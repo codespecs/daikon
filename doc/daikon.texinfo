@@ -189,6 +189,7 @@ Variable names
 
 Interpreting Daikon output
 
+* Redundant invariants::        
 * Equal variables::             
 
 Enhancing Daikon output
@@ -372,7 +373,7 @@ File formats
 Declarations
 
 * Declaration Version::         
-* Variable Comparability::      
+* Variable comparability::      
 * Program point declarations::  
 * Variable Declarations::       
 
@@ -2016,26 +2017,8 @@ You can enhance Daikon to produce output in other formats.  See
 @item Daikon format
 
 Daikon's default format is a mix of Java, mathematical logic, and some
-additional extensions.
-
-@cindex has only one value, in invariant output
-
-The output @samp{@var{var} has only one value} means that every time that
-variable @var{var} was encountered, it had the same value.  However,
-that value is not interesting to report.  Typically this means that
-@var{var} always referred to the same object.  Users may care that the
-variable was never rebound to a different object, but it would not be
-helpful to print out what the hashcode or address of that object
-happened to be at runtime.  @samp{@var{var} has only one value} differs from
-saying that @var{var} is unmodified.
-
-A variable can have only one value but not be reported as unmodified
-because the variable is not a parameter to a procedure --- for instance,
-if a routine always returns the same object, or in a class invariant.  A
-variable can be reported as unmodified but not have only one value
-because the variable is never modified during any execution of the
-procedure, but has different values on different invocations of the
-procedure.
+additional extensions.  It is intended to concisely convey meaning to
+programmers.
 
 @cindex DBC output format
 @cindex output format, DBC
@@ -2227,7 +2210,6 @@ code), but it may still be useful to compute invariants over this
 expression.  For a list of derived variables and how to control Daikon's
 use of them, see @ref{Options to enable/disable derived variables}.
 
-@cindex missing values for variables, see nonsensical values
 @cindex nonsensical values for variables
 
 Some trace variables and derived variables may represent meaningless
@@ -2252,7 +2234,10 @@ when an expression's value is meaningless is the most challenging part
 of writing an instrumenter for a language like C, since it requires
 tracking memory allocation and initialization.)  For derived variables
 created by Daikon, Daikon does the same thing, setting values to
-``nonsensical'' when appropriate.
+``nonsensical'' when appropriate.  For controlling Daikon's output in
+the presence of nonsensical values, see the
+@option{daikon.Daikon.guardNulls} configuration option
+(@pxref{General configuration options}).
 
 
 The remainder of this section describes conventions for naming
@@ -2507,6 +2492,22 @@ found no invariants.  You can get a little bit more information by using
 the @option{--output_num_samples} flag to Daikon
 (@pxref{Options to control Daikon output}).
 
+Daikon's output is predicated on the assumption that all expressions
+that get evaluated are sensible.  For instance, if Daikon prints
+@samp{a.b == 0}, then that means that if @samp{a.b} is sensible (that
+is, @samp{a} is non-null), then its value is zero.  If you would like
+the assumptions to be printed explicitly, then set the
+@option{daikon.Daikon.guardNulls} configuration option (@pxref{General
+configuration options}).
+
+
+@menu
+* Redundant invariants::        
+* Equal variables::             
+@end menu
+
+@node    Redundant invariants, Equal variables, Interpreting output, Interpreting output
+@subsection Redundant
 
 By default, Daikon does not display redundant invariants --- those
 that are implied by other invariants in the output --- because such
@@ -2519,11 +2520,8 @@ redundant ones, by saving the invariants to a @file{.inv} file and
 then using the PrintInvariants (@pxref{Printing invariants}) or Diff
 (@pxref{Invariant Diff}) programs to print the results.)
 
-@menu
-* Equal variables::             
-@end menu
 
-@node    Equal variables,  , Interpreting output, Interpreting output
+@node    Equal variables,  , Redundant invariants, Interpreting output
 @subsection Equal variables
 
 When two or more variables are always equal, any invariant that
@@ -2536,6 +2534,38 @@ For example, if the variables @code{a}, @code{b}, and @code{c} are all
 equal and @code{a} is chosen as the leader, the printed invariants will
 include any invariants over @code{a} and the equality invariants @samp{a=b}
 and @samp{a=c}.
+
+You can control which variables are in an equality set; @ref{Variable comparability}.
+
+
+@node    Has only one value variables,  , Redundant invariants, Interpreting output
+@subsection Equal variables
+
+@cindex has only one value, in invariant output
+@cindex hashcode type, for variables
+
+The output @samp{@var{var} has only one value} in Daikon's output means
+that every time that variable @var{var} was encountered, it had the same
+value.  Daikon ordinarily reports the actual value, as in
+@samp{@var{var} == 22}.  Typically this means that the variable is a
+hashcode or address --- that is, its declared type is @samp{hashcode}
+(@pxref{Variable declarations}).  For example, @samp{@var{var} ==
+0x38E8A} is not very illuminating, but it is still interesting that
+@var{var} was never rebound to a different object.
+
+Note that @samp{@var{var} has only one value} is different from
+saying that @var{var} is unmodified.
+
+A variable might have only one value but @emph{not} be reported as unmodified
+because the variable is not a parameter to a procedure --- for instance,
+if a routine always returns the same object, or in a class invariant.  A
+variable can be reported as unmodified but @emph{not} have only one value
+because the variable is never modified during any execution of the
+procedure, but has different values on different invocations of the
+procedure.
+
+
+
 
 @node   Invariant list, Invariant filters, Interpreting output, Daikon output
 @section Invariant list
@@ -3280,17 +3310,24 @@ and DynCompB (or Dyncomp for C/C++) respectively.)
 Because abstract type inference must be performed before Daikon runs, it
 is integrated with the front-ends rather than directly as part of
 Daikon.
+
+@itemize
+@item
 The Java DynComp tool produces a comparability file that must then be
-supplied to the Chicory Java front-end.
+supplied to the Chicory Java front-end.  For examples of using DynComp
+with Java programs, see @ref{Using DynComp with Java programs}.  For
+full details about the DynComp tool for Java, see @ref{DynComp for
+Java}.
+
+@item
 The Kvasir front-end for C/C++ binaries has a DynComp mode in which it
 produces a separate @file{.decls} file containing comparability
 information, which must be supplied to Daikon along with the
-@file{.dtrace} file.
-For examples of using DynComp with Java and C programs, see @ref{Using
-DynComp with Java programs} and @ref{Using DynComp with C programs}
-respectively.
-For full details about the DynComp tools for Java and C/C++, see
-@ref{DynComp for Java} and @ref{DynComp for C/C++}.
+@file{.dtrace} file.  For examples of using DynComp with C programs, see
+@ref{Using DynComp with C programs}.  For full details about the DynComp
+tool for C/C++, see @ref{DynComp for C/C++}.
+
+@end itemize
 
 @node    Loop invariants,  , Dynamic abstract type inference (DynComp), Enhancing Daikon output
 @section Loop invariants
@@ -7038,6 +7075,9 @@ java daikon.Daikon --nohierarchy myfile.decls myfile.dtrace
 In a future release, the @option{--nohierarchy} option may not be necessary,
 but it should always be safe to use this option.
 
+Before running @command{convertcsv.pl}, you may need to install
+Text::CSV, a Perl package that @command{convertcsv.pl} uses.
+
 
 @node    Other front ends,  , convertcsv.pl, Front ends (instrumentation)
 @section Other front ends
@@ -9123,6 +9163,7 @@ programming language.
 Daikon's input is conventionally one or more @file{.dtrace} data trace
 files.  There are two basic types of records that can appear in Daikon's
 input:  program point declarations, and trace records.
+(Daikon can also read splitter info files; @pxref{Splitter info file}.)
 
 A declaration describes the structure of the trace records.  One
 declaration is required for each instrumented program point --- that is,
@@ -9199,13 +9240,13 @@ readibility.
 
 @menu
 * Declaration Version::         
-* Variable Comparability::      
+* Variable comparability::      
 * Program point declarations::  
 * Variable Declarations::       
 @end menu
 
 
-@node Declaration Version, Variable Comparability, Declarations, Declarations
+@node Declaration Version, Variable comparability, Declarations, Declarations
 @subsection Declaration version
 
 The declaration version is specified in a field in the following format:
@@ -9218,11 +9259,12 @@ the lack of this field.  The declaration version field must be the
 first field specified in the file.
 
 
-@node Variable Comparability, Program point declarations, Declaration Version, Declarations
+@node Variable comparability, Program point declarations, Declaration Version, Declarations
 @subsection Variable comparability
 
 @cindex comparability, for variables
 @cindex variable comparability
+@cindex units of measurement, see variable comparability
 
 The type of variable comparability is specified in a field in the following
 format:
@@ -9234,7 +9276,7 @@ The possible values for @var{comparability-type} are @code{implicit} and
 @ref{V1 Program point declarations}.
 
 
-@node Program point declarations, Variable Declarations, Variable Comparability, Declarations
+@node Program point declarations, Variable Declarations, Variable comparability, Declarations
 @subsection Program point declarations
 
 The format of a program point declaration is:
@@ -9364,13 +9406,21 @@ type might be @code{Object} but the representation type might be
 @code{hashcode}, if the address of the object is written to the data trace
 file.
 
+@cindex pointer variables, see ``hashcode'' type
+@cindex hashcode type, for variables
+
 The representation type should be one of @code{boolean}, @code{int},
 @code{hashcode}, @code{double}, or @code{java.lang.String}; or an
 array of one of those (indicated by a @code{[]} suffix, as in Java).
-Hashcodes are treated like integers, except that their actual values
-are considered uninteresting for the purposes of output; they are
-intended for unique object identifiers like memory addresses or the
-return value of Java's @code{Object.hashCode} method.
+
+@code{hashcode} is intended for unique object identifiers like memory
+addresses (pointers) or the return value of Java's
+@code{Object.hashCode} method.  @code{hashcode} is treated like
+@code{int}, except that the hashcode values are considered uninteresting
+for the purposes of output.  For example, Daikon will print
+@samp{@var{var} has only one value} instead of @samp{@var{var} ==
+0x38E8A}.
+
 
 @item @code{flags <flags>}
 
@@ -9379,15 +9429,26 @@ One or more flags may be specified.  Possible values are:
 
 @item @code{is_param}
 
-Indicates that a given variable is a parameter to a method.  If a
-variable is a parameter, Daikon avoids printing some information that
-would be considered uninteresting for parameters.  First, invariants
+Indicates that a given variable is a parameter to a procedure.  Some
+procedures reassign parameters -- essentially using them as local
+variables.  Such uses are not relevant to the procedure's external
+specification.  The @code{is_param} flag causes Daikon not to print
+certain invariants, if the variable has been reassigned.
+
+@enumerate
+@item
+Invariants
 that use the parameter variable @code{p} in its post-state form are not
-printed.  Second, invariants that use fields of @code{p} (such as @code{p.x})
-are printed only if @code{p} has not changed.  Lastly, some immutable
-characteristics, such as the size of arrays and data types are not
-printed (both can be changed if @code{p} is changed, but then, @code{p}
-would no longer be interesting).
+printed.
+@item
+Invariants that use fields of @code{p} (such as @code{p.x})
+are printed only if @code{p} has not changed.
+@item
+Some immutable
+characteristics, such as the size of arrays and data types, are not
+printed.  (These can change only if @code{p} is changed, but then, @code{p}
+would no longer be interesting.)
+@end enumerate
 
 @item @code{no_dups}
 
@@ -9540,7 +9601,9 @@ That means that the variable does not have a value because
 the expression that computes it cannot be evaluated.  For instance, if
 variable @code{a} has value @code{null}, then variable @code{a.b} would
 have value @code{nonsensical}.  When the value is @code{nonsensical}, the
-modified field should be 2.
+modified field should be 2.  Also see the
+@option{daikon.Daikon.guardNulls} configuration option (@pxref{General
+configuration options}).
 
 @item modified? (0, 1, or 2).
 @cindex modified bit
@@ -10046,20 +10109,38 @@ trace file.
 @cindex variable comparability (decls format version 1)
 comparable variables.  This information indicates
 which other variables are comparable to this one.
-This may be obtained dynamically, via type-inference based analysis, or
-in some other manner.
+
+The point of comparability is that Daikon should not compare unrelated
+quantities.  For example, each person's height in centimeters may always
+be less than their birth year, but it is not helpful for Daikon to
+output @samp{height < birthyear}, because they are measuring
+incomparable quantities.  (In this case, the variables use different
+units of measurement.)
+
+Variable comparability information helps Daikon to avoid computing
+indormation over unrelated variables.  This saves time and (more
+importantly) improves the quality of Daikon's output.  For more details,
+see the paper
+@uref{http://www.cs.washington.edu/homes/mernst/pubs/invariants-relevance-icse2000-abstract.html,
+, ``Quickly detecting relevant program invariants''}.
+
+Variable comparability information may be obtained dynamically
+(@xref{Dynamic abstract type inference (DynComp)}), via
+type-inference based analysis, or in some other manner.  In any event,
+Daikon reads it from the variable declarations.
 
 A comparability for a non-array type is a signed integer.  Two variables
 at the same program point
-are considered comparable if both integers are the same, or if either
+are considered comparable if both integers are the same, @emph{or} if either
 integer is negative.
 A comparability for an array type must contain an
 integer for each index and for the contents; for instance, @samp{5[22][17]}
 for a two-dimensional array.  Comparisons succeed if comparisons over
 each component succeed.
 
-Variables at different program points are never compared to one another.
-Use of the same number at different program points does not indicate any
+Regardless of comparability, variables at different program points are
+never compared to one another.  Use of the same comparability integer at
+different program points does not indicate any
 relationship between the variables, and a given variable may have a
 different comparability integer at different program points.
 

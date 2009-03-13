@@ -69,15 +69,18 @@ public final class PrintInvariants {
    * mappings. For example: with this option set to false, a program
    * point might print like this:
    *
+   * <pre>
    * foo.bar.Bar(int):::EXIT
    * \old(capacity) == sizeof(this.theArray)
+   * </pre>
    *
    * With the option set to true, it would print like this:
    *
+   * <pre>
    * foo.bar.Bar(int):::EXIT
    * v0 == sizeof(this.theArray)
    * prestate assignment: v0=capacity
-   *
+   * </pre>
    */
   public static boolean dkconfig_replace_prestate = true;
 

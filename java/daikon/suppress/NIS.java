@@ -75,12 +75,12 @@ public class NIS {
 
   /** Boolean.  If true, use the specific list of suppressor related
    * invariant prototypes when creating constant invariants in the
-   * antecedent method.  Default is 'true'.
+   * antecedent method.
    */
   public static boolean dkconfig_suppressor_list = true;
 
   /** Boolean.  If true, skip variables of file rep type hashcode when creating
-   * invariants over constants in the antecedent method.  Default is 'true'.
+   * invariants over constants in the antecedent method.
    */
   public static boolean dkconfig_skip_hashcode_type = true;
 
