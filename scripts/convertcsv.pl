@@ -248,7 +248,7 @@ if (defined($decls_file)) {
     if ($isNumber[$csvindex]) {
       print DECLSHANDLE "double\ndouble\n";
     } else {
-      print DECLSHANDLE "String\nString\n";
+      print DECLSHANDLE "java.lang.String\njava.lang.String\n";
     }
     print DECLSHANDLE "1\n";
   }
