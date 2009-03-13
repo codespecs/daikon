@@ -206,8 +206,9 @@ public class SpinfoFileParser {
             if (splitObj == null) {
               throw new
                 RuntimeException("Malformed Spinfo file: " + spinfoFileName + lineSep +
-                                 "Format specication, " + pptStatement +
-                                 ", must follow a condition");
+                                 "Indented format specification, " + pptStatement +
+                                 ", must follow an unindented condition" + lineSep +
+                                 "For details, see the Daikon manual, section \"Splitter info file\"");
             } else {
               setFormatting(splitObj, pptStatement.trim());
             }
