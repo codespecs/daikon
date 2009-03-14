@@ -22,6 +22,9 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 #UTILMDE_CLASSPATH=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar
 UTILMDE_CLASSPATH= $(CLASSPATH)
 
+AUTO_GENERATED_FILES := \
+	MathMDE.java \
+	LimitedSizeIntSet.java
 # Might contain duplicates if ${AUTO_GENERATED_FILES} already exists.  Is that a problem?
 JAVA_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java' -print) ${AUTO_GENERATED_FILES}
 JAVA_LINT_FILES := $(shell find . \( -name CVS -o -name ArraysMDE.java -o -name WeakHasherMap.java -o -name Intern.java -o -name OrderedPairIterator.java -o -name WeakIdentityHashMap.java \) -prune -o -name '*.java' -print)
@@ -29,9 +32,6 @@ JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -p
 ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
 # This isn't quite right, since it includes .class files for helper .jpp files.
 ALL_CLASS_FILES := ${ALL_JAVA_FILES:.java=.class}
-AUTO_GENERATED_FILES = \
-	MathMDE.java \
-	LimitedSizeIntSet.java
 
 default: all
 
