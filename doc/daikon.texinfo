@@ -191,6 +191,7 @@ Interpreting Daikon output
 
 * Redundant invariants::        
 * Equal variables::             
+* Has only one value variables::  
 
 Enhancing Daikon output
 
@@ -375,7 +376,7 @@ Declarations
 * Declaration Version::         
 * Variable comparability::      
 * Program point declarations::  
-* Variable Declarations::       
+* Variable declarations::       
 
 Example files
 
@@ -2504,6 +2505,7 @@ configuration options}).
 @menu
 * Redundant invariants::        
 * Equal variables::             
+* Has only one value variables::  
 @end menu
 
 @node    Redundant invariants, Equal variables, Interpreting output, Interpreting output
@@ -2521,7 +2523,7 @@ then using the PrintInvariants (@pxref{Printing invariants}) or Diff
 (@pxref{Invariant Diff}) programs to print the results.)
 
 
-@node    Equal variables,  , Redundant invariants, Interpreting output
+@node    Equal variables, Has only one value variables, Redundant invariants, Interpreting output
 @subsection Equal variables
 
 When two or more variables are always equal, any invariant that
@@ -2538,7 +2540,7 @@ and @samp{a=c}.
 You can control which variables are in an equality set; @ref{Variable comparability}.
 
 
-@node    Has only one value variables,  , Redundant invariants, Interpreting output
+@node    Has only one value variables,  , Equal variables, Interpreting output
 @subsection Equal variables
 
 @cindex has only one value, in invariant output
@@ -9242,7 +9244,7 @@ readibility.
 * Declaration Version::         
 * Variable comparability::      
 * Program point declarations::  
-* Variable Declarations::       
+* Variable declarations::       
 @end menu
 
 
@@ -9276,7 +9278,7 @@ The possible values for @var{comparability-type} are @code{implicit} and
 @ref{V1 Program point declarations}.
 
 
-@node Program point declarations, Variable Declarations, Variable comparability, Declarations
+@node Program point declarations, Variable declarations, Variable comparability, Declarations
 @subsection Program point declarations
 
 The format of a program point declaration is:
@@ -9325,7 +9327,7 @@ Specifies one or more flags for this ppt.  The possible flags are:
 
 @end itemize
 
-@node Variable Declarations,  , Program point declarations, Declarations
+@node Variable declarations,  , Program point declarations, Declarations
 @subsection Variable declarations
 @cindex declaration file format
 
