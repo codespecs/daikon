@@ -22,7 +22,8 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 #UTILMDE_CLASSPATH=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar
 UTILMDE_CLASSPATH= $(CLASSPATH)
 
-# Leading "./" is to permit "$(sort ...)" to remove duplicates properly.
+# Leading "./" is for consistency with output of "find", so that names are
+# identical and "sort" can remove duplicates.
 AUTO_GENERATED_FILES := \
 	./MathMDE.java \
 	./LimitedSizeIntSet.java
@@ -31,8 +32,8 @@ JAVA_FILES := $(sort $(shell find . \( -name CVS \) -prune -o -name '*.java' -pr
 JAVA_LINT_FILES := $(shell find . \( -name CVS -o -name ArraysMDE.java -o -name WeakHasherMap.java -o -name Intern.java -o -name OrderedPairIterator.java -o -name WeakIdentityHashMap.java \) -prune -o -name '*.java' -print)
 JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -print)
 ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
-# This isn't quite right, since it includes .class files for helper .jpp files.
-ALL_CLASS_FILES := ${ALL_JAVA_FILES:.java=.class}
+# Using ALL_JAVA_FILES isn't quite right, since it includes .class files for helper .jpp files.
+ALL_CLASS_FILES := ${JAVA_FILES:.java=.class}
 
 default: all
 
