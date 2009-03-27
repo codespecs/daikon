@@ -516,7 +516,7 @@ JVM (@uref{http://java.sun.com,, Java Virtual Machine}).  The
 @file{tools.jar} file that comes with your JVM must also be on your
 classpath.
 
-@xref{Installing Daikon} for situations where you should
+@xref{Installing Daikon}, for situations where you should
 follow the complete installation instructions of @ref{Complete
 installation}.
 
@@ -10127,7 +10127,7 @@ see the paper
 , ``Quickly detecting relevant program invariants''}.
 
 Variable comparability information may be obtained dynamically
-(@xref{Dynamic abstract type inference (DynComp)}), via
+(@pxref{Dynamic abstract type inference (DynComp)}), via
 type-inference based analysis, or in some other manner.  In any event,
 Daikon reads it from the variable declarations.
 

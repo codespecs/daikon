@@ -70,6 +70,9 @@ endif
 ifeq "$(wildcard $(INV)/java/lib/bcel.jar)" "$(INV)/java/lib/bcel.jar"
     CLASSPATH_JARS = :$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar
 endif
+ifeq "$(wildcard ${CHECKERSJAR})" "${CHECKERSJAR}"
+    CLASSPATH_JARS2 = ${CHECKERSJAR}
+endif
 
 # Add necessary items to the classpath if they are not already there
 ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
@@ -77,7 +80,7 @@ ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
 endif
 ifdef CLASSPATH_JARS
   ifneq (bcel.jar,$(findstring bcel.jar,$(CLASSPATH)))
-    CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS)
+    CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS):$(CLASSPATH_JARS2)
   endif
 endif
 ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
@@ -746,7 +749,7 @@ audit:
 	cd $(HOME)/java && maudit daikon | perl -p -e 's/^daikon\///'
 
 
-# Interning type qualifier checker
+# Pluggable type qualifier checkers
 
 # JAVAC_INTERNING_ARGS = -proc:only -processor checkers.interning.InterningChecker
 JAVAC_INTERNING_ARGS = -proc:only -processor checkers.interning.InterningChecker -Alint=-dotequals
@@ -920,11 +923,13 @@ doc: $(AUTO_GENERATED_FILES) doc-dkconfig
 #echo "JDOC_FILES: ${JDOC_FILES}"
 	# This requires that jdk/lib/tools.jar be on your classpath
 	javadoc -J-Xmx1000m $(JAVADOC_FLAGS) $(JDOC_FILES)
+	cd doc && preplace '^ *&#64;cindex.*' ''
 
 ## Make doc with private fields for people working on source code
 doc-private: $(AUTO_GENERATED_FILES)
 	mkdir -p doc
 	javadoc -J-Xmx1000m$(JAVADOC_FLAGS) -private $(JDOC_FILES)
+	cd doc && preplace '^ *&#64;cindex.*' ''
 
 ## This doesn't seem necessary any more
 # javadoc-lookup: doc-javadoc-lookup
@@ -953,6 +958,8 @@ doc-invariant: ../doc/invariants-doc.texinfo
 	javadoc -J-Xmx1000m -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
+	perl -pi -e 's/&#64;cindex/\@cindex/g' $@
+
 
 doc-dkconfig: ../doc/config-options.texinfo
 

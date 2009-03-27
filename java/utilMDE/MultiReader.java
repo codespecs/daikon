@@ -127,10 +127,10 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
    * Create a MultiReader
    *
    *    @param reader Initial source
-   *    @param comment_re Regular expression that matches comments.
+   *    @param comment_re_string Regular expression that matches comments.
    *                      Any text that matches comment_re is removed.
    *                      A line that is entirely a comment is ignored
-   *    @param include_re Regular expression that matches include directives.
+   *    @param include_re_string Regular expression that matches include directives.
    *                      The expression should define one group that contains
    *                      the include file name
    */

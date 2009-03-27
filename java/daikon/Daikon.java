@@ -340,7 +340,7 @@ public final class Daikon {
    * If "always", then invariants are always guarded.
    * If "never", then invariants are never guarded.
    * If "missing", then invariants are guarded only for variables that
-   * were missing (``can be missing'') in the dtrace (the observed executions).
+   * were missing ("can be missing") in the dtrace (the observed executions).
    * <p>
    *
    * Guarding means adding predicates that ensure that variables can be
@@ -354,7 +354,7 @@ public final class Daikon {
    * (To do:  Some configuration option (maybe this one) should add guards for
    * other reasons that lead to nonsensical values (@pxref{Variable
    * names}).)
-   * @cindex nonsensical values for variables, guarding
+   * &#64;cindex nonsensical values for variables, guarding
    **/
   // Perhaps a better default would be "missing".
   public static /*@Interned*/ String dkconfig_guardNulls = "default";
