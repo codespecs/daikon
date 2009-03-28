@@ -517,7 +517,7 @@ public final class Intern {
    * they are compared using their equals() methods.
    **/
   @SuppressWarnings("interning")
-  public static /*@Interned*/ Object[/*@Interned*/] intern(/*@Interned*/ Object[] a) {
+  public static /*@Interned*/ Object /*@Interned*/ [] intern(/*@Interned*/ Object[] a) {
     WeakReference<Object /*@Interned*/ []> lookup = internedObjectArrays.get(a);
     if (lookup != null) {
       return lookup.get();
@@ -542,7 +542,9 @@ public final class Intern {
     } else if (a instanceof String) {
       return intern((String) a);
     } else if (a instanceof String[]) {
-      return intern((/*@Interned*/ String[]) a);
+      @SuppressWarnings("interning")
+      /*@Interned*/ String[] asArray = (/*@Interned*/ String[]) a;
+      return intern(asArray);
     } else if (a instanceof Integer) {
       return intern((Integer) a);
     } else if (a instanceof Long) {
@@ -556,7 +558,9 @@ public final class Intern {
     } else if (a instanceof double[]) {
       return intern((double[]) a);
     } else if (a instanceof Object[]) {
-      return intern((/*@Interned*/ Object[]) a);
+      @SuppressWarnings("interning")
+      /*@Interned*/ Object[] asArray = (/*@Interned*/ Object[]) a;
+      return intern(asArray);
     } else {
       throw new IllegalArgumentException
         ("Arguments of type " + a.getClass() + " cannot be interned");

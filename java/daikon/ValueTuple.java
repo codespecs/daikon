@@ -23,7 +23,7 @@ public final class ValueTuple implements Cloneable {
   public static Logger debug = Logger.getLogger("daikon.ValueTuple");
 
   // These arrays are interned, and so are their elements.
-  public /*@Interned*/ Object[/*@Interned*/] vals;
+  public /*@Interned*/ Object /*@Interned*/ [] vals;
 
   // consider putting this in the first slot of "vals", to avoid the Object
   // overhead of a pair of val and mods.  Do I need to worry about trickery
@@ -252,7 +252,7 @@ public final class ValueTuple implements Cloneable {
 
 
   /** Constructor that takes already-interned arguments. */
-  static ValueTuple makeFromInterned(/*@Interned*/ Object[/*@Interned*/] vals, int[] mods) {
+  static ValueTuple makeFromInterned(/*@Interned*/ Object /*@Interned*/ [] vals, int[] mods) {
     return new ValueTuple(vals, mods, true);
   }
 

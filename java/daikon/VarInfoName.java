@@ -777,7 +777,7 @@ public abstract /*@Interned*/ class VarInfoName
     if (!(vin instanceof Slice))
       return null;
     Slice slice = (Slice)vin;
-    VarInfoName[/*@Interned*/] ret = new /*@Interned*/ VarInfoName[2];
+    /*@Interned*/ VarInfoName[] ret = new /*@Interned*/ VarInfoName[2];
     if (slice.i != null)
       ret[0] = slice.i;
     else
