@@ -709,7 +709,7 @@ prover (@uref{http://www.hpl.hp.com/downloads/crl/jtk/}),
 @c
 or
 the Z3 theorem 
-prover (@uref{http://research.microsoft.com/en-us/um/redmond/projects/z3}; Z3
+prover (@uref{http://research.microsoft.com/en-us/um/redmond/projects/z3/}; Z3
 can replace Simplify but is only distributed for Windows).
 @c @c
 @c and the source-based C front
@@ -8766,6 +8766,9 @@ most important thing is the original, uninstrumented source files (e.g.,
 @file{.java}), and any inputs/tests used when you ran the program.
 It is also helpful to include instrumented source files,
 @file{.decl} files, and @file{.dtrace} files.
+@item
+the operating system and revision you are using (e.g., Debian stable,
+Windows XP service pack 2, etc)
 @item
 any other information that you consider relevant.
 @end itemize
