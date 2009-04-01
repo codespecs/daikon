@@ -2541,7 +2541,7 @@ You can control which variables are in an equality set; @ref{Variable comparabil
 
 
 @node    Has only one value variables,  , Equal variables, Interpreting output
-@subsection Equal variables
+@subsection Has only one value variables
 
 @cindex has only one value, in invariant output
 @cindex hashcode type, for variables
