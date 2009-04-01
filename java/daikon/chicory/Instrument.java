@@ -250,8 +250,11 @@ public class Instrument implements ClassFileTransformer {
 
       if (c_info.shouldInclude)
         return (cg.getJavaClass().getBytes());
-      else
+      else {
+        debug_transform.log ("not including class %s (filtered out)",
+                             className);
         return null;
+      }
 
     } catch (Throwable e) {
       out.format ("Unexpected error %s in transform", e);
