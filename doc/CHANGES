@@ -20,6 +20,33 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.6.0 (April 1 2009)
+
+Support for Daikon and DynComp for Java has been improved for MacOSX.
+The Daikon user and developer manuals were enhanced.
+
+Daikon
+
+    Documentation
+
+        A section was added describing approaches for writing automated
+        tools that process Daikon output
+
+        A new section (5.4.3) was added explaining the 'Has only one value'
+        invariant.
+
+        Detail was added to the section (6.5) on Loop invariants
+
+        Information on compiling Daikon for MacOSX was added to 
+        section 2.1 of the Daikon Developers manual.
+
+DynComp Java
+
+    Documentation
+
+        Information describing how to create an instrumented JDK on MacOSX
+        was added to Section 7.2.1 (Instrumenting the JDK with DynComp) 
+
 4.5.4 (February 2 2009)
 
 Bugs were fixed in Chicory and AnnotateNullable.  Daikon's

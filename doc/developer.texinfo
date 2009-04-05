@@ -245,6 +245,7 @@ to fail.
 
 For more information about compiling Daikon, see the comments in the Makefiles.
 
+@cindex Windows, compiling
 To compile Daikon on Windows, the best approach is to install the Cygwin
 toolset (available at @uref{http://sources.redhat.com/cygwin/}), which
 contains everything you need to compile and run Unix programs under
@@ -262,6 +263,19 @@ than semicolons (;) as a separator.  Using windows pathnames or
 separators is a common source of errors that will result in odd error
 messages and build failures.
 
+@cindex MacOSX, compiling
+Compiling Daikon on MacOSX is relatively straightforward.  In addition
+to the standard settings, add an environment variable that specifies
+the location of the Java @samp{classes.jar} file (@samp{classes.jar} performs a
+similar function to the more standard @samp{rt.jar}.  Normally the
+file is found in @samp{/System/Library/Frameworks} under the appropriate Java
+version.  The following example is for the standard install of
+Java 1.5 on MacOSX:
+
+@example
+  export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
+@end example
+  
 @node    CVS repository, Using Eclipse, Compiling Daikon, Extending Daikon
 @section CVS repository
 @cindex CVS repository
