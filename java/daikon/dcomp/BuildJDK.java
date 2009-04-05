@@ -101,6 +101,9 @@ public class BuildJDK {
       "java.nio.channels.SocketChannel.open",
       "sun.security.provider.PolicyFile.init",
       "java.io.Console.readPassword",
+      "sun.tools.jps.Jps.main",
+      "sun.net.www.MimeTable.saveAsProperties",
+      "sun.misc.Service.parse",
   };
 
   /**
