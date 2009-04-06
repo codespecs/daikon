@@ -10,7 +10,7 @@ class Point;
 class KMeans {
 
   static const int maxIters = 250;
-  static const float convergenceThreshold = 0.00001;
+  static const float convergenceThreshold;
   static const int numKMeans = 10;
   static const long seed = 123454321;
 

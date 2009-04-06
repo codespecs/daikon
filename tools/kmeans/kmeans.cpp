@@ -29,6 +29,8 @@
 #include "cluster.h"
 #include <time.h>
 
+// Doubles/floats must be initialized in source (not header) file
+const float KMeans::convergenceThreshold = 0.00001;
 
 KMeans::KMeans(char* s ) : s(s) { 
   DataFp = NULL;
