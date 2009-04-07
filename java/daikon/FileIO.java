@@ -988,7 +988,8 @@ public final class FileIO {
 
   /**
    * Class used to specify the processor to use for sample data.  By
-   * default, the internal process_sample routine will be called.
+   * default, the internal process_sample routine will be called, once for
+   * each sample.
    */
   public static class Processor {
     public void process_sample(
@@ -1001,18 +1002,17 @@ public final class FileIO {
   }
 
 
-  /** Read data from .dtrace file using standard data processor. **/
+  /**
+   * Read declarations or samples (not just sample data) from .dtrace
+   * file, using standard data processor. **/
   static void read_data_trace_file(String filename, PptMap all_ppts)
     throws IOException {
     Processor processor = new Processor();
     read_data_trace_file(filename, all_ppts, processor, false, true);
   }
 
-  /**
-   * Class used to encapsulate state information while parsing
-   * decl/dtrace files.
-   */
 
+  /** The type of the record that was most recently read. */
   public enum ParseStatus {
     NULL,               // haven't read anything yet
     DECL,               // got a decl
@@ -1024,7 +1024,22 @@ public final class FileIO {
     TRUNCATED           // dkconfig_max_line_number reached
   };
 
+  /**
+   * ParseState indicates:
+   * <ol>
+   * <li>
+   *   Some global information about the state of the parser while reading
+   *   a decl or dtrace file.
+   * <li>
+   *   The record that was most recently read; thus, ParseState is
+   *   essentially a discriminated union whose tag is a ParseStatus.
+   *   ParseState is what is returned (actually, side-effected) by
+   *   method read_data_trace_record when it reads a record.
+   * </ol>
+   **/
+
   public static class ParseState {
+    // This is the global information about the state of the parser.
     public String filename;
     public boolean is_decl_file;
     public boolean ppts_are_new;
@@ -1033,12 +1048,14 @@ public final class FileIO {
     public File file;
     public long total_lines;
     public int varcomp_format;
-    public ParseStatus status;
-    public PptTopLevel ppt;     // returned when state=DECL or SAMPLE
-    public Integer nonce;       // returned when state=SAMPLE
-    public ValueTuple vt;       // returned when state=SAMPLE
     public long lineNum;
+    // This is the discriminated-union part of the ParseState
+    public ParseStatus status;
+    public PptTopLevel ppt;     // valid when status=DECL or SAMPLE
+    public Integer nonce;       // valid when status=SAMPLE
+    public ValueTuple vt;       // valid when status=SAMPLE
 
+    /** Start parsing the given file. */
     public ParseState (String raw_filename, boolean decl_file_p,
                        boolean ppts_are_new, PptMap ppts) throws IOException {
       // Pretty up raw_filename for use in messages
@@ -1175,7 +1192,7 @@ public final class FileIO {
   public static int samples_processed = 0;
 
 
-  /** Read data from .dtrace file. **/
+  /** Read declarations or samples (not just sample data) from .dtrace file. **/
   static void read_data_trace_file(String filename, PptMap all_ppts,
                                    Processor processor,
                                    boolean is_decl_file, boolean ppts_are_new)
@@ -1243,7 +1260,10 @@ public final class FileIO {
   }
 
 
-  // read a single record (declaration or sample) from a dtrace file.
+  /**
+   * Read a single record (declaration OR sample) from a dtrace file.
+   * The record is stored by side effect into the state argument.
+   */
   public static void read_data_trace_record (ParseState state)
     throws IOException {
 
@@ -1317,32 +1337,7 @@ public final class FileIO {
       }
       // System.out.printf ("Not skipping ppt  %s\n", line);
 
-      // If we got here, we're looking at a sample and not a declaration.
-      // For compatibility with previous implementation, if this is a
-      // declaration file, skip over samples.
-      if (state.is_decl_file) {
-        if (debugRead.isLoggable(Level.FINE))
-          debugRead.fine("Skipping paragraph starting at line "
-                         + reader.getLineNumber()
-                         + " of file "
-                         + state.filename
-                         + ": "
-                         + line);
-        while ((line != null) && (!line.equals("")) && (!isComment(line))) {
-          System.out.println("Unrecognized paragraph contains line = `"
-                             + line
-                             + "'");
-          System.out.println(" line: null="
-                             + false // (line != null)
-                             + " empty="
-                             + (line.equals(""))
-                             + " comment="
-                             + (isComment(line)));
-          line = reader.readLine();
-        }
-        continue;
-      }
-
+      assert !state.is_decl_file : "Declaration files should not contain samples";
 
       // Parse the ppt name
       try {
@@ -1380,16 +1375,18 @@ public final class FileIO {
       // Read an invocation nonce if one exists
       Integer nonce = null;
 
-      // arbitrary number, hopefully big enough; catch exceptions
-      reader.mark(100);
-      String nonce_name_maybe;
-      try {
-        nonce_name_maybe = reader.readLine();
-      } catch (Exception e) {
-        nonce_name_maybe = null;
+      String nonce_name_peekahead;
+      {
+        // arbitrary number, hopefully big enough; catch exceptions
+        reader.mark(100);
+        try {
+          nonce_name_peekahead = reader.readLine();
+        } catch (Exception e) {
+          nonce_name_peekahead = null;
+        }
+        reader.reset();
       }
-      reader.reset();
-      if ("this_invocation_nonce".equals(nonce_name_maybe)) {
+      if ("this_invocation_nonce".equals(nonce_name_peekahead)) {
 
         String nonce_name = reader.readLine();
         Assert.assertTrue(nonce_name != null && nonce_name.equals("this_invocation_nonce"));
@@ -1404,7 +1401,7 @@ public final class FileIO {
         if (Global.debugPrintDtrace) {
           to_write_nonce = true;
           nonce_value = nonce.toString();
-          nonce_string = nonce_name_maybe;
+          nonce_string = nonce_name_peekahead;
         }
       }
 
