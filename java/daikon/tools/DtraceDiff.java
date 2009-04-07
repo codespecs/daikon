@@ -313,11 +313,11 @@ public class DtraceDiff {
         else if (state1.status == FileIO.ParseStatus.EOF) {
           throw new DiffError(String.format ("ppt %s (%s at line %d) is missing "
                                     + "at end of %s", state2.ppt.name(),
-                                    dtracefile2, state2.lineNum, dtracefile1));
+                                             dtracefile2, state2.get_linenum(), dtracefile1));
         } else {
           throw new DiffError(String.format ("ppt %s (%s at line %d) is missing "
                                     + "at end of %s", state1.ppt.name(),
-                                    dtracefile1, state1.lineNum, dtracefile2));
+                                             dtracefile1, state1.get_linenum(), dtracefile2));
     }
       }
     } catch (IOException e) {
@@ -410,8 +410,8 @@ public class DtraceDiff {
       (String.format("Mismatched program point:%n"
                      + "  ppt %s at %s:%d%n"
                      + "  ppt %s at %s:%d",
-                     state1.ppt.name, dtracefile1, state1.lineNum,
-                     state2.ppt.name, dtracefile2, state2.lineNum));
+                     state1.ppt.name, dtracefile1, state1.get_linenum(),
+                     state2.ppt.name, dtracefile2, state2.get_linenum()));
   }
 
   private static void ppt_decl_error (FileIO.ParseState state1,
@@ -422,8 +422,8 @@ public class DtraceDiff {
       (String.format("Mismatched program point declaration:%n"
                      + "  ppt %s at %s:%d%n"
                      + "  ppt %s at %s:%d",
-                     state1.ppt.name, dtracefile1, state1.lineNum,
-                     state2.ppt.name, dtracefile2, state2.lineNum));
+                     state1.ppt.name, dtracefile1, state1.get_linenum(),
+                     state2.ppt.name, dtracefile2, state2.get_linenum()));
   }
 
   private static void ppt_var_decl_error (VarInfo vi1,
@@ -438,8 +438,8 @@ public class DtraceDiff {
                      + "  variable %s at %s:%d%n"
                      + "  variable %s at %s:%d",
                      state1.ppt.name,
-                     vi1.name(), dtracefile1, state1.lineNum,
-                     vi2.name(), dtracefile2, state2.lineNum));
+                     vi1.name(), dtracefile1, state1.get_linenum(),
+                     vi2.name(), dtracefile2, state2.get_linenum()));
   }
 
   private static void ppt_var_value_error (VarInfo vi1,
@@ -457,8 +457,8 @@ public class DtraceDiff {
                      + "  value %s at %s:%d%n"
                      + "  value %s at %s:%d",
                      vi1.name(), state1.ppt.name,
-                     val1, dtracefile1, state1.lineNum,
-                     val2, dtracefile2, state2.lineNum));
+                     val1, dtracefile1, state1.get_linenum(),
+                     val2, dtracefile2, state2.get_linenum()));
   }
 
 

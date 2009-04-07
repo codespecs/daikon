@@ -559,7 +559,7 @@ public final class FileIO {
     throws IOException {
     LineNumberReader file = state.reader;
     int varcomp_format = state.varcomp_format;
-    File filename = state.file;
+    String filename = state.filename;
 
     String line = file.readLine();
     if ((line == null) || (line.equals("")))
@@ -633,7 +633,7 @@ public final class FileIO {
       rep_type = file_rep_type.fileTypeToRepType();
       aux = VarInfoAux.parse(aux_string);
     } catch (IOException e) {
-      throw new Daikon.TerminationMessage(e, file, filename.getPath());
+      throw new Daikon.TerminationMessage(e, file, filename);
     }
 
     if (static_constant_value_string != null) {
@@ -749,8 +749,7 @@ public final class FileIO {
                   version);
   }
 
-  private static void read_list_implementors (LineNumberReader reader,
-                                              File filename)
+  private static void read_list_implementors (LineNumberReader reader)
     throws IOException {
     // Each line following is the name (in JVM form) of a class
     // that implements java.util.List.
@@ -1037,29 +1036,50 @@ public final class FileIO {
    *   method read_data_trace_record when it reads a record.
    * </ol>
    **/
-
   public static class ParseState {
     // This is the global information about the state of the parser.
+    /** Name of input file **/
     public String filename;
+
+    /** True if the current file is a declaration file **/
     public boolean is_decl_file;
+
+    /** True if ppts may be new.  If a duplicate is seen, it must match
+     * a previous point exactly.  If false, the previous ppt is used without
+     * checking for a match
+     */
     public boolean ppts_are_new;
+
+    /** All of the ppts seen so far **/
     public PptMap all_ppts;
+
+    /** Input stream **/
     public LineNumberReader reader;
-    public File file;
+
+    /** Total number of lines in the input file **/
     public long total_lines;
+
+    /** Comparability format, either VarComparability.IMPLICIT or
+     * VarComparability.NONE
+     */
     public int varcomp_format;
-    public long lineNum;
+
     // This is the discriminated-union part of the ParseState
     public ParseStatus status;
-    public PptTopLevel ppt;     // valid when status=DECL or SAMPLE
-    public Integer nonce;       // valid when status=SAMPLE
-    public ValueTuple vt;       // valid when status=SAMPLE
+
+    /** Current ppt **/
+    public PptTopLevel ppt;     // returned when state=DECL or SAMPLE
+
+    /** The current nonce **/
+    public Integer nonce;       // returned when state=SAMPLE
+
+    /** The current set of values **/
+    public ValueTuple vt;       // returned when state=SAMPLE
 
     /** Start parsing the given file. */
     public ParseState (String raw_filename, boolean decl_file_p,
                        boolean ppts_are_new, PptMap ppts) throws IOException {
       // Pretty up raw_filename for use in messages
-      file = new File(raw_filename);
       if (raw_filename.equals("-")) {
         filename = "standard input";
       }
@@ -1068,7 +1088,7 @@ public final class FileIO {
       }
       else {
         // Remove directory parts, to make it shorter
-        filename = file.getName();
+        filename = raw_filename;
       }
 
       is_decl_file = decl_file_p;
@@ -1133,7 +1153,16 @@ public final class FileIO {
       status = ParseStatus.NULL;
       ppt = null;
     }
+
+    /** Returns the current line number in the input file if available **/
+    public int get_linenum () {
+      if (reader != null)
+        return reader.getLineNumber();
+      else
+        return -1;
+    }
   }
+
 
   private static InputStream connectToChicory()
     {
@@ -1274,11 +1303,10 @@ public final class FileIO {
       if (line.equals("") || isComment(line)) {
         continue;
       }
-      state.lineNum = reader.getLineNumber();
 
       // stop at a specified point in the file
       if ((dkconfig_max_line_number > 0)
-          && (state.lineNum > dkconfig_max_line_number))
+          && (reader.getLineNumber() > dkconfig_max_line_number))
         {
           state.status = ParseStatus.TRUNCATED;
           return;
@@ -1322,7 +1350,7 @@ public final class FileIO {
         return;
       }
       if (line.equals("ListImplementors")) {
-        read_list_implementors (reader, state.file);
+        read_list_implementors (reader);
         state.status = ParseStatus.LIST;
         return;
       }
@@ -1394,7 +1422,7 @@ public final class FileIO {
         if (nonce_number == null) {
           throw new Daikon.TerminationMessage("File ended while trying to read nonce",
                                     reader,
-                                    state.file);
+                                    state.filename);
         }
         nonce = new Integer(nonce_number);
 
