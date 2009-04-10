@@ -606,36 +606,24 @@ unzip daikon.zip
 This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 
 @item
-Set up your environment.  You need to set two environment variables
-and source a Daikon startup file.  The commands to define environment
-variables vary depending on your shell.  The csh and tcsh shells and
-their variants use @code{setenv} (e.g., @code{setenv JDKDIR
-/usr/lib/j2sdk1.5-sun}).  The sh and bash shells and their variants
-use @code{export} (e.g., @code{export JDKDIR=/usr/lib/jw2sdk1.5-sun}).
-Do not use a Windows shell.
+Set up your environment.  This requires three shell commands:
+set two environment variables
+and source a Daikon startup file.
+You can place the three commands in your shell initialization file.
 
-@itemize
+@enumerate
 
 @item
 @cindex DAIKONDIR
 Define the @code{DAIKONDIR} environment variable to be 
-the full @emph{Unix} pathname to the daikon directory you extracted
-above.  For example: @code{@var{daikonparent}/daikon}.  On Windows
-use the Cygwin/Unix path (e.g., @code{/cygdrive/c/daikon}) rather than the
-windows path (@code{C:\daikon}).
-
+the full pathname to the daikon directory you extracted
+above.  For example: @code{@var{daikonparent}/daikon}.
 
 @item
 Define the @code{JDKDIR} environment variable to be the full
 @emph{Unix} pathname to the JDK@.  For example:
-@code{/usr/lib/j2sdk1.t-sun} or @code{/cygdrive/c/Program
-Files/Java/jdk1.5.0_05}.  On Windows, you may need to avoid pathnames
-with spaces.  This can be done by using the @code{ln} command to add a
-symbolic link without spaces to @code{Program Files}.
-@example
-    cd /cygdrive/c
-    ln -s "Program Files" program_files
-@end example
+@code{/usr/lib/j2sdk1.5-sun} or @code{/cygdrive/c/Program
+Files/Java/jdk1.5.0_05}.
 
 @item
 Source the appropriate Daikon startup file 
@@ -643,11 +631,42 @@ Source the appropriate Daikon startup file
 These files are located in the @code{@var{daikonparent}/daikon/bin}
 directory.
 
-@end itemize
+@end enumerate
 
-These customizations can be placed in your startup file, or executed
-each time that you wish to use Daikon.  
-We recommend that you put all three commands in a batch file, and
+@strong{Example:}  If you use the sh or bash shell or their variants, the three commands might be
+@example
+export DAIKONDIR=$HOME/daikon
+export JDKDIR=/usr/lib/j2sdk1.5-sun
+source $DAIKONDIR/bin/daikon.bashrc
+@end example
+If you use the csh or tcsh shell or their variants, the three commands
+might be
+@example
+setenv DAIKONDIR $HOME/daikon
+setenv JDKDIR /usr/lib/j2sdk1.5-sun
+source $DAIKONDIR/bin/daikon.cshrc
+@end example
+
+Windows notes:  
+Do not use a Windows shell; if you are using the Windows operating
+system, then use the Cygwin bash shell.
+Use the Cygwin/Unix path style (e.g., @code{/cygdrive/c/daikon}) rather than the
+windows path style (@code{C:\daikon}).
+Some users have reported problems when using pathnames
+with spaces.  You can avoid the problem by using the @code{ln} command to add a
+symbolic link without spaces to @code{Program Files}.
+@example
+    cd /cygdrive/c
+    ln -s "Program Files" program_files
+@end example
+
+These three commands can be placed in your startup file (also known as
+your shell initialization file --- for example, the bash shell uses
+@file{.bashrc} in your home directory).
+Alternately, you can execute the three commands
+each time that you wish to use Daikon; in this case, you may find it
+convenient to put all three
+commands in a single batch file, and
 manually execute that batch file from the command line.
 
 @c You can also
@@ -661,8 +680,9 @@ After editing your shell initialization file, either execute the commands
 you placed in it, or else log out and log back in to achieve the same
 effect.
 
-You can examine the appropriate Daikon environment file to learn of
-other variables you can customize.
+Optionally, you can customize other environment variables besides
+@code{DAIKONDIR} and @code{JDKDIR}.  The customizable variables are
+listed in the  Daikon startup file, such as @file{daikon.bashrc}.
 
 @item
 Customize @code{make} variables.  The @code{Makefile} in
