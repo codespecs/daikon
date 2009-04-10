@@ -1037,16 +1037,20 @@ public final class FileIO {
    * </ol>
    **/
   public static class ParseState {
+
+    //
     // This is the global information about the state of the parser.
+    //
+
     /** Name of input file **/
     public String filename;
 
-    /** True if the current file is a declaration file **/
+    /** True if the current file is a declaration file. **/
     public boolean is_decl_file;
 
     /** True if ppts may be new.  If a duplicate is seen, it must match
      * a previous point exactly.  If false, the previous ppt is used without
-     * checking for a match
+     * checking for a match.
      */
     public boolean ppts_are_new;
 
@@ -1064,7 +1068,10 @@ public final class FileIO {
      */
     public int varcomp_format;
 
+    //
     // This is the discriminated-union part of the ParseState
+    //
+
     public ParseStatus status;
 
     /** Current ppt **/
@@ -1075,6 +1082,7 @@ public final class FileIO {
 
     /** The current set of values **/
     public ValueTuple vt;       // returned when state=SAMPLE
+
 
     /** Start parsing the given file. */
     public ParseState (String raw_filename, boolean decl_file_p,
@@ -1221,7 +1229,10 @@ public final class FileIO {
   public static int samples_processed = 0;
 
 
-  /** Read declarations or samples (not just sample data) from .dtrace file. **/
+  /**
+   * Read declarations or samples (not just sample data as the name might
+   * imply) from .dtrace file.
+   **/
   static void read_data_trace_file(String filename, PptMap all_ppts,
                                    Processor processor,
                                    boolean is_decl_file, boolean ppts_are_new)
@@ -1365,7 +1376,11 @@ public final class FileIO {
       }
       // System.out.printf ("Not skipping ppt  %s\n", line);
 
-      assert !state.is_decl_file : "Declaration files should not contain samples";
+      if (state.is_decl_file) {
+        if ((! new_decl_format) && line.startsWith ("ppt ")) {
+          throw new Daikon.TerminationMessage(String.format("Declaration file %s is not version 2.0, but line %d looks like a version 2.0 declaration: %s%nPerhaps the file is missing a \"decl-version 2.0\" record at the beginning", state.filename, state.reader.getLineNumber(), line)); }
+        throw new Daikon.TerminationMessage(String.format("Declaration files should not contain samples, but file %s does at line %d: %s", state.filename, state.reader.getLineNumber(), line));
+      }
 
       // Parse the ppt name
       try {
