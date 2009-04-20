@@ -142,7 +142,7 @@ LimitedSizeIntSet.java: LimitedSizeSet.java.jpp
 ###
 ###
 
-JAVAC_NULLNESS_ARGS = -proc:only -processor checkers.nullness.NullnessChecker
+JAVAC_NULLNESS_ARGS = -proc:only -processor checkers.nullness.NullnessChecker -XDTAannotationsincomments -source 1.7 -target 1.7
 JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 
 check-nullness: check-nullness-utilmde
