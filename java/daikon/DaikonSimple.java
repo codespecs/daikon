@@ -479,7 +479,7 @@ public class DaikonSimple {
     }
 
     /**
-     * process the sample by checking it against each existing invariant at the
+     * Process the sample by checking it against each existing invariant at the
      * program point and removing the invariant from the list of possibles if
      * any invariant is falsified.
      */
