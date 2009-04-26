@@ -656,7 +656,7 @@ public class SEQSEQINTEQUAL
   }
 
   // Look up a previously instantiated invariant.
-  public static SEQSEQINTEQUAL find(PptSlice ppt) {
+  public static /*@Nullable*/ SEQSEQINTEQUAL find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 2);
     for (Invariant inv : ppt.invs) {
       if (inv instanceof SEQSEQINTEQUAL)
@@ -668,7 +668,7 @@ public class SEQSEQINTEQUAL
   /**
    * Returns a list of non-instantiating suppressions for this invariant.
    */
-  public NISuppressionSet get_ni_suppressions() {
+  public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return (suppressions);
   }
 

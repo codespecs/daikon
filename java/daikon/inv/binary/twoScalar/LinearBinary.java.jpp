@@ -137,7 +137,7 @@ public class CLASSNAME
    *                    permuted to match the variable order in parent_ppt.
    * @param parent_ppt  Slice that will contain the new invariant
    */
-  public Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
+  public /*@Nullable*/ Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create a matching list of cores
     List<CORECLASS> cores = new ArrayList<CORECLASS>();
@@ -147,11 +147,11 @@ public class CLASSNAME
 
     // Merge the cores and build a new invariant containing the merged core
     CLASSNAME result = new CLASSNAME (parent_ppt);
-    result.core = core.merge (cores, result);
-    if (result.core == null)
+    CORECLASS newcore = core.merge (cores, result);
+    if (newcore == null)
       return (null);
-    else
-      return (result);
+    result.core = newcore;
+    return (result);
   }
 
   public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y, int count) {
@@ -240,7 +240,7 @@ public class CLASSNAME
 
 
   // Look up a previously instantiated invariant.
-  public static CLASSNAME find(PptSlice ppt) {
+  public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 2);
     for (Invariant inv : ppt.invs) {
       if (inv instanceof CLASSNAME)

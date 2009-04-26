@@ -110,9 +110,9 @@ public abstract class Invariant
 
   /**
    * The program point for this invariant, includes values, number of
-   * samples, VarInfos, etc.
+   * samples, VarInfos, etc.  Can be null for a "prototype" invariant.
    **/
-  public PptSlice ppt;
+  public /*@Nullable*/ PptSlice ppt;
 
   // Has to be public so wrappers can read it.
   /**
@@ -393,7 +393,7 @@ public abstract class Invariant
   // in the ppt.  Or, don't put too much work in the constructor and instead
   // have the caller do that.
   // The "ppt" argument can be null if this is a prototype invariant.
-  protected Invariant(PptSlice ppt) {
+  protected Invariant(/*@Nullable*/ PptSlice ppt) {
     this.ppt = ppt;
   }
 
@@ -584,7 +584,7 @@ public abstract class Invariant
    * @return the merged invariant or null if the invariants didn't represent
    * the same invariant.
    */
-  public Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
+  public /*@Nullable*/ Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
 
     Invariant first = invs.get(0);
     Invariant result = first.clone();
@@ -1080,7 +1080,7 @@ public abstract class Invariant
    * Returns the set of non-instantiating suppressions for this invariant.
    * Should be overridden by subclasses with non-instantiating suppressions.
    */
-  public NISuppressionSet get_ni_suppressions() {
+  public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return (null);
   }
 

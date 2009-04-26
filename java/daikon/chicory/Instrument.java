@@ -696,9 +696,9 @@ public class Instrument implements ClassFileTransformer {
   /**
    * Returns the local variable used to store the return result.  If it
    * is not present, creates it with the specified type.  If the variable
-   * is known to already exist, the type can be null
+   * is known to already exist, the type can be null.
    */
-  LocalVariableGen get_return_local (MethodGen mgen, Type return_type) {
+  LocalVariableGen get_return_local (MethodGen mgen, /*@Nullable*/ Type return_type) {
 
     // Find the local used for the return value
     LocalVariableGen return_local = null;

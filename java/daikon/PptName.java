@@ -25,11 +25,11 @@ public class PptName
   // These cannot be "final": they must be re-interned upon deserialization.
   private /*@Interned*/ String fullname;   // interned full program point name
   // fn_name and point together comprise fullname
-  private /*@Interned*/ String fn_name;    // interned; the part of fullname before ":::"
-  private /*@Interned*/ String point;      // interned post-separator (separator is ":::")
+  private /*@Nullable*/ /*@Interned*/ String fn_name;    // interned; the part of fullname before ":::"
+  private /*@Nullable*/ /*@Interned*/ String point;      // interned post-separator (separator is ":::")
   // cls and method together comprise fn_name
-  private /*@Interned*/ String cls;        // interned fully-qualified class name
-  private /*@Interned*/ String method;     // interned method signature, including types
+  private /*@Nullable*/ /*@Interned*/ String cls;        // interned fully-qualified class name
+  private /*@Nullable*/ /*@Interned*/ String method;     // interned method signature, including types
 
   // Representation invariant:
   //

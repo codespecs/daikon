@@ -574,7 +574,7 @@ public final class INTEQUAL
   // such as is_equal, is_lessequal, etc.
   // Look up a previously instantiated INTEQUAL relationship.
   // Should this implementation be made more efficient?
-  public static INTEQUAL find(PptSlice ppt) {
+  public static /*@Nullable*/ INTEQUAL find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 2);
     for (Invariant inv : ppt.invs) {
       if (inv instanceof INTEQUAL)
@@ -1104,8 +1104,9 @@ public final class INTEQUAL
   /** NI suppressions, initialized in get_ni_suppressions() **/
   private static NISuppressionSet suppressions = null;
 
+#if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
   /** Returns the non-instantiating suppressions for this invariant. **/
-  public NISuppressionSet get_ni_suppressions() {
+  public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
         NISuppressee suppressee = new NISuppressee (INTEQUAL.class, 2);
@@ -1143,6 +1144,11 @@ public final class INTEQUAL
     }
     return (suppressions);
   }
-
+#else
+  /** Returns the non-instantiating suppressions for this invariant. **/
+  public NISuppressionSet get_ni_suppressions() {
+    return null;
+  }
+#endif
 
 }

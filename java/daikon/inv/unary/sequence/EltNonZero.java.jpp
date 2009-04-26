@@ -345,7 +345,7 @@ public final class CLASSNAME
   }
 
   // Look up a previously instantiated invariant.
-  public static CLASSNAME find(PptSlice ppt) {
+  public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 1);
     for (Invariant inv : ppt.invs) {
       if (inv instanceof CLASSNAME)
@@ -358,7 +358,7 @@ public final class CLASSNAME
   private static NISuppressionSet suppressions = null;
 
   /** returns the ni-suppressions for CLASSNAME **/
-  public NISuppressionSet get_ni_suppressions() {
+  public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       NISuppressee suppressee = new NISuppressee (CLASSNAME.class, 1);
 

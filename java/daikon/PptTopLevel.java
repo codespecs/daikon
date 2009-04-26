@@ -248,7 +248,7 @@ public class PptTopLevel extends Ppt {
    * of successor PptTopLevel.  Can be null (not an empty list)
    * if there are no successors.
    */
-  public List<String> ppt_successors = null;
+  public /*@Nullable*/ List<String> ppt_successors = null;
 
   /**
    * List of predecesor program points. Computed from ppt_successors.

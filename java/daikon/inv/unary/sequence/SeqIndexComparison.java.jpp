@@ -227,11 +227,12 @@ public class CLASSNAME extends SUPERCLASS {
     return new CLASSNAME (slice);
   }
 
+#if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
   /** NI suppressions, initialized in get_ni_suppressions() **/
   private static NISuppressionSet suppressions = null;
 
   /** returns the ni-suppressions for CLASSNAME **/
-  public NISuppressionSet get_ni_suppressions() {
+  public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
       NISuppressee suppressee = new NISuppressee (CLASSNAME.class, 1);
@@ -264,6 +265,12 @@ public class CLASSNAME extends SUPERCLASS {
     }
     return (suppressions);
   }
+#else
+  /** returns the ni-suppressions for CLASSNAME **/
+  public NISuppressionSet get_ni_suppressions() {
+    return null;
+  }
+#endif
 
   protected Invariant resurrect_done_swapped() {
     #if defined(SYMMETRIC_OP)
@@ -397,7 +404,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   // Look up a previously instantiated invariant.
-  public static CLASSNAME find(PptSlice ppt) {
+  public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 1);
     for (Invariant inv : ppt.invs) {
       if (inv instanceof CLASSNAME)

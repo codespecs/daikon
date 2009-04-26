@@ -86,7 +86,7 @@ public class NONZERO
    * Determines whether non-null is obvious on 'this' variables.  While
    * 'this' can never be null (making the invariant vacuous), object-client
    * relations can exist between this and references to the class.  The client
-   * references can be null, which make this interesting
+   * references can be null, which makes this invariant interesting.
    */
   private static boolean this_non_null_obvious = true;
 

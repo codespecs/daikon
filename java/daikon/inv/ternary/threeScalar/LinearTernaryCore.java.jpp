@@ -1315,7 +1315,7 @@ public final class CLASSNAME
    *                all be permuted to match the variable order in
    *                ppt.
    */
-  public CLASSNAME merge (List<CLASSNAME> cores, Invariant wrapper) {
+  public /*@Nullable*/ CLASSNAME merge (List<CLASSNAME> cores, Invariant wrapper) {
 
     // Look for any active planes.  All must define the same plane
     CLASSNAME first = null;

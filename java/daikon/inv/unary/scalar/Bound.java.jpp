@@ -711,7 +711,7 @@ public class LOWERBOUND
   }
 
   // Look up a previously instantiated invariant.
-  public static LOWERBOUND find(PptSlice ppt) {
+  public static /*@Nullable*/ LOWERBOUND find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 1);
     for (Invariant inv : ppt.invs) {
       if (inv instanceof LOWERBOUND)
@@ -741,7 +741,7 @@ public class LOWERBOUND
    *                    parent_ppt.
    * @param parent_ppt  Slice that will contain the new invariant
    */
-  public Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
+  public /*@Nullable*/ Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create the initial parent invariant from the first child
     LOWERBOUND first = (LOWERBOUND) invs.get(0);

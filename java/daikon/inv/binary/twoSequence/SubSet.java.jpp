@@ -324,7 +324,7 @@ public class SUBSET
   }
 
   // Look up a previously instantiated SubSet relationship.
-  public static SUBSET find(PptSlice ppt) {
+  public static /*@Nullable*/ SUBSET find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 2);
     for (Invariant inv : ppt.invs) {
       if (inv instanceof SUBSET)
@@ -342,7 +342,7 @@ public class SUBSET
   private static NISuppressionSet suppressions = null;
 
   /** returns the ni-suppressions for SUBSET **/
-  public NISuppressionSet get_ni_suppressions() {
+  public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       NISuppressee suppressee = new NISuppressee (SUBSET.class, 2);
 

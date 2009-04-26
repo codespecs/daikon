@@ -706,7 +706,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /**
      * Returns a list of non-instantiating suppressions for this invariant.
      */
-    public NISuppressionSet get_ni_suppressions() {
+    public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);
     }
@@ -934,7 +934,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    public NISuppressionSet get_ni_suppressions() {
+    public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);
     }
@@ -1087,7 +1087,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     #endif
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    public NISuppressionSet get_ni_suppressions() {
+    public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);
     }
@@ -1169,7 +1169,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    public NISuppressionSet get_ni_suppressions() {
+    public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       return (suppressions);
     }
 
@@ -1177,17 +1177,19 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static NISuppressee suppressee
       = new NISuppressee (BitwiseAndZero.class, 2);
 
+    #if !defined(SEQ)
     private static NISuppressionSet suppressions =
       new NISuppressionSet (new NISuppression[] {
-        #if !defined(SEQ)
-          // (var1 == 0) ==> (var1 & var2) == 0
-          new NISuppression (var1_eq_0, suppressee),
+        // (var1 == 0) ==> (var1 & var2) == 0
+        new NISuppression (var1_eq_0, suppressee),
 
-          // (var2 == 0) ==> (var1 & var2) == 0
-          new NISuppression (var2_eq_0, suppressee),
+        // (var2 == 0) ==> (var1 & var2) == 0
+        new NISuppression (var2_eq_0, suppressee),
 
-        #endif
-      });
+    });
+    #else
+    private static NISuppressionSet suppressions = null;
+    #endif
   }
 
   /**
@@ -1245,7 +1247,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    public NISuppressionSet get_ni_suppressions() {
+    public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);
     }
@@ -1333,7 +1335,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /**
      * Returns a list of non-instantiating suppressions for this invariant.
      */
-    public NISuppressionSet get_ni_suppressions() {
+    public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);
     }

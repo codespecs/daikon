@@ -242,7 +242,7 @@ public class Modulus
   }
 
   // Look up a previously instantiated invariant.
-  public static Modulus find(PptSlice ppt) {
+  public static /*@Nullable*/ Modulus find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 1);
     for (Invariant inv : ppt.invs) {
       if (inv instanceof Modulus)

@@ -21,7 +21,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   NISuppression[] suppression_set;
 
   public NISuppressionSet (NISuppression[] suppressions) {
-
+    assert suppressions != null;
+    assert suppressions.length != 0;
     suppression_set = suppressions;
   }
 
@@ -274,8 +275,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
   /**
    * Checks the falsified invariant against the slice specified by vis.
-   * If the falsification of inv removed the last valid suppression then
-   * instantiates the suppressee
+   * If the falsification of inv removed the last valid suppression, then
+   * instantiates the suppressee.
    */
   private void check_falsified (PptTopLevel ppt, VarInfo[] vis, Invariant inv,
                                List<Invariant> new_invs) {

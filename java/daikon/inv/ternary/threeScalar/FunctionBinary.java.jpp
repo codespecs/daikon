@@ -149,7 +149,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * Map from function name (eg, MultiplyLong, MinimumFloat) to an array
    * of instances (one for each valid permutation) for that function.
    */
-  private static Map<String,CLASSNAME[]> functions = null;
+  private static Map<String,CLASSNAME[]> functions = new LinkedHashMap<String,CLASSNAME[]>();
 
   /**
    * A list indexed by function number to an array of instances (one for
@@ -213,7 +213,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   public static List<Invariant> instantiate_all (PptSlice slice) {
 
     // If this is the first call
-    if (functions == null) {
+    if (functions.isEmpty()) {
       build_func_list();
     }
 
@@ -251,7 +251,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     List<Invariant> result = new ArrayList<Invariant>();
 
     // If this is the first call
-    if (functions == null) {
+    if (functions.isEmpty()) {
       build_func_list();
     }
 
@@ -364,7 +364,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return (this);
 
     // Find the class that corresponds to the new order
-    if (functions == null)
+    if (functions.isEmpty())
       build_func_list();
     int func_id = get_function_id();
     CLASSNAME[] fb_arr = func_list.get (func_id);
@@ -473,7 +473,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   /**
    * If the arg is a sequence size, return the sequence; otherwise return null.
    **/
-  private VarInfo sized_sequence(VarInfo size) {
+  private @Nullable VarInfo sized_sequence(VarInfo size) {
     if (size.derived instanceof SequenceLength) {
       return ((SequenceLength)size.derived).base;
     }

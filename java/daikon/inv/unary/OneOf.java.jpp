@@ -1669,7 +1669,7 @@ public final class ONEOFSCALAR
   }
 
   // Look up a previously instantiated invariant.
-  public static ONEOFSCALAR find(PptSlice ppt) {
+  public static /*@Nullable*/ ONEOFSCALAR find(PptSlice ppt) {
     Assert.assertTrue(ppt.arity() == 1);
     for (Invariant inv : ppt.invs) {
       if (inv instanceof ONEOFSCALAR)
@@ -1704,7 +1704,7 @@ public final class ONEOFSCALAR
    *                   the variable order in parent_ppt.
    * @param parent_ppt Slice that will contain the new invariant
    */
-  public Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
+  public /*@Nullable*/ Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create the initial parent invariant from the first child
     ONEOFSCALAR  first = (ONEOFSCALAR) invs.get(0);

@@ -795,7 +795,7 @@ public final class FileIO {
   static final class Invocation implements Comparable<Invocation> {
     PptTopLevel ppt; // used in printing and in suppressing duplicates
     // Rather than a valuetuple, place its elements here.
-    Object[] vals;
+    /*@Nullable*/ Object[] vals;
     int[] mods;
 
     static Object canonical_hashcode = new Object();
@@ -1095,19 +1095,24 @@ public final class FileIO {
     public int varcomp_format;
 
     //
-    // This is the discriminated-union part of the ParseState
+    // This is the discriminated-union part of the ParseState.
+    // (Presumably this design was chosen for efficiency, to avoid creating
+    // & garbage-collecting these values many times.)
     //
 
     public ParseStatus status;
 
-    /** Current ppt **/
-    public PptTopLevel ppt;     // used when state=DECL or SAMPLE
+    /** Current ppt.  Used when status=DECL or SAMPLE.  Can be null if this
+     * declaration was skipped because of --ppt-select-pattern or
+     * --ppt-omit-pattern.
+     */
+    public /*@Nullable*/ PptTopLevel ppt;
 
-    /** The current nonce **/
-    public Integer nonce;       // used when state=SAMPLE
+    /** The current nonce.  Used when status=SAMPLE. */
+    public /*@Nullable*/ Integer nonce;
 
-    /** The current set of values **/
-    public ValueTuple vt;       // used when state=SAMPLE
+    /** The current set of values.  Used when status=SAMPLE. */
+    public /*@Nullable*/ ValueTuple vt;
 
     /** Miscellaneous text in the parsed item **/
     public Object payload;      // used when state=COMMENT
