@@ -1,9 +1,12 @@
-# List of Javadoc index files, for javadoc-index-to-alist
-
+# List of Javadoc index files, for javadoc-index-to-alist.
+# Run it like this:  javadoc-index-to-alist > ~/emacs/javadoc-index.el
 
 ## JDK
 ~mernst/java/jdk-docs/api/index-files/*.html
-~mernst/java/jdk-docs/jdk/api/javac/tree/index-all.html
+#Comment out in favor of the JSR 308 version, below.  Should use this if
+#the below is not available (need logic for that in javadoc-index-to-alist?):
+#~mernst/java/jdk-docs/jdk/api/javac/tree/index-all.html
+~mernst/research/typequals/annotations/langtools/build/javadoc/javac/index-all.html
 ~mernst/java/jdk-docs/jdk/api/javadoc/doclet/index-all.html
 # split(/\n/, `find ~mernst/java/jdk/docs/guide -name index-all.html`)
 
@@ -25,7 +28,6 @@
 ~mernst/research/invariants/java/doc/index-all.html
 ~mernst/research/typequals/annotations/checkers/doc/index-all.html
 ~mernst/research/typequals/annotations/scene-lib/javadoc/index-all.html
-
 
 ## Obsolete packages
 ## Use java.util.regexp in JDK1.4 instead
