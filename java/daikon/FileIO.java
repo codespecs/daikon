@@ -206,12 +206,28 @@ public final class FileIO {
   }
 
   // Utilities
-  // The Daikon manual states that "#" is the comment starter, but
-  // some code assumes "//", so permit both (at least temporarily).
-  // static final String comment_prefix = "//";
   public static final boolean isComment(String s) {
-    return s.startsWith("//") || s.startsWith("#");
+    return s != null && (s.startsWith("//") || s.startsWith("#"));
   }
+
+  public static final boolean nextLineIsComment(BufferedReader reader) {
+    boolean result = false;
+    try {
+      reader.mark(100);
+      String nextline = reader.readLine();
+      result = isComment(nextline);
+    } catch (IOException e) {
+      result = false;
+    } finally {
+      try {
+        reader.reset();
+      } catch (IOException e) {
+        throw new Error(e);
+      }
+    }
+    return result;
+  }
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// Declaration files
@@ -749,18 +765,22 @@ public final class FileIO {
                   version);
   }
 
-  private static void read_list_implementors (LineNumberReader reader)
+  // Each line following is the name (in JVM form) of a class that
+  // implements java.util.List.  All those lines (including interspersed
+  // comments) are returned.
+  private static String read_list_implementors (LineNumberReader reader)
     throws IOException {
-    // Each line following is the name (in JVM form) of a class
-    // that implements java.util.List.
+    StringBuilderDelimited result = new StringBuilderDelimited(lineSep);
     for (;;) {
       String line = reader.readLine();
       if (line == null || line.equals(""))
         break;
+      result.append(line);
       if (isComment(line))
         continue;
       ProglangType.list_implementors.add(line.intern());
     }
+    return result.toString();
   }
 
 
@@ -1013,14 +1033,19 @@ public final class FileIO {
 
   /** The type of the record that was most recently read. */
   public enum ParseStatus {
-    NULL,               // haven't read anything yet
-    DECL,               // got a decl
     SAMPLE,             // got a sample
+
+    DECL,               // got a ppt decl
+    DECL_VERSION,       // got an indication of the ppt decl format
     COMPARABILITY,      // got a VarComparability declaration
-    LIST,               // got a ListImplementors declaration
-    EOF,                // found EOF
+    LIST_IMPLEMENTORS,  // got a ListImplementors declaration
+    INPUT_LANGUAGE,     // got an input-language declaration
+
+    NULL,               // haven't read anything yet
+    COMMENT,            // got a comment
+    EOF,                // reached end of file
+    TRUNCATED,          // dkconfig_max_line_number reached (without error)
     ERROR,              // continuable error; fatal errors thrown as exceptions
-    TRUNCATED           // dkconfig_max_line_number reached
   };
 
   /**
@@ -1032,6 +1057,7 @@ public final class FileIO {
    * <li>
    *   The record that was most recently read; thus, ParseState is
    *   essentially a discriminated union whose tag is a ParseStatus.
+   *   (TODO:  These are poor names that should probably be swapped!)
    *   ParseState is what is returned (actually, side-effected) by
    *   method read_data_trace_record when it reads a record.
    * </ol>
@@ -1075,13 +1101,16 @@ public final class FileIO {
     public ParseStatus status;
 
     /** Current ppt **/
-    public PptTopLevel ppt;     // returned when state=DECL or SAMPLE
+    public PptTopLevel ppt;     // used when state=DECL or SAMPLE
 
     /** The current nonce **/
-    public Integer nonce;       // returned when state=SAMPLE
+    public Integer nonce;       // used when state=SAMPLE
 
     /** The current set of values **/
-    public ValueTuple vt;       // returned when state=SAMPLE
+    public ValueTuple vt;       // used when state=SAMPLE
+
+    /** Miscellaneous text in the parsed item **/
+    public Object payload;      // used when state=COMMENT
 
 
     /** Start parsing the given file. */
@@ -1230,7 +1259,7 @@ public final class FileIO {
 
 
   /**
-   * Read declarations or samples (not just sample data as the name might
+   * Read declarations OR samples (not just sample data as the name might
    * imply) from .dtrace file.
    **/
   static void read_data_trace_file(String filename, PptMap all_ppts,
@@ -1301,9 +1330,11 @@ public final class FileIO {
 
 
   /**
-   * Read a single record (declaration OR sample) from a dtrace file.
+   * Read a single record of ANY type (sample, declaration, comparability,
+   * etc.) from a dtrace file.
    * The record is stored by side effect into the state argument.
    */
+  // TODO:  For clarity, this should perhaps return its side-effected argument.
   public static void read_data_trace_record (ParseState state)
     throws IOException {
 
@@ -1311,8 +1342,21 @@ public final class FileIO {
 
     for (String line = reader.readLine(); line != null;
          line = reader.readLine()) {
-      if (line.equals("") || isComment(line)) {
+      if (line.equals("")) {
         continue;
+      }
+
+      // This cleverness would not be necessary if every comment was followed by
+      // a blank line.  We can't depend on that, though.
+      if (isComment(line)) {
+        StringBuilderDelimited commentLines = new StringBuilderDelimited(lineSep);
+        commentLines.append(line);
+        while (nextLineIsComment(reader)) {
+          commentLines.append(reader.readLine());
+        }
+        state.payload = commentLines.toString();
+        state.status = ParseStatus.COMMENT;
+        return;
       }
 
       // stop at a specified point in the file
@@ -1354,15 +1398,19 @@ public final class FileIO {
       }
       if (line.startsWith ("input-language")) {
         String input_language = read_input_language (state, line);
+        state.payload = input_language;
+        state.status = ParseStatus.INPUT_LANGUAGE;
         return;
       }
       if (line.startsWith ("decl-version")) {
         read_decl_version (state, line);
+        state.payload = (new_decl_format ? "2.0" : "1.0");
+        state.status = ParseStatus.DECL_VERSION;
         return;
       }
       if (line.equals("ListImplementors")) {
-        read_list_implementors (reader);
-        state.status = ParseStatus.LIST;
+        state.payload = read_list_implementors (reader);
+        state.status = ParseStatus.LIST_IMPLEMENTORS;
         return;
       }
       String ppt_name = line;

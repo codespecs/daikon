@@ -57,33 +57,46 @@ public class DtraceConvert {
       while (state.status != FileIO.ParseStatus.EOF) {
         FileIO.read_data_trace_record (state);
         switch(state.status) {
-        case NULL:
-          System.out.println("Got null");
-          break;
-        case TRUNCATED:
-          System.out.println("Got truncated");
-          break;
-        case ERROR:
-          System.out.println("Got an error");
-          break;
-        case EOF:
-          System.out.println("Got EOF");
-          break;
-        case DECL:
-          System.out.println("Got a decl");
-          break;
+
         case SAMPLE:
           // This should eventually call
           // processor.process_sample (state.all_ppts, state.ppt, state.vt, state.nonce);
           // but for the time being, it would be enough to hard-code the logic here.
           System.out.println("Got a sample");
           break;
+
+        case DECL:
+          System.out.println("Got a decl");
+          break;
+        case DECL_VERSION:
+          System.out.println("Got a decl_version");
+          break;
         case COMPARABILITY:
-          System.out.println("Got comparability");
+          System.out.println("Got a comparability");
           break;
-        case LIST:
-          System.out.println("Got list");
+        case LIST_IMPLEMENTORS:
+          System.out.println("Got a list_implementors");
           break;
+        case INPUT_LANGUAGE:
+          System.out.println("Got a input_language");
+          break;
+
+        case NULL:
+          System.out.println("Got a null");
+          break;
+        case COMMENT:
+          System.out.println("Got a comment");
+          break;
+        case EOF:
+          System.out.println("Got a eof");
+          break;
+        case TRUNCATED:
+          System.out.println("Got a truncated");
+          break;
+        case ERROR:
+          System.out.println("Got a error");
+          break;
+
         default:
           throw new Error();
         }
