@@ -784,6 +784,8 @@ check-interning-all:
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${JAVA_FILES}
 
+check-nullness: check-nullness-all
+
 check-nullness-all: check-nullness-all-withstubs
 
 check-nullness-all-nostubs:
