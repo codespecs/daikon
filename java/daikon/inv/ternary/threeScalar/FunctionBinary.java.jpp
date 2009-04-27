@@ -473,7 +473,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   /**
    * If the arg is a sequence size, return the sequence; otherwise return null.
    **/
-  private @Nullable VarInfo sized_sequence(VarInfo size) {
+  private /*@Nullable*/ VarInfo sized_sequence(VarInfo size) {
     if (size.derived instanceof SequenceLength) {
       return ((SequenceLength)size.derived).base;
     }
