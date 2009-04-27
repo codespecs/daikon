@@ -167,6 +167,15 @@ public class FieldInfo extends DaikonVariableInfo
         return field.getName();
     }
 
+  /* Don't include 'this' in instance variable names
+  public String getName() {
+    if (isStatic())
+      return super.getName();
+    else
+      return get_relative_name();
+  }
+  */
+
   /**
    * static final fields are NOMOD
    */
