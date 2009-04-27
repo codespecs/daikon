@@ -321,6 +321,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * suppressions are valid.  A suppression is valid if all of its
    * suppressors are true.
    *
+   * Also updates the debug information in each suppressor.
+   *
    * @see #is_instantiate_ok(PptSlice) for a check that considers missing
    */
   public boolean suppressed (PptSlice slice) {
@@ -333,6 +335,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * specified ppt and var_infos.  The suppression set is valid if any
    * of its suppressions are valid.  A suppression is valid if all of
    * its suppressors are true.
+   *
+   * Also updates the debug information in each suppressor.
    *
    * @see #is_instantiate_ok(PptTopLevel,VarInfo[]) for a check that
    * considers missing
