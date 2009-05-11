@@ -45,14 +45,14 @@ public class IsPointer extends SingleScalar {
 
 
     /** Returns the prototype invariant for IsPointer **/
-    public static Invariant get_proto() {
+    public static IsPointer get_proto() {
       if (proto == null)
         proto = new IsPointer(null);
       return (proto);
     }
 
     @Override
-    protected Invariant instantiate_dyn(PptSlice slice) {
+    protected IsPointer instantiate_dyn(PptSlice slice) {
         return new IsPointer(slice);
     }
 

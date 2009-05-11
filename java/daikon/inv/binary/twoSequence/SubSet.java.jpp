@@ -90,7 +90,7 @@ public class SUBSET
   private static SUBSET proto;
 
   /** Returns the prototype invariant for SUBSET **/
-  public static Invariant get_proto() {
+  public static SUBSET get_proto() {
     if (proto == null)
       proto = (new SUBSET (null));
     return (proto);
@@ -133,7 +133,7 @@ public class SUBSET
   }
 
   /** instantiates the invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
+  public SUBSET instantiate_dyn (PptSlice slice) {
     return new SUBSET (slice);
   }
 

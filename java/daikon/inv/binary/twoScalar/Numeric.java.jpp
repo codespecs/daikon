@@ -646,7 +646,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static Divides proto = new Divides (null, false);
     private static Divides proto_swap = new Divides (null, true);
 
-    public static Invariant get_proto (boolean swap) {
+    public static CLASSNAME get_proto (boolean swap) {
       if (swap) {
         return (proto_swap);
       } else {
@@ -662,7 +662,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected Invariant instantiate_dyn (PptSlice slice) {
+    protected Divides instantiate_dyn (PptSlice slice) {
       return new Divides (slice, swap);
     }
 
@@ -833,7 +833,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static Square proto = new Square (null, false);
     private static Square proto_swap = new Square (null, true);
 
-    public static Invariant get_proto (boolean swap) {
+    public static Square get_proto (boolean swap) {
       if (swap) return proto_swap;
       else return proto;
     }
@@ -845,7 +845,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
-    protected Invariant instantiate_dyn (PptSlice slice) {
+    protected Square instantiate_dyn (PptSlice slice) {
       return new Square (slice, swap);
     }
 
@@ -899,7 +899,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static ZeroTrack proto = new ZeroTrack (null, false);
     private static ZeroTrack proto_swap = new ZeroTrack (null, true);
 
-    public static Invariant get_proto (boolean swap) {
+    public static ZeroTrack get_proto (boolean swap) {
       if (swap) return proto_swap;
       else return proto;
     }
@@ -912,7 +912,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected Invariant instantiate_dyn (PptSlice slice) {
+    protected ZeroTrack instantiate_dyn (PptSlice slice) {
       return new ZeroTrack (slice, swap);
     }
 
@@ -976,7 +976,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     private static BitwiseComplement proto;
 
-    public static Invariant get_proto() {
+    public static BitwiseComplement get_proto() {
       if (proto == null)
         proto = new BitwiseComplement (null);
       return (proto);
@@ -990,7 +990,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected Invariant instantiate_dyn (PptSlice slice) {
+    protected BitwiseComplement instantiate_dyn (PptSlice slice) {
       return new BitwiseComplement (slice);
     }
 
@@ -1034,7 +1034,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static BitwiseSubset proto = new BitwiseSubset (null, false);
     private static BitwiseSubset proto_swap = new BitwiseSubset (null, true);
 
-    public static Invariant get_proto (boolean swap) {
+    public static BitwiseSubset get_proto (boolean swap) {
       if (swap) return proto_swap;
       else return proto;
     }
@@ -1047,7 +1047,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    public Invariant instantiate_dyn (PptSlice slice) {
+    public BitwiseSubset instantiate_dyn (PptSlice slice) {
       return new BitwiseSubset (slice, swap);
     }
 
@@ -1129,7 +1129,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     private static BitwiseAndZero proto;
 
-    public static Invariant get_proto () {
+    public static BitwiseAndZero get_proto () {
       if (proto == null)
         proto = new BitwiseAndZero (null);
       return (proto);
@@ -1143,7 +1143,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    public Invariant instantiate_dyn (PptSlice slice) {
+    public BitwiseAndZero instantiate_dyn (PptSlice slice) {
       return new BitwiseAndZero (slice);
     }
 
@@ -1211,7 +1211,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static ShiftZero proto = new ShiftZero (null, false);
     private static ShiftZero proto_swap = new ShiftZero (null, true);
 
-    public static Invariant get_proto (boolean swap) {
+    public static ShiftZero get_proto (boolean swap) {
       if (swap) return proto_swap;
       else return proto;
     }
@@ -1224,7 +1224,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected Invariant instantiate_dyn (PptSlice slice) {
+    protected ShiftZero instantiate_dyn (PptSlice slice) {
       return new ShiftZero (slice, swap);
     }
 
@@ -1289,7 +1289,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static SubString proto = new SubString (null, false);
     private static SubString proto_swap = new SubString (null, true);
 
-    public static Invariant get_proto (boolean swap) {
+    public static SubString get_proto (boolean swap) {
       if (swap) {
         return (proto_swap);
       } else {
@@ -1305,7 +1305,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected Invariant instantiate_dyn (PptSlice slice) {
+    protected SubString instantiate_dyn (PptSlice slice) {
       return new SubString (slice, swap);
     }
 

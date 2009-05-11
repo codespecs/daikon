@@ -83,15 +83,15 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   private static CNAME(FUNCTION,PERM_NAME) proto;
 
   /** Returns the prototype invariant for CNAME(FUNCTION,PERM_NAME) **/
-  public static Invariant get_proto() {
+  public static CNAME(FUNCTION,PERM_NAME) get_proto() {
     if (proto == null)
       proto = new CNAME(FUNCTION,PERM_NAME) (null);
     return (proto);
   }
 
   /** instantiate an invariant on the specified slice **/
-  protected Invariant instantiate_dyn (PptSlice slice) {
-    return (new CNAME(FUNCTION,PERM_NAME) (slice));
+  protected CNAME(FUNCTION,PERM_NAME) instantiate_dyn (PptSlice slice) {
+    return new CNAME(FUNCTION,PERM_NAME) (slice);
   }
 
   private CNAME(FUNCTION,PERM_NAME) (PptSlice slice) {

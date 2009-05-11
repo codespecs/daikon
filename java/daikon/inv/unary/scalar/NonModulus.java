@@ -50,7 +50,7 @@ public class NonModulus
   private static NonModulus proto;
 
   /** Returns the prototype invariant for NonModulus **/
-  public static Invariant get_proto() {
+  public static NonModulus get_proto() {
     if (proto == null)
       proto = new NonModulus (null);
     return (proto);
@@ -71,7 +71,7 @@ public class NonModulus
   }
 
   /** instantiate an invariant on the specified slice **/
-  protected Invariant instantiate_dyn (PptSlice slice) {
+  protected NonModulus instantiate_dyn (PptSlice slice) {
     return new NonModulus (slice);
   }
 

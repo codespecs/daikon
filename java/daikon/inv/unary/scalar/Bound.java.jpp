@@ -253,7 +253,7 @@ public class LOWERBOUND
   private static LOWERBOUND proto;
 
   /** Returns the prototype invariant for LOWERBOUND **/
-  public static Invariant get_proto() {
+  public static LOWERBOUND get_proto() {
     if (proto == null)
       proto = new LOWERBOUND (null);
     return (proto);
@@ -274,7 +274,7 @@ public class LOWERBOUND
     }
 
   /** instantiate an invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
+  public LOWERBOUND instantiate_dyn (PptSlice slice) {
     return new LOWERBOUND (slice);
   }
 

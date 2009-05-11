@@ -103,7 +103,7 @@ public class NONZERO
   private static NONZERO proto;
 
   /** Returns the prototype invariant for NONZERO **/
-  public static Invariant get_proto() {
+  public static NONZERO get_proto() {
     if (proto == null)
       proto = new NONZERO (null);
     return (proto);
@@ -128,7 +128,7 @@ public class NONZERO
   }
 
   /** instantiate an invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
+  public NONZERO instantiate_dyn (PptSlice slice) {
     return new NONZERO (slice);
   }
 

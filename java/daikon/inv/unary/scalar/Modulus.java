@@ -44,7 +44,7 @@ public class Modulus
   private static Modulus proto;
 
   /** Returns the prototype invariant for Modulus **/
-  public static Invariant get_proto() {
+  public static Modulus get_proto() {
     if (proto == null)
       proto = new Modulus (null);
     return (proto);
@@ -65,7 +65,7 @@ public class Modulus
   }
 
   /** Instantiate an invariant on the specified slice **/
-  protected Invariant instantiate_dyn (PptSlice slice) {
+  protected Modulus instantiate_dyn (PptSlice slice) {
     return new Modulus (slice);
   }
 

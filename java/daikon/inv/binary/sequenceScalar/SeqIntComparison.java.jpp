@@ -168,7 +168,7 @@ public final class SEQINTEQUAL
   private static SEQINTEQUAL proto;
 
   /** Returns the prototype invariant for SEQINTEQUAL **/
-  public static Invariant get_proto () {
+  public static SEQINTEQUAL get_proto () {
     if (proto == null)
       proto = new SEQINTEQUAL (null);
     return (proto);
@@ -207,7 +207,7 @@ public final class SEQINTEQUAL
   }
 
   /** instantiates the invariant on the specified slice **/
-  protected Invariant instantiate_dyn (PptSlice slice) {
+  protected SEQINTEQUAL instantiate_dyn (PptSlice slice) {
     return new SEQINTEQUAL (slice);
   }
 

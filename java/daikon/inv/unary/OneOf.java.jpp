@@ -319,7 +319,7 @@ public final class ONEOFSCALAR
   private static ONEOFSCALAR proto;
 
   /** Returns the prototype invariant for ONEOFSCALAR **/
-  public static Invariant get_proto() {
+  public static ONEOFSCALAR get_proto() {
     if (proto == null)
       proto = new ONEOFSCALAR (null);
     return (proto);
@@ -331,7 +331,7 @@ public final class ONEOFSCALAR
   }
 
   /** instantiate an invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
+  public ONEOFSCALAR instantiate_dyn (PptSlice slice) {
     return new ONEOFSCALAR(slice);
   }
 

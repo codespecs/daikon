@@ -292,7 +292,7 @@ public class SEQSEQINTEQUAL
   private static SEQSEQINTEQUAL proto;
 
   /** Returns the prototype invariant for SEQSEQINTEQUAL **/
-  public static Invariant get_proto() {
+  public static SEQSEQINTEQUAL get_proto() {
     if (proto == null)
       proto = new SEQSEQINTEQUAL (null, true);
     return (proto);
@@ -335,10 +335,10 @@ public class SEQSEQINTEQUAL
   }
 
   /** Instantiates the invariant on the specified slice **/
-  protected Invariant instantiate_dyn (PptSlice slice) {
+  protected SEQSEQINTEQUAL instantiate_dyn (PptSlice slice) {
     boolean has_order = slice.var_infos[0].aux.getFlag(VarInfoAux.HAS_ORDER)
                       && slice.var_infos[1].aux.getFlag(VarInfoAux.HAS_ORDER);
-    return (new SEQSEQINTEQUAL(slice, has_order));
+    return new SEQSEQINTEQUAL(slice, has_order);
   }
 
   protected Invariant resurrect_done_swapped() {

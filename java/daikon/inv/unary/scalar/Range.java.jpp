@@ -254,7 +254,7 @@ public abstract class RANGE extends SUPERCLASS {
     private static EqualZero proto;
 
     /** returns the prototype invariant **/
-    public static Invariant get_proto() {
+    public static EqualZero get_proto() {
       if (proto == null)
         proto = new EqualZero (null);
       return proto;
@@ -266,7 +266,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public Invariant instantiate_dyn (PptSlice slice) {
+    public EqualZero instantiate_dyn (PptSlice slice) {
       return new EqualZero (slice);
     }
 
@@ -301,7 +301,7 @@ public abstract class RANGE extends SUPERCLASS {
     private static EqualOne proto;
 
     /** returns the prototype invariant **/
-    public static Invariant get_proto() {
+    public static EqualOne get_proto() {
       if (proto == null)
         proto = new EqualOne (null);
       return proto;
@@ -313,7 +313,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public Invariant instantiate_dyn (PptSlice slice) {
+    public EqualOne instantiate_dyn (PptSlice slice) {
       return new EqualOne (slice);
     }
 
@@ -348,7 +348,7 @@ public abstract class RANGE extends SUPERCLASS {
     private static EqualMinusOne proto;
 
     /** returns the prototype invariant **/
-    public static Invariant get_proto() {
+    public static EqualMinusOne get_proto() {
       if (proto == null)
         proto = new EqualMinusOne (null);
       return proto;
@@ -360,7 +360,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public Invariant instantiate_dyn (PptSlice slice) {
+    public EqualMinusOne instantiate_dyn (PptSlice slice) {
       return new EqualMinusOne (slice);
     }
 
@@ -395,7 +395,7 @@ public abstract class RANGE extends SUPERCLASS {
     private static GreaterEqualZero proto;
 
     /** returns the prototype invariant **/
-    public static Invariant get_proto() {
+    public static GreaterEqualZero get_proto() {
       if (proto == null)
         proto = new GreaterEqualZero (null);
       return proto;
@@ -407,7 +407,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public Invariant instantiate_dyn (PptSlice slice) {
+    public GreaterEqualZero instantiate_dyn (PptSlice slice) {
       return new GreaterEqualZero (slice);
     }
 
@@ -442,7 +442,7 @@ public abstract class RANGE extends SUPERCLASS {
     private static GreaterEqual64 proto;
 
     /** returns the prototype invariant **/
-    public static Invariant get_proto() {
+    public static GreaterEqual64 get_proto() {
       if (proto == null)
         proto = new GreaterEqual64 (null);
       return proto;
@@ -454,7 +454,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public Invariant instantiate_dyn (PptSlice slice) {
+    public GreaterEqual64 instantiate_dyn (PptSlice slice) {
       return new GreaterEqual64 (slice);
     }
 
@@ -490,7 +490,7 @@ public abstract class RANGE extends SUPERCLASS {
     private static BooleanVal proto;
 
     /** returns the prototype invariant **/
-    public static Invariant get_proto() {
+    public static BooleanVal get_proto() {
       if (proto == null)
         proto = new BooleanVal (null);
       return (proto);
@@ -502,7 +502,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public Invariant instantiate_dyn (PptSlice slice) {
+    public BooleanVal instantiate_dyn (PptSlice slice) {
       return new BooleanVal (slice);
     }
 
@@ -541,7 +541,7 @@ public abstract class RANGE extends SUPERCLASS {
     private static PowerOfTwo proto;
 
     /** returns the prototype invariant **/
-    public static Invariant get_proto() {
+    public static PowerOfTwo get_proto() {
       if (proto == null)
         proto = new PowerOfTwo (null);
       return (proto);
@@ -553,7 +553,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public Invariant instantiate_dyn (PptSlice slice) {
+    public PowerOfTwo instantiate_dyn (PptSlice slice) {
       return new PowerOfTwo (slice);
     }
 
@@ -612,7 +612,7 @@ public abstract class RANGE extends SUPERCLASS {
     private static Even proto;
 
     /** returns the prototype invariant **/
-    public static Invariant get_proto() {
+    public static Even get_proto() {
       if (proto == null)
         proto = new Even (null);
       return proto;
@@ -624,7 +624,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public Invariant instantiate_dyn (PptSlice slice) {
+    public Even instantiate_dyn (PptSlice slice) {
       return new Even (slice);
     }
 
@@ -677,14 +677,14 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** returns the prototype invariant **/
-    public static Invariant get_proto() {
+    public static Bound0_63 get_proto() {
       if (proto == null)
         proto = new Bound0_63 (null);
       return (proto);
     }
 
     /** instantiates the invariant on the specified slice **/
-    public Invariant instantiate_dyn (PptSlice slice) {
+    public Bound0_63 instantiate_dyn (PptSlice slice) {
       return new Bound0_63 (slice);
     }
 

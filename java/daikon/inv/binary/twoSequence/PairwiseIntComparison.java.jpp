@@ -244,7 +244,7 @@ public class PAIRWISEINTEQUAL
   private static PAIRWISEINTEQUAL proto;
 
   /** Returns the prototype invariant for PAIRWISEINTEQUAL **/
-  public static Invariant get_proto() {
+  public static PAIRWISEINTEQUAL get_proto() {
     if (proto == null)
       proto = new PAIRWISEINTEQUAL ((/*@Nullable*/ PptSlice) null);
     return (proto);
@@ -270,8 +270,8 @@ public class PAIRWISEINTEQUAL
   }
 
   /** instantiates the invariant on the specified slice **/
-  protected Invariant instantiate_dyn (PptSlice slice) {
-    Invariant inv = new PAIRWISEINTEQUAL(slice);
+  protected PAIRWISEINTEQUAL instantiate_dyn (PptSlice slice) {
+    PAIRWISEINTEQUAL inv = new PAIRWISEINTEQUAL(slice);
     if (logOn())
       inv.log ("instantiate");
     return inv;

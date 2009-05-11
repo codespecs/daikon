@@ -41,7 +41,7 @@ public class Positive
   private static Positive proto;
 
   /** Returns the prototype invariant **/
-  public static Invariant get_proto() {
+  public static Positive get_proto() {
     if (proto == null)
       proto = new Positive (null);
     return (proto);
@@ -53,7 +53,7 @@ public class Positive
   }
 
   /** instantiate an invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
+  public Positive instantiate_dyn (PptSlice slice) {
     return new Positive(slice);
   }
 

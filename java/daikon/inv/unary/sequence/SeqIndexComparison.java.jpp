@@ -183,7 +183,7 @@ public class CLASSNAME extends SUPERCLASS {
   private static CLASSNAME proto  = null;
 
   /** Returns the prototype invariant for CLASSNAME **/
-  public static Invariant get_proto() {
+  public static CLASSNAME get_proto() {
     if (proto == null)
       proto = new CLASSNAME ();
     return (proto);
@@ -223,7 +223,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** Instantiate the invariant on the specified slice **/
-  public Invariant instantiate_dyn (PptSlice slice) {
+  public CLASSNAME instantiate_dyn (PptSlice slice) {
     return new CLASSNAME (slice);
   }
 

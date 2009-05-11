@@ -73,7 +73,7 @@ public class CLASSNAME
   private static CLASSNAME proto;
 
   /** Returns the prototype invariant for CLASSNAME **/
-  public static Invariant get_proto() {
+  public static CLASSNAME get_proto() {
     if (proto == null)
       proto = new CLASSNAME (null);
     return (proto);
@@ -97,7 +97,7 @@ public class CLASSNAME
   }
 
   /** instantiate an invariant on the specified slice **/
-  protected Invariant instantiate_dyn (PptSlice slice) {
+  protected CLASSNAME instantiate_dyn (PptSlice slice) {
     return new CLASSNAME(slice);
   }
 

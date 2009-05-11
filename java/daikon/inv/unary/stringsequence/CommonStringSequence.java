@@ -34,7 +34,7 @@ public class CommonStringSequence
   private static CommonStringSequence proto;
 
   /** Returns the prototype invariant for CommonStringSequence **/
-  public static Invariant get_proto() {
+  public static CommonStringSequence get_proto() {
     if (proto == null)
       proto = new CommonStringSequence (null);
     return (proto);
@@ -46,7 +46,7 @@ public class CommonStringSequence
   }
 
   /** instantiate an invariant on the specified slice **/
-  protected Invariant instantiate_dyn (PptSlice slice) {
+  protected CommonStringSequence instantiate_dyn (PptSlice slice) {
     return new CommonStringSequence (slice);
   }
 
