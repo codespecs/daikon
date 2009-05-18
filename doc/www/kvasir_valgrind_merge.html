@@ -1,0 +1,203 @@
+<!DOCTYPE HTML PUBLIC "-//W3C//DTD HTML 4.01 Transitional//EN" "http://www.w3.org/TR/html4/loose.dtd">
+<html>
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=iso-8859-15">
+<title>Merging newer versions of Valgrind into Fjalar</title>
+</head>
+<body>
+<h1>Merging newer versions of Valgrind into Fjalar</h1>
+
+<!-- PLEASE UPDATE REVISION NUMBER WHEN MERGING. -->
+
+<!-- CURRENT REVISION IN CVS: TODO -->
+
+<p>
+This document provides information on merging newer versions of Valgrid
+into Fjalar.  Fjalar is built as a tool on top of Valgrind, and it's support
+for newer distributions of Linux is dependent on Valgrind. In additionn to
+beingn a Valgrind tool, it also cotains sizable amount of code from another
+Valgrind tool: Memcheck</p>
+
+<p>
+It's easiest to think of this as two separate merges: (1) The merge between
+the underlying copy of Valgrind, and the newer version of Valgrind and (2)
+The merge between the memcheck code contained in Fjalar and the newer version
+of Memcheck. Unfortuately, due to very tight dependence of the memcheck code
+on Valgrind, the changed should be done simultaneously.
+</p>
+
+<p>
+The merge of the underlying copy of Valgrind should be able to be done almost
+completely automatically. Due to substantial modifications to the memcheck code,
+some portion of the merge will have to be done manually. It is for this reason
+that merges should be done on a frequent basis. Monthly, at the very least, is
+recommended.
+<p>
+
+<ul>
+  <li><a href="#Getting Started">Getting Started</a> </li>
+  <li><a href="#Cleaning up the directories">Cleaning up the directories</a> </li>
+  <li><a href="#Creating the diffs">Creating the diffs</a> </li>
+  <li><a href="#Merging the changes">Merging the changes</a> </li>
+  <li><a href="#Appendix A: Valgrind modifications"> Appendix A: Valgrind modifications </a></li>
+  <li><a href="#Appendix B: Memcheck modifications"> Appendix B: Memcheck modifications </a></li>
+</ul>
+
+<hr>
+
+<a name="Getting Started">
+<h3>Getting Started</h3>
+
+<p>
+To begin you will need to pull a fresh copy of Kvasir from CVS. See TODO, for
+further directions.</p>
+
+<p>Next you will need to obtain 2 copies of Valgrind: The most recent, and the
+one the current version of Fjalar is based on. You can get up to date instructions
+on pulling Valgrind from source from:</p>
+
+<p><a href="http://www.valgrind.org/downloads/repository.html">Valgrind: Code Repository</a></p>
+
+<p>As of the time of this writing, the current commands are:</p>
+
+<p><b>For the most recent version</b></p>
+<p><i> svn co svn://svn.valgrind.org/valgrind/trunk valgrind </i></p>
+
+<p><b>For our internal version:</b></p>
+
+<p><i>svn co -r [REVISION] svn://svn.valgrind.org/valgrind/trunk valgrind </i></p>
+
+<p>The revision currently in our repository is: TODO. Please update this document with
+The current SVN revision after the merge is complete.
+You will need to run the following commands in both directories:</p>
+
+<dl><dt><i>./autogen.sh1</dt>
+<dt>./configure --prefix...</dt>
+<dt>make</dt>
+<dt>make distclean</dt>
+</i></dl>
+
+<p>The VEX instrumentation libraries Valgridn is built on is stored in a separate
+SVN. The Valgrind build process will pull the correct version of VEX for you.
+Afterwards, we will not have much use of the binaries or auto created Makefiles,
+so we can delete them to create less clutter in the merging directors.</p>
+
+<hr>
+
+<a name="Cleaning up the directories">
+<h3>Cleaning up the directories</h3>
+<p>Next you must clean up both directories to reduce the number of irrelevant differences
+between the copies. Generally the only important directories are: Coregrind(the core logic
+for Valgrind), Memcheck(a Valgrind tool which is used heavily in Kvasir), VEX(the Intermediate
+representation used for Valgrind), and include. Everything else can be safely deleted. Be sure
+to check the copy of Valgrind in invariants/kvasir for an idea of the in-repository version of
+Valgrind.</p>
+
+<p>The command used at the time of this writing was:</p>
+
+<p><i>rm -r exp-ptrcheck/ lackey/ auxprogs/ cachegrind/ callgrind/ exp-drd/ exp-omega/ massif/ helgrind/  none/</i></p>
+
+<p>After the above command, ensure that all 3 copies of Valgrind have a similar directory structure.</p>
+
+<hr>
+
+<a name="Creating the diffs">
+<h3>Creating the diffs</h3>
+
+<p>Two separate diffs will be created. One for non Memcheck code and one for Memcheck.</p>
+
+<p>For the non-memcheck code run:</p>
+
+<!-- Ask Stephen for possible tips on the commands -->
+<p><i> diff -ur --unidirectional-new-file -x 'Makefile.in' -x '.cvsignore' -x inst -x '.svn' -x CVS -x memcheck -x fjalar [<b>Valgrind-Old</b>] [<b>Valgrind</b>] > coregrind.patch</i></p>
+
+
+<p>For the mem-check code run:</p>
+
+<p><i>diff -ur --unidirectional-new-file -x 'Makefile.in' -x '.cvsignore' -x '.svn'  [<b>Memcheck-Old</b>] [<b>Memcheck</b>] > coregrind.patch</i></p>
+
+<hr>
+
+
+<a name="Merging the changes">
+<h3>Merging the changes</h3>
+<p>Now we can merge the changes from the created diffs. The coregrind patch should apply with very little conflicts.</p>
+
+<p>The command:</p>
+
+<dl><dt><i>cd <b>[PAG Valgrind]</b></dt>
+<dt>patch -p0 < coregrind.patch</dt></i>
+
+<p>Be sure to resolve any conflicts that arise. Appendix A explains the modifications we've made
+and the logic behind them.</p>
+
+
+<p>Finally comes the merge of the memcheck portion. Unfortunately, do to having to reshuffle some of
+the memcheck code for use in Fjalar, using patch is not recommended for this operation. You will
+need to go through the patch file and manually perform the merging operation. For the most part
+large portions of memcheck code should be able to replaced on the whole with no-ill effects. Changes
+we've made are usually clearly commented in the code, they can also be seen as differences between what's
+in our version vs. what's in the old file.</p>
+
+<a name="Updating Fjalar/Kvasir">
+<h3>Updating Fjalar/Kvasir</h3>
+
+<p>Additionally Fjalar/Kvasir need to be updated to properly handle any changes in Valgrind API/functionality.
+. For the most part Valgrind maintains a relatively  stable interface to it's tools. Any tool-visible changes
+should be noted in the change logs.</p>
+
+<p>The largest modification to the memcheck is located in mc_translate.c and special care should be made
+to ensure it is present and up to date. in MC_(instrument, the code which handles the instrumentation
+of calls for Dyncomp is present. It is primarily contained in a case-switch statement below the
+case-switch statement for Memcheck.There should be an analogous for Dyncomp operation in the second
+case-switch for every memcheck operation in the first one.</p>
+
+<p>You should also make sure that any tool-visible VEX changes are reflected in DC_translate, which handles
+the actual VEX IR instructions.</p>
+<hr>
+
+
+<a name="Appendix A: Valgrind modifications">
+<h3>Appendix A: Valgrind modifications</h3>
+<p>In an effort to aid in determining the appropriate measures to take when merging conflicted files,
+this section will provide a list of files modified by us and a brief explanation of the changes.
+
+<!-- Should I include functions too? -->
+
+<p>The most important set of changes is the addition of extra shadow state in Coregrind and VEX.
+The shadow area is an area of memory that Valgrind provides for tools to use. Unfortunately,
+it is of a fixed size, and memcheck uses all of it. We've had to increase the size of the
+the shadow area.
+<dl><dt>
+coregrind/pub_core_threadstate.h: The declaration of the extra shadow space</dt>
+<dt>coregrind/m_scheduler/scheduler.c: An assertion that triggers based on shadow size</dt>
+<dt>VEX/priv/host-generic/reg_alloc2.c: memory calculation using the shadow size</dt></dl>
+
+<br>
+<dl><dt>Addition of primary/secondary integer return registers to the guest state:</dt>
+<dt>VEX/priv/guest-x86/ghelpers.c</dt>
+<dt>VEX/pub/libvex.h</dt>
+<dt>coregrind/m_machine.c: Tool-visible functions to access these values:</dt>
+<dt>include/pub_tool_machine.h</dt></dl>
+<br>
+
+<dl><dt>Addition of an extra libc functions.</dt>
+<dt>valgrind-3.4.0/coregrind/m_libcfile.c</dt>
+<dt>include/pub_tool_libcfile.h</dt></dl>
+<hr>
+<a name="Appendix B: Memcheck modifications">
+<h3>Appending B: Memcheck modifications</h3>
+
+<p>The modifications made to memcheck are more organizational in nature. A few functions from
+mc_main.c and mc_translate.c have been made non-static. An extra header has also been created
+and filled with their signatures for use by Fjalar.</p>
+
+<dl><dt>Other modifications include:</dt>
+<dt>mc_malloc_wrappers.c: Calls to Dyncomp functions for memory operations.</dt>
+<dt>mc_main.c:  Run-time arguments and versioning information for Kvasir to replace the default memcheck ones</dt>
+<dt>mc_translate.c: A duplicate of memcheck's instrumentation block for Dyncomp.</dt></dl></p>
+
+<hr>
+<address></address>
+<!-- hhmts start -->Last modified: Thu Apr 16 23:26:18 EDT 2009 <!-- hhmts end -->
+</body> </html>
