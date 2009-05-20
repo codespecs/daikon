@@ -2354,6 +2354,10 @@ public final class FileIO {
     }
   }
 
+  /**
+   * Returns true if the given variable is included, according to Daikon's
+   * --var-select-pattern and --var-omit-pattern flags.
+   **/
   public static boolean var_included(String var_name) {
     assert ! var_name.equals("");
     if (((Daikon.var_omit_regexp != null)

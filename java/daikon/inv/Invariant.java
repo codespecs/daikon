@@ -109,7 +109,7 @@ public abstract class Invariant
 
 
   /**
-   * The program point for this invariant, includes values, number of
+   * The program point for this invariant; includes values, number of
    * samples, VarInfos, etc.  Can be null for a "prototype" invariant.
    **/
   public /*@Nullable*/ PptSlice ppt;
@@ -1691,8 +1691,7 @@ public abstract class Invariant
    * @return the new invariant
    */
   protected Invariant instantiate_dyn (PptSlice slice) {
-    Assert.assertTrue (false, "no instantiate_dyn for class " + getClass());
-    return (null);
+    throw new Error("no instantiate_dyn for class " + getClass());
   }
 
   /**
@@ -1741,15 +1740,41 @@ public abstract class Invariant
     return (true);
   }
 
+  // Every Invariant is either a regular Invariant, or a "prototype"
+  // Invariant.  A prototype invariant is really a factory.  The
+  // "instantiate" method should only be called on a prototype invariant,
+  // and many methods should only be called on non-prototype methods.
+  // Another (arguably better, though less convenient in certain ways)
+  // design would not represent the factory as an Invariant object.  An
+  // object never transitions at runtime between being a factory/prototype
+  // and being a normal invariant.
+  //
+  // Could we just use the class, such as Positive.class, as (a proxy for)
+  // the factory?
+  //  * That would require use of reflection to call the constructor, which
+  //    is ugly.
+  //  * The factory needs at least some state is needed, for example to
+  //    distinguish between creating a division operator "a/b" vs. "b/a".
+  //
+  // Could the factories be represented by a separate class, unrelated in
+  // the type hierarchy to Invariant?
+  //  * That would probably be a better design.
+  //  * instantiate_dyn would have to have more than just the single line that
+  //    it is right now; longer code is more error-prone.
+  //  * Not all the code for an invariant would be in a single class any
+  //    more; but it could still all be in the same file, for example.
+  //  * There are probably other difficulties that escape me at the moment.
+
   /**
    * Instantiates this invariant over the specified slice.  The slice
    * must not be null and its variables must be valid for this type of
    * invariant.  Returns null if the invariant is not enabled or if the
    * invariant is not reasonable over the specified variables.  Otherwise
-   * returns the new invariant
+   * returns the new invariant.
    */
   public Invariant instantiate (PptSlice slice) {
 
+    assert this.ppt == null;    // argument should be a "prototype" invariant
     assert slice != null;
     if (! valid_types(slice.var_infos)) {
       System.out.printf("this.getClass(): %s%n", this.getClass());
