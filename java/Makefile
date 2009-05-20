@@ -751,13 +751,13 @@ audit:
 
 # Pluggable type qualifier checkers
 
-# JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker
-JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals
-JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker
+# JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -implicit:class
+JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals -implicit:class
+JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class
 JAVAC_NULLNESS_STUBS = -sourcepath ${checkers}/jdk/nullness/src
-JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker
+JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker -implicit:class
 JAVAC_JAVARI_STUBS = -sourcepath ${checkers}/jdk/nullness/src
-JAVAC_IGJ_ARGS = -processor checkers.igj.IGJChecker
+JAVAC_IGJ_ARGS = -processor checkers.igj.IGJChecker -implicit:class
 JAVAC_IGJ_STUBS = -sourcepath ${checkers}/jdk/nullness/src
 ## Remove files that are not fully annotated, but contain the string "@Interned".
 # INTERNING_JAVA_FILES_SKIP =
