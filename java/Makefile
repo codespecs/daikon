@@ -774,13 +774,13 @@ NULLNESS_JAVA_FILES = $(shell find utilMDE -name '*.java' -print) $(shell find d
 
 intern: check-interning
 interning: check-interning
-check-interning:
+check-interning: ${INTERNING_JAVA_FILES}
 	${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${INTERNING_JAVA_FILES}
 
 # Run the interning checker on all Java files, not just those that contain an
 # @Interned annotation.
 interning-all: check-interning-all
-check-interning-all:
+check-interning-all: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${JAVA_FILES}
 
@@ -788,27 +788,27 @@ check-nullness: check-nullness-all
 
 check-nullness-all: check-nullness-all-withstubs
 
-check-nullness-all-nostubs:
+check-nullness-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVA_FILES}
 
-check-nullness-all-withstubs:
+check-nullness-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${NULLNESS_JAVA_FILES}
 
-check-igj-all-nostubs:
+check-igj-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVA_FILES}
 
-check-igj-all-withstubs:
+check-igj-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${JAVA_FILES}
 
-check-javari-all-nostubs:
+check-javari-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVA_FILES}
 
-check-javari-all-withstubs:
+check-javari-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${JAVA_FILES}
 
