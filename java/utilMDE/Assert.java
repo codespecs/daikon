@@ -3,6 +3,10 @@ package utilMDE;
 // From
 //   Frequently Asked Questions (with answers) for Java programmers
 
+// Why not use Java's built-in assert statement instead?  In general, that
+// is better.  However, Java's built-in assert can be disabled (yet writing
+// "assert" statement can be clearer as to the intetion of the test)
+
 // A problem with this is that even if Assert.enabled is false, the
 // condition may be evaluated anyway (because it might have side effects).
 // How good a job do Java compilers do of eliminating those calls?  I
