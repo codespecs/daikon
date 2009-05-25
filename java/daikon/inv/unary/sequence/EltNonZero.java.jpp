@@ -56,6 +56,7 @@ import daikon.inv.unary.scalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.inv.ValueSet;
 import daikon.suppress.*;
+import daikon.typequals.*;
 
 import utilMDE.*;
 
@@ -97,12 +98,12 @@ public final class CLASSNAME
     super(ppt);
   }
 
-  private static CLASSNAME proto;
+  private static /*@Prototype*/ CLASSNAME proto;
 
   /** Returns the prototype invariant for CLASSNAME **/
-  public static CLASSNAME get_proto() {
+  public static /*@Prototype*/ CLASSNAME get_proto() {
     if (proto == null)
-      proto = new CLASSNAME (null);
+      proto = new /*@Prototype*/ CLASSNAME (null);
     return proto;
   }
 

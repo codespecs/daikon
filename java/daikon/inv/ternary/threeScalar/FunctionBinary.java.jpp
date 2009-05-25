@@ -77,6 +77,7 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
 import daikon.derive.unary.*;
 import daikon.suppress.*;
+import daikon.typequals.*;
 import utilMDE.*;
 import java.lang.reflect.*;
 import java.util.*;
@@ -246,9 +247,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
   /**
    * Returns a list of all of the CLASSNAME prototype invariants
    */
-  public static List<Invariant> get_proto_all() {
+  public static List</*@Prototype*/ Invariant> get_proto_all() {
 
-    List<Invariant> result = new ArrayList<Invariant>();
+    List</*@Prototype*/ Invariant> result = new ArrayList</*@Prototype*/ Invariant>();
 
     // If this is the first call
     if (functions.isEmpty()) {

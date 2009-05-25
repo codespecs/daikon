@@ -10,6 +10,7 @@ import daikon.inv.filter.*;
 import daikon.suppress.*;
 import daikon.simplify.SimpUtil;
 import daikon.simplify.LemmaStack;
+import daikon.typequals.*;
 
 import utilMDE.*;
 import java.util.logging.Logger;
@@ -112,7 +113,8 @@ public abstract class Invariant
    * The program point for this invariant; includes values, number of
    * samples, VarInfos, etc.  Can be null for a "prototype" invariant.
    **/
-  public /*@Nullable*/ PptSlice ppt;
+  /*@Dependent(when = Prototype.class, result=Nullable.class)*/
+  public PptSlice ppt;
 
   // Has to be public so wrappers can read it.
   /**
@@ -393,7 +395,7 @@ public abstract class Invariant
   // in the ppt.  Or, don't put too much work in the constructor and instead
   // have the caller do that.
   // The "ppt" argument can be null if this is a prototype invariant.
-  protected Invariant(/*@Nullable*/ PptSlice ppt) {
+  protected Invariant(/*@DependentField(when = Prototype.class, result=Nullable.class)*/ PptSlice ppt) {
     this.ppt = ppt;
   }
 
@@ -1068,7 +1070,7 @@ public abstract class Invariant
    **/
   // This implementation should be made more efficient, because it's used in
   // suppression.  We should somehow index invariants by their type.
-  public static Invariant find(Class<? extends Invariant> invclass, PptSlice ppt) {
+  public static /*@Nullable*/ Invariant find(Class<? extends Invariant> invclass, PptSlice ppt) {
     for (Invariant inv : ppt.invs) {
       if (inv.getClass() == invclass)
         return inv;
@@ -1529,7 +1531,7 @@ public abstract class Invariant
       this.inv = inv;
     }
 
-    public boolean equals (Object obj) {
+    public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof Match))
         return (false);
 
@@ -1573,7 +1575,7 @@ public abstract class Invariant
    * Create a guarding predicate for a given invariant.
    * Returns null if no guarding is needed.
    **/
-  public Invariant createGuardingPredicate(boolean install) {
+  public /*@Nullable*/ Invariant createGuardingPredicate(boolean install) {
     if (debugGuarding.isLoggable(Level.FINE)) {
       debugGuarding.fine ("Guarding predicate being created for: ");
       debugGuarding.fine ("  " + this.format());
@@ -1643,7 +1645,7 @@ public abstract class Invariant
    * modifying the original invariant.
    * Returns null if the invariant does not need to be guarded.
    **/
-  public Invariant createGuardedInvariant(boolean install) {
+  public /*@Nullable*/ Invariant createGuardedInvariant(boolean install) {
     if (Daikon.dkconfig_guardNulls == "never") { // interned
       return null;
     }
@@ -1772,9 +1774,9 @@ public abstract class Invariant
    * invariant is not reasonable over the specified variables.  Otherwise
    * returns the new invariant.
    */
-  public Invariant instantiate (PptSlice slice) {
+  public /*@Nullable*/ Invariant instantiate (PptSlice slice) /*@Prototype*/ {
 
-    assert this.ppt == null;    // argument should be a "prototype" invariant
+    assert this.ppt == null;    // receiver should be a "prototype" invariant
     assert slice != null;
     if (! valid_types(slice.var_infos)) {
       System.out.printf("this.getClass(): %s%n", this.getClass());

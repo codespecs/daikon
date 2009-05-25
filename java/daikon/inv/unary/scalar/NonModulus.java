@@ -2,6 +2,7 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.typequals.*;
 import utilMDE.*;
 import java.util.*;
 
@@ -47,12 +48,12 @@ public class NonModulus
     super(ppt);
   }
 
-  private static NonModulus proto;
+  private static /*@Prototype*/ NonModulus proto;
 
   /** Returns the prototype invariant for NonModulus **/
-  public static NonModulus get_proto() {
+  public static /*@Prototype*/ NonModulus get_proto() {
     if (proto == null)
-      proto = new NonModulus (null);
+      proto = new /*@Prototype*/ NonModulus (null);
     return (proto);
   }
 

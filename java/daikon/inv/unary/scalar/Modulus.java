@@ -3,6 +3,7 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.derive.unary.SequenceLength;
+import daikon.typequals.*;
 import utilMDE.*;
 import java.util.Iterator;
 
@@ -41,12 +42,12 @@ public class Modulus
     super(ppt);
   }
 
-  private static Modulus proto;
+  private static /*@Prototype*/ Modulus proto;
 
   /** Returns the prototype invariant for Modulus **/
-  public static Modulus get_proto() {
+  public static /*@Prototype*/ Modulus get_proto() {
     if (proto == null)
-      proto = new Modulus (null);
+      proto = new /*@Prototype*/ Modulus (null);
     return (proto);
   }
 

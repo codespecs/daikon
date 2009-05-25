@@ -168,6 +168,7 @@ import daikon.inv.binary.twoString.*;
 import daikon.derive.binary.*;
 import daikon.suppress.*;
 import daikon.Quantify.QuantFlags;
+import daikon.typequals.*;
 
 import utilMDE.*;
 import java.util.*;
@@ -571,9 +572,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return (new InvDef[][] {});
   }
 
-  public static List<Invariant> get_proto_all() {
+  public static List</*@Prototype*/ Invariant> get_proto_all() {
 
-    List<Invariant> result = new ArrayList<Invariant>();
+    List</*@Prototype*/ Invariant> result = new ArrayList<Invariant>();
     #if (defined(STRING))
         result.add (SubString.get_proto(false));
         result.add (SubString.get_proto(true));
@@ -643,10 +644,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
-    private static Divides proto = new Divides (null, false);
-    private static Divides proto_swap = new Divides (null, true);
+    private static /*@Prototype*/ Divides proto = new /*@Prototype*/ Divides (null, false);
+    private static /*@Prototype*/ Divides proto_swap = new /*@Prototype*/ Divides (null, true);
 
-    public static CLASSNAME get_proto (boolean swap) {
+    public static /*@Prototype*/ CLASSNAME get_proto (boolean swap) {
       if (swap) {
         return (proto_swap);
       } else {
@@ -830,10 +831,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
-    private static Square proto = new Square (null, false);
-    private static Square proto_swap = new Square (null, true);
+    private static /*@Prototype*/ Square proto = new /*@Prototype*/ Square (null, false);
+    private static /*@Prototype*/ Square proto_swap = new /*@Prototype*/ Square (null, true);
 
-    public static Square get_proto (boolean swap) {
+    public static /*@Prototype*/ Square get_proto (boolean swap) {
       if (swap) return proto_swap;
       else return proto;
     }
@@ -896,12 +897,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
-    private static ZeroTrack proto = new ZeroTrack (null, false);
-    private static ZeroTrack proto_swap = new ZeroTrack (null, true);
+    private static /*@Prototype*/ ZeroTrack proto = new /*@Prototype*/ ZeroTrack (null, false);
+    private static /*@Prototype*/ ZeroTrack proto_swap = new /*@Prototype*/ ZeroTrack (null, true);
 
-    public static ZeroTrack get_proto (boolean swap) {
-      if (swap) return proto_swap;
-      else return proto;
+    public static /*@Prototype*/ ZeroTrack get_proto (boolean swap) {
+      if (swap)
+        return proto_swap;
+      else
+        return proto;
     }
 
     // Variables starting with dkconfig_ should only be set via the
@@ -974,11 +977,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, false);
     }
 
-    private static BitwiseComplement proto;
+    private static /*@Prototype*/ BitwiseComplement proto;
 
-    public static BitwiseComplement get_proto() {
+    public static /*@Prototype*/ BitwiseComplement get_proto() {
       if (proto == null)
-        proto = new BitwiseComplement (null);
+        proto = new /*@Prototype*/ BitwiseComplement (null);
       return (proto);
     }
 
@@ -1031,12 +1034,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
-    private static BitwiseSubset proto = new BitwiseSubset (null, false);
-    private static BitwiseSubset proto_swap = new BitwiseSubset (null, true);
+    private static /*@Prototype*/ BitwiseSubset proto = new /*@Prototype*/ BitwiseSubset (null, false);
+    private static /*@Prototype*/ BitwiseSubset proto_swap = new /*@Prototype*/ BitwiseSubset (null, true);
 
-    public static BitwiseSubset get_proto (boolean swap) {
-      if (swap) return proto_swap;
-      else return proto;
+    public static /*@Prototype*/ BitwiseSubset get_proto (boolean swap) {
+      if (swap)
+        return proto_swap;
+      else
+        return proto;
     }
 
     // Variables starting with dkconfig_ should only be set via the
@@ -1127,11 +1132,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, false);
     }
 
-    private static BitwiseAndZero proto;
+    private static /*@Prototype*/ BitwiseAndZero proto;
 
-    public static BitwiseAndZero get_proto () {
+    public static /*@Prototype*/ BitwiseAndZero get_proto () {
       if (proto == null)
-        proto = new BitwiseAndZero (null);
+        proto = new /*@Prototype*/ BitwiseAndZero (null);
       return (proto);
     }
 
@@ -1208,12 +1213,14 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
-    private static ShiftZero proto = new ShiftZero (null, false);
-    private static ShiftZero proto_swap = new ShiftZero (null, true);
+    private static /*@Prototype*/ ShiftZero proto = new /*@Prototype*/ ShiftZero (null, false);
+    private static /*@Prototype*/ ShiftZero proto_swap = new /*@Prototype*/ ShiftZero (null, true);
 
-    public static ShiftZero get_proto (boolean swap) {
-      if (swap) return proto_swap;
-      else return proto;
+    public static /*@Prototype*/ ShiftZero get_proto (boolean swap) {
+      if (swap)
+        return proto_swap;
+      else
+        return proto;
     }
 
     // Variables starting with dkconfig_ should only be set via the
@@ -1286,10 +1293,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(ppt, swap);
     }
 
-    private static SubString proto = new SubString (null, false);
-    private static SubString proto_swap = new SubString (null, true);
+    private static /*@Prototype*/ SubString proto = new /*@Prototype*/ SubString (null, false);
+    private static /*@Prototype*/ SubString proto_swap = new /*@Prototype*/ SubString (null, true);
 
-    public static SubString get_proto (boolean swap) {
+    public static /*@Prototype*/ SubString get_proto (boolean swap) {
       if (swap) {
         return (proto_swap);
       } else {

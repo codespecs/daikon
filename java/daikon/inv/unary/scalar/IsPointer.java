@@ -8,6 +8,7 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.inv.ValueSet;
+import daikon.typequals.*;
 
 /**
  * IsPointer is an invariant that heuristically determines whether
@@ -25,7 +26,7 @@ import daikon.inv.ValueSet;
  */
 public class IsPointer extends SingleScalar {
 
-    private static IsPointer proto;
+    private static /*@Prototype*/ IsPointer proto;
 
     private static final long serialVersionUID = 20080221L;
 
@@ -45,9 +46,9 @@ public class IsPointer extends SingleScalar {
 
 
     /** Returns the prototype invariant for IsPointer **/
-    public static IsPointer get_proto() {
+    public static /*@Prototype*/ IsPointer get_proto() {
       if (proto == null)
-        proto = new IsPointer(null);
+        proto = new /*@Prototype*/ IsPointer(null);
       return (proto);
     }
 

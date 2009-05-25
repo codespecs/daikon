@@ -355,7 +355,7 @@ public final class PrintInvariants {
     PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),
                                                 true // use saved config
                                                 );
-    // Setup the list of proto invariants and initialize NIS suppressions
+    // Setup the list of prototype invariants and initialize NIS suppressions
     Daikon.setup_proto_invs();
     Daikon.setup_NISuppression();
 

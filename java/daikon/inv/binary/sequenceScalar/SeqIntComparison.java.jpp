@@ -128,6 +128,7 @@ import daikon.inv.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.suppress.*;
+import daikon.typequals.*;
 
 import utilMDE.*;
 
@@ -165,12 +166,12 @@ public final class SEQINTEQUAL
     super(ppt);
   }
 
-  private static SEQINTEQUAL proto;
+  private static /*@Prototype*/ SEQINTEQUAL proto;
 
   /** Returns the prototype invariant for SEQINTEQUAL **/
-  public static SEQINTEQUAL get_proto () {
+  public static /*@Prototype*/ SEQINTEQUAL get_proto () {
     if (proto == null)
-      proto = new SEQINTEQUAL (null);
+      proto = new /*@Prototype*/ SEQINTEQUAL (null);
     return (proto);
   }
 

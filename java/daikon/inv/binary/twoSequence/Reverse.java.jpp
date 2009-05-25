@@ -30,6 +30,7 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.typequals.*;
 import utilMDE.Assert;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -60,12 +61,12 @@ public class CLASSNAME
     super(ppt);
   }
 
-  private static CLASSNAME proto;
+  private static /*@Prototype*/ CLASSNAME proto;
 
   /** Returns the prototype invariant for CLASSNAME **/
-  public static CLASSNAME get_proto() {
+  public static /*@Prototype*/ CLASSNAME get_proto() {
     if (proto == null)
-      proto = new CLASSNAME (null);
+      proto = new /*@Prototype*/ CLASSNAME (null);
     return proto;
   }
 

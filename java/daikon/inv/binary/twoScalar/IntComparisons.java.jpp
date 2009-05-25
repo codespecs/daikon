@@ -329,6 +329,7 @@ import daikon.inv.binary.twoSequence.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.suppress.*;
+import daikon.typequals.*;
 
 import utilMDE.*;
 import java.util.logging.Logger;
@@ -368,12 +369,12 @@ public final class INTEQUAL
    super(ppt);
   }
 
-  private static INTEQUAL proto;
+  private static /*@Prototype*/ INTEQUAL proto;
 
   /** Returns the prototype invariant for INTEQUAL **/
-  public static INTEQUAL get_proto() {
+  public static /*@Prototype*/ INTEQUAL get_proto() {
     if (proto == null)
-      proto = new INTEQUAL (null);
+      proto = new /*@Prototype*/ INTEQUAL (null);
     return (proto);
   }
 

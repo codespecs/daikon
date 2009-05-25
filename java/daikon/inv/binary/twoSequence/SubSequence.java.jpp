@@ -84,6 +84,7 @@ import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
 import daikon.suppress.*;
+import daikon.typequals.*;
 
 import utilMDE.*;
 import java.util.logging.Logger;
@@ -118,12 +119,12 @@ public class CLASSNAME
     super(ppt);
   }
 
-  private static CLASSNAME proto;
+  private static /*@Prototype*/ CLASSNAME proto;
 
   /** Returns the prototype invariant for CLASSNAME **/
-  public static CLASSNAME get_proto() {
+  public static /*@Prototype*/ CLASSNAME get_proto() {
     if (proto == null)
-      proto = new CLASSNAME (null);
+      proto = new /*@Prototype*/ CLASSNAME (null);
     return (proto);
   }
 

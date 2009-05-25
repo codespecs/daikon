@@ -213,7 +213,8 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
     else if (enumValue==13)
       return filtered;
     else {//this should never happen
-      return null;
+      // return null;
+      throw new Error("impossible");
     }
   }
 }

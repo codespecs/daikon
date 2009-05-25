@@ -49,6 +49,7 @@ import daikon.inv.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
 import daikon.derive.unary.*;
+import daikon.typequals.*;
 
 import java.util.*;
 import java.util.logging.Logger;
@@ -100,12 +101,12 @@ public class NONZERO
     super(ppt);
   }
 
-  private static NONZERO proto;
+  private static /*@Prototype*/ NONZERO proto;
 
   /** Returns the prototype invariant for NONZERO **/
-  public static NONZERO get_proto() {
+  public static /*@Prototype*/ NONZERO get_proto() {
     if (proto == null)
-      proto = new NONZERO (null);
+      proto = new /*@Prototype*/ NONZERO (null);
     return (proto);
   }
 
@@ -143,7 +144,7 @@ public class NONZERO
     }
   }
 
-  public String format_using(OutputFormat format) {
+  public String format_using(OutputFormat format) /*@PrototypeOrNot*/ {
     // var() fails for prototype invariants
     if (ppt == null) {
       return "Prototype " + NONZEROSTRING + " invariant (ppt == null)";

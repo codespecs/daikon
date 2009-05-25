@@ -43,7 +43,7 @@ public enum OutputFormat {
    * if no such OutputFormat exists.
    **/
   public static OutputFormat get(String name) {
-    if (name == null) { return null; }
+    // if (name == null) { return null; }
     if (name.compareToIgnoreCase(DAIKON.name) == 0) { return DAIKON; }
     if (name.compareToIgnoreCase(DBCJAVA.name) == 0) { return DBCJAVA; }
     if (name.compareToIgnoreCase(ESCJAVA.name) == 0) { return ESCJAVA; }
@@ -51,7 +51,8 @@ public enum OutputFormat {
     if (name.compareToIgnoreCase(JAVA.name) == 0) { return JAVA; }
     if (name.compareToIgnoreCase(JML.name) == 0) { return JML; }
     if (name.compareToIgnoreCase(SIMPLIFY.name) == 0) { return SIMPLIFY; }
-    return null;
+    // return null;
+    throw new Error("Unknown OutputFormat " + name);
   }
 
   public String ensures_tag() { return "ensures"; }

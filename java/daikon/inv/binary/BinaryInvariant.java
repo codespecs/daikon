@@ -3,6 +3,7 @@ package daikon.inv.binary;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.InvariantStatus;
+import daikon.typequals.*;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -50,8 +51,7 @@ public abstract class BinaryInvariant extends Invariant {
    * sometimes called on prototype invariants.
    */
   public InvariantStatus check_unordered (Object val1, Object val2,
-                                          int mod_index, int count) {
-
+                                          int mod_index, int count) /*@PrototypeOrNot*/ {
 
     if (((val2 instanceof long[]) || (val2 instanceof double[])
          || (val2 instanceof String[]))

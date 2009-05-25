@@ -2,6 +2,7 @@ package daikon.inv.unary.stringsequence;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.typequals.*;
 import utilMDE.*;
 
 
@@ -31,12 +32,12 @@ public class CommonStringSequence
     super(ppt);
   }
 
-  private static CommonStringSequence proto;
+  private static /*@Prototype*/ CommonStringSequence proto;
 
   /** Returns the prototype invariant for CommonStringSequence **/
-  public static CommonStringSequence get_proto() {
+  public static /*@Prototype*/ CommonStringSequence get_proto() {
     if (proto == null)
-      proto = new CommonStringSequence (null);
+      proto = new /*@Prototype*/ CommonStringSequence (null);
     return (proto);
   }
 

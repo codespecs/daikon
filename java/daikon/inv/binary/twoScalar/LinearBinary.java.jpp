@@ -29,6 +29,7 @@ package daikon.inv.binary.twoScalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.derive.unary.SequenceLength;
+import daikon.typequals.*;
 import utilMDE.*;
 import java.util.*;
 import java.util.logging.Level;
@@ -63,12 +64,12 @@ public class CLASSNAME
     core = new CORECLASS(this);
   }
 
-  private static CLASSNAME proto;
+  private static /*@Prototype*/ CLASSNAME proto;
 
   /** Returns a prototype CLASSNAME invariant **/
-  public static CLASSNAME get_proto() {
+  public static /*@Prototype*/ CLASSNAME get_proto() {
     if (proto == null)
-      proto = new CLASSNAME (null);
+      proto = new /*@Prototype*/ CLASSNAME (null);
     return (proto);
   }
 

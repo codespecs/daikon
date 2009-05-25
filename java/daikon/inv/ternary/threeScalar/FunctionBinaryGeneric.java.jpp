@@ -80,12 +80,12 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     static int[] arg2_bound = ARG2_BOUND;
   #endif
 
-  private static CNAME(FUNCTION,PERM_NAME) proto;
+  private static /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) proto;
 
   /** Returns the prototype invariant for CNAME(FUNCTION,PERM_NAME) **/
-  public static CNAME(FUNCTION,PERM_NAME) get_proto() {
+  public static /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) get_proto() {
     if (proto == null)
-      proto = new CNAME(FUNCTION,PERM_NAME) (null);
+      proto = new /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) (null);
     return (proto);
   }
 

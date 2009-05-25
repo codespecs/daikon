@@ -2,6 +2,7 @@ package daikon.inv.unary.string;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.typequals.*;
 
 import utilMDE.*;
 
@@ -29,12 +30,12 @@ public final class PrintableString extends SingleString
       return;
   }
 
-  private static PrintableString proto;
+  private static /*@Prototype*/ PrintableString proto;
 
   /** Returns the prototype invariant for PrintableString **/
-  public static PrintableString get_proto() {
+  public static /*@Prototype*/ PrintableString get_proto() {
     if (proto == null)
-      proto = new PrintableString (null);
+      proto = new /*@Prototype*/ PrintableString (null);
     return (proto);
   }
 

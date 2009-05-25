@@ -185,6 +185,7 @@ import daikon.inv.*;
 #endif
 import daikon.inv.unary.*;
 import daikon.derive.unary.*;
+import daikon.typequals.*;
 import utilMDE.*;
 
 import java.util.*;
@@ -250,12 +251,12 @@ public class LOWERBOUND
     core = new LOWERBOUNDCORE(this);
   }
 
-  private static LOWERBOUND proto;
+  private static /*@Prototype*/ LOWERBOUND proto;
 
   /** Returns the prototype invariant for LOWERBOUND **/
-  public static LOWERBOUND get_proto() {
+  public static /*@Prototype*/ LOWERBOUND get_proto() {
     if (proto == null)
-      proto = new LOWERBOUND (null);
+      proto = new /*@Prototype*/ LOWERBOUND (null);
     return (proto);
   }
 

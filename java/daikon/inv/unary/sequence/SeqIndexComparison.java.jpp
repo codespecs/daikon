@@ -143,6 +143,7 @@ import daikon.inv.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.suppress.*;
 import daikon.Quantify.QuantFlags;
+import daikon.typequals.*;
 
 import utilMDE.*;
 import java.util.Iterator;
@@ -180,12 +181,12 @@ public class CLASSNAME extends SUPERCLASS {
     Assert.assertTrue(var().rep_type == ProglangType.ASSERTYPE);
   }
 
-  private static CLASSNAME proto  = null;
+  private static /*@Prototype*/ CLASSNAME proto  = null;
 
   /** Returns the prototype invariant for CLASSNAME **/
-  public static CLASSNAME get_proto() {
+  public static /*@Prototype*/ CLASSNAME get_proto() {
     if (proto == null)
-      proto = new CLASSNAME ();
+      proto = new /*@Prototype*/ CLASSNAME ();
     return (proto);
   }
 

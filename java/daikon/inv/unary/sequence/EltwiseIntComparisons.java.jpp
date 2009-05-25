@@ -120,6 +120,7 @@ import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.Quantify.QuantFlags;
 // import daikon.inv.binary.twoScalar.CORECLASS;
+import daikon.typequals.*;
 import utilMDE.*;
 import java.util.*;
 
@@ -156,12 +157,12 @@ public class CLASSNAME
     super(ppt);
   }
 
-  private static CLASSNAME proto;
+  private static /*@Prototype*/ CLASSNAME proto;
 
   /** Returns the prototype invariant for CLASSNAME **/
-  public static CLASSNAME get_proto() {
+  public static /*@Prototype*/ CLASSNAME get_proto() {
     if (proto == null)
-      proto = new CLASSNAME (null);
+      proto = new /*@Prototype*/ CLASSNAME (null);
     return (proto);
   }
 

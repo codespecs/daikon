@@ -51,6 +51,7 @@ import daikon.inv.DiscardCode;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
 import daikon.suppress.NIS;
+import daikon.typequals.*;
 import java.util.*;
 import utilMDE.*;
 
@@ -83,17 +84,19 @@ public class CLASSNAME
 
   public CORECLASS core;
 
-  protected CLASSNAME(PptSlice ppt) {
+  protected CLASSNAME(/*@DependentField(when = Prototype.class, result=Nullable.class)*/ PptSlice ppt) {
     super(ppt);
-    core = new CORECLASS(this);
+    @SuppressWarnings("nullness") // circular initialization; cast away rawness
+    CLASSNAME nonRawThis = (/*@NonNull*/ CLASSNAME) this;
+    core = new CORECLASS(nonRawThis);
   }
 
-  private static CLASSNAME proto;
+  private static /*@Prototype*/ CLASSNAME proto;
 
   /** Returns the prototype invariant for CLASSNAME **/
-  public static CLASSNAME get_proto() {
+  public static /*@Prototype*/ CLASSNAME get_proto() {
     if (proto == null)
-      proto = new CLASSNAME (null);
+      proto = new /*@Prototype*/ CLASSNAME (null);
     return (proto);
   }
 

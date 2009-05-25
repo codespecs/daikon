@@ -7,6 +7,7 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoString.*;
 import daikon.inv.ternary.*;
 import daikon.inv.ternary.threeScalar.*;
+import daikon.typequals.*;
 import utilMDE.*;
 
 import java.lang.reflect.*;
@@ -113,7 +114,7 @@ public class NIS {
   static List<NISuppressionSet> all_suppressions;
 
   /** List of suppressor invariant prototypes **/
-  public static List<Invariant> suppressor_proto_invs;
+  public static List</*@Prototype*/ Invariant> suppressor_proto_invs;
 
   /**
    * List of invariants that are unsuppressed by the current sample.
@@ -225,7 +226,7 @@ public class NIS {
 
     if (NIS.dkconfig_suppressor_list) {
       // Set up the list of suppressor invariant prototypes
-      for (Invariant i : Daikon.proto_invs) {
+      for (/*@Prototype*/ Invariant i : Daikon.proto_invs) {
         if (suppressor_map.containsKey(i.getClass())) {
           suppressor_proto_invs.add(i);
         }

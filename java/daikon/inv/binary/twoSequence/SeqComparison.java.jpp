@@ -229,6 +229,7 @@ import daikon.inv.*;
 import daikon.suppress.*;
 import daikon.derive.binary.*;
 import daikon.Quantify.QuantFlags;
+import daikon.typequals.*;
 
 import utilMDE.*;
 import java.util.logging.Logger;
@@ -289,12 +290,12 @@ public class SEQSEQINTEQUAL
 
   #endif
 
-  private static SEQSEQINTEQUAL proto;
+  private static /*@Prototype*/ SEQSEQINTEQUAL proto;
 
   /** Returns the prototype invariant for SEQSEQINTEQUAL **/
-  public static SEQSEQINTEQUAL get_proto() {
+  public static /*@Prototype*/ SEQSEQINTEQUAL get_proto() {
     if (proto == null)
-      proto = new SEQSEQINTEQUAL (null, true);
+      proto = new /*@Prototype*/ SEQSEQINTEQUAL (null, true);
     return (proto);
   }
 

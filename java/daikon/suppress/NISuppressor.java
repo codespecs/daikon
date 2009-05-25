@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.*;
 import daikon.inv.binary.*;
+import daikon.typequals.*;
 import utilMDE.*;
 
 import java.lang.reflect.*;
@@ -55,7 +56,7 @@ public class NISuppressor {
    * Sample invariant - used to check the suppressor over constants.
    * this is a prototype invariant; that is, sample_inv.ppt == null.
    **/
-  Invariant sample_inv;
+  /*@Prototype*/ Invariant sample_inv;
 
   /**
    * Defines a unary suppressor.

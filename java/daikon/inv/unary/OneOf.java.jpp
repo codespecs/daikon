@@ -190,6 +190,7 @@ import daikon.inv.*;
   import daikon.inv.unary.scalar.*;
   import daikon.inv.binary.twoSequence.SubSequence;
 #endif
+import daikon.typequals.*;
 
 import utilMDE.*;
 
@@ -316,12 +317,12 @@ public final class ONEOFSCALAR
     num_elts = 0;
   }
 
-  private static ONEOFSCALAR proto;
+  private static /*@Prototype*/ ONEOFSCALAR proto;
 
   /** Returns the prototype invariant for ONEOFSCALAR **/
-  public static ONEOFSCALAR get_proto() {
+  public static /*@Prototype*/ ONEOFSCALAR get_proto() {
     if (proto == null)
-      proto = new ONEOFSCALAR (null);
+      proto = new /*@Prototype*/ ONEOFSCALAR (null);
     return (proto);
   }
 

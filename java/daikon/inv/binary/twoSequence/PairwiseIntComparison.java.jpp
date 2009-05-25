@@ -199,6 +199,7 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.derive.binary.*;
 import daikon.suppress.*;
 import daikon.Quantify.QuantFlags;
+import daikon.typequals.*;
 
 import utilMDE.ArraysMDE;
 import utilMDE.Assert;
@@ -241,12 +242,12 @@ public class PAIRWISEINTEQUAL
     super(ppt);
   }
 
-  private static PAIRWISEINTEQUAL proto;
+  private static /*@Prototype*/ PAIRWISEINTEQUAL proto;
 
   /** Returns the prototype invariant for PAIRWISEINTEQUAL **/
-  public static PAIRWISEINTEQUAL get_proto() {
+  public static /*@Prototype*/ PAIRWISEINTEQUAL get_proto() {
     if (proto == null)
-      proto = new PAIRWISEINTEQUAL ((/*@Nullable*/ PptSlice) null);
+      proto = new /*@Prototype*/ PAIRWISEINTEQUAL ((/*@Nullable*/ PptSlice) null);
     return (proto);
   }
 

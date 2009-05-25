@@ -34,6 +34,7 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.DiscardCode;
 import daikon.inv.binary.twoScalar.*;
 import daikon.Quantify.QuantFlags;
+import daikon.typequals.*;
 import java.util.*;
 
 /**
@@ -66,12 +67,12 @@ public class CLASSNAME
     core = new CORECLASS(this);
   }
 
-  private static CLASSNAME proto;
+  private static /*@Prototype*/ CLASSNAME proto;
 
   /** Returns the prototype invariant for CLASSNAME **/
-  public static CLASSNAME get_proto() {
+  public static /*@Prototype*/ CLASSNAME get_proto() {
     if (proto == null)
-      proto = new CLASSNAME (null);
+      proto = new /*@Prototype*/ CLASSNAME (null);
     return (proto);
   }
 

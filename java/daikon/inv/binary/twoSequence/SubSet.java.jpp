@@ -52,6 +52,7 @@ package daikon.inv.binary.twoSequence;
 import daikon.*;
 import daikon.inv.*;
 import daikon.suppress.*;
+import daikon.typequals.*;
 
 import java.util.*;
 import utilMDE.*;
@@ -87,10 +88,10 @@ public class SUBSET
     super(ppt);
   }
 
-  private static SUBSET proto;
+  private static /*@Prototype*/ SUBSET proto;
 
   /** Returns the prototype invariant for SUBSET **/
-  public static SUBSET get_proto() {
+  public static /*@Prototype*/ SUBSET get_proto() {
     if (proto == null)
       proto = (new SUBSET (null));
     return (proto);

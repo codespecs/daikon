@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.inv.OutputFormat;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
+import daikon.typequals.*;
 
 // This invariant is true if the variable is always positive (greater than 0).
 // This invariant is provided for pedagogical reasons only.
@@ -38,12 +39,12 @@ public class Positive
     super(ppt);
   }
 
-  private static Positive proto;
+  private static /*@Prototype*/ Positive proto;
 
   /** Returns the prototype invariant **/
-  public static Positive get_proto() {
+  public static /*@Prototype*/ Positive get_proto() {
     if (proto == null)
-      proto = new Positive (null);
+      proto = new /*@Prototype*/ Positive (null);
     return (proto);
   }
 

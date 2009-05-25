@@ -22,6 +22,7 @@ import utilMDE.Assert;
 import daikon.inv.filter.InvariantFilters;
 import static daikon.FileIO.ParentRelation;
 import static daikon.PptRelation.PptRelationType;
+import daikon.typequals.*;
 
 import java.util.*;
 import java.text.*;
@@ -1705,14 +1706,14 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * If the proto invariant is true over the specified variable returns
-   * DiscardInfo indicating that the proto invariant implies imp_inv.
+   * If the prototype invariant is true over the specified variable returns
+   * DiscardInfo indicating that the prototype invariant implies imp_inv.
    * Otherwise returns null
    */
   public DiscardInfo check_implied(
     Invariant imp_inv,
     VarInfo v,
-    Invariant proto) {
+    /*@Prototype*/ Invariant proto) {
 
     // If there is no proto invariant, we can't look for it.  This happens
     // if the invariant is not enabled.
@@ -1743,7 +1744,7 @@ public class PptTopLevel extends Ppt {
   public DiscardInfo check_implied_canonical(
     Invariant imp_inv,
     VarInfo v,
-    Invariant proto) {
+    /*@Prototype*/ Invariant proto) {
 
     VarInfo leader = v.canonicalRep();
 
@@ -1759,17 +1760,17 @@ public class PptTopLevel extends Ppt {
     return new DiscardInfo(imp_inv, DiscardCode.obvious, reason);
   }
   /**
-   * If the proto invariant is true over the specified variables returns
-   * DiscardInfo indicating that the proto invariant implies imp_inv.
+   * If the prototype invariant is true over the specified variables returns
+   * DiscardInfo indicating that the prototype invariant implies imp_inv.
    * Otherwise returns null
    */
   public DiscardInfo check_implied(
     Invariant imp_inv,
     VarInfo v1,
     VarInfo v2,
-    Invariant proto) {
+    /*@Prototype*/ Invariant proto) {
 
-    // If there is no proto invariant, we can't look for it.  This happens
+    // If there is no prototype invariant, we can't look for it.  This happens
     // if the invariant is not enabled.
     if (proto == null)
       return (null);
@@ -1798,7 +1799,7 @@ public class PptTopLevel extends Ppt {
     DiscardInfo di,
     VarInfo v1,
     VarInfo v2,
-    Invariant proto) {
+    /*@Prototype*/ Invariant proto) {
 
     DiscardInfo di2 = check_implied(di.inv, v1, v2, proto);
     if (di2 == null)
@@ -1809,15 +1810,15 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * If the proto invariant is true over the leader of each specified
-   * variables returns DiscardInfo indicating that the proto invariant
-   * implies imp_inv.  Otherwise returns null
+   * If the prototype invariant is true over the leader of each specified
+   * variables returns DiscardInfo indicating that the prototype invariant
+   * implies imp_inv.  Otherwise returns null.
    */
   public DiscardInfo check_implied_canonical(
     Invariant imp_inv,
     VarInfo v1,
     VarInfo v2,
-    Invariant proto) {
+    /*@Prototype*/ Invariant proto) {
 
     VarInfo leader1 = v1.canonicalRep();
     VarInfo leader2 = v2.canonicalRep();
@@ -1844,7 +1845,7 @@ public class PptTopLevel extends Ppt {
     DiscardInfo di,
     VarInfo v1,
     VarInfo v2,
-    Invariant proto) {
+    /*@Prototype*/ Invariant proto) {
 
     DiscardInfo di2 = check_implied_canonical(di.inv, v1, v2, proto);
     if (di2 == null)
@@ -1898,7 +1899,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // Get a prototype of the invariant we are looking for
-    Invariant proto = NonZero.get_proto();
+    /*@Prototype*/ Invariant proto = NonZero.get_proto();
     if (proto == null)
       return false;
 
@@ -1928,7 +1929,7 @@ public class PptTopLevel extends Ppt {
       return (false);
 
     // Get a prototype of the invariant we are looking for
-    Invariant proto = null;
+    /*@Prototype*/ Invariant proto = null;
     if (v1.rep_type.isScalar()) {
       assert v2.rep_type.isScalar()
         : String.format ("v1 %s rep %s, v2 %s rep %s", v1, v1.rep_type, v2,
