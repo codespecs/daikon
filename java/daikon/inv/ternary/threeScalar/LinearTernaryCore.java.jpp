@@ -141,6 +141,9 @@ public final class CLASSNAME
   // current definition.  The next is a new point for consideration.
   // However, any slot may be set to null at any time, and points may be
   // duplicated at any time.
+  // (The invariant appears to be a bit stronger than that, since there are
+  // places that dereference the array unconditionally, assuming that its
+  // elements are non-null.  This should be clarified/refactored.)
   public Point[] def_points = new Point[MINTRIPLES];
 
   public Invariant wrapper;
