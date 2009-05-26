@@ -7,7 +7,6 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.binary.twoString.*;
 import daikon.inv.ternary.*;
 import daikon.inv.ternary.threeScalar.*;
-import daikon.typequals.*;
 import utilMDE.*;
 
 import java.lang.reflect.*;

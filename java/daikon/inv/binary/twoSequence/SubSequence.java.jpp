@@ -84,7 +84,6 @@ import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
 import daikon.suppress.*;
-import daikon.typequals.*;
 
 import utilMDE.*;
 import java.util.logging.Logger;

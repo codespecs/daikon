@@ -8,7 +8,6 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.inv.ValueSet;
-import daikon.typequals.*;
 
 /**
  * IsPointer is an invariant that heuristically determines whether

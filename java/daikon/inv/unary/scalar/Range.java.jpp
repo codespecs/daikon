@@ -65,7 +65,6 @@ import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.sequenceScalar.*;
 import daikon.derive.unary.*;
 import daikon.Quantify.QuantFlags;
-import daikon.typequals.*;
 
 import java.util.*;
 import java.util.logging.Logger;

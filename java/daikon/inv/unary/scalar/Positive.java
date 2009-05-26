@@ -4,7 +4,6 @@ import daikon.*;
 import daikon.inv.OutputFormat;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
-import daikon.typequals.*;
 
 // This invariant is true if the variable is always positive (greater than 0).
 // This invariant is provided for pedagogical reasons only.

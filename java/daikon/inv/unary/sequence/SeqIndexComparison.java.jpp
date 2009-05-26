@@ -143,7 +143,6 @@ import daikon.inv.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.suppress.*;
 import daikon.Quantify.QuantFlags;
-import daikon.typequals.*;
 
 import utilMDE.*;
 import java.util.Iterator;

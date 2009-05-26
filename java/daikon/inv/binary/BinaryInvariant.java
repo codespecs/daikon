@@ -3,7 +3,6 @@ package daikon.inv.binary;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.InvariantStatus;
-import daikon.typequals.*;
 
 import java.lang.reflect.*;
 import java.util.*;

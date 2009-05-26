@@ -329,7 +329,6 @@ import daikon.inv.binary.twoSequence.*;
 import daikon.derive.unary.*;
 import daikon.derive.binary.*;
 import daikon.suppress.*;
-import daikon.typequals.*;
 
 import utilMDE.*;
 import java.util.logging.Logger;

@@ -2,7 +2,6 @@ package daikon.inv.unary.stringsequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.typequals.*;
 import utilMDE.*;
 
 

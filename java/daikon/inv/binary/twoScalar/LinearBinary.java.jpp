@@ -29,7 +29,6 @@ package daikon.inv.binary.twoScalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.derive.unary.SequenceLength;
-import daikon.typequals.*;
 import utilMDE.*;
 import java.util.*;
 import java.util.logging.Level;

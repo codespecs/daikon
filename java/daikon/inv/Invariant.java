@@ -10,7 +10,6 @@ import daikon.inv.filter.*;
 import daikon.suppress.*;
 import daikon.simplify.SimpUtil;
 import daikon.simplify.LemmaStack;
-import daikon.typequals.*;
 
 import utilMDE.*;
 import java.util.logging.Logger;

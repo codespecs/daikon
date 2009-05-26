@@ -128,7 +128,6 @@ import daikon.inv.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.suppress.*;
-import daikon.typequals.*;
 
 import utilMDE.*;
 

@@ -40,7 +40,6 @@ import daikon.inv.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.inv.unary.scalar.*;
 import daikon.suppress.*;
-import daikon.typequals.*;
 import daikon.derive.binary.SEQUENCESPREDICATE;
 import daikon.derive.binary.SEQUENCESJOIN;
 import daikon.Quantify.QuantFlags;

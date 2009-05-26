@@ -51,7 +51,6 @@ import daikon.inv.DiscardCode;
 import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
 import daikon.suppress.NIS;
-import daikon.typequals.*;
 import java.util.*;
 import utilMDE.*;
 

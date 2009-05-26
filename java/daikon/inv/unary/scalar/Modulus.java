@@ -3,7 +3,6 @@ package daikon.inv.unary.scalar;
 import daikon.*;
 import daikon.inv.*;
 import daikon.derive.unary.SequenceLength;
-import daikon.typequals.*;
 import utilMDE.*;
 import java.util.Iterator;
 

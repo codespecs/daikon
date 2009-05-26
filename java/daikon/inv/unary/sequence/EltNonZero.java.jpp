@@ -56,7 +56,6 @@ import daikon.inv.unary.scalar.*;
 import daikon.inv.binary.twoSequence.*;
 import daikon.inv.ValueSet;
 import daikon.suppress.*;
-import daikon.typequals.*;
 
 import utilMDE.*;
 

@@ -4,7 +4,6 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.*;
 import daikon.inv.binary.*;
-import daikon.typequals.*;
 import utilMDE.*;
 
 import java.lang.reflect.*;

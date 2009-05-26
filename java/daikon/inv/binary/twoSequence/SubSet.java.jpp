@@ -52,7 +52,6 @@ package daikon.inv.binary.twoSequence;
 import daikon.*;
 import daikon.inv.*;
 import daikon.suppress.*;
-import daikon.typequals.*;
 
 import java.util.*;
 import utilMDE.*;

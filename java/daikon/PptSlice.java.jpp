@@ -51,7 +51,6 @@ import daikon.inv.binary.sequenceScalar.*;
 import daikon.inv.ternary.*;
 import daikon.inv.ternary.threeScalar.*;
 #endif
-import daikon.typequals.*;
 
 import java.util.*;
 import java.util.logging.Logger;

@@ -190,7 +190,6 @@ import daikon.inv.*;
   import daikon.inv.unary.scalar.*;
   import daikon.inv.binary.twoSequence.SubSequence;
 #endif
-import daikon.typequals.*;
 
 import utilMDE.*;
 

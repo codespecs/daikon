@@ -77,7 +77,6 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
 import daikon.derive.unary.*;
 import daikon.suppress.*;
-import daikon.typequals.*;
 import utilMDE.*;
 import java.lang.reflect.*;
 import java.util.*;

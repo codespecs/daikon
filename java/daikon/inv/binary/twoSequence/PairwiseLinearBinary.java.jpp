@@ -34,7 +34,6 @@ import daikon.inv.DiscardInfo;
 import daikon.inv.DiscardCode;
 import daikon.inv.binary.twoScalar.*;
 import daikon.Quantify.QuantFlags;
-import daikon.typequals.*;
 import java.util.*;
 
 /**

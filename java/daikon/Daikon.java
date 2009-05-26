@@ -56,7 +56,6 @@ import daikon.split.*;
 import daikon.suppress.NIS;
 import daikon.suppress.NIS.SuppressionProcessor;
 import daikon.util.Pair;
-import daikon.typequals.*;
 
 
 /**

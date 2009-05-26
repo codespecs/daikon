@@ -168,7 +168,6 @@ import daikon.inv.binary.twoString.*;
 import daikon.derive.binary.*;
 import daikon.suppress.*;
 import daikon.Quantify.QuantFlags;
-import daikon.typequals.*;
 
 import utilMDE.*;
 import java.util.*;

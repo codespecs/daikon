@@ -30,7 +30,6 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
-import daikon.typequals.*;
 import utilMDE.Assert;
 import java.util.logging.Logger;
 import java.util.logging.Level;
