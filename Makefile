@@ -134,7 +134,8 @@ help:
 	@echo " staging-to-www           -- copies $inv/staging-dist to website"
 	@echo " "
 	@echo "This Makefile is for manipulations of the entire invariants module."
-	@echo "Daikon proper can be found in the java/daikon subdirectory."
+	@echo "Daikon proper can be found in the java/daikon subdirectory (but you"
+	@echo "can perform basic operations like compiling it from here)."
 
 ### Compiling the code
 
