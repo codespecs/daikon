@@ -6,10 +6,22 @@
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
+### INV and DAIKONBIN need to be set early, because they are used below.
+
+INV ?= ${DAIKONDIR}
+
+# Set DAIKONBIN to scripts/ if it exists, otherwise to bin/.
+ifeq "$(wildcard ${INV}/scripts)" "${INV}/scripts"
+    DAIKONBIN ?= ${INV}/scripts
+else
+    DAIKONBIN ?= ${INV}/bin
+endif
+
+
 #
-# Do some basic configuration checking:;;;;;
+# Do some basic configuration checking:
 #  - Make sure uname and OSTYPE match up
-#  - On windows, Make sure that find is the unix find and not the windows find
+#  - On Windows, make sure that find is the Unix find and not the Windows find
 #
 ifeq (cygwin,$(OSTYPE))
   FIND_VERSION := $(shell find -version)
@@ -46,23 +58,14 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 
 ### end of user customizations
 
-# JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC_XLINT} ${JAVAC} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath ${CLASSPATH} ${JAVAC_ARGS}
+JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC_XLINT} ${JAVAC} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath ${CLASSPATH} ${JAVAC_ARGS}
 ## This version omits JAVAC_XLINT
-JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC} -J-Xmx1024m -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${CLASSPATH}' ${JAVAC_ARGS}
+# JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC} -J-Xmx1024m -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${CLASSPATH}' ${JAVAC_ARGS}
 
 
 ###########################################################################
 ### Variables
 ###
-
-INV ?= ${DAIKONDIR}
-
-# Set DAIKONBIN to scripts/ if it exists, otherwise to bin/.
-ifeq "$(wildcard ${INV}/scripts)" "${INV}/scripts"
-    DAIKONBIN ?= ${INV}/scripts
-else
-    DAIKONBIN ?= ${INV}/bin
-endif
 
 # These jar files only exist for the development version, not the
 # distributed version, of Daikon.  Avoid a (harmless but annoying) javac
