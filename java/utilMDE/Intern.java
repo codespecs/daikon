@@ -296,7 +296,7 @@ public final class Intern {
   // Interns a String.
   // Delegates to the builtin String.intern() method.  Provided for
   // completeness, so we can intern() any type used in OneOf.java.jpp.
-  public static /*@Interned*/ /*@Nullable*/ String intern(/*@Nullable*/ String a) {
+  public static /*@Interned*/ /*@PolyNull*/ String intern(/*@PolyNull*/ String a) {
     return (a == null) ? null : a.intern();
   }
 
@@ -536,7 +536,7 @@ public final class Intern {
    * If the argument is an array, its elements should themselves be
    * interned.
    **/
-  public static /*@Interned*/ /*@Nullable*/ Object intern(/*@Nullable*/ Object a) {
+  public static /*@Interned*/ /*@PolyNull*/ Object intern(/*@PolyNull*/ Object a) {
     if (a == null) {
       return null;
     } else if (a instanceof String) {
