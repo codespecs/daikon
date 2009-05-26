@@ -58,9 +58,9 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 
 ### end of user customizations
 
-JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC_XLINT} ${JAVAC} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath ${CLASSPATH} ${JAVAC_ARGS}
+# JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:typequals.*' ${JAVAC_XLINT} ${JAVAC} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath ${CLASSPATH} ${JAVAC_ARGS}
 ## This version omits JAVAC_XLINT
-# JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC} -J-Xmx1024m -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${CLASSPATH}' ${JAVAC_ARGS}
+JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:typequals.*' ${JAVAC} -J-Xmx1024m -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${CLASSPATH}' ${JAVAC_ARGS}
 
 
 ###########################################################################
@@ -106,7 +106,7 @@ endif
 # find command will get run multiple times.  USE AUTO_GENERATED_FILES instead.
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
 # " | perl -pi -e 's/^\.\///g'" to remove leading "./"
-JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name 'ReturnBytecodes.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/')
+JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name typequals -o -name 'ReturnBytecodes.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/')
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*') \
                     $(shell find utilMDE/ -name '*.java' -not -name '*\#*')
 
@@ -663,7 +663,9 @@ veryclean: very_clean
 
 very-clean: very_clean
 
-very_clean: dist_clean
+very_clean: dist_clean clean-generated-files
+
+clean-generated-files:
 	-rm -f ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 
 run:	all
@@ -672,18 +674,15 @@ run:	all
 run_gui:	all
 	${JAVA} daikon.gui.InvariantsGUI /g1/users/mhao/daikon/inv_files/dsaa.inv 2>&1 | grep -v Font
 
-# When doing certain search/replace, it makes sense to omit generated files
-tags-without-generated-files:
-	tags-nogen
-tags-nogen: very-
-	${MAKE} tags-nogen-noclean
-# Separate target to force make to run again and re-compute TAG_FILES
-tags-nogen-noclean:
-	@etags -l java ${TAG_FILES}
-
 etags:	tags
 TAGS:	tags
 tags:
+	@echo etags '*.java ...'
+	@etags -l java ${TAG_FILES}
+
+# When doing certain search/replace tasks, it's better to omit generated files
+tags-nogen: tags-without-generated-files
+tags-without-generated-files: clean-generated-files
 	@echo etags '*.java ...'
 	@etags -l java ${TAG_FILES}
 
