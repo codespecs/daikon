@@ -1,4 +1,4 @@
-package daikon.typequals;
+package typequals;
 
 import checkers.quals.*;
 

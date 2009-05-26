@@ -1,7 +1,7 @@
-package daikon.typequals;
+package typequals;
 
 import checkers.quals.*;
 
 @TypeQualifier
 @SubtypeOf(PrototypeOrNot.class)
-public @interface NonPrototype {}
+public @interface Prototype {}
