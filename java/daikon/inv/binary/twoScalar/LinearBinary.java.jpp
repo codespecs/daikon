@@ -58,6 +58,7 @@ public class CLASSNAME
 
   public CORECLASS core;
 
+  @SuppressWarnings("nullness") // circular initialization
   protected CLASSNAME(PptSlice ppt) {
     super(ppt);
     core = new CORECLASS(this);

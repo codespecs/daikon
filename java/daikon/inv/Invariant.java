@@ -766,7 +766,7 @@ public abstract class Invariant
    * supplied, is a human-readable description of the invariant in its
    * uninformative state, which will be added to the message.
    **/
-  public String format_too_few_samples(OutputFormat request, String attempt) {
+  public String format_too_few_samples(OutputFormat request, /*@Nullable*/ String attempt) {
     if (request == OutputFormat.SIMPLIFY) {
       return "(AND)";
     } else if (request == OutputFormat.JAVA ||

@@ -124,7 +124,7 @@ public final /*(at)Interned*/ class Equality
   // Accessors
 
 
-  private VarInfo leaderCache = null;
+  private /*@Nullable*/ VarInfo leaderCache = null;
   /**
    * Return the canonical VarInfo of this.  Note that the leader never
    * changes.

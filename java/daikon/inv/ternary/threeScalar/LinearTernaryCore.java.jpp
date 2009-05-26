@@ -69,6 +69,7 @@ import java.util.logging.Level;
 // linearintervention method deals with the degenerate form and the
 // planarintervention focuses on the full ternary invariant.
 
+@SuppressWarnings("nullness") // ***** TEMPORARY:  def_points is confused, needs review/refactoring/rewriting
 public final class CLASSNAME
   implements Serializable, Cloneable
 {
@@ -479,7 +480,8 @@ public final class CLASSNAME
 
     }
     // should never get here because values_seen is either < or >= MINTRIPLES
-    return InvariantStatus.NO_CHANGE;
+    // return InvariantStatus.NO_CHANGE;
+    throw new Error("at end of add_modified");
   }
 
   /**
@@ -681,8 +683,6 @@ public final class CLASSNAME
    */
   private double maxsep_doubles (Point[] pa) {
 
-    Point p1 = null, p2 = null;
-
     // cache values for the (square of the) distance between each pair of
     // points, to avoid duplicating work
     double[][] separations = new double[pa.length][pa.length];
@@ -692,10 +692,11 @@ public final class CLASSNAME
       }
     }
 
+    Point p1 = pa[0], p2 = pa[1]; // initialized to avoid being null
     // max_separation is the separation metric for the most separated
     // pair of points.  We use the sum of the separations as the
     // metric.
-    double max_separation = Double.MIN_VALUE;
+    double max_separation = separations[0][1];
 
     for (int i=0; i < pa.length-2; i++) {
       for (int j=i+1; j < pa.length-1; j++) {
@@ -944,8 +945,6 @@ public final class CLASSNAME
   */
  double maxsep_triples (Point[] pa) {
 
-   Point p1 = null, p2 = null, p3 = null;
-
    // cache values for the (square of the) distance between each pair of
    // points, to avoid duplicating work
    double[][] separations = new double[pa.length][pa.length];
@@ -955,6 +954,7 @@ public final class CLASSNAME
      }
    }
 
+   Point p1 = pa[0], p2 = pa[0], p3 = pa[0]; // initalize so never null
    // max_separation is the separation metric for the most separated
    // triple of points.  We use the sum of the separations as the
    // metric.  (The metric "min of the three separations" does not work
@@ -1145,7 +1145,7 @@ public final class CLASSNAME
   }
 
   // In this class for convenience (avoid prefixing "LinearBinaryCore").
-  static String formatTerm(double coeff, String varname, boolean first) {
+  static String formatTerm(double coeff, /*@Nullable*/ String varname, boolean first) {
     return LinearBinaryCore.formatTerm (coeff, varname, first);
   }
 
@@ -1195,7 +1195,8 @@ public final class CLASSNAME
           + eq + "0";
       }
 
-    return null;
+    throw new Error("unrecognized output format " + format);
+    // return null;
   }
 
   public static String format_simplify (String vix, String viy, String viz,

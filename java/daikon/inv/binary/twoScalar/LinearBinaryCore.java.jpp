@@ -449,8 +449,8 @@ public final class CLASSNAME
   // Variable "varname" is the name of the variable; may be null
   // for the constant term.
   public static String formatTerm (double coeff,
-                                  String varname,
-                                  boolean first) {
+                                   /*@Nullable*/ String varname,
+                                   boolean first) {
     double ncoeff = coeff;
 
     if (ncoeff == 0)
