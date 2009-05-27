@@ -288,7 +288,7 @@ public final class ONEOFSCALAR
   private int num_elts;
 
 
-  public ONEOFSCALAR (PptSlice slice) {
+  public ONEOFSCALAR (/*@DependentField(when = Prototype.class, result=Nullable.class)*/ PptSlice slice) {
     super (slice);
     if (slice == null)
       return;
