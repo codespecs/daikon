@@ -2024,8 +2024,7 @@ public final class FileIO {
       // it doesn't make sense to look at x.y when x is uninitialized.
       if (ValueTuple.modIsMissingNonsensical(mod)) {
         if (!(value_rep.equals("nonsensical")
-          || value_rep.equals("uninit") // backward compatibility (9/27/2002)
-          || value_rep.equals("missing"))) {
+              || value_rep.equals("missing"))) {
           throw new Daikon.TerminationMessage(
             "Modbit indicates missing value for variable "
               + vi.name() + " with value \"" + value_rep + "\";" + lineSep
