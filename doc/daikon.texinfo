@@ -378,6 +378,10 @@ Declarations
 * Program point declarations::  
 * Variable declarations::       
 
+Data trace records
+
+* Example files::               
+
 Example files
 
 * Example declaration file::    
@@ -2234,32 +2238,8 @@ use of them, see @ref{Options to enable/disable derived variables}.
 @cindex nonsensical values for variables
 
 Some trace variables and derived variables may represent meaningless
-expressions.  Examples include
-@itemize
-@item
-@code{x} when @code{x} is uninitialized or deallocated,
-@item
-@code{x.y} when @code{x} is null (or uninitialized or deallocated)
-@item
-@code{a[i]} when @code{i} is outside the bounds of @code{a} (or
-uninitialized or deallocated, or @code{a} is null, uninitialized, or
-deallocated)
-@end itemize
-@noindent
-For trace variables, it is the responsibility of the front end to
-perform a check at run time whenever a variable's value is about to be
-output to the trace, and to output
-the value ``nonsensical'' (@pxref{Data trace records}) rather than
-crashing the program or outputting a meaningless value.  (Determining
-when an expression's value is meaningless is the most challenging part
-of writing an instrumenter for a language like C, since it requires
-tracking memory allocation and initialization.)  For derived variables
-created by Daikon, Daikon does the same thing, setting values to
-``nonsensical'' when appropriate.  For controlling Daikon's output in
-the presence of nonsensical values, see the
-@option{daikon.Daikon.guardNulls} configuration option
-(@pxref{General configuration options}).
-
+expressions; in such a circumstance, the value is said to be nonsensical
+(@pxref{Nonsensical values}).
 
 The remainder of this section describes conventions for naming
 expressions.  Those that cannot be named by simple C/Java expressions
@@ -6536,7 +6516,7 @@ not initialized.  It performs these checks so that it can avoid
 dereferencing bad pointers and uninitialized variables when printing
 values at program points to the @file{.dtrace} file.  (Instead,
 it prints a value of ``nonsensical'' for those variables, which has a
-special meaning to Daikon.)
+special meaning to Daikon (@pxref{Nonsensical values}).)
 
 Both the Unix and Windows versions of Purify have problems identifying
 uninitialized variables on the stack.  In Mangel-Wurzel, this manifests
@@ -6665,7 +6645,8 @@ Mangel-Wurzel's data structure traversal.  On Windows, Purify also has
 problems reliably detecting uninitialized stack locations which manifest
 themselves in Mangel-Wurzel as uninitialized block-scope automatic
 variables sometimes being reported as having garbage values instead of as
-being ``nonsensical'', which is treated specially by Daikon.
+being ``nonsensical'', which is treated specially by Daikon
+(@pxref{Nonsensical values}).
 
 You will probably need to specify the @samp{--microsoft} compatibility mode
 option as the default in your @file{.mangelrc} file.
@@ -9631,15 +9612,9 @@ but @samp{a} for the identity of the array itself.)
 @cindex nonsensical values for variables
 @cindex missing values for variables, see nonsensical values
 
-The value may also be the string @code{nonsensical} (sometimes also
-known as ``missing'').
-That means that the variable does not have a value because
-the expression that computes it cannot be evaluated.  For instance, if
-variable @code{a} has value @code{null}, then variable @code{a.b} would
-have value @code{nonsensical}.  When the value is @code{nonsensical}, the
-modified field should be 2.  Also see the
-@option{daikon.Daikon.guardNulls} configuration option (@pxref{General
-configuration options}).
+@c the Daikon code sometimes calls this "missing" rather than "nonsensical".
+The value may also be the string @code{nonsensical}; @xref{Nonsensical
+values}.
 
 @item modified? (0, 1, or 2).
 @cindex modified bit
@@ -9671,6 +9646,44 @@ be several invocations of a procedure active at once and they do not
 necessarily follow a stack discipline, being exited in the reverse order of
 entry.  For non-concurrent systems, this nonce is not necessary and may be
 omitted.
+
+
+@menu
+* Example files::               
+@end menu
+
+@node    Example files,  , Data trace records, Data trace records
+@subsection Nonsensical values for variables
+
+Some trace variables and derived variables may not have a value because
+the expression that computes it cannot be evaluated.  In such a
+circumstance, the value is said to be nonsensical, it is written in the
+trace file as @code{nonsensical}, and its modified field must be 2.
+Examples include
+@itemize
+@item
+@code{x} when @code{x} is uninitialized or deallocated,
+@item
+@code{x.y} when @code{x} is null (or uninitialized or deallocated)
+@item
+@code{a[i]} when @code{i} is outside the bounds of @code{a} (or
+uninitialized or deallocated, or @code{a} is null, uninitialized, or
+deallocated)
+@end itemize
+@noindent
+For trace variables, it is the responsibility of the front end to
+perform a check at run time whenever a variable's value is about to be
+output to the trace, and to output the value ``nonsensical''
+(@pxref{Nonsensical values}) rather than crashing the program or
+outputting an uninitialized or meaningless value.  (Determining when an
+expression's value is meaningless is the most challenging part of
+writing an instrumenter for a language like C, since it requires
+tracking memory allocation and initialization.)  For derived variables
+created by Daikon, Daikon does the same thing, setting values to
+``nonsensical'' when appropriate.  For controlling Daikon's output in
+the presence of nonsensical values, see the
+@option{daikon.Daikon.guardNulls} configuration option (@pxref{General
+configuration options}).
 
 
 @node    Example files, Version 1 Declarations, Data trace records, File formats
