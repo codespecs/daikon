@@ -418,7 +418,7 @@ sub kvasir_daikon_test {
   print_log("Kvasir Daikon tests...");
 
   my $succ = buildtest_cmd ("make -C $INV/tests/kvasir-tests "
-            . "$TEST_SUITE-w-daikon", "kvasir_daikon_test.out", "", "FAILED");
+            . "$TEST_SUITE-w-daikon", "kvasir_daikon_test.out", "", "FAILED\n");
   if (!$succ) { return $succ; }
 
   my $summary_file = "kvasir_daikon_test_summary.out";
