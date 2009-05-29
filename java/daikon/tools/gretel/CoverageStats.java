@@ -56,9 +56,13 @@ public class CoverageStats
     {
       Method m;
       m = clazzListHits.getMethod("getHits", (Class<?> /*@Nullable*/ [])null);
-      hits = (Map<String,Set<Integer>>) m.invoke(null, (Object /*@Nullable*/ [])null); // unchecked cast
+      @SuppressWarnings("unchecked")
+      Map<String,Set<Integer>> hits_result = (Map<String,Set<Integer>>) m.invoke(null, (Object /*@Nullable*/ [])null);
+      hits = hits_result;
       m = clazzListHits.getMethod("getMisses", (Class<?> /*@Nullable*/ [])null);
-      misses = (Map<String,Set<Integer>>) m.invoke(null, (Object /*@Nullable*/ [])null); // unchecked cast
+      @SuppressWarnings("unchecked")
+      Map<String,Set<Integer>> misses_result = (Map<String,Set<Integer>>) m.invoke(null, (Object /*@Nullable*/ [])null);
+      misses = misses_result;
     }
 
     // Compute coverage

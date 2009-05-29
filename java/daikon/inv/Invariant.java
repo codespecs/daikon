@@ -394,7 +394,7 @@ public abstract class Invariant
   // in the ppt.  Or, don't put too much work in the constructor and instead
   // have the caller do that.
   // The "ppt" argument can be null if this is a prototype invariant.
-  protected Invariant(/*@DependentField(when = Prototype.class, result=Nullable.class)*/ PptSlice ppt) {
+  protected Invariant(/*@Dependent(when = Prototype.class, result=Nullable.class)*/ PptSlice ppt) {
     this.ppt = ppt;
   }
 

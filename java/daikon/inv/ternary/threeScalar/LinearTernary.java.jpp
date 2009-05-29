@@ -83,7 +83,7 @@ public class CLASSNAME
 
   public CORECLASS core;
 
-  protected CLASSNAME(/*@DependentField(when = Prototype.class, result=Nullable.class)*/ PptSlice ppt) {
+  protected CLASSNAME(/*@Dependent(when = Prototype.class, result=Nullable.class)*/ PptSlice ppt) {
     super(ppt);
     @SuppressWarnings("nullness") // circular initialization; cast away rawness
     CLASSNAME nonRawThis = (/*@NonNull*/ CLASSNAME) this;

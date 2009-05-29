@@ -14,11 +14,11 @@ public class NodeSequence implements NodeListInterface {
   static final long serialVersionUID = 20050923L;
 
    public NodeSequence(int n) {
-      nodes = new Vector(n);
+      nodes = new Vector<Node>(n);
    }
 
    public NodeSequence(Node firstNode) {
-      nodes = new Vector();
+      nodes = new Vector<Node>();
       addNode(firstNode);
    }
 
@@ -26,8 +26,8 @@ public class NodeSequence implements NodeListInterface {
       nodes.addElement(n);
    }
 
-   public Node elementAt(int i)  { return (Node)nodes.elementAt(i); }
-   public Enumeration elements() { return nodes.elements(); }
+   public Node elementAt(int i)  { return nodes.elementAt(i); }
+   public Enumeration<Node> elements() { return nodes.elements(); }
    public int size()             { return nodes.size(); }
    public void accept(jtb.cparser.visitor.Visitor v) {
       v.visit(this);

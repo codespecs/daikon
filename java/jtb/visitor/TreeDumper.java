@@ -71,8 +71,8 @@ public class TreeDumper extends DepthFirstVisitor {
       // Handle special tokens
       //
       if ( printSpecials && n.numSpecials() > 0 )
-         for ( Enumeration e = n.specialTokens.elements(); e.hasMoreElements(); )
-            visit((NodeToken)e.nextElement());
+         for ( Enumeration<NodeToken> e = n.specialTokens.elements(); e.hasMoreElements(); )
+            visit(e.nextElement());
 
       //
       // Handle startAtNextToken option

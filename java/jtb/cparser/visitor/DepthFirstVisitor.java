@@ -15,14 +15,14 @@ public class DepthFirstVisitor implements Visitor {
    // Auto class visitors--probably don't need to be overridden.
    //
    public void visit(NodeList n) {
-      for ( Enumeration e = n.elements(); e.hasMoreElements(); )
-         ((Node)e.nextElement()).accept(this);
+      for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); )
+         (e.nextElement()).accept(this);
    }
 
    public void visit(NodeListOptional n) {
       if ( n.present() )
-         for ( Enumeration e = n.elements(); e.hasMoreElements(); )
-            ((Node)e.nextElement()).accept(this);
+         for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); )
+            (e.nextElement()).accept(this);
    }
 
    public void visit(NodeOptional n) {
@@ -31,8 +31,8 @@ public class DepthFirstVisitor implements Visitor {
    }
 
    public void visit(NodeSequence n) {
-      for ( Enumeration e = n.elements(); e.hasMoreElements(); )
-         ((Node)e.nextElement()).accept(this);
+      for ( Enumeration<Node> e = n.elements(); e.hasMoreElements(); )
+         (e.nextElement()).accept(this);
    }
 
    public void visit(NodeToken n) { }

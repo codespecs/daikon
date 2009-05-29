@@ -5,6 +5,7 @@ import java.io.*;
 import jtb.syntaxtree.*;
 import java.util.Vector;
 
+@SuppressWarnings("cast")
 public class JavaParserTokenManager implements JavaParserConstants
 {
   public  java.io.PrintStream debugStream = System.out;

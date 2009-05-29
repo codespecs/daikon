@@ -2024,16 +2024,20 @@ public final class FileIO {
       // it doesn't make sense to look at x.y when x is uninitialized.
       if (ValueTuple.modIsMissingNonsensical(mod)) {
         if (!(value_rep.equals("nonsensical")
-              // Fjalar still uses "uninit" (it distinguishes between
+              // Kvasir still uses "uninit" (it distinguishes between
               // uninit and nonsensical), though the Daikon manual does not
               // officially permit "uninit" as a value and has not since at
-              // least 2002.
+              // least 2002.  This is fixed in the Kvasir repository as of
+              // 5/2009, so the following two lines should be removed at
+              // some point not too long after that.  Then Daikon should
+              // print a warning (or even terminate execution) about uses
+              // of "uninit".
               || value_rep.equals("uninit")
               || value_rep.equals("missing"))) {
           throw new Daikon.TerminationMessage(
-            "Modbit indicates missing value for variable "
+            "Modbit indicates nonsensical value for variable "
               + vi.name() + " with value \"" + value_rep + "\";" + lineSep
-            + "  text of value should be \"nonsensical\" or \"uninit\" at "
+            + "  text of value should be \"nonsensical\" at "
               + data_trace_state.filename + " line " + reader.getLineNumber());
         } else {
           // Keep track of variables that can be missing

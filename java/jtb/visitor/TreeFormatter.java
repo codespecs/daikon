@@ -19,6 +19,7 @@ import jtb.syntaxtree.*;
  * Pass your syntax tree to this visitor, and then to the TreeDumper
  * visitor in order to "pretty print" your tree.
  */
+@SuppressWarnings("rawtypes")
 public class TreeFormatter extends DepthFirstVisitor
 {
 

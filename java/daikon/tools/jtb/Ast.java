@@ -22,6 +22,7 @@ import daikon.*;
 
 import java.lang.reflect.*;
 
+@SuppressWarnings("rawtypes")
 public class Ast {
 
   private static final String lineSep = System.getProperty("line.separator");
@@ -1178,7 +1179,7 @@ public class Ast {
     List<Invariant> invs_vector = new LinkedList<Invariant>(ppt.getInvariants());
 
     Invariant[] invs_array =
-      (Invariant[]) invs_vector.toArray(new Invariant[invs_vector.size()]);
+      invs_vector.toArray(new Invariant[invs_vector.size()]);
     Arrays.sort(invs_array, PptTopLevel.icfp);
 
     Global.non_falsified_invariants += invs_array.length;

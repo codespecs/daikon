@@ -6,14 +6,15 @@ import java.util.*;
 import java.io.*;
 
 
+@SuppressWarnings({"rawtypes", "unchecked"})
 public class ConditionPrinter extends DepthFirstVisitor {
 
     private Printer printer;
     private Converter converter = new Converter();
     private ArrayList<String> actualStrings;
-    private ArrayList stringArrays;
+    private ArrayList<String> stringArrays;
     private HashMap<String,ArrayList<String>> actualStringsByFunction;
-    private HashMap<String,ArrayList> stringArraysByFunction;
+    private HashMap<String,ArrayList<String>> stringArraysByFunction;
     private ArrayList<String> localVariables;
 
 
@@ -29,7 +30,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
         this.actualStringsByFunction = l;
     }
 
-    public void setStringArrays(HashMap<String,ArrayList> l) {
+    public void setStringArrays(HashMap<String,ArrayList<String>> l) {
         this.stringArraysByFunction = l;
     }
 
@@ -73,7 +74,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
                     InitDeclaratorList list = (InitDeclaratorList) d.f1.node;
                     decls.add(list.f0); // get the first in "boolean first, second,third;"
                     // get the second, third, in "boolean first, second, third"
-                    Vector tempVec = list.f1.nodes;
+                    Vector<Node> tempVec = list.f1.nodes;
                     for (int k = 0; k < tempVec.size(); k++) {
                         decls.addAll(((NodeSequence)tempVec.get(k)).nodes);
                     }

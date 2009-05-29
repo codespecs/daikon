@@ -9,6 +9,7 @@ import jtb.cparser.customvisitor.*;
 import java.io.IOException;
 
 
+@SuppressWarnings({"unchecked","rawtypes"})
 public class CParser implements CParserConstants {
    private static Hashtable types = new Hashtable();
    private static Stack typedefParsingStack = new Stack();

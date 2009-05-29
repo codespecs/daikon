@@ -11,6 +11,6 @@ package jtb.cparser.syntaxtree;
 public interface NodeListInterface extends Node {
    public void addNode(Node n);
    public Node elementAt(int i);
-   public java.util.Enumeration elements();
+   public java.util.Enumeration<Node> elements();
    public int size();
 }

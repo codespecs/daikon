@@ -317,7 +317,7 @@ public final class Runtime {
   }
 
   public static final void println_modbit_missing(java.io.PrintStream ps) {
-    ps.println("2");          // "missing"
+    ps.println("2");          // "nonsensical"
   }
 
   public static final void println_class_and_modbit(java.io.PrintStream ps, Object x) {
@@ -569,9 +569,9 @@ public final class Runtime {
     println_modbit_modified(ps);
   }
 
-  // The parsing routines can't deal with "missing" in the middle of an
+  // The parsing routines can't deal with "nonsensical" in the middle of an
   // array (I think), so if an element is null, use 0 for its length.
-  // (A better solution be to mark the "length" derived variable as missing.
+  // (A better solution be to mark the "length" derived variable as nonsensical.
   // For expediency, I'm not doing that right now.  -MDE 2/1/2004)
 
   // Print the lengths of the elements of the top-level array.

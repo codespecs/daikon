@@ -46,7 +46,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
      // A shallow clone, which is what we want.
      HashMap<String,Stack<ClassOrInterfaceType>> oldShadowingMap =
-       copy((HashMap<String,Stack<ClassOrInterfaceType>>)shadowingMap);
+       copy(shadowingMap);
 
      if (n.f0.present()) {
        augmentShadowingMap((TypeParameters)n.f0.node);
@@ -76,7 +76,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
      // A shallow clone, which is what we want.
      HashMap<String,Stack<ClassOrInterfaceType>> oldShadowingMap =
-       copy((HashMap<String,Stack<ClassOrInterfaceType>>)shadowingMap);
+       copy(shadowingMap);
 
      if (n.f0.present()) {
        augmentShadowingMap((TypeParameters)n.f0.node);
@@ -107,7 +107,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
      // A shallow clone, which is what we want.
      HashMap<String,Stack<ClassOrInterfaceType>> oldShadowingMap =
-       copy((HashMap<String,Stack<ClassOrInterfaceType>>)shadowingMap);
+       copy(shadowingMap);
 
       n.f0.accept(this);
       n.f1.accept(this);
@@ -229,14 +229,14 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
     // Drop all type arguments.
     n.f1 = new NodeOptional(); // This removes optional node, if present.
-    Vector<Node> nodeSequenceList = ((NodeListOptional)n.f2).nodes;
+    Vector<Node> nodeSequenceList = (n.f2).nodes;
     for (int i = 0 ; i < nodeSequenceList.size() ; i++) {
       NodeSequence oldSequence = (NodeSequence) nodeSequenceList.get(i);
-      NodeSequence newSequence = (NodeSequence) new NodeSequence(3);
+      NodeSequence newSequence = new NodeSequence(3);
       newSequence.addNode(oldSequence.elementAt(0)); // "."
       newSequence.addNode(oldSequence.elementAt(1)); // <IDENTIFIER>
       newSequence.addNode(new NodeOptional()); // get rid of type arguments
-      ((NodeListOptional)n.f2).nodes.set(i, newSequence);
+      (n.f2).nodes.set(i, newSequence);
     }
 
     // 2. Only the first <IDENTIFIER> may possibly be associated
@@ -284,7 +284,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     HashMap<String,Stack<ClassOrInterfaceType>> newMap = new HashMap<String,Stack<ClassOrInterfaceType>>();
 
     for (Map.Entry<String,Stack<ClassOrInterfaceType>> e : m.entrySet()) {
-      String key = (String)e.getKey();
+      String key = e.getKey();
       Stack<ClassOrInterfaceType> oldStack = e.getValue();
       @SuppressWarnings("unchecked")
       Stack<ClassOrInterfaceType> newStack = (Stack<ClassOrInterfaceType>)oldStack.clone();

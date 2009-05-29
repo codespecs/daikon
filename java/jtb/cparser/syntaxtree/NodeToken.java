@@ -28,7 +28,7 @@ public class NodeToken implements Node {
    public NodeToken getSpecialAt(int i) {
       if ( specialTokens == null )
          throw new NoSuchElementException("No specials in token");
-      return (NodeToken)specialTokens.elementAt(i);
+      return specialTokens.elementAt(i);
    }
 
    public int numSpecials() {
@@ -37,7 +37,7 @@ public class NodeToken implements Node {
    }
 
    public void addSpecial(NodeToken s) {
-      if ( specialTokens == null ) specialTokens = new Vector();
+      if ( specialTokens == null ) specialTokens = new Vector<NodeToken>();
       specialTokens.addElement(s);
    }
 
@@ -54,7 +54,7 @@ public class NodeToken implements Node {
 
        StringBuffer buf = new StringBuffer();
 
-       for ( Enumeration e = specialTokens.elements(); e.hasMoreElements(); )
+       for ( Enumeration<NodeToken> e = specialTokens.elements(); e.hasMoreElements(); )
           buf.append(e.nextElement().toString());
 
        buf.append(tokenImage);
@@ -68,7 +68,7 @@ public class NodeToken implements Node {
    public String tokenImage;
 
    // Stores a list of NodeTokens
-   public Vector specialTokens;
+   public Vector<NodeToken> specialTokens;
 
    // -1 for these ints means no position info is available.
    public int beginLine, beginColumn, endLine, endColumn;

@@ -9,8 +9,8 @@ public class Printer extends DepthFirstVisitor {
 
   private PrintWriter out;
   private StringBuffer buffer;
-  private ArrayList filter;
-  public static List badExpressions;
+  private ArrayList<String> filter;
+  public static List<String> badExpressions;
   private File file;
 
   static {
@@ -59,7 +59,7 @@ public class Printer extends DepthFirstVisitor {
     // strings that should be filtered, don't
     // print it
     for (int i = 0; i < filter.size(); i++) {
-      String curr = (String)filter.get(i);
+      String curr = filter.get(i);
       int index = buffer.toString().indexOf(curr);
       if (shouldPrint(curr, index)) {
 	okToPrint = false;

@@ -13,11 +13,11 @@ public class NodeListOptional implements NodeListInterface {
   static final long serialVersionUID = 20050923L;
 
    public NodeListOptional() {
-      nodes = new Vector();
+      nodes = new Vector<Node>();
    }
 
    public NodeListOptional(Node firstNode) {
-      nodes = new Vector();
+      nodes = new Vector<Node>();
       addNode(firstNode);
    }
 
@@ -25,8 +25,8 @@ public class NodeListOptional implements NodeListInterface {
       nodes.addElement(n);
    }
 
-   public Enumeration elements() { return nodes.elements(); }
-   public Node elementAt(int i)  { return (Node)nodes.elementAt(i); }
+   public Enumeration<Node> elements() { return nodes.elements(); }
+   public Node elementAt(int i)  { return nodes.elementAt(i); }
    public int size()             { return nodes.size(); }
    public boolean present()      { return nodes.size() != 0; }
    public void accept(jtb.cparser.visitor.Visitor v) {

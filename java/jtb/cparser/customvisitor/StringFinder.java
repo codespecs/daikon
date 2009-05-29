@@ -27,7 +27,7 @@ public class StringFinder extends DepthFirstVisitor {
   //holds the string arrays
   private ArrayList<String> actualStringMatrices;
   //map the function name with the string arrays
-  public HashMap<String,ArrayList> stringMatrices = new HashMap<String,ArrayList>();
+  public HashMap<String,ArrayList<String>> stringMatrices = new HashMap<String,ArrayList<String>>();
   //map the function name with the strings
   public HashMap<String,ArrayList<String>> functionStringMapping = new HashMap<String,ArrayList<String>>();
   //holds the names of C functions that indicate a char pointer is a string
@@ -76,9 +76,9 @@ public class StringFinder extends DepthFirstVisitor {
       TypeSpecifier ts = (TypeSpecifier)(seq).nodes.get(0);
       if (p.f1.choice instanceof Declarator) {
         Declarator d = (Declarator)p.f1.choice;
-        Node maybePointer = ((NodeOptional)d.f0).node;
+        Node maybePointer = (d.f0).node;
         if (ts.f0.choice.toString().equals("char")) {
-          NodeListOptional nodeList = (NodeListOptional)d.f1.f1;
+          NodeListOptional nodeList = d.f1.f1;
           if (nodeList.nodes.size() == 1 && !( maybePointer instanceof Pointer)) {
             NodeChoice tempChoice = (NodeChoice)nodeList.nodes.get(0);
             NodeSequence tempNodeSeq = (NodeSequence)tempChoice.choice;

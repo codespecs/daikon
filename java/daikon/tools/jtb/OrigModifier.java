@@ -83,7 +83,7 @@ public class OrigModifier extends DepthFirstVisitor {
           if (n.f0.f0.choice instanceof NodeToken) {
             NodeToken firstToken = (NodeToken) n.f0.f0.choice;
             firstToken.tokenImage = "orig(" + firstToken.tokenImage;
-            Enumeration nodeSequence =
+            Enumeration<Node> nodeSequence =
               ((NodeSequence) ((PrimarySuffix) n.f1.elementAt(0)).f0.choice).elements();
             NodeToken lastToken = firstToken;
             while (nodeSequence.hasMoreElements()) {

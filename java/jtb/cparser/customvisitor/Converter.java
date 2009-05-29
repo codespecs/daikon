@@ -6,8 +6,8 @@ import java.util.*;
 
 public class Converter extends DepthFirstVisitor {
 
-  public ArrayList actualStrings;
-  public ArrayList stringArrays;
+  public ArrayList<String> actualStrings;
+  public ArrayList<String> stringArrays;
   private boolean matrixAccess = false;
   private boolean reorder = false;
   private NestedArrayChecker nestChecker= new NestedArrayChecker();
@@ -269,7 +269,7 @@ public class Converter extends DepthFirstVisitor {
   }
 
 
-  private ArrayList extractArgumentNames(ArgumentExpressionList ael) {
+  private ArrayList<Node> extractArgumentNames(ArgumentExpressionList ael) {
     ArrayList<Node> assigns = new ArrayList<Node>();
     if (ael!=null) {
       assigns.add(ael.f0);
