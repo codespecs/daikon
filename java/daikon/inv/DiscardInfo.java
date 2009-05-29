@@ -30,17 +30,18 @@ public final class DiscardInfo {
   /** Invariant for which the DiscardInfo applies **/
   public Invariant inv;
 
-  /**
-   * The className of the Invariant being discarded
-   */
-  private String className;
+  // Rarely used, so no need to precompute. -MDE
+  // /**
+  //  * The className of the Invariant being discarded
+  //  */
+  // private String className;
 
-  public DiscardInfo(String className, String discardFormat, DiscardCode discardCode, String discardString) {
-    this.discardCode = discardCode;
-    this.discardString = discardString;
-    this.discardFormat = discardFormat;
-    this.className = className;
-  }
+  // public DiscardInfo(String className, String discardFormat, DiscardCode discardCode, String discardString) {
+  //   this.discardCode = discardCode;
+  //   this.discardString = discardString;
+  //   this.discardFormat = discardFormat;
+  //   this.className = className;
+  // }
 
   public DiscardInfo(Invariant inv, DiscardCode discardCode, String discardString) {
     Assert.assertTrue (inv.ppt != null);
@@ -48,7 +49,7 @@ public final class DiscardInfo {
     this.discardCode = discardCode;
     this.discardString = discardString;
     this.discardFormat = inv.format();
-    this.className = inv.getClass().getName();
+    // this.className = inv.getClass().getName();
     this.inv = inv;
     inv.log (discardString);
   }
@@ -66,7 +67,7 @@ public final class DiscardInfo {
   }
 
   public String className() {
-    return this.className;
+    return this.inv.getClass().getName();
   }
 
   public String format() {
