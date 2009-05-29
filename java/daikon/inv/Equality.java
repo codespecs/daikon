@@ -106,6 +106,8 @@ public final /*(at)Interned*/ class Equality
     // ensure well-formedness and set equality slots
     Assert.assertTrue (variables.size() > 0);
     Assert.assertTrue (vars.size() == variables.size());
+    // Checkers TODO: flow should infer this as non-raw.
+    Equality thisNonRaw = (/*@NonNull*/ Equality)this;
     for (VarInfo vi : variables) {
       if (debug.isLoggable(Level.FINE)) {
         debug.fine ("  " + vi.name() + " [" + vi.comparability + "]");
@@ -116,7 +118,7 @@ public final /*(at)Interned*/ class Equality
              "not comparable " + leader.name() + " " + vi.name()
             +" at ppt " + ppt.parent.name());
       Assert.assertTrue(vi.rep_type.isArray() == leader.rep_type.isArray());
-      vi.equalitySet = (/*@NonNull*/ Equality)this;
+      vi.equalitySet = thisNonRaw;
     }
   }
 
