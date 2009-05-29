@@ -58,9 +58,11 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 
 ### end of user customizations
 
-# JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:typequals.*' ${JAVAC_XLINT} ${JAVAC} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath ${CLASSPATH} ${JAVAC_ARGS}
+# JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:typequals.*' ${JAVAC_XLINT} ${JAVAC} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath ${CLASSPATH} ${JAVAC_ARGS}
 ## This version omits JAVAC_XLINT
-JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:typequals.*' ${JAVAC} -J-Xmx1024m -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${CLASSPATH}' ${JAVAC_ARGS}
+JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:typequals.*' ${JAVAC} -J-Xmx1024m -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${CLASSPATH}' ${JAVAC_ARGS}
+## This version uses -Xlint
+# JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:typequals.*' ${JAVAC} -Xlint -J-Xmx1024m -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${CLASSPATH}' ${JAVAC_ARGS}
 
 
 ###########################################################################
@@ -653,7 +655,6 @@ clean_class_files:
 clean:
 	${MAKE} clean_class_files
 	-rm -f ChicoryPremain.jar
-	-rm -f dcomp_premain.jar dcomp_rt.jar
 	-rm -rf daikon/util
 
 dist_clean: clean
@@ -664,6 +665,7 @@ veryclean: very_clean
 very-clean: very_clean
 
 very_clean: dist_clean clean-generated-files
+	-rm -f dcomp_premain.jar dcomp_rt.jar
 
 clean-generated-files:
 	-rm -f ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
@@ -756,11 +758,11 @@ audit:
 # JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing
 JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing
-JAVAC_NULLNESS_STUBS = -sourcepath ${checkers}/jdk/nullness/src
+JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker -implicit:class -Xlint:-processing
-JAVAC_JAVARI_STUBS = -sourcepath ${checkers}/jdk/nullness/src
+JAVAC_JAVARI_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 JAVAC_IGJ_ARGS = -processor checkers.igj.IGJChecker -implicit:class -Xlint:-processing
-JAVAC_IGJ_STUBS = -sourcepath ${checkers}/jdk/nullness/src
+JAVAC_IGJ_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 ## Remove files that are not fully annotated, but contain the string "@Interned".
 # INTERNING_JAVA_FILES_SKIP =
 INTERNING_JAVA_FILES_SKIP = \( -name PptTopLevel.java -o -name DynamicConstants.java \) -prune -o
