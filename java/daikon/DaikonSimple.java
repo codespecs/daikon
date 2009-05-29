@@ -1,7 +1,5 @@
 package daikon;
 
-import static daikon.Global.lineSep;
-
 import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.IOException;
@@ -22,6 +20,8 @@ import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
 import daikon.inv.ValueSet;
 import daikon.suppress.NIS;
+
+import static daikon.Global.lineSep;
 
 /**
  * DaikonSimple reads a declaration file and trace file and outputs a list of

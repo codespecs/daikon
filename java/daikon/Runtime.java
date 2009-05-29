@@ -600,6 +600,7 @@ public final class Runtime {
 
   // Print the lengths of the elements of a List[]
 
+  @SuppressWarnings("rawtypes")
   public static final void println_array_List_size(java.io.PrintStream ps, List[] a) {
     if (a == null) {
       ps.println("null");

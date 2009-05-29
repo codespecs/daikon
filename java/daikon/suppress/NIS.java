@@ -783,7 +783,7 @@ public class NIS {
    * class. @return the number of false antecedents found.
    */
   static int find_antecedents (Iterator<PptSlice> slice_iterator,
-                    Map<Class,List<Invariant>> antecedent_map) {
+               Map<Class<? extends Invariant>,List<Invariant>> antecedent_map) {
 
     int false_cnt = 0;
 

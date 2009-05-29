@@ -5,10 +5,10 @@ import daikon.*;
 
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
-
 import daikon.inv.unary.UnaryInvariant;
 import daikon.inv.binary.BinaryInvariant;
 import daikon.inv.ternary.threeScalar.ThreeScalar;
+import static daikon.inv.Invariant.asInvClass;
 
 import java.io.*;
 
@@ -400,8 +400,7 @@ class FormatTestCase {
     // System.out.println("On class " + className);
 
     // Load the class from file
-    @SuppressWarnings("unchecked")
-    Class<? extends Invariant> classToTest = (Class<? extends Invariant>) getClass(className);
+    Class<? extends Invariant> classToTest = asInvClass(getClass(className));
 
     try {
       Field f = classToTest.getField("dkconfig_enabled");
@@ -1064,7 +1063,7 @@ class FormatTestCase {
    *         else throw a RuntimeException
    */
   private static Invariant instantiateClass(Class<? extends Invariant> theClass, PptSlice slice,
-                                         Class[] arg_types, Object[] arg_vals) {
+                                         Class<?>[] arg_types, Object[] arg_vals) {
     try {
       Method get_proto = theClass.getMethod ("get_proto", arg_types);
       Invariant proto = (Invariant) get_proto.invoke (null, arg_vals);

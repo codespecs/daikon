@@ -9,17 +9,17 @@ import daikon.inv.ternary.threeScalar.ThreeScalar;
 import daikon.inv.binary.*;
 import daikon.inv.unary.*;
 import daikon.inv.unary.sequence.CommonSequence;
+import static daikon.inv.Invariant.asInvClass;
 
-import java.io.*;
-import java.lang.reflect.*;
-
-import java.util.List;
-import java.util.StringTokenizer;
-import java.util.Vector;
+import utilMDE.Assert;
 
 import junit.framework.*;
 
-import utilMDE.Assert;
+import java.io.*;
+import java.lang.reflect.*;
+import java.util.List;
+import java.util.StringTokenizer;
+import java.util.Vector;
 
 /**
  * This is a tester for the results of adding or checking an sample
@@ -499,8 +499,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       if (className == null) return true;
 
       // Load the class from file
-      @SuppressWarnings("unchecked")
-      Class<? extends Invariant> classToTest = (Class<? extends Invariant>) getClass(className);
+      Class<? extends Invariant> classToTest = asInvClass(getClass(className));
 
       try {
         classToTest.getField("dkconfig_enabled"); // Enable if needs to be done

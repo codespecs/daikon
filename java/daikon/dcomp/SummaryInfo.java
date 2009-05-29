@@ -1,5 +1,13 @@
 package daikon.dcomp;
 
+import daikon.DynComp;
+import static daikon.dcomp.DCInstrument.MethodDef;
+
+import daikon.chicory.MethodInfo;
+import daikon.chicory.ClassInfo;
+import daikon.chicory.DaikonWriter;
+import daikon.util.*;
+
 import java.util.*;
 import java.util.regex.*;
 import java.lang.reflect.Constructor;
@@ -12,15 +20,8 @@ import org.apache.bcel.verifier.*;
 import org.apache.bcel.verifier.structurals.*;
 import daikon.util.BCELUtil;
 
-import daikon.util.*;
 import org.apache.commons.io.*;
 
-import daikon.chicory.MethodInfo;
-import daikon.chicory.ClassInfo;
-import daikon.chicory.DaikonWriter;
-
-import daikon.DynComp;
-import static daikon.dcomp.DCInstrument.MethodDef;
 
 /**
  * Information about DF summary routines.  These routines are called in

@@ -18,18 +18,17 @@ import daikon.simplify.*;
 import daikon.split.*;
 import daikon.split.misc.*;
 import daikon.suppress.*;
-import utilMDE.Assert;
 import daikon.inv.filter.InvariantFilters;
 import static daikon.FileIO.ParentRelation;
 import static daikon.PptRelation.PptRelationType;
+
+import utilMDE.*;
 
 import java.util.*;
 import java.text.*;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
-
-import utilMDE.*;
 
 /**
  * All information about a single program point.

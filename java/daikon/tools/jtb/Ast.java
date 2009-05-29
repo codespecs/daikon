@@ -988,7 +988,7 @@ public class Ast {
 
 
   public static String getReturnType(MethodDeclaration m) {
-    Node n = (Node) m.f1.f0.choice;
+    Node n = m.f1.f0.choice;
     return print(n);
   }
 

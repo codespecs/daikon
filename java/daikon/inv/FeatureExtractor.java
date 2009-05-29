@@ -1,12 +1,15 @@
 package daikon.inv;
 
+import utilMDE.*;
+import static daikon.inv.Invariant.asInvClass;
+
+import daikon.*;
+import daikon.diff.*;
+
 import java.lang.reflect.*;
 import java.io.*;
 import java.util.*;
 import java.text.*;
-import daikon.*;
-import daikon.diff.*;
-import utilMDE.*;
 
 /**
  * An invariant feature extractor.
@@ -620,8 +623,7 @@ public final class FeatureExtractor {
           name.substring(name.indexOf(".ver3") + 5);
 
       try {
-        @SuppressWarnings("unchecked")
-        Class<? extends Invariant> current = (Class<? extends Invariant>) Class.forName(name);
+        Class<? extends Invariant> current = asInvClass(Class.forName(name));
         if ((Invariant.class.isAssignableFrom(current)) ||
             (Ppt.class.isAssignableFrom(current)) ||
             (VarInfo.class.isAssignableFrom(current))) {

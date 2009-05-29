@@ -1310,7 +1310,7 @@ public final class PrintInvariants {
     Invariant[] invs_array = invs_vector.toArray(
       new Invariant[invs_vector.size()]);
 
-    Map<Class,Map<Class,Integer>> filter_map = new LinkedHashMap<Class,Map<Class,Integer>>();
+    Map<Class<? extends InvariantFilter>,Map<Class<? extends Invariant>,Integer>> filter_map = new LinkedHashMap<Class<? extends InvariantFilter>,Map<Class<? extends Invariant>,Integer>>();
 
     if (print_invs)
       debug.fine (ppt.name());
@@ -1320,12 +1320,12 @@ public final class PrintInvariants {
 
       InvariantFilters fi = InvariantFilters.defaultFilters();
       InvariantFilter filter = fi.shouldKeep(inv);
-      Class filter_class = null;
+      Class<? extends InvariantFilter> filter_class = null;
       if (filter != null)
         filter_class = filter.getClass();
-      Map<Class,Integer> inv_map = filter_map.get (filter_class);
+      Map<Class<? extends Invariant>,Integer> inv_map = filter_map.get (filter_class);
       if (inv_map == null) {
-        inv_map = new LinkedHashMap<Class,Integer>();
+        inv_map = new LinkedHashMap<Class<? extends Invariant>,Integer>();
         filter_map.put (filter_class, inv_map);
       }
       Integer cnt = inv_map.get (inv.getClass());
@@ -1341,9 +1341,9 @@ public final class PrintInvariants {
 
     log.fine (ppt.name() + ": " + invs_array.length);
 
-    for (Map.Entry<Class,Map<Class,Integer>> entry : filter_map.entrySet()) {
-      Class filter_class = entry.getKey();
-      Map<Class,Integer> inv_map = entry.getValue();
+    for (Map.Entry<Class<? extends InvariantFilter>,Map<Class<? extends Invariant>,Integer>> entry : filter_map.entrySet()) {
+      Class<? extends InvariantFilter> filter_class = entry.getKey();
+      Map<Class<? extends Invariant>,Integer> inv_map = entry.getValue();
       int total = 0;
       for (Integer cnt : inv_map.values()) {
         total += cnt.intValue();
@@ -1352,8 +1352,8 @@ public final class PrintInvariants {
         log.fine (" : Accepted Invariants : " + total);
       else
         log.fine (" : " + filter_class.getName() + ": " + total);
-      for (Map.Entry<Class,Integer> entry2 : inv_map.entrySet()) {
-        Class inv_class = entry2.getKey();
+      for (Map.Entry<Class<? extends Invariant>,Integer> entry2 : inv_map.entrySet()) {
+        Class<? extends Invariant> inv_class = entry2.getKey();
         Integer cnt = entry2.getValue();
         log.fine (" : : " + inv_class.getName() + ": " + cnt.intValue());
       }

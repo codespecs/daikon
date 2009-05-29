@@ -1,14 +1,14 @@
 package daikon.tools;
 
-import java.util.*;
-import java.util.regex.*;
-import java.io.*;
-
-import utilMDE.*;
-
 import daikon.chicory.DTraceReader;
 import daikon.chicory.DeclReader;
 import static daikon.chicory.DeclReader.*;
+
+import utilMDE.*;
+
+import java.util.*;
+import java.util.regex.*;
+import java.io.*;
 
 /**
  * Reads multiple dtrace files from web services and looks for fields

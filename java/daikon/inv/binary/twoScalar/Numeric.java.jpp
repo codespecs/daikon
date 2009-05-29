@@ -168,6 +168,7 @@ import daikon.inv.binary.twoString.*;
 import daikon.derive.binary.*;
 import daikon.suppress.*;
 import daikon.Quantify.QuantFlags;
+import static daikon.inv.Invariant.asInvClass;
 
 import utilMDE.*;
 import java.util.*;
@@ -412,7 +413,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     cstr = cstr.replaceFirst ("twoFloat", "twoSequence");
     Class<? extends Invariant> pairwise_class;
     try {
-      pairwise_class = (Class<? extends Invariant>) Class.forName (cstr); // unchecked cast
+      pairwise_class = asInvClass(Class.forName (cstr));
     } catch (Exception e) {
       throw new Error ("can't create class for " + cstr, e);
     }

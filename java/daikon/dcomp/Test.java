@@ -1,8 +1,8 @@
 package daikon.dcomp;
 
-import static java.lang.System.out;
 import java.io.*;
 import java.util.*;
+import static java.lang.System.out;
 
 class Test {
 

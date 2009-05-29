@@ -13,13 +13,13 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.Quantify;
 import daikon.Quantify.QuantFlags;
 import daikon.Quantify.QuantifyReturn;
-import utilMDE.*;
 import static daikon.FileIO.VarDefinition;
 
-import java.util.logging.Logger;
-import java.util.logging.Level;
+import utilMDE.*;
 
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.io.*;
 
 /**

@@ -1,12 +1,12 @@
 package daikon;
 
 import daikon.inv.*;
+import static daikon.FileIO.ParentRelation;
+import utilMDE.*;
 import java.io.*;
 import java.util.*;
-import utilMDE.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import static daikon.FileIO.ParentRelation;
 
 /**
  * Class that builds and describes relations in the ppt hierachy.

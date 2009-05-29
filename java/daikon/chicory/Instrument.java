@@ -1,12 +1,13 @@
 package daikon.chicory;
 
-import static java.lang.System.out;
 import java.lang.instrument.*;
 import java.lang.reflect.Modifier;
 import java.security.*;
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
+
+import static java.lang.System.out;
 
 // Sun included version of BCEL
 //import com.sun.org.apache.bcel.internal.*;

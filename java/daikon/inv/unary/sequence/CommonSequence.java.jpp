@@ -64,6 +64,7 @@ public class CLASSNAME
   static final boolean debugCommonSequence = false;
 
   private int elts;
+
   /**
    * Null means no samples have been seen yet.
    * Empty array means intersection is empty.

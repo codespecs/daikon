@@ -2,6 +2,7 @@ package daikon.simplify;
 
 import daikon.*;
 import daikon.inv.*;
+import static daikon.inv.Invariant.asInvClass;
 
 /** InvariantLemmas are Lemmas created by printing a Daikon invariant
  * in Simplify format, sometimes with some hacks.
@@ -30,11 +31,9 @@ public class InvariantLemma extends Lemma {
     } else {
       c = invariant.getClass();
     }
-    Class<?> outer = c.getDeclaringClass();
+    Class<? extends Invariant> outer = asInvClass(c.getDeclaringClass());
     if (outer != null) {
-      @SuppressWarnings("unchecked")
-      Class <? extends Invariant> c_tmp = (Class<? extends Invariant>) outer;
-      c = c_tmp;
+      c = outer;
     }
     return c;
   }

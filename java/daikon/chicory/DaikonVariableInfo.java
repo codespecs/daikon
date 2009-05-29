@@ -996,7 +996,8 @@ public abstract class DaikonVariableInfo
 
        if (implementsList(type))
        {
-           DaikonVariableInfo child = new ListInfo(offset + theName + "[]", (Class<? extends List<?>>)type); // unchecked cast
+           @SuppressWarnings("unchecked")
+           DaikonVariableInfo child = new ListInfo(offset + theName + "[]", (Class<? extends List<?>>)type);
 
            child.typeName = type.getName();
            child.repTypeName = "hashcode[]";

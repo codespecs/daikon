@@ -3,8 +3,8 @@ package daikon;
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
-import utilMDE.*;
 import static daikon.PptTopLevel.PptType;
+import utilMDE.*;
 
 /**
  * AnnotateNullable reads in a daikon invariant file and determines

@@ -10,8 +10,10 @@ import daikon.inv.filter.*;
 import daikon.suppress.*;
 import daikon.simplify.SimpUtil;
 import daikon.simplify.LemmaStack;
+import static daikon.inv.Invariant.asInvClass;
 
 import utilMDE.*;
+
 import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.regex.*;
@@ -1963,6 +1965,10 @@ public abstract class Invariant
       .toString();
   }
 
+  @SuppressWarnings("unchecked") // casting method
+  public static Class<? extends Invariant> asInvClass(Object x) {
+    return (Class<? extends Invariant>)x;
+  }
 
 }
 

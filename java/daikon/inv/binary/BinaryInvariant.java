@@ -3,6 +3,7 @@ package daikon.inv.binary;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.InvariantStatus;
+import static daikon.inv.Invariant.asInvClass;
 
 import java.lang.reflect.*;
 import java.util.*;
@@ -119,7 +120,7 @@ public abstract class BinaryInvariant extends Invariant {
     try {
       Method swap_method = cls.getMethod ("swap_class", (Class<?>[])null);
       if (fswap)
-        cls = (Class<? extends Invariant>) swap_method.invoke (null, (Object /*@Nullable*/ [])null); // unchecked cast
+        cls = asInvClass(swap_method.invoke (null, (Object /*@Nullable*/ [])null));
     } catch (Exception e) {
       swap_class = false;
     }

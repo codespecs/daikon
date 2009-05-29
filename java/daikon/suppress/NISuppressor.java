@@ -4,6 +4,8 @@ import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.*;
 import daikon.inv.binary.*;
+import static daikon.inv.Invariant.asInvClass;
+
 import utilMDE.*;
 
 import java.lang.reflect.*;
@@ -107,7 +109,7 @@ public class NISuppressor {
     try {
       Method swap_method = cls.getMethod ("swap_class", (Class<?>[])null);
       if (swap)
-        cls = (Class<? extends Invariant>) swap_method.invoke (null, (Object /*@Nullable*/ []) null); // unchecked cast
+        cls = asInvClass(swap_method.invoke (null, (Object /*@Nullable*/ []) null));
     } catch (Exception e) {
       swap_class = false;
     }

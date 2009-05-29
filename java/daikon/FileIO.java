@@ -13,12 +13,12 @@ import static daikon.VarInfo.VarFlags;
 import static daikon.VarInfo.LangFlags;
 
 import utilMDE.*;
-import java.util.logging.Logger;
-import java.util.logging.Level;
 
 import java.io.*;
 import java.net.*;
 import java.util.*;
+import java.util.logging.Logger;
+import java.util.logging.Level;
 import java.util.zip.*;
 
 public final class FileIO {

@@ -1,7 +1,7 @@
 package daikon.chicory;
 
-import static java.lang.System.out;
 import java.io.*;
+import static java.lang.System.out;
 
 class Test {
 
