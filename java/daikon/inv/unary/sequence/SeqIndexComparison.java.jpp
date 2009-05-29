@@ -207,15 +207,9 @@ public class CLASSNAME extends SUPERCLASS {
 
     // Make sure that the indices are comparable to the elements
     VarInfo seqvar = vis[0];
-    VarComparability elt_compar,index_compar;
-    if (seqvar.comparability != null) {
-      elt_compar = seqvar.comparability.elementType();
-      index_compar = seqvar.comparability.indexType(0);
-    } else {
-      elt_compar = null;
-      index_compar = null;
-      // return false;
-    }
+    assert seqvar.comparability != null;
+    VarComparability elt_compar = seqvar.comparability.elementType();
+    VarComparability index_compar = seqvar.comparability.indexType(0);
     if (! VarComparability.comparable (elt_compar, index_compar)) {
       return (false);
     }
