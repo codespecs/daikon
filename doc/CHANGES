@@ -25,16 +25,19 @@ Kvasir
 
    User visible changes
 
-	Kvasir's version of Valgrind has been updated to Valgrind 3.4.0.
-	This should improve support for users running operating systems
-	based on newer versions of glibc. Support for newer versions of
-	GCC is planned for a future release and GCC 3.3 is still reccomended 
-	for optimal operation.
+	Starting with this release, Kvasir is more closely tracking
+	the upstream development of Valgrind, with the aim of getting
+	Valgrind portability fixes into our releases in a more timely
+	manner. In particular, this release includes the fixes from
+	Valgrind's 3.4.1 stable release including initial support for
+	glibc version 2.10. (Portability work to better support new
+	GCC versions is ongoing but not included in this release, so
+	GCC 3.3 is still recommended for use with this Kvasir.)
 
    Bug fixes
 
 	Fixed an issue where the decls header wasn't printed if Kvasir was
-	run with dyncomp
+	run with DynComp.
 	
 	Fixed an issue where extra decls headers were printed when Kvasir
 	was in append mode.
