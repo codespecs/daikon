@@ -1,13 +1,4 @@
 package daikon.inv;
-/*********************************************
- * An invariant feature extractor.
- * This class creates a labeling of invariants.
- * That is, it extracts features from invariants and then
- * classifies the invariants as "good" or a "bad" based
- * on which of the two input files the invariant came from.
- * The output goes to file in one of the following formats:
- * SVM-Light, SVMfu, or C5 uses.
- *********************************************/
 
 import java.lang.reflect.*;
 import java.io.*;
@@ -17,7 +8,17 @@ import daikon.*;
 import daikon.diff.*;
 import utilMDE.*;
 
-@SuppressWarnings({"unchecked", "rawtypes"})
+/**
+ * An invariant feature extractor.
+ * This class creates a labeling of invariants.
+ * That is, it extracts features from invariants and then
+ * classifies the invariants as "good" or a "bad" based
+ * on which of the two input files the invariant came from.
+ * The output goes to file in one of the following formats:
+ * SVM-Light, SVMfu, or C5 uses.
+ **/
+
+@SuppressWarnings({"unchecked", "rawtypes", "nullness"})
 public final class FeatureExtractor {
   private FeatureExtractor() { throw new Error("do not instantiate"); }
 
