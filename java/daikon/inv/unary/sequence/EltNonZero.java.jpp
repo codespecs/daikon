@@ -93,7 +93,7 @@ public final class CLASSNAME
    **/
   public static boolean dkconfig_enabled = true;
 
-  public CLASSNAME(PptSlice ppt) {
+  public CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 
@@ -355,7 +355,7 @@ public final class CLASSNAME
   }
 
   /** NI suppressions, initialized in get_ni_suppressions() **/
-  private static NISuppressionSet suppressions = null;
+  private static /*@Nullable*/ NISuppressionSet suppressions = null;
 
   /** returns the ni-suppressions for CLASSNAME **/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {

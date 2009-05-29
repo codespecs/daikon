@@ -364,7 +364,7 @@ public final class INTEQUAL
   public static boolean dkconfig_integral_only = true;
 #endif
 
-  protected INTEQUAL(PptSlice ppt) {
+  protected INTEQUAL(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
    super(ppt);
   }
 
@@ -583,7 +583,7 @@ public final class INTEQUAL
 
     // If the invariant is suppressed, create it
     if ((suppressions != null) && suppressions.suppressed (ppt)) {
-      INTEQUAL inv = (INTEQUAL) proto.instantiate_dyn (ppt);
+      INTEQUAL inv = proto.instantiate_dyn (ppt);
       // Fmt.pf ("%s is suppressed in ppt %s", inv.format(), ppt.name());
       return (inv);
     }
@@ -972,7 +972,7 @@ public final class INTEQUAL
    //   *  (y = ax + b) ^ (a == 1) ^ (b > 0) ==> y > x
    //   *  (y = ax + b) ^ (a == 1) ^ (b < 0) ==> y < x
 
-  private DiscardInfo lb_implies (VarInfo[] vis) {
+  private /*@Nullable*/ DiscardInfo lb_implies (VarInfo[] vis) {
 
     // Look for a linear binary invariant over the same variables
     LINEARBINARY lb = (LINEARBINARY) ppt.parent.find_inv_by_class
@@ -1000,7 +1000,7 @@ public final class INTEQUAL
    *
    *     (x[] op y[]) ^ (i == j) ==> (x[i] op y[j])
    */
-  private DiscardInfo pairwise_implies (VarInfo[] vis) {
+  private /*@Nullable*/ DiscardInfo pairwise_implies (VarInfo[] vis) {
 
     VarInfo v1 = vis[0];
     VarInfo v2 = vis[1];
@@ -1036,7 +1036,7 @@ public final class INTEQUAL
    *
    *   (x[] = y[]) ==> size(x[]) = size(y[])
    */
-  private DiscardInfo array_eq_implies (VarInfo[] vis) {
+  private /*@Nullable*/ DiscardInfo array_eq_implies (VarInfo[] vis) {
 
     // Make sure v1 and v2 are size(array) with the same shift
     VarInfo v1 = vis[0];
@@ -1067,7 +1067,7 @@ public final class INTEQUAL
    *
    *    (A[] has no dups) ^ (i != j) ==> a[i] != a[j]
    */
-  private DiscardInfo no_dups_implies (VarInfo[] vis) {
+  private /*@Nullable*/ DiscardInfo no_dups_implies (VarInfo[] vis) {
 
     // Make sure v1 and v2 are SEQ_SUBSCRIPT from the same array
     VarInfo v1 = vis[0];
@@ -1102,7 +1102,7 @@ public final class INTEQUAL
 #endif
 
   /** NI suppressions, initialized in get_ni_suppressions() **/
-  private static NISuppressionSet suppressions = null;
+  private static /*@Nullable*/ NISuppressionSet suppressions = null;
 
 #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
   /** Returns the non-instantiating suppressions for this invariant. **/
@@ -1146,7 +1146,7 @@ public final class INTEQUAL
   }
 #else
   /** Returns the non-instantiating suppressions for this invariant. **/
-  public NISuppressionSet get_ni_suppressions() {
+  public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return null;
   }
 #endif

@@ -94,8 +94,8 @@ public class NIS {
   static final String VALID = "valid";
   /** suppressor is not true **/
   static final String INVALID = "invalid";
-  /** suppressor contains a variable that has always been missing **/
-  static final String MISSING = "missing";
+  /** suppressor contains a variable that has always been nonsensical **/
+  static final String NONSENSICAL = "nonsensical";
 
   /**
    * Map from invariant class to a list of all of the suppression sets

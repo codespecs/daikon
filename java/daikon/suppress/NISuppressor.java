@@ -203,7 +203,7 @@ public class NISuppressor {
    *                or not inv matches this suppressor
    *
    * @return the state of this suppressor which is one of (NIS.MATCH,
-   *         NIS.VALID, NIS.INVALID, NIS.MISSING)
+   *         NIS.VALID, NIS.INVALID, NIS.NONSENSICAL)
    */
 
   public String check (PptTopLevel ppt, VarInfo[] vis, Invariant inv) {
@@ -266,8 +266,8 @@ public class NISuppressor {
 
       // Check to see the variable is missing
       if (ppt.is_prev_missing(v1)) {
-        current_state_str = "missing";
-        return (state = NIS.MISSING);
+        current_state_str = "nonsensical";
+        return (state = NIS.NONSENSICAL);
       }
 
       // Check to see if this suppressor is true.  Note that we don't check
@@ -349,8 +349,8 @@ public class NISuppressor {
 
       // Check to see if either variable is missing
       if (ppt.is_prev_missing(v1) || ppt.is_prev_missing(v2)) {
-        current_state_str = "missing";
-        return (state = NIS.MISSING);
+        current_state_str = "nonsensical";
+        return (state = NIS.NONSENSICAL);
       }
 
       // Check to see if this suppressor is true.  Note that we don't check

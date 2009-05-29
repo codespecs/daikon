@@ -152,7 +152,7 @@ public class InvDef {
    * Looks for this invariant (in this ppt).  Returns the invariant if it
    * finds it, null  otherwise
    */
-  public Invariant find () {
+  public /*@Nullable*/ Invariant find () {
 
     PptTopLevel ppt = v1.ppt;
 

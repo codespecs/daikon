@@ -237,7 +237,7 @@ public class PAIRWISEINTEQUAL
 
   static final boolean debugPairwiseIntComparison = false;
 
-  protected PAIRWISEINTEQUAL(PptSlice ppt) {
+  protected PAIRWISEINTEQUAL(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 
@@ -290,14 +290,14 @@ public class PAIRWISEINTEQUAL
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
 
-    Object[] obv1 = SubSequence.isObviousSubSequence(var1, var2);
-    Object[] obv2 = SubSequence.isObviousSubSequence(var2, var1);
+    /*@Nullable*/ Object[] obv1 = SubSequence.isObviousSubSequence(var1, var2);
+    /*@Nullable*/ Object[] obv2 = SubSequence.isObviousSubSequence(var2, var1);
     if (obv1[1] != null) {
       Global.implied_noninstantiated_invariants++;
-      return new DiscardInfo(this, (DiscardCode) obv1[0], (String) obv1[1]);
+      return new DiscardInfo(this, (/*@NonNull*/ DiscardCode) obv1[0], (/*@NonNull*/ String) obv1[1]);
     } else if (obv2[1] != null) {
       Global.implied_noninstantiated_invariants++;
-      return new DiscardInfo(this, (DiscardCode) obv1[0], (String) obv1[1]);
+      return new DiscardInfo(this, (/*@NonNull*/ DiscardCode) obv1[0], (/*@NonNull*/ String) obv1[1]);
     }
 
     // Don't instantiate if the variables can't have order
@@ -336,7 +336,7 @@ public class PAIRWISEINTEQUAL
    *    (A[] op B[]) ^ (i == j)  ==> A[i..] op B[j..]
    *    (A[] op B[]) ^ (i == j)  ==> A[..i] op B[..j]
    */
-  private DiscardInfo superseq_implies (VarInfo[] vis) {
+  private /*@Nullable*/ DiscardInfo superseq_implies (VarInfo[] vis) {
 
     // Make sure the variables are SEQ_SUBSEQUENCE with the same start/end
     VarInfo v1 = vis[0];
@@ -537,7 +537,7 @@ public class PAIRWISEINTEQUAL
 
       });
   #else
-    private static NISuppressionSet suppressions = null;
+    private static /*@Nullable*/ NISuppressionSet suppressions = null;
   #endif
 
 }

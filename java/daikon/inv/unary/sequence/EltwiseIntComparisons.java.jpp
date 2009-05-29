@@ -152,7 +152,7 @@ public class CLASSNAME
 
   static final boolean debugEltwiseIntComparison = false;
 
-  protected CLASSNAME(PptSlice ppt) {
+  protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 

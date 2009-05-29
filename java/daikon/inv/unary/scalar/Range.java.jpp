@@ -247,7 +247,7 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected EqualZero (PptSlice ppt) {
+    protected EqualZero (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
       super (ppt);
     }
 

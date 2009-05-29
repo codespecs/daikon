@@ -23,7 +23,7 @@ public final class PrintableString extends SingleString
    **/
   public static boolean dkconfig_enabled = false;
 
-  public PrintableString (PptSlice slice) {
+  public PrintableString (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice slice) {
     super (slice);
     if (slice == null)
       return;

@@ -350,7 +350,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * is not a requirement here (the fact that 'x[] op y[]' implies that
    * foo == bar when x[] and y[] are not missing)
    */
-  public DiscardInfo is_subsequence (VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo is_subsequence (VarInfo[] vis) {
 
     VarInfo v1 = var1(vis);
     VarInfo v2 = var2(vis);
@@ -387,7 +387,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * Checks to see if 'x[a] op y[b]' where 'x[] op y[]' and 'a == b'.
    * Doesn't catch the case where a = b+1.
    */
-  public DiscardInfo is_subscript (VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo is_subscript (VarInfo[] vis) {
 
     VarInfo v1 = var1(vis);
     VarInfo v2 = var2(vis);
@@ -502,7 +502,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * table cells above could be filled in with linear binary invariants
    * (eg, m = n + 1)
    */
-  public InvDef array_sizes_eq (VarInfo v1, VarInfo v2) {
+  public /*@Nullable*/ InvDef array_sizes_eq (VarInfo v1, VarInfo v2) {
 
     VarInfo v1_size = get_array_size (v1);
     VarInfo v2_size = get_array_size (v2);
@@ -536,7 +536,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * if no such variable exists.  There are two cases that are
    * not handled:  x[..n] with an index shift and x[n..]
    */
-  public VarInfo get_array_size (VarInfo v) {
+  public /*@Nullable*/ VarInfo get_array_size (VarInfo v) {
 
     Assert.assertTrue (v.rep_type.isArray());
 
@@ -639,7 +639,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected Divides (PptSlice ppt, boolean swap) {
+    protected Divides (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
       super(ppt, swap);
     }
 
@@ -826,7 +826,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected Square (PptSlice ppt, boolean swap) {
+    protected Square (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
       super(ppt, swap);
     }
 
@@ -892,7 +892,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040313L;
 
-    protected ZeroTrack (PptSlice ppt, boolean swap) {
+    protected ZeroTrack (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
       super(ppt, swap);
     }
 
@@ -972,7 +972,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected BitwiseComplement (PptSlice ppt) {
+    protected BitwiseComplement (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
       super(ppt, false);
     }
 
@@ -1029,7 +1029,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected BitwiseSubset (PptSlice ppt, boolean swap) {
+    protected BitwiseSubset (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
       super(ppt, swap);
     }
 
@@ -1127,7 +1127,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040313L;
 
-    protected BitwiseAndZero (PptSlice ppt) {
+    protected BitwiseAndZero (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
       super(ppt, false);
     }
 
@@ -1173,7 +1173,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
+    public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
       return (suppressions);
     }
 
@@ -1192,7 +1192,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     });
     #else
-    private static NISuppressionSet suppressions = null;
+    private static /*@Nullable*/ NISuppressionSet suppressions = null;
     #endif
   }
 
@@ -1208,7 +1208,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040313L;
 
-    protected ShiftZero (PptSlice ppt, boolean swap) {
+    protected ShiftZero (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
       super(ppt, swap);
     }
 
@@ -1288,7 +1288,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20081113L;
 
-    protected SubString (PptSlice ppt, boolean swap) {
+    protected SubString (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
       super(ppt, swap);
     }
 

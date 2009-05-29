@@ -1079,6 +1079,7 @@ public abstract class Invariant
 
   /**
    * Returns the set of non-instantiating suppressions for this invariant.
+   * May return null instead of an empty set.
    * Should be overridden by subclasses with non-instantiating suppressions.
    */
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
@@ -1904,7 +1905,7 @@ public abstract class Invariant
   * @return whether or not it logged anything
   */
 
-  public boolean log (String format, Object...args) {
+  public boolean log (String format, Object...args) /*@Raw*/ {
     if (ppt != null) {
       String msg = format;
       if (args.length > 0)

@@ -114,7 +114,7 @@ public class CLASSNAME
    **/
   public static boolean dkconfig_enabled = false;
 
-  protected CLASSNAME(PptSlice ppt) {
+  protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 
@@ -288,7 +288,7 @@ public class CLASSNAME
    * a valid discardString.  If the Invariant is not an obvious subsequence, both
    * are null
    **/
-  public static Object[] isObviousSubSequence(VarInfo subvar, VarInfo supervar) {
+  public static /*@Nullable*/ Object[] isObviousSubSequence(VarInfo subvar, VarInfo supervar) {
     // Must typecheck since this could be called with non sequence variables in
     // some methods.
     ProglangType rep1 = subvar.rep_type;
@@ -300,7 +300,7 @@ public class CLASSNAME
           ((rep1 == ProglangType.STRING_ARRAY)
            && (rep2 == ProglangType.STRING_ARRAY))
           )) {
-      return new Object[] {null, null};
+      return new /*@Nullable*/ Object[] {null, null};
     }
 
     if (debug.isLoggable(Level.FINE)) {
@@ -345,7 +345,7 @@ public class CLASSNAME
     if (subvar_super == null) {
       // If it's not a union, intersection or a subsequence, it's not obvious
       debug.fine ("  returning false because subvar_super == null");
-      return new Object[] {null, null};
+      return new /*@Nullable*/ Object[] {null, null};
     }
 
     if (subvar_super == supervar) {
@@ -458,7 +458,7 @@ public class CLASSNAME
       }
     }
 
-    return new Object[] {null, null};
+    return new /*@Nullable*/ Object[] {null, null};
   }
 
   // Look up a previously instantiated SubSequence relationship.
@@ -484,9 +484,9 @@ public class CLASSNAME
                     "x[i..j] subsequence of x[] is obvious");
     }
 
-    Object[] obv1 = CLASSNAME.isObviousSubSequence(subvar, supervar);
+    /*@Nullable*/ Object[] obv1 = CLASSNAME.isObviousSubSequence(subvar, supervar);
     if (obv1[1] != null) {
-      return new DiscardInfo(this, (DiscardCode) obv1[0], (String) obv1[1]);
+      return new DiscardInfo(this, (/*@NonNull*/ DiscardCode) obv1[0], (/*@NonNull*/ String) obv1[1]);
     }
 
     // JHP: This is not a valid obvious check, since it  doesn't imply that
@@ -568,7 +568,7 @@ public class CLASSNAME
                    subvar.name() + " in " + supervar.name());
     }
 
-    Object[] di = isObviousSubSequence (subvar, supervar);
+    /*@Nullable*/ Object[] di = isObviousSubSequence (subvar, supervar);
     if (di[1] != null) {
       inv.log ("ObvSubSeq- true from isObviousSubSequence: " + di[1]);
       return true;

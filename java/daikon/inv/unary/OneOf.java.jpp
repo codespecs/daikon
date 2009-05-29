@@ -294,9 +294,11 @@ public final class ONEOFSCALAR
       return;
 
 #if defined(IS_ELT) || defined(IS_SEQUENCE)
-    assert var().is_array() :
+    @SuppressWarnings("nullness") // var() is initialized by the super constructor
+    ONEOFSCALAR thisNonRaw = (/*@NonNull*/ ONEOFSCALAR) this;
+    assert thisNonRaw.var().is_array() :
     String.format ("ProglangType (var %s type %s) must be pseudo-array for %s",
-                   var().name(), var().type, ONEOFSCALAR_STRING);
+                     thisNonRaw.var().name(), thisNonRaw.var().type, ONEOFSCALAR_STRING);
 #endif
 #if defined(SEQUENCE)
     // Elements are interned, so can test with ==
@@ -833,6 +835,7 @@ public final class ONEOFSCALAR
     } else {
       result = "(" + length + ") && (" + forall + ")";
     }
+    assert result != null;      // flow-sensitivity should infer this
 #elif defined(STRINGSEQUENCE)
     // If the variable expression is a raw sequence, examine its
     // element type(s).

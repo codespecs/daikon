@@ -8621,7 +8621,7 @@ class JTBToolkit {
       if ( t.specialToken == null )
          return node;
 
-      Vector temp = new Vector();
+      Vector<NodeToken> temp = new Vector<NodeToken>();
       Token orig = t;
 
       while ( t.specialToken != null ) {
@@ -8631,7 +8631,7 @@ class JTBToolkit {
 
       // Reverse the special token list
       for ( int i = temp.size() - 1; i >= 0; --i )
-         node.addSpecial((NodeToken)temp.elementAt(i));
+         node.addSpecial(temp.elementAt(i));
 
       node.trimSpecials();
       return node;

@@ -116,7 +116,7 @@ public final /*(at)Interned*/ class Equality
              "not comparable " + leader.name() + " " + vi.name()
             +" at ppt " + ppt.parent.name());
       Assert.assertTrue(vi.rep_type.isArray() == leader.rep_type.isArray());
-      vi.equalitySet = this;
+      vi.equalitySet = (/*@NonNull*/ Equality)this;
     }
   }
 

@@ -276,7 +276,7 @@ public class SEQSEQINTEQUAL
 
   boolean orderMatters;
 
-  protected SEQSEQINTEQUAL(PptSlice ppt, boolean order) {
+  protected SEQSEQINTEQUAL(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean order) {
     super(ppt);
     orderMatters = order;
   }
@@ -521,12 +521,12 @@ public class SEQSEQINTEQUAL
     #ifdef NUMERIC
       VarInfo var1 = vis[0];
       VarInfo var2 = vis[1];
-      Object[] obv1 = SUBSEQUENCE.isObviousSubSequence(var1, var2);
-      Object[] obv2 = SUBSEQUENCE.isObviousSubSequence(var2, var1);
+      /*@Nullable*/ Object[] obv1 = SUBSEQUENCE.isObviousSubSequence(var1, var2);
+      /*@Nullable*/ Object[] obv2 = SUBSEQUENCE.isObviousSubSequence(var2, var1);
       if (obv1[1] != null) {
-        return new DiscardInfo(this, (DiscardCode) obv1[0], (String) obv1[1]);
+        return new DiscardInfo(this, (/*@NonNull*/ DiscardCode) obv1[0], (/*@NonNull*/ String) obv1[1]);
       } else if (obv2[1] != null) {
-        return new DiscardInfo(this, (DiscardCode) obv2[0], (String) obv2[1]);
+        return new DiscardInfo(this, (/*@NonNull*/ DiscardCode) obv2[0], (/*@NonNull*/ String) obv2[1]);
       }
     #endif
     return super.isObviousStatically (vis);
@@ -601,19 +601,36 @@ public class SEQSEQINTEQUAL
         if (slice != null) {
           for (Invariant inv : slice.invs)
             debug.log ("-- invariant " + inv.format());
-          List<Invariant> found = new ArrayList<Invariant>();
-          found.add (SEQSEQ_EQ.find(slice));
-          found.add (SEQSEQ_LT.find(slice));
-          found.add (SEQSEQ_GT.find(slice));
-          found.add (SEQSEQ_LE.find(slice));
-          found.add (SEQSEQ_GE.find(slice));
-          for (Invariant inv : found) {
-            if (inv != null) {
-              if (logOn())
-                debug.log ("Obvious Dynamic from " + inv.format() +
-                           "(" + inv.getClass() + ")");
-              return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + inv.format());
-            }
+          Invariant inv;
+          inv = SEQSEQ_EQ.find(slice);
+          if (inv != null) {
+            if (logOn())
+              debug.log ("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
+            return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + inv.format());
+          }
+          inv = SEQSEQ_LT.find(slice);
+          if (inv != null) {
+            if (logOn())
+              debug.log ("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
+            return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + inv.format());
+          }
+          inv = SEQSEQ_GT.find(slice);
+          if (inv != null) {
+            if (logOn())
+              debug.log ("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
+            return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + inv.format());
+          }
+          inv = SEQSEQ_LE.find(slice);
+          if (inv != null) {
+            if (logOn())
+              debug.log ("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
+            return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + inv.format());
+          }
+          inv = SEQSEQ_GE.find(slice);
+          if (inv != null) {
+            if (logOn())
+              debug.log ("Obvious Dynamic from " + inv.format() + "(" + inv.getClass() + ")");
+            return new DiscardInfo(this, DiscardCode.obvious, "Implied by " + inv.format());
           }
         }
       }
@@ -687,6 +704,6 @@ public class SEQSEQINTEQUAL
         new NISuppression (v1_pw_v2, suppressee),
       });
   #else
-    private static NISuppressionSet suppressions = null;
+    private static /*@Nullable*/ NISuppressionSet suppressions = null;
   #endif
 }

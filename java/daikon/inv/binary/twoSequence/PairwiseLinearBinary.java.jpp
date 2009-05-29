@@ -61,7 +61,8 @@ public class CLASSNAME
 
   public CORECLASS core;
 
-  protected CLASSNAME(PptSlice ppt) {
+  @SuppressWarnings("nullness") // circular initialization
+  protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
     core = new CORECLASS(this);
   }

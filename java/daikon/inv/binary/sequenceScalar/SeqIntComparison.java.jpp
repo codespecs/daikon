@@ -161,7 +161,7 @@ public final class SEQINTEQUAL
 
   static boolean debugSeqIntComparison = false;
 
-  protected SEQINTEQUAL(PptSlice ppt) {
+  protected SEQINTEQUAL(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 
@@ -484,7 +484,7 @@ public final class SEQINTEQUAL
 
       });
   #else
-    private static NISuppressionSet suppressions = null;
+    private static /*@Nullable*/ NISuppressionSet suppressions = null;
   #endif
 
 }

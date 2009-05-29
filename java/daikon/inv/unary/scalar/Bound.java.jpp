@@ -243,7 +243,8 @@ public class LOWERBOUND
 
   private LOWERBOUNDCORE core;
 
-  private LOWERBOUND(PptSlice slice) {
+  @SuppressWarnings("nullness") // circular initialization
+  private LOWERBOUND(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice slice) {
     super (slice);
     if (slice == null)
       return;

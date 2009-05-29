@@ -97,7 +97,7 @@ public final class CLASSNAME
    **/
   public static boolean dkconfig_enabled = true;
 
-  protected CLASSNAME(PptSlice ppt) {
+  protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 
@@ -246,7 +246,7 @@ public final class CLASSNAME
       // else if the scalar is min or max of a sequence
       } else if ((sclvar.derived instanceof SequenceMin)
                  || (sclvar.derived instanceof SequenceMax)) {
-        Object[] obv = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
+        /*@Nullable*/ Object[] obv = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
         return (obv[1] != null);
       }
     }
@@ -389,7 +389,7 @@ public final class CLASSNAME
    * (A subset B) ==> (A[i] member B)
    * </pre>
    */
-  private DiscardInfo subset_in_subsequence (VarInfo[] vis) {
+  private /*@Nullable*/ DiscardInfo subset_in_subsequence (VarInfo[] vis) {
 
     VarInfo scl_var = sclvar (vis);
     VarInfo seq_var = seqvar (vis);
@@ -429,7 +429,7 @@ public final class CLASSNAME
    *   (0 <= i <= j) ^ (a[] == b[]) ==> a[j] in b[i..]
    * </pre>
    */
-  private DiscardInfo subscript_in_subsequence (VarInfo[] vis) {
+  private /*@Nullable*/ DiscardInfo subscript_in_subsequence (VarInfo[] vis) {
 
     VarInfo scl_var = sclvar (vis);
     VarInfo seq_var = seqvar (vis);

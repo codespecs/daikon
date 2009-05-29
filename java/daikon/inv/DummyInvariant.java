@@ -40,7 +40,7 @@ public class DummyInvariant
   // slice for the invariant to live in.
   public boolean valid = false;
 
-  public DummyInvariant(PptSlice ppt) {
+  public DummyInvariant(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 

@@ -170,17 +170,17 @@ public class CLASSNAME extends SUPERCLASS {
    **/
   public static boolean dkconfig_enabled = false;
 
-  private CLASSNAME () {
+  private CLASSNAME () /*@Prototype*/ {
     super (null);
   }
 
-  protected CLASSNAME (PptSlice slice) {
+  protected CLASSNAME (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice slice) {
     super (slice);
     Assert.assertTrue (slice != null);
     Assert.assertTrue(var().rep_type == ProglangType.ASSERTYPE);
   }
 
-  private static /*@Prototype*/ CLASSNAME proto  = null;
+  private static /*@Nullable*/ /*@Prototype*/ CLASSNAME proto  = null;
 
   /** Returns the prototype invariant for CLASSNAME **/
   public static /*@Prototype*/ CLASSNAME get_proto() {
@@ -214,6 +214,7 @@ public class CLASSNAME extends SUPERCLASS {
     } else {
       elt_compar = null;
       index_compar = null;
+      // return false;
     }
     if (! VarComparability.comparable (elt_compar, index_compar)) {
       return (false);
@@ -229,7 +230,7 @@ public class CLASSNAME extends SUPERCLASS {
 
 #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
   /** NI suppressions, initialized in get_ni_suppressions() **/
-  private static NISuppressionSet suppressions = null;
+  private static /*@Nullable*/ NISuppressionSet suppressions = null;
 
   /** returns the ni-suppressions for CLASSNAME **/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
@@ -267,7 +268,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 #else
   /** returns the ni-suppressions for CLASSNAME **/
-  public NISuppressionSet get_ni_suppressions() {
+  public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return null;
   }
 #endif

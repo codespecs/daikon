@@ -96,7 +96,7 @@ public class NONZERO
   /** Maximum value ever used for max-min in confidence calculation. **/
   static long range_max = 50;
 
-  private NONZERO(PptSlice ppt) {
+  private NONZERO(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 

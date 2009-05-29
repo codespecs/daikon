@@ -536,7 +536,7 @@ public class DeclWriter extends DaikonWriter {
         EnumSet<VarFlags> var_flags = var.get_var_flags();
         if (var_flags.size() > 0) {
           outFile.print ("    flags");
-          for (Enum e : var_flags) {
+          for (Enum<?> e : var_flags) {
             outFile.print (" " + out_name (e));
           }
           outFile.println();

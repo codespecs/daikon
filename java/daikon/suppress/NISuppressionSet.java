@@ -294,7 +294,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           NIS.debug.fine ("suppression " + suppression_set[i] + " is valid");
         return;
       }
-      Assert.assertTrue (status != NIS.MISSING);
+      Assert.assertTrue (status != NIS.NONSENSICAL);
     }
 
     if (NIS.debug.isLoggable (Level.FINE))
@@ -384,7 +384,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     // Check each suppression to see if it is valid
     for (int i = 0; i < suppression_set.length; i++ ) {
       String status = suppression_set[i].check (ppt, var_infos, null);
-      if ((status == NIS.VALID) || (status == NIS.MISSING)) {
+      if ((status == NIS.VALID) || (status == NIS.NONSENSICAL)) {
         if (Debug.logOn() || NIS.debug.isLoggable (Level.FINE))
           Debug.log (NIS.debug, getClass(), ppt, var_infos, "suppression "
             + suppression_set[i] + " is " + status + " in ppt " + ppt

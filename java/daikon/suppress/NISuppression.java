@@ -86,8 +86,8 @@ public class NISuppression {
    * @param inv     Falsified invariant (if any).  Any suppressor
    *                that matches inv will be marked as NIS.MATCH
    *
-   * @return NIS.VALID if the suppression is valid, NIS.MISSING if one or
-   *         more suppressors were missing and the rest were valid,
+   * @return NIS.VALID if the suppression is valid, NIS.NONSENSICAL if one or
+   *         more suppressors were nonsensical and the rest were valid,
    *         NIS.INVALID otherwise
    */
   public String check (PptTopLevel ppt, VarInfo[] vis, Invariant inv) {
@@ -99,8 +99,8 @@ public class NISuppression {
       String st = ssor.check (ppt, vis, inv);
 
       if (!set) {
-        if (st == NIS.MISSING)
-          status = NIS.MISSING;
+        if (st == NIS.NONSENSICAL)
+          status = NIS.NONSENSICAL;
         else if (st != NIS.VALID) {
           status = (NIS.INVALID);
           if (st == NIS.INVALID) {
@@ -131,12 +131,12 @@ public class NISuppression {
     // one is valid and at least one suppressor matches the falsified
     // invariant.  Note that match can be true on more than one
     // suppressor due to reflexive (x, x, x) invariants.  In this
-    // code, the suppressor should never be missing, since we should
-    // have never looked at a slice with missing variables.
+    // code, the suppressor should never be nonsensical, since we should
+    // have never looked at a slice with nonsensical variables.
     boolean inv_match = false;
     for (int i = 0; i < suppressors.length; i++) {
       NISuppressor ssor = suppressors[i];
-      Assert.assertTrue (ssor.state != NIS.MISSING);
+      Assert.assertTrue (ssor.state != NIS.NONSENSICAL);
       if (ssor.state == NIS.MATCH) {
         inv_match = true;
       } else if (ssor.state != NIS.VALID)

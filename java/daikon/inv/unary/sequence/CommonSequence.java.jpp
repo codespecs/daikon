@@ -64,9 +64,9 @@ public class CLASSNAME
   static final boolean debugCommonSequence = false;
 
   private int elts;
-  private PRIMITIVE[] intersect = null;
+  private PRIMITIVE /*@Nullable*/ [] intersect = null;
 
-  protected CLASSNAME(PptSlice ppt) {
+  protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 

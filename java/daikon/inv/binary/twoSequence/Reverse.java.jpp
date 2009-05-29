@@ -56,7 +56,7 @@ public class CLASSNAME
    **/
   public static boolean dkconfig_enabled = true;
 
-  protected CLASSNAME(PptSlice ppt) {
+  protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 
