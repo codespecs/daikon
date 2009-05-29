@@ -3,13 +3,13 @@ package daikon.inv;
 import utilMDE.Assert;
 import daikon.*;
 
+/**
+ * A class used for holding a DiscardCode and a string
+ * that contains more detailed information about why an Invariant
+ * was discarded, as well as the classname and what would be returned
+ * by the Invariant's format() method.
+ */
 public final class DiscardInfo {
-  /**
-   * A class used for holding a DiscardCode and a string
-   * that contains more detailed information about why an Invariant
-   * was discarded, as well as the classname and what would be returned
-   * by the Invariant's format() method.
-   */
 
   /**
    * The DiscardCode describing this DiscardInfo.  It should never be null;
