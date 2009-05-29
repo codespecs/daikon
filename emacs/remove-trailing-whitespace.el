@@ -24,6 +24,8 @@
    "annotations/asmx?/"
    ;; FreePastry
    "pastry/src/"
+   ;; Valgrind (part of Kvasir)
+   "valgrind-3/"
    )
   "List of regular expressions.  If any of them match a file name, then
 trailing whitespace is not removed from the file.
