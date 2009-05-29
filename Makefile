@@ -178,10 +178,10 @@ kvasir/fjalar/fjalar-$(VALGRIND_ARCH)-linux: kvasir/coregrind/valgrind $(wildcar
 kvasir/inst/bin/valgrind: kvasir/coregrind/valgrind
 	cd kvasir && $(MAKE) install >/dev/null
 
-kvasir/inst/lib/valgrind/$(VALGRIND_ARCH)-linux/fjalar: kvasir/fjalar/fjalar-$(VALGRIND_ARCH)-linux
+kvasir/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux: kvasir/fjalar/fjalar-$(VALGRIND_ARCH)-linux
 	cd kvasir/fjalar && $(MAKE) install >/dev/null
 
-kvasir: kvasir/inst/lib/valgrind/$(VALGRIND_ARCH)-linux/fjalar kvasir/inst/bin/valgrind
+kvasir: kvasir/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux kvasir/inst/bin/valgrind
 
 build-kvasir: kvasir
 
