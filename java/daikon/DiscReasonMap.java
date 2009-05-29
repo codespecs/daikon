@@ -83,7 +83,7 @@ public final class DiscReasonMap {
             // Perhaps we could replace it with the new reason, but maybe we
             // want to be able to "default" to reasons.  i.e., set less specific
             // reasons at the very end for everything not printed, just in case
-            // some discarded invariants haven't had their reasons set yet
+            // some discarded invariants haven't had their reasons set yet.
             return;
           }
         }
