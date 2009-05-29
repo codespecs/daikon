@@ -1,11 +1,12 @@
 package utilMDE;
 
+import static utilMDE.Options.ArgException;
+
 import junit.framework.*;
-import java.util.*;
 import java.io.*;
 import java.text.*;
+import java.util.*;
 import java.util.regex.*;
-import static utilMDE.Options.ArgException;
 
 // run like this:
 //   java utilMDE.TestUtilMDE

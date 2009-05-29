@@ -1,9 +1,10 @@
 package utilMDE;
 
+import static utilMDE.MultiReader.Entry;
+
 import java.io.*;
 import java.util.*;
 import java.util.regex.*;
-import static utilMDE.MultiReader.Entry;
 import com.sun.javadoc.*;
 
 /**

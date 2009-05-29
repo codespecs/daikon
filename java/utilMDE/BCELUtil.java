@@ -1,10 +1,5 @@
 package utilMDE;
 
-import static java.lang.System.out;
-
-import java.util.*;
-import java.io.*;
-
 import org.apache.bcel.Constants;
 import org.apache.bcel.classfile.Attribute;
 import org.apache.bcel.classfile.Constant;
@@ -25,6 +20,10 @@ import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
 import org.apache.bcel.generic.Type;
 import org.apache.bcel.generic.RETURN;
+
+import java.util.*;
+import java.io.*;
+import static java.lang.System.out;
 
 
 /**
