@@ -284,11 +284,10 @@ public class CLASSNAME
   }
 
   /**
-   * @return Array "a" such that a[0] is a valid discardCode and a[1] is
-   * a valid discardString.  If the Invariant is not an obvious subsequence, both
-   * are null
+   * @return a DiscardInfo,
+   * or null if the Invariant is not an obvious subsequence
    **/
-  public static /*@Nullable*/ Object[] isObviousSubSequence(VarInfo subvar, VarInfo supervar) {
+  public static /*@Nullable*/ DiscardInfo isObviousSubSequence(Invariant inv, VarInfo subvar, VarInfo supervar) {
     // Must typecheck since this could be called with non sequence variables in
     // some methods.
     ProglangType rep1 = subvar.rep_type;
@@ -300,7 +299,7 @@ public class CLASSNAME
           ((rep1 == ProglangType.STRING_ARRAY)
            && (rep2 == ProglangType.STRING_ARRAY))
           )) {
-      return new /*@Nullable*/ Object[] {null, null};
+      return null;
     }
 
     if (debug.isLoggable(Level.FINE)) {
@@ -326,7 +325,7 @@ public class CLASSNAME
       discardString = "Invariants involving subsets/subsequences of unions/intersections"+
         "are suppressed";
       debug.fine ("  returning true because of union or intersection");
-      return new Object[] {discardCode, discardString};
+      return new DiscardInfo(inv, discardCode, discardString);
     }
 
     if (subvar.derived instanceof SEQUENCESPREDICATE) {
@@ -337,7 +336,7 @@ public class CLASSNAME
         discardCode = DiscardCode.obvious;
         discardString = subvar.name()+" is derived from "+supervar.name();
         debug.fine ("  returning true because of predicate slicing");
-        return new Object[] {discardCode, discardString + " [pred slicing]"};
+        return new DiscardInfo(inv, discardCode, discardString + " [pred slicing]");
       }
     }
 
@@ -345,7 +344,7 @@ public class CLASSNAME
     if (subvar_super == null) {
       // If it's not a union, intersection or a subsequence, it's not obvious
       debug.fine ("  returning false because subvar_super == null");
-      return new /*@Nullable*/ Object[] {null, null};
+      return null;
     }
 
     if (subvar_super == supervar) {
@@ -354,8 +353,8 @@ public class CLASSNAME
       discardCode = DiscardCode.obvious;
       discardString = subvar.name()+"=="+supervar.name();
       debug.fine ("  returning true because subvar_super == supervar");
-      return new Object[] {discardCode, discardString
-                            + " [subvar_super == supervar]"};
+      return new DiscardInfo(inv, discardCode, discardString
+                             + " [subvar_super == supervar]");
     }
 
     // a[i+a..j+b] cmp a[i+c..j+d]
@@ -427,7 +426,8 @@ public class CLASSNAME
         if (left_included && right_included) {
           discardCode = DiscardCode.obvious;
           discardString = subvar.name()+" obvious subset/subsequence of "+supervar.name();
-          return new Object[] {discardCode, discardString + " [obvious]"};
+          return new DiscardInfo(inv, discardCode, discardString + " [obvious]")
+;
         }
       } else if ((subvar.derived instanceof SEQUENCESTRINGSUBSEQUENCE)
                  && (supervar.derived instanceof SEQUENCESTRINGSUBSEQUENCE)) {
@@ -444,11 +444,13 @@ public class CLASSNAME
         boolean start2 = sss2.from_start;
         if (index1 == index2) {
           if (start1 == true && start2 == true) {
-            if (shift1 <= shift2) return new Object[] {discardCode,
-                                                discardString + " [shift1]"};
+            if (shift1 <= shift2)
+              return new DiscardInfo(inv, discardCode,
+                                     discardString + " [shift1]");
           } else if (start1 == false && start2 == false) {
-            if (shift1 >= shift2) return new Object[] {discardCode,
-                                                discardString + " [shift2]"};
+            if (shift1 >= shift2)
+              return new DiscardInfo(inv, discardCode,
+                                     discardString + " [shift2]");
           }
         }
       } else {
@@ -458,7 +460,7 @@ public class CLASSNAME
       }
     }
 
-    return new /*@Nullable*/ Object[] {null, null};
+    return null;
   }
 
   // Look up a previously instantiated SubSequence relationship.
@@ -484,9 +486,9 @@ public class CLASSNAME
                     "x[i..j] subsequence of x[] is obvious");
     }
 
-    /*@Nullable*/ Object[] obv1 = CLASSNAME.isObviousSubSequence(subvar, supervar);
-    if (obv1[1] != null) {
-      return new DiscardInfo(this, (/*@NonNull*/ DiscardCode) obv1[0], (/*@NonNull*/ String) obv1[1]);
+    DiscardInfo di = CLASSNAME.isObviousSubSequence(this, subvar, supervar);
+    if (di != null) {
+      return di;
     }
 
     // JHP: This is not a valid obvious check, since it  doesn't imply that
@@ -568,9 +570,9 @@ public class CLASSNAME
                    subvar.name() + " in " + supervar.name());
     }
 
-    /*@Nullable*/ Object[] di = isObviousSubSequence (subvar, supervar);
-    if (di[1] != null) {
-      inv.log ("ObvSubSeq- true from isObviousSubSequence: " + di[1]);
+    DiscardInfo di = isObviousSubSequence (inv, subvar, supervar);
+    if (di != null) {
+      inv.log ("ObvSubSeq- true from isObviousSubSequence: " + di.discardString());
       return true;
     }
     debug.fine ("  not isObviousSubSequence(statically)");
