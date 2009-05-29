@@ -3253,9 +3253,9 @@ public class PptTopLevel extends Ppt {
    */
   public void processOmissions(boolean[] omitTypes) {
     // Avoid concurrent modification exceptions using arrays
-    Object[] viewArray = viewsAsCollection().toArray();
-    for (int i = 0; i < viewArray.length; i++) {
-      PptSlice currentView = (PptSlice) viewArray[i];
+    Collection<PptSlice> viewsAsCollection = viewsAsCollection();
+    PptSlice[] viewArray = viewsAsCollection.toArray(new PptSlice[viewsAsCollection.size()]);
+    for (PptSlice currentView : viewArray) {
       currentView.processOmissions(omitTypes);
     }
     for (Iterator<PptConditional> i = cond_iterator(); i.hasNext();) {
