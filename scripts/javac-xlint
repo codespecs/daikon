@@ -24,11 +24,12 @@
 # Regarding the warning message suppression feature of this script:  As of
 # Java 5 update 6 (JDK 5.0u6), javac has a way to suppress warnings:
 # @SuppressWarnings("unchecked").  This is more portable and standard than
-# this script.  However, it does not permit suppression per-line, only per
-# declaration, nor does it give a non-zero return status if non-suppressed
-# warnings exist.  (A way to get per-line suppression is to put the
-# offending statement in a variable declaration, and then annotate the
-# declaration.)
+# this script.  However:
+#  * it does not permit suppression per-line, only per declaration.
+#    (A way to get per-line suppression is to put the offending statement 
+#    in a variable declaration, and then annotate the declaration.)
+#  * it does not permit suppression based on directory/package (I think)
+#  * it does not give a non-zero return status if non-suppressed warnings exist. 
 
 # This script uses the separate) javac-xlint-prune.pl script.
 # As an alternative to this script, pipe javac output into javac-xlint-prune.pl:
