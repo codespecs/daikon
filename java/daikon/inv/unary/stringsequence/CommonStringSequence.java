@@ -25,9 +25,13 @@ public class CommonStringSequence
   public static boolean dkconfig_enabled = false;
 
   private int elts;
-  private String[] intersect = null;
+  /**
+   * Null means no samples have been seen yet.
+   * Empty array means intersection is empty.
+   */
+  private String /*@Nullable*/ [] intersect = null;
 
-  protected CommonStringSequence(PptSlice ppt) {
+  protected CommonStringSequence(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 
@@ -90,11 +94,13 @@ public class CommonStringSequence
     } else {
       String[] tmp = new String[intersect.length];
       int    size = 0;
-      for (int i=1; i<a.length; i++)
+      for (int i=1; i<a.length; i++) {
+        assert intersect != null;   // Checkers TODO: flow should infer this
         if ((ArraysMDE.indexOf(intersect, a[i])!=-1) &&
             ((size==0) ||
              (ArraysMDE.indexOf(ArraysMDE.subarray(tmp,0,size), a[i])==-1)))
           tmp[size++] = a[i];
+      }
 
       if (size==0) {
         return InvariantStatus.FALSIFIED;
@@ -113,11 +119,13 @@ public class CommonStringSequence
     } else {
       String[] tmp = new String[intersect.length];
       int    size = 0;
-      for (int i=1; i<a.length; i++)
+      for (int i=1; i<a.length; i++) {
+        assert intersect != null;   // Checkers TODO: flow should infer this
         if ((ArraysMDE.indexOf(intersect, a[i])!=-1) &&
             ((size==0) ||
              (ArraysMDE.indexOf(ArraysMDE.subarray(tmp,0,size), a[i])==-1)))
           tmp[size++] = a[i];
+      }
 
       if (size==0) {
         return InvariantStatus.FALSIFIED;

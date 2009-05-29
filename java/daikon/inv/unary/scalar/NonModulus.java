@@ -43,7 +43,7 @@ public class NonModulus
   // This indicates whether it is.
   private boolean results_accurate = false;
 
-  private NonModulus(PptSlice ppt) {
+  private NonModulus(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 

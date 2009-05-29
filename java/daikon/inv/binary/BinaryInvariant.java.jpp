@@ -87,7 +87,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
   protected boolean swap = false;
 
   /** Pass-through. */
-  protected CLASSNAME (PptSlice ppt) {
+  protected CLASSNAME (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 

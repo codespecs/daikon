@@ -34,7 +34,7 @@ public class Positive
   /// Required methods
   ///
 
-  private Positive(PptSlice ppt) {
+  private Positive(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 

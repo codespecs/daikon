@@ -88,7 +88,7 @@ public abstract class RANGE extends SUPERCLASS {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040311L;
 
-  protected RANGE (PptSlice ppt) {
+  protected RANGE (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super (ppt);
   }
 
@@ -294,7 +294,7 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected EqualOne (PptSlice ppt) {
+    protected EqualOne (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
       super (ppt);
     }
 
@@ -341,7 +341,7 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040824L;
 
-    protected EqualMinusOne (PptSlice ppt) {
+    protected EqualMinusOne (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
       super (ppt);
     }
 
@@ -388,7 +388,7 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected GreaterEqualZero (PptSlice ppt) {
+    protected GreaterEqualZero (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
       super (ppt);
     }
 
@@ -435,7 +435,7 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected GreaterEqual64 (PptSlice ppt) {
+    protected GreaterEqual64 (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
       super (ppt);
     }
 
@@ -483,7 +483,7 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected BooleanVal (PptSlice ppt) {
+    protected BooleanVal (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
       super (ppt);
     }
 
@@ -534,7 +534,7 @@ public abstract class RANGE extends SUPERCLASS {
     /** Boolean.  True if PowerOfTwo invariants should be considered **/
     public static boolean dkconfig_enabled = true;
 
-    protected PowerOfTwo (PptSlice ppt) {
+    protected PowerOfTwo (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
       super (ppt);
     }
 
@@ -605,7 +605,7 @@ public abstract class RANGE extends SUPERCLASS {
     /** Boolean.  True if PowerOfTwo invarianst should be considered **/
     public static boolean dkconfig_enabled = false;
 
-    protected Even (PptSlice ppt) {
+    protected Even (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
       super (ppt);
     }
 

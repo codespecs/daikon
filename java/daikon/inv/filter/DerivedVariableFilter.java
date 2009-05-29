@@ -21,11 +21,12 @@ public class DerivedVariableFilter extends InvariantFilter {
    * variables.  Invariants that contain derived variables that match will
    * be filtered out.  If null, nothing will be filtered out.
    **/
-  public static String dkconfig_class_re = null;
-  public static Pattern class_re = null;
+  public static /*@Nullable*/ String dkconfig_class_re = null;
+  public static /*@Nullable*/ Pattern class_re = null;
 
   /**
    */
+  @SuppressWarnings("nullness")
   public DerivedVariableFilter () {
     isOn = dkconfig_class_re != null;
     if (isOn) {
@@ -33,11 +34,13 @@ public class DerivedVariableFilter extends InvariantFilter {
     }
   }
 
-  public String get_derivation_class_re() {
+  public /*@Nullable*/ String get_derivation_class_re() {
     return dkconfig_class_re;
   }
 
   boolean shouldDiscardInvariant( Invariant invariant ) {
+
+    assert class_re != null;   // only called when filter is active
 
     for (VarInfo vi : invariant.ppt.var_infos) {
       if (vi.derived == null)

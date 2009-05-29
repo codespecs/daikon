@@ -64,6 +64,10 @@ public class CLASSNAME
   static final boolean debugCommonSequence = false;
 
   private int elts;
+  /**
+   * Null means no samples have been seen yet.
+   * Empty array means intersection is empty.
+   */
   private PRIMITIVE /*@Nullable*/ [] intersect = null;
 
   protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
@@ -138,6 +142,7 @@ public class CLASSNAME
     if (intersect == null || intersect.length == 0) {
       return "(AND)";
     }
+    assert intersect != null;   // Checkers TODO: flow should infer this
     String[] name = var().simplifyNameAndBounds();
     if (name == null) {
       return format_unimplemented(OutputFormat.SIMPLIFY);
@@ -150,6 +155,7 @@ public class CLASSNAME
     }
     StringBuffer pre_buf = new StringBuffer("");
     StringBuffer end_buf = new StringBuffer("");
+    assert intersect != null;   // Checkers TODO: flow should infer this
     for (int i=0; i<intersect.length; i++) {
       pre_buf.append("(EXISTS ("+idx+i + ") (AND ");
       pre_buf.append("(>= "+idx+i + " " + name[1] + ") ");
@@ -168,6 +174,7 @@ public class CLASSNAME
 //         pre_buf.append("(< "+idx+i + " (select arrayLength " + name[0] + ")) ");
       pre_buf.append("(EQ (select (select elems " + name[0] + ") "+idx+i + ") "
                      + TOSTRING_SIMPLIFY(intersect[i]) + ")");
+      assert intersect != null;   // Checkers TODO: flow should infer this
       if (i == intersect.length - 1)
         pre_buf.append(" ");
       end_buf.append("))");
@@ -182,7 +189,9 @@ public class CLASSNAME
     } else if (intersect==null) {
       return InvariantStatus.NO_CHANGE;
     } else {
+      assert intersect != null;   // Checkers TODO: flow should infer this
       for (int i = 0; i < a.length; i++) {
+        assert intersect != null;   // Checkers TODO: flow should infer this
         if (INDEXOF (intersect, a[i]) != -1) {
           return InvariantStatus.NO_CHANGE;
         }
@@ -200,9 +209,11 @@ public class CLASSNAME
       intersect = a;
       return InvariantStatus.NO_CHANGE;
     } else {
+      assert intersect != null;   // Checkers TODO: flow should infer this
       PRIMITIVE[] tmp = new PRIMITIVE[intersect.length];
       int size = 0;
       for (int i=0; i<a.length; i++) {
+        assert intersect != null;   // Checkers TODO: flow should infer this
 
         // if (a[i] in intersect) && !(a[i] in tmp), add a[i] to tmp
         int ii = INDEXOF (intersect, a[i]);
@@ -210,9 +221,10 @@ public class CLASSNAME
           (INDEXOF (ArraysMDE.subarray(tmp,0,size), a[i]) == -1)) {
           //System.out.println ("adding " + intersect[ii] + " at " + size);
 
-          //carefully add the existing intersect value and not a[i].  These
-          //are not necessarily the same when fuzzy floating point
-          //comparisons are active
+          assert intersect != null;   // Checkers TODO: flow should infer this
+          // Carefully add the existing intersect value and not a[i].  These
+          // are not necessarily the same when fuzzy floating point
+          // comparisons are active.
           tmp[size++] = intersect[ii];
         }
       }
@@ -223,6 +235,7 @@ public class CLASSNAME
       intersect = ArraysMDE.subarray(tmp, 0, size);
     }
 
+    assert intersect != null;   // Checkers TODO: flow should infer this
     intersect = Intern.intern(intersect);
     elts++;
     return InvariantStatus.NO_CHANGE;

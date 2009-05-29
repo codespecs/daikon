@@ -43,7 +43,7 @@ public abstract class CLASSNAME
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  protected CLASSNAME(PptSlice ppt) {
+  protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 

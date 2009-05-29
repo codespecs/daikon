@@ -38,9 +38,8 @@ public class IsPointer extends SingleScalar {
 
     private long smallestNonPointerValue = -100000;
 
-    protected IsPointer(PptSlice ppt) {
+    protected IsPointer(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
         super(ppt);
-
     }
 
 

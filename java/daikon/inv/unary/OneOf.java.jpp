@@ -835,7 +835,8 @@ public final class ONEOFSCALAR
     } else {
       result = "(" + length + ") && (" + forall + ")";
     }
-    assert result != null;      // flow-sensitivity should infer this
+    // Checkers TODO: flow-sensitivity should infer this
+    assert result != null;
 #elif defined(STRINGSEQUENCE)
     // If the variable expression is a raw sequence, examine its
     // element type(s).

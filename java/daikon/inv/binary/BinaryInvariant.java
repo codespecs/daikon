@@ -13,7 +13,7 @@ import java.util.*;
  **/
 public abstract class BinaryInvariant extends Invariant {
 
-  protected BinaryInvariant (PptSlice ppt) {
+  protected BinaryInvariant (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 

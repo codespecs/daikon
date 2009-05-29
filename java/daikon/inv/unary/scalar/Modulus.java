@@ -37,7 +37,7 @@ public class Modulus
   // used for initializing value1
   boolean no_samples_seen = true;
 
-  private Modulus(PptSlice ppt) {
+  private Modulus(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 

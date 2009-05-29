@@ -861,7 +861,7 @@ public final class UtilMDE {
     return hash(result);
   }
 
-  public static final int hash(double[] a) {
+  public static final int hash(double /*@Nullable*/ [] a) {
     double result = 17;
     if (a != null) {
       result = result * 37 + a.length;
@@ -872,7 +872,7 @@ public final class UtilMDE {
     return hash(result);
   }
 
-  public static final int hash(double[] a, double[] b) {
+  public static final int hash(double /*@Nullable*/ [] a, double /*@Nullable*/ [] b) {
     return hash(hash(a), hash(b));
   }
 
@@ -910,7 +910,7 @@ public final class UtilMDE {
     return hash(result);
   }
 
-  public static final int hash(long[] a) {
+  public static final int hash(long /*@Nullable*/ [] a) {
     long result = 17;
     if (a != null) {
       result = result * 37 + a.length;
@@ -921,7 +921,7 @@ public final class UtilMDE {
     return hash(result);
   }
 
-  public static final int hash(long[] a, long[] b) {
+  public static final int hash(long /*@Nullable*/ [] a, long /*@Nullable*/ [] b) {
     return hash(hash(a), hash(b));
   }
 
@@ -944,7 +944,7 @@ public final class UtilMDE {
     return hash(result);
   }
 
-  public static final int hash(String[] a) {
+  public static final int hash(String /*@Nullable*/ [] a) {
     long result = 17;
     if (a != null) {
       result = result * 37 + a.length;

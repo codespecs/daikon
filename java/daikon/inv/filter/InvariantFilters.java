@@ -23,6 +23,7 @@ import daikon.Daikon;
 //  variableFilterType).  There are no variable filters by default.  See
 //  the manual for more information on property and variable filters.
 
+@SuppressWarnings("nullness")
 public class InvariantFilters {
   public static final int ANY_VARIABLE = 1;
   public static final int ALL_VARIABLES = 2;

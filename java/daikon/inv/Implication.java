@@ -51,7 +51,7 @@ public class Implication
    * @return null if predicate and the consequent are the same, or if
    * the PptTopLevel already contains this Implication.
    **/
-   public static Implication makeImplication(PptTopLevel ppt,
+  public static /*@Nullable*/ Implication makeImplication(PptTopLevel ppt,
                                              Invariant predicate,
                                              Invariant consequent,
                                              boolean iff,
