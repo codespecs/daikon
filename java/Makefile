@@ -759,7 +759,7 @@ audit:
 
 # JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing
-JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing
+JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype,typequals.PrototypeOrNot
 JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker -implicit:class -Xlint:-processing
 JAVAC_JAVARI_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
@@ -775,8 +775,11 @@ INTERNING_JAVA_FILES_SKIP_COUNTS = \( -name Intern.java -o -name VarInfoName.jav
 ## Which files to check.
 INTERNING_JAVA_FILES = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} -wholename ./daikon/util -prune -o -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} ${INTERNING_JAVA_FILES_SKIP_COUNTS} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
-#
-NULLNESS_JAVA_FILES = $(shell find utilMDE -name '*.java' -print) $(shell find daikon/inv -name '*.java' -print)
+## Temporarily, only a subset of directories.  Expand the scope later.
+NULLNESS_JAVA_FILES = \
+  $(shell find utilMDE/ -name '*.java' -print) \
+  $(shell find daikon/inv/ -name '*.java' -print) \
+  $(shell find typequals/ -name '*.java' -not -name '*\#*')
 
 intern: check-interning
 interning: check-interning
@@ -796,7 +799,7 @@ check-nullness-all: check-nullness-all-withstubs
 
 check-nullness-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVA_FILES}
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${NULLNESS_JAVA_FILES} ${TYPEQUALS_JAVA_FILES}
 
 check-nullness-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
