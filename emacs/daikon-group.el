@@ -134,7 +134,7 @@ Remake it first if it is more than a week old."
         (let ((default-directory (substitute-in-file-name "$inv/java/"))
               (verb (if tags-file-exists "Updating" "Making")))
           (message "%s the Daikon tags table..." verb)
-          (call-process "make" nil nil nil "tags")
+          (call-process "make" nil nil nil "tags-nogen")
           (message "%s the Daikon tags table...done" verb)))
     (visit-tags-table tags-file)))
 (fset 'tags-table-daikon 'daikon-tags-table)
