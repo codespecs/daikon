@@ -107,7 +107,7 @@ public final /*(at)Interned*/ class Equality
     Assert.assertTrue (variables.size() > 0);
     Assert.assertTrue (vars.size() == variables.size());
     // Checkers TODO: flow should infer this as non-raw.
-    @SuppressWarnings("nullness")
+    @SuppressWarnings({"nullness","cast"})
     Equality thisNonRaw = (/*@NonNull*/ Equality)this;
     for (VarInfo vi : variables) {
       if (debug.isLoggable(Level.FINE)) {

@@ -327,7 +327,8 @@ public final class Intern {
     if (lookup != null) {
       return lookup.get();
     } else {
-      /*@Interned*/ Integer result = (/*@Interned*/ Integer) a; // cast is redundant (except in JSR 308)
+      @SuppressWarnings("cast") // cast is redundant (except in JSR 308)
+      /*@Interned*/ Integer result = (/*@Interned*/ Integer) a;
       internedIntegers.put(result, new WeakReference</*@Interned*/ Integer>(result));
       return result;
     }
@@ -359,7 +360,8 @@ public final class Intern {
     if (lookup != null) {
       return lookup.get();
     } else {
-      /*@Interned*/ Long result = (/*@Interned*/ Long) a; // cast is redundant (except in JSR 308)
+      @SuppressWarnings("cast") // cast is redundant (except in JSR 308)
+      /*@Interned*/ Long result = (/*@Interned*/ Long) a;
       internedLongs.put(result, new WeakReference</*@Interned*/ Long>(result));
       return result;
     }
@@ -398,7 +400,8 @@ public final class Intern {
     if (lookup != null) {
       return lookup.get();
     } else {
-      /*@Interned*/ int[] result = (int /*@Interned*/ []) a; // cast is redundant (except in JSR 308)
+      @SuppressWarnings("cast") // cast is redundant (except in JSR 308)
+      /*@Interned*/ int[] result = (int /*@Interned*/ []) a;
       internedIntArrays.put(result, new WeakReference<int /*@Interned*/ []>(result));
       return result;
     }
@@ -417,7 +420,8 @@ public final class Intern {
     if (lookup != null) {
       return lookup.get();
     } else {
-      /*@Interned*/ long[] result = (long /*@Interned*/ []) a; // cast is redundant (except in JSR 308)
+      @SuppressWarnings("cast") // cast is redundant (except in JSR 308)
+      /*@Interned*/ long[] result = (long /*@Interned*/ []) a;
       internedLongArrays.put(result, new WeakReference<long /*@Interned*/ []>(result));
       return result;
     }
@@ -442,7 +446,8 @@ public final class Intern {
     if (lookup != null) {
       return lookup.get();
     } else {
-      /*@Interned*/ Double result = (/*@Interned*/ Double) a; // cast is redundant (except in JSR 308)
+      @SuppressWarnings("cast") // cast is redundant (except in JSR 308)
+      /*@Interned*/ Double result = (/*@Interned*/ Double) a;
       internedDoubles.put(result, new WeakReference</*@Interned*/ Double>(result));
       return result;
     }
@@ -477,7 +482,8 @@ public final class Intern {
     if (lookup != null) {
       return lookup.get();
     } else {
-      /*@Interned*/ double[] result = (double /*@Interned*/ []) a; // cast is redundant (except in JSR 308)
+      @SuppressWarnings("cast") // cast is redundant (except in JSR 308)
+      /*@Interned*/ double[] result = (double /*@Interned*/ []) a;
       internedDoubleArrays.put(result, new WeakReference<double /*@Interned*/ []>(result));
       return result;
     }
@@ -503,7 +509,8 @@ public final class Intern {
     if (lookup != null) {
       return lookup.get();
     } else {
-      /*@Interned*/ String[] result = (String /*@Interned*/ []) a; // cast is redundant (except in JSR 308)
+      @SuppressWarnings("cast") // cast is redundant (except in JSR 308)
+      /*@Interned*/ String[] result = (String /*@Interned*/ []) a;
       internedStringArrays.put(result, new WeakReference<String /*@Interned*/ []>(result));
       return result;
     }
@@ -522,7 +529,8 @@ public final class Intern {
     if (lookup != null) {
       return lookup.get();
     } else {
-      /*@Interned*/ Object /*@Interned*/ [] result = (/*@Interned*/ Object /*@Interned*/ []) a; // cast is redundant (except in JSR 308)
+      @SuppressWarnings("cast") // cast is redundant (except in JSR 308)
+      /*@Interned*/ Object /*@Interned*/ [] result = (/*@Interned*/ Object /*@Interned*/ []) a;
       internedObjectArrays.put(result, new WeakReference</*@Interned*/ Object /*@Interned*/ []>(result));
       return result;
     }

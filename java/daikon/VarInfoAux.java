@@ -256,7 +256,7 @@ public final class VarInfoAux
    * Returns canonical representation of this.  Doesn't need to be
    * called by outside classes because these are always interned.
    **/
-  @SuppressWarnings("interning") // intern method
+  @SuppressWarnings({"interning","cast"}) // intern method
   private /*@Interned*/ VarInfoAux intern() {
     if (this.isInterned) return (/*@Interned*/ VarInfoAux) this; // cast is redundant (except in JSR 308)
 
