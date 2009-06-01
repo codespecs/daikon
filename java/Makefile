@@ -58,13 +58,8 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 
 ### end of user customizations
 
-### Determine whether or not to enable lint checks
-## This version uses javac_xlint
-# JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:typequals.*' ${JAVAC_XLINT} ${JAVAC} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath ${CLASSPATH} ${JAVAC_ARGS}
-## This version does no lint checking
-# JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:typequals.*' ${JAVAC} -J-Xmx1024m -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${CLASSPATH}' ${JAVAC_ARGS}
 ## This version uses -Xlint
-JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:typequals.*' ${JAVAC} -Xlint -J-Xmx1024m -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${CLASSPATH}' ${JAVAC_ARGS}
+JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:typequals.*' ${JAVAC} -Xlint -J-Xmx1024m -classpath '${CHECKERSJAR}:${CLASSPATH}' ${JAVAC_ARGS}
 
 
 ###########################################################################
@@ -388,7 +383,7 @@ all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Dif
 	$(MAKE) all_pass2
 
 xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
-	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1 | ${DAIKONBIN}/javac-xlint-prune.pl
+	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 all_directly: ${AUTO_GENERATED_FILES} utilMDE-import-check utilMDE-copy
