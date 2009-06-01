@@ -246,7 +246,7 @@ public final class CLASSNAME
       // else if the scalar is min or max of a sequence
       } else if ((sclvar.derived instanceof SequenceMin)
                  || (sclvar.derived instanceof SequenceMax)) {
-        Pair<DiscardCode,String> di = SUBSEQUENCE.isObviousSubSequence(null, sclvar_seq, seqvar);
+        Pair<DiscardCode,String> di = SUBSEQUENCE.isObviousSubSequence(sclvar_seq, seqvar);
         return (di != null);
       }
     }
