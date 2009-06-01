@@ -36,6 +36,7 @@ ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
 ALL_CLASS_FILES := ${JAVA_FILES:.java=.class}
 
 default: all
+compile: all
 
 all: test
 
@@ -54,7 +55,7 @@ compile_notest:  .class-files-timestamp
 
 # Creates ${ALL_CLASS_FILES}.
 .class-files-timestamp: ${ALL_JAVA_FILES}
-	${JAVAC_COMMAND} ${JAVAC_EXTRA_ARGS} ${JAVA_FILES} 2>&1 | ${DAIKONBIN}/javac-xlint-prune.pl
+	${JAVAC_COMMAND} ${JAVAC_EXTRA_ARGS} ${JAVA_FILES} 2>&1
 	touch .class-files-timestamp
 
 jar: utilMDE.jar
