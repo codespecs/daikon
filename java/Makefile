@@ -764,8 +764,9 @@ JAVAC_IGJ_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 # INTERNING_JAVA_FILES_SKIP =
 INTERNING_JAVA_FILES_SKIP = \( -name PptTopLevel.java -o -name DynamicConstants.java \) -prune -o
 # I should perhaps not count Intern.java, which implements interning and
-# so has very many annotations.  Also, VarInfoName is obsolescent (and of flawed
-# design) but has 60 @Interned annotations and quite a few SuppressWarnings.
+# so has very many annotations.  Also, VarInfoName is obsolescent, retained
+# for backward compatibility only; it is of flawed design and has 60 @Interned
+#  annotations and quite a few SuppressWarnings.
 INTERNING_JAVA_FILES_SKIP_COUNTS = \( -name Intern.java -o -name VarInfoName.java \) -prune -o
 ## Which files to check.
 INTERNING_JAVA_FILES = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} -wholename ./daikon/util -prune -o -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
@@ -842,6 +843,26 @@ interning-counts:
 	@echo ${DAIKON_JAVA_FILES} | sed 's/ /\n/g' | wc -l
 	@echo -n "Daikon total lines: "
 	@wc -l ${DAIKON_JAVA_FILES} | tail -1
+
+# Problem with these computations: double-counting of dakion/util/ directory.
+# "tail -1" is required when wc is given multiple arguments
+nullness-counts:
+	@echo -n "Annotated files: "
+	@echo ${NULLNESS_JAVA_FILES} | sed 's/ /\n/g' | wc -l
+#	@echo ${NULLNESS_JAVA_FILES}
+	@echo -n "Lines in annotated files: "
+	@wc -l ${NULLNESS_JAVA_FILES} | tail -1
+	@echo -n "Nullness annotations: "
+	@grep '@Dependent\|@NonNull\|@Nullable\|@PolyNull\|@Prototype.*result=Nullable\|@Raw' ${NULLNESS_JAVA_FILES}
+	@grep '@Dependent\|@NonNull\|@Nullable\|@PolyNull\|@Prototype\|@Raw' ${NULLNESS_JAVA_FILES} | wc -l
+	@echo -n "@SuppressWarnings annotations: "
+	@grep -n '@SuppressWarnings("nullness")' ${NULLNESS_JAVA_FILES} | wc -l
+	@grep -n '@SuppressWarnings("nullness")' ${NULLNESS_JAVA_FILES}
+	@echo -n "Daikon total files: "
+	@echo ${DAIKON_JAVA_FILES} | sed 's/ /\n/g' | wc -l
+	@echo -n "Daikon total lines: "
+	@wc -l ${DAIKON_JAVA_FILES} | tail -1
+
 
 ###
 ### Testing
@@ -1670,6 +1691,7 @@ daikon/derive/unary/SequenceInitialFactoryFloat.java: daikon/derive/unary/Sequen
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
 
 
+# See the showvars target; this one seems extraneous
 dump :
 	@echo "CLASSPATH = $(CLASSPATH)"
 	@echo "CLASSPATH_W = $(CLASSPATH_W)"
@@ -1678,6 +1700,7 @@ dump :
 	echo $(PATH)
 	echo $(DAIKONBIN)
 	@echo "JAVAC_COMMAND = $(JAVAC_COMMAND)"
+
 
 ###########################################################################
 ### Delete-on-error
