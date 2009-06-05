@@ -754,7 +754,7 @@ audit:
 
 # JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing
-JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype,typequals.PrototypeOrNot
+JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype,typequals.PrototypeOrNot -implicit:class -Xlint:-processing
 JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker -implicit:class -Xlint:-processing
 JAVAC_JAVARI_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
@@ -775,7 +775,7 @@ INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP
 NULLNESS_JAVA_FILES = \
   $(shell find utilMDE/ -name '*.java' -print) \
   $(shell find daikon/inv/ -name '*.java' -print) \
-  $(shell find typequals/ -name '*.java' -not -name '*\#*')
+  $(shell find typequals/ -name '*.java')
 
 intern: check-interning
 interning: check-interning
@@ -795,7 +795,7 @@ check-nullness-all: check-nullness-all-withstubs
 
 check-nullness-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ...
-	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${NULLNESS_JAVA_FILES} ${TYPEQUALS_JAVA_FILES}
+	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-nullness-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
@@ -1017,16 +1017,17 @@ use-%:
 ###
 
 showvars:
-	@echo JAVAC = ${JAVAC}
-	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
-	@echo JAVAC_ARGS = ${JAVAC_ARGS}
-	@echo JAVA = ${JAVA}
-	@echo DAIKONBIN = ${DAIKONBIN}
-	@echo JAVA_FILES = $(JAVA_FILES)
-	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
-	@echo TAG_FILES = $(TAG_FILES)
 	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
 	@echo CLASSPATH = "${CLASSPATH}"
+	@echo DAIKONBIN = ${DAIKONBIN}
+	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
+	@echo INV = "${INV}"
+	@echo JAVA = ${JAVA}
+	@echo JAVAC = ${JAVAC}
+	@echo JAVAC_ARGS = ${JAVAC_ARGS}
+	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
+	@echo JAVA_FILES = $(JAVA_FILES)
+	@echo TAG_FILES = $(TAG_FILES)
 
 showvar_JAVA_FILES:
 	@echo ${JAVA_FILES}
