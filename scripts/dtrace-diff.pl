@@ -27,6 +27,7 @@ my $gdeclshash = load_decls($declsname);
 # dump it
 # dump_decls($gdeclshash);
 
+
 # compare the dtraces
 my $differences_found = 0;
 my $errors_found = 0;
@@ -80,8 +81,50 @@ sub load_decls ( $ ) {
     my $declshash = {};
     my $ppt_seen = 0;
     while (defined (my $l = getline($decls))) {
+
         $l =~ s://.*::; # strip any comments on this line
-	if ($l eq "DECLARE") {
+
+	if (($l =~ /(^ppt\s+)(.+)/)) {
+	    my $currppt = $2;
+	    my $lhashref = {};
+            my @varorder = ();
+
+            my $curvar = "";
+            my $currep = "";
+            my $curdec = "";
+            my $curcomp = "";
+            
+            while(my $subline = getline($decls)) {
+                $subline =~ s/^\s+//;
+                $subline  =~ s/\s+$//;
+                
+                if($subline =~ /(^variable\s+)(.+)/) {
+                    unless($curvar eq "") { # Push stuff to the stack
+                        $$lhashref{$curvar} = [$curdec, $currep, $curcomp];
+                        push @varorder, $curvar;
+                    }
+                    $curvar = $2;
+                }elsif (($subline =~ /^parent.+/) ||
+                        ($subline =~ /^ppt\-type.+/) ||
+                        ($subline =~ /^flags.+/)) {
+                }elsif ($curvar eq "") {
+                    die "Malformed decls file: \"$subline\" at line $INPUT_LINE_NUMBER instead of variable declaration";
+                }elsif ($subline =~ /(^rep\-type\s*)(.+)/) {
+                    $currep = $2;
+                }elsif ($subline =~ /(^dec-type\s*)(.+)/) {
+                    $curdec = $2;
+                }elsif ($subline =~ /(^comparability\s*)(.+)/) {
+                    $curcomp = $2;
+                }                   
+            }
+            unless($curvar eq "") { # Push stuff to the stack
+                $$lhashref{$curvar} = [$curdec, $currep, $curcomp];
+                push @varorder, $curvar;
+            }
+            $$lhashref{"variable order"} = [ @varorder ];
+            $$declshash{$currppt} = $lhashref;
+            $ppt_seen = 1;
+	} elsif ($l eq "DECLARE") {
 	    my $currppt = getline($decls);
 	    my $lhashref = {};
             my @varorder = ();
@@ -99,7 +142,7 @@ sub load_decls ( $ ) {
             $$lhashref{"variable order"} = [ @varorder ];
 	    $$declshash{$currppt} = $lhashref;
 	    $ppt_seen = 1;
-	} elsif (($l eq "VarComparability") && !$ppt_seen) {
+        }elsif (($l eq "VarComparability") && !$ppt_seen) {
 	    # It's ok to have a VarComparability as the first thing
 	    # in the decls file.  Read the type of comparability,
 	    # then move on.
@@ -108,7 +151,10 @@ sub load_decls ( $ ) {
 	    # It's ok to have a ListImplementors in the decls file.
 	    # Read the type of comparability, then move on.
 	    $l = getline($decls);
-	} elsif ($l) {
+	} elsif (($l =~ /^input\-language.+/) ||
+                 ($l =~ /^decl\-version.+/) ||
+                 ($l =~ /^var\-comparability.+/)){
+        } elsif ($l) {
 	    die "malformed decls file: \"$l\" at line $INPUT_LINE_NUMBER of $mydeclsname";
 	}
     }
@@ -122,9 +168,14 @@ sub load_ppt ( $$ ) {
 # file, and hash mapping varname to array of value and modbit.
     my ($dtfh, $dtfhname) = @_;
     my $pptname = getline($dtfh);
-    while ((defined $pptname) && ($pptname eq "")) {
+    while ((defined $pptname) && (($pptname eq "") ||
+                                  ($pptname =~ /^input\-language.+/) ||
+                                  ($pptname =~ /^decl\-version.+/) ||
+                                  ($pptname =~ /^var\-comparability.+/))) {
 	$pptname = getline($dtfh);
     }
+
+
     (defined $pptname)
 	or return undef;
 
@@ -279,6 +330,10 @@ sub cmp_dtracen ( $$$ ) {
     my $dtb = gzopen(\*DTB, $mydtbname);
 
   PPT: while (1) {
+
+      #Skip headers
+
+
       my $ppta = load_ppt($dta, $mydtaname);
       my $pptb = load_ppt($dtb, $mydtbname);
       if ((not defined $ppta) && (not defined $pptb)) {
@@ -300,7 +355,7 @@ sub cmp_dtracen ( $$$ ) {
 
     close \*DTA;
     close \*DTB;
-}
+ }
 
 sub dump_decls ( $ ) {
 # dump the decls struct given by $1

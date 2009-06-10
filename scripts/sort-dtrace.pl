@@ -23,7 +23,7 @@ sub flush_decls {
 $/ = ""; # Read by paragraph
 
 while (<>) {
-    if (/^VarComparability/) {
+    if ((/^VarComparability/) || (/^decl/) || (/^input/)) {
 	print;
 	next;
     } elsif (/^DECLARE/) {
@@ -58,6 +58,3 @@ while (<>) {
     }
     flush_decls() if eof;
 }
-
-
-

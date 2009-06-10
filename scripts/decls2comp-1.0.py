@@ -27,33 +27,6 @@
 
 # Input:
 
-# input-language C/C++
-# decl-version 2.0
-# var-comparability none
-
-# ppt ..returnIntSum():::ENTER
-#  ppt-type enter
-#  variable a
-#   var-kind variable
-#   rep-type int
-#   dec-type int
-#   comparability 1
-#  variable b
-#   var-kind variable
-#   rep-type int
-#   dec-type int
-#   comparability 1
-#  variable c
-#   var-kind variable
-#   rep-type int
-#   dec-type int
-#   comparability 2
-#  variable d
-#   var-kind variable
-#   rep-type int
-#   dec-type int
-#   comparability -1
-
 # DECLARE
 # ..add():::ENTER
 # a
@@ -87,14 +60,6 @@
 # 2006-01-18: Added support for "INTERMEDIATE DECLARE" keyword
 #             for the --dyncomp-print-inc option
 
-# 2009-06-07: Rewrote to handle decls 2.0 format.
-# TODO: Reenable no-hashcode and lackwit(maybe?) support.
-
-VAR_START = "variable "
-PPT_START = "ppt "
-REP_START = "rep-type "
-COMP_START = "comparability "
-
 import sys
 
 # Note: Lackwit produces comparability numbers for arrays in the
@@ -104,11 +69,6 @@ import re
 LWArrayRExp = re.compile('\[.\]')
 
 ignoreHashcodes = False
-
-if (len(sys.argv) < 2):
-    print "Usage: decls2compy decls-file [no-hashcodes]"
-    sys.exit()
-   
 
 if ((len(sys.argv) == 3) and
     sys.argv[2] == "no-hashcodes"):
@@ -129,12 +89,17 @@ allPpts = {}
 
 tempAllPpts = [] # Temporary before placing in allPpts
 
+isIntermediate = 0
+
 for line in f.readlines():
     line = line.strip()
 
-    if line[0:4] == "ppt ":
-        tempAllPpts.append([line[len(PPT_START):]]) # Start a new list
+    if line == "DECLARE":
+        tempAllPpts.append([]) # Start a new list
         isIntermediate = 0
+    elif line == "INTERMEDIATE DECLARE":
+        tempAllPpts.append([]) # Start a new list
+        isIntermediate = 1
     elif line != "" and line[0] != "#": # Don't add blank lines & comments
         if len(tempAllPpts) > 0:
             tempAllPpts[-1].append(line) # Append line to the latest entry
@@ -170,25 +135,27 @@ for pptName in sortedPptKeys:
     i = 0
     var2comp = {} # Key: variable name, Value: comparability number
 
+    # All info. about variables at a program point come in sets of 4
+    # lines. e.g.
+    #
+    # a
+    # int # isParam=true
+    # int
+    # 1
+    while i < len(v):
+        curRepType = v[i+2]
+        curComp = v[i+3]
 
-    # The comparability info for a variable at a program point is
-    # prefixed by comparability    
+        if ((not ignoreHashcodes) or
+            (not hashcodeRE.match(curRepType))):
+            isArrayMatch = LWArrayRExp.search(curComp)
+            if isArrayMatch:
+                var2comp[v[i]] = curComp[:isArrayMatch.start()]
+            else:
+                var2comp[v[i]] = curComp
 
-    curVar = None
-    for line in v:
-        strippedLine = line.strip()
-                 
-        if strippedLine[0:len(VAR_START)] == VAR_START:
-            curVar = strippedLine[len(VAR_START):]
-        elif strippedLine[0:len(REP_START)] == REP_START:
-            assert(curVar) #There should have been a variable entry before rep-type
-            curRep = strippedLine[len(REP_START):]
-        elif strippedLine[0:len(COMP_START)] == COMP_START:
-            assert(curVar) #There should have been a variable entry before comparability
-            curComp = strippedLine[len(COMP_START):]
-            var2comp[curVar] = curComp
+        i += 4
 
-        
     # Now we can do the real work of grouping variables together
     # in comparability sets based on their numbers
     sortedVars = var2comp.keys()
