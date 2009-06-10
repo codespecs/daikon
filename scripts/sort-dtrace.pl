@@ -11,6 +11,7 @@ use 5.006;
 use warnings;
 
 my @decls;
+my $decls_2 = 0;
 
 sub flush_decls {
     if (@decls) {
@@ -23,10 +24,46 @@ sub flush_decls {
 $/ = ""; # Read by paragraph
 
 while (<>) {
-    if ((/^VarComparability/) || (/^decl/) || (/^input/)) {
+    if ((/^VarComparability/)) {
 	print;
 	next;
-    } elsif (/^DECLARE/) {
+    } elsif((/^decl\-input.+/) || (/^input-language.+/) || (/^var\-comparability.+/)) {
+        $decls_2 = 1;
+    } elsif((/^ppt\s.+/)) {
+	my @lines = split(/\n/, $_);
+	my @vars;
+        my $var = "";
+        my @ppt;
+
+
+        push @ppt, shift(@lines) . "\n";
+
+        while((@lines > 2) && (not ($lines[0] =~ /\s*variable/))) {                    
+            push @ppt, shift(@lines);
+        }
+
+        while(my $line = shift @lines) {
+            if($line =~ /^\s+variable.+/){
+                if($var) { 
+                    push @vars, $var;
+                    $var = "";
+                }
+                $var = join("\n", $var, $line);
+            } else {
+                $var = join("\n", $var, $line);
+            }
+        }
+
+        if($var) {
+            push @vars, $var;
+        }
+        
+        @vars = sort @vars;
+        @ppt = (@ppt, @vars );
+
+        push @decls, join("", @ppt);
+        
+    }elsif (/^DECLARE/) {
 	chomp;
 	my @lines = split(/\n/, $_);
 	die "Bad .decls paragraph format" if shift @lines ne "DECLARE";
