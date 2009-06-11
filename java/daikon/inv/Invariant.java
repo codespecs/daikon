@@ -1726,7 +1726,7 @@ public abstract class Invariant
    *
    * @see #instantiate_ok(VarInfo[])
    */
-  public boolean valid_types (VarInfo[] vis) {
+  public boolean valid_types (VarInfo[] vis) @PrototypeOrNot {
     Assert.assertTrue (false, "no valid_types for class " + getClass());
     return (false);
   }
@@ -1788,9 +1788,10 @@ public abstract class Invariant
         System.out.printf("  var_info: %s %s%n", vi, vi.type);
       }
       System.out.printf("ppt: %s%n", ppt);
-      if (this.ppt != null) {
-        System.out.printf("this: %s%n", this.repr());
-      }
+      assert(this.ppt == null);
+      // if (this.ppt != null) {
+      //   System.out.printf("this: %s%n", this.repr());
+      // }
     }
     assert valid_types(slice.var_infos)
       : String.format("valid_types(%s) = false for %s", slice.var_infos, this);

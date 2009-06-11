@@ -574,7 +574,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   public static List</*@Prototype*/ Invariant> get_proto_all() {
 
-    List</*@Prototype*/ Invariant> result = new ArrayList<Invariant>();
+    List</*@Prototype*/ Invariant> result = new ArrayList</*@Prototype*/ Invariant>();
     #if (defined(STRING))
         result.add (SubString.get_proto(false));
         result.add (SubString.get_proto(true));
