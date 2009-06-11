@@ -23,7 +23,7 @@ public class NISuppressee {
 
   public Class<? extends Invariant> sup_class;
   public int var_count;
-  public Invariant sample_inv;
+  public /*@Prototype*/ Invariant sample_inv;
 
   public NISuppressee (Class<? extends Invariant> cls, int var_count) {
     sup_class = cls;
@@ -32,7 +32,9 @@ public class NISuppressee {
 
     try {
       Method get_proto = cls.getMethod ("get_proto", new Class<?>[] {});
-      sample_inv = (Invariant)get_proto.invoke (null, new Object[] {});
+      @SuppressWarnings("prototype")
+      /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null, new Object[] {});
+      sample_inv = sample_inv_local;
       Assert.assertTrue (sample_inv != null, cls.getName());
     } catch (Exception e) {
       throw new RuntimeException ("error instantiating invariant "
@@ -51,8 +53,10 @@ public class NISuppressee {
     try {
       Method get_proto = cls.getMethod ("get_proto",
                                         new Class<?>[] {boolean.class});
-      sample_inv = (Invariant)get_proto.invoke (null,
+      @SuppressWarnings("prototype")
+      /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null,
                                     new Object[] {Boolean.valueOf(swap)});
+      sample_inv = sample_inv_local;
       Assert.assertTrue (sample_inv != null, cls.getName());
     } catch (Exception e) {
       throw new RuntimeException ("error instantiating binary invariant "

@@ -174,7 +174,7 @@ public class NIS {
     suppressor_map = new LinkedHashMap<Class<? extends Invariant>,List<NISuppressionSet>>(256);
     suppressor_map_suppression_count = new LinkedHashMap<Class<? extends Invariant>,Integer>(256);
     all_suppressions = new ArrayList<NISuppressionSet>();
-    suppressor_proto_invs = new ArrayList<Invariant>();
+    suppressor_proto_invs = new ArrayList</*@Prototype*/ Invariant>();
 
     // Get all defined suppressions.
     for (Invariant inv : Daikon.proto_invs) {

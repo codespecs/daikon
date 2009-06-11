@@ -4,5 +4,5 @@ import checkers.quals.*;
 
 @TypeQualifier
 @SubtypeOf({})
-@DefaultQualifierInHierarchy
+//@DefaultQualifierInHierarchy
 public @interface PrototypeOrNot {}

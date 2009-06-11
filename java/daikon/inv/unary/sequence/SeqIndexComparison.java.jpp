@@ -180,7 +180,6 @@ public class CLASSNAME extends SUPERCLASS {
     Assert.assertTrue(var().rep_type == ProglangType.ASSERTYPE);
   }
 
-  @SuppressWarnings("prototype") // problem with defaulting and null
   private static /*@Nullable*/ /*@Prototype*/ CLASSNAME proto = null;
 
   /** Returns the prototype invariant for CLASSNAME **/

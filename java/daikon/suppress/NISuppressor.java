@@ -74,7 +74,9 @@ public class NISuppressor {
     try {
       Method get_proto = inv_class.getMethod ("get_proto",
                                                 new Class<?>[] {});
-      sample_inv = (Invariant) get_proto.invoke (null, new Object[] {});
+      @SuppressWarnings("prototype")
+      /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant) get_proto.invoke (null, new Object[] {});
+      sample_inv = sample_inv_local;
       Assert.assertTrue (sample_inv != null);
     } catch (Exception e) {
       throw new RuntimeException ("error instantiating invariant "
@@ -122,12 +124,16 @@ public class NISuppressor {
       try {
         Method get_proto = inv_class.getMethod ("get_proto",
                                new Class<?>[] {boolean.class});
-        sample_inv = (Invariant)get_proto.invoke (null,
+        @SuppressWarnings("prototype")
+        /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null,
                                   new Object[] {Boolean.valueOf(swap)});
+        sample_inv = sample_inv_local;
       } catch (NoSuchMethodException e) {
         Method get_proto = inv_class.getMethod ("get_proto",
                                new Class<?>[] {});
-        sample_inv = (Invariant)get_proto.invoke (null, new Object[] {});
+        @SuppressWarnings("prototype")
+        /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null, new Object[] {});
+        sample_inv = sample_inv_local;
       }
     } catch (Exception e) {
       throw new RuntimeException ("error getting proto invariant "

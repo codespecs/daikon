@@ -754,7 +754,7 @@ audit:
 
 # JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing
-JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype,typequals.PrototypeOrNot -implicit:class -Xlint:-processing
+JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype,typequals.PrototypeOrNot,typequals.PrototypeBottom -implicit:class -Xlint:-processing
 JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker -implicit:class -Xlint:-processing
 JAVAC_JAVARI_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
@@ -774,12 +774,9 @@ INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP
 ## Temporarily, only a subset of directories.  Expand the scope later.
 NULLNESS_JAVA_FILES = \
   $(shell find utilMDE/ -name '*.java' -print) \
-  $(shell find daikon/inv/ -name '*.java' -print) \
-  $(shell find typequals/ -name '*.java')
+  $(shell find daikon/ -name '*.java' -print)
 
-#   $(shell find daikon/derive/ -name '*.java' -print) \
-#   $(shell find daikon/suppress/ -name '*.java' -print) \
-#   $(shell find daikon/util/ -name '*.java' -print) \
+#   $(shell find typequals/ -name '*.java')
 
 intern: check-interning
 interning: check-interning
@@ -899,10 +896,9 @@ check-serialize:
 junit:
 	@echo "Running unit (not system) tests..."
 	@echo java daikon.test.MasterUnitTester
-	@#jhp 9/19/07: not clear why this needs -server or classpath specified.
+	@#jhp 9/19/07: not clear why this needs classpath specified.
 	@#It doesn't work on windows that way for me.
-	@#@${JAVA} -server -classpath .:${CLASSPATH}:daikon/test/ daikon.test.MasterUnitTester
-	@${JAVA} daikon.test.MasterUnitTester
+	@${JAVA} -classpath .:${CLASSPATH}:daikon/test/ daikon.test.MasterUnitTester
 
 junit-all: junit
 	@# Alternately, MasterUnitTester could run SplitterFactoryTest,
