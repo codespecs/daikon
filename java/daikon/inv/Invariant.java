@@ -1726,7 +1726,7 @@ public abstract class Invariant
    *
    * @see #instantiate_ok(VarInfo[])
    */
-  public boolean valid_types (VarInfo[] vis) @PrototypeOrNot {
+  public boolean valid_types (VarInfo[] vis) /*@PrototypeOrNot*/ {
     Assert.assertTrue (false, "no valid_types for class " + getClass());
     return (false);
   }
