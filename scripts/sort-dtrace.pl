@@ -29,6 +29,8 @@ while (<>) {
 	next;
     } elsif((/^decl\-input.+/) || (/^input-language.+/) || (/^var\-comparability.+/)) {
         $decls_2 = 1;
+        print;
+        next;
     } elsif((/^ppt\s.+/)) {
 	my @lines = split(/\n/, $_);
 	my @vars;
@@ -38,7 +40,7 @@ while (<>) {
 
         push @ppt, shift(@lines) . "\n";
 
-        while((@lines > 2) && (not ($lines[0] =~ /\s*variable/))) {                    
+        while((@lines) && (not ($lines[0] =~ /\s*variable/))) {                    
             push @ppt, shift(@lines);
         }
 
