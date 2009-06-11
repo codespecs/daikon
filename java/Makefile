@@ -777,6 +777,10 @@ NULLNESS_JAVA_FILES = \
   $(shell find daikon/inv/ -name '*.java' -print) \
   $(shell find typequals/ -name '*.java')
 
+#   $(shell find daikon/derive/ -name '*.java' -print) \
+#   $(shell find daikon/suppress/ -name '*.java' -print) \
+#   $(shell find daikon/util/ -name '*.java' -print) \
+
 intern: check-interning
 interning: check-interning
 check-interning: ${INTERNING_JAVA_FILES}
@@ -793,11 +797,11 @@ check-nullness: check-nullness-all
 
 check-nullness-all: check-nullness-all-withstubs
 
-check-nullness-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
+check-nullness-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${NULLNESS_JAVA_FILES}
 
-check-nullness-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
+check-nullness-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${NULLNESS_JAVA_FILES}
 
@@ -816,6 +820,13 @@ check-javari-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 check-javari-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${JAVA_FILES}
+
+TYPEQUALS_JAVA_FILES = $(wildcard typequals/*.java)
+TYPEQUALS_CLASSES = $(subst .java,.class,${TYPEQUALS_JAVA_FILES})
+
+compile-typequals: ${TYPEQUALS_CLASSES}
+${TYPEQUALS_CLASSES}: ${TYPEQUALS_JAVA_FILES}
+	${JAVAC_COMMAND} ${TYPEQUALS_JAVA_FILES}
 
 # These targets run the Interning checker on just one file.  They use ${JAVAC}
 # instead of ${JAVAC_COMMAND}, to display a shorter, easier-to-read command.
