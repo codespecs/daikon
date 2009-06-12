@@ -125,7 +125,7 @@ public final class FileIO {
   public static boolean dkconfig_check_bb_connections = true;
 
   /** True if declaration records are in the new format **/
-  public static boolean new_decl_format = true;
+  public static Boolean new_decl_format = null;
 
   /// Variables
 
@@ -756,13 +756,21 @@ public final class FileIO {
     scanner.next();
     /*@Interned*/ String version = need (state, scanner, "declaration version number");
     need_eol (state, scanner);
+    boolean new_df = false;
     if (version == "2.0")       // interned
-      new_decl_format = true;
+      new_df = true;
     else if (version == "1.0")  // interned
-      new_decl_format = false;
+      new_df = false;
     else
       decl_error (state, "'%s' found where 1.0 or 2.0 expected",
                   version);
+
+    // Make sure that if a format was specified previously, it is the same
+    if ((new_decl_format != null) && (new_df != new_decl_format))
+      decl_error (state, "decl format '%s' does not match previous setting",
+                  version);
+
+    new_decl_format = new Boolean (new_df);
   }
 
   // Each line following is the name (in JVM form) of a class that
@@ -1280,8 +1288,6 @@ public final class FileIO {
                          ? " " + Daikon.ppt_omit_regexp.pattern() : ""));
     }
 
-    new_decl_format = false;
-
     data_trace_state = new ParseState(filename, is_decl_file, ppts_are_new,
                                       all_ppts);
 
@@ -1374,6 +1380,29 @@ public final class FileIO {
 
       // interning bugfix:  no need to intern "line" (after code change to is_declaration_header)
 
+      // Check for the file format
+      if (line.startsWith ("decl-version")) {
+        read_decl_version (state, line);
+        state.payload = (new_decl_format ? "2.0" : "1.0");
+        state.status = ParseStatus.DECL_VERSION;
+        return;
+      }
+
+      // Check for the input language
+      if (line.startsWith ("input-language")) {
+        String input_language = read_input_language (state, line);
+        state.payload = input_language;
+        state.status = ParseStatus.INPUT_LANGUAGE;
+        return;
+      }
+
+      // If we have gotten to here and new_decl_format is not set, presume
+      // it is the old format
+      if (new_decl_format == null) {
+        // System.out.printf ("setting new_decl_format to false%n");
+        new_decl_format = new Boolean (false);
+      }
+
       // First look for declarations in the dtrace stream
       if (is_declaration_header (line)) {
         if (new_decl_format)
@@ -1399,18 +1428,6 @@ public final class FileIO {
           || line.startsWith ("var-comparability")) {
         state.varcomp_format = read_var_comparability (state, line);
         state.status = ParseStatus.COMPARABILITY;
-        return;
-      }
-      if (line.startsWith ("input-language")) {
-        String input_language = read_input_language (state, line);
-        state.payload = input_language;
-        state.status = ParseStatus.INPUT_LANGUAGE;
-        return;
-      }
-      if (line.startsWith ("decl-version")) {
-        read_decl_version (state, line);
-        state.payload = (new_decl_format ? "2.0" : "1.0");
-        state.status = ParseStatus.DECL_VERSION;
         return;
       }
       if (line.equals("ListImplementors")) {
@@ -2307,8 +2324,11 @@ public final class FileIO {
           Configuration.getInstance().overlap(record.config);
         }
         FileIO.new_decl_format = record.new_decl_format;
+        // System.err.printf ("Setting FileIO.new_decl_format to %b%n",
+        //                   FileIO.new_decl_format);
         return (record.map);
       } else if (obj instanceof InvMap) {
+        // System.err.printf ("Restoring an InvMap%n");
         InvMap invs = (InvMap) obj;
         PptMap ppts = new PptMap();
         for (Iterator<PptTopLevel> i = invs.pptIterator(); i.hasNext();) {
