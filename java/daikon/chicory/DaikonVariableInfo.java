@@ -40,7 +40,7 @@ public abstract class DaikonVariableInfo
     protected final boolean isArray;
 
     /** Print debug information about the variables **/
-    static boolean debug_vars = false;
+    static SimpleLog debug_vars = new SimpleLog (false);
 
     private static SimpleLog debug_array = new SimpleLog (true);
 
@@ -158,8 +158,7 @@ public abstract class DaikonVariableInfo
         assert info.repTypeName != null : "Child's representation type name should not be null";
         assert info.compareInfoString != null : "Child's comparability information should not be null";
 
-        if (debug_vars)
-            System.out.printf ("Adding %s to %s\n", info, this);
+        debug_vars.log ("Adding %s to %s\n", info, this);
         children.add(info);
     }
 
@@ -416,12 +415,14 @@ public abstract class DaikonVariableInfo
                 continue;
             if (type.getName().equals ("java.lang.DCompMarker"))
                 continue;
+            debug_vars.indent ("processing parameter '%s'%n", name);
             DaikonVariableInfo theChild = addDeclVar(cinfo, type,
                                          name, offset, depth, i, param_offset);
             param_offset++;
             if ((type == Double.TYPE) || (type == Long.TYPE))
                 param_offset++;
             theChild.addChildNodes(cinfo, type, name, offset, depth);
+            debug_vars.exdent();
         }
     }
 
@@ -468,10 +469,9 @@ public abstract class DaikonVariableInfo
         // if (fields.length > 50)
         //    System.out.printf ("%d fields in %s%n", fields.length, type);
 
-        if (debug_vars)
-            System.out.printf ("%s: [%s] %d dontPrintInstanceVars = %b, "
-                               + "inArray = %b%n", type, offset, fields.length,
-                               dontPrintInstanceVars, isArray);
+        debug_vars.log ("%s: [%s] %d dontPrintInstanceVars = %b, "
+                        + "inArray = %b%n", type, offset, fields.length,
+                        dontPrintInstanceVars, isArray);
 
 
         for (int i = 0; i < fields.length; i++)
@@ -484,14 +484,13 @@ public abstract class DaikonVariableInfo
             if (skip_synthetic && classField.isSynthetic())
                 continue;
 
-            if (debug_vars)
-                System.out.printf ("considering field %s%n", classField);
+            debug_vars.log ("considering field %s -> %s%n", offset,
+                            classField);
 
             if (!is_static && dontPrintInstanceVars)
             {
-                if (debug_vars)
-                    System.out.printf ("--field !static and instance var %b%n",
-                                   dontPrintInstanceVars);
+                debug_vars.log ("--field !static and instance var %b%n",
+                                dontPrintInstanceVars);
                 continue;
             }
 
@@ -512,8 +511,7 @@ public abstract class DaikonVariableInfo
             // Don't print arrays of the same static field
             if (is_static && isArray)
             {
-                if (debug_vars)
-                    System.out.printf ("--field static and inArray%n");
+                debug_vars.log ("--field static and inArray%n");
                 continue;
             }
 
@@ -521,18 +519,17 @@ public abstract class DaikonVariableInfo
             if (is_static) {
                 String full_name = classField.getDeclaringClass().getName()
                     + "." + classField.getName();
-                if (ppt_statics.contains (full_name)) {
-                    if (debug_vars)
-                        System.out.println ("already printed static "
-                                            + full_name);
+                if (ppt_statics.contains (full_name) && (depth <= 0)) {
+                    debug_vars.log ("already included static %s (no children)",
+                                    full_name);
+
                     continue;
                 }
             }
 
             if (!isFieldVisible (cinfo.clazz, classField))
             {
-                if (debug_vars)
-                    System.out.printf ("--field not visible%n");
+                debug_vars.log ("--field not visible%n");
                 continue;
             }
 
@@ -541,12 +538,12 @@ public abstract class DaikonVariableInfo
             StringBuffer buf = new StringBuffer();
             DaikonVariableInfo newChild = thisInfo.addDeclVar(classField, offset, buf);
 
-            if (debug_vars)
-                System.out.printf ("--Created DaikonVariable %s%n", newChild);
+            debug_vars.indent ("--Created DaikonVariable %s%n", newChild);
 
             String newOffset = buf.toString();
             newChild.addChildNodes(cinfo, fieldType, classField.getName(),
                           newOffset, depth);
+            debug_vars.exdent();
         }
 
 
@@ -581,9 +578,11 @@ public abstract class DaikonVariableInfo
                                 cinfo, meth, offset, depth,
                                 buf);
                         String newOffset = buf.toString();
+                        debug_vars.indent ("Pure method");
                         newChild.addChildNodes(cinfo, ((Method) meth.member)
                                 .getReturnType(), meth.member
                                 .getName(), newOffset, depth);
+                        debug_vars.exdent();
 
                     }
                 }
@@ -611,7 +610,9 @@ public abstract class DaikonVariableInfo
 
         addChild(newChild);
 
-        newChild.checkForDerivedVariables(type, name, offset);
+        boolean ignore = newChild.check_for_dup_names();
+        if (!ignore)
+            newChild.checkForDerivedVariables(type, name, offset);
 
         return newChild;
     }
@@ -702,17 +703,9 @@ public abstract class DaikonVariableInfo
         String theName = field.getName();
         int modifiers = field.getModifiers();
 
-        if (Modifier.isStatic(modifiers))
-        {
+        if (Modifier.isStatic(modifiers)) {
             offset = field.getDeclaringClass().getName() + ".";
-            ppt_statics.add (offset + theName);
-            if (debug_vars)
-                System.out.printf (" added static var %s to list%n",
-                                   offset + theName);
-        }
-        // instance field, first recursion step
-        else if (offset.length() == 0)
-        {
+        } else if (offset.length() == 0) {// instance fld, 1st recursion step
             offset = "this.";
         }
 
@@ -723,6 +716,7 @@ public abstract class DaikonVariableInfo
 
         DaikonVariableInfo newField = new FieldInfo(offset + theName, field,
                                                     isArray);
+        boolean ignore = newField.check_for_dup_names();
 
         newField.typeName = type_name;
         newField.repTypeName = getRepName(type, false) + arr_str;
@@ -774,7 +768,8 @@ public abstract class DaikonVariableInfo
 
         addChild(newField);
 
-        newField.checkForDerivedVariables(type, theName, offset);
+        if (!ignore)
+            newField.checkForDerivedVariables(type, theName, offset);
 
         buf.append(offset);
 
@@ -994,24 +989,28 @@ public abstract class DaikonVariableInfo
        // System.out.printf ("checking %s %sto for list implementation = %b%n",
        //                    type, theName, implementsList (type));
 
-       if (implementsList(type))
-       {
+       if (implementsList(type)) {
            @SuppressWarnings("unchecked")
-           DaikonVariableInfo child = new ListInfo(offset + theName + "[]", (Class<? extends List<?>>)type);
+           DaikonVariableInfo child = new ListInfo(offset + theName + "[]",
+                                              (Class<? extends List<?>>)type);
 
            child.typeName = type.getName();
            child.repTypeName = "hashcode[]";
 
            addChild(child);
 
+           boolean ignore = child.check_for_dup_names();
+
            // .getClass() var
-           DaikonVariableInfo childClass = new DaikonClassInfo(offset
-               + theName + "[]" + class_suffix, true);
+           if (!ignore) {
+               DaikonVariableInfo childClass
+                   = new DaikonClassInfo(offset + theName + "[]" + class_suffix, true);
 
-           childClass.typeName = classClassName + "[]";
-           childClass.repTypeName = stringClassName + "[]" ;
+               childClass.typeName = classClassName + "[]";
+               childClass.repTypeName = stringClassName + "[]" ;
 
-           child.addChild(childClass);
+               child.addChild(childClass);
+           }
        }
    }
 
@@ -1123,6 +1122,8 @@ public abstract class DaikonVariableInfo
                newChild.typeName = arrayType.getName() + "[]";
                newChild.repTypeName = getRepName(arrayType, true) + "[]";
 
+               newChild.check_for_dup_names();
+
                addChild(newChild);
            }
            // multi-dimensional arrays (not currently used)
@@ -1133,10 +1134,13 @@ public abstract class DaikonVariableInfo
 
                newChild.typeName = arrayType.getName() + "[]";
                newChild.repTypeName = getRepName(arrayType, true) + "[]";
+               newChild.check_for_dup_names();
 
                addChild(newChild);
 
+               debug_vars.indent ("Array variable");
                newChild.addChildNodes(cinfo, arrayType, "", offset + theName + "[]", depthRemaining);
+               debug_vars.exdent();
            }
            // array is 1-dimensional and element type is a regular class
            else
@@ -1146,6 +1150,7 @@ public abstract class DaikonVariableInfo
 
                newChild.typeName = arrayType.getName() + "[]";
                newChild.repTypeName = getRepName(arrayType, true) + "[]";
+               boolean ignore = newChild.check_for_dup_names();
 
                addChild(newChild);
 
@@ -1154,20 +1159,22 @@ public abstract class DaikonVariableInfo
                // or parameters.
                // The offset will only be equal to ""
                // if we are examining a local variable (parameter).
-               if (!theName.equals ("return") && !offset.equals (""))
-                 newChild.checkForRuntimeClass (type, theName + "[]", offset);
+               if (!ignore) {
+                   if (!theName.equals ("return") && !offset.equals (""))
+                       newChild.checkForRuntimeClass (type, theName + "[]",
+                                                      offset);
 
-
-               newChild.checkForString(arrayType, theName + "[]", offset);
-               newChild.addClassVars(cinfo, false, arrayType, offset + theName + "[].", depthRemaining - 1);
+                   newChild.checkForString(arrayType, theName + "[]", offset);
+               }
+               newChild.addClassVars(cinfo, false, arrayType,
+                               offset + theName + "[].", depthRemaining - 1);
 
            }
        }
        // regular old class type
        else
        {
-           if (debug_vars)
-               System.out.printf ("**Depth Remaining = %d%n", depthRemaining);
+           debug_vars.log ("**Depth Remaining = %d%n", depthRemaining);
 
            if (depthRemaining <= 0)
            {
@@ -1319,14 +1326,6 @@ public abstract class DaikonVariableInfo
         return null;
     }
 
-    /** Returns whether or not this is a static variable.  **/
-    public boolean isStatic() {
-        if (this instanceof FieldInfo)
-            return ((FieldInfo)this).isStatic();
-        else
-            return (false);
-    }
-
     /** Empty set of variable flags **/
     private static EnumSet<VarFlags> empty_var_flags
         = EnumSet.noneOf (VarFlags.class);
@@ -1337,5 +1336,35 @@ public abstract class DaikonVariableInfo
      */
     public EnumSet<VarFlags> get_var_flags() {
         return empty_var_flags;
+    }
+
+    /**
+     * Returns true iff the variable is static.  Overridden by subclasses that can
+     * be static
+     */
+    public boolean isStatic() {
+        return false;
+    }
+
+    /**
+     * If the variable name has been seen before (which can happen with statics
+     * and children of statics, set the flags so that the variable is not considered
+     * for decl or dtrace and return true.  Otherwise, do nothing and return false
+     */
+    private boolean check_for_dup_names () {
+
+        if (ppt_statics.contains (name)) {
+            debug_vars.log ("ignoring already included variable %s [%s]",
+                            name, getClass());
+            if (false && !isStatic())
+                System.out.printf ("ignoring already included variable %s [%s]\n",
+                                   name, getClass());
+            declShouldPrint = false;
+            dtraceShouldPrint = false;
+            return true;
+        } else { // new variable
+            ppt_statics.add (name);
+            return false;
+        }
     }
 }
