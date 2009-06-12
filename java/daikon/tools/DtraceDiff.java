@@ -220,7 +220,7 @@ public class DtraceDiff {
                                  String dtracefile2) {
 
     // System.out.printf ("dtrace files = %s, %s\n", dtracefile1, dtracefile2);
-    FileIO.new_decl_format = false;
+    FileIO.new_decl_format = null;
 
     try {
       Map<PptTopLevel,PptTopLevel> pptmap = new HashMap<PptTopLevel,PptTopLevel>();  // map ppts1 -> ppts2
