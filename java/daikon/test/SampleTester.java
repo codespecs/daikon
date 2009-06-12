@@ -139,6 +139,8 @@ public class SampleTester extends TestCase {
    **/
   public void test_samples () throws IOException {
 
+    FileIO.new_decl_format = null;
+
     InputStream commands
       = getClass().getResourceAsStream("SampleTester.commands");
     if (commands == null)
