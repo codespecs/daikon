@@ -1448,7 +1448,9 @@ public final class DCRuntime {
     if (dv instanceof FieldInfo)
       tag = get_field_tag ((FieldInfo) dv, parent, obj);
 
-    if (dv.isArray() && (tag instanceof List<?>)) {
+    if (!dv.declShouldPrint()) {
+      ; // do nothing
+    } else if (dv.isArray() && (tag instanceof List<?>)) {
       @SuppressWarnings("unchecked")
       List<Object> elements = (List<Object>)tag;
       if (debug_timing.enabled())
@@ -1606,7 +1608,9 @@ public final class DCRuntime {
     if (dv instanceof FieldInfo)
       tag = get_field_tag_refs_only ((FieldInfo) dv, parent, obj);
 
-    if (dv.isArray() && (tag instanceof List<?>)) {
+    if (!dv.declShouldPrint()) {
+      ; // do nothing
+    } else if (dv.isArray() && (tag instanceof List<?>)) {
       @SuppressWarnings("unchecked")
       List<Object> elements = (List<Object>)tag;
       if (debug_timing.enabled())
@@ -1858,6 +1862,8 @@ public final class DCRuntime {
     for (DaikonVariableInfo dv : dv_list) {
       if (dv instanceof RootInfo)
         continue;
+      if (!dv.declShouldPrint())
+        continue;
       // System.out.printf ("      processing dv %s [%s]%n", dv,
       //                    dv.getTypeName());
       if (dv.isHashcode())
@@ -2065,7 +2071,8 @@ public final class DCRuntime {
     List<DaikonVariableInfo> dv_list = dv_tree.tree_as_list();
     time_decl.log_time ("built tree as list with %d elements", dv_list.size());
     for (DaikonVariableInfo dv : dv_list) {
-      if ((dv instanceof RootInfo) || (dv instanceof StaticObjInfo))
+      if ((dv instanceof RootInfo) || (dv instanceof StaticObjInfo)
+          || !dv.declShouldPrint())
         continue;
       ps.println(dv.getName());
       ps.println (dv.getTypeName());
@@ -2322,8 +2329,9 @@ public final class DCRuntime {
     Map<DaikonVariableInfo,DVSet> sets
       = new IdentityHashMap<DaikonVariableInfo, DVSet>();
 
-    for (DaikonVariableInfo dv : root)
-      add_variable (sets, dv);
+    for (DaikonVariableInfo dv : root) {
+        add_variable (sets, dv);
+    }
 
     // Get each set, sort it, and add it to the list of all sets.  The sort
     // the list of all sets.  The sorting is not critical except to create
@@ -2356,7 +2364,10 @@ public final class DCRuntime {
     Map<DaikonVariableInfo, DVSet> sets
       = new IdentityHashMap<DaikonVariableInfo, DVSet>();
 
-    for (DaikonVariableInfo child : root) add_variable_traced(sets, child);
+    for (DaikonVariableInfo child : root) {
+      if (child.declShouldPrint())
+        add_variable_traced(sets, child);
+    }
     for (DVSet dvs : sets.values()) dvs.sort();
 
     return sets;
@@ -2490,13 +2501,15 @@ public final class DCRuntime {
                             DaikonVariableInfo dv) {
 
     // Add this variable into the set of its leader
-    DaikonVariableInfo leader = (DaikonVariableInfo) TagEntry.find (dv);
-    DVSet set = sets.get (leader);
-    if (set == null) {
-      set = new DVSet();
-      sets.put (leader, set);
+    if (dv.declShouldPrint()) {
+      DaikonVariableInfo leader = (DaikonVariableInfo) TagEntry.find (dv);
+      DVSet set = sets.get (leader);
+      if (set == null) {
+        set = new DVSet();
+        sets.put (leader, set);
+      }
+      set.add (dv);
     }
-    set.add (dv);
 
     // Process the children
     for (DaikonVariableInfo child : dv)
