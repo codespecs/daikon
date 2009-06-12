@@ -898,7 +898,7 @@ junit:
 	@echo java daikon.test.MasterUnitTester
 	@#jhp 9/19/07: not clear why this needs classpath specified.
 	@#It doesn't work on windows that way for me.
-	@${JAVA} -classpath .:${CLASSPATH}:daikon/test/ daikon.test.MasterUnitTester
+	@${JAVA} daikon.test.MasterUnitTester
 
 junit-all: junit
 	@# Alternately, MasterUnitTester could run SplitterFactoryTest,
