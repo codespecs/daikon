@@ -32,9 +32,10 @@ public class RootInfo extends DaikonVariableInfo
     {
         RootInfo root = new RootInfo();
 
-        // debug_vars = mi.toString().contains ("Infer.instance");
-        if (debug_vars)
-            System.out.printf ("building enter tree for %s%n", mi);
+        // System.out.println ("Entering method " + mi);
+        // debug_vars.enabled = mi.toString().contains ("Job.<init>");
+
+        debug_vars.clear ("building enter tree for %s%n", mi);
 
         // Don't build a tree for class initializers.
         if (mi.is_class_init())
@@ -69,9 +70,9 @@ public class RootInfo extends DaikonVariableInfo
     {
         RootInfo root = new RootInfo();
 
-        // debug_vars = mi.toString().contains ("Infer.instance");
-        if (debug_vars)
-            System.out.printf ("building exit tree for %s%n", mi);
+        // debug_vars.enabled = mi.toString().contains ("Job.<init>");
+
+        debug_vars.clear ("building exit tree for %s%n", mi);
 
         // Don't build a tree for class initializers.
         if (mi.is_class_init())

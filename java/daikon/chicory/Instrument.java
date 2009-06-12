@@ -249,9 +249,10 @@ public class Instrument implements ClassFileTransformer {
       if (debug)
         njc.dump ("/tmp/ret/" + njc.getClassName() + ".class");
 
-      if (c_info.shouldInclude)
+      if (c_info.shouldInclude) {
+        // System.out.println ("Instrumented class " + className);
         return (cg.getJavaClass().getBytes());
-      else {
+      } else {
         debug_transform.log ("not including class %s (filtered out)",
                              className);
         return null;
