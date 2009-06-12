@@ -18,7 +18,7 @@ public class InvMap implements Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
   // remove fields, you should change this number to the current date.
-  static final long serialVersionUID = 20020301L;
+  static final long serialVersionUID = 20090612L;
 
   private Map<PptTopLevel,List<Invariant>> pptToInvs = new HashMap<PptTopLevel,List<Invariant>>();
   // The purpose of this field is apparently to permit the ppts to be
@@ -100,6 +100,22 @@ public class InvMap implements Serializable {
     int size2 = pptToInvs.size();
     Assert.assertTrue(size1 == size2);
     return size1;
+  }
+
+  /** Include FileIO.new_decl_format in the stream **/
+  private void writeObject(ObjectOutputStream oos)
+      throws IOException {
+    oos.defaultWriteObject();
+    oos.writeObject(FileIO.new_decl_format);
+  }
+
+  /** Serialize pptmap and FileIO.new_decl_format **/
+  private void readObject(ObjectInputStream ois)
+      throws ClassNotFoundException, IOException {
+    ois.defaultReadObject();
+    FileIO.new_decl_format = (Boolean) ois.readObject();
+    // System.out.printf ("Restoring new_decl_format to %b%n",
+    //                   FileIO.new_decl_format);
   }
 
 }
