@@ -177,8 +177,7 @@ public class DeclWriter extends DaikonWriter {
     private void traverseDecl(DaikonVariableInfo curInfo,
                               DeclReader.DeclPpt decl_ppt)
     {
-        if (!curInfo.declShouldPrint())
-            return;
+      if (curInfo.declShouldPrint()) {
 
         if (!(curInfo instanceof StaticObjInfo)) {
           outFile.println(curInfo.getName());
@@ -193,13 +192,13 @@ public class DeclWriter extends DaikonWriter {
           }
           outFile.println(comp_str);
         }
+      }
 
-        // Go through all of the current node's children
-        // and recurse
-        for (DaikonVariableInfo child : curInfo)
-        {
-            traverseDecl(child, decl_ppt);
-        }
+      // Go through all of the current node's children
+      // and recurse
+      for (DaikonVariableInfo child : curInfo) {
+        traverseDecl(child, decl_ppt);
+      }
 
     }
 
@@ -499,10 +498,9 @@ public class DeclWriter extends DaikonWriter {
                                 List<VarRelation> relations,
                                 DeclReader.DeclPpt compare_ppt) {
 
-      if (!var.declShouldPrint())
-        return;
-
-      if (!(var instanceof StaticObjInfo)) {
+      if (!var.declShouldPrint()) {
+        ; // don't do anything
+      } else if (!(var instanceof StaticObjInfo)) {
 
         // Write out the variable and its name
         outFile.println ("  variable " + escape (var.getName()));
