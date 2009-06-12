@@ -443,6 +443,10 @@ public final class Daikon {
     //    public TerminationMessage(Exception e) {
     //      super(e.getMessage() + lineSep + UtilMDE.backTrace(e)); }
 
+    public TerminationMessage (Exception e, String msg) {
+      super (msg + ": " + e.getMessage());
+    }
+
     public TerminationMessage (Throwable e, String msg, LineNumberReader reader,
                                String filename) {
       super ("Error at line " + reader.getLineNumber() + " in file "
@@ -1471,8 +1475,11 @@ public final class Daikon {
         // vars instead of taking the first n.
         int len = ppt.num_tracevars + ppt.num_static_constant_vars;
         VarInfo[] exit_vars = new VarInfo[len];
+        // System.out.printf ("new decl fmt = %b%n", FileIO.new_decl_format);
         for (int j = 0; j < len; j++) {
           exit_vars[j] = new VarInfo(ppt.var_infos[j]);
+          // System.out.printf ("exitNN name '%s', exit name '%s'%n",
+          //                   ppt.var_infos[j].name(), exit_vars[j].name());
           exit_vars[j].varinfo_index = ppt.var_infos[j].varinfo_index;
           exit_vars[j].value_index = ppt.var_infos[j].value_index;
           exit_vars[j].equalitySet = null;
@@ -1614,7 +1621,7 @@ public final class Daikon {
     } catch (IOException e) {
       // System.out.println();
       // e.printStackTrace();
-      throw new Daikon.TerminationMessage("Error parsing decl file", e);
+      throw new Daikon.TerminationMessage(e, "Error parsing decl file");
     } finally {
       debugProgress.fine(
         "Time spent on read_declaration_files: " + stopwatch.format());
