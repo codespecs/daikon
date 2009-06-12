@@ -114,7 +114,8 @@ public class Runtime
     }
 
     /** Stack of active methods. **/
-    private static Stack<CallInfo> callstack = new Stack<CallInfo>();
+    private static Map<Thread,Stack<CallInfo>> thread_to_callstack
+        = new LinkedHashMap<Thread,Stack<CallInfo>>();
 
   /**
    * Sample count at a call site to begin sampling.  All previous calls
@@ -248,6 +249,12 @@ public class Runtime
             capture = (mi.call_cnt % 1000) == 0;
           else
             capture = (mi.call_cnt % 10000) == 0;
+          Thread t = Thread.currentThread();
+          Stack<CallInfo> callstack = thread_to_callstack.get (t);
+          if (callstack == null) {
+              callstack = new Stack<CallInfo>();
+              thread_to_callstack.put (t, callstack);
+          }
           callstack.push (new CallInfo (nonce, capture));
         }
 
@@ -303,11 +310,20 @@ public class Runtime
 
         // Skip this call if it was not sampled at entry to the method
         if (sample_start > 0) {
-          CallInfo ci = callstack.pop();
-          while (ci.nonce != nonce)
+          CallInfo ci = null;
+          Stack<CallInfo> callstack
+              = thread_to_callstack.get (Thread.currentThread());
+          while (!callstack.empty()) {
             ci = callstack.pop();
-          if (!ci.captured)
+            if (ci.nonce == nonce)
+              break;
+          }
+          if (ci == null) {
+            System.out.printf ("no enter for exit %s%n", methods.get(mi_index));
             return;
+          } else if (!ci.captured) {
+            return;
+          }
         }
 
         // Write out the infromation for this method
@@ -399,7 +415,7 @@ public class Runtime
           break;
 
         if (debug)
-          System.out.printf ("processing class %s%n", class_info.class_name);
+          System.out.println ("processing class " + class_info.class_name);
         if (first_class) {
           decl_writer.printHeaderInfo (class_info.class_name);
           first_class = false;
