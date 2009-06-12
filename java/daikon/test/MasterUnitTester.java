@@ -5,6 +5,7 @@ import daikon.LogHelper;
 import junit.framework.*;
 import junit.textui.*;
 import utilMDE.*;
+import daikon.FileIO;
 
 /**
  * This class runs all the Daikon unit tests.  These tests are small, fast
@@ -15,6 +16,7 @@ import utilMDE.*;
 public class MasterUnitTester extends TestCase {
 
   public static void main(String[] args) {
+    FileIO.new_decl_format = new Boolean(true);
     TestRunner runner = new TestRunner();
     TestResult result = runner.doRun(suite(), false);
     if (! result.wasSuccessful()) {
