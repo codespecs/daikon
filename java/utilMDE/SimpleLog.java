@@ -143,6 +143,27 @@ public final class SimpleLog {
     }
   }
 
+  /**
+   * Clears indent and start times and then pushes one start time
+   */
+  public final void clear() {
+    if (enabled) {
+      indent_str = "";
+      start_times.clear();
+      push_start_time();
+    }
+  }
+
+  /**
+   * Calls clear() and then logs the specified message
+   */
+  public final void clear (String format, Object... args) {
+    if (enabled) {
+      clear();
+      log (format, args);
+    }
+  }
+
   public final void exdent() {
     if (enabled) {
       indent_str = indent_str.substring (0, indent_str.length()-indent_str_one_level.length());
