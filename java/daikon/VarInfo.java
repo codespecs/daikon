@@ -362,11 +362,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // Find and set the enclosing variable (if any)
     if (vardef.enclosing_var != null) {
       enclosing_var = ppt.find_var_by_name (vardef.enclosing_var);
-      if (enclosing_var == null)
+      if (enclosing_var == null) {
+        for (int i = 0; i < ppt.var_infos.length; i++)
+          System.out.printf ("var = '%s'%n", ppt.var_infos[i]);
         throw new RuntimeException
           (String.format("enclosing variable '%s' for variable '%s' "
                          + "in ppt '%s' cannot be found",
                          vardef.enclosing_var, vardef.name, ppt.name));
+      }
     }
 
     // Find all function arguments (if any)
