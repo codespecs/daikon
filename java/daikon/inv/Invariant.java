@@ -30,6 +30,7 @@ import java.io.Serializable;
  * variables a and b at PptTopLevel T, there will not be two instances
  * of invariant I(a, b).
  **/
+/*@PrototypeOrNot*/
 public abstract class Invariant
   implements Serializable, Cloneable // but don't YOU clone it
 {
