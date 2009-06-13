@@ -44,8 +44,12 @@ public class PptSplitter implements Serializable {
   /** PptTopLevel that contains this split. */
   private PptTopLevel parent;
 
-  /** Splitter that choses to which PptConditional a sample is applied. */
-  public transient Splitter splitter;
+  /**
+   * Splitter that choses to which PptConditional a sample is applied.  May
+   * be null if no computation is required (e.g., splitting over exit
+   * points).
+   */
+  public transient /*@Nullable*/ Splitter splitter;
 
   /**
    * PptConditionals for each splitter output.  ppts[0] is used
@@ -129,7 +133,7 @@ public class PptSplitter implements Serializable {
   /**
    * Chooses the correct conditional point based on the values in this sample.
    */
-  public PptConditional choose_conditional (ValueTuple vt) {
+  public /*@Nullable*/ PptConditional choose_conditional (ValueTuple vt) {
 
     boolean splitter_test;
     try {
@@ -428,7 +432,8 @@ public class PptSplitter implements Serializable {
     for (Invariant[] invs : exclusive_invs_vec) {
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (con_invs[jj] == null) {
-          Invariant orig = orig_invs.get (invs[jj]);
+          @SuppressWarnings("nullness")
+          /*@NonNull*/ Invariant orig = orig_invs.get (invs[jj]);
           if ((orig.isObvious() == null) && !orig.is_ni_suppressed())
             con_invs[jj] = invs[jj];
         }
@@ -564,21 +569,21 @@ public class PptSplitter implements Serializable {
    * possibly null).
    * All the arguments should be over the same program point.
    */
-  Vector<Invariant[]> different_invariants (Invariants invs1,
-                                            Invariants invs2) {
+  Vector</*@Nullable*/ Invariant[]> different_invariants (Invariants invs1,
+                                                          Invariants invs2) {
     SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
     ss1.addAll(invs1);
     SortedSet<Invariant> ss2 = new TreeSet<Invariant>(icfp);
     ss2.addAll(invs2);
-    Vector<Invariant[]> result = new Vector<Invariant[]>();
+    Vector</*@Nullable*/ Invariant[]> result = new Vector</*@Nullable*/ Invariant[]>();
     for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
                                     ss2.iterator(), icfp);
          opi.hasNext(); ) {
-      Pair<Invariant,Invariant> pair = opi.next();
+      Pair</*@Nullable*/ Invariant,/*@Nullable*/ Invariant> pair = opi.next();
       if ((pair.a == null) || (pair.b == null)
           // || (icfp.compare(pair.a, pair.b) != 0)
           ) {
-        result.add(new Invariant[] { pair.a, pair.b });
+        result.add(new /*@Nullable*/ Invariant[] { pair.a, pair.b });
       }
     }
     return result;
@@ -590,17 +595,17 @@ public class PptSplitter implements Serializable {
    * Result elements are Invariants (from the invs1 list)
    * All the arguments should be over the same program point.
    */
-  Vector<Invariant> same_invariants(Invariants invs1, Invariants invs2) {
+  Vector</*@Nullable*/ Invariant> same_invariants(Invariants invs1, Invariants invs2) {
 
     SortedSet<Invariant> ss1 = new TreeSet<Invariant>(icfp);
     ss1.addAll(invs1);
     SortedSet<Invariant> ss2 = new TreeSet<Invariant>(icfp);
     ss2.addAll(invs2);
-    Vector<Invariant> result = new Vector<Invariant>();
+    Vector</*@Nullable*/ Invariant> result = new Vector</*@Nullable*/ Invariant>();
     for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
                                     ss2.iterator(), icfp);
          opi.hasNext(); ) {
-      Pair<Invariant,Invariant> pair = opi.next();
+      Pair</*@Nullable*/ Invariant,/*@Nullable*/ Invariant> pair = opi.next();
       if (pair.a != null && pair.b != null) {
         Invariant inv1 = pair.a;
         Invariant inv2 = pair.b;
@@ -620,13 +625,13 @@ public class PptSplitter implements Serializable {
                                Invariant consequent, boolean iff,
                                Map<Invariant,Invariant> orig_invs) {
 
-    Assert.assertTrue (predicate != null);
-    Assert.assertTrue (consequent != null);
+    assert predicate != null;
+    assert consequent != null;
 
     Invariant orig_pred = orig_invs.get (predicate);
     Invariant orig_cons = orig_invs.get (consequent);
-    Assert.assertTrue (orig_pred != null);
-    Assert.assertTrue (orig_cons != null);
+    assert orig_pred != null;
+    assert orig_cons != null;
 
     // Don't add consequents that are obvious or suppressed.
     // JHP: Jan 2005: It might be better to create them anyway and
@@ -637,7 +642,7 @@ public class PptSplitter implements Serializable {
     // side.  This would have the pleasant side effect of not forcing
     // all of the suppressed invariants to be created before
     // determining implications.
-        if ((orig_cons.isObvious() != null) || orig_cons.is_ni_suppressed())
+    if ((orig_cons.isObvious() != null) || orig_cons.is_ni_suppressed())
       return;
 
 
