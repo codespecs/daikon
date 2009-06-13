@@ -4,7 +4,7 @@ package utilMDE;
  * Simple pair class.  Moved from OrderedPairIterator to its own
  * class, so it can be used in more places.
  **/
-public class Pair<T1,T2> {
+public class Pair<T1 extends /*@Nullable*/ Object,T2 extends /*@Nullable*/ Object> {
   public T1 a;
   public T2 b;
 
@@ -21,8 +21,10 @@ public class Pair<T1,T2> {
     if (obj instanceof Pair<?, ?>) { // generics are not checked at run time!
       @SuppressWarnings("unchecked")
       Pair<T1, T2> other = (Pair<T1, T2>) obj;
+      @SuppressWarnings("nullness") // due to problem with flow
       boolean aEquals = ((this.a == other.a)
                          || (this.a != null && (this.a.equals(other.a))));
+      @SuppressWarnings("nullness") // due to problem with flow
       boolean bEquals = ((this.b == other.b)
                          || (this.b != null && (this.b.equals(other.b))));
       return aEquals && bEquals;
