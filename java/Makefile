@@ -754,8 +754,10 @@ audit:
 
 # JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing
-JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype,typequals.PrototypeOrNot,typequals.PrototypeBottom -implicit:class -Xlint:-processing
+JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing
 JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
+JAVAC_PROTOTYPE_ARGS = -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype,typequals.PrototypeOrNot,typequals.PrototypeBottom -implicit:class -Xlint:-processing
+JAVAC_PROTOTYPE_STUBS = -Astubs typequals/jdk.astub
 JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker -implicit:class -Xlint:-processing
 JAVAC_JAVARI_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 JAVAC_IGJ_ARGS = -processor checkers.igj.IGJChecker -implicit:class -Xlint:-processing
@@ -801,6 +803,14 @@ check-nullness-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} co
 check-nullness-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${NULLNESS_JAVA_FILES}
+
+check-prototype: check-prototype-all
+
+check-prototype-all: check-prototype-all-withstubs
+
+check-prototype-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} compile-typequals
+	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ...
+	@${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${NULLNESS_JAVA_FILES}
 
 check-igj-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 	@echo ${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ...
