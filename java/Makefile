@@ -35,6 +35,9 @@ else
   endif
 endif
 
+# For debugging, uncomment this line
+# JAVAC ?= javac -verbose
+
 JAVAC ?= javac
 # When "javac" is a shall script (as it is in OpenJDK 7 when compiled via
 # "ant" as opposed to being downloaded from Sun), the "-J" flags are passed
@@ -58,7 +61,6 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 
 ### end of user customizations
 
-## This version uses -Xlint
 JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:typequals.*' ${JAVAC} -Xlint -J-Xmx1024m -classpath '${CHECKERSJAR}:${CLASSPATH}' ${JAVAC_ARGS}
 
 
@@ -757,7 +759,9 @@ JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-do
 JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing
 JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 JAVAC_PROTOTYPE_ARGS = -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype,typequals.PrototypeOrNot,typequals.PrototypeBottom -implicit:class -Xlint:-processing
-JAVAC_PROTOTYPE_STUBS = -Astubs typequals/jdk.astub
+# This stub file causes a crash as of 6/12/2009
+JAVAC_PROTOTYPE_STUBS = -Astubs=typequals/prototype-stubs.astub
+# JAVAC_PROTOTYPE_STUBS =
 JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker -implicit:class -Xlint:-processing
 JAVAC_JAVARI_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 JAVAC_IGJ_ARGS = -processor checkers.igj.IGJChecker -implicit:class -Xlint:-processing
