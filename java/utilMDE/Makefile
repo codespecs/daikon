@@ -28,9 +28,9 @@ AUTO_GENERATED_FILES := \
 	./MathMDE.java \
 	./LimitedSizeIntSet.java
 # Call to sort is to remove duplicates, which would cause javac errors.
-JAVA_FILES := $(sort $(shell find . \( -name CVS \) -prune -o -name '*.java' -print) ${AUTO_GENERATED_FILES})
-JAVA_LINT_FILES := $(shell find . \( -name CVS -o -name ArraysMDE.java -o -name WeakHasherMap.java -o -name Intern.java -o -name OrderedPairIterator.java -o -name WeakIdentityHashMap.java \) -prune -o -name '*.java' -print)
-JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -print)
+JAVA_FILES := $(sort $(shell find . \( -name CVS \) -prune -o -name '*.java' -print | sort) ${AUTO_GENERATED_FILES})
+JAVA_LINT_FILES := $(shell find . \( -name CVS -o -name ArraysMDE.java -o -name WeakHasherMap.java -o -name Intern.java -o -name OrderedPairIterator.java -o -name WeakIdentityHashMap.java \) -prune -o -name '*.java' -print | sort)
+JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -print | sort)
 ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
 # Using ALL_JAVA_FILES isn't quite right, since it includes .class files for helper .jpp files.
 ALL_CLASS_FILES := ${JAVA_FILES:.java=.class}
