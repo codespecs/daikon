@@ -311,7 +311,7 @@ class FormatTestCase {
    * @return the actual result String represented by the goal statement or
    *          null if the String isn't actually a goal statement
    **/
-  static String parseGoal(String goalString) {
+  static /*@Nullable*/ String parseGoal(String goalString) {
     if (goalString.startsWith(GOAL_PREFIX)) {
       return goalString.substring(GOAL_PREFIX.length(),goalString.length());
     }
@@ -360,7 +360,7 @@ class FormatTestCase {
    *        is desired
    * @return a new FormatTestCase instance
    **/
-  public static FormatTestCase instantiate(LineNumberReader commands, boolean generateGoals) {
+  public static /*@Nullable*/ FormatTestCase instantiate(LineNumberReader commands, boolean generateGoals) {
     List<SingleOutputTestCase> testCases = new Vector<SingleOutputTestCase>();
 
     // The first line contains the class and its instantiate args

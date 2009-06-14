@@ -20,8 +20,7 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
    * derived variables, per type of derivation.  Can also be null if the
    * variables have nothing to derive from.
    **/
-  public abstract TernaryDerivation[] instantiate(VarInfo vi1, VarInfo vi2,
-                                                  VarInfo vi3);
+  public abstract TernaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi1, VarInfo vi2, VarInfo vi3);
 
 
   /**

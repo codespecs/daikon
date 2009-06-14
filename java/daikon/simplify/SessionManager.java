@@ -171,7 +171,7 @@ public class SessionManager
     private SessionManager mgr = SessionManager.this; // just sugar
 
     /** The associated session, or null if the thread should shutdown. */
-    private Session session = new Session();
+    private /*@Nullable*/ Session session = new Session();
 
     private boolean finished = false;
 

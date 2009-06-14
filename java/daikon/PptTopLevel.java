@@ -1521,18 +1521,18 @@ public class PptTopLevel extends Ppt {
 
   /**
    * Returns the unary slice over v.  Returns null if the slice doesn't
-   * exist (which can occur if all of its invariants were falsified)
+   * exist (which can occur if all of its invariants were falsified).
    **/
-  public PptSlice1 findSlice(VarInfo v) {
+  public /*@Nullable*/ PptSlice1 findSlice(VarInfo v) {
     return (PptSlice1)findSlice(new VarInfo [] {v});
   }
 
   /**
    * Returns the binary slice over v1 and v2.  Returns null if the
    * slice doesn't exist (which can occur if all of its invariants
-   * were falsified)
+   * were falsified).
    **/
-  public PptSlice2 findSlice(VarInfo v1, VarInfo v2) {
+  public /*@Nullable*/ PptSlice2 findSlice(VarInfo v1, VarInfo v2) {
     Assert.assertTrue(v1.varinfo_index <= v2.varinfo_index);
     return (PptSlice2)findSlice(new VarInfo [] {v1, v2});
   }
@@ -1553,9 +1553,9 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns the ternary slice over v1, v2, and v3.  Returns null if
    * the slice doesn't exist (which can occur if all of its invariants
-   * were falsified)
+   * were falsified).
    **/
-  public PptSlice3 findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
+  public /*@Nullable*/ PptSlice3 findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
     Assert.assertTrue(v1.varinfo_index <= v2.varinfo_index);
     Assert.assertTrue(v2.varinfo_index <= v3.varinfo_index);
     return (PptSlice3)findSlice(new VarInfo [] {v1, v2, v3});
@@ -1617,7 +1617,7 @@ public class PptTopLevel extends Ppt {
    * specified class.  If the slice or the invariant does not exist, returns
    * null.
    */
-  public Invariant find_inv_by_class(VarInfo[] vis, Class<? extends Invariant> cls) {
+  public /*@Nullable*/ Invariant find_inv_by_class(VarInfo[] vis, Class<? extends Invariant> cls) {
 
     PptSlice slice = findSlice(vis);
     if (slice == null)
@@ -1636,7 +1636,7 @@ public class PptTopLevel extends Ppt {
    * @return list of matching invariants or null if no matching
    *         invariants are found
    */
-  public List<Invariant> find_assignment_inv (VarInfo v) {
+  public /*@Nullable*/ List<Invariant> find_assignment_inv (VarInfo v) {
 
     List<Invariant> assignment_invs = null;
 
@@ -1706,9 +1706,9 @@ public class PptTopLevel extends Ppt {
   /**
    * If the prototype invariant is true over the specified variable returns
    * DiscardInfo indicating that the prototype invariant implies imp_inv.
-   * Otherwise returns null
+   * Otherwise returns null.
    */
-  public DiscardInfo check_implied(
+  public /*@Nullable*/ DiscardInfo check_implied(
     Invariant imp_inv,
     VarInfo v,
     /*@Prototype*/ Invariant proto) {
@@ -1737,9 +1737,9 @@ public class PptTopLevel extends Ppt {
   /**
    * If the proto invariant is true over the leader of the specified
    * variable returns DiscardInfo indicating that the proto invariant
-   * implies imp_inv.  Otherwise returns null
+   * implies imp_inv.  Otherwise returns null.
    */
-  public DiscardInfo check_implied_canonical(
+  public /*@Nullable*/ DiscardInfo check_implied_canonical(
     Invariant imp_inv,
     VarInfo v,
     /*@Prototype*/ Invariant proto) {
@@ -1760,9 +1760,9 @@ public class PptTopLevel extends Ppt {
   /**
    * If the prototype invariant is true over the specified variables returns
    * DiscardInfo indicating that the prototype invariant implies imp_inv.
-   * Otherwise returns null
+   * Otherwise returns null.
    */
-  public DiscardInfo check_implied(
+  public /*@Nullable*/ DiscardInfo check_implied(
     Invariant imp_inv,
     VarInfo v1,
     VarInfo v2,
@@ -1812,7 +1812,7 @@ public class PptTopLevel extends Ppt {
    * variables returns DiscardInfo indicating that the prototype invariant
    * implies imp_inv.  Otherwise returns null.
    */
-  public DiscardInfo check_implied_canonical(
+  public /*@Nullable*/ DiscardInfo check_implied_canonical(
     Invariant imp_inv,
     VarInfo v1,
     VarInfo v2,
@@ -3318,7 +3318,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Debug method to print children (in the partial order) recursively.
    */
-  public void debug_print_tree(Logger l, int indent, PptRelation parent_rel) {
+  public void debug_print_tree(Logger l, int indent, /*@Nullable*/ PptRelation parent_rel) {
 
     // Calculate the indentation
     String indent_str = "";
@@ -3847,7 +3847,7 @@ public class PptTopLevel extends Ppt {
    * child are the union of those true at A and B at the
    * parent.
    */
-  public VarInfo[] parent_vis(PptRelation rel, PptSlice slice) {
+  public VarInfo /*@Nullable*/ [] parent_vis(PptRelation rel, PptSlice slice) {
 
     VarInfo[] pvis = new VarInfo[slice.var_infos.length];
     for (int j = 0; j < slice.var_infos.length; j++) {

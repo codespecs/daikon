@@ -1236,9 +1236,9 @@ public abstract class DaikonVariableInfo
     /**
      * Returns the constant value of the variable.  If the variable is not
      * static and final, or if the constant value is not available in the
-     * class file, returns null
+     * class file, returns null.
      */
-    public String get_const_val() {
+    public /*@Nullable*/ String get_const_val() {
         return const_val;
     }
 
@@ -1288,7 +1288,7 @@ public abstract class DaikonVariableInfo
     }
 
     /** Returns the direct child that is an array, null if one does not exist **/
-    public DaikonVariableInfo array_child() {
+    public /*@Nullable*/ DaikonVariableInfo array_child() {
         for (DaikonVariableInfo dv : children) {
             if (dv.isArray())
                 return dv;

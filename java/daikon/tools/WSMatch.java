@@ -333,9 +333,9 @@ public class WSMatch {
      * Look for a substitution given a primary match.  A valid
      * substitution requires that all input parameters match and that
      * one or more output parameters match.  Returns the substitution if
-     * it is valid, otherwise returns null
+     * it is valid, otherwise returns null.
      */
-    public static Substitution check_substitution (MatchInfo primary) {
+    public static /*@Nullable*/ Substitution check_substitution (MatchInfo primary) {
 
       Substitution s = new Substitution (primary);
       if (s.is_valid())

@@ -92,7 +92,7 @@ public abstract class Ppt
    * Returns the VarInfo with the specified name.  Null if the name is
    * not found
    */
-  public VarInfo find_var_by_name(String varname) {
+  public /*@Nullable*/ VarInfo find_var_by_name(String varname) {
     int i = indexOf(varname);
     if (i == -1) {
       if (varname.contains ("[]"))

@@ -35,7 +35,7 @@ import java.util.*;
  * For example, "a" is a name, and "sin(a)" is a name that is the name
  * "a" with the function "sin" applied to it.
  **/
-@SuppressWarnings("interning")
+@SuppressWarnings({"nullness","interning"})
 public abstract /*@Interned*/ class VarInfoName
   implements Serializable, Comparable<VarInfoName>
 {
@@ -2186,7 +2186,7 @@ public abstract /*@Interned*/ class VarInfoName
      * Returns the part of root that is contained in this.goals, or
      * null if not found.
      **/
-    public VarInfoName getPart (VarInfoName root) {
+    public /*@Nullable*/ VarInfoName getPart (VarInfoName root) {
       VarInfoName o = root.intern().accept(this);
       return o;
     }

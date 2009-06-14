@@ -232,7 +232,7 @@ public class DeclReader {
     /**
      * Returns the DeclVarInfo named var_name or null if it doesn't exist
      */
-    public DeclVarInfo find_var (String var_name) {
+    public /*@Nullable*/ DeclVarInfo find_var (String var_name) {
       return vars.get (var_name);
     }
 

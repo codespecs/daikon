@@ -163,7 +163,7 @@ public class AnnotateNullable {
   }
 
   // Returns null if no corresponding class ppt exists
-  private static PptTopLevel class_for_object(PptTopLevel object_ppt) {
+  private static /*@Nullable*/ PptTopLevel class_for_object(PptTopLevel object_ppt) {
     PptTopLevel class_ppt = null;
     if (object_ppt.parents.size() > 0) {
       assert object_ppt.parents.size() == 1 : object_ppt;
@@ -173,7 +173,7 @@ public class AnnotateNullable {
   }
 
   // Returns null if no corresponding object ppt exists
-  private static PptTopLevel object_for_class(PptTopLevel class_ppt) {
+  private static /*@Nullable*/ PptTopLevel object_for_class(PptTopLevel class_ppt) {
     PptTopLevel object_ppt = null;
     for (PptRelation child_relation : class_ppt.children) {
       PptTopLevel child = child_relation.child;

@@ -729,9 +729,9 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
-   * Finds the nonce local variable.  Returns null if not present
+   * Finds the nonce local variable.  Returns null if not present.
    */
-  LocalVariableGen get_nonce_local (MethodGen mgen) {
+  /*@Nullable*/ LocalVariableGen get_nonce_local (MethodGen mgen) {
 
     // Find the local used for the nonce value
     for (LocalVariableGen lv : mgen.getLocalVariables()) {

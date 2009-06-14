@@ -903,7 +903,7 @@ public final class DCRuntime {
    * @param mi_index index into the list of all methods (methods)
    * @param args Array of the arguments to the method.
    */
-  public static void enter (Object[] tag_frame, Object obj, int mi_index,
+  public static void enter (Object[] tag_frame, /*@Nullable*/ Object obj, int mi_index,
                             Object[] args) {
 
     // Don't be recursive
@@ -963,7 +963,7 @@ public final class DCRuntime {
    * @param mi_index index into the list of all methods (methods)
    * @param args Array of the arguments to the method.
    */
-  public static void enter_refs_only (Object obj, int mi_index,
+  public static void enter_refs_only (/*@Nullable*/ Object obj, int mi_index,
                                       Object[] args) {
 
     // Don't be recursive
@@ -1029,7 +1029,7 @@ public final class DCRuntime {
    * @param exit_line_number the source line number of this exit point
    */
 
-  public static void exit (Object[] tag_frame, Object obj, int mi_index,
+  public static void exit (Object[] tag_frame, /*@Nullable*/ Object obj, int mi_index,
                          Object[] args, Object ret_val, int exit_line_number) {
 
     // Don't be recursive
@@ -1083,7 +1083,7 @@ public final class DCRuntime {
    * @param exit_line_number the source line number of this exit point
    */
 
-  public static void exit_refs_only (Object obj, int mi_index,
+  public static void exit_refs_only (/*@Nullable*/ Object obj, int mi_index,
                          Object[] args, Object ret_val, int exit_line_number) {
 
     // Don't be recursive
@@ -2320,7 +2320,7 @@ public final class DCRuntime {
    * The sets are calculated by processing each daikon variable and adding
    * it to a list associated with the leader of that set.
    */
-  static List<DVSet> get_comparable (RootInfo root) {
+  static /*@Nullable*/ List<DVSet> get_comparable (RootInfo root) {
 
     if (root == null)
       return (null);

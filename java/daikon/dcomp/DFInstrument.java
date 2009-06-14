@@ -154,7 +154,7 @@ class DFInstrument extends DCInstrument {
    *    @param branch_cr Code range of branch whose dataflow is desired.
    *    null indicates there are no branches of interest in this method.
    */
-  InstructionList xform_inst (MethodGen mg, InstructionHandle ih,
+  /*@Nullable*/ InstructionList xform_inst (MethodGen mg, InstructionHandle ih,
                               OperandStack stack, CodeRange branch_cr) {
 
     Instruction inst = ih.getInstruction();
@@ -760,7 +760,7 @@ class DFInstrument extends DCInstrument {
    * number in the java source of the conditional of interest.
    * Returns null if the specified branch is not in this method.
    */
-  public CodeRange find_branch (String branch_id, String classname, Method m) {
+  public /*@Nullable*/ CodeRange find_branch (String branch_id, String classname, Method m) {
 
     // Get the classname, method name, and linenumber of the branch
     String[] sa = branch_id.split(":");

@@ -619,7 +619,7 @@ public class DeclWriter extends DaikonWriter {
    * @param parent - parent of var in the variable tree
    * @param var - variable whose relation is desired.
    */
-  private VarRelation find_relation (ClassInfo cinfo, boolean is_static_method,
+  private VarRelation find_relation (/*@Nullable*/ ClassInfo cinfo, boolean is_static_method,
                            DaikonVariableInfo parent, DaikonVariableInfo var) {
 
     // Look for object->class static relationship.  This starts on each

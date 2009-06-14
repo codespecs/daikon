@@ -93,7 +93,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
    * @return the Splitter that this SplitterObject represents. Null if
    * splitterExists() == false
    */
-  public Splitter getSplitter() {
+  public /*@Nullable*/ Splitter getSplitter() {
     return this.splitter;
   }
 

@@ -405,7 +405,7 @@ public class NISuppression {
    * @return a new VarInfo[] containing the variables of inv or null if inv
    * does not match in some way.
    */
-  private VarInfo[] consider_inv (Invariant inv, NISuppressor supor,
+  private VarInfo /*@Nullable*/ [] consider_inv (Invariant inv, NISuppressor supor,
                                   VarInfo[] vis) {
 
     // Make sure this invariant really matches this suppressor.  We know
@@ -449,7 +449,7 @@ public class NISuppression {
    * empty for any suppressor (because that means there can't be
    * any suppressions based on these antecedents)
    */
-  List<Invariant>[] antecedents_for_suppressors (NIS.Antecedents ants) {
+  List<Invariant> /*@Nullable*/ [] antecedents_for_suppressors (NIS.Antecedents ants) {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
     List<Invariant> antecedents[] = (List<Invariant>[]) new List[suppressors.length];

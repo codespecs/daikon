@@ -1050,9 +1050,9 @@ public class NIS {
 
     /**
      * Returns a list of all of the antecedent invariants of the specified
-     * class.  Returns NULL if there are none of that class
+     * class.  Returns null if there are none of that class.
      */
-    public List<Invariant> get (Class<? extends Invariant> cls) {
+    public /*@Nullable*/ List<Invariant> get (Class<? extends Invariant> cls) {
 
       return antecedent_map.get (cls);
     }

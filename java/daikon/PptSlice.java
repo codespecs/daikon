@@ -459,7 +459,7 @@ public abstract class PptSlice
    * exists.  Otherwise returns null.  An exact match requires that
    * the invariants be of the same class and have the same formula
    */
-  public Invariant find_inv_exact (Invariant inv) {
+  public /*@Nullable*/ Invariant find_inv_exact (Invariant inv) {
 
     for (Invariant mine : invs) {
       if ((mine.getClass() == inv.getClass()) && mine.isSameFormula(inv))
@@ -472,7 +472,7 @@ public abstract class PptSlice
    * Returns the invariant that matches the specified class if it
    * exists.  Otherwise returns null.
    */
-  public Invariant find_inv_by_class (Class<? extends Invariant> cls) {
+  public /*@Nullable*/ Invariant find_inv_by_class (Class<? extends Invariant> cls) {
 
     for (Invariant inv : invs) {
       if ((inv.getClass() == cls))

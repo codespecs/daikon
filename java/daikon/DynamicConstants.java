@@ -312,7 +312,7 @@ public class DynamicConstants implements Serializable {
    * Returns the constant value of the specified variable, or null if
    * the variable is not constant or prev_constant.
    **/
-  public Object constant_value (VarInfo vi) {
+  public /*@Nullable*/ Object constant_value (VarInfo vi) {
 
     if (all_vars[vi.varinfo_index].constant
         || all_vars[vi.varinfo_index].previous_constant)

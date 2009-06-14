@@ -462,7 +462,7 @@ The test ensures that the method only appears once in the output.
    * If either array is empty, returns only those elements in the other array.
    * If both arrays are empty, returns a new empty array.
    */
-  /* pure */ public static _TYPE[] concat(_TYPE[] seq1, _TYPE[] seq2) {
+  /* pure */ public static _TYPE /*@Nullable*/ [] concat(_TYPE[] seq1, _TYPE[] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return utilMDE.ArraysMDE.concat(seq1, seq2);
@@ -1662,7 +1662,7 @@ The test is ensures that it only appears once in the output.
    *
    * Returns null if any array or field access causes an exception.
    */
-  /* pure */ public static _TYPE[] COLLECT_TYPE (Object object, String fieldStr) {
+  /* pure */ public static _TYPE /*@Nullable*/ [] COLLECT_TYPE (Object object, String fieldStr) {
 
     if (object == null) { return null; }
     if (fieldStr == null) { return null; }

@@ -1272,7 +1272,7 @@ class DCInstrument {
    *    @param ih Handle of Instruction to translate
    *    @param stack Current contents of the stack.
    */
-  InstructionList xform_inst (MethodGen mg, InstructionHandle ih,
+  /*@Nullable*/ InstructionList xform_inst (MethodGen mg, InstructionHandle ih,
                              OperandStack stack) {
 
     Instruction inst = ih.getInstruction();

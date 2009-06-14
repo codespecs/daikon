@@ -399,7 +399,7 @@ public class WeakIdentityHashMap<K,V>
      * Returns the entry associated with the specified key in the HashMap.
      * Returns null if the HashMap contains no mapping for this key.
      */
-    Entry<K,V> getEntry(/*@Nullable*/ Object key) {
+    /*@Nullable*/ Entry<K,V> getEntry(/*@Nullable*/ Object key) {
         Object k = maskNull(key);
         int h = hasher (k);
         /*@Nullable*/ Entry<K,V>[] tab = getTable();

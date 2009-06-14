@@ -282,7 +282,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
 
   /**
    * Returns the next line in the multi-file.
-   * Returns null at end of file.
+   * Throws NoSuchElementException at end of file.
    **/
   public String next() {
     try {

@@ -190,7 +190,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @return the next non-comment, non-whitespace line of the input buffer or
    *         null if the end of the buffer is reached before such a line can be found
    **/
-  static String getNextRealLine(BufferedReader input) {
+  static /*@Nullable*/ String getNextRealLine(BufferedReader input) {
     String currentLine = "";
 
     try {
@@ -255,7 +255,7 @@ public class InvariantAddAndCheckTester extends TestCase {
    * @return a String holding the error messages for any failed tests
    *  or null if no tests are failed.
    **/
-  private static String performTest(LineNumberReader commands) {
+  private static /*@Nullable*/ String performTest(LineNumberReader commands) {
     StringBuffer output = new StringBuffer();
     //  List invariantTestCases = new Vector();
     boolean noTestFailed = true;

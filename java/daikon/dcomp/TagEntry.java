@@ -51,7 +51,7 @@ class TagEntry extends WeakReference<Object> {
    *
    * if TRACING_ENABLED?
    */
-  private TagEntry tracer;
+  private /*@Nullable*/ TagEntry tracer;
   protected String trace_loc = "";
 
   /** Create an entry as a separate set **/

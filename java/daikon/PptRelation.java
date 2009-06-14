@@ -204,7 +204,7 @@ public class PptRelation implements Serializable {
    * null if there is no corresponding variable.
    */
 
-  public VarInfo parentVar(VarInfo childVar) {
+  public /*@Nullable*/ VarInfo parentVar(VarInfo childVar) {
     return child_to_parent_map.get(childVar);
   }
 
@@ -214,7 +214,7 @@ public class PptRelation implements Serializable {
    * variable in the equality set and returns null only if none of them has
    * a parent.
    **/
-  public VarInfo parentVarAnyInEquality(VarInfo childVar) {
+  public /*@Nullable*/ VarInfo parentVarAnyInEquality(VarInfo childVar) {
     VarInfo result = parentVar(childVar);
     if (result != null) {
       return result;
@@ -238,7 +238,7 @@ public class PptRelation implements Serializable {
    * null if there is no corresponding variable.
    */
 
-  public VarInfo childVar(VarInfo parentVar) {
+  public /*@Nullable*/ VarInfo childVar(VarInfo parentVar) {
     return parent_to_child_map.get(parentVar);
   }
 
@@ -515,7 +515,7 @@ public class PptRelation implements Serializable {
     // a child variable with the same bases and the same equation.  This
     // is necessary because derivations are done AFTER orig variables so
     // applying the prestate name (as done above) won't work (the resulting
-    // variable is really the same but the name is constructed differently)
+    // variable is really the same but the name is constructed differently).
 
     // Loop through each derived parent (ENTER) variable
     for (VarInfo vp : parent.var_infos) {
@@ -524,7 +524,9 @@ public class PptRelation implements Serializable {
 
       // Get a child version of each of the bases of the derivation
       VarInfo[] vp_bases = vp.derived.getBases();
-      VarInfo[] child_vp_bases = new VarInfo[vp_bases.length];
+      // TODO: Is this "@Nullable" annotation correct?  (That is, can the
+      // value actually be null?)
+      /*@Nullable*/ VarInfo[] child_vp_bases = new VarInfo[vp_bases.length];
       for (int j = 0; j < vp_bases.length; j++)
         child_vp_bases[j] = rel.childVar(vp_bases[j]);
 
@@ -533,6 +535,7 @@ public class PptRelation implements Serializable {
         if (vc.derived == null)
           continue;
         if (vc.derived.isSameFormula(vp.derived)) {
+          assert vc.derived != null;
           VarInfo[] vc_bases = vc.derived.getBases();
           if (Arrays.equals(child_vp_bases, vc_bases)) {
             rel.child_to_parent_map.put(vc, vp);

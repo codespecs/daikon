@@ -210,7 +210,7 @@ public class Runtime
      * @param mi_index - Index in methods of the MethodInfo for this method
      * @param args - Array of arguments to method
      */
-    public static synchronized void enter(Object obj, int nonce, int mi_index,
+    public static synchronized void enter(/*@Nullable*/ Object obj, int nonce, int mi_index,
                                           Object[] args) {
 
       if (dontProcessPpts())
@@ -285,7 +285,7 @@ public class Runtime
      * @param ret_val     - Return value of method.  null if method is void
      * @param exitLineNum - The line number at which this method exited
      */
-    public static synchronized void exit(Object obj, int nonce, int mi_index,
+    public static synchronized void exit(/*@Nullable*/ Object obj, int nonce, int mi_index,
                             Object[] args, Object ret_val, int exitLineNum) {
       if (dontProcessPpts())
         return;
@@ -709,7 +709,7 @@ public class Runtime
      * @param type declaring class
      * @return ClassInfo structure corresponding to type
      */
-    public static ClassInfo getClassInfoFromClass(Class<?> type)
+    public static /*@Nullable*/ ClassInfo getClassInfoFromClass(Class<?> type)
     {
         try {
           synchronized (Runtime.all_classes) {

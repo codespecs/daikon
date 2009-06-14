@@ -1774,7 +1774,7 @@ public final class FileIO {
 
   }
 
-  /** Returns non-null if this procedure has an unmatched entry. **/
+  /** Returns true if this procedure has an unmatched entry. **/
   @SuppressWarnings("interning") // PptTopLevel
   static boolean has_unmatched_procedure_entry(PptTopLevel ppt) {
     for (Invocation invok : call_hashmap.values()) {
@@ -2511,7 +2511,7 @@ public final class FileIO {
     public String relative_name = null;
     public RefType ref_type = RefType.POINTER;
     public int arr_dims = 0;
-    public List<String> function_args = null;
+    public /*@Nullable*/ List<String> function_args = null; // non-null iff (vardef.kind == VarKind.FUNCTION)
     public ProglangType rep_type = null;
     public ProglangType declared_type = null;
     public EnumSet<VarFlags> flags = EnumSet.noneOf (VarFlags.class);

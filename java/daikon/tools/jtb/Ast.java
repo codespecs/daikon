@@ -208,7 +208,7 @@ public class Ast {
 
   // Returns the name of the package for this compilation unit, or null if
   // no package was specified.
-  public static String getPackage(CompilationUnit u) {
+  public static /*@Nullable*/ String getPackage(CompilationUnit u) {
     NodeOptional o = u.f0;
     if (o.present()) {
       PackageDeclaration p = (PackageDeclaration) o.node;
@@ -242,7 +242,7 @@ public class Ast {
 
   // Returns the classname if the given type declaration declares a
   // ClassOrInterfaceDeclaration. Otherwise returns null.
-  public static String getClassNameForType(TypeDeclaration d) {
+  public static /*@Nullable*/ String getClassNameForType(TypeDeclaration d) {
 
     /**
      * Grammar production for TypeDeclaration:
@@ -900,7 +900,7 @@ public class Ast {
   // Following the chain of parent pointers from the child, returns
   // the first node of the specified type or a subtype.  Returns null
   // if no parent of that type.
-  public static Node getParent(Class type, Node child) {
+  public static /*@Nullable*/ Node getParent(Class type, Node child) {
     Node currentNode = child.getParent();
     while (true) {
       if (type.isInstance(currentNode)) {

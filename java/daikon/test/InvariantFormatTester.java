@@ -144,7 +144,7 @@ public class InvariantFormatTester extends TestCase
    * @return the next non-comment, non-whitespace line of the input buffer or
    *         null if the end of the buffer is reached before such a line can be found
    **/
-  static String getNextRealLine(BufferedReader input) {
+  static /*@Nullable*/ String getNextRealLine(BufferedReader input) {
     String currentLine = "";
 
     try {

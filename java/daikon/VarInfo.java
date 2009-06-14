@@ -30,6 +30,7 @@ import java.io.*;
  * also includes info about the variable's name, its declared type, its
  * file representation type, its internal type, and its comparability.
  **/
+@SuppressWarnings("nullness")   // nullness properties in this file are hairy; save for later
 public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   // We are Serializable, so we specify a version to allow changes to
   // method signatures without breaking serialization.  If you add or
@@ -142,10 +143,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public boolean is_static_constant;
 
   /** Null if not statically constant. **/
-  /*@Interned*/ Object static_constant_value;
+  /*@Nullable*/ /*@Interned*/ Object static_constant_value;
 
   /** Whether and how derived.  Null if this is not derived. **/
-  public Derivation derived;
+  public /*@Nullable*/ Derivation derived;
 
   // Various enums used for information about variables
   public enum RefType {POINTER, OFFSET};
@@ -161,30 +162,30 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                         SYNTHETIC, CLASSNAME, TO_STRING, NON_NULL};
 
 
-  public RefType ref_type;
+  public /*@Nullable*/ RefType ref_type;
   public VarKind var_kind;
   public EnumSet<VarFlags> var_flags = EnumSet.noneOf (VarFlags.class);
   public EnumSet<LangFlags> lang_flags = EnumSet.noneOf (LangFlags.class);
 
   public VarDefinition vardef;
-  public VarInfo enclosing_var;
+  public /*@Nullable*/ VarInfo enclosing_var;
   public int arr_dims = 0;
-  public List<VarInfo> function_args = null;
+  public /*@Nullable*/ List<VarInfo> function_args = null;
 
   /** Parent ppt for this variable (if any) **/
-  public String parent_ppt = null;
+  public /*@Nullable*/ String parent_ppt = null;
 
   /** Parent variable (within parent_ppt) (if any) **/
-  public String parent_variable = null;
+  public /*@Nullable*/ String parent_variable = null;
 
   /** Parent ppt relation id **/
   public int parent_relation_id = 0;
 
   /**
    * The relative name of this variable with respect to its enclosing
-   * variable.  Field name for fields, method name for instance methods
+   * variable.  Field name for fields, method name for instance methods.
    */
-  public String relative_name = null;
+  public /*@Nullable*/ String relative_name = null;
 
   /**
    * Returns whether or not we have encountered to date any missing values
@@ -218,7 +219,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** non-null if this is an orig() variable.
    *  <b>Do not test equality!  Only use its .name slot.</b>
    **/
-  public VarInfo postState; //
+  public /*@Nullable*/ VarInfo postState; //
 
   /**
    * @exception RuntimeException if representation invariant on this is broken
@@ -293,7 +294,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     try {
       var_info_name = VarInfoName.parse (vardef.name); // vin ok
     } catch (Exception e) {
-      var_info_name = null;
+      @SuppressWarnings("nullness")
+      /*@NonNull*/ VarInfoName vin = null;
+      var_info_name = vin;
       System.out.printf ("Warning: Can't parse %s as a VarInfoName",
                          vardef.name);
     }
@@ -505,7 +508,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Create the specified VarInfo **/
   private VarInfo (VarInfoName name, ProglangType type,
                    ProglangType file_rep_type, VarComparability comparability,
-                   boolean is_static_constant, /*@Interned*/ Object static_constant_value,
+                   boolean is_static_constant, /*@Nullable*/ /*@Interned*/ Object static_constant_value,
                    VarInfoAux aux) {
 
     assert name != null;
@@ -552,7 +555,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** Create the specified VarInfo **/
   public VarInfo (String name, ProglangType type,
                   ProglangType file_rep_type, VarComparability comparability,
-                  boolean is_static_constant, /*@Interned*/ Object static_constant_value,
+                  boolean is_static_constant, /*@Nullable*/ /*@Interned*/ Object static_constant_value,
                   VarInfoAux aux) {
     this (VarInfoName.parse(name), type, file_rep_type, comparability,
           is_static_constant, static_constant_value, aux);
@@ -928,9 +931,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns the param variable that encloses this variable (if any).
-   * Returns null otherwise.  only valid in the new decl format
+   * Returns null otherwise.  Only valid in the new decl format.
    **/
-  private VarInfo enclosing_param () {
+  private /*@Nullable*/ VarInfo enclosing_param () {
     // System.out.printf ("Considering %s\n", this);
     assert FileIO.new_decl_format;
     if (isPrestate())
@@ -955,7 +958,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * use these cached values.
    * @return null if the above condition doesn't hold.
    **/
-  public VarInfo getDerivedParam() {
+  public /*@Nullable*/ VarInfo getDerivedParam() {
     if (isDerivedParamCached == null) {
       isDerivedParam();
     }
@@ -1288,7 +1291,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * or null if this wasn't derived from a sequence.
    * Only works for scalars.
    **/
-  public VarInfo isDerivedSequenceMember() {
+  public /*@Nullable*/ VarInfo isDerivedSequenceMember() {
     if (derived == null)
       return null;
 
@@ -1634,7 +1637,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   // This does *not* try the obvious thing of converting "foo" to
   // "orig(foo)"; it creates something new.  I need to clarify the
   // documentation.
-  public VarInfoName otherStateEquivalent(boolean post) {
+  public /*@Nullable*/ VarInfoName otherStateEquivalent(boolean post) {
 
     assert !FileIO.new_decl_format;
 
@@ -1984,7 +1987,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   // Adding a test against null is not quite right for C programs, where *p
   // could be nonsensical (uninitialized or freed) even when p is non-null.
   // But this is a decent approximation to start with.
-  public Invariant createGuardingPredicate(boolean install) {
+  public /*@Nullable*/ Invariant createGuardingPredicate(boolean install) {
     // Later for the array, make sure index in bounds
     if (! (type.isArray() || type.isObject())) {
       String message = String.format
@@ -2416,7 +2419,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    *
    * @param all_ppts    map of all program points
    */
-  public PptTopLevel find_object_ppt(PptMap all_ppts) {
+  public /*@Nullable*/ PptTopLevel find_object_ppt(PptMap all_ppts) {
 
     // Arrays don't have types
     if (is_array())
@@ -2675,7 +2678,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * of this array.  For example, if the array is a[].b.c, returns a.
    * Returns null if there is no such variable.
    */
-  public VarInfo get_base_array_hashcode() {
+  public /*@Nullable*/ VarInfo get_base_array_hashcode() {
     if (FileIO.new_decl_format)
       return get_base_array().enclosing_var;
     else {
@@ -3002,7 +3005,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * arrays and other sequences (such as java.util.list).  Simplify uses
    * (it seems) the same length approach for both, so we don't check isArray()
    */
-  public String get_simplify_size_name() {
+  public /*@Nullable*/ String get_simplify_size_name() {
     /*@Interned*/ String result = null;
     if (!file_rep_type.isArray() || isDerived())
       result = null;
@@ -3103,7 +3106,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * element is the upper bound.  Returns null if this is not a direct
    * array or slice.
    */
-  public String[] simplifyNameAndBounds() {
+  public String /*@Nullable*/ [] simplifyNameAndBounds() {
     if (!FileIO.new_decl_format)
       return VarInfoName.QuantHelper.simplifyNameAndBounds (var_info_name); // vin ok
 

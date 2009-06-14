@@ -107,6 +107,7 @@ public class Quantify {
     public String esc_name() {
       VarInfo arr_var = get_check_array_var ("ESC");
       if (arr_var.isPrestate()) {
+        assert arr_var.postState != null;
         return String.format ("\\old(%s)",
          name_with_offset (arr_var.postState.esc_name() + ".length", offset));
       } else { // array is not orig
@@ -116,6 +117,7 @@ public class Quantify {
     public String jml_name() {
       VarInfo arr_var = get_check_array_var ("JML");
       if (arr_var.isPrestate()) {
+        assert arr_var.postState != null;
         String name = String.format ("daikon.Quant.size(%s)",
                                      arr_var.postState.jml_name());
         return name_with_offset (String.format ("\\old(%s)", name), offset);
@@ -132,6 +134,7 @@ public class Quantify {
 
       VarInfo arr_var = get_check_array_var ("JML");
       if (arr_var.isPrestate()) {
+        assert arr_var.postState != null;
         String name = String.format ("daikon.Quant.size(%s)",
                                      arr_var.postState.jml_name());
         return name_with_offset (name, offset);
@@ -207,11 +210,13 @@ public class Quantify {
       if (!in_prestate)
         return jml_name();
 
-      if (var.isPrestate())
+      if (var.isPrestate()) {
+        assert var.postState != null;
         return name_with_offset (var.postState.jml_name(), offset);
-      else
+      } else {
         return name_with_offset (String.format ("\\new(%s)", var.jml_name()),
                                  offset);
+      }
     }
 
     public String simplify_name() {
@@ -336,7 +341,7 @@ public class Quantify {
      * var using index.  The expression is of the form
      * lower_bound <= index && index <= upper_bound
      */
-    private String bld_quant (VarInfo var, Term index) {
+    private String bld_quant (VarInfo var, Term index) /*@Raw*/ {
       return String.format ("%s <= %s && %s <= %s",
                             var.get_lower_bound().esc_name(),
                             index.esc_name(), index.esc_name(),

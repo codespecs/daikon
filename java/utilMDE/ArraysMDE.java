@@ -1136,13 +1136,13 @@ public final class ArraysMDE {
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static <T> T[] concat(T[] a, T[] b) {
+  public static <T> T[] concat(T /*@Nullable*/ [] a, T /*@Nullable*/ [] b) {
     if (a == null && b == null) {
       @SuppressWarnings("unchecked")
       T[] result = (T[]) new Object[0];
       return result;
     }
-    if (a == null) return b;
+    if (a == null) { assert b != null; return b; }
     if (b == null) return a;
     @SuppressWarnings("unchecked")
     T[] result = (T[]) new Object[a.length + b.length];
@@ -1154,17 +1154,17 @@ public final class ArraysMDE {
 
   /**
    * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
+   * arrays, in order.
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static <T> T[] concat(T[] a, List<T> b) {
+  public static <T> T[] concat(T /*@Nullable*/ [] a, /*@Nullable*/ List<T> b) {
     if (a == null && b == null) {
       @SuppressWarnings("unchecked")
       T[] result = (T[]) new Object[0];
       return result;
     }
-    if (a == null) return toTArray(b);
+    if (a == null) { assert b != null; return toTArray(b); }
     if (b == null) return a;
     @SuppressWarnings("unchecked")
     T[] result = (T[]) new Object[a.length + b.size()];
@@ -1179,17 +1179,17 @@ public final class ArraysMDE {
 
   /**
    * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
+   * arrays, in order.
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static <T> T[] concat(List<T> a, T[] b) {
+  public static <T> T[] concat(/*@Nullable*/ List<T> a, T /*@Nullable*/ [] b) {
     if (a == null && b == null) {
       @SuppressWarnings("unchecked")
       T[] result = (T[]) new Object[0];
       return result;
     }
-    if (a == null) return b;
+    if (a == null) { assert b != null; return b; }
     if (b == null) return toTArray(a);
     @SuppressWarnings("unchecked")
     T[] result = (T[]) new Object[a.size() + b.length];
@@ -1204,17 +1204,17 @@ public final class ArraysMDE {
 
   /**
    * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
+   * arrays, in order.
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static <T> T[] concat(List<T> a, List<T> b) {
+  public static <T> T[] concat(/*@Nullable*/ List<T> a, /*@Nullable*/ List<T> b) {
     if (a == null && b == null) {
       @SuppressWarnings("unchecked")
       T[] result = (T[]) new Object[0];
       return result;
     }
-    if (a == null) return toTArray(b);
+    if (a == null) { assert b != null; return toTArray(b); }
     if (b == null) return toTArray(a);
     @SuppressWarnings("unchecked")
     T[] result = (T[]) new Object[a.size() + b.size()];
@@ -1232,15 +1232,15 @@ public final class ArraysMDE {
 
   /**
    * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
+   * arrays, in order.
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static String[] concat(String[] a, String[] b) {
+  public static String[] concat(String /*@Nullable*/ [] a, String /*@Nullable*/ [] b) {
     if (a == null && b == null) {
       return new String[0];
     }
-    if (a == null) return b;
+    if (a == null) { assert b != null; return b; }
     if (b == null) return a;
     String[] result = new String[a.length + b.length];
 
@@ -1252,15 +1252,15 @@ public final class ArraysMDE {
 
   /**
    * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
+   * arrays, in order.
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static byte[] concat(byte[] a, byte[] b) {
+  public static byte[] concat(byte /*@Nullable*/ [] a, byte /*@Nullable*/ [] b) {
     if (a == null && b == null) {
       return new byte[0];
     }
-    if (a == null) return b;
+    if (a == null) { assert b != null; return b; }
     if (b == null) return a;
     byte[] result = new byte[a.length + b.length];
 
@@ -1271,15 +1271,15 @@ public final class ArraysMDE {
 
   /**
    * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
+   * arrays, in order.
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static boolean[] concat(boolean[] a, boolean[] b) {
+  public static boolean[] concat(boolean /*@Nullable*/ [] a, boolean /*@Nullable*/ [] b) {
     if (a == null && b == null) {
       return new boolean[0];
     }
-    if (a == null) return b;
+    if (a == null) { assert b != null; return b; }
     if (b == null) return a;
     boolean[] result = new boolean[a.length + b.length];
 
@@ -1290,15 +1290,15 @@ public final class ArraysMDE {
 
   /**
    * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
+   * arrays, in order.
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static char[] concat(char[] a, char[] b) {
+  public static char[] concat(char /*@Nullable*/ [] a, char /*@Nullable*/ [] b) {
     if (a == null && b == null) {
       return new char[0];
     }
-    if (a == null) return b;
+    if (a == null) { assert b != null; return b; }
     if (b == null) return a;
     char[] result = new char[a.length + b.length];
 
@@ -1310,15 +1310,15 @@ public final class ArraysMDE {
 
   /**
    * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
+   * arrays, in order.
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static double[] concat(double[] a, double[] b) {
+  public static double[] concat(double /*@Nullable*/ [] a, double /*@Nullable*/ [] b) {
     if (a == null && b == null) {
       return new double[0];
     }
-    if (a == null) return b;
+    if (a == null) { assert b != null; return b; }
     if (b == null) return a;
     double[] result = new double[a.length + b.length];
 
@@ -1329,15 +1329,15 @@ public final class ArraysMDE {
 
   /**
    * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
+   * arrays, in order.
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static float[] concat(float[] a, float[] b) {
+  public static float[] concat(float /*@Nullable*/ [] a, float /*@Nullable*/ [] b) {
     if (a == null && b == null) {
       return new float[0];
     }
-    if (a == null) return b;
+    if (a == null) { assert b != null; return b; }
     if (b == null) return a;
     float[] result = new float[a.length + b.length];
 
@@ -1348,15 +1348,15 @@ public final class ArraysMDE {
 
   /**
    * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
+   * arrays, in order.
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static int[] concat(int[] a, int[] b) {
+  public static int[] concat(int /*@Nullable*/ [] a, int /*@Nullable*/ [] b) {
     if (a == null && b == null) {
       return new int[0];
     }
-    if (a == null) return b;
+    if (a == null) { assert b != null; return b; }
     if (b == null) return a;
     int[] result = new int[a.length + b.length];
 
@@ -1367,15 +1367,15 @@ public final class ArraysMDE {
 
   /**
    * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
+   * arrays, in order.
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static long[] concat(long[] a, long[] b) {
+  public static long[] concat(long /*@Nullable*/ [] a, long /*@Nullable*/ [] b) {
     if (a == null && b == null) {
       return new long[0];
     }
-    if (a == null) return b;
+    if (a == null) { assert b != null; return b; }
     if (b == null) return a;
     long[] result = new long[a.length + b.length];
 
@@ -1386,15 +1386,15 @@ public final class ArraysMDE {
 
   /**
    * Return an array that contains all the elements of both argument
-   * arrays, in order.  If both arguments are null, returns null.
+   * arrays, in order.
    * Returns a new array unless one argument is null, in which case
    * it returns the other array.
    **/
-  public static short[] concat(short[] a, short[] b) {
+  public static short[] concat(short /*@Nullable*/ [] a, short /*@Nullable*/ [] b) {
     if (a == null && b == null) {
       return new short[0];
     }
-    if (a == null) return b;
+    if (a == null) { assert b != null; return b; }
     if (b == null) return a;
     short[] result = new short[a.length + b.length];
 
