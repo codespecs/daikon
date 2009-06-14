@@ -35,7 +35,7 @@ else
   endif
 endif
 
-# For debugging, uncomment this line
+# For debugging, uncomment this line, or do:  JAVAC="javac -verbose" make
 # JAVAC ?= javac -verbose
 
 JAVAC ?= javac
@@ -107,9 +107,9 @@ endif
 # find command will get run multiple times.  USE AUTO_GENERATED_FILES instead.
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
 # " | perl -pi -e 's/^\.\///g'" to remove leading "./"
-JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name typequals -o -name 'ReturnBytecodes.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/')
-DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*') \
-                    $(shell find utilMDE/ -name '*.java' -not -name '*\#*')
+JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name typequals -o -name 'ReturnBytecodes.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${DAIKONBIN}/sort-directory-order.pl)
+DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | sort)  \
+                    $(shell find utilMDE/ -name '*.java' -not -name '*\#*' | sort)
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
@@ -775,12 +775,12 @@ INTERNING_JAVA_FILES_SKIP = \( -name PptTopLevel.java -o -name DynamicConstants.
 #  annotations and quite a few SuppressWarnings.
 INTERNING_JAVA_FILES_SKIP_COUNTS = \( -name Intern.java -o -name VarInfoName.java \) -prune -o
 ## Which files to check.
-INTERNING_JAVA_FILES = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} -wholename ./daikon/util -prune -o -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
-INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} ${INTERNING_JAVA_FILES_SKIP_COUNTS} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned')
+INTERNING_JAVA_FILES = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} -wholename ./daikon/util -prune -o -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned' | sort)
+INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} ${INTERNING_JAVA_FILES_SKIP_COUNTS} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned' | sort)
 ## Temporarily, only a subset of directories.  Expand the scope later.
 NULLNESS_JAVA_FILES = \
-  $(shell find utilMDE/ -name '*.java' -print) \
-  $(shell find daikon/ -name '*.java' -print)
+  $(shell find utilMDE/ -name '*.java' -print | sort) \
+  $(shell find daikon/ -name '*.java' -print | sort)
 
 #   $(shell find typequals/ -name '*.java')
 
@@ -958,7 +958,7 @@ JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
                 -linkoffline http://java.sun.com/j2se/1.5.0/docs/api/ http://java.sun.com/j2se/1.5.0/docs/api/
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 # JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v '\#'`
-JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | ${DAIKONBIN}/sort-directory-order.pl)
+JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | sort)
 #JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v '\#' | sort | uniq | perl -p -e 's:^./::g; s:/:.:g;'`
 
 javadoc: doc
