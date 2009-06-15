@@ -1901,16 +1901,20 @@ public class PptTopLevel extends Ppt {
     if (proto == null)
       return false;
 
+    Invariant inv = proto.instantiate(slice);
+    if (inv == null)
+      return false;
+
     // Debug print the other invariants in this slice.
-    if (false && !slice.is_inv_true (proto)) {
+    if (false && !slice.is_inv_true (inv)) {
       System.out.printf ("%d invariants for variable %s in ppt %s\n",
                          slice.invs.size(), v, name());
-      for (Invariant inv : slice.invs) {
-        System.out.printf ("Invariant %s in ppt %s\n", inv.format(), name());
+      for (Invariant other_inv : slice.invs) {
+        System.out.printf ("Invariant %s in ppt %s\n", other_inv.format(), name());
       }
     }
 
-    return slice.is_inv_true (proto);
+    return slice.is_inv_true (inv);
   }
 
 
