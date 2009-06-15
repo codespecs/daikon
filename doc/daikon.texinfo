@@ -380,7 +380,7 @@ Declarations
 
 Data trace records
 
-* Example files::               
+* Nonsensical values::          
 
 Example files
 
@@ -9649,10 +9649,10 @@ omitted.
 
 
 @menu
-* Example files::               
+* Nonsensical values::          
 @end menu
 
-@node    Example files,  , Data trace records, Data trace records
+@node    Nonsensical values,  , Data trace records, Data trace records
 @subsection Nonsensical values for variables
 
 Some trace variables and derived variables may not have a value because
