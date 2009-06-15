@@ -171,8 +171,8 @@ public abstract class Invariant
   public static final double PROBABILITY_NEVER = 3;
 
   /**
-   * Return Invariant.CONFIDENCE_JUSTIFIED if x>=goal.
-   * Return Invariant.CONFIDENCE_UNJUSTIFIED if x<=1.
+   * Return Invariant.CONFIDENCE_JUSTIFIED if x&ge;goal.
+   * Return Invariant.CONFIDENCE_UNJUSTIFIED if x&le;1.
    * For intermediate inputs, the result gives confidence that grades
    * between the two extremes.
    * See the discussion of gradual vs. sudden confidence transitions.
@@ -188,8 +188,8 @@ public abstract class Invariant
   }
 
   /**
-   * Return Invariant.PROBABILITY_JUSTIFIED if x>=goal.
-   * Return Invariant.PROBABILITY_UNJUSTIFIED if x<=1.
+   * Return Invariant.PROBABILITY_JUSTIFIED if x&ge;goal.
+   * Return Invariant.PROBABILITY_UNJUSTIFIED if x&le;1.
    * For intermediate inputs, the result gives probability that grades
    * between the two extremes.
    * See the discussion of gradual vs. sudden probability transitions.
