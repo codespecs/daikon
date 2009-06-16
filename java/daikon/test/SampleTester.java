@@ -213,6 +213,10 @@ public class SampleTester extends TestCase {
     if (absolute_decl_file == null)
       fail ("Decl file " + decl_file + " not found.");
 
+    if (absolute_decl_file.startsWith("file:")) {
+      absolute_decl_file = absolute_decl_file.substring(5);
+    }
+
     decl_files.add (new File(absolute_decl_file));
     all_ppts = FileIO.read_declaration_files (decl_files);
 
