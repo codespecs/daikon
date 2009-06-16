@@ -1544,7 +1544,7 @@ public abstract class Invariant
 
     public /*@Prototype*/Invariant inv;
 
-    public Match (/*@Pprototype*/Invariant inv) {
+    public Match (/*@Prototype*/Invariant inv) {
       this.inv = inv;
     }
 
