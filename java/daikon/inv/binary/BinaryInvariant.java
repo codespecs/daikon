@@ -51,7 +51,7 @@ public abstract class BinaryInvariant extends Invariant {
    * sometimes called on prototype invariants.
    */
   public InvariantStatus check_unordered (Object val1, Object val2,
-                                          int mod_index, int count) /*@PrototypeOrNot*/ {
+                                          int mod_index, int count) /*@Prototype*/ {
 
     if (((val2 instanceof long[]) || (val2 instanceof double[])
          || (val2 instanceof String[]))

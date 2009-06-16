@@ -281,7 +281,7 @@ public abstract class Invariant
    * computed constants well-formed.  Is overridden in classes like
    * LinearBinary/Ternary and Upper/LowerBound.
    **/
-  public boolean enoughSamples() {
+  public boolean enoughSamples() /*@NonPrototype*/ {
     return true;
   }
 
@@ -314,7 +314,7 @@ public abstract class Invariant
 
 
   /** A wrapper around getConfidence() or getConfidence(). **/
-  public final boolean justified() {
+  public final boolean justified() /*@NonPrototype*/ {
     boolean just = (!falsified
                     && (getConfidence() >= dkconfig_confidence_limit));
     if (logOn())
@@ -349,7 +349,7 @@ public abstract class Invariant
    * actual work.
    * @see #computeConfidence()
    **/
-  public final double getConfidence() {
+  public final double getConfidence() /*@NonPrototype*/ {
     Assert.assertTrue(! falsified);
     // if (falsified)
     //   return CONFIDENCE_NEVER;
@@ -378,7 +378,7 @@ public abstract class Invariant
    * Users should use getConfidence() instead.
    * @see     #getConfidence()
    **/
-  protected abstract double computeConfidence();
+  protected abstract double computeConfidence() /*@NonPrototype*/ ;
 
   /**
    * Subclasses should override.  An exact invariant indicates that given
@@ -389,7 +389,7 @@ public abstract class Invariant
    * The result of this method does not depend on whether the invariant is
    * justified, destroyed, etc.
    **/
-  public boolean isExact() {
+  public boolean isExact() /*@Prototype*/ {
     return false;
   }
 
@@ -405,19 +405,19 @@ public abstract class Invariant
    * Marks the invariant as falsified.  Should always be called rather
    * than just setting the flag so that we can track when this happens
    */
-  public void falsify() {
+  public void falsify() /*@NonPrototype*/ {
     falsified = true;
     if (logOn())
       log ("Destroyed " + format());
   }
 
   /** Clear the falsified flag. */
-  public void clear_falsified() {
+  public void clear_falsified() /*@NonPrototype*/ {
     falsified = false;
   }
 
   /** Returns whether or not this invariant has been destroyed. */
-  public boolean is_false() {
+  public boolean is_false() /*@NonPrototype*/ {
     return (falsified);
   }
 
@@ -425,7 +425,7 @@ public abstract class Invariant
    * Do nothing special, Overridden to remove
    * exception from declaration
    **/
-  public Invariant clone() {
+  public Invariant clone() /*@NonPrototype*/ {
     try {
       Invariant result = (Invariant) super.clone();
       return result;
@@ -442,7 +442,7 @@ public abstract class Invariant
    **/
   public Invariant transfer(PptSlice new_ppt,
                             int[] permutation
-                            ) {
+                            ) /*@NonPrototype*/ {
     // Check some sanity conditions
     Assert.assertTrue(new_ppt.arity() == ppt.arity());
     Assert.assertTrue(permutation.length == ppt.arity());
@@ -487,7 +487,7 @@ public abstract class Invariant
    * used to make child invariant match the variable order of the parent
    * when merging invariants bottom up.
    */
-  public Invariant clone_and_permute (int[] permutation) {
+  public Invariant clone_and_permute (int[] permutation) /*@NonPrototype*/{
 
     Invariant result = this.clone();
     result = result.resurrect_done (permutation);
@@ -510,7 +510,7 @@ public abstract class Invariant
    **/
   public Invariant resurrect(PptSlice new_ppt,
                              int[] permutation
-                             ) {
+                             ) /*@NonPrototype*/ {
     // Check some sanity conditions
     Assert.assertTrue(falsified);
     Assert.assertTrue(new_ppt.arity() == ppt.arity());
@@ -556,7 +556,7 @@ public abstract class Invariant
    * comparable.  Otherwise the comparability information from one
    * of the non always-comparable variables is returned.
    */
-  public VarComparability get_comparability() {
+  public VarComparability get_comparability() /*@NonPrototype*/{
 
     // Assert.assertTrue (ppt != null, "class " + getClass());
 
@@ -588,7 +588,9 @@ public abstract class Invariant
    * @return the merged invariant or null if the invariants didn't represent
    * the same invariant.
    */
-  public /*@Nullable*/ Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
+  public /*@Nullable*/ /*@NonPrototype*/ Invariant
+    merge (List</*@NonPrototype*/Invariant> invs, PptSlice parent_ppt)
+    /*@Prototype*/ {
 
     Invariant first = invs.get(0);
     Invariant result = first.clone();
@@ -611,7 +613,8 @@ public abstract class Invariant
    * Permutes the invariant as specified.  Often creates a new invariant
    * (with a different class)
    */
-  public Invariant permute (int[] permutation) {
+  public /*@NonPrototype*/Invariant permute (int[] permutation)
+    /*@NonPrototype*/ {
     return (resurrect_done (permutation));
   }
 
@@ -620,22 +623,23 @@ public abstract class Invariant
    * allow subclasses to fix any information they might have cached
    * from the old Ppt and VarInfos.
    **/
-  protected abstract Invariant resurrect_done(int[] permutation);
+  protected abstract Invariant resurrect_done(int[] permutation)
+    /*@NonPrototype*/;
 
   // Regrettably, I can't declare a static abstract method.
   // // The return value is probably ignored.  The new Invariant installs
   // // itself on the PptSlice, and that's what really matters (right?).
   // public static abstract Invariant instantiate(PptSlice ppt);
 
-  public boolean usesVar(VarInfo vi) {
+  public boolean usesVar(VarInfo vi) /*@NonPrototype*/ {
     return ppt.usesVar(vi);
   }
 
-  public boolean usesVar(String name) {
+  public boolean usesVar(String name) /*@NonPrototype*/ {
     return ppt.usesVar(name);
   }
 
-  public boolean usesVarDerived(String name) {
+  public boolean usesVarDerived(String name) /*@NonPrototype*/ {
     return ppt.usesVarDerived(name);
   }
 
@@ -648,7 +652,7 @@ public abstract class Invariant
   // }
 
   /** Return a string representation of the variable names. */
-  public final String varNames() {
+  public final String varNames() /*@NonPrototype*/ {
     return ppt.varNames();
   }
 
@@ -661,7 +665,7 @@ public abstract class Invariant
    * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
-  public String repr() {
+  public String repr() /*@NonPrototype*/ {
     // A better default would be to use reflection and print out all
     // the variable names.
     return getClass() + varNames() + ": " + format();
@@ -673,7 +677,7 @@ public abstract class Invariant
    * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
-  public String repr_prob() {
+  public String repr_prob() /*@NonPrototype*/ {
     return repr()
       + "; confidence = " + getConfidence()
       ;
@@ -685,7 +689,7 @@ public abstract class Invariant
    * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
-  public String format() {
+  public String format() /*@NonPrototype*/ {
     String result = format_using(OutputFormat.DAIKON);
     if (PrintInvariants.dkconfig_print_inv_class) {
       String classname = getClass().getName();
@@ -696,7 +700,7 @@ public abstract class Invariant
     return result;
   }
 
-  public abstract String format_using(OutputFormat format);
+  public abstract String format_using(OutputFormat format) /*@NonPrototype*/ ;
 
   /**
    * @return conjuction of mapping the same function of our
@@ -706,7 +710,7 @@ public abstract class Invariant
    *
    * @see VarInfo#isValidEscExpression
    **/
-  public boolean isValidEscExpression() {
+  public boolean isValidEscExpression() /*@NonPrototype*/ {
     for (int i=0; i < ppt.var_infos.length; i++) {
       if (! ppt.var_infos[i].isValidEscExpression()) {
         return false;
@@ -721,7 +725,7 @@ public abstract class Invariant
   /**
    * @return true if this Invariant can be properly formatted for Java output.
    **/
-  public boolean isValidExpression(OutputFormat format) {
+  public boolean isValidExpression(OutputFormat format) /*@NonPrototype*/ {
     if ((format == OutputFormat.ESCJAVA) && (! isValidEscExpression())) {
       return false;
     }
@@ -756,7 +760,7 @@ public abstract class Invariant
    * @return standard "format needs to be implemented" for the given
    * requested format.  Made public so cores can call it.
    **/
-  public String format_unimplemented(OutputFormat request) {
+  public String format_unimplemented(OutputFormat request) /*@NonPrototype*/ {
     String classname = this.getClass().getName();
     return "warning: method " + classname + ".format(" + request + ")"
       + " needs to be implemented: " + format();
@@ -769,7 +773,7 @@ public abstract class Invariant
    * supplied, is a human-readable description of the invariant in its
    * uninformative state, which will be added to the message.
    **/
-  public String format_too_few_samples(OutputFormat request, /*@Nullable*/ String attempt) {
+  public String format_too_few_samples(OutputFormat request, /*@Nullable*/ String attempt) /*@NonPrototype*/ {
     if (request == OutputFormat.SIMPLIFY) {
       return "(AND)";
     } else if (request == OutputFormat.JAVA ||
@@ -914,7 +918,7 @@ public abstract class Invariant
    * Compare based on arity, then printed representation.
    **/
   public static final class InvariantComparatorForPrinting implements Comparator<Invariant> {
-    public int compare(Invariant inv1, Invariant inv2) {
+    public int compare(/*@NonPrototype*/ Invariant inv1, /*@NonPrototype*/ Invariant inv2) {
       if (inv1 == inv2)
         return 0;
 
@@ -1000,7 +1004,7 @@ public abstract class Invariant
    *
    * @exception RuntimeException if other.getClass() != this.getClass()
    **/
-  public boolean isSameFormula(Invariant other) {
+  public boolean isSameFormula(Invariant other) /*@Prototype*/ {
     return false;
   }
 
@@ -1013,7 +1017,7 @@ public abstract class Invariant
    * merge code as well (to merge the different formulas into a single formula
    * at the upper point
    */
-  public boolean mergeFormulasOk () {
+  public boolean mergeFormulasOk () /*@Prototype*/ {
     return (false);
   }
 
@@ -1022,7 +1026,7 @@ public abstract class Invariant
    * Same, in this case, means a matching type, formula, and variable
    * names.
    **/
-  public boolean isSameInvariant(Invariant inv2) {
+  public boolean isSameInvariant(Invariant inv2) /*@NonPrototype*/ {
     // return isSameInvariant(inv2, defaultIsSameInvariantNameExtractor);
 
     Invariant inv1 = this;
@@ -1062,7 +1066,7 @@ public abstract class Invariant
    * as variable names, confidences, sample counts, value counts, or
    * related quantities.
    **/
-  public boolean isExclusiveFormula(Invariant other) {
+  public boolean isExclusiveFormula(Invariant other) /*@NonPrototype*/{
     return false;
   }
 
@@ -1085,14 +1089,15 @@ public abstract class Invariant
    * May return null instead of an empty set.
    * Should be overridden by subclasses with non-instantiating suppressions.
    */
-  public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
+  public /*@Nullable*/ NISuppressionSet get_ni_suppressions()
+    /*@NonPrototype*/{
     return (null);
   }
 
   /**
    * Returns whether or not this invariant is ni-suppressed.
    */
-  public boolean is_ni_suppressed() {
+  public boolean is_ni_suppressed() /*@Prototype*/{
 
     NISuppressionSet ss = get_ni_suppressions();
     if (ss == null)
@@ -1113,7 +1118,7 @@ public abstract class Invariant
 
   // DO NOT OVERRIDE.  Should be declared "final", but the "final" is
   // omitted to allow for easier testing.
-  public boolean isWorthPrinting() {
+  public boolean isWorthPrinting() /*@NonPrototype*/ {
     return InvariantFilters.defaultFilters().shouldKeep(this) == null;
   }
 
@@ -1130,7 +1135,8 @@ public abstract class Invariant
    * extending isObviousStatically(VarInfo[]) because it is more
    * general.
    **/
-  public final /*@Nullable*/ DiscardInfo isObviousStatically() {
+  public final /*@Nullable*/ DiscardInfo isObviousStatically()
+    /*@NonPrototype*/{
     return isObviousStatically(this.ppt.var_infos);
   }
 
@@ -1146,7 +1152,8 @@ public abstract class Invariant
    * position and data type of the variables is the *same* as that of
    * this.ppt.var_infos.
    **/
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis)
+    /*@Prototype*/ {
     return null;
   }
 
@@ -1166,7 +1173,7 @@ public abstract class Invariant
   // Of course, it's expensive to examine every possible permutation
   // of VarInfos and their equality set, so a possible conservative
   // approximation is to simply return false.
-  public boolean isObviousStatically_AllInEquality() {
+  public boolean isObviousStatically_AllInEquality() /*@NonPrototype*/ {
     // If the leaders aren't statically obvious, then clearly not all
     // combinations are.
     if (isObviousStatically() == null) return false;
@@ -1190,7 +1197,8 @@ public abstract class Invariant
    * elementwise in the same equality set as this.ppt.var_infos.  Can
    * be null if no such assignment exists.
    **/
-  public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
+  public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality()
+    /*@NonPrototype*/ {
     DiscardInfo result = isObviousStatically();
     if (result != null) return result;
     return isObviousStatically_SomeInEqualityHelper (this.ppt.var_infos,
@@ -1202,9 +1210,10 @@ public abstract class Invariant
   /**
    * Recurse through vis and generate the cartesian product of ...
    **/
-  protected /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEqualityHelper(VarInfo[] vis,
-                                                             VarInfo[] assigned,
-                                                             int position) {
+  protected /*@Nullable*/ DiscardInfo
+    isObviousStatically_SomeInEqualityHelper(VarInfo[] vis,
+                                             VarInfo[] assigned,
+                                             int position) /*@NonPrototype*/ {
     if (position == vis.length) {
       if (debugIsObvious.isLoggable(Level.FINE)) {
         StringBuffer sb = new StringBuffer();
@@ -1234,7 +1243,7 @@ public abstract class Invariant
    * should override isObviousStatically or isObviousDynamically.  Wherever
    * possible, suppression, rather than this, should do the dynamic checking.
    **/
-  public final /*@Nullable*/ DiscardInfo isObvious() {
+  public final /*@Nullable*/ DiscardInfo isObvious() /*@NonPrototype*/ {
     // Actually actually, we'll eliminate invariants as they become obvious
     // rather than on output; the point of this is to speed up computation.
     // // Actually, we do need to check isObviousDerived after all because we
@@ -1270,7 +1279,8 @@ public abstract class Invariant
    * "super.isObviousDynamically(vis)".  Since this method is
    * dynamic, it should only be called after all processing.
    **/
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis)
+    /*@Prototype*/ {
     Assert.assertTrue (!Daikon.isInferencing);
     Assert.assertTrue(vis.length <= 3, "Unexpected more-than-ternary invariant");
     if (! ArraysMDE.noDuplicates(vis)) {
@@ -1294,7 +1304,7 @@ public abstract class Invariant
    * "a[] is a palindrome" corresponding to "a[] is the reverse of
    * a[]", for instance.
    **/
-  public boolean isReflexive() {
+  public boolean isReflexive() /*@NonPrototype*/ {
     return ! ArraysMDE.noDuplicates(ppt.var_infos);
   }
 
@@ -1307,7 +1317,8 @@ public abstract class Invariant
    * <p> This method is final because subclasses should extend
    * isObviousDynamically(VarInfo[]) since that method is more general.
    **/
-  public final /*@Nullable*/ DiscardInfo isObviousDynamically() {
+  public final /*@Nullable*/ DiscardInfo isObviousDynamically()
+    /*@NonPrototype*/{
     Assert.assertTrue (!Daikon.isInferencing);
     return isObviousDynamically (ppt.var_infos);
   }
@@ -1325,7 +1336,8 @@ public abstract class Invariant
    * elementwise in the same equality set as this.ppt.var_infos.  Can
    * be null if no such assignment exists.
    **/
-  public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality()
+    /*@NonPrototype*/ {
     DiscardInfo result = isObviousDynamically();
     if (result != null)
       return result;
@@ -1342,9 +1354,10 @@ public abstract class Invariant
    * combination.  The combinations are generated via recursive calls to
    * this routine.
    **/
-  protected /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEqualityHelper(VarInfo[] vis,
-                                                             VarInfo[] assigned,
-                                                             int position) {
+  protected /*@Nullable*/ DiscardInfo
+    isObviousDynamically_SomeInEqualityHelper(VarInfo[] vis,
+                                              VarInfo[] assigned,
+                                              int position) /*@NonPrototype*/ {
     if (position == vis.length) {
       // base case
       if (debugIsObvious.isLoggable(Level.FINE)) {
@@ -1372,7 +1385,7 @@ public abstract class Invariant
   /**
    * @return true if this invariant is only over prestate variables .
    */
-  public boolean isAllPrestate() {
+  public boolean isAllPrestate() /*@NonPrototype*/ {
     return ppt.allPrestate();
   }
 
@@ -1381,7 +1394,7 @@ public abstract class Invariant
   // hasUninterestingConstant(), or some other filter.
   // Uninteresting invariants will override this method to return
   // false
-  public boolean isInteresting() {
+  public boolean isInteresting() /*@NonPrototype*/ {
     return true;
   }
 
@@ -1397,7 +1410,7 @@ public abstract class Invariant
    * is likely to be an artifact of the way the program was tested,
    * rather than a statement that would in fact hold over all possible
    * executions. */
-  public boolean hasUninterestingConstant() {
+  public boolean hasUninterestingConstant() /*@NonPrototype*/ {
     return false;
   }
 
@@ -1482,7 +1495,8 @@ public abstract class Invariant
 
     Comparator<Invariant> classVarnameComparator = new ClassVarnameComparator();
 
-    public int compare(Invariant inv1, Invariant inv2) {
+    public int compare(/*@NonPrototype*/ Invariant inv1,
+                       /*@NonPrototype*/Invariant inv2) {
       int compareClassVarname = classVarnameComparator.compare(inv1, inv2);
 
       if (compareClassVarname != 0) {
@@ -1528,9 +1542,9 @@ public abstract class Invariant
    */
   public static class Match {
 
-    public Invariant inv;
+    public /*@Prototype*/Invariant inv;
 
-    public Match (Invariant inv) {
+    public Match (/*@Pprototype*/Invariant inv) {
       this.inv = inv;
     }
 
@@ -1557,7 +1571,7 @@ public abstract class Invariant
    * long as the mergeFormulaOk() method returns true
    */
 
-  public boolean match (Invariant inv) {
+  public boolean match (/*@Prototype*/ Invariant inv) {
 
     if (inv.getClass() ==  getClass())
       return (inv.mergeFormulasOk() || isSameFormula (inv));
@@ -1570,7 +1584,7 @@ public abstract class Invariant
    * Must be overriden by subclasses that support this.  Otherwise, it
    * returns true only if the state is null.
    */
-  public boolean state_match (Object state) {
+  public boolean state_match (Object state) /*@NonPrototype*/ {
     return (state == null);
   }
 
@@ -1578,7 +1592,8 @@ public abstract class Invariant
    * Create a guarding predicate for a given invariant.
    * Returns null if no guarding is needed.
    **/
-  public /*@Nullable*/ Invariant createGuardingPredicate(boolean install) {
+  public /*@Nullable*/ /*@NonPrototype*/ Invariant
+    createGuardingPredicate(boolean install) {
     if (debugGuarding.isLoggable(Level.FINE)) {
       debugGuarding.fine ("Guarding predicate being created for: ");
       debugGuarding.fine ("  " + this.format());
@@ -1625,7 +1640,7 @@ public abstract class Invariant
 
   // Gets a list of all the variables that must be guarded for this
   // invariant.
-  public List<VarInfo> getGuardingList() {
+  public List<VarInfo> getGuardingList() /*@NonPrototype*/ {
     return getGuardingList(ppt.var_infos);
   }
 
@@ -1648,7 +1663,8 @@ public abstract class Invariant
    * modifying the original invariant.
    * Returns null if the invariant does not need to be guarded.
    **/
-  public /*@Nullable*/ Invariant createGuardedInvariant(boolean install) {
+  public /*@Nullable*/ /*@NonPrototype*/ Invariant
+    createGuardedInvariant(boolean install) {
     if (Daikon.dkconfig_guardNulls == "never") { // interned
       return null;
     }
@@ -1695,7 +1711,7 @@ public abstract class Invariant
    * are done.
    * @return the new invariant
    */
-  protected Invariant instantiate_dyn (PptSlice slice) {
+  protected /*@NonPrototype*/ Invariant instantiate_dyn (PptSlice slice) {
     throw new Error("no instantiate_dyn for class " + getClass());
   }
 
@@ -1703,7 +1719,7 @@ public abstract class Invariant
    * Returns whether or not this class of invariants are currently
    * enabled
    */
-  public boolean enabled() {
+  public boolean enabled() /*@Prototype*/ {
     Assert.assertTrue (false, "no enabled for class " + getClass());
     return (false);
   }
@@ -1727,7 +1743,7 @@ public abstract class Invariant
    *
    * @see #instantiate_ok(VarInfo[])
    */
-  public boolean valid_types (VarInfo[] vis) /*@PrototypeOrNot*/ {
+  public boolean valid_types (VarInfo[] vis) /*@Prototype*/ {
     Assert.assertTrue (false, "no valid_types for class " + getClass());
     return (false);
   }
@@ -1741,7 +1757,7 @@ public abstract class Invariant
    *
    * @see #valid_types(VarInfo[])
    */
-  public boolean instantiate_ok (VarInfo[] vis) {
+  public boolean instantiate_ok (VarInfo[] vis) /*@Prototype*/{
     return (true);
   }
 
@@ -1810,7 +1826,8 @@ public abstract class Invariant
   /**
    * Adds the specified sample to the invariant and returns the result.
    */
-  public InvariantStatus add_sample (ValueTuple vt, int count) {
+  public InvariantStatus add_sample (ValueTuple vt, int count)
+    /*@NonPrototype*/ {
 
     if (ppt instanceof PptSlice1) {
 
@@ -1843,7 +1860,7 @@ public abstract class Invariant
   /**
    * Check the rep invariants of this.
    **/
-  public void repCheck() {
+  public void repCheck() /*@Prototype*/{
   }
 
   /**
@@ -1854,7 +1871,7 @@ public abstract class Invariant
    * This is used during suppresion.  Any invariant that is not active
    * cannot suppress another invariant
    */
-  public boolean isActive() {
+  public boolean isActive() /*@NonPrototype*/ {
     return (true);
   }
 
@@ -1893,7 +1910,7 @@ public abstract class Invariant
    * VarInfo[], String)}.
    */
 
-  public void log (Logger log, String msg) {
+  public void log (Logger log, String msg) /*@NonPrototype*/ {
 
     if (Debug.logOn()) {
       Debug.log (log, getClass(), ppt, msg);
@@ -1919,11 +1936,11 @@ public abstract class Invariant
       return (false);
   }
 
-  public String toString() {
+  public String toString() /*@NonPrototype*/ {
     return format();
   }
 
-  public static String toString (Invariant[] invs) {
+  public static String toString (/*@NonPrototype*/ Invariant[] invs) {
 
     ArrayList<String> strings = new ArrayList<String>(invs.length);
     for (int i = 0; i < invs.length; i++) {
