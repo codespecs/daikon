@@ -294,7 +294,7 @@ public final class ONEOFSCALAR
       return;
 
 #if defined(IS_ELT) || defined(IS_SEQUENCE)
-    @SuppressWarnings("nullness") // var() is initialized by the super constructor
+    @SuppressWarnings({"nullness","cast"}) // var() is initialized by the super constructor
     ONEOFSCALAR thisNonRaw = (/*@NonNull*/ ONEOFSCALAR) this;
     assert thisNonRaw.var().is_array() :
     String.format ("ProglangType (var %s type %s) must be pseudo-array for %s",
