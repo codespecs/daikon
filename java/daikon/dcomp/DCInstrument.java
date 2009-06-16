@@ -1851,7 +1851,7 @@ class DCInstrument {
       // Add the DCompMarker argument so that the instrumented version
       // will be used
       il.append (new ACONST_NULL());
-      Type[] new_arg_types = add_type (arg_types, dcomp_marker);
+      Type[] new_arg_types = BCELUtil.add_type (arg_types, dcomp_marker);
       il.append (ifact.createInvoke (classname, method_name, ret_type,
                                      new_arg_types, invoke.getOpcode()));
 
@@ -1944,7 +1944,7 @@ class DCInstrument {
     InstructionList il = new InstructionList();
 
     Type[] arg_types = invoke.getArgumentTypes(pool);
-    Type[] new_arg_types = add_type (arg_types, dcomp_marker);
+    Type[] new_arg_types = BCELUtil.add_type (arg_types, dcomp_marker);
     String method_name = invoke.getMethodName(pool);
     Type ret_type = invoke.getReturnType(pool);
     String classname = invoke.getClassName (pool);
@@ -2248,7 +2248,7 @@ class DCInstrument {
       // Add the DCompMarker argument so that the instrumented version
       // will be used
       il.append (new ACONST_NULL());
-      Type[] new_arg_types = add_type (arg_types, dcomp_marker);
+      Type[] new_arg_types = BCELUtil.add_type (arg_types, dcomp_marker);
       il.append (ifact.createInvoke (classname, method_name, ret_type,
                                      new_arg_types, invoke.getOpcode()));
 
@@ -3490,32 +3490,6 @@ class DCInstrument {
     }
 
   }
-
-  /**
-   * Returns a type array with new_type added to the end of types
-   */
-  public static Type[] add_type (Type[] types, Type new_type) {
-      Type[] new_types = new Type[types.length + 1];
-      for (int ii = 0; ii < types.length; ii++) {
-        new_types[ii] = types[ii];
-      }
-      new_types[types.length] = new_type;
-      return (new_types);
-  }
-
-
-  /**
-   * Returns a type array with new_type inserted at the beginning
-   */
-  public static Type[] insert_type (Type new_type, Type[] types) {
-      Type[] new_types = new Type[types.length + 1];
-      for (int ii = 0; ii < types.length; ii++) {
-        new_types[ii+1] = types[ii];
-      }
-      new_types[0] = new_type;
-      return (new_types);
-  }
-
   /**
    * Returns a String array with new_string added to the end of arr
    */
@@ -4235,7 +4209,7 @@ class DCInstrument {
 
     // Add an argument of type java.lang.DCompMarker to distinguish the
     // method as instrumented
-    Type[] arg_types = add_type (mg.getArgumentTypes(), dcomp_marker);
+    Type[] arg_types = BCELUtil.add_type (mg.getArgumentTypes(), dcomp_marker);
     String[] arg_names = add_string (mg.getArgumentNames(), "marker");
     debug_add_dcomp.log ("%s:%n  args = %s, %n  names = %s%n", mg.getName(),
                      Arrays.toString (arg_types), Arrays.toString (arg_names));
@@ -4386,7 +4360,7 @@ class DCInstrument {
     il.append (ifact.createReturn (ret_type));
 
     // Create the method
-    Type[] arg_types = add_type (mg.getArgumentTypes(), dcomp_marker);
+    Type[] arg_types = BCELUtil.add_type (mg.getArgumentTypes(), dcomp_marker);
     String[] arg_names = add_string (mg.getArgumentNames(), "marker");
     MethodGen dcomp_mg
       = new MethodGen (mg.getAccessFlags(), ret_type, arg_types,

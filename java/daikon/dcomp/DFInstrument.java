@@ -853,7 +853,7 @@ class DFInstrument extends DCInstrument {
       // Add the DCompMarker argument so that the instrumented version
       // will be used
       il.append (new ACONST_NULL());
-      Type[] new_arg_types = add_type (arg_types, dcomp_marker);
+      Type[] new_arg_types = BCELUtil.add_type (arg_types, dcomp_marker);
       il.append (ifact.createInvoke (classname, method_name, ret_type,
                                      new_arg_types, invoke.getOpcode()));
 
@@ -872,7 +872,7 @@ class DFInstrument extends DCInstrument {
       if (replacement_method != null) {
         if (invoke.getOpcode() == Constants.INVOKEVIRTUAL) {
           Type invoke_class = invoke.getReferenceType(pool);
-          arg_types = insert_type (invoke_class, arg_types);
+          arg_types = BCELUtil.insert_type (invoke_class, arg_types);
           il.append (dcr_call (replacement_method, ret_type, arg_types));
         } else if (invoke.getOpcode() == Constants.INVOKESPECIAL) {
           constructor_summary (il, invoke, replacement_method);
