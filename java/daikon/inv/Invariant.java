@@ -1922,7 +1922,7 @@ public abstract class Invariant
   * @return whether or not it logged anything
   */
 
-  public boolean log (String format, Object...args) /*@Raw*/ {
+  public boolean log (String format, /*@Nullable*/ Object...args) /*@Raw*/ {
     if (ppt != null) {
       String msg = format;
       if (args.length > 0)

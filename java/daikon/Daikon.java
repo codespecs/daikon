@@ -436,7 +436,7 @@ public final class Daikon {
   public static class TerminationMessage extends RuntimeException {
     static final long serialVersionUID = 20050923L;
     public TerminationMessage(String s) { super(s); }
-    public TerminationMessage(String format, Object... args) {
+    public TerminationMessage(String format, /*@Nullable*/ Object... args) {
       super (String.format (format, args));
     }
     public TerminationMessage(Exception e) { super(e.getMessage()); }

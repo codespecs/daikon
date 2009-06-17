@@ -2561,7 +2561,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   private static Set<String> out_strings = new LinkedHashSet<String>();
 
   /** If the message is new print it, otherwise discard it **/
-  static void debug_print_once (String format, Object... args) {
+  static void debug_print_once (String format, /*@Nullable*/ Object... args) {
     String msg = String.format (format, args);
     if (!out_strings.contains (msg)) {
       System.out.println (msg);

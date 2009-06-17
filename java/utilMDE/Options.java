@@ -621,7 +621,7 @@ public class Options {
   /**
    * Prints a message followed by usage information.
    */
-  public void print_usage (PrintStream ps, String format, Object... args) {
+  public void print_usage (PrintStream ps, String format, /*@Nullable*/ Object... args) {
     ps.printf (format, args);
     print_usage (ps);
   }
@@ -629,7 +629,7 @@ public class Options {
   /**
    * Prints, to standard output, a message followed by usage information.
    */
-  public void print_usage (String format, Object... args) {
+  public void print_usage (String format, /*@Nullable*/ Object... args) {
     print_usage(System.out, format, args);
   }
 
@@ -857,7 +857,7 @@ public class Options {
   public static class ArgException extends Exception {
     static final long serialVersionUID = 20051223L;
     public ArgException (String s) { super (s); }
-    public ArgException (String format, Object... args) {
+    public ArgException (String format, /*@Nullable*/ Object... args) {
       super (String.format (format, args));
     }
   }

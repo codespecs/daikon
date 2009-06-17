@@ -132,7 +132,7 @@ public class Runtime
     }
 
     /** Printf to dtrace file. **/
-    final private static void printf(String format, Object... args)
+    final private static void printf(String format, /*@Nullable*/ Object... args)
     {
         if (!dtrace_closed)
             dtrace.printf(format, args);

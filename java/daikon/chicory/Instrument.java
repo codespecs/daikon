@@ -56,7 +56,7 @@ public class Instrument implements ClassFileTransformer {
   public Instrument () {
   }
 
-  private void log (String format, Object... args) {
+  private void log (String format, /*@Nullable*/ Object... args) {
     if (!log_on)
       return;
     System.out.printf (format, args);
