@@ -1,11 +1,11 @@
-// import typequals.*;
+import typequals.*;
 
 
 package java.lang;
 
 class Object {
 //     Object();
-    Class<?> getClass() @PrototypeOrNot;
+    Class<?> getClass() @Prototype;
 //     int hashCode();
 //     boolean equals(Object arg0);
 //     protected Object clone() throws CloneNotSupportedException;

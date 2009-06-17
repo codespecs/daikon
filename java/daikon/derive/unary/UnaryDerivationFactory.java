@@ -5,6 +5,6 @@ import daikon.derive.*;
 
 public abstract class UnaryDerivationFactory implements DerivationFactory {
 
-  public abstract UnaryDerivation[] instantiate(VarInfo vi);
+  public abstract UnaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi);
 
 }

@@ -22,7 +22,7 @@ public class ArrayInfo extends DaikonVariableInfo
         this.array_type = array_type;
     }
 
-    public Object getMyValFromParentVal(Object value)
+    public /*@Nullable*/ Object getMyValFromParentVal(Object value)
     {
         if (value == null)
         {

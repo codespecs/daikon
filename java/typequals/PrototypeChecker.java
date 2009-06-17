@@ -13,10 +13,9 @@ import checkers.quals.*;
  * because every use of every type defaults to NonPrototype (and in fact
  * this default applies to every class declaration as well).  The
  * declaration of Invariant (and its subclasses) are explicitly marked
- * as @PrototypeOrNot, so that it is possible to annotate them
- * with @NonPrototype or @PrototypeOrNot.
+ * as @Prototype, so that it is possible for instances to be either
+ * with @Prototype or @NonPrototype.
  **/
 
-@TypeQualifiers({ Prototype.class, NonPrototype.class,
-                  PrototypeOrNot.class, PrototypeBottom.class })
+@TypeQualifiers({ Prototype.class, NonPrototype.class })
 public final class PrototypeChecker extends BaseTypeChecker { }

@@ -265,7 +265,7 @@ public final class ValueTuple implements Cloneable {
 
   // These definitions are intended to make different ValueTuples with the
   // same contents compare identically.
-  public boolean equals(Object obj) {
+  public boolean equals(/*@Nullable*/ Object obj) {
     if (! (obj instanceof ValueTuple))
       return false;
     ValueTuple other = (ValueTuple) obj;

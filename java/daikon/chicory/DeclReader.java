@@ -135,7 +135,7 @@ public class DeclReader {
     /**
      * Reads a single value for this variable and returns it.
      */
-    public /*@Interned*/ Object read_data (MultiReader reader) throws IOException {
+    public /*@Nullable*/ /*@Interned*/ Object read_data (MultiReader reader) throws IOException {
       String var_name = reader.readLine();
       if (!var_name.equals (this.name))
         throw new Error (var_name + " found where " + this.name

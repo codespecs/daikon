@@ -202,7 +202,7 @@ class TagEntry extends WeakReference<Object> {
     return (root_ref);
   }
 
-  public static Object tracer_find (Object obj) {
+  public static /*@Nullable*/ Object tracer_find (Object obj) {
     TagEntry entry = object_map.get(obj);
     if (entry == null) { return obj; }
     TagEntry tracer = entry.getTracer();

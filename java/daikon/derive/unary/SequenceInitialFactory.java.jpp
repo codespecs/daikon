@@ -31,7 +31,7 @@ public final class CLASSNAME extends UnaryDerivationFactory {
   public static final Logger debug =
     Logger.getLogger("daikon.derive.binary.SequenceInitialFactory");
 
-  public UnaryDerivation[] instantiate(VarInfo vi) {
+  public UnaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi) {
     // System.out.println("SequenceInitialFactory.instantiate(" + vi + ")");
     // return (UnaryDerivation)new SequenceFirst(vi);
 

@@ -2353,7 +2353,7 @@ public final class DCRuntime {
    *   to a set contains all its children. The parameter RootInfo node is
    *   included as a key to all its children.
    */
-  static Map<DaikonVariableInfo, DVSet> get_comparable_traced (RootInfo root) {
+  static /*@Nullable*/ Map<DaikonVariableInfo, DVSet> get_comparable_traced (RootInfo root) {
     if (root == null) return null;
 
     // List of all of the parent-child relationships, where parent-child

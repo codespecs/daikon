@@ -20,7 +20,7 @@ public class RootInfo extends DaikonVariableInfo
     }
 
     @Override
-    public Object getMyValFromParentVal(Object value)
+    public /*@Nullable*/ Object getMyValFromParentVal(Object value)
     {
         return null;
     }

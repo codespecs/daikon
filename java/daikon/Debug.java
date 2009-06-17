@@ -178,7 +178,7 @@ public class Debug {
    * the constructor directly, since it doesn't create the object if it
    * doesn't have to
    */
-  public static Debug newDebug (Class<?> c, Ppt ppt, VarInfo[] vis) {
+  public static /*@Nullable*/ Debug newDebug (Class<?> c, Ppt ppt, VarInfo[] vis) {
     if (logOn() && class_match (c) && ppt_match (ppt) && var_match (vis))
       return new Debug (c, ppt, vis);
     else
@@ -209,7 +209,7 @@ public class Debug {
    * any match, returns that variable.  Null is returned if there are no
    * matches.
    */
-  public VarInfo visTracked (List<VarInfo> vis) {
+  public /*@Nullable*/ VarInfo visTracked (List<VarInfo> vis) {
 
     for (VarInfo v : vis) {
       Set<VarInfo> evars = null;
@@ -778,7 +778,7 @@ public class Debug {
    * and can be left out.  The add_track routine can be called multiple times.
    * An invariant that matches any of the specifications will be tracked.
    */
-  public static String add_track (String def) {
+  public static /*@Nullable*/ String add_track (String def) {
 
     String classes = null;
     String vars = null;

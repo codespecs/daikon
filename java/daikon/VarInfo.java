@@ -1325,7 +1325,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * was derived.
    * Only works for sequences.
    **/
-  public VarInfo isDerivedSubSequenceOf() {
+  public /*@Nullable*/ VarInfo isDerivedSubSequenceOf() {
 
     if (derived == null)
       return null;
@@ -1343,7 +1343,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns the variable (if any) that represents the size of this sequence **/
-  public VarInfo sequenceSize() {
+  public /*@Nullable*/ VarInfo sequenceSize() {
     if (sequenceSize != null)
       return sequenceSize;
     Assert.assertTrue(rep_type.isArray());
@@ -2458,7 +2458,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       this.samples = samples;
     }
 
-    public boolean equals(Object obj) {
+    public boolean equals(/*@Nullable*/ Object obj) {
       if (!(obj instanceof Pair))
         return (false);
 
@@ -3128,7 +3128,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * The implementation is somewhat different that simplifyNameAndBounds
    * (I don't know why).
    */
-  public String[] get_simplify_slice_bounds() {
+  public String /*@Nullable*/ [] get_simplify_slice_bounds() {
     if (!FileIO.new_decl_format) {
       /*@Interned*/ VarInfoName[] bounds = var_info_name.getSliceBounds(); // vin ok
       if (bounds == null)

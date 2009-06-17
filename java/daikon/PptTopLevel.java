@@ -324,8 +324,8 @@ public class PptTopLevel extends Ppt {
   public Set<VarInfo> redundant_invs_equality = new LinkedHashSet<VarInfo>(0);
 
   public PptTopLevel (String name, PptType type, List<ParentRelation> parents,
-                      EnumSet<PptFlags> flags, List<String> ppt_successors,
-                      /*@Interned*/ String function_id, int bb_length, VarInfo[] var_infos) {
+                      EnumSet<PptFlags> flags, /*@Nullable*/ List<String> ppt_successors,
+                      /*@Nullable*/ /*@Interned*/ String function_id, int bb_length, VarInfo[] var_infos) {
 
     this.name = name;
     if (!name.contains (":::")) {
@@ -913,7 +913,7 @@ public class PptTopLevel extends Ppt {
    *
    * @return the set of all invariants weakened or falsified by this sample
    **/
-  public Set<Invariant> add_bottom_up (ValueTuple vt, int count) {
+  public /*@Nullable*/ Set<Invariant> add_bottom_up (ValueTuple vt, int count) {
     // Doable, but commented out for efficiency
     // repCheck();
 

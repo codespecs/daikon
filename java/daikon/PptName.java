@@ -151,7 +151,7 @@ public class PptName
    * May be null.
    * e.g. "StackAr"
    **/
-  public String getShortClassName() {
+  public /*@Nullable*/ String getShortClassName() {
     if (cls == null) return null;
     int pt = cls.lastIndexOf('.');
     if (pt == -1)
@@ -164,7 +164,7 @@ public class PptName
    * @return a guess at the package name.
    * May be null.
    **/
-  public String getPackageName() {
+  public /*@Nullable*/ String getPackageName() {
     if (cls == null) return null;
     int pt = cls.lastIndexOf('.');
     if (pt == -1)
@@ -190,7 +190,7 @@ public class PptName
    * May be null.
    * e.g. "pop"
    **/
-  public String getMethodName() {
+  public /*@Nullable*/ String getMethodName() {
     if (method == null) return null;
     int lparen = method.indexOf('(');
     Assert.assertTrue(lparen >= 0);
@@ -309,7 +309,7 @@ public class PptName
 
   /**
    * @return a string containing the line number, if this is an exit point;
-   *         otherwise, return null
+   *         otherwise, return an empty string
    * @see #getPointSubscript()
    **/
   public String exitLine() {

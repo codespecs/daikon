@@ -2166,7 +2166,7 @@ class DCInstrument {
    * for primitives. (That is, it does just about nothing.)
    * Currently, does not treat equals or clone specially.
    */
-  InstructionList handle_invoke_refs_only (InvokeInstruction invoke) {
+  /*@Nullable*/ InstructionList handle_invoke_refs_only (InvokeInstruction invoke) {
 
     String classname = invoke.getClassName (pool);
 
@@ -2601,7 +2601,7 @@ class DCInstrument {
    * exit locations are filled in, but the reflection information is
    * not generated
    */
-  protected MethodInfo create_method_info (ClassInfo class_info, MethodGen mgen) {
+  protected /*@Nullable*/ MethodInfo create_method_info (ClassInfo class_info, MethodGen mgen) {
 
     // Get the argument names for this method
     String[] arg_names = mgen.getArgumentNames();
@@ -3223,7 +3223,7 @@ class DCInstrument {
    * a primitive, pushes its tag on the tag stack.  If the constant is a
    * reference (string, class), does nothing
    */
-  InstructionList ldc_tag (Instruction inst, OperandStack stack) {
+  /*@Nullable*/ InstructionList ldc_tag (Instruction inst, OperandStack stack) {
     Type type;
     if (inst instanceof LDC) // LDC_W extends LDC
       type = ((LDC)inst).getType (pool);
@@ -3312,7 +3312,7 @@ class DCInstrument {
    * Returns the type of the last instruction that modified the top of
    * stack.  A gross attempt to figure out what is on the top of stack.
    */
-  protected Type find_last_push (InstructionHandle ih) {
+  protected /*@Nullable*/ Type find_last_push (InstructionHandle ih) {
 
     for (ih = ih.getPrev(); ih != null; ih = ih.getPrev()) {
       Instruction inst = ih.getInstruction();

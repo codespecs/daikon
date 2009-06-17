@@ -8,7 +8,7 @@ import daikon.inv.OutputFormat;
 
 public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
 
-  public UnaryDerivation[] instantiate(VarInfo vi) {
+  public UnaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi) {
     // System.out.println("SequenceMinMaxSumFactory.instantiate(" + vi.name + ")");
 
     if (vi.rep_type != ProglangType.INT_ARRAY)

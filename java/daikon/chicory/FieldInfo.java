@@ -160,7 +160,7 @@ public class FieldInfo extends DaikonVariableInfo
      * Returns the name of this field.  Since statics are top level, they
      * have no relative name.  Fields return their field name.
      **/
-    public String get_relative_name() {
+    public /*@Nullable*/ String get_relative_name() {
       if (isStatic())
         return null;
       else

@@ -131,7 +131,7 @@ public abstract class DaikonVariableInfo
     /**
      * Returns the name of this variable.
      */
-    public String getName()
+    public /*@Nullable*/ String getName()
     {
         if (name == null)
             return null;
@@ -1322,7 +1322,7 @@ public abstract class DaikonVariableInfo
      * Returns the name of this variable relative to its enclosing variable.
      * For example the relative name for 'this.a' is 'a'.
      */
-    public String get_relative_name() {
+    public /*@Nullable*/ String get_relative_name() {
         return null;
     }
 

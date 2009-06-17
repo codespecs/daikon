@@ -60,7 +60,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
   //   base1 is the sequence
   //   base2 and base3 are the scalars
 
-  public TernaryDerivation[] instantiate(VarInfo vi1, VarInfo vi2,
+  public TernaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi1, VarInfo vi2,
                                          VarInfo vi3) {
 
     // check if the derivations are globally disabled

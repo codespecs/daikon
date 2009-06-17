@@ -481,7 +481,7 @@ public class DTraceWriter extends DaikonWriter
      * @return a list of Strings which are the names of the runtime types in the
      * theVals param
      */
-    public static List<String> getTypeNameList(List<Object> theVals)
+    public static /*@Nullable*/ List<String> getTypeNameList(List<Object> theVals)
     {
         // Return null rather than NonsensicalList as NonsensicalList is
         // an array of Object and not String.
@@ -519,7 +519,7 @@ public class DTraceWriter extends DaikonWriter
      * @param runtime Should we use the runtime type or declared type?
      * @return The variable's type, with primitive wrappers removed
      */
-    public static Class<?> removeWrappers(Object val, Class<?> declared, boolean runtime)
+    public static /*@Nullable*/ Class<?> removeWrappers(Object val, Class<?> declared, boolean runtime)
     {
         if (!(val instanceof Runtime.PrimitiveWrapper))
         {

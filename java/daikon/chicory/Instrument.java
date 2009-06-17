@@ -125,7 +125,7 @@ public class Instrument implements ClassFileTransformer {
    * Given another class, return a transformed version of the class which
    * contains "hooks" at method entries and exits
    */
-  public byte[] transform (ClassLoader loader, String className,
+  public byte /*@Nullable*/ [] transform (ClassLoader loader, String className,
                            Class<?> classBeingRedefined,
                            ProtectionDomain protectionDomain,
                            byte[] classfileBuffer)
@@ -653,7 +653,7 @@ public class Instrument implements ClassFileTransformer {
    * variable (return__$trace2_val) and then do the return.  Also, calls
    * Runtime.exit() immediately before the return.
    */
-  private InstructionList xform_inst (String fullClassName, Instruction inst, MethodContext c,
+  private /*@Nullable*/ InstructionList xform_inst (String fullClassName, Instruction inst, MethodContext c,
                                       Iterator<Boolean> shouldIncIter, Iterator<Integer> exitIter)
   {
 
@@ -990,7 +990,7 @@ public class Instrument implements ClassFileTransformer {
 
   //creates a MethodInfo struct corresponding to mgen
   @SuppressWarnings("unchecked")
-    private MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen)
+  private /*@Nullable*/ MethodInfo create_method_info(ClassInfo class_info, MethodGen mgen)
   {
     // Get the argument names for this method
     String[] arg_names = mgen.getArgumentNames();

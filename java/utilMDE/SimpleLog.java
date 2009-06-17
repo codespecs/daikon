@@ -78,7 +78,7 @@ public final class SimpleLog {
    * Log a message.  Provide a backtrace (traceback) if variable
    * always_traceback is set.
    */
-  public final void log (String format, Object... args) {
+  public final void log (String format, /*@Nullable*/ Object... args) {
 
     if (enabled) {
       format = add_newline(format);
@@ -91,7 +91,7 @@ public final class SimpleLog {
   }
 
   /** Log a message, and provide a backtrace (traceback, or tb). */
-  public final void log_tb (String format, Object... args) {
+  public final void log_tb (String format, /*@Nullable*/ Object... args) {
     if (enabled) {
       log (format, args);
       tb();
@@ -136,7 +136,7 @@ public final class SimpleLog {
     }
   }
 
-  public final void indent (String format, Object... args) {
+  public final void indent (String format, /*@Nullable*/ Object... args) {
     if (enabled) {
       log (format, args);
       indent();
@@ -157,7 +157,7 @@ public final class SimpleLog {
   /**
    * Calls clear() and then logs the specified message
    */
-  public final void clear (String format, Object... args) {
+  public final void clear (String format, /*@Nullable*/ Object... args) {
     if (enabled) {
       clear();
       log (format, args);
@@ -177,7 +177,7 @@ public final class SimpleLog {
    * {@link #log(String, Object...)}.
    */
   @Deprecated
-  public final void exdent (String format, Object... args) {
+  public final void exdent (String format, /*@Nullable*/ Object... args) {
     if (enabled) {
       exdent();
       log (format, args);
@@ -185,7 +185,7 @@ public final class SimpleLog {
   }
 
   /** Prints the time and then exdents. */
-  public final void exdent_time (String format, Object... args) {
+  public final void exdent_time (String format, /*@Nullable*/ Object... args) {
     if (enabled) {
       // This puts the time inside, not outside, the indentation.
       log_time (format, args);
@@ -230,7 +230,7 @@ public final class SimpleLog {
    * the last call to start_time().
    * Does not pop nor reset the current start time.
    */
-  public final void log_time (String format, Object... args) {
+  public final void log_time (String format, /*@Nullable*/ Object... args) {
 
     if (enabled) {
       Long start_time = start_times.peek();

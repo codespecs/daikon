@@ -148,7 +148,7 @@ public final /*@Interned*/ class ProglangType
 
   // THIS CODE IS A HOT SPOT (~33% of runtime) [as of January 2002].
   /** @param t_base must be interned **/
-  private static ProglangType find(/*@Interned*/ String t_base, int t_dims) {
+  private static /*@Nullable*/ ProglangType find(/*@Interned*/ String t_base, int t_dims) {
 // Disabled for performance reasons! this assertion is sound though:
 //    Assert.assertTrue(t_base == t_base.intern());
 
@@ -334,7 +334,7 @@ public final /*@Interned*/ class ProglangType
    * is not really correct, but it is a reasonable path to take for now
    * (jhp, Feb 12, 2005)
    */
-  public final /*@Interned*/ Object parse_value(String value) {
+  public final /*@Nullable*/ /*@Interned*/ Object parse_value(String value) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
     String value_ = value;      // for debugging, I suppose

@@ -89,7 +89,7 @@ public class StackOffsets {
 
     }
 
-    public static Integer int_val (VarInfo vi, ValueTuple vt) {
+    public static /*@Nullable*/ Integer int_val (VarInfo vi, ValueTuple vt) {
       Object o = vt.getValue(vi);
       if (o == null)
         return null;

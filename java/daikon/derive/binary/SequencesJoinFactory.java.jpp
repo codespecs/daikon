@@ -38,7 +38,7 @@ public final class CLASSNAME extends BinaryDerivationFactory {
   public static final Logger debug =
     Logger.getLogger("daikon.derive.binary." + CLASSSTRING);
 
-  public BinaryDerivation[] instantiate(VarInfo var1, VarInfo var2) {
+  public BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo var1, VarInfo var2) {
 
     boolean enabled = SEQUENCESJOIN.dkconfig_enabled;
     if (!enabled) return null;

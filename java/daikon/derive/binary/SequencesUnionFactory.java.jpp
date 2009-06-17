@@ -42,7 +42,7 @@ import daikon.*;
 
 public final class SCALARSEQUENCESUNIONFACTORY extends BinaryDerivationFactory {
 
-  public BinaryDerivation[] instantiate(VarInfo seq1, VarInfo seq2) {
+  public BinaryDerivation /*@Nullable*/ [] instantiate(VarInfo seq1, VarInfo seq2) {
     if (! SCALARSEQUENCESUNION.dkconfig_enabled) {
       return null;
     }

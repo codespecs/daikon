@@ -2164,7 +2164,7 @@ public final class Daikon {
    * of ppts (presuming that only those ppts <= max_ppt will be
    * processed).
    */
-  private static String setup_ppt_perc(Collection<File> decl_files, int ppt_perc) {
+  private static /*@Nullable*/ String setup_ppt_perc(Collection<File> decl_files, int ppt_perc) {
 
     // Make sure the percentage is valid
     if ((ppt_perc < 1) || (ppt_perc > 100))
