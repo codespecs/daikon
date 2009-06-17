@@ -30,7 +30,7 @@ import java.io.Serializable;
  * variables a and b at PptTopLevel T, there will not be two instances
  * of invariant I(a, b).
  **/
-/*@PrototypeOrNot*/
+/*@Prototype*/
 public abstract class Invariant
   implements Serializable, Cloneable // but don't YOU clone it
 {
@@ -589,8 +589,7 @@ public abstract class Invariant
    * the same invariant.
    */
   public /*@Nullable*/ /*@NonPrototype*/ Invariant
-    merge (List</*@NonPrototype*/Invariant> invs, PptSlice parent_ppt)
-    /*@Prototype*/ {
+    merge (List</*@NonPrototype*/ Invariant> invs, PptSlice parent_ppt) /*@Prototype*/ {
 
     Invariant first = invs.get(0);
     Invariant result = first.clone();
@@ -613,7 +612,7 @@ public abstract class Invariant
    * Permutes the invariant as specified.  Often creates a new invariant
    * (with a different class)
    */
-  public /*@NonPrototype*/Invariant permute (int[] permutation)
+  public /*@NonPrototype*/ Invariant permute (int[] permutation)
     /*@NonPrototype*/ {
     return (resurrect_done (permutation));
   }
@@ -1089,8 +1088,7 @@ public abstract class Invariant
    * May return null instead of an empty set.
    * Should be overridden by subclasses with non-instantiating suppressions.
    */
-  public /*@Nullable*/ NISuppressionSet get_ni_suppressions()
-    /*@NonPrototype*/{
+  public /*@Nullable*/ NISuppressionSet get_ni_suppressions() /*@Prototype*/ {
     return (null);
   }
 
@@ -1152,8 +1150,7 @@ public abstract class Invariant
    * position and data type of the variables is the *same* as that of
    * this.ppt.var_infos.
    **/
-  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis)
-    /*@Prototype*/ {
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) /*@Prototype*/ {
     return null;
   }
 
@@ -1279,8 +1276,7 @@ public abstract class Invariant
    * "super.isObviousDynamically(vis)".  Since this method is
    * dynamic, it should only be called after all processing.
    **/
-  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis)
-    /*@Prototype*/ {
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) /*@NonPrototype*/ {
     Assert.assertTrue (!Daikon.isInferencing);
     Assert.assertTrue(vis.length <= 3, "Unexpected more-than-ternary invariant");
     if (! ArraysMDE.noDuplicates(vis)) {
@@ -1496,7 +1492,7 @@ public abstract class Invariant
     Comparator<Invariant> classVarnameComparator = new ClassVarnameComparator();
 
     public int compare(/*@NonPrototype*/ Invariant inv1,
-                       /*@NonPrototype*/Invariant inv2) {
+                       /*@NonPrototype*/ Invariant inv2) {
       int compareClassVarname = classVarnameComparator.compare(inv1, inv2);
 
       if (compareClassVarname != 0) {
@@ -1542,9 +1538,9 @@ public abstract class Invariant
    */
   public static class Match {
 
-    public /*@Prototype*/Invariant inv;
+    public Invariant inv;
 
-    public Match (/*@Prototype*/Invariant inv) {
+    public Match (Invariant inv) {
       this.inv = inv;
     }
 
@@ -1565,10 +1561,10 @@ public abstract class Invariant
    * Returns whether or not two invariants are of the same type.  To
    * be of the same type, invariants must be of the same class.
    * Some invariant classes represent multiple invariants (such as
-   * FunctionBinary).  They must also by the same formula.
+   * FunctionBinary).  They must also be the same formula.
    * Note that invariants with different formulas based on their
    * samples (LinearBinary, Bounds, etc) will still match as
-   * long as the mergeFormulaOk() method returns true
+   * long as the mergeFormulaOk() method returns true.
    */
 
   public boolean match (/*@Prototype*/ Invariant inv) {
@@ -1711,7 +1707,7 @@ public abstract class Invariant
    * are done.
    * @return the new invariant
    */
-  protected /*@NonPrototype*/ Invariant instantiate_dyn (PptSlice slice) {
+  protected /*@NonPrototype*/ Invariant instantiate_dyn (PptSlice slice) /*@Prototype*/ {
     throw new Error("no instantiate_dyn for class " + getClass());
   }
 
