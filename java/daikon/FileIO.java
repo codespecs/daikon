@@ -138,7 +138,8 @@ public final class FileIO {
   // For debugging purposes: printing out a modified trace file with
   // changed modbits.
   private static boolean to_write_nonce = false;
-  private static String nonce_value, nonce_string;
+  private static final String NONCE_HEADER = "this_invocation_nonce";
+  private static String nonce_value;
 
   // (This implementation as a public static variable is a bit unclean.)
   // Number of ignored declarations.
@@ -185,7 +186,7 @@ public final class FileIO {
     }
 
     public static DeclError detail (ParseState state, String format,
-                                    Object... args) {
+                                    /*@Nullable*/ Object... args) {
       String msg = String.format (format, args)
         + String.format (" at line %d in file %s",
                  state.reader.getLineNumber(), state.filename);
@@ -940,6 +941,7 @@ public final class FileIO {
       // Yoav: server mode
       while (true) {
         String[] dir_files = Daikon.server_dir.list();
+        assert dir_files != null; // server_dir was checked when it was set
         Arrays.sort(dir_files);
         boolean hasEnd = false;
         for (String f:dir_files) {
@@ -1263,7 +1265,7 @@ public final class FileIO {
 
 
   /** Stash state here to be examined/printed by other parts of Daikon. */
-  public static ParseState data_trace_state = null;
+  public static /*@Nullable*/ ParseState data_trace_state = null;
 
   /**
    * Total number of samples passed to process_sample().
@@ -1300,7 +1302,9 @@ public final class FileIO {
     }
 
     while (true) {
+      assert data_trace_state != null;    // for nullness checker
       read_data_trace_record (data_trace_state);
+      assert data_trace_state != null;    // for nullness checker
       if (data_trace_state.status == ParseStatus.SAMPLE) {
         // Keep track of the total number of samples we have seen.
         samples_processed++;
@@ -1311,6 +1315,7 @@ public final class FileIO {
                                     data_trace_state.vt,
                                     data_trace_state.nonce);
         } catch (Error e) {
+          assert data_trace_state != null;    // for nullness checker
           if (! dkconfig_continue_after_file_exception) {
             throw new RuntimeException ("Error at line "
                     + data_trace_state.reader.getLineNumber() + " in file "
@@ -1337,6 +1342,7 @@ public final class FileIO {
       Global.dtraceWriter.close();
     }
 
+    assert data_trace_state != null;    // for nullness checker
     Daikon.progress = "Finished reading " + data_trace_state.filename;
     data_trace_state = null;
   }
@@ -1415,6 +1421,7 @@ public final class FileIO {
         // --ppt-select-pattern or --ppt-omit-pattern.
         if (state.ppt != null) {
           if (!state.all_ppts.containsName (state.ppt.name())) {
+            assert state.ppt != null; // for nullness checker
             state.all_ppts.add(state.ppt);
             try {
               Daikon.init_ppt(state.ppt, state.all_ppts);
@@ -1458,13 +1465,16 @@ public final class FileIO {
       try {
         new PptName(ppt_name);
       } catch (Throwable t) {
-        if (t instanceof Daikon.TerminationMessage)
+        String message = t.getMessage();
+        assert message != null;
+        if (t instanceof Daikon.TerminationMessage) {
           throw new Daikon.TerminationMessage ("%s: in %s line %d",
-                      t.getMessage(), state.filename, reader.getLineNumber());
-        else
+                      message, state.filename, reader.getLineNumber());
+        } else {
           throw new Daikon.TerminationMessage
           (String.format ("Illegal program point name '%s' (%s) in %s line %d",
              ppt_name, t.getMessage(), state.filename, reader.getLineNumber()));
+        }
       }
 
       if (state.all_ppts.size() == 0) {
@@ -1490,21 +1500,22 @@ public final class FileIO {
       // Read an invocation nonce if one exists
       Integer nonce = null;
 
-      String nonce_name_peekahead;
+      boolean nonce_exists;
       {
+        String nonce_header_peekahead;
         // arbitrary number, hopefully big enough; catch exceptions
         reader.mark(100);
         try {
-          nonce_name_peekahead = reader.readLine();
+          nonce_header_peekahead = reader.readLine();
         } catch (Exception e) {
-          nonce_name_peekahead = null;
+          nonce_header_peekahead = null;
         }
         reader.reset();
+        nonce_exists = NONCE_HEADER.equals(nonce_header_peekahead);
       }
-      if ("this_invocation_nonce".equals(nonce_name_peekahead)) {
-
-        String nonce_name = reader.readLine();
-        Assert.assertTrue(nonce_name != null && nonce_name.equals("this_invocation_nonce"));
+      if (nonce_exists) {
+        String nonce_header = reader.readLine();   // read & discard header
+        assert NONCE_HEADER.equals(nonce_header);
         String nonce_number = reader.readLine();
         if (nonce_number == null) {
           throw new Daikon.TerminationMessage("File ended while trying to read nonce",
@@ -1516,7 +1527,6 @@ public final class FileIO {
         if (Global.debugPrintDtrace) {
           to_write_nonce = true;
           nonce_value = nonce.toString();
-          nonce_string = nonce_name_peekahead;
         }
       }
 
@@ -1817,8 +1827,8 @@ public final class FileIO {
         if (dkconfig_verbose_unmatched_procedure_entries) {
           // Print the invocations in sorted order.
           // (Does this work?  The keys are integers. -MDE 7/1/2005.)
-          TreeSet<Integer> keys = new TreeSet<Integer>(call_hashmap.keySet());
           ArrayList<Invocation> invocations = new ArrayList<Invocation>();
+          TreeSet<Integer> keys = new TreeSet<Integer>(call_hashmap.keySet());
           for (Integer i : keys) {
             invocations.add(call_hashmap.get(i));
           }
@@ -1903,7 +1913,7 @@ public final class FileIO {
       Global.dtraceWriter.println(ppt.name());
 
       if (to_write_nonce) {
-        Global.dtraceWriter.println(nonce_string);
+        Global.dtraceWriter.println(NONCE_HEADER);
         Global.dtraceWriter.println(nonce_value);
         to_write_nonce = false;
       }
@@ -2762,7 +2772,7 @@ public final class FileIO {
   }
 
   private static void decl_error (ParseState state, String format,
-                                  Object... args) throws DeclError {
+                                  /*@Nullable*/ Object... args) throws DeclError {
     throw DeclError.detail (state, format, args);
   }
 
