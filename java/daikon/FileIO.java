@@ -125,7 +125,7 @@ public final class FileIO {
   public static boolean dkconfig_check_bb_connections = true;
 
   /** True if declaration records are in the new format **/
-  public static Boolean new_decl_format = null;
+  public static /*@LazyNonNull*/ Boolean new_decl_format = null;
 
   /// Variables
 
@@ -206,7 +206,7 @@ public final class FileIO {
   }
 
   // Utilities
-  public static final boolean isComment(String s) {
+  public static final boolean isComment(/*@Nullable*/ String s) {
     return s != null && (s.startsWith("//") || s.startsWith("#"));
   }
 
@@ -271,9 +271,10 @@ public final class FileIO {
    * Reads one ppt declaration.  The next line should be the ppt record.
    * After completion, the file pointer will be pointing at the next
    * record (ie, the blank line at the end of the ppt declaration will
-   * have been read in)
+   * have been read in).
+   * Returns null if the ppt is excluded/omitted from this execution of Daikon.
    */
-  private static PptTopLevel read_ppt_decl (ParseState state, String top_line)
+  private static /*@Nullable*/ PptTopLevel read_ppt_decl (ParseState state, String top_line)
     throws IOException {
 
     // process the ppt record
@@ -466,7 +467,7 @@ public final class FileIO {
 
 
   // The "DECLARE" line has already been read.
-  private static PptTopLevel read_declaration(ParseState state)
+  private static /*@Nullable*/ PptTopLevel read_declaration(ParseState state)
     throws IOException {
 
     // We have just read the "DECLARE" line.
@@ -569,7 +570,7 @@ public final class FileIO {
    * Return null after reading the last variable in this program point
    * declaration.
    **/
-  private static VarInfo read_VarInfo(
+  private static /*@Nullable*/ VarInfo read_VarInfo(
     ParseState state,
     String ppt_name)
     throws IOException {
@@ -873,7 +874,7 @@ public final class FileIO {
     }
 
     // Return true if the invocations print the same
-    public boolean equals(Object other) {
+    public boolean equals(/*@Nullable*/ Object other) {
       if (other instanceof FileIO.Invocation)
         return this.format().equals(((FileIO.Invocation) other).format());
       else
@@ -924,7 +925,8 @@ public final class FileIO {
         read_data_trace_file(filename, all_ppts, processor, false,
                              ppts_are_new);
       } catch (IOException e) {
-        if (e.getMessage().equals("Corrupt GZIP trailer")) {
+        String message = e.getMessage();
+        if (message != null && message.equals("Corrupt GZIP trailer")) {
           System.out.println(
             filename
               + " has a corrupt gzip trailer.  "
