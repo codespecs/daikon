@@ -56,9 +56,10 @@ public final class CLASSNAME
    **/
   public static boolean dkconfig_enabled = false;
 
-  public final int index;       // negative if counting from end
-                                // typically 0,1,-1, or -2
-  // array length required for the subscript to be meaningful:  (i.e., 1 or 2)
+  /** Typically 0, 1, -1, or -2.  A negative number means counting from end. */
+  public final int index;
+
+  /** Array length required for the subscript to be meaningful:  (i.e., 1 or 2) */
   final int minLength;
 
   public CLASSNAME(VarInfo vi, int index) {
