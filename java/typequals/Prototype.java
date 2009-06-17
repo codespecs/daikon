@@ -8,9 +8,9 @@ import checkers.quals.*;
  * over a particular set of variables, will never be applied to values,
  * etc.  A prototype can have any operation performed on it that does not
  * depend on properties of instance fields, and the prototype's {@link
- * Invariant#ppt} field is null.  Prototypes are often used as factory
- * objects from which to instantiate non-prototypes, but can be used for
- * other purposes as well.
+ * daikon.inv.Invariant#ppt} field is null.  Prototypes are often used as
+ * factory objects from which to instantiate non-prototypes, but can be
+ * used for other purposes as well.
  * <p>
  *
  * The {@code Prototype} qualifier means an invariant that is
@@ -32,5 +32,5 @@ import checkers.quals.*;
  * </ul>
  **/
 @TypeQualifier
-@SubtypeOf(PrototypeOrNot.class)
+@SubtypeOf({})
 public @interface Prototype {}

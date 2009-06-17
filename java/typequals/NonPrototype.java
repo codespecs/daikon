@@ -3,6 +3,6 @@ package typequals;
 import checkers.quals.*;
 
 @TypeQualifier
-@SubtypeOf(PrototypeOrNot.class)
+@SubtypeOf(Prototype.class)
 @DefaultQualifierInHierarchy
 public @interface NonPrototype {}
