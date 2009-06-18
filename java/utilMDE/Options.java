@@ -237,6 +237,7 @@ public class Options {
           if (base_type == Pattern.class) {
             factory = Pattern.class.getMethod ("compile", String.class);
           } else { // look for a string constructor
+            assert base_type != null; // nullness checker: problem with flow
             constructor = base_type.getConstructor (String.class);
           }
         } catch (Exception e) {

@@ -661,7 +661,9 @@ public final class UtilMDE {
    */
   public static File fix_filename (File name) {
     String path = name.getPath();
-    String newname = fix_filename (path);
+    // XXX why does the Nullness checker require this @NonNull annotation?
+    // it should be redundant
+    /*@NonNull*/ String newname = fix_filename (path);
     if (newname == path)
       return (name);
     else

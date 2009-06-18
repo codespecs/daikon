@@ -157,13 +157,13 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
   /**
    * Create a MultiReader
    *
-   *    @param file       Initial file to read
+   *    @param file       Initial file to read.
    *    @param comment_re Regular expression that matches comments.
    *                      Any text that matches comment_re is removed.
-   *                      A line that is entirely a comment is ignored
+   *                      A line that is entirely a comment is ignored.
    *    @param include_re Regular expression that matches include directives.
    *                      The expression should define one group that contains
-   *                      the include file name
+   *                      the include file name.
    */
   public MultiReader (File file, /*@Nullable*/ String comment_re,
                       /*@Nullable*/ String include_re) throws IOException {
@@ -231,12 +231,15 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
     if (include_re != null) {
       Matcher m = include_re.matcher (line);
       if (m.matches()) {
-        @SuppressWarnings("nullness")
-        File filename = new File (UtilMDE.fix_filename(m.group (1)));
+        String filename_string = m.group (1);
+        if (filename_string == null) {
+          throw new Error(String.format("include_re (%s) does not capture group 1 in %s",
+                                        include_re, line));
+        }
+        File filename = new File (UtilMDE.fix_filename(filename_string));
         // System.out.printf ("Trying to include filename %s%n", filename);
         if (!filename.isAbsolute()) {
-          @SuppressWarnings("nullness")
-          /*@NonNull*/ ReaderInfo reader = readers.peek();
+          ReaderInfo reader = readers.peek();
           File current_filename = new File (reader.filename);
           File current_parent = current_filename.getParentFile();
           filename = new File (current_parent, filename.toString());
@@ -331,7 +334,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
 
       // Remove entry match from the line
       if (entry_match.groupCount() > 0) {
-        @SuppressWarnings("nullness")
+        @SuppressWarnings("nullness") // just checked that group 1 exists
         /*@NonNull*/ String match_group_1 = entry_match.group(1);
         line = entry_match.replaceFirst (match_group_1);
       }
@@ -401,16 +404,14 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
     if (readers.size() == 0)
       return (null);
 
-    @SuppressWarnings("nullness") // ri != null because readers.size != 0
-    /*@NonNull*/ ReaderInfo ri1 = readers.peek();
+    ReaderInfo ri1 = readers.peek();
     String line = ri1.reader.readLine();
     ri1.line_number++;
     while (line == null) {
       readers.pop();
       if (readers.empty())
         return (null);
-      @SuppressWarnings("nullness") // ri != null because readers.size != 0
-      /*@NonNull*/ ReaderInfo ri2 = readers.peek();
+      ReaderInfo ri2 = readers.peek();
       line = ri2.reader.readLine();
       ri2.line_number++;
     }
