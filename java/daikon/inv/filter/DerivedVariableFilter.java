@@ -26,7 +26,6 @@ public class DerivedVariableFilter extends InvariantFilter {
 
   /**
    */
-  @SuppressWarnings("nullness")
   public DerivedVariableFilter () {
     isOn = dkconfig_class_re != null;
     if (isOn) {

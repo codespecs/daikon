@@ -106,8 +106,8 @@ public final /*(at)Interned*/ class Equality
     // ensure well-formedness and set equality slots
     Assert.assertTrue (variables.size() > 0);
     Assert.assertTrue (vars.size() == variables.size());
-    // Checkers TODO: flow should infer this as non-raw.
-    @SuppressWarnings({"nullness","cast"})
+
+    @SuppressWarnings({"cast"}) // XXX Nullness checker TODO: flow should infer this as non-raw.
     Equality thisNonRaw = (/*@NonNull*/ Equality)this;
     for (VarInfo vi : variables) {
       if (debug.isLoggable(Level.FINE)) {

@@ -294,7 +294,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     try {
       var_info_name = VarInfoName.parse (vardef.name); // vin ok
     } catch (Exception e) {
-      @SuppressWarnings("nullness")
+      @SuppressWarnings("nullness") // error case, likely to crash later anyway
       /*@NonNull*/ VarInfoName vin = null;
       var_info_name = vin;
       System.out.printf ("Warning: Can't parse %s as a VarInfoName",
