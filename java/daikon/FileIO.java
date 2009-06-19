@@ -1447,7 +1447,9 @@ public final class FileIO {
   public static void read_data_trace_record (ParseState state)
     throws IOException {
 
-    assert state == FileIO.data_trace_state;
+    @SuppressWarnings("interning")
+    boolean stateOK = (state == FileIO.data_trace_state);
+    assert stateOK;
 
     LineNumberReader reader = state.reader;
 
