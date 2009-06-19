@@ -21,10 +21,8 @@ public class Pair<T1 extends /*@Nullable*/ Object,T2 extends /*@Nullable*/ Objec
     if (obj instanceof Pair<?, ?>) { // generics are not checked at run time!
       @SuppressWarnings("unchecked")
       Pair<T1, T2> other = (Pair<T1, T2>) obj;
-      @SuppressWarnings("nullness") // due to problem with flow
       boolean aEquals = ((this.a == other.a)
                          || (this.a != null && (this.a.equals(other.a))));
-      @SuppressWarnings("nullness") // due to problem with flow
       boolean bEquals = ((this.b == other.b)
                          || (this.b != null && (this.b.equals(other.b))));
       return aEquals && bEquals;
