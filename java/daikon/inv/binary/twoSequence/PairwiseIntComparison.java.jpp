@@ -433,7 +433,7 @@ public class PAIRWISEINTEQUAL
 
   public InvariantStatus check_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
     assert a1 != null && a2 != null
-      : var1() + " " + var2() + FileIO.data_trace_state.reader.getLineNumber();
+      : var1() + " " + var2() + FileIO.get_linenum_String();
     if (a1.length != a2.length || a1.length == 0 || a2.length == 0) {
       // destroyAndFlow();
       return InvariantStatus.FALSIFIED;

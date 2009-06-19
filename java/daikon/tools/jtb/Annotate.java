@@ -214,12 +214,12 @@ public class Annotate {
     int argindex = g.getOptind();
 
     if (argindex >= args.length) {
-      throw new Daikon.TerminationMessage("Error: No .inv file or .java file arguments supplied.", usage);
+      throw new Daikon.TerminationMessage("Error: No .inv file or .java file arguments supplied."+ Global.lineSep + usage);
     }
     String invfile = args[argindex];
     argindex++;
     if (argindex >= args.length) {
-      throw new Daikon.TerminationMessage("Error: No .java file arguments supplied.", usage);
+      throw new Daikon.TerminationMessage("Error: No .java file arguments supplied."+ Global.lineSep + usage);
     }
     PptMap ppts = FileIO.read_serialized_pptmap(new File(invfile),
                                                 /*use saved config=*/true
@@ -273,7 +273,7 @@ public class Annotate {
                                        maxInvariantsPP));
       } catch (Error e) {
         if (e.getMessage() != null && e.getMessage().startsWith("Didn't find class ")) {
-          throw new Daikon.TerminationMessage(e.getMessage() + ".",
+          throw new Daikon.TerminationMessage(e.getMessage() + "." + Global.lineSep +
             "Be sure to compile Java classes before calling Annotate.");
         }
         throw e;

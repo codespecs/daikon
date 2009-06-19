@@ -435,34 +435,44 @@ public final class Daikon {
    **/
   public static class TerminationMessage extends RuntimeException {
     static final long serialVersionUID = 20050923L;
-    public TerminationMessage(String s) { super(s); }
-    public TerminationMessage(String format, /*@Nullable*/ Object... args) {
-      super (String.format (format, args));
+    public static String error_at_line_file(LineNumberReader reader, String filename) {
+      return "Error at line " + reader.getLineNumber() + " in file " + filename;
     }
-    public TerminationMessage(Exception e) { super(e.getMessage()); }
+
+    /// Constructors that take a Throwable
+    public TerminationMessage(Throwable e) { super(e.getMessage()); }
     //    public TerminationMessage(Exception e) {
     //      super(e.getMessage() + lineSep + UtilMDE.backTrace(e)); }
-
-    public TerminationMessage (Exception e, String msg) {
+    public TerminationMessage (Throwable e, String msg) {
       super (msg + ": " + e.getMessage());
     }
+    public TerminationMessage (Throwable e,
+                               FileIO.ParseState state) {
+      super (error_at_line_file(state.reader, state.filename), e);
+    }
+    public TerminationMessage (Throwable e,
+                               LineNumberReader reader, String filename) {
+      super (error_at_line_file(reader, filename), e);
+    }
+    public TerminationMessage (Throwable e,
+                               String msg, LineNumberReader reader, String filename) {
+      super (error_at_line_file(reader, filename) +": " + msg, e);
+    }
 
-    public TerminationMessage (Throwable e, String msg, LineNumberReader reader,
-                               String filename) {
-      super ("Error at line " + reader.getLineNumber() + " in file "
-             + filename +": " + msg, e);
-    }
-    public TerminationMessage (Throwable e, LineNumberReader reader,
-                               String filename) {
-      super ("Error at line " + reader.getLineNumber() + " in file "
-             + filename, e);
-    }
-    public TerminationMessage (LineNumberReader reader, String filename,
-                               String msg) {
-      super ("Error at line " + reader.getLineNumber() + " in file "
-             + filename +": " + msg);
-    }
+    /// Constructors that do not take a Throwable
     public TerminationMessage() { super(""); }
+    public TerminationMessage(String s) { super(s); }
+    public TerminationMessage (String msg, FileIO.ParseState state) {
+      super (error_at_line_file(state.reader, state.filename) + ": " + msg);
+    }
+    public TerminationMessage (String msg, LineNumberReader reader, String filename) {
+      super (error_at_line_file(reader, filename) + ": " + msg);
+    }
+    // This constructor is too error-prone:  it leads to throwing away
+    // subsequent args if there are not enough % directives in the string.
+    // public TerminationMessage(String format, /*@Nullable*/ Object... args) {
+    //   super (String.format (format, args));
+    // }
   }
 
   /**
@@ -1713,9 +1723,6 @@ public final class Daikon {
   public static class FileIOProgress extends Thread {
     public FileIOProgress() {
       setDaemon(true);
-      pctFmt = NumberFormat.getPercentInstance();
-      pctFmt.setMinimumFractionDigits(2);
-      pctFmt.setMaximumFractionDigits(2);
       df = DateFormat.getTimeInstance(/*DateFormat.LONG*/
       );
     }
@@ -1725,7 +1732,6 @@ public final class Daikon {
      * setting this.
      **/
     public boolean shouldStop = false;
-    private static NumberFormat pctFmt;
     private DateFormat df;
     public void run() {
       if (dkconfig_progress_delay == -1)
@@ -1762,7 +1768,18 @@ public final class Daikon {
     public void display() {
       if (dkconfig_progress_delay == -1)
         return;
-      display(message());
+
+      String message;
+      if (FileIO.data_trace_state() != null) {
+        message = FileIO.data_trace_state().reading_message();
+      } else {
+        if (Daikon.progress == null) {
+          message = "[no status]";
+        } else {
+          message = Daikon.progress;
+        }
+      }
+      display(message);
     }
     /** Displays the given message. **/
     public void display(String message) {
@@ -1784,35 +1801,10 @@ public final class Daikon {
           "Used memory: "
             + (java.lang.Runtime.getRuntime().totalMemory()
               - java.lang.Runtime.getRuntime().freeMemory()));
-        if (FileIO.data_trace_state != null)
+        if (FileIO.data_trace_state() != null)
           debugTrace.fine("Active slices: " +
-                          FileIO.data_trace_state.all_ppts.countSlices());
+                          FileIO.data_trace_state().all_ppts.countSlices());
       }
-    }
-    private String message() {
-      if (FileIO.data_trace_state == null) {
-        if (Daikon.progress == null) {
-          return "[no status]";
-        } else {
-          return Daikon.progress;
-        }
-      }
-      String filename = FileIO.data_trace_state.filename;
-      LineNumberReader lnr = FileIO.data_trace_state.reader;
-      String line;
-      if (lnr == null) {
-        line = "?";
-      } else {
-        long lineNum = lnr.getLineNumber();
-        line = String.valueOf(lineNum);
-        if (FileIO.data_trace_state.total_lines > 0) {
-          double frac =
-            lineNum / (double) FileIO.data_trace_state.total_lines;
-          String percent = pctFmt.format(frac);
-          line = line + ", " + percent;
-        }
-      }
-      return "Reading " + filename + " (line " + line + ") ...";
     }
   }
 

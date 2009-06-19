@@ -236,7 +236,7 @@ public class DtraceDiff {
         // *** should do some kind of progress bar here?
         // read from dtracefile1 until we get a data trace record or EOF
         while (true) {
-          FileIO.read_data_trace_record (state1);
+          FileIO.read_data_trace_record_setstate (state1);
           if (state1.status == FileIO.ParseStatus.SAMPLE)
             break;
           else if ((state1.status == FileIO.ParseStatus.EOF)
@@ -245,7 +245,7 @@ public class DtraceDiff {
         }
         // read from dtracefile2 until we get a data trace record or EOF
         while (true) {
-          FileIO.read_data_trace_record (state2);
+          FileIO.read_data_trace_record_setstate (state2);
           if (state2.status == FileIO.ParseStatus.SAMPLE)
             break;
           else if ((state2.status == FileIO.ParseStatus.EOF)

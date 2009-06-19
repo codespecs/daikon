@@ -62,7 +62,7 @@ public class TraceSelect {
   public static void mainHelper(final String[] args) {
     argles = args;
     if (args.length == 0) {
-      throw new daikon.Daikon.TerminationMessage("No arguments found.", usage);
+      throw new daikon.Daikon.TerminationMessage("No arguments found." + daikon.Daikon.lineSep + usage);
     }
 
     num_reps = Integer.parseInt (args[0]);

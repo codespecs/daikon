@@ -178,7 +178,7 @@ public class InvariantChecker {
       String filename = file.toString();
       if (filename.indexOf(".inv") != -1) {
         if (inv_file != null) {
-          throw new Daikon.TerminationMessage ("multiple inv files specified", usage);
+          throw new Daikon.TerminationMessage ("multiple inv files specified" + Global.lineSep + usage);
         }
         inv_file = file;
       } else if (filename.indexOf(".dtrace") != -1) {
@@ -195,17 +195,17 @@ public class InvariantChecker {
     // Yoav additions:
     File[] filesInDir = dir_file.listFiles();
     if (filesInDir == null || filesInDir.length==0)
-          throw new Daikon.TerminationMessage("The directory "+dir_file+" is empty", usage);
+          throw new Daikon.TerminationMessage("The directory "+dir_file+" is empty"+ Global.lineSep + usage);
     ArrayList<File> invariants = new ArrayList<File>();
     for (File f: filesInDir)
        if (f.toString().indexOf(".inv") != -1) invariants.add(f);
     if (invariants.size()==0)
-          throw new Daikon.TerminationMessage("Did not find any invariant files in the directory "+dir_file, usage);
+          throw new Daikon.TerminationMessage("Did not find any invariant files in the directory "+dir_file+ Global.lineSep + usage);
     ArrayList<File> dtraces = new ArrayList<File>();
     for (File f: filesInDir)
        if (f.toString().indexOf(".dtrace") != -1) dtraces.add(f);
     if (dtraces.size()==0)
-          throw new Daikon.TerminationMessage("Did not find any dtrace files in the directory "+dir_file, usage);
+          throw new Daikon.TerminationMessage("Did not find any dtrace files in the directory "+dir_file+ Global.lineSep + usage);
 
     System.out.println("Collecting data for invariants files "+invariants+" and dtrace files "+dtraces);
 
@@ -458,15 +458,13 @@ public class InvariantChecker {
           InvariantStatus status = inv.add_sample (vt, 1);
           sample_cnt++;
           if (status != InvariantStatus.NO_CHANGE) {
-            LineNumberReader lnr = FileIO.data_trace_state.reader;
-            String line = (lnr == null) ? "?"
-                        : String.valueOf(lnr.getLineNumber());
+            String line = FileIO.get_linenum_String();
             if (!quiet) {
               output_stream.println ("At ppt " + ppt.name + ", Invariant '"
                                      + inv.format() + "' invalidated by sample "
                                      + Debug.toString (slice.var_infos, vt)
                                      + "at line " + line + " in file "
-                                     +FileIO.data_trace_state.filename);
+                                     + FileIO.data_trace_state().filename);
             }
             failedInvariants.add(inv);
             activeInvariants.remove(inv);

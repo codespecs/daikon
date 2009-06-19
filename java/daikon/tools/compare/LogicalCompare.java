@@ -675,7 +675,7 @@ public class LogicalCompare {
     int num_args = args.length - g.getOptind();
 
     if (num_args < 2) {
-      throw new Daikon.TerminationMessage("Must have at least two non-option arguments", usage);
+      throw new Daikon.TerminationMessage("Must have at least two non-option arguments"+ Global.lineSep + usage);
     }
 
     String app_filename = args[g.getOptind() + 0];
@@ -756,7 +756,7 @@ public class LogicalCompare {
 
       }
     } else {
-      throw new Daikon.TerminationMessage("Too many arguments", usage);
+      throw new Daikon.TerminationMessage("Too many arguments"+ Global.lineSep + usage);
     }
   }
 }

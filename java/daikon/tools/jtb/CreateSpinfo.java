@@ -115,8 +115,7 @@ public class CreateSpinfo {
     int argindex = g.getOptind();
     if (argindex >= args.length) {
       throw new Daikon.TerminationMessage(
-         "Error: No .java file arguments supplied.",
-         usage);
+         "Error: No .java file arguments supplied."+ Global.lineSep + usage);
     }
     if (outputfilename != null) {
       PrintWriter output = new PrintWriter(new FileWriter(outputfilename));

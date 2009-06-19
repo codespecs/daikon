@@ -170,10 +170,10 @@ public class Quantify {
         return arr_var;
 
       throw new Daikon.TerminationMessage
-        ("Error: Can't create %s expression for the size of an array: "
+        (String.format("Error: Can't create %s expression for the size of an array: "
          + "No base array (hashcode) variable declared for array '%s'"
          + " in program point %s", output_format, sequence.name(),
-         sequence.ppt.name());
+                       sequence.ppt.name()));
     }
   }
 

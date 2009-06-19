@@ -55,7 +55,7 @@ public class StackOffsets {
           if (entry_esp.size() == 0) {
             System.out.printf ("No function entry for ppt %s (func %s) "
                                + "(line %d)\n", ppt.name(), ppt.function_id,
-                               FileIO.data_trace_state.reader.getLineNumber());
+                               FileIO.get_linenum_String());
             return;
           }
           OffsetInfo past_offset = offset_map.get(vi);
@@ -63,7 +63,7 @@ public class StackOffsets {
           if (cur_offset == null) {
             System.out.printf ("unexpected nonsense val for ppt %s (func %s) "
                                + "(line %d)\n", ppt.name(), ppt.function_id,
-                               FileIO.data_trace_state.reader.getLineNumber());
+                               FileIO.get_linenum_String());
           } else if (past_offset == null) {
             cur_offset -= entry_esp.peek();
             offset_map.put (vi, new OffsetInfo (cur_offset));

@@ -313,7 +313,7 @@ public class PptSliceEquality
           System.out.println ("return value = "
                               + Debug.toString (rv.getValue(vt)));
           System.out.println ("At line number "
-                              + FileIO.data_trace_state.reader.getLineNumber());
+                              + FileIO.get_linenum_String());
         }
         addToBindingList (multiMap, vi.getValue(vt), vi);
       }

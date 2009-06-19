@@ -16,6 +16,7 @@ import utilMDE.*;
 
 import java.io.*;
 import java.net.*;
+import java.text.*;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -147,7 +148,7 @@ public final class FileIO {
 
   /**
    * Map from function id to list of program points in that function.
-   * Valid for basic block program points only
+   * Valid for basic block program points only.
    **/
   private static Map<String,List<PptTopLevel>> func_ppts
     = new LinkedHashMap<String,List<PptTopLevel>>();
@@ -188,8 +189,7 @@ public final class FileIO {
     public static DeclError detail (ParseState state, String format,
                                     /*@Nullable*/ Object... args) {
       String msg = String.format (format, args)
-        + String.format (" at line %d in file %s",
-                 state.reader.getLineNumber(), state.filename);
+        + state.line_file_message();
       return new DeclError (msg);
     }
   }
@@ -476,7 +476,7 @@ public final class FileIO {
     if (ppt_name == null) {
       throw new Daikon.TerminationMessage(
         "File ends with \"DECLARE\" with no following program point name",
-        state.reader, state.filename);
+        state);
     }
     ppt_name = ppt_name.intern();
     VarInfo[] vi_array = read_VarInfos(state, ppt_name);
@@ -547,8 +547,7 @@ public final class FileIO {
     while ((vi = read_VarInfo(state, ppt_name)) != null) {
       for (VarInfo vi2 : var_infos) {
         if (vi.name() == vi2.name()) {
-          throw new Daikon.TerminationMessage("Duplicate variable name " + vi.name(), state.reader,
-                                           state.filename);
+          throw new Daikon.TerminationMessage("Duplicate variable name " + vi.name(), state);
         }
       }
       // Can't do this test in read_VarInfo, it seems, because of the test
@@ -728,7 +727,7 @@ public final class FileIO {
       comp_str = state.reader.readLine();
       if (comp_str == null) {
         throw new Daikon.TerminationMessage("Found end of file, expected comparability",
-                                         state.reader, state.filename);
+                                            state);
       }
     }
 
@@ -738,7 +737,7 @@ public final class FileIO {
       return (VarComparability.IMPLICIT);
     } else {
       throw new Daikon.TerminationMessage("Unrecognized VarComparability '" + comp_str
-                                       + "'", state.reader, state.filename);
+                                          + "'", state);
     }
   }
 
@@ -810,7 +809,7 @@ public final class FileIO {
 
     static Object canonical_hashcode = new Object();
 
-    Invocation(PptTopLevel ppt, Object[] vals, int[] mods) {
+    Invocation(PptTopLevel ppt, /*@Nullable*/ Object[] vals, int[] mods) {
       this.ppt = ppt;
       this.vals = vals;
       this.mods = mods;
@@ -1017,6 +1016,52 @@ public final class FileIO {
   }
 
 
+  private static InputStream connectToChicory()
+    {
+
+
+        ServerSocket daikonServer = null;
+        try
+        {
+            daikonServer = new ServerSocket(0); //bind to any free port
+
+            //tell Chicory what port we have!
+            System.out.println("DaikonChicoryOnlinePort=" + daikonServer.getLocalPort());
+
+            daikonServer.setReceiveBufferSize(64000);
+
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Unable to create server", e);
+        }
+
+        Socket chicSocket = null;
+        try
+        {
+            daikonServer.setSoTimeout(5000);
+
+            //System.out.println("waiting for chicory connection on port " + daikonServer.getLocalPort());
+            chicSocket = daikonServer.accept();
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Unable to connect to Chicory", e);
+        }
+
+
+        try
+        {
+            return chicSocket.getInputStream();
+        }
+        catch (IOException e)
+        {
+            throw new RuntimeException("Unable to get Chicory's input stream", e);
+        }
+
+    }
+
+
   /**
    * Class used to specify the processor to use for sample data.  By
    * default, the internal process_sample routine will be called, once for
@@ -1034,13 +1079,11 @@ public final class FileIO {
 
 
   /**
-   * Read declarations or samples (not just sample data) from .dtrace
-   * file, using standard data processor. **/
-  static void read_data_trace_file(String filename, PptMap all_ppts)
-    throws IOException {
-    Processor processor = new Processor();
-    read_data_trace_file(filename, all_ppts, processor, false, true);
-  }
+   * Total number of samples passed to process_sample().
+   * Not part of ParseState because it's global over all files
+   * processed by Daikon.
+   */
+  public static int samples_processed = 0;
 
 
   /** The type of the record that was most recently read. */
@@ -1208,72 +1251,106 @@ public final class FileIO {
       ppt = null;
     }
 
-    /** Returns the current line number in the input file if available **/
+    /** Returns the current line number in the input file, or -1 if not available. **/
     public int get_linenum () {
-      if (reader != null)
-        return reader.getLineNumber();
-      else
+      if (reader == null) {
         return -1;
+      } else {
+        return reader.getLineNumber();
+      }
+    }
+
+    /**
+     * Returns a string representation of the current line number in the
+     * input file, or "?" if not available.
+     **/
+    public String get_linenum_String () {
+      if (reader == null) {
+        return "?";
+      } else {
+        return String.valueOf(reader.getLineNumber());
+      }
+    }
+
+    private static NumberFormat pctFmt;
+    static {
+      pctFmt = NumberFormat.getPercentInstance();
+      pctFmt.setMinimumFractionDigits(2);
+      pctFmt.setMaximumFractionDigits(2);
+    }
+
+    public /*@Nullable*/ String reading_message () {
+      String line;
+      if (reader == null) {
+        line = "?";
+      } else {
+        long lineNum = reader.getLineNumber();
+        line = String.valueOf(lineNum);
+        if (total_lines > 0) {
+          double frac =
+            lineNum / (double) total_lines;
+          String percent = pctFmt.format(frac);
+          line = line + ", " + percent;
+        }
+      }
+      return "Reading " + filename + " (line " + line + ") ...";
+    }
+
+    public String line_file_message() {
+      return String.format (" at line %d in file %s",
+                            reader.getLineNumber(), filename);
+    }
+
+  }
+
+  /** Returns the current line number in the input file, or -1 if not available. **/
+  public static int get_linenum () {
+    if (FileIO.data_trace_state == null) {
+      return -1;
+    } else {
+      return FileIO.data_trace_state.get_linenum();
     }
   }
 
-
-  private static InputStream connectToChicory()
-    {
-
-
-        ServerSocket daikonServer = null;
-        try
-        {
-            daikonServer = new ServerSocket(0); //bind to any free port
-
-            //tell Chicory what port we have!
-            System.out.println("DaikonChicoryOnlinePort=" + daikonServer.getLocalPort());
-
-            daikonServer.setReceiveBufferSize(64000);
-
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException("Unable to create server", e);
-        }
-
-        Socket chicSocket = null;
-        try
-        {
-            daikonServer.setSoTimeout(5000);
-
-            //System.out.println("waiting for chicory connection on port " + daikonServer.getLocalPort());
-            chicSocket = daikonServer.accept();
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException("Unable to connect to Chicory", e);
-        }
-
-
-        try
-        {
-            return chicSocket.getInputStream();
-        }
-        catch (IOException e)
-        {
-            throw new RuntimeException("Unable to get Chicory's input stream", e);
-        }
-
+  /**
+   * Returns a string representation of the current line number in the
+   * input file, or "?" if not available.
+   **/
+  public static String get_linenum_String () {
+    if (FileIO.data_trace_state == null) {
+      return "?";
+    } else {
+      return FileIO.data_trace_state.get_linenum_String();
     }
+  }
 
+  public static /*@Nullable*/ String reading_message () {
+    assert FileIO.data_trace_state != null;
+    return FileIO.data_trace_state.reading_message();
+  }
 
-  /** Stash state here to be examined/printed by other parts of Daikon. */
-  public static /*@Nullable*/ ParseState data_trace_state = null;
 
   /**
-   * Total number of samples passed to process_sample().
-   * Not part of data_trace_state because it's global over all files
-   * processed by Daikon.
+   * Logically, this is a local variable in method read_data_trace_file.
+   * But other parts of Daikon may wish to examine/print the state.
    */
-  public static int samples_processed = 0;
+  // The @LazyNonNull property is not true globally, but within every
+  // method it's true, so it is a useful annotation.
+  private static /*@LazyNonNull*/ ParseState data_trace_state = null;
 
+  public static /*@Nullable*/ ParseState data_trace_state() {
+    return data_trace_state;
+  }
+
+
+  /**
+   * Read declarations or samples (not just sample data) from .dtrace
+   * file, using standard data processor. **/
+  static void read_data_trace_file(String filename, PptMap all_ppts)
+    throws IOException {
+    Processor processor = new Processor();
+    read_data_trace_file(filename, all_ppts, processor, false, true);
+  }
 
   /**
    * Read declarations OR samples (not just sample data as the name might
@@ -1292,8 +1369,9 @@ public final class FileIO {
                          ? " " + Daikon.ppt_omit_regexp.pattern() : ""));
     }
 
-    data_trace_state = new ParseState(filename, is_decl_file, ppts_are_new,
+    ParseState data_trace_state = new ParseState(filename, is_decl_file, ppts_are_new,
                                       all_ppts);
+    FileIO.data_trace_state = data_trace_state;
 
     // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
@@ -1302,11 +1380,11 @@ public final class FileIO {
     }
 
     while (true) {
-      assert data_trace_state != null;    // for nullness checker
       read_data_trace_record (data_trace_state);
-      assert data_trace_state != null;    // for nullness checker
       if (data_trace_state.status == ParseStatus.SAMPLE) {
-        // Keep track of the total number of samples we have seen.
+        assert data_trace_state.ppt != null; // nullness: dependent type
+        assert data_trace_state.vt != null; // nullness: dependent type
+        assert data_trace_state.nonce != null; // nullness: dependent type
         samples_processed++;
         // Add orig and derived variables; pass to inference (add_and_flow)
         try {
@@ -1315,11 +1393,8 @@ public final class FileIO {
                                     data_trace_state.vt,
                                     data_trace_state.nonce);
         } catch (Error e) {
-          assert data_trace_state != null;    // for nullness checker
           if (! dkconfig_continue_after_file_exception) {
-            throw new RuntimeException ("Error at line "
-                    + data_trace_state.reader.getLineNumber() + " in file "
-                    + data_trace_state.filename, e);
+            throw new Daikon.TerminationMessage (e, data_trace_state);
           } else {
             System.out.println ();
             System.out.println ("WARNING: Error while processing "
@@ -1342,11 +1417,26 @@ public final class FileIO {
       Global.dtraceWriter.close();
     }
 
-    assert data_trace_state != null;    // for nullness checker
     Daikon.progress = "Finished reading " + data_trace_state.filename;
-    data_trace_state = null;
+
+    @SuppressWarnings("nullness") // see commments on data_trace_state declaration
+    /*@NonNull*/ ParseState reset_parse_state = null;
+    FileIO.data_trace_state = /*null*/ reset_parse_state;
   }
 
+
+  /**
+   * Like read_data_trace_record, but sets global FileIO.data_trace_state.
+   * Intended for most external callers.
+   */
+  @SuppressWarnings("nullness") // setting a LazyNonNull field to null, see comments at declaration of FileIO.data_trace_state
+  public static void read_data_trace_record_setstate (ParseState state)
+    throws IOException {
+
+    FileIO.data_trace_state = state;
+    read_data_trace_record(state);
+    FileIO.data_trace_state = null;
+  }
 
   /**
    * Read a single record of ANY type (sample, declaration, comparability,
@@ -1356,6 +1446,8 @@ public final class FileIO {
   // TODO:  For clarity, this should perhaps return its side-effected argument.
   public static void read_data_trace_record (ParseState state)
     throws IOException {
+
+    assert state == FileIO.data_trace_state;
 
     LineNumberReader reader = state.reader;
 
@@ -1423,6 +1515,7 @@ public final class FileIO {
           if (!state.all_ppts.containsName (state.ppt.name())) {
             assert state.ppt != null; // for nullness checker
             state.all_ppts.add(state.ppt);
+            assert state.ppt != null; // for nullness checker
             try {
               Daikon.init_ppt(state.ppt, state.all_ppts);
             } catch (Exception e) {
@@ -1468,8 +1561,9 @@ public final class FileIO {
         String message = t.getMessage();
         assert message != null;
         if (t instanceof Daikon.TerminationMessage) {
-          throw new Daikon.TerminationMessage ("%s: in %s line %d",
-                      message, state.filename, reader.getLineNumber());
+          // XXX Why am I creating a new TerminationMessage here?
+          throw new Daikon.TerminationMessage (
+                      message, reader, state.filename);
         } else {
           throw new Daikon.TerminationMessage
           (String.format ("Illegal program point name '%s' (%s) in %s line %d",
@@ -1484,9 +1578,7 @@ public final class FileIO {
 
       PptTopLevel ppt = state.all_ppts.get(ppt_name);
       if (ppt == null) {
-        throw new Daikon.TerminationMessage("No declaration was provided for program point " + ppt_name
-                        + " which appears in dtrace file " + state.filename
-                        + " at line " + reader.getLineNumber());
+        throw new Daikon.TerminationMessage("No declaration was provided for program point " + ppt_name, state);
       }
 
       VarInfo[] vis = ppt.var_infos;
@@ -1519,8 +1611,7 @@ public final class FileIO {
         String nonce_number = reader.readLine();
         if (nonce_number == null) {
           throw new Daikon.TerminationMessage("File ended while trying to read nonce",
-                                    reader,
-                                    state.filename);
+                                    state);
         }
         nonce = new Integer(nonce_number);
 
@@ -1530,7 +1621,7 @@ public final class FileIO {
         }
       }
 
-      Object[] vals = new Object[vals_array_size];
+      /*@Nullable*/ Object[] vals = new /*@Nullable*/ Object[vals_array_size];
       int[] mods = new int[vals_array_size];
 
       // Read a single record from the trace file;
@@ -1649,6 +1740,7 @@ public final class FileIO {
         && (ppt.function_id != null)) {
       if (!dkconfig_merge_basic_blocks) {
         List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
+        assert ppts != null;
         for (PptTopLevel p : ppts) {
           p.combined_subsumed = false;
           p.combined_ppts_init = true;
@@ -1830,7 +1922,9 @@ public final class FileIO {
           ArrayList<Invocation> invocations = new ArrayList<Invocation>();
           TreeSet<Integer> keys = new TreeSet<Integer>(call_hashmap.keySet());
           for (Integer i : keys) {
-            invocations.add(call_hashmap.get(i));
+            Invocation invok = call_hashmap.get(i);
+            assert invok != null; // for nullness checker; sorted keyset
+            invocations.add(invok);
           }
           print_invocations_verbose(invocations);
         } else {
@@ -1885,6 +1979,7 @@ public final class FileIO {
     TreeSet</*@Interned*/ Invocation> keys = new TreeSet</*@Interned*/ Invocation>(counter.keySet());
     for (/*@Interned*/ Invocation invok : keys) {
       Integer count = counter.get(invok);
+      assert count != null;     // for nullness checker:  use of sorted keyset
       System.out.println(invok.format(false) + " : "
                          + UtilMDE.nplural(count.intValue(), "invocation"));
     }
@@ -1895,9 +1990,13 @@ public final class FileIO {
   // invocation nonce (if any) have already been read.
   private static void read_vals_and_mods_from_trace_file
                         (LineNumberReader reader, String filename,
-                         PptTopLevel ppt, Object[] vals, int[] mods)
+                         PptTopLevel ppt, /*@Nullable*/ Object[] vals, int[] mods)
     throws IOException
   {
+    // Note:  global variable data_trace_state may be null (at least in the
+    // unit tests...).
+    assert data_trace_state != null; // added to test actual execution
+
     VarInfo[] vis = ppt.var_infos;
     int num_tracevars = ppt.num_tracevars;
 
@@ -1964,7 +2063,7 @@ public final class FileIO {
         if (line == null
             || !((line.equals("0") || line.equals("1") || line.equals("2")))) {
           throw new Daikon.TerminationMessage("Bad modbit '" + line + "'",
-                                              reader, data_trace_state.filename);
+                                              data_trace_state);
         }
         line = reader.readLine(); // next variable name
       }
@@ -1976,10 +2075,8 @@ public final class FileIO {
             + ", got "
             + line
             + " for program point "
-          + ppt.name() + " at line " + reader.getLineNumber() + " in file "
-          + data_trace_state.filename,
-          reader,
-          data_trace_state.filename);
+          + ppt.name(),
+          data_trace_state);
       }
       line = reader.readLine();
       if (line == null) {
@@ -2012,7 +2109,7 @@ public final class FileIO {
       }
       if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
         throw new Daikon.TerminationMessage("Bad modbit `" + line + "'",
-                                  reader, data_trace_state.filename);
+                                  data_trace_state);
       }
       int mod = ValueTuple.parseModified(line);
 
@@ -2066,14 +2163,14 @@ public final class FileIO {
           throw new Daikon.TerminationMessage(
             "Modbit indicates nonsensical value for variable "
               + vi.name() + " with value \"" + value_rep + "\";" + lineSep
-            + "  text of value should be \"nonsensical\" at "
-              + data_trace_state.filename + " line " + reader.getLineNumber());
+              + "  text of value should be \"nonsensical\"",
+              data_trace_state);
         } else {
           // Keep track of variables that can be missing
           if (debug_missing && !vi.canBeMissing) {
               System.out.printf ("Var %s ppt %s at line %d missing%n",
                                vi, ppt.name(),
-                               FileIO.data_trace_state.reader.getLineNumber());
+                               FileIO.get_linenum_String());
               System.out.printf ("val_index = %d, mods[val_index] = %d%n",
                                  val_index, mods[val_index]);
           }
@@ -2092,7 +2189,7 @@ public final class FileIO {
             if (debug_missing && !vi.canBeMissing)
               System.out.printf ("Var %s ppt %s at line %d null-not missing%n",
                                vi, ppt.name(),
-                               FileIO.data_trace_state.reader.getLineNumber());
+                               FileIO.get_linenum_String());
             vi.canBeMissing = true;
           }
         } catch (Exception e) {
@@ -2144,7 +2241,7 @@ public final class FileIO {
    **/
   public static boolean add_orig_variables(PptTopLevel ppt,
                                      // HashMap cumulative_modbits,
-                                     Object[] vals, int[] mods, Integer nonce) {
+                                     /*@Nullable*/ Object[] vals, int[] mods, Integer nonce) {
     VarInfo[] vis = ppt.var_infos;
     /*@Interned*/ String fn_name = ppt.ppt_name.getNameWithoutPoint();
     String ppt_name = ppt.name();
@@ -2196,6 +2293,7 @@ public final class FileIO {
             //                   data_trace_state.reader.getLineNumber());
             return true;
           } else if (invoc == null) {
+            assert data_trace_state != null; // nullness application invariant?
             // Not Daikon.TerminationMessage:  caller knows context such as
             // file name and line number.
             throw new Error(
@@ -2258,7 +2356,7 @@ public final class FileIO {
 
   /** Add derived variables **/
   public static void add_derived_variables(PptTopLevel ppt,
-                                            Object[] vals,
+                                           /*@Nullable*/ Object[] vals,
                                             int[] mods) {
     // This ValueTuple is temporary:  we're temporarily suppressing interning,
     // which we will do after we have all the values available.
@@ -2266,18 +2364,13 @@ public final class FileIO {
     int filled_slots =
       ppt.num_orig_vars + ppt.num_tracevars + ppt.num_static_constant_vars;
     for (int i = 0; i < filled_slots; i++) {
-      Assert.assertTrue(!ppt.var_infos[i].isDerived());
-    }
-    for (int i = filled_slots; i < ppt.var_infos.length; i++) {
-      if (!ppt.var_infos[i].isDerived()) {
-        // Check first because repr() can be slow
-        Assert.assertTrue(
-          ppt.var_infos[i].isDerived(),
-          "variable not derived: " + ppt.var_infos[i].repr());
-      }
+      assert !ppt.var_infos[i].isDerived();
     }
     int num_const = ppt.num_static_constant_vars;
     for (int i = filled_slots; i < ppt.var_infos.length; i++) {
+      assert ppt.var_infos[i].derived != null :
+        // repr() can be slow
+        "variable not derived: " + ppt.var_infos[i].repr();
       // Add this derived variable's value
       ValueAndModified vm =
         ppt.var_infos[i].derived.computeValueAndModified(partial_vt);
@@ -2305,6 +2398,7 @@ public final class FileIO {
     public SerialFormat(PptMap map, Configuration config) {
       this.map = map;
       this.config = config;
+      assert FileIO.new_decl_format != null; // nullness application invariant
       this.new_decl_format = FileIO.new_decl_format;
 
     }
@@ -2426,7 +2520,7 @@ public final class FileIO {
          + "\" with a different number of VarInfo objects: "
          + "old VarInfo number=" + existing_ppt.num_declvars
          + ", new VarInfo number="+vi_array.length,
-         state.reader, state.filename);
+         state);
         }
 
     for (int i=0; i<vi_array.length; i++) {
@@ -2436,7 +2530,7 @@ public final class FileIO {
         throw new Daikon.TerminationMessage
           ("Duplicate declaration of program point \""
            + existing_ppt.name() + "\" with two different VarInfo: old VarInfo="
-           + oldName+", new VarInfo="+newName, state.reader, state.filename);
+           + oldName+", new VarInfo="+newName, state);
       }
     }
   }
@@ -2514,6 +2608,7 @@ public final class FileIO {
    * Class that holds all of the information from the declaration record
    * concerning a particular variable
    */
+  @SuppressWarnings("nullness") // needs documentation before annotating with nullness
   public static class VarDefinition implements java.io.Serializable, Cloneable{
     static final long serialVersionUID = 20060524L;
     transient ParseState state;
@@ -2762,12 +2857,13 @@ public final class FileIO {
       return (e);
     } catch (Exception exception) {
       E[] all = enum_class.getEnumConstants();
+      assert all != null;       // getEnumConstants returs non-null because enum_class is an enum class
       StringBuilderDelimited msg = new StringBuilderDelimited(", ");
       for (E e : all) {
         msg.append(String.format ("'%s'", e.name().toLowerCase()));
       }
       decl_error (state, "'%s' found where %s expected", str, msg);
-      return (null);
+      throw new Error("execution cannot get to here, previous line threw an error");
     }
   }
 

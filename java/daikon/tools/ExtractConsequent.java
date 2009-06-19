@@ -131,7 +131,7 @@ public class ExtractConsequent {
     // The index of the first non-option argument -- the name of the file
     int fileIndex = g.getOptind();
     if (args.length - fileIndex != 1) {
-      throw new Daikon.TerminationMessage("Wrong number of arguments.", usage);
+      throw new Daikon.TerminationMessage("Wrong number of arguments." + Daikon.lineSep + usage);
     }
     String filename = args[fileIndex];
     PptMap ppts = FileIO.read_serialized_pptmap(new File(filename),

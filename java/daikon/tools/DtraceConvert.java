@@ -55,7 +55,7 @@ public class DtraceConvert {
         new FileIO.ParseState (filename, false, true, ppts);
 
       while (state.status != FileIO.ParseStatus.EOF) {
-        FileIO.read_data_trace_record (state);
+        FileIO.read_data_trace_record_setstate (state);
         switch(state.status) {
 
         case SAMPLE:

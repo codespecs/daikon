@@ -23,7 +23,7 @@ public final class ValueTuple implements Cloneable {
   public static Logger debug = Logger.getLogger("daikon.ValueTuple");
 
   // These arrays are interned, and so are their elements.
-  public /*@Interned*/ Object /*@Interned*/ [] vals;
+  public /*@Nullable*/ /*@Interned*/ Object /*@Interned*/ [] vals;
 
   // consider putting this in the first slot of "vals", to avoid the Object
   // overhead of a pair of val and mods.  Do I need to worry about trickery
@@ -216,14 +216,14 @@ public final class ValueTuple implements Cloneable {
 
 
   /** Default constructor that interns its argument. */
-  public ValueTuple(/*@Interned*/ Object[] vals, int[] mods) {
+  public ValueTuple(/*@Nullable*/ /*@Interned*/ Object[] vals, int[] mods) {
     this.vals = Intern.intern(vals);
     this.mods = Intern.intern(mods);
   }
 
   // Private constructor that doesn't perform interning.
   @SuppressWarnings("interning") // interning constructor
-  private ValueTuple(Object[] vals, int[] mods, boolean check) {
+  private ValueTuple(/*@Nullable*/ Object[] vals, int[] mods, boolean check) {
     Assert.assertTrue((!check) || Intern.isInterned(vals));
     Assert.assertTrue((!check) || Intern.isInterned(mods));
     this.vals = vals;
@@ -246,13 +246,13 @@ public final class ValueTuple implements Cloneable {
    * should use it!
    **/
   @SuppressWarnings("interning") // interning constructor
-  public static ValueTuple makeUninterned(Object[] vals, int[] mods) {
+  public static ValueTuple makeUninterned(/*@Nullable*/ Object[] vals, int[] mods) {
     return new ValueTuple(vals, mods, false);
   }
 
 
   /** Constructor that takes already-interned arguments. */
-  static ValueTuple makeFromInterned(/*@Interned*/ Object /*@Interned*/ [] vals, int[] mods) {
+  static ValueTuple makeFromInterned(/*@Nullable*/ /*@Interned*/ Object /*@Interned*/ [] vals, int[] mods) {
     return new ValueTuple(vals, mods, true);
   }
 
@@ -285,7 +285,7 @@ public final class ValueTuple implements Cloneable {
   /** Return a new ValueTuple containing this one's first len elements. **/
   public ValueTuple trim(int len) {
     @SuppressWarnings("interning") // polymorphism
-    /*@Interned*/ Object[] new_vals = ArraysMDE.subarray(vals, 0, len);
+    /*@Nullable*/ /*@Interned*/ Object[] new_vals = ArraysMDE.subarray(vals, 0, len);
     int[] new_mods = ArraysMDE.subarray(mods, 0, len);
     return new ValueTuple(new_vals, new_mods);
   }
@@ -346,7 +346,7 @@ public final class ValueTuple implements Cloneable {
     return sb.toString();
   }
 
-  public static String valsToString(Object[] vals) {
+  public static String valsToString(/*@Nullable*/ Object[] vals) {
     StringBuffer sb = new StringBuffer("[");
     for (int i=0; i<vals.length; i++) {
       if (i>0)
@@ -357,7 +357,7 @@ public final class ValueTuple implements Cloneable {
     return sb.toString();
   }
 
-  public static String valToString (Object val) {
+  public static String valToString (/*@Nullable*/ Object val) {
     if (val == null) return "null";
     if (val instanceof long[])
       return(ArraysMDE.toString((long[])val));
@@ -374,7 +374,7 @@ public final class ValueTuple implements Cloneable {
    **/
   public ValueTuple slice(int[] indices) {
     int new_len = indices.length;
-    /*@Interned*/ Object[] new_vals = new /*@Interned*/ Object[new_len];
+    /*@Nullable*/ /*@Interned*/ Object[] new_vals = new /*@Nullable*/ /*@Interned*/ Object[new_len];
     int[] new_mods = new int[new_len];
     for (int i=0; i<new_len; i++) {
       new_vals[i] = vals[indices[i]];
