@@ -152,8 +152,11 @@ public class PptTopLevel extends Ppt {
   /** Permutation to swap the order of variables in a binary invariant **/
   private static int[] permute_swap = new int[] { 1, 0 };
 
-  /** List of constant variables. */
-  public DynamicConstants constants = null;
+  /**
+   * List of constant variables.
+   * Null unless dkconfig_use_dynamic_constant_optimization is set.
+   */
+  public /*@LazyNonNull*/ DynamicConstants constants = null;
 
   // Invariant:  num_declvars == num_tracevars + num_orig_vars
   public int num_declvars; // number of variables in the declaration
@@ -177,7 +180,7 @@ public class PptTopLevel extends Ppt {
   private Map<List<Integer>,PptSlice> views;
 
   /** List of all of the splitters for this ppt. */
-  public ArrayList<PptSplitter> splitters = null;
+  public /*@LazyNonNull*/ ArrayList<PptSplitter> splitters = null;
 
   /**
    * Iterator for all of the conditional ppts.  Returns each PptConditional
@@ -201,6 +204,7 @@ public class PptTopLevel extends Ppt {
       if (!hasNext()) {
         throw new NoSuchElementException();
       }
+      assert splitters != null; // guarateed by call to hasNext
 
       PptSplitter ppt_split = splitters.get(splitter_index);
       PptConditional ppt = (PptConditional) ppt_split.ppts[ppts_index];
@@ -240,7 +244,7 @@ public class PptTopLevel extends Ppt {
    * in the declaration record.  These are used to build the detailed
    * parents/children lists of PptRelation above
    */
-  public List<ParentRelation> parent_relations = null;
+  public /*@Nullable*/ List<ParentRelation> parent_relations = null;
 
   /**
    * List of successor program point names.  Later changed into a list
@@ -254,11 +258,11 @@ public class PptTopLevel extends Ppt {
    * This field is only property set and used when creating combined program
    * points.
    */
-  public List<PptTopLevel> predecessors = null;
+  public /*@Nullable*/ List<PptTopLevel> predecessors = null;
 
 
   /** Identifier of the function (for basic blocks **/
-  public /*@Interned*/ String function_id = null;
+  public /*@Nullable*/ /*@Interned*/ String function_id = null;
 
   /** Length of basic block (bytes) **/
   public int bb_length;
@@ -269,21 +273,30 @@ public class PptTopLevel extends Ppt {
    */
   public boolean combined_ppts_init = false;
 
-  /** Combined ppt that should be processed when this ppt is encountered */
-  public PptCombined combined_ppt = null;
+  /**
+   * Combined ppt that should be processed when this ppt is encountered.
+   * Only non-null for basic block ppts.
+   */
+  public /*@LazyNonNull*/ PptCombined combined_ppt = null;
 
   /**
    * True if this ppt is subsumed by combined_ppt.  A different ppt is the
    * trigger to the combined_ppt (ie, the ppt whose data is used to
    * initiate the processing of a sample for the combined ppt
    */
-  public boolean  combined_subsumed = false;
+  public boolean combined_subsumed = false;
 
-  /** The ppt whose combined ppt includes this one **/
-  public PptTopLevel combined_subsumed_by = null;
+  /**
+   * The ppt whose combined ppt includes this one.  Only non-null for
+   * basic block ppts.
+   */
+  public /*@Nullable*/ PptTopLevel combined_subsumed_by = null;
 
-  /** The last set of values for this program point **/
-  public ValueTuple last_values = null;
+  /**
+   * The last set of values for this program point.
+   * Only for basic block ppts.
+   */
+  public /*@Nullable*/ ValueTuple last_values = null;
 
   /**
    *  Flag that indicates whether or not invariants have been merged
@@ -347,7 +360,7 @@ public class PptTopLevel extends Ppt {
     init_vars (var_infos);
   }
 
-  private void init_vars (VarInfo[] var_infos) {
+  private void init_vars (VarInfo[] var_infos) @Raw {
 
     debug_varinfo.log_tb ("initializing var_infos %s",
                            Arrays.toString(var_infos));
@@ -944,6 +957,7 @@ public class PptTopLevel extends Ppt {
 
     // If there are conditional program points, add the sample there instead
     if (has_splitters()) {
+      assert splitters != null; // guaranteed by call te has_splitters
       for (PptSplitter ppt_split : splitters) {
         ppt_split.add_bottom_up(vt, count);
       }
@@ -1127,6 +1141,7 @@ public class PptTopLevel extends Ppt {
         for (Invariant inv : slice.invs) {
           if (inv.is_ni_suppressed()) {
             NISuppressionSet ss = inv.get_ni_suppressions();
+            assert ss != null;  // guaranteed by call to is_ni_suppressed
             ss.suppressed (inv.ppt);
             System.out.printf ("suppressed: %s by suppression set %s in ppt %s",
                                inv.format(), ss, slice);
@@ -1195,7 +1210,7 @@ public class PptTopLevel extends Ppt {
    * and the MISSING_NONSENSICAL flag is set for a different reason on
    * this sample.  This could happen with an array in an object.
    *
-   * This implmeentation is also not particularly efficient and the
+   * This implementation is also not particularly efficient and the
    * variables must match exactly.
    *
    * Missing out of bounds really needs to be implemented as a separate
@@ -1206,6 +1221,7 @@ public class PptTopLevel extends Ppt {
     for (int ii = 0; ii < ppt.var_infos.length; ii++) {
       if (ppt.var_infos[ii].missingOutOfBounds()) {
         int mod = vt.getModified(ppt.var_infos[ii]);
+        assert var_infos[ii].derived != null;
         if (mod == ValueTuple.MISSING_NONSENSICAL)
           var_infos[ii].derived.missing_array_bounds = true;
       }
@@ -1340,27 +1356,30 @@ public class PptTopLevel extends Ppt {
         else if (inv instanceof UpperBoundFloat)
           ubf = (UpperBoundFloat) inv;
       }
-      if (lb != null)
+      if ((lb != null) && (ub != null)) {
         log.fine(
           lb.min()
             + " <= "
             + slice.var_infos[0].name()
             + " <= "
             + ub.max());
-      else if (lbf != null)
+      } else if ((lbf != null) && (ubf != null)) {
         log.fine(
           lbf.min()
             + " <= "
             + slice.var_infos[0].name()
             + " <= "
             + ubf.max());
+      } else {
+        throw new Error("This can't happen");
+      }
     }
   }
 
   /**
    * Returns how many invariants there are of each invariant class.  The
    * map is from the invariant class to an integer cnt of the number of
-   * that class
+   * that class.
    */
   public Map<Class<? extends Invariant>,Cnt> invariant_cnt_by_class() {
 
@@ -1541,7 +1560,7 @@ public class PptTopLevel extends Ppt {
    * Like findSlice, but it is not required that the variables be supplied
    * in order of varinfo_index.
    **/
-  public PptSlice2 findSlice_unordered(VarInfo v1, VarInfo v2) {
+  public /*@Nullable*/ PptSlice2 findSlice_unordered(VarInfo v1, VarInfo v2) {
     // Assert.assertTrue(v1.varinfo_index != v2.varinfo_index);
     if (v1.varinfo_index < v2.varinfo_index) {
       return findSlice(v1, v2);
@@ -1565,7 +1584,7 @@ public class PptTopLevel extends Ppt {
    * Like findSlice, but it is not required that the variables be supplied
    * in order of varinfo_index.
    **/
-  public PptSlice3 findSlice_unordered(VarInfo v1, VarInfo v2, VarInfo v3) {
+  public /*@Nullable*/ PptSlice3 findSlice_unordered(VarInfo v1, VarInfo v2, VarInfo v3) {
     // bubble sort is easier than 3 levels of if-then-else
     VarInfo tmp;
     if (v1.varinfo_index > v2.varinfo_index) {
@@ -1589,7 +1608,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Find a pptSlice without an assumed ordering.
    **/
-  public PptSlice findSlice_unordered(VarInfo[] vis) {
+  public /*@Nullable*/ PptSlice findSlice_unordered(VarInfo[] vis) {
     switch (vis.length) {
       case 1 :
         return findSlice(vis[0]);
@@ -1605,7 +1624,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Find a pptSlice with an assumed ordering.
    **/
-  public PptSlice findSlice(VarInfo[] vis) {
+  public /*@Nullable*/ PptSlice findSlice(VarInfo[] vis) {
     if (vis.length > 3) {
       throw new RuntimeException("Bad length " + vis.length);
     }
@@ -1955,8 +1974,8 @@ public class PptTopLevel extends Ppt {
     } else {
       Assert.assertTrue(false, "unexpected type " + v1.rep_type);
     }
-    Assert.assertTrue(proto != null);
-    Assert.assertTrue(proto.valid_types(slice.var_infos));
+    assert proto != null;
+    assert proto.valid_types(slice.var_infos);
 
     // Return whether or not the invariant is true in the slice
     Invariant inv = proto.instantiate(slice);
@@ -2004,6 +2023,7 @@ public class PptTopLevel extends Ppt {
       }
     }
 
+    @SuppressWarnings("nullness") // if inv is non-null, then slice is non-null
     boolean found = (inv != null) && slice.is_inv_true(inv);
     if (false) {
       System.out.printf ("Looking for %s [%d] <= %s [%d] in ppt %s%n", v1.name(),
@@ -2615,7 +2635,9 @@ public class PptTopLevel extends Ppt {
       if (!ppt_split.splitter_valid()) {
         debugConditional.fine(
           "Splitter ("
-            + ppt_split.splitter.getClass()
+            + ((ppt_split.splitter == null)
+               ? "[no class]"
+               : ppt_split.splitter.getClass())
             + ") not valid: "
             + ppt_split.ppts[0].name);
         continue;
@@ -2747,7 +2769,7 @@ public class PptTopLevel extends Ppt {
   ///
 
   // Created upon first use, then saved
-  private static LemmaStack proverStack = null;
+  private static /*@LazyNonNull*/ LemmaStack proverStack = null;
 
   /**
    * Interface used by mark_implied_via_simplify to determine what
@@ -2763,6 +2785,7 @@ public class PptTopLevel extends Ppt {
    * logically implied by others.  Considers only invariants that
    * pass isWorthPrinting.
    **/
+  @SuppressWarnings("nullness") // reassignment of LazyNonNull variable proverStack
   public void mark_implied_via_simplify(PptMap all_ppts) {
     try {
       if (proverStack == null)
@@ -2799,6 +2822,8 @@ public class PptTopLevel extends Ppt {
     SimplifyInclusionTester test)
     throws SimplifyError {
     SessionManager.debugln("Simplify checking " + ppt_name);
+
+    assert proverStack != null;
 
     // Create the list of invariants from this ppt which are
     // expressible in Simplify
@@ -3043,6 +3068,7 @@ public class PptTopLevel extends Ppt {
     int end)
     throws SimplifyError {
     Assert.assertTrue(start <= end);
+    assert proverStack != null;
     if (start == end) {
       // Base case: check a single invariant
       int checking = start;
@@ -3100,7 +3126,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Cached VarInfos that are parameter variables.
    **/
-  private Set<VarInfo> paramVars = null;
+  private /*@LazyNonNull*/ Set<VarInfo> paramVars = null;
 
   /**
    * Returns variables in this Ppt that are parameters.
@@ -3174,7 +3200,7 @@ public class PptTopLevel extends Ppt {
    **/
   public static final class ViewsIteratorIterator implements Iterator<Iterator<Invariant>> {
     Iterator<PptSlice> vitor;
-    Iterator<Invariant> implication_iterator;
+    /*@Nullable*/ Iterator<Invariant> implication_iterator;
     public ViewsIteratorIterator(PptTopLevel ppt) {
       vitor = ppt.views_iterator();
       implication_iterator = ppt.joiner_view.invs.iterator();
@@ -3186,6 +3212,9 @@ public class PptTopLevel extends Ppt {
       if (vitor.hasNext())
         return vitor.next().invs.iterator();
       else {
+        if (implication_iterator == null) {
+          throw new NoSuchElementException();
+        }
         Iterator<Invariant> tmp = implication_iterator;
         implication_iterator = null;
         return tmp;
@@ -3450,7 +3479,8 @@ public class PptTopLevel extends Ppt {
     if (debugMerge.isLoggable(Level.FINE))
       debugMerge.fine("Processing ppt " + name());
 
-    Stopwatch watch = null;
+    @SuppressWarnings("nullness") // all uses are guarded by a test against debugMerge
+    /*@NonNull*/ Stopwatch watch = null;
     if (debugTimeMerge.isLoggable(Level.FINE)) {
       watch = new Stopwatch();
       if (children.size() == 1)
@@ -3688,7 +3718,7 @@ public class PptTopLevel extends Ppt {
       VarInfo l = ((Equality) inv).leader();
       if (l.missingOutOfBounds())
         continue;
-      if (constants.is_missing (l)) {
+      if (constants != null && constants.is_missing (l)) {
         // System.out.printf ("skipping leader %s in ppt %s, always missing\n",
         //                   l, name());
         continue;
@@ -3871,6 +3901,7 @@ public class PptTopLevel extends Ppt {
       if (Assert.enabled) {
         for (VarInfo test_pv : pv.equalitySet.getVars()) {
           VarInfo test_cv = rel.childVar (test_pv);
+          assert test_cv != null;
           if (test_cv.canonicalRep() != cv.canonicalRep()) {
             System.out.println ("pv.equalitySet = " + pv.equalitySet);
             System.out.println ("cv.equalitySet = " + cv.equalitySet);
@@ -3938,6 +3969,7 @@ public class PptTopLevel extends Ppt {
    * multiple ppts maps based on different data.  This allows a ppt to
    * have its invariants recalculated.
    */
+  @SuppressWarnings("nullness") // re-initialize LazyNonNull fields
   public void clean_for_merge() {
     equality_view = null;
     for (int i = 0; i < var_infos.length; i++)
@@ -4197,7 +4229,8 @@ public class PptTopLevel extends Ppt {
     int const_inv_cnt = 0;
     int constant_leader_cnt = 0;
     public static boolean cnt_inv_classes = false;
-    Map<Class<? extends Invariant>,Cnt> inv_map = null;
+    // non-null if cnt_inv_classes is true
+    /*@Nullable*/ Map<Class<? extends Invariant>,Cnt> inv_map = null;
     public static boolean show_invs = false;
     public static boolean show_tern_slices = false;
 
@@ -4266,6 +4299,7 @@ public class PptTopLevel extends Ppt {
                         + memory + ": "
                         + time);
       if (cnt_inv_classes) {
+        assert inv_map != null; // because cnt_inv_classes is true
         for (Class<? extends Invariant> inv_class : inv_map.keySet()) {
           Cnt cnt = inv_map.get(inv_class);
           log.fine(" : " + inv_class + ": " + cnt.cnt);

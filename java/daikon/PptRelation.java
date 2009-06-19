@@ -847,6 +847,7 @@ public class PptRelation implements Serializable {
       // list.  This doesn't seem like the best solution.
       assert ppt != null;       // XXX nullness checker flow problem
       if (ppt.has_splitters()) {
+        assert ppt.splitters != null; // guaranteed by call to has_splitters
         PptSplitter ppt_split = ppt.splitters.get(0);
         for (int ii = 0; ii < ppt_split.ppts.length; ii++) {
           rel = newPptPptConditional(ppt, ppt_split.ppts[ii]);
@@ -1001,6 +1002,7 @@ public class PptRelation implements Serializable {
       // under all cases and then remove it from non-leaves children
       // list.  This doesn't seem like the best solution.
       if (ppt.has_splitters()) {
+        assert ppt.splitters != null; // guaranteed by call to has_splitters
         PptSplitter ppt_split = ppt.splitters.get(0);
         for (int ii = 0; ii < ppt_split.ppts.length; ii++) {
           PptRelation rel = newPptPptConditional(ppt, ppt_split.ppts[ii]);

@@ -458,13 +458,12 @@ public class InvariantChecker {
           InvariantStatus status = inv.add_sample (vt, 1);
           sample_cnt++;
           if (status != InvariantStatus.NO_CHANGE) {
-            String line = FileIO.get_linenum_String();
             if (!quiet) {
               output_stream.println ("At ppt " + ppt.name + ", Invariant '"
                                      + inv.format() + "' invalidated by sample "
                                      + Debug.toString (slice.var_infos, vt)
-                                     + "at line " + line + " in file "
-                                     + FileIO.data_trace_state().filename);
+                                     + "at line " + FileIO.get_linenum() + " in file "
+                                     + FileIO.data_trace_state.filename);
             }
             failedInvariants.add(inv);
             activeInvariants.remove(inv);
@@ -475,6 +474,6 @@ public class InvariantChecker {
     }
   }
   private static String invariant2str(PptTopLevel ppt, Invariant inv) {
-    return ppt.name+" == "+inv.repr()+inv.getClass()+ inv.varNames() + ": " + inv.format();
+    return ppt.name + " == " + inv.repr() + inv.getClass() + inv.varNames() + ": " + inv.format();
   }
 }

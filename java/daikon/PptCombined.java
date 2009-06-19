@@ -363,7 +363,7 @@ public class PptCombined extends PptTopLevel {
   /**
    * Add the current sample.  The last samples for each of the program
    * points that make up the combined program point must have been added
-   * to their last_values field
+   * to their last_values field.
    */
   public void add_combined() {
 

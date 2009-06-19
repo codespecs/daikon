@@ -412,7 +412,7 @@ public class Debug {
       samp_str = " s" + pslice.num_samples();
     }
 
-    String line = " line=" + FileIO.get_linenum_String();
+    String line = " line=" + FileIO.get_linenum();
 
     debug.fine (class_str + ": " + ppt.name()
                  + samp_str + line + ": " + vars + msg);
@@ -502,7 +502,7 @@ public class Debug {
       samp_str = " s" + pslice.num_samples();
     }
 
-    String line = " line=" + FileIO.get_linenum_String();
+    String line = " line=" + FileIO.get_linenum();
 
     debugTrack.fine (class_str + ": " + ((ppt == null) ? "null" : ppt.name())
                      + samp_str + line + ": " + vars + msg);

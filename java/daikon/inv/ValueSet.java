@@ -12,9 +12,19 @@ import java.io.Serializable;
 
 
 /**
- * ValueSet stores up to some maximum number of unique non-zero integer
- * values, at which point its rep is nulled.  This is used for efficient
- * justification tests.
+ * ValueSet stores a set of unique integers.  When adding a value, for
+ * efficiency its hash code is added rather than the value itself.  If the
+ * set size exceeds a specified limit, then its rep is nulled.
+ * <p>
+ *
+ * This class is used for efficient justification tests.
+ * Relevant subclasses are:
+ *   ValueSetScalar
+ *   ValueSetFloat
+ *   ValueSetScalarArray
+ *   ValueSetFloatArray
+ *   ValueSetString
+ *   ValueSetStringArray
  **/
 public abstract class ValueSet extends LimitedSizeIntSet
   implements Serializable, Cloneable
@@ -52,7 +62,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
   }
 
   /** Track the specified object. **/
-  public abstract void add(Object v1);
+  public abstract void add(/*@Nullable*/ Object v1);
 
   /** Add stats from the specified value set. */
   protected abstract void add_stats (ValueSet other);
@@ -80,8 +90,8 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public ValueSetScalar(int max_values) {
       super(max_values);
     }
-    public void add(Object v1) {
-      Assert.assertTrue(v1 != null);
+    public void add(/*@Nullable*/ Object v1) {
+      assert v1 != null;
       long val = ((Long) v1).longValue();
       if (val < min_val) { min_val = val; }
       if (val > max_val) { max_val = val; }
@@ -119,7 +129,8 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public ValueSetFloat(int max_values) {
       super(max_values);
     }
-    public void add(Object v1) {
+    public void add(/*@Nullable*/ Object v1) {
+      assert v1 != null;
       double val = ((Double) v1).doubleValue();
       if (val < min_val) { min_val = val; }
       if (val > max_val) { max_val = val; }
@@ -163,7 +174,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public ValueSetScalarArray(int max_values) {
       super(max_values);
     }
-    public void add(Object v1) {
+    public void add(/*@Nullable*/ Object v1) {
       long[] val = (long[]) v1;
       if (val != null) {
         for (int i = 0; i < val.length; i++) {
@@ -219,7 +230,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public ValueSetFloatArray(int max_values) {
       super(max_values);
     }
-    public void add(Object v1) {
+    public void add(/*@Nullable*/ Object v1) {
       double[] val = (double[]) v1;
       if (val != null) {
         for (int i = 0; i < val.length; i++) {
@@ -272,7 +283,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public ValueSetString(int max_values) {
       super(max_values);
     }
-    public void add(Object v1) {
+    public void add(/*@Nullable*/ Object v1) {
       add(UtilMDE.hash((String) v1));
     }
 
@@ -296,7 +307,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public ValueSetStringArray(int max_values) {
       super(max_values);
     }
-    public void add(Object v1) {
+    public void add(/*@Nullable*/ Object v1) {
       String[] val = (String[]) v1;
       if (val != null) {
         elem_cnt += val.length;

@@ -70,7 +70,7 @@ public final class Daikon {
 
   /**
    * The amount of time to wait between updates of the progress
-   * display, measured in milliseconds. A value of -1 means not to
+   * display, measured in milliseconds. A value of -1 means do not
    * print the progress display at all.
    **/
   public static int dkconfig_progress_delay = 1000;
@@ -1708,28 +1708,36 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Infer invariants over the trace data
 
-  /** Indicate progress for FileIOProgress. **/
-  public static String progress = "";
-
   /**
    * The number of columns of progress information to display. In many
    * Unix shells, this can be set to an appropriate value by
    * <samp>--config_option daikon.Daikon.progress_display_width=$COLUMNS</samp>.
-   **/
+   */
   public static int dkconfig_progress_display_width = 80;
 
-  /** A way to output FileIO progress information easily. */
+  /**
+   * Human-friendly progress status message.
+   * If fileio_progress is non-null, then this is ignored.
+   * So this is primarily for progress reports that are not IO-related.
+   */
+  public static String progress = "";
+
+  /** Takes precedence over the progress variable. */
   private static FileIOProgress fileio_progress = null;
+
+  /**
+   * Outputs FileIO progress information.
+   * Uses global variable FileIO.data_trace_state.
+   */
   public static class FileIOProgress extends Thread {
     public FileIOProgress() {
       setDaemon(true);
-      df = DateFormat.getTimeInstance(/*DateFormat.LONG*/
-      );
+      df = DateFormat.getTimeInstance(/*DateFormat.LONG*/);
     }
     /**
      * Clients should set this variable instead of calling Thread.stop(),
      * which is deprecated.  Typically a client calls "display()" before
-     * setting this.
+     * setting this.  The stopping happens later, and calls clear() anyway.
      **/
     public boolean shouldStop = false;
     private DateFormat df;
@@ -1770,8 +1778,8 @@ public final class Daikon {
         return;
 
       String message;
-      if (FileIO.data_trace_state() != null) {
-        message = FileIO.data_trace_state().reading_message();
+      if (FileIO.data_trace_state != null) {
+        message = FileIO.data_trace_state.reading_message();
       } else {
         if (Daikon.progress == null) {
           message = "[no status]";
@@ -1791,7 +1799,7 @@ public final class Daikon {
           dkconfig_progress_display_width - 1);
       System.out.print("\r" + status);
       System.out.flush();
-      // System.out.println (status);
+      // System.out.println (status); // for debugging
 
       if (debugTrace.isLoggable(Level.FINE)) {
         debugTrace.fine(
@@ -1801,9 +1809,9 @@ public final class Daikon {
           "Used memory: "
             + (java.lang.Runtime.getRuntime().totalMemory()
               - java.lang.Runtime.getRuntime().freeMemory()));
-        if (FileIO.data_trace_state() != null)
+        if (FileIO.data_trace_state != null)
           debugTrace.fine("Active slices: " +
-                          FileIO.data_trace_state().all_ppts.countSlices());
+                          FileIO.data_trace_state.all_ppts.countSlices());
       }
     }
   }

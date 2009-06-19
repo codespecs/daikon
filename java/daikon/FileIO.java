@@ -1253,23 +1253,7 @@ public final class FileIO {
 
     /** Returns the current line number in the input file, or -1 if not available. **/
     public int get_linenum () {
-      if (reader == null) {
-        return -1;
-      } else {
-        return reader.getLineNumber();
-      }
-    }
-
-    /**
-     * Returns a string representation of the current line number in the
-     * input file, or "?" if not available.
-     **/
-    public String get_linenum_String () {
-      if (reader == null) {
-        return "?";
-      } else {
-        return String.valueOf(reader.getLineNumber());
-      }
+      return reader.getLineNumber();
     }
 
     private static NumberFormat pctFmt;
@@ -1312,34 +1296,18 @@ public final class FileIO {
     }
   }
 
-  /**
-   * Returns a string representation of the current line number in the
-   * input file, or "?" if not available.
-   **/
-  public static String get_linenum_String () {
-    if (FileIO.data_trace_state == null) {
-      return "?";
-    } else {
-      return FileIO.data_trace_state.get_linenum_String();
-    }
-  }
-
-  public static /*@Nullable*/ String reading_message () {
-    assert FileIO.data_trace_state != null;
-    return FileIO.data_trace_state.reading_message();
-  }
-
 
   /**
    * Logically, this is a local variable in method read_data_trace_file.
-   * But other parts of Daikon may wish to examine/print the state.
+   * It is used for status output, and to give the line number at which
+   * a problem was detected.
    */
   // The @LazyNonNull property is not true globally, but within every
   // method it's true, so it is a useful annotation.
-  private static /*@LazyNonNull*/ ParseState data_trace_state = null;
-
-  public static /*@Nullable*/ ParseState data_trace_state() {
-    return data_trace_state;
+  public static /*@LazyNonNull*/ ParseState data_trace_state = null;
+  @SuppressWarnings("nullness") // setting a LazyNonNull field to null
+  private static void clear_data_trace_state() {
+    data_trace_state = null;
   }
 
 
@@ -1419,9 +1387,7 @@ public final class FileIO {
 
     Daikon.progress = "Finished reading " + data_trace_state.filename;
 
-    @SuppressWarnings("nullness") // see commments on data_trace_state declaration
-    /*@NonNull*/ ParseState reset_parse_state = null;
-    FileIO.data_trace_state = /*null*/ reset_parse_state;
+    clear_data_trace_state();
   }
 
 
@@ -1429,13 +1395,12 @@ public final class FileIO {
    * Like read_data_trace_record, but sets global FileIO.data_trace_state.
    * Intended for most external callers.
    */
-  @SuppressWarnings("nullness") // setting a LazyNonNull field to null, see comments at declaration of FileIO.data_trace_state
   public static void read_data_trace_record_setstate (ParseState state)
     throws IOException {
 
     FileIO.data_trace_state = state;
     read_data_trace_record(state);
-    FileIO.data_trace_state = null;
+    clear_data_trace_state();
   }
 
   /**
@@ -1806,6 +1771,7 @@ public final class FileIO {
             for (String succName : p.ppt_successors) {
               PptTopLevel succPpt = all_ppts.get(succName);
               assert succPpt != null;
+              assert succPpt.predecessors != null;
               succPpt.predecessors.add(p);
             }
           }
@@ -1821,6 +1787,7 @@ public final class FileIO {
           // Every block except the first should have at least one predecessor
           for (int i = 1; i < ppts.size(); i++) {
             PptTopLevel p = ppts.get(i);
+            assert p.predecessors != null;
             if (p.predecessors.size() == 0)
               System.out.printf ("ERROR: ppt %s has no predecessors\n", p);
           }
@@ -2172,7 +2139,7 @@ public final class FileIO {
           if (debug_missing && !vi.canBeMissing) {
               System.out.printf ("Var %s ppt %s at line %d missing%n",
                                vi, ppt.name(),
-                               FileIO.get_linenum_String());
+                               FileIO.get_linenum());
               System.out.printf ("val_index = %d, mods[val_index] = %d%n",
                                  val_index, mods[val_index]);
           }
@@ -2191,7 +2158,7 @@ public final class FileIO {
             if (debug_missing && !vi.canBeMissing)
               System.out.printf ("Var %s ppt %s at line %d null-not missing%n",
                                vi, ppt.name(),
-                               FileIO.get_linenum_String());
+                               FileIO.get_linenum());
             vi.canBeMissing = true;
           }
         } catch (Exception e) {
