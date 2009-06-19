@@ -59,10 +59,11 @@ endif
 
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 
+jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:typequals.*
+
 ### end of user customizations
 
-JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:typequals.*' ${JAVAC} -Xlint -J-Xmx1024m -classpath '${CHECKERSJAR}:${CLASSPATH}' ${JAVAC_ARGS}
-JAVAC_COMMAND_NOCP = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:typequals.*' ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
+JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m -classpath '${CLASSPATH}' ${JAVAC_ARGS}
 
 
 ###########################################################################
@@ -102,7 +103,7 @@ endif
 # semicolons (;) in the classpath
 ifeq (cygwin,$(OSTYPE))
   ifneq (;,$(findstring ;,$(CLASSPATH)))
-    export CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
+    CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
   endif
 endif
 
@@ -373,6 +374,14 @@ AUTO_GENERATED_CLASSES_2 = $(subst .java,.class,${AUTO_GENERATED_FILES_2})
 
 
 ###########################################################################
+### Variables passed down to subshells
+###
+
+export jsr308_imports
+export CLASSPATH
+
+
+###########################################################################
 ### Compilation targets
 ###
 
@@ -396,7 +405,7 @@ xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 all_directly: ${AUTO_GENERATED_FILES} utilMDE-import-check utilMDE-copy
 	@echo ${JAVA_FILES} > java_files.txt
-	@echo ${JAVAC_COMMAND_NOCP} @java_files.txt
+	@echo ${JAVAC_COMMAND} @java_files.txt
 	${JAVAC_COMMAND} @java_files.txt
 	@chmod -w ${AUTO_GENERATED_FILES}
 # This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
@@ -599,7 +608,7 @@ install-task-manager: task_manager.jar
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
 all_except_daikon: ${AUTO_GENERATED_FILES}
-	@echo ${JAVAC_COMMAND_NOCP} '*.java ... (except Daikon.java)'
+	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod -w ${AUTO_GENERATED_FILES}
 	$(MAKE) all_pass2
@@ -800,7 +809,7 @@ check-interning: ${INTERNING_JAVA_FILES}
 # @Interned annotation.
 interning-all: check-interning-all
 check-interning-all: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
-	@echo ${JAVAC_COMMAND_NOCP} ${JAVAC_INTERNING_ARGS} ...
+	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${JAVA_FILES}
 
 check-nullness: check-nullness-all
@@ -808,11 +817,11 @@ check-nullness: check-nullness-all
 check-nullness-all: check-nullness-all-withstubs
 
 check-nullness-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} compile-typequals
-	@echo ${JAVAC_COMMAND_NOCP} ${JAVAC_NULLNESS_ARGS} ...
+	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-nullness-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} compile-typequals
-	@echo ${JAVAC_COMMAND_NOCP} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
+	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${NULLNESS_JAVA_FILES}
 
 check-prototype: check-prototype-all
@@ -820,23 +829,23 @@ check-prototype: check-prototype-all
 check-prototype-all: check-prototype-all-withstubs
 
 check-prototype-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} compile-typequals
-	@echo ${JAVAC_COMMAND_NOCP} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ...
+	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${NULLNESS_JAVA_FILES}
 
 check-igj-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
-	@echo ${JAVAC_COMMAND_NOCP} ${JAVAC_IGJ_ARGS} ...
+	@echo ${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVA_FILES}
 
 check-igj-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
-	@echo ${JAVAC_COMMAND_NOCP} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ...
+	@echo ${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${JAVA_FILES}
 
 check-javari-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
-	@echo ${JAVAC_COMMAND_NOCP} ${JAVAC_JAVARI_ARGS} ...
+	@echo ${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVA_FILES}
 
 check-javari-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
-	@echo ${JAVAC_COMMAND_NOCP} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ...
+	@echo ${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${JAVA_FILES}
 
 TYPEQUALS_JAVA_FILES = $(wildcard typequals/*.java)
