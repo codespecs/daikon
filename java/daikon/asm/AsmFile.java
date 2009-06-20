@@ -124,7 +124,7 @@ public class AsmFile {
         return instructionsForBlock.get(blockShortName);
     }
 
-    public Object numBasicBlocks() {
+    public int numBasicBlocks() {
         return instructionsForBlock.size();
     }
 
