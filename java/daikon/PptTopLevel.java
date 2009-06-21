@@ -360,7 +360,7 @@ public class PptTopLevel extends Ppt {
     init_vars (var_infos);
   }
 
-  private void init_vars (VarInfo[] var_infos) @Raw {
+  private void init_vars (VarInfo[] var_infos) /*@Raw*/ {
 
     debug_varinfo.log_tb ("initializing var_infos %s",
                            Arrays.toString(var_infos));
