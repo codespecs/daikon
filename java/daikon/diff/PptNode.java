@@ -12,8 +12,7 @@ public class PptNode extends Node<PptTopLevel,InvNode> {
   /** Either ppt1 or ppt2 may be null, but not both. **/
   public PptNode(PptTopLevel ppt1, PptTopLevel ppt2) {
     super(new Pair<PptTopLevel,PptTopLevel>(ppt1, ppt2));
-    Assert.assertTrue(!(ppt1 == null && ppt2 == null),
-                  "Both program points may not be null");
+    assert !(ppt1 == null && ppt2 == null) : "Both program points may not be null";
   }
 
   public PptTopLevel getPpt1() {

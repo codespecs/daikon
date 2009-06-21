@@ -175,7 +175,7 @@ public class CLASSNAME
 
       if (((seq == x_summand) || (seq == y_summand) || (seq == z_summand))
           && (x_seq == y_seq) && (x_seq == z_seq)) {
-        Assert.assertTrue(y_seq == z_seq);
+        assert y_seq == z_seq;
         if (debugLinearTernary) {
           System.out.println(ppt.varNames() + " 3 sequences match");
         }
@@ -379,7 +379,7 @@ public class CLASSNAME
 
   // Look up a previously instantiated invariant.
   public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
-    Assert.assertTrue(ppt.arity() == 3);
+    assert ppt.arity() == 3;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof CLASSNAME)
         return (CLASSNAME) inv;

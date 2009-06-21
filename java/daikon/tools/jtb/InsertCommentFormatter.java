@@ -99,7 +99,7 @@ public class InsertCommentFormatter
     // until the start of the next line.  Without this code,
     // jtb.visitor.TreeDumper.visit throws an error.
     if (n.tokenImage.equals("") && prev_is_double_slash_comment) {
-      Assert.assertTrue(n.beginLine == n.endLine && n.beginColumn == n.endColumn);
+      assert n.beginLine == n.endLine && n.beginColumn == n.endColumn;
       n.beginLine += 1;
       n.beginColumn = 1;
       n.endLine += 1;

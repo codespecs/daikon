@@ -11,7 +11,6 @@ import java.util.List;
 import java.util.Set;
 import java.util.regex.Pattern;
 
-import utilMDE.Assert;
 
 /**
  * A program property (currently, derived by Daikon).
@@ -118,7 +117,7 @@ public class Property implements Serializable {
             } else if (name.equals("class invariant")) {
                 return classInvariant;
             } else {
-                Assert.assertTrue(name.equals("obj invariant"));
+                assert name.equals("obj invariant");
                 return objectInvariant;
             }
         }
@@ -536,12 +535,9 @@ public class Property implements Serializable {
         try {
 
             Property anno = get(kind(), daikonRep(), method());
-            Assert.assertTrue(anno.invRep == null || anno.invRep.equals(this.invRep),
-                              "anno.invRep==" + anno.invRep + " this.invRep==" + this.invRep);
-            Assert.assertTrue(anno.daikonClass == null || anno.daikonClass.equals(this.daikonClass),
-                              "anno.daikonClass==" + anno.daikonClass + " this.daikonClass==" + this.daikonClass);
-            Assert.assertTrue(anno.confidence == 0 || anno.confidence == this.confidence,
-                              "anno.confidence==" + anno.confidence + " this.confidence==" + this.confidence);
+            assert anno.invRep == null || anno.invRep.equals(this.invRep) : "anno.invRep==" + anno.invRep + " this.invRep==" + this.invRep;
+            assert anno.daikonClass == null || anno.daikonClass.equals(this.daikonClass) : "anno.daikonClass==" + anno.daikonClass + " this.daikonClass==" + this.daikonClass;
+            assert anno.confidence == 0 || anno.confidence == this.confidence : "anno.confidence==" + anno.confidence + " this.confidence==" + this.confidence;
             if (anno.invRep == null) {
                 anno.invRep = this.invRep;
                 anno.daikonClass = this.daikonClass;

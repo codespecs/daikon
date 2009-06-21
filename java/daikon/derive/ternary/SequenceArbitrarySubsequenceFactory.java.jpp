@@ -154,7 +154,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
     // size, if possible.
 //     PptSlice compar_slice = null;
 //     if (seqsize != null) {
-//       Assert.assertTrue(sclvar.ppt == seqsize.ppt);
+//       assert sclvar.ppt == seqsize.ppt;
 //       compar_slice = sclvar.ppt.findSlice_unordered(sclvar, seqsize);
 //     }
 //     if (compar_slice != null) {
@@ -223,7 +223,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
     // (k can have higher or lower VarInfo index than i.)
 
     {
-      Assert.assertTrue(startvar.ppt == seqvar.ppt);
+      assert startvar.ppt == seqvar.ppt;
       Vector<LINEARBINARY> lbs = LINEARBINARY.findAll(startvar);
       for (Object lbObject : lbs) {
         LINEARBINARY lb = (LINEARBINARY) lbObject;
@@ -255,7 +255,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY
     }
 
     {
-      Assert.assertTrue(endvar.ppt == seqvar.ppt);
+      assert endvar.ppt == seqvar.ppt;
       Vector<LINEARBINARY> lbs = LINEARBINARY.findAll(endvar);
       for (Object lbObject : lbs) {
         LINEARBINARY lb = (LINEARBINARY) lbObject;

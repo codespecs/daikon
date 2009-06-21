@@ -162,7 +162,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     // size, if possible.
     PptSlice compar_slice = null;
     if (seqsize != null) {
-      Assert.assertTrue(sclvar.ppt == seqsize.ppt);
+      assert sclvar.ppt == seqsize.ppt;
       compar_slice = sclvar.ppt.findSlice_unordered(sclvar, seqsize);
     }
     if (compar_slice != null) {
@@ -275,7 +275,7 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
 
     // This ought to be abstracted out, maybe
     {
-      Assert.assertTrue(sclvar.ppt == seqvar.ppt);
+      assert sclvar.ppt == seqvar.ppt;
       Vector<LINEARBINARY> lbs = LINEARBINARY.findAll(sclvar);
       // System.out.println("For " + sclvar.name + ", " + lbs.size() + " LinearBinary invariants");
       for (Object lbObject : lbs) {

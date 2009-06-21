@@ -88,12 +88,12 @@ public class PptCombinedTests extends TestCase {
 
   private void assertListDoesNotContain(List<PptTopLevel> list, PptTopLevel... ps) {
     for (PptTopLevel p : ps)
-      assertTrue(list + " " + p, !list.contains(p));
+      assert !list.contains(p) : list + " " + p;
   }
 
   private void assertListContains(List<PptTopLevel> list, PptTopLevel... ps) {
     for (PptTopLevel p : ps)
-      assertTrue(list + " " + p, list.contains(p));
+      assert list.contains(p) : list + " " + p;
   }
 
   private void setPredecessors(PptTopLevel... ppts) {

@@ -82,7 +82,7 @@ public class PptNameMatcher {
 
         // ClassOrInterfaceType t = (ClassOrInterfaceType)singleElementVector.get(0);
         ClassOrInterfaceType tOrig = (ClassOrInterfaceType)singleElementVectorOrig.get(0);
-        Assert.assertTrue(tOrig.unGenerifiedVersionOfThis != null);
+        assert tOrig.unGenerifiedVersionOfThis != null;
         singleElementVector.set(0, tOrig.unGenerifiedVersionOfThis);
         // Return getType of the ungenerified version of p.
 
@@ -260,8 +260,8 @@ public class PptNameMatcher {
     if (debug_getMatches) System.out.println("pptFullMethodName = " + pptFullMethodName);
     int lparen = pptFullMethodName.indexOf('(');
     int rparen = pptFullMethodName.indexOf(')');
-    Assert.assertTrue(lparen > 0);
-    Assert.assertTrue(rparen > lparen);
+    assert lparen > 0;
+    assert rparen > lparen;
     String ppt_args_string = pptFullMethodName.substring(lparen+1, rparen);
     String[] ppt_args = utilMDE.UtilMDE.split(ppt_args_string, ", ");
     if ((ppt_args.length == 1)

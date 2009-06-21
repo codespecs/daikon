@@ -34,8 +34,8 @@ public abstract class SingleFloat
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   public InvariantStatus add(Object val, int mod_index, int count) {
-    Assert.assertTrue(! falsified);
-    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    assert ! falsified;
+    assert (mod_index >= 0) && (mod_index < 2);
     double value = ((Double) val).doubleValue();
     if (mod_index == 0) {
       return add_unmodified(value, count);
@@ -46,8 +46,8 @@ public abstract class SingleFloat
 
 
   public InvariantStatus check(Object val, int mod_index, int count) {
-    Assert.assertTrue(! falsified);
-    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    assert ! falsified;
+    assert (mod_index >= 0) && (mod_index < 2);
     double value = ((Double) val).doubleValue();
     if (mod_index == 0) {
       return check_unmodified(value, count);

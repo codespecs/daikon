@@ -3,7 +3,6 @@ package daikon.tools.jtb;
 import java.util.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
-import utilMDE.Assert;
 
 /**
  * Method "fieldDeclarations" returns a list of all FieldDeclarations

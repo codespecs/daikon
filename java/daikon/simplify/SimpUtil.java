@@ -1,6 +1,5 @@
 package daikon.simplify;
 
-import utilMDE.Assert;
 
 /**
  * Utility functions for the simplify package.
@@ -10,7 +9,9 @@ public class SimpUtil
   private SimpUtil() { throw new Error("do not instantiate"); }
 
   public static void assert_well_formed(String s) {
-    if (!Assert.enabled) {
+    boolean assert_enabled = false;
+    assert (assert_enabled = true);
+    if (!assert_enabled) {
       return;
     }
 
@@ -20,15 +21,15 @@ public class SimpUtil
     // details like the rules for | delimiting strings, and how it can
     // be escaped.
 
-    Assert.assertTrue(s != null);
+    assert s != null;
     // XXX not with strings
 //     if (s.indexOf("((") != -1)
-//       Assert.assertTrue(false, "'((' may not appear, '" + s + "'");
-    Assert.assertTrue(s.length() >= 4, "too short, '" + s + "'");
+//       assert false : "'((' may not appear, '" + s + "'";
+    assert s.length() >= 4 : "too short, '" + s + "'";
     if (s.charAt(0) != '(')
-      Assert.assertTrue(false, "starts with lparen, '" + s + "'");
+      assert false : "starts with lparen, '" + s + "'";
     if (s.charAt(s.length()-1) != ')')
-      Assert.assertTrue(false, "ends with rparen, '" + s + "'");
+      assert false : "ends with rparen, '" + s + "'";
 
     int paren = 0;
     char[] cs = s.toCharArray();
@@ -39,17 +40,16 @@ public class SimpUtil
       } else if (c == ')') {
         // XXX not with strings
 //         if (paren <= 0)
-//           Assert.assertTrue(paren > 0,
-//                             "too deep at char " + i + " in '" + s + "'");
+//           assert paren > 0 : //                             "too deep at char " + i + " in '" + s + "'";
         paren--;
         // This check is only sensible for some callers; it needs a flag.
 //         if (paren == 0 && i < cs.length -1)
-//           Assert.assertTrue(false, "multiple SEXPs in " + s);
+//           assert false : "multiple SEXPs in " + s;
       }
     }
     // XXX not with strings
 //     if (paren != 0)
-//       Assert.assertTrue(paren == 0, "unbalanced parens in '" + s + "'");
+//       assert paren == 0 : "unbalanced parens in '" + s + "'";
   }
 
   /**

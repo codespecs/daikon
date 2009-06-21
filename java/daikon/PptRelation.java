@@ -115,8 +115,8 @@ public class PptRelation implements Serializable {
    * children list.
    */
   private void connect() {
-    Assert.assertTrue(!child.parents.contains(this));
-    Assert.assertTrue(!parent.children.contains(this));
+    assert !child.parents.contains(this);
+    assert !parent.children.contains(this);
     child.parents.add(this);
     parent.children.add(this);
   }
@@ -353,7 +353,7 @@ public class PptRelation implements Serializable {
     PptTopLevel parent,
     PptTopLevel child) {
 
-    Assert.assertTrue((parent != null) && (child != null));
+    assert (parent != null) && (child != null);
 
     PptRelation rel = new PptRelation(parent, child, PptRelationType.PARENT);
 
@@ -366,7 +366,7 @@ public class PptRelation implements Serializable {
     // Note that these should be the only variables whose names match and
     // that each parent variable should match one in the child.
     boolean relate_all = rel.relate_same_name();
-    Assert.assertTrue(relate_all);
+    assert relate_all;
     return (rel);
   }
 
@@ -378,7 +378,7 @@ public class PptRelation implements Serializable {
     PptTopLevel parent,
     PptTopLevel child) {
 
-    Assert.assertTrue((parent != null) && (child != null));
+    assert (parent != null) && (child != null);
 
     PptRelation rel = new PptRelation(parent, child, PptRelationType.PARENT);
 
@@ -461,7 +461,7 @@ public class PptRelation implements Serializable {
     PptTopLevel child,
     VarInfo arg) {
 
-    Assert.assertTrue((parent != null) && (child != null));
+    assert (parent != null) && (child != null);
 
     PptRelation rel = new PptRelation(parent, child, PptRelationType.USER);
 
@@ -485,7 +485,7 @@ public class PptRelation implements Serializable {
     PptTopLevel parent,
     PptTopLevel child) {
 
-    Assert.assertTrue((parent != null) && (child != null));
+    assert (parent != null) && (child != null);
 
     PptRelation rel = new PptRelation(parent, child,
                                       PptRelationType.ENTER_EXIT);
@@ -499,7 +499,7 @@ public class PptRelation implements Serializable {
       if (vp.isStaticConstant()) {
         boolean found = rel.relate(vp, vp.name());
         // Static constants are not always placed at each level in hierarchy
-        // Assert.assertTrue(found);
+        // assert found;
       } else {
         // VarInfoName orig_name = vp.name.applyPrestate().intern();
         boolean found = rel.relate(vp, vp.prestate_name());
@@ -566,7 +566,7 @@ public class PptRelation implements Serializable {
       for (VarInfo vc : child.var_infos) {
         System.out.println("    " + vc.name());
       }
-      //Assert.assertTrue (false, "Missing orig variable in EXIT");
+      //assert false : "Missing orig variable in EXIT";
     }
     return (rel);
   }
@@ -581,18 +581,18 @@ public class PptRelation implements Serializable {
     PptTopLevel parent,
     PptTopLevel child) {
 
-    Assert.assertTrue((parent != null) && (child != null));
+    assert (parent != null) && (child != null);
 
     PptRelation rel = new PptRelation(parent, child,
                                       PptRelationType.EXIT_EXITNN);
 
     // Create the parent-child variable map.  This one is easy as the
     // variables should match exactly
-    Assert.assertTrue(parent.var_infos.length == child.var_infos.length);
+    assert parent.var_infos.length == child.var_infos.length;
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vc = child.var_infos[i];
       VarInfo vp = parent.var_infos[i];
-      Assert.assertTrue(vc.name().equals(vp.name()));
+      assert vc.name().equals(vp.name());
       rel.child_to_parent_map.put(vc, vp);
       rel.parent_to_child_map.put(vp, vc);
     }
@@ -607,18 +607,18 @@ public class PptRelation implements Serializable {
     PptTopLevel parent,
     PptTopLevel child) {
 
-    Assert.assertTrue((parent != null) && (child != null));
+    assert (parent != null) && (child != null);
 
     PptRelation rel = new PptRelation(parent, child,
                                       PptRelationType.PPT_PPTCOND);
 
     // Create the parent-child variable map.  This one is easy as the
     // variables should match exactly
-    Assert.assertTrue(parent.var_infos.length == child.var_infos.length);
+    assert parent.var_infos.length == child.var_infos.length;
     for (int i = 0; i < parent.var_infos.length; i++) {
       VarInfo vc = child.var_infos[i];
       VarInfo vp = parent.var_infos[i];
-      Assert.assertTrue(vc.name().equals(vp.name()));
+      assert vc.name().equals(vp.name());
       rel.child_to_parent_map.put(vc, vp);
       rel.parent_to_child_map.put(vp, vc);
     }
@@ -635,7 +635,7 @@ public class PptRelation implements Serializable {
     PptTopLevel parent,
     PptTopLevel child) {
 
-    Assert.assertTrue((parent != null) && (child != null));
+    assert (parent != null) && (child != null);
 
     PptRelation rel = new PptRelation(parent, child, PptRelationType.MERGE_CHILD);
 
@@ -645,7 +645,7 @@ public class PptRelation implements Serializable {
         "newMergeChildRel: in ppt " + parent.name() + " vars don't match");
       System.out.println("parent vars= " + VarInfo.toString(parent.var_infos));
       System.out.println("child vars=  " + VarInfo.toString(child.var_infos));
-      Assert.assertTrue(parent.var_infos.length == child.var_infos.length);
+      assert parent.var_infos.length == child.var_infos.length;
     }
 
     // Create the parent-child variable map.  This one is easy as the
@@ -662,7 +662,7 @@ public class PptRelation implements Serializable {
             + " doesn't match");
         System.out.println("par vars  = " + VarInfo.toString(parent.var_infos));
         System.out.println("child vars= " + VarInfo.toString(child.var_infos));
-        Assert.assertTrue(vc.name().equals(vp.name()));
+        assert vc.name().equals(vp.name());
       }
       rel.child_to_parent_map.put(vc, vp);
       rel.parent_to_child_map.put(vp, vc);
@@ -682,8 +682,8 @@ public class PptRelation implements Serializable {
       VarInfo vp = child_to_parent_map.get(vc);
       VarInfo new_vc = new_child.var_infos[vc.varinfo_index];
       VarInfo new_vp = new_parent.var_infos[vp.varinfo_index];
-      Assert.assertTrue(new_vc.name().equals(vc.name()));
-      Assert.assertTrue(new_vp.name().equals(vp.name()));
+      assert new_vc.name().equals(vc.name());
+      assert new_vp.name().equals(vp.name());
       rel.child_to_parent_map.put(new_vc, new_vp);
       rel.parent_to_child_map.put(new_vp, new_vc);
     }

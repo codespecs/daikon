@@ -386,9 +386,9 @@ public final class FeatureExtractor {
 //           System.out.println(current.number);
 //       } */// end debug code
 
-      Assert.assertTrue(allFeatures.size() == allFets.size(),
-                        lineSep + "Expected number of features: "+allFeatures.size() +
-                        lineSep + "Actual number of features: "+allFets.size());
+      assert allFeatures.size() == allFets.size()
+        : lineSep + "Expected number of features: "+allFeatures.size() +
+        lineSep + "Actual number of features: "+allFets.size();
 
       for (IntDoublePair fet : allFets) {
         output.print(df.format(fet.value) + ",");

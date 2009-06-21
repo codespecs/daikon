@@ -343,14 +343,14 @@ public class InvariantChecker {
 
       // If this is an enter point, just remember it for later
       if (ppt.ppt_name.isEnterPoint()) {
-        Assert.assertTrue (nonce != null);
+        assert nonce != null;
         if (dir_file!=null) {
           //Yoav: I had to do a hack to handle the case that several dtrace files are concatenated together,
           // and Sung's dtrace files have unterminated calls, and when concatenating two files you can have the same nonce.
           // So I have to remove the nonce found from the call_map
           call_map.remove(nonce);
         } else
-          Assert.assertTrue (call_map.get (nonce) == null);
+          assert call_map.get (nonce) == null;
         call_map.put (nonce, new EnterCall (ppt, vt));
         debug.fine ("Skipping enter sample");
         return;
@@ -358,7 +358,7 @@ public class InvariantChecker {
 
       // If this is an exit point, process the saved enter point
       if (ppt.ppt_name.isExitPoint()) {
-        Assert.assertTrue (nonce != null);
+        assert nonce != null;
         EnterCall ec = call_map.get (nonce);
         if (ec != null) {
           call_map.remove (nonce);
@@ -405,9 +405,10 @@ public class InvariantChecker {
       // to check.
       // Yoav added: It can be that the different dtrace and inv files have different program points
       if (false && ppt.num_samples() <= 0)
-        Assert.assertTrue (ppt.num_samples() > 0, "ppt " + ppt.name
+        assert ppt.num_samples() > 0
+        : "ppt " + ppt.name
                             + " has 0 samples and "
-                            + ppt.var_infos.length + " variables");
+                            + ppt.var_infos.length + " variables";
 
       // Loop through each slice
       slice_loop:

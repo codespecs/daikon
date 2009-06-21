@@ -35,8 +35,8 @@ public abstract class SingleString
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(String,int)}.
   public InvariantStatus add(Object val, int mod_index, int count) {
-    Assert.assertTrue(! falsified);
-    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    assert ! falsified;
+    assert (mod_index >= 0) && (mod_index < 2);
     String value = (String) val;
     if (mod_index == 0) {
       return add_unmodified(value, count);
@@ -46,8 +46,8 @@ public abstract class SingleString
   }
 
   public InvariantStatus check(Object val, int mod_index, int count) {
-    Assert.assertTrue(! falsified);
-    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    assert ! falsified;
+    assert (mod_index >= 0) && (mod_index < 2);
     String value = (String) val;
     if (mod_index == 0) {
       return check_unmodified(value, count);

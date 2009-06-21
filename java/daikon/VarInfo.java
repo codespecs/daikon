@@ -225,21 +225,21 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * @exception RuntimeException if representation invariant on this is broken
    */
   public void checkRep() {
-    Assert.assertTrue(ppt != null);
-    Assert.assertTrue(var_info_name != null);  // vin ok
-    Assert.assertTrue(var_info_name == var_info_name.intern()); // vin ok
-    Assert.assertTrue(type != null);
-    Assert.assertTrue(file_rep_type != null);
-    Assert.assertTrue(rep_type != null);
-    Assert.assertTrue(comparability != null); // anything else ??
-    Assert.assertTrue(comparability.alwaysComparable()
-                      || (((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions()));
-    Assert.assertTrue(
-      0 <= varinfo_index && varinfo_index < ppt.var_infos.length);
-    Assert.assertTrue(-1 <= value_index && value_index < varinfo_index);
-    Assert.assertTrue(is_static_constant == (value_index == -1));
-    Assert.assertTrue(
-      is_static_constant || (static_constant_value == null));
+    assert ppt != null;
+    assert var_info_name != null;  // vin ok
+    assert var_info_name == var_info_name.intern(); // vin ok
+    assert type != null;
+    assert file_rep_type != null;
+    assert rep_type != null;
+    assert comparability != null; // anything else ??
+    assert comparability.alwaysComparable()
+                      || (((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions());
+    assert
+      0 <= varinfo_index && varinfo_index < ppt.var_infos.length;
+    assert -1 <= value_index && value_index < varinfo_index;
+    assert is_static_constant == (value_index == -1);
+    assert
+      is_static_constant || (static_constant_value == null);
   }
 
   /** Returns whether or not rep_type is a legal type **/
@@ -519,12 +519,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     assert type != null;
     assert comparability != null;
     // COMPARABILITY TEST
-    // Assert.assertTrue(
-    //   comparability.alwaysComparable() || ((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions(),
-    //   "Types dimensions incompatibility: "
+    // assert
+    //   comparability.alwaysComparable() || ((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions()
+    //   : "Types dimensions incompatibility: "
     //     + type
     //     + " vs. "
-    //     + file_rep_type);
+    //     + file_rep_type;
     assert aux != null;
     assert legalConstant (static_constant_value)
       : "unexpected constant class " + static_constant_value.getClass();
@@ -676,7 +676,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     for (int i = 0; i < len; i++) {
       a_new[i] = new VarInfo(a_old[i]);
       if (a_old[i].derived != null)
-        Assert.assertTrue(a_new[i].derived != null);
+        assert a_new[i].derived != null;
       a_new[i].varinfo_index = a_old[i].varinfo_index;
       a_new[i].value_index = a_old[i].value_index;
     }
@@ -1264,14 +1264,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public VarInfo canonicalRep() {
     if (equalitySet == null) {
       System.out.println("equality sets = " + ppt.equality_sets_txt());
-      Assert.assertTrue(
-        equalitySet != null,
-        "Variable "
+      assert
+        equalitySet != null
+        : "Variable "
           + name()
           + " in ppt "
           + ppt.name()
           + " index = "
-          + varinfo_index);
+          + varinfo_index;
     }
     return equalitySet.leader();
   }
@@ -1346,7 +1346,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public /*@Nullable*/ VarInfo sequenceSize() {
     if (sequenceSize != null)
       return sequenceSize;
-    Assert.assertTrue(rep_type.isArray());
+    assert rep_type.isArray();
     // we know the size follows the variable itself in the list
     VarInfo[] vis = ppt.var_infos;
     for (int i = varinfo_index + 1; i < vis.length; i++) {
@@ -1520,7 +1520,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         // stack.fillInStackTrace();
         // stack.printStackTrace();
 
-    Assert.assertTrue(!Daikon.isInferencing);
+    assert !Daikon.isInferencing;
     // System.out.println("compare_vars(" + vari.name + ", " + vari_shift + ", "+ varj.name + ", " + varj_shift + ", " + (test_lessequal?"<=":">=") + ")");
     if (vari == varj) {
       // same variable
@@ -1532,7 +1532,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // different variables
     @SuppressWarnings("interning") // assertion (PptTopLevel)
     boolean samePpt = (vari.ppt == varj.ppt);
-    Assert.assertTrue(samePpt);
+    assert samePpt;
     PptSlice indices_ppt = vari.ppt.findSlice_unordered(vari, varj);
     if (indices_ppt == null)
       return false;
@@ -1552,7 +1552,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
         // a is 1 or -1, and the values are integers, so c must be an integer
         long c_int = (long) lb.core.c;
-        Assert.assertTrue(lb.core.c == c_int);
+        assert lb.core.c == c_int;
         index_vari_minus_seq = (vari_is_var1 ? -c_int : c_int);
         index_vari_minus_seq += vari_shift - varj_shift;
       }
@@ -1642,7 +1642,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     assert !FileIO.new_decl_format;
 
     // Below is equivalent to:
-    // Assert.assertTrue(post == isPrestate());
+    // assert post == isPrestate();
     if (post != isPrestate()) {
       throw new Error("Shouldn't happen (should it?): "
                       + (post ? "post" : "pre") + "StateEquivalent("
@@ -1695,7 +1695,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    **/
   @SuppressWarnings("interning") // Equality
   public boolean isEqualTo(VarInfo other) {
-    Assert.assertTrue(equalitySet != null);
+    assert equalitySet != null;
     return this.equalitySet == other.equalitySet;
   }
 
@@ -1809,7 +1809,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // comparability info may not make sense.
     @SuppressWarnings("interning") // assertion (PptTopLevel)
     boolean samePpt = (var1.ppt == var2.ppt);
-    Assert.assertTrue(samePpt);
+    assert samePpt;
 
     if (!comparableByType(var2)) {
       return false;

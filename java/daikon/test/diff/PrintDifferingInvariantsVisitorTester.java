@@ -38,29 +38,29 @@ public class PrintDifferingInvariantsVisitorTester extends TestCase {
 
     Boolean b = (Boolean) m.invoke
       (v, new Object[] {null_noprint, null_noprint});
-    Assert.assertTrue(!b.booleanValue());
+    assert !b.booleanValue();
 
     // Test printing of uninteresting invariants
     b = (Boolean) m.invoke
       (v, new Object[] {null_uninteresting, null_uninteresting});
-    Assert.assertTrue(!b.booleanValue());
+    assert !b.booleanValue();
     PrintDifferingInvariantsVisitor vu =
       new PrintDifferingInvariantsVisitor(null, false, false, true);
     b = (Boolean) m.invoke
       (vu, new Object[] {null_uninteresting, null_uninteresting});
-    Assert.assertTrue(b.booleanValue());
+    assert b.booleanValue();
 
     b = (Boolean) m.invoke
       (v, new Object[] {null_int_1_just, null_noprint});
-    Assert.assertTrue(b.booleanValue());
+    assert b.booleanValue();
 
     b = (Boolean) m.invoke
       (v, new Object[] {null, null_noprint});
-    Assert.assertTrue(!b.booleanValue());
+    assert !b.booleanValue();
 
     b = (Boolean) m.invoke
       (v, new Object[] {null, null_int_1_just});
-    Assert.assertTrue(b.booleanValue());
+    assert b.booleanValue();
   }
 
 }

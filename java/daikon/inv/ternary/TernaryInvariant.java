@@ -2,7 +2,6 @@ package daikon.inv.ternary;
 
 import daikon.PptSlice;
 import daikon.inv.Invariant;
-import utilMDE.Assert;
 import daikon.inv.InvariantStatus;
 
 /**
@@ -23,8 +22,8 @@ public abstract class TernaryInvariant
 
   // Check if swap occurred and call one of the other methods
   protected Invariant resurrect_done(int[] permutation) {
-    Assert.assertTrue(permutation.length == 3);
-    // Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
+    assert permutation.length == 3;
+    // assert ArraysMDE.fn_is_permutation(permutation);
     throw new Error("to implement");
   }
 

@@ -170,7 +170,7 @@ public class DSForestTest extends TestCase {
 
         Set<Set<String>> actual = f.getSets();
 
-        assertTrue(actual.equals(expectedSets));
+        assert actual.equals(expectedSets);
     }
 
 }

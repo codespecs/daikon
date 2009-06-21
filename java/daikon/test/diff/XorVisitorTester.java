@@ -77,7 +77,7 @@ public class XorVisitorTester extends TestCase {
     expected.put(C, Arrays.asList(Z));
     expected.put(D, Arrays.asList(M, N));
 
-    assertEquals(expected.toString(), result.toString());
+    assert expected.toString().equals(result.toString());
   }
 
 }

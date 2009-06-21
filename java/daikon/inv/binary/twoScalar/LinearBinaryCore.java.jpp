@@ -320,7 +320,7 @@ public final class CLASSNAME
     // Find the most separated pair.
     // Do I really need to check in two dimensions, or would one be enough?
 
-    Assert.assertTrue(x_array.length == y_array.length);
+    assert x_array.length == y_array.length;
 
     // indices of the most-separated pair of points
     int max_i = -1;
@@ -335,7 +335,7 @@ public final class CLASSNAME
         double separation = xsep*xsep + ysep*ysep;
 #if defined(TYPEDOUBLE)
         // Roundoff error might result in 0.
-        // Assert.assertTrue(separation > 0);
+        // assert separation > 0;
 #endif
         if (separation > max_separation) {
           max_separation = separation;
@@ -570,7 +570,7 @@ public final class CLASSNAME
   // there a point to this method?
   public String format_reversed_using(OutputFormat format, String xname,
                                       String yname) {
-    Assert.assertTrue(a == 1 || a == -1);
+    assert a == 1 || a == -1;
     return format_using(format, yname, xname, b, a, c);
   }
 

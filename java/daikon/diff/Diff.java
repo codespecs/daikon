@@ -696,9 +696,9 @@ public final class Diff {
                                   boolean includeUnjustified) {
     PptNode pptNode = new PptNode(ppt1, ppt2);
 
-    Assert.assertTrue(ppt1 == null || ppt2 == null ||
-                      PPT_COMPARATOR.compare(ppt1, ppt2) == 0,
-                      "Program points do not correspond");
+    assert ppt1 == null || ppt2 == null ||
+                      PPT_COMPARATOR.compare(ppt1, ppt2) == 0
+        : "Program points do not correspond";
 
     List<Invariant> invs1;
     if (ppt1 != null && !treeManip) {

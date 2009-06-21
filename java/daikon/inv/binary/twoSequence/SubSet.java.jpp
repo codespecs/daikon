@@ -326,7 +326,7 @@ public class SUBSET
 
   // Look up a previously instantiated SubSet relationship.
   public static /*@Nullable*/ SUBSET find(PptSlice ppt) {
-    Assert.assertTrue(ppt.arity() == 2);
+    assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof SUBSET)
         return (SUBSET) inv;
@@ -335,7 +335,7 @@ public class SUBSET
   }
 
   public boolean isSameFormula(Invariant other) {
-    Assert.assertTrue(other instanceof SUBSET);
+    assert other instanceof SUBSET;
     return true;
   }
 

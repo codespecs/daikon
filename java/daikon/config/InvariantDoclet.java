@@ -239,7 +239,7 @@ public class InvariantDoclet
             out.println ("@item " + fb_type + "." + last_fb + "_@{" + permutes
                        + "@}");
             out.println (last_comment);
-            Assert.assertTrue ((permute_cnt == 3) || (permute_cnt == 6));
+            assert (permute_cnt == 3) || (permute_cnt == 6);
             if (permute_cnt == 3)
               out.println ("Since the function is symmetric, only the "
                            + "permutations xyz, yxz, and zxy are checked.");

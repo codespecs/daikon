@@ -75,7 +75,7 @@ public class LemmaStack {
     try {
       session.request(CmdUndoAssume.single);
     } catch (TimeoutException e) {
-      Assert.assertTrue(false, "Unexpected timeout on (BG_POP)");
+      assert false : "Unexpected timeout on (BG_POP)";
     }
   }
 
@@ -330,7 +330,7 @@ public class LemmaStack {
       }
       assumeAll(lemmas);
     } catch (TimeoutException e) {
-      Assert.assertTrue(false);
+      assert false;
     }
     return found;
   }
@@ -347,7 +347,7 @@ public class LemmaStack {
   /** Return a minimal set of assumptions from the stack that imply a
    * given string. */
   private Vector<Lemma> minimizeReasons(String str) throws SimplifyError {
-    Assert.assertTrue(checkString(str) == 'T');
+    assert checkString(str) == 'T';
     unAssumeAll(lemmas);
     Vector<Lemma> result;
     try {
@@ -412,7 +412,7 @@ public class LemmaStack {
         }
       }
     }
-    Assert.assertTrue(spliceOut != -1);
+    assert spliceOut != -1;
     lemmas.removeElementAt(spliceOut);
   }
 
@@ -480,7 +480,7 @@ public class LemmaStack {
       long l = ll.longValue();
       if (l == Long.MIN_VALUE)
         continue;
-      Assert.assertTrue(l != last_long);
+      assert l != last_long;
       String formula = "(< " + SimpUtil.formatInteger(last_long) + " " +
         SimpUtil.formatInteger(l) + ")";
       Lemma lem = new Lemma(last_long + " < " + l, formula);

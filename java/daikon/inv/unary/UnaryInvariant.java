@@ -2,7 +2,6 @@ package daikon.inv.unary;
 
 import daikon.inv.*;
 import daikon.PptSlice;
-import utilMDE.Assert;
 import daikon.inv.InvariantStatus;
 
 /**
@@ -24,8 +23,8 @@ public abstract class UnaryInvariant
 
   /** @return this */
   protected Invariant resurrect_done(int[] permutation) {
-    Assert.assertTrue(permutation.length == 1);
-    Assert.assertTrue(permutation[0] == 0);
+    assert permutation.length == 1;
+    assert permutation[0] == 0;
     return this;
   }
 

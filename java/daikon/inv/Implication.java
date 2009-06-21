@@ -122,16 +122,16 @@ public class Implication
   }
 
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
-    Assert.assertTrue (vis.length > 0);
+    assert vis.length > 0;
     for (int ii = 0; ii < vis.length; ii++ )
-      Assert.assertTrue (vis[ii] != null);
+      assert vis[ii] != null;
     return orig_right.isObviousStatically(vis);
   }
 
   public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
-    Assert.assertTrue (vis.length > 0);
+    assert vis.length > 0;
     for (int ii = 0; ii < vis.length; ii++ )
-      Assert.assertTrue (vis[ii] != null);
+      assert vis[ii] != null;
     DiscardInfo di = orig_right.isObviousDynamically (vis);
     if (di != null) {
       log ("failed isObviousDynamically with vis = " + VarInfo.toString (vis));
@@ -160,9 +160,9 @@ public class Implication
     return orig_right.isObviousStatically_SomeInEquality();
 //     DiscardInfo result = isObviousStatically (orig_right.ppt.var_infos);
 //     if (result != null) return result;
-//     Assert.assertTrue (orig_right.ppt.var_infos.length > 0);
+//     assert orig_right.ppt.var_infos.length > 0;
 //     for (int ii = 0; ii < orig_right.ppt.var_infos.length; ii++ )
-//       Assert.assertTrue (orig_right.ppt.var_infos[ii] != null);
+//       assert orig_right.ppt.var_infos[ii] != null;
 //     return isObviousStatically_SomeInEqualityHelper (orig_right.ppt.var_infos,
 //                      new VarInfo[orig_right.ppt.var_infos.length], 0);
   }

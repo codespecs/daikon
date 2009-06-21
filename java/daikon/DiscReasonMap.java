@@ -3,7 +3,6 @@ package daikon;
 import daikon.inv.*;
 
 import java.util.*;
-import utilMDE.Assert;
 
 public final class DiscReasonMap {
 
@@ -31,7 +30,7 @@ public final class DiscReasonMap {
   public static void put(Invariant inv, DiscardInfo disc_info) {
     if (! PrintInvariants.print_discarded_invariants)
       return;
-    Assert.assertTrue(disc_info != null);
+    assert disc_info != null;
 
     // Let's not keep track of DiscardInfo's from Invariants who have
     // any repeated variables since we don't expect them to print anyway
@@ -56,7 +55,7 @@ public final class DiscReasonMap {
   public static void put(String vars, String ppt, DiscardInfo disc_info) {
     if (! PrintInvariants.print_discarded_invariants)
       return;
-    Assert.assertTrue(disc_info != null);
+    assert disc_info != null;
 
     // Get the vars out of inv in our proper format
     // I should move this var_sorting stuff to a central
@@ -148,7 +147,7 @@ public final class DiscReasonMap {
   // least 1 DiscardInfo associated with it
   private static List<DiscardInfo> all_vars_tied_from_ppt(String ppt) {
     HashMap<String,List<DiscardInfo>> vars_map = the_map.get(ppt);
-    Assert.assertTrue(vars_map != null);
+    assert vars_map != null;
 
     ArrayList<DiscardInfo> result = new ArrayList<DiscardInfo>();
     for (List<DiscardInfo> ldi : vars_map.values()) {

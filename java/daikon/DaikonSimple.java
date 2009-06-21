@@ -13,7 +13,6 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import utilMDE.Assert;
 import utilMDE.UtilMDE;
 import daikon.Daikon.TerminationMessage;
 import daikon.inv.Invariant;
@@ -318,7 +317,7 @@ public class DaikonSimple {
     ppt.addViews(ternary_views);
 
     // This method didn't add any new variables.
-    Assert.assertTrue(old_num_vars == ppt.var_infos.length);
+    assert old_num_vars == ppt.var_infos.length;
     ppt.repCheck();
 
   }
@@ -541,8 +540,8 @@ public class DaikonSimple {
 
       // If this is an enter point, just remember it for later
       if (ppt_name.isEnterPoint()) {
-        Assert.assertTrue(nonce != null);
-        Assert.assertTrue(call_map.get(nonce) == null);
+        assert nonce != null;
+        assert call_map.get(nonce) == null;
         List<Call> value = new ArrayList<Call>();
         value.add(new Call(ppt, vt));
 
@@ -563,7 +562,7 @@ public class DaikonSimple {
       // If this is an exit point, process the saved enter (and sometimes
       // object) point
       if (ppt_name.isExitPoint()) {
-        Assert.assertTrue(nonce != null);
+        assert nonce != null;
         List<Call> value = call_map.remove(nonce);
 
         add(ppt, vt, nonce);

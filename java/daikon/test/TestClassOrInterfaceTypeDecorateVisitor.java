@@ -73,13 +73,13 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     UngenerifiedTypeCollector ungenerifiedCollector = new UngenerifiedTypeCollector();
     compilationUnit.accept(new ClassOrInterfaceTypeDecorateVisitor());
     compilationUnit.accept(ungenerifiedCollector);
-    
+
 
 
     /*
      for (int ii = 0; ii < result.length(); ii++) {
       if (result.charAt(ii) !=  expected.charAt(ii)) {
-        System.out.printf ("diff at offset %d: '%c' - '%c'%n", ii, 
+        System.out.printf ("diff at offset %d: '%c' - '%c'%n", ii,
                            result.charAt(ii), expected.charAt(ii));
         System.out.printf ("last:%n%s%n%s%n", result.substring (ii-50, ii+2),
                            expected.substring (ii-50, ii+2));
@@ -96,17 +96,18 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
     // UtilMDE.writeFile (new File ("expected.txt"), expected);
     // UtilMDE.writeFile (new File ("result.txt"), result);
 
-    assertEquals ("diff in buffer lengths", expected_arr.length, 
-                  result_arr.length);
+    assert expected_arr.length == result_arr.length
+        : "diff in buffer lengths";
     for (int ii = 0; ii < expected_arr.length; ii++) {
-      Assert.assertEquals ("diff at line " + ii, expected_arr[ii], 
-                           result_arr[ii]);
+      assert expected_arr[ii].equals(result_arr[ii])
+        : "diff at line " + ii;
     }
       /*
-    Assert.assertTrue(ungenerifiedCollector.collectionResults()
+    assert ungenerifiedCollector.collectionResults().trim().equals(expectedAnswerBuffer.toString().trim())
+                      : ungenerifiedCollector.collectionResults()
                       + "\n\n\nExpected answer:\n\n\n"
-                      + expectedAnswerBuffer.toString(),
-                      ungenerifiedCollector.collectionResults().trim().equals(expectedAnswerBuffer.toString().trim()));
+                      + expectedAnswerBuffer.toString()
+                      ;
       */
   }
 

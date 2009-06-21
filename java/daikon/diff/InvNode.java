@@ -12,8 +12,7 @@ public class InvNode extends Node<Invariant,Void> {
   /** Either inv1 or inv2 may be null, but not both. **/
   public InvNode(Invariant inv1, Invariant inv2) {
     super(new Pair<Invariant,Invariant>(inv1, inv2));
-    Assert.assertTrue(!(inv1 == null && inv2 == null),
-                  "Both invariants may not be null");
+    assert !(inv1 == null && inv2 == null) : "Both invariants may not be null";
   }
 
   public Invariant getInv1() {

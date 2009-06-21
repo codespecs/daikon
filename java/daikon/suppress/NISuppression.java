@@ -136,7 +136,7 @@ public class NISuppression {
     boolean inv_match = false;
     for (int i = 0; i < suppressors.length; i++) {
       NISuppressor ssor = suppressors[i];
-      Assert.assertTrue (ssor.state != NIS.NONSENSICAL);
+      assert ssor.state != NIS.NONSENSICAL;
       if (ssor.state == NIS.MATCH) {
         inv_match = true;
       } else if (ssor.state != NIS.VALID)
@@ -275,11 +275,12 @@ public class NISuppression {
             if (cinv != null) {
               NISuppressionSet ss = cinv.get_ni_suppressions();
               ss.suppressed (cinv.ppt);
-              Assert.assertTrue (false, "inv " + cinv.repr() + " of class "
+              assert false
+        : "inv " + cinv.repr() + " of class "
                                  + supinv.suppressee + " already exists in ppt "
                                  + ppt.name + " suppressionset = " + ss
                                  + " suppression = " + this
-                                 + " last antecedent = " + inv.format());
+                                 + " last antecedent = " + inv.format();
             }
           }
         }
@@ -365,9 +366,10 @@ public class NISuppression {
           for (NIS.SupInv supinv : new_invs) {
             Invariant cinv = supinv.already_exists();
             if (cinv != null)
-              Assert.assertTrue (false, "inv " + cinv.format() + " of class "
+              assert false
+        : "inv " + cinv.format() + " of class "
                                  + supinv.suppressee
-                                 + " already exists in ppt " + ppt.name);
+                                 + " already exists in ppt " + ppt.name;
 
           }
         }
@@ -548,7 +550,7 @@ public class NISuppression {
       return (new_suppressions);
 
     // Right now this only works if we match exactly one suppressor
-    Assert.assertTrue ((old_sors.size() + 1) == suppressors.length);
+    assert (old_sors.size() + 1) == suppressors.length;
 
     // Create one new suppression for each suppression in ss.  The suppressee
     // of ss is replaced by one of the suppressions of ss.  Each suppressor

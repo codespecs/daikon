@@ -2,7 +2,6 @@ package daikon.tools.compare;
 
 import java.util.*;
 import java.io.*;
-import utilMDE.Assert;
 import utilMDE.UtilMDE;
 import daikon.*;
 import daikon.config.Configuration;
@@ -296,7 +295,7 @@ public class LogicalCompare {
         if (opt_show_formulas)
           System.out.println("    " + inv.formula);
       } else {
-        Assert.assertTrue(result == '?');
+        assert result == '?';
         if (opt_proofs)
           System.out.println();
         System.out.print("Timeout: ");
@@ -327,7 +326,7 @@ public class LogicalCompare {
         System.out.println("Contradictory assumptions:");
         Vector<Lemma> min = lemmas.minimizeContradiction();
         LemmaStack.printLemmas(System.out, min);
-        Assert.assertTrue(false, "Aborting");
+        assert false : "Aborting";
       }
     }
 
@@ -349,7 +348,7 @@ public class LogicalCompare {
       System.out.println("Contradictory assumptions:");
       Vector<Lemma> min = lemmas.minimizeContradiction();
       LemmaStack.printLemmas(System.out, min);
-      Assert.assertTrue(false, "Aborting");
+      assert false : "Aborting";
     }
     assumptions.addAll(safeAssumptions);
 
@@ -371,7 +370,7 @@ public class LogicalCompare {
         }
       }
       if (!safe) {
-        Assert.assertTrue(unsafe.size() == 0);
+        assert unsafe.size() == 0;
         j = unsafeAssumptions.size();
       }
     }
@@ -515,7 +514,7 @@ public class LogicalCompare {
           if (ppt_name == null) {
             System.err.println("Must specify PPT_NAME before " +
                                "giving a formula");
-            Assert.assertTrue(false);
+            assert false;
           }
           String formula, comment;
           // XXX This should really read a balanced Simplify
@@ -537,15 +536,15 @@ public class LogicalCompare {
           System.err.println("Can't parse " + line + " in assumptions file");
           System.err.println("Should be `PPT_NAME <ppt_name>' or a Simplify " +
                              "formula (starting with `(')");
-          Assert.assertTrue(false);
+          assert false;
         }
       }
     } catch (FileNotFoundException e) {
       System.err.println("File not found: " + filename);
-      Assert.assertTrue(false);
+      assert false;
     } catch (IOException e) {
       System.err.println("IO error reading " + filename);
-      Assert.assertTrue(false);
+      assert false;
     }
   }
 
@@ -654,7 +653,7 @@ public class LogicalCompare {
         } else if (option_name.equals("minimize-classes")) {
           opt_minimize_classes = true;
         } else {
-          Assert.assertTrue(false);
+          assert false;
         }
         break;
       case 'h':
@@ -702,8 +701,8 @@ public class LogicalCompare {
 
       PptTopLevel app_enter_ppt = app_ppts.get(enter_ppt_name);
       PptTopLevel test_enter_ppt = test_ppts.get(enter_ppt_name);
-      Assert.assertTrue(app_enter_ppt != null);
-      Assert.assertTrue(test_enter_ppt != null);
+      assert app_enter_ppt != null;
+      assert test_enter_ppt != null;
 
       PptTopLevel app_exit_ppt = app_ppts.get(exit_ppt_name);
       PptTopLevel test_exit_ppt = test_ppts.get(exit_ppt_name);
@@ -712,8 +711,8 @@ public class LogicalCompare {
       if (test_exit_ppt == null)
         test_exit_ppt = test_ppts.get(test_enter_ppt.ppt_name.makeExit());
 
-      Assert.assertTrue(app_exit_ppt != null);
-      Assert.assertTrue(test_exit_ppt != null);
+      assert app_exit_ppt != null;
+      assert test_exit_ppt != null;
       comparePpts(app_enter_ppt, test_enter_ppt,
                   app_exit_ppt, test_exit_ppt);
     } else if (num_args == 2) {
@@ -749,8 +748,8 @@ public class LogicalCompare {
         PptTopLevel test_exit_ppt =
           test_ppts.get(test_enter_ppt.ppt_name.makeExit());
 
-        Assert.assertTrue(app_exit_ppt != null);
-        Assert.assertTrue(test_exit_ppt != null);
+        assert app_exit_ppt != null;
+        assert test_exit_ppt != null;
         comparePpts(app_enter_ppt, test_enter_ppt,
                     app_exit_ppt, test_exit_ppt);
 

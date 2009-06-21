@@ -177,7 +177,7 @@ public abstract class RANGE extends SUPERCLASS {
   }
 
   public boolean isSameFormula (Invariant other) {
-    Assert.assertTrue (other.getClass() == getClass());
+    assert other.getClass() == getClass();
     return (true);
   }
   public boolean isExclusiveFormula(Invariant other) {

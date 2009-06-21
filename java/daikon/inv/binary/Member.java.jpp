@@ -203,7 +203,7 @@ public final class CLASSNAME
         seq_right_index = ssass.endvar();
         seq_right_shift = (ssass.right_closed ? 0 : -1);
       } else {
-        Assert.assertTrue(false);
+        assert false;
       }
 
       // if the scalar is a a subscript (b[i])
@@ -346,7 +346,7 @@ public final class CLASSNAME
   }
 
   public boolean isSameFormula(Invariant other) {
-    Assert.assertTrue(other instanceof CLASSNAME);
+    assert other instanceof CLASSNAME;
     return true;
   }
 

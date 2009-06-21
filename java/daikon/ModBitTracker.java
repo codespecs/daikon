@@ -62,7 +62,7 @@ public class ModBitTracker
   private int[] this_bits_exception_index;
 
   public ModBitTracker(int num_vars) {
-    Assert.assertTrue(num_vars >= 0);
+    assert num_vars >= 0;
     this.num_vars = num_vars;
     modbits_arrays = new BitSet[num_vars];
     if (num_vars > 0) {
@@ -93,27 +93,26 @@ public class ModBitTracker
 
   /** Check the representation invariant. **/
   public void checkRep() {
-    Assert.assertTrue(index.length == num_vars);
-    Assert.assertTrue(modbits_arrays.length == num_vars);
+    assert index.length == num_vars;
+    assert modbits_arrays.length == num_vars;
     for (int i=0; i<num_vars; i++) {
       int this_index = index[i];
-      Assert.assertTrue(this_index >= 0);
-      Assert.assertTrue(this_index < num_sets);
-      Assert.assertTrue(modbits_arrays[this_index] != null);
+      assert this_index >= 0;
+      assert this_index < num_sets;
+      assert modbits_arrays[this_index] != null;
     }
     for (int i=0; i<num_vars; i++) {
       if (i<num_sets) {
-        Assert.assertTrue(modbits_arrays[i] != null);
+        assert modbits_arrays[i] != null;
         // Can't make this assertion, as there is no method that tells
         // the highest index that has been used in the BitSet.  (size()
         // gives physical size.)
-        // Assert.assertTrue(modbits_arrays[i].size() == num_samples
-        //                   , "modbits_arrays.[" + i + "].size() == "
+        // assert modbits_arrays[i].size() == num_samples
+        //                   : "modbits_arrays.[" + i + "].size() == "
         //                   + modbits_arrays[i].size()
-        //                   + ", num_samples == " + num_samples
-        //                   );
+        //                   + ", num_samples == " + num_samples;
       } else {
-        Assert.assertTrue(modbits_arrays[i] == null);
+        assert modbits_arrays[i] == null;
       }
     }
   }
@@ -147,9 +146,8 @@ public class ModBitTracker
   /** Add to this the modbits for the given ValueTuple. **/
   public void add(ValueTuple vt, int count) {
     if (debug) checkRep();
-    Assert.assertTrue(vt.size() == num_vars
-                      , "vt.size()=" + vt.size() + ", num_vars = " + num_vars
-                      );
+    assert vt.size() == num_vars
+      : "vt.size()=" + vt.size() + ", num_vars = " + num_vars;
     if (num_vars == 0) {
       num_samples += count;
       return;
@@ -165,7 +163,7 @@ public class ModBitTracker
         // that we have seen so far.
         this_bits[this_index] = modbit;
         this_bits_valid[this_index] = true;
-        Assert.assertTrue(this_bits_exception_index[this_index] == -1);
+        assert this_bits_exception_index[this_index] == -1;
       } else {
         // We have seen some other variable belonging to this equivalence set.
         if (this_bits[this_index] == modbit) {

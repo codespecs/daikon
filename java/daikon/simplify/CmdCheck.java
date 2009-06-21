@@ -2,7 +2,6 @@ package daikon.simplify;
 
 import java.io.IOException;
 
-import utilMDE.Assert;
 
 import java.util.logging.Logger;
 
@@ -59,8 +58,8 @@ public class CmdCheck
                                "daikon.simplify.LemmaStack." +
                                "synchronous_errors=true");
 
-          Assert.assertTrue(false, "Simplify error: " + result + " on "
-                            + proposition);
+          assert false
+        : "Simplify error: " + result + " on " + proposition;
         }
         if (result.equals("Abort (core dumped)")) {
           throw new SimplifyError(result);
@@ -78,18 +77,20 @@ public class CmdCheck
         }
         // then, a blank line
         String blank = s.readLine();
-        Assert.assertTrue("".equals(blank), "Not a blank line '" + blank +
-                          "' after output '" + result + "'");
+        assert "".equals(blank)
+        : "Not a blank line '" + blank +
+                          "' after output '" + result + "'";
       }
 
       // expect "##: [Inv|V]alid."
       int colon = result.indexOf(": ");
-      Assert.assertTrue(colon != -1);
+      assert colon != -1;
       try {
         Integer.parseInt(result.substring(0, colon));
       } catch (NumberFormatException e) {
-        Assert.assertTrue(false, "Expected number to prefix result '"
-                          + result + "' while checking: " + proposition);
+        assert false
+        : "Expected number to prefix result '"
+                          + result + "' while checking: " + proposition;
       }
       result = result.substring(colon + 2);
       if ("Valid.".equals(result)) {
@@ -106,8 +107,7 @@ public class CmdCheck
           System.out.flush();
         }
       } else {
-        Assert.assertTrue("Invalid.".equals(result),
-                          "unexpected reply " + result);
+        assert "Invalid.".equals(result) : "unexpected reply " + result;
         if (Session.dkconfig_verbose_progress > 0) {
           System.out.print("\bF");
           System.out.flush();

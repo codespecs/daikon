@@ -4,7 +4,6 @@ import jtb.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import daikon.tools.jtb.*;
-import utilMDE.Assert;
 import java.io.*;
 import java.util.*;
 
@@ -74,8 +73,8 @@ class ReplaceStatement {
     // Sets methodName and parameters.
     // But also seems to depend on methodName being set already...
     root.accept(visitor);
-    Assert.assertTrue(methodName != null);
-    Assert.assertTrue(parameters != null);
+    assert methodName != null;
+    assert parameters != null;
   }
 
   /**

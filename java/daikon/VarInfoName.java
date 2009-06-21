@@ -543,7 +543,7 @@ public abstract /*@Interned*/ class VarInfoName
     if (node == replacement)    // "interned": equality optimization pattern
       return this;
 
-    // Assert.assertTrue(! replacement.hasNode(node)); // no infinite loop
+    // assert ! replacement.hasNode(node); // no infinite loop
 
     // It doesn't make sense to assert this as we have plenty of times when
     // we want to replace x by y where y may contain x.
@@ -628,7 +628,7 @@ public abstract /*@Interned*/ class VarInfoName
 
     public final String name;
     public Simple(String name) {
-      Assert.assertTrue(name != null);
+      assert name != null;
       this.name = name;
     }
     public boolean isLiteralConstant() {
@@ -702,8 +702,7 @@ public abstract /*@Interned*/ class VarInfoName
           else if (c == '*')
             buf.append("star_");
           else
-            Assert.assertTrue(false,
-                              "Unexpected character in VarInfoName$Simple");
+            assert false : "Unexpected character in VarInfoName$Simple";
         }
         return buf.toString();
       }
@@ -805,7 +804,7 @@ public abstract /*@Interned*/ class VarInfoName
 
     public final VarInfoName sequence;
     public SizeOf(VarInfoName sequence) {
-      Assert.assertTrue(sequence != null);
+      assert sequence != null;
       this.sequence = sequence;
     }
     protected String repr_impl() {
@@ -861,10 +860,10 @@ public abstract /*@Interned*/ class VarInfoName
       // See declaration of testCall for explanation of this flag.
       if (testCall) { return "no format when testCall."; }
 
-      Assert.assertTrue(v != null);
-      Assert.assertTrue(v.isDerived());
+      assert v != null;
+      assert v.isDerived();
       Derivation derived = v.derived;
-      Assert.assertTrue(derived instanceof SequenceLength);
+      assert derived instanceof SequenceLength;
       VarInfo seqVarInfo = ((SequenceLength)derived).base;
       String prefix = get_term().name_using(format, seqVarInfo);
       return "daikon.Quant.size(" + prefix + ")";
@@ -930,8 +929,8 @@ public abstract /*@Interned*/ class VarInfoName
     public final String function;
     public final VarInfoName argument;
     public FunctionOf(String function, VarInfoName argument) {
-      Assert.assertTrue(function != null);
-      Assert.assertTrue(argument != null);
+      assert function != null;
+      assert argument != null;
       this.function = function;
       this.argument = argument;
     }
@@ -963,10 +962,10 @@ public abstract /*@Interned*/ class VarInfoName
       // See declaration of testCall for explanation of this flag.
       if (testCall) { return "no format when testCall."; }
 
-      Assert.assertTrue(v != null);
-      Assert.assertTrue(v.isDerived());
+      assert v != null;
+      assert v.isDerived();
       Derivation derived = v.derived;
-      Assert.assertTrue(derived instanceof UnaryDerivation);
+      assert derived instanceof UnaryDerivation;
       VarInfo argVarInfo = ((UnaryDerivation)derived).base;
       return "daikon.Quant." + function + "(" + argument.name_using(format, argVarInfo) + ")";
     }
@@ -996,8 +995,8 @@ public abstract /*@Interned*/ class VarInfoName
      * @param args the arguments to the function, of type VarInfoName
      **/
     public FunctionOfN(String function, List<VarInfoName> args) {
-      Assert.assertTrue(function != null);
-      Assert.assertTrue(args != null);
+      assert function != null;
+      assert args != null;
       this.args = args;
       this.function = function;
     }
@@ -1047,12 +1046,12 @@ public abstract /*@Interned*/ class VarInfoName
       // See declaration of testCall for explanation of this flag.
       if (testCall) { return "no format when testCall."; }
 
-      Assert.assertTrue(v != null);
-      Assert.assertTrue(v.isDerived());
+      assert v != null;
+      assert v.isDerived();
       Derivation derived = v.derived;
-      Assert.assertTrue(derived instanceof BinaryDerivation);
+      assert derived instanceof BinaryDerivation;
       //|| derived instanceof TernaryDerivation);
-      Assert.assertTrue(args.size() == 2);
+      assert args.size() == 2;
       VarInfo arg1VarInfo = ((BinaryDerivation)derived).base1;
       VarInfo arg2VarInfo = ((BinaryDerivation)derived).base2;
       return "daikon.Quant." + function + "("
@@ -1085,7 +1084,7 @@ public abstract /*@Interned*/ class VarInfoName
    * "intersect(a[], b[])".
    **/
   public VarInfoName applyIntersection(VarInfoName seq2) /*@Interned*/ {
-    Assert.assertTrue(seq2 != null);
+    assert seq2 != null;
     return (new Intersection(this, seq2)).intern();
   }
 
@@ -1110,7 +1109,7 @@ public abstract /*@Interned*/ class VarInfoName
    * "union(a[], b[])".
    **/
   public VarInfoName applyUnion(VarInfoName seq2) /*@Interned*/ {
-    Assert.assertTrue(seq2 != null);
+    assert seq2 != null;
     return (new Union(this, seq2)).intern();
   }
 
@@ -1150,8 +1149,8 @@ public abstract /*@Interned*/ class VarInfoName
     public final VarInfoName term;
     public final String field;
     public Field(VarInfoName term, String field) {
-      Assert.assertTrue(term != null);
-      Assert.assertTrue(field != null);
+      assert term != null;
+      assert field != null;
       this.term = term;
       this.field = field;
     }
@@ -1208,9 +1207,9 @@ public abstract /*@Interned*/ class VarInfoName
       boolean hasBrackets = (term.name().indexOf("[]") != -1);
 
       if (format == OutputFormat.JAVA) {
-        Assert.assertTrue(! hasBrackets || v.type.dimensions() > 0,
-                          "hasBrackets:" + hasBrackets
-                          + ", dimensions:" + v.type.dimensions() + ", v:" + v);
+        assert ! hasBrackets || v.type.dimensions() > 0
+        : "hasBrackets:" + hasBrackets
+                          + ", dimensions:" + v.type.dimensions() + ", v:" + v;
       }
 
       if (!hasBrackets && format != OutputFormat.JAVA) {
@@ -1331,7 +1330,7 @@ public abstract /*@Interned*/ class VarInfoName
 
     public final VarInfoName term;
     public TypeOf(VarInfoName term) {
-      Assert.assertTrue(term != null);
+      assert term != null;
       this.term = term;
     }
     protected String repr_impl() {
@@ -1401,7 +1400,7 @@ public abstract /*@Interned*/ class VarInfoName
 
     public final VarInfoName term;
     public Prestate(VarInfoName term) {
-      Assert.assertTrue(term != null);
+      assert term != null;
       this.term = term;
     }
     protected String repr_impl() {
@@ -1431,7 +1430,7 @@ public abstract /*@Interned*/ class VarInfoName
       if (testCall) { return "no format when testCall."; }
 
       String brackets = "";
-      Assert.assertTrue(v != null);
+      assert v != null;
       String preType = v.type.base();
       if ((term instanceof Slice)
           // Slices are obtained by calling daikon.Quant.slice(...)
@@ -1453,14 +1452,14 @@ public abstract /*@Interned*/ class VarInfoName
 
   // sansOrig()
   //      int origpos = s.indexOf("orig(");
-  //      Assert.assertTrue(origpos != -1);
+  //      assert origpos != -1;
   //      int rparenpos = s.lastIndexOf(")");
   //      return s.substring(0, origpos)
   //        + s.substring(origpos+5, rparenpos)
   //        + s.substring(rparenpos+1);
 
   //      int origpos = s.indexOf("\\old(");
-  //      Assert.assertTrue(origpos != -1);
+  //      assert origpos != -1;
   //      int rparenpos = s.lastIndexOf(")");
   //      return s.substring(0, origpos)
   //        + s.substring(origpos+5, rparenpos)
@@ -1486,7 +1485,7 @@ public abstract /*@Interned*/ class VarInfoName
 
     public final VarInfoName term;
     public Poststate(VarInfoName term) {
-      Assert.assertTrue(term != null);
+      assert term != null;
       this.term = term;
     }
     protected String repr_impl() {
@@ -1543,7 +1542,7 @@ public abstract /*@Interned*/ class VarInfoName
     public final VarInfoName term;
     public final int amount;
     public Add(VarInfoName term, int amount) {
-      Assert.assertTrue(term != null);
+      assert term != null;
       this.term = term;
       this.amount = amount;
     }
@@ -1616,7 +1615,7 @@ public abstract /*@Interned*/ class VarInfoName
 
     public final VarInfoName term;
     public Elements(VarInfoName term) {
-      Assert.assertTrue(term != null);
+      assert term != null;
       this.term = term;
     }
     protected String repr_impl() {
@@ -1733,10 +1732,10 @@ public abstract /*@Interned*/ class VarInfoName
    * "this[i]".
    **/
   public VarInfoName applySubscript(VarInfoName index) /*@Interned*/ {
-    Assert.assertTrue(index != null);
+    assert index != null;
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
-    Assert.assertTrue(elems != null, "applySubscript should have elements to use in " + this);
+    assert elems != null : "applySubscript should have elements to use in " + this;
     if (finder.inPre()) {
       index = indexToPrestate(index);
     }
@@ -1770,8 +1769,8 @@ public abstract /*@Interned*/ class VarInfoName
     public final Elements sequence;
     public final VarInfoName index;
     public Subscript(Elements sequence, VarInfoName index) {
-      Assert.assertTrue(sequence != null);
-      Assert.assertTrue(index != null);
+      assert sequence != null;
+      assert index != null;
       this.sequence = sequence;
       this.index = index;
     }
@@ -1802,12 +1801,12 @@ public abstract /*@Interned*/ class VarInfoName
       // See declaration of testCall for explanation of this flag.
       if (testCall) { return "no format when testCall."; }
 
-      Assert.assertTrue(v != null);
-      Assert.assertTrue(v.isDerived());
+      assert v != null;
+      assert v.isDerived();
       Derivation derived = v.derived;
-      Assert.assertTrue(derived instanceof  SequenceScalarSubscript
+      assert derived instanceof  SequenceScalarSubscript
                         || derived instanceof  SequenceStringSubscript
-                        || derived instanceof  SequenceFloatSubscript);
+                        || derived instanceof  SequenceFloatSubscript;
       VarInfo indexVarInfo = ((BinaryDerivation)derived).base2;
       VarInfo seqVarInfo = ((BinaryDerivation)derived).base1;
       if (format == OutputFormat.JAVA) {
@@ -1837,7 +1836,7 @@ public abstract /*@Interned*/ class VarInfoName
     // orig(a[]) -> orig(a[post(index)..])
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
-    Assert.assertTrue(elems != null);
+    assert elems != null;
     if (finder.inPre()) {
       if (i != null) {
         i = indexToPrestate(i);
@@ -1860,8 +1859,8 @@ public abstract /*@Interned*/ class VarInfoName
     public final Elements sequence;
     public final VarInfoName i, j;
     public Slice(Elements sequence, VarInfoName i, VarInfoName j) {
-      Assert.assertTrue(sequence != null);
-      Assert.assertTrue((i != null) || (j != null));
+      assert sequence != null;
+      assert (i != null) || (j != null);
       this.sequence = sequence;
       this.i = i;
       this.j = j;
@@ -1904,17 +1903,17 @@ public abstract /*@Interned*/ class VarInfoName
       // See declaration of testCall for explanation of this flag.
       if (testCall) { return "no format when testCall."; }
 
-      Assert.assertTrue(v != null);
-      Assert.assertTrue(v.isDerived());
+      assert v != null;
+      assert v.isDerived();
       Derivation derived = v.derived;
-      Assert.assertTrue(derived instanceof SequenceSubsequence ||
+      assert derived instanceof SequenceSubsequence ||
                         derived instanceof SequenceScalarArbitrarySubsequence ||
                         derived instanceof SequenceFloatArbitrarySubsequence ||
-                        derived instanceof SequenceStringArbitrarySubsequence);
+                        derived instanceof SequenceStringArbitrarySubsequence;
       if (derived instanceof SequenceSubsequence) {
-        Assert.assertTrue(i == null || j == null);
+        assert i == null || j == null;
         if (i == null) { // sequence[0..j]
-          Assert.assertTrue(j != null);
+          assert j != null;
           return
             "daikon.Quant.slice("
             + sequence.name_using(format, ((SequenceSubsequence)derived).seqvar())
@@ -1946,7 +1945,7 @@ public abstract /*@Interned*/ class VarInfoName
             + ")";
         }
       } else {
-        Assert.assertTrue(i != null && j != null);
+        assert i != null && j != null;
         if (derived instanceof SequenceScalarArbitrarySubsequence) {
           SequenceScalarArbitrarySubsequence derived2 = (SequenceScalarArbitrarySubsequence)derived;
           return
@@ -2087,7 +2086,7 @@ public abstract /*@Interned*/ class VarInfoName
      **/
     public NodeFinder(VarInfoName root, VarInfoName goal) {
       this.goal = goal;
-      Assert.assertTrue(root.accept(this) != null);
+      assert root.accept(this) != null;
     }
     // state and accessors
     private final VarInfoName goal;
@@ -2587,7 +2586,7 @@ public abstract /*@Interned*/ class VarInfoName
     extends AbstractVisitor<NoReturnValue>
   {
     public SimpleNamesVisitor(VarInfoName root) {
-      Assert.assertTrue(root != null);
+      assert root != null;
       simples = new HashSet<String>();
       root.accept(this);
     }
@@ -2640,7 +2639,7 @@ public abstract /*@Interned*/ class VarInfoName
     extends AbstractVisitor<NoReturnValue>
   {
     public QuantifierVisitor(VarInfoName root) {
-      Assert.assertTrue(root != null);
+      assert root != null;
       unquant = new HashSet<VarInfoName>();
       root.accept(this);
     }
@@ -2776,10 +2775,10 @@ public abstract /*@Interned*/ class VarInfoName
      * index (inclusive), in that order.
      **/
     public static VarInfoName[] replace(VarInfoName root, VarInfoName needy, VarInfoName index) {
-      Assert.assertTrue(root != null);
-      Assert.assertTrue(needy != null);
-      Assert.assertTrue(index != null);
-      Assert.assertTrue((needy instanceof Elements) || (needy instanceof Slice));
+      assert root != null;
+      assert needy != null;
+      assert index != null;
+      assert (needy instanceof Elements) || (needy instanceof Slice);
 
       // Figure out what to replace needy with, and the appropriate
       // bounds to use
@@ -2799,7 +2798,7 @@ public abstract /*@Interned*/ class VarInfoName
         // unreachable; placate javac
         throw new IllegalStateException();
       }
-      Assert.assertTrue(replace_with != null);
+      assert replace_with != null;
 
       // If needy was in prestate, adjust bounds appropriately
       if (root.inPrestateContext(needy)) {
@@ -2822,9 +2821,9 @@ public abstract /*@Interned*/ class VarInfoName
       // replace needy
       VarInfoName root_prime = (new Replacer(needy, replace_with)).replace(root).intern();
 
-      Assert.assertTrue(root_prime != null);
-      Assert.assertTrue(lower != null);
-      Assert.assertTrue(upper != null);
+      assert root_prime != null;
+      assert lower != null;
+      assert upper != null;
 
       return new VarInfoName[] { root_prime, lower, upper };
     }
@@ -2855,8 +2854,9 @@ public abstract /*@Interned*/ class VarInfoName
         /*@Interned*/ VarInfoName[] replace_result = replace(root, to_replace, index_vin);
         return replace_result[0];
       } else {
-        Assert.assertTrue(false, "Can't handle multi-dim array in " +
-                          "VarInfoName.QuantHelper.select_nth()");
+        assert false
+        : "Can't handle multi-dim array in " +
+                          "VarInfoName.QuantHelper.select_nth()";
         return null;
       }
     }
@@ -2897,8 +2897,9 @@ public abstract /*@Interned*/ class VarInfoName
         //                      root, to_replace, index_vin);
         return replace_result[0];
       } else {
-        Assert.assertTrue(false, "Can't handle multi-dim array in " +
-                          "VarInfoName.QuantHelper.select_nth()");
+        assert false
+        : "Can't handle multi-dim array in " +
+                          "VarInfoName.QuantHelper.select_nth()";
         return null;
       }
     }
@@ -2940,7 +2941,7 @@ public abstract /*@Interned*/ class VarInfoName
      * for the new variables.
      **/
     public static QuantifyReturn quantify(VarInfoName[] roots) {
-      Assert.assertTrue(roots != null);
+      assert roots != null;
 
       if (QuantHelper.debug.isLoggable(Level.FINE)) {
         QuantHelper.debug.fine ("roots: " + Arrays.asList(roots));
@@ -2982,7 +2983,7 @@ public abstract /*@Interned*/ class VarInfoName
           // We assume that the input was one unquantified sequence
           // variable.  If uq has more than one element, then the
           // sequence had more than one dimension.
-          Assert.assertTrue(uq.size() == 1, "We can only handle 1D arrays for now");
+          assert uq.size() == 1 : "We can only handle 1D arrays for now";
 
           VarInfoName uq_elt = uq.get(0);
 
@@ -2990,8 +2991,7 @@ public abstract /*@Interned*/ class VarInfoName
           do {
             idx_name = String.valueOf(tmp++);
           } while (simples.contains(idx_name));
-          Assert.assertTrue(tmp <= 'z',
-                            "Ran out of letters in quantification");
+          assert tmp <= 'z' : "Ran out of letters in quantification";
           VarInfoName idx = (new FreeVar(idx_name)).intern();
 
           if (QuantHelper.debug.isLoggable(Level.FINE)) {
@@ -3106,7 +3106,7 @@ public abstract /*@Interned*/ class VarInfoName
     //       return format_dbc(roots, elementwise, true, varinfos);
     //     }
     //     public static String[] format_dbc(VarInfoName[] roots, boolean elementwise, boolean forall, VarInfo[] varinfos) {
-    //       Assert.assertTrue(roots != null);
+    //       assert roots != null;
 
     //       QuantifyReturn qret = quantify(roots);
 
@@ -3263,10 +3263,10 @@ public abstract /*@Interned*/ class VarInfoName
                                            boolean adjacent,
                                            boolean distinct,
                                            boolean includeIndex) {
-      Assert.assertTrue(roots != null);
+      assert roots != null;
 
       if (adjacent || distinct)
-        Assert.assertTrue(roots.length == 2);
+        assert roots.length == 2;
 
       QuantifyReturn qret = quantify(roots);
 
@@ -3388,7 +3388,7 @@ public abstract /*@Interned*/ class VarInfoName
       return format_java_style(roots, elementwise, true, format);
     }
     protected static String[] format_java_style(VarInfoName[] roots, boolean elementwise, boolean forall, OutputFormat format) {
-      Assert.assertTrue(roots != null);
+      assert roots != null;
 
       QuantifyReturn qret = quantify(roots);
 

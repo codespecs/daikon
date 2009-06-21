@@ -110,7 +110,7 @@ public final class CLASSNAME
       length2 = ((PRIMITIVE[]) val2).length;
     }
 
-    Assert.assertTrue(length1 == length2);
+    assert length1 == length2;
 
 
     PRIMITIVE[] result = new PRIMITIVE[length1];

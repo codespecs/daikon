@@ -104,8 +104,8 @@ public final /*(at)Interned*/ class Equality
     VarInfo leader = leader();
 
     // ensure well-formedness and set equality slots
-    Assert.assertTrue (variables.size() > 0);
-    Assert.assertTrue (vars.size() == variables.size());
+    assert variables.size() > 0;
+    assert vars.size() == variables.size();
 
     @SuppressWarnings({"cast"}) // XXX Nullness checker TODO: flow should infer this as non-raw.
     Equality thisNonRaw = (/*@NonNull*/ Equality)this;
@@ -113,12 +113,12 @@ public final /*(at)Interned*/ class Equality
       if (debug.isLoggable(Level.FINE)) {
         debug.fine ("  " + vi.name() + " [" + vi.comparability + "]");
       }
-      Assert.assertTrue(vi.ppt == leader.ppt);
-      Assert.assertTrue(vi.comparableNWay (leader));
-      Assert.assertTrue (VarComparability.comparable (leader, vi),
-             "not comparable " + leader.name() + " " + vi.name()
-            +" at ppt " + ppt.parent.name());
-      Assert.assertTrue(vi.rep_type.isArray() == leader.rep_type.isArray());
+      assert vi.ppt == leader.ppt;
+      assert vi.comparableNWay (leader);
+      assert VarComparability.comparable (leader, vi)
+        : "not comparable " + leader.name() + " " + vi.name()
+            +" at ppt " + ppt.parent.name();
+      assert vi.rep_type.isArray() == leader.rep_type.isArray();
       vi.equalitySet = thisNonRaw;
     }
   }
@@ -242,7 +242,7 @@ public final /*(at)Interned*/ class Equality
     if (valid_equiv.size() > 0) {
       leader = valid_equiv.get(0);
     } else {
-      Assert.assertTrue(invalid_equiv.size() > 0);
+      assert invalid_equiv.size() > 0;
       leader = invalid_equiv.get(0);
     }
     // Print the equality statements, stating expressible ones first.
@@ -385,7 +385,7 @@ public final /*(at)Interned*/ class Equality
       VarInfo vi = i.next();
       if (vi == leader)
         continue;
-      Assert.assertTrue (vi.comparableNWay (leader));
+      assert vi.comparableNWay (leader);
       Object viValue = vi.getValue(vt);
       int viMod = vi.getModified(vt);
       // The following is possible because values are interned.  The
@@ -514,9 +514,9 @@ public final /*(at)Interned*/ class Equality
     super.repCheck();
     VarInfo leader = leader();
     for (VarInfo var : vars) {
-      Assert.assertTrue (VarComparability.comparable (leader, var),
-                 "not comparable: " + leader.name() + " "
-                + var.name() + " at ppt " + ppt.parent.name());
+      assert VarComparability.comparable (leader, var)
+        : "not comparable: " + leader.name() + " "
+                + var.name() + " at ppt " + ppt.parent.name();
     }
   }
 

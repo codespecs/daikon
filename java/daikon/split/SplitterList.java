@@ -38,7 +38,7 @@ public abstract class SplitterList
    */
   public static void put(String pptname, Splitter[] splits) {
     // for (int i=0; i<splits.length; i++) {
-    //   Assert.assertTrue(splits[i].instantiated() == false);
+    //   assert splits[i].instantiated() == false;
     // }
 
     if ((Global.debugSplit != null) && Global.debugSplit.isLoggable(Level.FINE)) {
@@ -57,11 +57,11 @@ public abstract class SplitterList
       System.arraycopy(splits, 0, new_splits, old.length, splits.length);
       ppt_splitters.put(pptname, new_splits);
     } else {
-      Assert.assertTrue(! ppt_splitters.containsKey(pptname));
-      // Assert.assertTrue(! ppt_splitters.containsKey(pptname),
-      //               "SplitterList already contains " + pptname
+      assert ! ppt_splitters.containsKey(pptname);
+      // assert ! ppt_splitters.containsKey(pptname)
+      //               : "SplitterList already contains " + pptname
       //               + " which maps to" + lineSep + " " + ArraysMDE.toString(get_raw(pptname))
-      //               + lineSep + " which is " + formatSplitters(get_raw(pptname)));
+      //               + lineSep + " which is " + formatSplitters(get_raw(pptname));
       ppt_splitters.put(pptname, splits);
     }
   }

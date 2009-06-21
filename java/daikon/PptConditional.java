@@ -33,12 +33,12 @@ public final class PptConditional
 
     super(ctor_name_helper(parent, splitter, splitter_inverse),
           ctor_vis_helper(parent, splitter, splitter_inverse));
-    // Assert.assertTrue(splitter.instantiated() == false);
+    // assert splitter.instantiated() == false;
     this.parent = parent;
     this.splitter = splitter.instantiate(this);
     this.splitter_inverse = splitter_inverse;
-    // Assert.assertTrue(splitter.instantiated() == false);
-    // Assert.assertTrue(this.splitter.instantiated() == true);
+    // assert splitter.instantiated() == false;
+    // assert this.splitter.instantiated() == true;
     // jhp this.invflow_ppts = new PptTopLevel[0];
     // jhp this.invflow_transforms = new int[0][];
   }

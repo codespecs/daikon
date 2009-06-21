@@ -539,7 +539,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    */
   public /*@Nullable*/ VarInfo get_array_size (VarInfo v) {
 
-    Assert.assertTrue (v.rep_type.isArray());
+    assert v.rep_type.isArray();
 
     if (v.derived == null)
       return (v.sequenceSize());

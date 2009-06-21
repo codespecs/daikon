@@ -403,7 +403,7 @@ public final class MergeInvariants {
                          (ppt.has_splitters() ? " has " : "doesn't have ") +
                          "splitters, but child ppt " + child.name +
                          (child.has_splitters() ? " does" : " doesn't"));
-      Assert.assertTrue(false);
+      assert false;
     }
 
     // Nothing to do if there are no splitters here
@@ -417,7 +417,7 @@ public final class MergeInvariants {
                           "more" : "fewer") + " splitters (" +
                          ppt.splitters.size() + ") than child ppt " +
                          child.name + " (" + child.splitters.size() + ")");
-      Assert.assertTrue(false);
+      assert false;
     }
 
     // Create a relation from each conditional ppt to its corresponding

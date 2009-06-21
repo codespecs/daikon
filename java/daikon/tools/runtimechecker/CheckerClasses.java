@@ -14,7 +14,6 @@ import jtb.syntaxtree.*;
 import jtb.visitor.DepthFirstVisitor;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
-import utilMDE.Assert;
 import utilMDE.UtilMDE;
 import daikon.PptMap;
 import daikon.PptTopLevel;

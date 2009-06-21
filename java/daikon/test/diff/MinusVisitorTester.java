@@ -76,7 +76,7 @@ public class MinusVisitorTester extends TestCase {
     expected.put(B, Arrays.asList(Y));
     expected.put(D, Arrays.asList(M));
 
-    assertEquals(expected.toString(), result.toString());
+    assert expected.toString().equals(result.toString());
   }
 
 }

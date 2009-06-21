@@ -183,7 +183,8 @@ public abstract class Invariant
     if (x<=1)
       return 0;
     double result = 1 - (goal - x)/(goal-1);
-    Assert.assertTrue(0 <= result && result <= 1, "conf_is_ge: bad result = " + result + " for (x=" + x + ", goal=" + goal + ")");
+    assert 0 <= result && result <= 1
+        : "conf_is_ge: bad result = " + result + " for (x=" + x + ", goal=" + goal + ")";
     return result;
   }
 
@@ -200,31 +201,32 @@ public abstract class Invariant
     if (x<=1)
       return 1;
     double result = (goal - x)/(goal-1);
-    Assert.assertTrue(0 <= result && result <= 1, "prob_is_ge: bad result = " + result + " for (x=" + x + ", goal=" + goal + ")");
+    assert 0 <= result && result <= 1
+        : "prob_is_ge: bad result = " + result + " for (x=" + x + ", goal=" + goal + ")";
     return result;
   }
 
 
   /** Return the confidence that both conditions are satisfied. */
   public static final double confidence_and(double c1, double c2) {
-    Assert.assertTrue(0 <= c1 && c1 <= 1, "confidence_and: bad c1 = " + c1);
-    Assert.assertTrue(0 <= c2 && c2 <= 1, "confidence_and: bad c2 = " + c2);
+    assert 0 <= c1 && c1 <= 1 : "confidence_and: bad c1 = " + c1;
+    assert 0 <= c2 && c2 <= 1 : "confidence_and: bad c2 = " + c2;
 
     double result = c1*c2;
 
-    Assert.assertTrue(0 <= result && result <= 1, "confidence_and: bad result = " + result);
+    assert 0 <= result && result <= 1 : "confidence_and: bad result = " + result;
     return result;
   }
 
   /** Return the confidence that all three conditions are satisfied. */
   public static final double confidence_and(double c1, double c2, double c3) {
-    Assert.assertTrue(0 <= c1 && c1 <= 1, "confidence_and: bad c1 = " + c1);
-    Assert.assertTrue(0 <= c2 && c2 <= 1, "confidence_and: bad c2 = " + c1);
-    Assert.assertTrue(0 <= c3 && c3 <= 1, "confidence_and: bad c3 = " + c1);
+    assert 0 <= c1 && c1 <= 1 : "confidence_and: bad c1 = " + c1;
+    assert 0 <= c2 && c2 <= 1 : "confidence_and: bad c2 = " + c1;
+    assert 0 <= c3 && c3 <= 1 : "confidence_and: bad c3 = " + c1;
 
     double result =  c1*c2*c3;
 
-    Assert.assertTrue(0 <= result && result <= 1, "confidence_and: bad result = " + result);
+    assert 0 <= result && result <= 1 : "confidence_and: bad result = " + result;
     return result;
   }
 
@@ -238,25 +240,25 @@ public abstract class Invariant
 
   /** Return the probability that both conditions are satisfied. */
   public static final double prob_and(double p1, double p2) {
-    Assert.assertTrue(0 <= p1 && p1 <= 1, "prob_and: bad p1 = " + p1);
-    Assert.assertTrue(0 <= p2 && p2 <= 1, "prob_and: bad p2 = " + p2);
+    assert 0 <= p1 && p1 <= 1 : "prob_and: bad p1 = " + p1;
+    assert 0 <= p2 && p2 <= 1 : "prob_and: bad p2 = " + p2;
 
     // 1 - (1-p1)*(1-p2)
     double result = p1 + p2 - p1*p2;
 
-    Assert.assertTrue(0 <= result && result <= 1, "prob_and: bad result = " + result);
+    assert 0 <= result && result <= 1 : "prob_and: bad result = " + result;
     return result;
   }
 
   /** Return the probability that all three conditions are satisfied. */
   public static final double prob_and(double p1, double p2, double p3) {
-    Assert.assertTrue(0 <= p1 && p1 <= 1, "prob_and: bad p1 = " + p1);
-    Assert.assertTrue(0 <= p2 && p2 <= 1, "prob_and: bad p2 = " + p1);
-    Assert.assertTrue(0 <= p3 && p3 <= 1, "prob_and: bad p3 = " + p1);
+    assert 0 <= p1 && p1 <= 1 : "prob_and: bad p1 = " + p1;
+    assert 0 <= p2 && p2 <= 1 : "prob_and: bad p2 = " + p1;
+    assert 0 <= p3 && p3 <= 1 : "prob_and: bad p3 = " + p1;
 
     double result =  1 - (1 - p1) * (1 - p2) * (1 - p3);
 
-    Assert.assertTrue(0 <= result && result <= 1, "prob_and: bad result = " + result);
+    assert 0 <= result && result <= 1 : "prob_and: bad result = " + result;
     return result;
   }
 
@@ -350,7 +352,7 @@ public abstract class Invariant
    * @see #computeConfidence()
    **/
   public final double getConfidence() /*@NonPrototype*/ {
-    Assert.assertTrue(! falsified);
+    assert ! falsified;
     // if (falsified)
     //   return CONFIDENCE_NEVER;
     double result = computeConfidence();
@@ -363,13 +365,11 @@ public abstract class Invariant
       System.out.println("getConfidence: " + getClass().getName() + " " + ppt.varNames() + " => " + result);
       System.out.println("  " + this.format() + "; " + repr());
     }
-    Assert.assertTrue(((0 <= result) && (result <= 1))
+    assert ((0 <= result) && (result <= 1))
                       || (result == CONFIDENCE_JUSTIFIED)
                       || (result == CONFIDENCE_UNJUSTIFIED)
                       || (result == CONFIDENCE_NEVER)
-                      // This can be expensive, so comment out.
-                      // , getClass().getName() + ": " + repr() + ", result=" + result
-                      , "unexpected conf value: " + result);
+        : "unexpected conf value: " + getClass().getName() + ": " + repr() + ", result=" + result;
     return result;
   }
 
@@ -444,8 +444,8 @@ public abstract class Invariant
                             int[] permutation
                             ) /*@NonPrototype*/ {
     // Check some sanity conditions
-    Assert.assertTrue(new_ppt.arity() == ppt.arity());
-    Assert.assertTrue(permutation.length == ppt.arity());
+    assert new_ppt.arity() == ppt.arity();
+    assert permutation.length == ppt.arity();
     for (int i=0; i < ppt.arity(); i++) {
       VarInfo oldvi = ppt.var_infos[i];
       VarInfo newvi = new_ppt.var_infos[permutation[i]];
@@ -453,7 +453,7 @@ public abstract class Invariant
       // that anymore, because with equality, invariants may get
       // transferred between old and new VarInfos of different types.
       // They are, however, comparable
-      Assert.assertTrue (oldvi.comparableNWay(newvi));
+      assert oldvi.comparableNWay(newvi);
     }
 
     Invariant result;
@@ -512,9 +512,9 @@ public abstract class Invariant
                              int[] permutation
                              ) /*@NonPrototype*/ {
     // Check some sanity conditions
-    Assert.assertTrue(falsified);
-    Assert.assertTrue(new_ppt.arity() == ppt.arity());
-    Assert.assertTrue(permutation.length == ppt.arity());
+    assert falsified;
+    assert new_ppt.arity() == ppt.arity();
+    assert permutation.length == ppt.arity();
     for (int i=0; i < ppt.arity(); i++) {
       VarInfo oldvi = ppt.var_infos[i];
       VarInfo newvi = new_ppt.var_infos[permutation[i]];
@@ -522,7 +522,7 @@ public abstract class Invariant
       // that anymore, because with equality, invariants may get
       // resurrected between old and new VarInfos of different types.
       // They are, however, comparable
-      Assert.assertTrue(oldvi.comparableNWay(newvi));
+      assert oldvi.comparableNWay(newvi);
     }
 
     Invariant result;
@@ -558,7 +558,7 @@ public abstract class Invariant
    */
   public VarComparability get_comparability() /*@NonPrototype*/{
 
-    // Assert.assertTrue (ppt != null, "class " + getClass());
+    // assert ppt != null : "class " + getClass();
 
     // Return the first variable that is not always-comparable
     for (int i = 0; i < ppt.var_infos.length; i++) {
@@ -598,10 +598,12 @@ public abstract class Invariant
                 + " child invariants " /* + first.ppt.name() */);
 
     // Make sure that each invariant was really of the same type
-    if (Assert.enabled) {
+    boolean assert_enabled = false;
+    assert (assert_enabled = true);
+    if (assert_enabled) {
       Match m = new Match (result);
       for (int i = 1; i < invs.size(); i++ )
-        Assert.assertTrue (m.equals (new Match (invs.get(i))));
+        assert m.equals (new Match (invs.get(i)));
     }
 
     return (result);
@@ -935,7 +937,7 @@ public abstract class Invariant
       if ((! (inv1 instanceof Comparison)) && (inv2 instanceof Comparison))
         return 1;
 
-      // Assert.assertTrue(inv1.ppt.parent == inv2.ppt.parent);
+      // assert inv1.ppt.parent == inv2.ppt.parent;
       VarInfo[] vis1 = inv1.ppt.var_infos;
       VarInfo[] vis2 = inv2.ppt.var_infos;
       int arity_cmp = vis1.length - vis2.length;
@@ -1045,7 +1047,7 @@ public abstract class Invariant
     VarInfo[] vars2 = inv2.ppt.var_infos;
 
     // due to inv type match already
-    Assert.assertTrue(vars1.length == vars2.length);
+    assert vars1.length == vars2.length;
 
     for (int i=0; i < vars1.length; i++) {
       VarInfo var1 = vars1[i];
@@ -1277,8 +1279,8 @@ public abstract class Invariant
    * dynamic, it should only be called after all processing.
    **/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) /*@NonPrototype*/ {
-    Assert.assertTrue (!Daikon.isInferencing);
-    Assert.assertTrue(vis.length <= 3, "Unexpected more-than-ternary invariant");
+    assert !Daikon.isInferencing;
+    assert vis.length <= 3 : "Unexpected more-than-ternary invariant";
     if (! ArraysMDE.noDuplicates(vis)) {
       log ("Two or more variables are equal " + format());
       return new DiscardInfo(this, DiscardCode.obvious,
@@ -1315,7 +1317,7 @@ public abstract class Invariant
    **/
   public final /*@Nullable*/ DiscardInfo isObviousDynamically()
     /*@NonPrototype*/{
-    Assert.assertTrue (!Daikon.isInferencing);
+    assert !Daikon.isInferencing;
     return isObviousDynamically (ppt.var_infos);
   }
 
@@ -1511,15 +1513,15 @@ public abstract class Invariant
       // variables have a different order (as in function binary), but the
       // swapped variables are actually the same (since we create invariants
       // of the form f(a, a, a) because of equality sets.
-      // Assert.assertTrue(result != 0
-      //                   , "isSameInvariant() returned false "
+      // assert result != 0
+      //                   : "isSameInvariant() returned false "
       //                   + "(isSameFormula returned " + inv1.isSameFormula(inv2) + ")," + lineSep
       //                   + "but format().compareTo() returned 0:" + lineSep
       //                   + "  " + inv1.format() + lineSep + "      "  + inv1.repr() + lineSep
       //                   + "    " + inv1.ppt.parent.name + lineSep
       //                   + "  " + inv2.format() + lineSep + "      "  + inv2.repr() + lineSep
       //                   + "    " + inv1.ppt.parent.name + lineSep
-      //                  );
+      //                  ;
 
       return result;
     }
@@ -1716,7 +1718,7 @@ public abstract class Invariant
    * enabled
    */
   public boolean enabled() /*@Prototype*/ {
-    Assert.assertTrue (false, "no enabled for class " + getClass());
+    assert false : "no enabled for class " + getClass();
     return (false);
   }
 
@@ -1726,7 +1728,7 @@ public abstract class Invariant
    * types.
    */
   // public boolean valid_types (ProglangType[] rep_types) {
-  //  Assert.assertTrue (false, "no valid_types for class " + getClass());
+  //  assert false : "no valid_types for class " + getClass();
   //  return (false);
   // }
 
@@ -1740,7 +1742,7 @@ public abstract class Invariant
    * @see #instantiate_ok(VarInfo[])
    */
   public boolean valid_types (VarInfo[] vis) /*@Prototype*/ {
-    Assert.assertTrue (false, "no valid_types for class " + getClass());
+    assert false : "no valid_types for class " + getClass();
     return (false);
   }
 
@@ -1811,10 +1813,10 @@ public abstract class Invariant
     if (!enabled() || !instantiate_ok (slice.var_infos))
       return (null);
     Invariant inv = instantiate_dyn (slice);
-    Assert.assertTrue (inv != null);
+    assert inv != null;
     if (inv.ppt == null) {
       // Avoid creating the message if the check succeeds
-      Assert.assertTrue (inv.ppt != null, "invariant class " + inv.getClass());
+      assert inv.ppt != null : "invariant class " + inv.getClass();
     }
     return (inv);
   }
@@ -1845,8 +1847,9 @@ public abstract class Invariant
       VarInfo v2 = ppt.var_infos[1];
       VarInfo v3 = ppt.var_infos[2];
       if (!(this instanceof TernaryInvariant))
-        Assert.assertTrue (false, "invariant '" + format() + "' in slice "
-                           + ppt.name() + " is not ternary");
+        assert false
+        : "invariant '" + format() + "' in slice "
+                           + ppt.name() + " is not ternary";
       TernaryInvariant ternary_inv = (TernaryInvariant) this;
       return (ternary_inv.add (vt.getValue(v1), vt.getValue(v2),
                                 vt.getValue(v3), vt.getModified(v1), count));

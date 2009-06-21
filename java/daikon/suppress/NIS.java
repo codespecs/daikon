@@ -186,10 +186,10 @@ public class NIS {
           assert inv.getClass() == sup.suppressee.sup_class : "class "
             + inv.getClass() + " doesn't match " + sup + "/"
             + sup.suppressee.sup_class;
-          Assert.assertTrue (inv.getClass()
-                            == ss.suppression_set[j].suppressee.sup_class,
-                           "class " + inv.getClass() + " doesn't match "
-                            + ss.suppression_set[j]);
+          assert inv.getClass()
+                            == ss.suppression_set[j].suppressee.sup_class
+        : "class " + inv.getClass() + " doesn't match "
+                            + ss.suppression_set[j];
           }
         }
         all_suppressions.add (ss);
@@ -327,8 +327,8 @@ public class NIS {
     // Loop through each invariant
     for (Invariant inv : new_invs) {
       if (inv.is_false())
-        Assert.assertTrue (!inv.is_false(), String.format ("inv %s in ppt %s is "
-            + " false before sample is applied ", inv.format(), inv.ppt));
+        assert !inv.is_false()
+          : String.format ("inv %s in ppt %s is false before sample is applied ", inv.format(), inv.ppt);
 
       // Looks to see if any variables are missing.  This can happen
       // when a variable not involved in the suppressor is missing on
@@ -346,10 +346,11 @@ public class NIS {
         InvariantStatus result = inv.add_sample (vt, count);
         if (result == InvariantStatus.FALSIFIED) {
           if (NIS.antecedent_method)
-          Assert.assertTrue (false, "inv " + inv.format()
+          assert false
+        : "inv " + inv.format()
                              + " falsified by sample "
                              + Debug.toString (inv.ppt.var_infos, vt)
-                             + " at ppt " + inv.ppt);
+                             + " at ppt " + inv.ppt;
           else {
             inv.falsify();
             newly_falsified.add(inv);
@@ -359,8 +360,8 @@ public class NIS {
 
       // Add the invariant to its slice
       if (Daikon.dkconfig_internal_check)
-        Assert.assertTrue (inv.ppt.parent.findSlice(inv.ppt.var_infos)
-                            == inv.ppt);
+        assert inv.ppt.parent.findSlice(inv.ppt.var_infos)
+                            == inv.ppt;
       inv.ppt.addInvariant (inv);
       if (Debug.logOn())
         inv.log (inv.format() + " added to slice");
@@ -644,8 +645,9 @@ public class NIS {
         if (Daikon.dkconfig_internal_check) {
           assert !inv.is_ni_suppressed() : "Still suppressed: " + inv.format();
           if (inv.ppt.find_inv_exact (inv) != null)
-            Assert.assertTrue (false, "inv " + inv.format()
-                               + " already exists in ppt " + ppt.name);
+            assert false
+        : "inv " + inv.format()
+                               + " already exists in ppt " + ppt.name;
         }
         new_invs.add (inv);
       }
@@ -722,7 +724,7 @@ public class NIS {
       Invariant inv = supinv.instantiate (ppt);
       if (inv != null) {
         if (Daikon.dkconfig_internal_check)
-          Assert.assertTrue (inv.ppt.find_inv_exact (inv) == null);
+          assert inv.ppt.find_inv_exact (inv) == null;
         inv.ppt.addInvariant (inv);
         created_invs.add (inv);
       }
@@ -1009,8 +1011,7 @@ public class NIS {
         return;
 
       // Only antecedents comparable to this one should be added
-      Assert.assertTrue (comparability.comparable (inv.get_comparability(),
-                                                   comparability));
+      assert comparability.comparable (inv.get_comparability(), comparability);
 
       // Ignore antecedents that are missing out of bounds.  They can't
       // create any valid invariants (since the suppressee is always over

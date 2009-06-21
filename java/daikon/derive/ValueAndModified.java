@@ -21,9 +21,9 @@ public final class ValueAndModified {
     = new ValueAndModified(null, ValueTuple.MISSING_FLOW);
 
   public ValueAndModified(Object val, int mod) {
-    Assert.assertTrue(Intern.isInterned(val));
+    assert Intern.isInterned(val);
     // Type should be Long, not Integer
-    Assert.assertTrue(! (val instanceof Integer));
+    assert ! (val instanceof Integer);
     value = val;
     modified = mod;
   }

@@ -203,7 +203,7 @@ public class NONZERO
 
   // used by computeConfidence
   protected double computeProbability() {
-    Assert.assertTrue(! falsified);
+    assert ! falsified;
     // This method works by looking at all sample values and
     // calculating the probability that they were all non-zero by
     // chance (assuming a uniform distribution).  If the variable is
@@ -346,7 +346,7 @@ public class NONZERO
 
 
   public boolean isSameFormula(Invariant other) {
-    Assert.assertTrue(other instanceof NONZERO);
+    assert other instanceof NONZERO;
     return true;
   }
 

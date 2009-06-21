@@ -3,7 +3,6 @@ package daikon.simplify;
 import java.io.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import utilMDE.Assert;
 
 /**
  * A SessionManager is a component which handles the threading
@@ -57,8 +56,8 @@ public class SessionManager
   public void request(Cmd command)
     throws TimeoutException
   {
-    Assert.assertTrue(worker != null, "Cannot use closed SessionManager");
-    Assert.assertTrue(pending == null, "Cannot queue requests");
+    assert worker != null : "Cannot use closed SessionManager";
+    assert pending == null : "Cannot queue requests";
     if (debug.isLoggable(Level.FINE)) {
       System.err.println("Running command " + command);
       System.err.println(" called from");
@@ -68,7 +67,7 @@ public class SessionManager
     }
     synchronized (this) {
       // place the command in the slot
-      Assert.assertTrue(pending == null);
+      assert pending == null;
       pending = command;
       // tell the worker to wake up
       this.notifyAll();
@@ -107,8 +106,7 @@ public class SessionManager
           fileName = "daikon-background.txt";
         InputStream bg_stream =
           SessionManager.class.getResourceAsStream(fileName);
-        Assert.assertTrue(bg_stream != null,
-                          "Could not find simplify/daikon-background.txt");
+        assert bg_stream != null : "Could not find simplify/daikon-background.txt";
         BufferedReader lines =
           new BufferedReader(new InputStreamReader(bg_stream));
         String line;
@@ -182,7 +180,7 @@ public class SessionManager
           mgr.pending = null;
           mgr.notifyAll();
           try { mgr.wait(0); } catch (InterruptedException e) { }
-          Assert.assertTrue(mgr.pending != null);
+          assert mgr.pending != null;
           // session != null && mgr.pending != null;
         }
         error = null;
@@ -214,26 +212,26 @@ public class SessionManager
 
     cc = new CmdCheck("(EQ 1 1)");
     m.request(cc);
-    Assert.assertTrue(true == cc.valid);
+    assert true == cc.valid;
 
     cc = new CmdCheck("(EQ 1 2)");
     m.request(cc);
-    Assert.assertTrue(false == cc.valid);
+    assert false == cc.valid;
 
     cc = new CmdCheck("(EQ x z)");
     m.request(cc);
-    Assert.assertTrue(false == cc.valid);
+    assert false == cc.valid;
 
     CmdAssume a = new CmdAssume("(AND (EQ x y) (EQ y z))");
     m.request(a);
 
     m.request(cc);
-    Assert.assertTrue(true == cc.valid);
+    assert true == cc.valid;
 
     m.request(CmdUndoAssume.single);
 
     m.request(cc);
-    Assert.assertTrue(false == cc.valid);
+    assert false == cc.valid;
 
     StringBuffer buf = new StringBuffer();
 

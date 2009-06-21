@@ -80,7 +80,7 @@ public class UnionVisitorTester extends TestCase {
     expected.put(C, Arrays.asList(Z));
     expected.put(D, Arrays.asList(M_001, N_0001, O_1));
 
-    assertEquals(expected.toString(), result.toString());
+    assert expected.toString().equals(result.toString());
   }
 
 }

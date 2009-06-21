@@ -36,9 +36,9 @@ public abstract class SingleStringSequence
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   public InvariantStatus add(Object val, int mod_index, int count) {
-    Assert.assertTrue(! falsified);
-    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
-    Assert.assertTrue(Intern.isInterned(val));
+    assert ! falsified;
+    assert (mod_index >= 0) && (mod_index < 2);
+    assert Intern.isInterned(val);
     // System.out.println("SingleStringSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
     String[] value = (String[]) val;
     if (value == null) {
@@ -51,9 +51,9 @@ public abstract class SingleStringSequence
   }
 
   public InvariantStatus check(Object val, int mod_index, int count) {
-    Assert.assertTrue(! falsified);
-    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
-    Assert.assertTrue(Intern.isInterned(val));
+    assert ! falsified;
+    assert (mod_index >= 0) && (mod_index < 2);
+    assert Intern.isInterned(val);
     String[] value = (String[]) val;
     if (value == null) {
       return InvariantStatus.NO_CHANGE;

@@ -76,13 +76,13 @@ public final class CLASSNAME
   }
 
   public static boolean applicable(VarInfo vi) {
-    Assert.assertTrue(vi.rep_type == PROGLANGTYPE);
+    assert vi.rep_type == PROGLANGTYPE;
     // For now, applicable if not a derived variable; a better test is if
     // not a prefix subsequence (sequence slice) we have added.
     if (vi.derived != null) {
-      Assert.assertTrue((vi.derived instanceof SEQUENCESCALARSUBSEQUENCE) ||
+      assert (vi.derived instanceof SEQUENCESCALARSUBSEQUENCE) ||
                     (vi.derived instanceof SEQUENCESCALARINTERSECTION) ||
-                    (vi.derived instanceof SEQUENCESCALARUNION));
+                    (vi.derived instanceof SEQUENCESCALARUNION);
       return false;
     }
 

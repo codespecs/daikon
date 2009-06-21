@@ -1,6 +1,5 @@
 package daikon.inv.unary.scalar;
 
-import utilMDE.Assert;
 import daikon.PptSlice;
 import daikon.ProglangType;
 import daikon.VarInfo;
@@ -103,7 +102,7 @@ public class IsPointer extends SingleScalar {
     // computes the probability that this is the result
     // of chance
     protected double computeProbability() {
-        Assert.assertTrue(!falsified);
+        assert !falsified;
 
         ValueSet.ValueSetScalar vs = (ValueSet.ValueSetScalar) ppt.var_infos[0]
                 .get_value_set();

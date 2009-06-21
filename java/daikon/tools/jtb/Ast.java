@@ -14,7 +14,6 @@ import java.io.*;
 import java.util.*;
 import jtb.JavaParser;
 import jtb.ParseException;
-import utilMDE.Assert;
 import utilMDE.UtilMDE;
 import utilMDE.ArraysMDE;
 
@@ -313,7 +312,7 @@ public class Ast {
         break;
       }
       Node n1 = b.getParent();
-      Assert.assertTrue(n1 instanceof ClassOrInterfaceDeclaration);
+      assert n1 instanceof ClassOrInterfaceDeclaration;
       if (isInner((ClassOrInterfaceDeclaration)n1)) {
         className = "$inner" + "." + className;
         currentNode = b;
@@ -342,36 +341,36 @@ public class Ast {
     // All this could perhaps be replaced with an ad-hoc visitor, as is
     // done in nodeTokenAfter().  But it is written now, so leave it as is.
 
-    Assert.assertTrue(n.f1.present());
+    assert n.f1.present();
     ConditionalExpression ce = n.f0;
-    Assert.assertTrue(! ce.f1.present());
+    assert ! ce.f1.present();
     ConditionalOrExpression coe = ce.f0;
-    Assert.assertTrue(! coe.f1.present());
+    assert ! coe.f1.present();
     ConditionalAndExpression cae = coe.f0;
-    Assert.assertTrue(! cae.f1.present());
+    assert ! cae.f1.present();
     InclusiveOrExpression ioe = cae.f0;
-    Assert.assertTrue(! ioe.f1.present());
+    assert ! ioe.f1.present();
     ExclusiveOrExpression eoe = ioe.f0;
-    Assert.assertTrue(! eoe.f1.present());
+    assert ! eoe.f1.present();
     AndExpression ande = eoe.f0;
-    Assert.assertTrue(! ande.f1.present());
+    assert ! ande.f1.present();
     EqualityExpression ee = ande.f0;
-    Assert.assertTrue(! ee.f1.present());
+    assert ! ee.f1.present();
     InstanceOfExpression iofe = ee.f0;
-    Assert.assertTrue(! iofe.f1.present());
+    assert ! iofe.f1.present();
     RelationalExpression re = iofe.f0;
-    Assert.assertTrue(! re.f1.present());
+    assert ! re.f1.present();
     ShiftExpression se = re.f0;
-    Assert.assertTrue(! se.f1.present());
+    assert ! se.f1.present();
     AdditiveExpression adde = se.f0;
-    Assert.assertTrue(! adde.f1.present());
+    assert ! adde.f1.present();
     MultiplicativeExpression me = adde.f0;
-    Assert.assertTrue(! me.f1.present());
+    assert ! me.f1.present();
     UnaryExpression ue = me.f0;
     UnaryExpressionNotPlusMinus uenpm
       = (UnaryExpressionNotPlusMinus) ue.f0.choice;
     PostfixExpression pfe = (PostfixExpression) uenpm.f0.choice;
-    Assert.assertTrue(! pfe.f1.present());
+    assert ! pfe.f1.present();
     PrimaryExpression pe = pfe.f0;
     return pe;
   }
@@ -398,7 +397,7 @@ public class Ast {
       switch (psnc.which) {
       case 4:
         NodeSequence sn = (NodeSequence) psnc.choice;
-        Assert.assertTrue(sn.size() == 2);
+        assert sn.size() == 2;
         return ((NodeToken) sn.elementAt(1)).tokenImage;
       }
     }
@@ -421,7 +420,7 @@ public class Ast {
     switch (ppnc.which) {
     case 2:
       NodeSequence sn = (NodeSequence) ppnc.choice;
-      Assert.assertTrue(sn.size() == 3);
+      assert sn.size() == 3;
       return ((NodeToken) sn.elementAt(2)).tokenImage;
     case 6:
       return fieldName((Name) ppnc.choice);
@@ -434,7 +433,7 @@ public class Ast {
     NodeListOptional nlo = n.f1;
     if (nlo.present()) {
       NodeSequence ns = (NodeSequence) nlo.elementAt(nlo.size()-1);
-      Assert.assertTrue(ns.size() == 2);
+      assert ns.size() == 2;
       NodeToken nt = (NodeToken) ns.elementAt(1);
       return nt.tokenImage;
     } else {
@@ -709,7 +708,7 @@ public class Ast {
   public static Class getClass(String s) {
     try {
       Class c = Class.forName(s);
-      Assert.assertTrue(c != null);
+      assert c != null;
       return c;
     } catch (ClassNotFoundException e) {
       String orig_s = s;
@@ -725,7 +724,7 @@ public class Ast {
         // System.out.println("Lookup trying: " + s);
         try {
           Class c = Class.forName(s);
-          Assert.assertTrue(c != null);
+          assert c != null;
           return c;
         } catch (ClassNotFoundException ex) {
         }
@@ -1189,11 +1188,11 @@ public class Ast {
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
 
-      Assert.assertTrue (!(inv instanceof Equality));
+      assert !(inv instanceof Equality);
       for (int j = 0; j < inv.ppt.var_infos.length; j++)
-        Assert.assertTrue (!inv.ppt.var_infos[j].missingOutOfBounds(),
-                           "var '" + inv.ppt.var_infos[j].name()
-                           + "' out of bounds in " + inv.format());
+        assert !inv.ppt.var_infos[j].missingOutOfBounds()
+        : "var '" + inv.ppt.var_infos[j].name()
+                           + "' out of bounds in " + inv.format();
       InvariantFilters fi = InvariantFilters.defaultFilters();
 
       boolean fi_accepted = true;
@@ -1235,12 +1234,12 @@ public class Ast {
 
   private static Modifiers getModifiersInternal(Node n) {
 
-    Assert.assertTrue((n instanceof MethodDeclaration)
-                      || (n instanceof ClassOrInterfaceDeclaration));
+    assert (n instanceof MethodDeclaration)
+                      || (n instanceof ClassOrInterfaceDeclaration);
 
     ClassOrInterfaceBodyDeclaration decl =
       (ClassOrInterfaceBodyDeclaration)getParent(ClassOrInterfaceBodyDeclaration.class, n);
-    Assert.assertTrue(decl != null);
+    assert decl != null;
     NodeSequence seq = (NodeSequence)decl.f0.choice;
     return (Modifiers)seq.elementAt(0);
   }
@@ -1253,8 +1252,8 @@ public class Ast {
      *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
      *       | ";"
      */
-    Assert.assertTrue((n instanceof MethodDeclaration)
-                      || (n instanceof ClassOrInterfaceDeclaration));
+    assert (n instanceof MethodDeclaration)
+                      || (n instanceof ClassOrInterfaceDeclaration);
 
     Modifiers modifiers = getModifiersInternal(n);
     if (modifierPresent(modifiers, "static")) {
@@ -1341,7 +1340,7 @@ public class Ast {
     if (isPrimitive(n)) {
       return false;
     }
-    Assert.assertTrue(isReference(n));
+    assert isReference(n);
     ReferenceType refType = (ReferenceType)n.f0.choice;
     NodeSequence seq = (NodeSequence)refType.f0.choice;
     if (seq.elementAt(0) instanceof PrimitiveType) {
@@ -1354,7 +1353,7 @@ public class Ast {
 
   public static String classnameForSourceOutput(Class c) {
 
-        Assert.assertTrue(!c.equals(Void.TYPE));
+        assert !c.equals(Void.TYPE);
 
         if (c.isPrimitive()) {
             return c.getName();

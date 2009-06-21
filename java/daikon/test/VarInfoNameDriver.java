@@ -4,7 +4,6 @@ import java.util.*;
 import java.io.*;
 
 import daikon.*;
-import utilMDE.Assert;
 
 /**
  * This is called by VarInfoName to parse varInfoNameTest<foo> files
@@ -74,7 +73,7 @@ public class VarInfoNameDriver {
   // VarInfoName parse(String);
   private static class Parse implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 2);
+      assert args.length == 2;
       String var = args[0];
       String expr = args[1];
       VarInfoName parse = VarInfoName.parse(expr);
@@ -87,7 +86,7 @@ public class VarInfoNameDriver {
   // String name();
   private static class Name implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 1);
+      assert args.length == 1;
       VarInfoName var = vars.get(args[0]);
       out.println(var.name());
     }
@@ -97,7 +96,7 @@ public class VarInfoNameDriver {
   // String esc_name();
   private static class EscName implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 1);
+      assert args.length == 1;
       VarInfoName var = vars.get(args[0]);
       out.println(var.esc_name());
     }
@@ -107,7 +106,7 @@ public class VarInfoNameDriver {
   // String simplify_name();
   private static class SimplifyName implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 1);
+      assert args.length == 1;
       VarInfoName var = vars.get(args[0]);
       out.println(var.simplify_name());
     }
@@ -158,7 +157,7 @@ public class VarInfoNameDriver {
   // boolean equals(VarInfoName);
   private static class Equals implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 2);
+      assert args.length == 2;
       VarInfoName a = vars.get(args[0]);
       VarInfoName b = vars.get(args[1]);
       out.println(args[0] + " " + (a.equals(b) ? "=" : "!") + "= " + args[1]);
@@ -169,7 +168,7 @@ public class VarInfoNameDriver {
   // int hashCode();
   private static class HashCode implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 2);
+      assert args.length == 2;
       VarInfoName a = vars.get(args[0]);
       VarInfoName b = vars.get(args[1]);
       out.println(args[0] + ".hash " +
@@ -184,7 +183,7 @@ public class VarInfoNameDriver {
   // VarInfoName applySize();
   private static class Size implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 2);
+      assert args.length == 2;
       VarInfoName var = vars.get(args[1]);
       VarInfoName result = var.applySize();
       vars.put(args[0], result);
@@ -196,7 +195,7 @@ public class VarInfoNameDriver {
   // VarInfoName applyFunction(String);
   private static class Function implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 3);
+      assert args.length == 3;
       String func = args[1];
       VarInfoName var = vars.get(args[2]);
       VarInfoName result = var.applyFunction(func);
@@ -209,7 +208,7 @@ public class VarInfoNameDriver {
   // VarInfoName applyTypeOf();
   private static class TypeOf implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 2);
+      assert args.length == 2;
       VarInfoName var = vars.get(args[1]);
       VarInfoName result = var.applyTypeOf();
       vars.put(args[0], result);
@@ -221,7 +220,7 @@ public class VarInfoNameDriver {
   // VarInfoName applyPrestate();
   private static class Prestate implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 2);
+      assert args.length == 2;
       VarInfoName var = vars.get(args[1]);
       VarInfoName result = var.applyPrestate();
       vars.put(args[0], result);
@@ -233,7 +232,7 @@ public class VarInfoNameDriver {
   // VarInfoName applyPoststate();
   private static class Poststate implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 2);
+      assert args.length == 2;
       VarInfoName var = vars.get(args[1]);
       VarInfoName result = var.applyPoststate();
       vars.put(args[0], result);
@@ -261,7 +260,7 @@ public class VarInfoNameDriver {
   // VarInfoName applyAdd(int);
   private static class Add implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 3);
+      assert args.length == 3;
       VarInfoName var = vars.get(args[1]);
       int amt = Integer.parseInt(args[2]);
       VarInfoName result = var.applyAdd(amt);
@@ -274,7 +273,7 @@ public class VarInfoNameDriver {
   // VarInfoName applyElements();
   private static class Elements implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 2);
+      assert args.length == 2;
       VarInfoName var = vars.get(args[1]);
       VarInfoName result = var.applyElements();
       vars.put(args[0], result);
@@ -286,7 +285,7 @@ public class VarInfoNameDriver {
   // VarInfoName applySubscript(VarInfoName);
   private static class Subscript implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 3);
+      assert args.length == 3;
       VarInfoName var = vars.get(args[1]);
       VarInfoName sub = vars.get(args[2]);
       VarInfoName result = var.applySubscript(sub);
@@ -299,7 +298,7 @@ public class VarInfoNameDriver {
   // VarInfoName applySlice(VarInfoName, VarInfoName);
   private static class Slice implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 4);
+      assert args.length == 4;
       VarInfoName var = vars.get(args[1]);
       VarInfoName i = vars.get(args[2]);
       VarInfoName j = vars.get(args[3]);
@@ -313,7 +312,7 @@ public class VarInfoNameDriver {
   // String jml_name()
   private static class JMLName implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 1);
+      assert args.length == 1;
       VarInfoName var = vars.get(args[0]);
       VarInfoName.testCall = true;
       out.println(args[0] + ".jml_name() = " + var.jml_name(null));
@@ -325,7 +324,7 @@ public class VarInfoNameDriver {
   // VarInfoName applyFunctionOfN(String function, List vars)
   private static class FunctionOfN implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length >= 4);
+      assert args.length >= 4;
       String func = args[1];
       List<VarInfoName> function_vars = new Vector<VarInfoName>();
       for (int x=2; x<args.length; x++)
@@ -340,7 +339,7 @@ public class VarInfoNameDriver {
   // public VarInfoName applyField(String field)
   private static class Field implements Handler {
     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-      Assert.assertTrue(args.length == 3);
+      assert args.length == 3;
       VarInfoName var = vars.get(args[1]);
       String fieldname = args[2];
       VarInfoName result = var.applyField(fieldname);
@@ -353,7 +352,7 @@ public class VarInfoNameDriver {
   // public String[] QuantHelper.format_jml(VarInfoName[] roots)
 //   private static class QuantifyFormatJML implements Handler {
 //     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-//       Assert.assertTrue(args.length >= 1);
+//       assert args.length >= 1;
 //       VarInfoName roots[] = new VarInfoName [args.length];
 //       for (int x=0; x<args.length; x++)
 //         roots[x] = vars.get(args[x]);
@@ -367,7 +366,7 @@ public class VarInfoNameDriver {
 //   // public String[] QuantHelper.format_jml(VarInfoName[] roots, boolean elementwise)
 //   private static class QuantifyFormatJMLElementwise implements Handler {
 //     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-//       Assert.assertTrue(args.length >= 1);
+//       assert args.length >= 1;
 //       VarInfoName roots[] = new VarInfoName [args.length];
 //       for (int x=0; x<args.length; x++)
 //         roots[x] = vars.get(args[x]);
@@ -381,7 +380,7 @@ public class VarInfoNameDriver {
 //   // public String[] QuantHelper.format_jml(VarInfoName[] roots, boolean elementwise,boolean forall)
 //   private static class QuantifyFormatJMLExists implements Handler {
 //     public void handle(Map<String,VarInfoName> vars, String[] args, PrintStream out) {
-//       Assert.assertTrue(args.length >= 1);
+//       assert args.length >= 1;
 //       VarInfoName roots[] = new VarInfoName [args.length];
 //       for (int x=0; x<args.length; x++)
 //         roots[x] = vars.get(args[x]);

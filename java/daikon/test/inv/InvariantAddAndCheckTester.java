@@ -11,7 +11,6 @@ import daikon.inv.unary.*;
 import daikon.inv.unary.sequence.CommonSequence;
 import static daikon.inv.Invariant.asInvClass;
 
-import utilMDE.Assert;
 
 import junit.framework.*;
 
@@ -530,7 +529,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       checkModified = getCheckModified(invariantToTest.getClass());
       outputProducer = getOutputProducer(invariantToTest.getClass());
 
-      Assert.assertTrue(getArity(invariantToTest.getClass()) == types.length);
+      assert getArity(invariantToTest.getClass()) == types.length;
 
       if (generatingCommands) {
         results.append(typeString + lineSep);
@@ -560,7 +559,7 @@ public class InvariantAddAndCheckTester extends TestCase {
       Object[] params = getParams(tokens);
       InvariantStatus goalStatus = parseStatus(tokens.nextToken().trim());
       tokens.nextToken();       // executed for side effect
-      Assert.assertTrue(! tokens.hasMoreTokens());
+      assert ! tokens.hasMoreTokens();
       InvariantStatus resultStatus = null;
       if (isCheckCommand(command)) {
         resultStatus = getCheckStatus(params);
@@ -590,7 +589,7 @@ public class InvariantAddAndCheckTester extends TestCase {
                                    " but should be: " + types.length);
       }
       Object[] params = getParams(tokens);
-      Assert.assertTrue(! tokens.hasMoreTokens());
+      assert ! tokens.hasMoreTokens();
       InvariantStatus goalStatus = null;
       if (isCheckCommand(command)) {
         goalStatus = getCheckStatus(params);
@@ -811,7 +810,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return a VarInfo object that described the type
      **/
     private static VarInfo getVarInfo(ProglangType type, int i) {
-      Assert.assertTrue(type != null,"Unexpected null variable type passed to getVarInfo");
+      assert type != null : "Unexpected null variable type passed to getVarInfo";
 
       String arrayModifier = "";
 
@@ -884,7 +883,7 @@ public class InvariantAddAndCheckTester extends TestCase {
         else
           return null;
 
-        Assert.assertTrue(result[i] != null,"ProglangType unexpectedly parsed to null in getTypes(String)");
+        assert result[i] != null : "ProglangType unexpectedly parsed to null in getTypes(String)";
       }
 
       return result;
@@ -903,16 +902,16 @@ public class InvariantAddAndCheckTester extends TestCase {
      */
     private static PptSlice createSlice(VarInfo[] vars, PptTopLevel ppt) {
       if (vars.length == 1) {
-        Assert.assertTrue(vars[0] != null);
+        assert vars[0] != null;
         return new PptSlice1(ppt, vars);
       } else if (vars.length == 2) {
-        Assert.assertTrue(vars[0] != null);
-        Assert.assertTrue(vars[1] != null);
+        assert vars[0] != null;
+        assert vars[1] != null;
         return new PptSlice2(ppt, vars);
       } else if (vars.length == 3) {
-        Assert.assertTrue(vars[0] != null);
-        Assert.assertTrue(vars[1] != null);
-        Assert.assertTrue(vars[2] != null);
+        assert vars[0] != null;
+        assert vars[1] != null;
+        assert vars[2] != null;
         return new PptSlice3(ppt, vars);
       } else {
         throw new RuntimeException("Improper vars passed to createSlice (length = "

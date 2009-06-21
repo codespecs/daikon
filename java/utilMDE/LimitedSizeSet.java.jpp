@@ -48,7 +48,7 @@ public class LIMITEDSIZEINTSET
   int num_values;
 
   public LimitedSizeIntSet(int max_values) {
-    Assert.assertTrue(max_values > 0);
+    assert max_values > 0;
     // this.max_values = max_values;
     values = new INT[max_values];
     num_values = 0;

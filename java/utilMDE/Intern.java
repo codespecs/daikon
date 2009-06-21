@@ -500,10 +500,8 @@ public final class Intern {
   public static /*@Interned*/ String /*@Interned*/ [] intern(/*@Interned*/ String[] a) {
 
     // Make sure each element is already interned
-    if (Assert.enabled) {
-      for (int k = 0; k < a.length; k++)
-        Assert.assertTrue (a[k] == Intern.intern (a[k]));
-    }
+    for (int k = 0; k < a.length; k++)
+      assert a[k] == Intern.intern (a[k]);
 
     WeakReference<String /*@Interned*/ []> lookup = internedStringArrays.get(a);
     if (lookup != null) {
@@ -590,7 +588,7 @@ public final class Intern {
    * @return a subsequence of seq from start to end that is interned.
    **/
   public static int /*@Interned*/ [] internSubsequence (int /*@Interned*/ [] seq, int start, int end) {
-    Assert.assertTrue (Intern.isInterned(seq));
+    assert Intern.isInterned(seq);
     SequenceAndIndices<int /*@Interned*/ []> sai = new SequenceAndIndices<int /*@Interned*/ []> (seq, start, end);
     WeakReference<int /*@Interned*/ []> lookup = internedIntSequenceAndIndices.get(sai);
     if (lookup != null) {
@@ -607,7 +605,7 @@ public final class Intern {
    * @see #internSubsequence(int[], int, int)
    **/
   public static long /*@Interned*/ [] internSubsequence (long /*@Interned*/ [] seq, int start, int end) {
-    Assert.assertTrue (Intern.isInterned(seq));
+    assert Intern.isInterned(seq);
     SequenceAndIndices<long /*@Interned*/ []> sai = new SequenceAndIndices<long /*@Interned*/ []> (seq, start, end);
     WeakReference<long /*@Interned*/ []> lookup = internedLongSequenceAndIndices.get(sai);
     if (lookup != null) {
@@ -624,7 +622,7 @@ public final class Intern {
    * @see #internSubsequence(int[], int, int)
    **/
   public static double /*@Interned*/ [] internSubsequence (double /*@Interned*/ [] seq, int start, int end) {
-    Assert.assertTrue (Intern.isInterned(seq));
+    assert Intern.isInterned(seq);
     SequenceAndIndices<double /*@Interned*/ []> sai = new SequenceAndIndices<double /*@Interned*/ []> (seq, start, end);
     WeakReference<double /*@Interned*/ []> lookup = internedDoubleSequenceAndIndices.get(sai);
     if (lookup != null) {
@@ -641,7 +639,7 @@ public final class Intern {
    * @see #internSubsequence(int[], int, int)
    **/
   public static /*@Interned*/ Object /*@Interned*/ [] internSubsequence (/*@Interned*/ Object /*@Interned*/ [] seq, int start, int end) {
-    Assert.assertTrue (Intern.isInterned(seq));
+    assert Intern.isInterned(seq);
     SequenceAndIndices</*@Interned*/ Object /*@Interned*/ []> sai = new SequenceAndIndices</*@Interned*/ Object /*@Interned*/ []> (seq, start, end);
     WeakReference</*@Interned*/ Object /*@Interned*/ []> lookup = internedObjectSequenceAndIndices.get(sai);
     if (lookup != null) {
@@ -658,7 +656,7 @@ public final class Intern {
    * @see #internSubsequence(int[], int, int)
    **/
   public static String /*@Interned*/ [] internSubsequence (/*@Interned*/ String /*@Interned*/ [] seq, int start, int end) {
-    Assert.assertTrue (Intern.isInterned(seq));
+    assert Intern.isInterned(seq);
     SequenceAndIndices</*@Interned*/ String /*@Interned*/ []> sai = new SequenceAndIndices</*@Interned*/ String /*@Interned*/ []> (seq, start, end);
     WeakReference</*@Interned*/ String /*@Interned*/ []> lookup = internedStringSequenceAndIndices.get(sai);
     if (lookup != null) {
@@ -794,7 +792,7 @@ public final class Intern {
   //         return tmp;
   //       // I'm counting on the fact that hashCode returns a different
   //       // number for each Object in the system.  This checks that assumption.
-  //       Assert.assertTrue(a1[i].equals(a2[i]));
+  //       assert a1[i].equals(a2[i]);
   //     }
   //     return 0;
   //   }

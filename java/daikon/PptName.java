@@ -193,7 +193,7 @@ public class PptName
   public /*@Nullable*/ String getMethodName() {
     if (method == null) return null;
     int lparen = method.indexOf('(');
-    Assert.assertTrue(lparen >= 0);
+    assert lparen >= 0;
     return method.substring(0, lparen);
   }
 
@@ -383,9 +383,9 @@ public class PptName
     // We may wish to have a different exceptional than non-exceptional
     // entry point; in particular, if there was an exception, then perhaps
     // the precondition or object invariant was not met.
-    Assert.assertTrue(isExitPoint(), fullname);
+    assert isExitPoint() : fullname;
 
-    Assert.assertTrue(isExitPoint() || isThrowsPoint());
+    assert isExitPoint() || isThrowsPoint();
     return new PptName(cls, method, FileIO.enter_suffix);
   }
 
@@ -394,7 +394,7 @@ public class PptName
    * @return a name for the combined exit point
    **/
   public PptName makeExit() {
-    Assert.assertTrue(isExitPoint() || isEnterPoint(), fullname);
+    assert isExitPoint() || isEnterPoint() : fullname;
     return new PptName(cls, method, FileIO.exit_suffix);
   }
 
@@ -403,7 +403,7 @@ public class PptName
    * @return a name for the corresponding object invariant
    **/
   public PptName makeObject() {
-    Assert.assertTrue(isExitPoint() || isEnterPoint(), fullname);
+    assert isExitPoint() || isEnterPoint() : fullname;
     return new PptName(cls, null, FileIO.object_suffix);
   }
 
@@ -412,7 +412,7 @@ public class PptName
    * @return a name for the corresponding class-static invariant
    **/
   public PptName makeClassStatic() {
-    Assert.assertTrue(isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic(), fullname);
+    assert isExitPoint() || isEnterPoint() || isObjectInstanceSynthetic() : fullname;
     return new PptName(cls, null, FileIO.class_static_suffix);
   }
 

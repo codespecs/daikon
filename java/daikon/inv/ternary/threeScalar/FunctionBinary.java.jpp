@@ -198,7 +198,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
         throw new Error (" can't create instance for " + subc.getName()
                         + ": '" + e + "' ii = " + ii);
       }
-      Assert.assertTrue (fb_arr[fb.get_var_order()] == null);
+      assert fb_arr[fb.get_var_order()] == null;
       fb_arr[fb.get_var_order()] = fb;
       fb.set_function_id (func_id);
       debug.fine ("Adding " + function + " " + fb.getClass().getName()
@@ -319,8 +319,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
    */
   protected Invariant resurrect_done (int[] permutation) {
 
-    Assert.assertTrue(permutation.length == 3);
-    Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
+    assert permutation.length == 3;
+    assert ArraysMDE.fn_is_permutation(permutation);
 
     int[] new_order = new int[3];
     int[] old_order = var_indices[get_var_order()];
@@ -361,7 +361,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
         break;
       }
     }
-    Assert.assertTrue (var_order != -1);
+    assert var_order != -1;
 
     // If the var order hasn't changed, we don't need to do anything
     if (var_order == get_var_order())
@@ -372,7 +372,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       build_func_list();
     int func_id = get_function_id();
     /*@Prototype*/ CLASSNAME[] fb_arr = func_list.get (func_id);
-    Assert.assertTrue (fb_arr != null);
+    assert fb_arr != null;
     for (int ii = 0; ii < fb_arr.length; ii++)
       if ((fb_arr[ii] != null) && (fb_arr[ii].get_var_order() == var_order))
         return (fb_arr[ii].instantiate_dyn (ppt));
@@ -446,8 +446,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
       else if (methodname[0].equals("utilMDE.MathMDE.logicalXor("))
         func = "|java-logical-xor|";
     } else {
-      Assert.assertTrue(methodname[0].equals(""));
-      Assert.assertTrue(methodname[2].equals(""));
+      assert methodname[0].equals("");
+      assert methodname[2].equals("");
       func = "|java-" + methodname[1].trim() + "|";
     }
     if (func == null)

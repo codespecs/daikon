@@ -14,7 +14,6 @@ import jtb.syntaxtree.*;
 import jtb.visitor.DepthFirstVisitor;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
-import utilMDE.Assert;
 import utilMDE.UtilMDE;
 import daikon.PptMap;
 import daikon.PptTopLevel;
@@ -308,7 +307,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         ClassOrInterfaceDeclaration clsdecl =
             (ClassOrInterfaceDeclaration)Ast.getParent(ClassOrInterfaceDeclaration.class, method);
 
-        Assert.assertTrue(clsdecl != null);
+        assert clsdecl != null;
 
         if (Ast.isInterface(clsdecl)) {
             return;
@@ -517,7 +516,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             Invariant inv = ip.invariant;
             Property property = ip.property;
 
-            Assert.assertTrue(property.xmlString().equals(toProperty(inv).xmlString()));
+            assert property.xmlString().equals(toProperty(inv).xmlString());
 
             String javarep = inv.format_using(OutputFormat.JAVA);
 
@@ -542,9 +541,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             }
 
             code.append("// Check: " + daikonrep + daikon.Global.lineSep);
-            code.append("junit.framework.Assert.assertTrue(");
+            code.append("assert ");
             code.append(fixForExternalUse(javarep));
-            code.append(");");
+            code.append(";");
         }
     }
 
@@ -747,7 +746,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         if (nodeOpt.present()) {
             NodeSequence seq = (NodeSequence) nodeOpt.node;
             // There should only be two elements: "throws" and NameList
-            Assert.assertTrue(seq.size() == 2);
+            assert seq.size() == 2;
             NameList nameList = (NameList) seq.elementAt(1);
 
             StringWriter stringWriter = new StringWriter();
@@ -1081,8 +1080,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             // Check that all declared methods were in fact visited.
             for (Method m : c.getDeclaredMethods()) {
                 if (!visitedMethods.contains(m)) {
-                    Assert.assertTrue(false,
-                                      "m=" + m + ", visitedMethods=" + visitedMethods);
+                    assert false
+        : "m=" + m + ", visitedMethods=" + visitedMethods;
                 }
             }
 
@@ -1090,8 +1089,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             // Check that all declared constructors were in fact visited.
 //             for (Constructor cons : c.getDeclaredConstructors()) {
 //                 if (!visitedConstructors.contains(cons)) {
-//                     Assert.assertTrue(cons.equals(getDefaultConstructor(c)),
-//                                       "cons=" + cons + ", visitedConstructors=" + visitedConstructors);
+//                     assert cons.equals(getDefaultConstructor(c))
+//                                       : "cons=" + cons + ", visitedConstructors=" + visitedConstructors);
 //                 }
 //             }
 
@@ -1156,7 +1155,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         String packageName = (pacg == null ? "" : pacg.getName());
         int packageNameLength = (packageName.equals("") ? 0 : packageName.length()+1 /* account for ending dot */);
         String className = c.getDeclaringClass().getName();
-        Assert.assertTrue(className.startsWith(packageName));
+        assert className.startsWith(packageName);
         String baseClassName = className.substring(packageNameLength);
 
         for (String s : new String[] { "Major", "Minor" }) {

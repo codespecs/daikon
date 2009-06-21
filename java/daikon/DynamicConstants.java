@@ -230,7 +230,7 @@ public class DynamicConstants implements Serializable {
         i.remove();
         con.constant = false;
         con.previous_constant = true;
-        Assert.assertTrue (all_vars[con.vi.varinfo_index].constant == false);
+        assert all_vars[con.vi.varinfo_index].constant == false;
         non_con.add (con);
       } else {
         con.count += count;
@@ -501,10 +501,10 @@ public class DynamicConstants implements Serializable {
             continue;
           Constant[] con_arr = {con1, con2, con3};
           Arrays.sort (con_arr, ConIndexComparator.getInstance());
-          Assert.assertTrue ((con_arr[0].vi.varinfo_index
+          assert (con_arr[0].vi.varinfo_index
                               <= con_arr[1].vi.varinfo_index) &&
                              (con_arr[1].vi.varinfo_index
-                              <= con_arr[2].vi.varinfo_index));
+                              <= con_arr[2].vi.varinfo_index);
           if (!ppt.is_slice_ok (con_arr[0].vi, con_arr[1].vi, con_arr[2].vi))
             continue;
 
@@ -643,10 +643,10 @@ public class DynamicConstants implements Serializable {
       Constant con1 = new_leaders.get(i);
       for (int j = 0; j < vars.size(); j++ ) {
         Constant con2 = vars.get(j);
-        Assert.assertTrue (con1 != con2);
+        assert con1 != con2;
         for (int k = j; k < vars.size(); k++ ) {
           Constant con3 = vars.get(k);
-          Assert.assertTrue (con1 != con3);
+          assert con1 != con3;
           if (!ppt.is_slice_ok (con1.vi, con2.vi, con3.vi))
             continue;
 
@@ -680,9 +680,8 @@ public class DynamicConstants implements Serializable {
           }
           if (lt != null) {
             if (Daikon.dkconfig_internal_check)
-              Assert.assertTrue
-                (slice.find_inv_by_class (lt.getClass()) == null,
-                "inv = " + lt.format() + " slice = " + slice);
+              assert slice.find_inv_by_class (lt.getClass()) == null
+                : "inv = " + lt.format() + " slice = " + slice;
             slice.addInvariant (lt);
             debug.fine ("Adding invariant " + lt.format() + " to slice "
                         + slice);
@@ -698,8 +697,8 @@ public class DynamicConstants implements Serializable {
         Constant con2 = new_leaders.get(j);
         for (int k = 0; k < vars.size(); k++ ) {
           Constant con3 = vars.get(k);
-          Assert.assertTrue (con2 != con3);
-          Assert.assertTrue (con1 != con3);
+          assert con2 != con3;
+          assert con1 != con3;
           if (!ppt.is_slice_ok (con1.vi, con2.vi, con3.vi))
             continue;
 
@@ -741,9 +740,8 @@ public class DynamicConstants implements Serializable {
           }
           if ((lt != null) && (sts == InvariantStatus.NO_CHANGE)) {
             if (Daikon.dkconfig_internal_check)
-              Assert.assertTrue
-                (slice.find_inv_by_class (lt.getClass()) == null,
-                "inv = " + lt.format() + " slice = " + slice);
+              assert slice.find_inv_by_class (lt.getClass()) == null
+                : "inv = " + lt.format() + " slice = " + slice;
             slice.addInvariant (lt);
             debug.fine ("Adding invariant " + lt.format() + " to slice "
                         + slice);

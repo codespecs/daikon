@@ -187,7 +187,7 @@ public class InstrumentObserversVisitor
         if (comment.indexOf("@ observer") >= 0) {
           MethodDeclaration method =
             (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
-          Assert.assertTrue(method != null);
+          assert method != null;
           String name = Ast.getName(method);
           String returnType = Ast.getReturnType(method);
           if (returnType.equals("void")) {

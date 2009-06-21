@@ -383,6 +383,7 @@ public final class FileIO {
     if (state.all_ppts.containsName(ppt_name)) {
       if (state.ppts_are_new) {
         PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+        assert existing_ppt != null; // because state.all_ppts.containsName(ppt_name)
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
         return state.all_ppts.get (ppt_name);
@@ -488,6 +489,7 @@ public final class FileIO {
     if (state.all_ppts.containsName(ppt_name)) {
       if (state.ppts_are_new) {
         PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+        assert existing_ppt != null; // because state.all_ppts.containsName(ppt_name)
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
         return state.all_ppts.get (ppt_name);
@@ -657,7 +659,7 @@ public final class FileIO {
       static_constant_value =
         rep_type.parse_value(static_constant_value_string);
       // Why can't the value be null?
-      Assert.assertTrue(static_constant_value != null);
+      assert static_constant_value != null;
     }
     VarComparability comparability = null;
     try {
@@ -668,8 +670,6 @@ public final class FileIO {
         (String.format ("Error parsing comparability (%s) at line %d "
                         + "in file %s", e, file.getLineNumber(), filename));
     }
-    // Not a call to Assert.assert in order to avoid doing the (expensive)
-    // string concatenations.
     if (!VarInfo.legalFileRepType(file_rep_type)) {
       throw new Daikon.TerminationMessage(
         "Unsupported representation type "
@@ -835,7 +835,7 @@ public final class FileIO {
       pw.print("    ");
 
       // [adonovan] is this sound? Let me know if not (sorry).
-      //Assert.assertTrue(ppt.var_infos.length == vals.length);
+      //assert ppt.var_infos.length == vals.length;
 
       for (int j = 0; j < vals.length; j++) {
         if (j != 0)
@@ -1754,8 +1754,10 @@ public final class FileIO {
           for (PptTopLevel p : ppts) {
             System.out.printf ("  %s\n", p.name());
             if (p.ppt_successors != null) {
-              for (String successor : p.ppt_successors) {
-                System.out.printf ("    %s\n", all_ppts.get (successor).name());
+              for (String successorName : p.ppt_successors) {
+                @SuppressWarnings("nullness") // because successorName is in p.ppt_successors
+                /*@NonNull*/ PptTopLevel successorPpt = all_ppts.get (successorName);
+                System.out.printf ("    %s\n", successorPpt.name());
               }
             }
             p.combined_ppts_init = true;
@@ -1990,20 +1992,19 @@ public final class FileIO {
     for (int vi_index = 0, val_index = 0;
       val_index < num_tracevars;
       vi_index++) {
-      Assert.assertTrue(vi_index < vis.length
-      // , "Got to vi_index " + vi_index + " after " + val_index + " of " + num_tracevars + " values"
-      );
+      assert vi_index < vis.length
+        : "Got to vi_index " + vi_index + " after " + val_index + " of " + num_tracevars + " values";
       VarInfo vi = vis[vi_index];
-      Assert.assertTrue((!vi.is_static_constant) || (vi.value_index == -1)
-      // , "Bad value_index " + vi.value_index + " when static_constant_value = " + vi.static_constant_value + " for " + vi.repr() + " at " + ppt_name
-      );
+      assert (!vi.is_static_constant) || (vi.value_index == -1)
+        // : "Bad value_index " + vi.value_index + " when static_constant_value = " + vi.static_constant_value + " for " + vi.repr() + " at " + ppt_name
+        ;
       if (vi.is_static_constant)
         continue;
-      Assert.assertTrue(val_index == vi.value_index
-      // , "Differing val_index = " + val_index
-      // + " and vi.value_index = " + vi.value_index
-      // + " for " + vi.name + lineSep + vi.repr()
-      );
+      assert val_index == vi.value_index
+        // : "Differing val_index = " + val_index
+        // + " and vi.value_index = " + vi.value_index
+        // + " for " + vi.name + lineSep + vi.repr()
+        ;
 
       // In errors, say "for program point", not "at program point" as the
       // latter confuses Emacs goto-error.
@@ -2087,8 +2088,8 @@ public final class FileIO {
       //                   + " for program point " + ppt.name());
 
       // MISSING_FLOW is only found during flow algorithm
-      Assert.assertTrue (mod != ValueTuple.MISSING_FLOW,
-                         "Data trace value can't be missing due to flow");
+      assert mod != ValueTuple.MISSING_FLOW
+        : "Data trace value can't be missing due to flow";
 
       if (mod != ValueTuple.MISSING_NONSENSICAL) {
         // Set the modbit now, depending on whether the value of the variable
@@ -2195,9 +2196,8 @@ public final class FileIO {
       line = reader.readLine(); // modbit
       line = reader.readLine(); // next variable name
     }
-    Assert.assertTrue(
-      (line == null) || (line.equals("")),
-      "Expected blank line at line " + reader.getLineNumber() + ": " + line);
+    assert (line == null) || (line.equals(""))
+      : "Expected blank line at line " + reader.getLineNumber() + ": " + line;
   }
 
   /**
@@ -2279,7 +2279,7 @@ public final class FileIO {
           call_hashmap.remove(nonce);
         }
       }
-      Assert.assertTrue(invoc != null);
+      assert invoc != null;
 
       // Loop through each orig variable and get its value/mod bits from
       // the ENTER point.  vi_index is the index into var_infos at the

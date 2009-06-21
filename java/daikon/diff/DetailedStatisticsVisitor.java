@@ -135,7 +135,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    **/
   private static double calculateConfidenceDifference(Invariant inv1,
                                                       Invariant inv2) {
-    Assert.assertTrue(inv1 != null && inv2 != null);
+    assert inv1 != null && inv2 != null;
     double diff;
     double conf1 = Math.max(inv1.getConfidence(), 0);
     double conf2 = Math.max(inv2.getConfidence(), 0);

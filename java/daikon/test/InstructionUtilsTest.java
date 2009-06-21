@@ -21,13 +21,13 @@ public class InstructionUtilsTest extends TestCase {
 
     Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
 
-    assertEquals(reds.toString(), 0, reds.size());
+    assert 0 == reds.size() :reds.toString();
 
     addX86Instruction(path, "x.dll:0x02 pop eax ebx -> ecx edx");
 
     reds = InstructionUtils.computeRedundantVars(path);
 
-    assertEquals(reds.toString(), 2, reds.size());
+    assert 2 == reds.size() : reds.toString();
     assertRedundants(reds, "bv:0x01:eax", "bv:0x02:eax");
     assertRedundants(reds, "bv:0x01:ebx", "bv:0x02:ebx");
   }
@@ -41,7 +41,7 @@ public class InstructionUtilsTest extends TestCase {
       if (e.getValue().equals(leader))
         redActual.add(e.getKey());
     }
-    assertEquals(leader, redExpected, redActual);
+    assert redExpected.equals(redActual) : leader;
   }
 
   public static void testComputeRedundantVars1a() {
@@ -52,7 +52,7 @@ public class InstructionUtilsTest extends TestCase {
 
     Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
 
-    assertEquals(reds.toString(), 0, reds.size());
+    assert 0 == reds.size() : reds;
   }
 
   public static void testComputeRedundantVars1b() {
@@ -63,7 +63,7 @@ public class InstructionUtilsTest extends TestCase {
 
     Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
 
-    assertEquals(reds.toString(), 2, reds.size());
+    assert 2 == reds.size() : reds;
     assertRedundants(reds, "bv:0x01:eax", "bv:0x02:eax");
     assertRedundants(reds, "bv:0x01:ebx", "bv:0x02:ebx");
   }
@@ -77,7 +77,7 @@ public class InstructionUtilsTest extends TestCase {
 
     Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
 
-    assertEquals(reds.toString(), 4, reds.size());
+    assert 4 == reds.size() : reds;
     assertRedundants(reds, "bv:0x01:eax", "bv:0x02:eax", "bv:0x03:eax");
     assertRedundants(reds, "bv:0x01:ebx", "bv:0x02:ebx", "bv:0x03:ebx");
   }
@@ -93,7 +93,7 @@ public class InstructionUtilsTest extends TestCase {
 
     Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
 
-    assertEquals(reds.toString(), 5, reds.size());
+    assert 5 == reds.size() : reds;
     assertRedundants(reds, "bv:0x01:eax", "bv:0x02:eax");
     assertRedundants(reds, "bv:0x01:ebx", "bv:0x02:ebx", "bv:0x03:ebx", "bv:0x05:ebx");
     assertRedundants(reds, "bv:0x04:esi", "bv:0x05:esi");
@@ -110,7 +110,7 @@ public class InstructionUtilsTest extends TestCase {
 
     Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
 
-    assertEquals(reds.toString(), 3, reds.size());
+    assert 3 == reds.size() : reds;
     assertRedundants(reds, "bv:0x01:eax", "bv:0x02:eax", "bv:0x03:eax", "bv:0x05:eax");
   }
 
@@ -138,7 +138,7 @@ public class InstructionUtilsTest extends TestCase {
 
     Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
 
-    assertEquals(reds.toString(), 5, reds.size());
+    assert 5 == reds.size() : reds;
     assertRedundants(reds, "bv:0x01:eax", "bv:0x02:eax");
     assertRedundants(reds, "bv:0x01:ebx", "bv:0x02:ebx", "bv:0x03:ebx", "bv:0x05:ebx");
     assertRedundants(reds, "bv:0x04:esi", "bv:0x05:esi");
@@ -170,7 +170,7 @@ public class InstructionUtilsTest extends TestCase {
 
     Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
 
-    assertEquals(reds.toString(), 1, reds.size());
+    assert 1 == reds.size() : reds;
     assertRedundants(reds, "bv:0x04:esi", "bv:0x05:esi");
   }
 
@@ -184,7 +184,7 @@ public class InstructionUtilsTest extends TestCase {
 
     Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
 
-    assertEquals(reds.toString(), 1, reds.size());
+    assert 1 == reds.size() : reds;
     assertRedundants(reds, "bv:0x01:[4+ebx]", "bv:0x03:[4+ebx]");
   }
 
@@ -196,7 +196,7 @@ public class InstructionUtilsTest extends TestCase {
 
     Map<String, String> reds = InstructionUtils.computeRedundantVars(path);
 
-    assertEquals(reds.toString(), 0, reds.size());
+    assert 0 == reds.size() : reds;
   }
 
   private static void addX86Instruction(List<IInstruction> path, String string) {

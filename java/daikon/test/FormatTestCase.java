@@ -19,7 +19,6 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import utilMDE.Assert;
 import utilMDE.Intern;
 
 /**
@@ -420,12 +419,12 @@ class FormatTestCase {
       getVarInfos(classToTest, types);
     PptSlice sl = createSlice(vars,
                             Common.makePptTopLevel("Test:::OBJECT", vars));
-    Assert.assertTrue (sl != null);
+    assert sl != null;
 
     // Create an actual instance of the class
     Invariant invariantToTest = instantiateClass(classToTest, sl, arg_types,
                                                  arg_vals);
-    Assert.assertTrue (invariantToTest != null, "class " + className);
+    assert invariantToTest != null : "class " + className;
 
     String goalOutput = "";
     String currentLine = null;
@@ -604,7 +603,7 @@ class FormatTestCase {
    * @return a VarInfo object that described the type
    **/
   private static VarInfo getVarInfo(ProglangType type, int i) {
-    Assert.assertTrue(type != null,"Unexpected null variable type passed to getVarInfo");
+    assert type != null : "Unexpected null variable type passed to getVarInfo";
 
     String arrayModifier = "";
 
@@ -684,7 +683,7 @@ class FormatTestCase {
       else
         return null;
 
-      Assert.assertTrue(result[i] != null,"ProglangType unexpectedly parsed to null in getTypes(String)");
+      assert result[i] != null : "ProglangType unexpectedly parsed to null in getTypes(String)";
     }
 
     return result;
@@ -904,7 +903,7 @@ class FormatTestCase {
   private static void populateWithSamples(Invariant inv, List<Object[]> samples) {
     if (samples == null || samples.size() == 0) return;
 
-    Assert.assertTrue (inv != null);
+    assert inv != null;
 
     // System.out.println(inv.getClass().getName());
     // System.out.println(samples.size());

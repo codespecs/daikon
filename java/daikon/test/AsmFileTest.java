@@ -11,16 +11,16 @@ import junit.framework.TestCase;
 
 public class AsmFileTest extends TestCase {
 
-  
+
   public static void testParser() throws IOException {
-    
+
     InputStream stream = AsmFileTest.class.getResourceAsStream("galar.asm");
     InputStreamReader streamReader = new InputStreamReader(stream);
     AsmFile file = new AsmFile(new LineNumberReader(streamReader));
-    
-    // The example asm file contains 152 basic blocks. 
-    assertEquals(152, file.numBasicBlocks());
-    
+
+    // The example asm file contains 152 basic blocks.
+    assert 152 == file.numBasicBlocks();
+
   }
-  
+
 }

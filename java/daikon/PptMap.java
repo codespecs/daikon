@@ -36,25 +36,25 @@ public class PptMap
   /**
    * Get the pptname named 'name' from the map.  Note that conditional
    * program points are not stored in the map by name.  They are only
-   * available through their parent
+   * available through their parent.
    */
-  public PptTopLevel get(String name) {
+  public /*@Nullable*/ PptTopLevel get(String name) {
     return nameToPpt.get(name);
   }
 
   /**
    * Get the pptname 'name' from the map.  Note that conditional
    * program points are not stored in the map by name.  They are only
-   * available through their parent
+   * available through their parent.
    */
-  public PptTopLevel get(PptName name) {
+  public /*@Nullable*/ PptTopLevel get(PptName name) {
     return get(name.toString());
   }
 
   /**
    * Returns whether or not 'name' is in the map.  Note that conditional
    * program points are not stored in the map by name.  They are only
-   * available through their parent
+   * available through their parent.
    */
   public boolean containsName(String name) {
     return nameToPpt.containsKey(name);
@@ -91,7 +91,7 @@ public class PptMap
     return new Iterator<PptTopLevel>() {
         public boolean hasNext() {
           boolean result = iter_view.hasNext();
-          Assert.assertTrue(result == iter_sort.hasNext());
+          assert result == iter_sort.hasNext();
           return result;
         }
         public PptTopLevel next() {
@@ -117,12 +117,12 @@ public class PptMap
     final Iterator<PptTopLevel> iter_view = nameToPpt.values().iterator();
     final Iterator<PptTopLevel> iter_sort = sorted.iterator();
     return new Iterator<PptTopLevel>() {
-        Iterator<PptConditional> cond_iterator = null;
+        /*@Nullable*/Iterator<PptConditional> cond_iterator = null;
         public boolean hasNext() {
           if ((cond_iterator != null) && cond_iterator.hasNext())
             return (true);
           boolean result = iter_view.hasNext();
-          Assert.assertTrue(result == iter_sort.hasNext());
+          assert result == iter_sort.hasNext();
           return result;
         }
         public PptTopLevel next() {

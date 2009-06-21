@@ -23,7 +23,7 @@ public final class StringLength extends UnaryDerivation
   }
 
   public static boolean applicable(VarInfo vi) {
-    Assert.assertTrue(vi.rep_type.isString());
+    assert vi.rep_type.isString();
     return true;
   }
 

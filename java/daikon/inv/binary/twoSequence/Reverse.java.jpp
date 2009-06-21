@@ -30,7 +30,6 @@ package daikon.inv.binary.twoSequence;
 
 import daikon.*;
 import daikon.inv.*;
-import utilMDE.Assert;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
@@ -204,7 +203,7 @@ public class CLASSNAME
   }
 
   public boolean isSameFormula(Invariant other) {
-    Assert.assertTrue(other instanceof CLASSNAME);
+    assert other instanceof CLASSNAME;
     return true;
   }
 

@@ -52,11 +52,13 @@ public class KillerInstructionTests extends TestCase {
   }
 
   private static void assertKills(KillerInstruction i, String... vars) {
-    for (String v : vars) assertTrue(i.kills(v));
+    for (String v : vars)
+      assert i.kills(v);
   }
 
   private static void assertNotKills(KillerInstruction i, String... vars) {
-    for (String v : vars) assertFalse(i.kills(v));
+    for (String v : vars)
+      assert ! i.kills(v);
   }
 
   private static void addX86Instruction(List<IInstruction> path, String string) {

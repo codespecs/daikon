@@ -382,7 +382,7 @@ public class PptTopLevel extends Ppt {
     }
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo vi = var_infos[i];
-      Assert.assertTrue((vi.value_index == -1) || (!vi.is_static_constant));
+      assert (vi.value_index == -1) || (!vi.is_static_constant);
     }
 
     views = new LinkedHashMap<List<Integer>,PptSlice>();
@@ -390,9 +390,9 @@ public class PptTopLevel extends Ppt {
     num_declvars = var_infos.length;
     num_tracevars = val_idx;
     num_orig_vars = 0;
-    Assert.assertTrue(num_static_constant_vars == num_declvars -num_tracevars);
-    Assert.assertTrue(num_tracevars ==
-                      var_infos.length - num_static_constant_vars);
+    assert num_static_constant_vars == num_declvars -num_tracevars;
+    assert num_tracevars ==
+                      var_infos.length - num_static_constant_vars;
     mbtracker = new ModBitTracker(num_tracevars);
     value_sets = new ValueSet[num_tracevars];
     for (int i = 0; i < var_infos.length; i++) {
@@ -401,11 +401,11 @@ public class PptTopLevel extends Ppt {
       if (value_index == -1) {
         continue;
       }
-      Assert.assertTrue(value_sets[value_index] == null);
+      assert value_sets[value_index] == null;
       value_sets[value_index] = ValueSet.factory(vi);
     }
     for (int i = 0; i < num_tracevars; i++) {
-      Assert.assertTrue(value_sets[i] != null);
+      assert value_sets[i] != null;
     }
 
     // Fix variable pointers so that they refer to the variables
@@ -552,7 +552,7 @@ public class PptTopLevel extends Ppt {
       return;
     int old_length = var_infos.length;
     VarInfo[] new_var_infos = new VarInfo[var_infos.length + vis.length];
-    Assert.assertTrue(mbtracker.num_samples() == 0);
+    assert mbtracker.num_samples() == 0;
     mbtracker = new ModBitTracker(mbtracker.num_vars() + vis.length);
     System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
     System.arraycopy(vis, 0, new_var_infos, old_length, vis.length);
@@ -945,13 +945,11 @@ public class PptTopLevel extends Ppt {
         System.out.printf ("%s vals: %s%n", name(), out);
     }
 
-    Assert.assertTrue(
-      vt.size() == var_infos.length - num_static_constant_vars,
-      name);
+    assert vt.size() == var_infos.length - num_static_constant_vars : name;
 
     // stop early if there are no vars
     if (var_infos.length == 0) {
-      Assert.assertTrue(vt.size() == 0);
+      assert vt.size() == 0;
       return null;
     }
 
@@ -1437,8 +1435,8 @@ public class PptTopLevel extends Ppt {
       // Using addDerivedVariables(derivations) would add data too
       addVarInfos(vis);
     }
-    Assert.assertTrue(lower == upper);
-    Assert.assertTrue(upper == var_infos.length);
+    assert lower == upper;
+    assert upper == var_infos.length;
 
     if (debug.isLoggable(Level.FINE))
       debug.fine(
@@ -1525,7 +1523,7 @@ public class PptTopLevel extends Ppt {
    **/
   public void removeSlice(PptSlice slice) {
     Object o = views.remove(sliceIndex(slice.var_infos));
-    Assert.assertTrue(o != null);
+    assert o != null;
   }
 
   /**
@@ -1552,7 +1550,7 @@ public class PptTopLevel extends Ppt {
    * were falsified).
    **/
   public /*@Nullable*/ PptSlice2 findSlice(VarInfo v1, VarInfo v2) {
-    Assert.assertTrue(v1.varinfo_index <= v2.varinfo_index);
+    assert v1.varinfo_index <= v2.varinfo_index;
     return (PptSlice2)findSlice(new VarInfo [] {v1, v2});
   }
 
@@ -1561,7 +1559,7 @@ public class PptTopLevel extends Ppt {
    * in order of varinfo_index.
    **/
   public /*@Nullable*/ PptSlice2 findSlice_unordered(VarInfo v1, VarInfo v2) {
-    // Assert.assertTrue(v1.varinfo_index != v2.varinfo_index);
+    // assert v1.varinfo_index != v2.varinfo_index;
     if (v1.varinfo_index < v2.varinfo_index) {
       return findSlice(v1, v2);
     } else {
@@ -1575,8 +1573,8 @@ public class PptTopLevel extends Ppt {
    * were falsified).
    **/
   public /*@Nullable*/ PptSlice3 findSlice(VarInfo v1, VarInfo v2, VarInfo v3) {
-    Assert.assertTrue(v1.varinfo_index <= v2.varinfo_index);
-    Assert.assertTrue(v2.varinfo_index <= v3.varinfo_index);
+    assert v1.varinfo_index <= v2.varinfo_index;
+    assert v2.varinfo_index <= v3.varinfo_index;
     return (PptSlice3)findSlice(new VarInfo [] {v1, v2, v3});
   }
 
@@ -1885,10 +1883,10 @@ public class PptTopLevel extends Ppt {
     // Create the invariant we are looking for
     Invariant inv = null;
     if ((v1.rep_type == ProglangType.INT_ARRAY)) {
-      Assert.assertTrue(v2.rep_type == ProglangType.INT_ARRAY);
+      assert v2.rep_type == ProglangType.INT_ARRAY;
       inv = SubSet.get_proto().instantiate(slice);
     } else if (v1.rep_type == ProglangType.DOUBLE_ARRAY) {
-      Assert.assertTrue(v2.rep_type == ProglangType.DOUBLE_ARRAY);
+      assert v2.rep_type == ProglangType.DOUBLE_ARRAY;
       inv = SubSetFloat.get_proto().instantiate(slice);
     }
 
@@ -1957,22 +1955,22 @@ public class PptTopLevel extends Ppt {
                          v2.rep_type);
       proto = IntEqual.get_proto();
     } else if (v1.rep_type.isFloat()) {
-      Assert.assertTrue(v2.rep_type.isFloat());
+      assert v2.rep_type.isFloat();
       proto = FloatEqual.get_proto();
     } else if (v1.rep_type == ProglangType.STRING) {
-      Assert.assertTrue(v2.rep_type == ProglangType.STRING);
+      assert v2.rep_type == ProglangType.STRING;
       proto = StringEqual.get_proto();
     } else if ((v1.rep_type == ProglangType.INT_ARRAY)) {
-      Assert.assertTrue(v2.rep_type == ProglangType.INT_ARRAY);
+      assert v2.rep_type == ProglangType.INT_ARRAY;
       proto = SeqSeqIntEqual.get_proto();
     } else if (v1.rep_type == ProglangType.DOUBLE_ARRAY) {
-      Assert.assertTrue(v2.rep_type == ProglangType.DOUBLE_ARRAY);
+      assert v2.rep_type == ProglangType.DOUBLE_ARRAY;
       proto = SeqSeqFloatEqual.get_proto();
     } else if ((v1.rep_type == ProglangType.STRING_ARRAY)) {
-      Assert.assertTrue(v2.rep_type == ProglangType.STRING_ARRAY);
+      assert v2.rep_type == ProglangType.STRING_ARRAY;
       proto = SeqSeqStringEqual.get_proto();
     } else {
-      Assert.assertTrue(false, "unexpected type " + v1.rep_type);
+      assert false : "unexpected type " + v1.rep_type;
     }
     assert proto != null;
     assert proto.valid_types(slice.var_infos);
@@ -1994,10 +1992,10 @@ public class PptTopLevel extends Ppt {
     VarInfo v2,
     int v2_shift) {
 
-    Assert.assertTrue(v1.ppt == this);
-    Assert.assertTrue(v2.ppt == this);
-    Assert.assertTrue(v1.file_rep_type.isIntegral());
-    Assert.assertTrue(v2.file_rep_type.isIntegral());
+    assert v1.ppt == this;
+    assert v2.ppt == this;
+    assert v1.file_rep_type.isIntegral();
+    assert v2.file_rep_type.isIntegral();
 
     Invariant inv = null;
     PptSlice slice = null;
@@ -2049,13 +2047,13 @@ public class PptTopLevel extends Ppt {
     // Create the invariant we are looking for.
     Invariant inv = null;
     if ((v1.rep_type == ProglangType.INT_ARRAY)) {
-      Assert.assertTrue(v2.rep_type == ProglangType.INT_ARRAY);
+      assert v2.rep_type == ProglangType.INT_ARRAY;
       inv = SubSequence.get_proto().instantiate(slice);
     } else if (v1.rep_type == ProglangType.DOUBLE_ARRAY) {
-      Assert.assertTrue(v2.rep_type == ProglangType.DOUBLE_ARRAY);
+      assert v2.rep_type == ProglangType.DOUBLE_ARRAY;
       inv = SubSequenceFloat.get_proto().instantiate(slice);
     } else {
-      Assert.assertTrue(false, "unexpected type " + v1.rep_type);
+      assert false : "unexpected type " + v1.rep_type;
     }
 
     if (inv == null)
@@ -2269,7 +2267,7 @@ public class PptTopLevel extends Ppt {
       debug.fine("Done with instantiate_views_and_invariants");
 
     // This method didn't add any new variables.
-    Assert.assertTrue(old_num_vars == var_infos.length);
+    assert old_num_vars == var_infos.length;
     repCheck();
   }
 
@@ -2528,7 +2526,7 @@ public class PptTopLevel extends Ppt {
       return result;
 
     // We may do inference over static constants
-    // Assert.assertTrue(! vi.isStaticConstant());
+    // assert ! vi.isStaticConstant();
     result = new PptSlice1(this, vi);
 
     addSlice(result);
@@ -2554,8 +2552,8 @@ public class PptTopLevel extends Ppt {
       return result;
 
     // We may do inference over static constants
-    // Assert.assertTrue(! v1.isStaticConstant());
-    // Assert.assertTrue(! v2.isStaticConstant());
+    // assert ! v1.isStaticConstant();
+    // assert ! v2.isStaticConstant();
     result = new PptSlice2(this, v1, v2);
 
     addSlice(result);
@@ -2594,9 +2592,9 @@ public class PptTopLevel extends Ppt {
       return result;
 
     // We may do inference over static constants
-    // Assert.assertTrue(! v1.isStaticConstant());
-    // Assert.assertTrue(! v2.isStaticConstant());
-    // Assert.assertTrue(! v3.isStaticConstant());
+    // assert ! v1.isStaticConstant();
+    // assert ! v2.isStaticConstant();
+    // assert ! v3.isStaticConstant();
     result = new PptSlice3(this, v1, v2, v3);
 
     addSlice(result);
@@ -2871,7 +2869,7 @@ public class PptTopLevel extends Ppt {
         int rev_cmp = icfp.compare(invs[i + 1], invs[i]);
         Global.debugSimplify.fine(
           "cmp(" + (i + 1) + "," + i + ") = " + rev_cmp);
-        Assert.assertTrue(rev_cmp >= 0);
+        assert rev_cmp >= 0;
       }
     }
 
@@ -3067,7 +3065,7 @@ public class PptTopLevel extends Ppt {
     int start,
     int end)
     throws SimplifyError {
-    Assert.assertTrue(start <= end);
+    assert start <= end;
     assert proverStack != null;
     if (start == end) {
       // Base case: check a single invariant
@@ -3175,7 +3173,7 @@ public class PptTopLevel extends Ppt {
    **/
   public Iterator<PptSlice> views_iterator() {
     // assertion only true when guarding invariants
-    // Assert.assertTrue(views.contains(joiner_view));
+    // assert views.contains(joiner_view);
     return viewsAsCollection().iterator();
   }
 
@@ -3315,7 +3313,7 @@ public class PptTopLevel extends Ppt {
     // hashCode then changed to the correct one, messing up the
     // indexing in a hard-to-debug way. -SMcC
     for (List<Integer> this_key : views.keySet()) {
-      Assert.assertTrue(views.containsKey(this_key));
+      assert views.containsKey(this_key);
     }
 
     // System.out.printf ("equality for %s = %s\n", this, equality_view);
@@ -3444,6 +3442,7 @@ public class PptTopLevel extends Ppt {
    * unary, binary, and ternary slices for each combination of equality
    * sets and build the invariants for each slice.
    */
+  @SuppressWarnings("nullness") // XXX nullness checker bug
   public void mergeInvs() {
 
     Daikon.debugProgress.fine
@@ -3553,7 +3552,7 @@ public class PptTopLevel extends Ppt {
         VarInfo parent_vi = var_infos[j];
         VarInfo child_vi = rel.childVar(parent_vi);
         if (child_vi != null) {
-          Assert.assertTrue(parent_vi.ppt == this);
+          assert parent_vi.ppt == this;
           if (parent_vi.value_index == -1) {
             continue;
           }
@@ -3582,9 +3581,10 @@ public class PptTopLevel extends Ppt {
         VarInfo child_vi = rel.childVar(parent_vi);
         if (child_vi != null) {
           parent_vi.canBeMissing |= child_vi.canBeMissing;
-          if (parent_vi.derived != null && child_vi.derived != null)
+          if (parent_vi.derived != null && child_vi.derived != null) {
             parent_vi.derived.missing_array_bounds
               |= child_vi.derived.missing_array_bounds;
+          }
         }
       }
     }
@@ -3710,7 +3710,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // There shouldn't be any slices when we start
-    Assert.assertTrue(views.size() == 0);
+    assert views.size() == 0;
 
     // Create an array of leaders to build slices over
     List<VarInfo> non_missing_leaders = new ArrayList<VarInfo>(equality_view.invs.size());
@@ -3818,8 +3818,8 @@ public class PptTopLevel extends Ppt {
    */
   public void merge_invs_one_child() {
 
-    Assert.assertTrue(views.size() == 0);
-    Assert.assertTrue(children.size() == 1);
+    assert views.size() == 0;
+    assert children.size() == 1;
 
     PptRelation rel = children.get(0);
 
@@ -3898,17 +3898,20 @@ public class PptTopLevel extends Ppt {
 
       // Make sure that the parent equality set is a subset of the child
       // equality set
-      if (Assert.enabled) {
+      boolean assert_enabled = false;
+      assert (assert_enabled = true);
+      if (assert_enabled) {
         for (VarInfo test_pv : pv.equalitySet.getVars()) {
           VarInfo test_cv = rel.childVar (test_pv);
           assert test_cv != null;
           if (test_cv.canonicalRep() != cv.canonicalRep()) {
             System.out.println ("pv.equalitySet = " + pv.equalitySet);
             System.out.println ("cv.equalitySet = " + cv.equalitySet);
-            Assert.assertTrue (false, "parent variable " + test_pv
+            assert false
+        : "parent variable " + test_pv
                                + " child " + test_cv
                                + " is not in the same child equality set as "
-                               + cv);
+                               + cv;
           }
         }
       }
@@ -3916,7 +3919,7 @@ public class PptTopLevel extends Ppt {
         pv = pv.canonicalRep();
       pvis[j] = pv;
 
-      // Assert.assertTrue (!pv.missingOutOfBounds());
+      // assert !pv.missingOutOfBounds();
     }
     return (pvis);
   }
@@ -4123,7 +4126,7 @@ public class PptTopLevel extends Ppt {
 
     // Check results
     for (int j = 0; j < vis1.length; j++)
-      Assert.assertTrue(vis1[j] == vis2[permute[j]]);
+      assert vis1[j] == vis2[permute[j]];
 
     return (permute);
   }
@@ -4151,7 +4154,7 @@ public class PptTopLevel extends Ppt {
     boolean rep_is_scalar = rep.isScalar();
     boolean rep_is_float = rep.isFloat();
 
-    Assert.assertTrue(findSlice_unordered(v1, v2) == null);
+    assert findSlice_unordered(v1, v2) == null;
     PptSlice newSlice = get_or_instantiate_slice(v1, v2);
 
     Invariant invEquals = null;
@@ -4591,6 +4594,7 @@ public class PptTopLevel extends Ppt {
 
     for (String successor : ppt_successors) {
       PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
+      assert ppt_succ != null;
       Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
       path_set.add (this);
       boolean succ_result = ppt_succ.connected (ppt, path_set);
@@ -4674,6 +4678,7 @@ public class PptTopLevel extends Ppt {
     int result = 0;
     for (String successor : ppt_successors) {
       PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
+      assert ppt_succ != null;
       Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
       path_set.add (this);
       int succ_result = ppt_succ.all_successors_goto (ppt, path_set);

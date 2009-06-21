@@ -51,7 +51,7 @@ public class PptSliceEquality
   }
 
   public void addInvariant(Invariant inv) {
-    Assert.assertTrue(inv instanceof Equality);
+    assert inv instanceof Equality;
     invs.add(inv);
   }
 
@@ -151,7 +151,7 @@ public class PptSliceEquality
     // Ensure determinism
     Arrays.sort (newInvs, EqualityComparator.theInstance);
     invs.addAll (Arrays.<Invariant>asList (newInvs));
-    Assert.assertTrue (varCount == var_infos.length); // Check that we get all vis
+    assert varCount == var_infos.length; // Check that we get all vis
   }
 
   /**
@@ -297,7 +297,7 @@ public class PptSliceEquality
   private List<Equality> createEqualityInvs (List<VarInfo> vis, ValueTuple vt,
                                                  Equality leader, int count
                                                  ) {
-    Assert.assertTrue (vis.size() > 0);
+    assert vis.size() > 0;
     HashMap<Object,List<VarInfo>> multiMap = new HashMap<Object,List<VarInfo>>(); /* key is a value */
     List<VarInfo> out_of_bounds = new ArrayList<VarInfo>();
     for (VarInfo vi : vis) {
@@ -325,7 +325,7 @@ public class PptSliceEquality
     for (Map.Entry<Object,List<VarInfo>> entry : multiMap.entrySet()) {
       Object key = entry.getKey();
       List<VarInfo> list = entry.getValue();
-      Assert.assertTrue (list.size() > 0);
+      assert list.size() > 0;
       Equality eq = new Equality (list, this);
       @SuppressWarnings("interning") // Special value
       boolean isMissing = (key == dummyMissing);
@@ -349,7 +349,7 @@ public class PptSliceEquality
     // Sort for determinism
     Arrays.sort (resultArray, EqualityComparator.theInstance);
     List<Equality> result = Arrays.<Equality>asList (resultArray);
-    Assert.assertTrue (result.size() > 0);
+    assert result.size() > 0;
     return result;
   }
 
@@ -365,7 +365,7 @@ public class PptSliceEquality
       * post result.size() > 0
       */
      public List<Equality> createEqualityInvs(List<VarInfo> vis, Equality leader) {
-       Assert.assertTrue(vis.size() > 0);
+       assert vis.size() > 0;
 
        // Why use an array?  Because we'll be sorting shortly
        Equality[] resultArray = new Equality[vis.size()];
@@ -384,7 +384,7 @@ public class PptSliceEquality
          resultArray,
          PptSliceEquality.EqualityComparator.theInstance);
        List<Equality> result = Arrays.<Equality>asList(resultArray);
-       Assert.assertTrue(result.size() > 0);
+       assert result.size() > 0;
        return result;
      }
 
@@ -401,7 +401,7 @@ public class PptSliceEquality
    * post: Each value in map is a list of size 1 or greater
    **/
   private <T> void addToBindingList (Map<T,List<VarInfo>> map, T key, VarInfo value) {
-    Assert.assertTrue (key != null);
+    assert key != null;
     List<VarInfo> elements = map.get(key);
     if (elements == null) {
       elements = new LinkedList<VarInfo>();
@@ -591,7 +591,7 @@ public class PptSliceEquality
   public void repCheck() {
     for (Invariant inv : invs) {
       inv.repCheck();
-      Assert.assertTrue (inv.ppt == this);
+      assert inv.ppt == this;
     }
   }
 
@@ -627,7 +627,7 @@ public class PptSliceEquality
     VarInfo[] leaders = new VarInfo[invs.size()];
     for (int i = 0; i < invs.size(); i++) {
       leaders[i] = ((Equality) invs.get(i)).leader();
-      Assert.assertTrue (leaders[i] != null);
+      assert leaders[i] != null;
     }
     Arrays.sort (leaders, VarInfo.IndexComparator.getInstance());
     return (leaders);

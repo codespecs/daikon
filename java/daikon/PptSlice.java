@@ -64,9 +64,9 @@ public abstract class PptSlice
     this.var_infos = var_infos;
     // Ensure that the VarInfo objects are in order (and not duplicated).
     for (int i=0; i<var_infos.length-1; i++) {
-      Assert.assertTrue(var_infos[i].varinfo_index <= var_infos[i+1].varinfo_index);
+      assert var_infos[i].varinfo_index <= var_infos[i+1].varinfo_index;
     }
-    Assert.assertTrue(this instanceof PptSliceEquality || arity() == var_infos.length);
+    assert this instanceof PptSliceEquality || arity() == var_infos.length;
     invs = new Invariants();
 
     if (debugGeneral.isLoggable(Level.FINE)) {
@@ -134,8 +134,7 @@ public abstract class PptSlice
     if (Debug.logOn())
       inv.log ("Removed from slice: " + inv.format());
     boolean removed = invs.remove(inv);
-    if (Assert.enabled && !removed)
-      Assert.assertTrue (removed, "inv " + inv + " not in ppt " + name());
+    assert removed : "inv " + inv + " not in ppt " + name();
     Global.falsified_invariants++;
     if (invs.size() == 0) {
       if (Debug.logDetail())
@@ -153,9 +152,9 @@ public abstract class PptSlice
       }
     } else {
       int removed = invs.removeMany(to_remove);
-      if (Assert.enabled && removed < to_remove.size())
-        Assert.assertTrue (false, "removed " + (to_remove.size() - removed)
-            + " invs not in ppt " + name());
+      assert removed == to_remove.size()
+        : "removed " + (to_remove.size() - removed)
+            + " invs not in ppt " + name();
       Global.falsified_invariants += removed;
       if (invs.size() == 0) {
         if (Debug.logDetail())
@@ -205,7 +204,7 @@ public abstract class PptSlice
         }
       }
     }
-    Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
+    assert ArraysMDE.fn_is_permutation(permutation);
   }
 
 
@@ -235,7 +234,7 @@ public abstract class PptSlice
         return 0;
       // Don't do this assert, which prevents comparison across different Ppts.
       // (The assert check may be useful in some situations, though.)
-      // Assert.assertTrue(slice1.parent == slice2.parent);
+      // assert slice1.parent == slice2.parent;
       if (slice1.arity() != slice2.arity()) {
         return slice2.arity() - slice1.arity();
       }
@@ -257,7 +256,7 @@ public abstract class PptSlice
         return 0;
       // Don't do this, to permit comparison across different Ppts.
       // (The check may be useful in some situations, though.)
-      // Assert.assertTrue(slice1.parent == slice2.parent);
+      // assert slice1.parent == slice2.parent;
       if (slice1.arity() != slice2.arity()) {
         return slice2.arity() - slice1.arity();
       }
@@ -396,7 +395,7 @@ public abstract class PptSlice
 
     for (Invariant inv : invs) {
       inv.repCheck();
-      Assert.assertTrue (inv.ppt == this);
+      assert inv.ppt == this;
     }
   }
 

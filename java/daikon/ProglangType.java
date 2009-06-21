@@ -77,7 +77,7 @@ public final /*@Interned*/ class ProglangType
    * basetype should be interned.
    **/
   private ProglangType(/*@Interned*/ String basetype, int dimensions) {
-    Assert.assertTrue(basetype == basetype.intern());
+    assert basetype == basetype.intern();
     this.base = basetype;
     this.dimensions = dimensions;
 
@@ -150,7 +150,7 @@ public final /*@Interned*/ class ProglangType
   /** @param t_base must be interned **/
   private static /*@Nullable*/ ProglangType find(/*@Interned*/ String t_base, int t_dims) {
 // Disabled for performance reasons! this assertion is sound though:
-//    Assert.assertTrue(t_base == t_base.intern());
+//    assert t_base == t_base.intern();
 
     // the string maps us to a vec of all plts with that base
     Vector<ProglangType> v = all_known_types.get(t_base);
@@ -182,7 +182,7 @@ public final /*@Interned*/ class ProglangType
 
   private static ProglangType intern(/*@Interned*/ String t_base, int t_dims) {
     // Disabled for performance reasons! this assertion is sound though:
-    //    Assert.assertTrue(t_base == t_base.intern());
+    //    assert t_base == t_base.intern();
     ProglangType result = find(t_base, t_dims);
     if (result != null) {
       return result;
@@ -219,7 +219,7 @@ public final /*@Interned*/ class ProglangType
     // dimensions of lists to work
     if (dimensions == 0)
       return OBJECT;
-    Assert.assertTrue(base == base.intern(), "Uninterned base " + base);
+    assert base == base.intern() : "Uninterned base " + base;
     return ProglangType.intern(base, dimensions-1);
   }
 
@@ -354,7 +354,7 @@ public final /*@Interned*/ class ProglangType
           stack.fillInStackTrace();
           stack.printStackTrace();
         }
-        // Assert.assertTrue(value.startsWith("\"") && value.endsWith("\""));
+        // assert value.startsWith("\"") && value.endsWith("\"");
         if (value.startsWith("\"") && value.endsWith("\""))
           value = value.substring(1, value.length()-1);
         value = UtilMDE.unescapeNonJava(value);
@@ -437,7 +437,7 @@ public final /*@Interned*/ class ProglangType
             } else if (parser.ttype == StreamTokenizer.TT_WORD) {
               if (parser.sval.equals ("nonsensical"))
                 return (null);
-              Assert.assertTrue(parser.sval.equals("null"));
+              assert parser.sval.equals("null");
               v.add(null);
             } else if (parser.ttype == StreamTokenizer.TT_NUMBER) {
               v.add(Integer.toString((int)parser.nval));

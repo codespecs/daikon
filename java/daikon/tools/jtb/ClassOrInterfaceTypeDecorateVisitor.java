@@ -166,7 +166,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
       // TODO figure out how/whether to handle f2 (currently it's just ignored).
 
-      Assert.assertTrue(b.f1.unGenerifiedVersionOfThis != null);
+      assert b.f1.unGenerifiedVersionOfThis != null;
 
       Stack<ClassOrInterfaceType> s = shadowingMap.get(n.f0.tokenImage);
       if (s == null) {

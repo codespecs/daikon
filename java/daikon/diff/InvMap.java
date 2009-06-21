@@ -4,7 +4,6 @@ import java.io.*;
 import java.util.*;
 import daikon.*;
 import daikon.inv.*;
-import utilMDE.Assert;
 
 /**
  * Maps ppts to lists of invariants.  Has an iterator to return the
@@ -98,7 +97,7 @@ public class InvMap implements Serializable {
   public int size() {
     int size1 = ppts.size();
     int size2 = pptToInvs.size();
-    Assert.assertTrue(size1 == size2);
+    assert size1 == size2;
     return size1;
   }
 

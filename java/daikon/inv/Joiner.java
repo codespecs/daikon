@@ -2,7 +2,6 @@ package daikon.inv;
 
 import daikon.*;
 
-import utilMDE.Assert;
 
 public abstract class Joiner
   extends Invariant {
@@ -19,7 +18,7 @@ public abstract class Joiner
 
   Joiner(PptSlice ppt, Invariant left, Invariant right) {
     super(ppt);
-    Assert.assertTrue(ppt instanceof PptSlice0);
+    assert ppt instanceof PptSlice0;
 
     this.left = left;
     this.right = right;

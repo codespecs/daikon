@@ -1,7 +1,6 @@
 package daikon.inv;
 
 import java.util.*;
-import utilMDE.Assert;
 
 public class InvariantInfo {
   /**
@@ -65,7 +64,7 @@ public class InvariantInfo {
     // We know there can be at most 3 vars so it's not worth writing
     // a complicated routine that generates all permutations
     StringTokenizer st = new StringTokenizer(vars, ",");
-    Assert.assertTrue(st.countTokens() <= 3);
+    assert st.countTokens() <= 3;
     ArrayList<String> result = new ArrayList<String>(3);
     if (st.countTokens() == 1) {
       result.add(vars);

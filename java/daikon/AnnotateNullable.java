@@ -22,7 +22,7 @@ import utilMDE.*;
  */
 public class AnnotateNullable {
 
-  static PptMap ppts = null;
+  static PptMap ppts;
 
   static SimpleLog verbose = new SimpleLog (/*enabled=*/ false);
 
@@ -131,6 +131,7 @@ public class AnnotateNullable {
       if (ppt.is_class()) {
         List<PptTopLevel> static_methods
           = class_map.get (ppt.name().replace (":::CLASS", ""));
+        assert static_methods != null;
         int child_cnt = 0;
         for (PptRelation child_rel : ppt.children) {
           PptTopLevel child = child_rel.child;
@@ -244,6 +245,7 @@ public class AnnotateNullable {
     } else {
       List<PptTopLevel> static_methods
         = class_map.get (object_ppt.ppt_name.getFullClassName());
+      assert static_methods != null;
       for (PptTopLevel child : static_methods)
         process_method (child);
     }
@@ -399,7 +401,9 @@ public class AnnotateNullable {
   public static String jvm_signature (PptTopLevel ppt) {
 
     String method = ppt.ppt_name.getMethodName();
+    assert method != null;
     String java_sig = ppt.ppt_name.getSignature();
+    assert java_sig != null;
     String java_args = java_sig.replace (method, "");
     // System.out.printf ("m/s/a = %s %s %s\n", method, java_sig, java_args);
     if (method.equals (ppt.ppt_name.getShortClassName()))

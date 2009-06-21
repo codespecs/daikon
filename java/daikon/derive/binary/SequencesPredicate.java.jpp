@@ -146,14 +146,14 @@ public final class CLASSNAME
       length1 = ((Object[]) val1).length;
     }
 
-    Assert.assertTrue(val2 == null || val2 instanceof PRIMITIVE[]);
+    assert val2 == null || val2 instanceof PRIMITIVE[];
 
     if (length1 != length2) {
       // This derived variable is no longer interesting
       return new ValueAndModified(null, ValueTuple.MISSING_NONSENSICAL);
     }
 
-    Assert.assertTrue(length1 == length2);
+    assert length1 == length2;
 
     int mod = ValueTuple.UNMODIFIED;
     int mod1 = var1().getModified(full_vt);

@@ -41,8 +41,8 @@ public abstract class SingleScalar
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
   public InvariantStatus add(Object val, int mod_index, int count) {
-    Assert.assertTrue(! falsified);
-    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    assert ! falsified;
+    assert (mod_index >= 0) && (mod_index < 2);
     long value = ((Long) val).longValue();
     if (mod_index == 0) {
       return add_unmodified(value, count);
@@ -53,8 +53,8 @@ public abstract class SingleScalar
 
 
   public InvariantStatus check(Object val, int mod_index, int count) {
-    Assert.assertTrue(! falsified);
-    Assert.assertTrue((mod_index >= 0) && (mod_index < 2));
+    assert ! falsified;
+    assert (mod_index >= 0) && (mod_index < 2);
     long value = ((Long) val).longValue();
     if (mod_index == 0) {
       return add_unmodified(value, count);

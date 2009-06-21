@@ -135,8 +135,8 @@ public class ContextSplitterFactory
 
         int tab = line.indexOf('\t');
         int arrow = line.indexOf(" -> ");
-        Assert.assertTrue(tab >= 0);
-        Assert.assertTrue(arrow >= tab);
+        assert tab >= 0;
+        assert arrow >= tab;
 
         id = Long.decode(line.substring(0, tab)).longValue();
 
@@ -146,28 +146,28 @@ public class ContextSplitterFactory
           fromclass = tok.nextToken();
           frommeth = tok.nextToken();
           String temp = tok.nextToken();
-          Assert.assertTrue(temp.startsWith("["));
-          Assert.assertTrue(temp.endsWith("]"));
+          assert temp.startsWith("[");
+          assert temp.endsWith("]");
           temp = temp.substring(1, temp.length()-1);
           int one = temp.indexOf(':');
           int two = temp.lastIndexOf(':');
           fromfile = temp.substring(0, one);
           fromline = Integer.parseInt(temp.substring(one+1,two));
           fromcol = Integer.parseInt(temp.substring(two+1));
-          Assert.assertTrue(! tok.hasMoreTokens());
+          assert ! tok.hasMoreTokens();
         }
 
         // parse "call into" data
         {
           String to = line.substring(arrow + 4); // 4: " -> "
-          Assert.assertTrue(to.startsWith("\""), to);
+          assert to.startsWith("\"") : to;
           int endquote = to.indexOf("\" ", 1);
           toexpr = line.substring(1, endquote);
           StringTokenizer tok = new StringTokenizer(to.substring(endquote+1));
           toargs = tok.nextToken();
           toclass = tok.nextToken();
           tometh = tok.nextToken();
-          Assert.assertTrue(! tok.hasMoreTokens());
+          assert ! tok.hasMoreTokens();
         }
 
         MapfileEntry entry = new MapfileEntry

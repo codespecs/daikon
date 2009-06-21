@@ -27,7 +27,7 @@ public class NISuppressee {
 
   public NISuppressee (Class<? extends Invariant> cls, int var_count) {
     sup_class = cls;
-    Assert.assertTrue ((var_count >= 1) && (var_count <=3));
+    assert (var_count >= 1) && (var_count <=3);
     this.var_count = var_count;
 
     try {
@@ -35,7 +35,7 @@ public class NISuppressee {
       @SuppressWarnings("prototype")
       /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null, new Object[] {});
       sample_inv = sample_inv_local;
-      Assert.assertTrue (sample_inv != null, cls.getName());
+      assert sample_inv != null : cls.getName();
     } catch (Exception e) {
       throw new RuntimeException ("error instantiating invariant "
                                   + cls.getName() + ": " + e);
@@ -57,7 +57,7 @@ public class NISuppressee {
       /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null,
                                     new Object[] {Boolean.valueOf(swap)});
       sample_inv = sample_inv_local;
-      Assert.assertTrue (sample_inv != null, cls.getName());
+      assert sample_inv != null : cls.getName();
     } catch (Exception e) {
       throw new RuntimeException ("error instantiating binary invariant "
                                   + cls.getName() + ": " + e);
@@ -98,7 +98,7 @@ public class NISuppressee {
                                 vt.getValue(vis[2]), 1, 1);
     } else if (var_count == 2) {
       if (!(sample_inv instanceof BinaryInvariant))
-        Assert.assertTrue (false, "not binary: " + sample_inv.getClass());
+        assert false : "not binary: " + sample_inv.getClass();
       BinaryInvariant binary_inv = (BinaryInvariant) sample_inv;
       // Fmt.pf ("checking %s over %s=%s and %s=%s", sample_inv.getClass(),
       //        vis[0].name(), vt.getValue(vis[0]),
@@ -138,7 +138,7 @@ public class NISuppressee {
     int missing_index = -1;
     for (int i = 0; i < vis.length; i++)
       if (vis[i] == null) {
-        Assert.assertTrue (missing_index == -1, "Multiple empty vars");
+        assert missing_index == -1 : "Multiple empty vars";
         missing_index = i;
       }
 
@@ -188,10 +188,10 @@ public class NISuppressee {
     int missing_index = -1;
     for (int i = 0; i < vis.length; i++)
       if (vis[i] == null) {
-        Assert.assertTrue (missing_index == -1, "Multiple empty vars");
+        assert missing_index == -1 : "Multiple empty vars";
         missing_index = i;
       } else {
-        Assert.assertTrue (!vis[i].missingOutOfBounds());
+        assert !vis[i].missingOutOfBounds();
       }
 
     // If all of the slots were full, specify the invariant
@@ -251,10 +251,10 @@ public class NISuppressee {
    * its variables are swapped.
    */
   public NISuppressee swap() {
-    Assert.assertTrue (var_count == 2);
+    assert var_count == 2;
     BinaryInvariant binv = (BinaryInvariant) sample_inv;
     if (binv != null)
-      Assert.assertTrue (!binv.is_symmetric());
+      assert !binv.is_symmetric();
     if ((binv == null) || binv.get_swap())
       return (new NISuppressee (sup_class, false));
     else

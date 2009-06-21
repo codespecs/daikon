@@ -48,7 +48,7 @@ public class OneOfScalarTester extends TestCase {
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
 
-    assertTrue(! inv1.isSameFormula(inv2));
+    assert ! inv1.isSameFormula(inv2);
   }
 
   public void testNullNull() {
@@ -58,7 +58,7 @@ public class OneOfScalarTester extends TestCase {
     inv1.add_modified(0, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
 
-    assertTrue(inv1.isSameFormula(inv2));
+    assert inv1.isSameFormula(inv2);
   }
 
   public void testNonNon() {
@@ -68,7 +68,7 @@ public class OneOfScalarTester extends TestCase {
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(22, DOESNT_MATTER);
 
-    assertTrue(inv1.isSameFormula(inv2));
+    assert inv1.isSameFormula(inv2);
   }
 
 
@@ -80,7 +80,7 @@ public class OneOfScalarTester extends TestCase {
     inv1.add_modified(0, DOESNT_MATTER);
     inv2.add_modified(22, DOESNT_MATTER);
 
-    assertTrue(! inv1.isSameFormula(inv2));
+    assert ! inv1.isSameFormula(inv2);
   }
 
   public void testNullNullHashcodeInt() {
@@ -90,7 +90,7 @@ public class OneOfScalarTester extends TestCase {
     inv1.add_modified(0, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
 
-    assertTrue(inv1.isSameFormula(inv2));
+    assert inv1.isSameFormula(inv2);
   }
 
   public void testNonNonHashcodeInt() {
@@ -100,7 +100,7 @@ public class OneOfScalarTester extends TestCase {
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(22, DOESNT_MATTER);
 
-    assertTrue(inv1.isSameFormula(inv2));
+    assert inv1.isSameFormula(inv2);
   }
   */
 }

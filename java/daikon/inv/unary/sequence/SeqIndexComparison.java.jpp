@@ -176,8 +176,8 @@ public class CLASSNAME extends SUPERCLASS {
 
   protected CLASSNAME (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice slice) {
     super (slice);
-    Assert.assertTrue (slice != null);
-    Assert.assertTrue(var().rep_type == ProglangType.ASSERTYPE);
+    assert slice != null;
+    assert var().rep_type == ProglangType.ASSERTYPE;
   }
 
   private static /*@Nullable*/ /*@Prototype*/ CLASSNAME proto = null;
@@ -375,13 +375,13 @@ public class CLASSNAME extends SUPERCLASS {
         // The factor of 2 is a hack, but this seems too stringent otherwise
         confidence_one_nonequal = Math.min(1.0, 2.0*confidence_one_nonequal);
 
-        Assert.assertTrue(! Double.isNaN(confidence_one_nonequal) &&
+        assert ! Double.isNaN(confidence_one_nonequal) &&
                           confidence_one_nonequal >= 0 &&
                           confidence_one_nonequal <= 1
-                          // "overlap=" + overlap
-                          // + ", range1=" + range1
-                          // + ", range2=" + range2
-                          );
+        : "overlap=" + overlap
+                          + ", range1=" + range1
+                          + ", range2=" + range2
+                          ;
         return 1 - Math.pow (1 - confidence_one_nonequal, vs.elem_cnt());
       }
     #else
@@ -400,7 +400,7 @@ public class CLASSNAME extends SUPERCLASS {
 
   // Look up a previously instantiated invariant.
   public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
-    Assert.assertTrue(ppt.arity() == 1);
+    assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof CLASSNAME)
         return (CLASSNAME) inv;

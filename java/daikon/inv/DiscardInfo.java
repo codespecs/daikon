@@ -1,6 +1,5 @@
 package daikon.inv;
 
-import utilMDE.Assert;
 import daikon.*;
 
 /**
@@ -44,7 +43,7 @@ public final class DiscardInfo {
   // }
 
   public DiscardInfo(Invariant inv, DiscardCode discardCode, String discardString) {
-    Assert.assertTrue (inv.ppt != null);
+    assert inv.ppt != null;
     // this(inv.getClass().getName(), inv.format(), discardCode, discardString);
     this.discardCode = discardCode;
     this.discardString = discardString;

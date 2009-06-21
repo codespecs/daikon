@@ -43,7 +43,6 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
 import utilMDE.*;
 import java.io.Serializable;
-import utilMDE.Assert;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -179,8 +178,8 @@ public final class CLASSNAME
    * order underneath us (rearrangement given by the permutation).
    **/
   public void permute(int[] permutation) {
-    Assert.assertTrue(permutation.length == 3);
-    Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
+    assert permutation.length == 3;
+    assert ArraysMDE.fn_is_permutation(permutation);
     // Fix a, b, c
     double[] clever = new double[] { a, b, c };
     double[] pclever = new double[3];
@@ -322,7 +321,7 @@ public final class CLASSNAME
         Fmt.pf ("LTCore: vals %s %s %s", "" + con_vals[i], "" + lb1_vals[i],
                 "" + lb2_vals[i]);
       Fmt.pf ("in inv " + wrapper.format() + " " + wrapper.ppt);
-      Assert.assertTrue (sts == InvariantStatus.NO_CHANGE);
+      assert sts == InvariantStatus.NO_CHANGE;
     }
 
     return (sts);
@@ -1256,7 +1255,7 @@ public final class CLASSNAME
 
   // // Format as "x = cy+d" instead of as "y = ax+b".
   // public String format_reversed(String x, String y) {
-  //   Assert.assertTrue(a == 1 || a == -1);
+  //   assert a == 1 || a == -1;
   //   return format(y, x, a, -b/a);
   // }
 

@@ -27,7 +27,7 @@ public class LinearTernaryCoreTest
   void one_test_set_tri_linear(int[][] triples, long goal_a, long goal_b, long goal_c, long goal_d) {
     LinearTernaryCore ltc = new LinearTernaryCore(null);
     for (int i=0; i<triples.length; i++) {
-      assertTrue(triples[i].length == 3);
+      assert triples[i].length == 3;
       set_cache (ltc, i, triples[i][0], triples[i][1], triples[i][2]);
     }
     double[] coef;
@@ -37,13 +37,13 @@ public class LinearTernaryCoreTest
       // In the future, we should perhaps test triples that that don't
       // determine a plane; but none of the current ones do.
       throw new Error("Not reached");
-      // assertTrue(false);
+      // assert false;
       // coef = null; // not reached
     }
    //  System.out.println("goals: " + goal_a + " " + goal_b + " " + goal_c + " " + goal_d);
    //  System.out.println("actual: " + coef[0] + " " + coef[1] + " " + coef[2] + " " + coef[3]);
     // System.out.println("difference: " + (goal_a - ltc.a) + " " + (goal_b - ltc.b) + " " + (goal_c - ltc.c));
-    assertTrue(coef[0] == goal_a && coef[1] == goal_b && coef[2] == goal_c && coef[3] == goal_d);
+    assert coef[0] == goal_a && coef[1] == goal_b && coef[2] == goal_c && coef[3] == goal_d;
   }
 
   public void test_set_tri_linear() {
@@ -97,7 +97,7 @@ public class LinearTernaryCoreTest
                                             "x", "y", "z");
  //    System.out.println("Expecting: " + goal_result);
  //    System.out.println("Actual:    " + actual_result);
-     assertTrue(actual_result.equals(goal_result));
+     assert actual_result.equals(goal_result);
   }
 
   public void test_format() {

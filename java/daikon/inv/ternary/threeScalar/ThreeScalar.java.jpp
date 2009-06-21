@@ -71,11 +71,11 @@ public abstract class CLASSNAME
   public InvariantStatus check(Object val1, Object val2, Object val3, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
-    Assert.assertTrue(! falsified);
+    assert ! falsified;
     if ((mod_index < 0) || (mod_index > 8))
-      Assert.assertTrue((mod_index >= 0) && (mod_index < 8),
-        "var 1 " + ppt.var_infos[0].name() + " value = "
-         + val1 + "mod_index = " +  mod_index);
+      assert (mod_index >= 0) && (mod_index < 8)
+        : "var 1 " + ppt.var_infos[0].name() + " value = "
+         + val1 + "mod_index = " +  mod_index;
     PRIMITIVE v1 = ((NUMWRAPPER) val1).LONGVALUE();
     PRIMITIVE v2 = ((NUMWRAPPER) val2).LONGVALUE();
     if (!(val3 instanceof NUMWRAPPER))
@@ -91,12 +91,12 @@ public abstract class CLASSNAME
   public InvariantStatus add(Object val1, Object val2, Object val3, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
-    Assert.assertTrue(! falsified);
+    assert ! falsified;
     if ((mod_index < 0) || (mod_index > 8))
-      Assert.assertTrue((mod_index >= 0) && (mod_index < 8),
-        "var 1 " + ppt.var_infos[0].name() + " value = "
+      assert (mod_index >= 0) && (mod_index < 8)
+        : "var 1 " + ppt.var_infos[0].name() + " value = "
          + val1 + "mod_index = " +  mod_index + " line "
-         + FileIO.get_linenum());
+         + FileIO.get_linenum();
     PRIMITIVE v1 = ((NUMWRAPPER) val1).LONGVALUE();
     PRIMITIVE v2 = ((NUMWRAPPER) val2).LONGVALUE();
     if (!(val3 instanceof NUMWRAPPER)) {
@@ -107,9 +107,9 @@ public abstract class CLASSNAME
       Fmt.pf ("our slice = " + this.ppt);
       PptSlice slice = this.ppt;
       Fmt.pf ("var3 reptype = %s", slice.var_infos[2].rep_type);
-      Assert.assertTrue((slice.var_infos[0].rep_type == ProglangType.INT)
+      assert (slice.var_infos[0].rep_type == ProglangType.INT)
                   && (slice.var_infos[1].rep_type == ProglangType.INT)
-                  && (slice.var_infos[2].rep_type == ProglangType.INT));
+                  && (slice.var_infos[2].rep_type == ProglangType.INT);
     }
     PRIMITIVE v3 = ((NUMWRAPPER) val3).LONGVALUE();
     if (mod_index == 0) {

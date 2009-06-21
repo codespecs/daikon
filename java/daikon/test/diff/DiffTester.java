@@ -216,7 +216,7 @@ public class DiffTester extends TestCase {
   public void testEmptyEmpty() {
     RootNode diff = diffSome.diffPptMap(empty, empty);
     RootNode ref = new RootNode();
-    Assert.assertEquals(printTree(ref), printTree(diff));
+    printTree(ref).equals(printTree(diff));
   }
 
   public void testEmptyPpts1() {
@@ -237,7 +237,7 @@ public class DiffTester extends TestCase {
        newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     ref.add(node);
 
-    Assert.assertEquals(printTree(ref), printTree(diff));
+    assert printTree(ref).equals(printTree(diff));
   }
 
   public void testPpts1Empty() {
@@ -258,7 +258,7 @@ public class DiffTester extends TestCase {
        null);
     ref.add(node);
 
-    Assert.assertEquals(printTree(ref), printTree(diff));
+    assert printTree(ref).equals(printTree(diff));
   }
 
 
@@ -280,7 +280,7 @@ public class DiffTester extends TestCase {
        newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     ref.add(node);
 
-    Assert.assertEquals(printTree(ref), printTree(diff));
+    assert printTree(ref).equals(printTree(diff));
   }
 
   public void testPpts1Ppts2() {
@@ -301,7 +301,7 @@ public class DiffTester extends TestCase {
        null);
     ref.add(node);
 
-    Assert.assertEquals(printTree(ref), printTree(diff));
+    assert printTree(ref).equals(printTree(diff));
   }
 
   public void testPpts1Ppts3() {
@@ -322,7 +322,7 @@ public class DiffTester extends TestCase {
        newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     ref.add(node);
 
-    Assert.assertEquals(printTree(ref), printTree(diff));
+    assert printTree(ref).equals(printTree(diff));
   }
 
 
@@ -353,7 +353,7 @@ public class DiffTester extends TestCase {
     invNode = new InvNode(invz, null);
     pptNode.add(invNode);
     ref.add(pptNode);
-    Assert.assertEquals(printTree(ref), printTree(diff));
+    assert printTree(ref).equals(printTree(diff));
   }
 
   public void testInvs1Invs1() {
@@ -385,7 +385,7 @@ public class DiffTester extends TestCase {
     pptNode.add(invNode);
     ref.add(pptNode);
 
-    Assert.assertEquals(printTree(ref), printTree(diff));
+    assert printTree(ref).equals(printTree(diff));
   }
 
   public void testInvs1Invs2() {
@@ -417,7 +417,7 @@ public class DiffTester extends TestCase {
     pptNode.add(invNode);
     ref.add(pptNode);
 
-    Assert.assertEquals(printTree(ref), printTree(diff));
+    assert printTree(ref).equals(printTree(diff));
   }
 
   public void testInvs1Invs3() {
@@ -449,7 +449,7 @@ public class DiffTester extends TestCase {
     pptNode.add(invNode);
     ref.add(pptNode);
 
-    Assert.assertEquals(printTree(ref), printTree(diff));
+    assert printTree(ref).equals(printTree(diff));
   }
 
   public void testNullaryInvs() {
@@ -498,7 +498,7 @@ public class DiffTester extends TestCase {
        newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     ref.add(node);
 
-    Assert.assertEquals(printTree(ref), printTree(diff));
+    assert printTree(ref).equals(printTree(diff));
   }
 
   // Runs diff on a PptMap containing a PptConditional, with
@@ -528,7 +528,7 @@ public class DiffTester extends TestCase {
        newPptTopLevel("Foo.Bar(int):::EXIT", new VarInfo[0]));
     ref.add(node);
 
-    Assert.assertEquals(printTree(ref), printTree(diff));
+    assert printTree(ref).equals(printTree(diff));
   }
 
   private static String printTree(RootNode root) {

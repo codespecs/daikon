@@ -603,7 +603,7 @@ public final class PrintInvariants {
     }
 
     // If it made it this far, the first char of temp has to be '@'
-    Assert.assertTrue(temp.charAt(0) == '@');
+    assert temp.charAt(0) == '@';
     if (temp.length()==1)
       throw new IllegalArgumentException("Must provide ppt name after '@'" + lineSep +usage);
     discPpt = temp.substring(1);
@@ -1077,11 +1077,11 @@ public final class PrintInvariants {
 
       if (inv.logOn())
         inv.log ("Considering Printing");
-      Assert.assertTrue (!(inv instanceof Equality));
+      assert !(inv instanceof Equality);
       for (int j = 0; j < inv.ppt.var_infos.length; j++)
-        Assert.assertTrue (!inv.ppt.var_infos[j].missingOutOfBounds(),
-                           "var '" + inv.ppt.var_infos[j].name()
-                            + "' out of bounds in " + inv.format());
+        assert !inv.ppt.var_infos[j].missingOutOfBounds()
+        : "var '" + inv.ppt.var_infos[j].name()
+                            + "' out of bounds in " + inv.format();
       InvariantFilters fi = InvariantFilters.defaultFilters();
 
       boolean fi_accepted = true;

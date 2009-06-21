@@ -162,7 +162,7 @@ public class DetailedStatisticsVisitorTester extends TestCase {
       for (int rel = 0;
            rel < DetailedStatisticsVisitor.NUM_RELATIONSHIPS;
            rel++) {
-        Assert.assertEquals(1, (int) v.freq(type, rel));
+        assert 1 == (int) v.freq(type, rel);
       }
     }
   }
@@ -175,18 +175,18 @@ public class DetailedStatisticsVisitorTester extends TestCase {
 
     Boolean b = (Boolean) m.invoke
       (null, new Object[] {null_noprint, null_noprint});
-    Assert.assertTrue(!b.booleanValue());
+    assert !b.booleanValue();
 
     b = (Boolean) m.invoke
       (null, new Object[] {null_int_1_just, null_int_1_just});
-    Assert.assertTrue(b.booleanValue());
+    assert b.booleanValue();
 
     b = (Boolean) m.invoke
       (null, new Object[] {null, null_noprint});
-    Assert.assertTrue(!b.booleanValue());
+    assert !b.booleanValue();
 
     b = (Boolean) m.invoke
       (null, new Object[] {null, null_int_1_just});
-    Assert.assertTrue(b.booleanValue());
+    assert b.booleanValue();
   }
 }

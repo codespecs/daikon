@@ -588,7 +588,7 @@ public final class ONEOFSCALAR
       #elif defined(SEQUENCE)
         if (is_hashcode()) {
           // we only have one value, because add_modified dies if more
-          Assert.assertTrue(num_elts == 1);
+          assert num_elts == 1;
           INT value = elts[0];
           if (value.length == 0) {
             return varname + " == []";
@@ -771,8 +771,8 @@ public final class ONEOFSCALAR
 #elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
   #if defined(SCALAR) || defined(ELT)
     if (is_boolean()) {
-      Assert.assertTrue(num_elts == 1);
-      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
+      assert num_elts == 1;
+      assert (elts[0] == 0) || (elts[0] == 1);
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode()) {
       if (num_elts == 1) {
@@ -787,8 +787,8 @@ public final class ONEOFSCALAR
         }
       } else if (num_elts == 2) {
         // add_modified allows two elements iff one is null
-        Assert.assertTrue(elts[0] == 0);
-        Assert.assertTrue(elts[1] != 0);
+        assert elts[0] == 0;
+        assert elts[1] != 0;
         return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
       } else if (num_elts == 0) {
         // Do nothing
@@ -811,7 +811,7 @@ public final class ONEOFSCALAR
   #if defined(SEQUENCE)
     if (is_hashcode()) {
       // we only have one value, because add_modified dies if more
-      Assert.assertTrue(num_elts == 1);
+      assert num_elts == 1;
       INT value = elts[0];
       if (var().isArray()) {
         length = null;
@@ -925,7 +925,7 @@ public final class ONEOFSCALAR
             + TOSTRING(elts[0]) + ")";
         }
     } else {
-      Assert.assertTrue(num_elts > 1);
+      assert num_elts > 1;
       // eltsOneOf == subsetOf
       result = "daikon.Quant.subsetOf(" + varname + ", " + oneOfArray + ")";
     }
@@ -937,8 +937,8 @@ public final class ONEOFSCALAR
     #if defined(BASE_INT)
 
     if (is_boolean()) {
-      Assert.assertTrue(num_elts == 1);
-      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
+      assert num_elts == 1;
+      assert (elts[0] == 0) || (elts[0] == 1);
       result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
     } else if (is_hashcode()) {
       if (num_elts == 2) {
@@ -1069,8 +1069,8 @@ public final class ONEOFSCALAR
 #elif defined(SCALAR) || defined(ELT) || defined(FLOAT) || defined(ELTFLOAT)
   #if defined(SCALAR) || defined(ELT)
     if (is_boolean()) {
-      Assert.assertTrue(num_elts == 1);
-      Assert.assertTrue((elts[0] == 0) || (elts[0] == 1));
+      assert num_elts == 1;
+      assert (elts[0] == 0) || (elts[0] == 1);
       result = "(EQ " + varname + " " + ((elts[0] == 0) ? "|@false|" : "|@true|") + ")";
     } else if (is_hashcode()) {
       if (num_elts == 1) {
@@ -1080,8 +1080,8 @@ public final class ONEOFSCALAR
            ("(hashcode " + simplify_format_long(hashcode_val) + ")")) + ")";
       } else if (num_elts == 2) {
         // add_modified allows two elements iff one is null
-        Assert.assertTrue(elts[0] == 0);
-        Assert.assertTrue(elts[1] != 0);
+        assert elts[0] == 0;
+        assert elts[1] != 0;
         long hashcode_val = get_hashcode_val (elts[1]);
         result = "(OR (EQ " + varname + " null) (EQ " + varname
           + "(hashcode " + simplify_format_long(hashcode_val) + ")))";
@@ -1198,7 +1198,7 @@ public final class ONEOFSCALAR
       } else if (length != null && contents == null) {
         resultBuf.append(" " + length);
       } else {
-        Assert.assertTrue(length != null && contents != null);
+        assert length != null && contents != null;
         resultBuf.append(" (AND " + length + " " + contents + ")");
       }
 
@@ -1211,7 +1211,7 @@ public final class ONEOFSCALAR
     } else if (num_elts == 0) {
       return format_too_few_samples(OutputFormat.SIMPLIFY, null);
     } else {
-      Assert.assertTrue(false);
+      assert false;
       throw new Error("this can't happen");
       // result = null;
     }
@@ -1385,7 +1385,7 @@ public final class ONEOFSCALAR
     // This removes static constants from the output, which might not be
     // desirable if the user doesn't know their actual value.
     if (vis[0].isStaticConstant()) {
-      Assert.assertTrue(num_elts <= 1);
+      assert num_elts <= 1;
       return new DiscardInfo(this, DiscardCode.obvious, vis[0].name() + " is a static constant.");
     }
     return super.isObviousStatically(vis);
@@ -1520,10 +1520,10 @@ public final class ONEOFSCALAR
                 (elts[0] != 0 && other.elts[0] != 0));
       } else if (num_elts == 2 && other.num_elts == 2) {
         // add_modified allows two elements iff one is null
-        Assert.assertTrue(elts[0] == 0);
-        Assert.assertTrue(other.elts[0] == 0);
-        Assert.assertTrue(elts[1] != 0);
-        Assert.assertTrue(other.elts[1] != 0);
+        assert elts[0] == 0;
+        assert other.elts[0] == 0;
+        assert elts[1] != 0;
+        assert other.elts[1] != 0;
 
         // Since we know the first elements of each invariant are
         // zero, and the second elements are nonzero, we can immediately
@@ -1546,7 +1546,7 @@ public final class ONEOFSCALAR
 
     if (is_hashcode() && other.is_hashcode()) {
       // we only have one value, because add_modified dies if more
-      Assert.assertTrue(num_elts == 1 && other.num_elts == 1);
+      assert num_elts == 1 && other.num_elts == 1;
 
       INT thisSeq = elts[0];
       INT otherSeq = other.elts[0];
@@ -1674,7 +1674,7 @@ public final class ONEOFSCALAR
 
   // Look up a previously instantiated invariant.
   public static /*@Nullable*/ ONEOFSCALAR find(PptSlice ppt) {
-    Assert.assertTrue(ppt.arity() == 1);
+    assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof ONEOFSCALAR)
         return (ONEOFSCALAR) inv;

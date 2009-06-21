@@ -538,7 +538,7 @@ public class SEQSEQINTEQUAL
     if (super_result != null) {
       return super_result;
     }
-    Assert.assertTrue (ppt != null);
+    assert ppt != null;
 
     #ifdef NUMERIC
 
@@ -642,7 +642,7 @@ public class SEQSEQINTEQUAL
           || SUBSEQUENCE.isObviousSubSequenceDynamically (this, v2, v1)) {
           if (logOn())
             debug.log ("Obvious SubSequence Dynamically");
-          Assert.assertTrue (ppt != null);
+          assert ppt != null;
           return new DiscardInfo(this, DiscardCode.obvious, "Both vars are derived and one is a subsequence "
                                  + "of the other");
         }
@@ -675,7 +675,7 @@ public class SEQSEQINTEQUAL
 
   // Look up a previously instantiated invariant.
   public static /*@Nullable*/ SEQSEQINTEQUAL find(PptSlice ppt) {
-    Assert.assertTrue(ppt.arity() == 2);
+    assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof SEQSEQINTEQUAL)
         return (SEQSEQINTEQUAL) inv;

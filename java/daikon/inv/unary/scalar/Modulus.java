@@ -132,7 +132,7 @@ public class Modulus
         new_modulus = 1;
       } else {
         new_modulus = (int) new_modulus_long;
-        Assert.assertTrue(new_modulus > 0);
+        assert new_modulus > 0;
       }
       if (new_modulus != modulus) {
         if (new_modulus == 1) {
@@ -140,7 +140,7 @@ public class Modulus
         }
       }
     }
-    Assert.assertTrue(modulus != 1);
+    assert modulus != 1;
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -149,7 +149,7 @@ public class Modulus
       // We shouldn't ever get to this case; the invariant should have been
       // destroyed instead.
       throw new Error("Modulus = 1");
-      // Assert.assertTrue(falsified);
+      // assert falsified;
       // // We already know this confidence fails
       // return;
     } else if (no_samples_seen) {
@@ -176,7 +176,7 @@ public class Modulus
         new_modulus = 1;
       } else {
         new_modulus = (int) new_modulus_long;
-        Assert.assertTrue(new_modulus > 0);
+        assert new_modulus > 0;
       }
       if (new_modulus != modulus) {
         if (new_modulus == 1) {
@@ -187,7 +187,7 @@ public class Modulus
         }
       }
     }
-    Assert.assertTrue(modulus != 1);
+    assert modulus != 1;
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -243,7 +243,7 @@ public class Modulus
 
   // Look up a previously instantiated invariant.
   public static /*@Nullable*/ Modulus find(PptSlice ppt) {
-    Assert.assertTrue(ppt.arity() == 1);
+    assert ppt.arity() == 1;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof Modulus)
         return (Modulus) inv;

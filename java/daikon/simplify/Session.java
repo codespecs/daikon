@@ -3,7 +3,6 @@ package daikon.simplify;
 import java.io.*;
 import java.util.*;
 
-import utilMDE.Assert;
 
 /**
  * A session is a channel to the Simplify theorem-proving tool.  Once
@@ -122,8 +121,8 @@ public class Session
       byte[] buf = new byte[expect.length()];
       int pos = is.read(buf);
       String actual = new String(buf, 0, pos);
-      Assert.assertTrue(expect.equals(actual),
-                        "Prompt expected, got '" + actual + "'");
+      assert expect.equals(actual)
+        : "Prompt expected, got '" + actual + "'";
 
       // set up result stream
       output = new BufferedReader(new InputStreamReader(is));
@@ -163,26 +162,26 @@ public class Session
 
     cc = new CmdCheck("(EQ 1 1)");
     cc.apply(s);
-    Assert.assertTrue(true == cc.valid);
+    assert true == cc.valid;
 
     cc = new CmdCheck("(EQ 1 2)");
     cc.apply(s);
-    Assert.assertTrue(false == cc.valid);
+    assert false == cc.valid;
 
     cc = new CmdCheck("(EQ x z)");
     cc.apply(s);
-    Assert.assertTrue(false == cc.valid);
+    assert false == cc.valid;
 
     CmdAssume a = new CmdAssume("(AND (EQ x y) (EQ y z))");
     a.apply(s);
 
     cc.apply(s);
-    Assert.assertTrue(true == cc.valid);
+    assert true == cc.valid;
 
     CmdUndoAssume.single.apply(s);
 
     cc.apply(s);
-    Assert.assertTrue(false == cc.valid);
+    assert false == cc.valid;
   }
 
 }

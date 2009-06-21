@@ -77,7 +77,7 @@ public class NISuppressor {
       @SuppressWarnings("prototype")
       /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant) get_proto.invoke (null, new Object[] {});
       sample_inv = sample_inv_local;
-      Assert.assertTrue (sample_inv != null);
+      assert sample_inv != null;
     } catch (Exception e) {
       throw new RuntimeException ("error instantiating invariant "
                                   + inv_class.getName() + ": " + e);
@@ -140,7 +140,7 @@ public class NISuppressor {
                                   + inv_class.getName() + ": " + e);
     }
 
-    Assert.assertTrue (sample_inv != null);
+    assert sample_inv != null;
     debug.fine ("Created " + this);
   }
 
@@ -157,7 +157,7 @@ public class NISuppressor {
         new_index = 1;
      return (new NISuppressor (new_index, inv_class));
     }
-    Assert.assertTrue (v3_index == -1);
+    assert v3_index == -1;
 
     if (swap)
       return new NISuppressor (v1_index, v2_index, inv_class);
@@ -217,8 +217,8 @@ public class NISuppressor {
   public String check (PptTopLevel ppt, VarInfo[] vis, Invariant inv) {
 
     // Currently we only support unary and binary suppressors
-    Assert.assertTrue (v3_index == -1);
-    Assert.assertTrue (v1_index != -1);
+    assert v3_index == -1;
+    assert v1_index != -1;
 
     // If the underlying invariant is not enabled, we can't possibly be true
     if (!is_enabled())
@@ -256,7 +256,7 @@ public class NISuppressor {
       if (ppt.is_prev_constant (v1)) {
         boolean valid = false;
         VarInfo[] sup_vis = new VarInfo[] {v1};
-        Assert.assertTrue (sample_inv.valid_types (sup_vis));
+        assert sample_inv.valid_types (sup_vis);
         if (sample_inv.instantiate_ok(sup_vis)) {
           UnaryInvariant uinv = (UnaryInvariant) sample_inv;
           InvariantStatus status = uinv.check
@@ -299,12 +299,14 @@ public class NISuppressor {
       if (v1_index >= vis.length || v2_index >= vis.length) {
         // Stringifying "this" is expensive, so only do it if one of the
         // assertions will fail
-        Assert.assertTrue ((v1_index < vis.length), "v1/len= "
+        assert (v1_index < vis.length)
+        : "v1/len= "
                            + v1_index + "/" + vis.length +
-                           " suppressor " + this);
-        Assert.assertTrue ((v2_index < vis.length), "v2/len= "
+                           " suppressor " + this;
+        assert (v2_index < vis.length)
+        : "v2/len= "
                            + v2_index + "/" + vis.length +
-                           " suppressor " + this);
+                           " suppressor " + this;
       }
       VarInfo v1 = vis[v1_index];
       VarInfo v2 = vis[v2_index];
@@ -334,7 +336,7 @@ public class NISuppressor {
       if (ppt.is_prev_constant (v1) && ppt.is_prev_constant (v2)) {
         boolean valid = false;
         VarInfo[] sup_vis = new VarInfo[] {v1, v2};
-        Assert.assertTrue (sample_inv.valid_types (sup_vis));
+        assert sample_inv.valid_types (sup_vis);
         if (sample_inv.instantiate_ok(sup_vis)) {
           BinaryInvariant binv = (BinaryInvariant) sample_inv;
           InvariantStatus status
@@ -454,7 +456,7 @@ public class NISuppressor {
     else if (new_v3 == -1)
       return new NISuppressor (new_v1, new_v2, inv_class);
     else {
-      Assert.assertTrue (false, "Unexpected ternary suppressor");
+      assert false : "Unexpected ternary suppressor";
       return (null);
     }
   }

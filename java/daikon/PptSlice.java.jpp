@@ -81,7 +81,7 @@ public final class PPTSLICE1 extends PptSlice {
   public PPTSLICE1(PptTopLevel parent, VarInfo[] var_infos) {
 
     super(parent, var_infos);
-    Assert.assertTrue(var_infos.length == ARITY);
+    assert var_infos.length == ARITY;
 
     if (debug.isLoggable(Level.FINE) || debugSpecific.isLoggable(Level.FINE))
       debug.info("Created " + PPTSLICE1STRING + " " + this.name());
@@ -154,7 +154,7 @@ public final class PPTSLICE1 extends PptSlice {
         return;
       if (!v2.compatible(v3))
         return;
-      Assert.assertTrue(v1.compatible(v3));
+      assert v1.compatible(v3);
     #else
       #error "Bad Arity"
     #endif
@@ -182,7 +182,7 @@ public final class PPTSLICE1 extends PptSlice {
       // never be returned because we check instantiate_ok() above and
       // only enabled invariants are in this list.
       Invariant inv = proto.instantiate (this);
-      Assert.assertTrue (inv != null);
+      assert inv != null;
       addInvariant(inv);
       if (Debug.logOn())
         inv.log ("Created invariant " + inv.format() + " ss = " + ss);
@@ -229,9 +229,9 @@ public final class PPTSLICE1 extends PptSlice {
    **/
   public List<Invariant> add(ValueTuple full_vt, int count) {
 
-    Assert.assertTrue(invs.size() > 0);
+    assert invs.size() > 0;
     for (Invariant inv : invs) {
-      Assert.assertTrue(inv != null);
+      assert inv != null;
     }
 
     #if defined(ARITY1)
@@ -279,7 +279,7 @@ public final class PPTSLICE1 extends PptSlice {
     }
 
     if (mod1 == ValueTuple.STATIC_CONSTANT) {
-      Assert.assertTrue(vi1.is_static_constant);
+      assert vi1.is_static_constant;
       mod1 = ((num_samples() == 0)
               ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
     }
@@ -291,7 +291,7 @@ public final class PPTSLICE1 extends PptSlice {
         return emptyInvList;
       }
       if (mod2 == ValueTuple.STATIC_CONSTANT) {
-        Assert.assertTrue(vi2.is_static_constant);
+        assert vi2.is_static_constant;
         mod2 = ((num_samples() == 0)
                 ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
       }
@@ -304,7 +304,7 @@ public final class PPTSLICE1 extends PptSlice {
         return emptyInvList;
       }
       if (mod3 == ValueTuple.STATIC_CONSTANT) {
-      Assert.assertTrue(vi3.is_static_constant);
+      assert vi3.is_static_constant;
       mod3 = ((num_samples() == 0)
               ? ValueTuple.MODIFIED : ValueTuple.UNMODIFIED);
       }
@@ -316,19 +316,19 @@ public final class PPTSLICE1 extends PptSlice {
 
     #if defined(ARITY2) || defined(ARITY3)
       Object val2 = full_vt.getValue(vi2);
-      Assert.assertTrue (Intern.isInterned (val2));
+      assert Intern.isInterned (val2);
     #endif
 
     #if defined(ARITY3)
       Object val3 = full_vt.getValue(vi3);
-      Assert.assertTrue (Intern.isInterned (val3));
+      assert Intern.isInterned (val3);
     #endif
 
     // Supply the new values to all the invariant objects.
-    Assert.assertTrue((mod1 == vi1.getModified(full_vt))
+    assert (mod1 == vi1.getModified(full_vt))
                   || ((vi1.getModified(full_vt) == ValueTuple.STATIC_CONSTANT)
                       && ((mod1 == ValueTuple.UNMODIFIED)
-                          || (mod1 == ValueTuple.MODIFIED))));
+                          || (mod1 == ValueTuple.MODIFIED)));
 
     #if defined(ARITY1)
       List<Invariant> weakened_invs = add_val_bu (val1, mod1, count);
@@ -344,8 +344,8 @@ public final class PPTSLICE1 extends PptSlice {
 #if defined (ARITY1)
   public List<Invariant> add_val_bu (Object val1, int mod1, int count) {
 
-    Assert.assertTrue(mod1 != ValueTuple.MISSING_FLOW
-                      && mod1 != ValueTuple.MISSING_NONSENSICAL);
+    assert mod1 != ValueTuple.MISSING_FLOW
+                      && mod1 != ValueTuple.MISSING_NONSENSICAL;
     List<Invariant> result = new ArrayList<Invariant>();
     for (int i=0; i < invs.size(); i++) {
       UnaryInvariant inv = (UnaryInvariant) invs.get(i);
@@ -370,10 +370,10 @@ public final class PPTSLICE1 extends PptSlice {
   public List<Invariant> add_val_bu (Object val1, Object val2,
                                         int mod1, int mod2, int count) {
 
-    Assert.assertTrue ((mod1 != ValueTuple.MISSING_FLOW
+    assert (mod1 != ValueTuple.MISSING_FLOW
                        && mod1 != ValueTuple.MISSING_NONSENSICAL)
                        && (mod2 != ValueTuple.MISSING_FLOW
-                       && mod2 != ValueTuple.MISSING_NONSENSICAL));
+                       && mod2 != ValueTuple.MISSING_NONSENSICAL);
 
     List<Invariant> result = new ArrayList<Invariant>();
     boolean array1 = var_infos[0].rep_type.isArray();
@@ -434,12 +434,12 @@ public final class PPTSLICE1 extends PptSlice {
   public List<Invariant> add_val_bu (Object val1, Object val2, Object val3,
                                      int mod1, int mod2, int mod3, int count) {
 
-    Assert.assertTrue ((mod1 != ValueTuple.MISSING_FLOW
+    assert (mod1 != ValueTuple.MISSING_FLOW
                         && mod1 != ValueTuple.MISSING_NONSENSICAL)
                         && (mod2 != ValueTuple.MISSING_FLOW
                         && mod2 != ValueTuple.MISSING_NONSENSICAL)
                         && (mod3 != ValueTuple.MISSING_FLOW
-                        && mod3 != ValueTuple.MISSING_NONSENSICAL));
+                        && mod3 != ValueTuple.MISSING_NONSENSICAL);
 
     List<Invariant> result = new ArrayList<Invariant>();
     for (int i=0; i < invs.size(); i++) {
@@ -471,8 +471,8 @@ public final class PPTSLICE1 extends PptSlice {
 
 
   public void addInvariant(Invariant invariant) {
-    Assert.assertTrue(invariant != null);
-    // Assert.assertTrue(invariant.ppt == this);
+    assert invariant != null;
+    // assert invariant.ppt == this;
 
     if (Daikon.dkconfig_internal_check) {
       // Don't add a check here to ensure that the invairant is not suppressed
@@ -510,22 +510,22 @@ public final class PPTSLICE1 extends PptSlice {
 
     // Assert sorted
     for (int i = 0; i < ARITY - 1; i++) {
-      Assert.assertTrue (vis_sorted[i].varinfo_index
-                         <= vis_sorted[i+1].varinfo_index);
+      assert vis_sorted[i].varinfo_index
+                         <= vis_sorted[i+1].varinfo_index;
     }
 
-    Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
+    assert ArraysMDE.fn_is_permutation(permutation);
     // Assert that the permutation represents the rearrangement
     for (int i=0; i < ARITY; i++) {
       // the variable that used to be at position "i" is now found at
       // position permutation[i].
       VarInfo oldvi = argNewVarInfos[i];
       VarInfo newvi = vis_sorted[permutation[i]];
-      Assert.assertTrue(oldvi == newvi);
+      assert oldvi == newvi;
     }
 
     // The new slice should not already exist.
-    Assert.assertTrue(parent.findSlice(vis_sorted) == null);
+    assert parent.findSlice(vis_sorted) == null;
 
     // Why not just clone?  Because then index order wouldn't be
     // preserved
@@ -534,12 +534,12 @@ public final class PPTSLICE1 extends PptSlice {
     // re-parent the invariants and copy them out.
     List<Invariant> newInvs = new LinkedList<Invariant>();
     for (Invariant inv : invs) {
-      Assert.assertTrue (inv.ppt == this);
+      assert inv.ppt == this;
       Invariant newInv = inv.transfer (result, permutation);
       newInvs.add (newInv);
-      Assert.assertTrue (newInv != inv);
-      Assert.assertTrue (newInv.ppt == result);
-      Assert.assertTrue (inv.ppt == this);
+      assert newInv != inv;
+      assert newInv.ppt == result;
+      assert inv.ppt == this;
     }
 
     if (Debug.logOn())
@@ -729,7 +729,7 @@ public final class PPTSLICE1 extends PptSlice {
           System.out.printf ("-- Invariant = '%s' [%s] @%s%n",
                              child_inv.repr(), child_inv.getClass(),
                              child_inv.ppt);
-        Assert.assertTrue (child_invs.size() <= valid_child_count);
+        assert child_invs.size() <= valid_child_count;
       }
       if (child_invs.size() == valid_child_count) {
         Invariant first = child_invs.get(0);

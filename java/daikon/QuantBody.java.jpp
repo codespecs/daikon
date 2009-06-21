@@ -428,7 +428,7 @@ The test ensures that the method only appears once in the output.
   //    * Returns the minimum element in the array.
   //    */
   //   /* pure */ public static _TYPE min(_TYPE[] seq) {
-  //      //Assert.assertTrue(seq.length > 0);
+  //      //assert seq.length > 0;
   //     _TYPE retval = seq[0];
   //     for (int i = 1 ; i < seq.length ; i++) {
   //       if (lt(seq[i], retval)) {
@@ -443,7 +443,7 @@ The test ensures that the method only appears once in the output.
   //    * Returns the minimum element in the array.
   //    */
   //   /* pure */ public static _TYPE max(_TYPE[] seq) {
-  //      //Assert.assertTrue(seq.length > 0);
+  //      //assert seq.length > 0;
   //     _TYPE retval = seq[0];
   //     for (int i = 1 ; i < seq.length ; i++) {
   //       if (gt(seq[i], retval)) {
@@ -1667,7 +1667,7 @@ The test is ensures that it only appears once in the output.
     if (object == null) { return null; }
     if (fieldStr == null) { return null; }
 
-    //Assert.assertTrue(fieldStr != null && !"".equals(fieldStr));
+    //assert fieldStr != null && !"".equals(fieldStr);
     String[] fieldNames = fieldStr.split("\\.");
     _TYPE[] retval = COLLECT_TYPE (object, fieldNames, 0);
     //System.err.println("%%% fieldArray returned: " + utilMDE.ArraysMDE.toString(retval));
@@ -1741,7 +1741,7 @@ The test is ensures that it only appears once in the output.
         // error.  Then, this case becomes a run-time error.  -MDE
 
         // Just one element; return a one-element array.
-        //Assert.assertTrue(cls.equals(_TYPE_WRAPPER_NAME.TYPE));
+        //assert cls.equals(_TYPE_WRAPPER_NAME.TYPE);
         return new _TYPE[] { GETVALUE(fieldObj) };
       }
     } else {
@@ -1754,7 +1754,7 @@ The test is ensures that it only appears once in the output.
         int index = 0;
         for (Iterator<?> i = collection.iterator() ; i.hasNext() ; ) {
           _TYPE[] oneEltArray = COLLECT_TYPE (i.next(), fields, fieldsStartIdx + 1);
-          //Assert.assertTrue(oneEltArray.length == 1);
+          //assert oneEltArray.length == 1;
           intermediate[index++] = oneEltArray[0];
         }
         return intermediate;
@@ -1766,7 +1766,7 @@ The test is ensures that it only appears once in the output.
         for (int i = 0 ; i < intermediate.length ; i++) {
           _TYPE[] oneEltArray = COLLECT_TYPE (Array.get(fieldObj, i),
                                              fields, fieldsStartIdx + 1);
-          //Assert.assertTrue(oneEltArray.length == 1);
+          //assert oneEltArray.length == 1;
           intermediate[i] = oneEltArray[0];
         }
         return intermediate;

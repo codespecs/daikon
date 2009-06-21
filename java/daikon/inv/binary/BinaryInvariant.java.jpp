@@ -57,7 +57,6 @@ package daikon.inv.binary.PACKAGE;
 import daikon.inv.*;
 import daikon.inv.binary.*;
 import daikon.*;
-import utilMDE.Assert;
 import daikon.inv.InvariantStatus;
 
 /**
@@ -122,8 +121,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * correct routine to handle it.
    */
   protected Invariant resurrect_done(int[] permutation) {
-    Assert.assertTrue(permutation.length == 2);
-    // Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
+    assert permutation.length == 2;
+    // assert ArraysMDE.fn_is_permutation(permutation);
     if (permutation[0] == 1)
       return resurrect_done_swapped();
     else
@@ -196,8 +195,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
                                int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
-    Assert.assertTrue(! falsified);
-    Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
+    assert ! falsified;
+    assert (mod_index >= 0) && (mod_index < 4);
     PRIMITIVE v1 = GET_VAL(val1);
     PRIMITIVE v2 = GET_VAL(val2);
     if (mod_index == 0) {
@@ -216,8 +215,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
   public InvariantStatus add(Object val1, Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
-    Assert.assertTrue(! falsified);
-    Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
+    assert ! falsified;
+    assert (mod_index >= 0) && (mod_index < 4);
     PRIMITIVE v1 = GET_VAL (val1);
     PRIMITIVE v2 = GET_VAL (val2);
     if (mod_index == 0) {

@@ -65,10 +65,10 @@ public class PptSlice0
 
   public void checkRep() {
     if (invariantsSeen != null && invs.size() != invariantsSeen.size()) {
-      Assert.assertTrue(invs.size() == invariantsSeen.size(),
-                        "invs.size()=" + invs.size() + ", invariantsSeen.size()=" + invariantsSeen.size());
+      assert invs.size() == invariantsSeen.size()
+        : "invs.size()=" + invs.size() + ", invariantsSeen.size()=" + invariantsSeen.size();
     }
-    Assert.assertTrue(invariantsSeen == null || invs.size() == invariantsSeen.size());
+    assert invariantsSeen == null || invs.size() == invariantsSeen.size();
   }
 
   /**
@@ -77,10 +77,10 @@ public class PptSlice0
    * isn't used as of November 2003.
    **/
   public void addInvariant(Invariant inv) {
-    Assert.assertTrue(inv != null);
-    Assert.assertTrue(inv instanceof Implication);
+    assert inv != null;
+    assert inv instanceof Implication;
     // checkRep();
-    // Assert.assertTrue(! hasImplication((Implication) inv));
+    // assert ! hasImplication((Implication) inv);
     initInvariantsSeen();
     invs.add(inv);
     invariantsSeen.add(new ImplicationWrapper((Implication)inv));
@@ -88,10 +88,10 @@ public class PptSlice0
   }
 
   public void removeInvariant(Invariant inv) {
-    Assert.assertTrue(inv != null);
-    Assert.assertTrue(inv instanceof Implication);
+    assert inv != null;
+    assert inv instanceof Implication;
     // checkRep();
-    // Assert.assertTrue(hasImplication((Implication) inv));
+    // assert hasImplication((Implication) inv);
     initInvariantsSeen();
     invs.remove(inv);
     invariantsSeen.remove(new ImplicationWrapper((Implication)inv));
@@ -183,7 +183,7 @@ public class PptSlice0
     public boolean equals(/*@Nullable*/ Object o) {
       if (o == null)
         return false;
-      Assert.assertTrue(o instanceof ImplicationWrapper);
+      assert o instanceof ImplicationWrapper;
       ImplicationWrapper other = (ImplicationWrapper)o;
       if (hashCode() != other.hashCode()) {
         return false;
@@ -211,7 +211,7 @@ public class PptSlice0
           System.out.println ("right class = "
                               + theImp.right.getClass() + "/"
                               + other.theImp.right.getClass());
-          // Assert.assertTrue (false);
+          // assert false;
         }
         assert (!same_eq) || fmt_eq;
       }

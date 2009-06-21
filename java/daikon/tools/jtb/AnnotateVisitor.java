@@ -8,7 +8,6 @@ import java.util.regex.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import daikon.*;
-import utilMDE.Assert;
 import utilMDE.ArraysMDE;
 import utilMDE.MultiReader;
 import utilMDE.UtilMDE;

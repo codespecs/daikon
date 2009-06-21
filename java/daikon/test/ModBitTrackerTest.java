@@ -50,11 +50,11 @@ public class ModBitTrackerTest extends TestCase {
     int numvars = bitsets.length;
     int numsamples = bitsets[0].size();
 
-    assertEquals(mbt.num_vars(), numvars);
-    assertEquals(mbt.num_samples(), numsamples);
+    assert mbt.num_vars() == numvars;
+    assert mbt.num_samples() == numsamples;
 
     for (int i=0; i<numvars; i++) {
-      assertEquals(bitsets[i], mbt.get(i));
+      assert bitsets[i].equals(mbt.get(i));
     }
   }
 
@@ -110,7 +110,7 @@ public class ModBitTrackerTest extends TestCase {
     BitSet[] bitsets = makeBitSets(vars, samples, duplicate_factor);
     ModBitTracker mbt = makeModBitTracker(bitsets);
     checkModBitTracker(mbt, bitsets);
-    assertEquals(mbt.num_sets(), vars);
+    assert mbt.num_sets() == vars;
   }
 
   public void testModBitTracker() {

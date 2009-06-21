@@ -62,9 +62,9 @@ public class ParseResults {
 
       File file = new File(javaFileName);
       String name = file.getName();
-      Assert.assertTrue(name.endsWith(".java"),
-                        "Found a java-file argument that doesn't end in .java: "
-                        + file);
+      assert name.endsWith(".java")
+        : "Found a java-file argument that doesn't end in .java: "
+                        + file;
 
       results.fileName = name;
 
@@ -124,9 +124,9 @@ public class ParseResults {
         ClassOrInterfaceDeclaration decl =
           (ClassOrInterfaceDeclaration)nodeChoice.choice;
 
-//         Assert.assertTrue(!Ast.isInterface(decl),
-//                           "Do not give .java files that declare interfaces "
-//                           + "to the instrumenter: " + javaFileName);
+//         assert !Ast.isInterface(decl)
+//                           : "Do not give .java files that declare interfaces "
+//                           + "to the instrumenter: " + javaFileName;
 
         results.roots.add(typeDeclaration);
       }

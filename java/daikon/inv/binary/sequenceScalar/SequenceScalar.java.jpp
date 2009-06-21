@@ -93,8 +93,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
    // Check if swap occurred and call one of the other two methods
   protected Invariant resurrect_done(int[] permutation) {
-    Assert.assertTrue(permutation.length == 2);
-    // Assert.assertTrue(ArraysMDE.fn_is_permutation(permutation));
+    assert permutation.length == 2;
+    // assert ArraysMDE.fn_is_permutation(permutation);
     if (permutation[0] == 1)
       return resurrect_done_swapped();
     else
@@ -147,8 +147,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
   public InvariantStatus check(Object val1, Object val2, int mod_index, int count) {
-    Assert.assertTrue(! falsified);
-    Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
+    assert ! falsified;
+    assert (mod_index >= 0) && (mod_index < 4);
     PRIMITIVE[] v1 = (PRIMITIVE[]) val1;
     PRIMITIVE v2 = GETVAL (val2);
     if (v1 == null) {
@@ -162,8 +162,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
 
 
   public InvariantStatus add(Object val1, Object val2, int mod_index, int count) {
-    Assert.assertTrue(! falsified);
-    Assert.assertTrue((mod_index >= 0) && (mod_index < 4));
+    assert ! falsified;
+    assert (mod_index >= 0) && (mod_index < 4);
     PRIMITIVE[] v1 = (PRIMITIVE[]) val1;
     PRIMITIVE v2 = GETVAL (val2);
     if (v1 == null) {

@@ -38,29 +38,29 @@ public class DtraceDiffTester extends TestCase {
     String file1 = "daikon/test/dtracediff/" + file;
     URL input_file_location =
       ClassLoader.getSystemClassLoader().getSystemResource(file1);
-    assertTrue(input_file_location != null);
+    assert input_file_location != null;
     return input_file_location.toExternalForm();
   }
 
   public void test_samples () {
     // these tests should succeed
-    assertTrue(diff("AllTypes.dtrace.gz", "AllTypes.dtrace.gz"));
-    assertTrue(diff("Hanoi.dtrace.gz", "Hanoi.dtrace.gz"));
-    assertTrue(diff("Hanoi.dtrace.gz", "Hanoi-mungpointers.dtrace.gz"));
+    assert diff("AllTypes.dtrace.gz", "AllTypes.dtrace.gz");
+    assert diff("Hanoi.dtrace.gz", "Hanoi.dtrace.gz");
+    assert diff("Hanoi.dtrace.gz", "Hanoi-mungpointers.dtrace.gz");
 
     // test for the diffs that this utility is supposed to find
-    assertFalse(diff("Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz"));
-    assertFalse(diff("Hanoi.dtrace.gz", "Hanoi-badvalue.dtrace.gz"));
-    assertFalse(diff("Hanoi.dtrace.gz", "Hanoi-truncated.dtrace.gz"));
+    assert !diff("Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz");
+    assert !diff("Hanoi.dtrace.gz", "Hanoi-badvalue.dtrace.gz");
+    assert !diff("Hanoi.dtrace.gz", "Hanoi-truncated.dtrace.gz");
 
     // test that command-line options work (to avoid comparing ppts with
     // a missing variable)
-    assertTrue(diff("--ppt-omit-pattern", "six170.Hanoi.showTowers*",
-                    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz"));
-    assertTrue(diff("--var-omit-pattern", "this.height",
-                    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz"));
-    assertTrue(diff("--ppt-select-pattern", "six170.Hanoi.moveDisk*",
-                    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz"));
+    assert diff("--ppt-omit-pattern", "six170.Hanoi.showTowers*",
+                    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz");
+    assert diff("--var-omit-pattern", "this.height",
+                    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz");
+    assert diff("--ppt-select-pattern", "six170.Hanoi.moveDisk*",
+                    "Hanoi.dtrace.gz", "Hanoi-badvar.dtrace.gz");
     // needs to test --var-select-pattern
   }
 

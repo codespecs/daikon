@@ -37,31 +37,31 @@ public class ProglangTypeTest extends TestCase {
 
   public void test_parse_value() {
     ProglangType pint = ProglangType.INT;
-    assertEquals(pint.parse_value("1"), new Long(1));
-    assertEquals(pint.parse_value("0"), new Long(0));
-    assertEquals(pint.parse_value("-3"), new Long(-3));
+    assert pint.parse_value("1").equals(new Long(1));
+    assert pint.parse_value("0").equals(new Long(0));
+    assert pint.parse_value("-3").equals(new Long(-3));
 
     ProglangType pstring = ProglangType.STRING;
-    assertEquals(pstring.parse_value("\"foo\""), "foo");
-    assertEquals(pstring.parse_value("\"\""), "");
-    assertEquals(pstring.parse_value("\"\"foo\"\""), "\"foo\"");
-    assertEquals(pstring.parse_value("\"foo bar\""), "foo bar");
-    assertEquals(pstring.parse_value("null"), null);
+    assert pstring.parse_value("\"foo\"").equals("foo");
+    assert pstring.parse_value("\"\"").equals("");
+    assert pstring.parse_value("\"\"foo\"\"").equals("\"foo\"");
+    assert pstring.parse_value("\"foo bar\"").equals("foo bar");
+    assert pstring.parse_value("null") == null;
 
     ProglangType pinta = ProglangType.INT_ARRAY;
-    assertTrue(longarrcomp(pinta.parse_value("[]"), new long[] {}));
-    assertTrue(longarrcomp(pinta.parse_value("[1]"), new long[] { 1 }));
-    assertTrue(longarrcomp(pinta.parse_value("[-2]"), new long[] { -2 }));
-    assertTrue(longarrcomp(pinta.parse_value("[1 2 3]"), new long[] { 1, 2, 3 }));
+    assert longarrcomp(pinta.parse_value("[]"), new long[] {});
+    assert longarrcomp(pinta.parse_value("[1]"), new long[] { 1 });
+    assert longarrcomp(pinta.parse_value("[-2]"), new long[] { -2 });
+    assert longarrcomp(pinta.parse_value("[1 2 3]"), new long[] { 1, 2, 3 });
 
     ProglangType pstringa = ProglangType.STRING_ARRAY;
-    assertTrue(comparrcomp(pstringa.parse_value("[]"), new String[] {}));
-    assertTrue(comparrcomp(pstringa.parse_value("[\"foo\"]"), new String[] { "foo" }));
-    assertTrue(comparrcomp(pstringa.parse_value("[\"f\\\"oo\"]"), new String[] { "f\"oo" }));
-    assertTrue(comparrcomp(pstringa.parse_value("[\"f\\noo\"]"), new String[] { "f\noo" }));
-    assertTrue(comparrcomp(pstringa.parse_value("[\"foo\" \"bar\"]"), new String[] { "foo", "bar" }));
-    assertTrue(comparrcomp(pstringa.parse_value("[\"foo bar\" \"baz\"]"), new String[] { "foo bar", "baz" }));
-    assertTrue(comparrcomp(pstringa.parse_value("[\"foo\" null \"baz\"]"), new String[] { "foo", null, "baz" }));
+    assert comparrcomp(pstringa.parse_value("[]"), new String[] {});
+    assert comparrcomp(pstringa.parse_value("[\"foo\"]"), new String[] { "foo" });
+    assert comparrcomp(pstringa.parse_value("[\"f\\\"oo\"]"), new String[] { "f\"oo" });
+    assert comparrcomp(pstringa.parse_value("[\"f\\noo\"]"), new String[] { "f\noo" });
+    assert comparrcomp(pstringa.parse_value("[\"foo\" \"bar\"]"), new String[] { "foo", "bar" });
+    assert comparrcomp(pstringa.parse_value("[\"foo bar\" \"baz\"]"), new String[] { "foo bar", "baz" });
+    assert comparrcomp(pstringa.parse_value("[\"foo\" null \"baz\"]"), new String[] { "foo", null, "baz" });
   }
 
 }

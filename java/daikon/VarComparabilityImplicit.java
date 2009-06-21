@@ -1,7 +1,6 @@
 package daikon;
 
 import java.util.Vector;
-import utilMDE.Assert;
 import java.io.Serializable;
 
 /**
@@ -160,7 +159,7 @@ public final class VarComparabilityImplicit
       return type1.base == type2.base;
     } else {
       // One array, one non-array, and the non-array isn't universally comparable.
-      Assert.assertTrue(type1.dimensions == 0 || type2.dimensions == 0);
+      assert type1.dimensions == 0 || type2.dimensions == 0;
       return false;
     }
   }
@@ -185,7 +184,7 @@ public final class VarComparabilityImplicit
       return type1.base == type2.base;
 
     // One array, one non-array
-    Assert.assertTrue(type1.dimensions == 0 || type2.dimensions == 0);
+    assert type1.dimensions == 0 || type2.dimensions == 0;
     return false;
   }
 

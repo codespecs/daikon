@@ -5,7 +5,6 @@ import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import utilMDE.Assert;
 import utilMDE.TextFile;
 import utilMDE.UtilMDE;
 
@@ -108,7 +107,7 @@ public final class Configuration
    * Configuration singleton makes no sense.
    **/
   public void overlap(Configuration config) {
-    Assert.assertTrue(config != null);
+    assert config != null;
     for (String statement : config.statements) {
       this.apply(statement);
     }
@@ -119,7 +118,7 @@ public final class Configuration
   private List<String> statements = new ArrayList<String>();
 
   public void apply(InputStream input) {
-    Assert.assertTrue(input != null);
+    assert input != null;
     for (String line : new TextFile(input)) {
       line = line.trim();
       if (line.length() == 0) continue;    // skip blank lines
@@ -129,7 +128,7 @@ public final class Configuration
   }
 
   public void apply(String line) {
-    Assert.assertTrue(line != null);
+    assert line != null;
 
     int eq = line.indexOf('=');
     if (eq <= 0) {
@@ -143,11 +142,11 @@ public final class Configuration
   }
 
   public void apply(String name, String value) {
-    Assert.assertTrue(name != null);
-    Assert.assertTrue(value != null);
+    assert name != null;
+    assert value != null;
 
     int dot = name.lastIndexOf('.');
-    Assert.assertTrue(dot >= 0, "Name must contain a period (.)");
+    assert dot >= 0 : "Name must contain a period (.)";
 
     String classname = name.substring(0, dot);
     String fieldname = name.substring(dot+1);
@@ -156,9 +155,9 @@ public final class Configuration
   }
 
   public void apply(String classname, String fieldname, String value) {
-    Assert.assertTrue(classname != null);
-    Assert.assertTrue(fieldname != null);
-    Assert.assertTrue(value != null);
+    assert classname != null;
+    assert fieldname != null;
+    assert value != null;
 
     // Use UtilMDE version of class.forName so that we can refer to
     // inner classes using '.' as well as '$'
@@ -175,9 +174,9 @@ public final class Configuration
   }
 
   public void apply(Class<?> clazz, String fieldname, String value) {
-    Assert.assertTrue(clazz != null);
-    Assert.assertTrue(fieldname != null);
-    Assert.assertTrue(value != null);
+    assert clazz != null;
+    assert fieldname != null;
+    assert value != null;
 
     Field field;
     try {
@@ -192,8 +191,8 @@ public final class Configuration
   }
 
   private void apply(Field field, String unparsed) {
-    Assert.assertTrue(field != null);
-    Assert.assertTrue(unparsed != null);
+    assert field != null;
+    assert unparsed != null;
 
     Object value; // typed version of value
     Class<?> type = field.getType();
@@ -277,13 +276,13 @@ public final class Configuration
     // record the application
     String classname = field.getDeclaringClass().getName();
     String fieldname = field.getName();
-    Assert.assertTrue(fieldname.startsWith(PREFIX)); // remove the prefix
+    assert fieldname.startsWith(PREFIX); // remove the prefix
     fieldname = fieldname.substring(PREFIX.length());
     addRecord(classname, fieldname, unparsed);
   }
 
   private void addRecord(String classname, String fieldname, String unparsed) {
-    Assert.assertTrue(! fieldname.startsWith(PREFIX)); // must not have prefix
+    assert ! fieldname.startsWith(PREFIX); // must not have prefix
     String record = classname + "." + fieldname + " = " + unparsed;
     statements.add(record);
   }

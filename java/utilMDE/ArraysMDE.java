@@ -2149,7 +2149,7 @@ public final class ArraysMDE {
         if (tmp != 0)
           return tmp;
         // Check the assumption that the two elements are equal.
-        Assert.assertTrue(elt1.equals(elt2));
+        assert elt1.equals(elt2);
       }
       return a1.length - a2.length;
     }
@@ -2180,7 +2180,7 @@ public final class ArraysMDE {
           return tmp;
         // I'm counting on the fact that hashCode returns a different
         // number for each Object in the system.  This checks that assumption.
-        Assert.assertTrue(elt1.equals(elt2));
+        assert elt1.equals(elt2);
       }
       return a1.length - a2.length;
     }
@@ -2255,7 +2255,7 @@ public final class ArraysMDE {
         if (tmp != 0)
           return tmp;
         // Check the assumption that the two elements are equal.
-        Assert.assertTrue(elt1.equals(elt2));
+        assert elt1.equals(elt2);
       }
       return 0;
     }
@@ -2289,7 +2289,7 @@ public final class ArraysMDE {
           return tmp;
         // I'm counting on the fact that hashCode returns a different
         // number for each Object in the system.  This checks that assumption.
-        Assert.assertTrue(elt1.equals(elt2));
+        assert elt1.equals(elt2);
       }
       return 0;
     }

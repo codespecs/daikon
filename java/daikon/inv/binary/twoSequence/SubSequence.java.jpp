@@ -189,8 +189,8 @@ public class CLASSNAME
 
     QuantifyReturn qret = QuantHelper.quantify(new VarInfoName[]
                                 { SUB_VAR().name, SUPER_VAR().name} );
-    Assert.assertTrue(qret.bound_vars.size() == 2);
-    Assert.assertTrue(qret.root_primes.length == 2);
+    assert qret.bound_vars.size() == 2;
+    assert qret.root_primes.length == 2;
 
     // These variables are, in order: Example element, free Index
     // variable, Lower bound, Upper bound, Span
@@ -404,7 +404,7 @@ public class CLASSNAME
           sub_right_var = sub.endvar();
           sub_right_shift = (sub.right_closed ? 0 : -1);
         } else {
-          Assert.assertTrue(false);
+          assert false;
         }
         if (supervar.derived instanceof SEQUENCESCALARSUBSEQUENCE) {
           SEQUENCESCALARSUBSEQUENCE super_
@@ -423,7 +423,7 @@ public class CLASSNAME
           super_right_var = super_.endvar();
           super_right_shift = (super_.right_closed ? 0 : -1);
         } else {
-          Assert.assertTrue(false);
+          assert false;
         }
         boolean left_included = false, right_included = false;
         if (super_left_var == null)
@@ -467,9 +467,10 @@ public class CLASSNAME
           }
         }
       } else {
-        Assert.assertTrue(false, "how can this happen? " + subvar.name() +
+        assert false
+        : "how can this happen? " + subvar.name() +
                           " " + subvar.derived.getClass() + " " +
-                          supervar.name() + " " + supervar.derived.getClass());
+                          supervar.name() + " " + supervar.derived.getClass();
       }
     }
 
@@ -478,7 +479,7 @@ public class CLASSNAME
 
   // Look up a previously instantiated SubSequence relationship.
   public static /*@Nullable*/ CLASSNAME find(PptSlice ppt) {
-    Assert.assertTrue(ppt.arity() == 2);
+    assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof CLASSNAME)
         return (CLASSNAME) inv;
@@ -671,7 +672,7 @@ public class CLASSNAME
           sub_right_var = sub.endvar();
           sub_right_shift = (sub.right_closed ? 0 : -1);
         } else {
-          Assert.assertTrue(false);
+          assert false;
         }
         if (supervar.derived instanceof SEQUENCESCALARSUBSEQUENCE) {
           SEQUENCESCALARSUBSEQUENCE super_
@@ -690,7 +691,7 @@ public class CLASSNAME
           super_right_var = super_.endvar();
           super_right_shift = (super_.right_closed ? 0 : -1);
         } else {
-          Assert.assertTrue(false);
+          assert false;
         }
         boolean left_included, right_included;
         if (super_left_var == null)
@@ -736,9 +737,10 @@ public class CLASSNAME
             return true;
           }
       } else {
-        Assert.assertTrue(false, "how can this happen? " + subvar.name()
+        assert false
+        : "how can this happen? " + subvar.name()
                         + " " + subvar.derived.getClass() + " "
-                        + supervar.name() + " " + supervar.derived.getClass());
+                        + supervar.name() + " " + supervar.derived.getClass();
       }
 
     }
@@ -788,7 +790,7 @@ public class CLASSNAME
   }
 
   public boolean isSameFormula(Invariant inv) {
-    Assert.assertTrue(inv instanceof CLASSNAME);
+    assert inv instanceof CLASSNAME;
     return (true);
   }
 

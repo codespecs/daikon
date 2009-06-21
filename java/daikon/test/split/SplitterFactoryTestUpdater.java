@@ -321,8 +321,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("   */");
     ps.println();
     ps.println("  public static void assertEqualFiles(String f1, String f2) {");
-    ps.println("    assertTrue(\"Files \" + f1 + \" and \" + f2 + \" differ.\",");
-    ps.println("               UtilMDE.equalFiles(f1, f2));");
+    ps.println("    assert UtilMDE.equalFiles(f1, f2) : \"Files \" + f1 + \" and \" + f2 + \" differ.\";");
     ps.println("  }");
     ps.println();
     ps.println("  public static void assertEqualFiles(String f1) {");

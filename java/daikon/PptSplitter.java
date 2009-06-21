@@ -101,8 +101,8 @@ public class PptSplitter implements Serializable {
    */
   public boolean splitter_valid() {
 
-    Assert.assertTrue (((PptConditional)ppts[1]).splitter_valid()
-                       == ((PptConditional) ppts[0]).splitter_valid());
+    assert ((PptConditional)ppts[1]).splitter_valid()
+                       == ((PptConditional) ppts[0]).splitter_valid();
     return ((PptConditional) ppts[0]).splitter_valid();
   }
 
@@ -160,7 +160,7 @@ public class PptSplitter implements Serializable {
   public void add_implications() {
 
     // Currently only binary implications are supported
-    Assert.assertTrue (ppts.length == 2);
+    assert ppts.length == 2;
 
     // Create any NIS suppressed invariants in each conditional
     @SuppressWarnings({"unchecked", "rawtypes"})
@@ -313,7 +313,7 @@ public class PptSplitter implements Serializable {
           invs[childno].add (inv);
           if ((eq_inv != null) && orig_inv.getClass().equals(eq_inv.getClass()))
             orig_inv = eq_inv;
-          Assert.assertTrue (! orig_invs.containsKey (inv));
+          assert ! orig_invs.containsKey (inv);
           orig_invs.put (inv, orig_inv);
         }
       } // children loop
@@ -377,8 +377,8 @@ public class PptSplitter implements Serializable {
         DummyInvariant dummy1 = cond1.dummyInvariant();
         DummyInvariant dummy2 = cond2.dummyInvariant();
         if (dummy1 != null && dummy1.valid && dummy2 != null && dummy2.valid) {
-          Assert.assertTrue(!cond1.splitter_inverse);
-          Assert.assertTrue(cond2.splitter_inverse);
+          assert !cond1.splitter_inverse;
+          assert cond2.splitter_inverse;
           dummy2.negate();
           Invariant[] dummy_pair = new Invariant[] {dummy1, dummy2};
           exclusive_invs_vec.add(dummy_pair);
@@ -402,7 +402,7 @@ public class PptSplitter implements Serializable {
     for (Iterator<Invariant[]> ii = different_invs_vec.iterator(); ii.hasNext(); ) {
       Invariant[] diff_invs = ii.next();
       if (diff_invs[0] != null) {
-        Assert.assertTrue (diff_invs[1] == null);
+        assert diff_invs[1] == null;
         // debug.fine ("Considering inv0 " + diff_invs[0]);
         for (Invariant[] ex_invs : exclusive_invs_vec) {
           if (ex_invs[0] == diff_invs[0]) {
@@ -412,7 +412,7 @@ public class PptSplitter implements Serializable {
           }
         }
       } else {
-        Assert.assertTrue (diff_invs[1] != null);
+        assert diff_invs[1] != null;
         // debug.fine ("Considering inv1 " + diff_invs[1]);
         for (Invariant[] ex_invs : exclusive_invs_vec) {
           if (ex_invs[1] == diff_invs[1]) {
@@ -444,7 +444,7 @@ public class PptSplitter implements Serializable {
       if (con_invs[jj] == null) {
         System.out.println ("Warning: No non-obvious non-suppressed exclusive"
                             + " invariants found in " + parent.name);
-        // Assert.assertTrue (false);
+        // assert false;
         con_invs[jj] = first[jj];
       }
     }
@@ -550,11 +550,11 @@ public class PptSplitter implements Serializable {
         // // reason we don't break out of the loop early:  also, there will
         // // be few invariants in a slice, so breaking out is of minimal
         // // benefit.)
-        // Assert.assertTrue(inv1.isExclusiveFormula(inv2)
-        //                  == inv2.isExclusiveFormula(inv1),
-        //              "Bad exclusivity: " + inv1.isExclusiveFormula(inv2)
+        // assert inv1.isExclusiveFormula(inv2)
+        //                  == inv2.isExclusiveFormula(inv1)
+        //              : "Bad exclusivity: " + inv1.isExclusiveFormula(inv2)
         //               + " " + inv2.isExclusiveFormula(inv1)
-        //               + "    " + inv1.format() + "    " + inv2.format());
+        //               + "    " + inv1.format() + "    " + inv2.format();
         if (inv1.isExclusiveFormula(inv2)) {
           result.add(new Invariant[] { inv1, inv2 });
         }
@@ -699,7 +699,7 @@ public class PptSplitter implements Serializable {
                                 VarInfo ppt2_var) {
 
     VarInfo v = ppt1.var_infos[ppt2_var.varinfo_index];
-    Assert.assertTrue (v.name().equals (ppt2_var.name()));
+    assert v.name().equals (ppt2_var.name());
     return (v);
   }
 

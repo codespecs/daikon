@@ -9,7 +9,6 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
-import utilMDE.Assert;
 
 /**
  * Represents a violation of a <code>Property</code>.
@@ -97,7 +96,7 @@ public class Violation implements Serializable {
             if (name.equals("violated on entry")) {
                 return onEntry;
             } else {
-                Assert.assertTrue(name.equals("violated on exit "), name);
+                assert name.equals("violated on exit ") : name;
                 return onExit;
             }
         }
@@ -333,9 +332,9 @@ public class Violation implements Serializable {
         Violation[] onEntry = Violation.withTime(vios_array, Violation.Time.onEntry);
         Violation[] onExit = Violation.withTime(vios_array, Violation.Time.onExit);
 
-        Assert.assertTrue(onEntry.length + onExit.length == vios.size(),
-                "onEntry: " + Arrays.asList(onEntry).toString() + "onExit:  "
-                        + Arrays.asList(onExit).toString() + "vios: " + vios);
+        assert onEntry.length + onExit.length == vios.size()
+        : "onEntry: " + Arrays.asList(onEntry).toString() + "onExit:  "
+                        + Arrays.asList(onExit).toString() + "vios: " + vios;
 
         StringBuffer retval = new StringBuffer();
         for (int i = 0; i < onEntry.length; i++) {

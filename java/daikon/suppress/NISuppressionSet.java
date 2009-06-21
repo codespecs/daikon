@@ -86,7 +86,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
     // For now all suppressors are unary/binary and
     // all suppressees are unary, binary or ternary
-    Assert.assertTrue (inv.ppt.var_infos.length < 3);
+    assert inv.ppt.var_infos.length < 3;
 
     // check unary, binary and ternary suppressees separately
 
@@ -294,7 +294,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           NIS.debug.fine ("suppression " + suppression_set[i] + " is valid");
         return;
       }
-      Assert.assertTrue (status != NIS.NONSENSICAL);
+      assert status != NIS.NONSENSICAL;
     }
 
     if (NIS.debug.isLoggable (Level.FINE))
@@ -422,10 +422,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     //  return;
     // }
 
-    if (Assert.enabled) {
-      for (int i = 0; i < vis.length; i++)
-        Assert.assertTrue (!vis[i].missingOutOfBounds());
-    }
+    for (int i = 0; i < vis.length; i++)
+      assert !vis[i].missingOutOfBounds();
 
     // Find the slice and create it if it is not already there.
     // Note that we must make a copy of vis.  vis is used to create each
@@ -449,8 +447,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     if (Daikon.dkconfig_internal_check) {
       for (Invariant new_inv : new_invs) {
         if ((new_inv.getClass() == inv.getClass()) && (new_inv.ppt == slice))
-          Assert.assertTrue (false, String.format("inv %s:%s already in new_invs "
-                        + "(slice %s)", inv.getClass(), inv.format(), slice));
+          assert false
+            : String.format("inv %s:%s already in new_invs "
+                        + "(slice %s)", inv.getClass(), inv.format(), slice);
       }
     }
 
@@ -468,8 +467,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
         PrintInvariants.print_all_invs (ppt, vis[1], vis[2], "  ");
         PrintInvariants.print_all_invs (ppt, vis[0], vis[2], "  ");
         Debug.check (Daikon.all_ppts, "assert failure");
-        Assert.assertTrue (false, String.format("inv %s:%s already in slice %s",
-                        inv.getClass(), inv.format(), slice));
+        assert false
+          : String.format("inv %s:%s already in slice %s",
+                        inv.getClass(), inv.format(), slice);
       }
     }
 
@@ -508,7 +508,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     }
     // This isn't necessarily true if the suppressee is of the same
     // class but doesn't match due to variable swapping.
-    // Assert.assertTrue (new_suppressions.size() > 0);
+    // assert new_suppressions.size() > 0;
 
     // Create a new suppression set with all of the suppressions.
     NISuppression[] new_array

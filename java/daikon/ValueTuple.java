@@ -191,7 +191,7 @@ public final class ValueTuple implements Cloneable {
 
   public static int parseModified(String raw) {
     int result = Integer.parseInt(raw);
-    Assert.assertTrue((result >= 0) && (result < MODBIT_VALUES));
+    assert (result >= 0) && (result < MODBIT_VALUES);
     return result;
   }
 
@@ -224,8 +224,8 @@ public final class ValueTuple implements Cloneable {
   // Private constructor that doesn't perform interning.
   @SuppressWarnings("interning") // interning constructor
   private ValueTuple(/*@Nullable*/ Object[] vals, int[] mods, boolean check) {
-    Assert.assertTrue((!check) || Intern.isInterned(vals));
-    Assert.assertTrue((!check) || Intern.isInterned(mods));
+    assert (!check) || Intern.isInterned(vals);
+    assert (!check) || Intern.isInterned(mods);
     this.vals = vals;
     this.mods = mods;
   }
@@ -294,7 +294,7 @@ public final class ValueTuple implements Cloneable {
   // For debugging
   public String toString() {
     StringBuffer sb = new StringBuffer("[");
-    Assert.assertTrue(vals.length == mods.length);
+    assert vals.length == mods.length;
     for (int i=0; i<vals.length; i++) {
       if (i>0)
         sb.append("; ");
@@ -324,8 +324,8 @@ public final class ValueTuple implements Cloneable {
    **/
   public String toString(VarInfo[] vis) {
     StringBuffer sb = new StringBuffer("[");
-    Assert.assertTrue(vals.length == mods.length);
-    Assert.assertTrue(vals.length == vis.length);
+    assert vals.length == mods.length;
+    assert vals.length == vis.length;
     for (int i=0; i<vals.length; i++) {
       if (i>0)
         sb.append("; ");

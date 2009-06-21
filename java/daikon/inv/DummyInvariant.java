@@ -1,7 +1,6 @@
 package daikon.inv;
 
 import daikon.*;
-import utilMDE.Assert;
 import java.util.HashSet;
 import java.util.Iterator;
 
@@ -70,8 +69,8 @@ public class DummyInvariant
     inv.escFormat = this.escFormat;
     inv.simplifyFormat = this.simplifyFormat;
     inv.valid = false; // Not valid until we find a slice for it
-    Assert.assertTrue(!this.negated, "Only instantiated invariants " +
-                      "should be negated");
+    assert !this.negated
+        : "Only instantiated invariants should be negated";
 
     // Find between 1 and 3 unique variables, to pick a slice to put
     // this in.
@@ -92,7 +91,7 @@ public class DummyInvariant
       }
     }
     vars = newVars;
-    Assert.assertTrue(vars.length >= 1 && vars.length <= 3);
+    assert vars.length >= 1 && vars.length <= 3;
     if (vars.length == 1) {
       PptSlice1 slice = parent.findSlice(vars[0]);
       if (slice == null) {

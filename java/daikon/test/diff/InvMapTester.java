@@ -38,15 +38,15 @@ public class InvMapTester extends TestCase {
 
     // Test the keys
     Iterator<PptTopLevel> i = map.pptIterator();
-    assertTrue(pptA == i.next());
-    assertTrue(pptB == i.next());
-    assertTrue(pptC == i.next());
-    assertTrue(!i.hasNext());
+    assert pptA == i.next();
+    assert pptB == i.next();
+    assert pptC == i.next();
+    assert !i.hasNext();
 
     // Test the values
-    assertTrue(invsA == map.get(pptA));
-    assertTrue(invsB == map.get(pptB));
-    assertTrue(invsC == map.get(pptC));
+    assert invsA == map.get(pptA);
+    assert invsB == map.get(pptB);
+    assert invsC == map.get(pptC);
   }
 
   public void testCAB() {
@@ -56,15 +56,15 @@ public class InvMapTester extends TestCase {
 
     // Test the keys
     Iterator<PptTopLevel> i = map.pptIterator();
-    assertTrue(pptC ==i.next());
-    assertTrue(pptA == i.next());
-    assertTrue(pptB == i.next());
-    assertTrue(!i.hasNext());
+    assert pptC ==i.next();
+    assert pptA == i.next();
+    assert pptB == i.next();
+    assert !i.hasNext();
 
     // Test the values
-    assertTrue(invsA == map.get(pptA));
-    assertTrue(invsB == map.get(pptB));
-    assertTrue(invsC == map.get(pptC));
+    assert invsA == map.get(pptA);
+    assert invsB == map.get(pptB);
+    assert invsC == map.get(pptC);
   }
 
 }

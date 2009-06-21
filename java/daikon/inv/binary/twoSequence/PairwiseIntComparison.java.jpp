@@ -201,7 +201,6 @@ import daikon.suppress.*;
 import daikon.Quantify.QuantFlags;
 
 import utilMDE.ArraysMDE;
-import utilMDE.Assert;
 import java.util.Iterator;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -489,7 +488,7 @@ public class PAIRWISEINTEQUAL
 
   // Look up a previously instantiated invariant.
   public static /*@Nullable*/ PAIRWISEINTEQUAL find(PptSlice ppt) {
-    Assert.assertTrue(ppt.arity() == 2);
+    assert ppt.arity() == 2;
     for (Invariant inv : ppt.invs) {
       if (inv instanceof PAIRWISEINTEQUAL)
         return (PAIRWISEINTEQUAL) inv;

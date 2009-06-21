@@ -102,7 +102,7 @@ public class InvTranslate {
    */
   private void add_variable_map (String v1_name, String v2_name) {
 
-    Assert.assertTrue (!var_map.containsKey (v1_name));
+    assert !var_map.containsKey (v1_name);
 
     var_map.put (v1_name, v2_name);
   }

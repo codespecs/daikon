@@ -106,8 +106,8 @@ public class InvDef {
    */
   public InvDef (int v1_index, int v2_index, int v3_index, Class<? extends Invariant> inv_class) {
 
-    Assert.assertTrue (v1_index < v2_index);
-    Assert.assertTrue (v2_index < v3_index);
+    assert v1_index < v2_index;
+    assert v2_index < v3_index;
     this.v1_index = v1_index;
     this.v2_index = v2_index;
     this.v3_index = v3_index;
@@ -124,7 +124,7 @@ public class InvDef {
   }
 
   public boolean check (Invariant inv) {
-    Assert.assertTrue (inv.getClass() == inv_class);
+    assert inv.getClass() == inv_class;
 
     debug.fine ("checking " + this);
 
