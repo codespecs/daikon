@@ -1,5 +1,4 @@
-import typequals.*;
-
+import typequals.Prototype;
 
 package java.lang;
 
@@ -19,9 +18,9 @@ class Object {
 }
 
 
-// package java.lang;
-// 
-// class String implements Serializable, Comparable<String>, CharSequence {
+package java.lang;
+
+class String implements Serializable, Comparable<String>, CharSequence {
 //     Comparator<String> CASE_INSENSITIVE_ORDER;
 //     String();
 //     String(String arg0);
@@ -89,8 +88,8 @@ class Object {
 //     String trim();
 //     String toString();
 //     char[] toCharArray();
-//     String format(String arg0, Object[] arg1);
-//     String format(Locale arg0, String arg1, Object[] arg2);
+    String format(String arg0, @Prototype Object[] arg1);
+    String format(Locale arg0, String arg1, @Prototype Object[] arg2);
 //     String valueOf(Object arg0);
 //     String valueOf(char[] arg0);
 //     String valueOf(char[] arg0, int arg1, int arg2);
@@ -103,4 +102,4 @@ class Object {
 //     String valueOf(float arg0);
 //     String valueOf(double arg0);
 //     String intern();
-// }
+}
