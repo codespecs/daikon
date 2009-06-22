@@ -12,15 +12,14 @@ JAVAC_ARGS ?= -g -target 5 -Xlint -Xmaxwarns 1000
 # The "-classpath" argument is only necessary when using the JSR 308 javac,
 # since it's a shell command for "javac -jar ..." which ignores the
 # CLASSPATH environment variable and thus must be supplied explicitly.
-JAVAC_COMMAND = jsr308_imports='checkers.interning.quals.*:checkers.nullness.quals.*' ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS} -J-Xbootclasspath/a:${CHECKERSJAR} -classpath '${UTILMDE_CLASSPATH}' ${JAVAC_ARGS}
+JAVAC_COMMAND = ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS} ${JAVAC_ARGS}
 # JAVAC ?= javac -g -Xlint:unchecked
 # JAVAC ?= jikes -g +E +F
 JAVA ?= java -ea
 
 CHECKERS ?= ${HOME}/research/typequals/annotations/checkers
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
-#UTILMDE_CLASSPATH=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar
-UTILMDE_CLASSPATH= $(CLASSPATH)
+CLASSPATH:=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar:${CLASSPATH}
 
 # Leading "./" is for consistency with output of "find", so that names are
 # identical and "sort" can remove duplicates.
@@ -34,6 +33,11 @@ JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -p
 ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
 # Using ALL_JAVA_FILES isn't quite right, since it includes .class files for helper .jpp files.
 ALL_CLASS_FILES := ${JAVA_FILES:.java=.class}
+
+jsr308_imports=checkers.interning.quals.*:checkers.nullness.quals.*
+
+export jsr308_imports
+export CLASSPATH
 
 default: all
 compile: all
