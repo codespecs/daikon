@@ -775,9 +775,8 @@ JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-do
 JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing
 JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 JAVAC_PROTOTYPE_ARGS = -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing
-# This stub file causes a crash as of 6/12/2009
 # JAVAC_PROTOTYPE_STUBS = -Astubs=typequals/prototype-stubs.astub
-JAVAC_PROTOTYPE_STUBS =
+JAVAC_PROTOTYPE_STUBS = -J-Dcheckers.skipClasses='^java\.'
 JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker -implicit:class -Xlint:-processing
 JAVAC_JAVARI_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 JAVAC_IGJ_ARGS = -processor checkers.igj.IGJChecker -implicit:class -Xlint:-processing
