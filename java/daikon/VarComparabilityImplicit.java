@@ -66,7 +66,7 @@ public final class VarComparabilityImplicit
     return base;
   }
 
-  public boolean equals (Object o) {
+  public boolean equals (/*@Nullable*/ Object o) {
     if (!(o instanceof VarComparabilityImplicit)) return false;
     return equals ((VarComparabilityImplicit) o);
   }

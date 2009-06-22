@@ -257,7 +257,7 @@ public class Debug {
    * don't have to set them.
    **/
 
-  void set (Class<?> c, Ppt ppt, VarInfo[] vis) {
+  void set (/*@Nullable*/ Class<?> c, /*@Nullable*/ Ppt ppt, /*@Nullable*/ VarInfo[] vis) {
     cache_class = c;
     cache_ppt = ppt;
     cache_vis = vis;
@@ -334,7 +334,7 @@ public class Debug {
    * #log(Logger, Class, Ppt, VarInfo[], String)}.
    */
 
-  public static void log (Logger debug, Class<?> inv_class, Ppt ppt, String msg) {
+  public static void log (Logger debug, Class<?> inv_class, /*@Nullable*/ Ppt ppt, String msg) {
     if (ppt == null)
       log (debug, inv_class, ppt, null, msg);
     else
@@ -457,7 +457,7 @@ public class Debug {
    *
    * @return whether or not it logged anything
    */
-  public static boolean log (Class<?> inv_class, Ppt ppt, VarInfo[] vis,
+  public static boolean log (Class<?> inv_class, /*@Nullable*/ Ppt ppt, /*@Nullable*/ VarInfo[] vis,
                              String msg) {
 
     if (!debugTrack.isLoggable(Level.FINE))
@@ -544,7 +544,7 @@ public class Debug {
    * are not the leader of their equality sets
    */
 
-  public static boolean var_match (VarInfo[] vis) {
+  public static boolean var_match (VarInfo /*@Nullable*/ [] vis) {
 
     if (debugTrackVars.length == 0)
       return (true);
@@ -703,7 +703,7 @@ public class Debug {
     return (out);
   }
 
-  public static String toString (Object val) {
+  public static String toString (/*@Nullable*/ Object val) {
     if (val == null)
       return ("none");
     if (val instanceof String)

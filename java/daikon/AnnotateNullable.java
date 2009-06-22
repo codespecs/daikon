@@ -243,8 +243,9 @@ public class AnnotateNullable {
         process_method (child);
       }
     } else {
-      List<PptTopLevel> static_methods
-        = class_map.get (object_ppt.ppt_name.getFullClassName());
+      String classname = object_ppt.ppt_name.getFullClassName();
+      assert classname != null;
+      List<PptTopLevel> static_methods = class_map.get (classname);
       assert static_methods != null;
       for (PptTopLevel child : static_methods)
         process_method (child);

@@ -88,7 +88,8 @@ public class PptName
   /**
    * @param className fully-qualified class name
    **/
-  public PptName(String className, String methodName, String pointName) {
+  @SuppressWarnings("nullness") // XXX nullness checker bug
+  public PptName(/*@Nullable*/ String className, /*@Nullable*/ String methodName, /*@Nullable*/ String pointName) {
     if ((className == null) && (methodName == null)) {
       throw new UnsupportedOperationException
         ("One of class or method must be non-null");
@@ -141,7 +142,7 @@ public class PptName
    * May be null.
    * e.g. "DataStructures.StackAr"
    **/
-  public String getFullClassName() {
+  public /*@Nullable*/ String getFullClassName() {
     return cls;
   }
 
@@ -180,7 +181,7 @@ public class PptName
    * May be null.
    * e.g. "pop()Ljava/lang/Object;"
    **/
-  public String getSignature() {
+  public /*@Nullable*/ String getSignature() {
     return method;
   }
 
@@ -203,7 +204,7 @@ public class PptName
    * May be null.
    * e.g. "DataStructures.StackAr.pop()Ljava/lang/Object;"
    **/
-  public /*@Interned*/ String getNameWithoutPoint() {
+  public /*@Nullable*/ /*@Interned*/ String getNameWithoutPoint() {
     return fn_name;
     // if (cls == null && method == null) return null;
     // if (cls == null) return method;
@@ -219,7 +220,7 @@ public class PptName
    * May be null.
    * e.g. "EXIT84"
    **/
-  public String getPoint() {
+  public /*@Nullable*/ String getPoint() {
     return point;
   }
 
@@ -341,6 +342,7 @@ public class PptName
         return (false);
 
       String class_name = UtilMDE.unqualified_name (cls);
+      assert method != null;    // for nullness checker
       int arg_start = method.indexOf ('(');
       String method_name = method;
       if (arg_start != -1)

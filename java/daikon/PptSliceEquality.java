@@ -77,7 +77,7 @@ public class PptSliceEquality
       return vi.file_rep_type.hashCode();
     }
 
-    public boolean equals (Object o) {
+    public boolean equals (/*@Nullable*/ Object o) {
       if (!(o instanceof VarInfoAndComparability)) return false;
       return equals ((VarInfoAndComparability) o);
     }

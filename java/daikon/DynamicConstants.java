@@ -72,7 +72,7 @@ public class DynamicConstants implements Serializable {
   List<Constant> all_list = new ArrayList<Constant>();
 
   /** Program point of these constants. **/
-  PptTopLevel ppt = null;
+  PptTopLevel ppt;
 
   /** Number of sample received. **/
   int sample_cnt = 0;
@@ -91,7 +91,7 @@ public class DynamicConstants implements Serializable {
     static final long serialVersionUID = 20030913L;
 
     /** The value of the constant. **/
-    public /*@Interned*/ Object val;
+    public /*@Nullable*/ /*@Interned*/ Object val;
 
     /** The sample count of the constant. **/
     public int count;
@@ -133,7 +133,7 @@ public class DynamicConstants implements Serializable {
       this.count = 0;
     }
 
-    public boolean equals (Object obj) {
+    public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof Constant))
         return (false);
       Constant c = (Constant) obj;
@@ -756,7 +756,7 @@ public class DynamicConstants implements Serializable {
    * Looks for a LinearBinary invariant in the specified slice.
    * Will match either float or integer versions
    */
-  private Invariant find_linear_binary (PptSlice slice) {
+  private /*@Nullable*/ Invariant find_linear_binary (/*@Nullable*/ PptSlice slice) {
 
     // if (debug.isLoggable (Level.FINE))
     //  debug.fine ("considering slice " + slice);

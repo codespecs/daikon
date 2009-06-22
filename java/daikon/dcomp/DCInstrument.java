@@ -171,7 +171,7 @@ class DCInstrument {
       return (true);
     }
 
-    public boolean equals (Object obj) {
+    public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof MethodDef))
         return false;
       MethodDef md = (MethodDef)obj;
