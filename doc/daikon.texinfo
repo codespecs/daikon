@@ -35,7 +35,7 @@
 @c @ifinfo
 @c @c This text appears only in the Info Version.
 @c
-@c Copyright 1998-2007
+@c Copyright 1998-2009
 @c @end ifinfo
 
 @c Avoid black boxes marking overfull hboxes in TeX output.
@@ -61,7 +61,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2007
+Copyright @copyright{} 1998-2009
 @end titlepage
 
 @html
@@ -128,14 +128,15 @@ Installing Daikon
 Complete installation instructions
 
 * Requirements::                
-* Installation steps::          
-* Windows command shells::      
+* Windows command shell::       
 
 Requirements for running Daikon
 
 * Optional requirements::       
+* Unix/Linux/MacOS installation::  
+* Windows installation::        
 
-Windows command shells
+Windows command shell
 
 * Windows command line::        
 * Cygwin shell::                
@@ -479,7 +480,8 @@ you may send mail to the list asking to be added.
 @chapter Installing Daikon
 @cindex installing Daikon
 
-Shortcut for the impatient:  skip directly to @ref{Installation steps}.
+Shortcut for the impatient:  skip directly to installation instructions
+(@pxref{Unix/Linux/MacOS installation}) (@pxref{Windows installation}).
 
 This section describes two ways to install Daikon.  The first gives a
 simple installation that is adequate for the needs of many users.
@@ -493,11 +495,10 @@ programs, if you wish to run certain other programs distributed with
 Daikon in its @file{bin/} directory, or if you wish to edit and
 recompile the source code of Daikon itself.
 
-Differences between various versions of Daikon appear
+Differences from previous versions of Daikon appear
 in the file @file{doc/CHANGES} in the distribution.
-You may wish to subscribe to one of the mailing lists
-(@pxref{Mailing lists}), in order to be notified of new releases or join
-discussions with other Daikon users and developers.
+To be notified of new releases, or to join discussions about Daikon,
+subscribe to one of the mailing lists (@pxref{Mailing lists}).
 
 
 @menu
@@ -529,39 +530,49 @@ installation}.
 @section Complete installation instructions
 
 This section gives step-by-step instructions for installing Daikon.
-The instructions in @ref{Installation steps} and the scripts used
-there are targeted for Unix users.  To perform a complete install on
-Windows, it is necessary to install the Cygwin toolset.
+
+Here is an overview of the steps.  Details appear below; select the
+instructions for your operating system.
+
+@enumerate
+@item
+Download Daikon.
+
+@item
+Place three commands in your shell initialization file.
+
+@item
+Optionally, customize your installation.
+
+@item
+Optionally, compile Daikon and build other tools by running @code{make}.
+
+@end enumerate
+
 
 For more complete information on compiling Daikon, @pxref{Compiling
 Daikon,,,./developer,Daikon Developer Manual} in the Daikon Developer Manual.
 
 @menu
 * Requirements::                
-* Installation steps::          
-* Windows command shells::      
+* Windows command shell::       
 @end menu
 
 
-@node    Requirements, Installation steps, Complete installation, Complete installation
+@node    Requirements, Windows command shell, Complete installation, Complete installation
 @subsection Requirements for running Daikon
 
 In order to run Daikon, you must have a Java 5.0 (or later) JVM
 (@uref{http://java.sun.com,, Java Virtual Machine}).  You must also
 have a Java 5.0 (or later) compiler.
 
-To install Daikon on Windows, the best approach is to install the Cygwin
-toolset (available at @uref{http://sources.redhat.com/cygwin/}), which
-contains everything you need to compile and run Unix programs under
-Windows.  You can install Cygwin by simply running the program found
-at @uref{http://sources.redhat.com/cygwin/setup.exe}.  The default
-installation is sufficient.
-
 @menu
 * Optional requirements::       
+* Unix/Linux/MacOS installation::  
+* Windows installation::        
 @end menu
 
-@node    Optional requirements,  , Requirements, Requirements
+@node    Optional requirements, Unix/Linux/MacOS installation, Requirements, Requirements
 @subsubsection Optional requirements for running Daikon
 
 All the remaining requirements listed here are optional (they enable you
@@ -580,80 +591,140 @@ If you wish to edit the Daikon source code and re-compile Daikon, see
 Daikon developers manual.
 
 
-@node  Installation steps, Windows command shells, Requirements, Complete installation
-@subsection Installation steps
+@c The explicit examples, segregated by OS type, seem necessary for some users.
+
+
+@node  Unix/Linux/MacOS installation, Windows installation, Optional requirements, Requirements
+@subsubsection Unix/Linux/MacOS installation
+
+
 
 @enumerate
 @item
-In the directory where you want to install Daikon (we'll call this
-the @var{daikonparent} directory),
-download and unpack Daikon.  Daikon is available as a zip file from
-@uref{http://pag.csail.mit.edu/daikon/download/daikon.zip} or
-as a tar file from
-@uref{http://pag.csail.mit.edu/daikon/download/daikon.tar.gz}.
-The two files contain the same information; you only need one of them.
-Windows users typically opt for the zip file.
+Choose the directory where you want to install Daikon; we'll call this
+the @var{daikonparent} directory.  In this directory, download and
+unpack Daikon.
 
 @example
 cd @var{daikonparent}
 wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
 tar zxf daikon.tar.gz
 @end example
-@noindent
-or
-@example
-cd @var{daikonparent}
-wget http://pag.csail.mit.edu/daikon/download/daikon.zip
-unzip daikon.zip
-@end example
+
 @noindent
 This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 
 @item
-Set up your environment.  This requires three shell commands:
+Place three commands in your shell initialization file:  
 set two environment variables
 and source a Daikon startup file.
-You can place the three commands in your shell initialization file.
 
-@enumerate
 
-@item
-@cindex DAIKONDIR
-Define the @code{DAIKONDIR} environment variable to be 
-the full pathname to the daikon directory you extracted
-above.  For example: @code{@var{daikonparent}/daikon}.
-
-@item
-Define the @code{JDKDIR} environment variable to be the full
-@emph{Unix} pathname to the JDK@.  For example:
-@code{/usr/lib/j2sdk1.5-sun} or @code{/cygdrive/c/Program
-Files/Java/jdk1.5.0_05}.
-
-@item
-Source the appropriate Daikon startup file 
-(@code{daikon.cshrc}, @code{daikon.bashrc} or @code{daikonenv.bat}).
-These files are located in the @code{@var{daikonparent}/daikon/bin}
-directory.
-
-@end enumerate
-
-@strong{Example:}  If you use the sh or bash shell or their variants, the three commands might be
+@strong{sh/bash:}  If you use the sh or bash shell or their variants,
+add these three commands to your @file{.bashrc} or @file{.bash_profile} file:
 @example
+# The full pathname of the directory that contains Daikon
 export DAIKONDIR=$HOME/daikon
+# The full pathname of the directory that contains the Java JDK
 export JDKDIR=/usr/lib/j2sdk1.5-sun
 source $DAIKONDIR/bin/daikon.bashrc
 @end example
-If you use the csh or tcsh shell or their variants, the three commands
-might be
+
+@strong{csh/tcsh:} If you use the csh or tcsh shell or their variants, 
+assd these three commands to your @file{.cshrc} file:
 @example
+# The full pathname of the directory that contains Daikon
 setenv DAIKONDIR $HOME/daikon
+# The full pathname of the directory that contains the Java JDK
 setenv JDKDIR /usr/lib/j2sdk1.5-sun
 source $DAIKONDIR/bin/daikon.cshrc
 @end example
 
-Windows notes:  
-Do not use a Windows shell; if you are using the Windows operating
-system, then use the Cygwin bash shell.
+After editing your shell initialization file, either execute the commands
+you placed in it, or else log out and log back in to achieve the same
+effect.
+
+@item
+Optionally, customize other variables.  The customizable variables are
+listed in the Daikon startup file: @file{daikon.bashrc} or
+@file{daikon.cshrc}.
+
+You may customize them by setting environment variables, or by adding a
+@code{Makefile.user} file to directory @code{$DAIKONDIR/java} (it is
+automatically read at the beginning of the main Makefile, and prevents
+you from having to edit the main Makefile directly).
+
+@item
+Compile Daikon and build other tools by running @code{make}.
+Note that this step is @emph{not} required if you only want to use Daikon
+with its Java front end (Chicory).    
+
+@example
+cd $DAIKONDIR
+make
+@end example
+This builds the various executables used by Daikon, such as the
+C/C++ front end Kvasir (@pxref{Installing Kvasir}) and the 
+JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
+For more
+information about compiling Daikon, see @ref{Compiling
+Daikon,,,./developer,Daikon Developer Manual} in the Daikon Developer Manual.
+
+Note that running this make command may take 20 minutes or more,
+depending on your computer.  
+
+Optionally, download other executables, such as
+@c
+the Simplify theorem
+prover (@uref{http://www.hpl.hp.com/downloads/crl/jtk/}).
+
+@end enumerate
+
+@node  Windows installation,  , Unix/Linux/MacOS installation, Requirements
+@subsubsection Windows installation
+
+To perform a complete install on
+Windows, it is necessary to install the Cygwin toolset.
+After you have installed Daikon, you can run it using either Cygwin or
+the reuglar Windows shell.
+
+The Cygwin toolset (available at
+@uref{http://sources.redhat.com/cygwin/}) contains everything you need
+to compile and run Unix programs under Windows.  You can install Cygwin
+by simply running the program found at
+@uref{http://sources.redhat.com/cygwin/setup.exe}.  The default
+installation of Cygwin is sufficient for installing Daikon.
+
+
+@enumerate
+@item
+Choose the directory where you want to install Daikon; we'll call this
+the @var{daikonparent} directory.  In this directory, download and
+unpack Daikon.
+
+@example
+cd @var{daikonparent}
+wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
+tar zxf daikon.tar.gz
+@end example
+
+@noindent
+This creates a @file{@var{daikonparent}/daikon/} subdirectory.
+
+@item
+Place three commands in your shell initialization file @file{.bashrc}:  
+set two environment variabless
+and source a Daikon startup file.
+Do not use a Windows shell; use the Cygwin bash shell instead.
+
+@example
+# The full pathname of the directory that contains Daikon
+export DAIKONDIR=$HOME/daikon
+# The full Unix pathname of the directory that contains the Java JDK
+export JDKDIR=/cygdrive/c/Program Files/Java/jdk1.5.0_05
+source $DAIKONDIR/bin/daikon.bashrc
+@end example
+
 Use the Cygwin/Unix path style (e.g., @code{/cygdrive/c/daikon}) rather than the
 windows path style (@code{C:\daikon}).
 Some users have reported problems when using pathnames
@@ -663,15 +734,11 @@ symbolic link without spaces to @code{Program Files}.
     cd /cygdrive/c
     ln -s "Program Files" program_files
 @end example
-
-These three commands can be placed in your startup file (also known as
-your shell initialization file --- for example, the bash shell uses
-@file{.bashrc} in your home directory).
-Alternately, you can execute the three commands
-each time that you wish to use Daikon; in this case, you may find it
-convenient to put all three
-commands in a single batch file, and
-manually execute that batch file from the command line.
+@noindent
+and then the JDKDIR line becomes:
+@example
+export JDKDIR=/cygdrive/c/program_files/Java/jdk1.5.0_05
+@end example
 
 @c You can also
 @c set the environment variables in the registry (right-click My Computer,
@@ -684,23 +751,18 @@ After editing your shell initialization file, either execute the commands
 you placed in it, or else log out and log back in to achieve the same
 effect.
 
-Optionally, you can customize other environment variables besides
-@code{DAIKONDIR} and @code{JDKDIR}.  The customizable variables are
-listed in the  Daikon startup file, such as @file{daikon.bashrc}.
-
 @item
-Customize @code{make} variables.  The @code{Makefile} in
-@code{$DAIKONDIR/java} can be customized by adding a
-@code{Makefile.user} file to that directory.  It is more convenient to
-set some variables here than as environment variables.  The build
-process needs the Java @code{CLASSPATH} defined to include
-@code{$DAIKONDIR/java}.  Note that the classpath must be defined in
-Unix format (cygwin paths and colon separators).  For example, add the
-following line to @code{$DAIKONDIR/java/Makefile.user}.
-@example
-  export CLASSPATH := $(DAIKONDIR)/java
-@end example
-In Windows, also define the @code{OSTYPE} variable to be @code{cygwin}.
+Optionally, customize other variables.  The customizable variables are
+listed in the Daikon startup file: @file{daikon.bashrc} or
+@file{daikon.cshrc}.
+
+You may customize them by setting environment variables, or by adding a
+@code{Makefile.user} file to directory @code{$DAIKONDIR/java} (it is
+automatically read at the beginning of the main Makefile, and prevents
+you from having to edit the main Makefile directly).
+
+The one variable you must customize is 
+to define the @code{OSTYPE} variable to be @code{cygwin}.
 @example
   OSTYPE = cygwin
 @end example
@@ -742,31 +804,28 @@ can replace Simplify but is only distributed for Windows).
 @end enumerate
 
 
-@node    Windows command shells,  , Installation steps, Complete installation
-@subsection Windows command shells
+@node    Windows command shell,  , Requirements, Complete installation
+@subsection Windows command shell
 @cindex Windows
 @cindex Microsoft Windows
 
-To install Daikon under Windows, see the main installation instructions
-(@pxref{Installing Daikon}).  This section discusses options for running
-Daikon under Windows.
+After you have installed Daikon under Windows (@pxref{Installing
+Daikon}), you can run it either using native Windows utilities, or using
+the Cygwin environment -- it's your choice.
 
-If you are running Daikon under Microsoft Windows, you have two
-options:  using native Windows utilities, or using the Cygwin
-environment.
-
-Daikon and most of its related programs, such as Chicory, run under
-Windows as command-line applications.  You should invoke them from a
-command shell --- either an Windows command shell or a Cygwin command
-shell --- rather than by double-clicking their icons.  In any event,
-double-clicking would not supply the proper arguments to the program.
+Daikon is a @strong{command-line application} (and so are its related
+programs, such as Chicory).  You should invoke them from a command shell
+--- either a Windows command shell or a Cygwin command shell --- rather
+than by double-clicking their icons.  In any event, double-clicking
+would not supply the proper arguments to the program.
 
 @menu
 * Windows command line::        
 * Cygwin shell::                
 @end menu
 
-@node    Windows command line, Cygwin shell, Windows command shells, Windows command shells
+
+@node    Windows command line, Cygwin shell, Windows command shell, Windows command shell
 @subsubsection Windows command line
 
 The first option is to run Daikon using native Windows utilities.
@@ -774,6 +833,7 @@ The is done in the normal fashion.  The @code{CLASSPATH} must include
 either @code{$DAIKONDIR/daikon.jar} or @code{$DAIKONDIR/java} (if you
 have recompiled the Daikon source).  The @code{CLASSPATH} should be
 specified in Windows format (Windows paths and semicolon separators).
+
 
 @c JHP Jan 2 2009: I comment out the below.  I don't think the environment
 @c is necessary to run Daikon, only to build it.
@@ -797,7 +857,8 @@ specified in Windows format (Windows paths and semicolon separators).
 @c @noindent
 @c The values for these registry entries are ASCII key codes.  Tab is 9.
 
-@node    Cygwin shell,  , Windows command line, Windows command shells
+
+@node    Cygwin shell,  , Windows command line, Windows command shell
 @subsubsection Cygwin shell
 
 @cindex Cygwin toolset
@@ -4106,7 +4167,7 @@ turned on with @code{--abridged-vars}.
 @cindex JDK, instrumented for DynComp
 
 If you did not already do so when installing Daikon (in
-@ref{Installation steps}), follow the instructions here to build an
+@ref{Complete installation}), follow the instructions here to build an
 instrumented copy of the JDK@.  Use the following command in
 @file{$DAIKONDIR}:
 
@@ -8929,7 +8990,9 @@ conditions that place no restrictions on use.
 
 @cindex license
 
-Copyright @copyright{} 1998-2007 Massachusetts Institute of Technology
+Copyright @copyright{} 1998-2008 Massachusetts Institute of Technology
+
+Copyright @copyright{} 2008-2009 University of Washington
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
