@@ -152,7 +152,7 @@ Analyzing historical versions of Daikon
 
 This is the developer manual for the 
 @uref{http://pag.csail.mit.edu/daikon/, ,Daikon invariant detector}.
-For information about using Daikon, see its user manual.
+For information about using Daikon, see its user manual (@pxref{Introduction,,,./daikon,Daikon User Manual}).
 This manual is intended for those who are already familiar with the use
 of Daikon, but wish to customize or extend it.
 
@@ -1413,7 +1413,7 @@ the first number of each sample better be less than the second)
 @c samples of a binary integer comparison
 
 Arrays and strings must be formatted according to the Daikon dtrace file
-convention (see the Daikon user manual for full description). This
+convention (for a full description, @pxref{File formats,,,./daikon,Daikon User Manual}.  This
 states that arrays must be surrounded in brackets (start with @samp{[}, end
 with @samp{]}), and entries must be separated by a space.  Strings must be
 enclosed in quotes (@samp{"}). Quotes within a string can be represented by the
