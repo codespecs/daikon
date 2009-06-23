@@ -19,13 +19,14 @@ width=$2
 temp=/tmp/eps2png$$.pgm
 # Default to whatever's on our path
 pnmtopng=`which pnmtopng`
+pnmtopng238=`which pnmtopng-2.38`
 if [ -x /g6/users/smcc/bin/pnmtopng ]; then
     # We need at least version 2.38, not 2.37.5 as in Red Hat.
     pnmtopng=/g6/users/smcc/bin/pnmtopng
-elif [ -x `which pnmtopng-2.38` ]; then
+elif [ -n "$pnmtopng238" ]; then
     # This is what we've called it on our Debian boxes, which as of
     # now also have a broken version in /usr/bin (Debian bug #274907)
-    pnmtopng=`which pnmtopng-2.38`
+    pnmtopng=$pnmtopng238
 fi
 # echo Using $pnmtopng
 
