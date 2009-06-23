@@ -45,10 +45,6 @@ JAVAC ?= javac
 # remove "-J-Xmx800m".  (When "javac" is an executable, it properly handles
 # "-J" flags.)
 JAVAC_ARGS ?= -g -target 5
-## If you do not wish to use the "javac-xlint" program, add to Makefile.user:
-##   JAVAC_XLINT =
-# Give full pathname so this works from cron jobs
-JAVAC_XLINT ?= ${DAIKONBIN}/javac-xlint -p '([/\\]jtb[/\\])|([/\\]junit[/\\])'
 
 JAR ?= jar
 ifeq (cygwin,$(OSTYPE))
@@ -95,7 +91,7 @@ ifdef CLASSPATH_JARS2
   endif
 endif
 ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
-  CLASSPATH := $(CLASSPATH):${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
+  CLASSPATH := $(CLASSPATH):${DAIKONDIR}/java:${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
 endif
 
 # On cygwin, translate the classpath to windows format.  Only do so if
@@ -379,6 +375,8 @@ AUTO_GENERATED_CLASSES_2 = $(subst .java,.class,${AUTO_GENERATED_FILES_2})
 
 export jsr308_imports
 export CLASSPATH
+export CHECKERSJAR
+export DAIKONDIR
 
 
 ###########################################################################
