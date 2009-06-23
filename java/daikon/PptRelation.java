@@ -822,8 +822,6 @@ public class PptRelation implements Serializable {
                   + ") is the same as this");
               continue;
             }
-            assert object_ppt != null; // XXX nullness checker flow problem
-            assert ppt != null; // XXX nullness checker flow problem
             rel = PptRelation.newObjectUserRel(object_ppt, ppt, vc);
             debug.fine(
               dstr
@@ -845,7 +843,6 @@ public class PptRelation implements Serializable {
       // from the child's point of view when printing, we create
       // under all cases and then remove it from non-leaves children
       // list.  This doesn't seem like the best solution.
-      assert ppt != null;       // XXX nullness checker flow problem
       if (ppt.has_splitters()) {
         assert ppt.splitters != null; // guaranteed by call to has_splitters
         PptSplitter ppt_split = ppt.splitters.get(0);
