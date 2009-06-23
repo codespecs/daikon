@@ -20,30 +20,26 @@ public class PptName
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  // Any of these except fullname can be null.  All but fullname are
-  // derived from fullname.
-  // These cannot be "final": they must be re-interned upon deserialization.
+  // These are never changed but cannot be declared "final", because they
+  // must be re-interned upon deserialization.
   private /*@Interned*/ String fullname;   // interned full program point name
   // fn_name and point together comprise fullname
-  private /*@Nullable*/ /*@Interned*/ String fn_name;    // interned; the part of fullname before ":::"
-  private /*@Nullable*/ /*@Interned*/ String point;      // interned post-separator (separator is ":::")
+  private /*@Interned*/ String fn_name;    // interned; the part of fullname before ":::"
+  private /*@Interned*/ String point;      // interned post-separator (separator is ":::")
   // cls and method together comprise fn_name
   private /*@Nullable*/ /*@Interned*/ String cls;        // interned fully-qualified class name
   private /*@Nullable*/ /*@Interned*/ String method;     // interned method signature, including types
 
   // Representation invariant:
   //
-  // Fullname is always present.
-  // If fullname does not contain :::, then all of the other fields are
-  // null.
-  // Otherwise, fn_name is the part of fullname before the ::: and point is
-  // the part after.
-  // If fn_name does not contain '(' then class is the same as fn_name and
-  // method is null.
+  // fullname must contain ":::".
+  // fn_name is the part of fullname before ::: and point is the part after.
   // If fn_name does contain a '(' and a '.' that comes before it, then
-  // cls is the portion before the dot and method if the portion after;
-  // otherwise (fn_name contains '(' but no dot) cls is null and method
+  // cls is the portion before the dot and method is the portion after.
+  // If fn_name contains '(' but no dot, cls is null and method
   // is the same as fn_name.
+  // If fn_name does not contain '(', then class is the same as fn_name and
+  // method is null.
 
   // ==================== CONSTRUCTORS ====================
 
@@ -86,10 +82,9 @@ public class PptName
   }
 
   /**
-   * @param className fully-qualified class name
+   * className or methodName (or both) must be non-null
    **/
-  @SuppressWarnings("nullness") // XXX nullness checker bug
-  public PptName(/*@Nullable*/ String className, /*@Nullable*/ String methodName, /*@Nullable*/ String pointName) {
+  public PptName(/*@Nullable*/ String className, /*@Nullable*/ String methodName, String pointName) {
     if ((className == null) && (methodName == null)) {
       throw new UnsupportedOperationException
         ("One of class or method must be non-null");
@@ -108,14 +103,10 @@ public class PptName
         fn_name = method;
       }
     }
-    // Then add point
-    if (pointName != null) {
-      point = pointName.intern();
-      fullname = (fn_name + FileIO.ppt_tag_separator + point).intern();
-    } else {
-      point = null;
-      fullname = fn_name;
-    }
+    assert fn_name != null;
+    // Finally, add point
+    point = pointName.intern();
+    fullname = (fn_name + FileIO.ppt_tag_separator + point).intern();
   }
 
   // ==================== OBSERVERS ====================
