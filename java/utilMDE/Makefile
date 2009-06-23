@@ -5,21 +5,21 @@
 # Make will silently continue if file does not exist.
 -include Makefile.user
 
-JAVAC ?= javac
-# Removed "-J-Xmx800m", because it is incompatible with JDK 7.
-JAVAC_ARGS ?= -g -target 5 -Xlint -Xmaxwarns 1000
-# When using the JSR 308 compiler, this expects checkers.jar on the classpath
-# The "-classpath" argument is only necessary when using the JSR 308 javac,
-# since it's a shell command for "javac -jar ..." which ignores the
-# CLASSPATH environment variable and thus must be supplied explicitly.
-JAVAC_COMMAND = ${JAVAC_XLINT} ${JAVAC} ${JAVAC_ARGS} ${JAVAC_ARGS}
-# JAVAC ?= javac -g -Xlint:unchecked
-# JAVAC ?= jikes -g +E +F
-JAVA ?= java -ea
-
 CHECKERS ?= ${HOME}/research/typequals/annotations/checkers
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 CLASSPATH:=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar:${CLASSPATH}
+
+JAVAC ?= javac
+# Removed "-J-Xmx800m", because it is incompatible with JDK 7.
+JAVAC_ARGS ?= -g -target 5 -Xlint -Xmaxwarns 1000
+# When using the JSR 308 compiler, this expects checkers.jar on the classpath.
+# The "-classpath" argument is only necessary when using the JSR 308 javac,
+# since it's a shell command for "javac -jar ..." which ignores the
+# CLASSPATH environment variable and thus must be supplied explicitly.
+JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS} ${JAVAC_ARGS}
+# JAVAC ?= javac -g -Xlint:unchecked
+# JAVAC ?= jikes -g +E +F
+JAVA ?= java -ea
 
 # Leading "./" is for consistency with output of "find", so that names are
 # identical and "sort" can remove duplicates.
@@ -31,7 +31,8 @@ JAVA_FILES := $(sort $(shell find . \( -name CVS \) -prune -o -name '*.java' -pr
 JAVA_LINT_FILES := $(shell find . \( -name CVS -o -name ArraysMDE.java -o -name WeakHasherMap.java -o -name Intern.java -o -name OrderedPairIterator.java -o -name WeakIdentityHashMap.java \) -prune -o -name '*.java' -print | sort)
 JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -print | sort)
 ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
-# Using ALL_JAVA_FILES isn't quite right, since it includes .class files for helper .jpp files.
+# Using ALL_JAVA_FILES instead of JAVA_FILES wouldn't be right, since
+# ALL_JAVA_FILES includes helper .jpp files that don't generate a .class file.
 ALL_CLASS_FILES := ${JAVA_FILES:.java=.class}
 
 jsr308_imports=checkers.interning.quals.*:checkers.nullness.quals.*
@@ -43,13 +44,6 @@ default: all
 compile: all
 
 all: test
-
-## Old version
-# all: all_stop_on_error
-# # Don't bother to run the unit tests if the compilation failed.
-# all_stop_on_error:
-# 	$(MAKE) --stop all_notest test
-# all_notest:  ${AUTO_GENERATED_FILES}
 
 compile_notest:  .class-files-timestamp
 
@@ -155,8 +149,7 @@ check-nullness: check-nullness-utilmde
 check-nullness-utilmde: check-nullness-utilmde-withstubs
 
 check-nullness-utilmde-withstubs:
-	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
-	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${JAVA_FILES}
+	${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${JAVA_FILES}
 
 
 
