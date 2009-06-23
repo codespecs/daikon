@@ -128,15 +128,15 @@ Installing Daikon
 Complete installation instructions
 
 * Requirements::                
-* Windows command shell::       
+* Unix/Linux/MacOS installation::  
+* Windows installation::        
+* Running Daikon under Windows::  
 
 Requirements for running Daikon
 
 * Optional requirements::       
-* Unix/Linux/MacOS installation::  
-* Windows installation::        
 
-Windows command shell
+Running Daikon under Windows
 
 * Windows command line::        
 * Cygwin shell::                
@@ -483,10 +483,11 @@ you may send mail to the list asking to be added.
 Shortcut for the impatient:  skip directly to installation instructions
 (@pxref{Unix/Linux/MacOS installation}) (@pxref{Windows installation}).
 
-This section describes two ways to install Daikon.  The first gives a
-simple installation that is adequate for the needs of many users.
-The second gives a complete installation that permits you to use all of
-the functionality in the Daikon distribution.
+There are two main ways to install Daikon.  @xref{Simple installation},
+for a simple 2-step installation process that is adequate for the needs
+of many users.  @xref{Complete installation}, for a complete
+installation, in 4 easy steps, that permits you to use all of the
+functionality in the Daikon distribution.
 
 Use the simple installation instructions if you only wish to detect
 invariants in Java programs.  Use the complete installation instructions
@@ -523,7 +524,9 @@ classpath.
 
 @xref{Installing Daikon}, for situations where you should
 follow the complete installation instructions of @ref{Complete
-installation}.
+installation}.  (Also, if you do not know how to add a jar file to your
+classpath, then use the complete installation instructions, which walk
+you through the process.)
 
 
 @node    Complete installation,  , Simple installation, Installing Daikon
@@ -555,11 +558,13 @@ Daikon,,,./developer,Daikon Developer Manual} in the Daikon Developer Manual.
 
 @menu
 * Requirements::                
-* Windows command shell::       
+* Unix/Linux/MacOS installation::  
+* Windows installation::        
+* Running Daikon under Windows::  
 @end menu
 
 
-@node    Requirements, Windows command shell, Complete installation, Complete installation
+@node    Requirements, Unix/Linux/MacOS installation, Complete installation, Complete installation
 @subsection Requirements for running Daikon
 
 In order to run Daikon, you must have a Java 5.0 (or later) JVM
@@ -568,11 +573,9 @@ have a Java 5.0 (or later) compiler.
 
 @menu
 * Optional requirements::       
-* Unix/Linux/MacOS installation::  
-* Windows installation::        
 @end menu
 
-@node    Optional requirements, Unix/Linux/MacOS installation, Requirements, Requirements
+@node    Optional requirements,  , Requirements, Requirements
 @subsubsection Optional requirements for running Daikon
 
 All the remaining requirements listed here are optional (they enable you
@@ -594,8 +597,8 @@ Daikon developers manual.
 @c The explicit examples, segregated by OS type, seem necessary for some users.
 
 
-@node  Unix/Linux/MacOS installation, Windows installation, Optional requirements, Requirements
-@subsubsection Unix/Linux/MacOS installation
+@node  Unix/Linux/MacOS installation, Windows installation, Requirements, Complete installation
+@subsection Unix/Linux/MacOS installation
 
 
 
@@ -631,7 +634,7 @@ source $DAIKONDIR/bin/daikon.bashrc
 @end example
 
 @strong{csh/tcsh:} If you use the csh or tcsh shell or their variants, 
-assd these three commands to your @file{.cshrc} file:
+add these three commands to your @file{.cshrc} file:
 @example
 # The full pathname of the directory that contains Daikon
 setenv DAIKONDIR $HOME/daikon
@@ -680,13 +683,13 @@ prover (@uref{http://www.hpl.hp.com/downloads/crl/jtk/}).
 
 @end enumerate
 
-@node  Windows installation,  , Unix/Linux/MacOS installation, Requirements
-@subsubsection Windows installation
+@node  Windows installation, Running Daikon under Windows, Unix/Linux/MacOS installation, Complete installation
+@subsection Windows installation
 
 To perform a complete install on
 Windows, it is necessary to install the Cygwin toolset.
 After you have installed Daikon, you can run it using either Cygwin or
-the reuglar Windows shell.
+the regular Windows shell (@pxref{Running Daikon under Windows}).
 
 The Cygwin toolset (available at
 @uref{http://sources.redhat.com/cygwin/}) contains everything you need
@@ -713,7 +716,7 @@ This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 
 @item
 Place three commands in your shell initialization file @file{.bashrc}:  
-set two environment variabless
+set two environment variables
 and source a Daikon startup file.
 Do not use a Windows shell; use the Cygwin bash shell instead.
 
@@ -804,14 +807,14 @@ can replace Simplify but is only distributed for Windows).
 @end enumerate
 
 
-@node    Windows command shell,  , Requirements, Complete installation
-@subsection Windows command shell
+@node    Running Daikon under Windows,  , Windows installation, Complete installation
+@subsection Running Daikon under Windows
 @cindex Windows
 @cindex Microsoft Windows
 
-After you have installed Daikon under Windows (@pxref{Installing
-Daikon}), you can run it either using native Windows utilities, or using
-the Cygwin environment -- it's your choice.
+After you have installed Daikon under Windows (@pxref{Windows
+installation}), you can run it either using native Windows utilities, or
+using the Cygwin environment --- it's your choice.
 
 Daikon is a @strong{command-line application} (and so are its related
 programs, such as Chicory).  You should invoke them from a command shell
@@ -825,7 +828,7 @@ would not supply the proper arguments to the program.
 @end menu
 
 
-@node    Windows command line, Cygwin shell, Windows command shell, Windows command shell
+@node    Windows command line, Cygwin shell, Running Daikon under Windows, Running Daikon under Windows
 @subsubsection Windows command line
 
 The first option is to run Daikon using native Windows utilities.
@@ -858,7 +861,7 @@ specified in Windows format (Windows paths and semicolon separators).
 @c The values for these registry entries are ASCII key codes.  Tab is 9.
 
 
-@node    Cygwin shell,  , Windows command line, Windows command shell
+@node    Cygwin shell,  , Windows command line, Running Daikon under Windows
 @subsubsection Cygwin shell
 
 @cindex Cygwin toolset
@@ -885,8 +888,8 @@ correctly.
 However, when running any Java program (such as Daikon or Chicory),
 the @code{CLASSPATH} should be specified in Windows format.  That is
 why the build instructions suggest specifying the @code{CLASSPATH} in
-the @code{$DAIKONDIR/java/Makefile.user} file -- so that the required
-unix definition is not part of the environment.
+the @code{$DAIKONDIR/java/Makefile.user} file --- so that the required
+Unix definition is not part of the environment.
 
 @c JHP Jan 2 2008: I removed this as I don't think this a problem for
 @c a user that isn't trying to write scripts on two platforms.  They
@@ -4163,7 +4166,7 @@ turned on with @code{--abridged-vars}.
 @subsection Instrumenting the JDK with DynComp
 
 @cindex dcomp_rt.jar file for DynComp
-@cindex intrumented JDK, for DynComp
+@cindex instrumented JDK, for DynComp
 @cindex JDK, instrumented for DynComp
 
 If you did not already do so when installing Daikon (in
@@ -4181,12 +4184,12 @@ containing your JDK@.  This command instruments the classes in the
 @file{rt.jar} file of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.
 
-On MacOSX, there is not normally a JDK directory.  Instead, the
+On MacOS, there is not normally a JDK directory.  Instead, the
 @code{ORIG_RT} variable must be set to specify the location of the input JDK
-jar file (@code{classes.jar} in MacOSX).  Normally the file is found in
+jar file (@code{classes.jar} in MacOS).  Normally the file is found in
 @code{/System/Library/Frameworks} under the appropriate Java version.
 The following example is for the standard install of Java 1.5 on
-MacOSX:
+MacOS:
 
 @example
   export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
@@ -5803,7 +5806,7 @@ Note that Kvasir requires a version of glibc between 2.2 and 2.5.  It
 checks for this and will not build with other versions.  If your
 system is not compatible with those versions (it is not advisable to
 install multiple versions of glibc at once), a possible workaround
-would be to install an older linux distribution using a virtual
+would be to install an older Linux distribution using a virtual
 machine (QEMU or VMWare) For instance, to match what we currently use
 for development, you could use Debian stable (Etch) with gcc 3.3
 installed.
@@ -7165,7 +7168,7 @@ Manual}.
 
 @cindex front end for Eiffel
 @cindex Eiffel front end
-@cindex intrumentation, of Eiffel programs
+@cindex instrumentation, of Eiffel programs
 
 A front end for the Eiffel programming language is distributed
 separately; see @uref{http://se.inf.ethz.ch/people/polikarpova/citadel.html}.
@@ -7623,7 +7626,7 @@ java daikon.AnnotateNullable an.inv.gz > nullable-annotations.jaif
 @item
 Use the
 @uref{http://groups.csail.mit.edu/pag/jsr308/annotation-file-utilities/,
-Annotation File Utilites} to insert the annotations in your .class or .java
+Annotation File Utilities} to insert the annotations in your .class or .java
 file.
 
 @example
@@ -8258,7 +8261,7 @@ configuration option (@pxref{General configuration options}).
 Another way to increase the number of invariants printed
 out is to lower the confidence bound cutoff.  Daikon
 only prints invariants whose confidence level is greater than 
-the boudn specified by the @option{--conf_limit} option
+the bound specified by the @option{--conf_limit} option
 (@pxref{Options to control invariant detection}).  In order to maximize
 the number of invariants printed, use @option{--conf_limit 0} to see all
 invariants Daikon is considering printing.
@@ -9448,7 +9451,7 @@ The variable that contains this variable.  Required for fields and
 arrays and optional for functions.  If specified for functions, the
 function is an instance method.  If not specified the function is
 static.  A variable is specified by its name.  The enclosing-var must
-be defined.  If a variable is omitted (eg, by the omit-var switch),
+be defined.  If a variable is omitted (e.g., by the omit-var switch),
 any variable for which it is the enclosing variable must be omitted as
 well.
 
@@ -10230,7 +10233,7 @@ incomparable quantities.  (In this case, the variables use different
 units of measurement.)
 
 Variable comparability information helps Daikon to avoid computing
-indormation over unrelated variables.  This saves time and (more
+information over unrelated variables.  This saves time and (more
 importantly) improves the quality of Daikon's output.  For more details,
 see the paper
 @uref{http://www.cs.washington.edu/homes/mernst/pubs/invariants-relevance-icse2000-abstract.html,
@@ -10521,4 +10524,9 @@ specify classes which implement lists; see
 @c  LocalWords:  libc Leitner Quinonez Rodric Rabbah DDTRACEAPPEND createItem
 @c  LocalWords:  maxPhase largestlet anag adjacentdups specfirstword DynComp's
 @c  LocalWords:  maxdepthspec DynCompJ DynCompB cset jdk dcomp BuildJDK FIFOs
-@c  LocalWords:  amd Itanium Yuan schoolDays breakDays DCompInstrumented
+@c  LocalWords:  amd Itanium Yuan schoolDays breakDays DCompInstrumented OSTYPE
+@c  LocalWords:  AnnotateNullable instrumenter toolset JHP pm PptMap loophead
+@c  LocalWords:  instrumenters NoSuchMethodException myprogram glibc NonNull XP
+@c  LocalWords:  Nullable Nullness daikondir nullable NonZero jaif nonnull Rudd
+@c  LocalWords:  Holten McCamant Alexandru Salcianu Tschantz Nadya Kuzmina dec
+@c  LocalWords:  readibility subexit dups rel birthyear

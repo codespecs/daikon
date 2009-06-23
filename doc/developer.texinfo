@@ -152,7 +152,7 @@ Analyzing historical versions of Daikon
 
 This is the developer manual for the 
 @uref{http://pag.csail.mit.edu/daikon/, ,Daikon invariant detector}.
-For information about using Daikon, see its user manual (@pxref{Introduction,,,./daikon,Daikon User Manual}).
+For information about using Daikon, see its user manual (@pxref{Top,,Overview,./daikon,Daikon User Manual}).
 This manual is intended for those who are already familiar with the use
 of Daikon, but wish to customize or extend it.
 
