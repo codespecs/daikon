@@ -209,12 +209,13 @@ public final class ArraysMDE {
 
   /**
    * Return a two-element array containing the smallest and largest values in the array.
-   * Return null if the array has length 0.
+   * Throw ArrayIndexOutOfBoundsException if the array has length 0.
    **/
-  public static int /*@Nullable*/ [] min_max(int[] a) {
-    if (a.length == 0)
-      // throw new ArrayIndexOutOfBoundsException("Empty array passed to min_max(int[])");
-      return null;
+  public static int [] min_max(int[] a) {
+    if (a.length == 0) {
+      // return null;
+      throw new ArrayIndexOutOfBoundsException("Empty array passed to min_max(int[])");
+    }
     int result_min = a[0];
     int result_max = a[0];
     for (int i=1; i<a.length; i++) {
@@ -226,12 +227,13 @@ public final class ArraysMDE {
 
   /**
    * Return a two-element array containing the smallest and largest values in the array.
-   * Return null if the array has length 0.
+   * Throw ArrayIndexOutOfBoundsException if the array has length 0.
    **/
-  public static long /*@Nullable*/ [] min_max(long[] a) {
-    if (a.length == 0)
-      // throw new ArrayIndexOutOfBoundsException("Empty array passed to min_max(long[])");
-      return null;
+  public static long [] min_max(long[] a) {
+    if (a.length == 0) {
+      // return null;
+      throw new ArrayIndexOutOfBoundsException("Empty array passed to min_max(long[])");
+    }
     long result_min = a[0];
     long result_max = a[0];
     for (int i=1; i<a.length; i++) {
@@ -247,8 +249,7 @@ public final class ArraysMDE {
   public static int element_range(int[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to element_range(int[])");
-    @SuppressWarnings("nullness") // array length is non-zero, so result is non-null
-    int /*@NonNull*/ [] min_max = min_max(a);
+    int [] min_max = min_max(a);
     return min_max[1] - min_max[0];
   }
 
@@ -258,8 +259,7 @@ public final class ArraysMDE {
   public static long element_range(long[] a) {
     if (a.length == 0)
       throw new ArrayIndexOutOfBoundsException("Empty array passed to element_range(long[])");
-    @SuppressWarnings("nullness") // array length is non-zero, so result is non-null
-    long /*@NonNull*/ [] min_max = min_max(a);
+    long [] min_max = min_max(a);
     return min_max[1] - min_max[0];
   }
 

@@ -146,8 +146,16 @@ public final class TestUtilMDE extends TestCase {
                          new int[] { -2,3 });
     assert_arrays_equals(ArraysMDE.min_max(new int[] { 3 }),
                          new int[] { 3,3 });
-    assert ArraysMDE.min_max(new int[] { }) == null;
-    assert ArraysMDE.min_max(new long[] { }) == null;
+    try {
+      ArraysMDE.min_max(new int[] { });
+      assert false : "Didn't throw ArrayIndexOutOfBoundsException";
+    } catch (ArrayIndexOutOfBoundsException e) {
+    }
+    try {
+      ArraysMDE.min_max(new long[] { });
+      assert false : "Didn't throw ArrayIndexOutOfBoundsException";
+    } catch (ArrayIndexOutOfBoundsException e) {
+    }
 
     // public static int sum(int[] a)
     assert 0 == ArraysMDE.sum(new int[0]);
@@ -1057,13 +1065,11 @@ public final class TestUtilMDE extends TestCase {
     assert oaIntern == oaOtherIntern;
 
     java.awt.Point pOrig = new java.awt.Point(1,2);
-    boolean exceptionCaught = false;
     try {
       Intern.intern((Object) pOrig); // performed for side effect
+      assert false : "Didn't throw IllegalArgumentException";
     } catch (IllegalArgumentException e) {
-      exceptionCaught = true;
     }
-    assert exceptionCaught;
   }
 
   // Add elements 0..limit-1 to the set.
@@ -1122,14 +1128,10 @@ public final class TestUtilMDE extends TestCase {
       e.printStackTrace();
       throw new Error(e);
     }
-    {
-      boolean exception = false;
-      try {
-        MathMDE.pow(3, -3);
-      } catch (Exception e) {
-        exception = true;
-      }
-      assert exception;
+    try {
+      MathMDE.pow(3, -3);
+      assert false : "Didn't throw ArithmeticException";
+    } catch (ArithmeticException e) {
     }
 
 
@@ -1677,6 +1679,7 @@ public final class TestUtilMDE extends TestCase {
     }
     try {
       java.lang.reflect.Method m = UtilMDE.methodForName("utilMDE.UtilMDE.methodForName()");
+      assert false : "Didn't throw NoSuchMethodException";
     } catch (NoSuchMethodException e) {
       // nothing to do; this is the expected case
     } catch (Exception e) {
@@ -1695,7 +1698,7 @@ public final class TestUtilMDE extends TestCase {
     assert UtilMDE.replaceString("hello dolly well hello dolly", " ", "  ").equals("hello  dolly  well  hello  dolly");
     assert UtilMDE.replaceString("  hello  dolly well hello dolly  ", " ", "  ").equals("    hello    dolly  well  hello  dolly    ");
     assert UtilMDE.replaceString("hello dolly well hello dolly", "ll", "y").equals("heyo doyy wey heyo doyy");
-    assert UtilMDE.replaceString("hello dolly well hello dolly", "q", "xxx").equals("hello dolly well hello dolly");
+    assert UtilMDE.replaceString("hello dolly well hello dolly", "q", "yyy").equals("hello dolly well hello dolly");
 
     // public static String[] split(String s, char delim)
     // public static String[] split(String s, String delim)
