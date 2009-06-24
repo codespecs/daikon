@@ -467,8 +467,7 @@ public class Options {
       }
 
     }
-    @SuppressWarnings("nullness") // List.toArray
-    /*@NonNull*/ String[] result = non_options.toArray (new String[non_options.size()]);
+    String[] result = non_options.toArray (new String[non_options.size()]);
     return result;
   }
 
@@ -512,8 +511,7 @@ public class Options {
     if (!arg.equals (""))
       arg_list.add (arg);
 
-    @SuppressWarnings("nullness") // List.toArray
-    /*@NonNull*/ String[] argsArray = arg_list.toArray (new String[arg_list.size()]);
+    String[] argsArray = arg_list.toArray (new String[arg_list.size()]);
     return parse (argsArray);
   }
 
@@ -660,8 +658,7 @@ public class Options {
       uses.add (use);
     }
 
-    @SuppressWarnings("nullness") // List.toArray
-    /*@NonNull*/ String[] result = uses.toArray (new String[uses.size()]);
+    String[] result = uses.toArray (new String[uses.size()]);
     return result;
 
   }
