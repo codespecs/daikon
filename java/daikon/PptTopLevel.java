@@ -3442,7 +3442,6 @@ public class PptTopLevel extends Ppt {
    * unary, binary, and ternary slices for each combination of equality
    * sets and build the invariants for each slice.
    */
-  @SuppressWarnings("nullness") // XXX nullness checker bug
   public void mergeInvs() {
 
     Daikon.debugProgress.fine
