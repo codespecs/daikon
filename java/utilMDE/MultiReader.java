@@ -334,7 +334,7 @@ public class MultiReader implements Iterable<String>, Iterator<String> {
 
       // Remove entry match from the line
       if (entry_match.groupCount() > 0) {
-        @SuppressWarnings("nullness") // just checked that group 1 exists
+        @SuppressWarnings("nullness") // just checked that group 1 exists in regexp
         /*@NonNull*/ String match_group_1 = entry_match.group(1);
         line = entry_match.replaceFirst (match_group_1);
       }
