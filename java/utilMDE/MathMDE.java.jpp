@@ -180,7 +180,7 @@ public final class MathMDE {
 
   public static int pow_fast(int base, int expt) throws ArithmeticException {
     if (expt < 0)
-      throw new ArithmeticException("Negative base passed to pow");
+      throw new ArithmeticException("Negative exponent passed to pow");
 
     int this_square_pow = base;
     int result = 1;
@@ -195,7 +195,7 @@ public final class MathMDE {
 
   public static long pow_fast(long base, long expt) throws ArithmeticException {
     if (expt < 0)
-      throw new ArithmeticException("Negative base passed to pow");
+      throw new ArithmeticException("Negative exponent passed to pow");
 
     long this_square_pow = base;
     long result = 1;
@@ -210,7 +210,7 @@ public final class MathMDE {
 
   public static int pow_slow(int base, int expt) throws ArithmeticException {
     if (expt < 0)
-      throw new ArithmeticException("Negative base passed to pow");
+      throw new ArithmeticException("Negative exponent passed to pow");
 
     int result = 1;
     for (int i=0; i<expt; i++)
