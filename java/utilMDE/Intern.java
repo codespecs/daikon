@@ -521,15 +521,15 @@ public final class Intern {
    * The elements should themselves already be interned;
    * they are compared using their equals() methods.
    **/
-  @SuppressWarnings("interning")
-  public static /*@Interned*/ Object /*@Interned*/ [] intern(/*@Interned*/ Object[] a) {
-    WeakReference<Object /*@Interned*/ []> lookup = internedObjectArrays.get(a);
+  @SuppressWarnings({"interning","nullness"}) // XXX nullness needs to be fixed
+  public static /*@PolyNull*/ /*@Interned*/ Object /*@Interned*/ [] intern(/*@PolyNull*/ /*@Interned*/ Object[] a) {
+    WeakReference</*@PolyNull*/ Object /*@Interned*/ []> lookup = internedObjectArrays.get(a);
     if (lookup != null) {
       return lookup.get();
     } else {
       @SuppressWarnings("cast") // cast is redundant (except in JSR 308)
-      /*@Interned*/ Object /*@Interned*/ [] result = (/*@Interned*/ Object /*@Interned*/ []) a;
-      internedObjectArrays.put(result, new WeakReference</*@Interned*/ Object /*@Interned*/ []>(result));
+      /*@PolyNull*/ /*@Interned*/ Object /*@Interned*/ [] result = (/*@PolyNull*/ /*@Interned*/ Object /*@Interned*/ []) a;
+      internedObjectArrays.put(result, new WeakReference</*@PolyNull*/ /*@Interned*/ Object /*@Interned*/ []>(result));
       return result;
     }
   }
@@ -638,7 +638,8 @@ public final class Intern {
   /**
    * @see #internSubsequence(int[], int, int)
    **/
-  public static /*@Interned*/ Object /*@Interned*/ [] internSubsequence (/*@Interned*/ Object /*@Interned*/ [] seq, int start, int end) {
+  @SuppressWarnings("nullness") // XXX java.lang.ref.* isn't annotated yet; possibly other problems in this method as well
+  public static /*@PolyNull*/ /*@Interned*/ Object /*@Interned*/ [] internSubsequence (/*@PolyNull*/ /*@Interned*/ Object /*@Interned*/ [] seq, int start, int end) {
     assert Intern.isInterned(seq);
     SequenceAndIndices</*@Interned*/ Object /*@Interned*/ []> sai = new SequenceAndIndices</*@Interned*/ Object /*@Interned*/ []> (seq, start, end);
     WeakReference</*@Interned*/ Object /*@Interned*/ []> lookup = internedObjectSequenceAndIndices.get(sai);
@@ -646,8 +647,8 @@ public final class Intern {
       return lookup.get();
     } else {
       /*@Interned*/ Object[] subseq_uninterned = ArraysMDE.subarray(seq, start, end - start);
-      /*@Interned*/ Object /*@Interned*/ [] subseq = Intern.intern (subseq_uninterned);
-      internedObjectSequenceAndIndices.put (sai, new WeakReference</*@Interned*/ Object /*@Interned*/ []>(subseq));
+      /*@Nullable*/ /*@Interned*/ Object /*@Interned*/ [] subseq = Intern.intern (subseq_uninterned);
+      internedObjectSequenceAndIndices.put (sai, new WeakReference</*@Nullable*/ /*@Interned*/ Object /*@Interned*/ []>(subseq));
       return subseq;
     }
   }
