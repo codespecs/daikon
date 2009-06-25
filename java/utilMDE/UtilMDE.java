@@ -925,18 +925,18 @@ public final class UtilMDE {
     return hash(hash(a), hash(b));
   }
 
-  public static final int hash(String a) {
+  public static final int hash(/*@Nullable*/ String a) {
     return (a == null) ? 0 : a.hashCode();
   }
 
-  public static final int hash(String a, String b) {
+  public static final int hash(/*@Nullable*/ String a, /*@Nullable*/ String b) {
     long result = 17;
     result = result * 37 + hash(a);
     result = result * 37 + hash(b);
     return hash(result);
   }
 
-  public static final int hash(String a, String b, String c) {
+  public static final int hash(/*@Nullable*/ String a, /*@Nullable*/ String b, /*@Nullable*/ String c) {
     long result = 17;
     result = result * 37 + hash(a);
     result = result * 37 + hash(b);
@@ -944,7 +944,7 @@ public final class UtilMDE {
     return hash(result);
   }
 
-  public static final int hash(String /*@Nullable*/ [] a) {
+  public static final int hash(/*@Nullable*/ String /*@Nullable*/ [] a) {
     long result = 17;
     if (a != null) {
       result = result * 37 + a.length;
