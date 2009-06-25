@@ -294,9 +294,12 @@ public class PptSplitter implements Serializable {
         PptSlice cslice = child_ppt.findSlice (cvis_sorted);
         if (cslice == null) {
           if (eq_inv != null) {
-            for (int i = 0; i < cvis_sorted.length; i++)
-              System.out.println ("con val = "
+            if (Daikon.dkconfig_use_dynamic_constant_optimization) {
+              assert child_ppt.constants != null; // because of config var
+              for (int i = 0; i < cvis_sorted.length; i++)
+                System.out.println ("con val = "
                    + child_ppt.constants.all_vars[cvis_sorted[i].varinfo_index]);
+            }
             throw new RuntimeException("found eq_inv " + eq_inv + " @"
                                 + eq_inv.ppt + " but can't find slice for "
                                 + VarInfo.toString (cvis_sorted));

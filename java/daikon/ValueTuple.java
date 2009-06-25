@@ -13,7 +13,8 @@ import utilMDE.*;
  * This is the data structure that holds the tuples of values seen so far
  * (and how many times each was seen) for a particular program point.  VarInfo
  * objects can use this to get the values of the variables they represent.
- * <br>
+ * <p>
+ *
  * While the arrays and their elements are interned, the ValueTuple objects
  * themselves are not interned.
  **/
@@ -212,7 +213,7 @@ public final class ValueTuple implements Cloneable {
    * Note: For clients, getValue(VarInfo) is preferred to getValue(int).
    * @see #getValue(VarInfo)
    **/
-  /*@Interned*/ Object getValue(int val_index) { return vals[val_index]; }
+  /*@Nullable*/ /*@Interned*/ Object getValue(int val_index) { return vals[val_index]; }
 
 
   /** Default constructor that interns its argument. */
@@ -284,7 +285,7 @@ public final class ValueTuple implements Cloneable {
 
   /** Return a new ValueTuple containing this one's first len elements. **/
   public ValueTuple trim(int len) {
-    @SuppressWarnings("interning") // polymorphism
+    @SuppressWarnings({"interning","nullness"}) // XXX checker bug with polymorphism
     /*@Nullable*/ /*@Interned*/ Object[] new_vals = ArraysMDE.subarray(vals, 0, len);
     int[] new_mods = ArraysMDE.subarray(mods, 0, len);
     return new ValueTuple(new_vals, new_mods);
@@ -292,6 +293,7 @@ public final class ValueTuple implements Cloneable {
 
 
   // For debugging
+  @SuppressWarnings("nullness")
   public String toString() {
     StringBuffer sb = new StringBuffer("[");
     assert vals.length == mods.length;
@@ -299,16 +301,17 @@ public final class ValueTuple implements Cloneable {
       if (i>0)
         sb.append("; ");
       if (vals[i] instanceof String)
-        sb.append("\"" + ((String)vals[i]) + "\"");
+        sb.append("\"" + ((/*@Nullable*/ String)vals[i]) + "\"");
       else if (vals[i] instanceof long[])
-        sb.append(ArraysMDE.toString((long[])vals[i]));
+        sb.append(ArraysMDE.toString((long /*@Nullable*/ [])vals[i]));
       else if (vals[i] instanceof int[])
         // shouldn't reach this case -- should be long[], not int[]
-        sb.append(ArraysMDE.toString((int[])vals[i]));
+        // sb.append(ArraysMDE.toString((int /*@Nullable*/ [])vals[i]));
+        assert false;
       else if (vals[i] instanceof double[])
-        sb.append(ArraysMDE.toString ((double[])vals[i]));
+        sb.append(ArraysMDE.toString ((double /*@Nullable*/ [])vals[i]));
       else if (vals[i] instanceof String[])
-        sb.append(ArraysMDE.toString((String[])vals[i]));
+        sb.append(ArraysMDE.toString((String /*@Nullable*/ [])vals[i]));
       else
         sb.append(vals[i]);
       sb.append(",");
@@ -322,6 +325,7 @@ public final class ValueTuple implements Cloneable {
    * Return the values of this tuple, annotated with the VarInfo that
    * would be associated with the value.
    **/
+  @SuppressWarnings("nullness")
   public String toString(VarInfo[] vis) {
     StringBuffer sb = new StringBuffer("[");
     assert vals.length == mods.length;
@@ -333,10 +337,11 @@ public final class ValueTuple implements Cloneable {
       if (vals[i] instanceof String)
         sb.append("\"" + vals[i] + "\"");
       else if (vals[i] instanceof long[])
-        sb.append(ArraysMDE.toString((long[])vals[i]));
+        sb.append(ArraysMDE.toString((long /*@Nullable*/ [])vals[i]));
       else if (vals[i] instanceof int[])
         // shouldn't reach this case -- should be long[], not int[]
-        sb.append(ArraysMDE.toString((int[])vals[i]));
+        // sb.append(ArraysMDE.toString((int /*@Nullable*/ [])vals[i]));
+        assert false;
       else
         sb.append(vals[i]);
       sb.append(",");

@@ -11,7 +11,7 @@ import utilMDE.*;
 
 public final class ValueAndModified {
   // The constructor checks that it is interned, contradicting this comment.
-  public Object value;          // not necessarily an interned value
+  public /*@Nullable*/ Object value;     // not necessarily an interned value
   public int modified;
 
   public static final ValueAndModified MISSING_NONSENSICAL

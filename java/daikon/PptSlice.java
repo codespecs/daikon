@@ -62,12 +62,12 @@ public abstract class PptSlice
   PptSlice(PptTopLevel parent, VarInfo[] var_infos) {
     this.parent = parent;
     this.var_infos = var_infos;
+    invs = new Invariants();
     // Ensure that the VarInfo objects are in order (and not duplicated).
     for (int i=0; i<var_infos.length-1; i++) {
       assert var_infos[i].varinfo_index <= var_infos[i+1].varinfo_index;
     }
     assert this instanceof PptSliceEquality || arity() == var_infos.length;
-    invs = new Invariants();
 
     if (debugGeneral.isLoggable(Level.FINE)) {
       debugGeneral.fine (ArraysMDE.toString(var_infos));

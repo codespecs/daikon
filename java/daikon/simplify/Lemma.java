@@ -27,7 +27,7 @@ public class Lemma implements Comparable<Lemma> {
   }
 
   /** If this lemma came from an invariant, get its class. */
-  public Class<? extends Invariant> invClass() {
+  public /*@Nullable*/ Class<? extends Invariant> invClass() {
     return null;
   }
 

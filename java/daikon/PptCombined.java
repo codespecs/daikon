@@ -26,6 +26,7 @@ import daikon.asm.X86Instruction;
  * are looked for over all combinations of variables from all of the program
  * points that make up the combined ppt.
  */
+@SuppressWarnings("nullness")
 public class PptCombined extends PptTopLevel {
 
   // We are Serializable, so we specify a version to allow changes to
@@ -40,7 +41,7 @@ public class PptCombined extends PptTopLevel {
 
   static int maxVarInfoSize = 10000;
 
-  private static AsmFile assemblies = null;
+  private static /*@LazyNonNull*/ AsmFile assemblies = null;
 
   /**
    * Map from the name of a redundant variable to its leader (the earliest

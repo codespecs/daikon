@@ -62,6 +62,7 @@ public class DynamicConstants implements Serializable {
                           = Logger.getLogger ("daikon.DynamicConstants");
 
   /** List of dynamic constants. **/
+  // each element, elt, has elt.count > 0 and elt.val != null, I think. -MDE
   List<Constant> con_list = new ArrayList<Constant>();
 
   /** List of variables that have always been missing. **/
@@ -90,11 +91,11 @@ public class DynamicConstants implements Serializable {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20030913L;
 
-    /** The value of the constant. **/
-    public /*@Nullable*/ /*@Interned*/ Object val;
+    /** The value of the constant.  Null iff count=0.  **/
+    public /*@LazyNonNull*/ /*@Interned*/ Object val = null;
 
     /** The sample count of the constant. **/
-    public int count;
+    public int count = 0;
 
     /** The variable that has this value. **/
     public VarInfo vi;
@@ -129,8 +130,6 @@ public class DynamicConstants implements Serializable {
 
     public Constant (VarInfo vi) {
       this.vi = vi;
-      this.val = null;
-      this.count = 0;
     }
 
     public boolean equals (/*@Nullable*/ Object obj) {
@@ -447,6 +446,7 @@ public class DynamicConstants implements Serializable {
       if (Debug.logOn())
         Debug.log (getClass(), ppt, Debug.vis(con.vi), "Instantiated invs");
       if (con.count > 0) {
+        assert con.val != null; // dependent: val when count>0
         slice1.add_val_bu (con.val, mod, con.count);
       }
       new_views.add (slice1);
@@ -480,6 +480,8 @@ public class DynamicConstants implements Serializable {
         //                   c1.count, c2.count);
         slice2.instantiate_invariants();
         if (c1.count > 0 && c2.count > 0) {
+          assert c1.val != null; // dependent: val when count>0
+          assert c2.val != null; // dependent: val when count>0
           slice2.add_val_bu (c1.val, c2.val, mod, mod, con1.count);
         }
         new_views.add (slice2);
@@ -513,6 +515,9 @@ public class DynamicConstants implements Serializable {
           slice3.instantiate_invariants();
           if ((con_arr[0].count > 0) && (con_arr[1].count > 0)
               && (con_arr[2].count > 0)) {
+            assert con_arr[0].val != null; // dependent: val when count>0
+            assert con_arr[1].val != null; // dependent: val when count>0
+            assert con_arr[2].val != null; // dependent: val when count>0
             slice3.add_val_bu (con_arr[0].val, con_arr[1].val,
                               con_arr[2].val, mod, mod, mod, con_arr[0].count);
           }
@@ -641,6 +646,7 @@ public class DynamicConstants implements Serializable {
     // Consider all of the ternary slices with one new non-constant
     for (int i = 0; i < new_leaders.size(); i++) {
       Constant con1 = new_leaders.get(i);
+      assert con1.val != null;
       for (int j = 0; j < vars.size(); j++ ) {
         Constant con2 = vars.get(j);
         assert con1 != con2;
@@ -884,6 +890,7 @@ public class DynamicConstants implements Serializable {
       }
 
       if (con.count > 0) {
+        assert con.val != null; // dependent: val when count>0
         slice1.add_val_bu(con.val, mod, con.count);
       }
       if (slice1.invs.size() > 0)
@@ -907,6 +914,8 @@ public class DynamicConstants implements Serializable {
         }
 
         if (con1.count > 0 && con2.count > 0) {
+          assert con1.val != null; // dependent: val when count>0
+          assert con2.val != null; // dependent: val when count>0
           slice2.add_val_bu(con1.val, con2.val, mod, mod, con1.count);
         }
         if (slice2.invs.size() > 0)
@@ -972,6 +981,7 @@ public class DynamicConstants implements Serializable {
    * Creates OneOf invariants for each constant
    */
   public void instantiate_oneof (Constant con) {
+    assert con.val != null;
 
     Invariant inv = null;
     PptSlice1 slice1 = (PptSlice1) ppt.get_or_instantiate_slice (con.vi);
@@ -994,8 +1004,9 @@ public class DynamicConstants implements Serializable {
     } else if (rep_type == ProglangType.STRING_ARRAY) {
       inv = OneOfStringSequence.get_proto().instantiate (slice1);
     } else {
-      // Do nothing; do not even complain
+      throw new Error("Unrecognized rep_type in instantiate_oneof");
     }
+    assert inv != null;
     slice1.addInvariant (inv);
 
     // Add the value to it

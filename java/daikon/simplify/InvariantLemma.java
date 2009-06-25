@@ -31,7 +31,10 @@ public class InvariantLemma extends Lemma {
     } else {
       c = invariant.getClass();
     }
-    Class<? extends Invariant> outer = asInvClass(c.getDeclaringClass());
+
+    Class<?> outer_uncasted = c.getDeclaringClass();
+    assert outer_uncasted != null; // because c is an instance of Invariant
+    Class<? extends Invariant> outer = asInvClass(outer_uncasted);
     if (outer != null) {
       c = outer;
     }

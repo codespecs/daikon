@@ -63,6 +63,12 @@ public class PptSlice0
     }
   }
 
+  @SuppressWarnings("nullness")
+  private void reinitInvariantsSeen() {
+    invariantsSeen = null;
+    initInvariantsSeen();
+  }
+
   public void checkRep() {
     if (invariantsSeen != null && invs.size() != invariantsSeen.size()) {
       assert invs.size() == invariantsSeen.size()
@@ -110,8 +116,7 @@ public class PptSlice0
       invs.removeMany(to_remove);
       if (to_remove.size() > invariantsSeen.size() / 2) {
         // Faster to throw away and recreate
-        invariantsSeen = null;
-        initInvariantsSeen();
+        reinitInvariantsSeen();
       } else {
         // Faster to update
         for (Invariant trinv : to_remove) {

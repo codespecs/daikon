@@ -427,7 +427,7 @@ public final /*@Interned*/ class ProglangType
       if (value.length() == 0) {
         value_strings = new String[0];
       } else if (base == BASE_STRING) {
-        Vector<String> v = new Vector<String>();
+        Vector</*@Nullable*/ String> v = new Vector</*@Nullable*/ String>();
         StreamTokenizer parser = new StreamTokenizer(new StringReader(value));
         parser.quoteChar('\"');
         try {
@@ -435,6 +435,7 @@ public final /*@Interned*/ class ProglangType
             if (parser.ttype == '\"') {
               v.add(parser.sval);
             } else if (parser.ttype == StreamTokenizer.TT_WORD) {
+              assert parser.sval != null;
               if (parser.sval.equals ("nonsensical"))
                 return (null);
               assert parser.sval.equals("null");
@@ -449,7 +450,7 @@ public final /*@Interned*/ class ProglangType
         } catch (Exception e) {
           throw new Error(e);
         }
-        value_strings = v.toArray(new String[0]);
+        value_strings = v.toArray(new /*@Nullable*/ String[0]);
       } else {
         value_strings = Global.ws_regexp.split(value);
       }

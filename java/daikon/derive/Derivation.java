@@ -243,10 +243,12 @@ public abstract class Derivation
       return "";
 
     if (in_orig) {
-      if (vi.isPrestate())
+      if (vi.isPrestate()) {
+        assert vi.postState != null; // by definition of isPrestate()
         return vi.postState.esc_name() + shift_str(shift);
-      else
+      } else {
         return String.format ("\\new(%s)%s", vi.esc_name(), shift_str(shift));
+      }
     } else
       return vi.esc_name() + shift_str(shift);
   }
@@ -261,10 +263,12 @@ public abstract class Derivation
       return "";
 
     if (in_orig) {
-      if (vi.isPrestate())
+      if (vi.isPrestate()) {
+        assert vi.postState != null; // by definition of isPrestate()
         return vi.postState.jml_name() + shift_str(shift);
-      else
+      } else {
         return String.format ("\\new(%s)%s", vi.jml_name(), shift_str(shift));
+      }
     } else
       return vi.jml_name() + shift_str(shift);
   }

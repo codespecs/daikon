@@ -51,9 +51,9 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
    * @param vi1
    * @param vi2
    * @return a ProglangType which is the type of VarInfo needed to make
-   * a valid VarInfo triple out of vi1 and vi2 (false otherwise)
+   * a valid VarInfo triple out of vi1 and vi2 (null otherwise)
    */
-  public static ProglangType returnType (VarInfo vi1, VarInfo vi2) {
+  public static /*@Nullable*/ ProglangType returnType (VarInfo vi1, VarInfo vi2) {
     if ((vi1.rep_type == ProglangType.INT_ARRAY)
         && (vi2.rep_type == ProglangType.INT))
       return ProglangType.INT;
