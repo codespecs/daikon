@@ -31,7 +31,7 @@ public abstract class DaikonVariableInfo
     public static boolean dkconfig_constant_infer = false;
 
     /** The variable name, if appropriate to the subtype **/
-    private final String name;
+    private final /*@Nullable*/ /*@Interned*/ String name;
 
     /** The child nodes **/
     public List<DaikonVariableInfo> children;
@@ -69,8 +69,8 @@ public abstract class DaikonVariableInfo
     protected String repTypeName;
     protected String compareInfoString = compareInfoDefaultString;
 
-    /** Value of static constants **/
-    String const_val = null;
+    /** Value of static constants.  Access via {@link #get_const_val} method. **/
+    /*@Nullable*/ String const_val = null;
 
     /** True iff the DeclWriter should print this variable **/
     protected boolean declShouldPrint = true;
@@ -579,9 +579,11 @@ public abstract class DaikonVariableInfo
                                 buf);
                         String newOffset = buf.toString();
                         debug_vars.indent ("Pure method");
-                        newChild.addChildNodes(cinfo, ((Method) meth.member)
-                                .getReturnType(), meth.member
-                                .getName(), newOffset, depth);
+                        newChild.addChildNodes(cinfo,
+                                               ((Method) meth.member).getReturnType(),
+                                               meth.member.getName(),
+                                               newOffset,
+                                               depth);
                         debug_vars.exdent();
 
                     }
@@ -643,6 +645,7 @@ public abstract class DaikonVariableInfo
         }
 
         Class<?> type = meth.getReturnType();
+        assert type != null;
 
         String theName = meth.getName() + "()";
 
@@ -782,8 +785,8 @@ public abstract class DaikonVariableInfo
     }
 
     /**
-     * Returns the class name of the specified class in 'java' format
-     * (i.e., as the class would have been declared in java source code)
+     * Returns the class name of the specified class in 'Java' format
+     * (i.e., as the class would have been declared in Java source code)
      */
     public static String stdClassName (Class<?> type)
     {
@@ -851,6 +854,7 @@ public abstract class DaikonVariableInfo
         if (type.isArray())
         {
             Class<?> eltType = type.getComponentType();
+            assert eltType != null; // because type is an array
             return !(eltType.isPrimitive());
         }
 
@@ -874,8 +878,9 @@ public abstract class DaikonVariableInfo
         else if (type.isArray()) //arrays of non-primitive types
         {
             // System.out.println ("type is array " + type);
-            Class<?> theType = type.getComponentType();
-            return !(theType.isPrimitive());
+            Class<?> eltType = type.getComponentType();
+            assert eltType != null; // because type is an array
+            return !(eltType.isPrimitive());
         }
         else
             return false;
@@ -1113,43 +1118,44 @@ public abstract class DaikonVariableInfo
            if (isArray)
                return;
 
-           Class<?> arrayType = type.getComponentType();
-           if (arrayType.isPrimitive()) {
+           Class<?> eltType = type.getComponentType();
+           assert eltType != null; // because type is an array
+           if (eltType.isPrimitive()) {
 
                DaikonVariableInfo newChild
-                   = new ArrayInfo(offset + theName + "[]", arrayType);
+                   = new ArrayInfo(offset + theName + "[]", eltType);
 
-               newChild.typeName = arrayType.getName() + "[]";
-               newChild.repTypeName = getRepName(arrayType, true) + "[]";
+               newChild.typeName = eltType.getName() + "[]";
+               newChild.repTypeName = getRepName(eltType, true) + "[]";
 
                newChild.check_for_dup_names();
 
                addChild(newChild);
            }
            // multi-dimensional arrays (not currently used)
-           else if (arrayType.isArray())
+           else if (eltType.isArray())
            {
                DaikonVariableInfo newChild
-                   = new ArrayInfo(offset + theName + "[]", arrayType);
+                   = new ArrayInfo(offset + theName + "[]", eltType);
 
-               newChild.typeName = arrayType.getName() + "[]";
-               newChild.repTypeName = getRepName(arrayType, true) + "[]";
+               newChild.typeName = eltType.getName() + "[]";
+               newChild.repTypeName = getRepName(eltType, true) + "[]";
                newChild.check_for_dup_names();
 
                addChild(newChild);
 
                debug_vars.indent ("Array variable");
-               newChild.addChildNodes(cinfo, arrayType, "", offset + theName + "[]", depthRemaining);
+               newChild.addChildNodes(cinfo, eltType, "", offset + theName + "[]", depthRemaining);
                debug_vars.exdent();
            }
            // array is 1-dimensional and element type is a regular class
            else
            {
                DaikonVariableInfo newChild
-                   = new ArrayInfo(offset + theName + "[]", arrayType);
+                   = new ArrayInfo(offset + theName + "[]", eltType);
 
-               newChild.typeName = arrayType.getName() + "[]";
-               newChild.repTypeName = getRepName(arrayType, true) + "[]";
+               newChild.typeName = eltType.getName() + "[]";
+               newChild.repTypeName = getRepName(eltType, true) + "[]";
                boolean ignore = newChild.check_for_dup_names();
 
                addChild(newChild);
@@ -1164,9 +1170,9 @@ public abstract class DaikonVariableInfo
                        newChild.checkForRuntimeClass (type, theName + "[]",
                                                       offset);
 
-                   newChild.checkForString(arrayType, theName + "[]", offset);
+                   newChild.checkForString(eltType, theName + "[]", offset);
                }
-               newChild.addClassVars(cinfo, false, arrayType,
+               newChild.addClassVars(cinfo, false, eltType,
                                offset + theName + "[].", depthRemaining - 1);
 
            }

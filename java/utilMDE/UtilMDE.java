@@ -14,6 +14,7 @@ import java.lang.reflect.*;
 public final class UtilMDE {
   private UtilMDE() { throw new Error("do not instantiate"); }
 
+  @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
   ///////////////////////////////////////////////////////////////////////////
@@ -673,6 +674,7 @@ public final class UtilMDE {
    * Fixes a file name to do tilde expansion (to the users home directory)
    * There maybe other logical things to do as well.
    */
+  @SuppressWarnings("nullness") // user.home property always exists
   public static String fix_filename (String name) {
     if (name.contains ("~"))
       return (name.replace ("~", System.getProperty ("user.home")));

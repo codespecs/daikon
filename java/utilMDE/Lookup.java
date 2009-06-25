@@ -118,6 +118,7 @@ public class Lookup {
   public static String include_re = "\\\\include\\{(.*)\\}";
 
   /** Platform-specific line separator **/
+  @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
   /** One line synopsis of usage **/

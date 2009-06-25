@@ -822,6 +822,10 @@ check-nullness-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} 
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${NULLNESS_JAVA_FILES}
 
+check-nullness-all-withstubs-warns: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} compile-typequals
+	@echo ${JAVAC_COMMAND} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
+	@${JAVAC_COMMAND} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${NULLNESS_JAVA_FILES}
+
 check-prototype: check-prototype-all
 
 check-prototype-all: check-prototype-all-withstubs

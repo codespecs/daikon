@@ -310,7 +310,7 @@ public class ChicoryPremain {
   public static class ChicoryLoader extends ClassLoader {
 
     /** Jar file that contains BCEL.  If null, use the normal classpath **/
-    JarFile bcel_jar = null;
+    /*@Nullable*/ JarFile bcel_jar = null;
 
     public static final SimpleLog debug = new SimpleLog (Chicory.verbose);
 
@@ -476,6 +476,7 @@ public class ChicoryPremain {
         if (name.startsWith ("daikon.chicory.Instrument")) {
           String resource_name = classname_to_resource_name (name);
           URL url = ClassLoader.getSystemResource (resource_name);
+          assert url != null;
           is = url.openStream();
         } else { //  Read the BCEL class from the jar file
           String entry_name = classname_to_resource_name (name);

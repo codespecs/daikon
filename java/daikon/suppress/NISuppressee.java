@@ -67,7 +67,7 @@ public class NISuppressee {
   /**
    * Instantiates the suppressee invariant on the specified slice.
    */
-  public Invariant instantiate (PptSlice slice) {
+  public /*@Nullable*/ Invariant instantiate (PptSlice slice) {
 
     Invariant inv = sample_inv.instantiate (slice);
     if (Debug.logOn()) {
@@ -116,7 +116,7 @@ public class NISuppressee {
    * by vis in the specified ppt.  If the slice is not currently there,
    * it will be created.
    */
-  public Invariant instantiate (VarInfo[] vis, PptTopLevel ppt) {
+  public /*@Nullable*/ Invariant instantiate (VarInfo[] vis, PptTopLevel ppt) {
 
     PptSlice slice = ppt.get_or_instantiate_slice (vis);
     return (instantiate (slice));
@@ -176,11 +176,11 @@ public class NISuppressee {
    * be specified by vis if a slot in vis is null.  The slot will be
    * filled by all leaders that can correctly fill the slot and SupInv
    * created for each. @return a list describing all of the invariants
-   * The cinv array is an array of the actual invariants that were
+   * The cinvs array is an array of the actual invariants that were
    * found for each slot.  It is used for for debug printing only.
    */
   public List<NIS.SupInv> find_all (VarInfo[] vis, PptTopLevel ppt,
-                                    Invariant cinvs[]) {
+                                    Invariant /*@Nullable*/ [] cinvs) {
 
     List<NIS.SupInv> created_list = new ArrayList<NIS.SupInv>();
 

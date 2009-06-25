@@ -138,10 +138,6 @@ public class PptCombined extends PptTopLevel {
     for (int i = ppts.size() - 1; i >= 0; i--) {
       PptTopLevel ppt = ppts.get(i);
       List<X86Instruction> instructionsForPpt = assemblies.getInstructions(ppt.name());
-      if (instructionsForPpt == null) {
-        String errorMsg = "Assembly file does not contain any instructions for ppt " + ppt.name();
-        throw new RuntimeException(errorMsg);
-      }
       path.addAll (0, instructionsForPpt);
       if (i > 0) {
         // Find intermediate basic blocks: blocks that are on some path from
@@ -154,10 +150,6 @@ public class PptCombined extends PptTopLevel {
           Set<X86Instruction> intermediateBlocksInstrs = new LinkedHashSet<X86Instruction>();
           for (PptTopLevel interBlock : interBlocks) {
             List<X86Instruction> iis = assemblies.getInstructions(interBlock.name());
-            if (iis == null) {
-              String errorMsg = "Assembly file does not contain any instructions for ppt " + ppt.name();
-              throw new RuntimeException(errorMsg);
-            }
             intermediateBlocksInstrs.addAll(iis);
           }
 
@@ -208,10 +200,6 @@ public class PptCombined extends PptTopLevel {
       boolean firstInst = true;
 
       List<X86Instruction> instructions = assemblies.getInstructions(p.name());
-      if (instructions == null) {
-        String errorMsg = "Assembly file does not contain any instructions for ppt " + p.name();
-        throw new RuntimeException(errorMsg);
-      }
 
       for (IInstruction i : instructions) {
         if (firstInst) {

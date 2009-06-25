@@ -16,13 +16,8 @@ public abstract class DaikonWriter
     protected static final boolean no_modifiers_ppt = true;
 
     /** Platform dependent line separator.  Should be "\n" on Unix **/
-    public static final String lineSep;
-
-    static
-    {
-        lineSep = System.getProperty("line.separator");
-        assert lineSep != null : "Line separator cannot be null";
-    }
+    @SuppressWarnings("nullness") // line.separator property always exists
+    public static final String lineSep = System.getProperty("line.separator");
 
     protected DaikonWriter()
     {

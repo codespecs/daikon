@@ -328,198 +328,223 @@ public final /*@Interned*/ class ProglangType
   /**
    * Given a string representation of a value (of the type represented by
    * this ProglangType), return the (canonicalized) interpretation of that value.
+   * <p>
+   *
    * If the type is an array and there
    * are any nonsensical elements in the array, the entire array is
    * considered to be nonsensical (indicated by returning null).  This
-   * is not really correct, but it is a reasonable path to take for now
+   * is not really correct, but it is a reasonable path to take for now.
    * (jhp, Feb 12, 2005)
    */
+  // The implementations only need to deal with representation types, not
+  // with all types in the underlying programming language.
   public final /*@Nullable*/ /*@Interned*/ Object parse_value(String value) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
-    String value_ = value;      // for debugging, I suppose
-    // This only needs to deal with representation types, not with all
-    // types in the underlying programming language.
+    switch (dimensions) {
+    case 0:
+      return parse_value_scalar(value);
+    case 1:
+      return parse_value_array_1d(value);
+    case 2:
+      return parse_value_array_2d(value);
+    default:
+      throw new Error("Can't parse a value of type " + format());
+    }
+  }
 
+  public final /*@Nullable*/ /*@Interned*/ Object parse_value_scalar(String value) {
+    // System.out.println(format() + ".parse(\"" + value + "\")");
 
+    assert dimensions == 0;
 
-    if (dimensions == 0) {
-      if (base == BASE_STRING) {
-        if (value.equals("null")) {
-          return null;
-        }
-        if (! (value.startsWith("\"") && value.endsWith("\""))) {
-          System.out.println("Unquoted string value: " + value);
-          Throwable stack = new Throwable("unquoted string");
-          stack.fillInStackTrace();
-          stack.printStackTrace();
-        }
-        // assert value.startsWith("\"") && value.endsWith("\"");
-        if (value.startsWith("\"") && value.endsWith("\""))
-          value = value.substring(1, value.length()-1);
-        value = UtilMDE.unescapeNonJava(value);
-        return value.intern();
-      } else if (base == BASE_CHAR) {
-        // This will fail if the character is output as an integer
-        // (as I believe the C front end does).
-        char c;
-        if (value.length() == 1)
-          c = value.charAt(0);
-        else if ((value.length() == 2) && (value.charAt(0) == '\\'))
-          c = UtilMDE.unescapeNonJava(value).charAt(0);
-        else if ((value.length() == 4) && (value.charAt(0) == '\\')) {
-          Byte b = Byte.decode("0" + value.substring(1));
-          return Intern.internedLong(b.longValue());
-        }
-        else
-          throw new IllegalArgumentException("Bad character: " + value);
-        return Intern.internedLong(Character.getNumericValue(c));
-      } else if ((base == BASE_INT) || (base == BASE_BOOLEAN)
-                 || (base== BASE_LONG) || (base == BASE_SHORT)) {
-        // File rep type might be int, boolean, or hashcode.
-        // If we had the actual type, we could do error-checking here.
-        // (Example:  no hashcode should be negative, nor any boolean > 1.)
-        if (value.equals ("nonsensical"))
-          return (null);
-        if (value.equals("false") || value.equals("0"))
-          return LongZero;
-        if (value.equals("true") || value.equals("1"))
-          return LongOne;
-        if (value.equals("null"))
-          return LongZero;
-        return Intern.internedLong(myParseLong(value));
-      } else if (base == BASE_DOUBLE) {
-        // Must ignore case, because dfej outputs "NaN", while dfec
-        // outputs "nan".  dfec outputs "nan", because this string
-        // comes from the C++ library.
-        if (value.equalsIgnoreCase("NaN"))
-          return DoubleNaN;
-        if (value.equalsIgnoreCase("Infinity") || value.equals("inf"))
-          return DoublePositiveInfinity;
-        if (value.equalsIgnoreCase("-Infinity") || value.equals("-inf"))
-          return DoubleNegativeInfinity;
-        return Intern.internedDouble(value);
-      } else {
-        throw new Error("unrecognized type " + base);
-      }
-    } else if (dimensions == 1) {
-      // variable is an array
-
-      value = value.trim();
-
+    if (base == BASE_STRING) {
       if (value.equals("null")) {
         return null;
       }
-
-      // Try requiring the square brackets around arrays (permits
-      // distinguishing between null and an array containing just null).
-      if (!(value.startsWith("[") && value.endsWith("]"))) {
-        throw new IllegalArgumentException("Array values must be " +
-                                           "enlosed in square brackets");
+      if (! (value.startsWith("\"") && value.endsWith("\""))) {
+        System.out.println("Unquoted string value: " + value);
+        Throwable stack = new Throwable("unquoted string");
+        stack.fillInStackTrace();
+        stack.printStackTrace();
       }
-      // Deal with [] surrounding Java array output
-      if (value.startsWith("[") && value.endsWith("]")) {
-        value = value.substring(1, value.length() - 1).trim();
+      // assert value.startsWith("\"") && value.endsWith("\"");
+      if (value.startsWith("\"") && value.endsWith("\""))
+        value = value.substring(1, value.length()-1);
+      value = UtilMDE.unescapeNonJava(value);
+      return value.intern();
+    } else if (base == BASE_CHAR) {
+      // This will fail if the character is output as an integer
+      // (as I believe the C front end does).
+      char c;
+      if (value.length() == 1)
+        c = value.charAt(0);
+      else if ((value.length() == 2) && (value.charAt(0) == '\\'))
+        c = UtilMDE.unescapeNonJava(value).charAt(0);
+      else if ((value.length() == 4) && (value.charAt(0) == '\\')) {
+        Byte b = Byte.decode("0" + value.substring(1));
+        return Intern.internedLong(b.longValue());
       }
+      else
+        throw new IllegalArgumentException("Bad character: " + value);
+      return Intern.internedLong(Character.getNumericValue(c));
+    } else if ((base == BASE_INT) || (base == BASE_BOOLEAN)
+               || (base == BASE_LONG) || (base == BASE_SHORT)) {
+      // File rep type might be int, boolean, or hashcode.
+      // If we had the actual type, we could do error-checking here.
+      // (Example:  no hashcode should be negative, nor any boolean > 1.)
+      if (value.equals ("nonsensical"))
+        return null;
+      if (value.equals("false") || value.equals("0"))
+        return LongZero;
+      if (value.equals("true") || value.equals("1"))
+        return LongOne;
+      if (value.equals("null"))
+        return LongZero;
+      return Intern.internedLong(myParseLong(value));
+    } else if (base == BASE_DOUBLE) {
+      // Must ignore case, because dfej outputs "NaN", while dfec
+      // outputs "nan".  dfec outputs "nan", because this string
+      // comes from the C++ library.
+      if (value.equalsIgnoreCase("NaN"))
+        return DoubleNaN;
+      if (value.equalsIgnoreCase("Infinity") || value.equals("inf"))
+        return DoublePositiveInfinity;
+      if (value.equalsIgnoreCase("-Infinity") || value.equals("-inf"))
+        return DoubleNegativeInfinity;
+      return Intern.internedDouble(value);
+    } else {
+      throw new Error("unrecognized type " + base);
+    }
+  }
 
+  public final /*@Nullable*/ /*@Interned*/ Object parse_value_array_1d(String value) {
+    // System.out.println(format() + ".parse(\"" + value + "\")");
+
+    String value_orig = value;  // we will side-effect the parameter
+
+    // variable is an array
+    assert dimensions == 1;
+
+    value = value.trim();
+
+    if (value.equals("null")) {
+      return null;
+    }
+
+    // Deal with [] surrounding array output (permits
+    // distinguishing between null and an array containing just null).
+    if (value.startsWith("[") && value.endsWith("]")) {
+      value = value.substring(1, value.length() - 1).trim();
+    } else {
+      throw new IllegalArgumentException(
+        "Array values must be enlosed in square brackets");
+    }
+
+    // Elements of value_strings can be null only if base == BASE_STRING.
+    String[] value_strings;
+    if (value.length() == 0) {
+      value_strings = new String[0];
+    } else if (base == BASE_STRING) {
       // This properly handles strings containing embedded spaces.
-      String[] value_strings;
-      if (value.length() == 0) {
-        value_strings = new String[0];
-      } else if (base == BASE_STRING) {
-        Vector</*@Nullable*/ String> v = new Vector</*@Nullable*/ String>();
-        StreamTokenizer parser = new StreamTokenizer(new StringReader(value));
-        parser.quoteChar('\"');
-        try {
-          while ( parser.nextToken() != StreamTokenizer.TT_EOF ) {
-            if (parser.ttype == '\"') {
-              v.add(parser.sval);
-            } else if (parser.ttype == StreamTokenizer.TT_WORD) {
-              assert parser.sval != null;
-              if (parser.sval.equals ("nonsensical"))
-                return (null);
-              assert parser.sval.equals("null");
-              v.add(null);
-            } else if (parser.ttype == StreamTokenizer.TT_NUMBER) {
-              v.add(Integer.toString((int)parser.nval));
-            } else {
-              System.out.println("Bad ttype " + (char)parser.ttype + " [int=" + parser.ttype + "] while parsing " + value_);
-              v.add(null);
-            }
+      Vector</*@Nullable*/ String> v = new Vector</*@Nullable*/ String>();
+      StreamTokenizer parser = new StreamTokenizer(new StringReader(value));
+      parser.quoteChar('\"');
+      try {
+        while ( parser.nextToken() != StreamTokenizer.TT_EOF ) {
+          if (parser.ttype == '\"') {
+            v.add(parser.sval);
+          } else if (parser.ttype == StreamTokenizer.TT_WORD) {
+            assert parser.sval != null;
+            if (parser.sval.equals ("nonsensical"))
+              return null;
+            assert parser.sval.equals("null");
+            v.add(null);
+          } else if (parser.ttype == StreamTokenizer.TT_NUMBER) {
+            v.add(Integer.toString((int)parser.nval));
+          } else {
+            System.out.println("Bad ttype " + (char)parser.ttype + " [int=" + parser.ttype + "] while parsing " + value_orig);
+            v.add(null);
           }
-        } catch (Exception e) {
-          throw new Error(e);
         }
-        value_strings = v.toArray(new /*@Nullable*/ String[0]);
-      } else {
-        value_strings = Global.ws_regexp.split(value);
+      } catch (Exception e) {
+        throw new Error(e);
       }
-      int len = value_strings.length;
+      // Avoid nullness warnings about elements of value_strings
+      @SuppressWarnings("nullness")
+      String[] value_strings_result = v.toArray(new /*@Nullable*/ String[0]);
+      value_strings = value_strings_result;
+    } else {
+      value_strings = Global.ws_regexp.split(value);
+    }
+    int len = value_strings.length;
 
-      // This big if ... else should deal with all the primitive types --
-      // or at least all the ones that can be rep_types.
-      // ("long" and "short" cannot be rep_types; for simplicity, variables
-      // declared as long or short have the "int" rep_type.)
-      if (base == BASE_INT) {
-        long[] result = new long[len];
-        for (int i=0; i<len; i++) {
-          if (value_strings[i].equals ("nonsensical"))
-            return (null);
-          else if (value_strings[i].equals("null"))
-            result[i] = 0;
-          else if (value_strings[i].equals("false"))
-            result[i] = 0;
-          else if (value_strings[i].equals("true"))
-            result[i] = 1;
-          else
-            result[i] = myParseLong(value_strings[i]);
-        }
-        return Intern.intern(result);
-      } else if (base == BASE_DOUBLE) {
-        double[] result = new double[len];
-        for (int i=0; i<len; i++) {
-          if (value_strings[i].equals ("nonsensical"))
-            return (null);
-          else if (value_strings[i].equals("null"))
-            result[i] = 0;
-          else if (value_strings[i].equalsIgnoreCase("NaN"))
-            result[i] = Double.NaN;
-          else if (value_strings[i].equalsIgnoreCase("Infinity") ||
-                   value_strings[i].equals("inf"))
-            result[i] = Double.POSITIVE_INFINITY;
-          else if (value_strings[i].equalsIgnoreCase("-Infinity") ||
-                   value_strings[i].equals("-inf"))
-            result[i] = Double.NEGATIVE_INFINITY;
-          else
-            result[i] = Double.parseDouble(value_strings[i]);
-        }
-        return Intern.intern(result);
-      } else if (base == BASE_STRING) {
-        // First, intern each String in the array ...
-        /*@Interned*/ String[] value_strings_elts_interned = Intern.internStrings(value_strings);
-        // ... then, intern the entire array, and return it
-        return Intern.intern(value_strings_elts_interned);
-      } else {
-        throw new Error("Can't yet parse array of base type " + base);
+    // This big if ... else should deal with all the primitive types --
+    // or at least all the ones that can be rep_types.
+    // ("long" and "short" cannot be rep_types; for simplicity, variables
+    // declared as long or short have the "int" rep_type.)
+    if (base == BASE_INT) {
+      long[] result = new long[len];
+      for (int i=0; i<len; i++) {
+        if (value_strings[i].equals ("nonsensical"))
+          return null;
+        else if (value_strings[i].equals("null"))
+          result[i] = 0;
+        else if (value_strings[i].equals("false"))
+          result[i] = 0;
+        else if (value_strings[i].equals("true"))
+          result[i] = 1;
+        else
+          result[i] = myParseLong(value_strings[i]);
       }
-
-      // This is a more general technique; but when will we need
-      // such generality?
-      // // not elementType() because that interns; here, there is no
-      // // need to do the work of interning (I think)
-      // ProglangType elt_type = elementType();
-      // Object[] result = new Object[len];
-      // for (int i=0; i<len; i++)
-      //   result[i] = ***;
-
-    } else if (dimensions == 2) {
-      if (base == BASE_CHAR) {
-        // Array of strings
-        throw new Error("To implement");
-        // value = tuple(eval(value));
-      } else {
-        throw new Error("Can't parse a value of type " + format());
+      return Intern.intern(result);
+    } else if (base == BASE_DOUBLE) {
+      double[] result = new double[len];
+      for (int i=0; i<len; i++) {
+        if (value_strings[i].equals ("nonsensical"))
+          return null;
+        else if (value_strings[i].equals("null"))
+          result[i] = 0;
+        else if (value_strings[i].equalsIgnoreCase("NaN"))
+          result[i] = Double.NaN;
+        else if (value_strings[i].equalsIgnoreCase("Infinity") ||
+                 value_strings[i].equals("inf"))
+          result[i] = Double.POSITIVE_INFINITY;
+        else if (value_strings[i].equalsIgnoreCase("-Infinity") ||
+                 value_strings[i].equals("-inf"))
+          result[i] = Double.NEGATIVE_INFINITY;
+        else
+          result[i] = Double.parseDouble(value_strings[i]);
       }
+      return Intern.intern(result);
+    } else if (base == BASE_STRING) {
+      // First, intern each String in the array ...
+      /*@Interned*/ String[] value_strings_elts_interned = Intern.internStrings(value_strings);
+      // ... then, intern the entire array, and return it
+      return Intern.intern(value_strings_elts_interned);
+    } else {
+      throw new Error("Can't yet parse array of base type " + base);
+    }
+
+    // This is a more general technique; but when will we need
+    // such generality?
+    // // not elementType() because that interns; here, there is no
+    // // need to do the work of interning (I think)
+    // ProglangType elt_type = elementType();
+    // Object[] result = new Object[len];
+    // for (int i=0; i<len; i++)
+    //   result[i] = ***;
+
+  }
+
+  public final /*@Nullable*/ /*@Interned*/ Object parse_value_array_2d(String value) {
+    // System.out.println(format() + ".parse(\"" + value + "\")");
+
+    assert dimensions == 2;
+    if (base == BASE_CHAR) {
+      // Array of strings
+      throw new Error("To implement");
+      // value = tuple(eval(value));
     } else {
       throw new Error("Can't parse a value of type " + format());
     }

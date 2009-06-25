@@ -89,6 +89,7 @@ public class LemmaStack {
   }
 
   /** Try to start Simplify. */
+  @SuppressWarnings("nullness") // if bad assignment, immediate exception
   private void startProver() /*@Raw*/ throws SimplifyError {
     session = SessionManager.attemptProverStartup();
     if (session == null) {

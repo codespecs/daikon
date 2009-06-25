@@ -1995,7 +1995,9 @@ public final class TestUtilMDE extends TestCase {
     assert c1.getNumberOfWrittenBytes() == 22;
     assert c1.getNumberOfPrintedChars() == 9;
     c1.println("foo");
-    int ls_len = System.getProperty("line.separator").length();
+    @SuppressWarnings("nullness") // line.separator property always exists
+    /*@NonNull*/ String lineSep = System.getProperty("line.separator");
+    int ls_len = lineSep.length();
     assert c1.getNumberOfPrintedBytes() == (12 + ls_len);
     assert c1.getNumberOfWrittenBytes() == (28);
     assert c1.getNumberOfPrintedChars() == (12 + ls_len);

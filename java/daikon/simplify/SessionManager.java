@@ -11,13 +11,13 @@ import java.util.logging.Level;
 public class SessionManager
 {
   /** The command to be performed (point of communication with worker thread). */
-  private Cmd pending;
+  private /*@Nullable*/ Cmd pending;
 
   /** Our worker thread; hold onto it so that we can stop it. */
   private Worker worker;
 
   // The error message returned by the worked thread, or null
-  private String error = null;
+  private /*@Nullable*/ String error = null;
 
   /**
    * Debug tracer common to all Simplify classes.
@@ -35,6 +35,7 @@ public class SessionManager
     debug.fine (s);
   }
 
+  @SuppressWarnings("nullness") // XXX checker error
   public SessionManager() {
     debugln("Creating SessionManager");
     worker = new Worker();
@@ -88,12 +89,13 @@ public class SessionManager
   /**
    * Shutdown this session.  No further commands may be executed.
    **/
+  @SuppressWarnings("nullness") // nulling worker for fast failure (& for GC)
   public void session_done() {
     worker.session_done();
     worker = null;
   }
 
-  private static String prover_background = null;
+  private static /*@LazyNonNull*/ String prover_background = null;
 
   private static String proverBackground() {
     if (prover_background == null) {
@@ -131,7 +133,7 @@ public class SessionManager
 
   // Start up simplify, and send the universal backgound.
   // Is successful exactly when return != null.
-  public static SessionManager attemptProverStartup() {
+  public static /*@Nullable*/ SessionManager attemptProverStartup() {
     SessionManager prover;
 
     // Limit ourselves to a few tries
@@ -196,6 +198,7 @@ public class SessionManager
     }
 
     private void session_done() {
+      assert session != null;
       finished = true;
       Session tmp = session;
       session = null;

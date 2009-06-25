@@ -25,6 +25,7 @@ public final class Global {
   /// Constants
   ///
 
+  @SuppressWarnings("nullness") // line.separator property always exists
   public static final String lineSep = System.getProperty("line.separator");
 
   // Regular expressions

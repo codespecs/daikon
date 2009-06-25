@@ -20,7 +20,7 @@ public final class ValueAndModified {
   public static final ValueAndModified MISSING_FLOW
     = new ValueAndModified(null, ValueTuple.MISSING_FLOW);
 
-  public ValueAndModified(Object val, int mod) {
+  public ValueAndModified(/*@Nullable*/ Object val, int mod) {
     assert Intern.isInterned(val);
     // Type should be Long, not Integer
     assert ! (val instanceof Integer);

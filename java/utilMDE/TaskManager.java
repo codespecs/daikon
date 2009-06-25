@@ -47,6 +47,7 @@ public class TaskManager {
   private static String usage_string
     = "TaskManger [options] <task-file> <task_file> ...";
 
+  @SuppressWarnings("nullness") // line.separator property always exists
   public static final String lineSep = System.getProperty("line.separator");
 
   /** Information about a single task **/

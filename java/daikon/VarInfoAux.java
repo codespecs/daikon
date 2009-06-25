@@ -24,6 +24,9 @@ public final class VarInfoAux
    **/
   public static final Logger debug = Logger.getLogger("daikon.VarInfoAux");
 
+  // The below are all the possible keys for the map, and values tend to be
+  // binary.  So could we make it a packed binary array?
+
   /**
    * Whether the elements in this collection are all the meaningful
    * elements, or whether there is a null at the end of this
@@ -118,6 +121,7 @@ public final class VarInfoAux
 
       /*@Interned*/ String token;
       if (tok.ttype == StreamTokenizer.TT_WORD || tok.ttype == '\"') {
+        assert tok.sval != null; // representation invariant of StreamTokenizer
         token = tok.sval.trim().intern();
       } else {
         token = ((char) tok.ttype + "").intern();
@@ -151,6 +155,7 @@ public final class VarInfoAux
 
     // Interning
     VarInfoAux result = new VarInfoAux(map).intern();
+    assert interningMap != null; // due to call to intern()
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("New parse " + result);
       debug.fine ("Intern table size: " + new Integer(interningMap.size()));
@@ -176,7 +181,7 @@ public final class VarInfoAux
   /**
    * Map for interning.
    **/
-  private static Map<VarInfoAux,/*@Interned*/ VarInfoAux> interningMap = null;
+  private static /*@LazyNonNull*/ Map<VarInfoAux,/*@Interned*/ VarInfoAux> interningMap = null;
 
 
 
@@ -281,10 +286,12 @@ public final class VarInfoAux
    * Returns the value for the given key.
    **/
   public String getValue(String key) {
+    assert map.containsKey(key);
     return map.get(key);
   }
 
   public boolean getFlag(String key) {
+    assert map.containsKey(key);
     Object value = map.get(key);
     return value.equals(TRUE);
   }

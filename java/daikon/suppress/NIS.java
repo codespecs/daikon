@@ -489,8 +489,10 @@ public class NIS {
 
             // use the following count update when splitting the hybrid method by the
             // number of total suppressions associated with the falsified invariants
-            count = count + suppressor_map_suppression_count.get(inv.getClass());
-            suppressions_processed_falsified += suppressor_map_suppression_count.get(inv.getClass());
+            @SuppressWarnings("nullness") // same keys in suppressor_map and suppressor_map_suppression_count
+            int map_count = suppressor_map_suppression_count.get(inv.getClass());
+            count += map_count;
+            suppressions_processed_falsified += map_count;
           }
         }
       }
@@ -924,19 +926,19 @@ public class NIS {
     }
 
     /** Instantiate this invariant on the specified ppt */
-    public Invariant instantiate (PptTopLevel ppt) {
+    public /*@Nullable*/ Invariant instantiate (PptTopLevel ppt) {
       return suppressee.instantiate (vis, ppt);
     }
 
     /**
-     * Checks to see if the invariant already exists.  Unary and
+     * Returns the invariant if it already exists, or null otherwise.  Unary and
      * and ternary invariant must match by class (there are no
      * permutations for unary invariants and ternary invariants handle
      * permutations as different classes).  Binary invariants must
      * match the class and if there is an internal swap variable for
      * variable order, that must match as well.
      */
-    public Invariant already_exists () {
+    public /*@Nullable*/ Invariant already_exists () {
       Invariant cinv = ppt.find_inv_by_class (vis, suppressee.sup_class);
       if (cinv == null)
         return (null);

@@ -90,7 +90,7 @@ public class NISuppression {
    *         more suppressors were nonsensical and the rest were valid,
    *         NIS.INVALID otherwise
    */
-  public String check (PptTopLevel ppt, VarInfo[] vis, Invariant inv) {
+  public String check (PptTopLevel ppt, VarInfo[] vis, /*@Nullable*/ Invariant inv) {
 
     String status = NIS.VALID;
     boolean set = false;
@@ -274,13 +274,15 @@ public class NISuppression {
             Invariant cinv = supinv.already_exists();
             if (cinv != null) {
               NISuppressionSet ss = cinv.get_ni_suppressions();
+              assert ss != null;
+              // this is apparently called for side effect (debugging output)
               ss.suppressed (cinv.ppt);
               assert false
-        : "inv " + cinv.repr() + " of class "
-                                 + supinv.suppressee + " already exists in ppt "
-                                 + ppt.name + " suppressionset = " + ss
-                                 + " suppression = " + this
-                                 + " last antecedent = " + inv.format();
+                : "inv " + cinv.repr() + " of class "
+                + supinv.suppressee + " already exists in ppt "
+                + ppt.name + " suppressionset = " + ss
+                + " suppression = " + this
+                + " last antecedent = " + inv.format();
             }
           }
         }
@@ -309,7 +311,8 @@ public class NISuppression {
    * @param false_antecedents   True if a false antecedent has been found
    * @param cinvs               The invariants associated with the current
    *                            set of antecedents.  Used only for debug
-   *                            printing
+   *                            printing.  May be side-effected by having
+   *                            cinvs[idx] set to null.
    *
    * @see find_unsuppressed_invs (Set, List, VarInfo[], int)
    * @see #consider_inv (Invariant, NISuppressor, VarInfo[])
@@ -318,7 +321,7 @@ public class NISuppression {
                                        List<Invariant> antecedents[],
                                        VarInfo vis[], int idx,
                                        boolean false_antecedents,
-                                       Invariant[] cinvs) {
+                                       /*@Nullable*/ Invariant[] cinvs) {
 
     boolean all_true_at_end = ((idx + 1) == suppressors.length)
       && !false_antecedents;

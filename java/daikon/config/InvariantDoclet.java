@@ -15,6 +15,7 @@ import utilMDE.*;
 public class InvariantDoclet
 {
 
+  @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
   /**

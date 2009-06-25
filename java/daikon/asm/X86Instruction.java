@@ -20,8 +20,9 @@ public class X86Instruction implements IInstruction {
   protected boolean isFirstInBlock = false;
 
   // For debugging printing purposes.
-  // The name of the basic block that contains this instruction.
-  public String owner = null;
+  /** The name of the basic block that contains this instruction. */
+  // (Maybe this should be @LazyNonNull?)
+  public /*@Nullable*/ String owner = null;
 
   // See method parseInstruction. It sets all fields appropriately.
   private X86Instruction() {

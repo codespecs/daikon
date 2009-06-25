@@ -296,6 +296,9 @@ public class CountingPrintWriter extends PrintWriter {
     super.print(obj);
   }
 
+  @SuppressWarnings("nullness") // line.separator property always exists
+  private static final String lineSep = System.getProperty("line.separator");
+
   /**
    * Terminate the current line by writing the line separator
    * string.  The line separator string is defined by the system
@@ -306,9 +309,8 @@ public class CountingPrintWriter extends PrintWriter {
    * bytes needed to represent the line separator string.
    */
   public void println() {
-    String s = System.getProperty("line.separator");
-    printedBytes += countBytes(s);
-    printedChars += s.length();
+    printedBytes += countBytes(lineSep);
+    printedChars += lineSep.length();
     super.println();
   }
 

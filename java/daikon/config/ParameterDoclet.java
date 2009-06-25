@@ -16,6 +16,7 @@ import utilMDE.*;
 public class ParameterDoclet
 {
 
+  @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
   /**

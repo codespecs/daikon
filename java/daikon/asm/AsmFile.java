@@ -63,7 +63,7 @@ public class AsmFile {
 
         // Read "BASIC BLOCK"
         String line = reader.readLine();
-        if (!line.startsWith("ppt ")) { // Malformed record file.
+        if (line == null || !line.startsWith("ppt ")) { // Malformed record file.
             System.out.println(line);
             throw new RuntimeException(parseError(reader.getLineNumber(),
                                                   errorMessage1));
@@ -121,6 +121,12 @@ public class AsmFile {
     }
 
     public List<X86Instruction> getInstructions(String blockShortName) {
+        if (! instructionsForBlock.containsKey(blockShortName)) {
+            throw new RuntimeException(
+              "Assembly file does not contain any instructions for ppt "
+              + blockShortName);
+        }
+        assert instructionsForBlock.containsKey(blockShortName); // XXX checker bug
         return instructionsForBlock.get(blockShortName);
     }
 

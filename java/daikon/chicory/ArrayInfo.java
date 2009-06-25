@@ -8,7 +8,7 @@ package daikon.chicory;
 public class ArrayInfo extends DaikonVariableInfo
 {
     /** Component type of the array **/
-    Class<?> array_type = null;
+    Class<?> array_type;
 
     /**
      * Constructs an ArrayInfo object with the specified name

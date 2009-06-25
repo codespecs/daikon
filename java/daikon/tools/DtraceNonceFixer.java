@@ -24,6 +24,7 @@ import utilMDE.*;
 
 public class DtraceNonceFixer {
 
+  @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
   private static String usage =

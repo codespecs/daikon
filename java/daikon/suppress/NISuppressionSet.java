@@ -439,37 +439,40 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     // Create the new invariant
     Invariant inv = suppressee.instantiate (slice);
 
-    if (Debug.logOn() || NIS.debug.isLoggable (Level.FINE))
-      inv.log (NIS.debug, "Adding " + inv.format()
-               + " from nis suppression set " + this);
+    if (inv != null) {
 
-    // Make sure the invariant isn't already in the new_invs list
-    if (Daikon.dkconfig_internal_check) {
-      for (Invariant new_inv : new_invs) {
-        if ((new_inv.getClass() == inv.getClass()) && (new_inv.ppt == slice))
-          assert false
-            : String.format("inv %s:%s already in new_invs "
-                        + "(slice %s)", inv.getClass(), inv.format(), slice);
+      if (Debug.logOn() || NIS.debug.isLoggable (Level.FINE))
+        inv.log (NIS.debug, "Adding " + inv.format()
+                 + " from nis suppression set " + this);
+
+      // Make sure the invariant isn't already in the new_invs list
+      if (Daikon.dkconfig_internal_check) {
+        for (Invariant new_inv : new_invs) {
+          if ((new_inv.getClass() == inv.getClass()) && (new_inv.ppt == slice))
+            assert false
+              : String.format("inv %s:%s already in new_invs "
+                          + "(slice %s)", inv.getClass(), inv.format(), slice);
+        }
       }
-    }
 
-    // Add the invariant to the new invariant list
-    if (inv != null)
+      // Add the invariant to the new invariant list
       new_invs.add (inv);
 
-    if (Daikon.dkconfig_internal_check) {
-      if (slice.contains_inv_exact (inv)) {
-        // Print all unary and binary invariants over the same variables
-        for (int i = 0; i < vis.length; i++) {
-          PrintInvariants.print_all_invs (ppt, vis[i], "  ");
+      if (Daikon.dkconfig_internal_check) {
+        if (slice.contains_inv_exact (inv)) {
+          // We are in trouble.
+          // Print all unary and binary invariants over the same variables
+          for (int i = 0; i < vis.length; i++) {
+            PrintInvariants.print_all_invs (ppt, vis[i], "  ");
+          }
+          PrintInvariants.print_all_invs (ppt, vis[0], vis[1], "  ");
+          PrintInvariants.print_all_invs (ppt, vis[1], vis[2], "  ");
+          PrintInvariants.print_all_invs (ppt, vis[0], vis[2], "  ");
+          Debug.check (Daikon.all_ppts, "assert failure");
+          assert false
+            : String.format("inv %s:%s already in slice %s",
+                            inv.getClass(), inv.format(), slice);
         }
-        PrintInvariants.print_all_invs (ppt, vis[0], vis[1], "  ");
-        PrintInvariants.print_all_invs (ppt, vis[1], vis[2], "  ");
-        PrintInvariants.print_all_invs (ppt, vis[0], vis[2], "  ");
-        Debug.check (Daikon.all_ppts, "assert failure");
-        assert false
-          : String.format("inv %s:%s already in slice %s",
-                        inv.getClass(), inv.format(), slice);
       }
     }
 

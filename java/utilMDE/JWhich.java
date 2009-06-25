@@ -158,7 +158,9 @@ public class JWhich {
 
 	protected static String getClasspath() {
 		if (CLASSPATH == null) {
-			setClasspath(System.getProperty("java.class.path"));
+			String classpath = System.getProperty("java.class.path");
+			assert classpath != null;
+			setClasspath(classpath);
 		}
 
 		return CLASSPATH;

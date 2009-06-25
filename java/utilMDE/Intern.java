@@ -36,7 +36,7 @@ public final class Intern {
    * objects equal to itself).
    **/
   @SuppressWarnings("interning")
-  public static boolean isInterned(Object value) {
+  public static boolean isInterned(/*@Nullable*/ Object value) {
     if (value == null) {
       // nothing to do
       return true;

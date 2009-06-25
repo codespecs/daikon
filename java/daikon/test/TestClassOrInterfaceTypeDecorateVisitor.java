@@ -112,6 +112,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
   }
 
   private static StringBuffer expectedAnswerBuffer = new StringBuffer();
+  @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
   static {

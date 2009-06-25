@@ -15,6 +15,7 @@ public class CmdCheck
 {
   public static final Logger debug = Logger.getLogger("daikon.simplify.CmdCheck");
 
+  @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
   public final String proposition;

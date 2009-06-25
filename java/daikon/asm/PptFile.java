@@ -35,7 +35,7 @@ public class PptFile {
     public PptFile(LineNumberReader reader) throws IOException {
 
         String line = reader.readLine();
-        assert line.startsWith("====================") : line;
+        assert line != null && line.startsWith("====================") : line;
         line = reader.readLine();
         boolean readingPptName = true;
         String name = null;

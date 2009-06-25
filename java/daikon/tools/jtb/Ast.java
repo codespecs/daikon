@@ -24,6 +24,7 @@ import java.lang.reflect.*;
 @SuppressWarnings("rawtypes")
 public class Ast {
 
+  @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
 

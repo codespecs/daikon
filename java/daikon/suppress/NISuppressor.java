@@ -51,7 +51,7 @@ public class NISuppressor {
    * information about the suppressor for the current check.  This is just
    * used for debugging purposes
    */
-  String current_state_str = null;
+  /*@Nullable*/ String current_state_str = null;
 
   /**
    * Sample invariant - used to check the suppressor over constants.
@@ -214,7 +214,7 @@ public class NISuppressor {
    *         NIS.VALID, NIS.INVALID, NIS.NONSENSICAL)
    */
 
-  public String check (PptTopLevel ppt, VarInfo[] vis, Invariant inv) {
+  public String check (PptTopLevel ppt, VarInfo[] vis, /*@Nullable*/ Invariant inv) {
 
     // Currently we only support unary and binary suppressors
     assert v3_index == -1;
@@ -254,11 +254,13 @@ public class NISuppressor {
 
       // Check to see if the suppressor is true over all constants.
       if (ppt.is_prev_constant (v1)) {
+        assert ppt.constants != null;
         boolean valid = false;
         VarInfo[] sup_vis = new VarInfo[] {v1};
         assert sample_inv.valid_types (sup_vis);
         if (sample_inv.instantiate_ok(sup_vis)) {
           UnaryInvariant uinv = (UnaryInvariant) sample_inv;
+          @SuppressWarnings("nullness") // elements of ppt.constants have a constant_value
           InvariantStatus status = uinv.check
                     (ppt.constants.constant_value(v1), ValueTuple.MODIFIED, 1);
           valid = (status == InvariantStatus.NO_CHANGE);
@@ -334,6 +336,7 @@ public class NISuppressor {
       // Check to see if the suppressor is true over all constants.  This
       // code will not work for invariants with any state!
       if (ppt.is_prev_constant (v1) && ppt.is_prev_constant (v2)) {
+        assert ppt.constants != null;
         boolean valid = false;
         VarInfo[] sup_vis = new VarInfo[] {v1, v2};
         assert sample_inv.valid_types (sup_vis);
@@ -456,8 +459,7 @@ public class NISuppressor {
     else if (new_v3 == -1)
       return new NISuppressor (new_v1, new_v2, inv_class);
     else {
-      assert false : "Unexpected ternary suppressor";
-      return (null);
+      throw new Error("Unexpected ternary suppressor");
     }
   }
 

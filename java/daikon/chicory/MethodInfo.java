@@ -12,10 +12,12 @@ import java.lang.reflect.*;
 public class MethodInfo {
 
   /** Class that contains this method **/
-  public ClassInfo class_info = null;
+  public ClassInfo class_info;
 
-  /** Reflection information on this method **/
-  public Member member = null;
+  /** Reflection information on this method.
+   *    Null if a class initializer (see {@link @is_class_init()}.
+   */
+  public /*@Nullable*/ Member member = null;
 
   /**
    * Method name.  For example: "public static void sort(int[] arr)"
@@ -216,7 +218,7 @@ public class MethodInfo {
       return isPure;
   }
 
-  /** Returns the turn type of the method.  Constructors return Void.TYPE **/
+  /** Returns the turn type of the method.  Constructors return Void.TYPE. **/
   public Class<?> return_type() {
     if (member instanceof Method) {
       Method m = (Method) member;

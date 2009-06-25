@@ -132,15 +132,17 @@ public class Session
     }
   }
 
-  /* package access */ void sendLine(String s) {
+  /* package access */ void sendLine(String s) /*@Raw*/ {
     if (dkconfig_trace_input) {
+      assert trace_file != null; // trace_file is set in constructor if dkconfig_trace_input is true
       trace_file.println(s);
     }
+    assert input != null; // set in constructor before this is called
     input.println(s);
     input.flush();
   }
 
-  /* package access */ String readLine()
+  /* package access */ /*@Nullable*/ String readLine()
     throws IOException
   {
     return output.readLine();
