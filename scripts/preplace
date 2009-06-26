@@ -21,16 +21,18 @@ This is like
   perl -pi -e 's/OLD/NEW/g'
 except that the timestamp on each file is updated only if the replacement
 is performed.  If the replacement is not performed (because the target did
-not appear in the file), then the file's timestamp is unmodified.  Thus,
-you can call it on as many files as you like without losing the historical
+not appear in the file), then the timestamp is unmodified.  Thus, you can
+call it on as many files as you like without losing the historical
 information about when a file was last modified.
 END_OF_USAGE
 }
 
 # Called from the shell, it could be emulated as:
 #   find . -type f -name '*.html' -print \
-#     | xargs grep -l 'OLD' \
+#     | xargs grep -l -P 'OLD' \
 #     | xargs perl -pi.bak -e 's|OLD|NEW|g'
+# or as (with sed, not Perl, regular expression syntax):
+#   sed -i.bak 's/oldText/newText/g' `grep -ril 'oldText'`
 
 # Problem: it only works for replacements on a single line; the OLD text
 # cannot span lines (though the NEW text can).
