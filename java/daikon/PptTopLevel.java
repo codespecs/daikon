@@ -1239,9 +1239,8 @@ public class PptTopLevel extends Ppt {
    * processing.
    */
   public boolean is_prev_constant(VarInfo v) {
-    return (
-      (constants != null)
-        && (constants.is_constant(v) || constants.is_prev_constant(v)));
+    return ((constants != null)
+            && constants.is_prev_constant(v));
   }
 
   /**

@@ -35,6 +35,7 @@ public abstract class BinaryInvariant extends Invariant {
     VarInfo v1 = ppt.var_infos[0];
     VarInfo v2 = ppt.var_infos[1];
 
+    // If one argument is scalar and the other an array, put the scalar first.
     if (v2.rep_type.isArray() && !v1.rep_type.isArray())
       return (add (val2, val1, mod_index, count));
     else
@@ -53,6 +54,7 @@ public abstract class BinaryInvariant extends Invariant {
   public InvariantStatus check_unordered (Object val1, Object val2,
                                           int mod_index, int count) /*@Prototype*/ {
 
+    // If one argument is scalar and the other an array, put the scalar first.
     if (((val2 instanceof long[]) || (val2 instanceof double[])
          || (val2 instanceof String[]))
         && !((val1 instanceof long[]) || (val1 instanceof String[])

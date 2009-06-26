@@ -334,7 +334,7 @@ public class NISuppressor {
       }
 
       // Check to see if the suppressor is true over all constants.  This
-      // code will not work for invariants with any state!
+      // code only works for stateless invariants!
       if (ppt.is_prev_constant (v1) && ppt.is_prev_constant (v2)) {
         assert ppt.constants != null;
         boolean valid = false;

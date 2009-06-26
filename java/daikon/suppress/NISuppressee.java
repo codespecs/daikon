@@ -180,7 +180,7 @@ public class NISuppressee {
    * found for each slot.  It is used for for debug printing only.
    */
   public List<NIS.SupInv> find_all (VarInfo[] vis, PptTopLevel ppt,
-                                    Invariant /*@Nullable*/ [] cinvs) {
+                                    /*@Nullable*/ Invariant /*@Nullable*/ [] cinvs) {
 
     List<NIS.SupInv> created_list = new ArrayList<NIS.SupInv>();
 

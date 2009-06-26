@@ -298,7 +298,7 @@ public class PptSplitter implements Serializable {
               assert child_ppt.constants != null; // because of config var
               for (int i = 0; i < cvis_sorted.length; i++)
                 System.out.println ("con val = "
-                   + child_ppt.constants.all_vars[cvis_sorted[i].varinfo_index]);
+                   + child_ppt.constants.getConstant(cvis_sorted[i]));
             }
             throw new RuntimeException("found eq_inv " + eq_inv + " @"
                                 + eq_inv.ppt + " but can't find slice for "

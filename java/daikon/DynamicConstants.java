@@ -26,6 +26,7 @@ import utilMDE.*;
  * variables (i.e., that that have only seen one value).  When the
  * variable receives a second value, invariants are instantiated and
  * are given the sample representing the previous constant value.
+ * Each DynamicConstants object is associated with a single program point, ppt.
  **/
 public class DynamicConstants implements Serializable {
 
@@ -61,25 +62,34 @@ public class DynamicConstants implements Serializable {
   public static final Logger debug
                           = Logger.getLogger ("daikon.DynamicConstants");
 
-  /** List of dynamic constants. **/
-  // each element, elt, has elt.count > 0 and elt.val != null, I think. -MDE
+  /**
+   * List of dynamic constants.
+   * Each element, c, has c.constant = true, c.count > 0, elt.val != null.
+   **/
   List<Constant> con_list = new ArrayList<Constant>();
 
-  /** List of variables that have always been missing. **/
+  /**
+   * List of variables that have always been missing.
+   * For each element c, c.always_missing = true or con.vi.missingOutOfBounds().
+   **/
   List<Constant> missing_list = new ArrayList<Constant>();
 
-  /** List of all variables. **/
+  /** List of all variables.  Some may be non-constant. **/
   Constant[] all_vars;
   List<Constant> all_list = new ArrayList<Constant>();
 
   /** Program point of these constants. **/
   PptTopLevel ppt;
 
-  /** Number of sample received. **/
+  /** Number of samples received. **/
   int sample_cnt = 0;
 
   /**
-   * Class used to store the value and count for each constant.
+   * Class used to indicate, for each variable, whether it is constant (see
+   * boolean field "constant").  If it is, then the class also stores its
+   * constant value and its sample count.
+   * <p>
+   *
    * Note that two objects of this class are equal if they refer
    * to the same variable.  This allows these to be stored in
    * sets.
@@ -91,7 +101,12 @@ public class DynamicConstants implements Serializable {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20030913L;
 
-    /** The value of the constant.  Null iff count=0.  **/
+    // XXX Question: what if the constant value is itself null, as for a
+    // String or pointer?  Does the code distinguish that case from val not
+    // being set?
+    /** The value of the constant, or the previous constant value if
+     * constant==false && previous_constant==true.  Null iff count=0.
+     **/
     public /*@LazyNonNull*/ /*@Interned*/ Object val = null;
 
     /** The sample count of the constant. **/
@@ -128,9 +143,30 @@ public class DynamicConstants implements Serializable {
      */
     boolean previous_missing = false;
 
+    /** Check representation invariant. */
+    public void checkRep() {
+      // This assertion is not valid.  If first sample is missing, then
+      // always_missing=true, previous_missing=false.
+      // assert (always_missing ? previous_missing : true) : toString();
+      assert !(constant && previous_constant) : toString();
+      assert ((constant || previous_constant)
+              ? (val != null && count > 0)
+              : (val == null && count == 0))
+        : toString();
+    }
+
     public Constant (VarInfo vi) {
       this.vi = vi;
     }
+
+    /**
+     * returns whether the specified variable is currently a constant OR
+     * was a constant at the beginning of constants processing.
+     **/
+    public boolean is_prev_constant () {
+      return constant || previous_constant;
+    }
+
 
     public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof Constant))
@@ -218,6 +254,8 @@ public class DynamicConstants implements Serializable {
     // Check each constant, destroy any that are missing or different
     for (Iterator<Constant> i = con_list.iterator(); i.hasNext(); ) {
       Constant con = i.next();
+      assert con.constant;
+      con.checkRep();
       /*@Interned*/ Object val = con.vi.getValue (vt);
       if (Debug.logDetail())
         Debug.log (getClass(), ppt, Debug.vis(con.vi), "Adding "
@@ -234,14 +272,17 @@ public class DynamicConstants implements Serializable {
       } else {
         con.count += count;
       }
+      con.checkRep();
     }
 
-    // Move any non-missing variables to the constant list and init their val
+
+    // Move any non-missing variables to the constant list and init their val.
     // If a variable is missing out of bounds, leave it on this list
     // forever (guranteeing that invariants will never be instantiated over
     // it).
     for (Iterator<Constant> i = missing_list.iterator(); i.hasNext(); ) {
       Constant con = i.next();
+      con.checkRep();
       if (con.vi.missingOutOfBounds())
         continue;
       /*@Interned*/ Object val = con.vi.getValue (vt);
@@ -256,11 +297,13 @@ public class DynamicConstants implements Serializable {
                     + ": samples = " + con.count + "/" + count
                     + "/" + sample_cnt);
         if (sample_cnt == 0) {
+          // First sample for this variable; it never saw a missing value.
           con.val = val;
           con.count = count;
           con.constant = true;
           con_list.add (con);
         } else {
+          // This variable has seen a missing value.
           non_missing.add (con);
           con.previous_missing = true;
         }
@@ -275,11 +318,15 @@ public class DynamicConstants implements Serializable {
     // Turn off previous_constant on all newly non-constants
     for (Constant con : non_con) {
       con.previous_constant = false;
+      con.val = null;
+      con.count = 0;
+      con.checkRep();
     }
 
     // Turn off previous_missing on all newly non-missing
     for (Constant con : non_missing) {
       con.previous_missing = false;
+      con.checkRep();
     }
   }
 
@@ -291,10 +338,18 @@ public class DynamicConstants implements Serializable {
             || (mod == ValueTuple.MISSING_NONSENSICAL));
   }
 
+  /** Returns the Constant for the specified variable. */
+  public Constant getConstant(VarInfo vi) {
+
+    Constant result = all_vars[vi.varinfo_index];
+    result.checkRep();
+    return result;
+  }
+
   /** Returns whether the specified variable is currently a constant. **/
   public boolean is_constant (VarInfo vi) {
 
-    return (all_vars[vi.varinfo_index].constant);
+    return getConstant(vi).constant;
   }
 
   /**
@@ -303,8 +358,7 @@ public class DynamicConstants implements Serializable {
    **/
   public boolean is_prev_constant (VarInfo vi) {
 
-    return (all_vars[vi.varinfo_index].constant
-            || all_vars[vi.varinfo_index].previous_constant);
+    return getConstant(vi).is_prev_constant();
   }
 
   /**
@@ -313,17 +367,13 @@ public class DynamicConstants implements Serializable {
    **/
   public /*@Nullable*/ Object constant_value (VarInfo vi) {
 
-    if (all_vars[vi.varinfo_index].constant
-        || all_vars[vi.varinfo_index].previous_constant)
-      return (all_vars[vi.varinfo_index].val);
-    else
-      return (null);
+    return getConstant(vi).val;
   }
 
   /** Returns whether the specified variable missing for all values so far. **/
   public boolean is_missing (VarInfo vi) {
 
-    return (all_vars[vi.varinfo_index].always_missing);
+    return (getConstant(vi).always_missing);
   }
 
   /**
@@ -332,8 +382,8 @@ public class DynamicConstants implements Serializable {
    **/
   public boolean is_prev_missing (VarInfo vi) {
 
-    return (all_vars[vi.varinfo_index].always_missing
-            || all_vars[vi.varinfo_index].previous_missing);
+    Constant c = all_vars[vi.varinfo_index];
+    return (c.always_missing || c.previous_missing);
   }
 
   /** Returns the number of constants that are leaders. **/
@@ -366,6 +416,12 @@ public class DynamicConstants implements Serializable {
       }
     }
 
+    for (Constant con : noncons) {
+      con.checkRep();
+    }
+    for (Constant con : non_missing) {
+      con.checkRep();
+    }
 
     // Create all of the views over noncons and noncons+con_list.
     // Since everything starts out as a constant, it is only necessary
@@ -970,9 +1026,12 @@ public class DynamicConstants implements Serializable {
           break;
         }
       }
-      all_vars[pvar.varinfo_index].always_missing = missing;
+      Constant c = all_vars[pvar.varinfo_index];
+      c.checkRep();
+      c.always_missing = missing;
+      c.checkRep();
       if (missing)
-        missing_list.add (all_vars[pvar.varinfo_index]);
+        missing_list.add (c);
 
     }
   }
