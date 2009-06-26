@@ -5,7 +5,7 @@
 # Make will silently continue if file does not exist.
 -include Makefile.user
 
-DAIKONDIR ?= ..
+DAIKONDIR ?= ../..
 CHECKERS ?= ${HOME}/research/typequals/annotations/checkers
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 CLASSPATH:=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar:${CLASSPATH}
