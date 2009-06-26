@@ -18,6 +18,7 @@
    ;; Emacs source files
    "mernst/emacs/x?lisp/"
    "emacs[-/][0-9]+\.[0-9]+\\(\.[0-9]+\\)?/\\(lisp\\|src\\)/"
+   "viewmail/lisp/"
    ;; Javac compiler
    "annotations/\\(vendor-\\)?compiler/"
    ;; ASM bytecode manipulation library
