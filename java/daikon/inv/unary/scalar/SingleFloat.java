@@ -16,7 +16,7 @@ public abstract class SingleFloat
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  protected SingleFloat(PptSlice ppt) {
+  protected SingleFloat(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
     // System.out.println("Created SingleFloat invariant " + this + " at " + ppt);
   }

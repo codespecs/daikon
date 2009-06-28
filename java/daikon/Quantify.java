@@ -107,7 +107,7 @@ public class Quantify {
     public String esc_name() {
       VarInfo arr_var = get_check_array_var ("ESC");
       if (arr_var.isPrestate()) {
-        assert arr_var.postState != null;
+        assert arr_var.postState != null; // because isPrestate() = true
         return String.format ("\\old(%s)",
          name_with_offset (arr_var.postState.esc_name() + ".length", offset));
       } else { // array is not orig
@@ -117,7 +117,7 @@ public class Quantify {
     public String jml_name() {
       VarInfo arr_var = get_check_array_var ("JML");
       if (arr_var.isPrestate()) {
-        assert arr_var.postState != null;
+        assert arr_var.postState != null; // because isPrestate() = true
         String name = String.format ("daikon.Quant.size(%s)",
                                      arr_var.postState.jml_name());
         return name_with_offset (String.format ("\\old(%s)", name), offset);
@@ -134,7 +134,7 @@ public class Quantify {
 
       VarInfo arr_var = get_check_array_var ("JML");
       if (arr_var.isPrestate()) {
-        assert arr_var.postState != null;
+        assert arr_var.postState != null; // because isPrestate() = true
         String name = String.format ("daikon.Quant.size(%s)",
                                      arr_var.postState.jml_name());
         return name_with_offset (name, offset);
@@ -211,7 +211,7 @@ public class Quantify {
         return jml_name();
 
       if (var.isPrestate()) {
-        assert var.postState != null;
+        assert var.postState != null; // because isPrestate() = true
         return name_with_offset (var.postState.jml_name(), offset);
       } else {
         return name_with_offset (String.format ("\\new(%s)", var.jml_name()),

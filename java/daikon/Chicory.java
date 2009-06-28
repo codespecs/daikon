@@ -19,10 +19,10 @@ import daikon.util.*;
 public class Chicory {
 
   @Option ("File in which to put dtrace output")
-  public static File dtrace_file = null;
+  public static /*@LazyNonNull*/ File dtrace_file = null;
 
   @Option ("Omit variables that match this regular expression")
-  public static Pattern omit_var = null;
+  public static /*@Nullable*/ Pattern omit_var = null;
 
   @Option ("Directory in which to create output files")
   public static File output_dir = new File(".");
@@ -37,7 +37,7 @@ public class Chicory {
   public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
 
   @Option ("Decl formatted file containing comparability information")
-  public static File comparability_file = null;
+  public static /*@Nullable*/ File comparability_file = null;
 
   @Option ("Print progress information")
   public static boolean verbose = true;
@@ -52,7 +52,7 @@ public class Chicory {
   public static boolean debug_transform = false;
 
   @Option ("Treat classes that match the regex as boot classes")
-  public static Pattern boot_classes = null;
+  public static /*@Nullable*/ Pattern boot_classes = null;
 
   @Option ("Size of the heap for the target program")
   public static String heap_size = "128M";
@@ -72,7 +72,7 @@ public class Chicory {
    * @see ChicoryPremain#premain
    **/
   @Option ("Path to the Chicory agent jar file")
-  public static File premain = null;
+  public static /*@LazyNonNull*/ File premain = null;
 
   /**
    * The name of the file to read for a list of pure methods.  Should
@@ -83,7 +83,7 @@ public class Chicory {
   public static File purity_file;
 
   @Option ("Directory in which to find configuration files")
-  public static File config_dir = null;
+  public static /*@Nullable*/ File config_dir = null;
 
   @Option ("Run Daikon on the generated data trace file")
   public static boolean daikon = false;
@@ -278,9 +278,9 @@ public class Chicory {
     terminate = System.getProperty(traceLimTermString);
 
     // Run Daikon if we're in online mode
-    StreamRedirectThread daikon_err = null, daikon_out = null;
-    if (daikon_online)
-      {
+    StreamRedirectThread daikon_err = null;
+    StreamRedirectThread daikon_out = null;
+    if (daikon_online) {
         runDaikon();
 
         daikon_err = new StreamRedirectThread("stderr",
@@ -331,7 +331,7 @@ public class Chicory {
         //continue reading daikon output in separate thread
         daikon_out = new StreamRedirectThread("stdout", daikonStdOut, System.out);
         daikon_out.start();
-      }
+    }
 
 
 
@@ -415,6 +415,7 @@ public class Chicory {
 
       // Make sure all output is forwarded before we finish
       try {
+        assert daikon_err != null && daikon_out != null; // because daikon_online is true
         daikon_err.join();
         daikon_out.join();
       } catch (InterruptedException e) {
@@ -433,7 +434,7 @@ public class Chicory {
       }
       System.exit (targetResult);
     }
-      }
+  }
 
 
   /**
@@ -463,7 +464,6 @@ public class Chicory {
     if (verbose)
       System.out.printf ("\nExecuting daikon: %s\n", cmdstr);
 
-    daikon_proc = null;
     try {
       daikon_proc = rt.exec(cmdstr);
     } catch (Exception e) {

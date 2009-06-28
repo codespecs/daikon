@@ -16,7 +16,7 @@ public abstract class SingleScalarSequence
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020813;
 
-  protected SingleScalarSequence(PptSlice ppt) {
+  protected SingleScalarSequence(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
     // System.out.println("Created SingleScalarSequence invariant " + this + " at " + ppt);
   }

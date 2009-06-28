@@ -59,6 +59,7 @@ public class ParentFilter extends InvariantFilter {
       VarInfo[] pvis = new VarInfo[inv.ppt.var_infos.length];
       for (int j = 0; j < pvis.length; j++) {
         pvis[j] = rel.parentVar (inv.ppt.var_infos[j]);
+        // pvis[j] *cat* be null -MDE
         if (pvis[j] == null) {
           if (Debug.logDetail()) {
             inv.log ("variable %s [%s] cannot be found in %s",

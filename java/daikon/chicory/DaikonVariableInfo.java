@@ -30,8 +30,8 @@ public abstract class DaikonVariableInfo
     /** switch to turn on experimental techniques on static constants */
     public static boolean dkconfig_constant_infer = false;
 
-    /** The variable name, if appropriate to the subtype **/
-    private final /*@Nullable*/ /*@Interned*/ String name;
+    /** The variable name.  Sensible for all subtypes except RootInfo.  **/
+    private final /*@Interned*/ String name;
 
     /** The child nodes **/
     public List<DaikonVariableInfo> children;
@@ -113,11 +113,8 @@ public abstract class DaikonVariableInfo
     {
         // Intern the names because there will be many of the
         // same variable names at different program points within
-        // the same class
-        if (theName == null)
-            name = null;
-        else
-            name = theName.intern();
+        // the same class.
+        name = theName.intern();
 
         children = new ArrayList<DaikonVariableInfo> ();
         isArray = arr;
@@ -230,7 +227,8 @@ public abstract class DaikonVariableInfo
      * For instance, if the variable a has a field b, then calling
      * getMyValParentVal(val_of_a) will return the value of a.b
      *
-     * @param parentVal The parent object
+     * @param parentVal The parent object.  Can be null for static fields.
+     *    (Are there any other circumstances where it can be null?)
      */
     public abstract Object getMyValFromParentVal(Object parentVal);
 
@@ -579,6 +577,7 @@ public abstract class DaikonVariableInfo
                                 buf);
                         String newOffset = buf.toString();
                         debug_vars.indent ("Pure method");
+                        assert meth.member != null;
                         newChild.addChildNodes(cinfo,
                                                ((Method) meth.member).getReturnType(),
                                                meth.member.getName(),
@@ -927,7 +926,7 @@ public abstract class DaikonVariableInfo
             return true;
 
         // If the field is in the same package, it's visible if it is
-        // not private or protected
+        // not private or protected.
         if (current.getPackage() != null
             && current.getPackage().equals (fclass.getPackage())) {
             if (Modifier.isPrivate (modifiers)

@@ -274,10 +274,12 @@ public final class MergeInvariants {
       //                   ppt.children.size());
 
       // Splitters should not have any children to begin with
-      if (ppt.has_splitters())
+      if (ppt.has_splitters()) {
+        assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters)
           for (PptTopLevel p : ppt_split.ppts)
             assert p.children.size() == 0 : p;
+      }
 
       // Loop over each of the input ppt maps, looking for the same ppt
       for (int j = 0; j < pptmaps.size(); j++ ) {
@@ -307,6 +309,7 @@ public final class MergeInvariants {
         // splitters.  Don't attach the ppt itself, as its invariants can
         // be built from the invariants in the splitters.
         if (ppt.has_splitters()) {
+          assert ppt.splitters != null; // because ppt.has_splitters() = true
           setup_conditional_merge (ppt, child);
         } else {
           PptRelation rel = PptRelation.newMergeChildRel (ppt, child);
@@ -316,6 +319,7 @@ public final class MergeInvariants {
       // Make sure at least one child was found
       assert ppt.children.size() > 0 : ppt;
       if (ppt.has_splitters())
+        assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters)
           for (PptTopLevel p : ppt_split.ppts)
             assert p.children.size() > 0 : p;
@@ -409,6 +413,7 @@ public final class MergeInvariants {
     // Nothing to do if there are no splitters here
     if (!ppt.has_splitters())
       return;
+    assert ppt.splitters != null; // because ppt.has_splitters() = true
 
     // Both ppt and child should have the same number of splitters
     if (ppt.splitters.size() != child.splitters.size()) {

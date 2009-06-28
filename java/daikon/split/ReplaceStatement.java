@@ -69,7 +69,7 @@ class ReplaceStatement {
     JavaParser parser = new JavaParser(input);
     Node root = parser.CompilationUnit();
     MethodDeclarationParser visitor = new MethodDeclarationParser();
-    parameters = null;          // to quiet FindBugs
+    // parameters = null;          // to quiet FindBugs
     // Sets methodName and parameters.
     // But also seems to depend on methodName being set already...
     root.accept(visitor);

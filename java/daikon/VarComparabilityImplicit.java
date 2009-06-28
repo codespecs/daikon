@@ -38,7 +38,7 @@ public final class VarComparabilityImplicit
    * belongs to.
    **/
   int base;
-  VarComparabilityImplicit[] indexTypes; // indexTypes[0] is comparability of
+  VarComparabilityImplicit /*@Nullable*/ [] indexTypes; // indexTypes[0] is comparability of
                                 // the first index of this array.
   int dimensions;               // Indicates how many of the indices are in use;
                                 // there may be more indices than this.
@@ -47,7 +47,7 @@ public final class VarComparabilityImplicit
 
   public static final VarComparabilityImplicit unknown = new VarComparabilityImplicit(-3, null, 0);
 
-  private VarComparabilityImplicit(int base, VarComparabilityImplicit[] indexTypes, int dimensions) {
+  private VarComparabilityImplicit(int base, VarComparabilityImplicit /*@NonNull*/ [] indexTypes, int dimensions) {
     this.base = base;
     this.indexTypes = indexTypes;
     this.dimensions = dimensions;
@@ -83,7 +83,7 @@ public final class VarComparabilityImplicit
     return (dimensions == 0) && (base < 0);
   }
 
-  static VarComparabilityImplicit parse(String rep, ProglangType vartype) {
+  static VarComparabilityImplicit parse(String rep, /*@Nullable*/ ProglangType vartype) {
     // String rep_ = rep;          // for debugging
 
     Vector<String> dim_reps = new Vector<String>();

@@ -82,7 +82,6 @@ public class Premain {
     // Initialize the static tag array
     DCRuntime.init();
 
-
   }
 
   static public class Transform implements ClassFileTransformer {

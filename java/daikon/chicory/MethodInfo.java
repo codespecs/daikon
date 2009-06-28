@@ -143,7 +143,7 @@ public class MethodInfo {
     }
 
 
-    if (ChicoryPremain.shouldDoPurity())
+    if (ChicoryPremain.shouldDoPurity() && (member != null))
     {
         int mod = member.getModifiers();
 
@@ -218,7 +218,7 @@ public class MethodInfo {
       return isPure;
   }
 
-  /** Returns the turn type of the method.  Constructors return Void.TYPE. **/
+  /** Returns the turn type of the method, or Void.TYPE for a constructor. **/
   public Class<?> return_type() {
     if (member instanceof Method) {
       Method m = (Method) member;

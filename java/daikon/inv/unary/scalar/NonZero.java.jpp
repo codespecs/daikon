@@ -128,7 +128,7 @@ public class NONZERO
   }
 
   /** instantiate an invariant on the specified slice **/
-  public NONZERO instantiate_dyn (PptSlice slice) {
+  public NONZERO instantiate_dyn (PptSlice slice) /*@Prototype*/ {
     return new NONZERO (slice);
   }
 

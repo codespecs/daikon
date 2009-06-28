@@ -112,7 +112,7 @@ public final class CLASSNAME
   }
 
   /** instantiate an invariant on the specified slice **/
-  protected CLASSNAME instantiate_dyn (PptSlice slice) {
+  protected CLASSNAME instantiate_dyn (PptSlice slice) /*@Prototype*/ {
     return new CLASSNAME (slice);
   }
 

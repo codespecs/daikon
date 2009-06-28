@@ -188,7 +188,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20060609L;
 
-  protected CLASSNAME(PptSlice ppt, boolean swap) {
+  protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
     super(ppt);
     this.swap = swap;
   }
@@ -663,7 +663,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected Divides instantiate_dyn (PptSlice slice) {
+    protected Divides instantiate_dyn (PptSlice slice) /*@Prototype*/ {
       return new Divides (slice, swap);
     }
 
@@ -846,7 +846,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
-    protected Square instantiate_dyn (PptSlice slice) {
+    protected Square instantiate_dyn (PptSlice slice) /*@Prototype*/ {
       return new Square (slice, swap);
     }
 
@@ -915,7 +915,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected ZeroTrack instantiate_dyn (PptSlice slice) {
+    protected ZeroTrack instantiate_dyn (PptSlice slice) /*@Prototype*/ {
       return new ZeroTrack (slice, swap);
     }
 
@@ -993,7 +993,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected BitwiseComplement instantiate_dyn (PptSlice slice) {
+    protected BitwiseComplement instantiate_dyn (PptSlice slice) /*@Prototype*/ {
       return new BitwiseComplement (slice);
     }
 
@@ -1052,7 +1052,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    public BitwiseSubset instantiate_dyn (PptSlice slice) {
+    public BitwiseSubset instantiate_dyn (PptSlice slice) /*@Prototype*/ {
       return new BitwiseSubset (slice, swap);
     }
 
@@ -1148,7 +1148,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    public BitwiseAndZero instantiate_dyn (PptSlice slice) {
+    public BitwiseAndZero instantiate_dyn (PptSlice slice) /*@Prototype*/ {
       return new BitwiseAndZero (slice);
     }
 
@@ -1231,7 +1231,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected ShiftZero instantiate_dyn (PptSlice slice) {
+    protected ShiftZero instantiate_dyn (PptSlice slice) /*@Prototype*/ {
       return new ShiftZero (slice, swap);
     }
 
@@ -1312,7 +1312,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected SubString instantiate_dyn (PptSlice slice) {
+    protected SubString instantiate_dyn (PptSlice slice) /*@Prototype*/ {
       return new SubString (slice, swap);
     }
 

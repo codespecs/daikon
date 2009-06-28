@@ -320,7 +320,7 @@ public final class Intern {
    **/
   // TODO: JLS 5.1.7 requires that the boxing conversion interns integer
   // values between -128 and 127 (and Intern.valueOf is intended to promise
-  // the same).  This could take advantage of that.
+  // the same).  This does not currently take advantage of that.
   @SuppressWarnings("interning")
   public static /*@Interned*/ Integer intern(Integer a) {
     WeakReference</*@Interned*/ Integer> lookup = internedIntegers.get(a);

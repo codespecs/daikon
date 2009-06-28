@@ -96,7 +96,9 @@ public class SplitterFactory {
             Vector<Splitter> sp = new Vector<Splitter>();
             for (int k = 0; k < numsplitters; k++) {
               if (splitterObjects[i][k].splitterExists()) {
-                sp.addElement(splitterObjects[i][k].getSplitter());
+                @SuppressWarnings("nullness") // because splitterExists() = true
+                /*@NonNull*/ Splitter splitter = splitterObjects[i][k].getSplitter();
+                sp.addElement(splitter);
               } else if (! Daikon.dkconfig_suppressSplitterErrors) {
                 System.out.println(splitterObjects[i][k].getError());
               }

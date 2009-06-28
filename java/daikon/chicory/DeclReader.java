@@ -65,7 +65,7 @@ public class DeclReader {
     public int index;
 
     public DeclVarInfo (String name, String type, String rep_type,
-                    String comparability, int index) {
+                        String comparability, int index) {
       this.name = name;
       this.type = type;
       this.rep_type = rep_type;
@@ -73,19 +73,19 @@ public class DeclReader {
       this.index = index;
     }
 
-    /** Returns the variables name */
+    /** Returns the variable's name */
     public String get_name() {
       return name;
     }
 
-    /** Returns the variables declared type as specified in the decl file **/
+    /** Returns the variable's declared type as specified in the decl file b.**/
     public String get_type() {
       return type;
     }
 
     /**
      * Returns the type name.  get_type() returns the entire entry including
-     * auxiliary information
+     * auxiliary information.
      */
     public String get_type_name() {
       return type.replaceFirst (" .*", "");
@@ -93,7 +93,7 @@ public class DeclReader {
 
     /**
      * Returns the representation type of the variable as specified in
-     * the decl file.  The static value (if any) is discarded
+     * the decl file.  The static value (if any) is discarded.
      */
     public String get_rep_type() {
       return rep_type.replaceFirst (" .*", "");
@@ -134,34 +134,36 @@ public class DeclReader {
 
     /**
      * Reads a single value for this variable and returns it.
+     * The result is null exactly if the value is nonsensical.
+     * The return value is interned.
      */
     public /*@Nullable*/ /*@Interned*/ Object read_data (MultiReader reader) throws IOException {
       String var_name = reader.readLine();
+      if (var_name == null)
+        throw new Error("file " + reader.get_filename() + " terminated prematurely, expeced var " + this.name);
       if (!var_name.equals (this.name))
         throw new Error (var_name + " found where " + this.name
                          + " expected ");
       String value = reader.readLine();
       String mod_bit = reader.readLine();
+      if ((value == null) || (mod_bit == null))
+        throw new Error("file " + reader.get_filename() + " terminated prematurely");
       if (value.equals ("nonsensical")) {
         return null;
       } else if (is_int()) {
-        Integer val = null;
         try {
-          val = new Integer (value);
-        } catch (Throwable t) {
-          System.out.printf ("Unexpected integer value '%s', for variable %s "
-                             + "treated as nonsensical%n", value, this.name);
+          return (Intern.intern(new Integer (value))); // interning bugfix
+        } catch (NumberFormatException t) {
+          throw new Error ("Unexpected value '" + value
+                           + "' for integer variable " + this.name);
         }
-        return (Intern.intern(val)); // interning bugfix
       } else if (is_double()){
-        Double val = null;
         try {
-          val = new Double (value);
-        } catch (Throwable t) {
-          System.out.printf ("Unexpected double value '%s', for variable %s "
-                             + "treated as nonsensical%n", value, this.name);
+          return (Intern.intern(new Double (value))); // interning bugfix
+        } catch (NumberFormatException t) {
+          throw new Error ("Unexpected string '" + value
+                           + "' for double variable " + this.name);
         }
-        return (Intern.intern(val)); // interning bugfix
       } else if (is_string()) {
         if (value.startsWith("\"") && value.endsWith("\""))
           value = value.substring (1, value.length()-1);
@@ -169,8 +171,7 @@ public class DeclReader {
       } else if (is_string_array()) {
         return (null);  // treating arrays as nonsensical for now
       } else {
-        assert false : "unexpected rep type " + rep_type;
-        return (null);
+        throw new Error("unexpected rep type " + rep_type);
       }
 
     }
@@ -203,15 +204,20 @@ public class DeclReader {
      * must be positioned immediately before the variable name
      */
     public DeclVarInfo read_var (MultiReader decl_file)
-      throws java.io.IOException{
+      throws java.io.IOException {
 
-      String name = decl_file.readLine().intern();
-      String type = decl_file.readLine().intern();
-      String rep_type = decl_file.readLine().intern();
-      String comparability = decl_file.readLine().intern();
+      String name = decl_file.readLine();
+      String type = decl_file.readLine();
+      String rep_type = decl_file.readLine();
+      String comparability = decl_file.readLine();
+      if ((name == null) || (type == null) || (rep_type == null) || (comparability == null))
+        throw new Error("File " + decl_file.get_filename() + " ends prematurely");
 
-      DeclVarInfo var = new DeclVarInfo (name, type, rep_type, comparability,
-                                 vars.size());
+      // I don't see the point of this interning.  No code seems to take
+      // advantage of it.  Is it just for space?  -MDE
+      DeclVarInfo var = new DeclVarInfo (name.intern(), type.intern(),
+                                         rep_type.intern(), comparability.intern(),
+                                         vars.size());
       vars.put (name, var);
       return (var);
     }
@@ -289,6 +295,8 @@ public class DeclReader {
 
     // Read the name of the program point
     String pptname = decl_file.readLine();
+    if (pptname == null)
+      throw new Error("file " + decl_file.get_filename() + " ends prematurely");
     assert pptname.contains (":::");
     DeclPpt ppt = new DeclPpt (pptname);
     ppts.put (pptname, ppt);
@@ -317,7 +325,10 @@ public class DeclReader {
   }
 
   public DeclPpt find_ppt (String ppt_name) {
-    return ppts.get (ppt_name);
+    DeclPpt result = ppts.get (ppt_name);
+    // I'm curious whether this will ever fail
+    assert result != null;
+    return result;
   }
 
   /**
@@ -419,6 +430,7 @@ public class DeclReader {
           if (!comp_map.containsKey (comp)) {
             comp_map.put (comp, new ArrayList<DeclVarInfo>());
           }
+          assert comp_map.containsKey (comp); // XXX flow could compute this
           List<DeclVarInfo> vi_list = comp_map.get (comp);
           vi_list.add (vi);
         }

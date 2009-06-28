@@ -160,31 +160,30 @@ public final class SEQUENCESCALARSUBSCRIPTFACTORY extends BinaryDerivationFactor
     // nonsensical/missing.  Is that what I want?
     // Find an IntComparison relationship over the scalar and the sequence
     // size, if possible.
-    PptSlice compar_slice = null;
     if (seqsize != null) {
       assert sclvar.ppt == seqsize.ppt;
-      compar_slice = sclvar.ppt.findSlice_unordered(sclvar, seqsize);
-    }
-    if (compar_slice != null) {
-      if ((sclvar.varinfo_index < seqsize.varinfo_index)
-          ? INTLESSEQUAL.find(compar_slice) == null // sclvar can be more than seqsize
-          : INTGREATEREQUAL.find(compar_slice) == null // seqsize can be less than sclvar
-          ) {
-        Global.nonsensical_suppressed_derived_variables += 6;
-        if (debug != null) debug.log ("sclvar is sometimes > length sequence");
-        return null;
-      } else if (INTEQUAL.find(compar_slice) != null) {
-        Global.nonsensical_suppressed_derived_variables += 3;
-        ArrayList<BinaryDerivation> result = new ArrayList<BinaryDerivation>();
-        if (enable_subscript) {
-          result.add(new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, true)); // a[i-1]
+      PptSlice compar_slice = sclvar.ppt.findSlice_unordered(sclvar, seqsize);
+      if (compar_slice != null) {
+        if ((sclvar.varinfo_index < seqsize.varinfo_index)
+            ? INTLESSEQUAL.find(compar_slice) == null // sclvar can be more than seqsize
+            : INTGREATEREQUAL.find(compar_slice) == null // seqsize can be less than sclvar
+            ) {
+          Global.nonsensical_suppressed_derived_variables += 6;
+          if (debug != null) debug.log ("sclvar is sometimes > length sequence");
+          return null;
+        } else if (INTEQUAL.find(compar_slice) != null) {
+          Global.nonsensical_suppressed_derived_variables += 3;
+          ArrayList<BinaryDerivation> result = new ArrayList<BinaryDerivation>();
+          if (enable_subscript) {
+            result.add(new SEQUENCESCALARSUBSCRIPT(seqvar, sclvar, true)); // a[i-1]
+          }
+          if (enable_subsequence) {
+            result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, true)); // a[..i-1]
+            result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, false)); // a[i..]
+          }
+          if (debug != null) debug.log ("Found derivations: " + result);
+          return result.toArray(new BinaryDerivation[result.size()]);
         }
-        if (enable_subsequence) {
-          result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, true, true)); // a[..i-1]
-          result.add(new SEQUENCESCALARSUBSEQUENCE(seqvar, sclvar, false, false)); // a[i..]
-        }
-        if (debug != null) debug.log ("Found derivations: " + result);
-        return result.toArray(new BinaryDerivation[result.size()]);
       }
     }
 

@@ -17,7 +17,7 @@ public abstract class UnaryInvariant
   static final long serialVersionUID = 20020122L;
 
   /** Pass-through. */
-  protected UnaryInvariant(PptSlice ppt) {
+  protected UnaryInvariant(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 

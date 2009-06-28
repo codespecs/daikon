@@ -58,7 +58,7 @@ public class Runtime
     public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
 
     /** Comparability information (if any) **/
-    static DeclReader comp_info = null;
+    static /*@Nullable*/ DeclReader comp_info = null;
 
     //
     // Setups that control what information is written
@@ -91,10 +91,12 @@ public class Runtime
     static boolean no_dtrace = false;
 
     /** Decl writer setup for writing to the trace file **/
-    static DeclWriter decl_writer = null;
+    // Set in ChicoryPremain.premain().
+    static DeclWriter decl_writer;
 
     /** Dtrace writer setup for writing to the trace file **/
-    static DTraceWriter dtrace_writer = null;
+    // Set in ChicoryPremain.premain().
+    static DTraceWriter dtrace_writer;
 
     /**
      * Which static initializers have been run.

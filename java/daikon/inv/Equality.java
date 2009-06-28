@@ -368,11 +368,10 @@ public final /*(at)Interned*/ class Equality
   public List<VarInfo> add(ValueTuple vt, int count) {
     // Need to handle specially if leader is missing.
     VarInfo leader = leader();
-    Object leaderValue = leader.getValue(vt);
+    Object leaderValue = leader.getValueOrNull(vt);
     int leaderMod = leader.getModified(vt);
     boolean leaderOutOfBounds = leader.missingOutOfBounds();
-    if (leaderMod == ValueTuple.MISSING_NONSENSICAL ||
-        leaderMod == ValueTuple.MISSING_FLOW) {
+    if (leader.isMissing(vt)) {
     } else {
       numSamples += count;
     }
@@ -386,20 +385,20 @@ public final /*(at)Interned*/ class Equality
       if (vi == leader)
         continue;
       assert vi.comparableNWay (leader);
-      Object viValue = vi.getValue(vt);
+      Object viValue = vi.getValueOrNull(vt);
       int viMod = vi.getModified(vt);
       // The following is possible because values are interned.  The
       // test also takes into account missing values, since they are
       // null.
       if ((leaderValue == viValue) && (leaderMod == viMod)
-        && !leaderOutOfBounds && !vi.missingOutOfBounds()) {
-        if (leaderValue instanceof Double) {
-          if (!((Double)leaderValue).isNaN() && !((Double)viValue).isNaN())
-            continue;
-        } else {
-          continue;
-        }
+          && !leaderOutOfBounds && !vi.missingOutOfBounds()
+          // If the values are NaN, treat them as different.
+          && (!((leaderValue instanceof Double) && ((Double)leaderValue).isNaN()))) {
+          // The values are the same.
+        continue;
       }
+      // The values differ.  Remove this from the equality set.
+
       //       if (debug.isLoggable(Level.FINE)) {
       //         debug.fine ("  vi name: " + vi.name.name());
       //         debug.fine ("  vi value: " + viValue);

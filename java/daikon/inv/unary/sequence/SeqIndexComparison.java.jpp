@@ -218,7 +218,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
   /** Instantiate the invariant on the specified slice **/
-  public CLASSNAME instantiate_dyn (PptSlice slice) {
+  public CLASSNAME instantiate_dyn (PptSlice slice) /*@Prototype*/ {
     return new CLASSNAME (slice);
   }
 

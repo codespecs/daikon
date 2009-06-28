@@ -133,7 +133,7 @@ public class CLASSNAME
   }
 
   /** instantiates the invariant on the specified slice **/
-  protected CLASSNAME instantiate_dyn (PptSlice slice) {
+  protected CLASSNAME instantiate_dyn (PptSlice slice) /*@Prototype*/ {
     return new CLASSNAME (slice);
   }
 
@@ -467,10 +467,14 @@ public class CLASSNAME
           }
         }
       } else {
-        assert false
-        : "how can this happen? " + subvar.name() +
-                          " " + subvar.derived.getClass() + " " +
-                          supervar.name() + " " + supervar.derived.getClass();
+        throw new Error("how can this happen? " + subvar.name() +
+                        " " + (subvar.derived == null
+                               ? "(not derived)"
+                               : subvar.derived.getClass())
+                        + " " + supervar.name()
+                        + " " + (supervar.derived == null
+                                 ? "(not derived)"
+                                 : supervar.derived.getClass()));
       }
     }
 
@@ -737,10 +741,14 @@ public class CLASSNAME
             return true;
           }
       } else {
-        assert false
-        : "how can this happen? " + subvar.name()
-                        + " " + subvar.derived.getClass() + " "
-                        + supervar.name() + " " + supervar.derived.getClass();
+        throw new Error("how can this happen? " + subvar.name() +
+                        " " + (subvar.derived == null
+                               ? "(not derived)"
+                               : subvar.derived.getClass())
+                        + " " + supervar.name()
+                        + " " + (supervar.derived == null
+                                 ? "(not derived)"
+                                 : supervar.derived.getClass()));
       }
 
     }

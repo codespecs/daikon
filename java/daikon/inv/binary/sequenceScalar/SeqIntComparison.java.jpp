@@ -185,8 +185,8 @@ public final class SEQINTEQUAL
     if (!valid_types (vis))
       return (false);
 
-    VarInfo seqvar = null;
-    VarInfo sclvar = null;
+    VarInfo seqvar;
+    VarInfo sclvar;
     if (vis[0].rep_type == ProglangType.PROGLANGTYPEARRAY) {
       seqvar = vis[0];
       sclvar = vis[1];
@@ -207,7 +207,7 @@ public final class SEQINTEQUAL
   }
 
   /** instantiates the invariant on the specified slice **/
-  protected SEQINTEQUAL instantiate_dyn (PptSlice slice) {
+  protected SEQINTEQUAL instantiate_dyn (PptSlice slice) /*@Prototype*/ {
     return new SEQINTEQUAL (slice);
   }
 
@@ -228,11 +228,12 @@ public final class SEQINTEQUAL
     SequenceMin seqmin = null;
     SequenceMax seqmax = null;
     VarInfo sclseq = null;
-    if (sclvar(vis).derived instanceof SequenceMin) {
-      seqmin = (SequenceMin) sclvar(vis).derived;
+    VarInfo sclvar = sclvar(vis);
+    if (sclvar.derived instanceof SequenceMin) {
+      seqmin = (SequenceMin) sclvar.derived;
       sclseq = seqmin.base;
-    } else if (sclvar(vis).derived instanceof SequenceMax) {
-      seqmax = (SequenceMax) sclvar(vis).derived;
+    } else if (sclvar.derived instanceof SequenceMax) {
+      seqmax = (SequenceMax) sclvar.derived;
       sclseq = seqmax.base;
     }
     if (seqvar(vis) == sclseq) {

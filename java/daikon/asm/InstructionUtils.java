@@ -216,8 +216,8 @@ public class InstructionUtils {
                 new LinkedHashSet<String>());
 
           } else { // If we've seen it, it may be a leader or redundant.
-            assert timeKilled.get(var) != null;
-            assert leaders.get(var) != null;
+            assert timeKilled.containsKey(var);
+            assert leaders.containsKey(var);
             if (timeKilled.get(var) >= leaders.get(var)) {
               // It was killed by a killer instruction.
               // Make it a leader.

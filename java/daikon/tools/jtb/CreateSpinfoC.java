@@ -40,7 +40,8 @@ public class CreateSpinfoC {
           writer.close();
         } catch (IOException e) {
           System.out.println(e.getMessage());
-          temp.delete();
+          if (temp != null)
+            temp.delete();
         }
         try {
           parser = new CParser(new FileInputStream(temp));

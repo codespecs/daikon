@@ -146,7 +146,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /*@Nullable*/ /*@Interned*/ Object static_constant_value;
 
   /** Whether and how derived.  Null if this is not derived. **/
-  public /*@Nullable*/ Derivation derived;
+  public /*@LazyNonNull*/ Derivation derived;
 
   // Various enums used for information about variables
   public enum RefType {POINTER, OFFSET};
@@ -168,6 +168,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public EnumSet<LangFlags> lang_flags = EnumSet.noneOf (LangFlags.class);
 
   public VarDefinition vardef;
+  // under what circumstances is this null?
   public /*@Nullable*/ VarInfo enclosing_var;
   public int arr_dims = 0;
   public /*@Nullable*/ List<VarInfo> function_args = null;
@@ -1142,6 +1143,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return static_constant_value;
     else
       return vt.getValue(value_index);
+  }
+
+  /** Use of this method is discouraged. */
+  public /*@Nullable*/ /*@Interned*/ Object getValueOrNull(ValueTuple vt) {
+    if (is_static_constant)
+      return static_constant_value;
+    else
+      return vt.getValueOrNull(value_index);
   }
 
   /** Return the value of this long variable (as an integer) **/
@@ -3555,8 +3564,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * ends at end with the specified shifts.  The begin or the end can be
    * null.  Shifts are only allowed with non-null variables
    */
-  public static VarInfo make_subsequence (VarInfo seq, VarInfo begin,
-                                int begin_shift, VarInfo end, int end_shift) {
+  public static VarInfo make_subsequence (VarInfo seq,
+                                          /*@Nullable*/ VarInfo begin, int begin_shift,
+                                          /*@Nullable*/ VarInfo end, int end_shift) {
 
     String begin_str = inside_name (begin, seq.isPrestate(), begin_shift);
     if (begin_str.equals("")) // interned if the null string, not interned otherwise
@@ -3626,7 +3636,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * If the array reference is orig, then orig is implied.  This removes
    * orig from orig variales and adds post to post variables.
    */
-  private static String inside_name (VarInfo vi, boolean in_orig, int shift) {
+  private static String inside_name (/*@Nullable*/ VarInfo vi, boolean in_orig, int shift) {
     if (vi == null)
       return "";
 

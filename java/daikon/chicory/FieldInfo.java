@@ -25,8 +25,12 @@ public class FieldInfo extends DaikonVariableInfo
     /** whether or not this field is of a primitive type **/
     private boolean is_primitive;
 
-    /** Class that gets the tags for fields.  Used by DynComp **/
-    public DCRuntime.FieldTag field_tag = null;
+    /**
+     * Class that gets the tags for fields.  Used by DynComp.
+     * Accessed only by methods DCRuntime.get_field_tag and
+     * DCRuntime.get_field_tag_refs_only.
+     **/
+    public /*@LazyNonNull*/ DCRuntime.FieldTag field_tag = null;
 
     public FieldInfo(String theName, Field theField, boolean isArr)
     {
@@ -130,7 +134,7 @@ public class FieldInfo extends DaikonVariableInfo
     }
 
 
-    Field tag_field = null;
+    /*@LazyNonNull*/ Field tag_field = null;
     public Field get_tag_field (String tag_field_name, Class<?> parent_class)
     {
         if (tag_field == null)
@@ -167,23 +171,23 @@ public class FieldInfo extends DaikonVariableInfo
         return field.getName();
     }
 
-  /* Don't include 'this' in instance variable names
-  public String getName() {
-    if (isStatic())
-      return super.getName();
-    else
-      return get_relative_name();
-  }
-  */
+    /* Don't include 'this' in instance variable names
+    public String getName() {
+        if (isStatic())
+            return super.getName();
+        else
+            return get_relative_name();
+    }
+    */
 
-  /**
-   * static final fields are NOMOD
-   */
-  public EnumSet<VarFlags> get_var_flags() {
-    EnumSet<VarFlags> flags = super.get_var_flags();
-    int modbits = field.getModifiers();
-    if (Modifier.isFinal(modbits) && Modifier.isStatic(modbits))
-      flags.add (VarFlags.NOMOD);
-    return (flags);
-  }
+    /**
+     * static final fields are NOMOD
+     */
+    public EnumSet<VarFlags> get_var_flags() {
+        EnumSet<VarFlags> flags = super.get_var_flags();
+        int modbits = field.getModifiers();
+        if (Modifier.isFinal(modbits) && Modifier.isStatic(modbits))
+            flags.add (VarFlags.NOMOD);
+        return (flags);
+    }
 }

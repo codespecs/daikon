@@ -812,7 +812,8 @@ check-interning-all: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 
 check-nullness: check-nullness-all
 
-check-nullness-all: check-nullness-all-withstubs
+# check-nullness-all: check-nullness-all-withstubs
+check-nullness-all: check-nullness-all-withstubs-warns
 
 check-nullness-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ...

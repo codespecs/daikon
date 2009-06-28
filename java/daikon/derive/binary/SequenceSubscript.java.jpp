@@ -121,6 +121,7 @@ public final class SEQUENCESCALARSUBSCRIPT
   }
 
   /** Returns the ESC name for sequence subscript **/
+  @SuppressWarnings("nullness")
   public String esc_name (String index) {
     if (seqvar().isPrestate())
       return String.format ("\\old(%s[%s])",
@@ -133,6 +134,7 @@ public final class SEQUENCESCALARSUBSCRIPT
   }
 
   /** Returns the JML name for sequence subscript **/
+  @SuppressWarnings("nullness")
   public String jml_name (String index) {
     String get_element = GET_ELEMENT;
     if (seqvar().file_rep_type.baseIsHashcode())
@@ -150,6 +152,7 @@ public final class SEQUENCESCALARSUBSCRIPT
   }
 
   /** Return the simplify name for sequence subscript **/
+  @SuppressWarnings("nullness")
   public String simplify_name() {
     String subscript = sclvar().simplify_name();
     if (index_shift < 0)

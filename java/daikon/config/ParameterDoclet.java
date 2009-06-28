@@ -77,13 +77,13 @@ public class ParameterDoclet
   // ============================== NON-STATIC METHODS ==============================
 
   static class DocCategory {
-    public String prefixPattern;
-    public String fieldName;
+    public /*@Nullable*/ String prefixPattern;
+    public /*@Nullable*/ String fieldName;
     public String description;
     public String longBlurb;
     public Map<String,String> fields;  // field -> description
 
-    public DocCategory (String prefix, String name, String desc, String blurb) {
+    public DocCategory (/*@Nullable*/ String prefix, /*@Nullable*/ String name, String desc, String blurb) {
       prefixPattern = prefix;
       if (name == null)
         fieldName = null;

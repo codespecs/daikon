@@ -37,7 +37,7 @@ class ReplaceStatementMap {
    * and "get(y.z)" would return null.
    * @param name the name of the ReplaceStatement desired.
    */
-  public ReplaceStatement get(String name) {
+  public /*@Nullable*/ ReplaceStatement get(String name) {
     ReplaceStatement rs = map.get(name);
     if (rs != null) {
       return rs;

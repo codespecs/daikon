@@ -269,7 +269,7 @@ public class PAIRWISEINTEQUAL
   }
 
   /** instantiates the invariant on the specified slice **/
-  protected PAIRWISEINTEQUAL instantiate_dyn (PptSlice slice) {
+  protected PAIRWISEINTEQUAL instantiate_dyn (PptSlice slice) /*@Prototype*/ {
     PAIRWISEINTEQUAL inv = new PAIRWISEINTEQUAL(slice);
     if (logOn())
       inv.log ("instantiate");

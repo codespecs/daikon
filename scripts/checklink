@@ -1,8 +1,8 @@
-#!/usr/bin/perl -wT
+#!/usr/local/bin/perl -wT
 #
 # W3C Link Checker
 # by Hugo Haas <hugo@w3.org>
-# (c) 1999-2008 World Wide Web Consortium
+# (c) 1999-2009 World Wide Web Consortium
 # based on Renaud Bruyeron's checklink.pl
 #
 # $Id$
@@ -24,10 +24,21 @@
 #       http://lists.w3.org/Archives/Public/www-validator/ (archives)
 
 use strict;
+use English;
+$WARNING = 1;
 
 # Get rid of potentially unsafe and unneeded environment variables.
 delete(@ENV{qw(IFS CDPATH ENV BASH_ENV)});
 $ENV{PATH} = ''; # undef would output warnings with Perl 5.6.1's Cwd.pm.
+
+# ...but we want PERL5LIB honored even in taint mode, see perlsec, perl5lib,
+# http://www.mail-archive.com/cpan-testers-discuss%40perl.org/msg01064.html
+BEGIN {
+  # undefinedness and "v-string in use/require non-portable" warnings with
+  # perl5lib 1.02 and perl 5.10.0, rt.cpan.org #43446, #43447
+  local $^W = 0;
+#  require perl5lib;
+}
 
 # -----------------------------------------------------------------------------
 
@@ -55,9 +66,7 @@ sub new
   # Cheat by defining something for the constructor, and resetting it later.
   my $from_ok = $from;
   $from ||= 'www-validator@w3.org';
-  # WWW::RobotRules <= 5.78 have bugs which cause suboptimal results with
-  # User-Agent substring matching against robots.txt files; "User-Agent: *"
-  # should work ok with all though, and "User-Agent: W3C-checklink" for >= 5.77
+
   my $self;
   if (USE_ROBOT_UA) {
     $self = $class->SUPER::new($name, $from, $rules);
@@ -73,6 +82,9 @@ sub new
   $self->env_proxy();
 
   $self->allow_private_ips(1);
+
+  # TODO: bug 29
+  $self->protocols_forbidden([qw(mailto javascript)]);
 
   return $self;
 }
@@ -202,12 +214,12 @@ use HTTP::Response  1.50 qw(); # >= 1.50 for decoded_content()
 use Time::HiRes          qw();
 use URI             1.31 qw(); # >= 1.31 for sip: abs/rel
 use URI::Escape          qw();
-use URI::file            qw();
 # @@@ Needs also W3C::UserAgent but can't use() it here.
 
-use constant RC_ROBOTS_TXT    => -1;
-use constant RC_DNS_ERROR     => -2;
-use constant RC_IP_DISALLOWED => -3;
+use constant RC_ROBOTS_TXT          => -1;
+use constant RC_DNS_ERROR           => -2;
+use constant RC_IP_DISALLOWED       => -3;
+use constant RC_PROTOCOL_DISALLOWED => -4;
 
 use constant LINE_UNKNOWN  => -1;
 
@@ -215,27 +227,35 @@ use constant MP2 =>
   (exists($ENV{MOD_PERL_API_VERSION}) && $ENV{MOD_PERL_API_VERSION} >= 2);
 
 # Tag=>attribute mapping of things we treat as links.
-# Note: base/@href gets a special treatment, see start() for details.
+# Note: base/@href and meta/@http-equiv get special treatment, see start()
+# for details.
 use constant LINK_ATTRS => {
     a          => ['href'],
     area       => ['href'],
+    audio      => ['src'],
     blockquote => ['cite'],
     body       => ['background'],
     del        => ['cite'],
     embed      => ['href', 'pluginspage', 'pluginurl', 'src'], # proprietary
+    # form/@action not checked (side effects)
     frame      => ['longdesc', 'src'],
     iframe     => ['longdesc', 'src'],
     img        => ['longdesc', 'src'],
     ins        => ['cite'],
+    # input/@action not checked (side effects)
     input      => ['src'],
     link       => ['href'],
     object     => ['data'],
     q          => ['cite'],
     script     => ['src'],
+    source     => ['src'],
+    video      => ['src'],
 };
 
-# Tag=>attribute mapping of things we treat as space separeted lists of links.
+# Tag=>attribute mapping of things we treat as space separated lists of links.
 use constant LINK_LIST_ATTRS => {
+    a          => ['ping'],
+    area       => ['ping'],
     head       => ['profile'],
 };
 
@@ -257,8 +277,8 @@ BEGIN
   # Version info
   $PACKAGE     = 'W3C Link Checker';
   $PROGRAM     = 'W3C-checklink';
-  $VERSION     = '4.3';
-  $REVISION    = sprintf('version %s (c) 1999-2008 W3C', $VERSION);
+  $VERSION     = '4.4';
+  $REVISION    = sprintf('version %s (c) 1999-2009 W3C', $VERSION);
   my ($cvsver) = q$Revision$ =~ /(\d+[\d\.]*\.\d+)/;
   $AGENT       = sprintf('%s/%s [%s] %s',
                          $PROGRAM, $VERSION, $cvsver,
@@ -272,10 +292,13 @@ BEGIN
     require Apache2::RequestUtil;
   } if MP2();
 
-  my @content_types =
-    qw(application/xhtml+xml text/html application/vnd.wap.xhtml+xml);
+  my @content_types = qw(
+    text/html
+    application/xhtml+xml;q=0.9
+    application/vnd.wap.xhtml+xml;q=0.6
+  );
   $Accept = join(', ', @content_types, '*/*;q=0.5');
-  my $re = join('|', map(quotemeta, @content_types));
+  my $re = join('|', map { s/;.*// ; quotemeta } @content_types);
   $ContentTypes = qr{\b(?:$re)\b}io;
 
   #
@@ -311,28 +334,32 @@ $@
     'http://jigsaw.w3.org/css-validator/validator?uri=%s';
   $Cfg{Doc_URI} ||=
     'http://validator.w3.org/docs/checklink.html';
-  $Cfg{Style_URI} ||=
-    'http://validator.w3.org/docs/linkchecker.css';
 
   # Untaint config params that are used as the format argument to (s)printf(),
   # Perl 5.10 does not want to see that in taint mode.
   ($Cfg{Markup_Validator_URI}) = ($Cfg{Markup_Validator_URI} =~ /^(.*)$/);
   ($Cfg{CSS_Validator_URI})    = ($Cfg{CSS_Validator_URI}    =~ /^(.*)$/);
 
-  $DocType = '  <!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
-  $Head = sprintf(<<'EOF', HTML::Entities::encode($AGENT), $Cfg{Style_URI});
+  $DocType = '<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd">';
+  my $css_url = URI->new_abs('linkchecker.css', $Cfg{Doc_URI});
+  $Head = sprintf(<<'EOF', HTML::Entities::encode($AGENT), $css_url);
 <meta http-equiv="Content-Script-Type" content="text/javascript" />
 <meta name="generator" content="%s" />
 <link rel="stylesheet" type="text/css" href="%s" />
 <script type="text/javascript">
-function show_progress(progress_text, progress_head_id) {
+function show_progress(progress_text, progress_head_id, progress_pre_id) {
 var progressHead = document.getElementById(progress_head_id);
 var txt = document.createTextNode(progress_text);
 oChild=progressHead.childNodes[1];
 oNewChild=document.createElement("span");
 oNewChild.appendChild(txt);
 progressHead.replaceChild(oNewChild, oChild);
-};</script>
+scroll_bottom(progress_pre_id);
+};
+function scroll_bottom(progress_pre_id) {
+var progressPre = document.getElementById(progress_pre_id);
+progressPre.scrollTop = progressPre.scrollHeight;
+}</script>
 EOF
 
   # Trusted environment variables that need laundering in taint mode.
@@ -370,10 +397,10 @@ my %Opts =
     Base_Locations    => [],
     Exclude           => undef,
     Exclude_Docs      => undef,
-    Exclude_Redirect  => undef,
-    Exclude_Redirect_Prefix => undef,
-    Exclude_Broken    => undef,
-    Exclude_Fragment  => undef,
+    Suppress_Redirect => [],
+    Suppress_Redirect_Prefix => [],
+    Suppress_Broken   => [],
+    Suppress_Fragment => [],
     Masquerade        => 0,
     Masquerade_From   => '',
     Masquerade_To     => '',
@@ -400,16 +427,6 @@ my $doc_header;
 
 &parse_arguments() if $Opts{Command_Line};
 
-# Precompile/error-check regular expressions.
-if (defined($Opts{Exclude})) {
-  eval { $Opts{Exclude} = qr/$Opts{Exclude}/o; };
-  &usage(1, "Error in exclude regexp: $@") if $@;
-}
-if (defined($Opts{Trusted})) {
-  eval { $Opts{Trusted} = qr/$Opts{Trusted}/io; };
-  &usage(1, "Error in trusted domains regexp: $@") if $@;
-}
-
 my $ua = W3C::UserAgent->new($AGENT); # @@@ TODO: admin address
 # @@@ make number of keep-alive connections customizable
 $ua->conn_cache({ total_capacity => 1}); # 1 keep-alive connection
@@ -432,6 +449,8 @@ if ($Opts{Command_Line}) {
 
   require Text::Wrap;
   Text::Wrap->import('wrap');
+
+  require URI::file;
 
   &usage(1) unless scalar(@ARGV);
 
@@ -484,6 +503,11 @@ if ($Opts{Command_Line}) {
   require CGI::Carp;
   CGI::Carp->import(qw(fatalsToBrowser));
   require CGI::Cookie;
+
+  # file: URIs are not allowed in CGI mode
+  my $forbidden = $ua->protocols_forbidden() || [];
+  push(@$forbidden, 'file');
+  $ua->protocols_forbidden($forbidden);
 
   my $query = new CGI;
   # Set a few parameters in CGI mode
@@ -567,11 +591,7 @@ if ($Opts{Command_Line}) {
   } if (MP2() && !$ENV{HTTP_AUTHORIZATION});
 
   $uri =~ s/^\s+//g;
-  if ($uri =~ m/^file:/) {
-    # Only the http scheme is allowed
-    # TODO: bug 29
-    &file_uri($uri);
-  } elsif ($uri !~ m/:/) {
+  if ($uri !~ m/:/) {
     if ($uri =~ m|^//|) {
       $uri = 'http:'.$uri;
     } else {
@@ -615,12 +635,12 @@ sub parse_arguments ()
              'r|recursive'     => sub { $Opts{Depth} = -1
                                           if $Opts{Depth} == 0; },
              'l|location=s'    => \@locs,
-             'X|exclude=s',    => \$Opts{Exclude},
-             'exclude-docs=s@', => \$Opts{Exclude_Docs},
-             'exclude-redirect=s@', => \$Opts{Exclude_Redirect},
-             'exclude-redirect-prefix=s@', => \$Opts{Exclude_Redirect_Prefix},
-             'exclude-broken=s@', => \$Opts{Exclude_Broken},
-             'exclude-fragment=s@', => \$Opts{Exclude_Fragment},
+             'X|exclude=s'     => \$Opts{Exclude},
+             'exclude-docs=s@' => \@{$Opts{Exclude_Docs}},
+             'suppress-redirect=s@' => \@{$Opts{Suppress_Redirect}},
+             'suppress-redirect-prefix=s@' => \@{$Opts{Suppress_Redirect_Prefix}},
+             'suppress-broken=s@' => \@{$Opts{Suppress_Broken}},
+             'suppress-fragment=s@' => \@{$Opts{Suppress_Fragment}},
              'u|user=s'        => \$Opts{User},
              'p|password=s'    => \$Opts{Password},
              't|timeout=i'     => \$Opts{Timeout},
@@ -662,6 +682,42 @@ sub parse_arguments ()
 
   $Opts{Depth} = -1 if ($Opts{Depth} == 0 && @locs);
 
+  # Precompile/error-check regular expressions.
+  if (defined($Opts{Exclude})) {
+    eval { $Opts{Exclude} = qr/$Opts{Exclude}/o; };
+    &usage(1, "Error in exclude regexp: $@") if $@;
+  }
+  for my $i (0 .. $#{$Opts{Exclude_Docs}}) {
+    eval { $Opts{Exclude_Docs}->[$i] = qr/$Opts{Exclude_Docs}->[$i]/; };
+    &usage(1, "Error in exclude-docs regexp: $@") if $@;
+  }
+  if (defined($Opts{Trusted})) {
+    eval { $Opts{Trusted} = qr/$Opts{Trusted}/io; };
+    &usage(1, "Error in trusted domains regexp: $@") if $@;
+  }
+
+  # Sanity-check error-suppression arguments
+  for my $sr_arg (@{$Opts{Suppress_Redirect}}) {
+    if ($sr_arg !~ /.->./) {
+      &usage(1, "Bad suppress-redirect argument, should contain \"->\": $sr_arg");
+    }
+  }
+  for my $srp_arg (@{$Opts{Suppress_Redirect_Prefix}}) {
+    if ($srp_arg !~ /.->./) {
+      &usage(1, "Bad suppress-redirect-prefix argument, should contain \"->\": $srp_arg");
+    }
+  }
+  for my $sb_arg (@{$Opts{Suppress_Broken}}) {
+    if ($sb_arg !~ /^(-1|[0-9]+):./) {
+      &usage(1, "Bad suppress-broken argument: $sb_arg");
+    }
+  }
+  for my $sf_arg (@{$Opts{Suppress_Fragment}}) {
+    if ($sf_arg !~ /.#./) {
+      &usage(1, "Bad suppress-fragment argument, should contain \"#\": $sf_arg");
+    }
+  }
+
   return;
 }
 
@@ -702,17 +758,20 @@ Options:
                             match REGEXP; also limits recursion the same way
                             as --exclude-docs with the same regexp would.
  --exclude-docs REGEXP      In recursive mode, do not check links in documents
-                            whose full, canonical URIs match REGEXP.
- --exclude-redirect URI->URI  Do not report a redirect from the first to the
-                            second URI.  The \"->\" is literal text.
- --exclude-redirect-prefix URI->URI  Do not report a redirect from a child of
-                            the first URI to the same child of the second
-                            URI.  The \"->\" is literal text.
- --exclude-broken CODE:URI  Do not report a broken link with the given CODE.
+                            whose full, canonical URIs match REGEXP.  This
+                            option may be specified multiple times.
+ --suppress-redirect URI->URI  Do not report a redirect from the first to the
+                            second URI.  This option may be specified multiple
+                            times.
+ --suppress-redirect-prefix URI->URI  Do not report a redirect from a child of
+                            the first URI to the same child of the second URI.
+                            This option may be specified multiple times.
+ --suppress-broken CODE:URI  Do not report a broken link with the given CODE.
                             CODE is HTTP response, or -1 for robots exclusion.
-                            The \":\" is literal text.
- --exclude-fragment URL#FRAG  Do not report the given broken fragment.
-                            The \"#\" is literal text.
+                            This option may be specified multiple times.
+ --suppress-fragment URI    Do not report the given broken fragment URI.
+                            A fragment URI contains \"#\".  This option may be
+                            specified multiple times.
  -L, --languages LANGS      Accept-Language header to send.  The special value
                             'auto' causes autodetection from the environment.
  -R, --no-referer           Do not send the Referer HTTP header.
@@ -859,7 +918,7 @@ sub check_uri (\%$$$$;$$)
 
   if ($check_num != 1) {
     if ($Opts{HTML}) {
-      $doc_header = "\n<hr>\n";
+      $doc_header = "\n<hr />\n";
     } else {
       $doc_header = "\n" . ('-' x 40) . "\n";
     }
@@ -899,7 +958,7 @@ EOF
     printf("- Excluding links matching %s\n", $Opts{Exclude})
       if defined($Opts{Exclude});
     printf("- Excluding links in documents whose URIs match %s\n",
-      $Opts{Exclude_Docs}) if defined($Opts{Exclude_Docs});
+      join(', ', @{$Opts{Exclude_Docs}})) if @{$Opts{Exclude_Docs}};
   }
 
   if ($Opts{HTML}) {
@@ -931,8 +990,7 @@ EOF
              &encode($Opts{_Self_URI}));
 
       printf ('<h3 class="status_progress" id="status_progress%s">Status: <span></span></h3>', $result_anchor);
-      print("<pre class=\"progress\">\n");
-
+      printf("<pre class=\"progress\" id=\"pre_progress%s\">\n", $result_anchor);
     }
   }
 
@@ -1011,17 +1069,13 @@ EOF
   my %broken;
   while (my ($u, $ulinks) = each(%links)) {
 
-    # Don't check mailto: URI's
-    # TODO: bug 29
-    next if ($u =~ m/^mailto:/);
-
     if ($Opts{Summary_Only}) {
       # Hack: avoid browser/server timeouts in summary only CGI mode, bug 896
       print ' ' if ($Opts{HTML} && !$Opts{Command_Line});
     } else {
-      printf('<script type="text/javascript">show_progress("Checking link %s", "status_progress%s");</script>' , &encode($u), $result_anchor)
+      &hprintf("\nChecking link %s\n", $u);
+      printf('<script type="text/javascript">show_progress("Checking link %s", "status_progress%s", "pre_progress%s");</script>' , &encode($u), $result_anchor, $result_anchor)
         if (!$Opts{Command_Line} && $Opts{HTML} && !$Opts{Summary_Only});
-      &hprintf("Checking link %s\n", $u);
     }
 
     # Check that a link is valid
@@ -1052,7 +1106,7 @@ EOF
           $broken{$u}{fragments}{$fragment} += 2;
         }
       }
-    } else {
+    } elsif (!($Opts{Quiet} && &informational($results{$u}{location}{code}))) {
       # Couldn't find the document
       $broken{$u}{location} = 1;
       # All the fragments associated are hence broken
@@ -1061,10 +1115,10 @@ EOF
       }
     }
   }
-  printf('<script type="text/javascript">show_progress("Done. Document processed in %ss.\n", "status_progress%s");</script>' , &time_diff($start, &get_timestamp()), $result_anchor)
-  if ($Opts{HTML} && !$Opts{Summary_Only});
-  &hprintf("Processed in %ss.\n", &time_diff($start, &get_timestamp()))
+  &hprintf("\nProcessed in %ss.\n", &time_diff($start, &get_timestamp()))
    unless $Opts{Summary_Only};
+   printf('<script type="text/javascript">show_progress("Done. Document processed in %ss.\n", "status_progress%s", "pre_progress%s");</script>' , &time_diff($start, &get_timestamp()), $result_anchor, $result_anchor)
+   if ($Opts{HTML} && !$Opts{Summary_Only});
 
   # Display results
   if ($Opts{HTML} && !$Opts{Summary_Only}) {
@@ -1073,8 +1127,8 @@ EOF
   }
   print "\n" unless $Opts{Quiet};
 
-  &anchors_summary($p->{Anchors}, \%errors);
   &links_summary(\%links, \%results, \%broken, \%redirects);
+  &anchors_summary($p->{Anchors}, \%errors);
 
   # Do we want to process other documents?
   if ($depth != 0) {
@@ -1217,12 +1271,9 @@ sub in_recursion_scope ($)
   my $candidate = URI->new($uri)->canonical();
 
   return 0 if (defined($Opts{Exclude}) && $candidate =~ $Opts{Exclude});
-  if (defined($Opts{Exclude_Docs})) {
-    for my $excluded_doc (@{$Opts{Exclude_Docs}}) {
-      if ($candidate =~ $excluded_doc) {
-        return 0;
-      }
-    }
+
+  for my $excluded_doc (@{$Opts{Exclude_Docs}}) {
+    return 0 if ($candidate =~ $excluded_doc);
   }
 
   foreach my $base (@{$Opts{Base_Locations}}) {
@@ -1290,9 +1341,13 @@ sub get_uri ($$;$$\%$$$$)
   &hprintf("%s %s ", $method, $uri) if $verbose_progress;
 
   my $request = new HTTP::Request($method, $uri);
+
   $request->header('Accept-Language' => $Opts{Accept_Language})
     if $Opts{Accept_Language};
   $request->header('Accept', $Accept);
+  # accept_decodable() was added in LWP 5.814
+  $request->accept_decodable() if $request->can('accept_decodable');
+
   # Are we providing authentication info?
   if ($auth && $request->url()->host() =~ $Opts{Trusted}) {
     if (defined($ENV{HTTP_AUTHORIZATION})) {
@@ -1370,6 +1425,9 @@ sub record_results ($$$)
   $results{$uri}{location}{code} = RC_DNS_ERROR()
     if ($results{$uri}{location}{code} == 500 &&
         $response->message() =~ /Bad hostname '[^\']*'/);
+  $results{$uri}{location}{code} = RC_PROTOCOL_DISALLOWED()
+    if ($results{$uri}{location}{code} == 500 &&
+        $response->message() =~ /Access to '[^\']*' URIs has been disabled/);
   $results{$uri}{location}{type} = $response->header('Content-type');
   $results{$uri}{location}{display} = $results{$uri}{location}{code};
   # Rewind, check for the original code and message.
@@ -1383,7 +1441,7 @@ sub record_results ($$$)
   # print STDERR "success? " . $results{$uri}{location}{success} . ": $uri\n";
   if (! $results{$uri}{location}{success}) {
     my $code = $results{$uri}{location}{code};
-    my $match = grep { $_ eq "$code:$uri" } @{$Opts{Exclude_Broken}};
+    my $match = grep { $_ eq "$code:$uri" } @{$Opts{Suppress_Broken}};
     if ($match) {
       $results{$uri}{location}{success} = 1;
       $results{$uri}{location}{code} = 100;
@@ -1609,6 +1667,8 @@ sub start
   # Links
   if (!$self->{only_anchors}) {
 
+    my $tag_local_base = undef;
+
     # Special case: base/@href
     # TODO: This should go away as soon as LWP::Protocol::collect() invokes
     #       HTML::HeadParser (thus taking care of it in $response->base()
@@ -1623,9 +1683,17 @@ sub start
       # Note: base/@href intentionally not treated as a dereferenceable link:
       # http://www.w3.org/mid/200802091439.27764.ville.skytta%40iki.fi
     }
-
-    my $tag_local_base = undef;
-    if ($tag eq 'applet' || $tag eq 'object') {
+    # Special case: meta[@http-equiv=Refresh]/@content
+    elsif ($tag eq 'meta') {
+      if ($attr->{'http-equiv'} && lc($attr->{'http-equiv'}) eq 'refresh') {
+        my $content = $attr->{content};
+        if ($content && $content =~ /.*?;\s*(?:url=)?(.+)/i) {
+          $self->add_link($1, undef, $line);
+        }
+      }
+    }
+    # Special case: tags that have "local base"
+    elsif ($tag eq 'applet' || $tag eq 'object') {
       if (my $codebase = $attr->{codebase}) {
         # TODO: HTML 4 spec says applet/@codebase may only point to subdirs of
         # the directory containing the current document.  Should we do
@@ -1702,21 +1770,6 @@ sub check_validity ($$$\%\%)
   # $links is a hash of the links in the documents checked
   # $redirects is a map of the redirects encountered
 
-  # Checking file: URI's is not allowed with a CGI
-  # TODO: bug 29
-  if ($referer ne $uri) {
-    if (!$Opts{Command_Line} && $referer !~ m/^file:/ && $uri =~ m/^file:/) {
-      my $msg = 'Error: \'file:\' URI not allowed';
-      # Can't test? Return 400 Bad request.
-      $results{$uri}{location}{code}    = 400;
-      $results{$uri}{location}{record}  = 400;
-      $results{$uri}{location}{success} = 0;
-      $results{$uri}{location}{message} = $msg;
-      &hprintf("Error: %d %s\n", 400, $msg) if $Opts{Verbose};
-      return;
-    }
-  }
-
   # Get the document with the appropriate method
   # Only use GET if there are fragments. HEAD is enough if it's not the
   # case.
@@ -1761,7 +1814,7 @@ sub check_validity ($$$\%\%)
   foreach my $fragment (keys %{$links->{$uri}{fragments}}) {
     if (defined($p->{Anchors}{$fragment})
         || &escape_match($fragment, $p->{Anchors})
-        || grep { $_ eq "$uri#$fragment" } @{$Opts{Exclude_Fragment}}) {
+        || grep { $_ eq "$uri#$fragment" } @{$Opts{Suppress_Fragment}}) {
       $results{$uri}{fragments}{$fragment} = 1;
     } else {
       $results{$uri}{fragments}{$fragment} = 0;
@@ -1860,7 +1913,7 @@ sub record_redirects (\%$)
     my $from = $prev->request()->url();
     my $to = $response->request()->url(); # same on every loop iteration
     my $from_to = $from . '->' . $to;
-    my $match = grep { $_ eq $from_to } @{$Opts{Exclude_Redirect}};
+    my $match = grep { $_ eq $from_to } @{$Opts{Suppress_Redirect}};
     # print STDERR "Result $match of checking $from_to\n";
     if ($match) { next; }
 
@@ -1868,23 +1921,14 @@ sub record_redirects (\%$)
     my $prefix_match = 0;
     my $from_len = length($from);
     my $to_len = length($to);
-    for my $redir_prefix (@{$Opts{Exclude_Redirect_Prefix}}) {
-      # Slightly inefficient; we could have parsed these once, ahead of time.
+    for my $redir_prefix (@{$Opts{Suppresss_Redirect_Prefix}}) {
       if ($redir_prefix !~ /^(.*)->(.*)$/) {
-        die "Bad exclude-redirect-prefix: $redir_prefix";
+        die "Bad suppress-redirect-prefix: $redir_prefix";
       }
       my $from_prefix = $1;
       my $to_prefix = $2;
       my $from_prefix_len = length($from_prefix);
       my $to_prefix_len = length($to_prefix);
-      # Debugging output.
-      if (0) {
-        my $from_try_prefix = substr($from, 0, $from_prefix_len);
-        my $to_try_prefix = substr($to, 0, $to_prefix_len);
-        my $from_try_base = substr($from, $from_prefix_len);
-        my $to_try_base = substr($to, $to_prefix_len);
-        print STDERR "Checking prefix:\n  from_prefix: $from_prefix\n  to_prefix: $to_prefix\n  from: $from\n  from_try_prefix: $from_try_prefix\n  from_try_base: $from_try_base\n  to: $to\n  to_try_prefix: $to_try_prefix\n  to_try_base: $to_try_base\n";
-      }
       if (($from eq $from_prefix) && ($to eq $to_prefix)) {
         $prefix_match = 1;
         last;
@@ -1898,7 +1942,7 @@ sub record_redirects (\%$)
       }
     }
     if ($prefix_match) {
-      # print STDERR "AN EXCLUDED REDIRECT:\n  $from\n  $to\n";
+      # print STDERR "A SUPPRESSED REDIRECT:\n  $from\n  $to\n";
       next;
     }
 
@@ -1963,6 +2007,14 @@ sub http_rc ($)
   return "(N/A)";
 }
 
+# returns true if the given code is informational
+sub informational ($)
+{
+  my $rc = shift;
+  return $rc == RC_ROBOTS_TXT() || $rc == RC_IP_DISALLOWED() ||
+    $rc == RC_PROTOCOL_DISALLOWED();
+}
+
 sub anchors_summary (\%\%)
 {
   my ($anchors, $errors) = @_;
@@ -1991,7 +2043,7 @@ sub anchors_summary (\%\%)
   print('List of duplicate and empty anchors');
   print <<EOF if $Opts{HTML};
 </p>
-<table border="1" summary="List of duplicate and empty anchors.">
+<table class="report" border="1" summary="List of duplicate and empty anchors.">
 <thead>
 <tr>
 <th>Anchor</th>
@@ -2057,9 +2109,8 @@ sub show_link_report (\%\%\%\%\@;$\%)
           $whattodo =
 'You must change this link: people using a browser without JavaScript support
 will <em>not</em> be able to follow this link. See the
-<a href="http://www.w3.org/TR/1999/WAI-WEBCONTENT-19990505/#tech-scripts">Web
-Content Accessibility Guidelines on the use of scripting on the Web</a> and
-the
+<a href="http://www.w3.org/TR/WAI-WEBCONTENT/#tech-scripts">Web Content
+Accessibility Guidelines on the use of scripting on the Web</a> and the
 <a href="http://www.w3.org/TR/WCAG10-HTML-TECHS/#directly-accessible-scripts">techniques
 on how to solve this</a>.';
         } else {
@@ -2121,40 +2172,38 @@ on how to solve this</a>.';
       my $redirmsg =
         $redirect_loop ? ' <em>redirect loop detected</em>' : '';
       printf("
-<dt%s>%s%s</dt>
-<dd>What to do: <em>%s</em>%s<br /></dd>
-<dd>Response status code: %s<br />
-Response message: %s%s%s</dd>
-<dd>Line%s: %s</dd>\n",
+<dt%s>%s <span class='msg_loc'>Line%s: %s</span> %s</dt>
+<dd class='responsecode'><strong>Status</strong>: %s %s %s</dd>
+<dd class='message_explanation'><p>%s %s</p></dd>\n",
              # Anchor for return codes
              $idref,
              # Color
              &status_icon($c),
+             $s,
+             # List of lines
+             $lines_list,
              # List of redirects
-             $redirected ?
-             join(' redirected to ', @redirects_urls) . $redirmsg :
-             &show_url($u),
+             $redirected ? join(' redirected to ', @redirects_urls) . $redirmsg : &show_url($u),
+             # Realm
+             defined($currloc->{realm})
+             ? sprintf('Realm: %s<br />', &encode($currloc->{realm})) : '',
+             # HTTP original message
+             # defined($currloc->{orig_message})
+             # ? &encode($currloc->{orig_message}).
+             # ' <span title="redirected to">-&gt;</span> '
+             # : '',
+
+             # Response code chain
+             join(' <span class="redirected_to" title="redirected to">-&gt;</span> ',
+                  map { &encode($_) } @http_codes),
+             # HTTP final message
+             $http_message,
              # What to do
              $whattodo,
              # Redirect too?
              $redirect_too ?
              sprintf(' <span %s>%s</span>', &bgcolor(301), $redirect_too) : '',
-             # Response code chain
-             join(' <span title="redirected to">-&gt;</span> ',
-                  map { &encode($_) } @http_codes),
-             # Realm
-             defined($currloc->{realm})
-             ? sprintf('Realm: %s<br />', &encode($currloc->{realm})) : '',
-             # HTTP original message
-             defined($currloc->{orig_message})
-             ? &encode($currloc->{orig_message}).
-             ' <span title="redirected to">-&gt;</span> '
-             : '',
-             # HTTP final message
-             $http_message,
-             $s,
-             # List of lines
-             $lines_list);
+             );
       if ($#fragments >= 0) {
         printf("<dd>Broken fragments: <ul>\n");
       }
@@ -2164,7 +2213,7 @@ Response message: %s%s%s</dd>
              # List of redirects
              $redirected ? join("\n-> ", @redirects_urls) . $redirmsg : $u,
              # List of lines
-             $lines_list ? "Line$s: $lines_list" : '',
+             $lines_list ? sprintf("\n%6s: %s", "Line$s", $lines_list) : '',
              # Response code chain
              join(' -> ', @http_codes),
              # HTTP message
@@ -2216,18 +2265,18 @@ sub links_summary (\%\%\%\%)
 {
   # Advices to fix the problems
 
-  my %todo = ( 200 => 'Some of the links to this resource point to broken URI fragments, which should be removed or fixed.',
-               300 => 'It usually means that there is a typo in a link that triggers mod_speling action - this must be fixed!',
-               301 => 'This is a permanent redirect. The link should be updated.',
+  my %todo = ( 200 => 'Some of the links to this resource point to broken URI fragments (such as index.html#fragment).',
+               300 => 'This often happens when a typo in the link gets corrected automatically by the server. For the sake of performance, the link should be fixed.',
+               301 => 'This is a permanent redirect. The link should be updated to point to the more recent URI.',
                302 => 'This is a temporary redirect. Update the link if you believe it makes sense, or leave it as is.',
-               303 => 'Usually nothing.',
+               303 => 'This rare status code points to a "See Other" resource. There is generally nothing to be done.',
                307 => 'This is a temporary redirect. Update the link if you believe it makes sense, or leave it as is.',
-               400 => 'Usually the sign of a malformed URL that cannot be parsed by the server.',
-               401 => "The link is not public. You'd better specify it.",
+               400 => 'This is usually the sign of a malformed URL that cannot be parsed by the server. Check the syntax of the link.',
+               401 => "The link is not public and the actual resource is only available behind authentication. If not already done, you could specify it.",
                403 => 'The link is forbidden! This needs fixing. Usual suspects: a missing index.html or Overview.html, or a missing ACL.',
-               404 => 'The link is broken. Fix it.',
-               405 => 'The server does not allow HEAD requests. Go ask the guys who run this server why. Check the link manually.',
-               406 => "The server isn't capable of responding according to the Accept* headers sent. Check it out.",
+               404 => 'The link is broken. Double-check that you have not made any typo, or mistake in copy-pasting. If the link points to a resource that no longer exists, you may want to remove or fix the link.',
+               405 => 'The server does not allow HTTP HEAD requests, which prevents the Link Checker to check the link automatically.  Check the link manually.',
+               406 => "The server isn't capable of responding according to the Accept* headers sent. This is likely to be a server-side issue with negotiation.",
                407 => 'The link is a proxy, but requires Authentication.',
                408 => 'The request timed out.',
                410 => 'The resource is gone. You should remove this link.',
@@ -2241,6 +2290,7 @@ sub links_summary (\%\%\%\%)
                RC_DNS_ERROR() => 'The hostname could not be resolved. Check the link for typos.',
                RC_IP_DISALLOWED() => sprintf('The link resolved to a %snon-public IP address%s, and this link checker instance has been configured to not access such addresses. This may be a real error or just a quirk of the name resolver configuration on the server where the link checker runs. Check the link manually, in particular its hostname/IP address.',
                                              $Opts{HTML} ? ('<a href="http://www.ietf.org/rfc/rfc1918.txt">', '</a>') : ('') x 2),
+               RC_PROTOCOL_DISALLOWED() => 'Accessing links with this URI scheme has been disabled in link checker.',
              );
   my %priority = ( 410 => 1,
                    404 => 2,
@@ -2285,7 +2335,7 @@ sub links_summary (\%\%\%\%)
   } else {
     print_doc_header();
     print('<h3>') if $Opts{HTML};
-    print("\nList of broken links");
+    print("\nList of broken links and other issues");
     #print(' and redirects') if $Opts{Redirects};
 
     # Sort the URI's by HTTP Code
@@ -2319,7 +2369,7 @@ sub links_summary (\%\%\%\%)
 </h3>
 <p><em>There are issues with the URLs listed below. The table summarizes the
 issues and suggested actions by HTTP response status code.</em></p>
-<table border="1" summary="List of issues and suggested actions.">
+<table class="report" border="1" summary="List of issues and suggested actions.">
 <thead>
 <tr>
 <th>Code</th>
@@ -2437,8 +2487,8 @@ sub banner ($)
 {
   my $tagline ="Check links and anchors in Web pages or full Web sites";
 
-  printf(<<'EOF', $tagline);
-<div id="banner"><h1 id="title"><a href="http://www.w3.org/" title="W3C"><img alt="W3C" id="logo" src="http://validator.w3.org/images/w3c.png" /></a>
+  printf(<<'EOF', URI->new_abs("../images/w3c.png", $Cfg{Doc_URI}), $tagline);
+<div id="banner"><h1 id="title"><a href="http://www.w3.org/" title="W3C"><img alt="W3C" id="logo" src="%s" /></a>
 <a href="checklink"><span>Link Checker</span></a></h1>
 <p id="tagline">%s</p></div>
 <div id="main">
@@ -2453,7 +2503,7 @@ sub status_icon($)
   my $r = HTTP::Response->new($code);
   if ($r->is_success()) {
     $icon_type = 'error'; # if is success but reported, it's because of broken frags => error
-  } elsif ($code == RC_ROBOTS_TXT() || $code == RC_IP_DISALLOWED()) {
+  } elsif (&informational($code)) {
     $icon_type = 'info';
   } elsif ($code == 300) {
     $icon_type = 'info';
@@ -2466,8 +2516,10 @@ sub status_icon($)
   } else {
     $icon_type = 'error';
   }
-  return('<span class="err_type"><img src="http://validator.w3.org/images/info_icons/'.$icon_type.'.png" alt="'.$icon_type.'" /></span>');
-
+  return sprintf('<span class="err_type"><img src="%s" alt="%s" /></span>',
+                 URI->new_abs("../images/info_icons/$icon_type.png",
+                              $Cfg{Doc_URI}),
+                 $icon_type);
 }
 
 sub bgcolor ($)
@@ -2534,18 +2586,6 @@ EOF
 </html>
 EOF
   return;
-}
-
-sub file_uri ($)
-{
-  my ($uri) = @_;
-  &html_header($uri);
-  printf(<<'EOF', &encode($uri));
-<h2>Forbidden</h2>
-<p>You cannot check such a URI (<code>%s</code>).</p>
-EOF
-  &html_footer();
-  exit;
 }
 
 sub print_form (\%$$)
@@ -2622,6 +2662,8 @@ of a document that you would like to check:</label></p>
 </fieldset>
 <p class=\"submit_button\"><input type=\"submit\" name=\"check\" value=\"Check\" /></p>
 </form>
+<div class=\"intro\" id=\"don_program\"></div>
+<script type=\"text/javascript\" src=\"http://www.w3.org/QA/Tools/don_prog.js\"></script>
 ";
   return;
 }

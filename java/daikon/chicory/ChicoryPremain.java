@@ -22,6 +22,7 @@ public class ChicoryPremain {
   public static boolean debug = false;
 
   /** Set of pure methods returned by Alexandru Salcianu's purity analysis **/
+  // Non-null if doPurity == true
   private static Set<String> pureMethods = null;
 
   /**
@@ -153,7 +154,7 @@ public class ChicoryPremain {
    * or private first, and then other modifiers in the following
    * order: abstract, static, final, synchronized native."
    */
-  private static void readPurityFile(File purityFileName, File pathLoc)
+  private static void readPurityFile(File purityFileName, /*@Nullable*/ File pathLoc)
   {
     pureMethods = new HashSet<String>();
 

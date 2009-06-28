@@ -15,14 +15,14 @@ public class RootInfo extends DaikonVariableInfo
 {
     private RootInfo()
     {
-        //the root needs no name
-        super(null);
+        //the root needs no name, but give it one to preserve nullness property
+        super(" RootInfo Object ");
     }
 
     @Override
-    public /*@Nullable*/ Object getMyValFromParentVal(Object value)
+    public Object getMyValFromParentVal(Object value)
     {
-        return null;
+        throw new RuntimeException ("No val for RootInfo");
     }
 
     /**
@@ -86,12 +86,16 @@ public class RootInfo extends DaikonVariableInfo
         // guarantees that any static variables in the class are found here
         // and not below.
         root.addClassVars(mi.class_info,
-                Modifier.isStatic(mi.member.getModifiers()), mi.member
-                        .getDeclaringClass(), "", depth);
+                          Modifier.isStatic(mi.member.getModifiers()),
+                          mi.member.getDeclaringClass(),
+                          "",
+                          depth);
 
         // Print arguments
-        root.addParameters(mi.class_info, mi.member,
-                           Arrays.<String>asList(mi.arg_names), /*offset = */ "",
+        root.addParameters(mi.class_info,
+                           mi.member,
+                           Arrays.<String>asList(mi.arg_names),
+                           /*offset = */ "",
                            depth);
 
         // Print return type information for methods only and not constructors

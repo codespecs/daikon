@@ -11,6 +11,7 @@ import daikon.util.SimpleLog;
 import daikon.util.ArraysMDE;
 import daikon.util.Stopwatch;
 
+@SuppressWarnings("nullness")   // come back to this later
 public final class DCRuntime {
 
   /** List of all instrumented methods **/
@@ -32,11 +33,11 @@ public final class DCRuntime {
   /** Depth to follow fields in classes **/
   public static int depth = 2;
 
-  /** static count in the JDK.  Used as an offset for non-jdk code **/
+  /** static count in the JDK.  Used as an offset for non-JDK code. **/
   static int max_jdk_static = 100000;
 
   /** If the application exits with an exception, it should be placed here **/
-  public static Throwable exit_exception = null;
+  public static /*@Nullable*/ Throwable exit_exception = null;
 
   /**
    * Map from each primitive static name to the offset in static_tags
@@ -45,7 +46,7 @@ public final class DCRuntime {
   //   = new LinkedHashMap<String,Integer>();
 
   /** Storage for each static tag **/
-  public static List<Object> static_tags = new ArrayList<Object>();
+  public static List</*@Nullable*/ Object> static_tags = new ArrayList</*@Nullable*/ Object>();
 
   /** Tag stack **/
   public static Stack<Object> tag_stack = new Stack<Object>();
@@ -80,7 +81,7 @@ public final class DCRuntime {
 
   /**
    * Map from each object to the tags used for each primitive value in
-   * the object
+   * the object.
    */
   public static WeakIdentityHashMap<Object,Object[]> field_map
     = new WeakIdentityHashMap<Object,Object[]>();
@@ -103,7 +104,7 @@ public final class DCRuntime {
 
   /**
    * Class used as a tag for uninitialized instance fields. Only different
-   * from Object for debugging purposes
+   * from Object for debugging purposes.
    */
   private static class UninitFieldTag {
     String descr = null;
@@ -179,6 +180,7 @@ public final class DCRuntime {
   public static void init() {
 
     // Initialize the array of static tags
+    ((ArrayList</*@Nullable*/ Object>)static_tags).ensureCapacity(max_jdk_static);
     while (static_tags.size() <= max_jdk_static)
       static_tags.add (null);
 
@@ -455,7 +457,7 @@ public final class DCRuntime {
   public static boolean has_instrumented (Class<?> c, String method_name) {
 
     // initialize the Class for DCompMarker if it is not already initialized.
-    // This needs tobe done her rather than in the initializer to avoid some
+    // This needs to be done here rather than in the initializer to avoid some
     // order dependencies in loading
     if (dcompmarker == null) {
       try {
@@ -3666,6 +3668,7 @@ public final class DCRuntime {
    * corresponding new), create a ValueSource tree for this location.
    */
   private static ValueSource get_value_source (Object tag) {
+    assert tag != null;         // see whether this fails -MDE
     if (tag == null)
       return ValueSource.null_value_source;
 

@@ -33,11 +33,15 @@ public final class Configuration
   protected static final String PREFIX = "dkconfig_";
 
   private static final Class<String> STRING_CLASS;
+  private static final Class<Object> OBJECT_CLASS;
   static {
     try {
       @SuppressWarnings("unchecked")
       Class<String> STRING_CLASS_tmp = (Class<String>) Class.forName("java.lang.String");
       STRING_CLASS = STRING_CLASS_tmp;
+      @SuppressWarnings("unchecked")
+      Class<Object> OBJECT_CLASS_tmp = (Class<Object>) Class.forName("java.lang.Object");
+      OBJECT_CLASS = OBJECT_CLASS_tmp;
     } catch (Exception e) {
       throw new RuntimeException(e);
     }
@@ -57,7 +61,7 @@ public final class Configuration
     }
     return instance;
   }
-  private static volatile Configuration instance = null;
+  private static volatile /*@LazyNonNull*/ Configuration instance = null;
 
   /**
    * This used to read a file containing all of the configurable
@@ -240,7 +244,8 @@ public final class Configuration
       }
       value = ((String)value).intern();
       // System.out.printf ("setting %s to '%s'\n", field, value);
-    } else if (type.getSuperclass().getName().equals("java.lang.Enum")) {
+    } else if ((type.getSuperclass() != null)
+               && type.getSuperclass().getName().equals("java.lang.Enum")) {
       try {
         java.lang.reflect.Method valueOf
           = type.getDeclaredMethod("valueOf", new Class<?>[] { STRING_CLASS });

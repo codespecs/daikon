@@ -13,9 +13,9 @@ public final class SplitterExample
   static final long serialVersionUID = 20030218L;
 
   static DummyInvariant dummyInvFactory;
-  DummyInvariant dummyInv;
+  /*@Nullable*/ DummyInvariant dummyInv;
 
-  VarInfo x_varinfo;
+  /*@Nullable*/ VarInfo x_varinfo;
 
   public SplitterExample() {
   }

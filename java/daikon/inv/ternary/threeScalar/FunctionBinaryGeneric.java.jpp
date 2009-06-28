@@ -9,7 +9,7 @@
 
 #if (PERMUTATION == PERM_XYZ)
   #define PERM_NAME _xyz
-  #define result x
+  #define resultvar x
   #define arg1   y
   #define arg2   z
   #define result_index 0
@@ -17,7 +17,7 @@
   #define arg2_index   2
 #elif (PERMUTATION == PERM_YXZ)
   #define PERM_NAME _yxz
-  #define result y
+  #define resultvar y
   #define arg1   x
   #define arg2   z
   #define result_index 1
@@ -25,7 +25,7 @@
   #define arg2_index   2
 #elif (PERMUTATION == PERM_ZXY)
   #define PERM_NAME _zxy
-  #define result z
+  #define resultvar z
   #define arg1   x
   #define arg2   y
   #define result_index 2
@@ -33,7 +33,7 @@
   #define arg2_index   1
 #elif (PERMUTATION == PERM_XZY)
   #define PERM_NAME _xzy
-  #define result x
+  #define resultvar x
   #define arg1   z
   #define arg2   y
   #define result_index 0
@@ -41,7 +41,7 @@
   #define arg2_index   1
 #elif (PERMUTATION == PERM_YZX)
   #define PERM_NAME _yzx
-  #define result y
+  #define resultvar y
   #define arg1   z
   #define arg2   x
   #define result_index 1
@@ -49,7 +49,7 @@
   #define arg2_index   0
 #elif (PERMUTATION == PERM_ZYX)
   #define PERM_NAME _zyx
-  #define result z
+  #define resultvar z
   #define arg1   y
   #define arg2   x
   #define result_index 2
@@ -61,7 +61,7 @@
 
 
 /**
- * Represents the invariant <samp>result = FUNCTION (arg1, arg2)</samp>
+ * Represents the invariant <samp>resultvar = FUNCTION (arg1, arg2)</samp>
  * over three PRIMITIVE scalars.
  */
 public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
@@ -90,11 +90,11 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   }
 
   /** instantiate an invariant on the specified slice **/
-  protected CNAME(FUNCTION,PERM_NAME) instantiate_dyn (PptSlice slice) {
+  protected CNAME(FUNCTION,PERM_NAME) instantiate_dyn (PptSlice slice) /*@Prototype*/ {
     return new CNAME(FUNCTION,PERM_NAME) (slice);
   }
 
-  private CNAME(FUNCTION,PERM_NAME) (PptSlice slice) {
+  private CNAME(FUNCTION,PERM_NAME) (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice slice) {
     super (slice);
   }
 
@@ -158,15 +158,15 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
   public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y,
                                       PRIMITIVE z, int count) {
-    return (check_ordered (result, arg1, arg2, count));
+    return (check_ordered (resultvar, arg1, arg2, count));
   }
 
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y,
                                       PRIMITIVE z, int count) {
     if (Debug.logDetail())
-      log (Fmt.spf ("result=%s, arg1=%s, arg2=%s", "" + result, "" + arg1,
+      log (Fmt.spf ("result=%s, arg1=%s, arg2=%s", "" + resultvar, "" + arg1,
                     "" + arg2));
-    return (add_ordered (result, arg1, arg2, count));
+    return (add_ordered (resultvar, arg1, arg2, count));
   }
 
   public boolean is ## FUNCTION() {
@@ -439,20 +439,20 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
 
-        // (r == arg1) && (arg1 <= arg2) ==> r = min(arg1, arg2)
+        // (resultvar == arg1) && (arg1 <= arg2) ==> r = min(arg1, arg2)
         new NISuppression (result_eq_arg1, arg1_le_arg2, suppressee),
 
-        // (r == arg2) && (arg2 <= arg1) ==> r = min(arg1, arg2)
+        // (resultvar == arg2) && (arg2 <= arg1) ==> r = min(arg1, arg2)
         new NISuppression (result_eq_arg2, arg2_le_arg1, suppressee),
 
       #if defined (TYPELONG)
-        // (result boolean) && (arg1=0 <==> r=0) && (arg2 == 1)
+        // (resultvar boolean) && (arg1=0 <==> r=0) && (arg2 == 1)
         // 0 = min (arg1, 1), true when (arg1 == 0)
         // 1 = min (arg1, 1), true when (arg1 > 0)
         new NISuppression (result_track0_arg1, arg1_track0_result,
                            result_boolean, arg1_ge_0, arg2_eq_1, suppressee),
 
-        // (result boolean) && (arg2=0 <==> r=0) && (arg1 == 1)
+        // (resultvar boolean) && (arg2=0 <==> r=0) && (arg1 == 1)
         new NISuppression (result_track0_arg2, arg2_track0_result,
                            result_boolean, arg2_ge_0, arg1_eq_1, suppressee),
       #endif
@@ -748,11 +748,11 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         new NISuppression (arg1_eq_arg2, arg1_boolean, result_eq_0,
                            suppressee),
 
-        // (r == arg1) && (arg2 == 0) && (result boolean) ==> r = arg1 ^ arg2
+        // (r == arg1) && (arg2 == 0) && (resultvar boolean) ==> r = arg1 ^ arg2
         new NISuppression (result_eq_arg1, result_boolean, arg2_eq_0,
                            suppressee),
 
-        // (r == arg2) && (arg1 == 0) && (result boolean)==> r = arg1 ^ arg2
+        // (r == arg2) && (arg1 == 0) && (resultvar boolean)==> r = arg1 ^ arg2
         new NISuppression (result_eq_arg2, result_boolean, arg1_eq_0,
                            suppressee),
 
@@ -791,7 +791,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
 #undef PERMUTATION
 #undef PERM_NAME
-#undef result
+#undef resultvar
 #undef arg1
 #undef arg2
 #undef result_index

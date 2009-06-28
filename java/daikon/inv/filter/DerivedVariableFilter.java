@@ -29,6 +29,7 @@ public class DerivedVariableFilter extends InvariantFilter {
   public DerivedVariableFilter () {
     isOn = dkconfig_class_re != null;
     if (isOn) {
+      assert dkconfig_class_re != null;
       class_re = Pattern.compile (dkconfig_class_re);
     }
   }

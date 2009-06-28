@@ -26,7 +26,7 @@ class Test {
     t.test_d (1.0, 5.0);
   }
 
-  public Test[] test_array() {
+  public Test /*@Nullable*/ [] test_array() {
     return (null);
   }
 

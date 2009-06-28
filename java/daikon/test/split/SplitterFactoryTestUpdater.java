@@ -38,7 +38,7 @@ public class SplitterFactoryTestUpdater {
   private static ArrayList<ArrayList<File>> declsFileLists = new ArrayList<ArrayList<File>>();
   private static ArrayList<String> classNames = new ArrayList<String>();
 
-  private static File tempDir = null;
+  private static /*@LazyNonNull*/ File tempDir = null;
 
   private SplitterFactoryTestUpdater() {} //blocks public constructor
 
@@ -109,6 +109,8 @@ public class SplitterFactoryTestUpdater {
   private static void moveFiles() {
     tempDir = new File(SplitterFactory.getTempDir());
     String[] fileNames = tempDir.list();
+    assert fileNames != null
+      : "tmpdir = " + tempDir + " which is not a directory";
     for (int i = 0; i < fileNames.length; i++) {
       if (fileNames[i].endsWith(".java")) {
         String fileName = fileNames[i];
@@ -198,7 +200,7 @@ public class SplitterFactoryTestUpdater {
     ps.println();
     ps.println("  private static String targetDir = \"" + targetDir + "\";");
     ps.println();
-    ps.println("  private static String tempDir = null;");
+    ps.println("  private static /*@Nullable*/ String tempDir = null;");
     ps.println();
     ps.println("  private static boolean saveFiles = false;");
     ps.println();

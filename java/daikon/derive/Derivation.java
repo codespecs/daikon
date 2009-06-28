@@ -244,7 +244,7 @@ public abstract class Derivation
 
     if (in_orig) {
       if (vi.isPrestate()) {
-        assert vi.postState != null; // by definition of isPrestate()
+        assert vi.postState != null; // because isPrestate() = true
         return vi.postState.esc_name() + shift_str(shift);
       } else {
         return String.format ("\\new(%s)%s", vi.esc_name(), shift_str(shift));
@@ -264,7 +264,7 @@ public abstract class Derivation
 
     if (in_orig) {
       if (vi.isPrestate()) {
-        assert vi.postState != null; // by definition of isPrestate()
+        assert vi.postState != null; // because isPrestate() = true
         return vi.postState.jml_name() + shift_str(shift);
       } else {
         return String.format ("\\new(%s)%s", vi.jml_name(), shift_str(shift));

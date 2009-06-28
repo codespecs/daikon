@@ -294,7 +294,7 @@ public final class Daikon {
    * configuration option dkconfig_ppt_percent to only work on a specified
    * percent of the ppts.
    */
-  public static String ppt_max_name = null;
+  public static /*@Nullable*/ String ppt_max_name = null;
 
   // The invariants detected will be serialized and written to this
   // file.
@@ -378,7 +378,7 @@ public final class Daikon {
   public static PptMap all_ppts;
 
   /** current invariant (used for debugging) **/
-  public static Invariant current_inv = null;
+  public static /*@Nullable*/ Invariant current_inv = null;
 
   /* List of prototype invariants (one for each type of invariant) */
   public static ArrayList</*@Prototype*/ Invariant> proto_invs = new ArrayList</*@Prototype*/ Invariant>();
@@ -739,6 +739,7 @@ public final class Daikon {
    * Cleans up static variables so that mainHelper can be called more
    * than once.
    */
+  @SuppressWarnings("nullness")
   public static void cleanup() {
 
     // Stop the thread that prints out progress information
@@ -808,7 +809,7 @@ public final class Daikon {
     // same type) are gratuitously processed in a different order than they
     // were supplied on the command line.
     HashSet<File> decl_files = new LinkedHashSet<File>();
-    HashSet<String> dtrace_files = new LinkedHashSet<String>(); /* either file names or "-"*/
+    HashSet<String> dtrace_files = new LinkedHashSet<String>(); // file names or "-" or "+"
     HashSet<File> spinfo_files = new LinkedHashSet<File>();
     HashSet<File> map_files = new LinkedHashSet<File>();
 
@@ -1101,14 +1102,17 @@ public final class Daikon {
     // processing only to bail out at the end.
     for (int i = g.getOptind(); i < args.length; i++) {
       String filename = args[i];
-      File file = null;
-      if (!filename.equals("-") && !filename.equals("+")) {
-        file = new File(filename);
-        if (!file.exists()) {
-            throw new Daikon.TerminationMessage("File " + file + " not found.");
-        }
-        filename = file.toString();
+      if (filename.equals("-") || filename.equals("+")) {
+        dtrace_files.add(filename);
+        continue;
       }
+
+      File file = new File(filename);
+      if (!file.exists()) {
+        throw new Daikon.TerminationMessage("File " + file + " not found.");
+      }
+      filename = file.toString();
+
       // These aren't "endsWith()" because there might be a suffix on the end
       // (eg, a date or ".gz").
       if (filename.indexOf(".decls") != -1) {
@@ -1135,8 +1139,6 @@ public final class Daikon {
         spinfo_files.add(file);
       } else if (filename.indexOf(".map") != -1) {
         map_files.add(file);
-      } else if (filename.equals("-") || filename.equals("+")) {
-        dtrace_files.add(filename);
       } else {
         throw new Daikon.TerminationMessage("Unrecognized file type: " + file);
       }
@@ -2158,8 +2160,8 @@ public final class Daikon {
   }
 
   /**
-   * Returns the max ppt that corresponds to the specified percentage
-   * of ppts (presuming that only those ppts <= max_ppt will be
+   * Returns the ppt name, max_ppt, that corresponds to the specified
+   * percentage of ppts (presuming that only those ppts <= max_ppt will be
    * processed).
    */
   private static /*@Nullable*/ String setup_ppt_perc(Collection<File> decl_files, int ppt_perc) {
@@ -2191,6 +2193,8 @@ public final class Daikon {
           if (!line.equals("DECLARE"))
             continue;
           String ppt_name = fp.readLine();
+          if (ppt_name == null)
+            throw new Daikon.TerminationMessage("File " + file + " terminated prematurely");
           ppts.add(ppt_name);
         }
 

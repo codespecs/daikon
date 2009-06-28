@@ -50,7 +50,7 @@ public class CommonStringSequence
   }
 
   /** instantiate an invariant on the specified slice **/
-  protected CommonStringSequence instantiate_dyn (PptSlice slice) {
+  protected CommonStringSequence instantiate_dyn (PptSlice slice) /*@Prototype*/ {
     return new CommonStringSequence (slice);
   }
 

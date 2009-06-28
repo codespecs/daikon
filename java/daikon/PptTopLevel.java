@@ -931,7 +931,7 @@ public class PptTopLevel extends Ppt {
     // repCheck();
 
     // Debug print some (program specific) variables
-    if (false) {
+    if (debug.isLoggable(Level.FINE)) {
       System.out.println ("Processing samples at " + name());
       String out = "";
       for (int i = 0; i < vt.size(); i++) {

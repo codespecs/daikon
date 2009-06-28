@@ -234,7 +234,7 @@ public class Annotate {
       if (! (javafilename.endsWith(".java") || javafilename.endsWith(".java-random-tabs"))) {
         throw new Daikon.TerminationMessage("File does not end in .java: " + javafilename);
       }
-      File outputFile = null;
+      File outputFile;
       if (Daikon.output_format == OutputFormat.ESCJAVA) {
         outputFile = new File(javafilename + "-escannotated");
       } else if (Daikon.output_format == OutputFormat.JML) {
@@ -243,6 +243,8 @@ public class Annotate {
         outputFile = new File(javafilename + "-javaannotated");
       } else if (Daikon.output_format == OutputFormat.DBCJAVA) {
         outputFile = new File(javafilename + "-dbcannotated");
+      } else {
+        throw new Error("unsupported output file format " + Daikon.output_format);
       }
       // outputFile.getParentFile().mkdirs();
       Writer output = new FileWriter(outputFile);
@@ -272,8 +274,9 @@ public class Annotate {
                    new AnnotateVisitor(javafilename, root, ppts, slashslash, insert_inexpressible, setLightweight, useReflection,
                                        maxInvariantsPP));
       } catch (Error e) {
-        if (e.getMessage() != null && e.getMessage().startsWith("Didn't find class ")) {
-          throw new Daikon.TerminationMessage(e.getMessage() + "." + Global.lineSep +
+        String message = e.getMessage();
+        if (message != null && message.startsWith("Didn't find class ")) {
+          throw new Daikon.TerminationMessage(message + "." + Global.lineSep +
             "Be sure to compile Java classes before calling Annotate.");
         }
         throw e;

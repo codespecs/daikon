@@ -16,7 +16,7 @@ public abstract class SingleStringSequence
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  protected SingleStringSequence(PptSlice ppt) {
+  protected SingleStringSequence(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
     // System.out.println("Created SingleStringSequence invariant " + this + " at " + ppt);
   }

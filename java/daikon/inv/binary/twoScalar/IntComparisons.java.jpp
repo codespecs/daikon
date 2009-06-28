@@ -526,7 +526,7 @@ public final class INTEQUAL
   }
 
   /** Instantiate an invariant on the specified slice **/
-  protected INTEQUAL instantiate_dyn (PptSlice slice) {
+  protected INTEQUAL instantiate_dyn (PptSlice slice) /*@Prototype*/ {
     #if defined (NONEQUAL)
     // System.out.printf ("Instantiating non-equal on %s and %s%n",
     //                     slice.var_infos[0], slice.var_infos[1]);

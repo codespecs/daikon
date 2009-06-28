@@ -35,11 +35,11 @@ public class ExtractConsequent {
     // preferred form, with a pointer pack to the dispreferred
     // form. If we later see the preferred form, we replace the
     // placeholder and remove the dispreferred form.
-    String fakeFor;
+    /*@Nullable*/ String fakeFor;
 
-    HashedConsequent(Invariant i, String ff) {
-      inv = i;
-      fakeFor = ff;
+    HashedConsequent(Invariant inv, /*@Nullable*/ String fakeFor) {
+      this.inv = inv;
+      this.fakeFor = fakeFor;
     }
   }
 
@@ -287,6 +287,9 @@ public class ExtractConsequent {
         if (predicate.usesVarDerived("cluster"))
           pred_uses_cluster = true;
 
+        assert consequent != null; // XXX flow
+        assert predicate != null; // XXX flow
+
         if (!(pred_uses_cluster ^ cons_uses_cluster))
           continue;
         else if (pred_uses_cluster) {
@@ -296,6 +299,8 @@ public class ExtractConsequent {
           inv = predicate;
           cluster_inv = consequent;
         }
+
+        assert cluster_inv != null; // XXX flow
 
         if (!inv.isInteresting()) {
           continue;

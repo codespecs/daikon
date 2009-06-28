@@ -168,12 +168,12 @@ public abstract class SplitterList
   //////////////////////
 
   /**
-   * Return the splitters associated with this program point name.
+   * Return the splitters associated with this program point name (or null).
    * The resulting splitters are factories, not instantiated splitters.
    * @param pptName
    * @return an array of splitters
    */
-  public static Splitter[] get(String pptName) {
+  public static Splitter /*@Nullable*/ [] get(String pptName) {
     Vector<Splitter[]> splitterArrays = new Vector<Splitter[]>();
 
     for (String name : ppt_splitters.keySet()) {

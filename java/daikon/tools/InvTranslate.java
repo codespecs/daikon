@@ -38,8 +38,9 @@ public class InvTranslate {
    */
   int quality = 0;
 
-  /** Ppt of source invariant **/
-  public PptTopLevel ppt = null;
+  // Not used. -MDE
+  // /** Ppt of source invariant **/
+  // public PptTopLevel ppt = null;
 
   /** Map of variables from inv to inv **/
   Map<String,String> var_map = new LinkedHashMap<String,String>();

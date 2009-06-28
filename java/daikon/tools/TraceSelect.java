@@ -17,7 +17,7 @@ public class TraceSelect {
   private static int num_reps;
 
   private static String filePrefix;
-  private static String fileName = null;
+  private static /*@LazyNonNull*/ String fileName = null;
 
   // Just a quick command line cache
   private static String[] argles;

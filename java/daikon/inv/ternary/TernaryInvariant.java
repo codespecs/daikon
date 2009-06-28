@@ -16,7 +16,7 @@ public abstract class TernaryInvariant
   static final long serialVersionUID = 20020122L;
 
   /** Pass-through. */
-  protected TernaryInvariant(PptSlice ppt) {
+  protected TernaryInvariant(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
   }
 

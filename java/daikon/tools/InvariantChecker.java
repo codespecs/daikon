@@ -53,7 +53,7 @@ public class InvariantChecker {
       "      Print debug info on the specified invariant class, vars, and ppt"
       );
 
-  public static File inv_file = null;
+  public static /*@LazyNonNull*/ File inv_file = null;
   public static List<String> dtrace_files = new ArrayList<String>();
   static File output_file;
   static PrintStream output_stream = System.out;
@@ -319,7 +319,7 @@ public class InvariantChecker {
 
   public static class InvariantCheckProcessor extends FileIO.Processor {
 
-    PptMap all_ppts = null;
+    PptMap all_ppts;
 
     Map<Integer,EnterCall> call_map = new LinkedHashMap<Integer,EnterCall>();
 
@@ -378,6 +378,7 @@ public class InvariantChecker {
     private void add (PptTopLevel ppt, ValueTuple vt) {
       // Add the sample to any splitters
       if (ppt.has_splitters()) {
+        assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters) {
           PptConditional ppt_cond = ppt_split.choose_conditional (vt);
           if (ppt_cond != null)

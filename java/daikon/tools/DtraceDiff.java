@@ -258,8 +258,12 @@ public class DtraceDiff {
           if (state1.status == FileIO.ParseStatus.SAMPLE) {
             PptTopLevel ppt1 = state1.ppt;
             PptTopLevel ppt2 = state2.ppt;
+            assert ppt1 != null;
+            assert ppt2 != null;
             ValueTuple vt1 = state1.vt;
             ValueTuple vt2 = state2.vt;
+            assert vt1 != null;
+            assert vt2 != null;
             VarInfo[] vis1 = ppt1.var_infos;
             VarInfo[] vis2 = ppt2.var_infos;
 
@@ -296,8 +300,8 @@ public class DtraceDiff {
                 continue;
               boolean missing1 = vt1.isMissingNonsensical(vis1[i]);
               boolean missing2 = vt2.isMissingNonsensical(vis2[i]);
-              Object val1 = vt1.getValue(vis1[i]);
-              Object val2 = vt2.getValue(vis2[i]);
+              Object val1 = vt1.getValueOrNull(vis1[i]);
+              Object val2 = vt2.getValueOrNull(vis2[i]);
               if ((missing1 != missing2)
                   || (! (missing1 || values_are_equal(vis1[i], val1, val2))))
                 ppt_var_value_error (vis1[i], val1, state1, dtracefile1,

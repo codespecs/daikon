@@ -133,7 +133,7 @@ public class SUBSET
   }
 
   /** instantiates the invariant on the specified slice **/
-  public SUBSET instantiate_dyn (PptSlice slice) {
+  public SUBSET instantiate_dyn (PptSlice slice) /*@Prototype*/ {
     return new SUBSET (slice);
   }
 

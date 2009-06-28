@@ -189,8 +189,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         return result;
       }
     }
-    assert false;
-    return null;
+    throw new Error("Didn't find ClassFieldInfo for " + fieldname);
   }
 
   // ClassDeclaration is a top-level (non-nested) construct.  Collect all

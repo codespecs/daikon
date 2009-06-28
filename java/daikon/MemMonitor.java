@@ -15,7 +15,7 @@ public class MemMonitor implements Runnable {
     try {
       fout = new PrintWriter(new BufferedWriter(new FileWriter(fileName)));
     } catch (java.io.IOException e) {
-      System.out.println("could not open " + fileName);
+      throw new Error("could not open " + fileName, e);
     }
 
     keep_going = true;

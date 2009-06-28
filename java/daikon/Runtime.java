@@ -34,7 +34,7 @@ public final class Runtime {
   /// Fresh (unique) classname used to disambiguate overloaded method
   /// calls during instrumentation; is not instantiated or used.
   public static class Unique {}
-  public static final Unique unique = null;
+  public static final /*@Nullable*/ Unique unique = null;
 
   ////////////////////////////////////////////////////////////////////////
   /// The context-sensitive instrumentation pass creates bodies for

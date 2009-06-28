@@ -57,7 +57,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
       } catch (IllegalAccessException iae) {
         iae.printStackTrace(System.out);
       }
-      DummyInvariant dummy = new DummyInvariant(null);
+      DummyInvariant dummy = new @Prototype DummyInvariant(null);
       dummy.setFormats(daikonFormat, javaFormat, escFormat, simplifyFormat,
                        jmlFormat, dbcFormat, dummyDesired);
       splitter.makeDummyInvariant(dummy);

@@ -44,7 +44,7 @@ public final class PrintableString extends SingleString
   }
 
   /** instantiate an invariant on the specified slice **/
-  public PrintableString instantiate_dyn (PptSlice slice) {
+  public PrintableString instantiate_dyn (PptSlice slice) /*@Prototype*/ {
     return new PrintableString(slice);
   }
 

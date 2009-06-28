@@ -20,7 +20,8 @@ public class ValueSource {
   /** Description of the value, includes its source if it is a constant **/
   String descr;
 
-  /** Stack trace of the location where this node was created **/
+  /** Stack trace of the location where this node was created. **/
+  // under what circumstances is this null? -MDE
   Throwable stack_trace = null;
 
   /** Left subtree for binary/unary operations **/

@@ -1263,7 +1263,7 @@ public final class FileIO {
       pctFmt.setMaximumFractionDigits(2);
     }
 
-    public /*@Nullable*/ String reading_message () {
+    public String reading_message () {
       String line;
       if (reader == null) {
         line = "?";

@@ -7,7 +7,8 @@ package daikon.chicory;
  */
 public class ReturnInfo extends DaikonVariableInfo
 {
-    Class<?> return_type = null;
+    // Under what circumstances is this null?  Maybe it's unused. -MDE
+//    Class<?> return_type = null;
 
     public ReturnInfo()
     {
@@ -17,7 +18,7 @@ public class ReturnInfo extends DaikonVariableInfo
     public ReturnInfo (Class<?> return_type)
     {
         super("return");
-        this.return_type = return_type;
+//        this.return_type = return_type;
     }
 
     public Object getMyValFromParentVal(Object value)

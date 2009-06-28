@@ -10,11 +10,12 @@ import utilMDE.*;
 
 
 /**
- * This is the data structure that holds the tuples of values seen so far
- * (and how many times each was seen) for a particular program point.  VarInfo
- * objects can use this to get the values of the variables they represent.
+ * This data structure holds a tuple of values for a particular program
+ * point.  VarInfo objects can use this to get the values of the variables
+ * they represent.
  * <p>
  *
+ * It has two fields:  vals and mods.
  * While the arrays and their elements are interned, the ValueTuple objects
  * themselves are not interned.
  **/
@@ -24,17 +25,11 @@ public final class ValueTuple implements Cloneable {
   public static Logger debug = Logger.getLogger("daikon.ValueTuple");
 
   // These arrays are interned, and so are their elements.
+  // Each element is null only if it is missing (according to the mods array).
   public /*@Nullable*/ /*@Interned*/ Object /*@Interned*/ [] vals;
 
-  // consider putting this in the first slot of "vals", to avoid the Object
-  // overhead of a pair of val and mods.  Do I need to worry about trickery
-  // such as orderings changing when we add derived values?  I think not...
-
-  // I need to have some kind of access to this representation so that
-  // external code can create one of these and pass it in.  Or maybe
-  // external code always passes in an ordinary array and I convert it to
-  // the packed representation if appropriate.  (That does seem cleaner,
-  // although it might be less efficient.)
+  // Could consider putting this in the first slot of "vals", to avoid the
+  // Object overhead of a pair of val and mods.
 
   /**
    * Modification bit per value, possibly packed into fewer ints than the
@@ -64,7 +59,9 @@ public final class ValueTuple implements Cloneable {
   // short term.)
   public static final int STATIC_CONSTANT = 22;
 
-  // implementation for unpacked representation
+  // Implementation for unpacked representation.
+  // (An alternate representation would pack the mod values into fewer ints
+  // than the vals field.)
 
   public int getModified(VarInfo vi) { return vi.getModified(this); }
   public boolean isUnmodified(VarInfo vi) { return vi.isUnmodified(this); }
@@ -198,8 +195,7 @@ public final class ValueTuple implements Cloneable {
 
 
   /**
-   * Get the value of the variable vi in this ValueTuple.  Note: the
-   * VarInfo form is preferred
+   * Get the value of the variable vi in this ValueTuple.
    * @param vi the variable whose value is to be returned
    * @return the value of the variable at this ValueTuple
    **/
@@ -209,17 +205,52 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * Get the value at the val_index.
+   * Get the value of the variable vi in this ValueTuple, or null if it is missing.
+   * Use of this method is discouraged.
+   * @param vi the variable whose value is to be returned
+   * @return the value of the variable at this ValueTuple
+   * @see #getValue(VarInfo)
+   **/
+  public /*@Nullable*/ /*@Interned*/ Object getValueOrNull(VarInfo vi) {
+    assert vi.value_index < vals.length : vi;
+    return vi.getValueOrNull(this);
+  }
+
+  /**
+   * Get the value at the val_index, which should not have a missing value.
    * Note: For clients, getValue(VarInfo) is preferred to getValue(int).
    * @see #getValue(VarInfo)
    **/
-  /*@Nullable*/ /*@Interned*/ Object getValue(int val_index) { return vals[val_index]; }
+  /*@Interned*/ Object getValue(int val_index) {
+    Object result = vals[val_index];
+    assert result != null;
+    return result;
+  }
+
+  /**
+   * Get the value at the val_index, or null if it is missing.
+   * Use of this method is (doubly) discouraged.
+   * @see #getValue(int)
+   **/
+  /*@Nullable*/ /*@Interned*/ Object getValueOrNull(int val_index) {
+    Object result = vals[val_index];
+    return result;
+  }
+
+  public void checkRep() {
+    assert vals.length == mods.length;
+    for (int i=0; i<vals.length; i++) {
+      assert 0 <= mods[i] && mods[i] < MODBIT_VALUES;
+      assert (isMissing(i) ? vals[i] == null : true);
+    }
+  }
 
 
   /** Default constructor that interns its argument. */
   public ValueTuple(/*@Nullable*/ /*@Interned*/ Object[] vals, int[] mods) {
     this.vals = Intern.intern(vals);
     this.mods = Intern.intern(mods);
+    checkRep();
   }
 
   // Private constructor that doesn't perform interning.
@@ -229,6 +260,7 @@ public final class ValueTuple implements Cloneable {
     assert (!check) || Intern.isInterned(mods);
     this.vals = vals;
     this.mods = mods;
+    checkRep();
   }
 
   /** Creates and returns a copy of this. **/
@@ -292,60 +324,58 @@ public final class ValueTuple implements Cloneable {
   }
 
 
-  // For debugging
-  @SuppressWarnings("nullness")
   public String toString() {
-    StringBuffer sb = new StringBuffer("[");
-    assert vals.length == mods.length;
-    for (int i=0; i<vals.length; i++) {
-      if (i>0)
-        sb.append("; ");
-      if (vals[i] instanceof String)
-        sb.append("\"" + ((/*@Nullable*/ String)vals[i]) + "\"");
-      else if (vals[i] instanceof long[])
-        sb.append(ArraysMDE.toString((long /*@Nullable*/ [])vals[i]));
-      else if (vals[i] instanceof int[])
-        // shouldn't reach this case -- should be long[], not int[]
-        // sb.append(ArraysMDE.toString((int /*@Nullable*/ [])vals[i]));
-        assert false;
-      else if (vals[i] instanceof double[])
-        sb.append(ArraysMDE.toString ((double /*@Nullable*/ [])vals[i]));
-      else if (vals[i] instanceof String[])
-        sb.append(ArraysMDE.toString((String /*@Nullable*/ [])vals[i]));
-      else
-        sb.append(vals[i]);
-      sb.append(",");
-      sb.append(mods[i]);
-    }
-    sb.append("]");
-    return sb.toString();
+    return toString(null);
   }
 
   /**
-   * Return the values of this tuple, annotated with the VarInfo that
+   * Return the values of this tuple.
+   * If vis is non-null, the values are annotated with the VarInfo name that
    * would be associated with the value.
    **/
   @SuppressWarnings("nullness")
-  public String toString(VarInfo[] vis) {
+  public String toString(VarInfo /*@Nullable*/ [] vis) {
     StringBuffer sb = new StringBuffer("[");
     assert vals.length == mods.length;
-    assert vals.length == vis.length;
+    assert vis == null || vals.length == vis.length;
     for (int i=0; i<vals.length; i++) {
       if (i>0)
         sb.append("; ");
-      sb.append (vis[i].name() + ": ");
-      if (vals[i] instanceof String)
-        sb.append("\"" + vals[i] + "\"");
-      else if (vals[i] instanceof long[])
-        sb.append(ArraysMDE.toString((long /*@Nullable*/ [])vals[i]));
-      else if (vals[i] instanceof int[])
-        // shouldn't reach this case -- should be long[], not int[]
-        // sb.append(ArraysMDE.toString((int /*@Nullable*/ [])vals[i]));
-        assert false;
-      else
-        sb.append(vals[i]);
-      sb.append(",");
-      sb.append(mods[i]);
+      if (vis != null) {
+        sb.append (vis[i].name() + "=");
+      }
+      Object val = vals[i];
+      int mod = mods[i];
+      switch (mod) {
+      case UNMODIFIED:
+      case MODIFIED:
+        if (val instanceof String)
+          sb.append("\"" + val + "\"");
+        else if (val instanceof long[])
+          sb.append(ArraysMDE.toString((long[])val));
+        else if (val instanceof int[])
+          // shouldn't reach this case -- should be long[], not int[]
+          // sb.append(ArraysMDE.toString((int[])val));
+          throw new Error("should be long[], not int[]");
+        else if (val instanceof double[])
+          sb.append(ArraysMDE.toString ((double[])val));
+        else if (val instanceof String[])
+          sb.append(ArraysMDE.toString((String[])val));
+        else
+          sb.append(val);
+        if (mod == UNMODIFIED) {
+          sb.append("(U)");
+        }
+        break;
+      case MISSING_NONSENSICAL:
+        sb.append("(missing)");
+        break;
+      case MISSING_FLOW:
+        sb.append("(missing-flow)");
+        break;
+      default:
+        throw new Error("bad modbit " + mod);
+      }
     }
     sb.append("]");
     return sb.toString();

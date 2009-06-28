@@ -28,7 +28,7 @@ public class WSMatch {
   public static boolean verbose = false;
 
   @Option ("consider only variables that match the regular expression")
-  public static Pattern var_match = null;
+  public static /*@Nullable*/ Pattern var_match = null;
 
   @Option ("minimum rate for a substitution match")
   public static double min_substitution_match = 0.60;
@@ -289,6 +289,7 @@ public class WSMatch {
       for (int ii = 0; ii < vars2.size(); ii++) {
         DeclVarInfo v2 = vars2.get(ii);
         MatchInfo m = vars_match.get (new VarPair(v1, v2));
+        assert m != null;
         if (m.perc_match > min_perc) {
           // System.out.printf ("Adding match %s%n", m);
           matches.add (m);

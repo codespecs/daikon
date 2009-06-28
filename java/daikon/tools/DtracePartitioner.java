@@ -68,6 +68,7 @@ public class DtracePartitioner
     StringBuffer sb = new StringBuffer();
     while (br.ready()) {
       String line = br.readLine();
+      assert line != null;      // because br.ready() = true
       line = line.trim();
       if (line.equals ("")) {
         break;
@@ -81,8 +82,9 @@ public class DtracePartitioner
   /** Returns the program point name given by the input invocation.
    *  Throws RuntimeException if invocation is not instanceof String.
    */
-  public String assignToBucket (String invocation) {
-    if (invocation.indexOf (lineSep) == -1) return null;
+  public /*@Nullable*/ String assignToBucket (String invocation) {
+    if (invocation.indexOf (lineSep) == -1)
+      return null;
     return invocation.substring (0, invocation.indexOf (lineSep));
   }
 

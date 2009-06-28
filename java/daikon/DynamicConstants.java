@@ -146,9 +146,13 @@ public class DynamicConstants implements Serializable {
     /** Check representation invariant. */
     public void checkRep() {
       // This assertion is not valid.  If first sample is missing, then
-      // always_missing=true, previous_missing=false.
+      // always_missing=true and previous_missing=false.
       // assert (always_missing ? previous_missing : true) : toString();
+
       assert !(constant && previous_constant) : toString();
+
+      // Whereas values can be null, null is never the value for a dynamic
+      // constant.
       assert ((constant || previous_constant)
               ? (val != null && count > 0)
               : (val == null && count == 0))
@@ -248,6 +252,8 @@ public class DynamicConstants implements Serializable {
    */
   public void add (ValueTuple vt, int count) {
 
+    // System.out.println("DynamicConstants.add : " + vt.toString(ppt.var_infos));
+
     List<Constant> non_missing = new ArrayList<Constant>();
     List<Constant> non_con = new ArrayList<Constant>();
 
@@ -256,14 +262,14 @@ public class DynamicConstants implements Serializable {
       Constant con = i.next();
       assert con.constant;
       con.checkRep();
-      /*@Interned*/ Object val = con.vi.getValue (vt);
+
       if (Debug.logDetail())
         Debug.log (getClass(), ppt, Debug.vis(con.vi), "Adding "
-                   + Debug.toString(val) +
+                   + Debug.toString(con.vi.getValueOrNull (vt)) +
                    " to constant " + con.val +" : missing = "
                    + missing (con.vi, vt)
                   +": samples = " + con.count + "/" + count);
-      if ((con.val != val) || missing (con.vi, vt)) {
+      if (missing (con.vi, vt) || (con.val != con.vi.getValue (vt))) {
         i.remove();
         con.constant = false;
         con.previous_constant = true;
@@ -285,28 +291,37 @@ public class DynamicConstants implements Serializable {
       con.checkRep();
       if (con.vi.missingOutOfBounds())
         continue;
+
+      if (missing (con.vi, vt)) {
+        // value is still missingg, nothing to do (we incremented its count above)
+        continue;
+      }
+
       /*@Interned*/ Object val = con.vi.getValue (vt);
-      if (!missing (con.vi, vt)) {
-        i.remove();
-        con.always_missing = false;
-        if (Debug.logDetail())
-          Debug.log (getClass(), ppt, Debug.vis(con.vi), "Adding "
-                     + Debug.toString(val) +
-                     " to missing : missing = "
-                     + missing (con.vi, vt)
-                    + ": samples = " + con.count + "/" + count
-                    + "/" + sample_cnt);
-        if (sample_cnt == 0) {
-          // First sample for this variable; it never saw a missing value.
-          con.val = val;
-          con.count = count;
-          con.constant = true;
-          con_list.add (con);
-        } else {
-          // This variable has seen a missing value.
-          non_missing.add (con);
-          con.previous_missing = true;
-        }
+      // the variable is not missing, so it is non-null
+      assert val != null;
+
+      i.remove();
+      con.always_missing = false;
+      if (Debug.logDetail())
+        Debug.log (getClass(), ppt, Debug.vis(con.vi), "Adding "
+                   + Debug.toString(val) +
+                   " to missing : missing = "
+                   + missing (con.vi, vt)
+                  + ": samples = " + con.count + "/" + count
+                  + "/" + sample_cnt);
+      // Is the Constant missing because it was initialized that way, or
+      // has the program point seen values in the past?
+      if (sample_cnt == 0) {
+        // First sample for this program point (& this variable)
+        con.val = val;
+        con.count = count;
+        con.constant = true;
+        con_list.add (con);
+      } else {
+        // This variable truly is missing; has seen a missing value in the past.
+        non_missing.add (con);
+        con.previous_missing = true;
       }
     }
 
@@ -318,7 +333,9 @@ public class DynamicConstants implements Serializable {
     // Turn off previous_constant on all newly non-constants
     for (Constant con : non_con) {
       con.previous_constant = false;
-      con.val = null;
+      @SuppressWarnings("nullness")
+      @NonNull Object nullValue = null;
+      con.val = nullValue;
       con.count = 0;
       con.checkRep();
     }
@@ -363,11 +380,16 @@ public class DynamicConstants implements Serializable {
 
   /**
    * Returns the constant value of the specified variable, or null if
-   * the variable is not constant or prev_constant.
+   * the variable is not constant or prev_constant.  But is apparently
+   * only called on constants with a value.
    **/
-  public /*@Nullable*/ Object constant_value (VarInfo vi) {
+  public Object constant_value (VarInfo vi) {
 
-    return getConstant(vi).val;
+    Object result = getConstant(vi).val;
+    // Why does this cause no crash?  That is, why isn't a non-missing
+    // value of null handled by DynamicConstants?
+    assert result != null;
+    return result;
   }
 
   /** Returns whether the specified variable missing for all values so far. **/
