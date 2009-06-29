@@ -41,6 +41,15 @@ public class StrTok {
   }
 
   /**
+   * Creates a tokenizer for the specified string with the specified
+   * error handler
+   */
+  public StrTok (String s, Error e) {
+    this(s);
+    set_error_handler (e);
+  }
+
+  /**
    * Default Class for error handling.  Throws a RuntimeException when an
    * error occurs.
    *
@@ -73,6 +82,13 @@ public class StrTok {
     }
 
     return (token());
+  }
+
+  /**
+   * Causes the next call to nextToken() to return the current token
+   */
+  public void pushBack() {
+    stok.pushBack();
   }
 
   /**
@@ -168,5 +184,19 @@ public class StrTok {
 
     err.tok_error (String.format ("Token %s found where %s expected", t, tok));
   }
+
+  /**
+   * Reads the next token and checks to make sure that it is a word (id).
+   * If it is not a word, calls the error handling routine.  If it is,
+   * returns the string of the word
+   */
+  public String need_word() {
+    String t = nextToken();
+    if (!isWord()) {
+      err.tok_error (String.format ("'%s' found where identifier expected", t));
+    }
+    return t;
+  }
+
 
 }
