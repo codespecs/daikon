@@ -18,6 +18,7 @@ import org.apache.bcel.generic.LineNumberGen;
 import org.apache.bcel.generic.LocalVariableGen;
 import org.apache.bcel.generic.MethodGen;
 import org.apache.bcel.generic.ObjectType;
+import org.apache.bcel.generic.ArrayType;
 import org.apache.bcel.generic.Type;
 import org.apache.bcel.generic.RETURN;
 
@@ -477,6 +478,44 @@ public class BCELUtil {
       }
       new_types[0] = new_type;
       return (new_types);
+  }
+
+  public static Type classname_to_type (String classname) {
+
+    // Get the array depth (if any)
+    int array_depth = 0;
+    while (classname.endsWith ("[]")) {
+      classname = classname.substring (0, classname.length()-2);
+      array_depth++;
+    }
+
+    // Get the base type
+    Type t = null;
+    if (classname == "int")
+      t = Type.INT;
+    else if (classname == "boolean")
+      t = Type.BOOLEAN;
+    else if (classname == "byte")
+      t = Type.BYTE;
+    else if (classname == "char")
+      t = Type.CHAR;
+    else if (classname == "double")
+      t = Type.DOUBLE;
+    else if (classname == "float")
+      t = Type.FLOAT;
+    else if (classname == "long")
+      t = Type.LONG;
+    else if (classname == "short")
+      t = Type.SHORT;
+    else // must be a non-primitive
+      t = new ObjectType (classname);
+
+    // If there was an array, build the array type
+    if (array_depth > 0) {
+      t = new ArrayType (t, array_depth);
+    }
+
+    return t;
   }
 
 }
