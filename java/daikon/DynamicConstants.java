@@ -334,7 +334,7 @@ public class DynamicConstants implements Serializable {
     for (Constant con : non_con) {
       con.previous_constant = false;
       @SuppressWarnings("nullness")
-      @NonNull Object nullValue = null;
+      /*@NonNull*/ Object nullValue = null;
       con.val = nullValue;
       con.count = 0;
       con.checkRep();
