@@ -31,14 +31,12 @@ $WARNING = 1;
 delete(@ENV{qw(IFS CDPATH ENV BASH_ENV)});
 $ENV{PATH} = ''; # undef would output warnings with Perl 5.6.1's Cwd.pm.
 
-# ...but we want PERL5LIB honored even in taint mode, see perlsec, perl5lib,
+# ...but we want PERL5?LIB honored even in taint mode, see perlsec, perl5lib,
 # http://www.mail-archive.com/cpan-testers-discuss%40perl.org/msg01064.html
-BEGIN {
-  # undefinedness and "v-string in use/require non-portable" warnings with
-  # perl5lib 1.02 and perl 5.10.0, rt.cpan.org #43446, #43447
-  local $^W = 0;
-#  require perl5lib;
-}
+use Config qw(%Config);
+use lib map { /(.*)/ }
+  defined($ENV{PERL5LIB}) ? split(/$Config{path_sep}/, $ENV{PERL5LIB}) :
+  defined($ENV{PERLLIB})  ? split(/$Config{path_sep}/, $ENV{PERLLIB})  : ();
 
 # -----------------------------------------------------------------------------
 
@@ -277,7 +275,7 @@ BEGIN
   # Version info
   $PACKAGE     = 'W3C Link Checker';
   $PROGRAM     = 'W3C-checklink';
-  $VERSION     = '4.4';
+  $VERSION     = '4.5';
   $REVISION    = sprintf('version %s (c) 1999-2009 W3C', $VERSION);
   my ($cvsver) = q$Revision$ =~ /(\d+[\d\.]*\.\d+)/;
   $AGENT       = sprintf('%s/%s [%s] %s',
@@ -383,7 +381,7 @@ my %Opts =
     Verbose           => 0,
     Progress          => 0,
     HTML              => 0,
-    Timeout           => 60,
+    Timeout           => 30,
     Redirects         => 1,
     Dir_Redirects     => 1,
     Accept_Language   => $cmdline ? undef : $ENV{HTTP_ACCEPT_LANGUAGE},
@@ -664,8 +662,10 @@ sub parse_arguments ()
         !defined($masq[1]) || $masq[1] !~ /\S/) {
       usage(1, "Error: --masquerade takes two whitespace separated URIs.");
     } else {
+      require URI::file;
       $Opts{Masquerade_From} = $masq[0];
-      $Opts{Masquerade_To}   = $masq[1];
+      my $u                  = URI->new($masq[1]);
+      $Opts{Masquerade_To}   = $u->scheme() ? $u : URI::file->new_abs($masq[1]);
     }
   }
 
@@ -784,7 +784,7 @@ Options:
                             document checked.
  -S, --sleep SECS           Sleep SECS seconds between requests to each server
                             (default and minimum: 1 second).
- -t, --timeout SECS         Timeout for requests (in seconds).
+ -t, --timeout SECS         Timeout for requests in seconds (default: 30).
  -d, --domain DOMAIN        Regular expression describing the domain to which
                             authentication information will be sent
                             (default: $trust).
@@ -884,18 +884,19 @@ sub check_uri (\%$$$$;$$)
   my ($params, $uri, $check_num, $depth, $cookie, $referer, $is_start) = @_;
   $is_start ||= ($check_num == 1);
 
+  my $start = $Opts{Summary_Only} ? 0 : &get_timestamp();
+
+  # Get and parse the document
+  my $response = &get_document('GET', $uri, $doc_count, \%redirects, $referer,
+                               $cookie, $params, $check_num, $is_start);
+
+  # Can we check the resource? If not, we exit here...
+  return if defined($response->{Stop});
+
   if ($Opts{HTML}) {
     &html_header($uri, 0, $cookie) if ($check_num == 1);
     &print_form($params, $cookie, $check_num) if $is_start;
   }
-
-  my $start = $Opts{Summary_Only} ? 0 : &get_timestamp();
-
-  # Get and parse the document
-  my $response = &get_document('GET', $uri, $doc_count, \%redirects, $referer);
-
-  # Can we check the resource? If not, we exit here...
-  return if defined($response->{Stop});
 
   if ($is_start) { # Starting point of a new check, eg. from the command line
     # Use the first URI as the recursion base unless specified otherwise.
@@ -1179,15 +1180,18 @@ EOF
 # Get and parse a resource to process #
 #######################################
 
-sub get_document ($$$;\%$)
+sub get_document ($$$;\%$$$$$)
 {
-  my ($method, $uri, $in_recursion, $redirects, $referer) = @_;
+  my ($method, $uri, $in_recursion, $redirects, $referer, $cookie, $params,
+      $check_num, $is_start) = @_;
   # $method contains the HTTP method the use (GET or HEAD)
   # $uri contains the identifier of the resource
   # $in_recursion is > 0 if we are in recursion mode (i.e. it is at least
   #                        the second resource checked)
   # $redirects is a pointer to the hash containing the map of the redirects
   # $referer is the URI of the referring document
+  # $cookie, $params, $check_num, and $is_start are for printing HTTP headers
+  #                  and the form if $in_recursion == 0 and not authenticating
 
   # Get the resource
   my $response;
@@ -1203,10 +1207,13 @@ sub get_document ($$$;\%$)
     if (! $in_recursion) {
       # Is it too late to request authentication?
       if ($response->code() == 401) {
-        &authentication($response);
+        &authentication($response, $cookie, $params, $check_num, $is_start);
       } else {
-        # TODO: style this message to make it stand out
-        print "<p>" if $Opts{HTML};
+        if ($Opts{HTML}) {
+          &html_header($uri, 0, $cookie) if ($check_num == 1);
+          &print_form($params, $cookie, $check_num) if $is_start;
+          print "<p>", &status_icon($response->code());
+        }
         &hprintf("\nError: %d %s\n",
                  $response->code(), $response->message() || '(no message)');
         print "</p>\n" if $Opts{HTML};
@@ -1246,8 +1253,12 @@ sub get_document ($$$;\%$)
   if ($failed_reason) {
     # No, there is a problem...
     if (! $in_recursion) {
-      # TODO: style this message to make it stand out
-      print "<p>" if $Opts{HTML};
+      if ($Opts{HTML}) {
+        &html_header($uri, 0, $cookie) if ($check_num == 1);
+        &print_form($params, $cookie, $check_num) if $is_start;
+        print "<p>", &status_icon(406);
+
+      }
       &hprintf("Can't check links: %s.\n", $failed_reason);
       print "</p>\n" if $Opts{HTML};
     }
@@ -1836,9 +1847,9 @@ sub escape_match ($\%)
 # Ask for authentication #
 ##########################
 
-sub authentication ($)
+sub authentication ($;$$$$)
 {
-  my ($response) = @_;
+  my ($response, $cookie, $params, $check_num, $is_start) = @_;
 
   my $realm = '';
   if ($response->www_authenticate() =~ /Basic realm=\"([^\"]+)\"/) {
@@ -1855,7 +1866,10 @@ to specify trusted domains.
 EOF
   } else {
 
-    printf("Status: 401 Authorization Required\nWWW-Authenticate: %s\nConnection: close\nContent-Language: en\nContent-Type: text/html; charset=utf-8\n\n", $response->www_authenticate());
+    printf("Status: 401 Authorization Required\nWWW-Authenticate: %s\n%sConnection: close\nContent-Language: en\nContent-Type: text/html; charset=utf-8\n\n",
+           $response->www_authenticate(),
+           $cookie ? "Set-Cookie: $cookie\n" : "",
+          );
 
     printf("%s
 <html lang=\"en\" xmlns=\"http://www.w3.org/1999/xhtml\" xml:lang=\"en\">
@@ -1864,14 +1878,20 @@ EOF
 %s</head>
 <body>", $DocType, $Head);
     &banner(': 401 Authorization Required');
-    printf("<p>
-  You need \"%s\" access to <a href=\"%s\">%s</a> to perform link checking.<br />
-", &encode($realm), (&encode($response->request()->url())) x 2);
+    &print_form($params, $cookie, $check_num) if $is_start;
+    printf('<p>
+  %s
+  You need "%s" access to <a href="%s">%s</a> to perform link checking.<br />
+',
+           &status_icon(401),
+           &encode($realm), (&encode($response->request()->url())) x 2);
 
-    if ($Opts{Trusted}) {
-      printf <<EOF, &encode($Opts{Trusted});
+    my $host = $response->request()->url()->host();
+    if ($Opts{Trusted} && $host !~ $Opts{Trusted}) {
+      printf <<EOF, &encode($Opts{Trusted}), &encode($host);
   This service has been configured to send authentication only to hostnames
-  matching the regular expression <code>%s</code>
+  matching the regular expression <code>%s</code>, but the hostname
+  <code>%s</code> does not match it.
 EOF
     }
 
@@ -2487,7 +2507,7 @@ sub banner ($)
 {
   my $tagline ="Check links and anchors in Web pages or full Web sites";
 
-  printf(<<'EOF', URI->new_abs("../images/w3c.png", $Cfg{Doc_URI}), $tagline);
+  printf(<<'EOF', URI->new_abs("../images/no_w3c.png", $Cfg{Doc_URI}), $tagline);
 <div id="banner"><h1 id="title"><a href="http://www.w3.org/" title="W3C"><img alt="W3C" id="logo" src="%s" /></a>
 <a href="checklink"><span>Link Checker</span></a></h1>
 <p id="tagline">%s</p></div>
