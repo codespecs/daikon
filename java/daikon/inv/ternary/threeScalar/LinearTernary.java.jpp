@@ -85,7 +85,7 @@ public class CLASSNAME
 
   protected CLASSNAME(/*@Dependent(when = Prototype.class, result=Nullable.class)*/ PptSlice ppt) {
     super(ppt);
-    @SuppressWarnings("nullness") // circular initialization; cast away rawness
+    @SuppressWarnings({"nullness", "cast"}) // circular initialization; cast away rawness
     CLASSNAME nonRawThis = (/*@NonNull*/ CLASSNAME) this;
     core = new CORECLASS(nonRawThis);
   }
