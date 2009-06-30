@@ -61,8 +61,13 @@ endif
 images/%.eps: images/%.dot
 	dot -Tps $< >$@
 
-images/dfepl-flow.png: images/dfepl-flow.eps
-	eps2png-mono-alpha.zsh $< 500
+# Create a jpg version of the dfepl flow, blow up by 4X to get cleaner
+# output.
+images/dfepl-flow.jpg: images/dfepl-flow.eps
+	pstopnm -portrait -stdout -xsize 2000 $<  \
+	  | pnmcrop \
+	  | pnmscale 0.25 \
+	  | pnmmargin -white 20 | pnmtojpeg > images/dfepl-flow.jpg
 
 images/%.pdf: images/%.eps
 	epstopdf $< --outfile=$@
@@ -71,7 +76,7 @@ html: daikon.html developer.html
 
 # The perl moves </ul> from after the table of contents to before it,
 # preventing it from being too deeply indented.  It's needed with makeinfo 4.2.
-daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo .fix-menu images/dfepl-flow.png
+daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo .fix-menu images/dfepl-flow.jpg
 	makeinfo --html --no-split $<
 	perl -pi -e '$$/ = undef; s|(<h2>Table of Contents</h2>)|</ul>\n\n$$1|; s|</ul>\n\n(<p><hr>\nNode:<a name="Introduction">Introduction</a>,)|$$1|; s|(<h2>Table of Contents</h2>)|</ul>\n\n$$1|; s|,\nPrevious:<a rel=previous href="#dir">\(dir\)</a>,\nUp:<a rel=up href="#dir">\(dir\)</a>||; s|,\nPrevious:&nbsp;<a rel="previous" accesskey="p" href="#dir">\(dir\)</a>,\nUp:&nbsp;<a rel="up" accesskey="u" href="#dir">\(dir\)</a>||;' daikon.html
 
@@ -150,7 +155,7 @@ clean: texi-clean
 	rm -f developer.tmp developer.pg \
 		developer.info developer.info-[0-9] \
 		developer.log developer.dvi developer.ps developer.pdf developer.html
-	rm -f images/dfepl-flow.{eps,pdf,png}
+	rm -f images/dfepl-flow.{eps,pdf,jpg}
 
 texi-clean:
 	rm -rf daikon.aux daikon.cp daikon.cps daikon.fn daikon.ky daikon.pg daikon.toc daikon.tp daikon.vr
