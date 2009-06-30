@@ -5805,11 +5805,7 @@ You may see warnings about the 'missing' script.  These can be ignored.
 Note that Kvasir requires a version of glibc between 2.2 and 2.10.  It
 checks for this and will not build with other versions.  If your
 system is not compatible with those versions (it is not advisable to
-install multiple versions of glibc at once), a possible workaround
-would be to install an older Linux distribution using a virtual
-machine (QEMU or VMWare) For instance, to match what we currently use
-for development, you could use Debian stable (Etch) with gcc 3.3
-installed.
+install multiple versions of glibc at once.)
 
 Once Kvasir has been installed, it can be used via the
 @file{kvasir-dtrace} script in the @file{$DAIKONDIR/bin} directory; if
@@ -5884,8 +5880,8 @@ multidimensional arrays into multiple single-dimensional arrays.
 
 @item
 Kvasir behaves somewhat differently with different versions of GCC@.
-We have had the best results with GCC versions 3.3 (which we use for
-testing) and 3.4.  If feasible, we recommend that you use
+We have had the best results with GCC versions 4.1 (which we use for
+testing) and 3.3/3.4.  If feasible, we recommend that you use
 Kvasir with such a relatively recent version of GCC@.  Incompatibilities
 between Kvasir and the debugging information produced by older GCC
 versions can lead to incorrect output and, in some cases for version
