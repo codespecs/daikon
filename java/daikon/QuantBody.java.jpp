@@ -120,7 +120,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #undef NUMERIC
-#if defined(COMPATIBLE) || defined(SHORT)
+#if defined(COMPATIBLE) || defined(SHORT) || defined(CHAR)
   #define NUMERIC
 #endif
 
