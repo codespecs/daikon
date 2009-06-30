@@ -1,4 +1,4 @@
-#!/usr/local/bin/perl -wT
+#!/usr/bin/perl -wT
 #
 # W3C Link Checker
 # by Hugo Haas <hugo@w3.org>
