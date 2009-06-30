@@ -21,7 +21,7 @@ Further documentation can be found in:
 ===========================================================================
 4.5.6
 
-Kvasir
+Kvasir now supports binaries created with GCC 4.0+.
 
    User visible changes
 
@@ -30,9 +30,13 @@ Kvasir
 	Valgrind portability fixes into our releases in a more timely
 	manner. In particular, this release includes the fixes from
 	Valgrind's 3.4.1 stable release including initial support for
-	glibc version 2.10. (Portability work to better support new
-	GCC versions is ongoing but not included in this release, so
-	GCC 3.3 is still recommended for use with this Kvasir.)
+	glibc version 2.10.
+
+	Kvasir is now able to correctly output dtrace files for binaries
+	produced with GCC 4.0+.
+
+	Variables declared with the 'register' attribute should now be
+	handled correctly.
 
    Bug fixes
 
@@ -42,6 +46,8 @@ Kvasir
 	Fixed an issue where extra decls headers were printed when Kvasir
 	was in append mode.
 
+	Fixed an issue where Kvasir attempted to print variables for which
+	there was no debugging information available.
     
 
 
