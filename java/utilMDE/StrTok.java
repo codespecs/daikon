@@ -188,13 +188,14 @@ public class StrTok {
   /**
    * Reads the next token and checks to make sure that it is a word (id).
    * If it is not a word, calls the error handling routine.  If it is,
-   * returns the string of the word
+   * returns the string of the word.
    */
   public String need_word() {
     String t = nextToken();
     if (!isWord()) {
       err.tok_error (String.format ("'%s' found where identifier expected", t));
     }
+    assert t != null;
     return t;
   }
 
