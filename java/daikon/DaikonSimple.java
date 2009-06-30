@@ -451,7 +451,7 @@ public class DaikonSimple {
           VarInfo var2 = j.next();
 
           if (var.name().equals(var2.name())) {
-            values[k] = vt.getValue(var2);
+            values[k] = vt.getValueOrNull(var2);
             mods[k] = vt.getModified(var2);
             found = true;
             break;
