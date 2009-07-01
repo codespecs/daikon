@@ -5802,11 +5802,6 @@ it in the directory @file{kvasir/inst}.
 
 You may see warnings about the 'missing' script.  These can be ignored.
 
-Note that Kvasir requires a version of glibc between 2.2 and 2.10.  It
-checks for this and will not build with other versions.  If your
-system is not compatible with those versions (it is not advisable to
-install multiple versions of glibc at once.)
-
 Once Kvasir has been installed, it can be used via the
 @file{kvasir-dtrace} script in the @file{$DAIKONDIR/bin} directory; if
 you have set up the Daikon environment according to the instructions
