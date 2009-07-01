@@ -4,7 +4,7 @@
 
 # note that for right now, we are only copying the html and texinfo
 # versions of the developer manual (though all other versions are built)
-IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps dfepl-flow.png
+IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps dfepl-flow.jpg
 # old image files
 # gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps context-gui.jpg context-gui.eps
 IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
