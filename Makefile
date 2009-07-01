@@ -123,10 +123,12 @@ RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -n
 ### Default tag
 help:
 	@echo "Targets:"
-	@echo " compile compile-java"
-	@echo " junit test"
-	@echo " tags TAGS"
-	@echo " install PAG specific files pag-install"
+	@echo " compile compile-java     -- compile Java files"
+	@echo " junit                    -- run unit tests"
+	@echo " test                     -- run system tests"
+	@echo " tags TAGS                -- make TAGS file for Emacs"
+	@echo " pag-install              -- install PAG specific files "
+	@echo " kvasir                   -- make Kvasir, the C front end"
 	@echo "Creating the Daikon distribution:"
 	@echo " daikon.tar daikon.jar    -- just makes the tar files"
 	@echo " staging                  -- moves all release file to $inv/staging-dist"
