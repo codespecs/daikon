@@ -977,22 +977,30 @@ JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
                 -linkoffline http://java.sun.com/j2se/1.5.0/docs/api/ http://java.sun.com/j2se/1.5.0/docs/api/
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 # JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v '\#'`
-JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | sort)
+JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | sort)
 #JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v '\#' | sort | uniq | perl -p -e 's:^./::g; s:/:.:g;'`
+
+# Daikon packages except for util (which is just a copy of utilMDE)
+DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'CVS|util' \
+				   | sed s./.. | sed s/^/daikon./ | tr '\n' ':')
 
 javadoc: doc
 
+# Build javadoc using the daikon package and all of subpackages of
+# daikon (except daikon.util) and utilMDE.  Unfortunately, there is
+# no switch to javadoc that ignores a subpackage.  Don't include the
+# typequal package -- it crashes javadoc.
 doc: $(AUTO_GENERATED_FILES) doc-dkconfig
 	mkdir -p doc
-#echo "JDOC_FILES: ${JDOC_FILES}"
-	# This requires that jdk/lib/tools.jar be on your classpath
-	javadoc -J-Xmx1000m $(JAVADOC_FLAGS) $(JDOC_FILES)
+	javadoc -J-Xmx1000m $(JAVADOC_FLAGS) \
+		daikon -subpackages $(DAIKON_PACKAGES):utilMDE
 	cd doc && preplace '^ *&#64;cindex.*' ''
 
 ## Make doc with private fields for people working on source code
 doc-private: $(AUTO_GENERATED_FILES)
 	mkdir -p doc
-	javadoc -J-Xmx1000m$(JAVADOC_FLAGS) -private $(JDOC_FILES)
+	javadoc -J-Xmx1000m $(JAVADOC_FLAGS) -private \
+	  daikon -subpackages $(DAIKON_PACKAGES):utilMDE
 	cd doc && preplace '^ *&#64;cindex.*' ''
 
 ## This doesn't seem necessary any more
