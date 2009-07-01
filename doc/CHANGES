@@ -19,6 +19,7 @@ Further documentation can be found in:
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
+
 4.6.0
 
 Kvasir now supports binaries created with GCC 4.0+ and glibc versions 2.2
@@ -83,7 +84,7 @@ Kvasir
 	Fixed an issue where Kvasir attempted to print variables for which
 	there was no debugging information available.
     
-
+-------------------------------------------
 
 4.5.5 (April 1 2009)
 
@@ -111,6 +112,8 @@ DynComp Java
 
         Information describing how to create an instrumented JDK on MacOSX
         was added to Section 7.2.1 (Instrumenting the JDK with DynComp) 
+
+-------------------------------------------
 
 4.5.4 (February 2 2009)
 
