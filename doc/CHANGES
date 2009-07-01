@@ -19,9 +19,43 @@ Further documentation can be found in:
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
-4.5.6
+4.6.0
 
-Kvasir now supports binaries created with GCC 4.0+.
+Kvasir now supports binaries created with GCC 4.0+ and glibc versions 2.2
+to 2.10.  The Daikon user manual was updated for clarity and completeness.  
+Bugs were fixed in Daikon, Kvasir, and Chicory.
+
+Daikon
+
+  Documentation
+
+    The installation section of the user manual was rewritten .
+
+    A more complete explanation of nonsensical values was added to
+    Appendix A (File formats).
+
+  Bug Fixes
+
+    The declaration version (decl-version) specification only needs to
+    be specified once if multiple input files are used.  If it is specified
+    in each file, each specification must be the same.
+
+    The Quant code (used when adding invariant checks to the original
+    source) did not support character comparisons.  This problem has been
+    resolved.
+
+Chicory
+
+  Bug Fixes
+
+    In some circumstances Chicory would not handle the children of static
+    variables that were referenced through multiple variables (such
+    as a parameter and an instance variable).  This problem has been
+    resolved.
+
+    Sampling now works correctly with applications with multiple threads
+
+Kvasir
 
    User visible changes
 
