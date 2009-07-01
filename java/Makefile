@@ -928,8 +928,7 @@ check-serialize:
 # and you want to do junit tests on *this* version.
 junit:
 	@echo "Running unit (not system) tests..."
-	@echo ${JAVA} daikon.test.MasterUnitTester
-	${JAVA} -cp ${CLASSPATH} daikon.test.MasterUnitTester
+	${JAVA} daikon.test.MasterUnitTester
 
 junit-all: junit
 	@# Alternately, MasterUnitTester could run SplitterFactoryTest,
