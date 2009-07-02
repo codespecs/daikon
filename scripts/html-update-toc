@@ -2,7 +2,7 @@
 # html-update-toc
 # Update (in place) table of contents for an HTML document.
 # Michael Ernst <mernst@csail.mit.edu>
-# Time-stamp: <2008-10-29 14:04:27 mernst>
+# Time-stamp: <2009-07-02 16:06:54 mernst>
 
 # This script edits a HTML file in place to modify an existing table of
 # contents.  The contents start (and end, respectively) with "<!-- start
@@ -117,7 +117,9 @@ FILELOOP: for my $file (@ARGV) {
       }
       close(FILE);
 
-      print STDERR "html-update-toc: updating $file\n";
+      if (! $quiet) {
+        print STDERR "html-update-toc: updating $file\n";
+      }
 
       # I would like to just call Perl with
       #   "perl -pi.bak -e '\$/ = \"\\n\\n\"; s/($contents_start_quoted)(.*?)($contents_end_quoted)/\$1$newcontent_quoted\$3/s'"
