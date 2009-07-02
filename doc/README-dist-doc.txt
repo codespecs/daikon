@@ -1,5 +1,5 @@
 This directory contains documentation for the Daikon invariant detector,
-Daikon version 4.5.5, released April 1 2009.
+Daikon version 4.6.0, released July 1, 2009.
 
 See file
   index.html
