@@ -33,7 +33,8 @@ SCRIPT_FILES := Makefile java-cpp.pl lines-from \
 	trace-untruncate trace-untruncate-fast.c trace-purge-fns.pl trace-purge-vars.pl \
 	trace-add-nonces.pl \
 	checkargs.pm util_daikon.pm \
-	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
+	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl \
+	sort-directory-order.pl
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 # This is so toublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS  \) -prune -o -name '*.java' -print) $(shell find java/daikon -follow \( -name '*daikon-java*' -o -name CVS \) -prune -o -name '*.java' -print)
