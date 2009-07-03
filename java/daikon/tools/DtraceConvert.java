@@ -8,10 +8,15 @@ import java.util.regex.*;
 import gnu.getopt.*;
 
 /**
- * This tool converts between the uncompressed and compressed Daikon file
- * formats.
+ * This tool converts between the textual and binary Daikon file formats.
+ * Its input is any number of files in either format.  By default it
+ * converts each file to binary format.  If the --textoutput argument is
+ * supplied, it converts each file to textual format.
  */
 public class DtraceConvert {
+
+  @Option("produce output in textual format")
+  public static boolean textOutput = false;
 
   public static void main (String[] args) {
     try {
@@ -25,11 +30,6 @@ public class DtraceConvert {
   }
 
   /**
-   * This entry point is useful for testing.  It returns a boolean to indicate
-   * return status instead of croaking with an error.
-   **/
-
-  /**
    * This does the work of main, but it never calls System.exit, so it
    * is appropriate to be called progrmmatically.
    * Termination of the program with a message to the user is indicated by
@@ -38,7 +38,12 @@ public class DtraceConvert {
    * @see daikon.Daikon.TerminationMessage
    **/
   public static void mainHelper(final String[] args) {
-    if (args.length == 0) {
+    DtraceConvert myInstance = new DtraceConvert();
+    Options options = new Options("DtraceConvert [options] infiles...",
+                                  DtraceConvert.class);
+    String[] file_args = options.parse_or_usage (args);
+
+    if (file_args.length == 0) {
       throw new daikon.Daikon.TerminationMessage("No trace files specified.");
     }
     for (String filename : args) {
