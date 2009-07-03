@@ -1392,7 +1392,8 @@ public final class FileIO {
 
 
   /**
-   * Like read_data_trace_record, but sets global FileIO.data_trace_state.
+   * Like read_data_trace_record, but sets global FileIO.data_trace_state
+   * for the duration of the call then clears it before returning.
    * Intended for most external callers.
    */
   public static void read_data_trace_record_setstate (ParseState state)
