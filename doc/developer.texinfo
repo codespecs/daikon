@@ -195,7 +195,7 @@ When you compile Daikon, environment variables @env{DAIKONDIR} (or
 @env{INV}, whose effect is the same) and @env{JDKDIR} should be set.
 This is already done if you source the @file{daikon.bashrc} or
 @file{daikon.cshrc} file, as recommended in the installation
-instructions (@pxref{Installation steps,,,./daikon,Daikon User Manual}).
+instructions (@pxref{Complete installation,,,./daikon,Daikon User Manual}).
 When you compile Daikon, environment variable @env{DAIKONCLASS_SOURCES}
 should be set (to any value) before your startup file sources file
 @file{daikon.bashrc} or @file{daikon.cshrc}.
