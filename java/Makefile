@@ -812,6 +812,7 @@ check-interning-all: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 
 check-nullness: check-nullness-all
 
+## Once this actually works, stop using the -warns version
 # check-nullness-all: check-nullness-all-withstubs
 check-nullness-all: check-nullness-all-withstubs-warns
 
