@@ -397,6 +397,7 @@ my %Opts =
     Exclude_Docs      => undef,
     Suppress_Redirect => [],
     Suppress_Redirect_Prefix => [],
+    Suppress_Redirect_Regexp => [],
     Suppress_Broken   => [],
     Suppress_Fragment => [],
     Masquerade        => 0,
@@ -703,9 +704,11 @@ sub parse_arguments ()
     }
   }
   for my $srp_arg (@{$Opts{Suppress_Redirect_Prefix}}) {
-    if ($srp_arg !~ /.->./) {
+    if ($srp_arg !~ /^(.*)->(.*)$/) {
       &usage(1, "Bad suppress-redirect-prefix argument, should contain \"->\": $srp_arg");
     }
+    # Turn prefixes into a regexp.
+    push @{$Opts{Suppress_Redirect_Regexp}}, qr/^\Q$1\E(.*)->\Q$2\E\1$/ism;
   }
   for my $sb_arg (@{$Opts{Suppress_Broken}}) {
     if ($sb_arg !~ /^(-1|[0-9]+):./) {
@@ -1934,37 +1937,12 @@ sub record_redirects (\%$)
     my $to = $response->request()->url(); # same on every loop iteration
     my $from_to = $from . '->' . $to;
     my $match = grep { $_ eq $from_to } @{$Opts{Suppress_Redirect}};
-    # print STDERR "Result $match of checking $from_to\n";
+    # print STDERR "Result $match of redirect checking $from_to\n";
     if ($match) { next; }
 
-    # Check for redirect_prefix match
-    my $prefix_match = 0;
-    my $from_len = length($from);
-    my $to_len = length($to);
-    for my $redir_prefix (@{$Opts{Suppresss_Redirect_Prefix}}) {
-      if ($redir_prefix !~ /^(.*)->(.*)$/) {
-        die "Bad suppress-redirect-prefix: $redir_prefix";
-      }
-      my $from_prefix = $1;
-      my $to_prefix = $2;
-      my $from_prefix_len = length($from_prefix);
-      my $to_prefix_len = length($to_prefix);
-      if (($from eq $from_prefix) && ($to eq $to_prefix)) {
-        $prefix_match = 1;
-        last;
-      } elsif (($from_prefix_len < $from_len)
-                 && ($to_prefix_len < $to_len)
-                 && ($from_prefix eq substr($from, 0, $from_prefix_len))
-                 && ($to_prefix eq substr($to, 0, $to_prefix_len))
-                 && (substr($from, $from_prefix_len) eq substr($to, $to_prefix_len))) {
-        $prefix_match = 1;
-        last;
-      }
-    }
-    if ($prefix_match) {
-      # print STDERR "A SUPPRESSED REDIRECT:\n  $from\n  $to\n";
-      next;
-    }
+    $match = grep { $from_to =~ /$_/ } @{$Opts{Suppress_Redirect_Regexp}};
+    # print STDERR "Result $match of regexp checking $from_to\n";
+    if ($match) { next; }
 
     $redirects->{$prev->request()->url()} = $response->request()->url();
   }
