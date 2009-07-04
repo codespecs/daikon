@@ -66,7 +66,9 @@
 --suppress-redirect http://www.amtrak.com/->http://www.amtrak.com/servlet/ContentServer?pagename=Amtrak/HomePage
 --suppress-redirect http://www.aro.ncren.net/->http://www.arl.army.mil/main/main/default.cfm?Action=29&Page=29	
 --suppress-redirect http://www.computer.org/tse/->http://www.computer.org/portal/site/transactions/index.jsp?pageID=tse_home/
+--suppress-redirect http://www.computer.org/tse/->http://www2.computer.org/portal/web/tse/
 --suppress-redirect http://www.cs.cmu.edu/~dpelleg/kmeans.html->http://www-2.cs.cmu.edu/~dpelleg/kmeans.html
+--suppress-redirect http://www.cs.ucl.ac.uk/icse07/->http://web4.cs.ucl.ac.uk/icse07/	
 --suppress-redirect http://www.cs.utexas.edu/->http://www.cs.utexas.edu/home/department/welcome.html
 --suppress-redirect http://www.csail.mit.edu/->http://www.csail.mit.edu/index.php
 --suppress-redirect http://www.dexonline.com/->http://www.dexonline.com/displayhome.ds
@@ -82,6 +84,7 @@
 --suppress-redirect http://www.rational.com/licensing/->http://www-306.ibm.com/software/rational/support/licensing/
 --suppress-redirect http://www.usps.gov/ncsc/lookups/lookup_zip%2B4.html->http://www.usps.com/ncsc/lookups/lookup_zip%2b4.html	
 --suppress-redirect https://tree-api.dev.java.net/->https://www.dev.java.net/servlets/Login?cookieCheck=failed
+--suppress-redirect-prefix http://doi.ieeecomputersociety.org/->http://www2.computer.org/portal/web/csdl/doi/	
 --suppress-redirect-prefix http://pag.csail.mit.edu/->http://groups.csail.mit.edu/pag/
 --suppress-redirect-prefix http://pag.csail.mit.edu/->http://www.pag.csail.mit.edu/
 --suppress-redirect-prefix http://pag.csail.mit.edu/~->http://people.csail.mit.edu/
