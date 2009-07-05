@@ -128,6 +128,9 @@ public final class FileIO {
   /** True if declaration records are in the new format **/
   public static /*@LazyNonNull*/ Boolean new_decl_format = null;
 
+    /** Input language as read from the declaration file**/
+    public static String input_lang = null;
+
   /// Variables
 
   // This hashmap maps every program point to an array, which contains the
@@ -265,7 +268,530 @@ public final class FileIO {
       read_data_trace_file(filename.toString(), all_ppts, processor, true,
                            true);
     }
+  }
 
+    /** Writes every declaration string as one byte length and
+        a byte sequence of characters.
+        Records a byte -1 to denote the end of the declaration. **/
+    public static void write_binaryDeclaration( PrintWriter declWriter,
+						DataOutputStream binWriter, ParseState state ) {
+
+      echoMsg( declWriter, "" );
+      int index = 0;
+      List<String> identifiers = new ArrayList<String>( );
+
+      PptTopLevel ppt = state.ppt;
+      String pptName = ppt.ppt_name.getName( );
+      identifiers.add( "ppt" );
+      identifiers.add( pptName );
+
+      if ( !pptNamesMap.containsKey( pptName ) ) {
+        pptNamesIndex++;
+        pptNamesMap.put( pptName, pptNamesIndex );
+      }
+      identifiers.add( "ppt-type" );
+      identifiers.add( ppt.type.toString( ).toLowerCase( ) );
+
+      declWriter.println( "ppt " +  ppt.ppt_name.name( ).replaceAll( " ", "\\\\_" ) );
+      declWriter.println( "ppt-type " + ppt.type.toString( ).toLowerCase( ) );
+
+      if ( !ppt.flags.isEmpty( ) ) {
+        String fls = "";
+        identifiers.add( "flags" );
+        identifiers.add( "" + ppt.flags.size( ) );
+
+        for ( PptFlags flag : ppt.flags ) {
+          identifiers.add( flag.toString( ).toLowerCase( ) );
+          fls += flag.toString( ).toLowerCase( ) + " ";
+        }
+        declWriter.println( "flags " + fls.trim( ) );
+      }
+
+      if ( ppt.parent_relations != null ) {
+
+        for ( ParentRelation pr : ppt.parent_relations ) {
+          if ( pr != null ) {
+            identifiers.add( "parent" );
+
+            String rts = pr.rel_type.toString( );
+            identifiers.add( rts.toLowerCase( ) );
+
+            identifiers.add( pr.parent_ppt_name );
+            identifiers.add( Integer.toString( pr.id ) );
+
+            declWriter.println( "parent " + rts.toLowerCase( )
+                                + " " + pr.parent_ppt_name + " " + pr.id );
+          }
+        }
+      }
+
+      if ( ppt.ppt_successors != null ) {
+        if ( !ppt.ppt_successors.isEmpty( ) ) {
+          identifiers.add( "ppt-successors" );
+          identifiers.add( Integer.toString( ppt.ppt_successors.size( ) ) );
+        }
+
+        for ( String sc : ppt.ppt_successors ) {
+          if ( sc != null ) {
+            declWriter.print( " " + sc );
+            identifiers.add( sc );
+          }
+        }
+        declWriter.println( );
+      }
+
+      if ( ppt.function_id != null ) {
+        identifiers.add( "ppt-func" );
+        identifiers.add( ppt.function_id );
+
+        declWriter.println( "ppt-func " + ppt.function_id );
+      }
+
+      if ( ppt.bb_length != 0 ) {
+        identifiers.add( "ppt-length" );
+        identifiers.add( Integer.toString( ppt.bb_length ) );
+
+        declWriter.println( "ppt-length " + ppt.bb_length );
+      }
+
+      VarInfo [] varInfos = ppt.var_infos;
+      for ( int i = 0; i < varInfos.length; i++ ) {
+
+        VarDefinition vardef = varInfos[i].vardef;
+
+        // don't include orig( ) variables
+        if ( vardef != null && !varInfos[i].isPrestate( ) ) {
+
+          identifiers.add( "variable" );
+          identifiers.add( vardef.name );
+          declWriter.println( "  variable " + vardef.name );
+
+          String kind = vardef.kind.toString( );
+          String relname = "";
+          boolean isRelname = false;
+
+          if ( vardef.relative_name != null ) {
+            isRelname = true;
+            relname = vardef.relative_name;
+          }
+          declWriter.println( "    var-kind " + kind.toLowerCase( ) + " " + relname );
+          identifiers.add( "var-kind" );
+          identifiers.add( kind.toLowerCase( ) );
+          identifiers.add( Boolean.toString( isRelname ) );
+
+          if ( isRelname ) {
+            identifiers.add( relname );
+          }
+
+          if ( vardef.enclosing_var != null ) {
+            identifiers.add(  "enclosing-var" );
+            identifiers.add( vardef.enclosing_var );
+            declWriter.println( "    enclosing-var " + vardef.enclosing_var );
+          }
+
+          if ( vardef.arr_dims != 0  ) {
+            identifiers.add(  "array");
+            identifiers.add( Integer.toString( vardef.arr_dims ) );
+            declWriter.println( "    array" + " " + vardef.arr_dims );
+          }
+
+          declWriter.println( "    dec-type " + vardef.declared_type );
+          declWriter.println( "    rep-type " + vardef.rep_type );
+
+          identifiers.add( "dec-type" );
+          identifiers.add( vardef.declared_type.toString( ) );
+
+          identifiers.add( "rep-type" );
+          identifiers.add( vardef.rep_type.toString( ) );
+
+          if ( vardef.static_constant_value != null ) {
+            identifiers.add( "constant" );
+            identifiers.add( vardef.static_constant_value.toString( ) );
+            declWriter.println( "    constant " + vardef.static_constant_value );
+          }
+
+          String fls = "";
+          if ( !vardef.flags.isEmpty( ) ) {
+            identifiers.add( "flags" );
+            identifiers.add( Integer.toString( vardef.flags.size( ) ) );
+
+            for ( VarFlags flag : vardef.flags ) {
+              fls += flag.toString( ) + " ";
+              identifiers.add( flag.toString( ).toLowerCase( ) );
+            }
+            if ( !fls.equals("") ) {
+              declWriter.println( "    flags " + fls.toLowerCase( ).trim( ) );
+            }
+          }
+
+          fls = "";
+          if ( !vardef.lang_flags.isEmpty( ) ) {
+            identifiers.add(  "lang-flags" );
+            identifiers.add( Integer.toString( vardef.lang_flags.size( ) ) );
+
+            for ( LangFlags langflag : vardef.lang_flags ) {
+              fls += langflag.toString( ) + " ";
+              identifiers.add( langflag.toString( ).toLowerCase( ) );
+            }
+            if ( !fls.equals("") ) {
+              declWriter.println( "    lang-flags " + fls.toLowerCase( ).trim( ) );
+            }
+          }
+
+          identifiers.add( "comparability" );
+          identifiers.add( "22" );
+          declWriter.println( "    comparability " +  22 );
+
+          if ( vardef.parent_ppt != null ) {
+            identifiers.add( "parent" );
+            identifiers.add( vardef.parent_ppt );
+            identifiers.add( "" + vardef.parent_relation_id );
+
+            if ( vardef.parent_variable != null ) {
+              identifiers.add( vardef.parent_variable );
+            }
+            else {
+              identifiers.add( "null" );
+            }
+            declWriter.println( "    parent " + vardef.parent_ppt + " " + vardef.parent_relation_id );
+          }
+        }
+      }
+      try {
+        for ( String binIdent : identifiers ) {
+          binWriter.writeByte( binIdent.length( ) );
+          binWriter.writeBytes( binIdent );
+        }
+        binWriter.writeByte( -1 );
+
+      } catch ( IOException e ) {
+          e.printStackTrace( System.out );
+      }
+    }
+
+    // Reads from the binary file the specified number of records
+    // The method is used for reading declarations from a binary file
+    public static String [] get_binaryRecords( DataInputStream binReader, int records )
+    throws IOException {
+
+      int strLen;
+      byte buf [];
+      String readRecords [] = new String [records];
+      int i = 0;
+
+      while ( records > 0 ) {
+	strLen = binReader.readByte( ); // gets the length of the string
+        buf = new byte [strLen];
+        binReader.read( buf, 0, strLen ); // gets the string
+        readRecords[i++] = new String( buf ); // platform charset dependant
+        records--;
+      }
+      return readRecords;
+    }
+
+    // Integer key, String value
+    static Map<Integer, String> pptDeclMap = new HashMap<Integer, String>( );
+    static int pptDeclIndex = 0;
+    // Vardef_names of all variable (included and excluded)
+    static Vector<String> allVars = new Vector<String>( );
+
+    // Reads a binary declaration
+    // "ppt" string has already been read
+    // -1 denotes the end of a declaration block in a binary file
+    public static PptTopLevel read_binaryDeclaration( DataInputStream binReader,
+						      ParseState state, PrintWriter pWriter )
+	throws IOException {
+
+	int strLen = binReader.readByte( ); // gets the length of the string
+	byte [] buf = new byte [strLen];
+	binReader.read( buf, 0, strLen ); // gets the string
+	String s_ppt_name = new String( buf );
+
+	// registers the name, so that it is referred to by its integer index
+	// in the corresponding data samples
+	if ( !pptDeclMap.containsValue( s_ppt_name ) ) {
+	  pptDeclIndex++;
+          pptDeclMap.put( pptDeclIndex, s_ppt_name );
+	}
+
+	String msg = "\nppt " + s_ppt_name.replaceAll( " ", "\\\\_" );
+	if ( bin2ascii_dbg )
+	  msg += " hashKey = "  + pptDeclIndex;
+	echoMsg( pWriter, msg );
+
+	// Information that will populate the new program point
+	Map<String,VarDefinition> varmap
+	    = new LinkedHashMap<String,VarDefinition>();
+
+	VarDefinition vardef = null;
+	List<ParentRelation> ppt_parents = new ArrayList<ParentRelation>();
+	EnumSet<PptFlags> ppt_flags = EnumSet.noneOf (PptFlags.class);
+	PptType ppt_type = PptType.POINT;
+	List<String> ppt_successors = null;
+	/*@Interned*/ String function_id = null;
+	int bb_length = 0;
+
+	// while the end of the declaration hasn't been reached
+	while ( ( strLen = binReader.readByte( ) ) != -1 ) {
+
+	  buf = new byte [strLen];
+          binReader.read( buf, 0, strLen );
+          String record = new String( buf );
+
+          if ( vardef == null ) {
+            if ( record.equals( "parent") ) {
+
+              // attr[0] = parent_relation
+              // attr[1] = parent_name
+              // attr[2] = parent_id
+              String p_attributes [] = get_binaryRecords( binReader, 3 );
+              String line = "";
+
+              line = p_attributes[0] + " " + p_attributes[1] + " " + p_attributes[2];
+
+              Scanner scanner = new Scanner( line + "\n" );
+              ppt_parents.add( parse_ppt_parent( state, scanner ) );
+              echoMsg( pWriter, record + " " + line );
+
+            } else if ( record.equals( "flags" ) ) {
+                String flg_num [] = get_binaryRecords( binReader, 1 );
+                String flags [] = get_binaryRecords( binReader, Integer.valueOf( flg_num[0] ) );
+
+                String line = "";
+                for ( int j = 0; j < flags.length; j++ ) {
+                    line += flags[j] + " ";
+                }
+
+                Scanner scanner = new Scanner( line.trim( ) + "\n" );
+                parse_ppt_flags( state, scanner, ppt_flags );
+                echoMsg( pWriter, (record + " " + line) );
+
+		} else if ( record.equals( "variable" ) ) {
+                    //vd_attr[0] = vardef_name
+		    String vd_attr [] = get_binaryRecords( binReader, 1 );
+
+		    Scanner scanner = new Scanner( vd_attr[0] + "\n" );
+		    vardef = new VarDefinition( state, scanner );
+
+		    if (var_included (vardef.name)) {
+		      varmap.put ( vardef.name, vardef );
+		      allVars.add( vardef.name );
+		    }
+		    else {
+		      allVars.add( vardef.name );
+		    }
+		    echoMsg( pWriter, ("  " + record + " " + vardef.name) );
+
+		} else if ( record.equals( "ppt-type" ) ) {
+		    //type_attr[0] = ppt_type string
+		    String type_attr [] = get_binaryRecords( binReader, 1 );
+
+		    Scanner scanner = new Scanner( type_attr[0] + "\n" );
+		    ppt_type = parse_ppt_type ( state, scanner );
+		    echoMsg( pWriter, (record + " " + type_attr[0]) );
+
+		} else if ( record.equals( "ppt-successors" ) ) {
+		    String succ_num [] = get_binaryRecords( binReader, 1 );
+		    String successors [] = get_binaryRecords( binReader, Integer.valueOf( succ_num[0] ) );
+
+		    String line = "";
+		    for ( int j = 0; j < successors.length; j++ ) {
+		      line += successors[j] + " ";
+		    }
+
+		    Scanner scanner = new Scanner( line.trim( ) + "\n" );
+		    ppt_successors = parse_ppt_successors (state, scanner);
+
+		    echoMsg( pWriter, (record + " " + line.trim()) );
+
+		} else if ( record.equals( "ppt-func" ) ) {
+		    String f_attr [] = get_binaryRecords( binReader, 1 );
+		    function_id = f_attr[0];
+		    echoMsg( pWriter, (record + " " + function_id) );
+
+		} else if ( record.equals( "ppt-length" ) ) {
+		    String length_attr [] = get_binaryRecords( binReader, 1 );
+		    bb_length = Integer.valueOf( length_attr[0] );
+		    echoMsg( pWriter, (record + " " + bb_length) );
+
+		} else {
+		    decl_error (state, "record '%s' found where %s expected", record,
+				"'parent', 'flags', 'ppt-length', 'ppt-func'"
+				+ " or 'ppt-successors'");
+		}
+	    }
+	    else { // there must be a current variable
+		if ( record.equals( "var-kind" ) ) {
+		  String kind_attr [] = get_binaryRecords( binReader, 2 );
+                  String var_kind = kind_attr[0];
+                  String isRelname = kind_attr[1];
+
+                  String relname = "";
+                  if ( isRelname.equals( "true" ) ) {
+                    String relname_attr [] = get_binaryRecords( binReader, 1 );
+                    relname = relname_attr[0];
+                  }
+
+                  Scanner scanner = new Scanner( var_kind + " " + relname + "\n" );
+                  vardef.parse_var_kind (scanner);
+                  echoMsg( pWriter, ("    " + record + " " + var_kind + " " + relname) );
+
+		} else if ( record.equals( "enclosing-var" ) ) {
+		    String enclVar_attr [] = get_binaryRecords( binReader, 1 );
+		    vardef.enclosing_var = enclVar_attr[0];
+		    echoMsg( pWriter, ("    " + record + " " + vardef.enclosing_var) );
+
+		} else if ( record.equals( "reference-type" ) ) {
+		    String refType_attr [] = get_binaryRecords( binReader, 1 );
+		    String ref_type = refType_attr[0];
+
+		    Scanner scanner = new Scanner( ref_type + "\n" );
+		    vardef.parse_reference_type (scanner);
+		    echoMsg( pWriter, ("    " + record + " " + ref_type) );
+
+		} else if ( record.equals( "array" ) ) {
+		    String arr_attr [] = get_binaryRecords( binReader, 1 );
+		    String arr_dim = arr_attr[0];
+
+		    Scanner scanner = new Scanner( arr_dim );
+		    vardef.parse_array (scanner);
+		    echoMsg( pWriter, ("    " + record + " " + arr_dim) );
+
+		} else if ( record.equals( "rep-type" ) ) {
+		    String rep_type [] = get_binaryRecords( binReader, 1 );
+
+		    Scanner scanner = new Scanner( rep_type[0] + "\n" );
+		    vardef.parse_rep_type (scanner);
+		    echoMsg( pWriter, ("    " + record + " " + rep_type[0]) );
+
+		} else if ( record.equals( "dec-type" ) ) {
+		    String dec_type [] = get_binaryRecords( binReader, 1 );
+
+		    Scanner scanner = new Scanner( dec_type[0] + "\n" );
+		    vardef.parse_dec_type (scanner);
+		    echoMsg( pWriter, ("    " + record + " " + dec_type[0]) );
+
+		} else if ( record.equals( "flags") ) {
+		    String flg_num [] = get_binaryRecords( binReader, 1 );
+		    String flags [] = get_binaryRecords( binReader, Integer.valueOf( flg_num[0] ) );
+
+		    String line = "";
+		    for ( int j = 0; j < flags.length; j++ ) {
+			line += flags[j] + " ";
+		    }
+		    Scanner scanner = new Scanner( line.trim() + "\n" );
+		    vardef.parse_flags (scanner);
+		    echoMsg( pWriter, ("    " + record + " " + line.trim()) );
+
+		} else if ( record.equals( "lang-flags" ) ) {
+		    String flg_num [] = get_binaryRecords( binReader, 1 );
+		    String lang_flags [] = get_binaryRecords( binReader, Integer.valueOf( flg_num[0] ) );
+
+		    String line = "";
+		    for ( int j = 0; j < lang_flags.length; j++ ) {
+			line += lang_flags[j] + " ";
+		    }
+		    Scanner scanner = new Scanner( line.trim( ) + "\n" );
+		    vardef.parse_lang_flags (scanner);
+		    echoMsg( pWriter, ("    " + record + " " + line.trim()) );
+
+		} else if ( record.equals( "parent" ) ) {
+		    // attr[0] = parent_ppt
+		    // attr[1] = parent_rel_id
+		    // attr[2] = parent_var
+		    String p_attr [] = get_binaryRecords( binReader, 3 );
+		    String line = "";
+
+		    if ( p_attr[2].equals( "null" ) )
+		      p_attr[2] = "";
+
+		    line = p_attr[0] + " " + p_attr[1] + " " + p_attr[2];
+		    Scanner scanner = new Scanner( line + "\n" );
+		    vardef.parse_parent (scanner, ppt_parents);
+		    echoMsg( pWriter, ("    " + record + " " + line.trim()) );
+
+		} else if ( record.equals( "comparability" ) ) {
+		    String comp_attr [] = get_binaryRecords( binReader, 1 );
+
+		    Scanner scanner = new Scanner( comp_attr[0] + "\n" );
+		    vardef.parse_comparability (scanner);
+		    echoMsg( pWriter, ("    " + record + " " + comp_attr[0]) );
+
+		} else if ( record.equals( "constant") ) {
+		    String const_attr [] = get_binaryRecords( binReader, 1 );
+		    String constant = const_attr[0];
+
+		    Scanner scanner = new Scanner( constant + "\n" );
+		    vardef.parse_constant (scanner);
+		    echoMsg( pWriter, ("    " + record + " " + constant) );
+
+		} else if ( record.equals( "variable" ) ) {
+		    String vd_attr [] = get_binaryRecords( binReader, 1 );
+
+		    Scanner scanner = new Scanner( vd_attr[0] + "\n" );
+		    vardef = new VarDefinition (state, scanner);
+
+		    if (varmap.containsKey (vardef.name))
+		      decl_error (state, "var %s declared twice", vardef.name);
+
+		    if (var_included (vardef.name)) {
+		      varmap.put (vardef.name, vardef);
+                      allVars.add( vardef.name );
+		    }
+		    else {
+		      allVars.add( vardef.name );
+		    }
+		    echoMsg( pWriter, ("  " + record + " " + vd_attr[0]) );
+
+		} else {
+		    decl_error (state, "Unexpected variable item '%s' found", record);
+		}
+	    }
+	}
+
+	// If we are excluding this ppt, just read the data and throw it away
+	if (!ppt_included ( s_ppt_name)) {
+	  omitted_declarations++;
+          return null;
+	}
+
+	// Build the var infos from the var definitions.
+	VarInfo[] vi_array = new VarInfo[varmap.size()];
+	int ii = 0;
+	for (VarDefinition vd : varmap.values()) {
+	  vi_array[ii++] = new VarInfo (vd);
+	}
+
+	// Check to see if the program point is new
+	if ( state.all_ppts.containsName( s_ppt_name ) ) {
+	  if (state.ppts_are_new) {
+            PptTopLevel existing_ppt = state.all_ppts.get( s_ppt_name );
+            check_decl_match (state, existing_ppt, vi_array);
+          } else { // ppts are already in the map
+              return state.all_ppts.get ( s_ppt_name );
+          }
+	}
+
+	// Build the program point
+	PptTopLevel newppt = new PptTopLevel( s_ppt_name, ppt_type, ppt_parents,
+					     ppt_flags, ppt_successors, function_id, bb_length, vi_array );
+
+	// Add this ppt to the list of ppts for this function_id.  If we
+	// are still getting ppts for this function id, they should not have
+	// been yet combined
+	if (function_id != null) {
+	  System.out.printf ("Declaration of ppt %s with %d variables\n",
+			       newppt.name(), newppt.var_infos.length);
+          List<PptTopLevel> f_ppts = func_ppts.get (function_id);
+          if (f_ppts == null) {
+            f_ppts = new ArrayList<PptTopLevel>();
+            func_ppts.put (function_id, f_ppts);
+          }
+          for (PptTopLevel ppt : f_ppts)
+            assert !ppt.combined_ppts_init : ppt.name();
+          f_ppts.add (newppt);
+	}
+	return newppt;
   }
 
   /**
@@ -792,9 +1318,26 @@ public final class FileIO {
     return result.toString();
   }
 
+  // Pre: the string "List Implementors" has been read
+  // Interspersed comments aren't supported
+  private static void read_binary_list_implementors ( DataInputStream binReader )
+    throws IOException {
+    // Each line following is the name (in JVM form) of a class
+    // that implements java.util.List.
+     int list_size = binReader.readByte( );
 
+    while( list_size > 0 ) {
+      list_size--;
 
+      int strLen = binReader.readByte( );
+      byte [] buf = new byte [strLen];
 
+      binReader.read( buf, 0, strLen );
+      String impl = new String( buf );
+
+      ProglangType.list_implementors.add( impl );
+    }
+  }
 
 
   ///////////////////////////////////////////////////////////////////////////
@@ -1129,6 +1672,9 @@ public final class FileIO {
     /** True if the current file is a declaration file. **/
     public boolean is_decl_file;
 
+    /** True if the current file is a binary file. **/
+      public boolean is_bin_file;
+
     /** True if ppts may be new.  If a duplicate is seen, it must match
      * a previous point exactly.  If false, the previous ppt is used without
      * checking for a match.
@@ -1140,6 +1686,9 @@ public final class FileIO {
 
     /** Input stream **/
     public LineNumberReader reader;
+
+      /** Binary input stream **/
+    public DataInputStream binReader;
 
     /** Total number of lines in the input file **/
     public long total_lines;
@@ -1170,7 +1719,7 @@ public final class FileIO {
     public /*@Nullable*/ ValueTuple vt;
 
     /** Miscellaneous text in the parsed item **/
-    public Object payload;      // used when state=COMMENT
+    public String payload;      // used when state=COMMENT
 
 
     /** Start parsing the given file. */
@@ -1195,10 +1744,12 @@ public final class FileIO {
       boolean is_url = raw_filename.startsWith ("file:")
         || raw_filename.startsWith ("jar:");
 
+      is_bin_file = ( filename.indexOf( "dat" ) != -1 );
+
       // Do we need to count the lines in the file?
       total_lines = 0;
       boolean count_lines = dkconfig_count_lines;
-      if (is_decl_file) {
+      if (is_decl_file || is_bin_file ) {
         count_lines = false;
       } else if (dkconfig_dtrace_line_count != 0) {
         total_lines = dkconfig_dtrace_line_count;
@@ -1242,6 +1793,15 @@ public final class FileIO {
         } else {
           reader = new LineNumberReader (new InputStreamReader (stream));
         }
+      } else if ( is_bin_file ) {
+          if ( raw_filename.endsWith (".gz") ) {
+            // binReader is an output stream and could be casted to
+            // GZIP or Data stream accordingly
+            // not supported yet
+            //binReader = new GZIPInputStream( new FileInputStream( filename ) );
+          }
+          else
+            binReader = new DataInputStream( new FileInputStream( filename ) );
       } else {
         reader = UtilMDE.lineNumberFileReader(raw_filename);
       }
@@ -1343,12 +1903,22 @@ public final class FileIO {
 
     // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
-      Global.dtraceWriter
-             = new PrintWriter(new FileWriter(new File(filename + ".debug")));
+	Global.dtraceWriter
+	  = new PrintWriter(new FileWriter(new File(filename + ".debug")));
     }
 
+    PrintWriter pWriter = null;
+    if ( data_trace_state.is_bin_file )
+	pWriter = null; //new PrintWriter( new FileWriter( new File( filename + ".dtrace" ) ), true );
+
     while (true) {
-      read_data_trace_record (data_trace_state);
+      assert data_trace_state != null;    // for nullness checker
+      if ( data_trace_state.is_bin_file ) {
+	read_binary_data_trace_record( data_trace_state, pWriter );
+      }
+      else
+	read_data_trace_record (data_trace_state);
+
       if (data_trace_state.status == ParseStatus.SAMPLE) {
         assert data_trace_state.ppt != null; // nullness: dependent type
         assert data_trace_state.vt != null; // nullness: dependent type
@@ -1362,7 +1932,7 @@ public final class FileIO {
                                     data_trace_state.nonce);
         } catch (Error e) {
           if (! dkconfig_continue_after_file_exception) {
-            throw new Daikon.TerminationMessage (e, data_trace_state);
+            throw new Daikon.TerminationMessage (e.toString(), data_trace_state);
           } else {
             System.out.println ();
             System.out.println ("WARNING: Error while processing "
@@ -1414,13 +1984,14 @@ public final class FileIO {
     throws IOException {
 
     @SuppressWarnings("interning")
-    boolean stateOK = (state == FileIO.data_trace_state);
-    assert stateOK;
+        //boolean stateOK = ( state == FileIO.data_trace_state );
+        //assert stateOK;
 
     LineNumberReader reader = state.reader;
 
     for (String line = reader.readLine(); line != null;
          line = reader.readLine()) {
+
       if (line.equals("")) {
         continue;
       }
@@ -1632,6 +2203,563 @@ public final class FileIO {
 
     state.status = ParseStatus.EOF;
     return;
+  }
+
+  public static void echoMsg( PrintWriter pWriter, String message ) {
+    if ( pWriter != null ) {
+      pWriter.println( message );
+    }
+  }
+
+    // Read a single binary record (declaration or sample) from a binary dtrace file.
+    // pWriter( test print writer ): writes all the information written in binary
+    // as human readable text
+    // ParseStatus.TRUNCATED is assumed when the end of the file is reached,
+    // when data is expected
+    // Each record, read by the method has a byte length
+    public static void read_binary_data_trace_record( ParseState state, PrintWriter pWriter )
+      throws IOException {
+
+      DataInputStream binReader = state.binReader;
+
+      try {
+        while ( true ) {
+          int strLen = 0;
+          try {
+            strLen = binReader.readByte( );
+          }
+          // Only EOFException caught at the beginning of the loop
+          // indicates ParseStatus.EOF
+          catch ( EOFException e ) {
+            state.status = ParseStatus.EOF;
+            return;
+          }
+
+          try {
+            // get the first (word) record from the file
+            byte [] buf = new byte [strLen];
+            binReader.read( buf, 0, strLen );
+
+            String record = new String( buf );
+
+            // Parse comments
+            if ( record.equals( "//" ) || record.equals( "#" ) ) {
+              int comLen = binReader.readInt( ); // gets the length of the string
+              byte comBuf [] = new byte [comLen];
+              binReader.read( comBuf, 0, comLen ); // gets the string
+              String comment = new String( comBuf );
+
+              if ( comment.startsWith( "#" ) ) {
+                comment = "\n\n" + comment;
+                echoMsg( pWriter, comment );
+              }
+              else
+                echoMsg( pWriter, comment + "\n" );
+
+              state.status = ParseStatus.COMMENT;
+              return;
+            }
+            // First look for declarations
+            if ( record.equals( "ppt" ) ) {
+              if ( new_decl_format ) {
+                state.ppt = read_binaryDeclaration( binReader, state, pWriter );
+              }
+              else
+                state.ppt = read_declaration( state );
+              // ppt can be null if this declaration was skipped because of
+              // --ppt-select-pattern or --ppt-omit-pattern.
+              if ( state.ppt != null ) {
+                if ( !state.all_ppts.containsName (state.ppt.name()) ) {
+                  state.all_ppts.add( state.ppt );
+                  try {
+                    Daikon.init_ppt( state.ppt, state.all_ppts );
+                  } catch (Exception e) {
+                    decl_error (state, "unexpected error: %s", e);
+                  }
+                }
+              }
+              state.status = ParseStatus.DECL;
+              return;
+            }
+            if ( record.equals( "var-comparability" ) ) {
+
+              String comp [] = get_binaryRecords( binReader, 1 );
+              String line = record + " " + comp[0] + "\n";
+
+              state.varcomp_format = read_var_comparability ( state, line );
+              state.status = ParseStatus.COMPARABILITY;
+              echoMsg( pWriter, (record + " " + comp[0]) );
+              return;
+            }
+            if ( record.equals( "input-language" ) ) {
+
+              String input_lang [] = get_binaryRecords( binReader, 1 );
+              String line = record + " " + input_lang[0] + "\n";
+
+              read_input_language ( state, line );
+              state.status = ParseStatus.INPUT_LANGUAGE;
+              echoMsg( pWriter, (record + " " + input_lang[0]) );
+              return;
+            }
+            if ( record.equals( "decl-version" ) ) {
+
+              String version [] = get_binaryRecords( binReader, 1 );
+              String line = record + " " + version[0] + "\n";
+
+              read_decl_version( state, line );
+              state.status = ParseStatus.DECL_VERSION;
+              echoMsg( pWriter, (record + " " + version[0]) );
+              return;
+            }
+            if ( record.equals( "ListImplementors" ) ) {
+              read_binary_list_implementors ( binReader );
+              state.status = ParseStatus.LIST_IMPLEMENTORS;
+              return;
+            }
+            // we got a program point
+            // The binary file contains indexes instead of full ppt_names
+            String ppt_name = pptDeclMap.get( new Integer( record ) );
+            if ( ppt_name == null) {
+              throw new Daikon.TerminationMessage( "read_binary_data_trace_record() " +
+                                                   " not found ppt_name in file " + state.filename );
+            }
+            echoMsg( pWriter, "" );
+            String msg = ppt_name;
+
+            if ( bin2ascii_dbg )
+              msg += " " + record;
+            echoMsg( pWriter, msg );
+
+            // If we got here, we're looking at a sample and not a declaration.
+            // Start processing the data sample
+            // Parse the ppt name
+            try {
+              new PptName( ppt_name );
+            } catch (Throwable t) {
+              if ( t instanceof Daikon.TerminationMessage )
+                throw new Daikon.TerminationMessage ( "%s: in %s ",
+								  t.getMessage(), state.filename );
+              else
+                throw new Daikon.TerminationMessage
+                    ( String.format ( "Illegal program point name '%s' (%s) in %s ",
+                                      ppt_name, t.getMessage(), state.filename ) );
+            }
+
+            if ( state.all_ppts.size() == 0 ) {
+              throw new Daikon.TerminationMessage("No declarations were provided before the first sample. " +
+                                                  "Perhaps you did not supply the proper .decls file to Daikon. " +
+                                                  "(Or, there could be a bug in the front end that created the .dtrace file "
+                                                  + state.filename
+                                                  + ".)");
+            }
+
+            PptTopLevel ppt = state.all_ppts.get( ppt_name );
+            if ( ppt == null ) {
+              throw new Daikon.TerminationMessage( "No declaration was provided for program point " + ppt_name
+                                                   + " which appears in binary dtrace file " + state.filename );
+            }
+
+            // not vis.length, as that includes constants, derived variables, etc.
+            // Actually, we do want to leave space for _orig vars.
+            // And for the time being (and possibly forever), for derived variables.
+            int num_tracevars = ppt.num_tracevars;
+            int vals_array_size = ppt.var_infos.length - ppt.num_static_constant_vars;
+
+            // Read an invocation nonce if one exists
+            Integer nonce = null;
+            int nonce_maybe;
+            try {
+              nonce_maybe = binReader.readInt( );
+            } catch ( IOException e ) {
+              nonce_maybe = 0;
+            }
+
+            echoMsg( pWriter, ("this_invocation_nonce\n" + nonce_maybe) );
+            nonce = new Integer( nonce_maybe );
+
+            if (Global.debugPrintDtrace) {
+                to_write_nonce = true;
+                nonce_value = nonce.toString();
+            }
+
+            Object[] vals = new Object[vals_array_size];
+            int[] mods = new int[vals_array_size];
+
+            // Read a single record from the trace file;
+            // fills up vals array by side effect.
+            read_vals_from_binary_dtrace_file( binReader, state.filename,
+                                               ppt, vals, mods, pWriter );
+
+            if ( ppt_included( ppt_name ) ) {
+              state.ppt = ppt;
+              state.nonce = nonce;
+              state.vt = new ValueTuple( vals, mods );
+              state.status = ParseStatus.SAMPLE;
+              return;
+            }
+            else
+              continue;
+
+          } catch ( EOFException e ) {
+            state.status = ParseStatus.TRUNCATED;
+            return;
+          }
+        }
+
+      } catch ( IOException e ) {
+        e.printStackTrace( System.out );
+      }
+      return;
+    }
+
+
+    // Returns an array of bytes, where the mod bits are stored
+    // for example, an int mods array =  { 1, 0, 1, 0, 0, 1, 1, 1, 0, 0, 0, 0, 0, 0, 1, 1, 1, 0, 1, 0, 0, 0 }
+    // with length of 22 will be represented as an array of 3 bytes (i.e. 24 bits)
+    // byteBuf[0] = LSB 10100111 MSB
+    // byteBuf[1] = LSB 00000011 MSB
+    // byteBuf[2] = LSB 10100011 MSB, where the last two bits (two extra 1s) are added to form a byte
+    // MISSING_NONSENSICAL is recorded as 0s
+    private static byte [] get_modBits( int mods [] ) {
+
+	int arrLen = mods.length;
+	int bits;
+
+	if ( ( bits = arrLen%8 ) != 0 ) {
+	    arrLen += 8 - bits;
+	}
+
+	byte ext_mods [] = new byte [arrLen];
+	int i = 0;
+	for ( ; i < mods.length; i++ ) {
+
+	  if ( mods[i] == ValueTuple.MISSING_NONSENSICAL )
+	      ext_mods[i] = 1;
+	  else
+	      ext_mods[i] = 0;
+	}
+
+	while ( i < arrLen )
+	    ext_mods[i++] = 0;
+
+	int bufLen = arrLen/8;
+	byte buf [] = new byte [bufLen];
+	byte masks [] = { (byte)0xfe, (byte)0xfd, (byte)0xfb, (byte)0xf7, (byte)0xef, (byte)0xdf, (byte)0xbf, (byte)0x7f };
+
+	for ( int k = 0; k < arrLen ; k += 8 ) {
+	    int j = k/8;
+	    buf[j] = ( byte )0xff;
+	    for ( int l = 0; l < 8; l++ ) {
+		byte val = ( byte ) ( ( byte )( ~ext_mods[k+l] ) << l );
+		val |= masks[l];
+		buf[j] &= val;
+	    }
+        }
+
+	return buf;
+    }
+
+    // Returns a buffer containing the individual bits of the byte array
+    private static StringBuffer recordBits( byte mod_bits [] ) {
+	int len = mod_bits.length;
+	byte bits [] = new byte [len];
+	System.arraycopy( mod_bits, 0, bits, 0, len );
+	byte mask = 1;
+        StringBuffer str_buf = new StringBuffer( 8 * bits.length );
+
+        for ( int i = 0; i < bits.length; i++ ) {
+            for ( int j = 0; j < 8; j++ ) {
+                str_buf.append( ( bits[i] & mask ) == 0 ? '0' : '1' );
+                bits[i] >>= 1;
+            }
+        }
+	return str_buf;
+    }
+
+    static Map<String, Integer> pptNamesMap = new HashMap<String, Integer>( );
+    static int pptNamesIndex = 0;
+    static boolean bin2ascii_dbg = false;
+
+   /**
+    * Converts a dtrace file sample into binary data as follows:
+    * Records the ppt_name as an integer index (these indexes are hashed by ppt_names)
+    * The integer index is recorded as one byte length, followed by a sequence of bytes
+    * (i.e. index 23 occupies 3 bytes: 1 byte length (length=2) and 2 bytes for the chars (char1=2, char2=3)
+    * Records the nonce value as 4 byte integer
+    *
+    * Records the mod bits, stored in an array of bytes (one byte contains 8 mod bits)
+    * The array length is recorded first as one byte, then the array itself
+    * Variables, whose values are MISSING_NONSENSICAL aren't recorded in the binary file
+    *
+    * Records the String value as 1 word (4 bytes) for the number of characters,
+    * then the characters as a sequence of bytes
+    * if String value = null, number of bytes = -1 is recorded
+    * Records the Array length as 1 word,
+    * then the Array elements, depending on their type
+    * Records boolean, char as one byte
+    * Records int, Integer, Hashcode as one word (4 bytes)
+    * Records long, Long, Double, Object as two words (8 bytes)
+   **/
+    public static void write_binarySample( PrintWriter pWriter, DataOutputStream binWriter,
+					   PptMap all_ppts,
+					   PptTopLevel ppt,
+					   ValueTuple vt,
+					   Integer nonce ) {
+
+      Collection<PptTopLevel> allPptTopLevels = all_ppts.asCollection( );
+      echoMsg( pWriter, "" ); // new line
+
+      String ppt_index = "";
+      if ( bin2ascii_dbg )
+        ppt_index = " " +  pptNamesMap.get( ppt.ppt_name.getName( ) );
+
+      echoMsg( pWriter, (ppt.ppt_name.getName( ) + ppt_index) );
+
+
+      // uses the key ( ppt_name ) to retrieve the integer index
+      String hash_pptName = "" + pptNamesMap.get( ppt.ppt_name.getName( ) );
+
+      try {
+	// records the program point index
+      	binWriter.writeByte( hash_pptName.length( ) );
+	binWriter.writeBytes( hash_pptName );
+
+        if ( nonce != null ) {
+          echoMsg( pWriter, ("this_invocation_nonce\n" + nonce.intValue( )) );
+	  binWriter.writeInt( nonce.intValue( ) );
+        }
+        else {
+          // the binReader will always expect a 4 byte value for the nonce
+	  binWriter.writeInt( 0 );
+        }
+
+        int mods [] = vt.mods; // get modes from the ValueTuple to check for "nonsensical"
+
+        if ( bin2ascii_dbg ) {
+	  String vt_mods = "";
+	  for ( int k = 0; k < mods.length; k++ )
+	    vt_mods += mods[k];
+      	  echoMsg( pWriter, "vt_mods: " + vt_mods );
+      }
+
+      // This is true if there are static constants, because
+      // their mods aren't recorded
+      //if ( mods.length != ppt.var_infos.length )
+      //  echoMsg( pWriter, "ERROR: FileIO: write_binarySample: mods.length != var_infos.length : "
+      //
+      //	   + mods.length + " != " + ppt.var_infos.length );
+
+        byte mod_bits [] = get_modBits( mods );
+        StringBuffer mod_str = recordBits( mod_bits );
+        if ( bin2ascii_dbg )
+          echoMsg( pWriter, "recorded_mods: " + mod_str.toString( ) );
+
+        // records the mod bits
+        binWriter.writeByte( mod_bits.length );
+        binWriter.write( mod_bits, 0, mod_bits.length );
+
+        int index_mods = 0; // index in mods[]
+
+        // go through all variables in the given program point
+        for ( int i = 0; i < ppt.var_infos.length; i++, index_mods++ ) {
+
+	  VarInfo vInfo = ppt.var_infos[i];
+	  ProglangType repType = vInfo.file_rep_type;
+
+	  // if a variable is a static const
+	  // then it is not included in the dtrace file
+	  if ( vInfo.is_static_constant ) {
+	    index_mods--;
+	    continue;
+	  }
+
+	  if ( mods[index_mods] != ValueTuple.MISSING_NONSENSICAL ) {
+
+	    Object value = ppt.var_infos[i].getValue( vt );
+	    String valid_mod = "1";
+
+            if ( value instanceof String ) {
+              String vs = ( String ) value;
+              echoMsg( pWriter, (vInfo.name( ) + "\n" + "\"" + vs + "\"") );
+              echoMsg( pWriter, valid_mod );
+
+              if ( vs != null ) {
+                binWriter.writeInt( vs.length( ) );
+                binWriter.writeBytes( vs );
+              }
+              else
+                binWriter.writeInt( -1 );
+            }
+            /*
+            else if ( value instanceof char [][] ) {
+              char cha [][] = ( char [][] ) value;
+              echoMsg( pWriter, vInfo.name( ) );
+              binWriter.writeInt( cha.length );
+              String msg = "[";
+
+              for ( int k = 0; k < cha.length; k++ ) {
+                binWriter.writeByte( ( byte ) cha[k].length );
+                for ( int l = 0; l < cha[k].length; l++ ) {
+                  msg += cha[k][l] + " ";
+                  binWriter.writeByte( ( char ) cha[k][l] );
+                }
+              }
+              msg = msg.trim() + "]";
+              echoMsg( pWriter, msg );
+              echoMsg( pWriter, valid_mod );
+              }*/
+            else if ( value instanceof long [] ) {
+              long va [] = ( long [] ) value;
+	      echoMsg( pWriter, vInfo.name( ) );
+              binWriter.writeInt( va.length );
+              String msg = "[";
+
+              if ( repType == ProglangType.INT_ARRAY ) {
+                for ( int j = 0; j < va.length; j++ ) {
+                  msg += va[j] + " ";
+                  binWriter.writeInt( ( int ) va[j] );
+                }
+              }
+              else if ( repType == ProglangType.CHAR_ARRAY ) {
+                for ( int j = 0; j < va.length; j++ ) {
+                  msg += va[j] + " ";
+                  binWriter.writeByte( ( char ) va[j] );
+                }
+              }
+              else if ( repType == ProglangType.HASHCODE_ARRAY ) {
+                for ( int j = 0; j < va.length; j++ ) {
+                  binWriter.writeInt( ( int ) va[j] );
+                  if ( va[j] != 0 )
+                    msg += va[j] + " ";
+                  else
+                    msg += "null" + " ";
+                }
+              }
+              else if ( repType == ProglangType.BOOLEAN_ARRAY ) {
+                for ( int j = 0; j < va.length; j++ ) {
+                    binWriter.writeByte( ( byte ) va[j] );
+                    if ( va[j] == 1 )
+                        msg += "true" + " ";
+                    else
+                        msg += "false" + " ";
+                }
+              }
+              else {
+                for ( int j = 0; j < va.length; j++ ) {
+                  msg += va[j] + " ";
+                  binWriter.writeLong( va[j] );
+                }
+              }
+              msg = msg.trim() + "]";
+              echoMsg( pWriter, msg );
+              echoMsg( pWriter, valid_mod );
+            }
+            else if ( value instanceof double [] ) {
+              double va [] = ( double [] ) value;
+              echoMsg( pWriter, vInfo.name( ) );
+              binWriter.writeInt( va.length );
+              String msg = "[";
+
+              for ( int j = 0; j < va.length; j++ ) {
+                msg += va[j] + " ";
+                binWriter.writeDouble( va[j] );
+              }
+              msg = msg.trim() + "]";
+              echoMsg( pWriter, msg );
+              echoMsg( pWriter, valid_mod );
+            }
+	    else if ( value instanceof String [] ) {
+              String va [] = ( String [] ) value;
+              echoMsg( pWriter, vInfo.name( ) );
+              binWriter.writeInt( va.length );
+              String msg = "[";
+
+              for ( int j = 0; j < va.length; j++ ) {
+                if ( va[j] != null ) {
+                  msg += "\"" + va[j] + "\"" + " ";
+                  binWriter.writeByte( va[j].length( ) );
+                  binWriter.writeBytes( va[j] );
+                }
+                else {
+                  msg += "null" + " ";
+                  // zero length, means that the string is null;
+                  binWriter.writeByte( -1 );
+                }
+              }
+              msg = msg.trim() + "]";
+              echoMsg( pWriter, msg );
+              echoMsg( pWriter, valid_mod );
+            }
+            else if ( value != null ) {
+              echoMsg( pWriter, vInfo.name( ) );
+
+              String sVal = value.toString( );
+
+              if ( repType == ProglangType.BOOLEAN ) {
+                binWriter.writeByte( sVal.charAt( 0 ) );
+
+                sVal = ( sVal.charAt( 0 ) == '1' ) ? "true" : "false";
+                echoMsg( pWriter, sVal + "\n" + valid_mod );
+              }
+              else if ( repType == ProglangType.CHAR ) {
+                binWriter.writeByte( sVal.charAt( 0 ) );
+                echoMsg( pWriter, sVal + "\n" + valid_mod );
+              }
+              else if ( repType == ProglangType.DOUBLE ) {
+                binWriter.writeDouble( Double.valueOf( sVal ) );
+                echoMsg( pWriter, sVal + "\n" + valid_mod );
+              }
+              else if ( repType == ProglangType.LONG_PRIMITIVE ) {
+                binWriter.writeLong( Long.valueOf( sVal ) );
+                echoMsg( pWriter, sVal + "\n" + valid_mod );
+              }
+              else if ( repType == ProglangType.INT ) {
+                binWriter.writeInt( Integer.valueOf( sVal ) );
+                echoMsg( pWriter, sVal + "\n" + valid_mod );
+              }
+              else if ( repType == ProglangType.INTEGER ) {
+                binWriter.writeInt( Integer.valueOf( sVal ) );
+                echoMsg( pWriter, sVal + "\n" + valid_mod );
+              }
+              else if ( repType == ProglangType.LONG_OBJECT ) {
+                binWriter.writeLong( Long.valueOf( sVal ) );
+                echoMsg( pWriter, sVal + "\n" + valid_mod );
+              }
+              else if ( repType == ProglangType.OBJECT ) {
+                binWriter.writeLong( Long.valueOf( sVal ) );
+                echoMsg( pWriter, sVal + "\n" + valid_mod );
+              }
+              else if ( repType == ProglangType.HASHCODE ) {
+	        binWriter.writeInt( Integer.valueOf( sVal ) );
+                if ( Integer.valueOf( sVal ) == 0 )
+                    sVal = "null";
+                echoMsg( pWriter, sVal + "\n" + valid_mod );
+	       }
+              else {
+                throw new Daikon.TerminationMessage( "value of variable " +
+                                                     vInfo.name( ) +
+                                                     " was of unspecified ProglangType" );
+                //echoMsg( pWriter, "was of unspecified type" );
+              }
+            }
+            else {
+              // There are vars, whose values, which are null
+              // and aren't recorded in the dtrace file
+              // probably these values have no mod bits
+              index_mods--;
+              // echoMsg( pWriter, "value = null variable name = " + vInfo.name( ) );
+            }
+          }
+          else {
+           echoMsg( pWriter, vInfo.name( ) );
+           echoMsg( pWriter, "nonsensical" );
+           echoMsg( pWriter, "" + ValueTuple.MISSING_NONSENSICAL );
+          }
+        }
+
+      } catch ( IOException e ) {
+	  e.printStackTrace( System.out );
+      }
   }
 
 
@@ -1847,8 +2975,8 @@ public final class FileIO {
     if (Global.debugPrintDtrace) {
       Global.dtraceWriter.close();
     }
-
   }
+
 
   /** Returns true if this procedure has an unmatched entry. **/
   @SuppressWarnings("interning") // PptTopLevel
@@ -1967,7 +3095,7 @@ public final class FileIO {
   {
     // Note:  global variable data_trace_state may be null (at least in the
     // unit tests...).
-    assert data_trace_state != null; // added to test actual execution
+    //assert data_trace_state != null; // added to test actual execution
 
     VarInfo[] vis = ppt.var_infos;
     int num_tracevars = ppt.num_tracevars;
@@ -2199,6 +3327,369 @@ public final class FileIO {
     }
     assert (line == null) || (line.equals(""))
       : "Expected blank line at line " + reader.getLineNumber() + ": " + line;
+  }
+
+
+  // This procedure reads a single record from a trace file and
+  // fills up vals and mods by side effect.  The ppt name and
+  // invocation nonce (if any) have already been read.
+  private static void read_vals_from_binary_dtrace_file
+    ( DataInputStream binReader, String filename,
+      PptTopLevel ppt, Object[] vals, int[] mods, PrintWriter pWriter )
+      throws IOException {
+
+    VarInfo[] vis = ppt.var_infos;
+    int num_tracevars = ppt.num_tracevars;
+
+    String[] oldvalue_reps = ppt_to_value_reps.get( ppt );
+    if (oldvalue_reps == null) {
+      // We've not encountered this program point before.  The nulls in
+      // this array will compare non-equal to whatever is in the trace
+      // file, which is the desired behavior.
+      oldvalue_reps = new String[num_tracevars];
+    }
+
+    // read the mod bytes
+    int mods_len = binReader.readByte( );
+    byte mod_bits [] = new byte [mods_len];
+
+    // these are the mods for all variables
+    // including the skipped ones
+    // so in order to get the mod for the right variable
+    // we need all variables, not just the not-skipped ones
+    // contained in var_infos
+
+    binReader.read( mod_bits, 0, mods_len );
+    StringBuffer mods_buf = recordBits( mod_bits );
+    if ( bin2ascii_dbg )
+      echoMsg( pWriter, mods_buf.toString( ) );
+
+    //mods_buf.charAt( allVar_index ) == 0 )
+    int allVar_index = 0;
+
+    for (int vi_index = 0, val_index = 0; val_index < num_tracevars; vi_index++) {
+
+      Assert.assertTrue(vi_index < vis.length
+                        // , "Got to vi_index " + vi_index + " after " + val_index
+                        // + " of " + num_tracevars + " values"
+                        );
+      VarInfo vi = vis[vi_index];
+      Assert.assertTrue((!vi.is_static_constant) || (vi.value_index == -1)
+                        // , "Bad value_index " + vi.value_index + " when static_constant_value = "
+                        // + vi.static_constant_value + " for " + vi.repr() + " at " + ppt_name
+                        );
+      // static constants aren't written neither in DTrace, nor in Binary files
+      // this check seems unnecessary
+      if ( vi.is_static_constant )
+        continue;
+
+      Assert.assertTrue(val_index == vi.value_index
+                        // , "Differing val_index = " + val_index
+                        // + " and vi.value_index = " + vi.value_index
+                        // + " for " + vi.name + lineSep + vi.repr()
+                        );
+
+      String elements = null;
+
+      while ( true ) {
+        // only variables with sensical mods are written in the binary file
+        for ( ; allVar_index < allVars.size( ); allVar_index++ ) {
+          if( var_included( allVars.get( allVar_index ) ) ) {
+            break;
+          }
+          if ( mods_buf.charAt( allVar_index ) != '0' ) {
+            break;
+           }
+         }
+        if ( allVar_index >= allVars.size( ) ) {
+          elements = null;
+          break;
+        }
+        if ( mods_buf.charAt( allVar_index ) == '0' ) {
+          elements = "";
+          break;
+        }
+        // read the variable from the file
+        elements = get_variableValue( vi, binReader, pWriter );
+
+        if( var_included( allVars.get( allVar_index ) ) ) {
+          break;
+        }
+        allVar_index++;
+      }
+
+      if ( elements == null) {
+        throw new Daikon.TerminationMessage(
+                                            "Unexpected end of file at "
+                                            + data_trace_state.filename
+                                            + "  Expected value for variable "
+                                            + vi.name()
+                                            + ", got "
+                                            + "null"
+                                            + " for program point "
+                                            + ppt.name());
+      }
+
+      String value_rep = elements;
+      int mod = 1;
+
+      if ( mods_buf.charAt( allVar_index ) == '0' ) {
+        mod = 2;
+        value_rep = "nonsensical";
+        echoMsg( pWriter, (vi.name( ) + "\n" + value_rep) );
+      }
+
+      if ( mod != ValueTuple.MISSING_NONSENSICAL ) {
+        // Set the modbit now, depending on whether the value of the variable
+        // has been changed or not.
+        if (value_rep.equals(oldvalue_reps[val_index])) {
+          if (!dkconfig_add_changed) {
+            mod = ValueTuple.UNMODIFIED;
+          }
+        } else {
+          mod = ValueTuple.MODIFIED;
+        }
+      }
+
+      mods[val_index] = mod;
+      oldvalue_reps[val_index] = value_rep;
+
+      echoMsg( pWriter, "" + mod );
+
+      Debug dbg = Debug.newDebug(FileIO.class, ppt, Debug.vis(vi));
+      if (dbg != null)
+        dbg.log(
+		"Var " + vi.name() + " has value " + value_rep + " mod " + mod);
+
+      // Both uninit and nonsensical mean missing modbit 2, because
+      // it doesn't make sense to look at x.y when x is uninitialized.
+      if (ValueTuple.modIsMissingNonsensical(mod)) {
+        if (!(value_rep.equals("nonsensical")
+          || value_rep.equals("uninit") // backward compatibility (9/27/2002)
+          || value_rep.equals("missing"))) {
+          throw new Daikon.TerminationMessage(
+            "Modbit indicates missing value for variable "
+              + vi.name() + " with value \"" + value_rep + "\";" + lineSep
+            + "  text of value should be \"nonsensical\" or \"uninit\" at "
+              + data_trace_state.filename );
+        } else {
+          // Keep track of variables that can be missing
+          if (debug_missing && !vi.canBeMissing) {
+	      System.out.printf ("Var %s ppt %s", vi, ppt.name() );
+
+              System.out.printf ("val_index = %d, mods[val_index] = %d%n",
+                                 val_index, mods[val_index]);
+          }
+          vi.canBeMissing = true;
+        }
+	vals[val_index] = null;
+      }
+      else {
+        try {
+          vals[val_index] = vi.rep_type.parse_value(value_rep);
+          if (vals[val_index] == null) {
+            mods[val_index] = ValueTuple.MISSING_NONSENSICAL;
+            if (debug_missing && !vi.canBeMissing)
+              System.out.printf ("Var %s ppt %s : null-not missing%n",
+				 vi, ppt.name() );
+            vi.canBeMissing = true;
+          }
+        } catch (Exception e) {
+          throw new Daikon.TerminationMessage(
+            "Error while parsing value "
+              + value_rep
+              + " for variable "
+              + vi.name()
+              + " of type "
+              + vi.rep_type
+              + ": "
+              + e.toString() );
+        }
+      }
+      allVar_index++;
+      val_index++;
+    }
+    ppt_to_value_reps.put(ppt, oldvalue_reps);
+  }
+
+  // Used in read_vals_from_binary_dtrace_file( )
+  // Currently this method recreates the string value, read from a dtrace file
+  // So that VarInfo : rep_type.parse_value( var_value )
+  // receives as a parameter the String format it expects
+  // It recreates the null string as "null"
+  private static String get_variableValue( VarInfo vi, DataInputStream binReader,
+						   PrintWriter pWriter )
+  throws IOException {
+    String elements = null;
+    ProglangType repType = vi.file_rep_type;
+
+    if ( repType == ProglangType.STRING ) {
+      elements = "";
+      int strLen = binReader.readInt( );
+
+      if ( strLen != -1 ) {
+        for ( int j = 0; j < strLen; j++ ) {
+          elements += ( char ) binReader.readByte( );
+        }
+        elements = "\"" + elements + "\"";
+      }
+      else {
+        elements = "null";
+      }
+
+      echoMsg( pWriter, (vi.name( ) + "\n" + elements) );
+   }
+
+   else if ( repType == ProglangType.STRING_ARRAY ) {
+     echoMsg( pWriter, vi.name( ) );
+     int al = binReader.readInt( );
+     elements = "[";
+
+     for ( int j = 0; j < al; j++ ) {
+       int sl = binReader.readByte( );
+       String rs = "\"";
+       if ( sl != -1 ) {
+         for ( int k = 0; k < sl; k++ ) {
+           char c = ( char ) binReader.readByte( );
+           rs += c;
+         }
+         elements += rs + "\" ";
+       }
+       else {
+           elements  += "null ";
+       }
+     }
+     elements =  elements.trim( ) + "]";
+     echoMsg( pWriter, elements );
+   }
+
+   else if ( repType == ProglangType.INT_ARRAY
+             || repType == ProglangType.LONG_PRIMITIVE_ARRAY
+             || repType == ProglangType.HASHCODE_ARRAY
+             || repType == ProglangType.CHAR_ARRAY
+             || repType == ProglangType.BOOLEAN_ARRAY ) {
+
+     echoMsg( pWriter, vi.name( ) );
+     elements = "[";
+     int al = binReader.readInt( );
+
+     if ( repType == ProglangType.INT_ARRAY ) {
+       for ( int j = 0; j < al; j++ ) {
+         int aval = binReader.readInt( );
+         elements += aval + " ";
+       }
+     }
+     else if ( repType == ProglangType.CHAR_ARRAY ) {
+       for ( int j = 0; j < al; j++ ) {
+         String sval = Byte.toString( binReader.readByte( ) );
+         elements += sval + " ";
+       }
+     }
+     else if ( repType == ProglangType.HASHCODE_ARRAY ) {
+       for ( int j = 0; j < al; j++ ) {
+         int hval = binReader.readInt( );
+         if ( hval != 0 ) {
+           elements += hval + " ";
+         }
+         else {
+           elements += "null" + " ";
+         }
+       }
+     }
+     else if ( repType == ProglangType.BOOLEAN_ARRAY ) {
+       for ( int j = 0; j < al; j++ ) {
+         byte vb =  binReader.readByte( );
+         if ( vb == 1 )
+           elements += "true" + " ";
+         else
+           elements += "false" + " ";
+       }
+     }
+     else {
+       for ( int j = 0; j < al; j++ ) {
+         long lval = binReader.readLong( );
+         elements += lval + " ";
+       }
+     }
+     elements = elements.trim( );
+     elements += "]";
+     echoMsg( pWriter, elements );
+   }
+   else if ( repType == ProglangType.DOUBLE_ARRAY ) {
+     echoMsg( pWriter, vi.name( ) );
+     int al = binReader.readInt( );
+     elements = "[";
+
+     for ( int j = 0; j < al; j++ ) {
+       double dval = binReader.readDouble( );
+       elements += dval + " ";
+     }
+     elements = elements.trim( );
+     elements += "]";
+     echoMsg( pWriter, elements );
+   }
+    /*else if ( repType == ProglangType.CHAR_ARRAY_ARRAY ) {
+     echoMsg( pWriter, vi.name( ) );
+     int al = binReader.readInt( );
+     elements = "[";
+
+     for ( int k = 0; k < al; k++ ) {
+       String row = "[";
+       int rl = binReader.readByte( );
+
+       for ( int l = 0; l < rl; l++ ) {
+         char vc = ( char ) binReader.readByte( );
+         row += vc + " ";
+       }
+       elements += row.trim( ) + "]";
+     }
+     elements += "]";
+     echoMsg( pWriter, elements );
+     }*/
+   else {
+     echoMsg( pWriter, vi.name( ) );
+
+     if ( repType == ProglangType.BOOLEAN ) {
+       elements = "";
+       char vb = ( char ) binReader.readByte( );
+       elements = ( vb == '1' ) ? "true" : "false" ;
+     }
+
+     else if ( repType == ProglangType.CHAR ) {
+       elements = "";
+       char vc = ( char ) binReader.readByte( );
+       elements += vc;
+     }
+
+     else if ( repType == ProglangType.DOUBLE ) {
+       elements = "";
+       double vd = binReader.readDouble( );
+       elements += vd;
+     }
+
+     else if ( repType == ProglangType.LONG_PRIMITIVE || repType == ProglangType.LONG_OBJECT
+               || repType == ProglangType.OBJECT ) {
+       elements = "";
+       long vl = binReader.readLong( );
+       elements += vl;
+     }
+
+     else if ( repType == ProglangType.INT || repType == ProglangType.INTEGER
+               || repType == ProglangType.HASHCODE ) {
+       elements = "";
+       int vint = binReader.readInt( );
+       if ( repType == ProglangType.HASHCODE && vint == 0 )
+         elements = "null";
+       else
+         elements += vint;
+     }
+
+     else {
+       return null;
+     }
+     echoMsg( pWriter, elements );
+   }
+    return elements;
   }
 
   /**
