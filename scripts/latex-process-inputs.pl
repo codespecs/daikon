@@ -49,7 +49,7 @@ while ($line = <>) {
   # kill comments on the line
   $line =~ s/((^|[^\\])%).*?$/$1/;
 
-  while ($line =~ s/\\(verbatim)?(input|include)\{([a-z0-9_\.-]+)\}/___TOKEN___/i) {
+  while ($line =~ s/\\(verbatim)?(input|include)\{([-a-z0-9_\.+]+)\}/___TOKEN___/i) {
     my $verbatim_p = ($1 eq "verbatim");
     my $file = "$3";
     if ($file !~ m/\./) {
