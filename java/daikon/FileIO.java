@@ -474,17 +474,13 @@ public final class FileIO {
     public static String [] get_binaryRecords( DataInputStream binReader, int records )
     throws IOException {
 
-      int strLen;
-      byte buf [];
       String readRecords [] = new String [records];
-      int i = 0;
 
-      while ( records > 0 ) {
-	strLen = binReader.readByte( ); // gets the length of the string
-        buf = new byte [strLen];
+      for (int i=0; i<records; i++) {
+	int strLen = binReader.readByte( ); // gets the length of the string
+        byte[] buf = new byte [strLen];
         binReader.read( buf, 0, strLen ); // gets the string
-        readRecords[i++] = new String( buf ); // platform charset dependant
-        records--;
+        readRecords[i] = new String( buf ); // platform charset dependant
       }
       return readRecords;
     }
