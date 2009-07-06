@@ -602,7 +602,7 @@ public final class FileIO {
 
 		} else if ( record.equals( "ppt-func" ) ) {
 		    String f_attr [] = get_binaryRecords( binReader, 1 );
-		    function_id = f_attr[0];
+		    function_id = f_attr[0].intern();
 		    echoMsg( pWriter, (record + " " + function_id) );
 
 		} else if ( record.equals( "ppt-length" ) ) {
@@ -2388,7 +2388,7 @@ public final class FileIO {
             if ( ppt_included( ppt_name ) ) {
               state.ppt = ppt;
               state.nonce = nonce;
-              state.vt = new ValueTuple( vals, mods );
+              state.vt = ValueTuple.makeUninterned(vals, mods);
               state.status = ParseStatus.SAMPLE;
               return;
             }
