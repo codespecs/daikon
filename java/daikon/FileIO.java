@@ -2337,8 +2337,7 @@ public final class FileIO {
               new PptName( ppt_name );
             } catch (Throwable t) {
               if ( t instanceof Daikon.TerminationMessage )
-                throw new Daikon.TerminationMessage ( "%s: in %s ",
-								  t.getMessage(), state.filename );
+                throw new Daikon.TerminationMessage ( t.getMessage() + ": in " + state.filename );
               else
                 throw new Daikon.TerminationMessage
                     ( String.format ( "Illegal program point name '%s' (%s) in %s ",
@@ -3369,25 +3368,25 @@ public final class FileIO {
 
     for (int vi_index = 0, val_index = 0; val_index < num_tracevars; vi_index++) {
 
-      Assert.assertTrue(vi_index < vis.length
+      assert vi_index < vis.length
                         // , "Got to vi_index " + vi_index + " after " + val_index
                         // + " of " + num_tracevars + " values"
-                        );
+                        ;
       VarInfo vi = vis[vi_index];
-      Assert.assertTrue((!vi.is_static_constant) || (vi.value_index == -1)
+      assert (!vi.is_static_constant) || (vi.value_index == -1)
                         // , "Bad value_index " + vi.value_index + " when static_constant_value = "
                         // + vi.static_constant_value + " for " + vi.repr() + " at " + ppt_name
-                        );
+                        ;
       // static constants aren't written neither in DTrace, nor in Binary files
       // this check seems unnecessary
       if ( vi.is_static_constant )
         continue;
 
-      Assert.assertTrue(val_index == vi.value_index
+      assert val_index == vi.value_index
                         // , "Differing val_index = " + val_index
                         // + " and vi.value_index = " + vi.value_index
                         // + " for " + vi.name + lineSep + vi.repr()
-                        );
+                        ;
 
       String elements = null;
 
