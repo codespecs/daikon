@@ -271,6 +271,7 @@ public final class ValueTuple implements Cloneable {
 
   /**
    * More convenient name for the constructor that doesn't intern.
+   * That is, the result is an <b>uninterned</b> ValueTuple.
    *
    * This is not private because it is used (only) by read_data_trace_file,
    * which makes a partial ValueTuple, fills it in with derived variables,
