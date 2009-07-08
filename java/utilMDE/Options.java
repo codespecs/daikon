@@ -101,8 +101,8 @@ import com.sun.javadoc.FieldDoc;
  *
  * Limitations: <ul>
  *
- *  <li> Short options are only supported as separate entries (eg, -a -b)
- *  and not as a single group (eg, -ab).
+ *  <li> Short options are only supported as separate entries
+ *  (e.g., "-a -b") and not as a single group (e.g., "-ab").
  *
  *  <li> Not all primitive types are supported.
  *
@@ -310,8 +310,13 @@ public class Options {
    */
   private boolean use_dashes = true;
 
-  /** Synopsis of usage.  Example:  "prog [options] arg1, arg2, ..." **/
-  String usage_synopsis = "";
+  /**
+   * Synopsis of usage.  Example:  "prog [options] arg1 arg2 ..."
+   * <p>
+   * This variable is public so that clients can reset it (useful for
+   * masquerading as another program, based on parsed options).
+   **/
+  public /*@Nullable*/ String usage_synopsis = null;
 
   // Debug loggers
   private SimpleLog debug_options = new SimpleLog (false);
@@ -586,10 +591,13 @@ public class Options {
   /// programmer.
 
   /**
-   * Prints usage information.
+   * Prints usage information.  Uses the usage synopsis passed into the
+   * constructor, if any.
    */
   public void print_usage (PrintStream ps) {
-    ps.printf ("Usage: %s%n", usage_synopsis);
+    if (usage_synopsis != null) {
+      ps.printf ("Usage: %s%n", usage_synopsis);
+    }
     for (String use : usage()) {
       ps.printf ("  %s%n", use);
     }
@@ -606,19 +614,26 @@ public class Options {
   // This method is distinct from
   //   print_usage (PrintStream ps, String format, Object... args)
   // because % characters in the message are not interpreted.
-  /** Prints a message followed by indented usage information. **/
+  /**
+   * Prints a message followed by indented usage information.
+   * The message is printed in addition to (not replacing) the usage synopsis.
+   **/
   public void print_usage (PrintStream ps, String msg) {
     ps.println (msg);
     print_usage (ps);
   }
 
-  /** Prints, to standard output, a message followed by usage information. **/
+  /**
+   * Prints, to standard output, a message followed by usage information.
+   * The message is printed in addition to (not replacing) the usage synopsis.
+   **/
   public void print_usage (String msg) {
     print_usage (System.out, msg);
   }
 
   /**
    * Prints a message followed by usage information.
+   * The message is printed in addition to (not replacing) the usage synopsis.
    */
   public void print_usage (PrintStream ps, String format, /*@Nullable*/ Object... args) {
     ps.printf (format, args);
@@ -627,6 +642,7 @@ public class Options {
 
   /**
    * Prints, to standard output, a message followed by usage information.
+   * The message is printed in addition to (not replacing) the usage synopsis.
    */
   public void print_usage (String format, /*@Nullable*/ Object... args) {
     print_usage(System.out, format, args);
@@ -634,7 +650,7 @@ public class Options {
 
   /**
    * Returns an array of Strings, where each String describes the usage of
-   * one command-line option.
+   * one command-line option.  Does not include the usage synopsis.
    **/
   public String[] usage () {
 
