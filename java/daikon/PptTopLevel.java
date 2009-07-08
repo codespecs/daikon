@@ -390,9 +390,8 @@ public class PptTopLevel extends Ppt {
     num_declvars = var_infos.length;
     num_tracevars = val_idx;
     num_orig_vars = 0;
-    assert num_static_constant_vars == num_declvars -num_tracevars;
-    assert num_tracevars ==
-                      var_infos.length - num_static_constant_vars;
+    assert num_static_constant_vars == num_declvars - num_tracevars;
+    assert num_tracevars == var_infos.length - num_static_constant_vars;
     mbtracker = new ModBitTracker(num_tracevars);
     value_sets = new ValueSet[num_tracevars];
     for (int i = 0; i < var_infos.length; i++) {
