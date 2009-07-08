@@ -6,7 +6,7 @@
 -include Makefile.user
 
 DAIKONDIR ?= ../..
-CHECKERS ?= ${HOME}/research/typequals/annotations/checkers
+CHECKERS ?= ${HOME}/research/types/checker-framework/checkers
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 CLASSPATH:=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar:${CLASSPATH}
 
