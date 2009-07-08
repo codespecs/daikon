@@ -128,8 +128,8 @@ public final class FileIO {
   /** True if declaration records are in the new format **/
   public static /*@LazyNonNull*/ Boolean new_decl_format = null;
 
-    /** Input language as read from the declaration file**/
-    public static String input_lang = null;
+  /** Input language as read from the declaration file**/
+  public static String input_lang = null;
 
   /// Variables
 
@@ -1669,7 +1669,7 @@ public final class FileIO {
     public boolean is_decl_file;
 
     /** True if the current file is a binary file. **/
-      public boolean is_bin_file;
+    public boolean is_bin_file;
 
     /** True if ppts may be new.  If a duplicate is seen, it must match
      * a previous point exactly.  If false, the previous ppt is used without
@@ -1683,7 +1683,7 @@ public final class FileIO {
     /** Input stream **/
     public LineNumberReader reader;
 
-      /** Binary input stream **/
+    /** Binary input stream **/
     public DataInputStream binReader;
 
     /** Total number of lines in the input file **/
@@ -1899,8 +1899,8 @@ public final class FileIO {
 
     // Used for debugging: write new data trace file.
     if (Global.debugPrintDtrace) {
-	Global.dtraceWriter
-	  = new PrintWriter(new FileWriter(new File(filename + ".debug")));
+      Global.dtraceWriter
+             = new PrintWriter(new FileWriter(new File(filename + ".debug")));
     }
 
     PrintWriter pWriter = null;
