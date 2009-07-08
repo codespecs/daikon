@@ -2535,14 +2535,14 @@ public final class FileIO {
 	  for ( int k = 0; k < mods.length; k++ )
 	    vt_mods += mods[k];
       	  echoMsg( pWriter, "vt_mods: " + vt_mods );
-      }
+        }
 
-      // This is true if there are static constants, because
-      // their mods aren't recorded
-      //if ( mods.length != ppt.var_infos.length )
-      //  echoMsg( pWriter, "ERROR: FileIO: write_binarySample: mods.length != var_infos.length : "
-      //
-      //	   + mods.length + " != " + ppt.var_infos.length );
+        // This is true if there are static constants, because
+        // their mods aren't recorded
+        //if ( mods.length != ppt.var_infos.length )
+        //  echoMsg( pWriter, "ERROR: FileIO: write_binarySample: mods.length != var_infos.length : "
+        //
+        //	   + mods.length + " != " + ppt.var_infos.length );
 
         byte mod_bits [] = get_modBits( mods );
         StringBuffer mod_str = recordBits( mod_bits );
@@ -2556,7 +2556,7 @@ public final class FileIO {
         int index_mods = 0; // index in mods[]
 
         // go through all variables in the given program point
-        for ( int i = 0; i < ppt.var_infos.length; i++, index_mods++ ) {
+        for ( int i = 0; i < ppt.num_declvars; i++, index_mods++ ) {
 
 	  VarInfo vInfo = ppt.var_infos[i];
 	  ProglangType repType = vInfo.file_rep_type;
@@ -2572,6 +2572,7 @@ public final class FileIO {
 
 	    Object value = ppt.var_infos[i].getValue( vt );
 	    String valid_mod = "1";
+            assert value != null;
 
             if ( value instanceof String ) {
               String vs = ( String ) value;
@@ -2685,7 +2686,7 @@ public final class FileIO {
               echoMsg( pWriter, msg );
               echoMsg( pWriter, valid_mod );
             }
-            else if ( value != null ) {
+            else {
               echoMsg( pWriter, vInfo.name( ) );
 
               String sVal = value.toString( );
@@ -2736,13 +2737,6 @@ public final class FileIO {
                                                      " was of unspecified ProglangType" );
                 //echoMsg( pWriter, "was of unspecified type" );
               }
-            }
-            else {
-              // There are vars, whose values, which are null
-              // and aren't recorded in the dtrace file
-              // probably these values have no mod bits
-              index_mods--;
-              // echoMsg( pWriter, "value = null variable name = " + vInfo.name( ) );
             }
           }
           else {
@@ -3362,6 +3356,8 @@ public final class FileIO {
     //mods_buf.charAt( allVar_index ) == 0 )
     int allVar_index = 0;
 
+    // vi_index:  index into the var_infos array
+    // val_index:  index into the ValueTuple (NOT index into values in the binary trace)
     for (int vi_index = 0, val_index = 0; val_index < num_tracevars; vi_index++) {
 
       assert vi_index < vis.length
@@ -3425,13 +3421,16 @@ public final class FileIO {
                                             + ppt.name());
       }
 
-      String value_rep = elements;
-      int mod = 1;
+      String value_rep;
+      int mod;
 
       if ( mods_buf.charAt( allVar_index ) == '0' ) {
-        mod = 2;
+        mod = ValueTuple.MISSING_NONSENSICAL;
         value_rep = "nonsensical";
         echoMsg( pWriter, (vi.name( ) + "\n" + value_rep) );
+      } else {
+        mod = ValueTuple.MODIFIED;
+        value_rep = elements;
       }
 
       if ( mod != ValueTuple.MISSING_NONSENSICAL ) {
