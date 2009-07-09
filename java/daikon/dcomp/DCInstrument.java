@@ -4376,9 +4376,9 @@ class DCInstrument {
    * the specified file.  Can be read with restore_static_map.
    * Each line contains a key/value combination with a blank separating them.
    */
-  public static void save_static_map (File filename) throws IOException {
+  public static void save_static_map (File file) throws IOException {
 
-    PrintStream ps = new PrintStream (filename);
+    PrintStream ps = new PrintStream (file);
     for (Map.Entry<String,Integer> entry : static_map.entrySet()) {
       ps.printf ("%s  %d%n", entry.getKey(), entry.getValue());
     }
@@ -4389,8 +4389,8 @@ class DCInstrument {
    * Restores the static map from the specified file.
    * @see #save_static_map(File)
    */
-  public static void restore_static_map (File filename) throws IOException {
-    for (String line : new TextFile(filename, "UTF-8")) {
+  public static void restore_static_map (File file) throws IOException {
+    for (String line : new EntryReader(file, "UTF-8")) {
       String[] key_val = line.split ("  *");
       assert !static_map.containsKey (key_val[0])
         : key_val[0] + " " + key_val[1];
