@@ -28,7 +28,7 @@ public class IsPointer extends SingleScalar {
 
     private static final long serialVersionUID = 20080221L;
 
-    /** Boolean. True iff IsPointer invariants should be considered **/
+    /** Boolean. True iff IsPointer invariants should be considered. **/
     public static boolean dkconfig_enabled = false;
 
     // pointers values in ff_prepare.dtrace were starting from 65536,

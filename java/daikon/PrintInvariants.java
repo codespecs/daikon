@@ -97,7 +97,7 @@ public final class PrintInvariants {
   /**
    * If true, print the total number of true invariants.  This includes
    * invariants that are redundant and would normally not be printed
-   * or even created due to optimizations
+   * or even created due to optimizations.
    */
   public static boolean dkconfig_true_inv_cnt = false;
 
@@ -111,10 +111,10 @@ public final class PrintInvariants {
   public static boolean dkconfig_remove_post_vars = false;
 
   /**
-   * In the new decl format print array names without as 'a[]' as
+   * In the new decl format, print array names without as 'a[]' as
    * opposed to 'a[..]'  This creates names that are more compatible
    * with the old output.  This option has no effect in the old decl
-   * format
+   * format.
    */
   public static boolean dkconfig_old_array_names = true;
 

@@ -531,7 +531,7 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    /** Boolean.  True if PowerOfTwo invariants should be considered **/
+    /** Boolean.  True if PowerOfTwo invariants should be considered. **/
     public static boolean dkconfig_enabled = true;
 
     protected PowerOfTwo (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
@@ -602,7 +602,7 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    /** Boolean.  True if PowerOfTwo invarianst should be considered **/
+    /** Boolean.  True if Even invariants should be considered. **/
     public static boolean dkconfig_enabled = false;
 
     protected Even (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {

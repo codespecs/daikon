@@ -49,7 +49,7 @@ public final /*@Interned*/ class ProglangType
 
   /**
    * If true, treat 32 bit values whose high bit is on, as a negative
-   * number (rather than as a 32 bit unsigned)
+   * number (rather than as a 32 bit unsigned).
    */
   public static boolean dkconfig_convert_to_signed = false;
 

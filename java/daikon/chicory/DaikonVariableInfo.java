@@ -27,7 +27,7 @@ public abstract class DaikonVariableInfo
     implements Iterable<DaikonVariableInfo>, Comparable<DaikonVariableInfo>
 {
 
-    /** switch to turn on experimental techniques on static constants */
+    /** Enable experimental techniques on static constants. */
     public static boolean dkconfig_constant_infer = false;
 
     /** The variable name.  Sensible for all subtypes except RootInfo.  **/

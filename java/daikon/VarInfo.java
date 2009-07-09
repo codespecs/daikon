@@ -44,14 +44,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * comparable to double.  This may miss valid invariants, but
    * significant time can be saved and many variables with
    * different declared types are not comparable (e.g., java.util.Date
-   * and java.util.ArrayList)
+   * and java.util.ArrayList).
    */
   public static boolean dkconfig_declared_type_comparability = true;
 
   /**
    * If true, the treat static constants (such as MapQuick.GeoPoint.FACTOR)
    * as fields within an object rather than as a single name.  Not correct,
-   * but used to obtain compatibility with VarInfoName
+   * but used to obtain compatibility with VarInfoName.
    */
   public static boolean dkconfig_constant_fields_simplify = true;
 

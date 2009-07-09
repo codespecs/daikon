@@ -26,6 +26,7 @@ public class ParameterDoclet
     throws IOException
   {
     ParameterDoclet pd = new ParameterDoclet(doc);
+
     pd.process();
 
     String[][] options = doc.options();
@@ -162,6 +163,10 @@ public class ParameterDoclet
 
   public static String NO_DESCRIPTION = "(no description provided)";
   public static String UNKNOWN_DEFAULT = "The default value is not known.";
+  public static Pattern endOfSentence;
+  static {
+     Pattern endOfSentence = Pattern.compile("[.?!>](\\))?$");
+  }
 
   /**
    * Add (name, desc) pair to the map field 'fields' for the appropriate
@@ -170,8 +175,11 @@ public class ParameterDoclet
   public void process(String fullname, String name, String desc) {
     // System.out.printf ("%s - %s%n", fullname, name);
 
-    if ("".equals(desc.trim()))
+    if ("".equals(desc.trim())) {
       desc = NO_DESCRIPTION;
+    } else if (! endOfSentence.matcher(desc).find()) {
+      desc = desc + ".";
+    }
 
     for (int i = 0; i < categories.length; i++) {
       if (((categories[i].prefixPattern == null) ||
@@ -236,7 +244,6 @@ public class ParameterDoclet
           out.printf ("@item %s %s%n%n", value, field);
           continue;
         }
-
 
         // @item [field]
         //  [desc]

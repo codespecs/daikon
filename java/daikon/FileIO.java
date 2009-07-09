@@ -61,7 +61,7 @@ public final class FileIO {
   /**
    * When true, just ignore exit ppts that don't have a matching enter
    * ppt rather than exiting with an error.  Unmatched exits can occur
-   * if only a portion of a dtrace file is processed
+   * if only a portion of a dtrace file is processed.
    */
   public static boolean dkconfig_ignore_missing_enter = false;
 
@@ -121,7 +121,7 @@ public final class FileIO {
 
   /**
    * If true, check all of the basic blocks that make up a function
-   * to ensure that there is a path from function entry to the block
+   * to ensure that there is a path from function entry to the block.
    */
   public static boolean dkconfig_check_bb_connections = true;
 
@@ -160,7 +160,7 @@ public final class FileIO {
    * If true, variables from basic blocks which predominate a basic block X
    * will be included when X is processed.  This allows Daikon to find
    * invariants between variables in different program points (basic blocks
-   * in this case)
+   * in this case).
    */
   public static boolean dkconfig_merge_basic_blocks = false;
 

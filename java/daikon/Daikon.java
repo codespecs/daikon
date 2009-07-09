@@ -74,7 +74,7 @@ public final class Daikon {
    **/
   public static int dkconfig_progress_delay = 1000;
 
-  /** If true, show stack traces for errors such as file format errors **/
+  /** If true, show stack traces for errors such as file format errors. **/
   public static boolean dkconfig_show_stack_trace = false;
 
   // Don't change the order of the modifiers on these strings as they
