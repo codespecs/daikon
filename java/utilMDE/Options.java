@@ -328,7 +328,7 @@ public class Options {
    * options (that is, the fields annotated with &#064;{@link Option}) must be
    * unique across all the arguments.
    */
-  public Options (Object... args) {
+  public Options (/*@Raw*/ Object... args) {
     this ("", args);
   }
 
@@ -340,12 +340,13 @@ public class Options {
    * unique across all the arguments.
    * @param usage_synopsis A synopsis of how to call your program
    */
-  public Options (String usage_synopsis, Object... args) {
+  @SuppressWarnings("nullness") // XXX checker bug: raw vs. non-null
+  public Options (String usage_synopsis, /*@Raw*/ Object... args) {
 
     this.usage_synopsis = usage_synopsis;
 
     // Loop through each specified object or class
-    for (Object obj : args) {
+    for (/*@Raw*/ Object obj : args) {
 
       if (obj instanceof Class<?>) {
 

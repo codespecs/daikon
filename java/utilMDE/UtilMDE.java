@@ -98,7 +98,77 @@ public final class UtilMDE {
   /// BufferedFileReader
   ///
 
-  // Convenience methods for creating BufferedReaders and LineNumberReaders.
+
+  // Convenience methods for creating InputStreams, Readers, BufferedReaders, and LineNumberReaders.
+
+  /**
+   * Returns an InputStream for the file, accounting for the possibility
+   * that the file is compressed.
+   * <p>
+   * Warning: The "gzip" program writes and reads files containing
+   * concatenated gzip files.  As of Java 1.4, Java reads
+   * just the first one:  it silently discards all characters (including
+   * gzipped files) after the first gzipped file.
+   */
+  public static InputStream fileInputStream(File file) throws IOException {
+    InputStream in;
+    if (file.getName().endsWith(".gz")) {
+      in = new GZIPInputStream(new FileInputStream(file));
+    } else {
+      in = new FileInputStream(file);
+    }
+    return in;
+  }
+
+  /**
+   * Returns a Reader for the file, accounting for the possibility
+   * that the file is compressed.
+   * <p>
+   * Warning: The "gzip" program writes and reads files containing
+   * concatenated gzip files.  As of Java 1.4, Java reads
+   * just the first one:  it silently discards all characters (including
+   * gzipped files) after the first gzipped file.
+   **/
+  public static InputStreamReader fileReader(String filename) throws FileNotFoundException, IOException {
+    // return fileReader(filename, "ISO-8859-1");
+    return fileReader(new File(filename), null);
+  }
+
+  /**
+   * Returns a Reader for the file, accounting for the possibility
+   * that the file is compressed.
+   * @param charsetName may be null, or the name of a Charset
+   * <p>
+   * Warning: The "gzip" program writes and reads files containing
+   * concatenated gzip files.  As of Java 1.4, Java reads
+   * just the first one:  it silently discards all characters (including
+   * gzipped files) after the first gzipped file.
+   **/
+  public static InputStreamReader fileReader(File file) throws FileNotFoundException, IOException {
+    return fileReader(file, null);
+  }
+
+
+  /**
+   * Returns a Reader for the file, accounting for the possibility
+   * that the file is compressed.
+   * @param charsetName may be null, or the name of a Charset
+   * <p>
+   * Warning: The "gzip" program writes and reads files containing
+   * concatenated gzip files.  As of Java 1.4, Java reads
+   * just the first one:  it silently discards all characters (including
+   * gzipped files) after the first gzipped file.
+   **/
+  public static InputStreamReader fileReader(File file, /*@Nullable*/ String charsetName) throws FileNotFoundException, IOException {
+    InputStream in = new FileInputStream(file);
+    InputStreamReader file_reader;
+    if (charsetName == null) {
+      file_reader = new InputStreamReader(in);
+    } else {
+      file_reader = new InputStreamReader(in, charsetName);
+    }
+    return file_reader;
+  }
 
   /**
    * Returns a BufferedReader for the file, accounting for the possibility
@@ -123,14 +193,33 @@ public final class UtilMDE {
    * gzipped files) after the first gzipped file.
    **/
   public static BufferedReader bufferedFileReader(File file) throws FileNotFoundException, IOException {
-    Reader file_reader;
-    if (file.getName().endsWith(".gz")) {
-      file_reader = new InputStreamReader(new GZIPInputStream(new FileInputStream(file)),
-                                          "ISO-8859-1");
-    } else {
-      file_reader = new InputStreamReader(new FileInputStream(file),
-                                          "ISO-8859-1");
-    }
+    return(bufferedFileReader(file, null));
+  }
+
+  /**
+   * Returns a BufferedReader for the file, accounting for the possibility
+   * that the file is compressed.
+   * <p>
+   * Warning: The "gzip" program writes and reads files containing
+   * concatenated gzip files.  As of Java 1.4, Java reads
+   * just the first one:  it silently discards all characters (including
+   * gzipped files) after the first gzipped file.
+   **/
+  public static BufferedReader bufferedFileReader(String filename, /*@Nullable*/ String charsetName) throws FileNotFoundException, IOException {
+    return bufferedFileReader(new File(filename), charsetName);
+  }
+
+  /**
+   * Returns a BufferedReader for the file, accounting for the possibility
+   * that the file is compressed.
+   * <p>
+   * Warning: The "gzip" program writes and reads files containing
+   * concatenated gzip files.  As of Java 1.4, Java reads
+   * just the first one:  it silently discards all characters (including
+   * gzipped files) after the first gzipped file.
+   **/
+  public static BufferedReader bufferedFileReader(File file, /*@Nullable*/ String charsetName) throws FileNotFoundException, IOException {
+    Reader file_reader = fileReader(file, charsetName);
     return new BufferedReader(file_reader);
   }
 

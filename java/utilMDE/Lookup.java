@@ -1,6 +1,6 @@
 package utilMDE;
 
-import static utilMDE.MultiReader.Entry;
+import static utilMDE.EntryReader.Entry;
 
 import java.io.*;
 import java.util.*;
@@ -166,13 +166,13 @@ public class Lookup {
       comment_re = null;
 
     // Open the first readable root file
-    MultiReader reader = null;
+    EntryReader reader = null;
     String entry_files[] = entry_file.split (":");
     List<Exception> file_errors = new ArrayList<Exception>();
     for (String ef : entry_files) {
       ef = UtilMDE.fix_filename (ef);
       try {
-        reader = new MultiReader (ef, comment_re, include_re);
+        reader = new EntryReader (ef, comment_re, include_re);
       } catch (FileNotFoundException e) {
         file_errors.add (e);
       }
@@ -231,8 +231,8 @@ public class Lookup {
       }
     } catch (FileNotFoundException e) {
       System.out.printf ("Error: Can't read %s at line %d in file %s%n",
-                         e.getMessage(), reader.get_line_number(),
-                         reader.get_filename());
+                         e.getMessage(), reader.getLineNumber(),
+                         reader.getFileName());
       System.exit (254);
     }
 
@@ -296,7 +296,7 @@ public class Lookup {
   /**
    * Returns the next entry.  If no more entries are available, returns null.
    */
-  public static /*@Nullable*/ Entry old_get_entry (MultiReader reader) throws IOException {
+  public static /*@Nullable*/ Entry old_get_entry (EntryReader reader) throws IOException {
 
     try {
 
@@ -309,14 +309,14 @@ public class Lookup {
 
       String body = "";
       Entry entry = null;
-      String filename = reader.get_filename();
-      long line_number = reader.get_line_number();
+      String filename = reader.getFileName();
+      long line_number = reader.getLineNumber();
 
       // If this is a long entry
       if (line.startsWith (">entry")) {
 
         // Get the current filename
-        String current_filename = reader.get_filename();
+        String current_filename = reader.getFileName();
 
         // Remove '>entry' from the line
         line = line.replaceFirst ("^>entry *", "");
@@ -325,7 +325,7 @@ public class Lookup {
         // Read until we find the termination of the entry
         while ((line != null) && !line.startsWith (">entry") &&
                !line.equals ("<entry")
-               && current_filename.equals (reader.get_filename())) {
+               && current_filename.equals (reader.getFileName())) {
           body += line + lineSep;
           line = reader.readLine();
         }
@@ -333,7 +333,7 @@ public class Lookup {
         // If this entry was terminated by the start of the next one,
         // put that line back
         if ((line != null) && (line.startsWith (">entry")
-                           || !current_filename.equals (reader.get_filename())))
+                           || !current_filename.equals (reader.getFileName())))
           reader.putback (line);
 
         entry = new Entry (first_line, body, filename, line_number, false);
@@ -355,8 +355,8 @@ public class Lookup {
 
     } catch (FileNotFoundException e) {
       System.out.printf ("Error: Can't read %s at line %d in file %s%n",
-                         e.getMessage(), reader.get_line_number(),
-                         reader.get_filename());
+                         e.getMessage(), reader.getLineNumber(),
+                         reader.getFileName());
       System.exit (254);
       return (null);
     }

@@ -1,6 +1,6 @@
 package utilMDE;
 
-import static utilMDE.MultiReader.Entry;
+import static utilMDE.EntryReader.Entry;
 
 import java.io.*;
 import java.util.*;
@@ -209,9 +209,9 @@ public class TaskManager {
     // Read in each specified task file
     for (String filename : filenames) {
       filename = UtilMDE.fix_filename (filename);
-      MultiReader reader = new MultiReader (filename, comment_re, include_re);
+      EntryReader reader = new EntryReader (filename, comment_re, include_re);
       while (true) {
-        MultiReader.Entry entry = reader.get_entry();
+        EntryReader.Entry entry = reader.get_entry();
         if (entry == null) break;
         try {
           tasks.add (new Task (entry.body, entry.filename, entry.line_number));
