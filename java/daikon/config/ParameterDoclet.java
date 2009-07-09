@@ -1,6 +1,7 @@
 package daikon.config;
 
 import java.util.*;
+import java.util.regex.*;
 import java.io.*;
 import java.lang.reflect.*;
 import com.sun.javadoc.*;
