@@ -488,8 +488,8 @@ public final class Runtime {
     ps.println(']');
   }
 
-  // Deprecated
   // Print an array of the classes of the elements.
+  @Deprecated
   public static final void println_array_Object_eltclass(java.io.PrintStream ps, Object[] a) {
     if (a == null) {
       ps.println("null");
@@ -528,8 +528,8 @@ public final class Runtime {
     println_modbit_modified(ps);
   }
 
-  // Deprecated.
   // Print an array of the classes of the elements.
+  @Deprecated
   public static final void println_array_Object_eltclass(java.io.PrintStream ps, List<?> v) {
     if (v == null) {
       ps.println("null");
