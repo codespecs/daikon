@@ -31,9 +31,9 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
+import utilMDE.EntryReader;
 import utilMDE.FileIOException;
 import utilMDE.Stopwatch;
-import utilMDE.TextFile;
 import utilMDE.UtilMDE;
 import daikon.config.Configuration;
 import daikon.derive.Derivation;
@@ -880,7 +880,7 @@ public final class Daikon {
           } else if (files_from_SWITCH.equals(option_name)) {
             String files_from_filename = g.getOptarg();
             try {
-              for (String filename : new TextFile(files_from_filename)) {
+              for (String filename : new EntryReader(files_from_filename)) {
                 // Ignore blank lines in file.
                 if (filename.equals("")) {
                   continue;

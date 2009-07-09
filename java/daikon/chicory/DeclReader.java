@@ -137,17 +137,17 @@ public class DeclReader {
      * The result is null exactly if the value is nonsensical.
      * The return value is interned.
      */
-    public /*@Nullable*/ /*@Interned*/ Object read_data (MultiReader reader) throws IOException {
+    public /*@Nullable*/ /*@Interned*/ Object read_data (EntryReader reader) throws IOException {
       String var_name = reader.readLine();
       if (var_name == null)
-        throw new Error("file " + reader.get_filename() + " terminated prematurely, expeced var " + this.name);
+        throw new Error("file " + reader.getFileName() + " terminated prematurely, expeced var " + this.name);
       if (!var_name.equals (this.name))
         throw new Error (var_name + " found where " + this.name
                          + " expected ");
       String value = reader.readLine();
       String mod_bit = reader.readLine();
       if ((value == null) || (mod_bit == null))
-        throw new Error("file " + reader.get_filename() + " terminated prematurely");
+        throw new Error("file " + reader.getFileName() + " terminated prematurely");
       if (value.equals ("nonsensical")) {
         return null;
       } else if (is_int()) {
@@ -203,7 +203,7 @@ public class DeclReader {
      * Read a single variable declaration from decl_file.  The file
      * must be positioned immediately before the variable name
      */
-    public DeclVarInfo read_var (MultiReader decl_file)
+    public DeclVarInfo read_var (EntryReader decl_file)
       throws java.io.IOException {
 
       String name = decl_file.readLine();
@@ -211,7 +211,7 @@ public class DeclReader {
       String rep_type = decl_file.readLine();
       String comparability = decl_file.readLine();
       if ((name == null) || (type == null) || (rep_type == null) || (comparability == null))
-        throw new Error("File " + decl_file.get_filename() + " ends prematurely");
+        throw new Error("File " + decl_file.getFileName() + " ends prematurely");
 
       // I don't see the point of this interning.  No code seems to take
       // advantage of it.  Is it just for space?  -MDE
@@ -272,7 +272,7 @@ public class DeclReader {
   public void read (File pathname) {
     try {
 
-      MultiReader decl_file = new MultiReader(pathname, "^(//|#).*", null);
+      EntryReader decl_file = new EntryReader(pathname, "^(//|#).*", null);
 
       for (String line = decl_file.readLine(); line != null;
            line = decl_file.readLine()) {
@@ -291,12 +291,12 @@ public class DeclReader {
    * Reads a single declaration from decl_file.  The opening "DECLARE"
    * line should have already been read.  Returns the ppt.
    */
-  protected DeclPpt read_decl (MultiReader decl_file) throws IOException {
+  protected DeclPpt read_decl (EntryReader decl_file) throws IOException {
 
     // Read the name of the program point
     String pptname = decl_file.readLine();
     if (pptname == null)
-      throw new Error("file " + decl_file.get_filename() + " ends prematurely");
+      throw new Error("file " + decl_file.getFileName() + " ends prematurely");
     assert pptname.contains (":::");
     DeclPpt ppt = new DeclPpt (pptname);
     ppts.put (pptname, ppt);

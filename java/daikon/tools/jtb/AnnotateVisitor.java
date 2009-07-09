@@ -9,7 +9,7 @@ import jtb.syntaxtree.*;
 import jtb.visitor.*;
 import daikon.*;
 import utilMDE.ArraysMDE;
-import utilMDE.MultiReader;
+import utilMDE.EntryReader;
 import utilMDE.UtilMDE;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
@@ -95,7 +95,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     // Read the Java file into a list of Strings.
     this.javaFileLines = new ArrayList<String>();
     try {
-      for (String line : new MultiReader(javafilename)) {
+      for (String line : new EntryReader(javafilename)) {
         this.javaFileLines.add(line);
       }
     } catch (IOException e) {

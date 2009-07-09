@@ -839,7 +839,7 @@ public final class FeatureExtractor {
       HashSet<String> neg = new HashSet<String>();
 
       for (String s : inputs) {
-        for (String vector : new TextFile(s)) {
+        for (String vector : new EntryReader(s)) {
           if (type.equals("C5")) {
             if (vector.indexOf("bad") > -1)
               neg.add(vector.substring(0, vector.lastIndexOf("bad")));
@@ -961,7 +961,7 @@ public final class FeatureExtractor {
       HashSet<String> neg = new HashSet<String>();
 
       for (String s : trains) {
-        for (String vector : new TextFile(s)) {
+        for (String vector : new EntryReader(s)) {
           if (type.equals("C5")) {
             if (vector.indexOf("bad") > -1)
               neg.add(vector.substring(0, vector.lastIndexOf("bad")));
@@ -984,7 +984,7 @@ public final class FeatureExtractor {
       ArrayList<String> testBad = new ArrayList<String>();
 
       for (String s : trains) {
-        for (String vector : new TextFile(s)) {
+        for (String vector : new EntryReader(s)) {
           if (type.equals("C5")) {
             if (vector.indexOf("bad") > -1)
               testBad.add(vector.substring(0, vector.lastIndexOf("bad")));

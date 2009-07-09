@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import utilMDE.TextFile;
+import utilMDE.EntryReader;
 import utilMDE.UtilMDE;
 
 /**
@@ -123,7 +123,7 @@ public final class Configuration
 
   public void apply(InputStream input) {
     assert input != null;
-    for (String line : new TextFile(input)) {
+    for (String line : new EntryReader(input)) {
       line = line.trim();
       if (line.length() == 0) continue;    // skip blank lines
       if (line.charAt(0) == '#') continue; // skip # comment lines

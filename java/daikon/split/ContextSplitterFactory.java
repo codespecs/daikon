@@ -112,7 +112,7 @@ public class ContextSplitterFactory
     ArrayList<MapfileEntry> result = new ArrayList<MapfileEntry>();
 
     try {
-      for (String reader_line : new TextFile(mapfile.toString())) {
+      for (String reader_line : new EntryReader(mapfile.toString())) {
         String line = reader_line;
         // Remove comments, skip blank lines
         {

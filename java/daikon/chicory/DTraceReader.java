@@ -15,7 +15,7 @@ public class DTraceReader extends DeclReader {
 
     try {
 
-      MultiReader dtrace_file = new MultiReader (pathname, "^(//|#).*", null);
+      EntryReader dtrace_file = new EntryReader (pathname, "^(//|#).*", null);
 
       for (String line = dtrace_file.readLine(); line != null;
            line = dtrace_file.readLine()) {
@@ -48,12 +48,12 @@ public class DTraceReader extends DeclReader {
    * Reads data for one ppt from the trace file.  Adds the data to
    * the list of data for the ppt.
    */
-  protected void read_data (String ppt_name, MultiReader dtrace_file)
+  protected void read_data (String ppt_name, EntryReader dtrace_file)
     throws IOException {
 
     if (!ppt_name.contains (":::"))
       throw new Error ("unexpected program point name " + ppt_name + " at "
-           + dtrace_file.get_filename() + ":" + dtrace_file.get_line_number());
+           + dtrace_file.getFileName() + ":" + dtrace_file.getLineNumber());
     DeclPpt ppt = ppts.get (ppt_name);
     if (ppt == null)
       throw new Error ("ppt " + ppt_name + " not declared");
