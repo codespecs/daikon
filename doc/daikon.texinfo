@@ -9437,8 +9437,10 @@ ppt <ppt-name>
 @end example
 
 The program point name can include any character.  In the declaration
-file, blanks must be
-replaced by @code{\_}, and backslashes must be escaped as @code{\\}.
+file,
+@c Replacing blanks by \_ isn't important on this line, but is important
+@c on other lines.
+blanks must be replaced by @code{\_}, and backslashes must be escaped as @code{\\}.
 Program point names must be distinct.
 
 The following program point fields (ppt-fields) can be specified:
