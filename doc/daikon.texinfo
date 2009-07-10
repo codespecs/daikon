@@ -9231,30 +9231,38 @@ of, or in addition to, referencing this manual and the Daikon website
 This chapter contains information about the file format of Daikon's
 input files.  It is of most information to those who wish to write a
 front end, also known as an instrumenter (@pxref{Front ends
-(instrumentation)}), enabling Daikon to detect invariants in another
-programming language.
+(instrumentation)}).  A new front end enables Daikon to detect
+invariants in another programming language.
 
 Daikon's input is conventionally one or more @file{.dtrace} data trace
-files.  There are two basic types of records that can appear in Daikon's
-input:  program point declarations, and trace records.
-(Daikon can also read splitter info files; @pxref{Splitter info file}.)
+files.  (Another, optional type of input file for Daikon is a splitter
+info file; @pxref{Splitter info file}.)
+A trace file is a text file that consists of newline-separated
+records.  There are two basic types of records that can appear in Daikon's
+input:  program point declarations, and trace records.  The trace
+records contain the data on which Daikon operates --- the run-time
+values of variables in your program.  The declarations describe the
+structure of the trace records.
 
-A declaration describes the structure of the trace records.  One
-declaration is required for each instrumented program point --- that is,
-each program point for which a trace record may appear.  Each
-declaration names a program point and lists the variables at that
-program point.
+Each declaration names an instrumented program point and lists the
+variables at that program point.  A program point is a location in the
+program, such as a procedure entry or exit, or a specific line number.
+An instrumented program point is a place where the instrumenter may emit
+a trace record.
 
 A data trace record (also known as a ``sample'')
 represents one execution of a program point.  The
 record names the program point and gives the runtime values of each
 variable.  The list of variables in the data trace record must be
-identical to that in the corresponding declaration.  The program point
-declaration must precede the first data trace record for the program
-point, but it is not required that all the program point declarations
+identical to that in the corresponding declaration.  For a given program point,
+the declaration must precede the first data trace record for the program
+point.  It is not required that all the program point declarations
 appear before any of the data trace records.  Each program point may be
-declared only once; re-declarations (even identical ones) are not
-currently permitted.
+declared only once; re-declarations (even identical ones) are currently
+not permitted.
+
+There exist some other declaration-related records;
+@xref{Declaration-related records}.
 
 Instead of placing both declarations and data trace records in a single
 file, it is permitted to place the declarations in one or more
@@ -9320,34 +9328,77 @@ readibility.
 @end menu
 
 
-@node Declaration Version, Variable comparability, Declarations, Declarations
-@subsection Declaration version
+@node Declaration-related records, Variable comparability, Declarations, Declarations
+@subsection Declaration-related records
 
-The declaration version is specified in a field in the following format:
+
+@node Declaration version, Variable comparability, Declarations, Declarations
+@subsubsection Declaration version
+
+The declaration version record is as follows:
 @example
 decl-version <version>
 @end example
 The current version is 2.0.  Previous versions (see @ref{Version 1
 Declarations}) did not include a version field and are identified by
-the lack of this field.  The declaration version field must be the
-first field specified in the file.
+the lack of this field.  The declaration version record must be the
+first record in the file.
+
+
+@node Input-language declaration, Program point declarations, Declaration Version, Declarations
+@subsubsection Input-language declaration
+
+You can specify the lanugage in which the program was written with a
+record of the form
+
+@example
+input-lanugage <language>
+@end example
+
+The language string is arbitrary and is not currently used.
 
 
 @node Variable comparability, Program point declarations, Declaration Version, Declarations
-@subsection Variable comparability
+@subsubsection Variable comparability
 
 @cindex comparability, for variables
 @cindex variable comparability
 @cindex units of measurement, see variable comparability
 
-The type of variable comparability is specified in a field in the following
-format:
+The Variable comparability record is as follows:
 @example
 var-comparability <comparability-type>
 @end example
 The possible values for @var{comparability-type} are @code{implicit} and
-@code{none}.  The @code{implicit} type is the default.  It is described in 
-@ref{V1 Program point declarations}.
+@code{none}.
+
+``@code{implicit}'' means ordinary comparability as described in
+@ref{Program point declarations}.  (The name @code{implicit} is retained
+for historical reasons.)
+
+This record is optional.  The @code{implicit} type is the default.
+
+
+@node ListImplementors declaration,  , V1 VarComparability declaration, Version 1 Declarations
+@subsection ListImplementors declaration
+
+This declaration indicates classes that implement the
+@code{java.util.List} interface, and should be treated as sequences
+for the purposes of invariant detection.  The syntax is as follows:
+
+@example
+ListImplementors
+<classname1>
+<classname2>
+...
+@end example
+
+Each classname is in Java format (for example, ``java.util.LinkedList'').
+
+The @samp{--list_type} command-line option to Daikon can also be used to
+specify classes that implement lists; @xref{Options to control invariant
+detection}.
+
 
 
 @node Program point declarations, Variable declarations, Variable comparability, Declarations
@@ -10407,20 +10458,21 @@ blank line is required between this record and the next one.
 @node V1 ListImplementors declaration,  , V1 VarComparability declaration, Version 1 Declarations
 @subsection V1 ListImplementors declaration
 
-This declaration can be used to indicate classes that implement the
+This declaration indicates classes that implement the
 @code{java.util.List} interface, and should be treated as sequences
 for the purposes of invariant detection.  The syntax is as follows:
 
 @example
 ListImplementors
-classname1
-classname2
+<classname1>
+<classname2>
 ...
 @end example
 
+Each classname is in Java format (for example, ``java.util.LinkedList'').
+
 The @samp{--list_type} command-line option to Daikon can also be used to
-specify classes which implement lists; see
-@ref{Options to control invariant detection}, for information.
+specify classes that implement lists; @xref{Options to control invariant detection}.
 
 
 
