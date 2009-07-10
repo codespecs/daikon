@@ -581,7 +581,7 @@ daikon/tools/WSMatch.class : $(wildcard $(WSMATCH_JAVA_FILES))
 LOOKUP_JAVA_FILES := $(shell find utilMDE -name '*.java')
 lookup.jar : $(LOOKUP_JAVA_FILES) utilMDE/lookup.manifest utilMDE/html2textrc
 	${JAVAC_COMMAND} $(LOOKUP_JAVA_FILES)
-	javadoc -quiet -doclet utilMDE.Lookup utilMDE/Lookup.java \
+	javadoc -J-ea -quiet -doclet utilMDE.Lookup utilMDE/Lookup.java \
 	  > utilMDE/lookup.html
 	html2text -rcfile utilMDE/html2textrc \
 	  < utilMDE/lookup.html > utilMDE/lookup.txt
@@ -993,14 +993,14 @@ javadoc: doc
 # typequal package -- it crashes javadoc.
 doc: $(AUTO_GENERATED_FILES) doc-dkconfig
 	mkdir -p doc
-	javadoc -J-Xmx1000m $(JAVADOC_FLAGS) \
+	javadoc -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
 		daikon -subpackages $(DAIKON_PACKAGES):utilMDE
 	cd doc && preplace '^ *&#64;cindex.*' ''
 
 ## Make doc with private fields for people working on source code
 doc-private: $(AUTO_GENERATED_FILES)
 	mkdir -p doc
-	javadoc -J-Xmx1000m $(JAVADOC_FLAGS) -private \
+	javadoc -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):utilMDE
 	cd doc && preplace '^ *&#64;cindex.*' ''
 
@@ -1013,7 +1013,7 @@ doc-private: $(AUTO_GENERATED_FILES)
 # 	echo "Run javadoc-index-to-alist > ~/emacs/javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: $(AUTO_GENERATED_FILES)
-	javadoc -J-Xmx1000m -doclet daikon.config.InvariantDoclet \
+	javadoc -J-Xmx1000m -J-ea -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -1028,7 +1028,7 @@ doc-invariant: ../doc/invariants-doc.texinfo
 # It depends on "all", which forces compilation, to avoid errors like
 #   "java.lang.ClassFormatError: Truncated class file".
 ../doc/config-options.texinfo: $(AUTO_GENERATED_FILES) all
-	javadoc -J-Xmx1000m -doclet daikon.config.ParameterDoclet \
+	javadoc -J-Xmx1000m -J-ea -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 	perl -pi -e 's/&#64;cindex/\@cindex/g' $@
@@ -1038,12 +1038,12 @@ doc-dkconfig: ../doc/config-options.texinfo
 
 # This file is no longer used; there's no point in keeping it around.
 # daikon/config/configurable.txt: $(AUTO_GENERATED_FILES)
-# 	javadoc -doclet daikon.config.ParameterDoclet \
+# 	javadoc -J-ea -doclet daikon.config.ParameterDoclet \
 # 		--list $@ \
 # 		$(JDOC_FILES)
 
 ../doc/category-options.texinfo: $(AUTO_GENERATED_FILES)
-	javadoc -J-Xmx1000m -doclet daikon.config.ParameterDocletCategory \
+	javadoc -J-Xmx1000m -J-ea -doclet daikon.config.ParameterDocletCategory \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
