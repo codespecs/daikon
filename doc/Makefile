@@ -5,7 +5,11 @@ info: daikon.info developer.info
 
 daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo \
 			 .fix-menu
-	makeinfo $<
+# Large split size fixes an apparent bug in makeinfo 4.11:
+# failing searches say
+#   Search failed: "  Indirect:"
+# instead of proper message.
+	makeinfo --split-size=1000000 $<
 
 developer.info: developer.texinfo .fix-dev-menu
 	makeinfo $<
