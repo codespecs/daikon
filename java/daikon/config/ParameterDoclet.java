@@ -166,7 +166,7 @@ public class ParameterDoclet
   public static String UNKNOWN_DEFAULT = "The default value is not known.";
   public static Pattern endOfSentence;
   static {
-     Pattern endOfSentence = Pattern.compile("[.?!>](\\))?$");
+    endOfSentence = Pattern.compile("[.?!>](\\))?$");
   }
 
   /**
@@ -179,6 +179,7 @@ public class ParameterDoclet
     if ("".equals(desc.trim())) {
       desc = NO_DESCRIPTION;
     } else if (! endOfSentence.matcher(desc).find()) {
+      // Add period if there is no end-of-sentence documentation
       desc = desc + ".";
     }
 
