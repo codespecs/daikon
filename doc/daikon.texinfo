@@ -374,10 +374,16 @@ File formats
 
 Declarations
 
-* Declaration Version::         
-* Variable comparability::      
+* Declaration-related records::  
 * Program point declarations::  
 * Variable declarations::       
+
+Declaration-related records
+
+* Declaration version::         
+* Input-language declaration::  
+* Variable comparability::      
+* ListImplementors declaration::  
 
 Data trace records
 
@@ -2220,8 +2226,9 @@ suffixing them with their line numbers; for instance,
 this example, @code{StackAr.top():::EXIT}) collects the postconditions
 that are true at every numbered exit point.  This is an example of a
 program point that represents a collection of locations in the program
-source rather than a single location.  This concept is referred to as
-@emph{hierarchy}.
+source rather than a single location.  This concept is represented in
+Daikon by the dataflow hierarchy, see
+@ref{Dataflow hierarchy,,,./developer,Daikon Developer Manual}.
 
 @cindex :::OBJECT program point
 @cindex OBJECT program point
@@ -9311,41 +9318,52 @@ inside a record.
 @cindex declaration format
 @cindex .decls file
 
-A declaration file (decls file) first states the declaration file format
-version number and the 
-comparability type, then defines each program point and its variables.
-Information is specified in named fields.  Fields with defaults can be
-omitted.  Each field is specified on a separate line in the format
-@code{<field-name> <field-value>}.  Indentation is ignored, so it may be
-used to aid
-readibility.
+The declaration file first  states the declaration file format
+version number (@pxref{Declaration version}).
+Then, it defines each program point and its variables.
+It may also specify some other information about the file
+(@pxref{Declaration-related records}).
+
+Indentation is ignored, so it may be used to aid readibility.
+Fields with defaults can be omitted.
+
+As a rule, each line of the declaration file is of the form
+@code{<field-name> <field-value>}.
 
 @menu
-* Declaration Version::         
-* Variable comparability::      
+* Declaration-related records::  
 * Program point declarations::  
 * Variable declarations::       
 @end menu
 
 
-@node Declaration-related records, Variable comparability, Declarations, Declarations
+@node Declaration-related records, Program point declarations, Declarations, Declarations
 @subsection Declaration-related records
 
 
-@node Declaration version, Variable comparability, Declarations, Declarations
+@menu
+* Declaration version::         
+* Input-language declaration::  
+* Variable comparability::      
+* ListImplementors declaration::  
+@end menu
+
+@node Declaration version, Input-language declaration, Declaration-related records, Declaration-related records
 @subsubsection Declaration version
+
+The declaration version record must be the first record in the file.
 
 The declaration version record is as follows:
 @example
 decl-version <version>
 @end example
-The current version is 2.0.  Previous versions (see @ref{Version 1
-Declarations}) did not include a version field and are identified by
-the lack of this field.  The declaration version record must be the
-first record in the file.
+The current version is 2.0.
+
+Previous versions (see @ref{Version 1 Declarations}) did not include a
+version field and are identified by the lack of this field.
 
 
-@node Input-language declaration, Program point declarations, Declaration Version, Declarations
+@node Input-language declaration, Variable comparability, Declaration version, Declaration-related records
 @subsubsection Input-language declaration
 
 You can specify the lanugage in which the program was written with a
@@ -9358,14 +9376,17 @@ input-lanugage <language>
 The language string is arbitrary and is not currently used.
 
 
-@node Variable comparability, Program point declarations, Declaration Version, Declarations
+@node Variable comparability, ListImplementors declaration, Input-language declaration, Declaration-related records
 @subsubsection Variable comparability
 
 @cindex comparability, for variables
 @cindex variable comparability
 @cindex units of measurement, see variable comparability
 
-The Variable comparability record is as follows:
+The Variable comparability record indicates how the comparability field
+of a variable declaration should be interpreted.
+
+Its format is:
 @example
 var-comparability <comparability-type>
 @end example
@@ -9379,8 +9400,8 @@ for historical reasons.)
 This record is optional.  The @code{implicit} type is the default.
 
 
-@node ListImplementors declaration,  , V1 VarComparability declaration, Version 1 Declarations
-@subsection ListImplementors declaration
+@node ListImplementors declaration,  , Variable comparability, Declaration-related records
+@subsubsection ListImplementors declaration
 
 This declaration indicates classes that implement the
 @code{java.util.List} interface, and should be treated as sequences
@@ -9401,42 +9422,27 @@ detection}.
 
 
 
-@node Program point declarations, Variable declarations, Variable comparability, Declarations
+@node Program point declarations, Variable declarations, Declaration-related records, Declarations
 @subsection Program point declarations
 
 The format of a program point declaration is:
 @example
 ppt <ppt-name>
-<ppt-fields>
-<ppt-fields>
+<ppt-info>
+<ppt-info>
 ...
 <variable-declaration>
 <variable-declaration>
 ...
 @end example
 
-The program point name can include any character.  Blanks must be
+The program point name can include any character.  In the declaration
+file, blanks must be
 replaced by @code{\_}, and backslashes must be escaped as @code{\\}.
 Program point names must be distinct.
 
 The following program point fields (ppt-fields) can be specified:
 @itemize 
-@item @code{parent <relation-type> <parent-ppt-name> <relation-id>}
-
-Specifies the name of a parent program point.  A parent program point
-is a point whose samples should include all of the samples at this
-program point.  For example, an object program point is a parent of
-each of the method program points in that object.  Multiple parent
-fields can be specified.  
-
-The @var{relation-type} is the type of parent-child relationship in
-the hierarchy.  Possible relationship types are @code{parent} and
-@code{user}.
-
-The @var{relation-id} is a unique integer that identifies this parent
-relation.  They are used when defining the the specific parent
-relations for variables.
-
 @item @code{ppt-type <type>}
 
 Specifies the @var{type} of the program point.  Possible program point
@@ -9447,6 +9453,26 @@ types are @code{point}, @code{class}, @code{object}, @code{enter},
 
 Specifies one or more flags for this ppt.  The possible flags are:
 @code{static}, @code{enter}, @code{exit}, @code{private}, @code{return}.
+
+@item @code{parent <relation-type> <parent-ppt-name> <relation-id>}
+
+Specifies the program point hierarchy (@ref{Dataflow
+hierarchy,,,./developer,Daikon Developer Manual}).
+
+In particular, names one parent of this program point.  A parent program point
+is a point whose samples should include all of the samples at this
+program point.  For example, an object program point is a parent of
+each of the method program points in that object.
+
+The @var{relation-type} is the type of parent-child relationship in
+the hierarchy.  Possible relationship types are @code{parent} and
+@code{user}.
+
+The @var{relation-id} is a unique integer that identifies this parent
+relation.  They are used when defining the the specific parent
+relations for variables.
+
+Multiple parent fields can be specified.
 
 @end itemize
 
