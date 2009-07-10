@@ -790,6 +790,8 @@ public final class FileIO {
 	return newppt;
   }
 
+  // Read a declaration in the Version 2 format.  For Version 1, see
+  // read_declaration.
   /**
    * Reads one ppt declaration.  The next line should be the ppt record.
    * After completion, the file pointer will be pointing at the next
@@ -990,6 +992,8 @@ public final class FileIO {
   }
 
 
+  // Read a declaration in the Version 1 format.  For version 2, see
+  // read_ppt_decl.
   // The "DECLARE" line has already been read.
   private static /*@Nullable*/ PptTopLevel read_declaration(ParseState state)
     throws IOException {
@@ -1279,14 +1283,16 @@ public final class FileIO {
     scanner.next();
     /*@Interned*/ String version = need (state, scanner, "declaration version number");
     need_eol (state, scanner);
-    boolean new_df = false;
+    boolean new_df;
     if (version == "2.0")       // interned
       new_df = true;
     else if (version == "1.0")  // interned
       new_df = false;
-    else
+    else {
       decl_error (state, "'%s' found where 1.0 or 2.0 expected",
                   version);
+      throw new Error("Can't get here"); // help out definite assignment analysis
+    }
 
     // Make sure that if a format was specified previously, it is the same
     if ((new_decl_format != null) && (new_df != new_decl_format))
