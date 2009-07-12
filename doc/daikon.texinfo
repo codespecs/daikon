@@ -9264,9 +9264,8 @@ variable.  The list of variables in the data trace record must be
 identical to that in the corresponding declaration.  For a given program point,
 the declaration must precede the first data trace record for the program
 point.  It is not required that all the program point declarations
-appear before any of the data trace records.  Each program point may be
-declared only once; re-declarations (even identical ones) are currently
-not permitted.
+appear before any of the data trace records.  A program point declaration
+may be repeated if its variables must match exactly.  
 
 There exist some other declaration-related records;
 @xref{Declaration-related records}.
