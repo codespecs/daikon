@@ -428,10 +428,6 @@ public final /*@Interned*/ class ProglangType
 
     value = value.trim();
 
-    if (value.equals("null")) {
-      return null;
-    }
-
     // Deal with [] surrounding array output (permits
     // distinguishing between null and an array containing just null).
     if (value.startsWith("[") && value.endsWith("]")) {
