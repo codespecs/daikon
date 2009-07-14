@@ -22,11 +22,12 @@ public class ArrayInfo extends DaikonVariableInfo
         this.array_type = array_type;
     }
 
+    @Override
     public /*@Nullable*/ Object getMyValFromParentVal(Object value)
     {
         if (value == null)
         {
-            return null;
+            return NonsensicalList.getInstance();
         }
         else if (value instanceof NonsensicalObject)
         {
