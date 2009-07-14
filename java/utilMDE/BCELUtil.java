@@ -105,9 +105,8 @@ public class BCELUtil {
       return cc.getBytes(pool) + " [" + cc.getNameIndex() + "]";
     } else {
       assert c != null;
-      assert false : "unexpected constant " + c + " class " + c.getClass();
+      throw new Error("unexpected constant " + c + " class " + c.getClass());
     }
-    return (null);
   }
 
   /** returns whether or not the specified method is a constructor * */
@@ -488,24 +487,25 @@ public class BCELUtil {
       classname = classname.substring (0, classname.length()-2);
       array_depth++;
     }
+    classname = classname.intern();
 
     // Get the base type
     Type t = null;
-    if (classname == "int")
+    if (classname == "int") // interned
       t = Type.INT;
-    else if (classname == "boolean")
+    else if (classname == "boolean") // interned
       t = Type.BOOLEAN;
-    else if (classname == "byte")
+    else if (classname == "byte") // interned
       t = Type.BYTE;
-    else if (classname == "char")
+    else if (classname == "char") // interned
       t = Type.CHAR;
-    else if (classname == "double")
+    else if (classname == "double") // interned
       t = Type.DOUBLE;
-    else if (classname == "float")
+    else if (classname == "float") // interned
       t = Type.FLOAT;
-    else if (classname == "long")
+    else if (classname == "long") // interned
       t = Type.LONG;
-    else if (classname == "short")
+    else if (classname == "short") // interned
       t = Type.SHORT;
     else // must be a non-primitive
       t = new ObjectType (classname);
