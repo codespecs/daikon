@@ -3279,11 +3279,15 @@ public final class FileIO {
         try {
           vals[val_index] = vi.rep_type.parse_value(value_rep);
           if (vals[val_index] == null) {
-            mods[val_index] = ValueTuple.MISSING_NONSENSICAL;
             if (debug_missing && !vi.canBeMissing)
               System.out.printf ("Var %s ppt %s at line %d null-not missing%n",
                                vi, ppt.name(),
                                FileIO.get_linenum());
+            assert vi.canBeMissing
+              : String.format("Var %s ppt %s at line %d null-not missing",
+                              vi, ppt.name(),
+                              FileIO.get_linenum());
+            mods[val_index] = ValueTuple.MISSING_NONSENSICAL;
             vi.canBeMissing = true;
           }
         } catch (Exception e) {
