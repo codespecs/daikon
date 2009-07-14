@@ -2851,8 +2851,8 @@ public final class FileIO {
               if (sp == null) {
                 System.out.printf ("Warning: successor %s in ppt %s does not "
                                    + "exist, removing\n", successor, p.name());
-                assert false;
-                it.remove();
+                throw new Error();
+                // it.remove();
               } else {
                 assert sp != null : successor;
                 @SuppressWarnings("interning") // PptTopLevel
@@ -2861,8 +2861,8 @@ public final class FileIO {
                   System.out.printf ("Warning: successor %s (func %s) in "
                             + "ppt %s (func %s) is not in same function\n",
                             sp.name(), sp.function_id, p.name(), p.function_id);
-                  assert false;
-                  it.remove();
+                  throw new Error();
+                  // it.remove();
                 } else {
                   assert same_function_id
                     : sp.function_id + " " + p.function_id;

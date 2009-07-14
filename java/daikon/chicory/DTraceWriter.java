@@ -132,8 +132,8 @@ public class DTraceWriter extends DaikonWriter
      * @param root The root of the program point's tree.
      * @param args The arguments to the method corrsponding to mi.
      *             Must be in the same order as the .decls info is in
-     *             (Which is the declared order in the source code)
-     * @param thisObj The value of the "this" object at this point in the execution
+     *             (which is the declared order in the source code).
+     * @param thisObj The value of the "this" object at this point in the execution.
      * @param ret_val The value returned from this method, only used for
      *                exit program points.
      *
@@ -172,10 +172,9 @@ public class DTraceWriter extends DaikonWriter
                 val = null;
             } else
             {
-                assert false: "Unknown DaikonVariableInfo subtype " + child.getClass() +
-                        " in traversePattern in DTraceWriter for info named " + child.getName() +
-                        " in class " + "for method " + mi;
-                val = null;
+                throw new Error("Unknown DaikonVariableInfo subtype " + child.getClass() +
+                                " in traversePattern in DTraceWriter for info named " + child.getName() +
+                                " in class " + "for method " + mi);
             }
 
             traverseValue(mi, child, val);

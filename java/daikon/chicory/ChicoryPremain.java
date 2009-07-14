@@ -403,10 +403,8 @@ public class ChicoryPremain {
                                                    "");
         return (loc1.equals (loc2));
       } else {
-        assert false : "unexpected protocol " + url1.getProtocol();
+        throw new Error("unexpected protocol " + url1.getProtocol());
       }
-
-      return (false);
     }
 
     /**

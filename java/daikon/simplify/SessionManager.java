@@ -215,26 +215,26 @@ public class SessionManager
 
     cc = new CmdCheck("(EQ 1 1)");
     m.request(cc);
-    assert true == cc.valid;
+    assert cc.valid;
 
     cc = new CmdCheck("(EQ 1 2)");
     m.request(cc);
-    assert false == cc.valid;
+    assert ! cc.valid;
 
     cc = new CmdCheck("(EQ x z)");
     m.request(cc);
-    assert false == cc.valid;
+    assert ! cc.valid;
 
     CmdAssume a = new CmdAssume("(AND (EQ x y) (EQ y z))");
     m.request(a);
 
     m.request(cc);
-    assert true == cc.valid;
+    assert cc.valid;
 
     m.request(CmdUndoAssume.single);
 
     m.request(cc);
-    assert false == cc.valid;
+    assert ! cc.valid;
 
     StringBuffer buf = new StringBuffer();
 

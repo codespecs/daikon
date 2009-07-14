@@ -1287,8 +1287,8 @@ public final class TypeStack
         for (int i = 0; i < types.length; i++)
         {
             if (!sameType(top(stack, i), types[i]))
-                assert false : "Wanted " + types[i] + " but got "
-                        + top(stack, i);
+                throw new Error("Wanted " + types[i] + " but got "
+                                + top(stack, i));
         }
     }
 
@@ -1324,7 +1324,7 @@ public final class TypeStack
 
     public void not_used()
     {
-        assert false : "We don't use this superclass";
+        throw new Error("We don't use this superclass");
     }
 
     public Type pop_check(Type type)

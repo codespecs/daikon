@@ -1175,7 +1175,7 @@ public final class DCRuntime {
           merge_comparability (varmap, null, null, static_dv);
         }
       } else {
-        assert false : "unexpected node " + dv;
+        throw new Error("unexpected node " + dv);
       }
     }
     debug_timing.log ("exit process_all_vars for %s%n", mi);
@@ -1238,7 +1238,7 @@ public final class DCRuntime {
             merge_comparability_refs_only (varmap, null, null, static_dv);
         }
       } else {
-        assert false : "unexpected node " + dv;
+        throw new Error("unexpected node " + dv);
       }
     }
     debug_timing.log ("exit process_all_vars for %s%n", mi);
@@ -2545,12 +2545,12 @@ public final class DCRuntime {
         debug_primitive.log ("push_field_tag %s [%s] %d = %s%n", obj,
                      obj.getClass().getName(), field_num, obj_tags[field_num]);
     } else {
-      assert false : "Object " +obj.getClass() + " '"+ obj + "' field_num "
-        + field_num;
-      tag_stack.push (null);
       if (debug_primitive.enabled())
         debug_primitive.log ("push_field_tag %s [%s] %d = null%n", obj,
                            obj.getClass().getName(), field_num);
+      throw new Error("Object " + obj.getClass() + " '" + obj + "' field_num "
+                      + field_num);
+      // tag_stack.push (null);
     }
   }
 
@@ -2778,9 +2778,9 @@ public final class DCRuntime {
         debug_primitive.log ("arrayload %s[%d] = %s%n", arr_ref, index,
                            obj_str(obj_tags[index]));
     } else {
-      assert false : "no tag storage: index " + index + " in array " + arr_ref;
-      tag_stack.push (null);
       debug_primitive.log ("iaload %s[%d]  = null%n", arr_ref, index);
+      throw new Error("no tag storage: index " + index + " in array " + arr_ref);
+      // tag_stack.push (null);
     }
   }
 

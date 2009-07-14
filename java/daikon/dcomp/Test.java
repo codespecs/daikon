@@ -278,7 +278,7 @@ class Test {
         assert obj1.x == obj2.x : "Corresponding fields should be equal";
         assert obj1.y == obj2.y : "Corresponding fields should be equal";
       } catch (CloneNotSupportedException e) {
-        assert false : "Caught unexpected CloneNotSupportedException";
+        throw new Error("Caught unexpected CloneNotSupportedException");
       }
 
       // Ensure the clone() method still works when not overridden
@@ -288,7 +288,7 @@ class Test {
         return;
       }
 
-      assert false : "Expected CloneNotSupportedException wasn't thrown";
+      throw new Error("Expected CloneNotSupportedException wasn't thrown");
     }
   }
 

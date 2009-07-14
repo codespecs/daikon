@@ -404,7 +404,7 @@ public class CLASSNAME
           sub_right_var = sub.endvar();
           sub_right_shift = (sub.right_closed ? 0 : -1);
         } else {
-          assert false;
+          throw new Error();
         }
         if (supervar.derived instanceof SEQUENCESCALARSUBSEQUENCE) {
           SEQUENCESCALARSUBSEQUENCE super_
@@ -423,7 +423,7 @@ public class CLASSNAME
           super_right_var = super_.endvar();
           super_right_shift = (super_.right_closed ? 0 : -1);
         } else {
-          assert false;
+          throw new Error();
         }
         boolean left_included = false, right_included = false;
         if (super_left_var == null)
@@ -676,7 +676,7 @@ public class CLASSNAME
           sub_right_var = sub.endvar();
           sub_right_shift = (sub.right_closed ? 0 : -1);
         } else {
-          assert false;
+          throw new Error();
         }
         if (supervar.derived instanceof SEQUENCESCALARSUBSEQUENCE) {
           SEQUENCESCALARSUBSEQUENCE super_
@@ -695,7 +695,7 @@ public class CLASSNAME
           super_right_var = super_.endvar();
           super_right_shift = (super_.right_closed ? 0 : -1);
         } else {
-          assert false;
+          throw new Error();
         }
         boolean left_included, right_included;
         if (super_left_var == null)

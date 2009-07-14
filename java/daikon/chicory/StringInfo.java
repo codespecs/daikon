@@ -14,6 +14,7 @@ public class StringInfo extends DaikonVariableInfo
         super(theName, arr);
     }
 
+    @Override
     public Object getMyValFromParentVal(Object value)
     {
         return value;

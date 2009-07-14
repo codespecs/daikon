@@ -1080,8 +1080,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             // Check that all declared methods were in fact visited.
             for (Method m : c.getDeclaredMethods()) {
                 if (!visitedMethods.contains(m)) {
-                    assert false
-        : "m=" + m + ", visitedMethods=" + visitedMethods;
+                    throw new Error("m=" + m + ", visitedMethods=" + visitedMethods);
                 }
             }
 

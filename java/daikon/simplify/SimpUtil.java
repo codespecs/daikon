@@ -24,12 +24,12 @@ public class SimpUtil
     assert s != null;
     // XXX not with strings
 //     if (s.indexOf("((") != -1)
-//       assert false : "'((' may not appear, '" + s + "'";
+//       throw new Error("'((' may not appear, '" + s + "'");
     assert s.length() >= 4 : "too short, '" + s + "'";
     if (s.charAt(0) != '(')
-      assert false : "starts with lparen, '" + s + "'";
+      throw new Error("starts with lparen, '" + s + "'");
     if (s.charAt(s.length()-1) != ')')
-      assert false : "ends with rparen, '" + s + "'";
+      throw new Error("ends with rparen, '" + s + "'");
 
     int paren = 0;
     char[] cs = s.toCharArray();
@@ -44,7 +44,7 @@ public class SimpUtil
         paren--;
         // This check is only sensible for some callers; it needs a flag.
 //         if (paren == 0 && i < cs.length -1)
-//           assert false : "multiple SEXPs in " + s;
+//           throw new Error("multiple SEXPs in " + s);
       }
     }
     // XXX not with strings

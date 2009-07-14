@@ -1211,7 +1211,6 @@ public final class ONEOFSCALAR
     } else if (num_elts == 0) {
       return format_too_few_samples(OutputFormat.SIMPLIFY, null);
     } else {
-      assert false;
       throw new Error("this can't happen");
       // result = null;
     }

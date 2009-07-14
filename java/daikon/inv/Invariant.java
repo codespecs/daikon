@@ -1719,8 +1719,7 @@ public abstract class Invariant
    * enabled
    */
   public boolean enabled() /*@Prototype*/ {
-    assert false : "no enabled for class " + getClass();
-    return (false);
+    throw new Error("no implementation of enabled() for class " + getClass());
   }
 
 
@@ -1729,7 +1728,7 @@ public abstract class Invariant
    * types.
    */
   // public boolean valid_types (ProglangType[] rep_types) {
-  //  assert false : "no valid_types for class " + getClass();
+  //  throw new Error("no valid_types for class " + getClass());
   //  return (false);
   // }
 
@@ -1743,8 +1742,7 @@ public abstract class Invariant
    * @see #instantiate_ok(VarInfo[])
    */
   public boolean valid_types (VarInfo[] vis) /*@Prototype*/ {
-    assert false : "no valid_types for class " + getClass();
-    return (false);
+    throw new Error("no implementation of valid_types() for class " + getClass());
   }
 
   /**
@@ -1847,8 +1845,7 @@ public abstract class Invariant
       VarInfo v1 = ppt.var_infos[0];
       VarInfo v2 = ppt.var_infos[1];
       VarInfo v3 = ppt.var_infos[2];
-      if (!(this instanceof TernaryInvariant))
-        assert false
+      assert (this instanceof TernaryInvariant)
         : "invariant '" + format() + "' in slice "
                            + ppt.name() + " is not ternary";
       TernaryInvariant ternary_inv = (TernaryInvariant) this;

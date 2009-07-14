@@ -98,7 +98,7 @@ public class NISuppressee {
                                 vt.getValue(vis[2]), 1, 1);
     } else if (var_count == 2) {
       if (!(sample_inv instanceof BinaryInvariant))
-        assert false : "not binary: " + sample_inv.getClass();
+        throw new Error("not binary: " + sample_inv.getClass());
       BinaryInvariant binary_inv = (BinaryInvariant) sample_inv;
       // Fmt.pf ("checking %s over %s=%s and %s=%s", sample_inv.getClass(),
       //        vis[0].name(), vt.getValue(vis[0]),

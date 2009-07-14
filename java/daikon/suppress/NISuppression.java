@@ -277,12 +277,11 @@ public class NISuppression {
               assert ss != null;
               // this is apparently called for side effect (debugging output)
               ss.suppressed (cinv.ppt);
-              assert false
-                : "inv " + cinv.repr() + " of class "
+              throw new Error("inv " + cinv.repr() + " of class "
                 + supinv.suppressee + " already exists in ppt "
                 + ppt.name + " suppressionset = " + ss
                 + " suppression = " + this
-                + " last antecedent = " + inv.format();
+                              + " last antecedent = " + inv.format());
             }
           }
         }
@@ -369,10 +368,9 @@ public class NISuppression {
           for (NIS.SupInv supinv : new_invs) {
             Invariant cinv = supinv.already_exists();
             if (cinv != null)
-              assert false
-        : "inv " + cinv.format() + " of class "
+              throw new Error("inv " + cinv.format() + " of class "
                                  + supinv.suppressee
-                                 + " already exists in ppt " + ppt.name;
+                              + " already exists in ppt " + ppt.name);
 
           }
         }

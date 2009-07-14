@@ -403,11 +403,10 @@ public final class MergeInvariants {
 
     // Both ppt and child should have splitters
     if (ppt.has_splitters() != child.has_splitters()) {
-      System.err.println("Merge ppt " + ppt.name +
+      throw new Error("Merge ppt " + ppt.name +
                          (ppt.has_splitters() ? " has " : "doesn't have ") +
                          "splitters, but child ppt " + child.name +
                          (child.has_splitters() ? " does" : " doesn't"));
-      assert false;
     }
 
     // Nothing to do if there are no splitters here
@@ -417,12 +416,11 @@ public final class MergeInvariants {
 
     // Both ppt and child should have the same number of splitters
     if (ppt.splitters.size() != child.splitters.size()) {
-      System.err.println("Merge ppt " + ppt.name + " has " +
+      throw new Error("Merge ppt " + ppt.name + " has " +
                          ((ppt.splitters.size() > child.splitters.size()) ?
                           "more" : "fewer") + " splitters (" +
                          ppt.splitters.size() + ") than child ppt " +
                          child.name + " (" + child.splitters.size() + ")");
-      assert false;
     }
 
     // Create a relation from each conditional ppt to its corresponding

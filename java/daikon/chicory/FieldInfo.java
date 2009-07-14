@@ -59,7 +59,7 @@ public class FieldInfo extends DaikonVariableInfo
            if (f.getType().isPrimitive())
                field_num++;
        }
-       assert false : "Can't find " + field + " in "+field.getDeclaringClass();
+       throw new Error("Can't find " + field + " in "+field.getDeclaringClass());
     }
 
     /**

@@ -148,12 +148,12 @@ public final class TestUtilMDE extends TestCase {
                          new int[] { 3,3 });
     try {
       ArraysMDE.min_max(new int[] { });
-      assert false : "Didn't throw ArrayIndexOutOfBoundsException";
+      throw new Error("Didn't throw ArrayIndexOutOfBoundsException");
     } catch (ArrayIndexOutOfBoundsException e) {
     }
     try {
       ArraysMDE.min_max(new long[] { });
-      assert false : "Didn't throw ArrayIndexOutOfBoundsException";
+      throw new Error("Didn't throw ArrayIndexOutOfBoundsException");
     } catch (ArrayIndexOutOfBoundsException e) {
     }
 
@@ -1067,7 +1067,7 @@ public final class TestUtilMDE extends TestCase {
     java.awt.Point pOrig = new java.awt.Point(1,2);
     try {
       Intern.intern((Object) pOrig); // performed for side effect
-      assert false : "Didn't throw IllegalArgumentException";
+      throw new Error("Didn't throw IllegalArgumentException");
     } catch (IllegalArgumentException e) {
     }
   }
@@ -1130,7 +1130,7 @@ public final class TestUtilMDE extends TestCase {
     }
     try {
       MathMDE.pow(3, -3);
-      assert false : "Didn't throw ArithmeticException";
+      throw new Error("Didn't throw ArithmeticException");
     } catch (ArithmeticException e) {
     }
 
@@ -1679,7 +1679,7 @@ public final class TestUtilMDE extends TestCase {
     }
     try {
       java.lang.reflect.Method m = UtilMDE.methodForName("utilMDE.UtilMDE.methodForName()");
-      assert false : "Didn't throw NoSuchMethodException";
+      throw new Error("Didn't throw NoSuchMethodException");
     } catch (NoSuchMethodException e) {
       // nothing to do; this is the expected case
     } catch (Exception e) {

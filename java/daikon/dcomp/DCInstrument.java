@@ -1648,8 +1648,7 @@ class DCInstrument {
 
     // Make sure we didn't miss anything
     default:
-      assert false: "instruction " + inst + " unsupported";
-      return (null);
+      throw new Error("instruction " + inst + " unsupported");
     }
 
   }
@@ -2515,8 +2514,7 @@ class DCInstrument {
         if (f.getType() instanceof BasicType)
           fcnt++;
       }
-      assert false : "Can't find " + name + " in " + obj_type;
-      return (-1);
+      throw new Error("Can't find " + name + " in " + obj_type);
     }
 
     // Look up the class using this classes class loader.  This may
@@ -2536,8 +2534,7 @@ class DCInstrument {
       if (f.getType().isPrimitive())
         fcnt++;
     }
-    assert false : "Can't find " + name + " in " + obj_class;
-    return (-1);
+    throw new Error("Can't find " + name + " in " + obj_class);
   }
 
   /**
@@ -3122,9 +3119,9 @@ class DCInstrument {
       else // both values are references
         op = "dup";
     } else if (is_primitive (top)) {
-      if (is_category2 (stack.peek(1)))
-        assert false : "not supposed to happen " + stack_contents(stack, 3);
-      else if (is_category2(stack.peek(2))) {
+      if (is_category2 (stack.peek(1))) {
+        throw new Error("not supposed to happen " + stack_contents(stack, 3));
+      } else if (is_category2(stack.peek(2))) {
         if (is_primitive (stack.peek(1)))
           op = "dup2_x1";
         else
@@ -3145,9 +3142,9 @@ class DCInstrument {
           op = "dup";
       }
     } else { // top is a reference
-      if (is_category2 (stack.peek(1)))
-        assert false : "not supposed to happen " + stack_contents(stack, 3);
-      else if (is_category2(stack.peek(2))) {
+      if (is_category2 (stack.peek(1))) {
+        throw new Error("not supposed to happen " + stack_contents(stack, 3));
+      } else if (is_category2(stack.peek(2))) {
         if (is_primitive (stack.peek(1)))
           op = "dup_x1";
         else
@@ -3322,8 +3319,7 @@ class DCInstrument {
       if (inst instanceof TypedInstruction)
         return ((TypedInstruction) inst).getType (pool);
     }
-    assert false : "couldn't find any typed instructions";
-    return null;
+    throw new Error("couldn't find any typed instructions");
   }
 
   /** Convenience function to build an instruction list **/
@@ -3485,8 +3481,7 @@ class DCInstrument {
         throw new Error ("can't get class " + sig, e);
       }
     } else {
-      assert false : "unexpected type " + t;
-      return (null);
+      throw new Error("unexpected type " + t);
     }
 
   }
@@ -4159,8 +4154,8 @@ class DCInstrument {
           System.out.printf ("param %s %s%n", arg_types[ii], arg_names[ii]);
         for (LocalVariableGen lvg : locals)
           System.out.printf ("local[%d] = %s%n", lvg.getIndex(), lvg);
-        assert false : mg.getClassName() + "." + mg + " "
-          + first_local + " " + locals.length;
+        throw new Error(mg.getClassName() + "." + mg + " "
+                        + first_local + " " + locals.length);
       }
 
       // Add back the object and the parameters

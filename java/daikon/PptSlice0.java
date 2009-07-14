@@ -216,7 +216,7 @@ public class PptSlice0
           System.out.println ("right class = "
                               + theImp.right.getClass() + "/"
                               + other.theImp.right.getClass());
-          // assert false;
+          // throw new Error();
         }
         assert (!same_eq) || fmt_eq;
       }

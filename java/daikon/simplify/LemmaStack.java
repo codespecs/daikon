@@ -75,7 +75,7 @@ public class LemmaStack {
     try {
       session.request(CmdUndoAssume.single);
     } catch (TimeoutException e) {
-      assert false : "Unexpected timeout on (BG_POP)";
+      throw new Error("Unexpected timeout on (BG_POP)");
     }
   }
 
@@ -332,7 +332,7 @@ public class LemmaStack {
       }
       assumeAll(lemmas);
     } catch (TimeoutException e) {
-      assert false;
+      throw new Error();
     }
     return found;
   }

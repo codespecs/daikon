@@ -2840,10 +2840,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return str_name;
     case RETURN:
       return ("\\result");
+    default:
+      throw new Error("can't drop through switch statement");
     }
-
-    assert false : "can't drop through switch statement";
-    return (null);
   }
 
   /**
@@ -2916,10 +2915,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return str_name;
     case RETURN:
       return ("\\result");
+    default:
+      throw new Error("can't drop through switch statement");
     }
-
-    assert false : "can't drop through switch statement";
-    return (null);
   }
 
   /** Returns the name of this variable in simplify format **/
@@ -2993,10 +2991,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return "|" + str_name + "|";
     case RETURN:
       return ("|return|");
+    default:
+      throw new Error("can't drop through switch statement");
     }
-
-    assert false : "can't drop through switch statement";
-    return (null);
   }
 
   /**
@@ -3030,9 +3027,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     else
       old_result = var_info_name.applySize().simplify_name().intern(); // vin ok
     if (FileIO.new_decl_format && (old_result != result)) {
-      System.out.printf("%s: '%s' '%s'\n", this, result, old_result);
-      System.out.printf (" basehashcode = %s\n", get_base_array_hashcode());
-      assert false;
+      throw new Error(String.format("%s: '%s' '%s'%n basehashcode = %s%n", this, result, old_result, get_base_array_hashcode()));
     }
 
     return old_result;

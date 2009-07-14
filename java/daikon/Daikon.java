@@ -1590,7 +1590,6 @@ public final class Daikon {
             System.out.printf ("  entry var = %s%n", cvi);
           for (VarInfo cvi : exit_ppt.var_infos)
             System.out.printf ("  exit var = %s%n", cvi);
-          assert false;
           throw new RuntimeException("this can't happen: postvar is null");
         }
         origvar.postState = postvar;

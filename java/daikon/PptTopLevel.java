@@ -1142,7 +1142,7 @@ public class PptTopLevel extends Ppt {
             ss.suppressed (inv.ppt);
             System.out.printf ("suppressed: %s by suppression set %s in ppt %s",
                                inv.format(), ss, slice);
-            assert false;
+            throw new Error();
           }
         }
       }
@@ -1505,7 +1505,7 @@ public class PptTopLevel extends Ppt {
       System.out.println ("but, slice " + cslice + " already exists");
       for (Invariant inv : cslice.invs)
         System.out.println(" -- inv " + inv);
-      assert false;
+      throw new Error();
     }
 
     // Make sure that the slice is valid (they are not always valid)
@@ -1968,7 +1968,7 @@ public class PptTopLevel extends Ppt {
       assert v2.rep_type == ProglangType.STRING_ARRAY;
       proto = SeqSeqStringEqual.get_proto();
     } else {
-      assert false : "unexpected type " + v1.rep_type;
+      throw new Error("unexpected type " + v1.rep_type);
     }
     assert proto != null;
     assert proto.valid_types(slice.var_infos);
@@ -2051,7 +2051,7 @@ public class PptTopLevel extends Ppt {
       assert v2.rep_type == ProglangType.DOUBLE_ARRAY;
       inv = SubSequenceFloat.get_proto().instantiate(slice);
     } else {
-      assert false : "unexpected type " + v1.rep_type;
+      throw new Error("unexpected type " + v1.rep_type);
     }
 
     if (inv == null)
@@ -3904,11 +3904,10 @@ public class PptTopLevel extends Ppt {
           if (test_cv.canonicalRep() != cv.canonicalRep()) {
             System.out.println ("pv.equalitySet = " + pv.equalitySet);
             System.out.println ("cv.equalitySet = " + cv.equalitySet);
-            assert false
-        : "parent variable " + test_pv
+            throw new Error("parent variable " + test_pv
                                + " child " + test_cv
                                + " is not in the same child equality set as "
-                               + cv;
+                            + cv);
           }
         }
       }
@@ -4631,9 +4630,8 @@ public class PptTopLevel extends Ppt {
       return true;
 
     // All of the paths are loops, very strange
-    assert false : String.format ("all paths from %s to %s are loops", name(),
-                                  ppt.name());
-    return false;
+    throw new Error(String.format ("all paths from %s to %s are loops", name(),
+                                   ppt.name()));
   }
 
   static Set<String> succ_map = new LinkedHashSet<String>();
@@ -4717,8 +4715,7 @@ public class PptTopLevel extends Ppt {
       return true;
 
     // All of the paths are loops, very strange
-    assert false : String.format ("all paths into %s are loops", name());
-    return false;
+    throw new Error(String.format ("all paths into %s are loops", name()));
   }
 
   static Set<String> pred_map = new LinkedHashSet<String>();

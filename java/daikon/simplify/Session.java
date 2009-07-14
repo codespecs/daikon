@@ -164,26 +164,26 @@ public class Session
 
     cc = new CmdCheck("(EQ 1 1)");
     cc.apply(s);
-    assert true == cc.valid;
+    assert cc.valid;
 
     cc = new CmdCheck("(EQ 1 2)");
     cc.apply(s);
-    assert false == cc.valid;
+    assert ! cc.valid;
 
     cc = new CmdCheck("(EQ x z)");
     cc.apply(s);
-    assert false == cc.valid;
+    assert ! cc.valid;
 
     CmdAssume a = new CmdAssume("(AND (EQ x y) (EQ y z))");
     a.apply(s);
 
     cc.apply(s);
-    assert true == cc.valid;
+    assert cc.valid;
 
     CmdUndoAssume.single.apply(s);
 
     cc.apply(s);
-    assert false == cc.valid;
+    assert ! cc.valid;
   }
 
 }

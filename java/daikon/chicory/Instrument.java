@@ -938,8 +938,7 @@ public class Instrument implements ClassFileTransformer {
     case Constants.T_INT:     wrapper = "IntWrap"; break;
     case Constants.T_LONG:    wrapper = "LongWrap"; break;
     case Constants.T_SHORT:   wrapper = "ShortWrap"; break;
-    default:
-    assert false : "unexpected type " + prim_type;
+    default: throw new Error("unexpected type " + prim_type);
     }
 
     InstructionList il = new InstructionList();

@@ -702,7 +702,7 @@ public abstract /*@Interned*/ class VarInfoName
           else if (c == '*')
             buf.append("star_");
           else
-            assert false : "Unexpected character in VarInfoName$Simple";
+            throw new Error("Unexpected character in VarInfoName$Simple");
         }
         return buf.toString();
       }
@@ -2854,10 +2854,8 @@ public abstract /*@Interned*/ class VarInfoName
         /*@Interned*/ VarInfoName[] replace_result = replace(root, to_replace, index_vin);
         return replace_result[0];
       } else {
-        assert false
-        : "Can't handle multi-dim array in " +
-                          "VarInfoName.QuantHelper.select_nth()";
-        return null;
+        throw new Error("Can't handle multi-dim array in " +
+                        "VarInfoName.QuantHelper.select_nth()");
       }
     }
 
@@ -2897,10 +2895,8 @@ public abstract /*@Interned*/ class VarInfoName
         //                      root, to_replace, index_vin);
         return replace_result[0];
       } else {
-        assert false
-        : "Can't handle multi-dim array in " +
-                          "VarInfoName.QuantHelper.select_nth()";
-        return null;
+        throw new Error("Can't handle multi-dim array in " +
+                        "VarInfoName.QuantHelper.select_nth()");
       }
     }
 

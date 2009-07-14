@@ -566,7 +566,7 @@ public class PptRelation implements Serializable {
       for (VarInfo vc : child.var_infos) {
         System.out.println("    " + vc.name());
       }
-      //assert false : "Missing orig variable in EXIT";
+      //throw new Error("Missing orig variable in EXIT");
     }
     return (rel);
   }

@@ -346,11 +346,10 @@ public class NIS {
         InvariantStatus result = inv.add_sample (vt, count);
         if (result == InvariantStatus.FALSIFIED) {
           if (NIS.antecedent_method)
-          assert false
-        : "inv " + inv.format()
+            throw new Error ("inv " + inv.format()
                              + " falsified by sample "
                              + Debug.toString (inv.ppt.var_infos, vt)
-                             + " at ppt " + inv.ppt;
+                             + " at ppt " + inv.ppt);
           else {
             inv.falsify();
             newly_falsified.add(inv);
@@ -647,9 +646,8 @@ public class NIS {
         if (Daikon.dkconfig_internal_check) {
           assert !inv.is_ni_suppressed() : "Still suppressed: " + inv.format();
           if (inv.ppt.find_inv_exact (inv) != null)
-            assert false
-        : "inv " + inv.format()
-                               + " already exists in ppt " + ppt.name;
+            throw new Error("inv " + inv.format()
+                            + " already exists in ppt " + ppt.name);
         }
         new_invs.add (inv);
       }

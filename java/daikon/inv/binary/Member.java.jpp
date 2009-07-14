@@ -203,7 +203,7 @@ public final class CLASSNAME
         seq_right_index = ssass.endvar();
         seq_right_shift = (ssass.right_closed ? 0 : -1);
       } else {
-        assert false;
+        throw new Error();
       }
 
       // if the scalar is a a subscript (b[i])

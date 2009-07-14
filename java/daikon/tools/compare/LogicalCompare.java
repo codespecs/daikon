@@ -326,7 +326,7 @@ public class LogicalCompare {
         System.out.println("Contradictory assumptions:");
         Vector<Lemma> min = lemmas.minimizeContradiction();
         LemmaStack.printLemmas(System.out, min);
-        assert false : "Aborting";
+        throw new Error("Aborting");
       }
     }
 
@@ -348,7 +348,7 @@ public class LogicalCompare {
       System.out.println("Contradictory assumptions:");
       Vector<Lemma> min = lemmas.minimizeContradiction();
       LemmaStack.printLemmas(System.out, min);
-      assert false : "Aborting";
+      throw new Error("Aborting");
     }
     assumptions.addAll(safeAssumptions);
 
@@ -514,7 +514,7 @@ public class LogicalCompare {
           if (ppt_name == null) {
             System.err.println("Must specify PPT_NAME before " +
                                "giving a formula");
-            assert false;
+            throw new Error();
           }
           String formula, comment;
           // XXX This should really read a balanced Simplify
@@ -536,15 +536,15 @@ public class LogicalCompare {
           System.err.println("Can't parse " + line + " in assumptions file");
           System.err.println("Should be `PPT_NAME <ppt_name>' or a Simplify " +
                              "formula (starting with `(')");
-          assert false;
+          throw new Error();
         }
       }
     } catch (FileNotFoundException e) {
       System.err.println("File not found: " + filename);
-      assert false;
+      throw new Error();
     } catch (IOException e) {
       System.err.println("IO error reading " + filename);
-      assert false;
+      throw new Error();
     }
   }
 
@@ -653,7 +653,7 @@ public class LogicalCompare {
         } else if (option_name.equals("minimize-classes")) {
           opt_minimize_classes = true;
         } else {
-          assert false;
+          throw new Error();
         }
         break;
       case 'h':

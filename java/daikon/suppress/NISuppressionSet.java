@@ -449,9 +449,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
       if (Daikon.dkconfig_internal_check) {
         for (Invariant new_inv : new_invs) {
           if ((new_inv.getClass() == inv.getClass()) && (new_inv.ppt == slice))
-            assert false
-              : String.format("inv %s:%s already in new_invs "
-                          + "(slice %s)", inv.getClass(), inv.format(), slice);
+            throw new Error(String.format("inv %s:%s already in new_invs "
+                                          + "(slice %s)", inv.getClass(), inv.format(), slice));
         }
       }
 
@@ -469,9 +468,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           PrintInvariants.print_all_invs (ppt, vis[1], vis[2], "  ");
           PrintInvariants.print_all_invs (ppt, vis[0], vis[2], "  ");
           Debug.check (Daikon.all_ppts, "assert failure");
-          assert false
-            : String.format("inv %s:%s already in slice %s",
-                            inv.getClass(), inv.format(), slice);
+          throw new Error(String.format("inv %s:%s already in slice %s",
+                                        inv.getClass(), inv.format(), slice));
         }
       }
     }

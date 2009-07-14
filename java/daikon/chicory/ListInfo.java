@@ -25,6 +25,7 @@ public class ListInfo extends DaikonVariableInfo
 
     //use the "toArray" method to get an array
     //convert the array to a List
+    @Override
     public Object getMyValFromParentVal(Object value)
     {
 

@@ -214,7 +214,7 @@ public class PptSplitter implements Serializable {
         for (PptRelation rel : pchild.children)
           System.out.printf ("  relation = %s\n", rel);
         System.out.printf ("parent: %s\n", parent);
-        assert false;
+        throw new Error();
       }
     }
 
@@ -447,7 +447,7 @@ public class PptSplitter implements Serializable {
       if (con_invs[jj] == null) {
         System.out.println ("Warning: No non-obvious non-suppressed exclusive"
                             + " invariants found in " + parent.name);
-        // assert false;
+        // throw new Error();
         con_invs[jj] = first[jj];
       }
     }

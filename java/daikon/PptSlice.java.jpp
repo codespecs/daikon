@@ -485,7 +485,7 @@ public final class PPTSLICE1 extends PptSlice {
         // NISuppressionSet ss = invariant.get_ni_suppressions();
         // ss.suppressed (invariant.ppt);
         // System.out.printf ("suppression = %s%n", ss);
-        // assert false;
+        // throw new Error();
      // }
     }
 

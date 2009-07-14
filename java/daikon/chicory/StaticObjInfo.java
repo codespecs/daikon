@@ -31,6 +31,7 @@ public class StaticObjInfo extends DaikonVariableInfo
     /* (non-Javadoc)
      * @see daikon.chicory.DaikonVariableInfo#getChildValue(java.lang.Object)
      */
+    @Override
     public /*@Nullable*/ Object getMyValFromParentVal(Object val)
     {
         return null;

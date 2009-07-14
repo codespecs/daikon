@@ -81,10 +81,10 @@ public class ParameterInfo extends DaikonVariableInfo
         return param_offset;
     }
 
+    @Override
     public Object getMyValFromParentVal(Object value)
     {
         //a parameter has no parent value
-        assert false : "Parameters have no parent value";
         throw new RuntimeException("Parameters have no parent value");
     }
 

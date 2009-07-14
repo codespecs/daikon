@@ -607,8 +607,7 @@ class DFInstrument extends DCInstrument {
 
     // Make sure we didn't miss anything
     default:
-      assert false: "instruction " + inst + " unsupported";
-      return (null);
+      throw new Error("instruction " + inst + " unsupported");
     }
 
   }
@@ -981,7 +980,7 @@ class DFInstrument extends DCInstrument {
 
   public void constructor_summary (InstructionList il, InvokeInstruction invoke,
                                    String replacement_method) {
-    assert false;
+    throw new Error();
   }
 
 }

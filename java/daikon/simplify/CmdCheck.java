@@ -59,8 +59,7 @@ public class CmdCheck
                                "daikon.simplify.LemmaStack." +
                                "synchronous_errors=true");
 
-          assert false
-        : "Simplify error: " + result + " on " + proposition;
+          throw new Error("Simplify error: " + result + " on " + proposition);
         }
         if (result.equals("Abort (core dumped)")) {
           throw new SimplifyError(result);
@@ -89,9 +88,8 @@ public class CmdCheck
       try {
         Integer.parseInt(result.substring(0, colon));
       } catch (NumberFormatException e) {
-        assert false
-        : "Expected number to prefix result '"
-                          + result + "' while checking: " + proposition;
+        throw new Error("Expected number to prefix result '"
+                        + result + "' while checking: " + proposition);
       }
       result = result.substring(colon + 2);
       if ("Valid.".equals(result)) {

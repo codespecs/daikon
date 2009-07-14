@@ -189,16 +189,16 @@ public final class CLASSNAME
     if (isActive()) {
       // Seen enough values, so permuting a, b, c is useful
       if ( a == 0 || b == 0 || c == 0) {
-        assert false : "Active LTs never have 0 coefficients";
-        // Can't handle this form once rotated.  But if we've seen
-        // enough values, yet a, b or c is zero, then this is covered by
-        // a LinearBinary or a constant, so let me just destroy myself.
-        values_seen = Integer.MAX_VALUE;
-        a = b = c = d = 0;
-        if (debug.isLoggable(Level.FINE)) {
-          debug.fine ("  Ternary invariant destroyed because a, b, or c = 0");
-        }
-        return;
+        throw new Error("Active LTs never have 0 coefficients");
+        // // Can't handle this form once rotated.  But if we've seen
+        // // enough values, yet a, b or c is zero, then this is covered by
+        // // a LinearBinary or a constant, so let me just destroy myself.
+        // values_seen = Integer.MAX_VALUE;
+        // a = b = c = d = 0;
+        // if (debug.isLoggable(Level.FINE)) {
+        //   debug.fine ("  Ternary invariant destroyed because a, b, or c = 0");
+        // }
+        // return;
       } else {
         // double d = -1.0 / pclever[2];
         a = pclever[0];
