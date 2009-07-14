@@ -50,6 +50,8 @@
 --suppress-fragment http://java.sun.com/javase/6/docs/jdk/api/javac/tree/com/sun/source/util/SimpleTreeVisitor.html?is-external=true#visitAnnotatedType(com.sun.source.tree.AnnotatedTypeTree,%20P)
 --suppress-fragment http://java.sun.com/javase/6/docs/jdk/api/javac/tree/com/sun/source/util/TreeScanner.html?is-external=true#visitAnnotatedType(com.sun.source.tree.AnnotatedTypeTree,%20P)
 --suppress-redirect http://2006.ecoop.org/->http://www.emn.fr/x-info/ecoop2006/
+--suppress-redirect http://dspace.mit.edu/bitstream/1721.1/40090/1/MIT-CSAIL-TR-2008-002.pdf->http://dspace.mit.edu/bitstream/handle/1721.1/40090/MIT-CSAIL-TR-2008-002.pdf;jsessionid=F9C78AFBDD8893F8B8BF595A1CD01E0D?sequence=1
+--suppress-redirect http://dspace.mit.edu/bitstream/1721.1/40090/2/MIT-CSAIL-TR-2008-002.ps->http://dspace.mit.edu/bitstream/handle/1721.1/40090/MIT-CSAIL-TR-2008-002.ps;jsessionid=2245D2EAFD5A5D9757CFDCB6E1DE2875?sequence=2
 --suppress-redirect http://en.wikipedia.org/->http://en.wikipedia.org/wiki/Main_Page	
 --suppress-redirect http://groups.google.com/->http://groups-beta.google.com/
 --suppress-redirect http://ieeexplore.ieee.org/->http://ieeexplore.ieee.org/Xplore/home.jsp
@@ -76,6 +78,7 @@
 --suppress-redirect http://www.hotelatmit.com/->http://www.hotelatmit.com/
 --suppress-redirect http://www.ibm.com/developerworks/oss/jikes/->http://www-124.ibm.com/developerworks/oss/jikes/
 --suppress-redirect http://www.ibm.com/developerworks/oss/jikes/->http://www-124.ibm.com/developerworks/oss/jikes/
+--suppress-redirect http://www.intellicast.com/LocalWeather/World/UnitedStates/Northwest/Washington/Seattle/Forecast/->http://www.intellicast.com/National/Default.aspx
 --suppress-redirect http://www.jmlspecs.org/->http://www.cs.iastate.edu/~leavens/JML/
 --suppress-redirect http://www.jmlspecs.org/->http://www.eecs.ucf.edu/~leavens/JML/
 --suppress-redirect http://www.nsf.gov/home/cise/->http://www.nsf.gov/dir/index.jsp?org=CISE
@@ -83,6 +86,7 @@
 --suppress-redirect http://www.rational.com/licensing->http://www-306.ibm.com/software/rational/support/licensing/
 --suppress-redirect http://www.rational.com/licensing/->http://www-306.ibm.com/software/rational/support/licensing/
 --suppress-redirect http://www.usps.gov/ncsc/lookups/lookup_zip%2B4.html->http://www.usps.com/ncsc/lookups/lookup_zip%2b4.html	
+--suppress-redirect http://www.weather.com/weather/local/USWA0395->http://xhtml.weather.com/xhtml/search
 --suppress-redirect https://tree-api.dev.java.net/->https://www.dev.java.net/servlets/Login?cookieCheck=failed
 --suppress-redirect-prefix http://doi.ieeecomputersociety.org/->http://www2.computer.org/portal/web/csdl/doi/	
 --suppress-redirect-prefix http://pag.csail.mit.edu/->http://groups.csail.mit.edu/pag/
