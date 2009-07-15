@@ -1859,10 +1859,27 @@ unused program points, or program points with many variables.
 @table @option
 @cindex confidence limit
 @item --conf_limit @var{val}
-Set the confidence limit for justifying invariants, which is used to filter
-invariants which are satisfied purely by chance from Daikon's output.
-@var{val} must be between 0 and 1; the default is .99 (1%).  Larger values
+Set the confidence limit for justifying invariants.
+If the confidence level for a given invariant is larger than the limit, then
+Daikon outputs the invariant.  This mechanism filters out
+invariants that are satisfied purely by chance.
+This is only relevant to invariants that were true in all observed
+samples; Daikon never outputs invariants that were ever false.
+
+@var{val} must be between 0 and 1; the default is .99.  Larger values
 yield stronger filtering.
+
+Each type of invariant has its own rules for determining confidence.
+See the @code{computeConfidence} method in the Java source code for the
+invariant.
+
+For example, consider the invariant @var{a}<@var{b} whose confidence computation
+is @code{1 - 1/2^@var{numsamples}}, which indicates the likelihood that the
+observations of @var{a} and @var{b} did not occur by chance.  If there were 3
+samples, and @var{a}<@var{b} on all of them, then the confidence would be 7/8 =
+.875.  If there were 6 samples, and @var{a}<@var{b} on only 5 on them, the
+confidence would be 0.  If there were 9 samples, and @var{a}<@var{b} on all of
+them, then the confidence would be 1-1/2^9 = .998.
 
 @item --list_type @var{classname}
 Indicate that the given class implements the @code{java.util.List}
@@ -7783,8 +7800,11 @@ Checks only invariants that are above the default confidence level.
 Checks only invariants that are not filtered by the default filters.
 
 @item --dir @var{directory-name}
-Processes all invariant files in the given directory and reports the number of invariants that failed on any of the dtrace files in that directory.
-We only process invariants above the default confidence level and invariants that have not been filtered out by the default filters.
+Processes all invariant files in the given directory and reports the
+number of invariants that failed on any of the dtrace files in that
+directory.  We only process invariants above the default confidence
+level and invariants that have not been filtered out by the default
+filters.
 
 @item --config_option @var{name}=@var{value}
 @itemx --dbg @var{category}
@@ -9291,4 +9311,4 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  instrumenters NoSuchMethodException myprogram glibc NonNull XP
 @c  LocalWords:  Nullable Nullness daikondir nullable NonZero jaif nonnull Rudd
 @c  LocalWords:  Holten McCamant Alexandru Salcianu Tschantz Nadya Kuzmina dec
-@c  LocalWords:  readibility subexit dups rel birthyear
+@c  LocalWords:  readibility subexit dups rel birthyear preprocess

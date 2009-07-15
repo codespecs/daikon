@@ -146,6 +146,7 @@ Analyzing historical versions of Daikon
 
 File formats
 
+* Declarations in a separate file::  
 * Conventions::                 
 * Declarations::                
 * Data trace records::          
@@ -168,6 +169,7 @@ Declaration-related records
 Data trace records
 
 * Nonsensical values::          
+* Variables that do not appear in trace records::  
 
 Example files
 
@@ -290,7 +292,7 @@ contains everything you need to compile and run Unix programs under
 Windows.  You can install Cygwin by simply running the program found
 at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 
-When setting up environment pathnamne variables under Windows/Cygwin
+When setting up environment pathname variables under Windows/Cygwin
 (such as @command{JDKDIR} or @command{CLASSPATH}) make sure that the
 pathname is specified in Unix format (e.g., @samp{/cygdrive/c/daikon}
 rather than @samp{C:\daikon}).  Cygwin expects Unix style pathnames
@@ -1925,6 +1927,7 @@ There exist some other declaration-related records;
 
 
 @menu
+* Declarations in a separate file::  
 * Conventions::                 
 * Declarations::                
 * Data trace records::          
@@ -1933,7 +1936,7 @@ There exist some other declaration-related records;
 @end menu
 
 
-@node    Declarations in a separate file, Declarations, File formats, File formats
+@node    Declarations in a separate file, Conventions, File formats, File formats
 @section Declarations in a separate file
 
 
@@ -1957,7 +1960,7 @@ information about a program, rather than multiple @file{.decls} files
 that must be associated with the @file{.dtrace} file.
 
 
-@node    Conventions, Declarations, File formats, File formats
+@node    Conventions, Declarations, Declarations in a separate file, File formats
 @section File format conventions
 
 
@@ -1982,7 +1985,7 @@ It may also specify some other information about the file
 (@pxref{Declaration-related records}).
 Then, it defines each program point and its variables.
 
-Indentation is ignored, so it may be used to aid readibility.
+Indentation is ignored, so it may be used to aid readability.
 Fields with defaults can be omitted.
 
 As a rule, each line of the declaration file is of the form
@@ -2024,11 +2027,11 @@ version field and are identified by the lack of this field.
 @node Input-language declaration, Variable comparability, Declaration version, Declaration-related records
 @subsubsection Input-language declaration
 
-You can specify the lanugage in which the program was written with a
+You can specify the language in which the program was written with a
 record of the form
 
 @example
-input-lanugage <language>
+input-language <language>
 @end example
 
 The language string is arbitrary and is not currently used.
@@ -2456,9 +2459,10 @@ declaration of the program point, without omissions or additions.
 
 @menu
 * Nonsensical values::          
+* Variables that do not appear in trace records::  
 @end menu
 
-@node    Nonsensical values,  , Data trace records, Data trace records
+@node    Nonsensical values, Variables that do not appear in trace records, Data trace records, Data trace records
 @subsection Nonsensical values for variables
 
 Some trace variables and derived variables may not have a value because
@@ -2492,11 +2496,11 @@ the presence of nonsensical values, see the
 configuration options,,,./daikon,Daikon User Manual}).
 
 
-@node    Variables that do not appear in trace records, Version 1 Declarations, Data trace records, File formats
+@node    Variables that do not appear in trace records,  , Nonsensical values, Data trace records
 @subsection Variables that do not appear in trace records
 
 A trace record should contain exactly the same variables as in the
-corresponding declaration.  There is one excepiton:  for efficiency,
+corresponding declaration.  There is one exception:  for efficiency,
 compile-time constants (e.g., static final variables in Java) are
 omitted from the trace record, since they would have the same value
 every time.
@@ -3220,4 +3224,10 @@ specify classes that implement lists; @xref{Options to control invariant detecti
 @c  LocalWords:  JDKDIR bashrc cshrc DAIKONCLASS makeinfo InvariantStatus itemx
 @c  LocalWords:  ObviousFilter StackAr DataStructures structs StackArTester Ren
 @c  LocalWords:  INST Xiaoxia regex printf DiscardInfo instanceof UpperBound Xu
-@c  LocalWords:  DiscardCode Kapfhammer GB
+@c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname MacOSX rt
+@c  LocalWords:  VarComparability instrumenter struct Hatcliff Sinha Vibha xref
+@c  LocalWords:  dfepl uninstrumented classname subexit inline dec hashcode len
+@c  LocalWords:  hashCode param dups NonZero rel varname topOfStack MyInteger
+@c  LocalWords:  hasDuplicates hasOrder hasNull nullTerminated isParam DynComp
+@c  LocalWords:  Hashcodes birthyear topLevel bottomLevel pptInfo toplevel
+@c  LocalWords:  bottomlevel namespace namespaces
