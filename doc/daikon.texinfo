@@ -409,7 +409,8 @@ itself, are described in various
 @uref{http://pag.csail.mit.edu/daikon/pubs/, ,publications}.
 
 More information on Daikon can be found in the Daikon Developer
-Manual.  For instance, the Daikon Developer Manual indicates how to
+Manual (@pxref{Top,,,./developer,Daikon Developer Manual}).
+For instance, the Daikon Developer Manual indicates how to
 extend Daikon with new invariants, new derived variables, and front
 ends for new languages.  It also contains information about the
 implementation and about debugging flags.

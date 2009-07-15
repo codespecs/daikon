@@ -1888,7 +1888,8 @@ trunk (respectively, the branch).
 This chapter contains information about the file format of Daikon's
 input files.  It is of most information to those who wish to write a
 front end, also known as an instrumenter (@pxref{Front ends
-(instrumentation),,,./daikon,Daikon User Manual}).  A new front end enables Daikon to detect
+(instrumentation),,,./daikon,Daikon User Manual}).
+A new front end enables Daikon to detect
 invariants in another programming language.
 
 Daikon's input is conventionally one or more @file{.dtrace} data trace
@@ -1896,29 +1897,45 @@ files.  (Another, optional type of input file for Daikon is a splitter
 info file; @pxref{Splitter info file,,,./daikon,Daikon User Manual}.)
 A trace file is a text file that consists of newline-separated
 records.  There are two basic types of records that can appear in Daikon's
-input:  program point declarations, and trace records.  The trace
+input:  program point declarations, and trace records.
+The declarations describe the structure of the trace records.  The trace
 records contain the data on which Daikon operates --- the run-time
-values of variables in your program.  The declarations describe the
-structure of the trace records.
+values of variables in your program.
 
 Each declaration names an instrumented program point and lists the
 variables at that program point.  A program point is a location in the
-program, such as a procedure entry or exit, or a specific line number.
+program, such as a specific line number, or a specific procedure's entry or exit.
 An instrumented program point is a place where the instrumenter may emit
 a trace record.
+A program point declaration
+may be repeated, so long as the declarations match exactly (any
+declarations after the first one have no effect).
 
 A data trace record (also known as a ``sample'')
 represents one execution of a program point.  The
-record names the program point and gives the runtime values of each
+record specifies the program point and gives the runtime values of each
 variable.  The list of variables in the data trace record must be
 identical to that in the corresponding declaration.  For a given program point,
 the declaration must precede the first data trace record for the program
 point.  It is not required that all the program point declarations
-appear before any of the data trace records.  A program point declaration
-may be repeated if its variables must match exactly.  
+appear before any of the data trace records.  
 
 There exist some other declaration-related records;
 @xref{Declaration-related records}.
+
+
+@menu
+* Conventions::                 
+* Declarations::                
+* Data trace records::          
+* Example files::               
+* Version 1 Declarations::      
+@end menu
+
+
+@node    Declarations in a separate file, Declarations, File formats, File formats
+@section Declarations in a separate file
+
 
 Instead of placing both declarations and data trace records in a single
 file, it is permitted to place the declarations in one or more
@@ -1940,14 +1957,6 @@ information about a program, rather than multiple @file{.decls} files
 that must be associated with the @file{.dtrace} file.
 
 
-@menu
-* Conventions::                 
-* Declarations::                
-* Data trace records::          
-* Example files::               
-* Version 1 Declarations::      
-@end menu
-
 @node    Conventions, Declarations, File formats, File formats
 @section File format conventions
 
@@ -1967,11 +1976,11 @@ inside a record.
 @cindex declaration format
 @cindex .decls file
 
-The declaration file first  states the declaration file format
+The trace file (or declaration file) first states the declaration file format
 version number (@pxref{Declaration version}).
-Then, it defines each program point and its variables.
 It may also specify some other information about the file
 (@pxref{Declaration-related records}).
+Then, it defines each program point and its variables.
 
 Indentation is ignored, so it may be used to aid readibility.
 Fields with defaults can be omitted.
@@ -2092,7 +2101,7 @@ file,
 blanks must be replaced by @code{\_}, and backslashes must be escaped as @code{\\}.
 Program point names must be distinct.
 
-The following program point fields (ppt-fields) can be specified:
+The following information about the program point (@code{ppt-info}) can be specified:
 @itemize 
 @item @code{ppt-type <type>}
 
@@ -2107,10 +2116,9 @@ Specifies one or more flags for this ppt.  The possible flags are:
 
 @item @code{parent <relation-type> <parent-ppt-name> <relation-id>}
 
-Specifies the program point hierarchy (@ref{Dataflow
-hierarchy,,,./developer,Daikon Developer Manual}).
+Specifies the program point hierarchy (@ref{Dataflow hierarchy}).
 
-In particular, names one parent of this program point.  A parent program point
+In particular, each @code{parent} field names one parent of this program point.  A parent program point
 is a point whose samples should include all of the samples at this
 program point.  For example, an object program point is a parent of
 each of the method program points in that object.
@@ -2134,15 +2142,16 @@ Multiple parent fields can be specified.
 The format of a variable declaration is:
 @example
 variable <name>
-  <variable-fields>
-  <variable-fields>
+  <variable-info>
+  <variable-info>
   ...
 @end example
 
-External variable names should match as much as possible the legal
-variable name in the input language.  All characters are legal in a
-name, but blanks must be represented as @code{\_} and
-backslashes as @code{\\}.
+The variable name is arbitrary, but for clarity, it should match what is
+used in the programming language.  All characters are legal in a name,
+but blanks must be represented as @code{\_} and backslashes as
+@code{\\}.
+
 If the variable is an array, '@code{..}' marks the location of
 array indices within the variable name.  Some examples of names are:
 @example
@@ -2151,7 +2160,7 @@ this.theArray[..]
 this.stack.getClass()
 @end example
 
-The following variable fields can be specified:
+The following information about the variable (@code{variable-info}) can be specified:
 @itemize
 
 @item @code{var-kind <kind> [<relative-name>]}
@@ -2289,15 +2298,17 @@ case, Daikon will not check for the NonZero invariant.
 @item @code{comparability <comparability-key>}
 
 The @var{comparability-key} indicates which other variables are
-comparable to this one.  This may be obtained dynamically, via
+comparable to this one.  The information specified here might have been
+obtained dynamically, via
 type-inference based analysis, or in some other manner.
 
 A comparability for a non-array type is a signed integer.  Two
 variables at the same program point are considered comparable if both
-integers are the same, or if either integer is negative.  A
+integers are the same, or if either integer is negative (that is, a
+negative number means ``comparable to every other variable'').  A
 comparability for an array type must contain an integer for each index
 and for the contents; for instance, @samp{5[22][17]} for a
-two-dimensional array.  Comparisons succeed if comparisons over each
+two-dimensional array.  An array comparison succeeds if comparisons over each
 component succeed.
 
 Variables at different program points are never compared to one another.
@@ -2360,37 +2371,54 @@ be defined as variables.
 @cindex data trace format
 @cindex .dtrace file
 
-The format of the value information in a data trace record (also known
-as a ``sample'') is:
+A data trace record (also known as a ``sample'') contains run-time value
+information.  Its format is:
 @example
-program-point-name
-varname1
-var-value-1
-var-modified-1
-varname2
-var-value-2
-var-modified-2
+<program-point-name>
+this-invocation-nonce
+<nonce-string>
+<varname-1>
+<var-value-1>
+<var-modified-1>
+<varname2>
+<var-value-2>
+<var-modified-2>
 ...
 @end example
 
-Value information includes:
+In other words, the sample record contains:
 @itemize @bullet
 @item name of the program point
+
+@item
+optionally, an arbitrary string (a nonce) used to match up procedure
+entries (whose names conventionally end with @code{:::ENTER}) with
+procedure exits (whose names conventionally end with @code{:::EXIT}).
+This is necessary in concurrent systems because there may
+be several invocations of a procedure active at once and they do not
+necessarily follow a stack discipline, being exited in the reverse order of
+entry.  For non-concurrent systems, this nonce is not necessary, and
+both the line @code{this-invocation-nonce} and the nonce value may be
+omitted.
+
+
 
 @item for each variable:
 @itemize @bullet
 @item name
 @item value
 @itemize @bullet
-@item    integer: sequence of digits, optionally preceded by a minus sign.
+@item    if an integer: sequence of digits, optionally preceded by a minus sign.
 Boolean values are written as the number 0 (for false) or the number 1
-(for true).
-@item    string: characters surrounded by double-quotes; internal
-double-quotes and backslashes are escaped by a backslash; newlines and
-carriage returns are represented as @samp{\n} and @samp{\r}, respectively
-@item    array: elements are listed on one line, separated by spaces.
-The entire array contents are in square brackets.  (Also, the array name
-should end in @samp{[]}; use @samp{a[]} for array contents,
+(for true).  For pointers, the value may be @code{null}.
+@item    if a string: characters surrounded by double-quotes.  Internal
+double-quotes and backslashes are escaped by a backslash.  Newlines and
+carriage returns are represented as @samp{\n} and @samp{\r},
+respectively.
+
+@item    if an array: open bracket (@code{[}), elements separated by
+spaces, close bracket (@code{]}).  (Also, the array name
+should end in @samp{[..]}; use @samp{a[..]} for array contents,
 but @samp{a} for the identity of the array itself.)
 @end itemize
 
@@ -2400,6 +2428,9 @@ but @samp{a} for the identity of the array itself.)
 @c the Daikon code sometimes calls this "missing" rather than "nonsensical".
 The value may also be the string @code{nonsensical}; @xref{Nonsensical
 values}.
+A string or array value is never @code{null}.  A reference to a
+string or array may be @code{null}, in which case the string or array is
+@code{nonsensical}.
 
 @item modified? (0, 1, or 2).
 @cindex modified bit
@@ -2421,16 +2452,6 @@ declaration of the program point, without omissions or additions.
 
 @cindex nonce, invocation
 @cindex this_invocation_nonce
-
-As a special case, the first variable in a record may be
-@code{this_invocation_nonce}, in which case there is no modification
-information, only a value.  The nonce is used to match up procedure entries
-(whose names end with @code{:::ENTER}) with procedure exits (whose names end
-with @code{:::EXIT}); this is necessary in concurrent systems because there may
-be several invocations of a procedure active at once and they do not
-necessarily follow a stack discipline, being exited in the reverse order of
-entry.  For non-concurrent systems, this nonce is not necessary and may be
-omitted.
 
 
 @menu
@@ -2469,6 +2490,20 @@ created by Daikon, Daikon does the same thing, setting values to
 the presence of nonsensical values, see the
 @option{daikon.Daikon.guardNulls} configuration option (@pxref{General
 configuration options,,,./daikon,Daikon User Manual}).
+
+
+@node    Variables that do not appear in trace records, Version 1 Declarations, Data trace records, File formats
+@subsection Variables that do not appear in trace records
+
+A trace record should contain exactly the same variables as in the
+corresponding declaration.  There is one excepiton:  for efficiency,
+compile-time constants (e.g., static final variables in Java) are
+omitted from the trace record, since they would have the same value
+every time.
+
+Neither the declarations nor the trace records contains derived
+variables (@pxref{Variable names,,,./daikon,Daikon User Manual}).
+
 
 
 @node    Example files, Version 1 Declarations, Data trace records, File formats
