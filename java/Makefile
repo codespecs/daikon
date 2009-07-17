@@ -1019,15 +1019,15 @@ doc-private: $(AUTO_GENERATED_FILES)
 
 doc-invariant: ../doc/invariants-doc.texinfo
 
-# This fails on pag-me, but succeeds on pag machines.  The pag-me failure
-# (which occurs only when run from $inv/java) appears to be a result of
-# having both . and pwd on CLASSPATH:  classes are found twice resulting in
-# a duplicate class warning.
+# This fails if both . and pwd are on CLASSPATH:  classes are found twice
+# resulting in a duplicate class warning.
 # This could depend on java/daikon/config/ParameterDoclet.class (but that
 # will typically exist).
 # It depends on "all", which forces compilation, to avoid errors like
 #   "java.lang.ClassFormatError: Truncated class file".
-../doc/config-options.texinfo: $(AUTO_GENERATED_FILES) all
+## Experiment with not depending on "all". -MDE
+## ../doc/config-options.texinfo: $(AUTO_GENERATED_FILES) all
+../doc/config-options.texinfo: $(AUTO_GENERATED_FILES)
 	javadoc -J-Xmx1000m -J-ea -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
