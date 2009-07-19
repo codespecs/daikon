@@ -55,10 +55,10 @@ for my $file (@ARGV) {
   $prefix =~ s/\/index-files\//\//;
   $javadoc_ignored_prefixes{$prefix} = 1;
   while (<INDEX>) {
-    if (m%^  <dt> public interface <b>%) {
+    if (m%^  <dt> public interface <(?:b|strong)>%) {
       # print STDERR "Considering: $_";
     }
-    if (m%^  <dt> public interface <b>(\w+)</b>%) {
+    if (m%^  <dt> public interface <(?:b|strong)>(\w+)</(?:b|strong)>%) {
       $refs{$1} .= " \"" . $this_dir . $1 . ".html\"";
     }
     # Get rid of type parameters.
@@ -72,7 +72,7 @@ for my $file (@ARGV) {
     # This regexp is intentionally not anchored at its beginning or end,
     # because sometimes line breaks are missing.
     # (Problem: Distributed XOM Javadocs do not use <B>...</B> tags.
-    while (m%<DT>[ \t]*<A HREF="(.*?)"(?: title=".*?")?><B>(.*?)(\(.*?\))?</B></A>(\(.*?\))?(\.| - )%ig) {
+    while (m%<DT>[ \t]*<A HREF="(.*?)"(?: title=".*?")?><(?:B|STRONG)>(.*?)(\(.*?\))?</(?:B|STRONG)></A>(\(.*?\))?(\.| - )%ig) {
       # Either $3 or $4 could be set (but not both).
       # my ($this_ref,$this_item,$this_args1,$this_args2) = ($1,$2,$3,$4);
       my ($this_ref,$this_item) = ($1,$2);
