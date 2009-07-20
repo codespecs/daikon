@@ -744,6 +744,9 @@ public final class UtilMDE {
     }
   }
 
+  @SuppressWarnings("nullness") // user.home property always exists
+  static @NonNull String userHome = System.getProperty ("user.home");
+
   // A better name would be "expandFilename"; "fix"is too vague. -MDE
   /**
    * Fixes a file name to do tilde expansion (to the user's home directory).
@@ -760,13 +763,12 @@ public final class UtilMDE {
 
   // A better name would be "expandFilename"; "fix"is too vague. -MDE
   /**
-   * Fixes a file name to do tilde expansion (to the users home directory)
+   * Fixes a file name to do tilde expansion (to the users home directory).
    * There maybe other logical things to do as well.
    */
-  @SuppressWarnings("nullness") // user.home property always exists
   public static String fix_filename (String name) {
     if (name.contains ("~"))
-      return (name.replace ("~", System.getProperty ("user.home")));
+      return (name.replace ("~", userHome));
     else
       return name;
   }
