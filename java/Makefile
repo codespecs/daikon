@@ -585,8 +585,11 @@ lookup.jar : $(LOOKUP_JAVA_FILES) utilMDE/lookup.manifest utilMDE/html2textrc
 	  > utilMDE/lookup.html
 	html2text -rcfile utilMDE/html2textrc \
 	  < utilMDE/lookup.html > utilMDE/lookup.txt
+	(mkdir tools-jar; (cd tools-jar; jar xf ${JDKDIR}/lib/tools.jar); ln -s tools-jar/com com)
 	$(JAR) cfm lookup.jar utilMDE/lookup.manifest utilMDE/*.class \
-	  utilMDE/lookup.html utilMDE/lookup.txt
+	  utilMDE/lookup.html utilMDE/lookup.txt \
+	  com/sun/javadoc/*.class
+	rm -rf tools-jar com
 
 install-lookup: lookup.jar
 	cp lookup.jar $(pag)/software/pkg/
