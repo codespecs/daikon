@@ -745,7 +745,7 @@ public final class UtilMDE {
   }
 
   @SuppressWarnings("nullness") // user.home property always exists
-  static @NonNull String userHome = System.getProperty ("user.home");
+  static /*@NonNull*/ String userHome = System.getProperty ("user.home");
 
   // A better name would be "expandFilename"; "fix"is too vague. -MDE
   /**
