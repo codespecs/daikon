@@ -70,7 +70,7 @@ JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m -classpath '${CLASSPATH}' ${JAVAC_AR
 # distributed version, of Daikon.  Avoid a (harmless but annoying) javac
 # error message that they don't exist.
 ifeq "$(wildcard $(INV)/java/lib/bcel.jar)" "$(INV)/java/lib/bcel.jar"
-    CLASSPATH_JARS = :$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar:$(INV)/java/utilMDE/svnkit.jar
+    CLASSPATH_JARS = :$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar:$(INV)/java/utilMDE/svnkit.jar:$(INV)/java/utilMDE/ini4j-0.5.1.jar
 endif
 ifeq "$(wildcard ${CHECKERSJAR})" "${CHECKERSJAR}"
     CLASSPATH_JARS2 = ${CHECKERSJAR}
