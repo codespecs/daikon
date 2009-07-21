@@ -6,6 +6,7 @@ import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
 import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
 import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
 import org.tmatesoft.svn.core.*;
+import org.ini4j.Ini;
 
 import java.io.*;
 import java.util.*;
@@ -30,8 +31,13 @@ import java.net.URL;
  *
  * The "repositories" file contains a list of sections.  Each section names
  * one repository, and a list of directories in which a checkout of a
- * different module appears.  Each repository name is prefixed
- * by the type of the repository.  Examples include:
+ * different module appears.  Each repository name is prefixed by the type
+ * of the repository.  Each directory may be suffixed by the name of the
+ * module being checked out (relevant only to CVS and SVN); it defaults to
+ * the last component of the directory.  (Note:  This prohibits file names
+ * with spaces!  Bad!)
+ *
+ * Examples include:
  * <pre>
  * CVSROOT: :ext:login.csail.mit.edu:/afs/csail.mit.edu/u/m/mernst/.CVS/.CVS-mernst
  * SVNROOT: svn+ssh://tricycle.cs.washington.edu/cse/courses/cse403/09sp/
@@ -60,10 +66,15 @@ import java.net.URL;
  * When performing a checkout, the parent directiories are created if
  * needed.
  */
+
+// TODO:  There is a problem when two modules from the same SVN repository
+// are checked out, with one checkout inside the other.  It doesn't always
+// manifest, and I am ignoring it for now.
+
 public class MultiVersionControl {
 
-  @Option("File with list of checkouts")
-  public String repositories = new File(userHome, ".mvcrepos").getPath();
+  @Option("File with list of checkouts.  Set it to /dev/null to suppress reading.")
+  public String repositories = new File(userHome, ".mvc-checkouts").getPath();
 
   @Option("Directory under which to search for checkouts; default=home dir")
   public List<String> dir = new ArrayList<String>();
@@ -103,13 +114,19 @@ public class MultiVersionControl {
 
     Set<Checkout> checkouts = new LinkedHashSet<Checkout>();
 
-    // readCheckouts(new File(repositories), checkouts);
+    try {
+      readCheckouts(new File(mvc.repositories), checkouts);
+    } catch (IOException e) {
+      throw new Error("Problem reading file " + mvc.repositories, e);
+    }
 
-    for (String adir : mvc.dir) {
-      if (debug) {
-        System.out.println("Searching for checkouts under " + adir);
+    if (mvc.search) {
+      for (String adir : mvc.dir) {
+        if (debug) {
+          System.out.println("Searching for checkouts under " + adir);
+        }
+        findCheckouts(new File(adir), checkouts);
       }
-      findCheckouts(new File(adir), checkouts);
     }
 
     mvc.process(checkouts);
@@ -186,8 +203,8 @@ public class MultiVersionControl {
     // (Most operations don't need this.  Useful for checkout, though.)
     /*@Nullable*/ String repositoryRoot;
     /**
-     * Null for distributed version control systems (Bzr, Hg).
      * Null if no module, just whole thing.
+     * Non-null for CVS and, optionally, for SVN.
      */
     /*@Nullable*/ String repositoryModule;
 
@@ -197,23 +214,28 @@ public class MultiVersionControl {
     }
 
     Checkout(RepoType repoType, File directory, /*@Nullable*/ String repositoryRoot, /*@Nullable*/ String repositoryModule) {
+      assert directory.isDirectory() : "Not a directory: " + directory;
       this.repoType = repoType;
       this.directory = directory;
       this.repositoryRoot = repositoryRoot;
       this.repositoryModule = repositoryModule;
-      assert directory.isDirectory() : "Not a directory: " + directory;
+      // These asserts come at the end so that the error message can be better.
       switch (repoType) {
       case BZR:
         assert new File(directory, ".bzr").isDirectory();
+        assert repositoryModule == null;
         break;
       case CVS:
         assert new File(directory, "CVS").isDirectory() : "Bad CVS: " + this;
+        assert repositoryModule != null : "Bad CVS: " + this;
         break;
       case HG:
         assert new File(directory, ".hg").isDirectory();
+        assert repositoryModule == null;
         break;
       case SVN:
         assert new File(directory, ".svn").isDirectory() : "Bad SVN: " + this;
+        assert repositoryModule == null : "Bad SVN: " + this;
         break;
       }
     }
@@ -249,6 +271,79 @@ public class MultiVersionControl {
         + " " + repositoryModule;
     }
 
+  }
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Read checkouts from a directory
+  ///
+
+  static void readCheckouts(File file, Set<Checkout> checkouts) throws IOException {
+    RepoType currentType = RepoType.BZR; // arbitrary choice
+    String currentRoot = null;
+
+    for (String line : new EntryReader(file)) {
+      if (debug) {
+        System.out.println("line: " + line);
+      }
+      line = line.trim();
+      // Skip comments and blank lines
+      if (line.equals("") || line.startsWith("#")) {
+        continue;
+      }
+
+      String[] splitTwo = line.split("[ \t]+");
+      if (debug) {
+        System.out.println("split length: " + splitTwo.length);
+      }
+      if (splitTwo.length == 2) {
+        String word1 = splitTwo[0];
+        String word2 = splitTwo[1];
+        if (word1.equals("BZRROOT:")) {
+          throw new Error("bzr not yet supported");
+          // continue;
+        } else if (word1.equals("CVSROOT:")) {
+          currentType = RepoType.CVS;
+          currentRoot = word2;
+          // If the CVSROOT is remote, try to make it local.
+          if (currentRoot.startsWith(":ext:")) {
+            String[] rootWords = currentRoot.split(":");
+            String possibleRoot = rootWords[rootWords.length-1];
+            if (new File(possibleRoot).isDirectory()) {
+              currentRoot = possibleRoot;
+            }
+          }
+          continue;
+        } else if (word1.equals("HGROOT:")) {
+          currentType = RepoType.HG;
+          currentRoot = word2;
+          continue;
+        } else if (word1.equals("SVNROOT:")) {
+          currentType = RepoType.SVN;
+          currentRoot = word2;
+          continue;
+        }
+      }
+
+      if (currentRoot == null) {
+        throw new Error("need root before directory: " + line);
+      }
+
+      // Replace "~" by "$HOME", because -d (and Athena's "cd" command) does not
+      // understand ~, but it does understand $HOME.
+      File dir = new File(line.replaceFirst("^~", userHome));
+      if (! dir.exists()) {
+        System.out.println("Cannot find directory: " + dir);
+        continue;
+      }
+
+      String module = null;
+      if (currentType == RepoType.CVS) {
+        module = dir.getName();
+      }
+
+      checkouts.add(new Checkout(currentType, dir, currentRoot, module));
+    }
   }
 
 
@@ -321,7 +416,7 @@ public class MultiVersionControl {
       } else if (dirName.equals("CVS")) {
         addCheckoutCvs(dir, parent, checkouts);
       } else if (dirName.equals(".hg")) {
-        checkouts.add(new Checkout(RepoType.HG, parent, null, null));
+        checkouts.add(dirToCheckoutHg(dir, parent));
       } else if (dirName.equals(".svn")) {
         checkouts.add(dirToCheckoutSvn(parent));
       }
@@ -352,16 +447,50 @@ public class MultiVersionControl {
     }
     String pathInRepo = UtilMDE.readFile(repositoryFile).trim();
     String repoRoot = UtilMDE.readFile(rootFile).trim();
+    /*@NonNull*/ File repoFileRoot = new File(pathInRepo);
+    while (repoFileRoot.getParentFile() != null) {
+      @SuppressWarnings("nullness") // just checed that parent is non-null
+      /*@NonNull*/ File newRepoFileRoot = repoFileRoot.getParentFile();
+      repoFileRoot = newRepoFileRoot;
+    }
 
     // strip common suffix off of local dir and repo url
     Pair<File,File> stripped = removeCommonSuffixDirs(dir,
                                                       new File(pathInRepo),
-                                                      new File(repoRoot),
+                                                      repoFileRoot,
                                                       "CVS");
     dir = stripped.a;
-    String pathInRepoAtCheckout = (stripped.b == null) ? null : stripped.b.toString();
+    String pathInRepoAtCheckout;
+    if (stripped.b != null) {
+      pathInRepoAtCheckout = stripped.b.toString();
+    } else {
+      pathInRepoAtCheckout = dir.getName();
+    }
 
     checkouts.add(new Checkout(RepoType.CVS, dir, repoRoot, pathInRepoAtCheckout));
+  }
+
+  /**
+   * Given a directory named ".hg" , create a corresponding Checkout object
+   * for its parent.
+   */
+  static Checkout dirToCheckoutHg(File hgDir, File dir) {
+    String repositoryRoot = null;
+
+    File hgrcFile = new File(hgDir, "hgrc");
+    Ini ini;
+    try {
+      ini = new Ini(new FileReader(hgrcFile));
+    } catch (IOException e) {
+      throw new Error("Problem reading file " + hgrcFile);
+    }
+
+    Ini.Section pathsSection = ini.get("paths");
+    if (pathsSection != null) {
+      repositoryRoot = pathsSection.get("default");
+    }
+
+    return new Checkout(RepoType.HG, dir, repositoryRoot, null);
   }
 
 
@@ -403,8 +532,6 @@ public class MultiVersionControl {
       System.out.println("     dir = " + dir.toString());
     }
 
-    assert url != repoRoot : "Need to handle this case";
-
     // Strip common suffix off of local dir and repo url.
     Pair<File,File> stripped = removeCommonSuffixDirs(dir,
                                                       new File(url.getPath()),
@@ -426,17 +553,19 @@ public class MultiVersionControl {
 
     assert url.toString().startsWith(repoRoot.toString())
       : "repoRoot="+repoRoot+", url="+url;
-    String module = url.toString().substring(repoRoot.toString().length());
-    if (module.startsWith("/")) {
-      module = module.substring(1);
-    }
+    return new Checkout(RepoType.SVN, dir, url.toString(), null);
 
-    return new Checkout(RepoType.SVN, dir, repoRoot.toString(), module);
+    /// Old implementation
+    // String module = url.toString().substring(repoRoot.toString().length());
+    // if (module.startsWith("/")) {
+    //   module = module.substring(1);
+    // }
+    // if (module.equals("")) {
+    //   module = null;
+    // }
+    // return new Checkout(RepoType.SVN, dir, repoRoot.toString(), module);
 
-    // See https://wiki.svnkit.com/Printing_Out_A_Subversion_Repository_Tree
 
-    // Then, I know it is the same if it's the same repository root and
-    // stripping elements off the end of the URL gets me to the same place.
 
   }
 
@@ -458,7 +587,7 @@ public class MultiVersionControl {
     /*@Nullable*/ File r2 = p2;
     while (r1 != null
            && r2 != null
-           && (p2_limit == null || r2 != p2_limit)
+           && (p2_limit == null || ! r2.equals(p2_limit))
            && r1.getName().equals(r2.getName())) {
       if (p1_contains != null
           && ! new File(r1.getParentFile(), p1_contains).isDirectory()) {
@@ -677,7 +806,6 @@ public class MultiVersionControl {
 //     }
 //     next;
 //   }
-//   print "IGNORED LINE: $dir\n";
 // }
 //
 // sub maybe_mkdir ( $ ) {
