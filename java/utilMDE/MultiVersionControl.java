@@ -1,6 +1,15 @@
 package utilMDE;
 
+import org.tmatesoft.svn.core.wc.*;
+import org.tmatesoft.svn.core.internal.io.dav.DAVRepositoryFactory;
+import org.tmatesoft.svn.core.internal.io.fs.FSRepositoryFactory;
+import org.tmatesoft.svn.core.internal.io.svn.SVNRepositoryFactoryImpl;
+import org.tmatesoft.svn.core.auth.ISVNAuthenticationManager;
+import org.tmatesoft.svn.core.*;
+
 import java.io.*;
+import java.util.*;
+import java.net.URL;
 
 // TO DO:  Make this search for all CVS, .hg, and .svn files in the
 // filesystem, and report about them all.  In fact, that may be preferable.
@@ -77,16 +86,28 @@ public class MultiVersionControl {
   public String program_name;
 
   @Option("Print debugging output")
-  public boolean debug;
+  public static boolean debug;
 
   /** "checkout", "update", or "diff" */
   private String action;
 
 
+  @SuppressWarnings("nullness") // user.home property always exists
+  static final /*@NonNull*/ String userHome = System.getProperty ("user.home");
 
   public static void main (String[] args) {
+    setupSVNKIT();
     MultiVersionControl mvc = new MultiVersionControl(args);
-    mvc.process();
+
+    Set<Checkout> checkouts = findCheckouts(new File(userHome));
+
+    mvc.process(checkouts);
+  }
+
+  private static void setupSVNKIT() {
+    DAVRepositoryFactory.setup();
+    SVNRepositoryFactoryImpl.setup();
+    FSRepositoryFactory.setup();
   }
 
   public MultiVersionControl(String[] args) {
@@ -97,7 +118,8 @@ public class MultiVersionControl {
     Options options = new Options ("mvc [options] {checkout,update,diff}", this);
     String[] remaining_args = options.parse_or_usage (args);
     if (remaining_args.length != 1) {
-      options.print_usage("Please supply exactly one argument; found %d: %s", remaining_args.length, UtilMDE.join(remaining_args, " "));
+      options.print_usage("Please supply exactly one argument (found %d)%n%s", remaining_args.length, UtilMDE.join(remaining_args, " "));
+      System.exit(1);
     }
     action = remaining_args[0].intern();
     if ("checkout".startsWith(action)) {
@@ -129,16 +151,263 @@ public class MultiVersionControl {
 
   }
 
-  enum RepoType { cvs, hg, svn };
+  enum RepoType {
+    BZR,
+      CVS,
+      HG,
+      SVN };
 
-  public void process() {
+  public void process(Set<Checkout> checkouts) {
     String repo;
 
   }
 
-  /** Find all checkouts under the given directory. */
-  static void findCheckouts(File f) {
+  /**
+   */
+  static class Checkout {
+    RepoType repoType;
+    /** Local directory */
+    File directory;
+    /**
+     * Null for distributed version control systems (Bzr, Hg).
+     */
+    // (Most operations don't need this.  Useful for checkout, though.)
+    String repositoryRoot;
+    /**
+     * Null for distributed version control systems (Bzr, Hg).
+     * Null if no module, just whole thing.
+     */
+    String repositoryModule;
+
+
+    Checkout(RepoType repoType, File directory) {
+      assert repoType == RepoType.HG;
+      this.repoType = repoType;
+      this.directory = directory;
+    }
+
+    Checkout(RepoType repoType, File directory, String repositoryRoot, String repositoryModule) {
+      this.repoType = repoType;
+      this.directory = directory;
+      this.repositoryRoot = repositoryRoot;
+      this.repositoryModule = repositoryModule;
+    }
+
+    @Override
+    public boolean equals(Object other) {
+      if (! (other instanceof Checkout))
+        return false;
+      Checkout c2 = (Checkout) other;
+      return ((repoType == c2.repoType)
+              && directory.equals(c2.directory)
+              && ((repositoryRoot == null)
+                  ? (repositoryRoot == c2.repositoryRoot)
+                  : repositoryRoot.equals(repositoryRoot))
+              && ((repositoryModule == null)
+                  ? (repositoryModule == c2.repositoryModule)
+                  : repositoryModule.equals(repositoryModule)));
+    }
+
+    @Override
+    public int hashCode() {
+      return (repoType.hashCode()
+              + directory.hashCode()
+              + (repositoryRoot == null ? 0 : repositoryRoot.hashCode())
+              + (repositoryModule == null ? 0 : repositoryModule.hashCode()));
+    }
+
+    @Override
+      public String toString() {
+      return repoType + " " + directory
+        + ((repositoryRoot == null)
+           ? ""
+           : (" " + repositoryRoot))
+        + ((repositoryModule == null)
+           ? ""
+           : (" " + repositoryModule));
+    }
+
   }
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Find checkouts
+  ///
+
+  /**
+   * Find checkouts.  These are indicated by directories named .bzr, CVS,
+   * .hg, or .svn.
+   * <p>
+   *
+   * With some version control systems, this task is easy:  there is
+   * exactly one .bzr or .hg directory per checkout.  With CVS and SVN,
+   * there is one CVS/.svn directory per directory of the checkout.  It is
+   * permitted for one checkout to be made inside another one (though that
+   * is bad style), so we must examine every CVS/.svn directory to find all
+   * the distinct checkouts.
+   */
+
+  // An alternative implementation would use Files.walkFileTree, but that
+  // is available only in Java 7.
+
+
+
+  static class IsDirectoryFilter implements FileFilter {
+    public boolean accept(File pathname) {
+      return pathname.isDirectory();
+    }
+  }
+
+  static IsDirectoryFilter idf = new IsDirectoryFilter();
+
+  /** Find all checkouts under the given directory. */
+  static Set<Checkout> findCheckouts(File dir) {
+    assert dir.isDirectory();
+
+    Set<Checkout> checkouts = new LinkedHashSet<Checkout>();
+
+    findCheckoutsHelper(dir, checkouts);
+
+    for (Checkout c : checkouts) {
+      System.out.println(c);
+    }
+
+    return checkouts;
+  }
+
+
+  /** Find all checkouts under the given directory, and adds them to checkouts. */
+  private static void findCheckoutsHelper(File dir, Set<Checkout> checkouts) {
+    assert dir.isDirectory();
+
+    String dirName = dir.getName().toString();
+    if (dirName.equals(".bzr")) {
+      checkouts.add(new Checkout(RepoType.BZR, dir.getParentFile(), null, null));
+    } else if (dirName.equals("CVS")) {
+      checkouts.add(dirToCheckoutCvs(dir));
+    } else if (dirName.equals(".hg")) {
+      checkouts.add(new Checkout(RepoType.HG, dir.getParentFile(), null, null));
+    } else if (dirName.equals(".svn")) {
+      checkouts.add(dirToCheckoutSvn(dir.getParentFile()));
+    }
+
+    for (File childdir : dir.listFiles(idf)) {
+      findCheckoutsHelper(childdir, checkouts);
+    }
+  }
+
+
+  /**
+   * Given a CVS directory, create a corresponding Checkout object for its
+   * parent.
+   */
+  static Checkout dirToCheckoutCvs(File cvsDir) {
+    assert cvsDir.getName().toString().equals("CVS") : cvsDir.getName();
+    File dir = cvsDir.getParentFile();
+    File cvsDirAsFile = new File(cvsDir.toString());
+    // relative path within repository
+    String pathInRepo = UtilMDE.readFile(new File(cvsDirAsFile, "Repository")).trim();
+    String repoRoot = UtilMDE.readFile(new File(cvsDirAsFile, "Root")).trim();
+
+    // strip common suffix off of repo url and local dir
+    Pair<File,File> stripped = removeCommonSuffixDirs(new File(pathInRepo),
+                                                      dir);
+    String pathInRepoAtCheckout = (stripped.a == null) ? null : stripped.a.toString();
+    dir = stripped.b;
+
+    return new Checkout(RepoType.CVS, dir, repoRoot, pathInRepoAtCheckout);
+  }
+
+
+  /**
+   * Given a directory that contains a .svn subdirectory, create a
+   * corresponding Checkout object.
+   */
+  static Checkout dirToCheckoutSvn(File dir) {
+
+    // For SVN, do
+    //   svn info
+    // and grep out these lines:
+    //   URL: svn+ssh://login.csail.mit.edu/afs/csail/group/pag/projects/reCrash/repository/trunk/www
+    //   Repository Root: svn+ssh://login.csail.mit.edu/afs/csail/group/pag/projects/reCrash/repository
+
+    // Use SVNKit?
+    // Con: introduces dependency on external library.
+    // Pro: no need to re-implement or to call external process (which
+    //   might be slow for large checkouts).
+
+    SVNWCClient wcClient = new SVNWCClient((ISVNAuthenticationManager) null, null);
+    SVNInfo info;
+    try {
+      info = wcClient.doInfo(new File(dir.toString()), SVNRevision.WORKING);
+    } catch (SVNException e) {
+      throw new Error(e);
+    }
+    // getFile is null when operating on a working copy, as I am
+    // String relativeFile = info.getPath(); // relative to repository root -- can use to determine root of checkout
+    // getFile is just the (absolute) local file name for local items -- same as "dir"
+    // File relativeFile = info.getFile();
+    SVNURL url = info.getURL();
+    SVNURL repoRoot = info.getRepositoryRootURL();
+    if (debug) {
+      System.out.println();
+      System.out.println("repoRoot = " + repoRoot);
+      System.out.println(" repoUrl = " + url);
+      System.out.println("     dir = " + dir.toString());
+    }
+
+    assert url != repoRoot : "Need to handle this case";
+
+    // strip common suffix off of repo url and local dir
+    Pair<File,File> stripped = removeCommonSuffixDirs(new File(url.getPath()),
+                                                      dir);
+
+    try {
+      url = url.setPath(stripped.a.toString(), false);
+    } catch (SVNException e) {
+      throw new Error(e);
+    }
+    dir = stripped.b;
+    if (debug) {
+      System.out.println("stripped: " + stripped);
+      System.out.println("repoRoot = " + repoRoot);
+      System.out.println(" repoUrl = " + url);
+      System.out.println("     dir = " + dir.toString());
+    }
+    assert url.toString().startsWith(repoRoot.toString())
+      : "repoRoot="+repoRoot+", url="+url;
+    String module = url.toString().substring(repoRoot.toString().length());
+    if (module.startsWith("/")) {
+      module = module.substring(1);
+    }
+
+    return new Checkout(RepoType.SVN, dir, repoRoot.toString(), module);
+
+    // See https://wiki.svnkit.com/Printing_Out_A_Subversion_Repository_Tree
+
+    // Then, I know it is the same if it's the same repository root and
+    // stripping elements off the end of the URL gets me to the same place.
+
+  }
+
+
+
+  /**
+   * Strip identical elements off the end of both paths, and then return
+   * what is left of each.  Returned elements can be null!
+   */
+  static Pair<File,File> removeCommonSuffixDirs(File p1, File p2) {
+    while (p1 != null
+           && p2 != null
+           && p1.getName().equals(p2.getName())) {
+      p1 = p1.getParentFile();
+      p2 = p2.getParentFile();
+    }
+    return new Pair<File,File>(p1,p2);
+  }
+
+
+
 
 
 }

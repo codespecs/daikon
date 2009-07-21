@@ -8,7 +8,7 @@
 DAIKONDIR ?= ../..
 CHECKERS ?= ${HOME}/research/types/checker-framework/checkers
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
-CLASSPATH:=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar:${CLASSPATH}
+CLASSPATH:=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar:svnkit.jar:${CLASSPATH}
 
 JAVAC ?= javac
 # Removed "-J-Xmx800m", because it is incompatible with JDK 7.
