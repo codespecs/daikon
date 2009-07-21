@@ -766,7 +766,7 @@ public class Options {
           if (oi.constructor != null) {
             val = oi.constructor.newInstance (arg_value);
           } else if (oi.base_type.isEnum()) {
-            @SuppressWarnings({"unchecked","rawness","rawtypes"})
+            @SuppressWarnings({"unchecked","rawness","rawtypes"}) /// XXX rawness bug
             Object tmpVal = Enum.valueOf ((Class<? extends Enum>)oi.base_type, arg_value);
             val = tmpVal;
           } else {
