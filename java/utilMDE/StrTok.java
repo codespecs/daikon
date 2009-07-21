@@ -9,18 +9,18 @@ import java.io.*;
  *
  * The major difference from StreamTokenizer is that all tokens are
  * returned as strings.  EOF returns a null, EOL returns an empty string.
- * Delimiters are returned as one character strings.  Words and numbers
+ * A delimiters is returned as a one-character string.  Words and numbers
  * are returned as strings.  Quoted strings are also returned as strings
  * including their quote characters (so they can easily be differentiated
  * from words and numbers).
  *
  * Other differences are: <ul>
- *  <li> Automatic setup for tokenizing strings
- *  <li> Underscores are included in identifiers (words)
+ *  <li> Automatic setup for tokenizing strings.
+ *  <li> Underscores are included in identifiers (words).
  *  <li> I/O errors (which should be impossible when tokenizing strings) are
  *       converted to RuntimeExceptions so that every call doesn't have to
- *       be included in a try block
- *  <li> Convenience functions isWord(), isQString(), and need()
+ *       be included in a try block.
+ *  <li> Convenience functions isWord(), isQString(), and need().
  *  <li> Returned string tokens are interned for easier comparisons.
  * </ul>
  */
