@@ -754,8 +754,8 @@ public final class ArraysMDE {
    *        to avoid confusion over whether it would be the last included
    *        index or the first non-included index)
    **/
-  public static /*@PolyInterned*/ Object[] subarray(/*@PolyInterned*/ Object[] a, int startindex, int length) {
-    /*@PolyInterned*/ Object[] result = new /*@PolyInterned*/ Object[length];
+  public static /*@PolyNull*/ /*@PolyInterned*/ Object[] subarray(/*@PolyNull*/ /*@PolyInterned*/ Object[] a, int startindex, int length) {
+    /*@PolyNull*/ /*@PolyInterned*/ Object[] result = new /*@PolyNull*/ /*@PolyInterned*/ Object[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }
@@ -780,8 +780,8 @@ public final class ArraysMDE {
    *        to avoid confusion over whether it would be the last included
    *        index or the first non-included index)
    **/
-  public static /*@PolyInterned*/ String[] subarray(/*@PolyInterned*/ String[] a, int startindex, int length) {
-    /*@PolyInterned*/ String[] result = new String[length];
+  public static /*@PolyNull*/ /*@PolyInterned*/ String[] subarray(/*@PolyNull*/ /*@PolyInterned*/ String[] a, int startindex, int length) {
+    /*@PolyNull*/ /*@PolyInterned*/ String[] result = new String[length];
     System.arraycopy(a, startindex, result, 0, length);
     return result;
   }

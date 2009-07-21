@@ -175,10 +175,13 @@ public class Options {
      * from the option annotation.  The long name is the name of the
      * field.  The default value is the current value of the field.
      */
-    OptionInfo (Field field, Option option, /*@Nullable*/ Object obj) {
+    OptionInfo (Field field, Option option, /*@Nullable*/ /*@Raw*/ Object obj) {
       this.field = field;
       this.option = option;
-      this.obj = obj;
+      @SuppressWarnings("rawness")
+      /*@NonRaw*/ Object objNonRaw = obj;
+      obj = objNonRaw;
+      this.obj = objNonRaw;
       this.base_type = field.getType();
 
       // The long name is the name of the field
@@ -191,7 +194,7 @@ public class Options {
       if (!Modifier.isPublic (field.getModifiers()))
         throw new Error ("option field is not public: " + field);
       try {
-        default_obj = field.get (obj);
+        default_obj = field.get (objNonRaw);
         if (default_obj != null)
           default_str = default_obj.toString();
       } catch (Exception e) {
@@ -340,13 +343,15 @@ public class Options {
    * unique across all the arguments.
    * @param usage_synopsis A synopsis of how to call your program
    */
-  @SuppressWarnings("nullness") // XXX checker bug: raw vs. non-null
   public Options (String usage_synopsis, /*@Raw*/ Object... args) {
 
     this.usage_synopsis = usage_synopsis;
 
+    @SuppressWarnings("cast")
+    Object[] argsNonRaw = (Object[]) args;
+
     // Loop through each specified object or class
-    for (/*@Raw*/ Object obj : args) {
+    for (Object obj : argsNonRaw) {
 
       if (obj instanceof Class<?>) {
 
@@ -761,7 +766,7 @@ public class Options {
           if (oi.constructor != null) {
             val = oi.constructor.newInstance (arg_value);
           } else if (oi.base_type.isEnum()) {
-            @SuppressWarnings({"unchecked","rawtypes"})
+            @SuppressWarnings({"unchecked","rawness","rawtypes"})
             Object tmpVal = Enum.valueOf ((Class<? extends Enum>)oi.base_type, arg_value);
             val = tmpVal;
           } else {
