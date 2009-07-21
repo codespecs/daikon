@@ -528,7 +528,7 @@ public final class Intern {
    * The elements should themselves already be interned;
    * they are compared using their equals() methods.
    **/
-  @SuppressWarnings({"interning"}) // XXX nullness needs to be fixed
+  @SuppressWarnings({"interning"})
   public static /*@PolyNull*/ /*@Interned*/ Object /*@Interned*/ [] intern(/*@PolyNull*/ /*@Interned*/ Object[] a) {
     // PolyNull because the value = parameter a, so the type is the same as
     // for parameter a
