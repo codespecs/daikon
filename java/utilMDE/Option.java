@@ -12,7 +12,7 @@ import java.lang.annotation.*;
  * Takes a single string argument that describes the option.  The string
  * is in the format '[-c] [&lt;type&gt;] description':
  * <ul>
- *   <li>'-c' is an optional single character short name for the option.
+ *   <li>'-c' is an optional single-character short name for the option.
  *   <li>'&lt;type&gt;' is an optional description of the option type more
  *       specific than its Java type (eg, '&lt;filename&gt;' if the variable's
  *       type is String).  The less-than and greater-than symbols are required.
