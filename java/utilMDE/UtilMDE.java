@@ -842,7 +842,7 @@ public final class UtilMDE {
       reader.close();
       return contents.toString();
     } catch (Exception e) {
-      throw new Error ("Unexpected error in readFile", e);
+      throw new Error ("Unexpected error in readFile(" + file + ")", e);
     }
   }
 
@@ -858,7 +858,7 @@ public final class UtilMDE {
       writer.write (contents, 0, contents.length());
       writer.close();
     } catch (Exception e) {
-      throw new Error ("Unexpected error in writeFile", e);
+      throw new Error ("Unexpected error in writeFile(" + file + ")", e);
     }
   }
 
