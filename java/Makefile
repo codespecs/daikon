@@ -59,7 +59,7 @@ jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.q
 
 ### end of user customizations
 
-JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m -classpath '${CLASSPATH}' ${JAVAC_ARGS}
+JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
 
 
 ###########################################################################
@@ -81,9 +81,7 @@ ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
   CLASSPATH := .:$(CLASSPATH)
 endif
 ifdef CLASSPATH_JARS
-  ifneq (bcel.jar,$(findstring bcel.jar,$(CLASSPATH)))
-    CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS)
-  endif
+	CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS)
 endif
 ifdef CLASSPATH_JARS2
   ifneq (checkers.jar,$(findstring checkers.jar,$(CLASSPATH)))
@@ -102,6 +100,8 @@ ifeq (cygwin,$(OSTYPE))
     CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
   endif
 endif
+
+export CLASSPATH
 
 # This command should run after the AUTO_GENERATED_FILES are generated, or
 # else AUTO_GENERATED_FILES should be appended to it (without duplication).
@@ -403,7 +403,6 @@ xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 all_directly: ${AUTO_GENERATED_FILES} utilMDE-import-check utilMDE-copy
 	@echo ${JAVA_FILES} > java_files.txt
-	@echo ${JAVAC_COMMAND} @java_files.txt
 	${JAVAC_COMMAND} @java_files.txt
 	@chmod -w ${AUTO_GENERATED_FILES}
 # This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
