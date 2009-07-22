@@ -3,12 +3,13 @@
 
 ## JDK
 ~mernst/java/jdk-docs/api/index-files/*.html
+~mernst/java/jdk-docs/jdk/api/javadoc/doclet/index-all.html
+# split(/\n/, `find ~mernst/java/jdk/docs/guide -name index-all.html`)
+## Javac
 #Comment out in favor of the JSR 308 version, below.  Should use this if
 #the below is not available (need logic for that in javadoc-index-to-alist?):
 #~mernst/java/jdk-docs/jdk/api/javac/tree/index-all.html
 ~mernst/research/types/jsr308-langtools/build/javadoc/javac/index-all.html
-~mernst/java/jdk-docs/jdk/api/javadoc/doclet/index-all.html
-# split(/\n/, `find ~mernst/java/jdk/docs/guide -name index-all.html`)
 
 ## Other libraries
 ~mernst/java/XOM-1.2b1/build/apidocs/index-all.html
