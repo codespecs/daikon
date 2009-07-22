@@ -13,70 +13,113 @@ import java.util.*;
 import java.net.URL;
 
 /**
- * This program lets you run a version control command, such as "update" or
- * "diff", on a set of CVS/SVN/Hg checkouts rather than just one.
- * <p>
+ * This program, mvc for Multiple Version Control, lets you run a version
+ * control command, such as "update" or "diff", on a set of Bzr/CVS/SVN/Hg
+ * checkouts rather than just one.<p>
  *
- * This can simplify the process of managing many checkouts.  It is not
- * uncommon for a developer to have multiple checkouts at once.  You might
- * want to know whether you have uncommitted changes in any of them, or you
+ * This program simplifies managing your checkouts.  You might
+ * want to know whether any of them have uncommitted changes, or you
  * might want to update all of them.  Or, when setting up a new account,
  * you might want to check them all out.  This program does any of those
  * tasks.  In particular, it accepts these arguments:
  * <pre>
- *   checkout         -- checks out all repositories
- *   mdecvs update    -- update all checked out repositories
- *   mdecvs diff      -- list files that are not committed
+ *   checkout  -- checks out all repositories
+ *   update    -- update all checked out repositories
+ *   diff      -- list files that are not committed
  * </pre><p>
  *
- * The "repositories" file contains a list of sections.  Each section names
- * one repository, and a list of directories in which a checkout of a
- * different module appears.  Each repository name is prefixed by the type
- * of the repository.  Each directory may be suffixed by the name of the
- * module being checked out (relevant only to CVS and SVN); it defaults to
- * the last component of the directory.  (Note:  This prohibits file names
- * with spaces!  Bad!)
+ * You can specify the set of checkouts for the program to manage, or it
+ * can search your directory structure to find all of your checkouts, or
+ * both.<p>
  *
+ * For usage information, run the program with no arguments.<p>
+ *
+ * <b>File format for "repositories" file:</b><p>
+ *
+ * (Note:  because mvc can search for all checkouts in your directory, you
+
+ * The "repositories" file contains a list of sections.  Each section names
+ * either a root from which a sub-part (e.g., a module or a subdirectory)
+ * will be checked out, or a repository all of which will be checked out.
  * Examples include:
  * <pre>
  * CVSROOT: :ext:login.csail.mit.edu:/afs/csail.mit.edu/u/m/mernst/.CVS/.CVS-mernst
- * SVNROOT: svn+ssh://tricycle.cs.washington.edu/cse/courses/cse403/09sp/
- * HGROOT: https://jsr308-langtools.googlecode.com/hg/
+ * SVNROOT: svn+ssh://tricycle.cs.washington.edu/cse/courses/cse403/09sp
+ * REPOS: svn+ssh://login.csail.mit.edu/afs/csail/u/a/akiezun/.SVN/papers/parameterization-paper/trunk
+ * HGREPOS: https://jsr308-langtools.googlecode.com/hg
  * </pre><p>
  *
- * Each repository begins a section of the file.  A section consists of a
- * list of checkout directories.  For example, a section might be
- * <pre>
- * SVNROOT: https://crashma.googlecode.com/svn/trunk/
- * ~/research/crashma
+ * Within each section is a list of directories that contain a checkout
+ * from that repository.  If the section names a root, then a module or
+ * subdirectory is needed.  By default, the directory's basename is used.
+ * This can be overridden by specifying the module/subdirectory on the same
+ * line, after a space.  If the section names a repository, then no module
+ * information is needed or used.<p>
  *
- * HGROOT: https://jsr308-langtools.googlecode.com/hg/
- * cd ~/research/types/jsr308-langtools
+ * Here are some example sections:
+ * <pre>
  * CVSROOT: :ext:login.csail.mit.edu:/afs/csail.mit.edu/group/pag/projects/classify-tests/.CVS
  * ~/research/testing/symstra-eclat-paper
  * ~/research/testing/symstra-eclat-code
- * ## This is last because it's slow.
  * ~/research/testing/eclat
+ *
+ * SVNROOT: svn+ssh://login.csail.mit.edu/afs/csail/group/pag/projects/.SVNREPOS/
+ * ~/research/typequals/igj
+ * ~/research/typequals/annotations-papers
+ *
+ * SVNREPOS: svn+ssh://login.csail.mit.edu/afs/csail/group/pag/projects/abb/REPOS
+ * ~/prof/grants/2008-06-abb/abb
+ *
+ * HGREPOS: https://checker-framework.googlecode.com/hg/
+ * ~/research/types/checker-framework
+ *
+ * SVNROOT: svn+ssh://login.csail.mit.edu/afs/csail/u/d/dannydig/REPOS/
+ * ~/research/concurrency/concurrentPaper
+ * ~/research/concurrency/mit.edu.concurrencyRefactorings concurrencyRefactorings/project/mit.edu.concurrencyRefactorings
+ * </pre>
+ *
+ * Furthermore, these sections have identical effects:
+ * <pre>
+ * SVNROOT: https://crashma.googlecode.com/svn/
+ * ~/research/crashma trunk
+ *
+ * SVNREPOS: https://crashma.googlecode.com/svn/trunk
+ * ~/research/crashma
+ * </pre>
+ * and, all 3 of these sections have identical effects:
+ * <pre>
+ * SVNROOT: svn+ssh://login.csail.mit.edu/afs/csail/group/pag/projects/
+ * ~/research/typequals/annotations
+ *
+ * SVNROOT: svn+ssh://login.csail.mit.edu/afs/csail/group/pag/projects/
+ * ~/research/typequals/annotations annotations
+ *
+ * SVNREPOS: svn+ssh://login.csail.mit.edu/afs/csail/group/pag/projects/annotations
+ * ~/research/typequals/annotations
  * </pre><p>
  *
- * The basename of the directory is assumed to be the same as the name of
- * the module in the repository.  If this is not the case, then you can
- * override it.  [SAY HOW.]
+ * When performing a checkout, the parent directories are created if
+ * needed.<p>
  *
- * When performing a checkout, the parent directiories are created if
- * needed.
+ * In the file, blank lines, and lines beginning with "#", are ignored.<p>
  */
 
-// TODO:  There is a problem when two modules from the same SVN repository
-// are checked out, with one checkout inside the other.  It doesn't always
-// manifest, and I am ignoring it for now.
+// TODO:
+//
+// Use of space delimiter interacts badly with file names that contain spaces.
+//
+// There is a problem when two modules from the same SVN repository are
+// checked out, with one checkout inside the other at the top level.  The
+// inner checkout's directory can be mis-reported.  This isn't always a
+// problem for nested checkouts, and nested checkouts are bad style anyway,
+// so I am deferring fixing it for now.
 
 public class MultiVersionControl {
 
   @Option("File with list of checkouts.  Set it to /dev/null to suppress reading.")
   public String repositories = new File(userHome, ".mvc-checkouts").getPath();
 
-  @Option("Directory under which to search for checkouts; default=home dir")
+  @Option("Directory under which to search for checkouts; may be supplied multiple times; default=home dir")
   public List<String> dir = new ArrayList<String>();
 
   @Option("Searches for all checkouts, not just those listed in a file; default=true")
@@ -85,18 +128,15 @@ public class MultiVersionControl {
   @Option("Display commands as they are executed")
   public boolean show;
 
-  @Option("Show the directories in which commands will be executed")
-  public boolean show_directory;
+  @Option("Print the directory before executing commands")
+  public boolean print_directory;
 
-  @Option("Do not execute commands; just show them.  Implies --show --redo-existing")
+  @Option("Do not execute commands; just print them.  Implies --show --redo-existing")
   public boolean dry_run;
 
   /**  Default is for checkout command to skip existing directories. */
   @Option("Redo existing checkouts; relevant only to checkout command")
   public boolean redo_existing;
-
-  @Option("Name of the executable for this program")
-  public String program_name;
 
   @Option("Print debugging output")
   public static boolean debug;
@@ -117,7 +157,7 @@ public class MultiVersionControl {
     try {
       readCheckouts(new File(mvc.repositories), checkouts);
     } catch (IOException e) {
-      throw new Error("Problem reading file " + mvc.repositories, e);
+      System.err.println("Problem reading file " + mvc.repositories + ": " + e.getMessage());
     }
 
     if (mvc.search) {
@@ -174,7 +214,7 @@ public class MultiVersionControl {
       show = true;
     }
     if (action == "update") {   // interned
-      show_directory = true;
+      print_directory = true;
     }
 
     if (debug) {
@@ -281,8 +321,10 @@ public class MultiVersionControl {
   static void readCheckouts(File file, Set<Checkout> checkouts) throws IOException {
     RepoType currentType = RepoType.BZR; // arbitrary choice
     String currentRoot = null;
+    boolean currentRootIsRepos = false;
 
-    for (String line : new EntryReader(file)) {
+    EntryReader er = new EntryReader(file);
+    for (String line : er) {
       if (debug) {
         System.out.println("line: " + line);
       }
@@ -299,12 +341,14 @@ public class MultiVersionControl {
       if (splitTwo.length == 2) {
         String word1 = splitTwo[0];
         String word2 = splitTwo[1];
-        if (word1.equals("BZRROOT:")) {
-          throw new Error("bzr not yet supported");
+        if (word1.equals("BZRROOT:") || word1.equals("BZRREPOS:")) {
+          System.err.println("bzr not yet supported");
+          System.exit(1);
           // continue;
         } else if (word1.equals("CVSROOT:")) {
           currentType = RepoType.CVS;
           currentRoot = word2;
+          currentRootIsRepos = false;
           // If the CVSROOT is remote, try to make it local.
           if (currentRoot.startsWith(":ext:")) {
             String[] rootWords = currentRoot.split(":");
@@ -314,35 +358,57 @@ public class MultiVersionControl {
             }
           }
           continue;
-        } else if (word1.equals("HGROOT:")) {
+        } else if (word1.equals("HGROOT:") || word1.equals("HGREPOS:")) {
           currentType = RepoType.HG;
           currentRoot = word2;
+          currentRootIsRepos = word1.equals("HGREPOS:");
           continue;
-        } else if (word1.equals("SVNROOT:")) {
+        } else if (word1.equals("SVNROOT:") || word1.equals("SVNREPOS:")) {
           currentType = RepoType.SVN;
           currentRoot = word2;
+          currentRootIsRepos = word1.equals("SVNREPOS:");
           continue;
         }
       }
 
       if (currentRoot == null) {
-        throw new Error("need root before directory: " + line);
+        System.err.printf("need root before directory at line %d of file %s%n",
+                          er.getLineNumber(), er.getFileName());
+        System.exit(1);
       }
 
       // Replace "~" by "$HOME", because -d (and Athena's "cd" command) does not
       // understand ~, but it does understand $HOME.
-      File dir = new File(line.replaceFirst("^~", userHome));
+      String dirname;
+      String root = currentRoot;
+      if (root.endsWith("/")) root = root.substring(0,root.length()-1);
+      String module = null;
+
+      int spacePos = line.lastIndexOf(' ');
+      if (spacePos == -1) {
+        dirname = line;
+      } else {
+        dirname = line.substring(0, spacePos);
+        module = line.substring(spacePos+1);
+      }
+
+      File dir = new File(dirname.replaceFirst("^~", userHome));
       if (! dir.exists()) {
         System.out.println("Cannot find directory: " + dir);
         continue;
       }
 
-      String module = null;
-      if (currentType == RepoType.CVS) {
-        module = dir.getName();
+      if (module == null) {
+          module = dir.getName();
+      }
+      if (currentType != RepoType.CVS) {
+        if (! currentRootIsRepos) {
+          root = root + "/" + module;
+        }
+        module = null;
       }
 
-      checkouts.add(new Checkout(currentType, dir, currentRoot, module));
+      checkouts.add(new Checkout(currentType, dir, root, module));
     }
   }
 
@@ -479,15 +545,21 @@ public class MultiVersionControl {
 
     File hgrcFile = new File(hgDir, "hgrc");
     Ini ini;
-    try {
-      ini = new Ini(new FileReader(hgrcFile));
-    } catch (IOException e) {
-      throw new Error("Problem reading file " + hgrcFile);
-    }
+    // There also exist Hg commands that will do this same thing.
+    if (hgrcFile.exists()) {
+      try {
+        ini = new Ini(new FileReader(hgrcFile));
+      } catch (IOException e) {
+        throw new Error("Problem reading file " + hgrcFile);
+      }
 
-    Ini.Section pathsSection = ini.get("paths");
-    if (pathsSection != null) {
-      repositoryRoot = pathsSection.get("default");
+      Ini.Section pathsSection = ini.get("paths");
+      if (pathsSection != null) {
+        repositoryRoot = pathsSection.get("default");
+        if (repositoryRoot != null && repositoryRoot.endsWith("/")) {
+          repositoryRoot = repositoryRoot.substring(0, repositoryRoot.length()-1);
+        }
+      }
     }
 
     return new Checkout(RepoType.HG, dir, repositoryRoot, null);
