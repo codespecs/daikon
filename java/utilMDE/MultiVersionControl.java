@@ -106,13 +106,14 @@ import java.net.URL;
 
 // TODO:
 //
-// Use of space delimiter interacts badly with file names that contain spaces.
+// Use of space delimiter for specifyng module interacts badly with file
+// names that contain spaces.  This doesn't seem important enough to fix.
 //
 // There is a problem when two modules from the same SVN repository are
 // checked out, with one checkout inside the other at the top level.  The
-// inner checkout's directory can be mis-reported.  This isn't always a
-// problem for nested checkouts, and nested checkouts are bad style anyway,
-// so I am deferring fixing it for now.
+// inner checkout's directory can be mis-reported as the outer one.  This
+// isn't always a problem for nested checkouts, and nested checkouts are
+// bad style anyway, so I am deferring investigating/fixing it.
 
 public class MultiVersionControl {
 
@@ -124,6 +125,8 @@ public class MultiVersionControl {
 
   @Option("Searches for all checkouts, not just those listed in a file; default=true")
   public boolean search = true;
+
+  // TODO: use consistent names: both "show" or both "print"
 
   @Option("Display commands as they are executed")
   public boolean show;
@@ -223,59 +226,57 @@ public class MultiVersionControl {
 
   }
 
-  enum RepoType {
+  static enum RepoType {
     BZR,
       CVS,
       HG,
       SVN };
 
-  /**
-   */
-  // TODO: have subclasses of Checkout
+  // TODO: have subclasses of Checkout for the different varieties, perhaps.
   static class Checkout {
     RepoType repoType;
     /** Local directory */
     // actually the parent directory?
     File directory;
     /**
-     * Null for distributed version control systems (Bzr, Hg).
+     * May be null for distributed version control systems (Bzr, Hg).
      */
     // (Most operations don't need this.  Useful for checkout, though.)
-    /*@Nullable*/ String repositoryRoot;
+    /*@Nullable*/ String repository;
     /**
      * Null if no module, just whole thing.
      * Non-null for CVS and, optionally, for SVN.
      */
-    /*@Nullable*/ String repositoryModule;
+    /*@Nullable*/ String module;
 
 
     Checkout(RepoType repoType, File directory) {
       this(repoType, directory, null, null);
     }
 
-    Checkout(RepoType repoType, File directory, /*@Nullable*/ String repositoryRoot, /*@Nullable*/ String repositoryModule) {
+    Checkout(RepoType repoType, File directory, /*@Nullable*/ String repository, /*@Nullable*/ String module) {
       assert directory.isDirectory() : "Not a directory: " + directory;
       this.repoType = repoType;
       this.directory = directory;
-      this.repositoryRoot = repositoryRoot;
-      this.repositoryModule = repositoryModule;
+      this.repository = repository;
+      this.module = module;
       // These asserts come at the end so that the error message can be better.
       switch (repoType) {
       case BZR:
         assert new File(directory, ".bzr").isDirectory();
-        assert repositoryModule == null;
+        assert module == null;
         break;
       case CVS:
         assert new File(directory, "CVS").isDirectory() : "Bad CVS: " + this;
-        assert repositoryModule != null : "Bad CVS: " + this;
+        assert module != null : "Bad CVS: " + this;
         break;
       case HG:
         assert new File(directory, ".hg").isDirectory();
-        assert repositoryModule == null;
+        assert module == null;
         break;
       case SVN:
         assert new File(directory, ".svn").isDirectory() : "Bad SVN: " + this;
-        assert repositoryModule == null : "Bad SVN: " + this;
+        assert module == null : "Bad SVN: " + this;
         break;
       }
     }
@@ -287,35 +288,35 @@ public class MultiVersionControl {
       Checkout c2 = (Checkout) other;
       return ((repoType == c2.repoType)
               && directory.equals(c2.directory)
-              && ((repositoryRoot == null)
-                  ? (repositoryRoot == c2.repositoryRoot)
-                  : repositoryRoot.equals(repositoryRoot))
-              && ((repositoryModule == null)
-                  ? (repositoryModule == c2.repositoryModule)
-                  : repositoryModule.equals(repositoryModule)));
+              && ((repository == null)
+                  ? (repository == c2.repository)
+                  : repository.equals(c2.repository))
+              && ((module == null)
+                  ? (module == c2.module)
+                  : module.equals(c2.module)));
     }
 
     @Override
     public int hashCode() {
       return (repoType.hashCode()
               + directory.hashCode()
-              + (repositoryRoot == null ? 0 : repositoryRoot.hashCode())
-              + (repositoryModule == null ? 0 : repositoryModule.hashCode()));
+              + (repository == null ? 0 : repository.hashCode())
+              + (module == null ? 0 : module.hashCode()));
     }
 
     @Override
       public String toString() {
       return repoType
         + " " + directory
-        + " " + repositoryRoot
-        + " " + repositoryModule;
+        + " " + repository
+        + " " + module;
     }
 
   }
 
 
   ///////////////////////////////////////////////////////////////////////////
-  /// Read checkouts from a directory
+  /// Read checkouts from a file
   ///
 
   static void readCheckouts(File file, Set<Checkout> checkouts) throws IOException {
@@ -342,9 +343,10 @@ public class MultiVersionControl {
         String word1 = splitTwo[0];
         String word2 = splitTwo[1];
         if (word1.equals("BZRROOT:") || word1.equals("BZRREPOS:")) {
-          System.err.println("bzr not yet supported");
-          System.exit(1);
-          // continue;
+          currentType = RepoType.BZR;
+          currentRoot = word2;
+          currentRootIsRepos = word1.equals("BZRREPOS:");
+          continue;
         } else if (word1.equals("CVSROOT:")) {
           currentType = RepoType.CVS;
           currentRoot = word2;
@@ -392,11 +394,8 @@ public class MultiVersionControl {
         module = line.substring(spacePos+1);
       }
 
+      // The directory may not yet exist if we are doing a checkout.
       File dir = new File(dirname.replaceFirst("^~", userHome));
-      if (! dir.exists()) {
-        System.out.println("Cannot find directory: " + dir);
-        continue;
-      }
 
       if (module == null) {
           module = dir.getName();
@@ -414,7 +413,7 @@ public class MultiVersionControl {
 
 
   ///////////////////////////////////////////////////////////////////////////
-  /// Find checkouts
+  /// Find checkouts in a directory
   ///
 
   /// Note:  this can be slow, because it examines every directory in your
@@ -541,7 +540,7 @@ public class MultiVersionControl {
    * for its parent.
    */
   static Checkout dirToCheckoutHg(File hgDir, File dir) {
-    String repositoryRoot = null;
+    String repository = null;
 
     File hgrcFile = new File(hgDir, "hgrc");
     Ini ini;
@@ -555,14 +554,14 @@ public class MultiVersionControl {
 
       Ini.Section pathsSection = ini.get("paths");
       if (pathsSection != null) {
-        repositoryRoot = pathsSection.get("default");
-        if (repositoryRoot != null && repositoryRoot.endsWith("/")) {
-          repositoryRoot = repositoryRoot.substring(0, repositoryRoot.length()-1);
+        repository = pathsSection.get("default");
+        if (repository != null && repository.endsWith("/")) {
+          repository = repository.substring(0, repository.length()-1);
         }
       }
     }
 
-    return new Checkout(RepoType.HG, dir, repositoryRoot, null);
+    return new Checkout(RepoType.HG, dir, repository, null);
   }
 
 
@@ -641,8 +640,6 @@ public class MultiVersionControl {
 
   }
 
-
-
   /**
    * Strip identical elements off the end of both paths, and then return
    * what is left of each.  Returned elements can be null!  If p2_limit is
@@ -682,75 +679,78 @@ public class MultiVersionControl {
   public void process(Set<Checkout> checkouts) {
     String repo;
 
+    ProcessBuilder pb = new ProcessBuilder("");
+    pb.redirectErrorStream(true);
+    String filter;              // needs to be a regexp!
+
+
     for (Checkout c : checkouts) {
-      System.out.println(c);
-    }
+      if (debug) {
+        System.out.println(c);
+      }
+      File dir = c.directory;
 
-  }
+      filter = null;
 
-
-}
-
-
-
-// # At least one of these is always undefined, and we are using the other one.
-// my $cvsroot;
-// my $svnroot;
-//
-// my $dirfile = "$ENV{HOME}/bin/share/mdecvsdirs";
-// open(DIRS, $dirfile) or die "Can't open '$dirfile: $!";
-// my @dirs = <DIRS>;
-// close(DIRS);
-//
-// for my $dir (@dirs) {
-//   # print "line: $dir\n";
-//   chomp($dir);
-//   # Skip comments and blank lines.
-//   if (($dir eq "") || ($dir =~ /^\#/)) {
-//     next;
-//   }
-//   if ($dir =~ /^CVSROOT: (.*)$/) {
-//     $cvsroot = $1;
-//     $svnroot = undef;
-//     # If the CVSROOT is remote, try to make it local.
-//     if ($cvsroot =~ /^:ext:.*:(.*)$/) {
-//       if (-e $1) {
-//         $cvsroot = $1;
-//       }
-//     }
-//     next;
-//   }
-//   if ($dir =~ /^SVNROOT: (.*)$/) {
-//     $svnroot = $1;
-//     $cvsroot = undef;
-//     next;
-//   }
-//   if ($dir =~ /^(~\/.*?)([^\/]*)$/) {
-//     my $base = $1;
-//     my $module = $2;
-//     # Replace "~" by "$HOME", because -d (and Athena's "cd" command) does not
-//     # understand ~, but it does understand $HOME.
-//     my $dir_expanded = $dir;
-//     $dir_expanded =~ s/^~\//$ENV{HOME}\//;
-//     $base =~ s/^~\//$ENV{HOME}\//;
-//
-//     # Compute the command
-//     my $command_cwd = $dir_expanded;            # working directory for command
-//     my $command;
-//     my $filter;
-//     if ($action eq "checkout") {
-//       $command_cwd = $base;
-//       if (defined($cvsroot)) {
-//         # Need a way to specify "-ko" option after "checkout".
-//         # "-P" means prune empty directories.
-//         $command = "$cvs -d $cvsroot checkout -P $module";
-//       } else {
-//         # To do:  can specify the local name, which might differ from the
-//         # repository directory (such as "trunk"), by specifying it as the
-//         # last argument to "svn checkout".  Support this.
-//         $command = "svn checkout ${svnroot}$module";
-//       }
-//     } elsif ($action eq "update") {
+      if (action == "checkout") { // interned
+        pb.directory(dir.getParentFile());
+        String dirbase = dir.getName();
+        switch (c.repoType) {
+        case BZR:
+          throw new Error("not yet implemented");
+          // break;
+        case CVS:
+          pb.command("cvs", "-d", c.repository, "checkout",
+                     "-P", // prune empty directories
+                     "-ko", // no keyword substitution
+                     c.module);
+          break;
+        case HG:
+          pb.command("hg", "clone", c.repository, dirbase);
+          break;
+        case SVN:
+          pb.command("svn", "checkout", c.repository, dirbase);
+          break;
+        }
+      } else if (action == "diff") { // interned
+        switch (c.repoType) {
+        case BZR:
+          throw new Error("not yet implemented");
+          // break;
+        case CVS:
+          pb.command("cvs", "-d", c.repository, "diff",
+                     "-b",      // compress whitespace
+                     "--brief", // report only whether files differ, not details
+                     "-N");     // report new files
+//         # For the last perl command, this also works:
+//         #   perl -p -e 'chomp(\$cwd = `pwd`); s/^Index: /\$cwd\\//'";
+//         # but the one we use is briefer and uses the abbreviated directory name.
+//         $filter = "grep -v \"unrecognized keyword 'UseNewInfoFmtStrings'\" | grep \"^Index:\" | perl -p -e 's|^Index: |$dir\\/|'";
+          break;
+        case HG:
+          pb.command("hg", "diff");
+          break;
+        case SVN:
+          // "svn diff --summarize" and "svn log -vq" can only compare one
+          // repository to another, but I want to compare the working
+          // directory to the repository.
+          pb.command("svn", "diff", "--diff-cmd", "diff", "-x", "-q", "-x", "-r", "-x", "-N");
+//         $filter = "grep \"^Index:\" | perl -p -e 's|^Index: |$dir\\/|'";
+          break;
+        }
+      } else if (action == "update") { // interned
+        switch (c.repoType) {
+        case BZR:
+          throw new Error("not yet implemented");
+          // break;
+        case CVS:
+          break;
+        case HG:
+          break;
+        case SVN:
+          break;
+        }
+        // ...
 //       if (defined($cvsroot)) {
 //         $command = "$cvs -d $cvsroot -Q update -d";
 //         $filter = "grep -v \"config: unrecognized keyword 'UseNewInfoFmtStrings'\"";
@@ -758,71 +758,45 @@ public class MultiVersionControl {
 //         $command = "svn -q update";
 //         $filter = "grep -v \"Killed by signal 15.\"";
 //       }
-//     } elsif ($action eq "diff") {
-//       if (defined($cvsroot)) {
-//         $command = "$cvs -d $cvsroot -Q diff -b --brief -N";
-//         # For the last perl command, this also works:
-//         #   perl -p -e 'chomp(\$cwd = `pwd`); s/^Index: /\$cwd\\//'";
-//         # but the one we use is briefer and uses the abbreviated directory name.
-//         $filter = "grep -v \"unrecognized keyword 'UseNewInfoFmtStrings'\" | grep \"^Index:\" | perl -p -e 's|^Index: |$dir\\/|'";
-//       } else {
-//         # Both of these work.  The second one prints the whole diff, then just greps out the "Index" line, whereas the first one doesn't compute the whole diff.
-//         $command = "svn diff --diff-cmd diff -x -q -x -r -x -N";
-//         $filter = "grep \"^Index:\" | perl -p -e 's|^Index: |$dir\\/|'";
-//         # $command = "svn diff";
-//         # $filter = "grep \"^Index:\" | perl -p -e 's|^Index: |$dir\\/|'";
-//       }
-//     } else {
-//       die "bad action $action";
-//     }
-//     # $command = "$command 2>&1";
-//
-//     # Check that the directory exists (OK if it doesn't for checkout).
-//     if ($debug) {
-//       print "$dir:\n";
-//     }
-//     if (! -e $dir_expanded) {
-//       # Directory was not found
-//       if (-e $dir) { die "Found $dir but not $dir_expanded"; } # sanity check
-//       if ($action eq "checkout") {
-//         if ($show_commands) {
-//           print "Does not exist"
-//             . ($perform_commands ? " (creating)" : "")
-//             . ": $dir\n";
-//         }
-//         if ($perform_commands) {
-//           maybe_mkdir($base);
-//         }
-//       } else {
-//         print "Did not find directory $dir = $dir_expanded\n";
-//         next;
-//       }
-//     } else {
-//       # Directory was found
-//       if ($action eq "checkout" && ! $redo_existing) {
-//         print "Skipping checkout (dir already exists): $dir\n";
-//         next;
-//       }
-//     }
-//     if (chdir($command_cwd)) {
-//       if ($debug) { print "changed to $command_cwd\n"; }
-//     } else {
-//       print "couldn't chdir to $command_cwd: $!\n";
-//       if ($debug) {
-//         printf "does it exist? %d\n", (-e $command_cwd);
-//         printf "does it exist (2)? %d\n", (-e "$command_cwd/");
-//       }
-//       if (! $show_commands) {
-//         next;
-//       }
-//     }
-//     if ($debug) {
-//       print("pwd: ");
-//       system("pwd");
-//     }
-//
+        // ...
+      } else {
+        throw new Error("This can't happen");
+      }
+
+      // Check that the directory exists (OK if it doesn't for checkout).
+      if (debug) {
+        System.out.println(dir + ":");
+      }
+      if (dir.exists()) {
+        if (action == "checkout" && ! redo_existing) { // interned
+          System.out.println("Skipping checkout (dir already exists): " + dir);
+          continue;
+        }
+      } else {
+        // Directory does not exist
+        if (action == "checkout") { // interned
+          File parent = dir.getParentFile();
+          if (! parent.exists()) {
+            if (show) {
+              System.out.println("Directory does not exist"
+                                 + (dry_run ? "" : " (creating)")
+                                 + ": parent");
+            }
+            if (! dry_run) {
+              if (! parent.mkdirs()) {
+                System.err.println("Could not create directory: " + parent);
+                System.exit(1);
+              }
+            }
+          } else {
+            System.out.println("Cannot find directory: " + dir);
+            continue;
+          }
+        }
+      }
+
 //     # Show the command.
-//     if ($show_commands) {
+//     if ($show) {
 //       if (($action eq "checkout")
 //           # Better would be to change the printed (but not executed) command
 //           # || (($action eq "update") && defined($svnroot))
@@ -833,8 +807,7 @@ public class MultiVersionControl {
 //     }
 //
 //     # Perform the command
-//     if ($debug) { "perform_commands = $perform_commands\n"; }
-//     if ($perform_commands) {
+//     if (! $dry_run) {
 //       my $tmpfile = "/tmp/cmd-output-$$";
 //       # For debugging
 //       # my $command_cwd_sanitized = $command_cwd;
@@ -879,18 +852,9 @@ public class MultiVersionControl {
 //     next;
 //   }
 // }
-//
-// sub maybe_mkdir ( $ ) {
-//   my ($base) = @_;
-//   my $base_expanded = $base;
-//   $base_expanded =~ s/^~/$ENV{HOME}/;
-//   # print "base_expanded: $base_expanded\n";
-//   if (! -e $base_expanded) {
-//     my $command = "mkdir -p $base";
-//     print "COMMAND: $command\n";
-//     my $result = system($command);
-//     if ($result != 0) {
-//       die "system failed: $?";
-//     }
-//   }
-// }
+
+    }
+  }
+
+
+}
