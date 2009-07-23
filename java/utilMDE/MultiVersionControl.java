@@ -239,6 +239,7 @@ public class MultiVersionControl {
     // actually the parent directory?
     File directory;
     /**
+     * Non-null for CVS and SVN.
      * May be null for distributed version control systems (Bzr, Hg).
      */
     // (Most operations don't need this.  Useful for checkout, though.)
@@ -246,6 +247,7 @@ public class MultiVersionControl {
     /**
      * Null if no module, just whole thing.
      * Non-null for CVS and, optionally, for SVN.
+     * Null for distributed version control systems (Bzr, Hg).
      */
     /*@Nullable*/ String module;
 
@@ -695,11 +697,13 @@ public class MultiVersionControl {
       if (action == "checkout") { // interned
         pb.directory(dir.getParentFile());
         String dirbase = dir.getName();
+        assert c.repository != null;
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
           // break;
         case CVS:
+          assert c.module != null;
           pb.command("cvs", "-d", c.repository, "checkout",
                      "-P", // prune empty directories
                      "-ko", // no keyword substitution
@@ -718,6 +722,7 @@ public class MultiVersionControl {
           throw new Error("not yet implemented");
           // break;
         case CVS:
+          assert c.repository != null;
           pb.command("cvs", "-d", c.repository, "diff",
                      "-b",      // compress whitespace
                      "--brief", // report only whether files differ, not details
@@ -747,10 +752,12 @@ public class MultiVersionControl {
           throw new Error("not yet implemented");
           // break;
         case CVS:
+          assert c.repository != null;
           break;
         case HG:
           break;
         case SVN:
+          assert c.repository != null;
           break;
         }
         // ...
@@ -779,6 +786,10 @@ public class MultiVersionControl {
         // Directory does not exist
         if (action == "checkout") { // interned
           File parent = dir.getParentFile();
+          if (parent == null) {
+            System.err.println("Root directory cannot be a checkout");
+            System.exit(1);
+          }
           if (! parent.exists()) {
             if (show) {
               System.out.println("Directory does not exist"
@@ -792,7 +803,7 @@ public class MultiVersionControl {
               }
             }
           } else {
-            System.out.println("Cannot find directory: " + dir);
+            System.out.println("Cannot find directory: " + parent);
             continue;
           }
         }
