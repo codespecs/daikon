@@ -14,7 +14,7 @@ import java.net.URL;
 
 /**
  * This program, mvc for Multiple Version Control, lets you run a version
- * control command, such as "update" or "diff", on a set of Bzr/CVS/SVN/Hg
+ * control command, such as "status" or "update", on a set of Bzr/CVS/SVN/Hg
  * checkouts rather than just one.<p>
  *
  * This program simplifies managing your checkouts.  You might
@@ -25,7 +25,7 @@ import java.net.URL;
  * <pre>
  *   checkout  -- checks out all repositories
  *   update    -- update all checked out repositories
- *   diff      -- list files that are not committed
+ *   status    -- show files that are changed but not committed
  * </pre><p>
  *
  * You can specify the set of checkouts for the program to manage, or it
@@ -144,7 +144,7 @@ public class MultiVersionControl {
   @Option("Print debugging output")
   public static boolean debug;
 
-  /** "checkout", "update", or "diff" */
+  /** "checkout", "status", or "update" */
   private String action;
 
 
@@ -186,7 +186,7 @@ public class MultiVersionControl {
   }
 
   public void parseArgs(String[] args) /*@Raw*/ {
-    Options options = new Options ("mvc [options] {checkout,update,diff}", this);
+    Options options = new Options ("mvc [options] {checkout,status,update}", this);
     String[] remaining_args = options.parse_or_usage (args);
     if (remaining_args.length != 1) {
       options.print_usage("Please supply exactly one argument (found %d)%n%s", remaining_args.length, UtilMDE.join(remaining_args, " "));
@@ -195,12 +195,12 @@ public class MultiVersionControl {
     action = remaining_args[0].intern();
     if ("checkout".startsWith(action)) {
       action = "checkout";
-    } else if ("diff".startsWith(action)) {
-      action = "diff";
+    } else if ("status".startsWith(action)) {
+      action = "status";
     } else if ("update".startsWith(action)) {
       action = "update";
     } else {
-      options.print_usage("Unrecognized action \"%s\" should be one of \"checkout\", \"diff\", or \"commit\"", action);
+      options.print_usage("Unrecognized action \"%s\" should be one of \"checkout\", \"status\", or \"update\"", action);
     }
 
     // clean up options
@@ -712,7 +712,7 @@ public class MultiVersionControl {
           pb.command("svn", "checkout", c.repository, dirbase);
           break;
         }
-      } else if (action == "diff") { // interned
+      } else if (action == "status") { // interned
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
@@ -728,13 +728,16 @@ public class MultiVersionControl {
 //         $filter = "grep -v \"unrecognized keyword 'UseNewInfoFmtStrings'\" | grep \"^Index:\" | perl -p -e 's|^Index: |$dir\\/|'";
           break;
         case HG:
-          pb.command("hg", "diff");
+          pb.command("hg", "status");
           break;
         case SVN:
+          pb.command("svn", "status");
+          // Alternate implementation using diff (by analogy with CVS).  But
+          // for SVN, "status" is the appropriate command.
           // "svn diff --summarize" and "svn log -vq" can only compare one
           // repository to another, but I want to compare the working
           // directory to the repository.
-          pb.command("svn", "diff", "--diff-cmd", "diff", "-x", "-q", "-x", "-r", "-x", "-N");
+          // pb.command("svn", "diff", "--diff-cmd", "diff", "-x", "-q", "-x", "-r", "-x", "-N");
 //         $filter = "grep \"^Index:\" | perl -p -e 's|^Index: |$dir\\/|'";
           break;
         }
@@ -828,8 +831,8 @@ public class MultiVersionControl {
 //         # or if there was an error, so ther's no good way to detect errors.
 //         $result = $result >> 8;
 //         if ($debug) { print "shifted result = $result\n"; }
-//         if ((($action eq "diff") && ($result != 0) && ($result != 1))
-//             || (($action ne "diff") && ($result != 0))) {
+//         if ((($action eq "status") && ($result != 0) && ($result != 1))
+//             || (($action ne "status") && ($result != 0))) {
 //           print "exit status $result for:\n  cd $command_cwd;\n  $command_redirected\n";
 //           system("cat $tmpfile");
 //         }
