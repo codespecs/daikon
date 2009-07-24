@@ -22,6 +22,8 @@ JAVAC_COMMAND = ${JAVAC} ${JAVAC_ARGS} ${JAVAC_ARGS}
 # JAVAC ?= jikes -g +E +F
 JAVA ?= java -ea
 
+JAR ?= jar
+
 # Leading "./" is for consistency with output of "find", so that names are
 # identical and "sort" can remove duplicates.
 AUTO_GENERATED_FILES := \
@@ -31,10 +33,7 @@ AUTO_GENERATED_FILES := \
 JAVA_FILES := $(sort $(shell find . \( -name CVS \) -prune -o -name '*.java' -print | sort) ${AUTO_GENERATED_FILES})
 JAVA_LINT_FILES := $(shell find . \( -name CVS -o -name ArraysMDE.java -o -name WeakHasherMap.java -o -name Intern.java -o -name OrderedPairIterator.java -o -name WeakIdentityHashMap.java \) -prune -o -name '*.java' -print | sort)
 JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -print | sort)
-ALL_JAVA_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
-# Using ALL_JAVA_FILES instead of JAVA_FILES wouldn't be right, since
-# ALL_JAVA_FILES includes helper .jpp files that don't generate a .class file.
-ALL_CLASS_FILES := ${JAVA_FILES:.java=.class}
+JAVA_AND_CPP_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
 
 jsr308_imports=checkers.interning.quals.*:checkers.nullness.quals.*
 
@@ -52,18 +51,11 @@ compile_notest:  .class-files-timestamp
 # compilation succeeds.  So, no targets for .class files in this Makefile.
 # ${ALL_CLASS_FILES}: .class-files-timestamp
 
-# Creates ${ALL_CLASS_FILES}.
-.class-files-timestamp: ${ALL_JAVA_FILES}
+# This rule creates ${ALL_CLASS_FILES}.
+# The timestamp file indicates when the files were last compiled.
+.class-files-timestamp: ${JAVA_AND_CPP_FILES}
 	${JAVAC_COMMAND} ${JAVAC_EXTRA_ARGS} ${JAVA_FILES} 2>&1
 	touch .class-files-timestamp
-
-jar: utilMDE.jar
-utilMDE.jar: .class-files-timestamp
-	rm -rf utilMDE
-	mkdir utilMDE
-	cp -p ${ALL_CLASS_FILES} utilMDE
-	jar cf utilMDE.jar utilMDE
-	rm -rf utilMDE
 
 clean:
 	rm -f *.class
@@ -73,8 +65,8 @@ very_clean: clean
 	rm -f ${AUTO_GENERATED_FILES}
 
 tags: TAGS
-TAGS: ${ALL_JAVA_FILES}
-	etags ${ALL_JAVA_FILES}
+TAGS: ${JAVA_AND_CPP_FILES}
+	etags ${JAVA_AND_CPP_FILES}
 
 # This "set" form doesn't seem to work for me (maybe needs to be export?).
 # Used to depend on targets "clean all", but I want to run this in "all".
@@ -101,25 +93,13 @@ javadoc: $(JAVA_FILES)
 	# jdk-add-munged-anchor-names doc/utilMDE/*.html
 	@echo "Optionally run jdk-index-to-alist (for Emacs support)"
 
-# No need to do "make doc" or "make all" before running this.
-# (This includes .class files, so users don't need to recompile.)
-utilMDE.tar.gz: $(ALL_JAVA_FILES) Makefile README
-	rm -rf /tmp/utilMDE
-	mkdir /tmp/utilMDE
-	cp -p $(ALL_JAVA_FILES) /tmp/utilMDE
-	cp -p Makefile README /tmp/utilMDE
-	(cd /tmp/utilMDE; make compile_notest doc)
-	(cd /tmp; tar zcf utilMDE.tar.gz utilMDE)
-	rm -f utilMDE.tar.gz
-	mv /tmp/utilMDE.tar.gz .
-	rm -rf /tmp/utilMDE
-
 showvars:
-	@echo ALL_JAVA_FILES = $(ALL_JAVA_FILES)
+	@echo JAVA_AND_CPP_FILES = $(JAVA_AND_CPP_FILES)
 	@echo JAVA_FILES = $(JAVA_FILES)
 	@echo JAVA_LINT_FILES = $(JAVA_LINT_FILES)
 	@echo JAVA_CPP_FILES = $(JAVA_CPP_FILES)
 	@echo CLASSPATH = "$(CLASSPATH)"
+	@echo jsr308_imports = $(jsr308_imports)
 
 
 ###########################################################################
@@ -139,7 +119,85 @@ LimitedSizeIntSet.java: LimitedSizeSet.java.jpp
 
 
 ###########################################################################
+### Jar files and distribution
 ###
+
+## TODO:  the .jar files other than utilMDE.jar should be trimmed, with
+## extraneous components removed.
+
+
+jar: utilMDE.jar
+utilMDE.jar: .class-files-timestamp svnkit.jar ini4j-0.5.1.jar lookup.html lookup.txt
+# "make clean" avoids including stray .class files from your directory.
+# "make compile" runs unit tests.
+	$(MAKE) clean compile
+	rm -rf jar-contents
+	mkdir jar-contents
+	mkdir jar-contents/utilMDE
+	cp -p *.class jar-contents/utilMDE
+	(cd jar-contents; jar xf ../svnkit.jar)
+	(cd jar-contents; jar xf ../ini4j-0.5.1.jar)
+	(cd jar-contents; jar xf ${JDKDIR}/lib/tools.jar com/sun/javadoc)
+	rm -rf jar-contents/meta-inf jar-contents/META-INF
+# Put contents in alphabetical order.
+	(cd jar-contents; jar cf ../utilMDE.jar `find * -type f | sort`)
+	rm -rf jar-contents
+
+#
+# Lookup targets
+#
+lookup.html: Lookup.java
+	javadoc -J-ea -quiet -doclet utilMDE.Lookup $< > $@
+lookup.txt: lookup.html html2textrc
+	html2text -rcfile html2textrc < $< > $@
+
+lookup.jar : utilMDE.jar lookup.manifest
+	rm -rf jar-contents
+	mkdir jar-contents
+	(cd jar-contents; jar xf ../utilMDE.jar)
+	rm -rf jar-contents/meta-inf jar-contents/META-INF
+	(cd jar-contents; $(JAR) cfm ../lookup.jar ../lookup.manifest `find * -type f | sort`)
+	rm -rf jar-contents
+
+install-lookup: $(pag)/software/pkg/lookup.jar
+$(pag)/software/pkg/lookup.jar: lookup.jar
+	cp -p $< $>
+
+#
+# TaskManager targets
+#
+TASKMANAGER_JAVA_FILES := $(shell find -name '*.java')
+task-manager : task_manager.jar
+task_manager.jar: utilMDE.jar task_manager.manifest
+	rm -rf jar-contents
+	mkdir jar-contents
+	(cd jar-contents; jar xf ../utilMDE.jar)
+	rm -rf jar-contents/meta-inf jar-contents/META-INF
+	(cd jar-contents; $(JAR) cfm ../task_manager.jar ../task_manager.manifest `find * -type f | sort`)
+	rm -rf jar-contents
+
+install-task-manager: $(pag)/software/pkg/task_manager.jar
+$(pag)/software/pkg/task_manager.jar: task_manager.jar
+	cp -p $< $>
+
+
+# No need to do "make doc" or "make all" before running this.
+# (This includes .class files, so users don't need to recompile.)
+utilMDE.tar.gz: $(JAVA_AND_CPP_FILES) Makefile README
+	rm -rf /tmp/utilMDE
+	mkdir /tmp/utilMDE
+	cp -p $(JAVA_AND_CPP_FILES) /tmp/utilMDE
+	cp -p Makefile README /tmp/utilMDE
+	(cd /tmp/utilMDE; make compile_notest doc)
+	(cd /tmp; tar zcf utilMDE.tar.gz utilMDE)
+	rm -f utilMDE.tar.gz
+	mv /tmp/utilMDE.tar.gz .
+	rm -rf /tmp/utilMDE
+
+
+
+###########################################################################
+### Pluggable type-checking
 ###
 
 JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing
@@ -155,10 +213,10 @@ check-nullness-utilmde-withstubs:
 
 
 ###########################################################################
-###
+### Makefile bookkeeping
 ###
 
-.PHONY: default all compile_notest jar clean very_clean tags test run-chicory javadoc showvars doc
+.PHONY: default all compile_notest jar clean very_clean tags test run-chicory javadoc showvars doc task-manager install-task-manager install-lookup
 
 
 # Existence of this rule means that a target is deleted if has just changed

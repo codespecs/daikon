@@ -70,7 +70,7 @@ JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
 # distributed version, of Daikon.  Avoid a (harmless but annoying) javac
 # error message that they don't exist.
 ifeq "$(wildcard $(INV)/java/lib/bcel.jar)" "$(INV)/java/lib/bcel.jar"
-    CLASSPATH_JARS = :$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar:$(INV)/java/utilMDE/svnkit.jar:$(INV)/java/utilMDE/ini4j-0.5.1.jar
+    CLASSPATH_JARS = :$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar:$(INV)/java/lib/utilMDE.jar
 endif
 ifeq "$(wildcard ${CHECKERSJAR})" "${CHECKERSJAR}"
     CLASSPATH_JARS2 = ${CHECKERSJAR}
@@ -111,8 +111,7 @@ export CLASSPATH
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
 # " | perl -pi -e 's/^\.\///g'" to remove leading "./"
 JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name typequals -o -name 'ReturnBytecodes.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${DAIKONBIN}/sort-directory-order.pl)
-DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | sort)  \
-                    $(shell find utilMDE/ -name '*.java' -not -name '*\#*' | sort)
+DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | sort)
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
@@ -120,8 +119,6 @@ TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -who
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
 AUTO_GENERATED_FILES = \
-	utilMDE/MathMDE.java \
-	utilMDE/LimitedSizeIntSet.java \
 	daikon/PptSlice1.java \
 	daikon/PptSlice2.java \
 	daikon/PptSlice3.java \
@@ -368,6 +365,8 @@ AUTO_GENERATED_FILES_2 = \
 
 AUTO_GENERATED_CLASSES_2 = $(subst .java,.class,${AUTO_GENERATED_FILES_2})
 
+ALL_GENERATED_FILES = ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} lib/utilMDE.jar
+
 
 ###########################################################################
 ### Variables passed down to subshells
@@ -397,11 +396,11 @@ all_stop_on_error:
 all_via_daikon: chicory daikon/Daikon.class daikon/Runtime.class daikon/diff/Diff.class
 	$(MAKE) all_pass2
 
-xlint: chicory ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
+xlint: chicory ${ALL_GENERATED_FILES}
 	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
-all_directly: ${AUTO_GENERATED_FILES} utilMDE-import-check utilMDE-copy
+all_directly: ${AUTO_GENERATED_FILES} lib/utilMDE.jar utilMDE-import-check utilMDE-copy
 	@echo ${JAVA_FILES} > java_files.txt
 	${JAVAC_COMMAND} @java_files.txt
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -413,8 +412,8 @@ all_directly: ${AUTO_GENERATED_FILES} utilMDE-import-check utilMDE-copy
 
 .PHONY : daikon
 daikon: compile_daikon junit
-compile_daikon : $(AUTO_GENERATED_FILES)
-	@echo $(JAVAC_COMMAND) 'daikon/*.java utilMDE/*.java ...'
+compile_daikon : $(AUTO_GENERATED_FILES) lib/utilMDE.jar
+	@echo $(JAVAC_COMMAND) 'daikon/*.java ...'
 	@$(JAVAC_COMMAND) $(DAIKON_JAVA_FILES)
 	@chmod -w ${AUTO_GENERATED_FILES}
 	# $(MAKE) all_pass2
@@ -422,7 +421,7 @@ compile_daikon : $(AUTO_GENERATED_FILES)
 #
 # Chicory java front end for Daikon
 #
-CHICORY_JAVA_FILES := daikon/Chicory.java daikon/chicory/*.java utilMDE/*.java
+CHICORY_JAVA_FILES := daikon/Chicory.java daikon/chicory/*.java
 
 # This actually requires Daikon to already be compiled.
 # It would be good to make that an explicit prerequisite.
@@ -492,26 +491,22 @@ dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	install -d $(DCOMP_RT)
 	$(JAVA) -Xmx1024m daikon.dcomp.BuildJDK $(ORIG_RT) $(DCOMP_RT)
-	jar cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
+	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 dyncomp-jdk-no-primitives dcomp-jdk-no-primitives  : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	install -d $(DCOMP_RT)
 	$(JAVA) -Xmx1024m daikon.dcomp.BuildJDK --no-primitives $(ORIG_RT) $(DCOMP_RT)
-	jar cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
+	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 # Install the local version of the dyncomp specific rt.jar
 install-dyncomp-jdk install-dcomp-jdk : dcomp_rt.jar
 	cp dcomp_rt.jar $(pag)/software/arch/common/pkg/DynComp/
 
-# Only rebuild the jar file, don't recreate the contents of $(DCOMP_RT)
-# useful if editing only one file in the jar
+# Only rebuild the jar file, don't recreate the contents of $(DCOMP_RT).
+# Useful if editing only one file in the jar.
 dyncomp-jdk-only dcomp-jdk-only :
-	jar cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
-
-# Double colon means always rerun the rules, even though there are no prerequisites and the target exists.
-utilMDE/.class-files-timestamp::
-	$(MAKE) -C utilMDE
+	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 # daikon.util is a copy of utilMDE.
 # Copied source files are read-only, to prevent accidental changes.
@@ -519,7 +514,8 @@ utilMDE/.class-files-timestamp::
 .PHONY: utilMDE-copy
 utilMDE-copy : daikon/util/README
 
-daikon/util/README : utilMDE/.class-files-timestamp
+daikon/util/README :
+	$(MAKE) -C utilMDE
 	/bin/rm -rf daikon/util
 	install -d daikon/util/
 	cp utilMDE/*.java daikon/util
@@ -568,46 +564,14 @@ utilMDE-import-check :
 #
 # Web Services Matching targets
 #
-WSMATCH_JAVA_FILES = daikon/tools/WSMatch.java daikon/chicory/*.java \
-					 utilMDE/*.java
+WSMATCH_JAVA_FILES = daikon/tools/WSMatch.java daikon/chicory/*.java
 wsmatch : daikon/tools/WSMatch.class
-daikon/tools/WSMatch.class : $(wildcard $(WSMATCH_JAVA_FILES))
+daikon/tools/WSMatch.class : $(wildcard $(WSMATCH_JAVA_FILES)) lib/utilMDE.jar
 	$(JAVAC_COMMAND) $(WSMATCH_JAVA_FILES)
-
-#
-# Lookup targets
-#
-LOOKUP_JAVA_FILES := $(shell find utilMDE -name '*.java')
-lookup.jar : $(LOOKUP_JAVA_FILES) utilMDE/lookup.manifest utilMDE/html2textrc
-	${JAVAC_COMMAND} $(LOOKUP_JAVA_FILES)
-	javadoc -J-ea -quiet -doclet utilMDE.Lookup utilMDE/Lookup.java \
-	  > utilMDE/lookup.html
-	html2text -rcfile utilMDE/html2textrc \
-	  < utilMDE/lookup.html > utilMDE/lookup.txt
-	(mkdir tools-jar; (cd tools-jar; jar xf ${JDKDIR}/lib/tools.jar); ln -s tools-jar/com com)
-	$(JAR) cfm lookup.jar utilMDE/lookup.manifest utilMDE/*.class \
-	  utilMDE/lookup.html utilMDE/lookup.txt \
-	  com/sun/javadoc/*.class
-	rm -rf tools-jar com
-
-install-lookup: lookup.jar
-	cp lookup.jar $(pag)/software/pkg/
-
-#
-# TaskManager targerts
-#
-TASKMANAGER_JAVA_FILES := $(shell find utilMDE -name '*.java')
-task-manager : task_manager.jar
-task_manager.jar: $(TASKMANAGER_JAVA_FILES)
-	${JAVAC_COMMAND} $(TASKMANAGER_JAVA_FILES)
-	$(JAR) cfm task_manager.jar utilMDE/task_manager.manifest utilMDE/*.class
-
-install-task-manager: task_manager.jar
-	cp task_manager.jar $(pag)/software/pkg
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
-all_except_daikon: ${AUTO_GENERATED_FILES}
+all_except_daikon: ${AUTO_GENERATED_FILES} lib/utilMDE.jar
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -639,13 +603,13 @@ jikes:	all_via_jikes
 
 # These rules are undesirable, because Daikon.class (or Diff.class) might
 # be up to date even if other files aren't.
-daikon/Daikon.class: daikon/Daikon.java	${AUTO_GENERATED_FILES}
+daikon/Daikon.class: daikon/Daikon.java	${AUTO_GENERATED_FILES} lib/utilMDE.jar
 	${JAVAC_COMMAND} daikon/Daikon.java
 
-daikon/Diff.class: Diff.java ${AUTO_GENERATED_FILES}
+daikon/Diff.class: Diff.java ${AUTO_GENERATED_FILES} lib/utilMDE.jar
 	${JAVAC_COMMAND} daikon/Diff.java
 
-daikon/Runtime.class: daikon/Runtime.java
+daikon/Runtime.class: daikon/Runtime.java lib/utilMDE.jar
 	${JAVAC_COMMAND} daikon/Runtime.java
 
 
@@ -703,10 +667,10 @@ tags-without-generated-files: clean-generated-files
 	@etags -l java ${TAG_FILES}
 	$(MAKE) compile
 
-utilMDE.jar: $(AUTO_GENERATED_FILES)
-	javac -g utilMDE/*.java
-	jar cf utilMDE.jar utilMDE/*.class
-.PHONY: utilMDE.jar
+lib/utilMDE.jar: utilMDE/utilMDE.jar
+	cp -p $< $@
+utilMDE/utilMDE.jar:
+	$(MAKE) -C utilMDE utilMDE.jar
 
 ###
 ### Static checks of the code
@@ -730,7 +694,7 @@ findbugs-nocompile:
 findbugs-cat:
 	cat .findbugs-output
 
-../daikon.jar: ${AUTO_GENERATED_FILES} compile
+../daikon.jar: ${AUTO_GENERATED_FILES} lib/utilMDE.jar compile
 	cd .. && $(MAKE) daikon.jar
 
 checkstyle: checkstyle-cs checkstyle-sun
@@ -738,7 +702,7 @@ checkstyle-cs: .checkstyle-cschecks-output
 checkstyle-sun: .checkstyle-sunchecks-output
 .PHONY: checkstyle checkstyle-cs checkstyle-sun
 
-.checkstyle-sunchecks-output: ${AUTO_GENERATED_FILES}
+.checkstyle-sunchecks-output: ${AUTO_GENERATED_FILES} lib/utilMDE.jar
 	  ${JAVA} \
 	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
 	    -Dcheckstyle.suppressions.file=${inv}/java/.checkstyle-suppressions.xml \
@@ -747,7 +711,7 @@ checkstyle-sun: .checkstyle-sunchecks-output
 	    -c /g2/users/mernst/java/checkstyle-3.4/docs/sun_checks.xml \
 	    -r daikon | tee .checkstyle-sunchecks-output
 
-.checkstyle-cschecks-output: ${AUTO_GENERATED_FILES}
+.checkstyle-cschecks-output: ${AUTO_GENERATED_FILES} lib/utilMDE.jar
 	  ${JAVA} \
 	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
 	    -Dcheckstyle.suppressions.file=.checkstyle-suppressions.xml \
@@ -795,7 +759,6 @@ INTERNING_JAVA_FILES = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} -whol
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} ${INTERNING_JAVA_FILES_SKIP_COUNTS} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned' | sort)
 ## Temporarily, only a subset of directories.  Expand the scope later.
 NULLNESS_JAVA_FILES = \
-  $(shell find utilMDE/ -name '*.java' -print | sort) \
   $(shell find daikon/ -name '*.java' -print | sort)
 
 #   $(shell find typequals/ -name '*.java')
@@ -808,7 +771,7 @@ check-interning: ${INTERNING_JAVA_FILES}
 # Run the interning checker on all Java files, not just those that contain an
 # @Interned annotation.
 interning-all: check-interning-all
-check-interning-all: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
+check-interning-all: ${ALL_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_INTERNING_ARGS} ${JAVA_FILES}
 
@@ -818,15 +781,15 @@ check-nullness: check-nullness-all
 # check-nullness-all: check-nullness-all-withstubs
 check-nullness-all: check-nullness-all-withstubs-warns
 
-check-nullness-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} compile-typequals
+check-nullness-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${NULLNESS_JAVA_FILES}
 
-check-nullness-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} compile-typequals
+check-nullness-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${NULLNESS_JAVA_FILES}
 
-check-nullness-all-withstubs-warns: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} compile-typequals
+check-nullness-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals
 	@echo ${JAVAC_COMMAND} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
 	@${JAVAC_COMMAND} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${NULLNESS_JAVA_FILES}
 
@@ -834,23 +797,23 @@ check-prototype: check-prototype-all
 
 check-prototype-all: check-prototype-all-withstubs
 
-check-prototype-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} compile-typequals
+check-prototype-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals
 	@echo ${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${NULLNESS_JAVA_FILES}
 
-check-igj-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
+check-igj-all-nostubs: ${ALL_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVA_FILES}
 
-check-igj-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
+check-igj-all-withstubs: ${ALL_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${JAVA_FILES}
 
-check-javari-all-nostubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
+check-javari-all-nostubs: ${ALL_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ...
 	@${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVA_FILES}
 
-check-javari-all-withstubs: ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
+check-javari-all-withstubs: ${ALL_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ...
 	@${JAVAC_COMMAND} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${JAVA_FILES}
 
@@ -868,7 +831,7 @@ check-interning-varinfo:
 check-interning-fileio:
 	${JAVAC} ${JAVAC_INTERNING_ARGS} daikon/FileIO.java
 
-# Problem with these computations: double-counting of dakion/util/ directory.
+# Problem with these computations: double-counting of daikon/util/ directory.
 # "tail -1" is required when wc is given multiple arguments
 interning-counts:
 	@echo -n "Annotated files: "
@@ -888,7 +851,7 @@ interning-counts:
 	@echo -n "Daikon total lines: "
 	@wc -l ${DAIKON_JAVA_FILES} | tail -1
 
-# Problem with these computations: double-counting of dakion/util/ directory.
+# Problem with these computations: double-counting of daikon/util/ directory.
 # "tail -1" is required when wc is given multiple arguments
 nullness-counts:
 	@echo -n "Annotated files: "
@@ -1076,6 +1039,7 @@ showvars:
 	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
 	@echo JAVA_FILES = $(JAVA_FILES)
 	@echo TAG_FILES = $(TAG_FILES)
+	@echo jsr308_imports = $(jsr308_imports)
 
 showvar_JAVA_FILES:
 	@echo ${JAVA_FILES}
@@ -1132,12 +1096,6 @@ JAVA_CPP ?= (rm -f $@; ${DAIKONBIN}/java-cpp.pl -DDEFINEDVAR $< 2>&1 > $@ && chm
 ## These are used like:	$(JAVA_CPP_START) -DLOWER $(JAVA_CPP_END)
 # JAVA_CPP_START = (cp -pf $@ $@-bak; set -e; java-cpp $<
 # JAVA_CPP_END = > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
-
-utilMDE/MathMDE.java: utilMDE/MathMDE.java.jpp utilMDE/MathMDE-gcd.java.jpp utilMDE/MathMDE-modulus.java.jpp utilMDE/MathMDE-nonmodulus.java.jpp utilMDE/MathMDE-help.java.jpp utilMDE/MathMDE-helpend.java.jpp
-	cd utilMDE && $(MAKE) MathMDE.java
-
-utilMDE/LimitedSizeIntSet.java: utilMDE/LimitedSizeSet.java.jpp
-	cd utilMDE && $(MAKE) LimitedSizeIntSet.java
 
 daikon/PptSlice1.java: daikon/PptSlice.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=ARITY1)
