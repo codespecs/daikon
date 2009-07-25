@@ -1,9 +1,11 @@
 .class-files-timestamp
 .test-timestamp
+LimitedSizeIntSet.java
+MathMDE.java
 doc
+lookup.html
+lookup.jar
+lookup.txt
+task_manager.jar
 utilMDE.jar
 utilMDE.tar.gz
-MathMDE.java
-LimitedSizeIntSet.java
-lookup.txt
-lookup.html
