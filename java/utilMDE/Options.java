@@ -643,6 +643,9 @@ public class Options {
    */
   public void print_usage (PrintStream ps, String format, /*@Nullable*/ Object... args) {
     ps.printf (format, args);
+    if (! format.endsWith("%n")) {
+      ps.println();
+    }
     print_usage (ps);
   }
 
