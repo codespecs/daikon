@@ -26,6 +26,7 @@ import java.net.URL;
  *   checkout  -- checks out all repositories
  *   update    -- update all checked out repositories
  *   status    -- show files that are changed but not committed
+ *   list      -- list the checkouts that this program is aware of
  * </pre><p>
  *
  * You can specify the set of checkouts for the program to manage, or it
@@ -105,20 +106,31 @@ import java.net.URL;
  */
 
 // TODO:
-//
-// Use of space delimiter for specifyng module interacts badly with file
-// names that contain spaces.  This doesn't seem important enough to fix.
-//
-// There is a problem when two modules from the same SVN repository are
-// checked out, with one checkout inside the other at the top level.  The
-// inner checkout's directory can be mis-reported as the outer one.  This
-// isn't always a problem for nested checkouts, and nested checkouts are
-// bad style anyway, so I am deferring investigating/fixing it.
+
+// It might be nice to list all the "unexpected" checkouts -- those found
+// on disk that are not in the checkouts file.  This permits the checkouts
+// file to be updated and then used in preference to searching the whole
+// filesystem, which may be slow.
+// You can do this from the command line by comparing the output of these
+// two commands:
+//   mvc list --repositories /dev/null | sort > checkouts-from-directory
+//   mvc list --search=false | sort > checkouts-from-file
+
+// In checkouts file, use of space delimiter for specifyng module interacts
+// badly with file names that contain spaces.  This doesn't seem important
+// enough to fix.
+
+// When discovering checkouts from a directory structure, there is a
+// problem when two modules from the same SVN repository are checked out,
+// with one checkout inside the other at the top level.  The inner
+// checkout's directory can be mis-reported as the outer one.  This isn't
+// always a problem for nested checkouts, and nested checkouts are bad
+// style anyway, so I am deferring investigating/fixing it.
 
 public class MultiVersionControl {
 
   @Option("File with list of checkouts.  Set it to /dev/null to suppress reading.")
-  public String repositories = new File(userHome, ".mvc-checkouts").getPath();
+  public String checkouts = new File(userHome, ".mvc-checkouts").getPath();
 
   @Option("Directory under which to search for checkouts; may be supplied multiple times; default=home dir")
   public List<String> dir = new ArrayList<String>();
@@ -144,9 +156,19 @@ public class MultiVersionControl {
   @Option("Print debugging output")
   public static boolean debug;
 
-  /** "checkout", "status", or "update" */
-  private String action;
+  enum Action {
+    CHECKOUT,
+      STATUS,
+      UPDATE,
+      LIST
+      };
+  // Shorter variants
+  private Action CHECKOUT = Action.CHECKOUT;
+  private Action STATUS = Action.STATUS;
+  private Action UPDATE = Action.UPDATE;
+  private Action LIST = Action.LIST;
 
+  private Action action;
 
   @SuppressWarnings("nullness") // user.home property always exists
   static final /*@NonNull*/ String userHome = System.getProperty ("user.home");
@@ -158,9 +180,9 @@ public class MultiVersionControl {
     Set<Checkout> checkouts = new LinkedHashSet<Checkout>();
 
     try {
-      readCheckouts(new File(mvc.repositories), checkouts);
+      readCheckouts(new File(mvc.checkouts), checkouts);
     } catch (IOException e) {
-      System.err.println("Problem reading file " + mvc.repositories + ": " + e.getMessage());
+      System.err.println("Problem reading file " + mvc.checkouts + ": " + e.getMessage());
     }
 
     if (mvc.search) {
@@ -186,21 +208,24 @@ public class MultiVersionControl {
   }
 
   public void parseArgs(String[] args) /*@Raw*/ {
-    Options options = new Options ("mvc [options] {checkout,status,update}", this);
+    Options options = new Options ("mvc [options] {checkout,status,update,list}", this);
     String[] remaining_args = options.parse_or_usage (args);
     if (remaining_args.length != 1) {
       options.print_usage("Please supply exactly one argument (found %d)%n%s", remaining_args.length, UtilMDE.join(remaining_args, " "));
       System.exit(1);
     }
-    action = remaining_args[0].intern();
-    if ("checkout".startsWith(action)) {
-      action = "checkout";
-    } else if ("status".startsWith(action)) {
-      action = "status";
-    } else if ("update".startsWith(action)) {
-      action = "update";
+    String action_string = remaining_args[0];
+    if ("checkout".startsWith(action_string)) {
+      action = CHECKOUT;
+    } else if ("status".startsWith(action_string)) {
+      action = STATUS;
+    } else if ("update".startsWith(action_string)) {
+      action = UPDATE;
+    } else if ("list".startsWith(action_string)) {
+      action = LIST;
     } else {
-      options.print_usage("Unrecognized action \"%s\" should be one of \"checkout\", \"status\", or \"update\"", action);
+      options.print_usage("Unrecognized action \"%s\"", action_string);
+      assert false;
     }
 
     // clean up options
@@ -213,10 +238,10 @@ public class MultiVersionControl {
       redo_existing = true;
     }
 
-    if (action == "checkout") { // interned
+    if (action == CHECKOUT) {
       show = true;
     }
-    if (action == "update") {   // interned
+    if (action == UPDATE) {
       print_directory = true;
     }
 
@@ -228,9 +253,9 @@ public class MultiVersionControl {
 
   static enum RepoType {
     BZR,
-      CVS,
-      HG,
-      SVN };
+    CVS,
+    HG,
+    SVN };
 
   // TODO: have subclasses of Checkout for the different varieties, perhaps.
   static class Checkout {
@@ -257,7 +282,10 @@ public class MultiVersionControl {
     }
 
     Checkout(RepoType repoType, File directory, /*@Nullable*/ String repository, /*@Nullable*/ String module) {
-      assert directory.isDirectory() : "Not a directory: " + directory;
+      // Directory might not exist if we are running the checkout command.
+      // If it exists, it must be a directory.
+      assert (directory.exists() ? directory.isDirectory() : true)
+        : "Not a directory: " + directory;
       this.repoType = repoType;
       this.directory = directory;
       this.repository = repository;
@@ -265,21 +293,23 @@ public class MultiVersionControl {
       // These asserts come at the end so that the error message can be better.
       switch (repoType) {
       case BZR:
-        assert new File(directory, ".bzr").isDirectory();
+        assert (directory.exists() ? new File(directory, ".bzr").isDirectory() : true);
         assert module == null;
         break;
       case CVS:
-        assert new File(directory, "CVS").isDirectory() : "Bad CVS: " + this;
+        assert (directory.exists() ? new File(directory, "CVS").isDirectory() : true) : "Bad CVS: " + this;
         assert module != null : "Bad CVS: " + this;
         break;
       case HG:
-        assert new File(directory, ".hg").isDirectory();
+        assert (directory.exists() ? new File(directory, ".hg").isDirectory() : true);
         assert module == null;
         break;
       case SVN:
-        assert new File(directory, ".svn").isDirectory() : "Bad SVN: " + this;
+        assert (directory.exists() ? new File(directory, ".svn").isDirectory() : true) : "Bad SVN: " + this;
         assert module == null : "Bad SVN: " + this;
         break;
+      default:
+        assert false;
       }
     }
 
@@ -694,7 +724,11 @@ public class MultiVersionControl {
 
       filter = null;
 
-      if (action == "checkout") { // interned
+      switch (action) {
+      case LIST:
+        System.out.println(c);
+        break;
+      case CHECKOUT:
         pb.directory(dir.getParentFile());
         String dirbase = dir.getName();
         assert c.repository != null;
@@ -715,8 +749,11 @@ public class MultiVersionControl {
         case SVN:
           pb.command("svn", "checkout", c.repository, dirbase);
           break;
+        default:
+          assert false;
         }
-      } else if (action == "status") { // interned
+        break;
+      case STATUS:
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
@@ -745,8 +782,11 @@ public class MultiVersionControl {
           // pb.command("svn", "diff", "--diff-cmd", "diff", "-x", "-q", "-x", "-r", "-x", "-N");
 //         $filter = "grep \"^Index:\" | perl -p -e 's|^Index: |$dir\\/|'";
           break;
+        default:
+          assert false;
         }
-      } else if (action == "update") { // interned
+        break;
+      case UPDATE:
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
@@ -759,6 +799,8 @@ public class MultiVersionControl {
         case SVN:
           assert c.repository != null;
           break;
+        default:
+          assert false;
         }
         // ...
 //       if (defined($cvsroot)) {
@@ -769,8 +811,9 @@ public class MultiVersionControl {
 //         $filter = "grep -v \"Killed by signal 15.\"";
 //       }
         // ...
-      } else {
-        throw new Error("This can't happen");
+        break;
+      default:
+        assert false;
       }
 
       // Check that the directory exists (OK if it doesn't for checkout).
@@ -778,18 +821,22 @@ public class MultiVersionControl {
         System.out.println(dir + ":");
       }
       if (dir.exists()) {
-        if (action == "checkout" && ! redo_existing) { // interned
+        if (action == CHECKOUT && ! redo_existing) {
           System.out.println("Skipping checkout (dir already exists): " + dir);
           continue;
         }
       } else {
         // Directory does not exist
-        if (action == "checkout") { // interned
-          File parent = dir.getParentFile();
-          if (parent == null) {
-            System.err.println("Root directory cannot be a checkout");
-            System.exit(1);
-          }
+        File parent = dir.getParentFile();
+        if (parent == null) {
+          System.err.println("Root directory cannot be a checkout");
+          System.exit(1);
+        }
+        switch (action) {
+        case LIST:
+          // nothing to do
+          break;
+        case CHECKOUT:
           if (! parent.exists()) {
             if (show) {
               System.out.println("Directory does not exist"
@@ -802,10 +849,14 @@ public class MultiVersionControl {
                 System.exit(1);
               }
             }
-          } else {
-            System.out.println("Cannot find directory: " + parent);
-            continue;
           }
+          break;
+        case STATUS:
+        case UPDATE:
+          System.out.println("Cannot find directory: " + dir);
+          continue;
+        default:
+          assert false;
         }
       }
 
