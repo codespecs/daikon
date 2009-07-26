@@ -228,6 +228,7 @@ public class BCELUtil {
     // targeters (branches, exceptions) should not include the new
     // code
     if (old_start.hasTargeters()) {
+      // getTargeters() returns non-null because hasTargeters => true
       for (InstructionTargeter it : old_start.getTargeters()) {
         if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
           it.updateTarget(old_start, new_start);
