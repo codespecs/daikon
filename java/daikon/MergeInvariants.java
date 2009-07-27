@@ -318,11 +318,12 @@ public final class MergeInvariants {
 
       // Make sure at least one child was found
       assert ppt.children.size() > 0 : ppt;
-      if (ppt.has_splitters())
+      if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters)
           for (PptTopLevel p : ppt_split.ppts)
             assert p.children.size() > 0 : p;
+      }
     }
 
     // Check the resulting PptMap for consistency
