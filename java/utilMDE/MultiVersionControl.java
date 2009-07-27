@@ -771,6 +771,9 @@ public class MultiVersionControl {
           break;
         case HG:
           pb.command("hg", "status");
+          // also do
+          //   hg outgoing -l 1
+          // and the third line is either "no changes found" or not
           break;
         case SVN:
           pb.command("svn", "status");
