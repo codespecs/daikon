@@ -115,7 +115,7 @@ public abstract class Invariant
    * The program point for this invariant; includes values, number of
    * samples, VarInfos, etc.  Can be null for a "prototype" invariant.
    **/
-  /*@Dependent(when = Prototype.class, result=Nullable.class)*/
+  /*@Dependent(result=Nullable.class, when=Prototype.class)*/
   public PptSlice ppt;
 
   // Has to be public so wrappers can read it.
@@ -397,7 +397,7 @@ public abstract class Invariant
   // in the ppt.  Or, don't put too much work in the constructor and instead
   // have the caller do that.
   // The "ppt" argument can be null if this is a prototype invariant.
-  protected Invariant(/*@Dependent(when = Prototype.class, result=Nullable.class)*/ PptSlice ppt) {
+  protected Invariant(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     this.ppt = ppt;
   }
 

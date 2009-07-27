@@ -333,7 +333,7 @@ public class DynamicConstants implements Serializable {
     // Turn off previous_constant on all newly non-constants
     for (Constant con : non_con) {
       con.previous_constant = false;
-      @SuppressWarnings("nullness")
+      @SuppressWarnings("nullness") // need statement annotation
       /*@NonNull*/ Object nullValue = null;
       con.val = nullValue;
       con.count = 0;

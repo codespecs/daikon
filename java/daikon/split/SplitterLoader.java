@@ -11,7 +11,7 @@ public class SplitterLoader extends ClassLoader {
   /**
    * Read in the bytes of the .class file.
    **/
-  private byte[] read_Class_Data(String fileName) {
+  private byte /*@Nullable*/ [] read_Class_Data(String fileName) {
 
     try {
       FileInputStream fi = new FileInputStream(fileName);
@@ -36,7 +36,7 @@ public class SplitterLoader extends ClassLoader {
    * @param full_pathname the pathname of a .class file
    * @return a Java Object corresponding to the .class file
    **/
-  protected Class<?> load_Class(String className, String full_pathname) {
+  protected /*@Nullable*/ Class<?> load_Class(String className, String full_pathname) {
     Class<?> return_class;
     byte[] classData = read_Class_Data(full_pathname);
     if (classData == null) {

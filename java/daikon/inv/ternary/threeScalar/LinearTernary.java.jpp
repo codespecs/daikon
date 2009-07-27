@@ -83,11 +83,10 @@ public class CLASSNAME
 
   public CORECLASS core;
 
-  protected CLASSNAME(/*@Dependent(when = Prototype.class, result=Nullable.class)*/ PptSlice ppt) {
+  @SuppressWarnings("nullness") // circular initialization
+  protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
-    @SuppressWarnings({"nullness", "cast"}) // circular initialization; cast away rawness
-    CLASSNAME nonRawThis = (/*@NonNull*/ CLASSNAME) this;
-    core = new CORECLASS(nonRawThis);
+    core = new CORECLASS(this);
   }
 
   private static /*@Prototype*/ CLASSNAME proto;

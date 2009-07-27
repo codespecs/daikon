@@ -23,7 +23,7 @@ public class InvMatch {
   /**
    * Main program for testing purposes
    */
-  @SuppressWarnings("nullness")
+  @SuppressWarnings("nullness") // testing method
   public static void main (String[] args) throws IOException {
 
     // Read in the sample decls file

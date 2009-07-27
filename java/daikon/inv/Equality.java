@@ -107,8 +107,6 @@ public final /*(at)Interned*/ class Equality
     assert variables.size() > 0;
     assert vars.size() == variables.size();
 
-    @SuppressWarnings({"cast","nullness"}) // XXX Nullness checker TODO: flow should infer this as non-raw.
-    Equality thisNonRaw = (/*@NonNull*/ Equality)this;
     for (VarInfo vi : variables) {
       if (debug.isLoggable(Level.FINE)) {
         debug.fine ("  " + vi.name() + " [" + vi.comparability + "]");
@@ -119,7 +117,7 @@ public final /*(at)Interned*/ class Equality
         : "not comparable " + leader.name() + " " + vi.name()
             +" at ppt " + ppt.parent.name();
       assert vi.rep_type.isArray() == leader.rep_type.isArray();
-      vi.equalitySet = thisNonRaw;
+      vi.equalitySet = this;
     }
   }
 

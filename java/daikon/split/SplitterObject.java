@@ -23,12 +23,12 @@ public class SplitterObject implements Comparable<SplitterObject> {
   private File classFile; // class file containing compiled code for this splitter
 
   public boolean dummyDesired = false;
-  public String daikonFormat   = null;
-  public String javaFormat     = null;
-  public String escFormat      = null;
-  public String simplifyFormat = null;
-  public String jmlFormat      = null;
-  public String dbcFormat      = null;
+  public /*@Nullable*/ String daikonFormat   = null;
+  public /*@Nullable*/ String javaFormat     = null;
+  public /*@Nullable*/ String escFormat      = null;
+  public /*@Nullable*/ String simplifyFormat = null;
+  public /*@Nullable*/ String jmlFormat      = null;
+  public /*@Nullable*/ String dbcFormat      = null;
 
   /**
    * @param condition The splitting condition of this splitter

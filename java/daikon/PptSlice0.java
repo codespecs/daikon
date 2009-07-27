@@ -63,7 +63,7 @@ public class PptSlice0
     }
   }
 
-  @SuppressWarnings("nullness")
+  @SuppressWarnings("nullness") // resets variables to null
   private void reinitInvariantsSeen() {
     invariantsSeen = null;
     initInvariantsSeen();

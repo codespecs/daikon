@@ -89,10 +89,11 @@ public class LemmaStack {
   }
 
   /** Try to start Simplify. */
-  @SuppressWarnings("nullness") // if bad assignment, immediate exception
   private void startProver() /*@Raw*/ throws SimplifyError {
-    session = SessionManager.attemptProverStartup();
-    if (session == null) {
+    SessionManager session_try = SessionManager.attemptProverStartup();
+    if (session_try != null) {
+      session = session_try;
+    } else {
       throw new SimplifyError("Couldn't start Simplify");
     }
   }
@@ -107,7 +108,6 @@ public class LemmaStack {
     }
   }
 
-  @SuppressWarnings("nullness") // this is non-raw by time of call to pushLemmas
   public LemmaStack() throws SimplifyError {
     startProver();
     lemmas = new Stack<Lemma>();

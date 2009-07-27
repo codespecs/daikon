@@ -21,7 +21,7 @@ import java.text.*;
  * SVM-Light, SVMfu, or C5 uses.
  **/
 
-@SuppressWarnings({"unchecked", "rawtypes", "nullness"})
+@SuppressWarnings({"unchecked", "rawtypes", "nullness"}) // not actively maintained
 public final class FeatureExtractor {
   private FeatureExtractor() { throw new Error("do not instantiate"); }
 

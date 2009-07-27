@@ -318,7 +318,7 @@ public final class ValueTuple implements Cloneable {
 
   /** Return a new ValueTuple containing this one's first len elements. **/
   public ValueTuple trim(int len) {
-    @SuppressWarnings({"interning","nullness"}) // XXX checker bug with polymorphism
+    // @SuppressWarnings({"interning","nullness"}) // XXX checker bug with polymorphism
     /*@Nullable*/ /*@Interned*/ Object[] new_vals = ArraysMDE.subarray(vals, 0, len);
     int[] new_mods = ArraysMDE.subarray(mods, 0, len);
     return new ValueTuple(new_vals, new_mods);
@@ -334,7 +334,7 @@ public final class ValueTuple implements Cloneable {
    * If vis is non-null, the values are annotated with the VarInfo name that
    * would be associated with the value.
    **/
-  @SuppressWarnings("nullness")
+  // @SuppressWarnings("nullness")
   public String toString(VarInfo /*@Nullable*/ [] vis) {
     StringBuffer sb = new StringBuffer("[");
     assert vals.length == mods.length;

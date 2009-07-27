@@ -41,6 +41,7 @@ import static daikon.Global.lineSep;
  * the two, we can find problems with the optimization implementation by
  * tracking the cause of the differences.
  */
+@SuppressWarnings("nullness")
 public class DaikonSimple {
 
   // logging information
@@ -49,8 +50,8 @@ public class DaikonSimple {
   public static final Logger debug_detail = Logger
       .getLogger("daikon.DaikonSimple.Detail");
 
-  // inv file for storing the invariants in serialized form
-  public static File inv_file = null;
+  // // inv file for storing the invariants in serialized form
+  // public static File inv_file = null;
 
   private static String usage = UtilMDE
       .join(
@@ -59,8 +60,8 @@ public class DaikonSimple {
               "Usage: java daikon.DaikonSimple [OPTION]... <decls_file> <dtrace_file>",
               "  -h, --" + Daikon.help_SWITCH,
               "      Display this usage message",
-              "  -o, <inv_file> ",
-              "      Writes output to <inv_file>",
+              // "  -o, <inv_file> ",
+              // "      Writes output to <inv_file>",
               "  --" + Daikon.debugAll_SWITCH,
               "      Turns on all debug flags (voluminous output)",
               "  --" + Daikon.debug_SWITCH + " logger",

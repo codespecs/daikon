@@ -288,17 +288,16 @@ public final class ONEOFSCALAR
   private int num_elts;
 
 
-  public ONEOFSCALAR (/*@Dependent(when = Prototype.class, result=Nullable.class)*/ PptSlice slice) {
+  public ONEOFSCALAR (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice slice) {
     super (slice);
     if (slice == null)
       return;
 
 #if defined(IS_ELT) || defined(IS_SEQUENCE)
-    @SuppressWarnings({"nullness","cast"}) // cast away rawness:  var() is initialized by the super constructor
-    ONEOFSCALAR thisNonRaw = (/*@NonNull*/ ONEOFSCALAR) this;
-    assert thisNonRaw.var().is_array() :
+    // var() is initialized by the super constructor
+    assert var().is_array() :
     String.format ("ProglangType (var %s type %s) must be pseudo-array for %s",
-                     thisNonRaw.var().name(), thisNonRaw.var().type, ONEOFSCALAR_STRING);
+                     var().name(), var().type, ONEOFSCALAR_STRING);
 #endif
 #if defined(SEQUENCE)
     // Elements are interned, so can test with ==

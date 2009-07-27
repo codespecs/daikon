@@ -90,6 +90,7 @@ public class InstructionUtils {
           leaders.put(varName, varFullName);
         } else {
           // Add it to redundants.
+          @SuppressWarnings("nullness") boolean dummy =
           redundants.get(leaders.get(varName)).add(varFullName);
         }
       }
@@ -231,7 +232,9 @@ public class InstructionUtils {
               String leaderName = "bv:" + path.get(leaders.get(var)).getAddress() + ":"
                   + var;
               String varName = "bv:" + instr.getAddress() + ":" + var;
-              redundantVars.get(leaderName).add(varName);
+              Set<String> rset = redundantVars.get(leaderName);
+              assert rset != null; // was set of previous iteration
+              rset.add(varName);
             }
           }
         }

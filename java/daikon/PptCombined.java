@@ -26,7 +26,7 @@ import daikon.asm.X86Instruction;
  * are looked for over all combinations of variables from all of the program
  * points that make up the combined ppt.
  */
-@SuppressWarnings("nullness")
+@SuppressWarnings("nullness")   // defer annotating this class to later
 public class PptCombined extends PptTopLevel {
 
   // We are Serializable, so we specify a version to allow changes to

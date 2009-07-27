@@ -372,7 +372,7 @@ public final class Daikon {
   public static final String disc_reason_SWITCH = "disc_reason";
   public static final String mem_stat_SWITCH = "mem_stat";
 
-  public static File server_dir = null; //YOAV: the directory from which we read the dtrace files
+  public static /*@LazyNonNull*/ File server_dir = null; //YOAV: the directory from which we read the dtrace files
 
   // A pptMap which contains all the Program Points
   public static PptMap all_ppts;
@@ -634,11 +634,8 @@ public final class Daikon {
         FileIO.write_serialized_pptmap(all_ppts, inv_file);
       } catch (IOException e) {
         throw new RuntimeException(
-          "Error while writing .inv file "
-            + "'"
-            + inv_file
-            + "': "
-            + e.toString());
+          "Error while writing .inv file: " + inv_file,
+          e);
       }
     }
 
@@ -739,7 +736,7 @@ public final class Daikon {
    * Cleans up static variables so that mainHelper can be called more
    * than once.
    */
-  @SuppressWarnings("nullness")
+  @SuppressWarnings("nullness") // resets state, sets vars back to null
   public static void cleanup() {
 
     // Stop the thread that prints out progress information

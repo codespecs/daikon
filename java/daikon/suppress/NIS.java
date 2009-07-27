@@ -920,6 +920,7 @@ public class NIS {
     public boolean is_ni_suppressed() {
 
       NISuppressionSet ss = suppressee.sample_inv.get_ni_suppressions();
+      assert ss != null;        // this class can be suppressed, so ss != null
       return (ss.suppressed (ppt, vis));
     }
 

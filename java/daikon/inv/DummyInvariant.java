@@ -43,9 +43,9 @@ public class DummyInvariant
     super(ppt);
   }
 
-  public void setFormats(String daikonStr, String java, String esc,
-                         String simplify, String jml,
-                         String dbc, boolean desired) {
+  public void setFormats(/*@Nullable*/ String daikonStr, /*@Nullable*/ String java, /*@Nullable*/ String esc,
+                         /*@Nullable*/ String simplify, /*@Nullable*/ String jml,
+                         /*@Nullable*/ String dbc, boolean desired) {
     if (daikonStr != null)
       daikonFormat = daikonStr;
     if (java != null)

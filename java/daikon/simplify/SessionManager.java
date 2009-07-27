@@ -35,7 +35,6 @@ public class SessionManager
     debug.fine (s);
   }
 
-  @SuppressWarnings("nullness") // XXX checker error
   public SessionManager() {
     debugln("Creating SessionManager");
     worker = new Worker();

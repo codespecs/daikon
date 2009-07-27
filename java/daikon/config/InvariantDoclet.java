@@ -159,6 +159,7 @@ public class InvariantDoclet
    * @param indent  Starting indent for the derived class (normally 0)
    */
   public void process_class_tree_txt (PrintStream out, ClassDoc cd, int indent) {
+    assert cmap.containsKey(cd);
 
     String prefix = "";
 
@@ -322,6 +323,7 @@ public class InvariantDoclet
    */
 
   public void gather_derived_classes (ClassDoc cd, TreeSet<ClassDoc> set) {
+    assert cmap.containsKey(cd);
 
     // System.out.println ("Processing " + cd);
     Set<ClassDoc> derived = cmap.get (cd);
@@ -359,6 +361,7 @@ public class InvariantDoclet
           Class<?> c = UtilMDE.classForName(classname);
           Field f = c.getField (enable_name);
           Object value = f.get(null);
+          assert value instanceof Boolean;
           if (((Boolean) value).booleanValue())
             return (1);
           else

@@ -11,7 +11,7 @@ import daikon.util.SimpleLog;
 import daikon.util.ArraysMDE;
 import daikon.util.Stopwatch;
 
-@SuppressWarnings("nullness")   // come back to this later
+@SuppressWarnings("nullness")   // defer annotating this file to later
 public final class DCRuntime {
 
   /** List of all instrumented methods **/

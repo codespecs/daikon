@@ -52,7 +52,7 @@ public class ParseException extends Exception {
     specialConstructor = false;
   }
 
-  public ParseException(String message) {
+  public ParseException(@Nullable String message) {
     super(message);
     specialConstructor = false;
   }

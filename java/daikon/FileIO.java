@@ -129,7 +129,7 @@ public final class FileIO {
   public static /*@LazyNonNull*/ Boolean new_decl_format = null;
 
   /** Input language as read from the declaration file**/
-  public static String input_lang = null;
+  public static /*@Nullable*/ String input_lang = null;
 
   /// Variables
 
@@ -273,6 +273,7 @@ public final class FileIO {
     /** Writes every declaration string as one byte length and
         a byte sequence of characters.
         Records a byte -1 to denote the end of the declaration. **/
+    @SuppressWarnings("nullness")
     public static void write_binaryDeclaration( PrintWriter declWriter,
 						DataOutputStream binWriter, ParseState state ) {
 
@@ -494,7 +495,8 @@ public final class FileIO {
     // Reads a binary declaration
     // "ppt" string has already been read
     // -1 denotes the end of a declaration block in a binary file
-    public static PptTopLevel read_binaryDeclaration( DataInputStream binReader,
+    @SuppressWarnings("nullness")
+    public static /*@Nullable*/ PptTopLevel read_binaryDeclaration( DataInputStream binReader,
 						      ParseState state, PrintWriter pWriter )
 	throws IOException {
 
@@ -2219,6 +2221,7 @@ public final class FileIO {
     // ParseStatus.TRUNCATED is assumed when the end of the file is reached,
     // when data is expected
     // Each record, read by the method has a byte length
+    @SuppressWarnings("nullness")
     public static void read_binary_data_trace_record( ParseState state, PrintWriter pWriter )
       throws IOException {
 
@@ -2879,7 +2882,7 @@ public final class FileIO {
             System.out.printf ("  %s\n", p.name());
             if (p.ppt_successors != null) {
               for (String successorName : p.ppt_successors) {
-                @SuppressWarnings("nullness") // because successorName is in p.ppt_successors
+                @SuppressWarnings("nullness") // get() returns non-null because successorName is in p.ppt_successors
                 /*@NonNull*/ PptTopLevel successorPpt = all_ppts.get (successorName);
                 System.out.printf ("    %s\n", successorPpt.name());
               }
@@ -3091,6 +3094,11 @@ public final class FileIO {
     // Note:  global variable data_trace_state may be null (at least in the
     // unit tests...).
     //assert data_trace_state != null; // added to test actual execution
+
+    // I think this should be non-null in ordinary execution; suppress warnings
+    @SuppressWarnings("nullness")
+    /*@NonNull*/ ParseState data_trace_state_nonnull = data_trace_state;
+    data_trace_state = data_trace_state_nonnull;
 
     VarInfo[] vis = ppt.var_infos;
     int num_tracevars = ppt.num_tracevars;
@@ -3521,6 +3529,7 @@ public final class FileIO {
   // So that VarInfo : rep_type.parse_value( var_value )
   // receives as a parameter the String format it expects
   // It recreates the null string as "null"
+  @SuppressWarnings("nullness")
   private static String get_variableValue( VarInfo vi, DataInputStream binReader,
 						   PrintWriter pWriter )
   throws IOException {

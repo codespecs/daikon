@@ -99,7 +99,7 @@ public class Debug {
    * restriction (all function binary methods are printed).  See Functions.java
    * for a list of function names
    */
-  public static String function_binary_method =
+  public static /*@Nullable*/ String function_binary_method =
      null
     // "java.lang.Math.max("
     // "java.lang.Math.min("
@@ -228,7 +228,7 @@ public class Debug {
     return null;
   }
 
-  private static String[] ourvars = new String[3];
+  private static /*@Nullable*/ String[] ourvars = new String[3];
 
   private static final VarInfo[] vis1 = new VarInfo[1];
   private static final VarInfo[] vis2 = new VarInfo[2];
@@ -457,7 +457,7 @@ public class Debug {
    *
    * @return whether or not it logged anything
    */
-  public static boolean log (Class<?> inv_class, /*@Nullable*/ Ppt ppt, /*@Nullable*/ VarInfo[] vis,
+  public static boolean log (Class<?> inv_class, /*@Nullable*/ Ppt ppt, VarInfo /*@Nullable*/ [] vis,
                              String msg) {
 
     if (!debugTrack.isLoggable(Level.FINE))

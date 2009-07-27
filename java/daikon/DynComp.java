@@ -16,6 +16,7 @@ import daikon.util.*;
  * javaagent switch on the target program.
  * Code based largely on daikon.Chicory
  */
+@SuppressWarnings("nullness")   // defer until later
 public class DynComp {
 
   @Option("-v Print information about the classes being transformed")
@@ -31,7 +32,7 @@ public class DynComp {
   public static File output_dir = new File(".");
 
   @Option("-f Output filename for Daikon decl file")
-  public static File decl_file = null;
+  public static /*@Nullable*/ File decl_file = null;
 
   @Option("Don't output a comparability sets file")
   public static boolean no_cset_file = false;

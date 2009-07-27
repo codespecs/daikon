@@ -42,18 +42,20 @@ public class XorVisitor extends DepthFirstVisitor {
                     + ((inv2 != null) ? inv2.repr() : "NULL"));
     }
     if (shouldAddInv1(inv1, inv2)) {
+      assert inv1 != null;
       result.add(currentPpt, inv1);
     } else if (shouldAddInv2(inv1, inv2)) {
+      assert inv2 != null;
       result.add(currentPpt, inv2);
     }
   }
 
 
-  private static boolean shouldAddInv1(Invariant inv1, Invariant inv2) {
+  private static boolean shouldAddInv1(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     return ((inv1 != null) && (inv2 == null));
   }
 
-  private static boolean shouldAddInv2(Invariant inv1, Invariant inv2) {
+  private static boolean shouldAddInv2(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     return ((inv2 != null) && (inv1 == null));
   }
 
