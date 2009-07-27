@@ -166,7 +166,7 @@ $(pag)/software/pkg/lookup.jar: lookup.jar
 #
 # TaskManager targets
 #
-TASKMANAGER_JAVA_FILES := $(shell find -name '*.java')
+TASKMANAGER_JAVA_FILES := $(shell find . -name '*.java')
 task-manager : task_manager.jar
 task_manager.jar: utilMDE.jar task_manager.manifest
 	rm -rf jar-contents
