@@ -278,7 +278,6 @@ public final class FileIO {
 						DataOutputStream binWriter, ParseState state ) {
 
       echoMsg( declWriter, "" );
-      int index = 0;
       List<String> identifiers = new ArrayList<String>( );
 
       PptTopLevel ppt = state.ppt;
@@ -286,15 +285,14 @@ public final class FileIO {
       identifiers.add( "ppt" );
       identifiers.add( pptName );
 
-      if ( !pptNamesMap.containsKey( pptName ) ) {
-        pptNamesIndex++;
-        pptNamesMap.put( pptName, pptNamesIndex );
+      if ( !pptNamesList.contains( pptName ) ) {
+        pptNamesList.add( pptName );
       }
       identifiers.add( "ppt-type" );
       identifiers.add( ppt.type.toString( ).toLowerCase( ) );
 
-      declWriter.println( "ppt " +  ppt.ppt_name.name( ).replaceAll( " ", "\\\\_" ) );
-      declWriter.println( "ppt-type " + ppt.type.toString( ).toLowerCase( ) );
+      echoMsg( declWriter, "ppt " +  ppt.ppt_name.name( ).replaceAll( " ", "\\\\_" ) );
+      echoMsg( declWriter, "ppt-type " + ppt.type.toString( ).toLowerCase( ) );
 
       if ( !ppt.flags.isEmpty( ) ) {
         String fls = "";
@@ -305,11 +303,10 @@ public final class FileIO {
           identifiers.add( flag.toString( ).toLowerCase( ) );
           fls += flag.toString( ).toLowerCase( ) + " ";
         }
-        declWriter.println( "flags " + fls.trim( ) );
+        echoMsg( declWriter, "flags " + fls.trim( ) );
       }
 
       if ( ppt.parent_relations != null ) {
-
         for ( ParentRelation pr : ppt.parent_relations ) {
           if ( pr != null ) {
             identifiers.add( "parent" );
@@ -319,40 +316,41 @@ public final class FileIO {
 
             identifiers.add( pr.parent_ppt_name );
             identifiers.add( Integer.toString( pr.id ) );
-
-            declWriter.println( "parent " + rts.toLowerCase( )
+            echoMsg( declWriter, "parent " + rts.toLowerCase( )
                                 + " " + pr.parent_ppt_name + " " + pr.id );
           }
         }
       }
 
       if ( ppt.ppt_successors != null ) {
+        String successors = "";
         if ( !ppt.ppt_successors.isEmpty( ) ) {
           identifiers.add( "ppt-successors" );
           identifiers.add( Integer.toString( ppt.ppt_successors.size( ) ) );
+          successors = "ppt-successors";
         }
 
         for ( String sc : ppt.ppt_successors ) {
           if ( sc != null ) {
-            declWriter.print( " " + sc );
+            successors += " " + sc;
             identifiers.add( sc );
           }
         }
-        declWriter.println( );
+        echoMsg( declWriter, successors );
       }
 
       if ( ppt.function_id != null ) {
         identifiers.add( "ppt-func" );
         identifiers.add( ppt.function_id );
 
-        declWriter.println( "ppt-func " + ppt.function_id );
+        echoMsg( declWriter, "ppt-func " + ppt.function_id );
       }
 
       if ( ppt.bb_length != 0 ) {
         identifiers.add( "ppt-length" );
         identifiers.add( Integer.toString( ppt.bb_length ) );
 
-        declWriter.println( "ppt-length " + ppt.bb_length );
+        echoMsg( declWriter, "ppt-length " + ppt.bb_length );
       }
 
       VarInfo [] varInfos = ppt.var_infos;
@@ -365,7 +363,7 @@ public final class FileIO {
 
           identifiers.add( "variable" );
           identifiers.add( vardef.name );
-          declWriter.println( "  variable " + vardef.name );
+          echoMsg( declWriter, "  variable " + vardef.name );
 
           String kind = vardef.kind.toString( );
           String relname = "";
@@ -375,7 +373,7 @@ public final class FileIO {
             isRelname = true;
             relname = vardef.relative_name;
           }
-          declWriter.println( "    var-kind " + kind.toLowerCase( ) + " " + relname );
+          echoMsg( declWriter, "    var-kind " + kind.toLowerCase( ) + " " + relname );
           identifiers.add( "var-kind" );
           identifiers.add( kind.toLowerCase( ) );
           identifiers.add( Boolean.toString( isRelname ) );
@@ -387,17 +385,17 @@ public final class FileIO {
           if ( vardef.enclosing_var != null ) {
             identifiers.add(  "enclosing-var" );
             identifiers.add( vardef.enclosing_var );
-            declWriter.println( "    enclosing-var " + vardef.enclosing_var );
+            echoMsg( declWriter, "    enclosing-var " + vardef.enclosing_var );
           }
 
           if ( vardef.arr_dims != 0  ) {
             identifiers.add(  "array");
             identifiers.add( Integer.toString( vardef.arr_dims ) );
-            declWriter.println( "    array" + " " + vardef.arr_dims );
+            echoMsg( declWriter, "    array" + " " + vardef.arr_dims );
           }
 
-          declWriter.println( "    dec-type " + vardef.declared_type );
-          declWriter.println( "    rep-type " + vardef.rep_type );
+          echoMsg( declWriter, "    dec-type " + vardef.declared_type );
+          echoMsg( declWriter, "    rep-type " + vardef.rep_type );
 
           identifiers.add( "dec-type" );
           identifiers.add( vardef.declared_type.toString( ) );
@@ -408,7 +406,7 @@ public final class FileIO {
           if ( vardef.static_constant_value != null ) {
             identifiers.add( "constant" );
             identifiers.add( vardef.static_constant_value.toString( ) );
-            declWriter.println( "    constant " + vardef.static_constant_value );
+            echoMsg( declWriter, "    constant " + vardef.static_constant_value );
           }
 
           String fls = "";
@@ -421,7 +419,7 @@ public final class FileIO {
               identifiers.add( flag.toString( ).toLowerCase( ) );
             }
             if ( !fls.equals("") ) {
-              declWriter.println( "    flags " + fls.toLowerCase( ).trim( ) );
+              echoMsg( declWriter, "    flags " + fls.toLowerCase( ).trim( ) );
             }
           }
 
@@ -435,13 +433,13 @@ public final class FileIO {
               identifiers.add( langflag.toString( ).toLowerCase( ) );
             }
             if ( !fls.equals("") ) {
-              declWriter.println( "    lang-flags " + fls.toLowerCase( ).trim( ) );
+              echoMsg( declWriter, "    lang-flags " + fls.toLowerCase( ).trim( ) );
             }
           }
 
           identifiers.add( "comparability" );
           identifiers.add( "22" );
-          declWriter.println( "    comparability " +  22 );
+          echoMsg( declWriter, "    comparability " +  22 );
 
           if ( vardef.parent_ppt != null ) {
             identifiers.add( "parent" );
@@ -454,10 +452,11 @@ public final class FileIO {
             else {
               identifiers.add( "null" );
             }
-            declWriter.println( "    parent " + vardef.parent_ppt + " " + vardef.parent_relation_id );
+            echoMsg( declWriter, "    parent " + vardef.parent_ppt + " " + vardef.parent_relation_id );
           }
         }
       }
+      if ( binWriter != null ) {
       try {
         for ( String binIdent : identifiers ) {
           binWriter.writeByte( binIdent.length( ) );
@@ -467,6 +466,7 @@ public final class FileIO {
 
       } catch ( IOException e ) {
           e.printStackTrace( System.out );
+      }
       }
     }
 
@@ -487,8 +487,7 @@ public final class FileIO {
     }
 
     // Integer key, String value
-    static Map<Integer, String> pptDeclMap = new HashMap<Integer, String>( );
-    static int pptDeclIndex = 0;
+    static List<String> pptDeclList = new ArrayList<String>( );
     // Vardef_names of all variable (included and excluded)
     static Vector<String> allVars = new Vector<String>( );
 
@@ -507,14 +506,13 @@ public final class FileIO {
 
 	// registers the name, so that it is referred to by its integer index
 	// in the corresponding data samples
-	if ( !pptDeclMap.containsValue( s_ppt_name ) ) {
-	  pptDeclIndex++;
-          pptDeclMap.put( pptDeclIndex, s_ppt_name );
+	if ( !pptDeclList.contains( s_ppt_name ) ) {
+            pptDeclList.add( s_ppt_name );
 	}
 
 	String msg = "\nppt " + s_ppt_name.replaceAll( " ", "\\\\_" );
 	if ( bin2ascii_dbg )
-	  msg += " hashKey = "  + pptDeclIndex;
+            msg += " hashKey = "  + pptDeclList.indexOf( s_ppt_name );
 	echoMsg( pWriter, msg );
 
 	// Information that will populate the new program point
@@ -1748,7 +1746,8 @@ public final class FileIO {
       boolean is_url = raw_filename.startsWith ("file:")
         || raw_filename.startsWith ("jar:");
 
-      is_bin_file = ( filename.indexOf( "dat" ) != -1 );
+      is_bin_file = ( filename.endsWith( "dat" )
+                      || filename.endsWith( "dat.gz" ) );
 
       // Do we need to count the lines in the file?
       total_lines = 0;
@@ -1799,10 +1798,7 @@ public final class FileIO {
         }
       } else if ( is_bin_file ) {
           if ( raw_filename.endsWith (".gz") ) {
-            // binReader is an output stream and could be casted to
-            // GZIP or Data stream accordingly
-            // not supported yet
-            //binReader = new GZIPInputStream( new FileInputStream( filename ) );
+            binReader = new DataInputStream( new GZIPInputStream( new FileInputStream( filename ) ) );
           }
           else
             binReader = new DataInputStream( new FileInputStream( filename ) );
@@ -2253,13 +2249,14 @@ public final class FileIO {
               byte comBuf [] = new byte [comLen];
               binReader.read( comBuf, 0, comLen ); // gets the string
               String comment = new String( comBuf );
+              state.payload  = comment;
 
               if ( comment.startsWith( "#" ) ) {
                 comment = "\n\n" + comment;
-                echoMsg( pWriter, comment );
               }
               else
-                echoMsg( pWriter, comment + "\n" );
+                comment += "\n";
+              echoMsg( pWriter, comment );
 
               state.status = ParseStatus.COMMENT;
               return;
@@ -2323,7 +2320,7 @@ public final class FileIO {
             }
             // we got a program point
             // The binary file contains indexes instead of full ppt_names
-            String ppt_name = pptDeclMap.get( new Integer( record ) );
+            String ppt_name = pptDeclList.get( Integer.valueOf( new Integer( record ) ) );
             if ( ppt_name == null) {
               throw new Daikon.TerminationMessage( "read_binary_data_trace_record() " +
                                                    " not found ppt_name in file " + state.filename );
@@ -2424,7 +2421,7 @@ public final class FileIO {
     // byteBuf[1] = LSB 00000011 MSB
     // byteBuf[2] = LSB 10100011 MSB, where the last two bits (two extra 1s) are added to form a byte
     // MISSING_NONSENSICAL is recorded as 0s
-    private static byte [] get_modBits( int mods [] ) {
+    public static byte [] get_modBits( int mods [] ) {
 
 	int arrLen = mods.length;
 	int bits;
@@ -2464,7 +2461,7 @@ public final class FileIO {
     }
 
     // Returns a buffer containing the individual bits of the byte array
-    private static StringBuffer recordBits( byte mod_bits [] ) {
+    public static StringBuffer recordBits( byte mod_bits [] ) {
 	int len = mod_bits.length;
 	byte bits [] = new byte [len];
 	System.arraycopy( mod_bits, 0, bits, 0, len );
@@ -2480,9 +2477,8 @@ public final class FileIO {
 	return str_buf;
     }
 
-    static Map<String, Integer> pptNamesMap = new HashMap<String, Integer>( );
-    static int pptNamesIndex = 0;
-    static boolean bin2ascii_dbg = false;
+    public static List<String> pptNamesList = new ArrayList<String>( );
+    public static boolean bin2ascii_dbg = false;
 
    /**
     * Converts a dtrace file sample into binary data as follows:
@@ -2515,13 +2511,13 @@ public final class FileIO {
 
       String ppt_index = "";
       if ( bin2ascii_dbg )
-        ppt_index = " " +  pptNamesMap.get( ppt.ppt_name.getName( ) );
+        ppt_index = " " +  pptNamesList.indexOf( ppt.ppt_name.getName( ) );
 
       echoMsg( pWriter, (ppt.ppt_name.getName( ) + ppt_index) );
 
 
       // uses the key ( ppt_name ) to retrieve the integer index
-      String hash_pptName = "" + pptNamesMap.get( ppt.ppt_name.getName( ) );
+      String hash_pptName = "" + pptNamesList.indexOf( ppt.ppt_name.getName( ) );
 
       try {
 	// records the program point index
@@ -2682,13 +2678,13 @@ public final class FileIO {
               for ( int j = 0; j < va.length; j++ ) {
                 if ( va[j] != null ) {
                   msg += "\"" + va[j] + "\"" + " ";
-                  binWriter.writeByte( va[j].length( ) );
+                  binWriter.writeInt( va[j].length( ) );
                   binWriter.writeBytes( va[j] );
                 }
                 else {
                   msg += "null" + " ";
                   // zero length, means that the string is null;
-                  binWriter.writeByte( -1 );
+                  binWriter.writeInt( -1 );
                 }
               }
               msg = msg.trim() + "]";
@@ -2697,7 +2693,6 @@ public final class FileIO {
             }
             else {
               echoMsg( pWriter, vInfo.name( ) );
-
               String sVal = value.toString( );
 
               if ( repType == ProglangType.BOOLEAN ) {
@@ -2744,7 +2739,6 @@ public final class FileIO {
                 throw new Daikon.TerminationMessage( "value of variable " +
                                                      vInfo.name( ) +
                                                      " was of unspecified ProglangType" );
-                //echoMsg( pWriter, "was of unspecified type" );
               }
             }
           }
@@ -2759,7 +2753,6 @@ public final class FileIO {
 	  e.printStackTrace( System.out );
       }
   }
-
 
   /**
    * Add orig() and derived variables to vt (by side effect), then
@@ -3559,7 +3552,7 @@ public final class FileIO {
      elements = "[";
 
      for ( int j = 0; j < al; j++ ) {
-       int sl = binReader.readByte( );
+       int sl = binReader.readInt( );
        String rs = "\"";
        if ( sl != -1 ) {
          for ( int k = 0; k < sl; k++ ) {
