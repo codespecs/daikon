@@ -1,3 +1,4 @@
+===========================================================================
 
   - Testing/Validation
 
@@ -12,38 +13,18 @@
       - Enhance track debugging to ensure that the specified ppt/class/variables
         were reasonable and existed.
       
-  - DynComp robustness
+===========================================================================
 
-      DynComp/Java and DynComp/C have been successfully used on a
-      number of realistic programs.  Howerver, both versions of
-      DynComp requires extensive instrumentation of the application
-      program in order to track all value flow in the program.  Both
-      should be tested on a wider variety of programs.  Any bugs encountered
-      should be fixed and the test suites enhanced to cover more cases.
-    
+Front ends
+
   - Add support for loop invariants.
 
-  - Sequence/array invariant redesign
+  - C front end
 
-      Redesign invariants so that only scalar invariants need to be
-      implemented directly.  All invariants over sequences
-      (element-wise, pair-wise, and sequence invariants) would be
-      automatically created from the scalar versions.  Element-wise,
-      pair-wise, and sequence invariants would be extended to ternary
-      invariants.
+      - Everything Robert is currently doing.
+        New gcc, new architectures
 
-      Change the input dtrace record format so that arrays of classes
-      or structs are represented directly in the input rather than 
-      creating a separate array for each class/structure member.  This
-      would simplify the front end and also allow invariants over nested
-      arrays and more complex data structures.
-
-  - Optimize derived variables
-
-      - Apply equality sets, constants, etc to the creation of derived
-        variables.
-      - Optionally limit derived variables to expressions seen in the
-        program.
+      - Convert Kvasir to using the new decl format.
 
   - C/C++ front end for Windows 
 
@@ -95,6 +76,19 @@
         in any way.  Other approaches are also possible (and may be
         technically superior to these suggestions).
 
+===========================================================================
+
+External tools
+
+  - DynComp robustness
+
+      DynComp/Java and DynComp/C have been successfully used on a
+      number of realistic programs.  Howerver, both versions of
+      DynComp requires extensive instrumentation of the application
+      program in order to track all value flow in the program.  Both
+      should be tested on a wider variety of programs.  Any bugs encountered
+      should be fixed and the test suites enhanced to cover more cases.
+    
   - Comparability for C/C++ and C# for windows
 
       The C/C++ version would essentially be a port of the existing
@@ -103,32 +97,12 @@
       If an instrumentation interface similar to Java exists for C# then
       the C# version would probably be pretty similar to DynComp/Java
 
-  - Support for multiple processors 
-
-      - With the exception of I/O, Daikon is naturally parallel
-          - Each program point can be processed independently
-          - Post processing (such as processing the hierarchy and splitting)
-            can also be done in parallel
-      - One thread could read the input file (or socket) and then hand
-        off the input record to a worker thread.
-      - Significant speedups should be possible (I/O time is (at least for
-        significant input files) usually a small percentage of the total
-        time).
-
-  - Support for multiple computers (ie, splitting runs across a set of
-    computers over a network -- cloud computing)
-
-      - One process would read the input file (or socket) and then
-        send records to separate processes.
-      - A large number of processes (up to the number of program points
-        that are instrumented) could be supported.
-      - This would also largely eliminate memory constraints (since each
-        program point is handled in a separate process).
-
   - Mechanism to check invariants found by Daikon in programs (ie, add
     as assertions or some other mechanism).  Optimally it would be easy
     to read and edit.  Also it would be easy to update if new invariants
     are calculated
+
+    (c.f. JML's RAC)
 
     From our project file:
 
@@ -172,6 +146,61 @@
         differences between the current configuration management version and
         an engineers checkout.
 
+===========================================================================
+
+Performance/scalability
+
+  - Support for multiple processors 
+
+      - With the exception of I/O, Daikon is naturally parallel
+          - Each program point can be processed independently
+          - Post processing (such as processing the hierarchy and splitting)
+            can also be done in parallel
+      - One thread could read the input file (or socket) and then hand
+        off the input record to a worker thread.
+      - Significant speedups should be possible (I/O time is (at least for
+        significant input files) usually a small percentage of the total
+        time).
+
+  - Support for multiple computers (ie, splitting runs across a set of
+    computers over a network -- cloud computing)
+
+      - One process would read the input file (or socket) and then
+        send records to separate processes.
+      - A large number of processes (up to the number of program points
+        that are instrumented) could be supported.
+      - This would also largely eliminate memory constraints (since each
+        program point is handled in a separate process).
+
+  - Trace file binary format
+
+  - Trace file shows only changed variables, not every variable
+
+  - implement per-call-site sampling.  This may help scalability dramatically.
+
+  - Optimize derived variables
+
+      - Apply equality sets, constants, etc to the creation of derived
+        variables.
+      - Optionally limit derived variables to expressions seen in the
+        program.
+
+  - Ignore unused variables. Currently Daikon outputs data about all
+    variables, but it would speed Daikon up to perform output only for
+    variables that a given procedure may read or write. As a side benefit,
+    this could also eliminate some irrelevant output.
+
+===========================================================================
+
+Algorithms
+
+  - Fix the usage of final statics and enums in Daikon.  It probably doesn't
+    make sense to include these as separate variables since they are
+    constants.  It might be both more efficient and provide better
+    output to examine the one-ofs and other sample dependent invariants
+    at the end of the run and substitute in constants where they
+    match.
+
   - Reduce spurious (obvious and/or uninteresting) invariants in Daikon.   
 
       Daikon's output is can be too voluminous to be useful to programmers
@@ -185,6 +214,23 @@
           it calls)
         - Analyze output (with and without DynComp) on a number of real
           world programs.
+
+  - Sequence/array invariant redesign
+
+      Redesign invariants so that only scalar invariants need to be
+      implemented directly.  All invariants over sequences
+      (element-wise, pair-wise, and sequence invariants) would be
+      automatically created from the scalar versions.  Element-wise,
+      pair-wise, and sequence invariants would be extended to ternary
+      invariants.
+
+      Change the input dtrace record format so that arrays of classes
+      or structs are represented directly in the input rather than 
+      creating a separate array for each class/structure member.  This
+      would simplify the front end and also allow invariants over nested
+      arrays and more complex data structures.
+
+      Fix array handling so that there can be nonsensical elements in arrays.
 
   - Extend non-instantiating suppressions
 
@@ -249,6 +295,10 @@
           - The current implementation uses dynamic constants which
             are always present, and does not suffer from this problem
 
+===========================================================================
+
+PPT hierarchy
+
   - Add subclasses and interfaces to the PPT hierarchy
 
       Currently the hierarchy only covers the relationship between
@@ -310,6 +360,51 @@
 
 ------------------------------------------------
 
+Text from DSD paper:
+
+Therefore, we extended Daikon so that all behaviors observed for a subclass
+correctly influence the invariants of the superclass and vice versa. This
+change was crucial in getting invariants of sufficient consistency for
+ESC/Java to process automatically| otherwise we experienced contradictions
+in our experiments that prevented further automatic reasoning. The change
+is not directly related to the integration of Daikon and CnC, however. It
+is an independent enhancement of Daikon, valid for any use of the inferred
+invariants. We are in the process of implementing this enhancement directly
+on Daikon. We describe in a separate paper [10] the exact algorithm for
+computing the invariants so they are consistent with the observed behaviors
+and as general as possible, while satisfying behavioral subtyping.
+DSD-Crasher also modifies the CnC back-end: the heuristics used during
+execution of the generated test cases to
+
+
+
+Christoph Csallner notes two problems with Daikon's output:
+
+  The current Daikon implementation does not produce invariants for
+  interfaces. It also emits conflicting postconditions in case a method and
+  the one it overrides are called with similar input values but produce
+  different output values. Contradicting postconditions violate JML
+  semantics and throw off tools like ESC/Java2.
+
+A reasonable approach would be to enhance the program point hierarchy.  One
+could produce interface invariants by creating a program point representing
+each method in the interface, and making the program point a parent (in the
+hierarchy) of each implementation of it.
+
+For overriding methods, one could add a hierarchy relation between the two
+versions of the method.  (This slightly changes the definition of the
+hierarchy, but that change might well be desirable.)  Alternately (but
+perhaps less desirably), one could apply the same technique as for
+interfaces:  for each method, add a new program point, and add a Daikon
+hierarchy relationship from it to any (overriding) definition.
+
+His paper says:
+
+  Executions of the overriding method do not affect at all the invariants
+  of the overridden method and vice versa.
+
+------------------------------------------------
+
 Appendix A - Supporting Exception exits in the Daikon PPT Hierarchy
 
 Mikes proposal:
@@ -348,8 +443,8 @@ Mikes proposal:
   preconditions (and other invariants) are inferred for the routine.  I lean
   somewhat toward:
 
-              exit
-            /      \
+                      exit
+                  /          \
          normalexit          declexception
         /    |    \           /         \
     exit1  exit2  exit3    declexc1  declexc2    error
@@ -377,20 +472,20 @@ Mikes proposal:
 
     int foo() throws DeclaredEx1, DeclaredEx2, DeclaredEx3 {
       try {
-        body		// includes instrumentation for normal entry and exit
+        body            // includes instrumentation for normal entry and exit
       } catch (DeclaredEx1 daikon_exception_1) {
         print exceptional exit program point
-        throw daikon_exception_1;		// rethrow
+        throw daikon_exception_1;               // rethrow
       } catch (DeclaredEx2 daikon_exception_2) {
         print exceptional exit program point
-        throw daikon_exception_2;		// rethrow
+        throw daikon_exception_2;               // rethrow
       } catch (DeclaredEx3 daikon_exception_3) {
         print exceptional exit program point
-        throw daikon_exception_3;		// rethrow
+        throw daikon_exception_3;               // rethrow
       } catch (java.lang.Throwable daikon_exception_4) {
         // for RuntimeException, Error, and any other undeclared Throwable
         print exceptional exit program point
-        throw daikon_exception_4;		// rethrow
+        throw daikon_exception_4;               // rethrow
       }
     }
 
@@ -398,11 +493,11 @@ Mikes proposal:
 
     int foo() throws DeclaredEx1, DeclaredEx2, DeclaredEx3 {
       try {
-        body		// includes instrumentation for normal entry and exit
+        body            // includes instrumentation for normal entry and exit
       } catch (Throwable daikon_exception) {
         switch statement to print program point name
         print rest of exceptional exit program point
-        throw daikon_exception;		// rethrow
+        throw daikon_exception;         // rethrow
       }
     }
 
