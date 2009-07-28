@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-4.6.0
+4.6.0 (July 1 2009)
 
 Kvasir now supports binaries created with GCC 4.0+ and glibc versions 2.2
 to 2.10.  The Daikon user manual was updated for clarity and completeness.  
