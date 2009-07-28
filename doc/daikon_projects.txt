@@ -194,6 +194,16 @@ Performance/scalability
 
 Algorithms
 
+  - Infer some properties of multithreaded code, e.g., which variables are
+    shared or which are protected by what locks, etc.
+
+  - Statistically likely, but not entirely true, properties -- good for finding
+    bugs or corner cases.  Related to splitting, or not?
+
+  - Advance the basic techniques so that fewer settings are required to
+    infer invariants and that less manual filtering is required.  Maybe
+    even exploring more heuristics to automatically set the options?
+
   - Fix the usage of final statics and enums in Daikon.  It probably doesn't
     make sense to include these as separate variables since they are
     constants.  It might be both more efficient and provide better
