@@ -1454,7 +1454,7 @@ public final class FileIO {
 
   /**
    * Read data from .dtrace files.
-   * Calls @link{read_data_trace_file(File,PptMap,Pattern,false)} for each
+   * Calls {@link read_data_trace_file(File,PptMap,Pattern,false)} for each
    * element of filenames.
    *
    * @param ppts_are_new - true if declarations of ppts read from the data
