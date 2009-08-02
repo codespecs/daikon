@@ -133,11 +133,13 @@ public class Violation implements Serializable {
             throw new IllegalArgumentException(e.getMessage(), e);
         }
 
-        Time t = null;
+        Time t;
         if (vioString.matches(".*<ON_ENTRY>.*")) {
             t = Time.onEntry;
         } else if (vioString.matches(".*<ON_EXIT>.*")) {
             t = Time.onExit;
+        } else {
+            throw new Error("Bad time");
         }
 
         return get(anno, t);
