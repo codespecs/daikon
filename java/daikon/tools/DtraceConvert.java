@@ -521,7 +521,7 @@ public class DtraceConvert {
             else if ( value instanceof double [] ) {
               double va [] = ( double [] ) value;
               FileIO.echoMsg( pWriter, vInfo.name( ) );
-              echoBinMsg( binWriter, null, ( int )va.length, 4 );
+              echoBinMsg( binWriter, null, va.length, 4 );
               String msg = "[";
 
               for ( int j = 0; j < va.length; j++ ) {
@@ -536,13 +536,13 @@ public class DtraceConvert {
 	    else if ( value instanceof String [] ) {
               String va [] = ( String [] ) value;
               FileIO.echoMsg( pWriter, vInfo.name( ) );
-              echoBinMsg( binWriter, null, ( int )va.length, 4 );
+              echoBinMsg( binWriter, null, va.length, 4 );
               String msg = "[";
 
               for ( int j = 0; j < va.length; j++ ) {
                 if ( va[j] != null ) {
                   msg += "\"" + va[j] + "\"" + " ";
-                  String str = ( String )va[j];
+                  String str = va[j];
                   echoBinMsg( binWriter, str, str.length( ), 4 );
                 }
                 else {
