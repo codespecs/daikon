@@ -8,6 +8,7 @@
 --suppress-broken 302:MAY-NEED-TO-ALSO-LIST-IN-exclude-redirect-CLAUSE
 --suppress-broken 302:http://ieeexplore.ieee.org/
 --suppress-broken 302:http://www.hotelatmit.com/
+--suppress-broken 403:http://arxiv.org/pdf/cs.SE/0508108
 --suppress-broken 403:http://validator.w3.org/check?uri=referer
 --suppress-broken 403:http://www.acm.org/
 --suppress-broken 403:http://www.acm.org/publications/copyright_form/	
