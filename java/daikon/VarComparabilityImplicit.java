@@ -38,16 +38,19 @@ public final class VarComparabilityImplicit
    * belongs to.
    **/
   int base;
-  VarComparabilityImplicit /*@Nullable*/ [] indexTypes; // indexTypes[0] is comparability of
-                                // the first index of this array.
-  int dimensions;               // Indicates how many of the indices are in use;
-                                // there may be more indices than this.
+  /** indexTypes[0] is comparability of the first index of this array. */
+  VarComparabilityImplicit /*@Nullable*/ [] indexTypes;
+  /**
+   * Indicates how many of the indices are in use; there may be more
+   * indices than this.
+   */
+  int dimensions;
 
   private VarComparabilityImplicit cached_element_type;
 
   public static final VarComparabilityImplicit unknown = new VarComparabilityImplicit(-3, null, 0);
 
-  private VarComparabilityImplicit(int base, VarComparabilityImplicit /*@NonNull*/ [] indexTypes, int dimensions) {
+  private VarComparabilityImplicit(int base, VarComparabilityImplicit /*@Nullable*/ [] indexTypes, int dimensions) {
     this.base = base;
     this.indexTypes = indexTypes;
     this.dimensions = dimensions;
@@ -136,10 +139,12 @@ public final class VarComparabilityImplicit
   public VarComparability indexType(int dim) {
     // When Ajax is modified to output non-atomic info for arrays, this
     // check will no longer be necessary.
-    if (dim < dimensions)
+    if (dim < dimensions) {
+      assert indexTypes != null;
       return indexTypes[dim];
-    else
+    } else {
       return unknown;
+    }
   }
 
   static boolean comparable (VarComparabilityImplicit type1,

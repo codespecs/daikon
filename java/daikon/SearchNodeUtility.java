@@ -1,5 +1,5 @@
 /**
- * 
+ *
  */
 package daikon;
 
@@ -14,10 +14,10 @@ public class SearchNodeUtility<T> {
     private List<T> indexNodes;
 
     private List<T> stopConditions;
-    
+
     boolean found = false;
-    
-    T foundNode = null;
+
+    /*@Nullable*/ T foundNode = null;
 
     public SearchNodeUtility(List<List<T>> graph) {
         this.graph = graph;
@@ -33,7 +33,7 @@ public class SearchNodeUtility<T> {
     }
 
     /**
-     * 
+     *
      * @param start
      *            Non-null start node
      * @param end
@@ -44,13 +44,13 @@ public class SearchNodeUtility<T> {
      *         node to the end node without visiting nodes that were already
      *         visited
      */
-    
+
     public boolean findDepthFirst(T start, T end, List<T> visited) {
         found = false;
         doFindDepthFirst(start, end, visited);
         return found;
     }
-    
+
     public void doFindDepthFirst(T start, T end, List<T> visited) {
         if (start.equals(end)) {
             found = true;
@@ -84,7 +84,7 @@ public class SearchNodeUtility<T> {
         doFindDepthFirstStopAtCondition(start, visited);
         return foundNode;
     }
-    
+
     public void doFindDepthFirstStopAtCondition(T start, List<T> visited) {
         if (!visited.contains(start) && stopConditions.contains(start)) {
             foundNode = start;

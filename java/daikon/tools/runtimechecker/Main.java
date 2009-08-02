@@ -57,6 +57,7 @@ public class Main extends CommandHandler {
             success = false;
         } finally {
             if (!success) {
+                assert h != null;
                 System.err.println("The instrumenter failed.");
                 h.usageMessage();
                 System.exit(1);
