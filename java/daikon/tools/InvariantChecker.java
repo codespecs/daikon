@@ -53,7 +53,6 @@ public class InvariantChecker {
       "      Print debug info on the specified invariant class, vars, and ppt"
       );
 
-  public static /*@LazyNonNull*/ File inv_file = null;
   public static List<String> dtrace_files = new ArrayList<String>();
   static File output_file;
   static PrintStream output_stream = System.out;
@@ -163,6 +162,10 @@ public class InvariantChecker {
       }
     }
 
+
+    {
+    File inv_file = null;
+
     // Loop through each filename specified
     for (int i=g.getOptind(); i<args.length; i++) {
 
@@ -187,8 +190,12 @@ public class InvariantChecker {
       }
     }
     if (dir_file==null) {
-      checkInvariants();
+      if (inv_file == null) {
+          throw new Daikon.TerminationMessage ("No inv file specified" + Global.lineSep + usage);
+      }
+      checkInvariants(inv_file);
       return;
+    }
     }
 
     // Yoav additions:
@@ -223,13 +230,13 @@ public class InvariantChecker {
 
     commaLine = "";
     for (File inFile : invariants) {
-      inv_file = inFile;
+      File inv_file = inFile;
       failedInvariants.clear();
       testedInvariants.clear();
       error_cnt = 0;
 
       output_stream = new PrintStream (new FileOutputStream (inFile.toString().replace(".inv","").replace(".gz","")+".false-positives.txt"));
-      checkInvariants();
+      checkInvariants(inv_file);
       output_stream.close();
 
       int failedCount = failedInvariants.size();
@@ -247,7 +254,7 @@ public class InvariantChecker {
     double s = portion * 100;
     return String.format("%.2f",s /total)+"%";
   }
-  private static void checkInvariants() throws IOException {
+  private static void checkInvariants(File inv_file) throws IOException {
     // Read the invariant file
     PptMap ppts = FileIO.read_serialized_pptmap (inv_file, true );
 
