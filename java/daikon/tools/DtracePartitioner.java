@@ -79,18 +79,14 @@ public class DtracePartitioner
   }
 
 
-  /** Returns the program point name given by the input invocation.
-   *  Throws RuntimeException if invocation is not instanceof String.
-   */
+  /** Returns the program point name given by the input invocation. */
   public /*@Nullable*/ String assignToBucket (String invocation) {
     if (invocation.indexOf (lineSep) == -1)
       return null;
     return invocation.substring (0, invocation.indexOf (lineSep));
   }
 
-  // TODO: this should be a Javadoc link
-  /** Same as this.patchValues (enters, false)
-   */
+  /** Same as {@link #patchValues (List<String>, boolean)} with second arg=false. */
   public List<String> patchValues (List<String> enters) {
     return patchValues (enters, false);
   }
