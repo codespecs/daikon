@@ -75,7 +75,9 @@ test: .test-timestamp
 # Using compile_notest instead of .class-files-timestamp as the
 # prerequisite doesn't work.
 .test-timestamp: .class-files-timestamp
-	set JAVA_COMPILER=NONE; ${JAVA} utilMDE.TestUtilMDE
+	which java
+# This is failing without the "-cp ${CLASSPATH}"; will that argument help?
+	set JAVA_COMPILER=NONE; ${JAVA} -cp ${CLASSPATH} utilMDE.TestUtilMDE
 	touch .test-timestamp
 
 run-chicory:

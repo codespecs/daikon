@@ -548,6 +548,11 @@ public final class UtilMDE {
 
   /** Tries to infer the line separator used in a file. **/
   public static String inferLineSeparator(String filename) throws IOException {
+    return inferLineSeparator(new File(filename));
+  }
+
+  /** Tries to infer the line separator used in a file. **/
+  public static String inferLineSeparator(File filename) throws IOException {
     BufferedReader r = UtilMDE.bufferedFileReader(filename);
     int unix = 0;
     int dos = 0;
