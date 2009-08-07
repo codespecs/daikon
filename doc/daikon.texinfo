@@ -4418,16 +4418,20 @@ programs,,,./developer,Daikon Developer Manual}.
 @node Using Kvasir, Kvasir options, Kvasir, Kvasir
 @subsection Using Kvasir
 
-Before using Kvasir, you must compile your program without optimization,
-and with the DWARF-2 format of debugging information (e.g, by using @code{gcc} for C
-programs and @code{g++} for C++ programs).
-DWARF-2 is the default format for debugging information in GCC 3 and later, and
-otherwise is produced by supplying the
-@option{-gdwarf-2} command line option.
-Also, remove any optimization flags, such as @option{-O} or @option{-O2},
+Before using Kvasir, you must compile your program compile and link your
+program normally, with two exceptions:
+@itemize
+@item
+Do not use optimization.  Remove 
+any optimization flags, such as @option{-O} or @option{-O2},
 and any flags that affect calling conventions, such as
-@option{-fomit-frame-pointer}.  Except for these changes, you should be
-able to compile and link your program normally.
+@option{-fomit-frame-pointer}.
+@item
+Include debugging information, by supplying the @option{-g} flag.
+The debugging information must be in the DWARF-2 format.
+DWARF-2 is the default format for debugging information in GCC 3 and later, and
+otherwise is produced by supplying the @option{-gdwarf-2} command line option.
+@end itemize
 
 In the second step of using Kvasir, run your program as you normally
 would, but prepend the command @command{kvasir-dtrace} to the beginning.
@@ -9196,6 +9200,7 @@ let us know so we can correct the oversight.
 Financial support has been provided by:
 National Science Foundation (NSF),
 Defense Advanced Research Projects Agency (DARPA),
+ABB,
 Edison Design Group,
 IBM,
 NTT,
