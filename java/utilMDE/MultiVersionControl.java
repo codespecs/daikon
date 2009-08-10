@@ -266,8 +266,11 @@ public class MultiVersionControl {
     /**
      * Non-null for CVS and SVN.
      * May be null for distributed version control systems (Bzr, Hg).
+     * For distributed systems, refers to the parent repository from which
+     * this was cloned, not the one here in this directory
+     * <p>
+     * Most operations don't need this.  it is needed for checkout, though.
      */
-    // (Most operations don't need this.  Useful for checkout, though.)
     /*@Nullable*/ String repository;
     /**
      * Null if no module, just whole thing.
@@ -716,6 +719,7 @@ public class MultiVersionControl {
     String filter;              // needs to be a regexp!
 
 
+    CHECKOUTLOOP:
     for (Checkout c : checkouts) {
       if (debug) {
         System.out.println(c);
@@ -724,6 +728,7 @@ public class MultiVersionControl {
 
       filter = null;
 
+      // Set pb.command() to be the command to be executed.
       switch (action) {
       case LIST:
         System.out.println(c);
@@ -731,13 +736,17 @@ public class MultiVersionControl {
       case CHECKOUT:
         pb.directory(dir.getParentFile());
         String dirbase = dir.getName();
-        assert c.repository != null;
+        if (c.repository == null) {
+          System.out.printf("Skipping checkout with unknown repository:%n  %s%n",
+                            dir);
+          continue CHECKOUTLOOP;
+        }
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
           // break;
         case CVS:
-          assert c.module != null;
+          assert c.module != null : "@SuppressWarnings(nullness): dependent type CVS";
           pb.command("cvs", "-d", c.repository, "checkout",
                      "-P", // prune empty directories
                      "-ko", // no keyword substitution
