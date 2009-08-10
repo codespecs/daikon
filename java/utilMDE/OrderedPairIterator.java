@@ -30,12 +30,12 @@ public class OrderedPairIterator<T> implements java.util.Iterator<Pair</*@Nullab
     setnext2();
     this.comparator = comparator;
   }
-  private void setnext1() /*@Raw*/ {
-    assert itor1 != null;
+  /** Set the next1 variable. */
+  private void setnext1() {
     next1 = itor1.hasNext() ? itor1.next() : null;
   }
-  private void setnext2() /*@Raw*/ {
-    assert itor2 != null;
+  /** Set the next2 variable. */
+  private void setnext2() {
     next2 = itor2.hasNext() ? itor2.next() : null;
   }
   // Have the caller do this directly, probably.
