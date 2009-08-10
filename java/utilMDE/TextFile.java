@@ -2,6 +2,7 @@ package utilMDE;
 
 import java.io.*;
 import java.util.Iterator;
+import java.util.NoSuchElementException;
 
 // This code was originally taken from
 // http://www.onjava.com/pub/a/onjava/2005/04/20/javaIAN5.html, then
@@ -125,7 +126,9 @@ public class TextFile implements Iterable<String> {
 	}
 
 	public String next() {
-            assert nextline != null;
+            if (nextline == null) {
+                throw new NoSuchElementException();
+            }
 	    String returnValue = nextline;
 	    getNextLine();
 	    return returnValue;
