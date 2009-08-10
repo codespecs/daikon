@@ -783,7 +783,7 @@ public class Options {
                                   arg_value, arg_name);
         }
 
-        assert val != null;
+        assert val != null : "@SuppressWarnings(nullness)";
 
         // Set the value
         if (oi.list != null)

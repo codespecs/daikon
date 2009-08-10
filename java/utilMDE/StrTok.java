@@ -195,7 +195,7 @@ public class StrTok {
     if (!isWord()) {
       err.tok_error (String.format ("'%s' found where identifier expected", t));
     }
-    assert t != null;
+    assert t != null : "@SuppressWarnings(nullness): because of isWord check";
     return t;
   }
 
