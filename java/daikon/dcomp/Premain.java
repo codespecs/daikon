@@ -49,6 +49,8 @@ public class Premain {
 
     // Read in the list of pre-instrumented classes
     if (!DynComp.no_jdk) {
+      // location is: invariants/java/dcomp-rt/java/lang/jdk_classes.txt .
+      // As of build b68, this fails when using JDK 7 (OpenJDK).
       InputStream strm
         = Object.class.getResourceAsStream ("jdk_classes.txt");
       if (strm == null) {
