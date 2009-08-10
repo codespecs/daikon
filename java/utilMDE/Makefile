@@ -116,9 +116,6 @@ JAVA_CPP ?= (rm -f $@; ${JAVA_CPP_PL} -DDEFINEDVAR $< 2>&1 > $@ && chmod -w $@)
 MathMDE.java: MathMDE.java.jpp MathMDE-gcd.java.jpp MathMDE-modulus.java.jpp MathMDE-nonmodulus.java.jpp MathMDE-help.java.jpp MathMDE-helpend.java.jpp
 	$(JAVA_CPP)
 
-LimitedSizeIntSet.java: LimitedSizeSet.java.jpp
-	$(JAVA_CPP:DEFINEDVAR=TYPEINT)
-
 
 ###########################################################################
 ### Jar files and distribution

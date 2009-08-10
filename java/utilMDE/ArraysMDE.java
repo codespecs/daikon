@@ -1137,19 +1137,26 @@ public final class ArraysMDE {
    * it returns the other array.
    **/
   public static <T> T[] concat(T /*@Nullable*/ [] a, T /*@Nullable*/ [] b) {
-    if (a == null && b == null) {
-      @SuppressWarnings("unchecked")
-      T[] result = (T[]) new Object[0];
-      return result;
-    }
-    if (a == null) { assert b != null; return b; }
-    if (b == null) return a;
-    @SuppressWarnings("unchecked")
-    T[] result = (T[]) new Object[a.length + b.length];
+    if (a == null) {
+      if (b != null) {
+        return b;
+      } else {
+        @SuppressWarnings("unchecked")
+        T[] result = (T[]) new Object[0];
+        return result;
+      }
+    } else {
+      if (b == null) {
+        return a;
+      } else {
+        @SuppressWarnings("unchecked")
+          T[] result = (T[]) new Object[a.length + b.length];
 
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
+        return result;
+      }
+    }
   }
 
   /**
@@ -1159,22 +1166,29 @@ public final class ArraysMDE {
    * it returns the other array.
    **/
   public static <T> T[] concat(T /*@Nullable*/ [] a, /*@Nullable*/ List<T> b) {
-    if (a == null && b == null) {
-      @SuppressWarnings("unchecked")
-      T[] result = (T[]) new Object[0];
-      return result;
-    }
-    if (a == null) { assert b != null; return toTArray(b); }
-    if (b == null) return a;
-    @SuppressWarnings("unchecked")
-    T[] result = (T[]) new Object[a.length + b.size()];
+    if (a == null) {
+      if (b != null) {
+        return toTArray(b);
+      } else {
+        @SuppressWarnings("unchecked")
+        T[] result = (T[]) new Object[0];
+        return result;
+      }
+    } else {
+      if (b == null) {
+        return a;
+      } else {
+        @SuppressWarnings("unchecked")
+        T[] result = (T[]) new Object[a.length + b.size()];
 
-    System.arraycopy(a, 0, result, 0, a.length);
-    // System.arraycopy(b, 0, result, a.length, b.size());
-    for (int i=0; i<b.size(); i++) {
-      result[i+a.length] = b.get(i);
+        System.arraycopy(a, 0, result, 0, a.length);
+        // System.arraycopy(b, 0, result, a.length, b.size());
+        for (int i=0; i<b.size(); i++) {
+          result[i+a.length] = b.get(i);
+        }
+        return result;
+      }
     }
-    return result;
   }
 
   /**
@@ -1184,22 +1198,29 @@ public final class ArraysMDE {
    * it returns the other array.
    **/
   public static <T> T[] concat(/*@Nullable*/ List<T> a, T /*@Nullable*/ [] b) {
-    if (a == null && b == null) {
-      @SuppressWarnings("unchecked")
-      T[] result = (T[]) new Object[0];
-      return result;
-    }
-    if (a == null) { assert b != null; return b; }
-    if (b == null) return toTArray(a);
-    @SuppressWarnings("unchecked")
-    T[] result = (T[]) new Object[a.size() + b.length];
+    if (a == null) {
+      if (b != null) {
+        return b;
+      } else {
+        @SuppressWarnings("unchecked")
+        T[] result = (T[]) new Object[0];
+        return result;
+      }
+    } else {
+      if (b == null) {
+        return toTArray(a);
+      } else {
+        @SuppressWarnings("unchecked")
+        T[] result = (T[]) new Object[a.size() + b.length];
 
-    // System.arraycopy(a, 0, result, 0, a.size());
-    for (int i=0; i<a.size(); i++) {
-      result[i] = a.get(i);
+        // System.arraycopy(a, 0, result, 0, a.size());
+        for (int i=0; i<a.size(); i++) {
+          result[i] = a.get(i);
+        }
+        System.arraycopy(b, 0, result, a.size(), b.length);
+        return result;
+      }
     }
-    System.arraycopy(b, 0, result, a.size(), b.length);
-    return result;
   }
 
   /**
@@ -1209,25 +1230,32 @@ public final class ArraysMDE {
    * it returns the other array.
    **/
   public static <T> T[] concat(/*@Nullable*/ List<T> a, /*@Nullable*/ List<T> b) {
-    if (a == null && b == null) {
-      @SuppressWarnings("unchecked")
-      T[] result = (T[]) new Object[0];
-      return result;
-    }
-    if (a == null) { assert b != null; return toTArray(b); }
-    if (b == null) return toTArray(a);
-    @SuppressWarnings("unchecked")
-    T[] result = (T[]) new Object[a.size() + b.size()];
+    if (a == null) {
+      if (b != null) {
+        return toTArray(b);
+      } else {
+        @SuppressWarnings("unchecked")
+        T[] result = (T[]) new Object[0];
+        return result;
+      }
+    } else {
+      if (b == null) {
+        return toTArray(a);
+      } else {
+        @SuppressWarnings("unchecked")
+        T[] result = (T[]) new Object[a.size() + b.size()];
 
-    // System.arraycopy(a, 0, result, 0, a.length);
-    for (int i=0; i<a.size(); i++) {
-      result[i] = a.get(i);
+        // System.arraycopy(a, 0, result, 0, a.length);
+        for (int i=0; i<a.size(); i++) {
+          result[i] = a.get(i);
+        }
+        // System.arraycopy(b, 0, result, a.length, b.length);
+        for (int i=0; i<b.size(); i++) {
+          result[i+a.size()] = b.get(i);
+        }
+        return result;
+      }
     }
-    // System.arraycopy(b, 0, result, a.length, b.length);
-    for (int i=0; i<b.size(); i++) {
-      result[i+a.size()] = b.get(i);
-    }
-    return result;
   }
 
   /**
@@ -1237,16 +1265,23 @@ public final class ArraysMDE {
    * it returns the other array.
    **/
   public static String[] concat(String /*@Nullable*/ [] a, String /*@Nullable*/ [] b) {
-    if (a == null && b == null) {
-      return new String[0];
-    }
-    if (a == null) { assert b != null; return b; }
-    if (b == null) return a;
-    String[] result = new String[a.length + b.length];
+    if (a == null) {
+      if (b == null) {
+        return new String[0];
+      } else {
+        return b;
+      }
+    } else {
+      if (b == null) {
+        return a;
+      } else {
+        String[] result = new String[a.length + b.length];
 
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
+        return result;
+      }
+    }
   }
 
 
@@ -1257,16 +1292,23 @@ public final class ArraysMDE {
    * it returns the other array.
    **/
   public static byte[] concat(byte /*@Nullable*/ [] a, byte /*@Nullable*/ [] b) {
-    if (a == null && b == null) {
-      return new byte[0];
-    }
-    if (a == null) { assert b != null; return b; }
-    if (b == null) return a;
-    byte[] result = new byte[a.length + b.length];
+    if (a == null) {
+      if (b == null) {
+        return new byte[0];
+      } else {
+        return b;
+      }
+    } else {
+      if (b == null) {
+        return a;
+      } else {
+        byte[] result = new byte[a.length + b.length];
 
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
+        return result;
+      }
+    }
   }
 
   /**
@@ -1276,16 +1318,23 @@ public final class ArraysMDE {
    * it returns the other array.
    **/
   public static boolean[] concat(boolean /*@Nullable*/ [] a, boolean /*@Nullable*/ [] b) {
-    if (a == null && b == null) {
-      return new boolean[0];
-    }
-    if (a == null) { assert b != null; return b; }
-    if (b == null) return a;
-    boolean[] result = new boolean[a.length + b.length];
+    if (a == null) {
+      if (b == null) {
+        return new boolean[0];
+      } else {
+        return b;
+      }
+    } else {
+      if (b == null) {
+        return a;
+      } else {
+        boolean[] result = new boolean[a.length + b.length];
 
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
+        return result;
+      }
+    }
   }
 
   /**
@@ -1295,16 +1344,23 @@ public final class ArraysMDE {
    * it returns the other array.
    **/
   public static char[] concat(char /*@Nullable*/ [] a, char /*@Nullable*/ [] b) {
-    if (a == null && b == null) {
-      return new char[0];
-    }
-    if (a == null) { assert b != null; return b; }
-    if (b == null) return a;
-    char[] result = new char[a.length + b.length];
+    if (a == null) {
+      if (b == null) {
+        return new char[0];
+      } else {
+        return b;
+      }
+    } else {
+      if (b == null) {
+        return a;
+      } else {
+        char[] result = new char[a.length + b.length];
 
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
+        return result;
+      }
+    }
   }
 
 
@@ -1315,16 +1371,23 @@ public final class ArraysMDE {
    * it returns the other array.
    **/
   public static double[] concat(double /*@Nullable*/ [] a, double /*@Nullable*/ [] b) {
-    if (a == null && b == null) {
-      return new double[0];
-    }
-    if (a == null) { assert b != null; return b; }
-    if (b == null) return a;
-    double[] result = new double[a.length + b.length];
+    if (a == null) {
+      if (b == null) {
+        return new double[0];
+      } else {
+        return b;
+      }
+    } else {
+      if (b == null) {
+        return a;
+      } else {
+        double[] result = new double[a.length + b.length];
 
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
+        return result;
+      }
+    }
   }
 
   /**
@@ -1334,16 +1397,23 @@ public final class ArraysMDE {
    * it returns the other array.
    **/
   public static float[] concat(float /*@Nullable*/ [] a, float /*@Nullable*/ [] b) {
-    if (a == null && b == null) {
-      return new float[0];
-    }
-    if (a == null) { assert b != null; return b; }
-    if (b == null) return a;
-    float[] result = new float[a.length + b.length];
+    if (a == null) {
+      if (b == null) {
+        return new float[0];
+      } else {
+        return b;
+      }
+    } else {
+      if (b == null) {
+        return a;
+      } else {
+        float[] result = new float[a.length + b.length];
 
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
+        return result;
+      }
+    }
   }
 
   /**
@@ -1353,16 +1423,23 @@ public final class ArraysMDE {
    * it returns the other array.
    **/
   public static int[] concat(int /*@Nullable*/ [] a, int /*@Nullable*/ [] b) {
-    if (a == null && b == null) {
-      return new int[0];
-    }
-    if (a == null) { assert b != null; return b; }
-    if (b == null) return a;
-    int[] result = new int[a.length + b.length];
+    if (a == null) {
+      if (b == null) {
+        return new int[0];
+      } else {
+        return b;
+      }
+    } else {
+      if (b == null) {
+        return a;
+      } else {
+        int[] result = new int[a.length + b.length];
 
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
+        return result;
+      }
+    }
   }
 
   /**
@@ -1372,16 +1449,23 @@ public final class ArraysMDE {
    * it returns the other array.
    **/
   public static long[] concat(long /*@Nullable*/ [] a, long /*@Nullable*/ [] b) {
-    if (a == null && b == null) {
-      return new long[0];
-    }
-    if (a == null) { assert b != null; return b; }
-    if (b == null) return a;
-    long[] result = new long[a.length + b.length];
+    if (a == null) {
+      if (b == null) {
+        return new long[0];
+      } else {
+        return b;
+      }
+    } else {
+      if (b == null) {
+        return a;
+      } else {
+        long[] result = new long[a.length + b.length];
 
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
+        return result;
+      }
+    }
   }
 
   /**
@@ -1391,16 +1475,23 @@ public final class ArraysMDE {
    * it returns the other array.
    **/
   public static short[] concat(short /*@Nullable*/ [] a, short /*@Nullable*/ [] b) {
-    if (a == null && b == null) {
-      return new short[0];
-    }
-    if (a == null) { assert b != null; return b; }
-    if (b == null) return a;
-    short[] result = new short[a.length + b.length];
+    if (a == null) {
+      if (b == null) {
+        return new short[0];
+      } else {
+        return b;
+      }
+    } else {
+      if (b == null) {
+        return a;
+      } else {
+        short[] result = new short[a.length + b.length];
 
-    System.arraycopy(a, 0, result, 0, a.length);
-    System.arraycopy(b, 0, result, a.length, b.length);
-    return result;
+        System.arraycopy(a, 0, result, 0, a.length);
+        System.arraycopy(b, 0, result, a.length, b.length);
+        return result;
+      }
+    }
   }
 
 

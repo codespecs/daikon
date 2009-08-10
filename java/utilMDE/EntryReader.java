@@ -422,8 +422,9 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
 
   /**
    * Returns the next entry (paragraph) in the file.  Entries are separated
-   * by blank lines unless the entry started with entry_start_re (@see
-   * set_entry_start_stop).  If no more entries are available returns null.
+   * by blank lines unless the entry started with {@link #entry_start_re}
+   * (see {@link #set_entry_start_stop}).  If no more entries are
+   * available, returns null.
    */
   public /*@Nullable*/ Entry get_entry() throws IOException {
 
@@ -444,8 +445,8 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
     if (entry_start_re != null)
       entry_match = entry_start_re.matcher (line);
     if ((entry_match != null) && entry_match.find()) {
-      assert entry_start_re != null;
-      assert entry_stop_re != null;
+      assert entry_start_re != null : "@SuppressWarnings(nullness)";
+      assert entry_stop_re != null : "@SuppressWarnings(nullness)";
 
       // Remove entry match from the line
       if (entry_match.groupCount() > 0) {
@@ -467,9 +468,10 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
         if (line == null) {
           throw new IOException("File terminated unexpectedly (didn't find entry terminator)");
         }
-        // Re-asserting is necessary because readLine might have side-effected the fields.
-        assert entry_start_re != null;
-        assert entry_stop_re != null;
+        // Re-asserting is necessary because the checker reasons that
+        // readLine might have side-effected the fields (though it didn't!).
+        assert entry_start_re != null : "@SuppressWarnings(nullness)";
+        assert entry_stop_re != null : "@SuppressWarnings(nullness)";
         entry_match = entry_start_re.matcher(line);
         end_entry_match = entry_stop_re.matcher(line);
       }

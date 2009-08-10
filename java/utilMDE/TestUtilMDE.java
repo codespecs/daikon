@@ -1073,7 +1073,7 @@ public final class TestUtilMDE extends TestCase {
   }
 
   // Add elements 0..limit-1 to the set.
-  private static void lsis_add_elts(int limit, LimitedSizeIntSet s) {
+  private static void lsis_add_elts(int limit, LimitedSizeSet<Integer> s) {
     Random r = new Random();
     for (int i=0; i<100; i++) {
       s.add(r.nextInt(limit));
@@ -1081,7 +1081,7 @@ public final class TestUtilMDE extends TestCase {
   }
 
   private static void lsis_test(int max_size) {
-    LimitedSizeIntSet s = new LimitedSizeIntSet(max_size);
+    LimitedSizeSet<Integer> s = new LimitedSizeSet<Integer>(max_size);
     for (int i=1; i<2*max_size; i++) {
       lsis_add_elts(i, s);
       int size = s.size();
@@ -1090,7 +1090,7 @@ public final class TestUtilMDE extends TestCase {
     }
   }
 
-  public static void testLimitedSizeIntSet() {
+  public static void testLimitedSizeSet() {
     for (int i=1; i<10; i++) {
       lsis_test(i);
     }
