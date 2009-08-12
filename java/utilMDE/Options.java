@@ -16,7 +16,7 @@ import com.sun.javadoc.FieldDoc;
 
 /**
  * The Options class parses command-line options and sets fields in your
- * program accordingly.  Each field that is annotated with &#064;{@link
+ * program accordingly.  Each field that is annotated with @{@link
  * utilMDE.Option} is set from a command-line argument of the same name.
  * The Options class can also create usage messages and HTML documentation.
  * The Options class interprets annotations and Javadoc comments, so that
@@ -83,13 +83,13 @@ import com.sun.javadoc.FieldDoc;
  *
  *  public static class Test {
  *
- *    &#064;Option ("-o &lt;filename&gt; the output file ")
+ *    &#64;Option ("-o &lt;filename&gt; the output file ")
  *    public static File outfile = "/tmp/foobar";
  *
- *    &#064;Option ("-i ignore case")
+ *    &#64;Option ("-i ignore case")
  *    public static boolean ignore_case;
  *
- *    &#064;Option ("-t set the initial temperature")
+ *    &#64;Option ("-t set the initial temperature")
  *    public static double temperature = 75.0;
  *
  *    public static void main (String[] args) {
@@ -344,6 +344,10 @@ public class Options {
    * @param usage_synopsis A synopsis of how to call your program
    */
   public Options (String usage_synopsis, /*@Raw*/ Object... args) {
+
+    if (args.length == 0) {
+      throw new Error("Must pass at least one object to Options constructor");
+    }
 
     this.usage_synopsis = usage_synopsis;
 
