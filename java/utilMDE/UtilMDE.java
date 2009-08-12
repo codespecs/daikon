@@ -137,7 +137,6 @@ public final class UtilMDE {
   /**
    * Returns a Reader for the file, accounting for the possibility
    * that the file is compressed.
-   * @param charsetName may be null, or the name of a Charset
    * <p>
    * Warning: The "gzip" program writes and reads files containing
    * concatenated gzip files.  As of Java 1.4, Java reads

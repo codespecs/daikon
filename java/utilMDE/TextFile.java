@@ -35,7 +35,7 @@ import java.util.NoSuchElementException;
  * yourself, take a look at java.nio.channels.FileLock.
  *
  * @deprecated
- * @see #MultiReader
+ * @see MultiReader
  **/
 @Deprecated
 public class TextFile implements Iterable<String> {
