@@ -20,6 +20,21 @@ Further documentation can be found in:
 
 ===========================================================================
 
+Support for GCC 4.3+ created binaries has been improved for Kvasir.
+
+Kvasir
+
+  User visible changes
+
+    Kvasir should now print more sensible traces for binaries created
+    with GCC 4.3.x and 4.4.x.
+
+  Bug fixes
+
+    Fixed an issue where Kvasir would not detect entry to a function if
+    it's body consisted of only a loop.
+
+
 4.6.0 (July 1 2009)
 
 Kvasir now supports binaries created with GCC 4.0+ and glibc versions 2.2
