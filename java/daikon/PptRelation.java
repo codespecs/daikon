@@ -958,7 +958,7 @@ public class PptRelation implements Serializable {
       // Process the front-end specified relations
       for (ParentRelation pr : ppt.parent_relations) {
         // Skip all relations in subexits.  These relations will be handled
-        // in the combined exit point
+        // in the combined exit point.
         if (ppt.is_subexit())
           continue;
 
