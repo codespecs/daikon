@@ -1950,7 +1950,7 @@ public final class FileIO {
       else
         ;  // don't need to do anything explicit for other records found
     }
-
+    //System.err.println( "\nTime to get variable values = " + totalTime );
     if (Global.debugPrintDtrace) {
       Global.dtraceWriter.close();
     }
@@ -2166,8 +2166,10 @@ public final class FileIO {
       // Read a single record from the trace file;
       // fills up vals and mods arrays by side effect.
       try {
+        //long time2get_txtVals = System.currentTimeMillis( );
         read_vals_and_mods_from_trace_file (reader, state.filename,
                                             ppt, vals, mods);
+        //totalTime += System.currentTimeMillis( ) - time2get_txtVals;
       } catch (IOException e) {
         String nextLine = reader.readLine();
         if ((e instanceof EOFException) || (nextLine == null)) {
@@ -2193,7 +2195,6 @@ public final class FileIO {
           throw e;
         }
       }
-
       state.ppt = ppt;
       state.nonce = nonce;
       state.vt = ValueTuple.makeUninterned(vals, mods);
@@ -2318,6 +2319,7 @@ public final class FileIO {
               state.status = ParseStatus.LIST_IMPLEMENTORS;
               return;
             }
+
             // we got a program point
             // The binary file contains indexes instead of full ppt_names
             String ppt_name = pptDeclList.get( Integer.valueOf( new Integer( record ) ) );
@@ -3329,6 +3331,7 @@ public final class FileIO {
       : "Expected blank line at line " + reader.getLineNumber() + ": " + line;
   }
 
+  private static long totalTime = 0;
 
   // This procedure reads a single record from a trace file and
   // fills up vals and mods by side effect.  The ppt name and
@@ -3368,7 +3371,7 @@ public final class FileIO {
     int allVar_index = 0;
 
     // vi_index:  index into the var_infos array
-    // val_index:  index into the ValueTuple (NOT index into values in the binary trace)
+    // val_index: index into the ValueTuple (NOT index into values in the binary trace)
     for (int vi_index = 0, val_index = 0; val_index < num_tracevars; vi_index++) {
 
       assert vi_index < vis.length
@@ -3392,6 +3395,7 @@ public final class FileIO {
                         ;
 
       String elements = null;
+      Object value [] = null;
 
       while ( true ) {
         // only variables with sensical mods are written in the binary file
@@ -3411,9 +3415,12 @@ public final class FileIO {
           elements = "";
           break;
         }
-        // read the variable from the file
-        elements = get_variableValue( vi, binReader, pWriter );
+        //long time2get_binVals = System.currentTimeMillis( );
+        // read the variable value from the file
+        value = get_variableValue( vi, binReader, pWriter );
+        //totalTime += System.currentTimeMillis( ) - time2get_binVals;
 
+        elements = ( String ) value[0];
         if( var_included( allVars.get( allVar_index ) ) ) {
           break;
         }
@@ -3491,7 +3498,7 @@ public final class FileIO {
       }
       else {
         try {
-          vals[val_index] = vi.rep_type.parse_value(value_rep);
+          vals[val_index] = value[1];//vi.rep_type.parse_value(value_rep);
           if (vals[val_index] == null) {
             mods[val_index] = ValueTuple.MISSING_NONSENSICAL;
             if (debug_missing && !vi.canBeMissing)
@@ -3523,9 +3530,10 @@ public final class FileIO {
   // receives as a parameter the String format it expects
   // It recreates the null string as "null"
   @SuppressWarnings("nullness")
-  private static String get_variableValue( VarInfo vi, DataInputStream binReader,
+  private static Object [] get_variableValue( VarInfo vi, DataInputStream binReader,
 						   PrintWriter pWriter )
   throws IOException {
+    Object [] value = new Object [2];
     String elements = null;
     ProglangType repType = vi.file_rep_type;
 
@@ -3537,35 +3545,40 @@ public final class FileIO {
         for ( int j = 0; j < strLen; j++ ) {
           elements += ( char ) binReader.readByte( );
         }
+        value[1] = UtilMDE.unescapeNonJava( elements ).intern( );
         elements = "\"" + elements + "\"";
       }
       else {
+        value[1] = null;
         elements = "null";
       }
-
       echoMsg( pWriter, (vi.name( ) + "\n" + elements) );
    }
 
    else if ( repType == ProglangType.STRING_ARRAY ) {
      echoMsg( pWriter, vi.name( ) );
      int al = binReader.readInt( );
+     String [] value_strings = new String [al];
      elements = "[";
 
      for ( int j = 0; j < al; j++ ) {
        int sl = binReader.readInt( );
-       String rs = "\"";
+       String rs = "";
        if ( sl != -1 ) {
          for ( int k = 0; k < sl; k++ ) {
            char c = ( char ) binReader.readByte( );
            rs += c;
          }
-         elements += rs + "\" ";
+         elements += "\"" + rs + "\" ";
+         value_strings[j] = rs;
        }
        else {
-           elements  += "null ";
+         elements  += "null ";
+         value_strings[j] = null;
        }
      }
      elements =  elements.trim( ) + "]";
+     value[1] = Intern.intern( Intern.internStrings(value_strings) );
      echoMsg( pWriter, elements );
    }
 
@@ -3578,10 +3591,12 @@ public final class FileIO {
      echoMsg( pWriter, vi.name( ) );
      elements = "[";
      int al = binReader.readInt( );
+     long long_arr [] = new long [al];
 
      if ( repType == ProglangType.INT_ARRAY ) {
        for ( int j = 0; j < al; j++ ) {
          int aval = binReader.readInt( );
+         long_arr[j] = aval;
          elements += aval + " ";
        }
      }
@@ -3589,11 +3604,13 @@ public final class FileIO {
        for ( int j = 0; j < al; j++ ) {
          String sval = Byte.toString( binReader.readByte( ) );
          elements += sval + " ";
+         long_arr[j] = sval.charAt( 0 );
        }
      }
      else if ( repType == ProglangType.HASHCODE_ARRAY ) {
        for ( int j = 0; j < al; j++ ) {
          int hval = binReader.readInt( );
+         long_arr[j] = hval;
          if ( hval != 0 ) {
            elements += hval + " ";
          }
@@ -3605,33 +3622,42 @@ public final class FileIO {
      else if ( repType == ProglangType.BOOLEAN_ARRAY ) {
        for ( int j = 0; j < al; j++ ) {
          byte vb =  binReader.readByte( );
-         if ( vb == 1 )
+         if ( vb == 1 ) {
            elements += "true" + " ";
-         else
+           long_arr[j] = 1;
+         }
+         else {
            elements += "false" + " ";
+           long_arr[j] = 0;
+         }
        }
      }
      else {
        for ( int j = 0; j < al; j++ ) {
          long lval = binReader.readLong( );
          elements += lval + " ";
+         long_arr[j] = lval;
        }
      }
      elements = elements.trim( );
      elements += "]";
+     value[1] = Intern.intern( long_arr );
      echoMsg( pWriter, elements );
    }
    else if ( repType == ProglangType.DOUBLE_ARRAY ) {
      echoMsg( pWriter, vi.name( ) );
      int al = binReader.readInt( );
+     double double_arr [] = new double [al];
      elements = "[";
 
      for ( int j = 0; j < al; j++ ) {
        double dval = binReader.readDouble( );
+       double_arr[j] = dval;
        elements += dval + " ";
      }
      elements = elements.trim( );
      elements += "]";
+     value[1] = Intern.intern( double_arr );
      echoMsg( pWriter, elements );
    }
     /*else if ( repType == ProglangType.CHAR_ARRAY_ARRAY ) {
@@ -3658,26 +3684,37 @@ public final class FileIO {
      if ( repType == ProglangType.BOOLEAN ) {
        elements = "";
        char vb = ( char ) binReader.readByte( );
-       elements = ( vb == '1' ) ? "true" : "false" ;
+       if ( vb == '1' ) {
+           elements = "true";
+           value[1] = Intern.internedLong( 1 );
+       }
+       else {
+           elements = "false" ;
+           value[1] = Intern.internedLong( 0 );
+       }
      }
 
      else if ( repType == ProglangType.CHAR ) {
        elements = "";
        char vc = ( char ) binReader.readByte( );
        elements += vc;
+       value[1] = Intern.internedLong( Character.getNumericValue( vc ) );
      }
 
      else if ( repType == ProglangType.DOUBLE ) {
        elements = "";
        double vd = binReader.readDouble( );
        elements += vd;
+       value[1] = Intern.internedDouble( vd );
      }
 
      else if ( repType == ProglangType.LONG_PRIMITIVE || repType == ProglangType.LONG_OBJECT
                || repType == ProglangType.OBJECT ) {
        elements = "";
+       // unsigned longs are not supported
        long vl = binReader.readLong( );
        elements += vl;
+       value[1] = Intern.internedLong( vl );
      }
 
      else if ( repType == ProglangType.INT || repType == ProglangType.INTEGER
@@ -3688,14 +3725,17 @@ public final class FileIO {
          elements = "null";
        else
          elements += vint;
+       value[1] = Intern.internedLong( vint );
      }
-
      else {
-       return null;
+       value[0] = null;
+       value[1] = null;
+       return value;
      }
      echoMsg( pWriter, elements );
    }
-    return elements;
+    value[0] = elements;
+    return value;
   }
 
   /**
