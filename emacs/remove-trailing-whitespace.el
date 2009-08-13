@@ -23,6 +23,7 @@
    "annotations/\\(vendor-\\)?compiler/"
    ;; ASM bytecode manipulation library
    "annotations/asmx?/"
+   "org/objectweb/asm/"
    ;; FreePastry
    "pastry/src/"
    ;; Valgrind (part of Kvasir)
