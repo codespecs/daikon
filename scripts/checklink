@@ -712,7 +712,7 @@ sub parse_arguments ()
   }
   for my $sb_arg (@{$Opts{Suppress_Broken}}) {
     if ($sb_arg !~ /^(-1|[0-9]+):./) {
-      &usage(1, "Bad suppress-broken argument: $sb_arg");
+      &usage(1, "Bad suppress-broken argument, should be prefixed by a numeric response code: $sb_arg");
     }
   }
   for my $sf_arg (@{$Opts{Suppress_Fragment}}) {
