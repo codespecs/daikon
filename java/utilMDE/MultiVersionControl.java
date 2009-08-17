@@ -14,8 +14,8 @@ import java.net.URL;
 
 /**
  * This program, mvc for Multiple Version Control, lets you run a version
- * control command, such as "status" or "update", on a set of Bzr/CVS/SVN/Hg
- * checkouts rather than just one.<p>
+ * control command, such as "status" or "update", on a <b>set</b> of
+ * Bzr/CVS/SVN/Hg checkouts rather than just one.<p>
  *
  * This program simplifies managing your checkouts.  You might
  * want to know whether any of them have uncommitted changes, or you
