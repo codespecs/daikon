@@ -30,7 +30,7 @@ AUTO_GENERATED_FILES := \
 	./MathMDE.java \
 	./LimitedSizeIntSet.java
 # Call to sort is to remove duplicates, which would cause javac errors.
-JAVA_FILES := $(sort $(shell find . \( -name CVS \) -prune -o -name '*.java' -print | sort) ${AUTO_GENERATED_FILES})
+JAVA_FILES := $(sort $(shell find . \( -name CVS \) -prune -o -name '*.java' -print | grep -v '\.\#' | sort) ${AUTO_GENERATED_FILES})
 JAVA_LINT_FILES := $(shell find . \( -name CVS -o -name ArraysMDE.java -o -name WeakHasherMap.java -o -name Intern.java -o -name OrderedPairIterator.java -o -name WeakIdentityHashMap.java \) -prune -o -name '*.java' -print | sort)
 JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -print | sort)
 JAVA_AND_CPP_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
@@ -40,7 +40,7 @@ jsr308_imports=checkers.interning.quals.*:checkers.nullness.quals.*
 export jsr308_imports
 export CLASSPATH
 
-default: all
+default: jar
 compile: all
 
 all: test
@@ -88,11 +88,13 @@ run-chicory-arrays:
 
 
 doc: javadoc
+javadoc: .javadoc-timestamp
 
-javadoc: $(JAVA_FILES)
-	mkdir -p doc
-	javadoc -d doc utilMDE
-	# jdk-add-munged-anchor-names doc/utilMDE/*.html
+.javadoc-timestamp: $(JAVA_FILES)
+	mkdir -p javadoc
+	javadoc -classpath ${CLASSPATH} -d doc *.java
+	# jdk-add-munged-anchor-names javadoc/utilMDE/*.html
+	touch .javadoc-timestamp
 	@echo "Optionally run jdk-index-to-alist (for Emacs support)"
 
 showvars:
@@ -126,7 +128,7 @@ MathMDE.java: MathMDE.java.jpp MathMDE-gcd.java.jpp MathMDE-modulus.java.jpp Mat
 
 
 jar: utilMDE.jar
-utilMDE.jar: .class-files-timestamp svnkit.jar ini4j-0.5.1.jar lookup.html lookup.txt
+utilMDE.jar: .class-files-timestamp .test-timestamp svnkit.jar ini4j-0.5.1.jar lookup.html lookup.txt
 # "make clean" avoids including stray .class files from your directory.
 # "make compile" runs unit tests.
 	$(MAKE) clean compile
