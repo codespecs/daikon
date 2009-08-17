@@ -317,7 +317,7 @@ public final class ArraysMDE {
    *    or -1 if no such element is found in the array.
    * @see java.util.List#indexOf(java.lang.Object)
    **/
-  public static int indexOf(Object[] a, /*@Nullable*/ Object elt) {
+  public static int indexOf(/*@PolyNull*/ Object[] a, /*@Nullable*/ Object elt) {
     if (elt == null) {
       return indexOfEq(a, elt);
     }
@@ -335,7 +335,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in that section of the array.
    * @see java.util.List#indexOf(java.lang.Object)
    **/
-  public static int indexOf(Object[] a, /*@Nullable*/ Object elt, int minindex, int indexlimit) {
+  public static int indexOf(/*@PolyNull*/ Object[] a, /*@Nullable*/ Object elt, int minindex, int indexlimit) {
     if (elt == null) {
       return indexOfEq(a, elt, minindex, indexlimit);
         }
@@ -353,7 +353,7 @@ public final class ArraysMDE {
    *    or -1 if no such element is found in the list.
    * @see java.util.List#indexOf(java.lang.Object)
    **/
-  public static int indexOf(List<?> a, /*@Nullable*/ Object elt) {
+  public static int indexOf(List<? extends /*@PolyNull*/ Object> a, /*@Nullable*/ Object elt) {
     return a.indexOf(elt);
   }
 
@@ -365,7 +365,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in that section of the list.
    * @see java.util.List#indexOf(java.lang.Object)
    **/
-  public static int indexOf(List<?> a, /*@Nullable*/ Object elt, int minindex, int indexlimit) {
+  public static int indexOf(List<? extends /*@PolyNull*/ Object> a, /*@Nullable*/ Object elt, int minindex, int indexlimit) {
     if (elt == null) {
       return indexOfEq(a, elt, minindex, indexlimit);
     }
@@ -382,7 +382,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    **/
-  public static int indexOfEq(Object[] a, /*@Nullable*/ Object elt) {
+  public static int indexOfEq(/*@PolyNull*/ Object[] a, /*@Nullable*/ Object elt) {
     for (int i=0; i<a.length; i++)
       if (elt == a[i])
         return i;
@@ -397,7 +397,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in that section of the array.
    * @see java.util.Vector#indexOf(java.lang.Object)
    **/
-  public static int indexOfEq(Object[] a, /*@Nullable*/ Object elt, int minindex, int indexlimit) {
+  public static int indexOfEq(/*@PolyNull*/ Object[] a, /*@Nullable*/ Object elt, int minindex, int indexlimit) {
     for (int i=minindex; i<indexlimit; i++)
       if (elt == a[i])
         return i;
@@ -411,7 +411,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in the list.
    * @see java.util.Vector#indexOf(java.lang.Object)
    **/
-  public static int indexOfEq(List<?> a, /*@Nullable*/ Object elt) {
+  public static int indexOfEq(List<? extends /*@PolyNull*/ Object> a, /*@Nullable*/ Object elt) {
     for (int i=0; i<a.size(); i++)
       if (elt == a.get(i))
         return i;
@@ -426,7 +426,7 @@ public final class ArraysMDE {
    *    or -1 if the element is not found in that section of the list.
    * @see java.util.Vector#indexOf(java.lang.Object)
    **/
-  public static int indexOfEq(List<?> a, /*@Nullable*/ Object elt, int minindex, int indexlimit) {
+  public static int indexOfEq(List<? extends /*@PolyNull*/ Object> a, /*@Nullable*/ Object elt, int minindex, int indexlimit) {
     for (int i=minindex; i<indexlimit; i++)
       if (elt == a.get(i))
         return i;
