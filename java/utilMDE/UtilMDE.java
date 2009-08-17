@@ -829,8 +829,27 @@ public final class UtilMDE {
   }
 
   /**
-   * Reads the entire contents of the specified file and returns it
-   * as a string.  Any IOException encountered will be turned into an Error.
+   * Reads the entire contents of the reader and returns it as a string.
+   * Any IOException encountered will be turned into an Error.
+   */
+  public static String readerContents(Reader r) {
+    try {
+      StringBuilder contents = new StringBuilder();
+      int ch;
+      while ((ch = r.read()) != -1) {
+        contents.append((char) ch);
+      }
+      r.close();
+      return contents.toString();
+    } catch (Exception e) {
+      throw new Error ("Unexpected error in readerContents(" + r + ")", e);
+    }
+  }
+
+  // an alternate name would be "fileContents".
+  /**
+   * Reads the entire contents of the file and returns it as a string.
+   * Any IOException encountered will be turned into an Error.
    */
   public static String readFile (File file) {
 
@@ -840,6 +859,7 @@ public final class UtilMDE {
       String line = reader.readLine();
       while (line != null) {
         contents.append (line);
+        // Note that this converts line terminators!
         contents.append (lineSep);
         line = reader.readLine();
       }
@@ -1442,6 +1462,22 @@ public final class UtilMDE {
         sb.append("\\E");
         return sb.toString();
     }
+
+
+  ///////////////////////////////////////////////////////////////////////////
+  /// Reflection
+  ///
+
+  /**
+   * Sets the given field, which may be final.
+   * Intended for use in readObject and nowhere else!
+   */
+  public static void setFinalField(Object o, String fieldName, Object value)
+    throws NoSuchFieldException, IllegalAccessException {
+      Field f = o.getClass().getDeclaredField(fieldName);
+      f.setAccessible(true);
+      f.set(o, value);
+  }
 
 
   ///////////////////////////////////////////////////////////////////////////
