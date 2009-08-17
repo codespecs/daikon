@@ -156,17 +156,19 @@ public class MultiVersionControl {
   @Option("Print debugging output")
   public static boolean debug;
 
-  enum Action {
+  static enum Action {
     CHECKOUT,
       STATUS,
       UPDATE,
       LIST
       };
   // Shorter variants
-  private Action CHECKOUT = Action.CHECKOUT;
-  private Action STATUS = Action.STATUS;
-  private Action UPDATE = Action.UPDATE;
-  private Action LIST = Action.LIST;
+  private static Action CHECKOUT = Action.CHECKOUT;
+  private static Action STATUS = Action.STATUS;
+  private static Action UPDATE = Action.UPDATE;
+  private static Action LIST = Action.LIST;
+
+  private static final int TIMEOUT_SEC = 40;
 
   private Action action;
 
@@ -296,25 +298,35 @@ public class MultiVersionControl {
       // These asserts come at the end so that the error message can be better.
       switch (repoType) {
       case BZR:
-        assert (directory.exists() ? new File(directory, ".bzr").isDirectory() : true);
+        assertSubdirExists(directory, ".bzr");
         assert module == null;
         break;
       case CVS:
-        assert (directory.exists() ? new File(directory, "CVS").isDirectory() : true) : "Bad CVS: " + this;
-        assert module != null : "Bad CVS: " + this;
+        assertSubdirExists(directory, "CVS");
+        assert module != null : "No module for CVS checkout at: " + directory;
         break;
       case HG:
-        assert (directory.exists() ? new File(directory, ".hg").isDirectory() : true);
+        assertSubdirExists(directory, ".hg");
         assert module == null;
         break;
       case SVN:
-        assert (directory.exists() ? new File(directory, ".svn").isDirectory() : true) : "Bad SVN: " + this;
-        assert module == null : "Bad SVN: " + this;
+        assertSubdirExists(directory, ".svn");
+        assert module == null;
         break;
       default:
         assert false;
       }
     }
+
+    /** If the directory exists, then the subdirectory must exist too. */
+    private void assertSubdirExists(File directory, String subdirName) {
+      assert (directory.exists()
+              ? new File(directory, subdirName).isDirectory()
+              : true)
+        : String.format("Directory %s exists but %s subdirectory does not",
+                        directory, subdirName);
+    }
+
 
     @Override
     public boolean equals(/*@Nullable*/ Object other) {
@@ -442,7 +454,8 @@ public class MultiVersionControl {
         module = null;
       }
 
-      checkouts.add(new Checkout(currentType, dir, root, module));
+      Checkout checkout = new Checkout(currentType, dir, root, module);
+      checkouts.add(checkout);
     }
   }
 
@@ -711,13 +724,28 @@ public class MultiVersionControl {
   /// Process checkouts
   ///
 
+  private class Replacer {
+    String regexp;
+    String replacement;
+    public Replacer(String regexp, String replacement) {
+      this.regexp = regexp;
+      this.replacement = replacement;
+    }
+    public String replaceAll(String s) {
+      return s.replaceAll(regexp, replacement);
+    }
+  }
+
+
   public void process(Set<Checkout> checkouts) {
     String repo;
 
     ProcessBuilder pb = new ProcessBuilder("");
+    // pb.redirectErrorStream(true);
+    // pb.inheritIO(); //   This method (& functionality) only exists in Java 7!
     pb.redirectErrorStream(true);
-    String filter;              // needs to be a regexp!
 
+    ProcessBuilder pb2;
 
     CHECKOUTLOOP:
     for (Checkout c : checkouts) {
@@ -726,8 +754,9 @@ public class MultiVersionControl {
       }
       File dir = c.directory;
 
-      filter = null;
+      List<Replacer> replacers = new ArrayList<Replacer>();
 
+      pb.directory(dir);
       // Set pb.command() to be the command to be executed.
       switch (action) {
       case LIST:
@@ -753,46 +782,58 @@ public class MultiVersionControl {
                      c.module);
           break;
         case HG:
-          pb.command("hg", "clone", c.repository, dirbase);
+          pb.command("hg", "clone", c.repository);
           break;
         case SVN:
-          pb.command("svn", "checkout", c.repository, dirbase);
+          if (dir != null) {
+            pb.command("svn", "checkout", c.repository, dir.getName());
+          } else {
+            pb.command("svn", "checkout", c.repository);
+          }
           break;
         default:
           assert false;
         }
         break;
       case STATUS:
+        replacers.add(new Replacer("(^|\n)\\? +", "$1? " + dir + "/"));
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
           // break;
         case CVS:
           assert c.repository != null;
-          pb.command("cvs", "-d", c.repository, "diff",
+          pb.command("cvs", "-q",
+                     // Including "-d REPOS" seems to give errors when a
+                     // subdirectory is in a different CVS repository.
+                     // "-d", c.repository,
+                     "diff",
                      "-b",      // compress whitespace
                      "--brief", // report only whether files differ, not details
                      "-N");     // report new files
-//         # For the last perl command, this also works:
-//         #   perl -p -e 'chomp(\$cwd = `pwd`); s/^Index: /\$cwd\\//'";
-//         # but the one we use is briefer and uses the abbreviated directory name.
-//         $filter = "grep -v \"unrecognized keyword 'UseNewInfoFmtStrings'\" | grep \"^Index:\" | perl -p -e 's|^Index: |$dir\\/|'";
+          //         # For the last perl command, this also works:
+          //         #   perl -p -e 'chomp(\$cwd = `pwd`); s/^Index: /\$cwd\\//'";
+          //         # but the one we use is briefer and uses the abbreviated directory name.
+          //         $filter = "grep -v \"unrecognized keyword 'UseNewInfoFmtStrings'\" | grep \"^Index:\" | perl -p -e 's|^Index: |$dir\\/|'";
+          String removeRegexp
+            = ("\n=+"
+               + "\nRCS file: .*" // no trailing ,v for newly-created files
+               + "(\nretrieving revision .*)?" // no output for newly-created files
+               + "\ndiff .*"
+               + "\nFiles .* and .* differ");
+          replacers.add(new Replacer(removeRegexp, ""));
+          replacers.add(new Replacer("(^|\n)Index: ", "$1" + dir + "/"));
           break;
         case HG:
           pb.command("hg", "status");
-          // also do
-          //   hg outgoing -l 1
-          // and the third line is either "no changes found" or not
+          pb2 = new ProcessBuilder("");
+          pb2.redirectErrorStream(true);
+          pb2.directory(pb.directory());
+          // The third line is either "no changes found" or not.
+          pb2.command("hg", "outgoing", "-l", "1");
           break;
         case SVN:
           pb.command("svn", "status");
-          // Alternate implementation using diff (by analogy with CVS).  But
-          // for SVN, "status" is the appropriate command.
-          // "svn diff --summarize" and "svn log -vq" can only compare one
-          // repository to another, but I want to compare the working
-          // directory to the repository.
-          // pb.command("svn", "diff", "--diff-cmd", "diff", "-x", "-q", "-x", "-r", "-x", "-N");
-//         $filter = "grep \"^Index:\" | perl -p -e 's|^Index: |$dir\\/|'";
           break;
         default:
           assert false;
@@ -815,13 +856,13 @@ public class MultiVersionControl {
           assert false;
         }
         // ...
-//       if (defined($cvsroot)) {
-//         $command = "$cvs -d $cvsroot -Q update -d";
-//         $filter = "grep -v \"config: unrecognized keyword 'UseNewInfoFmtStrings'\"";
-//       } else {
-//         $command = "svn -q update";
-//         $filter = "grep -v \"Killed by signal 15.\"";
-//       }
+        //       if (defined($cvsroot)) {
+        //         $command = "$cvs -d $cvsroot -Q update -d";
+        //         $filter = "grep -v \"config: unrecognized keyword 'UseNewInfoFmtStrings'\"";
+        //       } else {
+        //         $command = "svn -q update";
+        //         $filter = "grep -v \"Killed by signal 15.\"";
+        //       }
         // ...
         break;
       default:
@@ -871,6 +912,53 @@ public class MultiVersionControl {
           assert false;
         }
       }
+
+      if (! dry_run) {
+        try {
+          // Perform the command
+
+          // For debugging
+          //  my $command_cwd_sanitized = $command_cwd;
+          //  $command_cwd_sanitized =~ s/\//_/g;
+          //  $tmpfile = "/tmp/cmd-output-$$-$command_cwd_sanitized";
+          // my $command_redirected = "$command > $tmpfile 2>&1";
+          if (debug) {
+            System.out.println("About to execute:");
+            System.out.println(command(pb));
+          }
+          TimeLimitProcess p = new TimeLimitProcess(pb.start(), TIMEOUT_SEC * 1000);
+          p.waitFor();
+          if (p.timed_out()) {
+            System.out.printf("Timed out (limit: %ss):%n", TIMEOUT_SEC);
+            System.out.println(command(pb));
+            // Ignore output streams?
+            continue;
+          }
+
+          // Filter then print the output
+          String output = UtilMDE.readerContents(new InputStreamReader(p.getInputStream()));
+          // System.out.println("output=<<<" + output + ">>>");
+          // System.out.println("removeRegexp=<<<" + removeRegexp + ">>>");
+          for (Replacer r : replacers) {
+            output = r.replaceAll(output);
+          }
+          System.out.print(output);
+
+        } catch (IOException e) {
+          throw new Error(e);
+        } catch (InterruptedException e) {
+          throw new Error(e);
+        }
+
+      }
+    }
+  }
+
+  String command(ProcessBuilder pb) {
+    return "  cd " + pb.directory() + "\n"
+      + "  " + UtilMDE.join(pb.command(), " ");
+  }
+
 
 //     # Show the command.
 //     if ($show) {
@@ -930,8 +1018,74 @@ public class MultiVersionControl {
 //   }
 // }
 
+  /**
+   * A stream of newlines.  Used for processes that want input, when we
+   * don't want to give them input but don't want them to simply hang. */
+  static class StreamOfNewlines extends InputStream {
+    public int read() {
+      return (int) '\n';
     }
   }
 
+//   static interface BufferedReaderFilter {
+//     void process(Stream s);
+//   }
+//
+//   public static class CvsDiffFilter implements BufferedReaderFilter {
+//
+//     BufferedReader reader;
+//     String directory;
+//
+//     public CvsDiffFilter(BufferedReader reader, String directory) {
+//       this.reader = reader;
+//       this.directory = directory;
+//     }
+//
+//     public void close() {
+//       reader.close();
+//     }
+//
+//     public void mark(int readAheadLimit) {
+//       reader.mark(readAheadLimit);
+//     }
+//
+//     public boolean markSupported() {
+//       reader.markSupported();
+//     }
+//
+//     public int read() {
+//       throw new UnsupportedOperationException();
+//       // reader.read();
+//     }
+//
+//     public int read(char[] cbuf, int off, int len) {
+//       throw new UnsupportedOperationException();
+//       // reader.read(char[] cbuf, int off, int len);
+//     }
+//
+//     public String readLine() {
+//       String result = reader.readLine();
+//       if (result == null) {
+//         return result;
+//       } else if (result.startsWith("Index: ")) {
+//         return directory + result.substring(7);
+//       } else {
+//         return "";
+//       }
+//     }
+//
+//     public boolean ready() {
+//       reader.ready();
+//     }
+//
+//     public void reset() {
+//       reader.reset();
+//     }
+//
+//     public long skip(long n) {
+//       reader.skip(n);
+//     }
+//
+//   }
 
 }
