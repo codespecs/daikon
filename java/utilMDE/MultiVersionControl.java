@@ -785,8 +785,8 @@ public class MultiVersionControl {
           pb.command("hg", "clone", c.repository);
           break;
         case SVN:
-          if (module != null) {
-            pb.command("svn", "checkout", c.repository, module);
+          if (c.module != null) {
+            pb.command("svn", "checkout", c.repository, c.module);
           } else {
             pb.command("svn", "checkout", c.repository);
           }
