@@ -11,7 +11,13 @@ import utilMDE.*;
  *
  * <p> Examples below are as if the full value of this PptName were
  * "DataStructures.StackAr.pop()Ljava/lang/Object;:::EXIT84"
+ *
+ * <p>
+ * PptName is deprecated, because declaration file format 2 should not need
+ * it.  Uses of PptName should be eliminated.
  **/
+// No "@Deprecated" annotation yet, but we should add it once support for
+// file format 1 is removed from Daikon.
 public class PptName
   implements Serializable
 {
