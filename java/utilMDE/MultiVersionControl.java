@@ -752,7 +752,7 @@ public class MultiVersionControl {
       if (debug) {
         System.out.println(c);
       }
-      File dir = c.directory;
+      @NonNull File dir = c.directory;
 
       List<Replacer> replacers = new ArrayList<Replacer>();
 
@@ -785,8 +785,8 @@ public class MultiVersionControl {
           pb.command("hg", "clone", c.repository);
           break;
         case SVN:
-          if (dir != null) {
-            pb.command("svn", "checkout", c.repository, dir.getName());
+          if (module != null) {
+            pb.command("svn", "checkout", c.repository, module);
           } else {
             pb.command("svn", "checkout", c.repository);
           }
