@@ -38,6 +38,9 @@ public abstract class ValueSet extends LimitedSizeIntSet
     super(max_values);
   }
 
+  // There is one ValueSet per variable (not one per slice or invariant),
+  // so the use of 44 slots should not be a problem.  If it is, then change
+  // LimitedSizeIntSet to optionally not pre-allocate the entire array.
   public static ValueSet factory(VarInfo var_info) {
     ProglangType rep_type = var_info.rep_type;
     boolean is_scalar = rep_type.isScalar();
