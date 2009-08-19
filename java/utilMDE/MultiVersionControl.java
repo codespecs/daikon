@@ -752,7 +752,7 @@ public class MultiVersionControl {
       if (debug) {
         System.out.println(c);
       }
-      @NonNull File dir = c.directory;
+      /*@NonNull*/ File dir = c.directory;
 
       List<Replacer> replacers = new ArrayList<Replacer>();
 
