@@ -756,6 +756,10 @@ public class MultiVersionControl {
 
       List<Replacer> replacers = new ArrayList<Replacer>();
 
+      // the \r* is necessary here; (somtimes?) there are two carriage returns
+      replacers.add(new Replacer("Warning: untrusted X11 forwarding setup failed: xauth key data not generated\r*\n", ""));
+      replacers.add(new Replacer("Warning: No xauth data; using fake authentication data for X11 forwarding\\.\r*\n", ""));
+
       pb.directory(dir);
       // Set pb.command() to be the command to be executed.
       switch (action) {
@@ -796,7 +800,7 @@ public class MultiVersionControl {
         }
         break;
       case STATUS:
-        replacers.add(new Replacer("(^|\n)\\? +", "$1? " + dir + "/"));
+        replacers.add(new Replacer("(^|\\n)\\? +", "$1? " + dir + "/"));
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
@@ -937,11 +941,15 @@ public class MultiVersionControl {
 
           // Filter then print the output
           String output = UtilMDE.readerContents(new InputStreamReader(p.getInputStream()));
-          // System.out.println("output=<<<" + output + ">>>");
-          // System.out.println("removeRegexp=<<<" + removeRegexp + ">>>");
+          // System.out.println("preoutput=<<<" + output + ">>>");
           for (Replacer r : replacers) {
             output = r.replaceAll(output);
+            // System.out.println("midoutput[" + r.regexp + "]=<<<" + output + ">>>");
           }
+          // System.out.println("postoutput=<<<" + output + ">>>");
+          // for (int i=0; i<Math.min(100,output.length()); i++) {
+          //   System.out.println(i + ": " + (int) output.charAt(i) + "\n        \"" + output.charAt(i) + "\"");
+          // }
           System.out.print(output);
 
         } catch (IOException e) {
