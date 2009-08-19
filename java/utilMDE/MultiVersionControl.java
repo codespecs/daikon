@@ -752,7 +752,7 @@ public class MultiVersionControl {
       if (debug) {
         System.out.println(c);
       }
-      /*@NonNull*/ File dir = c.directory;
+      File dir = c.directory;
 
       List<Replacer> replacers = new ArrayList<Replacer>();
 
@@ -800,7 +800,7 @@ public class MultiVersionControl {
         }
         break;
       case STATUS:
-        replacers.add(new Replacer("(^|\\n)\\? +", "$1? " + dir + "/"));
+        replacers.add(new Replacer("(^|\\n)[?!AMR] +", "$1? " + dir + "/"));
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
