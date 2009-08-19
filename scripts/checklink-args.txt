@@ -29,6 +29,7 @@
 --suppress-broken 500:http://jcp.org/en/jsr/detail?id=308
 --suppress-broken 500:http://www.orbitz.com/
 --suppress-broken 500:http://www.w3.org/TR/html4/loose.dtd
+--suppress-broken 500:http://www.washington.edu/home/maps/southcentral.html?80,70,792,660
 --suppress-broken 500:https://ca.mit.edu:444/moira/showresult.jhtml?list=parg&operation=displaylistinfo
 --suppress-broken 500:https://eecsfacweb.mit.edu/
 --suppress-broken 500:https://web.mit.edu/21.guide/www/l-rec-ob.htm
@@ -51,8 +52,6 @@
 --suppress-fragment http://java.sun.com/javase/6/docs/jdk/api/javac/tree/com/sun/source/util/SimpleTreeVisitor.html?is-external=true#visitAnnotatedType(com.sun.source.tree.AnnotatedTypeTree,%20P)
 --suppress-fragment http://java.sun.com/javase/6/docs/jdk/api/javac/tree/com/sun/source/util/TreeScanner.html?is-external=true#visitAnnotatedType(com.sun.source.tree.AnnotatedTypeTree,%20P)
 --suppress-redirect http://2006.ecoop.org/->http://www.emn.fr/x-info/ecoop2006/
---suppress-redirect http://dspace.mit.edu/bitstream/1721.1/40090/1/MIT-CSAIL-TR-2008-002.pdf->http://dspace.mit.edu/bitstream/handle/1721.1/40090/MIT-CSAIL-TR-2008-002.pdf;jsessionid=F9C78AFBDD8893F8B8BF595A1CD01E0D?sequence=1
---suppress-redirect http://dspace.mit.edu/bitstream/1721.1/40090/2/MIT-CSAIL-TR-2008-002.ps->http://dspace.mit.edu/bitstream/handle/1721.1/40090/MIT-CSAIL-TR-2008-002.ps;jsessionid=2245D2EAFD5A5D9757CFDCB6E1DE2875?sequence=2
 --suppress-redirect http://en.wikipedia.org/->http://en.wikipedia.org/wiki/Main_Page	
 --suppress-redirect http://groups.google.com/->http://groups-beta.google.com/
 --suppress-redirect http://ieeexplore.ieee.org/->http://ieeexplore.ieee.org/Xplore/home.jsp
