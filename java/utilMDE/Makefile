@@ -5,10 +5,10 @@
 # Make will silently continue if file does not exist.
 -include Makefile.user
 
-DAIKONDIR ?= ../..
-CHECKERS ?= ${HOME}/research/types/checker-framework/checkers
-CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
-CLASSPATH:=.:${DAIKONDIR}/java/lib/junit.jar:${CHECKERSJAR}:${DAIKONDIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar:svnkit.jar:ini4j-0.5.1.jar:${CLASSPATH}
+# This wildcard doesn't seem to work, so list the jar files individually.
+# CLASSPATH:=lib/*:$(JDKDIR)/lib/tools.jar
+CLASSPATH:=lib/bcel.jar:lib/ini4j-0.5.1.jar:lib/junit.jar:lib/svnkit.jar:lib/checkers.jar:$(JDKDIR)/lib/tools.jar
+SOURCEPATH:=..:${CLASSPATH}
 
 JAVAC ?= javac
 # Removed "-J-Xmx800m", because it is incompatible with JDK 7.
@@ -35,7 +35,9 @@ JAVA_LINT_FILES := $(shell find . \( -name CVS -o -name ArraysMDE.java -o -name 
 JAVA_CPP_FILES := $(shell find . \( -name CVS \) -prune -o -name '*.java.jpp' -print | sort)
 JAVA_AND_CPP_FILES := ${JAVA_FILES} ${JAVA_CPP_FILES}
 
+CHECKERS ?= ${HOME}/research/types/checker-framework/checkers
 jsr308_imports=checkers.interning.quals.*:checkers.nullness.quals.*
+
 
 export jsr308_imports
 export CLASSPATH
@@ -59,7 +61,7 @@ compile_notest:  .class-files-timestamp
 
 clean:
 	rm -f *.class
-	rm .class-files-timestamp
+	rm -f .class-files-timestamp
 
 very_clean: clean
 	rm -f ${AUTO_GENERATED_FILES}
@@ -76,8 +78,8 @@ test: .test-timestamp
 # prerequisite doesn't work.
 .test-timestamp: .class-files-timestamp
 	which java
-# This is failing without the "-cp ${CLASSPATH}"; will that argument help?
-	set JAVA_COMPILER=NONE; ${JAVA} -cp ${CLASSPATH} utilMDE.TestUtilMDE
+# CLASSPATH is set in this file; it is not an external dependency
+	set JAVA_COMPILER=NONE; ${JAVA} -cp "${SOURCEPATH}" utilMDE.TestUtilMDE
 	touch .test-timestamp
 
 run-chicory:
@@ -92,7 +94,7 @@ javadoc: .javadoc-timestamp
 
 .javadoc-timestamp: $(JAVA_FILES)
 	mkdir -p javadoc
-	javadoc -classpath ${CLASSPATH} -d doc *.java
+	javadoc -classpath ${CLASSPATH} -d javadoc *.java
 	# jdk-add-munged-anchor-names javadoc/utilMDE/*.html
 	touch .javadoc-timestamp
 	@echo "Optionally run jdk-index-to-alist (for Emacs support)"
@@ -128,7 +130,8 @@ MathMDE.java: MathMDE.java.jpp MathMDE-gcd.java.jpp MathMDE-modulus.java.jpp Mat
 
 
 jar: utilMDE.jar
-utilMDE.jar: .class-files-timestamp .test-timestamp svnkit.jar ini4j-0.5.1.jar lookup.html lookup.txt
+# TODO: Why does this depend on lookup.html and lookup.txt but doesn't include them?
+utilMDE.jar: .class-files-timestamp .test-timestamp lib/ini4j-0.5.1.jar lib/svnkit.jar lookup.html lookup.txt
 # "make clean" avoids including stray .class files from your directory.
 # "make compile" runs unit tests.
 	$(MAKE) clean compile
@@ -136,8 +139,11 @@ utilMDE.jar: .class-files-timestamp .test-timestamp svnkit.jar ini4j-0.5.1.jar l
 	mkdir jar-contents
 	mkdir jar-contents/utilMDE
 	cp -p *.class jar-contents/utilMDE
-	(cd jar-contents; jar xf ../svnkit.jar)
-	(cd jar-contents; jar xf ../ini4j-0.5.1.jar)
+	(cd jar-contents; jar xf ../lib/bcel.jar)
+	(cd jar-contents; jar xf ../lib/checkers.jar)
+	(cd jar-contents; jar xf ../lib/ini4j-0.5.1.jar)
+	(cd jar-contents; jar xf ../lib/junit.jar)
+	(cd jar-contents; jar xf ../lib/svnkit.jar)
 	(cd jar-contents; jar xf ${JDKDIR}/lib/tools.jar com/sun/javadoc)
 	rm -rf jar-contents/meta-inf jar-contents/META-INF
 # Put contents in alphabetical order.
@@ -148,7 +154,7 @@ utilMDE.jar: .class-files-timestamp .test-timestamp svnkit.jar ini4j-0.5.1.jar l
 # Lookup targets
 #
 lookup.html: Lookup.java
-	javadoc -J-ea -quiet -doclet utilMDE.Lookup $< > $@
+	javadoc -classpath ..:${CLASSPATH} -docletpath .. -J-ea -quiet -doclet utilMDE.Lookup $< > $@
 lookup.txt: lookup.html html2textrc
 	html2text -rcfile html2textrc < $< > $@
 
