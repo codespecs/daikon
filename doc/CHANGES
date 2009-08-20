@@ -20,7 +20,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.6.1 (August 21 2009)
+
 Support for GCC 4.3+ created binaries has been improved for Kvasir.
+
+Daikon
+
+  Documentation
+
+    Appendix A (File Formats) of the Daikon user manual was moved to
+    the developers manual.
 
 Kvasir
 
