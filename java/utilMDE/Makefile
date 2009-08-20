@@ -195,6 +195,7 @@ utilMDE.tar.gz: $(JAVA_AND_CPP_FILES) Makefile README
 	mkdir /tmp/utilMDE
 	cp -p $(JAVA_AND_CPP_FILES) /tmp/utilMDE
 	cp -p Makefile README /tmp/utilMDE
+	cp -r lib /tmp/utilMDE
 	(cd /tmp/utilMDE; make compile_notest doc)
 	(cd /tmp; tar zcf utilMDE.tar.gz utilMDE)
 	rm -f utilMDE.tar.gz
