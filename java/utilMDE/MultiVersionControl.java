@@ -12,6 +12,19 @@ import java.io.*;
 import java.util.*;
 import java.net.URL;
 
+// TODO: incoming (shows you need to do update and/or fetch)
+//
+// For Mercurial, I can do "hg incoming", but how to show that the current
+// working directory is not up to date with respect to the local
+// repository?  "hg prompt" with the "update" tag will do the trick, see
+// http://bitbucket.org/sjl/hg-prompt/src/
+//
+// For svn, "svn status -u":
+//   The out-of-date information appears in the ninth column (with -u):
+//       '*' a newer revision exists on the server
+//       ' ' the working copy is up to date
+
+
 /**
  * This program, mvc for Multiple Version Control, lets you run a version
  * control command, such as "status" or "update", on a <b>set</b> of
@@ -168,7 +181,9 @@ public class MultiVersionControl {
   private static Action UPDATE = Action.UPDATE;
   private static Action LIST = Action.LIST;
 
-  private static final int TIMEOUT_SEC = 40;
+  // Terminating the process can leave the repository in a bad state, so
+  // set this rather high for safety.
+  private static int TIMEOUT_SEC = 300;
 
   private Action action;
 
@@ -242,6 +257,8 @@ public class MultiVersionControl {
 
     if (action == CHECKOUT) {
       show = true;
+      // Checkouts can be much slower than other operations.
+      TIMEOUT_SEC = TIMEOUT_SEC * 10;
     }
     if (action == UPDATE) {
       print_directory = true;
@@ -757,9 +774,10 @@ public class MultiVersionControl {
       List<Replacer> replacers = new ArrayList<Replacer>();
 
       // the \r* is necessary here; (somtimes?) there are two carriage returns
-      replacers.add(new Replacer("Warning: untrusted X11 forwarding setup failed: xauth key data not generated\r*\n", ""));
-      replacers.add(new Replacer("Warning: No xauth data; using fake authentication data for X11 forwarding\\.\r*\n", ""));
+      replacers.add(new Replacer("Warning: untrusted X11 forwarding setup failed: xauth key data not generated\r*\nWarning: No xauth data; using fake authentication data for X11 forwarding\\.\r*\n", ""));
 
+      pb2 = null;
+      pb.command("echo", "command", "not", "set");
       pb.directory(dir);
       // Set pb.command() to be the command to be executed.
       switch (action) {
@@ -800,7 +818,7 @@ public class MultiVersionControl {
         }
         break;
       case STATUS:
-        replacers.add(new Replacer("(^|\\n)[?!AMR] +", "$1? " + dir + "/"));
+        replacers.add(new Replacer("(^|\\n)([?!AMR]) +", "$1$2 " + dir + "/"));
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
@@ -833,8 +851,10 @@ public class MultiVersionControl {
           pb2 = new ProcessBuilder("");
           pb2.redirectErrorStream(true);
           pb2.directory(pb.directory());
-          // The third line is either "no changes found" or not.
           pb2.command("hg", "outgoing", "-l", "1");
+          // The third line is either "no changes found" or "changeset".
+          replacers.add(new Replacer("^comparing with .*\\nsearching for changes\\nchangeset[^\001]*", "unpushed changesets: " + pb.directory() + "\n"));
+          replacers.add(new Replacer("^comparing with .*\\nsearching for changes\\nno changes found\n", ""));
           break;
         case SVN:
           pb.command("svn", "status");
@@ -844,30 +864,32 @@ public class MultiVersionControl {
         }
         break;
       case UPDATE:
+        replacers.add(new Replacer("(^|\\n)([?!AMR]|cvs update: (in|skipping) directory) +", "$1$2 " + dir + "/"));
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
           // break;
         case CVS:
           assert c.repository != null;
+          pb.command("cvs",
+                     // Including -d causes problems with CVS repositories
+                     // that are embedded inside other repositories.
+                     // "-d", c.repository,
+                     "-Q", "update", "-d");
+          //         $filter = "grep -v \"config: unrecognized keyword 'UseNewInfoFmtStrings'\"";
           break;
         case HG:
+          replacers.add(new Replacer("(^|\\n)(abort: outstanding uncommitted changes)", "$1$2 in " + dir));
+          pb.command("hg", "-q", "fetch");
           break;
         case SVN:
           assert c.repository != null;
+          pb.command("svn", "-q", "update");
+        //         $filter = "grep -v \"Killed by signal 15.\"";
           break;
         default:
           assert false;
         }
-        // ...
-        //       if (defined($cvsroot)) {
-        //         $command = "$cvs -d $cvsroot -Q update -d";
-        //         $filter = "grep -v \"config: unrecognized keyword 'UseNewInfoFmtStrings'\"";
-        //       } else {
-        //         $command = "svn -q update";
-        //         $filter = "grep -v \"Killed by signal 15.\"";
-        //       }
-        // ...
         break;
       default:
         assert false;
@@ -918,49 +940,58 @@ public class MultiVersionControl {
       }
 
       if (! dry_run) {
-        try {
-          // Perform the command
-
-          // For debugging
-          //  my $command_cwd_sanitized = $command_cwd;
-          //  $command_cwd_sanitized =~ s/\//_/g;
-          //  $tmpfile = "/tmp/cmd-output-$$-$command_cwd_sanitized";
-          // my $command_redirected = "$command > $tmpfile 2>&1";
-          if (debug) {
-            System.out.println("About to execute:");
-            System.out.println(command(pb));
-          }
-          TimeLimitProcess p = new TimeLimitProcess(pb.start(), TIMEOUT_SEC * 1000);
-          p.waitFor();
-          if (p.timed_out()) {
-            System.out.printf("Timed out (limit: %ss):%n", TIMEOUT_SEC);
-            System.out.println(command(pb));
-            // Ignore output streams?
-            continue;
-          }
-
-          // Filter then print the output
-          String output = UtilMDE.readerContents(new InputStreamReader(p.getInputStream()));
-          // System.out.println("preoutput=<<<" + output + ">>>");
-          for (Replacer r : replacers) {
-            output = r.replaceAll(output);
-            // System.out.println("midoutput[" + r.regexp + "]=<<<" + output + ">>>");
-          }
-          // System.out.println("postoutput=<<<" + output + ">>>");
-          // for (int i=0; i<Math.min(100,output.length()); i++) {
-          //   System.out.println(i + ": " + (int) output.charAt(i) + "\n        \"" + output.charAt(i) + "\"");
-          // }
-          System.out.print(output);
-
-        } catch (IOException e) {
-          throw new Error(e);
-        } catch (InterruptedException e) {
-          throw new Error(e);
-        }
-
+        perform_command(pb, replacers);
+        if (pb2 != null) perform_command(pb2, replacers);
       }
     }
   }
+
+  void perform_command(ProcessBuilder pb, List<Replacer> replacers) {
+    try {
+      // Perform the command
+
+      // For debugging
+      //  my $command_cwd_sanitized = $command_cwd;
+      //  $command_cwd_sanitized =~ s/\//_/g;
+      //  $tmpfile = "/tmp/cmd-output-$$-$command_cwd_sanitized";
+      // my $command_redirected = "$command > $tmpfile 2>&1";
+      if (debug) {
+        System.out.println("About to execute:");
+        System.out.println(command(pb));
+      }
+      TimeLimitProcess p = new TimeLimitProcess(pb.start(), TIMEOUT_SEC * 1000);
+      p.waitFor();
+      if (p.timed_out()) {
+        System.out.printf("Timed out (limit: %ss):%n", TIMEOUT_SEC);
+        System.out.println(command(pb));
+        // Is it right to ignore output streams?
+        return;
+      }
+
+      // Filter then print the output Sometimes, unpredictably this throws
+      // an IOException "stream closed" from
+      // java.io.BufferedInputStream.getBufIfOpen(BufferedInputStream.java:145)
+      // .  I don't know why.  Re-running immediately gives fine results.
+      String output = UtilMDE.readerContents(new BufferedReader(new InputStreamReader(p.getInputStream())));
+      // System.out.println("preoutput=<<<" + output + ">>>");
+      for (Replacer r : replacers) {
+        output = r.replaceAll(output);
+        // System.out.println("midoutput[" + r.regexp + "]=<<<" + output + ">>>");
+      }
+      // System.out.println("postoutput=<<<" + output + ">>>");
+      // for (int i=0; i<Math.min(100,output.length()); i++) {
+      //   System.out.println(i + ": " + (int) output.charAt(i) + "\n        \"" + output.charAt(i) + "\"");
+      // }
+      System.out.print(output);
+
+
+    } catch (IOException e) {
+      throw new Error(e);
+    } catch (InterruptedException e) {
+      throw new Error(e);
+    }
+  }
+
 
   String command(ProcessBuilder pb) {
     return "  cd " + pb.directory() + "\n"
