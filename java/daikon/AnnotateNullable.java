@@ -7,12 +7,13 @@ import static daikon.PptTopLevel.PptType;
 import utilMDE.*;
 
 /**
- * AnnotateNullable reads in a daikon invariant file and determines
- * which reference variables have seen any null values.  It writes
- * an annotation file (to standard out) with those variables.  It
- * determines which variables have seen null values by looking at the
- * NonZero invariant.  If that invariant is NOT present, then the
- * variable must have been null at least once.
+ * AnnotateNullable reads a Daikon invariant file and determines which
+ * reference variables have seen any null values.  It writes to standard
+ * out an <a
+ * href="http://types.cs.washington.edu/annotation-file-utilities/annotation-file-format.html">annotation
+ * file</a> with those variables.  It determines which variables have seen
+ * null values by looking at the NonZero invariant.  If that invariant is
+ * NOT present, then the variable must have been null at least once.
  * <p>
  *
  * Since only the NonZero invariant is used, Daikon processing time can be
