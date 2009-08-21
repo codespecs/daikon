@@ -4457,7 +4457,7 @@ to modify your command to specify a pathname.  For example:
 kvasir-dtrace `which myprogram` -option input.file
 @end example
 
-A number of options to Kvasir may be supplied on the command line
+You may supply options to Kvasir
 before the argument that is the name of your program (@pxref{Kvasir options}).
 
 
