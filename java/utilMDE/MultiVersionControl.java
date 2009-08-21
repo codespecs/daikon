@@ -818,7 +818,9 @@ public class MultiVersionControl {
         }
         break;
       case STATUS:
-        replacers.add(new Replacer("(^|\\n)([?!AMR]) +", "$1$2 " + dir + "/"));
+        // All the letters that can appear in the first column for SVN;
+        // I assume those are a subset of letters for other systems.
+        replacers.add(new Replacer("(^|\\n)([ACDIMRX?!~]) +", "$1$2 " + dir + "/"));
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
