@@ -380,7 +380,7 @@ public class DynamicConstants implements Serializable {
 
   /**
    * Returns the constant value of the specified variable, or null if
-   * the variable is not constant or prev_constant.  But is apparently
+   * the variable is not constant or prev_constant.  But, it is apparently
    * only called on constants with a value.
    **/
   public Object constant_value (VarInfo vi) {
