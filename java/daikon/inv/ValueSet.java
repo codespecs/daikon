@@ -39,25 +39,34 @@ public abstract class ValueSet extends LimitedSizeIntSet
   }
 
   // There is one ValueSet per variable (not one per slice or invariant),
-  // so the use of 44 slots should not be a problem.  If it is, then change
-  // LimitedSizeIntSet to optionally not pre-allocate the entire array.
+  // so pre-allocating an array with 44 slots should not be a problem.  If
+  // it is, then change LimitedSizeIntSet to optionally not pre-allocate
+  // the entire array.
+  /**
+   * The number 44 comes from the fact that .9^44 < .01.  So, if the
+   * confidence limit is .01 and the probability of a given event is set at
+   * .1, then 44 values is enough to demonstrate that never seeing the
+   * event is statistically justified (not a coincidence).
+   */
+  static final int DEFAULT_MAX_VALUES = 44;
+
   public static ValueSet factory(VarInfo var_info) {
     ProglangType rep_type = var_info.rep_type;
     boolean is_scalar = rep_type.isScalar();
     if (is_scalar) {
-      return new ValueSet.ValueSetScalar(44);
+      return new ValueSet.ValueSetScalar(DEFAULT_MAX_VALUES);
     } else if (rep_type == ProglangType.INT_ARRAY) {
-      return new ValueSet.ValueSetScalarArray(44);
+      return new ValueSet.ValueSetScalarArray(DEFAULT_MAX_VALUES);
     } else if (Daikon.dkconfig_enable_floats
                && rep_type == ProglangType.DOUBLE) {
-      return new ValueSet.ValueSetFloat(44);
+      return new ValueSet.ValueSetFloat(DEFAULT_MAX_VALUES);
     } else if (Daikon.dkconfig_enable_floats
                && rep_type == ProglangType.DOUBLE_ARRAY) {
-      return new ValueSet.ValueSetFloatArray(44);
+      return new ValueSet.ValueSetFloatArray(DEFAULT_MAX_VALUES);
     } else if (rep_type == ProglangType.STRING) {
-      return new ValueSet.ValueSetString(44);
+      return new ValueSet.ValueSetString(DEFAULT_MAX_VALUES);
     } else if (rep_type == ProglangType.STRING_ARRAY) {
-      return new ValueSet.ValueSetStringArray(44);
+      return new ValueSet.ValueSetStringArray(DEFAULT_MAX_VALUES);
     } else {
       throw new Error("Can't create ValueSet for " + var_info.name()
                       + " with rep type " + rep_type);
