@@ -881,7 +881,7 @@ public class MultiVersionControl {
           //         $filter = "grep -v \"config: unrecognized keyword 'UseNewInfoFmtStrings'\"";
           break;
         case HG:
-          replacers.add(new Replacer("(^|\\n)(abort: outstanding uncommitted changes)", "$1$2 in " + dir));
+          replacers.add(new Replacer("(^|\\n)(abort: .*)", "$1$2: " + dir));
           pb.command("hg", "-q", "fetch");
           break;
         case SVN:
