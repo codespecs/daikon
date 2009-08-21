@@ -1098,6 +1098,7 @@ public abstract class Invariant
   /**
    * Returns whether or not this invariant is ni-suppressed.
    */
+  /*@AssertNonNullIfTrue("get_ni_suppressions()")*/
   public boolean is_ni_suppressed() /*@Prototype*/{
 
     NISuppressionSet ss = get_ni_suppressions();

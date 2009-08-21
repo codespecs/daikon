@@ -230,6 +230,7 @@ The correct way to build the system is to run 'make'.
 #endif
 
   /** True iff both sequences are non-null and have the same length. */
+  /*@AssertNonNullIfTrue({"seq1", "seq2"})*/
   /* pure */ public static boolean sameLength(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
     return ((seq1 != null)
             && (seq2 != null)
@@ -238,6 +239,7 @@ The correct way to build the system is to run 'make'.
 
 #ifdef COMPATIBLE
   /** True iff both sequences are non-null and have the same length. */
+  /*@AssertNonNullIfTrue({"seq1", "seq2"})*/
   /* pure */ public static boolean sameLength(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
     return ((seq1 != null)
             && (seq2 != null)

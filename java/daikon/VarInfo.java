@@ -755,6 +755,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns true if this is an "orig()" variable **/
+  /*@AssertNonNullIfTrue("postState")*/
   public boolean isPrestate() {
     return postState != null;
   }

@@ -191,6 +191,7 @@ public class PptTopLevel extends Ppt {
     int splitter_index = 0;
     int ppts_index = 0;
 
+    /*@AssertNonNullIfTrue("splitters")*/
     public boolean hasNext() {
       if (splitters == null)
         return (false);
@@ -204,7 +205,6 @@ public class PptTopLevel extends Ppt {
       if (!hasNext()) {
         throw new NoSuchElementException();
       }
-      assert splitters != null; // guarateed by call to hasNext
 
       PptSplitter ppt_split = splitters.get(splitter_index);
       PptConditional ppt = (PptConditional) ppt_split.ppts[ppts_index];
@@ -229,6 +229,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns whether or not this ppt has any splitters. */
+  /*@AssertNonNullIfTrue("splitters")*/
   public boolean has_splitters() {
     return (splitters != null) && (splitters.size() > 0);
   }
@@ -244,12 +245,12 @@ public class PptTopLevel extends Ppt {
    * in the declaration record.  These are used to build the detailed
    * parents/children lists of PptRelation above
    */
-  public /*@Nullable*/ List<ParentRelation> parent_relations = null;
+  public List<ParentRelation> parent_relations;
 
   /**
    * List of successor program point names.  Later changed into a list
    * of successor PptTopLevel.  Can be null (not an empty list)
-   * if there are no successors.
+   * if there are no successors, as for an exit program point.
    */
   public /*@Nullable*/ List<String> ppt_successors = null;
 
@@ -261,7 +262,7 @@ public class PptTopLevel extends Ppt {
   public /*@Nullable*/ List<PptTopLevel> predecessors = null;
 
 
-  /** Identifier of the function (for basic blocks **/
+  /** Identifier of the function (for basic blocks) **/
   public /*@Nullable*/ /*@Interned*/ String function_id = null;
 
   /** Length of basic block (bytes) **/
@@ -354,6 +355,7 @@ public class PptTopLevel extends Ppt {
     init_vars (var_infos);
   }
 
+  // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
   public PptTopLevel(String name, VarInfo[] var_infos) {
     this.name = name;
     ppt_name = new PptName(name);
@@ -2764,7 +2766,9 @@ public class PptTopLevel extends Ppt {
   /// Locating implied (same) invariants via the simplify theorem-prover
   ///
 
-  // Created upon first use, then saved
+  // Created upon first use, then saved.  Do not eagerly initialize,
+  // because doing so runs Simplify (which crashes if Simplify is not
+  // installed).
   private static /*@LazyNonNull*/ LemmaStack proverStack = null;
 
   /**
@@ -2819,7 +2823,7 @@ public class PptTopLevel extends Ppt {
     throws SimplifyError {
     SessionManager.debugln("Simplify checking " + ppt_name);
 
-    assert proverStack != null;
+    assert proverStack != null : "@SuppressWarnings(nullness): calling context";
 
     // Create the list of invariants from this ppt which are
     // expressible in Simplify
@@ -3064,7 +3068,8 @@ public class PptTopLevel extends Ppt {
     int end)
     throws SimplifyError {
     assert start <= end;
-    assert proverStack != null;
+    assert proverStack != null : "@SuppressWarnings(nullness): calling context";
+
     if (start == end) {
       // Base case: check a single invariant
       int checking = start;
@@ -4298,7 +4303,7 @@ public class PptTopLevel extends Ppt {
                         + memory + ": "
                         + time);
       if (cnt_inv_classes) {
-        assert inv_map != null; // because cnt_inv_classes is true
+        assert inv_map != null : "@SuppressWarnings(nullness) : dependent: cnt_inv_classes is true";
         for (Class<? extends Invariant> inv_class : inv_map.keySet()) {
           Cnt cnt = inv_map.get(inv_class);
           log.fine(" : " + inv_class + ": " + cnt.cnt);
@@ -4531,9 +4536,11 @@ public class PptTopLevel extends Ppt {
     // System.out.printf ("looking for combined_ppt leader for %s\n", name());
     while (ppt.combined_ppt == null) {
       // System.out.printf ("  ppt %s", ppt.name());
-      assert (ppt.combined_subsumed_by != null)
-        : String.format ("ppt %s, combined_subsumed_by null/combined_ppt null",
-                         ppt.name());
+      if (ppt.combined_subsumed_by == null) {
+        throw new Error(
+          String.format ("ppt %s, combined_subsumed_by null/combined_ppt null",
+                         ppt.name()));
+      }
       ppt = ppt.combined_subsumed_by;
     }
 
