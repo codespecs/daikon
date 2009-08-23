@@ -42,7 +42,8 @@ if [ -x ${INV}/scripts/path-remove.pl ]; then
   export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
 fi
 
-source ${INV}/scripts/daikon.bashrc
+# "source" is a bash, not sh, feature, so use "." instead
+. ${INV}/scripts/daikon.bashrc
 
 export LD_LIBRARY_PATH=/usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
