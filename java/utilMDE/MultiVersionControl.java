@@ -779,6 +779,7 @@ public class MultiVersionControl {
 
       // the \r* is necessary here; (somtimes?) there are two carriage returns
       replacers.add(new Replacer("Warning: untrusted X11 forwarding setup failed: xauth key data not generated\r*\nWarning: No xauth data; using fake authentication data for X11 forwarding\\.\r*\n", ""));
+      replacers.add(new Replacer("(svn: Network connection closed unexpectedly)", "$1 for " + dir));
       replacers.add(new Replacer("(svn: Repository) (UUID)", "$1 " + dir + " $2"));
 
       pb2 = null;
@@ -788,7 +789,7 @@ public class MultiVersionControl {
       switch (action) {
       case LIST:
         System.out.println(c);
-        break;
+        continue CHECKOUTLOOP;
       case CHECKOUT:
         pb.directory(dir.getParentFile());
         String dirbase = dir.getName();
@@ -884,6 +885,8 @@ public class MultiVersionControl {
                      // "-d", c.repository,
                      "-Q", "update", "-d");
           //         $filter = "grep -v \"config: unrecognized keyword 'UseNewInfoFmtStrings'\"";
+          replacers.add(new Replacer("(cvs update: move away )", "$1" + dir + "/"));
+          replacers.add(new Replacer("(cvs \\[update aborted)(\\])", "$1 in " + dir + "$2"));
           break;
         case HG:
           replacers.add(new Replacer("(^|\\n)(abort: .*)", "$1$2: " + dir));
@@ -940,7 +943,7 @@ public class MultiVersionControl {
         case STATUS:
         case UPDATE:
           System.out.println("Cannot find directory: " + dir);
-          continue;
+          continue CHECKOUTLOOP;
         default:
           assert false;
         }
