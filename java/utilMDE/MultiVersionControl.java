@@ -488,38 +488,20 @@ public class MultiVersionControl {
   /// Note:  this can be slow, because it examines every directory in your
   /// entire home directory.
 
-  /**
-   * Find checkouts.  These are indicated by directories named .bzr, CVS,
-   * .hg, or .svn.
-   * <p>
-   *
-   * With some version control systems, this task is easy:  there is
-   * exactly one .bzr or .hg directory per checkout.  With CVS and SVN,
-   * there is one CVS/.svn directory per directory of the checkout.  It is
-   * permitted for one checkout to be made inside another one (though that
-   * is bad style), so we must examine every CVS/.svn directory to find all
-   * the distinct checkouts.
-   */
+  // Find checkouts.  These are indicated by directories named .bzr, CVS,
+  // .hg, or .svn.
+  //
+  // With some version control systems, this task is easy:  there is
+  // exactly one .bzr or .hg directory per checkout.  With CVS and SVN,
+  // there is one CVS/.svn directory per directory of the checkout.  It is
+  // permitted for one checkout to be made inside another one (though that
+  // is bad style), so we must examine every CVS/.svn directory to find all
+  // the distinct checkouts.
 
   // An alternative implementation would use Files.walkFileTree, but that
   // is available only in Java 7.
 
 
-
-  /** Accept only directories that are not symbolic links. */
-  static class IsDirectoryFilter implements FileFilter {
-    public boolean accept(File pathname) {
-      try {
-      return pathname.isDirectory()
-        && pathname.getPath().equals(pathname.getCanonicalPath());
-      } catch (IOException e) {
-        throw new Error(e);
-        // return false;
-      }
-    }
-  }
-
-  static IsDirectoryFilter idf = new IsDirectoryFilter();
 
   /** Find all checkouts under the given directory. */
   static Set<Checkout> findCheckouts(File dir) {
@@ -562,6 +544,22 @@ public class MultiVersionControl {
       findCheckouts(childdir, checkouts);
     }
   }
+
+
+  /** Accept only directories that are not symbolic links. */
+  static class IsDirectoryFilter implements FileFilter {
+    public boolean accept(File pathname) {
+      try {
+      return pathname.isDirectory()
+        && pathname.getPath().equals(pathname.getCanonicalPath());
+      } catch (IOException e) {
+        throw new Error(e);
+        // return false;
+      }
+    }
+  }
+
+  static IsDirectoryFilter idf = new IsDirectoryFilter();
 
 
   /**
@@ -922,9 +920,6 @@ public class MultiVersionControl {
           System.exit(1);
         }
         switch (action) {
-        case LIST:
-          // nothing to do
-          break;
         case CHECKOUT:
           if (! parent.exists()) {
             if (show) {
@@ -944,6 +939,7 @@ public class MultiVersionControl {
         case UPDATE:
           System.out.println("Cannot find directory: " + dir);
           continue CHECKOUTLOOP;
+        case LIST:
         default:
           assert false;
         }
