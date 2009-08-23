@@ -12,6 +12,10 @@ import java.io.*;
 import java.util.*;
 import java.net.URL;
 
+// TODO: "list" should maybe distinguish checkouts found in the directories
+// but not in the filesystem, or have another way to show that.
+// (A user can just run "list" twice and run diff...)
+
 // TODO: incoming (shows you need to do update and/or fetch)
 //
 // For Mercurial, I can do "hg incoming", but how to show that the current
@@ -775,6 +779,7 @@ public class MultiVersionControl {
 
       // the \r* is necessary here; (somtimes?) there are two carriage returns
       replacers.add(new Replacer("Warning: untrusted X11 forwarding setup failed: xauth key data not generated\r*\nWarning: No xauth data; using fake authentication data for X11 forwarding\\.\r*\n", ""));
+      replacers.add(new Replacer("(svn: Repository) (UUID)", "$1 " + dir + " $2"));
 
       pb2 = null;
       pb.command("echo", "command", "not", "set");
