@@ -905,12 +905,12 @@ public final class FileIO {
 
     // Check to see if the program point is new
     if (state.all_ppts.containsName(ppt_name)) {
+      PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+      assert existing_ppt != null : "@SuppressWarnings(nullness): state.all_ppts.containsName(ppt_name)";
       if (state.ppts_are_new) {
-        PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
-        assert existing_ppt != null; // because state.all_ppts.containsName(ppt_name)
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
-        return state.all_ppts.get (ppt_name);
+        return existing_ppt;
       }
     }
 
@@ -1013,12 +1013,12 @@ public final class FileIO {
 
     // This program point name has already been encountered.
     if (state.all_ppts.containsName(ppt_name)) {
+      PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+      assert existing_ppt != null : "@SuppressWarnings(nullness): state.all_ppts.containsName(ppt_name)";
       if (state.ppts_are_new) {
-        PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
-        assert existing_ppt != null; // because state.all_ppts.containsName(ppt_name)
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
-        return state.all_ppts.get (ppt_name);
+        return existing_ppt;
       }
     }
 
@@ -1485,7 +1485,7 @@ public final class FileIO {
       // Yoav: server mode
       while (true) {
         String[] dir_files = Daikon.server_dir.list();
-        assert dir_files != null; // server_dir was checked when it was set
+        assert dir_files != null : "@SuppressWarnings(nullness): server_dir was checked when it was set";
         Arrays.sort(dir_files);
         boolean hasEnd = false;
         for (String f:dir_files) {
@@ -1912,7 +1912,6 @@ public final class FileIO {
 	pWriter = null; //new PrintWriter( new FileWriter( new File( filename + ".dtrace" ) ), true );
 
     while (true) {
-      assert data_trace_state != null;    // for nullness checker
       if ( data_trace_state.is_bin_file ) {
 	read_binary_data_trace_record( data_trace_state, pWriter );
       }
@@ -1920,9 +1919,9 @@ public final class FileIO {
 	read_data_trace_record (data_trace_state);
 
       if (data_trace_state.status == ParseStatus.SAMPLE) {
-        assert data_trace_state.ppt != null; // nullness: dependent type
-        assert data_trace_state.vt != null; // nullness: dependent type
-        assert data_trace_state.nonce != null; // nullness: dependent type
+        assert data_trace_state.ppt != null : "@SuppressWarnings(nullness): dependent type";
+        assert data_trace_state.vt != null : "@SuppressWarnings(nullness): dependent type";
+        assert data_trace_state.nonce != null : "@SuppressWarnings(nullness): dependent type";
         samples_processed++;
         // Add orig and derived variables; pass to inference (add_and_flow)
         try {
@@ -2052,7 +2051,7 @@ public final class FileIO {
         // --ppt-select-pattern or --ppt-omit-pattern.
         if (state.ppt != null) {
           if (!state.all_ppts.containsName (state.ppt.name())) {
-            assert state.ppt != null; // for nullness checker
+            assert state.ppt != null : "@SuppressWarnings(nullness): not side-effected since check";
             state.all_ppts.add(state.ppt);
             assert state.ppt != null; // for nullness checker
             try {
@@ -2098,16 +2097,15 @@ public final class FileIO {
         new PptName(ppt_name);
       } catch (Throwable t) {
         String message = t.getMessage();
-        assert message != null;
-        if (t instanceof Daikon.TerminationMessage) {
-          // XXX Why am I creating a new TerminationMessage here?
-          throw new Daikon.TerminationMessage (
-                      message, reader, state.filename);
-        } else {
-          throw new Daikon.TerminationMessage
-          (String.format ("Illegal program point name '%s' (%s) in %s line %d",
-             ppt_name, t.getMessage(), state.filename, reader.getLineNumber()));
+        assert message != null : "@SuppressWarnings(nullness)";
+        // Augment the message with line number information.
+        // If it is not a Daikon.TerminationMessage, first add some context.
+        if (! (t instanceof Daikon.TerminationMessage)) {
+          message = String.format("Illegal program point name '%s' (%s)",
+                                  ppt_name, message);
         }
+        // Can't side-effect a TerminationMessage, so create a new one.
+        throw new Daikon.TerminationMessage (message, reader, state.filename);
       }
 
       if (state.all_ppts.size() == 0) {
@@ -4364,7 +4362,7 @@ public final class FileIO {
       return (e);
     } catch (Exception exception) {
       E[] all = enum_class.getEnumConstants();
-      assert all != null;       // getEnumConstants returs non-null because enum_class is an enum class
+      assert all != null : "@SuppressWarnings(nullness): getEnumConstants returs non-null because enum_class is an enum class";
       StringBuilderDelimited msg = new StringBuilderDelimited(", ");
       for (E e : all) {
         msg.append(String.format ("'%s'", e.name().toLowerCase()));

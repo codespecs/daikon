@@ -34,7 +34,7 @@ public class PptName
   private /*@Interned*/ String point;      // interned post-separator (separator is ":::")
   // cls and method together comprise fn_name
   private /*@Nullable*/ /*@Interned*/ String cls;        // interned fully-qualified class name
-  private /*@Nullable*/ /*@Interned*/ String method;     // interned method signature, including types
+  final private /*@Nullable*/ /*@Interned*/ String method;     // interned method signature, including types
 
   // Representation invariant:
   //
@@ -101,7 +101,9 @@ public class PptName
       fn_name = cls;
     }
     // Then add method name
-    if (methodName != null) {
+    if (methodName == null) {
+      method = null;
+    } else {
       method = methodName.intern();
       if (cls != null) {
         fn_name = (cls + "." + method).intern();
@@ -439,17 +441,25 @@ public class PptName
   private void readObject(ObjectInputStream in)
     throws IOException, ClassNotFoundException
   {
-    in.defaultReadObject();
-    if (fullname != null)
-      fullname = fullname.intern();
-    if (fn_name != null)
-      fn_name = fn_name.intern();
-    if (cls != null)
-      cls = cls.intern();
-    if (method != null)
-      method = method.intern();
-    if (point != null)
-      point = point.intern();
+    try {
+      in.defaultReadObject();
+      if (fullname != null)
+        fullname = fullname.intern();
+      if (fn_name != null)
+        fn_name = fn_name.intern();
+      if (cls != null)
+        cls = cls.intern();
+      if (method != null) {
+        // method = method.intern();
+        UtilMDE.setFinalField(this, "method", method.intern());
+      }
+      if (point != null)
+        point = point.intern();
+    } catch (NoSuchFieldException e) {
+      throw new Error(e);
+    } catch (IllegalAccessException e) {
+      throw new Error(e);
+    }
   }
 
 }
