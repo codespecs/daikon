@@ -260,6 +260,7 @@ public class MultiVersionControl {
     }
 
     if (action == CHECKOUT) {
+      search = false;
       show = true;
       // Checkouts can be much slower than other operations.
       TIMEOUT_SEC = TIMEOUT_SEC * 10;
@@ -945,14 +946,19 @@ public class MultiVersionControl {
         }
       }
 
-      if (! dry_run) {
-        perform_command(pb, replacers);
-        if (pb2 != null) perform_command(pb2, replacers);
-      }
+      perform_command(pb, replacers);
+      if (pb2 != null) perform_command(pb2, replacers);
     }
   }
 
   void perform_command(ProcessBuilder pb, List<Replacer> replacers) {
+
+    if (show) {
+      System.out.println(command(pb));
+    }
+    if (dry_run) {
+      return;
+    }
     try {
       // Perform the command
 
@@ -961,10 +967,6 @@ public class MultiVersionControl {
       //  $command_cwd_sanitized =~ s/\//_/g;
       //  $tmpfile = "/tmp/cmd-output-$$-$command_cwd_sanitized";
       // my $command_redirected = "$command > $tmpfile 2>&1";
-      if (debug) {
-        System.out.println("About to execute:");
-        System.out.println(command(pb));
-      }
       TimeLimitProcess p = new TimeLimitProcess(pb.start(), TIMEOUT_SEC * 1000);
       p.waitFor();
       if (p.timed_out()) {
