@@ -385,12 +385,14 @@ chicory:
 daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) chicory
 	-rm -rf $@ /tmp/${USER}/daikon-jar
 	install -d /tmp/${USER}/daikon-jar
-	# Compile daikon and utilMDE and place the resulting class files
+	# Compile daikon and utilMDE and copy the resulting class files
 	# in the /tmp/${USER}/daikon-jar directory
-	make JAVAC_ARGS="-g -target 5 -d /tmp/${USER}/daikon-jar" \
-		 -C java all_directly
-	make JAVAC_ARGS="-g -target 5 -d /tmp/${USER}/daikon-jar" \
-		 -C java/utilMDE compile_notest
+	make -C java all_directly
+	cd java && tar cf - `find daikon -name *.class` \
+			   | tar xf - -C /tmp/${USER}/daikon-jar
+	make -C java/utilMDE compile_notest
+	cd java && tar cf - `find utilMDE -name *.class` \
+			   | tar xf - -C /tmp/${USER}/daikon-jar
 	#cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/commons-io.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR):$(BCEL_DIR)' CLASSPATH=${CLASSPATH}:/tmp/${USER}/daikon-jar all_directly
 	#cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar:${INV_DIR}/java/lib/commons-io.jar:${INV_DIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar' compile_notest
 	## Old untarring code:
