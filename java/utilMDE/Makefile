@@ -190,11 +190,11 @@ $(pag)/software/pkg/task_manager.jar: task_manager.jar
 
 # No need to do "make doc" or "make all" before running this.
 # (This includes .class files, so users don't need to recompile.)
-utilMDE.tar.gz: $(JAVA_AND_CPP_FILES) Makefile README
+utilMDE.tar.gz: $(JAVA_AND_CPP_FILES) Makefile README html2textrc
 	rm -rf /tmp/utilMDE
 	mkdir /tmp/utilMDE
 	cp -p $(JAVA_AND_CPP_FILES) /tmp/utilMDE
-	cp -p Makefile README /tmp/utilMDE
+	cp -p Makefile README html2textrc /tmp/utilMDE
 	cp -r lib /tmp/utilMDE
 	(cd /tmp/utilMDE; make compile_notest doc)
 	(cd /tmp; tar zcf utilMDE.tar.gz utilMDE)
