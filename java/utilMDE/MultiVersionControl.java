@@ -152,8 +152,9 @@ public class MultiVersionControl {
   @Option("Directory under which to search for checkouts; may be supplied multiple times; default=home dir")
   public List<String> dir = new ArrayList<String>();
 
-  @Option("Searches for all checkouts, not just those listed in a file; default=true")
-  public boolean search = true;
+  // Default is false because searching whole directory structure is slow.
+  @Option("Search for all checkouts, not just those listed in a file")
+  public boolean search = false;
 
   // TODO: use consistent names: both "show" or both "print"
 
