@@ -777,10 +777,11 @@ public class MultiVersionControl {
 
       List<Replacer> replacers = new ArrayList<Replacer>();
 
-      // the \r* is necessary here; (somtimes?) there are two carriage returns
+      // The \r* is necessary here; (somtimes?) there are two carriage returns.
       replacers.add(new Replacer("Warning: untrusted X11 forwarding setup failed: xauth key data not generated\r*\nWarning: No xauth data; using fake authentication data for X11 forwarding\\.\r*\n", ""));
       replacers.add(new Replacer("(svn: Network connection closed unexpectedly)", "$1 for " + dir));
       replacers.add(new Replacer("(svn: Repository) (UUID)", "$1 " + dir + " $2"));
+      replacers.add(new Replacer("(working copy ')", "$1" + dir));
 
       pb2 = null;
       pb.command("echo", "command", "not", "set");
