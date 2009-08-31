@@ -7,8 +7,7 @@
 
 # This wildcard doesn't seem to work, so list the jar files individually.
 # CLASSPATH:=lib/*:$(JDKDIR)/lib/tools.jar
-CLASSPATH:=lib/bcel.jar:lib/ini4j-0.5.1.jar:lib/junit.jar:lib/svnkit.jar:lib/checkers.jar:$(JDKDIR)/lib/tools.jar
-SOURCEPATH:=..:${CLASSPATH}
+CLASSPATH := ..:lib/bcel.jar:lib/ini4j-0.5.1.jar:lib/junit.jar:lib/svnkit.jar:lib/checkers.jar:$(JDKDIR)/lib/tools.jar
 
 # On cygwin, translate the classpath and sourcepath to windows format.
 # Only do so if this has not already been done (which is determined by
@@ -17,11 +16,9 @@ ifeq (cygwin,$(OSTYPE))
   ifneq (;,$(findstring ;,$(CLASSPATH)))
     CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
   endif
-  ifneq (;,$(findstring ;,$(SOURCEPATH)))
-    SOURCEPATH := $(shell cygpath -pw "$(SOURCEPATH)")
-  endif
 endif
 
+export CLASSPATH
 
 JAVAC ?= javac
 # Removed "-J-Xmx800m", because it is incompatible with JDK 7.
@@ -53,7 +50,6 @@ jsr308_imports=checkers.interning.quals.*:checkers.nullness.quals.*
 
 
 export jsr308_imports
-export CLASSPATH
 
 default: jar
 compile: all
@@ -92,7 +88,7 @@ test: .test-timestamp
 .test-timestamp: .class-files-timestamp
 	which java
 # CLASSPATH is set in this file; it is not an external dependency
-	set JAVA_COMPILER=NONE; ${JAVA} -cp "${SOURCEPATH}" utilMDE.TestUtilMDE
+	set JAVA_COMPILER=NONE; ${JAVA} utilMDE.TestUtilMDE
 	touch .test-timestamp
 
 run-chicory:
@@ -107,7 +103,7 @@ javadoc: .javadoc-timestamp
 
 .javadoc-timestamp: $(JAVA_FILES)
 	mkdir -p javadoc
-	javadoc -classpath ${CLASSPATH} -d javadoc *.java
+	javadoc -d javadoc *.java
 	# jdk-add-munged-anchor-names javadoc/utilMDE/*.html
 	touch .javadoc-timestamp
 	@echo "Optionally run jdk-index-to-alist (for Emacs support)"
@@ -167,9 +163,9 @@ utilMDE.jar: .class-files-timestamp .test-timestamp lib/ini4j-0.5.1.jar lib/svnk
 # Lookup targets
 #
 lookup.html: Lookup.java
-	javadoc -classpath ..:${CLASSPATH} -docletpath .. -J-ea -quiet -doclet utilMDE.Lookup $< > $@
-lookup.txt: lookup.html html2textrc
-	html2text -rcfile html2textrc < $< > $@
+	javadoc -docletpath .. -J-ea -quiet -doclet utilMDE.Lookup $< > $@
+lookup.txt: lookup.html 
+	lynx -dump < $< > $@
 
 lookup.jar : utilMDE.jar lookup.manifest
 	rm -rf jar-contents
@@ -203,11 +199,11 @@ $(pag)/software/pkg/task_manager.jar: task_manager.jar
 
 # No need to do "make doc" or "make all" before running this.
 # (This includes .class files, so users don't need to recompile.)
-utilMDE.tar.gz: $(JAVA_AND_CPP_FILES) Makefile README html2textrc
+utilMDE.tar.gz: $(JAVA_AND_CPP_FILES) Makefile README
 	rm -rf /tmp/utilMDE
 	mkdir /tmp/utilMDE
 	cp -p $(JAVA_AND_CPP_FILES) /tmp/utilMDE
-	cp -p Makefile README html2textrc /tmp/utilMDE
+	cp -p Makefile README /tmp/utilMDE
 	cp -r lib /tmp/utilMDE
 	(cd /tmp/utilMDE; make compile_notest doc)
 	(cd /tmp; tar zcf utilMDE.tar.gz utilMDE)
