@@ -10,6 +10,19 @@
 CLASSPATH:=lib/bcel.jar:lib/ini4j-0.5.1.jar:lib/junit.jar:lib/svnkit.jar:lib/checkers.jar:$(JDKDIR)/lib/tools.jar
 SOURCEPATH:=..:${CLASSPATH}
 
+# On cygwin, translate the classpath and sourcepath to windows format.
+# Only do so if this has not already been done (which is determined by
+# looking for semicolons (;) in the classpath
+ifeq (cygwin,$(OSTYPE))
+  ifneq (;,$(findstring ;,$(CLASSPATH)))
+    CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
+  endif
+  ifneq (;,$(findstring ;,$(SOURCEPATH)))
+    SOURCEPATH := $(shell cygpath -pw "$(SOURCEPATH)")
+  endif
+endif
+
+
 JAVAC ?= javac
 # Removed "-J-Xmx800m", because it is incompatible with JDK 7.
 JAVAC_ARGS ?= -g -target 5 -Xlint -Xmaxwarns 1000
@@ -45,7 +58,7 @@ export CLASSPATH
 default: jar
 compile: all
 
-all: test
+all: compile_no_test test
 
 compile_notest:  .class-files-timestamp
 
@@ -134,7 +147,7 @@ jar: utilMDE.jar
 utilMDE.jar: .class-files-timestamp .test-timestamp lib/ini4j-0.5.1.jar lib/svnkit.jar lookup.html lookup.txt
 # "make clean" avoids including stray .class files from your directory.
 # "make compile" runs unit tests.
-	$(MAKE) clean compile
+	$(MAKE) clean compile_notest
 	rm -rf jar-contents
 	mkdir jar-contents
 	mkdir jar-contents/utilMDE
