@@ -514,7 +514,8 @@ dyncomp-jdk-only dcomp-jdk-only :
 .PHONY: utilMDE-copy
 utilMDE-copy : daikon/util/README
 
-daikon/util/README :
+daikon/util/README: $(wildcard utilMDE/*.java utilMDE/*.jpp utilMDE/*.manifest)\
+					 utilMDE/Makefile utilMDE/README
 	$(MAKE) -C utilMDE
 	/bin/rm -rf daikon/util
 	install -d daikon/util/
