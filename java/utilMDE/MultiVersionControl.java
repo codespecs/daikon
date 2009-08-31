@@ -824,9 +824,8 @@ public class MultiVersionControl {
         }
         break;
       case STATUS:
-        // All the letters that can appear in the first column for SVN;
-        // I assume those are a subset of letters for other systems.
-        replacers.add(new Replacer("(^|\\n)([ACDIMRX?!~]) +", "$1$2 " + dir + "/"));
+        // I need a replacer for other version control systems, to add
+        // directory names.
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
@@ -865,6 +864,8 @@ public class MultiVersionControl {
           replacers.add(new Replacer("^comparing with .*\\nsearching for changes\\nno changes found\n", ""));
           break;
         case SVN:
+          // This ignores columns other than the first two.
+          replacers.add(new Replacer("(^|\\n)([ACDIMRX?!~].|.[CM])..... ", "$1$2 " + dir + "/"));
           pb.command("svn", "status");
           break;
         default:
