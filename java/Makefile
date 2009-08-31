@@ -89,7 +89,7 @@ ifdef CLASSPATH_JARS2
   endif
 endif
 ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
-  CLASSPATH := $(CLASSPATH):${DAIKONDIR}/java:${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
+  CLASSPATH := $(CLASSPATH):${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
 endif
 
 # On cygwin, translate the classpath to windows format.  Only do so if
@@ -1704,13 +1704,13 @@ daikon/derive/unary/SequenceInitialFactoryFloat.java: daikon/derive/unary/Sequen
 # See the showvars target; this one seems extraneous
 dump :
 	@echo "CLASSPATH = $(CLASSPATH)"
-	@echo "CLASSPATH_W = $(CLASSPATH_W)"
+	@echo "CLASSPATH_JARS2 = $(CLASSPATH_JARS2)"
+	@echo "DAIKONDIR = $(DAIKONDIR)"
 	which java
 	echo $(OSTYPE)
 	echo $(PATH)
 	echo $(DAIKONBIN)
 	@echo "JAVAC_COMMAND = $(JAVAC_COMMAND)"
-	jwhich com.sun.javadoc.RootDoc
 
 
 ###########################################################################
