@@ -21,7 +21,8 @@ import java.net.URL;
 // For Mercurial, I can do "hg incoming", but how to show that the current
 // working directory is not up to date with respect to the local
 // repository?  "hg prompt" with the "update" tag will do the trick, see
-// http://bitbucket.org/sjl/hg-prompt/src/
+// http://bitbucket.org/sjl/hg-prompt/src/ .  Or don't bother:  it's rarely an
+// issue if you always update via "hg fetch" as done by this program.
 //
 // For svn, "svn status -u":
 //   The out-of-date information appears in the ninth column (with -u):
