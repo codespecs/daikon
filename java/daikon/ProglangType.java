@@ -438,6 +438,7 @@ public final /*@Interned*/ class ProglangType
     }
 
     // Elements of value_strings can be null only if base == BASE_STRING.
+    // [I think they can never be null.  -MDE]
     String[] value_strings;
     if (value.length() == 0) {
       value_strings = new String[0];
