@@ -9,6 +9,8 @@
 # CLASSPATH:=lib/*:$(JDKDIR)/lib/tools.jar
 CLASSPATH := ..:lib/bcel.jar:lib/ini4j-0.5.1.jar:lib/junit.jar:lib/svnkit.jar:lib/checkers.jar:$(JDKDIR)/lib/tools.jar
 
+TOOLS_JAR := ${JDKDIR}/lib/tools.jar
+
 # On cygwin, translate the classpath and sourcepath to windows format.
 # Only do so if this has not already been done (which is determined by
 # looking for semicolons (;) in the classpath
@@ -16,6 +18,7 @@ ifeq (cygwin,$(OSTYPE))
   ifneq (;,$(findstring ;,$(CLASSPATH)))
     CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
   endif
+  TOOLS_JAR := $(shell cygpath -w $(TOOLS_JAR))
 endif
 
 export CLASSPATH
@@ -153,7 +156,7 @@ utilMDE.jar: .class-files-timestamp .test-timestamp lib/ini4j-0.5.1.jar lib/svnk
 	(cd jar-contents; jar xf ../lib/ini4j-0.5.1.jar)
 	(cd jar-contents; jar xf ../lib/junit.jar)
 	(cd jar-contents; jar xf ../lib/svnkit.jar)
-	(cd jar-contents; jar xf ${JDKDIR}/lib/tools.jar com/sun/javadoc)
+	(cd jar-contents; jar xf $(TOOLS_JAR) com/sun/javadoc)
 	rm -rf jar-contents/meta-inf jar-contents/META-INF
 # Put contents in alphabetical order.
 	(cd jar-contents; jar cf ../utilMDE.jar `find * -type f | sort`)
@@ -164,7 +167,7 @@ utilMDE.jar: .class-files-timestamp .test-timestamp lib/ini4j-0.5.1.jar lib/svnk
 #
 lookup.html: Lookup.java
 	javadoc -docletpath .. -J-ea -quiet -doclet utilMDE.Lookup $< > $@
-lookup.txt: lookup.html 
+lookup.txt: lookup.html
 	lynx -dump < $< > $@
 
 lookup.jar : utilMDE.jar lookup.manifest
