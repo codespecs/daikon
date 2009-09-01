@@ -18,7 +18,7 @@ ifeq (cygwin,$(OSTYPE))
   ifneq (;,$(findstring ;,$(CLASSPATH)))
     CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
   endif
-  TOOLS_JAR := $(shell cygpath -w $(TOOLS_JAR))
+  TOOLS_JAR := '$(shell cygpath -w $(TOOLS_JAR))'
 endif
 
 export CLASSPATH
