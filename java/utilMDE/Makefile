@@ -57,9 +57,9 @@ export jsr308_imports
 default: jar
 compile: all
 
-all: compile_no_test test
+all: compile_without_testing test
 
-compile_notest:  .class-files-timestamp
+compile_without_testing:  .class-files-timestamp
 
 # Don't do this.  We want to create .class-files-timestamp after the
 # compilation succeeds.  So, no targets for .class files in this Makefile.
@@ -86,7 +86,7 @@ TAGS: ${JAVA_AND_CPP_FILES}
 # Used to depend on targets "clean all", but I want to run this in "all".
 test: .test-timestamp
 
-# Using compile_notest instead of .class-files-timestamp as the
+# Using compile_without_testing instead of .class-files-timestamp as the
 # prerequisite doesn't work.
 .test-timestamp: .class-files-timestamp
 	which java
@@ -146,7 +146,7 @@ jar: utilMDE.jar
 utilMDE.jar: .class-files-timestamp .test-timestamp lib/ini4j-0.5.1.jar lib/svnkit.jar lookup.html lookup.txt
 # "make clean" avoids including stray .class files from your directory.
 # "make compile" runs unit tests.
-	$(MAKE) clean compile_notest
+	$(MAKE) clean compile_without_testing
 	rm -rf jar-contents
 	mkdir jar-contents
 	mkdir jar-contents/utilMDE
@@ -208,7 +208,7 @@ utilMDE.tar.gz: $(JAVA_AND_CPP_FILES) Makefile README
 	cp -p $(JAVA_AND_CPP_FILES) /tmp/utilMDE
 	cp -p Makefile README /tmp/utilMDE
 	cp -r lib /tmp/utilMDE
-	(cd /tmp/utilMDE; make compile_notest doc)
+	(cd /tmp/utilMDE; make compile_without_testing doc)
 	(cd /tmp; tar zcf utilMDE.tar.gz utilMDE)
 	rm -f utilMDE.tar.gz
 	mv /tmp/utilMDE.tar.gz .
@@ -236,7 +236,7 @@ check-nullness-utilmde-withstubs:
 ### Makefile bookkeeping
 ###
 
-.PHONY: default all compile_notest jar clean very_clean tags test run-chicory javadoc showvars doc task-manager install-task-manager install-lookup
+.PHONY: default all compile_without_testing jar clean very_clean tags test run-chicory javadoc showvars doc task-manager install-task-manager install-lookup
 
 
 # Existence of this rule means that a target is deleted if has just changed
