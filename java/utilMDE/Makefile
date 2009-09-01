@@ -158,8 +158,9 @@ utilMDE.jar: .class-files-timestamp .test-timestamp lib/ini4j-0.5.1.jar lib/svnk
 	(cd jar-contents; jar xf ../lib/svnkit.jar)
 	(cd jar-contents; jar xf $(TOOLS_JAR) com/sun/javadoc)
 	rm -rf jar-contents/meta-inf jar-contents/META-INF
-# Put contents in alphabetical order.
-	(cd jar-contents; jar cf ../utilMDE.jar `find * -type f | sort`)
+# Put contents in alphabetical order. (not for now, overflows command line)
+#	(cd jar-contents; jar cf ../utilMDE.jar `find * -type f | sort`)
+	cd jar-contents; jar cf ../utilMDE.jar *
 	rm -rf jar-contents
 
 #
