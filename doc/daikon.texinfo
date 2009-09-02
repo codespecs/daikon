@@ -7576,7 +7576,7 @@ annotations.
 java daikon.Chicory --dtrace-file=an.dtrace.gz @emph{your-command-and-options}
 @end example
 
-@item Run Daikon on the resulting dtrace file:
+@item Run Daikon on the resulting .dtrace file:
 
 @example
 java daikon.Daikon an.dtrace.gz --no_text_output --config @var{daikondir}/java/daikon/annotate_nullable.config
