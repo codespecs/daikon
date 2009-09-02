@@ -388,27 +388,17 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) c
 	# Compile daikon and utilMDE and copy the resulting class files
 	# in the /tmp/${USER}/daikon-jar directory
 	make -C java all_directly
-	cd java && tar cf - `find daikon -name *.class` \
-			   | tar xf - -C /tmp/${USER}/daikon-jar
-	make -C java/utilMDE compile_notest
-	cd java && tar cf - `find utilMDE -name *.class` \
-			   | tar xf - -C /tmp/${USER}/daikon-jar
-	#cd java && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath ${INV_DIR}/java:${INV_DIR}/java/lib/java-getopt.jar:${INV_DIR}/java/lib/commons-io.jar:${INV_DIR}/java/lib/junit.jar:$(TOOLSJAR):$(BCEL_DIR)' CLASSPATH=${CLASSPATH}:/tmp/${USER}/daikon-jar all_directly
-	#cd java/utilMDE && $(MAKE) JAVAC='javac -g -d /tmp/${USER}/daikon-jar -classpath .:${INV_DIR}/java/lib/junit.jar:${INV_DIR}/java/lib/commons-io.jar:${INV_DIR}/java/lib/bcel.jar:$(JDKDIR)/lib/tools.jar' compile_notest
-	## Old untarring code:
-	#  tar xzf java/lib/java-getopt-1.0.8.tar.gz -C /tmp/${USER}/daikon-jar
-	#  tar xzf java/lib/OROMatcher-1.1.tar.gz -C /tmp/${USER}/daikon-jar
-	#  mv /tmp/${USER}/daikon-jar/OROMatcher-1.1.0a/com /tmp/${USER}/daikon-jar
-	#  rm -rf /tmp/${USER}/daikon-jar/OROMatcher-1.1.0a
-	# jar does not seem to accept the -C argument.  MDE 6/14/2001
-	# jar xf java/lib/java-getopt.jar -C /tmp/${USER}/daikon-jar
-	# jar xf java/lib/junit.jar -C /tmp/${USER}/daikon-jar
-	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
+	make -C java/utilMDE compile_without_testing
+	cd java && find . -name '*.class' \
+		-exec cp --parents '{}' /tmp/${USER}/daikon-jar \;
 	# (cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
 	# (cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
-	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar)
-	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar)
-	(cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/commons-io.jar)
+	cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar
+	cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar
+	cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar
+	cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/commons-io.jar
+	cd /tmp/$(USER)/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/svnkit.jar
+	cd /tmp/$(USER)/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/ini4j-0.5.1.jar
 	(cd java; cp -f --parents --target-directory=/tmp/${USER}/daikon-jar $(DAIKON_RESOURCE_FILES))
 	cd /tmp/${USER}/daikon-jar && \
 	  jar cfm $@ $(INV_DIR)/java/daikon/chicory/manifest.txt *
@@ -521,6 +511,10 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	##rm -rf /tmp/daikon/tmp-junit
 	##(cd /tmp/daikon/java/junit; ${JAVAC} -g `find . -name '*.java'`)
 	cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/junit.jar
+
+	# utilMDE Libraries
+	cd /tmp/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/svnkit.jar
+	cd /tmp/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/ini4j-0.5.1.jar
 
 	## Front ends
 	mkdir /tmp/daikon/front-end
