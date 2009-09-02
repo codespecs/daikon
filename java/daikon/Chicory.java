@@ -148,7 +148,7 @@ public class Chicory {
 
     // Parse our arguments
     Options options = new Options (synopsis, Chicory.class);
-    // options.ignore_options_after_arg (true);
+    options.parse_options_after_arg (false);
     String[] target_args = options.parse_or_usage (args);
     boolean ok = check_args (options, target_args);
     if (!ok)
