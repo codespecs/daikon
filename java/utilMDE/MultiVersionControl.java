@@ -778,10 +778,25 @@ public class MultiVersionControl {
 
       List<Replacer> replacers = new ArrayList<Replacer>();
 
+      switch (c.repoType) {
+      case BZR:
+        break;
+      case CVS:
+        replacers.add(new Replacer("(^|\\n)([?]) ", "$1$2 " + dir + "/"));
+        break;
+      case HG:
+        replacers.add(new Replacer("(^|\\n)(abort: .*)", "$1$2: " + dir));
+        replacers.add(new Replacer("(^|\\n)([M?]) ", "$1$2 " + dir + "/"));
+        break;
+      case SVN:
+        replacers.add(new Replacer("(svn: Network connection closed unexpectedly)", "$1 for " + dir));
+        replacers.add(new Replacer("(svn: Repository) (UUID)", "$1 " + dir + " $2"));
+        break;
+      default:
+        assert false;
+      }
       // The \r* is necessary here; (somtimes?) there are two carriage returns.
       replacers.add(new Replacer("Warning: untrusted X11 forwarding setup failed: xauth key data not generated\r*\nWarning: No xauth data; using fake authentication data for X11 forwarding\\.\r*\n", ""));
-      replacers.add(new Replacer("(svn: Network connection closed unexpectedly)", "$1 for " + dir));
-      replacers.add(new Replacer("(svn: Repository) (UUID)", "$1 " + dir + " $2"));
       replacers.add(new Replacer("(working copy ')", "$1" + dir));
 
       pb2 = null;
@@ -853,7 +868,9 @@ public class MultiVersionControl {
                + "\ndiff .*"
                + "\nFiles .* and .* differ");
           replacers.add(new Replacer(removeRegexp, ""));
-          replacers.add(new Replacer("(^|\n)Index: ", "$1" + dir + "/"));
+          replacers.add(new Replacer("(^|\\n)Index: ", "$1" + dir + "/"));
+          replacers.add(new Replacer("(^|\\n)(cvs \\[diff aborted)(\\]:)", "$1$2 in " + dir + "$3"));
+          replacers.add(new Replacer("(^|\\n)(Permission denied)", "$1$2 in " + dir));
           break;
         case HG:
           pb.command("hg", "status");
@@ -867,7 +884,10 @@ public class MultiVersionControl {
           break;
         case SVN:
           // This ignores columns other than the first two.
-          replacers.add(new Replacer("(^|\\n)([ACDIMRX?!~].|.[CM])..... ", "$1$2 " + dir + "/"));
+          // Handle column 1.
+          replacers.add(new Replacer("(^|\\n)([ACDIMRX?!~])...... ", "$1$2 " + dir + "/"));
+          // Handle column 2.
+          replacers.add(new Replacer("(^|\\n).([CM])..... ", "$1$2 " + dir + "/"));
           pb.command("svn", "status");
           break;
         default:
@@ -892,7 +912,6 @@ public class MultiVersionControl {
           replacers.add(new Replacer("(cvs \\[update aborted)(\\])", "$1 in " + dir + "$2"));
           break;
         case HG:
-          replacers.add(new Replacer("(^|\\n)(abort: .*)", "$1$2: " + dir));
           pb.command("hg", "-q", "fetch");
           break;
         case SVN:
