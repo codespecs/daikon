@@ -21,6 +21,17 @@ ifeq (cygwin,$(OSTYPE))
   TOOLS_JAR := '$(shell cygpath -w $(TOOLS_JAR))'
 endif
 
+# On MACOSX there is no separate tools.jar
+ifeq (darwin,$(OSTYPE))
+  TOOLS_JAR := /System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
+endif
+
+# No good html_to_text translator on mac, just use html source
+HTML_TO_TEXT = lynx -dump
+ifeq (darwin,$(OSTYPE))
+  HTML_TO_TEXT = cat
+endif
+
 export CLASSPATH
 
 JAVAC ?= javac
@@ -169,7 +180,7 @@ utilMDE.jar: .class-files-timestamp .test-timestamp lib/ini4j-0.5.1.jar lib/svnk
 lookup.html: Lookup.java
 	javadoc -docletpath .. -J-ea -quiet -doclet utilMDE.Lookup $< > $@
 lookup.txt: lookup.html
-	lynx -dump < $< > $@
+	$(HTML_TO_TEXT) < $< > $@
 
 lookup.jar : utilMDE.jar lookup.manifest
 	rm -rf jar-contents
