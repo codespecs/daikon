@@ -750,16 +750,16 @@ JAVAC_JAVARI_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 JAVAC_IGJ_ARGS = -processor checkers.igj.IGJChecker -implicit:class -Xlint:-processing
 JAVAC_IGJ_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 ## Remove files that are not fully annotated, but contain the string "@Interned".
-# INTERNING_JAVA_FILES_SKIP =
-INTERNING_JAVA_FILES_SKIP = \( -name PptTopLevel.java -o -name DynamicConstants.java \) -prune -o
+INTERNING_JAVA_FILES_SKIP = 'PptTopLevel.java|DynamicConstants.java|daikon/util'
+
 # I should perhaps not count Intern.java, which implements interning and
 # so has very many annotations.  Also, VarInfoName is obsolescent, retained
 # for backward compatibility only; it is of flawed design and has 60 @Interned
 #  annotations and quite a few SuppressWarnings.
-INTERNING_JAVA_FILES_SKIP_COUNTS = \( -name Intern.java -o -name VarInfoName.java \) -prune -o
+INTERNING_JAVA_FILES_SKIP_COUNTS = 'Intern.java|VarInfoName.java'
 ## Which files to check.
-INTERNING_JAVA_FILES = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} -wholename ./daikon/util -prune -o -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned' | sort)
-INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f ${INTERNING_JAVA_FILES_SKIP} ${INTERNING_JAVA_FILES_SKIP_COUNTS} -name '*.java' -print0 | xargs -0 -e grep -l -i '@Interned' | sort)
+INTERNING_JAVA_FILES = $(shell find . -type f -name '*.java' | egrep -v $(INTERNING_JAVA_FILES_SKIP) | xargs grep -l -i '@Interned' | sort)
+INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP}\|${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | sort)
 ## Temporarily, only a subset of directories.  Expand the scope later.
 NULLNESS_JAVA_FILES = \
   $(shell find daikon/ -name '*.java' -print | sort)
@@ -1711,6 +1711,8 @@ dump :
 	echo $(PATH)
 	echo $(DAIKONBIN)
 	@echo "JAVAC_COMMAND = $(JAVAC_COMMAND)"
+	@echo "INTERNING_JAVA_FILES = $(INTERNING_JAVA_FILES)"
+	@echo "INTERNING_JAVA_FILES_COUNTS = $(INTERNING_JAVA_FILES_COUNTS)"
 
 
 ###########################################################################
