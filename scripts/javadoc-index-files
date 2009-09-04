@@ -18,6 +18,7 @@
 ~mernst/java/bcel/docs/api/index-all.html
 ~mernst/java/apache/commons-io-1.2/docs/index-all.html
 ~mernst/java/iCal4j/docs/api/index-all.html
+~mernst/tmp/google-collections-read-only/javadoc/index-all.html
 
 # ~mernst/java/junit3.8.1/javadoc/index-all.html
 # Note that (in JUnit 4.5, anyway), the Javadoc explicitly excludes
