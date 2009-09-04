@@ -7545,7 +7545,7 @@ AnnotateNullable determines which variables in a Java program were ever
 null during execution.  Its primary use is for performing inference for
 a type system that detects null dereference errors.  An example is the
 Nullness checker that is part of the
-@uref{http://groups.csail.mit.edu/pag/jsr308/, JSR 308 Checker Framework}.
+@uref{http://types.cs.washington.edu/checker-framework/, Checker Framework}.
 
 The Nullness checker requires a programmer to annotate some references
 with @code{@@Nullable}, meaning the variable might be null; references
@@ -7607,7 +7607,7 @@ java daikon.AnnotateNullable an.inv.gz > nullable-annotations.jaif
 
 @item
 Use the
-@uref{http://groups.csail.mit.edu/pag/jsr308/annotation-file-utilities/,
+@uref{http://types.cs.washington.edu/annotation-file-utilities/,
 Annotation File Utilities} to insert the annotations in your .class or .java
 file.
 
