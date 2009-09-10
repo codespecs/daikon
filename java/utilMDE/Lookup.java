@@ -136,8 +136,13 @@ public class Lookup {
 
     // If help was requested, print it and exit
     if (help) {
-      BufferedReader help_stream = new BufferedReader (new InputStreamReader
-                   (Lookup.class.getResourceAsStream ("lookup.txt")));
+      InputStream is = Lookup.class.getResourceAsStream ("lookup.txt");
+      if (is == null) {
+        // This should never happen.
+        System.out.println("Unable to find resource 'lookup.txt' with help text.");
+        System.exit(1);
+      }
+      BufferedReader help_stream = new BufferedReader (new InputStreamReader (is));
       String line = help_stream.readLine();
       while (line != null) {
         System.out.println (line);
