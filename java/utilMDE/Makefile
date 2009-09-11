@@ -26,7 +26,6 @@ ifeq (darwin,$(OSTYPE))
   TOOLS_JAR := /System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
 endif
 
-# No good html_to_text translator on mac, just use html source
 ifndef HTML_TO_TEXT
 ifneq (,$(shell which lynx 2>/dev/null))
   HTML_TO_TEXT = lynx -dump
