@@ -98,7 +98,7 @@ public class JWhich {
 	 * @param className Name of the class.
 	 * @return Class URL, or null of the class was not found.
 	 */
-	public static @Nullable URL findClass(final String className) {
+	public static /*@Nullable*/ URL findClass(final String className) {
 		return JWhich.class.getResource(asResourceName(className));
 	}
 
