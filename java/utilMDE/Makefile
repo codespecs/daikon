@@ -27,9 +27,14 @@ ifeq (darwin,$(OSTYPE))
 endif
 
 # No good html_to_text translator on mac, just use html source
-HTML_TO_TEXT = lynx -dump
-ifeq (darwin,$(OSTYPE))
-  HTML_TO_TEXT = cat
+ifndef HTML_TO_TEXT
+ifneq (,$(shell which lynx 2>/dev/null))
+  HTML_TO_TEXT = lynx -dump
+else ifneq (,$(shell which html2text 2>/dev/null))
+  HTML_TO_TEXT = html2text -rcfile html2textrc
+else
+  HTML_TO_TEXT ?= cat
+endif
 endif
 
 export CLASSPATH
