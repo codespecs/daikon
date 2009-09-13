@@ -344,6 +344,7 @@ Problems running Daikon
 * Contradictory invariants::    
 * Method needs to be implemented::  
 * Daikon runs slowly::          
+* Bigger traces cause invariants to appear::  
 
 Large data trace (.dtrace) files
 
@@ -8130,6 +8131,7 @@ understand Daikon's operation; @xref{Daikon debugging options}.
 * Contradictory invariants::    
 * Method needs to be implemented::  
 * Daikon runs slowly::          
+* Bigger traces cause invariants to appear::  
 @end menu
 
 
@@ -8453,7 +8455,7 @@ or else use an output formatting that can handle those invariants.
 Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
 
 
-@node    Daikon runs slowly,  , Method needs to be implemented, Daikon problems
+@node    Daikon runs slowly, Bigger traces cause invariants to appear, Method needs to be implemented, Daikon problems
 @subsection Daikon runs slowly
 
 @cindex slow operation, of Daikon
@@ -8496,6 +8498,50 @@ detecting fewer invariants, especially over sequences.
 
 For details on improving Daikon's performance, see @ref{Out of
 memory}, and @ref{Large dtrace files}.
+
+
+@node    Bigger traces cause invariants to appear,  , Daikon runs slowly, Daikon problems
+@subsection Bigger traces cause invariants to appear
+
+Suppose that you run Daikon twice.  The first time, you supply Daikon
+with traces @i{T}.  The second time you supply Daikon with traces
+@i{T}+@i{T'}:  either more files, or file(s) that are supersets of the
+original one(s).  The second Daikon execution may report fewer
+invariants, more invariants, or a mix.
+
+The second execution may report @strong{fewer} invariants, because the
+additional data has eliminated overfitting (false positives).  There may
+have been some accidental property of the shorter executions that is not
+true in the longer ones.
+
+Even though fewer invariants are true on the second execution, Daikon may
+report invariants that it did not report on the first execution.  We
+mention two reasons that Daikon might not report an invariant that is true:
+statistical justification, and implication.
+
+The second execution may report @strong{more} invariants, because of Daikon's
+statistical justification tests.  Daikon only reports a property if it is
+statistically justified, and Daikon needs to see enough samples for the
+statistical test to work.  So, there may have been a property that was true
+both in the short trace and in the long one, but Daikon only reported it
+for the long one.  If you want to prevent this from happening, you can
+adjust the confidence limit so that the property is reported even in the
+short executions; see the command-line option @code{--conf_limit}.  For
+instance, supplying @code{--conf_limit 0} causes all properties that have
+not been falsified to be printed.
+
+Another reason that the second execution might report @strong{more}
+invariants (more specifically, might report an invariant that did not
+appear in the first execution) is because Daikon does not report
+redundant, or implied, invariants.  Suppose that both @code{i < j} and
+@code{i <= j} were true on the first execution.  Daikon would report
+only @code{i < j}; Daikon would not report @code{i <= j}, which is
+implied by what Daikon has reported.  Further suppose that the second
+execution had a sample containing @code{i=22, j=22}.  Only @code{i <= j}
+would be true in the second execution, and Daikon would report it.
+(The invariant @code{i < j} is an example of a false positive or
+overfitting in the first execution.)
+
 
 @node    Large dtrace files, Parsing Java 5.0 code, Daikon problems, Troubleshooting
 @section Large data trace (.dtrace) files
