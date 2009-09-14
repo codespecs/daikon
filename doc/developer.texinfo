@@ -548,7 +548,7 @@ In every subclass of @code{Invariant}, edit the
 A front end for Daikon converts data into a form Daikon can process,
 producing files in Daikon's input format --- data trace declarations and
 records.  For more information about these files, see @ref{File
-formats,,,./daikon,Daikon User Manual}.
+formats}.
 
 The data traces can be obtained from any source.  For instance, front
 ends have been built for stock data, weather forecasts, truck weight
@@ -566,10 +566,10 @@ this section is relevant to both approaches.
 Conceptually, instrumentation is very simple.  For each program point
 (say, a line of code or the entry or exit from a procedure) at which you
 wish to detect invariants, the front end must arrange to create a
-declaration (@pxref{Declarations,,,./daikon,Daikon User Manual}) that
+declaration (@pxref{Declarations}) that
 lists the variables in scope at that program point, and the front end
 must arrange that execution creates a data trace record (@pxref{Data
-trace records,,,./daikon,Daikon User Manual}) for each execution of that
+trace records}) for each execution of that
 program point.  Conventionally, the way to create a data trace record is
 to insert a @code{printf} (or similar) statement that outputs the current
 values of the variables of interest.
@@ -726,7 +726,7 @@ initialized and pointers whose content has been deallocated.  (A pointer
 dereference, such as @samp{*p} or @samp{p->field}, can itself
 be to uninitialized and/or deallocated memory.)  Invalid values should
 be printed as ``nonsensical'' (@pxref{Data trace
-records,,,./daikon,Daikon User Manual}).
+records}).
 
 It is desirable to print ``nonsensical'' rather than an invalid value,
 for two reasons.  First, outputting nonsense values can degrade
@@ -1453,7 +1453,7 @@ the first number of each sample better be less than the second)
 @c samples of a binary integer comparison
 
 Arrays and strings must be formatted according to the Daikon dtrace file
-convention (for a full description, @pxref{File formats,,,./daikon,Daikon User Manual}.  This
+convention (for a full description, @pxref{File formats}.  This
 states that arrays must be surrounded in brackets (start with @samp{[}, end
 with @samp{]}), and entries must be separated by a space.  Strings must be
 enclosed in quotes (@samp{"}). Quotes within a string can be represented by the
