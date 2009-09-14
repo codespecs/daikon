@@ -671,6 +671,7 @@ tags-without-generated-files: clean-generated-files
 # Need to ensure that utilMDE.jar gets regenerated if necessary.
 lib/utilMDE.jar:
 	$(MAKE) -C utilMDE utilMDE.jar
+	install -d lib
 	cp -p utilMDE/utilMDE.jar $@
 # Always run the rule even if the file exists
 .PHONY: lib/utilMDE.jar
