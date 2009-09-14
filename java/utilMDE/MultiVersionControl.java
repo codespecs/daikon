@@ -895,12 +895,13 @@ public class MultiVersionControl {
         }
         break;
       case UPDATE:
-        replacers.add(new Replacer("(^|\\n)([?!AMR]|cvs update: (in|skipping) directory) +", "$1$2 " + dir + "/"));
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
           // break;
         case CVS:
+          replacers.add(new Replacer("(^|\\n)(cvs update: ((in|skipping) directory|conflicts found in )) +", "$1$2 " + dir + "/"));
+          replacers.add(new Replacer("(^|\\n)(Merging differences between 1.16 and 1.17 into ", "$1$2 " + dir + "/"));
           assert c.repository != null;
           pb.command("cvs",
                      // Including -d causes problems with CVS repositories
@@ -912,9 +913,11 @@ public class MultiVersionControl {
           replacers.add(new Replacer("(cvs \\[update aborted)(\\])", "$1 in " + dir + "$2"));
           break;
         case HG:
+          replacers.add(new Replacer("(^|\\n)([?!AMR] ) +", "$1$2 " + dir + "/"));
           pb.command("hg", "-q", "fetch");
           break;
         case SVN:
+          replacers.add(new Replacer("(^|\\n)([?!AMR] ) +", "$1$2 " + dir + "/"));
           assert c.repository != null;
           pb.command("svn", "-q", "update");
         //         $filter = "grep -v \"Killed by signal 15.\"";
