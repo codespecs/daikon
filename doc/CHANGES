@@ -424,7 +424,7 @@ AnnotateNullable
   ever null during execution. Its primary use is for performing
   inference for a type system that detects null dereference errors. An
   example is the Nullness checker that is part of the JSR 308 Checker
-  Framework (see http://groups.csail.mit.edu/pag/jsr308/).  See section
+  Framework (see http://types.cs.washington.edu/jsr308/).  See section
   8.1.4 of the Daikon user manual for more information.
 
 DynComp
