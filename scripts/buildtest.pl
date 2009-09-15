@@ -361,7 +361,7 @@ sub kvasir_checkout {
   symlink("valgrind-3/valgrind", "kvasir");
   chdir($DAIKONPARENT) or die "Can't chdir to $DAIKONPARENT: $!\n";
   `chmod -R a+r $INV/valgrind-3 2>&1 | tee -a $log`;
-  if (-e "$INV/kvasir/fjalar/Makefile.in") {
+  if (-e "$INV/kvasir/fjalar/Makefile.am") {
     print_log("OK\n");
   } else {
     print_log("FAILED\n");
