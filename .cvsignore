@@ -16,3 +16,4 @@ rt
 tests.speccov
 valgrind-new
 valgrind-old
+valgrind/Makefile.vex.in

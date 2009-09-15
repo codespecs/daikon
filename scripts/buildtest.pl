@@ -373,8 +373,11 @@ sub kvasir_compile {
   my $log = "$DAIKONPARENT/kvasir_compile.out";
   # chdir("$INV/kvasir") or die "can't chdir to $INV/kvasir: $!\n";
 
-  my $succ = buildtest_cmd ("cd $INV/kvasir && " .
-                            "./configure --prefix=`pwd`/inst",
+  # my $succ = buildtest_cmd ("cd $INV/kvasir && " .
+  #                           "./configure --prefix=`pwd`/inst",
+  #                           $log, "", "FAILED\n");
+  my $succ = buildtest_cmd ("cd $INV/valgrind-3 && " .
+                            "./auto-everything.sh",
                             $log, "", "FAILED\n");
   if (!$succ) { return 0; }
 
