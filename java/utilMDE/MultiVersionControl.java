@@ -12,24 +12,6 @@ import java.io.*;
 import java.util.*;
 import java.net.URL;
 
-// TODO: "list" should maybe distinguish checkouts found in the directories
-// but not in the filesystem, or have another way to show that.
-// (A user can just run "list" twice and run diff...)
-
-// TODO: incoming (shows you need to do update and/or fetch)
-//
-// For Mercurial, I can do "hg incoming", but how to show that the current
-// working directory is not up to date with respect to the local
-// repository?  "hg prompt" with the "update" tag will do the trick, see
-// http://bitbucket.org/sjl/hg-prompt/src/ .  Or don't bother:  it's rarely an
-// issue if you always update via "hg fetch" as done by this program.
-//
-// For svn, "svn status -u":
-//   The out-of-date information appears in the ninth column (with -u):
-//       '*' a newer revision exists on the server
-//       ' ' the working copy is up to date
-
-
 /**
  * This program, mvc for Multiple Version Control, lets you run a version
  * control command, such as "status" or "update", on a <b>set</b> of
@@ -49,16 +31,23 @@ import java.net.URL;
  *
  * You can specify the set of checkouts for the program to manage, or it
  * can search your directory structure to find all of your checkouts, or
- * both.  A command that you can run right away is:
+ * both.  A command that you can run right away to list un-committed
+ * changed files is:
  * <pre>java utilMDE.MultiVersionControl status --search=true</pre>
  *
  * For complete usage information, run the program with no arguments.<p>
  *
- * <b>File format for "repositories" file:</b><p>
+ * The remainter of this document describes the file format for the
+ * ".mvc-checkouts" file.<p>
+ *
+ * <b>File format for ".mvc-checkouts" file:</b><p>
  *
  * (Note:  because mvc can search for all checkouts in your directory, you
-
- * The "repositories" file contains a list of sections.  Each section names
+ * don't need a .mvc-checkouts file.  But using it makes the program faster
+ * (it doesn't have to search your entire directory), or permits you to
+ * exclude certain checkouts from processing.)<p>
+ *
+ * The ".mvc-checkouts" file contains a list of sections.  Each section names
  * either a root from which a sub-part (e.g., a module or a subdirectory)
  * will be checked out, or a repository all of which will be checked out.
  * Examples include:
@@ -134,6 +123,10 @@ import java.net.URL;
 // two commands:
 //   mvc list --repositories /dev/null | sort > checkouts-from-directory
 //   mvc list --search=false | sort > checkouts-from-file
+// but it might be nicer for the "list" command to do that explicitly.
+
+// The "list" command should be in the .mvc-checkouts file format, rather
+// than requiring the user to munge it.
 
 // In checkouts file, use of space delimiter for specifyng module interacts
 // badly with file names that contain spaces.  This doesn't seem important
@@ -143,8 +136,24 @@ import java.net.URL;
 // problem when two modules from the same SVN repository are checked out,
 // with one checkout inside the other at the top level.  The inner
 // checkout's directory can be mis-reported as the outer one.  This isn't
-// always a problem for nested checkouts, and nested checkouts are bad
-// style anyway, so I am deferring investigating/fixing it.
+// always a problem for nested checkouts (so it's hard to reproduce), and
+// nested checkouts are bad style anyway, so I am deferring
+// investigating/fixing it.
+
+// Add "incoming" command that shows you need to do update and/or fetch?
+//
+// For Mercurial, I can do "hg incoming", but how to show that the current
+// working directory is not up to date with respect to the local
+// repository?  "hg prompt" with the "update" tag will do the trick, see
+// http://bitbucket.org/sjl/hg-prompt/src/ .  Or don't bother:  it's rarely an
+// issue if you always update via "hg fetch" as done by this program.
+//
+// For svn, "svn status -u":
+//   The out-of-date information appears in the ninth column (with -u):
+//       '*' a newer revision exists on the server
+//       ' ' the working copy is up to date
+
+
 
 public class MultiVersionControl {
 
