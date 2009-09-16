@@ -827,7 +827,7 @@ public class MultiVersionControl {
                      c.module);
           break;
         case HG:
-          pb.command("hg", "clone", c.repository);
+          pb.command("hg", "clone", c.repository, dirbase);
           break;
         case SVN:
           if (c.module != null) {
@@ -901,7 +901,7 @@ public class MultiVersionControl {
           // break;
         case CVS:
           replacers.add(new Replacer("(^|\\n)(cvs update: ((in|skipping) directory|conflicts found in )) +", "$1$2 " + dir + "/"));
-          replacers.add(new Replacer("(^|\\n)(Merging differences between 1.16 and 1.17 into ", "$1$2 " + dir + "/"));
+          replacers.add(new Replacer("(^|\\n)(Merging differences between 1.16 and 1.17 into )", "$1$2 " + dir + "/"));
           assert c.repository != null;
           pb.command("cvs",
                      // Including -d causes problems with CVS repositories
