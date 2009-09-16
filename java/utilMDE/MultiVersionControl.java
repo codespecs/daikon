@@ -45,13 +45,14 @@ import java.net.URL;
  *   update    -- update all checked out repositories
  *   status    -- show files that are changed but not committed
  *   list      -- list the checkouts that this program is aware of
- * </pre><p>
+ * </pre>
  *
  * You can specify the set of checkouts for the program to manage, or it
  * can search your directory structure to find all of your checkouts, or
- * both.<p>
+ * both.  A command that you can run right away is:
+ * <pre>java utilMDE.MultiVersionControl status --search=true</pre>
  *
- * For usage information, run the program with no arguments.<p>
+ * For complete usage information, run the program with no arguments.<p>
  *
  * <b>File format for "repositories" file:</b><p>
  *
