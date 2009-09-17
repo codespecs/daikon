@@ -223,6 +223,10 @@ public class MultiVersionControl {
         if (debug) {
           System.out.println("Searching for checkouts under " + adir);
         }
+        if (! dir.isDirectory()) {
+          System.err.printf("Directory in which to search for checkouts is not a directory: %s", directory);
+          System.exit(2);
+        }
         findCheckouts(new File(adir), checkouts);
       }
     }
@@ -354,11 +358,12 @@ public class MultiVersionControl {
 
     /** If the directory exists, then the subdirectory must exist too. */
     private void assertSubdirExists(File directory, String subdirName) {
-      assert (directory.exists()
-              ? new File(directory, subdirName).isDirectory()
-              : true)
-        : String.format("Directory %s exists but %s subdirectory does not",
-                        directory, subdirName);
+      if (directory.exists()
+          && ! new File(directory, subdirName).isDirectory()) {
+        System.err.printf("Directory %s exists but %s subdirectory does not exist%s",
+                          directory, subdirName);
+        System.exit(2);
+      }
     }
 
 
