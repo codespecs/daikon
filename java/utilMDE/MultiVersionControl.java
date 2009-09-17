@@ -223,8 +223,8 @@ public class MultiVersionControl {
         if (debug) {
           System.out.println("Searching for checkouts under " + adir);
         }
-        if (! dir.isDirectory()) {
-          System.err.printf("Directory in which to search for checkouts is not a directory: %s", directory);
+        if (! new File(adir).isDirectory()) {
+          System.err.printf("Directory in which to search for checkouts is not a directory: %s", adir);
           System.exit(2);
         }
         findCheckouts(new File(adir), checkouts);
