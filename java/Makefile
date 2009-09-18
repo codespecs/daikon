@@ -67,8 +67,8 @@ JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
 ###
 
 # These jar files only exist for the development version, not the
-# distributed version, of Daikon.  Avoid a (harmless but annoying) javac
-# error message that they don't exist.
+# distributed version, of Daikon.  The if clause avoids a (harmless but
+# annoying) javac error message that they don't exist.
 ifeq "$(wildcard $(INV)/java/lib/bcel.jar)" "$(INV)/java/lib/bcel.jar"
     CLASSPATH_JARS = :$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar:$(INV)/java/lib/utilMDE.jar
 endif
