@@ -236,6 +236,7 @@ utilMDE.tar.gz: $(JAVA_AND_CPP_FILES) Makefile README
 ### Pluggable type-checking
 ###
 
+# A user may set JAVAC_USER_NULLNESS_ARGS, for example to: -Awarns
 JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing
 JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 
@@ -244,7 +245,7 @@ check-nullness: check-nullness-utilmde
 check-nullness-utilmde: check-nullness-utilmde-withstubs
 
 check-nullness-utilmde-withstubs:
-	${JAVAC_COMMAND} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${JAVA_FILES}
+	${JAVAC_COMMAND} ${JAVAC_USER_NULLNESS_ARGS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${JAVA_FILES}
 
 
 
