@@ -881,7 +881,8 @@ public class MultiVersionControl {
                + "\nRCS file: .*" // no trailing ,v for newly-created files
                + "(\nretrieving revision .*)?" // no output for newly-created files
                + "\ndiff .*"
-               + "\nFiles .* and .* differ");
+               + "(\nFiles .* and .* differ)?" // no output if only whitespace differences
+               );
           replacers.add(new Replacer(removeRegexp, ""));
           replacers.add(new Replacer("(^|\\n)Index: ", "$1" + dir + "/"));
           replacers.add(new Replacer("(^|\\n)(cvs \\[diff aborted)(\\]:)", "$1$2 in " + dir + "$3"));
