@@ -1,8 +1,7 @@
 package utilMDE;
 
 /**
- * Simple pair class.  Moved from OrderedPairIterator to its own
- * class, so it can be used in more places.
+ * Simple pair class.
  **/
 public class Pair<T1 extends /*@Nullable*/ Object,T2 extends /*@Nullable*/ Object> {
   public T1 a;
@@ -11,6 +10,11 @@ public class Pair<T1 extends /*@Nullable*/ Object,T2 extends /*@Nullable*/ Objec
   public Pair(T1 a, T2 b) {
     this.a = a;
     this.b = b;
+  }
+
+  /** Factory method with short name and no need to name type parameters. */
+  public static <A, B> Pair<A, B> of(A a, B b) {
+    return new Pair<A, B>(a, b);
   }
 
   public String toString() {

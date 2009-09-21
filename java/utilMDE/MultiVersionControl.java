@@ -753,7 +753,7 @@ public class MultiVersionControl {
     if (debug) {
       System.out.printf("removeCommonSuffixDirs => %s %s%n", r1, r2);
     }
-    return new Pair<File,File>(r1,r2);
+    return Pair.of(r1,r2);
   }
 
 

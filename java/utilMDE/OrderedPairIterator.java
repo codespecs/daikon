@@ -45,19 +45,19 @@ public class OrderedPairIterator<T> implements java.util.Iterator<Pair</*@Nullab
   public boolean hasNext() { return ((next1 != null) || (next2 != null)); }
   /** Return an element of the first iterator, paired with null. */
   private Pair</*@Nullable*/ T,/*@Nullable*/ T> return1() {
-    Pair</*@Nullable*/ T,/*@Nullable*/ T> result = new Pair</*@Nullable*/ T,/*@Nullable*/ T>(next1, (T)null);
+    Pair</*@Nullable*/ T,/*@Nullable*/ T> result = Pair.of(next1, (T)null);
     setnext1();
     return result;
   }
   /** Return a pair of null and an element of the second iterator. */
   private Pair</*@Nullable*/ T,/*@Nullable*/ T> return2() {
-    Pair</*@Nullable*/ T,/*@Nullable*/ T> result = new Pair</*@Nullable*/ T,/*@Nullable*/ T>((T)null, next2);
+    Pair</*@Nullable*/ T,/*@Nullable*/ T> result = Pair.of((T)null, next2);
     setnext2();
     return result;
   }
   /** Return a pair containing an element from each iterator. */
   private Pair</*@Nullable*/ T,/*@Nullable*/ T> returnboth() {
-    Pair</*@Nullable*/ T,/*@Nullable*/ T> result = new Pair</*@Nullable*/ T,/*@Nullable*/ T>(next1, next2);
+    Pair</*@Nullable*/ T,/*@Nullable*/ T> result = Pair.of(next1, next2);
     setnext1();
     setnext2();
     return result;
