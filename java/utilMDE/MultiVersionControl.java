@@ -801,7 +801,7 @@ public class MultiVersionControl {
         break;
       case HG:
         replacers.add(new Replacer("(^|\\n)(abort: .*)", "$1$2: " + dir));
-        replacers.add(new Replacer("(^|\\n)([M?]) ", "$1$2 " + dir + "/"));
+        replacers.add(new Replacer("(^|\\n)([MARC!?I]) ", "$1$2 " + dir + "/"));
         break;
       case SVN:
         replacers.add(new Replacer("(svn: Network connection closed unexpectedly)", "$1 for " + dir));
