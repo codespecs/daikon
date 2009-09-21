@@ -167,6 +167,7 @@ utilMDE.jar: .class-files-timestamp .test-timestamp lib/ini4j-0.5.1.jar lib/svnk
 	mkdir jar-contents/utilMDE
 	cp -p *.class jar-contents/utilMDE
 	(cd jar-contents; jar xf ../lib/bcel.jar)
+	(cd jar-contents; jar xf ../lib/ical4j.jar)
 	(cd jar-contents; jar xf ../lib/checkers.jar)
 	(cd jar-contents; jar xf ../lib/ini4j-0.5.1.jar)
 	(cd jar-contents; jar xf ../lib/junit.jar)
