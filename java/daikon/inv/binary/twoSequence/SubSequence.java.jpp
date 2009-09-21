@@ -338,7 +338,7 @@ public class CLASSNAME
       discardString = "Invariants involving subsets/subsequences of unions/intersections"+
         "are suppressed";
       debug.fine ("  returning true because of union or intersection");
-      return new Pair<DiscardCode,String>(discardCode, discardString);
+      return Pair.of(discardCode, discardString);
     }
 
     if (subvar.derived instanceof SEQUENCESPREDICATE) {
@@ -349,7 +349,7 @@ public class CLASSNAME
         discardCode = DiscardCode.obvious;
         discardString = subvar.name()+" is derived from "+supervar.name();
         debug.fine ("  returning true because of predicate slicing");
-        return new Pair<DiscardCode,String>(discardCode, discardString + " [pred slicing]");
+        return Pair.of(discardCode, discardString + " [pred slicing]");
       }
     }
 
@@ -366,8 +366,8 @@ public class CLASSNAME
       discardCode = DiscardCode.obvious;
       discardString = subvar.name()+"=="+supervar.name();
       debug.fine ("  returning true because subvar_super == supervar");
-      return new Pair<DiscardCode,String>(discardCode, discardString
-                             + " [subvar_super == supervar]");
+      return Pair.of(discardCode,
+                     discardString + " [subvar_super == supervar]");
     }
 
     // a[i+a..j+b] cmp a[i+c..j+d]
@@ -439,7 +439,7 @@ public class CLASSNAME
         if (left_included && right_included) {
           discardCode = DiscardCode.obvious;
           discardString = subvar.name()+" obvious subset/subsequence of "+supervar.name();
-          return new Pair<DiscardCode,String>(discardCode, discardString + " [obvious]")
+          return Pair.of(discardCode, discardString + " [obvious]")
 ;
         }
       } else if ((subvar.derived instanceof SEQUENCESTRINGSUBSEQUENCE)
@@ -458,12 +458,10 @@ public class CLASSNAME
         if (index1 == index2) {
           if (start1 == true && start2 == true) {
             if (shift1 <= shift2)
-              return new Pair<DiscardCode,String>(discardCode,
-                                     discardString + " [shift1]");
+              return Pair.of(discardCode, discardString + " [shift1]");
           } else if (start1 == false && start2 == false) {
             if (shift1 >= shift2)
-              return new Pair<DiscardCode,String>(discardCode,
-                                     discardString + " [shift2]");
+              return Pair.of(discardCode, discardString + " [shift2]");
           }
         }
       } else {

@@ -23,7 +23,7 @@ public abstract class Node<CONTENT,CHILD> {
   }
 
   public Node(CONTENT left, CONTENT right) {
-    this.userObject = new Pair<CONTENT,CONTENT>(left, right);
+    this.userObject = Pair.of(left, right);
   }
 
   public void add(CHILD newChild) {

@@ -219,7 +219,7 @@ public final class FeatureExtractor {
       for (Iterator<Invariant> invs=readInvMap(new File(nonuseful)).invariantIterator(); invs.hasNext(); )
         nonusefulResult.add(invs.next());
 
-    return new Pair<ArrayList<Invariant>,ArrayList<Invariant>>(usefulResult, nonusefulResult);
+    return Pair.of(usefulResult, nonusefulResult);
   }
 
   //   // Old version of loading invariants from a list of filenames.
