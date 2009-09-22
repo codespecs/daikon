@@ -732,13 +732,13 @@ public class MultiVersionControl {
    * when p2 becomes p2_limit.  If p1_contains is non-null, then p1 must
    * contain a subdirectory of that name.
    */
-  static Pair<File,File> removeCommonSuffixDirs(File p1, File p2, File p2_limit, String p1_contains) {
+  static Pair</*@Nullable*/ File,/*@Nullable*/ File> removeCommonSuffixDirs(File p1, File p2, File p2_limit, String p1_contains) {
     if (debug) {
       System.out.printf("removeCommonSuffixDirs(%s, %s, %s, %s)%n", p1, p2, p2_limit, p1_contains);
     }
     // new names for results, because we will be side-effecting them
-    /*@Nullable*/ File r1 = p1;
-    /*@Nullable*/ File r2 = p2;
+    File r1 = p1;
+    File r2 = p2;
     while (r1 != null
            && r2 != null
            && (p2_limit == null || ! r2.equals(p2_limit))
