@@ -104,7 +104,6 @@ test: .test-timestamp
 # Using compile_without_testing instead of .class-files-timestamp as the
 # prerequisite doesn't work.
 .test-timestamp: .class-files-timestamp
-	which java
 # CLASSPATH is set in this file; it is not an external dependency
 	set JAVA_COMPILER=NONE; ${JAVA} utilMDE.TestUtilMDE
 	touch .test-timestamp
@@ -158,10 +157,14 @@ MathMDE.java: MathMDE.java.jpp MathMDE-gcd.java.jpp MathMDE-modulus.java.jpp Mat
 
 jar: utilMDE.jar
 # TODO: Why does this depend on lookup.html and lookup.txt but doesn't include them?
-utilMDE.jar: .class-files-timestamp .test-timestamp lib/ini4j-0.5.1.jar lib/svnkit.jar lookup.html lookup.txt
+utilMDE.jar: .class-files-timestamp .test-timestamp lib lookup.html lookup.txt
 # "make clean" avoids including stray .class files from your directory.
-# "make compile" runs unit tests.
-	$(MAKE) clean compile_without_testing
+# "make compile" runs unit tests; do that instead of "compile_without_testing".
+# If you use "compile_without_testing", the tests will look out of date
+# with respect to the newly-generated .class files.
+# But, don't make "clean compile" the prerequisites for utilMDE.jar or the
+# .jar file will always be remade even if it is up-to-date.
+	$(MAKE) clean compile
 	rm -rf jar-contents
 	mkdir jar-contents
 	mkdir jar-contents/utilMDE
