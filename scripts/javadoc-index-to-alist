@@ -3,8 +3,8 @@
 # Michael Ernst <mernst@cs.washington.edu>
 
 # Run like this:
-#  javadoc-index-to-alist > ~/emacs/javadoc-index.el
-# With no arguments, it uses a default list from file javadoc-index-files
+#  javadoc-index-to-alist > ~/.javadoc-index.el
+# With no arguments, it uses a default list from file ~/.javadoc-index-files
 # in this directory.
 # This runs javadoc-escape-anchors if necessary (see its documentation).
 
@@ -18,7 +18,7 @@ use File::Find;
 use FindBin qw($Bin);
 
 if (scalar(@ARGV) == 0) {
-  @ARGV = read_and_glob_files("$Bin/javadoc-index-files");
+  @ARGV = read_and_glob_files("$ENV{HOME}/.javadoc-index-files");
   # print STDERR "ARGV (" . scalar(@ARGV) . " elements): @ARGV\n";
 }
 
