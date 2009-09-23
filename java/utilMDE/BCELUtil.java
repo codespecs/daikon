@@ -205,8 +205,8 @@ public class BCELUtil {
       t.fillInStackTrace();
       StackTraceElement[] ste = t.getStackTrace();
       StackTraceElement caller = ste[1];
-      System.out.printf("%s.%s (%s line %d)", caller.getClassName(), caller
-          .getMethodName(), caller.getFileName(), caller.getLineNumber());
+      System.out.printf("%s.%s (%s line %d)", caller.getClassName(),
+        caller.getMethodName(), caller.getFileName(), caller.getLineNumber());
       for (int ii = 2; ii < ste.length; ii++)
         System.out.printf(" [%s line %d]", ste[ii].getFileName(), ste[ii]
             .getLineNumber());
