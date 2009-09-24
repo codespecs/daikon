@@ -605,10 +605,9 @@ public class MultiVersionControl {
     }
 
     // strip common suffix off of local dir and repo url
-    Pair<File,File> stripped = removeCommonSuffixDirs(dir,
-                                                      new File(pathInRepo),
-                                                      repoFileRoot,
-                                                      "CVS");
+    Pair</*@Nullable*/ File, /*@Nullable*/ File> stripped
+      = removeCommonSuffixDirs(dir, new File(pathInRepo),
+                               repoFileRoot, "CVS");
     dir = stripped.a;
     String pathInRepoAtCheckout;
     if (stripped.b != null) {
@@ -689,10 +688,9 @@ public class MultiVersionControl {
     }
 
     // Strip common suffix off of local dir and repo url.
-    Pair<File,File> stripped = removeCommonSuffixDirs(dir,
-                                                      new File(url.getPath()),
-                                                      new File(repoRoot.getPath()),
-                                                      ".svn");
+    Pair</*@Nullable*/ File, /*@Nullable*/ File> stripped
+      = removeCommonSuffixDirs(dir, new File(url.getPath()),
+                               new File(repoRoot.getPath()), ".svn");
     dir = stripped.a;
     try {
       url = url.setPath(stripped.b.toString(), false);
@@ -802,6 +800,7 @@ public class MultiVersionControl {
       case HG:
         replacers.add(new Replacer("(^|\\n)(abort: .*)", "$1$2: " + dir));
         replacers.add(new Replacer("(^|\\n)([MARC!?I]) ", "$1$2 " + dir + "/"));
+        replacers.add(new Replacer("(^|\\n)(\\*\\*\\* failed to import extension .*: No module named demandload)", ""));
         break;
       case SVN:
         replacers.add(new Replacer("(svn: Network connection closed unexpectedly)", "$1 for " + dir));
@@ -830,18 +829,19 @@ public class MultiVersionControl {
                             dir);
           continue CHECKOUTLOOP;
         }
+        assert c.module != null : "@SuppressWarnings(nullness): need module when checking out";
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
           // break;
         case CVS:
-          assert c.module != null : "@SuppressWarnings(nullness): dependent type CVS";
           pb.command("cvs", "-d", c.repository, "checkout",
                      "-P", // prune empty directories
                      "-ko", // no keyword substitution
                      c.module);
           break;
         case HG:
+          assert c.module != null : "@SuppressWarnings(nullness): dependent type CVS";
           pb.command("hg", "clone", c.repository, dirbase);
           break;
         case SVN:
