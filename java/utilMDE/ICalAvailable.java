@@ -224,7 +224,8 @@ public class ICalAvailable {
       System.err.println("Bad time: " + time);
       System.exit(1);
     }
-    String hourString = m.group(1);
+    @SuppressWarnings("nullness")
+    /*@NonNull*/ String hourString = m.group(1);
     String minuteString = m.group(3);
     String ampmString = m.group(4);
 
@@ -313,7 +314,7 @@ public class ICalAvailable {
     StringBuilder result = new StringBuilder();
     for (Object p : pl) {
       assert p != null;
-      result.append(rangeString((Period)p, tz) + "\n");
+      result.append(rangeString((/*@NonNull*/ Period)p, tz) + "\n");
     }
     return result.toString();
   }
@@ -399,7 +400,7 @@ public class ICalAvailable {
    * Parses a date when formatted in several common formats.
    * @see dateFormats
    **/
-  static java.util.Date parseDate( String strDate ) {
+  static java.util.Date parseDate( String strDate ) throws ParseException {
     java.util.Date result = null;
     if (Pattern.matches("^[0-9][0-9]?/[0-9][0-9]?$", date)) {
       @SuppressWarnings("deprecation") // for iCal4j
@@ -410,11 +411,12 @@ public class ICalAvailable {
       this_df.setLenient(false);
       try {
         result = this_df.parse( strDate );
-        break;
+        return result;
       } catch ( ParseException e ) {
+        // Try the next format in the list.
       }
     }
-    return result;
+    throw new ParseException("bad date " + strDate, 0);
   }
 
   static String formatDate(DateTime d, TimeZone tz) {
