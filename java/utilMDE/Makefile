@@ -7,7 +7,7 @@
 
 # This wildcard doesn't seem to work, so list the jar files individually.
 # CLASSPATH:=lib/*:$(JDKDIR)/lib/tools.jar
-CLASSPATH := ..:lib/bcel.jar:lib/ical4j.jar:lib/ini4j-0.5.1.jar:lib/junit.jar:lib/svnkit.jar:lib/xom-1.2.1.jar:lib/checkers.jar:$(JDKDIR)/lib/tools.jar
+CLASSPATH := ${UTILMDE_CLASSPATH_PREFIX}:..:lib/bcel.jar:lib/ical4j.jar:lib/ini4j-0.5.1.jar:lib/junit.jar:lib/svnkit.jar:lib/xom-1.2.1.jar:lib/checkers.jar:$(JDKDIR)/lib/tools.jar
 
 TOOLS_JAR := ${JDKDIR}/lib/tools.jar
 
