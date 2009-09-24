@@ -80,6 +80,7 @@ endif
 ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
   CLASSPATH := .:$(CLASSPATH)
 endif
+CLASSPATH := ${DAIKON_CLASSPATH_PREFIX}:${CLASSPATH}
 ifdef CLASSPATH_JARS
 	CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS)
 endif
