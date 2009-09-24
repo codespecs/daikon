@@ -608,15 +608,18 @@ public class MultiVersionControl {
     Pair</*@Nullable*/ File, /*@Nullable*/ File> stripped
       = removeCommonSuffixDirs(dir, new File(pathInRepo),
                                repoFileRoot, "CVS");
-    dir = stripped.a;
+    File cDir = stripped.a;
+    assert cDir != null :
+      String.format("dir (%s) parent of path in repo (%s)",
+                    dir, pathInRepo);
     String pathInRepoAtCheckout;
     if (stripped.b != null) {
       pathInRepoAtCheckout = stripped.b.toString();
     } else {
-      pathInRepoAtCheckout = dir.getName();
+      pathInRepoAtCheckout = cDir.getName();
     }
 
-    checkouts.add(new Checkout(RepoType.CVS, dir, repoRoot, pathInRepoAtCheckout));
+    checkouts.add(new Checkout(RepoType.CVS, cDir, repoRoot, pathInRepoAtCheckout));
   }
 
   /**
@@ -691,9 +694,16 @@ public class MultiVersionControl {
     Pair</*@Nullable*/ File, /*@Nullable*/ File> stripped
       = removeCommonSuffixDirs(dir, new File(url.getPath()),
                                new File(repoRoot.getPath()), ".svn");
-    dir = stripped.a;
+    File cDir = stripped.a;
+    assert cDir != null :
+      String.format("dir (%s) is parent of repository URL (%s)",
+                    dir, url.getPath());
+    assert stripped.b != null :
+      String.format("dir (%s) is child of repository URL (%s)",
+                    dir, url.getPath());
+    String pathInRepoAtCheckout = stripped.b.toString();
     try {
-      url = url.setPath(stripped.b.toString(), false);
+      url = url.setPath(pathInRepoAtCheckout, false);
     } catch (SVNException e) {
       throw new Error(e);
     }
@@ -702,12 +712,12 @@ public class MultiVersionControl {
       System.out.println("stripped: " + stripped);
       System.out.println("repoRoot = " + repoRoot);
       System.out.println(" repoUrl = " + url);
-      System.out.println("     dir = " + dir.toString());
+      System.out.println("    cDir = " + cDir.toString());
     }
 
     assert url.toString().startsWith(repoRoot.toString())
       : "repoRoot="+repoRoot+", url="+url;
-    return new Checkout(RepoType.SVN, dir, url.toString(), null);
+    return new Checkout(RepoType.SVN, cDir, url.toString(), null);
 
     /// Old implementation
     // String module = url.toString().substring(repoRoot.toString().length());
@@ -717,7 +727,7 @@ public class MultiVersionControl {
     // if (module.equals("")) {
     //   module = null;
     // }
-    // return new Checkout(RepoType.SVN, dir, repoRoot.toString(), module);
+    // return new Checkout(RepoType.SVN, cDir, repoRoot.toString(), module);
 
 
 
