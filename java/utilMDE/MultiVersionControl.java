@@ -262,7 +262,7 @@ public class MultiVersionControl {
       action = LIST;
     } else {
       options.print_usage("Unrecognized action \"%s\"", action_string);
-      assert false;
+      System.exit(1);
     }
 
     // clean up options
