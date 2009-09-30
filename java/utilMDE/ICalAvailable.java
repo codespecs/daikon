@@ -313,7 +313,7 @@ public class ICalAvailable {
     tf.setTimeZone(tz);
     StringBuilder result = new StringBuilder();
     for (Object p : pl) {
-      assert p != null;
+      assert p != null : "@SuppressWarnings(nullness)";
       result.append(rangeString((/*@NonNull*/ Period)p, tz) + "\n");
     }
     return result.toString();
