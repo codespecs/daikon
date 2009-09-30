@@ -169,10 +169,13 @@ kvasir/fjalar/Makefile.in: valgrind-3/auto-everything.sh
 	ln -nsf valgrind-3/valgrind kvasir
 	touch $@
 
-kvasir/config.status: kvasir/fjalar/Makefile.in valgrind-3/valgrind/VEX/pub/libvex.h
+kvasir/configure: valgrind-3/auto-everything.sh
+	cd valgrind-3 && ./auto-everything.sh
+
+kvasir/config.status: kvasir/fjalar/Makefile.in valgrind-3/valgrind/VEX/pub/libvex.h kvasir/configure
 	cd kvasir && ./configure --prefix=`pwd`/inst
 
-kvasir/coregrind/valgrind: kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
+kvasir/coregrind/valgrind: kvasir/configure kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
 	cd kvasir && $(MAKE) --no-print-directory
 
 kvasir/fjalar/fjalar-$(VALGRIND_ARCH)-linux: kvasir/coregrind/valgrind $(wildcard kvasir/fjalar/*.[ch]) $(wildcard kvasir/fjalar/kvasir/*.[ch])
