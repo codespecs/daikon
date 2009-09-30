@@ -111,7 +111,7 @@ public class AnnotateNullable {
       String name = ppt.name().replaceFirst ("[(].*$", "");
       int lastdot = name.lastIndexOf ('.');
       String classname = name.substring (0, lastdot);
-      // System.out.printf ("classname for ppt %s is '%s'\n", name, classname);
+      // System.out.printf ("classname for ppt %s is '%s'%n", name, classname);
       List<PptTopLevel> static_methods = class_map.get (classname);
       assert static_methods != null : classname;
       static_methods.add (ppt);
@@ -120,7 +120,7 @@ public class AnnotateNullable {
     // Debug print all of the static methods
     if (false) {
       for (String classname : class_map.keySet()) {
-        System.out.printf ("class %s static methods: %s\n", classname,
+        System.out.printf ("class %s static methods: %s%n", classname,
                            class_map.get(classname));
       }
     }
@@ -208,16 +208,16 @@ public class AnnotateNullable {
       if (ppt_package != last_package) {
         // This will print the empty string if we switch from a package to the
         // unnamed package.  That is intentional.
-        System.out.printf ("package %s;\n\n", ppt_package);
+        System.out.printf ("package %s;%n%n", ppt_package);
         last_package = ppt_package;
       }
-      System.out.printf ("class %s { // %d/%s obj/class samples\n",
+      System.out.printf ("class %s { // %d/%s obj/class samples%n",
                          object_ppt.ppt_name.getFullClassName(),
                          object_ppt.num_samples(),
                          class_samples);
     } else {
-      System.out.printf ("package %s:\n", ppt_package);
-      System.out.printf ("class %s : // %d/%s obj/class samples\n",
+      System.out.printf ("package %s:%n", ppt_package);
+      System.out.printf ("class %s : // %d/%s obj/class samples%n",
                          object_ppt.ppt_name.getShortClassName(),
                          object_ppt.num_samples(),
                          class_samples);
@@ -263,9 +263,9 @@ public class AnnotateNullable {
     }
 
     if (stub_format)
-      System.out.printf ("}\n\n");
+      System.out.printf ("}%n%n");
     else
-      System.out.printf ("\n\n");
+      System.out.printf ("%n%n");
   }
 
   /**
@@ -340,11 +340,12 @@ public class AnnotateNullable {
       }
       System.out.printf ("); // %d samples%n", ppt.num_samples());
     } else {
-      System.out.printf ("  method %s : %s // %d samples\n", jvm_signature(ppt),
-                         return_annotation, ppt.num_samples());
+      System.out.printf ("  method %s : // %d samples%n",
+                         jvm_signature(ppt), ppt.num_samples());
+      System.out.printf ("    return: %s%n", return_annotation);
       for (int i = 0; i < params.size(); i++) {
         // Print the annotation for this parameter
-        System.out.printf ("    parameter #%d : %s // %s\n", i, annos.get(i), names.get(i));
+        System.out.printf ("    parameter #%d : %s // %s%n", i, annos.get(i), names.get(i));
       }
     }
   }
@@ -378,7 +379,7 @@ public class AnnotateNullable {
       // are declared
       VarInfo evar = vi.get_enclosing_var();
       if ((evar != null) && (!evar.name().equals ("this"))) {
-        // System.out.printf ("  enclosed %s %s\n", vi.type, vi.name());
+        // System.out.printf ("  enclosed %s %s%n", vi.type, vi.name());
         continue;
       }
 
@@ -388,10 +389,10 @@ public class AnnotateNullable {
         annotation = get_annotation (ppt, vi);
       }
       if (stub_format) {
-        System.out.printf ("  field %s %s {} // %s\n", field_name(vi),
+        System.out.printf ("  field %s %s {} // %s%n", field_name(vi),
                            annotation, vi.type);
       } else {
-        System.out.printf ("  field %s : %s // %s\n", field_name(vi),
+        System.out.printf ("  field %s : %s // %s%n", field_name(vi),
                            annotation, vi.type);
       }
     }
@@ -407,7 +408,7 @@ public class AnnotateNullable {
     String java_sig = ppt.ppt_name.getSignature();
     assert java_sig != null;
     String java_args = java_sig.replace (method, "");
-    // System.out.printf ("m/s/a = %s %s %s\n", method, java_sig, java_args);
+    // System.out.printf ("m/s/a = %s %s %s%n", method, java_sig, java_args);
     if (method.equals (ppt.ppt_name.getShortClassName()))
       method = "<init>";
     return method + UtilMDE.arglistToJvm(java_args);
