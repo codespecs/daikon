@@ -609,9 +609,11 @@ public class MultiVersionControl {
       = removeCommonSuffixDirs(dir, new File(pathInRepo),
                                repoFileRoot, "CVS");
     File cDir = stripped.a;
-    assert cDir != null :
-      String.format("dir (%s) parent of path in repo (%s)",
-                    dir, pathInRepo);
+    if (cDir == null) {
+      System.out.printf("dir (%s) is parent of path in repo (%s)",
+                        dir, pathInRepo);
+      System.exit(1);
+    }
     String pathInRepoAtCheckout;
     if (stripped.b != null) {
       pathInRepoAtCheckout = stripped.b.toString();
@@ -695,12 +697,16 @@ public class MultiVersionControl {
       = removeCommonSuffixDirs(dir, new File(url.getPath()),
                                new File(repoRoot.getPath()), ".svn");
     File cDir = stripped.a;
-    assert cDir != null :
-      String.format("dir (%s) is parent of repository URL (%s)",
-                    dir, url.getPath());
-    assert stripped.b != null :
-      String.format("dir (%s) is child of repository URL (%s)",
-                    dir, url.getPath());
+    if (cDir == null) {
+      System.out.printf("dir (%s) is parent of repository URL (%s)",
+                         dir, url.getPath());
+      System.exit(1);
+    }
+    if (stripped.b == null) {
+      System.out.printf("dir (%s) is child of repository URL (%s)",
+                        dir, url.getPath());
+      System.exit(1);
+    }
     String pathInRepoAtCheckout = stripped.b.toString();
     try {
       url = url.setPath(pathInRepoAtCheckout, false);
