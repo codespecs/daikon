@@ -55,7 +55,7 @@
   #define result_index 2
   #define arg1_index   1
   #define arg2_index   0
-#elif
+#else
   #error "PERMUTATION not properly defined"
 #endif
 
