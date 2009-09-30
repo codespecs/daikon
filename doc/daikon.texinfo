@@ -928,7 +928,7 @@ Daikon, @ref{Front ends (instrumentation)}.
 @section Detecting invariants in Java programs
 
 In order to detect invariants in a Java program, run the
-program using the Chicory front end to create a data trace file, then
+program using the Chicory front end (@pxref{Chicory}) to create a data trace file, then
 run Daikon itself to detect invariants.
 With the @option{--daikon} option to Chicory, a single command performs
 both steps.
