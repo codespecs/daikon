@@ -403,7 +403,8 @@ xlint: chicory ${ALL_GENERATED_FILES}
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 all_directly: ${AUTO_GENERATED_FILES} lib/utilMDE.jar utilMDE-import-check utilMDE-copy
 	@echo ${JAVA_FILES} > java_files.txt
-	${JAVAC_COMMAND} @java_files.txt
+# "." in classpath for typequals package
+	${JAVAC_COMMAND} -cp .:$CLASSPATH @java_files.txt
 	@chmod -w ${AUTO_GENERATED_FILES}
 # This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
 	$(MAKE) all_pass2
@@ -528,7 +529,8 @@ daikon/util/README: $(wildcard utilMDE/*.java utilMDE/*.jpp utilMDE/*.manifest)\
 	perl -p -i -e 's/package utilMDE/package daikon.util/' daikon/util/*.java
 	# change relevant imports (make sure to get "import static" as well)
 	perl -p -i -e 's/^(import .*)utilMDE/\1daikon.util/g' daikon/util/*.java
-	$(JAVAC_COMMAND) daikon/util/*.java
+	# "." is needed on classpath for typequals package
+	$(JAVAC_COMMAND) -cp .:${CLASSPATH} daikon/util/*.java
 
 ## Old version.  Unfortunately, it always re-made everything.
 ## That is unnecessarily slow, and it also produces a lot of output that
@@ -669,13 +671,11 @@ tags-without-generated-files: clean-generated-files
 	@etags -l java ${TAG_FILES}
 	$(MAKE) compile
 
-# Need to ensure that utilMDE.jar gets regenerated if necessary.
-lib/utilMDE.jar:
+utilMDE/utilMDE.jar:
 	$(MAKE) -C utilMDE utilMDE.jar
-	install -d lib
+
+lib/utilMDE.jar: utilMDE/utilMDE.jar
 	cp -p utilMDE/utilMDE.jar $@
-# Always run the rule even if the file exists
-.PHONY: lib/utilMDE.jar
 
 ###
 ### Static checks of the code
