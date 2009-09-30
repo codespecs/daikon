@@ -404,7 +404,7 @@ xlint: chicory ${ALL_GENERATED_FILES}
 all_directly: ${AUTO_GENERATED_FILES} lib/utilMDE.jar utilMDE-import-check utilMDE-copy
 	@echo ${JAVA_FILES} > java_files.txt
 # "." in classpath for typequals package
-	${JAVAC_COMMAND} -cp .:$CLASSPATH @java_files.txt
+	${JAVAC_COMMAND} -cp .:${CLASSPATH} @java_files.txt
 	@chmod -w ${AUTO_GENERATED_FILES}
 # This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
 	$(MAKE) all_pass2
