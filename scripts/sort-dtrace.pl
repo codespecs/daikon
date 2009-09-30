@@ -38,10 +38,10 @@ while (<>) {
         my @ppt;
 
 
-        push @ppt, shift(@lines) . "\n";
+        push @ppt, shift(@lines);
 
         while((@lines) && (not ($lines[0] =~ /\s*variable/))) {                    
-            push @ppt, shift(@lines);
+            push @ppt,  "\n" . shift(@lines);
         }
 
         while(my $line = shift @lines) {

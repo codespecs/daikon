@@ -20,6 +20,34 @@ Further documentation can be found in:
 
 ===========================================================================
 
+(October 2009)
+
+Kvasir's support for x86-64 hosts and C++ programs has been improved
+
+Kvasir
+
+  User visible changes
+
+    Kvasir now has limited support for non-local exits such as 
+    setjmp/longjmp and C++ Exceptions. Kvasir will correctly detect
+    if a function has been exited by non-local means and not print
+    an exit program point for the function but continue printing 
+    other functins as normal. Previously Kvasir would stop printing
+    program points after the first non-locally exited function.
+
+    Added support for multi-threaded C/C++ programs.
+
+    Kvasir's now fully supports x86-64 hosts and running x86-64 
+    binaries.
+
+  Bug fixes
+   
+    Fixed an issue where Kvasir would print incorrect values
+    for floating point numbers. 
+    
+   
+
+
 4.6.1 (September 1 2009)
 
 Support for GCC 4.3+ created binaries has been improved for Kvasir.
