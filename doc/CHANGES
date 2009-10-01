@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-(October 2009)
+4.6.2 (October 1 2009)
 
 Kvasir's support for x86-64 hosts and C++ programs has been improved
 
@@ -55,6 +55,14 @@ Kvasir
     Fixed a crash that would sometimes occur when processing
     C++ programs with large amounts of debugging information.
 
+Daikon
+
+  User Documentation
+
+    Added an explanation of how additional data changes invariant
+    ouput
+
+-------------------------------------------
 
 4.6.1 (September 1 2009)
 
@@ -79,6 +87,7 @@ Kvasir
     Fixed an issue where Kvasir would not detect entry to a function if
     it's body consisted of only a loop.
 
+-------------------------------------------
 
 4.6.0 (July 1 2009)
 
