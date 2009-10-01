@@ -217,7 +217,7 @@ public final class FileIO {
   public static final boolean nextLineIsComment(BufferedReader reader) {
     boolean result = false;
     try {
-      reader.mark(100);
+      reader.mark(1000);
       String nextline = reader.readLine();
       result = isComment(nextline);
     } catch (IOException e) {
@@ -1466,6 +1466,7 @@ public final class FileIO {
                 throws IOException {
 
     for (String filename : files) {
+      // System.out.printf ("processing filename %s%n", filename);
       try {
         read_data_trace_file(filename, all_ppts, processor, false,
                              ppts_are_new);
@@ -1874,7 +1875,7 @@ public final class FileIO {
   /**
    * Read declarations or samples (not just sample data) from .dtrace
    * file, using standard data processor. **/
-  static void read_data_trace_file(String filename, PptMap all_ppts)
+  public static void read_data_trace_file(String filename, PptMap all_ppts)
     throws IOException {
     Processor processor = new Processor();
     read_data_trace_file(filename, all_ppts, processor, false, true);
@@ -1884,7 +1885,7 @@ public final class FileIO {
    * Read declarations OR samples (not just sample data as the name might
    * imply) from .dtrace file.
    **/
-  static void read_data_trace_file(String filename, PptMap all_ppts,
+  public static void read_data_trace_file(String filename, PptMap all_ppts,
                                    Processor processor,
                                    boolean is_decl_file, boolean ppts_are_new)
     throws IOException {
