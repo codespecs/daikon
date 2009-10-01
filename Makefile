@@ -401,6 +401,8 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) c
 	cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar
 	cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/commons-io.jar
 	cd /tmp/$(USER)/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/svnkit.jar
+	cd /tmp/$(USER)/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/xom-1.2.1.jar
+	cd /tmp/$(USER)/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/ical4j.jar
 	cd /tmp/$(USER)/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/ini4j-0.5.1.jar
 	(cd java; cp -f --parents --target-directory=/tmp/${USER}/daikon-jar $(DAIKON_RESOURCE_FILES))
 	cd /tmp/${USER}/daikon-jar && \
