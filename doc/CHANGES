@@ -32,7 +32,7 @@ Kvasir
     setjmp/longjmp and C++ Exceptions. Kvasir will correctly detect
     if a function has been exited by non-local means and not print
     an exit program point for the function but continue printing 
-    other functins as normal. Previously Kvasir would stop printing
+    other functions as normal. Previously Kvasir would stop printing
     program points after the first non-locally exited function.
 
     Added support for multi-threaded C/C++ programs.
@@ -40,12 +40,20 @@ Kvasir
     Kvasir's now fully supports x86-64 hosts and running x86-64 
     binaries.
 
+    Improved Kvasir's speed when working with large C++ binaries.
+
   Bug fixes
    
     Fixed an issue where Kvasir would print incorrect values
     for floating point numbers. 
-    
-   
+
+    Fixed an issue where Kvasir would print incorrect values
+    for parameters to C++ constructors.
+
+    Fixed a memory leak in Fjalar's processing of variable names.
+
+    Fixed a crash that would sometimes occur when processing
+    C++ programs with large amounts of debugging information.
 
 
 4.6.1 (September 1 2009)
