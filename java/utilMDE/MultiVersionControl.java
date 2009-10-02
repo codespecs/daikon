@@ -851,10 +851,6 @@ public class MultiVersionControl {
           // break;
         case CVS:
           assert c.module != null : "@SuppressWarnings(nullness): dependent type CVS";
-          if (c.module == null) {
-            System.out.printf("Skipping CVS checkout that lacks a module name: %s%n", c.repository);
-            continue CHECKOUTLOOP;
-          }
           pb.command("cvs", "-d", c.repository, "checkout",
                      "-P", // prune empty directories
                      "-ko", // no keyword substitution
