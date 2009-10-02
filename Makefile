@@ -538,7 +538,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	# Kvasir C front end
 	@# "rsync -C" means "copy, ignoring the same files CVS would"
 	rsync -rCp valgrind-3/ /tmp/daikon/kvasir
-	@# configure file
+	@# Generate configure file
 	(cd /tmp/daikon/kvasir/valgrind; ./autogen.sh )
 	@# CVS-only build script
 	rm -f /tmp/daikon/kvasir/auto-everything.sh
