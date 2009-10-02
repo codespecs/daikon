@@ -44,7 +44,7 @@ JAVAC ?= javac
 # through to com.sun.tools.javac.Main rather than being passed to java.  So,
 # remove "-J-Xmx800m".  (When "javac" is an executable, it properly handles
 # "-J" flags.)
-JAVAC_ARGS ?= -g -target 5
+JAVAC_ARGS ?= -g -target 5 -source 5
 
 JAR ?= jar
 ifeq (cygwin,$(OSTYPE))
