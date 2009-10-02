@@ -520,6 +520,8 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	# utilMDE Libraries
 	cd /tmp/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/svnkit.jar
 	cd /tmp/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/ini4j-0.5.1.jar
+	cd /tmp/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/xom-1.2.1.jar
+	cd /tmp/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/ical4j.jar
 
 	## Front ends
 	mkdir /tmp/daikon/front-end
