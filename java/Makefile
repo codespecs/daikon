@@ -675,6 +675,7 @@ utilMDE/utilMDE.jar:
 	$(MAKE) -C utilMDE utilMDE.jar
 
 lib/utilMDE.jar: utilMDE/utilMDE.jar
+	install -d lib
 	cp -p utilMDE/utilMDE.jar $@
 
 ###
