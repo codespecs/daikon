@@ -7,7 +7,7 @@
 
 # This wildcard doesn't seem to work, so list the jar files individually.
 # CLASSPATH:=lib/*:$(JDKDIR)/lib/tools.jar
-CLASSPATH := ${UTILMDE_CLASSPATH_PREFIX}:..:lib/bcel.jar:lib/ical4j.jar:lib/ini4j-0.5.1.jar:lib/junit.jar:lib/svnkit.jar:lib/xom-1.2.1.jar:lib/checkers.jar:$(JDKDIR)/lib/tools.jar
+CLASSPATH := ${UTILMDE_CLASSPATH_PREFIX}:..:lib/bcel.jar:lib/checkers.jar:lib/ical4j.jar:lib/ini4j-0.5.1.jar:lib/junit.jar:lib/svnkit.jar:lib/tagsoup-1.2.jar:lib/xom-1.2.1.jar:$(JDKDIR)/lib/tools.jar
 
 TOOLS_JAR := ${JDKDIR}/lib/tools.jar
 
@@ -175,6 +175,7 @@ utilMDE.jar: .class-files-timestamp .test-timestamp lib lookup.html lookup.txt
 	(cd jar-contents; jar xf ../lib/ini4j-0.5.1.jar)
 	(cd jar-contents; jar xf ../lib/junit.jar)
 	(cd jar-contents; jar xf ../lib/svnkit.jar)
+	(cd jar-contents; jar xf ../lib/tagsoup-1.2.jar)
 	(cd jar-contents; jar xf ../lib/xom-1.2.1.jar)
 	(cd jar-contents; jar xf $(TOOLS_JAR) com/sun/javadoc)
 	rm -rf jar-contents/meta-inf jar-contents/META-INF
