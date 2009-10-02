@@ -845,19 +845,22 @@ public class MultiVersionControl {
                             dir);
           continue CHECKOUTLOOP;
         }
-        assert c.module != null : "@SuppressWarnings(nullness): need module when checking out";
         switch (c.repoType) {
         case BZR:
           throw new Error("not yet implemented");
           // break;
         case CVS:
+          assert c.module != null : "@SuppressWarnings(nullness): dependent type CVS";
+          if (c.module == null) {
+            System.out.printf("Skipping CVS checkout that lacks a module name: %s%n", c.repository);
+            continue CHECKOUTLOOP;
+          }
           pb.command("cvs", "-d", c.repository, "checkout",
                      "-P", // prune empty directories
                      "-ko", // no keyword substitution
                      c.module);
           break;
         case HG:
-          assert c.module != null : "@SuppressWarnings(nullness): dependent type CVS";
           pb.command("hg", "clone", c.repository, dirbase);
           break;
         case SVN:
