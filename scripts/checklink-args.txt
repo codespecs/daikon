@@ -3,6 +3,7 @@
 --exclude-docs daikon/download/jdoc
 --exclude-docs http://groups.csail.mit.edu/pag/reading-group/
 --exclude-docs http://pag.csail.mit.edu/jsr308/dist/doc/javac_lifecycle
+--exclude-docs http://types.cs.washington.edu/list-archives/
 --exclude-docs mernst/(public_html/)?(ir95|advice/conference/)
 --suppress-broken -1:http://whereis.mit.edu/map-jpg?selection=32&Buildings=go 
 --suppress-broken 302:MAY-NEED-TO-ALSO-LIST-IN-exclude-redirect-CLAUSE
