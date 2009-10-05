@@ -292,6 +292,33 @@ public final class UtilMDE {
   }
 
 
+  /** @deprecated use BufferedFileReader (note lowercase first letter) */
+  @Deprecated // since June 2005
+  public static BufferedReader BufferedFileReader(String filename) throws FileNotFoundException, IOException {
+    return bufferedFileReader(filename);
+  }
+  /** @deprecated use lineNumberFileReader (note lowercase first letter) */
+  @Deprecated // since June 2005
+  public static LineNumberReader LineNumberFileReader(String filename) throws FileNotFoundException, IOException {
+    return lineNumberFileReader(filename);
+  }
+  /** @deprecated use lineNumberFileReader (note lowercase first letter) */
+  @Deprecated // since June 2005
+  public static LineNumberReader LineNumberFileReader(File file) throws FileNotFoundException, IOException {
+    return lineNumberFileReader(file);
+  }
+  /** @deprecated use BufferedFileWriter (note lowercase first letter) */
+  @Deprecated // since June 2005
+  public static BufferedWriter BufferedFileWriter(String filename) throws IOException {
+    return bufferedFileWriter(filename);
+  }
+  /** @deprecated use bufferedFileWriter (note lowercase first letter) */
+  @Deprecated // since June 2005
+  public static BufferedWriter BufferedFileWriter(String filename, boolean append) throws IOException {
+    return bufferedFileWriter(filename, append);
+  }
+
+
   ///////////////////////////////////////////////////////////////////////////
   /// Class
   ///
