@@ -39,12 +39,8 @@ endif
 # JAVAC ?= javac -verbose
 
 JAVAC ?= javac
-# When "javac" is a shall script (as it is in OpenJDK 7 when compiled via
-# "ant" as opposed to being downloaded from Sun), the "-J" flags are passed
-# through to com.sun.tools.javac.Main rather than being passed to java.  So,
-# remove "-J-Xmx800m".  (When "javac" is an executable, it properly handles
-# "-J" flags.)
-JAVAC_ARGS ?= -g -target 5 -source 5
+JAVAC_TARGET ?= -target 5 -source 5
+JAVAC_ARGS ?= -g ${JAVAC_TARGET}
 
 JAR ?= jar
 ifeq (cygwin,$(OSTYPE))

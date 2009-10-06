@@ -39,7 +39,8 @@ endif
 export CLASSPATH
 
 JAVAC ?= javac
-JAVAC_ARGS ?= -g -target 5 -Xlint -Xmaxwarns 1000 -J-Xmx800m
+JAVAC_TARGET ?= -target 5 -source 5
+JAVAC_ARGS ?= -g -Xlint -Xmaxwarns 1000 -J-Xmx800m ${JAVAC_TARGET}
 # When using the JSR 308 compiler, this expects checkers.jar on the classpath.
 # The "-classpath" argument is only necessary when using the JSR 308 javac,
 # since it's a shell command for "javac -jar ..." which ignores the
