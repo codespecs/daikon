@@ -1941,11 +1941,19 @@ public class PptTopLevel extends Ppt {
    */
   public boolean is_equal(VarInfo v1, VarInfo v2) {
 
+    // System.out.printf ("checking equality on %s and %s%n", v1, v2);
+
+    // Check for leaders, not variables
+    v1 = v1.canonicalRep();
+    v2 = v2.canonicalRep();
+
     // Find the slice for v1 and v2.  If the slice doesn't exist,
     // the variables can't be equal
     PptSlice slice = findSlice_unordered(v1, v2);
-    if (slice == null)
+    if (slice == null) {
+      // System.out.printf ("No slide for %s and %s%n", v1, v2);
       return (false);
+    }
 
     // Get a prototype of the invariant we are looking for
     /*@Prototype*/ Invariant proto = null;
@@ -1977,6 +1985,7 @@ public class PptTopLevel extends Ppt {
 
     // Return whether or not the invariant is true in the slice
     Invariant inv = proto.instantiate(slice);
+    // System.out.printf ("invariant = %s", inv);
     if (inv == null)
       return (false);
     return (slice.is_inv_true(inv));
