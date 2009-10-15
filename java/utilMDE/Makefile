@@ -7,7 +7,7 @@
 
 # This wildcard doesn't seem to work, so list the jar files individually.
 # CLASSPATH:=lib/*:$(JDKDIR)/lib/tools.jar
-CLASSPATH := ${UTILMDE_CLASSPATH_PREFIX}:..:lib/bcel.jar:lib/checkers.jar:lib/ical4j.jar:lib/ini4j-0.5.1.jar:lib/junit.jar:lib/svnkit.jar:lib/tagsoup-1.2.jar:lib/xom-1.2.1.jar:$(JDKDIR)/lib/tools.jar
+CLASSPATH := ${UTILMDE_CLASSPATH_PREFIX}:..:lib/bcel.jar:lib/checkers.jar:lib/commons-logging-1.1.1.jar:lib/commons-lang-2.4.jar:lib/ical4j.jar:lib/ini4j-0.5.1.jar:lib/junit.jar:lib/svnkit.jar:lib/tagsoup-1.2.jar:lib/xom-1.2.1.jar:$(JDKDIR)/lib/tools.jar
 
 TOOLS_JAR := ${JDKDIR}/lib/tools.jar
 
@@ -170,8 +170,10 @@ utilMDE.jar: .class-files-timestamp .test-timestamp lib lookup.html lookup.txt
 	mkdir jar-contents/utilMDE
 	cp -p *.class jar-contents/utilMDE
 	(cd jar-contents; jar xf ../lib/bcel.jar)
-	(cd jar-contents; jar xf ../lib/ical4j.jar)
+	(cd jar-contents; jar xf ../lib/commons-logging-1.1.1.jar)
+	(cd jar-contents; jar xf ../lib/commons-lang-2.4.jar)
 	(cd jar-contents; jar xf ../lib/checkers.jar)
+	(cd jar-contents; jar xf ../lib/ical4j.jar)
 	(cd jar-contents; jar xf ../lib/ini4j-0.5.1.jar)
 	(cd jar-contents; jar xf ../lib/junit.jar)
 	(cd jar-contents; jar xf ../lib/svnkit.jar)
