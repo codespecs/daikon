@@ -677,7 +677,7 @@ public class MultiVersionControl {
     try {
       info = wcClient.doInfo(new File(dir.toString()), SVNRevision.WORKING);
     } catch (SVNException e) {
-      throw new Error(e);
+      throw new Error("Problem in dirToCheckoutSvn(" + dir + "): ", e);
     }
     // getFile is null when operating on a working copy, as I am
     // String relativeFile = info.getPath(); // relative to repository root -- can use to determine root of checkout
