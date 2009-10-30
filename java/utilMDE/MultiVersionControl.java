@@ -163,6 +163,10 @@ public class MultiVersionControl {
   @Option("Directory under which to search for checkouts; may be supplied multiple times; default=home dir")
   public List<String> dir = new ArrayList<String>();
 
+  @Option("Directory under which to NOT search for checkouts; may be supplied multiple times")
+  public List<String> ignore_dir = new ArrayList<String>();
+  private List<File> ignoreDirs = new ArrayList<File>();
+
   // Default is false because searching whole directory structure is slow.
   @Option("Search for all checkouts, not just those listed in a file")
   public boolean search = false;
@@ -184,6 +188,8 @@ public class MultiVersionControl {
 
   @Option("Print debugging output")
   public static boolean debug;
+
+  public static boolean debug_replacers = false;
 
   static enum Action {
     CHECKOUT,
@@ -219,18 +225,31 @@ public class MultiVersionControl {
     }
 
     if (mvc.search) {
+      // Postprocess command-line arguments
+      for (String adir : mvc.ignore_dir) {
+        File afile = new File(adir.replaceFirst("^~", userHome));
+        if (! afile.isDirectory()) {
+            System.err.printf("Warning: Directory to ignore while searching for checkouts is not a directory:%n  %s%n", adir);
+        }
+        mvc.ignoreDirs.add(afile);
+      }
+
       for (String adir : mvc.dir) {
+        adir = adir.replaceFirst("^~", userHome);
         if (debug) {
           System.out.println("Searching for checkouts under " + adir);
         }
         if (! new File(adir).isDirectory()) {
-          System.err.printf("Directory in which to search for checkouts is not a directory: %s", adir);
+          System.err.printf("Directory in which to search for checkouts is not a directory: %s%n", adir);
           System.exit(2);
         }
-        findCheckouts(new File(adir), checkouts);
+        findCheckouts(new File(adir), checkouts, mvc.ignoreDirs);
       }
     }
 
+    if (debug) {
+      System.out.println("Processing checkouts read from " + checkouts);
+    }
     mvc.process(checkouts);
   }
 
@@ -521,16 +540,16 @@ public class MultiVersionControl {
 
 
 
-  /** Find all checkouts under the given directory. */
-  static Set<Checkout> findCheckouts(File dir) {
-    assert dir.isDirectory();
-
-    Set<Checkout> checkouts = new LinkedHashSet<Checkout>();
-
-    findCheckouts(dir, checkouts);
-
-    return checkouts;
-  }
+//   /** Find all checkouts under the given directory. */
+//   static Set<Checkout> findCheckouts(File dir) {
+//     assert dir.isDirectory();
+//
+//     Set<Checkout> checkouts = new LinkedHashSet<Checkout>();
+//
+//     findCheckouts(dir, checkouts);
+//
+//     return checkouts;
+//   }
 
 
   /**
@@ -539,8 +558,11 @@ public class MultiVersionControl {
    * them to checkouts.  Works by checking whether dir or any of its
    * descendants is a version control directory.
    */
-  private static void findCheckouts(File dir, Set<Checkout> checkouts) {
+  private static void findCheckouts(File dir, Set<Checkout> checkouts, List<File> ignoreDirs) {
     assert dir.isDirectory();
+    if (ignoreDirs.contains(dir)) {
+      return;
+    }
 
     String dirName = dir.getName().toString();
     File parent = dir.getParentFile();
@@ -559,7 +581,7 @@ public class MultiVersionControl {
     @SuppressWarnings("nullness") // listFiles => non-null because dir is a directory
     File /*@NonNull*/ [] childdirs = dir.listFiles(idf);
     for (File childdir : childdirs) {
-      findCheckouts(childdir, checkouts);
+      findCheckouts(childdir, checkouts, ignoreDirs);
     }
   }
 
@@ -684,7 +706,14 @@ public class MultiVersionControl {
     // getFile is just the (absolute) local file name for local items -- same as "dir"
     // File relativeFile = info.getFile();
     SVNURL url = info.getURL();
+    // This can be null (example: dir /afs/csail.mit.edu/u/m/mernst/.snapshot/class/6170/2006-spring/3dphysics).  I don't know under what circumstances.
     SVNURL repoRoot = info.getRepositoryRootURL();
+    if (repoRoot == null) {
+      System.err.println("Problem:  old svn working copy in " + dir.toString());
+      System.err.println("Check it out again to get a 'Repository Root' entry in the svn info output.");
+      System.err.println("  repoUrl = " + url);
+      System.exit(2);
+    }
     if (debug) {
       System.out.println();
       System.out.println("repoRoot = " + repoRoot);
@@ -816,7 +845,7 @@ public class MultiVersionControl {
       case HG:
         replacers.add(new Replacer("(^|\\n)(abort: .*)", "$1$2: " + dir));
         replacers.add(new Replacer("(^|\\n)([MARC!?I]) ", "$1$2 " + dir + "/"));
-        replacers.add(new Replacer("(^|\\n)(\\*\\*\\* failed to import extension .*: No module named demandload)", ""));
+        replacers.add(new Replacer("(^|\\n)(\\*\\*\\* failed to import extension .*: No module named demandload\\n)", ""));
         break;
       case SVN:
         replacers.add(new Replacer("(svn: Network connection closed unexpectedly)", "$1 for " + dir));
@@ -912,7 +941,7 @@ public class MultiVersionControl {
           pb2.command("hg", "outgoing", "-l", "1");
           // The third line is either "no changes found" or "changeset".
           replacers.add(new Replacer("^comparing with .*\\nsearching for changes\\nchangeset[^\001]*", "unpushed changesets: " + pb.directory() + "\n"));
-          replacers.add(new Replacer("^comparing with .*\\nsearching for changes\\nno changes found\n", ""));
+          replacers.add(new Replacer("^\\n?comparing with .*\\nsearching for changes\\nno changes found\n", ""));
           break;
         case SVN:
           // This ignores columns other than the first two.
@@ -1039,15 +1068,17 @@ public class MultiVersionControl {
       // java.io.BufferedInputStream.getBufIfOpen(BufferedInputStream.java:145)
       // .  I don't know why.  Re-running immediately gives fine results.
       String output = UtilMDE.readerContents(new BufferedReader(new InputStreamReader(p.getInputStream())));
-      // System.out.println("preoutput=<<<" + output + ">>>");
+      if (debug_replacers) { System.out.println("preoutput=<<<" + output + ">>>"); }
       for (Replacer r : replacers) {
         output = r.replaceAll(output);
-        // System.out.println("midoutput[" + r.regexp + "]=<<<" + output + ">>>");
+        if (debug_replacers) { System.out.println("midoutput[" + r.regexp + "]=<<<" + output + ">>>"); }
       }
-      // System.out.println("postoutput=<<<" + output + ">>>");
-      // for (int i=0; i<Math.min(100,output.length()); i++) {
-      //   System.out.println(i + ": " + (int) output.charAt(i) + "\n        \"" + output.charAt(i) + "\"");
-      // }
+      if (debug_replacers) {
+        System.out.println("postoutput=<<<" + output + ">>>");
+        for (int i=0; i<Math.min(100,output.length()); i++) {
+          System.out.println(i + ": " + (int) output.charAt(i) + "\n        \"" + output.charAt(i) + "\"");
+        }
+      }
       System.out.print(output);
 
 
