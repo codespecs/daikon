@@ -42,7 +42,7 @@
 ;; (setq guess-offset-minimum-superiority 1.33) ; default 2
 ;; ;; (load "c-set-basic-offset")
 
-(load "remove-trailing-whitespace")
+;; (load "remove-trailing-whitespace")
 (defun unset-indent-tabs-mode ()
   (setq indent-tabs-mode nil))
 (add-hook 'java-mode-hook 'unset-indent-tabs-mode)
