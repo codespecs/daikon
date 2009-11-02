@@ -580,6 +580,10 @@ public class MultiVersionControl {
 
     @SuppressWarnings("nullness") // listFiles => non-null because dir is a directory
     File /*@NonNull*/ [] childdirs = dir.listFiles(idf);
+    if (childdirs == null) {
+      System.err.printf("childdirs is null (permission or other I/O problem?) for %s%n", dir.toString());
+      return;
+    }
     for (File childdir : childdirs) {
       findCheckouts(childdir, checkouts, ignoreDirs);
     }
@@ -590,9 +594,10 @@ public class MultiVersionControl {
   static class IsDirectoryFilter implements FileFilter {
     public boolean accept(File pathname) {
       try {
-      return pathname.isDirectory()
-        && pathname.getPath().equals(pathname.getCanonicalPath());
+        return pathname.isDirectory()
+          && pathname.getPath().equals(pathname.getCanonicalPath());
       } catch (IOException e) {
+        System.err.printf("Exception in IsDirectoryFilter.accept(%s): %s%n", pathname, e);
         throw new Error(e);
         // return false;
       }
