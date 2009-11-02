@@ -53,6 +53,8 @@
 --suppress-fragment http://types.cs.washington.edu/checker-framework/doc/checkers/quals/DefaultQualifiers.html#annotation_type_element_detail
 --suppress-fragment http://types.cs.washington.edu/checker-framework/doc/checkers/quals/ImplicitFor.html#annotation_type_element_detail
 --suppress-redirect http://2006.ecoop.org/->http://www.emn.fr/x-info/ecoop2006/
+--suppress-redirect http://doi.acm.org/10.1145/1467247.1467259->http://portal.acm.org/citation.cfm?doid=1467247.1467259	
+--suppress-redirect http://doi.acm.org/10.1145/1467247.1467260->http://portal.acm.org/citation.cfm?doid=1467247.1467260	
 --suppress-redirect http://en.wikipedia.org/->http://en.wikipedia.org/wiki/Main_Page	
 --suppress-redirect http://groups.google.com/->http://groups-beta.google.com/
 --suppress-redirect http://ieeexplore.ieee.org/->http://ieeexplore.ieee.org/Xplore/home.jsp
@@ -62,6 +64,7 @@
 --suppress-redirect http://msdn.microsoft.com/library/default.asp?url=/library/en-us/vccore/html/_core_building_on_the_command_line.3a_.overview.asp->http://msdn.microsoft.com/library/shared/deeptree/bot/bot.asp?dtcnfg=/library/deeptreeconfig.xml
 --suppress-redirect http://pag.csail.mit.edu/~smcc/->http://people.csail.mit.edu/people/smcc/
 --suppress-redirect http://pag/daikon/mit/log2html.php->http://www.pag.csail.mit.edu/daikon/mit/log2html.php
+--suppress-redirect http://people.csail.mit.edu/cpacheco/randoop/->http://people.csail.mit.edu/cpacheco/randoop/1.2/doc/	
 --suppress-redirect http://student.mit.edu/catalog/index.cgi->http://student.mit.edu/@8178100.17571/catalog/index.cgi	
 --suppress-redirect http://texi2html.cvshome.org/->http://ximbiot.com/cvs/
 --suppress-redirect http://www.a1trails.com/xc_ski/xc_ma.html->http://www.a1trails.com/home/nospiders.html
@@ -69,6 +72,7 @@
 --suppress-redirect http://www.amtrak.com/->http://www.amtrak.com/servlet/ContentServer?pagename=Amtrak/HomePage
 --suppress-redirect http://www.aro.ncren.net/->http://www.arl.army.mil/main/main/default.cfm?Action=29&Page=29	
 --suppress-redirect http://www.computer.org/tse/->http://www.computer.org/portal/site/transactions/index.jsp?pageID=tse_home/
+--suppress-redirect http://www.computer.org/tse/->http://www.computer.org/portal/web/tse/	
 --suppress-redirect http://www.computer.org/tse/->http://www2.computer.org/portal/web/tse/
 --suppress-redirect http://www.cs.cmu.edu/~dpelleg/kmeans.html->http://www-2.cs.cmu.edu/~dpelleg/kmeans.html
 --suppress-redirect http://www.cs.ucl.ac.uk/icse07/->http://web4.cs.ucl.ac.uk/icse07/	
