@@ -8,21 +8,30 @@ BIBFILES = ${BIBDIR}/bibstring-unabbrev.bib ${BIBDIR}/ernst.bib ${BIBDIR}/invari
 BPHOME ?= /afs/csail.mit.edu/u/m/mernst/bin/src/perl/bibtex2web/lib
 BWBIN = ${BPHOME}/../bin
 MDEWWW ?= /afs/csail.mit.edu/u/m/mernst/www
-LINK_NAMES = ${MDEWWW}/pubs/link-names
-#LINK_NAMES = /afs/csail.mit.edu/u/j/jhp/afstmp/pubs/link-names
+INVSCRIPTS ?= /afs/csail.mit.edu/u/m/mernst/research/invariants/scripts
 PERLLIB := $(HOME)/research/invariants/scripts:/afs/csail.mit.edu/u/m/mernst/bin/src/perl/bibtex2web/lib
 ###########################################################################
+
+# Files in $pag/www/daikon/pubs-sources/
+FILES_FROM_CHECKOUT := Makefile abstract-headfoot-methodology.html abstract-headfoot-technique.html abstract-headfoot-testsubject.html abstract-headfoot.html fix-homedir-tilde.pl index-headfoot.html
+
 
 html: HTML
 
 HTML: abstracts index.html
+
+update-from-checkout:
+	cd ${INV}/doc/www/pubs-sources; cp -pf ${FILES_FROM_CHECKOUT} ${pag}/www/daikon/pubs-sources/
 
 # Remove generated files.
 clean-abstracts:
 	@touch dummy-abstract.html
 	\rm -f *-abstract.html
 
+.PHONY: index.html
 index.html:
+# Avoid error "Cannot write to index.html"
+	rm -f $@
 	${BWBIN}/bwconv.pl -format=bibtex,htmlpubs -outopts=withyears -hfbodyline BODY-INVARIANTDETECTION -headfoot ../pubs-sources/index-headfoot.html -to $(notdir $@)-1 -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Invariant detection") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	${BWBIN}/bwconv.pl -format=bibtex,htmlpubs -outopts=withyears -hfbodyline BODY-METHODOLOGYUSINGDAIKON -headfoot $(notdir $@)-1 -to $(notdir $@)-2 -filter 'defined($$rec{"usesdaikon"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	${BWBIN}/bwconv.pl -format=bibtex,htmlpubs -outopts=withyears -hfbodyline BODY-DAIKONTESTSUBJECT -headfoot $(notdir $@)-2 -to $(notdir $@) -filter 'defined($$rec{"usesdaikonastestsubject"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
@@ -45,7 +54,7 @@ writable-abstracts:
 abstracts: writable-abstracts abstracts-testsubject abstracts-methodology abstracts-invariantdetection writable-abstracts
 
 abstracts-invariantdetection:
-	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${LINK_NAMES} -validurls ${MDEWWW}/pubs/valid-urls -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Invariant detection") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
+	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${INVSCRIPTS}/link-names -validurls ${INVSCRIPTS}/valid-urls -filter 'defined($$rec{"category"}) && ($$rec{"category"} eq "Invariant detection") && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	../pubs-sources/fix-homedir-tilde.pl abstracts-unsplit.html
 	${BWBIN}/htmlabstract-split.pl \
 	  -headfoot ../pubs-sources/abstract-headfoot-technique.html \
@@ -53,7 +62,7 @@ abstracts-invariantdetection:
 	\rm -f abstracts-unsplit.html
 
 abstracts-methodology:
-	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${LINK_NAMES} -validurls ${MDEWWW}/pubs/valid-urls -filter 'defined($$rec{"usesdaikon"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
+	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${INVSCRIPTS}/link-names -validurls ${INVSCRIPTS}/valid-urls -filter 'defined($$rec{"usesdaikon"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	../pubs-sources/fix-homedir-tilde.pl abstracts-unsplit.html
 	${BWBIN}/htmlabstract-split.pl \
 	  -headfoot ../pubs-sources/abstract-headfoot-methodology.html \
@@ -61,7 +70,7 @@ abstracts-methodology:
 	rm abstracts-unsplit.html
 
 abstracts-testsubject:
-	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${LINK_NAMES} -validurls ${MDEWWW}/pubs/valid-urls -filter 'defined($$rec{"usesdaikonastestsubject"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
+	${BWBIN}/bwconv.pl -format=bibtex -outformat=htmlabstract -outopts=withbibtex -to abstracts-unsplit.html -linknames ${INVSCRIPTS}/link-names -validurls ${INVSCRIPTS}/valid-urls -filter 'defined($$rec{"usesdaikonastestsubject"}) && ! (defined($$rec{"omitfromcv"}) || (lc($$rec{"TYPE"}) eq "lecture") || (defined($$rec{"crossrefonly"}) && ! defined($$rec{"inlined-crossref"})))' ${BIBFILES}
 	../pubs-sources/fix-homedir-tilde.pl abstracts-unsplit.html
 	${BWBIN}/htmlabstract-split.pl -headfoot ../pubs-sources/abstract-headfoot-testsubject.html abstracts-unsplit.html
 	rm abstracts-unsplit.html
