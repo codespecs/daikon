@@ -1,0 +1,263 @@
+Date: Thu, 4 Jun 1998 11:17:21 -0700 (PDT)
+From: Michael Ernst <mernst@cs.washington.edu>
+Subject: Invariants: sample inputs and outputs
+
+
+---------------- cut here for gries.lisp ----------------
+;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;;
+;;; Chapter 14: Programming as a goal-oriented activity
+;;;
+
+;; page 173, program (14.3):
+;; compute max of two numbers
+(defun p173-14.3 (x y)
+  (declare (type integer x y))
+  (pre true)
+  ;; z is a new variable
+  (let (z)
+    (declare (type (or integer null) z))	; yuck
+    (if-fi ((>= x y) (setq z x))
+	   ((>= y x) (setq z y)))
+    ;; equivalently, (and (>= z x) (>= z y) (or (= z x) (= z y)))
+    (post (= (z (max x y))))))
+
+(defun test-p173-14.3 ()
+  (with-invariants-log "p173-14.3.inv"
+    (loop for i from 0 to 100
+	  do (p173-14.3 (random-range -100 100) (random-range -100 100)))))
+
+;; page 176:
+;; set x to smaller of inputs, y to larger
+(defun p176 (x y)
+  (declare (type integer x y))
+  (pre (and (= x orig-x) (= y orig-y)))
+  (if-fi ((<= x y) (skip))
+	 ((<= y x) (swap x y)))
+  (post (and (<= x y) (or (and (= x orig-x) (= y orig-y))
+			  (and (= y orig-x) (= x orig-y))))))
+
+(defun test-p176 ()
+  (with-invariants-log "p176.inv"
+    (loop for i from 0 to 100
+	  do (p176 (random-range -100 100) (random-range -100 100)))))
+
+
+;;; increment k under the invariance j = k mod 10
+
+;; page 177, program (14.8):
+;; increment k under the invariance j = k mod 10
+(defun p177-14.8 (j k)
+  (declare (type integer j k))
+  (pre (= j (mod k 10)))
+  (if-fi ((< j 9) (setq k (+ k 1) j (+ j 1)))
+	 ((= j 9) (setq k (+ k 1) j 0)))
+  (post (= j (mod k 10))))
+
+(defun test-p177-14.8 ()
+  (with-invariants-log "p177-14.8.inv"
+    (loop for i from 0 to 100
+	  do (let ((k (random-range -100 100)))
+	       (p177-14.8 (mod k 10) k)))))
+
+;; page 177, program (14.9):
+;; increment k under the invariance j = k mod 10
+(defun p177-14.9 (j k)
+  (declare (type integer j k))
+  (pre (= j (mod k 10)))
+  (if-fi ((< j 9) (setq k (+ k 1) j (+ j 1)))
+	 ((>= j 9) (setq k (+ k 1) j 0)))
+  (post (= j (mod k 10))))
+
+(defun test-p177-14.9 ()
+  (with-invariants-log "p177-14.9.inv"
+    (loop for i from 0 to 100
+	  do (let ((k (random-range -100 100)))
+	       (p177-14.9 (mod k 10) k)))))
+
+;; page 177, near bottom of page:
+;; increment k under the invariance j = k mod 10
+(defun p177-1 (j k)
+  (declare (type integer j k))
+  (pre (= j (mod k 10)))
+  (if-fi ((and (<= 0 j) (< j 9))
+	  (setq k (+ k 1) j (+ j 1)))
+	 ((>= j 9)
+	  (setq k (+ k 1) j 0)))
+  (post (= j (mod k 10))))
+
+(defun test-p177-1 ()
+  (with-invariants-log "p177-1.inv"
+    (loop for i from 0 to 100
+	  do (let ((k (random-range -100 100)))
+	       (p177-1 (mod k 10) k)))))
+
+;; page 177, very bottom of page:
+;; increment k under the invariance j = k mod 10
+(defun p177-2 (j k)
+  (declare (type integer j k))
+  (pre (= j (mod k 10)))
+  (setq k (+ k 1))
+  (if-fi ((< j 9) (setq j (+ j 1)))
+	 ((= j 9) (setq j 0)))
+  (post (= j (mod k 10))))
+
+(defun test-p177-2 ()
+  (with-invariants-log "p177-2.inv"
+    (loop for i from 0 to 100
+	  do (let ((k (random-range -100 100)))
+	       (p177-2 (mod k 10) k)))))
+
+;;; end of: increment k under the invariance j = k mod 10
+
+;; page 178, exercise 1(b); answer on page 342:
+;; set x to abs(x)
+(defun p178-1b (x)
+  (declare (type integer x))
+  (pre (= x orig-x))
+  (if-fi ((>= x 0) (skip))
+	 ((<= x 0) (setq x (- x))))
+  ;; equivalently, (or (and (>= orig-x 0) (= x orig-x))
+  ;;                   (and (<= orig-x 0) (= x (- orig-x))))
+  (post (= x (abs orig-x))))
+
+(defun test-p178-1b ()
+  (with-invariants-log "p178-1b.inv"
+    (loop for i from 0 to 100
+	  do (p178-1b (random-range -100 100)))))
+---------------- end of gries.lisp ----------------
+
+---------------- cut here for gries.discovered ----------------
+>>> daikon.read_invs('p*.inv', 'clear first')
+>>> daikon.all_numeric_invariants()
+P173-14.3:::BEGIN 101 samples
+  X in [-99..98]
+  Y in [-97..100]
+P173-14.3:::END 101 samples
+  X in [-99..98]
+  Y in [-97..100]
+  Z in [-79..100]
+    Z >= Y
+    Y <= Z
+    Z >= X
+    X <= Z
+      Z = max(Y, X)
+      Z = max(X, Y)
+P176:::BEGIN 101 samples
+  X in [-98..97]
+  Y in [-97..100]
+P176:::END 101 samples
+  X in [-98..81]
+  Y in [-73..100]
+  ORIG-Y in [-97..100]
+  ORIG-X in [-98..97]
+    ORIG-Y <= Y
+    Y >= ORIG-Y
+    ORIG-X <= Y
+    Y >= ORIG-X
+    Y > X
+    X < Y
+    ORIG-Y >= X
+    X <= ORIG-Y
+    ORIG-X >= X
+    X <= ORIG-X
+      Y = max(ORIG-X, ORIG-Y)
+      Y = max(ORIG-Y, ORIG-X)
+      X = min(ORIG-X, ORIG-Y)
+      X = min(ORIG-Y, ORIG-X)
+P177-14.8:::BEGIN 101 samples
+  J in [0..9]
+  K in [-99..99]
+    K = J (mod 10)
+    J = K (mod 10)
+P177-14.8:::END 101 samples
+  J in [0..9]
+  K in [-98..100]
+  ORIG-K in [-99..99]
+  ORIG-J in [0..9]
+    ORIG-J = ORIG-K (mod 10)
+    ORIG-K = ORIG-J (mod 10)
+    K = ORIG-K + 1
+    ORIG-K = K - 1
+    ORIG-J - K = 9 (mod 10)
+    K - ORIG-J = 1 (mod 10)
+    K = J (mod 10)
+    J = K (mod 10)
+    ORIG-K - J = 9 (mod 10)
+    J - ORIG-K = 1 (mod 10)
+    ('ORIG-J - J',) in [-1, 9]
+    ('J - ORIG-J',) in [-9, 1]
+P177-14.9:::BEGIN 101 samples
+  J in [0..9]
+  K in [-99..98]
+    K = J (mod 10)
+    J = K (mod 10)
+P177-14.9:::END 101 samples
+  J in [0..9]
+  K in [-98..99]
+  ORIG-K in [-99..98]
+  ORIG-J in [0..9]
+    ORIG-J = ORIG-K (mod 10)
+    ORIG-K = ORIG-J (mod 10)
+    K = ORIG-K + 1
+    ORIG-K = K - 1
+    ORIG-J - K = 9 (mod 10)
+    K - ORIG-J = 1 (mod 10)
+    K = J (mod 10)
+    J = K (mod 10)
+    ORIG-K - J = 9 (mod 10)
+    J - ORIG-K = 1 (mod 10)
+    ('ORIG-J - J',) in [-1, 9]
+    ('J - ORIG-J',) in [-9, 1]
+P177-1:::BEGIN 101 samples
+  J in [0..9]
+  K in [-94..100]
+    K = J (mod 10)
+    J = K (mod 10)
+P177-1:::END 101 samples
+  J in [0..9]
+  K in [-93..101]
+  ORIG-K in [-94..100]
+  ORIG-J in [0..9]
+    ORIG-J = ORIG-K (mod 10)
+    ORIG-K = ORIG-J (mod 10)
+    K = ORIG-K + 1
+    ORIG-K = K - 1
+    ORIG-J - K = 9 (mod 10)
+    K - ORIG-J = 1 (mod 10)
+    K = J (mod 10)
+    J = K (mod 10)
+    ORIG-K - J = 9 (mod 10)
+    J - ORIG-K = 1 (mod 10)
+    ('ORIG-J - J',) in [-1, 9]
+    ('J - ORIG-J',) in [-9, 1]
+P177-2:::BEGIN 101 samples
+  J in [0..9]
+  K in [-100..96]
+    K = J (mod 10)
+    J = K (mod 10)
+P177-2:::END 101 samples
+  J in [0..9]
+  K in [-99..97]
+  ORIG-K in [-100..96]
+  ORIG-J in [0..9]
+    ORIG-J = ORIG-K (mod 10)
+    ORIG-K = ORIG-J (mod 10)
+    K = ORIG-K + 1
+    ORIG-K = K - 1
+    ORIG-J - K = 9 (mod 10)
+    K - ORIG-J = 1 (mod 10)
+    K = J (mod 10)
+    J = K (mod 10)
+    ORIG-K - J = 9 (mod 10)
+    J - ORIG-K = 1 (mod 10)
+    ('ORIG-J - J',) in [-1, 9]
+    ('J - ORIG-J',) in [-9, 1]
+P178-1B:::BEGIN 101 samples
+  X in [-95..99]
+P178-1B:::END 101 samples
+  X in [0..99]
+  ORIG-X in [-95..99]
+    X = abs(ORIG-X)
+    X >= ORIG-X
+---------------- end of gries.discovered ----------------
+

@@ -1,0 +1,48 @@
+<h4><a name="lisp-front-end">Lisp front end</a></h4>
+
+<ol>
+  <li>Load all the support code.
+<pre>
+  (load "load-all")
+</pre>
+  <li>Add instrumentation code to the beginning and end  of each
+      function, and to each loop head.  The instrumentation writes the
+      values of all the live variables to a file. 
+<pre>
+  (instrument-file "gries.lisp" "gries-instrumented.lisp")
+</pre>
+</ol>
+
+  For efficiency, you might want to compile the Lisp files and run the
+  compiled versions; do the following after <tt>(load "load-all")</tt>:
+<pre>
+    (compile-all)	;; only needs to be done once (ever)
+    (load-all)		;; only needs to be done explicitly after compiling
+</pre>
+
+===========================================================================
+
+  <li>In Lisp, here is how you would run the Gries example programs, after
+      having done <tt>(load "load-all")</tt>:
+<pre>
+    ;; Load the instrumented code.
+    (load "gries-instrumented")
+    ;; Run the instrumented code.  This runs all the test-* functions; 
+    ;; each test-* function creates one *.dtrace file
+    (test-all)
+</pre>
+
+===========================================================================
+
+Lisp front end and example files
+  lisp-front-end/
+    load-all.lisp	Shell for loading other Lisp files
+    instrument.lisp	Instrumenting Lisp programs to write data traces
+    data-trace.lisp	Writing data values to a data trace
+    gries.lisp		Programs from Gries's "The Science of Programming"
+    gries-helper.lisp	Support for Gries-style syntax and for testing
+    gries-instrumented.lisp	Instrumented version of gries.lisp
+    inv-medic.lisp	Support for finding invariants in the Medic program
+
+===========================================================================
+
