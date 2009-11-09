@@ -77,10 +77,8 @@ public class AnnotateNullable {
       System.out.println();
     } else {
       System.out.println ("package checkers.nullness.quals:");
-      System.out.println ("annotation visible @Nullable");
-      System.out.println();
-      System.out.println ("package checkers.nullness.quals:");
-      System.out.println ("annotation visible @NonNull");
+      System.out.println ("annotation @Nullable:");
+      System.out.println ("annotation @NonNull:");
       System.out.println();
     }
 
@@ -361,8 +359,8 @@ public class AnnotateNullable {
       assert (!vi.isPrestate()) : vi;
 
       // Skip anyone with a parent in the hierarchy.  We are only
-      // interested in them at the top (eg, we don't want to see
-      // object fields in each method
+      // interested in them at the top (e.g., we don't want to see
+      // object fields in each method).
       if (vi.parent_ppt != null)
         continue;
 
