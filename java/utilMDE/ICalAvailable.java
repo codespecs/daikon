@@ -26,6 +26,9 @@ import java.util.HashMap;
 // transparency of your iCal items (this shows up as "available/busy" in
 // Google calendar).
 
+// TODO:  Fix "Problem:  any all-day events will be treated as UTC." (see below)
+
+
 /**
  * Given one or more calendars in iCal format, produces a textual summary
  * of available times.  Run
@@ -81,8 +84,8 @@ public class ICalAvailable {
 
   /// Other variables
 
-  static boolean debug = false;
-  // static boolean debug = true;
+  @Option("enable debugging output")
+  public static boolean debug = false;
 
   /** The appointments (the times that are unavailable for meeting) */
   static List<Calendar> calendars = new ArrayList<Calendar>();
@@ -361,8 +364,23 @@ public class ICalAvailable {
         System.out.println("Request = " + request);
       }
       ComponentList busyTimes = new ComponentList();
+      // Problem:  any all-day events will be treated as UTC.
+      // Instead, they should be converted to local time (tz1).
+      // But VFreeBusy does not support this, so I may need to convert
+      // daily events into a different format before inserting them.
       for (Calendar calendar : calendars) {
-        busyTimes.addAll(calendar.getComponents());
+        for (Iterator<Object> itor = calendar.getComponents().iterator(); itor.hasNext(); ) {
+          Component c = (Component) itor.next();
+          if (c instanceof VEvent) {
+            VEvent v = (VEvent) c;
+            DtStart dts = v.getStartDate();
+            Parameter dtsValue = dts.getParameter("VALUE");
+            boolean allDay = (dtsValue != null) && dtsValue.getValue().equals("DATE");
+            // TODO: convert to the proper timezone.
+            // Tricky: must deal with the possibility of RRULE:FREQ=
+          }
+          busyTimes.add(c);
+        }
       }
       VFreeBusy response = new VFreeBusy(request, busyTimes);
       if (debug) {
