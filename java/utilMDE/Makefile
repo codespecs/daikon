@@ -156,6 +156,7 @@ MathMDE.java: MathMDE.java.jpp MathMDE-gcd.java.jpp MathMDE-modulus.java.jpp Mat
 
 
 jar: utilMDE.jar
+# This should depend on all the included .jar files, too.
 # TODO: Why does this depend on lookup.html and lookup.txt but doesn't include them?
 utilMDE.jar: .class-files-timestamp .test-timestamp lib lookup.html lookup.txt
 # "make clean" avoids including stray .class files from your directory.
