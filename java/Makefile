@@ -980,7 +980,7 @@ doc-private: $(AUTO_GENERATED_FILES)
 # ## Fix up generated .html files for use by the Emacs `javadoc-lookup' function.
 # doc-javadoc-lookup: doc
 # 	find doc -name '*.html' | xargs -n 100 ${DAIKONBIN}/jdk-add-munged-anchor-names
-# 	echo "Run javadoc-index-to-alist > ~/emacs/javadoc-index.el"
+# 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: $(AUTO_GENERATED_FILES)
 	javadoc -J-Xmx1000m -J-ea -doclet daikon.config.InvariantDoclet \
