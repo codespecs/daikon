@@ -288,8 +288,7 @@ public class PptRelation implements Serializable {
       Equality e = (Equality) inv;
       debug.fine("-- processing equality set " + e);
       Set<VarInfo> eqset = e.getVars();
-      VarInfo[] varr = new VarInfo[eqset.size()];
-      varr = eqset.toArray(varr);
+      VarInfo[] varr = eqset.toArray(new VarInfo[eqset.size()]);
 
       // Build each combination of variables in the equality set and produce
       // a pair for each.  Skip any variables that do not have corresponding
