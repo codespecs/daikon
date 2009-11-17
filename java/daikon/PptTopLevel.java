@@ -1105,7 +1105,7 @@ public class PptTopLevel extends Ppt {
       // since NISuppressions will add new slices/invariants as others are
       // falsified.
       PptSlice[] slices = views.values().toArray(
-          new PptSlice[views.size()]);
+          new PptSlice[views.values().size()]);
       for (int i = 0; i < slices.length; i++) {
         slices[i].remove_falsified();
       }
@@ -1220,7 +1220,7 @@ public class PptTopLevel extends Ppt {
     for (int ii = 0; ii < ppt.var_infos.length; ii++) {
       if (ppt.var_infos[ii].missingOutOfBounds()) {
         int mod = vt.getModified(ppt.var_infos[ii]);
-        assert var_infos[ii].derived != null;
+        assert var_infos[ii].derived != null : "@SuppressWarnings(nullness)";
         if (mod == ValueTuple.MISSING_NONSENSICAL)
           var_infos[ii].derived.missing_array_bounds = true;
       }
@@ -3736,8 +3736,8 @@ public class PptTopLevel extends Ppt {
       }
       non_missing_leaders.add(l);
     }
-    VarInfo[] leaders = new VarInfo[non_missing_leaders.size()];
-    leaders = non_missing_leaders.toArray(leaders);
+    VarInfo[] leaders = non_missing_leaders.toArray(
+                           new VarInfo[non_missing_leaders.size()]);
 
     // Create any invariants in the children which are NI-suppressed and
     // remember the list for each child.  The same ppt can be a child
@@ -3913,8 +3913,8 @@ public class PptTopLevel extends Ppt {
       assert (assert_enabled = true);
       if (assert_enabled) {
         for (VarInfo test_pv : pv.equalitySet.getVars()) {
-          VarInfo test_cv = rel.childVar (test_pv);
-          assert test_cv != null;
+          @SuppressWarnings("nullness")
+          @NonNull VarInfo test_cv = rel.childVar (test_pv);
           if (test_cv.canonicalRep() != cv.canonicalRep()) {
             System.out.println ("pv.equalitySet = " + pv.equalitySet);
             System.out.println ("cv.equalitySet = " + cv.equalitySet);
@@ -4605,8 +4605,8 @@ public class PptTopLevel extends Ppt {
     }
 
     for (String successor : ppt_successors) {
-      PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
-      assert ppt_succ != null;
+      @SuppressWarnings("nullness")
+      @NonNull PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
       Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
       path_set.add (this);
       boolean succ_result = ppt_succ.connected (ppt, path_set);
@@ -4688,8 +4688,8 @@ public class PptTopLevel extends Ppt {
 
     int result = 0;
     for (String successor : ppt_successors) {
-      PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
-      assert ppt_succ != null;
+      @SuppressWarnings("nullness")
+      @NonNull PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
       Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
       path_set.add (this);
       int succ_result = ppt_succ.all_successors_goto (ppt, path_set);

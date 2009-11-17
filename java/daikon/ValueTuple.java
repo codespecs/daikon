@@ -28,13 +28,13 @@ public final class ValueTuple implements Cloneable {
   // Each element is null only if it is missing (according to the mods array).
   public /*@Nullable*/ /*@Interned*/ Object /*@Interned*/ [] vals;
 
-  // Could consider putting this in the first slot of "vals", to avoid the
-  // Object overhead of a pair of val and mods.
+  // Could consider putting the mods array in the first slot of "vals", to
+  // avoid the Object overhead of a pair of val and mods.
 
   /**
    * Modification bit per value, possibly packed into fewer ints than the
    * vals field.  Don't use a single int because that won't scale to (say)
-   * more than 16 values.
+   * more than 32 values.
   **/
   public int /*@Interned*/ [] mods;
 

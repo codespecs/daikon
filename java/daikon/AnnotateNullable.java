@@ -110,7 +110,8 @@ public class AnnotateNullable {
       int lastdot = name.lastIndexOf ('.');
       String classname = name.substring (0, lastdot);
       // System.out.printf ("classname for ppt %s is '%s'%n", name, classname);
-      List<PptTopLevel> static_methods = class_map.get (classname);
+      @SuppressWarnings("nullness")
+      @NonNull List<PptTopLevel> static_methods = class_map.get (classname);
       assert static_methods != null : classname;
       static_methods.add (ppt);
     }
@@ -128,9 +129,9 @@ public class AnnotateNullable {
     for (Iterator<PptTopLevel> ii = ppts.pptIterator(); ii.hasNext(); ) {
       PptTopLevel ppt = ii.next();
       if (ppt.is_class()) {
-        List<PptTopLevel> static_methods
+        @SuppressWarnings("nullness")
+        @NonNull List<PptTopLevel> static_methods
           = class_map.get (ppt.name().replace (":::CLASS", ""));
-        assert static_methods != null;
         int child_cnt = 0;
         for (PptRelation child_rel : ppt.children) {
           PptTopLevel child = child_rel.child;
@@ -244,8 +245,9 @@ public class AnnotateNullable {
     } else {
       String classname = object_ppt.ppt_name.getFullClassName();
       assert classname != null;
-      List<PptTopLevel> static_methods = class_map.get (classname);
-      assert static_methods != null;
+      @SuppressWarnings("nullness")
+      @NonNull List<PptTopLevel> static_methods = class_map.get (classname);
+      assert static_methods != null : classname;
       for (PptTopLevel child : static_methods)
         process_method (child);
     }
@@ -401,10 +403,10 @@ public class AnnotateNullable {
    */
   public static String jvm_signature (PptTopLevel ppt) {
 
-    String method = ppt.ppt_name.getMethodName();
-    assert method != null;
-    String java_sig = ppt.ppt_name.getSignature();
-    assert java_sig != null;
+    @SuppressWarnings("nullness")
+    @NonNull String method = ppt.ppt_name.getMethodName();
+    @SuppressWarnings("nullness")
+    @NonNull String java_sig = ppt.ppt_name.getSignature();
     String java_args = java_sig.replace (method, "");
     // System.out.printf ("m/s/a = %s %s %s%n", method, java_sig, java_args);
     if (method.equals (ppt.ppt_name.getShortClassName()))
