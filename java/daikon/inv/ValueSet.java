@@ -74,7 +74,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
   }
 
   /** Track the specified object. **/
-  public abstract void add(/*@Nullable*/ Object v1);
+  public abstract void add(Object v1);
 
   /** Add stats from the specified value set. */
   protected abstract void add_stats (ValueSet other);
@@ -102,7 +102,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public ValueSetScalar(int max_values) {
       super(max_values);
     }
-    public void add(/*@Nullable*/ Object v1) {
+    public void add(Object v1) {
       assert v1 != null;
       long val = ((Long) v1).longValue();
       if (val < min_val) { min_val = val; }
@@ -141,7 +141,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public ValueSetFloat(int max_values) {
       super(max_values);
     }
-    public void add(/*@Nullable*/ Object v1) {
+    public void add(Object v1) {
       assert v1 != null;
       double val = ((Double) v1).doubleValue();
       if (val < min_val) { min_val = val; }
@@ -186,19 +186,18 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public ValueSetScalarArray(int max_values) {
       super(max_values);
     }
-    public void add(/*@Nullable*/ Object v1) {
+    public void add(Object v1) {
+      assert v1 != null;
       long[] val = (long[]) v1;
-      if (val != null) {
-        for (int i = 0; i < val.length; i++) {
-          if (val[i] < min_val) { min_val = val[i]; }
-          if (val[i] > max_val) { max_val = val[i]; }
-        }
-        elem_cnt += val.length;
-        if (val.length > 1)
-          multi_arr_cnt++;
-        if (val.length > max_length)
-          max_length = val.length;
+      for (int i = 0; i < val.length; i++) {
+        if (val[i] < min_val) { min_val = val[i]; }
+        if (val[i] > max_val) { max_val = val[i]; }
       }
+      elem_cnt += val.length;
+      if (val.length > 1)
+        multi_arr_cnt++;
+      if (val.length > max_length)
+        max_length = val.length;
       add(UtilMDE.hash((long[]) v1));
     }
 
@@ -242,20 +241,19 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public ValueSetFloatArray(int max_values) {
       super(max_values);
     }
-    public void add(/*@Nullable*/ Object v1) {
+    public void add(Object v1) {
+      assert v1 != null;
       double[] val = (double[]) v1;
-      if (val != null) {
-        for (int i = 0; i < val.length; i++) {
-          if (val[i] < min_val) { min_val = val[i]; }
-          if (val[i] > max_val) { max_val = val[i]; }
-          if (Double.isNaN(val[i])) { can_be_NaN = true; }
-        }
-        elem_cnt += val.length;
-        if (val.length > 1)
-          multi_arr_cnt++;
-        if (val.length > max_length)
-          max_length = val.length;
+      for (int i = 0; i < val.length; i++) {
+        if (val[i] < min_val) { min_val = val[i]; }
+        if (val[i] > max_val) { max_val = val[i]; }
+        if (Double.isNaN(val[i])) { can_be_NaN = true; }
       }
+      elem_cnt += val.length;
+      if (val.length > 1)
+        multi_arr_cnt++;
+      if (val.length > max_length)
+        max_length = val.length;
       add(UtilMDE.hash(val));
     }
 
@@ -295,7 +293,8 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public ValueSetString(int max_values) {
       super(max_values);
     }
-    public void add(/*@Nullable*/ Object v1) {
+    public void add(Object v1) {
+      assert v1 != null;
       add(UtilMDE.hash((String) v1));
     }
 
@@ -319,13 +318,12 @@ public abstract class ValueSet extends LimitedSizeIntSet
     public ValueSetStringArray(int max_values) {
       super(max_values);
     }
-    public void add(/*@Nullable*/ Object v1) {
+    public void add(Object v1) {
+      assert v1 != null;
       String[] val = (String[]) v1;
-      if (val != null) {
-        elem_cnt += val.length;
-        if (val.length > 1)
-          multi_arr_cnt++;
-      }
+      elem_cnt += val.length;
+      if (val.length > 1)
+        multi_arr_cnt++;
       add(UtilMDE.hash(val));
     }
 
