@@ -18,13 +18,18 @@ import java.io.Serializable;
  * <p>
  *
  * This class is used for efficient justification tests.
+ * <p>
+ *
  * Relevant subclasses are:
- *   ValueSetScalar
- *   ValueSetFloat
- *   ValueSetScalarArray
- *   ValueSetFloatArray
- *   ValueSetString
- *   ValueSetStringArray
+ * <ul>
+ *   <li>ValueSetScalar
+ *   <li>ValueSetFloat
+ *   <li>ValueSetScalarArray
+ *   <li>ValueSetFloatArray
+ *   <li>ValueSetString
+ *   <li>ValueSetStringArray
+ * </ul>
+ * These subclasses store a hashcode.
  **/
 public abstract class ValueSet extends LimitedSizeIntSet
   implements Serializable, Cloneable
@@ -73,7 +78,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
     }
   }
 
-  /** Track the specified object. **/
+  /** Add the specified object (really, its hashcode) to the set. **/
   public abstract void add(Object v1);
 
   /** Add stats from the specified value set. */
