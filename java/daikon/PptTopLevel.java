@@ -3914,7 +3914,7 @@ public class PptTopLevel extends Ppt {
       if (assert_enabled) {
         for (VarInfo test_pv : pv.equalitySet.getVars()) {
           @SuppressWarnings("nullness")
-          @NonNull VarInfo test_cv = rel.childVar (test_pv);
+          /*@NonNull*/ VarInfo test_cv = rel.childVar (test_pv);
           if (test_cv.canonicalRep() != cv.canonicalRep()) {
             System.out.println ("pv.equalitySet = " + pv.equalitySet);
             System.out.println ("cv.equalitySet = " + cv.equalitySet);
@@ -4606,7 +4606,7 @@ public class PptTopLevel extends Ppt {
 
     for (String successor : ppt_successors) {
       @SuppressWarnings("nullness")
-      @NonNull PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
+      /*@NonNull*/ PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
       Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
       path_set.add (this);
       boolean succ_result = ppt_succ.connected (ppt, path_set);
@@ -4689,7 +4689,7 @@ public class PptTopLevel extends Ppt {
     int result = 0;
     for (String successor : ppt_successors) {
       @SuppressWarnings("nullness")
-      @NonNull PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
+      /*@NonNull*/ PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
       Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
       path_set.add (this);
       int succ_result = ppt_succ.all_successors_goto (ppt, path_set);

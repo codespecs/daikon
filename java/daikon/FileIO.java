@@ -383,7 +383,7 @@ public final class FileIO {
     // Check to see if the program point is new
     if (state.all_ppts.containsName(ppt_name)) {
       @SuppressWarnings("nullness")
-      @NonNull PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+      /*@NonNull*/ PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(ppt_name)";
       if (state.ppts_are_new) {
         check_decl_match (state, existing_ppt, vi_array);
@@ -492,7 +492,7 @@ public final class FileIO {
     // This program point name has already been encountered.
     if (state.all_ppts.containsName(ppt_name)) {
       @SuppressWarnings("nullness")
-      @NonNull PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+      /*@NonNull*/ PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(ppt_name)";
       if (state.ppts_are_new) {
         check_decl_match (state, existing_ppt, vi_array);
@@ -948,7 +948,7 @@ public final class FileIO {
       // Yoav: server mode
       while (true) {
         @SuppressWarnings("nullness") // server_dir was checked when it was set
-        @NonNull String[] dir_files = Daikon.server_dir.list();
+        /*@NonNull*/ String[] dir_files = Daikon.server_dir.list();
         Arrays.sort(dir_files);
         boolean hasEnd = false;
         for (String f : dir_files) {
@@ -1537,7 +1537,7 @@ public final class FileIO {
         new PptName(ppt_name);
       } catch (Throwable t) {
         @SuppressWarnings("nullness")
-        @NonNull String message = t.getMessage();
+        /*@NonNull*/ String message = t.getMessage();
         // Augment the message with line number information.
         // If it is not a Daikon.TerminationMessage, first add some context.
         if (! (t instanceof Daikon.TerminationMessage)) {
@@ -1717,7 +1717,7 @@ public final class FileIO {
         && (ppt.function_id != null)) {
       if (!dkconfig_merge_basic_blocks) {
         @SuppressWarnings("nullness")
-        @NonNull List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
+        /*@NonNull*/ List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
         for (PptTopLevel p : ppts) {
           p.combined_subsumed = false;
           p.combined_ppts_init = true;
@@ -1725,7 +1725,7 @@ public final class FileIO {
       } else {
         // Sanity check the ppts in this function
         @SuppressWarnings("nullness")
-        @NonNull List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
+        /*@NonNull*/ List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
         assert ppts != null : ppt.name() + " func id " + ppt.function_id;
         assert ppts.size() > 0 : ppt.name();
         for (PptTopLevel p : ppts) {
@@ -1783,7 +1783,7 @@ public final class FileIO {
           if (p.ppt_successors != null) {
             for (String succName : p.ppt_successors) {
               @SuppressWarnings("nullness")
-              @NonNull PptTopLevel succPpt = all_ppts.get(succName);
+              /*@NonNull*/ PptTopLevel succPpt = all_ppts.get(succName);
               assert succPpt.predecessors != null : "@SuppressWarnings(nullness)";
               succPpt.predecessors.add(p);
             }
@@ -1905,7 +1905,7 @@ public final class FileIO {
           TreeSet<Integer> keys = new TreeSet<Integer>(call_hashmap.keySet());
           for (Integer i : keys) {
             @SuppressWarnings("nullness") // sorted keyset
-            @NonNull Invocation invok = call_hashmap.get(i);
+            /*@NonNull*/ Invocation invok = call_hashmap.get(i);
             assert invok != null;
             invocations.add(invok);
           }
@@ -1962,7 +1962,7 @@ public final class FileIO {
     TreeSet</*@Interned*/ Invocation> keys = new TreeSet</*@Interned*/ Invocation>(counter.keySet());
     for (/*@Interned*/ Invocation invok : keys) {
       @SuppressWarnings("nullness") // sorted keyset
-      @NonNull Integer count = counter.get(invok);
+      /*@NonNull*/ Integer count = counter.get(invok);
       System.out.println(invok.format(false) + " : "
                          + UtilMDE.nplural(count.intValue(), "invocation"));
     }
@@ -2257,7 +2257,7 @@ public final class FileIO {
     }
 
     if (ppt.ppt_name.isExitPoint() || ppt.ppt_name.isThrowsPoint()) {
-      @NonNull Invocation invoc;
+      /*@NonNull*/ Invocation invoc;
       // Set invoc
       {
         if (nonce == null) {
@@ -2857,7 +2857,7 @@ public final class FileIO {
       return (e);
     } catch (Exception exception) {
       @SuppressWarnings("nullness") // getEnumConstants returns non-null because enum_class is an enum class
-      E @NonNull [] all = enum_class.getEnumConstants();
+        E /*@NonNull*/ [] all = enum_class.getEnumConstants();
       StringBuilderDelimited msg = new StringBuilderDelimited(", ");
       for (E e : all) {
         msg.append(String.format ("'%s'", e.name().toLowerCase()));
