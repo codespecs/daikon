@@ -278,6 +278,7 @@ public class DynComp {
     cmdlist.add ("-cp");
     cmdlist.add (cp);
     cmdlist.add ("-ea");
+    cmdlist.add ("-esa");
     //    cmdlist.add ("-Xmx" + heap_size);
     if (!no_jdk)
       cmdlist.add ("-Xbootclasspath:" + rt_file + separator + cp);
