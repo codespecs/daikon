@@ -1717,20 +1717,20 @@ The test can be added into the standard tests (either @samp{everything} or
 @c     http://pag.csail.mit.edu/~mernst/tmp/inv-cvs.tar.gz
 @c   The compressed repository is about 800 Mbytes in size.
 @c   Let me know when you have downloaded it, so I can remove the file.
+@c   Please do not further redistribute it.
 @c 
-@c   Please do not distribute it to anyone else.
+@c   Before using it, please read the "Analyzing historical versions of
+@c   Daikon" section of the Daikon Developer Manual.  Feel free to
+@c   contact me if you have any problems, questions, or suggestions.  I
+@c   would like to correct problems -- both for you and for other users
+@c   of Daikon or of the CVS repository.  This can also avoid misleading
+@c   results that follow from incorrect assumptions about the system.
 @c 
-@c   Before using it, carefully read the "Analyzing historical versions of
-@c   Daikon" section of the Daikon Developer Manual.  Contact me if you have any
-@c   problems, questions, or suggestions, so that I can correct problems both
-@c   for you and for other users of Daikon or of the CVS repository.  This can
-@c   also avoid misleading results that follow from incorrect assumptions about
-@c   the system.
-@c 
-@c   Please let me know anything interesting you learn about Daikon.  Also point
-@c   me at any publications that make use of Daikon, either as a test subject or
-@c   as one step in your methodology, both for my own edification and so I can
-@c   link to them from http://pag.csail.mit.edu/daikon/pubs/.
+@c   I would enjoy hearing what you learn about Daikon -- please share
+@c   any interesting findings.  If you write any publications that use
+@c   Daikon, either as a test subject or as one step in your
+@c   methodology, let me know so I can link to them from
+@c   http://pag.csail.mit.edu/daikon/pubs/.
 @c 
 @c   I wish you the best of luck with your research!
 @c Some recent distributions:
@@ -1743,6 +1743,8 @@ The test can be added into the standard tests (either @samp{everything} or
 @c   9/10/2007  Saurabh Sinha <saurabhsinha@in.ibm.com>, Vibha S Sinha <vibha.sinha@in.ibm.com>
 @c   11/19/2007	Kevin Hoffman <kevinjohnhoffman@gmail.com>
 @c   12/27/2008 zlmdunk@126.com
+@c   11/15/2009 Jay Liu <jayliu@cs.utexas.edu>
+@c   11/15/2009 Alex Loh <alexloh@cs.utexas.edu>
 
 This section is intended primarily for researchers who are analyzing
 historical versions of Daikon.  A number of researchers (for example, in
