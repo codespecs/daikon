@@ -31,6 +31,8 @@ my $nocleanup = 0;
 my $skip_daikon_build = 0;
 # When on, skip Daikon unit tests, Daikon system tests, and diff system tests
 my $skip_daikon = 0;
+# when on skip building the dyncomp version of rt.jar (dcomp_rt.jar)
+my $skip_build_dyncomp = 0;
 # When on, test Kvasir
 my $test_kvasir = 1;
 # When on run daikon simple as a cross checker -- note: takes 3+ hours
@@ -107,6 +109,12 @@ if (! $skip_daikon_build) {
   }
   if ($success{"daikon_update"}) {
     $success{"daikon_compile"} = daikon_compile();
+  }
+}
+
+if (! $skip_build_dyncomp) {
+  if ($success{"daikon_compile"}) {
+    $success{"build_dyncomp_jar"} = build_dyncomp_jar();
   }
 }
 
@@ -259,6 +267,12 @@ sub daikon_compile {
                         "daikon_compile.out");
 }
 
+# Build the dyncomp rt.jar 
+sub build_dyncomp_jar {
+  print_log("Building dcomp_rt.jar...");
+  return buildtest_cmd ("make -C $INV/java dcomp_rt.jar",
+                        "build_dyncomp_jar.out");
+}
 
 # Run the daikon JUnit unit tests
 sub daikon_unit_test {
