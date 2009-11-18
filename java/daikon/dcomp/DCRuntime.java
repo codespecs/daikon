@@ -2031,18 +2031,26 @@ public final class DCRuntime {
       // variables.  If it does, it is indicating index comparability
       boolean hashcode_vars = false;
       boolean non_hashcode_vars = false;
+      // System.out.printf ("Checking dv set %s%n", set);
       for (DaikonVariableInfo dv : set) {
         if (dv.isHashcode() || dv.isHashcodeArray())
           hashcode_vars = true;
         else
           non_hashcode_vars = true;
+        // System.out.printf ("dv = %s, hashcode_var = %b%n", 
+        //                   dv, dv.isHashcode() || dv.isHashcodeArray());
       }
       debug_decl_print.log ("        %d vars in set, hashcode/non = %b/%b%n",
                             set.size(), hashcode_vars, non_hashcode_vars);
 
       // Loop through each variable and assign its comparability
       // Since hashcodes and their indices are in the same set, assign
-      // hashcodes one higher comparability number
+      // hashcodes one higher comparability number.  Note that there is 
+      // not necessarily an array child for a hashcode that is comparable
+      // to an integer.  This can happen when an array and a non-array object
+      // become comparable to one another.  An integer that is comparable
+      // to the array will also be comparable to the non-array object, but
+      // that comparability isn't interesting (and it can't be expressed)
       for (DaikonVariableInfo dv : set) {
         debug_decl_print.log ("          dv %s%n", dv);
         if (dv instanceof DaikonClassInfo) {
@@ -2050,10 +2058,13 @@ public final class DCRuntime {
           assert set.size() == 1 : "odd set " + set;
           comp--;   // negate increment of comp below
         } else if (dv.isHashcode() && non_hashcode_vars) {
+          assert !dv_comp_map.containsKey (dv) : dv + " " + comp;
           dv_comp_map.put (dv, comp+1);
           DaikonVariableInfo array_child = dv.array_child();
-          arr_index_map.put (array_child.getName(), comp);
+          if (array_child != null)
+            arr_index_map.put (array_child.getName(), comp);
         } else {
+          assert !dv_comp_map.containsKey (dv) : dv + " " + comp;
           dv_comp_map.put (dv, comp);
         }
       }
@@ -2068,8 +2079,10 @@ public final class DCRuntime {
 
     // Loop through each variable and print out its comparability
     // Use the dv_tree rather than sets so that we print out in the
-    // same order each time
-
+    // same order each time.  Note that arrays get two comparablities, one
+    // for the elements of the array and one for indices.  Normally, these
+    // comparabilities will be different, but if an index is placed in the
+    // array the comparabilities can be the same.
     List<DaikonVariableInfo> dv_list = dv_tree.tree_as_list();
     time_decl.log_time ("built tree as list with %d elements", dv_list.size());
     for (DaikonVariableInfo dv : dv_list) {
@@ -2082,9 +2095,9 @@ public final class DCRuntime {
       comp = dv_comp_map.get (dv);
       if (dv.isArray()) {
         Integer index_comp = arr_index_map.get (dv.getName());
-        if (index_comp != null)
+        if (index_comp != null) {
           ps.println (comp + "[" + index_comp + "]");
-        else
+        } else
           ps.println (comp);
       } else
         ps.println (comp);
