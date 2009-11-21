@@ -484,7 +484,7 @@ public class DaikonSimple {
      * any invariant is falsified.
      */
     public void process_sample(PptMap all_ppts, PptTopLevel ppt, ValueTuple vt,
-        Integer nonce) {
+                               /*@Nullable*/ Integer nonce) {
       this.all_ppts = all_ppts;
 
       // Add samples to orig and derived variables

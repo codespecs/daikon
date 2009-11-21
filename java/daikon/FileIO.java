@@ -1080,7 +1080,7 @@ public final class FileIO {
                                PptMap all_ppts,
                                PptTopLevel ppt,
                                ValueTuple vt,
-                               Integer nonce) {
+                               /*@Nullable*/ Integer nonce) {
       FileIO.process_sample(all_ppts, ppt, vt, nonce);
     }
   }
@@ -1362,7 +1362,7 @@ public final class FileIO {
       if (data_trace_state.status == ParseStatus.SAMPLE) {
         assert data_trace_state.ppt != null : "@SuppressWarnings(nullness): dependent type";
         assert data_trace_state.vt != null : "@SuppressWarnings(nullness): dependent type";
-        assert data_trace_state.nonce != null : "@SuppressWarnings(nullness): dependent type";
+        // Nonce may be null
         samples_processed++;
         // Add orig and derived variables; pass to inference (add_and_flow)
         try {
@@ -1653,7 +1653,7 @@ public final class FileIO {
                                     PptMap all_ppts,
                                     PptTopLevel ppt,
                                     ValueTuple vt,
-                                    Integer nonce) {
+                                    /*@Nullable*/ Integer nonce) {
 
     // Add orig variables.  This must be above the check below because
     // it saves away the orig values from enter points for later use

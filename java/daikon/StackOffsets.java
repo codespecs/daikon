@@ -113,7 +113,7 @@ public class StackOffsets {
       = new LinkedHashMap<PptTopLevel,StackInfo>();
 
     public void process_sample (PptMap all_ppts, PptTopLevel ppt, ValueTuple vt,
-                                Integer nonce) {
+                                /*@Nullable*/ Integer nonce) {
 
       // System.out.printf ("Processing sample for ppt %s [%d]\n", ppt.name(),
       //                   nonce);

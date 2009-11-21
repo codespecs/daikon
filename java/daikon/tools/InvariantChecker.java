@@ -334,7 +334,7 @@ public class InvariantChecker {
      * and issuing an error if any invariant is falsified or weakened.
      */
     public void process_sample (PptMap all_ppts, PptTopLevel ppt,
-                                ValueTuple vt, Integer nonce) {
+                                ValueTuple vt, /*@Nullable*/ Integer nonce) {
 
       this.all_ppts = all_ppts;
 
