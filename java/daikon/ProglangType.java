@@ -452,7 +452,7 @@ public final /*@Interned*/ class ProglangType
           if (parser.ttype == '\"') {
             v.add(parser.sval);
           } else if (parser.ttype == StreamTokenizer.TT_WORD) {
-            assert parser.sval != null;
+            assert parser.sval != null : "@SuppressWarnings(nullness): representation invariant of StreamTokenizer";
             if (parser.sval.equals ("nonsensical"))
               return null;
             assert parser.sval.equals("null");

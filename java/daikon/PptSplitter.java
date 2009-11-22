@@ -295,7 +295,7 @@ public class PptSplitter implements Serializable {
         if (cslice == null) {
           if (eq_inv != null) {
             if (Daikon.dkconfig_use_dynamic_constant_optimization) {
-              assert child_ppt.constants != null; // because of config var
+              assert child_ppt.constants != null : "@SuppressWarnings(nullness):  because of config var";
               for (int i = 0; i < cvis_sorted.length; i++)
                 System.out.println ("con val = "
                    + child_ppt.constants.getConstant(cvis_sorted[i]));
@@ -631,8 +631,10 @@ public class PptSplitter implements Serializable {
     assert predicate != null;
     assert consequent != null;
 
-    Invariant orig_pred = orig_invs.get (predicate);
-    Invariant orig_cons = orig_invs.get (consequent);
+    @SuppressWarnings("nullness")
+    /*@NonNull*/ Invariant orig_pred = orig_invs.get (predicate);
+    @SuppressWarnings("nullness")
+    /*@NonNull*/ Invariant orig_cons = orig_invs.get (consequent);
     assert orig_pred != null;
     assert orig_cons != null;
 

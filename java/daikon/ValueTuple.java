@@ -68,6 +68,7 @@ public final class ValueTuple implements Cloneable {
   public boolean isModified(VarInfo vi) { return vi.isModified(this); }
   public boolean isMissingNonsensical(VarInfo vi) { return vi.isMissingNonsensical(this); }
   public boolean isMissingFlow(VarInfo vi) { return vi.isMissingFlow(this); }
+  /*@AssertNonNullIfTrue("vt.vals[vi.value_index]")*/
   public boolean isMissing(VarInfo vi) { return vi.isMissing(this); }
 
   int getModified(int value_index) { return mods[value_index]; }
@@ -222,7 +223,8 @@ public final class ValueTuple implements Cloneable {
    * @see #getValue(VarInfo)
    **/
   /*@Interned*/ Object getValue(int val_index) {
-    Object result = vals[val_index];
+    @SuppressWarnings("nullness") // dependent: the value isn't missing
+    /*@NonNull*/ Object result = vals[val_index];
     assert result != null;
     return result;
   }

@@ -385,10 +385,8 @@ public class DynamicConstants implements Serializable {
    **/
   public Object constant_value (VarInfo vi) {
 
-    Object result = getConstant(vi).val;
-    // Why does this cause no crash?  That is, why isn't a non-missing
-    // value of null handled by DynamicConstants?
-    assert result != null;
+    @SuppressWarnings("nullness") // non-missing value, so non-null
+    /*@NonNull*/ Object result = getConstant(vi).val;
     return result;
   }
 
@@ -730,7 +728,7 @@ public class DynamicConstants implements Serializable {
     // Consider all of the ternary slices with one new non-constant
     for (int i = 0; i < new_leaders.size(); i++) {
       Constant con1 = new_leaders.get(i);
-      assert con1.val != null;
+      assert con1.val != null : "@SuppressWarnings(nullness)";
       for (int j = 0; j < vars.size(); j++ ) {
         Constant con2 = vars.get(j);
         assert con1 != con2;
@@ -812,10 +810,12 @@ public class DynamicConstants implements Serializable {
             slice = ppt.get_or_instantiate_slice (con1.vi, con2.vi, con3.vi);
 
             lt = LinearTernary.get_proto().instantiate (slice);
-            if (lt != null)
+            if (lt != null) {
+              assert con2.val != null : "@SuppressWarnings(nullness)";
               sts = ((LinearTernary) lt).setup (oo, con1.vi,
                         ((Long) con1.val).longValue(),
                         con2.vi, ((Long) con2.val).longValue());
+            }
           } else /* must be float */ {
             OneOfFloat oo = (OneOfFloat) ppt.find_inv_by_class
                 (new VarInfo[] {con3.vi}, OneOfFloat.class);
@@ -974,7 +974,7 @@ public class DynamicConstants implements Serializable {
       }
 
       if (con.count > 0) {
-        assert con.val != null; // dependent: val when count>0
+        assert con.val != null : "@SuppressWarnings(nullness): dependent: val when count>0";
         slice1.add_val_bu(con.val, mod, con.count);
       }
       if (slice1.invs.size() > 0)
@@ -1070,7 +1070,7 @@ public class DynamicConstants implements Serializable {
    * Creates OneOf invariants for each constant
    */
   public void instantiate_oneof (Constant con) {
-    assert con.val != null;
+    assert con.val != null : "@SuppressWarnings(nullness)";
 
     // @NonNull, but not marked that way to ease warning suppression.
     Invariant inv;

@@ -205,6 +205,7 @@ public class PptTopLevel extends Ppt {
       if (!hasNext()) {
         throw new NoSuchElementException();
       }
+      assert splitters != null : "@SuppressWarnings(nullness): need flow for @AssertNonNullIfTrue";
 
       PptSplitter ppt_split = splitters.get(splitter_index);
       PptConditional ppt = (PptConditional) ppt_split.ppts[ppts_index];
@@ -1072,6 +1073,7 @@ public class PptTopLevel extends Ppt {
     // Keep track of the distinct values seen
     for (int i=0; i<vt.vals.length; i++) {
       if (! vt.isMissing(i)) {
+        assert vt.vals[i] != null : "@SuppressWarnings(nullness): need flow for @AssertNonNullIfTrue";
         ValueSet vs = value_sets[i];
         vs.add(vt.vals[i]);
       }

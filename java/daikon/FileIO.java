@@ -948,7 +948,7 @@ public final class FileIO {
       // Yoav: server mode
       while (true) {
         @SuppressWarnings("nullness") // server_dir was checked when it was set
-        /*@NonNull*/ String[] dir_files = Daikon.server_dir.list();
+        String /*@NonNull*/ [] dir_files = Daikon.server_dir.list();
         Arrays.sort(dir_files);
         boolean hasEnd = false;
         for (String f : dir_files) {
@@ -1601,6 +1601,9 @@ public final class FileIO {
       /*@Nullable*/ Object[] vals = new /*@Nullable*/ Object[vals_array_size];
       int[] mods = new int[vals_array_size];
 
+      // Test whether flow was able to determine this.
+      /*@NonNull*/ Object x = data_trace_state;
+
       // Read a single record from the trace file;
       // fills up vals and mods arrays by side effect.
       try {
@@ -1976,14 +1979,8 @@ public final class FileIO {
                          PptTopLevel ppt, /*@Nullable*/ Object[] vals, int[] mods)
     throws IOException
   {
-    // Note:  global variable data_trace_state may be null (at least in the
-    // unit tests...).
-    assert data_trace_state != null; // added to test actual execution
-
-    // I think this should be non-null in ordinary execution; suppress warnings
-    @SuppressWarnings("nullness")
-    /*@NonNull*/ ParseState data_trace_state_nonnull = data_trace_state;
-    data_trace_state = data_trace_state_nonnull;
+    // Global variable data_trace_state should be non-null.
+    assert data_trace_state != null : "@SuppressWarnings(nullness)";
 
     VarInfo[] vis = ppt.var_infos;
     int num_tracevars = ppt.num_tracevars;
@@ -2242,7 +2239,10 @@ public final class FileIO {
    **/
   public static boolean add_orig_variables(PptTopLevel ppt,
                                      // HashMap cumulative_modbits,
-                                     /*@Nullable*/ Object[] vals, int[] mods, Integer nonce) {
+                                     /*@Nullable*/ Object[] vals, int[] mods,
+                                           /*@Nullable*/ Integer nonce) {
+    assert data_trace_state != null : "@SuppressWarnings(nullness): need @NonNullVariable method annotation";
+
     VarInfo[] vis = ppt.var_infos;
     /*@Interned*/ String fn_name = ppt.ppt_name.getNameWithoutPoint();
     String ppt_name = ppt.name();
@@ -2286,28 +2286,26 @@ public final class FileIO {
           }
         } else {
           // nonce != null
-          invoc = call_hashmap.get(nonce);
-          if (dkconfig_ignore_missing_enter && (invoc == null)) {
-            //System.out.printf ("Didn't find call with nonce %d to match %s" +
-            //                   " ending at %s line %d\n", nonce, ppt.name(),
-            //                   data_trace_state.filename,
-            //                   data_trace_state.reader.getLineNumber());
-            return true;
-          } else if (invoc == null) {
-            assert data_trace_state != null; // nullness application invariant?
-            // Not Daikon.TerminationMessage:  caller knows context such as
-            // file name and line number.
-            throw new Error(
-              "Didn't find call with nonce "
-                + nonce
-                + " to match "
-                + ppt.name()
-                + " ending at "
-                + data_trace_state.filename
-                + " line "
-                + data_trace_state.reader.getLineNumber());
+          if (! call_hashmap.containsKey(nonce)) {
+            if (dkconfig_ignore_missing_enter) {
+              //System.out.printf ("Didn't find call with nonce %d to match %s" +
+              //                   " ending at %s line %d\n", nonce, ppt.name(),
+              //                   data_trace_state.filename,
+              //                   data_trace_state.reader.getLineNumber());
+              return true;
+            } else {
+              assert data_trace_state != null; // nullness application invariant?
+              // Not Daikon.TerminationMessage:  caller knows context such as
+              // file name and line number.
+              throw new Error(String.format("Didn't find call with nonce %s to match %s ending at %s line %d",
+                                            nonce, ppt.name(),
+                                            data_trace_state.filename,
+                                            data_trace_state.reader.getLineNumber()));
+            }
           }
-          invoc = call_hashmap.get(nonce);
+          @SuppressWarnings("nullness") // bug in flow and containsKey, it seems:  test testContainsKey2 indicates that the get should be recognized to return non-null
+          /*@NonNull*/ Invocation invoc_nonNull = call_hashmap.get(nonce);
+          invoc = invoc_nonNull;
           call_hashmap.remove(nonce);
         }
       }

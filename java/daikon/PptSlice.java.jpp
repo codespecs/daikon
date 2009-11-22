@@ -181,8 +181,8 @@ public final class PPTSLICE1 extends PptSlice {
       // Instantiate the invariant and add it to the list.  Null should
       // never be returned because we check instantiate_ok() above and
       // only enabled invariants are in this list.
-      Invariant inv = proto.instantiate (this);
-      assert inv != null;
+      @SuppressWarnings("nullness") // application invariant, see comment above
+      /*@NonNull*/ Invariant inv = proto.instantiate (this);
       addInvariant(inv);
       if (Debug.logOn())
         inv.log ("Created invariant " + inv.format() + " ss = " + ss);
@@ -680,7 +680,7 @@ public final class PPTSLICE1 extends PptSlice {
           for (int k = 0; k < var_infos.length; k++) {
             VarInfo pv = var_infos[k];
             VarInfo cv = rel.childVar (pv);
-            assert cv != null;
+            assert cv != null : "@SuppressWarnings(nullness)";
             child_vars[k] = cv.canonicalRep();
           }
           orig_inv.log ("org inv");
