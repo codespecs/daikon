@@ -137,7 +137,7 @@ public class Session
       assert trace_file != null; // trace_file is set in constructor if dkconfig_trace_input is true
       trace_file.println(s);
     }
-    assert input != null; // set in constructor before this is called
+    assert input != null : "@SuppressWarnings(nullness): set in constructor before this is called";
     input.println(s);
     input.flush();
   }

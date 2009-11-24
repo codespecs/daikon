@@ -370,8 +370,7 @@ public class Chicory {
     if (verbose)
       System.out.printf ("\nExecuting target program: %s\n",
                          args_to_string(cmdlist));
-    String[] cmdline = new String[cmdlist.size()];
-    cmdline = cmdlist.toArray(cmdline);
+    String[] cmdline = cmdlist.toArray(new String[cmdlist.size()]);
 
     // Execute the command, sending all output to our streams
     java.lang.Runtime rt = java.lang.Runtime.getRuntime();
@@ -415,7 +414,8 @@ public class Chicory {
 
       // Make sure all output is forwarded before we finish
       try {
-        assert daikon_err != null && daikon_out != null; // because daikon_online is true
+        assert daikon_err != null : "@SuppressWarnings(nullness): dependent: because daikon_online is true";
+        assert daikon_out != null : "@SuppressWarnings(nullness): dependent: because daikon_online is true";
         daikon_err.join();
         daikon_out.join();
       } catch (InterruptedException e) {

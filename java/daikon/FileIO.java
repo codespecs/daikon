@@ -1313,6 +1313,7 @@ public final class FileIO {
   // The @LazyNonNull property is not true globally, but within every
   // method it's true, so it is a useful annotation.
   public static /*@LazyNonNull*/ ParseState data_trace_state = null;
+  // The variable is only ever cleared at the end of a routine that set it.
   @SuppressWarnings("nullness") // setting a LazyNonNull field to null
   private static void clear_data_trace_state() {
     data_trace_state = null;
@@ -1423,9 +1424,13 @@ public final class FileIO {
   public static void read_data_trace_record (ParseState state)
     throws IOException {
 
+    // Abstract out the test result into a variable because Java doesn't
+    // permit suppressing warnings on a statement.  Yuck.
     @SuppressWarnings("interning")
     boolean stateOK = (state == FileIO.data_trace_state);
     assert stateOK;
+    assert FileIO.data_trace_state != null
+      : "@SuppressWarnings(nullness): global var is non-null on entry";
 
     LineNumberReader reader = state.reader;
 

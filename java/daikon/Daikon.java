@@ -1561,7 +1561,7 @@ public final class Daikon {
     }
 
     PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
-    assert entry_ppt != null : exit_ppt.name();
+    assert entry_ppt != null : "@SuppressWarnings(nullness): entry must exist for " + exit_ppt.name();
 
     // Add "orig(...)" (prestate) variables to the program point.
     // Don't bother to include the constants.  Walk through
@@ -1719,7 +1719,7 @@ public final class Daikon {
   public static String progress = "";
 
   /** Takes precedence over the progress variable. */
-  private static FileIOProgress fileio_progress = null;
+  private static /*@LazyNonNull*/ FileIOProgress fileio_progress = null;
 
   /**
    * Outputs FileIO progress information.

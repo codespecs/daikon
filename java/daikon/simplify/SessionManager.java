@@ -107,7 +107,9 @@ public class SessionManager
           fileName = "daikon-background.txt";
         InputStream bg_stream =
           SessionManager.class.getResourceAsStream(fileName);
-        assert bg_stream != null : "Could not find simplify/daikon-background.txt";
+        if (bg_stream == null) {
+          throw new RuntimeException("Could not find simplify/daikon-background.txt");
+        }
         BufferedReader lines =
           new BufferedReader(new InputStreamReader(bg_stream));
         String line;
@@ -181,7 +183,7 @@ public class SessionManager
           mgr.pending = null;
           mgr.notifyAll();
           try { mgr.wait(0); } catch (InterruptedException e) { }
-          assert mgr.pending != null;
+          assert mgr.pending != null : "@SuppressWarnings(nullness)";
           // session != null && mgr.pending != null;
         }
         error = null;
@@ -197,7 +199,7 @@ public class SessionManager
     }
 
     private void session_done() {
-      assert session != null;
+      assert session != null : "@SuppressWarnings(nullness)";
       finished = true;
       Session tmp = session;
       session = null;

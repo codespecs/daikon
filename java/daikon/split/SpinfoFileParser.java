@@ -254,7 +254,8 @@ public class SpinfoFileParser {
   /**
    * Returns whether the line is blank (or null).
    */
-  private static boolean isBlank(String line) {
+  @AssertNonNullIfTrue("line")
+    private static boolean isBlank(/*@Nullable*/ String line) {
     return (line == null) || line.trim().equals("");
   }
 

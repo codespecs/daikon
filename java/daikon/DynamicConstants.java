@@ -781,6 +781,7 @@ public class DynamicConstants implements Serializable {
     // Consider all of the ternary slices with two new non-constants
     for (int i = 0; i < new_leaders.size(); i++) {
       Constant con1 = new_leaders.get(i);
+      assert con1.val != null : "@SuppressWarnings(nullness)";
       for (int j = i; j < new_leaders.size(); j++ ) {
         Constant con2 = new_leaders.get(j);
         for (int k = 0; k < vars.size(); k++ ) {

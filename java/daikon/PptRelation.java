@@ -874,7 +874,6 @@ public class PptRelation implements Serializable {
         continue;
       if (!ppt.has_splitters())
         continue;
-      assert ppt.splitters != null : "@SuppressWarnings(nullness):  bug in checker support of @AssertNonNullIfTrue";
 
       // System.out.printf ("processing splitter '%s' [%s] %b%n", ppt.name(),
       //                    ppt.ppt_name.getPoint(),
@@ -1034,7 +1033,6 @@ public class PptRelation implements Serializable {
         continue;
       if (!ppt.has_splitters())
         continue;
-      assert ppt.splitters != null : "@SuppressWarnings(nullness):  bug in checker support of @AssertNonNullIfTrue";
 
       // System.out.printf ("processing splitter %s%n", ppt.name());
 

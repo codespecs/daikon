@@ -233,7 +233,7 @@ public class InstructionUtils {
                   + var;
               String varName = "bv:" + instr.getAddress() + ":" + var;
               Set<String> rset = redundantVars.get(leaderName);
-              assert rset != null; // was set of previous iteration
+              assert rset != null : "@SuppressWarnings(nullness):  was set on previous iteration";
               rset.add(varName);
             }
           }

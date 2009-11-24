@@ -273,8 +273,8 @@ public class NISuppression {
           for (NIS.SupInv supinv : new_invs) {
             Invariant cinv = supinv.already_exists();
             if (cinv != null) {
-              NISuppressionSet ss = cinv.get_ni_suppressions();
-              assert ss != null;
+              @SuppressWarnings("nullness")
+              /*@NonNull*/ NISuppressionSet ss = cinv.get_ni_suppressions();
               // this is apparently called for side effect (debugging output)
               ss.suppressed (cinv.ppt);
               throw new Error("inv " + cinv.repr() + " of class "

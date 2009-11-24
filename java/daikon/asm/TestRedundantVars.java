@@ -87,10 +87,11 @@ public class TestRedundantVars {
             return true; // We don't consider missing ppts as failures.
         }
 
-        assert invsWith != null;
+        assert invsWith != null : "@SuppressWarnings(nullness): same nullness as invsWithout, which was checked";
 
         List<String> redVars = reds.records.get(ppt);
         assert redVars != null : ppt;
+        assert redVars != null : "@SuppressWarnings(nullness)";
 
         boolean success = true;
 

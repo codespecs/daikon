@@ -481,12 +481,13 @@ public class Debug {
       class_str = UtilMDE.replaceString (inv_class.getName(),
                                 inv_class.getPackage().getName() + ".", "");
 
-    // Get a string with all of the variable names.  Each is separated by ': '
-    // 3 variable slots are always setup for consistency
+    // Get a string with all of the variable names.  Each is separated by ': '.
+    // 3 variable slots are always setup for consistency.
     String vars = "";
     int numvars = (vis == null) ? 0 : vis.length;
     for (int i = 0; i < numvars; i++) {
-      VarInfo v = vis[i];
+      @SuppressWarnings("nullness") // loop is not entered unless vis != null
+      /*@NonNull*/ VarInfo v = vis[i];
       vars += v.name();
       if (ourvars[i] != null)
         vars += " {" + ourvars[i] + "}";

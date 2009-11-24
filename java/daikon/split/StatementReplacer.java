@@ -100,7 +100,7 @@ class StatementReplacer extends DepthFirstVisitor {
     if (! matchFound) {
       ReplaceStatement replaceStatement = null;
       NodeToken firstToken = null;
-      List<String> newArgs = null;
+      List<String> newArgs;
       if (isNonThisMethod(n)) {
         replaceStatement = statementMap.get(getNonThisName(n));
         firstToken = ((Name) n.f0.f0.choice).f0;
@@ -109,6 +109,8 @@ class StatementReplacer extends DepthFirstVisitor {
         replaceStatement = statementMap.get(getThisName(n));
         firstToken = (NodeToken) n.f0.f0.choice;
         newArgs = getArgs(n);
+      } else {
+        newArgs = null;
       }
       if (replaceStatement != null && firstToken != null) {
         List<String> oldArgs = getParameterNames(replaceStatement.getParameters());
