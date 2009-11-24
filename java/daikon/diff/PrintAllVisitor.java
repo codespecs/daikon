@@ -90,7 +90,7 @@ public class PrintAllVisitor extends DepthFirstVisitor {
     bufPrint("  " + "<");
 
     if (inv1 == null) {
-      bufPrint((/*@Nullable*/ String) null);
+      bufPrint(null);
     } else {
       printInvariant(inv1);
 
@@ -203,10 +203,10 @@ public class PrintAllVisitor extends DepthFirstVisitor {
   }
 
   // "prints" by appending to a string buffer
-  protected void bufPrint(String s) {
+  protected void bufPrint(/*@Nullable*/ String s) {
     bufOutput.append(s);
   }
-  protected void bufPrintln(String s) {
+  protected void bufPrintln(/*@Nullable*/ String s) {
     bufPrint(s);
     bufPrintln();
   }

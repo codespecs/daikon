@@ -120,8 +120,9 @@ public final class DiscReasonMap {
     List<DiscardInfo> di_list = new ArrayList<DiscardInfo>();
     if (invInfo.vars() != null) {
       // The user entered the vars in a specific order, but let's give
-      // them matching invariants that have those vars in any order
-      List<String> var_perms = invInfo.var_permutations();
+      // them matching invariants that have those vars in any order.
+      @SuppressWarnings("null") // because invInfo.vars() != null
+      /*@NonNull*/ List<String> var_perms = invInfo.var_permutations();
       for (String var_perm : var_perms) {
         List<DiscardInfo> temp = vars_map_from_ppt.get(var_perm);
         if (temp != null) {
@@ -147,7 +148,7 @@ public final class DiscReasonMap {
   // least 1 DiscardInfo associated with it
   private static List<DiscardInfo> all_vars_tied_from_ppt(String ppt) {
     HashMap<String,List<DiscardInfo>> vars_map = the_map.get(ppt);
-    assert vars_map != null;
+    assert vars_map != null : "@SuppressWarnings(nullness)";
 
     ArrayList<DiscardInfo> result = new ArrayList<DiscardInfo>();
     for (List<DiscardInfo> ldi : vars_map.values()) {

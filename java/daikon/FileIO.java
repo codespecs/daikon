@@ -1393,6 +1393,8 @@ public final class FileIO {
     }
 
     if (Global.debugPrintDtrace) {
+      assert Global.dtraceWriter != null
+        : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
       Global.dtraceWriter.close();
     }
 
@@ -1863,6 +1865,8 @@ public final class FileIO {
       debugVars.fine (ppt.name() + " vars: " + Debug.int_vars (ppt, vt));
 
     if (Global.debugPrintDtrace) {
+      assert Global.dtraceWriter != null
+        : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
       Global.dtraceWriter.close();
     }
 
@@ -1999,6 +2003,8 @@ public final class FileIO {
     }
 
     if (Global.debugPrintDtrace) {
+      assert Global.dtraceWriter != null
+        : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
       Global.dtraceWriter.println(ppt.name());
 
       if (to_write_nonce) {
@@ -2136,6 +2142,8 @@ public final class FileIO {
       oldvalue_reps[val_index] = value_rep;
 
       if (Global.debugPrintDtrace) {
+        assert Global.dtraceWriter != null
+          : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
         Global.dtraceWriter.println(vi.name());
         Global.dtraceWriter.println(value_rep);
         Global.dtraceWriter.println(mod);
@@ -2216,6 +2224,8 @@ public final class FileIO {
     ppt_to_value_reps.put(ppt, oldvalue_reps);
 
     if (Global.debugPrintDtrace) {
+      assert Global.dtraceWriter != null
+        : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
       Global.dtraceWriter.println();
     }
 

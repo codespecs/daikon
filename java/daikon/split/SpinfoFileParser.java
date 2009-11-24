@@ -145,6 +145,8 @@ public class SpinfoFileParser {
     throws IOException, ParseException {
     String methodDeclaration = spinfoFile.readLine();
     while (! isBlank(methodDeclaration)) {
+      assert methodDeclaration != null
+        : "@SuppressWarnings(nullness): looks like a bug in @AssertNonNullIfTrue processing";
       String returnStatement = spinfoFile.readLine();
       if (isBlank(returnStatement)) {
         throw new RuntimeException(
@@ -153,6 +155,8 @@ public class SpinfoFileParser {
           methodDeclaration + lineSep +
           "Each replace statement must be a pair of lines.");
       }
+      assert methodDeclaration != null
+        : "@SuppressWarnings(nullness): looks like a bug in flow; we asserted the same thing earlier in the loop body";
       ReplaceStatement replaceStatement =
         new ReplaceStatement(methodDeclaration.trim(), returnStatement.trim());
       replaceStatements.add(replaceStatement);
@@ -255,7 +259,7 @@ public class SpinfoFileParser {
    * Returns whether the line is blank (or null).
    */
   @AssertNonNullIfTrue("line")
-    private static boolean isBlank(/*@Nullable*/ String line) {
+  private static boolean isBlank(/*@Nullable*/ String line) {
     return (line == null) || line.trim().equals("");
   }
 

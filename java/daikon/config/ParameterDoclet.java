@@ -237,7 +237,7 @@ public class ParameterDoclet
       Collections.sort(keys);
       for (String field : keys) {
         @SuppressWarnings("nullness") // iterating over sorted keySet
-        String desc = categories[c].fields.get(field);
+        /*@NonNull*/ String desc = categories[c].fields.get(field);
         String defstr = getDefaultString(field);
 
         // Simpler format for debugging

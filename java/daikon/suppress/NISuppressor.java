@@ -254,7 +254,7 @@ public class NISuppressor {
 
       // Check to see if the suppressor is true over all constants.
       if (ppt.is_prev_constant (v1)) {
-        assert ppt.constants != null;
+        assert ppt.constants != null : "@SuppressWarnings(nullness)";
         boolean valid = false;
         VarInfo[] sup_vis = new VarInfo[] {v1};
         assert sample_inv.valid_types (sup_vis);
@@ -336,7 +336,7 @@ public class NISuppressor {
       // Check to see if the suppressor is true over all constants.  This
       // code only works for stateless invariants!
       if (ppt.is_prev_constant (v1) && ppt.is_prev_constant (v2)) {
-        assert ppt.constants != null;
+        assert ppt.constants != null : "@SuppressWarnings(nullness)";
         boolean valid = false;
         VarInfo[] sup_vis = new VarInfo[] {v1, v2};
         assert sample_inv.valid_types (sup_vis);

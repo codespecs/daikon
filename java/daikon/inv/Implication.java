@@ -26,9 +26,9 @@ public class Implication
   // These can be null (for instance, for GuardingImplication).  What
   // exactly is the representation invariant:  should they never be null?
   /** The original predicate invariant from its original conditional ppt. */
-  private Invariant orig_left;
+  private /*@Nullable*/ Invariant orig_left;
   /** The original consequent invariant from its original conditional ppt. */
-  private Invariant orig_right;
+  private /*@Nullable*/ Invariant orig_right;
 
   public Invariant predicate() { return left; }
   public Invariant consequent() { return right; }

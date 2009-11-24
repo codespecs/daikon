@@ -1072,9 +1072,10 @@ public class PptTopLevel extends Ppt {
     // Keep track of the distinct values seen
     for (int i=0; i<vt.vals.length; i++) {
       if (! vt.isMissing(i)) {
+        @SuppressWarnings("nullness") // because of @AssertNonNullIfTrue annotation on isMissing()
+        /*@NonNull*/ Object val = vt.vals[i];
         ValueSet vs = value_sets[i];
-        assert vt.vals[i] != null : "@SuppressWarnings(nullness):  because of @AssertNonNullIfTrue annotation on isMissing()";
-        vs.add(vt.vals[i]);
+        vs.add(val);
       }
     }
 

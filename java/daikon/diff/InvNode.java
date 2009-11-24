@@ -10,7 +10,7 @@ import utilMDE.*;
 public class InvNode extends Node<Invariant,Void> {
 
   /** Either inv1 or inv2 may be null, but not both. **/
-  public InvNode(Invariant inv1, Invariant inv2) {
+  public InvNode(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     super(Pair.of(inv1, inv2));
     assert !(inv1 == null && inv2 == null) : "Both invariants may not be null";
   }

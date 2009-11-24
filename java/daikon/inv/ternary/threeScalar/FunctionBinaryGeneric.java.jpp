@@ -98,7 +98,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     super (slice);
   }
 
-  public CNAME(FUNCTION,PERM_NAME) () {
+  public CNAME(FUNCTION,PERM_NAME) () /*@Prototype*/ {
     super (null);
   }
 

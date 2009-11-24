@@ -1609,6 +1609,8 @@ public final class Daikon {
 
   private static PptMap load_decls_files(Set<File> decl_files) {
     stopwatch.reset();
+    assert fileio_progress != null :
+      "@SuppressWarnings(nullness): precondition:  set in mainHelper";
     try {
       if (!Daikon.dkconfig_quiet) {
         System.out.print("Reading declaration files ");
@@ -1718,6 +1720,7 @@ public final class Daikon {
    */
   public static String progress = "";
 
+  // Is set unconditionally in mainHelper
   /** Takes precedence over the progress variable. */
   private static /*@LazyNonNull*/ FileIOProgress fileio_progress = null;
 
@@ -1820,6 +1823,8 @@ public final class Daikon {
    * candidate invariants.
    **/
   private static void process_data(PptMap all_ppts, Set<String> dtrace_files) {
+    assert fileio_progress != null :
+      "@SuppressWarnings(nullness): precondition:  set in mainHelper";
     MemMonitor monitor = null;
     if (use_mem_monitor) {
       monitor = new MemMonitor("stat.out");
@@ -1985,6 +1990,8 @@ public final class Daikon {
 
     // Add implications
     stopwatch.reset();
+    assert fileio_progress != null :
+      "@SuppressWarnings(nullness): looks like a bug with LazyNonNull and flow:  beginning of method asserted the same fact";
     fileio_progress.clear();
     if (! Daikon.dkconfig_disable_splitting) {
       debugProgress.fine("Adding Implications ... ");

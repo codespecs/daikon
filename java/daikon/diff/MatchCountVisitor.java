@@ -28,8 +28,6 @@ public class MatchCountVisitor extends PrintAllVisitor {
   private HashMap<String,HashSet<String>> goodMap = new HashMap<String,HashSet<String>>();
 
 
-  private Invariant dummy = null;
-
   public MatchCountVisitor (PrintStream ps, boolean verbose,
                             boolean printEmptyPpts) {
     super(ps, verbose, printEmptyPpts);
@@ -60,7 +58,6 @@ public class MatchCountVisitor extends PrintAllVisitor {
       // checks for justification
       if (shouldPrint (inv1, inv1)) // [???]
         cnt.add (key1);
-      if (dummy == null) dummy = inv1;
 
     }
 

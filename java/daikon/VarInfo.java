@@ -3653,7 +3653,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Creates a VarInfo that is an index into a sequence.  The type,
    * file_rep_type, etc are taken from the element type of the sequence.
    */
-  public static VarInfo make_subscript (VarInfo seq, VarInfo index,
+  public static VarInfo make_subscript (VarInfo seq, /*@Nullable*/ VarInfo index,
                                         int index_shift) {
 
     String index_str = inside_name (index, seq.isPrestate(), index_shift);
@@ -3725,7 +3725,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    *              are -1, 0, and 1.
    */
   public static VarInfo make_scalar_seq_func (String func_name,
-                              ProglangType type, VarInfo seq, int shift) {
+            /*@Nullable*/ ProglangType type, VarInfo seq, int shift) {
 
     VarInfoName viname = seq.var_info_name.applyFunction (func_name);
     if (func_name.equals ("size"))

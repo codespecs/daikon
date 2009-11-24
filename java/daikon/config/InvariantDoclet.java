@@ -360,8 +360,8 @@ public class InvariantDoclet
           String classname = fullname.substring(0, i);
           Class<?> c = UtilMDE.classForName(classname);
           Field f = c.getField (enable_name);
-          Object value = f.get(null);
-          assert value instanceof Boolean;
+          @SuppressWarnings("nullness")
+          /*@NonNull*/ Object value = f.get(null);
           if (((Boolean) value).booleanValue())
             return (1);
           else

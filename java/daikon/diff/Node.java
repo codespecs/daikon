@@ -13,10 +13,8 @@ import utilMDE.Pair;
 public abstract class Node<CONTENT,CHILD> {
 
   private List<CHILD> children = new ArrayList<CHILD>();
-  private Pair<CONTENT,CONTENT> userObject = null;
-
-  public Node() {
-  }
+  // Nonsensical for RootNode
+  private Pair<CONTENT,CONTENT> userObject;
 
   public Node(Pair<CONTENT,CONTENT> userObject) {
     this.userObject = userObject;

@@ -50,8 +50,8 @@ public final class Diff {
   private static boolean treeManip = false;
 
   // this is set only when the manip flag is set "-z"
-  private static PptMap manip1 = null;
-  private static PptMap manip2 = null;
+  private static /*@Nullable*/ PptMap manip1 = null;
+  private static /*@Nullable*/ PptMap manip2 = null;
 
   /** The long command line options. **/
   private static final String HELP_SWITCH =
@@ -853,7 +853,7 @@ public final class Diff {
    * classname.  Else, returns the default.
    **/
   private static Comparator<Invariant> selectComparator
-    (String classname, Comparator<Invariant> defaultComparator) throws
+    (/*@Nullable*/ String classname, Comparator<Invariant> defaultComparator) throws
     ClassNotFoundException, InstantiationException, IllegalAccessException {
 
     if (classname != null) {

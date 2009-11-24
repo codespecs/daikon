@@ -232,8 +232,8 @@ public class Quantify {
   public static class QuantifyReturn {
     /** variable being quantified **/
     public VarInfo var;
-    /** index into the variable, if null, variable is not a sequence **/
-    public Term index;
+    /** index into the variable.  If null, variable is not a sequence. **/
+    public /*@Nullable*/ Term index;
     public QuantifyReturn (VarInfo var) {
       this.var = var;
     }
@@ -451,8 +451,8 @@ public class Quantify {
       for (int i=0; i < qrets.length; i++) {
         QuantifyReturn qret = qrets[i];
         if (qret.index != null) {
-          VarInfo arr_var = qret.var.get_array_var();
           Term index = qret.index;
+          VarInfo arr_var = qret.var.get_array_var();
           arr_vars_indexed[i] = arr_var.simplify_name (index.simplify_name());
           // System.out.printf ("vi = %s, arr_var = %s\n", vi, arr_var);
         } else
