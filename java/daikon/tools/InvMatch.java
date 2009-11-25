@@ -134,6 +134,7 @@ public class InvMatch {
         if (xlate.quality > 0)
           inv_xlate_list.add (xlate);
       }
+      // what is the purpose of this?
       inv_xlate_list.add (null);
     }
 

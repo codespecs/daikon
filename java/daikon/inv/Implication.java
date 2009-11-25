@@ -134,7 +134,7 @@ public class Implication
       assert vis[ii] != null;
     DiscardInfo di = orig_right.isObviousDynamically (vis);
     if (di != null) {
-      log ("failed isObviousDynamically with vis = " + VarInfo.toString (vis));
+      log ("failed isObviousDynamically with vis = " + VarInfo.arrayToString (vis));
       return (di);
     }
 

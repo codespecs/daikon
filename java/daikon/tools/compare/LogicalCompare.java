@@ -243,6 +243,7 @@ public class LogicalCompare {
           Vector<Set<Class<? extends Invariant>>> sets = lemmas.minimizeClasses(inv.formula);
           for (Set<Class<? extends Invariant>> classes : sets) {
             Class<? extends Invariant> inv_class = inv.invClass();
+            assert inv_class != null : "@SuppressWarnings(nullness): looks like a Checker Framework bug";
             System.out.print(shortName(inv_class) + ":");
             if (classes.contains(inv_class)) {
               System.out.print(" " + shortName(inv_class));

@@ -227,7 +227,7 @@ public class NISuppressor {
     if (Debug.logDetail() && NIS.debug.isLoggable (Level.FINE))
       NIS.debug.fine ("checking suppressor " + this + " against inv "
                     + ((inv != null) ? inv.format() : "null") + " over vars "
-                    + VarInfo.toString(vis) + " in ppt " + ppt.name);
+                    + VarInfo.arrayToString(vis) + " in ppt " + ppt.name);
 
     // If unary
     if (v2_index == -1) {

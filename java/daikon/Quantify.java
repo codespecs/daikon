@@ -417,7 +417,8 @@ public class Quantify {
           if (flags.contains (QuantFlags.ELEMENT_WISE) && (i >= 1)) {
             // Term[] _boundv = qret.bound_vars.get(i-1);
             // Term _idx = _boundv[0], _low = _boundv[1];
-            Term _idx = qrets[i-1].index;
+            @SuppressWarnings("nullness")
+            /*@NonNull*/ Term _idx = qrets[i-1].index;
             Term _low = qrets[i-1].var.get_lower_bound();
             if (_low.simplify_name().equals(low.simplify_name())) {
               conditions.append(" (EQ " + _idx.simplify_name() + " "
@@ -433,7 +434,8 @@ public class Quantify {
                          || flags.contains (QuantFlags.DISTINCT))) {
             // Term[] _boundv = qret.bound_vars.get(i-1);
             // Term prev_idx = _boundv[0];
-            Term prev_idx = qrets[i-1].index;
+            @SuppressWarnings("nullness")
+            /*@NonNull*/ Term prev_idx = qrets[i-1].index;
             if (flags.contains (QuantFlags.ADJACENT))
               conditions.append(" (EQ (+ " + prev_idx.simplify_name() + " 1) "
                                 + idx.simplify_name() + ")");

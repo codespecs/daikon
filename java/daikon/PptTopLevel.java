@@ -380,7 +380,9 @@ public class PptTopLevel extends Ppt {
         vi.value_index = val_idx;
         val_idx++;
       }
-      vi.ppt = this;
+      @SuppressWarnings("rawness") // initialization will complete before it is used
+      /*@NonRaw*/ PptTopLevel nonRawThis = this;
+      vi.ppt = nonRawThis;
     }
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo vi = var_infos[i];

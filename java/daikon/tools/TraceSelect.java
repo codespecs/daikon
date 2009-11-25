@@ -148,7 +148,9 @@ public class TraceSelect {
     sampleNames[0] = "-p";
 
 
-
+    if (fileName == null) {
+      throw new daikon.Daikon.TerminationMessage ("No .dtrace file name specified");
+    }
 
     try {
 
@@ -171,8 +173,7 @@ public class TraceSelect {
 
       while (num_reps > 0) {
 
-        DtracePartitioner dec =
-          new DtracePartitioner (fileName);
+        DtracePartitioner dec = new DtracePartitioner (fileName);
         MultiRandSelector<String> mrs = new MultiRandSelector<String> (numPerSample,
                                                        dec);
 

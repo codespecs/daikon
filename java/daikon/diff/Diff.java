@@ -49,9 +49,9 @@ public final class Diff {
   // added to disrupt the tree when bug hunting -LL
   private static boolean treeManip = false;
 
-  // this is set only when the manip flag is set "-z"
-  private static /*@Nullable*/ PptMap manip1 = null;
-  private static /*@Nullable*/ PptMap manip2 = null;
+  // this is set only when the manip flag is set "-z", that is when treeManip != null
+  private static /*@LazyNonNull*/ PptMap manip1 = null;
+  private static /*@LazyNonNull*/ PptMap manip2 = null;
 
   /** The long command line options. **/
   private static final String HELP_SWITCH =
@@ -745,6 +745,9 @@ public final class Diff {
       Collections.sort(invs2, invSortComparator2);
     } else {
       if ( false && treeManip && isCond (ppt1)) {
+        assert manip1 != null : "@SuppressWarnings(nullness): dependent on boolean treeManip";
+        assert manip2 != null : "@SuppressWarnings(nullness): dependent on boolean treeManip";
+
         // remember, only want to mess with the second list
         invs2 = findCondPpt (manip1, ppt1);
         List<Invariant> tmpList = findCondPpt (manip2, ppt1);
@@ -758,6 +761,8 @@ public final class Diff {
         Collections.sort(invs2, invSortComparator2);
       }
       else if (treeManip && ppt2 != null && !isCond(ppt2)) {
+        assert manip1 != null : "@SuppressWarnings(nullness): dependent on boolean treeManip";
+        assert manip2 != null : "@SuppressWarnings(nullness): dependent on boolean treeManip";
 
         invs2 = findNormalPpt (manip1, ppt2);
         invs2.addAll ( findNormalPpt (manip2, ppt2));

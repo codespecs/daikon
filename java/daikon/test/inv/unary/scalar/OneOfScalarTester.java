@@ -42,10 +42,8 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public void testNullNon() {
-    OneOfScalar inv1 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
-    OneOfScalar inv2 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
-    assert inv1 != null;
-    assert inv2 != null;
+    /*@NonNull*/ OneOfScalar inv1 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfScalar inv2 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
 
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
@@ -54,10 +52,8 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public void testNullNull() {
-    OneOfScalar inv1 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
-    OneOfScalar inv2 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
-    assert inv1 != null;
-    assert inv2 != null;
+    /*@NonNull*/ OneOfScalar inv1 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfScalar inv2 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
 
     inv1.add_modified(0, DOESNT_MATTER);
     inv2.add_modified(0, DOESNT_MATTER);
@@ -66,10 +62,8 @@ public class OneOfScalarTester extends TestCase {
   }
 
   public void testNonNon() {
-    OneOfScalar inv1 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
-    OneOfScalar inv2 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
-    assert inv1 != null;
-    assert inv2 != null;
+    /*@NonNull*/ OneOfScalar inv1 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfScalar inv2 = (OneOfScalar)OneOfScalar.get_proto().instantiate(slicex);
 
     inv1.add_modified(19, DOESNT_MATTER);
     inv2.add_modified(22, DOESNT_MATTER);

@@ -255,10 +255,9 @@ public class PptNameMatcher {
 
   public List<String> extractPptArgs(PptName ppt_name) {
 
-    String pptFullMethodName = ppt_name.getSignature();
+    /*@NonNull*/ String pptFullMethodName = ppt_name.getSignature();
 
     if (debug_getMatches) System.out.println("pptFullMethodName = " + pptFullMethodName);
-    assert pptFullMethodName != null;
     int lparen = pptFullMethodName.indexOf('(');
     int rparen = pptFullMethodName.indexOf(')');
     assert lparen > 0;

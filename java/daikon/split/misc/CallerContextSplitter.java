@@ -6,7 +6,7 @@ import daikon.split.*;
 import utilMDE.ArraysMDE;
 
 /**
- * This splitter tests the condition "$caller one of < some set of integers >".
+ * This splitter tests the condition "$caller one of { some set of integers }".
  **/
 public final class CallerContextSplitter
   extends Splitter

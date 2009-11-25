@@ -643,7 +643,7 @@ public final class PPTSLICE1 extends PptSlice {
       if ((cslice == null) || (cslice.invs.size() == 0)) {
         if (Debug.logOn())
           this.log ("slice not found " + ppt.name() + " "
-                   + VarInfo.toString (cvis_sorted)
+                   + VarInfo.arrayToString (cvis_sorted)
                    + " num_samples= " + ppt.num_samples()
                    + " ppt.constants = " + ppt.constants);
         if (debugMerge.isLoggable (Level.FINE))
@@ -664,9 +664,9 @@ public final class PPTSLICE1 extends PptSlice {
         debugMerge.fine ("-- Processing child " + ppt.name() + " ("
                          + rel.getRelationType() + ")");
         debugMerge.fine ("-- -- child vars = "
-                         + VarInfo.toString (cvis_sorted));
+                         + VarInfo.arrayToString (cvis_sorted));
         debugMerge.fine ("-- -- parent vars = "
-                         + VarInfo.toString (var_infos));
+                         + VarInfo.arrayToString (var_infos));
         debugMerge.fine ("-- -- permute = " + ArraysMDE.toString (permute));
       }
 
@@ -686,8 +686,8 @@ public final class PPTSLICE1 extends PptSlice {
           orig_inv.log ("org inv");
           inv.log ("Created " + inv + " from " + orig_inv + " using permute "
                    + ArraysMDE.toString(permute) + " cvis_sorted = "
-                   + VarInfo.toString (cvis_sorted) + " cvis = "
-                   + VarInfo.toString (child_vars)
+                   + VarInfo.arrayToString (cvis_sorted) + " cvis = "
+                   + VarInfo.arrayToString (child_vars)
                    + " for ppt " + parent.name());
         }
       }

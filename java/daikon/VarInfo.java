@@ -2486,7 +2486,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns a string containing the names of the vars in the array. **/
-  public static String toString(VarInfo[] vis) {
+  public static String arrayToString(VarInfo[] vis) {
 
     if (vis == null)
       return ("null");
@@ -2501,7 +2501,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns a string containing the names of the vars in the list. **/
-  public static String toString(List<VarInfo> vlist) {
+  public static String listToString(List<VarInfo> vlist) {
 
     if (vlist == null)
       return ("null");

@@ -288,8 +288,7 @@ public class WSMatch {
       boolean no_match = false;
       for (int ii = 0; ii < vars2.size(); ii++) {
         DeclVarInfo v2 = vars2.get(ii);
-        MatchInfo m = vars_match.get (new VarPair(v1, v2));
-        assert m != null;
+        /*@NonNull*/ MatchInfo m = vars_match.get (new VarPair(v1, v2));
         if (m.perc_match > min_perc) {
           // System.out.printf ("Adding match %s%n", m);
           matches.add (m);

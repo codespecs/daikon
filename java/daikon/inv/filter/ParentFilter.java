@@ -35,7 +35,7 @@ public class ParentFilter extends InvariantFilter {
             inv.format(), inv.ppt.parent.name, inv.ppt.parent.parents.size());
         for (PptRelation rel : inv.ppt.parent.parents) {
           inv.log ("--%s%n", rel);
-          inv.log ("--variables: %s", VarInfo.toString (rel.parent.var_infos));
+          inv.log ("--variables: %s", VarInfo.arrayToString (rel.parent.var_infos));
           inv.log ("--map: %s", rel.child_to_parent_map);
         }
       } else {
@@ -56,11 +56,11 @@ public class ParentFilter extends InvariantFilter {
 
       // Look up each variable in the parent, skip this parent if any
       // variables don't exist in the parent.
-      /*@Nullable*/ VarInfo[] pvis = new VarInfo[inv.ppt.var_infos.length];
-      for (int j = 0; j < pvis.length; j++) {
-        pvis[j] = rel.parentVar (inv.ppt.var_infos[j]);
-        // pvis[j] *can* be null -MDE
-        if (pvis[j] == null) {
+      /*@Nullable*/ VarInfo[] pvis_raw = new VarInfo[inv.ppt.var_infos.length];
+      for (int j = 0; j < pvis_raw.length; j++) {
+        pvis_raw[j] = rel.parentVar (inv.ppt.var_infos[j]);
+        // pvis_raw[j] *can* be null.  Why, and is that a problem? -MDE
+        if (pvis_raw[j] == null) {
           if (Debug.logDetail()) {
             inv.log ("variable %s [%s] cannot be found in %s",
                      inv.ppt.var_infos[j],
@@ -72,6 +72,8 @@ public class ParentFilter extends InvariantFilter {
           continue outer;
         }
       }
+      @SuppressWarnings("nullness") // at this point, pvis contains only non-null elements
+      VarInfo[] pvis = pvis_raw;
 
       if (Debug.logDetail())
         inv.log ("  got variables");
@@ -79,7 +81,7 @@ public class ParentFilter extends InvariantFilter {
       // Sort the parent variables in index order
       Arrays.sort (pvis, VarInfo.IndexComparator.getInstance());
       if (Debug.logDetail())
-        inv.log ("Found parent vars: " + VarInfo.toString (pvis));
+        inv.log ("Found parent vars: " + VarInfo.arrayToString (pvis));
 
       // Lookup the slice, skip if not found
       PptSlice pslice = rel.parent.findSlice (pvis);

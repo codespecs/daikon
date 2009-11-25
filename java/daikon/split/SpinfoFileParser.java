@@ -157,6 +157,8 @@ public class SpinfoFileParser {
       }
       assert methodDeclaration != null
         : "@SuppressWarnings(nullness): looks like a bug in flow; we asserted the same thing earlier in the loop body";
+      assert returnStatement != null
+        : "@SuppressWarnings(nullness): looks like a bug in flow; we tested that returnStatement is not blank";
       ReplaceStatement replaceStatement =
         new ReplaceStatement(methodDeclaration.trim(), returnStatement.trim());
       replaceStatements.add(replaceStatement);
@@ -258,7 +260,7 @@ public class SpinfoFileParser {
   /**
    * Returns whether the line is blank (or null).
    */
-  /*@AssertNonNullIfTrue("line")*/
+  /*Need this annotation:  AssertNonNullIfFalse("line")*/
   private static boolean isBlank(/*@Nullable*/ String line) {
     return (line == null) || line.trim().equals("");
   }

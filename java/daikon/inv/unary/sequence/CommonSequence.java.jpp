@@ -69,7 +69,8 @@ public class CLASSNAME
    * Null means no samples have been seen yet.
    * Empty array means intersection is empty.
    */
-  private PRIMITIVE /*@Nullable*/ [] intersect = null;
+  /*@LazyNonNull*/
+  private PRIMITIVE [] intersect = null;
 
   protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
     super(ppt);
@@ -155,7 +156,6 @@ public class CLASSNAME
     }
     StringBuffer pre_buf = new StringBuffer("");
     StringBuffer end_buf = new StringBuffer("");
-    assert intersect != null;   // flow doesn't know that the above methods didn't mutate intersect
     for (int i=0; i<intersect.length; i++) {
       pre_buf.append("(EXISTS ("+idx+i + ") (AND ");
       pre_buf.append("(>= "+idx+i + " " + name[1] + ") ");
@@ -174,7 +174,6 @@ public class CLASSNAME
 //         pre_buf.append("(< "+idx+i + " (select arrayLength " + name[0] + ")) ");
       pre_buf.append("(EQ (select (select elems " + name[0] + ") "+idx+i + ") "
                      + TOSTRING_SIMPLIFY(intersect[i]) + ")");
-      assert intersect != null;   // flow doesn't know that the above methods didn't mutate intersect
       if (i == intersect.length - 1)
         pre_buf.append(" ");
       end_buf.append("))");
@@ -190,7 +189,6 @@ public class CLASSNAME
       return InvariantStatus.NO_CHANGE;
     } else {
       for (int i = 0; i < a.length; i++) {
-        assert intersect != null;   // flow doesn't know that INDEXOF doesn't mutate intersect
         if (INDEXOF (intersect, a[i]) != -1) {
           return InvariantStatus.NO_CHANGE;
         }
@@ -211,14 +209,12 @@ public class CLASSNAME
       PRIMITIVE[] tmp = new PRIMITIVE[intersect.length];
       int size = 0;
       for (int i=0; i<a.length; i++) {
-        assert intersect != null;   // flow doesn't know that the methods didn't mutate intersect
         // if (a[i] in intersect) && !(a[i] in tmp), add a[i] to tmp
         int ii = INDEXOF (intersect, a[i]);
         if ((ii != -1) &&
           (INDEXOF (ArraysMDE.subarray(tmp,0,size), a[i]) == -1)) {
           //System.out.println ("adding " + intersect[ii] + " at " + size);
 
-          assert intersect != null;   // flow doesn't know that the methods don't mutate intersect
           // Carefully add the existing intersect value and not a[i].  These
           // are not necessarily the same when fuzzy floating point
           // comparisons are active.

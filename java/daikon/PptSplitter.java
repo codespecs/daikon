@@ -302,7 +302,7 @@ public class PptSplitter implements Serializable {
             }
             throw new RuntimeException("found eq_inv " + eq_inv + " @"
                                 + eq_inv.ppt + " but can't find slice for "
-                                + VarInfo.toString (cvis_sorted));
+                                + VarInfo.arrayToString (cvis_sorted));
           }
           continue;
         }
@@ -332,7 +332,7 @@ public class PptSplitter implements Serializable {
 
       if ((pslice.invs.size() == 0) && Debug.logDetail())
         debug.fine ("PptSplitter: created new slice " +
-                            VarInfo.toString (vis) + " @" + parent.name);
+                            VarInfo.arrayToString (vis) + " @" + parent.name);
 
       // Add any exclusive conditions for this slice to the list
       exclusive_invs_vec.addAll(exclusive_conditions(invs[0], invs[1]));

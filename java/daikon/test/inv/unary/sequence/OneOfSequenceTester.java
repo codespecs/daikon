@@ -44,10 +44,8 @@ public class OneOfSequenceTester extends TestCase {
   }
 
   public void testNonNonNonNull() {
-    OneOfSequence inv1 = (OneOfSequence) OneOfSequence.get_proto().instantiate(slicex);
-    OneOfSequence inv2 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
-    assert inv1 != null;
-    assert inv2 != null;
+    /*@NonNull*/ OneOfSequence inv1 = (OneOfSequence) OneOfSequence.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfSequence inv2 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
 
     inv1.add_modified(Intern.intern(new long[] {19,23}), DOESNT_MATTER);
     inv2.add_modified(Intern.intern(new long[] {91,0}), DOESNT_MATTER);
@@ -56,10 +54,8 @@ public class OneOfSequenceTester extends TestCase {
   }
 
   public void testNonNonNonNon() {
-    OneOfSequence inv1 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
-    OneOfSequence inv2 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
-    assert inv1 != null;
-    assert inv2 != null;
+    /*@NonNull*/ OneOfSequence inv1 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfSequence inv2 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
 
     inv1.add_modified(Intern.intern(new long[] {19,23}), DOESNT_MATTER);
     inv2.add_modified(Intern.intern(new long[] {91,32}), DOESNT_MATTER);
@@ -68,10 +64,8 @@ public class OneOfSequenceTester extends TestCase {
   }
 
   public void testNonNullNonNull() {
-    OneOfSequence inv1 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
-    OneOfSequence inv2 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
-    assert inv1 != null;
-    assert inv2 != null;
+    /*@NonNull*/ OneOfSequence inv1 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfSequence inv2 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
 
     inv1.add_modified(Intern.intern(new long[] {19,0}), DOESNT_MATTER);
     inv2.add_modified(Intern.intern(new long[] {91,0}), DOESNT_MATTER);
@@ -80,10 +74,8 @@ public class OneOfSequenceTester extends TestCase {
   }
 
   public void testNullNullNullNull() {
-    OneOfSequence inv1 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
-    OneOfSequence inv2 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
-    assert inv1 != null;
-    assert inv2 != null;
+    /*@NonNull*/ OneOfSequence inv1 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfSequence inv2 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
 
     inv1.add_modified(Intern.intern(new long[] {0,0}), DOESNT_MATTER);
     inv2.add_modified(Intern.intern(new long[] {0,0}), DOESNT_MATTER);
@@ -92,10 +84,8 @@ public class OneOfSequenceTester extends TestCase {
   }
 
   public void testDifferentLengths() {
-    OneOfSequence inv1 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
-    OneOfSequence inv2 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
-    assert inv1 != null;
-    assert inv2 != null;
+    /*@NonNull*/ OneOfSequence inv1 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
+    /*@NonNull*/ OneOfSequence inv2 = (OneOfSequence)OneOfSequence.get_proto().instantiate(slicex);
 
     inv1.add_modified(Intern.intern(new long[] {0,0,0}), DOESNT_MATTER);
     inv2.add_modified(Intern.intern(new long[] {0,0}), DOESNT_MATTER);

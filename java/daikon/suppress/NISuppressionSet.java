@@ -350,7 +350,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
         if (Debug.logOn() || NIS.debug.isLoggable (Level.FINE))
           Debug.log (NIS.debug, getClass(), ppt, var_infos, "suppression "
             + suppression_set[i] + " is " + status + " in ppt " + ppt
-            + " with var infos " + VarInfo.toString (var_infos));
+            + " with var infos " + VarInfo.arrayToString (var_infos));
         return (true);
       }
     }
@@ -358,7 +358,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     if (Debug.logOn() || NIS.debug.isLoggable (Level.FINE))
       Debug.log (NIS.debug, getClass(), ppt, var_infos, "suppression " + this
                   + " is not valid in ppt " + ppt + " with var infos "
-                  + VarInfo.toString (var_infos));
+                  + VarInfo.arrayToString (var_infos));
     return (false);
   }
 
@@ -388,7 +388,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
         if (Debug.logOn() || NIS.debug.isLoggable (Level.FINE))
           Debug.log (NIS.debug, getClass(), ppt, var_infos, "suppression "
             + suppression_set[i] + " is " + status + " in ppt " + ppt
-            + " with var infos " + VarInfo.toString (var_infos));
+            + " with var infos " + VarInfo.arrayToString (var_infos));
         return (false);
       }
     }
@@ -396,7 +396,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     if (Debug.logOn() || NIS.debug.isLoggable (Level.FINE))
       Debug.log (NIS.debug, getClass(), ppt, var_infos, "suppression " + this
                   + " is not valid in ppt " + ppt + " with var infos "
-                  + VarInfo.toString (var_infos));
+                  + VarInfo.arrayToString (var_infos));
     return (true);
   }
 

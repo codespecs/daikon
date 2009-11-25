@@ -197,7 +197,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         Collections.sort (theKeys);
         String lastPpt = "";
         for (String key : theKeys) {
-            ArrayList<String> al = lastMap.get(key);
+            @SuppressWarnings("nullness") // iterating over sorted keyset
+            /*@NonNull*/ ArrayList<String> al = lastMap.get(key);
             // don't print anything if there are no selective invariants
 
             if (al.size() == 0) continue;

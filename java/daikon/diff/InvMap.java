@@ -22,6 +22,7 @@ public class InvMap implements Serializable {
   private Map<PptTopLevel,List<Invariant>> pptToInvs = new HashMap<PptTopLevel,List<Invariant>>();
   // The purpose of this field is apparently to permit the ppts to be
   // extracted in the same order in which they were inserted.
+  // Why not use a LinkedHashMap?  Maybe because it was only added in JDK 1.4.
   private List<PptTopLevel> ppts = new ArrayList<PptTopLevel>();
 
   public InvMap() { }
@@ -46,6 +47,9 @@ public class InvMap implements Serializable {
   }
 
   public List<Invariant> get(PptTopLevel ppt) {
+    if (! pptToInvs.containsKey(ppt)) {
+      throw new Error("ppt has not yet been added: " + ppt.name());
+    }
     return pptToInvs.get(ppt);
   }
 

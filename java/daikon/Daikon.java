@@ -627,9 +627,7 @@ public final class Daikon {
 
     // Write serialized output - must be done before guarding invariants
     if (inv_file != null) {
-      PptTopLevel.pred_map = null;
-      PptTopLevel.succ_map = null;
-      PptTopLevel.conn_map = null;
+      nullOutMaps();
       try {
         FileIO.write_serialized_pptmap(all_ppts, inv_file);
       } catch (IOException e) {
@@ -730,6 +728,13 @@ public final class Daikon {
     if (!Daikon.dkconfig_quiet) {
       System.out.println("Exiting Daikon.");
     }
+  }
+
+  @SuppressWarnings("nullness") // use with care!
+  private static void nullOutMaps() {
+    PptTopLevel.pred_map = null;
+    PptTopLevel.succ_map = null;
+    PptTopLevel.conn_map = null;
   }
 
   /**

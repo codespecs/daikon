@@ -433,7 +433,7 @@ public class PptSliceEquality
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("copyInvsFromLeader: " + parent.name() + ": leader "
                   + leader.name()
-                  + ": new leaders = " + VarInfo.toString (newVis));
+                  + ": new leaders = " + VarInfo.listToString (newVis));
       debug.fine ("  orig slices count:" + parent.numViews());
     }
 

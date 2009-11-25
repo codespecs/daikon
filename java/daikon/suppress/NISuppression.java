@@ -353,7 +353,7 @@ public class NISuppression {
         if (!false_antecedents && !inv.is_false()) {
           if (debug)
             System.out.printf ("Skipping %s, no false antecedents%n",
-                               VarInfo.toString(cvis));
+                               VarInfo.arrayToString(cvis));
           continue;
         }
 
@@ -433,7 +433,7 @@ public class NISuppression {
     }
     if (debug)
       System.out.printf ("Placed antecedent '%s' into cvis %s%n", inv.format(),
-                         VarInfo.toString(cvis));
+                         VarInfo.arrayToString(cvis));
 
     // Make sure the resulting variables are in the proper order and are
     // compatible

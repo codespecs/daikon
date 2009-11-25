@@ -496,8 +496,8 @@ public abstract class Invariant
       result.log ("Created " + result.format() + " via clone_and_permute from "
                   + format() + " using permutation "
                   + ArraysMDE.toString (permutation)
-                  + " old_ppt = " + VarInfo.toString (ppt.var_infos)
-                  // + " new_ppt = " + VarInfo.toString (new_ppt.var_infos)
+                  + " old_ppt = " + VarInfo.arrayToString (ppt.var_infos)
+                  // + " new_ppt = " + VarInfo.arrayToString (new_ppt.var_infos)
                   );
 
     return (result);
@@ -539,8 +539,8 @@ public abstract class Invariant
       result.log ("Created " + result.format() + " via resurrect from "
                   + format() + " using permutation "
                   + ArraysMDE.toString (permutation)
-                  + " old_ppt = " + VarInfo.toString (ppt.var_infos)
-                  + " new_ppt = " + VarInfo.toString (new_ppt.var_infos));
+                  + " old_ppt = " + VarInfo.arrayToString (ppt.var_infos)
+                  + " new_ppt = " + VarInfo.arrayToString (new_ppt.var_infos));
 
     return result;
   }

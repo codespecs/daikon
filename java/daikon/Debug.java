@@ -716,7 +716,7 @@ public class Debug {
     else if (val instanceof double[])
       return ArraysMDE.toString ((double[])val);
     else if (val instanceof VarInfo[])
-      return VarInfo.toString((VarInfo[]) val);
+      return VarInfo.arrayToString((VarInfo[]) val);
     else
       return (val.toString());
   }
