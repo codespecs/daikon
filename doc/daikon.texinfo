@@ -8099,6 +8099,9 @@ reading, so they are compared with a ``fuzzy'' rather than exact equality test.
 This chapter gives solutions for certain problems you might have with
 Daikon.  It also tells you how to report bugs in a useful manner.
 
+If, after reading this section and other parts of the manual, you are
+unable to solve your problem, you may wish to send mail to one of the
+mailing lists (@pxref{Mailing lists}).
 
 @menu
 * Daikon problems::             
