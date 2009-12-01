@@ -220,7 +220,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /** non-null if this is an orig() variable.
    *  <b>Do not test equality!  Only use its .name slot.</b>
    **/
-  public /*@Nullable*/ VarInfo postState; //
+  public /*@Nullable*/ VarInfo postState;
 
   /**
    * @exception RuntimeException if representation invariant on this is broken
@@ -233,25 +233,22 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     assert file_rep_type != null;
     assert rep_type != null;
     assert comparability != null; // anything else ??
-    assert comparability.alwaysComparable()
-                      || (((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions());
-    assert
-      0 <= varinfo_index && varinfo_index < ppt.var_infos.length;
+    assert (comparability.alwaysComparable()
+            || (((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions()));
+    assert 0 <= varinfo_index && varinfo_index < ppt.var_infos.length;
     assert -1 <= value_index && value_index < varinfo_index;
     assert is_static_constant == (value_index == -1);
-    assert
-      is_static_constant || (static_constant_value == null);
+    assert is_static_constant || (static_constant_value == null);
   }
 
   /** Returns whether or not rep_type is a legal type **/
   static boolean legalRepType(ProglangType rep_type) {
-    return (
-      (rep_type == ProglangType.INT)
-        || (rep_type == ProglangType.DOUBLE)
-        || (rep_type == ProglangType.STRING)
-        || (rep_type == ProglangType.INT_ARRAY)
-        || (rep_type == ProglangType.DOUBLE_ARRAY)
-        || (rep_type == ProglangType.STRING_ARRAY));
+    return (   (rep_type == ProglangType.INT)
+            || (rep_type == ProglangType.DOUBLE)
+            || (rep_type == ProglangType.STRING)
+            || (rep_type == ProglangType.INT_ARRAY)
+            || (rep_type == ProglangType.DOUBLE_ARRAY)
+            || (rep_type == ProglangType.STRING_ARRAY));
   }
 
   /** Returns whether or not constant_value is a legal constant **/
@@ -267,11 +264,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    */
   static boolean legalFileRepType(ProglangType file_rep_type) {
     return (legalRepType(file_rep_type)
-    // The below types are converted into one of the rep types
-    // by ProglangType.fileTypeToRepType().
-    || (file_rep_type == ProglangType.HASHCODE)
-    || (file_rep_type == ProglangType.HASHCODE_ARRAY)
-    || ((file_rep_type.dimensions() <= 1) && file_rep_type.baseIsPrimitive()));
+            // The below types are converted into one of the rep types
+            // by ProglangType.fileTypeToRepType().
+            || (file_rep_type == ProglangType.HASHCODE)
+            || (file_rep_type == ProglangType.HASHCODE_ARRAY)
+            || ((file_rep_type.dimensions() <= 1)
+                && file_rep_type.baseIsPrimitive()));
   }
 
   /** Create VarInfo from VarDefinition **/
@@ -285,8 +283,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     assert vardef.rep_type != null;
     assert vardef.declared_type != null;
     assert vardef.comparability != null;
-    if (vardef.kind != VarKind.FUNCTION)
-      assert vardef.function_args == null;
+    assert ((vardef.kind == VarKind.FUNCTION)
+            || (vardef.function_args == null));
 
     this.vardef = vardef;
 
