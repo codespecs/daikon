@@ -34,6 +34,8 @@ print ";; Command line: $0 @ARGV\n";
 my %refs = ();
 my %javadoc_ignored_prefixes = ();
 
+my $sort_sublists = 0;          # enable for debugging
+
 for my $file (@ARGV) {
   if (! -e $file) {
     print STDERR "Didn't find $file\n";
@@ -92,19 +94,27 @@ for my $file (@ARGV) {
   }
 }
 
-# I can't do this because javadoc-lookup.el loads .javadoc-index.el.
+# I can't require javadoc-lookup because it loads .javadoc-index.el.
 # print "(eval-when-compile '(require 'javadoc-lookup))\n";
 print "(setq javadoc-html-refs '(\n";
 # Reverse the list so that, when completion-ignore-case is t, "Class"
 # takes priority over the less-likely-to-be-desired "CLASS".
 for my $item (reverse sort keys %refs) {
-  # Sort for reproducibility of results
   my $refs_sans_leading_trailing = $refs{$item};
   $refs_sans_leading_trailing =~ s/^ "//;
   $refs_sans_leading_trailing =~ s/"$//;
-  my @refs = split('" "', $refs_sans_leading_trailing);
-  my $sorted_refs = join('" "', sort(@refs));
-  print " (\"$item\" \"$sorted_refs\")\n"; }
+  my $sorted_refs;
+  if ($sort_sublists) {
+    # Sort for reproducibility of results.  Problem:  user has no control
+    # over which version is chosen, if duplicate Javadoc exists.
+    my @refs = split('" "', $refs_sans_leading_trailing);
+    $sorted_refs = join('" "', sort(@refs));
+  } else {
+    # Prioritize the first-seen version of Javadoc for any class.
+    $sorted_refs = $refs_sans_leading_trailing;
+  }
+  print " (\"$item\" \"$sorted_refs\")\n";
+}
 print "))\n";
 
 print "(setq javadoc-ignored-prefixes (list\n";
