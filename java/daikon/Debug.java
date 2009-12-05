@@ -391,9 +391,11 @@ public class Debug {
 
     // Get the non-qualified class name
     String class_str = "null";
-    if (inv_class != null)
-      class_str = UtilMDE.replaceString (inv_class.getName(),
-                                inv_class.getPackage().getName() + ".", "");
+    if (inv_class != null) {
+      @SuppressWarnings("nullness") // invariants always have a package
+      /*@NonNull*/ String packageName = inv_class.getPackage().getName() + ".";
+      class_str = UtilMDE.replaceString (inv_class.getName(), packageName, "");
+    }
 
     // Get a string with all of the variable names.  Each is separated by ': '
     // 3 variable slots are always setup for consistency
@@ -477,9 +479,11 @@ public class Debug {
 
     // Get the non-qualified class name
     String class_str = "null";
-    if (inv_class != null)
-      class_str = UtilMDE.replaceString (inv_class.getName(),
-                                inv_class.getPackage().getName() + ".", "");
+    if (inv_class != null) {
+      @SuppressWarnings("nullness") // invariants always have a package
+      /*@NonNull*/ String packageName = inv_class.getPackage().getName() + ".";
+      class_str = UtilMDE.replaceString (inv_class.getName(), packageName, "");
+    }
 
     // Get a string with all of the variable names.  Each is separated by ': '.
     // 3 variable slots are always setup for consistency.
