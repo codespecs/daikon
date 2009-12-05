@@ -146,7 +146,7 @@ public class SpinfoFileParser {
     String methodDeclaration = spinfoFile.readLine();
     while (! isBlank(methodDeclaration)) {
       assert methodDeclaration != null
-        : "@SuppressWarnings(nullness): looks like a bug in @AssertNonNullIfTrue processing";
+        : "@SuppressWarnings(nullness): need @AssertNonNullIfFalse annotation";
       String returnStatement = spinfoFile.readLine();
       if (isBlank(returnStatement)) {
         throw new RuntimeException(
