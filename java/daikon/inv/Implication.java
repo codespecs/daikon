@@ -24,7 +24,8 @@ public class Implication
   static final long serialVersionUID = 20030822L;
 
   // These can be null (for instance, for GuardingImplication).  What
-  // exactly is the representation invariant:  should they never be null?
+  // exactly is the representation invariant?  Is GuardingImplication the
+  // only special case?
   /** The original predicate invariant from its original conditional ppt. */
   private /*@Nullable*/ Invariant orig_left;
   /** The original consequent invariant from its original conditional ppt. */
