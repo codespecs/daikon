@@ -1566,7 +1566,9 @@ public final class Daikon {
     }
 
     PptTopLevel entry_ppt = ppts.get(exit_ppt.ppt_name.makeEnter());
-    assert entry_ppt != null : "@SuppressWarnings(nullness): entry must exist for " + exit_ppt.name();
+    if (entry_ppt == null) {
+      throw new Daikon.TerminationMessage("exit found with no corresponding entry: " + exit_ppt.name());
+    }
 
     // Add "orig(...)" (prestate) variables to the program point.
     // Don't bother to include the constants.  Walk through
