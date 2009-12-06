@@ -584,6 +584,7 @@ target.
     <li> Make sure that Daikon compiles under Java 5
     <pre>
         make -C $inv/java JAVAC=$pag/software/pkg/jdk1.5.0_17/bin/javac clean all </pre>
+    </li>
 
     <li> Rebuild everything.
 
@@ -654,8 +655,7 @@ target.
     <li> Test the distribution on a Windows machine.  On a Windows
     machine with Cygwin installed, download the staged daikon.tar.gz
     file, extract the files, set the appropriate environment variables
-    and run the top level makefile.  The commands below are for csh,
-    make the appropriate subsitutions for other shells.  This is
+    and run the top level makefile.  This is
     successful if the make command runs to conclusion without an error.
     The last line should indicate that Kvasir was not built because
     it is not a linux platform.
@@ -664,16 +664,36 @@ target.
     Note that the build will take a fair amount of time because it 
     builds the DynComp-instrumented JDK.
     </p>
-    <pre>
-        wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
-        tar xzvf daikon.tar.gz
-        setenv JDKDIR <i>jdk-directory</i>    # example: '/cygdrive/c/Program Files/Java/jre6'
-        setenv DAIKONDIR `pwd`/daikon
-        setenv DAIKONCLASS_SOURCES 1
-        source daikon/bin/daikon.cshrc
-        cd daikon
-        make
-    </pre>
+
+    <ul>
+      <li>Csh version:
+      <pre>
+	  wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+	  tar xzvf daikon.tar.gz
+	  setenv JDKDIR <i>jdk-directory</i>
+	  setenv DAIKONDIR `pwd`/daikon
+	  setenv DAIKONCLASS_SOURCES 1
+	  source daikon/bin/daikon.cshrc
+	  cd daikon
+	  make
+      </pre>
+      </li>
+      <li>Bash version:
+      <pre>
+	  wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+	  tar xzvf daikon.tar.gz
+          # Convert OSTYPE from a bash shell variable to a system environment variable.
+	  export OSTYPE
+          # It's NOT enough to have the JRE; you need the JDK for the javadoc program
+	  export JDKDIR="/cygdrive/c/Program Files/Java/jre6"
+	  export DAIKONDIR=`pwd`/daikon
+	  export DAIKONCLASS_SOURCES=1
+	  source daikon/bin/daikon.bashrc
+	  cd daikon
+	  make
+      </pre>
+      </li>
+    </ul>
     </li>
 
     <li> Test the distribution on a MacOSX machine.  On a MacOSX
