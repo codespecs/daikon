@@ -657,17 +657,17 @@ target.
     and run the top level makefile.  The commands below are for csh,
     make the appropriate subsitutions for other shells.  This is
     successful if the make command runs to conclusion without an error.
-    The last line should indicate that Kvasir was not build because
+    The last line should indicate that Kvasir was not built because
     it is not a linux platform.
 
     <p>
     Note that the build will take a fair amount of time because it 
-    builds the dyncomp instrumented JDK.
+    builds the DynComp-instrumented JDK.
     </p>
     <pre>
         wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
         tar xzvf daikon.tar.gz
-        setenv JDKDIR <i>jdk-directory</i>
+        setenv JDKDIR <i>jdk-directory</i>    # example: '/cygdrive/c/Program Files/Java/jre6'
         setenv DAIKONDIR `pwd`/daikon
         setenv DAIKONCLASS_SOURCES 1
         source daikon/bin/daikon.cshrc
