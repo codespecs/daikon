@@ -70,12 +70,15 @@ instructions below.
           <li><a href="#regression-tests">Testing Daikon</a></li>
           <li><a href="#distribution">Making a distribution (a release)</a></li>
           <li><a href="#distribute-repository">Distributing the CVS repository</a></li>
+          <li><a href="#vmware">Setting up VMWare</a></li>
+        </ul></li>
+      <li><a href="#Mangel-Wurzel">Mangel-Wurzel</a>
+        <ul>
           <li><a href="#Mangel-Wurzel-linux">Building and testing Mangel-Wurzel on Linux</a></li>
           <li><a href="#Mangel-Wurzel-Windows">Building/testing Mangel-Wurzel on Windows</a></li>
           <li><a href="#purify-linux">Setting up Purify on Linux</a></li>
           <li><a href="#purify-windows">Setting up Purify on Windows</a></li>
           <li><a href="#EDG-front-end">EDG C++ front end</a></li>
-          <li><a href="#vmware">Setting up VMWare</a></li>
           <li><a href="#windows-setup">Setting up Windows for Mangel-Wurzel</a></li>
         </ul></li>
     </ul>
@@ -641,12 +644,21 @@ target.
         make staging    </pre>
     </li>
 
-    <li> Test the distribution in the staging area.  The last part of
+    <li> Test the distribution in the staging area, on a 32-bit machine
+    such as onion.  The last part of
     the test runs Chicory/Daikon on the StackAr example in the
     release.  Success is indicated by invariant output being written
-    to the screen. <b>Consider moving the staging area to the website
+    to the screen.  <b>Consider moving the staging area to the website
     so that we can check things out via the webserver before
     installing.</b>
+
+    <pre>
+        make test-staged-dist    </pre>
+    </li>
+
+    <li> Test the distribution in the staging area, on a 64-bit machine
+    such as mangold. Success is indicated by invariant output being written
+    to the screen.
 
     <pre>
         make test-staged-dist    </pre>
@@ -817,6 +829,40 @@ distribution and a boilerplate email message that we send to people who
 request the repository.  When you send the repository to someone, don't
 forget to add that person's name in the comments, so we can track who is
 using the repository.
+</p>
+
+
+<h3><a name="vmware"> Setting up VMWare </a></h3>
+
+<ul>
+
+    <li> The vmware executable is /usr/vmware/bin/vmware.  Normally its
+    best to add /usr/vmware/bin to your path </li>
+
+    <li> MIT has licenses for VMWare.  Send an email to software@csail.mit.edu
+    to get a license number.  From the vmware screen, choose
+    'help->Enter Serial Number' to enter the license. </li>
+
+    <li> Start up VMWare by choosing 'Open existing virtual machine or team'
+    from the main window.  The setup (at least on horseradish) is found
+    in /scratch/vmware (should we move this to a place that is backed up?) </li>
+
+    <li> Using VMWare remotely may create some problems with mapping X
+    keys correctly.  This is explained at: <a
+    href="http://www.vmware.com/support/ws5/doc/ws_devices_keymap_linux_longer.html">
+    the vmware support site</a>.  To use VNC I found I had to set the
+    keyboard by hand.  To do this add 'xkeymap.language = us101' to
+    your vmware config file (~/.vmware/config).  At that point
+    everything worked except the vertical bar (|).  I fixed that be
+    adding 'xkeymap.keysym.bar = 0x02b' to the config file. </li>
+</ul>
+
+
+<h2><a name="Mangel-Wurzel">Mangel-Wurzel</a></h3>
+
+<p>
+<b>Mangel-Wurzel is obsolete.</b>  These instructions are of only
+historical interest.
 </p>
 
 
@@ -1166,30 +1212,6 @@ If you are new to this code, start by reading its manual and by looking
 at <code>src/il_def.h</code>.
 </p>
 
-<h3><a name="vmware"> Setting up VMWare </a></h3>
-
-<ul>
-
-    <li> The vmware executable is /usr/vmware/bin/vmware.  Normally its
-    best to add /usr/vmware/bin to your path </li>
-
-    <li> MIT has licenses for VMWare.  Send an email to software@csail.mit.edu
-    to get a license number.  From the vmware screen, choose
-    'help->Enter Serial Number' to enter the license. </li>
-
-    <li> Start up VMWare by choosing 'Open existing virtual machine or team'
-    from the main window.  The setup (at least on horseradish) is found
-    in /scratch/vmware (should we move this to a place that is backed up?) </li>
-
-    <li> Using VMWare remotely may create some problems with mapping X
-    keys correctly.  This is explained at: <a
-    href="http://www.vmware.com/support/ws5/doc/ws_devices_keymap_linux_longer.html">
-    the vmware support site</a>.  To use VNC I found I had to set the
-    keyboard by hand.  To do this add 'xkeymap.language = us101' to
-    your vmware config file (~/.vmware/config).  At that point
-    everything worked except the vertical bar (|).  I fixed that be
-    adding 'xkeymap.keysym.bar = 0x02b' to the config file. </li>
-</ul>
 
 <h3><a name="windows-setup"> Setting up Windows for Mangel-Wurzel</a></h3>
 
