@@ -15,7 +15,7 @@ public class MethodInfo {
   public ClassInfo class_info;
 
   /** Reflection information on this method.
-   *    Null if a class initializer (see {@link @is_class_init()}.
+   *    Null if a class initializer (see {@link #is_class_init()}.
    */
   public /*@Nullable*/ Member member = null;
 
