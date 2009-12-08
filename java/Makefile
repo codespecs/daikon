@@ -960,11 +960,14 @@ javadoc: doc
 # Build javadoc using the daikon package and all of subpackages of
 # daikon (except daikon.util) and utilMDE.  Unfortunately, there is
 # no switch to javadoc that ignores a subpackage.  Don't include the
-# typequal package -- it crashes javadoc.
+# typequals package -- it crashes javadoc.
 doc: $(AUTO_GENERATED_FILES) doc-dkconfig
 	mkdir -p doc
+	@rm -f java-files.txt
+	find . -name "*.java" -print | grep -v typequals > java-files.txt
 	javadoc -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
-		daikon -subpackages $(DAIKON_PACKAGES):utilMDE
+		daikon @java-files.txt
+	@rm -f java-files.txt
 	cd doc && preplace '^ *&#64;cindex.*' ''
 
 ## Make doc with private fields for people working on source code
