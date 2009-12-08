@@ -6,44 +6,32 @@ import java.util.regex.*;
 import java.nio.CharBuffer;
 
 /**
- * Clean a BibTeX file.
+ * Clean a BibTeX file by removing text outside BibTeX entries.
+ *
  * Remove each non-empty line that is not in a BibTeX entry, except retain
  * any line that starts with "%".
-
- * I can't use EntryReader because the @ line does not necessarily follow a
- * blank line.
-
- Problem:  comment lines before the @.
- Problem:  @string, which can be multiline.
-
-
-Operate by paragraphs.  A paragraph starts at "\n\n" or "\n@" or after
-  ^[ \t]*[\)\}]
-If the paragraph starts with @, retain it.
-Otherwise, retain each line that starts with %.
-
-
-Operate line-by-line.  Suppress non-blank lines, but retain thoste  that do not star
-
-
-for each line:
-  if ^@, read to end of entry, outputting.  If you find a blank line first, issue a warning.
-  if ^%, output
-  if blank, output
-  skip
-This is a hack, but it works pretty well.
-
-*/
-
-/**
- * Run in the location where you want the cleaned files.  Arguments are the
- * names of the original files, which should be in another directory to
- * avoid being overwritten.
+ *
+ * Arguments are the names of the original files.  Cleaned copies of those
+ * files are written in the CURRENT DIRECTORY.  Therefore, this should be
+ * run in a different directory from where the argument files are, to avoid
+ * overwriting them.
  */
+
+// The implementation uses regular expressions rather than a BibTeX parser,
+// because BibTeX parsers generally do not preserve formatting, such as
+// indentation, delimiter characters, and order of fields.  And, the ones I
+// looked at were not very well-documented.
+
+// The implementation cannot use EntryReader to iterate through the file
+// because the @ line does not necessarily follow a blank line -- there
+// might be a comment line before it.  But, EntryReader requires that its
+// "long entries" start after a blank line.  (That can be considered an
+// EntryReader bug, or at least inflexibility in its interface.)
+
 public class BibtexClean {
 
   private static Pattern entry_end = Pattern.compile("^[ \t]*(?i)(year[ \t]*=[ \t]*[12][0-9][0-9][0-9][ \t]*)?[)}]");
-  private static Pattern string = Pattern.compile("^@(?i)string(\\{.*\\}|\\(.*\\))$");
+  private static Pattern stringDef = Pattern.compile("^@(?i)string(\\{.*\\}|\\(.*\\))$");
 
   public static void main(String[] args) {
     for (String filename : args) {
@@ -68,7 +56,7 @@ public class BibtexClean {
         if (line.equals("") || line.startsWith("%")) {
           out.println(line);
         } else if (line.startsWith("@")) {
-          if (string.matcher(line).matches()) {
+          if (stringDef.matcher(line).matches()) {
             out.println(line);
           } else {
             out.println(line);
@@ -90,10 +78,3 @@ public class BibtexClean {
   }
 
 }
-
-
-
-
-// This uses regular expressions rather than a BibTeX parser, because
-// BibTeX parsers generally do not preserve formatting, such as
-// indentation, delimiter characters, and order of fields.
