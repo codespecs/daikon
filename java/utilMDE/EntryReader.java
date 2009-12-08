@@ -42,17 +42,23 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
   private final /*@Nullable*/ Pattern comment_re;
 
   /**
-   * Regular expression that starts a long entry (paragraph).
-   * By default, paragraphs are separated by blank lines.
+   * Regular expression that starts a long entry.
+   * <p>
+   * If the first line of an entry matches this regexp, then the entry is
+   * terminated by:  entry_stop_re, another line that matches
+   * entry_start_re (even not following a newline), or the end of the
+   * current file.
+   * <p>
+   * Otherwise, the first line of an entry does NOT match this regexp (or
+   * the regexp is null), in which case the entry is terminated by a blank
+   * line or the end of the current file.
    */
-  public /*@Nullable*/ Pattern entry_start_re = null;
+  public /*@LazyNonNull*/ Pattern entry_start_re = null;
 
   /**
-   * Regular expression that terminates a long entry.  Long entries
-   * can also be terminated by the start of a new long entry or the
-   * end of the current file.
+   * @see #entry_start_re
    */
-  public /*@Nullable*/ Pattern entry_stop_re = null;
+  public /*@LazyNonNull*/ Pattern entry_stop_re = null;
 
   ///
   /// Internal implementation variables
@@ -440,7 +446,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
     String filename = get_filename();
     long line_number = get_line_number();
 
-    // If this is a long entry
+    // If first line matches entry_start_re, this is a long entry.
     Matcher entry_match = null;
     if (entry_start_re != null)
       entry_match = entry_start_re.matcher (line);
@@ -468,10 +474,6 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
         if (line == null) {
           throw new IOException("File terminated unexpectedly (didn't find entry terminator)");
         }
-        // Re-asserting is necessary because the checker reasons that
-        // readLine might have side-effected the fields (though it didn't!).
-        assert entry_start_re != null : "@SuppressWarnings(nullness)";
-        assert entry_stop_re != null : "@SuppressWarnings(nullness)";
         entry_match = entry_start_re.matcher(line);
         end_entry_match = entry_stop_re.matcher(line);
       }
@@ -485,7 +487,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
       entry = new Entry (description, body.toString(), filename,
                                      line_number, false);
 
-    } else { // blank separated entry
+    } else { // blank-separated entry
 
       String description = line;
 
@@ -581,7 +583,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
 
   /**
    * Set the regular expressions for the start and stop of long
-   * entries (multiple lins that are read as a group by get_entry()).
+   * entries (multiple lines that are read as a group by get_entry()).
    */
   public void set_entry_start_stop (String entry_start_re,
                                     String entry_stop_re) {
@@ -591,7 +593,7 @@ public class EntryReader extends LineNumberReader implements Iterable<String>, I
 
   /**
    * Set the regular expressions for the start and stop of long
-   * entries (multiple lins that are read as a group by get_entry()).
+   * entries (multiple lines that are read as a group by get_entry()).
    */
   public void set_entry_start_stop (Pattern entry_start_re,
                                     Pattern entry_stop_re) {
