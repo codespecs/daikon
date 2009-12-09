@@ -51,7 +51,7 @@ endif
 
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
 
-jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:typequals.*
+jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*
 
 ### end of user customizations
 
