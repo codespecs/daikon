@@ -42,7 +42,12 @@ public abstract class CLASSNAME
 
   public abstract boolean hasSeenNonTrivialSample();
 
-  protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected CLASSNAME(PptSlice ppt) {
     super(ppt);
   }
+
+  protected /*@Prototype*/ CLASSNAME() {
+    super();
+  }
+
 }

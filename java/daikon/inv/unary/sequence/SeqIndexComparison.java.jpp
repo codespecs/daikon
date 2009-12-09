@@ -171,16 +171,16 @@ public class CLASSNAME extends SUPERCLASS {
   public static boolean dkconfig_enabled = false;
 
   private CLASSNAME () /*@Prototype*/ {
-    super (null);
+    super ();
   }
 
-  protected CLASSNAME (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice slice) {
+  protected CLASSNAME (PptSlice slice) {
     super (slice);
     assert slice != null;
     assert var().rep_type == ProglangType.ASSERTYPE;
   }
 
-  private static /*@Nullable*/ /*@Prototype*/ CLASSNAME proto = null;
+  private static /*@Nullable*/ /*@Prototype*/ CLASSNAME proto;
 
   /** Returns the prototype invariant for CLASSNAME **/
   public static /*@Prototype*/ CLASSNAME get_proto() {

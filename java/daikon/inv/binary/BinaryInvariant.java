@@ -14,8 +14,12 @@ import java.util.*;
  **/
 public abstract class BinaryInvariant extends Invariant {
 
-  protected BinaryInvariant (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected BinaryInvariant (PptSlice ppt) {
     super(ppt);
+  }
+
+  protected /*@Prototype*/ BinaryInvariant () {
+    super();
   }
 
   public abstract InvariantStatus check(Object val1, Object val2,

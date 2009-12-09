@@ -85,9 +85,12 @@ public abstract class CLASSNAME extends BinaryInvariant {
   // if true, swap the order of the invariant variables
   protected boolean swap = false;
 
-  /** Pass-through. */
-  protected CLASSNAME (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected CLASSNAME (PptSlice ppt) {
     super(ppt);
+  }
+
+  protected /*@Prototype*/ CLASSNAME () {
+    super();
   }
 
   /** Returns whether or not the specified types are valid **/

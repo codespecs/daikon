@@ -43,8 +43,12 @@ public class NonModulus
   // This indicates whether it is.
   private boolean results_accurate = false;
 
-  private NonModulus(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  private NonModulus(PptSlice ppt) {
     super(ppt);
+  }
+
+  private /*@Prototype*/ NonModulus() {
+    super();
   }
 
   private static /*@Prototype*/ NonModulus proto;
@@ -52,7 +56,7 @@ public class NonModulus
   /** Returns the prototype invariant for NonModulus **/
   public static /*@Prototype*/ NonModulus get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ NonModulus (null);
+      proto = new /*@Prototype*/ NonModulus ();
     return (proto);
   }
 

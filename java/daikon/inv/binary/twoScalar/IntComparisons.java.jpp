@@ -364,8 +364,12 @@ public final class INTEQUAL
   public static boolean dkconfig_integral_only = true;
 #endif
 
-  protected INTEQUAL(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected INTEQUAL(PptSlice ppt) {
    super(ppt);
+  }
+
+  protected /*@Prototype*/ INTEQUAL() {
+   super();
   }
 
   private static /*@Prototype*/ INTEQUAL proto;
@@ -373,7 +377,7 @@ public final class INTEQUAL
   /** Returns the prototype invariant for INTEQUAL **/
   public static /*@Prototype*/ INTEQUAL get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ INTEQUAL (null);
+      proto = new /*@Prototype*/ INTEQUAL ();
     return (proto);
   }
 

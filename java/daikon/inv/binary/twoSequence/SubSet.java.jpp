@@ -83,8 +83,12 @@ public class SUBSET
    **/
   public static boolean dkconfig_enabled = false;
 
-  protected SUBSET(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected SUBSET(PptSlice ppt) {
     super(ppt);
+  }
+
+  protected /*@Prototype*/ SUBSET() {
+    super();
   }
 
   private static /*@Prototype*/ SUBSET proto;
@@ -92,7 +96,7 @@ public class SUBSET
   /** Returns the prototype invariant for SUBSET **/
   public static /*@Prototype*/ SUBSET get_proto() {
     if (proto == null)
-      proto = (new /*@Prototype*/ SUBSET (null));
+      proto = new /*@Prototype*/ SUBSET ();
     return (proto);
   }
 

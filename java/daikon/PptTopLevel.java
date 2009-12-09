@@ -1960,7 +1960,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // Get a prototype of the invariant we are looking for
-    /*@Prototype*/ Invariant proto = null;
+    /*@Prototype*/ Invariant proto;
     if (v1.rep_type.isScalar()) {
       assert v2.rep_type.isScalar()
         : String.format ("v1 %s rep %s, v2 %s rep %s", v1, v1.rep_type, v2,

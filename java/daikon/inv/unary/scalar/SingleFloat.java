@@ -16,9 +16,12 @@ public abstract class SingleFloat
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  protected SingleFloat(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected SingleFloat(PptSlice ppt) {
     super(ppt);
-    // System.out.println("Created SingleFloat invariant " + this + " at " + ppt);
+  }
+
+  protected /*@Prototype*/ SingleFloat() {
+    super();
   }
 
   /** Returns whether or not the specified types are valid for unary float **/

@@ -116,8 +116,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
     var_indices[PERM_ZYX] = new int[] { 2, 1, 0 };
   }
 
-  protected CLASSNAME (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected CLASSNAME (PptSlice ppt) {
     super (ppt);
+  }
+
+  protected /*@Prototype*/ CLASSNAME () {
+    super ();
   }
 
   /** returns whether or not this invariant is enabled **/

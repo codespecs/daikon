@@ -17,9 +17,12 @@ public abstract class SingleString
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  protected SingleString(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected SingleString(PptSlice ppt) {
     super(ppt);
-    // System.out.println("Created SingleString invariant " + this + " at " + ppt);
+  }
+
+  protected /*@Prototype*/ SingleString() {
+    super();
   }
 
   /** Returns whether or not the specified types are valid for unary string **/

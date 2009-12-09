@@ -59,8 +59,15 @@ public class CLASSNAME
   public CORECLASS core;
 
   @SuppressWarnings("nullness") // circular initialization
-  protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected CLASSNAME(PptSlice ppt) {
     super(ppt);
+    core = new CORECLASS(this);
+  }
+
+  @SuppressWarnings("nullness") // circular initialization
+  protected /*@Prototype*/ CLASSNAME() {
+    super();
+    // Do we need core to be set for a prototype invariant?
     core = new CORECLASS(this);
   }
 
@@ -69,7 +76,7 @@ public class CLASSNAME
   /** Returns a prototype CLASSNAME invariant **/
   public static /*@Prototype*/ CLASSNAME get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ CLASSNAME (null);
+      proto = new /*@Prototype*/ CLASSNAME ();
     return (proto);
   }
 

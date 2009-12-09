@@ -161,8 +161,12 @@ public final class SEQINTEQUAL
 
   static boolean debugSeqIntComparison = false;
 
-  protected SEQINTEQUAL(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected SEQINTEQUAL(PptSlice ppt) {
     super(ppt);
+  }
+
+  protected /*@Prototype*/ SEQINTEQUAL() {
+    super();
   }
 
   private static /*@Prototype*/ SEQINTEQUAL proto;
@@ -170,7 +174,7 @@ public final class SEQINTEQUAL
   /** Returns the prototype invariant for SEQINTEQUAL **/
   public static /*@Prototype*/ SEQINTEQUAL get_proto () {
     if (proto == null)
-      proto = new /*@Prototype*/ SEQINTEQUAL (null);
+      proto = new /*@Prototype*/ SEQINTEQUAL ();
     return (proto);
   }
 

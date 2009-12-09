@@ -188,8 +188,13 @@ public abstract class CLASSNAME extends SUPERCLASS {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20060609L;
 
-  protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
+  protected CLASSNAME(PptSlice ppt, boolean swap) {
     super(ppt);
+    this.swap = swap;
+  }
+
+  protected CLASSNAME(boolean swap) {
+    super();
     this.swap = swap;
   }
 
@@ -640,12 +645,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected Divides (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
+    protected Divides (PptSlice ppt, boolean swap) {
       super(ppt, swap);
     }
 
-    private static /*@Prototype*/ Divides proto = new /*@Prototype*/ Divides (null, false);
-    private static /*@Prototype*/ Divides proto_swap = new /*@Prototype*/ Divides (null, true);
+    protected Divides (boolean swap) {
+      super(swap);
+    }
+
+    private static /*@Prototype*/ Divides proto = new /*@Prototype*/ Divides (false);
+    private static /*@Prototype*/ Divides proto_swap = new /*@Prototype*/ Divides (true);
 
     public static /*@Prototype*/ CLASSNAME get_proto (boolean swap) {
       if (swap) {
@@ -827,12 +836,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected Square (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
+    protected Square (PptSlice ppt, boolean swap) {
       super(ppt, swap);
     }
 
-    private static /*@Prototype*/ Square proto = new /*@Prototype*/ Square (null, false);
-    private static /*@Prototype*/ Square proto_swap = new /*@Prototype*/ Square (null, true);
+    protected Square (boolean swap) {
+      super(swap);
+    }
+
+    private static /*@Prototype*/ Square proto = new /*@Prototype*/ Square (false);
+    private static /*@Prototype*/ Square proto_swap = new /*@Prototype*/ Square (true);
 
     public static /*@Prototype*/ Square get_proto (boolean swap) {
       if (swap) return proto_swap;
@@ -893,12 +906,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040313L;
 
-    protected ZeroTrack (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
+    protected ZeroTrack (PptSlice ppt, boolean swap) {
       super(ppt, swap);
     }
 
-    private static /*@Prototype*/ ZeroTrack proto = new /*@Prototype*/ ZeroTrack (null, false);
-    private static /*@Prototype*/ ZeroTrack proto_swap = new /*@Prototype*/ ZeroTrack (null, true);
+    protected /*@Prototype*/ ZeroTrack (boolean swap) {
+      super(swap);
+    }
+
+    private static /*@Prototype*/ ZeroTrack proto = new /*@Prototype*/ ZeroTrack (false);
+    private static /*@Prototype*/ ZeroTrack proto_swap = new /*@Prototype*/ ZeroTrack (true);
 
     public static /*@Prototype*/ ZeroTrack get_proto (boolean swap) {
       if (swap)
@@ -973,15 +990,19 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected BitwiseComplement (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+    protected BitwiseComplement (PptSlice ppt) {
       super(ppt, false);
+    }
+
+    protected /*@Prototype*/ BitwiseComplement () {
+      super(false);
     }
 
     private static /*@Prototype*/ BitwiseComplement proto;
 
     public static /*@Prototype*/ BitwiseComplement get_proto() {
       if (proto == null)
-        proto = new /*@Prototype*/ BitwiseComplement (null);
+        proto = new /*@Prototype*/ BitwiseComplement ();
       return (proto);
     }
 
@@ -1030,12 +1051,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected BitwiseSubset (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
+    protected BitwiseSubset (PptSlice ppt, boolean swap) {
       super(ppt, swap);
     }
 
-    private static /*@Prototype*/ BitwiseSubset proto = new /*@Prototype*/ BitwiseSubset (null, false);
-    private static /*@Prototype*/ BitwiseSubset proto_swap = new /*@Prototype*/ BitwiseSubset (null, true);
+    protected BitwiseSubset (boolean swap) {
+      super(swap);
+    }
+
+    private static /*@Prototype*/ BitwiseSubset proto = new /*@Prototype*/ BitwiseSubset (false);
+    private static /*@Prototype*/ BitwiseSubset proto_swap = new /*@Prototype*/ BitwiseSubset (true);
 
     public static /*@Prototype*/ BitwiseSubset get_proto (boolean swap) {
       if (swap)
@@ -1128,15 +1153,19 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040313L;
 
-    protected BitwiseAndZero (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+    protected BitwiseAndZero (PptSlice ppt) {
       super(ppt, false);
+    }
+
+    protected /*@Prototype*/ BitwiseAndZero () {
+      super(false);
     }
 
     private static /*@Prototype*/ BitwiseAndZero proto;
 
     public static /*@Prototype*/ BitwiseAndZero get_proto () {
       if (proto == null)
-        proto = new /*@Prototype*/ BitwiseAndZero (null);
+        proto = new /*@Prototype*/ BitwiseAndZero ();
       return (proto);
     }
 
@@ -1209,12 +1238,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040313L;
 
-    protected ShiftZero (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
+    protected ShiftZero (PptSlice ppt, boolean swap) {
       super(ppt, swap);
     }
 
-    private static /*@Prototype*/ ShiftZero proto = new /*@Prototype*/ ShiftZero (null, false);
-    private static /*@Prototype*/ ShiftZero proto_swap = new /*@Prototype*/ ShiftZero (null, true);
+    protected ShiftZero (boolean swap) {
+      super(swap);
+    }
+
+    private static /*@Prototype*/ ShiftZero proto = new /*@Prototype*/ ShiftZero (false);
+    private static /*@Prototype*/ ShiftZero proto_swap = new /*@Prototype*/ ShiftZero (true);
 
     public static /*@Prototype*/ ShiftZero get_proto (boolean swap) {
       if (swap)
@@ -1289,12 +1322,16 @@ public abstract class CLASSNAME extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20081113L;
 
-    protected SubString (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean swap) {
+    protected SubString (PptSlice ppt, boolean swap) {
       super(ppt, swap);
     }
 
-    private static /*@Prototype*/ SubString proto = new /*@Prototype*/ SubString (null, false);
-    private static /*@Prototype*/ SubString proto_swap = new /*@Prototype*/ SubString (null, true);
+    protected SubString (boolean swap) {
+      super(swap);
+    }
+
+    private static /*@Prototype*/ SubString proto = new /*@Prototype*/ SubString (false);
+    private static /*@Prototype*/ SubString proto_swap = new /*@Prototype*/ SubString (true);
 
     public static /*@Prototype*/ SubString get_proto (boolean swap) {
       if (swap) {

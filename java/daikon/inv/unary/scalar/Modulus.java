@@ -37,8 +37,12 @@ public class Modulus
   // used for initializing value1
   boolean no_samples_seen = true;
 
-  private Modulus(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  private Modulus(PptSlice ppt) {
     super(ppt);
+  }
+
+  private /*@Prototype*/ Modulus() {
+    super();
   }
 
   private static /*@Prototype*/ Modulus proto;
@@ -46,7 +50,7 @@ public class Modulus
   /** Returns the prototype invariant for Modulus **/
   public static /*@Prototype*/ Modulus get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ Modulus (null);
+      proto = new /*@Prototype*/ Modulus ();
     return (proto);
   }
 

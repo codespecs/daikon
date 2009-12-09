@@ -97,8 +97,12 @@ public final class CLASSNAME
    **/
   public static boolean dkconfig_enabled = true;
 
-  protected CLASSNAME(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected CLASSNAME(PptSlice ppt) {
     super(ppt);
+  }
+
+  protected /*@Prototype*/ CLASSNAME() {
+    super();
   }
 
   private static /*@Prototype*/ CLASSNAME proto;
@@ -106,7 +110,7 @@ public final class CLASSNAME
   /** Returns the prototype invariant for CLASSNAME **/
   public static /*@Prototype*/ CLASSNAME get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ CLASSNAME (null);
+      proto = new /*@Prototype*/ CLASSNAME ();
     return (proto);
   }
 

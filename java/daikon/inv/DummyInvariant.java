@@ -39,8 +39,12 @@ public class DummyInvariant
   // slice for the invariant to live in.
   public boolean valid = false;
 
-  public DummyInvariant(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  public DummyInvariant(PptSlice ppt) {
     super(ppt);
+  }
+
+  public /*@Prototype*/ DummyInvariant() {
+    super();
   }
 
   public void setFormats(/*@Nullable*/ String daikonStr, /*@Nullable*/ String java, /*@Nullable*/ String esc,

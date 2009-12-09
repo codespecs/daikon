@@ -85,7 +85,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   /** Returns the prototype invariant for CNAME(FUNCTION,PERM_NAME) **/
   public static /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) (null);
+      proto = new /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) ();
     return (proto);
   }
 
@@ -94,12 +94,12 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     return new CNAME(FUNCTION,PERM_NAME) (slice);
   }
 
-  private CNAME(FUNCTION,PERM_NAME) (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice slice) {
+  private CNAME(FUNCTION,PERM_NAME) (PptSlice slice) {
     super (slice);
   }
 
   public CNAME(FUNCTION,PERM_NAME) () /*@Prototype*/ {
-    super (null);
+    super ();
   }
 
   private static String[] method_name = new String[] METHOD_NAME;

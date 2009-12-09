@@ -31,8 +31,12 @@ public class CommonStringSequence
    */
   private String /*@Nullable*/ [] intersect = null;
 
-  protected CommonStringSequence(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected CommonStringSequence(PptSlice ppt) {
     super(ppt);
+  }
+
+  protected /*@Prototype*/ CommonStringSequence() {
+    super();
   }
 
   private static /*@Prototype*/ CommonStringSequence proto;
@@ -40,7 +44,7 @@ public class CommonStringSequence
   /** Returns the prototype invariant for CommonStringSequence **/
   public static /*@Prototype*/ CommonStringSequence get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ CommonStringSequence (null);
+      proto = new /*@Prototype*/ CommonStringSequence ();
     return (proto);
   }
 

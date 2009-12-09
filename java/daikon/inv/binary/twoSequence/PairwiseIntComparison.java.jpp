@@ -236,8 +236,12 @@ public class PAIRWISEINTEQUAL
 
   static final boolean debugPairwiseIntComparison = false;
 
-  protected PAIRWISEINTEQUAL(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected PAIRWISEINTEQUAL(PptSlice ppt) {
     super(ppt);
+  }
+
+  protected /*@Prototype*/ PAIRWISEINTEQUAL() {
+    super();
   }
 
   private static /*@Prototype*/ PAIRWISEINTEQUAL proto;
@@ -245,7 +249,7 @@ public class PAIRWISEINTEQUAL
   /** Returns the prototype invariant for PAIRWISEINTEQUAL **/
   public static /*@Prototype*/ PAIRWISEINTEQUAL get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ PAIRWISEINTEQUAL ((/*@Nullable*/ PptSlice) null);
+      proto = new /*@Prototype*/ PAIRWISEINTEQUAL ();
     return (proto);
   }
 

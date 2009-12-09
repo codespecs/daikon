@@ -23,10 +23,12 @@ public final class PrintableString extends SingleString
    **/
   public static boolean dkconfig_enabled = false;
 
-  public PrintableString (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice slice) {
+  public PrintableString (PptSlice slice) {
     super (slice);
-    if (slice == null)
-      return;
+  }
+
+  public /*@Prototype*/ PrintableString () {
+    super ();
   }
 
   private static /*@Prototype*/ PrintableString proto;
@@ -34,7 +36,7 @@ public final class PrintableString extends SingleString
   /** Returns the prototype invariant for PrintableString **/
   public static /*@Prototype*/ PrintableString get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ PrintableString (null);
+      proto = new /*@Prototype*/ PrintableString ();
     return (proto);
   }
 

@@ -288,10 +288,12 @@ public final class ONEOFSCALAR
   private int num_elts;
 
 
-  public ONEOFSCALAR (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice slice) {
+  public /*@Prototype*/ ONEOFSCALAR () {
+    super();
+  }
+
+  public ONEOFSCALAR (PptSlice slice) {
     super (slice);
-    if (slice == null)
-      return;
 
 #if defined(IS_ELT) || defined(IS_SEQUENCE)
     // var() is initialized by the super constructor
@@ -322,7 +324,7 @@ public final class ONEOFSCALAR
   /** Returns the prototype invariant for ONEOFSCALAR **/
   public static /*@Prototype*/ ONEOFSCALAR get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ ONEOFSCALAR (null);
+      proto = new /*@Prototype*/ ONEOFSCALAR ();
     return (proto);
   }
 

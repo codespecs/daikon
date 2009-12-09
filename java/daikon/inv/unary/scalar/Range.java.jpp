@@ -88,8 +88,12 @@ public abstract class RANGE extends SUPERCLASS {
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040311L;
 
-  protected RANGE (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected RANGE (PptSlice ppt) {
     super (ppt);
+  }
+
+  protected /*@Prototype*/ RANGE () {
+    super ();
   }
 
   /**
@@ -247,8 +251,12 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected EqualZero (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+    protected EqualZero (PptSlice ppt) {
       super (ppt);
+    }
+
+    protected /*@Prototype*/ EqualZero () {
+      super ();
     }
 
     private static /*@Prototype*/ EqualZero proto;
@@ -256,7 +264,7 @@ public abstract class RANGE extends SUPERCLASS {
     /** returns the prototype invariant **/
     public static /*@Prototype*/ EqualZero get_proto() {
       if (proto == null)
-        proto = new /*@Prototype*/ EqualZero (null);
+        proto = new /*@Prototype*/ EqualZero ();
       return proto;
     }
 
@@ -294,8 +302,12 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected EqualOne (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+    protected EqualOne (PptSlice ppt) {
       super (ppt);
+    }
+
+    protected /*@Prototype*/ EqualOne () {
+      super ();
     }
 
     private static /*@Prototype*/ EqualOne proto;
@@ -303,7 +315,7 @@ public abstract class RANGE extends SUPERCLASS {
     /** returns the prototype invariant **/
     public static /*@Prototype*/ EqualOne get_proto() {
       if (proto == null)
-        proto = new /*@Prototype*/ EqualOne (null);
+        proto = new /*@Prototype*/ EqualOne ();
       return proto;
     }
 
@@ -341,8 +353,12 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040824L;
 
-    protected EqualMinusOne (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+    protected EqualMinusOne (PptSlice ppt) {
       super (ppt);
+    }
+
+    protected /*@Prototype*/ EqualMinusOne () {
+      super ();
     }
 
     private static /*@Prototype*/ EqualMinusOne proto;
@@ -350,7 +366,7 @@ public abstract class RANGE extends SUPERCLASS {
     /** returns the prototype invariant **/
     public static /*@Prototype*/ EqualMinusOne get_proto() {
       if (proto == null)
-        proto = new /*@Prototype*/ EqualMinusOne (null);
+        proto = new /*@Prototype*/ EqualMinusOne ();
       return proto;
     }
 
@@ -388,8 +404,12 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected GreaterEqualZero (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+    protected GreaterEqualZero (PptSlice ppt) {
       super (ppt);
+    }
+
+    protected /*@Prototype*/ GreaterEqualZero () {
+      super ();
     }
 
     private static /*@Prototype*/ GreaterEqualZero proto;
@@ -397,7 +417,7 @@ public abstract class RANGE extends SUPERCLASS {
     /** returns the prototype invariant **/
     public static /*@Prototype*/ GreaterEqualZero get_proto() {
       if (proto == null)
-        proto = new /*@Prototype*/ GreaterEqualZero (null);
+        proto = new /*@Prototype*/ GreaterEqualZero ();
       return proto;
     }
 
@@ -435,8 +455,12 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected GreaterEqual64 (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+    protected GreaterEqual64 (PptSlice ppt) {
       super (ppt);
+    }
+
+    protected /*@Prototype*/ GreaterEqual64 () {
+      super ();
     }
 
     private static /*@Prototype*/ GreaterEqual64 proto;
@@ -444,7 +468,7 @@ public abstract class RANGE extends SUPERCLASS {
     /** returns the prototype invariant **/
     public static /*@Prototype*/ GreaterEqual64 get_proto() {
       if (proto == null)
-        proto = new /*@Prototype*/ GreaterEqual64 (null);
+        proto = new /*@Prototype*/ GreaterEqual64 ();
       return proto;
     }
 
@@ -483,8 +507,12 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected BooleanVal (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+    protected BooleanVal (PptSlice ppt) {
       super (ppt);
+    }
+
+    protected /*@Prototype*/ BooleanVal () {
+      super ();
     }
 
     private static /*@Prototype*/ BooleanVal proto;
@@ -492,7 +520,7 @@ public abstract class RANGE extends SUPERCLASS {
     /** returns the prototype invariant **/
     public static /*@Prototype*/ BooleanVal get_proto() {
       if (proto == null)
-        proto = new /*@Prototype*/ BooleanVal (null);
+        proto = new /*@Prototype*/ BooleanVal ();
       return (proto);
     }
 
@@ -534,8 +562,12 @@ public abstract class RANGE extends SUPERCLASS {
     /** Boolean.  True if PowerOfTwo invariants should be considered. **/
     public static boolean dkconfig_enabled = true;
 
-    protected PowerOfTwo (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+    protected PowerOfTwo (PptSlice ppt) {
       super (ppt);
+    }
+
+    protected /*@Prototype*/ PowerOfTwo () {
+      super ();
     }
 
     private static /*@Prototype*/ PowerOfTwo proto;
@@ -543,7 +575,7 @@ public abstract class RANGE extends SUPERCLASS {
     /** returns the prototype invariant **/
     public static /*@Prototype*/ PowerOfTwo get_proto() {
       if (proto == null)
-        proto = new /*@Prototype*/ PowerOfTwo (null);
+        proto = new /*@Prototype*/ PowerOfTwo ();
       return (proto);
     }
 
@@ -605,8 +637,12 @@ public abstract class RANGE extends SUPERCLASS {
     /** Boolean.  True if Even invariants should be considered. **/
     public static boolean dkconfig_enabled = false;
 
-    protected Even (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+    protected Even (PptSlice ppt) {
       super (ppt);
+    }
+
+    protected /*@Prototype*/ Even () {
+      super ();
     }
 
     private static /*@Prototype*/ Even proto;
@@ -614,7 +650,7 @@ public abstract class RANGE extends SUPERCLASS {
     /** returns the prototype invariant **/
     public static /*@Prototype*/ Even get_proto() {
       if (proto == null)
-        proto = new /*@Prototype*/ Even (null);
+        proto = new /*@Prototype*/ Even ();
       return proto;
     }
 
@@ -665,8 +701,12 @@ public abstract class RANGE extends SUPERCLASS {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20040113L;
 
-    protected Bound0_63 (/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+    protected Bound0_63 (PptSlice ppt) {
       super (ppt);
+    }
+
+    protected /*@Prototype*/ Bound0_63 () {
+      super ();
     }
 
     private static /*@Prototype*/ Bound0_63 proto;
@@ -679,7 +719,7 @@ public abstract class RANGE extends SUPERCLASS {
     /** returns the prototype invariant **/
     public static /*@Prototype*/ Bound0_63 get_proto() {
       if (proto == null)
-        proto = new /*@Prototype*/ Bound0_63 (null);
+        proto = new /*@Prototype*/ Bound0_63 ();
       return (proto);
     }
 

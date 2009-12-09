@@ -37,15 +37,19 @@ public class IsPointer extends SingleScalar {
 
     private long smallestNonPointerValue = -100000;
 
-    protected IsPointer(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+    protected IsPointer(PptSlice ppt) {
         super(ppt);
+    }
+
+    protected /*@Prototype*/ IsPointer() {
+        super();
     }
 
 
     /** Returns the prototype invariant for IsPointer **/
     public static /*@Prototype*/ IsPointer get_proto() {
       if (proto == null)
-        proto = new /*@Prototype*/ IsPointer(null);
+        proto = new /*@Prototype*/ IsPointer();
       return (proto);
     }
 

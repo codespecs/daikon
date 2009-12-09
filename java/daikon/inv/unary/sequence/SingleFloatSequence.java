@@ -16,9 +16,12 @@ public abstract class SingleFloatSequence
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020813L;
 
-  protected SingleFloatSequence(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected SingleFloatSequence(PptSlice ppt) {
     super(ppt);
-    // System.out.println("Created SingleFloatSequence invariant " + this + " at " + ppt);
+  }
+
+  protected /*@Prototype*/ SingleFloatSequence() {
+    super();
   }
 
   /** Returns whether or not the specified types are valid  **/

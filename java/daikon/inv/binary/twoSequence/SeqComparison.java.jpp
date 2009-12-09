@@ -276,8 +276,13 @@ public class SEQSEQINTEQUAL
 
   boolean orderMatters;
 
-  protected SEQSEQINTEQUAL(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt, boolean order) {
+  protected SEQSEQINTEQUAL(PptSlice ppt, boolean order) {
     super(ppt);
+    orderMatters = order;
+  }
+
+  protected /*@Prototype*/ SEQSEQINTEQUAL(boolean order) {
+    super();
     orderMatters = order;
   }
 
@@ -294,7 +299,7 @@ public class SEQSEQINTEQUAL
   /** Returns the prototype invariant for SEQSEQINTEQUAL **/
   public static /*@Prototype*/ SEQSEQINTEQUAL get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ SEQSEQINTEQUAL (null, true);
+      proto = new /*@Prototype*/ SEQSEQINTEQUAL (true);
     return (proto);
   }
 

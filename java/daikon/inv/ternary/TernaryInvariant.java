@@ -15,9 +15,12 @@ public abstract class TernaryInvariant
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  /** Pass-through. */
-  protected TernaryInvariant(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected TernaryInvariant(PptSlice ppt) {
     super(ppt);
+  }
+
+  protected /*@Prototype*/ TernaryInvariant() {
+    super();
   }
 
   // Check if swap occurred and call one of the other methods

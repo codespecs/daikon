@@ -244,11 +244,15 @@ public class LOWERBOUND
   private LOWERBOUNDCORE core;
 
   @SuppressWarnings("nullness") // circular initialization
-  private LOWERBOUND(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice slice) {
+  private LOWERBOUND(PptSlice slice) {
     super (slice);
-    if (slice == null)
-      return;
+    assert slice != null;
     core = new LOWERBOUNDCORE(this);
+  }
+
+  private /*@Prototype*/ LOWERBOUND() {
+    super ();
+    // do we need a core?
   }
 
   private static /*@Prototype*/ LOWERBOUND proto;
@@ -256,7 +260,7 @@ public class LOWERBOUND
   /** Returns the prototype invariant for LOWERBOUND **/
   public static /*@Prototype*/ LOWERBOUND get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ LOWERBOUND (null);
+      proto = new /*@Prototype*/ LOWERBOUND ();
     return (proto);
   }
 

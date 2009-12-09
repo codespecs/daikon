@@ -28,9 +28,12 @@ public abstract class SingleSequence
    */
   public static boolean dkconfig_SeqIndexDisableAll = false;
 
-  protected SingleSequence(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected SingleSequence(PptSlice ppt) {
     super(ppt);
-    // System.out.println("Created SingleSequence invariant " + this + " at " + ppt);
+  }
+
+  protected /*@Prototype*/ SingleSequence() {
+    super();
   }
 
   public VarInfo var() {

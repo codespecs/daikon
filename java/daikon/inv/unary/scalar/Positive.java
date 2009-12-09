@@ -34,8 +34,12 @@ public class Positive
   /// Required methods
   ///
 
-  private Positive(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  private Positive(PptSlice ppt) {
     super(ppt);
+  }
+
+  private /*@Prototype*/ Positive() {
+    super();
   }
 
   private static /*@Prototype*/ Positive proto;
@@ -43,7 +47,7 @@ public class Positive
   /** Returns the prototype invariant **/
   public static /*@Prototype*/ Positive get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ Positive (null);
+      proto = new /*@Prototype*/ Positive ();
     return (proto);
   }
 

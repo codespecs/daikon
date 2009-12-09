@@ -96,8 +96,12 @@ public class NONZERO
   /** Maximum value ever used for max-min in confidence calculation. **/
   static long range_max = 50;
 
-  private NONZERO(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  private NONZERO(PptSlice ppt) {
     super(ppt);
+  }
+
+  private /*@Prototype*/ NONZERO() {
+    super();
   }
 
   private static /*@Prototype*/ NONZERO proto;
@@ -105,7 +109,7 @@ public class NONZERO
   /** Returns the prototype invariant for NONZERO **/
   public static /*@Prototype*/ NONZERO get_proto() {
     if (proto == null)
-      proto = new /*@Prototype*/ NONZERO (null);
+      proto = new /*@Prototype*/ NONZERO ();
     return (proto);
   }
 

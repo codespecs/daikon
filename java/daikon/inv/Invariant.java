@@ -115,7 +115,7 @@ public abstract class Invariant
    * The program point for this invariant; includes values, number of
    * samples, VarInfos, etc.  Can be null for a "prototype" invariant.
    **/
-  /*@Dependent(result=Nullable.class, when=Prototype.class)*/
+  /*@Unused(when=Prototype.class)*/
   public PptSlice ppt;
 
   // Has to be public so wrappers can read it.
@@ -397,9 +397,19 @@ public abstract class Invariant
   // in the ppt.  Or, don't put too much work in the constructor and instead
   // have the caller do that.
   // The "ppt" argument can be null if this is a prototype invariant.
-  protected Invariant(/*@Dependent(result=Nullable.class, when=Prototype.class)*/ PptSlice ppt) {
+  protected Invariant(PptSlice ppt) {
     this.ppt = ppt;
   }
+
+  protected /*@Prototype*/ Invariant() {
+    this.ppt = null;
+  }
+
+  @SuppressWarnings("unused")
+  private boolean isPrototype() {
+    return this.ppt == null;
+  }
+
 
   /**
    * Marks the invariant as falsified.  Should always be called rather
@@ -1099,6 +1109,7 @@ public abstract class Invariant
    * Returns whether or not this invariant is ni-suppressed.
    */
   /*@AssertNonNullIfTrue("get_ni_suppressions()")*/
+  // This @Prototype annotation (written by Jeff, I think) looks wrong to me.  -Mike
   public boolean is_ni_suppressed() /*@Prototype*/{
 
     NISuppressionSet ss = get_ni_suppressions();
@@ -1793,7 +1804,7 @@ public abstract class Invariant
    */
   public /*@Nullable*/ Invariant instantiate (PptSlice slice) /*@Prototype*/ {
 
-    assert this.ppt == null;    // receiver should be a "prototype" invariant
+    assert isPrototype();    // receiver should be a "prototype" invariant
     assert slice != null;
     if (! valid_types(slice.var_infos)) {
       System.out.printf("this.getClass(): %s%n", this.getClass());
@@ -1802,11 +1813,6 @@ public abstract class Invariant
       for (VarInfo vi : slice.var_infos) {
         System.out.printf("  var_info: %s %s%n", vi, vi.type);
       }
-      System.out.printf("ppt: %s%n", ppt);
-      assert(this.ppt == null);
-      // if (this.ppt != null) {
-      //   System.out.printf("this: %s%n", this.repr());
-      // }
     }
     assert valid_types(slice.var_infos)
       : String.format("valid_types(%s) = false for %s", slice.var_infos, this);
