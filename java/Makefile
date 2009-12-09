@@ -10,6 +10,12 @@
 
 INV ?= ${DAIKONDIR}
 
+# Test that the directory exists.  There must be a better way to do this.
+INV:=$(wildcard $(INV))
+ifndef INV
+  $(error Environment variable INV is not set to an existing directory)
+endif
+
 # Set DAIKONBIN to scripts/ if it exists, otherwise to bin/.
 ifeq "$(wildcard ${INV}/scripts)" "${INV}/scripts"
     DAIKONBIN ?= ${INV}/scripts
