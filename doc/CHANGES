@@ -19,6 +19,25 @@ Further documentation can be found in:
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
+4.6.3 
+
+Kvasir's support for GCC 4.4 has been improved. 
+
+Kvasir
+
+  User visible changes
+
+     The output of variables declared as constant can now be
+     supressed via the '--ignore-constants' flag   
+
+  Bug fixes
+
+     Fixed an issue where Fjalar would not print variables
+     delcared constant for binaries created with some versions
+     of g++
+
+     Fixed comparability errors which occured when Kvasir was run
+     with dyncomp on an x86-64 host.
 
 4.6.2 (October 1 2009)
 

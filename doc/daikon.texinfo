@@ -5875,6 +5875,15 @@ versions can lead to incorrect output and, in some cases for version
 2.95, can cause Kvasir to crash.
 
 @item
+Kvasir with Dyncomp will produce different results for x86 and
+x86-64 hosts. This is due to a Dyncomp limitation with regards to
+how handling the AMD64 ABI. The AMD64 ABI allows structs that are
+less than 8-bytes to be passed to a function via register. 
+Dyncomp categorizes this as an interaction between all
+fields of the struct and will mark all fields of the struct as
+comparable to each other.
+
+@item
 Kvasir is incompatible with some compiler optimizations.  It is
 definitely incompatible with the @option{-fomit-frame-pointer}
 optimization, and it may have trouble with other optimizations as
