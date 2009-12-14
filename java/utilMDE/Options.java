@@ -903,9 +903,10 @@ public class Options {
     // Process each option and add in the javadoc info
     for (OptionInfo oi : options) {
       ClassDoc opt_doc = find_class_doc (doc, oi.get_declaring_class());
+      String nameWithUnderscores = oi.long_name.replace('-', '_');
       if (opt_doc != null) {
         for (FieldDoc fd : opt_doc.fields()) {
-          if (fd.name().equals (oi.long_name)) {
+          if (fd.name().equals (nameWithUnderscores)) {
             oi.jdoc = fd.commentText();
             break;
           }
