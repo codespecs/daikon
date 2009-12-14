@@ -37,7 +37,7 @@ import com.sun.javadoc.*;
  **/
 public class Lookup {
 
-  /** Show detailed help information and exit. **/
+  /** Show detailed help information and exit. */
   @Option ("-h Show detailed help information")
   public static boolean help = false;
 
