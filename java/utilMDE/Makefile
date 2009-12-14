@@ -28,11 +28,14 @@ endif
 
 ifndef HTML_TO_TEXT
 ifneq (,$(shell which lynx 2>/dev/null))
-  HTML_TO_TEXT = lynx -dump
+  # Note no trailing space!
+  HTML_TO_TEXT = lynx -dump file://$(shell pwd)/
 else ifneq (,$(shell which html2text 2>/dev/null))
-  HTML_TO_TEXT = html2text -rcfile html2textrc
+  # Note trailing space!
+  HTML_TO_TEXT = html2text -rcfile html2textrc 
 else
-  HTML_TO_TEXT ?= cat
+  # Note trailing space!
+  HTML_TO_TEXT = cat 
 endif
 endif
 
@@ -193,7 +196,8 @@ utilMDE.jar: .class-files-timestamp .test-timestamp lib lookup.html lookup.txt
 lookup.html: Lookup.java
 	javadoc -docletpath .. -J-ea -quiet -doclet utilMDE.Lookup $< > $@
 lookup.txt: lookup.html
-	$(HTML_TO_TEXT) < $< > $@
+# Note no space between command and argument.
+	$(HTML_TO_TEXT)$< > $@
 
 lookup.jar : utilMDE.jar lookup.manifest
 	rm -rf jar-contents
