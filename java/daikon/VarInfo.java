@@ -1985,6 +1985,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   //   }
   // }
 
+  // Is this property always guaranteed to be true?  It's placed in a
+  // slice, but then might it get printed or treated as true?
   /**
    * Create a guarding predicate for this VarInfo, that is, an
    * invariant that ensures that this object is available for access

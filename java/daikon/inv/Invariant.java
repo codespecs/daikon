@@ -1109,8 +1109,7 @@ public abstract class Invariant
    * Returns whether or not this invariant is ni-suppressed.
    */
   /*@AssertNonNullIfTrue("get_ni_suppressions()")*/
-  // This @Prototype annotation (written by Jeff, I think) looks wrong to me.  -Mike
-  public boolean is_ni_suppressed() /*@Prototype*/{
+  public boolean is_ni_suppressed() {
 
     NISuppressionSet ss = get_ni_suppressions();
     if (ss == null)
@@ -1668,6 +1667,7 @@ public abstract class Invariant
   }
 
 
+  // Nothing is ever done with the result except print it and discard it.
   /**
    * This procedure guards one invariant and returns the resulting guarded
    * invariant (implication), without placing it in any slice and without
