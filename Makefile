@@ -106,6 +106,8 @@ INV_GROUP := 14127
 
 RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
 
+TMPDIR := /scratch/${USER}
+
 
 ## Examples of better ways to get the lists:
 # PERL_MODULES := $(wildcard *.pm)
@@ -221,9 +223,9 @@ TAGS:
 ### Test the distribution
 ###
 
-# These should be in /scratch (which tends to have more space), not in /tmp.
-DISTTESTDIR := /tmp/daikon.dist
-DISTTESTDIRJAVA := /tmp/daikon.dist/daikon/java
+
+DISTTESTDIR := ${TMPDIR}/daikon.dist
+DISTTESTDIRJAVA := ${TMPDIR}/daikon.dist/daikon/java
 
 # Test that the files in the staging area are correct.
 test-staged-dist: $(STAGING_DIR)
@@ -249,7 +251,7 @@ test-staged-dist: $(STAGING_DIR)
 
 # I would rather define this inside the cvs-test rule.  (In that case I
 # must use "$$FOO", not $(FOO), to refer to it.)
-TESTCVS=/scratch/$(USER)/daikon.cvs
+TESTCVS=${TMPDIR}/daikon.cvs
 TESTCVSJAVA=$(TESTCVS)/invariants/java
 
 cvs-test:
@@ -275,8 +277,8 @@ staging: doc/CHANGES
 	# Build the main tarfile for daikon
 	@echo "]2;Building daikon.tar"
 	$(MAKE) daikon.tar
-	gzip -c /tmp/daikon.tar > $(STAGING_DIR)/download/daikon.tar.gz
-	cp -pf /tmp/daikon.zip $(STAGING_DIR)/download/daikon.zip
+	gzip -c ${TMPDIR}/daikon.tar > $(STAGING_DIR)/download/daikon.tar.gz
+	cp -pf ${TMPDIR}/daikon.zip $(STAGING_DIR)/download/daikon.zip
 	mv daikon.jar $(STAGING_DIR)/download
 	# Build javadoc
 	@echo "]2;Building Java doc"
@@ -301,11 +303,11 @@ staging: doc/CHANGES
 	# compare new list of files in tarfile to previous list
 	@echo "]2;New or removed files"
 	@echo "***** New or removed files:"
-	tar tzf $(WWW_DIR)/download/daikon.tar.gz | sort > /tmp/old_tar.txt
-	tar tzf $(STAGING_DIR)/download/daikon.tar.gz | sort > /tmp/new_tar.txt
-	-diff -u /tmp/old_tar.txt /tmp/new_tar.txt
+	tar tzf $(WWW_DIR)/download/daikon.tar.gz | sort > ${TMPDIR}/old_tar.txt
+	tar tzf $(STAGING_DIR)/download/daikon.tar.gz | sort > ${TMPDIR}/new_tar.txt
+	-diff -u ${TMPDIR}/old_tar.txt ${TMPDIR}/new_tar.txt
 	# Delete the tmp files
-	cd /tmp && /bin/rm -rf daikon daikon.dist daikon.tar daikon.zip \
+	cd ${TMPDIR} && /bin/rm -rf daikon daikon.dist daikon.tar daikon.zip \
 							old_tar.txt new_tar.txt
 
 # Copy the files in the staging area to the website.  This will copy
@@ -386,29 +388,29 @@ chicory:
 ## It seems that one must do "make compile" before "make daikon.jar".
 # Perhaps daikon.jar shouldn't include JUnit or the test files.
 daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) chicory
-	-rm -rf $@ /tmp/${USER}/daikon-jar
-	install -d /tmp/${USER}/daikon-jar
+	-rm -rf $@ ${TMPDIR}/daikon-jar
+	install -d ${TMPDIR}/daikon-jar
 	# Compile daikon and utilMDE and copy the resulting class files
-	# in the /tmp/${USER}/daikon-jar directory
+	# in the ${TMPDIR}/daikon-jar directory
 	make -C java all_directly
 	make -C java/utilMDE compile_without_testing
 	cd java && find . -name '*.class' \
-		-exec cp --parents '{}' /tmp/${USER}/daikon-jar \;
-	# (cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
-	# (cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
-	cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar
-	cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar
-	cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar
-	cd /tmp/${USER}/daikon-jar; jar xf $(INV_DIR)/java/lib/commons-io.jar
-	cd /tmp/$(USER)/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/svnkit.jar
-	cd /tmp/$(USER)/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/xom-1.2.1.jar
-	cd /tmp/$(USER)/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/ical4j.jar
-	cd /tmp/$(USER)/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/ini4j-0.5.1.jar
-	(cd java; cp -f --parents --target-directory=/tmp/${USER}/daikon-jar $(DAIKON_RESOURCE_FILES))
-	cd /tmp/${USER}/daikon-jar && \
+		-exec cp --parents '{}' ${TMPDIR}/daikon-jar \;
+	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
+	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
+	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/commons-io.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/svnkit.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/xom-1.2.1.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/ical4j.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/ini4j-0.5.1.jar
+	(cd java; cp -f --parents --target-directory=${TMPDIR}/daikon-jar $(DAIKON_RESOURCE_FILES))
+	cd ${TMPDIR}/daikon-jar && \
 	  jar cfm $@ $(INV_DIR)/java/daikon/chicory/manifest.txt *
-	mv /tmp/${USER}/daikon-jar/$@ $@
-	#rm -rf /tmp/${USER}/daikon-jar
+	mv ${TMPDIR}/daikon-jar/$@ $@
+	#rm -rf ${TMPDIR}/daikon-jar
 
 # This rule creates the files that comprise the distribution, but does
 # not copy them anywhere.
@@ -419,89 +421,89 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) c
 # checkout.
 daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKON_JAVA_FILES) daikon.jar java/Makefile
 
-	-rm -rf /tmp/daikon
-	mkdir /tmp/daikon
+	-rm -rf ${TMPDIR}/daikon
+	mkdir ${TMPDIR}/daikon
 
-	mkdir /tmp/daikon/doc
-	cp -p doc/README-dist.txt /tmp/daikon/README.txt
-	cp -p doc/README-dist.html /tmp/daikon/README.html
-	cp -p doc/README-dist-doc.txt /tmp/daikon/doc/README.txt
-	cd doc && cp -p $(DOC_FILES_NO_IMAGES) /tmp/daikon/doc
-	mkdir /tmp/daikon/doc/images
-	cd doc && cp -p $(IMAGE_PARTIAL_PATHS) /tmp/daikon/doc/images
-	cp -pR doc/daikon_manual_html /tmp/daikon/doc
+	mkdir ${TMPDIR}/daikon/doc
+	cp -p doc/README-dist.txt ${TMPDIR}/daikon/README.txt
+	cp -p doc/README-dist.html ${TMPDIR}/daikon/README.html
+	cp -p doc/README-dist-doc.txt ${TMPDIR}/daikon/doc/README.txt
+	cd doc && cp -p $(DOC_FILES_NO_IMAGES) ${TMPDIR}/daikon/doc
+	mkdir ${TMPDIR}/daikon/doc/images
+	cd doc && cp -p $(IMAGE_PARTIAL_PATHS) ${TMPDIR}/daikon/doc/images
+	cp -pR doc/daikon_manual_html ${TMPDIR}/daikon/doc
 
 	## EMACS_PATHS is currently empty.
 	# # Emacs
-	# mkdir /tmp/daikon/emacs
-	# cp -p $(EMACS_PATHS) /tmp/daikon/emacs
+	# mkdir ${TMPDIR}/daikon/emacs
+	# cp -p $(EMACS_PATHS) ${TMPDIR}/daikon/emacs
 
 	# Auxiliary programs
-	mkdir /tmp/daikon/bin
-	cp -p $(SCRIPT_PATHS) /tmp/daikon/bin
+	mkdir ${TMPDIR}/daikon/bin
+	cp -p $(SCRIPT_PATHS) ${TMPDIR}/daikon/bin
 
 	# Java example files
-	mkdir /tmp/daikon/examples
-	cp -pR examples/java-examples /tmp/daikon/examples
+	mkdir ${TMPDIR}/daikon/examples
+	cp -pR examples/java-examples ${TMPDIR}/daikon/examples
 	# Keep .java files, delete everything else
-	cd /tmp/daikon && find examples/java-examples -name '*.java' -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
+	cd ${TMPDIR}/daikon && find examples/java-examples -name '*.java' -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
 
 	# Perl example files
-	mkdir /tmp/daikon/examples/perl-examples
-	cp -p examples/perl-examples/{Birthday.{pm,accessors},{test_bday,standalone}.pl} /tmp/daikon/examples/perl-examples
+	mkdir ${TMPDIR}/daikon/examples/perl-examples
+	cp -p examples/perl-examples/{Birthday.{pm,accessors},{test_bday,standalone}.pl} ${TMPDIR}/daikon/examples/perl-examples
 
 	# C example files for Kvasir
-	mkdir /tmp/daikon/examples/c-examples
-	mkdir /tmp/daikon/examples/c-examples/bzip2
-	cp -p examples/c-examples/bzip2/bzip2.c /tmp/daikon/examples/c-examples/bzip2
-	mkdir /tmp/daikon/examples/c-examples/wordplay
-	cp -p examples/c-examples/wordplay/wordplay.c /tmp/daikon/examples/c-examples/wordplay
-	cp -p examples/c-examples/wordplay/words.txt /tmp/daikon/examples/c-examples/wordplay
+	mkdir ${TMPDIR}/daikon/examples/c-examples
+	mkdir ${TMPDIR}/daikon/examples/c-examples/bzip2
+	cp -p examples/c-examples/bzip2/bzip2.c ${TMPDIR}/daikon/examples/c-examples/bzip2
+	mkdir ${TMPDIR}/daikon/examples/c-examples/wordplay
+	cp -p examples/c-examples/wordplay/wordplay.c ${TMPDIR}/daikon/examples/c-examples/wordplay
+	cp -p examples/c-examples/wordplay/words.txt ${TMPDIR}/daikon/examples/c-examples/wordplay
 
-	# chgrp -R $(INV_GROUP) /tmp/daikon
+	# chgrp -R $(INV_GROUP) ${TMPDIR}/daikon
 
-	cp -p daikon.jar /tmp/daikon
+	cp -p daikon.jar ${TMPDIR}/daikon
 	# # Now we are ready to make the daikon-compiled distribution
-	# (cd /tmp; tar cf daikon-compiled.tar daikon)
-	# cp -pf /tmp/daikon-compiled.tar .
+	# (cd ${TMPDIR}; tar cf daikon-compiled.tar daikon)
+	# cp -pf ${TMPDIR}/daikon-compiled.tar .
 
 	## Now make the daikon distribution
 	# First add some more files to the distribution
 
-	cp -p Makefile-dist /tmp/daikon/Makefile
+	cp -p Makefile-dist ${TMPDIR}/daikon/Makefile
 
 	# Daikon itself
-	(cd java; tar chf /tmp/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user daikon)
-	(mkdir /tmp/daikon/java; cd /tmp/daikon/java; tar xf /tmp/daikon-java.tar; rm /tmp/daikon-java.tar)
-	cp -p doc/README-daikon-java.txt /tmp/daikon/java/README.txt
-	cp -p java/Makefile /tmp/daikon/java/Makefile
+	(cd java; tar chf ${TMPDIR}/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user daikon)
+	(mkdir ${TMPDIR}/daikon/java; cd ${TMPDIR}/daikon/java; tar xf ${TMPDIR}/daikon-java.tar; rm ${TMPDIR}/daikon-java.tar)
+	cp -p doc/README-daikon-java.txt ${TMPDIR}/daikon/java/README.txt
+	cp -p java/Makefile ${TMPDIR}/daikon/java/Makefile
 	# Maybe I should do  $(MAKE) doc
 	# Don't do  $(MAKE) clean  which deletes .class files
-	(cd /tmp/daikon/java; $(RM_TEMP_FILES))
+	(cd ${TMPDIR}/daikon/java; $(RM_TEMP_FILES))
 
 	# Java support files
 	## utilMDE
 	(cd java/utilMDE; $(MAKE) utilMDE.tar.gz)
-	cd java && tar zxf utilMDE/utilMDE.tar.gz -C /tmp/daikon/java
-	rm -rf /tmp/daikon/java/utilMDE/doc
+	cd java && tar zxf utilMDE/utilMDE.tar.gz -C ${TMPDIR}/daikon/java
+	rm -rf ${TMPDIR}/daikon/java/utilMDE/doc
 	## getopt
-	(cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
+	(cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
 	## intern checker
-	# (cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/checkers.jar)
+	# (cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/checkers.jar)
 	## Apache packages
-	mkdir /tmp/daikon/java/org
-	mkdir /tmp/daikon/java/org/apache
+	mkdir ${TMPDIR}/daikon/java/org
+	mkdir ${TMPDIR}/daikon/java/org/apache
 	## JTB
-	cp -pR java/jtb /tmp/daikon/java/
+	cp -pR java/jtb ${TMPDIR}/daikon/java/
 	## BCEL
-	(cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/bcel.jar)
+	(cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/bcel.jar)
 	## Apache commons
-	(cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/commons-io.jar)
+	(cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/commons-io.jar)
 
 	## JUnit
 	# This is wrong:
-	#   unzip java/lib/$(JUNIT_VERSION).zip -d /tmp/daikon/java
-	#   (cd /tmp/daikon/java; ln -s $(JUNIT_VERSION)/junit .)
+	#   unzip java/lib/$(JUNIT_VERSION).zip -d ${TMPDIR}/daikon/java
+	#   (cd ${TMPDIR}/daikon/java; ln -s $(JUNIT_VERSION)/junit .)
 	# Need to extract a jar file in the zip file, then unjar that.
 	# (src.jar only contains .java files, not .class files.)
 
@@ -510,61 +512,61 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
     # when we updated to junit4.4.  It looks like we were compiling JUnit,
     # though its surprising that was necessary.  Now we just extract from the
     # jar file like we do for other jars that we include.
-	##mkdir /tmp/daikon/tmp-junit
-	##unzip java/lib/$(JUNIT_VERSION).zip $(JUNIT_VERSION)/cpl-v10.html $(JUNIT_VERSION)/src.jar -d /tmp/daikon/tmp-junit
-	##(cd /tmp/daikon/tmp-junit; unzip $(JUNIT_VERSION)/src.jar; rm -f $(JUNIT_VERSION)/src.jar; mv $(JUNIT_VERSION)/cpl-v10.html junit; rmdir $(JUNIT_VERSION); chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit /tmp/daikon/java/)
-	##rm -rf /tmp/daikon/tmp-junit
-	##(cd /tmp/daikon/java/junit; ${JAVAC} -g `find . -name '*.java'`)
-	cd /tmp/daikon/java; jar xf $(INV_DIR)/java/lib/junit.jar
+	##mkdir ${TMPDIR}/daikon/tmp-junit
+	##unzip java/lib/$(JUNIT_VERSION).zip $(JUNIT_VERSION)/cpl-v10.html $(JUNIT_VERSION)/src.jar -d ${TMPDIR}/daikon/tmp-junit
+	##(cd ${TMPDIR}/daikon/tmp-junit; unzip $(JUNIT_VERSION)/src.jar; rm -f $(JUNIT_VERSION)/src.jar; mv $(JUNIT_VERSION)/cpl-v10.html junit; rmdir $(JUNIT_VERSION); chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit ${TMPDIR}/daikon/java/)
+	##rm -rf ${TMPDIR}/daikon/tmp-junit
+	##(cd ${TMPDIR}/daikon/java/junit; ${JAVAC} -g `find . -name '*.java'`)
+	cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/junit.jar
 
 	# utilMDE Libraries
-	cd /tmp/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/svnkit.jar
-	cd /tmp/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/ini4j-0.5.1.jar
-	cd /tmp/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/xom-1.2.1.jar
-	cd /tmp/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/ical4j.jar
+	cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/svnkit.jar
+	cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/ini4j-0.5.1.jar
+	cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/xom-1.2.1.jar
+	cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/ical4j.jar
 
 	## Front ends
-	mkdir /tmp/daikon/front-end
+	mkdir ${TMPDIR}/daikon/front-end
 
 	# # C/C++ instrumenter -- now distributed separately
-	# mkdir /tmp/daikon/front-end/c
-	# cp -p $(C_RUNTIME_PATHS) /tmp/daikon/front-end/c
+	# mkdir ${TMPDIR}/daikon/front-end/c
+	# cp -p $(C_RUNTIME_PATHS) ${TMPDIR}/daikon/front-end/c
 
 	# Perl front end
-	# mkdir /tmp/daikon/front-end/perl
-	cp -pR front-end/perl /tmp/daikon/front-end
-	(cd /tmp/daikon/front-end/perl; $(RM_TEMP_FILES) )
+	# mkdir ${TMPDIR}/daikon/front-end/perl
+	cp -pR front-end/perl ${TMPDIR}/daikon/front-end
+	(cd ${TMPDIR}/daikon/front-end/perl; $(RM_TEMP_FILES) )
 
 	# Kvasir C front end
 	@# "rsync -C" means "copy, ignoring the same files CVS would"
-	rsync -rCp valgrind-3/ /tmp/daikon/kvasir
+	rsync -rCp valgrind-3/ ${TMPDIR}/daikon/kvasir
 	@# Generate configure file
-	(cd /tmp/daikon/kvasir/valgrind; ./autogen.sh )
+	(cd ${TMPDIR}/daikon/kvasir/valgrind; ./autogen.sh )
 	@# CVS-only build script
-	rm -f /tmp/daikon/kvasir/auto-everything.sh
+	rm -f ${TMPDIR}/daikon/kvasir/auto-everything.sh
 	@# Internal developer documentation
-	rm -rf /tmp/daikon/kvasir/valgrind/fjalar/notes
-	rm -rf /tmp/daikon/kvasir/valgrind/fjalar/trivial-tool
-	(cd /tmp/daikon/kvasir; $(RM_TEMP_FILES) )
+	rm -rf ${TMPDIR}/daikon/kvasir/valgrind/fjalar/notes
+	rm -rf ${TMPDIR}/daikon/kvasir/valgrind/fjalar/trivial-tool
+	(cd ${TMPDIR}/daikon/kvasir; $(RM_TEMP_FILES) )
 
 	# Jar file needed for Chicory front end
-	cp -p java/ChicoryPremain.jar /tmp/daikon/java
+	cp -p java/ChicoryPremain.jar ${TMPDIR}/daikon/java
 
 	# Jar file needed for DynComp front end
-	cp -p java/dcomp_premain.jar /tmp/daikon/java
+	cp -p java/dcomp_premain.jar ${TMPDIR}/daikon/java
 
 	## Tools
-	cp -pR tools /tmp/daikon
-	(cd /tmp/daikon/tools; $(RM_TEMP_FILES); rm -f kmeans/kmeans; (cd hierarchical; rm -f clgroup cluster den difftbl) )
+	cp -pR tools ${TMPDIR}/daikon
+	(cd ${TMPDIR}/daikon/tools; $(RM_TEMP_FILES); rm -f kmeans/kmeans; (cd hierarchical; rm -f clgroup cluster den difftbl) )
 
 	## Make the source distribution proper
-	rm -rf `find /tmp/daikon -name CVS`
-	(cd /tmp && chmod -R a+rX daikon)
-	(cd /tmp; tar cf daikon.tar daikon)
-	cp -pf /tmp/daikon.tar .
-	rm -f /tmp/daikon.zip
-	(cd /tmp; zip -r daikon daikon)
-	cp -pf /tmp/daikon.zip .
+	rm -rf `find ${TMPDIR}/daikon -name CVS`
+	(cd ${TMPDIR} && chmod -R a+rX daikon)
+	(cd ${TMPDIR}; tar cf daikon.tar daikon)
+	cp -pf ${TMPDIR}/daikon.tar .
+	rm -f ${TMPDIR}/daikon.zip
+	(cd ${TMPDIR}; zip -r daikon daikon)
+	cp -pf ${TMPDIR}/daikon.zip .
 
 # Rule for daikon.tar.gz
 %.gz : %
