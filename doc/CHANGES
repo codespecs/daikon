@@ -19,25 +19,28 @@ Further documentation can be found in:
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
-4.6.3 
 
-Kvasir's support for GCC 4.4 has been improved. 
+4.6.3 (December 18 2009)
+
+Kvasir's support for GCC 4.4 has been improved.
 
 Kvasir
 
   User visible changes
 
      The output of variables declared as constant can now be
-     supressed via the '--ignore-constants' flag   
+     supressed via the '--ignore-constants' flag.
 
   Bug fixes
 
      Fixed an issue where Fjalar would not print variables
      delcared constant for binaries created with some versions
-     of g++
+     of g++.
 
      Fixed comparability errors which occured when Kvasir was run
      with dyncomp on an x86-64 host.
+
+----------------
 
 4.6.2 (October 1 2009)
 
@@ -47,24 +50,24 @@ Kvasir
 
   User visible changes
 
-    Kvasir now has limited support for non-local exits such as 
+    Kvasir now has limited support for non-local exits such as
     setjmp/longjmp and C++ Exceptions. Kvasir will correctly detect
     if a function has been exited by non-local means and not print
-    an exit program point for the function but continue printing 
+    an exit program point for the function but continue printing
     other functions as normal. Previously Kvasir would stop printing
     program points after the first non-locally exited function.
 
     Added support for multi-threaded C/C++ programs.
 
-    Kvasir's now fully supports x86-64 hosts and running x86-64 
+    Kvasir's now fully supports x86-64 hosts and running x86-64
     binaries.
 
     Improved Kvasir's speed when working with large C++ binaries.
 
   Bug fixes
-   
+
     Fixed an issue where Kvasir would print incorrect values
-    for floating point numbers. 
+    for floating point numbers.
 
     Fixed an issue where Kvasir would print incorrect values
     for parameters to C++ constructors.
@@ -79,7 +82,7 @@ Daikon
   User Documentation
 
     Added an explanation of how additional data changes invariant
-    ouput
+    ouput.
 
 -------------------------------------------
 
@@ -111,7 +114,7 @@ Kvasir
 4.6.0 (July 1 2009)
 
 Kvasir now supports binaries created with GCC 4.0+ and glibc versions 2.2
-to 2.10.  The Daikon user manual was updated for clarity and completeness.  
+to 2.10.  The Daikon user manual was updated for clarity and completeness.
 Bugs were fixed in Daikon, Kvasir, and Chicory.
 
 Daikon
@@ -171,7 +174,7 @@ Kvasir
 
 	Fixed an issue where Kvasir attempted to print variables for which
 	there was no debugging information available.
-    
+
 -------------------------------------------
 
 4.5.5 (April 1 2009)
@@ -191,7 +194,7 @@ Daikon
 
         Detail was added to the section (6.5) on Loop invariants
 
-        Information on compiling Daikon for MacOSX was added to 
+        Information on compiling Daikon for MacOSX was added to
         section 2.1 of the Daikon Developers manual.
 
 DynComp Java
@@ -199,7 +202,7 @@ DynComp Java
     Documentation
 
         Information describing how to create an instrumented JDK on MacOSX
-        was added to Section 7.2.1 (Instrumenting the JDK with DynComp) 
+        was added to Section 7.2.1 (Instrumenting the JDK with DynComp)
 
 -------------------------------------------
 
@@ -212,7 +215,7 @@ Chicory
 
     Bug fixes
 
-        A problem the occurred when a purity file is specified 
+        A problem the occurred when a purity file is specified
         was resolved.
 
         In some circumstances, when classes are dynamically created at
@@ -224,17 +227,17 @@ Daikon
 
     Documentation
 
-        The Daikon user manual was improved with more detailed information 
+        The Daikon user manual was improved with more detailed information
         on compiling Daikon, creating implications, and the information
         required with bug reports.
-    
+
 AnnotateNullable
 
     Bug fixes
 
-        A null pointer exception that occurred in the case of the 
+        A null pointer exception that occurred in the case of the
         default package was fixed.
- 
+
 
 -------------------------------------------
 
@@ -277,7 +280,7 @@ Daikon
 
 4.5.1 (November 3 2008)
 
-A new front end for Eiffel is available and a new tool (MergeInvariants) 
+A new front end for Eiffel is available and a new tool (MergeInvariants)
 for merging serialized invariant files was added.  Some modifications and
 bug fixes were made to the AnnotateNullable tool and some Daikon bugs
 were fixed.
@@ -286,7 +289,7 @@ Daikon
 
   User visible changes
 
-    A new front end for Eiffel programs is available.  See 
+    A new front end for Eiffel programs is available.  See
     http://se.inf.ethz.ch/people/polikarpova/citadel.html .
 
     A new tool (MergeInvariants) for merging serialized invariant files has
@@ -367,9 +370,9 @@ Daikon
     PowerOfTwo.
 
     The other Range invariants (which provide information similar to the
-    Upper/LowerBound and OneOf invariants and are used for non-instantiating 
+    Upper/LowerBound and OneOf invariants and are used for non-instantiating
     suppressions) are enabled if their corresponding Bound
-    or OneOf invariants are enabled.  The invariants EqualZero, EqualOne, 
+    or OneOf invariants are enabled.  The invariants EqualZero, EqualOne,
     EqualMinusOne, are enabled if OneOf is enabled.  The invariants
     GreaterEqualZero, GreaterEqual64, BooleanVal, and Bound0_63 are enabled
     if the Upper/LowerBound invariants are enabled.
@@ -411,7 +414,7 @@ Chicory
 
 4.4.1 (July 1 2008)
 
-A number of bugs were fixed in Daikon, Chicory, and DynComp.  The 
+A number of bugs were fixed in Daikon, Chicory, and DynComp.  The
 user manual was improved.  Support for IOA format was removed from
 Daikon.
 
@@ -427,7 +430,7 @@ Daikon
       1.5 is required to compile or run Daikon.
 
   Documentation
-    
+
     - Added troubleshooting section when expected invariants are not
       reported.
 
@@ -462,7 +465,7 @@ DynComp
 4.4.0 (June 11 2008)
 
 A new format for declaration records in Daikon trace data was
-introduced.  The AnnotateNullable tool was released.  A number 
+introduced.  The AnnotateNullable tool was released.  A number
 of bugs were fixed.
 
 Daikon
@@ -480,7 +483,7 @@ Chicory
 
   User-visible changes
 
-    Creates the new declaration format by default.  
+    Creates the new declaration format by default.
 
 AnnotateNullable
 
@@ -500,7 +503,7 @@ DynComp
 
   Bug-fixes
 
-    Fixed a problem with clone where the instrumentation incorrectly added a 
+    Fixed a problem with clone where the instrumentation incorrectly added a
     call to a instrumented version of clone where it did not exist.
 
     Fixed some problems with the instrumentation of equals.
@@ -512,7 +515,7 @@ DynComp
 4.3.5 (April 3 2008)
 
 Daikon was enhanced to better support program points that are basic
-blocks.  Also, some minor enhancements and bugs fixes were made and the 
+blocks.  Also, some minor enhancements and bugs fixes were made and the
 documentation was improved.
 
 Daikon
@@ -534,19 +537,19 @@ Daikon
 
     Added support for program points that are basic blocks.  Using
     variables at the basic block level allows intra-procedural
-    invariants (such as loop invariants) to be found.  There is 
+    invariants (such as loop invariants) to be found.  There is
     also support for combining multiple basic blocks into a single
     program points so that invariants can be found over variables from
     different basic blocks.  See the configuration option
     daikon.FileIO.merge_basic_blocks for more information.
 
     Added the configuration option daikon.ProglangType.convert_to_signed
-    (default false).  If true, 32 bit values whose high bit is on, are 
+    (default false).  If true, 32 bit values whose high bit is on, are
     treated as negative numbers.
 
   Documentation
 
-    The differences between a minimal and complete installation are 
+    The differences between a minimal and complete installation are
     better explained.  The installation instructions are improved.
 
     A section on removing irrelevant output was added.
@@ -557,7 +560,7 @@ Daikon
 
 4.3.4 (December 1, 2007)
 
-Dyncomp (Java) was enhanced with a number of new options.  It has a 
+Dyncomp (Java) was enhanced with a number of new options.  It has a
 new significantly faster mode where it only tracks references (and
 not primitives).  It also has additional output that makes it easier
 to determine where interactions occurred.
@@ -571,7 +574,7 @@ DynComp (Java)
     ignore primitive values.  Dyncomp runs significantly faster when
     only tracking references.
 
-    DynComp has a number of new command line options that provide 
+    DynComp has a number of new command line options that provide
     information on the source of the interactions that merge variables.
 
 Daikon
@@ -594,7 +597,7 @@ instructions were updated.
 
 4.3.2 (September 3, 2007)
 
-Bug fixes and minor enhancements were made to Daikon, Kvasir, and 
+Bug fixes and minor enhancements were made to Daikon, Kvasir, and
 DynComp (Java).  The "repair" output format is no longer supported
 by Daikon.
 
@@ -607,7 +610,7 @@ Daikon
 
   Bug fixes
 
-    Enhanced mainHelper (the programmatic interface to Daikon) so that 
+    Enhanced mainHelper (the programmatic interface to Daikon) so that
     it can be called multiple times.  This allows a caller to process
     multiple unrelated trace files within a single run.
 
@@ -787,7 +790,7 @@ Daikon
 4.2.14 (February 1, 2007)
 
 A new mode was added to Daikon that allows it to handle constants
-more efficiently.  Also, a new configuration option was added 
+more efficiently.  Also, a new configuration option was added
 and one was renamed.
 
 Daikon
@@ -800,7 +803,7 @@ Daikon
     as OneOf, LowerBound, and UpperBound).  For example, if the
     UpperBound invariant 'i < 1024' is found and a constant 'bufsize'
     with the value 1024 exists, the invariant will be printed as
-    'i < bufsize'.  This mode is controlled by the configuration option 
+    'i < bufsize'.  This mode is controlled by the configuration option
     daikon.PrintInvariants.static_const_infer.  It is not enabled by
     default.
 
@@ -811,7 +814,7 @@ Daikon
     of a dtrace file.
 
     The configuration option daikon.Daikon.disable_derived_variables was
-    renamed to daikon.derive.Derivation.disable_derived_variables 
+    renamed to daikon.derive.Derivation.disable_derived_variables
 
 ---------------------------------------
 
@@ -825,7 +828,7 @@ InvariantChecker
 
   User-visible changes
 
-    Added a switch (--conf) that checks only invariants that are above 
+    Added a switch (--conf) that checks only invariants that are above
     the default confidence level.
 
     Added a switch (--filter) that checks only invariants that are not
@@ -856,7 +859,7 @@ InvariantChecker
     files in the directory.  The number of samples that violated an invariant
     are reported for each invariant file.
 
-    Only invariants above the default confidence level and that have 
+    Only invariants above the default confidence level and that have
     not been filtered out by the default filters are checked.
 
 Daikon
@@ -934,7 +937,7 @@ Daikon
     variable needed to be guarded was sometimes incorrect.  This
     resulted in both unnecessary and missing guarding.  This has
     been fixed.
-    
+
 ---------------------------------------
 
 4.2.9 (September 1, 2006)
@@ -949,18 +952,18 @@ Chicory
 
   Chicory uses the Byte Code Engineering Library (BCEL) to instrument
   class files.  Errors can occur if the application uses an incompatible
-  version of BCEL.  Chicory has been modified to identify and load its 
+  version of BCEL.  Chicory has been modified to identify and load its
   copy of BCEL when multiple copies of BCEL are in the class path.  It will
   also issue a warning if multiple copies of BCEL are in the class path and
   the application version is not the first one.  This behavior can be
-  overridden with the default_bcel command line option 
+  overridden with the default_bcel command line option
 
   Chicory only modifies classes that are instrumented.  Previous versions
   made unnecessary changes to uninstrumented classes.
 
 Daikon
 
-  The configuration option 'omit_hashcode_values_Simplify' now uses 
+  The configuration option 'omit_hashcode_values_Simplify' now uses
   artificial values for hashcodes that should remain consistent from run
   to run rather than omitting the invariant altogether.
 
@@ -990,9 +993,9 @@ Kvasir
 This is a maintenance release with few substantive changes.
 
 Daikon
-  
+
   Performance changes
-    
+
     Non-instantiating suppression processing has been optimized to
     run 5 to 15% faster.
 
@@ -1023,12 +1026,12 @@ Daikon
   User-visible changes
 
     Daikon prints a warning message if it encounters non-standard
-    program point names in a trace file and the --nohierarchy 
+    program point names in a trace file and the --nohierarchy
     switch is not used.  This change is irrelevant for most users,
     since, for trace files corresponding to an execution of a program,
     such as those obtained from Chicory and Kvasir, the --nohierarchy
-    switch should not be used.  For trace files obtained from 
-    spreadsheet data, such as from a csv file using convertcsv.pl, 
+    switch should not be used.  For trace files obtained from
+    spreadsheet data, such as from a csv file using convertcsv.pl,
     the --nohierarchy switch should be used.
 
     The divides invariant (b % a == 0) is redundant and thus not printed
@@ -1044,7 +1047,7 @@ Kvasir
     consistent. The most noticeable change is that base pointers and
     indexes used in array dereferences are now always counted as
     interacting.
- 
+
 --------------------------------------------
 
 4.2.6 (June 1, 2006)
@@ -1079,7 +1082,7 @@ Kvasir
 4.2.5 (May 1, 2006)
 
 Some enhancements were made to Daikon.  The list of modified and
-unmodified variables in DBC and JML output is more accurate.  A 
+unmodified variables in DBC and JML output is more accurate.  A
 configuration option was added to control the method by which Daikon
 determines variable comparability.  And the treatment of values near
 zero with fuzzy comparisons has been changed.
@@ -1119,7 +1122,7 @@ This is a bug-fix release.  Several bugs in Daikon were fixed.
 Daikon
 
   User-visible changes
-    
+
     Fixed bugs in the LinearTernaryFloat and LinearBinaryFloat
     invariants such that the coefficients and constants of these
     invariants print out as decimals rather than integers.
@@ -1178,7 +1181,7 @@ Kvasir
 4.2.2 (February 1, 2006)
 
 Enhancements were made to the Chicory and Kvasir front ends.
-Chicory allows a regular expression to choose variables to be 
+Chicory allows a regular expression to choose variables to be
 omitted by name and has some new and modified command line options.
 Kvasir has some new command line options to better control its
 comparability analysis.
@@ -1222,8 +1225,8 @@ Kvasir
 
 Enhancements were made to the Mangel-Wurzel and Kvasir front ends.
 Mangel-Wurzel better supports arrays, C++, and regular expressions for
-specifying program point names.  Some Kvasir command line 
-options were updated. 
+specifying program point names.  Some Kvasir command line
+options were updated.
 
 Mangel-Wurzel
 
@@ -1238,7 +1241,7 @@ Mangel-Wurzel
     Output for statically-sized, multidimensional arrays is now supported.
     There are new command-line options --flatten-arrays,
     --max-flatten-array-size, and --max-array-size to control how arrays
-    are output.  
+    are output.
 
   Bug fixes
 
@@ -1257,7 +1260,7 @@ Kvasir
 
     The --limit-static-vars command line option was removed.  The default
     behavior now only outputs static variables at program points for
-    the file that contains the static variable.  The new option 
+    the file that contains the static variable.  The new option
     --all-static-vars outputs static variables at all program points.
 
 --------------------------------------------
@@ -1390,7 +1393,7 @@ Chicory
     program points.  It also complains if no records are printed to the
     trace file (which can happen even if some methods match if those methods
     are never executed)
-    
+
 Purity Analysis Kit
 
   The Purity Analysis Kit computes which methods of a Java program are pure

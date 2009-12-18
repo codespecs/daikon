@@ -590,12 +590,15 @@ someone who is making a release to plan.
     <p>The <tt>cvs -q diff</tt> command should produce no output. </p>
     </li>
 
-    <li> Make sure that Daikon compiles under Java 5
+    <li> Make sure that Daikon compiles under Java 5.
+         <!-- All times are on mangold, as of 12/2009. -->
+         [Time: 3 min]
     <pre>
-        make -C $inv/java JAVAC=$pag/software/pkg/jdk1.5.0_17/bin/javac clean all </pre>
+        make -C $inv/java JAVAC=$pag/software/pkg/jdk-5/bin/javac clean all </pre>
     </li>
 
     <li> Rebuild everything.
+         [Time: 35 min]
 
     <pre>
         make rebuild-everything    </pre>
@@ -631,10 +634,9 @@ someone who is making a release to plan.
 	cvs -q log -d ">1 month ago" -N | cvs-log-summarize.pl    </pre>
     </li>
 
-    <li> <p> Set the distribution date and version number.  The date will
-    be set to today, but can be overridden by redefining environment
-    variable TODAY (e.g., 'TODAY=November 1 2004').  The version is
-    specified in the file $inv/doc/VERSION </p>
+    <li> <p> Optionally, adjust the version number in file $inv/doc/VERSION.
+    Optionally, override the distribution date (default: today) by
+    redefining environment variable TODAY (e.g., 'TODAY=November 1 2004').</p>
 
     <pre>
 	cd $inv
@@ -642,7 +644,7 @@ someone who is making a release to plan.
     </li>
 
     <li> <p>Build everything to be distributed and copy it to the staging
-    area (www.pag.csai.mit.edu/daikon/staging-daikon).  The final
+    area (<a href="www.pag.csail.mit.edu/daikon/staging-daikon">www.pag.csail.mit.edu/daikon/staging-daikon</a>).  The final
     output will be a list of files that were added/removed since the
     last release.</p>
 
