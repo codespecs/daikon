@@ -689,7 +689,7 @@ someone who is making a release to plan.
       <li>Csh version:
       <pre>
 	  wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
-	  tar xzvf daikon.tar.gz
+	  tar xzf daikon.tar.gz
 	  setenv JDKDIR <i>jdk-directory</i>
 	  setenv DAIKONDIR `pwd`/daikon
 	  setenv DAIKONCLASS_SOURCES 1
@@ -701,11 +701,11 @@ someone who is making a release to plan.
       <li>Bash version:
       <pre>
 	  wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
-	  tar xzvf daikon.tar.gz
+	  tar xzf daikon.tar.gz
           # Convert OSTYPE from a bash shell variable to a system environment variable.
 	  export OSTYPE
           # It's NOT enough to have the JRE; you need the JDK for the javadoc program
-	  export JDKDIR="/cygdrive/c/Program Files/Java/jre6"
+	  export JDKDIR="/cygdrive/c/Program Files/Java/jdk1.6.0_17"
 	  export DAIKONDIR=`pwd`/daikon
 	  export DAIKONCLASS_SOURCES=1
 	  source daikon/bin/daikon.bashrc
