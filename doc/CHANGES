@@ -40,7 +40,7 @@ Kvasir
      Fixed comparability errors which occured when Kvasir was run
      with dyncomp on an x86-64 host.
 
-----------------
+-------------------------------------------
 
 4.6.2 (October 1 2009)
 
