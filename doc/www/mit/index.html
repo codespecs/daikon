@@ -679,15 +679,13 @@ someone who is making a release to plan.
     successful if the make command runs to conclusion without an error.
     The last line should indicate that Kvasir was not built because
     it is not a linux platform.
-
-    <p>
-    Note that the build will take a fair amount of time because it 
-    builds the DynComp-instrumented JDK.
-    </p>
+         [Time: 32 min]
 
     <ul>
       <li>Csh version:
       <pre>
+	  cd ~/tmp
+	  rm -rf daikon.tar.gz daikon
 	  wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
 	  tar xzf daikon.tar.gz
 	  setenv JDKDIR <i>jdk-directory</i>
@@ -700,11 +698,12 @@ someone who is making a release to plan.
       </li>
       <li>Bash version:
       <pre>
+	  cd ~/tmp
+	  rm -rf daikon.tar.gz daikon
 	  wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
 	  tar xzf daikon.tar.gz
           # Convert OSTYPE from a bash shell variable to a system environment variable.
 	  export OSTYPE
-          # It's NOT enough to have the JRE; you need the JDK for the javadoc program
 	  export JDKDIR="/cygdrive/c/Program Files/Java/jdk1.6.0_17"
 	  export DAIKONDIR=`pwd`/daikon
 	  export DAIKONCLASS_SOURCES=1
@@ -751,7 +750,10 @@ someone who is making a release to plan.
     <p>
     Note that <code>make staging-to-www</code> will automatically
     update the version numbers in the source code and documentation
-    from the file <tt>doc/VERSION</tt>.  After doing so, it will
+    from the file <tt>doc/VERSION</tt>.  (In the repository, the
+    <tt>doc/VERSION</tt> file describes the <em>next</em> version of Daikon
+    to be released; in the repository, it is incremented by 1 as compared
+    to the distributed release.)  After doing so, it will
     correctly update the version number in <tt>doc/VERSION</tt>.  This
     should not require any hand intervention unless there is a problem
     near the end of building the distribution and the <code>make
@@ -769,11 +771,11 @@ someone who is making a release to plan.
     <li> Check the website to see if it has any broken links
 
     <pre>
-      checklink -q -r -suppress-temp-redirects `cat $inv/scripts/checklink-args.txt` http://pag.csail.mit.edu/daikon </pre>
+      checklink -q -r `cat $inv/scripts/checklink-args.txt` http://pag.csail.mit.edu/daikon </pre>
 
     <p>
     Links to the webpages of people and conferences are read from
-    <tt>~mernst/www/pubs-sources/link-names</tt>.  (This is not a
+    <tt>$inv/scripts/link-names</tt>.  (This is not a
     paricularly good place for them and should eventually be moved...)
     </p>
 
@@ -813,7 +815,7 @@ someone who is making a release to plan.
     <p>
     Go to the <a
     href="http://freshmeat.net/projects/daikon/">Daikon project</a> and
-    choose 'add releases' which is the first choice next to [Project].
+    choose 'submit a release' which is in the lower right corner.
     There enter the version number, type of release and the introductory
     paragraph from CHANGES for this release.
     </p>
