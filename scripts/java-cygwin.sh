@@ -28,6 +28,9 @@ while [ -n "$1" ]; do
    ARGS="$ARGS '$arg'"
 done
 
+# echo "ARGS: $ARGS"
+# Set all shell variables; and $1 $2 ... $n to the elements of $ARGS.
 eval "set -- $ARGS"
-#echo "$JAVA_EXEC" "$@"
+# echo "classpath: $CLASSPATH"
+# echo java-cygwin.sh:  "$JAVA_EXEC" "$@"
 exec "$JAVA_EXEC" "$@"
