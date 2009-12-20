@@ -23,6 +23,8 @@ else
     DAIKONBIN ?= ${INV}/bin
 endif
 
+PLUMEBIN ?= ${INV}/plume-lib/bin
+
 
 #
 # Do some basic configuration checking:
@@ -50,7 +52,7 @@ JAVAC_ARGS ?= -g ${JAVAC_TARGET}
 
 JAR ?= jar
 ifeq (cygwin,$(OSTYPE))
-  JAVA ?= $(DAIKONBIN)/java-cygwin.sh -ea -cp "${CLASSPATH}"
+  JAVA ?= $(PLUMEBIN)/java-cygwin.sh -ea -cp "${CLASSPATH}"
 else
   JAVA ?= java -ea
 endif
@@ -75,7 +77,7 @@ JAVAC_COMMAND_NO_ARGS = ${JAVAC} -Xlint -J-Xmx1024m
 # distributed version, of Daikon.  The if clause avoids a (harmless but
 # annoying) javac error message that they don't exist.
 ifeq "$(wildcard $(INV)/java/lib/bcel.jar)" "$(INV)/java/lib/bcel.jar"
-    CLASSPATH_JARS = :$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar:$(INV)/java/lib/utilMDE.jar
+    CLASSPATH_JARS = :$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar:$(INV)/java/lib/plume.jar
 endif
 ifeq "$(wildcard ${CHECKERSJAR})" "${CHECKERSJAR}"
     CLASSPATH_JARS2 = ${CHECKERSJAR}
@@ -118,12 +120,12 @@ export CLASSPATH
 # find command will get run multiple times.  USE AUTO_GENERATED_FILES instead.
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
 # " | perl -pi -e 's/^\.\///g'" to remove leading "./"
-JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name typequals -o -name 'ReturnBytecodes.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${DAIKONBIN}/sort-directory-order.pl)
+JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name typequals -o -name 'ReturnBytecodes.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${PLUMEBIN}/sort-directory-order.pl)
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | sort)
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
-TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${DAIKONBIN}/sort-directory-order.pl)
+TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${PLUMEBIN}/sort-directory-order.pl)
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
 AUTO_GENERATED_FILES = \
@@ -373,7 +375,7 @@ AUTO_GENERATED_FILES_2 = \
 
 AUTO_GENERATED_CLASSES_2 = $(subst .java,.class,${AUTO_GENERATED_FILES_2})
 
-ALL_GENERATED_FILES = ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} lib/utilMDE.jar
+ALL_GENERATED_FILES = ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} lib/plume.jar
 
 
 ###########################################################################
@@ -408,7 +410,7 @@ xlint: chicory ${ALL_GENERATED_FILES}
 	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
-all_directly: ${AUTO_GENERATED_FILES} lib/utilMDE.jar utilMDE-import-check utilMDE-copy
+all_directly: ${AUTO_GENERATED_FILES} lib/plume.jar plume-import-check plume-copy
 	@echo ${JAVA_FILES} > java_files.txt
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
@@ -421,7 +423,7 @@ all_directly: ${AUTO_GENERATED_FILES} lib/utilMDE.jar utilMDE-import-check utilM
 
 .PHONY : daikon
 daikon: compile_daikon junit
-compile_daikon : $(AUTO_GENERATED_FILES) lib/utilMDE.jar
+compile_daikon : $(AUTO_GENERATED_FILES) lib/plume.jar
 	@echo $(JAVAC_COMMAND) 'daikon/*.java ...'
 	@$(JAVAC_COMMAND) $(DAIKON_JAVA_FILES)
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -456,7 +458,7 @@ JAVA_DCOMP = java -ea -esa -Xbootclasspath:dcomp_rt.jar:$(CLASSPATH)
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
 
 # Build DynComp/Java, check the DF summary info and run a sanity test
-dyncomp dcomp : utilMDE-import-check utilMDE-copy dcomp_premain.jar dcomp-test
+dyncomp dcomp : plume-import-check plume-copy dcomp_premain.jar dcomp-test
 dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
 	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
 	$(JAVA) daikon.dcomp.SummaryInfo
@@ -517,56 +519,42 @@ install-dyncomp-jdk install-dcomp-jdk : dcomp_rt.jar
 dyncomp-jdk-only dcomp-jdk-only :
 	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
-# daikon.util is a copy of utilMDE.
+# daikon.util is a copy of plume.
 # Copied source files are read-only, to prevent accidental changes.
-# Use this file as a "canary" for copying everything.
-.PHONY: utilMDE-copy
-utilMDE-copy : daikon/util/README
+# Use the README file as a "canary" for copying everything.
+.PHONY: plume-copy
+plume-copy : daikon/util/README
 
-daikon/util/README: $(wildcard utilMDE/*.java utilMDE/*.jpp utilMDE/*.manifest)\
-					 utilMDE/Makefile utilMDE/README
-	$(MAKE) -C utilMDE
+PLUMEJAVA=../plume-lib/java
+PLUME=${PLUMEJAVA}/src/plume
+
+daikon/util/README: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
+  ${PLUMEJAVA}/*.manifest) ${PLUMEJAVA}/Makefile
+# TODO: uncomment this
+#	(cd ${PLUMEJAVA}; hg fetch)
+	$(MAKE) -C ${PLUMEJAVA}
 	/bin/rm -rf daikon/util
 	install -d daikon/util/
-	cp utilMDE/*.java daikon/util
+	cp ${PLUME}/*.java daikon/util
 	chmod 444 daikon/util/*.java
-	#install -t daikon/util/ -m 444 utilMDE/*.java
+	#install -t daikon/util/ -m 444 ${PLUME}/*.java
 	install -m 444 daikon/dcomp/daikon.util.README daikon/util/README
 	# change the package declarations
-	perl -p -i -e 's/package utilMDE/package daikon.util/' daikon/util/*.java
+	perl -p -i -e 's/package plume/package daikon.util/' daikon/util/*.java
 	# change relevant imports (make sure to get "import static" as well)
-	perl -p -i -e 's/^(import .*)utilMDE/\1daikon.util/g' daikon/util/*.java
+	perl -p -i -e 's/^(import .*)plume/\1daikon.util/g' daikon/util/*.java
 	$(JAVAC_COMMAND) daikon/util/*.java
 
-## Old version.  Unfortunately, it always re-made everything.
-## That is unnecessarily slow, and it also produces a lot of output that
-## obscures the interesting output.
-# utilMDE-copy : utilMDE-import-check
-# 	/bin/rm -rf daikon/util
-# 	install -d daikon/util/
-# 	# Must compile utilMDE in order to create .java files from .jpp files.
-# 	make -C utilMDE
-# 	cp utilMDE/*.java daikon/util
-# 	chmod 444 daikon/util/*.java
-# 	#install -t daikon/util/ -m 444 utilMDE/*.java
-# 	install -m 444 daikon/dcomp/daikon.util.README daikon/util/README
-# 	# change the package declarations
-# 	perl -p -i -e 's/package utilMDE/package daikon.util/' daikon/util/*.java
-# 	# change relevant imports (make sure to get "import static" as well)
-# 	perl -p -i -e 's/^(import .*)utilMDE/\1daikon.util/g' daikon/util/*.java
-# 	$(JAVAC_COMMAND) daikon/util/*.java
-
-# Checks that daikon.util is imported by DynComp source files, rather
-# than utilMDE
-utilMDE-import-check :
-	@echo -n "Checking that imports of utilMDE and daikon.util are correct..."
-	@if [ -n "`grep '^import utilMDE' $(DCOMP_JAVA_FILES)`" ]; then \
+# Checks that daikon.util, rather than plume, is imported by DynComp source files.
+plume-import-check :
+	@echo -n "Checking that imports of plume and daikon.util are correct..."
+	@if [ -n "`grep '^import plume' $(DCOMP_JAVA_FILES)`" ]; then \
 	echo ""; \
-	echo "*** ERROR: Do not import utilMDE from DynComp code. It will be"; \
+	echo "*** ERROR: Do not import plume from DynComp code. It will be"; \
 	echo " instrumented when DynComp is run. Please use the (identical)"; \
 	echo " daikon.util package, which will not be instrumented."; \
-	echo "The following files import from utilMDE:"; \
-	grep -n '^import utilMDE' $(DCOMP_JAVA_FILES); \
+	echo "The following files import from plume:"; \
+	grep -n '^import plume' $(DCOMP_JAVA_FILES); \
 	else \
 	echo "done"; \
 	fi
@@ -576,12 +564,12 @@ utilMDE-import-check :
 #
 WSMATCH_JAVA_FILES = daikon/tools/WSMatch.java daikon/chicory/*.java
 wsmatch : daikon/tools/WSMatch.class
-daikon/tools/WSMatch.class : $(wildcard $(WSMATCH_JAVA_FILES)) lib/utilMDE.jar
+daikon/tools/WSMatch.class : $(wildcard $(WSMATCH_JAVA_FILES)) lib/plume.jar
 	$(JAVAC_COMMAND) $(WSMATCH_JAVA_FILES)
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
-all_except_daikon: ${AUTO_GENERATED_FILES} lib/utilMDE.jar
+all_except_daikon: ${AUTO_GENERATED_FILES} lib/plume.jar
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -613,13 +601,13 @@ jikes:	all_via_jikes
 
 # These rules are undesirable, because Daikon.class (or Diff.class) might
 # be up to date even if other files aren't.
-daikon/Daikon.class: daikon/Daikon.java	${AUTO_GENERATED_FILES} lib/utilMDE.jar
+daikon/Daikon.class: daikon/Daikon.java	${AUTO_GENERATED_FILES} lib/plume.jar
 	${JAVAC_COMMAND} daikon/Daikon.java
 
-daikon/Diff.class: Diff.java ${AUTO_GENERATED_FILES} lib/utilMDE.jar
+daikon/Diff.class: Diff.java ${AUTO_GENERATED_FILES} lib/plume.jar
 	${JAVAC_COMMAND} daikon/Diff.java
 
-daikon/Runtime.class: daikon/Runtime.java lib/utilMDE.jar
+daikon/Runtime.class: daikon/Runtime.java lib/plume.jar
 	${JAVAC_COMMAND} daikon/Runtime.java
 
 
@@ -677,12 +665,12 @@ tags-without-generated-files: clean-generated-files
 	@etags -l java ${TAG_FILES}
 	$(MAKE) compile
 
-utilMDE/utilMDE.jar:
-	$(MAKE) -C utilMDE utilMDE.jar
+../plume-lib/java/plume.jar:
+	$(MAKE) -C ../plume-lib/java plume.jar
 
-lib/utilMDE.jar: utilMDE/utilMDE.jar
+lib/plume.jar: ../plume-lib/java/plume.jar
 	install -d lib
-	cp -p utilMDE/utilMDE.jar $@
+	cp -p $< $@
 
 ###
 ### Static checks of the code
@@ -706,7 +694,7 @@ findbugs-nocompile:
 findbugs-cat:
 	cat .findbugs-output
 
-../daikon.jar: ${AUTO_GENERATED_FILES} lib/utilMDE.jar compile
+../daikon.jar: ${AUTO_GENERATED_FILES} lib/plume.jar compile
 	cd .. && $(MAKE) daikon.jar
 
 checkstyle: checkstyle-cs checkstyle-sun
@@ -714,7 +702,7 @@ checkstyle-cs: .checkstyle-cschecks-output
 checkstyle-sun: .checkstyle-sunchecks-output
 .PHONY: checkstyle checkstyle-cs checkstyle-sun
 
-.checkstyle-sunchecks-output: ${AUTO_GENERATED_FILES} lib/utilMDE.jar
+.checkstyle-sunchecks-output: ${AUTO_GENERATED_FILES} lib/plume.jar
 	  ${JAVA} \
 	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
 	    -Dcheckstyle.suppressions.file=${inv}/java/.checkstyle-suppressions.xml \
@@ -723,7 +711,7 @@ checkstyle-sun: .checkstyle-sunchecks-output
 	    -c /g2/users/mernst/java/checkstyle-3.4/docs/sun_checks.xml \
 	    -r daikon | tee .checkstyle-sunchecks-output
 
-.checkstyle-cschecks-output: ${AUTO_GENERATED_FILES} lib/utilMDE.jar
+.checkstyle-cschecks-output: ${AUTO_GENERATED_FILES} lib/plume.jar
 	  ${JAVA} \
 	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
 	    -Dcheckstyle.suppressions.file=.checkstyle-suppressions.xml \
@@ -958,14 +946,14 @@ JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
 JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | sort)
 #JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v '\#' | sort | uniq | perl -p -e 's:^./::g; s:/:.:g;'`
 
-# Daikon packages except for util (which is just a copy of utilMDE)
+# Daikon packages except for util (which is just a copy of plume)
 DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'CVS|util' \
 				   | sed s./.. | sed s/^/daikon./ | tr '\n' ':')
 
 javadoc: doc
 
 # Build javadoc using the daikon package and all of subpackages of
-# daikon (except daikon.util) and utilMDE.  Unfortunately, there is
+# daikon (except daikon.util) and plume.  Unfortunately, there is
 # no switch to javadoc that ignores a subpackage.  Don't include the
 # typequals package -- it crashes javadoc.
 doc: $(AUTO_GENERATED_FILES) doc-dkconfig
@@ -981,7 +969,7 @@ doc: $(AUTO_GENERATED_FILES) doc-dkconfig
 doc-private: $(AUTO_GENERATED_FILES)
 	mkdir -p doc
 	javadoc -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
-	  daikon -subpackages $(DAIKON_PACKAGES):utilMDE
+	  daikon -subpackages $(DAIKON_PACKAGES):plume
 	cd doc && preplace '^ *&#64;cindex.*' ''
 
 ## This doesn't seem necessary any more
@@ -989,7 +977,7 @@ doc-private: $(AUTO_GENERATED_FILES)
 # 
 # ## Fix up generated .html files for use by the Emacs `javadoc-lookup' function.
 # doc-javadoc-lookup: doc
-# 	find doc -name '*.html' | xargs -n 100 ${DAIKONBIN}/jdk-add-munged-anchor-names
+# 	find doc -name '*.html' | xargs -n 100 ${PLUMEBIN}/jdk-add-munged-anchor-names
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: $(AUTO_GENERATED_FILES)
@@ -1043,9 +1031,14 @@ use-%:
 ###
 
 showvars:
+	which java
 	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
 	@echo CLASSPATH = "${CLASSPATH}"
+	@echo CLASSPATH_JARS2 = $(CLASSPATH_JARS2)
+	@echo OSTYPE = $(OSTYPE)
+	@echo PATH = $(PATH)
 	@echo DAIKONBIN = ${DAIKONBIN}
+	@echo PLUMEBIN = ${PLUMEBIN}
 	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
 	@echo INV = "${INV}"
 	@echo JAVA = ${JAVA}
@@ -1055,6 +1048,11 @@ showvars:
 	@echo JAVA_FILES = $(JAVA_FILES)
 	@echo TAG_FILES = $(TAG_FILES)
 	@echo jsr308_imports = $(jsr308_imports)
+	@echo INTERNING_JAVA_FILES = $(INTERNING_JAVA_FILES)
+	@echo INTERNING_JAVA_FILES_COUNTS = $(INTERNING_JAVA_FILES_COUNTS)
+
+dump:
+	showvars
 
 showvar_JAVA_FILES:
 	@echo ${JAVA_FILES}
@@ -1099,9 +1097,9 @@ avoid-jpp:
 # the status of the last command.
 
 # This rule does not work with make 3.77, but does work with make 3.78.
-JAVA_CPP ?= (rm -f $@; ${DAIKONBIN}/java-cpp.pl -DDEFINEDVAR $< 2>&1 > $@ && chmod -w $@)
+JAVA_CPP ?= (rm -f $@; ${PLUMEBIN}/java-cpp.pl -DDEFINEDVAR $< 2>&1 > $@ && chmod -w $@)
 # Like the above, but also makes a backup file
-# JAVA_CPP = (mv -f $@ $@-bak; set -e; ${DAIKONBIN}/java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
+# JAVA_CPP = (mv -f $@ $@-bak; set -e; ${PLUMEBIN}/java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
 
 # JAVA_CPP = (cp -pf $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
 ## Here are alternate ways of writing the same command:
@@ -1711,20 +1709,6 @@ daikon/derive/unary/SequenceInitialFactory.java: daikon/derive/unary/SequenceIni
 
 daikon/derive/unary/SequenceInitialFactoryFloat.java: daikon/derive/unary/SequenceInitialFactory.java.jpp
 	$(JAVA_CPP:DEFINEDVAR=TYPEDOUBLE)
-
-
-# See the showvars target; this one seems extraneous
-dump :
-	@echo "CLASSPATH = $(CLASSPATH)"
-	@echo "CLASSPATH_JARS2 = $(CLASSPATH_JARS2)"
-	@echo "DAIKONDIR = $(DAIKONDIR)"
-	which java
-	echo $(OSTYPE)
-	echo $(PATH)
-	echo $(DAIKONBIN)
-	@echo "JAVAC_COMMAND = $(JAVAC_COMMAND)"
-	@echo "INTERNING_JAVA_FILES = $(INTERNING_JAVA_FILES)"
-	@echo "INTERNING_JAVA_FILES_COUNTS = $(INTERNING_JAVA_FILES_COUNTS)"
 
 
 ###########################################################################

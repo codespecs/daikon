@@ -44,7 +44,7 @@ import daikon.derive.binary.SEQUENCESPREDICATE;
 import daikon.derive.binary.SEQUENCESJOIN;
 import daikon.Quantify.QuantFlags;
 
-import utilMDE.*;
+import plume.*;
 
 import java.util.*;
 import java.util.logging.*;

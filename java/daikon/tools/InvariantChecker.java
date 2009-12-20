@@ -3,7 +3,7 @@ package daikon.tools;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.filter.InvariantFilters;
-import utilMDE.*;
+import plume.*;
 
 import java.util.*;
 import java.io.*;

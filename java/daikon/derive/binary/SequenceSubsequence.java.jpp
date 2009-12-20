@@ -29,7 +29,7 @@ package daikon.derive.binary;
 import daikon.*;
 import daikon.derive.*;
 
-import utilMDE.*;
+import plume.*;
 
 public final class SEQUENCESCALARSUBSEQUENCE
   extends SequenceSubsequence

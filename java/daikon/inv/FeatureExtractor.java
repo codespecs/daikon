@@ -1,6 +1,6 @@
 package daikon.inv;
 
-import utilMDE.*;
+import plume.*;
 import static daikon.inv.Invariant.asInvClass;
 
 import daikon.*;

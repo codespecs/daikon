@@ -5,7 +5,7 @@ import daikon.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import utilMDE.*;
+import plume.*;
 
 // Here Implication is reimplemented as an extension of the new general
 // Joiner class

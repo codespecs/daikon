@@ -69,7 +69,7 @@ import daikon.Quantify.QuantFlags;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import utilMDE.*;
+import plume.*;
 
 /**
  * Baseclass for unary range based invariants.  Each invariant is a

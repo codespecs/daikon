@@ -50,7 +50,7 @@ package daikon.derive.ternary;
 import daikon.*;
 import daikon.inv.binary.twoScalar.*; // for IntComparison
 
-import utilMDE.*;
+import plume.*;
 import java.util.*;
 
 public final class SEQUENCESCALARSUBSCRIPTFACTORY

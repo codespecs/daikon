@@ -80,7 +80,7 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
 import daikon.derive.unary.*;
 import daikon.suppress.*;
-import utilMDE.*;
+import plume.*;
 import java.lang.reflect.*;
 import java.util.*;
 import java.util.logging.Logger;
@@ -443,11 +443,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
         func = "min";
       else if (methodname[0].equals("java.lang.Math.max("))
         func = "max";
-      else if (methodname[0].equals("utilMDE.MathMDE.gcd("))
+      else if (methodname[0].equals("plume.MathMDE.gcd("))
         func = "gcd";
       else if (methodname[0].equals("java.lang.Math.pow("))
         func = "pow";
-      else if (methodname[0].equals("utilMDE.MathMDE.logicalXor("))
+      else if (methodname[0].equals("plume.MathMDE.logicalXor("))
         func = "|java-logical-xor|";
     } else {
       assert methodname[0].equals("");
@@ -611,7 +611,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   #define BOOLEAN_ARGS 1
   #define FUNC(arg1,arg2) (((arg1 != 0) ^ (arg2 != 0)) ? 1 : 0)
   // #define METHOD_NAME {"", " ^ ", ""}
-  #define METHOD_NAME {"utilMDE.MathMDE.logicalXor(", ", ", ")"}
+  #define METHOD_NAME {"plume.MathMDE.logicalXor(", ", ", ")"}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION BitwiseOr
@@ -632,7 +632,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   #assert FTYPE (Gcd)
   // #define EQUALITY_SUPPRESS 1
   #define FUNC(arg1,arg2) MathMDE.gcd (arg1, arg2)
-  #define METHOD_NAME {"utilMDE.MathMDE.gcd(", ", ", ")"}
+  #define METHOD_NAME {"plume.MathMDE.gcd(", ", ", ")"}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION Mod

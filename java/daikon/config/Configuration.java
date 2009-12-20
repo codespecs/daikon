@@ -5,8 +5,8 @@ import java.io.*;
 import java.util.List;
 import java.util.ArrayList;
 import java.util.Iterator;
-import utilMDE.EntryReader;
-import utilMDE.UtilMDE;
+import plume.EntryReader;
+import plume.UtilMDE;
 
 /**
  * This class applies settings from a configuration file that lists

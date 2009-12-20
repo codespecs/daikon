@@ -3,7 +3,7 @@ package daikon.derive.binary;
 import daikon.*;
 import daikon.derive.*;
 
-import utilMDE.*;
+import plume.*;
 
 /**
  * Abstract class to represent a derived variable that came from

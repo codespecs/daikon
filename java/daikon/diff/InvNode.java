@@ -1,7 +1,7 @@
 package daikon.diff;
 
 import daikon.inv.Invariant;
-import utilMDE.*;
+import plume.*;
 
 /**
  * Contains a pair of Invariants.  Resides in the third level of the tree.

@@ -43,6 +43,10 @@ if (! $?DAIKONBIN) then
   endif
 endif
 
+if (! $?PLUMEBIN) then
+  setenv PLUMEBIN ${DAIKONDIR}/bin
+endif
+
 # setenv DAIKONCLASS_SOURCES 1
 
 setenv CPADD ${DAIKONDIR}/daikon.jar
@@ -85,11 +89,11 @@ endif
 if ($?debuglogin) echo "daikon.cshrc about to add scripts to path"
 
 ## Add the Daikon binaries to your path
-set path = (${DAIKONBIN} $path)
+set path = (${DAIKONBIN} ${PLUMEBIN} $path)
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if ($?PERLLIB) then
-  setenv PERLLIB ${DAIKONBIN}:${PERLLIB}
+  setenv PERLLIB ${DAIKONBIN}:${PLUMEBIN}:${PERLLIB}
 else
-  setenv PERLLIB ${DAIKONBIN}
+  setenv PERLLIB ${DAIKONBIN}:${PLUMEBIN}
 endif

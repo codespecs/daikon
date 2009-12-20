@@ -1,7 +1,7 @@
 package daikon.derive.unary;
 import daikon.*;
 import daikon.derive.*;
-import utilMDE.*;
+import plume.*;
 
 // like SequenceMax; if one changes, change the other, too
 public final class SequenceMin

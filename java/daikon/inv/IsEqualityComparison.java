@@ -1,6 +1,6 @@
 package daikon.inv;
 
-import utilMDE.*;
+import plume.*;
 
 /** This Filter returns true if its argument is an Invariant which satisfies
  * the following conditions:

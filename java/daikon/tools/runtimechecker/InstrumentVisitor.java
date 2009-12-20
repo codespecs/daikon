@@ -14,7 +14,7 @@ import jtb.syntaxtree.*;
 import jtb.visitor.DepthFirstVisitor;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
-import utilMDE.UtilMDE;
+import plume.UtilMDE;
 import daikon.PptMap;
 import daikon.PptTopLevel;
 import daikon.inv.Invariant;
@@ -1009,7 +1009,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         code.append("<INVINFO>");
         code.append("<" + inv.ppt.parent.ppt_name.getPoint() + ">");
         code.append("<DAIKON>" + daikonrep + "</DAIKON>");
-        code.append("<INV>" + utilMDE.UtilMDE.escapeNonJava(javarep) + "</INV>");
+        code.append("<INV>" + plume.UtilMDE.escapeNonJava(javarep) + "</INV>");
         code.append("<DAIKONCLASS>" + inv.getClass().toString()
                     + "</DAIKONCLASS>");
         code.append("<METHOD>" + inv.ppt.parent.ppt_name.getSignature()

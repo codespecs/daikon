@@ -3,7 +3,7 @@ package daikon;
 import java.util.*;
 import java.io.*;
 
-import utilMDE.*;
+import plume.*;
 
 /**
  * Represents the type of a variable, for its declared, dtrace file

@@ -4,7 +4,7 @@ import java.util.*;
 import java.io.*;
 import java.lang.reflect.*;
 import com.sun.javadoc.*;
-import utilMDE.*;
+import plume.*;
 
 /**
  * InvariantDoclet is a JavaDoc doclet that collects information about

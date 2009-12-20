@@ -3,7 +3,7 @@ package daikon.test;
 import daikon.PptName;
 import daikon.tools.jtb.*;
 import junit.framework.*;
-import utilMDE.UtilMDE;
+import plume.UtilMDE;
 
 import jtb.*;
 import jtb.visitor.*;

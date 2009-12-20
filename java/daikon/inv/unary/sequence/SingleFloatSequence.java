@@ -2,7 +2,7 @@ package daikon.inv.unary.sequence;
 
 import daikon.*;
 import daikon.inv.*;
-import utilMDE.*;
+import plume.*;
 
 /**
  * Abstract base class used to evaluate single double sequences.

@@ -3,7 +3,7 @@ package daikon.suppress;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.*;
-import utilMDE.*;
+import plume.*;
 
 import java.lang.reflect.*;
 import java.util.logging.*;

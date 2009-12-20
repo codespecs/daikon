@@ -3,7 +3,7 @@ import daikon.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
-import utilMDE.*;
+import plume.*;
 
 /** Length of String variables **/
 public final class StringLength extends UnaryDerivation

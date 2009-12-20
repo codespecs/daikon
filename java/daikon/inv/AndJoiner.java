@@ -2,7 +2,7 @@ package daikon.inv;
 
 import daikon.*;
 import java.util.*;
-import utilMDE.UtilMDE;
+import plume.UtilMDE;
 
 /**
  * This is a special invariant used internally by Daikon to represent

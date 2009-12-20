@@ -3,7 +3,7 @@ package daikon;
 import java.util.*;
 import java.io.*;
 import gnu.getopt.*;
-import utilMDE.UtilMDE;
+import plume.UtilMDE;
 
 /**
  * UnionInvariants is a command-line tool that will read in one (or

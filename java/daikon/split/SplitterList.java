@@ -2,7 +2,7 @@ package daikon.split;
 
 import java.util.*;
 import daikon.*;
-import utilMDE.*;
+import plume.*;
 import java.util.logging.Level;
 
 // SplitterList maps from a program point name to an array of Splitter
@@ -47,7 +47,7 @@ public abstract class SplitterList
         splits_strings[i] = splits[i].condition();
       }
       Global.debugSplit.fine ("Registering splitters for " + pptname + ":"
-                              + utilMDE.ArraysMDE.toString(splits_strings));
+                              + plume.ArraysMDE.toString(splits_strings));
     }
 
     if (ppt_splitters.containsKey(pptname)) {

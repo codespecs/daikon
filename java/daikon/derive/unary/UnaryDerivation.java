@@ -3,7 +3,7 @@ package daikon.derive.unary;
 import daikon.*;
 import daikon.derive.*;
 
-import utilMDE.*;
+import plume.*;
 
 public abstract class UnaryDerivation
   extends Derivation

@@ -6,7 +6,7 @@ import daikon.inv.unary.*;
 import daikon.inv.binary.*;
 import static daikon.inv.Invariant.asInvClass;
 
-import utilMDE.*;
+import plume.*;
 
 import java.lang.reflect.*;
 import java.util.logging.*;

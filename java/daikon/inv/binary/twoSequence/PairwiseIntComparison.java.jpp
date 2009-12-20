@@ -200,7 +200,7 @@ import daikon.derive.binary.*;
 import daikon.suppress.*;
 import daikon.Quantify.QuantFlags;
 
-import utilMDE.ArraysMDE;
+import plume.ArraysMDE;
 import java.util.Iterator;
 import java.util.logging.Logger;
 import java.util.logging.Level;

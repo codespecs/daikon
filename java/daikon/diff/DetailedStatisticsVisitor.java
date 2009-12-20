@@ -2,7 +2,7 @@ package daikon.diff;
 
 import java.io.*;
 import daikon.inv.*;
-import utilMDE.*;
+import plume.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 

@@ -2,7 +2,7 @@ package daikon.inv;
 
 import daikon.*;
 
-import utilMDE.*;
+import plume.*;
 
 import java.io.Serializable;
 

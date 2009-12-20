@@ -4,7 +4,7 @@ package daikon;
 
 import java.util.*;
 import java.io.Serializable;
-import utilMDE.*;
+import plume.*;
 import daikon.inv.Invariant;    // for emptyInvList
 
 // Types of Ppt (program point) objects:

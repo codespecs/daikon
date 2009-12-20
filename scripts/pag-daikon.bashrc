@@ -26,6 +26,7 @@ if [ ! -d "${DAIKONDIR}" ]; then
 fi
 
 export DAIKONBIN=${DAIKONDIR}/scripts
+export PLUMEBIN=${DAIKONDIR}/plume-lib/bin
 export INV=${DAIKONDIR}
 export inv=${INV}
 export DAIKONCLASS_SOURCES=1
@@ -38,9 +39,6 @@ export JDK4DIR=${JDK4DIR:-/afs/csail/group/pag/software/pkg/j2sdk-1.4.2}
 export JDK5DIR=${JDK5DIR:-/afs/csail/group/pag/software/pkg/j2sdk-1.5}
 
 export PATH=/usr/local/bin:${PATH}:/afs/csail/group/pag/projects/invariants/binaries:$DAIKONDIR/front-end/c
-if [ -x ${INV}/scripts/path-remove.pl ]; then
-  export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
-fi
 
 # "source" is a bash, not sh, feature, so use "." instead
 . ${INV}/scripts/daikon.bashrc
@@ -54,8 +52,10 @@ unset DAIKON_LIBS
 export LACKWIT_HOME=${INV}/front-end/c/lackwit
 
 # Remove duplicates so path and classpath don't get too long
-export CLASSPATH=`echo $CLASSPATH | ${INV}/scripts/path-remove.pl`
-export PATH=`echo $PATH | ${INV}/scripts/path-remove.pl`
+if [ -x ${PLUMEBIN}/path-remove.pl ]; then
+  export CLASSPATH=`echo $CLASSPATH | ${PLUMEBIN}/path-remove.pl`
+  export PATH=`echo $PATH | ${PLUMEBIN}/path-remove.pl`
+fi
 
 ## Someone needs to rewrite this as a shell function, since bash aliases
 ## can't handle arguments.

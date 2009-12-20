@@ -1,7 +1,7 @@
 package daikon.diff;
 
 import daikon.PptTopLevel;
-import utilMDE.*;
+import plume.*;
 
 /**
  * Contains a pair of Ppts.  Resides in the second level of the tree.

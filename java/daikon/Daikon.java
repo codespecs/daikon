@@ -31,10 +31,10 @@ import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
 
-import utilMDE.EntryReader;
-import utilMDE.FileIOException;
-import utilMDE.Stopwatch;
-import utilMDE.UtilMDE;
+import plume.EntryReader;
+import plume.FileIOException;
+import plume.Stopwatch;
+import plume.UtilMDE;
 import daikon.config.Configuration;
 import daikon.derive.Derivation;
 import daikon.inv.Equality;

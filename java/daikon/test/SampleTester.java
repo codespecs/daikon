@@ -2,7 +2,7 @@ package daikon.test;
 
 import daikon.*;
 import daikon.inv.*;
-import utilMDE.*;
+import plume.*;
 
 import gnu.getopt.*;
 import java.io.*;

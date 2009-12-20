@@ -4,7 +4,7 @@ import daikon.LogHelper;
 
 import junit.framework.*;
 import junit.textui.*;
-import utilMDE.*;
+import plume.*;
 import daikon.FileIO;
 
 /**
@@ -82,7 +82,7 @@ public class MasterUnitTester extends TestCase {
 
     // This is possibly not right; the JIT needs to be disabled in order
     // for these tests to succeed.
-    result.addTest(new TestSuite(TestUtilMDE.class));
+    result.addTest(new TestSuite(TestPlume.class));
 
     return result;
   }

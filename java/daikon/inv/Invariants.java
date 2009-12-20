@@ -83,7 +83,7 @@ public final class Invariants
   /// For testing
   // private static final boolean isPowerOfTwoSlow(int x) {
   //   for (int i=0; true; i++) {
-  //     int pow = utilMDE.MathMDE.pow(2, i);
+  //     int pow = plume.MathMDE.pow(2, i);
   //     if (pow == x)
   //       return true;
   //     if (pow > x)

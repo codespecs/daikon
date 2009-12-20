@@ -13,7 +13,7 @@ my %all_conditions = ();
 
 nextline:
     while (<>) {
-	if ( /(utilMDE|warning|\.class)/ ) {
+	if ( /(\bplume\b|warning|\.class)/ ) {
 	    next;
 	} elsif ( /for\s*\(int/ ) {
 	    next;

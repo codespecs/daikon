@@ -4,12 +4,12 @@ import daikon.*;
 import junit.framework.*;
 import java.util.*;
 import java.io.*;
-import utilMDE.*;
+import plume.*;
 
 public final class TestQuant extends TestCase {
 
   public static void main(String[] args) {
-    junit.textui.TestRunner.run(new TestSuite(TestUtilMDE.class));
+    junit.textui.TestRunner.run(new TestSuite(TestPlume.class));
   }
 
   public TestQuant(String name) {
@@ -17,7 +17,7 @@ public final class TestQuant extends TestCase {
   }
 
   public static final void assert_arrays_equals(int[] a1, int[] a2) {
-    TestUtilMDE.assert_arrays_equals(a1, a2);
+    TestPlume.assert_arrays_equals(a1, a2);
   }
 
   private static int[] removeAdjacentDups(int[] a) {

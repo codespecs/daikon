@@ -2,7 +2,7 @@
 package daikon.tools;
 import java.util.*;
 import java.io.*;
-import utilMDE.*;
+import plume.*;
 
 /** This class partitions Daikon trace files so that invocations of
  *  the same program point are grouped together for use with random

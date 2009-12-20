@@ -12,7 +12,7 @@ import static daikon.VarInfo.VarKind;
 import static daikon.VarInfo.VarFlags;
 import static daikon.VarInfo.LangFlags;
 
-import utilMDE.*;
+import plume.*;
 
 import java.io.*;
 import java.net.*;

@@ -5,7 +5,7 @@ import java.io.*;
 import java.util.logging.Logger;
 import java.util.regex.*;
 import gnu.getopt.*;
-import utilMDE.UtilMDE;
+import plume.UtilMDE;
 import daikon.*;
 import daikon.inv.*;
 

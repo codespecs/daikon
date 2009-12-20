@@ -120,7 +120,7 @@ import daikon.derive.binary.*;
 import daikon.inv.*;
 import daikon.Quantify.QuantFlags;
 // import daikon.inv.binary.twoScalar.CORECLASS;
-import utilMDE.*;
+import plume.*;
 import java.util.*;
 
 #if defined(EQUAL) || defined(EQUALFLOAT)

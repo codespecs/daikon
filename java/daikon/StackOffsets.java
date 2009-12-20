@@ -1,8 +1,8 @@
 package daikon;
 
-import utilMDE.Option;
-import utilMDE.Options;
-import utilMDE.SimpleLog;
+import plume.Option;
+import plume.Options;
+import plume.SimpleLog;
 
 import java.util.*;
 import java.io.*;

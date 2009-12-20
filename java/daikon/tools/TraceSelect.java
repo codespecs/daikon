@@ -3,7 +3,7 @@ package daikon.tools;
 
 import java.util.*;
 import java.io.*;
-import utilMDE.*;
+import plume.*;
 
 public class TraceSelect {
 
@@ -309,7 +309,7 @@ public class TraceSelect {
 
 // I don't think any of this is used anymore...
 // Now all of the random selection comes from the
-// classes in utilMDE.
+// classes in plume.
 
 class InvocationComparator implements Comparator<String> {
     /** Requires:  s1 and s2 are String representations of invocations

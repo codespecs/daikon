@@ -2,7 +2,7 @@ package daikon.inv.unary.stringsequence;
 
 import daikon.*;
 import daikon.inv.*;
-import utilMDE.*;
+import plume.*;
 
 
 /**

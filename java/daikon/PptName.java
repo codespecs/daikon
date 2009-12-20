@@ -3,7 +3,7 @@ package daikon;
 import java.io.ObjectInputStream;
 import java.io.Serializable;
 import java.io.IOException;
-import utilMDE.*;
+import plume.*;
 
 /**
  * PptName is an immutable ADT that represents naming data associated with a

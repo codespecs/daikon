@@ -13,7 +13,7 @@ import java.util.Vector;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 
-import utilMDE.UtilMDE;
+import plume.UtilMDE;
 import daikon.Daikon.TerminationMessage;
 import daikon.inv.Invariant;
 import daikon.inv.InvariantStatus;
@@ -53,8 +53,8 @@ public class DaikonSimple {
   // // inv file for storing the invariants in serialized form
   // public static File inv_file = null;
 
-  private static String usage = UtilMDE
-      .join(
+  private static String usage = 
+      UtilMDE.join(
           new String[] {
               "",
               "Usage: java daikon.DaikonSimple [OPTION]... <decls_file> <dtrace_file>",

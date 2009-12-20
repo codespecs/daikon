@@ -24,17 +24,26 @@ README_PATHS := $(addprefix doc/,$(README_FILES))
 DIST_VERSION_FILES := ${README_PATHS} \
 	doc/daikon.texinfo doc/developer.texinfo \
 	doc/index.html doc/www/download/index.html
+# Scripts, such as Perl programs.  Why not just include all of them?
+# (Maybe to avoid problems with accidentally including things in the user's
+# checkout that are not needed by most users, but why not include
+# everything that's in repository?)
 SCRIPT_FILES := Makefile java-cpp.pl lines-from \
-	daikon.cshrc daikon.bashrc daikonenv.bat cygwin-runner.pl java-cygwin.sh \
+	daikon.cshrc daikon.bashrc daikonenv.bat \
 	dfepl dtrace-perl dtype-perl \
-	javac-xlint javac-xlint-prune.pl \
 	kvasir-dtrace \
 	convertcsv.pl \
 	trace-untruncate trace-untruncate-fast.c trace-purge-fns.pl trace-purge-vars.pl \
 	trace-add-nonces.pl \
-	checkargs.pm util_daikon.pm \
-	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl \
-	sort-directory-order.pl
+	util_daikon.pm \
+	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
+
+## These are now in plume-lib
+# 	cygwin-runner.pl java-cygwin.sh \
+# 	javac-xlint javac-xlint-prune.pl \
+# 	checkargs.pm
+# 	sort-directory-order.pl
+
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
 # This is so toublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS  \) -prune -o -name '*.java' -print) $(shell find java/daikon -follow \( -name '*daikon-java*' -o -name CVS \) -prune -o -name '*.java' -print)
@@ -236,7 +245,7 @@ test-staged-dist: $(STAGING_DIR)
 	(cd $(DISTTESTDIR)/daikon/java && \
 	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
 	## Make sure that all of the class files are 1.5 (version 49) or earlier
-	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs check_version 49)
+	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs classfile_check_version 49)
 	## Second, test the .java files.
 	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
 	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(RTJAR):$(TOOLSJAR) all_javac)
@@ -316,7 +325,7 @@ staging: doc/CHANGES
 staging-to-www: $(STAGING_DIR)
 	(cd $(STAGING_DIR) && tar cf - .) | (cd $(WWW_DIR) && tar xfBp -)
 	@echo "**Update the dates and sizes in the various index files**"
-	update-link-dates $(DIST_DIR)/index.html
+	html-update-link-dates $(DIST_DIR)/index.html
 	$(MAKE) update-dist-version-file
 	@echo "*****"
 	@echo "Don't forget to send mail to daikon-announce and commit changes."
@@ -390,10 +399,10 @@ chicory:
 daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) chicory
 	-rm -rf $@ ${TMPDIR}/daikon-jar
 	install -d ${TMPDIR}/daikon-jar
-	# Compile daikon and utilMDE and copy the resulting class files
+	# Compile Daikon and copy the resulting class files
 	# in the ${TMPDIR}/daikon-jar directory
 	make -C java all_directly
-	make -C java/utilMDE compile_without_testing
+	make -C plume-lib/java plume.jar
 	cd java && find . -name '*.class' \
 		-exec cp --parents '{}' ${TMPDIR}/daikon-jar \;
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
@@ -402,10 +411,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) c
 	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/commons-io.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/svnkit.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/xom-1.2.1.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/ical4j.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/utilMDE/lib/ini4j-0.5.1.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/plume-lib/java/plume.jar
 	(cd java; cp -f --parents --target-directory=${TMPDIR}/daikon-jar $(DAIKON_RESOURCE_FILES))
 	cd ${TMPDIR}/daikon-jar && \
 	  jar cfm $@ $(INV_DIR)/java/daikon/chicory/manifest.txt *
@@ -437,6 +443,9 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	# # Emacs
 	# mkdir ${TMPDIR}/daikon/emacs
 	# cp -p $(EMACS_PATHS) ${TMPDIR}/daikon/emacs
+
+	# Plume-lib library
+	(cd plume-lib; hg archive ${TMPDIR}/daikon/plume-lib)
 
 	# Auxiliary programs
 	mkdir ${TMPDIR}/daikon/bin
@@ -482,10 +491,10 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	(cd ${TMPDIR}/daikon/java; $(RM_TEMP_FILES))
 
 	# Java support files
-	## utilMDE
-	(cd java/utilMDE; $(MAKE) utilMDE.tar.gz)
-	cd java && tar zxf utilMDE/utilMDE.tar.gz -C ${TMPDIR}/daikon/java
-	rm -rf ${TMPDIR}/daikon/java/utilMDE/doc
+	## plume
+	(cd plume-lib; $(MAKE) plume-lib.tar.gz)
+	cd java && tar zxf plume-lib/plume-lib.tar.gz java -C ${TMPDIR}/daikon/java
+	rm -rf ${TMPDIR}/daikon/java/plume/api
 	## getopt
 	(cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
 	## intern checker
@@ -519,11 +528,8 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	##(cd ${TMPDIR}/daikon/java/junit; ${JAVAC} -g `find . -name '*.java'`)
 	cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/junit.jar
 
-	# utilMDE Libraries
-	cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/svnkit.jar
-	cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/ini4j-0.5.1.jar
-	cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/xom-1.2.1.jar
-	cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/utilMDE/lib/ical4j.jar
+	# Plume library
+	cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/plume-lib/java/plume.jar
 
 	## Front ends
 	mkdir ${TMPDIR}/daikon/front-end

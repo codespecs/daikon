@@ -1,6 +1,6 @@
 package daikon.test;
 
-import utilMDE.*;
+import plume.*;
 import daikon.*;
 
 import daikon.inv.Invariant;
@@ -19,7 +19,7 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
-import utilMDE.Intern;
+import plume.Intern;
 
 /**
  * This class is used by InvariantFormatTester to store data
@@ -114,7 +114,7 @@ class FormatTestCase {
         throw new RuntimeException(e.toString());
       }
       catch (InvocationTargetException e) {
-        System.out.println("***" + inv.getClass() + "***" + utilMDE.ArraysMDE.toString(outputProducerArgs));
+        System.out.println("***" + inv.getClass() + "***" + plume.ArraysMDE.toString(outputProducerArgs));
         System.out.println("^^^" + e.toString());
         System.out.println("^^^" + e.getMessage());
         System.out.println("^^^" + e.getCause());
@@ -976,9 +976,9 @@ class FormatTestCase {
       catch (InvocationTargetException e) {
         StringWriter target_backtrace = new StringWriter();
         e.getTargetException().printStackTrace(new PrintWriter(target_backtrace));
-        throw new RuntimeException("Error in populating invariant with add_modified (" + addModified.toString() + "applied to " + utilMDE.ArraysMDE.toString(params) + "):" + lineSep + "START TARGETEXCEPTION=" + lineSep + target_backtrace.toString() + lineSep + "END TARGETEXCEPTION" + lineSep + e.toString());
+        throw new RuntimeException("Error in populating invariant with add_modified (" + addModified.toString() + "applied to " + plume.ArraysMDE.toString(params) + "):" + lineSep + "START TARGETEXCEPTION=" + lineSep + target_backtrace.toString() + lineSep + "END TARGETEXCEPTION" + lineSep + e.toString());
       } catch (Exception e) {
-        throw new RuntimeException("Error in populating invariant with add_modified (" + addModified.toString() + "applied to " + utilMDE.ArraysMDE.toString(params) + "): " + e.toString());
+        throw new RuntimeException("Error in populating invariant with add_modified (" + addModified.toString() + "applied to " + plume.ArraysMDE.toString(params) + "): " + e.toString());
       }
     }
   }

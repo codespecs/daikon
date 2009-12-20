@@ -28,7 +28,7 @@ package daikon.inv.binary.twoScalar;
 
 import daikon.*;
 import daikon.inv.*;
-import utilMDE.*;
+import plume.*;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;

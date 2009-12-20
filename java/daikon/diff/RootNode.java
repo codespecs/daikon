@@ -1,5 +1,5 @@
 package daikon.diff;
-import utilMDE.Pair;
+import plume.Pair;
 
 /**
  * The root of the tree.  All its children are PptNodes.

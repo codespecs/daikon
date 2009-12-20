@@ -14,8 +14,8 @@ import java.io.*;
 import java.util.*;
 import jtb.JavaParser;
 import jtb.ParseException;
-import utilMDE.UtilMDE;
-import utilMDE.ArraysMDE;
+import plume.UtilMDE;
+import plume.ArraysMDE;
 
 import daikon.*;
 

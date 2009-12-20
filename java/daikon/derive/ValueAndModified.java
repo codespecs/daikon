@@ -2,7 +2,7 @@ package daikon.derive;
 
 import daikon.*;
 
-import utilMDE.*;
+import plume.*;
 
 /**
  * This is a temporary structure for grouping elements to be returned

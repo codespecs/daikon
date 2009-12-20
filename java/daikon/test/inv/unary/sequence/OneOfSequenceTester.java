@@ -3,7 +3,7 @@ package daikon.test.inv.unary.sequence;
 import junit.framework.*;
 import daikon.*;
 import daikon.inv.unary.sequence.*;
-import utilMDE.*;
+import plume.*;
 import daikon.test.Common;
 
 public class OneOfSequenceTester extends TestCase {

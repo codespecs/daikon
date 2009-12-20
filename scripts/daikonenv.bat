@@ -50,6 +50,10 @@ if "$DAIKONBIN"=="" (
   )
 )
 
+if "$PLUMEBIN"=="" (
+  set PLUMEBIN=%DAIKONDIR%\plume-lib\bin
+)
+
 REM set DAIKONCLASS_SOURCES=1
 
 REM For Windows, adjacent semicolons in CLASSPATH are harmless, but keep
@@ -73,7 +77,7 @@ set PATH=%DAIKONBIN%;%DAIKONDIR%\front-end\java\src;%JDKDIR%\bin;%PATH%
 
 REM Indicate where to find Perl modules such as util_daikon.pm.
 if not "%PERLLIB%"=="" (
-  set PERLLIB=%DAIKONBIN%;%PERLLIB%
+  set PERLLIB=%DAIKONBIN%;%PLUMEBIN%;%PERLLIB%
 ) else (
-  set PERLLIB=%DAIKONBIN%
+  set PERLLIB=%DAIKONBIN%;%PLUMEBIN%
 )

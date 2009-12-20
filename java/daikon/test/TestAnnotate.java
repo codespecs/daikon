@@ -3,7 +3,7 @@ package daikon.test;
 import daikon.tools.jtb.*;
 import junit.framework.*;
 import java.util.*;
-import utilMDE.*;
+import plume.*;
 
 /**
  * Tests that Annotate respects tabs.

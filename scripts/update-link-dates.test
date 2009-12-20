@@ -1,8 +1,0 @@
-# To test, run:
-touch update-link-dates.file*
-update-link-dates update-link-dates.test
-
-<a href="update-link-dates.file1">text</a> (6 Jul 2006)
-<a href="update-link-dates.file2">text</a> (6 Jul 2006, 2.0 kbytes)
-<a href="update-link-dates.file3">text</a> (PDF, 6 Jul 2006)
-<a href="update-link-dates.file4">text</a> (PDF, 6 Jul 2006, 1.0 Mbytes)

@@ -3,7 +3,7 @@ package daikon.test;
 import junit.framework.*;
 import java.util.Comparator;
 import daikon.*;
-import utilMDE.ArraysMDE;
+import plume.ArraysMDE;
 
 public class ProglangTypeTest extends TestCase {
 

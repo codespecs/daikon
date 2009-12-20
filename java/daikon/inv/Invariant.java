@@ -12,7 +12,7 @@ import daikon.simplify.SimpUtil;
 import daikon.simplify.LemmaStack;
 import static daikon.inv.Invariant.asInvClass;
 
-import utilMDE.*;
+import plume.*;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -1962,7 +1962,7 @@ public abstract class Invariant
    *
    *  Returns
    *
-   *     "utilMDE.FuzzyFloat.method(v1_name, v2_name)"
+   *     "plume.FuzzyFloat.method(v1_name, v2_name)"
    *
    *  Where v1_name and v2_name are the properly formatted
    *  varinfos v1 and v2, under the given format.

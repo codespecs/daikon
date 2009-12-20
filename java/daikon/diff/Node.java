@@ -1,7 +1,7 @@
 package daikon.diff;
 
 import java.util.*;
-import utilMDE.Pair;
+import plume.Pair;
 
 /**
  * All nodes must subclass this class.

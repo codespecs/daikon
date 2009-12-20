@@ -52,7 +52,7 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.inv.unary.scalar.*;
 import daikon.suppress.NIS;
 import java.util.*;
-import utilMDE.*;
+import plume.*;
 
 /**
  * Represents a Linear invariant over three PRIMITIVE scalars <samp>x</samp>,

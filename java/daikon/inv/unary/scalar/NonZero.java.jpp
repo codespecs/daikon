@@ -53,7 +53,7 @@ import daikon.derive.unary.*;
 import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
-import utilMDE.*;
+import plume.*;
 
 #if defined (SCALAR)
 // This also serves as NonNull.

@@ -576,7 +576,8 @@ someone who is making a release to plan.
     from other accounts as well.
 
     <pre>
-        su - daikonuser </pre>
+        ssh daikonuser@mangold.csail.mit.edu</pre>
+    (Alternately, you can do <tt>su - daikonuser</tt> instead.)
     </li>
 
     <li> Update daikon in daikonuser to the most recent version.
@@ -604,7 +605,8 @@ someone who is making a release to plan.
         make rebuild-everything    </pre>
     </li>
 
-    <li> Run the kvasir regression tests
+    <li> Run the kvasir regression tests.
+         [Time: 18 min]
     <pre>
         make -C $inv/tests/kvasir-tests nightly-summary-w-daikon </pre>
 
@@ -612,6 +614,7 @@ someone who is making a release to plan.
 
     <li> Run the regression tests.
          The last line printed should be "All tests succeeded."
+         [Time: 55 min]
 
     <pre>
         make -C $inv/tests clean diffs </pre>
@@ -643,10 +646,11 @@ someone who is making a release to plan.
 	make update-doc-dist-date-and-version    </pre>
     </li>
 
-    <li> <p>Build everything to be distributed and copy it to the staging
+    <li> Build everything to be distributed and copy it to the staging
     area (<a href="www.pag.csail.mit.edu/daikon/staging-daikon">www.pag.csail.mit.edu/daikon/staging-daikon</a>).  The final
     output will be a list of files that were added/removed since the
-    last release.</p>
+    last release.
+    [Time: 11 min]
 
     <pre>
         make staging    </pre>
@@ -659,6 +663,7 @@ someone who is making a release to plan.
     to the screen.  <b>Consider moving the staging area to the website
     so that we can check things out via the webserver before
     installing.</b>
+    [Time: ?? min]
 
     <pre>
         make test-staged-dist    </pre>
@@ -667,6 +672,7 @@ someone who is making a release to plan.
     <li> Test the distribution in the staging area, on a 64-bit machine
     such as mangold. Success is indicated by invariant output being written
     to the screen.
+    [Time: 24 min]
 
     <pre>
         make test-staged-dist    </pre>
@@ -679,7 +685,7 @@ someone who is making a release to plan.
     successful if the make command runs to conclusion without an error.
     The last line should indicate that Kvasir was not built because
     it is not a linux platform.
-         [Time: 32 min]
+    [Time: 32 min]
 
     <ul>
       <li>Csh version:
@@ -725,7 +731,7 @@ someone who is making a release to plan.
     Kvasir was not build because it is not a linux platform.
 
     <p>
-    Note that the build will take a fair amount of time because it 
+    Note that the build will take a fair amount of time because it
     builds the dyncomp instrumented JDK.
     </p>
     <pre>
@@ -771,7 +777,7 @@ someone who is making a release to plan.
     <li> Check the website to see if it has any broken links
 
     <pre>
-      checklink -q -r `cat $inv/scripts/checklink-args.txt` http://pag.csail.mit.edu/daikon </pre>
+      checklink -q -r `cat $inv/plume-lib/bin/checklink-args.txt` http://pag.csail.mit.edu/daikon </pre>
 
     <p>
     Links to the webpages of people and conferences are read from
@@ -868,7 +874,7 @@ using the repository.
 </ul>
 
 
-<h2><a name="Mangel-Wurzel">Mangel-Wurzel</a></h3>
+<h2><a name="Mangel-Wurzel">Mangel-Wurzel</a></h2>
 
 <p>
 <b>Mangel-Wurzel is obsolete.</b>  These instructions are of only

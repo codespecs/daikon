@@ -476,14 +476,14 @@ The test ensures that the method only appears once in the output.
   /* pure */ public static _TYPE /*@PolyNull*/ [] concat(_TYPE /*@PolyNull*/ [] seq1, _TYPE /*@PolyNull*/ [] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
-    return utilMDE.ArraysMDE.concat(seq1, seq2);
+    return plume.ArraysMDE.concat(seq1, seq2);
   }
 
 #ifdef COMPATIBLE
   /* pure */ public static CAST_TYPE /*@PolyNull*/ [] concat(_TYPE /*@PolyNull*/ [] seq1, COMPATIBLE /*@PolyNull*/ [] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
-    // Cannot just use utilMDE.ArraysMDE.concat because the two arrays
+    // Cannot just use plume.ArraysMDE.concat because the two arrays
     // have different types.  This essentially inlines that method.
     int newLength = seq1.length + seq2.length;
     CAST_TYPE[] retval = new CAST_TYPE[newLength];
@@ -538,7 +538,7 @@ The test ensures that the method only appears once in the output.
         intermediate[length++] = seq1[i];
       }
     }
-    return utilMDE.ArraysMDE.subarray(intermediate, 0, length);
+    return plume.ArraysMDE.subarray(intermediate, 0, length);
   }
 
 #ifdef COMPATIBLE
@@ -552,7 +552,7 @@ The test ensures that the method only appears once in the output.
         intermediate[length++] = seq1[i];
       }
     }
-    return utilMDE.ArraysMDE.subarray(intermediate, 0, length);
+    return plume.ArraysMDE.subarray(intermediate, 0, length);
   }
 #endif
 
@@ -572,7 +572,7 @@ The test ensures that the method only appears once in the output.
         intermediate[length++] = seq1[i];
       }
     }
-    return utilMDE.ArraysMDE.subarray(intermediate, 0, length);
+    return plume.ArraysMDE.subarray(intermediate, 0, length);
   }
 
 #ifdef COMPATIBLE
@@ -586,7 +586,7 @@ The test ensures that the method only appears once in the output.
         intermediate[length++] = seq1[i];
       }
     }
-    return utilMDE.ArraysMDE.subarray(intermediate, 0, length);
+    return plume.ArraysMDE.subarray(intermediate, 0, length);
   }
 #endif
 
@@ -796,7 +796,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
    */
   /* pure */ public static boolean noDups(_TYPE /*@Nullable*/ [] seq) {
     if (seq == null) { return false; }
-    return utilMDE.ArraysMDE.noDuplicates(seq);
+    return plume.ArraysMDE.noDuplicates(seq);
   }
 
  /**
@@ -843,7 +843,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
     if (end > seq.length-1) { return new _TYPE[] { }; }
     if (sliceStart > sliceEnd) { return new _TYPE[] { }; }
     int length = sliceEnd - sliceStart + 1;
-    return utilMDE.ArraysMDE.subarray(seq, sliceStart, length);
+    return plume.ArraysMDE.subarray(seq, sliceStart, length);
   }
 
   /* pure */ public static _TYPE /*@PolyNull*/ [] slice(_TYPE /*@PolyNull*/ [] seq, long start, int end) {
@@ -1696,7 +1696,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
     //assert fieldStr != null && !"".equals(fieldStr);
     String[] fieldNames = fieldStr.split("\\.");
     _TYPE[] retval = COLLECT_TYPE (object, fieldNames, 0);
-    //System.err.println("%%% fieldArray returned: " + utilMDE.ArraysMDE.toString(retval));
+    //System.err.println("%%% fieldArray returned: " + plume.ArraysMDE.toString(retval));
     return retval;
   }
 

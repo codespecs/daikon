@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.*;
 import java.util.regex.*;
 import static daikon.PptTopLevel.PptType;
-import utilMDE.*;
+import plume.*;
 
 /**
  * AnnotateNullable reads a Daikon invariant file and determines which
@@ -55,7 +55,7 @@ public class AnnotateNullable {
 
   public static void main (String[] args) throws IOException {
 
-    Options options = new Options ("utilMDE.AnnotateNullable [options] "
+    Options options = new Options ("plume.AnnotateNullable [options] "
                                    + "<inv_file>", AnnotateNullable.class);
     String[] inv_files = options.parse_or_usage (args);
     assert inv_files.length == 1;

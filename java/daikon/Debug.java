@@ -7,7 +7,7 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import utilMDE.*;
+import plume.*;
 
 /**
  * Debug class used with the logger to create standardized output.
@@ -103,8 +103,8 @@ public class Debug {
      null
     // "java.lang.Math.max("
     // "java.lang.Math.min("
-    // "utilMDE.MathMDE.logicalXor("
-    // "utilMDE.MathMDE.gcd("
+    // "plume.MathMDE.logicalXor("
+    // "plume.MathMDE.gcd("
     ;
 
   /**

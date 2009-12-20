@@ -3,7 +3,7 @@ package daikon.split.misc;
 import daikon.*;
 import daikon.inv.DummyInvariant;
 import daikon.split.*;
-import utilMDE.ArraysMDE;
+import plume.ArraysMDE;
 
 /**
  * This splitter tests the condition "$caller one of { some set of integers }".

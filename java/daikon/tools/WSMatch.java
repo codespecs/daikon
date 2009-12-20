@@ -4,7 +4,7 @@ import daikon.chicory.DTraceReader;
 import daikon.chicory.DeclReader;
 import static daikon.chicory.DeclReader.*;
 
-import utilMDE.*;
+import plume.*;
 
 import java.util.*;
 import java.util.regex.*;

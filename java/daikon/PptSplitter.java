@@ -3,7 +3,7 @@ package daikon;
 import daikon.split.*;
 import daikon.inv.*;
 import daikon.suppress.*;
-import utilMDE.*;
+import plume.*;
 
 import java.util.*;
 import java.util.logging.Logger;

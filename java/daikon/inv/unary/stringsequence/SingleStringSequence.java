@@ -3,7 +3,7 @@ package daikon.inv.unary.stringsequence;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.unary.UnaryInvariant;
-import utilMDE.*;
+import plume.*;
 
 /**
  * Abstract base class used to evaluate single string sequences.

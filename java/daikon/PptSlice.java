@@ -8,7 +8,7 @@ import java.util.logging.Level;
 
 import java.util.*;
 
-import utilMDE.*;
+import plume.*;
 
 /**
  * A Slice is a view of some of the variables for a program point.  A

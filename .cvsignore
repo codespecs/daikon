@@ -12,6 +12,7 @@ dist
 mail
 notes
 papers
+plume-lib
 rt
 tests.speccov
 valgrind-new

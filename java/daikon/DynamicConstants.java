@@ -18,7 +18,7 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
-import utilMDE.*;
+import plume.*;
 
 /**
  * Class that implements dynamic constants optimization.  This

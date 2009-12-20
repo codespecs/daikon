@@ -2,8 +2,8 @@ package daikon.split;
 
 import daikon.*;
 
-import utilMDE.*;
-import utilMDE.FileCompiler;
+import plume.*;
+import plume.FileCompiler;
 import jtb.ParseException;
 import java.io.*;
 import java.util.*;

@@ -6,7 +6,7 @@ import java.lang.reflect.*;
 import java.io.*;
 import java.util.*;
 
-import utilMDE.*;
+import plume.*;
 
 /**
  * Replaces uses of generic type parameters with versions that do not

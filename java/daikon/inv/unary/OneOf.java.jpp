@@ -191,7 +191,7 @@ import daikon.inv.*;
   import daikon.inv.binary.twoSequence.SubSequence;
 #endif
 
-import utilMDE.*;
+import plume.*;
 
 import java.io.*;
 import java.util.logging.Logger;

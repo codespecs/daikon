@@ -2,7 +2,7 @@ package daikon.inv.unary.scalar;
 
 import daikon.*;
 import daikon.inv.*;
-import utilMDE.*;
+import plume.*;
 import java.util.*;
 
 /**

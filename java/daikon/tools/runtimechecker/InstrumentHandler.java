@@ -17,7 +17,7 @@ import jtb.JavaParser;
 import jtb.syntaxtree.*;
 import jtb.visitor.TreeDumper;
 import jtb.visitor.TreeFormatter;
-import utilMDE.UtilMDE;
+import plume.UtilMDE;
 import daikon.Daikon;
 import daikon.FileIO;
 import daikon.Global;

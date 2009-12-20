@@ -34,7 +34,7 @@ package daikon.inv.unary.sequence;
 import daikon.*;
 import daikon.inv.*;
 
-import utilMDE.*;
+import plume.*;
 
 /**
  * Represents sequences of PRIMITIVE values that contain a common subset.

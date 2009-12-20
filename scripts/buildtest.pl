@@ -6,7 +6,7 @@
 # not remove generated files (good for debugging).
 
 # This script ordinarily runs overnight; to invoke it by hand, execute the
-# followng commands as user daikonbuildtest:
+# following commands as user daikonbuildtest:
 #   cd $HOME/build
 #   /usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --nocleanup
 # Make sure that . is either not in your path or at the end.  Otherwise,

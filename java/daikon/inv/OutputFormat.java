@@ -1,6 +1,6 @@
 package daikon.inv;
 import daikon.*;
-import utilMDE.Pair;
+import plume.Pair;
 import java.util.*;
 
 /**

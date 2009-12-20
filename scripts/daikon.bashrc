@@ -43,6 +43,10 @@ if [ -z "$DAIKONBIN" ]; then
   fi
 fi
 
+if [ -z "$PLUMEBIN" ]; then
+  export PLUMEBIN=${DAIKONDIR}/plume-lib/bin
+fi
+
 # export DAIKONCLASS_SOURCES=1
 
 if [ $DAIKONCLASS_SOURCES ]; then
@@ -71,11 +75,11 @@ if [ "$JDKPATH" != "none" ]; then
 fi
 
 ## Add the Daikon binaries to your path
-export PATH=${DAIKONBIN}:${PATH}
+export PATH=${DAIKONBIN}:${PLUMEBIN}:${PATH}
 
 ## Indicate where to find Perl modules such as util_daikon.pm.
 if [ $PERLLIB ]; then
-  export PERLLIB=${DAIKONBIN}:${PERLLIB}
+  export PERLLIB=${DAIKONBIN}:${PLUMEBIN}:${PERLLIB}
 else
-  export PERLLIB=${DAIKONBIN}
+  export PERLLIB=${DAIKONBIN}:${PLUMEBIN}
 fi

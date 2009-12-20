@@ -2,7 +2,7 @@ package daikon.tools.compare;
 
 import java.util.*;
 import java.io.*;
-import utilMDE.UtilMDE;
+import plume.UtilMDE;
 import daikon.*;
 import daikon.config.Configuration;
 import daikon.inv.*;

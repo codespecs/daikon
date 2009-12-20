@@ -8,7 +8,7 @@ import jtb.visitor.*;
 
 import java.util.*;
 
-import utilMDE.*;
+import plume.*;
 
 
 /**
@@ -263,7 +263,7 @@ public class PptNameMatcher {
     assert lparen > 0;
     assert rparen > lparen;
     String ppt_args_string = pptFullMethodName.substring(lparen+1, rparen);
-    String[] ppt_args = utilMDE.UtilMDE.split(ppt_args_string, ", ");
+    String[] ppt_args = plume.UtilMDE.split(ppt_args_string, ", ");
     if ((ppt_args.length == 1)
         && (ppt_args[0].equals(""))) {
       ppt_args = new String[0];

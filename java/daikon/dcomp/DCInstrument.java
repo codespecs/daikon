@@ -2175,7 +2175,7 @@ class DCInstrument {
       || (jdk_instrumented // && classname.startsWith ("java")
           && (exclude_object && !classname.equals ("java.lang.Object")));
 
-    // Don't instrument daikon.util (our copy of utilMDE)
+    // Don't instrument daikon.util (our copy of plume)
     if (classname.startsWith ("daikon.util"))
       callee_instrumented = false;
 

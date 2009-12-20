@@ -3,7 +3,7 @@ package daikon.test.split;
 import daikon.split.*;
 import java.util.*;
 import java.io.*;
-import utilMDE.*;
+import plume.*;
 import daikon.*;
 
 /**
@@ -175,7 +175,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("import daikon.*;");
     ps.println("import java.util.*;");
     ps.println("import java.io.*;");
-    ps.println("import utilMDE.*;");
+    ps.println("import plume.*;");
     ps.println("import gnu.getopt.*;");
     ps.println();
     ps.println("/**");

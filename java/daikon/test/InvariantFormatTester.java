@@ -1,7 +1,7 @@
 package daikon.test;
 
 import daikon.*;
-import utilMDE.*;
+import plume.*;
 
 import daikon.config.Configuration;
 

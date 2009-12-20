@@ -15,7 +15,7 @@ import daikon.Quantify.QuantFlags;
 import daikon.Quantify.QuantifyReturn;
 import static daikon.FileIO.VarDefinition;
 
-import utilMDE.*;
+import plume.*;
 
 import java.util.*;
 import java.util.logging.Logger;

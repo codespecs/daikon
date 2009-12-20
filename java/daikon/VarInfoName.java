@@ -8,7 +8,7 @@ import daikon.derive.binary.*;  // see dbc_name_impl(VarInfo v)
 import daikon.derive.ternary.*; // see dbc_name_impl(VarInfo v)
 import daikon.chicory.DaikonVariableInfo;
 
-import utilMDE.*;
+import plume.*;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -1663,7 +1663,7 @@ public abstract /*@Interned*/ class VarInfoName
       String formatted = term.name_using(format, v);
       String collectType =  (v.type.baseIsPrimitive() ? v.type.base() : "Object");
       return "daikon.Quant.getElement_" + collectType + "(" + formatted + ", " + index + ")";
-//       // XXX temporary fix: sometimes long is passed as index (utilMDE.StopWatch).
+//       // XXX temporary fix: sometimes long is passed as index (plume.StopWatch).
 //       // I can't find where the VarInfo for "index" is found. Wherever that is,
 //       // we should check if its type is long, and do the casting only for that
 //       // case.

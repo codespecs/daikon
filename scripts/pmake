@@ -1,8 +1,8 @@
 #! /usr/bin/env php
 <?php
 //
-// Runs some make commands in parallel.  Could be more general purpose,
-// but right now is specific to running the regression tests in parallel
+// Runs some make commands in parallel.  Could be more general purpose, but
+// right now is specific to running the Daikon regression tests in parallel.
 //
 {
   $HOME = getenv ("HOME");
