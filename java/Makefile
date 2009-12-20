@@ -363,13 +363,17 @@ OLD_AUTO_GENERATED_FILES = \
 	daikon/inv/ternary/threeScalar/FunctionBinaryCore.java \
 	daikon/inv/Functions.java \
 	daikon/inv/FunctionsFloat.java \
-	daikon/inv/ternary/threeScalar/FunctionBinaryCoreFloat.java
+	daikon/inv/ternary/threeScalar/FunctionBinaryCoreFloat.java \
+	utilMDE/MathMDE.java \
+	lib/utilMDE.jar
 
 
 OLD_AUTO_GENERATED_CLASSES = $(subst .java,.class,${OLD_AUTO_GENERATED_FILES})
 
 
 # These files cannot be generated until everything else has been compiled.
+# (But, a problem is that it can get out of date and cause the compilation
+# to fail during pass 1.)
 AUTO_GENERATED_FILES_2 = \
 	daikon/test/split/SplitterFactoryTest.java \
 
@@ -665,7 +669,11 @@ tags-without-generated-files: clean-generated-files
 	@etags -l java ${TAG_FILES}
 	$(MAKE) compile
 
-../plume-lib/java/plume.jar:
+../plume-lib:
+	$(MAKE) -C .. plume-lib
+	(cd ../plume-lib; hg fetch)
+
+../plume-lib/java/plume.jar: ../plume-lib
 	$(MAKE) -C ../plume-lib/java plume.jar
 
 lib/plume.jar: ../plume-lib/java/plume.jar

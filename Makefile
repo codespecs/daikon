@@ -644,3 +644,7 @@ use-%: daikon-is-symlink
 daikon-is-symlink:
 	[ ! -e java/daikon ] || [ -L java/daikon ] # daikon must be symlink if it exists
 	[ ! -e tests ] || [ -L tests ] # tests must be symlink if it exists
+
+plume-lib:
+	rm -rf java/utilMDE
+	hg clone https://plume-lib.googlecode.com/hg/ plume-lib
