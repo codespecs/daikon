@@ -24,14 +24,14 @@ my $usage =
     "Usage: buildtest.pl [--quiet] [--message=text]\n"
   . "                    [--rsync_location=machine:/path/invariants]\n"
   . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_daikon_build]\n"
-  . "                    [--skip_kvasir] [--skip_cross_checker]\n";
+  . "                    [--skip_build_dyncomp] [--skip_kvasir] [--skip_cross_checker]\n";
 my $quiet = 0;
 my $nocleanup = 0;
 # These flags permit only part of the tests to be run; good for debugging.
 my $skip_daikon_build = 0;
 # When on, skip Daikon unit tests, Daikon system tests, and diff system tests
 my $skip_daikon = 0;
-# when on skip building the dyncomp version of rt.jar (dcomp_rt.jar)
+# When on, skip building the dyncomp version of rt.jar (dcomp_rt.jar)
 my $skip_build_dyncomp = 0;
 # When on, test Kvasir
 my $test_kvasir = 1;
@@ -53,6 +53,8 @@ while (scalar(@ARGV) > 0) {
     $skip_daikon = $skip_daikon_build = 1;
   } elsif ($arg eq "--skip_daikon") {
     $skip_daikon = 1;
+  } elsif ($arg eq "--skip_build_dyncomp") {
+    $skip_daikon = $skip_build_dyncomp = 1;
   } elsif ($arg eq "--test_kvasir") {
     $test_kvasir = 1;
   } elsif ($arg eq "--skip_kvasir") {
