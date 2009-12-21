@@ -414,7 +414,7 @@ xlint: chicory ${ALL_GENERATED_FILES}
 	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
-all_directly: ${AUTO_GENERATED_FILES} lib/plume.jar plume-import-check plume-copy
+all_directly: ${AUTO_GENERATED_FILES} ../plume-lib lib/plume.jar plume-import-check plume-copy
 	@echo ${JAVA_FILES} > java_files.txt
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
@@ -531,6 +531,9 @@ plume-copy : daikon/util/README
 
 PLUMEJAVA=../plume-lib/java
 PLUME=${PLUMEJAVA}/src/plume
+
+../plume-lib:
+	${MAKE} -C .. plume-lib
 
 daikon/util/README: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
   ${PLUMEJAVA}/*.manifest) ${PLUMEJAVA}/Makefile
