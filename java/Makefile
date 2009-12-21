@@ -120,7 +120,7 @@ export CLASSPATH
 # find command will get run multiple times.  USE AUTO_GENERATED_FILES instead.
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
 # " | perl -pi -e 's/^\.\///g'" to remove leading "./"
-JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name typequals -o -name 'ReturnBytecodes.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${PLUMEBIN}/sort-directory-order.pl)
+JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${PLUMEBIN}/sort-directory-order.pl)
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | sort)
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
@@ -415,6 +415,8 @@ xlint: chicory ${ALL_GENERATED_FILES}
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 all_directly: ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar plume-import-check plume-copy
+# # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
+# 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
 	@echo ${JAVA_FILES} > java_files.txt
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
