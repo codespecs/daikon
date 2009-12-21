@@ -650,7 +650,7 @@ daikon-is-symlink:
 	[ ! -e tests ] || [ -L tests ] # tests must be symlink if it exists
 
 plume-lib:
-	rm -rf java/utilMDE
+	rm -rf java/utilMDE java/lib/utilMDE.jar
 	hg clone https://plume-lib.googlecode.com/hg/ plume-lib
 
 .PHONY: plume-lib-update
