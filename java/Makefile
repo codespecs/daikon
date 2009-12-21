@@ -538,6 +538,13 @@ PLUME=${PLUMEJAVA}/src/plume
 plume-lib-update:
 	${MAKE} -C .. plume-lib-update
 
+../plume-lib/java/plume.jar: ../plume-lib
+	$(MAKE) -C ../plume-lib/java plume.jar
+
+lib/plume.jar: ../plume-lib/java/plume.jar
+	install -d lib
+	cp -p $< $@
+
 daikon/util/README: plume-lib-update $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
   ${PLUMEJAVA}/*.manifest) ${PLUMEJAVA}/Makefile
 	$(MAKE) -C ${PLUMEJAVA}
@@ -672,16 +679,6 @@ tags-without-generated-files: clean-generated-files
 	@echo etags '*.java ...'
 	@etags -l java ${TAG_FILES}
 	$(MAKE) compile
-
-../plume-lib:
-	$(MAKE) -C .. plume-lib plume-lib-update
-
-../plume-lib/java/plume.jar: ../plume-lib
-	$(MAKE) -C ../plume-lib/java plume.jar
-
-lib/plume.jar: ../plume-lib/java/plume.jar
-	install -d lib
-	cp -p $< $@
 
 ###
 ### Static checks of the code
