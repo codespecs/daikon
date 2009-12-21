@@ -414,7 +414,7 @@ xlint: chicory ${ALL_GENERATED_FILES}
 	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
-all_directly: ${AUTO_GENERATED_FILES} ../plume-lib lib/plume.jar plume-import-check plume-copy
+all_directly: ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar plume-import-check plume-copy
 	@echo ${JAVA_FILES} > java_files.txt
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
@@ -427,7 +427,7 @@ all_directly: ${AUTO_GENERATED_FILES} ../plume-lib lib/plume.jar plume-import-ch
 
 .PHONY : daikon
 daikon: compile_daikon junit
-compile_daikon : $(AUTO_GENERATED_FILES) lib/plume.jar
+compile_daikon : ../plume-lib $(AUTO_GENERATED_FILES) lib/plume.jar
 	@echo $(JAVAC_COMMAND) 'daikon/*.java ...'
 	@$(JAVAC_COMMAND) $(DAIKON_JAVA_FILES)
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -576,7 +576,7 @@ daikon/tools/WSMatch.class : $(wildcard $(WSMATCH_JAVA_FILES)) lib/plume.jar
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
-all_except_daikon: ${AUTO_GENERATED_FILES} lib/plume.jar
+all_except_daikon: ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -608,10 +608,10 @@ jikes:	all_via_jikes
 
 # These rules are undesirable, because Daikon.class (or Diff.class) might
 # be up to date even if other files aren't.
-daikon/Daikon.class: daikon/Daikon.java	${AUTO_GENERATED_FILES} lib/plume.jar
+daikon/Daikon.class: daikon/Daikon.java	../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar
 	${JAVAC_COMMAND} daikon/Daikon.java
 
-daikon/Diff.class: Diff.java ${AUTO_GENERATED_FILES} lib/plume.jar
+daikon/Diff.class: Diff.java ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar
 	${JAVAC_COMMAND} daikon/Diff.java
 
 daikon/Runtime.class: daikon/Runtime.java lib/plume.jar
@@ -705,7 +705,7 @@ findbugs-nocompile:
 findbugs-cat:
 	cat .findbugs-output
 
-../daikon.jar: ${AUTO_GENERATED_FILES} lib/plume.jar compile
+../daikon.jar: ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar compile
 	cd .. && $(MAKE) daikon.jar
 
 checkstyle: checkstyle-cs checkstyle-sun
@@ -713,7 +713,7 @@ checkstyle-cs: .checkstyle-cschecks-output
 checkstyle-sun: .checkstyle-sunchecks-output
 .PHONY: checkstyle checkstyle-cs checkstyle-sun
 
-.checkstyle-sunchecks-output: ${AUTO_GENERATED_FILES} lib/plume.jar
+.checkstyle-sunchecks-output: ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar
 	  ${JAVA} \
 	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
 	    -Dcheckstyle.suppressions.file=${inv}/java/.checkstyle-suppressions.xml \
@@ -722,7 +722,7 @@ checkstyle-sun: .checkstyle-sunchecks-output
 	    -c /g2/users/mernst/java/checkstyle-3.4/docs/sun_checks.xml \
 	    -r daikon | tee .checkstyle-sunchecks-output
 
-.checkstyle-cschecks-output: ${AUTO_GENERATED_FILES} lib/plume.jar
+.checkstyle-cschecks-output: ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar
 	  ${JAVA} \
 	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
 	    -Dcheckstyle.suppressions.file=.checkstyle-suppressions.xml \
@@ -967,7 +967,7 @@ javadoc: doc
 # daikon (except daikon.util) and plume.  Unfortunately, there is
 # no switch to javadoc that ignores a subpackage.  Don't include the
 # typequals package -- it crashes javadoc.
-doc: $(AUTO_GENERATED_FILES) doc-dkconfig
+doc: ../plume-lib $(AUTO_GENERATED_FILES) doc-dkconfig
 	mkdir -p doc
 	@rm -f java-files.txt
 	find . -name "*.java" -print | grep -v typequals > java-files.txt
@@ -977,7 +977,7 @@ doc: $(AUTO_GENERATED_FILES) doc-dkconfig
 	cd doc && preplace '^ *&#64;cindex.*' ''
 
 ## Make doc with private fields for people working on source code
-doc-private: $(AUTO_GENERATED_FILES)
+doc-private: ../plume-lib $(AUTO_GENERATED_FILES)
 	mkdir -p doc
 	javadoc -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
@@ -991,7 +991,7 @@ doc-private: $(AUTO_GENERATED_FILES)
 # 	find doc -name '*.html' | xargs -n 100 ${PLUMEBIN}/jdk-add-munged-anchor-names
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
-../doc/invariants-doc.texinfo: $(AUTO_GENERATED_FILES)
+../doc/invariants-doc.texinfo: ../plume-lib $(AUTO_GENERATED_FILES)
 	javadoc -J-Xmx1000m -J-ea -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
@@ -1006,7 +1006,7 @@ doc-invariant: ../doc/invariants-doc.texinfo
 #   "java.lang.ClassFormatError: Truncated class file".
 ## Experiment with not depending on "all". -MDE
 ## ../doc/config-options.texinfo: $(AUTO_GENERATED_FILES) all
-../doc/config-options.texinfo: $(AUTO_GENERATED_FILES)
+../doc/config-options.texinfo: ../plume-lib $(AUTO_GENERATED_FILES)
 	javadoc -J-Xmx1000m -J-ea -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
@@ -1021,7 +1021,7 @@ doc-dkconfig: ../doc/config-options.texinfo
 # 		--list $@ \
 # 		$(JDOC_FILES)
 
-../doc/category-options.texinfo: $(AUTO_GENERATED_FILES)
+../doc/category-options.texinfo: ../plume-lib $(AUTO_GENERATED_FILES)
 	javadoc -J-Xmx1000m -J-ea -doclet daikon.config.ParameterDocletCategory \
 		--texinfo $@ \
 		$(JDOC_FILES)
@@ -1091,7 +1091,7 @@ daikon/test/split/SplitterFactoryTest.class: daikon/test/split/SplitterFactoryTe
 
 # Create the auto-generated files with jpp
 .PHONY: jpp
-jpp: ${AUTO_GENERATED_FILES}
+jpp: ../plume-lib ${AUTO_GENERATED_FILES}
 
 # Use this rule if you do not have cpp or for some other reason do not want
 # to refresh the automatically generated .java files.  You should not do
