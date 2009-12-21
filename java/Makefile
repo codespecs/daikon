@@ -535,10 +535,11 @@ PLUME=${PLUMEJAVA}/src/plume
 ../plume-lib:
 	${MAKE} -C .. plume-lib
 
-daikon/util/README: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
+plume-lib-update:
+	${MAKE} -C .. plume-lib-update
+
+daikon/util/README: plume-lib-update $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
   ${PLUMEJAVA}/*.manifest) ${PLUMEJAVA}/Makefile
-# TODO: uncomment this
-#	(cd ${PLUMEJAVA}; hg fetch)
 	$(MAKE) -C ${PLUMEJAVA}
 	/bin/rm -rf daikon/util
 	install -d daikon/util/
@@ -673,8 +674,7 @@ tags-without-generated-files: clean-generated-files
 	$(MAKE) compile
 
 ../plume-lib:
-	$(MAKE) -C .. plume-lib
-	(cd ../plume-lib; hg fetch)
+	$(MAKE) -C .. plume-lib plume-lib-update
 
 ../plume-lib/java/plume.jar: ../plume-lib
 	$(MAKE) -C ../plume-lib/java plume.jar

@@ -108,6 +108,10 @@ TOOLSJAR := $(JDKDIR)/lib/tools.jar
 
 JAVAC ?= javac -target 5
 
+# A good alternative for Makefile.user is: hg fetch
+# When disconnected from network, change this to a no-op.
+HG_PULL_U ?= hg pull -u
+
 JUNIT_VERSION := junit3.8.1
 
 # for "chgrp, we need to use the number on debian, 14127 is invariants"
@@ -648,3 +652,7 @@ daikon-is-symlink:
 plume-lib:
 	rm -rf java/utilMDE
 	hg clone https://plume-lib.googlecode.com/hg/ plume-lib
+
+.PHONY: plume-lib-update
+plume-lib-update: plume-lib
+	(cd plume-lib; ${HG_PULL_U})
