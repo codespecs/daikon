@@ -222,7 +222,7 @@ sub daikon_checkout {
   if ($rsync_location) {
       $cmd = "rsync -e 'ssh -x' -rav $rsync_location . ";
   } else {
-      $cmd = "cvs -d $CVS_REP co invariants ";
+      $cmd = "cvs -d $CVS_REP co invariants; make -C invariants plume-lib ";
   }
   return buildtest_cmd ($cmd, "daikon_checkout.out");
 }
