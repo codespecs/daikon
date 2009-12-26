@@ -7,7 +7,7 @@
 
 USER=daikonuser
 MAILTO=daikon-developers@csail.mit.edu
-CRONIC=/afs/csail.mit.edu/u/d/daikonuser/research/invariants/plume-lib/cronic
+CRONIC=/afs/csail.mit.edu/u/d/daikonuser/research/invariants/plume-lib/bin/cronic
 AFS=/afs/csail.mit.edu/u/d/daikonuser/bin/afs-cron-wrapper
 
 01 1 * * * cd $HOME/research/invariants/scripts; $AFS cvs -Q up
