@@ -103,6 +103,7 @@ if ($success{"daikon_checkout"}) {
 }
 my $INV = $ENV{"INV"};
 print_log("INV = $INV\n");
+print_log("CLASSPATH = $CLASSPATHUXs\n");
 
 if (! $skip_daikon_build) {
   if ($success{"daikon_checkout"}) {
@@ -206,7 +207,7 @@ foreach my $subdir ("daikon", "diff", "kvasir") {
   }
 }
 
-if (! $nocleanup) {
+if ((@failed_steps == 0) && (! $nocleanup)) {
   `rm -rf invariants`;
 }
 
@@ -222,9 +223,16 @@ sub daikon_checkout {
   if ($rsync_location) {
       $cmd = "rsync -e 'ssh -x' -rav $rsync_location . ";
   } else {
-      $cmd = "cvs -d $CVS_REP co invariants; make -C invariants plume-lib ";
+      $cmd = "cvs -d $CVS_REP co invariants ";
   }
-  return buildtest_cmd ($cmd, "daikon_checkout.out");
+  my $cvs_status = buildtest_cmd ($cmd, "daikon_checkout.out");
+  $cmd = "make -C invariants plume-lib ";
+  my $plume_lib_status = buildtest_cmd ($cmd, "daikon_checkout.out");
+  if (($cvs_status == 0) && ($plume_lib_status == 0)) {
+    return 0;
+  } else {
+    return 1;
+  }
 }
 
 
