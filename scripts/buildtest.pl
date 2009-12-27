@@ -103,7 +103,7 @@ if ($success{"daikon_checkout"}) {
 }
 my $INV = $ENV{"INV"};
 print_log("INV = $INV\n");
-print_log("CLASSPATH = $CLASSPATHUXs\n");
+print_log("CLASSPATH = $CLASSPATH\n");
 
 if (! $skip_daikon_build) {
   if ($success{"daikon_checkout"}) {
