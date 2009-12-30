@@ -227,7 +227,7 @@ sub daikon_checkout {
       $cmd = "cvs -d $CVS_REP co invariants ";
   }
   my $cvs_status = buildtest_cmd ($cmd, "daikon_checkout.out");
-  $cmd = "make -C invariants plume-lib ";
+  $cmd = "make -C invariants plume-lib plume-lib/java/plume.jar ";
   my $plume_lib_status = buildtest_cmd ($cmd, "daikon_checkout.out");
   if (($cvs_status == 0) && ($plume_lib_status == 0)) {
     return 0;
