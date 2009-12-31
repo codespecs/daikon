@@ -1,5 +1,5 @@
 # Crontab for daikonbuildtest user
-# Runs on parsnip.
+# Runs on onion.
 
 # To initiate this crontab, run the crontab command on this file.
 # Henceforth, this file will nightly be updated and its commands
