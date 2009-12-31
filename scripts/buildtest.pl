@@ -18,30 +18,36 @@ use strict;
 use English;
 $WARNING = 1;
 use Cwd;
+use File::Copy;
 
 # Process the command-line args
 my $usage =
     "Usage: buildtest.pl [--quiet] [--message=text]\n"
   . "                    [--rsync_location=machine:/path/invariants]\n"
   . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_daikon_build]\n"
-  . "                    [--skip_build_dyncomp] [--skip_kvasir] [--skip_cross_checker]\n";
+  . "                    [--skip_build_dyncomp] [--reuse_dyncomp_jar=jarfile]\n"
+  . "                    [--skip_kvasir] [--skip_cross_checker]\n";
 my $quiet = 0;
 my $nocleanup = 0;
-# These flags permit only part of the tests to be run; good for debugging.
+# When set, print an additional message in the header of failing runs
+my $message;
+## These flags permit only part of the tests to be run; good for debugging.
+# When on, skip compiling daikon.  Implies skip_daikon.
 my $skip_daikon_build = 0;
 # When on, skip Daikon unit tests, Daikon system tests, and diff system tests
 my $skip_daikon = 0;
-# When on, skip building the dyncomp version of rt.jar (dcomp_rt.jar)
+# When on, skip building the dyncomp version of rt.jar (dcomp_rt.jar).
+# When on, also implies skip_daikon!
 my $skip_build_dyncomp = 0;
+# When on, reuse an existing dyncomp_rt.jar file.  (Building it is very slow.)
+my $reuse_dyncomp_jar;
 # When on, test Kvasir
 my $test_kvasir = 1;
 # When on run daikon simple as a cross checker -- note: takes 3+ hours
 my $test_cross_checker = 1;
 # When set, get the sources by rsync from the given location, rather
-# than by CVS
+# than by CVS.
 my $rsync_location;
-# When set, print an additional message in the header of failing runs
-my $message;
 
 while (scalar(@ARGV) > 0) {
   my $arg = shift @ARGV;
@@ -65,6 +71,9 @@ while (scalar(@ARGV) > 0) {
     $rsync_location = $1;
   } elsif ($arg =~ /^--message=(.*)$/s) {
     $message = $1;
+  } elsif ($arg =~ /^--reuse_dyncomp_jar=(.*)$/s) {
+    $reuse_dyncomp_jar = $1;
+    $skip_build_dyncomp = 1;
   } else {
     die "Unrecognized argument $arg\n$usage\n";
   }
@@ -121,6 +130,11 @@ if (! $skip_build_dyncomp) {
     $success{"build_dyncomp_jar"} = build_dyncomp_jar();
   }
 }
+
+if ($reuse_dyncomp_jar) {
+  copy($reuse_dyncomp_jar, "$inv/java/dcomp_rt.jar") or die "File cannot be copied:\n  $reuse_dyncomp_jar\n  $inv/java/dcomp_rt.jar";
+}
+
 
 if (! $skip_daikon) {
   if ($success{"daikon_compile"}
