@@ -46,7 +46,7 @@ export PATH=/usr/local/bin:${PATH}:/afs/csail/group/pag/projects/invariants/bina
 export LD_LIBRARY_PATH=/usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
 export DAIKON_LIBS=`/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
-export CLASSPATH=.:${CLASSPATH}:${DAIKON_LIBS}:${INV}/plume-lib/plume.jar
+export CLASSPATH=.:${CLASSPATH}:${DAIKON_LIBS}:${INV}/plume-lib/java/plume.jar
 unset DAIKON_LIBS
 
 export LACKWIT_HOME=${INV}/front-end/c/lackwit
