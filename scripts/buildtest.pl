@@ -530,6 +530,9 @@ sub get_env {
     return 0;
   }
   foreach my $line (split '\n', $newenv) {
+    if (1) { # FOR DEBUGGING
+      print_log("env line: $line\n");
+    }
     my ($var, $val) = split '=', $line;
     $newenv{$var} = $val;
   }
