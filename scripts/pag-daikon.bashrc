@@ -51,10 +51,20 @@ unset DAIKON_LIBS
 
 export LACKWIT_HOME=${INV}/front-end/c/lackwit
 
+DEBUG=1
+
+if [ ${DEBUG} ]; then
+  echo debugging: CLASSPATH = ${CLASSPATH}
+fi
+
 # Remove duplicates so path and classpath don't get too long
 if [ -x ${PLUMEBIN}/path-remove.pl ]; then
   export CLASSPATH=`echo $CLASSPATH | ${PLUMEBIN}/path-remove.pl`
   export PATH=`echo $PATH | ${PLUMEBIN}/path-remove.pl`
+fi
+
+if [ ${DEBUG} ]; then
+  echo debugging: CLASSPATH = ${CLASSPATH}
 fi
 
 ## Someone needs to rewrite this as a shell function, since bash aliases
