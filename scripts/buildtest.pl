@@ -132,7 +132,7 @@ if (! $skip_build_dyncomp) {
 }
 
 if ($reuse_dyncomp_jar) {
-  copy($reuse_dyncomp_jar, "$inv/java/dcomp_rt.jar") or die "File cannot be copied:\n  $reuse_dyncomp_jar\n  $inv/java/dcomp_rt.jar";
+  copy($reuse_dyncomp_jar, "$INV/java/dcomp_rt.jar") or die "File cannot be copied:\n  $reuse_dyncomp_jar\n  $INV/java/dcomp_rt.jar";
 }
 
 
