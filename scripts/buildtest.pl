@@ -248,8 +248,8 @@ sub daikon_checkout {
   }
   print_log("Making plume.jar...");
   # my $JAVA_HOME = $ENV{'JAVA_HOME'};
-  # $cmd = "make JAVAC=$JAVA_HOME/bin/javac -C invariants plume-lib plume-lib/java/plume.jar ";
-  $cmd = "make JAVAC=/afs/csail.mit.edu/system/\@sys/java/latest/bin/javac -C invariants plume-lib plume-lib/java/plume.jar ";
+  # $cmd = "make JAVA_HOME=/afs/csail.mit.edu/system/\@sys/java/latest JAVAC=$JAVA_HOME/bin/javac -C invariants plume-lib plume-lib/java/plume.jar ";
+  $cmd = "make JAVA_HOME=/afs/csail.mit.edu/system/\@sys/java/latest JAVAC=/afs/csail.mit.edu/system/\@sys/java/latest/bin/javac -C invariants plume-lib plume-lib/java/plume.jar ";
   my $plume_lib_success = buildtest_cmd ($cmd, "daikon_checkout.out");
   return $plume_lib_success;
 }
