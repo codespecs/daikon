@@ -114,6 +114,8 @@ my $INV = $ENV{"INV"};
 print_log("INV = $INV\n");
 my $CLASSPATH = $ENV{"CLASSPATH"};
 print_log("CLASSPATH = $CLASSPATH\n");
+my $PATH = $ENV{"PATH"};
+print_log("PATH = $PATH\n");
 
 if (! $skip_daikon_build) {
   if ($success{"daikon_checkout"}) {
