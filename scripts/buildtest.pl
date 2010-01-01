@@ -533,6 +533,11 @@ sub get_env {
   my ($file) = @_;
   my %newenv = ();
   my $newenv = `source $file; env`;
+  if (1) { # FOR DEBUGGING
+    print_log("NEWENV starts here =====\n");
+    print_log("$newenv\n");
+    print_log("NEWENV ends here =====\n");
+  }
   if ($CHILD_ERROR) {
     print("FAILED: source $file; env\n");
     print_log("FAILED: source $file; env\n");
