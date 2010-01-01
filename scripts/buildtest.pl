@@ -533,6 +533,9 @@ sub get_env {
     print_log("FAILED: source $file; env\n");
     return 0;
   }
+  if (1) { # FOR DEBUGGING
+    print_log("printing env lines\n");
+  }
   foreach my $line (split '\n', $newenv) {
     if (1) { # FOR DEBUGGING
       print_log("env line: $line\n");
