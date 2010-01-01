@@ -106,10 +106,13 @@ print_log("$message\n") if defined $message;
 
 $success{"daikon_checkout"} = daikon_checkout();
 
-# Inherit the environment of the group-wide init file
-if ($success{"daikon_checkout"}) {
-  %ENV = get_env("$DAIKONPARENT/invariants/scripts/pag-daikon.bashrc");
+if (! $success{"daikon_checkout"}) {
+  goto PRINT_FAILURES;
 }
+
+# Inherit the environment of the group-wide init file
+%ENV = get_env("$DAIKONPARENT/invariants/scripts/pag-daikon.bashrc");
+
 foreach my $evar (keys %ENV) {
   print_log("ENV{$evar} = $ENV{$evar}\n");
 }
@@ -168,6 +171,8 @@ if ($test_kvasir and $success{"daikon_checkout"}) {
 if ($test_cross_checker and $success{"daikon_system_test"}) {
     $success{"daikon_cross_checker"} = daikon_cross_checker();
 }
+
+PRINT_FAILURES:
 
 # Print the output files for any steps that failed.  Output steps are
 # sorted alphabetically, not in order of operation.  This is OK, since
