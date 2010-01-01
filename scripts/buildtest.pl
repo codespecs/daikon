@@ -94,7 +94,7 @@ $ENV{"JAVAC"} = "javac -g";
 # my $J2 = "-j2";
 my $J2 = "";
 
-# The success of each step in the build/test process
+# The success of each step in the build/test process.  Non-zero means success.
 my %success = ();
 
 mkdir($DAIKONPARENT, 0777) or die "can't make directory $DAIKONPARENT: $!\n";
@@ -240,10 +240,11 @@ sub daikon_checkout {
   } else {
       $cmd = "cvs -d $CVS_REP co invariants ";
   }
-  my $cvs_status = buildtest_cmd ($cmd, "daikon_checkout.out");
+  my $cvs_success = buildtest_cmd ($cmd, "daikon_checkout.out");
+  print_log("Making plume.jar...");
   $cmd = "make -C invariants plume-lib plume-lib/java/plume.jar ";
-  my $plume_lib_status = buildtest_cmd ($cmd, "daikon_checkout.out");
-  if (($cvs_status == 0) && ($plume_lib_status == 0)) {
+  my $plume_lib_success = buildtest_cmd ($cmd, "daikon_checkout.out");
+  if (($cvs_success == 0) || ($plume_lib_success == 0)) {
     return 0;
   } else {
     return 1;
@@ -493,12 +494,12 @@ sub print_log {
 }
 
 # Executes the command in the first argument and APPENDS its results into
-# the file in the second argument.  By default, prints 'FAILED'
-# to the log and returns 0 if the command fails and  prints 'OK' to the
-# log and returns 1 if it succeeds.  Optional 3rd and 4th arguments can specify
-# the strings to printed on success and failure respectively.
-# Note that if the cmd includes a pipe that the result is taken from
-# the status of the last item in the pipe.
+# the file in the second argument.  By default:
+#  * If the command succeeds, prints 'OK' to the log and returns 1.
+#  * If the command fails, prints 'FAILED' to the log and returns 0.
+# (Note that the return value is the inverse of the Unix/C exit status.)
+# Optional 3rd and 4th arguments can override the strings 'OK' and 'FAILED'.
+# If the command includes a pipe, the result depends only on the last item.
 sub buildtest_cmd {
     my ($cmd, $file, $pass, $fail) = @_;
     if (!defined ($pass)) {
