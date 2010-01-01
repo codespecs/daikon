@@ -243,14 +243,13 @@ sub daikon_checkout {
       $cmd = "cvs -d $CVS_REP co invariants ";
   }
   my $cvs_success = buildtest_cmd ($cmd, "daikon_checkout.out");
+  if (! $cvs_success) {
+    return $cvs_success;
+  }
   print_log("Making plume.jar...");
   $cmd = "make -C invariants plume-lib plume-lib/java/plume.jar ";
   my $plume_lib_success = buildtest_cmd ($cmd, "daikon_checkout.out");
-  if (($cvs_success == 0) || ($plume_lib_success == 0)) {
-    return 0;
-  } else {
-    return 1;
-  }
+  return $plume_lib_success;
 }
 
 
