@@ -247,7 +247,9 @@ sub daikon_checkout {
     return $cvs_success;
   }
   print_log("Making plume.jar...");
-  $cmd = "make PATH=${PATH}:${JAVA_HOME}/bin -C invariants plume-lib plume-lib/java/plume.jar ";
+  # my $JAVA_HOME = $ENV{'JAVA_HOME'};
+  # $cmd = "make JAVAC=$JAVA_HOME/bin/javac -C invariants plume-lib plume-lib/java/plume.jar ";
+  $cmd = "make JAVAC=/afs/csail.mit.edu/system/@sys/java/latest/bin/javac -C invariants plume-lib plume-lib/java/plume.jar ";
   my $plume_lib_success = buildtest_cmd ($cmd, "daikon_checkout.out");
   return $plume_lib_success;
 }
