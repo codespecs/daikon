@@ -1597,10 +1597,9 @@ non-zero size, the tests fail.  You do not generally need to do
 process) the next time you run the tests.
 
 As when you install or compile Daikon, when you run the tests
-environment variables @env{DAIKONDIR} (or @env{INV}, whose effect is
-the same) and @env{JDKDIR} should be set.  Additionally, you should set
-environment variable @env{JDKDIR} (or, equivalently, @env{JDK5DIR}) to the directory containing the Java
-5 JDK@.
+environment variable @env{DAIKONDIR} (or @env{INV}, whose effect is
+the same) should be set.  Additionally, environment variable
+@env{JDKDIR} should be the directory containing the Java JDK@.
 
 You should generally run the regression tests before checking it a
 change (especially any non-trivial change).  If any of the regression
