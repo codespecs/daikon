@@ -35,8 +35,6 @@ export pag=${PAG}
 
 ## Set this directory to the directory containing the JDK.
 export JDKDIR=${JDKDIR:-/afs/csail/group/pag/software/pkg/jdk}
-export JDK4DIR=${JDK4DIR:-/afs/csail/group/pag/software/pkg/j2sdk-1.4.2}
-export JDK5DIR=${JDK5DIR:-/afs/csail/group/pag/software/pkg/j2sdk-1.5}
 
 export PATH=/usr/local/bin:${PATH}:/afs/csail/group/pag/projects/invariants/binaries:$DAIKONDIR/front-end/c
 
@@ -51,27 +49,11 @@ unset DAIKON_LIBS
 
 export LACKWIT_HOME=${INV}/front-end/c/lackwit
 
-DEBUG=1
-
-if [ ${DEBUG} ]; then
-  echo debugging: CLASSPATH = ${CLASSPATH}
-fi
-
 # Remove duplicates so path and classpath don't get too long
 if [ -x ${PLUMEBIN}/path-remove.pl ]; then
   export CLASSPATH=`echo $CLASSPATH | ${PLUMEBIN}/path-remove.pl`
   export PATH=`echo $PATH | ${PLUMEBIN}/path-remove.pl`
 fi
-
-if [ ${DEBUG} ]; then
-  echo debugging: CLASSPATH = ${CLASSPATH}
-fi
-
-## Someone needs to rewrite this as a shell function, since bash aliases
-## can't handle arguments.
-## # Like "cvs update", but filters out output that is unlikely to be of interest.
-## # Alternately, run CVS under emacs via "M-x cvs-update".
-## alias	cvsupdate	'cvs -q update -d \!* |& egrep -e "^C |update aborted|non-existent repository|Permission denied|cannot open|^cvs update: [^U]"'
 
 # Enable use of group bibliographies, and the "bibfind" command.
 # Private comments in bib files are not to be shared outside the group.

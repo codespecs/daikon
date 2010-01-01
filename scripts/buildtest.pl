@@ -113,16 +113,12 @@ if (! $success{"daikon_checkout"}) {
 # Inherit the environment of the group-wide init file
 %ENV = get_env("$DAIKONPARENT/invariants/scripts/pag-daikon.bashrc");
 
-foreach my $evar (keys %ENV) {
-  print_log("ENV{$evar} = $ENV{$evar}\n");
-}
-
 my $INV = $ENV{"INV"};
 print_log("INV = $INV\n");
-my $CLASSPATH = $ENV{"CLASSPATH"};
-print_log("CLASSPATH = $CLASSPATH\n");
-my $PATH = $ENV{"PATH"};
-print_log("PATH = $PATH\n");
+# my $CLASSPATH = $ENV{"CLASSPATH"};
+# print_log("CLASSPATH = $CLASSPATH\n");
+# my $PATH = $ENV{"PATH"};
+# print_log("PATH = $PATH\n");
 
 if (! $skip_daikon_build) {
   if ($success{"daikon_checkout"}) {
@@ -256,8 +252,6 @@ sub daikon_checkout {
     return $cvs_success;
   }
   print_log("Making plume.jar...");
-  # my $JAVA_HOME = $ENV{'JAVA_HOME'};
-  # $cmd = "make JAVA_HOME=/afs/csail.mit.edu/system/\@sys/java/latest JAVAC=$JAVA_HOME/bin/javac -C invariants plume-lib plume-lib/java/plume.jar ";
   $cmd = "make JAVA_HOME=/afs/csail.mit.edu/system/\@sys/java/latest JAVA=/afs/csail.mit.edu/system/\@sys/java/latest/bin/java JAVAC=/afs/csail.mit.edu/system/\@sys/java/latest/bin/javac JAVADOC=/afs/csail.mit.edu/system/\@sys/java/latest/bin/javadoc -C invariants plume-lib plume-lib/java/plume.jar ";
   my $plume_lib_success = buildtest_cmd ($cmd, "daikon_checkout.out");
   return $plume_lib_success;
@@ -538,23 +532,12 @@ sub get_env {
   my ($file) = @_;
   my %newenv = ();
   my $newenv = `source $file; env`;
-  if (1) { # FOR DEBUGGING
-    print_log("NEWENV starts here =====\n");
-    print_log("$newenv\n");
-    print_log("NEWENV ends here =====\n");
-  }
   if ($CHILD_ERROR) {
     print("FAILED: source $file; env\n");
     print_log("FAILED: source $file; env\n");
     return 0;
   }
-  if (1) { # FOR DEBUGGING
-    print_log("printing env lines\n");
-  }
   foreach my $line (split '\n', $newenv) {
-    if (1) { # FOR DEBUGGING
-      print_log("env line: $line\n");
-    }
     my ($var, $val) = split '=', $line;
     $newenv{$var} = $val;
   }

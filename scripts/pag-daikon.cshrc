@@ -35,8 +35,6 @@ setenv pag ${PAG}
 
 ## Set this directory to the directory containing the JDK.
 if (! $?JDKDIR) setenv JDKDIR /afs/csail/group/pag/software/pkg/jdk
-if (! $?JDK4DIR) setenv JDK4DIR /afs/csail/group/pag/software/pkg/j2sdk-1.4.2
-if (! $?JDK5DIR) setenv JDK5DIR /afs/csail/group/pag/software/pkg/j2sdk-1.5
 
 setenv PATH /usr/local/bin:${PATH}:/afs/csail/group/pag/projects/invariants/binaries:$DAIKONDIR/front-end/c
 
@@ -49,7 +47,7 @@ setenv LD_LIBRARY_PATH /usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 setenv CLASSPATH `echo $CLASSPATH | path-remove.pl`
 
 setenv DAIKON_LIBS `/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
-setenv CLASSPATH .:${CLASSPATH}:${DAIKON_LIBS}
+setenv CLASSPATH .:${CLASSPATH}:${DAIKON_LIBS}:${INV}/plume-lib/java/plume.jar
 unsetenv DAIKON_LIBS
 
 setenv LACKWIT_HOME ${INV}/front-end/c/lackwit
@@ -59,10 +57,6 @@ if (-x ${PLUMEBIN}/path-remove.pl) then
   if ($?CLASSPATH) setenv CLASSPATH `echo $CLASSPATH | ${PLUMEBIN}/path-remove.pl`
   setenv PATH `echo $PATH | ${PLUMEBIN}/path-remove.pl`
 endif
-
-# Like "cvs update", but filters out output that is unlikely to be of interest.
-# Alternately, run CVS under emacs via "M-x cvs-update".
-alias	cvsupdate	'cvs -q update -d \!* |& egrep -e "^C |update aborted|non-existent repository|Permission denied|cannot open|^cvs update: [^U]"'
 
 # Enable use of group bibliographies, and the "bibfind" command.
 # Private comments in bib files are not to be shared outside the group.
