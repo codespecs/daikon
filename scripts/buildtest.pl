@@ -110,6 +110,10 @@ $success{"daikon_checkout"} = daikon_checkout();
 if ($success{"daikon_checkout"}) {
   %ENV = get_env("$DAIKONPARENT/invariants/scripts/pag-daikon.bashrc");
 }
+foreach my $evar (keys %ENV) {
+  print_log("ENV{$evar} = $ENV{$evar}\n");
+}
+
 my $INV = $ENV{"INV"};
 print_log("INV = $INV\n");
 my $CLASSPATH = $ENV{"CLASSPATH"};
@@ -249,7 +253,7 @@ sub daikon_checkout {
   print_log("Making plume.jar...");
   # my $JAVA_HOME = $ENV{'JAVA_HOME'};
   # $cmd = "make JAVA_HOME=/afs/csail.mit.edu/system/\@sys/java/latest JAVAC=$JAVA_HOME/bin/javac -C invariants plume-lib plume-lib/java/plume.jar ";
-  $cmd = "make JAVA_HOME=/afs/csail.mit.edu/system/\@sys/java/latest JAVAC=/afs/csail.mit.edu/system/\@sys/java/latest/bin/javac -C invariants plume-lib plume-lib/java/plume.jar ";
+  $cmd = "make JAVA_HOME=/afs/csail.mit.edu/system/\@sys/java/latest JAVA=/afs/csail.mit.edu/system/\@sys/java/latest/bin/java JAVAC=/afs/csail.mit.edu/system/\@sys/java/latest/bin/javac -C invariants plume-lib plume-lib/java/plume.jar ";
   my $plume_lib_success = buildtest_cmd ($cmd, "daikon_checkout.out");
   return $plume_lib_success;
 }
@@ -530,6 +534,7 @@ sub get_env {
   my %newenv = ();
   my $newenv = `source $file; env`;
   if ($CHILD_ERROR) {
+    print("FAILED: source $file; env\n");
     print_log("FAILED: source $file; env\n");
     return 0;
   }
