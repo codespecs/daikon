@@ -23,12 +23,15 @@ public class Implication
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
-  // orig_left and orig_right are null iff the implication is a
-  // GuardingImplication).
+  // orig_left and orig_right are the original invariants, in the original
+  // context (the parent of the conditional ppt where predicate and
+  // consequent appear).  predicate and consequent might be permuted from
+  // the original.  orig_left and orig_right are used in computeConfidence,
+  // and orig_right is used in isObvious*.
   /** The original predicate invariant from its original conditional ppt. */
-  private /*@Nullable*/ Invariant orig_left;
+  private Invariant orig_left;
   /** The original consequent invariant from its original conditional ppt. */
-  private /*@Nullable*/ Invariant orig_right;
+  private Invariant orig_right;
 
   public Invariant predicate() { return left; }
   public Invariant consequent() { return right; }
@@ -39,14 +42,15 @@ public class Implication
     super(ppt, predicate, consequent);
     assert(predicate != null);
     assert(consequent != null);
+    assert(orig_predicate != null);
+    assert(orig_consequent != null);
     this.iff = iff;
     this.orig_left = orig_predicate;
     this.orig_right = orig_consequent;
   }
 
   /**
-   * Creates a new Implication Invariant from the predicate,
-   * consequent and the boolean iff and adds it to the PptTopLevel.
+   * Creates a new Implication Invariant and adds it to the PptTopLevel.
    *
    * @return null if predicate and the consequent are the same, or if
    * the PptTopLevel already contains this Implication.

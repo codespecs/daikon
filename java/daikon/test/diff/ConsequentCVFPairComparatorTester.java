@@ -35,9 +35,9 @@ public class ConsequentCVFPairComparatorTester extends TestCase {
     Invariant B = NonZero.get_proto().instantiate(sliceb);
     Invariant C = NonZero.get_proto().instantiate(slicec);
     Invariant D = NonZero.get_proto().instantiate(sliced);
-    Invariant A_B = Implication.makeImplication(P,A,B,false,null,null);
-    Invariant A_C = Implication.makeImplication(P,A,C,false,null,null);
-    Invariant B_C = Implication.makeImplication(P,B,C,false,null,null);
+    Invariant A_B = Implication.makeImplication(P,A,B,false,A,B);
+    Invariant A_C = Implication.makeImplication(P,A,C,false,A,C);
+    Invariant B_C = Implication.makeImplication(P,B,C,false,B,C);
 
     Comparator<Invariant> c = new ConsequentCVFPairComparator();
 

@@ -61,24 +61,24 @@ public class InvariantTester extends TestCase {
     inv4 = IntNonEqual.get_proto().instantiate(slice);
     assert c.compare(inv1, inv4) > 0;
 
-    inv5 = Implication.makeImplication(ppt, inv1, inv2, false, null, null);
-    inv6 = Implication.makeImplication(ppt, inv1, inv3, false, null, null);
+    inv5 = Implication.makeImplication(ppt, inv1, inv2, false, inv1, inv2);
+    inv6 = Implication.makeImplication(ppt, inv1, inv3, false, inv1, inv3);
     assert c.compare(inv5, inv6) < 0;
 
-    inv5 = Implication.makeImplication(ppt, inv2, inv1, false, null, null);
-    inv6 = Implication.makeImplication(ppt, inv2, inv3, false, null, null);
+    inv5 = Implication.makeImplication(ppt, inv2, inv1, false, inv2, inv1);
+    inv6 = Implication.makeImplication(ppt, inv2, inv3, false, inv2, inv3);
     assert c.compare(inv5, inv6) > 0;
 
-    inv5 = Implication.makeImplication(ppt, inv3, inv2, false, null, null);
-    inv6 = Implication.makeImplication(ppt, inv3, inv1, false, null, null);
+    inv5 = Implication.makeImplication(ppt, inv3, inv2, false, inv3, inv2);
+    inv6 = Implication.makeImplication(ppt, inv3, inv1, false, inv3, inv1);
     assert c.compare(inv5, inv6) < 0;
 
-    inv5 = Implication.makeImplication(ppt, inv1, inv4, false, null, null);
-    inv6 = Implication.makeImplication(ppt, inv3, inv4, false, null, null);
+    inv5 = Implication.makeImplication(ppt, inv1, inv4, false, inv1, inv4);
+    inv6 = Implication.makeImplication(ppt, inv3, inv4, false, inv3, inv4);
     assert c.compare(inv5, inv6) > 0;
 
-    inv5 = Implication.makeImplication(ppt, inv2, inv4, false, null, null);
-    inv6 = Implication.makeImplication(ppt, inv4, inv1, false, null, null);
+    inv5 = Implication.makeImplication(ppt, inv2, inv4, false, inv2, inv4);
+    inv6 = Implication.makeImplication(ppt, inv4, inv1, false, inv4, inv1);
     assert c.compare(inv5, inv6) < 0;
 
     VarInfo[] vars2 = { Common.makeIntVarInfo("x"), Common.makeIntVarInfo("z") };
