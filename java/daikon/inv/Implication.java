@@ -23,9 +23,8 @@ public class Implication
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030822L;
 
-  // These can be null (for instance, for GuardingImplication).  What
-  // exactly is the representation invariant?  Is GuardingImplication the
-  // only special case?
+  // orig_left and orig_right are null iff the implication is a
+  // GuardingImplication).
   /** The original predicate invariant from its original conditional ppt. */
   private /*@Nullable*/ Invariant orig_left;
   /** The original consequent invariant from its original conditional ppt. */

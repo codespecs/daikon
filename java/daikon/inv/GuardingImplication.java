@@ -22,6 +22,10 @@ public class GuardingImplication
 
   // The below is not true any longer.  PptSlice.guardInvariants no longer
   // exists, and this method is called only in createGuardedInvariant().
+
+  // A GuardingImplication is never installed in a PptMap -- it's only
+  // printed by using format_using.
+
   // // Do not call this!  The only location these should be created is in
   // // PptSlice.guardInvariants().  (I need to find a way to enforce this.)
   public static GuardingImplication makeGuardingImplication(PptTopLevel ppt,

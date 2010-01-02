@@ -1667,6 +1667,7 @@ public abstract class Invariant
   }
 
 
+  // This is called only from finally_print_the_invariants().
   // Nothing is ever done with the result except print it and discard it.
   /**
    * This procedure guards one invariant and returns the resulting guarded
@@ -1674,8 +1675,7 @@ public abstract class Invariant
    * modifying the original invariant.
    * Returns null if the invariant does not need to be guarded.
    **/
-  public /*@Nullable*/ /*@NonPrototype*/ Invariant
-    createGuardedInvariant(boolean install) {
+  public /*@Nullable*/ /*@NonPrototype*/ Invariant createGuardedInvariant(boolean install) {
     if (Daikon.dkconfig_guardNulls == "never") { // interned
       return null;
     }
