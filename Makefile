@@ -657,7 +657,7 @@ plume-lib:
 plume-lib-update: plume-lib
 	(cd plume-lib; ${HG_PULL_U})
 
-# It's real, but the commands should always be re-run even if it exists.
+# The file is real, but the commands should always be re-run even if it exists.
 .PHONY: plume-lib/java/plume.jar
 plume-lib/java/plume.jar: plume-lib-update
 	make -C plume-lib/java plume.jar
