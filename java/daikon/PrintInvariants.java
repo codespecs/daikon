@@ -928,42 +928,23 @@ public final class PrintInvariants {
     String num_values_samples = "\t\t(" +
       nplural(inv_num_samps, "sample") + ")";
 
-    String inv_rep;
-    // All this should turn into simply a call to format_using.
-    if (Daikon.output_format == OutputFormat.DAIKON) {
-      inv_rep = inv.format_using(Daikon.output_format);
-    } else if (Daikon.output_format == OutputFormat.ESCJAVA) {
-      if (inv.isValidEscExpression()) {
-        inv_rep = inv.format_using(Daikon.output_format);
-      } else {
-        if (inv instanceof Equality) {
-          inv_rep = "warning: method 'equality'.format(OutputFormat:ESC/Java) needs to be implemented: " + inv.format();
-        } else {
-          inv_rep = "warning: method " + inv.getClass().getName() + ".format(OutputFormat:ESC/Java) needs to be implemented: " + inv.format();
-        }
-      }
-    } else if (Daikon.output_format == OutputFormat.SIMPLIFY) {
-      inv_rep = inv.format_using(Daikon.output_format);
+    String inv_rep = inv.format_using(Daikon.output_format);
 
-    } else if (Daikon.output_format == OutputFormat.JAVA
-               || Daikon.output_format == OutputFormat.JML
-               || Daikon.output_format == OutputFormat.DBCJAVA) {
-
-      inv_rep = inv.format_using(Daikon.output_format);
-
-      // TODO: Remove once we revise OutputFormat
-      if (Daikon.output_format == OutputFormat.JAVA) {
-        inv_rep = inv.format_using (OutputFormat.JAVA);
-        // if there is a $pre string in the format, then it contains
-        // the orig variable and should not be printed.
-        if (inv_rep.indexOf ("$pre") != -1) {
-          return;
-        }
-      }
-
-    } else {
-      throw new IllegalStateException("Unknown output mode");
+    if ((Daikon.output_format == OutputFormat.ESCJAVA)
+               && ! (inv.isValidEscExpression())) {
+      String class_name = ((inv instanceof Equality) ?
+                           "'equality'" : inv.getClass().getName());
+      inv_rep = "warning: method " + class_name + ".format(OutputFormat:ESC/Java) needs to be implemented: " + inv.format();
     }
+    // TODO: Remove once we revise OutputFormat
+    if (Daikon.output_format == OutputFormat.JAVA) {
+      // if there is a $pre string in the format, then it contains
+      // the orig variable and should not be printed.
+      if (inv_rep.indexOf ("$pre") != -1) {
+        return;
+      }
+    }
+
     if (Daikon.output_num_samples) {
       inv_rep += num_values_samples;
     }
