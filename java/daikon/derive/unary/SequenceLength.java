@@ -104,6 +104,7 @@ public final class SequenceLength
   }
 
   /** Returns the ESC name **/
+  @SuppressWarnings("nullness")
   public String esc_name (String index) {
     // This should be able to use Quantify.Length to calculate the name,
     // but it can't because the old version formatted these slightly

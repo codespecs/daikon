@@ -195,9 +195,9 @@ public final class PrintInvariants {
   public static boolean wrap_xml = false;
 
   // Fields that will be used if the --disc_reason switch is used
-  private static String discClass = null;
-  private static String discVars = null;
-  private static String discPpt = null;
+  private static /*@LazyNonNull*/ String discClass = null;
+  private static /*@LazyNonNull*/ String discVars = null;
+  private static /*@LazyNonNull*/ String discPpt = null;
 
   // Avoid problems if daikon.Runtime is loaded at analysis (rather than
   // test-run) time.  This might have to change when JTrace is used.
@@ -1267,7 +1267,7 @@ public final class PrintInvariants {
   }
 
   /** Prints all of the invariants in the specified slice **/
-  public static void print_all_invs (PptSlice slice, String indent) {
+  public static void print_all_invs (/*@Nullable*/ PptSlice slice, String indent) {
 
     if (slice == null)
       return;

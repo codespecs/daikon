@@ -168,7 +168,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public EnumSet<LangFlags> lang_flags = EnumSet.noneOf (LangFlags.class);
 
   public VarDefinition vardef;
-  // under what circumstances is this null?
+  // For documentation, see get_enclosing_var().
+  // Under what circumstances is this null?
   public /*@Nullable*/ VarInfo enclosing_var;
   public int arr_dims = 0;
   public /*@Nullable*/ List<VarInfo> function_args = null;

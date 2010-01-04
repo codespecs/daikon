@@ -148,10 +148,10 @@ public class NONZERO
   }
 
   public String format_using(OutputFormat format) /*@Prototype*/ {
-    // var() fails for prototype invariants
-    if (ppt == null) {
-      return "Prototype " + NONZEROSTRING + " invariant (ppt == null)";
-    }
+    // // var() fails for prototype invariants
+    // if (ppt == null) {
+    //   return "Prototype " + NONZEROSTRING + " invariant (ppt == null)";
+    // }
 
     String name = var().name_using(format);
 

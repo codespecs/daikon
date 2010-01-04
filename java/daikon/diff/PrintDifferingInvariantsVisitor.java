@@ -34,7 +34,7 @@ public class PrintDifferingInvariantsVisitor extends PrintAllVisitor {
    * Returns true if the pair of invariants should be printed,
    * depending on their type, relationship, and printability.
    **/
-  protected boolean shouldPrint(Invariant inv1, Invariant inv2) {
+  protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int type = DetailedStatisticsVisitor.determineType(inv1, inv2);
     if (type == DetailedStatisticsVisitor.TYPE_NULLARY_UNINTERESTING ||
         type == DetailedStatisticsVisitor.TYPE_UNARY_UNINTERESTING) {

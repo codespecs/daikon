@@ -87,7 +87,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Adds the difference between the two invariants to the appropriate
    * entry in the frequencies table.
    **/
-  private void addFrequency(Invariant inv1, Invariant inv2) {
+  private void addFrequency(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     if (continuousJustification) {
       addFrequencyContinuous(inv1, inv2);
     } else {
@@ -100,7 +100,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Treats justification as a binary value.  The table entry is
    * incremented by 1 regardless of the difference in justifications.
    **/
-  private void addFrequencyBinary(Invariant inv1, Invariant inv2) {
+  private void addFrequencyBinary(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int type = determineType(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
     freq[type][relationship]++;
@@ -112,7 +112,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * justified but the other is unjustified, the table entry is
    * incremented by the difference in justifications.
    **/
-  private void addFrequencyContinuous(Invariant inv1, Invariant inv2) {
+  private void addFrequencyContinuous(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int type = determineType(inv1, inv2);
     int relationship = determineRelationship(inv1, inv2);
 
@@ -150,11 +150,12 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * or not.  A pair is interesting if at least one invariant is
    * interesting.
    **/
-  public static int determineType(Invariant inv1, Invariant inv2) {
+  public static int determineType(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int type;
 
     // Set inv to a non-null invariant
-    Invariant inv = (inv1 != null) ? inv1 : inv2;
+    @SuppressWarnings("nullness") // at least one argument is non-null
+    @NonNull Invariant inv = (inv1 != null) ? inv1 : inv2;
 
     boolean interesting = ((inv1 != null && inv1.isInteresting()) ||
                            (inv2 != null && inv2.isInteresting()));
@@ -197,10 +198,11 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * twelve possible relationships, described at the beginning of this
    * file.
    **/
-  public static int determineRelationship(Invariant inv1, Invariant inv2) {
+  public static int determineRelationship(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     int relationship;
 
     if (inv1 == null) {
+      assert inv2 != null : "@SuppressWarnings(nullness): at least one argument is non-null";
       relationship = inv2.justified() ? REL_MISS_JUST2 : REL_MISS_UNJUST2;
     } else if (inv2 == null) {
       relationship = inv1.justified() ? REL_MISS_JUST1 : REL_MISS_UNJUST1;
@@ -304,7 +306,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
    * Returns true if the pair of invariants should be added to the
    * frequency table, based on their printability.
    **/
-  private static boolean shouldAddFrequency(Invariant inv1, Invariant inv2) {
+  private static boolean shouldAddFrequency(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     return (inv1 != null && inv1.isWorthPrinting()) ||
       (inv2 != null && inv2.isWorthPrinting());
   }

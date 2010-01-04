@@ -92,7 +92,7 @@ public abstract class SequenceSubsequence
   }
 
   /** returns the JML name for the slice **/
-  // @SuppressWarnings("nullness")
+  @SuppressWarnings("nullness")
   public String jml_name (String index) {
 
     // The slice routine needs the actual length as opposed to the

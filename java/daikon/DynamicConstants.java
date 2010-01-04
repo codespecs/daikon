@@ -364,6 +364,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /** Returns whether the specified variable is currently a constant. **/
+  /*@AssertNonNullIfTrue("this.constants")*/
   public boolean is_constant (VarInfo vi) {
 
     return getConstant(vi).constant;

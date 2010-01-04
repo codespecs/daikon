@@ -73,6 +73,9 @@ public class PptMap
     return Collections.unmodifiableCollection(nameToPpt.values());
   }
 
+  /**
+   * @return an unmodifiable version of the keySet
+   */
   public Collection<String> nameStringSet() {
     return Collections.unmodifiableSet(nameToPpt.keySet());
   }

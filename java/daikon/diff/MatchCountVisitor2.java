@@ -150,7 +150,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
   }
 
   /** Returns true if the pair of invariants should be printed **/
-  protected boolean shouldPrint(Invariant inv1, Invariant inv2) {
+  protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
 
     if (5 == 5) {
       if (inv1 == null || inv2 == null) {

@@ -49,16 +49,19 @@ public final class StringLength extends UnaryDerivation
   }
 
   /** Returns the ESC name **/
+  @SuppressWarnings("nullness")
   public String esc_name (String index) {
     return String.format ("%s.length()", base.enclosing_var.esc_name());
   }
 
   /** Returns the JML name **/
+  @SuppressWarnings("nullness")
   public String jml_name (String index) {
     return String.format ("%s.length()", base.enclosing_var.jml_name());
   }
 
   /** Returns the simplify name **/
+  @SuppressWarnings("nullness")
   public String simplify_name () {
     return String.format ("(stringLength %s)", base.enclosing_var.simplify_name());
   }

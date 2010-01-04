@@ -808,11 +808,11 @@ public final class Diff {
 
     String targ = targetName.substring (0, targetName.lastIndexOf(";condition"));
 
-    for ( Iterator<String> i = manip.nameStringSet().iterator(); i.hasNext(); ) {
-      String somePptName = i.next();
+    for ( String somePptName : manip.nameStringSet() ) {
       // A conditional Ppt always contains the normal Ppt
       if (targ.equals (somePptName)) {
-        PptTopLevel repl = manip.get (somePptName);
+        @SuppressWarnings("nullness") // iterating over keySet
+        /*@NonNull*/ PptTopLevel repl = manip.get (somePptName);
         return repl.getInvariants();
       }
     }
@@ -829,11 +829,11 @@ public final class Diff {
 
     //    String targ = targetName.substring (0, targetName.lastIndexOf(";condition"));
 
-    for ( Iterator<String> i = manip.nameStringSet().iterator(); i.hasNext(); ) {
-      String somePptName = i.next();
+    for ( String somePptName : manip.nameStringSet() ) {
       // A conditional Ppt always contains the normal Ppt
       if (targetName.equals (somePptName)) {
-        PptTopLevel repl = manip.get (somePptName);
+        @SuppressWarnings("nullness") // iterating over keySet
+        /*@NonNull*/ PptTopLevel repl = manip.get (somePptName);
         return UtilMDE.sortList(repl.getInvariants(), PptTopLevel.icfp);
       }
     }

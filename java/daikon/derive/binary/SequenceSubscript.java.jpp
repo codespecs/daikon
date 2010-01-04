@@ -61,6 +61,13 @@ public final class SEQUENCESCALARSUBSCRIPT
   public VarInfo seqvar() { return base1; }
   public VarInfo sclvar() { return base2; }
 
+  public VarInfo seq_enclosing_var() {
+    VarInfo result = seqvar().enclosing_var;
+    // When using old dtrace file format, this can fail.
+    assert result != null : "@SuppressWarnings(nullness): foo[] has enclosing_var foo";
+    return result;
+  }
+
   // Indicates whether the subscript is an index of valid data or a limit
   // (one element beyond the data of interest).
   // Value is -1 or 0.
@@ -121,7 +128,7 @@ public final class SEQUENCESCALARSUBSCRIPT
   }
 
   /** Returns the ESC name for sequence subscript **/
-  // @SuppressWarnings("nullness")
+  @SuppressWarnings("nullness")
   public String esc_name (String index) {
     if (seqvar().isPrestate())
       return String.format ("\\old(%s[%s])",
@@ -134,7 +141,7 @@ public final class SEQUENCESCALARSUBSCRIPT
   }
 
   /** Returns the JML name for sequence subscript **/
-  // @SuppressWarnings("nullness")
+  @SuppressWarnings("nullness")
   public String jml_name (String index) {
     String get_element = GET_ELEMENT;
     if (seqvar().file_rep_type.baseIsHashcode())
@@ -152,7 +159,7 @@ public final class SEQUENCESCALARSUBSCRIPT
   }
 
   /** Return the simplify name for sequence subscript **/
-  // @SuppressWarnings("nullness")
+  @SuppressWarnings("nullness")
   public String simplify_name() {
     String subscript = sclvar().simplify_name();
     if (index_shift < 0)

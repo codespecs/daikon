@@ -15,11 +15,11 @@ public class InvNode extends Node</*@Nullable*/ Invariant,Void> {
     assert !(inv1 == null && inv2 == null) : "Both invariants may not be null";
   }
 
-  public Invariant getInv1() {
+  public /*@Nullable*/ Invariant getInv1() {
     return getUserLeft();
   }
 
-  public Invariant getInv2() {
+  public /*@Nullable*/ Invariant getInv2() {
     return getUserRight();
   }
 

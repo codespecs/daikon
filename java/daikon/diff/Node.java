@@ -10,7 +10,7 @@ import plume.Pair;
  * The type parameter CHILD is the type of the children (and is ignored if
  * there are no children).
  **/
-public abstract class Node<CONTENT,CHILD> {
+public abstract class Node<CONTENT extends /*@Nullable*/ Object,CHILD> {
 
   private List<CHILD> children = new ArrayList<CHILD>();
   // Nonsensical for RootNode
