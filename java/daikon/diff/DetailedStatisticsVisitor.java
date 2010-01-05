@@ -155,7 +155,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
 
     // Set inv to a non-null invariant
     @SuppressWarnings("nullness") // at least one argument is non-null
-    @NonNull Invariant inv = (inv1 != null) ? inv1 : inv2;
+    /*@NonNull*/ Invariant inv = (inv1 != null) ? inv1 : inv2;
 
     boolean interesting = ((inv1 != null && inv1.isInteresting()) ||
                            (inv2 != null && inv2.isInteresting()));
