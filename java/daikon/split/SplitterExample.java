@@ -56,7 +56,7 @@ public final class SplitterExample
     }
   }
 
-  public DummyInvariant getDummyInvariant() {
+  public /*@Nullable*/ DummyInvariant getDummyInvariant() {
     return dummyInv;
   }
 }

@@ -773,7 +773,8 @@ public final class Diff {
       }
     }
 
-    Iterator<Pair<Invariant,Invariant>> opi = new OrderedPairIterator<Invariant>(invs1.iterator(), invs2.iterator(),
+    Iterator<Pair<Invariant,Invariant>> opi
+      = new OrderedPairIterator<Invariant>(invs1.iterator(), invs2.iterator(),
                                            invPairComparator);
     while (opi.hasNext()) {
       Pair<Invariant,Invariant> invariants = opi.next();

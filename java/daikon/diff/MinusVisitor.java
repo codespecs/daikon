@@ -34,7 +34,7 @@ public class MinusVisitor extends DepthFirstVisitor {
    * If the first invariant is non-null and justified, and the second
    * one is null or unjustified, the first invariant should be added.
    **/
-  /*@AssertNonNullIfTrue({"inv1", "inv2"})*/
+  /*@AssertNonNullIfTrue({"#0", "#1"})*/
   private static boolean shouldAdd(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     return ((inv1 != null) && (inv2 == null));
   }

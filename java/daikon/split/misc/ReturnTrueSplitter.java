@@ -13,7 +13,7 @@ public final class ReturnTrueSplitter
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  VarInfo return_varinfo;
+  /*@Nullable*/ VarInfo return_varinfo;
 
   public ReturnTrueSplitter() {
   }

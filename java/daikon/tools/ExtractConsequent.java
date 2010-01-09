@@ -275,9 +275,9 @@ public class ExtractConsequent {
           }
         }
 
-        Invariant consequent = maybe.consequent();
-        Invariant predicate = maybe.predicate();
-        Invariant inv, cluster_inv;
+        /*@NonNull*/ Invariant consequent = maybe.consequent();
+        /*@NonNull*/ Invariant predicate = maybe.predicate();
+        /*@NonNull*/ Invariant inv, cluster_inv;
         boolean cons_uses_cluster = false, pred_uses_cluster = false;
         // extract the consequent (predicate) if the predicate
         // (consequent) uses the variable "cluster".  Ignore if they
@@ -286,9 +286,6 @@ public class ExtractConsequent {
           cons_uses_cluster = true;
         if (predicate.usesVarDerived("cluster"))
           pred_uses_cluster = true;
-
-        assert consequent != null; // XXX flow
-        assert predicate != null; // XXX flow
 
         if (!(pred_uses_cluster ^ cons_uses_cluster))
           continue;
@@ -299,8 +296,6 @@ public class ExtractConsequent {
           inv = predicate;
           cluster_inv = consequent;
         }
-
-        assert cluster_inv != null; // XXX flow
 
         if (!inv.isInteresting()) {
           continue;

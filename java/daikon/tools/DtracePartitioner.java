@@ -11,7 +11,7 @@ import plume.*;
  */
 
 public class DtracePartitioner
-  implements Partitioner<String,String>, Iterator<String>
+  implements Partitioner<String,/*@Nullable*/ String>, Iterator<String>
 {
 
   @SuppressWarnings("nullness") // line.separator property always exists
@@ -67,7 +67,7 @@ public class DtracePartitioner
   private String grabNextInvocation () throws IOException {
     StringBuffer sb = new StringBuffer();
     while (br.ready()) {
-      String line = br.readLine();
+      /*@NonNull*/ String line = br.readLine();
       assert line != null;      // because br.ready() = true
       line = line.trim();
       if (line.equals ("")) {

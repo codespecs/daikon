@@ -28,7 +28,7 @@ public final class CallerContextSplitter
    * (callsite) information.
    **/
   public final String CALLER_INDICATOR_NAME_STRING = "daikon_callsite_id";
-  private final VarInfo caller_varinfo;
+  private final /*@Nullable*/ VarInfo caller_varinfo;
   private final long[] ids;
   private final String condition;
 
@@ -71,7 +71,7 @@ public final class CallerContextSplitter
       + ", " + attach + ">";
   }
 
-  public DummyInvariant getDummyInvariant() {
+  public /*@Nullable*/ DummyInvariant getDummyInvariant() {
     return null;
   }
 }

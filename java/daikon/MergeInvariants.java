@@ -413,7 +413,6 @@ public final class MergeInvariants {
     // Nothing to do if there are no splitters here
     if (!ppt.has_splitters())
       return;
-    assert ppt.splitters != null : "@SuppressWarnings(nullness): AssertNonNullIfTrue should handle this case";
 
     // Both ppt and child should have the same number of splitters
     if (ppt.splitters.size() != child.splitters.size()) {

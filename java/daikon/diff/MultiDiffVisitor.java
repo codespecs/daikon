@@ -125,10 +125,12 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         // Now to populate those ArrayLists
         for (String str : bigList) {
             StringTokenizer st = new StringTokenizer (str, "$");
-            String key = st.nextToken();
+            String key = st.nextToken(); // a Ppt name
             String data = st.nextToken();
             try {
-                lastMap.get(key).add (data);
+                @SuppressWarnings("nullness") // key is in map
+                /*@NonNull*/ ArrayList<String> formatAndFrequencyList = lastMap.get(key);
+                formatAndFrequencyList.add (data);
             } catch (Exception e) {System.out.println (key + " error in MultiDiffVisitor");}
         }
 
@@ -186,7 +188,9 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             String key = st.nextToken();
             String data = st.nextToken();
             try {
-                lastMap.get(key).add (data);
+                @SuppressWarnings("nullness") // key is in map
+                /*@NonNull*/ ArrayList<String> formatAndFrequencyList = lastMap.get(key);
+                formatAndFrequencyList.add (data);
             } catch (Exception e) { out.println (key + " error in MultiDiffVisitor");}
         }
 
