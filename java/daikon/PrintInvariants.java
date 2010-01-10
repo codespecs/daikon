@@ -163,7 +163,7 @@ public final class PrintInvariants {
 
   /**
    * Switch for whether to print discarded Invariants or not, default is false.
-   * Activated by --disc_reason switch.
+   * True iff --disc_reason switch was supplied on the command line.
    **/
   public static boolean print_discarded_invariants = false;
 
@@ -194,7 +194,10 @@ public final class PrintInvariants {
    */
   public static boolean wrap_xml = false;
 
-  // Fields that will be used if the --disc_reason switch is used
+  // Fields that will be used if the --disc_reason switch is used (in other
+  // words, if print_discarded_invariants == true).  But they can be null
+  // even in that case, which means to output a discard-reason for every
+  // invariant.
   private static /*@LazyNonNull*/ String discClass = null;
   private static /*@LazyNonNull*/ String discVars = null;
   private static /*@LazyNonNull*/ String discPpt = null;
@@ -497,6 +500,7 @@ public final class PrintInvariants {
             di = new DiscardInfo(nextInv, DiscardCode.findCode(propFilter),
                                  propFilter.getDescription());
           }
+          assert di != null : "@SuppressWarnings(nullness)";
           DiscReasonMap.put(nextInv, di);
         }
       }
