@@ -209,28 +209,29 @@ public class CLASSNAME
     } else if (intersect==null) {
       intersect = a;
       return InvariantStatus.NO_CHANGE;
-    } else {
-      PRIMITIVE[] tmp = new PRIMITIVE[intersect.length];
-      int size = 0;
-      for (int i=0; i<a.length; i++) {
-        // if (a[i] in intersect) && !(a[i] in tmp), add a[i] to tmp
-        int ii = INDEXOF (intersect, a[i]);
-        if ((ii != -1) &&
-          (INDEXOF (ArraysMDE.subarray(tmp,0,size), a[i]) == -1)) {
-          //System.out.println ("adding " + intersect[ii] + " at " + size);
-
-          // Carefully add the existing intersect value and not a[i].  These
-          // are not necessarily the same when fuzzy floating point
-          // comparisons are active.
-          tmp[size++] = intersect[ii];
-        }
-      }
-      if (size==0) {
-        return InvariantStatus.FALSIFIED;
-      }
-
-      intersect = ArraysMDE.subarray(tmp, 0, size);
     }
+
+    @SuppressWarnings("nullness") // checker framework bug:  http://code.google.com/p/checker-framework/issues/detail?id=51
+    PRIMITIVE[] tmp = new PRIMITIVE[intersect.length];
+    int size = 0;
+    for (int i=0; i<a.length; i++) {
+      // if (a[i] in intersect) && !(a[i] in tmp), add a[i] to tmp
+      int ii = INDEXOF (intersect, a[i]);
+      if ((ii != -1) &&
+        (INDEXOF (ArraysMDE.subarray(tmp,0,size), a[i]) == -1)) {
+        //System.out.println ("adding " + intersect[ii] + " at " + size);
+
+        // Carefully add the existing intersect value and not a[i].  These
+        // are not necessarily the same when fuzzy floating point
+        // comparisons are active.
+        tmp[size++] = intersect[ii];
+      }
+    }
+    if (size==0) {
+      return InvariantStatus.FALSIFIED;
+    }
+
+    intersect = ArraysMDE.subarray(tmp, 0, size);
 
     intersect = Intern.intern(intersect);
     elts++;

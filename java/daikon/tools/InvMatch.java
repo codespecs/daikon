@@ -207,7 +207,7 @@ public class InvMatch {
     return (true);
   }
 
-  public static List<InvTranslate> best_translation
+  public static /*@Nullable*/ List<InvTranslate> best_translation
             (List<List<InvTranslate>> valid_translations) {
 
     // Determine the best translation and print it out.

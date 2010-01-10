@@ -109,8 +109,9 @@ public class SplitterFactoryTestUpdater {
   private static void moveFiles() {
     tempDir = new File(SplitterFactory.getTempDir());
     String[] fileNames = tempDir.list();
-    assert fileNames != null
-      : "tmpdir = " + tempDir + " which is not a directory";
+    if (fileNames == null) {
+      throw new Error("tmpdir = " + tempDir + " which is not a directory");
+    }
     for (int i = 0; i < fileNames.length; i++) {
       if (fileNames[i].endsWith(".java")) {
         String fileName = fileNames[i];

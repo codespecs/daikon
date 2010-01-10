@@ -191,7 +191,8 @@ public class PptCountVisitor extends PrintAllVisitor {
   }
 
   /** Returns true if the pair of invariants should be printed **/
-  protected static boolean shouldPrint(Invariant inv1, Invariant inv2) {
+  /*@AssertNonNullIfTrue({"#0", "#1"})*/
+  protected static boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
 
     if (5 == 5) {
       if (inv1 == null || inv2 == null) {
@@ -226,7 +227,7 @@ public class PptCountVisitor extends PrintAllVisitor {
 
   /** returns true iff any token of inv.format_java() contains
    *  a number other than -1, 0, 1 or is null. */
-  private static boolean filterOut (Invariant inv) {
+  private static boolean filterOut (/*@Nullable*/ Invariant inv) {
 
     if (inv == null) return true;
     String str = inv.format_using(OutputFormat.JAVA);

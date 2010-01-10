@@ -258,12 +258,12 @@ public class DtraceDiff {
           if (state1.status == FileIO.ParseStatus.SAMPLE) {
             PptTopLevel ppt1 = state1.ppt;
             PptTopLevel ppt2 = state2.ppt;
-            assert ppt1 != null;
-            assert ppt2 != null;
+            assert ppt1 != null : "@SuppressWarnings(nullness)";
+            assert ppt2 != null : "@SuppressWarnings(nullness)";
             ValueTuple vt1 = state1.vt;
             ValueTuple vt2 = state2.vt;
-            assert vt1 != null;
-            assert vt2 != null;
+            assert vt1 != null : "@SuppressWarnings(nullness)";
+            assert vt2 != null : "@SuppressWarnings(nullness)";
             VarInfo[] vis1 = ppt1.var_infos;
             VarInfo[] vis2 = ppt2.var_infos;
 

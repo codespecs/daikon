@@ -47,8 +47,9 @@ public class StackOffsets {
           // if (entry_esp.size() > 0)
             // System.out.printf ("Entry stack for %s is size %d\n",
             //                    func_ppt.name(), entry_esp.size());
-          Integer entry = int_val (vi, vt);
-          assert entry != null :  "function entry esp should be be nonsense";
+          @SuppressWarnings("nullness") // application invariant
+          /*@NonNull*/ Integer entry = int_val (vi, vt);
+          assert entry != null : "function entry esp should not be nonsense";
           entry_esp.push (entry);
           // System.out.printf ("Enter function %s\n", ppt.name);
         } else {
@@ -168,7 +169,8 @@ public class StackOffsets {
           : prev.name() + "  not adjacent to " + bb.name();
         if (bb.ppt_successors != null) {
           for (String succ : bb.ppt_successors) {
-            PptTopLevel ppt_succ = all_ppts.get (succ);
+            @SuppressWarnings("nullness") // application invariant: key is in map
+            /*@NonNull*/ PptTopLevel ppt_succ = all_ppts.get (succ);
             System.out.printf ("%04X ", ppt_succ.bb_offset() & 0xFFFF);
             assert ppt_succ.function_id.equals (ppt.function_id);
           }

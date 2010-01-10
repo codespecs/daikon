@@ -255,6 +255,7 @@ public class PptNameMatcher {
 
   public List<String> extractPptArgs(PptName ppt_name) {
 
+    @SuppressWarnings("nullness") // application invariant
     /*@NonNull*/ String pptFullMethodName = ppt_name.getSignature();
 
     if (debug_getMatches) System.out.println("pptFullMethodName = " + pptFullMethodName);

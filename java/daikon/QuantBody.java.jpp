@@ -21,6 +21,8 @@ The correct way to build the system is to run 'make'.
 #undef _TYPE_WRAPPER_NAME
 #undef ARRAY_GET_NAME
 #undef BAD_VALUE
+#undef BAD_VALUE_QUALIFIER
+#define BAD_VALUE_QUALIFIER
 #if defined(BOOLEAN)
   #define _TYPE boolean
   #define _TYPE_WRAPPER_NAME Boolean
@@ -56,9 +58,13 @@ The correct way to build the system is to run 'make'.
 #elif defined(OBJECT)
   #define _TYPE Object
   #define BAD_VALUE null
+  #undef BAD_VALUE_QUALIFIER
+  #define BAD_VALUE_QUALIFIER /*@Nullable*/
 #elif defined(STRING)
   #define _TYPE String
   #define BAD_VALUE null
+  #undef BAD_VALUE_QUALIFIER
+  #define BAD_VALUE_QUALIFIER /*@Nullable*/
 #endif
 
 #if defined(OBJECT)
@@ -134,7 +140,7 @@ The correct way to build the system is to run 'make'.
    * If the argument is null or not an array or collection, returns a
    * default value (BAD_VALUE).
    **/
-  /* pure */ public static _TYPE GET_ELEMENT (Object o, long i) {
+  /* pure */ public static BAD_VALUE_QUALIFIER _TYPE GET_ELEMENT (Object o, long i) {
     if (o == null) { return BAD_VALUE; } // return default value
     java.lang.Class<?> c = o.getClass();
     if (c.isArray()) {
@@ -146,7 +152,7 @@ The correct way to build the system is to run 'make'.
     }
   }
 
-  /* pure */ public static _TYPE GET_ELEMENT (_TYPE[] arr, long i) {
+  /* pure */ public static BAD_VALUE_QUALIFIER _TYPE GET_ELEMENT (_TYPE[] arr, long i) {
     if (arr == null) { return BAD_VALUE; } // return default value
     return arr[(int)i];
   }
@@ -215,7 +221,7 @@ The correct way to build the system is to run 'make'.
    * array. If an element of the array is null, its slot in the returned
    * array is null.
    */
-  /* pure */ public static String[] typeArray(_TYPE[] seq) {
+  /* pure */ public static /*@PolyNull*/ String /*@Nullable*/ [] typeArray(/*@PolyNull*/ _TYPE /*@Nullable*/ [] seq) {
     if (seq == null) { return null; }
     String[] retval = new String[seq.length];
     for (int i = 0 ; i < seq.length ; i++) {
@@ -591,7 +597,7 @@ The test ensures that the method only appears once in the output.
 #endif
 
   /**
-   * Retuns true iff seq1 and seq2 are equal when considered as sets.
+   * Returns true iff seq1 and seq2 are equal when considered as sets.
    */
   /* pure */ public static boolean setEqual(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
     if (seq1 == null) { return false; }
@@ -701,8 +707,10 @@ The "defined(INT)" test ensures that it only appears once in the output.
     // This implementation simply calls either subsetOf(long[], long[]) or
     // subsetOf(double[], double[]).
 
-    Class<?> eltsType = elts.getClass().getComponentType();
-    Class<?> arrType = arr.getClass().getComponentType();
+    @SuppressWarnings("nullness") // because isArray() returned true
+    /*@NonNull*/ Class<?> eltsType = elts.getClass().getComponentType();
+    @SuppressWarnings("nullness") // because isArray() returned true
+    /*@NonNull*/ Class<?> arrType = arr.getClass().getComponentType();
     if (isIntegralType(eltsType) && isIntegralType(arrType)) {
       // Both arrays are int/long
       // Cast both arrays to long and call subsetOf(long[],long[])
@@ -1807,7 +1815,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
   // Returns the results of dereferencing the fields specified in
   // fields[fieldsStartIdx..] for 'object'.
   // Returns a default value if any field access causes an exception.
-  /* pure */ public static _TYPE COLLECT_TYPE_FIELD (Object object, String fieldStr) {
+  /* pure */ public static BAD_VALUE_QUALIFIER _TYPE COLLECT_TYPE_FIELD (Object object, String fieldStr) {
 
     if (object == null) { return BAD_VALUE; } // return default value
     if (fieldStr == null) { return BAD_VALUE; } // return default value
@@ -1828,6 +1836,10 @@ The "defined(INT)" test ensures that it only appears once in the output.
           : fieldObj.getClass().getDeclaredField(fieldName);
         field.setAccessible(true);
         fieldObj = field.get(fieldObj);
+
+        if (fieldObj == null) {
+          return BAD_VALUE; // return default value
+        }
 
       } catch (Exception e) {
         return BAD_VALUE; // return default value

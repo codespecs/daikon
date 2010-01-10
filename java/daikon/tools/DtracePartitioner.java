@@ -7,11 +7,10 @@ import plume.*;
 /** This class partitions Daikon trace files so that invocations of
  *  the same program point are grouped together for use with random
  *  selection.
- *
  */
 
 public class DtracePartitioner
-  implements Partitioner<String,/*@Nullable*/ String>, Iterator<String>
+  implements Partitioner<String,String>, Iterator<String>
 {
 
   @SuppressWarnings("nullness") // line.separator property always exists
@@ -80,9 +79,11 @@ public class DtracePartitioner
 
 
   /** Returns the program point name given by the input invocation. */
-  public /*@Nullable*/ String assignToBucket (String invocation) {
-    if (invocation.indexOf (lineSep) == -1)
-      return null;
+  public String assignToBucket (String invocation) {
+    if (invocation.indexOf (lineSep) == -1) {
+      // was: return null;
+      throw new Error("No lineSep: " + invocation);
+    }
     return invocation.substring (0, invocation.indexOf (lineSep));
   }
 

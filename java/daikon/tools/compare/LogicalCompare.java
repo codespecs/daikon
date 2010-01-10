@@ -38,6 +38,7 @@ public class LogicalCompare {
   private static boolean opt_show_sets      = false;
   private static boolean opt_minimize_classes = false;
 
+  // key = ppt name
   private static Map<String,Vector<Lemma>> extra_assumptions;
 
   private static LemmaStack lemmas;
@@ -531,7 +532,8 @@ public class LogicalCompare {
           }
           formula = formula.trim();
           comment = comment.trim();
-          Vector<Lemma> assumption_vec = extra_assumptions.get(ppt_name);
+          @SuppressWarnings("nullness") // on previous loop iteration, this key was added to map
+          /*@NonNull*/ Vector<Lemma> assumption_vec = extra_assumptions.get(ppt_name);
           assumption_vec.add(new Lemma(comment, formula));
         } else {
           System.err.println("Can't parse " + line + " in assumptions file");
@@ -702,18 +704,36 @@ public class LogicalCompare {
 
       PptTopLevel app_enter_ppt = app_ppts.get(enter_ppt_name);
       PptTopLevel test_enter_ppt = test_ppts.get(enter_ppt_name);
-      assert app_enter_ppt != null;
-      assert test_enter_ppt != null;
+      if (app_enter_ppt == null) {
+        throw new Daikon.TerminationMessage(String.format("Ppt %s not found in %s",
+                                                          enter_ppt_name, app_filename));
+      }
+      if (test_enter_ppt == null) {
+        throw new Daikon.TerminationMessage(String.format("Ppt %s not found in %s",
+                                                          enter_ppt_name, test_filename));
+      }
 
       PptTopLevel app_exit_ppt = app_ppts.get(exit_ppt_name);
       PptTopLevel test_exit_ppt = test_ppts.get(exit_ppt_name);
-      if (app_exit_ppt == null)
+      if (app_exit_ppt == null) {
         app_exit_ppt = app_ppts.get(app_enter_ppt.ppt_name.makeExit());
-      if (test_exit_ppt == null)
+        if (app_exit_ppt == null) {
+          throw new Daikon.TerminationMessage(String.format("Neither ppt %s nor ppt %s found in %s",
+                                                            exit_ppt_name,
+                                                            app_enter_ppt.ppt_name.makeExit(),
+                                                            app_filename));
+        }
+      }
+      if (test_exit_ppt == null) {
         test_exit_ppt = test_ppts.get(test_enter_ppt.ppt_name.makeExit());
+        if (test_exit_ppt == null) {
+          throw new Daikon.TerminationMessage(String.format("Neither ppt %s nor ppt %s found in %s",
+                                                            exit_ppt_name,
+                                                            test_enter_ppt.ppt_name.makeExit(),
+                                                            test_filename));
+        }
+      }
 
-      assert app_exit_ppt != null;
-      assert test_exit_ppt != null;
       comparePpts(app_enter_ppt, test_enter_ppt,
                   app_exit_ppt, test_exit_ppt);
     } else if (num_args == 2) {
@@ -724,7 +744,8 @@ public class LogicalCompare {
       Set<String> common_names = new TreeSet<String>();
 
       for (String name : app_ppt_names) {
-        PptTopLevel app_ppt = app_ppts.get(name);
+        @SuppressWarnings("nullness") // iterating over keyset
+        /*@NonNull*/ PptTopLevel app_ppt = app_ppts.get(name);
 
         if (!app_ppt.ppt_name.isEnterPoint()) {
           // an exit point, and we only want entries
@@ -742,11 +763,15 @@ public class LogicalCompare {
 
       for (String name : common_names) {
         System.out.println("Looking at " + name);
-        PptTopLevel app_enter_ppt = app_ppts.get(name);
-        PptTopLevel test_enter_ppt = test_ppts.get(name);
-        PptTopLevel app_exit_ppt =
+        @SuppressWarnings("nullness") // key is in map
+        /*@NonNull*/ PptTopLevel app_enter_ppt = app_ppts.get(name);
+        @SuppressWarnings("nullness") // key is in map
+        /*@NonNull*/ PptTopLevel test_enter_ppt = test_ppts.get(name);
+        @SuppressWarnings("nullness") // exit should be in map if enter is
+        /*@NonNull*/ PptTopLevel app_exit_ppt =
           app_ppts.get(app_enter_ppt.ppt_name.makeExit());
-        PptTopLevel test_exit_ppt =
+        @SuppressWarnings("nullness") // exit should be in map if enter is
+        /*@NonNull*/ PptTopLevel test_exit_ppt =
           test_ppts.get(test_enter_ppt.ppt_name.makeExit());
 
         assert app_exit_ppt != null;

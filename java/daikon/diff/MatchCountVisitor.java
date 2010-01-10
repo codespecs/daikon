@@ -124,7 +124,8 @@ public class MatchCountVisitor extends PrintAllVisitor {
   }
 
   /** Returns true if the pair of invariants should be printed **/
-  protected static boolean shouldPrint(Invariant inv1, Invariant inv2) {
+  /*@AssertNonNullIfTrue({"#0", "#1"})*/
+  protected static boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
 
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
     if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2 ) {

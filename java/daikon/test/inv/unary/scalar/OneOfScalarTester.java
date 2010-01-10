@@ -5,6 +5,7 @@ import daikon.*;
 import daikon.inv.unary.scalar.*;
 import daikon.test.Common;
 
+@SuppressWarnings("nullness")
 public class OneOfScalarTester extends TestCase {
 
   private VarInfo[] vars = { Common.makeHashcodeVarInfo("x"), Common.makeIntVarInfo("y") };

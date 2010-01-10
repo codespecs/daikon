@@ -294,7 +294,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   // Node n is a MethodDeclaration or a ConstructorDeclaration
-  InvariantsAndModifiedVars[] get_requires_and_ensures(PptMap ppts, Node n) {
+  /*@Nullable*/ InvariantsAndModifiedVars[] get_requires_and_ensures(PptMap ppts, Node n) {
     InvariantsAndModifiedVars requires_invs = null;
     InvariantsAndModifiedVars ensures_invs = null;
 
@@ -319,7 +319,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       }
     }
 
-    return new InvariantsAndModifiedVars[] { requires_invs, ensures_invs };
+    return new /*@Nullable*/ InvariantsAndModifiedVars[] { requires_invs, ensures_invs };
   }
 
 
@@ -453,9 +453,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     boolean invariantInserted =
       insertInvariants(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, ensures_tag, ensures_invs, lightweight);
 
-          if (ensures_invs != null) {
-            insertModifies(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, ensures_invs.modifiedVars, ensures_tag, lightweight);
-          }
+    if (ensures_invs != null) {
+      insertModifies(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, ensures_invs.modifiedVars, ensures_tag, lightweight);
+    }
 
     invariantInserted =
       insertInvariants(n.getParent().getParent() /* see  ClassOrInterfaceBodyDeclaration */, requires_tag, requires_invs, lightweight) ||
@@ -607,7 +607,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   // The "invs" argument may be null, in which case no work is done.
-  public boolean insertInvariants(Node n, String prefix, InvariantsAndModifiedVars invs,
+  public boolean insertInvariants(Node n, String prefix, /*@Nullable*/ InvariantsAndModifiedVars invs,
                                   boolean useJavaComment) {
     if (invs == null) {
       return false;
@@ -847,9 +847,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       VarInfo elt_vi = ppt.find_var_by_name (elt_varname);
       if (elt_vi == null) {
         debug_field_problem(elt_varname, ppt);
+        throw new Daikon.TerminationMessage("Annotate: Daikon knows nothing about variable " + elt_varname + " at " + ppt);
       }
-      assert ppt.find_var_by_name (elt_varname) != null
-        : "Annotate: Daikon knows nothing about variable " + elt_varname + " at " + ppt;
       // et_varname variable represents the types of the elements.
       String et_varname = elt_varname + DaikonVariableInfo.class_suffix;
       // System.out.printf("Found %s, seeking %s%n", elt_varname, et_varname);
@@ -863,9 +862,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       VarInfo et_vi = ppt.find_var_by_name (et_varname);
       if (et_vi == null) {
         debug_field_problem(et_varname, ppt);
+        throw new Daikon.TerminationMessage("Annotate: Daikon knows nothing about variable " + et_varname + " at " + ppt + "\n  with allFieldNames = " + allFieldNames);
       }
-      assert et_vi != null
-        : "Annotate: Daikon knows nothing about variable " + et_varname + " at " + ppt + "\n  with allFieldNames = " + allFieldNames;
 
       // et_vi != null
       PptSlice1 slice = ppt.findSlice(et_vi);

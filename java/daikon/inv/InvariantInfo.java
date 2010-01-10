@@ -2,24 +2,26 @@ package daikon.inv;
 
 import java.util.*;
 
+/**
+ * Container class for holding all info needed to describe an Invariant.
+ * If any field is null, that field is a wildcard, so one instance of
+ * InvariantInfo may describe multiple Invariants in that way.
+ */
 public class InvariantInfo {
-  /**
-   * Container class for holding all info needed to describe an Invariant.  If any field is null,
-   * that field is a wildcard, so one instance of InvariantInfo may describe multiple
-   * Invariants in that way.
-   */
 
   private String ppt;
   // vars is maintained as "var1,var2,.." sorted in ascending lexicographical order
-  private String vars;
-  private String className;
+  /** If null, treated as a wildcard. */
+  private /*@Nullable*/ String vars;
+  /** If null, treated as a wildcard. */
+  private /*@Nullable*/ String className;
 
   private InvariantInfo() {
     // Make the default constructor private, this should never be called
   }
 
   // It's ok if vars isn't given in sorted order, we'll sort it here
-  public InvariantInfo(String ppt, String vars, String className) {
+  public InvariantInfo(String ppt, /*@Nullable*/ String vars, /*@Nullable*/ String className) {
     this.ppt = ppt;
     this.className = className;
     /* if (vars != null) {
@@ -43,11 +45,11 @@ public class InvariantInfo {
     return this.ppt;
   }
 
-  public String className() {
+  public /*@Nullable*/ String className() {
     return this.className;
   }
 
-  public String vars() {
+  public /*@Nullable*/ String vars() {
     return this.vars;
   }
 

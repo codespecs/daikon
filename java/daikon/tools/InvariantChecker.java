@@ -350,7 +350,7 @@ public class InvariantChecker {
 
       // If this is an enter point, just remember it for later
       if (ppt.ppt_name.isEnterPoint()) {
-        assert nonce != null;
+        assert nonce != null : "@SuppressWarnings(nullness)";
         if (dir_file!=null) {
           //Yoav: I had to do a hack to handle the case that several dtrace files are concatenated together,
           // and Sung's dtrace files have unterminated calls, and when concatenating two files you can have the same nonce.

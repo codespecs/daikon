@@ -174,9 +174,8 @@ public class TraceSelect {
       while (num_reps > 0) {
 
         DtracePartitioner dec = new DtracePartitioner (fileName);
-        MultiRandSelector<String> mrs = new MultiRandSelector<String> (numPerSample,
-                                                       dec);
-
+        MultiRandSelector</*@Nullable*/ String> mrs
+          = new MultiRandSelector<String> (numPerSample, dec);
 
         while (dec.hasNext()) {
           mrs.accept (dec.next());
