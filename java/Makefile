@@ -744,6 +744,8 @@ audit:
 
 # Pluggable type qualifier checkers
 
+## All of the following targets need to depend on "compile".
+
 # JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing
 JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing
@@ -775,13 +777,13 @@ NULLNESS_JAVA_FILES = \
 
 intern: check-interning
 interning: check-interning
-check-interning: ${INTERNING_JAVA_FILES}
+check-interning: ${INTERNING_JAVA_FILES} compile
 	${JAVAC_COMMAND_NO_ARGS} ${JAVAC_INTERNING_ARGS} ${INTERNING_JAVA_FILES}
 
 # Run the interning checker on all Java files, not just those that contain an
 # @Interned annotation.
 interning-all: check-interning-all
-check-interning-all: ${ALL_GENERATED_FILES}
+check-interning-all: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_INTERNING_ARGS} ...
 	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_INTERNING_ARGS} ${JAVA_FILES}
 
@@ -791,15 +793,15 @@ check-nullness: check-nullness-all
 # check-nullness-all: check-nullness-all-withstubs
 check-nullness-all: check-nullness-all-withstubs-warns
 
-check-nullness-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
+check-nullness-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ...
 	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${NULLNESS_JAVA_FILES}
 
-check-nullness-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals
+check-nullness-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
 	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${NULLNESS_JAVA_FILES}
 
-check-nullness-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals
+check-nullness-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND_NO_ARGS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
 	@${JAVAC_COMMAND_NO_ARGS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${NULLNESS_JAVA_FILES}
 
@@ -807,23 +809,23 @@ check-prototype: check-prototype-all
 
 check-prototype-all: check-prototype-all-withstubs
 
-check-prototype-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals
+check-prototype-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ...
 	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${NULLNESS_JAVA_FILES}
 
-check-igj-all-nostubs: ${ALL_GENERATED_FILES}
+check-igj-all-nostubs: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ...
 	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${JAVA_FILES}
 
-check-igj-all-withstubs: ${ALL_GENERATED_FILES}
+check-igj-all-withstubs: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ...
 	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${JAVA_FILES}
 
-check-javari-all-nostubs: ${ALL_GENERATED_FILES}
+check-javari-all-nostubs: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ...
 	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${JAVA_FILES}
 
-check-javari-all-withstubs: ${ALL_GENERATED_FILES}
+check-javari-all-withstubs: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ...
 	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${JAVA_FILES}
 
@@ -984,7 +986,7 @@ doc-private: ../plume-lib $(AUTO_GENERATED_FILES)
 
 ## This doesn't seem necessary any more
 # javadoc-lookup: doc-javadoc-lookup
-# 
+#
 # ## Fix up generated .html files for use by the Emacs `javadoc-lookup' function.
 # doc-javadoc-lookup: doc
 # 	find doc -name '*.html' | xargs -n 100 ${PLUMEBIN}/jdk-add-munged-anchor-names
