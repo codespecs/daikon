@@ -3,7 +3,7 @@ use strict;
 use English;
 $WARNING = 1;
 
-my $build_dir = "/afs/csail.mit.edu/u/d/daikonuser/build"
+my $build_dir = "/afs/csail.mit.edu/u/d/daikonuser/build";
 my $build_dir_exists = -d $build_dir;
 my $build_dir_age = -M $build_dir;
 if ((! $build_dir_exists) || ($build_dir_age > 1)) {
