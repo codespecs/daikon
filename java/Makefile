@@ -769,11 +769,19 @@ INTERNING_JAVA_FILES_SKIP_COUNTS = 'Intern.java|VarInfoName.java'
 ## Which files to check.
 INTERNING_JAVA_FILES = $(shell find . -type f -name '*.java' | egrep -v $(INTERNING_JAVA_FILES_SKIP) | xargs grep -l -i '@Interned' | sort)
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP}\|${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | sort)
-## Temporarily, only a subset of directories.  Expand the scope later.
+## Can be temporarily set to a subset of directories.
+## Should automatically exclude packages & files rather than having to do it manually.
+# Computed by hand for now
+NULLNESS_JAVA_FILES_SKIP = 'DaikonSimple.java|DCRuntime.java|DynComp.java|FeatureExtractor.java|InvariantFilters.java|LinearTernaryCoreFloat.java|LinearTernaryCore.java|PptCombined.java|OneOfScalarTester.java|OneOfSequenceTester.java|Ast.java|TaskManager.java|TestPlume.java|WeakHasherMap.java|WeakIdentityHashMap.java|VarInfo.java|VarInfoName.java'
 NULLNESS_JAVA_FILES = \
-  $(shell find daikon/ -name '*.java' -print | sort)
-
+  $(shell find daikon/ \( -name chicory -o -name dcomp -o -name test \) -prune -o -name '*.java' -print | egrep -v ${NULLNESS_JAVA_FILES_SKIP} | sort)
 #   $(shell find typequals/ -name '*.java')
+
+show_nullness_java_files:
+	@echo NULLNESS_JAVA_FILES:
+	@echo ${NULLNESS_JAVA_FILES}
+	@echo DAIKON_JAVA_FILES:
+	@echo ${DAIKON_JAVA_FILES}
 
 intern: check-interning
 interning: check-interning
@@ -851,9 +859,9 @@ interning-counts:
 	#@echo ${INTERNING_JAVA_FILES_COUNTS}
 	@echo -n "Lines in annotated files: "
 	@wc -l ${INTERNING_JAVA_FILES_COUNTS} | tail -1
-	@echo -n "@Interned annotations: "
+	@echo -n "Lines with @Interned annotations: "
 	@grep "@Interned" ${INTERNING_JAVA_FILES_COUNTS} | wc -l
-	@echo -n "Commented @Interned annotations: "
+	@echo -n "Lines with commented @Interned annotations: "
 	@grep -E "//.*@Interned" ${INTERNING_JAVA_FILES_COUNTS} | wc -l
 	@echo -n "@SuppressWarnings annotations: "
 	@grep -n '@SuppressWarnings("interning")' ${INTERNING_JAVA_FILES_COUNTS} | wc -l
@@ -868,19 +876,19 @@ interning-counts:
 nullness-counts:
 	@echo -n "Annotated files: "
 	@echo ${NULLNESS_JAVA_FILES} | sed 's/ /\n/g' | wc -l
+	@echo -n " / "
+	@echo ${DAIKON_JAVA_FILES} | sed 's/ /\n/g' | wc -l
 #	@echo ${NULLNESS_JAVA_FILES}
 	@echo -n "Lines in annotated files: "
-	@wc -l ${NULLNESS_JAVA_FILES} | tail -1
-	@echo -n "Nullness annotations: "
-	@grep '@Dependent\|@NonNull\|@Nullable\|@PolyNull\|@Prototype.*result=Nullable\|@Raw' ${NULLNESS_JAVA_FILES}
-	@grep '@Dependent\|@NonNull\|@Nullable\|@PolyNull\|@Prototype\|@Raw' ${NULLNESS_JAVA_FILES} | wc -l
-	@echo -n "@SuppressWarnings annotations: "
-	@grep -n '@SuppressWarnings("nullness")' ${NULLNESS_JAVA_FILES} | wc -l
-	@grep -n '@SuppressWarnings("nullness")' ${NULLNESS_JAVA_FILES}
-	@echo -n "Daikon total files: "
-	@echo ${DAIKON_JAVA_FILES} | sed 's/ /\n/g' | wc -l
-	@echo -n "Daikon total lines: "
-	@wc -l ${DAIKON_JAVA_FILES} | tail -1
+	@echo ${NULLNESS_JAVA_FILES} | xargs wc -l | tail -1 | cut -d ' ' -f 2
+	@echo -n " / "
+	@echo ${DAIKON_JAVA_FILES} | xargs wc -l | tail -1 | cut -d ' ' -f 2
+	@echo -n "Lines with nullness annotations: "
+#	@grep '@Dependent\|@NonNull\|@Nullable\|@PolyNull\|@Raw\|@Prototype\|@Dependent.*result=Nullable\|@Dependent.*result=NonNull' ${NULLNESS_JAVA_FILES}
+	@grep '@Dependent\|@NonNull\|@Nullable\|@PolyNull\|@Raw\|@Prototype\|@Dependent.*result=Nullable\|@Dependent.*result=NonNull' ${NULLNESS_JAVA_FILES} | wc -l
+	@echo -n "Lines with @SuppressWarnings annotations: "
+	@grep -n '@SuppressWarnings.*nullness' ${NULLNESS_JAVA_FILES} | wc -l
+	@grep -n '@SuppressWarnings.*nullness' ${NULLNESS_JAVA_FILES}
 
 
 ###
