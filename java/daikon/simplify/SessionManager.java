@@ -198,8 +198,8 @@ public class SessionManager
       }
     }
 
+    /*@NonNullVariable("session")*/
     private void session_done() {
-      assert session != null : "@SuppressWarnings(nullness)";
       finished = true;
       Session tmp = session;
       session = null;

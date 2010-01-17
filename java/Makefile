@@ -851,7 +851,6 @@ check-interning-varinfo:
 check-interning-fileio:
 	${JAVAC} ${JAVAC_INTERNING_ARGS} daikon/FileIO.java
 
-# Problem with these computations: double-counting of daikon/util/ directory.
 # "tail -1" is required when wc is given multiple arguments
 interning-counts:
 	@echo -n "Annotated files: "
@@ -871,7 +870,7 @@ interning-counts:
 	@echo -n "Daikon total lines: "
 	@wc -l ${DAIKON_JAVA_FILES} | tail -1
 
-# Problem with these computations: double-counting of daikon/util/ directory.
+# This counts annotations in comments, etc.
 # "tail -1" is required when wc is given multiple arguments
 nullness-counts:
 	@echo -n "Annotated files: "
@@ -884,11 +883,11 @@ nullness-counts:
 	@echo -n " / "
 	@echo ${DAIKON_JAVA_FILES} | xargs wc -l | tail -1 | cut -d ' ' -f 2
 	@echo -n "Lines with nullness annotations: "
-#	@grep '@Dependent\|@NonNull\|@Nullable\|@PolyNull\|@Raw\|@Prototype\|@Dependent.*result=Nullable\|@Dependent.*result=NonNull' ${NULLNESS_JAVA_FILES}
 	@grep '@Dependent\|@NonNull\|@Nullable\|@PolyNull\|@Raw\|@Prototype\|@Dependent.*result=Nullable\|@Dependent.*result=NonNull' ${NULLNESS_JAVA_FILES} | wc -l
+#	@grep '@Dependent\|@NonNull\|@Nullable\|@PolyNull\|@Raw\|@Prototype\|@Dependent.*result=Nullable\|@Dependent.*result=NonNull' ${NULLNESS_JAVA_FILES}
 	@echo -n "Lines with @SuppressWarnings annotations: "
-	@grep -n '@SuppressWarnings.*nullness' ${NULLNESS_JAVA_FILES} | wc -l
-	@grep -n '@SuppressWarnings.*nullness' ${NULLNESS_JAVA_FILES}
+	@grep '@SuppressWarnings.*nullness\|castNonNull' ${NULLNESS_JAVA_FILES} | wc -l
+	@grep -n '@SuppressWarnings.*nullness\|castNonNull' ${NULLNESS_JAVA_FILES}
 
 
 ###

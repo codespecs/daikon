@@ -12,6 +12,8 @@ import plume.*;
  * found in it, and an .inv file contains (only) the serialized form of
  * this object.
  */
+// Why doesn't this implement Map<String,PptTopLevel> or extend
+// LinkedHashMap<String,PptTopLevel?
 public class PptMap
   implements Serializable
 {
@@ -52,10 +54,11 @@ public class PptMap
   }
 
   /**
-   * Returns whether or not 'name' is in the map.  Note that conditional
+   * Returns whether or not 'name' is the name of a Ppt in the map.  Note that conditional
    * program points are not stored in the map by name.  They are only
    * available through their parent.
    */
+  /*@Pure*/
   public boolean containsName(String name) {
     return nameToPpt.containsKey(name);
   }

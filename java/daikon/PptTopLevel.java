@@ -145,6 +145,7 @@ public class PptTopLevel extends Ppt {
   public final String name;
   public final PptName ppt_name;
 
+  /*@Pure*/
   public String name() {
     return name;
   }
@@ -256,7 +257,7 @@ public class PptTopLevel extends Ppt {
 
   /**
    * List of predecesor program points. Computed from ppt_successors.
-   * This field is only property set and used when creating combined program
+   * This field is only properly set and used when creating combined program
    * points.
    */
   public /*@Nullable*/ List<PptTopLevel> predecessors = null;
@@ -1074,7 +1075,7 @@ public class PptTopLevel extends Ppt {
     // Keep track of the distinct values seen
     for (int i=0; i<vt.vals.length; i++) {
       if (! vt.isMissing(i)) {
-        @SuppressWarnings("nullness") // need @AssertNonNullIfFalse annotation on isMissing()
+        // @SuppressWarnings("nullness") // bug: http://code.google.com/p/checker-framework/issues/detail?id=56
         /*@NonNull*/ Object val = vt.vals[i];
         ValueSet vs = value_sets[i];
         vs.add(val);
@@ -1234,6 +1235,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns whether or not the specified variable is dynamically constant.
    */
+  /*@AssertNonNullIfTrue("constants")*/
   public boolean is_constant(VarInfo v) {
     return ((constants != null) && constants.is_constant(v));
   }
@@ -1243,6 +1245,7 @@ public class PptTopLevel extends Ppt {
    * constant, or was a dynamic constant at the beginning of constant
    * processing.
    */
+  /*@AssertNonNullIfTrue("constants")*/
   public boolean is_prev_constant(VarInfo v) {
     return ((constants != null)
             && constants.is_prev_constant(v));
@@ -1252,6 +1255,7 @@ public class PptTopLevel extends Ppt {
    * Returns whether or not the specified variable has been missing
    * for all samples seen so far.
    */
+  /*@AssertNonNullIfTrue("constants")*/
   public boolean is_missing(VarInfo v) {
     return ((constants != null) && constants.is_missing(v));
   }
@@ -1260,6 +1264,7 @@ public class PptTopLevel extends Ppt {
    * returns whether the specified variable is currently missing OR
    * was missing at the beginning of constants processing.
    **/
+  /*@AssertNonNullIfTrue("constants")*/
   public boolean is_prev_missing(VarInfo v) {
     return ((constants != null) && constants.is_prev_missing(v));
   }
@@ -2034,7 +2039,7 @@ public class PptTopLevel extends Ppt {
       }
     }
 
-    @SuppressWarnings("nullness") // if inv is non-null, then slice is non-null
+    @SuppressWarnings("nullness") // dependent: if inv is non-null, then slice is non-null
     boolean found = (inv != null) && slice.is_inv_true(inv);
     if (false) {
       System.out.printf ("Looking for %s [%d] <= %s [%d] in ppt %s%n", v1.name(),
@@ -2798,7 +2803,7 @@ public class PptTopLevel extends Ppt {
    * logically implied by others.  Considers only invariants that
    * pass isWorthPrinting.
    **/
-  @SuppressWarnings("nullness") // reassignment of LazyNonNull variable proverStack
+  @SuppressWarnings("nullness") // reinitialization if error occurs
   public void mark_implied_via_simplify(PptMap all_ppts) {
     try {
       if (proverStack == null)
@@ -2830,13 +2835,12 @@ public class PptTopLevel extends Ppt {
    * logically implied by others.  Uses the provided test interface to
    * determine if an invariant is within the domain of inspection.
    **/
+  /*@NonNullVariable("proverStack")*/
   private void markImpliedViaSimplify_int(
     PptMap all_ppts,
     SimplifyInclusionTester test)
     throws SimplifyError {
     SessionManager.debugln("Simplify checking " + ppt_name);
-
-    assert proverStack != null : "@SuppressWarnings(nullness): calling context";
 
     // Create the list of invariants from this ppt which are
     // expressible in Simplify
@@ -3074,6 +3078,7 @@ public class PptTopLevel extends Ppt {
 
   /** Go though an array of invariants, marking those that can be
    * proved as consequences of others as redundant. */
+  /*@NonNullVariable("proverStack")*/
   private void flagRedundantRecursive(
     InvariantLemma[] lemmas,
     boolean[] present,
@@ -3081,7 +3086,6 @@ public class PptTopLevel extends Ppt {
     int end)
     throws SimplifyError {
     assert start <= end;
-    assert proverStack != null : "@SuppressWarnings(nullness): calling context";
 
     if (start == end) {
       // Base case: check a single invariant
@@ -3493,7 +3497,7 @@ public class PptTopLevel extends Ppt {
     if (debugMerge.isLoggable(Level.FINE))
       debugMerge.fine("Processing ppt " + name());
 
-    @SuppressWarnings("nullness") // all uses are guarded by a test against debugMerge
+    @SuppressWarnings("nullness") // dependent: non-null if debugMerge.isLoggable(Level.FINE)
     /*@NonNull*/ Stopwatch watch = null;
     if (debugTimeMerge.isLoggable(Level.FINE)) {
       watch = new Stopwatch();
@@ -3986,7 +3990,7 @@ public class PptTopLevel extends Ppt {
    * multiple ppts maps based on different data.  This allows a ppt to
    * have its invariants recalculated.
    */
-  @SuppressWarnings("nullness") // re-initialize LazyNonNull fields
+  @SuppressWarnings("nullness") // reinitialization
   public void clean_for_merge() {
     equality_view = null;
     for (int i = 0; i < var_infos.length; i++)
@@ -4522,6 +4526,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Is this a ppt that represents a class? **/
+  /*@AssertNonNullIfTrue("type")*/
   public boolean is_class() {
     return (type != null && type == PptType.CLASS);
   }
@@ -4609,7 +4614,7 @@ public class PptTopLevel extends Ppt {
     }
 
     for (String successor : ppt_successors) {
-      @SuppressWarnings("nullness")
+      @SuppressWarnings("nullness") // sucessor ppt is in the PptMap
       /*@NonNull*/ PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
       Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
       path_set.add (this);
@@ -4692,7 +4697,7 @@ public class PptTopLevel extends Ppt {
 
     int result = 0;
     for (String successor : ppt_successors) {
-      @SuppressWarnings("nullness")
+      @SuppressWarnings("nullness") // sucessor ppt is in the PptMap
       /*@NonNull*/ PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
       Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
       path_set.add (this);

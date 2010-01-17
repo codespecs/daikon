@@ -127,7 +127,8 @@ public class InstrumentObserversVisitor
         Ast.copy("MethodDeclaration", method);
       Ast.setBody(wrapper, new_method);
       wrapper.accept(new TreeFormatter(2, 0));
-      ClassOrInterfaceBody c = (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
+      @SuppressWarnings("nullness")
+      /*@NonNull*/ ClassOrInterfaceBody c = (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
       ClassOrInterfaceBodyDeclaration d = (ClassOrInterfaceBodyDeclaration)
         Ast.create("ClassOrInterfaceBodyDeclaration", Ast.format(wrapper));
       Ast.addDeclaration(c, d);
@@ -187,7 +188,7 @@ public class InstrumentObserversVisitor
         if (comment.indexOf("@ observer") >= 0) {
           MethodDeclaration method =
             (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
-          assert method != null;
+          assert method != null : "@SuppressWarnings(nullness)";
           String name = Ast.getName(method);
           String returnType = Ast.getReturnType(method);
           if (returnType.equals("void")) {

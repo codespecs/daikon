@@ -6,11 +6,12 @@ import java.util.*;
 
 public final class DiscReasonMap {
 
-  // The keys are PptTopLevel name strings, and the values
-  // are HashMaps whose keys are Strings containing variable
-  // names separated by commas, e.g. "this.head, this.tail" (names appear in sorted order)
-  // The values of those HashMaps are lists containing DiscardInfo's
-  // for all Invariants using those variable names in that PptTopLevel.
+  // Key: PptTopLevel name string
+  // Value: HashMap, such that:
+  //    Key: String containing variable names separated by commas,
+  //      e.g. "this.head, this.tail" (names appear in sorted order).
+  //    Value:  list containing DiscardInfo's for all Invariants using
+  //      those variable names in that PptTopLevel.
   private static HashMap<String,HashMap<String,List<DiscardInfo>>> the_map;
 
   private DiscReasonMap() {
@@ -135,7 +136,10 @@ public final class DiscReasonMap {
 
     for (DiscardInfo di : di_list) {
       String shortName = di.className().substring(di.className().lastIndexOf('.')+1); // chop off hierarchical info
-      if ((invInfo.className() == null) || invInfo.className().equals(di.className())
+      if ((invInfo.className() == null)
+          // @SuppressWarnings(nullness): bug exposed by test PureTest.shortCircuitOr()
+          || invInfo.className().equals(di.className())
+          // @SuppressWarnings(nullness): bug exposed by test PureTest.shortCircuitOr()
           || invInfo.className().equals(shortName)) {
         result.add(di);
       }
@@ -147,8 +151,9 @@ public final class DiscReasonMap {
   // with a set of vars at a ppt.  Only called when we know ppt has at
   // least 1 DiscardInfo associated with it
   private static List<DiscardInfo> all_vars_tied_from_ppt(String ppt) {
-    HashMap<String,List<DiscardInfo>> vars_map = the_map.get(ppt);
-    assert vars_map != null : "@SuppressWarnings(nullness)";
+    @SuppressWarnings("nullness") // application invariant, due to calling context
+    /*@NonNull*/ HashMap<String,List<DiscardInfo>> vars_map = the_map.get(ppt);
+    assert vars_map != null;
 
     ArrayList<DiscardInfo> result = new ArrayList<DiscardInfo>();
     for (List<DiscardInfo> ldi : vars_map.values()) {

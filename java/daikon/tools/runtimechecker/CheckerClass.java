@@ -39,7 +39,8 @@ public class CheckerClass {
     this.name = Ast.getClassName(clazz).replace("$", "_").replace(".", "_") + "_checks";
 
     // Get the package and imports from clazz. We'll include them.
-    CompilationUnit clazzCU = (CompilationUnit)Ast.getParent(CompilationUnit.class, clazz);
+    @SuppressWarnings("nullness") // application invariant: every body is in a compilation unit
+    /*@NonNull*/ CompilationUnit clazzCU = (CompilationUnit)Ast.getParent(CompilationUnit.class, clazz);
     NodeOptional no = clazzCU.f0;
     String packageName = null;
     if (no.present()) {

@@ -77,6 +77,7 @@ public class TestRedundantVars {
     }
 
     // Returns true iff all tests pass.
+    /*@NonNullVariable("reds.records.get(#0)")*/
     private static boolean process_ppt(String ppt) {
 
         List<String> invsWithout = without.records.get(ppt);
@@ -87,11 +88,11 @@ public class TestRedundantVars {
             return true; // We don't consider missing ppts as failures.
         }
 
-        assert invsWith != null : "@SuppressWarnings(nullness): same nullness as invsWithout, which was checked";
+        assert invsWith != null : "@SuppressWarnings(nullness): dependent: same nullness as invsWithout, which was checked";
 
-        List<String> redVars = reds.records.get(ppt);
+        @SuppressWarnings("nullness") // ppt is in reds.records when process_ppt is called
+        /*@NonNull*/ List<String> redVars = reds.records.get(ppt);
         assert redVars != null : ppt;
-        assert redVars != null : "@SuppressWarnings(nullness)";
 
         boolean success = true;
 

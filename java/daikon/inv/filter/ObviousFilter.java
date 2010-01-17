@@ -6,7 +6,7 @@ public class ObviousFilter extends InvariantFilter {
   public String getDescription() { return "Suppress obvious invariants"; }
 
   /**
-   * Boolean. If true, ObviousFilter is initially turned on. 
+   * Boolean. If true, ObviousFilter is initially turned on.
    */
   public static boolean dkconfig_enabled = true;
 
@@ -15,6 +15,7 @@ public class ObviousFilter extends InvariantFilter {
   }
 
 
+  /*@AssertNonNullIfTrue("#0.isObvious()")*/
   boolean shouldDiscardInvariant( Invariant invariant ) {
     // if ((invariant.ppt.arity() == 1) || IsEqualityComparison.it.accept(invariant)) {
     DiscardInfo discard = invariant.isObvious();

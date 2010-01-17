@@ -22,7 +22,8 @@ public class XorVisitor extends DepthFirstVisitor {
   public void visit(PptNode node) {
     PptTopLevel ppt1 = node.getPpt1();
     PptTopLevel ppt2 = node.getPpt2();
-    PptTopLevel pptNonNull = (ppt1 != null ? ppt1 : ppt2);
+    @SuppressWarnings("nullness") // application invariant: at least one of ppt1 and ppt2 is non-null
+    /*@NonNull*/ PptTopLevel pptNonNull = (ppt1 != null ? ppt1 : ppt2);
     result.addPpt(pptNonNull);
     currentPpt = pptNonNull;
     super.visit(node);

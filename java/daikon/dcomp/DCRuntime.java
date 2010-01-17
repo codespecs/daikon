@@ -2037,7 +2037,7 @@ public final class DCRuntime {
           hashcode_vars = true;
         else
           non_hashcode_vars = true;
-        // System.out.printf ("dv = %s, hashcode_var = %b%n", 
+        // System.out.printf ("dv = %s, hashcode_var = %b%n",
         //                   dv, dv.isHashcode() || dv.isHashcodeArray());
       }
       debug_decl_print.log ("        %d vars in set, hashcode/non = %b/%b%n",
@@ -2045,7 +2045,7 @@ public final class DCRuntime {
 
       // Loop through each variable and assign its comparability
       // Since hashcodes and their indices are in the same set, assign
-      // hashcodes one higher comparability number.  Note that there is 
+      // hashcodes one higher comparability number.  Note that there is
       // not necessarily an array child for a hashcode that is comparable
       // to an integer.  This can happen when an array and a non-array object
       // become comparable to one another.  An integer that is comparable
@@ -2368,7 +2368,7 @@ public final class DCRuntime {
    *   to a set contains all its children. The parameter RootInfo node is
    *   included as a key to all its children.
    */
-  static /*@Nullable*/ Map<DaikonVariableInfo, DVSet> get_comparable_traced (RootInfo root) {
+  static /*@PolyNull*/ Map<DaikonVariableInfo, DVSet> get_comparable_traced (/*@PolyNull*/ RootInfo root) {
     if (root == null) return null;
 
     // List of all of the parent-child relationships, where parent-child

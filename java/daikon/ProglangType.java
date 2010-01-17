@@ -135,7 +135,8 @@ public final /*@Interned*/ class ProglangType
     return intern(base.intern(), dimensions);
   }
 
-  // Is this necessary?  It will be inhereited from Object.
+  // Is this necessary?  It will be inherited from Object.
+  // /*@AssertNonNullIfTrue("#0")*/
   // public boolean equals(/*@Nullable*/ Object o) {
   //   return this == o;
   // }
@@ -452,7 +453,7 @@ public final /*@Interned*/ class ProglangType
           if (parser.ttype == '\"') {
             v.add(parser.sval);
           } else if (parser.ttype == StreamTokenizer.TT_WORD) {
-            assert parser.sval != null : "@SuppressWarnings(nullness): representation invariant of StreamTokenizer";
+            assert parser.sval != null : "@SuppressWarnings(nullness): dependent: representation invariant of StreamTokenizer";
             if (parser.sval.equals ("nonsensical"))
               return null;
             assert parser.sval.equals("null");

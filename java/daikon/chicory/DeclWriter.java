@@ -472,6 +472,7 @@ public class DeclWriter extends DaikonWriter {
      * Two VarRelations are equal if the refer to the same program point and
      * local variable
      */
+    /*@AssertNonNullIfTrue("#0")*/
     public boolean equals (/*@Nullable*/ Object o) {
       if (!(o instanceof VarRelation) || (o == null))
         return false;

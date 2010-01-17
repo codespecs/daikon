@@ -232,6 +232,7 @@ public class Annotation {
       this.name = name;
       this.xmlname = xmlname;
     }
+    /*@AssertNonNullIfTrue("#0")*/
     public boolean equals(/*@Nullable*/ Object o) {
       if (o == null) {
         return false;
@@ -289,6 +290,7 @@ public class Annotation {
    * Two annotations are equal iff their fields "daikonRep", "method"
    * and "kind" are equal.
    */
+  /*@AssertNonNullIfTrue("#0")*/
   public boolean equals(/*@Nullable*/ Object o) {
     if (o == null) {
       return false;
@@ -326,10 +328,11 @@ public class Annotation {
     throws Annotation.MalformedAnnotationException {
 
     Annotation anno = new Annotation(kind, daikonRep, method);
-    if (annotationsMap.containsKey(new Integer(anno.hashCode()))) {
-      return annotationsMap.get(new Integer(anno.hashCode()));
+    Integer key = new Integer(anno.hashCode());
+    if (annotationsMap.containsKey(key)) {
+      return annotationsMap.get(key);
     } else {
-      annotationsMap.put(new Integer(anno.hashCode()), anno);
+      annotationsMap.put(key, anno);
       return anno;
     }
   }

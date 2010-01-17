@@ -145,8 +145,6 @@ public class SpinfoFileParser {
     throws IOException, ParseException {
     String methodDeclaration = spinfoFile.readLine();
     while (! isBlank(methodDeclaration)) {
-      assert methodDeclaration != null
-        : "@SuppressWarnings(nullness): need @AssertNonNullIfFalse annotation";
       String returnStatement = spinfoFile.readLine();
       if (isBlank(returnStatement)) {
         throw new RuntimeException(
@@ -155,13 +153,14 @@ public class SpinfoFileParser {
           methodDeclaration + lineSep +
           "Each replace statement must be a pair of lines.");
       }
-      assert methodDeclaration != null
-        : "@SuppressWarnings(nullness): looks like a bug in flow; we asserted the same thing earlier in the loop body";
-      assert returnStatement != null
-        : "@SuppressWarnings(nullness): looks like a bug in flow; we tested that returnStatement is not blank";
+      // assert methodDeclaration != null
+      //   : "@SuppressWarnings(nullness): bug exposed by test case Asserts.assertTwice()";
+      // assert returnStatement != null
+      //   : "@SuppressWarnings(nullness): looks like a bug in flow; we tested that returnStatement is not blank";
       ReplaceStatement replaceStatement =
         new ReplaceStatement(methodDeclaration.trim(), returnStatement.trim());
       replaceStatements.add(replaceStatement);
+      // @SuppressWarnings(nullness): bug exposed by test case Asserts.assertTwice().
       methodDeclaration = spinfoFile.readLine();
     }
   }
@@ -260,7 +259,7 @@ public class SpinfoFileParser {
   /**
    * Returns whether the line is blank (or null).
    */
-  /*Need this annotation:  @AssertNonNullIfFalse("#0")*/
+  /*@AssertNonNullIfFalse("#0")*/
   private static boolean isBlank(/*@Nullable*/ String line) {
     return (line == null) || line.trim().equals("");
   }

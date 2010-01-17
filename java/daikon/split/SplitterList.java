@@ -83,7 +83,7 @@ public abstract class SplitterList
     return sb.toString();
   }
 
-  public static Splitter[] get_raw(String pptname) {
+  public static Splitter /*@Nullable*/ [] get_raw(String pptname) {
     return ppt_splitters.get(pptname);
   }
 

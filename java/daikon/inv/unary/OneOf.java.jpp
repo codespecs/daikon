@@ -726,30 +726,25 @@ public final class ONEOFSCALAR
 #elif defined(IS_SCALAR)
     String varname = var().esc_name();
 #endif
-    String result;
+    /*@NonNull*/ String result;
 #if defined(ELTSTRING)
     // We cannot say anything about Strings in ESC, just types (which
     // Daikon stores as Strings).
-    boolean valid = false;
-    result = null;
     if (is_type() && (num_elts == 1)) {
       VarInfo base = var().get_enclosing_var();
       if ((base == null) || base.type.isArray()) {
-        valid = true;
         result = varname + " == " + format_esc_string2type(elts[0]);
       } else { // base is not an array, presume it is a collection
         VarInfo collection = base.get_enclosing_var();
         assert collection != null : "no enclosing var for " + base.name();
-        if (collection != null) {
-          result = collection.esc_name() + ".elementType == "
+        result = collection.esc_name() + ".elementType == "
             + format_esc_string2type(elts[0]);
-          // Do not use the \forall, return this directly
-          return (result);
-        }
+        // Do not use the \forall, return this directly
+        return (result);
       }
-    }
-    if (! valid) {
+    } else {
       result = format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+      // Return immediately?  There is little point in wrapping "unimplemented".
     }
 #elif defined(STRING)
     // We cannot say anything about Strings in ESC, just types (which
@@ -827,16 +822,19 @@ public final class ONEOFSCALAR
       }
     }
   #endif
-    if (length == null && forall == null) {
-      return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
-    } else if (length == null) { // interned
-      result = forall;
-    } else if (forall == null) { // interned
-      result = length;
+    if (length == null) {
+      if (forall == null) {
+        return format_unimplemented(OutputFormat.ESCJAVA); // "needs to be implemented"
+      } else {
+        result = forall;
+      }
     } else {
-      result = "(" + length + ") && (" + forall + ")";
+      if (forall == null) {
+        result = length;
+      } else {
+        result = "(" + length + ") && (" + forall + ")";
+      }
     }
-    assert result != null : "@SuppressWarnings(nullness): flow-sensitivity should infer this (though it's tricky)";
 #elif defined(STRINGSEQUENCE)
     // If the variable expression is a raw sequence, examine its
     // element type(s).

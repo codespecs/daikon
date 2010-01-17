@@ -42,7 +42,9 @@ public class CreateSpinfoC {
           System.out.println(e.getMessage());
           if (temp != null)
             temp.delete();
+          System.exit(1);
         }
+        assert temp != null : "@SuppressWarnings(nullness)";
         try {
           parser = new CParser(new FileInputStream(temp));
           TranslationUnit root = parser.TranslationUnit();

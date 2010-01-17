@@ -68,7 +68,7 @@ public final class ValueTuple implements Cloneable {
   public boolean isModified(VarInfo vi) { return vi.isModified(this); }
   public boolean isMissingNonsensical(VarInfo vi) { return vi.isMissingNonsensical(this); }
   public boolean isMissingFlow(VarInfo vi) { return vi.isMissingFlow(this); }
-  /*Need this annotation:  AssertNonNullIfFalse("vals[#0.value_index]")*/
+  /*@AssertNonNullIfFalse("vals[#0.value_index]")*/
   public boolean isMissing(VarInfo vi) { return vi.isMissing(this); }
 
   int getModified(int value_index) { return mods[value_index]; }
@@ -76,7 +76,7 @@ public final class ValueTuple implements Cloneable {
   boolean isModified(int value_index) { return mods[value_index] == MODIFIED; }
   boolean isMissingNonsensical(int value_index) { return mods[value_index] == MISSING_NONSENSICAL; }
   boolean isMissingFlow(int value_index) { return mods[value_index] == MISSING_FLOW; }
-  /*Need this annotation:  AssertNonNullIfFalse("vals[#0]")*/
+  /*@AssertNonNullIfFalse("vals[#0]")*/
   boolean isMissing(int value_index) { return (isMissingNonsensical(value_index)
                                                || isMissingFlow(value_index)); }
 
@@ -224,7 +224,7 @@ public final class ValueTuple implements Cloneable {
    * @see #getValue(VarInfo)
    **/
   /*@Interned*/ Object getValue(int val_index) {
-    @SuppressWarnings("nullness") // dependent: the value isn't missing
+    @SuppressWarnings("nullness") // context: precondition requires that the value isn't missing
     /*@NonNull*/ Object result = vals[val_index];
     assert result != null;
     return result;
@@ -302,6 +302,7 @@ public final class ValueTuple implements Cloneable {
 
   // These definitions are intended to make different ValueTuples with the
   // same contents compare identically.
+  /*@AssertNonNullIfTrue("#0")*/
   public boolean equals(/*@Nullable*/ Object obj) {
     if (! (obj instanceof ValueTuple))
       return false;
@@ -337,7 +338,7 @@ public final class ValueTuple implements Cloneable {
    * If vis is non-null, the values are annotated with the VarInfo name that
    * would be associated with the value.
    **/
-  // @SuppressWarnings("nullness")
+  // @SuppressWarnings("nullness") // bug?
   public String toString(VarInfo /*@Nullable*/ [] vis) {
     StringBuffer sb = new StringBuffer("[");
     assert vals.length == mods.length;

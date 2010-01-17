@@ -45,6 +45,7 @@ public class InvariantInfo {
     return this.ppt;
   }
 
+  /*@Pure*/
   public /*@Nullable*/ String className() {
     return this.className;
   }

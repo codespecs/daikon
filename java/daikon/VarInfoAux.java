@@ -155,7 +155,7 @@ public final class VarInfoAux
 
     // Interning
     VarInfoAux result = new VarInfoAux(map).intern();
-    assert interningMap != null : "@SuppressWarnings(nullness):  due to call to intern()";
+    assert interningMap != null : "@SuppressWarnings(nullness):  application invariant:  postcondition of intern(), which was just called";
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("New parse " + result);
       debug.fine ("Intern table size: " + new Integer(interningMap.size()));
@@ -245,6 +245,7 @@ public final class VarInfoAux
   }
 
 
+  /*@AssertNonNullIfTrue("#0")*/
   public boolean equals(/*@Nullable*/ Object o) {
     if (o instanceof VarInfoAux) {
       return equals((VarInfoAux) o);
@@ -253,6 +254,7 @@ public final class VarInfoAux
     }
   }
 
+  /*@AssertNonNullIfTrue("#0")*/
   public boolean equals(VarInfoAux o) {
     return this.map.equals(o.map);
   }

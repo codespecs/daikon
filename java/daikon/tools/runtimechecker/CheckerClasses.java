@@ -52,13 +52,17 @@ public class CheckerClasses {
   public void addDeclaration(ConstructorDeclaration clazz,
                              StringBuffer decl) {
 
-    addDeclaration((ClassOrInterfaceBody)Ast.getParent(ClassOrInterfaceBody.class, clazz), decl);
+    @SuppressWarnings("nullness") // application invariant: a constructor is always in a class or interface
+    /*@NonNull*/ ClassOrInterfaceBody body = (ClassOrInterfaceBody)Ast.getParent(ClassOrInterfaceBody.class, clazz);
+    addDeclaration(body, decl);
   }
 
   public void addDeclaration(MethodDeclaration clazz,
                              StringBuffer decl) {
 
-    addDeclaration((ClassOrInterfaceBody)Ast.getParent(ClassOrInterfaceBody.class, clazz), decl);
+    @SuppressWarnings("nullness") // application invariant: a method is always in a class or interface
+    /*@NonNull*/ ClassOrInterfaceBody body = (ClassOrInterfaceBody)Ast.getParent(ClassOrInterfaceBody.class, clazz);
+    addDeclaration(body, decl);
   }
 
 

@@ -174,7 +174,7 @@ public class TraceSelect {
       while (num_reps > 0) {
 
         DtracePartitioner dec = new DtracePartitioner (fileName);
-        MultiRandSelector</*@Nullable*/ String> mrs
+        MultiRandSelector<String> mrs
           = new MultiRandSelector<String> (numPerSample, dec);
 
         while (dec.hasNext()) {
@@ -267,13 +267,18 @@ public class TraceSelect {
 
 
     // initializes daikon again or else an exception is thrown
-    daikon.Daikon.inv_file = null;
+    reinitializeDaikon();
     daikon.Daikon.main (daikonArgs);
     Runtime.getRuntime().exec ("java daikon.PrintInvariants "
                                + dtraceName + ".inv" + " > "
                                + dtraceName + ".txt");
 
     return;
+  }
+
+  @SuppressWarnings("nullness") // reinitialization
+  private static void reinitializeDaikon() {
+    daikon.Daikon.inv_file = null;
   }
 
   /** Used when I used to select by probability, not absolute number. */

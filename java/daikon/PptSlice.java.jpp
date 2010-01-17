@@ -679,8 +679,9 @@ public final class PPTSLICE1 extends PptSlice {
           VarInfo[] child_vars = new VarInfo[var_infos.length];
           for (int k = 0; k < var_infos.length; k++) {
             VarInfo pv = var_infos[k];
-            VarInfo cv = rel.childVar (pv);
-            assert cv != null : "@SuppressWarnings(nullness)";
+            @SuppressWarnings("nullness")
+            /*@NonNull*/ VarInfo cv = rel.childVar (pv);
+            assert cv != null;
             child_vars[k] = cv.canonicalRep();
           }
           orig_inv.log ("org inv");

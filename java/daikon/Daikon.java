@@ -730,7 +730,7 @@ public final class Daikon {
     }
   }
 
-  @SuppressWarnings("nullness") // use with care!
+  @SuppressWarnings("nullness") // reinitialization
   private static void nullOutMaps() {
     PptTopLevel.pred_map = null;
     PptTopLevel.succ_map = null;
@@ -741,7 +741,7 @@ public final class Daikon {
    * Cleans up static variables so that mainHelper can be called more
    * than once.
    */
-  @SuppressWarnings("nullness") // resets state, sets vars back to null
+  @SuppressWarnings("nullness") // reinitialization
   public static void cleanup() {
 
     // Stop the thread that prints out progress information
@@ -1484,7 +1484,7 @@ public final class Daikon {
 
       // Create the exit, if necessary
       if (exit_ppt == null) {
-        // this is a hack.  it should probably filter out orig and derived
+        // This is a hack.  It should probably filter out orig and derived
         // vars instead of taking the first n.
         int len = ppt.num_tracevars + ppt.num_static_constant_vars;
         VarInfo[] exit_vars = new VarInfo[len];
@@ -1495,7 +1495,10 @@ public final class Daikon {
           //                   ppt.var_infos[j].name(), exit_vars[j].name());
           exit_vars[j].varinfo_index = ppt.var_infos[j].varinfo_index;
           exit_vars[j].value_index = ppt.var_infos[j].value_index;
-          exit_vars[j].equalitySet = null;
+          // Don't inherit the entry variable's equalitySet.
+          @SuppressWarnings("nullness") // reinitialization
+          /*@NonNull*/ Equality es = null;
+          exit_vars[j].equalitySet = es;
         }
 
         exit_ppt
@@ -1614,10 +1617,9 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Read decls, dtrace, etc. files
 
+  /*@NonNullVariable("fileio_progress")*/ // set in mainHelper
   private static PptMap load_decls_files(Set<File> decl_files) {
     stopwatch.reset();
-    assert fileio_progress != null :
-      "@SuppressWarnings(nullness): precondition:  set in mainHelper";
     try {
       if (!Daikon.dkconfig_quiet) {
         System.out.print("Reading declaration files ");
@@ -1829,9 +1831,8 @@ public final class Daikon {
    * been instantiated.  This routine processes data to falsify the
    * candidate invariants.
    **/
+  /*@NonNullVariable("fileio_progress")*/ // set in mainHelper
   private static void process_data(PptMap all_ppts, Set<String> dtrace_files) {
-    assert fileio_progress != null :
-      "@SuppressWarnings(nullness): precondition:  set in mainHelper";
     MemMonitor monitor = null;
     if (use_mem_monitor) {
       monitor = new MemMonitor("stat.out");
@@ -1997,8 +1998,6 @@ public final class Daikon {
 
     // Add implications
     stopwatch.reset();
-    assert fileio_progress != null :
-      "@SuppressWarnings(nullness): looks like a bug with LazyNonNull and flow:  beginning of method asserted the same fact";
     fileio_progress.clear();
     if (! Daikon.dkconfig_disable_splitting) {
       debugProgress.fine("Adding Implications ... ");

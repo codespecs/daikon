@@ -205,12 +205,13 @@ public class Implication
 //                                  new VarInfo[right.ppt.var_infos.length], 0);
   }
 
-  public boolean isSameFormula(Invariant other) {
+  public boolean isSameFormula(/*@NonNull*/ Invariant other) {
     Implication other_implic = (Implication)other;
     return ((iff == other_implic.iff)
             && super.isSameFormula(other_implic));
   }
 
+  /*@AssertNonNullIfTrue("#0")*/
   public boolean isSameInvariant(Invariant other) {
     if (other == null)
       return false;

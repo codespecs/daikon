@@ -80,7 +80,7 @@ public abstract class PptSlice
     invs.trimToSize();
   }
 
-  public final String name() {
+  public final /*@Pure*/ String name() {
     return parent.name + varNames(var_infos);
   }
 
@@ -371,6 +371,7 @@ public abstract class PptSlice
    * for the specified invariant.  An exact match requires that the
    * invariants be of the same class and have the same formula
    */
+  /*@AssertNonNullIfTrue("find_inv_exact(#0)")*/
   public boolean contains_inv_exact (Invariant inv) {
 
     return (find_inv_exact(inv) != null);

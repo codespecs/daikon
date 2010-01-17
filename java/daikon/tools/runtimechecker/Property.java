@@ -76,6 +76,7 @@ public class Property implements Serializable {
             this.xmlname = xmlname;
         }
 
+        /*@AssertNonNullIfTrue("#0")*/
         public boolean equals(/*@Nullable*/ Object o) {
             if (o == null) {
                 return false;
@@ -154,6 +155,7 @@ public class Property implements Serializable {
      * Two properties are equal if their fields <code>daikonRep</code>,
      * <code>method</code> and <code>kind</code> are equal.
      */
+    /*@AssertNonNullIfTrue("#0")*/
     public boolean equals(/*@Nullable*/ Object o) {
         if (o == null) {
             return false;
@@ -346,10 +348,11 @@ public class Property implements Serializable {
             throws MalformedPropertyException {
 
         Property anno = new Property(kind, daikonRep, method);
-        if (propertiesMap.containsKey(new Integer(anno.hashCode()))) {
-            return propertiesMap.get(new Integer(anno.hashCode()));
+        Integer key = new Integer(anno.hashCode());
+        if (propertiesMap.containsKey(key)) {
+            return propertiesMap.get(key);
         } else {
-            propertiesMap.put(new Integer(anno.hashCode()), anno);
+            propertiesMap.put(key, anno);
             return anno;
         }
     }

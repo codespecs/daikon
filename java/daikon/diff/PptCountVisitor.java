@@ -6,6 +6,8 @@ import java.io.*;
 import daikon.*;
 import java.util.*;
 
+// This seems to only count the left side of the pair -- it calls getPpt1
+// but not getPpt2.
 /**
  * PptCountVisitor is currently not documented.
  *
@@ -40,9 +42,11 @@ public class PptCountVisitor extends PrintAllVisitor {
     super(ps, verbose, printEmptyPpts);
   }
 
-  // throw out Program points that are Conditional,
+  // Throw out Program points that are Conditional.
   public void visit (PptNode node) {
-    PptTopLevel ppt = node.getPpt1();
+    @SuppressWarnings("nullness") // application invariant: calling context
+    /*@NonNull*/ PptTopLevel ppt = node.getPpt1();
+
     if ((ppt instanceof PptConditional)) return;
     //        else super.visit (node);
 
@@ -62,6 +66,7 @@ public class PptCountVisitor extends PrintAllVisitor {
     }
   }
 
+  /*@Pure*/
   private boolean countReport (PptNode input) {
 
     int reportCnt = 0;
@@ -85,6 +90,7 @@ public class PptCountVisitor extends PrintAllVisitor {
 
   }
 
+  /*@Pure*/
   private boolean countTarget (PptNode input) {
 
     int targetCnt = 0;

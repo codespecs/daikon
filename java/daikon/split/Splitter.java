@@ -69,6 +69,7 @@ public abstract class Splitter
   /**
    * Returns true or false according to whether the values in the specified
    * ValueTuple satisfy the condition represented by this Splitter.
+   * Requires that valid() returns true.
    */
   public abstract boolean test(ValueTuple vt);
 
@@ -87,5 +88,5 @@ public abstract class Splitter
 
   /** On an instantiated Splitter, give back an appropriate instantiated
    * DummyInvariant. */
-  public abstract DummyInvariant getDummyInvariant();
+  public abstract /*@Nullable*/ DummyInvariant getDummyInvariant();
 }

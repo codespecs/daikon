@@ -49,10 +49,12 @@ public final class CallerContextSplitter
     this.condition = condition;
   }
 
+  /*@AssertNonNullIfTrue("caller_varinfo")*/
   public boolean valid() {
     return (caller_varinfo != null);
   }
 
+  /*@NonNullVariable("caller_varinfo")*/
   public boolean test(ValueTuple vt) {
     long caller = caller_varinfo.getIntValue(vt);
     return (ArraysMDE.indexOf(ids, caller) >= 0);

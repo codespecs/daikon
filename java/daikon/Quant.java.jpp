@@ -100,6 +100,7 @@ public final class Quant {
   }
 
   /** True iff the sequence contains no null elements. */
+  /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean eltsNonNull(Object[] seq1) {
     if (seq1 == null) { return false; }
     for (int i = 0 ; i < seq1.length ; i++) {
@@ -162,6 +163,7 @@ public final class Quant {
 
   /** @see #noDups(Object[])
    */
+  /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean noDups(Object seq) {
     if (seq == null) { return false; }
     return noDups(toObjArray(seq));
@@ -169,6 +171,7 @@ public final class Quant {
 
   /** @see #typeArray(Object[])
    */
+  /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static String /*@PolyNull*/ [] typeArray(/*@PolyNull*/ Object seq) {
     if (seq == null) { return null; }
     return typeArray(toObjArray(seq));
@@ -176,6 +179,7 @@ public final class Quant {
 
   /** @see #eltwiseEqual(Object[])
    */
+  /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean eltwiseEqual(Object seq) {
     if (seq == null) { return false; }
     return eltwiseEqual(toObjArray(seq));
@@ -183,6 +187,7 @@ public final class Quant {
 
   /** @see #eltwiseNotEqual(Object[])
    */
+  /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean eltwiseNotEqual(Object seq) {
     if (seq == null) { return false; }
     return eltwiseNotEqual(toObjArray(seq));
@@ -190,7 +195,8 @@ public final class Quant {
 
   /** @see #concat(Object[], Object[])
    */
-  /* pure */ public static java.lang.Object /*@PolyNull*/ [] concat(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
+  /*TODO: @AssertNonNullIfNonNull({"#0","#1"})*/
+  /* pure */ public static /*@Nullable*/ java.lang.Object /*@PolyNull*/ [] concat(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return concat(toObjArray(seq1), toObjArray(seq2));
@@ -198,6 +204,7 @@ public final class Quant {
 
   /** @see #union(Object[], Object[])
    */
+  /*TODO: @AssertNonNullIfNonNull({"#0","#1"})*/
   /* pure */ public static java.lang.Object /*@PolyNull*/ [] union(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
@@ -206,6 +213,7 @@ public final class Quant {
 
   /** @see #intersection(Object[], Object[])
    */
+  /*TODO: @AssertNonNullIfNonNull({"#0","#1"})*/
   /* pure */ public static java.lang.Object /*@PolyNull*/ [] intersection(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
@@ -214,6 +222,7 @@ public final class Quant {
 
   /** @see #setDiff(Object[], Object[])
    */
+  /*TODO: @AssertNonNullIfNonNull({"#0","#1"})*/
   /* pure */ public static java.lang.Object /*@PolyNull*/ [] setDiff(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
@@ -222,6 +231,7 @@ public final class Quant {
 
   /** @see #setEqual(Object[], Object[])
    */
+  /*@AssertNonNullIfTrue({"#0","#1"})*/
   /* pure */ public static boolean setEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
@@ -230,6 +240,7 @@ public final class Quant {
 
   /** @see #isReverse(Object[], Object[])
    */
+  /*@AssertNonNullIfTrue({"#0","#1"})*/
   /* pure */ public static boolean isReverse(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
@@ -238,6 +249,7 @@ public final class Quant {
 
   /** @see #pairwiseEqual(Object[], Object[])
    */
+  /*@AssertNonNullIfTrue({"#0","#1"})*/
   /* pure */ public static boolean pairwiseEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
@@ -246,6 +258,7 @@ public final class Quant {
 
   /** @see #pairwiseNotEqual(Object[], Object[])
    */
+  /*@AssertNonNullIfTrue({"#0","#1"})*/
   /* pure */ public static boolean pairwiseNotEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
@@ -254,6 +267,7 @@ public final class Quant {
 
   /** @see #lexEqual(Object[], Object[])
    */
+  /*@AssertNonNullIfTrue({"#0","#1"})*/
   /* pure */ public static boolean lexEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
@@ -262,6 +276,7 @@ public final class Quant {
 
   /** @see #lexNotEqual(Object[], Object[])
    */
+  /*@AssertNonNullIfTrue({"#0","#1"})*/
   /* pure */ public static boolean lexNotEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
@@ -270,6 +285,7 @@ public final class Quant {
 
   /** @see #memberOf(Object, Object[])
    */
+  /*@AssertNonNullIfTrue("#1")*/
   /* pure */ public static boolean memberOf(Object elt, /*@Nullable*/ Object arr) {
     if (arr == null) { return false; }
     return memberOf(elt, toObjArray(arr));
@@ -277,6 +293,7 @@ public final class Quant {
 
   /** @see #slice(Object[], int, int)
    */
+  /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static Object /*@PolyNull*/ [] slice(/*@PolyNull*/ Object seq, int start, int end) {
     if (seq == null) { return null; }
     return slice(toObjArray(seq), start, end);
@@ -284,6 +301,7 @@ public final class Quant {
 
   /** @see #eltsEqual(Object[], Object)
    */
+  /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean eltsEqual(/*@Nullable*/ Object arr, Object elt) {
     if (arr == null) { return false; }
     return eltsEqual(toObjArray(arr), elt);
@@ -291,11 +309,13 @@ public final class Quant {
 
   /** @see #eltsNotEqual(Object[], Object)
    */
+  /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean eltsNotEqual(/*@Nullable*/ Object arr, Object elt) {
     if (arr == null) { return false; }
     return eltsNotEqual(toObjArray(arr), elt);
   }
 
+  /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean isIntegralType(/*@Nullable*/ Class<?> c) {
     if (c == null) { return false; }
     return
@@ -305,6 +325,7 @@ public final class Quant {
        c.equals(Long.TYPE));
   }
 
+  /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean isRealType(/*@Nullable*/ Class<?> c) {
     if (c == null) { return false; }
     return
@@ -312,6 +333,7 @@ public final class Quant {
        c.equals(Double.TYPE));
   }
 
+  /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean isNumericType(Class<?> c) {
     if (c == null) { return false; }
     return isIntegralType(c) || isRealType(c);
@@ -320,6 +342,7 @@ public final class Quant {
   /** Returns an Object[] array, either by casting or by conversion from an
    * AbstractCollection.
    */
+  /*@AssertNonNullIfTrue("#0")*/
   public static Object /*@PolyNull*/ [] toObjArray(/*@PolyNull*/ Object o) {
     if (o == null) { return null; }
     if (o instanceof java.util.AbstractCollection<?>) {

@@ -29,10 +29,12 @@ public final class SplitterExample
     return new SplitterExample(ppt);
   }
 
+  /*@AssertNonNullIfTrue("x_varinfo")*/
   public boolean valid() {
     return (x_varinfo != null);
   }
 
+  /*@NonNullVariable("x_varinfo")*/
   public boolean test(ValueTuple vt) {
     // Alternately, if x represents an array, use
     //   vt.getIntArrayValue(x_varinfo);

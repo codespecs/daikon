@@ -243,8 +243,8 @@ public class LogicalCompare {
         if (result == 'T' && !identical) {
           Vector<Set<Class<? extends Invariant>>> sets = lemmas.minimizeClasses(inv.formula);
           for (Set<Class<? extends Invariant>> classes : sets) {
-            Class<? extends Invariant> inv_class = inv.invClass();
-            assert inv_class != null : "@SuppressWarnings(nullness): looks like a Checker Framework bug";
+            @SuppressWarnings("nullness") // application invariant: context; might be able to rewrite types to make consequences a Vector<InvariantLemma>";
+            /*@NonNull*/ Class<? extends Invariant> inv_class = inv.invClass();
             System.out.print(shortName(inv_class) + ":");
             if (classes.contains(inv_class)) {
               System.out.print(" " + shortName(inv_class));
@@ -753,6 +753,7 @@ public class LogicalCompare {
         }
         if (app_ppt.num_samples() > 0) {
           if (test_ppt_names.contains(name)
+              // correlated maps: test_ppts.get(name) is non-null because test_ppt_names.contains(name) is true
               && test_ppts.get(name).num_samples() > 0) {
             common_names.add(name);
           } else {

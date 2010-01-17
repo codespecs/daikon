@@ -290,6 +290,7 @@ public final class PrintInvariants {
         } else if (Daikon.disc_reason_SWITCH.equals(option_name)) {
           try { PrintInvariants.discReasonSetup(g.getOptarg()); }
           catch (IllegalArgumentException e) {
+            assert e.getMessage() != null : "@SuppressWarnings(nullness):  application invariant:  if discReasonSetup throws IllegalArgumentException, its message is non-null";
             throw new Daikon.TerminationMessage(e.getMessage());
           }
         } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
@@ -490,6 +491,7 @@ public final class PrintInvariants {
           DiscardInfo di;
           if (propFilter instanceof ObviousFilter) {
             di = nextInv.isObvious();
+            assert di != null : "@SuppressWarnings(nullness)";
             if (nextInv.logOn())
               nextInv.log ("DiscardInfo's stuff: " + di.className() + lineSep
                            + di.format());
@@ -500,7 +502,6 @@ public final class PrintInvariants {
             di = new DiscardInfo(nextInv, DiscardCode.findCode(propFilter),
                                  propFilter.getDescription());
           }
-          assert di != null : "@SuppressWarnings(nullness)";
           DiscReasonMap.put(nextInv, di);
         }
       }
@@ -771,8 +772,9 @@ public final class PrintInvariants {
    * If Daikon.output_num_samples is enabled, prints the number of samples
    * for the specified ppt.  Also prints all of the variables for the ppt
    * if Daikon.output_num_samples is enabled or the format is ESCJAVA,
-   * JML, or DBCJAVA
+   * JML, or DBCJAVA.
    */
+  /*@NonNullVariable("FileIO.new_decl_format")*/
   public static void print_sample_data(PptTopLevel ppt, PrintWriter out) {
 
     if (Daikon.output_num_samples) {
@@ -926,6 +928,7 @@ public final class PrintInvariants {
   private static String reason = "";
 
   /** Prints the specified invariant to out. **/
+  /*@NonNullVariable("FileIO.new_decl_format")*/
   public static void print_invariant(Invariant inv, PrintWriter out,
                                      int invCounter, PptTopLevel ppt) {
     int inv_num_samps = inv.ppt.num_samples();
@@ -933,6 +936,8 @@ public final class PrintInvariants {
       nplural(inv_num_samps, "sample") + ")";
 
     String inv_rep = inv.format_using(Daikon.output_format);
+    assert inv_rep != null
+      : String.format("Null format (%s): %s", inv.getClass(), inv);
 
     if ((Daikon.output_format == OutputFormat.ESCJAVA)
                && ! (inv.isValidEscExpression())) {
@@ -1295,7 +1300,8 @@ public final class PrintInvariants {
     Invariant[] invs_array = invs_vector.toArray(
       new Invariant[invs_vector.size()]);
 
-    Map<Class<? extends InvariantFilter>,Map<Class<? extends Invariant>,Integer>> filter_map = new LinkedHashMap<Class<? extends InvariantFilter>,Map<Class<? extends Invariant>,Integer>>();
+    // Not Map, because keys are nullable
+    HashMap</*@Nullable*/ Class<? extends InvariantFilter>,Map<Class<? extends Invariant>,Integer>> filter_map = new LinkedHashMap</*@Nullable*/ Class<? extends InvariantFilter>,Map<Class<? extends Invariant>,Integer>>();
 
     if (print_invs)
       debug.fine (ppt.name());
@@ -1326,7 +1332,7 @@ public final class PrintInvariants {
 
     log.fine (ppt.name() + ": " + invs_array.length);
 
-    for (Map.Entry<Class<? extends InvariantFilter>,Map<Class<? extends Invariant>,Integer>> entry : filter_map.entrySet()) {
+    for (Map.Entry</*@Nullable*/ Class<? extends InvariantFilter>,Map<Class<? extends Invariant>,Integer>> entry : filter_map.entrySet()) {
       Class<? extends InvariantFilter> filter_class = entry.getKey();
       Map<Class<? extends Invariant>,Integer> inv_map = entry.getValue();
       int total = 0;

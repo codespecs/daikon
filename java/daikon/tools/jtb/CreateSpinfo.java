@@ -236,15 +236,17 @@ public class CreateSpinfo {
       Collections.sort(methodsList);
       for (String declaration : methodsList) {
         output.println(declaration);
-        output.println(removeNewlines(replaceStatements.get(declaration)));
+        @SuppressWarnings("nullness") // iterating over sorted keySet
+        /*@NonNull*/ String replacement = replaceStatements.get(declaration);
+        output.println(removeNewlines(replacement));
       }
       output.println();
     }
-    List<String> method_conds;
     List<String> methodsList = new ArrayList<String>(conditions.keySet());
     Collections.sort(methodsList);
     for (String method : methodsList) {
-      method_conds = conditions.get(method);
+      @SuppressWarnings("nullness") // iterating over sorted keySet
+      /*@NonNull*/ List<String> method_conds = conditions.get(method);
       Collections.sort(method_conds);
       if (method_conds.size() > 0) {
         if (packageName != null) {

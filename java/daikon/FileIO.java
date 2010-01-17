@@ -207,6 +207,7 @@ public final class FileIO {
   }
 
   // Utilities
+  /*@AssertNonNullIfTrue("#0")*/
   public static final boolean isComment(/*@Nullable*/ String s) {
     return s != null && (s.startsWith("//") || s.startsWith("#"));
   }
@@ -382,7 +383,7 @@ public final class FileIO {
 
     // Check to see if the program point is new
     if (state.all_ppts.containsName(ppt_name)) {
-      @SuppressWarnings("nullness")
+      @SuppressWarnings("nullness") // key is in PptMap due to containsName call
       /*@NonNull*/ PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(ppt_name)";
       if (state.ppts_are_new) {
@@ -491,7 +492,7 @@ public final class FileIO {
 
     // This program point name has already been encountered.
     if (state.all_ppts.containsName(ppt_name)) {
-      @SuppressWarnings("nullness")
+      @SuppressWarnings("nullness") // key is in PptMap due to containsName call
       /*@NonNull*/ PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(ppt_name)";
       if (state.ppts_are_new) {
@@ -881,6 +882,7 @@ public final class FileIO {
     }
 
     // Return true if the invocations print the same
+    /*@AssertNonNullIfTrue("#0")*/
     public boolean equals(/*@Nullable*/ Object other) {
       if (other instanceof FileIO.Invocation)
         return this.format().equals(((FileIO.Invocation) other).format());
@@ -947,7 +949,7 @@ public final class FileIO {
     if (Daikon.server_dir!=null) {
       // Yoav: server mode
       while (true) {
-        @SuppressWarnings("nullness") // server_dir was checked when it was set
+        @SuppressWarnings("nullness") // server_dir is a directory; this was checked when the variable was set
         String /*@NonNull*/ [] dir_files = Daikon.server_dir.list();
         Arrays.sort(dir_files);
         boolean hasEnd = false;
@@ -1314,7 +1316,7 @@ public final class FileIO {
   // method it's true, so it is a useful annotation.
   public static /*@LazyNonNull*/ ParseState data_trace_state = null;
   // The variable is only ever cleared at the end of a routine that set it.
-  @SuppressWarnings("nullness") // setting a LazyNonNull field to null
+  @SuppressWarnings("nullness") // reinitialization
   private static void clear_data_trace_state() {
     data_trace_state = null;
   }
@@ -1361,8 +1363,8 @@ public final class FileIO {
       read_data_trace_record (data_trace_state);
 
       if (data_trace_state.status == ParseStatus.SAMPLE) {
-        assert data_trace_state.ppt != null : "@SuppressWarnings(nullness): dependent type";
-        assert data_trace_state.vt != null : "@SuppressWarnings(nullness): dependent type";
+        assert data_trace_state.ppt != null : "@SuppressWarnings(nullness): dependent: ParseStatus.SAMPLE";
+        assert data_trace_state.vt != null : "@SuppressWarnings(nullness): dependent: ParseStatus.SAMPLE";
         // Nonce may be null
         samples_processed++;
         // Add orig and derived variables; pass to inference (add_and_flow)
@@ -1423,6 +1425,7 @@ public final class FileIO {
    * The record is stored by side effect into the state argument.
    */
   // TODO:  For clarity, this should perhaps return its side-effected argument.
+  /*@NonNullVariable("FileIO.data_trace_state")*/
   public static void read_data_trace_record (ParseState state)
     throws IOException {
 
@@ -1431,8 +1434,6 @@ public final class FileIO {
     @SuppressWarnings("interning")
     boolean stateOK = (state == FileIO.data_trace_state);
     assert stateOK;
-    assert FileIO.data_trace_state != null
-      : "@SuppressWarnings(nullness): global var is non-null on entry";
 
     LineNumberReader reader = state.reader;
 
@@ -1498,7 +1499,7 @@ public final class FileIO {
         // --ppt-select-pattern or --ppt-omit-pattern.
         if (state.ppt != null) {
           if (!state.all_ppts.containsName (state.ppt.name())) {
-            assert state.ppt != null : "@SuppressWarnings(nullness): not side-effected since check";
+            // assert state.ppt != null : "@SuppressWarnings(nullness): bug: not side-effected since check, and only pure methods have been called since";
             state.all_ppts.add(state.ppt);
             assert state.ppt != null; // for nullness checker
             try {
@@ -1607,9 +1608,6 @@ public final class FileIO {
 
       /*@Nullable*/ Object[] vals = new /*@Nullable*/ Object[vals_array_size];
       int[] mods = new int[vals_array_size];
-
-      // Test whether flow was able to determine this.
-      /*@NonNull*/ Object x = data_trace_state;
 
       // Read a single record from the trace file;
       // fills up vals and mods arrays by side effect.
@@ -1792,9 +1790,9 @@ public final class FileIO {
         for (PptTopLevel p : ppts) {
           if (p.ppt_successors != null) {
             for (String succName : p.ppt_successors) {
-              @SuppressWarnings("nullness")
+              @SuppressWarnings("nullness") // map get: any successor is in the map
               /*@NonNull*/ PptTopLevel succPpt = all_ppts.get(succName);
-              assert succPpt.predecessors != null : "@SuppressWarnings(nullness)";
+              assert succPpt.predecessors != null : "@SuppressWarnings(nullness): this is a successor, so the predecessor exists";
               succPpt.predecessors.add(p);
             }
           }
@@ -1810,7 +1808,7 @@ public final class FileIO {
           // Every block except the first should have at least one predecessor
           for (int i = 1; i < ppts.size(); i++) {
             PptTopLevel p = ppts.get(i);
-            assert p.predecessors != null : "@SuppressWarnings(nullness)";
+            assert p.predecessors != null : "@SuppressWarnings(nullness): dependent: building combined program points";
             if (p.predecessors.size() == 0)
               System.out.printf ("ERROR: ppt %s has no predecessors\n", p);
           }
@@ -1916,7 +1914,7 @@ public final class FileIO {
           ArrayList<Invocation> invocations = new ArrayList<Invocation>();
           TreeSet<Integer> keys = new TreeSet<Integer>(call_hashmap.keySet());
           for (Integer i : keys) {
-            @SuppressWarnings("nullness") // sorted keyset
+            @SuppressWarnings("nullness") // iterating over sorted keyset
             /*@NonNull*/ Invocation invok = call_hashmap.get(i);
             assert invok != null;
             invocations.add(invok);
@@ -1973,7 +1971,7 @@ public final class FileIO {
     // Print the invocations in sorted order.
     TreeSet</*@Interned*/ Invocation> keys = new TreeSet</*@Interned*/ Invocation>(counter.keySet());
     for (/*@Interned*/ Invocation invok : keys) {
-      @SuppressWarnings("nullness") // sorted keyset
+      @SuppressWarnings("nullness") // iterating over sorted keyset
       /*@NonNull*/ Integer count = counter.get(invok);
       System.out.println(invok.format(false) + " : "
                          + UtilMDE.nplural(count.intValue(), "invocation"));
@@ -1983,14 +1981,12 @@ public final class FileIO {
   // This procedure reads a single record from a trace file and
   // fills up vals and mods by side effect.  The ppt name and
   // invocation nonce (if any) have already been read.
+  /*@NonNullVariable("data_trace_state")*/
   private static void read_vals_and_mods_from_trace_file
                         (LineNumberReader reader, String filename,
                          PptTopLevel ppt, /*@Nullable*/ Object[] vals, int[] mods)
     throws IOException
   {
-    // Global variable data_trace_state should be non-null.
-    assert data_trace_state != null : "@SuppressWarnings(nullness)";
-
     VarInfo[] vis = ppt.var_infos;
     int num_tracevars = ppt.num_tracevars;
 
@@ -2038,6 +2034,7 @@ public final class FileIO {
       if (line == null) {
         throw new Daikon.TerminationMessage(
           "Unexpected end of file at "
+          // @SuppressWarnings(nullness): bug with NonNullVariable
             + data_trace_state.filename
             + " line "
             + reader.getLineNumber() + lineSep
@@ -2058,6 +2055,7 @@ public final class FileIO {
         if (line == null
             || !((line.equals("0") || line.equals("1") || line.equals("2")))) {
           throw new Daikon.TerminationMessage("Bad modbit '" + line + "'",
+                                              // @SuppressWarnings(nullness): bug with NonNullVariable
                                               data_trace_state);
         }
         line = reader.readLine(); // next variable name
@@ -2065,6 +2063,7 @@ public final class FileIO {
       if (line == null) {
         throw new Daikon.TerminationMessage(
           "Unexpected end of file at "
+          // @SuppressWarnings(nullness): bug with NonNullVariable
             + data_trace_state.filename
             + " line "
             + reader.getLineNumber() + lineSep
@@ -2081,12 +2080,14 @@ public final class FileIO {
             + line
             + " for program point "
           + ppt.name(),
+          // @SuppressWarnings(nullness): bug with NonNullVariable
           data_trace_state);
       }
       line = reader.readLine();
       if (line == null) {
         throw new Daikon.TerminationMessage(
           "Unexpected end of file at "
+          // @SuppressWarnings(nullness): bug with NonNullVariable
             + data_trace_state.filename
             + " line "
             + reader.getLineNumber() + lineSep
@@ -2102,6 +2103,7 @@ public final class FileIO {
       if (line == null) {
         throw new Daikon.TerminationMessage(
           "Unexpected end of file at "
+          // @SuppressWarnings(nullness): bug with NonNullVariable
             + data_trace_state.filename
             + " line "
             + reader.getLineNumber() + lineSep
@@ -2114,6 +2116,7 @@ public final class FileIO {
       }
       if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
         throw new Daikon.TerminationMessage("Bad modbit `" + line + "'",
+                                              // @SuppressWarnings(nullness): bug with NonNullVariable
                                   data_trace_state);
       }
       int mod = ValueTuple.parseModified(line);
@@ -2171,6 +2174,7 @@ public final class FileIO {
             "Modbit indicates nonsensical value for variable "
               + vi.name() + " with value \"" + value_rep + "\";" + lineSep
               + "  text of value should be \"nonsensical\"",
+            // @SuppressWarnings(nullness): bug with NonNullVariable
               data_trace_state);
         } else {
           // Keep track of variables that can be missing
@@ -2252,11 +2256,12 @@ public final class FileIO {
    * a matching enter.  See dkconfig_ignore_missing_enter for more info.
    * If true is returned, this ppt should be ignored by the caller
    **/
+  /*@NonNullVariable("data_trace_state")*/
   public static boolean add_orig_variables(PptTopLevel ppt,
                                      // HashMap cumulative_modbits,
                                      /*@Nullable*/ Object[] vals, int[] mods,
                                            /*@Nullable*/ Integer nonce) {
-    assert data_trace_state != null : "@SuppressWarnings(nullness): need @NonNullVariable method annotation";
+    assert data_trace_state != null;
 
     VarInfo[] vis = ppt.var_infos;
     /*@Interned*/ String fn_name = ppt.ppt_name.getNameWithoutPoint();
@@ -2309,18 +2314,17 @@ public final class FileIO {
               //                   data_trace_state.reader.getLineNumber());
               return true;
             } else {
-              assert data_trace_state != null; // nullness application invariant?
               // Not Daikon.TerminationMessage:  caller knows context such as
               // file name and line number.
               throw new Error(String.format("Didn't find call with nonce %s to match %s ending at %s line %d",
                                             nonce, ppt.name(),
+                                            // @SuppressWarnings(nullness): bug with NonNullVariable
                                             data_trace_state.filename,
                                             data_trace_state.reader.getLineNumber()));
             }
           }
-          @SuppressWarnings("nullness") // bug in flow and containsKey, it seems:  test testContainsKey2 indicates that the get should be recognized to return non-null
-          /*@NonNull*/ Invocation invoc_nonNull = call_hashmap.get(nonce);
-          invoc = invoc_nonNull;
+          // @SuppressWarnings(nullness): bug with Map heuristics
+          invoc = call_hashmap.get(nonce);
           call_hashmap.remove(nonce);
         }
       }
@@ -2381,8 +2385,10 @@ public final class FileIO {
     }
     int num_const = ppt.num_static_constant_vars;
     for (int i = filled_slots; i < ppt.var_infos.length; i++) {
-      assert ppt.var_infos[i].derived != null :
-        "@SuppressWarnings(nullness): variable not derived: " + ppt.var_infos[i].repr();
+      assert ppt.var_infos[i].derived != null
+        : "variable not derived: " + ppt.var_infos[i].repr();
+      assert ppt.var_infos[i].derived != null
+        : "@SuppressWarnings(nullness): application invariant";
       // Add this derived variable's value
       ValueAndModified vm =
         ppt.var_infos[i].derived.computeValueAndModified(partial_vt);
@@ -2407,11 +2413,10 @@ public final class FileIO {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20060905L;
 
+    /*@NonNullVariable("FileIO.new_decl_format")*/
     public SerialFormat(PptMap map, Configuration config) {
       this.map = map;
       this.config = config;
-      assert FileIO.new_decl_format != null
-        : "@SuppressWarnings(nullness):  nullness application invariant";
       this.new_decl_format = FileIO.new_decl_format;
 
     }
@@ -2621,7 +2626,7 @@ public final class FileIO {
    * Class that holds all of the information from the declaration record
    * concerning a particular variable
    */
-  @SuppressWarnings("nullness") // needs documentation before annotating with nullness
+  @SuppressWarnings("nullness") // undocumented class needs documentation before annotating with nullness
   public static class VarDefinition implements java.io.Serializable, Cloneable{
     static final long serialVersionUID = 20060524L;
     transient ParseState state;

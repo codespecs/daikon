@@ -35,6 +35,7 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
         if (node.getPpt1() instanceof PptConditional) {
             return;
         }
+        // @SuppressWarnings(nullness): bug exposed by test PureTest.testInstanceof()
         System.out.println (node.getPpt1().name);
         repeatFilter.clear();
         accum.clear();

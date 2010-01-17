@@ -245,6 +245,7 @@ public final class Configuration
       value = ((String)value).intern();
       // System.out.printf ("setting %s to '%s'\n", field, value);
     } else if ((type.getSuperclass() != null)
+               // @SuppressWarnings(nullness):  bug in handling of @Pure
                && type.getSuperclass().getName().equals("java.lang.Enum")) {
       try {
         java.lang.reflect.Method valueOf

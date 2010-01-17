@@ -777,6 +777,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns true if this variable is a derived variable **/
+  /*@AssertNonNullIfTrue("derived")*/
   public boolean isDerived() {
     return (derived != null);
   }
@@ -2469,6 +2470,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       this.samples = samples;
     }
 
+    /*@AssertNonNullIfTrue("#0")*/
     public boolean equals(/*@Nullable*/ Object obj) {
       if (!(obj instanceof Pair))
         return (false);

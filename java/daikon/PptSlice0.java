@@ -63,7 +63,7 @@ public class PptSlice0
     }
   }
 
-  @SuppressWarnings("nullness") // resets variables to null
+  @SuppressWarnings("nullness") // reinitialization
   private void reinitInvariantsSeen() {
     invariantsSeen = null;
     initInvariantsSeen();
@@ -185,6 +185,7 @@ public class PptSlice0
     }
 
     // Returns the value of "isSameInvariant()".
+    /*@AssertNonNullIfTrue("#0")*/
     public boolean equals(/*@Nullable*/ Object o) {
       if (o == null)
         return false;

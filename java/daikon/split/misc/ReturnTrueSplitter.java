@@ -27,11 +27,13 @@ public final class ReturnTrueSplitter
     return new ReturnTrueSplitter(ppt);
   }
 
+  /*@AssertNonNullIfTrue("return_varinfo")*/
   public boolean valid() {
     return ((return_varinfo != null)
             && (return_varinfo.type == ProglangType.BOOLEAN));
   }
 
+  /*@NonNullVariable("return_varinfo")*/
   public boolean test(ValueTuple vt) {
     return (return_varinfo.getIntValue(vt) != 0);
   }
@@ -40,7 +42,7 @@ public final class ReturnTrueSplitter
     return "return == true";
   }
 
-  public DummyInvariant getDummyInvariant() {
+  public /*@Nullable*/ DummyInvariant getDummyInvariant() {
     return null;
   }
 }

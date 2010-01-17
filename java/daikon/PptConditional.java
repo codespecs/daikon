@@ -67,7 +67,7 @@ public final class PptConditional
     return splitter.valid();
   }
 
-  public DummyInvariant dummyInvariant() {
+  public /*@Nullable*/ DummyInvariant dummyInvariant() {
     return splitter.getDummyInvariant();
   }
 

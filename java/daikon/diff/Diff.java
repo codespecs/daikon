@@ -628,9 +628,9 @@ public final class Diff {
                              boolean includeUnjustified) {
     RootNode root = new RootNode();
 
-    Iterator<Pair<PptTopLevel,PptTopLevel>> opi = new OrderedPairIterator<PptTopLevel>(map1.pptSortedIterator(PPT_COMPARATOR), map2.pptSortedIterator(PPT_COMPARATOR), PPT_COMPARATOR);
+    Iterator<Pair</*@Nullable*/ PptTopLevel,/*@Nullable*/ PptTopLevel>> opi = new OrderedPairIterator<PptTopLevel>(map1.pptSortedIterator(PPT_COMPARATOR), map2.pptSortedIterator(PPT_COMPARATOR), PPT_COMPARATOR);
     while (opi.hasNext()) {
-      Pair<PptTopLevel,PptTopLevel> ppts = opi.next();
+      Pair</*@Nullable*/ PptTopLevel,/*@Nullable*/ PptTopLevel> ppts = opi.next();
       PptTopLevel ppt1 = ppts.a;
       PptTopLevel ppt2 = ppts.b;
       if (shouldAdd(ppt1) || shouldAdd(ppt2)) {
@@ -669,7 +669,7 @@ public final class Diff {
    * Returns true if the program point should be added to the tree,
    * false otherwise.
    **/
-  private boolean shouldAdd(PptTopLevel ppt) {
+  private boolean shouldAdd(/*@Nullable*/ PptTopLevel ppt) {
     if (examineAllPpts) {
       return true;
     } else {
@@ -691,7 +691,7 @@ public final class Diff {
    * the program points may be null.
    * If includeUnjustied is true, the unjustified invariants are included.
    **/
-  private PptNode diffPptTopLevel(PptTopLevel ppt1, PptTopLevel ppt2,
+  private PptNode diffPptTopLevel(/*@Nullable*/ PptTopLevel ppt1, /*@Nullable*/ PptTopLevel ppt2,
                                   InvMap map1, InvMap map2,
                                   boolean includeUnjustified) {
     PptNode pptNode = new PptNode(ppt1, ppt2);
@@ -745,6 +745,7 @@ public final class Diff {
       Collections.sort(invs2, invSortComparator2);
     } else {
       if ( false && treeManip && isCond (ppt1)) {
+        assert ppt1 != null : "@SuppressWarnings(nullness): dead code";
         assert manip1 != null : "@SuppressWarnings(nullness): dependent on boolean treeManip";
         assert manip2 != null : "@SuppressWarnings(nullness): dependent on boolean treeManip";
 
@@ -773,11 +774,11 @@ public final class Diff {
       }
     }
 
-    Iterator<Pair<Invariant,Invariant>> opi
+    Iterator<Pair</*@Nullable*/ Invariant,/*@Nullable*/ Invariant>> opi
       = new OrderedPairIterator<Invariant>(invs1.iterator(), invs2.iterator(),
                                            invPairComparator);
     while (opi.hasNext()) {
-      Pair<Invariant,Invariant> invariants = opi.next();
+      Pair</*@Nullable*/ Invariant,/*@Nullable*/ Invariant> invariants = opi.next();
       Invariant inv1 = invariants.a;
       Invariant inv2 = invariants.b;
       if (!includeUnjustified) {
@@ -798,7 +799,7 @@ public final class Diff {
     return pptNode;
   }
 
-  private boolean isCond (PptTopLevel ppt) {
+  private boolean isCond (/*@Nullable*/ PptTopLevel ppt) {
     return (ppt instanceof PptConditional);
   }
 

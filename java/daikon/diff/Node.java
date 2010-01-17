@@ -36,10 +36,12 @@ public abstract class Node<CONTENT extends /*@Nullable*/ Object,CHILD> {
     return userObject;
   }
 
+  /*@Pure*/
   public CONTENT getUserLeft() {
     return userObject.a;
   }
 
+  /*@Pure*/
   public CONTENT getUserRight() {
     return userObject.b;
   }

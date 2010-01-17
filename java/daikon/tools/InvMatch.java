@@ -23,7 +23,7 @@ public class InvMatch {
   /**
    * Main program for testing purposes
    */
-  @SuppressWarnings("nullness") // testing method
+  @SuppressWarnings("nullness") // testing method, not worth type-checking
   public static void main (String[] args) throws IOException {
 
     // Read in the sample decls file
@@ -134,8 +134,13 @@ public class InvMatch {
         if (xlate.quality > 0)
           inv_xlate_list.add (xlate);
       }
-      // what is the purpose of this?
-      inv_xlate_list.add (null);
+      // What is the purpose of this?  Maybe it separates the translation
+      // results for different invariants.  How/where is it used/checked?
+      // I see places where a null is just skipped over, but not where it
+      // has an effect.
+      @SuppressWarnings("nullness") // can't figure out what this is for; maybe change the declaration
+      /*@NonNull*/ InvTranslate dummy = null;
+      inv_xlate_list.add (dummy);
     }
 
     // Debug print all of the translations

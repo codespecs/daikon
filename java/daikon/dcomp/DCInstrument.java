@@ -160,6 +160,7 @@ class DCInstrument {
       this.arg_types = arg_types;
     }
 
+    /*@AssertNonNullIfTrue("#0")*/
     boolean equals (String name, Type[] arg_types) {
       if (!name.equals (this.name))
         return false;
@@ -171,6 +172,7 @@ class DCInstrument {
       return (true);
     }
 
+    /*@AssertNonNullIfTrue("#0")*/
     public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof MethodDef))
         return false;

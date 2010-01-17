@@ -105,7 +105,7 @@ public class DynamicConstants implements Serializable {
     // String or pointer?  Does the code distinguish that case from val not
     // being set?
     /** The value of the constant, or the previous constant value if
-     * constant==false && previous_constant==true.  Null iff count=0.
+     * constant==false  and  previous_constant==true.  Null iff count=0.
      **/
     public /*@LazyNonNull*/ /*@Interned*/ Object val = null;
 
@@ -172,6 +172,7 @@ public class DynamicConstants implements Serializable {
     }
 
 
+    /*@AssertNonNullIfTrue("#0")*/
     public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof Constant))
         return (false);
@@ -333,7 +334,7 @@ public class DynamicConstants implements Serializable {
     // Turn off previous_constant on all newly non-constants
     for (Constant con : non_con) {
       con.previous_constant = false;
-      @SuppressWarnings("nullness") // need statement annotation
+      @SuppressWarnings("nullness") // reinitialization
       /*@NonNull*/ Object nullValue = null;
       con.val = nullValue;
       con.count = 0;
@@ -386,7 +387,7 @@ public class DynamicConstants implements Serializable {
    **/
   public Object constant_value (VarInfo vi) {
 
-    @SuppressWarnings("nullness") // non-missing value, so non-null
+    @SuppressWarnings("nullness") // non-missing value, so non-null val field
     /*@NonNull*/ Object result = getConstant(vi).val;
     return result;
   }
@@ -524,7 +525,7 @@ public class DynamicConstants implements Serializable {
         Debug.log (getClass(), ppt, Debug.vis(con.vi), "Instantiated invs");
       if (con.count > 0) {
         assert con.val != null
-          : "@SuppressWarnings(nullness): dependent: val when count>0";
+          : "@SuppressWarnings(nullness): dependent: val != null when count>0";
         slice1.add_val_bu (con.val, mod, con.count);
       }
       new_views.add (slice1);
@@ -559,9 +560,9 @@ public class DynamicConstants implements Serializable {
         slice2.instantiate_invariants();
         if (c1.count > 0 && c2.count > 0) {
           assert c1.val != null
-            : "@SuppressWarnings(nullness): dependent: val when count>0";
+            : "@SuppressWarnings(nullness): dependent: val != null when count>0";
           assert c2.val != null
-            : "@SuppressWarnings(nullness): dependent: val when count>0";
+            : "@SuppressWarnings(nullness): dependent: val != null when count>0";
           slice2.add_val_bu (c1.val, c2.val, mod, mod, con1.count);
         }
         new_views.add (slice2);
@@ -596,11 +597,11 @@ public class DynamicConstants implements Serializable {
           if ((con_arr[0].count > 0) && (con_arr[1].count > 0)
               && (con_arr[2].count > 0)) {
             assert con_arr[0].val != null
-              : "@SuppressWarnings(nullness): dependent: val when count>0";
+              : "@SuppressWarnings(nullness): dependent: val != null when count>0";
             assert con_arr[1].val != null
-              : "@SuppressWarnings(nullness): dependent: val when count>0";
+              : "@SuppressWarnings(nullness): dependent: val != null when count>0";
             assert con_arr[2].val != null
-              : "@SuppressWarnings(nullness): dependent: val when count>0";
+              : "@SuppressWarnings(nullness): dependent: val != null when count>0";
             slice3.add_val_bu (con_arr[0].val, con_arr[1].val,
                               con_arr[2].val, mod, mod, mod, con_arr[0].count);
           }
@@ -1001,9 +1002,9 @@ public class DynamicConstants implements Serializable {
 
         if (con1.count > 0 && con2.count > 0) {
           assert con1.val != null
-            : "@SuppressWarnings(nullness): dependent: val when count>0";
+            : "@SuppressWarnings(nullness): dependent: val != null when count>0";
           assert con2.val != null
-            : "@SuppressWarnings(nullness): dependent: val when count>0";
+            : "@SuppressWarnings(nullness): dependent: val != null when count>0";
           slice2.add_val_bu(con1.val, con2.val, mod, mod, con1.count);
         }
         if (slice2.invs.size() > 0)
@@ -1098,7 +1099,7 @@ public class DynamicConstants implements Serializable {
     } else {
       throw new Error("Unrecognized rep_type in instantiate_oneof");
     }
-    assert inv != null : "@SuppressWarnings(nullness)";
+    assert inv != null : "@SuppressWarnings(nullness): instantiation of the given invariants always succeeds";
     slice1.addInvariant (inv);
 
     // Add the value to it

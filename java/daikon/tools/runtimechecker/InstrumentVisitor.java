@@ -304,10 +304,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         super.visit(method);
 
-        ClassOrInterfaceDeclaration clsdecl =
+    @SuppressWarnings("nullness") // application invariant: method node is always in a class or interface
+        /*@NonNull*/ ClassOrInterfaceDeclaration clsdecl =
             (ClassOrInterfaceDeclaration)Ast.getParent(ClassOrInterfaceDeclaration.class, method);
-
-        assert clsdecl != null;
 
         if (Ast.isInterface(clsdecl)) {
             return;
@@ -430,7 +429,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         Modifiers modifiers = (Modifiers)Ast.copy("Modifiers", modifiersOrig);
         modifiers.accept(new TreeFormatter());
 
-        ClassOrInterfaceBody c =
+        @SuppressWarnings("nullness") // application invariant: method node is always in a class or interface
+        /*@NonNull*/ ClassOrInterfaceBody c =
             (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
 
         StringBuffer modifiers_declaration_stringbuffer  = new StringBuffer();

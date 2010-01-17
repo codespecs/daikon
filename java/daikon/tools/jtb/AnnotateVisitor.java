@@ -421,7 +421,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     super.visit(n);             // call "accept(this)" on each field
 
 
-    InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
+    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
 
     InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
     InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
@@ -491,7 +491,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
     super.visit(n);             // call "accept(this)" on each field
 
-    InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
+    /*@Nullable*/ InvariantsAndModifiedVars[] requires_and_ensures = get_requires_and_ensures(ppts, n);
     InvariantsAndModifiedVars requires_invs = requires_and_ensures[0];
     InvariantsAndModifiedVars ensures_invs = requires_and_ensures[1];
 
@@ -607,6 +607,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   // The "invs" argument may be null, in which case no work is done.
+  /*@AssertNonNullIfTrue("#3")*/
   public boolean insertInvariants(Node n, String prefix, /*@Nullable*/ InvariantsAndModifiedVars invs,
                                   boolean useJavaComment) {
     if (invs == null) {
@@ -700,7 +701,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
               = (MethodDeclaration) Ast.getParent(MethodDeclaration.class, n);
             if ((cd != null)
                 || ((md != null) && (! Ast.contains(md.f0, "static")))) {
-              Node parent = Ast.getParent(Statement.class, n);
+              @SuppressWarnings("nullness")
+              /*@NonNull*/ Node parent = Ast.getParent(Statement.class, n);
               // If parent isn't in a block (eg, if parent
               // is sole element in then or else clause), then this is wrong.
               // It's safe, however.  But does it cause syntax errors if an
@@ -736,7 +738,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       PrimaryExpression pe = Ast.assignment2primaryexpression(n);
       String fieldname = Ast.fieldName(pe);
       // System.out.println("In expression, fieldname = " + fieldname);
-      Node stmt = Ast.getParent(Statement.class, n);
+      @SuppressWarnings("nullness") // every expression is within a statement
+      /*@NonNull*/ Node stmt = Ast.getParent(Statement.class, n);
       if ((fieldname != null) && isOwned(fieldname)) {
         if (lightweight)
           addCommentAfter(stmt, javaLineComment("@ set " + fieldname + ".owner = this;"));

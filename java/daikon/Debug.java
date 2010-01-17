@@ -392,7 +392,7 @@ public class Debug {
     // Get the non-qualified class name
     String class_str = "null";
     if (inv_class != null) {
-      @SuppressWarnings("nullness") // invariants always have a package
+      @SuppressWarnings("nullness") // getPackage(): invariant class always has a package
       /*@NonNull*/ String packageName = inv_class.getPackage().getName() + ".";
       class_str = UtilMDE.replaceString (inv_class.getName(), packageName, "");
     }
@@ -480,7 +480,7 @@ public class Debug {
     // Get the non-qualified class name
     String class_str = "null";
     if (inv_class != null) {
-      @SuppressWarnings("nullness") // invariants always have a package
+      @SuppressWarnings("nullness") // getPackage(): invariant class always has a package
       /*@NonNull*/ String packageName = inv_class.getPackage().getName() + ".";
       class_str = UtilMDE.replaceString (inv_class.getName(), packageName, "");
     }
@@ -488,17 +488,18 @@ public class Debug {
     // Get a string with all of the variable names.  Each is separated by ': '.
     // 3 variable slots are always setup for consistency.
     String vars = "";
-    int numvars = (vis == null) ? 0 : vis.length;
-    for (int i = 0; i < numvars; i++) {
-      @SuppressWarnings("nullness") // loop is not entered unless vis != null
-      /*@NonNull*/ VarInfo v = vis[i];
-      vars += v.name();
-      if (ourvars[i] != null)
-        vars += " {" + ourvars[i] + "}";
-      vars += ": ";
+    if (vis != null) {
+      int numvars = vis.length;
+      for (int i = 0; i < numvars; i++) {
+        /*@NonNull*/ VarInfo v = vis[i];
+        vars += v.name();
+        if (ourvars[i] != null)
+          vars += " {" + ourvars[i] + "}";
+        vars += ": ";
+      }
+      for (int i = numvars; i < 3; i++)
+        vars += ": ";
     }
-    for (int i = numvars; i < 3; i++)
-      vars += ": ";
 
     // Figure out the sample count if possible
     String samp_str = "";

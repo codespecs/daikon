@@ -323,6 +323,7 @@ class Test {
       return super.clone();
     }
 
+    /*@AssertNonNullIfTrue("#0")*/
     public boolean equals(/*@Nullable*/ Object obj) {
       return (obj instanceof Obj)
         && this.x == ((Obj)obj).x
@@ -348,6 +349,7 @@ class Test {
     }
 
     // Overrides Obj.equals
+    /*@AssertNonNullIfTrue("#0")*/
     public boolean equals(/*@Nullable*/ Object obj) {
       return (obj instanceof ObjSub)
         && super.equals(obj)

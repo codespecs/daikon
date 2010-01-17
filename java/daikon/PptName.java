@@ -123,6 +123,7 @@ public class PptName
    * @return getName() [convenience accessor]
    * @see #getName()
    **/
+  /*@Pure*/
   public String name() {
     return getName();
   }
@@ -131,6 +132,7 @@ public class PptName
    * @return the complete program point name
    * e.g. "DataStructures.StackAr.pop()Ljava/lang/Object;:::EXIT84"
    **/
+  /*@Pure*/
   public String getName() {
     return fullname;
   }
@@ -273,6 +275,7 @@ public class PptName
   /**
    * @return true iff this name refers to a procedure exit point
    **/
+  /*@AssertNonNullIfTrue("point")*/
   public boolean isExitPoint() {
     return (point != null) && point.startsWith(FileIO.exit_suffix);
   }
@@ -280,6 +283,7 @@ public class PptName
   /**
    * @return true iff this name refers to an abrupt completion point
    **/
+  /*@AssertNonNullIfTrue("point")*/
   public boolean isThrowsPoint() {
     return (point != null) && point.startsWith(FileIO.throws_suffix);
   }
@@ -288,6 +292,7 @@ public class PptName
    * @return true iff this name refers to a combined (synthetic) procedure
    *         exit point
    **/
+  /*@AssertNonNullIfTrue("point")*/
   public boolean isCombinedExitPoint() {
     return (point != null) && point.equals(FileIO.exit_suffix);
   }
@@ -296,6 +301,7 @@ public class PptName
    * @return true iff this name refers to an actual (not combined)
    * procedure exit point (eg, EXIT22)
    */
+  /*@AssertNonNullIfTrue("point")*/
   public boolean isNumberedExitPoint() {
     return ((point != null) && (isExitPoint() && !isCombinedExitPoint()));
   }
@@ -303,6 +309,7 @@ public class PptName
   /**
    * @return true iff this name refers to a procedure exit point
    **/
+  /*@AssertNonNullIfTrue("point")*/
   public boolean isEnterPoint() {
     return (point != null) && point.startsWith(FileIO.enter_suffix);
   }
@@ -424,10 +431,12 @@ public class PptName
     return fullname;
   }
 
+  /*@AssertNonNullIfTrue("#0")*/
   public boolean equals(/*@Nullable*/ Object o) {
     return (o instanceof PptName) && equals((PptName) o);
   }
 
+  /*@AssertNonNullIfTrue("#0")*/
   public boolean equals(PptName o) {
     return (o != null) && (o.fullname == fullname);
   }

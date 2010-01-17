@@ -39,6 +39,7 @@ public final class VarComparabilityImplicit
    **/
   int base;
   /** indexTypes[0] is comparability of the first index of this array. */
+  // null only for the "unknown" type??
   VarComparabilityImplicit /*@Nullable*/ [] indexTypes;
   /**
    * Indicates how many of the indices are in use; there may be more
@@ -69,11 +70,13 @@ public final class VarComparabilityImplicit
     return base;
   }
 
+  /*@AssertNonNullIfTrue("#0")*/
   public boolean equals (/*@Nullable*/ Object o) {
     if (!(o instanceof VarComparabilityImplicit)) return false;
     return equals ((VarComparabilityImplicit) o);
   }
 
+  /*@AssertNonNullIfTrue("#0")*/
   public boolean equals (VarComparabilityImplicit o) {
     return equality_set_ok (o);
   }
@@ -140,7 +143,7 @@ public final class VarComparabilityImplicit
     // When Ajax is modified to output non-atomic info for arrays, this
     // check will no longer be necessary.
     if (dim < dimensions) {
-      assert indexTypes != null : "@SuppressWarnings(nullness)";
+      assert indexTypes != null : "@SuppressWarnings(nullness): dependent: not the unknown type";
       return indexTypes[dim];
     } else {
       return unknown;

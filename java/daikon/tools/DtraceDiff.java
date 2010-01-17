@@ -8,6 +8,7 @@ import daikon.*;
 import daikon.config.Configuration;
 import java.util.regex.*;
 import gnu.getopt.*;
+import static daikon.tools.nullness.NullnessUtils.*;
 
 /** This tool is used to find the differences between two dtrace files
  *  based on analysis of the files' content, rather than a straight textual
@@ -214,13 +215,18 @@ public class DtraceDiff {
     dtraceDiff (declsfile1, dtracefile1, declsfile2, dtracefile2);
   }
 
+  @SuppressWarnings("nullness") // reinitialization
+  private static void resetNewDeclFormat() {
+    FileIO.new_decl_format = null;
+  }
+
   public static void dtraceDiff (Set<File> declsfile1,
                                  String dtracefile1,
                                  Set<File> declsfile2,
                                  String dtracefile2) {
 
     // System.out.printf ("dtrace files = %s, %s\n", dtracefile1, dtracefile2);
-    FileIO.new_decl_format = null;
+    resetNewDeclFormat();
 
     try {
       Map<PptTopLevel,PptTopLevel> pptmap = new HashMap<PptTopLevel,PptTopLevel>();  // map ppts1 -> ppts2
@@ -256,14 +262,14 @@ public class DtraceDiff {
         // things had better be the same
         if (state1.status == state2.status) {
           if (state1.status == FileIO.ParseStatus.SAMPLE) {
-            PptTopLevel ppt1 = state1.ppt;
-            PptTopLevel ppt2 = state2.ppt;
-            assert ppt1 != null : "@SuppressWarnings(nullness)";
-            assert ppt2 != null : "@SuppressWarnings(nullness)";
-            ValueTuple vt1 = state1.vt;
-            ValueTuple vt2 = state2.vt;
-            assert vt1 != null : "@SuppressWarnings(nullness)";
-            assert vt2 != null : "@SuppressWarnings(nullness)";
+            @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
+            /*@NonNull*/ PptTopLevel ppt1 = state1.ppt;
+            @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
+            /*@NonNull*/ PptTopLevel ppt2 = state2.ppt;
+            @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
+            /*@NonNull*/ ValueTuple vt1 = state1.vt;
+            @SuppressWarnings("nullness") // dependent:  state2 is SAMPLE
+            /*@NonNull*/ ValueTuple vt2 = state2.vt;
             VarInfo[] vis1 = ppt1.var_infos;
             VarInfo[] vis2 = ppt2.var_infos;
 
@@ -302,8 +308,13 @@ public class DtraceDiff {
               boolean missing2 = vt2.isMissingNonsensical(vis2[i]);
               Object val1 = vt1.getValueOrNull(vis1[i]);
               Object val2 = vt2.getValueOrNull(vis2[i]);
-              if ((missing1 != missing2)
-                  || (! (missing1 || values_are_equal(vis1[i], val1, val2))))
+              // Require that missing1 == missing2.  Also require that if
+              // the values are present, they are the same.
+              if (! ((missing1 == missing2)
+                     && ((missing1
+                          // At this point, missing1 == false, missing2 == false,
+                          // val1 != null, val2 != null.
+                          || values_are_equal(vis1[i], castNonNull(val1), castNonNull(val2)))))) // application invariant
                 ppt_var_value_error (vis1[i], val1, state1, dtracefile1,
                                      vis2[i], val2, state2, dtracefile2);
             }
@@ -315,13 +326,17 @@ public class DtraceDiff {
                  || (state1.status == FileIO.ParseStatus.TRUNCATED))
           return;  // either file reached truncation limit, return quietly
         else if (state1.status == FileIO.ParseStatus.EOF) {
-          throw new DiffError(String.format ("ppt %s (%s at line %d) is missing "
-                                    + "at end of %s", state2.ppt.name(),
-                                             dtracefile2, state2.get_linenum(), dtracefile1));
+          assert state2.ppt != null : "@SuppressWarnings(nullness): application invariant: status is not EOF or TRUNCATED";
+          throw new DiffError(String.format (
+                        "ppt %s (%s at line %d) is missing at end of %s",
+                        state2.ppt.name(), dtracefile2, state2.get_linenum(),
+                        dtracefile1));
         } else {
-          throw new DiffError(String.format ("ppt %s (%s at line %d) is missing "
-                                    + "at end of %s", state1.ppt.name(),
-                                             dtracefile1, state1.get_linenum(), dtracefile2));
+          assert state1.ppt != null : "@SuppressWarnings(nullness): application invariant: status is not EOF or TRUNCATED";
+          throw new DiffError(String.format (
+                        "ppt %s (%s at line %d) is missing at end of %s",
+                        state1.ppt.name(), dtracefile1, state1.get_linenum(),
+                        dtracefile2));
     }
       }
     } catch (IOException e) {
@@ -406,6 +421,7 @@ public class DtraceDiff {
     throw new Error ("Unexpected value type found");  // should never happen
   }
 
+  @SuppressWarnings("nullness") // dependent: ParseState for error reporting
   private static void ppt_mismatch_error (FileIO.ParseState state1,
                                           String dtracefile1,
                                           FileIO.ParseState state2,
@@ -418,6 +434,7 @@ public class DtraceDiff {
                      state2.ppt.name, dtracefile2, state2.get_linenum()));
   }
 
+  @SuppressWarnings("nullness") // dependent: ParseState for error reporting
   private static void ppt_decl_error (FileIO.ParseState state1,
                                       String dtracefile1,
                                       FileIO.ParseState state2,
@@ -430,6 +447,7 @@ public class DtraceDiff {
                      state2.ppt.name, dtracefile2, state2.get_linenum()));
   }
 
+  @SuppressWarnings("nullness") // dependent: ParseState for error reporting
   private static void ppt_var_decl_error (VarInfo vi1,
                                           FileIO.ParseState state1,
                                           String dtracefile1,
@@ -446,12 +464,13 @@ public class DtraceDiff {
                      vi2.name(), dtracefile2, state2.get_linenum()));
   }
 
+  @SuppressWarnings("nullness") // nullable parameters suppress warnings at call sites
   private static void ppt_var_value_error (VarInfo vi1,
-                                           Object val1,
+                                           /*@Nullable*/ Object val1,
                                            FileIO.ParseState state1,
                                            String dtracefile1,
                                            VarInfo vi2,
-                                           Object val2,
+                                           /*@Nullable*/ Object val2,
                                            FileIO.ParseState state2,
                                            String dtracefile2) {
     assert vi1.name().equals(vi2.name());

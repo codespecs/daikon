@@ -121,7 +121,8 @@ public class StackOffsets {
 
       // Find the StackInfo for this function
       String function_id = ppt.function_id;
-      PptTopLevel func_ppt = all_ppts.get(function_id);
+      @SuppressWarnings("nullness") // map: ppt.function_id is a key in all_ppts
+      /*@NonNull*/ PptTopLevel func_ppt = all_ppts.get(function_id);
       StackInfo si = stack_info_map.get (func_ppt);
       if (si == null) {
         si = new StackInfo (func_ppt);
@@ -147,7 +148,8 @@ public class StackOffsets {
       = new LinkedHashMap<PptTopLevel,List<PptTopLevel>>();
     for (Iterator<PptTopLevel> ii = all_ppts.pptIterator(); ii.hasNext(); ) {
       PptTopLevel ppt = ii.next();
-      PptTopLevel func = all_ppts.get(ppt.function_id);
+      @SuppressWarnings("nullness") // map: ppt.function_id is a key in all_ppts
+      /*@NonNull*/ PptTopLevel func = all_ppts.get(ppt.function_id);
       List<PptTopLevel> bbs = func_map.get (func);
       if (bbs == null) {
         bbs = new ArrayList<PptTopLevel>();
@@ -172,7 +174,7 @@ public class StackOffsets {
             @SuppressWarnings("nullness") // application invariant: key is in map
             /*@NonNull*/ PptTopLevel ppt_succ = all_ppts.get (succ);
             System.out.printf ("%04X ", ppt_succ.bb_offset() & 0xFFFF);
-            assert ppt_succ.function_id.equals (ppt.function_id);
+            assert ppt_succ.function_id != null && ppt_succ.function_id.equals (ppt.function_id);
           }
         }
         if (bb.flags.contains(PptTopLevel.PptFlags.RETURN))

@@ -110,7 +110,7 @@ public class AnnotateNullable {
       int lastdot = name.lastIndexOf ('.');
       String classname = name.substring (0, lastdot);
       // System.out.printf ("classname for ppt %s is '%s'%n", name, classname);
-      @SuppressWarnings("nullness")
+      @SuppressWarnings("nullness") // map membership: class_map has entry per class, and this method is in some class
       /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get (classname);
       assert static_methods != null : classname;
       static_methods.add (ppt);
@@ -129,7 +129,7 @@ public class AnnotateNullable {
     for (Iterator<PptTopLevel> ii = ppts.pptIterator(); ii.hasNext(); ) {
       PptTopLevel ppt = ii.next();
       if (ppt.is_class()) {
-        @SuppressWarnings("nullness")
+        @SuppressWarnings("nullness") // map membership
         /*@NonNull*/ List<PptTopLevel> static_methods
           = class_map.get (ppt.name().replace (":::CLASS", ""));
         int child_cnt = 0;
@@ -245,7 +245,7 @@ public class AnnotateNullable {
     } else {
       String classname = object_ppt.ppt_name.getFullClassName();
       assert classname != null;
-      @SuppressWarnings("nullness")
+      @SuppressWarnings("nullness") // map membership
       /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get (classname);
       assert static_methods != null : classname;
       for (PptTopLevel child : static_methods)

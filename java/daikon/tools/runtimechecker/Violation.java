@@ -63,6 +63,7 @@ public class Violation implements Serializable {
             this.xmlname = xmlname;
         }
 
+        /*@AssertNonNullIfTrue("#0")*/
         public boolean equals(/*@Nullable*/ Object o) {
             if (o == null) {
                 return false;
@@ -160,10 +161,11 @@ public class Violation implements Serializable {
      */
     public static Violation get(Property anno, Time t) {
         Violation vio = new Violation(anno, t);
-        if (violationsMap.containsKey(new Integer(vio.hashCode()))) {
-            return violationsMap.get(new Integer(vio.hashCode()));
+        Integer key = new Integer(vio.hashCode());
+        if (violationsMap.containsKey(key)) {
+            return violationsMap.get(key);
         } else {
-            violationsMap.put(new Integer(vio.hashCode()), vio);
+            violationsMap.put(key, vio);
             return vio;
         }
     }
@@ -212,6 +214,7 @@ public class Violation implements Serializable {
     /**
      * Two violations are equal if their properties and times are equal.
      */
+    /*@AssertNonNullIfTrue("#0")*/
     public boolean equals(/*@Nullable*/ Object o) {
         if (o == null) {
             return false;

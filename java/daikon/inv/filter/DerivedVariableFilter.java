@@ -21,6 +21,7 @@ public class DerivedVariableFilter extends InvariantFilter {
    * variables.  Invariants that contain derived variables that match will
    * be filtered out.  If null, nothing will be filtered out.
    **/
+  // dkconfig_* means a configuration option, set from command line or file
   public static /*@Nullable*/ String dkconfig_class_re = null;
   public static /*@Nullable*/ Pattern class_re = null;
 
@@ -30,7 +31,7 @@ public class DerivedVariableFilter extends InvariantFilter {
     isOn = dkconfig_class_re != null;
     if (isOn) {
       assert dkconfig_class_re != null
-        : "@SuppressWarnings(nullness): check stored in boolean variable";
+        : "@SuppressWarnings(nullness): dependent:  nullness is indicated by boolean variable isOn";
       class_re = Pattern.compile (dkconfig_class_re);
     }
   }

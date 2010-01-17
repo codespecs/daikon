@@ -341,7 +341,7 @@ public class InvariantChecker {
       debug.fine ("processing sample from: " + ppt.name);
 
       // Add orig and derived variables
-      assert vt.vals != null : "@SuppressWarnings(nullness): Checker Framework bug?  vals is a non-null array";
+      // assert vt.vals != null : "@SuppressWarnings(nullness): Checker Framework bug:  vals is a non-null array, but is reported as nullable";
       FileIO.add_orig_variables(ppt, vt.vals, vt.mods, nonce);
       FileIO.add_derived_variables(ppt, vt.vals, vt.mods);
 
@@ -365,7 +365,7 @@ public class InvariantChecker {
 
       // If this is an exit point, process the saved enter point
       if (ppt.ppt_name.isExitPoint()) {
-        assert nonce != null;
+        assert nonce != null : "@SuppressWarnings(nullness)";
         EnterCall ec = call_map.get (nonce);
         if (ec != null) {
           call_map.remove (nonce);
@@ -382,6 +382,7 @@ public class InvariantChecker {
       add (ppt, vt);
     }
 
+    /*@NonNullVariable("FileIO.data_trace_state")*/
     private void add (PptTopLevel ppt, ValueTuple vt) {
       // Add the sample to any splitters
       if (ppt.has_splitters()) {
@@ -482,7 +483,9 @@ public class InvariantChecker {
       }
     }
   }
+
   private static String invariant2str(PptTopLevel ppt, Invariant inv) {
     return ppt.name + " == " + inv.repr() + inv.getClass() + inv.varNames() + ": " + inv.format();
   }
+
 }
