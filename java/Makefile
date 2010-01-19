@@ -57,7 +57,8 @@ else
   JAVA ?= java -ea
 endif
 
-CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers.jar
+# If actually checking, override to checkers.jar.
+CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers-quals.jar
 
 jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*
 
@@ -94,7 +95,7 @@ ifdef CLASSPATH_JARS
 	CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS)
 endif
 ifdef CLASSPATH_JARS2
-  ifneq (checkers.jar,$(findstring checkers.jar,$(CLASSPATH)))
+  ifneq (checkers-quals.jar,$(findstring checkers-quals.jar,$(CLASSPATH)))
     CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS2)
   endif
 endif
