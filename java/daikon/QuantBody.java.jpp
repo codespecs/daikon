@@ -726,9 +726,9 @@ The "defined(INT)" test ensures that it only appears once in the output.
     // This implementation simply calls either subsetOf(long[], long[]) or
     // subsetOf(double[], double[]).
 
-    // @SuppressWarnings("nullness") // bug: because isArray() returned true
+    // @SuppressWarnings("nullness") // bug: isArray() returned true and is annotated @AssertNonNullIfTrue("getComponentType()")
     /*@NonNull*/ Class<?> eltsType = elts.getClass().getComponentType();
-    // @SuppressWarnings("nullness") // bug: because isArray() returned true
+    // @SuppressWarnings("nullness") // bug: isArray() returned true and is annotated @AssertNonNullIfTrue("getComponentType()")
     /*@NonNull*/ Class<?> arrType = arr.getClass().getComponentType();
     if (isIntegralType(eltsType) && isIntegralType(arrType)) {
       // Both arrays are int/long

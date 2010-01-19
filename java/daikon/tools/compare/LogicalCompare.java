@@ -12,6 +12,8 @@ import daikon.inv.unary.string.*;
 import daikon.simplify.*;
 import gnu.getopt.*;
 
+import static daikon.tools.nullness.NullnessUtils.*;
+
 /**
  * This is a standalone program that compares the invariants from two
  * versions of (and/or runs of) a program, and determines using
@@ -753,8 +755,7 @@ public class LogicalCompare {
         }
         if (app_ppt.num_samples() > 0) {
           if (test_ppt_names.contains(name)
-              // correlated maps: test_ppts.get(name) is non-null because test_ppt_names.contains(name) is true
-              && test_ppts.get(name).num_samples() > 0) {
+              && castNonNull(test_ppts.get(name)).num_samples() > 0) { // correlated maps: test_ppts.get(name) is non-null because test_ppt_names.contains(name) is true
             common_names.add(name);
           } else {
             System.out.println(name + " was used but not tested");
