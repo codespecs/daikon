@@ -140,6 +140,7 @@ public class SpinfoFileParser {
    * @param replaceStatements the List into which the ReplaceStatements
    *  are added.
    */
+  @SuppressWarnings("nullness") // bug exposed by test case Asserts.assertTwice().
   private void readReplaceStatements(LineNumberReader spinfoFile,
                                      List<ReplaceStatement> replaceStatements)
     throws IOException, ParseException {
@@ -153,14 +154,9 @@ public class SpinfoFileParser {
           methodDeclaration + lineSep +
           "Each replace statement must be a pair of lines.");
       }
-      // assert methodDeclaration != null
-      //   : "@SuppressWarnings(nullness): bug exposed by test case Asserts.assertTwice()";
-      // assert returnStatement != null
-      //   : "@SuppressWarnings(nullness): looks like a bug in flow; we tested that returnStatement is not blank";
       ReplaceStatement replaceStatement =
         new ReplaceStatement(methodDeclaration.trim(), returnStatement.trim());
       replaceStatements.add(replaceStatement);
-      // @SuppressWarnings(nullness): bug exposed by test case Asserts.assertTwice().
       methodDeclaration = spinfoFile.readLine();
     }
   }

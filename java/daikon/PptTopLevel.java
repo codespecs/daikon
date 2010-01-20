@@ -1075,7 +1075,6 @@ public class PptTopLevel extends Ppt {
     // Keep track of the distinct values seen
     for (int i=0; i<vt.vals.length; i++) {
       if (! vt.isMissing(i)) {
-        // @SuppressWarnings("nullness") // bug: http://code.google.com/p/checker-framework/issues/detail?id=56
         /*@NonNull*/ Object val = vt.vals[i];
         ValueSet vs = value_sets[i];
         vs.add(val);

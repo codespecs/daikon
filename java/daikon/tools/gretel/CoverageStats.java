@@ -97,9 +97,8 @@ public class CoverageStats
         System.out.println(file + " not instrumented (?)");
         continue;
       }
-      // @SuppressWarnings("nullness") // flow/pure bug:  all.get(file) was tested above
       int nall = all.get(file).size();
-      // @SuppressWarnings("nullness") // flow/pure bug:  get is checked and immediately used
+      @SuppressWarnings("nullness") // bug: see test case NonNullMapValue.mapGetSize
       int ncov = (covered.get(file) == null) ? 0 : covered.get(file).size();
       System.out.println(file + " covered on " + ncov + " of " + nall + " lines");
       nall_sum += nall;

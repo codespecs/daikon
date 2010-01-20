@@ -223,7 +223,7 @@ The correct way to build the system is to run 'make'.
    * array. If an element of the array is null, its slot in the returned
    * array is null.
    */
-  // See http://code.google.com/p/checker-framework/issues/detail?id=54 ,
+  @SuppressWarnings("nullness") // bug: http://code.google.com/p/checker-framework/issues/detail?id=54
   /* pure */ public static /*@PolyNull*//*("elt")*/ String /*@PolyNull*//*("container")*/ [] typeArray(/*@PolyNull*//*("elt")*/ _TYPE /*@PolyNull*//*("container")*/ [] seq) {
     if (seq == null) { return null; }
     /*@PolyNull*//*("elt")*/ String[] retval = new /*@PolyNull*//*("elt")*/ String[seq.length];
@@ -726,9 +726,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
     // This implementation simply calls either subsetOf(long[], long[]) or
     // subsetOf(double[], double[]).
 
-    // @SuppressWarnings("nullness") // bug: isArray() returned true and is annotated @AssertNonNullIfTrue("getComponentType()")
     /*@NonNull*/ Class<?> eltsType = elts.getClass().getComponentType();
-    // @SuppressWarnings("nullness") // bug: isArray() returned true and is annotated @AssertNonNullIfTrue("getComponentType()")
     /*@NonNull*/ Class<?> arrType = arr.getClass().getComponentType();
     if (isIntegralType(eltsType) && isIntegralType(arrType)) {
       // Both arrays are int/long

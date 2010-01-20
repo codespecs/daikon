@@ -1499,7 +1499,7 @@ public final class FileIO {
         // --ppt-select-pattern or --ppt-omit-pattern.
         if (state.ppt != null) {
           if (!state.all_ppts.containsName (state.ppt.name())) {
-            // assert state.ppt != null : "@SuppressWarnings(nullness): bug: not side-effected since check, and only pure methods have been called since";
+            assert state.ppt != null : "@SuppressWarnings(nullness): bug: not side-effected since check, and only pure methods have been called since";
             state.all_ppts.add(state.ppt);
             assert state.ppt != null; // for nullness checker
             try {
@@ -2034,7 +2034,6 @@ public final class FileIO {
       if (line == null) {
         throw new Daikon.TerminationMessage(
           "Unexpected end of file at "
-          // @SuppressWarnings(nullness): bug with NonNullVariable
             + data_trace_state.filename
             + " line "
             + reader.getLineNumber() + lineSep
@@ -2055,7 +2054,6 @@ public final class FileIO {
         if (line == null
             || !((line.equals("0") || line.equals("1") || line.equals("2")))) {
           throw new Daikon.TerminationMessage("Bad modbit '" + line + "'",
-                                              // @SuppressWarnings(nullness): bug with NonNullVariable
                                               data_trace_state);
         }
         line = reader.readLine(); // next variable name
@@ -2063,7 +2061,6 @@ public final class FileIO {
       if (line == null) {
         throw new Daikon.TerminationMessage(
           "Unexpected end of file at "
-          // @SuppressWarnings(nullness): bug with NonNullVariable
             + data_trace_state.filename
             + " line "
             + reader.getLineNumber() + lineSep
@@ -2080,14 +2077,12 @@ public final class FileIO {
             + line
             + " for program point "
           + ppt.name(),
-          // @SuppressWarnings(nullness): bug with NonNullVariable
           data_trace_state);
       }
       line = reader.readLine();
       if (line == null) {
         throw new Daikon.TerminationMessage(
           "Unexpected end of file at "
-          // @SuppressWarnings(nullness): bug with NonNullVariable
             + data_trace_state.filename
             + " line "
             + reader.getLineNumber() + lineSep
@@ -2103,7 +2098,6 @@ public final class FileIO {
       if (line == null) {
         throw new Daikon.TerminationMessage(
           "Unexpected end of file at "
-          // @SuppressWarnings(nullness): bug with NonNullVariable
             + data_trace_state.filename
             + " line "
             + reader.getLineNumber() + lineSep
@@ -2116,8 +2110,7 @@ public final class FileIO {
       }
       if (!((line.equals("0") || line.equals("1") || line.equals("2")))) {
         throw new Daikon.TerminationMessage("Bad modbit `" + line + "'",
-                                              // @SuppressWarnings(nullness): bug with NonNullVariable
-                                  data_trace_state);
+                                            data_trace_state);
       }
       int mod = ValueTuple.parseModified(line);
 
@@ -2174,7 +2167,6 @@ public final class FileIO {
             "Modbit indicates nonsensical value for variable "
               + vi.name() + " with value \"" + value_rep + "\";" + lineSep
               + "  text of value should be \"nonsensical\"",
-            // @SuppressWarnings(nullness): bug with NonNullVariable
               data_trace_state);
         } else {
           // Keep track of variables that can be missing
@@ -2318,12 +2310,10 @@ public final class FileIO {
               // file name and line number.
               throw new Error(String.format("Didn't find call with nonce %s to match %s ending at %s line %d",
                                             nonce, ppt.name(),
-                                            // @SuppressWarnings(nullness): bug with NonNullVariable
                                             data_trace_state.filename,
                                             data_trace_state.reader.getLineNumber()));
             }
           }
-          // @SuppressWarnings(nullness): bug with Map heuristics
           invoc = call_hashmap.get(nonce);
           call_hashmap.remove(nonce);
         }

@@ -31,11 +31,12 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
         nonce = 0;
     }
 
-    public void visit (PptNode node) {
+    public void visit (/*@NonNull*/ PptNode node) {
+        assert node.getPpt1() != null
+            : "@SuppressWarnings(nullness): has a (non-null) consequent";
         if (node.getPpt1() instanceof PptConditional) {
             return;
         }
-        // @SuppressWarnings(nullness): bug that should be exposed by test PureTest.testInstanceof() -- but doesn't seem to be
         System.out.println (node.getPpt1().name);
         repeatFilter.clear();
         accum.clear();

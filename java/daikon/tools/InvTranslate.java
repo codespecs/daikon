@@ -12,7 +12,7 @@ import java.util.logging.Level;
 
 /**
  * Provides a variable translation over an invariant at one program
- * point (perhaps in a different program) to a similar inariant at a
+ * point (perhaps in a different program) to a similar invariant at a
  * second program point.  In general, on order for a translation to be
  * possible, the invariants must be of the same class.  For example,
  * consider the invariants (x>y) at ppt1 and (p>q) at ppt2.  Since the
@@ -34,13 +34,9 @@ public class InvTranslate {
 
   /**
    * The quality of the mapping.  0 indicates no mapping is possible.
-   * 100 indicates that there is a perfect translation
+   * 100 indicates that there is a perfect translation.
    */
   int quality = 0;
-
-  // Not used. -MDE
-  // /** Ppt of source invariant **/
-  // public PptTopLevel ppt = null;
 
   /** Map of variables from inv to inv **/
   Map<String,String> var_map = new LinkedHashMap<String,String>();
@@ -58,7 +54,7 @@ public class InvTranslate {
 
   /**
    * Setup a translation from i1 to i2.  The quality and the variable
-   * map is set accordingly
+   * map is set accordingly.
    */
   public void translate (Invariant i1, Invariant i2) {
 
@@ -78,7 +74,7 @@ public class InvTranslate {
 
     // Create the simple mapping and adjust for the quality of the variable
     // mapping (variables of the same derivation are better than those of
-    // different derivations)
+    // different derivations).
     for (int i = 0; i < i1.ppt.var_infos.length; i++) {
       VarInfo v1 = i1.ppt.var_infos[i];
       VarInfo v2 = i2.ppt.var_infos[i];
@@ -99,7 +95,7 @@ public class InvTranslate {
   }
 
   /**
-   * Add the specified variable names to the variable translation
+   * Add the specified variable names to the variable translation.
    */
   private void add_variable_map (String v1_name, String v2_name) {
 
@@ -109,7 +105,7 @@ public class InvTranslate {
   }
 
   /**
-   * Returns a somewhat verbose description of the translation
+   * Returns a somewhat verbose description of the translation.
    */
   public String toString () {
 

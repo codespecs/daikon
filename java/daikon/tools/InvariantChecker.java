@@ -341,7 +341,7 @@ public class InvariantChecker {
       debug.fine ("processing sample from: " + ppt.name);
 
       // Add orig and derived variables
-      // assert vt.vals != null : "@SuppressWarnings(nullness): Checker Framework bug:  vals is a non-null array, but is reported as nullable";
+      assert vt.vals != null : "@SuppressWarnings(nullness): bug: Checker Framework bug:  vals is a non-null array, but is reported as nullable";
       FileIO.add_orig_variables(ppt, vt.vals, vt.mods, nonce);
       FileIO.add_derived_variables(ppt, vt.vals, vt.mods);
 

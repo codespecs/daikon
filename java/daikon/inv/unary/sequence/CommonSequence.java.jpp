@@ -211,7 +211,6 @@ public class CLASSNAME
       return InvariantStatus.NO_CHANGE;
     }
 
-    // @SuppressWarnings(nullness): bug: test case Flow.add_modified
     PRIMITIVE[] tmp = new PRIMITIVE[intersect.length];
     int size = 0;
     for (int i=0; i<a.length; i++) {

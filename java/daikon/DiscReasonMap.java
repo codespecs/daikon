@@ -137,9 +137,7 @@ public final class DiscReasonMap {
     for (DiscardInfo di : di_list) {
       String shortName = di.className().substring(di.className().lastIndexOf('.')+1); // chop off hierarchical info
       if ((invInfo.className() == null)
-          // @SuppressWarnings(nullness): bug exposed by test PureTest.shortCircuitOr()
           || invInfo.className().equals(di.className())
-          // @SuppressWarnings(nullness): bug exposed by test PureTest.shortCircuitOr()
           || invInfo.className().equals(shortName)) {
         result.add(di);
       }
