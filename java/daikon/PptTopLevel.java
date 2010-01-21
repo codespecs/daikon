@@ -1075,7 +1075,7 @@ public class PptTopLevel extends Ppt {
     // Keep track of the distinct values seen
     for (int i=0; i<vt.vals.length; i++) {
       if (! vt.isMissing(i)) {
-        /*@NonNull*/ Object val = vt.vals[i];
+        Object val = vt.vals[i];
         ValueSet vs = value_sets[i];
         vs.add(val);
       }

@@ -491,7 +491,7 @@ public class Debug {
     if (vis != null) {
       int numvars = vis.length;
       for (int i = 0; i < numvars; i++) {
-        /*@NonNull*/ VarInfo v = vis[i];
+        VarInfo v = vis[i];
         vars += v.name();
         if (ourvars[i] != null)
           vars += " {" + ourvars[i] + "}";

@@ -2269,7 +2269,7 @@ public final class FileIO {
     }
 
     if (ppt.ppt_name.isExitPoint() || ppt.ppt_name.isThrowsPoint()) {
-      /*@NonNull*/ Invocation invoc;
+      Invocation invoc;
       // Set invoc
       {
         if (nonce == null) {

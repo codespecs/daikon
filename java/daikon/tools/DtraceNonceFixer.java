@@ -200,7 +200,7 @@ public class DtraceNonceFixer {
     throws IOException {
     StringBuffer sb = new StringBuffer();
     while (br.ready()) {
-      /*@NonNull*/ String line = br.readLine();
+      String line = br.readLine();
       assert line != null;      // because br.ready() = true
       line = line.trim();
       if (line.equals ("")) {

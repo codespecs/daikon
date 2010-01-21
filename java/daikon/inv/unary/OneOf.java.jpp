@@ -726,7 +726,7 @@ public final class ONEOFSCALAR
 #elif defined(IS_SCALAR)
     String varname = var().esc_name();
 #endif
-    /*@NonNull*/ String result;
+    String result;
 #if defined(ELTSTRING)
     // We cannot say anything about Strings in ESC, just types (which
     // Daikon stores as Strings).

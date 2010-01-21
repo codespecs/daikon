@@ -726,8 +726,8 @@ The "defined(INT)" test ensures that it only appears once in the output.
     // This implementation simply calls either subsetOf(long[], long[]) or
     // subsetOf(double[], double[]).
 
-    /*@NonNull*/ Class<?> eltsType = elts.getClass().getComponentType();
-    /*@NonNull*/ Class<?> arrType = arr.getClass().getComponentType();
+    Class<?> eltsType = elts.getClass().getComponentType();
+    Class<?> arrType = arr.getClass().getComponentType();
     if (isIntegralType(eltsType) && isIntegralType(arrType)) {
       // Both arrays are int/long
       // Cast both arrays to long and call subsetOf(long[],long[])
