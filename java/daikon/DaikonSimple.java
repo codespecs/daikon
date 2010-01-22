@@ -41,7 +41,7 @@ import static daikon.Global.lineSep;
  * the two, we can find problems with the optimization implementation by
  * tracking the cause of the differences.
  */
-@SuppressWarnings("nullness")
+@SuppressWarnings("nullness")   // not actively maintained
 public class DaikonSimple {
 
   // logging information
@@ -434,10 +434,10 @@ public class DaikonSimple {
         PptTopLevel original, ValueTuple vt, int nonce) {
 
       // Make the vt for the receiver ppt
-//      Object values[] = new Object[receiver.num_tracevars];
-//      int mods[] = new int[receiver.num_tracevars];
-      Object values[] = new Object[receiver.var_infos.length - receiver.num_static_constant_vars];
-      int mods[] = new int[receiver.var_infos.length - receiver.num_static_constant_vars];
+//      Object[] values = new Object[receiver.num_tracevars];
+//      int[] mods = new int[receiver.num_tracevars];
+      /*@Nullable*/ Object[] values = new Object[receiver.var_infos.length - receiver.num_static_constant_vars];
+      int[] mods = new int[receiver.var_infos.length - receiver.num_static_constant_vars];
 
       // Build the vt for the receiver ppt by looking through the current
       // vt and filling in the gaps.
@@ -469,10 +469,9 @@ public class DaikonSimple {
 
       ValueTuple receiver_vt = new ValueTuple(values, mods);
 
-      FileIO.add_orig_variables(receiver, receiver_vt.vals, receiver_vt.mods,
-          nonce);
-      FileIO
-          .add_derived_variables(receiver, receiver_vt.vals, receiver_vt.mods);
+      // @SuppressWarnings(nullness):  bug: ValueTuple.vals should be @Nullable Object @NonNull [], so why is it reported otherwise?
+      FileIO.add_orig_variables(receiver, receiver_vt.vals, receiver_vt.mods, nonce);
+      FileIO.add_derived_variables(receiver, receiver_vt.vals, receiver_vt.mods);
 
       return receiver_vt;
 
@@ -488,6 +487,7 @@ public class DaikonSimple {
       this.all_ppts = all_ppts;
 
       // Add samples to orig and derived variables
+      // @SuppressWarnings(nullness):  bug: ValueTuple.vals should be @Nullable Object @NonNull [], so why is it reported otherwise?
       FileIO.add_orig_variables(ppt, vt.vals, vt.mods, nonce);
       FileIO.add_derived_variables(ppt, vt.vals, vt.mods);
 

@@ -296,7 +296,7 @@ public class LOWERBOUNDCORE
     PptTopLevel pptt = wrapper.ppt.parent;
 
     for (VarInfo vi : pptt.var_infos) {
-      if (vi.is_static_constant) {
+      if (vi.isStaticConstant()) {
         // If variable is a double, then use fuzzy comparison
         if (vi.rep_type == ProglangType.DOUBLE) {
           Double constantVal = (Double)vi.constantValue();

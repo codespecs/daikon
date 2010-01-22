@@ -284,7 +284,8 @@ public class DtraceDiff {
                 // *** what about comparability and aux info?
                 if ((!vis1[i].name().equals(vis2[i].name()))
                     || (vis1[i].is_static_constant != vis2[i].is_static_constant)
-                    || ((vis1[i].is_static_constant) &&
+                    || ((vis1[i].isStaticConstant()) &&
+                        (vis2[i].isStaticConstant()) &&
                         !values_are_equal (vis1[i],
                                            vis1[i].constantValue(),
                                            vis2[i].constantValue()))

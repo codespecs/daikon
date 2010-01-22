@@ -448,7 +448,7 @@ public final class ONEOFSCALAR
         boolean curVarMatch = false;
         PptTopLevel pptt = ppt.parent;
         for (VarInfo vi : pptt.var_infos) {
-          if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+          if (vi.isStaticConstant() && VarComparability.comparable(vi, var())) {
             Object constantVal = vi.constantValue();
             if (constantVal.equals(elts[i])) {
               sb.append(vi.name());
@@ -469,7 +469,7 @@ public final class ONEOFSCALAR
         boolean curVarMatch = false;
         PptTopLevel pptt = ppt.parent;
         for (VarInfo vi : pptt.var_infos) {
-          if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+          if (vi.isStaticConstant() && VarComparability.comparable(vi, var())) {
             // If variable is a double, then use fuzzy comparison
             if (vi.rep_type == ProglangType.DOUBLE) {
               Double constantVal = (Double)vi.constantValue();
@@ -576,7 +576,7 @@ public final class ONEOFSCALAR
           if (PrintInvariants.dkconfig_static_const_infer) {
             PptTopLevel pptt = ppt.parent;
             for (VarInfo vi : pptt.var_infos) {
-              if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+              if (vi.isStaticConstant() && VarComparability.comparable(vi, var())) {
                 Object constantVal = vi.constantValue();
                 if (constantVal.equals(elts[0])) {
                   return varname + " == " + vi.name();
@@ -606,7 +606,7 @@ public final class ONEOFSCALAR
           if (PrintInvariants.dkconfig_static_const_infer) {
             PptTopLevel pptt = ppt.parent;
             for (VarInfo vi : pptt.var_infos) {
-              if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+              if (vi.isStaticConstant() && VarComparability.comparable(vi, var())) {
                 Object constantVal = vi.constantValue();
                 if (constantVal.equals(elts[0])) {
                   return varname + " == " + vi.name();
@@ -632,7 +632,7 @@ public final class ONEOFSCALAR
             if (PrintInvariants.dkconfig_static_const_infer) {
               PptTopLevel pptt = ppt.parent;
               for (VarInfo vi : pptt.var_infos) {
-                if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+                if (vi.isStaticConstant() && VarComparability.comparable(vi, var())) {
                   Object constantVal = vi.constantValue();
                   if (constantVal.equals(str)) {
                     return varname + " == " + vi.name();
@@ -649,7 +649,7 @@ public final class ONEOFSCALAR
         if (PrintInvariants.dkconfig_static_const_infer) {
           PptTopLevel pptt = ppt.parent;
           for (VarInfo vi : pptt.var_infos) {
-            if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+            if (vi.isStaticConstant() && VarComparability.comparable(vi, var())) {
               if (vi.rep_type == ProglangType.DOUBLE) {
                 Double constantVal = (Double)vi.constantValue();
                 if (Global.fuzzy.eq(constantVal, elts[0]) || (Double.isNaN(constantVal) && Double.isNaN(elts[0]))) {

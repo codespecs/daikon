@@ -16,7 +16,6 @@ import daikon.util.*;
  * javaagent switch on the target program.
  * Code based largely on daikon.Chicory
  */
-@SuppressWarnings("nullness")   // defer until later
 public class DynComp {
 
   @Option("-v Print information about the classes being transformed")
@@ -38,7 +37,8 @@ public class DynComp {
   public static boolean no_cset_file = false;
 
   @Option("Output file for comparability sets")
-  public static File compare_sets_file = null;
+  // If null, do no output
+  public static /*@Nullable*/ File compare_sets_file = null;
 
   @Option("Only process program points matching the regex")
   public static List<Pattern> ppt_select_pattern = new ArrayList<Pattern>();
@@ -53,7 +53,7 @@ public class DynComp {
   public static boolean no_jdk = false;
 
   @Option("jar file containing an instrumented JDK")
-  public static File rt_file = null;
+  public static /*@Nullable*/ File rt_file = null;
 
   @Option("use standard visibility")
   public static boolean std_visibility = false;
@@ -65,6 +65,7 @@ public class DynComp {
   public static boolean shiny_print = false;
 
   @Option("Trace output file")
+  // Null if shouldn't do output
   public static File trace_sets_file = null;
 
   @Option("Depth of call hierarchy for line tracing")
@@ -72,14 +73,16 @@ public class DynComp {
 
   // Options for use in dynamically tracing the input parameters
   // associated with a particular branch.  Setting these options turns
-  // off normal DynComp behavior
+  // off normal DynComp behavior.
+  // Invariant:  (branch == null) == (input_method == null)
   @Option("Branch to trace")
-  public static String branch = null;
+  public static /*@Nullable*/ String branch = null;
 
   @Option ("Method that contains a test sequence")
-  public static String input_method = null;
+  public static /*@Nullable*/ String input_method = null;
 
   @Option ("Output file for DataFlow information")
+  // Null if shouldn't do output
   public static File dataflow_out = null;
 
 //  @Option("Enable tracing");
@@ -93,8 +96,9 @@ public class DynComp {
    * The "main" procedure is Premain.premain().
    * @see Premain#premain
    **/
-  @Option ("Path to the DynComp agent jar file")
-  public static File premain = null;
+  // Set by start_target()
+  @Option ("Path to the DynComp agent jar file (usually dcomp_premain.jar)")
+  public static /*@LazyNonNull*/ File premain = null;
 
 
   /** Thread that copies output from target to our output **/
@@ -161,7 +165,7 @@ public class DynComp {
 
     if ((branch == null) != (input_method == null)) {
       options.print_usage ("Dynamic tracing options 'branch' and "
-                           + "'input_method' must both be specified");
+                           + "'input_method':  must specify both or neither");
       return (false);
     }
 
@@ -172,8 +176,9 @@ public class DynComp {
   /**
    * Starts the target program with the java agent setup to do the
    * transforms.  All java agent arguments are passed to it.  Our
-   * classpath is passed to the new jvm
+   * classpath is passed to the new JVM.
    */
+  /*TO DO: @PostNonNull("premain")*/
   void start_target (String premain_args, String[] target_args) {
 
     String target_class = target_args[0].replaceFirst (".*[/.]", "");
@@ -290,8 +295,7 @@ public class DynComp {
     if (verbose)
       System.out.printf ("\nExecuting target program: %s\n",
                          args_to_string(cmdlist));
-    String[] cmdline = new String[cmdlist.size()];
-    cmdline = cmdlist.toArray(cmdline);
+    String[] cmdline = cmdlist.toArray(new String[cmdlist.size()]);
 
     // Execute the command, sending all output to our streams
     java.lang.Runtime rt = java.lang.Runtime.getRuntime();

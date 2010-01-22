@@ -773,7 +773,7 @@ INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v $
 ## Can be temporarily set to a subset of directories.
 ## Should automatically exclude packages & files rather than having to do it manually.
 # Computed by hand for now
-NULLNESS_JAVA_FILES_SKIP = 'DaikonSimple.java|DCRuntime.java|DynComp.java|FeatureExtractor.java|InvariantFilters.java|LinearTernaryCoreFloat.java|LinearTernaryCore.java|PptCombined.java|OneOfScalarTester.java|OneOfSequenceTester.java|Ast.java|TaskManager.java|TestPlume.java|WeakHasherMap.java|WeakIdentityHashMap.java|VarInfo.java|VarInfoName.java'
+NULLNESS_JAVA_FILES_SKIP = 'DaikonSimple.java|DynComp.java|FeatureExtractor.java|OneOfScalarTester.java|OneOfSequenceTester.java|Ast.java|TaskManager.java|TestPlume.java|WeakHasherMap.java|WeakIdentityHashMap.java|VarInfo.java|VarInfoName.java'
 NULLNESS_JAVA_FILES = \
   $(shell find daikon/ \( -name chicory -o -name dcomp -o -name test \) -prune -o -name '*.java' -print | egrep -v ${NULLNESS_JAVA_FILES_SKIP} | sort)
 #   $(shell find typequals/ -name '*.java')

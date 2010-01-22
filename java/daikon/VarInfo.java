@@ -137,9 +137,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public int value_index;
 
   /**
-   * is_static_constant iff (value_index == -1);
+   * is_static_constant == (value_index == -1);
    * is_static_constant == (static_constant_value != null).
    **/
+  // queried via isStaticConstant() method, so consider making this field private
   public boolean is_static_constant;
 
   /** Null if not statically constant. **/
@@ -172,7 +173,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   // Under what circumstances is this null?
   public /*@Nullable*/ VarInfo enclosing_var;
   public int arr_dims = 0;
-  public /*@Nullable*/ List<VarInfo> function_args = null;
+  public /*@LazyNonNull*/ List<VarInfo> function_args = null;
 
   /** Parent ppt for this variable (if any) **/
   public /*@Nullable*/ String parent_ppt = null;
@@ -253,7 +254,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns whether or not constant_value is a legal constant **/
-  static boolean legalConstant (Object constant_value) {
+  static boolean legalConstant (/*@Nullable*/ Object constant_value) {
     return ((constant_value == null) || (constant_value instanceof Long)
             || (constant_value instanceof Double));
   }
@@ -628,8 +629,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       result_vardef.clear_parent_relation();
 
       // Fix the enclosing variable to point to the prestate version
-      if (result_vardef.enclosing_var != null)
+      if (result_vardef.enclosing_var != null) {
+        assert vi.enclosing_var != null : "@SuppressWarnings(nullness): dependent: result_vardef was copied from vi and their enclosing_var fields are the same";
         result_vardef.enclosing_var = vi.enclosing_var.prestate_name();
+      }
 
       // Build a the prestate VarInfo from the VarDefinition.
       result = new VarInfo (result_vardef);
@@ -696,7 +699,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Helper function for repr(). **/
-  private Object checkNull(Object o) {
+  private Object checkNull(/*@Nullable*/ Object o) {
     return (o == null) ? "null" : o;
   }
 
@@ -737,6 +740,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns whether or not this variable is a static constant **/
+  /*@Pure*/
+  /*@AssertNonNullIfTrue({"constantValue()", "static_constant_value"})*/
   public boolean isStaticConstant() {
     return is_static_constant;
   }
@@ -745,7 +750,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Returns the static constant value of this variable.  The variable
    * must be a static constant.
    */
-  public Object constantValue() {
+  public /*@Nullable*/ Object constantValue() {
     if (isStaticConstant()) {
       return static_constant_value;
     } else {

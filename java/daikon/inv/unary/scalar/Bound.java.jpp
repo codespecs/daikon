@@ -312,7 +312,7 @@ public class LOWERBOUND
       if (PrintInvariants.dkconfig_static_const_infer) {
         for (VarInfo vi : pptt.var_infos) {
           // Check is static constant, and variables are comparable
-          if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+          if (vi.isStaticConstant() && VarComparability.comparable(vi, var())) {
             // If variable is a double, then use fuzzy comparison
             if (vi.rep_type == ProglangType.DOUBLE) {
               Double constantVal = (Double)vi.constantValue();
@@ -366,7 +366,7 @@ public class LOWERBOUND
 
     if (PrintInvariants.dkconfig_static_const_infer) {
       for (VarInfo vi : pptt.var_infos) {
-        if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+        if (vi.isStaticConstant() && VarComparability.comparable(vi, var())) {
           // If variable is a double, then use fuzzy comparison
           if (vi.rep_type == ProglangType.DOUBLE) {
             Double constantVal = (Double)vi.constantValue();
@@ -392,7 +392,7 @@ public class LOWERBOUND
 
     if (PrintInvariants.dkconfig_static_const_infer) {
       for (VarInfo vi : pptt.var_infos) {
-        if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+        if (vi.isStaticConstant() && VarComparability.comparable(vi, var())) {
           // If variable is a double, then use fuzzy comparison
           if (vi.rep_type == ProglangType.DOUBLE) {
             Double constantVal = (Double)vi.constantValue();
@@ -436,7 +436,7 @@ public class LOWERBOUND
 
     if (PrintInvariants.dkconfig_static_const_infer) {
       for (VarInfo vi : pptt.var_infos) {
-        if (vi.is_static_constant && VarComparability.comparable(vi, var())) {
+        if (vi.isStaticConstant() && VarComparability.comparable(vi, var())) {
           // If variable is a double, then use fuzzy comparison
           if (vi.rep_type == ProglangType.DOUBLE) {
             Double constantVal = (Double)vi.constantValue();

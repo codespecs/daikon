@@ -86,7 +86,7 @@ public abstract class VarComparability {
   public abstract boolean alwaysComparable();
 
   /** Returns whether two variables are comparable. **/
-  public static boolean comparable(VarInfo v1, VarInfo v2) {
+  public static /*@Pure*/ boolean comparable(VarInfo v1, VarInfo v2) {
     return comparable(v1.comparability, v2.comparability);
   }
 

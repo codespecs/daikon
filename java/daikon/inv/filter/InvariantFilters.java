@@ -23,7 +23,6 @@ import daikon.Daikon;
 //  variableFilterType).  There are no variable filters by default.  See
 //  the manual for more information on property and variable filters.
 
-@SuppressWarnings("nullness")
 public class InvariantFilters {
   public static final int ANY_VARIABLE = 1;
   public static final int ALL_VARIABLES = 2;
@@ -72,7 +71,7 @@ public class InvariantFilters {
   }
 
 
-  private static InvariantFilters default_filters = null;
+  private static /*@LazyNonNull*/ InvariantFilters default_filters = null;
 
   public static InvariantFilters defaultFilters() {
     if (default_filters == null)
@@ -86,7 +85,7 @@ public class InvariantFilters {
   }
 
 
-  public InvariantFilter shouldKeepVarFilters( Invariant invariant ) {
+  public /*@Nullable*/ InvariantFilter shouldKeepVarFilters( Invariant invariant ) {
     // Logger df = PrintInvariants.debugFiltering;
     if (variableFilters.size() != 0) {
       if (variableFilterType == InvariantFilters.ANY_VARIABLE) {
@@ -115,7 +114,7 @@ public class InvariantFilters {
     return null;
   }
 
-  public InvariantFilter shouldKeepPropFilters( Invariant invariant ) {
+  public /*@Nullable*/ InvariantFilter shouldKeepPropFilters( Invariant invariant ) {
     Logger df = PrintInvariants.debugFiltering;
     for (InvariantFilter filter : propertyFilters) {
       if (invariant.logDetail() || df.isLoggable(Level.FINE)) {
@@ -134,7 +133,7 @@ public class InvariantFilters {
      return null;
   }
 
-  public InvariantFilter shouldKeep( Invariant invariant ) {
+  public /*@Nullable*/ InvariantFilter shouldKeep( Invariant invariant ) {
     Logger df = PrintInvariants.debugFiltering;
 
     if (invariant.logOn() || df.isLoggable(Level.FINE)) {
@@ -168,13 +167,18 @@ public class InvariantFilters {
         answer = filter;
       }
     }
+    if (answer == null) {
+      throw new Error("Bad filter description: " + description);
+    }
     return answer;
   }
 
+  // Description must be a valid description of a filter
   public boolean getFilterSetting( String description ) {
     return find(description).getSetting();
   }
 
+  // Description must be a valid description of a filter
   public void changeFilterSetting( String description, boolean turnOn ) {
     InvariantFilter filter = find(description);
     if (turnOn)
