@@ -33,7 +33,7 @@ public class ConsequentExtractorVisitor extends DepthFirstVisitor  {
 
     public void visit (/*@NonNull*/ PptNode node) {
         assert node.getPpt1() != null
-            : "@SuppressWarnings(nullness): has a (non-null) consequent";
+            : "@SuppressWarnings(nullness): method precondition: has a (non-null) consequent";
         if (node.getPpt1() instanceof PptConditional) {
             return;
         }

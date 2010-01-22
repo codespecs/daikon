@@ -32,12 +32,9 @@ public class InvariantLemma extends Lemma {
       c = invariant.getClass();
     }
 
-    @SuppressWarnings("nullness")
-    /*@NonNull*/ Class<?> outer_uncasted = c.getDeclaringClass();
-    assert outer_uncasted != null;
-    Class<? extends Invariant> outer = asInvClass(outer_uncasted);
+    Class<?> outer = c.getDeclaringClass();
     if (outer != null) {
-      c = outer;
+      c = asInvClass(outer);
     }
     return c;
   }

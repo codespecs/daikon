@@ -4613,7 +4613,7 @@ public class PptTopLevel extends Ppt {
     }
 
     for (String successor : ppt_successors) {
-      @SuppressWarnings("nullness") // sucessor ppt is in the PptMap
+      @SuppressWarnings("nullness") // Map.get: sucessor ppt is in the PptMap
       /*@NonNull*/ PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
       Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
       path_set.add (this);
@@ -4696,7 +4696,7 @@ public class PptTopLevel extends Ppt {
 
     int result = 0;
     for (String successor : ppt_successors) {
-      @SuppressWarnings("nullness") // sucessor ppt is in the PptMap
+      @SuppressWarnings("nullness") // Map.get: sucessor ppt is in the PptMap
       /*@NonNull*/ PptTopLevel ppt_succ = Daikon.all_ppts.get (successor);
       Set<PptTopLevel> path_set = new LinkedHashSet<PptTopLevel>(visited_set);
       path_set.add (this);

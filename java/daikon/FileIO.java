@@ -383,9 +383,9 @@ public final class FileIO {
 
     // Check to see if the program point is new
     if (state.all_ppts.containsName(ppt_name)) {
-      @SuppressWarnings("nullness") // key is in PptMap due to containsName call
-      /*@NonNull*/ PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
-      assert existing_ppt != null : "state.all_ppts.containsName(ppt_name)";
+      PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+      assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
+      assert existing_ppt != null : "@SuppressWarnings(nullness): bug: containsName() is annotated as @AssertNonNullIfTrue('get(#0)')";
       if (state.ppts_are_new) {
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
@@ -492,9 +492,9 @@ public final class FileIO {
 
     // This program point name has already been encountered.
     if (state.all_ppts.containsName(ppt_name)) {
-      @SuppressWarnings("nullness") // key is in PptMap due to containsName call
-      /*@NonNull*/ PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
-      assert existing_ppt != null : "state.all_ppts.containsName(ppt_name)";
+      PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
+      assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
+      assert existing_ppt != null : "@SuppressWarnings(nullness): bug: containsName() is annotated as @AssertNonNullIfTrue('get(#0)')";
       if (state.ppts_are_new) {
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
@@ -1544,7 +1544,7 @@ public final class FileIO {
       try {
         new PptName(ppt_name);
       } catch (Throwable t) {
-        @SuppressWarnings("nullness")
+        @SuppressWarnings("nullness") // thrown exception always has a detail message
         /*@NonNull*/ String message = t.getMessage();
         // Augment the message with line number information.
         // If it is not a Daikon.TerminationMessage, first add some context.
@@ -1720,11 +1720,11 @@ public final class FileIO {
     // function, initialize the relationships between basic blocks
     // in the same function.  Note that all declarations for basic
     // block ppts must have been received before data is recieved for
-    // any block in the same function
+    // any block in the same function.
     if (ppt.is_basic_block() && !ppt.combined_ppts_init
         && (ppt.function_id != null)) {
       if (!dkconfig_merge_basic_blocks) {
-        @SuppressWarnings("nullness")
+        @SuppressWarnings("nullness") // Map.get
         /*@NonNull*/ List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
         for (PptTopLevel p : ppts) {
           p.combined_subsumed = false;
@@ -1732,7 +1732,7 @@ public final class FileIO {
         }
       } else {
         // Sanity check the ppts in this function
-        @SuppressWarnings("nullness")
+        @SuppressWarnings("nullness") // Map.get
         /*@NonNull*/ List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
         assert ppts != null : ppt.name() + " func id " + ppt.function_id;
         assert ppts.size() > 0 : ppt.name();
@@ -1774,7 +1774,7 @@ public final class FileIO {
             System.out.printf ("  %s\n", p.name());
             if (p.ppt_successors != null) {
               for (String successorName : p.ppt_successors) {
-                @SuppressWarnings("nullness") // get() returns non-null because successorName is in p.ppt_successors
+                @SuppressWarnings("nullness") // Map.get:  successorName is in p.ppt_successors
                 /*@NonNull*/ PptTopLevel successorPpt = all_ppts.get (successorName);
                 System.out.printf ("    %s\n", successorPpt.name());
               }
@@ -1790,7 +1790,7 @@ public final class FileIO {
         for (PptTopLevel p : ppts) {
           if (p.ppt_successors != null) {
             for (String succName : p.ppt_successors) {
-              @SuppressWarnings("nullness") // map get: any successor is in the map
+              @SuppressWarnings("nullness") // Map.get: any successor is in the map
               /*@NonNull*/ PptTopLevel succPpt = all_ppts.get(succName);
               assert succPpt.predecessors != null : "@SuppressWarnings(nullness): this is a successor, so the predecessor exists";
               succPpt.predecessors.add(p);
@@ -1914,7 +1914,7 @@ public final class FileIO {
           ArrayList<Invocation> invocations = new ArrayList<Invocation>();
           TreeSet<Integer> keys = new TreeSet<Integer>(call_hashmap.keySet());
           for (Integer i : keys) {
-            @SuppressWarnings("nullness") // iterating over sorted keyset
+            @SuppressWarnings("nullness") // Map.get: iterating over sorted keyset
             /*@NonNull*/ Invocation invok = call_hashmap.get(i);
             assert invok != null;
             invocations.add(invok);
@@ -1971,7 +1971,7 @@ public final class FileIO {
     // Print the invocations in sorted order.
     TreeSet</*@Interned*/ Invocation> keys = new TreeSet</*@Interned*/ Invocation>(counter.keySet());
     for (/*@Interned*/ Invocation invok : keys) {
-      @SuppressWarnings("nullness") // iterating over sorted keyset
+      @SuppressWarnings("nullness") // Map.get: iterating over sorted keyset
       /*@NonNull*/ Integer count = counter.get(invok);
       System.out.println(invok.format(false) + " : "
                          + UtilMDE.nplural(count.intValue(), "invocation"));

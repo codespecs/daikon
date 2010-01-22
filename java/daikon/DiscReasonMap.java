@@ -147,9 +147,9 @@ public final class DiscReasonMap {
 
   // Helper function used to combine all the DiscardInfo lists associated
   // with a set of vars at a ppt.  Only called when we know ppt has at
-  // least 1 DiscardInfo associated with it
+  // least 1 DiscardInfo associated with it.
   private static List<DiscardInfo> all_vars_tied_from_ppt(String ppt) {
-    @SuppressWarnings("nullness") // application invariant, due to calling context
+    @SuppressWarnings("nullness") // Map.get:  method precondition
     /*@NonNull*/ HashMap<String,List<DiscardInfo>> vars_map = the_map.get(ppt);
     assert vars_map != null;
 

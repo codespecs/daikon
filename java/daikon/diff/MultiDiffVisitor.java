@@ -128,7 +128,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             String key = st.nextToken(); // a Ppt name
             String data = st.nextToken();
             try {
-                @SuppressWarnings("nullness") // key is in map
+                @SuppressWarnings("nullness") // Map.get
                 /*@NonNull*/ ArrayList<String> formatAndFrequencyList = lastMap.get(key);
                 formatAndFrequencyList.add (data);
             } catch (Exception e) {System.out.println (key + " error in MultiDiffVisitor");}
@@ -188,7 +188,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             String key = st.nextToken();
             String data = st.nextToken();
             try {
-                @SuppressWarnings("nullness") // key is in map
+                @SuppressWarnings("nullness") // Map.get
                 /*@NonNull*/ ArrayList<String> formatAndFrequencyList = lastMap.get(key);
                 formatAndFrequencyList.add (data);
             } catch (Exception e) { out.println (key + " error in MultiDiffVisitor");}
@@ -201,7 +201,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         Collections.sort (theKeys);
         String lastPpt = "";
         for (String key : theKeys) {
-            @SuppressWarnings("nullness") // iterating over sorted keyset
+            @SuppressWarnings("nullness") // Map.get: iterating over sorted keyset
             /*@NonNull*/ ArrayList<String> al = lastMap.get(key);
             // don't print anything if there are no selective invariants
 

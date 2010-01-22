@@ -13,7 +13,7 @@ import plume.*;
  * this object.
  */
 // Why doesn't this implement Map<String,PptTopLevel> or extend
-// LinkedHashMap<String,PptTopLevel?
+// LinkedHashMap<String,PptTopLevel>?
 public class PptMap
   implements Serializable
 {
@@ -59,6 +59,7 @@ public class PptMap
    * available through their parent.
    */
   /*@Pure*/
+  /*@AssertNonNullIfTrue("get(#0)")*/
   public boolean containsName(String name) {
     return nameToPpt.containsKey(name);
   }

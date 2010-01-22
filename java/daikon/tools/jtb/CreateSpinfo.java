@@ -236,7 +236,7 @@ public class CreateSpinfo {
       Collections.sort(methodsList);
       for (String declaration : methodsList) {
         output.println(declaration);
-        @SuppressWarnings("nullness") // iterating over sorted keySet
+        @SuppressWarnings("nullness") // Map.get: iterating over sorted keySet
         /*@NonNull*/ String replacement = replaceStatements.get(declaration);
         output.println(removeNewlines(replacement));
       }
@@ -245,7 +245,7 @@ public class CreateSpinfo {
     List<String> methodsList = new ArrayList<String>(conditions.keySet());
     Collections.sort(methodsList);
     for (String method : methodsList) {
-      @SuppressWarnings("nullness") // iterating over sorted keySet
+      @SuppressWarnings("nullness") // Map.get: iterating over sorted keySet
       /*@NonNull*/ List<String> method_conds = conditions.get(method);
       Collections.sort(method_conds);
       if (method_conds.size() > 0) {

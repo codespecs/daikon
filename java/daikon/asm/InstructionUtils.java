@@ -90,8 +90,8 @@ public class InstructionUtils {
           leaders.put(varName, varFullName);
         } else {
           // Add it to redundants.
-          @SuppressWarnings("nullness") // map: varName in varsUsedPreviously => all map keys OK, inserted on previous iteration
-          boolean dummy =       // to afford a place for the @SuppressWarnings annotations
+          @SuppressWarnings("nullness") // Map.get: varName in varsUsedPreviously => all map keys OK, inserted on previous iteration
+          boolean dummy =       // to afford a place for the @SuppressWarnings annotation
           redundants.get(leaders.get(varName)).add(varFullName);
         }
       }
@@ -233,7 +233,7 @@ public class InstructionUtils {
               String leaderName = "bv:" + path.get(leaders.get(var)).getAddress() + ":"
                   + var;
               String varName = "bv:" + instr.getAddress() + ":" + var;
-              @SuppressWarnings("nullness") // was set on previous iteration
+              @SuppressWarnings("nullness") // Map.get: was set on previous iteration
               /*@NonNull*/ Set<String> rset = redundantVars.get(leaderName);
               rset.add(varName);
             }
