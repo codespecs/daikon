@@ -13,7 +13,7 @@ import checkers.quals.*;
  * because every use of every type defaults to NonPrototype (and in fact
  * this default applies to every class declaration as well).  The
  * declaration of Invariant (and its subclasses) are explicitly marked
- * as @Prototype, so that it is possible for instances to be either
+ * as @Prototype, so that it is possible for instances to be marked either
  * with @Prototype or @NonPrototype.
  **/
 
