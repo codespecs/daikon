@@ -14,6 +14,7 @@ package daikon.tools.nullness;
  * To eliminate this dependency, you can simply copy this class into your
  * own project.
  */
+@SuppressWarnings("nullness")   // nullness utilities
 public final class NullnessUtils {
 
     private NullnessUtils()
@@ -61,7 +62,6 @@ public final class NullnessUtils {
      * @param ref a possibly-null reference
      * @return the argument, casted to have the type qualifier @NonNull
      */
-    @SuppressWarnings("nullness")
     /*@AssertParametersNonNull*/
         public static <T extends /*@Nullable*/ Object> /*@NonNull*/ T castNonNull(T ref) {
         assert ref != null : "misuse of castNonNull, which should never be called on a null argument";
