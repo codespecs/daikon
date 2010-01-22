@@ -132,12 +132,14 @@ public class MethodInfo {
 
     // Look up the method
     try {
-      if (is_class_init())
+      if (is_class_init()) {
         member = null;
-      else if (is_constructor())
+        // This case DOES occur at run time.  -MDE 1/22/2010
+      } else if (is_constructor()) {
         member = class_info.clazz.getDeclaredConstructor (arg_types);
-      else
+      } else {
         member = class_info.clazz.getDeclaredMethod (method_name, arg_types);
+      }
     } catch (Exception e) {
       throw new Error ("can't find method " + method_name, e);
     }

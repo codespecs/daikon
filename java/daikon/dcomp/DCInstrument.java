@@ -2602,6 +2602,10 @@ class DCInstrument {
    */
   protected /*@Nullable*/ MethodInfo create_method_info (ClassInfo class_info, MethodGen mgen) {
 
+    // if (mgen.getName().equals("<clinit>")) {
+    //   // This case DOES occur at run time.  -MDE 1/22/2010
+    // }
+
     // Get the argument names for this method
     String[] arg_names = mgen.getArgumentNames();
     LocalVariableGen[] lvs = mgen.getLocalVariables();
