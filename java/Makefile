@@ -771,11 +771,8 @@ INTERNING_JAVA_FILES_SKIP_COUNTS = 'Intern.java|VarInfoName.java'
 INTERNING_JAVA_FILES = $(shell find . -type f -name '*.java' | egrep -v $(INTERNING_JAVA_FILES_SKIP) | xargs grep -l -i '@Interned' | sort)
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP}\|${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | sort)
 ## Can be temporarily set to a subset of directories.
-## Should automatically exclude packages & files rather than having to do it manually.
-# Computed by hand for now
-NULLNESS_JAVA_FILES_SKIP = 'DaikonSimple.java|DynComp.java|FeatureExtractor.java|OneOfScalarTester.java|OneOfSequenceTester.java|Ast.java|TaskManager.java|TestPlume.java|WeakHasherMap.java|WeakIdentityHashMap.java|VarInfo.java|VarInfoName.java'
 NULLNESS_JAVA_FILES = \
-  $(shell find daikon/ \( -name chicory -o -name dcomp -o -name test \) -prune -o -name '*.java' -print | egrep -v ${NULLNESS_JAVA_FILES_SKIP} | sort)
+  $(shell find daikon -name '*.java' -a -exec grep -L "^@SuppressWarnings.*nullness" {} \; | sort)
 #   $(shell find typequals/ -name '*.java')
 
 show_nullness_java_files:
@@ -884,9 +881,9 @@ nullness-counts:
 	@echo -n " / "
 	@echo ${DAIKON_JAVA_FILES} | xargs wc -l | tail -1 | cut -d ' ' -f 2
 	@echo -n "Lines with nullness annotations: "
-	@grep '@Dependent\|@NonNull\|@Nullable\|@PolyNull\|@Raw\|@Prototype\|@Dependent.*result=Nullable\|@Dependent.*result=NonNull' ${NULLNESS_JAVA_FILES} | wc -l
-#	@grep '@Dependent\|@NonNull\|@Nullable\|@PolyNull\|@Raw\|@Prototype\|@Dependent.*result=Nullable\|@Dependent.*result=NonNull' ${NULLNESS_JAVA_FILES}
-	@echo -n "Lines with @SuppressWarnings annotations: "
+	@grep '@NonNull\|@Nullable\|@PolyNull\|@Raw\|@Unused\|@Prototype\|@Dependent.*result=Nullable\|@Dependent.*result=NonNull' ${NULLNESS_JAVA_FILES} | wc -l
+#	@grep '@NonNull\|@Nullable\|@PolyNull\|@Raw\|@Unused\|@Prototype\|@Dependent.*result=Nullable\|@Dependent.*result=NonNull' ${NULLNESS_JAVA_FILES}
+	@echo -n "Lines with @SuppressWarnings annotation or castNonNull method call: "
 	@grep '@SuppressWarnings.*nullness\|castNonNull' ${NULLNESS_JAVA_FILES} | wc -l
 	@grep -n '@SuppressWarnings.*nullness\|castNonNull' ${NULLNESS_JAVA_FILES}
 
