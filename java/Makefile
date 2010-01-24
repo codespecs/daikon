@@ -881,8 +881,7 @@ nullness-counts:
 	@echo -n " / "
 	@echo ${DAIKON_JAVA_FILES} | xargs wc -l | tail -1 | cut -d ' ' -f 2
 	@echo -n "Lines with nullness annotations: "
-	@grep '@NonNull\|@Nullable\|@PolyNull\|@Raw\|@Unused\|@Prototype\|@Dependent.*result=Nullable\|@Dependent.*result=NonNull' ${NULLNESS_JAVA_FILES} | wc -l
-#	@grep '@NonNull\|@Nullable\|@PolyNull\|@Raw\|@Unused\|@Prototype\|@Dependent.*result=Nullable\|@Dependent.*result=NonNull' ${NULLNESS_JAVA_FILES}
+	@grep '@AssertNonNullIfFalse\|@AssertNonNullIfTrue\|@AssertParametersNonNull\|@LazyNonNull\|@NonNull\|@NonNullVariable\|@NonRaw\|@Nullable\|@PolyNull\|@PolyRaw\|@Pure\|@Raw' ${NULLNESS_JAVA_FILES} | wc -l
 	@echo -n "Lines with @SuppressWarnings annotation or castNonNull method call: "
 	@grep '@SuppressWarnings.*nullness\|castNonNull' ${NULLNESS_JAVA_FILES} | wc -l
 	@grep -n '@SuppressWarnings.*nullness\|castNonNull' ${NULLNESS_JAVA_FILES}
