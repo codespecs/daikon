@@ -46,7 +46,9 @@ public class FieldInfo extends DaikonVariableInfo
            field_num = -1;
            return;
        }
-       field_num = num_prim_fields (clazz.getSuperclass());
+       @SuppressWarnings("nullness") // Object declares no fields, so clazz != object and so superclass != null
+       /*@NonNull*/ Class<?> superclass = clazz.getSuperclass();
+       field_num = num_prim_fields (superclass);
        for (Field f : clazz.getDeclaredFields())
        {
            if (f.equals (field)) {
@@ -72,6 +74,7 @@ public class FieldInfo extends DaikonVariableInfo
             return 0;
         else
         {
+            @SuppressWarnings("nullness") // clazz != object and so superclass != null
             int field_cnt = num_prim_fields (clazz.getSuperclass());
             for (Field f : clazz.getDeclaredFields())
             {

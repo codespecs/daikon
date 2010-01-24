@@ -51,6 +51,9 @@ public class VarInfoNameTest
     InputStream input_stream = VarInfoNameTest.class.getResourceAsStream(file);
     InputStream goal_stream = VarInfoNameTest.class.getResourceAsStream(file + ".goal");
 
+    if (input_stream == null) { throw new Error("couldn't find " + file); }
+    if (goal_stream == null) { throw new Error("couldn't find " + file + ".goal"); }
+
     // run the tests
     ByteArrayOutputStream out = new ByteArrayOutputStream();
     VarInfoNameDriver.run(input_stream, new PrintStream(out));

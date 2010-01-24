@@ -75,6 +75,9 @@ public final class TestAst extends TestCase {
 
     // Parse the file "GenericTestClass.java" (under same dir as this class)
     InputStream sourceIn = this.getClass().getResourceAsStream("GenericTestClass.java");
+    if (sourceIn == null) {
+        throw new Error("Couldn't find file GenericTestClass.java");
+    }
     JavaParser parser = new JavaParser(sourceIn);
 
     CompilationUnit compilationUnit = null;

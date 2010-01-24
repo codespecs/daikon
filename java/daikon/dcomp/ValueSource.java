@@ -21,8 +21,7 @@ public class ValueSource {
   String descr;
 
   /** Stack trace of the location where this node was created. **/
-  // under what circumstances is this null? -MDE
-  Throwable stack_trace = null;
+  Throwable stack_trace;
 
   /** Left subtree for binary/unary operations **/
   ValueSource left;
@@ -31,14 +30,15 @@ public class ValueSource {
   ValueSource right;
 
   /** ValueSet used for the null reference value **/
-  public static ValueSource null_value_source = new ValueSource ("null");
+  public static ValueSource null_value_source
+    = new ValueSource ("null", new Throwable().fillInStackTrace());
 
   private static String blank_string = "                 ";
 
   @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
-  ValueSource (String descr) { this.descr = descr; }
+  // ValueSource (String descr) { this.descr = descr; }
   ValueSource (String descr, Throwable stack_trace) {
     this.descr = descr;
     this.stack_trace = stack_trace;

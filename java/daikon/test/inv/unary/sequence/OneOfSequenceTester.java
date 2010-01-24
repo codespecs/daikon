@@ -6,7 +6,7 @@ import daikon.inv.unary.sequence.*;
 import plume.*;
 import daikon.test.Common;
 
-@SuppressWarnings("nullness")
+@SuppressWarnings("nullness")   // testing code
 public class OneOfSequenceTester extends TestCase {
 
   private VarInfo[] vars = { Common.makeHashcodeArrayVarInfo("x"),

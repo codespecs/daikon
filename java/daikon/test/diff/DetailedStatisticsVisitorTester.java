@@ -182,11 +182,11 @@ public class DetailedStatisticsVisitorTester extends TestCase {
     assert b.booleanValue();
 
     b = (Boolean) m.invoke
-      (null, new Object[] {null, null_noprint});
+      (null, new /*@Nullable*/ Object[] {null, null_noprint});
     assert !b.booleanValue();
 
     b = (Boolean) m.invoke
-      (null, new Object[] {null, null_int_1_just});
+      (null, new /*@Nullable*/ Object[] {null, null_int_1_just});
     assert b.booleanValue();
   }
 }

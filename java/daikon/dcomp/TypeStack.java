@@ -21,7 +21,7 @@ public final class TypeStack
     private final Map<InstructionHandle, InstructionHandle> parentMap = new HashMap<InstructionHandle, InstructionHandle>();
     private final Type[] argTypes;
     private final Type retType;
-    private OperandStack stack = null;
+    private OperandStack stack; // initialized by createMap
 
     private static final int MAX = Integer.MAX_VALUE;
 
@@ -168,8 +168,8 @@ public final class TypeStack
     }
 
     /*@AssertNonNullIfTrue("#1")*/
-    private boolean inChainHelper(final InstructionHandle h1,
-            final InstructionHandle h2)
+    private boolean inChainHelper(final /*@Nullable*/ InstructionHandle h1,
+                                  final /*@Nullable*/ InstructionHandle h2)
     {
         if (h2 == null)
             return false;
@@ -204,6 +204,7 @@ public final class TypeStack
                 initStack(parent);
                 parentStack = stackMap.get(parent);
                 assert parentStack != null : "Could not initialize parent stack!!!";
+                assert parentStack != null : "@SuppressWarnings(nullness): just checked";
             }
         }
         else
@@ -640,6 +641,7 @@ public final class TypeStack
         }
     }
 
+    /*@NonNullVariable("stack")*/  // is this right, or too strict?
     private void handleBranch(BranchInstruction inst)
     {
         if (inst instanceof GotoInstruction)
@@ -1197,6 +1199,7 @@ public final class TypeStack
         testClass(Type.class);
     }
 
+    @SuppressWarnings("nullness") // class loaders always exist
     public static void testClass(Class<?> testClass) throws ClassNotFoundException
     {
         System.out.printf("testing %s...", testClass);
@@ -1208,6 +1211,7 @@ public final class TypeStack
         else
             load = new ClassLoaderRepository(testClass.getClassLoader());
 
+        // How can load be null?  Looks like an error in the test.
         if (load == null)
             throw new RuntimeException("Null class loader for class "
                     + testClass);

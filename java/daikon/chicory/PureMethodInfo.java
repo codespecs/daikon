@@ -27,14 +27,15 @@ public class PureMethodInfo extends DaikonVariableInfo
     }
 
     /**
-     * Invokes this pure method on the given parentVal
+     * Invokes this pure method on the given parentVal.
      * This is safe because the method is pure!
      */
     @Override
     @SuppressWarnings("unchecked")
     public Object getMyValFromParentVal(Object parentVal)
     {
-        Method meth = (Method) minfo.member;
+        @SuppressWarnings("nullness") // not a class initializer, so meth != null
+        /*@NonNull*/ Method meth = (Method) minfo.member;
         boolean changedAccess = false;
         Object retVal;
 

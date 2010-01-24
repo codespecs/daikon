@@ -26,6 +26,7 @@ import plume.Intern;
  * representing test cases and for formatting results related to that
  * data. This class is related to tests performed on one invariant.
  **/
+@SuppressWarnings("nullness")
 class FormatTestCase {
 
   private static final String lineSep = Global.lineSep;
@@ -63,7 +64,7 @@ class FormatTestCase {
     /**
      * A cached copy of the result achieved by invoking the output method.
      **/
-    private String resultCache;
+    private /*@LazyNonNull*/ String resultCache;
 
     /**
      * A string containing the format that this particular test case represented.
@@ -317,7 +318,7 @@ class FormatTestCase {
     return null;
   }
 
-  static String getFormat(String partialGoalString) {
+  static /*@Nullable*/ String getFormat(String partialGoalString) {
     try {
       return partialGoalString.substring(partialGoalString.indexOf('(')+1,
                                          partialGoalString.indexOf(')'));
@@ -328,7 +329,7 @@ class FormatTestCase {
     return null;
   }
 
-  static String getGoalOutput(String partialGoalString) {
+  static /*@Nullable*/ String getGoalOutput(String partialGoalString) {
     try {
       return partialGoalString.substring(partialGoalString.indexOf(':')+2,
                                          partialGoalString.length());

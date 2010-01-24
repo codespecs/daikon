@@ -6,6 +6,7 @@ import daikon.inv.*;
 import daikon.diff.*;
 import java.lang.reflect.*;
 
+@SuppressWarnings("nullness")   // testing code
 public class PrintDifferingInvariantsVisitorTester extends TestCase {
 
   VarInfo[] vars = { DiffTester.newIntVarInfo("x"),

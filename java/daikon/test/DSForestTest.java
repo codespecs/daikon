@@ -8,6 +8,7 @@ import daikon.asm.DSForest;
 import junit.framework.TestCase;
 
 
+@SuppressWarnings("nullness")   // testing code
 public class DSForestTest extends TestCase {
 
     public static final String s1 = "s1";

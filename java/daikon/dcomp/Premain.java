@@ -103,7 +103,8 @@ public class Premain {
       }
     }
 
-    public byte[] transform (ClassLoader loader, String className,
+    @SuppressWarnings("nullness") // bug: java.lang.instrument is not yet annotated
+    public byte /*@Nullable*/ [] transform (ClassLoader loader, String className,
                            Class<?> classBeingRedefined,
                            ProtectionDomain protectionDomain,
                            byte[] classfileBuffer)

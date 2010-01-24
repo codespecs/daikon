@@ -82,7 +82,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
 	 * @see #locals()
 	 * @see #stack()
 	 */
-	private Frame frame = null;
+	private /*@LazyNonNull*/ Frame frame = null;
 
 	/**
 	 * The ConstantPoolGen we're working on.
@@ -103,6 +103,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
 	 *
 	 * @see #setFrame(Frame f)
 	 */
+  /*@NonNullVariable("frame")*/
 	private OperandStack stack() {
 		return frame.getStack();
 	}
@@ -112,6 +113,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
 	 *
 	 * @see #setFrame(Frame f)
 	 */
+  /*@NonNullVariable("frame")*/
 	private LocalVariables locals() {
 		return frame.getLocals();
 	}

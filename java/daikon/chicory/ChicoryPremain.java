@@ -13,6 +13,8 @@ import java.net.URL;
 import daikon.Chicory;
 import daikon.util.*;
 
+import static daikon.tools.nullness.NullnessUtils.castNonNull;
+
 public class ChicoryPremain {
 
   // Premain specific options.  Most options are the same as Chicory.
@@ -23,7 +25,7 @@ public class ChicoryPremain {
 
   /** Set of pure methods returned by Alexandru Salcianu's purity analysis **/
   // Non-null if doPurity == true
-  private static Set<String> pureMethods = null;
+  private static /*@LazyNonNull*/ Set<String> pureMethods = null;
 
   /**
    * True iff Chicory should add variables based on pure methods
@@ -80,7 +82,7 @@ public class ChicoryPremain {
     DaikonVariableInfo.std_visibility = Chicory.std_visibility;
     if (Chicory.comparability_file != null) {
       Runtime.comp_info = new DeclReader();
-      Runtime.comp_info.read (Chicory.comparability_file);
+      castNonNull(Runtime.comp_info).read (castNonNull(Chicory.comparability_file));      // @SuppressWarnings("nullness") // bug: flow should figure this out (mark DeclReader constructor as pure?
       if (debug) {
         System.out.printf ("Read comparability from %s%n",
                            Chicory.comparability_file);
@@ -214,6 +216,7 @@ public class ChicoryPremain {
    * Write a *.pure file to the given location
    * @param fileName Where to write the file to (full path)
    */
+  /*@NonNullVariable("pureMethods")*/
   private static void writePurityFile(String fileName, String parentDir)
   {
     PrintWriter pureFileWriter = null;
@@ -269,6 +272,7 @@ public class ChicoryPremain {
    *
    * @return true iff member is a pure method
    */
+  /*@NonNullVariable("pureMethods")*/
   public static boolean isMethodPure(Member member)
   {
     assert shouldDoPurity() : "Can't query for purity if no purity analysis was executed";
@@ -286,6 +290,7 @@ public class ChicoryPremain {
   /**
    * Return an unmodifiable Set of the pure methods
    */
+  /*@NonNullVariable("pureMethods")*/
   public static Set<String> getPureMethods()
   {
     return Collections.unmodifiableSet(pureMethods);
@@ -474,11 +479,13 @@ public class ChicoryPremain {
         InputStream is = null;
         if (name.startsWith ("daikon.chicory.Instrument")) {
           String resource_name = classname_to_resource_name (name);
-          URL url = ClassLoader.getSystemResource (resource_name);
-          assert url != null;
+          @SuppressWarnings("nullness") // should always find daikon.chicory.Instrument classes
+          /*@NonNull*/ URL url = ClassLoader.getSystemResource (resource_name);
+          assert url != null : "couldn't find resource " + resource_name;
           is = url.openStream();
         } else { //  Read the BCEL class from the jar file
           String entry_name = classname_to_resource_name (name);
+          @SuppressWarnings("nullness") // bcel_jar should be properly set
           JarEntry entry = bcel_jar.getJarEntry (entry_name);
           assert entry != null : "Can't find " + entry_name;
           is = bcel_jar.getInputStream (entry);

@@ -62,7 +62,7 @@ public class InvariantFormatTester extends TestCase
    * Determines whether the object will generate goal statements.
    **/
   @Option ("-g Filename to write goals to")
-  public static File generate_goals = null;
+  public static /*@Nullable*/ File generate_goals = null;
 
   /**
    * This function allows this test to be run from the command line

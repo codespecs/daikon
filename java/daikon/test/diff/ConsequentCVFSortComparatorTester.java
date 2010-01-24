@@ -8,6 +8,7 @@ import daikon.inv.*;
 import daikon.inv.unary.scalar.*;
 import daikon.test.*;
 
+@SuppressWarnings("nullness")   // testing code
 public class ConsequentCVFSortComparatorTester extends TestCase {
 
   public static void main(String[] args) {

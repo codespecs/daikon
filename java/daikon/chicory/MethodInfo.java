@@ -9,15 +9,17 @@ import java.lang.reflect.*;
  * out during the transformation and other information is added the
  * first time a method is called.
  */
+@SuppressWarnings("nullness")   // to do.  member field is tricky.
 public class MethodInfo {
 
   /** Class that contains this method **/
   public ClassInfo class_info;
 
   /** Reflection information on this method.
-   *    Null if a class initializer (see {@link #is_class_init()}.
+   *    Null if a class initializer, &lt;clinit&gt; (see {@link #is_class_init()}.
    */
-  public /*@Nullable*/ Member member = null;
+  // The code often assumes that member != null.
+  public /*@LazyNonNull*/ Member member = null;
 
   /**
    * Method name.  For example: "public static void sort(int[] arr)"
@@ -51,14 +53,14 @@ public class MethodInfo {
    *
    * Set by DeclWriter and read by DTraceWriter.
    **/
-  public RootInfo traversalEnter = null;
+  public /*@LazyNonNull*/ RootInfo traversalEnter = null;
 
   /**
    * The root of the variable tree for the method exit program point(s).
    *
    * Set by DeclWriter and read by DTraceWriter.
    **/
-  public RootInfo traversalExit = null;
+  public /*@LazyNonNull*/ RootInfo traversalExit = null;
 
   /** The number of times this method has been called **/
   public int call_cnt = 0;
@@ -179,6 +181,7 @@ public class MethodInfo {
   }
 
   /** Returns whether or not this method is static **/
+  /*@NonNullVariable("member")*/
   public boolean is_static() {
     return Modifier.isStatic(member.getModifiers());
   }
@@ -188,6 +191,7 @@ public class MethodInfo {
    * traversalExit).  The reflection information must have already been
    * initialized.
    */
+  /*TO DO: @PostNonNull({"traversalEnter", "traversalExit"})*/
   public void init_traversal (int depth) {
 
     traversalEnter = RootInfo.enter_process (this, depth);

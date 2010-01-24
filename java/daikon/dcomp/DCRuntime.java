@@ -11,6 +11,7 @@ import daikon.util.SimpleLog;
 import daikon.util.ArraysMDE;
 import daikon.util.Stopwatch;
 
+@SuppressWarnings("nullness")
 public final class DCRuntime {
 
   /** List of all instrumented methods **/
@@ -106,8 +107,8 @@ public final class DCRuntime {
    * from Object for debugging purposes.
    */
   private static class UninitFieldTag {
-    String descr = null;
-    Throwable stack_trace = null;
+    String descr;
+    /*@Nullable*/ Throwable stack_trace = null;
     public UninitFieldTag() {}
     public UninitFieldTag(String descr) { this.descr = descr; }
     public UninitFieldTag(String descr, Throwable stack_trace) {
@@ -3293,7 +3294,7 @@ public final class DCRuntime {
   /**
    * Sets up the dataflow information for an array allocation.  The length
    * of the array is associated with the size argument (on the top of the
-   * tag stack).  The array itself is associated wit the specified description
+   * tag stack).  The array itself is associated with the specified description.
    */
   public static void setup_array_df (Object arr_ref, String descr) {
 
@@ -3303,7 +3304,9 @@ public final class DCRuntime {
     df_arrlen_map.put (arr_ref, size_values);
 
     // Create a new DF for the array itself
-    ValueSource values = new ValueSource (descr);
+    Throwable t = new Throwable();
+    t.fillInStackTrace();
+    ValueSource values = new ValueSource (descr, t);
     tag_map.put (arr_ref, values);
   }
 
@@ -3313,7 +3316,7 @@ public final class DCRuntime {
    * the size of each dimension from the stack.  The tags for each of these
    * sizes are thus on the tag stack.  The length of each allocated array
    * is associated with its size argument.  The array itself is
-   * associated wit the specified description
+   * associated with the specified description.
    */
   public static void setup_multiarray_df (Object arr, int dims, String descr) {
 
@@ -3323,7 +3326,9 @@ public final class DCRuntime {
       tags[dims] = pop_check();
 
     // Create a description for the array allocation
-    ValueSource values = new ValueSource (descr);
+    Throwable t = new Throwable();
+    t.fillInStackTrace();
+    ValueSource values = new ValueSource (descr, t);
 
     setup_multiarray_df (0, tags, values, arr);
 
@@ -3427,7 +3432,7 @@ public final class DCRuntime {
       StackTraceElement ste = t.getStackTrace()[1];
       String descr = String.format ("%s.%s:uninit-arr-elem@L%d",
                 ste.getClassName(), ste.getMethodName(), ste.getLineNumber());
-      ValueSource val = new ValueSource (descr);
+      ValueSource val = new ValueSource (descr, t);
       tag_map.put (elem, val);
     }
 

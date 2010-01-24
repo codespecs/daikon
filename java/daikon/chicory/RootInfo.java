@@ -11,6 +11,7 @@ import java.util.Set;
  *  "placeholder" for the root of the tree.  It contains no variable
  *  information other than what is stored in its children.
  */
+@SuppressWarnings("nullness")   // to do
 public class RootInfo extends DaikonVariableInfo
 {
     private RootInfo()

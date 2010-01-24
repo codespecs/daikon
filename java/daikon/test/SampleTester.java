@@ -23,6 +23,7 @@ import junit.framework.*;
  *
  * The input file format is documented in the developer manual.
  **/
+@SuppressWarnings("nullness")
 public class SampleTester extends TestCase {
 
   public static final Logger debug
@@ -122,7 +123,7 @@ public class SampleTester extends TestCase {
     System.out.println ("Test Passes");
   }
 
-  private static String find_file (String fname) {
+  private static /*@Nullable*/ String find_file (String fname) {
 
     URL input_file_location =
       ClassLoader.getSystemClassLoader().getSystemResource (fname);

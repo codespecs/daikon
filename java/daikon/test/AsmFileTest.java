@@ -15,6 +15,9 @@ public class AsmFileTest extends TestCase {
   public static void testParser() throws IOException {
 
     InputStream stream = AsmFileTest.class.getResourceAsStream("galar.asm");
+    if (stream == null) {
+      throw new Error("Couldn't read resource galar.asm");
+    }
     InputStreamReader streamReader = new InputStreamReader(stream);
     AsmFile file = new AsmFile(new LineNumberReader(streamReader));
 

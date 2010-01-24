@@ -9,6 +9,7 @@ import java.io.*;
  * Reads dtrace files and provides methods to access the information
  * within them.  A dtrace file contains both declarations and data.
  */
+@SuppressWarnings("nullness")   // to do
 public class DTraceReader extends DeclReader {
 
   public void read (File pathname) {

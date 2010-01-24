@@ -79,6 +79,7 @@ import java.util.Vector;
  * Note: no test case should contain the character ';' in any way
  * other than to divide arguments with in a command line.
  **/
+@SuppressWarnings("nullness")
 public class InvariantAddAndCheckTester extends TestCase {
 
   /**
@@ -432,7 +433,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      *  commands is empty (there are no more test cases and the
      *  end of the file has been reached), null is returned.
      */
-    public static String runTest(LineNumberReader commands) {
+    public static /*@Nullable*/ String runTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, false);
       if (endOfFile) {
         return null;
@@ -459,7 +460,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return a String containing the proper add and check
      *  commands for this input lines of this test case.
      */
-    public static String generateTest(LineNumberReader commands) {
+    public static /*@Nullable*/ String generateTest(LineNumberReader commands) {
       boolean endOfFile = initFields(commands, true);
       if (endOfFile) return null;
       while (true) {

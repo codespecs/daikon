@@ -225,12 +225,12 @@ public abstract class DaikonVariableInfo
      * of this DaikonVariableInfo variable.
      *
      * For instance, if the variable a has a field b, then calling
-     * getMyValParentVal(val_of_a) will return the value of a.b
+     * getMyValFromParentVal(val_of_a) will return the value of a.b
      *
      * @param parentVal The parent object.  Can be null for static fields.
      *    (Are there any other circumstances where it can be null?)
      */
-    public abstract Object getMyValFromParentVal(Object parentVal);
+    public abstract /*@Nullable*/ Object getMyValFromParentVal(Object parentVal);
 
     /**
      * Returns a String representation of this object suitable for a .dtrace file
@@ -577,7 +577,7 @@ public abstract class DaikonVariableInfo
                                 buf);
                         String newOffset = buf.toString();
                         debug_vars.indent ("Pure method");
-                        assert meth.member != null;
+                        assert meth.member != null : "@SuppressWarnings(nullness): member of method_infos have .member field"; // fix with dependent type
                         newChild.addChildNodes(cinfo,
                                                ((Method) meth.member).getReturnType(),
                                                meth.member.getName(),
@@ -631,7 +631,8 @@ public abstract class DaikonVariableInfo
         if (isArray)
             arr_str = "[]";
 
-        Method meth = (Method) minfo.member;
+        @SuppressWarnings("nullness") // method precondition
+        /*@NonNull*/ Method meth = (Method) minfo.member;
 
 
         boolean changedAccess = false;

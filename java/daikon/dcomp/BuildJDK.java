@@ -361,9 +361,10 @@ public class BuildJDK {
    **/
   private void processClassFile(Map<String, JavaClass> classmap, File dfile,
                                 String classname) throws java.io.IOException {
-    JavaClass jc = classmap.get(classname);
     if (verbose)
       System.out.printf("processing target %s\n", classname);
+    JavaClass jc = classmap.get(classname);
+    assert jc != null : "@SuppressWarnings(nullness): seems to be non-null";
     DCInstrument dci = new DCInstrument (jc, true, null);
     if (false) {
       System.out.printf ("Comparing type stacks for class %s%n", classname);
@@ -376,6 +377,7 @@ public class BuildJDK {
       inst_jc = dci.instrument_jdk();
     skipped_methods.addAll(dci.get_skipped_methods());
     File classfile = new File(classname.replace('.', '/') + ".class");
+    @SuppressWarnings("nullness") // classfile has a parent
     File dir = new File(dfile, classfile.getParent());
     dir.mkdirs();
     File classpath = new File(dir, classfile.getName());

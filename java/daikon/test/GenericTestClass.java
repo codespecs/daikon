@@ -7,7 +7,7 @@ package daikon.test;
 
 import java.util.*;
 
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "nullness"}) // testing code
 public class GenericTestClass <A, B extends String, C extends java.lang.Object, U> {
 
   public List foo1() { return null; }

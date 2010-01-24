@@ -8,6 +8,7 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.test.*;
 import java.util.*;
 
+@SuppressWarnings("nullness")   // testing code
 public class InvariantTester extends TestCase {
 
   public static void main(String[] args) {

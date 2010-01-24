@@ -25,6 +25,7 @@ public class LinearTernaryCoreTest
   }
 
   void one_test_set_tri_linear(int[][] triples, long goal_a, long goal_b, long goal_c, long goal_d) {
+    @SuppressWarnings("nullness") // testing code: wrapper will never be used
     LinearTernaryCore ltc = new LinearTernaryCore(null);
     for (int i=0; i<triples.length; i++) {
       assert triples[i].length == 3;
@@ -88,6 +89,7 @@ public class LinearTernaryCoreTest
   }
 
   public void one_test_format(double a, double b, double c, double d, String goal_result) {
+    @SuppressWarnings("nullness") // testing code: wrapper will never be used
     LinearTernaryCore ltc = new LinearTernaryCore(null);
     ltc.a = a;
     ltc.b = b;

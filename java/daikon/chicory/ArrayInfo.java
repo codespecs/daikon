@@ -23,7 +23,7 @@ public class ArrayInfo extends DaikonVariableInfo
     }
 
     @Override
-    public /*@Nullable*/ Object getMyValFromParentVal(Object value)
+    public Object getMyValFromParentVal(Object value)
     {
         if (value == null)
         {

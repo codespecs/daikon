@@ -10,6 +10,7 @@ import daikon.Chicory;
  *  DTraceWriter writes .dtrace program points to an output stream.
  *  It uses the trees created by the {@link DeclWriter}.
  */
+@SuppressWarnings("nullness")
 public class DTraceWriter extends DaikonWriter
 {
     // Notes:
@@ -58,7 +59,7 @@ public class DTraceWriter extends DaikonWriter
     /**
      * Prints the method entry program point in the dtrace file
      */
-    public void methodEntry(MethodInfo mi, int nonceVal, Object obj, Object[] args)
+    public void methodEntry(MethodInfo mi, int nonceVal, /*@Nullable*/ Object obj, Object[] args)
     {
         //don't print
         if (Runtime.dtrace_closed)
@@ -90,7 +91,7 @@ public class DTraceWriter extends DaikonWriter
     /**
      * Prints the method exit program point in the dtrace file
      */
-    public void methodExit(MethodInfo mi, int nonceVal, Object obj, Object[] args, Object ret_val, int lineNum)
+    public void methodExit(MethodInfo mi, int nonceVal, /*@Nullable*/ Object obj, Object[] args, Object ret_val, int lineNum)
     {
         if (Runtime.dtrace_closed)
             return;

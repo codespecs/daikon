@@ -21,7 +21,7 @@ import daikon.*;
 
 import java.lang.reflect.*;
 
-@SuppressWarnings({"rawtypes","nullness"}) // defer nullness checking for now
+@SuppressWarnings({"rawtypes","nullness"}) // not generics-correct
 public class Ast {
 
   @SuppressWarnings("nullness") // line.separator property always exists

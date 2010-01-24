@@ -35,7 +35,7 @@ import java.util.*;
  * For example, "a" is a name, and "sin(a)" is a name that is the name
  * "a" with the function "sin" applied to it.
  **/
-@SuppressWarnings({"nullness","interning"}) // defer annotating this file to later
+@SuppressWarnings({"nullness","interning"}) // deprecated file
 public abstract /*@Interned*/ class VarInfoName
   implements Serializable, Comparable<VarInfoName>
 {

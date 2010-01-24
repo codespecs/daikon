@@ -5,6 +5,7 @@ import java.util.Comparator;
 import daikon.*;
 import plume.ArraysMDE;
 
+@SuppressWarnings("nullness")   // testing code
 public class ProglangTypeTest extends TestCase {
 
   public static void main(String[] args) {

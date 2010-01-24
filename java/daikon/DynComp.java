@@ -66,7 +66,7 @@ public class DynComp {
 
   @Option("Trace output file")
   // Null if shouldn't do output
-  public static File trace_sets_file = null;
+  public static /*@Nullable*/ File trace_sets_file = null;
 
   @Option("Depth of call hierarchy for line tracing")
   public static int trace_line_depth = 1;
@@ -83,7 +83,7 @@ public class DynComp {
 
   @Option ("Output file for DataFlow information")
   // Null if shouldn't do output
-  public static File dataflow_out = null;
+  public static /*@Nullable*/ File dataflow_out = null;
 
 //  @Option("Enable tracing");
 //  public static boolean tracing_enabled = true;

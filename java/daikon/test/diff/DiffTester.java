@@ -15,6 +15,7 @@ import java.io.*;
 import java.lang.reflect.*;
 
 
+@SuppressWarnings("nullness")   // testing code
 public class DiffTester extends TestCase {
 
   private Diff diffSome;

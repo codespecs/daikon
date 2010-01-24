@@ -15,6 +15,7 @@ import daikon.util.SimpleLog;
  * program point.  These are also used by the {@link DTraceWriter}.
  *
  */
+@SuppressWarnings("nullness")   // to do
 public class DeclWriter extends DaikonWriter {
   // Notes:
   //
@@ -101,7 +102,7 @@ public class DeclWriter extends DaikonWriter {
      *        Class whose declarations should be printed.
      *
      */
-    public void printDeclClass (ClassInfo cinfo, DeclReader comp_info)
+    public void printDeclClass (ClassInfo cinfo, /*@Nullable*/ DeclReader comp_info)
     {
       if (Chicory.new_decl_format) {
         print_decl_class (cinfo, comp_info);
@@ -262,7 +263,7 @@ public class DeclWriter extends DaikonWriter {
      *        Class whose declarations should be printed.
      *
      */
-    public void print_decl_class (ClassInfo cinfo, DeclReader comp_info) {
+    public void print_decl_class (ClassInfo cinfo, /*@Nullable*/ DeclReader comp_info) {
 
       // Print all methods and constructors
       for (MethodInfo mi : cinfo.get_method_infos()) {
@@ -313,7 +314,7 @@ public class DeclWriter extends DaikonWriter {
      * @param comp_info Comparability information
      */
     private void print_method (MethodInfo mi, RootInfo root, String name,
-                               PptType ppt_type, DeclReader comp_info) {
+                               PptType ppt_type, /*@Nullable*/ DeclReader comp_info) {
 
       outFile.println ("ppt " + escape(name));
       outFile.println ("ppt-type " + ppt_type.name().toLowerCase());

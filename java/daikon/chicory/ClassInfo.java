@@ -18,6 +18,8 @@ public class ClassInfo {
   /** reflection object for this class **/
   public Class<?> clazz;
 
+  // Does not include class initializers, so each element's .member field
+  // is non-null.
   /** list of methods in the class **/
   public List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
 
@@ -54,8 +56,8 @@ public class ClassInfo {
   }
 
   /**
-   * Gets the reflection object Class for this class and the Method objects
-   * for each method
+   * Gets the reflection object Class for this class, and the Method objects
+   * for each method that is already in method_infos.
    */
   public void initViaReflection() {
 
@@ -82,6 +84,7 @@ public class ClassInfo {
             {
                 boolean foundMatch = false;
                 for (MethodInfo mi: method_infos) {
+                  assert mi.member != null : "@SuppressWarnings(nullness): member of method_infos have .member field"; // fix with dependent type
                   // System.out.printf("compare %s to pure %s%n",
                   //                  mi.member.toString() , pureMeth);
                   if (mi.member.toString().trim().equals(pureMeth)) {

@@ -326,8 +326,10 @@ public class DeclReader {
 
   public DeclPpt find_ppt (String ppt_name) {
     DeclPpt result = ppts.get (ppt_name);
-    // I'm curious whether this will ever fail
+    // I'm curious whether this will ever fail. -MDE 6/28/2009
     assert result != null;
+    // It seems not to.
+    assert result != null : "@SuppressWarnings(nullness): method precondition (I think)";
     return result;
   }
 

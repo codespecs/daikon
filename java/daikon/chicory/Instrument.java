@@ -35,6 +35,7 @@ import daikon.Chicory;
  * other class at method entries and exits for instrumentation
  * purposes.
  */
+@SuppressWarnings("nullness")
 public class Instrument implements ClassFileTransformer {
 
   boolean debug = false;
@@ -362,7 +363,7 @@ public class Instrument implements ClassFileTransformer {
 
 
   //called by addInvokeToClinit to add in a hook at return opcodes
-  private InstructionList xform_clinit(ClassGen cg, ConstantPoolGen cp,
+  private /*@Nullable*/ InstructionList xform_clinit(ClassGen cg, ConstantPoolGen cp,
                                        String fullClassName, Instruction inst, MethodContext context) {
     switch (inst.getOpcode()) {
 

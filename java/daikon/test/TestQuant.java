@@ -6,6 +6,7 @@ import java.util.*;
 import java.io.*;
 import plume.*;
 
+@SuppressWarnings("nullness")   // testing code
 public final class TestQuant extends TestCase {
 
   public static void main(String[] args) {

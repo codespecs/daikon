@@ -26,6 +26,7 @@ import daikon.DynComp;
 /**
  * Instruments a class file to perform Dynamic Comparability.
  */
+@SuppressWarnings("nullness")   // 
 class DCInstrument {
 
   protected JavaClass orig_class;
@@ -33,7 +34,7 @@ class DCInstrument {
   protected ConstantPoolGen pool;
   protected boolean in_jdk;
   protected InstructionFactory ifact;
-  protected ClassLoader loader;
+  protected /*@Nullable*/ ClassLoader loader;
 
   /** Local that stores the tag frame for the current method **/
   protected LocalVariableGen tag_frame_local;
@@ -209,7 +210,7 @@ class DCInstrument {
    * is part of the JDK
    */
   public DCInstrument (JavaClass orig_class, boolean in_jdk,
-                       ClassLoader loader) {
+                       /*@Nullable*/ ClassLoader loader) {
     this.orig_class = orig_class;
     this.in_jdk = in_jdk;
     this.loader = loader;
@@ -2598,7 +2599,8 @@ class DCInstrument {
   /**
    * Creates a MethodInfo corresponding to the specified method.  The
    * exit locations are filled in, but the reflection information is
-   * not generated
+   * not generated.  Returns null if there are no instructions, or if the
+   * instructions have no RETURN opcode.
    */
   protected /*@Nullable*/ MethodInfo create_method_info (ClassInfo class_info, MethodGen mgen) {
 

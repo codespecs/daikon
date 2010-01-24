@@ -43,7 +43,7 @@ class TagEntry extends WeakReference<Object> {
    * Parent in the tree that represents the set for this element.  If this,
    * this entry is the representative one
    */
-  private TagEntry parent;
+  private /*@Nullable*/ TagEntry parent;
 
   /**
    * Element in the tree that this element interacted with.
@@ -226,7 +226,8 @@ class TagEntry extends WeakReference<Object> {
    * and reverses the direction of every pointer on the path, such that
    * this object is now the root of its tracer tree. (Imprecise wording, I know)
    */
-  public void reroute(TagEntry newTracer, String tloc) {
+  @SuppressWarnings("nullness") // catches NullPointerException
+  public void reroute(/*@Nullable*/ TagEntry newTracer, String tloc) {
     try { this.tracer.reroute(this, trace_loc); }
     catch (NullPointerException e) { }
     finally { this.tracer = newTracer; this.trace_loc = tloc; }
@@ -276,7 +277,7 @@ class TagEntry extends WeakReference<Object> {
   }
 
   /** Returns the tracer of this node **/
-  public TagEntry getTracer() { return tracer; }
+  public /*@Nullable*/ TagEntry getTracer() { return tracer; }
 
   public TagEntry getTraceRoot() {
     if (tracer == null) return this;
