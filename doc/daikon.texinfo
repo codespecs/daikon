@@ -35,7 +35,7 @@
 @c @ifinfo
 @c @c This text appears only in the Info Version.
 @c
-@c Copyright 1998-2009
+@c Copyright 1998-2010
 @c @end ifinfo
 
 @c Avoid black boxes marking overfull hboxes in TeX output.
@@ -61,7 +61,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2009
+Copyright @copyright{} 1998-2010
 @end titlepage
 
 @html
@@ -630,7 +630,8 @@ you from having to edit the main Makefile directly).
 @item
 Compile Daikon and build other tools by running @code{make}.
 Note that this step is @emph{not} required if you only want to use Daikon
-with its Java front end (Chicory).    
+with its Java front end (Chicory).  This step is required for using
+Daikon with its C/C++ front end (Kvasir), and for other tools.
 
 @example
 cd $DAIKONDIR
@@ -743,7 +744,8 @@ to define the @code{OSTYPE} variable to be @code{cygwin}.
 @item
 Compile Daikon and build other tools by running @code{make}.
 Note that this step is @emph{not} required if you only want to use Daikon
-with its Java front end (Chicory).    
+with its Java front end (Chicory).  This step is required for using
+Daikon with its C/C++ front end (Kvasir), and for other tools.
 
 @example
 cd $DAIKONDIR
@@ -1370,11 +1372,11 @@ tool; if they do not appear with that tool, they are probably
 spurious).
 
 @item Run Daikon on the trace file.
-@example
+@smallexample
 java daikon.Daikon \
      --config_option daikon.derive.Derivation.disable_derived_variables=true \
      daikon-output/wordplay.dtrace
-@end example
+@end smallexample
 
 The invariants are printed to standard output, and a binary representation
 of the invariants is written to @file{wordplay.inv.gz}.  Note that the
@@ -1385,22 +1387,28 @@ longer.
 Daikon can analyze multiple runs (executions) of the program.  You can
 supply Daikon with multiple trace files:
 
-@example
-kvasir-dtrace --dtrace-file=daikon-output/wordplay1.dtrace ./wordplay -f words.txt 'daikon dynamic invariant detector'
-kvasir-dtrace --dtrace-file=daikon-output/wordplay2.dtrace ./wordplay -f words.txt 'better results from multiple runs'
-kvasir-dtrace --dtrace-file=daikon-output/wordplay3.dtrace ./wordplay -f words.txt 'more testing equals better testing'
+@smallexample
+kvasir-dtrace --dtrace-file=daikon-output/wordplay1.dtrace \
+    ./wordplay -f words.txt 'daikon dynamic invariant detector'
+kvasir-dtrace --dtrace-file=daikon-output/wordplay2.dtrace \
+    ./wordplay -f words.txt 'better results from multiple runs'
+kvasir-dtrace --dtrace-file=daikon-output/wordplay3.dtrace \
+    ./wordplay -f words.txt 'more testing equals better testing'
 java -Xmx256m daikon.Daikon daikon-output/wordplay*.dtrace
-@end example
+@end smallexample
 
 @noindent
 or, you can append information from multiple runs in a single trace file:
 
-@example
-kvasir-dtrace --dtrace-file=daikon-output/wordplay-all.dtrace ./wordplay -f words.txt 'daikon dynamic invariant detector'
-kvasir-dtrace --dtrace-append --dtrace-file=daikon-output/wordplay-all.dtrace ./wordplay -f words.txt 'better results from multiple runs'
-kvasir-dtrace --dtrace-append --dtrace-file=daikon-output/wordplay-all.dtrace ./wordplay -f words.txt 'more testing equals better testing'
+@smallexample
+kvasir-dtrace --dtrace-file=daikon-output/wordplay-all.dtrace \
+    ./wordplay -f words.txt 'daikon dynamic invariant detector'
+kvasir-dtrace --dtrace-append --dtrace-file=daikon-output/wordplay-all.dtrace \
+    ./wordplay -f words.txt 'better results from multiple runs'
+kvasir-dtrace --dtrace-append --dtrace-file=daikon-output/wordplay-all.dtrace \
+    ./wordplay -f words.txt 'more testing equals better testing'
 java -Xmx256m daikon.Daikon daikon-output/wordplay-all.dtrace
-@end example
+@end smallexample
 
 
 @item
@@ -1442,11 +1450,11 @@ kvasir-dtrace --with-dyncomp \
 
 Then, supply the @file{.decls} file when invoking Daikon:
 
-@example
+@smallexample
 java daikon.Daikon \
      --config_option daikon.derive.Derivation.disable_derived_variables=true \
      daikon-output/wordplay.decls daikon-output/wordplay.dtrace
-@end example
+@end smallexample
 
 For instance, one effect of DynComp that can be seen in the wordplay
 example concerns the global variables @code{largestlet},
@@ -1689,9 +1697,9 @@ process, @pxref{Example usage}, and @pxref{Front ends (instrumentation)}.
 
 
 Run the Daikon invariant detector via the command
-@example
+@smallexample
 java daikon.Daikon @i{[@var{flags}]} @var{dtrace-files...} @i{[@var{decl-files...}]} @i{[@var{spinfo-files...}]}
-@end example
+@end smallexample
 
 @itemize
 @item
@@ -3616,28 +3624,28 @@ parts of your program.
 
 @itemize
 @item omit a whole package:
-@example
+@smallexample
 java daikon.Chicory '--ppt-omit-pattern=^junit\.'
-@end example
-@example
+@end smallexample
+@smallexample
 java daikon.Chicory '--ppt-omit-pattern=^daikon\.util\..*' ...
-@end example
+@end smallexample
 
 @item omit a single class:
-@example
+@smallexample
 java daikon.Chicory '--ppt-omit-pattern=HashSetLinear\$HslIterator' ...
-@end example
+@end smallexample
 
 @item omit a single method:
-@example
+@smallexample
 java daikon.Chicory '--ppt-omit-pattern=StackAr.topAndPop()' \
      ...
-@end example
+@end smallexample
 
 @item omit a single program point:
-@example
+@smallexample
 java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(int):::EXIT33' ...
-@end example
+@end smallexample
 
 @end itemize
 @end table
@@ -4122,13 +4130,14 @@ Duplicate values in this list represent the results of separate calls to
 another method which each of the relevant variables.  For example, if @code{main} had calls
 @code{compute(year, summerDays, winterDays)} and
 @code{compute(year,schoolDays,breakDays)}, then for @code{main} we might see
+this output:
 
-@example
+@smallexample
 daikon.chicory.FieldInfo:summerDays
 --daikon.chicory.FieldInfo:winterDays([Year:compute()-11])
 --daikon.chicory.FieldInfo:schoolDays([Year:compute()-11, Year:compute()-11])
 ----daikon.chicory.FieldInfo:breakDays([Year:compute()-11])
-@end example
+@end smallexample
 
 Empty lists indicate that no non-assignment interactions occurred in the series of
 interactions connecting the two variables.
@@ -4179,9 +4188,9 @@ jar file (@code{classes.jar} in MacOS).  Normally the file is found in
 The following example is for the standard install of Java 1.5 on
 MacOS:
 
-@example
+@smallexample
   export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
-@end example
+@end smallexample
 
 BuildJDK requires 20-40 minutes to complete and uses 1024 MB of
 memory.  Regular progress indicators are printed to standard output.
@@ -4914,7 +4923,7 @@ Kvasir runs without DynComp.
 Here is part of the @file{.decls} file generated by running Kvasir with
 DynComp on the above example:
 
-@example
+@smallexample
 DECLARE
 ..compute():::ENTER
 yr
@@ -4948,7 +4957,7 @@ return
 int
 int
 2
-@end example
+@end smallexample
 
 The abstract type of 'year' (and its corresponding comparability set) is
 represented by the number 1 while the abstract type of 'day' is
@@ -5337,7 +5346,7 @@ coercion work.
 This example demonstrates the power of pointer type disambiguation in creating
 more accurate Daikon output.  Consider this file:
 
-@example
+@smallexample
 struct record @{
   char* name;     // Initialize to: "Daikon User"
   int numbers[5]; // Initialize to: @{5, 4, 3, 2, 1@}
@@ -5356,7 +5365,7 @@ int main() @{
   baz.name = myName;
   foo(&baz);
 @}
-@end example
+@end smallexample
 
 In @code{foo()}, @code{bar} is a pointer to a  @code{record} struct.  By inspection, it is
 evident that in this program, @code{bar} only refers to one element: @code{&baz}
@@ -5372,7 +5381,7 @@ consequence of the fact that Daikon can only handle one layer of sequences
 
 Here is part of the Daikon output for this program:
 
-@example
+@smallexample
 ======================================================================
 ..foo():::ENTER
 bar has only one value
@@ -5414,7 +5423,7 @@ bar[].numbers[4][0] elements == 1
 size(bar[]).numbers[0] == 1
 bar[].numbers[4][0] elements == size(bar[]).numbers[0]
 size(bar[]).numbers[0] in bar[].numbers[4][0]
-@end example
+@end smallexample
 
 This is a bit verbose due to the fact that Kvasir treats @code{bar} like an array
 by default when it actually only points to one element.  However, by running
@@ -5428,12 +5437,12 @@ kvasir-dtrace @var{...options...} --disambig --smart-disambig @var{myprog}
 
 This creates the @file{@var{myprog}.disambig} file.  It contains, at the top:
 
-@example
+@smallexample
 ----SECTION----
 function: ..foo()
 bar
 P
-@end example
+@end smallexample
 
 This means that at the program points corresponding to the entry and
 exit of @code{foo()}, the variable @code{bar} is treated as a
@@ -5466,7 +5475,7 @@ Daikon can recognize @w{@code{bar->numbers}} as a single-dimensional
 array (Daikon uses a Java-like syntax, replacing the arrow '->' symbol
 with a dot, so it actually outputs @code{bar.numbers}).
 
-@example
+@smallexample
 ======================================================================
 ..foo():::ENTER
 bar has only one value
@@ -5480,7 +5489,8 @@ size(bar.numbers[]) == 5
 bar.name == orig(bar.name)
 size(bar.numbers[]) in bar.numbers[]
 size(bar.numbers[])-1 in bar.numbers[]
-@end example
+@end smallexample
+
 
 @node    Using pointer type disambiguation with partial program tracing,  , Pointer type disambiguation example, Pointer type disambiguation
 @subsubsection Using pointer type disambiguation with partial program tracing
@@ -5748,16 +5758,17 @@ it once and only generate a .decls file with comparability information,
 then run Kvasir again without DynComp and pipe the .dtrace data directly
 into Daikon while using the .decls file generated from the previous run:
 
-@example
+@smallexample
 kvasir-dtrace --with-dyncomp --decls-only ./foo
-@end example
+@end smallexample
 
 This should generate a .decls file with comparability information
 named @file{daikon-output/foo.decls}.
 
-@example
-kvasir-dtrace --dtrace-no-decs --dtrace-file=- ./foo | java daikon.Daikon daikon-output/foo.decls -
-@end example
+@smallexample
+kvasir-dtrace --dtrace-no-decs --dtrace-file=- ./foo \
+    | java daikon.Daikon daikon-output/foo.decls -
+@end smallexample
 
 When you run Kvasir the second time, you don't need to run DynComp
 again since you are only interested in the .dtrace file.  Notice that
@@ -6631,7 +6642,7 @@ tar xvzf mangel-wurzel-linux-x86.tar.gz
 
 @item
 On Windows, download, then unzip,
-@url{http://pag.csail.mit.edu/daikon/download/binaries/mangel-wurzel-linux-x86.tar.gz} .
+@url{http://pag.csail.mit.edu/daikon/@/download/@/binaries/@/mangel-wurzel-linux-x86.tar.gz} .
 
 @end itemize
 
@@ -7582,15 +7593,16 @@ possible.  No incorrect @code{@@Nullable} annotations are ever produced,
 but more thorough runs produce a larger number of @code{@@Nullable}
 annotations.
 
-@example
+@smallexample
 java daikon.Chicory --dtrace-file=an.dtrace.gz @emph{your-command-and-options}
-@end example
+@end smallexample
 
 @item Run Daikon on the resulting .dtrace file:
 
-@example
-java daikon.Daikon an.dtrace.gz --no_text_output --config @var{daikondir}/java/daikon/annotate_nullable.config
-@end example
+@smallexample
+java daikon.Daikon an.dtrace.gz --no_text_output \
+    --config @var{daikondir}/java/daikon/annotate_nullable.config
+@end smallexample
 
 The example uses the @file{annotate_nullable.config} configuration file
 that is included in the Daikon distribution.
@@ -7611,28 +7623,29 @@ Run the AnnotateNullable tool to create an annotation index file.
 AnnotateNullable writes its output to standard out, so you should
 redirect its output to a @file{.jaif} file.
 
-@example
+@smallexample
 java daikon.AnnotateNullable an.inv.gz > nullable-annotations.jaif
-@end example
+@end smallexample
 
 @item
 Use the
-@uref{http://types.cs.washington.edu/annotation-file-utilities/,
+@uref{http://types.cs.washington.edu/@/annotation-file-utilities/,
 Annotation File Utilities} to insert the annotations in your .class or .java
 file.
 
-@example
+@smallexample
 insert-annotations @var{mypackage.MyClass} nullable-annotations.jaif
-insert-annotations-to-source nullable-annotations.jaif mypackage/MyClass.java annotated/mypackage/MyClass.java
-@end example
+insert-annotations-to-source nullable-annotations.jaif \
+    mypackage/MyClass.java annotated/mypackage/MyClass.java
+@end smallexample
 
 @end enumerate
 
 
 AnnotateNullable is invoked as follows:
-@example
+@smallexample
 java daikon.AnnotateNullable @i{[@var{flags}]} @var{inv-file}
-@end example
+@end smallexample
 
 The flags are:
 
@@ -7704,7 +7717,7 @@ that class for other useful methods.)
 @item
 A @code{Throwable} (exception) is thrown when evaluating the
 invariant.  In this case, the throwable is added to the list
-@code{daikon.tools.runtimechecker.Runtime.internalInvariantEvaluationErrors}.
+@code{daikon.tools.runtimechecker.Runtime@/.internalInvariantEvaluationErrors}.
 The throwable is not rethrown.
 
 @end itemize
@@ -8617,7 +8630,7 @@ points (functions) in your program.
 @enumerate
 @item
 You can make Daikon ignore some program points.  With the
-@option{--ppt-select-pattern=@var{ppt_regexp}}
+@option{--ppt-select-pattern@/=@var{ppt_regexp}}
 flag (@pxref{Processing only part of the trace file}),
 only program points matching
 the regular expression are processed.  Likewise, the
@@ -8808,11 +8821,11 @@ Chicory; please report it if it is not already explained in this manual.
 @cindex constant pool index error, when running Chicory
 
 If Chicory throws an error such as the following:
-@example
+@smallexample
 Exception in thread "main" java.lang.VerifyError:
   (class: ps1/PublicTest, method: <init> signature: (Ljava/lang/String;)V)
   Illegal constant pool index
-@end example
+@end smallexample
 @noindent
 then the problem is most likely that your classpath contains a version
 of the BCEL library (@file{bcel.jar}) that is not compatible with Java

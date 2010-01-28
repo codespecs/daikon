@@ -326,7 +326,7 @@ the distribution.  For example, the top-level directory is named
 helper programs is named @file{scripts/} instead of @file{bin/}.
 
 For information about obtaining Daikon via CVS, see
-@uref{http://groups.csail.mit.edu/pag/daikon/mit/}.
+@uref{http://groups.csail.mit.edu/@/pag/daikon/mit/}.
 
 
 @node    Using Eclipse, New invariants, CVS repository, Extending Daikon
@@ -858,7 +858,7 @@ is called.
 The following example defines suppressions for ``x == y'' implies
 ``x >= y'' and ``x > y'' implies ``x >= y''.
 
-@example
+@smallexample
 private static NISuppressionSet suppressions = null;
 
 public NISuppressionSet get_ni_suppressions() @{
@@ -875,13 +875,13 @@ public NISuppressionSet get_ni_suppressions() @{
   @}
   return (suppressions);
 @}
-@end example
+@end smallexample
 
 For suppressions depending on the state of a particular invariant, each @code{Invariant} has an @code{isObviousDynamically(VarInfo[] vis)} method that is called once the state of other invariants has already been determined.  This method returns a non-null value if this invariant is implied by a fact that can be derived from the given @code{VarInfo}s.  
 
 For example, suppose division was not defined for divisors smaller than 1.  The following example defines an obvious check for ``x <= c'' (where c < 1 is a constant) implies ``y % x == 0'', written in the Divides class.
 
-@example
+@smallexample
 public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
   DiscardInfo di = super.isObviousDynamically(vis);
   if(di != null) @{
@@ -907,7 +907,7 @@ public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
 
   return null;
 @}
-@end example  
+@end smallexample  
 
 @node    System.exit,  , New suppressors, Extending Daikon
 @section System.exit
@@ -1002,9 +1002,9 @@ sequence variables from sequence @code{this.theArray[]} and scalar
 @code{x} at program point @code{DisjSets.find(int):::EXIT}, the tracking
 argument would be:
 
-@example
+@smallexample
 SequenceScalarSubscriptFactory<x,this.theArray[]>@@DisjSets.find(int):::EXIT
-@end example
+@end smallexample
 
 There are two configuration options that can customize the output.  The
 option @option{daikon.Debug.showTraceback} will output a stack trace on
@@ -1020,7 +1020,7 @@ This is covered in the next section.
 More detailed information can be found in the Javadoc for
 @uref{http://pag.csail.mit.edu/daikon/download/jdoc/daikon/Debug.html,@code{daikon.Debug}}
 and
-@uref{http://pag.csail.mit.edu/daikon/download/jdoc/daikon/inv/Invariant.html,@code{daikon.inv.Invariant}}.
+@uref{http://pag.csail.mit.edu/daikon/download/jdoc/@/daikon/inv/Invariant.html,@code{daikon.inv.Invariant}}.
 
 @menu
 * Adding track logging::        
@@ -1461,7 +1461,7 @@ enclosed in quotes (@samp{"}). Quotes within a string can be represented by the
 sequence @samp{\"}.
 
 For example:
-@example
+@smallexample
 [1 2 3 4 5] - an array with the elements 1, 2, 3, 4, 5
 "aString" - a string
 "a string" - also legal as a string
@@ -1474,7 +1474,7 @@ Goal: a < b    <- goal string, no comment/blank lines after this
 2
 2              <-|__ Pair of values (a = 2 , b = 3)
 3              <-|
-@end example
+@end smallexample
 
 Other examples are in the existing test file 
 (@file{InvariantFormatTest.commands}).
@@ -1757,7 +1757,7 @@ note that the Daikon distribution contains full source code, and we are
 always happy to receive bug fixes and patches against the source code.)
 
 If you wish access to the Daikon CVS repository, send mail to
-@email{daikon-developers@@lists.csail.mit.edu}.  We appreciate it if you
+@email{daikon-developers@@@/lists.csail.mit.edu}.  We appreciate it if you
 let us know why you need it and what you want to use it for.  Also, we
 request that you keep us appraised of any problems that you encounter or
 discoveries that you make, and that you let us know of any publications
@@ -1818,7 +1818,7 @@ The CVS manual
 (@pxref{Branching and merging,,,cvs,CVS --- Concurrent Versions System})
 @end ifinfo
 @ifnotinfo
-(see section @uref{http://ximbiot.com/cvs/manual/cvs-1.11.18/cvs_5.html,``Branching and merging''} of the manual @emph{CVS --- Concurrent Versions System})
+(see section @uref{http://ximbiot.com/cvs/@/manual/cvs-1.11.18/cvs_5.html,``Branching and merging''} of the manual @emph{CVS --- Concurrent Versions System})
 @end ifnotinfo
 describes CVS branches:
 
@@ -2533,7 +2533,7 @@ C, or Perl programs and viewing the resulting files.
 This is part of the file @file{StackArTester.decls}, a declaration file for
 the @file{StackAr.java} program (@pxref{StackAr example,,,./daikon,Daikon User Manual}).
 
-@example
+@smallexample
 ppt DataStructures.StackAr.push(java.lang.Object):::ENTER
 ppt-type enter
 parent parent DataStructures.StackAr:::OBJECT 1
@@ -2703,7 +2703,7 @@ ppt-type object
     rep-type int
     comparability 22
 
-@end example
+@end smallexample
 
 
 @node    Example data trace file,  , Example declaration file, Example files
@@ -2717,7 +2717,7 @@ associated object program point records; omitted records are indicated
 by ellipses.
 
 
-@example
+@smallexample
 ...
 
 StackAr.push(java.lang.Object):::ENTER
@@ -2851,7 +2851,8 @@ this.topOfStack
 1
 
 ...
-@end example
+@end smallexample
+
 
 @node    Version 1 Declarations,  , Example files, File formats
 @section Version 1 Declarations
