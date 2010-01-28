@@ -312,9 +312,9 @@ file is found in @samp{/System/Library/Frameworks} under the appropriate Java
 version.  The following example is for the standard install of
 Java 1.5 on MacOSX:
 
-@example
+@smallexample
   export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
-@end example
+@end smallexample
   
 @node    CVS repository, Using Eclipse, Compiling Daikon, Extending Daikon
 @section CVS repository
@@ -477,9 +477,10 @@ return 1 - Math.pow(.5, ppt.num_samples());
 @end example
 @noindent
 If 5 values had been seen, then this implementation would return 31/32,
-which is the likelihood that all 5 values seen so far were even purely
-by chance.  Invariants are only printed if their probabilities are small
-enough (by default, less than .01).
+which is the likelihood that all 5 values seen so far were even not purely
+by chance.  An invariant is printed only if its probability of not
+occurring by chance alone is large enough (by default, greater than .99;
+see Daikon's @samp{--conf_limit} command-line option.
 
 @item public String format ()
 @itemx public String repr ()
