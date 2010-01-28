@@ -1042,12 +1042,12 @@ java daikon.Daikon StackArTester.dtrace.gz
 Daikon can analyze multiple runs (executions) of the program.  You can
 supply Daikon with multiple trace files:
 
-@example
+@smallexample
 java daikon.Chicory --dtrace-file=StackArTester1.dtrace.gz DataStructures.StackArTester
 java daikon.Chicory --dtrace-file=StackArTester2.dtrace.gz DataStructures.StackArTester
 java daikon.Chicory --dtrace-file=StackArTester3.dtrace.gz DataStructures.StackArTester
 java daikon.Daikon StackArTester*.dtrace.gz
-@end example
+@end smallexample
 
 @c @noindent
 @c or, you can append information from multiple runs in a single trace file
