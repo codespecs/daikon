@@ -133,7 +133,7 @@ char
 char const
     *sortclus (int i);
 int
-    getline (FILE *fp, int required, char const *filename);
+    my_getline (FILE *fp, int required, char const *filename);
 
 int main (int argc, char *argv [])
 {
@@ -205,7 +205,7 @@ int main (int argc, char *argv [])
 	    syntax ();
     }
 
-    getline (fp, 1, infile);
+    my_getline (fp, 1, infile);
     if (sscanf (buffer, "%i", &size) != 1)
 	errit (
 	    "file \"%s\", line %i\nTable size expected",
@@ -214,7 +214,7 @@ int main (int argc, char *argv [])
 	);
     labels = (char **) s_malloc (size * sizeof (char *));
     for (i = 0; i < size; i++) {
-        getline (fp, 1, infile);
+        my_getline (fp, 1, infile);
         labels [i] = s_strdup (buffer);
     }
 
@@ -223,7 +223,7 @@ int main (int argc, char *argv [])
 	diff_in [i] = (float *) s_malloc (i * sizeof (float));
     for (i = 1; i < size; i++) {
         for (j = 0; j < i; j++) {
-            getline (fp, 1, infile);
+            my_getline (fp, 1, infile);
             if (sscanf (buffer, "%f", &d) != 1)
                 errit ("file \"%s\", line %i\nValue expected", infile, input_line);
             diff_in [i][j] = d;
@@ -667,7 +667,7 @@ void errit (char const *format, ...)
     exit (1);
 }
 
-int getline (FILE *fp, int required, char const *filename)
+int my_getline (FILE *fp, int required, char const *filename)
 /* Lees een regel in
  * Plaats in buffer
  * Negeer lege regels en regels die beginnen met #

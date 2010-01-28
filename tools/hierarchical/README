@@ -5,8 +5,11 @@ conditions that enable Daikon to infer more conditional invariants.)
 
 Downloaded from
   http://www.let.rug.nl/~kleiweg/clustering/
-on 02 Oct 2007.  The only change is to remove "denxview" from the
-default target in the Makefile.
-
+on 02 Oct 2007.
 The above webpage is duplicated in this directory as clustering.html
 but some links may not work in the local copy.
+
+Changes:
+ * Remove "denxview" from the default target in the Makefile.
+ * Rename getline to my_getline and my_getline_bool, to avoid conflicts
+   with stdio.h.

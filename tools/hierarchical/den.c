@@ -422,7 +422,7 @@ char
     *s_strdup (char const *s);
 
 BOOL
-    getline (BOOL required);
+    my_getline_bool (BOOL required);
 
 int main (int argc, char *argv [])
 {
@@ -527,7 +527,7 @@ int main (int argc, char *argv [])
        if (! fp)
 	   errit ("Opening file \"%s\": %s", colorfile, strerror (errno));
        inputline = 0;
-       while (getline (FALSE)) {
+       while (my_getline_bool (FALSE)) {
            if (n_colors == max_colors) {
                max_colors += 16;
                usercolors = (float **) s_realloc (usercolors, max_colors * sizeof (float**));
@@ -571,7 +571,7 @@ int main (int argc, char *argv [])
             syntax (1);
     }
 
-    while (getline (FALSE)) {
+    while (my_getline_bool (FALSE)) {
         if (used == max) {
             max += 256;
             cl = (CLUSTER *) s_realloc (cl, max * sizeof (CLUSTER));
@@ -588,7 +588,7 @@ int main (int argc, char *argv [])
         } else
             cl [used].text = NULL;
         for (n = 0; n < 2; n++) {
-            getline (TRUE);
+            my_getline_bool (TRUE);
             switch (buffer [0]) {
   	        case 'l':
                 case 'L':
@@ -1572,7 +1572,7 @@ float psstringwidth (char const *s)
     return f / 1000.0 * (float)fontsize;
 }
 
-BOOL getline (BOOL required)
+BOOL my_getline_bool (BOOL required)
 /* Lees een regel in
  * Plaats in buffer
  * Negeer lege regels en regels die beginnen met #

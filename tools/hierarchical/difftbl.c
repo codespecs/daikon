@@ -83,7 +83,7 @@ char
 char const
     *quote (char const *s, char *buf);
 int
-    getline (FILE *fp, int required, char const *filename);
+    my_getline (FILE *fp, int required, char const *filename);
 float
     cityblock  (int i1, int i2),
     euclid     (int i1, int i2),
@@ -171,14 +171,14 @@ int main (int argc, char *argv [])
     } else
 	fp_out = stdout;
 
-    getline (fp, 1, infile);
+    my_getline (fp, 1, infile);
     if (sscanf (buffer, "%i", &vec_size) != 1)
 	errit (
 	    "file \"%s\", line %i\nVectorsize expected",
 	    infile,
 	    input_line
 	);
-    while (getline (fp, 0, NULL)) {
+    while (my_getline (fp, 0, NULL)) {
         if (vec_n == vec_max) {
 	    vec_max += 256;
 	    vec = (VEC *) s_realloc (vec, vec_max * sizeof (VEC));
@@ -186,7 +186,7 @@ int main (int argc, char *argv [])
         vec [vec_n].s = s_strdup (buffer);
         vec [vec_n].f = (float *) s_malloc (vec_size * sizeof (float));
 	for (i = 0; i < vec_size; i++) {
-	    getline (fp, 1, infile);
+	    my_getline (fp, 1, infile);
 	    if (sscanf (buffer, "%f", &(vec [vec_n].f[i])) != 1)
 		errit (
 		    "file \"%s\", line %i\n"
@@ -395,7 +395,7 @@ void errit (char const *format, ...)
     exit (1);
 }
 
-int getline (FILE *fp, int required, char const *filename)
+int my_getline (FILE *fp, int required, char const *filename)
 /* Lees een regel in
  * Plaats in buffer
  * Negeer lege regels en regels die beginnen met #
