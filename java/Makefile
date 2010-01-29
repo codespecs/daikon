@@ -433,7 +433,7 @@ all_directly: ${AUTO_GENERATED_FILES} plume-copy-and-check
 	$(MAKE) dyncomp
 
 .PHONY: plume-copy-and-check
-plume-copy-and-check: plume-lib-update lib/plume.jar plume-copy plume-import-check 
+plume-copy-and-check: plume-lib-update lib/plume.jar plume-copy
 
 .PHONY : daikon compile_daikon
 daikon: compile_daikon junit
