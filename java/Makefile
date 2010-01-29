@@ -376,7 +376,7 @@ OLD_AUTO_GENERATED_CLASSES = $(subst .java,.class,${OLD_AUTO_GENERATED_FILES})
 # (But, a problem is that it can get out of date and cause the compilation
 # to fail during pass 1.)
 AUTO_GENERATED_FILES_2 = \
-	daikon/test/split/SplitterFactoryTest.java \
+	daikon/test/split/SplitterFactoryTest.java
 
 AUTO_GENERATED_CLASSES_2 = $(subst .java,.class,${AUTO_GENERATED_FILES_2})
 
@@ -397,6 +397,8 @@ export DAIKONDIR
 ### Compilation targets
 ###
 
+# all_directly is not marked as phony
+.PHONY: default compile all all_stop_on_error all_via_daikon
 default: all
 compile: all
 
@@ -415,7 +417,9 @@ xlint: chicory ${ALL_GENERATED_FILES}
 	@${JAVAC_COMMAND} -Xlint -Xmaxwarns 1000 ${DAIKON_JAVA_FILES} 2>&1
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
-all_directly: ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar plume-import-check plume-copy
+# Do not mark this target as .PHONY.  We want it to
+# alway recompile, whether recompilation is necessary or not.
+all_directly: ${AUTO_GENERATED_FILES} plume-copy-and-check
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
 	@echo ${JAVA_FILES} > java_files.txt
@@ -428,7 +432,10 @@ all_directly: ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar plume-import-ch
 	$(MAKE) chicory
 	$(MAKE) dyncomp
 
-.PHONY : daikon
+.PHONY: plume-copy-and-check
+plume-copy-and-check: plume-lib-update lib/plume.jar plume-copy plume-import-check 
+
+.PHONY : daikon compile_daikon
 daikon: compile_daikon junit
 compile_daikon : ../plume-lib $(AUTO_GENERATED_FILES) lib/plume.jar
 	@echo $(JAVAC_COMMAND) 'daikon/*.java ...'
@@ -443,6 +450,7 @@ CHICORY_JAVA_FILES := daikon/Chicory.java daikon/chicory/*.java
 
 # This actually requires Daikon to already be compiled.
 # It would be good to make that an explicit prerequisite.
+.PHONY: chicory
 chicory : ChicoryPremain.jar
 ChicoryPremain.jar : $(wildcard $(CHICORY_JAVA_FILES)) \
 					 daikon/chicory/manifest.txt
@@ -465,14 +473,17 @@ JAVA_DCOMP = java -ea -esa -Xbootclasspath:dcomp_rt.jar:$(CLASSPATH)
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
 
 # Build DynComp/Java, check the DF summary info and run a sanity test
-dyncomp dcomp : plume-import-check plume-copy dcomp_premain.jar dcomp-test
+.PHONY: dyncomp dcomp
+dyncomp dcomp : plume-copy plume-import-check dcomp_premain.jar
 dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
 	$(JAVAC_COMMAND) $(DCOMP_JAVA_FILES)
 	$(JAVA) daikon.dcomp.SummaryInfo
 	$(JAR) cfm dcomp_premain.jar daikon/dcomp/manifest.txt \
 	  daikon/dcomp/Premain.class
+	$(MAKE) dcomp-test
 
 # Runs a simple sanity test on DynComp/Java without an instrumented JDK
+.PHONY: dcomp-test
 dcomp-test : daikon/dcomp/std_dcomp_out.diff
 daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
 	/bin/rm -rf /tmp/$(USER)/bin/* /tmp/$(USER)/orig/*
@@ -538,6 +549,7 @@ PLUME=${PLUMEJAVA}/src/plume
 ../plume-lib:
 	${MAKE} -C .. plume-lib
 
+.PHONY: plume-lib-update
 plume-lib-update:
 	${MAKE} -C .. plume-lib-update
 
@@ -548,7 +560,9 @@ lib/plume.jar: ../plume-lib/java/plume.jar
 	install -d lib
 	cp -p $< $@
 
-daikon/util/README: plume-lib-update $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
+daikon/util/README: plume-lib-update daikon/util/.timestamp-daikonutil
+
+daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
   ${PLUMEJAVA}/*.manifest) ${PLUMEJAVA}/Makefile
 	$(MAKE) -C ${PLUMEJAVA}
 	/bin/rm -rf daikon/util
@@ -562,8 +576,10 @@ daikon/util/README: plume-lib-update $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
 	# change relevant imports (make sure to get "import static" as well)
 	perl -p -i -e 's/^(import .*)plume/\1daikon.util/g' daikon/util/*.java
 	$(JAVAC_COMMAND) daikon/util/*.java
+	touch daikon/util/.timestamp-daikonutil
 
 # Checks that daikon.util, rather than plume, is imported by DynComp source files.
+.PHONY: plume-import-check
 plume-import-check :
 	@echo -n "Checking that imports of plume and daikon.util are correct..."
 	@if [ -n "`grep '^import plume' $(DCOMP_JAVA_FILES)`" ]; then \
@@ -593,6 +609,7 @@ all_except_daikon: ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar
 	@chmod -w ${AUTO_GENERATED_FILES}
 	$(MAKE) all_pass2
 
+.PHONY: all_pass2
 all_pass2: ${AUTO_GENERATED_CLASSES_2}
 	${JAVAC_COMMAND} ${AUTO_GENERATED_FILES_2}
 
@@ -658,6 +675,7 @@ veryclean: very_clean
 
 very-clean: very_clean
 
+# Could/should remove plume-lib here, too.
 very_clean: dist_clean clean-generated-files
 	-rm -f dcomp_premain.jar dcomp_rt.jar
 
