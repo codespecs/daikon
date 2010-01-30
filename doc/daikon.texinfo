@@ -240,7 +240,7 @@ Front ends (instrumentation)
 Java front end Chicory
 
 * Chicory options::             
-* Static fields (Global variables)::  
+* Static fields (global variables)::  
 
 Chicory options
 
@@ -347,6 +347,15 @@ Problems running Daikon
 * Bigger traces cause invariants to appear::  
 
 Large data trace (.dtrace) files
+
+* Run Daikon online::           
+* Multiple smaller files::      
+* Less information per file::   
+* Reducing program points::     
+* Reducing variables::          
+* Reducing executions::         
+
+Record or read less information in the data trace file
 
 * Reducing program points::     
 * Reducing variables::          
@@ -3524,10 +3533,10 @@ with older versions of Java code.
 
 @menu
 * Chicory options::             
-* Static fields (Global variables)::  
+* Static fields (global variables)::  
 @end menu
 
-@node    Chicory options, Static fields (Global variables), Chicory, Chicory
+@node    Chicory options, Static fields (global variables), Chicory, Chicory
 @subsection Chicory options
 
 Chicory is invoked as follows:
@@ -3625,7 +3634,7 @@ parts of your program.
 @itemize
 @item omit a whole package:
 @smallexample
-java daikon.Chicory '--ppt-omit-pattern=^junit\.'
+java daikon.Chicory '--ppt-omit-pattern=^junit\.' ...
 @end smallexample
 @smallexample
 java daikon.Chicory '--ppt-omit-pattern=^daikon\.util\..*' ...
@@ -3638,8 +3647,7 @@ java daikon.Chicory '--ppt-omit-pattern=HashSetLinear\$HslIterator' ...
 
 @item omit a single method:
 @smallexample
-java daikon.Chicory '--ppt-omit-pattern=StackAr.topAndPop()' \
-     ...
+java daikon.Chicory '--ppt-omit-pattern=StackAr.topAndPop()' ...
 @end smallexample
 
 @item omit a single program point:
@@ -3648,6 +3656,19 @@ java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(int):::EXIT33' ...
 @end smallexample
 
 @end itemize
+
+@item --sample-start=@var{sample-cnt}
+@cindex sampling of program point executions
+When this option is chosen, Chicory will record each program point until
+that program point has been executed @var{sample-cnt} times.  Chicory will
+then begin sampling.  Sampling starts at 10% and decreases by a factor
+of 10 each time another @var{sample-cnt} samples have been recorded.  If
+@var{sample-cnt} is 0, then all calls will be recorded.
+
+@item --boot-classes=@var{regex}
+Chicory treats  classes that match the @var{regex} as boot classes.
+Such classes are not instrumented.
+
 @end table
 
 
@@ -3791,7 +3812,14 @@ configuration directory is specified.
 One way to create a @file{.pure} file is to run the Purity Analysis Kit
 (@uref{http://jppa.sourceforge.net/}).  If you supply
 the @option{--daikon-purity-file} when running the Purity Analysis Kit,
-it writes a file that can be supplied to Daikon.
+it writes a file that can be supplied to Chicory.
+
+@item --linked-lists
+@cindex linked lists, in Chicory
+This boolean option (default: true) causes user-defined linked lists to
+be output as sequences, much like Java @samp{List}s and arrays are.
+A user-defined data structure is considered to be a linked list if it
+has one instance field that is of its own type.
 
 @end table
 
@@ -3808,9 +3836,10 @@ Chicory's output.
 Print a help message.
 
 @item --debug
-Produce debugging information.
+Produce debugging information.  For other debugging options, run Chicory
+with the @option{--help} option.
 
-@item --default_bcel
+@item --default-bcel
 Chicory uses the Byte Code Engineering Library (BCEL) to instrument
 classfiles.  Errors can occur if the application uses an incompatible
 version of BCEL@.  By default, Chicory identifies and loads its 
@@ -3819,13 +3848,6 @@ also issue a warning if multiple copies of BCEL are in the classpath and
 the application version is not the first one.  When this option is
 chosen, Chicory will simply use whatever version of BCEL is found on
 the classpath.
-
-@item --sample-start=@var{sample-cnt}
-When this option is chosen, Chicory will record each program point until
-that program point has been executed @var{sample-cnt} times.  Chicory will
-then begin sampling.  Sampling starts at 10% and decreases by a factor
-of 10 each time another sample-cnt samples have been recorded.  If
-sample_start is 0, then all calls will be recorded.
 
 @item --dtrace-file=@var{filename}
 @cindex DTRACEFILE environment variable
@@ -3883,9 +3905,12 @@ over a socket to Daikon, which processes the information incrementally
 Just like with the @option{--daikon} option, Daikon is only given a
 single trace from one execution of your program.
 
+The Kvasir front end also supports online execution, via use of (normal or
+named) Unix pipes (@pxref{Online execution}).
+
 @item --daikon-args=@var{arguments}
-Specifies arguments to be passed to Daikon if the --daikon or --daikon-online
-options are used.
+Specifies arguments to be passed to Daikon if the @option{--daikon} or
+@option{--daikon-online} options are used.
 
 @item --premain=@var{path}
 Specifies the absolute pathname to the @file{ChicoryPremain.jar} file.
@@ -3910,7 +3935,8 @@ the target program.  The size is specified in the same manner as the
 
 @end table
 
-@node    Static fields (Global variables),  , Chicory options, Chicory
+
+@node    Static fields (global variables),  , Chicory options, Chicory
 @subsection Static fields (global variables)
 
 @cindex Static fields (global variables) in Java programs
@@ -4699,7 +4725,7 @@ Tells Kvasir to create or read pointer type disambiguation
 which is @file{@var{myprog}.disambig} in the same
 directory as the target program, where @var{myprog} is the name of the
 target program.  This is equivalent to
-@samp{--disambig-file=@file{@var{myprog}.disambig}}.
+@option{--disambig-file=@file{@var{myprog}.disambig}}.
 
 @item --smart-disambig
 This option should be used in addition to either the @option{--disambig}
@@ -5686,8 +5712,8 @@ that, unless FIFOs, or named pipes (@pxref{Online execution with DynComp for C/C
 are used, it runs Daikon over only a single execution, as opposed to
 generalizing over multiple executions as can be done when writing to files
 and supplying all the files to Daikon.
-The Chicory front end for Java also supports online execution via its
-@option{--daikon-online} argument (@pxref{Chicory miscellaneous options}).
+The Chicory front end for Java also supports online execution, via its
+@option{--daikon-online} option (@pxref{Chicory miscellaneous options}).
 
 @cindex pipe, as data trace file
 
@@ -6481,12 +6507,12 @@ files to the search path passed to wurzel, as well adding the libraries
 themselves to your link options.
 
 If your source code uses extensions specific to a particular host compiler,
-you may need to use the @samp{--gcc} or @samp{--microsoft} flags to enable
+you may need to use the @option{--gcc} or @option{--microsoft} flags to enable
 the appropriate compatibility mode.
 Wurzel recognizes many other command-line options supported by the
 underlying EDG front end to customize the language dialects it accepts,
 as described in the EDG documentation.  You can set these options using
-the @samp{--preprocessor-opts} flag to mangel.
+the @option{--preprocessor-opts} flag to mangel.
 
 If your code compiles with your host compiler, but not with
 Mangel-Wurzel, you can try these approaches:
@@ -6518,7 +6544,7 @@ on another platform supported by Rational Purify.
 @subsubsection Using Mangel-Wurzel on Unix
 
 GCC is the standard compiler on most Unix-based systems.  You may find
-it necessary to specify the @samp{--gcc} option to wurzel to make it
+it necessary to specify the @option{--gcc} option to wurzel to make it
 correctly process system
 include files, even if your code doesn't use GCC extensions itself.
 
@@ -6537,8 +6563,8 @@ built-in defines: @samp{cpp -dM > mwdefines.h}
 Edit the file, wrapping each of the @samp{#define}s in an
 @samp{#ifndef...#endif} to prevent multiple definition.
 
-@item In the @samp{--preprocessor-opts} value in your @file{.mangelrc}, add
-@samp{--preinclude=@var{filename}}, where @var{filename} is the name of your
+@item In the @option{--preprocessor-opts} value in your @file{.mangelrc}, add
+@option{--preinclude=@var{filename}}, where @var{filename} is the name of your
 new @file{mwdefines.h} file.
 @end enumerate
 
@@ -6675,13 +6701,13 @@ and make any necessary changes there.  The most likely things you may need to
 customize are:
 
 @itemize
-@item Make sure that the @samp{--compiler} and @samp{--linker} commands are
+@item Make sure that the @option{--compiler} and @option{--linker} commands are
 correct.  For example, if you want to use gcc, on some systems you may
 need to specify @samp{gcc} explicitly instead of @samp{cc}, or use a
 full pathname.  On Windows, you should use @samp{cl} only.
 
 @item You may need to alter the default system include paths, specified with
-@samp{--sys_include} in the @samp{--preprocessor_opts} option.  See
+@option{--sys_include} in the @option{--preprocessor_opts} option.  See
 @ref{Using Mangel-Wurzel on Unix}, and @ref{Using Mangel-Wurzel on Windows},
 for details.
 
@@ -6701,7 +6727,7 @@ Microsoft compiler to set up the system include paths, so in theory you
 should not have to specify any additional paths in your @file{.mangelrc}
 configuration file.
 Do be sure that you specify @samp{cl} (the Microsoft C compiler) for
-both the @samp{--compiler} and @samp{--linker} options and that you have
+both the @option{--compiler} and @option{--linker} options and that you have
 your @env{PATH} environment variable set up to include both the path to the
 cl compiler and related Visual C utilities, and the path for Rational Purify.
 
@@ -6715,13 +6741,13 @@ variables sometimes being reported as having garbage values instead of as
 being ``nonsensical'', which is treated specially by Daikon
 (@pxref{Nonsensical values,,,./developer,Daikon Developer Manual}).
 
-You will probably need to specify the @samp{--microsoft} compatibility mode
+You will probably need to specify the @option{--microsoft} compatibility mode
 option as the default in your @file{.mangelrc} file.
 
 @end itemize
 
 @item You might also want to add some additional options, such as specifying
-@samp{--gcc} or @samp{--microsoft} to enable the appropriate compatibility
+@option{--gcc} or @option{--microsoft} to enable the appropriate compatibility
 mode for your normal C compiler by default.
 @end itemize
 
@@ -8489,6 +8515,13 @@ Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
 It can sometimes be slow to create a trace for Daikon to analyze, and it
 can be slow for Daikon to analyze that trace.
 
+For additional details on improving Daikon's performance, see @ref{Out of
+memory}, and @ref{Large dtrace files}.
+
+
+@subsubsection Slow creation of large trace files
+@cindex large trace files, creating
+
 Creating a trace can take a long time, because of the time to traverse
 and print the values of many variables.  If your invariant detection
 process runs slowly, you might want to separate the creation and
@@ -8498,6 +8531,9 @@ speed up both creation and analysis of trace files.  For instance, you
 might eliminate helper procedures from the analysis, or eliminate large
 arrays that get repeatedly output.
 
+
+@subsubsection Slow inference of invariants
+@cindex large trace files, creating
 
 Daikon's runtime and space depend on the particular data that it analyzes.
 Informally, invariant detection time can be characterized as
@@ -8533,9 +8569,6 @@ The @option{daikon.derive.Derivation.disable_derived_variables} and individual
 (@pxref{Options to enable/disable derived variables}) may be used
 to disable derived variables altogether or selectively, at the cost of
 detecting fewer invariants, especially over sequences.
-
-For details on improving Daikon's performance, see @ref{Out of
-memory}, and @ref{Large dtrace files}.
 
 
 @node    Bigger traces cause invariants to appear,  , Daikon runs slowly, Daikon problems
@@ -8591,10 +8624,40 @@ overfitting in the first execution.)
 Running instrumented code can create very large @file{.dtrace} files.
 This can be a problem because writing the large files can slow the
 target programs substantially, or because the large files may fill up
-your disk.  The solution is to create smaller data trace files, by
-computing invariants over fewer program
-points (procedures), computing invariants over fewer variables, or
-computing invariants over fewer samples (executions).
+your disk.
+
+This section describes ways to work around this problem.
+
+
+@menu
+* Run Daikon online::           
+* Multiple smaller files::      
+* Less information per file::   
+* Reducing program points::     
+* Reducing variables::          
+* Reducing executions::         
+@end menu
+
+@node Run Daikon online, Multiple smaller files, Large dtrace files, Large dtrace files
+@subsection Run Daikon online
+
+The term ``online execution'' refers to running Daikon at the same time
+as the target program.  The front end supplies information to Daikon
+directly over a socket or pipe, without writing any information to a
+file.  This can avoid some I/O overhead, and it prevents filling up your
+disk with files.
+
+The Chicory front end supports online execution via use of the
+@option{--daikon-online} option (@pxref{Chicory miscellaneous options}).
+The Kvasir front end supports online execution via use of (normal or
+named) Unix pipes (@pxref{Online execution}).
+
+In the future, Daikon may be able to output partial results as the
+target program is executing.
+
+
+@node Multiple smaller files, Less information per file, Run Daikon online, Large dtrace files
+@subsection Create multiple smaller data trace files
 
 It is usually possible to create an @file{.inv} file equivalent to
 the one that Daikon would have computed, had Daikon been able to
@@ -8604,16 +8667,16 @@ techniques below (@pxref{Reducing program points}) to split your
 @file{.dtrace} file.  Finally, use the @ref{MergeInvariants} tool 
 to combine the resulting @file{.inv} files into one.
 
-Independently from the above techniques, you can run Daikon online.
-The term ``online execution'' refers to running Daikon at the same time
-as the target program, without writing any information to a file.  This
-can avoid some I/O overhead, it prevents filling up your disk with
-files, and in the future Daikon may be able to produce partial results
-as the target program is executing.
-@c The Chicory front end supports online execution via use of the
-@c @option{--daikon} flag.
-The Kvasir front end supports online execution via use of (normal or
-named) Unix pipes (@pxref{Online execution}).
+
+@node Less information per file, Reducing program points, Multiple smaller files, Large dtrace files
+@subsection Record or read less information in the data trace file
+
+You can record less information from each program execution, or you can
+make Daikon read less information from the trace files.  It's usually
+most efficient to do the pruning as early in the process as possible.
+For example, it is better to have the front end output less information,
+rather than have Daikon ignore some of the information.
+
 
 @menu
 * Reducing program points::     
@@ -8622,24 +8685,30 @@ named) Unix pipes (@pxref{Online execution}).
 @end menu
 
 
-@node    Reducing program points, Reducing variables, Large dtrace files, Large dtrace files
+@node    Reducing program points, Reducing variables, Less information per file, Large dtrace files
 @subsection Reducing program points (functions)
 
 Here are ways to compute invariants over a subset of the program
 points (functions) in your program.
 @enumerate
 @item
-You can make Daikon ignore some program points.  With the
-@option{--ppt-select-pattern@/=@var{ppt_regexp}}
-flag (@pxref{Processing only part of the trace file}),
-only program points matching
-the regular expression are processed.  Likewise, the
-@option{--ppt-omit-pattern=@var{ppt_omit_regexp}} option causes program points
-matching the regular expression to be ignored.
+Make your front end instrument fewer files.  This is often mast
+applicable if you are using a source-based front end.
 
-Also, the configuration variable @option{daikon.Daikon.ppt_perc}
-allows a percentage of the program points to be processed.
-@xref{General configuration options}, for details.
+@item
+You can instrument fewer procedures.
+@itemize
+@item With Chicory, use the @option{--ppt-omit-pattern} or
+@option{--ppt-select-pattern} options (see @ref{Processing only part of
+the trace file}, @ref{Chicory options}) to
+restrict which program points are traced.  Running the
+instrumented program will result in a smaller @file{.dtrace} file that
+contains fewer records.
+@item With Kvasir, use the @option{--ppt-list-file} option to specify a list
+of program points that should be traced (@pxref{Tracing only part of a
+program} section for more details).
+@c @item With dfec, split your program into multiple files, then
+@c instrument only some of them (see below).
 
 @item
 @cindex trace-purge-fns.pl script
@@ -8660,25 +8729,19 @@ trace-purge-fns.pl 'set|get' myprog-non-setters.dtrace
 @end example
 
 @item
-You can instrument fewer methods, creating smaller @file{.dtrace}
-files in the first place (rather than cutting the @file{.dtrace} files
-down afterward).
-@itemize
-@item With Chicory, use the @option{--ppt-omit-pattern} or
-@option{--ppt-select-pattern} options (see @ref{Processing only part of
-the trace file}, @ref{Chicory options}) to
-restrict which program points are traced.  Running the
-instrumented program will result in a smaller @file{.dtrace} file that
-contains fewer records.
-@item With Kvasir, use the @option{--ppt-list-file} option to specify a list
-of program points that should be traced (@pxref{Tracing only part of a
-program} section for more details).
-@c @item With dfec, split your program into multiple files, then
-@c instrument only some of them (see below).
-@end itemize
+You can make Daikon ignore some program points.  With the
+@option{--ppt-select-pattern@/=@var{ppt_regexp}}
+flag (@pxref{Processing only part of the trace file}),
+only program points matching
+the regular expression are processed.  Likewise, the
+@option{--ppt-omit-pattern=@var{ppt_omit_regexp}} option causes program points
+matching the regular expression to be ignored.
 
-@item
-If you are using a source-based front end, you can instrument fewer files.
+Also, the configuration variable @option{daikon.Daikon.ppt_perc}
+allows a percentage of the program points to be processed.
+@xref{General configuration options}, for details.
+
+@end itemize
 
 @end enumerate
 
@@ -8694,14 +8757,6 @@ or reported.  For instance, you might remove uninteresting variables
 that use a lot of memory (such as some arrays).
 
 @enumerate
-@item
-You can make Daikon ignore certain variables rather than modifying
-the @file{.dtrace} file directly.  Analogously with the
-@option{--ppt-select-pattern} and @option{--ppt-omit-pattern} flags, the
-@option{--var-select-pattern} and @option{--var-omit-pattern} flags
-restrict which variables Daikon processes
-(see @ref{Processing only part of
-the trace file}, and @ref{Chicory options}).
 
 @item
 You can reduce the number of variables that are output by instrumented
@@ -8710,6 +8765,7 @@ code --- for instance, output @samp{a} and @samp{a.b} but not
 depth.
 @itemize
 @item With Chicory, use the @option{--nesting-depth=@var{N}} option.
+Also see the @option{--linked-lists=false} option.
 @item With Kvasir, use the @option{--struct-depth=@var{N}} or the
 @option{--nesting-depth=@var{N}} option.
 @item With Mangel-Wurzel, use the @option{--struct-depth=@var{N}} or the
@@ -8731,6 +8787,15 @@ all program points in a function (or retains them, with the
 @option{-v} flag).  After running this command, you will need
 to edit the corresponding @file{.decls} file by hand to remove the
 same variables.
+
+@item
+You can make Daikon ignore certain variables rather than modifying
+the @file{.dtrace} file directly.  Analogously with the
+@option{--ppt-select-pattern} and @option{--ppt-omit-pattern} flags, the
+@option{--var-select-pattern} and @option{--var-omit-pattern} flags
+restrict which variables Daikon processes
+(see @ref{Processing only part of
+the trace file}, and @ref{Chicory options}).
 
 @end enumerate
 
@@ -8765,6 +8830,14 @@ Alternately, you can use the
 faster on very large files.  In order to use
 @command{trace-untruncate-fast}, you must have already compiled it
 (@pxref{Installing Daikon}).
+
+@item
+You can cause the front end to record only a subset of executions of a
+given procedure, 
+rather than every execution.  For example, Chicory's
+@option{--sample-start} command-line option does this (@pxref{Chicory
+miscellaneous options}).
+
 
 @end enumerate
 
