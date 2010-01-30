@@ -1198,6 +1198,10 @@ public final class Daikon {
       // Printable String
       proto_invs.add (PrintableString.get_proto());
 
+      // Complete One Of 
+      proto_invs.add (CompleteOneOfString.get_proto());
+      proto_invs.add (CompleteOneOfScalar.get_proto());
+
       // Positive (x > 0) (Postive.java).  Positive is a sample invariant
       // that is only included as an example.
       // proto_invs.add (Postive.get_proto());
