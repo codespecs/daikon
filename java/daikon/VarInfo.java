@@ -1977,6 +1977,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     in.defaultReadObject();
     var_info_name = var_info_name.intern(); // vin ok
     str_name = str_name.intern();
+    if (parent_ppt != null)
+      parent_ppt = parent_ppt.intern();
+    if (parent_variable != null)
+      parent_variable = parent_variable.intern();
+    if (relative_name != null)
+      relative_name = relative_name.intern();
   }
 
   // /**

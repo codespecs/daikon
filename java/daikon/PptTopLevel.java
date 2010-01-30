@@ -26,6 +26,7 @@ import plume.*;
 
 import java.util.*;
 import java.text.*;
+import java.io.*;
 
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -354,6 +355,21 @@ public class PptTopLevel extends Ppt {
     this.function_id = function_id;
     this.bb_length = bb_length;
     init_vars (var_infos);
+  }
+
+  /** Restore/Create interns when reading serialized object **/
+  private void readObject(ObjectInputStream in)
+    throws IOException, ClassNotFoundException {
+    in.defaultReadObject();
+    if (name != null) {
+      try {
+        UtilMDE.setFinalField(this, "name", name.intern());
+      } catch (Exception e) {
+        throw new Error ("unexpected error setting name", e);
+      }
+    }
+    if (function_id != null)
+      function_id = function_id.intern();
   }
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
