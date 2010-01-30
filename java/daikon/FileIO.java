@@ -128,6 +128,14 @@ public final class FileIO {
   /** True if declaration records are in the new format **/
   public static /*@LazyNonNull*/ Boolean new_decl_format = null;
 
+  /** 
+   * If true, modified all ppt names to remove duplicate routine
+   * names within the ppt name.  This is used when a stack trace
+   * (of active methods) is used as the ppt name.  The routine names
+   * must be separated by vertical bars (|)
+   */
+  public static boolean dkconfig_rm_stack_dups = false;
+
   /// Variables
 
   // This hashmap maps every program point to an array, which contains the
@@ -204,6 +212,12 @@ public final class FileIO {
     int id;
     public String toString() { return parent_ppt_name + "[" + id + "] "
                                  + rel_type; };
+    private void readObject(ObjectInputStream in)
+      throws IOException, ClassNotFoundException {
+      in.defaultReadObject();
+      if (parent_ppt_name != null)
+        parent_ppt_name.intern();
+    }
   }
 
   // Utilities
@@ -215,7 +229,7 @@ public final class FileIO {
   public static final boolean nextLineIsComment(BufferedReader reader) {
     boolean result = false;
     try {
-      reader.mark(1000);
+      reader.mark(10000);
       String nextline = reader.readLine();
       result = isComment(nextline);
     } catch (IOException e) {
@@ -288,6 +302,7 @@ public final class FileIO {
       decl_error (state, "found '%s' where 'ppt' expected", record_name);
     }
     /*@Interned*/ String ppt_name = need (state, scanner, "ppt name");
+    ppt_name = user_mod_ppt_name (ppt_name);
 
     // Information that will populate the new program point
     Map<String,VarDefinition> varmap
@@ -367,6 +382,8 @@ public final class FileIO {
         }
       }
     }
+
+    
 
     // If we are excluding this ppt, just read the data and throw it away
     if (!ppt_included (ppt_name)) {
@@ -484,6 +501,7 @@ public final class FileIO {
         "File ends with \"DECLARE\" with no following program point name",
         state);
     }
+    ppt_name = user_mod_ppt_name (ppt_name);
     ppt_name = ppt_name.intern();
     VarInfo[] vi_array = read_VarInfos(state, ppt_name);
 
@@ -934,15 +952,22 @@ public final class FileIO {
       try {
         read_data_trace_file(filename, all_ppts, processor, false,
                              ppts_are_new);
-      } catch (IOException e) {
+      } catch (Throwable e) {
         String message = e.getMessage();
         if (message != null && message.equals("Corrupt GZIP trailer")) {
           System.out.println(
             filename
               + " has a corrupt gzip trailer.  "
               + "All possible data was recovered.");
+        } else if (dkconfig_continue_after_file_exception) {
+          System.out.println ();
+          System.out.println ("WARNING: Error while processing "
+                              + "trace file - remaining records ignored");
+          System.out.print ("Ignored backtrace:");
+          e.printStackTrace(System.out);
+          System.out.println ();
         } else {
-          throw e;
+          throw new Error (e);
         }
       }
     }
@@ -1379,7 +1404,7 @@ public final class FileIO {
           } else {
             System.out.println ();
             System.out.println ("WARNING: Error while processing "
-                                + "trace file - record ignored");
+                                + "trace file - subsequent records ignored");
             System.out.print ("Ignored backtrace:");
             e.printStackTrace(System.out);
             System.out.println ();
@@ -1526,6 +1551,7 @@ public final class FileIO {
       String ppt_name = line;
       if (new_decl_format)
         ppt_name = unescape_decl(line); // interning bugfix: no need to intern
+      ppt_name = user_mod_ppt_name (ppt_name);
       if (!ppt_included (ppt_name)) {
         // System.out.printf ("skipping ppt %s\n", line);
         while ((line != null) && !line.equals(""))
@@ -2236,7 +2262,8 @@ public final class FileIO {
       line = reader.readLine(); // next variable name
     }
     assert (line == null) || (line.equals(""))
-      : "Expected blank line at line " + reader.getLineNumber() + ": " + line;
+      : "Expected blank line in " + data_trace_state.filename + " at line " 
+        + reader.getLineNumber() + ": " + line;
   }
 
 
@@ -2656,6 +2683,19 @@ public final class FileIO {
       }
     }
 
+    /** Restore interned strings **/
+    private void readObject(ObjectInputStream in) throws IOException,
+                                                       ClassNotFoundException {
+      in.defaultReadObject();
+      name = name.intern();
+      if (enclosing_var != null)
+        enclosing_var = enclosing_var.intern();
+      if (relative_name != null)
+        relative_name = relative_name.intern();
+      if (parent_variable != null)
+        parent_variable = parent_variable.intern();
+    }
+
     /** Clears the parent relation if one existed **/
     public void clear_parent_relation() {
       parent_ppt = null;
@@ -2888,5 +2928,28 @@ public final class FileIO {
       return (line.equals(declaration_header));
   }
 
+  /**
+   * Handle any possible modifications to the ppt name.  For now, just
+   * support the Applications Communities specific modification to remove
+   * duplicate stack entries.  But a more generic technique could be
+   * implemented in the future.
+   */
+  public static String user_mod_ppt_name (String ppt_name) {
+
+    if (!dkconfig_rm_stack_dups)
+      return ppt_name;
+
+    // System.out.printf ("removing stack dups (%b)in fileio%n", 
+    //                    dkconfig_rm_stack_dups);
+
+    String[] stack = ppt_name.split ("[|]");
+    List<String> nd_stack = new ArrayList<String>();
+    for (String si : stack) {
+      if (nd_stack.contains (si))
+        continue;
+      nd_stack.add (si);
+    }
+    return UtilMDE.join (nd_stack, "|").intern();
+  }    
 
 }
