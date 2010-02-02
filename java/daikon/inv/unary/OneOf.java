@@ -1,4 +1,4 @@
-package daikon.inv;
+package daikon.inv.unary;
 
 import daikon.*;
 

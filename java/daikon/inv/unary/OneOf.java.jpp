@@ -181,6 +181,7 @@ package daikon.inv.unary.SCALARPKG;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.unary.OneOf;
 #ifdef IS_NUMERIC
   import daikon.derive.unary.*;
   import daikon.inv.unary.sequence.*;

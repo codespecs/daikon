@@ -6,6 +6,7 @@ import plume.UtilMDE;
 import daikon.*;
 import daikon.config.Configuration;
 import daikon.inv.*;
+import daikon.inv.unary.OneOf;
 import daikon.inv.unary.scalar.*;
 import daikon.inv.unary.sequence.*;
 import daikon.inv.unary.string.*;

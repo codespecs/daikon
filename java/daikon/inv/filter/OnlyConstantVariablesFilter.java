@@ -2,6 +2,7 @@ package daikon.inv.filter;
 
 import daikon.*;
 import daikon.inv.*;
+import daikon.inv.unary.OneOf;
 import daikon.inv.unary.scalar.*;
 
 public class OnlyConstantVariablesFilter extends InvariantFilter {
