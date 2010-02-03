@@ -301,7 +301,7 @@ public final class FileIO {
     if (record_name != "ppt") { // interned
       decl_error (state, "found '%s' where 'ppt' expected", record_name);
     }
-    /*@Interned*/ String ppt_name = need (state, scanner, "ppt name");
+    String ppt_name = need (state, scanner, "ppt name");
     ppt_name = user_mod_ppt_name (ppt_name);
 
     // Information that will populate the new program point
