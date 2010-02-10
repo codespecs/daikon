@@ -189,7 +189,6 @@ public final class Global {
   public static Logger debugPrint = Logger.getLogger("daikon.print");
 
 
-  // Can't change to log4j; uses special outputter
   public static final boolean debugPrintDtrace = false;
 
   // used only if debugPrintDtrace is true.  Users need not set this.
