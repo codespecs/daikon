@@ -51,7 +51,7 @@ public class Chicory {
   @Option ("Print detailed information on which classes are transformed")
   public static boolean debug_transform = false;
 
-  @Option ("Treat classes that match the regex as boot classes")
+  @Option ("Treat classes that match the regex as boot classes (do not instrument)")
   public static /*@Nullable*/ Pattern boot_classes = null;
 
   @Option ("Size of the heap for the target program")
