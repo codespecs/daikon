@@ -143,7 +143,7 @@ public class Instrument implements ClassFileTransformer {
 
     // Don't instrument boot classes.  They are uninteresting and will
     // not be able to access daikon.chicory.Runtime (because it is not
-    // on the boot classpath.  Previously this code skipped classes
+    // on the boot classpath).  Previously this code skipped classes
     // that started with java, com, javax, or sun, but this is not
     // correct in many cases.  Most boot classes have the null loader,
     // but some generated classes (such as those in sun.reflect) will
