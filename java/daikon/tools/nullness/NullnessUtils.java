@@ -63,7 +63,8 @@ public final class NullnessUtils {
      * @return the argument, casted to have the type qualifier @NonNull
      */
     /*@AssertParametersNonNull*/
-        public static <T extends /*@Nullable*/ Object> /*@NonNull*/ T castNonNull(T ref) {
+    @SuppressWarnings("cast")   // cast looks redundant if Nullness Checker is not run
+    public static <T extends /*@Nullable*/ Object> /*@NonNull*/ T castNonNull(T ref) {
         assert ref != null : "misuse of castNonNull, which should never be called on a null argument";
         return (/*@NonNull*/ T)ref;
     }
