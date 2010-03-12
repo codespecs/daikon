@@ -20,6 +20,36 @@ Further documentation can be found in:
 
 ===========================================================================
 
+4.6.4 (March 14 2010)
+
+Kvasir's support for GCC 4.4 has been further improved.
+
+
+Daikon
+
+  User-visible changes
+
+    Added new invariants: CompleteOneOfScalar, CompleteOneOfString
+
+    Added configuration variable daikon.FileIO.rm_stack_dups.
+
+    Documented Chicory options --boot-classes=REGEX, --linked-lists.
+
+    Improved documentation of handling large data trace files or slow
+    Daikon runs.
+
+  Non-user-visible changes  
+
+    Extracted utilMDE and other utilities into a new library named plume-lib,
+    which makes it easier to use in other programs.  See
+    http://code.google.com/p/plume-lib/.
+
+    Daikon now type-checks with the Nullness Checker (which is part of the
+    Checker Framework).  A few warning suppressions remain, but as far as we
+    know Daikon is the largest program ever to be verified in this way.
+
+-------------------------------------------
+
 4.6.3 (December 18 2009)
 
 Kvasir's support for GCC 4.4 has been improved.
