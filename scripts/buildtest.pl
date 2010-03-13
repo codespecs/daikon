@@ -295,7 +295,7 @@ sub tests_update {
 # Compile daikon using javac
 sub daikon_compile {
   print_log("Compiling Daikon...");
-  return buildtest_cmd ("make -C $INV/java clean all_directly",
+  return buildtest_cmd ("make -C $INV/java clean all_directly ../daikon.jar",
                         "daikon_compile.out");
 }
 
