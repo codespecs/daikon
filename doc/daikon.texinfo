@@ -5136,13 +5136,14 @@ immediately by a line that either denotes the program point name
 (formatted like how it appears in the .decls and .dtrace files) or the
 special string ``@code{globals}''.  This is followed by a
 newline-delimited list of all variables to be outputted for that
-particular program point.  (Global variables listed in the
-@code{globals} section are outputted for all program points.)
-For clarity, one or more blank lines should separate neighboring sections,
-although the ``@code{----SECTION----}'' string literal on a line by itself is the only
-required delimiter.  If an entire section is missing, then no variables
-for that program point (or no global variables, if it is the special
-globals section) are traced.
+particular program point.  Global variables listed in the
+@code{globals} section are outputted for all program points. Additional global
+variables to be outputted for a particular program point can be specified
+in the corresponding section entry. For clarity, one or more blank lines 
+should separate neighboring sections, although the ``@code{----SECTION----}'' 
+string literal on a line by itself is the only required delimiter.  
+If an entire section is missing, then no variables for that program point 
+(or no global variables, if it is the special globals section) are traced.
 
 The variables listed in this file are written exactly as they appear in
 the .decls and .dtrace file (@pxref{Using Kvasir} section
