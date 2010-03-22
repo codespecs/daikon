@@ -22,7 +22,15 @@ Further documentation can be found in:
 
 4.6.4 (March 14 2010)
 
-Kvasir's support for GCC 4.4 has been further improved.
+Kvasir
+
+  user-visible changes
+
+    The var-list-file can specify different global variables for different
+    functions, rather than having to specify the same set of global
+    variables for all of a program.
+
+    Kvasir's support for GCC 4.4 has been further improved.
 
 
 Daikon
