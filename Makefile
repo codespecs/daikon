@@ -77,7 +77,7 @@ DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 # WWW_FILES := $(shell cd doc/www; find . \( \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -a -type f \) -o -print | grep -v '^.$$')
 WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|CVS|.cvsignore|/.\#|.bak$$|uw/|pubs/')
 #WWW_DIR := /home/httpd/html/daikon/
-WWW_PARENT := /afs/csail.mit.edu/group/pag/docroot/www.pag.csail.mit.edu
+WWW_PARENT ?= /afs/csail.mit.edu/group/pag/docroot/www.pag.csail.mit.edu
 WWW_DIR := $(WWW_PARENT)/daikon
 INV_DIR := $(shell pwd)
 # Staging area for the distribution
