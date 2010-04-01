@@ -209,7 +209,7 @@ if (@failed_steps != 0) {
   # not quiet is set.  However, if all steps succeed, there is no
   # output iff quiet is set.
   if ($quiet) {
-    open LOG, $LOG or die "can't open $LOG: $!\n";
+    open LOG, $LOG or die "failed_steps = @failed_steps but can't open " . cwd() . "/$LOG: $!\n";
     print <LOG>;
     close LOG;
   }
@@ -491,7 +491,7 @@ sub kvasir_daikon_test {
 # Appends its arguments to the log file.  If the quiet option was *not*
 # specified, also prints its arguments to STDOUT.
 sub print_log {
-  open LOG, ">>$LOG" or die "can't open $LOG: $!\n";
+  open LOG, ">>$LOG" or die "can't open " . cwd() . "/$LOG for append: $!\n";
   print LOG @_;
   if (! $quiet) {
     print @_;
