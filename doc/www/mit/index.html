@@ -608,7 +608,7 @@ someone who is making a release to plan.
     <li> Run the kvasir regression tests.
          [Time: 18 min]
     <pre>
-        make -C $inv/tests/kvasir-tests nightly-summary-w-daikon </pre>
+        make -C $inv/tests/kvasir-tests clean nightly-summary-w-daikon </pre>
 
     </li>
 
@@ -655,6 +655,9 @@ someone who is making a release to plan.
 
     <pre>
         make staging    </pre>
+
+    (To test just this part, you can do: <tt>make -C $inv/java clean; make -C $inv WWW_PARENT=$HOME/www/tmp staging</tt>)
+
     </li>
 
     <li> Test the distribution in the staging area, on a 32-bit machine
