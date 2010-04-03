@@ -1023,13 +1023,12 @@ doc-invariant: ../doc/invariants-doc.texinfo
 
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
 # resulting in a duplicate class warning.
-# This could depend on java/daikon/config/ParameterDoclet.class (but that
-# will typically exist).
+# This must depend on java/daikon/config/ParameterDoclet.class.
+# Instead, it depends on "all", which forces compilation.  (An experiment
+# with not depending on "all" showed that ParameterDoclet.class was needed.)
 # It depends on "all", which forces compilation, to avoid errors like
 #   "java.lang.ClassFormatError: Truncated class file".
-## Experiment with not depending on "all". -MDE
-## ../doc/config-options.texinfo: $(AUTO_GENERATED_FILES) all
-../doc/config-options.texinfo: ../plume-lib $(AUTO_GENERATED_FILES)
+../doc/config-options.texinfo: ../plume-lib $(AUTO_GENERATED_FILES) all
 	javadoc -J-Xmx1000m -J-ea -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
