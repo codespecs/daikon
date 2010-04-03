@@ -28,7 +28,7 @@ DIST_VERSION_FILES := ${README_PATHS} \
 # (Maybe to avoid problems with accidentally including things in the user's
 # checkout that are not needed by most users, but why not include
 # everything that's in repository?)
-SCRIPT_FILES := Makefile java-cpp.pl lines-from \
+SCRIPT_FILES := Makefile \
 	daikon.cshrc daikon.bashrc daikonenv.bat \
 	dfepl dtrace-perl dtype-perl \
 	kvasir-dtrace \
@@ -37,6 +37,7 @@ SCRIPT_FILES := Makefile java-cpp.pl lines-from \
 	trace-add-nonces.pl \
 	util_daikon.pm \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
+PLUME_SCRIPT_FILES := java-cpp.pl lines-from
 
 ## These are now in plume-lib
 # 	cygwin-runner.pl java-cygwin.sh \
@@ -44,8 +45,8 @@ SCRIPT_FILES := Makefile java-cpp.pl lines-from \
 # 	checkargs.pm
 # 	sort-directory-order.pl
 
-SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES))
-# This is so toublesome that it isn't used except as a list of dependences for make commands
+SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES)) $(addprefix plume-lib/bin/,$(PLUME_SCRIPT_FILES))
+# This is so troublesome that it isn't used except as a list of dependences for make commands
 DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS  \) -prune -o -name '*.java' -print) $(shell find java/daikon -follow \( -name '*daikon-java*' -o -name CVS \) -prune -o -name '*.java' -print)
 DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/simplify/daikon-background.txt \
@@ -271,7 +272,7 @@ TESTCVSJAVA=$(TESTCVS)/invariants/java
 cvs-test:
 	-rm -rf $(TESTCVS)
 	mkdir -p $(TESTCVS)
-	cd $(TESTCVS) && cvs -Q -d $(CVS_REPOSITORY) co invariants
+	cd $(TESTCVS) && cvs -Q -P -d $(CVS_REPOSITORY) co invariants
 	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:(TESTCVSJAVA)/lib/checkers.jar:.:$(RTJAR):$(TOOLSJAR)
 
 
@@ -286,6 +287,7 @@ cvs-test:
 # daikon.tar.gz, daikon.zip, daikon.jar, javadoc, and the documentation.
 # See the dist target for moving these files to the website.
 staging: doc/CHANGES
+	chmod -R +w $(STAGING_DIR)
 	/bin/rm -rf $(STAGING_DIR)
 	install -d $(STAGING_DIR)/download
 	# Build the main tarfile for daikon
@@ -317,7 +319,8 @@ staging: doc/CHANGES
 	# compare new list of files in tarfile to previous list
 	@echo "]2;New or removed files"
 	@echo "***** New or removed files:"
-	tar tzf $(WWW_DIR)/download/daikon.tar.gz | sort > ${TMPDIR}/old_tar.txt
+	# Using $(WWW_DIR)/download/daikon.tar.gz is faster than fetching with wget but only works on the local filesystem.
+	(cd ${TMPDIR} && wget http://groups.csail.mit.edu/pag/daikon/download/daikon.tar.gz && tar tzf daikon.tar.gz | sort > old_tar.txt && rm -f daikon.tar.gz)
 	tar tzf $(STAGING_DIR)/download/daikon.tar.gz | sort > ${TMPDIR}/new_tar.txt
 	-diff -u ${TMPDIR}/old_tar.txt ${TMPDIR}/new_tar.txt
 	# Delete the tmp files
@@ -424,7 +427,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) c
 	#rm -rf ${TMPDIR}/daikon-jar
 
 # This rule creates the files that comprise the distribution, but does
-# not copy them anywhere.
+# not copy them anywhere.  (It does no compilation of its own.)
 # This rule could be changed to check out a fresh version of the
 # repository, then tar from there.  Then there would be no need to be so
 # careful about not including extraneous files in the distribution, and one
@@ -495,24 +498,23 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	# Don't do  $(MAKE) clean  which deletes .class files
 	(cd ${TMPDIR}/daikon/java; $(RM_TEMP_FILES))
 
-	# Java support files
-	## plume
-	(cd plume-lib; $(MAKE) plume-lib.tar.gz)
-	cd java && tar zxf plume-lib/plume-lib.tar.gz java -C ${TMPDIR}/daikon/java
-	rm -rf ${TMPDIR}/daikon/java/plume/api
-	## getopt
-	(cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
-	## intern checker
-	# (cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/checkers.jar)
-	## Apache packages
-	mkdir ${TMPDIR}/daikon/java/org
-	mkdir ${TMPDIR}/daikon/java/org/apache
-	## JTB
-	cp -pR java/jtb ${TMPDIR}/daikon/java/
-	## BCEL
-	(cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/bcel.jar)
-	## Apache commons
-	(cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/commons-io.jar)
+	## I don't think I need the source.  The compiled versions appear in .jar files.
+	## # Java support files
+	## ## plume
+	## (cd plume-lib; hg archive ${TMPDIR}/daikon/java)
+	## ## getopt
+	## (cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
+	## ## intern checker
+	## # (cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/checkers.jar)
+	## ## Apache packages
+	## mkdir ${TMPDIR}/daikon/java/org
+	## mkdir ${TMPDIR}/daikon/java/org/apache
+	## ## JTB
+	## cp -pR java/jtb ${TMPDIR}/daikon/java/
+	## ## BCEL
+	## (cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/bcel.jar)
+	## ## Apache commons
+	## (cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/commons-io.jar)
 
 	## JUnit
 	# This is wrong:
@@ -531,10 +533,10 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	##(cd ${TMPDIR}/daikon/tmp-junit; unzip $(JUNIT_VERSION)/src.jar; rm -f $(JUNIT_VERSION)/src.jar; mv $(JUNIT_VERSION)/cpl-v10.html junit; rmdir $(JUNIT_VERSION); chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit ${TMPDIR}/daikon/java/)
 	##rm -rf ${TMPDIR}/daikon/tmp-junit
 	##(cd ${TMPDIR}/daikon/java/junit; ${JAVAC} -g `find . -name '*.java'`)
-	cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/junit.jar
+	## cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/junit.jar
 
 	# Plume library
-	cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/plume-lib/java/plume.jar
+	## cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/plume-lib/java/plume.jar
 
 	## Front ends
 	mkdir ${TMPDIR}/daikon/front-end
@@ -616,39 +618,40 @@ showvars:
 
 
 
-## v2 is now obsolete, so there is no longer any need to perform these steps.
-# Only run the "setup" targets once.
-setup-v2-and-v3: setup-v2-and-v3-tests setup-v2-and-v3-daikon
+# ## v2 is now obsolete, so there is no longer any need to perform these steps.
+# # Only run the "setup" targets once.
+# setup-v2-and-v3: setup-v2-and-v3-tests setup-v2-and-v3-daikon
+# 
+# setup-v2-and-v3-daikon:
+# 	mv java/daikon daikon.ver3
+# 	cvs update -d -P -r ENGINE_V2_PATCHES java/daikon
+# 	mv java/daikon daikon.ver2
+# 	ln -s daikon.ver3 java/daikon
+# 
+# setup-v2-and-v3-tests:
+# 	mv tests tests.ver3
+# 	cvs update -d -P -r ENGINE_V2_PATCHES tests
+# 	mv tests tests.ver2
+# 	ln -s tests.ver3 java/daikon
+# 
+# 
+# # To set up the version-2 and version-3 directories:
+# # Use the above setup-v2-and-v3 target after updating your invariants
+# # directory so that it only contains V3 stuff.
+# 
+# use-%: daikon-is-symlink
+# 	[ -e daikon.$* ]
+# 	[ -e tests.$* ]
+# 	rm -f java/daikon
+# 	ln -s ../daikon.$* java/daikon
+# 	$(MAKE) tags >& /dev/null &
+# 	rm -f tests
+# 	ln -s tests.$* tests
+# 
+# daikon-is-symlink:
+# 	[ ! -e java/daikon ] || [ -L java/daikon ] # daikon must be symlink if it exists
+# 	[ ! -e tests ] || [ -L tests ] # tests must be symlink if it exists
 
-setup-v2-and-v3-daikon:
-	mv java/daikon daikon.ver3
-	cvs update -d -P -r ENGINE_V2_PATCHES java/daikon
-	mv java/daikon daikon.ver2
-	ln -s daikon.ver3 java/daikon
-
-setup-v2-and-v3-tests:
-	mv tests tests.ver3
-	cvs update -d -P -r ENGINE_V2_PATCHES tests
-	mv tests tests.ver2
-	ln -s tests.ver3 java/daikon
-
-
-# To set up the version-2 and version-3 directories:
-# Use the above setup-v2-and-v3 target after updating your invariants
-# directory so that it only contains V3 stuff.
-
-use-%: daikon-is-symlink
-	[ -e daikon.$* ]
-	[ -e tests.$* ]
-	rm -f java/daikon
-	ln -s ../daikon.$* java/daikon
-	$(MAKE) tags >& /dev/null &
-	rm -f tests
-	ln -s tests.$* tests
-
-daikon-is-symlink:
-	[ ! -e java/daikon ] || [ -L java/daikon ] # daikon must be symlink if it exists
-	[ ! -e tests ] || [ -L tests ] # tests must be symlink if it exists
 
 plume-lib:
 	rm -rf java/utilMDE java/lib/utilMDE.jar
