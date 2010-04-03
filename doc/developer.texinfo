@@ -1715,7 +1715,7 @@ The test can be added into the standard tests (either @samp{everything} or
 @c Tell those who receive the repository:
 @c   You can find a copy of the Daikon CVS repository at
 @c     http://pag.csail.mit.edu/~mernst/tmp/inv-cvs.tar.gz
-@c   The compressed repository is about 800 Mbytes in size.
+@c   The compressed repository is about 900 Mbytes in size.
 @c   Let me know when you have downloaded it, so I can remove the file.
 @c   Please do not further redistribute it.
 @c 
@@ -1745,6 +1745,7 @@ The test can be added into the standard tests (either @samp{everything} or
 @c   12/27/2008 zlmdunk@126.com
 @c   11/15/2009 Jay Liu <jayliu@cs.utexas.edu>
 @c   11/15/2009 Alex Loh <alexloh@cs.utexas.edu>
+@c    3/17/2010 Dan Keith <dkeith@uoregon.edu>
 
 This section is intended primarily for researchers who are analyzing
 historical versions of Daikon.  A number of researchers (for example, in
