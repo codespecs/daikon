@@ -6,13 +6,12 @@
 # not remove generated files (good for debugging).
 
 # This script ordinarily runs overnight; to invoke it by hand, execute the
-# following commands as user daikonbuildtest:
+# following commands as user daikonbuildtest (or as any other user):
 #   cd $HOME/build
 #   /usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --nocleanup
 # Make sure that . is either not in your path or at the end.  Otherwise,
 # some of the kvasir perl tests will fail trying to run the test version of
-# perl rather than the system version.  You can also run this script as
-# any other user.
+# perl rather than the system version.
 
 use strict;
 use English;
@@ -26,7 +25,8 @@ my $usage =
   . "                    [--rsync_location=machine:/path/invariants]\n"
   . "  Debugging flags:  [--nocleanup] [--skip_daikon] [--skip_daikon_build]\n"
   . "                    [--skip_build_dyncomp] [--reuse_dyncomp_jar=jarfile]\n"
-  . "                    [--skip_kvasir] [--skip_cross_checker]\n";
+  . "                    [--skip_kvasir] [--skip_cross_checker]\n"
+  . "                    [--cvs_co_args=ARGS]\n";
 my $quiet = 0;
 my $nocleanup = 0;
 # When set, print an additional message in the header of failing runs
@@ -45,6 +45,9 @@ my $reuse_dyncomp_jar;
 my $test_kvasir = 1;
 # When on run daikon simple as a cross checker -- note: takes 3+ hours
 my $test_cross_checker = 1;
+# If set, supply the arguments to the "cvs co" command.  Example:
+# --cvs_co_args='-D date'
+mf $cvs_co_args = "";
 # When set, get the sources by rsync from the given location, rather
 # than by CVS.
 my $rsync_location;
@@ -67,6 +70,8 @@ while (scalar(@ARGV) > 0) {
     $test_kvasir = 0;
   } elsif ($arg eq "--skip_cross_checker") {
     $test_cross_checker = 0;
+  } elsif ($arg =~ /^--cvs_co_args=(.*)$/) {
+    $cvs_co_args = $1;
   } elsif ($arg =~ /^--rsync_location=(.*)$/) {
     $rsync_location = $1;
   } elsif ($arg =~ /^--message=(.*)$/s) {
@@ -245,7 +250,7 @@ sub daikon_checkout {
   if ($rsync_location) {
       $cmd = "rsync -e 'ssh -x' -rav $rsync_location . ";
   } else {
-      $cmd = "cvs -d $CVS_REP co invariants ";
+      $cmd = "cvs -d $CVS_REP co $cvs_co_args invariants ";
   }
   my $cvs_success = buildtest_cmd ($cmd, "daikon_checkout.out");
   if (! $cvs_success) {
