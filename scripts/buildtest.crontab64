@@ -1,0 +1,24 @@
+# Crontab for daikonbuildtest user
+# Runs on mangold ("buildtest.crontab" runs on onion, which is a 32-bit machine).
+
+# To initiate this crontab, run the crontab command on this file.
+# Henceforth, this file will nightly be updated and its commands
+# executed.
+
+USER=daikonuser
+MAILTO=daikon-developers@csail.mit.edu
+CRONIC=/afs/csail.mit.edu/u/d/daikonuser/research/invariants/plume-lib/bin/cronic
+AFS=/afs/csail.mit.edu/u/d/daikonuser/bin/afs-cron-wrapper
+
+01 5 * * * cd $HOME/research/invariants/scripts; $AFS cvs -Q up
+02 5 * * * cd $HOME/research/invariants/plume-lib; $AFS $CRONIC hg pull -u
+03 5 * * * $AFS crontab $HOME/research/invariants/scripts/buildtest.crontab2
+55 5 * * * $AFS $HOME/research/invariants/scripts/buildtest-remove-old
+0 6 * * * $AFS $HOME/research/invariants/scripts/buildtest
+
+## Debugging.  (Also consider setting MAILTO variable while debugging.)
+# To re-install:
+#   cd $HOME/research/invariants/scripts; cvs update; crontab buildtest.crontab2; date
+# 21 00 * * * $AFS $HOME/research/invariants/scripts/buildtest --reuse_dyncomp_jar=$HOME/dcomp_rt.jar --skip_kvasir
+
+# Last command must end with a blank line; this comment is here to ensure that.
