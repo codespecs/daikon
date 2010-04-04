@@ -1,11 +1,14 @@
 package daikon.diff;
 
+import daikon.*;
 import daikon.inv.Invariant;
 import daikon.inv.OutputFormat;
 import java.io.*;
-import daikon.*;
 import java.util.*;
 
+// MatchCountVisitor2 differs from MatchCountVisitor in that it reverses
+// some key predicates, and adds some functionality.  The differences are
+// not documented.
 /**
  * MatchCountVisitor is a visitor that almost does the opposite of
  * PrintDifferingInvariantsVisitor.  MatchCount prints invariant pairs
@@ -17,7 +20,6 @@ import java.util.*;
  * @author Lee Lin
  **/
 public class MatchCountVisitor2 extends PrintAllVisitor {
-
 
   // invariants found by the splitting
   private HashSet<String> cnt = new HashSet<String>();
@@ -53,11 +55,10 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
-
-    if (inv1 != null && !(inv1.ppt.parent instanceof PptConditional)) { return; }
-
     String key1 = "";
     // String key2 = "";
+
+    if (inv1 != null && !(inv1.ppt.parent instanceof PptConditional)) { return; }
 
     if (inv1 != null && inv1.justified() && !filterOut (inv1)) {
       String thisPptName1 = inv1.ppt.name();
@@ -91,7 +92,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
       // System.out.println ("K2: " + key2);
 
       String thisPptName1 = inv1.ppt.name();
-      // System.out.println ("NAME1: " + tmpStr1);
+      // System.out.println ("NAME1: " + thisPptName1);
       // Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
       String bucketKey =  thisPptName1.indexOf (";condition") > -1 ?
 
@@ -117,7 +118,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     }
   }
 
-  /** grabs the splitting condition from a pptname */
+  /** Grabs the splitting condition from a pptname. */
   private String extractPredicate (String s) {
     int cut = s.indexOf (";condition=");
     if (cut == -1) return "NO_PREDICATE: ";
@@ -151,7 +152,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
   /** Returns true if the pair of invariants should be printed **/
   /*@AssertNonNullIfTrue({"#0", "#1"})*/
-  protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
+  protected static boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
 
     if (5 == 5) {
       if (inv1 == null || inv2 == null) {

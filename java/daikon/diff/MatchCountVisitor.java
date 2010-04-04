@@ -49,12 +49,12 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
 
     if (inv1 != null && inv1.justified() && !filterOut (inv1)) {
-      String tmpStr1 = inv1.ppt.name();
-      // System.out.println ("NAME1: " + tmpStr1);
+      String thisPptName1 = inv1.ppt.name();
+      // System.out.println ("NAME1: " + thisPptName1);
       // Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
-      String thisPptName1 = tmpStr1.substring (0,
-                                               tmpStr1.lastIndexOf (";condition"));
-      key1 = thisPptName1 + "$" + inv1.format_using(OutputFormat.JAVA);
+      String bucketKey = thisPptName1.substring (0,
+                                               thisPptName1.lastIndexOf (";condition"));
+      key1 = bucketKey + "$" + inv1.format_using(OutputFormat.JAVA);
       // checks for justification
       if (shouldPrint (inv1, inv1)) // [???]
         cnt.add (key1);
@@ -62,10 +62,10 @@ public class MatchCountVisitor extends PrintAllVisitor {
     }
 
     if (inv2 != null && inv2.justified() && !filterOut (inv2)) {
-      String tmpStr2 = inv2.ppt.name();
-      String thisPptName2 = tmpStr2.substring (0,
-                                               tmpStr2.lastIndexOf ('('));
-      key2 = thisPptName2 + "$" + inv2.format_using(OutputFormat.JAVA);
+      String thisPptName2 = inv2.ppt.name();
+      String thisPptName2_substring = thisPptName2.substring (0,
+                                               thisPptName2.lastIndexOf ('('));
+      key2 = thisPptName2_substring + "$" + inv2.format_using(OutputFormat.JAVA);
       targSet.add (key2);
     }
 
@@ -77,16 +77,16 @@ public class MatchCountVisitor extends PrintAllVisitor {
       // System.out.println("K1: " + key1);
       // System.out.println ("K2: " + key2);
 
-      String tmpStr1 = inv1.ppt.name();
-      // System.out.println ("NAME1: " + tmpStr1);
+      String thisPptName1 = inv1.ppt.name();
+      // System.out.println ("NAME1: " + thisPptName1);
       // Contest.smallestRoom(II)I:::EXIT;condition="not(max <= num)"
-      String thisPptName1 = tmpStr1.substring (0,
-                                               tmpStr1.lastIndexOf (";condition"));
-      String predicate = extractPredicate (tmpStr1);
-      HashSet<String> bucket = goodMap.get (thisPptName1);
+      String bucketKey = thisPptName1.substring (0,
+                                               thisPptName1.lastIndexOf (";condition"));
+      String predicate = extractPredicate (thisPptName1);
+      HashSet<String> bucket = goodMap.get (bucketKey);
       if (bucket == null) {
         bucket = new HashSet<String>();
-        goodMap.put (thisPptName1, bucket);
+        goodMap.put (bucketKey, bucket);
       }
       bucket.add (predicate + " ==> " + inv1.format());
     }
