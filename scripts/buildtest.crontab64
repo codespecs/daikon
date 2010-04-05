@@ -12,7 +12,7 @@ AFS=/afs/csail.mit.edu/u/d/daikonuser/bin/afs-cron-wrapper
 
 01 5 * * * cd $HOME/research/invariants/scripts; $AFS cvs -Q up
 02 5 * * * cd $HOME/research/invariants/plume-lib; $AFS $CRONIC hg pull -u
-03 5 * * * $AFS crontab $HOME/research/invariants/scripts/buildtest.crontab2
+03 5 * * * $AFS crontab $HOME/research/invariants/scripts/buildtest.crontab64
 55 5 * * * $AFS $HOME/research/invariants/scripts/buildtest-remove-old
 0 6 * * * $AFS $HOME/research/invariants/scripts/buildtest
 
