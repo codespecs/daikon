@@ -47,7 +47,7 @@ my $test_kvasir = 1;
 my $test_cross_checker = 1;
 # If set, supply the arguments to the "cvs co" command.  Example:
 # --cvs_co_args='-D date'
-mf $cvs_co_args = "";
+my $cvs_co_args = "";
 # When set, get the sources by rsync from the given location, rather
 # than by CVS.
 my $rsync_location;
