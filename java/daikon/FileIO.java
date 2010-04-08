@@ -331,6 +331,9 @@ public final class FileIO {
           parse_ppt_flags (state, scanner, ppt_flags);
         } else if (record == "variable") { // interned
           vardef = new VarDefinition (state, scanner);
+          // There is no need to check "varmap.containsKey(vardef.name)"
+          // because this is the first variable.
+          assert varmap.isEmpty();
           if (var_included (vardef.name))
             varmap.put (vardef.name, vardef);
         } else if (record == "ppt-type") { // interned
@@ -377,12 +380,21 @@ public final class FileIO {
             decl_error (state, "var %s declared twice", vardef.name);
           if (var_included (vardef.name))
             varmap.put (vardef.name, vardef);
+          try {
+            vardef.checkRep();
+          } catch (AssertionError e) {
+            throw new Daikon.TerminationMessage(e.getMessage(), state);
+          }
         } else {
           decl_error (state, "Unexpected variable item '%s' found", record);
         }
       }
     }
-
+    try {
+      vardef.checkRep();
+    } catch (AssertionError e) {
+      throw new Daikon.TerminationMessage(e.getMessage(), state);
+    }
     
 
     // If we are excluding this ppt, just read the data and throw it away
@@ -2664,6 +2676,51 @@ public final class FileIO {
     public String parent_variable = null;
     public /*@Interned*/ Object static_constant_value = null;
 
+    /** Check representation invariants. */
+    public void checkRep() {
+
+      // Basic checking for sensible input
+      assert name != null;
+      if (kind == null)
+        throw new AssertionError("missing var-kind information for variable " + name);
+      assert (arr_dims == 0) || (arr_dims == 1)
+        : String.format("arrdims==%s, should be 0 or 1, for VarDefinition %s",
+                        arr_dims, name);
+      if (rep_type == null)
+        throw new AssertionError("missing rep-type information for variable " + name);
+      if (declared_type == null)
+        throw new AssertionError("missing dec-type information for variable " + name);
+      if (comparability == null)
+        throw new AssertionError("missing comparability information for variable " + name);
+      assert ((kind == VarKind.FUNCTION)
+              || (function_args == null))
+        : String.format("incompatible kind=%s and function_args=%s for VarDefinition %s",
+                        kind, function_args, name);
+    }
+
+    /**
+     * Initialize from the 'variable <name>' record.  Scanner should be
+     * pointing at name.
+     */
+    public VarDefinition (ParseState state, Scanner scanner) throws DeclError {
+      this.state = state;
+      name = need (scanner, "name");
+      need_eol (scanner);
+      if (state.varcomp_format == VarComparability.IMPLICIT)
+        comparability = VarComparabilityImplicit.unknown;
+      else
+        comparability = VarComparabilityNone.it;
+    }
+
+    public VarDefinition (String name, VarKind kind, ProglangType type) {
+      this.state = null;
+      this.name = name;
+      this.kind = kind;
+      this.rep_type = type;
+      this.declared_type = type;
+      comparability = VarComparabilityNone.it;
+    }
+
     public VarDefinition clone() {
       try {
         return (VarDefinition) super.clone();
@@ -2701,29 +2758,6 @@ public final class FileIO {
       parent_ppt = null;
       parent_relation_id = 0;
       parent_variable = null;
-    }
-
-    /**
-     * Initialize from the 'variable <name>' record.  Scanner should be
-     * pointing at name.
-     */
-    public VarDefinition (ParseState state, Scanner scanner) throws DeclError {
-      this.state = state;
-      name = need (scanner, "name");
-      need_eol (scanner);
-      if (state.varcomp_format == VarComparability.IMPLICIT)
-        comparability = VarComparabilityImplicit.unknown;
-      else
-        comparability = VarComparabilityNone.it;
-    }
-
-    public VarDefinition (String name, VarKind kind, ProglangType type) {
-      this.state = null;
-      this.name = name;
-      this.kind = kind;
-      this.rep_type = type;
-      this.declared_type = type;
-      comparability = VarComparabilityNone.it;
     }
 
     /**

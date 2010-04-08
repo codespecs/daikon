@@ -276,17 +276,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Create VarInfo from VarDefinition **/
   public VarInfo (VarDefinition vardef) {
-
-    // Basic checking for sensible input
-    assert vardef.name != null;
-    assert vardef.kind != null;
-    assert vardef.rep_type != null;
-    assert (vardef.arr_dims == 0) || (vardef.arr_dims == 1);
-    assert vardef.rep_type != null;
-    assert vardef.declared_type != null;
-    assert vardef.comparability != null;
-    assert ((vardef.kind == VarKind.FUNCTION)
-            || (vardef.function_args == null));
+    vardef.checkRep();
 
     this.vardef = vardef;
 
