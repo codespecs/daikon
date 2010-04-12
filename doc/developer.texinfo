@@ -2177,7 +2177,7 @@ are specified, the relative name of the field or function must be
 specified.  For example, if the variable is @code{this.theArray}, the
 relative name is @code{theArray}.  Pointers to arrays are of type
 @code{field}.  The arrays themselves (a sequence of values) are of 
-type @code{array}.  
+type @code{array}.  A var-kind entry is required in each variable block.
 
 @item @code{enclosing-var <enclosing-var-name>}
 
@@ -2212,7 +2212,8 @@ versions of Daikon may support more levels of arrays.
 This is what the programmer used in the declaration of the variable.
 Names for standard types should use Java's names (e.g., @code{int},
 @code{boolean}, etc.), but names for user-defined or language-specific
-types can be arbitrary strings.
+types can be arbitrary strings.  A dec-type entry is required in each
+variable block.
 
 @item @code{rep-type <daikon-type>}
 
@@ -2221,7 +2222,8 @@ trace file.  For instance, the declared type might be @code{char[]} but
 the representation type might be @code{java.lang.String}.  Or, the declared
 type might be @code{Object} but the representation type might be
 @code{hashcode}, if the address of the object is written to the data trace
-file.
+file.  A rep-type entry is required in each
+variable block.
 
 @cindex pointer variables, see ``hashcode'' type
 @cindex hashcode type, for variables
@@ -2241,7 +2243,7 @@ for the purposes of output.  For example, Daikon will print
 
 @item @code{flags <flags>}
 
-One or more flags may be specified.  Possible values are: 
+One or more flags may optionally be specified.  Possible values are: 
 @itemize
 
 @item @code{is_param}
@@ -2341,9 +2343,11 @@ a       - comparability 8[5]
 return  - comparability 8
 @end example
 
+A comparability entry is required in each variable block.
+
 @item @code{parent <parent-ppt> <rel-id> [<parent-variable>]}
 
-Specifies the parent variable of this variable in the program
+Optionally specifies the parent variable of this variable in the program
 point/variable hierarchy.  The @var{parent-ppt} is the name of the
 parent program point.  The @var{rel-id} must be one of the
 relationship ids specified for this program point.  The
@@ -2352,13 +2356,13 @@ parent program point.  If the names are the same, it can be omitted.
 
 @item @code{constant <value>}
 
-Specifies a constant value for this variable.  If the variable has
+Optionally specifies a constant value for this variable.  If the variable has
 compile-time constant value, it must be omitted from the data trace
 records.
 
 @item @code{function-args <arg1> <arg2> ...}
 
-Specifies the arguments to a function (if any).  Specified by the
+Optionally specifies the arguments to a function (if any).  Specified by the
 external name of the argument variables.  Multiple arguments are
 blank separated.  For example
 @example
