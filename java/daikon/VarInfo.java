@@ -1428,6 +1428,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     boolean is_array_length =
       is_length && ((SequenceLength) derived).base.type.isArray();
     if (is_length && (!is_array_length)) {
+      VarInfo base = ((SequenceLength) derived).base;
+      // System.out.printf ("%s is not an array%n", base);
+      // System.out.printf ("type = %s%n", base.type);
       return false;
     }
 
