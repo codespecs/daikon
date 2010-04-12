@@ -375,27 +375,28 @@ public final class FileIO {
         } else if (record == "constant") { // interned
           vardef.parse_constant (scanner);
         } else if (record == "variable") { // interned
+          try {
+            vardef.checkRep();  // make sure the previous variable is ok
+          } catch (AssertionError e) {
+            decl_error (state, e.getMessage());
+          }
           vardef = new VarDefinition (state, scanner);
           if (varmap.containsKey (vardef.name))
             decl_error (state, "var %s declared twice", vardef.name);
           if (var_included (vardef.name))
             varmap.put (vardef.name, vardef);
-          try {
-            vardef.checkRep();
-          } catch (AssertionError e) {
-            throw new Daikon.TerminationMessage(e.getMessage(), state);
-          }
         } else {
           decl_error (state, "Unexpected variable item '%s' found", record);
         }
       }
     }
-    try {
-      vardef.checkRep();
-    } catch (AssertionError e) {
-      throw new Daikon.TerminationMessage(e.getMessage(), state);
-    }
-    
+    if (vardef != null) {
+      try {
+        vardef.checkRep();
+      } catch (AssertionError e) {
+        decl_error (state, e.getMessage());
+      }
+    }  
 
     // If we are excluding this ppt, just read the data and throw it away
     if (!ppt_included (ppt_name)) {
@@ -2652,28 +2653,52 @@ public final class FileIO {
   }
 
   /**
-   * Class that holds all of the information from the declaration record
-   * concerning a particular variable
+   * Class that holds all of the information from the declaration
+   * record concerning a particular variable.  Used because a VarInfo
+   * cannot be created until much of this information is present.
+   * More detailed information about each of the fields can be found
+   * in the 'Variable declarations' section of the 'File Formats'
+   * appendix of the Daikon developers manual.  Specifics can also be
+   * found in the 'parse_[field]' methods of the class (eg,
+   * parse_var_kind, parse_enclosing_var, etc).  In general, each
+   * field has a one-to-one relation with the corresponding entry in
+   * the variable definition block in the trace file.
    */
   @SuppressWarnings("nullness") // undocumented class needs documentation before annotating with nullness
   public static class VarDefinition implements java.io.Serializable, Cloneable{
     static final long serialVersionUID = 20060524L;
+    /** Current information about input file and previously parsed values **/
     transient ParseState state;
+    /** Name of the variable (required) **/
     public String name;
+    /** Type of the variable (required) **/
     public VarKind kind = null;
+    /** Variable that contains this variable (optional) **/
     public String enclosing_var;
+    /** the simple (not fully specified) name of this variable (optional) **/
     public String relative_name = null;
+    /** Type of reference for structure/class variables **/
     public RefType ref_type = RefType.POINTER;
+    /** Number of array dimensions (0 or 1) **/
     public int arr_dims = 0;
     public /*@Nullable*/ List<String> function_args = null; // non-null iff (vardef.kind == VarKind.FUNCTION)
+    /** The type of the variable as stored in the dtrace file (required) **/
     public ProglangType rep_type = null;
+    /** Declared type of the variable as an arbitrary string (required) **/
     public ProglangType declared_type = null;
+    /** Variable flags (optional) **/
     public EnumSet<VarFlags> flags = EnumSet.noneOf (VarFlags.class);
+    /** Language specific variable flags (optional) **/
     public EnumSet<LangFlags> lang_flags = EnumSet.noneOf (LangFlags.class);
+    /** Comparability of this variable (required **/
     public VarComparability comparability = null;
+    /** Parent program point in ppt hierarchy (optional) **/
     public /*@Interned*/ String parent_ppt = null;
+    /** One of the relationship IDs for this ppt (optional) **/
     public int parent_relation_id = 0;
+    /** The parent var name in the parent ppt (defaults to this name) **/
     public String parent_variable = null;
+    /** Set if this 'variable' always has the same value (optional) **/
     public /*@Interned*/ Object static_constant_value = null;
 
     /** Check representation invariants. */
