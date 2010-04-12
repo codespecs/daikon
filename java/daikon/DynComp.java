@@ -207,9 +207,17 @@ public class DynComp {
         String[] cpath = cp.split(separator);
         for (String path : cpath)
           {
-            File poss_premain = new File(path, "dcomp_premain.jar");
-            if (poss_premain.canRead())
+            File poss_premain;
+            if (path.endsWith ("dcomp_premain.jar")) {
+              poss_premain = new File (path);
+            } else {
+              poss_premain = new File(path, "dcomp_premain.jar");
+            }
+            // System.out.printf ("looking for file %s%n", poss_premain);
+            if (poss_premain.canRead()) {
               premain = poss_premain;
+              break;
+            }
           }
       }
 
