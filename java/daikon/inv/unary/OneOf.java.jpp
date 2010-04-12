@@ -549,7 +549,8 @@ public final class ONEOFSCALAR
     } else if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
-      return format_esc();
+      String result = format_esc();
+      return result;
     } else {
       return format_unimplemented(format);
     }
