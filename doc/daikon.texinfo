@@ -1899,6 +1899,20 @@ samples, and @var{a}<@var{b} on all of them, then the confidence would be 7/8 =
 confidence would be 0.  If there were 9 samples, and @var{a}<@var{b} on all of
 them, then the confidence would be 1-1/2^9 = .998.
 
+There are two ways to print the confidence of each invariant.  You can
+use Diff (@pxref{Invariant Diff}):
+@example
+java daikon.diff.Diff MyFile.inv.gz
+@end example
+or you can use PrintInvariants
+(@pxref{Printing invariants}):
+@example
+java daikon.PrintInvariants --dbg daikon.PrintInvariants.repr MyFile.inv.gz 
+@end example
+To print the confidence of each invariant that is discarded, run Daikon
+with the @option{--disc_reason all} command-line option (@pxref{Daikon
+debugging options}).
+
 @item --list_type @var{classname}
 Indicate that the given class implements the @code{java.util.List}
 interface.  The preferred mechanism for indicating such information is
@@ -8247,7 +8261,7 @@ Daikon will sometimes not output invariants that are expected.  There
 are a number of reasons why this may happen:
 
 @itemize
-@item There is a sample that violate the invariant
+@item There is a sample that violates the invariant
 @item The invariant is true, but does not pass one of the output filters
 @item One or more of the variables in the invariant always has the same
 value as another variable.  Daikon only prints invariants over one
