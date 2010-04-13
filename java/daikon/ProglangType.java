@@ -120,8 +120,11 @@ public final /*@Interned*/ class ProglangType
 
   /** Convert a file representation type to an internal representation type. **/
   public ProglangType fileTypeToRepType() {
-    if ((base == BASE_HASHCODE) || (base == BASE_BOOLEAN)
-        || (base == BASE_LONG) || (base == BASE_SHORT))
+    if ((base == BASE_HASHCODE)
+        || (base == BASE_BOOLEAN)
+        || (base == BASE_LONG)
+        || (base == BASE_LONG_LONG)
+        || (base == BASE_SHORT))
       return intern("int", dimensions);
     return this;
   }
@@ -235,6 +238,7 @@ public final /*@Interned*/ class ProglangType
   static final /*@Interned*/ String BASE_FLOAT = "float";
   static final /*@Interned*/ String BASE_INT = "int";
   static final /*@Interned*/ String BASE_LONG = "long";
+  static final /*@Interned*/ String BASE_LONG_LONG = "long long int";
   static final /*@Interned*/ String BASE_SHORT = "short";
 
   // Nonprimitive types
@@ -389,8 +393,11 @@ public final /*@Interned*/ class ProglangType
       else
         throw new IllegalArgumentException("Bad character: " + value);
       return Intern.internedLong(Character.getNumericValue(c));
-    } else if ((base == BASE_INT) || (base == BASE_BOOLEAN)
-               || (base == BASE_LONG) || (base == BASE_SHORT)) {
+    } else if ((base == BASE_INT)
+               || (base == BASE_BOOLEAN)
+               || (base == BASE_LONG)
+               || (base == BASE_LONG_LONG)
+               || (base == BASE_SHORT)) {
       // File rep type might be int, boolean, or hashcode.
       // If we had the actual type, we could do error-checking here.
       // (Example:  no hashcode should be negative, nor any boolean > 1.)
@@ -556,6 +563,7 @@ public final /*@Interned*/ class ProglangType
             || (base == BASE_FLOAT)
             || (base == BASE_INT)
             || (base == BASE_LONG)
+            || (base == BASE_LONG_LONG)
             || (base == BASE_SHORT));
   }
 
@@ -566,12 +574,13 @@ public final /*@Interned*/ class ProglangType
   // Does not include boolean.  Is that intentional?  (If it were added,
   // we would need to change isIndex().)
   public boolean baseIsIntegral() {
-    return ((base == BASE_BYTE) ||
-            (base == BASE_CHAR) ||
-            (base == BASE_INT) ||
-            (base == BASE_LONG) ||
-            (base == BASE_SHORT) ||
-            (base == BASE_INTEGER));
+    return ((base == BASE_BYTE)
+            || (base == BASE_CHAR)
+            || (base == BASE_INT)
+            || (base == BASE_LONG)
+            || (base == BASE_LONG_LONG)
+            || (base == BASE_SHORT)
+            || (base == BASE_INTEGER));
   }
 
   public boolean isIntegral() {
