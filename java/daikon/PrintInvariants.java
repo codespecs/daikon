@@ -16,6 +16,14 @@ import daikon.inv.filter.*;
 import daikon.suppress.*;
 import daikon.config.Configuration;
 
+/**
+ * PrintInvariants prints a set of invariants from a .inv file.
+ * For documentation, see section "Printing Invariants" in the Daikon
+ * manual.
+ * Invoke the program as follows:
+ * <pre>java daikon.PrintInvariants [flags] inv-file</pre>
+ * For a list of cammand-line options, pass the "-h" flag to this program.
+ */
 public final class PrintInvariants {
 
   private PrintInvariants() { throw new Error("do not instantiate"); }
@@ -227,6 +235,9 @@ public final class PrintInvariants {
       "      Print debug info on the specified invariant class, vars, and ppt"
       );
 
+  /**
+   * See the documentation for this class.
+   */
   public static void main(final String[] args)
     throws FileNotFoundException, StreamCorruptedException,
            OptionalDataException, IOException, ClassNotFoundException {
