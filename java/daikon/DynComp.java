@@ -292,7 +292,7 @@ public class DynComp {
     cmdlist.add (cp);
     cmdlist.add ("-ea");
     cmdlist.add ("-esa");
-    cmdlist.add ("-Xmx1024");
+    cmdlist.add ("-Xmx1024m");
     if (!no_jdk)
       cmdlist.add ("-Xbootclasspath:" + rt_file + separator + cp);
 
