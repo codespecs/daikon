@@ -72,7 +72,7 @@ public class CParser implements CParserConstants {
          }
       try
       {
-         parser.TranslationUnit();
+         CParser.TranslationUnit();
          System.out.println("C Parser Version 0.1Alpha:  C program parsed successfully.");
 
       }
@@ -6051,8 +6051,8 @@ public class CParser implements CParserConstants {
   }
 
   static public void ReInit(java.io.InputStream stream) {
-    jj_input_stream.ReInit(stream, 1, 1);
-    token_source.ReInit(jj_input_stream);
+    ASCII_CharStream.ReInit(stream, 1, 1);
+    CParserTokenManager.ReInit(jj_input_stream);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
@@ -6078,8 +6078,8 @@ public class CParser implements CParserConstants {
   }
 
   static public void ReInit(java.io.Reader stream) {
-    jj_input_stream.ReInit(stream, 1, 1);
-    token_source.ReInit(jj_input_stream);
+    ASCII_CharStream.ReInit(stream, 1, 1);
+    CParserTokenManager.ReInit(jj_input_stream);
     token = new Token();
     jj_ntk = -1;
     jj_gen = 0;
@@ -6115,7 +6115,7 @@ public class CParser implements CParserConstants {
   static final private Token jj_consume_token(int kind) throws ParseException {
     Token oldToken;
     if ((oldToken = token).next != null) token = token.next;
-    else token = token.next = token_source.getNextToken();
+    else token = token.next = CParserTokenManager.getNextToken();
     jj_ntk = -1;
     if (token.kind == kind) {
       jj_gen++;
@@ -6140,7 +6140,7 @@ public class CParser implements CParserConstants {
     if (jj_scanpos == jj_lastpos) {
       jj_la--;
       if (jj_scanpos.next == null) {
-        jj_lastpos = jj_scanpos = jj_scanpos.next = token_source.getNextToken();
+        jj_lastpos = jj_scanpos = jj_scanpos.next = CParserTokenManager.getNextToken();
       } else {
         jj_lastpos = jj_scanpos = jj_scanpos.next;
       }
@@ -6157,7 +6157,7 @@ public class CParser implements CParserConstants {
 
   static public final Token getNextToken() {
     if (token.next != null) token = token.next;
-    else token = token.next = token_source.getNextToken();
+    else token = token.next = CParserTokenManager.getNextToken();
     jj_ntk = -1;
     jj_gen++;
     return token;
@@ -6167,14 +6167,14 @@ public class CParser implements CParserConstants {
     Token t = lookingAhead ? jj_scanpos : token;
     for (int i = 0; i < index; i++) {
       if (t.next != null) t = t.next;
-      else t = t.next = token_source.getNextToken();
+      else t = t.next = CParserTokenManager.getNextToken();
     }
     return t;
   }
 
   static final private int jj_ntk() {
     if ((jj_nt=token.next) == null)
-      return (jj_ntk = (token.next=token_source.getNextToken()).kind);
+      return (jj_ntk = (token.next=CParserTokenManager.getNextToken()).kind);
     else
       return (jj_ntk = jj_nt.kind);
   }

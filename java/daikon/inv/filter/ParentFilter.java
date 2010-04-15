@@ -145,7 +145,7 @@ public class ParentFilter extends InvariantFilter {
         if (var_mismatch)
           continue;
 
-        if (inv.logOn()) {
+        if (Invariant.logOn()) {
           inv.log ("Filtered by parent inv '%s' at ppt %s with rel %s",
                    pinv.format(), pslice.name(), rel);
           for (VarInfo cvi : inv.ppt.var_infos) {

@@ -682,10 +682,10 @@ public class Instrument implements ClassFileTransformer {
 
     Type type = c.mgen.getReturnType();
     InstructionList il = new InstructionList();
-    if (type != type.VOID) {
+    if (type != Type.VOID) {
       LocalVariableGen return_loc = get_return_local (c.mgen, type);
-      il.append (c.ifact.createDup (type.getSize()));
-      il.append (c.ifact.createStore (type, return_loc.getIndex()));
+      il.append (InstructionFactory.createDup (type.getSize()));
+      il.append (InstructionFactory.createStore (type, return_loc.getIndex()));
     }
 
     if (!exitIter.hasNext())
@@ -767,20 +767,20 @@ public class Instrument implements ClassFileTransformer {
                                         Type.INT));
 
     // dup (make a second copy of runtime.nonce on the stack)
-    nl.append (c.ifact.createDup (Type.INT.getSize()));
+    nl.append (InstructionFactory.createDup (Type.INT.getSize()));
 
     // iconst_1 (push 1 on the stack)
     nl.append (c.ifact.createConstant (1));
 
     // iadd (add the top two items on the stack together)
-    nl.append (c.ifact.createBinaryOperation ("+", Type.INT));
+    nl.append (InstructionFactory.createBinaryOperation ("+", Type.INT));
 
     // putstatic Runtime.nonce (pop result of add to Runtime.nonce)
     nl.append (c.ifact.createPutStatic (runtime_classname, "nonce",
                                         Type.INT));
 
     // istore <lv> (pop original value of nonce into this_invocation_nonce)
-    nl.append (c.ifact.createStore (Type.INT, nonce_lv.getIndex()));
+    nl.append (InstructionFactory.createStore (Type.INT, nonce_lv.getIndex()));
 
 
     if (shouldCallEnter)
@@ -844,7 +844,7 @@ public class Instrument implements ClassFileTransformer {
         (method_name.equals ("enter") && is_constructor (mgen))) {
       il.append (new ACONST_NULL());
     } else { // must be an instance method
-      il.append (ifact.createLoad (Type.OBJECT, 0));
+      il.append (InstructionFactory.createLoad (Type.OBJECT, 0));
     }
 
     // Determine the offset of the first parameter
@@ -854,7 +854,7 @@ public class Instrument implements ClassFileTransformer {
 
     // Push the nonce
     LocalVariableGen nonce_lv = get_nonce_local (mgen);
-    il.append (ifact.createLoad (Type.INT, nonce_lv.getIndex()));
+    il.append (InstructionFactory.createLoad (Type.INT, nonce_lv.getIndex()));
 
     // Push the MethodInfo index
     il.append (ifact.createConstant (cur_method_info_index));
@@ -867,15 +867,15 @@ public class Instrument implements ClassFileTransformer {
     // Put each argument into the array
     int param_index = param_offset;
     for (int ii = 0; ii < arg_types.length; ii++) {
-      il.append (ifact.createDup (object_arr_typ.getSize()));
+      il.append (InstructionFactory.createDup (object_arr_typ.getSize()));
       il.append (ifact.createConstant (ii));
       Type at = arg_types[ii];
       if (at instanceof BasicType) {
         il.append (create_wrapper (c, at, param_index));
       } else { // must be reference of some sort
-        il.append (ifact.createLoad (Type.OBJECT, param_index));
+        il.append (InstructionFactory.createLoad (Type.OBJECT, param_index));
       }
-      il.append (ifact.createArrayStore (Type.OBJECT));
+      il.append (InstructionFactory.createArrayStore (Type.OBJECT));
       param_index += at.getSize();
     }
 
@@ -892,7 +892,7 @@ public class Instrument implements ClassFileTransformer {
         if (ret_type instanceof BasicType) {
           il.append (create_wrapper (c, ret_type, return_local.getIndex()));
         } else {
-          il.append (ifact.createLoad (Type.OBJECT, return_local.getIndex()));
+          il.append (InstructionFactory.createLoad (Type.OBJECT, return_local.getIndex()));
         }
       }
 
@@ -945,8 +945,8 @@ public class Instrument implements ClassFileTransformer {
     InstructionList il = new InstructionList();
     String classname = runtime_classname + "$" + wrapper;
     il.append (c.ifact.createNew (classname));
-    il.append (c.ifact.createDup (Type.OBJECT.getSize()));
-    il.append (c.ifact.createLoad (prim_type, var_index));
+    il.append (InstructionFactory.createDup (Type.OBJECT.getSize()));
+    il.append (InstructionFactory.createLoad (prim_type, var_index));
     il.append (c.ifact.createInvoke (classname, "<init>", Type.VOID,
                                      new Type[] {prim_type}, Constants.INVOKESPECIAL));
 

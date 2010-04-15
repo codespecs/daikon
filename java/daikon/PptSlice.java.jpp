@@ -260,7 +260,7 @@ public final class PPTSLICE1 extends PptSlice {
                   var_infos[i].name() + " array index was out of bounds");
           inv.falsify();
           result.add (inv);
-          if (inv.logOn())
+          if (Invariant.logOn())
             inv.log ("destroyed because " + var_infos[i].name()
                      + " array index out of bounds");
         }
@@ -491,7 +491,7 @@ public final class PPTSLICE1 extends PptSlice {
 
     invs.add(invariant);
     Global.instantiated_invariants++;
-    if (invariant.logOn())
+    if (Invariant.logOn())
       invariant.log ("Instantiated " + invariant.format());
 
   }
@@ -675,7 +675,7 @@ public final class PPTSLICE1 extends PptSlice {
       for (Invariant orig_inv : cslice.invs) {
         Invariant inv = orig_inv.clone_and_permute (permute);
         all_invs.add (inv);
-        if (inv.logOn()) {
+        if (Invariant.logOn()) {
           VarInfo[] child_vars = new VarInfo[var_infos.length];
           for (int k = 0; k < var_infos.length; k++) {
             VarInfo pv = var_infos[k];
@@ -707,7 +707,7 @@ public final class PPTSLICE1 extends PptSlice {
     for (Invariant inv : all_invs) {
       Invariant.Match imatch = new Invariant.Match (inv);
       List<Invariant> invs = inv_map.get (imatch);
-      if (inv.logOn()) {
+      if (Invariant.logOn()) {
         inv.log ("Adding " + inv.format() + " to " + name()
                  + " invs list " + invs);
       }

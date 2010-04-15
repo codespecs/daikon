@@ -1014,7 +1014,7 @@ public class NIS {
         return;
 
       // Only antecedents comparable to this one should be added
-      assert comparability.comparable (inv.get_comparability(), comparability);
+      assert VarComparability.comparable (inv.get_comparability(), comparability);
 
       // Ignore antecedents that are missing out of bounds.  They can't
       // create any valid invariants (since the suppressee is always over

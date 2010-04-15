@@ -438,7 +438,7 @@ public final class CLASSNAME
 
           // Try to find small changes that will fit better.
           if (!try_new_equation (x, y, z)) {
-            if (wrapper.logOn() || debug.isLoggable(Level.FINE)) {
+            if (Invariant.logOn() || debug.isLoggable(Level.FINE)) {
               wrapper.log (debug, "destroying  (" + wrapper.format()
                            + ") where x=" + x + " y=" + y + " z=" + z
                            + " a=" + a + " b=" + b + " c=" + c
@@ -874,7 +874,7 @@ public final class CLASSNAME
       b = (min_b + max_b) / 2;
       c = (min_c + max_c) / 2;
       d = (min_d + max_d) / 2;
-      if (wrapper.logOn() || debug.isLoggable(Level.FINE))
+      if (Invariant.logOn() || debug.isLoggable(Level.FINE))
         wrapper.log (debug, wrapper.ppt.name() + ": Trying new a (" + a +
                      "), b (" + b + "), c (" + c + "), and d (" + d + ")");
       wrapper.log ("min max: Trying new a (" + a +

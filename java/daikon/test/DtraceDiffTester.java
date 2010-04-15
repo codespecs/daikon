@@ -38,7 +38,7 @@ public class DtraceDiffTester extends TestCase {
     String file1 = "daikon/test/dtracediff/" + file;
     @SuppressWarnings("nullness") // system class loader exists
     URL input_file_location =
-      ClassLoader.getSystemClassLoader().getSystemResource(file1);
+      ClassLoader.getSystemResource(file1);
     if (input_file_location == null) {
       throw new Error("Cannot find " + file1);
     }

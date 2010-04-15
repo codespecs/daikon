@@ -503,7 +503,7 @@ public final class PrintInvariants {
           if (propFilter instanceof ObviousFilter) {
             di = nextInv.isObvious();
             assert di != null : "@SuppressWarnings(nullness)";
-            if (nextInv.logOn())
+            if (Invariant.logOn())
               nextInv.log ("DiscardInfo's stuff: " + di.className() + lineSep
                            + di.format());
           } else if (propFilter instanceof UnjustifiedFilter) {
@@ -1076,7 +1076,7 @@ public final class PrintInvariants {
     for (int i = 0; i < invs_array.length; i++) {
       Invariant inv = invs_array[i];
 
-      if (inv.logOn())
+      if (Invariant.logOn())
         inv.log ("Considering Printing");
       assert !(inv instanceof Equality);
       for (int j = 0; j < inv.ppt.var_infos.length; j++)
@@ -1097,7 +1097,7 @@ public final class PrintInvariants {
         PptSplitter.debug.fine ("filter result = " + filter_result
                                 + " for inv " + inv);
 
-      if (inv.logOn())
+      if (Invariant.logOn())
         inv.log ("Filtering, accepted = " + fi_accepted);
 
       // Never print the guarding predicates themselves, they should only
@@ -1106,7 +1106,7 @@ public final class PrintInvariants {
         Global.reported_invariants++;
         accepted_invariants.add(inv);
       } else {
-        if (inv.logOn() || debugPrint.isLoggable(Level.FINE)) {
+        if (Invariant.logOn() || debugPrint.isLoggable(Level.FINE)) {
           inv.log (debugPrint, "fi_accepted = " + fi_accepted +
                     " inv.isGuardingPredicate = " + inv.isGuardingPredicate
                     + " not printing " + inv.repr());

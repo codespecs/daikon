@@ -96,14 +96,14 @@ public class InvariantFilters {
           }
         }
         if (! hasAnyVariable) {
-          if (invariant.logOn())
+          if (Invariant.logOn())
             invariant.log ("Failed ANY_VARIABLE filter");
           return variableFilters.get(0);
         }
       } else if (variableFilterType == InvariantFilters.ALL_VARIABLES) {
         for (VariableFilter filter : variableFilters) {
           if (filter.shouldDiscard( invariant )) {
-            if (invariant.logOn())
+            if (Invariant.logOn())
               invariant.log ("Failed ALL_VARIABLES filter"
                              + filter.getClass().getName());
               return filter;
@@ -117,11 +117,11 @@ public class InvariantFilters {
   public /*@Nullable*/ InvariantFilter shouldKeepPropFilters( Invariant invariant ) {
     Logger df = PrintInvariants.debugFiltering;
     for (InvariantFilter filter : propertyFilters) {
-      if (invariant.logDetail() || df.isLoggable(Level.FINE)) {
+      if (Invariant.logDetail() || df.isLoggable(Level.FINE)) {
         invariant.log (df, "applying " + filter.getClass().getName());
       }
       if (filter.shouldDiscard( invariant )) {
-        if (invariant.logOn() || df.isLoggable(Level.FINE))
+        if (Invariant.logOn() || df.isLoggable(Level.FINE))
           invariant.log (df, "failed " + filter.getClass().getName()
                          // + " num_values = "
                          // + ",num_unmod_missing_samples==" + invariant.ppt.num_mod_samples()
@@ -136,7 +136,7 @@ public class InvariantFilters {
   public /*@Nullable*/ InvariantFilter shouldKeep( Invariant invariant ) {
     Logger df = PrintInvariants.debugFiltering;
 
-    if (invariant.logOn() || df.isLoggable(Level.FINE)) {
+    if (Invariant.logOn() || df.isLoggable(Level.FINE)) {
       invariant.log (df, "filtering");
     }
 

@@ -214,7 +214,7 @@ class DFInstrument extends DCInstrument {
     // checked.  We duplicate the object on the top of the stack and call
     // dup_obj_tag_val to push a new tag that points to the same values
     case Constants.INSTANCEOF: {
-      return build_il (ifact.createDup (1),
+      return build_il (InstructionFactory.createDup (1),
                        dcr_call ("dup_obj_tag_val", Type.VOID, object_arg),
                        inst);
     }

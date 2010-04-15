@@ -1077,7 +1077,7 @@ class DCInstrument {
     il.append (ifact.createInvoke (DCRuntime.class.getName(),
                                    "create_tag_frame", object_arr, string_arg,
                                    Constants.INVOKESTATIC));
-    il.append (ifact.createStore (object_arr, tag_frame_local.getIndex()));
+    il.append (InstructionFactory.createStore (object_arr, tag_frame_local.getIndex()));
     debug_instrument_inst.log ("Store Tag frame local at index %d%n",
                                tag_frame_local.getIndex());
 
@@ -1097,7 +1097,7 @@ class DCInstrument {
      Type[] arg_types = mgen.getArgumentTypes();
 
      // Push the tag frame
-    il.append (ifact.createLoad (tag_frame_local.getType(),
+    il.append (InstructionFactory.createLoad (tag_frame_local.getType(),
                                  tag_frame_local.getIndex()));
 
      // Push the object.  Null if this is a static method or a constructor
@@ -1105,7 +1105,7 @@ class DCInstrument {
          (method_name.equals ("enter") && BCELUtil.is_constructor (mgen))) {
        il.append (new ACONST_NULL());
      } else { // must be an instance method
-       il.append (ifact.createLoad (Type.OBJECT, 0));
+       il.append (InstructionFactory.createLoad (Type.OBJECT, 0));
      }
 
      // Determine the offset of the first parameter
@@ -1123,16 +1123,16 @@ class DCInstrument {
      // Put each argument into the array
      int param_index = param_offset;
      for (int ii = 0; ii < arg_types.length; ii++) {
-       il.append (ifact.createDup (object_arr.getSize()));
+       il.append (InstructionFactory.createDup (object_arr.getSize()));
        il.append (ifact.createConstant (ii));
        Type at = arg_types[ii];
        if (at instanceof BasicType) {
          il.append (new ACONST_NULL());
          // il.append (create_wrapper (c, at, param_index));
        } else { // must be reference of some sort
-         il.append (ifact.createLoad (Type.OBJECT, param_index));
+         il.append (InstructionFactory.createLoad (Type.OBJECT, param_index));
        }
-       il.append (ifact.createArrayStore (Type.OBJECT));
+       il.append (InstructionFactory.createArrayStore (Type.OBJECT));
        param_index += at.getSize();
      }
 
@@ -1150,7 +1150,7 @@ class DCInstrument {
            il.append (new ACONST_NULL());
            //il.append (create_wrapper (c, ret_type, return_local.getIndex()));
          } else {
-           il.append (ifact.createLoad (Type.OBJECT, return_local.getIndex()));
+           il.append (InstructionFactory.createLoad (Type.OBJECT, return_local.getIndex()));
          }
        }
 
@@ -1189,7 +1189,7 @@ class DCInstrument {
     Type[] arg_types = mgen.getArgumentTypes();
 
     // Push the tag frame
-    //    il.append (ifact.createLoad (tag_frame_local.getType(),
+    //    il.append (InstructionFactory.createLoad (tag_frame_local.getType(),
     //                                 tag_frame_local.getIndex()));
 
     // Push the object.  Null if this is a static method or a constructor
@@ -1198,7 +1198,7 @@ class DCInstrument {
          BCELUtil.is_constructor (mgen))) {
       il.append (new ACONST_NULL());
     } else { // must be an instance method
-      il.append (ifact.createLoad (Type.OBJECT, 0));
+      il.append (InstructionFactory.createLoad (Type.OBJECT, 0));
     }
 
     // Determine the offset of the first parameter
@@ -1216,16 +1216,16 @@ class DCInstrument {
     // Put each argument into the array
     int param_index = param_offset;
     for (int ii = 0; ii < arg_types.length; ii++) {
-      il.append (ifact.createDup (object_arr.getSize()));
+      il.append (InstructionFactory.createDup (object_arr.getSize()));
       il.append (ifact.createConstant (ii));
       Type at = arg_types[ii];
       if (at instanceof BasicType) {
         il.append (new ACONST_NULL());
         // il.append (create_wrapper (c, at, param_index));
       } else { // must be reference of some sort
-        il.append (ifact.createLoad (Type.OBJECT, param_index));
+        il.append (InstructionFactory.createLoad (Type.OBJECT, param_index));
       }
-      il.append (ifact.createArrayStore (Type.OBJECT));
+      il.append (InstructionFactory.createArrayStore (Type.OBJECT));
       param_index += at.getSize();
     }
 
@@ -1243,7 +1243,7 @@ class DCInstrument {
           il.append (new ACONST_NULL());
           //il.append (create_wrapper (c, ret_type, return_local.getIndex()));
         } else {
-          il.append (ifact.createLoad (Type.OBJECT, return_local.getIndex()));
+          il.append (InstructionFactory.createLoad (Type.OBJECT, return_local.getIndex()));
         }
       }
 
@@ -1742,8 +1742,8 @@ class DCInstrument {
         InstructionList new_il = new InstructionList();
         if (type != Type.VOID) {
           LocalVariableGen return_loc = get_return_local (mg, type);
-          new_il.append (ifact.createDup (type.getSize()));
-          new_il.append (ifact.createStore (type, return_loc.getIndex()));
+          new_il.append (InstructionFactory.createDup (type.getSize()));
+          new_il.append (InstructionFactory.createStore (type, return_loc.getIndex()));
         }
         new_il.append (call_enter_exit (mg, method_info_index, "exit",
                                     exit_iter.next()));
@@ -1784,8 +1784,8 @@ class DCInstrument {
         InstructionList new_il = new InstructionList();
         if (type != Type.VOID) {
           LocalVariableGen return_loc = get_return_local (mg, type);
-          new_il.append (ifact.createDup (type.getSize()));
-          new_il.append (ifact.createStore (type, return_loc.getIndex()));
+          new_il.append (InstructionFactory.createDup (type.getSize()));
+          new_il.append (InstructionFactory.createStore (type, return_loc.getIndex()));
         }
         new_il.append (call_enter_exit_refs_only (mg, method_info_index,
                                                   "exit_refs_only",
@@ -2277,7 +2277,7 @@ class DCInstrument {
                                    compare_method, Type.BOOLEAN,
                                    two_objects, Constants.INVOKESTATIC));
     assert branch.getTarget() != null;
-    il.append (ifact.createBranchInstruction (boolean_if,
+    il.append (InstructionFactory.createBranchInstruction (boolean_if,
                                               branch.getTarget()));
     return (il);
   }
@@ -2298,10 +2298,10 @@ class DCInstrument {
     InstructionList il = new InstructionList();
 
     if (f instanceof GETFIELD) {
-      il.append (ifact.createDup (obj_type.getSize()));
+      il.append (InstructionFactory.createDup (obj_type.getSize()));
     } else {
       il.append (new SWAP());
-      il.append (ifact.createDup (obj_type.getSize()));
+      il.append (InstructionFactory.createDup (obj_type.getSize()));
     }
 
     int field_num = get_field_num (f.getFieldName(pool), obj_type);
@@ -2348,7 +2348,7 @@ class DCInstrument {
 
     if (f instanceof GETFIELD) {
       // Dup the object ref on the top of stack
-      il.append (ifact.createDup (obj_type.getSize()));
+      il.append (InstructionFactory.createDup (obj_type.getSize()));
 
       // Get the tag value from the tag field
       il.append (ifact.createGetField (classname,
@@ -2361,7 +2361,7 @@ class DCInstrument {
 
       // Put the object ref on the stop of stack and dup it
       il.append (new SWAP());
-      il.append (ifact.createDup (obj_type.getSize()));
+      il.append (InstructionFactory.createDup (obj_type.getSize()));
 
       // Get the tag from the top of the tag stack
       il.append (dcr_call ("pop_tag", Type.OBJECT, Type.NO_ARGS));
@@ -2404,22 +2404,22 @@ class DCInstrument {
                    tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
                    Type.VOID, Type.NO_ARGS, Constants.INVOKESTATIC));
     } else if (f instanceof GETFIELD) {
-      il.append (ifact.createDup (obj_type.getSize()));
+      il.append (InstructionFactory.createDup (obj_type.getSize()));
       il.append (ifact.createInvoke (classname,
                  tag_method_name (GET_TAG, classname, f.getFieldName(pool)),
                  Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
     } else { // must be put field
       if (field_type.getSize() == 2) {
         LocalVariableGen lv = get_tmp2_local (mg, field_type);
-        il.append (ifact.createStore (field_type, lv.getIndex()));
-        il.append (ifact.createDup (obj_type.getSize()));
+        il.append (InstructionFactory.createStore (field_type, lv.getIndex()));
+        il.append (InstructionFactory.createDup (obj_type.getSize()));
         il.append (ifact.createInvoke (classname,
                    tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
                    Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
-        il.append (ifact.createLoad (field_type, lv.getIndex()));
+        il.append (InstructionFactory.createLoad (field_type, lv.getIndex()));
       } else {
         il.append (new SWAP());
-        il.append (ifact.createDup (obj_type.getSize()));
+        il.append (InstructionFactory.createDup (obj_type.getSize()));
         il.append (ifact.createInvoke (classname,
                    tag_method_name(SET_TAG, classname, f.getFieldName(pool)),
                    Type.VOID, Type.NO_ARGS, Constants.INVOKEVIRTUAL));
@@ -2488,7 +2488,7 @@ class DCInstrument {
     InstructionList il = new InstructionList();
 
     // Push the tag frame and the index of this local
-    il.append (ifact.createLoad (tag_frame_local.getType(),
+    il.append (InstructionFactory.createLoad (tag_frame_local.getType(),
                                  tag_frame_local.getIndex()));
     debug_instrument_inst.log ("CreateLoad %s %d%n", tag_frame_local.getType(),
                                tag_frame_local.getIndex());
@@ -2718,7 +2718,7 @@ class DCInstrument {
     }
     if (cinit == null) {
       InstructionList il = new InstructionList();
-      il.append (ifact.createReturn (Type.VOID));
+      il.append (InstructionFactory.createReturn (Type.VOID));
       MethodGen cinit_gen = new MethodGen (Constants.ACC_STATIC, Type.VOID,
         Type.NO_ARGS, new String[0], "<clinit>", gen.getClassName(), il, pool);
       cinit_gen.setMaxLocals();
@@ -3290,7 +3290,7 @@ class DCInstrument {
                                   ts.getTarget()));
     } else if (inst instanceof IfInstruction) {
       IfInstruction ifi = (IfInstruction) inst;
-      il.append (ifact.createBranchInstruction (inst.getOpcode(),
+      il.append (InstructionFactory.createBranchInstruction (inst.getOpcode(),
                                                 ifi.getTarget()));
     } else {
       il.append (inst);
@@ -3551,7 +3551,7 @@ class DCInstrument {
 
     // If the method is not static, push the instance on the stack
     if (!mg.isStatic())
-      il.append(ifact.createLoad(new ObjectType(gen.getClassName()), 0));
+      il.append(InstructionFactory.createLoad(new ObjectType(gen.getClassName()), 0));
 
     // if call is sun.reflect.Reflection.getCallerClass (realFramesToSkip)
     if (mg.getName().equals("getCallerClass")
@@ -3560,7 +3560,7 @@ class DCInstrument {
       // The call returns the class realFramesToSkip up on the stack. Since we
       // have added this call in between, we need to increment that number
       // by 1.
-      il.append(ifact.createLoad(Type.INT, 0));
+      il.append(InstructionFactory.createLoad(Type.INT, 0));
       il.append(ifact.createConstant(1));
       il.append(new IADD());
       // System.out.printf("adding 1 in %s.%s\n", gen.getClassName(),
@@ -3643,7 +3643,7 @@ class DCInstrument {
     */
     // If the method is not static, push the instance on the stack
     if (!mg.isStatic())
-      il.append(ifact.createLoad(new ObjectType(gen.getClassName()), 0));
+      il.append(InstructionFactory.createLoad(new ObjectType(gen.getClassName()), 0));
 
     // if call is sun.reflect.Reflection.getCallerClass (realFramesToSkip)
     if (mg.getName().equals("getCallerClass")
@@ -3652,7 +3652,7 @@ class DCInstrument {
       // The call returns the class realFramesToSkip up on the stack. Since we
       // have added this call in between, we need to increment that number
       // by 1.
-      il.append(ifact.createLoad(Type.INT, 0));
+      il.append(InstructionFactory.createLoad(Type.INT, 0));
       il.append(ifact.createConstant(1));
       il.append(new IADD());
       // System.out.printf("adding 1 in %s.%s\n", gen.getClassName(),
@@ -3927,10 +3927,10 @@ class DCInstrument {
     InstructionList il = new InstructionList();
 
     if (!f.isStatic())
-      il.append (ifact.createThis());
+      il.append (InstructionFactory.createThis());
     il.append (ifact.createConstant (tag_offset));
     il.append (dcr_call (methodname, Type.VOID, args));
-    il.append (ifact.createReturn (Type.VOID));
+    il.append (InstructionFactory.createReturn (Type.VOID));
 
     // Create the get accessor method
     MethodGen get_method
@@ -3979,10 +3979,10 @@ class DCInstrument {
     InstructionList il = new InstructionList();
 
     if (!f.isStatic())
-      il.append (ifact.createThis());
+      il.append (InstructionFactory.createThis());
     il.append (ifact.createConstant (tag_offset));
     il.append (dcr_call (methodname, Type.VOID, args));
-    il.append (ifact.createReturn (Type.VOID));
+    il.append (InstructionFactory.createReturn (Type.VOID));
 
     // Create the get accessor method
     MethodGen set_method
@@ -4020,15 +4020,15 @@ class DCInstrument {
                                       "equals_dcomp_instrumented",
                                       gen.getClassName(), il, pool);
 
-    il.append(ifact.createLoad(Type.OBJECT, 0));  // load this
-    il.append(ifact.createLoad(Type.OBJECT, 1));  // load obj
+    il.append(InstructionFactory.createLoad(Type.OBJECT, 0));  // load this
+    il.append(InstructionFactory.createLoad(Type.OBJECT, 1));  // load obj
     il.append(new ACONST_NULL());                 // use null for marker
     il.append(ifact.createInvoke(gen.getClassName(),
                                  "equals",
                                  Type.BOOLEAN,
                                  new Type[] { Type.OBJECT, dcomp_marker },
                                  Constants.INVOKEVIRTUAL));
-    il.append(ifact.createReturn(Type.BOOLEAN));
+    il.append(InstructionFactory.createReturn(Type.BOOLEAN));
     method.setMaxStack();
     method.setMaxLocals();
     gen.addMethod(method.getMethod());
@@ -4054,14 +4054,14 @@ class DCInstrument {
                                      new String[] { "obj" }, "equals",
                                      gen.getClassName(), il, pool);
 
-    il.append(ifact.createLoad(Type.OBJECT, 0));  // load this
-    il.append(ifact.createLoad(Type.OBJECT, 1));  // load obj
+    il.append(InstructionFactory.createLoad(Type.OBJECT, 0));  // load this
+    il.append(InstructionFactory.createLoad(Type.OBJECT, 1));  // load obj
     il.append(ifact.createInvoke(gen.getSuperclassName(),
                                  "equals",
                                  Type.BOOLEAN,
                                  new Type[] { Type.OBJECT },
                                  Constants.INVOKESPECIAL));
-    il.append(ifact.createReturn(Type.BOOLEAN));
+    il.append(InstructionFactory.createReturn(Type.BOOLEAN));
     method.setMaxStack();
     method.setMaxLocals();
     gen.addMethod(method.getMethod());
@@ -4103,13 +4103,13 @@ class DCInstrument {
                                      new String[] {  }, "clone",
                                      gen.getClassName(), il, pool);
 
-    il.append(ifact.createLoad(Type.OBJECT, 0));  // load this
+    il.append(InstructionFactory.createLoad(Type.OBJECT, 0));  // load this
     il.append(ifact.createInvoke(gen.getSuperclassName(),
                                  "clone",
                                  Type.OBJECT,
                                  Type.NO_ARGS,
                                  Constants.INVOKESPECIAL));
-    il.append(ifact.createReturn(Type.OBJECT));
+    il.append(InstructionFactory.createReturn(Type.OBJECT));
     method.setMaxStack();
     method.setMaxLocals();
     gen.addMethod(method.getMethod());
@@ -4343,13 +4343,13 @@ class DCInstrument {
     // if mg is dynamic, Push 'this' on the stack
     int offset = 0;
     if (!mg.isStatic()) {
-      il.append (ifact.createThis());
+      il.append (InstructionFactory.createThis());
       offset = 1;
     }
 
     // push each argument on the stack
     for (Type arg_type : mg.getArgumentTypes()) {
-      il.append (ifact.createLoad (arg_type, offset));
+      il.append (InstructionFactory.createLoad (arg_type, offset));
       offset += arg_type.getSize();
     }
 
@@ -4360,7 +4360,7 @@ class DCInstrument {
     il.append (ifact.createInvoke (mg.getClassName(), mg.getName(),
                                    ret_type, mg.getArgumentTypes(), kind));
 
-    il.append (ifact.createReturn (ret_type));
+    il.append (InstructionFactory.createReturn (ret_type));
 
     // Create the method
     Type[] arg_types = BCELUtil.add_type (mg.getArgumentTypes(), dcomp_marker);

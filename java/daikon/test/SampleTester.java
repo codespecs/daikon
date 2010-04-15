@@ -126,7 +126,7 @@ public class SampleTester extends TestCase {
   private static /*@Nullable*/ String find_file (String fname) {
 
     URL input_file_location =
-      ClassLoader.getSystemClassLoader().getSystemResource (fname);
+      ClassLoader.getSystemResource (fname);
 
     if (input_file_location == null)
       return (null);
