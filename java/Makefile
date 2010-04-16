@@ -422,6 +422,7 @@ xlint: chicory ${ALL_GENERATED_FILES}
 all_directly: ${AUTO_GENERATED_FILES} plume-copy-and-check
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
+	rm -f `find daikon -name "*.class" -print`
 	@echo ${JAVA_FILES} > java_files.txt
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
