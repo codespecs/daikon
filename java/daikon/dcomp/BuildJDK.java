@@ -104,6 +104,11 @@ public class BuildJDK {
       "sun.tools.jps.Jps.main",
       "sun.net.www.MimeTable.saveAsProperties",
       "sun.misc.Service.parse",
+      "sun.font.Type1Font.readFile",
+      "sun.misc.Resource.getBytes",
+      "java.util.ServiceLoader.parse",
+      "sun.jkernel.Bundle.loadReceipts",
+      "sun.nio.ch.PipeImpl$Initializer.run",
   };
 
   /**

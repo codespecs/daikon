@@ -520,7 +520,7 @@ dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	install -d $(DCOMP_RT)
-	$(JAVA) -Xmx1600m daikon.dcomp.BuildJDK "$(ORIG_RT)" $(DCOMP_RT)
+	$(JAVA) -Xmx1590m daikon.dcomp.BuildJDK "$(ORIG_RT)" $(DCOMP_RT)
 	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 dyncomp-jdk-no-primitives dcomp-jdk-no-primitives  : dcomp_premain.jar
@@ -1084,9 +1084,9 @@ showvars:
 	@echo jsr308_imports = $(jsr308_imports)
 	@echo INTERNING_JAVA_FILES = $(INTERNING_JAVA_FILES)
 	@echo INTERNING_JAVA_FILES_COUNTS = $(INTERNING_JAVA_FILES_COUNTS)
+	@echo JDKDIR = $(JDKDIR)
 
-dump:
-	showvars
+dump: showvars
 
 showvar_JAVA_FILES:
 	@echo ${JAVA_FILES}
@@ -1106,7 +1106,7 @@ daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTes
 	${JAVAC_COMMAND} $<
 	rm -f $@
 	${JAVA} daikon.test.split.SplitterFactoryTestUpdater
-	chmod -w $@
+	chmod a-w $@
 
 ## I don't understand why this is necessary, but it seems to be
 daikon/test/split/SplitterFactoryTest.class: daikon/test/split/SplitterFactoryTest.java
