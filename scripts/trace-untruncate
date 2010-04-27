@@ -12,12 +12,15 @@
 # backup file whose name has suffix ".bak".
 
 
+# The line
+#    $/ = ""
+# for reading by paragraphs does not work for non-native files (e.g., for
+# DOS files when working on Unix or for Unix files when working on DOS).
+# Furthermore, $/ is a string and not a regexp, so there is little hope for
+# fixing this, say by setting it to a regexp like "\015?\012(\015?\012)+".
+# That suggests that this whole script should be abandoned and rewritten.
 BEGIN { $/ = ""; }
-
-# This removes a specific bad paragraph
-# if ($_ eq "TestTuple:::CLASS\nshape\nnull\n1\nwinPos\nnull\n1\ncursor\nnull\n1\n\n")
-#   { undef $_; }
 
 if (defined($last))
   { print $last; }
-$last = $_
+$last = $_;
