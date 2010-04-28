@@ -2113,7 +2113,12 @@ The following information about the program point (@code{ppt-info}) can be speci
 
 Specifies the @var{type} of the program point.  Possible program point
 types are @code{point}, @code{class}, @code{object}, @code{enter}, 
-@code{exit}, @code{subexit}.
+@code{exit}, @code{subexit}.  Except for @code{point} all of these
+types are related to the program point hierarchy (see @ref{Dataflow hierarchy}).
+
+A @code{point} program point is one that is @emph{not} involved in a
+program point hierarchy.   This is normally used when the input is not
+from a programming language or when is no dataflow hierarchy.
 
 @item @code{flags <flags>}
 
