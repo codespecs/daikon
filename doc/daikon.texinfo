@@ -4883,10 +4883,11 @@ initialization.  You can attach a debugger such as @code{gdb} to the
 running process by running gdb on @file{inst/lib/valgrind/x86-linux/fjalar} under
 the Kvasir directory and using the @code{attach} command.
 
-@item --debug
+@item --kvasir-debug
+@itemx --fjalar-debug
 @itemx --dyncomp-debug
 
-Enable progress messages meant for debugging problems with Kvasir or
+Enable progress messages meant for debugging problems with Kvasir, Fjalar, or
 DynComp.  By default, they are disabled.  This option is intended mainly
 for Kvasir's developers.
 
