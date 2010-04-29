@@ -1,10 +1,17 @@
 #!/usr/bin/env perl
 
+# Takes as input a trace file.
+# Produces as output a file with one line per program point name.
+# The line gives the number of occurrences of the corresponding "enter"
+# and "exit" program points.
+
 use strict;
 use 5.006;
 use warnings;
 
 # $ppt_count{ppt_name} = [count, num_lines];
+# num_lines is the number of lines in each dtrace record.
+# It is measured to detect discrepancies, which indicate errors in the trace file.
 my %ppt_count;
 
 my %long_names;
@@ -20,8 +27,9 @@ while (<>) {
     if (exists $ppt_count{$name}) {
 	$ppt_count{$name}[0]++;
 	die "Mismatched line count ($ppt_count{$name}[1] vs. $line_count)".
-	  " for $name"
-	    unless $ppt_count{$name}[1] == $line_count;
+	  " for $name in $_"
+	    unless (($ppt_count{$name}[1] == $line_count)
+                    || ($_ =~ "// EOF"));
     } else {
 	$ppt_count{$name}[0] = 1;
 	$ppt_count{$name}[1] = $line_count;
