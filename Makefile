@@ -18,7 +18,7 @@ DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html CHANGES \
 				  daikon.texinfo developer.texinfo config-options.texinfo \
 				  invariants-doc.texinfo developer.pdf developer.ps
 # EMACS_PATHS := emacs/daikon-context-gui.el
-README_FILES := README-dist.txt README-dist-doc.txt README-daikon-java.txt
+README_FILES := README-dist.txt README-dist.html README-dist-doc.txt README-daikon-java.txt
 README_PATHS := $(addprefix doc/,$(README_FILES))
 # Files that contain the (automatically updated) version number and date.
 DIST_VERSION_FILES := ${README_PATHS} \
