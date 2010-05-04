@@ -19,6 +19,14 @@ Further documentation can be found in:
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
+4.6.5
+
+Kvasir
+
+  User Documentation
+
+    Added documentation for several previously undocumented Kvasir
+    command line options.
 
 4.6.4 (March 14 2010)
 

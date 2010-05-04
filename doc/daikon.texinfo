@@ -4672,6 +4672,10 @@ Other options affecting the amount of output Kvasir produces:
 
 @table @option
 
+@item --object-ppts
+Enables printing of object program points for C/C++ structs and C++
+classes. See @ref{Program points} for more information.
+
 @item --flatten-arrays
 This option forces the flattening of statically-sized arrays into
 separate variables, one for each element.  For example, an array
@@ -4890,6 +4894,30 @@ the Kvasir directory and using the @code{attach} command.
 Enable progress messages meant for debugging problems with Kvasir, Fjalar, or
 DynComp.  By default, they are disabled.  This option is intended mainly
 for Kvasir's developers.
+
+@item --no-path-compression
+@itemx --no-var-leader
+@itemx --no-val-leader
+
+These disable optimizations to Dyncomp's abstract type inference 
+implementation. These are disabled by default. These options are
+intended mainly for Dyncomp developers.
+
+@item --dyncomp-trace
+@itemx --dyncomp-trace-merge
+@itemx -- dyncomp-print-inc
+
+Enables trace messages to be output to stderr. These are disabled by
+default. These options are intended mainly for Dyncomp developers.
+
+@item --gcc3
+
+Experimental option. This option improves Kvasir's support for GCC 3.x 
+created binaries. This option is fairly untested, but may be useful
+for anyone attempting to run Kvasir on GCC 3.x created binaries. We
+recommend the use of GCC 4.1 for creating binaries for use
+with Kvasir. See @ref{Kvasir implementation and limitations} for 
+more information.
 
 @end table
 
@@ -5920,9 +5948,9 @@ multidimensional arrays into multiple single-dimensional arrays.
 
 @item
 Kvasir behaves somewhat differently with different versions of GCC@.
-We have had the best results with GCC versions 4.1 (which we use for
-testing) and 3.3/3.4.  If feasible, we recommend that you use
-Kvasir with such a relatively recent version of GCC@.  Incompatibilities
+We have had the best results with GCC versions 4.1 and 4.3 (which we use for
+testing).  If feasible, we recommend that you use Kvasir with one of
+these versions of GCC@.  Incompatibilities
 between Kvasir and the debugging information produced by older GCC
 versions can lead to incorrect output and, in some cases for version
 2.95, can cause Kvasir to crash.
