@@ -378,7 +378,9 @@ public final class FileIO {
           try {
             vardef.checkRep();  // make sure the previous variable is ok
           } catch (AssertionError e) {
-            decl_error (state, e.getMessage());
+            String msg = e.getMessage();
+            if (msg == null) { throw e; }
+            decl_error (state, msg);
           }
           vardef = new VarDefinition (state, scanner);
           if (varmap.containsKey (vardef.name))
@@ -394,7 +396,9 @@ public final class FileIO {
       try {
         vardef.checkRep();
       } catch (AssertionError e) {
-        decl_error (state, e.getMessage());
+        String msg = e.getMessage();
+        if (msg == null) { throw e; }
+        decl_error (state, msg);
       }
     }  
 
