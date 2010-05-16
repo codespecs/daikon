@@ -2772,8 +2772,8 @@ Simplify processing, this filter doesn't do anything.
 For every invariant, Daikon estimates the probability of that invariant
 happening by chance.  If that probability is less than the limit, then
 the invariant is deemed to be an actual invariant, not just a chance
-occurrence.  Currently the limit is .01%.  So by default, only invariants
-with probabilities of less than .01% are shown.  See the @option{--conf_limit}
+occurrence.  Currently the limit is .01.  So by default, only invariants
+with probabilities of less than 1% are shown.  See the @option{--conf_limit}
 option (@pxref{Options to control invariant detection}).
 
 
