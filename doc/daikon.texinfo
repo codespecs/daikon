@@ -3434,7 +3434,7 @@ requires no change to Daikon or its front ends.
 
 At the top of a loop (or at any other location in the program at which
 you would like to obtain invariants), insert a call to a dummy procedure
-that does not work but returns immediately.  Pass, as arguments to the
+that does no work but returns immediately.  Pass, as arguments to the
 dummy procedure, all variables of interest (including local variables).
 Daikon will produce (identical) preconditions and postconditions for the
 dummy procedure; these are properties that held at the call site.
