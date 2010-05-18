@@ -23,6 +23,11 @@ Further documentation can be found in:
 
 Kvasir
 
+  User-visible changes
+
+    Fixed an issue where Fjalar would not correctly traverse variables
+    when using the var-list-file option.    
+
   User Documentation
 
     Added documentation for several previously undocumented Kvasir
