@@ -29,6 +29,7 @@ public class InvariantChecker {
   private static final String dir_SWITCH = "dir";
   private static final String conf_SWITCH = "conf";
   private static final String filter_SWITCH = "filter";
+  private static final String verbose_SWITCH = "verbose";
 
   private static String usage =
     UtilMDE.joinLines(
@@ -43,6 +44,7 @@ public class InvariantChecker {
       "      Checks only invariants that are not filtered by the default filters",
       "  --" + dir_SWITCH + " directory with invariant and dtrace files",
       "      We output how many invariants failed for each invariant file. We check for failure against any sample in any dtrace file.",
+      "  --" + verbose_SWITCH + " print all failing samples",
       "  --" + Daikon.config_option_SWITCH + " config_var=val",
       "      Sets the specified configuration variable.  ",
       "  --" + Daikon.debugAll_SWITCH,
@@ -104,6 +106,7 @@ public class InvariantChecker {
       new LongOpt(dir_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(conf_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(filter_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(verbose_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
@@ -123,6 +126,8 @@ public class InvariantChecker {
           doConf = true;
         } else if (filter_SWITCH.equals (option_name)) {
           doFilter = true;
+        } else if (verbose_SWITCH.equals (option_name)) {
+          quiet = false;
         } else if (dir_SWITCH.equals (option_name)) {
           dir_file = new File (g.getOptarg());
           if (!dir_file.exists() || !dir_file.isDirectory())
