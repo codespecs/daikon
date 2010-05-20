@@ -4916,7 +4916,7 @@ Experimental option. This option improves Kvasir's support for GCC 3.x
 created binaries. This option is fairly untested, but may be useful
 for anyone attempting to run Kvasir on GCC 3.x created binaries. We
 recommend the use of GCC 4.1 for creating binaries for use
-with Kvasir. See @ref{Kvasir implementation and limitations} for 
+with Kvasir. See @ref{Kvasir limitations} for 
 more information.
 
 @end table
@@ -7895,6 +7895,10 @@ Checks only invariants that are above the default confidence level.
 
 @item --filter
 Checks only invariants that are not filtered by the default filters.
+
+@item --verbose
+Print all samples that violate an invariant.  By default only the totals
+are printed.
 
 @item --dir @var{directory-name}
 Processes all invariant files in the given directory and reports the
