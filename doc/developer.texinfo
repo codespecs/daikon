@@ -675,6 +675,14 @@ class Example @{
 @}
 @end example
 
+(Daikon's Java front end, Chicory, does not actually insert
+instrumentation into the Java source code of your program.  Rather, it
+instruments the bytecode as it is loaded into the JVM.  This is more
+efficient, and it avoids making any changes to your @code{.java} or
+@code{.class} files.  We have shown an example of  Java source code
+instrumentation because that is  simpler to explain and understand than
+the bytecode instrumentation.)
+
 
 @node    Instrumenting C programs,  , Example instrumented Java program, New front ends
 @subsection Instrumenting C programs
