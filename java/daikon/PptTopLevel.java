@@ -532,18 +532,23 @@ public class PptTopLevel extends Ppt {
 
   /**
    * An upper bound on the number of distinct pairs of values
-   * that have been seen.
+   * that have been seen.  Note that there can't be more pairs of
+   * values than there are samples.  This matters when there are very
+   * few samples due to one of the variables being missing.
    **/
   public int num_values(VarInfo vi1, VarInfo vi2) {
-    return num_values(vi1) * num_values(vi2);
+    return Math.min (num_samples (vi1, vi2), num_values(vi1) * num_values(vi2));
   }
 
   /**
    * An upper bound on the number of distinct values over vi1, vi2, and vi3
-   * that have been seen.
+   * that have been seen.  Note that there can't be more pairs of
+   * values than there are samples.  This matters when there are very
+   * few samples due to one of the variables being missing.
    **/
   public int num_values(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
-    return num_values(vi1) * num_values(vi2) * num_values(vi3);
+    return Math.min (num_samples (vi1, vi2, vi3), 
+                     num_values(vi1) * num_values(vi2) * num_values(vi3));
   }
 
   // Get the actual views from the HashMap
