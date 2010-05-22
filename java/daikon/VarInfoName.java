@@ -176,6 +176,7 @@ public abstract /*@Interned*/ class VarInfoName
    * @return the string representation (interned) of this name, in the
    * default output format
    **/
+  /*@Pure*/
   public /*@Interned*/ String name() {
     if (name_cached == null) {
       try {

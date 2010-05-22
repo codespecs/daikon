@@ -26,7 +26,6 @@ import daikon.asm.X86Instruction;
  * are looked for over all combinations of variables from all of the program
  * points that make up the combined ppt.
  */
-@SuppressWarnings("nullness")   // defer annotating this class to later
 public class PptCombined extends PptTopLevel {
 
   // We are Serializable, so we specify a version to allow changes to
@@ -47,22 +46,22 @@ public class PptCombined extends PptTopLevel {
    * Map from the name of a redundant variable to its leader (the earliest
    * executed variable with guaranteed statically to have the same value).
    */
-  public Map<String, String> rvars = null;
+  public Map<String, String> rvars;
 
   /**
    * If non-null, we will compute redundant binary variables
    * when creating a CombinedProgramPoint, using
    * the assembly information in the file specified.
    */
-  public static String dkconfig_asm_path_name = null;
+  public static /*@Nullable*/ String dkconfig_asm_path_name = null;
 
   /**
    * If redundant variables are being computed, the results
    * of the redundancy analysis are printed to this stream.
    * See dkconfig_asm_path_name above.
    */
-  public static String dkconfig_rvars_file = null;
-  private static PrintStream rvars_stream = null;
+  public static /*@Nullable*/ String dkconfig_rvars_file = null;
+  private static /*@LazyNonNull*/ PrintStream rvars_stream = null;
 
   public PptCombined (List<PptTopLevel> ppts, CombinedVisResults vis) {
 
@@ -72,7 +71,7 @@ public class PptCombined extends PptTopLevel {
            new ArrayList<ParentRelation>(), EnumSet.noneOf (PptFlags.class),
            null, ppts.get(0).function_id, -1, vis.var_infos);
     this.ppts = new ArrayList<PptTopLevel>(ppts);
-    this.rvars = vis.rvarMap; // May be null.
+    this.rvars = vis.rvarMap;
     init();
     System.out.printf ("Combined ppt %s has %d variables%n", name(),
                        var_infos.length);
@@ -101,6 +100,7 @@ public class PptCombined extends PptTopLevel {
   }
 
   // Preconditions: assemblies != null.
+  @NonNullVariable("assemblies")
   private static Map<String, String> computeRedundantVariables(List<PptTopLevel> ppts) {
     assert assemblies != null;
     //System.out.println("Computing redundant variables in combined ppt...");
@@ -132,6 +132,7 @@ public class PptCombined extends PptTopLevel {
     return result;
   }
 
+  @NonNullVariable("assemblies")
   private static List<IInstruction> createPath(List<PptTopLevel> ppts) {
     List<IInstruction> path;
     path = new ArrayList<IInstruction>();
@@ -186,6 +187,7 @@ public class PptCombined extends PptTopLevel {
   // Checks that variables in var_infos are the same are the variables
   // obtained from the asm file for this set of basic blocks.
   // Happens to return number of variables (TODO remove this ugliness).
+  @NonNullVariable("assemblies")
   private static int checkVarsOk(List<PptTopLevel> ppts, List<VarInfo> list) {
 
     // Create the set of variables in var_infos.
@@ -261,8 +263,10 @@ public class PptCombined extends PptTopLevel {
 
     Set<PptTopLevel> visited = new LinkedHashSet<PptTopLevel>();
     Queue<PptTopLevel> toProcess = new LinkedList<PptTopLevel>();
-    toProcess.addAll(dest.predecessors);
-    if (!dest.predecessors.contains(dest)) {
+    @SuppressWarnings("nullness")
+    /*@NonNull*/ List<PptTopLevel> preds = dest.predecessors;
+    toProcess.addAll(preds);
+    if (!preds.contains(dest)) {
       // Check to see if this basic block really does not have a
       // self-loop. If it does, output warning message (but in galar)
       // and add the loop ourselves.
@@ -272,11 +276,14 @@ public class PptCombined extends PptTopLevel {
       }
     }
     while (!toProcess.isEmpty()) {
-      PptTopLevel p = toProcess.poll();
+      @SuppressWarnings("nullness") // dependent: just checked that !toProcess.isEmpty()
+      /*@NonNull*/ PptTopLevel p = toProcess.poll();
       if (p == source)
         continue;
       visited.add(p);
-      for (PptTopLevel parent: p.predecessors) {
+      @SuppressWarnings("nullness") // only visiting things that are linked into predecessors grahp
+      /*@NonNull*/ List<PptTopLevel> ppreds = p.predecessors;
+      for (PptTopLevel parent: ppreds) {
         if (!visited.contains(parent))
           toProcess.add(parent);
       }
@@ -284,7 +291,8 @@ public class PptCombined extends PptTopLevel {
     return new ArrayList<PptTopLevel>(visited);
   }
 
-  // WORKAROUND FOR BUG IN GALAR, which does not output self-cycles.
+  // WORKAROUND FOR BUG IN GALAR (x86 front end), which does not output self-cycles.
+  @NonNullVariable("assemblies")
   private static boolean has_self_cycle(PptTopLevel ppt) {
     assert assemblies != null;
 
@@ -360,7 +368,7 @@ public class PptCombined extends PptTopLevel {
     int vals_array_size = var_infos.length - num_static_constant_vars;
 
     // Allocate arrays for the combined values and mod information
-    Object[] vals = new Object[vals_array_size];
+    /*@Nullable*/ Object[] vals = new Object[vals_array_size];
     int[] mods = new int[vals_array_size];
     ValueTuple partial_vt = ValueTuple.makeUninterned (vals, mods);
 
@@ -416,7 +424,7 @@ public class PptCombined extends PptTopLevel {
 
   private static class CombinedVisResults {
     public final VarInfo[] var_infos;
-    public final Map<String,String> rvarMap; // May be null.
+    public final Map<String,String> rvarMap;
     public CombinedVisResults(VarInfo[] vis, Map<String,String> rvarMap) {
       this.var_infos = vis;
       this.rvarMap = rvarMap;
@@ -476,7 +484,7 @@ public class PptCombined extends PptTopLevel {
         System.out.println("End redundant vars");
       }
       if (dkconfig_rvars_file != null) {
-        assert rvars_stream != null;
+        assert rvars_stream != null : "@SuppressWarnings(nullness): dependent: dkconfig_rvars_file is non-null";
         rvars_stream.println("===========================================================================");
         rvars_stream.println(cppt_name);
         for (Map.Entry<String, String> e : redundantVariables.entrySet()) {
@@ -500,10 +508,12 @@ public class PptCombined extends PptTopLevel {
 
       } else if (redundantVariables != null
                  && redundantVariables.containsKey(vi.name())) {
+        @SuppressWarnings("nullness") // map: just called containsKey
+        /*@NonNull*/ String rleader = redundantVariables.get(vi.name());
 
         // Variable is considered redundant. Don't add it to var_info
         // list, and add it to final rvars map.
-        finalRvars.put(vi.name(), redundantVariables.get(vi.name()));
+        finalRvars.put(vi.name(), rleader);
       } else {
 
         // Variable is not redundant. Add it to var_info list, but
@@ -582,6 +592,7 @@ public class PptCombined extends PptTopLevel {
    *
    *    trigger = PptCombined.ppts.get(PptCombined.ppts.size()-1)
    */
+  @SuppressWarnings("nullness") // map (3 times)
   public static void combine_func_ppts (PptMap all_ppts,
           List<PptTopLevel> func_ppts) {
 
@@ -626,8 +637,12 @@ public class PptCombined extends PptTopLevel {
     for (PptTopLevel ppt : func_ppts) {
       List<PptTopLevel> this_pp = new ArrayList<PptTopLevel>();
       pp.put(ppt, this_pp);
-      for (PptTopLevel candidate : postdoms.get(ppt)) {
-        if (predoms.get(candidate).contains(ppt)) {
+      @SuppressWarnings("nullness") // postdoms contains every PptTopLevel
+      /*@NonNull*/ List<PptTopLevel> ppt_postdoms = postdoms.get(ppt);
+      for (PptTopLevel candidate : ppt_postdoms) {
+        @SuppressWarnings("nullness") // postdoms contains every PptTopLevel
+        /*@NonNull*/ List<PptTopLevel> candidate_predoms = predoms.get(candidate);
+        if (candidate_predoms.contains(ppt)) {
           this_pp.add(candidate);
         }
       }
@@ -660,7 +675,9 @@ public class PptCombined extends PptTopLevel {
     // in each one's pp entry.
     PpSizeComparator ppComparator = new PpSizeComparator(pp);
     for (PptTopLevel ppt : func_ppts) {
-      Collections.sort(pp.get(ppt), ppComparator);
+      @SuppressWarnings("nullness") // all func_ppts are in pp
+      /*@NonNull*/ List<PptTopLevel> pp_elt = pp.get(ppt);
+      Collections.sort(pp_elt, ppComparator);
     }
     // Now, the trigger is the last element of each list.
 
@@ -668,8 +685,10 @@ public class PptCombined extends PptTopLevel {
     // Make the combined program points.
     Map<PptTopLevel,PptCombined> trigger_comb = new LinkedHashMap<PptTopLevel, PptCombined>();
     for (PptTopLevel ppt : func_ppts) {
-      List<PptTopLevel> this_pp = pp.get(ppt);
+      @SuppressWarnings("nullness") // pp contains all elements of func_ppts
+      /*@NonNull*/ List<PptTopLevel> this_pp = pp.get(ppt);
       if (this_pp.get(this_pp.size()-1) == ppt) {
+        @SuppressWarnings("nullness") // map: predoms contains ppt
         List<PptTopLevel> ppts_to_combine = new ArrayList<PptTopLevel>(predoms.get(ppt));
         PpSizeComparator predomComparator = new PpSizeComparator(predoms);
         Collections.sort(ppts_to_combine, predomComparator);
@@ -680,12 +699,14 @@ public class PptCombined extends PptTopLevel {
 
     // Actually do the work of side-effecting the ppts.
     for (PptTopLevel ppt : func_ppts) {
-      List<PptTopLevel> this_pp = pp.get(ppt);
+      @SuppressWarnings("nullness") // pp contains all elements of func_ppts
+      /*@NonNull*/ List<PptTopLevel> this_pp = pp.get(ppt);
       PptTopLevel this_trigger = this_pp.get(this_pp.size()-1);
 
       ppt.combined_ppts_init = true;
-      ppt.combined_ppt = trigger_comb.get(this_trigger);
-      assert ppt.combined_ppt != null;
+      @SuppressWarnings("nullness") // map
+      /*@NonNull*/ PptCombined new_combined_ppt = trigger_comb.get(this_trigger);
+      ppt.combined_ppt = new_combined_ppt;
       assert ppt.combined_ppt.ppts.contains(ppt);
       ppt.combined_subsumed = (this_trigger != ppt);
     }
@@ -701,8 +722,12 @@ public class PptCombined extends PptTopLevel {
     public int compare(PptTopLevel ppt1, PptTopLevel ppt2) {
       if (ppt1 == ppt2)
         return 0;
-      int len1 = pp.get(ppt1).size();
-      int len2 = pp.get(ppt2).size();
+      @SuppressWarnings("nullness") // map key
+      /*@NonNull*/ List<PptTopLevel> list1 = pp.get(ppt1);
+      @SuppressWarnings("nullness") // map key
+      /*@NonNull*/ List<PptTopLevel> list2 = pp.get(ppt2);
+      int len1 = list1.size();
+      int len2 = list2.size();
       return len1 - len2;
     }
   }
@@ -731,7 +756,7 @@ public class PptCombined extends PptTopLevel {
       }
     }
 
-    PptTopLevel trigger;
+    /*@NonNull*/ PptTopLevel trigger;
     boolean ppts_in_dominator_order = true;
 
     if (ppts_in_dominator_order) {
@@ -772,17 +797,25 @@ public class PptCombined extends PptTopLevel {
     } else { // ppts are NOT in dominator order
 
       //Find the trigger (and make sure there is only one)
-      trigger = null;
-      for (PptTopLevel ppt : ppts) {
-        if (!ppt.combined_subsumed && (ppt.combined_ppt == this)) {
-          if (trigger == null)
-            trigger = ppt;
-          else {
-            System.out.printf ("ERROR: multiple triggers (%s,%s) for %s\n",
-                               trigger, ppt, this);
-            return false;
+      {
+        PptTopLevel trigger_candidate = null;
+        for (PptTopLevel ppt : ppts) {
+          if (!ppt.combined_subsumed && (ppt.combined_ppt == this)) {
+            if (trigger_candidate == null)
+              trigger_candidate = ppt;
+            else {
+              System.out.printf ("ERROR: multiple triggers (%s,%s) for %s\n",
+                                 trigger_candidate, ppt, this);
+              return false;
+            }
           }
         }
+
+        if (trigger_candidate == null) {
+          throw new Error("No trigger candidate");
+        }
+
+        trigger = trigger_candidate;
       }
 
       // Make sure every other block pre-dominates the trigger
@@ -858,7 +891,8 @@ public class PptCombined extends PptTopLevel {
       String succs = "";
       if (ppt.ppt_successors != null) {
         for (String succ : ppt.ppt_successors) {
-          PptTopLevel ppt_succ = Daikon.all_ppts.get (succ);
+          @SuppressWarnings("nullness") // map key
+          /*@NonNull*/ PptTopLevel ppt_succ = Daikon.all_ppts.get (succ);
           if (succs == "")      // "interned"
             succs = bb_short_name (ppt_succ);
           else

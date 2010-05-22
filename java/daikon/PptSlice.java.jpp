@@ -205,7 +205,7 @@ public final class PPTSLICE1 extends PptSlice {
   }
 
   /**
-   * Returns (an approximation to) the number of distinct values observed
+   * Returns an upper bound on the number of distinct values observed
    * at this slice.  This is not the number of samples observed.
    **/
   public int num_values() {

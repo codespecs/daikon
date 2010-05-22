@@ -159,7 +159,7 @@ public class InstructionUtils {
   /**
    * Computes a set of binary variables that are guaranteed to be redundant.
    *
-   * The redundant variables are returned as a map. Each entry <rvar, leader>
+   * The redundant variables are returned as a map. Each entry &lt;rvar, leader&gt;
    * represents a redundant variable rvar and its leader. If a variable is
    * not in the map, it is not redundant.
    */

@@ -77,6 +77,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   private /*@Interned*/ String str_name; // interned
 
   /** returns the interned name of the variable **/
+  /*@Pure*/
   public /*@Interned*/ String name() {
     if (FileIO.new_decl_format)
       return str_name;
