@@ -233,9 +233,7 @@ public class ParameterDoclet
       out.println("@table @option");
       out.println();
 
-      List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
-      Collections.sort(keys);
-      for (String field : keys) {
+      for (String field : UtilMDE.sortedKeySet(categories[c].fields)) {
         @SuppressWarnings("nullness") // Map.get: iterating over sorted keySet
         /*@NonNull*/ String desc = categories[c].fields.get(field);
         String defstr = getDefaultString(field);
@@ -279,9 +277,7 @@ public class ParameterDoclet
       out.println(categories[c].description);
       out.println();
 
-      List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
-      Collections.sort(keys);
-      for (String field : keys) {
+      for (String field : UtilMDE.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defstr = getDefaultString(field);
 
@@ -297,9 +293,7 @@ public class ParameterDoclet
 
   public void writeList(PrintWriter out) {
     for (int c = 0; c < categories.length; c++) {
-      List<String> keys = new ArrayList<String>(categories[c].fields.keySet());
-      Collections.sort(keys);
-      for (String field : keys) {
+      for (String field : UtilMDE.sortedKeySet(categories[c].fields)) {
         out.println(field);
       }
     }

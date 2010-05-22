@@ -508,7 +508,7 @@ public class PptCombined extends PptTopLevel {
 
       } else if (redundantVariables != null
                  && redundantVariables.containsKey(vi.name())) {
-        @SuppressWarnings("nullness") // map: just called containsKey
+        @SuppressWarnings("nullness") // map: just called containsKey (checker bug???)
         /*@NonNull*/ String rleader = redundantVariables.get(vi.name());
 
         // Variable is considered redundant. Don't add it to var_info

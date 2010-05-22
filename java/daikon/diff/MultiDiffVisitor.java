@@ -6,6 +6,7 @@ import daikon.*;
 import daikon.inv.*;
 import java.io.*;
 import java.util.*;
+import plume.UtilMDE;
 
 /**
  * <B>MultiDiffVisitor</B> is a state-storing NodeVisitor that works
@@ -195,12 +196,10 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         }
 
         // print it all
-        ArrayList<String> theKeys = new ArrayList<String> (lastMap.keySet());
+        String lastPpt = "";
         // sort them so that multiple exits will end up being adjacent
         // to each other when they are from the same method
-        Collections.sort (theKeys);
-        String lastPpt = "";
-        for (String key : theKeys) {
+        for (String key : UtilMDE.sortedKeySet(lastMap)) {
             @SuppressWarnings("nullness") // Map.get: iterating over sorted keyset
             /*@NonNull*/ ArrayList<String> al = lastMap.get(key);
             // don't print anything if there are no selective invariants

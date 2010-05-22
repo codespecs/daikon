@@ -1955,8 +1955,7 @@ public final class FileIO {
           // Print the invocations in sorted order.
           // (Does this work?  The keys are integers. -MDE 7/1/2005.)
           ArrayList<Invocation> invocations = new ArrayList<Invocation>();
-          TreeSet<Integer> keys = new TreeSet<Integer>(call_hashmap.keySet());
-          for (Integer i : keys) {
+          for (Integer i : UtilMDE.sortedKeySet(call_hashmap)) {
             @SuppressWarnings("nullness") // Map.get: iterating over sorted keyset
             /*@NonNull*/ Invocation invok = call_hashmap.get(i);
             assert invok != null;
@@ -2012,8 +2011,7 @@ public final class FileIO {
     }
 
     // Print the invocations in sorted order.
-    TreeSet</*@Interned*/ Invocation> keys = new TreeSet</*@Interned*/ Invocation>(counter.keySet());
-    for (/*@Interned*/ Invocation invok : keys) {
+    for (/*@Interned*/ Invocation invok : UtilMDE.sortedKeySet(counter)) {
       @SuppressWarnings("nullness") // Map.get: iterating over sorted keyset
       /*@NonNull*/ Integer count = counter.get(invok);
       System.out.println(invok.format(false) + " : "

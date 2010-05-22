@@ -232,9 +232,7 @@ public class CreateSpinfo {
     throws IOException {
     if (!replaceStatements.values().isEmpty()) {
       output.println("REPLACE");
-      List<String> methodsList = new ArrayList<String>(replaceStatements.keySet());
-      Collections.sort(methodsList);
-      for (String declaration : methodsList) {
+      for (String declaration : UtilMDE.sortedKeySet(replaceStatements)) {
         output.println(declaration);
         @SuppressWarnings("nullness") // Map.get: iterating over sorted keySet
         /*@NonNull*/ String replacement = replaceStatements.get(declaration);
@@ -242,9 +240,7 @@ public class CreateSpinfo {
       }
       output.println();
     }
-    List<String> methodsList = new ArrayList<String>(conditions.keySet());
-    Collections.sort(methodsList);
-    for (String method : methodsList) {
+    for (String method : UtilMDE.sortedKeySet(conditions)) {
       @SuppressWarnings("nullness") // Map.get: iterating over sorted keySet
       /*@NonNull*/ List<String> method_conds = conditions.get(method);
       Collections.sort(method_conds);
