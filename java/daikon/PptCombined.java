@@ -100,7 +100,7 @@ public class PptCombined extends PptTopLevel {
   }
 
   // Preconditions: assemblies != null.
-  @NonNullVariable("assemblies")
+  /*@NonNullVariable("assemblies")*/
   private static Map<String, String> computeRedundantVariables(List<PptTopLevel> ppts) {
     assert assemblies != null;
     //System.out.println("Computing redundant variables in combined ppt...");
@@ -132,7 +132,7 @@ public class PptCombined extends PptTopLevel {
     return result;
   }
 
-  @NonNullVariable("assemblies")
+  /*@NonNullVariable("assemblies")*/
   private static List<IInstruction> createPath(List<PptTopLevel> ppts) {
     List<IInstruction> path;
     path = new ArrayList<IInstruction>();
@@ -187,7 +187,7 @@ public class PptCombined extends PptTopLevel {
   // Checks that variables in var_infos are the same are the variables
   // obtained from the asm file for this set of basic blocks.
   // Happens to return number of variables (TODO remove this ugliness).
-  @NonNullVariable("assemblies")
+  /*@NonNullVariable("assemblies")*/
   private static int checkVarsOk(List<PptTopLevel> ppts, List<VarInfo> list) {
 
     // Create the set of variables in var_infos.
@@ -292,7 +292,7 @@ public class PptCombined extends PptTopLevel {
   }
 
   // WORKAROUND FOR BUG IN GALAR (x86 front end), which does not output self-cycles.
-  @NonNullVariable("assemblies")
+  /*@NonNullVariable("assemblies")*/
   private static boolean has_self_cycle(PptTopLevel ppt) {
     assert assemblies != null;
 
