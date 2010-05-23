@@ -3816,7 +3816,7 @@ public final class DCRuntime {
     return (obj);
   }
 
-/** DF of result is equal to DF of argument **/
+  /** DF of result is equal to DF of argument **/
   @DFSum ("static-java.lang.Integer.decode")
   public static Integer Integer_decode(String str) {
     Integer val = Integer.decode (str);
