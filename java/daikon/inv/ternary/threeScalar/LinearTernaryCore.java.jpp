@@ -505,10 +505,7 @@ public final class CLASSNAME
     // Find the three points with the maximum separation
     maxsep_triples (dummy);
 
-    // sometimes the points are still null
-    if (dummy[0] == null) {
-      return InvariantStatus.FALSIFIED;
-    }
+    assert dummy[0] != null;
 
     // calculate the coefficients of the equation (a, b, c, d)
     double[] coef = calc_tri_linear (dummy);
