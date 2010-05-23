@@ -1834,7 +1834,7 @@ public abstract /*@Interned*/ class VarInfoName
    * like "this[i..j]".  If an endpoint is null, it means "from the
    * start" or "to the end".
    **/
-  public VarInfoName applySlice(VarInfoName i, VarInfoName j) /*@Interned*/ {
+  public VarInfoName applySlice(/*@Nullable*/ VarInfoName i, /*@Nullable*/ VarInfoName j) /*@Interned*/ {
     // a[] -> a[index..]
     // orig(a[]) -> orig(a[post(index)..])
     ElementsFinder finder = new ElementsFinder(this);
@@ -2838,7 +2838,7 @@ public abstract /*@Interned*/ class VarInfoName
      * sequence. index_base may be null, to represent 0.
      **/
     public static VarInfoName selectNth(VarInfoName root,
-                                        VarInfoName index_base,
+                                        /*@Nullable*/ VarInfoName index_base,
                                         int index_off) {
       QuantifierVisitor qv = new QuantifierVisitor(root);
       List<VarInfoName> unquants = new ArrayList<VarInfoName>(qv.unquants());

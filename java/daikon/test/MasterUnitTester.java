@@ -16,7 +16,7 @@ import daikon.FileIO;
 public class MasterUnitTester extends TestCase {
 
   public static void main(String[] args) {
-    FileIO.new_decl_format = new Boolean(true);
+    FileIO.new_decl_format = Boolean.TRUE;
     TestRunner runner = new TestRunner();
     TestResult result = runner.doRun(suite(), false);
     if (! result.wasSuccessful()) {

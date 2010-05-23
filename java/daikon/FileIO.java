@@ -814,7 +814,7 @@ public final class FileIO {
       decl_error (state, "decl format '%s' does not match previous setting",
                   version);
 
-    new_decl_format = new Boolean (new_df);
+    new_decl_format = Boolean.valueOf (new_df);
   }
 
   // Each line following is the name (in JVM form) of a class that
@@ -1528,7 +1528,7 @@ public final class FileIO {
       // it is the old format
       if (new_decl_format == null) {
         // System.out.printf ("setting new_decl_format to false%n");
-        new_decl_format = new Boolean (false);
+        new_decl_format = Boolean.FALSE;
       }
 
       // First look for declarations in the dtrace stream
