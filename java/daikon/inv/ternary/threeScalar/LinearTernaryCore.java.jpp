@@ -144,7 +144,7 @@ public final class CLASSNAME
   // (The invariant appears to be a bit stronger than that, since there are
   // places that dereference the array unconditionally, assuming that its
   // elements are non-null.  This should be clarified/refactored.)
-  public Point[] def_points = new Point[MINTRIPLES];
+  public /*@Nullable*/ Point[] def_points = new Point[MINTRIPLES];
 
   public Invariant wrapper;
 
@@ -492,22 +492,24 @@ public final class CLASSNAME
    * @return the status of the invariant
    *     (whether the plane fitting was successful)
    */
-  private InvariantStatus planarIntervention(Point[] def_point) {
+  private InvariantStatus planarIntervention(/*@Nullable*/ Point[] def_point) {
 
     // make a copy of the array so that the points don't get clobbered
     // because we need to check all the points in def_points against the
     // coefficients calculated
 
-    Point[] dummy = new Point[def_point.length];
+    /*@Nullable*/ Point[] dummy = new /*@Nullable*/ Point[def_point.length];
     for (int i = 0; i < def_point.length; i++)
       dummy[i] = def_point[i];
 
     // Find the three points with the maximum separation
     maxsep_triples (dummy);
+    // Now, first 3 values of dummy are the maximum-separated 3 points.
 
     assert dummy[0] != null;
 
-    // calculate the coefficients of the equation (a, b, c, d)
+    // Calculate the coefficients of the equation (a, b, c, d).
+    // Requires that the first 3 elements of dummy must be non-null.
     double[] coef = calc_tri_linear (dummy);
 
     a = coef[0];
@@ -586,31 +588,24 @@ public final class CLASSNAME
    * @param def_point  Array of points.  Must have at least 2 elements.
    *
    */
-  private void linearIntervention(Point[] def_point) {
-
-
-    // make a copy of the array so that the points don't get clobbered because
-    // if a line fails to form; the calc_tri_linear code will need an
-    // unmodified copy of def_point
-
-    Point[] dummy = new Point[def_point.length];
-    for (int i = 0; i < def_point.length; i++)
-      dummy[i] = def_point[i];
+  private void linearIntervention(/*@Nullable*/ Point[] def_point) {
 
     // find the max separation points
-    maxsep_doubles(dummy);
+    Point[] maxsep_doubles = maxsep_doubles(def_point);
 
-    // dummy[0] could be null when all the points are NaN
-    if (dummy[0] == null) {
+    // maxsep_doubles[0] could be null when enough points have a NaN
+    if (maxsep_doubles == null) {
       // line_flag == Flag.NO_LINE so the invariant
       // will try to fit a plane to the points and fail
       return;
     } else {
       // find the equation (coefficients now stored in coefficients[])
-      calc_bi_linear(dummy);
+      calc_bi_linear(maxsep_doubles[0], maxsep_doubles[1]);
 
 
-      //check the other points against the coefficients
+      // This seems to imply that all elements of def_points are non-null.
+      // Is that true?
+      // check the other points against the coefficients
       for (int i = 0; i < def_point.length; i++) {
         // try to fit the current point to the current line
         boolean ok = try_points_linear(def_point[i].x, def_point[i].y, def_point[i].z);
@@ -666,61 +661,52 @@ public final class CLASSNAME
   }
 
   /**
-   * Calculates the two points that have the maximum separation in pa and
-   * places them as the first two elements of pa.
+   * Returns the two points that have the maximum separation in pa.
    *
    * @param ps  Array of points.  Must have at least 2 elements.  Can be any
    *            length and can contain nulls (which will be ignored).
-   *            Is side-effected so that the first two elements contain the
-   *            points with the maximum total separation; this may introduce
-   *            duplicates into the array.
    *
-   * @return the maximum separation found.
+   * @return a 2-element array containing the most-separated elements.
+   *         Returns null if no pair of elements is NaN-free.
    */
-  private double maxsep_doubles (Point[] pa) {
+  private Point /*@Nullable*/ [] maxsep_doubles (/*@Nullable*/ Point[] pa) {
 
-    // cache values for the (square of the) distance between each pair of
-    // points, to avoid duplicating work
-    double[][] separations = new double[pa.length][pa.length];
-    for (int i=0; i<pa.length-1; i++) {
-      for (int j=i+1; j<pa.length; j++) {
-        separations[i][j] = separation(pa[i], pa[j]);
-      }
-    }
+    Point p1 = null, p2 = null;
 
-    Point p1 = pa[0], p2 = pa[1]; // initialized to avoid being null
     // max_separation is the separation metric for the most separated
     // pair of points.  We use the sum of the separations as the
     // metric.
-    double max_separation = separations[0][1];
+    double max_separation = Double.MIN_VALUE;
 
-    for (int i=0; i < pa.length-2; i++) {
-      for (int j=i+1; j < pa.length-1; j++) {
-        double separation = separations[i][j];
+    for (int i=0; i < pa.length-1; i++) {
+      for (int j=i+1; j < pa.length; j++) {
+        double separation = separation(pa[i], pa[j]);
         if (separation > max_separation) {
           max_separation = separation;
           p1 = pa[i];
           p2 = pa[j];
-
         }
       }
     }
 
-    pa[0] = p1;
-    pa[1] = p2;
-
+    // This can happen if enough values are NaN.
+    // if (p1 == null) {
+    //   throw new IllegalArgumentException(Arrays.toString(pa));
+    // }
 
     if (Debug.logDetail())
-      wrapper.log ("maxsep_doubles = " + pa[0] + " " + pa[1]);
-    return (max_separation);
+      wrapper.log ("maxsep_doubles = " + p1 + " " + p2);
+    if (p1 == null) {
+      return null;
+    }
+    return new Point[] { p1, p2 };
   }
 
   /**
-   * Calculates the coefficients for the line in 3D using the first two points
+   * Calculates the coefficients for the line in 3D
    * and sets the coefficients[] by side effect.
    *
-   * @param points  array of points to use to calculate the coefficents.  Only
-   *                the first two points are used
+   * @param points  2 points to use to calculate the coefficents.
    */
   //
   //  the line can fall under 3 categories
@@ -752,9 +738,7 @@ public final class CLASSNAME
   //
   //  Note that A, B, C, and D are coefficients that are stored in coefficients[]
 
-  private void calc_bi_linear(Point[] points) {
-    Point p0 = points[0];
-    Point p1 = points[1];
+  private void calc_bi_linear(Point p0, Point p1) {
 
     if ((p0.x == p1.x) && (p0.y == p1.y) && (p0.z != p1.z)) {
       // x and y have constant values
@@ -847,6 +831,7 @@ public final class CLASSNAME
       separation = sep;
       double[] coef;
       try {
+        // Requires that the first 3 elements of def_points must be non-null.
         coef = calc_tri_linear (def_points);
         if (Debug.logDetail())
           wrapper.log ("Calc new plane with points " + def_points[0] + " " +
@@ -904,7 +889,8 @@ public final class CLASSNAME
    * @param p1  First point
    * @param p2  Second point
    *
-   * @return the distance between p1 and p2
+   * @return the distance between p1 and p2, or 0 if either point is null,
+   * or NaN if either point contains a NaN
    */
   double separation(Point p1, Point p2) {
     #if defined(TYPELONG)
@@ -939,7 +925,7 @@ public final class CLASSNAME
   *
   * @return the maximum separation found.
   */
- double maxsep_triples (Point[] pa) {
+ double maxsep_triples (/*@Nullable*/ Point[] pa) {
 
    // cache values for the (square of the) distance between each pair of
    // points, to avoid duplicating work
@@ -950,7 +936,8 @@ public final class CLASSNAME
      }
    }
 
-   Point p1 = pa[0], p2 = pa[0], p3 = pa[0]; // initalize so never null
+   Point p1 = null, p2 = null, p3 = null;
+
    // max_separation is the separation metric for the most separated
    // triple of points.  We use the sum of the separations as the
    // metric.  (The metric "min of the three separations" does not work
@@ -1018,7 +1005,7 @@ public final class CLASSNAME
    * first three points in points.
    *
    * @param points  array of points to use to calculate the coefficents.  Only
-   *                the first three points are used
+   *                the first three points (all of which must be non-null) are used.
    *
    * @return a four element array where a is the first element, b the
    * second, c the third, and d is the fourth.  All elements are
