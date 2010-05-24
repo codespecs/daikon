@@ -3810,6 +3810,8 @@ public final class DCRuntime {
   /** DF of result is equal to DF of argument **/
   @DFSum ("static-java.lang.Boolean.valueOf")
   public static Boolean Boolean_valueOf (boolean val) {
+    // DynComp creates a unique object rather than re-using, so that it can
+    // distinguish different values.
     // Boolean obj = Boolean.valueOf (val);
     Boolean obj = new Boolean(val);
     prim_to_obj (obj);
