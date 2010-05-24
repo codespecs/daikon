@@ -255,7 +255,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns whether or not constant_value is a legal constant **/
-  @AssertNonNullIfFalse("#0")
+  /*@AssertNonNullIfFalse("#0")*/
   static boolean legalConstant (/*@Nullable*/ Object constant_value) {
     return ((constant_value == null) || (constant_value instanceof Long)
             || (constant_value instanceof Double));
@@ -875,7 +875,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * values the first time this method is called.  Subsequent calls
    * use these cached values.
    **/
-  @AssertNonNullIfTrue("getDerivedParam()")
+  /*@AssertNonNullIfTrue("getDerivedParam()")*/
   public boolean isDerivedParam() {
     if (isDerivedParamCached != null) {
       // System.out.printf ("var %s is-derived-param = %b\n", name(),
