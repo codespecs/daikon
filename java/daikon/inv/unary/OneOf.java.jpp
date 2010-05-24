@@ -739,6 +739,7 @@ public final class ONEOFSCALAR
       } else { // base is not an array, presume it is a collection
         VarInfo collection = base.get_enclosing_var();
         assert collection != null : "no enclosing var for " + base.name();
+        assert collection != null : "@SuppressWarnings(nullness)";
         result = collection.esc_name() + ".elementType == "
             + format_esc_string2type(elts[0]);
         // Do not use the \forall, return this directly
@@ -842,8 +843,10 @@ public final class ONEOFSCALAR
     // element type(s).
     if (var().is_typeof()) {
 
-      VarInfo sequence = var().get_enclosing_var();
-      String varname = sequence.get_enclosing_var().esc_name();
+      @SuppressWarnings("nullness")
+      /*@NonNull*/ VarInfo sequence = var().get_enclosing_var();
+      @SuppressWarnings("nullness")
+      /*@NonNull*/ String varname = sequence.get_enclosing_var().esc_name();
       String type = null;
       boolean consistent = true;
       for (int i=0; consistent && i<num_elts; i++) {
