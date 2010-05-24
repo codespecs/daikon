@@ -54,7 +54,7 @@ public final class CallerContextSplitter
     return (caller_varinfo != null);
   }
 
-  /*@NonNullVariable("caller_varinfo")*/
+  /*@NonNullOnEntry("caller_varinfo")*/
   public boolean test(ValueTuple vt) {
     long caller = caller_varinfo.getIntValue(vt);
     return (ArraysMDE.indexOf(ids, caller) >= 0);

@@ -929,7 +929,7 @@ public abstract class Invariant
    * Compare based on arity, then printed representation.
    **/
   public static final class InvariantComparatorForPrinting implements Comparator<Invariant> {
-    /*@NonNullVariable("FileIO.new_decl_format")*/
+    /*@NonNullOnEntry("FileIO.new_decl_format")*/
     public int compare(/*@NonPrototype*/ Invariant inv1, /*@NonPrototype*/ Invariant inv2) {
       if (inv1 == inv2)
         return 0;

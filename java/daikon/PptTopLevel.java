@@ -2855,7 +2855,7 @@ public class PptTopLevel extends Ppt {
    * logically implied by others.  Uses the provided test interface to
    * determine if an invariant is within the domain of inspection.
    **/
-  /*@NonNullVariable("proverStack")*/
+  /*@NonNullOnEntry("proverStack")*/
   private void markImpliedViaSimplify_int(
     PptMap all_ppts,
     SimplifyInclusionTester test)
@@ -3098,7 +3098,7 @@ public class PptTopLevel extends Ppt {
 
   /** Go though an array of invariants, marking those that can be
    * proved as consequences of others as redundant. */
-  /*@NonNullVariable("proverStack")*/
+  /*@NonNullOnEntry("proverStack")*/
   private void flagRedundantRecursive(
     InvariantLemma[] lemmas,
     boolean[] present,

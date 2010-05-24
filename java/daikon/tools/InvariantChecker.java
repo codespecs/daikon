@@ -387,7 +387,7 @@ public class InvariantChecker {
       add (ppt, vt);
     }
 
-    /*@NonNullVariable("FileIO.data_trace_state")*/
+    /*@NonNullOnEntry("FileIO.data_trace_state")*/
     private void add (PptTopLevel ppt, ValueTuple vt) {
       // Add the sample to any splitters
       if (ppt.has_splitters()) {

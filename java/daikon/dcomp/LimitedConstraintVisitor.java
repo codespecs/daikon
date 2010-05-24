@@ -103,7 +103,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
 	 *
 	 * @see #setFrame(Frame f)
 	 */
-  /*@NonNullVariable("frame")*/
+  /*@NonNullOnEntry("frame")*/
 	private OperandStack stack() {
 		return frame.getStack();
 	}
@@ -113,7 +113,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
 	 *
 	 * @see #setFrame(Frame f)
 	 */
-  /*@NonNullVariable("frame")*/
+  /*@NonNullOnEntry("frame")*/
 	private LocalVariables locals() {
 		return frame.getLocals();
 	}

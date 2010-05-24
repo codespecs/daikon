@@ -33,7 +33,7 @@ public final class ReturnTrueSplitter
             && (return_varinfo.type == ProglangType.BOOLEAN));
   }
 
-  /*@NonNullVariable("return_varinfo")*/
+  /*@NonNullOnEntry("return_varinfo")*/
   public boolean test(ValueTuple vt) {
     return (return_varinfo.getIntValue(vt) != 0);
   }

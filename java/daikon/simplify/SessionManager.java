@@ -198,7 +198,7 @@ public class SessionManager
       }
     }
 
-    /*@NonNullVariable("session")*/
+    /*@NonNullOnEntry("session")*/
     private void session_done() {
       finished = true;
       Session tmp = session;

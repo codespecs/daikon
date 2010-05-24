@@ -1467,7 +1467,7 @@ public final class FileIO {
    * The record is stored by side effect into the state argument.
    */
   // TODO:  For clarity, this should perhaps return its side-effected argument.
-  /*@NonNullVariable("FileIO.data_trace_state")*/
+  /*@NonNullOnEntry("FileIO.data_trace_state")*/
   public static void read_data_trace_record (ParseState state)
     throws IOException {
 
@@ -2022,7 +2022,7 @@ public final class FileIO {
   // This procedure reads a single record from a trace file and
   // fills up vals and mods by side effect.  The ppt name and
   // invocation nonce (if any) have already been read.
-  /*@NonNullVariable("data_trace_state")*/
+  /*@NonNullOnEntry("data_trace_state")*/
   private static void read_vals_and_mods_from_trace_file
                         (LineNumberReader reader, String filename,
                          PptTopLevel ppt, /*@Nullable*/ Object[] vals, int[] mods)
@@ -2290,7 +2290,7 @@ public final class FileIO {
    * a matching enter.  See dkconfig_ignore_missing_enter for more info.
    * If true is returned, this ppt should be ignored by the caller
    **/
-  /*@NonNullVariable("data_trace_state")*/
+  /*@NonNullOnEntry("data_trace_state")*/
   public static boolean add_orig_variables(PptTopLevel ppt,
                                      // HashMap cumulative_modbits,
                                      /*@Nullable*/ Object[] vals, int[] mods,
@@ -2445,7 +2445,7 @@ public final class FileIO {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20060905L;
 
-    /*@NonNullVariable("FileIO.new_decl_format")*/
+    /*@NonNullOnEntry("FileIO.new_decl_format")*/
     public SerialFormat(PptMap map, Configuration config) {
       this.map = map;
       this.config = config;

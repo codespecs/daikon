@@ -77,7 +77,7 @@ public class TestRedundantVars {
     }
 
     // Returns true iff all tests pass.
-    /*@NonNullVariable("reds.records.get(#0)")*/
+    /*@NonNullOnEntry("reds.records.get(#0)")*/
     private static boolean process_ppt(String ppt) {
 
         List<String> invsWithout = without.records.get(ppt);
