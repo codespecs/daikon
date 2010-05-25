@@ -2145,6 +2145,14 @@ each of the method program points in that object.
 The @var{relation-type} is the type of parent-child relationship in
 the hierarchy.  Possible relationship types are @code{parent} and
 @code{user}.
+A @code{parent} relationship is one where the program points themselves
+are explicitly related, such as an enter and an exit point.  All of the
+variables at one of the points exists at the other.  A @code{user}
+relation is one where a class is used at another point, such as at an
+enter point.  For example, if a reference to class A were passed to
+routine r1, the values found at enter and exit of r1 could be applied to
+the class/object program point for A.  By default @code{user} relations
+are not used because they can be recursive.
 
 The @var{relation-id} is a unique integer that identifies this parent
 relation.  They are used when defining the the specific parent
