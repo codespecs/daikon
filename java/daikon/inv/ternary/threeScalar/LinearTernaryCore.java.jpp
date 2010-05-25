@@ -506,7 +506,12 @@ public final class CLASSNAME
     maxsep_triples (dummy);
     // Now, first 3 values of dummy are the maximum-separated 3 points.
 
-    assert dummy[0] != null;
+    // Null points only show up in the cross-checker, not the regression
+    // tests, as of 5/25/2010.
+    // Sometimes the points are still null.
+    if (dummy[0] == null) {
+      return InvariantStatus.FALSIFIED;
+    }
 
     // Calculate the coefficients of the equation (a, b, c, d).
     // Requires that the first 3 elements of dummy must be non-null.
@@ -916,15 +921,17 @@ public final class CLASSNAME
   /**
    * Calculates the three points that have the maximum separation in pa and
    * places them as the first three elements of pa.
-  *
-  * @param pa  Array of points.  Must have at least 3 elements.  Can be any
-  *            length and can contain nulls (which will be ignored).
-  *            Is side-effected so that the first three elements contain the
-  *            points with the maximum total separation; this may introduce
-  *            duplicates into the array.
-  *
-  * @return the maximum separation found.
-  */
+   *
+   * @param pa  Array of points.  Must have at least 3 elements.  Can be any
+   *            length and can contain nulls (which will be ignored).
+   *            Is side-effected so that the first three elements contain the
+   *            points with the maximum total separation; this may introduce
+   *            duplicates into the array.
+   *            The first three elements are null if no triple of elements
+   *            is NaN-free.
+   *
+   * @return the maximum separation found.
+   */
  double maxsep_triples (/*@Nullable*/ Point[] pa) {
 
    // cache values for the (square of the) distance between each pair of
