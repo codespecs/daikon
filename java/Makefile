@@ -789,9 +789,9 @@ INTERNING_JAVA_FILES_SKIP_COUNTS = 'Intern.java|VarInfoName.java'
 ## Which files to check.
 INTERNING_JAVA_FILES = $(shell find . -type f -name '*.java' | egrep -v $(INTERNING_JAVA_FILES_SKIP) | xargs grep -l -i '@Interned' | sort)
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP}\|${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | sort)
-## Setting this to a subset of directories only works if every file has
-## been previously compiled with the Java 7 compiler, so that annotations
-## in the files with @SuppressWarnings are respected.
+## Setting this to a subset of directories only works if every file has been
+## previously compiled with the Java 7 compiler in annotations-in-comments
+## mode, so that annotations in the files with @SuppressWarnings are respected.
 NULLNESS_JAVA_FILES = \
   ${DAIKON_JAVA_FILES}
 #  $(shell find daikon -name '*.java' -a -exec grep -L "^@SuppressWarnings.*nullness" {} \; | sort)
