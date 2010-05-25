@@ -1011,7 +1011,9 @@ public final class CLASSNAME
    * second, c the third, and d is the fourth.  All elements are
    * mutually prime, integers and a is positive
    */
-  public double[] calc_tri_linear(Point[] points) {
+  // TODO: should just pass in the first three elements rather than passing
+  // in the point array.
+  public double[] calc_tri_linear(/*@Nullable*/ Point[] points) { // TODO: remove annotation after refactoring method
 
     Point p0 = points[0];
     Point p1 = points[1];
