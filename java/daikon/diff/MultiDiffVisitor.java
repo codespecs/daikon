@@ -199,9 +199,8 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
         String lastPpt = "";
         // sort them so that multiple exits will end up being adjacent
         // to each other when they are from the same method
-        for (String key : UtilMDE.sortedKeySet(lastMap)) {
-            @SuppressWarnings("nullness") // Map.get: iterating over sorted keyset
-            /*@NonNull*/ ArrayList<String> al = lastMap.get(key);
+        for (/*@KeyFor("lastMap")*/ String key : UtilMDE.sortedKeySet(lastMap)) {
+            ArrayList<String> al = lastMap.get(key);
             // don't print anything if there are no selective invariants
 
             if (al.size() == 0) continue;

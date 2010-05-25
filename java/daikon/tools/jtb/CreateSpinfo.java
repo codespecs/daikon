@@ -232,17 +232,15 @@ public class CreateSpinfo {
     throws IOException {
     if (!replaceStatements.values().isEmpty()) {
       output.println("REPLACE");
-      for (String declaration : UtilMDE.sortedKeySet(replaceStatements)) {
+      for (/*@KeyFor("replaceStatements")*/ String declaration : UtilMDE.sortedKeySet(replaceStatements)) {
         output.println(declaration);
-        @SuppressWarnings("nullness") // Map.get: iterating over sorted keySet
-        /*@NonNull*/ String replacement = replaceStatements.get(declaration);
+        String replacement = replaceStatements.get(declaration);
         output.println(removeNewlines(replacement));
       }
       output.println();
     }
-    for (String method : UtilMDE.sortedKeySet(conditions)) {
-      @SuppressWarnings("nullness") // Map.get: iterating over sorted keySet
-      /*@NonNull*/ List<String> method_conds = conditions.get(method);
+    for (/*@KeyFor("conditions")*/ String method : UtilMDE.sortedKeySet(conditions)) {
+      List<String> method_conds = conditions.get(method);
       Collections.sort(method_conds);
       if (method_conds.size() > 0) {
         if (packageName != null) {

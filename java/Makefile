@@ -789,9 +789,12 @@ INTERNING_JAVA_FILES_SKIP_COUNTS = 'Intern.java|VarInfoName.java'
 ## Which files to check.
 INTERNING_JAVA_FILES = $(shell find . -type f -name '*.java' | egrep -v $(INTERNING_JAVA_FILES_SKIP) | xargs grep -l -i '@Interned' | sort)
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP}\|${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | sort)
-## Can be temporarily set to a subset of directories.
+## Setting this to a subset of directories only works if every file has
+## been previously compiled with the Java 7 compiler, so that annotations
+## in the files with @SuppressWarnings are respected.
 NULLNESS_JAVA_FILES = \
-  $(shell find daikon -name '*.java' -a -exec grep -L "^@SuppressWarnings.*nullness" {} \; | sort)
+  ${DAIKON_JAVA_FILES}
+#  $(shell find daikon -name '*.java' -a -exec grep -L "^@SuppressWarnings.*nullness" {} \; | sort)
 #   $(shell find typequals/ -name '*.java')
 
 show_nullness_java_files:
@@ -900,7 +903,7 @@ nullness-counts:
 	@echo -n " / "
 	@echo ${DAIKON_JAVA_FILES} | xargs wc -l | tail -1 | cut -d ' ' -f 2
 	@echo -n "Lines with nullness annotations: "
-	@grep '@AssertNonNullIfFalse\|@AssertNonNullIfTrue\|@AssertParametersNonNull\|@LazyNonNull\|@NonNull\|@NonNullVariable\|@NonRaw\|@Nullable\|@PolyNull\|@PolyRaw\|@Pure\|@Raw' ${NULLNESS_JAVA_FILES} | wc -l
+	@grep '@AssertNonNullIfFalse\|@AssertNonNullIfTrue\|@AssertParametersNonNull\|@KeyFor\|@LazyNonNull\|@NonNull\|@NonNullOnEntry\|@NonRaw\|@Nullable\|@PolyNull\|@PolyRaw\|@Pure\|@Raw' ${NULLNESS_JAVA_FILES} | wc -l
 	@echo -n "Lines with @SuppressWarnings annotation or castNonNull method call: "
 	@grep '@SuppressWarnings.*nullness\|castNonNull' ${NULLNESS_JAVA_FILES} | wc -l
 	@grep -n '@SuppressWarnings.*nullness\|castNonNull' ${NULLNESS_JAVA_FILES}

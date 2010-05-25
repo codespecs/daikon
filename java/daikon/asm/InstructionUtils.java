@@ -78,7 +78,7 @@ public class InstructionUtils {
   public static Map<String, Set<String>> computeRedundantVarsFake(
       List<IInstruction> path) {
     Map<String, Set<String>> redundants = new LinkedHashMap<String, Set<String>>();
-    Set<String> varsUsedPreviously = new LinkedHashSet<String>();
+    Set</*@KeyFor("leaders")*/ String> varsUsedPreviously = new LinkedHashSet<String>();
     Map<String, String> leaders = new LinkedHashMap<String, String>();
     for (IInstruction instr : path) {
       for (String varName : instr.getBinaryVarNames()) {

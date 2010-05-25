@@ -80,7 +80,7 @@ public class PptMap
   /**
    * @return an unmodifiable version of the keySet
    */
-  public Collection<String> nameStringSet() {
+  public Collection</*@KeyFor("nameToPpt")*/ String> nameStringSet() {
     return Collections.unmodifiableSet(nameToPpt.keySet());
   }
 

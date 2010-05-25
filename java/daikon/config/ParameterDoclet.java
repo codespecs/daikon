@@ -233,9 +233,8 @@ public class ParameterDoclet
       out.println("@table @option");
       out.println();
 
-      for (String field : UtilMDE.sortedKeySet(categories[c].fields)) {
-        @SuppressWarnings("nullness") // Map.get: iterating over sorted keySet
-        /*@NonNull*/ String desc = categories[c].fields.get(field);
+      for (/*@KeyFor("categories[c].fields")*/ String field : UtilMDE.sortedKeySet(categories[c].fields)) {
+        String desc = categories[c].fields.get(field);
         String defstr = getDefaultString(field);
 
         // Simpler format for debugging

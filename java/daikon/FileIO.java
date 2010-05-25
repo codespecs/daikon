@@ -1953,11 +1953,9 @@ public final class FileIO {
         System.out.println("Unterminated calls:");
         if (dkconfig_verbose_unmatched_procedure_entries) {
           // Print the invocations in sorted order.
-          // (Does this work?  The keys are integers. -MDE 7/1/2005.)
           ArrayList<Invocation> invocations = new ArrayList<Invocation>();
-          for (Integer i : UtilMDE.sortedKeySet(call_hashmap)) {
-            @SuppressWarnings("nullness") // Map.get: iterating over sorted keyset
-            /*@NonNull*/ Invocation invok = call_hashmap.get(i);
+          for (/*@KeyFor("call_hashmap")*/ Integer i : UtilMDE.sortedKeySet(call_hashmap)) {
+            Invocation invok = call_hashmap.get(i);
             assert invok != null;
             invocations.add(invok);
           }
@@ -2011,9 +2009,8 @@ public final class FileIO {
     }
 
     // Print the invocations in sorted order.
-    for (/*@Interned*/ Invocation invok : UtilMDE.sortedKeySet(counter)) {
-      @SuppressWarnings("nullness") // Map.get: iterating over sorted keyset
-      /*@NonNull*/ Integer count = counter.get(invok);
+    for (/*@KeyFor("counter")*/ /*@Interned*/ Invocation invok : UtilMDE.sortedKeySet(counter)) {
+      Integer count = counter.get(invok);
       System.out.println(invok.format(false) + " : "
                          + UtilMDE.nplural(count.intValue(), "invocation"));
     }

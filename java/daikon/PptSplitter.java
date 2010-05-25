@@ -223,11 +223,11 @@ public class PptSplitter implements Serializable {
     // Maps permuted invariants to their original invariants
     Map<Invariant,Invariant> orig_invs = new LinkedHashMap<Invariant,Invariant>();
 
-    Vector<Invariant> same_invs_vec = new Vector<Invariant>();
+    Vector</*@KeyFor("orig_invs")*/ Invariant> same_invs_vec = new Vector<Invariant>();
 
-    Vector<Invariant[]> exclusive_invs_vec = new Vector<Invariant[]>();
+    Vector</*@KeyFor("orig_invs")*/ Invariant[]> exclusive_invs_vec = new Vector<Invariant[]>();
 
-    Vector<Invariant[]> different_invs_vec = new Vector<Invariant[]>();
+    Vector</*@KeyFor("orig_invs")*/ Invariant[]> different_invs_vec = new Vector<Invariant[]>();
 
 /// ??? MDE
     // Loop through each possible parent slice
