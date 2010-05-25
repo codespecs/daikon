@@ -47,6 +47,7 @@ endif
 # JAVAC ?= javac -verbose
 
 JAVAC ?= javac
+# Target is 5 so that Java 5 JVM can run the code.
 JAVAC_TARGET ?= -target 5 -source 5
 JAVAC_ARGS ?= -g ${JAVAC_TARGET}
 
