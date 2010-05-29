@@ -306,16 +306,16 @@ class DCInstrument {
         // Skip methods defined in Object
         if (!double_client) {
           if (is_object_method (mg.getName(), mg.getArgumentTypes())) {
-            debug_instrument.log ("Skipped object method %s%n", mg.getName());
+            debug_instrument.log ("Skipped Object method %s%n", mg.getName());
             continue;
           }
         }
 
-        // Add an argument of java.lang.DCompMarker to match up with the
+        // Add a parameter of java.lang.DCompMarker to match up with the
         // instrumented versions in the JDK.
         add_dcomp_arg (mg);
 
-        // Create a MethodInfo that describes this methods arguments
+        // Create a MethodInfo that describes this method's arguments
         // and exit line numbers (information not available via reflection)
         // and add it to the list for this class.
         MethodInfo mi = null;
@@ -353,9 +353,11 @@ class DCInstrument {
         // Remove any LVTT tables
         BCELUtil.remove_local_variable_type_tables (mg);
 
-        if (double_client && !BCELUtil.is_main (mg) && !BCELUtil.is_clinit(mg))
+        if (double_client && !BCELUtil.is_main (mg) && !BCELUtil.is_clinit(mg)) {
+          // doubling
           gen.addMethod (mg.getMethod());
-        else {
+        } else {
+          // replacing
           gen.replaceMethod (m, mg.getMethod());
           if (BCELUtil.is_main (mg))
             gen.addMethod (create_dcomp_stub (mg).getMethod());
@@ -484,7 +486,7 @@ class DCInstrument {
           }
         }
 
-        // Add an argument of java.lang.DCompMarker to match up with the
+        // Add a parameter of java.lang.DCompMarker to match up with the
         // instrumented versions in the JDK.
         add_dcomp_arg (mg);
 
@@ -1850,8 +1852,7 @@ class DCInstrument {
 
     } else if (callee_instrumented) {
 
-      // Add the DCompMarker argument so that the instrumented version
-      // will be used
+      // Add the DCompMarker argument so that it calls the instrumented version
       il.append (new ACONST_NULL());
       Type[] new_arg_types = BCELUtil.add_type (arg_types, dcomp_marker);
       il.append (ifact.createInvoke (classname, method_name, ret_type,
@@ -1935,7 +1936,7 @@ class DCInstrument {
   }
 
   /**
-   * Instrument calls to the object methods clone and toString.  In each
+   * Instrument calls to the Object methods clone and toString.  In each
    * case, an instrumented version is called if it exists, the non-instrumented
    * version if it does not.  Could be used for other Object methods without
    * arguments.
