@@ -2124,7 +2124,7 @@ public final class Daikon {
   }
 
   /**
-   * Create user defined splitters
+   * Create user-defined splitters
    */
 
   private static List<SpinfoFileParser> parsedSplitters = new ArrayList<SpinfoFileParser>();
