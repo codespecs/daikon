@@ -603,7 +603,7 @@ and source a Daikon startup file.
 
 
 @strong{sh/bash:}  If you use the sh or bash shell or their variants,
-add these three commands to your @file{.bashrc} or @file{.bash_profile} file:
+add these three commands to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The full pathname of the directory that contains Daikon
 export DAIKONDIR=$HOME/daikon
@@ -613,7 +613,7 @@ source $DAIKONDIR/bin/daikon.bashrc
 @end example
 
 @strong{csh/tcsh:} If you use the csh or tcsh shell or their variants, 
-add these three commands to your @file{.cshrc} file:
+add these three commands to your @file{~/.cshrc} file:
 @example
 # The full pathname of the directory that contains Daikon
 setenv DAIKONDIR $HOME/daikon
@@ -695,7 +695,7 @@ tar zxf daikon.tar.gz
 This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 
 @item
-Place three commands in your shell initialization file @file{.bashrc}:  
+Place three commands in your shell initialization file @file{~/.bashrc}:  
 set two environment variables
 and source a Daikon startup file.
 Do not use a Windows shell; use the Cygwin bash shell instead.
