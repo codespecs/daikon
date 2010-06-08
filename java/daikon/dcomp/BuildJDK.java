@@ -109,6 +109,11 @@ public class BuildJDK {
       "java.util.ServiceLoader.parse",
       "sun.jkernel.Bundle.loadReceipts",
       "sun.nio.ch.PipeImpl$Initializer.run",
+      "com.sun.tools.javac.jvm.ClassReader.readInputStream",
+      "com.sun.tools.javac.processing.ServiceProxy.parse",
+      "com.sun.tools.javac.zip.ZipFileIndex$DirectoryEntry.initEntries",
+      "com.sun.tools.javac.zip.ZipFileIndex.readIndex",
+      "com.sun.tools.javac.zip.ZipFileIndex.writeIndex",
   };
 
   /**
