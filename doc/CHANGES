@@ -19,7 +19,7 @@ Further documentation can be found in:
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
-4.6.5
+4.6.4 (June 12 2010)
 
 Kvasir
 
@@ -28,23 +28,16 @@ Kvasir
     Fixed an issue where Fjalar would not correctly traverse variables
     when using the var-list-file option.    
 
-  User Documentation
-
-    Added documentation for several previously undocumented Kvasir
-    command line options.
-
-4.6.4 (March 14 2010)
-
-Kvasir
-
-  user-visible changes
-
     The var-list-file can specify different global variables for different
     functions, rather than having to specify the same set of global
     variables for all of a program.
 
     Kvasir's support for GCC 4.4 has been further improved.
 
+  User Documentation
+
+    Added documentation for several previously undocumented Kvasir
+    command line options.
 
 Daikon
 
@@ -59,6 +52,19 @@ Daikon
     Improved documentation of handling large data trace files or slow
     Daikon runs.
 
+    Improved the documentation concerning the confidence of each invariant
+
+    When calculating the confidence value for an invariant, Daikon sometimes
+    estimates the number of possible unique values that have been seen.
+    This calculation has been changed to better handle variable that
+    are often missing.  In particular, invariants over combinations of
+    variables that are never present in the same sample, will have a
+    zero confidence and will thus not normally be printed.
+
+    Improved the documentation of program point declarations and in 
+    particular, the various types of program points and their relationship
+    to the program point hierarchy.
+
   Non-user-visible changes  
 
     Extracted utilMDE and other utilities into a new library named plume-lib,
@@ -68,6 +74,20 @@ Daikon
     Daikon now type-checks with the Nullness Checker (which is part of the
     Checker Framework).  A few warning suppressions remain, but as far as we
     know Daikon is the largest program ever to be verified in this way.
+
+    Interned some string variables when de-serializing an invariant file,
+    saving an appreciable amount of memory.
+
+DynComp
+
+    Fixed a bug when searching for dcomp_premain.jar.  The jar file will
+    now be found if it is anywhere in the classpath.
+
+InvariantChecker
+
+  Added --verbose option that will print all samples that violate an invariant.
+
+
 
 -------------------------------------------
 
