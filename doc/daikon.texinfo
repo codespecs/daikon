@@ -394,7 +394,8 @@ applications.  Examples include ``.field > abs(y)''; ``y = 2*x+3'';
 ``array a is sorted''; ``for all list objects lst, lst.next.prev =
 lst''; ``for all treenode objects n, n.left.value < n.right.value''; ``p
 != null => p.content in myArray''; and many more.  You can extend Daikon
-to add new properties (@pxref{Enhancing Daikon output}).
+to add new properties (@pxref{Enhancing Daikon output};
+@pxref{New invariants,,,./developer,Daikon Developer Manual}).
 
 Dynamic invariant detection runs a program, observes the values that the
 program computes, and then reports properties that were true over the
