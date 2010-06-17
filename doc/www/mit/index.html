@@ -648,7 +648,7 @@ someone who is making a release to plan.
     </li>
 
     <li> Build everything to be distributed and copy it to the staging
-    area (<a href="www.pag.csail.mit.edu/daikon/staging-daikon">www.pag.csail.mit.edu/daikon/staging-daikon</a>).  The final
+    area (<a href="http://www.pag.csail.mit.edu/daikon/staging-daikon">http://www.pag.csail.mit.edu/daikon/staging-daikon</a>).  The final
     output will be a list of files that were added/removed since the
     last release.
     [Time: 11 min]
@@ -683,7 +683,8 @@ someone who is making a release to plan.
     </li>
 
     <li> Test the distribution on a Windows machine.  On a Windows
-    machine with Cygwin installed, download the staged daikon.tar.gz
+    machine with Cygwin installed, as a guest user (or at least one without
+    environment variables such as $INV defined!), download the staged daikon.tar.gz
     file, extract the files, set the appropriate environment variables
     and run the top level makefile.  This is
     successful if the make command runs to conclusion without an error.
@@ -732,11 +733,11 @@ someone who is making a release to plan.
     commands below are for csh, make the appropriate subsitutions for
     other shells.  This is successful if the make command runs to
     conclusion without an error.  The last line should indicate that
-    Kvasir was not build because it is not a linux platform.
+    Kvasir was not built because it is not a Linux platform.
 
     <p>
     Note that the build will take a fair amount of time because it
-    builds the dyncomp instrumented JDK.
+    builds the DynComp instrumented JDK.
     </p>
     <pre>
         wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
