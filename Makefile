@@ -39,7 +39,7 @@ SCRIPT_FILES := Makefile \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
 PLUME_SCRIPT_FILES := java-cpp.pl lines-from
 
-## These are now in plume-lib
+## These are now in plume-lib:
 # 	cygwin-runner.pl java-cygwin.sh \
 # 	javac-xlint javac-xlint-prune.pl \
 # 	checkargs.pm
