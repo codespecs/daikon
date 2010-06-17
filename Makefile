@@ -251,11 +251,11 @@ test-staged-dist: $(STAGING_DIR)
 	(cd $(DISTTESTDIR)/daikon/java && \
 	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
 	## Make sure that all of the class files are 1.5 (version 49) or earlier
-	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs classfile_check_version 49)
+	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs -n 1 classfile_check_version 49)
 	## Second, test the .java files.
 	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
-	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(RTJAR):$(TOOLSJAR) all_javac)
-	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA) junit)
+	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(RTJAR):$(TOOLSJAR) all_javac)
+	(cd $(DISTTESTDIR)/daikon/java && $(MAKE) CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar junit)
 	# Test the main target of the makefile
 	cd $(DISTTESTDIR)/daikon && make
 	# test basic operation (Chicory/Daikon)
@@ -494,6 +494,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	(mkdir ${TMPDIR}/daikon/java; cd ${TMPDIR}/daikon/java; tar xf ${TMPDIR}/daikon-java.tar; rm ${TMPDIR}/daikon-java.tar)
 	cp -p doc/README-daikon-java.txt ${TMPDIR}/daikon/java/README.txt
 	cp -p java/Makefile ${TMPDIR}/daikon/java/Makefile
+	cp -p java/Makefile-dist.user ${TMPDIR}/daikon/java/Makefile.user
 	# Maybe I should do  $(MAKE) doc
 	# Don't do  $(MAKE) clean  which deletes .class files
 	(cd ${TMPDIR}/daikon/java; $(RM_TEMP_FILES))
