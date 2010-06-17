@@ -44,7 +44,7 @@ if (! $?DAIKONBIN) then
 endif
 
 if (! $?PLUMEBIN) then
-  setenv PLUMEBIN ${DAIKONDIR}/bin
+  setenv PLUMEBIN ${DAIKONDIR}/plume-lib/bin
 endif
 
 # setenv DAIKONCLASS_SOURCES 1
