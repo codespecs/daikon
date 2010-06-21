@@ -15,9 +15,8 @@ import daikon.*;
  * and the target files, run
  * <pre>    rm $inv/java/daikon/test/split/targets/*.java.goal
  *      rm $inv/java/daikon/test/split/SplitterFactoryTest.java</pre>
- * Then simply run the main method with out any arguments
- * in the $INV/java directory. After running the
- * main method one should re-compile the SplitterFactoryTest.
+ * Then simply run the main method without any arguments
+ * in the $INV/java directory, and then re-compile the SplitterFactoryTest.
  *
  * To add additional tests to this test program, place the .spinfo
  * and decls files into the "targets" directory then add a call to
@@ -38,8 +37,6 @@ public class SplitterFactoryTestUpdater {
   private static ArrayList<ArrayList<File>> declsFileLists = new ArrayList<ArrayList<File>>();
   private static ArrayList<String> classNames = new ArrayList<String>();
 
-  private static /*@LazyNonNull*/ File tempDir = null;
-
   private SplitterFactoryTestUpdater() {} //blocks public constructor
 
   /**
@@ -52,13 +49,15 @@ public class SplitterFactoryTestUpdater {
    * @param args are ignored.
    */
   public static void  main(String[] args) {
+    // For debugging
+    // SplitterFactory.dkconfig_delete_splitters_on_exit = false;
+
     generateSplitters("StreetNumberSet.spinfo", "StreetNumberSet.decls");
     generateSplitters("Fib.spinfo", "Fib.decls");
     generateSplitters("QueueAr.spinfo", "QueueAr.decls");
     generateSplitters("muldiv.spinfo", "BigFloat.decls");
     moveFiles();
     writeTestClass();
-    // UtilMDE.deleteDir(tempDir); // file's delete requires a dir be empty
   }
 
   /**
@@ -74,7 +73,7 @@ public class SplitterFactoryTestUpdater {
   }
 
   /**
-   * Generates the splitter java files in the tempDir.
+   * Generates the splitter .java files.
    * @param spinfos the spinfo files that should be used in generating
    *  the splitter java files.
    * @param decls the decls files that should be used in generating the
@@ -107,7 +106,7 @@ public class SplitterFactoryTestUpdater {
    * Moves the generated splitter files from the tempDir to the target Dir.
    */
   private static void moveFiles() {
-    tempDir = new File(SplitterFactory.getTempDir());
+    File tempDir = new File(SplitterFactory.getTempDir());
     String[] fileNames = tempDir.list();
     if (fileNames == null) {
       throw new Error("tmpdir = " + tempDir + " which is not a directory");
@@ -117,10 +116,14 @@ public class SplitterFactoryTestUpdater {
         String fileName = fileNames[i];
         String fromName = tempDir.getPath() + File.separator + fileName;
         String toName = targetDir + fileName + ".goal";
-        boolean moveSuccess = moveFile(fromName, toName);
-        if (! moveSuccess) {
-          // This is consistently failing for me; not sure why.  -MDE 7/8/2005
+        try {
+          moveFile(fromName, toName);
+        } catch (Error e) {
           System.out.printf("Failed to move %s to %s%n", fromName, toName);
+          throw e;
+        } catch (RuntimeException e) {
+          System.out.printf("Failed to move %s to %s%n", fromName, toName);
+          throw e;
         }
         String javaFileName = new File(fileName).getName();
         String className =
@@ -130,17 +133,24 @@ public class SplitterFactoryTestUpdater {
     }
   }
 
-  private static boolean moveFile(String fromName, String toName) {
+  private static void moveFile(String fromName, String toName) {
     File from = new File(fromName);
     File to = new File(toName);
+    if (! from.exists()) {
+      throw new Error("Does not exist: " + fromName);
+    }
     if (! from.canRead()) {
       throw new Error("Cannot read " + fromName);
     }
-    if (! to.canWrite()) {
-      throw new Error("Cannot write " + toName);
-    }
-    // if (to.exists()) { to.delete(); }
-    return from.renameTo(to);
+    // canWrite() requires that the file already exists.  So comment this out.
+    // if (! to.canWrite()) {
+    //   throw new Error("Cannot write " + toName + " = " + to.getAbsoluteFile() + " when copying from " + fromName);
+    // }
+    if (to.exists()) { to.delete(); }
+    // file.renameTo(to) fails if the two files are on different file systems
+    // (e.g., /tmp and /scratch may be different
+    // So read and write the file directly rather than using renameTo().
+    UtilMDE.writeFile(to, UtilMDE.readFile(from));
   }
 
   /**
