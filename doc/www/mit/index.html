@@ -695,11 +695,12 @@ someone who is making a release to plan.
     <ul>
       <li>Csh version:
       <pre>
+          mkdir -p ~/tmp
 	  cd ~/tmp
 	  rm -rf daikon.tar.gz daikon
 	  wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
 	  tar xzf daikon.tar.gz
-	  setenv JDKDIR <i>jdk-directory</i>
+	  setenv JAVA_HOME "/cygdrive/c/Program Files/Java/jdk1.6.0_19"
 	  setenv DAIKONDIR `pwd`/daikon
 	  setenv DAIKONCLASS_SOURCES 1
 	  source daikon/bin/daikon.cshrc
@@ -709,13 +710,14 @@ someone who is making a release to plan.
       </li>
       <li>Bash version:
       <pre>
+          mkdir -p ~/tmp
 	  cd ~/tmp
 	  rm -rf daikon.tar.gz daikon
 	  wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
 	  tar xzf daikon.tar.gz
           # Convert OSTYPE from a bash shell variable to a system environment variable.
 	  export OSTYPE
-	  export JDKDIR="/cygdrive/c/Program Files/Java/jdk1.6.0_17"
+	  export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.6.0_19"
 	  export DAIKONDIR=`pwd`/daikon
 	  export DAIKONCLASS_SOURCES=1
 	  source daikon/bin/daikon.bashrc

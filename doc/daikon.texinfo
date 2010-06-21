@@ -609,7 +609,7 @@ add these three commands to your @file{~/.bashrc} or @file{~/.bash_profile} file
 # The full pathname of the directory that contains Daikon
 export DAIKONDIR=$HOME/daikon
 # The full pathname of the directory that contains the Java JDK
-export JDKDIR=/usr/lib/j2sdk1.5-sun
+export JAVA_HOME=/usr/java/jdk1.6.0_20
 source $DAIKONDIR/bin/daikon.bashrc
 @end example
 
@@ -619,7 +619,7 @@ add these three commands to your @file{~/.cshrc} file:
 # The full pathname of the directory that contains Daikon
 setenv DAIKONDIR $HOME/daikon
 # The full pathname of the directory that contains the Java JDK
-setenv JDKDIR /usr/lib/j2sdk1.5-sun
+setenv JAVA_HOME /usr/java/jdk1.6.0_20
 source $DAIKONDIR/bin/daikon.cshrc
 @end example
 
@@ -705,7 +705,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 # The full pathname of the directory that contains Daikon
 export DAIKONDIR=$HOME/daikon
 # The full Unix pathname of the directory that contains the Java JDK
-export JDKDIR=/cygdrive/c/Program Files/Java/jdk1.5.0_05
+export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.6.0_20
 source $DAIKONDIR/bin/daikon.bashrc
 @end example
 
@@ -719,9 +719,9 @@ symbolic link without spaces to @code{Program Files}.
     ln -s "Program Files" program_files
 @end example
 @noindent
-and then the JDKDIR line becomes:
+and then the JAVA_HOME line becomes:
 @example
-export JDKDIR=/cygdrive/c/program_files/Java/jdk1.5.0_05
+export JAVA_HOME=/cygdrive/c/program_files/Java/jdk1.6.0_20
 @end example
 
 @c You can also
@@ -4217,7 +4217,7 @@ make -C java dcomp_rt.jar
 @end example
 
 @noindent
-Make sure the @code{JDKDIR} environment variable is set to the directory
+Make sure the @code{JAVA_HOME} environment variable is set to the directory
 containing your JDK@.  This command instruments the classes in the
 @file{rt.jar} file of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.
@@ -9487,7 +9487,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  escannotated jmlannotated dbcannotated Annnotate xml INVINFO
 @c  LocalWords:  ubs Throwable throwable rethrown WriteViolationFile MyProg cfg
 @c  LocalWords:  callMethod isDaikonInstrumented getDaikonInvariants INVS ijmp
-@c  LocalWords:  bBoOmjpi de iconv undefine DHAVE Xie Ast rt JDKDIR MyPackage
+@c  LocalWords:  bBoOmjpi de iconv undefine DHAVE Xie Ast rt MyPackage
 @c  LocalWords:  superdirectory SOURCEPATH InvalidClassDataError strace lstat
 @c  LocalWords:  RuntimeException IFLNK interconvert interconvertible strdup ld
 @c  LocalWords:  lwpp ine runtime's malloced MaxPermSize JVM's MyVector perc vv

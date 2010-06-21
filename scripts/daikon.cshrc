@@ -4,19 +4,19 @@
 
 ## Wherever you source this file, you should set two environment variables:
 ##   DAIKONDIR      absolute pathname of the "daikon" directory
-##   JDKDIR         absolute pathname of the directory containing the JDK
+##   JAVA_HOME      absolute pathname of the directory containing the JDK
 ##                  (or "none" if you don't have it)
 ## Optionally, you may set the following environment variables:
 ##   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
 ##        files, instead of the default, which is to use daikon.jar.
 ## You should not need to edit this file directly.
 
-if (! $?JDKDIR) then
-  echo "JDKDIR environment variable is not set."
+if (! $?JAVA_HOME) then
+  echo "JAVA_HOME environment variable is not set."
   echo "Bailing out of daikon.cshrc ." 
   exit 2
-else if (! -d $JDKDIR && $JDKDIR != "none") then
-  echo "JDKDIR is set to non-existent directory: $JDKDIR"
+else if (! -d $JAVA_HOME && $JAVA_HOME != "none") then
+  echo "JAVA_HOME is set to non-existent directory: $JAVA_HOME"
   echo "Bailing out of daikon.cshrc ." 
   exit 2
 endif
@@ -70,11 +70,11 @@ if ($?OSTYPE) then
   endif
 endif
 
-if ($JDKDIR != "none") then
+if ($JAVA_HOME != "none") then
   if (! $darwinos) then
     if ($?debuglogin) echo "daikon.cshrc about to set classpath (non-Darwin)"
     if ($?debuglogin) echo "CLASSPATH: $CLASSPATH"
-    setenv CLASSPATH ${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
+    setenv CLASSPATH ${CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
   else
     if ($?debuglogin) echo "daikon.cshrc about to set classpath (Darwin)"
     ## For Macintosh MacOSX users.  (This list
@@ -83,7 +83,7 @@ if ($JDKDIR != "none") then
   endif
 
   ## Add the requested JDK's binaries to the front of the path
-  set path = ($JDKDIR/bin $path)
+  set path = ($JAVA_HOME/bin $path)
 endif
 
 if ($?debuglogin) echo "daikon.cshrc about to add scripts to path"

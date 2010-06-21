@@ -104,8 +104,8 @@ DIST_DIR_PATHS := daikon.tar.gz daikon.zip doc/images/daikon-logo.gif daikon.jar
 CVS_REPOSITORY := /afs/csail.mit.edu/group/pag/projects/invariants/.CVS
 
 # It seems like these should come from their standard locations (jhp)
-RTJAR := $(JDKDIR)/jre/lib/rt.jar
-TOOLSJAR := $(JDKDIR)/lib/tools.jar
+RTJAR := $(JAVA_HOME)/jre/lib/rt.jar
+TOOLSJAR := $(JAVA_HOME)/lib/tools.jar
 
 JAVAC ?= javac -target 5
 

@@ -6,19 +6,19 @@ REM (This file should be kept in synch with daikon.bashrc and daikon.cshrc.)
 
 REM Wherever you source this file, you should set two environment variables:
 REM   DAIKONDIR      absolute pathname of the "daikon" directory
-REM   JDKDIR         absolute pathname of the directory containing the JDK
+REM   JAVA_HOME      absolute pathname of the directory containing the JDK
 REM Optionally, you may set the following environment variables:
 REM   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
 REM        files, instead of the default, which is to use daikon.jar.
 REM You should not need to edit this file directly.
 
-if "%JDKDIR%"=="" (
-  echo JDKDIR environment variable is not set.
+if "%JAVA_HOME%"=="" (
+  echo JAVA_HOME environment variable is not set.
   echo Bailing out of daikonenv.bat .
   exit /b 2
 ) else (
-  if not exist "%JDKDIR%" (
-    echo JDKDIR is set to non-existent directory: %JDKDIR%
+  if not exist "%JAVA_HOME%" (
+    echo JAVA_HOME is set to non-existent directory: %JAVA_HOME%
     echo Bailing out of daikonenv.bat .
     exit /b 2
   )
@@ -70,10 +70,10 @@ if not "%CLASSPATH%"=="" (
 )
 
 REM tools.jar must be on your classpath.
-set CLASSPATH=%CLASSPATH%;%JDKDIR%\jre\lib\rt.jar;%JDKDIR%\lib\tools.jar
+set CLASSPATH=%CLASSPATH%;%JAVA_HOME%\jre\lib\rt.jar;%JAVA_HOME%\lib\tools.jar
 
 REM Add the Daikon binaries to your path
-set PATH=%DAIKONBIN%;%DAIKONDIR%\front-end\java\src;%JDKDIR%\bin;%PATH%
+set PATH=%DAIKONBIN%;%DAIKONDIR%\front-end\java\src;%JAVA_HOME%\bin;%PATH%
 
 REM Indicate where to find Perl modules such as util_daikon.pm.
 if not "%PERLLIB%"=="" (

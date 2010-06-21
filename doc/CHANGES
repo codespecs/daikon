@@ -34,6 +34,8 @@ Kvasir
 
     Kvasir's support for GCC 4.4 has been further improved.
 
+    Daikon uses the JAVA_HOME environment variable, rather than JDKDIR.
+
   User Documentation
 
     Added documentation for several previously undocumented Kvasir

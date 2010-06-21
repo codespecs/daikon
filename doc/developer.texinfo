@@ -232,7 +232,7 @@ subdirectories.  The distribution includes compiled @file{.class} files,
 so you do not need to compile them yourself unless you make changes.
 
 When you compile Daikon, environment variables @env{DAIKONDIR} (or
-@env{INV}, whose effect is the same) and @env{JDKDIR} should be set.
+@env{INV}, whose effect is the same) and @env{JAVA_HOME} should be set.
 This is already done if you source the @file{daikon.bashrc} or
 @file{daikon.cshrc} file, as recommended in the installation
 instructions (@pxref{Complete installation,,,./daikon,Daikon User Manual}).
@@ -244,7 +244,7 @@ that would enable you to compile Daikon might look like the following.
 
 @example
   export INV=$HOME/invariants
-  export JDKDIR=$HOME/jdk1.5.0_04
+  export JAVA_HOME=/usr/java/jdk1.6.0_20
   export DAIKONCLASS_SOURCES=1
   source $INV/scripts/daikon.bashrc
   export CLASSPATH=.:$CLASSPATH
@@ -293,7 +293,7 @@ Windows.  You can install Cygwin by simply running the program found
 at @uref{http://sources.redhat.com/cygwin/setup.exe}.
 
 When setting up environment pathname variables under Windows/Cygwin
-(such as @command{JDKDIR} or @command{CLASSPATH}) make sure that the
+(such as @command{JAVA_HOME} or @command{CLASSPATH}) make sure that the
 pathname is specified in Unix format (e.g., @samp{/cygdrive/c/daikon}
 rather than @samp{C:\daikon}).  Cygwin expects Unix style pathnames
 and the Makefile will convert them to Windows pathnames when necessary
@@ -1608,7 +1608,7 @@ process) the next time you run the tests.
 As when you install or compile Daikon, when you run the tests
 environment variable @env{DAIKONDIR} (or @env{INV}, whose effect is
 the same) should be set.  Additionally, environment variable
-@env{JDKDIR} should be the directory containing the Java JDK@.
+@env{JAVA_HOME} should be the directory containing the Java JDK@.
 
 You should generally run the regression tests before checking it a
 change (especially any non-trivial change).  If any of the regression
@@ -3250,7 +3250,7 @@ specify classes that implement lists; @xref{Options to control invariant detecti
 @c  LocalWords:  jtb cvs checkin smallexample checkins printindex Dataflow gcc
 @c  LocalWords:  convertcsv Mangel Wurzel malloc TerminationMessage un Mozilla FSE cd
 @c  LocalWords:  dataflow czf mernst pag calloc Mbytes Miryung ifnotinfo env di
-@c  LocalWords:  JDKDIR bashrc cshrc DAIKONCLASS makeinfo InvariantStatus itemx
+@c  LocalWords:  bashrc cshrc DAIKONCLASS makeinfo InvariantStatus itemx
 @c  LocalWords:  ObviousFilter StackAr DataStructures structs StackArTester Ren
 @c  LocalWords:  INST Xiaoxia regex printf DiscardInfo instanceof UpperBound Xu
 @c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname MacOSX rt

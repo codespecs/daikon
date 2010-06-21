@@ -34,7 +34,7 @@ setenv PAG /afs/csail.mit.edu/group/pag
 setenv pag ${PAG}
 
 ## Set this directory to the directory containing the JDK.
-if (! $?JDKDIR) setenv JDKDIR /afs/csail/group/pag/software/pkg/jdk
+if (! $?JAVA_HOME) setenv JAVA_HOME /afs/csail/group/pag/software/pkg/jdk
 
 setenv PATH /usr/local/bin:${PATH}:/afs/csail/group/pag/projects/invariants/binaries:$DAIKONDIR/front-end/c
 

@@ -101,7 +101,7 @@ ifdef CLASSPATH_JARS2
   endif
 endif
 ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
-  CLASSPATH := $(CLASSPATH):${JDKDIR}/lib/tools.jar:${JDKDIR}/jre/lib/rt.jar
+  CLASSPATH := $(CLASSPATH):${JAVA_HOME}/lib/tools.jar:${JAVA_HOME}/jre/lib/rt.jar
 endif
 
 # On cygwin, translate the classpath to windows format.  Only do so if
@@ -469,7 +469,7 @@ chicory-test : ChicoryPremain.jar
 #
 DCOMP_JAVA_FILES := daikon/dcomp/*java daikon/chicory/*.java daikon/util/*.java
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
-ORIG_RT ?= $(JDKDIR)/jre/lib/rt.jar
+ORIG_RT ?= $(JAVA_HOME)/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:dcomp_rt.jar:$(CLASSPATH)
 JAVA_DCOMP = java -ea -esa -Xbootclasspath:$(DCOMP_RT):$(CLASSPATH)
@@ -1088,7 +1088,7 @@ showvars:
 	@echo jsr308_imports = $(jsr308_imports)
 	@echo INTERNING_JAVA_FILES = $(INTERNING_JAVA_FILES)
 	@echo INTERNING_JAVA_FILES_COUNTS = $(INTERNING_JAVA_FILES_COUNTS)
-	@echo JDKDIR = $(JDKDIR)
+	@echo JAVA_HOME = $(JAVA_HOME)
 
 dump: showvars
 

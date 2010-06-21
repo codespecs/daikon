@@ -4,19 +4,19 @@
 
 ## Wherever you source this file, you should set two environment variables:
 ##   DAIKONDIR      absolute pathname of the "daikon" directory
-##   JDKDIR         absolute pathname of the directory containing the JDK
+##   JAVA_HOME      absolute pathname of the directory containing the JDK
 ##                  (or "none" if you don't have it)
 ## Optionally, you may set the following environment variables:
 ##   DAIKONCLASS_SOURCES   to any value, if you want to run Daikon from .class
 ##        files, instead of the default, which is to use daikon.jar.
 ## You should not need to edit this file directly.
 
-if [ -z "$JDKDIR" ]; then
-  echo "JDKDIR environment variable is not set."
+if [ -z "$JAVA_HOME" ]; then
+  echo "JAVA_HOME environment variable is not set."
   echo "Bailing out of daikon.bashrc ."
   return 2
-elif [ ! -d "$JDKDIR" -a "$JDKDIR" != "none" ]; then
-  echo "JDKDIR is set to non-existent directory: $JDKDIR"
+elif [ ! -d "$JAVA_HOME" -a "$JAVA_HOME" != "none" ]; then
+  echo "JAVA_HOME is set to non-existent directory: $JAVA_HOME"
   echo "Bailing out of daikon.bashrc ."
   return 2
 fi
@@ -63,7 +63,7 @@ fi
 if [ "$JDKPATH" != "none" ]; then
   ## tools.jar must be on your classpath.
   if [ "$OSTYPE" != "darwin" ]; then
-    export CLASSPATH=${CLASSPATH}:${JDKDIR}/jre/lib/rt.jar:${JDKDIR}/lib/tools.jar
+    export CLASSPATH=${CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
   else
     ## For Macintosh MacOSX users.  (This list
     ## is the system property "sun.boot.class.path".)
@@ -71,7 +71,7 @@ if [ "$JDKPATH" != "none" ]; then
   fi
 
   ## Make sure the specified JDK is first on your path
-  export PATH=$JDKDIR/bin:$PATH
+  export PATH=$JAVA_HOME/bin:$PATH
 fi
 
 ## Add the Daikon binaries to your path
