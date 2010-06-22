@@ -19,7 +19,49 @@ Further documentation can be found in:
    It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
 
 ===========================================================================
-4.6.4 (June 12 2010)
+
+4.6.4 (June 21 2010)
+
+Daikon
+
+  User-visible changes
+
+    Added new invariants: CompleteOneOfScalar, CompleteOneOfString
+
+    Added configuration variable daikon.FileIO.rm_stack_dups.
+
+    When calculating the confidence value for an invariant, Daikon
+    sometimes estimates the number of possible unique values that have
+    been seen.  This calculation has been changed to better handle
+    variable that are often missing.  In particular, invariants over
+    combinations of variables that are never present in the same
+    sample, will have a zero confidence and will thus not normally be
+    printed.
+
+    Improved documentation about: handling large data trace files or
+    slow Daikon runs; the confidence of each invariant; and the types
+    of program point declarations and their relationship to the
+    program point hierarchy.
+
+    Daikon uses the JAVA_HOME environment variable, rather than JDKDIR.
+
+  Non-user-visible changes  
+
+    Extracted utilMDE and other utilities into a new library named
+    plume-lib, which makes it easier to use in other programs.  See
+    http://code.google.com/p/plume-lib/.
+
+    Daikon now type-checks with the Nullness Checker (which is part of
+    the Checker Framework), with just a few suppressed warnings.  As
+    far as we know Daikon is the largest program ever to be verified
+    in this way.
+
+    Interned some string variables when de-serializing an invariant file,
+    saving an appreciable amount of memory.
+
+Chicory
+
+    Documented Chicory options --boot-classes=REGEX, --linked-lists.
 
 Kvasir
 
@@ -34,51 +76,10 @@ Kvasir
 
     Kvasir's support for GCC 4.4 has been further improved.
 
-    Daikon uses the JAVA_HOME environment variable, rather than JDKDIR.
-
   User Documentation
 
     Added documentation for several previously undocumented Kvasir
     command line options.
-
-Daikon
-
-  User-visible changes
-
-    Added new invariants: CompleteOneOfScalar, CompleteOneOfString
-
-    Added configuration variable daikon.FileIO.rm_stack_dups.
-
-    Documented Chicory options --boot-classes=REGEX, --linked-lists.
-
-    Improved documentation of handling large data trace files or slow
-    Daikon runs.
-
-    Improved the documentation concerning the confidence of each invariant
-
-    When calculating the confidence value for an invariant, Daikon sometimes
-    estimates the number of possible unique values that have been seen.
-    This calculation has been changed to better handle variable that
-    are often missing.  In particular, invariants over combinations of
-    variables that are never present in the same sample, will have a
-    zero confidence and will thus not normally be printed.
-
-    Improved the documentation of program point declarations and in 
-    particular, the various types of program points and their relationship
-    to the program point hierarchy.
-
-  Non-user-visible changes  
-
-    Extracted utilMDE and other utilities into a new library named plume-lib,
-    which makes it easier to use in other programs.  See
-    http://code.google.com/p/plume-lib/.
-
-    Daikon now type-checks with the Nullness Checker (which is part of the
-    Checker Framework).  A few warning suppressions remain, but as far as we
-    know Daikon is the largest program ever to be verified in this way.
-
-    Interned some string variables when de-serializing an invariant file,
-    saving an appreciable amount of memory.
 
 DynComp
 
@@ -87,9 +88,8 @@ DynComp
 
 InvariantChecker
 
-  Added --verbose option that will print all samples that violate an invariant.
-
-
+    Added --verbose option that will print all samples that violate an
+    invariant.
 
 -------------------------------------------
 
