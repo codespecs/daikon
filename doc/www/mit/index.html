@@ -34,7 +34,7 @@ href="../download/doc/daikon.html">Daikon manual</a> for more details.
 <p>
 If you work in the Program Analysis Group, then you should also be
 familiar with the <a
-href="http://pag.csail.mit.edu/pag/logistics.html">logistics for work
+href="http://groups.csail.mit.edu/pag/pag/logistics.html">logistics for work
 at PAG</a>.  In particular these instructions assume that you are
 using the pag startup files (pag-daikon.cshrc or pag-daikon.bashrc)
 described on that page.  Among other things, those startup files
@@ -94,7 +94,7 @@ In order to become familiar with the theory of dynamic invariant detection
 and some details of the Daikon implementation, see the <a
 href="http://www.cs.washington.edu/homes/mernst/research/#Invariant_detection">papers</a>.
 You are probably best off starting with the
-<a href="http://pag.csail.mit.edu/daikon/pubs/daikon-tool-scp2007-abstract.html">overview paper</a>
+<a href="http://groups.csail.mit.edu/pag/daikon/pubs/daikon-tool-scp2007-abstract.html">overview paper</a>
 and then reading other papers as necessary for more technical details; the
 <a href="http://www.cs.washington.edu/homes/mernst/pubs/invariants-incremental-fse2004-abstract.html">incremental
 analysis paper</a>
@@ -106,7 +106,7 @@ is a reasonable second paper to read.
 
 <p>
 See the notes about <a
-href="http://pag.csail.mit.edu/pag/logistics.html#pag-computers">PAG
+href="http://groups.csail.mit.edu/pag/pag/logistics.html#pag-computers">PAG
 computers</a>.
 </p>
 
@@ -168,7 +168,7 @@ manual</a>.
 The following commands create and populate the
 <tt>~/research/invariants</tt> directory.  Note that <tt>$pag</tt> is
 defined in the pag-daikon startup files described in the <a
-href="http://pag.csail.mit.edu/pag/logistics.html">logistics</a> file.
+href="http://groups.csail.mit.edu/pag/pag/logistics.html">logistics</a> file.
 
 </p>
 <pre>
@@ -305,7 +305,7 @@ href="eclipse-pag.html">instructions for using Eclipse at PAG</a>.
 <p>
 In order to permit other members of the Daikon project to read your files,
 please make them readable by the <tt>pag</tt> group, as described on the <a
-href="http://pag.csail.mit.edu/pag/logistics.html#pag-computers">PAG
+href="http://groups.csail.mit.edu/pag/pag/logistics.html#pag-computers">PAG
 computers</a>.
 </p>
 
@@ -408,7 +408,7 @@ environment variable.  (This is the default if you don't specify a filename.)
 
 <p>
 Important:  see the <a
-href="http://pag.csail.mit.edu/pag/logistics.html#code-conventions">PAG
+href="http://groups.csail.mit.edu/pag/pag/logistics.html#code-conventions">PAG
 coding conventions</a>.
 </p>
 
@@ -517,7 +517,7 @@ it twice) in order to generate formatted versions of the manual
 
 <p>
 See the description of <a
-href="http://pag.csail.mit.edu/daikon/download/doc/developer.html#Testing">Daikon's
+href="http://groups.csail.mit.edu/pag/daikon/download/doc/developer.html#Testing">Daikon's
 tests</a> in the Daikon Developer Manual.  It is important that you
 understand that Daikon has two sets of tests (unit tests and regression
 tests), and that if any of these tests fails, you should not check in your
@@ -648,7 +648,7 @@ someone who is making a release to plan.
     </li>
 
     <li> Build everything to be distributed and copy it to the staging
-    area (<a href="http://www.pag.csail.mit.edu/daikon/staging-daikon">http://www.pag.csail.mit.edu/daikon/staging-daikon</a>).  The final
+    area (<a href="http://www.pag.csail.mit.edu/daikon/staging-daikon/">http://www.pag.csail.mit.edu/daikon/staging-daikon/</a>).  The final
     output will be a list of files that were added/removed since the
     last release.
     [Time: 11 min]
@@ -744,7 +744,8 @@ someone who is making a release to plan.
       <pre>
           mkdir -p ~/tmp
 	  cd ~/tmp
-	  wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+	  # or: wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+	  curl -O http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
 	  tar xzvf daikon.tar.gz
 	  setenv ORIG_RT /System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
 	  setenv DAIKONDIR `pwd`/daikon
@@ -758,7 +759,8 @@ someone who is making a release to plan.
       <pre>
           mkdir -p ~/tmp
 	  cd ~/tmp
-	  wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+	  # or: wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+	  curl -O http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
 	  tar xzvf daikon.tar.gz
           # Convert OSTYPE from a bash shell variable to a system environment variable.
 	  export OSTYPE
@@ -772,8 +774,6 @@ someone who is making a release to plan.
       </pre>
       </li>
     </ul>
-    <pre>
-    </pre>
     </li>
 
 
@@ -807,12 +807,11 @@ someone who is making a release to plan.
     <li> Check the website to see if it has any broken links
 
     <pre>
-      checklink -q -r `cat $inv/plume-lib/bin/checklink-args.txt` http://pag.csail.mit.edu/daikon </pre>
+      checklink -q -r `cat $inv/plume-lib/bin/checklink-args.txt` http://groups.csail.mit.edu/pag/daikon </pre>
 
     <p>
     Links to the webpages of people and conferences are read from
-    <tt>$inv/scripts/link-names</tt>.  (This is not a
-    paricularly good place for them and should eventually be moved...)
+    <tt>$pl/bin/html-canonical-urls</tt>.
     </p>
 
     <p>
