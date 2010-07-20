@@ -411,7 +411,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) c
 	# in the ${TMPDIR}/daikon-jar directory
 	make -C java all_directly
 	make -C plume-lib/java plume.jar
-	cd java && find . -name '*.class' \
+	cd java && find . \( -name dcomp-rt \) -prune -o -name '*.class' -print \
 		-exec cp --parents '{}' ${TMPDIR}/daikon-jar \;
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
