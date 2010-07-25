@@ -420,11 +420,10 @@ xlint: chicory ${ALL_GENERATED_FILES}
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 # Do not mark this target as .PHONY.  We want it to
 # alway recompile, whether recompilation is necessary or not.
-all_directly: ${AUTO_GENERATED_FILES} plume-copy-and-check
+all_directly: ${AUTO_GENERATED_FILES} plume-copy-and-check java_files.txt
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
 	rm -f `find daikon -name "*.class" -print`
-	@echo ${JAVA_FILES} > java_files.txt
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -433,6 +432,9 @@ all_directly: ${AUTO_GENERATED_FILES} plume-copy-and-check
 # These can't be prerequisites because they depend on .class files from Daikon itself.
 	$(MAKE) chicory
 	$(MAKE) dyncomp
+
+java_files.txt: ${JAVA_FILES}
+	@echo ${JAVA_FILES} > java_files.txt
 
 .PHONY: plume-copy-and-check
 plume-copy-and-check: plume-lib-update lib/plume.jar plume-copy
