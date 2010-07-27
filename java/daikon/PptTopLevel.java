@@ -397,9 +397,6 @@ public class PptTopLevel extends Ppt {
         vi.value_index = val_idx;
         val_idx++;
       }
-      @SuppressWarnings("rawness") // initialization will complete before it is used
-      /*@NonRaw*/ PptTopLevel nonRawThis = this;
-      vi.ppt = nonRawThis;
     }
     for (int i = 0; i < var_infos.length; i++) {
       VarInfo vi = var_infos[i];
@@ -426,6 +423,13 @@ public class PptTopLevel extends Ppt {
     }
     for (int i = 0; i < num_tracevars; i++) {
       assert value_sets[i] != null;
+    }
+
+    for (VarInfo vi : var_infos) {
+      // TODO: This should not be necessary, since initialization is now complete
+      @SuppressWarnings("rawness") // initialization is now complete
+      /*@NonRaw*/ PptTopLevel nonRawThis = this;
+      vi.ppt = nonRawThis;
     }
 
     // Fix variable pointers so that they refer to the variables
