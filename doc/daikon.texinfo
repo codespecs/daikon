@@ -498,7 +498,7 @@ can be downloaded separately from
 now ready to use Daikon!
 
 There are two additional requirements.  You must have a Java 5.0 (or later)
-JVM (@uref{http://java.sun.com,, Java Virtual Machine}).  The
+JVM (@uref{http://www.oracle.com/technetwork/java/,, Java Virtual Machine}).  The
 @file{tools.jar} file that comes with your JVM must also be on your
 classpath.
 
@@ -548,7 +548,7 @@ Daikon,,,./developer,Daikon Developer Manual} in the Daikon Developer Manual.
 @subsection Requirements for running Daikon
 
 In order to run Daikon, you must have a Java 5.0 (or later) JVM
-(@uref{http://java.sun.com,, Java Virtual Machine}).  You must also
+(@uref{http://www.oracle.com/technetwork/java/,, Java Virtual Machine}).  You must also
 have a Java 5.0 (or later) compiler.
 
 @menu
