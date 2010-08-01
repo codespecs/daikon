@@ -609,7 +609,7 @@ add these three commands to your @file{~/.bashrc} or @file{~/.bash_profile} file
 # The full pathname of the directory that contains Daikon
 export DAIKONDIR=$HOME/daikon
 # The full pathname of the directory that contains the Java JDK
-export JAVA_HOME=/usr/java/jdk1.6.0_20
+export JAVA_HOME=/usr/java/current
 source $DAIKONDIR/bin/daikon.bashrc
 @end example
 
@@ -619,7 +619,7 @@ add these three commands to your @file{~/.cshrc} file:
 # The full pathname of the directory that contains Daikon
 setenv DAIKONDIR $HOME/daikon
 # The full pathname of the directory that contains the Java JDK
-setenv JAVA_HOME /usr/java/jdk1.6.0_20
+setenv JAVA_HOME /usr/java/current
 source $DAIKONDIR/bin/daikon.cshrc
 @end example
 

@@ -244,7 +244,7 @@ that would enable you to compile Daikon might look like the following.
 
 @example
   export INV=$HOME/invariants
-  export JAVA_HOME=/usr/java/jdk1.6.0_20
+  export JAVA_HOME=/usr/java/current
   export DAIKONCLASS_SOURCES=1
   source $INV/scripts/daikon.bashrc
   export CLASSPATH=.:$CLASSPATH
