@@ -316,11 +316,11 @@ public final class CLASSNAME
     }
 
     if (sts != InvariantStatus.NO_CHANGE) {
-      Fmt.pf ("lb.core.values_seen=" + lb.core.values_seen);
+      System.out.println ("lb.core.values_seen=" + lb.core.values_seen);
       for (int i = 0; i < mi; i++ )
-        Fmt.pf ("LTCore: vals %s %s %s", "" + con_vals[i], "" + lb1_vals[i],
-                "" + lb2_vals[i]);
-      Fmt.pf ("in inv " + wrapper.format() + " " + wrapper.ppt);
+        System.out.printf ("LTCore: vals %s %s %s%n", con_vals[i], lb1_vals[i],
+                           lb2_vals[i]);
+      System.out.println ("in inv " + wrapper.format() + " " + wrapper.ppt);
       assert sts == InvariantStatus.NO_CHANGE;
     }
 

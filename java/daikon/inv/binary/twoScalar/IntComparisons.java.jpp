@@ -588,7 +588,7 @@ public final class INTEQUAL
     // If the invariant is suppressed, create it
     if ((suppressions != null) && suppressions.suppressed (ppt)) {
       INTEQUAL inv = proto.instantiate_dyn (ppt);
-      // Fmt.pf ("%s is suppressed in ppt %s", inv.format(), ppt.name());
+      // System.out.printf ("%s is suppressed in ppt %s%n", inv.format(), ppt.name());
       return (inv);
     }
 

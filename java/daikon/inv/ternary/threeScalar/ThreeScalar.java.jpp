@@ -83,7 +83,7 @@ public abstract class CLASSNAME
     PRIMITIVE v1 = ((NUMWRAPPER) val1).LONGVALUE();
     PRIMITIVE v2 = ((NUMWRAPPER) val2).LONGVALUE();
     if (!(val3 instanceof NUMWRAPPER))
-      Fmt.pf ("val3 should be PRIMITIVE, but is " + val3.getClass());
+      System.out.println ("val3 should be PRIMITIVE, but is " + val3.getClass());
     PRIMITIVE v3 = ((NUMWRAPPER) val3).LONGVALUE();
     if (mod_index == 0) {
       return check_unmodified(v1, v2, v3, count);
@@ -104,13 +104,13 @@ public abstract class CLASSNAME
     PRIMITIVE v1 = ((NUMWRAPPER) val1).LONGVALUE();
     PRIMITIVE v2 = ((NUMWRAPPER) val2).LONGVALUE();
     if (!(val3 instanceof NUMWRAPPER)) {
-      Fmt.pf ("val3 should be PRIMITIVE, but is %s=%s, v2 is %s=%s",
+      System.out.printf ("val3 should be PRIMITIVE, but is %s=%s, v2 is %s=%s%n",
               val3.getClass().getName(), Debug.toString(val3),
               val2.getClass().getName(), Debug.toString(val2));
-      Fmt.pf ("our class = " + this.getClass().getName());
-      Fmt.pf ("our slice = " + this.ppt);
+      System.out.println ("our class = " + this.getClass().getName());
+      System.out.println ("our slice = " + this.ppt);
       PptSlice slice = this.ppt;
-      Fmt.pf ("var3 reptype = %s", slice.var_infos[2].rep_type);
+      System.out.printf ("var3 reptype = %s%n", slice.var_infos[2].rep_type);
       assert (slice.var_infos[0].rep_type == ProglangType.INT)
                   && (slice.var_infos[1].rep_type == ProglangType.INT)
                   && (slice.var_infos[2].rep_type == ProglangType.INT);

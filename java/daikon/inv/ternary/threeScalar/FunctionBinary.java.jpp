@@ -233,7 +233,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
         if (fb != null) {
           if (NIS.dkconfig_enabled) {
             NISuppressionSet ss = fb.get_ni_suppressions();
-            // Fmt.pf ("attempting instantiation of " + fb.getClass());
+            // System.out.println ("attempting instantiation of " + fb.getClass());
             if ((ss == null) || !ss.suppressed (slice)) {
               Invariant inv = fb.instantiate_dyn (slice);
               if (Debug.logOn() && (inv != null))

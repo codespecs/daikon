@@ -387,11 +387,11 @@ public final class SEQINTEQUAL
       }
       if (inv instanceof SEQINTEQUAL) {
         SEQINTEQUAL other = (SEQINTEQUAL) inv;
-        // Fmt.pf ("considering %s seqvar=%s, other=%s", other.format(),
+        // System.out.printf ("considering %s seqvar=%s, other=%s%n", other.format(),
         // seqvar().name(), other.seqvar().name());
         if (pptt.is_subsequence (seqvar(), other.seqvar())
             && (sclvar(vis) == other.sclvar())) {
-          // Fmt.pf ("is subsequence");
+          // System.out.println ("is subsequence");
           return new DiscardInfo(this, DiscardCode.obvious, seqvar().name()
                                  + " is a subsequence of "
                                  + other.seqvar().name() + " and "

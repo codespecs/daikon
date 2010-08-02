@@ -164,8 +164,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y,
                                       PRIMITIVE z, int count) {
     if (Debug.logDetail())
-      log (Fmt.spf ("result=%s, arg1=%s, arg2=%s", "" + resultvar, "" + arg1,
-                    "" + arg2));
+      log (String.format ("result=%s, arg1=%s, arg2=%s", resultvar, arg1, arg2));
     return (add_ordered (resultvar, arg1, arg2, count));
   }
 

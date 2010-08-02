@@ -100,7 +100,7 @@ public class NISuppressee {
       if (!(sample_inv instanceof BinaryInvariant))
         throw new Error("not binary: " + sample_inv.getClass());
       BinaryInvariant binary_inv = (BinaryInvariant) sample_inv;
-      // Fmt.pf ("checking %s over %s=%s and %s=%s", sample_inv.getClass(),
+      // System.out.printf ("checking %s over %s=%s and %s=%s%n", sample_inv.getClass(),
       //        vis[0].name(), vt.getValue(vis[0]),
       //        vis[1].name(), vt.getValue(vis[1]));
       return binary_inv.check_unordered (vt.getValue(vis[0]),
