@@ -207,10 +207,11 @@ if (@failed_steps != 0) {
     }
   }
 
-  # If quiet is not set, this output was printed earlier.  If quiet is
-  # set, the output was instead written to a log file (see function
-  # print_log).  If a step failed, we must print the log file now.  To
-  # summarize, if a step fails, the same output is printed whether or
+  # Handle error output and the quiet flag.
+  #  * If quiet is not set, this output was printed earlier.
+  #  * If quiet is set, the output was instead written to a log file (see
+  #    function print_log).  If a step failed, we must print the log file now.
+  # To summarize, if a step fails, the same output is printed whether or
   # not quiet is set.  However, if all steps succeed, there is no
   # output iff quiet is set.
   if ($quiet) {

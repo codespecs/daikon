@@ -7,6 +7,7 @@
 
 USER=daikonuser
 MAILTO=daikon-developers@csail.mit.edu
+#MAILTO=mernst@csail.mit.edu
 CRONIC=/afs/csail.mit.edu/u/d/daikonuser/research/invariants/plume-lib/bin/cronic
 AFS=/afs/csail.mit.edu/u/d/daikonuser/bin/afs-cron-wrapper
 
@@ -14,12 +15,14 @@ AFS=/afs/csail.mit.edu/u/d/daikonuser/bin/afs-cron-wrapper
 02 5 * * * cd $HOME/research/invariants/plume-lib; $AFS $CRONIC hg pull -u
 03 5 * * * $AFS crontab $HOME/research/invariants/scripts/buildtest.crontab64
 55 5 * * * $AFS $HOME/research/invariants/scripts/buildtest-remove-old
-# TEMPORARILY disabled
+# TEMPORARILY disabled -- runs nightly on 32-bit, but 64-bit fails at present
 # 0 6 * * * $AFS $HOME/research/invariants/scripts/buildtest
 
 ## Debugging.  (Also consider setting MAILTO variable while debugging.)
-# To re-install:
-#   cd $HOME/research/invariants/scripts; cvs update; crontab buildtest.crontab2; date
+# To install changed version:
+#   cd $HOME/research/invariants/scripts; crontab buildtest.crontab64; date
+# To throw away changes and re-install version from repository
+#   cd $HOME/research/invariants/scripts; rm buildtest.crontab64; cvs update; crontab buildtest.crontab64; date
 # 21 00 * * * $AFS $HOME/research/invariants/scripts/buildtest --reuse_dyncomp_jar=$HOME/dcomp_rt.jar --skip_kvasir
 
 # Last command must end with a blank line; this comment is here to ensure that.
