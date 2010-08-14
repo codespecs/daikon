@@ -37,13 +37,13 @@ SCRIPT_FILES := Makefile \
 	trace-add-nonces.pl \
 	util_daikon.pm \
 	runcluster.pl decls-add-cluster.pl extract_vars.pl dtrace-add-cluster.pl
-PLUME_SCRIPT_FILES := java-cpp.pl lines-from
+PLUME_SCRIPT_FILES := java-cpp lines-from
 
 ## These are now in plume-lib:
-# 	cygwin-runner.pl java-cygwin.sh \
-# 	javac-xlint javac-xlint-prune.pl \
+# 	cygwin-runner java-cygwin \
+# 	javac-xlint javac-xlint-prune \
 # 	checkargs.pm
-# 	sort-directory-order.pl
+# 	sort-directory-order
 
 SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES)) $(addprefix plume-lib/bin/,$(PLUME_SCRIPT_FILES))
 # This is so troublesome that it isn't used except as a list of dependences for make commands
