@@ -53,7 +53,7 @@ JAVAC_ARGS ?= -g ${JAVAC_TARGET}
 
 JAR ?= jar
 ifeq (cygwin,$(OSTYPE))
-  JAVA ?= $(PLUMEBIN)/java-cygwin.sh -ea -cp "${CLASSPATH}"
+  JAVA ?= $(PLUMEBIN)/java-cygwin -ea -cp "${CLASSPATH}"
 else
   JAVA ?= java -ea
 endif
@@ -122,12 +122,12 @@ export CLASSPATH
 # find command will get run multiple times.  USE AUTO_GENERATED_FILES instead.
 # "-o -path './jakarta-oro*/src/java/examples'" does not work for non-GNU find.
 # " | perl -pi -e 's/^\.\///g'" to remove leading "./"
-JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${PLUMEBIN}/sort-directory-order.pl)
+JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${PLUMEBIN}/sort-directory-order)
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | sort)
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
-TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${PLUMEBIN}/sort-directory-order.pl)
+TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${PLUMEBIN}/sort-directory-order)
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
 AUTO_GENERATED_FILES = \
@@ -1137,9 +1137,9 @@ avoid-jpp:
 # the status of the last command.
 
 # This rule does not work with make 3.77, but does work with make 3.78.
-JAVA_CPP ?= (rm -f $@; ${PLUMEBIN}/java-cpp.pl -DDEFINEDVAR $< 2>&1 > $@ && chmod -w $@)
+JAVA_CPP ?= (rm -f $@; ${PLUMEBIN}/java-cpp -DDEFINEDVAR $< 2>&1 > $@ && chmod -w $@)
 # Like the above, but also makes a backup file
-# JAVA_CPP = (mv -f $@ $@-bak; set -e; ${PLUMEBIN}/java-cpp.pl -DDEFINEDVAR $< > $@; chmod -w $@)
+# JAVA_CPP = (mv -f $@ $@-bak; set -e; ${PLUMEBIN}/java-cpp -DDEFINEDVAR $< > $@; chmod -w $@)
 
 # JAVA_CPP = (cp -pf $@ $@-bak; set -e; java-cpp $< -DDEFINEDVAR > $@-postproc; mv -f $@-postproc $@; chmod -w $@)
 ## Here are alternate ways of writing the same command:
