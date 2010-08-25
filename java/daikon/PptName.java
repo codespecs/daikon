@@ -466,8 +466,6 @@ public class PptName
         point = point.intern();
     } catch (NoSuchFieldException e) {
       throw new Error(e);
-    } catch (IllegalAccessException e) {
-      throw new Error(e);
     }
   }
 
