@@ -692,7 +692,7 @@ run:	all
 run_gui:	all
 	${JAVA} daikon.gui.InvariantsGUI /g1/users/mhao/daikon/inv_files/dsaa.inv 2>&1 | grep -v Font
 
- TAGS:	tags
+TAGS:	tags
 .PHONY: etags tags
 etags:	tags
 tags: ../plume-lib
