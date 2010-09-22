@@ -47,9 +47,12 @@ endif
 # JAVAC ?= javac -verbose
 
 JAVAC ?= javac
+# "-source 5" prevents accidental use of Java 7 features.
+# (But, with "-source 5" the .class files do not contain the type annotations.
+# So, do not use "-source 5".)
 # Target is 5 so that Java 5 JVM can run the code.
-JAVAC_TARGET ?= -target 5 -source 5
-JAVAC_ARGS ?= -g ${JAVAC_TARGET}
+JAVAC_TARGET_FLAGS ?= -target 5
+JAVAC_ARGS ?= -g ${JAVAC_TARGET_FLAGS}
 
 JAR ?= jar
 ifeq (cygwin,$(OSTYPE))
@@ -58,7 +61,13 @@ else
   JAVA ?= java -ea
 endif
 
-# If actually checking, override to checkers.jar.
+# When type-checking, need to use checkers.jar.  No harm using it if available.
+ifdef JSR308
+  CHECKERS ?= ${JSR308}/checker-framework/checkers
+endif
+ifdef CHECKERS
+  CHECKERSJAR ?= ${CHECKERS}/checkers.jar
+endif
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers-quals.jar
 
 jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*
@@ -768,6 +777,9 @@ audit:
 
 # Pluggable type qualifier checkers
 
+CHECKERS_BOOTCLASSPATH = -Xbootclasspath/p:${CHECKERS}/jdk/jdk.jar
+CHECKERS_ARGS = -source 7 -Awarns
+
 ## All of the following targets need to depend on "compile".
 
 # JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -implicit:class -Xlint:-processing
@@ -810,14 +822,14 @@ show_nullness_java_files:
 intern: check-interning
 interning: check-interning
 check-interning: ${INTERNING_JAVA_FILES} compile
-	${JAVAC_COMMAND_NO_ARGS} ${JAVAC_INTERNING_ARGS} ${INTERNING_JAVA_FILES}
+	${JAVAC_COMMAND_NO_ARGS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${INTERNING_JAVA_FILES}
 
 # Run the interning checker on all Java files, not just those that contain an
 # @Interned annotation.
 interning-all: check-interning-all
 check-interning-all: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_INTERNING_ARGS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_INTERNING_ARGS} ${JAVA_FILES}
+	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 check-nullness: check-nullness-all
 
@@ -825,41 +837,42 @@ check-nullness: check-nullness-all
 # check-nullness-all: check-nullness-all-withstubs
 check-nullness-all: check-nullness-all-withstubs-warns
 
-check-nullness-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${NULLNESS_JAVA_FILES}
+check-nullness-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
+	$(MAKE) compile
+	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-nullness-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-nullness-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ...
-	@${JAVAC_COMMAND_NO_ARGS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_NO_ARGS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_NO_ARGS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-prototype: check-prototype-all
 
 check-prototype-all: check-prototype-all-withstubs
 
 check-prototype-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-igj-all-nostubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 check-igj-all-withstubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 check-javari-all-nostubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 check-javari-all-withstubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 TYPEQUALS_JAVA_FILES = $(wildcard typequals/*.java)
 TYPEQUALS_CLASSES = $(subst .java,.class,${TYPEQUALS_JAVA_FILES})
