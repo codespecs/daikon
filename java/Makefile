@@ -47,11 +47,7 @@ endif
 # JAVAC ?= javac -verbose
 
 JAVAC ?= javac
-# "-source 5" prevents accidental use of Java 7 features.
-# (But, with "-source 5" the .class files do not contain the type annotations.
-# So, do not use "-source 5".)
-# Target is 5 so that Java 5 JVM can run the code.
-JAVAC_TARGET_FLAGS ?= -target 5
+# Add flags like "-source 5" or "-target 5" to JAVAC_TARGET_FLAGS.
 JAVAC_ARGS ?= -g ${JAVAC_TARGET_FLAGS}
 
 JAR ?= jar
@@ -102,7 +98,10 @@ ifdef DAIKON_CLASSPATH_PREFIX
   CLASSPATH := ${DAIKON_CLASSPATH_PREFIX}:${CLASSPATH}
 endif
 ifdef CLASSPATH_JARS
-	CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS)
+  CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS)
+endif
+ifeq "$(wildcard ${CHECKERS}/build)" "${CHECKERS}/build"
+  CLASSPATH := $(CLASSPATH):${CHECKERS}/build
 endif
 ifdef CLASSPATH_JARS2
   ifneq (checkers-quals.jar,$(findstring checkers-quals.jar,$(CLASSPATH)))
