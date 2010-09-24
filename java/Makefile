@@ -568,6 +568,7 @@ plume-lib-update:
 ../plume-lib/java/plume.jar: ../plume-lib
 	$(MAKE) -C ../plume-lib/java plume.jar
 
+# TODO: just check in a stable version of plume.jar
 lib/plume.jar: ../plume-lib/java/plume.jar
 	install -d lib
 	cp -p $< $@
