@@ -338,6 +338,7 @@ public class InvariantChecker {
      * process the sample by checking it against each existing invariant
      * and issuing an error if any invariant is falsified or weakened.
      */
+    /*@NonNullOnEntry("FileIO.data_trace_state")*/
     public void process_sample (PptMap all_ppts, PptTopLevel ppt,
                                 ValueTuple vt, /*@Nullable*/ Integer nonce) {
 

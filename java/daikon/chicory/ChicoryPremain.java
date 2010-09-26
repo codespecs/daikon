@@ -261,6 +261,7 @@ public class ChicoryPremain {
   /**
    * Return true iff Chicory has run a purity analysis or read a *.pure file
    */
+  /*@AssertNonNullIfTrue("pureMethods")*/
   public static boolean shouldDoPurity()
   {
     return doPurity;
