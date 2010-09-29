@@ -2967,7 +2967,7 @@ the predicates of conditional invariants.
 
 To use dummy invariants, a condition's formatting must be specified in
 the splitter info file, and the configuration option
-@option{daikon.PptTopLevel.dummy_invariant_level} must be set to a
+@option{daikon.split.PptSplitter.dummy_invariant_level} must be set to a
 non-zero value (see @ref{List of configuration options}).
 
 @menu

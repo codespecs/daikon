@@ -80,7 +80,7 @@ public class DaikonSimple {
       mainHelper(args);
     } catch (Daikon.TerminationMessage e) {
       String message = e.getMessage();
-      if (Daikon.dkconfig_show_stack_trace)
+      if (Debug.dkconfig_show_stack_trace)
         e.printStackTrace();
       if (message != null) {
         System.err.println(message);
@@ -113,7 +113,7 @@ public class DaikonSimple {
     // No optimizations used in the simple incremental algorithm so
     // optimizations are turned off.
     Daikon.use_equality_optimization = false;
-    Daikon.dkconfig_use_dynamic_constant_optimization = false;
+    DynamicConstants.dkconfig_use_dynamic_constant_optimization = false;
     Daikon.suppress_implied_controlled_invariants = false;
     NIS.dkconfig_enabled = false;
 

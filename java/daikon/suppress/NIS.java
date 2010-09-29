@@ -358,7 +358,7 @@ public class NIS {
       }
 
       // Add the invariant to its slice
-      if (Daikon.dkconfig_internal_check)
+      if (Debug.dkconfig_internal_check)
         assert inv.ppt.parent.findSlice(inv.ppt.var_infos)
                             == inv.ppt;
       inv.ppt.addInvariant (inv);
@@ -643,7 +643,7 @@ public class NIS {
       }
       Invariant inv = supinv.instantiate (ppt);
       if (inv != null) {
-        if (Daikon.dkconfig_internal_check) {
+        if (Debug.dkconfig_internal_check) {
           assert !inv.is_ni_suppressed() : "Still suppressed: " + inv.format();
           if (inv.ppt.find_inv_exact (inv) != null)
             throw new Error("inv " + inv.format()
@@ -723,7 +723,7 @@ public class NIS {
     for (SupInv supinv : suppressed_invs) {
       Invariant inv = supinv.instantiate (ppt);
       if (inv != null) {
-        if (Daikon.dkconfig_internal_check)
+        if (Debug.dkconfig_internal_check)
           assert inv.ppt.find_inv_exact (inv) == null;
         inv.ppt.addInvariant (inv);
         created_invs.add (inv);

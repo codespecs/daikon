@@ -8,6 +8,7 @@ import java.util.logging.Level;
 import plume.*;
 
 import daikon.suppress.NIS;
+import daikon.split.PptSplitter;
 
 /**
  * Merges invariants from multiple invariant files into a single invariant

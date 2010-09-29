@@ -95,6 +95,13 @@ public class ParameterDoclet
       longBlurb = blurb;
       fields = new HashMap<String,String> ();
     }
+
+    public boolean matches(String fullname, String name) {
+      return (((prefixPattern == null) ||
+               fullname.startsWith(prefixPattern)) &&
+              ((fieldName == null) ||
+               name.equals(fieldName)));
+    }
   }
 
   protected RootDoc root; // root document
@@ -126,6 +133,14 @@ public class ParameterDoclet
                       "Simplify interface configuration options",
                       "@cindex Simplify theorem prover, configuring\n"
                       + "The configuration options in this section are used to customize the interface to the Simplify theorem prover.  See the description of the @option{--suppress_redundant} command-line option in @ref{Options to control invariant detection}."),
+      new DocCategory("daikon.split.", null,
+                      "Splitter options",
+                      "@cindex Splitters, configuring\n"
+                      + "The configuration options in this section are used to customize the the behavior of splitters, which yield conditional invariants and implications (@pxref{Conditional invariants})."),
+      new DocCategory("daikon.Debug.", null,
+                      "Debugging options",
+                      "@cindex Splitters, configuring\n"
+                      + "The configuration options in this section are used to cause extra output that is useful for debugging."),
       new DocCategory(null, null,
                       "General configuration options",
                       "This section lists miscellaneous configuration options for Daikon.") };
@@ -184,10 +199,7 @@ public class ParameterDoclet
     }
 
     for (int i = 0; i < categories.length; i++) {
-      if (((categories[i].prefixPattern == null) ||
-           fullname.startsWith(categories[i].prefixPattern)) &&
-          ((categories[i].fieldName == null) ||
-           name.equals(categories[i].fieldName))) {
+      if (categories[i].matches(fullname, name)) {
         categories[i].fields.put(fullname, desc);
         break;
       }

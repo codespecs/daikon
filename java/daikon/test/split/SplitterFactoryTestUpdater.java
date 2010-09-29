@@ -94,7 +94,7 @@ public class SplitterFactoryTestUpdater {
     }
     declsFileLists.add(new ArrayList<File>(declsFileSet));
     try {
-      Daikon.dkconfig_suppressSplitterErrors = true;
+      PptSplitter.dkconfig_suppressSplitterErrors = true;
       Daikon.create_splitters(spinfoFiles);
       PptMap allPpts = FileIO.read_declaration_files(declsFileSet);
     } catch(IOException e) {
@@ -279,7 +279,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("      if (saveFiles) {");
     ps.println("        SplitterFactory.dkconfig_delete_splitters_on_exit = false;");
     ps.println("      }");
-    ps.println("      Daikon.dkconfig_suppressSplitterErrors = true;");
+    ps.println("      PptSplitter.dkconfig_suppressSplitterErrors = true;");
     ps.println("      Daikon.create_splitters(spFiles);");
     ps.println("      FileIO.read_declaration_files(declsFiles); // invoked for side effect");
     ps.println("      tempDir = SplitterFactory.getTempDir();");

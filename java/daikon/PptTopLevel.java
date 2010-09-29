@@ -156,7 +156,7 @@ public class PptTopLevel extends Ppt {
 
   /**
    * List of constant variables.
-   * Null unless dkconfig_use_dynamic_constant_optimization is set.
+   * Null unless DynamicConstants.dkconfig_use_dynamic_constant_optimization is set.
    */
   public /*@LazyNonNull*/ DynamicConstants constants = null;
 
@@ -1016,7 +1016,7 @@ public class PptTopLevel extends Ppt {
     // Instantiate slices and invariants if this is the first sample
     if (values_num_samples == 0) {
       debugFlow.fine("  Instantiating views for the first time");
-      if (!Daikon.dkconfig_use_dynamic_constant_optimization)
+      if (!DynamicConstants.dkconfig_use_dynamic_constant_optimization)
         instantiate_views_and_invariants();
     }
 
@@ -1026,7 +1026,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // Add samples to constants, adding new invariants as required
-    if (Daikon.dkconfig_use_dynamic_constant_optimization) {
+    if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
       if (constants == null)
         constants = new DynamicConstants(this);
       constants.add(vt, count);
@@ -1163,7 +1163,7 @@ public class PptTopLevel extends Ppt {
       NIS.dump_stats (debugNISStats, this);
 
     // At this point, no invariant should exist that is suppressed
-    if (Daikon.dkconfig_internal_check) {
+    if (Debug.dkconfig_internal_check) {
       for (Iterator<PptSlice> itor = views_iterator(); itor.hasNext();) {
         PptSlice slice = itor.next();
         for (Invariant inv : slice.invs) {
@@ -2319,7 +2319,7 @@ public class PptTopLevel extends Ppt {
    */
   private boolean is_var_ok_unary(VarInfo var) {
 
-    if (Daikon.dkconfig_use_dynamic_constant_optimization && constants == null)
+    if (DynamicConstants.dkconfig_use_dynamic_constant_optimization && constants == null)
       return (false);
 
     if (is_constant(var))
@@ -2347,7 +2347,7 @@ public class PptTopLevel extends Ppt {
    */
   private boolean is_var_ok_binary(VarInfo var) {
 
-    if (Daikon.dkconfig_use_dynamic_constant_optimization && constants == null)
+    if (DynamicConstants.dkconfig_use_dynamic_constant_optimization && constants == null)
       return (false);
 
     if (is_missing(var))
@@ -2374,7 +2374,7 @@ public class PptTopLevel extends Ppt {
    * @see #is_var_ok_binary(VarInfo)
    */
   private boolean is_var_ok_ternary(VarInfo var) {
-    if (Daikon.dkconfig_use_dynamic_constant_optimization && constants == null)
+    if (DynamicConstants.dkconfig_use_dynamic_constant_optimization && constants == null)
       return (false);
 
     if (!is_var_ok_binary(var))
@@ -2652,7 +2652,7 @@ public class PptTopLevel extends Ppt {
   // it doesn't need to be unless we run this static region!
 
   static {
-    if (! Daikon.dkconfig_disable_splitting) {
+    if (! PptSplitter.dkconfig_disable_splitting) {
       SplitterList.put(".*", new Splitter[] {
         new ReturnTrueSplitter(),
       });
@@ -2697,7 +2697,7 @@ public class PptTopLevel extends Ppt {
    **/
   public void addImplications() {
 
-    if (Daikon.dkconfig_disable_splitting)
+    if (PptSplitter.dkconfig_disable_splitting)
       return;
 
     // Will this code be a problem at a parent point if one of its children
@@ -3546,7 +3546,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // Merge any always missing variables from the children
-    if (Daikon.dkconfig_use_dynamic_constant_optimization) {
+    if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
       assert constants == null : this;
       constants = new DynamicConstants(this);
       constants.merge();

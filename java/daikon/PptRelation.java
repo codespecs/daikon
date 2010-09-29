@@ -1,6 +1,7 @@
 package daikon;
 
 import daikon.inv.*;
+import daikon.split.PptSplitter;
 import static daikon.FileIO.ParentRelation;
 import plume.*;
 import java.io.*;

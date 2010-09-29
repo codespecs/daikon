@@ -1,6 +1,6 @@
-package daikon;
+package daikon.split;
 
-import daikon.split.*;
+import daikon.*;
 import daikon.inv.*;
 import daikon.suppress.*;
 import plume.*;
@@ -25,6 +25,14 @@ public class PptSplitter implements Serializable {
   static final long serialVersionUID = 20031031L;
 
   /**
+   * Boolean.  Controls whether or not splitting based on the built-in
+   * splitting rules is disabled.  The built-in rules look for implications
+   * based on boolean return values and also when there are exactly two
+   * exit points from a method.
+   **/
+  public static boolean dkconfig_disable_splitting = false;
+
+  /**
    * Integer. A value of zero indicates that DummyInvariant objects should
    * not be created. A value of one indicates that dummy invariants
    * should be created only when no suitable condition was found in
@@ -37,6 +45,12 @@ public class PptSplitter implements Serializable {
    * Split bi-implications into two separate invariants.
    **/
   public static boolean dkconfig_split_bi_implications = false;
+
+  /**
+   * When true compilation errors during splitter file generation
+   * will not be reported to the user.
+   */
+  public static boolean dkconfig_suppressSplitterErrors = false;
 
   /** General debug tracer. **/
   public static final Logger debug = Logger.getLogger ("daikon.PptSplitter");
@@ -294,7 +308,7 @@ public class PptSplitter implements Serializable {
         PptSlice cslice = child_ppt.findSlice (cvis_sorted);
         if (cslice == null) {
           if (eq_inv != null) {
-            if (Daikon.dkconfig_use_dynamic_constant_optimization) {
+            if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
               assert child_ppt.constants != null : "@SuppressWarnings(nullness):  dependent:  config var";
               for (int i = 0; i < cvis_sorted.length; i++)
                 System.out.println ("con val = "

@@ -30,7 +30,8 @@ config-options:
 invariants-doc:
 	cd ../java && $(MAKE) ../doc/invariants-doc.texinfo
 
-# Always remake config-options.texinfo (../java/Makefile is more discerning)
+# Always remake config-options.texinfo
+# (We delegate to ../java/Makefile, which more discerning)
 .PHONY : config-options
 .PHONY : invariants-doc
 endif

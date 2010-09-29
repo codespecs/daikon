@@ -74,9 +74,6 @@ public final class Daikon {
    **/
   public static int dkconfig_progress_delay = 1000;
 
-  /** If true, show stack traces for errors such as file format errors. **/
-  public static boolean dkconfig_show_stack_trace = false;
-
   // Don't change the order of the modifiers on these strings as they
   // are automatically updated as part of the release process
   public final static String release_version = "4.6.4";
@@ -129,14 +126,6 @@ public final class Daikon {
   public static final String lineSep = Global.lineSep;
 
   /**
-   * Boolean.  Controls whether or not splitting based on the built-in
-   * splitting rules is disabled.  The built-in rules look for implications
-   * based on boolean return values and also when there are exactly two
-   * exit points from a method.
-   **/
-  public static boolean dkconfig_disable_splitting = false;
-
-  /**
    * Boolean.  Controls whether or not processing information is printed out.
    * Setting this variable to true also automatically sets
    * <code>progress_delay</code> to -1.
@@ -178,15 +167,6 @@ public final class Daikon {
   public static boolean use_equality_optimization = true;
 
   /**
-   * Whether to use the dynamic constants optimization.  This
-   * optimization doesn't instantiate invariants over constant
-   * variables (i.e., that that have only seen one value).  When the
-   * variable receives a second value, invariants are instantiated and
-   * are given the sample representing the previous constant value.
-   **/
-  public static boolean dkconfig_use_dynamic_constant_optimization = true;
-
-  /**
    * Boolean.  Controls whether the Daikon optimizations (equality
    * sets, suppressions) are undone at the end to create a more
    * complete set of invariants.  Output does not include
@@ -224,12 +204,6 @@ public final class Daikon {
    **/
   // Perhaps a better default would be "missing".
   public static /*@Interned*/ String dkconfig_guardNulls = "default";
-
-  /**
-   * When true compilation errors during splitter file generation
-   * will not be reported to the user.
-   */
-  public static boolean dkconfig_suppressSplitterErrors = false;
 
   /**
    * Whether to associate the program points in a dataflow hierarchy,
@@ -282,12 +256,6 @@ public final class Daikon {
   public static Pattern ppt_omit_regexp;
   public static Pattern var_regexp;
   public static Pattern var_omit_regexp;
-
-  /**
-   * When true, perform detailed internal checking.
-   * These are essentially additional, possibly costly assert statements.
-   */
-  public static boolean dkconfig_internal_check = false;
 
   /**
    * If set, only ppts less than ppt_max_name are included.  Used by the
@@ -488,7 +456,7 @@ public final class Daikon {
     } catch (TerminationMessage e) {
       if (e.getMessage() != null) {
         System.err.println(e.getMessage());
-        if (dkconfig_show_stack_trace)
+        if (Debug.dkconfig_show_stack_trace)
           e.printStackTrace();
         System.exit(1);
       } else {
@@ -524,7 +492,7 @@ public final class Daikon {
     }
 
     if (Daikon.dkconfig_undo_opts) {
-      Daikon.dkconfig_disable_splitting = true;
+      PptSplitter.dkconfig_disable_splitting = true;
     }
 
     if (Daikon.dkconfig_quiet)
@@ -1650,7 +1618,7 @@ public final class Daikon {
   }
 
   private static void load_spinfo_files(Set<File> spinfo_files) {
-    if (dkconfig_disable_splitting || spinfo_files.isEmpty()) {
+    if (PptSplitter.dkconfig_disable_splitting || spinfo_files.isEmpty()) {
       return;
     }
     stopwatch.reset();
@@ -1672,7 +1640,7 @@ public final class Daikon {
 
   private static void load_map_files(PptMap all_ppts, Set<File> map_files) {
     stopwatch.reset();
-    if (!dkconfig_disable_splitting && map_files.size() > 0) {
+    if (!PptSplitter.dkconfig_disable_splitting && map_files.size() > 0) {
       System.out.print("Reading map (context) files ");
       ContextSplitterFactory.load_mapfiles_into_splitterlist(
         map_files,
@@ -1692,7 +1660,7 @@ public final class Daikon {
    * by default (though other splitters can be defined by the user)
    */
   public static void setup_splitters(PptTopLevel ppt) {
-    if (dkconfig_disable_splitting) {
+    if (PptSplitter.dkconfig_disable_splitting) {
       return;
     }
 
@@ -1941,7 +1909,7 @@ public final class Daikon {
     create_combined_exits(all_ppts);
 
     // Post process dynamic constants
-    if (dkconfig_use_dynamic_constant_optimization) {
+    if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
       debugProgress.fine("Constant Post Processing ... ");
       for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator();
         itor.hasNext();
@@ -2003,7 +1971,7 @@ public final class Daikon {
     // Add implications
     stopwatch.reset();
     fileio_progress.clear();
-    if (! Daikon.dkconfig_disable_splitting) {
+    if (! PptSplitter.dkconfig_disable_splitting) {
       debugProgress.fine("Adding Implications ... ");
       for (Iterator<PptTopLevel> ii = all_ppts.pptIterator(); ii.hasNext();) {
         PptTopLevel ppt = ii.next();

@@ -119,12 +119,6 @@ public final class FileIO {
    */
   public static long dkconfig_dtrace_line_count = 0;
 
-  /**
-   * If true, check all of the basic blocks that make up a function
-   * to ensure that there is a path from function entry to the block.
-   */
-  public static boolean dkconfig_check_bb_connections = true;
-
   /** True if declaration records are in the new format **/
   public static /*@LazyNonNull*/ Boolean new_decl_format = null;
 
@@ -1840,7 +1834,7 @@ public final class FileIO {
             }
           }
         }
-        if (dkconfig_check_bb_connections) {
+        if (Debug.dkconfig_check_bb_connections) {
           // The function entry should be able should be strongly connected
           for (int i = 1; i < ppts.size(); i++) {
             PptTopLevel p = ppts.get(i);

@@ -14,6 +14,7 @@ import daikon.inv.*;
 import daikon.inv.OutputFormat;
 import daikon.inv.filter.*;
 import daikon.suppress.*;
+import daikon.split.PptSplitter;
 import daikon.config.Configuration;
 
 /**

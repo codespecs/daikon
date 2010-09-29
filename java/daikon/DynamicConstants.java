@@ -44,6 +44,15 @@ public class DynamicConstants implements Serializable {
   // daikon.config.Configuration interface.
 
   /**
+   * Whether to use the dynamic constants optimization.  This
+   * optimization doesn't instantiate invariants over constant
+   * variables (i.e., that that have only seen one value).  When the
+   * variable receives a second value, invariants are instantiated and
+   * are given the sample representing the previous constant value.
+   **/
+  public static boolean dkconfig_use_dynamic_constant_optimization = true;
+
+  /**
    * Boolean. If true only create OneOf invariants for variables that
    * are constant for the entire run.  If false, all possible invariants
    * are created between constants.  Note that setting this to true only
@@ -770,7 +779,7 @@ public class DynamicConstants implements Serializable {
                         ((Double) con1.val).doubleValue());
           }
           if (lt != null) {
-            if (Daikon.dkconfig_internal_check)
+            if (Debug.dkconfig_internal_check)
               assert slice.find_inv_by_class (lt.getClass()) == null
                 : "inv = " + lt.format() + " slice = " + slice;
             slice.addInvariant (lt);
@@ -833,7 +842,7 @@ public class DynamicConstants implements Serializable {
                         con2.vi, ((Double) con2.val).doubleValue());
           }
           if ((lt != null) && (sts == InvariantStatus.NO_CHANGE)) {
-            if (Daikon.dkconfig_internal_check)
+            if (Debug.dkconfig_internal_check)
               assert slice.find_inv_by_class (lt.getClass()) == null
                 : "inv = " + lt.format() + " slice = " + slice;
             slice.addInvariant (lt);

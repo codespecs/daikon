@@ -269,7 +269,7 @@ public class NISuppression {
         unsuppressed_invs.addAll (new_invs);
 
         // Check to insure that none of the invariants already exists
-        if (Daikon.dkconfig_internal_check) {
+        if (Debug.dkconfig_internal_check) {
           for (NIS.SupInv supinv : new_invs) {
             Invariant cinv = supinv.already_exists();
             if (cinv != null) {
@@ -364,7 +364,7 @@ public class NISuppression {
         unsuppressed_invs.addAll (new_invs);
 
         // Check to insure that none of the invariants already exists
-        if (Daikon.dkconfig_internal_check) {
+        if (Debug.dkconfig_internal_check) {
           for (NIS.SupInv supinv : new_invs) {
             Invariant cinv = supinv.already_exists();
             if (cinv != null)

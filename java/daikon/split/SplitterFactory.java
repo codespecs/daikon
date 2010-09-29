@@ -99,7 +99,7 @@ public class SplitterFactory {
                 @SuppressWarnings("nullness") // dependent: because splitterExists() = true
                 /*@NonNull*/ Splitter splitter = splitterObjects[i][k].getSplitter();
                 sp.addElement(splitter);
-              } else if (! Daikon.dkconfig_suppressSplitterErrors) {
+              } else if (! PptSplitter.dkconfig_suppressSplitterErrors) {
                 System.out.println(splitterObjects[i][k].getError());
               }
             }

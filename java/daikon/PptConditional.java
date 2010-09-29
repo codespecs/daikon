@@ -21,9 +21,9 @@ public final class PptConditional
   static final long serialVersionUID = 20041216L;
 
   public PptTopLevel parent;
-  transient Splitter splitter;
+  public transient Splitter splitter;
   // indicates whether we're on the true side or the false side of the Splitter
-  boolean splitter_inverse;
+  public boolean splitter_inverse;
 
   // This does not install the variable values.  The reason is that it's
   // more efficient to do that for two PptConditional objects at once.

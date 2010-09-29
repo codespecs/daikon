@@ -13,7 +13,7 @@ import java.util.Iterator;
  * is equivalent to the condition.
  *
  * To use dummy invariants for splitting conditions, the configuration
- * option <samp>daikon.PptTopLevel.dummy_invariant_level</samp> must be set,
+ * option <samp>daikon.split.PptSplitter.dummy_invariant_level</samp> must be set,
  * and formatting information must be supplied in the splitter info file.
  **/
 public class DummyInvariant

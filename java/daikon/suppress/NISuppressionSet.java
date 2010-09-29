@@ -446,7 +446,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
                  + " from nis suppression set " + this);
 
       // Make sure the invariant isn't already in the new_invs list
-      if (Daikon.dkconfig_internal_check) {
+      if (Debug.dkconfig_internal_check) {
         for (Invariant new_inv : new_invs) {
           if ((new_inv.getClass() == inv.getClass()) && (new_inv.ppt == slice))
             throw new Error(String.format("inv %s:%s already in new_invs "
@@ -457,7 +457,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
       // Add the invariant to the new invariant list
       new_invs.add (inv);
 
-      if (Daikon.dkconfig_internal_check) {
+      if (Debug.dkconfig_internal_check) {
         if (slice.contains_inv_exact (inv)) {
           // We are in trouble.
           // Print all unary and binary invariants over the same variables
