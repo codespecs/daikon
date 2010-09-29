@@ -210,13 +210,13 @@ build-kvasir: kvasir
 ### Rebuild everything; used for monthly releases, for example
 
 rebuild-everything:
-	${MAKE} -C $(inv)/java very-clean
-	${MAKE} -C $(inv)/java tags compile
-	${MAKE} -C $(inv) daikon.jar
-	${MAKE} -C $(inv)/java dcomp_rt.jar
-	${MAKE} -C $(inv)/doc clean
-	${MAKE} -C $(inv)/doc
-	-${MAKE} -C $(inv)/kvasir distclean
+	${MAKE} -C $(INV)/java very-clean
+	${MAKE} -C $(INV)/java tags compile
+	${MAKE} -C $(INV) daikon.jar
+	${MAKE} -C $(INV)/java dcomp_rt.jar
+	${MAKE} -C $(INV)/doc clean
+	${MAKE} -C $(INV)/doc
+	-${MAKE} -C $(INV)/kvasir distclean
 	${MAKE} kvasir
 
 ### Testing the code
@@ -409,8 +409,8 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) c
 	install -d ${TMPDIR}/daikon-jar
 	# Compile Daikon and copy the resulting class files
 	# in the ${TMPDIR}/daikon-jar directory
-	make -C java all_directly
-	make -C plume-lib/java plume.jar
+	$(MAKE) -C java all_directly
+	$(MAKE) -C plume-lib/java plume.jar
 	cd java && find . \( -name dcomp-rt \) -prune -o -name '*.class' -print \
 		-exec cp --parents '{}' ${TMPDIR}/daikon-jar \;
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
@@ -665,4 +665,4 @@ plume-lib-update: plume-lib
 # The file is real, but the commands should always be re-run even if it exists.
 .PHONY: plume-lib/java/plume.jar
 plume-lib/java/plume.jar: plume-lib-update
-	make -C plume-lib/java plume.jar
+	$(MAKE) -C plume-lib/java plume.jar
