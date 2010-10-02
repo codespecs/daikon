@@ -26,7 +26,7 @@ while (<>) {
     my $line_count = ($_ =~ tr/\n/\n/) + 1;
     if (exists $ppt_count{$name}) {
 	$ppt_count{$name}[0]++;
-	die "Mismatched line count ($ppt_count{$name}[1] vs. $line_count)".
+	die "Mismatched line count (expected $ppt_count{$name}[1], found $line_count)".
 	  " for $name in $_"
 	    unless (($ppt_count{$name}[1] == $line_count)
                     || ($_ =~ "// EOF"));
