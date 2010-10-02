@@ -5,7 +5,7 @@
 # group samples by class (for Java) or method (for C) they were taken
 # from, writing new trace files with grouped data.
 # Jeremy Nimmer <jwnimmer@lcs.mit.edu>
-# Time-stamp: <2002-03-28 17:06:30 mistere>
+# Time-stamp: <2010-10-01 23:50:20 mernst>
 
 use FileHandle;
 use Compress::Zlib;
@@ -35,14 +35,16 @@ BEGIN {
 
 if ($tmp =~ m|^\s*$|) {
   next;
-} elsif ($tmp =~ m|^std\.(\w+)|s) {
+} elsif ($tmp =~ m/^(input-language|decl-version|var-comparability)/) {
+  next;
+} elsif ($tmp =~ m|^(?:ppt )?std\.(\w+)|s) {
   # C programs: std.method(...)
   $bucket_name = $1;
-} elsif ($tmp =~ m|^(.+):::OBJECT\n|s) {
+} elsif ($tmp =~ m|^(?:ppt )?(.+):::OBJECT\n|s) {
   $bucket_name = $1;
-} elsif ($tmp =~ m|^(.+):::CLASS\n|s) {
+} elsif ($tmp =~ m|^(?:ppt )?(.+):::CLASS\n|s) {
   $bucket_name = $1;
-} elsif ($tmp =~ m|^(.+)(\.[^(]+)\([^\)]*\)[^:]+:::\w+\n|s) {
+} elsif ($tmp =~ m|^(?:ppt )?(.+)(\.[^(]+)\([^\)]*\)[^:]*:::\w+\n|s) {
   $bucket_name = $1;
   if ($per_method) {
     $bucket_name .= $2;
