@@ -561,6 +561,7 @@ PLUME=${PLUMEJAVA}/src/plume
 ../plume-lib:
 	${MAKE} -C .. plume-lib
 
+# Watch out if you have another copy of plume that is earlier on your classpath.
 .PHONY: plume-lib-update
 plume-lib-update:
 	${MAKE} -C .. plume-lib-update
