@@ -1,0 +1,171 @@
+===========================================================================
+DataStructures.MyInteger:::OBJECT
+this.value == 0
+===========================================================================
+DataStructures.MyInteger.MyInteger(int):::ENTER
+x == 0
+===========================================================================
+DataStructures.MyInteger.MyInteger(int):::EXIT
+this.value == orig(x)
+===========================================================================
+DataStructures.Overflow:::OBJECT
+this has only one value
+===========================================================================
+DataStructures.Overflow.Overflow():::EXIT
+===========================================================================
+DataStructures.StackAr:::OBJECT
+this.topOfStack >= -1
+===========================================================================
+DataStructures.StackAr.StackAr(int):::ENTER
+capacity >= 0
+===========================================================================
+DataStructures.StackAr.StackAr(int):::EXIT
+this.topOfStack == -1
+this.topOfStack < orig(capacity)
+===========================================================================
+DataStructures.StackAr.isEmpty():::ENTER
+===========================================================================
+DataStructures.StackAr.isEmpty():::EXIT
+this.topOfStack == orig(this.topOfStack)
+(this.topOfStack == -1)  <==>  (return == true)
+(this.topOfStack >= 0)  <==>  (return == false)
+===========================================================================
+DataStructures.StackAr.isEmpty():::EXIT;condition="return == true"
+this.topOfStack == -1
+return == true
+===========================================================================
+DataStructures.StackAr.isEmpty():::EXIT;condition="not(return == true)"
+this.topOfStack >= 0
+return == false
+===========================================================================
+DataStructures.StackAr.isFull():::ENTER
+===========================================================================
+DataStructures.StackAr.isFull():::EXIT
+this.topOfStack == orig(this.topOfStack)
+===========================================================================
+DataStructures.StackAr.isFull():::EXIT;condition="return == true"
+return == true
+===========================================================================
+DataStructures.StackAr.isFull():::EXIT;condition="not(return == true)"
+return == false
+===========================================================================
+DataStructures.StackAr.makeEmpty():::ENTER
+===========================================================================
+DataStructures.StackAr.makeEmpty():::EXIT
+this.topOfStack == -1
+this.topOfStack <= orig(this.topOfStack)
+===========================================================================
+DataStructures.StackAr.pop():::ENTER
+this.topOfStack >= 0
+===========================================================================
+DataStructures.StackAr.pop():::EXIT
+this.topOfStack - orig(this.topOfStack) + 1 == 0
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::ENTER
+x != null
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::EXIT
+this.topOfStack >= 0
+this.topOfStack - orig(this.topOfStack) - 1 == 0
+===========================================================================
+DataStructures.StackAr.top():::ENTER
+===========================================================================
+DataStructures.StackAr.top():::EXIT74
+this.topOfStack == -1
+return == null
+===========================================================================
+DataStructures.StackAr.top():::EXIT75
+this.topOfStack >= 0
+return != null
+===========================================================================
+DataStructures.StackAr.top():::EXIT
+this.topOfStack == orig(this.topOfStack)
+(this.topOfStack == -1)  <==>  (return == null)
+(this.topOfStack >= 0)  <==>  (return != null)
+===========================================================================
+DataStructures.StackAr.topAndPop():::ENTER
+===========================================================================
+DataStructures.StackAr.topAndPop():::EXIT108
+this.topOfStack == orig(this.topOfStack)
+this.topOfStack == -1
+return == null
+===========================================================================
+DataStructures.StackAr.topAndPop():::EXIT111
+return != null
+orig(this.topOfStack) >= 0
+this.topOfStack - orig(this.topOfStack) + 1 == 0
+===========================================================================
+DataStructures.StackAr.topAndPop():::EXIT
+(return != null)  <==>  (orig(this.topOfStack) >= 0)
+(return != null)  ==>  (this.topOfStack - orig(this.topOfStack) + 1 == 0)
+(return == null)  <==>  (orig(this.topOfStack) == -1)
+(return == null)  <==>  (this.topOfStack == orig(this.topOfStack))
+(return == null)  ==>  (this.topOfStack == -1)
+this.topOfStack <= orig(this.topOfStack)
+===========================================================================
+DataStructures.StackArTester:::CLASS
+DataStructures.StackArTester.s != null
+DataStructures.StackArTester.s.topOfStack >= -1
+DataStructures.StackArTester.rnd has only one value
+DataStructures.StackArTester.rnd != null
+===========================================================================
+DataStructures.StackArTester.doNew(int):::ENTER
+DataStructures.StackArTester.s.topOfStack == -1
+size >= 0
+DataStructures.StackArTester.s.topOfStack < size
+===========================================================================
+DataStructures.StackArTester.doNew(int):::EXIT
+DataStructures.StackArTester.s.topOfStack == orig(DataStructures.StackArTester.s.topOfStack)
+DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
+DataStructures.StackArTester.s.topOfStack == -1
+DataStructures.StackArTester.s.topOfStack < orig(size)
+===========================================================================
+DataStructures.StackArTester.fill(int):::ENTER
+DataStructures.StackArTester.s.topOfStack == -1
+DataStructures.StackArTester.s.topOfStack < n
+===========================================================================
+DataStructures.StackArTester.fill(int):::EXIT
+DataStructures.StackArTester.s.topOfStack == orig(DataStructures.StackArTester.s.topOfStack)
+DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
+DataStructures.StackArTester.s.topOfStack == -1
+DataStructures.StackArTester.s.topOfStack < orig(n)
+===========================================================================
+DataStructures.StackArTester.main(java.lang.String[]):::ENTER
+DataStructures.StackArTester.s.topOfStack == size(args[])-1
+DataStructures.StackArTester.s has only one value
+args has only one value
+args.getClass() == java.lang.String[].class
+args[] == []
+args[].toString == []
+===========================================================================
+DataStructures.StackArTester.main(java.lang.String[]):::EXIT
+DataStructures.StackArTester.s.topOfStack == orig(DataStructures.StackArTester.s.topOfStack)
+DataStructures.StackArTester.s.topOfStack == size(args[])-1
+DataStructures.StackArTester.s.topOfStack == orig(size(args[]))-1
+DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
+args[] == orig(args[])
+DataStructures.StackArTester.s has only one value
+args[] == []
+args[].toString == []
+===========================================================================
+DataStructures.StackArTester.observe():::ENTER
+===========================================================================
+DataStructures.StackArTester.observe():::EXIT
+DataStructures.StackArTester.s == orig(DataStructures.StackArTester.s)
+DataStructures.StackArTester.s.topOfStack == orig(DataStructures.StackArTester.s.topOfStack)
+DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
+===========================================================================
+DataStructures.StackArTester.push():::ENTER
+===========================================================================
+DataStructures.StackArTester.push():::EXIT
+DataStructures.StackArTester.s == orig(DataStructures.StackArTester.s)
+DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
+DataStructures.StackArTester.s.topOfStack >= 0
+DataStructures.StackArTester.s.topOfStack - orig(DataStructures.StackArTester.s.topOfStack) - 1 == 0
+===========================================================================
+DataStructures.StackArTester.topOrPop():::ENTER
+===========================================================================
+DataStructures.StackArTester.topOrPop():::EXIT
+DataStructures.StackArTester.s == orig(DataStructures.StackArTester.s)
+DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
+DataStructures.StackArTester.s.topOfStack <= orig(DataStructures.StackArTester.s.topOfStack)

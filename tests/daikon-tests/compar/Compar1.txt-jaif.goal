@@ -1,0 +1,19 @@
+package checkers.nullness.quals:
+annotation @Nullable:
+annotation @NonNull:
+
+package misc:
+class Compar1 : // 0/- obj/class samples
+  method bar(IIII) : // 100 samples
+    return: 
+    parameter #0 :  // i
+    parameter #1 :  // j
+    parameter #2 :  // k
+    parameter #3 :  // l
+  method main([Ljava/lang/String;) : // 1 samples
+    return: 
+    parameter #0 :  // args
+  method <init>() : // 0 samples
+    return: 
+
+

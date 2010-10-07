@@ -1,0 +1,293 @@
+===========================================================================
+std.InfoTbl(int;int;const long *;int *;)double:::ENTER
+    Variables: r c f *f pdf *pdf ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
+r == ::r
+c == ::c
+f == ::f
+f != null
+pdf != null
+*pdf >= 0
+::line != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::line[] is printable
+daikon.Quant.size(::f) >= 1
+daikon.Quant.memberOf(*f , ::f )
+(!(daikon.Quant.size(::f)-1 == 0)) || (*pdf == 0)
+*pdf <= daikon.Quant.size(::f)-1
+===========================================================================
+std.InfoTbl(int;int;const long *;int *;)double:::EXIT
+    Variables: r c f *f pdf *pdf ::line ::line[] ::f ::f[] ::r ::c return orig(r) orig(c) orig(f) orig(*f) orig(pdf) orig(*pdf) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+assignable *pdf
+r == ::r
+r == \old(r)
+r == \old(::r)
+c == ::c
+c == \old(c)
+c == \old(::c)
+f == ::f
+f == \old(f)
+f == \old(::f)
+*f == \old(*f)
+pdf == \old(pdf)
+::line == \old(::line)
+daikon.Quant.pairwiseEqual(::f, \old(::f))
+f != null
+pdf != null
+*pdf >= 0
+::line != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::line[] is printable
+daikon.Quant.size(::f) >= 1
+daikon.Quant.memberOf(*f , ::f )
+(!(*pdf == 0)) || (\old(*pdf) == 0)
+(!(daikon.Quant.size(::f)-1 == 0)) || (*pdf == 0)
+*pdf <= daikon.Quant.size(::f)-1
+::line.equals(\old(::line))
+(!(daikon.Quant.size(::f)-1 == 0)) || (\old(*pdf) == 0)
+\old(*pdf) <= daikon.Quant.size(::f)-1
+===========================================================================
+std.LGamma(double;)double:::ENTER
+    Variables: x ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
+x >= 0.5
+::line != null
+::f != null
+::r >= 2
+::c != 0
+===========================================================================
+std.LGamma(double;)double:::EXIT6
+    Variables: x ::line ::line[] ::f ::f[] ::r ::c return orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+assignable x
+::r == ::c
+::r == \old(::c)
+daikon.Quant.fuzzy.eq(x, -0.5)
+::r == 2 || ::r == 4
+::r % 2 == 0
+daikon.Quant.fuzzy.eq(\result, 0.572365)
+daikon.Quant.fuzzy.eq(\old(x), 0.5)
+===========================================================================
+std.LGamma(double;)double:::EXIT7
+    Variables: x ::line ::line[] ::f ::f[] ::r ::c return orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+assignable x
+\old(x) >= 1.0
+daikon.Quant.fuzzy.eq(0, x - \old(x) - 5)
+===========================================================================
+std.LGamma(double;)double:::EXIT
+    Variables: x ::line ::line[] ::f ::f[] ::r ::c return orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+assignable x
+::line == \old(::line)
+::f == \old(::f)
+daikon.Quant.pairwiseEqual(::f, \old(::f))
+::r == \old(::r)
+::c == \old(::c)
+(\old(x) >= 1.0)  ==>  (\result >= -0.120782)
+(\old(x) >= 1.0)  ==>  (daikon.Quant.fuzzy.eq(0, x - \old(x) - 5))
+(daikon.Quant.fuzzy.eq(x, -0.5))  <==>  (daikon.Quant.fuzzy.eq(\old(x), 0.5))
+(daikon.Quant.fuzzy.eq(x, -0.5))  <==>  (daikon.Quant.fuzzy.lt(x, \old(x)))
+(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (::c % 2 == 0)
+(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (::c == 2 || ::c == 4)
+(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (::r % 2 == 0)
+(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (::r == ::c)
+(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (::r == 2 || ::r == 4)
+(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (daikon.Quant.fuzzy.eq(\result, 0.572365))
+(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (daikon.Quant.fuzzy.gt(\result, \old(x)))
+(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (daikon.Quant.fuzzy.lt(x, \result))
+daikon.Quant.fuzzy.ne(x, 0)
+x >= -0.5
+::line != null
+::f != null
+::r >= 2
+::c != 0
+daikon.Quant.fuzzy.ne(\result, 0)
+\result >= -0.120782
+daikon.Quant.fuzzy.ne(x, \result)
+daikon.Quant.fuzzy.ne(x, \old(x))
+::line.equals(\old(::line))
+daikon.Quant.fuzzy.ne(\result, \old(x))
+===========================================================================
+std.QChiSq(double;int;)double:::ENTER
+    Variables: chisq df ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
+chisq >= 0.0
+df >= 1
+::line != null
+::f != null
+::r >= 2
+::c != 0
+===========================================================================
+std.QChiSq(double;int;)double:::EXIT
+    Variables: chisq df ::line ::line[] ::f ::f[] ::r ::c return orig(chisq) orig(df) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+daikon.Quant.fuzzy.eq(chisq, \old(chisq))
+df == \old(df)
+::line == \old(::line)
+::f == \old(::f)
+daikon.Quant.pairwiseEqual(::f, \old(::f))
+::r == \old(::r)
+::c == \old(::c)
+chisq >= 0.0
+df >= 1
+::line != null
+::f != null
+::r >= 2
+::c != 0
+daikon.Quant.fuzzy.ne(chisq, \result)
+::line.equals(\old(::line))
+===========================================================================
+std.QGamma(double;double;)double:::ENTER
+    Variables: a x ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
+a >= 0.5
+x >= 0.0
+::line != null
+::f != null
+::r >= 2
+::c != 0
+daikon.Quant.fuzzy.ne(a, x)
+===========================================================================
+std.QGamma(double;double;)double:::EXIT
+    Variables: a x ::line ::line[] ::f ::f[] ::r ::c return orig(a) orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+daikon.Quant.fuzzy.eq(a, \old(a))
+daikon.Quant.fuzzy.eq(x, \old(x))
+::line == \old(::line)
+::f == \old(::f)
+daikon.Quant.pairwiseEqual(::f, \old(::f))
+::r == \old(::r)
+::c == \old(::c)
+a >= 0.5
+x >= 0.0
+::line != null
+::f != null
+::r >= 2
+::c != 0
+daikon.Quant.fuzzy.ne(a, x)
+daikon.Quant.fuzzy.ne(x, \result)
+::line.equals(\old(::line))
+===========================================================================
+std.gcf(double;double;)double:::ENTER
+    Variables: a x ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
+a >= 0.5
+::line != null
+::f != null
+::r >= 2
+::c >= 2
+===========================================================================
+std.gcf(double;double;)double:::EXIT11
+    Variables: a x ::line ::line[] ::f ::f[] ::r ::c return orig(a) orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+===========================================================================
+std.gcf(double;double;)double:::EXIT
+    Variables: a x ::line ::line[] ::f ::f[] ::r ::c return orig(a) orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+daikon.Quant.fuzzy.eq(a, \old(a))
+daikon.Quant.fuzzy.eq(x, \old(x))
+::line == \old(::line)
+::f == \old(::f)
+daikon.Quant.pairwiseEqual(::f, \old(::f))
+::r == \old(::r)
+::c == \old(::c)
+a >= 0.5
+::line != null
+::f != null
+::r >= 2
+::c >= 2
+::line.equals(\old(::line))
+===========================================================================
+std.gser(double;double;)double:::ENTER
+    Variables: a x ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
+a >= 0.5
+::line != null
+::f != null
+::r >= 2
+::c != 0
+===========================================================================
+std.gser(double;double;)double:::EXIT8
+    Variables: a x ::line ::line[] ::f ::f[] ::r ::c return orig(a) orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+daikon.Quant.fuzzy.eq(x, 0.0)
+::r == 2 || ::r == 4 || ::r == 6
+::r % 2 == 0
+::c >= 2
+daikon.Quant.fuzzy.eq(\result, 0.0)
+(::r >> ::c == 0)
+===========================================================================
+std.gser(double;double;)double:::EXIT9
+    Variables: a x ::line ::line[] ::f ::f[] ::r ::c return orig(a) orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+===========================================================================
+std.gser(double;double;)double:::EXIT
+    Variables: a x ::line ::line[] ::f ::f[] ::r ::c return orig(a) orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+daikon.Quant.fuzzy.eq(a, \old(a))
+daikon.Quant.fuzzy.eq(x, \old(x))
+::line == \old(::line)
+::f == \old(::f)
+daikon.Quant.pairwiseEqual(::f, \old(::f))
+::r == \old(::r)
+::c == \old(::c)
+a >= 0.5
+::line != null
+::f != null
+::r >= 2
+::c != 0
+::line.equals(\old(::line))
+===========================================================================
+std.main(int;char **;)int:::ENTER
+    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
+::r == ::c
+argc == 1
+argv != null
+::line != null
+::f != null
+::r == 0
+===========================================================================
+std.main(int;char **;)int:::EXIT1
+    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c return orig(argc) orig(argv) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+assignable ::line[*], ::f[*], ::r, ::c
+(::f != null)  ==>  (daikon.Quant.eltsGTE(::f, 0))
+\result == 1
+daikon.Quant.size(::f) % 2 == 0
+(::f != null)  ==>  (daikon.Quant.eltsGTE(::f, \old(::r)))
+::r >= ::c
+::r > \old(::r)
+::c >= \old(::r)
+===========================================================================
+std.main(int;char **;)int:::EXIT2
+    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c return orig(argc) orig(argv) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+assignable ::line[*], ::f[*], ::r, ::c
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::line[] is printable
+\result == 1
+::r > \old(::r)
+::c > \old(::r)
+===========================================================================
+std.main(int;char **;)int:::EXIT3
+    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c return orig(argc) orig(argv) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+assignable ::line[*], ::f[*], ::r, ::c
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::line[] is printable
+\result == 1
+daikon.Quant.size(::f) >= 1
+::r > \old(::r)
+::c > \old(::r)
+===========================================================================
+std.main(int;char **;)int:::EXIT4
+    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c return orig(argc) orig(argv) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+assignable ::line[*], ::f[*], ::r, ::c
+(::line != null)  ==>  (::line.equals("\n") || ::line.equals(" \n") || ::line.equals("  \n"))
+::c >= 0
+\result == 1
+::c >= \old(::r)
+===========================================================================
+std.main(int;char **;)int:::EXIT5
+    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c return orig(argc) orig(argv) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+assignable ::line[*], ::f[*], ::r, ::c
+::line.equals("\n") || ::line.equals(" \n") || ::line.equals("  \n")
+::r >= 2
+::c != 0
+\result == 0
+::r > \old(::r)
+::c != \old(::r)
+===========================================================================
+std.main(int;char **;)int:::EXIT
+    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c return orig(argc) orig(argv) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+assignable ::line[*], ::f[*], ::r, ::c
+argc == \old(argc)
+argv == \old(argv)
+::line == \old(::line)
+::f == \old(::f)
+argc == 1
+argv != null
+::line != null
+::f != null
+::r >= 0
+\result == 0 || \result == 1
+(::f != null)  ==>  (daikon.Quant.size(::f) >= 1)
+::r >= \old(::r)

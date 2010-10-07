@@ -1,0 +1,8 @@
+WhatIsInteraction
+WhatIsInteraction.dtrace.diff
+WhatIsInteraction.comp
+WhatIsInteraction.comp.diff
+WhatIsInteraction.invs.diff
+WhatIsInteraction.out
+ran-kvasir
+*.counts *.counts.diff

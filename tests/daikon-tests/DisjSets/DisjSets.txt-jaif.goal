@@ -1,0 +1,23 @@
+package checkers.nullness.quals:
+annotation @Nullable:
+annotation @NonNull:
+
+package DataStructures:
+class DisjSets : // 23589/- obj/class samples
+  field s :  // int[]
+  method <init>(I) : // 29 samples
+    return: 
+    parameter #0 :  // numElements
+  method find(I) : // 11018 samples
+    return: 
+    parameter #0 :  // x
+  method unionCareful(II) : // 576 samples
+    return: 
+    parameter #0 :  // set1
+    parameter #1 :  // set2
+  method unionDisjoint(II) : // 186 samples
+    return: 
+    parameter #0 :  // root1
+    parameter #1 :  // root2
+
+

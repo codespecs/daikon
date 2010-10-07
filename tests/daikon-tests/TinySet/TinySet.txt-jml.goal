@@ -1,0 +1,89 @@
+===========================================================================
+six170.TinySet:::OBJECT
+    Variables: this this.bits
+this.bits >= 0
+===========================================================================
+six170.TinySet.TinySet():::EXIT
+    Variables: this this.bits
+this.bits == 0
+===========================================================================
+six170.TinySet.add(int):::ENTER
+    Variables: this this.bits n
+n >= 0
+===========================================================================
+six170.TinySet.add(int):::EXIT
+    Variables: this this.bits n orig(this) orig(this.bits) orig(n)
+assignable this.bits
+this.bits >= 1
+this.bits == (\old(this.bits) | this.bits)
+this.bits >= \old(this.bits)
+this.bits > \old(n)
+===========================================================================
+six170.TinySet.contains(int):::ENTER
+    Variables: this this.bits n
+n >= 0
+===========================================================================
+six170.TinySet.contains(int):::EXIT
+    Variables: this this.bits n return orig(this) orig(this.bits) orig(n)
+this.bits == \old(this.bits)
+(\result == true)  ==>  (\old(this) != null)
+(\result == true)  ==>  (this.bits > \old(n))
+===========================================================================
+six170.TinySet.intersect(six170.TinySet):::ENTER
+    Variables: this this.bits other other.bits
+other != null
+other.bits >= 0
+(!(other.bits == 0)) || (this.bits == 0)
+(!(this.bits == 0)) || (other.bits == 0)
+===========================================================================
+six170.TinySet.intersect(six170.TinySet):::EXIT
+    Variables: this this.bits other other.bits orig(this) orig(this.bits) orig(other) orig(other.bits)
+assignable this.bits
+other.bits == \old(other.bits)
+other.bits >= 0
+(!(other.bits == 0)) || (this.bits == 0)
+this.bits <= other.bits
+other.bits == (this.bits | other.bits)
+(!(\old(this.bits) == 0)) || (this.bits == 0)
+this.bits <= \old(this.bits)
+\old(this.bits) == (this.bits | \old(this.bits))
+(!(\old(this.bits) == 0)) || (other.bits == 0)
+(!(other.bits == 0)) || (\old(this.bits) == 0)
+this.bits == (other.bits & \old(this.bits))
+===========================================================================
+six170.TinySet.remove(int):::ENTER
+    Variables: this this.bits n
+this != null
+this.bits >= 1
+n >= 0
+this.bits > n
+===========================================================================
+six170.TinySet.remove(int):::EXIT
+    Variables: this this.bits n orig(this) orig(this.bits) orig(n)
+assignable this.bits
+this.bits <= \old(this.bits)
+\old(this.bits) == (this.bits | \old(this.bits))
+===========================================================================
+six170.TinySet.union(six170.TinySet):::ENTER
+    Variables: this this.bits other other.bits
+other != null
+other.bits >= 0
+(!(other.bits == 0)) || (this.bits == 0)
+(!(this.bits == 0)) || (other.bits == 0)
+===========================================================================
+six170.TinySet.union(six170.TinySet):::EXIT
+    Variables: this this.bits other other.bits orig(this) orig(this.bits) orig(other) orig(other.bits)
+assignable this.bits
+other.bits == \old(other.bits)
+other.bits >= 0
+(!(other.bits == 0)) || (this.bits == 0)
+(!(this.bits == 0)) || (other.bits == 0)
+this.bits == (other.bits | this.bits)
+this.bits >= other.bits
+(!(\old(this.bits) == 0)) || (this.bits == 0)
+(!(this.bits == 0)) || (\old(this.bits) == 0)
+this.bits == (\old(this.bits) | this.bits)
+this.bits >= \old(this.bits)
+(!(\old(this.bits) == 0)) || (other.bits == 0)
+(!(other.bits == 0)) || (\old(this.bits) == 0)
+this.bits == (other.bits | \old(this.bits))

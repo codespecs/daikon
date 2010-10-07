@@ -1,0 +1,32 @@
+package misc;
+
+class Precedence {
+
+  /*@ invariant this != null; */
+  /*@ invariant this.i == 0 || this.i == 2 || this.i == 10; */
+  /*@ requires args != null; */
+  /*@ requires \typeof(args) == \type(java.lang.String[]); */
+  /*@ requires (args.length == 0) && ((\forall int i; (0 <= i && i <= args.length-1) ==> (args[i] != null))); */
+  /*@ ensures (args.length == 0) && ((\forall int i; (0 <= i && i <= args.length-1) ==> (args[i] != null))); */
+  public static void main(String args[]) {
+    Precedence e = new Precedence();
+    e.i = 10;
+    System.out.println(e.lets_calculate(4));
+    // prints 6
+  }
+
+  /*@ spec_public */ int i;
+
+  /*@ requires this.i == 10; */
+  /*@ requires j == 4; */
+  /*@ modifies this.i; */
+  /*@ ensures this.i == 2; */
+  /*@ ensures \result == 6; */
+  int lets_calculate(int j)
+  {
+    i = i++ % j ; // this one prints 14 in the instrumented version
+    //i = (i++) % j ; // this one prints 6 in the instrumented version
+    return i + j;
+  }
+
+}

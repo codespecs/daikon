@@ -1,0 +1,952 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..foo():::ENTER
+  ppt-type enter
+  variable ::floatPtr1
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr1[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr1
+    rep-type double
+    dec-type float
+  variable ::floatPtr2
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr2[..]
+    var-kind array
+    enclosing-var ::floatPtr2
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::intPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr[..]
+    var-kind array
+    enclosing-var ::intPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::leaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global1
+    rep-type int
+    dec-type int
+  variable ::leaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global2
+    rep-type int
+    dec-type int
+  variable ::leaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global3
+    rep-type int
+    dec-type int
+  variable ::leaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global4
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global1
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global2
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global3
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global4
+    rep-type int
+    dec-type int
+
+ppt ..foo():::EXIT0
+  ppt-type subexit
+  variable ::floatPtr1
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr1[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr1
+    rep-type double
+    dec-type float
+  variable ::floatPtr2
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr2[..]
+    var-kind array
+    enclosing-var ::floatPtr2
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::intPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr[..]
+    var-kind array
+    enclosing-var ::intPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::leaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global1
+    rep-type int
+    dec-type int
+  variable ::leaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global2
+    rep-type int
+    dec-type int
+  variable ::leaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global3
+    rep-type int
+    dec-type int
+  variable ::leaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global4
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global1
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global2
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global3
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global4
+    rep-type int
+    dec-type int
+
+ppt ..leaf():::ENTER
+  ppt-type enter
+  variable ::floatPtr1
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr1[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr1
+    rep-type double
+    dec-type float
+  variable ::floatPtr2
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr2[..]
+    var-kind array
+    enclosing-var ::floatPtr2
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::intPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr[..]
+    var-kind array
+    enclosing-var ::intPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::leaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global1
+    rep-type int
+    dec-type int
+  variable ::leaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global2
+    rep-type int
+    dec-type int
+  variable ::leaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global3
+    rep-type int
+    dec-type int
+  variable ::leaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global4
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global1
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global2
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global3
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global4
+    rep-type int
+    dec-type int
+
+ppt ..leaf():::EXIT0
+  ppt-type subexit
+  variable ::floatPtr1
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr1[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr1
+    rep-type double
+    dec-type float
+  variable ::floatPtr2
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr2[..]
+    var-kind array
+    enclosing-var ::floatPtr2
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::intPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr[..]
+    var-kind array
+    enclosing-var ::intPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::leaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global1
+    rep-type int
+    dec-type int
+  variable ::leaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global2
+    rep-type int
+    dec-type int
+  variable ::leaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global3
+    rep-type int
+    dec-type int
+  variable ::leaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global4
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global1
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global2
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global3
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global4
+    rep-type int
+    dec-type int
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::floatPtr1
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr1[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr1
+    rep-type double
+    dec-type float
+  variable ::floatPtr2
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr2[..]
+    var-kind array
+    enclosing-var ::floatPtr2
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::intPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr[..]
+    var-kind array
+    enclosing-var ::intPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::leaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global1
+    rep-type int
+    dec-type int
+  variable ::leaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global2
+    rep-type int
+    dec-type int
+  variable ::leaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global3
+    rep-type int
+    dec-type int
+  variable ::leaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global4
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global1
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global2
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global3
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global4
+    rep-type int
+    dec-type int
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::floatPtr1
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr1[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr1
+    rep-type double
+    dec-type float
+  variable ::floatPtr2
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr2[..]
+    var-kind array
+    enclosing-var ::floatPtr2
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::intPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr[..]
+    var-kind array
+    enclosing-var ::intPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::leaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global1
+    rep-type int
+    dec-type int
+  variable ::leaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global2
+    rep-type int
+    dec-type int
+  variable ::leaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global3
+    rep-type int
+    dec-type int
+  variable ::leaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global4
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global1
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global2
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global3
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global4
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..nonleaf():::ENTER
+  ppt-type enter
+  variable ::floatPtr1
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr1[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr1
+    rep-type double
+    dec-type float
+  variable ::floatPtr2
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr2[..]
+    var-kind array
+    enclosing-var ::floatPtr2
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::intPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr[..]
+    var-kind array
+    enclosing-var ::intPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::leaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global1
+    rep-type int
+    dec-type int
+  variable ::leaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global2
+    rep-type int
+    dec-type int
+  variable ::leaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global3
+    rep-type int
+    dec-type int
+  variable ::leaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global4
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global1
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global2
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global3
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global4
+    rep-type int
+    dec-type int
+
+ppt ..nonleaf():::EXIT0
+  ppt-type subexit
+  variable ::floatPtr1
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr1[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr1
+    rep-type double
+    dec-type float
+  variable ::floatPtr2
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr2[..]
+    var-kind array
+    enclosing-var ::floatPtr2
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::intPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr[..]
+    var-kind array
+    enclosing-var ::intPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::leaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global1
+    rep-type int
+    dec-type int
+  variable ::leaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global2
+    rep-type int
+    dec-type int
+  variable ::leaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global3
+    rep-type int
+    dec-type int
+  variable ::leaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::leaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::leaf_global4
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global1
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global1[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global1
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global2
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global2[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global2
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global3
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global3[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global3
+    rep-type int
+    dec-type int
+  variable ::nonleaf_global4
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::nonleaf_global4[0]
+    var-kind field [0]
+    enclosing-var ::nonleaf_global4
+    rep-type int
+    dec-type int
+

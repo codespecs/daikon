@@ -1,0 +1,11 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== Copyright (C) 2004-2006, Philip Guo, MIT CSAIL Program Analysis Group
+==PID== Using LibVEX rev XXXX, a library for dynamic binary translation.
+==PID== Copyright (C) 2004-20XX, and GNU GPL'd, by OpenWorks LLP.
+==PID== Using valgrind, a dynamic binary instrumentation framework.
+==PID== Copyright (C) 2000-20XX, and GNU GPL'd, by Julian Seward et al.
+==PID== For more details, rerun with: -v
+==PID== 
+
+==PID== 
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

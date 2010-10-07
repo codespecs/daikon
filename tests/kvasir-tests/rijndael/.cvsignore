@@ -1,0 +1,20 @@
+cbc_d_m.txt
+cbc_e_m.txt
+daikon-output
+ecb_d_m.txt
+ecb_e_m.txt
+ecb_iv.txt
+ecb_tbl.txt
+ecb_vk.txt
+ecb_vt.txt
+ran-kvasir
+rijndaeltest-ref
+rijndaeltest-ref.decls.diff
+rijndaeltest-ref.dtrace.diff
+rijndaeltest-ref.out
+rijndaeltest-ref.out.diff
+rijndaeltest-ref.invs.diff
+*.counts *.counts.diff
+rijndael.decls.diff
+rijndael.out.diff
+rijndael.comp.diff rijndaeltest-ref.comp

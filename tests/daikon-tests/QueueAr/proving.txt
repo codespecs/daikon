@@ -1,0 +1,8 @@
+
+We don't find the (complicated) rep invariant - neither the
+front/back/size relationship, nor the nullness invariants.  Therefore,
+most of the invariants fail to prove.
+
+We could consider adding the rep invarint and seeing how the rest
+does.
+

@@ -1,0 +1,100 @@
+===========================================================================
+DisjSets:::OBJECT
+    Variables: this.s this.s[] size(this.s[]) size(this.s[])-1
+this.s != null
+(\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] >= -1))
+(\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] != i))
+(\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] <= this.s.length-1))
+===========================================================================
+DisjSets.DisjSets(int):::ENTER
+    Variables: numElements
+numElements >= 1
+===========================================================================
+DisjSets.DisjSets(int):::EXIT32
+    Variables: numElements this.s this.s[] orig(numElements) size(this.s[]) size(this.s[])-1
+      Unmodified variables: numElements
+numElements == this.s.length
+(\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] == -1))
+===========================================================================
+DisjSets.find(int):::ENTER
+    Variables: x this.s this.s[] size(this.s[]) size(this.s[])-1 this.s[x] this.s[x-1] this.s[x..] this.s[x+1..] this.s[0..x] this.s[0..x-1]
+x >= 0
+x <= this.s.length-1
+===========================================================================
+DisjSets.find(int):::EXIT
+    Variables: x return this.s this.s[] orig(x) orig(this.s) orig(this.s[]) size(this.s[]) size(this.s[])-1 this.s[x] this.s[x-1] this.s[x..] this.s[x+1..] this.s[0..x] this.s[0..x-1] this.s[return] this.s[return-1] this.s[return..] this.s[return+1..] this.s[0..return] this.s[0..return-1]
+      Unmodified variables: x this.s this.s[]
+(this.s[x] >= 0)  ==>  (!(\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] != \result)))
+(x != \result)  ==  (this.s[x] >= 0)
+\result >= 0
+this.s[\result] == -1
+x <= this.s.length-1
+===========================================================================
+DisjSets.unionCareful(int, int):::ENTER
+    Variables: set1 set2 this.s this.s[] size(this.s[]) size(this.s[])-1 this.s[set1] this.s[set1-1] this.s[set1..] this.s[set1+1..] this.s[0..set1] this.s[0..set1-1] this.s[set2] this.s[set2-1] this.s[set2..] this.s[set2+1..] this.s[0..set2] this.s[0..set2-1]
+set1 >= 0
+set2 >= 0
+set1 <= this.s.length-1
+set2 <= this.s.length-1
+===========================================================================
+DisjSets.unionCareful(int, int):::EXIT57
+    Variables: set1 set2 this.s this.s[] orig(set1) orig(set2) orig(this.s) orig(this.s[]) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[set1] this.s[set1-1] this.s[set1..] this.s[set1+1..] this.s[0..set1] this.s[0..set1-1] orig(this.s[set1]) orig(this.s[set1-1]) orig(this.s[set1..]) orig(this.s[set1+1..]) orig(this.s[0..set1]) orig(this.s[0..set1-1]) this.s[set2] this.s[set2-1] this.s[set2..] this.s[set2+1..] this.s[0..set2] this.s[0..set2-1] orig(this.s[set2]) orig(this.s[set2-1]) orig(this.s[set2..]) orig(this.s[set2+1..]) orig(this.s[0..set2]) orig(this.s[0..set2-1])
+      Modified variables: this.s[] this.s[set1..] this.s[set1+1..] this.s[0..set1] this.s[0..set1-1] this.s[set2] this.s[set2..] this.s[set2+1..] this.s[0..set2] this.s[0..set2-1]
+      Unmodified variables: set1 set2 this.s size(this.s[]) this.s[set1]
+this.s[set1] == \old(this.s[set1])
+set1 <= this.s.length-1
+set2 <= this.s.length-1
+(\forall int i, j; (0 <= i && i <= this.s.length-1 && 0 <= j && j <= \old(this.s.length-1) && i == j) ==> (this.s[i] >= \old(this.s[j])))
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterEqual needs to be changed: this.s[] >= orig(this.s[0..set1]) (lexically)
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan needs to be changed: this.s[] > orig(this.s[0..set1-1]) (lexically)
+!(\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] != \old(this.s[set2])))
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterEqual needs to be changed: this.s[] >= orig(this.s[0..set2]) (lexically)
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan needs to be changed: this.s[] > orig(this.s[0..set2-1]) (lexically)
+(\forall int i, j; (set1 <= i && i <= this.s.length-1 && \old(set1) <= j && j <= \old(this.s.length-1) && (i-(set1)) == (j-(\old(set1)))) ==> (this.s[i] >= \old(this.s[j])))
+(\forall int i, j; (set1+1 <= i && i <= this.s.length-1 && \old(set1+1) <= j && j <= \old(this.s.length-1) && (i-(set1+1)) == (j-(\old(set1+1)))) ==> (this.s[i] >= \old(this.s[j])))
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan needs to be changed: this.s[0..set1] > orig(this.s[0..set1-1]) (lexically)
+this.s[set2] >= \old(this.s[set2])
+(\forall int i, j; (set2 <= i && i <= this.s.length-1 && \old(set2) <= j && j <= \old(this.s.length-1) && (i-(set2)) == (j-(\old(set2)))) ==> (this.s[i] >= \old(this.s[j])))
+(\forall int i, j; (set2+1 <= i && i <= this.s.length-1 && \old(set2+1) <= j && j <= \old(this.s.length-1) && (i-(set2+1)) == (j-(\old(set2+1)))) ==> (this.s[i] >= \old(this.s[j])))
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan needs to be changed: this.s[0..set2] > orig(this.s[0..set2-1]) (lexically)
+===========================================================================
+DisjSets.unionDisjoint(int, int):::ENTER
+    Variables: root1 root2 this.s this.s[] size(this.s[]) size(this.s[])-1 this.s[root1] this.s[root1-1] this.s[root1..] this.s[root1+1..] this.s[0..root1] this.s[0..root1-1] this.s[root2] this.s[root2-1] this.s[root2..] this.s[root2+1..] this.s[0..root2] this.s[0..root2-1]
+this.s[root1] == this.s[root2]
+root1 >= 0
+root2 >= 0
+this.s[root1] == -1
+root1 != root2
+root1 <= this.s.length-1
+root2 <= this.s.length-1
+===========================================================================
+DisjSets.unionDisjoint(int, int):::EXIT44
+    Variables: root1 root2 this.s this.s[] orig(root1) orig(root2) orig(this.s) orig(this.s[]) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[root1] this.s[root1-1] this.s[root1..] this.s[root1+1..] this.s[0..root1] this.s[0..root1-1] orig(this.s[root1]) orig(this.s[root1-1]) orig(this.s[root1..]) orig(this.s[root1+1..]) orig(this.s[0..root1]) orig(this.s[0..root1-1]) this.s[root2] this.s[root2-1] this.s[root2..] this.s[root2+1..] this.s[0..root2] this.s[0..root2-1] orig(this.s[root2]) orig(this.s[root2-1]) orig(this.s[root2..]) orig(this.s[root2+1..]) orig(this.s[0..root2]) orig(this.s[0..root2-1])
+      Modified variables: this.s[] this.s[root1..] this.s[root1+1..] this.s[0..root1] this.s[0..root1-1] this.s[root2..] this.s[0..root2]
+      Unmodified variables: root1 root2 this.s size(this.s[]) this.s[root1] this.s[root2+1..] this.s[0..root2-1]
+root1 == this.s[root2]
+this.s[root1] == \old(this.s[root1])
+this.s[root1] == \old(this.s[root2])
+(\forall int i, j; (root2+1 <= i && i <= this.s.length-1 && \old(root2+1) <= j && j <= \old(this.s.length-1) && (i-(root2+1)) == (j-(\old(root2+1)))) ==> ( this.s[i] == \old(this.s[j]) ))
+(\forall int i, j; (0 <= i && i <= root2-1 && 0 <= j && j <= \old(root2-1) && i == j) ==> ( this.s[i] == \old(this.s[j]) ))
+root1 <= this.s.length-1
+root2 <= this.s.length-1
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan needs to be changed: this.s[] > orig(this.s[]) (lexically)
+(\forall int i, j; (0 <= i && i <= this.s.length-1 && 0 <= j && j <= \old(this.s.length-1) && i == j) ==> (this.s[i] >= \old(this.s[j])))
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan needs to be changed: this.s[] > orig(this.s[0..root1]) (lexically)
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan needs to be changed: this.s[] > orig(this.s[0..root1-1]) (lexically)
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan to be changed: this.s[] > orig(this.s[0..root2]) (lexically)
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntLessThan needs to be changed: orig(this.s[]) < this.s[0..root2] (lexically)
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan needs to be changed: orig(this.s[]) > this.s[0..root2-1] (lexically)
+(\forall int i, j; (root1 <= i && i <= this.s.length-1 && \old(root1) <= j && j <= \old(this.s.length-1) && (i-(root1)) == (j-(\old(root1)))) ==> (this.s[i] >= \old(this.s[j])))
+(\forall int i, j; (root1+1 <= i && i <= this.s.length-1 && \old(root1+1) <= j && j <= \old(this.s.length-1) && (i-(root1+1)) == (j-(\old(root1+1)))) ==> (this.s[i] >= \old(this.s[j])))
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan needs to be changed: this.s[0..root1] > orig(this.s[0..root1-1]) (lexically)
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntLessThan needs to be changed: orig(this.s[root1..]) < this.s[root2..] (lexically)
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntLessThan needs to be changed: orig(this.s[0..root1]) < this.s[0..root2] (lexically)
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntLessThan needs to be changed: orig(this.s[0..root1-1]) < this.s[0..root2] (lexically)
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan needs to be changed: this.s[root2..] > orig(this.s[root2..]) (lexically)
+(\forall int i, j; (root2 <= i && i <= this.s.length-1 && \old(root2) <= j && j <= \old(this.s.length-1) && (i-(root2)) == (j-(\old(root2)))) ==> (this.s[i] >= \old(this.s[j])))
+format_esc needs to be changed on SubSequence
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan needs to be changed: this.s[0..root2] > orig(this.s[0..root2]) (lexically)
+format_esc class daikon.inv.binary.twoSequence.SeqSeqIntLessThan needs to be changed: this.s[0..root2-1] < orig(this.s[0..root2]) (lexically)
+format_esc needs to be changed on SubSequence

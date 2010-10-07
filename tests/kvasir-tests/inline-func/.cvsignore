@@ -1,0 +1,8 @@
+inline inline.decls.diff inline.dtrace.diff inline.invs.diff inline.out inline.out.diff ran-kvasir
+*.counts *.counts.diff
+inline.comp inline.comp.diff
+inline-func.comp.diff
+inline-func.decls.diff
+inline-func.dtrace.diff
+inline-func.invs.diff
+inline-func.out.diff

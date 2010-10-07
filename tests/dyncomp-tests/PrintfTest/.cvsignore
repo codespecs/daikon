@@ -1,0 +1,8 @@
+PrintfTest
+PrintfTest.dtrace.diff
+PrintfTest.comp
+PrintfTest.comp.diff
+PrintfTest.invs.diff
+PrintfTest.out
+ran-kvasir
+*.counts *.counts.diff

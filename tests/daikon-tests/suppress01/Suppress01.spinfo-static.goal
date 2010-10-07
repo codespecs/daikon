@@ -1,0 +1,8 @@
+PPT_NAME misc.Suppress01.f
+i < theArray.length-1
+orig(i < theArray.length-1)
+
+PPT_NAME misc.Suppress01.main
+i < 25
+orig(i < 25)
+

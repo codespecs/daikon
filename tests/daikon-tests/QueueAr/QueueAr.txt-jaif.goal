@@ -1,0 +1,28 @@
+package checkers.nullness.quals:
+annotation @Nullable:
+annotation @NonNull:
+
+package DataStructures:
+class QueueAr : // 15267/- obj/class samples
+  field theArray :  // java.lang.Object[]
+  field currentSize :  // int
+  field front :  // int
+  field back :  // int
+  method <init>(I) : // 37 samples
+    return: 
+    parameter #0 :  // capacity
+  method dequeue() : // 536 samples
+    return: 
+  method enqueue(Ljava/lang/Object;) : // 673 samples
+    return: 
+    parameter #0 :  // x
+  method getFront() : // 1274 samples
+    return: @Nullable 
+  method isEmpty() : // 3156 samples
+    return: 
+  method isFull() : // 1947 samples
+    return: 
+  method makeEmpty() : // 29 samples
+    return: 
+
+

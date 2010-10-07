@@ -1,0 +1,50 @@
+PPT_NAME six170.Hanoi.Hanoi
+i<height
+orig(i<height)
+
+PPT_NAME six170.Hanoi.moveDisk
+diskLocation[i] == fromPeg
+i<height
+orig(diskLocation[i] == fromPeg)
+orig(i<height)
+
+PPT_NAME six170.Hanoi.moveTower
+orig(towerHeight == 1)
+towerHeight == 1
+
+PPT_NAME six170.Hanoi.otherPeg
+(pegA == 0)&&(pegB == 1)
+(pegA == 0)&&(pegB == 2)
+(pegA == 1)&&(pegB == 0)
+(pegA == 1)&&(pegB == 2)
+(pegA == 2)&&(pegB == 0)
+(pegA == 2)&&(pegB == 1)
+orig((pegA == 0)&&(pegB == 1))
+orig((pegA == 0)&&(pegB == 2))
+orig((pegA == 1)&&(pegB == 0))
+orig((pegA == 1)&&(pegB == 2))
+orig((pegA == 2)&&(pegB == 0))
+orig((pegA == 2)&&(pegB == 1))
+
+PPT_NAME six170.Hanoi.showTowers
+!noOutput
+(diskLocation[i] == j)&&(k <= i)
+(diskLocation[i] == j)&&(k <= i)
+i<((height*2+2)*3)
+i<height
+j<3
+k<height
+k>=0
+orig(!noOutput)
+orig((diskLocation[i] == j)&&(k <= i))
+orig((diskLocation[i] == j)&&(k <= i))
+orig(i<((height*2+2)*3))
+orig(i<height)
+orig(j<3)
+orig(k<height)
+orig(k>=0)
+
+PPT_NAME six170.Hanoi:::OBJECT
+noOutput ==  true
+orig(noOutput ==  true)
+

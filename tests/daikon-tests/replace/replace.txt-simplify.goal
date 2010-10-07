@@ -1,0 +1,328 @@
+===========================================================================
+std.addstr(char;char *;int *;int;)int:::ENTER
+(NEQ (hash |outset|) null)
+(NEQ (hash |j|) null)
+(>= |*j| 0)
+(EQ |maxset| 100)
+(<= |*j| |maxset|)
+===========================================================================
+std.addstr(char;char *;int *;int;)int:::EXIT
+(EQ |c| |__orig__c|)
+(EQ (hash |outset|) (hash |__orig__outset|))
+(EQ (hash |j|) (hash |__orig__j|))
+(EQ |maxset| |__orig__maxset|)
+(NEQ (hash |outset|) null)
+(NEQ (hash |j|) null)
+(>= |*j| 1)
+(EQ |maxset| 100)
+(OR (EQ |return| 0) (EQ |return| 1))
+(<= |*j| |maxset|)
+(>= |*j| |__orig__*j|)
+(>= |maxset| |__orig__*j|)
+===========================================================================
+std.amatch(char *;int;char *;int;)int:::ENTER
+(NEQ (hash |lin|) null)
+(>= |offset| 0)
+(NEQ (hash |pat|) null)
+(>= |j| 0)
+===========================================================================
+std.amatch(char *;int;char *;int;)int:::EXIT
+(EQ (hash |lin|) (hash |__orig__lin|))
+(EQ |offset| |return|)
+(EQ (hash |pat|) (hash |__orig__pat|))
+(NEQ (hash |lin|) null)
+(>= |offset| -1)
+(NEQ (hash |pat|) null)
+(>= |j| 0)
+(>= (select elems |lin|) (select elems |__orig__lin|))
+(IMPLIES (EQ |offset| 0) (EQ |__orig__offset| 0))
+(EQ (select elems |pat|) (select elems |__orig__pat|))
+(IMPLIES (EQ |j| 0) (EQ |__orig__j| 0))
+(>= |j| |__orig__j|)
+===========================================================================
+std.change(char *;char *;)void:::ENTER
+(NEQ (hash |pat|) null)
+(NEQ (hash |sub|) null)
+===========================================================================
+std.change(char *;char *;)void:::EXIT
+(EQ (hash |pat|) (hash |__orig__pat|))
+(EQ (hash |sub|) (hash |__orig__sub|))
+(NEQ (hash |pat|) null)
+(NEQ (hash |sub|) null)
+(EQ (select elems |pat|) (select elems |__orig__pat|))
+(EQ (select elems |sub|) (select elems |__orig__sub|))
+===========================================================================
+std.dodash(char;char *;int *;char *;int *;int;)void:::ENTER
+(EQ |delim| 93)
+(NEQ (hash |src|) null)
+(NEQ (hash |i|) null)
+(>= |*i| 2)
+(NEQ (hash |dest|) null)
+(NEQ (hash |j|) null)
+(EQ |maxset| 100)
+(NEQ |delim| |*j|)
+(<= |*j| |maxset|)
+===========================================================================
+std.dodash(char;char *;int *;char *;int *;int;)void:::EXIT
+(EQ |delim| |__orig__delim|)
+(EQ (hash |src|) (hash |__orig__src|))
+(EQ (hash |i|) (hash |__orig__i|))
+(EQ (hash |dest|) (hash |__orig__dest|))
+(EQ (hash |j|) (hash |__orig__j|))
+(EQ |maxset| |__orig__maxset|)
+(EQ |delim| 93)
+(NEQ (hash |src|) null)
+(NEQ (hash |i|) null)
+(NEQ (hash |dest|) null)
+(NEQ (hash |j|) null)
+(EQ |maxset| 100)
+(NEQ |delim| |*j|)
+(NEQ |delim| |__orig__*j|)
+(EQ (select elems |src|) (select elems |__orig__src|))
+(>= |*i| |__orig__*i|)
+(EQ (select elems |dest|) (select elems |__orig__dest|))
+(<= |*j| |maxset|)
+(>= |*j| |__orig__*j|)
+(>= |maxset| |__orig__*j|)
+===========================================================================
+std.esc(char *;int *;)char:::ENTER
+(NEQ (hash |s|) null)
+(NEQ (hash |i|) null)
+(>= |*i| 0)
+===========================================================================
+std.esc(char *;int *;)char:::EXIT
+(EQ (hash |s|) (hash |__orig__s|))
+(EQ (hash |i|) (hash |__orig__i|))
+(NEQ (hash |s|) null)
+(NEQ (hash |i|) null)
+(>= |*i| 0)
+(EQ (select elems |s|) (select elems |__orig__s|))
+(IMPLIES (EQ |*i| 0) (EQ |__orig__*i| 0))
+(>= |*i| |__orig__*i|)
+===========================================================================
+std.getccl(char *;int *;char *;int *;)boolean:::ENTER
+(NEQ (hash |arg|) null)
+(NEQ (hash |i|) null)
+(NEQ (hash |pat|) null)
+(NEQ (hash |j|) null)
+===========================================================================
+std.getccl(char *;int *;char *;int *;)boolean:::EXIT
+(EQ (hash |arg|) (hash |__orig__arg|))
+(EQ (hash |i|) (hash |__orig__i|))
+(EQ (hash |pat|) (hash |__orig__pat|))
+(EQ (hash |j|) (hash |__orig__j|))
+(IMPLIES (EQ |return| 0) (>= |__orig__*i| 1))
+(IMPLIES (EQ |return| 0) (> (select elems |pat|) (select elems |__orig__pat|)))
+(NEQ (hash |arg|) null)
+(NEQ (hash |i|) null)
+(NEQ (hash |pat|) null)
+(NEQ (hash |j|) null)
+(OR (EQ |return| 0) (EQ |return| 1))
+(EQ (select elems |arg|) (select elems |__orig__arg|))
+(> |*i| |__orig__*i|)
+(>= (select elems |pat|) (select elems |__orig__pat|))
+(> |*j| |__orig__*j|)
+===========================================================================
+std.getline(char *;int;)boolean:::ENTER
+(NEQ (hash |s|) null)
+(EQ |maxsize| 100)
+===========================================================================
+std.getline(char *;int;)boolean:::EXIT
+(EQ (hash |s|) (hash |__orig__s|))
+(EQ |maxsize| |__orig__maxsize|)
+(IMPLIES (EQ |return| 0) (EQ (select elems |s|) (select elems |__orig__s|)))
+(NEQ (hash |s|) null)
+(EQ |maxsize| 100)
+(OR (EQ |return| 0) (EQ |return| 1))
+===========================================================================
+std.getpat(char *;char *;)int:::ENTER
+(NEQ (hash |arg|) null)
+(NEQ (hash |pat|) null)
+===========================================================================
+std.getpat(char *;char *;)int:::EXIT
+(EQ (hash |arg|) (hash |__orig__arg|))
+(EQ (hash |pat|) (hash |__orig__pat|))
+(NEQ (hash |arg|) null)
+(NEQ (hash |pat|) null)
+(OR (EQ |return| 0) (EQ |return| 1))
+(EQ (select elems |arg|) (select elems |__orig__arg|))
+===========================================================================
+std.getsub(char *;char *;)boolean:::ENTER
+(NEQ (hash |arg|) null)
+(NEQ (hash |sub|) null)
+===========================================================================
+std.getsub(char *;char *;)boolean:::EXIT
+(EQ (hash |arg|) (hash |__orig__arg|))
+(EQ (hash |sub|) (hash |__orig__sub|))
+(NEQ (hash |arg|) null)
+(NEQ (hash |sub|) null)
+(OR (EQ |return| 0) (EQ |return| 1))
+(EQ (select elems |arg|) (select elems |__orig__arg|))
+===========================================================================
+std.in_pat_set(char;)boolean:::ENTER
+===========================================================================
+std.in_pat_set(char;)boolean:::EXIT
+(EQ |c| |__orig__c|)
+(EQ |return| 1)
+===========================================================================
+std.in_set_2(char;)boolean:::ENTER
+===========================================================================
+std.in_set_2(char;)boolean:::EXIT
+(EQ |c| |__orig__c|)
+(IMPLIES (EQ |return| 1) (OR (EQ |c| 37) (EQ |c| 42)))
+(OR (EQ |return| 0) (EQ |return| 1))
+===========================================================================
+std.locate(character;char *;int;)boolean:::ENTER
+(NEQ (hash |pat|) null)
+(>= |offset| 1)
+===========================================================================
+std.locate(character;char *;int;)boolean:::EXIT
+(EQ |c| |__orig__c|)
+(EQ (hash |pat|) (hash |__orig__pat|))
+(EQ |offset| |__orig__offset|)
+(NEQ (hash |pat|) null)
+(>= |offset| 1)
+(OR (EQ |return| 0) (EQ |return| 1))
+(EQ (select elems |pat|) (select elems |__orig__pat|))
+===========================================================================
+std.main(int;char **;)int:::ENTER
+(OR (EQ |argc| 2) (EQ |argc| 3))
+(NEQ (hash |argv|) null)
+===========================================================================
+std.main(int;char **;)int:::EXIT
+(EQ |argc| |__orig__argc|)
+(EQ (hash |argv|) (hash |__orig__argv|))
+(OR (EQ |argc| 2) (EQ |argc| 3))
+(NEQ (hash |argv|) null)
+(EQ |return| 0)
+===========================================================================
+std.makepat(char *;int;char;char *;)int:::ENTER
+(NEQ (hash |arg|) null)
+(EQ |start| 0)
+(EQ |delim| 0)
+(NEQ (hash |pat|) null)
+===========================================================================
+std.makepat(char *;int;char;char *;)int:::EXIT
+(EQ (hash |arg|) (hash |__orig__arg|))
+(EQ |start| |__orig__start|)
+(EQ |delim| |__orig__delim|)
+(EQ (hash |pat|) (hash |__orig__pat|))
+(NEQ (hash |arg|) null)
+(EQ |start| 0)
+(EQ |delim| 0)
+(NEQ (hash |pat|) null)
+(>= |return| 0)
+(EQ (select elems |arg|) (select elems |__orig__arg|))
+(<= |start| |return|)
+===========================================================================
+std.makesub(char *;int;character;char *;)int:::ENTER
+(NEQ (hash |arg|) null)
+(EQ |from| 0)
+(EQ |delim| 0)
+(NEQ (hash |sub|) null)
+===========================================================================
+std.makesub(char *;int;character;char *;)int:::EXIT
+(EQ (hash |arg|) (hash |__orig__arg|))
+(EQ |from| |__orig__from|)
+(EQ |delim| |__orig__delim|)
+(EQ (hash |sub|) (hash |__orig__sub|))
+(NEQ (hash |arg|) null)
+(EQ |from| 0)
+(EQ |delim| 0)
+(NEQ (hash |sub|) null)
+(>= |return| 0)
+(EQ (select elems |arg|) (select elems |__orig__arg|))
+(<= |from| |return|)
+===========================================================================
+std.omatch(char *;int *;char *;int;)boolean:::ENTER
+(NEQ (hash |lin|) null)
+(NEQ (hash |i|) null)
+(>= |*i| 0)
+(NEQ (hash |pat|) null)
+(>= |j| 0)
+===========================================================================
+std.omatch(char *;int *;char *;int;)boolean:::EXIT
+(EQ (hash |lin|) (hash |__orig__lin|))
+(EQ (hash |i|) (hash |__orig__i|))
+(EQ (hash |pat|) (hash |__orig__pat|))
+(EQ |j| |__orig__j|)
+(IMPLIES (EQ |return| 0) (EQ |*i| |__orig__*i|))
+(NEQ (hash |lin|) null)
+(NEQ (hash |i|) null)
+(>= |*i| 0)
+(NEQ (hash |pat|) null)
+(>= |j| 0)
+(OR (EQ |return| 0) (EQ |return| 1))
+(>= (select elems |lin|) (select elems |__orig__lin|))
+(IMPLIES (EQ |*i| 0) (EQ |__orig__*i| 0))
+(>= |*i| |__orig__*i|)
+(EQ (select elems |pat|) (select elems |__orig__pat|))
+===========================================================================
+std.patsize(char *;int;)int:::ENTER
+(NEQ (hash |pat|) null)
+(>= |n| 0)
+===========================================================================
+std.patsize(char *;int;)int:::EXIT
+(EQ (hash |pat|) (hash |__orig__pat|))
+(EQ |n| |__orig__n|)
+(NEQ (hash |pat|) null)
+(>= |n| 0)
+(>= |return| 1)
+(EQ (select elems |pat|) (select elems |__orig__pat|))
+===========================================================================
+std.putsub(char *;int;int;char *;)void:::ENTER
+(NEQ (hash |lin|) null)
+(>= |s1| 0)
+(>= |s2| 0)
+(NEQ (hash |sub|) null)
+(IMPLIES (EQ |s2| 0) (EQ |s1| 0))
+(<= |s1| |s2|)
+===========================================================================
+std.putsub(char *;int;int;char *;)void:::EXIT
+(EQ (hash |lin|) (hash |__orig__lin|))
+(EQ |s1| |__orig__s1|)
+(EQ |s2| |__orig__s2|)
+(EQ (hash |sub|) (hash |__orig__sub|))
+(NEQ (hash |lin|) null)
+(>= |s1| 0)
+(>= |s2| 0)
+(NEQ (hash |sub|) null)
+(EQ (select elems |lin|) (select elems |__orig__lin|))
+(IMPLIES (EQ |s2| 0) (EQ |s1| 0))
+(<= |s1| |s2|)
+(EQ (select elems |sub|) (select elems |__orig__sub|))
+===========================================================================
+std.stclose(char *;int *;int;)void:::ENTER
+(NEQ (hash |pat|) null)
+(NEQ (hash |j|) null)
+(>= |*j| 2)
+(>= |lastj| 0)
+(> |*j| |lastj|)
+===========================================================================
+std.stclose(char *;int *;int;)void:::EXIT
+(EQ (hash |pat|) (hash |__orig__pat|))
+(EQ (hash |j|) (hash |__orig__j|))
+(EQ |lastj| |__orig__lastj|)
+(NEQ (hash |pat|) null)
+(NEQ (hash |j|) null)
+(>= |lastj| 0)
+(NEQ (select elems |pat|) (select elems |__orig__pat|))
+(> |*j| |lastj|)
+(EQ 0 (+ (+ |*j| (* -1 |__orig__*j|)) -1))
+(< |lastj| |__orig__*j|)
+===========================================================================
+std.subline(char *;char *;char *;)void:::ENTER
+(NEQ (hash |lin|) null)
+(NEQ (hash |pat|) null)
+(NEQ (hash |sub|) null)
+===========================================================================
+std.subline(char *;char *;char *;)void:::EXIT
+(EQ (hash |lin|) (hash |__orig__lin|))
+(EQ (hash |pat|) (hash |__orig__pat|))
+(EQ (hash |sub|) (hash |__orig__sub|))
+(NEQ (hash |lin|) null)
+(NEQ (hash |pat|) null)
+(NEQ (hash |sub|) null)
+(>= (select elems |lin|) (select elems |__orig__lin|))
+(EQ (select elems |pat|) (select elems |__orig__pat|))
+(EQ (select elems |sub|) (select elems |__orig__sub|))

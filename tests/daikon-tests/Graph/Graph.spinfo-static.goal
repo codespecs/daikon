@@ -1,0 +1,32 @@
+REPLACE
+containsNode(Object node)
+adjMap.containsKey(node)
+getGraph()
+Graph.this
+nodeSet()
+adjMap.keySet()
+
+PPT_NAME MapQuick1.Graph.addEdge
+!this.containsNode(to)
+adj.contains(to)
+orig(!this.containsNode(to))
+orig(adj.contains(to))
+
+PPT_NAME MapQuick1.Graph.addNode
+adjMap.containsKey(node)
+orig(adjMap.containsKey(node))
+
+PPT_NAME MapQuick1.Graph.adjTo
+orig(result == null)
+result == null
+
+PPT_NAME MapQuick1.Graph.checkRep
+children.hasNext()
+nodes.hasNext()
+orig(children.hasNext())
+orig(nodes.hasNext())
+
+PPT_NAME MapQuick1.Graph.containsNode
+adjMap.containsKey(node)
+orig(adjMap.containsKey(node))
+

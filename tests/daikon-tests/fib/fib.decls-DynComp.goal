@@ -1,0 +1,317 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+misc.Fib:::CLASS
+misc.Fib.STEPS
+int # declaringClassPackageName=misc, 
+int
+2
+misc.Fib.a
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.b
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.c
+int # declaringClassPackageName=misc, 
+int
+3
+
+DECLARE
+misc.Fib:::OBJECT
+this
+misc.Fib # isParam=true
+hashcode
+4
+misc.Fib.STEPS
+int # declaringClassPackageName=misc, 
+int
+2
+misc.Fib.a
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.b
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.c
+int # declaringClassPackageName=misc, 
+int
+3
+
+
+DECLARE
+misc.Fib.Fib():::ENTER
+
+DECLARE
+misc.Fib.Fib():::EXIT5
+this
+misc.Fib # isParam=true
+hashcode
+4
+misc.Fib.STEPS
+int # declaringClassPackageName=misc, 
+int
+2
+misc.Fib.a
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.b
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.c
+int # declaringClassPackageName=misc, 
+int
+3
+
+
+DECLARE
+misc.Fib.main(java.lang.String[]):::ENTER
+misc.Fib.STEPS
+int # declaringClassPackageName=misc, 
+int
+5
+misc.Fib.a
+int # declaringClassPackageName=misc, 
+int
+6
+misc.Fib.b
+int # declaringClassPackageName=misc, 
+int
+6
+misc.Fib.c
+int # declaringClassPackageName=misc, 
+int
+6
+args
+java.lang.String[] # isParam=true
+hashcode
+2
+args.getClass()
+java.lang.Class
+java.lang.String
+1
+args[..]
+java.lang.String[]
+hashcode[]
+3
+args[..].toString
+java.lang.String[]
+java.lang.String[]
+4
+
+DECLARE
+misc.Fib.main(java.lang.String[]):::EXIT18
+misc.Fib.STEPS
+int # declaringClassPackageName=misc, 
+int
+5
+misc.Fib.a
+int # declaringClassPackageName=misc, 
+int
+6
+misc.Fib.b
+int # declaringClassPackageName=misc, 
+int
+6
+misc.Fib.c
+int # declaringClassPackageName=misc, 
+int
+6
+args
+java.lang.String[] # isParam=true
+hashcode
+2
+args.getClass()
+java.lang.Class
+java.lang.String
+1
+args[..]
+java.lang.String[]
+hashcode[]
+3
+args[..].toString
+java.lang.String[]
+java.lang.String[]
+4
+
+
+DECLARE
+misc.Fib.increment():::ENTER
+misc.Fib.STEPS
+int # declaringClassPackageName=misc, 
+int
+2
+misc.Fib.a
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.b
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.c
+int # declaringClassPackageName=misc, 
+int
+3
+
+DECLARE
+misc.Fib.increment():::EXIT25
+misc.Fib.STEPS
+int # declaringClassPackageName=misc, 
+int
+2
+misc.Fib.a
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.b
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.c
+int # declaringClassPackageName=misc, 
+int
+3
+
+
+DECLARE
+misc.Fib.equals(java.lang.Object):::ENTER
+this
+misc.Fib # isParam=true
+hashcode
+5
+misc.Fib.STEPS
+int # declaringClassPackageName=misc, 
+int
+2
+misc.Fib.a
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.b
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.c
+int # declaringClassPackageName=misc, 
+int
+3
+obj
+java.lang.Object # isParam=true
+hashcode
+4
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.Fib.equals(java.lang.Object):::EXIT1
+this
+misc.Fib # isParam=true
+hashcode
+6
+misc.Fib.STEPS
+int # declaringClassPackageName=misc, 
+int
+2
+misc.Fib.a
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.b
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.c
+int # declaringClassPackageName=misc, 
+int
+3
+obj
+java.lang.Object # isParam=true
+hashcode
+4
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+5
+
+
+DECLARE
+misc.Fib.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+misc.Fib # isParam=true
+hashcode
+5
+misc.Fib.STEPS
+int # declaringClassPackageName=misc, 
+int
+2
+misc.Fib.a
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.b
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.c
+int # declaringClassPackageName=misc, 
+int
+3
+obj
+java.lang.Object # isParam=true
+hashcode
+4
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.Fib.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+misc.Fib # isParam=true
+hashcode
+6
+misc.Fib.STEPS
+int # declaringClassPackageName=misc, 
+int
+2
+misc.Fib.a
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.b
+int # declaringClassPackageName=misc, 
+int
+3
+misc.Fib.c
+int # declaringClassPackageName=misc, 
+int
+3
+obj
+java.lang.Object # isParam=true
+hashcode
+4
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+5
+

@@ -1,0 +1,7 @@
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/FileIO.java:1025: not a statement
+x
+^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/FileIO.java:1026: ';' expected
+    if (Daikon.use_dataflow_hierarchy) {
+    ^
+2 errors

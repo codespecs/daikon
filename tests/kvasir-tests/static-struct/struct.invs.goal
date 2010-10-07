@@ -1,0 +1,162 @@
+===========================================================================
+..examine():::ENTER
+::array1[] == ::foo.dyn_array[]
+::array2[] == ::bar.dyn_array[]
+::bar.answer == ::foo.answer
+::array1 has only one value
+::array1[] == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+::array2 has only one value
+::array2[] == [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38]
+::bar has only one value
+::bar.answer == 42
+::bar.dyn_array has only one value
+::foo has only one value
+::foo.dyn_array has only one value
+p[].answer == [42]
+p[].dyn_array[0] == [0]
+===========================================================================
+..examine():::EXIT
+::array1 == orig(::array1)
+::array1[] == ::foo.dyn_array[]
+::array1[] == orig(::array1[])
+::array1[] == orig(::foo.dyn_array[])
+::array2 == orig(::array2)
+::array2[] == ::bar.dyn_array[]
+::array2[] == orig(::array2[])
+::array2[] == orig(::bar.dyn_array[])
+::bar == orig(::bar)
+::bar.answer == ::foo.answer
+::bar.answer == orig(::bar.answer)
+::bar.answer == orig(::foo.answer)
+::bar.dyn_array == orig(::bar.dyn_array)
+::foo == orig(::foo)
+::foo.dyn_array == orig(::foo.dyn_array)
+p[] == orig(p[])
+p[].answer == orig(p[].answer)
+p[].dyn_array == orig(p[].dyn_array)
+p[].dyn_array[0] == orig(p[].dyn_array[0])
+::array1 has only one value
+::array1[] == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+::array2 has only one value
+::array2[] == [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38]
+::bar has only one value
+::bar.answer == 42
+::bar.dyn_array has only one value
+::foo has only one value
+::foo.dyn_array has only one value
+p[].answer == [42]
+p[].dyn_array[0] == [0]
+===========================================================================
+..main():::ENTER
+::array1[] == ::foo.dyn_array[]
+::array2[] == ::bar.dyn_array[]
+::array1 has only one value
+::array1[] == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::array2 has only one value
+::array2[] == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::bar has only one value
+::bar.answer == 42
+::bar.dyn_array has only one value
+::foo has only one value
+::foo.answer == 42
+::foo.dyn_array has only one value
+===========================================================================
+..main():::EXIT
+::array1 == orig(::array1)
+::array1[] == ::foo.dyn_array[]
+::array2 == orig(::array2)
+::array2[] == ::bar.dyn_array[]
+::bar == orig(::bar)
+::bar.answer == orig(::bar.answer)
+::bar.dyn_array == orig(::bar.dyn_array)
+::foo == orig(::foo)
+::foo.answer == orig(::foo.answer)
+::foo.dyn_array == orig(::foo.dyn_array)
+::array1 has only one value
+::array1[] == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+::array2 has only one value
+::array2[] == [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38]
+::bar has only one value
+::bar.answer == 42
+::bar.dyn_array has only one value
+::foo has only one value
+::foo.answer == 42
+::foo.dyn_array has only one value
+return == 0
+===========================================================================
+..second_examine():::ENTER
+::array1 has only one value
+::array1[] == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+::array2 has only one value
+::array2[] == [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38]
+::count == 100
+::second_int == 182
+::second_int_array has only one value
+::second_int_array[] == [1, 1, 2, 3, 5]
+p has only one value
+p[] contains no nulls and has only one value, of length 1
+p[].answer == [42]
+p[].dyn_array contains no nulls and has only one value, of length 1
+p[].dyn_array[0] == [0]
+===========================================================================
+..second_examine():::EXIT
+::array1 == orig(::array1)
+::array1[] == orig(::array1[])
+::array2 == orig(::array2)
+::array2[] == orig(::array2[])
+::count == orig(::count)
+::second_int == orig(::second_int)
+::second_int_array == orig(::second_int_array)
+::second_int_array[] == orig(::second_int_array[])
+p[] == orig(p[])
+p[].answer == orig(p[].answer)
+p[].dyn_array == orig(p[].dyn_array)
+p[].dyn_array[0] == orig(p[].dyn_array[0])
+::array1 has only one value
+::array1[] == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+::array2 has only one value
+::array2[] == [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38]
+::count == 100
+::second_int == 182
+::second_int_array has only one value
+::second_int_array[] == [1, 1, 2, 3, 5]
+p[] contains no nulls and has only one value, of length 1
+p[].answer == [42]
+p[].dyn_array contains no nulls and has only one value, of length 1
+p[].dyn_array[0] == [0]
+===========================================================================
+..second_examine_int():::ENTER
+::second_int_array[] == int_array[]
+::array1 has only one value
+::array1[] == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+::array2 has only one value
+::array2[] == [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38]
+::second_int == 182
+::second_int_array has only one value
+::second_int_array[] == [1, 1, 2, 3, 5]
+int_array has only one value
+numPtr has only one value
+numPtr[] == [182]
+===========================================================================
+..second_examine_int():::EXIT
+::array1 == orig(::array1)
+::array1[] == orig(::array1[])
+::array2 == orig(::array2)
+::array2[] == orig(::array2[])
+::second_int == orig(::second_int)
+::second_int_array == orig(::second_int_array)
+::second_int_array[] == int_array[]
+::second_int_array[] == orig(::second_int_array[])
+::second_int_array[] == orig(int_array[])
+numPtr[] == return[]
+numPtr[] == orig(numPtr[])
+return == orig(numPtr)
+::array1 has only one value
+::array1[] == [0, 1, 2, 3, 4, 5, 6, 7, 8, 9]
+::array2 has only one value
+::array2[] == [0, 2, 4, 6, 8, 10, 12, 14, 16, 18, 20, 22, 24, 26, 28, 30, 32, 34, 36, 38]
+::second_int == 182
+::second_int_array has only one value
+::second_int_array[] == [1, 1, 2, 3, 5]
+numPtr[] == [182]
+return has only one value

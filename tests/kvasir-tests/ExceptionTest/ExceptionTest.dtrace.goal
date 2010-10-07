@@ -1,0 +1,16 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+
+..function(int):::ENTER
+a
+17
+1
+
+..thrower(int):::ENTER
+a
+34
+1
+

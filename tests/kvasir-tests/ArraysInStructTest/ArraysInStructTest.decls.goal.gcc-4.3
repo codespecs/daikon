@@ -1,0 +1,406 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..baz():::ENTER
+  ppt-type enter
+  variable ::globalFoo
+    var-kind variable
+    rep-type hashcode
+    dec-type foo
+  variable ::globalFoo.bar_struct
+    var-kind field bar_struct
+    enclosing-var ::globalFoo
+    rep-type hashcode
+    dec-type bar
+  variable ::globalFoo.bar_struct.bar_int_20
+    var-kind field bar_int_20
+    enclosing-var ::globalFoo.bar_struct
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalFoo.bar_struct.bar_int_20[..]
+    var-kind array
+    enclosing-var ::globalFoo.bar_struct.bar_int_20
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalFoo.bar_struct.blah
+    var-kind field blah
+    enclosing-var ::globalFoo.bar_struct
+    rep-type int
+    dec-type char
+  variable ::globalFoo.bar_struct.bleh
+    var-kind field bleh
+    enclosing-var ::globalFoo.bar_struct
+    rep-type int
+    dec-type int
+  variable ::globalFoo.char_10
+    var-kind field char_10
+    enclosing-var ::globalFoo
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::globalFoo.double_15
+    var-kind field double_15
+    enclosing-var ::globalFoo
+    rep-type hashcode
+    dec-type double*
+    flags non_null 
+  variable ::globalFoo.double_15[..]
+    var-kind array
+    enclosing-var ::globalFoo.double_15
+    reference-type offset
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::globalFoo.int_5
+    var-kind field int_5
+    enclosing-var ::globalFoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalFoo.int_5[..]
+    var-kind array
+    enclosing-var ::globalFoo.int_5
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable f
+    var-kind variable
+    rep-type hashcode
+    dec-type foo
+    flags is_param 
+  variable f.bar_struct
+    var-kind field bar_struct
+    enclosing-var f
+    rep-type hashcode
+    dec-type bar
+  variable f.bar_struct.bar_int_20
+    var-kind field bar_int_20
+    enclosing-var f.bar_struct
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable f.bar_struct.bar_int_20[..]
+    var-kind array
+    enclosing-var f.bar_struct.bar_int_20
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable f.bar_struct.blah
+    var-kind field blah
+    enclosing-var f.bar_struct
+    rep-type int
+    dec-type char
+  variable f.bar_struct.bleh
+    var-kind field bleh
+    enclosing-var f.bar_struct
+    rep-type int
+    dec-type int
+  variable f.char_10
+    var-kind field char_10
+    enclosing-var f
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable f.double_15
+    var-kind field double_15
+    enclosing-var f
+    rep-type hashcode
+    dec-type double*
+    flags non_null 
+  variable f.double_15[..]
+    var-kind array
+    enclosing-var f.double_15
+    reference-type offset
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable f.int_5
+    var-kind field int_5
+    enclosing-var f
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable f.int_5[..]
+    var-kind array
+    enclosing-var f.int_5
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..baz():::EXIT0
+  ppt-type subexit
+  variable ::globalFoo
+    var-kind variable
+    rep-type hashcode
+    dec-type foo
+  variable ::globalFoo.bar_struct
+    var-kind field bar_struct
+    enclosing-var ::globalFoo
+    rep-type hashcode
+    dec-type bar
+  variable ::globalFoo.bar_struct.bar_int_20
+    var-kind field bar_int_20
+    enclosing-var ::globalFoo.bar_struct
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalFoo.bar_struct.bar_int_20[..]
+    var-kind array
+    enclosing-var ::globalFoo.bar_struct.bar_int_20
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalFoo.bar_struct.blah
+    var-kind field blah
+    enclosing-var ::globalFoo.bar_struct
+    rep-type int
+    dec-type char
+  variable ::globalFoo.bar_struct.bleh
+    var-kind field bleh
+    enclosing-var ::globalFoo.bar_struct
+    rep-type int
+    dec-type int
+  variable ::globalFoo.char_10
+    var-kind field char_10
+    enclosing-var ::globalFoo
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::globalFoo.double_15
+    var-kind field double_15
+    enclosing-var ::globalFoo
+    rep-type hashcode
+    dec-type double*
+    flags non_null 
+  variable ::globalFoo.double_15[..]
+    var-kind array
+    enclosing-var ::globalFoo.double_15
+    reference-type offset
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::globalFoo.int_5
+    var-kind field int_5
+    enclosing-var ::globalFoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalFoo.int_5[..]
+    var-kind array
+    enclosing-var ::globalFoo.int_5
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable f
+    var-kind variable
+    rep-type hashcode
+    dec-type foo
+    flags is_param 
+  variable f.bar_struct
+    var-kind field bar_struct
+    enclosing-var f
+    rep-type hashcode
+    dec-type bar
+  variable f.bar_struct.bar_int_20
+    var-kind field bar_int_20
+    enclosing-var f.bar_struct
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable f.bar_struct.bar_int_20[..]
+    var-kind array
+    enclosing-var f.bar_struct.bar_int_20
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable f.bar_struct.blah
+    var-kind field blah
+    enclosing-var f.bar_struct
+    rep-type int
+    dec-type char
+  variable f.bar_struct.bleh
+    var-kind field bleh
+    enclosing-var f.bar_struct
+    rep-type int
+    dec-type int
+  variable f.char_10
+    var-kind field char_10
+    enclosing-var f
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable f.double_15
+    var-kind field double_15
+    enclosing-var f
+    rep-type hashcode
+    dec-type double*
+    flags non_null 
+  variable f.double_15[..]
+    var-kind array
+    enclosing-var f.double_15
+    reference-type offset
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable f.int_5
+    var-kind field int_5
+    enclosing-var f
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable f.int_5[..]
+    var-kind array
+    enclosing-var f.int_5
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::globalFoo
+    var-kind variable
+    rep-type hashcode
+    dec-type foo
+  variable ::globalFoo.bar_struct
+    var-kind field bar_struct
+    enclosing-var ::globalFoo
+    rep-type hashcode
+    dec-type bar
+  variable ::globalFoo.bar_struct.bar_int_20
+    var-kind field bar_int_20
+    enclosing-var ::globalFoo.bar_struct
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalFoo.bar_struct.bar_int_20[..]
+    var-kind array
+    enclosing-var ::globalFoo.bar_struct.bar_int_20
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalFoo.bar_struct.blah
+    var-kind field blah
+    enclosing-var ::globalFoo.bar_struct
+    rep-type int
+    dec-type char
+  variable ::globalFoo.bar_struct.bleh
+    var-kind field bleh
+    enclosing-var ::globalFoo.bar_struct
+    rep-type int
+    dec-type int
+  variable ::globalFoo.char_10
+    var-kind field char_10
+    enclosing-var ::globalFoo
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::globalFoo.double_15
+    var-kind field double_15
+    enclosing-var ::globalFoo
+    rep-type hashcode
+    dec-type double*
+    flags non_null 
+  variable ::globalFoo.double_15[..]
+    var-kind array
+    enclosing-var ::globalFoo.double_15
+    reference-type offset
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::globalFoo.int_5
+    var-kind field int_5
+    enclosing-var ::globalFoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalFoo.int_5[..]
+    var-kind array
+    enclosing-var ::globalFoo.int_5
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::globalFoo
+    var-kind variable
+    rep-type hashcode
+    dec-type foo
+  variable ::globalFoo.bar_struct
+    var-kind field bar_struct
+    enclosing-var ::globalFoo
+    rep-type hashcode
+    dec-type bar
+  variable ::globalFoo.bar_struct.bar_int_20
+    var-kind field bar_int_20
+    enclosing-var ::globalFoo.bar_struct
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalFoo.bar_struct.bar_int_20[..]
+    var-kind array
+    enclosing-var ::globalFoo.bar_struct.bar_int_20
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalFoo.bar_struct.blah
+    var-kind field blah
+    enclosing-var ::globalFoo.bar_struct
+    rep-type int
+    dec-type char
+  variable ::globalFoo.bar_struct.bleh
+    var-kind field bleh
+    enclosing-var ::globalFoo.bar_struct
+    rep-type int
+    dec-type int
+  variable ::globalFoo.char_10
+    var-kind field char_10
+    enclosing-var ::globalFoo
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::globalFoo.double_15
+    var-kind field double_15
+    enclosing-var ::globalFoo
+    rep-type hashcode
+    dec-type double*
+    flags non_null 
+  variable ::globalFoo.double_15[..]
+    var-kind array
+    enclosing-var ::globalFoo.double_15
+    reference-type offset
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::globalFoo.int_5
+    var-kind field int_5
+    enclosing-var ::globalFoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalFoo.int_5[..]
+    var-kind array
+    enclosing-var ::globalFoo.int_5
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+

@@ -1,0 +1,11 @@
+
+This example will never work.  Daikon instruments the Vector contents
+and find cool invariants there, but ESC doesn't talk about the vector
+in the same say that Daikon does, so also all of the merged
+invariants don't parse for ESC.
+
+Even if I pare the output down to the five or so invariants which are
+easily expressible, missing annotations having to do with the ghost
+fields of Vector do me in.
+
+

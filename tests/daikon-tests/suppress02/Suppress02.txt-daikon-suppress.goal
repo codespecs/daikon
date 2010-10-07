@@ -1,0 +1,49 @@
+===========================================================================
+misc.Suppress02:::OBJECT
+this has only one value
+this.theArray has only one value
+this.theArray != null
+this.theArray[] elements >= 0
+this.i >= 0
+size(this.theArray[]) == 1000
+this.theArray[0..this.j] contains no duplicates
+this.i <= this.j
+this.i < size(this.theArray[])-1
+this.j < size(this.theArray[])-1
+this.theArray[this.i] in this.theArray[this.i+1..]
+this.theArray[this.i] in this.theArray[this.j..]
+this.theArray[this.i] in this.theArray[this.j+1..]
+this.theArray[this.j] in this.theArray[this.i+1..]
+this.theArray[this.j] in this.theArray[this.j+1..]
+===========================================================================
+misc.Suppress02.Suppress02():::EXIT
+this.i == 0
+this.j == 5
+this.theArray[0..this.i] elements == 0
+this.theArray[this.j] == 153
+this.theArray[this.j-1] == 44
+this.theArray[0..this.i] elements == this.theArray[this.i]
+this.theArray[this.i] in this.theArray[0..this.j-1]
+===========================================================================
+misc.Suppress02.f(int):::ENTER
+===========================================================================
+misc.Suppress02.f(int):::EXIT
+this.theArray == orig(this.theArray)
+this.theArray[] == orig(this.theArray[])
+this.theArray[0..orig(this.i)] contains no duplicates
+this.theArray[0..orig(this.j)] contains no duplicates
+this.j != orig(this.j)
+orig(this.i) < size(this.theArray[])-1
+orig(this.j) < size(this.theArray[])-1
+this.theArray[this.j] != this.theArray[orig(this.j)]
+this.theArray[orig(this.i)] in this.theArray[0..orig(this.j)]
+===========================================================================
+misc.Suppress02.main(java.lang.String[]):::ENTER
+args has only one value
+args.getClass() == java.lang.String[].class
+args[] == []
+args[].toString == []
+===========================================================================
+misc.Suppress02.main(java.lang.String[]):::EXIT
+args[] == []
+args[].toString == []

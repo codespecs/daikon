@@ -1,0 +1,275 @@
+
+..main():::ENTER
+
+..structByValue():::ENTER
+x.a
+5
+1
+x.b
+1.234567
+1
+x.cPtr
+1388307040
+1
+x.cPtr[]
+[ 5 ]
+1
+y.a
+5
+1
+y.b
+1.234567
+1
+y.cPtr
+1388307040
+1
+y.cPtr[]
+[ 5 ]
+1
+d
+1.234567
+1
+
+..structByValue():::EXIT0
+x.a
+5
+1
+x.b
+1.234567
+1
+x.cPtr
+1388307040
+1
+x.cPtr[]
+[ 5 ]
+1
+y.a
+5
+1
+y.b
+1.234567
+1
+y.cPtr
+1388307040
+1
+y.cPtr[]
+[ 5 ]
+1
+d
+1.234567
+1
+
+..structByPtr():::ENTER
+xPtr
+1388307040
+1
+xPtr[].a
+[ 5 ]
+1
+xPtr[].b
+[ 1.234567 ]
+1
+xPtr[].cPtr
+[ 1388307040 ]
+1
+xPtr[].cPtr[0]
+[ 5 ]
+1
+yPtr
+1388307024
+1
+yPtr[].a
+[ 5 ]
+1
+yPtr[].b
+[ 1.234567 ]
+1
+yPtr[].cPtr
+[ 1388307040 ]
+1
+yPtr[].cPtr[0]
+[ 5 ]
+1
+dPtr
+1388307016
+1
+dPtr[]
+[ 1.234567 ]
+1
+
+..structByPtr():::EXIT0
+xPtr
+1388307040
+1
+xPtr[].a
+[ 5 ]
+1
+xPtr[].b
+[ 1.234567 ]
+1
+xPtr[].cPtr
+[ 1388307040 ]
+1
+xPtr[].cPtr[0]
+[ 5 ]
+1
+yPtr
+1388307024
+1
+yPtr[].a
+[ 5 ]
+1
+yPtr[].b
+[ 1.234567 ]
+1
+yPtr[].cPtr
+[ 1388307040 ]
+1
+yPtr[].cPtr[0]
+[ 5 ]
+1
+dPtr
+1388307016
+1
+dPtr[]
+[ 1.234567 ]
+1
+
+..assignPtrThenFieldsInteract():::ENTER
+aPtr
+463712296
+1
+aPtr[].a
+[ 10 ]
+1
+aPtr[].b
+[ 10 ]
+1
+aPtr[].cPtr
+nonsensical
+2
+aPtr[].cPtr[0]
+nonsensical
+2
+bPtr
+463712296
+1
+bPtr[].a
+[ 10 ]
+1
+bPtr[].b
+[ 10 ]
+1
+bPtr[].cPtr
+nonsensical
+2
+bPtr[].cPtr[0]
+nonsensical
+2
+c
+10
+1
+
+..assignPtrThenFieldsInteract():::EXIT0
+aPtr
+463712296
+1
+aPtr[].a
+[ 10 ]
+1
+aPtr[].b
+[ 10 ]
+1
+aPtr[].cPtr
+nonsensical
+2
+aPtr[].cPtr[0]
+nonsensical
+2
+bPtr
+463712296
+1
+bPtr[].a
+[ 10 ]
+1
+bPtr[].b
+[ 10 ]
+1
+bPtr[].cPtr
+nonsensical
+2
+bPtr[].cPtr[0]
+nonsensical
+2
+c
+10
+1
+
+..assignPtrAwayBeforeFieldsInteract():::ENTER
+aPtr
+463712424
+1
+aPtr[].a
+[ 3 ]
+1
+aPtr[].b
+[ 3.1415899999999999 ]
+1
+aPtr[].cPtr
+nonsensical
+2
+aPtr[].cPtr[0]
+nonsensical
+2
+bPtr
+1388307040
+1
+bPtr[].a
+[ 5 ]
+1
+bPtr[].b
+[ 1.234567 ]
+1
+bPtr[].cPtr
+[ 1388307040 ]
+1
+bPtr[].cPtr[0]
+[ 5 ]
+1
+
+..assignPtrAwayBeforeFieldsInteract():::EXIT0
+aPtr
+463712424
+1
+aPtr[].a
+[ 3 ]
+1
+aPtr[].b
+[ 3.1415899999999999 ]
+1
+aPtr[].cPtr
+nonsensical
+2
+aPtr[].cPtr[0]
+nonsensical
+2
+bPtr
+1388307040
+1
+bPtr[].a
+[ 5 ]
+1
+bPtr[].b
+[ 1.234567 ]
+1
+bPtr[].cPtr
+[ 1388307040 ]
+1
+bPtr[].cPtr[0]
+[ 5 ]
+1
+
+..main():::EXIT0
+return
+0
+1

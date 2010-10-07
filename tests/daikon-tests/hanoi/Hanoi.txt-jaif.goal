@@ -1,0 +1,33 @@
+package checkers.nullness.quals:
+annotation @Nullable:
+annotation @NonNull:
+
+package six170:
+class Hanoi : // 500/- obj/class samples
+  field diskLocation :  // int[]
+  field height :  // int
+  field noOutput :  // boolean
+  method otherPeg(II) : // 66 samples
+    return: 
+    parameter #0 :  // pegA
+    parameter #1 :  // pegB
+  method <init>(I) : // 4 samples
+    return: 
+    parameter #0 :  // height
+  method <init>(IZ) : // 4 samples
+    return: 
+    parameter #0 :  // height
+    parameter #1 :  // noOutput
+  method moveDisk(II) : // 78 samples
+    return: 
+    parameter #0 :  // fromPeg
+    parameter #1 :  // toPeg
+  method moveTower(III) : // 78 samples
+    return: 
+    parameter #0 :  // fromPeg
+    parameter #1 :  // toPeg
+    parameter #2 :  // towerHeight
+  method showTowers() : // 90 samples
+    return: 
+
+

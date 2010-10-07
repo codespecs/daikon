@@ -1,0 +1,10 @@
+REPLACE
+get(int index)
+(RatTerm)wrapped.get(index)
+printDebug()
+"RatTermVec<wrapped:"+this.wrapped+">"
+size()
+wrapped.size()
+toString()
+printDebug()
+

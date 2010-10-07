@@ -1,0 +1,8 @@
+IntFromFloatTest
+IntFromFloatTest.dtrace.diff
+IntFromFloatTest.comp
+IntFromFloatTest.comp.diff
+IntFromFloatTest.invs.diff
+IntFromFloatTest.out
+ran-kvasir
+*.counts *.counts.diff

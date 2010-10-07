@@ -1,0 +1,32 @@
+#
+# Include file that sets up the classpath
+#
+
+# Add the basic jars to the classpath if they aren't already there
+ifeq "$(wildcard $(INV)/java/lib/bcel.jar)" "$(INV)/java/lib/bcel.jar"
+    CLASSPATH_JARS = :$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar:$(INV)/java/lib/plume.jar
+endif
+
+# Add necessary items to the classpath if they are not already there
+ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
+  CLASSPATH := .:$(CLASSPATH)
+endif
+ifneq (invariants/java:,$(findstring invariants/java:,$(CLASSPATH)))
+    CLASSPATH := $(CLASSPATH):$(INV)/java
+endif
+ifdef CLASSPATH_JARS
+  ifneq (bcel.jar,$(findstring bcel.jar,$(CLASSPATH)))
+    CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS)
+  endif
+endif
+
+# On Cygwin, translate the classpath to Windows format.  Only do so if
+# this has not already been done, which is determined by looking for
+# semicolons (;) in the classpath.
+ifeq (cygwin,$(OSTYPE))
+  ifneq (;,$(findstring ;,$(CLASSPATH)))
+    CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
+  endif
+endif
+
+export CLASSPATH

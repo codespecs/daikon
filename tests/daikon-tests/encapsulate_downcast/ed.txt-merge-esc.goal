@@ -1,0 +1,71 @@
+package misc;
+
+import java.util.*;
+
+class Person {
+
+    /*@ invariant this._name != null; */
+    /*@ invariant this._height >= 0; */
+    /*@ invariant this._height < this._weight; */
+    /*@ spec_public */ private String _name;
+    /*@ spec_public */ private int _height;
+    /*@ spec_public */ private int _weight;
+
+    /*@ requires name != null; */
+    /*@ requires height >= 0; */
+    /*@ requires height < weight; */
+    /*@ ensures this._name == \old(name); */
+    /*@ ensures this._height == \old(height); */
+    /*@ ensures this._weight == \old(weight); */
+    public Person(String name, int height, int weight) {
+	_name = name;
+	_height = height;
+	_weight = weight;
+    }
+
+    /*@ modifies this._name, this._name.toString, this._height, this._weight; */
+    public String getName() {
+	return _name;
+    }
+}
+
+public class EncapsulateDowncast {
+
+    /*@ spec_public */ static final int CASES = 64;
+    /*@ spec_public */ static final int SEED = 327;
+
+    /*@ spec_public */ static Random random = new Random(SEED);
+
+    /*@ requires list != null; */
+    /*@ requires list.containsNull == false; */
+    /*@ requires list.elementType == \type(misc.Person); */
+    /*@ ensures list.containsNull == false; */
+    /*@ ensures list.elementType == \type(misc.Person); */
+    static void showLastPerson(Vector list) {
+	    Person last = (Person)list.lastElement();
+            // Reduce output, for test suite
+	    // System.out.println("The last person in the list: " + last.getName());
+    }
+
+    /*@ requires argv != null; */
+    /*@ requires \typeof(argv) == \type(java.lang.String[]); */
+    /*@ requires (argv.length == 0) && ((\forall int i; (0 <= i && i <= argv.length-1) ==> (argv[i] != null))); */
+    /*@ ensures (argv.length == 0) && ((\forall int i; (0 <= i && i <= argv.length-1) ==> (argv[i] != null))); */
+    public static void main(String argv[]) {
+	for (int i = 0;
+	     i < CASES;
+	     i++) {
+	    Vector list = new Vector();
+	    for (int j = 0;
+		 j <= random.nextInt(CASES);
+		 j++) {
+		String name = "name" + j;
+		int height = random.nextInt(12);
+		int weight = random.nextInt(100) + 100;
+		Person person = new Person(name, height, weight);
+		list.addElement(person);
+	    }
+	    showLastPerson(list);
+	}
+    }
+}

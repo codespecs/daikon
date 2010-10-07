@@ -1,0 +1,64 @@
+
+Variable sets for misc.EncapsulateDowncast.<init>() enter
+  not called
+Variable sets for misc.EncapsulateDowncast.<init>() exit
+  not called
+
+Variable sets for misc.EncapsulateDowncast.showLastPerson(java.util.Vector list) enter
+  [1] [Parameter list]
+  [1] [List list[..]]
+  [1] [Class of list[..]]
+  [1] [Field misc.EncapsulateDowncast.CASES]
+  [1] [Field misc.EncapsulateDowncast.SEED]
+  [1] [Field misc.EncapsulateDowncast.random]
+Variable sets for misc.EncapsulateDowncast.showLastPerson(java.util.Vector list) exit
+  [1] [Parameter list]
+  [1] [List list[..]]
+  [1] [Class of list[..]]
+  [1] [Field misc.EncapsulateDowncast.CASES]
+  [1] [Field misc.EncapsulateDowncast.SEED]
+  [1] [Field misc.EncapsulateDowncast.random]
+
+Variable sets for misc.EncapsulateDowncast.main([Ljava.lang.String; argv) enter
+  [1] [Parameter argv]
+  [1] [Class of argv]
+  [1] [Array argv[..]]
+  [1] [String argv[..].toString]
+  [1] [Field misc.EncapsulateDowncast.CASES]
+  [1] [Field misc.EncapsulateDowncast.SEED]
+  [1] [Field misc.EncapsulateDowncast.random]
+Variable sets for misc.EncapsulateDowncast.main([Ljava.lang.String; argv) exit
+  [1] [Parameter argv]
+  [1] [Class of argv]
+  [1] [Array argv[..]]
+  [1] [String argv[..].toString]
+  [1] [Field misc.EncapsulateDowncast.CASES]
+  [1] [Field misc.EncapsulateDowncast.SEED]
+  [1] [Field misc.EncapsulateDowncast.random]
+
+Variable sets for misc.EncapsulateDowncast.equals(java.lang.Object obj) enter
+  not called
+Variable sets for misc.EncapsulateDowncast.equals(java.lang.Object obj) exit
+  not called
+
+Variable sets for misc.Person.<init>(java.lang.String name, I height, I weight) enter
+  [1] [Parameter height]
+  [1] [Parameter name]
+  [1] [String name.toString]
+  [1] [Parameter weight]
+Variable sets for misc.Person.<init>(java.lang.String name, I height, I weight) exit
+  [4] [Parameter height, Field _height, Field _weight, Parameter weight]
+  [2] [Parameter name, Field _name]
+  [1] [String name.toString]
+  [1] [this]
+  [1] [String Field _name.toString]
+
+Variable sets for misc.Person.getName() enter
+  not called
+Variable sets for misc.Person.getName() exit
+  not called
+
+Variable sets for misc.Person.equals(java.lang.Object obj) enter
+  not called
+Variable sets for misc.Person.equals(java.lang.Object obj) exit
+  not called

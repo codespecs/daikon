@@ -1,0 +1,67 @@
+===========================================================================
+MapQuick1.Graph:::OBJECT
+    Variables: this this.adjMap
+this.adjMap != null
+===========================================================================
+MapQuick1.Graph.Graph():::EXIT
+    Variables: this this.adjMap
+===========================================================================
+MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::ENTER
+    Variables: this this.adjMap from from.getClass() to to.getClass()
+from != null
+\typeof(from) == \type(MapQuick1.GeoSegment)
+to != null
+\typeof(from) == \typeof(to)
+===========================================================================
+MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::EXIT
+    Variables: this this.adjMap from from.getClass() to to.getClass() orig(this) orig(this.adjMap) orig(from) orig(from.getClass()) orig(to) orig(to.getClass())
+      Unmodified variables: this this.adjMap from from.getClass() to to.getClass()
+===========================================================================
+MapQuick1.Graph.addNode(java.lang.Object):::ENTER
+    Variables: this this.adjMap node node.getClass()
+node != null
+\typeof(node) == \type(MapQuick1.GeoSegment)
+===========================================================================
+MapQuick1.Graph.addNode(java.lang.Object):::EXIT
+    Variables: this this.adjMap node node.getClass() orig(this) orig(this.adjMap) orig(node) orig(node.getClass())
+      Unmodified variables: this this.adjMap node node.getClass()
+===========================================================================
+MapQuick1.Graph.adjTo(java.lang.Object):::ENTER
+    Variables: this this.adjMap node node.getClass()
+node != null
+\typeof(node) == \type(MapQuick1.GeoSegment)
+===========================================================================
+MapQuick1.Graph.adjTo(java.lang.Object):::EXIT
+    Variables: this this.adjMap node node.getClass() return return.getClass() orig(this) orig(this.adjMap) orig(node) orig(node.getClass())
+      Unmodified variables: this this.adjMap node node.getClass()
+\result != null
+\typeof(\result) == \type(java.util.LinkedHashSet)
+\typeof(\result) != \old(\typeof(node))
+===========================================================================
+MapQuick1.Graph.checkRep():::ENTER
+    Variables: this this.adjMap
+===========================================================================
+MapQuick1.Graph.checkRep():::EXIT
+    Variables: this this.adjMap orig(this) orig(this.adjMap)
+      Unmodified variables: this this.adjMap
+===========================================================================
+MapQuick1.Graph.childrenOf(java.lang.Object):::ENTER
+    Variables: this this.adjMap node node.getClass()
+node != null
+\typeof(node) == \type(MapQuick1.GeoSegment)
+===========================================================================
+MapQuick1.Graph.childrenOf(java.lang.Object):::EXIT
+    Variables: this this.adjMap node node.getClass() return return.getClass() orig(this) orig(this.adjMap) orig(node) orig(node.getClass())
+      Unmodified variables: this this.adjMap node node.getClass()
+\result != null
+\typeof(\result) == \type(java.util.LinkedHashSet)
+\typeof(\result) != \old(\typeof(node))
+===========================================================================
+MapQuick1.Graph.containsNode(java.lang.Object):::ENTER
+    Variables: this this.adjMap node node.getClass()
+node != null
+\typeof(node) == \type(MapQuick1.GeoSegment)
+===========================================================================
+MapQuick1.Graph.containsNode(java.lang.Object):::EXIT
+    Variables: this this.adjMap node node.getClass() return orig(this) orig(this.adjMap) orig(node) orig(node.getClass())
+      Unmodified variables: this this.adjMap node node.getClass()

@@ -1,0 +1,584 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..baa():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..baa():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..bab():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..bab():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..bac():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..bac():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..bad():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..bad():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..bae():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..bae():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..bar():::ENTER
+  ppt-type enter
+  variable f
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable f[..]
+    var-kind array
+    enclosing-var f
+    array 1
+    rep-type hashcode[]
+    dec-type foo[]
+  variable f[..].a
+    var-kind field a
+    enclosing-var f[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable f[..].b
+    var-kind field b
+    enclosing-var f[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..bar():::EXIT0
+  ppt-type subexit
+  variable f
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable f[..]
+    var-kind array
+    enclosing-var f
+    array 1
+    rep-type hashcode[]
+    dec-type foo[]
+  variable f[..].a
+    var-kind field a
+    enclosing-var f[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable f[..].b
+    var-kind field b
+    enclosing-var f[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..baz():::ENTER
+  ppt-type enter
+  variable n
+    var-kind variable
+    rep-type hashcode
+    dec-type node*
+    flags is_param 
+  variable n[..]
+    var-kind array
+    enclosing-var n
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+  variable n[..].b
+    var-kind field b
+    enclosing-var n[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable n[..].next
+    var-kind field next
+    enclosing-var n[..]
+    array 1
+    rep-type hashcode[]
+    dec-type node*[]
+  variable n[..].next->b
+    var-kind field b
+    enclosing-var n[..].next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable n[..].next->next
+    var-kind field next
+    enclosing-var n[..].next
+    array 1
+    rep-type hashcode[]
+    dec-type node*[]
+  variable n[..].next->next->b
+    var-kind field b
+    enclosing-var n[..].next->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable n[..].next->next->next
+    var-kind field next
+    enclosing-var n[..].next->next
+    array 1
+    rep-type hashcode[]
+    dec-type node*[]
+  variable n[..].next->next->next[0]
+    var-kind field [0]
+    enclosing-var n[..].next->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+  variable n[..].next->next->prev
+    var-kind field prev
+    enclosing-var n[..].next->next
+    array 1
+    rep-type hashcode[]
+    dec-type node*[]
+  variable n[..].next->next->prev[0]
+    var-kind field [0]
+    enclosing-var n[..].next->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+  variable n[..].next->next[0]
+    var-kind field [0]
+    enclosing-var n[..].next->next
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+  variable n[..].next->prev
+    var-kind field prev
+    enclosing-var n[..].next
+    array 1
+    rep-type hashcode[]
+    dec-type node*[]
+  variable n[..].next->prev[0]
+    var-kind field [0]
+    enclosing-var n[..].next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+  variable n[..].next[0]
+    var-kind field [0]
+    enclosing-var n[..].next
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+  variable n[..].prev
+    var-kind field prev
+    enclosing-var n[..]
+    array 1
+    rep-type hashcode[]
+    dec-type node*[]
+  variable n[..].prev[0]
+    var-kind field [0]
+    enclosing-var n[..].prev
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+
+ppt ..baz():::EXIT0
+  ppt-type subexit
+  variable n
+    var-kind variable
+    rep-type hashcode
+    dec-type node*
+    flags is_param 
+  variable n[..]
+    var-kind array
+    enclosing-var n
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+  variable n[..].b
+    var-kind field b
+    enclosing-var n[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable n[..].next
+    var-kind field next
+    enclosing-var n[..]
+    array 1
+    rep-type hashcode[]
+    dec-type node*[]
+  variable n[..].next->b
+    var-kind field b
+    enclosing-var n[..].next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable n[..].next->next
+    var-kind field next
+    enclosing-var n[..].next
+    array 1
+    rep-type hashcode[]
+    dec-type node*[]
+  variable n[..].next->next->b
+    var-kind field b
+    enclosing-var n[..].next->next
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable n[..].next->next->next
+    var-kind field next
+    enclosing-var n[..].next->next
+    array 1
+    rep-type hashcode[]
+    dec-type node*[]
+  variable n[..].next->next->next[0]
+    var-kind field [0]
+    enclosing-var n[..].next->next->next
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+  variable n[..].next->next->prev
+    var-kind field prev
+    enclosing-var n[..].next->next
+    array 1
+    rep-type hashcode[]
+    dec-type node*[]
+  variable n[..].next->next->prev[0]
+    var-kind field [0]
+    enclosing-var n[..].next->next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+  variable n[..].next->next[0]
+    var-kind field [0]
+    enclosing-var n[..].next->next
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+  variable n[..].next->prev
+    var-kind field prev
+    enclosing-var n[..].next
+    array 1
+    rep-type hashcode[]
+    dec-type node*[]
+  variable n[..].next->prev[0]
+    var-kind field [0]
+    enclosing-var n[..].next->prev
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+  variable n[..].next[0]
+    var-kind field [0]
+    enclosing-var n[..].next
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+  variable n[..].prev
+    var-kind field prev
+    enclosing-var n[..]
+    array 1
+    rep-type hashcode[]
+    dec-type node*[]
+  variable n[..].prev[0]
+    var-kind field [0]
+    enclosing-var n[..].prev
+    array 1
+    rep-type hashcode[]
+    dec-type node[]
+
+ppt ..caa():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..caa():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..cab():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..cab():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..cac():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..cac():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..cad():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..cad():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..cae():::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..cae():::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..main():::ENTER
+  ppt-type enter
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+

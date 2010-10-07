@@ -1,0 +1,74 @@
+--- QueueAr.java.goal	Sat Jul  6 14:49:00 2002
++++ merged/DataStructures/QueueAr.java	Sat Jul  6 14:25:22 2002
+@@ -33,21 +33,6 @@
+   /*@ invariant this.front <= this.theArray.length-1; */
+   /*@ invariant this.back <= this.theArray.length-1; */
+   /*@ invariant theArray.owner == this; */
+-
+-  //@ invariant (currentSize > 0) ==> ((front <= back) == (currentSize == back - front + 1))
+-  //@ invariant (currentSize > 0) ==> ((front > back) == (currentSize == theArray.length + back - front + 1))
+-  //@ invariant (currentSize == 0) ==> ((front <= back) == (front == 0 && back == theArray.length - 1))
+-  //@ invariant (currentSize == 0) ==> ((front > back) == (back == front - 1))
+-
+-  //@ invariant (currentSize == 0) ==> (\forall int i; (0 <= i && i < theArray.length) ==> (theArray[i] == null))
+-  //@ invariant (currentSize > 0 && front <= back) ==> (\forall int i; (0 <= i && i < front) ==> (theArray[i] == null))
+-  //@ invariant (currentSize > 0 && front <= back) ==> (\forall int i; (i >= front && i <= back) ==> (theArray[i] != null))
+-  //@ invariant (currentSize > 0 && front <= back) ==> (\forall int i; (back < i && i < theArray.length) ==> (theArray[i] == null))
+-  //@ invariant (currentSize > 0 && back < front) ==> (\forall int i; (0 <= i && i <= back) ==> (theArray[i] != null))
+-  //@ invariant (currentSize > 0 && back < front) ==> (\forall int i; (i > back && i < front) ==> (theArray[i] == null))
+-  //@ invariant (currentSize > 0 && back < front) ==> (\forall int i; (front <= i && i < theArray.length) ==> (theArray[i] != null))
+-
+-  //@ requires capacity >= 1
+   /*@ ensures this.currentSize == this.front; */
+   /*@ ensures \old(capacity) == this.theArray.length; */
+   /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)); */
+@@ -65,11 +50,11 @@
+     back = theArray.length-1;
+   }
+ 
+-  /**@ ensures (\result == false)  ==  (this.currentSize >= 1); */
++  /*@ ensures (\result == false)  ==  (this.currentSize >= 1); */
+   /*@ ensures (\result == false)  ==  (this.theArray[this.back] != null); */
+   /*@ ensures (\result == false)  ==  (this.theArray[this.front] != null); */
+   /*@ ensures (\result == true)  ==  (this.currentSize == 0); */
+-  /**@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) == \typeof(null)))); */
++  /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) == \typeof(null)))); */
+   /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))); */
+   /**
+    * Test if the queue is logically empty.
+@@ -108,9 +93,9 @@
+ 
+   /*@ ensures \result == this.theArray[this.front]; */
+   /*@ ensures (\result != null)  ==  (this.currentSize >= 1); */
+-  /**@ ensures (\result == null)  ==>  ((\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) == \typeof(null)))); */
+-  /*@ ensures (\result == null)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))); */
+-  /*@ ensures (this.currentSize >= 1)  ==  (this.theArray[this.back] != null); */
++  /*@ ensures (\result != null)  ==  (this.theArray[this.back] != null); */
++  /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) == \typeof(null)))); */
++  /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))); */
+   /**
+    * Get the least recently inserted item in the queue.
+    * Does not alter the queue.
+@@ -128,7 +113,7 @@
+   /*@ modifies this.theArray[*], this.currentSize, this.front; */
+   /*@ ensures \result == \old(this.theArray[this.front]); */
+   /*@ ensures (\forall int i, j; (this.front <= i && i <= this.theArray.length-1 && \old(this.front+1) <= j && j <= \old(this.theArray.length-1) && (i-(this.front)) == (j-(\old(this.front+1)))) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
+-  /**@ ensures (\forall int i, j; (\old(this.front)+1 <= i && i <= this.theArray.length-1 && this.front <= j && j <= \old(this.theArray.length-1) && (i-(\old(this.front)+1)) == (j-(this.front))) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
++  /*@ ensures (\forall int i, j; (\old(this.front)+1 <= i && i <= this.theArray.length-1 && this.front <= j && j <= \old(this.theArray.length-1) && (i-(\old(this.front)+1)) == (j-(this.front))) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
+   /*@ ensures (\forall int i, j; (0 <= i && i <= \old(this.front)-1 && 0 <= j && j <= \old(this.front-1) && i == j) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
+   /*@ ensures this.theArray[\old(this.front)] == null; */
+   /*@ ensures \old(this.currentSize) == this.currentSize + 1; */
+@@ -154,10 +139,9 @@
+   /*@ requires this.currentSize <= this.theArray.length-1; */
+   /*@ modifies this.theArray[*], this.currentSize, this.back; */
+   /*@ ensures \old(x) == this.theArray[this.back]; */
+-  /*! ensures (\forall int i, j; (this.back+1 <= i && i <= this.theArray.length-1 && this.back+1 <= j && j <= \old(this.theArray.length-1) && (i-(this.back+1)) == (j-this.back+1))) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
+-  /**@ ensures (\forall int i, j; (0 <= i && i <= this.back-1 && 0 <= j && j <= \old(this.back) && i == j) ==> ( this.theArray[i] == this.theArray[j] )); */
+-  /*! ensures (\forall int i, j; (0 <= i && i <= this.back-1 && 0 <= j && j <= this.back-1 && i == j) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
+-  /*! ensures \old(this.theArray[\new(this.back)]) == null; */
++  /*@ ensures (\forall int i, j; (this.back+1 <= i && i <= this.theArray.length-1 && this.back+1 <= j && j <= \old(this.theArray.length-1) && (i-(this.back+1)) == (j-(this.back+1))) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
++  /*@ ensures (\forall int i, j; (0 <= i && i <= this.back-1 && 0 <= j && j <= \old(this.back) && i == j) ==> ( this.theArray[i] == this.theArray[j] )); */
++  /*@ ensures (\forall int i, j; (0 <= i && i <= this.back-1 && 0 <= j && j <= this.back-1 && i == j) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
+   /*@ ensures (\forall int i, j; (0 <= i && i <= this.back-1 && 0 <= j && j <= \old(this.back) && i == j) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
+   /*@ ensures this.theArray[this.front] != null; */
+   /*@ ensures \old(this.currentSize) == this.currentSize - 1; */

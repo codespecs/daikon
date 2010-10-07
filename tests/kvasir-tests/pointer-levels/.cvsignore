@@ -1,0 +1,8 @@
+levels levels.decls.diff levels.dtrace.diff levels.invs.diff levels.out levels.out.diff ran-kvasir
+*.counts *.counts.diff
+levels.comp levels.comp.diff
+pointer-levels.comp.diff
+pointer-levels.decls.diff
+pointer-levels.dtrace.diff
+pointer-levels.invs.diff
+pointer-levels.out.diff

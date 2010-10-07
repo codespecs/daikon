@@ -1,0 +1,50 @@
+===========================================================================
+..main():::ENTER
+/global has only one value
+/global[] == [0, 0, 0, 0, 0, 0, 0, 0]
+argc == 1
+argv has only one value
+argv[] == [./partial]
+===========================================================================
+..main():::EXIT
+/global == orig(/global)
+/global has only one value
+/global[] == [10, 0, 0, 0, 10, 0, 0, 0]
+argv[] == [./partial]
+return == 0
+===========================================================================
+..print_bits():::ENTER
+/global has only one value
+/global[] == [10, 0, 0, 0, 10, 0, 0, 0]
+len one of { 36, 64 }
+bits[] elements one of { 0, 10 }
+bits[] one of { [10, 0, 0, 0, 10], [10, 0, 0, 0, 10, 0, 0, 0] }
+bits[i] != i
+bits[] is a subsequence of /global[]
+===========================================================================
+..print_bits():::EXIT
+/global == orig(/global)
+/global[] == orig(/global[])
+bits[] == orig(bits[])
+/global has only one value
+/global[] == [10, 0, 0, 0, 10, 0, 0, 0]
+bits[] elements one of { 0, 10 }
+bits[] one of { [10, 0, 0, 0, 10], [10, 0, 0, 0, 10, 0, 0, 0] }
+bits[i] != i
+bits[] is a subsequence of /global[]
+===========================================================================
+..test_bits():::ENTER
+/global has only one value
+/global[] elements one of { 0, 10 }
+/global[] one of { [0, 0, 0, 0, 0, 0, 0, 0], [10, 0, 0, 0, 10, 0, 0, 0] }
+p[] elements == 0
+p[] one of { [], [0, 0, 0, 0, 0, 0, 0, 0] }
+p[] is a subsequence of /global[]
+===========================================================================
+..test_bits():::EXIT
+/global == orig(/global)
+/global has only one value
+/global[] == [10, 0, 0, 0, 10, 0, 0, 0]
+p[] elements one of { 0, 10 }
+p[] one of { [10, 0, 0, 0, 10], [10, 0, 0, 0, 10, 0, 0, 0] }
+p[] is a subsequence of /global[]

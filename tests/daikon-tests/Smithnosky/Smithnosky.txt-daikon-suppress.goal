@@ -1,0 +1,49 @@
+===========================================================================
+kataoka.EncapsulateDowncast:::CLASS
+kataoka.EncapsulateDowncast.random has only one value
+kataoka.EncapsulateDowncast.random != null
+===========================================================================
+kataoka.EncapsulateDowncast:::OBJECT
+kataoka.EncapsulateDowncast.random has only one value
+kataoka.EncapsulateDowncast.random != null
+===========================================================================
+kataoka.EncapsulateDowncast.main(java.lang.String[]):::ENTER
+argv has only one value
+argv.getClass() == java.lang.String[].class
+argv[] == []
+argv[].toString == []
+===========================================================================
+kataoka.EncapsulateDowncast.main(java.lang.String[]):::EXIT
+kataoka.EncapsulateDowncast.random == orig(kataoka.EncapsulateDowncast.random)
+argv[] == []
+argv[].toString == []
+===========================================================================
+kataoka.EncapsulateDowncast.showLastPerson(java.util.Vector):::ENTER
+list != null
+list[] contains no duplicates
+list[] elements != null
+list[].getClass() elements == "kataoka.Person"
+===========================================================================
+kataoka.EncapsulateDowncast.showLastPerson(java.util.Vector):::EXIT
+list[] == orig(list[])
+kataoka.EncapsulateDowncast.random == orig(kataoka.EncapsulateDowncast.random)
+list[] contains no duplicates
+list[] elements != null
+list[].getClass() elements == "kataoka.Person"
+===========================================================================
+kataoka.Person:::OBJECT
+this._name != null
+this._height >= 0
+this._height < this._weight
+===========================================================================
+kataoka.Person.Person(java.lang.String, int, int):::ENTER
+name != null
+height >= 0
+height < weight
+===========================================================================
+kataoka.Person.Person(java.lang.String, int, int):::EXIT
+this._name == orig(name)
+this._height == orig(height)
+this._weight == orig(weight)
+name.toString == this._name.toString
+name.toString == orig(name.toString)

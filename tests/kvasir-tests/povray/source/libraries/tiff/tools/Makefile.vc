@@ -1,0 +1,45 @@
+#
+#	Simple MS VC++ Makefile
+#
+#	To build:
+#       C:\libtiff\tools> nmake /f makefile.vc 
+#
+# Uncomment and edit following lines to enable JPEG support
+#JPEG_SUPPORT	= 1
+#JPEGDIR 	= d:/projects/jpeg-6b
+#JPEG_LIB 	= $(JPEGDIR)/Release/jpeg.lib
+
+TARGETS	=	tiffcp.exe tiffinfo.exe tiffdump.exe fax2tiff.exe \
+		fax2ps.exe gif2tiff.exe pal2rgb.exe ppm2tiff.exe \
+		rgb2ycbcr.exe thumbnail.exe ras2tiff.exe raw2tiff.exe \
+		tiff2bw.exe tiff2rgba.exe tiff2pdf.exe tiff2ps.exe \
+		tiffcmp.exe tiffdither.exe tiffmedian.exe tiffsplit.exe 
+
+EXTRA_OBJ 	= 	strcasecmp.obj getopt.obj
+
+LIBS		=	..\libtiff\libtiff.lib
+EXTRAFLAGS	=
+
+!IFDEF JPEG_SUPPORT
+LIBS		= $(LIBS) $(JPEG_LIB)
+EXTRAFLAGS	= $(EXTRAFLAGS) -DJPEG_SUPPORT
+!ENDIF
+
+CFLAGS 	=	/nologo -I..\libtiff /D_WINDOWS $(EXTRAFLAGS)
+
+default:	$(EXTRA_OBJ) $(TARGETS)
+
+.c.exe:
+	$(CC) $(CFLAGS) $*.c $(EXTRA_OBJ) $(LIBS)
+
+tiffgt.exe:
+	$(CC) $(CFLAGS) tiffgt.c $(EXTRA_OBJ) $(LIBS)
+
+getopt.obj:	..\port\getopt.c
+	$(CC) /c $(CFLAGS) ..\port\getopt.c
+
+strcasecmp.obj:	..\port\strcasecmp.c
+	$(CC) /c $(CFLAGS) ..\port\strcasecmp.c
+
+clean:
+	del *.obj *.exe

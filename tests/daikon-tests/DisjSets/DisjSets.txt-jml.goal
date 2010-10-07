@@ -1,0 +1,148 @@
+===========================================================================
+DataStructures.DisjSets:::OBJECT
+    Variables: this this.s this.s[] size(this.s[]) size(this.s[])-1
+this.s != null
+daikon.Quant.eltsGTE(this.s, -1)
+daikon.Quant.eltsNotEqualIndex(this.s)
+daikon.Quant.eltsLTE(this.s, daikon.Quant.size(this.s)-1)
+===========================================================================
+DataStructures.DisjSets.DisjSets(int):::ENTER
+    Variables: numElements
+numElements >= 1
+===========================================================================
+DataStructures.DisjSets.DisjSets(int):::EXIT
+    Variables: this this.s this.s[] numElements orig(numElements) size(this.s[]) size(this.s[])-1 this.s[numElements] this.s[numElements-1] this.s[numElements..] this.s[numElements+1..] this.s[0..numElements] this.s[0..numElements-1] this.s[orig(numElements)] this.s[orig(numElements)-1] this.s[orig(numElements)..] this.s[orig(numElements)+1..] this.s[0..orig(numElements)] this.s[0..orig(numElements)-1]
+\old(numElements) == daikon.Quant.size(this.s)
+daikon.Quant.eltsEqual(this.s, -1)
+daikon.Quant.eltsLtIndex(this.s)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.eltsEqual(this.s, daikon.Quant.getElement_int(this.s, \old(numElements)-1))
+daikon.Quant.size(this.s)-1 > daikon.Quant.getElement_int(this.s, \old(numElements)-1)
+===========================================================================
+DataStructures.DisjSets.find(int):::ENTER
+    Variables: this this.s this.s[] x size(this.s[]) size(this.s[])-1 this.s[x] this.s[x-1] this.s[x..] this.s[x+1..] this.s[0..x] this.s[0..x-1]
+x >= 0
+(!(daikon.Quant.size(this.s)-1 == 0)) || (x == 0)
+x <= daikon.Quant.size(this.s)-1
+x != daikon.Quant.getElement_int(this.s, x)
+daikon.Quant.size(this.s)-1 >= daikon.Quant.getElement_int(this.s, x)
+===========================================================================
+DataStructures.DisjSets.find(int):::EXIT68
+    Variables: this this.s this.s[] x return orig(this) orig(this.s) orig(this.s[]) orig(x) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[x] this.s[x-1] this.s[x..] this.s[x+1..] this.s[0..x] this.s[0..x-1] this.s[return] this.s[return-1] this.s[return..] this.s[return+1..] this.s[0..return] this.s[0..return-1] this.s[orig(x)] this.s[orig(x)-1] this.s[orig(x)..] this.s[orig(x)+1..] this.s[0..orig(x)] this.s[0..orig(x)-1] orig(this.s[post(x)]) orig(this.s[post(x)-1]) orig(this.s[post(x)..]) orig(this.s[post(x)+1..]) orig(this.s[0..post(x)]) orig(this.s[0..post(x)-1]) orig(this.s[post(return)]) orig(this.s[post(return)-1]) orig(this.s[post(return)..]) orig(this.s[post(return)+1..]) orig(this.s[0..post(return)]) orig(this.s[0..post(return)-1]) orig(this.s[x]) orig(this.s[x-1]) orig(this.s[x..]) orig(this.s[x+1..]) orig(this.s[0..x]) orig(this.s[0..x-1])
+\result == \old(x)
+===========================================================================
+DataStructures.DisjSets.find(int):::EXIT70
+    Variables: this this.s this.s[] x return orig(this) orig(this.s) orig(this.s[]) orig(x) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[x] this.s[x-1] this.s[x..] this.s[x+1..] this.s[0..x] this.s[0..x-1] this.s[return] this.s[return-1] this.s[return..] this.s[return+1..] this.s[0..return] this.s[0..return-1] this.s[orig(x)] this.s[orig(x)-1] this.s[orig(x)..] this.s[orig(x)+1..] this.s[0..orig(x)] this.s[0..orig(x)-1] orig(this.s[post(x)]) orig(this.s[post(x)-1]) orig(this.s[post(x)..]) orig(this.s[post(x)+1..]) orig(this.s[0..post(x)]) orig(this.s[0..post(x)-1]) orig(this.s[post(return)]) orig(this.s[post(return)-1]) orig(this.s[post(return)..]) orig(this.s[post(return)+1..]) orig(this.s[0..post(return)]) orig(this.s[0..post(return)-1]) orig(this.s[x]) orig(this.s[x-1]) orig(this.s[x..]) orig(this.s[x+1..]) orig(this.s[0..x]) orig(this.s[0..x-1])
+daikon.Quant.getElement_int(this.s, \old(x)) >= 0
+daikon.Quant.memberOf(\result , this.s )
+\result != \old(x)
+daikon.Quant.getElement_int(this.s, \result) < daikon.Quant.getElement_int(this.s, \old(x))
+===========================================================================
+DataStructures.DisjSets.find(int):::EXIT
+    Variables: this this.s this.s[] x return orig(this) orig(this.s) orig(this.s[]) orig(x) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[x] this.s[x-1] this.s[x..] this.s[x+1..] this.s[0..x] this.s[0..x-1] this.s[return] this.s[return-1] this.s[return..] this.s[return+1..] this.s[0..return] this.s[0..return-1] this.s[orig(x)] this.s[orig(x)-1] this.s[orig(x)..] this.s[orig(x)+1..] this.s[0..orig(x)] this.s[0..orig(x)-1] orig(this.s[post(x)]) orig(this.s[post(x)-1]) orig(this.s[post(x)..]) orig(this.s[post(x)+1..]) orig(this.s[0..post(x)]) orig(this.s[0..post(x)-1]) orig(this.s[post(return)]) orig(this.s[post(return)-1]) orig(this.s[post(return)..]) orig(this.s[post(return)+1..]) orig(this.s[0..post(return)]) orig(this.s[0..post(return)-1]) orig(this.s[x]) orig(this.s[x-1]) orig(this.s[x..]) orig(this.s[x+1..]) orig(this.s[0..x]) orig(this.s[0..x-1])
+this.s == \old(this.s)
+daikon.Quant.pairwiseEqual(this.s, \old(this.s))
+(daikon.Quant.getElement_int(this.s, \old(x)) == -1)  <==>  (\result == \old(x))
+(daikon.Quant.getElement_int(this.s, \old(x)) == -1)  ==>  (\old(x) > daikon.Quant.getElement_int(this.s, \old(x)))
+(daikon.Quant.getElement_int(this.s, \old(x)) == -1)  ==>  (\result > daikon.Quant.getElement_int(this.s, \old(x)))
+(daikon.Quant.getElement_int(this.s, \old(x)) == -1)  ==>  (daikon.Quant.size(this.s)-1 > daikon.Quant.getElement_int(this.s, \old(x)))
+(daikon.Quant.getElement_int(this.s, \old(x)) == -1)  ==>  (daikon.Quant.eltsGTE(this.s, daikon.Quant.getElement_int(this.s, \old(x))))
+(daikon.Quant.getElement_int(this.s, \old(x)) == -1)  ==>  (warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {-1} subset of this.s[0..orig(x)])
+(daikon.Quant.getElement_int(this.s, \old(x)) == -1)  ==>  (warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {-1} subset of this.s[orig(x)..])
+(daikon.Quant.getElement_int(this.s, \old(x)) >= 0)  <==>  (\result != \old(x))
+(daikon.Quant.getElement_int(this.s, \old(x)) >= 0)  <==>  (daikon.Quant.getElement_int(this.s, \result) < daikon.Quant.getElement_int(this.s, \old(x)))
+(daikon.Quant.getElement_int(this.s, \old(x)) >= 0)  ==>  (daikon.Quant.memberOf(\result , this.s ))
+\result >= 0
+daikon.Quant.getElement_int(this.s, \result) == -1
+warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {-1} subset of this.s[return..]
+warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {-1} subset of this.s[0..return]
+daikon.Quant.eltsGTE(this.s, daikon.Quant.getElement_int(this.s, \result))
+(!(daikon.Quant.size(this.s)-1 == 0)) || (\result == 0)
+\result <= daikon.Quant.size(this.s)-1
+\result > daikon.Quant.getElement_int(this.s, \result)
+(!(daikon.Quant.size(this.s)-1 == 0)) || (\old(x) == 0)
+\old(x) <= daikon.Quant.size(this.s)-1
+\old(x) > daikon.Quant.getElement_int(this.s, \result)
+\old(x) != daikon.Quant.getElement_int(this.s, \old(x))
+daikon.Quant.size(this.s)-1 > daikon.Quant.getElement_int(this.s, \result)
+daikon.Quant.size(this.s)-1 >= daikon.Quant.getElement_int(this.s, \old(x))
+daikon.Quant.getElement_int(this.s, \result) <= daikon.Quant.getElement_int(this.s, \old(x))
+===========================================================================
+DataStructures.DisjSets.unionCareful(int, int):::ENTER
+    Variables: this this.s this.s[] set1 set2 size(this.s[]) size(this.s[])-1 this.s[set1] this.s[set1-1] this.s[set1..] this.s[set1+1..] this.s[0..set1] this.s[0..set1-1] this.s[set2] this.s[set2-1] this.s[set2..] this.s[set2+1..] this.s[0..set2] this.s[0..set2-1]
+set1 >= 0
+set2 >= 0
+(!(daikon.Quant.size(this.s)-1 == 0)) || (set1 == 0)
+set1 <= daikon.Quant.size(this.s)-1
+set1 != daikon.Quant.getElement_int(this.s, set1)
+(!(daikon.Quant.size(this.s)-1 == 0)) || (set2 == 0)
+set2 <= daikon.Quant.size(this.s)-1
+set2 != daikon.Quant.getElement_int(this.s, set2)
+daikon.Quant.size(this.s)-1 >= daikon.Quant.getElement_int(this.s, set1)
+daikon.Quant.size(this.s)-1 >= daikon.Quant.getElement_int(this.s, set2)
+===========================================================================
+DataStructures.DisjSets.unionCareful(int, int):::EXIT
+    Variables: this this.s this.s[] set1 set2 orig(this) orig(this.s) orig(this.s[]) orig(set1) orig(set2) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[set1] this.s[set1-1] this.s[set1..] this.s[set1+1..] this.s[0..set1] this.s[0..set1-1] this.s[set2] this.s[set2-1] this.s[set2..] this.s[set2+1..] this.s[0..set2] this.s[0..set2-1] this.s[orig(set1)] this.s[orig(set1)-1] this.s[orig(set1)..] this.s[orig(set1)+1..] this.s[0..orig(set1)] this.s[0..orig(set1)-1] this.s[orig(set2)] this.s[orig(set2)-1] this.s[orig(set2)..] this.s[orig(set2)+1..] this.s[0..orig(set2)] this.s[0..orig(set2)-1] orig(this.s[post(set1)]) orig(this.s[post(set1)-1]) orig(this.s[post(set1)..]) orig(this.s[post(set1)+1..]) orig(this.s[0..post(set1)]) orig(this.s[0..post(set1)-1]) orig(this.s[post(set2)]) orig(this.s[post(set2)-1]) orig(this.s[post(set2)..]) orig(this.s[post(set2)+1..]) orig(this.s[0..post(set2)]) orig(this.s[0..post(set2)-1]) orig(this.s[set1]) orig(this.s[set1-1]) orig(this.s[set1..]) orig(this.s[set1+1..]) orig(this.s[0..set1]) orig(this.s[0..set1-1]) orig(this.s[set2]) orig(this.s[set2-1]) orig(this.s[set2..]) orig(this.s[set2+1..]) orig(this.s[0..set2]) orig(this.s[0..set2-1])
+assignable this.s[*]
+this.s == \old(this.s)
+daikon.Quant.size(this.s) == \old(daikon.Quant.size(this.s))
+daikon.Quant.getElement_int(this.s, \old(set1)) == \old(daikon.Quant.getElement_int(this.s, \new(set1)))
+daikon.Quant.getElement_int(this.s, \old(set1)) == \old(daikon.Quant.getElement_int(this.s, set1))
+daikon.Quant.pairwiseGTE(this.s, \old(this.s))
+daikon.Quant.pairwiseBitwiseSubset(\old(this.s), this.s)
+daikon.Quant.subsetOf(\old(this.s), this.s)
+daikon.Quant.eltsLTE(\old(this.s), daikon.Quant.size(this.s)-1)
+(!(daikon.Quant.size(this.s)-1 == 0)) || (\old(set1) == 0)
+\old(set1) <= daikon.Quant.size(this.s)-1
+\old(set1) != daikon.Quant.getElement_int(this.s, \old(set1))
+(!(daikon.Quant.size(this.s)-1 == 0)) || (\old(set2) == 0)
+\old(set2) <= daikon.Quant.size(this.s)-1
+\old(set2) != daikon.Quant.getElement_int(this.s, \old(set2))
+daikon.Quant.size(this.s)-1 >= daikon.Quant.getElement_int(this.s, \old(set1))
+daikon.Quant.size(this.s)-1 >= daikon.Quant.getElement_int(this.s, \old(set2))
+daikon.Quant.size(this.s)-1 >= \old(daikon.Quant.getElement_int(this.s, set2))
+(!(\old(daikon.Quant.getElement_int(this.s, set2)) == 0)) || (daikon.Quant.getElement_int(this.s, \old(set2)) == 0)
+===========================================================================
+DataStructures.DisjSets.unionDisjoint(int, int):::ENTER
+    Variables: this this.s this.s[] root1 root2 size(this.s[]) size(this.s[])-1 this.s[root1] this.s[root1-1] this.s[root1..] this.s[root1+1..] this.s[0..root1] this.s[0..root1-1] this.s[root2] this.s[root2-1] this.s[root2..] this.s[root2+1..] this.s[0..root2] this.s[0..root2-1]
+daikon.Quant.getElement_int(this.s, root1) == daikon.Quant.getElement_int(this.s, root2)
+root1 >= 0
+root2 >= 0
+daikon.Quant.getElement_int(this.s, root1) == -1
+warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {-1} subset of this.s[root1..]
+warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {-1} subset of this.s[0..root1]
+warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {-1} subset of this.s[root2..]
+warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {-1} subset of this.s[0..root2]
+daikon.Quant.eltsGTE(this.s, daikon.Quant.getElement_int(this.s, root1))
+root1 != root2
+root1 <= daikon.Quant.size(this.s)-1
+root1 > daikon.Quant.getElement_int(this.s, root1)
+root2 <= daikon.Quant.size(this.s)-1
+root2 > daikon.Quant.getElement_int(this.s, root1)
+daikon.Quant.size(this.s)-1 > daikon.Quant.getElement_int(this.s, root1)
+===========================================================================
+DataStructures.DisjSets.unionDisjoint(int, int):::EXIT
+    Variables: this this.s this.s[] root1 root2 orig(this) orig(this.s) orig(this.s[]) orig(root1) orig(root2) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[root1] this.s[root1-1] this.s[root1..] this.s[root1+1..] this.s[0..root1] this.s[0..root1-1] this.s[root2] this.s[root2-1] this.s[root2..] this.s[root2+1..] this.s[0..root2] this.s[0..root2-1] this.s[orig(root1)] this.s[orig(root1)-1] this.s[orig(root1)..] this.s[orig(root1)+1..] this.s[0..orig(root1)] this.s[0..orig(root1)-1] this.s[orig(root2)] this.s[orig(root2)-1] this.s[orig(root2)..] this.s[orig(root2)+1..] this.s[0..orig(root2)] this.s[0..orig(root2)-1] orig(this.s[post(root1)]) orig(this.s[post(root1)-1]) orig(this.s[post(root1)..]) orig(this.s[post(root1)+1..]) orig(this.s[0..post(root1)]) orig(this.s[0..post(root1)-1]) orig(this.s[post(root2)]) orig(this.s[post(root2)-1]) orig(this.s[post(root2)..]) orig(this.s[post(root2)+1..]) orig(this.s[0..post(root2)]) orig(this.s[0..post(root2)-1]) orig(this.s[root1]) orig(this.s[root1-1]) orig(this.s[root1..]) orig(this.s[root1+1..]) orig(this.s[0..root1]) orig(this.s[0..root1-1]) orig(this.s[root2]) orig(this.s[root2-1]) orig(this.s[root2..]) orig(this.s[root2+1..]) orig(this.s[0..root2]) orig(this.s[0..root2-1])
+assignable this.s[*]
+this.s == \old(this.s)
+daikon.Quant.lexGT(this.s, \old(this.s))
+\old(root1) == daikon.Quant.getElement_int(this.s, \old(root2))
+daikon.Quant.size(this.s) == \old(daikon.Quant.size(this.s))
+daikon.Quant.getElement_int(this.s, \old(root1)) == \old(daikon.Quant.getElement_int(this.s, \new(root1)))
+daikon.Quant.getElement_int(this.s, \old(root1)) == \old(daikon.Quant.getElement_int(this.s, \new(root2)))
+daikon.Quant.getElement_int(this.s, \old(root1)) == \old(daikon.Quant.getElement_int(this.s, root1))
+daikon.Quant.getElement_int(this.s, \old(root1)) == \old(daikon.Quant.getElement_int(this.s, root2))
+daikon.Quant.getElement_int(this.s, \old(root1)) == -1
+warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {-1} subset of this.s[orig(root1)..]
+warning: method daikon.inv.unary.sequence.CommonSequence.format(OutputFormat:JML) needs to be implemented: {-1} subset of this.s[0..orig(root1)]
+daikon.Quant.pairwiseGTE(this.s, \old(this.s))
+daikon.Quant.pairwiseBitwiseSubset(\old(this.s), this.s)
+daikon.Quant.subsetOf(\old(this.s), this.s)
+daikon.Quant.eltsGTE(this.s, daikon.Quant.getElement_int(this.s, \old(root1)))
+daikon.Quant.eltsLTE(\old(this.s), daikon.Quant.size(this.s)-1)
+daikon.Quant.eltsGTE(\old(this.s), daikon.Quant.getElement_int(this.s, \old(root1)))
+\old(root1) <= daikon.Quant.size(this.s)-1
+\old(root1) > daikon.Quant.getElement_int(this.s, \old(root1))
+\old(root2) <= daikon.Quant.size(this.s)-1
+\old(root2) > daikon.Quant.getElement_int(this.s, \old(root1))
+daikon.Quant.size(this.s)-1 > daikon.Quant.getElement_int(this.s, \old(root1))

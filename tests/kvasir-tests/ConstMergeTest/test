@@ -1,0 +1,14 @@
+----SECTION----
+globals
+file1_h/var1
+file1_h/var2
+/var3
+
+----SECTION----
+..getVar()
+return
+
+----SECTION----
+..main()
+return
+

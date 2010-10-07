@@ -1,0 +1,105 @@
+===========================================================================
+six170.FixedSizeSet:::OBJECT
+(NEQ (hash (select |bits| |this|)) null)
+(EQ (arrayLength (select |bits| |this|)) 8)
+===========================================================================
+six170.FixedSizeSet.FixedSizeSet():::EXIT
+(AND (EQ (arrayLength (select |bits| |this|)) 8) (AND  (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| 7)) (EQ (select (select elems (select |bits| |this|)) |i|) 0)))))
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1))) (EQ (select (select elems (select |bits| |this|)) |i|) |@false|)))
+===========================================================================
+six170.FixedSizeSet.add(int):::ENTER
+(>= |n| 0)
+(EQ (|java-&| |n| (arrayLength (select |bits| |this|))) 0)
+(<= |n| (- (arrayLength (select |bits| |this|)) 1))
+(EQ (- (arrayLength (select |bits| |this|)) 1) (|java-bitwise-or| |n| (- (arrayLength (select |bits| |this|)) 1)))
+===========================================================================
+six170.FixedSizeSet.add(int):::EXIT
+(EQ (hash (select |bits| |this|)) (hash (select |bits| |__orig__this|)))
+(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |__orig__this|)))
+(FORALL (|i| |j|) (IMPLIES (AND (<= (+ |__orig__n| 1) |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)) (<= (+ |n| 1) |j|) (<= |j| (- (arrayLength (select |bits| |__orig__this|)) 1)) (EQ (- |i| (+ |__orig__n| 1)) (- |j| (+ |n| 1)))) (EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |__orig__this|)) |j|))))
+(FORALL (|i| |j|) (IMPLIES (AND (<= (+ |__orig__n| 1) |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)) (<= (+ |__orig__n| 1) |j|) (<= |j| (- (arrayLength (select |bits| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |__orig__this|)) |j|))))
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |__orig__n| 1)) (<= 0 |j|) (<= |j| (- |n| 1)) (EQ |i| |j|)) (EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |__orig__this|)) |j|))))
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |__orig__n| 1)) (<= 0 |j|) (<= |j| (- |__orig__n| 1)) (EQ |i| |j|)) (EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |__orig__this|)) |j|))))
+(EQ (select (select elems (select |bits| |this|)) |__orig__n|) |@true|)
+(EQ (|java-&| |__orig__n| (arrayLength (select |bits| |this|))) 0)
+(<= |__orig__n| (- (arrayLength (select |bits| |this|)) 1))
+(EQ (- (arrayLength (select |bits| |this|)) 1) (|java-bitwise-or| |__orig__n| (- (arrayLength (select |bits| |this|)) 1)))
+===========================================================================
+six170.FixedSizeSet.contains(int):::ENTER
+(>= |n| 0)
+(EQ (|java-&| |n| (arrayLength (select |bits| |this|))) 0)
+(<= |n| (- (arrayLength (select |bits| |this|)) 1))
+(EQ (- (arrayLength (select |bits| |this|)) 1) (|java-bitwise-or| |n| (- (arrayLength (select |bits| |this|)) 1)))
+===========================================================================
+six170.FixedSizeSet.contains(int):::EXIT
+(EQ (hash (select |bits| |this|)) (hash (select |bits| |__orig__this|)))
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |__orig__this|)) |j|))))
+(EQ |return| (select (select elems (select |bits| |this|)) |__orig__n|))
+(EQ |return| (select (select elems (select |bits| |__orig__this|)) |n|))
+(EQ |return| (select (select elems (select |bits| |__orig__this|)) |__orig__n|))
+(IMPLIES (EQ |return| |@true|) (EQ (hash |__orig__this|) (hashcode 1001)))
+(IMPLIES (EQ |return| |@true|) (EQ (hash (select |bits| |this|)) (hashcode 1002)))
+(EQ (|java-&| |__orig__n| (arrayLength (select |bits| |this|))) 0)
+(<= |__orig__n| (- (arrayLength (select |bits| |this|)) 1))
+(EQ (- (arrayLength (select |bits| |this|)) 1) (|java-bitwise-or| |__orig__n| (- (arrayLength (select |bits| |this|)) 1)))
+===========================================================================
+six170.FixedSizeSet.intersect(six170.FixedSizeSet):::ENTER
+(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |other|)))
+(NEQ (hash |other|) null)
+(NEQ (hash (select |bits| |other|)) null)
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |other|)) 1))(EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |other|)) |j|))))))
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |other|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |this|)) 1))(EQ (select (select elems (select |bits| |other|)) |i|) (select (select elems (select |bits| |this|)) |j|))))))
+===========================================================================
+six170.FixedSizeSet.intersect(six170.FixedSizeSet):::EXIT
+(EQ (hash (select |bits| |this|)) (hash (select |bits| |__orig__this|)))
+(EQ (hash (select |bits| |other|)) (hash (select |bits| |__orig__other|)))
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |__orig__other|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |bits| |other|)) |i|) (select (select elems (select |bits| |__orig__other|)) |j|))))
+(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |other|)))
+(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |__orig__this|)))
+(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |__orig__other|)))
+(NEQ (hash (select |bits| |other|)) null)
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |other|)) 1))(EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |other|)) |j|))))))
+format_simplify can't handle one of these sequences: this.bits[] is a subset of orig(this.bits[])
+format_simplify can't handle one of these sequences: other.bits[] is a subset of orig(this.bits[])
+format_simplify can't handle one of these sequences: other.bits[] is a superset of orig(this.bits[])
+===========================================================================
+six170.FixedSizeSet.remove(int):::ENTER
+(EQ (hash |this|) (hashcode 1001))
+(EQ (hash (select |bits| |this|)) (hashcode 1002))
+(>= |n| 0)
+(EQ (|java-&| |n| (arrayLength (select |bits| |this|))) 0)
+(<= |n| (- (arrayLength (select |bits| |this|)) 1))
+(EQ (- (arrayLength (select |bits| |this|)) 1) (|java-bitwise-or| |n| (- (arrayLength (select |bits| |this|)) 1)))
+===========================================================================
+six170.FixedSizeSet.remove(int):::EXIT
+(EQ (hash (select |bits| |this|)) (hash (select |bits| |__orig__this|)))
+(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |__orig__this|)))
+(FORALL (|i| |j|) (IMPLIES (AND (<= (+ |__orig__n| 1) |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)) (<= (+ |n| 1) |j|) (<= |j| (- (arrayLength (select |bits| |__orig__this|)) 1)) (EQ (- |i| (+ |__orig__n| 1)) (- |j| (+ |n| 1)))) (EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |__orig__this|)) |j|))))
+(FORALL (|i| |j|) (IMPLIES (AND (<= (+ |__orig__n| 1) |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)) (<= (+ |__orig__n| 1) |j|) (<= |j| (- (arrayLength (select |bits| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |__orig__this|)) |j|))))
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |__orig__n| 1)) (<= 0 |j|) (<= |j| (- |n| 1)) (EQ |i| |j|)) (EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |__orig__this|)) |j|))))
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |__orig__n| 1)) (<= 0 |j|) (<= |j| (- |__orig__n| 1)) (EQ |i| |j|)) (EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |__orig__this|)) |j|))))
+(EQ (hash (select |bits| |this|)) (hashcode 1002))
+(EQ (select (select elems (select |bits| |this|)) |__orig__n|) |@false|)
+(EQ (|java-&| |__orig__n| (arrayLength (select |bits| |this|))) 0)
+(<= |__orig__n| (- (arrayLength (select |bits| |this|)) 1))
+(EQ (- (arrayLength (select |bits| |this|)) 1) (|java-bitwise-or| |__orig__n| (- (arrayLength (select |bits| |this|)) 1)))
+===========================================================================
+six170.FixedSizeSet.union(six170.FixedSizeSet):::ENTER
+(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |other|)))
+(NEQ (hash |other|) null)
+(NEQ (hash (select |bits| |other|)) null)
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |other|)) 1))(EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |other|)) |j|))))))
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |other|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |this|)) 1))(EQ (select (select elems (select |bits| |other|)) |i|) (select (select elems (select |bits| |this|)) |j|))))))
+===========================================================================
+six170.FixedSizeSet.union(six170.FixedSizeSet):::EXIT
+(EQ (hash (select |bits| |this|)) (hash (select |bits| |__orig__this|)))
+(EQ (hash (select |bits| |other|)) (hash (select |bits| |__orig__other|)))
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |other|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |__orig__other|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |bits| |other|)) |i|) (select (select elems (select |bits| |__orig__other|)) |j|))))
+(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |other|)))
+(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |__orig__this|)))
+(EQ (arrayLength (select |bits| |this|)) (arrayLength (select |bits| |__orig__other|)))
+(NEQ (hash (select |bits| |other|)) null)
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |bits| |this|)) 1)))(EXISTS (|j|)(AND (<= 0 |j|) (<= |j| (- (arrayLength (select |bits| |other|)) 1))(EQ (select (select elems (select |bits| |this|)) |i|) (select (select elems (select |bits| |other|)) |j|))))))
+format_simplify can't handle one of these sequences: this.bits[] is a subset of orig(this.bits[])
+format_simplify can't handle one of these sequences: other.bits[] is a subset of orig(this.bits[])
+format_simplify can't handle one of these sequences: other.bits[] is a superset of orig(this.bits[])

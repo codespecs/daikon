@@ -1,0 +1,876 @@
+// Declarations for misc.Fib
+// Declarations written Thu Oct 15 13:10:46 EDT 2009
+
+decl-version 2.0
+var-comparability none
+
+ppt misc.Fib.Fib():::ENTER
+ppt-type enter
+
+ppt misc.Fib.Fib():::EXIT5
+ppt-type subexit
+parent parent misc.Fib:::OBJECT 1
+  variable this
+    var-kind variable 
+    dec-type misc.Fib
+    rep-type hashcode
+    flags is_param
+    comparability 22
+    parent misc.Fib:::OBJECT 1
+  variable misc.Fib.STEPS
+    var-kind variable 
+    dec-type int
+    rep-type int
+    constant 20
+    flags nomod
+    comparability 22
+    parent misc.Fib:::OBJECT 1
+  variable misc.Fib.a
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::OBJECT 1
+  variable misc.Fib.b
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::OBJECT 1
+  variable misc.Fib.c
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::OBJECT 1
+
+ppt misc.Fib.main(java.lang.String[]):::ENTER
+ppt-type enter
+parent parent misc.Fib:::CLASS 1
+  variable misc.Fib.STEPS
+    var-kind variable 
+    dec-type int
+    rep-type int
+    constant 20
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.a
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.b
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.c
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable args
+    var-kind variable 
+    dec-type java.lang.String[]
+    rep-type hashcode
+    flags is_param nomod
+    comparability 22
+  variable args.getClass()
+    var-kind function getClass()
+    enclosing-var args
+    dec-type java.lang.Class
+    rep-type java.lang.String
+    flags nomod synthetic classname
+    comparability 22
+  variable args[..]
+    var-kind array 
+    enclosing-var args
+    array 1
+    dec-type java.lang.String[]
+    rep-type hashcode[]
+    flags nomod
+    comparability 22
+  variable args[..].toString
+    var-kind function toString()
+    enclosing-var args[..]
+    array 1
+    dec-type java.lang.String[]
+    rep-type java.lang.String[]
+    flags nomod synthetic to_string
+    comparability 22
+
+ppt misc.Fib.main(java.lang.String[]):::EXIT18
+ppt-type subexit
+parent parent misc.Fib:::CLASS 1
+  variable misc.Fib.STEPS
+    var-kind variable 
+    dec-type int
+    rep-type int
+    constant 20
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.a
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.b
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.c
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable args
+    var-kind variable 
+    dec-type java.lang.String[]
+    rep-type hashcode
+    flags is_param nomod
+    comparability 22
+  variable args.getClass()
+    var-kind function getClass()
+    enclosing-var args
+    dec-type java.lang.Class
+    rep-type java.lang.String
+    flags nomod synthetic classname
+    comparability 22
+  variable args[..]
+    var-kind array 
+    enclosing-var args
+    array 1
+    dec-type java.lang.String[]
+    rep-type hashcode[]
+    flags nomod
+    comparability 22
+  variable args[..].toString
+    var-kind function toString()
+    enclosing-var args[..]
+    array 1
+    dec-type java.lang.String[]
+    rep-type java.lang.String[]
+    flags nomod synthetic to_string
+    comparability 22
+
+ppt misc.Fib.increment():::ENTER
+ppt-type enter
+parent parent misc.Fib:::CLASS 1
+  variable misc.Fib.STEPS
+    var-kind variable 
+    dec-type int
+    rep-type int
+    constant 20
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.a
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.b
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.c
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+
+ppt misc.Fib.increment():::EXIT25
+ppt-type subexit
+parent parent misc.Fib:::CLASS 1
+  variable misc.Fib.STEPS
+    var-kind variable 
+    dec-type int
+    rep-type int
+    constant 20
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.a
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.b
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.c
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+
+ppt misc.Fib:::CLASS
+ppt-type class
+  variable misc.Fib.STEPS
+    var-kind variable 
+    dec-type int
+    rep-type int
+    constant 20
+    flags nomod
+    comparability 22
+  variable misc.Fib.a
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+  variable misc.Fib.b
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+  variable misc.Fib.c
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+
+ppt misc.Fib:::OBJECT
+ppt-type object
+parent parent misc.Fib:::CLASS 1
+  variable this
+    var-kind variable 
+    dec-type misc.Fib
+    rep-type hashcode
+    flags is_param nomod
+    comparability 22
+  variable misc.Fib.STEPS
+    var-kind variable 
+    dec-type int
+    rep-type int
+    constant 20
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.a
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.b
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+  variable misc.Fib.c
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags nomod
+    comparability 22
+    parent misc.Fib:::CLASS 1
+
+misc.Fib.main(java.lang.String[]):::ENTER
+this_invocation_nonce
+0
+misc.Fib.a
+0
+1
+misc.Fib.b
+0
+1
+misc.Fib.c
+0
+1
+args
+16713087
+1
+args.getClass()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+1
+misc.Fib.a
+0
+1
+misc.Fib.b
+1
+1
+misc.Fib.c
+1
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+1
+misc.Fib.a
+1
+1
+misc.Fib.b
+1
+1
+misc.Fib.c
+2
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+2
+misc.Fib.a
+1
+1
+misc.Fib.b
+1
+1
+misc.Fib.c
+2
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+2
+misc.Fib.a
+1
+1
+misc.Fib.b
+2
+1
+misc.Fib.c
+3
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+3
+misc.Fib.a
+1
+1
+misc.Fib.b
+2
+1
+misc.Fib.c
+3
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+3
+misc.Fib.a
+2
+1
+misc.Fib.b
+3
+1
+misc.Fib.c
+5
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+4
+misc.Fib.a
+2
+1
+misc.Fib.b
+3
+1
+misc.Fib.c
+5
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+4
+misc.Fib.a
+3
+1
+misc.Fib.b
+5
+1
+misc.Fib.c
+8
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+5
+misc.Fib.a
+3
+1
+misc.Fib.b
+5
+1
+misc.Fib.c
+8
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+5
+misc.Fib.a
+5
+1
+misc.Fib.b
+8
+1
+misc.Fib.c
+13
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+6
+misc.Fib.a
+5
+1
+misc.Fib.b
+8
+1
+misc.Fib.c
+13
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+6
+misc.Fib.a
+8
+1
+misc.Fib.b
+13
+1
+misc.Fib.c
+21
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+7
+misc.Fib.a
+8
+1
+misc.Fib.b
+13
+1
+misc.Fib.c
+21
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+7
+misc.Fib.a
+13
+1
+misc.Fib.b
+21
+1
+misc.Fib.c
+34
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+8
+misc.Fib.a
+13
+1
+misc.Fib.b
+21
+1
+misc.Fib.c
+34
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+8
+misc.Fib.a
+21
+1
+misc.Fib.b
+34
+1
+misc.Fib.c
+55
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+9
+misc.Fib.a
+21
+1
+misc.Fib.b
+34
+1
+misc.Fib.c
+55
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+9
+misc.Fib.a
+34
+1
+misc.Fib.b
+55
+1
+misc.Fib.c
+89
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+10
+misc.Fib.a
+34
+1
+misc.Fib.b
+55
+1
+misc.Fib.c
+89
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+10
+misc.Fib.a
+55
+1
+misc.Fib.b
+89
+1
+misc.Fib.c
+144
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+11
+misc.Fib.a
+55
+1
+misc.Fib.b
+89
+1
+misc.Fib.c
+144
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+11
+misc.Fib.a
+89
+1
+misc.Fib.b
+144
+1
+misc.Fib.c
+233
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+12
+misc.Fib.a
+89
+1
+misc.Fib.b
+144
+1
+misc.Fib.c
+233
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+12
+misc.Fib.a
+144
+1
+misc.Fib.b
+233
+1
+misc.Fib.c
+377
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+13
+misc.Fib.a
+144
+1
+misc.Fib.b
+233
+1
+misc.Fib.c
+377
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+13
+misc.Fib.a
+233
+1
+misc.Fib.b
+377
+1
+misc.Fib.c
+610
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+14
+misc.Fib.a
+233
+1
+misc.Fib.b
+377
+1
+misc.Fib.c
+610
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+14
+misc.Fib.a
+377
+1
+misc.Fib.b
+610
+1
+misc.Fib.c
+987
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+15
+misc.Fib.a
+377
+1
+misc.Fib.b
+610
+1
+misc.Fib.c
+987
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+15
+misc.Fib.a
+610
+1
+misc.Fib.b
+987
+1
+misc.Fib.c
+1597
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+16
+misc.Fib.a
+610
+1
+misc.Fib.b
+987
+1
+misc.Fib.c
+1597
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+16
+misc.Fib.a
+987
+1
+misc.Fib.b
+1597
+1
+misc.Fib.c
+2584
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+17
+misc.Fib.a
+987
+1
+misc.Fib.b
+1597
+1
+misc.Fib.c
+2584
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+17
+misc.Fib.a
+1597
+1
+misc.Fib.b
+2584
+1
+misc.Fib.c
+4181
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+18
+misc.Fib.a
+1597
+1
+misc.Fib.b
+2584
+1
+misc.Fib.c
+4181
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+18
+misc.Fib.a
+2584
+1
+misc.Fib.b
+4181
+1
+misc.Fib.c
+6765
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+19
+misc.Fib.a
+2584
+1
+misc.Fib.b
+4181
+1
+misc.Fib.c
+6765
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+19
+misc.Fib.a
+4181
+1
+misc.Fib.b
+6765
+1
+misc.Fib.c
+10946
+1
+
+misc.Fib.increment():::ENTER
+this_invocation_nonce
+20
+misc.Fib.a
+4181
+1
+misc.Fib.b
+6765
+1
+misc.Fib.c
+10946
+1
+
+misc.Fib.increment():::EXIT25
+this_invocation_nonce
+20
+misc.Fib.a
+6765
+1
+misc.Fib.b
+10946
+1
+misc.Fib.c
+17711
+1
+
+misc.Fib.main(java.lang.String[]):::EXIT18
+this_invocation_nonce
+0
+misc.Fib.a
+6765
+1
+misc.Fib.b
+10946
+1
+misc.Fib.c
+17711
+1
+args
+16713087
+1
+args.getClass()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+

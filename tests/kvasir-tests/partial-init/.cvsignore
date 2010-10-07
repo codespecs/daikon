@@ -1,0 +1,9 @@
+partial
+partial.counts
+partial.counts.diff
+partial.decls.diff
+partial.dtrace.diff
+partial.invs.diff
+partial.out
+partial.out.diff
+ran-kvasir

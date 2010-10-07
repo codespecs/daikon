@@ -1,0 +1,5 @@
+
+Without any annotations on RatPolyStack, we get tons of warnings about
+null dereferences.  We have to instrument both of them to make this
+work, but we'd only want to verify this class, since RPS is hopeless.
+(Go modular checking!)

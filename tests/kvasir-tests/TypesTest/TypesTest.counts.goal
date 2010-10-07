@@ -1,0 +1,12 @@
+..basicFunctionTest() ENTER/3: 1 EXIT0/3: 1
+..main() ENTER/3: 1 EXIT0/6: 1
+..returnCharSum() ENTER/9: 100 EXIT0/12: 100
+..returnDoubleSum() ENTER/9: 10 EXIT0/12: 10
+..returnFloatProduct() ENTER/9: 10 EXIT0/12: 10
+..returnIntSum() ENTER/9: 70 EXIT0/12: 70
+..returnLongSum() ENTER/9: 10 EXIT0/12: 10
+..returnShortSum() ENTER/9: 10 EXIT0/12: 10
+..returnUCharProduct() ENTER/9: 10 EXIT0/12: 10
+..returnUIntProduct() ENTER/9: 10 EXIT0/12: 10
+..returnULongProduct() ENTER/9: 10 EXIT0/12: 10
+..returnUShortProduct() ENTER/9: 10 EXIT0/12: 10

@@ -1,0 +1,963 @@
+===========================================================================
+std.add_process(int;)void:::ENTER
+    Variables: prio ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+prio == 1 || prio == 2 || prio == 3
+::alloc_proc_num >= 0
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.add_process(int;)void:::EXIT
+    Variables: prio ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(prio) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::alloc_proc_num, ::num_processes, ::cur_proc.next, ::cur_proc.next.next
+prio == \old(prio)
+::cur_proc == \old(::cur_proc)
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.prev == \old(::cur_proc.next.prev))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.val == \old(::cur_proc.next.val))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.prev == \old(::cur_proc.prev))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.next == \old(::cur_proc.prev.next))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.prev == \old(::cur_proc.prev.prev))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.val == \old(::cur_proc.prev.val))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.val == \old(::cur_proc.val))
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.first == \old(::block_queue.first))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.next == \old(::block_queue.first.next))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.val == \old(::block_queue.first.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.last == \old(::block_queue.last))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.prev == \old(::block_queue.last.prev))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.val == \old(::block_queue.last.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count == \old(::block_queue.mem_count))
+prio == 1 || prio == 2 || prio == 3
+::alloc_proc_num >= 1
+::num_processes >= 1
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+::alloc_proc_num - \old(::alloc_proc_num) - 1 == 0
+::num_processes - \old(::num_processes) - 1 == 0
+===========================================================================
+std.append_ele(List *;Ele *;)List *:::ENTER
+    Variables: a_list a_list.first a_list.first.next a_list.first.prev a_list.first.val a_list.last a_list.last.next a_list.last.prev a_list.last.val a_list.mem_count a_ele a_ele.next a_ele.next.next a_ele.next.prev a_ele.next.val a_ele.prev a_ele.prev.next a_ele.prev.prev a_ele.prev.val a_ele.val ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+((a_list != null) && (a_list.first != null))  ==>  (a_list.first.prev == null)
+((a_list != null) && (a_list.first != null))  ==>  (a_list.first.val >= 0)
+((a_list != null) && (a_list.last != null))  ==>  (a_list.last.next == null)
+((a_list != null) && (a_list.last != null))  ==>  (a_list.last.val >= 0)
+(a_list != null)  ==>  (a_list.mem_count >= 0)
+a_ele != null
+(a_ele.next != null)  ==>  (a_ele.next.val >= 0)
+(a_ele.prev != null)  ==>  (a_ele.prev.val >= 0)
+a_ele.val >= 0
+::alloc_proc_num >= 1
+::num_processes >= 1
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.val >= 0)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.append_ele(List *;Ele *;)List *:::EXIT
+    Variables: a_list a_list.first a_list.first.next a_list.first.prev a_list.first.val a_list.last a_list.last.next a_list.last.prev a_list.last.val a_list.mem_count a_ele a_ele.next a_ele.next.next a_ele.next.prev a_ele.next.val a_ele.prev a_ele.prev.next a_ele.prev.prev a_ele.prev.val a_ele.val ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count return return.first return.first.next return.first.prev return.first.val return.last return.last.next return.last.prev return.last.val return.mem_count orig(a_list) orig(a_list.first) orig(a_list.first.next) orig(a_list.first.prev) orig(a_list.first.val) orig(a_list.last) orig(a_list.last.next) orig(a_list.last.prev) orig(a_list.last.val) orig(a_list.mem_count) orig(a_ele) orig(a_ele.next) orig(a_ele.next.next) orig(a_ele.next.prev) orig(a_ele.next.val) orig(a_ele.prev) orig(a_ele.prev.next) orig(a_ele.prev.prev) orig(a_ele.prev.val) orig(a_ele.val) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable a_list, a_list.first, a_list.first.next, a_list.last, a_list.last.prev, a_list.last.val, a_list.mem_count, a_ele.next, a_ele.next.next, a_ele.next.prev, a_ele.next.val, a_ele.prev, a_ele.prev.next, a_ele.prev.prev, a_ele.prev.val, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::block_queue.first, ::block_queue.first.next, ::block_queue.last, ::block_queue.last.prev, ::block_queue.last.val, ::block_queue.mem_count
+a_list == \result
+((\old(a_list) != null) && (\old(a_list.first) != null))  ==>  (a_list.first.prev == \old(a_list.first.prev))
+((\old(a_list) != null) && (\old(a_list.first) != null))  ==>  (a_list.first.val == \old(a_list.first.val))
+((\old(a_list) != null) && (\old(a_list.last) != null))  ==>  (a_list.last.next == \old(a_list.last.next))
+a_ele == \old(a_ele)
+a_ele.val == \old(a_ele.val)
+::alloc_proc_num == \old(::alloc_proc_num)
+::num_processes == \old(::num_processes)
+::cur_proc == \old(::cur_proc)
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.prev == \old(::cur_proc.next.prev))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.val == \old(::cur_proc.next.val))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.val == \old(::cur_proc.val))
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.val == \old(::block_queue.first.val))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+a_list != null
+a_list.first != null
+a_list.first.prev == null
+a_list.first.val >= 0
+a_list.last != null
+a_list.last.next == null
+a_list.last.val >= 0
+a_list.mem_count >= 1
+a_ele != null
+a_ele.next == null
+(a_ele.prev != null)  ==>  (a_ele.prev.next != null)
+(a_ele.prev != null)  ==>  (a_ele.prev.val >= 0)
+a_ele.val >= 0
+::alloc_proc_num >= 1
+::num_processes >= 1
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.val % 4 != 1)
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.val >= 1)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+\result.first != null
+\result.first.prev == null
+\result.first.val >= 0
+\result.last != null
+\result.last.next == null
+\result.last.val >= 0
+\result.mem_count >= 1
+((\old(a_list) != null) && (\old(a_list.last) != null))  ==>  (a_list.last.val != \old(a_list.last.val))
+(\old(a_list) != null)  ==>  (a_list.mem_count - \old(a_list.mem_count) - 1 == 0)
+((a_ele.prev != null) && (\old(a_ele.prev) != null))  ==>  (a_ele.prev.val != \old(a_ele.prev.val))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  ((!(::cur_proc.prev.val == 0)) || (\old(::cur_proc.prev.val) == 0))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  ((!(::block_queue.mem_count == 0)) || (\old(::block_queue.mem_count) == 0))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count >= \old(::block_queue.mem_count))
+===========================================================================
+std.block_process()void:::ENTER
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.block_process()void:::EXIT
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::cur_proc, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::cur_proc.val, ::block_queue, ::block_queue.first, ::block_queue.first.next, ::block_queue.last, ::block_queue.last.prev, ::block_queue.last.val, ::block_queue.mem_count
+::alloc_proc_num == \old(::alloc_proc_num)
+::num_processes == \old(::num_processes)
+::prio_queue == \old(::prio_queue)
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.val == \old(::block_queue.first.val))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+::num_processes >= 0
+(::cur_proc != null)  ==>  (::cur_proc.next == null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.val != \old(::cur_proc.prev.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  ((!(::block_queue.mem_count == 0)) || (\old(::block_queue.mem_count) == 0))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count >= \old(::block_queue.mem_count))
+===========================================================================
+std.del_ele(List *;Ele *;)List *:::ENTER
+    Variables: d_list d_list.first d_list.first.next d_list.first.prev d_list.first.val d_list.last d_list.last.next d_list.last.prev d_list.last.val d_list.mem_count d_ele d_ele.next d_ele.next.next d_ele.next.prev d_ele.next.val d_ele.prev d_ele.prev.next d_ele.prev.prev d_ele.prev.val d_ele.val ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+d_list != null
+d_list.first != null
+d_list.first.prev == null
+d_list.first.val >= 0
+d_list.last != null
+d_list.last.next == null
+d_list.last.val >= 0
+d_list.mem_count >= 1
+d_ele != null
+(d_ele.next != null)  ==>  (d_ele.next.prev != null)
+(d_ele.next != null)  ==>  (d_ele.next.val >= 0)
+(d_ele.prev != null)  ==>  (d_ele.prev.next != null)
+(d_ele.prev != null)  ==>  (d_ele.prev.val >= 0)
+d_ele.val >= 0
+::alloc_proc_num >= 1
+::num_processes >= 1
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.val >= 0)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.del_ele(List *;Ele *;)List *:::EXIT7
+    Variables: d_list d_list.first d_list.first.next d_list.first.prev d_list.first.val d_list.last d_list.last.next d_list.last.prev d_list.last.val d_list.mem_count d_ele d_ele.next d_ele.next.next d_ele.next.prev d_ele.next.val d_ele.prev d_ele.prev.next d_ele.prev.prev d_ele.prev.val d_ele.val ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count return return.first return.first.next return.first.prev return.first.val return.last return.last.next return.last.prev return.last.val return.mem_count orig(d_list) orig(d_list.first) orig(d_list.first.next) orig(d_list.first.prev) orig(d_list.first.val) orig(d_list.last) orig(d_list.last.next) orig(d_list.last.prev) orig(d_list.last.val) orig(d_list.mem_count) orig(d_ele) orig(d_ele.next) orig(d_ele.next.next) orig(d_ele.next.prev) orig(d_ele.next.val) orig(d_ele.prev) orig(d_ele.prev.next) orig(d_ele.prev.prev) orig(d_ele.prev.val) orig(d_ele.val) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable d_list.first, d_list.first.next, d_list.first.val, d_list.last, d_list.last.prev, d_list.last.val, d_list.mem_count, d_ele.next.prev, d_ele.prev.next, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::block_queue.first, ::block_queue.first.next, ::block_queue.first.val, ::block_queue.last, ::block_queue.last.prev, ::block_queue.last.val, ::block_queue.mem_count
+===========================================================================
+std.del_ele(List *;Ele *;)List *:::EXIT
+    Variables: d_list d_list.first d_list.first.next d_list.first.prev d_list.first.val d_list.last d_list.last.next d_list.last.prev d_list.last.val d_list.mem_count d_ele d_ele.next d_ele.next.next d_ele.next.prev d_ele.next.val d_ele.prev d_ele.prev.next d_ele.prev.prev d_ele.prev.val d_ele.val ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count return return.first return.first.next return.first.prev return.first.val return.last return.last.next return.last.prev return.last.val return.mem_count orig(d_list) orig(d_list.first) orig(d_list.first.next) orig(d_list.first.prev) orig(d_list.first.val) orig(d_list.last) orig(d_list.last.next) orig(d_list.last.prev) orig(d_list.last.val) orig(d_list.mem_count) orig(d_ele) orig(d_ele.next) orig(d_ele.next.next) orig(d_ele.next.prev) orig(d_ele.next.val) orig(d_ele.prev) orig(d_ele.prev.next) orig(d_ele.prev.prev) orig(d_ele.prev.val) orig(d_ele.val) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable d_list.first, d_list.first.next, d_list.first.val, d_list.last, d_list.last.prev, d_list.last.val, d_list.mem_count, d_ele.next.prev, d_ele.prev.next, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::block_queue.first, ::block_queue.first.next, ::block_queue.first.val, ::block_queue.last, ::block_queue.last.prev, ::block_queue.last.val, ::block_queue.mem_count
+d_list == \result
+d_list == \old(d_list)
+(d_list.first != null)  ==>  (d_list.first.prev == \old(d_list.first.prev))
+(d_list.last != null)  ==>  (d_list.last.next == \old(d_list.last.next))
+d_ele == \old(d_ele)
+d_ele.next == \old(d_ele.next)
+((d_ele.next != null) && (\old(d_ele.next) != null))  ==>  (d_ele.next.next == \old(d_ele.next.next))
+((d_ele.next != null) && (\old(d_ele.next) != null))  ==>  (d_ele.next.val == \old(d_ele.next.val))
+d_ele.prev == \old(d_ele.prev)
+((d_ele.prev != null) && (\old(d_ele.prev) != null))  ==>  (d_ele.prev.prev == \old(d_ele.prev.prev))
+((d_ele.prev != null) && (\old(d_ele.prev) != null))  ==>  (d_ele.prev.val == \old(d_ele.prev.val))
+d_ele.val == \old(d_ele.val)
+::alloc_proc_num == \old(::alloc_proc_num)
+::num_processes == \old(::num_processes)
+::cur_proc == \old(::cur_proc)
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.val == \old(::cur_proc.val))
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+d_list != null
+(d_list.first != null)  ==>  (d_list.first.prev == null)
+(d_list.first != null)  ==>  (d_list.first.val >= 0)
+(d_list.last != null)  ==>  (d_list.last.next == null)
+(d_list.last != null)  ==>  (d_list.last.val >= 0)
+d_list.mem_count >= 0
+d_ele != null
+(d_ele.next != null)  ==>  (d_ele.next.val >= 0)
+(d_ele.prev != null)  ==>  (d_ele.prev.val >= 0)
+d_ele.val >= 0
+::alloc_proc_num >= 1
+::num_processes >= 1
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.val >= 0)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+(\result.first != null)  ==>  (\result.first.prev == null)
+(\result.first != null)  ==>  (\result.first.val >= 0)
+(\result.last != null)  ==>  (\result.last.next == null)
+(\result.last != null)  ==>  (\result.last.val >= 0)
+\result.mem_count >= 0
+d_list.mem_count - \old(d_list.mem_count) + 1 == 0
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  ((!(::cur_proc.next.val == 0)) || (\old(::cur_proc.next.val) == 0))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  ((!(\old(::cur_proc.next.val) == 0)) || (::cur_proc.next.val == 0))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  ((\old(::cur_proc.next.val) >> ::cur_proc.next.val == 0))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.val <= \old(::cur_proc.next.val))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  ((!(\old(::cur_proc.prev.val) == 0)) || (::cur_proc.prev.val == 0))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.val <= \old(::cur_proc.prev.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  ((!(\old(::block_queue.mem_count) == 0)) || (::block_queue.mem_count == 0))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count <= \old(::block_queue.mem_count))
+===========================================================================
+std.find_nth(List *;int;)Ele *:::ENTER
+    Variables: f_list f_list.first f_list.first.next f_list.first.prev f_list.first.val f_list.last f_list.last.next f_list.last.prev f_list.last.val f_list.mem_count n ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+f_list != null
+(f_list.first != null)  ==>  (f_list.first.prev == null)
+(f_list.first != null)  ==>  (f_list.first.val >= 0)
+(f_list.last != null)  ==>  (f_list.last.next == null)
+(f_list.last != null)  ==>  (f_list.last.val >= 0)
+f_list.mem_count >= 0
+n >= 1
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.find_nth(List *;int;)Ele *:::EXIT5
+    Variables: f_list f_list.first f_list.first.next f_list.first.prev f_list.first.val f_list.last f_list.last.next f_list.last.prev f_list.last.val f_list.mem_count n ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count return return.next return.next.next return.next.prev return.next.val return.prev return.prev.next return.prev.prev return.prev.val return.val orig(f_list) orig(f_list.first) orig(f_list.first.next) orig(f_list.first.prev) orig(f_list.first.val) orig(f_list.last) orig(f_list.last.next) orig(f_list.last.prev) orig(f_list.last.val) orig(f_list.mem_count) orig(n) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+===========================================================================
+std.find_nth(List *;int;)Ele *:::EXIT
+    Variables: f_list f_list.first f_list.first.next f_list.first.prev f_list.first.val f_list.last f_list.last.next f_list.last.prev f_list.last.val f_list.mem_count n ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count return return.next return.next.next return.next.prev return.next.val return.prev return.prev.next return.prev.prev return.prev.val return.val orig(f_list) orig(f_list.first) orig(f_list.first.next) orig(f_list.first.prev) orig(f_list.first.val) orig(f_list.last) orig(f_list.last.next) orig(f_list.last.prev) orig(f_list.last.val) orig(f_list.mem_count) orig(n) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+f_list == \old(f_list)
+f_list.first == \old(f_list.first)
+((f_list.first != null) && (\old(f_list.first) != null))  ==>  (f_list.first.next == \old(f_list.first.next))
+((f_list.first != null) && (\old(f_list.first) != null))  ==>  (f_list.first.prev == \old(f_list.first.prev))
+((f_list.first != null) && (\old(f_list.first) != null))  ==>  (f_list.first.val == \old(f_list.first.val))
+f_list.last == \old(f_list.last)
+((f_list.last != null) && (\old(f_list.last) != null))  ==>  (f_list.last.next == \old(f_list.last.next))
+((f_list.last != null) && (\old(f_list.last) != null))  ==>  (f_list.last.prev == \old(f_list.last.prev))
+((f_list.last != null) && (\old(f_list.last) != null))  ==>  (f_list.last.val == \old(f_list.last.val))
+f_list.mem_count == \old(f_list.mem_count)
+n == \old(n)
+::alloc_proc_num == \old(::alloc_proc_num)
+::num_processes == \old(::num_processes)
+::cur_proc == \old(::cur_proc)
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.next == \old(::cur_proc.next))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.next == \old(::cur_proc.next.next))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.prev == \old(::cur_proc.next.prev))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.val == \old(::cur_proc.next.val))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.prev == \old(::cur_proc.prev))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.next == \old(::cur_proc.prev.next))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.prev == \old(::cur_proc.prev.prev))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.val == \old(::cur_proc.prev.val))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.val == \old(::cur_proc.val))
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.first == \old(::block_queue.first))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.next == \old(::block_queue.first.next))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.val == \old(::block_queue.first.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.last == \old(::block_queue.last))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.prev == \old(::block_queue.last.prev))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.val == \old(::block_queue.last.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count == \old(::block_queue.mem_count))
+f_list != null
+(f_list.first != null)  ==>  (f_list.first.prev == null)
+(f_list.first != null)  ==>  (f_list.first.val >= 0)
+(f_list.last != null)  ==>  (f_list.last.next == null)
+(f_list.last != null)  ==>  (f_list.last.val >= 0)
+f_list.mem_count >= 0
+n >= 1
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+((\result != null) && (\result.next != null))  ==>  (\result.next.prev != null)
+((\result != null) && (\result.next != null))  ==>  (\result.next.val >= 0)
+((\result != null) && (\result.prev != null))  ==>  (\result.prev.next != null)
+((\result != null) && (\result.prev != null))  ==>  (\result.prev.val >= 0)
+(\result != null)  ==>  (\result.val >= 0)
+===========================================================================
+std.finish_all_processes()void:::ENTER
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.next == null)
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.finish_all_processes()void:::EXIT
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::num_processes, ::cur_proc, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::cur_proc.val
+::alloc_proc_num == \old(::alloc_proc_num)
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.first == \old(::block_queue.first))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.next == \old(::block_queue.first.next))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.val == \old(::block_queue.first.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.last == \old(::block_queue.last))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.prev == \old(::block_queue.last.prev))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.val == \old(::block_queue.last.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count == \old(::block_queue.mem_count))
+::num_processes >= 0
+::cur_proc == null
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+(!(\old(::num_processes) == 0)) || (::num_processes == 0)
+::num_processes <= \old(::num_processes)
+===========================================================================
+std.finish_process()void:::ENTER
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.finish_process()void:::EXIT
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::num_processes, ::cur_proc, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::cur_proc.val
+::alloc_proc_num == \old(::alloc_proc_num)
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.first == \old(::block_queue.first))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.next == \old(::block_queue.first.next))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.val == \old(::block_queue.first.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.last == \old(::block_queue.last))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.prev == \old(::block_queue.last.prev))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.val == \old(::block_queue.last.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count == \old(::block_queue.mem_count))
+::num_processes >= 0
+::cur_proc == null
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+(!(\old(::num_processes) == 0)) || (::num_processes == 0)
+::num_processes <= \old(::num_processes)
+===========================================================================
+std.free_ele(Ele *;)void:::ENTER
+    Variables: ptr ptr.next ptr.next.next ptr.next.prev ptr.next.val ptr.prev ptr.prev.next ptr.prev.prev ptr.prev.val ptr.val ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+ptr != null
+(ptr.next != null)  ==>  (ptr.next.prev == null)
+(ptr.next != null)  ==>  (ptr.next.val >= 0)
+ptr.prev == null
+ptr.val >= 0
+::num_processes >= 1
+::cur_proc != null
+(::cur_proc.next != null)  ==>  (::cur_proc.next.prev == null)
+(::cur_proc.next != null)  ==>  (::cur_proc.next.val >= 0)
+::cur_proc.prev == null
+::cur_proc.val >= 0
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.free_ele(Ele *;)void:::EXIT
+    Variables: ptr ptr.next ptr.next.next ptr.next.prev ptr.next.val ptr.prev ptr.prev.next ptr.prev.prev ptr.prev.val ptr.val ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(ptr) orig(ptr.next) orig(ptr.next.next) orig(ptr.next.prev) orig(ptr.next.val) orig(ptr.prev) orig(ptr.prev.next) orig(ptr.prev.prev) orig(ptr.prev.val) orig(ptr.val) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ptr, ptr.next, ptr.next.next, ptr.next.prev, ptr.next.val, ptr.prev, ptr.prev.next, ptr.prev.prev, ptr.prev.val, ptr.val, ::cur_proc, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::cur_proc.val
+::alloc_proc_num == \old(::alloc_proc_num)
+::num_processes == \old(::num_processes)
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.first == \old(::block_queue.first))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.next == \old(::block_queue.first.next))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.val == \old(::block_queue.first.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.last == \old(::block_queue.last))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.prev == \old(::block_queue.last.prev))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.val == \old(::block_queue.last.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count == \old(::block_queue.mem_count))
+::num_processes >= 1
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.init_prio_queue(int;int;)void:::ENTER
+    Variables: prio num_proc ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+prio == 1 || prio == 2 || prio == 3
+num_proc >= 0
+::alloc_proc_num >= 0
+::num_processes >= 0
+::cur_proc == null
+::prio_queue != null
+::block_queue == null
+===========================================================================
+std.init_prio_queue(int;int;)void:::EXIT
+    Variables: prio num_proc ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(prio) orig(num_proc) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::alloc_proc_num, ::num_processes, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::cur_proc.val, ::block_queue.first, ::block_queue.first.next, ::block_queue.first.prev, ::block_queue.first.val, ::block_queue.last, ::block_queue.last.next, ::block_queue.last.prev, ::block_queue.last.val, ::block_queue.mem_count
+prio == \old(prio)
+num_proc == \old(num_proc)
+::cur_proc == \old(::cur_proc)
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+prio == 1 || prio == 2 || prio == 3
+num_proc >= 0
+::alloc_proc_num >= 0
+::num_processes >= 0
+::cur_proc == null
+::prio_queue != null
+::block_queue == null
+(!(::alloc_proc_num == 0)) || (\old(::alloc_proc_num) == 0)
+::alloc_proc_num >= \old(::alloc_proc_num)
+(!(::num_processes == 0)) || (\old(::num_processes) == 0)
+::num_processes >= \old(::num_processes)
+===========================================================================
+std.initialize()void:::ENTER
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+::alloc_proc_num == 0
+::num_processes == 0
+::cur_proc == null
+::prio_queue != null
+::block_queue == null
+===========================================================================
+std.initialize()void:::EXIT
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::cur_proc.val, ::block_queue.first, ::block_queue.first.next, ::block_queue.first.prev, ::block_queue.first.val, ::block_queue.last, ::block_queue.last.next, ::block_queue.last.prev, ::block_queue.last.val, ::block_queue.mem_count
+::alloc_proc_num == \old(::alloc_proc_num)
+::num_processes == \old(::num_processes)
+::cur_proc == \old(::cur_proc)
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+::alloc_proc_num == 0
+::num_processes == 0
+::cur_proc == null
+::prio_queue != null
+::block_queue == null
+===========================================================================
+std.main(int;char **;)int:::ENTER
+    Variables: argc argv ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+argc == 4
+argv != null
+::alloc_proc_num == 0
+::num_processes == 0
+::cur_proc == null
+::prio_queue != null
+::block_queue == null
+===========================================================================
+std.main(int;char **;)int:::EXIT25
+    Variables: argc argv ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count return orig(argc) orig(argv) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::alloc_proc_num, ::num_processes, ::cur_proc, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::cur_proc.val, ::block_queue, ::block_queue.first, ::block_queue.first.next, ::block_queue.first.prev, ::block_queue.first.val, ::block_queue.last, ::block_queue.last.next, ::block_queue.last.prev, ::block_queue.last.val, ::block_queue.mem_count
+===========================================================================
+std.main(int;char **;)int:::EXIT
+    Variables: argc argv ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count return orig(argc) orig(argv) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::alloc_proc_num, ::num_processes, ::cur_proc, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::cur_proc.val, ::block_queue, ::block_queue.first, ::block_queue.first.next, ::block_queue.first.prev, ::block_queue.first.val, ::block_queue.last, ::block_queue.last.next, ::block_queue.last.prev, ::block_queue.last.val, ::block_queue.mem_count
+argc == \old(argc)
+argv == \old(argv)
+::prio_queue == \old(::prio_queue)
+argc == 4
+argv != null
+::alloc_proc_num >= 0
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+\result == 0
+::alloc_proc_num >= \old(::alloc_proc_num)
+::num_processes >= \old(::num_processes)
+===========================================================================
+std.new_ele(int;)Ele *:::ENTER
+    Variables: new_num ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+new_num >= 0
+::alloc_proc_num >= 1
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+new_num - ::alloc_proc_num + 1 == 0
+===========================================================================
+std.new_ele(int;)Ele *:::EXIT
+    Variables: new_num ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count return return.next return.next.next return.next.prev return.next.val return.prev return.prev.next return.prev.prev return.prev.val return.val orig(new_num) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+new_num == \old(new_num)
+::alloc_proc_num == \old(::alloc_proc_num)
+::num_processes == \old(::num_processes)
+::cur_proc == \old(::cur_proc)
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.next == \old(::cur_proc.next))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.next == \old(::cur_proc.next.next))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.prev == \old(::cur_proc.next.prev))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.val == \old(::cur_proc.next.val))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.prev == \old(::cur_proc.prev))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.next == \old(::cur_proc.prev.next))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.prev == \old(::cur_proc.prev.prev))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.val == \old(::cur_proc.prev.val))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.val == \old(::cur_proc.val))
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.first == \old(::block_queue.first))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.next == \old(::block_queue.first.next))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.val == \old(::block_queue.first.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.last == \old(::block_queue.last))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.prev == \old(::block_queue.last.prev))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.val == \old(::block_queue.last.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count == \old(::block_queue.mem_count))
+new_num >= 0
+::alloc_proc_num >= 1
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+\result != null
+\result.next == null
+\result.prev == null
+\result.val >= 0
+new_num - ::alloc_proc_num + 1 == 0
+===========================================================================
+std.new_list()List *:::ENTER
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+::alloc_proc_num >= 0
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev == null)
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.prev == null)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+::block_queue == null
+===========================================================================
+std.new_list()List *:::EXIT
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count return return.first return.first.next return.first.prev return.first.val return.last return.last.next return.last.prev return.last.val return.mem_count orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::block_queue.first, ::block_queue.first.next, ::block_queue.first.prev, ::block_queue.first.val, ::block_queue.last, ::block_queue.last.next, ::block_queue.last.prev, ::block_queue.last.val, ::block_queue.mem_count
+::alloc_proc_num == \old(::alloc_proc_num)
+::num_processes == \old(::num_processes)
+::cur_proc == \old(::cur_proc)
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.next == \old(::cur_proc.next))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.next == \old(::cur_proc.next.next))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.prev == \old(::cur_proc.next.prev))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.val == \old(::cur_proc.next.val))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.prev == \old(::cur_proc.prev))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.val == \old(::cur_proc.val))
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+::alloc_proc_num >= 0
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev == null)
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.prev == null)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+::block_queue == null
+\result != null
+\result.first == null
+\result.last == null
+\result.mem_count == 0
+===========================================================================
+std.new_process(int;)Ele *:::ENTER
+    Variables: prio ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+prio == 1 || prio == 2 || prio == 3
+::alloc_proc_num >= 0
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.new_process(int;)Ele *:::EXIT
+    Variables: prio ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count return return.next return.next.next return.next.prev return.next.val return.prev return.prev.next return.prev.prev return.prev.val return.val orig(prio) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::alloc_proc_num, ::num_processes
+prio == \old(prio)
+::cur_proc == \old(::cur_proc)
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.next == \old(::cur_proc.next))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.next == \old(::cur_proc.next.next))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.prev == \old(::cur_proc.next.prev))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.val == \old(::cur_proc.next.val))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.prev == \old(::cur_proc.prev))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.next == \old(::cur_proc.prev.next))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.prev == \old(::cur_proc.prev.prev))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.val == \old(::cur_proc.prev.val))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.val == \old(::cur_proc.val))
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.first == \old(::block_queue.first))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.next == \old(::block_queue.first.next))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.val == \old(::block_queue.first.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.last == \old(::block_queue.last))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.prev == \old(::block_queue.last.prev))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.val == \old(::block_queue.last.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count == \old(::block_queue.mem_count))
+prio == 1 || prio == 2 || prio == 3
+::alloc_proc_num >= 1
+::num_processes >= 1
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+\result != null
+\result.next == null
+\result.prev == null
+\result.val >= 0
+::alloc_proc_num - \old(::alloc_proc_num) - 1 == 0
+::num_processes - \old(::num_processes) - 1 == 0
+===========================================================================
+std.quantum_expire()void:::ENTER
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.val >= 1)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.quantum_expire()void:::EXIT
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::cur_proc, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::cur_proc.val
+::alloc_proc_num == \old(::alloc_proc_num)
+::num_processes == \old(::num_processes)
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.first == \old(::block_queue.first))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.next == \old(::block_queue.first.next))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.val == \old(::block_queue.first.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.last == \old(::block_queue.last))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.prev == \old(::block_queue.last.prev))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.val == \old(::block_queue.last.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count == \old(::block_queue.mem_count))
+::num_processes >= 0
+(::cur_proc != null)  ==>  (::cur_proc.next == null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.val != \old(::cur_proc.prev.val))
+===========================================================================
+std.schedule()void:::ENTER
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.val % 4 != 1)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.schedule()void:::EXIT11
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::cur_proc, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::cur_proc.val
+::num_processes >= 1
+::cur_proc != null
+(::cur_proc.next != null)  ==>  (::cur_proc.next.prev == null)
+(::cur_proc.next != null)  ==>  (::cur_proc.next.val >= 0)
+::cur_proc.prev == null
+::cur_proc.val >= 0
+===========================================================================
+std.schedule()void:::EXIT12
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::cur_proc, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::cur_proc.val
+::cur_proc == null
+(\old(::cur_proc) != null)  ==>  (\old(::cur_proc.next) == null)
+===========================================================================
+std.schedule()void:::EXIT
+    Variables: ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::cur_proc, ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.prev, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.next, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::cur_proc.val
+::alloc_proc_num == \old(::alloc_proc_num)
+::num_processes == \old(::num_processes)
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.first == \old(::block_queue.first))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.next == \old(::block_queue.first.next))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.val == \old(::block_queue.first.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.last == \old(::block_queue.last))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.prev == \old(::block_queue.last.prev))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.val == \old(::block_queue.last.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count == \old(::block_queue.mem_count))
+(::cur_proc != null)  ==>  (::cur_proc.next.prev == null)
+(::cur_proc != null)  ==>  (::cur_proc.next.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.prev == null)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+(::cur_proc != null)  ==>  (::num_processes >= 1)
+(::cur_proc != null)  ==>  (\old(::cur_proc.next.prev) != null)
+(::cur_proc != null)  ==>  (\old(::cur_proc.next.val) % 4 != 1)
+(::cur_proc == null)  ==>  (\old(::cur_proc.next) == null)
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev == null)
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.prev == null)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.unblock_process(float;)void:::ENTER
+    Variables: ratio ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.unblock_process(float;)void:::EXIT
+    Variables: ratio ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(ratio) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.prev, ::cur_proc.prev.prev, ::cur_proc.prev.val, ::block_queue.first, ::block_queue.first.next, ::block_queue.first.val, ::block_queue.last, ::block_queue.last.prev, ::block_queue.last.val, ::block_queue.mem_count
+daikon.Quant.fuzzy.eq(ratio, \old(ratio))
+::alloc_proc_num == \old(::alloc_proc_num)
+::num_processes == \old(::num_processes)
+::cur_proc == \old(::cur_proc)
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.prev == \old(::cur_proc.next.prev))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.val == \old(::cur_proc.next.val))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.next == \old(::cur_proc.prev.next))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.val == \old(::cur_proc.val))
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.val >= 1)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  ((!(\old(::block_queue.mem_count) == 0)) || (::block_queue.mem_count == 0))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count <= \old(::block_queue.mem_count))
+===========================================================================
+std.upgrade_process_prio(int;float;)void:::ENTER
+    Variables: prio ratio ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count
+prio == 1 || prio == 2 || prio == 3
+::alloc_proc_num >= 0
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+===========================================================================
+std.upgrade_process_prio(int;float;)void:::EXIT13
+    Variables: prio ratio ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(prio) orig(ratio) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.next == \old(::cur_proc.next))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.next == \old(::cur_proc.next.next))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.val == \old(::cur_proc.next.val))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.prev == \old(::cur_proc.prev))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.prev == \old(::cur_proc.prev.prev))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.val == \old(::cur_proc.prev.val))
+prio == 3
+===========================================================================
+std.upgrade_process_prio(int;float;)void:::EXIT14
+    Variables: prio ratio ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(prio) orig(ratio) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.prev, ::cur_proc.prev.val
+prio == 1 || prio == 2
+===========================================================================
+std.upgrade_process_prio(int;float;)void:::EXIT
+    Variables: prio ratio ::alloc_proc_num ::num_processes ::cur_proc ::cur_proc.next ::cur_proc.next.next ::cur_proc.next.prev ::cur_proc.next.val ::cur_proc.prev ::cur_proc.prev.next ::cur_proc.prev.prev ::cur_proc.prev.val ::cur_proc.val ::prio_queue ::block_queue ::block_queue.first ::block_queue.first.next ::block_queue.first.prev ::block_queue.first.val ::block_queue.last ::block_queue.last.next ::block_queue.last.prev ::block_queue.last.val ::block_queue.mem_count orig(prio) orig(ratio) orig(::alloc_proc_num) orig(::num_processes) orig(::cur_proc) orig(::cur_proc.next) orig(::cur_proc.next.next) orig(::cur_proc.next.prev) orig(::cur_proc.next.val) orig(::cur_proc.prev) orig(::cur_proc.prev.next) orig(::cur_proc.prev.prev) orig(::cur_proc.prev.val) orig(::cur_proc.val) orig(::prio_queue) orig(::block_queue) orig(::block_queue.first) orig(::block_queue.first.next) orig(::block_queue.first.prev) orig(::block_queue.first.val) orig(::block_queue.last) orig(::block_queue.last.next) orig(::block_queue.last.prev) orig(::block_queue.last.val) orig(::block_queue.mem_count)
+assignable ::cur_proc.next, ::cur_proc.next.next, ::cur_proc.next.val, ::cur_proc.prev, ::cur_proc.prev.prev, ::cur_proc.prev.val
+prio == \old(prio)
+daikon.Quant.fuzzy.eq(ratio, \old(ratio))
+::alloc_proc_num == \old(::alloc_proc_num)
+::num_processes == \old(::num_processes)
+::cur_proc == \old(::cur_proc)
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.prev == \old(::cur_proc.next.prev))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.next == \old(::cur_proc.prev.next))
+((::cur_proc != null) && (\old(::cur_proc) != null))  ==>  (::cur_proc.val == \old(::cur_proc.val))
+::prio_queue == \old(::prio_queue)
+::block_queue == \old(::block_queue)
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.first == \old(::block_queue.first))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.next == \old(::block_queue.first.next))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.prev == \old(::block_queue.first.prev))
+((::block_queue != null) && (::block_queue.first != null) && (\old(::block_queue) != null) && (\old(::block_queue.first) != null))  ==>  (::block_queue.first.val == \old(::block_queue.first.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.last == \old(::block_queue.last))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.next == \old(::block_queue.last.next))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.prev == \old(::block_queue.last.prev))
+((::block_queue != null) && (::block_queue.last != null) && (\old(::block_queue) != null) && (\old(::block_queue.last) != null))  ==>  (::block_queue.last.val == \old(::block_queue.last.val))
+((::block_queue != null) && (\old(::block_queue) != null))  ==>  (::block_queue.mem_count == \old(::block_queue.mem_count))
+(prio == 3)  ==>  (::cur_proc.next == \old(::cur_proc.next))
+(prio == 3)  ==>  (::cur_proc.next.next == \old(::cur_proc.next.next))
+(prio == 3)  ==>  (::cur_proc.next.val == \old(::cur_proc.next.val))
+(prio == 3)  ==>  (::cur_proc.prev == \old(::cur_proc.prev))
+(prio == 3)  ==>  (::cur_proc.prev.prev == \old(::cur_proc.prev.prev))
+(prio == 3)  ==>  (::cur_proc.prev.val == \old(::cur_proc.prev.val))
+prio == 1 || prio == 2 || prio == 3
+::alloc_proc_num >= 0
+::num_processes >= 0
+((::cur_proc != null) && (::cur_proc.next != null))  ==>  (::cur_proc.next.prev != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.next != null)
+((::cur_proc != null) && (::cur_proc.prev != null))  ==>  (::cur_proc.prev.val >= 0)
+(::cur_proc != null)  ==>  (::cur_proc.val >= 0)
+::prio_queue != null
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.prev == null)
+((::block_queue != null) && (::block_queue.first != null))  ==>  (::block_queue.first.val >= 0)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.next == null)
+((::block_queue != null) && (::block_queue.last != null))  ==>  (::block_queue.last.val >= 0)
+(::block_queue != null)  ==>  (::block_queue.mem_count >= 0)
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  ((\old(::cur_proc.next.val) >> ::cur_proc.next.val == 0))
+((::cur_proc != null) && (::cur_proc.next != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.next) != null))  ==>  (::cur_proc.next.val <= \old(::cur_proc.next.val))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  ((!(::cur_proc.prev.val == 0)) || (\old(::cur_proc.prev.val) == 0))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  ((!(\old(::cur_proc.prev.val) == 0)) || (::cur_proc.prev.val == 0))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  ((\old(::cur_proc.prev.val) >> ::cur_proc.prev.val == 0))
+((::cur_proc != null) && (::cur_proc.prev != null) && (\old(::cur_proc) != null) && (\old(::cur_proc.prev) != null))  ==>  (::cur_proc.prev.val <= \old(::cur_proc.prev.val))

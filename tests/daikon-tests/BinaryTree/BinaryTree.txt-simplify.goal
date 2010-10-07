@@ -1,0 +1,135 @@
+===========================================================================
+DataStructures.BinarySearchTree:::OBJECT
+===========================================================================
+DataStructures.BinarySearchTree.BinarySearchTree():::EXIT
+(EQ (hash (select |root| |this|)) null)
+===========================================================================
+DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::ENTER
+===========================================================================
+DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::EXIT
+(EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
+(EQ (typeof |return|) |T_DataStructures.MyInteger|)
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable):::ENTER
+(NEQ (hash |x|) null)
+(EQ (typeof |x|) |T_DataStructures.MyInteger|)
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable):::EXIT
+(EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
+(EQ (typeof |return|) |T_DataStructures.MyInteger|)
+(EQ (typeof |return|) (typeof |__orig__x|))
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+(NEQ (hash |x|) null)
+(EQ (typeof |x|) |T_DataStructures.MyInteger|)
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196
+(EQ (hash |return|) (hash |__orig__t|))
+(EQ (hash |return|) null)
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198
+(NEQ (hash (select |root| |this|)) null)
+(NEQ (hash |__orig__t|) null)
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200
+(NEQ (hash (select |root| |this|)) null)
+(NEQ (hash |__orig__t|) null)
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202
+(EQ (hash |return|) (hash |__orig__t|))
+(NEQ (hash (select |root| |this|)) null)
+(NEQ (hash |return|) null)
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
+(EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
+===========================================================================
+DataStructures.BinarySearchTree.findMax():::ENTER
+===========================================================================
+DataStructures.BinarySearchTree.findMax():::EXIT
+(EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
+(EQ (typeof |return|) |T_DataStructures.MyInteger|)
+===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::ENTER
+(EQ (hash (select |root| |this|)) (hash |t|))
+===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT
+(EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
+(EQ (hash (select |root| |this|)) (hash |__orig__t|))
+===========================================================================
+DataStructures.BinarySearchTree.findMin():::ENTER
+===========================================================================
+DataStructures.BinarySearchTree.findMin():::EXIT
+(EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
+(EQ (typeof |return|) |T_DataStructures.MyInteger|)
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::ENTER
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167
+(EQ (hash (select |root| |this|)) (hash |return|))
+(EQ (hash |return|) (hash (select |root| |__orig__this|)))
+(EQ (hash |return|) (hash |__orig__t|))
+(EQ (hash |return|) null)
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169
+(EQ (hash |return|) (hash |__orig__t|))
+(NEQ (hash (select |root| |this|)) null)
+(NEQ (hash |return|) null)
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170
+(NEQ (hash (select |root| |this|)) null)
+(NEQ (hash |return|) null)
+(NEQ (hash |__orig__t|) null)
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT
+(EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::ENTER
+(NEQ (hash |x|) null)
+(EQ (typeof |x|) |T_DataStructures.MyInteger|)
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXIT
+(NEQ (hash (select |root| |this|)) null)
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+(NEQ (hash |x|) null)
+(EQ (typeof |x|) |T_DataStructures.MyInteger|)
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
+(EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
+(NEQ (hash |return|) null)
+===========================================================================
+DataStructures.BinarySearchTree.isEmpty():::ENTER
+===========================================================================
+DataStructures.BinarySearchTree.isEmpty():::EXIT
+(EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
+(IFF (NEQ (hash (select |root| |this|)) null) (EQ |return| |@false|))
+(IFF (EQ (hash (select |root| |this|)) null) (EQ |return| |@true|))
+===========================================================================
+DataStructures.BinarySearchTree.makeEmpty():::ENTER
+===========================================================================
+DataStructures.BinarySearchTree.makeEmpty():::EXIT
+(EQ (hash (select |root| |this|)) null)
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::ENTER
+(NEQ (hash |x|) null)
+(EQ (typeof |x|) |T_DataStructures.MyInteger|)
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::EXIT
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+(NEQ (hash |x|) null)
+(EQ (typeof |x|) |T_DataStructures.MyInteger|)
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144
+(EQ (hash |return|) (hash |__orig__t|))
+(EQ (hash |return|) null)
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156
+(NEQ (hash (select |root| |this|)) null)
+(NEQ (hash |__orig__t|) null)
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
+(EQ (hash (select |root| |this|)) (hash (select |root| |__orig__this|)))
+(IMPLIES (NEQ (hash |__orig__t|) null) (NEQ (hash (select |root| |this|)) null))
+(IMPLIES (EQ (hash |__orig__t|) null) (EQ (hash |return|) null))
+(IMPLIES (EQ (hash |__orig__t|) null) (EQ (hash |return|) (hash |__orig__t|)))

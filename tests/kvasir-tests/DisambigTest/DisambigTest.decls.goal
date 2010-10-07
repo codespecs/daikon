@@ -1,0 +1,1770 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..fooMultiple():::ENTER
+  ppt-type enter
+  variable ::char_C
+    var-kind variable
+    rep-type string
+    dec-type char
+  variable ::char_I
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::floatPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr_A[..]
+    var-kind array
+    enclosing-var ::floatPtr_A
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::floatPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr_P
+    rep-type double
+    dec-type float
+  variable ::globalStringArray
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags non_null 
+  variable ::globalStringArray[..]
+    var-kind array
+    enclosing-var ::globalStringArray
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::globalTB
+    var-kind variable
+    rep-type hashcode
+    dec-type TestBuffer
+  variable ::globalTB.char_C
+    var-kind field char_C
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char
+  variable ::globalTB.char_I
+    var-kind field char_I
+    enclosing-var ::globalTB
+    rep-type int
+    dec-type char
+  variable ::globalTB.intPtr_A
+    var-kind field intPtr_A
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type int*
+  variable ::globalTB.intPtr_A[..]
+    var-kind array
+    enclosing-var ::globalTB.intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalTB.intPtr_P
+    var-kind field intPtr_P
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type int*
+  variable ::globalTB.intPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::globalTB.intPtr_P
+    rep-type int
+    dec-type int
+  variable ::globalTB.stringPtr_A
+    var-kind field stringPtr_A
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type char**
+  variable ::globalTB.stringPtr_A[..]
+    var-kind array
+    enclosing-var ::globalTB.stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::globalTB.stringPtr_P
+    var-kind field stringPtr_P
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type char**
+  variable ::globalTB.stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::globalTB.stringPtr_P
+    rep-type string
+    dec-type char*
+  variable ::globalTB.string_A
+    var-kind field string_A
+    enclosing-var ::globalTB
+    rep-type int[]
+    dec-type int[]
+  variable ::globalTB.string_C
+    var-kind field string_C
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char*
+  variable ::globalTB.string_P
+    var-kind field string_P
+    enclosing-var ::globalTB
+    rep-type int
+    dec-type int
+  variable ::globalTB.string_S
+    var-kind field string_S
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char*
+  variable ::intArray_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::intArray_A[..]
+    var-kind array
+    enclosing-var ::intArray_A
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intArray_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::intArray_P[0]
+    var-kind field [0]
+    enclosing-var ::intArray_P
+    reference-type offset
+    rep-type int
+    dec-type int
+  variable ::intPtrPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr_A[..]
+    var-kind array
+    enclosing-var ::intPtrPtr_A
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable ::intPtrPtr_A[..][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_A[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intPtrPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_P
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr_P[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_P[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtr_A[..]
+    var-kind array
+    enclosing-var ::intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::intPtr_P
+    rep-type int
+    dec-type int
+  variable ::stringPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+  variable ::stringPtr_A[..]
+    var-kind array
+    enclosing-var ::stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::stringPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+  variable ::stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::stringPtr_P
+    rep-type string
+    dec-type char*
+  variable ::string_A
+    var-kind variable
+    rep-type int[]
+    dec-type int[]
+  variable ::string_C
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable ::string_P
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::string_S
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable ::u_char_C
+    var-kind variable
+    rep-type string
+    dec-type unsigned\_char
+  variable ::u_char_I
+    var-kind variable
+    rep-type int
+    dec-type unsigned\_char
+  variable numElts
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable tb
+    var-kind variable
+    rep-type hashcode
+    dec-type TestBuffer*
+    flags is_param 
+  variable tb[..]
+    var-kind array
+    enclosing-var tb
+    array 1
+    rep-type hashcode[]
+    dec-type TestBuffer[]
+  variable tb[..].char_C
+    var-kind field char_C
+    enclosing-var tb[..]
+    array 1
+    rep-type string[]
+    dec-type char[]
+  variable tb[..].char_I
+    var-kind field char_I
+    enclosing-var tb[..]
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable tb[..].intPtr_A
+    var-kind field intPtr_A
+    enclosing-var tb[..]
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable tb[..].intPtr_A[0]
+    var-kind field [0]
+    enclosing-var tb[..].intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tb[..].intPtr_P
+    var-kind field intPtr_P
+    enclosing-var tb[..]
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable tb[..].intPtr_P[0]
+    var-kind field [0]
+    enclosing-var tb[..].intPtr_P
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tb[..].stringPtr_A
+    var-kind field stringPtr_A
+    enclosing-var tb[..]
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable tb[..].stringPtr_A[0]
+    var-kind field [0]
+    enclosing-var tb[..].stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable tb[..].stringPtr_P
+    var-kind field stringPtr_P
+    enclosing-var tb[..]
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable tb[..].stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var tb[..].stringPtr_P
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable tb[..].string_A
+    var-kind field string_A
+    enclosing-var tb[..]
+    array 1
+    rep-type int[]
+    dec-type int[][]
+  variable tb[..].string_C
+    var-kind field string_C
+    enclosing-var tb[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable tb[..].string_P
+    var-kind field string_P
+    enclosing-var tb[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tb[..].string_S
+    var-kind field string_S
+    enclosing-var tb[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..fooMultiple():::EXIT0
+  ppt-type subexit
+  variable ::char_C
+    var-kind variable
+    rep-type string
+    dec-type char
+  variable ::char_I
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::floatPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr_A[..]
+    var-kind array
+    enclosing-var ::floatPtr_A
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::floatPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr_P
+    rep-type double
+    dec-type float
+  variable ::globalStringArray
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags non_null 
+  variable ::globalStringArray[..]
+    var-kind array
+    enclosing-var ::globalStringArray
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::globalTB
+    var-kind variable
+    rep-type hashcode
+    dec-type TestBuffer
+  variable ::globalTB.char_C
+    var-kind field char_C
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char
+  variable ::globalTB.char_I
+    var-kind field char_I
+    enclosing-var ::globalTB
+    rep-type int
+    dec-type char
+  variable ::globalTB.intPtr_A
+    var-kind field intPtr_A
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type int*
+  variable ::globalTB.intPtr_A[..]
+    var-kind array
+    enclosing-var ::globalTB.intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalTB.intPtr_P
+    var-kind field intPtr_P
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type int*
+  variable ::globalTB.intPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::globalTB.intPtr_P
+    rep-type int
+    dec-type int
+  variable ::globalTB.stringPtr_A
+    var-kind field stringPtr_A
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type char**
+  variable ::globalTB.stringPtr_A[..]
+    var-kind array
+    enclosing-var ::globalTB.stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::globalTB.stringPtr_P
+    var-kind field stringPtr_P
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type char**
+  variable ::globalTB.stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::globalTB.stringPtr_P
+    rep-type string
+    dec-type char*
+  variable ::globalTB.string_A
+    var-kind field string_A
+    enclosing-var ::globalTB
+    rep-type int[]
+    dec-type int[]
+  variable ::globalTB.string_C
+    var-kind field string_C
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char*
+  variable ::globalTB.string_P
+    var-kind field string_P
+    enclosing-var ::globalTB
+    rep-type int
+    dec-type int
+  variable ::globalTB.string_S
+    var-kind field string_S
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char*
+  variable ::intArray_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::intArray_A[..]
+    var-kind array
+    enclosing-var ::intArray_A
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intArray_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::intArray_P[0]
+    var-kind field [0]
+    enclosing-var ::intArray_P
+    reference-type offset
+    rep-type int
+    dec-type int
+  variable ::intPtrPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr_A[..]
+    var-kind array
+    enclosing-var ::intPtrPtr_A
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable ::intPtrPtr_A[..][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_A[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intPtrPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_P
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr_P[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_P[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtr_A[..]
+    var-kind array
+    enclosing-var ::intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::intPtr_P
+    rep-type int
+    dec-type int
+  variable ::stringPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+  variable ::stringPtr_A[..]
+    var-kind array
+    enclosing-var ::stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::stringPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+  variable ::stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::stringPtr_P
+    rep-type string
+    dec-type char*
+  variable ::string_A
+    var-kind variable
+    rep-type int[]
+    dec-type int[]
+  variable ::string_C
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable ::string_P
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::string_S
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable ::u_char_C
+    var-kind variable
+    rep-type string
+    dec-type unsigned\_char
+  variable ::u_char_I
+    var-kind variable
+    rep-type int
+    dec-type unsigned\_char
+  variable numElts
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable tb
+    var-kind variable
+    rep-type hashcode
+    dec-type TestBuffer*
+    flags is_param 
+  variable tb[..]
+    var-kind array
+    enclosing-var tb
+    array 1
+    rep-type hashcode[]
+    dec-type TestBuffer[]
+  variable tb[..].char_C
+    var-kind field char_C
+    enclosing-var tb[..]
+    array 1
+    rep-type string[]
+    dec-type char[]
+  variable tb[..].char_I
+    var-kind field char_I
+    enclosing-var tb[..]
+    array 1
+    rep-type int[]
+    dec-type char[]
+  variable tb[..].intPtr_A
+    var-kind field intPtr_A
+    enclosing-var tb[..]
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable tb[..].intPtr_A[0]
+    var-kind field [0]
+    enclosing-var tb[..].intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tb[..].intPtr_P
+    var-kind field intPtr_P
+    enclosing-var tb[..]
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable tb[..].intPtr_P[0]
+    var-kind field [0]
+    enclosing-var tb[..].intPtr_P
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tb[..].stringPtr_A
+    var-kind field stringPtr_A
+    enclosing-var tb[..]
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable tb[..].stringPtr_A[0]
+    var-kind field [0]
+    enclosing-var tb[..].stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable tb[..].stringPtr_P
+    var-kind field stringPtr_P
+    enclosing-var tb[..]
+    array 1
+    rep-type hashcode[]
+    dec-type char**[]
+  variable tb[..].stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var tb[..].stringPtr_P
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable tb[..].string_A
+    var-kind field string_A
+    enclosing-var tb[..]
+    array 1
+    rep-type int[]
+    dec-type int[][]
+  variable tb[..].string_C
+    var-kind field string_C
+    enclosing-var tb[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable tb[..].string_P
+    var-kind field string_P
+    enclosing-var tb[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tb[..].string_S
+    var-kind field string_S
+    enclosing-var tb[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..fooSingle():::ENTER
+  ppt-type enter
+  variable ::char_C
+    var-kind variable
+    rep-type string
+    dec-type char
+  variable ::char_I
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::floatPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr_A[..]
+    var-kind array
+    enclosing-var ::floatPtr_A
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::floatPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr_P
+    rep-type double
+    dec-type float
+  variable ::globalStringArray
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags non_null 
+  variable ::globalStringArray[..]
+    var-kind array
+    enclosing-var ::globalStringArray
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::globalTB
+    var-kind variable
+    rep-type hashcode
+    dec-type TestBuffer
+  variable ::globalTB.char_C
+    var-kind field char_C
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char
+  variable ::globalTB.char_I
+    var-kind field char_I
+    enclosing-var ::globalTB
+    rep-type int
+    dec-type char
+  variable ::globalTB.intPtr_A
+    var-kind field intPtr_A
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type int*
+  variable ::globalTB.intPtr_A[..]
+    var-kind array
+    enclosing-var ::globalTB.intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalTB.intPtr_P
+    var-kind field intPtr_P
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type int*
+  variable ::globalTB.intPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::globalTB.intPtr_P
+    rep-type int
+    dec-type int
+  variable ::globalTB.stringPtr_A
+    var-kind field stringPtr_A
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type char**
+  variable ::globalTB.stringPtr_A[..]
+    var-kind array
+    enclosing-var ::globalTB.stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::globalTB.stringPtr_P
+    var-kind field stringPtr_P
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type char**
+  variable ::globalTB.stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::globalTB.stringPtr_P
+    rep-type string
+    dec-type char*
+  variable ::globalTB.string_A
+    var-kind field string_A
+    enclosing-var ::globalTB
+    rep-type int[]
+    dec-type int[]
+  variable ::globalTB.string_C
+    var-kind field string_C
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char*
+  variable ::globalTB.string_P
+    var-kind field string_P
+    enclosing-var ::globalTB
+    rep-type int
+    dec-type int
+  variable ::globalTB.string_S
+    var-kind field string_S
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char*
+  variable ::intArray_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::intArray_A[..]
+    var-kind array
+    enclosing-var ::intArray_A
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intArray_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::intArray_P[0]
+    var-kind field [0]
+    enclosing-var ::intArray_P
+    reference-type offset
+    rep-type int
+    dec-type int
+  variable ::intPtrPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr_A[..]
+    var-kind array
+    enclosing-var ::intPtrPtr_A
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable ::intPtrPtr_A[..][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_A[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intPtrPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_P
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr_P[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_P[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtr_A[..]
+    var-kind array
+    enclosing-var ::intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::intPtr_P
+    rep-type int
+    dec-type int
+  variable ::stringPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+  variable ::stringPtr_A[..]
+    var-kind array
+    enclosing-var ::stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::stringPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+  variable ::stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::stringPtr_P
+    rep-type string
+    dec-type char*
+  variable ::string_A
+    var-kind variable
+    rep-type int[]
+    dec-type int[]
+  variable ::string_C
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable ::string_P
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::string_S
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable ::u_char_C
+    var-kind variable
+    rep-type string
+    dec-type unsigned\_char
+  variable ::u_char_I
+    var-kind variable
+    rep-type int
+    dec-type unsigned\_char
+  variable tb
+    var-kind variable
+    rep-type hashcode
+    dec-type TestBuffer*
+    flags is_param 
+  variable tb->char_C
+    var-kind field char_C
+    enclosing-var tb
+    rep-type string
+    dec-type char
+  variable tb->char_I
+    var-kind field char_I
+    enclosing-var tb
+    rep-type int
+    dec-type char
+  variable tb->intPtr_A
+    var-kind field intPtr_A
+    enclosing-var tb
+    rep-type hashcode
+    dec-type int*
+  variable tb->intPtr_A[..]
+    var-kind array
+    enclosing-var tb->intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tb->intPtr_P
+    var-kind field intPtr_P
+    enclosing-var tb
+    rep-type hashcode
+    dec-type int*
+  variable tb->intPtr_P[0]
+    var-kind field [0]
+    enclosing-var tb->intPtr_P
+    rep-type int
+    dec-type int
+  variable tb->stringPtr_A
+    var-kind field stringPtr_A
+    enclosing-var tb
+    rep-type hashcode
+    dec-type char**
+  variable tb->stringPtr_A[..]
+    var-kind array
+    enclosing-var tb->stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable tb->stringPtr_P
+    var-kind field stringPtr_P
+    enclosing-var tb
+    rep-type hashcode
+    dec-type char**
+  variable tb->stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var tb->stringPtr_P
+    rep-type string
+    dec-type char*
+  variable tb->string_A
+    var-kind field string_A
+    enclosing-var tb
+    rep-type int[]
+    dec-type int[]
+  variable tb->string_C
+    var-kind field string_C
+    enclosing-var tb
+    rep-type string
+    dec-type char*
+  variable tb->string_P
+    var-kind field string_P
+    enclosing-var tb
+    rep-type int
+    dec-type int
+  variable tb->string_S
+    var-kind field string_S
+    enclosing-var tb
+    rep-type string
+    dec-type char*
+  variable tb[0]
+    var-kind field [0]
+    enclosing-var tb
+    rep-type hashcode
+    dec-type TestBuffer
+
+ppt ..fooSingle():::EXIT0
+  ppt-type subexit
+  variable ::char_C
+    var-kind variable
+    rep-type string
+    dec-type char
+  variable ::char_I
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::floatPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr_A[..]
+    var-kind array
+    enclosing-var ::floatPtr_A
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::floatPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr_P
+    rep-type double
+    dec-type float
+  variable ::globalStringArray
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags non_null 
+  variable ::globalStringArray[..]
+    var-kind array
+    enclosing-var ::globalStringArray
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::globalTB
+    var-kind variable
+    rep-type hashcode
+    dec-type TestBuffer
+  variable ::globalTB.char_C
+    var-kind field char_C
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char
+  variable ::globalTB.char_I
+    var-kind field char_I
+    enclosing-var ::globalTB
+    rep-type int
+    dec-type char
+  variable ::globalTB.intPtr_A
+    var-kind field intPtr_A
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type int*
+  variable ::globalTB.intPtr_A[..]
+    var-kind array
+    enclosing-var ::globalTB.intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalTB.intPtr_P
+    var-kind field intPtr_P
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type int*
+  variable ::globalTB.intPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::globalTB.intPtr_P
+    rep-type int
+    dec-type int
+  variable ::globalTB.stringPtr_A
+    var-kind field stringPtr_A
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type char**
+  variable ::globalTB.stringPtr_A[..]
+    var-kind array
+    enclosing-var ::globalTB.stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::globalTB.stringPtr_P
+    var-kind field stringPtr_P
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type char**
+  variable ::globalTB.stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::globalTB.stringPtr_P
+    rep-type string
+    dec-type char*
+  variable ::globalTB.string_A
+    var-kind field string_A
+    enclosing-var ::globalTB
+    rep-type int[]
+    dec-type int[]
+  variable ::globalTB.string_C
+    var-kind field string_C
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char*
+  variable ::globalTB.string_P
+    var-kind field string_P
+    enclosing-var ::globalTB
+    rep-type int
+    dec-type int
+  variable ::globalTB.string_S
+    var-kind field string_S
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char*
+  variable ::intArray_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::intArray_A[..]
+    var-kind array
+    enclosing-var ::intArray_A
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intArray_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::intArray_P[0]
+    var-kind field [0]
+    enclosing-var ::intArray_P
+    reference-type offset
+    rep-type int
+    dec-type int
+  variable ::intPtrPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr_A[..]
+    var-kind array
+    enclosing-var ::intPtrPtr_A
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable ::intPtrPtr_A[..][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_A[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intPtrPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_P
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr_P[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_P[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtr_A[..]
+    var-kind array
+    enclosing-var ::intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::intPtr_P
+    rep-type int
+    dec-type int
+  variable ::stringPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+  variable ::stringPtr_A[..]
+    var-kind array
+    enclosing-var ::stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::stringPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+  variable ::stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::stringPtr_P
+    rep-type string
+    dec-type char*
+  variable ::string_A
+    var-kind variable
+    rep-type int[]
+    dec-type int[]
+  variable ::string_C
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable ::string_P
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::string_S
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable ::u_char_C
+    var-kind variable
+    rep-type string
+    dec-type unsigned\_char
+  variable ::u_char_I
+    var-kind variable
+    rep-type int
+    dec-type unsigned\_char
+  variable tb
+    var-kind variable
+    rep-type hashcode
+    dec-type TestBuffer*
+    flags is_param 
+  variable tb->char_C
+    var-kind field char_C
+    enclosing-var tb
+    rep-type string
+    dec-type char
+  variable tb->char_I
+    var-kind field char_I
+    enclosing-var tb
+    rep-type int
+    dec-type char
+  variable tb->intPtr_A
+    var-kind field intPtr_A
+    enclosing-var tb
+    rep-type hashcode
+    dec-type int*
+  variable tb->intPtr_A[..]
+    var-kind array
+    enclosing-var tb->intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable tb->intPtr_P
+    var-kind field intPtr_P
+    enclosing-var tb
+    rep-type hashcode
+    dec-type int*
+  variable tb->intPtr_P[0]
+    var-kind field [0]
+    enclosing-var tb->intPtr_P
+    rep-type int
+    dec-type int
+  variable tb->stringPtr_A
+    var-kind field stringPtr_A
+    enclosing-var tb
+    rep-type hashcode
+    dec-type char**
+  variable tb->stringPtr_A[..]
+    var-kind array
+    enclosing-var tb->stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable tb->stringPtr_P
+    var-kind field stringPtr_P
+    enclosing-var tb
+    rep-type hashcode
+    dec-type char**
+  variable tb->stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var tb->stringPtr_P
+    rep-type string
+    dec-type char*
+  variable tb->string_A
+    var-kind field string_A
+    enclosing-var tb
+    rep-type int[]
+    dec-type int[]
+  variable tb->string_C
+    var-kind field string_C
+    enclosing-var tb
+    rep-type string
+    dec-type char*
+  variable tb->string_P
+    var-kind field string_P
+    enclosing-var tb
+    rep-type int
+    dec-type int
+  variable tb->string_S
+    var-kind field string_S
+    enclosing-var tb
+    rep-type string
+    dec-type char*
+  variable tb[0]
+    var-kind field [0]
+    enclosing-var tb
+    rep-type hashcode
+    dec-type TestBuffer
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::char_C
+    var-kind variable
+    rep-type string
+    dec-type char
+  variable ::char_I
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::floatPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr_A[..]
+    var-kind array
+    enclosing-var ::floatPtr_A
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::floatPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr_P
+    rep-type double
+    dec-type float
+  variable ::globalStringArray
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags non_null 
+  variable ::globalStringArray[..]
+    var-kind array
+    enclosing-var ::globalStringArray
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::globalTB
+    var-kind variable
+    rep-type hashcode
+    dec-type TestBuffer
+  variable ::globalTB.char_C
+    var-kind field char_C
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char
+  variable ::globalTB.char_I
+    var-kind field char_I
+    enclosing-var ::globalTB
+    rep-type int
+    dec-type char
+  variable ::globalTB.intPtr_A
+    var-kind field intPtr_A
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type int*
+  variable ::globalTB.intPtr_A[..]
+    var-kind array
+    enclosing-var ::globalTB.intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalTB.intPtr_P
+    var-kind field intPtr_P
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type int*
+  variable ::globalTB.intPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::globalTB.intPtr_P
+    rep-type int
+    dec-type int
+  variable ::globalTB.stringPtr_A
+    var-kind field stringPtr_A
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type char**
+  variable ::globalTB.stringPtr_A[..]
+    var-kind array
+    enclosing-var ::globalTB.stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::globalTB.stringPtr_P
+    var-kind field stringPtr_P
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type char**
+  variable ::globalTB.stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::globalTB.stringPtr_P
+    rep-type string
+    dec-type char*
+  variable ::globalTB.string_A
+    var-kind field string_A
+    enclosing-var ::globalTB
+    rep-type int[]
+    dec-type int[]
+  variable ::globalTB.string_C
+    var-kind field string_C
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char*
+  variable ::globalTB.string_P
+    var-kind field string_P
+    enclosing-var ::globalTB
+    rep-type int
+    dec-type int
+  variable ::globalTB.string_S
+    var-kind field string_S
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char*
+  variable ::intArray_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::intArray_A[..]
+    var-kind array
+    enclosing-var ::intArray_A
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intArray_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::intArray_P[0]
+    var-kind field [0]
+    enclosing-var ::intArray_P
+    reference-type offset
+    rep-type int
+    dec-type int
+  variable ::intPtrPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr_A[..]
+    var-kind array
+    enclosing-var ::intPtrPtr_A
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable ::intPtrPtr_A[..][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_A[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intPtrPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_P
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr_P[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_P[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtr_A[..]
+    var-kind array
+    enclosing-var ::intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::intPtr_P
+    rep-type int
+    dec-type int
+  variable ::stringPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+  variable ::stringPtr_A[..]
+    var-kind array
+    enclosing-var ::stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::stringPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+  variable ::stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::stringPtr_P
+    rep-type string
+    dec-type char*
+  variable ::string_A
+    var-kind variable
+    rep-type int[]
+    dec-type int[]
+  variable ::string_C
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable ::string_P
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::string_S
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable ::u_char_C
+    var-kind variable
+    rep-type string
+    dec-type unsigned\_char
+  variable ::u_char_I
+    var-kind variable
+    rep-type int
+    dec-type unsigned\_char
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::char_C
+    var-kind variable
+    rep-type string
+    dec-type char
+  variable ::char_I
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::floatPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr_A[..]
+    var-kind array
+    enclosing-var ::floatPtr_A
+    array 1
+    rep-type double[]
+    dec-type float[]
+  variable ::floatPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type float*
+  variable ::floatPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::floatPtr_P
+    rep-type double
+    dec-type float
+  variable ::globalStringArray
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags non_null 
+  variable ::globalStringArray[..]
+    var-kind array
+    enclosing-var ::globalStringArray
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::globalTB
+    var-kind variable
+    rep-type hashcode
+    dec-type TestBuffer
+  variable ::globalTB.char_C
+    var-kind field char_C
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char
+  variable ::globalTB.char_I
+    var-kind field char_I
+    enclosing-var ::globalTB
+    rep-type int
+    dec-type char
+  variable ::globalTB.intPtr_A
+    var-kind field intPtr_A
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type int*
+  variable ::globalTB.intPtr_A[..]
+    var-kind array
+    enclosing-var ::globalTB.intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalTB.intPtr_P
+    var-kind field intPtr_P
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type int*
+  variable ::globalTB.intPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::globalTB.intPtr_P
+    rep-type int
+    dec-type int
+  variable ::globalTB.stringPtr_A
+    var-kind field stringPtr_A
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type char**
+  variable ::globalTB.stringPtr_A[..]
+    var-kind array
+    enclosing-var ::globalTB.stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::globalTB.stringPtr_P
+    var-kind field stringPtr_P
+    enclosing-var ::globalTB
+    rep-type hashcode
+    dec-type char**
+  variable ::globalTB.stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::globalTB.stringPtr_P
+    rep-type string
+    dec-type char*
+  variable ::globalTB.string_A
+    var-kind field string_A
+    enclosing-var ::globalTB
+    rep-type int[]
+    dec-type int[]
+  variable ::globalTB.string_C
+    var-kind field string_C
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char*
+  variable ::globalTB.string_P
+    var-kind field string_P
+    enclosing-var ::globalTB
+    rep-type int
+    dec-type int
+  variable ::globalTB.string_S
+    var-kind field string_S
+    enclosing-var ::globalTB
+    rep-type string
+    dec-type char*
+  variable ::intArray_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::intArray_A[..]
+    var-kind array
+    enclosing-var ::intArray_A
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intArray_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::intArray_P[0]
+    var-kind field [0]
+    enclosing-var ::intArray_P
+    reference-type offset
+    rep-type int
+    dec-type int
+  variable ::intPtrPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr_A[..]
+    var-kind array
+    enclosing-var ::intPtrPtr_A
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable ::intPtrPtr_A[..][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_A[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intPtrPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::intPtrPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_P
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtrPtr_P[0][0]
+    var-kind field [0]
+    enclosing-var ::intPtrPtr_P[0]
+    rep-type int
+    dec-type int
+  variable ::intPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtr_A[..]
+    var-kind array
+    enclosing-var ::intPtr_A
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::intPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::intPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::intPtr_P
+    rep-type int
+    dec-type int
+  variable ::stringPtr_A
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+  variable ::stringPtr_A[..]
+    var-kind array
+    enclosing-var ::stringPtr_A
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::stringPtr_P
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+  variable ::stringPtr_P[0]
+    var-kind field [0]
+    enclosing-var ::stringPtr_P
+    rep-type string
+    dec-type char*
+  variable ::string_A
+    var-kind variable
+    rep-type int[]
+    dec-type int[]
+  variable ::string_C
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable ::string_P
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::string_S
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable ::u_char_C
+    var-kind variable
+    rep-type string
+    dec-type unsigned\_char
+  variable ::u_char_I
+    var-kind variable
+    rep-type int
+    dec-type unsigned\_char
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+

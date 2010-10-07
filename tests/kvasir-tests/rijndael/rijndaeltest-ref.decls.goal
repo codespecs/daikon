@@ -1,0 +1,4509 @@
+VarComparability
+none
+
+DECLARE
+..AddRoundKey():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+BC
+unsigned char # isParam=true
+int
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+rk
+unsigned char** # isParam=true
+hashcode
+22
+rk[]
+unsigned char*[]
+hashcode[]
+22
+rk[][0]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..AddRoundKey():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+BC
+unsigned char # isParam=true
+int
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+rk
+unsigned char** # isParam=true
+hashcode
+22
+rk[]
+unsigned char*[]
+hashcode[]
+22
+rk[][0]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..InvMixColumns():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+BC
+unsigned char # isParam=true
+int
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..InvMixColumns():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+BC
+unsigned char # isParam=true
+int
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..MixColumns():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+BC
+unsigned char # isParam=true
+int
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..MixColumns():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+BC
+unsigned char # isParam=true
+int
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..ShiftRows():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+BC
+unsigned char # isParam=true
+int
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+d
+unsigned char # isParam=true
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..ShiftRows():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+BC
+unsigned char # isParam=true
+int
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+d
+unsigned char # isParam=true
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..Substitution():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+BC
+unsigned char # isParam=true
+int
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+box
+unsigned char* # isParam=true
+hashcode
+22
+box[]
+unsigned char[]
+int[]
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..Substitution():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+BC
+unsigned char # isParam=true
+int
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+box
+unsigned char* # isParam=true
+hashcode
+22
+box[]
+unsigned char[]
+int[]
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..blockDecrypt():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+cipher
+cipherInstance* # isParam=true
+hashcode
+22
+cipher[].IV
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+cipher[].IV[0]
+unsigned char[]
+int[]
+22
+cipher[].blockLen
+int[]
+int[]
+22
+cipher[].mode
+unsigned char[]
+int[]
+22
+input
+unsigned char* # isParam=true
+hashcode
+22
+inputLen
+int # isParam=true
+int
+22
+input[]
+unsigned char[]
+int[]
+22
+key
+keyInstance* # isParam=true
+hashcode
+22
+key[].blockLen
+int[]
+int[]
+22
+key[].direction
+unsigned char[]
+int[]
+22
+key[].keyLen
+int[]
+int[]
+22
+key[].keyMaterial
+char*[]
+java.lang.String[]
+22
+key[].keySched
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+key[].keySched[0]
+unsigned char[]
+int[]
+22
+outBuffer
+unsigned char* # isParam=true
+hashcode
+22
+outBuffer[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..blockDecrypt():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+cipher
+cipherInstance* # isParam=true
+hashcode
+22
+cipher[].IV
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+cipher[].IV[0]
+unsigned char[]
+int[]
+22
+cipher[].blockLen
+int[]
+int[]
+22
+cipher[].mode
+unsigned char[]
+int[]
+22
+input
+unsigned char* # isParam=true
+hashcode
+22
+inputLen
+int # isParam=true
+int
+22
+input[]
+unsigned char[]
+int[]
+22
+key
+keyInstance* # isParam=true
+hashcode
+22
+key[].blockLen
+int[]
+int[]
+22
+key[].direction
+unsigned char[]
+int[]
+22
+key[].keyLen
+int[]
+int[]
+22
+key[].keyMaterial
+char*[]
+java.lang.String[]
+22
+key[].keySched
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+key[].keySched[0]
+unsigned char[]
+int[]
+22
+outBuffer
+unsigned char* # isParam=true
+hashcode
+22
+outBuffer[]
+unsigned char[]
+int[]
+22
+return
+int
+int
+22
+
+DECLARE
+..blockEncrypt():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+cipher
+cipherInstance* # isParam=true
+hashcode
+22
+cipher[].IV
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+cipher[].IV[0]
+unsigned char[]
+int[]
+22
+cipher[].blockLen
+int[]
+int[]
+22
+cipher[].mode
+unsigned char[]
+int[]
+22
+input
+unsigned char* # isParam=true
+hashcode
+22
+inputLen
+int # isParam=true
+int
+22
+input[]
+unsigned char[]
+int[]
+22
+key
+keyInstance* # isParam=true
+hashcode
+22
+key[].blockLen
+int[]
+int[]
+22
+key[].direction
+unsigned char[]
+int[]
+22
+key[].keyLen
+int[]
+int[]
+22
+key[].keyMaterial
+char*[]
+java.lang.String[]
+22
+key[].keySched
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+key[].keySched[0]
+unsigned char[]
+int[]
+22
+outBuffer
+unsigned char* # isParam=true
+hashcode
+22
+outBuffer[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..blockEncrypt():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+cipher
+cipherInstance* # isParam=true
+hashcode
+22
+cipher[].IV
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+cipher[].IV[0]
+unsigned char[]
+int[]
+22
+cipher[].blockLen
+int[]
+int[]
+22
+cipher[].mode
+unsigned char[]
+int[]
+22
+input
+unsigned char* # isParam=true
+hashcode
+22
+inputLen
+int # isParam=true
+int
+22
+input[]
+unsigned char[]
+int[]
+22
+key
+keyInstance* # isParam=true
+hashcode
+22
+key[].blockLen
+int[]
+int[]
+22
+key[].direction
+unsigned char[]
+int[]
+22
+key[].keyLen
+int[]
+int[]
+22
+key[].keyMaterial
+char*[]
+java.lang.String[]
+22
+key[].keySched
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+key[].keySched[0]
+unsigned char[]
+int[]
+22
+outBuffer
+unsigned char* # isParam=true
+hashcode
+22
+outBuffer[]
+unsigned char[]
+int[]
+22
+return
+int
+int
+22
+
+DECLARE
+..cipherInit():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+IV
+char* # isParam=true
+java.lang.String
+22
+cipher
+cipherInstance* # isParam=true
+hashcode
+22
+cipher[].IV
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+cipher[].IV[0]
+unsigned char[]
+int[]
+22
+cipher[].blockLen
+int[]
+int[]
+22
+cipher[].mode
+unsigned char[]
+int[]
+22
+mode
+unsigned char # isParam=true
+int
+22
+
+DECLARE
+..cipherInit():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+IV
+char* # isParam=true
+java.lang.String
+22
+cipher
+cipherInstance* # isParam=true
+hashcode
+22
+cipher[].IV
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+cipher[].IV[0]
+unsigned char[]
+int[]
+22
+cipher[].blockLen
+int[]
+int[]
+22
+cipher[].mode
+unsigned char[]
+int[]
+22
+mode
+unsigned char # isParam=true
+int
+22
+return
+int
+int
+22
+
+DECLARE
+..cipherUpdateRounds():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+cipher
+cipherInstance* # isParam=true
+hashcode
+22
+cipher[].IV
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+cipher[].IV[0]
+unsigned char[]
+int[]
+22
+cipher[].blockLen
+int[]
+int[]
+22
+cipher[].mode
+unsigned char[]
+int[]
+22
+input
+unsigned char* # isParam=true
+hashcode
+22
+inputLen
+int # isParam=true
+int
+22
+input[]
+unsigned char[]
+int[]
+22
+key
+keyInstance* # isParam=true
+hashcode
+22
+key[].blockLen
+int[]
+int[]
+22
+key[].direction
+unsigned char[]
+int[]
+22
+key[].keyLen
+int[]
+int[]
+22
+key[].keyMaterial
+char*[]
+java.lang.String[]
+22
+key[].keySched
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+key[].keySched[0]
+unsigned char[]
+int[]
+22
+outBuffer
+unsigned char* # isParam=true
+hashcode
+22
+outBuffer[]
+unsigned char[]
+int[]
+22
+rounds
+int # isParam=true
+int
+22
+
+DECLARE
+..cipherUpdateRounds():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+cipher
+cipherInstance* # isParam=true
+hashcode
+22
+cipher[].IV
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+cipher[].IV[0]
+unsigned char[]
+int[]
+22
+cipher[].blockLen
+int[]
+int[]
+22
+cipher[].mode
+unsigned char[]
+int[]
+22
+input
+unsigned char* # isParam=true
+hashcode
+22
+inputLen
+int # isParam=true
+int
+22
+input[]
+unsigned char[]
+int[]
+22
+key
+keyInstance* # isParam=true
+hashcode
+22
+key[].blockLen
+int[]
+int[]
+22
+key[].direction
+unsigned char[]
+int[]
+22
+key[].keyLen
+int[]
+int[]
+22
+key[].keyMaterial
+char*[]
+java.lang.String[]
+22
+key[].keySched
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+key[].keySched[0]
+unsigned char[]
+int[]
+22
+outBuffer
+unsigned char* # isParam=true
+hashcode
+22
+outBuffer[]
+unsigned char[]
+int[]
+22
+return
+int
+int
+22
+rounds
+int # isParam=true
+int
+22
+
+DECLARE
+..main():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+
+DECLARE
+..main():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+return
+int
+int
+22
+
+DECLARE
+..makeKey():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+direction
+unsigned char # isParam=true
+int
+22
+key
+keyInstance* # isParam=true
+hashcode
+22
+keyLen
+int # isParam=true
+int
+22
+keyMaterial
+char* # isParam=true
+java.lang.String
+22
+key[].blockLen
+int[]
+int[]
+22
+key[].direction
+unsigned char[]
+int[]
+22
+key[].keyLen
+int[]
+int[]
+22
+key[].keyMaterial
+char*[]
+java.lang.String[]
+22
+key[].keySched
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+key[].keySched[0]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..makeKey():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+direction
+unsigned char # isParam=true
+int
+22
+key
+keyInstance* # isParam=true
+hashcode
+22
+keyLen
+int # isParam=true
+int
+22
+keyMaterial
+char* # isParam=true
+java.lang.String
+22
+key[].blockLen
+int[]
+int[]
+22
+key[].direction
+unsigned char[]
+int[]
+22
+key[].keyLen
+int[]
+int[]
+22
+key[].keyMaterial
+char*[]
+java.lang.String[]
+22
+key[].keySched
+unsigned char*[] # hasNull=false
+hashcode[]
+22
+key[].keySched[0]
+unsigned char[]
+int[]
+22
+return
+int
+int
+22
+
+DECLARE
+..mul():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+a
+unsigned char # isParam=true
+int
+22
+b
+unsigned char # isParam=true
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..mul():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+a
+unsigned char # isParam=true
+int
+22
+b
+unsigned char # isParam=true
+int
+22
+return
+unsigned char
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..rijndaelDecrypt():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+blockBits
+int # isParam=true
+int
+22
+keyBits
+int # isParam=true
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+rk
+unsigned char** # isParam=true
+hashcode
+22
+rk[]
+unsigned char*[]
+hashcode[]
+22
+rk[][0]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..rijndaelDecrypt():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+blockBits
+int # isParam=true
+int
+22
+keyBits
+int # isParam=true
+int
+22
+return
+int
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+rk
+unsigned char** # isParam=true
+hashcode
+22
+rk[]
+unsigned char*[]
+hashcode[]
+22
+rk[][0]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..rijndaelDecryptRound():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+blockBits
+int # isParam=true
+int
+22
+keyBits
+int # isParam=true
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+rk
+unsigned char** # isParam=true
+hashcode
+22
+rk[]
+unsigned char*[]
+hashcode[]
+22
+rk[][0]
+unsigned char[]
+int[]
+22
+rounds
+int # isParam=true
+int
+22
+
+DECLARE
+..rijndaelDecryptRound():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+blockBits
+int # isParam=true
+int
+22
+keyBits
+int # isParam=true
+int
+22
+return
+int
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+rk
+unsigned char** # isParam=true
+hashcode
+22
+rk[]
+unsigned char*[]
+hashcode[]
+22
+rk[][0]
+unsigned char[]
+int[]
+22
+rounds
+int # isParam=true
+int
+22
+
+DECLARE
+..rijndaelEncrypt():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+blockBits
+int # isParam=true
+int
+22
+keyBits
+int # isParam=true
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+rk
+unsigned char** # isParam=true
+hashcode
+22
+rk[]
+unsigned char*[]
+hashcode[]
+22
+rk[][0]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..rijndaelEncrypt():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+blockBits
+int # isParam=true
+int
+22
+keyBits
+int # isParam=true
+int
+22
+return
+int
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+rk
+unsigned char** # isParam=true
+hashcode
+22
+rk[]
+unsigned char*[]
+hashcode[]
+22
+rk[][0]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..rijndaelEncryptRound():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+blockBits
+int # isParam=true
+int
+22
+keyBits
+int # isParam=true
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+rk
+unsigned char** # isParam=true
+hashcode
+22
+rk[]
+unsigned char*[]
+hashcode[]
+22
+rk[][0]
+unsigned char[]
+int[]
+22
+rounds
+int # isParam=true
+int
+22
+
+DECLARE
+..rijndaelEncryptRound():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+a
+unsigned char** # isParam=true
+hashcode
+22
+a[]
+unsigned char*[]
+hashcode[]
+22
+a[][0]
+unsigned char[]
+int[]
+22
+blockBits
+int # isParam=true
+int
+22
+keyBits
+int # isParam=true
+int
+22
+return
+int
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+rk
+unsigned char** # isParam=true
+hashcode
+22
+rk[]
+unsigned char*[]
+hashcode[]
+22
+rk[][0]
+unsigned char[]
+int[]
+22
+rounds
+int # isParam=true
+int
+22
+
+DECLARE
+..rijndaelKeySched():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+W
+unsigned char** # isParam=true
+hashcode
+22
+W[]
+unsigned char*[]
+hashcode[]
+22
+W[][0]
+unsigned char[]
+int[]
+22
+blockBits
+int # isParam=true
+int
+22
+k
+unsigned char** # isParam=true
+hashcode
+22
+k[]
+unsigned char*[]
+hashcode[]
+22
+k[][0]
+unsigned char[]
+int[]
+22
+keyBits
+int # isParam=true
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+..rijndaelKeySched():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+W
+unsigned char** # isParam=true
+hashcode
+22
+W[]
+unsigned char*[]
+hashcode[]
+22
+W[][0]
+unsigned char[]
+int[]
+22
+blockBits
+int # isParam=true
+int
+22
+k
+unsigned char** # isParam=true
+hashcode
+22
+k[]
+unsigned char*[]
+hashcode[]
+22
+k[][0]
+unsigned char[]
+int[]
+22
+keyBits
+int # isParam=true
+int
+22
+return
+int
+int
+22
+rijndael_alg_ref_c/shifts
+unsigned char* # hasNull=false
+hashcode
+22
+rijndael_alg_ref_c/shifts[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+rijndaeltest_ref.c.HexToBin():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+binBlock
+unsigned char* # isParam=true
+hashcode
+22
+binBlock[]
+unsigned char[]
+int[]
+22
+blockLen
+int # isParam=true
+int
+22
+hexBlock
+unsigned char* # isParam=true
+hashcode
+22
+hexBlock[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+rijndaeltest_ref.c.HexToBin():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+binBlock
+unsigned char* # isParam=true
+hashcode
+22
+binBlock[]
+unsigned char[]
+int[]
+22
+blockLen
+int # isParam=true
+int
+22
+hexBlock
+unsigned char* # isParam=true
+hashcode
+22
+hexBlock[]
+unsigned char[]
+int[]
+22
+
+DECLARE
+rijndaeltest_ref.c.blockPrint():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+block
+unsigned char* # isParam=true
+hashcode
+22
+blockBits
+int # isParam=true
+int
+22
+block[]
+unsigned char[]
+int[]
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+tag
+char* # isParam=true
+java.lang.String
+22
+
+DECLARE
+rijndaeltest_ref.c.blockPrint():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+block
+unsigned char* # isParam=true
+hashcode
+22
+blockBits
+int # isParam=true
+int
+22
+block[]
+unsigned char[]
+int[]
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+tag
+char* # isParam=true
+java.lang.String
+22
+
+DECLARE
+rijndaeltest_ref.c.makeKATs():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+ivFile
+char* # isParam=true
+java.lang.String
+22
+tblFile
+char* # isParam=true
+java.lang.String
+22
+vkFile
+char* # isParam=true
+java.lang.String
+22
+vtFile
+char* # isParam=true
+java.lang.String
+22
+
+DECLARE
+rijndaeltest_ref.c.makeKATs():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+ivFile
+char* # isParam=true
+java.lang.String
+22
+tblFile
+char* # isParam=true
+java.lang.String
+22
+vkFile
+char* # isParam=true
+java.lang.String
+22
+vtFile
+char* # isParam=true
+java.lang.String
+22
+
+DECLARE
+rijndaeltest_ref.c.makeMCTs():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+cbcDecryptionFile
+char* # isParam=true
+java.lang.String
+22
+cbcEncryptionFile
+char* # isParam=true
+java.lang.String
+22
+ecbDecryptionFile
+char* # isParam=true
+java.lang.String
+22
+ecbEncryptionFile
+char* # isParam=true
+java.lang.String
+22
+
+DECLARE
+rijndaeltest_ref.c.makeMCTs():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+cbcDecryptionFile
+char* # isParam=true
+java.lang.String
+22
+cbcEncryptionFile
+char* # isParam=true
+java.lang.String
+22
+ecbDecryptionFile
+char* # isParam=true
+java.lang.String
+22
+ecbEncryptionFile
+char* # isParam=true
+java.lang.String
+22
+
+DECLARE
+rijndaeltest_ref.c.rijndaelCBC_MCT():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+blockLength
+int # isParam=true
+int
+22
+direction
+unsigned char # isParam=true
+int
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+initBlock
+char* # isParam=true
+java.lang.String
+22
+initIV
+char* # isParam=true
+java.lang.String
+22
+initKey
+char* # isParam=true
+java.lang.String
+22
+keyLength
+int # isParam=true
+int
+22
+
+DECLARE
+rijndaeltest_ref.c.rijndaelCBC_MCT():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+blockLength
+int # isParam=true
+int
+22
+direction
+unsigned char # isParam=true
+int
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+initBlock
+char* # isParam=true
+java.lang.String
+22
+initIV
+char* # isParam=true
+java.lang.String
+22
+initKey
+char* # isParam=true
+java.lang.String
+22
+keyLength
+int # isParam=true
+int
+22
+
+DECLARE
+rijndaeltest_ref.c.rijndaelECB_MCT():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+blockLength
+int # isParam=true
+int
+22
+direction
+unsigned char # isParam=true
+int
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+initBlock
+char* # isParam=true
+java.lang.String
+22
+initKey
+char* # isParam=true
+java.lang.String
+22
+keyLength
+int # isParam=true
+int
+22
+
+DECLARE
+rijndaeltest_ref.c.rijndaelECB_MCT():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+blockLength
+int # isParam=true
+int
+22
+direction
+unsigned char # isParam=true
+int
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+initBlock
+char* # isParam=true
+java.lang.String
+22
+initKey
+char* # isParam=true
+java.lang.String
+22
+keyLength
+int # isParam=true
+int
+22
+
+DECLARE
+rijndaeltest_ref.c.rijndaelIVKAT():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+blockLength
+int # isParam=true
+int
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+keyLength
+int # isParam=true
+int
+22
+
+DECLARE
+rijndaeltest_ref.c.rijndaelIVKAT():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+blockLength
+int # isParam=true
+int
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+keyLength
+int # isParam=true
+int
+22
+
+DECLARE
+rijndaeltest_ref.c.rijndaelTKAT():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+blockLength
+int # isParam=true
+int
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+in
+void* # isParam=true
+hashcode
+22
+in[]
+void[]
+hashcode[]
+22
+keyLength
+int # isParam=true
+int
+22
+
+DECLARE
+rijndaeltest_ref.c.rijndaelTKAT():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+blockLength
+int # isParam=true
+int
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+in
+void* # isParam=true
+hashcode
+22
+in[]
+void[]
+hashcode[]
+22
+keyLength
+int # isParam=true
+int
+22
+
+DECLARE
+rijndaeltest_ref.c.rijndaelVKKAT():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+blockLength
+int # isParam=true
+int
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+keyLength
+int # isParam=true
+int
+22
+
+DECLARE
+rijndaeltest_ref.c.rijndaelVKKAT():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+blockLength
+int # isParam=true
+int
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+keyLength
+int # isParam=true
+int
+22
+
+DECLARE
+rijndaeltest_ref.c.rijndaelVTKAT():::ENTER
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+blockLength
+int # isParam=true
+int
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+keyLength
+int # isParam=true
+int
+22
+
+DECLARE
+rijndaeltest_ref.c.rijndaelVTKAT():::EXIT0
+/Alogtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Alogtable[]
+unsigned char[]
+int[]
+22
+/Logtable
+unsigned char* # hasNull=false
+hashcode
+22
+/Logtable[]
+unsigned char[]
+int[]
+22
+/S
+unsigned char* # hasNull=false
+hashcode
+22
+/S[]
+unsigned char[]
+int[]
+22
+/Si
+unsigned char* # hasNull=false
+hashcode
+22
+/Si[]
+unsigned char[]
+int[]
+22
+/iG
+unsigned char* # hasNull=false
+hashcode
+22
+/iG[]
+unsigned char[]
+int[]
+22
+/rcon
+unsigned int* # hasNull=false
+hashcode
+22
+/rcon[]
+unsigned int[]
+int[]
+22
+blockLength
+int # isParam=true
+int
+22
+fp
+void* # isParam=true
+hashcode
+22
+fp[]
+void[]
+hashcode[]
+22
+keyLength
+int # isParam=true
+int
+22
+

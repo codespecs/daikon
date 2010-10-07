@@ -1,0 +1,32 @@
+
+Variable sets for misc.Suppress02.main([Ljava.lang.String; args) enter
+  [1] [Parameter args]
+  [1] [Class of args]
+  [1] [Array args[..]]
+  [1] [String args[..].toString]
+Variable sets for misc.Suppress02.main([Ljava.lang.String; args) exit
+  [1] [Parameter args]
+  [1] [Class of args]
+  [1] [Array args[..]]
+  [1] [String args[..].toString]
+
+Variable sets for misc.Suppress02.f(I n) enter
+  [3] [Parameter n, Field i, Field j]
+  [1] [this]
+  [2] [Field theArray, Array Field theArray[..]]
+Variable sets for misc.Suppress02.f(I n) exit
+  [3] [Parameter n, Field i, Field j]
+  [1] [this]
+  [2] [Field theArray, Array Field theArray[..]]
+
+Variable sets for misc.Suppress02.<init>() enter
+Variable sets for misc.Suppress02.<init>() exit
+  [1] [this]
+  [1] [Field i]
+  [1] [Field j]
+  [2] [Field theArray, Array Field theArray[..]]
+
+Variable sets for misc.Suppress02.equals(java.lang.Object obj) enter
+  not called
+Variable sets for misc.Suppress02.equals(java.lang.Object obj) exit
+  not called

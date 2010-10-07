@@ -1,0 +1,2 @@
+daikon-output ran-kvasir shared-lib shared-lib.decls.diff shared-lib.dtrace.diff shared-lib.out shared-lib.out.diff
+*.counts *.counts.diff

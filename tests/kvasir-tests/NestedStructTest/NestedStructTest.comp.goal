@@ -1,0 +1,89 @@
+..main():::ENTER
+::globalBetterFoo ::globalBetterFoo.betterAge
+::globalBetterFoo.betterName
+::globalBetterFoo.namedBar ::globalBetterFoo.namedBar.betterA
+::globalBetterFoo.namedBar.betterB
+::globalBetterFoo.namedBar.crappyFoo ::globalBetterFoo.namedBar.crappyFoo.age
+::globalBetterFoo.namedBar.crappyFoo.b ::globalBetterFoo.namedBar.crappyFoo.b.a
+::globalBetterFoo.namedBar.crappyFoo.b.b
+::globalBetterFoo.namedBar.crappyFoo.name
+::globalBetterFoo.namedBar.myBazzz ::globalBetterFoo.namedBar.myBazzz.hello
+::globalBetterFoo.namedBar.myBazzz.world
+::globalFoo
+::globalFoo[..]
+::globalFoo[..].age
+::globalFoo[..].b
+::globalFoo[..].b.a
+::globalFoo[..].b.b
+::globalFoo[..].name
+
+..main():::EXIT0
+::globalBetterFoo ::globalBetterFoo.betterAge
+::globalBetterFoo.betterName
+::globalBetterFoo.namedBar ::globalBetterFoo.namedBar.betterA
+::globalBetterFoo.namedBar.betterB
+::globalBetterFoo.namedBar.crappyFoo ::globalBetterFoo.namedBar.crappyFoo.age
+::globalBetterFoo.namedBar.crappyFoo.b ::globalBetterFoo.namedBar.crappyFoo.b.a
+::globalBetterFoo.namedBar.crappyFoo.b.b
+::globalBetterFoo.namedBar.crappyFoo.name
+::globalBetterFoo.namedBar.myBazzz ::globalBetterFoo.namedBar.myBazzz.hello
+::globalBetterFoo.namedBar.myBazzz.world
+::globalFoo
+::globalFoo[..]
+::globalFoo[..].age
+::globalFoo[..].b
+::globalFoo[..].b.a
+::globalFoo[..].b.b
+::globalFoo[..].name
+return
+
+..returnF():::ENTER
+::globalBetterFoo ::globalBetterFoo.betterAge
+::globalBetterFoo.betterName
+::globalBetterFoo.namedBar ::globalBetterFoo.namedBar.betterA
+::globalBetterFoo.namedBar.betterB
+::globalBetterFoo.namedBar.crappyFoo ::globalBetterFoo.namedBar.crappyFoo.age
+::globalBetterFoo.namedBar.crappyFoo.b ::globalBetterFoo.namedBar.crappyFoo.b.a
+::globalBetterFoo.namedBar.crappyFoo.b.b
+::globalBetterFoo.namedBar.crappyFoo.name
+::globalBetterFoo.namedBar.myBazzz ::globalBetterFoo.namedBar.myBazzz.hello
+::globalBetterFoo.namedBar.myBazzz.world
+::globalFoo
+::globalFoo[..]
+::globalFoo[..].age f[..].age
+::globalFoo[..].b
+::globalFoo[..].b.a f[..].b.a
+::globalFoo[..].b.b f[..].b.b
+::globalFoo[..].name f[..].name
+blah
+blah[..]
+f
+f[..]
+f[..].b
+
+..returnF():::EXIT0
+::globalBetterFoo ::globalBetterFoo.betterAge
+::globalBetterFoo.betterName
+::globalBetterFoo.namedBar ::globalBetterFoo.namedBar.betterA
+::globalBetterFoo.namedBar.betterB
+::globalBetterFoo.namedBar.crappyFoo ::globalBetterFoo.namedBar.crappyFoo.age
+::globalBetterFoo.namedBar.crappyFoo.b ::globalBetterFoo.namedBar.crappyFoo.b.a
+::globalBetterFoo.namedBar.crappyFoo.b.b
+::globalBetterFoo.namedBar.crappyFoo.name
+::globalBetterFoo.namedBar.myBazzz ::globalBetterFoo.namedBar.myBazzz.hello
+::globalBetterFoo.namedBar.myBazzz.world
+::globalFoo
+::globalFoo[..]
+::globalFoo[..].age f[..].age return[..].age
+::globalFoo[..].b
+::globalFoo[..].b.a f[..].b.a return[..].b.a
+::globalFoo[..].b.b f[..].b.b return[..].b.b
+::globalFoo[..].name f[..].name return[..].name
+blah
+blah[..]
+f return
+f[..]
+f[..].b
+return[..]
+return[..].b
+

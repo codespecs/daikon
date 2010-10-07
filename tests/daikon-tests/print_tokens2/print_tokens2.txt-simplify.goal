@@ -1,0 +1,421 @@
+===========================================================================
+std.get_char(character_stream;)char:::ENTER
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.get_char(character_stream;)char:::EXIT
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(NEQ (hash |::buffer|) null)
+(>= |return| -1)
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.get_token(token_stream;)token:::ENTER
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.get_token(token_stream;)token:::EXIT10
+(EQ (select elems |::buffer|) |_string_|)
+===========================================================================
+std.get_token(token_stream;)token:::EXIT11
+(OR (EQ (select elems |__orig__::buffer|) |_string_|) (EQ (select elems |__orig__::buffer|) |_string_'|) (EQ (select elems |__orig__::buffer|) |_string_)|))
+===========================================================================
+std.get_token(token_stream;)token:::EXIT13
+(EQ (select elems |::buffer|) |_string_|)
+===========================================================================
+std.get_token(token_stream;)token:::EXIT7
+(EQ (select elems |::buffer|) |_string_\377|)
+(> (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.get_token(token_stream;)token:::EXIT8
+===========================================================================
+std.get_token(token_stream;)token:::EXIT9
+(NEQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.get_token(token_stream;)token:::EXIT
+(EQ (hash |::buffer|) (hash |return|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(NEQ (hash |::buffer|) null)
+(EQ (select elems |::buffer|) (select elems |return|))
+===========================================================================
+std.is_char_constant(token;)int:::ENTER
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.is_char_constant(token;)int:::EXIT38
+(EQ |return| 1)
+===========================================================================
+std.is_char_constant(token;)int:::EXIT39
+(OR (EQ (select elems |str|) |_string_|) (EQ (select elems |str|) |_string_#5|) (EQ (select elems |str|) |_string_\377|))
+(OR (EQ (select elems |::buffer|) |_string_|) (EQ (select elems |::buffer|) |_string_#5|) (EQ (select elems |::buffer|) |_string_\377|))
+(EQ |return| 0)
+===========================================================================
+std.is_char_constant(token;)int:::EXIT
+(EQ (hash |str|) (hash |__orig__str|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(IMPLIES (EQ |return| 0) (OR (EQ (select elems |::buffer|) |_string_|) (EQ (select elems |::buffer|) |_string_#5|) (EQ (select elems |::buffer|) |_string_\377|)))
+(IMPLIES (EQ |return| 0) (OR (EQ (select elems |str|) |_string_|) (EQ (select elems |str|) |_string_#5|) (EQ (select elems |str|) |_string_\377|)))
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+(OR (EQ |return| 0) (EQ |return| 1))
+(EQ (select elems |str|) (select elems |__orig__str|))
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.is_comment(token;)int:::ENTER
+(NEQ (hash |ident|) null)
+(OR (EQ (select elems |ident|) |_string_|) (EQ (select elems |ident|) |_string_#5|) (EQ (select elems |ident|) |_string_\377|))
+(NEQ (hash |::buffer|) null)
+(OR (EQ (select elems |::buffer|) |_string_|) (EQ (select elems |::buffer|) |_string_#5|) (EQ (select elems |::buffer|) |_string_\377|))
+===========================================================================
+std.is_comment(token;)int:::EXIT35
+===========================================================================
+std.is_comment(token;)int:::EXIT
+(EQ (hash |ident|) (hash |__orig__ident|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(NEQ (hash |ident|) null)
+(OR (EQ (select elems |ident|) |_string_|) (EQ (select elems |ident|) |_string_#5|) (EQ (select elems |ident|) |_string_\377|))
+(NEQ (hash |::buffer|) null)
+(OR (EQ (select elems |::buffer|) |_string_|) (EQ (select elems |::buffer|) |_string_#5|) (EQ (select elems |::buffer|) |_string_\377|))
+(EQ |return| 0)
+(EQ (select elems |ident|) (select elems |__orig__ident|))
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.is_eof_token(token;)int:::ENTER
+(NEQ (hash |tok|) null)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.is_eof_token(token;)int:::EXIT32
+(EQ (select elems |tok|) |_string_\377|)
+(EQ |return| 1)
+(>= (select elems |tok|) (select elems |::buffer|))
+===========================================================================
+std.is_eof_token(token;)int:::EXIT33
+(EQ |return| 0)
+===========================================================================
+std.is_eof_token(token;)int:::EXIT
+(EQ (hash |tok|) (hash |__orig__tok|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(IMPLIES (EQ |return| 1) (EQ (select elems |tok|) |_string_\377|))
+(IMPLIES (EQ |return| 1) (>= (select elems |tok|) (select elems |::buffer|)))
+(NEQ (hash |tok|) null)
+(NEQ (hash |::buffer|) null)
+(OR (EQ |return| 0) (EQ |return| 1))
+(EQ (select elems |tok|) (select elems |__orig__tok|))
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.is_identifier(token;)int:::ENTER
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.is_identifier(token;)int:::EXIT47
+(EQ |return| 1)
+===========================================================================
+std.is_identifier(token;)int:::EXIT48
+(EQ |return| 0)
+===========================================================================
+std.is_identifier(token;)int:::EXIT
+(EQ (hash |str|) (hash |__orig__str|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+(OR (EQ |return| 0) (EQ |return| 1))
+(EQ (select elems |str|) (select elems |__orig__str|))
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.is_keyword(token;)int:::ENTER
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.is_keyword(token;)int:::EXIT36
+(EQ |return| 1)
+===========================================================================
+std.is_keyword(token;)int:::EXIT37
+(EQ |return| 0)
+===========================================================================
+std.is_keyword(token;)int:::EXIT
+(EQ (hash |str|) (hash |__orig__str|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+(OR (EQ |return| 0) (EQ |return| 1))
+(EQ (select elems |str|) (select elems |__orig__str|))
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.is_num_constant(token;)int:::ENTER
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.is_num_constant(token;)int:::EXIT41
+(EQ |return| 1)
+===========================================================================
+std.is_num_constant(token;)int:::EXIT42
+(EQ |return| 0)
+===========================================================================
+std.is_num_constant(token;)int:::EXIT
+(EQ (hash |str|) (hash |__orig__str|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+(OR (EQ |return| 0) (EQ |return| 1))
+(EQ (select elems |str|) (select elems |__orig__str|))
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.is_spec_symbol(token;)int:::ENTER
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT57
+(EQ (select elems |str|) |_string_(|)
+(OR (EQ (select elems |::buffer|) |_string_|) (EQ (select elems |::buffer|) |_string_(|))
+(EQ |return| 1)
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT58
+(EQ (select elems |str|) |_string_)|)
+(OR (EQ (select elems |::buffer|) |_string_|) (EQ (select elems |::buffer|) |_string_)|))
+(EQ |return| 1)
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT59
+(EQ (select elems |str|) |_string_[|)
+(OR (EQ (select elems |::buffer|) |_string_|) (EQ (select elems |::buffer|) |_string_[|))
+(EQ |return| 1)
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT60
+(EQ (select elems |str|) |_string_]|)
+(OR (EQ (select elems |::buffer|) |_string_|) (EQ (select elems |::buffer|) |_string_]|))
+(EQ |return| 1)
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT61
+(EQ (select elems |str|) |_string_'|)
+(OR (EQ (select elems |::buffer|) |_string_|) (EQ (select elems |::buffer|) |_string_'|))
+(EQ |return| 1)
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT62
+(EQ (select elems |str|) |_string_`|)
+(OR (EQ (select elems |::buffer|) |_string_|) (EQ (select elems |::buffer|) |_string_`|))
+(EQ |return| 1)
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT63
+(EQ (select elems |str|) |_string_,|)
+(OR (EQ (select elems |::buffer|) |_string_|) (EQ (select elems |::buffer|) |_string_,|))
+(EQ |return| 1)
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT64
+(EQ |return| 0)
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT
+(EQ (hash |str|) (hash |__orig__str|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+(OR (EQ |return| 0) (EQ |return| 1))
+(EQ (select elems |str|) (select elems |__orig__str|))
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.is_str_constant(token;)int:::ENTER
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.is_str_constant(token;)int:::EXIT43
+(EQ |return| 1)
+===========================================================================
+std.is_str_constant(token;)int:::EXIT45
+(EQ |return| 0)
+===========================================================================
+std.is_str_constant(token;)int:::EXIT
+(EQ (hash |str|) (hash |__orig__str|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+(OR (EQ |return| 0) (EQ |return| 1))
+(EQ (select elems |str|) (select elems |__orig__str|))
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.is_token_end(int;char;)int:::ENTER
+(OR (EQ |str_com_id| 0) (EQ |str_com_id| 1))
+(NEQ |ch| 0)
+(>= |ch| -1)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT14
+(EQ |str_com_id| 0)
+(EQ |ch| -1)
+(EQ |return| 1)
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT15
+(EQ |str_com_id| 1)
+(EQ |ch| 34)
+(EQ |return| 1)
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT16
+(EQ |str_com_id| 1)
+(EQ |return| 0)
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT19
+(EQ |str_com_id| 0)
+(EQ (select elems |::buffer|) |_string_|)
+(EQ |return| 1)
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT20
+(EQ |str_com_id| 0)
+(EQ |ch| 32)
+(EQ (select elems |::buffer|) |_string_|)
+(EQ |return| 1)
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT21
+(EQ |str_com_id| 0)
+(EQ |return| 0)
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT
+(EQ |str_com_id| |__orig__str_com_id|)
+(EQ |ch| |__orig__ch|)
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(OR (EQ |str_com_id| 0) (EQ |str_com_id| 1))
+(NEQ |ch| 0)
+(>= |ch| -1)
+(NEQ (hash |::buffer|) null)
+(OR (EQ |return| 0) (EQ |return| 1))
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.open_character_stream(char *;)character_stream:::ENTER
+(EQ (hash |fname|) null)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.open_character_stream(char *;)character_stream:::EXIT
+(EQ (hash |fname|) (hash |__orig__fname|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(EQ (hash |fname|) null)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.open_token_stream(char *;)token_stream:::ENTER
+(NEQ (hash |fname|) null)
+(EQ (select elems |fname|) |_string_|)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.open_token_stream(char *;)token_stream:::EXIT
+(EQ (hash |fname|) (hash |__orig__fname|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(NEQ (hash |fname|) null)
+(EQ (select elems |fname|) |_string_|)
+(NEQ (hash |::buffer|) null)
+(EQ (select elems |fname|) (select elems |__orig__fname|))
+===========================================================================
+std.print_spec_symbol(token;)void:::ENTER
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT50
+(EQ (select elems |str|) |_string_(|)
+(EQ (select elems |::buffer|) |_string_(|)
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT51
+(EQ (select elems |str|) |_string_)|)
+(EQ (select elems |::buffer|) |_string_)|)
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT52
+(EQ (select elems |str|) |_string_[|)
+(EQ (select elems |::buffer|) |_string_[|)
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT53
+(EQ (select elems |str|) |_string_]|)
+(EQ (select elems |::buffer|) |_string_]|)
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT54
+(EQ (select elems |str|) |_string_'|)
+(EQ (select elems |::buffer|) |_string_'|)
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT55
+(EQ (select elems |str|) |_string_`|)
+(EQ (select elems |::buffer|) |_string_`|)
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT56
+(EQ (select elems |str|) |_string_,|)
+(EQ (select elems |::buffer|) |_string_,|)
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT
+(EQ (hash |str|) (hash |__orig__str|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(NEQ (hash |str|) null)
+(NEQ (hash |::buffer|) null)
+(EQ (select elems |str|) (select elems |__orig__str|))
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.print_token(token;)int:::ENTER
+(EQ (hash |tok|) (hash |::buffer|))
+(NEQ (hash |tok|) null)
+(EQ (select elems |tok|) (select elems |::buffer|))
+===========================================================================
+std.print_token(token;)int:::EXIT
+(EQ (hash |::buffer|) (hash |__orig__tok|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(NEQ (hash |tok|) null)
+(NEQ (hash |::buffer|) null)
+(>= (select elems |tok|) (select elems |::buffer|))
+(EQ (select elems |::buffer|) (select elems |__orig__tok|))
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.token_type(token;)int:::ENTER
+(NEQ (hash |tok|) null)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.token_type(token;)int:::EXIT22
+(EQ |return| 1)
+===========================================================================
+std.token_type(token;)int:::EXIT23
+(EQ |return| 2)
+===========================================================================
+std.token_type(token;)int:::EXIT24
+(EQ |return| 3)
+===========================================================================
+std.token_type(token;)int:::EXIT25
+(EQ |return| 41)
+===========================================================================
+std.token_type(token;)int:::EXIT26
+(EQ |return| 42)
+===========================================================================
+std.token_type(token;)int:::EXIT27
+(EQ |return| 43)
+===========================================================================
+std.token_type(token;)int:::EXIT29
+(EQ (select elems |tok|) |_string_\377|)
+(EQ (select elems |::buffer|) |_string_\377|)
+(EQ |return| 6)
+===========================================================================
+std.token_type(token;)int:::EXIT30
+(OR (EQ (select elems |tok|) |_string_|) (EQ (select elems |tok|) |_string_#5|))
+(OR (EQ (select elems |::buffer|) |_string_|) (EQ (select elems |::buffer|) |_string_#5|))
+(EQ |return| 0)
+===========================================================================
+std.token_type(token;)int:::EXIT
+(EQ (hash |tok|) (hash |__orig__tok|))
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(NEQ (hash |tok|) null)
+(NEQ (hash |::buffer|) null)
+(>= |return| 0)
+(EQ (select elems |tok|) (select elems |__orig__tok|))
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.unget_char(char;character_stream;)char:::ENTER
+(NEQ |ch| 0)
+(>= |ch| -1)
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.unget_char(char;character_stream;)char:::EXIT4
+(EQ |ch| -1)
+===========================================================================
+std.unget_char(char;character_stream;)char:::EXIT5
+(EQ (select elems |::buffer|) |_string_|)
+===========================================================================
+std.unget_char(char;character_stream;)char:::EXIT
+(EQ |ch| |return|)
+(EQ |ch| |__orig__ch|)
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(IMPLIES (>= |ch| 39) (EQ (select elems |::buffer|) |_string_|))
+(NEQ |ch| 0)
+(>= |ch| -1)
+(NEQ (hash |::buffer|) null)
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))
+===========================================================================
+std.unget_error(token_stream;)int:::ENTER
+(NEQ (hash |::buffer|) null)
+===========================================================================
+std.unget_error(token_stream;)int:::EXIT
+(EQ (hash |::buffer|) (hash |__orig__::buffer|))
+(NEQ (hash |::buffer|) null)
+(EQ (select elems |::buffer|) (select elems |__orig__::buffer|))

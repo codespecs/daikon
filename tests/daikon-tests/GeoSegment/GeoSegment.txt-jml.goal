@@ -1,0 +1,364 @@
+===========================================================================
+MapQuick1.GeoPoint:::CLASS
+    Variables: MapQuick1.GeoPoint.REP_SCALE_FACTOR
+===========================================================================
+MapQuick1.GeoPoint:::OBJECT
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude
+this.latitude > this.longitude
+===========================================================================
+MapQuick1.GeoPoint.GeoPoint(int, int):::ENTER
+    Variables: latitude longitude
+latitude  isPointer
+longitude  isPointer
+latitude > longitude
+===========================================================================
+MapQuick1.GeoPoint.GeoPoint(int, int):::EXIT
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude latitude longitude orig(latitude) orig(longitude)
+this.latitude == \old(latitude)
+this.longitude == \old(longitude)
+this.latitude  isPointer
+this.longitude  isPointer
+===========================================================================
+MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::ENTER
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude gp gp.latitude gp.longitude
+this.latitude  isPointer
+this.longitude  isPointer
+gp != null
+gp.latitude  isPointer
+gp.longitude  isPointer
+this.latitude > gp.longitude
+this.longitude < gp.latitude
+gp.latitude > gp.longitude
+===========================================================================
+MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::EXIT
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude gp gp.latitude gp.longitude return orig(this) orig(this.latitude) orig(this.longitude) orig(gp) orig(gp.latitude) orig(gp.longitude)
+this.latitude == \old(this.latitude)
+this.longitude == \old(this.longitude)
+gp.latitude == \old(gp.latitude)
+gp.longitude == \old(gp.longitude)
+this.latitude  isPointer
+this.longitude  isPointer
+gp.latitude  isPointer
+gp.longitude  isPointer
+daikon.Quant.fuzzy.gt(MapQuick1.GeoPoint.REP_SCALE_FACTOR, \result)
+this.latitude > gp.longitude
+this.longitude < gp.latitude
+gp.latitude > gp.longitude
+===========================================================================
+MapQuick1.GeoPoint.equals(java.lang.Object):::ENTER
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude o o.getClass()
+o != null
+o.getClass() == MapQuick1.GeoPoint.class
+===========================================================================
+MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT69
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude o o.getClass() return orig(this) orig(this.latitude) orig(this.longitude) orig(o) orig(o.getClass())
+===========================================================================
+MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude o o.getClass() return orig(this) orig(this.latitude) orig(this.longitude) orig(o) orig(o.getClass())
+this.latitude == \old(this.latitude)
+this.longitude == \old(this.longitude)
+===========================================================================
+MapQuick1.GeoPoint.hashCode():::ENTER
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude
+this.latitude  isPointer
+this.longitude  isPointer
+===========================================================================
+MapQuick1.GeoPoint.hashCode():::EXIT
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude return orig(this) orig(this.latitude) orig(this.longitude)
+this.latitude == \old(this.latitude)
+this.longitude == \old(this.longitude)
+this.latitude  isPointer
+this.longitude  isPointer
+\result  isPointer
+this.latitude < \result
+this.longitude < \result
+7 * this.latitude + 41 * this.longitude - \result + 4.294967296E9 == 0
+===========================================================================
+MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::ENTER
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude gp gp.latitude gp.longitude
+this.latitude  isPointer
+this.longitude  isPointer
+gp != null
+gp.latitude  isPointer
+gp.longitude  isPointer
+this.latitude != gp.latitude
+this.latitude > gp.longitude
+this.longitude < gp.latitude
+this.longitude != gp.longitude
+gp.latitude > gp.longitude
+===========================================================================
+MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::EXIT
+    Variables: this MapQuick1.GeoPoint.REP_SCALE_FACTOR this.latitude this.longitude gp gp.latitude gp.longitude return orig(this) orig(this.latitude) orig(this.longitude) orig(gp) orig(gp.latitude) orig(gp.longitude)
+this.latitude == \old(this.latitude)
+this.longitude == \old(this.longitude)
+gp.latitude == \old(gp.latitude)
+gp.longitude == \old(gp.longitude)
+this.latitude  isPointer
+this.longitude  isPointer
+gp.latitude  isPointer
+gp.longitude  isPointer
+daikon.Quant.fuzzy.gt(MapQuick1.GeoPoint.REP_SCALE_FACTOR, \result)
+this.latitude != gp.latitude
+this.latitude > gp.longitude
+this.longitude < gp.latitude
+this.longitude != gp.longitude
+gp.latitude > gp.longitude
+===========================================================================
+MapQuick1.GeoSegment:::OBJECT
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude
+this.name != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: this.name.toString is printable
+this.p1 != null
+this.p2 != null
+this.p1.latitude > this.p1.longitude
+this.p1.latitude > this.p2.longitude
+this.p1.longitude < this.p2.latitude
+this.p2.latitude > this.p2.longitude
+===========================================================================
+MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::ENTER
+    Variables: name name.toString p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR p1.latitude p1.longitude p2 p2.latitude p2.longitude
+name != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: name.toString is printable
+p1 != null
+p1.latitude  isPointer
+p1.longitude  isPointer
+p2 != null
+p2.latitude  isPointer
+p2.longitude  isPointer
+p1.latitude > p1.longitude
+p1.latitude > p2.longitude
+p1.longitude < p2.latitude
+p2.latitude > p2.longitude
+===========================================================================
+MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::EXIT
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude name name.toString p1 p1.latitude p1.longitude p2 p2.latitude p2.longitude orig(name) orig(name.toString) orig(p1) orig(p1.latitude) orig(p1.longitude) orig(p2) orig(p2.latitude) orig(p2.longitude)
+this.name == \old(name)
+this.p1 == \old(p1)
+this.p1.latitude == p1.latitude
+this.p1.longitude == p1.longitude
+this.p2 == \old(p2)
+this.p2.latitude == p2.latitude
+this.p2.longitude == p2.longitude
+p1.latitude == \old(p1.latitude)
+p1.longitude == \old(p1.longitude)
+p2.latitude == \old(p2.latitude)
+p2.longitude == \old(p2.longitude)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: name.toString is printable
+p1.latitude  isPointer
+p1.longitude  isPointer
+p2.latitude  isPointer
+p2.longitude  isPointer
+this.name.toString().equals(name.toString())
+name.toString().equals(\old(name.toString()))
+p1.latitude > p1.longitude
+p1.latitude > p2.longitude
+p1.longitude < p2.latitude
+p2.latitude > p2.longitude
+===========================================================================
+MapQuick1.GeoSegment.equals(java.lang.Object):::ENTER
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude o o.getClass()
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+o != null
+o.getClass() == MapQuick1.GeoSegment.class
+this.p1.latitude != this.p2.latitude
+this.p1.longitude != this.p2.longitude
+===========================================================================
+MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT135
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude o o.getClass() return orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude) orig(o) orig(o.getClass())
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+===========================================================================
+MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude o o.getClass() return orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude) orig(o) orig(o.getClass())
+this.name == \old(this.name)
+this.p1 == \old(this.p1)
+this.p1.latitude == \old(this.p1.latitude)
+this.p1.longitude == \old(this.p1.longitude)
+this.p2 == \old(this.p2)
+this.p2.latitude == \old(this.p2.latitude)
+this.p2.longitude == \old(this.p2.longitude)
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+\result == false
+this.name.toString().equals(\old(this.name.toString()))
+this.p1.latitude != this.p2.latitude
+this.p1.longitude != this.p2.longitude
+===========================================================================
+MapQuick1.GeoSegment.hashCode():::ENTER
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+===========================================================================
+MapQuick1.GeoSegment.hashCode():::EXIT
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude return orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude)
+this.name == \old(this.name)
+this.p1 == \old(this.p1)
+this.p1.latitude == \old(this.p1.latitude)
+this.p1.longitude == \old(this.p1.longitude)
+this.p2 == \old(this.p2)
+this.p2.latitude == \old(this.p2.latitude)
+this.p2.longitude == \old(this.p2.longitude)
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+\result  isPointer
+\result != 0
+this.name.toString().equals(\old(this.name.toString()))
+this.p1.latitude != \result
+this.p1.longitude != \result
+this.p2.latitude != \result
+this.p2.longitude != \result
+===========================================================================
+MapQuick1.GeoSegment.heading():::ENTER
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+this.p1.latitude != this.p2.latitude
+this.p1.longitude != this.p2.longitude
+===========================================================================
+MapQuick1.GeoSegment.heading():::EXIT
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude return orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude)
+this.name == \old(this.name)
+this.p1 == \old(this.p1)
+this.p1.latitude == \old(this.p1.latitude)
+this.p1.longitude == \old(this.p1.longitude)
+this.p2 == \old(this.p2)
+this.p2.latitude == \old(this.p2.latitude)
+this.p2.longitude == \old(this.p2.longitude)
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+this.name.toString().equals(\old(this.name.toString()))
+daikon.Quant.fuzzy.gt(MapQuick1.GeoPoint.REP_SCALE_FACTOR, \result)
+this.p1.latitude != this.p2.latitude
+this.p1.longitude != this.p2.longitude
+===========================================================================
+MapQuick1.GeoSegment.length():::ENTER
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+this.p1.longitude != this.p2.longitude
+===========================================================================
+MapQuick1.GeoSegment.length():::EXIT
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude return orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude)
+this.name == \old(this.name)
+this.p1 == \old(this.p1)
+this.p1.latitude == \old(this.p1.latitude)
+this.p1.longitude == \old(this.p1.longitude)
+this.p2 == \old(this.p2)
+this.p2.latitude == \old(this.p2.latitude)
+this.p2.longitude == \old(this.p2.longitude)
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+this.name.toString().equals(\old(this.name.toString()))
+daikon.Quant.fuzzy.gt(MapQuick1.GeoPoint.REP_SCALE_FACTOR, \result)
+this.p1.longitude != this.p2.longitude
+===========================================================================
+MapQuick1.GeoSegment.name():::ENTER
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+this.p1.latitude != this.p2.latitude
+this.p1.longitude != this.p2.longitude
+===========================================================================
+MapQuick1.GeoSegment.name():::EXIT
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude return return.toString orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude)
+this.name == \result
+this.p1 == \old(this.p1)
+this.p1.latitude == \old(this.p1.latitude)
+this.p1.longitude == \old(this.p1.longitude)
+this.p2 == \old(this.p2)
+this.p2.latitude == \old(this.p2.latitude)
+this.p2.longitude == \old(this.p2.longitude)
+\result == \old(this.name)
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+\result != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: return.toString is printable
+this.name.toString().equals(\result.toString())
+this.p1.latitude != this.p2.latitude
+this.p1.longitude != this.p2.longitude
+\result.toString().equals(\old(this.name.toString()))
+===========================================================================
+MapQuick1.GeoSegment.p1():::ENTER
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+this.p1.latitude != this.p2.latitude
+this.p1.longitude != this.p2.longitude
+===========================================================================
+MapQuick1.GeoSegment.p1():::EXIT
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude return return.latitude return.longitude orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude)
+this.name == \old(this.name)
+this.p1 == \result
+this.p1.latitude == \result.latitude
+this.p1.longitude == \result.longitude
+this.p2 == \old(this.p2)
+this.p2.latitude == \old(this.p2.latitude)
+this.p2.longitude == \old(this.p2.longitude)
+\result == \old(this.p1)
+\result.latitude == \old(this.p1.latitude)
+\result.longitude == \old(this.p1.longitude)
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+\result != null
+\result.latitude  isPointer
+\result.longitude  isPointer
+this.name.toString().equals(\old(this.name.toString()))
+this.p2.latitude != \result.latitude
+this.p2.latitude > \result.longitude
+this.p2.longitude < \result.latitude
+this.p2.longitude != \result.longitude
+\result.latitude > \result.longitude
+===========================================================================
+MapQuick1.GeoSegment.p2():::ENTER
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+this.p2.latitude  isPointer
+this.p2.longitude  isPointer
+===========================================================================
+MapQuick1.GeoSegment.p2():::EXIT
+    Variables: this this.name this.name.toString this.p1 MapQuick1.GeoPoint.REP_SCALE_FACTOR this.p1.latitude this.p1.longitude this.p2 this.p2.latitude this.p2.longitude return return.latitude return.longitude orig(this) orig(this.name) orig(this.name.toString) orig(this.p1) orig(this.p1.latitude) orig(this.p1.longitude) orig(this.p2) orig(this.p2.latitude) orig(this.p2.longitude)
+this.name == \old(this.name)
+this.p1 == \old(this.p1)
+this.p1.latitude == \old(this.p1.latitude)
+this.p1.longitude == \old(this.p1.longitude)
+this.p2 == \result
+this.p2.latitude == \result.latitude
+this.p2.longitude == \result.longitude
+\result == \old(this.p2)
+\result.latitude == \old(this.p2.latitude)
+\result.longitude == \old(this.p2.longitude)
+this.p1.latitude  isPointer
+this.p1.longitude  isPointer
+\result != null
+\result.latitude  isPointer
+\result.longitude  isPointer
+this.name.toString().equals(\old(this.name.toString()))
+this.p1.latitude > \result.longitude
+this.p1.longitude < \result.latitude
+\result.latitude > \result.longitude

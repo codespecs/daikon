@@ -1,0 +1,40 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..getVar():::ENTER
+  ppt-type enter
+  variable ::var3
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..getVar():::EXIT0
+  ppt-type subexit
+  variable ::var3
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::var3
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::var3
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+

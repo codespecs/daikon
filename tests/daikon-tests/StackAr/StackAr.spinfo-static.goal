@@ -1,0 +1,30 @@
+REPLACE
+isEmpty()
+topOfStack == -1
+isFull()
+topOfStack == theArray.length - 1
+
+PPT_NAME DataStructures.StackAr.isEmpty
+orig(topOfStack == -1)
+topOfStack == -1
+
+PPT_NAME DataStructures.StackAr.isFull
+orig(topOfStack == theArray.length - 1)
+topOfStack == theArray.length - 1
+
+PPT_NAME DataStructures.StackAr.pop
+isEmpty()
+orig(isEmpty())
+
+PPT_NAME DataStructures.StackAr.push
+isFull()
+orig(isFull())
+
+PPT_NAME DataStructures.StackAr.top
+isEmpty()
+orig(isEmpty())
+
+PPT_NAME DataStructures.StackAr.topAndPop
+isEmpty()
+orig(isEmpty())
+

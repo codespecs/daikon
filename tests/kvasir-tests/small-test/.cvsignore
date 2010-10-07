@@ -1,0 +1,3 @@
+ran-kvasir small-test small-test.decls.diff small-test.dtrace.diff small-test.invs.diff small-test.out small-test.out.diff
+*.counts *.counts.diff
+small-test.comp small-test.comp.diff

@@ -1,0 +1,6 @@
+
+Everthing proves.
+
+TODO: I'm unsure about how many are redundant, or if we could express
+additional ones.
+

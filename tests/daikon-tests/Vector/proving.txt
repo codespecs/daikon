@@ -1,0 +1,4 @@
+
+merge-esc.pl: copyInto didn't merge
+
+merge-esc.pl: protected fields didn't spec_public (nor get an owner)

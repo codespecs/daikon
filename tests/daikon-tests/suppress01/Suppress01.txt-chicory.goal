@@ -1,0 +1,1414 @@
+// Declarations for misc.Suppress01
+// Declarations written Thu Oct 15 13:12:06 EDT 2009
+
+decl-version 2.0
+var-comparability none
+
+ppt misc.Suppress01.main(java.lang.String[]):::ENTER
+ppt-type enter
+  variable args
+    var-kind variable 
+    dec-type java.lang.String[]
+    rep-type hashcode
+    flags is_param
+    comparability 22
+  variable args.getClass()
+    var-kind function getClass()
+    enclosing-var args
+    dec-type java.lang.Class
+    rep-type java.lang.String
+    flags synthetic classname
+    comparability 22
+  variable args[..]
+    var-kind array 
+    enclosing-var args
+    array 1
+    dec-type java.lang.String[]
+    rep-type hashcode[]
+    comparability 22
+  variable args[..].toString
+    var-kind function toString()
+    enclosing-var args[..]
+    array 1
+    dec-type java.lang.String[]
+    rep-type java.lang.String[]
+    flags synthetic to_string
+    comparability 22
+
+ppt misc.Suppress01.main(java.lang.String[]):::EXIT24
+ppt-type subexit
+  variable args
+    var-kind variable 
+    dec-type java.lang.String[]
+    rep-type hashcode
+    flags is_param
+    comparability 22
+  variable args.getClass()
+    var-kind function getClass()
+    enclosing-var args
+    dec-type java.lang.Class
+    rep-type java.lang.String
+    flags synthetic classname
+    comparability 22
+  variable args[..]
+    var-kind array 
+    enclosing-var args
+    array 1
+    dec-type java.lang.String[]
+    rep-type hashcode[]
+    comparability 22
+  variable args[..].toString
+    var-kind function toString()
+    enclosing-var args[..]
+    array 1
+    dec-type java.lang.String[]
+    rep-type java.lang.String[]
+    flags synthetic to_string
+    comparability 22
+
+ppt misc.Suppress01.f():::ENTER
+ppt-type enter
+parent parent misc.Suppress01:::OBJECT 1
+  variable this
+    var-kind variable 
+    dec-type misc.Suppress01
+    rep-type hashcode
+    flags is_param
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.theArray
+    var-kind field theArray
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.theArray[..]
+    var-kind array 
+    enclosing-var this.theArray
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.theArray2
+    var-kind field theArray2
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.theArray2[..]
+    var-kind array 
+    enclosing-var this.theArray2
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.b
+    var-kind field b
+    enclosing-var this
+    dec-type int
+    rep-type int
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+
+ppt misc.Suppress01.f():::EXIT35
+ppt-type subexit
+parent parent misc.Suppress01:::OBJECT 1
+  variable this
+    var-kind variable 
+    dec-type misc.Suppress01
+    rep-type hashcode
+    flags is_param
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.theArray
+    var-kind field theArray
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.theArray[..]
+    var-kind array 
+    enclosing-var this.theArray
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.theArray2
+    var-kind field theArray2
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.theArray2[..]
+    var-kind array 
+    enclosing-var this.theArray2
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.b
+    var-kind field b
+    enclosing-var this
+    dec-type int
+    rep-type int
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+
+ppt misc.Suppress01.Suppress01():::ENTER
+ppt-type enter
+
+ppt misc.Suppress01.Suppress01():::EXIT43
+ppt-type subexit
+parent parent misc.Suppress01:::OBJECT 1
+  variable this
+    var-kind variable 
+    dec-type misc.Suppress01
+    rep-type hashcode
+    flags is_param
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.theArray
+    var-kind field theArray
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.theArray[..]
+    var-kind array 
+    enclosing-var this.theArray
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.theArray2
+    var-kind field theArray2
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.theArray2[..]
+    var-kind array 
+    enclosing-var this.theArray2
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+  variable this.b
+    var-kind field b
+    enclosing-var this
+    dec-type int
+    rep-type int
+    comparability 22
+    parent misc.Suppress01:::OBJECT 1
+
+ppt misc.Suppress01:::OBJECT
+ppt-type object
+  variable this
+    var-kind variable 
+    dec-type misc.Suppress01
+    rep-type hashcode
+    flags is_param
+    comparability 22
+  variable this.theArray
+    var-kind field theArray
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+  variable this.theArray[..]
+    var-kind array 
+    enclosing-var this.theArray
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 22
+  variable this.theArray2
+    var-kind field theArray2
+    enclosing-var this
+    dec-type int[]
+    rep-type hashcode
+    comparability 22
+  variable this.theArray2[..]
+    var-kind array 
+    enclosing-var this.theArray2
+    array 1
+    dec-type int[]
+    rep-type int[]
+    comparability 22
+  variable this.b
+    var-kind field b
+    enclosing-var this
+    dec-type int
+    rep-type int
+    comparability 22
+
+misc.Suppress01.main(java.lang.String[]):::ENTER
+this_invocation_nonce
+0
+args
+27891041
+1
+args.getClass()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+
+misc.Suppress01.Suppress01():::ENTER
+this_invocation_nonce
+1
+
+misc.Suppress01.Suppress01():::EXIT43
+this_invocation_nonce
+1
+this
+9319143
+1
+this.theArray
+751354
+1
+this.theArray[..]
+[0]
+1
+this.theArray2
+2352593
+1
+this.theArray2[..]
+[0 1]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+2
+this
+9319143
+1
+this.theArray
+751354
+1
+this.theArray[..]
+[0]
+1
+this.theArray2
+2352593
+1
+this.theArray2[..]
+[0 1]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+2
+this
+9319143
+1
+this.theArray
+18751079
+1
+this.theArray[..]
+[0 0]
+1
+this.theArray2
+22323092
+1
+this.theArray2[..]
+[0 1 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+3
+this
+9319143
+1
+this.theArray
+18751079
+1
+this.theArray[..]
+[0 0]
+1
+this.theArray2
+22323092
+1
+this.theArray2[..]
+[0 1 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+3
+this
+9319143
+1
+this.theArray
+12110054
+1
+this.theArray[..]
+[0 1 0]
+1
+this.theArray2
+26056784
+1
+this.theArray2[..]
+[0 1 2 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+4
+this
+9319143
+1
+this.theArray
+12110054
+1
+this.theArray[..]
+[0 1 0]
+1
+this.theArray2
+26056784
+1
+this.theArray2[..]
+[0 1 2 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+4
+this
+9319143
+1
+this.theArray
+24569170
+1
+this.theArray[..]
+[0 1 2 0]
+1
+this.theArray2
+13205705
+1
+this.theArray2[..]
+[0 1 2 3 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+5
+this
+9319143
+1
+this.theArray
+24569170
+1
+this.theArray[..]
+[0 1 2 0]
+1
+this.theArray2
+13205705
+1
+this.theArray2[..]
+[0 1 2 3 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+5
+this
+9319143
+1
+this.theArray
+2628939
+1
+this.theArray[..]
+[0 1 2 3 0]
+1
+this.theArray2
+26956311
+1
+this.theArray2[..]
+[0 1 2 3 4 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+6
+this
+9319143
+1
+this.theArray
+2628939
+1
+this.theArray[..]
+[0 1 2 3 0]
+1
+this.theArray2
+26956311
+1
+this.theArray2[..]
+[0 1 2 3 4 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+6
+this
+9319143
+1
+this.theArray
+2780950
+1
+this.theArray[..]
+[0 1 2 3 4 0]
+1
+this.theArray2
+31658378
+1
+this.theArray2[..]
+[0 1 2 3 4 5 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+7
+this
+9319143
+1
+this.theArray
+2780950
+1
+this.theArray[..]
+[0 1 2 3 4 0]
+1
+this.theArray2
+31658378
+1
+this.theArray2[..]
+[0 1 2 3 4 5 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+7
+this
+9319143
+1
+this.theArray
+9734221
+1
+this.theArray[..]
+[0 1 2 3 4 5 0]
+1
+this.theArray2
+25197736
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+8
+this
+9319143
+1
+this.theArray
+9734221
+1
+this.theArray[..]
+[0 1 2 3 4 5 0]
+1
+this.theArray2
+25197736
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+8
+this
+9319143
+1
+this.theArray
+7866553
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 0]
+1
+this.theArray2
+8706595
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+9
+this
+9319143
+1
+this.theArray
+7866553
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 0]
+1
+this.theArray2
+8706595
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+9
+this
+9319143
+1
+this.theArray
+867695
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 0]
+1
+this.theArray2
+20727434
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+10
+this
+9319143
+1
+this.theArray
+867695
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 0]
+1
+this.theArray2
+20727434
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+10
+this
+9319143
+1
+this.theArray
+3874052
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 0]
+1
+this.theArray2
+15606519
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+11
+this
+9319143
+1
+this.theArray
+3874052
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 0]
+1
+this.theArray2
+15606519
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+11
+this
+9319143
+1
+this.theArray
+3779465
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 0]
+1
+this.theArray2
+2929821
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+12
+this
+9319143
+1
+this.theArray
+3779465
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 0]
+1
+this.theArray2
+2929821
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+12
+this
+9319143
+1
+this.theArray
+13328393
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 0]
+1
+this.theArray2
+927929
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+13
+this
+9319143
+1
+this.theArray
+13328393
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 0]
+1
+this.theArray2
+927929
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+13
+this
+9319143
+1
+this.theArray
+26453615
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 0]
+1
+this.theArray2
+9688764
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+14
+this
+9319143
+1
+this.theArray
+26453615
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 0]
+1
+this.theArray2
+9688764
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+14
+this
+9319143
+1
+this.theArray
+32956236
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 0]
+1
+this.theArray2
+12455463
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+15
+this
+9319143
+1
+this.theArray
+32956236
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 0]
+1
+this.theArray2
+12455463
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+15
+this
+9319143
+1
+this.theArray
+26425437
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 0]
+1
+this.theArray2
+5862378
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+16
+this
+9319143
+1
+this.theArray
+26425437
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 0]
+1
+this.theArray2
+5862378
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+16
+this
+9319143
+1
+this.theArray
+13177628
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 0]
+1
+this.theArray2
+22172629
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+17
+this
+9319143
+1
+this.theArray
+13177628
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 0]
+1
+this.theArray2
+22172629
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+17
+this
+9319143
+1
+this.theArray
+33414193
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0]
+1
+this.theArray2
+25383554
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+18
+this
+9319143
+1
+this.theArray
+33414193
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 0]
+1
+this.theArray2
+25383554
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+18
+this
+9319143
+1
+this.theArray
+10351444
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 0]
+1
+this.theArray2
+30549415
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+19
+this
+9319143
+1
+this.theArray
+10351444
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 0]
+1
+this.theArray2
+30549415
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+19
+this
+9319143
+1
+this.theArray
+27667505
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 0]
+1
+this.theArray2
+14886914
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+20
+this
+9319143
+1
+this.theArray
+27667505
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 0]
+1
+this.theArray2
+14886914
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+20
+this
+9319143
+1
+this.theArray
+22528701
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 0]
+1
+this.theArray2
+11678224
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+21
+this
+9319143
+1
+this.theArray
+22528701
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 0]
+1
+this.theArray2
+11678224
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+21
+this
+9319143
+1
+this.theArray
+16053322
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 0]
+1
+this.theArray2
+30562042
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+22
+this
+9319143
+1
+this.theArray
+16053322
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 0]
+1
+this.theArray2
+30562042
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+22
+this
+9319143
+1
+this.theArray
+6997089
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 0]
+1
+this.theArray2
+25352765
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+23
+this
+9319143
+1
+this.theArray
+6997089
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 0]
+1
+this.theArray2
+25352765
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+23
+this
+9319143
+1
+this.theArray
+29751107
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 0]
+1
+this.theArray2
+32278793
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+24
+this
+9319143
+1
+this.theArray
+29751107
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 0]
+1
+this.theArray2
+32278793
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+24
+this
+9319143
+1
+this.theArray
+4815156
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 0]
+1
+this.theArray2
+28606871
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+25
+this
+9319143
+1
+this.theArray
+4815156
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 0]
+1
+this.theArray2
+28606871
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+25
+this
+9319143
+1
+this.theArray
+27789929
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 0]
+1
+this.theArray2
+21202114
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::ENTER
+this_invocation_nonce
+26
+this
+9319143
+1
+this.theArray
+27789929
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 0]
+1
+this.theArray2
+21202114
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.f():::EXIT35
+this_invocation_nonce
+26
+this
+9319143
+1
+this.theArray
+29420695
+1
+this.theArray[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 0]
+1
+this.theArray2
+26435810
+1
+this.theArray2[..]
+[0 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 19 20 21 22 23 24 25 0 0]
+1
+this.b
+0
+1
+
+misc.Suppress01.main(java.lang.String[]):::EXIT24
+this_invocation_nonce
+0
+args
+27891041
+1
+args.getClass()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+

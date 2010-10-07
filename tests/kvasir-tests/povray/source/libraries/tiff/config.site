@@ -1,0 +1,174 @@
+# $Header: /cvsroot/osrs/libtiff/config.site,v 1.8 2002/10/11 14:33:49 dron Exp $
+#
+# TIFF Software
+#
+# Copyright (c) 1990-1997 Sam Leffler
+# Copyright (c) 1991-1997 Silicon Graphics, Inc.
+# 
+# Permission to use, copy, modify, distribute, and sell this software and 
+# its documentation for any purpose is hereby granted without fee, provided
+# that (i) the above copyright notices and this permission notice appear in
+# all copies of the software and related documentation, and (ii) the names of
+# Sam Leffler and Silicon Graphics may not be used in any advertising or
+# publicity relating to the software without the specific, prior written
+# permission of Sam Leffler and Silicon Graphics.
+# 
+# THE SOFTWARE IS PROVIDED "AS-IS" AND WITHOUT WARRANTY OF ANY KIND, 
+# EXPRESS, IMPLIED OR OTHERWISE, INCLUDING WITHOUT LIMITATION, ANY 
+# WARRANTY OF MERCHANTABILITY OR FITNESS FOR A PARTICULAR PURPOSE.  
+# 
+# IN NO EVENT SHALL SAM LEFFLER OR SILICON GRAPHICS BE LIABLE FOR
+# ANY SPECIAL, INCIDENTAL, INDIRECT OR CONSEQUENTIAL DAMAGES OF ANY KIND,
+# OR ANY DAMAGES WHATSOEVER RESULTING FROM LOSS OF USE, DATA OR PROFITS,
+# WHETHER OR NOT ADVISED OF THE POSSIBILITY OF DAMAGE, AND ON ANY THEORY OF 
+# LIABILITY, ARISING OUT OF OR IN CONNECTION WITH THE USE OR PERFORMANCE 
+# OF THIS SOFTWARE.
+#
+
+#
+# This file holds site-specific configuration parameters.
+#
+# Nothing is defined in here by default, the definitions
+# commented out below serve as documentation for what you
+# can set in this file or a config.local file.
+#
+# Note that you do not need to set anything here unless you
+# want to override the auto-configuration behaviour and/or
+# interactive prompting done by the configure script.
+#
+
+#
+# Package controls.
+#
+#DSO="auto"			# auto|IRIX|IRIX52 enable DSO support for system
+#JPEG="yes"			# yes|no configure JPEG support (see below)
+#ZIP="yes"			# yes|no configure Deflate support (see below)
+#LIBGL="auto"			# yes|no|auto configure IRIS GL-based tools
+#LIBIMAGE="auto"		# yes|no|auto configure SGI RGB image tools
+#HTML="yes"			# yes|no install HTML documentation
+
+#NONINTERACTIVE=yes		# yes|no Don't ask for confirmation on console
+
+#
+# Directory parameters.
+#
+#DIR_BIN="/usr/local/bin"		# directory for tools
+#DIR_LIB="/usr/local/lib"		# directory for libraries
+#DIR_INC="/usr/local/include"		# directory for include files
+#DIR_MAN="/usr/local/man"		# directory for manual pages
+#DIR_HTML="/var/httpd/htdocs/tiff"	# directory for HTML documentation
+
+#
+# Configuring supporting libraries.
+#
+# The TIFF software makes use of two ancillary packages: the IJG
+# distribution to support the JPEG codec and the zlib distribution
+# to support the Deflate codec.  To setup use of these packages you
+# need to specify where each package's include files are located and
+# where the pre-built library (static archive or DSO) is located.
+# These may be different or the same (as when the package is compiled
+# and referenced directly from the place where the software was
+# loaded and compiled).
+#
+# DIRS_LIBINC is a space-separated list of directories to use for
+# locating include files in these packages.  Note that it should not
+# include -I options as might be passed to the C preprocessor; these
+# are automatically added by the configure script when the Makefiles
+# are generated.
+#
+# DIR_<package>LIB is the pathname of the directory where <package>'s
+# pre-built library may be found; this is used when building a TIFF
+# DSO (on systems where support is present) and when building the
+# programs in the tools directory.  By default the configure script
+# will load the associated library using
+#
+#     -L${DIR_<package>LIB} -l<package>
+#
+# e.g. -L${DIR_JPEGLIB} -ljpeg.  If this is wrong for your system
+# (e.g. your compiler/loader does not support the -L option), then
+# the LIB<package> parameter can be set explicitly to specify the
+# library to use.
+#
+
+#
+# JPEG-specific parameters; used when JPEG support is enabled (see above).
+#
+# JPEG support requires release 5 or later of the IJG code,
+# which you can find on the Internet at ftp.uu.net:/graphics/jpeg/.
+#
+#DIRS_LIBINC="$DIRS_LIBINC ../src/jpeg-6b" # directory for jpeg include files
+#DIR_JPEGLIB=../src/jpeg-6b		# directory for libjpeg
+
+# The following will enable OJPEG support.  Note that a patch libjpeg is
+# required before this can be enabled.  It is also only supported if JPEG is
+# enabled.  
+
+#OJPEG="yes"			        # yes|no configure OJPEG support
+
+#
+# Deflate-specific parameters; used when Deflate support is enabled (see above).
+#
+# NB: Deflate support requires version 0.92 or later of the zlib
+#     library written by Jean-loup Gailly and Mark Adler.  Starting
+#     with about 0.95 the library is called libz.a (previously it was
+#     libgz.a).  The library was last found at
+#
+#        ftp://ftp.uu.net/graphics/png/code/zlib-0.93.tar.gz
+#
+#     Look for it also at ftp://ftp.uu.net/pub/archiving/zip/zlib.
+#
+#DIRS_LIBINC="$DIRS_LIBINC ../zlib"	# directory for zlib include files
+#DIR_GZLIB="../zlib"			# directory for libz
+
+#
+# Miscellaneous parameters.
+#
+#FILLORDER="MS2LSB"			# bit order of cpu (MSB2LSB/LSB2MSB)
+#MANSCHEME="sysv-source-cat-strip"	# manual page installation scheme
+#LARGEFILE="yes"			# support for large (>2GiB) files
+
+#
+# Parameters used when building the software.
+#
+# Note that configure has several ENVOPTS built into it that are
+# set according to the target.  This is done to help naive folks.
+#
+# Beware of changing the INSTALL definition; you *must* have an
+# install script that emulates the Silicon Graphics install program!
+#
+#AR="/bin/ar"				# pathname of suitable ar program
+#AROPTS="rc"				# options to ar for creating archive
+#CC="gcc"				# name/pathname of C compiler
+#CCOMPILER=/opt/ansic/bin/$CC		# path to compiler if not in PATH.
+#ENVOPTS="-Aa"				# options for getting ANSI C
+#GCOPTS="-g"				# options to pass C compiler
+#OPTIMIZER="-O"				# Optimization options for compiler
+#LDFLAGS="-Wl,-O"                       # Special linker flags.
+#LIBPORT='${PORT}/libport.a'		# library with emulation code
+#MACHDEPLIBS="-lm"			# extra libraries for linking
+#PORTFUNCS=""				# non-standard functions to emulate
+#RANLIB=":"				# pathname of suitable ranlib program
+#DSOSUF="so"				# DSO filename suffix
+#LIBCOPTS="-K PIC"			# compiler options for building library
+#TARGET=hppa1.1-hp-hpux11.11            # Force TARGET platform setting.
+#PATH="$PATH:/usr/ccs/bin"		# Modify path for finding compilers,etc
+
+#
+# Makefile construction parameters.
+#
+# These should not normally be set; configure will
+# deduce the appropriate syntax to use for includes.
+#
+#SETMAKE='MAKE	= ${MAKE}'		# define if make does not setup $MAKE
+
+#
+# General system stuff used by the distribution.
+#
+#CHMOD="/etc/chmod"			# pathname of suitable chmod program
+#INSTALL='${SHELL} ${PORT}/install.sh'	# SGI install program/emulator
+#LN="/bin/ln"				# pathname of suitable ln program
+#LN_S="-s"				# option to ${LN} to create symlink
+#MV_F="-f"				# option to ${MV} to force operation
+#SED="/bin/sed"				# pathname of suitable sed program
+#SCRIPT_SH="/bin/sh"			# pathname of suitable shell
+#STRIP="/bin/strip"			# strip program used by install.sh

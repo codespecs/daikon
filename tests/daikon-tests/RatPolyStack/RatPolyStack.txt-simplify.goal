@@ -1,0 +1,168 @@
+===========================================================================
+PolyCalc.Cons:::OBJECT
+(NEQ (hash (select |head| |this|)) null)
+(NEQ (hash (select |head| (select |tail| |this|))) null)
+(NEQ (hash (select |head| (select |tail| (select |tail| |this|)))) null)
+===========================================================================
+PolyCalc.Cons.Cons(PolyCalc.RatPoly, PolyCalc.Cons):::ENTER
+(NEQ (hash |h|) null)
+(NEQ (hash (select |head| |t|)) null)
+(NEQ (hash (select |head| (select |tail| |t|))) null)
+===========================================================================
+PolyCalc.Cons.Cons(PolyCalc.RatPoly, PolyCalc.Cons):::EXIT
+(EQ (hash (select |head| |this|)) (hash |__orig__h|))
+(EQ (hash (select |tail| |this|)) (hash |__orig__t|))
+(EQ (hash (select |head| (select |tail| |this|))) (hash (select |head| |t|)))
+(EQ (hash (select |tail| (select |tail| |this|))) (hash (select |tail| |t|)))
+(EQ (hash (select |head| (select |tail| (select |tail| |this|)))) (hash (select |head| (select |tail| |t|))))
+(EQ (hash (select |tail| (select |tail| (select |tail| |this|)))) (hash (select |tail| (select |tail| |t|))))
+(EQ (hash (select |head| |t|)) (hash (select |head| |__orig__t|)))
+(EQ (hash (select |tail| |t|)) (hash (select |tail| |__orig__t|)))
+(EQ (hash (select |head| (select |tail| |t|))) (hash (select |head| (select |tail| |__orig__t|))))
+(EQ (hash (select |tail| (select |tail| |t|))) (hash (select |tail| (select |tail| |__orig__t|))))
+(NEQ (hash (select |head| |t|)) null)
+(NEQ (hash (select |head| (select |tail| |t|))) null)
+===========================================================================
+PolyCalc.RatPolyStack:::OBJECT
+(NEQ (hash (select |head| (select |polys| |this|))) null)
+(NEQ (hash (select |head| (select |tail| (select |polys| |this|)))) null)
+(>= (select |size| |this|) 0)
+===========================================================================
+PolyCalc.RatPolyStack.RatPolyStack():::EXIT
+(EQ (hash (select |polys| |this|)) null)
+(EQ (select |size| |this|) 0)
+===========================================================================
+PolyCalc.RatPolyStack.add():::ENTER
+(OR (EQ (select |size| |this|) 2) (EQ (select |size| |this|) 3))
+===========================================================================
+PolyCalc.RatPolyStack.add():::EXIT
+(EQ (hash (select |tail| (select |polys| |this|))) (hash (select |tail| (select |tail| (select |polys| |__orig__this|)))))
+(EQ (hash (select |tail| (select |tail| (select |polys| |this|)))) null)
+(OR (EQ (select |size| |this|) 1) (EQ (select |size| |this|) 2))
+===========================================================================
+PolyCalc.RatPolyStack.clear():::ENTER
+(EQ (hash (select |head| (select |polys| |this|))) (hashcode 1002))
+(EQ (select |size| |this|) 3)
+===========================================================================
+PolyCalc.RatPolyStack.clear():::EXIT
+(EQ (hash (select |polys| |this|)) null)
+(EQ (select |size| |this|) 0)
+===========================================================================
+PolyCalc.RatPolyStack.div():::ENTER
+(EQ (hash |this|) (hashcode 1003))
+(OR (EQ (select |size| |this|) 2) (EQ (select |size| |this|) 3) (EQ (select |size| |this|) 4))
+===========================================================================
+PolyCalc.RatPolyStack.div():::EXIT
+(EQ (hash (select |tail| (select |polys| |this|))) (hash (select |tail| (select |tail| (select |polys| |__orig__this|)))))
+(OR (EQ (select |size| |this|) 1) (EQ (select |size| |this|) 2) (EQ (select |size| |this|) 3))
+===========================================================================
+PolyCalc.RatPolyStack.dup():::ENTER
+(OR (EQ (select |size| |this|) 1) (EQ (select |size| |this|) 2) (EQ (select |size| |this|) 3))
+===========================================================================
+PolyCalc.RatPolyStack.dup():::EXIT
+(EQ (hash (select |head| (select |polys| |this|))) (hash (select |head| (select |tail| (select |polys| |this|)))))
+(EQ (hash (select |head| (select |polys| |this|))) (hash (select |head| (select |polys| |__orig__this|))))
+(EQ (hash (select |tail| (select |polys| |this|))) (hash (select |polys| |__orig__this|)))
+(EQ (hash (select |tail| (select |tail| (select |polys| |this|)))) (hash (select |tail| (select |polys| |__orig__this|))))
+(OR (EQ (select |size| |this|) 2) (EQ (select |size| |this|) 3) (EQ (select |size| |this|) 4))
+===========================================================================
+PolyCalc.RatPolyStack.get(int):::ENTER
+(NEQ (hash (select |polys| |this|)) null)
+(>= (select |size| |this|) 1)
+(>= |index| 0)
+(> (select |size| |this|) |index|)
+===========================================================================
+PolyCalc.RatPolyStack.get(int):::EXIT
+(EQ (hash (select |polys| |this|)) (hash (select |polys| |__orig__this|)))
+(EQ (hash (select |head| (select |polys| |this|))) (hash (select |head| (select |polys| |__orig__this|))))
+(EQ (hash (select |tail| (select |polys| |this|))) (hash (select |tail| (select |polys| |__orig__this|))))
+(EQ (hash (select |head| (select |tail| (select |polys| |this|)))) (hash (select |head| (select |tail| (select |polys| |__orig__this|)))))
+(EQ (hash (select |tail| (select |tail| (select |polys| |this|)))) (hash (select |tail| (select |tail| (select |polys| |__orig__this|)))))
+(EQ (select |size| |this|) (select |size| |__orig__this|))
+(NEQ (hash (select |polys| |this|)) null)
+(>= (select |size| |this|) 1)
+(NEQ (hash |return|) null)
+(> (select |size| |this|) |__orig__index|)
+===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::ENTER
+(NEQ (hash (select |polys| |this|)) null)
+(>= (select |size| |this|) 1)
+(>= |index| 0)
+(> (select |size| |this|) |index|)
+===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::EXIT
+(EQ (hash (select |polys| |this|)) (hash (select |polys| |__orig__this|)))
+(EQ (hash (select |head| (select |polys| |this|))) (hash (select |head| (select |polys| |__orig__this|))))
+(EQ (hash (select |tail| (select |polys| |this|))) (hash (select |tail| (select |polys| |__orig__this|))))
+(EQ (hash (select |head| (select |tail| (select |polys| |this|)))) (hash (select |head| (select |tail| (select |polys| |__orig__this|)))))
+(EQ (hash (select |tail| (select |tail| (select |polys| |this|)))) (hash (select |tail| (select |tail| (select |polys| |__orig__this|)))))
+(EQ (select |size| |this|) (select |size| |__orig__this|))
+(NEQ (hash (select |polys| |this|)) null)
+(>= (select |size| |this|) 1)
+(NEQ (hash |return|) null)
+(NEQ (hash (select |head| |return|)) null)
+(NEQ (hash (select |head| (select |tail| |return|))) null)
+(> (select |size| |this|) |__orig__index|)
+===========================================================================
+PolyCalc.RatPolyStack.mul():::ENTER
+(OR (EQ (select |size| |this|) 2) (EQ (select |size| |this|) 3))
+===========================================================================
+PolyCalc.RatPolyStack.mul():::EXIT
+(EQ (hash (select |tail| (select |polys| |this|))) (hash (select |tail| (select |tail| (select |polys| |__orig__this|)))))
+(EQ (hash (select |tail| (select |tail| (select |polys| |this|)))) null)
+(OR (EQ (select |size| |this|) 1) (EQ (select |size| |this|) 2))
+===========================================================================
+PolyCalc.RatPolyStack.pop():::ENTER
+(NEQ (hash (select |polys| |this|)) null)
+(>= (select |size| |this|) 1)
+===========================================================================
+PolyCalc.RatPolyStack.pop():::EXIT
+(EQ (hash (select |polys| |this|)) (hash (select |tail| (select |polys| |__orig__this|))))
+(EQ (hash (select |head| (select |polys| |this|))) (hash (select |head| (select |tail| (select |polys| |__orig__this|)))))
+(EQ (hash (select |tail| (select |polys| |this|))) (hash (select |tail| (select |tail| (select |polys| |__orig__this|)))))
+(EQ (hash |return|) (hash (select |head| (select |polys| |__orig__this|))))
+(NEQ (hash |return|) null)
+(EQ 0 (+ (+ (select |size| |this|) (* -1 (select |size| |__orig__this|))) 1))
+===========================================================================
+PolyCalc.RatPolyStack.push(PolyCalc.RatPoly):::ENTER
+(NEQ (hash |p|) null)
+===========================================================================
+PolyCalc.RatPolyStack.push(PolyCalc.RatPoly):::EXIT
+(EQ (hash (select |head| (select |polys| |this|))) (hash |__orig__p|))
+(EQ (hash (select |tail| (select |polys| |this|))) (hash (select |polys| |__orig__this|)))
+(EQ (hash (select |head| (select |tail| (select |polys| |this|)))) (hash (select |head| (select |polys| |__orig__this|))))
+(EQ (hash (select |tail| (select |tail| (select |polys| |this|)))) (hash (select |tail| (select |polys| |__orig__this|))))
+(NEQ (hash (select |polys| |this|)) null)
+(>= (select |size| |this|) 1)
+(EQ 0 (+ (+ (select |size| |this|) (* -1 (select |size| |__orig__this|))) -1))
+===========================================================================
+PolyCalc.RatPolyStack.size():::ENTER
+===========================================================================
+PolyCalc.RatPolyStack.size():::EXIT
+(EQ (hash (select |polys| |this|)) (hash (select |polys| |__orig__this|)))
+(EQ (hash (select |head| (select |polys| |this|))) (hash (select |head| (select |polys| |__orig__this|))))
+(EQ (hash (select |tail| (select |polys| |this|))) (hash (select |tail| (select |polys| |__orig__this|))))
+(EQ (hash (select |head| (select |tail| (select |polys| |this|)))) (hash (select |head| (select |tail| (select |polys| |__orig__this|)))))
+(EQ (hash (select |tail| (select |tail| (select |polys| |this|)))) (hash (select |tail| (select |tail| (select |polys| |__orig__this|)))))
+(EQ (select |size| |this|) |return|)
+(EQ |return| (select |size| |__orig__this|))
+(>= |return| 0)
+===========================================================================
+PolyCalc.RatPolyStack.sub():::ENTER
+(OR (EQ (select |size| |this|) 2) (EQ (select |size| |this|) 3) (EQ (select |size| |this|) 4))
+===========================================================================
+PolyCalc.RatPolyStack.sub():::EXIT
+(EQ (hash (select |tail| (select |polys| |this|))) (hash (select |tail| (select |tail| (select |polys| |__orig__this|)))))
+(OR (EQ (select |size| |this|) 1) (EQ (select |size| |this|) 2) (EQ (select |size| |this|) 3))
+===========================================================================
+PolyCalc.RatPolyStack.swap():::ENTER
+(OR (EQ (select |size| |this|) 2) (EQ (select |size| |this|) 3))
+===========================================================================
+PolyCalc.RatPolyStack.swap():::EXIT
+(EQ (hash (select |polys| |this|)) (hash (select |tail| (select |polys| |__orig__this|))))
+(EQ (hash (select |head| (select |polys| |this|))) (hash (select |head| (select |tail| (select |polys| |__orig__this|)))))
+(EQ (hash (select |tail| (select |polys| |this|))) (hash (select |polys| |__orig__this|)))
+(EQ (hash (select |head| (select |tail| (select |polys| |this|)))) (hash (select |head| (select |polys| |__orig__this|))))
+(EQ (hash (select |tail| (select |tail| (select |polys| |this|)))) (hash (select |tail| (select |tail| (select |polys| |__orig__this|)))))
+(EQ (select |size| |this|) (select |size| |__orig__this|))
+(OR (EQ (select |size| |this|) 2) (EQ (select |size| |this|) 3))

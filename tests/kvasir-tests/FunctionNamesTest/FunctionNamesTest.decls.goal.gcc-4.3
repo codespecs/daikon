@@ -1,0 +1,80 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::anotherGlobalIntArray[..]
+    var-kind array
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntArray[..]
+    var-kind array
+    enclosing-var ::globalIntArray
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::anotherGlobalIntArray[..]
+    var-kind array
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntArray[..]
+    var-kind array
+    enclosing-var ::globalIntArray
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..secondFileFunction():::ENTER
+  ppt-type enter
+  variable ::anotherGlobalIntArray[..]
+    var-kind array
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntArray[..]
+    var-kind array
+    enclosing-var ::globalIntArray
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..secondFileFunction():::EXIT0
+  ppt-type subexit
+  variable ::anotherGlobalIntArray[..]
+    var-kind array
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntArray[..]
+    var-kind array
+    enclosing-var ::globalIntArray
+    array 1
+    rep-type int[]
+    dec-type int[]
+

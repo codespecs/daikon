@@ -1,0 +1,248 @@
+..add_accept() ENTER/903: 13 EXIT0/903: 13
+..add_action() ENTER/900: 233 EXIT0/900: 233
+..addsym() ENTER/981: 12 EXIT0/984: 12
+..allocate_array() ENTER/903: 80 EXIT0/909: 80
+..bldtbl() ENTER/915: 35 EXIT0/915: 35
+..bubble() ENTER/906: 75 EXIT0/906: 75
+..build_eof_action() ENTER/897: 1 EXIT0/897: 1
+..ccl2ecl() ENTER/897: 1 EXIT0/897: 1
+..ccladd() ENTER/903: 15 EXIT0/903: 15
+..cclinit() ENTER/897: 5 EXIT0/900: 5
+..cclinstal() ENTER/906: 4 EXIT0/906: 4
+..ccllookup() ENTER/903: 6 EXIT0/906: 6
+..cclnegate() ENTER/900: 1 EXIT0/900: 1
+..check_char() ENTER/900: 34 EXIT0/900: 34
+..check_for_backing_up() ENTER/906: 23 EXIT0/906: 23
+..cmptmps() ENTER/897: 1 EXIT0/897: 1
+..copy_string() ENTER/900: 8 EXIT0/903: 8
+..copy_unsigned_string() ENTER/903: 6 EXIT0/909: 6
+..copysingl() ENTER/903: 3 EXIT0/906: 3
+..cre8ecs() ENTER/912: 2 EXIT0/915: 2
+..cshell() ENTER/909: 1 EXIT0/909: 1
+..dataend() ENTER/897: 7 EXIT0/897: 7
+..dataflush() ENTER/897: 47 EXIT0/897: 47
+..do_indent() ENTER/897: 61 EXIT0/897: 61
+..dupmachine() ENTER/900: 9 EXIT0/903: 9
+..epsclosure() ENTER/936: 74 EXIT0/942: 74
+..findsym() ENTER/1041: 9 EXIT0/1110: 9
+..finish_rule() ENTER/909: 13 EXIT0/909: 13
+..flex_alloc() ENTER/900: 100 EXIT0/906: 100
+..flex_free() ENTER/903: 2 EXIT0/903: 2
+..flexend() ENTER/900: 1
+..flexinit() ENTER/906: 1 EXIT0/906: 1
+..flexscan() ENTER/909: 94 EXIT0/912: 94
+..gen_NUL_trans() ENTER/897: 1 EXIT0/897: 1
+..gen_backing_up() ENTER/897: 3 EXIT0/897: 3
+..gen_bu_action() ENTER/897: 1 EXIT0/897: 1
+..gen_find_action() ENTER/897: 1 EXIT0/897: 1
+..gen_next_compressed_state() ENTER/900: 3 EXIT0/900: 3
+..gen_next_match() ENTER/897: 1 EXIT0/897: 1
+..gen_next_state() ENTER/900: 2 EXIT0/900: 2
+..gen_start_state() ENTER/897: 2 EXIT0/897: 2
+..genecs() ENTER/897: 1 EXIT0/897: 1
+..gentabs() ENTER/900: 1 EXIT0/900: 1
+..hashfunct() ENTER/903: 21 EXIT0/906: 21
+..indent_put2s() ENTER/903: 3 EXIT0/903: 3
+..indent_puts() ENTER/900: 53 EXIT0/900: 53
+..inittbl() ENTER/897: 1 EXIT0/897: 1
+..line_directive_out() ENTER/903: 17 EXIT0/903: 17
+..line_pinpoint() ENTER/903: 2 EXIT0/903: 2
+..line_warning() ENTER/903: 2 EXIT0/903: 2
+..link_machines() ENTER/903: 43 EXIT0/906: 43
+..main() ENTER/906: 1
+..make_tables() ENTER/897: 1 EXIT0/897: 1
+..mark_defs1() ENTER/897: 1 EXIT0/897: 1
+..mark_prolog() ENTER/897: 1 EXIT0/897: 1
+..mk1tbl() ENTER/909: 16 EXIT0/909: 16
+..mkbranch() ENTER/903: 36 EXIT0/906: 36
+..mkclos() ENTER/900: 3 EXIT0/903: 3
+..mkdata() ENTER/900: 451 EXIT0/900: 451
+..mkdeftbl() ENTER/897: 1 EXIT0/897: 1
+..mkeccl() ENTER/930: 43 EXIT0/930: 43
+..mkechar() ENTER/912: 61 EXIT0/912: 61
+..mkentry() ENTER/915: 36 EXIT0/915: 36
+..mkopt() ENTER/900: 6 EXIT0/903: 6
+..mkposcl() ENTER/900: 4 EXIT0/903: 4
+..mkprot() ENTER/909: 3 EXIT0/909: 3
+..mkrep() ENTER/906: 2 EXIT0/909: 2
+..mkstate() ENTER/900: 104 EXIT0/903: 104
+..mktemplate() ENTER/909: 1 EXIT0/909: 1
+..mkxtion() ENTER/903: 125 EXIT0/903: 125
+..mv2front() ENTER/900: 11 EXIT0/900: 11
+..myctoi() ENTER/900: 4 EXIT0/903: 4
+..myesc() ENTER/903: 2 EXIT0/906: 2
+..ndinstal() ENTER/906: 2 EXIT0/906: 2
+..ndlookup() ENTER/900: 3 EXIT0/906: 3
+..new_rule() ENTER/897: 14 EXIT0/897: 14
+..ntod() ENTER/897: 1 EXIT0/897: 1
+..readin() ENTER/897: 1 EXIT0/897: 1
+..scinstal() ENTER/903: 6 EXIT0/903: 6
+..set_input_file() ENTER/900: 1 EXIT0/900: 1
+..set_up_initial_allocations() ENTER/897: 1 EXIT0/897: 1
+..skelout() ENTER/897: 18 EXIT0/897: 18
+..snstods() ENTER/924: 75 EXIT0/927: 75
+..stack1() ENTER/909: 16 EXIT0/909: 16
+..symfollowset() ENTER/915: 62 EXIT0/918: 62
+..sympartition() ENTER/918: 36 EXIT0/918: 36
+..tbldiff() ENTER/912: 16 EXIT0/915: 16
+..yy_create_buffer() ENTER/906: 1 EXIT0/939: 1
+..yy_init_buffer() ENTER/936: 2 EXIT0/936: 2
+..yy_load_buffer_state() ENTER/897: 2 EXIT0/897: 2
+..yylex() ENTER/900: 93 EXIT0/903: 93
+..yyparse() ENTER/897: 1 EXIT0/900: 1
+..yyrestart() ENTER/903: 1 EXIT0/903: 1
+..yywrap() ENTER/897: 1 EXIT0/900: 1
+..zero_out() ENTER/903: 1 EXIT0/903: 1
+flex.c.yy_flex_alloc() ENTER/900: 102 EXIT0/906: 102
+flex.c.yy_flex_free() ENTER/903: 2 EXIT0/903: 2
+flex.c.yy_get_next_buffer() ENTER/897: 2 EXIT0/900: 2
+flex.c.yy_get_previous_state() ENTER/897: 1 EXIT0/900: 1
+flex.c.yyinput() ENTER/897: 2 EXIT0/900: 2
+flex.c.yyunput() ENTER/903: 21 EXIT0/903: 21
+ppt ..add_accept() ENTER/1451: 1 EXIT0/1451: 1
+ppt ..add_action() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..addsym() ENTER/1604: 1 EXIT0/1608: 1
+ppt ..all_lower() ENTER/1446: 1 EXIT0/1450: 1
+ppt ..all_upper() ENTER/1446: 1 EXIT0/1450: 1
+ppt ..allocate_array() ENTER/1451: 1 EXIT0/1461: 1
+ppt ..bldtbl() ENTER/1472: 1 EXIT0/1472: 1
+ppt ..bubble() ENTER/1457: 1 EXIT0/1457: 1
+ppt ..build_eof_action() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..ccl2ecl() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..ccladd() ENTER/1451: 1 EXIT0/1451: 1
+ppt ..cclinit() ENTER/1441: 1 EXIT0/1445: 1
+ppt ..cclinstal() ENTER/1457: 1 EXIT0/1457: 1
+ppt ..ccllookup() ENTER/1452: 1 EXIT0/1456: 1
+ppt ..cclnegate() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..check_char() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..check_for_backing_up() ENTER/1457: 1 EXIT0/1457: 1
+ppt ..check_trailing_context() ENTER/1473: 1 EXIT0/1473: 1
+ppt ..clower() ENTER/1446: 1 EXIT0/1450: 1
+ppt ..cmptmps() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..copy_string() ENTER/1446: 1 EXIT0/1450: 1
+ppt ..copy_unsigned_string() ENTER/1452: 1 EXIT0/1462: 1
+ppt ..copysingl() ENTER/1451: 1 EXIT0/1455: 1
+ppt ..cre8ecs() ENTER/1468: 1 EXIT0/1472: 1
+ppt ..cshell() ENTER/1462: 1 EXIT0/1462: 1
+ppt ..dataend() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..dataflush() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..do_indent() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..dump_associated_rules() ENTER/1457: 1 EXIT0/1457: 1
+ppt ..dump_transitions() ENTER/1463: 1 EXIT0/1463: 1
+ppt ..dumpnfa() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..dupmachine() ENTER/1446: 1 EXIT0/1450: 1
+ppt ..epsclosure() ENTER/1510: 1 EXIT0/1520: 1
+ppt ..expand_nxt_chk() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..find_table_space() ENTER/1457: 1 EXIT0/1461: 1
+ppt ..findsym() ENTER/1719: 1 EXIT0/1855: 1
+ppt ..finish_rule() ENTER/1461: 1 EXIT0/1461: 1
+ppt ..flex_alloc() ENTER/1446: 1 EXIT0/1456: 1
+ppt ..flex_free() ENTER/1452: 1 EXIT0/1452: 1
+ppt ..flex_realloc() ENTER/1457: 1 EXIT0/1467: 1
+ppt ..flexend() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..flexerror() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..flexfatal() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..flexinit() ENTER/1457: 1 EXIT0/1457: 1
+ppt ..flexscan() ENTER/1457: 1 EXIT0/1461: 1
+ppt ..format_pinpoint_message() ENTER/1451: 1 EXIT0/1451: 1
+ppt ..format_synerr() ENTER/1451: 1 EXIT0/1451: 1
+ppt ..gen_NUL_trans() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..gen_backing_up() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..gen_bu_action() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..gen_find_action() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..gen_next_compressed_state() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..gen_next_match() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..gen_next_state() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..gen_start_state() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..genctbl() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..genecs() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..genftbl() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..gentabs() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..hashfunct() ENTER/1451: 1 EXIT0/1455: 1
+ppt ..htoi() ENTER/1452: 1 EXIT0/1456: 1
+ppt ..increase_max_dfas() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..indent_put2s() ENTER/1451: 1 EXIT0/1451: 1
+ppt ..indent_puts() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..inittbl() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..is_hex_digit() ENTER/1446: 1 EXIT0/1450: 1
+ppt ..lerrif() ENTER/1451: 1 EXIT0/1451: 1
+ppt ..lerrsf() ENTER/1451: 1 EXIT0/1451: 1
+ppt ..line_directive_out() ENTER/1452: 1 EXIT0/1452: 1
+ppt ..line_pinpoint() ENTER/1451: 1 EXIT0/1451: 1
+ppt ..line_warning() ENTER/1451: 1 EXIT0/1451: 1
+ppt ..link_machines() ENTER/1451: 1 EXIT0/1455: 1
+ppt ..list_character_set() ENTER/1463: 1 EXIT0/1463: 1
+ppt ..main() ENTER/1457: 1 EXIT0/1461: 1
+ppt ..make_tables() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..mark_beginning_as_normal() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..mark_defs1() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..mark_prolog() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..mk1tbl() ENTER/1461: 1 EXIT0/1461: 1
+ppt ..mk2data() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..mkbranch() ENTER/1451: 1 EXIT0/1455: 1
+ppt ..mkclos() ENTER/1446: 1 EXIT0/1450: 1
+ppt ..mkdata() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..mkdeftbl() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..mkeccl() ENTER/1501: 1 EXIT0/1501: 1
+ppt ..mkechar() ENTER/1468: 1 EXIT0/1468: 1
+ppt ..mkentry() ENTER/1472: 1 EXIT0/1472: 1
+ppt ..mkopt() ENTER/1446: 1 EXIT0/1450: 1
+ppt ..mkor() ENTER/1451: 1 EXIT0/1455: 1
+ppt ..mkposcl() ENTER/1446: 1 EXIT0/1450: 1
+ppt ..mkprot() ENTER/1462: 1 EXIT0/1462: 1
+ppt ..mkrep() ENTER/1456: 1 EXIT0/1460: 1
+ppt ..mkstate() ENTER/1446: 1 EXIT0/1450: 1
+ppt ..mktemplate() ENTER/1462: 1 EXIT0/1462: 1
+ppt ..mkxtion() ENTER/1451: 1 EXIT0/1451: 1
+ppt ..mv2front() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..myctoi() ENTER/1446: 1 EXIT0/1450: 1
+ppt ..myesc() ENTER/1452: 1 EXIT0/1456: 1
+ppt ..ndinstal() ENTER/1457: 1 EXIT0/1457: 1
+ppt ..ndlookup() ENTER/1446: 1 EXIT0/1456: 1
+ppt ..new_rule() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..ntod() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..otoi() ENTER/1452: 1 EXIT0/1456: 1
+ppt ..pinpoint_message() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..place_state() ENTER/1462: 1 EXIT0/1462: 1
+ppt ..readable_form() ENTER/1451: 1 EXIT0/1455: 1
+ppt ..readin() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..reallocate_array() ENTER/1462: 1 EXIT0/1472: 1
+ppt ..scextend() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..scinstal() ENTER/1451: 1 EXIT0/1451: 1
+ppt ..sclookup() ENTER/1446: 1 EXIT0/1450: 1
+ppt ..set_input_file() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..set_up_initial_allocations() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..skelout() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..snstods() ENTER/1489: 1 EXIT0/1493: 1
+ppt ..stack1() ENTER/1461: 1 EXIT0/1461: 1
+ppt ..symfollowset() ENTER/1473: 1 EXIT0/1477: 1
+ppt ..sympartition() ENTER/1479: 1 EXIT0/1479: 1
+ppt ..synerr() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..tbldiff() ENTER/1468: 1 EXIT0/1472: 1
+ppt ..transition_struct_out() ENTER/1451: 1 EXIT0/1451: 1
+ppt ..usage() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..warn() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..yy_create_buffer() ENTER/1457: 1 EXIT0/1521: 1
+ppt ..yy_delete_buffer() ENTER/1506: 1 EXIT0/1506: 1
+ppt ..yy_flex_xmalloc() ENTER/1446: 1 EXIT0/1456: 1
+ppt ..yy_init_buffer() ENTER/1517: 1 EXIT0/1517: 1
+ppt ..yy_load_buffer_state() ENTER/1441: 1 EXIT0/1441: 1
+ppt ..yy_switch_to_buffer() ENTER/1506: 1 EXIT0/1506: 1
+ppt ..yyerror() ENTER/1446: 1 EXIT0/1446: 1
+ppt ..yylex() ENTER/1445: 1 EXIT0/1449: 1
+ppt ..yyparse() ENTER/1441: 1 EXIT0/1445: 1
+ppt ..yyrestart() ENTER/1452: 1 EXIT0/1452: 1
+ppt ..yywrap() ENTER/1441: 1 EXIT0/1445: 1
+ppt ..zero_out() ENTER/1451: 1 EXIT0/1451: 1
+ppt flex.c.yy_fatal_error() ENTER/1446: 1 EXIT0/1446: 1
+ppt flex.c.yy_flex_alloc() ENTER/1446: 1 EXIT0/1456: 1
+ppt flex.c.yy_flex_free() ENTER/1452: 1 EXIT0/1452: 1
+ppt flex.c.yy_flex_realloc() ENTER/1457: 1 EXIT0/1467: 1
+ppt flex.c.yy_get_next_buffer() ENTER/1441: 1 EXIT0/1445: 1
+ppt flex.c.yy_get_previous_state() ENTER/1441: 1 EXIT0/1445: 1
+ppt flex.c.yy_pop_state() ENTER/1441: 1 EXIT0/1441: 1
+ppt flex.c.yy_push_state() ENTER/1446: 1 EXIT0/1446: 1
+ppt flex.c.yy_top_state() ENTER/1441: 1 EXIT0/1445: 1
+ppt flex.c.yy_try_NUL_trans() ENTER/1446: 1 EXIT0/1450: 1
+ppt flex.c.yyinput() ENTER/1441: 1 EXIT0/1445: 1
+ppt flex.c.yyunput() ENTER/1451: 1 EXIT0/1451: 1

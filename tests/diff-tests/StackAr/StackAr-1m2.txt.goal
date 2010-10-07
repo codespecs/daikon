@@ -1,0 +1,19 @@
+<DataStructures.StackAr.<init>(I)V:::ENTER, null>
+  <capacity >= 0 {0+}, null> (UInt,JM)
+<DataStructures.StackAr.makeEmpty()V:::ENTER, null>
+  <this.topOfStack <= size(this.theArray[])-1 {0.0072+}, null> (Bin,JM)
+  <this.theArray[this.topOfStack+1..] elements == null {0+}, null> (UInt,JM)
+  <this.theArray[0..this.topOfStack] elements are equal {0+}, null> (UInt,JM)
+  <this.theArray.class == "[Ljava.lang.Object;" {0+}, null> (UInt,JM)
+<DataStructures.StackAr.makeEmpty()V:::EXIT, null>
+  <size(this.theArray[]) == orig(size(this.theArray[])) {0+}, null> (Bin,JM)
+  <this.theArray == orig(this.theArray) {0+}, null> (Bin,JM)
+  <orig(this.topOfStack) <= size(this.theArray[])-1 {0.0072+}, null> (Bin,JM)
+  <this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..]) {0+}, null> (Bin,JM)
+  <this.theArray.class == orig(this.theArray.class) {0+}, null> (Bin,JM)
+  <this.topOfStack == -1 {0+}, null> (UInt,JM)
+  <this.theArray[] elements == null {0+}, null> (UInt,JM)
+  <orig(this.theArray[0..this.topOfStack]) elements are equal {0+}, null> (UInt,JM)
+  <this.theArray[0..this.topOfStack] == [] {0+}, null> (UInt,JM)
+  <this.theArray.class == "[Ljava.lang.Object;" {0+}, null> (UInt,JM)
+  <this.theArray[].class elements == null {0+}, null> (UInt,JM)

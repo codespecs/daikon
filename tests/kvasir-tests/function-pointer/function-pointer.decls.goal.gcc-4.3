@@ -1,0 +1,56 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..apply():::ENTER
+  ppt-type enter
+  variable fp
+    var-kind variable
+    rep-type hashcode
+    dec-type function*
+    flags is_param 
+  variable fp[..]
+    var-kind array
+    enclosing-var fp
+    array 1
+    rep-type hashcode[]
+    dec-type function[]
+  variable val
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..apply():::EXIT0
+  ppt-type subexit
+  variable fp
+    var-kind variable
+    rep-type hashcode
+    dec-type function*
+    flags is_param 
+  variable fp[..]
+    var-kind array
+    enclosing-var fp
+    array 1
+    rep-type hashcode[]
+    dec-type function[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable val
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..main():::ENTER
+  ppt-type enter
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+

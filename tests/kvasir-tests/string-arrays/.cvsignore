@@ -1,0 +1,8 @@
+ran-kvasir strings strings.decls.diff strings.dtrace.diff strings.invs.diff strings.out strings.out.diff
+*.counts *.counts.diff
+strings.comp strings.comp.diff
+string-arrays.comp.diff
+string-arrays.decls.diff
+string-arrays.dtrace.diff
+string-arrays.invs.diff
+string-arrays.out.diff

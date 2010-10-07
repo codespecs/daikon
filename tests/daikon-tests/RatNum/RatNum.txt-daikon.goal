@@ -1,0 +1,335 @@
+===========================================================================
+PolyCalc.RatNum:::OBJECT
+this.denom >= 0
+===========================================================================
+PolyCalc.RatNum.RatNum(int):::ENTER
+===========================================================================
+PolyCalc.RatNum.RatNum(int):::EXIT
+this.numer == orig(n)
+this.denom == 1
+===========================================================================
+PolyCalc.RatNum.RatNum(int, int):::ENTER
+===========================================================================
+PolyCalc.RatNum.RatNum(int, int):::EXIT55
+this.numer == orig(n)
+this.denom == orig(d)
+this.denom == 0
+===========================================================================
+PolyCalc.RatNum.RatNum(int, int):::EXIT67
+this.denom >= 1
+orig(d) != 0
+orig(d) % this.denom == 0
+===========================================================================
+PolyCalc.RatNum.RatNum(int, int):::EXIT
+(this.denom == 0)  <==>  (orig(d) == 0)
+(this.denom == 0)  ==>  (orig(d)  isPointer)
+(this.denom == 0)  ==>  (this.denom  isPointer)
+(this.denom == 0)  ==>  (this.denom == orig(d))
+(this.denom == 0)  ==>  (this.numer == orig(n))
+(orig(n) == 0) ==> (this.numer == 0)
+(this.numer == 0) ==> (orig(n) == 0)
+(orig(d) == 0) ==> (this.denom == 0)
+(this.denom == 0) ==> (orig(d) == 0)
+===========================================================================
+PolyCalc.RatNum.add(PolyCalc.RatNum):::ENTER
+arg != null
+arg.denom >= 0
+===========================================================================
+PolyCalc.RatNum.add(PolyCalc.RatNum):::EXIT
+this.numer == orig(this.numer)
+this.denom == orig(this.denom)
+arg.numer == orig(arg.numer)
+arg.denom == orig(arg.denom)
+arg.denom >= 0
+return != null
+return.denom >= 0
+(this.denom == 0) ==> (return.denom == 0)
+(arg.denom == 0) ==> (return.denom == 0)
+===========================================================================
+PolyCalc.RatNum.approx():::ENTER
+===========================================================================
+PolyCalc.RatNum.approx():::EXIT117
+this.denom == 0
+return == Double.NaN
+this.numer != this.denom
+===========================================================================
+PolyCalc.RatNum.approx():::EXIT120
+this.denom >= 1
+===========================================================================
+PolyCalc.RatNum.approx():::EXIT
+this.numer == orig(this.numer)
+this.denom == orig(this.denom)
+(this.denom == 0)  ==>  (return == Double.NaN)
+(this.denom == 0)  ==>  (this.denom  isPointer)
+(this.denom == 0)  ==>  (this.numer != this.denom)
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::ENTER
+rn != null
+rn.denom >= 0
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT101
+this.denom >= 1
+rn.denom >= 1
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT94
+this.denom == return
+rn.denom == return
+return == orig(this.denom)
+return == orig(rn.denom)
+return == 0
+this.numer != return
+rn.numer != return
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96
+this.denom == 0
+rn.numer >= -1
+rn.denom >= 1
+return == 1
+this.numer != this.denom
+this.denom < rn.denom
+rn.denom >= return
+return == (plume.MathMDE.gcd(rn.numer, rn.denom))
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT98
+this.denom >= 1
+rn.numer != 0
+rn.denom == 0
+return == -1
+this.denom > rn.denom
+this.denom > return
+rn.numer != rn.denom
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT
+this.numer == orig(this.numer)
+this.denom == orig(this.denom)
+rn.numer == orig(rn.numer)
+rn.denom == orig(rn.denom)
+rn.denom >= 0
+===========================================================================
+PolyCalc.RatNum.debugPrint():::ENTER
+===========================================================================
+PolyCalc.RatNum.debugPrint():::EXIT
+this.numer == orig(this.numer)
+this.denom == orig(this.denom)
+return != null
+return.toString is printable
+===========================================================================
+PolyCalc.RatNum.div(PolyCalc.RatNum):::ENTER
+arg != null
+arg.denom >= 0
+===========================================================================
+PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT187
+arg.numer == return.numer
+arg.denom == return.denom
+return == orig(arg)
+arg.denom == 0
+(arg.numer == 0) ==> (this.numer == 0)
+this.denom >= arg.denom
+===========================================================================
+PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT189
+arg.denom >= 1
+(this.numer == 0) ==> (return.numer == 0)
+===========================================================================
+PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT
+this.numer == orig(this.numer)
+this.denom == orig(this.denom)
+arg.numer == orig(arg.numer)
+arg.denom == orig(arg.denom)
+(arg.denom == 0)  ==>  ((arg.numer == 0) ==> (this.numer == 0))
+(arg.denom == 0)  ==>  (arg.denom  isPointer)
+(arg.denom == 0)  ==>  (arg.denom == return.denom)
+(arg.denom == 0)  ==>  (arg.numer == return.numer)
+(arg.denom == 0)  ==>  (return == orig(arg))
+(arg.denom == 0)  ==>  (return.denom  isPointer)
+(arg.denom == 0)  ==>  (return.denom == 0)
+(arg.denom == 0)  ==>  (this.denom >= arg.denom)
+(arg.denom == 0)  ==>  (this.denom >= return.denom)
+arg.denom >= 0
+return != null
+return.denom >= 0
+(return.numer == 0) ==> (this.numer == 0)
+(this.denom == 0) ==> (return.denom == 0)
+(arg.numer == 0) ==> (return.denom == 0)
+(arg.denom == 0) ==> (return.denom == 0)
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::ENTER
+obj != null
+obj.getClass() == PolyCalc.RatNum.class
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT230
+this.denom == 0
+return == true
+this.numer != this.denom
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT230;condition="return == true"
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT232
+(return == true)  ==>  (this.denom >= 1)
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT232;condition="return == true"
+this.denom >= 1
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT232;condition="not(return == true)"
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT
+this.numer == orig(this.numer)
+this.denom == orig(this.denom)
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT;condition="return == true"
+return == true
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT;condition="not(return == true)"
+return == false
+===========================================================================
+PolyCalc.RatNum.gcd(int, int):::ENTER
+_b != 0
+===========================================================================
+PolyCalc.RatNum.gcd(int, int):::EXIT209
+===========================================================================
+PolyCalc.RatNum.gcd(int, int):::EXIT
+return != 0
+orig(_a) % return == 0
+orig(_b) % return == 0
+===========================================================================
+PolyCalc.RatNum.isNaN():::ENTER
+===========================================================================
+PolyCalc.RatNum.isNaN():::EXIT
+this.numer == orig(this.numer)
+this.denom == orig(this.denom)
+(this.denom == 0)  <==>  (return == true)
+(this.denom == 0)  ==>  (this.denom  isPointer)
+===========================================================================
+PolyCalc.RatNum.isNaN():::EXIT;condition="return == true"
+this.denom == 0
+return == true
+===========================================================================
+PolyCalc.RatNum.isNaN():::EXIT;condition="not(return == true)"
+this.denom >= 1
+return == false
+===========================================================================
+PolyCalc.RatNum.isNegative():::ENTER
+===========================================================================
+PolyCalc.RatNum.isNegative():::EXIT
+this.numer == orig(this.numer)
+this.denom == orig(this.denom)
+(return == true)  ==>  (this.denom >= 1)
+(return == true)  ==>  (this.numer < this.denom)
+(return == true)  ==>  (this.numer <= -1)
+===========================================================================
+PolyCalc.RatNum.isNegative():::EXIT;condition="return == true"
+this.numer <= -1
+this.denom >= 1
+return == true
+this.numer < this.denom
+===========================================================================
+PolyCalc.RatNum.isNegative():::EXIT;condition="not(return == true)"
+return == false
+===========================================================================
+PolyCalc.RatNum.isPositive():::ENTER
+===========================================================================
+PolyCalc.RatNum.isPositive():::EXIT
+this.numer == orig(this.numer)
+this.denom == orig(this.denom)
+(return == false)  ==>  (this.numer < this.denom)
+(return == true)  ==>  (this.numer != 0)
+===========================================================================
+PolyCalc.RatNum.isPositive():::EXIT;condition="return == true"
+this.numer != 0
+return == true
+===========================================================================
+PolyCalc.RatNum.isPositive():::EXIT;condition="not(return == true)"
+return == false
+this.numer < this.denom
+===========================================================================
+PolyCalc.RatNum.mul(PolyCalc.RatNum):::ENTER
+arg != null
+arg.denom >= 0
+===========================================================================
+PolyCalc.RatNum.mul(PolyCalc.RatNum):::EXIT
+this.numer == orig(this.numer)
+this.denom == orig(this.denom)
+arg.numer == orig(arg.numer)
+arg.denom == orig(arg.denom)
+arg.denom >= 0
+return != null
+return.denom >= 0
+(this.numer == 0) ==> (return.numer == 0)
+(this.denom == 0) ==> (return.denom == 0)
+(arg.numer == 0) ==> (return.numer == 0)
+(arg.denom == 0) ==> (return.denom == 0)
+===========================================================================
+PolyCalc.RatNum.negate():::ENTER
+===========================================================================
+PolyCalc.RatNum.negate():::EXIT
+this.numer == orig(this.numer)
+this.denom == return.denom
+this.denom == orig(this.denom)
+return != null
+(return.numer == 0) ==> (this.numer == 0)
+(this.numer == 0) ==> (return.numer == 0)
+this.numer + return.numer == 0
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::ENTER
+ratStr != null
+ratStr.toString is printable
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::EXIT264
+ratStr.toString == "NaN"
+return.numer == 1
+return.denom == 0
+orig(ratStr) has only one value
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::EXIT267
+return.denom == 1
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::EXIT273
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::EXIT
+ratStr.toString is printable
+return != null
+return.denom >= 0
+ratStr.toString == orig(ratStr.toString)
+===========================================================================
+PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
+arg != null
+arg.denom >= 0
+===========================================================================
+PolyCalc.RatNum.sub(PolyCalc.RatNum):::EXIT
+this.numer == orig(this.numer)
+this.denom == orig(this.denom)
+arg.numer == orig(arg.numer)
+arg.denom == orig(arg.denom)
+arg.denom >= 0
+return != null
+return.denom >= 0
+(this.denom == 0) ==> (return.denom == 0)
+(arg.denom == 0) ==> (return.denom == 0)
+===========================================================================
+PolyCalc.RatNum.toString():::ENTER
+===========================================================================
+PolyCalc.RatNum.toString():::EXIT
+this.numer == orig(this.numer)
+this.denom == orig(this.denom)
+return != null
+return.toString is printable
+===========================================================================
+PolyCalc.RatNum.unparse():::ENTER
+===========================================================================
+PolyCalc.RatNum.unparse():::EXIT133
+this.denom == 0
+return has only one value
+return.toString == "NaN"
+===========================================================================
+PolyCalc.RatNum.unparse():::EXIT135
+this.numer != 0
+this.denom >= 2
+this.numer != this.denom
+===========================================================================
+PolyCalc.RatNum.unparse():::EXIT137
+this.denom == 1
+===========================================================================
+PolyCalc.RatNum.unparse():::EXIT
+this.numer == orig(this.numer)
+this.denom == orig(this.denom)
+return != null
+return.toString is printable

@@ -1,0 +1,9 @@
+==PID== kvasir-dtrace-VERSION C Language Front-End for Daikon for x86-linux.
+==PID== Copyright (C) 2004, Philip Guo, MIT CSAIL Program Analysis Group
+==PID== Using valgrind-2.1.0, a program supervision framework for x86-linux.
+==PID== Copyright (C) 2000-2004, and GNU GPL'd, by Julian Seward.
+==PID== For more details, rerun with: -v
+==PID== 
+Sum is 111
+==PID== 
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

@@ -1,0 +1,8 @@
+DerivedComparability
+DerivedComparability.dtrace.diff
+DerivedComparability.comp
+DerivedComparability.comp.diff
+DerivedComparability.invs.diff
+DerivedComparability.out
+ran-kvasir
+*.counts *.counts.diff

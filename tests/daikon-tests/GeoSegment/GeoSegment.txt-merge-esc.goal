@@ -1,0 +1,448 @@
+package MapQuick1;
+
+import MapQuick.*;
+import junit.framework.Assert;
+
+/**
+ * A GeoSegment models a straight line segment on the earth.<p>
+ *
+ * @specfield  name : String       // name of the geographic feature identified
+ * @specfield  p1 : GeoPoint       // first endpoint of the segment
+ * @specfield  p2 : GeoPoint       // second endpoint of the segment
+ * @derivedfield  length : double  // straight-line distance between p1 and p2,
+ *                                 // in miles
+ * @derivedfield  heading : double // compass heading from p1 to p2, in degrees
+ * @endspec
+ * <p>
+ * GeoSegments are immutable.<p>
+ *
+ * The choice of which endpoint is p1 and which is p2 is arbitrary.<p>
+ *
+ * A compass heading is a nonnegative real number less than 360.
+ * In compass headings, north = 0, east = 90, south = 180, and west = 270.<p>
+ *
+ * When used in a map, a GeoSegment might represent part of a street,
+ * boundary, or other feature.
+ * As an example usage, this map
+ * <pre>
+ *  Penny Lane  a
+ *              |
+ *              i--j--k  Abbey Road
+ *              |
+ *              z
+ * </pre>
+ * could be represented by the following GeoSegments:
+ * ("Penny Lane", a, i), ("Penny Lane", z, i),
+ * ("Abbey Road", i, j), and ("Abbey Road", j, k).
+ **/
+public class GeoSegment  {
+
+  /*@ invariant this.name != null; */
+  /*@ invariant this.p1 != null; */
+  /*@ invariant this.p2 != null; */
+  /*@ invariant this.p1.latitude > this.p1.longitude; */
+  /*@ invariant this.p1.latitude > this.p2.longitude; */
+  /*@ invariant this.p1.longitude < this.p2.latitude; */
+  /*@ invariant this.p2.latitude > this.p2.longitude; */
+  // fields
+  /*@ spec_public */ final private String name;
+  /*@ spec_public */ final private GeoPoint p1;
+  /*@ spec_public */ final private GeoPoint p2;
+
+  /*@ requires name != null; */
+  /*@ requires p1 != null; */
+  /*@ requires p1.latitude  isPointer; */
+  /*@ requires p1.longitude  isPointer; */
+  /*@ requires p2 != null; */
+  /*@ requires p2.latitude  isPointer; */
+  /*@ requires p2.longitude  isPointer; */
+  /*@ requires p1.latitude > p1.longitude; */
+  /*@ requires p1.latitude > p2.longitude; */
+  /*@ requires p1.longitude < p2.latitude; */
+  /*@ requires p2.latitude > p2.longitude; */
+  /*@ ensures this.name == \old(name); */
+  /*@ ensures this.p1 == \old(p1); */
+  /*@ ensures this.p1.latitude == p1.latitude; */
+  /*@ ensures this.p1.longitude == p1.longitude; */
+  /*@ ensures this.p2 == \old(p2); */
+  /*@ ensures this.p2.latitude == p2.latitude; */
+  /*@ ensures this.p2.longitude == p2.longitude; */
+  /*@ ensures p1.latitude  isPointer; */
+  /*@ ensures p1.longitude  isPointer; */
+  /*@ ensures p2.latitude  isPointer; */
+  /*@ ensures p2.longitude  isPointer; */
+  /*@ ensures p1.latitude > p1.longitude; */
+  /*@ ensures p1.latitude > p2.longitude; */
+  /*@ ensures p1.longitude < p2.latitude; */
+  /*@ ensures p2.latitude > p2.longitude; */
+  // Constructors
+
+  /**
+   * @requires name != null && p1 != null && p2 != null
+   * @effects constructs a new GeoSegment with the specified name and endpoints
+   **/
+  public GeoSegment(String name, GeoPoint p1, GeoPoint p2)
+  {
+    Assert.assertNotNull(name);
+    Assert.assertNotNull(p1);
+    Assert.assertNotNull(p2);
+
+    // This is not in the requires clause.  However, we will outlaw
+    // zero-length segments MapQuick, so we check for it here to be
+    // safe.  The only loss from denying the existence of such
+    // segments would be a loss of a few addresses from the input
+    // space -- not a big deal.
+    Assert.assertTrue(!p1.equals(p2));
+
+    this.name = name;
+    this.p1 = p1;
+    this.p2 = p2;
+  }
+
+  /*@ modifies this.name, this.name.toString, this.p1, this.p1.latitude, this.p1.longitude, this.p2, this.p2.latitude, this.p2.longitude; */
+  // Producers
+
+  /**
+   * Returns a new GeoSegment like this one, but with its endpoints reversed.
+   * @return a new GeoSegment gs such that
+   *      gs.name = this.name
+   *   && gs.p1 = this.p2
+   *   && gs.p2 = this.p1
+   **/
+  public GeoSegment reverse()
+  {
+    return new GeoSegment(name, p2, p1);
+  }
+
+  /*@ requires this.p1.latitude  isPointer; */
+  /*@ requires this.p1.longitude  isPointer; */
+  /*@ requires this.p2.latitude  isPointer; */
+  /*@ requires this.p2.longitude  isPointer; */
+  /*@ requires this.p1.latitude != this.p2.latitude; */
+  /*@ requires this.p1.longitude != this.p2.longitude; */
+  /*@ ensures this.name == \result; */
+  /*@ ensures \result == \old(this.name); */
+  /*@ ensures this.p1.latitude  isPointer; */
+  /*@ ensures this.p1.longitude  isPointer; */
+  /*@ ensures this.p2.latitude  isPointer; */
+  /*@ ensures this.p2.longitude  isPointer; */
+  /*@ ensures \result != null; */
+  /*@ ensures this.p1.latitude != this.p2.latitude; */
+  /*@ ensures this.p1.longitude != this.p2.longitude; */
+  // Observers
+
+  /** @return this.name */
+  public String name()
+  {
+    return this.name;
+  }
+
+  /*@ requires this.p1.latitude  isPointer; */
+  /*@ requires this.p1.longitude  isPointer; */
+  /*@ requires this.p2.latitude  isPointer; */
+  /*@ requires this.p2.longitude  isPointer; */
+  /*@ requires this.p1.latitude != this.p2.latitude; */
+  /*@ requires this.p1.longitude != this.p2.longitude; */
+  /*@ ensures this.p1 == \result; */
+  /*@ ensures this.p1.latitude == \result.latitude; */
+  /*@ ensures this.p1.longitude == \result.longitude; */
+  /*@ ensures \result == \old(this.p1); */
+  /*@ ensures \result.latitude == \old(this.p1.latitude); */
+  /*@ ensures \result.longitude == \old(this.p1.longitude); */
+  /*@ ensures this.p2.latitude  isPointer; */
+  /*@ ensures this.p2.longitude  isPointer; */
+  /*@ ensures \result != null; */
+  /*@ ensures \result.latitude  isPointer; */
+  /*@ ensures \result.longitude  isPointer; */
+  /*@ ensures this.p2.latitude != \result.latitude; */
+  /*@ ensures this.p2.latitude > \result.longitude; */
+  /*@ ensures this.p2.longitude < \result.latitude; */
+  /*@ ensures this.p2.longitude != \result.longitude; */
+  /*@ ensures \result.latitude > \result.longitude; */
+  /** @return this.p1 */
+  public GeoPoint p1()
+  {
+    return this.p1;
+  }
+
+  /*@ requires this.p1.latitude  isPointer; */
+  /*@ requires this.p1.longitude  isPointer; */
+  /*@ requires this.p2.latitude  isPointer; */
+  /*@ requires this.p2.longitude  isPointer; */
+  /*@ ensures this.p2 == \result; */
+  /*@ ensures this.p2.latitude == \result.latitude; */
+  /*@ ensures this.p2.longitude == \result.longitude; */
+  /*@ ensures \result == \old(this.p2); */
+  /*@ ensures \result.latitude == \old(this.p2.latitude); */
+  /*@ ensures \result.longitude == \old(this.p2.longitude); */
+  /*@ ensures this.p1.latitude  isPointer; */
+  /*@ ensures this.p1.longitude  isPointer; */
+  /*@ ensures \result != null; */
+  /*@ ensures \result.latitude  isPointer; */
+  /*@ ensures \result.longitude  isPointer; */
+  /*@ ensures this.p1.latitude > \result.longitude; */
+  /*@ ensures this.p1.longitude < \result.latitude; */
+  /*@ ensures \result.latitude > \result.longitude; */
+  /** @return this.p2 */
+  public GeoPoint p2()
+  {
+    return this.p2;
+  }
+
+  /*@ requires this.p1.latitude  isPointer; */
+  /*@ requires this.p1.longitude  isPointer; */
+  /*@ requires this.p2.latitude  isPointer; */
+  /*@ requires this.p2.longitude  isPointer; */
+  /*@ requires this.p1.longitude != this.p2.longitude; */
+  /*@ ensures this.p1.latitude  isPointer; */
+  /*@ ensures this.p1.longitude  isPointer; */
+  /*@ ensures this.p2.latitude  isPointer; */
+  /*@ ensures this.p2.longitude  isPointer; */
+  /*@ ensures MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result; */
+  /*@ ensures this.p1.longitude != this.p2.longitude; */
+  /** @return this.length */
+  public double length()
+  {
+    return p1.distanceTo(p2);
+  }
+
+  /*@ requires this.p1.latitude  isPointer; */
+  /*@ requires this.p1.longitude  isPointer; */
+  /*@ requires this.p2.latitude  isPointer; */
+  /*@ requires this.p2.longitude  isPointer; */
+  /*@ requires this.p1.latitude != this.p2.latitude; */
+  /*@ requires this.p1.longitude != this.p2.longitude; */
+  /*@ ensures this.p1.latitude  isPointer; */
+  /*@ ensures this.p1.longitude  isPointer; */
+  /*@ ensures this.p2.latitude  isPointer; */
+  /*@ ensures this.p2.longitude  isPointer; */
+  /*@ ensures MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result; */
+  /*@ ensures this.p1.latitude != this.p2.latitude; */
+  /*@ ensures this.p1.longitude != this.p2.longitude; */
+  /**
+   * @requires this.length != 0
+   * @return this.heading
+   **/
+  public double heading()
+  {
+    Assert.assertTrue(length() != 0.0);
+    return p1.headingTo(p2);
+  }
+
+  /*@ also_modifies this.name, this.name.toString, this.p1, this.p1.latitude, this.p1.longitude, this.p2, this.p2.latitude, this.p2.longitude; */
+  public String toString()
+  {
+    return "Seg{" + name + "," + p1 + "," + p2 + "}";
+  }
+
+  /*@ also_ensures this.p1.latitude  isPointer; */
+  /*@ also_ensures this.p1.longitude  isPointer; */
+  /*@ also_ensures this.p2.latitude  isPointer; */
+  /*@ also_ensures this.p2.longitude  isPointer; */
+  /*@ also_ensures \result == false; */
+  /*@ also_ensures this.p1.latitude != this.p2.latitude; */
+  /*@ also_ensures this.p1.longitude != this.p2.longitude; */
+  /**
+   * Compares the specified Object with with this GeoSegment for equality.
+   * @return    gs != null && (gs instanceof GeoSegment)
+   *         && gs.name = this.name && gs.p1 = this.p1 && gs.p2 = this.p2
+   **/
+  public boolean equals(Object o)
+  {
+    if (!(o instanceof GeoSegment))
+      return false;
+
+    GeoSegment other = (GeoSegment) o;
+    return
+      this.p1.equals(other.p1) &&
+      this.p2.equals(other.p2) &&
+      this.name.equals(other.name);
+  }
+
+  /*@ also_ensures this.p1.latitude  isPointer; */
+  /*@ also_ensures this.p1.longitude  isPointer; */
+  /*@ also_ensures this.p2.latitude  isPointer; */
+  /*@ also_ensures this.p2.longitude  isPointer; */
+  /*@ also_ensures \result  isPointer; */
+  /*@ also_ensures \result != 0; */
+  /*@ also_ensures this.p1.latitude != \result; */
+  /*@ also_ensures this.p1.longitude != \result; */
+  /*@ also_ensures this.p2.latitude != \result; */
+  /*@ also_ensures this.p2.longitude != \result; */
+  // specified by superclass (Object)
+  public int hashCode()
+  {
+    return
+      name.hashCode() +
+      p1.hashCode() * 7 +
+      p2.hashCode() * 17;
+  }
+
+} // GeoSegment
+package MapQuick1;
+
+import MapQuick.*;
+import junit.framework.Assert;
+
+/**
+ * A GeoPoint models a point on the earth.<p>
+ *
+ * @specfield  latitude : double          // measured in degrees
+ * @specfield  longitude : double         // measured in degrees
+ * @endspec
+ *
+ * <p>GeoPoints are immutable.
+ *
+ *
+ * <p>South latitudes and west longitudes are represented by negative numbers.
+ *
+ * <p>The code may assume that the represented points are nearby Boston.
+ *
+ * <p><b>Implementation hint</b>:<br>
+ * Boston is at approximately 42 deg. 21 min. 30 sec. N latitude and 71
+ * deg. 03 min. 37 sec. W longitude.  At that location, there are
+ * approximately 69.023 miles per degree of latitude and 51.075 miles per
+ * degree of longitude.  An implementation may use these values when
+ * determining distances and headings.
+ **/
+public class GeoPoint {
+
+  /*@ invariant this.latitude > this.longitude; */
+  /*@ spec_public */ private final static double REP_SCALE_FACTOR = 1000000.0;
+
+  /*@ spec_public */ private final int latitude;
+  /*@ spec_public */ private final int longitude;
+
+  /*@ requires latitude  isPointer; */
+  /*@ requires longitude  isPointer; */
+  /*@ requires latitude > longitude; */
+  /*@ ensures this.latitude == \old(latitude); */
+  /*@ ensures this.longitude == \old(longitude); */
+  /*@ ensures this.latitude  isPointer; */
+  /*@ ensures this.longitude  isPointer; */
+  // Constructors
+
+  /**
+   * @requires the point given by (latitude, longitude) is near Boston
+   * @effects constructs a GeoPoint from a latitude and longitude given in degrees East and North.
+   **/
+  public GeoPoint(int latitude, int longitude)
+  {
+    Assert.assertTrue((41000000 <= latitude) && (latitude <= 43000000));
+    Assert.assertTrue((-72000000 <= longitude) && (longitude <= -70000000));
+
+    this.latitude = latitude;
+    this.longitude = longitude;
+  }
+  /*@ also_modifies this.latitude, this.longitude; */
+  // Observers
+
+  public String toString() {
+    return "Pt{" +
+      (latitude / REP_SCALE_FACTOR) +
+      "," +
+      (longitude / REP_SCALE_FACTOR) +
+      "}";
+  }
+
+  /**
+   * Compares the specified Object with this GeoPoint for equality.
+   * @return    gp != null && (gp instanceof GeoPoint)
+   *         && gp.latitude == this.latitude && gp.longitude == this.longitude
+   **/
+  public boolean equals(Object o)
+  {
+    if(!(o instanceof GeoPoint))
+      return false;
+
+    GeoPoint other = (GeoPoint) o;
+    return
+      (this.latitude == other.latitude) &&
+      (this.longitude == other.longitude);
+  }
+
+  /*@ also_ensures this.latitude  isPointer; */
+  /*@ also_ensures this.longitude  isPointer; */
+  /*@ also_ensures \result  isPointer; */
+  /*@ also_ensures this.latitude < \result; */
+  /*@ also_ensures this.longitude < \result; */
+  /*@ also_ensures 7 * this.latitude + 41 * this.longitude - \result + 4.294967296E9 == 0; */
+  // specified by superclass (Object)
+  public int hashCode()
+  {
+    return latitude * 7 + longitude * 41;
+  }
+
+  /*@ requires this.latitude  isPointer; */
+  /*@ requires this.longitude  isPointer; */
+  /*@ requires gp != null; */
+  /*@ requires gp.latitude  isPointer; */
+  /*@ requires gp.longitude  isPointer; */
+  /*@ requires this.latitude > gp.longitude; */
+  /*@ requires this.longitude < gp.latitude; */
+  /*@ requires gp.latitude > gp.longitude; */
+  /*@ ensures this.latitude  isPointer; */
+  /*@ ensures this.longitude  isPointer; */
+  /*@ ensures gp.latitude  isPointer; */
+  /*@ ensures gp.longitude  isPointer; */
+  /*@ ensures MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result; */
+  /*@ ensures this.latitude > gp.longitude; */
+  /*@ ensures this.longitude < gp.latitude; */
+  /*@ ensures gp.latitude > gp.longitude; */
+  /** Computes the distance between GeoPoints.
+   * @requires gp != null
+   * @return a close approximation of as-the-crow-flies distance, in
+   *         miles, from this to gp
+   **/
+  public double distanceTo(GeoPoint gp)
+  {
+    Assert.assertNotNull(gp);
+
+    double x = (gp.latitude - this.latitude) * 69.023 / REP_SCALE_FACTOR;
+    double y = (gp.longitude - this.longitude) * 51.075 / REP_SCALE_FACTOR;
+    return Math.sqrt(x * x + y * y);
+  }
+
+  /*@ requires this.latitude  isPointer; */
+  /*@ requires this.longitude  isPointer; */
+  /*@ requires gp != null; */
+  /*@ requires gp.latitude  isPointer; */
+  /*@ requires gp.longitude  isPointer; */
+  /*@ requires this.latitude != gp.latitude; */
+  /*@ requires this.latitude > gp.longitude; */
+  /*@ requires this.longitude < gp.latitude; */
+  /*@ requires this.longitude != gp.longitude; */
+  /*@ requires gp.latitude > gp.longitude; */
+  /*@ ensures this.latitude  isPointer; */
+  /*@ ensures this.longitude  isPointer; */
+  /*@ ensures gp.latitude  isPointer; */
+  /*@ ensures gp.longitude  isPointer; */
+  /*@ ensures MapQuick1.GeoPoint.REP_SCALE_FACTOR > \result; */
+  /*@ ensures this.latitude != gp.latitude; */
+  /*@ ensures this.latitude > gp.longitude; */
+  /*@ ensures this.longitude < gp.latitude; */
+  /*@ ensures this.longitude != gp.longitude; */
+  /*@ ensures gp.latitude > gp.longitude; */
+  /** Computes the compass heading between GeoPoints.
+   * @requires gp != null && !this.equals(gp)
+   * @return a close approximation of compass heading h from this to
+   *         gp, in degrees, such that 0 <= h < 360.  In compass
+   *         headings, * north = 0, east = 90, south = 180, and west =
+   *         270.
+   **/
+  public double headingTo(GeoPoint gp)
+  {
+    Assert.assertNotNull(gp);
+    Assert.assertTrue(!equals(gp));
+
+    double x = (gp.latitude - this.latitude) * 69.023 / REP_SCALE_FACTOR;
+    double y = (gp.longitude - this.longitude) * 51.075 / REP_SCALE_FACTOR;
+
+    double angle = Math.toDegrees(Math.atan2(y, x));
+    if (angle < 0) {
+      angle += 360.0;
+    }
+    return angle;
+  }
+
+} // GeoPoint

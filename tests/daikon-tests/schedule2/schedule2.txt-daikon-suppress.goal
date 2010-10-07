@@ -1,0 +1,795 @@
+===========================================================================
+std.block()int:::ENTER
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+::next_pid >= ::prio_queue.length
+::next_pid >= ::prio_queue.head.next.priority
+===========================================================================
+std.block()int:::EXIT11
+::next_pid >= 1
+::prio_queue.length >= 1
+::prio_queue.head != null
+orig(::current_job) != null
+::next_pid > return
+::next_pid > orig(::prio_queue.length)
+::next_pid >= orig(::prio_queue.head.priority)
+::next_pid > orig(::prio_queue.head.next.priority)
+::prio_queue.length > return
+orig(::prio_queue.length) == ::prio_queue.length - 1
+::prio_queue.length >= orig(::prio_queue.head.next.priority)
+::prio_queue.head.priority >= orig(::prio_queue.head.next.priority)
+orig(::prio_queue.head.next.priority) is a bitwise subset of ::prio_queue.head.priority
+orig(::prio_queue.head.next.priority) is a bitwise subset of orig(::prio_queue.head.priority)
+orig(::prio_queue.head.priority) >= orig(::prio_queue.head.next.priority)
+===========================================================================
+std.block()int:::EXIT12
+::current_job == return
+::current_job == orig(::current_job)
+::prio_queue.length == orig(::prio_queue.length)
+::prio_queue.head == orig(::prio_queue.head)
+::prio_queue.head.next == orig(::prio_queue.head.next)
+::prio_queue.head.next.next == orig(::prio_queue.head.next.next)
+::current_job == null
+::next_pid >= ::prio_queue.head.next.priority
+===========================================================================
+std.block()int:::EXIT
+::current_job.next == return
+::current_job.next == orig(::current_job.next)
+::next_pid == orig(::next_pid)
+::prio_queue == orig(::prio_queue)
+::prio_queue.head.priority == orig(::prio_queue.head.priority)
+::prio_queue.head.next.priority == orig(::prio_queue.head.next.priority)
+return == orig(::current_job.next)
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return == 0
+::current_job.priority <= ::prio_queue.head.priority
+::current_job.priority <= ::prio_queue.head.next.priority
+::current_job.priority > return
+::current_job.priority <= orig(::prio_queue.head.priority)
+::current_job.priority <= orig(::prio_queue.head.next.priority)
+::next_pid >= return
+::next_pid >= orig(::prio_queue.head.next.priority)
+::prio_queue.length >= return
+::prio_queue.head.priority > return
+::prio_queue.head.next.priority > return
+return < orig(::current_job.priority)
+return <= orig(::prio_queue.length)
+return < orig(::prio_queue.head.priority)
+return < orig(::prio_queue.head.next.priority)
+===========================================================================
+std.enqueue(int;process *;)int:::ENTER
+new_process.next == ::current_job.next
+prio >= 0
+new_process != null
+new_process.priority one of { 1, 2, 3 }
+new_process.next == null
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 1
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+prio % new_process.priority == 0
+prio <= new_process.priority
+prio is a bitwise subset of new_process.priority
+::next_pid > ::prio_queue.length
+::next_pid >= ::prio_queue.head.priority
+::next_pid > ::prio_queue.head.next.priority
+===========================================================================
+std.enqueue(int;process *;)int:::EXIT2
+prio % new_process.priority == 0
+prio is a bitwise subset of new_process.priority
+===========================================================================
+std.enqueue(int;process *;)int:::EXIT
+prio == orig(prio)
+new_process == orig(new_process)
+new_process.priority == orig(new_process.priority)
+new_process.next == ::current_job.next
+new_process.next == return
+new_process.next == orig(new_process.next)
+new_process.next == orig(::current_job.next)
+::current_job.next == return
+::current_job.next == orig(::current_job.next)
+::next_pid == orig(::next_pid)
+::prio_queue == orig(::prio_queue)
+::prio_queue.head.priority == orig(::prio_queue.head.priority)
+::prio_queue.head.next.priority == orig(::prio_queue.head.next.priority)
+return == orig(::current_job.next)
+prio >= 0
+new_process != null
+new_process.priority one of { 1, 2, 3 }
+new_process.next == null
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 1
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return == 0
+prio % new_process.priority == 0
+prio is a bitwise subset of new_process.priority
+prio <= ::current_job.priority
+prio >= return
+new_process.priority > return
+::current_job.priority > return
+::current_job.priority >= orig(::current_job.priority)
+::next_pid > return
+::next_pid > orig(::prio_queue.length)
+::next_pid >= orig(::prio_queue.head.priority)
+::next_pid > orig(::prio_queue.head.next.priority)
+::prio_queue.length >= return
+::prio_queue.head.priority > return
+::prio_queue.head.next.priority > return
+return < orig(::current_job.priority)
+return <= orig(::prio_queue.length)
+return < orig(::prio_queue.head.priority)
+return < orig(::prio_queue.head.next.priority)
+===========================================================================
+std.finish()int:::ENTER
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+::next_pid >= ::prio_queue.length
+::next_pid >= ::prio_queue.head.next.priority
+===========================================================================
+std.finish()int:::EXIT17
+return == 0
+orig(::current_job) != null
+::next_pid > ::prio_queue.length
+::next_pid >= ::prio_queue.head.priority
+::next_pid > return
+::prio_queue.length >= return
+::prio_queue.head.priority > return
+::prio_queue.head.next.priority > return
+===========================================================================
+std.finish()int:::EXIT18
+::current_job == orig(::current_job)
+::current_job == null
+return == 1
+::next_pid > ::prio_queue.head.next.priority
+===========================================================================
+std.finish()int:::EXIT
+::current_job.next == return
+::current_job.next == orig(::current_job.next)
+::next_pid == orig(::next_pid)
+::prio_queue == orig(::prio_queue)
+::prio_queue.length == orig(::prio_queue.length)
+::prio_queue.head == orig(::prio_queue.head)
+::prio_queue.head.priority == orig(::prio_queue.head.priority)
+::prio_queue.head.next == orig(::prio_queue.head.next)
+::prio_queue.head.next.priority == orig(::prio_queue.head.next.priority)
+::prio_queue.head.next.next == orig(::prio_queue.head.next.next)
+return == orig(::current_job.next)
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return one of { 0, 1 }
+::current_job.priority > return
+return % ::current_job.priority == 0
+return is a bitwise subset of ::current_job.priority
+::next_pid >= ::prio_queue.head.next.priority
+::prio_queue.head.priority >= return
+::prio_queue.head.next.priority >= return
+return % orig(::current_job.priority) == 0
+return < orig(::current_job.priority)
+return is a bitwise subset of orig(::current_job.priority)
+===========================================================================
+std.flush()int:::ENTER
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+::next_pid >= ::prio_queue.length
+::next_pid >= ::prio_queue.head.priority
+::next_pid > ::prio_queue.head.next.priority
+===========================================================================
+std.flush()int:::EXIT
+::current_job == return
+::current_job == orig(::current_job.next)
+::next_pid == orig(::next_pid)
+::prio_queue == orig(::prio_queue)
+::prio_queue.length == orig(::prio_queue.length)
+::prio_queue.head == orig(::prio_queue.head)
+::prio_queue.head.priority == orig(::prio_queue.head.priority)
+::prio_queue.head.next == orig(::prio_queue.head.next)
+::prio_queue.head.next.priority == orig(::prio_queue.head.next.priority)
+::prio_queue.head.next.next == orig(::prio_queue.head.next.next)
+return == orig(::current_job.next)
+::current_job == null
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return == 0
+::next_pid >= ::prio_queue.head.priority
+::next_pid > ::prio_queue.head.next.priority
+::next_pid >= return
+::prio_queue.length >= return
+::prio_queue.head.priority > return
+::prio_queue.head.next.priority > return
+return < orig(::current_job.priority)
+===========================================================================
+std.get_command(int *;int *;float *;)int:::ENTER
+command != null
+*command >= -1
+prio != null
+*prio >= -1
+ratio != null
+*ratio >= -1.0
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 0
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+::next_pid >= ::prio_queue.length
+===========================================================================
+std.get_command(int *;int *;float *;)int:::EXIT4
+*command != 0
+*prio != 0
+*ratio != 0
+return == 1
+===========================================================================
+std.get_command(int *;int *;float *;)int:::EXIT5
+*command == orig(*command)
+*prio == orig(*prio)
+*ratio == orig(*ratio)
+::current_job.next == return
+::prio_queue.head.next.priority one of { 2, 3 }
+return == 0
+::current_job.priority > return
+::next_pid > ::prio_queue.head.next.priority
+::next_pid >= return
+::prio_queue.length >= return
+::prio_queue.head.priority > return
+::prio_queue.head.next.priority > return
+===========================================================================
+std.get_command(int *;int *;float *;)int:::EXIT
+command == orig(command)
+prio == orig(prio)
+ratio == orig(ratio)
+::current_job == orig(::current_job)
+::current_job.priority == orig(::current_job.priority)
+::current_job.next == orig(::current_job.next)
+::next_pid == orig(::next_pid)
+::prio_queue == orig(::prio_queue)
+::prio_queue.length == orig(::prio_queue.length)
+::prio_queue.head == orig(::prio_queue.head)
+::prio_queue.head.priority == orig(::prio_queue.head.priority)
+::prio_queue.head.next == orig(::prio_queue.head.next)
+::prio_queue.head.next.priority == orig(::prio_queue.head.next.priority)
+::prio_queue.head.next.next == orig(::prio_queue.head.next.next)
+command != null
+*command >= -1
+prio != null
+*prio >= -1
+ratio != null
+*ratio >= -1.0
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 0
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return one of { 0, 1 }
+::current_job.priority >= return
+::prio_queue.head.priority >= return
+::prio_queue.head.next.priority >= return
+===========================================================================
+std.get_current()process *:::ENTER
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+::next_pid >= ::prio_queue.length
+===========================================================================
+std.get_current()process *:::EXIT
+::current_job == return
+::current_job.priority == return.priority
+::current_job.priority == orig(::current_job.priority)
+::current_job.next == return.next
+::current_job.next == orig(::current_job.next)
+::next_pid == orig(::next_pid)
+::prio_queue == orig(::prio_queue)
+::prio_queue.length == orig(::prio_queue.length)
+::prio_queue.head == orig(::prio_queue.head)
+::prio_queue.head.priority == orig(::prio_queue.head.priority)
+::prio_queue.head.next == orig(::prio_queue.head.next)
+::prio_queue.head.next.priority == orig(::prio_queue.head.next.priority)
+::prio_queue.head.next.next == orig(::prio_queue.head.next.next)
+return.priority == orig(::current_job.priority)
+return.next == orig(::current_job.next)
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return.priority one of { 1, 2, 3 }
+return.next == null
+===========================================================================
+std.get_process(int;float;process **;)int:::ENTER
+prio >= 0
+ratio >= 0.0
+job != null
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 0
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+::next_pid >= ::prio_queue.length
+===========================================================================
+std.get_process(int;float;process **;)int:::EXIT27
+::next_pid >= 1
+return == 1
+prio <= ::current_job.priority
+prio <= orig(::current_job.priority)
+::next_pid > ::prio_queue.length
+::next_pid >= ::prio_queue.head.next.priority
+===========================================================================
+std.get_process(int;float;process **;)int:::EXIT28
+::current_job == orig(::current_job)
+::current_job.next == return
+::prio_queue.length == orig(::prio_queue.length)
+::prio_queue.head == orig(::prio_queue.head)
+::prio_queue.head.priority == orig(::prio_queue.head.priority)
+::prio_queue.head.next == orig(::prio_queue.head.next)
+::prio_queue.head.next.priority == orig(::prio_queue.head.next.priority)
+::prio_queue.head.next.next == orig(::prio_queue.head.next.next)
+return == 0
+::current_job.priority > return
+::prio_queue.head.priority > return
+::prio_queue.head.next.priority > return
+===========================================================================
+std.get_process(int;float;process **;)int:::EXIT
+prio == orig(prio)
+ratio == orig(ratio)
+job == orig(job)
+::current_job.priority == orig(::current_job.priority)
+::current_job.next == orig(::current_job.next)
+::next_pid == orig(::next_pid)
+::prio_queue == orig(::prio_queue)
+prio >= 0
+ratio >= 0.0
+job != null
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 0
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return one of { 0, 1 }
+::current_job.priority >= return
+::next_pid >= return
+::prio_queue.head.priority >= return
+::prio_queue.head.next.priority >= return
+return <= orig(::current_job.priority)
+return <= orig(::prio_queue.head.priority)
+return <= orig(::prio_queue.head.next.priority)
+===========================================================================
+std.new_job(int;)int:::ENTER
+prio one of { 1, 2, 3 }
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 0
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+::next_pid >= ::prio_queue.length
+::next_pid > ::prio_queue.head.next.priority
+===========================================================================
+std.new_job(int;)int:::EXIT
+prio == orig(prio)
+::current_job.next == return
+::current_job.next == orig(::current_job.next)
+::prio_queue == orig(::prio_queue)
+::prio_queue.length == orig(::prio_queue.length)
+::prio_queue.head == orig(::prio_queue.head)
+::prio_queue.head.priority == orig(::prio_queue.head.priority)
+::prio_queue.head.next == orig(::prio_queue.head.next)
+::prio_queue.head.next.priority == orig(::prio_queue.head.next.priority)
+::prio_queue.head.next.next == orig(::prio_queue.head.next.next)
+return == orig(::current_job.next)
+prio one of { 1, 2, 3 }
+::current_job != null
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 1
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return == 0
+prio <= ::current_job.priority
+prio > return
+::current_job.priority > return
+::current_job.priority >= orig(::current_job.priority)
+::next_pid > ::prio_queue.length
+::next_pid >= ::prio_queue.head.priority
+::next_pid > ::prio_queue.head.next.priority
+::next_pid > return
+orig(::next_pid) == ::next_pid - 1
+::prio_queue.length >= return
+::prio_queue.head.priority > return
+::prio_queue.head.next.priority > return
+::prio_queue.head.next.priority < orig(::next_pid)
+return < orig(::current_job.priority)
+return <= orig(::next_pid)
+===========================================================================
+std.put_end(int;process *;)int:::ENTER
+process_ptr.next == ::current_job.next
+prio >= 0
+process_ptr != null
+process_ptr.priority one of { 1, 2, 3 }
+process_ptr.next == null
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 1
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+prio % process_ptr.priority == 0
+prio <= process_ptr.priority
+prio is a bitwise subset of process_ptr.priority
+::next_pid > ::prio_queue.length
+::next_pid >= ::prio_queue.head.priority
+::next_pid > ::prio_queue.head.next.priority
+===========================================================================
+std.put_end(int;process *;)int:::EXIT24
+prio % process_ptr.priority == 0
+prio is a bitwise subset of process_ptr.priority
+===========================================================================
+std.put_end(int;process *;)int:::EXIT
+prio == orig(prio)
+process_ptr == orig(process_ptr)
+process_ptr.priority == orig(process_ptr.priority)
+process_ptr.next == ::current_job.next
+process_ptr.next == return
+process_ptr.next == orig(process_ptr.next)
+::current_job == orig(::current_job)
+::current_job.priority == orig(::current_job.priority)
+::current_job.next == return
+::current_job.next == orig(::current_job.next)
+::next_pid == orig(::next_pid)
+::prio_queue == orig(::prio_queue)
+::prio_queue.head.priority == orig(::prio_queue.head.priority)
+::prio_queue.head.next.priority == orig(::prio_queue.head.next.priority)
+prio >= 0
+process_ptr != null
+process_ptr.priority one of { 1, 2, 3 }
+process_ptr.next == null
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 1
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return == 0
+prio % process_ptr.priority == 0
+prio is a bitwise subset of process_ptr.priority
+prio >= return
+process_ptr.priority > return
+::current_job.priority > return
+::next_pid > return
+::next_pid > orig(::prio_queue.length)
+::next_pid >= orig(::prio_queue.head.priority)
+::next_pid > orig(::prio_queue.head.next.priority)
+::prio_queue.length >= return
+::prio_queue.head.priority > return
+::prio_queue.head.next.priority > return
+return <= orig(::prio_queue.length)
+return < orig(::prio_queue.head.priority)
+return < orig(::prio_queue.head.next.priority)
+===========================================================================
+std.quantum_expire()int:::ENTER
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+::next_pid > ::prio_queue.length
+::next_pid >= ::prio_queue.head.priority
+::next_pid > ::prio_queue.head.next.priority
+===========================================================================
+std.quantum_expire()int:::EXIT15
+::current_job != null
+orig(::current_job) != null
+::prio_queue.head.priority >= ::prio_queue.head.next.priority
+===========================================================================
+std.quantum_expire()int:::EXIT16
+::current_job == return
+::current_job == orig(::current_job)
+::current_job == null
+::next_pid > ::prio_queue.head.priority
+===========================================================================
+std.quantum_expire()int:::EXIT
+::current_job.priority == orig(::current_job.priority)
+::current_job.next == return
+::current_job.next == orig(::current_job.next)
+::next_pid == orig(::next_pid)
+::prio_queue == orig(::prio_queue)
+::prio_queue.length == orig(::prio_queue.length)
+::prio_queue.head == orig(::prio_queue.head)
+::prio_queue.head.priority == orig(::prio_queue.head.priority)
+::prio_queue.head.next == orig(::prio_queue.head.next)
+::prio_queue.head.next.priority == orig(::prio_queue.head.next.priority)
+::prio_queue.head.next.next == orig(::prio_queue.head.next.next)
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return == 0
+::current_job.priority > return
+::next_pid > ::prio_queue.length
+::next_pid >= ::prio_queue.head.priority
+::next_pid > ::prio_queue.head.next.priority
+::next_pid > return
+::prio_queue.length >= return
+::prio_queue.head.priority > return
+::prio_queue.head.next.priority > return
+===========================================================================
+std.reschedule(int;)int:::ENTER
+prio >= 0
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 1
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+::next_pid >= ::prio_queue.length
+===========================================================================
+std.reschedule(int;)int:::EXIT
+prio == orig(prio)
+::current_job.next == return
+::current_job.next == orig(::current_job.next)
+::next_pid == orig(::next_pid)
+::prio_queue == orig(::prio_queue)
+::prio_queue.length == orig(::prio_queue.length)
+::prio_queue.head == orig(::prio_queue.head)
+::prio_queue.head.priority == orig(::prio_queue.head.priority)
+::prio_queue.head.next == orig(::prio_queue.head.next)
+::prio_queue.head.next.priority == orig(::prio_queue.head.next.priority)
+::prio_queue.head.next.next == orig(::prio_queue.head.next.next)
+return == orig(::current_job.next)
+prio >= 0
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 1
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return == 0
+prio <= ::current_job.priority
+prio >= return
+::current_job.priority > return
+::current_job.priority >= orig(::current_job.priority)
+::next_pid > return
+::prio_queue.length >= return
+::prio_queue.head.priority > return
+::prio_queue.head.next.priority > return
+return < orig(::current_job.priority)
+===========================================================================
+std.schedule(int;int;float;)int:::ENTER
+command != 0
+command >= -1
+prio != 0
+prio >= -1
+ratio != 0
+ratio >= -1.0
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 0
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+::next_pid >= ::prio_queue.length
+===========================================================================
+std.schedule(int;int;float;)int:::EXIT
+command == orig(command)
+prio == orig(prio)
+ratio == orig(ratio)
+::current_job.next == orig(::current_job.next)
+::prio_queue == orig(::prio_queue)
+command != 0
+command >= -1
+prio != 0
+prio >= -1
+ratio != 0
+ratio >= -1.0
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 0
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return one of { -6, -4, 0 }
+command > return
+return % command == 0
+prio != return
+::current_job.priority > return
+::next_pid >= return
+::prio_queue.length >= return
+::prio_queue.head.priority > return
+::prio_queue.head.next.priority > return
+return < orig(::current_job.priority)
+return <= orig(::next_pid)
+return <= orig(::prio_queue.length)
+return < orig(::prio_queue.head.priority)
+return < orig(::prio_queue.head.next.priority)
+===========================================================================
+std.unblock(float;)int:::ENTER
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+::next_pid >= ::prio_queue.length
+===========================================================================
+std.unblock(float;)int:::EXIT13
+::current_job == orig(::current_job)
+::current_job.priority == orig(::current_job.priority)
+::current_job.next == ::prio_queue.length
+::current_job.next == ::prio_queue.head
+::prio_queue.length == ::prio_queue.head
+::prio_queue.length == return
+::prio_queue.length == orig(::prio_queue.length)
+::prio_queue.head == return
+::prio_queue.head == orig(::prio_queue.head)
+::prio_queue.length == 0
+::prio_queue.head == null
+::current_job.priority > ::prio_queue.length
+===========================================================================
+std.unblock(float;)int:::EXIT14
+::current_job != null
+orig(::prio_queue.head) != null
+::next_pid > ::prio_queue.length
+::next_pid > return
+orig(::prio_queue.length) == ::prio_queue.length + 1
+return < orig(::prio_queue.length)
+===========================================================================
+std.unblock(float;)int:::EXIT
+ratio == orig(ratio)
+::current_job.next == return
+::current_job.next == orig(::current_job.next)
+::next_pid == orig(::next_pid)
+::prio_queue == orig(::prio_queue)
+return == orig(::current_job.next)
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return == 0
+::current_job.priority > return
+::next_pid > ::prio_queue.head.next.priority
+::next_pid >= return
+::prio_queue.length >= return
+::prio_queue.head.priority > return
+::prio_queue.head.next.priority > return
+::prio_queue.head.next.priority <= orig(::prio_queue.length)
+return < orig(::current_job.priority)
+return <= orig(::prio_queue.length)
+return < orig(::prio_queue.head.priority)
+return < orig(::prio_queue.head.next.priority)
+===========================================================================
+std.upgrade_prio(int;float;)int:::ENTER
+prio one of { 1, 2, 3 }
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 0
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+::next_pid >= ::prio_queue.length
+::next_pid >= ::prio_queue.head.priority
+::next_pid > ::prio_queue.head.next.priority
+===========================================================================
+std.upgrade_prio(int;float;)int:::EXIT10
+::current_job.next == return
+prio one of { 1, 2 }
+::current_job != null
+::current_job.priority one of { 2, 3 }
+return == 0
+orig(::current_job) != null
+prio < ::current_job.priority
+prio <= ::next_pid
+prio <= ::prio_queue.head.priority
+prio <= orig(::current_job.priority)
+::next_pid > ::prio_queue.length
+::next_pid > ::prio_queue.head.priority
+::next_pid > return
+::prio_queue.head.priority >= ::prio_queue.head.next.priority
+===========================================================================
+std.upgrade_prio(int;float;)int:::EXIT8
+::current_job == orig(::current_job)
+::current_job.priority == orig(::current_job.priority)
+prio == 3
+return == -4
+prio >= ::current_job.priority
+prio <= ::next_pid
+prio >= ::prio_queue.head.priority
+prio >= ::prio_queue.head.next.priority
+::current_job.priority < ::next_pid
+::next_pid > ::prio_queue.length
+::next_pid > ::prio_queue.head.priority
+::next_pid > return
+::prio_queue.length > return
+::prio_queue.head.priority >= ::prio_queue.head.next.priority
+===========================================================================
+std.upgrade_prio(int;float;)int:::EXIT9
+::current_job == orig(::current_job)
+::current_job.priority == orig(::current_job.priority)
+::current_job.next == return
+prio one of { 1, 2 }
+return == 0
+===========================================================================
+std.upgrade_prio(int;float;)int:::EXIT
+prio == orig(prio)
+ratio == orig(ratio)
+::current_job.next == orig(::current_job.next)
+::next_pid == orig(::next_pid)
+::prio_queue == orig(::prio_queue)
+::prio_queue.length == orig(::prio_queue.length)
+::prio_queue.head == orig(::prio_queue.head)
+::prio_queue.head.priority == orig(::prio_queue.head.priority)
+::prio_queue.head.next == orig(::prio_queue.head.next)
+::prio_queue.head.next.priority == orig(::prio_queue.head.next.priority)
+::prio_queue.head.next.next == orig(::prio_queue.head.next.next)
+prio one of { 1, 2, 3 }
+::current_job.priority one of { 1, 2, 3 }
+::current_job.next == null
+::next_pid >= 0
+::prio_queue != null
+::prio_queue.length >= 0
+::prio_queue.head.priority one of { 1, 2, 3 }
+::prio_queue.head.next.priority one of { 1, 2, 3 }
+return one of { -4, 0 }
+prio > return
+::current_job.priority > return
+::current_job.priority >= orig(::current_job.priority)
+::next_pid >= ::prio_queue.head.priority
+::next_pid > ::prio_queue.head.next.priority
+::next_pid >= return
+::prio_queue.length >= return
+::prio_queue.head.priority > return
+::prio_queue.head.next.priority > return
+return < orig(::current_job.priority)

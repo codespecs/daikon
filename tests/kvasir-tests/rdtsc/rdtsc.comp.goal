@@ -1,0 +1,16 @@
+..main():::ENTER
+argc
+argv
+argv[]
+
+..main():::EXIT0
+argc
+argv
+argv[]
+return
+
+..read_tsc():::ENTER
+
+..read_tsc():::EXIT0
+return
+

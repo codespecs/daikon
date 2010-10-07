@@ -1,0 +1,94 @@
+<std.block()int:::ENTER>
+  <::next_pid >= 0 {1-}, ::next_pid >= 0 {0+}> (UInt,SUJ)
+<std.block()int:::EXIT>
+  <::next_pid >= 0 {1-}, ::next_pid >= 0 {0+}> (UInt,SUJ)
+<std.block()int:::EXIT11>
+  <::next_pid >= 1 {0+}, ::next_pid >= 2 {0.7637-}> (UInt,DJU)
+<std.block()int:::EXIT12>
+  <::next_pid >= 0 {1-}, ::next_pid >= 0 {0+}> (UInt,SUJ)
+<std.enqueue(int;process *;)int:::ENTER>
+  <prio >= 0 {0+}, prio >= -1 {0+}> (UInt,DJJ)
+<std.enqueue(int;process *;)int:::EXIT>
+  <prio >= 0 {0+}, prio >= -1 {0+}> (UInt,DJJ)
+  <return == 0 {0+}, return one of { -4, 0 } {0+}> (UInt,DJJ)
+<std.enqueue(int;process *;)int:::EXIT1>
+  <null, ::next_pid == orig(::next_pid) {0+}> (Bin,MJ)
+  <null, prio == orig(prio) {0+}> (Bin,MJ)
+  <null, prio != 0 {0.0001+}> (UInt,MJ)
+  <null, return == -4 {0+}> (UInt,MJ)
+<std.get_command(int *;int *;float *;)int:::ENTER>
+  <*command != 0 {0.0001+}, null> (UInt,JM)
+<std.get_command(int *;int *;float *;)int:::EXIT>
+  <*command != 0 {0.0001+}, null> (UInt,JM)
+  <orig(*command) != 0 {0.0001+}, null> (UInt,JM)
+<std.get_command(int *;int *;float *;)int:::EXIT4>
+  <*command != 0 {0+}, null> (UInt,JM)
+  <*prio != 0 {0+}, null> (UInt,JM)
+  <orig(*command) != 0 {0.0001+}, null> (UInt,JM)
+<std.get_command(int *;int *;float *;)int:::EXIT5>
+  <::next_pid >= 0 {0+}, ::next_pid >= 0 {0.9421-}> (UInt,SJU)
+  <*command != 0 {0.0001+}, null> (UInt,JM)
+<std.get_current()process *:::ENTER>
+  <::next_pid >= 0 {0.5556-}, ::next_pid >= 0 {0+}> (UInt,SUJ)
+<std.get_current()process *:::EXIT>
+  <::next_pid >= 0 {0.5556-}, ::next_pid >= 0 {0+}> (UInt,SUJ)
+<std.get_current()process *:::EXIT20>
+  <::next_pid >= 0 {0.5556-}, ::next_pid >= 0 {0+}> (UInt,SUJ)
+<std.get_process(int;float;process **;)int:::ENTER>
+  <ratio >= 0.0 {0+}, ratio >= -1.0 {0.9279-}> (UInt,DJU)
+<std.get_process(int;float;process **;)int:::EXIT>
+  <ratio >= 0.0 {0+}, ratio >= -1.0 {0.9279-}> (UInt,DJU)
+<std.get_process(int;float;process **;)int:::EXIT26>
+  <null, ratio == orig(ratio) {0+}> (Bin,MJ)
+  <null, ::next_pid == orig(::next_pid) {0+}> (Bin,MJ)
+  <null, job == orig(job) {0+}> (Bin,MJ)
+  <null, prio == orig(prio) {0+}> (Bin,MJ)
+  <null, job != null {0.0001+}> (UInt,MJ)
+  <null, return == -5 {0+}> (UInt,MJ)
+<std.get_process(int;float;process **;)int:::EXIT27>
+  <::next_pid >= 1 {0+}, ::next_pid >= 1 {0.0782-}> (UInt,SJU)
+<std.new_job(int;)int:::EXIT>
+  <::next_pid > orig(::next_pid) {0.0001+}, null> (Bin,JM)
+  <orig(::next_pid) == ::next_pid - 1 {0+}, null> (Bin,JM)
+  <::next_pid >= 1 {0+}, ::next_pid >= 0 {0.6667-}> (UInt,DJU)
+  <return == 0 {0+}, return one of { -4, 0 } {0+}> (UInt,DJJ)
+<std.new_job(int;)int:::EXIT7>
+  <::next_pid > orig(::next_pid) {0.0001+}, null> (Bin,JM)
+  <orig(::next_pid) == ::next_pid - 1 {0+}, null> (Bin,JM)
+  <::next_pid >= 1 {0+}, ::next_pid >= 0 {0.6667-}> (UInt,DJU)
+  <return == 0 {0+}, return one of { -4, 0 } {0+}> (UInt,DJJ)
+<std.put_end(int;process *;)int:::ENTER>
+  <prio >= 0 {0+}, prio >= -1 {0+}> (UInt,DJJ)
+<std.put_end(int;process *;)int:::EXIT>
+  <prio >= 0 {0+}, prio >= -1 {0+}> (UInt,DJJ)
+  <return == 0 {0+}, return one of { -4, 0 } {0+}> (UInt,DJJ)
+<std.put_end(int;process *;)int:::EXIT23>
+  <null, ::next_pid == orig(::next_pid) {0+}> (Bin,MJ)
+  <null, prio == orig(prio) {0+}> (Bin,MJ)
+  <null, prio != 0 {0.0001+}> (UInt,MJ)
+  <null, return == -4 {0+}> (UInt,MJ)
+<std.quantum_expire()int:::EXIT16>
+  <::next_pid >= 2 {1-}, ::next_pid >= 0 {0+}> (UInt,DUJ)
+<std.schedule(int;int;float;)int:::ENTER>
+  <command != 0 {0+}, null> (UInt,JM)
+  <prio != 0 {0+}, null> (UInt,JM)
+<std.schedule(int;int;float;)int:::EXIT>
+  <command != 0 {0+}, null> (UInt,JM)
+  <prio != 0 {0+}, null> (UInt,JM)
+<std.schedule(int;int;float;)int:::EXIT22>
+  <command != 0 {0+}, null> (UInt,JM)
+  <prio != 0 {0+}, null> (UInt,JM)
+<std.unblock(float;)int:::EXIT>
+  <return == 0 {0+}, return one of { -5, 0 } {0+}> (UInt,DJJ)
+<std.unblock(float;)int:::EXIT13>
+  <::next_pid >= 0 {0.6011-}, ::next_pid >= 0 {0+}> (UInt,SUJ)
+  <return == 0 {0+}, return one of { -5, 0 } {0+}> (UInt,DJJ)
+<std.upgrade_prio(int;float;)int:::ENTER>
+  <::next_pid >= 0 {0+}, ::next_pid >= 0 {0.2221-}> (UInt,SJU)
+<std.upgrade_prio(int;float;)int:::EXIT>
+  <::next_pid >= 0 {0+}, ::next_pid >= 0 {0.2221-}> (UInt,SJU)
+<std.upgrade_prio(int;float;)int:::EXIT8>
+  <prio == 3 {0+}, null> (UInt,JM)
+<std.upgrade_prio(int;float;)int:::EXIT9>
+  <::next_pid >= 0 {0+}, ::next_pid >= 0 {1-}> (UInt,SJU)
+  <return == 0 {0+}, return one of { -5, 0 } {0+}> (UInt,DJJ)

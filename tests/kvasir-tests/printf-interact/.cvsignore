@@ -1,0 +1,2 @@
+interact interact.comp interact.counts interact.out interact-static log merges printf-interact.comp.diff printf-interact.counts.diff printf-interact.counts.diff printf-interact.decls.diff printf-interact.dtrace.diff printf-interact.out.diff ran-kvasir
+printf-interact.invs.diff

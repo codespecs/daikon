@@ -1,0 +1,33 @@
+===========================================================================
+misc.Precedence:::OBJECT
+    Variables: this this.i
+this != null
+this.i == 0 || this.i == 2 || this.i == 10
+===========================================================================
+misc.Precedence.Precedence():::EXIT
+    Variables: this this.i
+this.i == 0
+===========================================================================
+misc.Precedence.lets_calculate(int):::ENTER
+    Variables: this this.i j
+this.i == 10
+j == 4
+===========================================================================
+misc.Precedence.lets_calculate(int):::EXIT
+    Variables: this this.i j return orig(this) orig(this.i) orig(j)
+assignable this.i
+this.i == 2
+\result == 6
+===========================================================================
+misc.Precedence.main(java.lang.String[]):::ENTER
+    Variables: args args.getClass() args[] args[].toString size(args[]) size(args[])-1
+args != null
+args.getClass() == java.lang.String[].class
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(args, "toString()"), new String[] {  })
+===========================================================================
+misc.Precedence.main(java.lang.String[]):::EXIT
+    Variables: args args.getClass() args[] args[].toString orig(args) orig(args.getClass()) orig(args[]) orig(args[].toString) size(args[]) size(args[])-1 orig(size(args[])) orig(size(args[]))-1
+daikon.Quant.pairwiseEqual(args, \old(args))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(args, "toString()"), new String[] {  })

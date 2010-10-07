@@ -1,0 +1,4108 @@
+===========================================================================
+std.Get1Real(charac *;charac **;double *;)int:::ENTER
+pp2 != null
+ureal_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.Get1Real(charac *;charac **;double *;)int:::EXIT120
+return == 12
+===========================================================================
+std.Get1Real(charac *;charac **;double *;)int:::EXIT121
+return == size(ureal_ptr[])-1
+return == 0
+===========================================================================
+std.Get1Real(charac *;charac **;double *;)int:::EXIT
+pp2 == orig(pp2)
+ureal_ptr == orig(ureal_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+ureal_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 12 }
+size(ureal_ptr[]) == 1
+ureal_ptr[] is the reverse of orig(ureal_ptr[])
+return != size(ureal_ptr[])
+return >= size(ureal_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.GetInt(charac *;charac **;int *;)int:::ENTER
+pp2 != null
+intero != null
+::GLOBLE_FILENAME != null
+size(intero[]) == 1
+===========================================================================
+std.GetInt(charac *;charac **;int *;)int:::EXIT124
+===========================================================================
+std.GetInt(charac *;charac **;int *;)int:::EXIT
+pp2 == orig(pp2)
+intero == orig(intero)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(intero[])-1
+return == orig(size(intero[]))-1
+size(intero[]) == orig(size(intero[]))
+pp2 != null
+intero != null
+::GLOBLE_FILENAME != null
+return == 0
+size(intero[]) == 1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.GetKeyword(char *;charac **;)int:::ENTER
+kw != null
+tp != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.GetKeyword(char *;charac **;)int:::EXIT125
+return == 0
+===========================================================================
+std.GetKeyword(char *;charac **;)int:::EXIT126
+return == 1
+===========================================================================
+std.GetKeyword(char *;charac **;)int:::EXIT
+kw == orig(kw)
+tp == orig(tp)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+kw != null
+tp != null
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.GetNatur(charac *;charac **;int *;)int:::ENTER
+pp2 != null
+natur_ptr != null
+natur_ptr[] elements >= 1
+::GLOBLE_FILENAME != null
+size(natur_ptr[]) == 1
+===========================================================================
+std.GetNatur(charac *;charac **;int *;)int:::EXIT130
+===========================================================================
+std.GetNatur(charac *;charac **;int *;)int:::EXIT
+pp2 == orig(pp2)
+natur_ptr == orig(natur_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(natur_ptr[])-1
+return == orig(size(natur_ptr[]))-1
+size(natur_ptr[]) == orig(size(natur_ptr[]))
+pp2 != null
+natur_ptr != null
+natur_ptr[] elements >= 1
+::GLOBLE_FILENAME != null
+return == 0
+size(natur_ptr[]) == 1
+natur_ptr[] > orig(natur_ptr[]) (elementwise)
+orig(natur_ptr[]) == natur_ptr[] - 1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.GetReal(double *;charac **;)int:::ENTER
+reale != null
+reale[] elements one of { 0.0, 90.0 }
+reale[] one of { [0.0], [90.0] }
+tp != null
+::GLOBLE_FILENAME != null
+size(reale[]) == 1
+===========================================================================
+std.GetReal(double *;charac **;)int:::EXIT131
+::GLOBLE_FILENAME[] one of { "inputs/gr13462", "inputs/gr13463", "inputs/gr13525" }
+return == 13
+===========================================================================
+std.GetReal(double *;charac **;)int:::EXIT132
+return == 0
+===========================================================================
+std.GetReal(double *;charac **;)int:::EXIT
+reale == orig(reale)
+tp == orig(tp)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(reale[])-1
+return == orig(size(reale[]))-1
+size(reale[]) == orig(size(reale[]))
+reale != null
+tp != null
+::GLOBLE_FILENAME != null
+return one of { 0, 13 }
+size(reale[]) == 1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.GetUName(char *;charac **;)int:::ENTER
+word != null
+tp != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.GetUName(char *;charac **;)int:::EXIT135
+word[] == "GEOMETRY"
+return == 6
+===========================================================================
+std.GetUName(char *;charac **;)int:::EXIT136
+word[] one of { "test", "testgroup" }
+return == 0
+===========================================================================
+std.GetUName(char *;charac **;)int:::EXIT
+word == orig(word)
+tp == orig(tp)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+word != null
+word[] one of { "GEOMETRY", "test", "testgroup" }
+tp != null
+::GLOBLE_FILENAME != null
+return one of { 0, 6 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.GetUReal(charac *;charac **;double *;)int:::ENTER
+pp2 != null
+ureal_ptr != null
+ureal_ptr[] == [0.0]
+ureal_ptr[] elements == 0.0
+::GLOBLE_FILENAME != null
+size(ureal_ptr[]) == 1
+===========================================================================
+std.GetUReal(charac *;charac **;double *;)int:::EXIT139
+===========================================================================
+std.GetUReal(charac *;charac **;double *;)int:::EXIT
+pp2 == orig(pp2)
+ureal_ptr == orig(ureal_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(ureal_ptr[])-1
+size(ureal_ptr[]) == orig(size(ureal_ptr[]))
+pp2 != null
+ureal_ptr != null
+::GLOBLE_FILENAME != null
+return == 0
+size(ureal_ptr[]) == 1
+ureal_ptr[] > orig(ureal_ptr[]) (elementwise)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.InKWords(char *;)int:::ENTER
+WORD != null
+WORD[] one of { "GEOMETRY", "test", "testgroup" }
+::GLOBLE_FILENAME != null
+===========================================================================
+std.InKWords(char *;)int:::EXIT195
+WORD[] == "GEOMETRY"
+return == 1
+===========================================================================
+std.InKWords(char *;)int:::EXIT196
+WORD[] one of { "test", "testgroup" }
+return == 0
+===========================================================================
+std.InKWords(char *;)int:::EXIT
+WORD == orig(WORD)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+WORD != null
+WORD[] one of { "GEOMETRY", "test", "testgroup" }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+WORD[] == orig(WORD[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.InUNames(char *;)int:::ENTER
+WORD != null
+WORD[] one of { "test", "testgroup" }
+::GLOBLE_FILENAME != null
+===========================================================================
+std.InUNames(char *;)int:::EXIT205
+===========================================================================
+std.InUNames(char *;)int:::EXIT
+WORD == orig(WORD)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+WORD != null
+WORD[] one of { "test", "testgroup" }
+::GLOBLE_FILENAME != null
+return == 0
+WORD[] == orig(WORD[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.InserUN(char *;)int:::ENTER
+WORD != null
+WORD[] one of { "test", "testgroup" }
+::GLOBLE_FILENAME != null
+===========================================================================
+std.InserUN(char *;)int:::EXIT197
+===========================================================================
+std.InserUN(char *;)int:::EXIT
+WORD == orig(WORD)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+WORD != null
+WORD[] one of { "test", "testgroup" }
+::GLOBLE_FILENAME != null
+return == 0
+WORD[] == orig(WORD[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.TapeGet(charac **;)char:::ENTER
+tp != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.TapeGet(charac **;)char:::EXIT
+tp == orig(tp)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+tp != null
+::GLOBLE_FILENAME != null
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.adddef(charac *;charac **;AddRem **;)int:::ENTER
+pp2 != null
+addrem_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.adddef(charac *;charac **;AddRem **;)int:::EXIT10
+return == 0
+===========================================================================
+std.adddef(charac *;charac **;AddRem **;)int:::EXIT11
+::GLOBLE_FILENAME[] one of { "inputs/gr114", "inputs/gr42" }
+return == 17
+===========================================================================
+std.adddef(charac *;charac **;AddRem **;)int:::EXIT2
+return == 1
+===========================================================================
+std.adddef(charac *;charac **;AddRem **;)int:::EXIT4
+return == 0
+===========================================================================
+std.adddef(charac *;charac **;AddRem **;)int:::EXIT6
+return == 0
+===========================================================================
+std.adddef(charac *;charac **;AddRem **;)int:::EXIT
+pp2 == orig(pp2)
+addrem_ptr == orig(addrem_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+addrem_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 1, 17 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.addscan(Group *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.addscan(Group *;)int:::EXIT12
+return == 7
+===========================================================================
+std.addscan(Group *;)int:::EXIT13
+return == 0
+===========================================================================
+std.addscan(Group *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return one of { 0, 7 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.adremdef(charac *;charac **;AddRem **;)int:::ENTER
+pp2 != null
+addrem_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.adremdef(charac *;charac **;AddRem **;)int:::EXIT14
+return == 0
+===========================================================================
+std.adremdef(charac *;charac **;AddRem **;)int:::EXIT15
+pp2 has only one value
+addrem_ptr has only one value
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr114"
+return == 17
+===========================================================================
+std.adremdef(charac *;charac **;AddRem **;)int:::EXIT18
+return == 1
+===========================================================================
+std.adremdef(charac *;charac **;AddRem **;)int:::EXIT
+pp2 == orig(pp2)
+addrem_ptr == orig(addrem_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+addrem_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 1, 17 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.ampunit(charac **;int *;)int:::ENTER
+tp != null
+unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.ampunit(charac **;int *;)int:::EXIT20
+return == size(unit_ptr[])
+unit_ptr[] == [0]
+unit_ptr[] elements == 0
+return == 1
+===========================================================================
+std.ampunit(charac **;int *;)int:::EXIT21
+return == size(unit_ptr[])-1
+unit_ptr[] elements one of { 1, 2 }
+unit_ptr[] one of { [1], [2] }
+::GLOBLE_FILENAME[] one of { "inputs/gr13462", "inputs/gr13463", "inputs/gr13523" }
+return == 0
+===========================================================================
+std.ampunit(charac **;int *;)int:::EXIT
+tp == orig(tp)
+unit_ptr == orig(unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+tp != null
+unit_ptr != null
+unit_ptr[] elements one of { 0, 1, 2 }
+unit_ptr[] one of { [0], [1], [2] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(unit_ptr[]) == 1
+unit_ptr[] is the reverse of orig(unit_ptr[])
+return <= size(unit_ptr[])
+return >= size(unit_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.ampval(charac *;charac **;double *;int *;)int:::ENTER
+pp2 != null
+amp_ptr != null
+amp_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.ampval(charac *;charac **;double *;int *;)int:::EXIT22
+pp2 has only one value
+amp_ptr has only one value
+amp_unit_ptr has only one value
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr13525"
+return == 1
+===========================================================================
+std.ampval(charac *;charac **;double *;int *;)int:::EXIT23
+return == 0
+===========================================================================
+std.ampval(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+amp_ptr == orig(amp_ptr)
+amp_unit_ptr == orig(amp_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(amp_ptr[])-1
+return == size(amp_unit_ptr[])-1
+size(amp_ptr[]) == size(amp_unit_ptr[])
+pp2 != null
+amp_ptr != null
+amp_ptr[] elements != 0
+amp_unit_ptr != null
+amp_unit_ptr[] elements one of { 0, 1, 2 }
+amp_unit_ptr[] one of { [0], [1], [2] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(amp_ptr[]) == 1
+size(amp_unit_ptr[]) == 1
+amp_ptr[] is the reverse of orig(amp_ptr[])
+amp_unit_ptr[] is the reverse of orig(amp_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.angclaus(charac *;charac **;double *;int *;)int:::ENTER
+size(angle_ptr[]) == size(angle_unit_ptr[])
+pp2 != null
+angle_ptr != null
+angle_ptr[] == [0.0]
+angle_ptr[] elements == 0.0
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+size(angle_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+===========================================================================
+std.angclaus(charac *;charac **;double *;int *;)int:::EXIT24
+angle_ptr[] == orig(angle_ptr[])
+return == size(angle_ptr[])
+return == size(angle_unit_ptr[])
+angle_ptr[] == [0.0]
+angle_ptr[] elements == 0.0
+return == 1
+===========================================================================
+std.angclaus(charac *;charac **;double *;int *;)int:::EXIT26
+return == size(angle_ptr[])-1
+return == size(angle_unit_ptr[])-1
+return == 0
+angle_ptr[] > orig(angle_ptr[]) (elementwise)
+===========================================================================
+std.angclaus(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+angle_ptr == orig(angle_ptr)
+angle_unit_ptr == orig(angle_unit_ptr)
+angle_unit_ptr[] == orig(angle_unit_ptr[])
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+size(angle_ptr[]) == size(angle_unit_ptr[])
+size(angle_ptr[]) == orig(size(angle_ptr[]))
+pp2 != null
+angle_ptr != null
+angle_ptr[] elements >= 0.0
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(angle_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+angle_ptr[] >= orig(angle_ptr[]) (elementwise)
+return <= size(angle_ptr[])
+return >= size(angle_ptr[])-1
+return <= size(angle_unit_ptr[])
+return >= size(angle_unit_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.angledir(charac *;charac **;double *;double *;int *;)int:::ENTER
+::GLOBLE_FILENAME[] one of { "inputs/gr192", "inputs/gr82" }
+===========================================================================
+std.angledir(charac *;charac **;double *;double *;int *;)int:::EXIT27
+===========================================================================
+std.angledir(charac *;charac **;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+theta_ptr == orig(theta_ptr)
+phi_ptr == orig(phi_ptr)
+angle_unit_ptr == orig(angle_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] one of { "inputs/gr192", "inputs/gr82" }
+return == 1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.anglerot(charac *;charac **;double *;double *;int *;)int:::ENTER
+pp2 != null
+angle_start_ptr != null
+angle_step_ptr != null
+angle_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.anglerot(charac *;charac **;double *;double *;int *;)int:::EXIT32
+return == 1
+===========================================================================
+std.anglerot(charac *;charac **;double *;double *;int *;)int:::EXIT35
+return == 0
+===========================================================================
+std.anglerot(charac *;charac **;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+angle_start_ptr == orig(angle_start_ptr)
+angle_step_ptr == orig(angle_step_ptr)
+angle_unit_ptr == orig(angle_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(angle_start_ptr[])-1
+return == size(angle_step_ptr[])-1
+return == size(angle_unit_ptr[])-1
+size(angle_start_ptr[]) == size(angle_step_ptr[])
+size(angle_start_ptr[]) == size(angle_unit_ptr[])
+size(angle_step_ptr[]) == size(angle_unit_ptr[])
+pp2 != null
+angle_start_ptr != null
+angle_step_ptr != null
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(angle_start_ptr[]) == 1
+size(angle_step_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+angle_start_ptr[] is the reverse of orig(angle_start_ptr[])
+angle_step_ptr[] is the reverse of orig(angle_step_ptr[])
+angle_unit_ptr[] is the reverse of orig(angle_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.angstep(charac *;charac **;double *;int *;double *;double *;int *;)int:::ENTER
+size(angle_ptr[]) == size(angle_unit_ptr[])
+size(angle_ptr[]) == size(pstep_ptr[])
+size(angle_ptr[]) == size(qstep_ptr[])
+size(angle_ptr[]) == size(pqstep_unit_ptr[])
+size(angle_unit_ptr[]) == size(pstep_ptr[])
+size(angle_unit_ptr[]) == size(qstep_ptr[])
+size(angle_unit_ptr[]) == size(pqstep_unit_ptr[])
+size(pstep_ptr[]) == size(qstep_ptr[])
+size(pstep_ptr[]) == size(pqstep_unit_ptr[])
+size(qstep_ptr[]) == size(pqstep_unit_ptr[])
+pp2 != null
+angle_ptr != null
+angle_ptr[] == [0.0]
+angle_ptr[] elements == 0.0
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+pstep_ptr != null
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+qstep_ptr != null
+qstep_ptr[] == [0.0]
+qstep_ptr[] elements == 0.0
+pqstep_unit_ptr != null
+pqstep_unit_ptr[] == [0]
+pqstep_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+size(angle_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+size(pstep_ptr[]) == 1
+size(qstep_ptr[]) == 1
+size(pqstep_unit_ptr[]) == 1
+===========================================================================
+std.angstep(charac *;charac **;double *;int *;double *;double *;int *;)int:::EXIT36
+angle_ptr[] == orig(angle_ptr[])
+pstep_ptr[] == orig(pstep_ptr[])
+qstep_ptr[] == orig(qstep_ptr[])
+pqstep_unit_ptr[] == orig(pqstep_unit_ptr[])
+return == size(angle_ptr[])
+return == size(angle_unit_ptr[])
+return == size(pstep_ptr[])
+return == size(qstep_ptr[])
+return == size(pqstep_unit_ptr[])
+angle_ptr[] == [0.0]
+angle_ptr[] elements == 0.0
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+qstep_ptr[] == [0.0]
+qstep_ptr[] elements == 0.0
+pqstep_unit_ptr[] == [0]
+pqstep_unit_ptr[] elements == 0
+return == 1
+===========================================================================
+std.angstep(charac *;charac **;double *;int *;double *;double *;int *;)int:::EXIT38
+return == size(angle_ptr[])-1
+return == size(angle_unit_ptr[])-1
+return == size(pstep_ptr[])-1
+return == size(qstep_ptr[])-1
+return == size(pqstep_unit_ptr[])-1
+return == 0
+pstep_ptr[] > orig(pstep_ptr[]) (elementwise)
+qstep_ptr[] > orig(qstep_ptr[]) (elementwise)
+===========================================================================
+std.angstep(charac *;charac **;double *;int *;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+angle_ptr == orig(angle_ptr)
+angle_unit_ptr == orig(angle_unit_ptr)
+angle_unit_ptr[] == orig(angle_unit_ptr[])
+pstep_ptr == orig(pstep_ptr)
+qstep_ptr == orig(qstep_ptr)
+pqstep_unit_ptr == orig(pqstep_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+size(angle_ptr[]) == size(angle_unit_ptr[])
+size(angle_ptr[]) == size(pstep_ptr[])
+size(angle_ptr[]) == size(qstep_ptr[])
+size(angle_ptr[]) == size(pqstep_unit_ptr[])
+size(angle_ptr[]) == orig(size(angle_ptr[]))
+size(angle_unit_ptr[]) == size(pstep_ptr[])
+size(angle_unit_ptr[]) == size(qstep_ptr[])
+size(angle_unit_ptr[]) == size(pqstep_unit_ptr[])
+size(pstep_ptr[]) == size(qstep_ptr[])
+size(pstep_ptr[]) == size(pqstep_unit_ptr[])
+size(pstep_ptr[]) == orig(size(pstep_ptr[]))
+size(qstep_ptr[]) == size(pqstep_unit_ptr[])
+size(qstep_ptr[]) == orig(size(qstep_ptr[]))
+size(pqstep_unit_ptr[]) == orig(size(pqstep_unit_ptr[]))
+pp2 != null
+angle_ptr != null
+angle_ptr[] elements >= 0.0
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+pstep_ptr != null
+pstep_ptr[] elements >= 0.0
+qstep_ptr != null
+qstep_ptr[] elements >= 0.0
+pqstep_unit_ptr != null
+pqstep_unit_ptr[] elements one of { 0, 3 }
+pqstep_unit_ptr[] one of { [0], [3] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(angle_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+size(pstep_ptr[]) == 1
+size(qstep_ptr[]) == 1
+size(pqstep_unit_ptr[]) == 1
+angle_ptr[] >= orig(angle_ptr[]) (elementwise)
+pstep_ptr[] >= orig(pstep_ptr[]) (elementwise)
+qstep_ptr[] >= orig(qstep_ptr[]) (elementwise)
+pqstep_unit_ptr[] >= orig(pqstep_unit_ptr[]) (elementwise)
+return <= size(angle_ptr[])
+return >= size(angle_ptr[])-1
+return <= size(angle_unit_ptr[])
+return >= size(angle_unit_ptr[])-1
+return <= size(pstep_ptr[])
+return >= size(pstep_ptr[])-1
+return <= size(qstep_ptr[])
+return >= size(qstep_ptr[])-1
+return <= size(pqstep_unit_ptr[])
+return >= size(pqstep_unit_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.angunit(charac *;charac **;int *;)int:::ENTER
+pp2 != null
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+size(angle_unit_ptr[]) == 1
+===========================================================================
+std.angunit(charac *;charac **;int *;)int:::EXIT39
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+return == 20
+===========================================================================
+std.angunit(charac *;charac **;int *;)int:::EXIT40
+return == size(angle_unit_ptr[])-1
+return == orig(size(angle_unit_ptr[]))-1
+return == 0
+===========================================================================
+std.angunit(charac *;charac **;int *;)int:::EXIT
+pp2 == orig(pp2)
+angle_unit_ptr == orig(angle_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+angle_unit_ptr != null
+angle_unit_ptr[] elements one of { 0, 1 }
+angle_unit_ptr[] one of { [0], [1] }
+::GLOBLE_FILENAME != null
+return one of { 0, 20 }
+size(angle_unit_ptr[]) == 1
+angle_unit_ptr[] == orig(angle_unit_ptr[]) (elementwise)
+angle_unit_ptr[] is the reverse of orig(angle_unit_ptr[])
+return != size(angle_unit_ptr[])
+return >= size(angle_unit_ptr[])-1
+return != orig(size(angle_unit_ptr[]))
+return >= orig(size(angle_unit_ptr[]))-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.angval(charac *;charac **;double *;int *;)int:::ENTER
+size(angle_ptr[]) == size(angle_unit_ptr[])
+pp2 != null
+angle_ptr != null
+angle_ptr[] == [90.0]
+angle_ptr[] elements == 90.0
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+size(angle_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+===========================================================================
+std.angval(charac *;charac **;double *;int *;)int:::EXIT41
+::GLOBLE_FILENAME[] one of { "inputs/gr13462", "inputs/gr13463" }
+return == 1
+===========================================================================
+std.angval(charac *;charac **;double *;int *;)int:::EXIT42
+return == 0
+===========================================================================
+std.angval(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+angle_ptr == orig(angle_ptr)
+angle_unit_ptr == orig(angle_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(angle_ptr[])-1
+return == size(angle_unit_ptr[])-1
+return == orig(size(angle_ptr[]))-1
+return == orig(size(angle_unit_ptr[]))-1
+size(angle_ptr[]) == size(angle_unit_ptr[])
+size(angle_ptr[]) == orig(size(angle_ptr[]))
+size(angle_ptr[]) == orig(size(angle_unit_ptr[]))
+size(angle_unit_ptr[]) == orig(size(angle_ptr[]))
+pp2 != null
+angle_ptr != null
+angle_unit_ptr != null
+angle_unit_ptr[] elements one of { 0, 1 }
+angle_unit_ptr[] one of { [0], [1] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(angle_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+angle_ptr[] < orig(angle_ptr[]) (elementwise)
+angle_unit_ptr[] == orig(angle_unit_ptr[]) (elementwise)
+angle_unit_ptr[] is the reverse of orig(angle_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.beampha(charac *;charac **;double *;double *;double *;double *;int *;)int:::ENTER
+===========================================================================
+std.beampha(charac *;charac **;double *;double *;double *;double *;int *;)int:::EXIT45
+return == 0
+===========================================================================
+std.beampha(charac *;charac **;double *;double *;double *;double *;int *;)int:::EXIT49
+::GLOBLE_FILENAME[] one of { "inputs/gr192", "inputs/gr82" }
+return == 17
+===========================================================================
+std.beampha(charac *;charac **;double *;double *;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+u_ptr == orig(u_ptr)
+v_ptr == orig(v_ptr)
+theta_ptr == orig(theta_ptr)
+phi_ptr == orig(phi_ptr)
+angle_unit_ptr == orig(angle_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(u_ptr[])-1
+return == size(v_ptr[])-1
+size(u_ptr[]) == size(v_ptr[])
+u_ptr[] == [0.5]
+u_ptr[] elements == 0.5
+v_ptr[] == [0.5]
+v_ptr[] elements == 0.5
+return one of { 0, 17 }
+size(u_ptr[]) == 1
+size(v_ptr[]) == 1
+u_ptr[] is the reverse of orig(u_ptr[])
+v_ptr[] is the reverse of orig(v_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.blockdef(charac *;charac **;Node **;)int:::ENTER
+pp2 != null
+node_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.blockdef(charac *;charac **;Node **;)int:::EXIT50
+return == 1
+===========================================================================
+std.blockdef(charac *;charac **;Node **;)int:::EXIT55
+return == 0
+===========================================================================
+std.blockdef(charac *;charac **;Node **;)int:::EXIT
+pp2 == orig(pp2)
+node_ptr == orig(node_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+node_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.circpol(charac *;charac **;int *;)int:::ENTER
+pp2 != null
+direction_ptr != null
+direction_ptr[] == [0]
+direction_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+size(direction_ptr[]) == 1
+===========================================================================
+std.circpol(charac *;charac **;int *;)int:::EXIT56
+direction_ptr[] == orig(direction_ptr[])
+return == size(direction_ptr[])
+pp2 has only one value
+direction_ptr has only one value
+direction_ptr[] == [0]
+direction_ptr[] elements == 0
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr13461"
+return == 1
+===========================================================================
+std.circpol(charac *;charac **;int *;)int:::EXIT57
+direction_ptr[] == orig(direction_ptr[])
+return == size(direction_ptr[])-1
+direction_ptr[] == [0]
+direction_ptr[] elements == 0
+return == 0
+===========================================================================
+std.circpol(charac *;charac **;int *;)int:::EXIT58
+return == size(direction_ptr[])-1
+direction_ptr[] == [1]
+direction_ptr[] elements == 1
+return == 0
+direction_ptr[] > orig(direction_ptr[]) (elementwise)
+===========================================================================
+std.circpol(charac *;charac **;int *;)int:::EXIT59
+direction_ptr[] == orig(direction_ptr[])
+return == size(direction_ptr[])-1
+direction_ptr[] == [0]
+direction_ptr[] elements == 0
+return == 0
+===========================================================================
+std.circpol(charac *;charac **;int *;)int:::EXIT
+pp2 == orig(pp2)
+direction_ptr == orig(direction_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+size(direction_ptr[]) == orig(size(direction_ptr[]))
+pp2 != null
+direction_ptr != null
+direction_ptr[] elements one of { 0, 1 }
+direction_ptr[] one of { [0], [1] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(direction_ptr[]) == 1
+direction_ptr[] >= orig(direction_ptr[]) (elementwise)
+return <= size(direction_ptr[])
+return >= size(direction_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.circspec(charac *;charac **;double *;int *;)int:::ENTER
+pp2 != null
+radius_ptr != null
+radius_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.circspec(charac *;charac **;double *;int *;)int:::EXIT60
+::GLOBLE_FILENAME[] one of { "inputs/gr150", "inputs/gr2", "inputs/gr54" }
+return == 1
+===========================================================================
+std.circspec(charac *;charac **;double *;int *;)int:::EXIT62
+return == 0
+===========================================================================
+std.circspec(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+radius_ptr == orig(radius_ptr)
+radius_unit_ptr == orig(radius_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(radius_ptr[])-1
+return == size(radius_unit_ptr[])-1
+size(radius_ptr[]) == size(radius_unit_ptr[])
+pp2 != null
+radius_ptr != null
+radius_unit_ptr != null
+radius_unit_ptr[] elements >= 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(radius_ptr[]) == 1
+size(radius_unit_ptr[]) == 1
+radius_ptr[] is the reverse of orig(radius_ptr[])
+radius_unit_ptr[] is the reverse of orig(radius_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.dacos(double;)double:::ENTER
+x != 0
+::GLOBLE_FILENAME != null
+===========================================================================
+std.dacos(double;)double:::EXIT
+x == orig(x)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+x != 0
+::GLOBLE_FILENAME != null
+x != return
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.datan(double;)double:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.datan(double;)double:::EXIT
+x == orig(x)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+::GLOBLE_FILENAME != null
+x < return
+===========================================================================
+std.dcos(double;)double:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.dcos(double;)double:::EXIT
+x == orig(x)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return != 0
+x >= return
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.degconv(double *;int;)int:::ENTER
+unit == size(x_ptr[])-1
+x_ptr != null
+x_ptr[] elements >= 0.0
+unit one of { 0, 1 }
+::GLOBLE_FILENAME != null
+size(x_ptr[]) == 1
+===========================================================================
+std.degconv(double *;int;)int:::EXIT
+x_ptr == orig(x_ptr)
+unit == orig(unit)
+unit == orig(size(x_ptr[]))-1
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(x_ptr[])-1
+return == orig(size(x_ptr[]))-1
+x_ptr != null
+x_ptr[] elements >= 0.0
+unit one of { 0, 1 }
+::GLOBLE_FILENAME != null
+return == 0
+size(x_ptr[]) == 1
+x_ptr[] == orig(x_ptr[]) (elementwise)
+x_ptr[] is the reverse of orig(x_ptr[])
+unit >= return
+unit <= size(x_ptr[])
+unit >= size(x_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.doubmax(double;double;)double:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.doubmax(double;double;)double:::EXIT71
+a == return
+a > b
+===========================================================================
+std.doubmax(double;double;)double:::EXIT72
+b == return
+===========================================================================
+std.doubmax(double;double;)double:::EXIT
+a == orig(a)
+b == orig(b)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+b <= return
+return == (java.lang.Math.max(a, b))
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.doubstep(charac *;charac **;double *;double *;int *;)int:::ENTER
+size(pstep_ptr[]) == size(qstep_ptr[])
+size(pstep_ptr[]) == size(pqstep_unit_ptr[])
+size(qstep_ptr[]) == size(pqstep_unit_ptr[])
+pp2 != null
+pstep_ptr != null
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+qstep_ptr != null
+qstep_ptr[] == [0.0]
+qstep_ptr[] elements == 0.0
+pqstep_unit_ptr != null
+pqstep_unit_ptr[] == [0]
+pqstep_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+size(pstep_ptr[]) == 1
+size(qstep_ptr[]) == 1
+size(pqstep_unit_ptr[]) == 1
+===========================================================================
+std.doubstep(charac *;charac **;double *;double *;int *;)int:::EXIT75
+pstep_ptr[] == orig(pstep_ptr[])
+qstep_ptr[] == orig(qstep_ptr[])
+pqstep_unit_ptr[] == orig(pqstep_unit_ptr[])
+return == size(pstep_ptr[])
+return == size(qstep_ptr[])
+return == size(pqstep_unit_ptr[])
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+qstep_ptr[] == [0.0]
+qstep_ptr[] elements == 0.0
+pqstep_unit_ptr[] == [0]
+pqstep_unit_ptr[] elements == 0
+return == 1
+===========================================================================
+std.doubstep(charac *;charac **;double *;double *;int *;)int:::EXIT79
+return == size(pstep_ptr[])-1
+return == size(qstep_ptr[])-1
+return == size(pqstep_unit_ptr[])-1
+return == 0
+pstep_ptr[] > orig(pstep_ptr[]) (elementwise)
+qstep_ptr[] > orig(qstep_ptr[]) (elementwise)
+===========================================================================
+std.doubstep(charac *;charac **;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+pstep_ptr == orig(pstep_ptr)
+qstep_ptr == orig(qstep_ptr)
+pqstep_unit_ptr == orig(pqstep_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+size(pstep_ptr[]) == size(qstep_ptr[])
+size(pstep_ptr[]) == size(pqstep_unit_ptr[])
+size(pstep_ptr[]) == orig(size(pstep_ptr[]))
+size(qstep_ptr[]) == size(pqstep_unit_ptr[])
+size(qstep_ptr[]) == orig(size(qstep_ptr[]))
+size(pqstep_unit_ptr[]) == orig(size(pqstep_unit_ptr[]))
+pp2 != null
+pstep_ptr != null
+pstep_ptr[] elements >= 0.0
+qstep_ptr != null
+qstep_ptr[] elements >= 0.0
+pqstep_unit_ptr != null
+pqstep_unit_ptr[] elements one of { 0, 2, 3 }
+pqstep_unit_ptr[] one of { [0], [2], [3] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(pstep_ptr[]) == 1
+size(qstep_ptr[]) == 1
+size(pqstep_unit_ptr[]) == 1
+pstep_ptr[] >= orig(pstep_ptr[]) (elementwise)
+qstep_ptr[] >= orig(qstep_ptr[]) (elementwise)
+pqstep_unit_ptr[] >= orig(pqstep_unit_ptr[]) (elementwise)
+return <= size(pstep_ptr[])
+return >= size(pstep_ptr[])-1
+return <= size(qstep_ptr[])
+return >= size(qstep_ptr[])-1
+return <= size(pqstep_unit_ptr[])
+return >= size(pqstep_unit_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.dsin(double;)double:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.dsin(double;)double:::EXIT
+x == orig(x)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return <= 1.0
+x >= return
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.elemdef(charac *;charac **;Elem **;)int:::ENTER
+pp2 != null
+elem_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.elemdef(charac *;charac **;Elem **;)int:::EXIT81
+return == 1
+===========================================================================
+std.elemdef(charac *;charac **;Elem **;)int:::EXIT83
+return == 0
+===========================================================================
+std.elemdef(charac *;charac **;Elem **;)int:::EXIT84
+return == 17
+===========================================================================
+std.elemdef(charac *;charac **;Elem **;)int:::EXIT
+pp2 == orig(pp2)
+elem_ptr == orig(elem_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+elem_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 1, 17 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.emsginit()void:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.emsginit()void:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.extremes(Geomnode *;int *;int *;)int:::ENTER
+pnum_ptr != null
+qnum_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.extremes(Geomnode *;int *;int *;)int:::EXIT
+pnum_ptr == orig(pnum_ptr)
+qnum_ptr == orig(qnum_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(pnum_ptr[])-1
+return == size(qnum_ptr[])-1
+size(pnum_ptr[]) == size(qnum_ptr[])
+pnum_ptr != null
+pnum_ptr[] elements >= 1
+qnum_ptr != null
+qnum_ptr[] elements >= 1
+::GLOBLE_FILENAME != null
+return == 0
+size(pnum_ptr[]) == 1
+size(qnum_ptr[]) == 1
+pnum_ptr[] is the reverse of orig(pnum_ptr[])
+qnum_ptr[] is the reverse of orig(qnum_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.extsize(Geomnode *;double;double;double *;double *;)int:::ENTER
+xsize_ptr != null
+ysize_ptr != null
+::GLOBLE_FILENAME != null
+elem_pdim in xsize_ptr[]
+elem_pdim in ysize_ptr[]
+elem_qdim in xsize_ptr[]
+elem_qdim in ysize_ptr[]
+===========================================================================
+std.extsize(Geomnode *;double;double;double *;double *;)int:::EXIT
+elem_pdim == orig(elem_pdim)
+elem_qdim == orig(elem_qdim)
+xsize_ptr == orig(xsize_ptr)
+ysize_ptr == orig(ysize_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(xsize_ptr[])-1
+return == size(ysize_ptr[])-1
+size(xsize_ptr[]) == size(ysize_ptr[])
+xsize_ptr != null
+ysize_ptr != null
+::GLOBLE_FILENAME != null
+return == 0
+size(xsize_ptr[]) == 1
+size(ysize_ptr[]) == 1
+elem_pdim in orig(xsize_ptr[])
+elem_pdim in orig(ysize_ptr[])
+elem_qdim in orig(xsize_ptr[])
+elem_qdim in orig(ysize_ptr[])
+xsize_ptr[] is the reverse of orig(xsize_ptr[])
+ysize_ptr[] is the reverse of orig(ysize_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.fixgramp(GrAmpExc *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.fixgramp(GrAmpExc *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return == 0
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.fixgrpha(GrPhaExc *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.fixgrpha(GrPhaExc *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return == 0
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.fixnodor(Node *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.fixnodor(Node *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return == 0
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.fixport(Elem *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.fixport(Elem *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return == 0
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.fixselem(Elem *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.fixselem(Elem *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return == 0
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.fixsgrel(Group *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.fixsgrel(Group *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return == 0
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.fixsgrid(Grid *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.fixsgrid(Grid *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return == 0
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.floatsup()void:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.floatsup()void:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.geomspec(charac *;charac **;int *;double *;int *;double *;double *;int *;)int:::ENTER
+pp2 != null
+geometry_ptr != null
+radius_ptr != null
+radius_unit_ptr != null
+pdim_ptr != null
+qdim_ptr != null
+pqdim_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.geomspec(charac *;charac **;int *;double *;int *;double *;double *;int *;)int:::EXIT114
+return == size(geometry_ptr[])-1
+return == size(pdim_ptr[])-1
+return == size(qdim_ptr[])-1
+geometry_ptr[] == [0]
+geometry_ptr[] elements == 0
+return == 0
+===========================================================================
+std.geomspec(charac *;charac **;int *;double *;int *;double *;double *;int *;)int:::EXIT115
+geometry_ptr[] == [0]
+geometry_ptr[] elements == 0
+return == 17
+===========================================================================
+std.geomspec(charac *;charac **;int *;double *;int *;double *;double *;int *;)int:::EXIT116
+return == size(geometry_ptr[])-1
+geometry_ptr[] == [1]
+geometry_ptr[] elements == 1
+return == 0
+===========================================================================
+std.geomspec(charac *;charac **;int *;double *;int *;double *;double *;int *;)int:::EXIT118
+geometry_ptr[] == [1]
+geometry_ptr[] elements == 1
+::GLOBLE_FILENAME[] one of { "inputs/gr150", "inputs/gr2", "inputs/gr54" }
+return == 17
+===========================================================================
+std.geomspec(charac *;charac **;int *;double *;int *;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+geometry_ptr == orig(geometry_ptr)
+radius_ptr == orig(radius_ptr)
+radius_unit_ptr == orig(radius_unit_ptr)
+pdim_ptr == orig(pdim_ptr)
+qdim_ptr == orig(qdim_ptr)
+pqdim_unit_ptr == orig(pqdim_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(radius_ptr[])-1
+return == size(radius_unit_ptr[])-1
+return == size(pqdim_unit_ptr[])-1
+size(geometry_ptr[]) == size(radius_ptr[])
+size(geometry_ptr[]) == size(radius_unit_ptr[])
+size(geometry_ptr[]) == size(pdim_ptr[])
+size(geometry_ptr[]) == size(qdim_ptr[])
+size(geometry_ptr[]) == size(pqdim_unit_ptr[])
+size(radius_ptr[]) == size(radius_unit_ptr[])
+size(pdim_ptr[]) == size(qdim_ptr[])
+size(pdim_ptr[]) == size(pqdim_unit_ptr[])
+size(qdim_ptr[]) == size(pqdim_unit_ptr[])
+pp2 != null
+geometry_ptr != null
+geometry_ptr[] elements one of { 0, 1 }
+geometry_ptr[] one of { [0], [1] }
+radius_ptr != null
+radius_unit_ptr != null
+radius_unit_ptr[] elements >= 0
+pdim_ptr != null
+qdim_ptr != null
+pqdim_unit_ptr != null
+pqdim_unit_ptr[] elements one of { 0, 1, 2 }
+pqdim_unit_ptr[] one of { [0], [1], [2] }
+::GLOBLE_FILENAME != null
+return one of { 0, 17 }
+size(geometry_ptr[]) == 1
+size(radius_ptr[]) == 1
+size(radius_unit_ptr[]) == 1
+size(pdim_ptr[]) == 1
+size(qdim_ptr[]) == 1
+size(pqdim_unit_ptr[]) == 1
+geometry_ptr[] is the reverse of orig(geometry_ptr[])
+radius_ptr[] is the reverse of orig(radius_ptr[])
+radius_unit_ptr[] is the reverse of orig(radius_unit_ptr[])
+pdim_ptr[] is the reverse of orig(pdim_ptr[])
+qdim_ptr[] is the reverse of orig(qdim_ptr[])
+pqdim_unit_ptr[] is the reverse of orig(pqdim_unit_ptr[])
+return != size(geometry_ptr[])
+return >= size(geometry_ptr[])-1
+return != size(pdim_ptr[])
+return >= size(pdim_ptr[])-1
+return != size(qdim_ptr[])
+return >= size(qdim_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.glvainit()void:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.glvainit()void:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.gnodevis(int;int;double;double;Geomnode *;)void:::ENTER
+angle == phase
+::GLOBLE_FILENAME != null
+===========================================================================
+std.gnodevis(int;int;double;double;Geomnode *;)void:::EXIT
+p == orig(p)
+q == orig(q)
+angle == phase
+angle == orig(angle)
+angle == orig(phase)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.gnodfind(Geomnode *;Geomnode **;int;int;)int:::ENTER
+gnode_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.gnodfind(Geomnode *;Geomnode **;int;int;)int:::EXIT143
+===========================================================================
+std.gnodfind(Geomnode *;Geomnode **;int;int;)int:::EXIT
+gnode_ptr == orig(gnode_ptr)
+p == orig(p)
+q == orig(q)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+gnode_ptr != null
+::GLOBLE_FILENAME != null
+return == 0
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.grampexc(charac *;charac **;GrAmpExc **;)int:::ENTER
+pp2 != null
+grampexc_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.grampexc(charac *;charac **;GrAmpExc **;)int:::EXIT145
+return == 0
+===========================================================================
+std.grampexc(charac *;charac **;GrAmpExc **;)int:::EXIT147
+return == 0
+===========================================================================
+std.grampexc(charac *;charac **;GrAmpExc **;)int:::EXIT148
+::GLOBLE_FILENAME[] one of { "inputs/gr127", "inputs/gr143", "inputs/gr27" }
+return == 17
+===========================================================================
+std.grampexc(charac *;charac **;GrAmpExc **;)int:::EXIT
+pp2 == orig(pp2)
+grampexc_ptr == orig(grampexc_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+grampexc_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 17 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.greldef(charac *;charac **;Grid **;Elem **;)int:::ENTER
+pp2 != null
+grid_ptr != null
+elem_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.greldef(charac *;charac **;Grid **;Elem **;)int:::EXIT150
+pp2 has only one value
+grid_ptr has only one value
+elem_ptr has only one value
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr29"
+return == 17
+===========================================================================
+std.greldef(charac *;charac **;Grid **;Elem **;)int:::EXIT151
+return == 1
+===========================================================================
+std.greldef(charac *;charac **;Grid **;Elem **;)int:::EXIT152
+return == 17
+===========================================================================
+std.greldef(charac *;charac **;Grid **;Elem **;)int:::EXIT153
+return == 0
+===========================================================================
+std.greldef(charac *;charac **;Grid **;Elem **;)int:::EXIT
+pp2 == orig(pp2)
+grid_ptr == orig(grid_ptr)
+elem_ptr == orig(elem_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+grid_ptr != null
+elem_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 1, 17 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.grexcdef(charac *;charac **;GrAmpExc **;GrPhaExc **;)int:::ENTER
+pp2 != null
+grampexc_ptr != null
+grphaexc_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.grexcdef(charac *;charac **;GrAmpExc **;GrPhaExc **;)int:::EXIT155
+::GLOBLE_FILENAME[] one of { "inputs/gr127", "inputs/gr143", "inputs/gr27" }
+return == 17
+===========================================================================
+std.grexcdef(charac *;charac **;GrAmpExc **;GrPhaExc **;)int:::EXIT156
+return == 17
+===========================================================================
+std.grexcdef(charac *;charac **;GrAmpExc **;GrPhaExc **;)int:::EXIT157
+return == 0
+===========================================================================
+std.grexcdef(charac *;charac **;GrAmpExc **;GrPhaExc **;)int:::EXIT
+pp2 == orig(pp2)
+grampexc_ptr == orig(grampexc_ptr)
+grphaexc_ptr == orig(grphaexc_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+grampexc_ptr != null
+grphaexc_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 17 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.grgeodef(charac *;charac **;AddRem **;)int:::ENTER
+pp2 != null
+addrem_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.grgeodef(charac *;charac **;AddRem **;)int:::EXIT158
+return == 17
+===========================================================================
+std.grgeodef(charac *;charac **;AddRem **;)int:::EXIT159
+pp2 has only one value
+addrem_ptr has only one value
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr42"
+return == 17
+===========================================================================
+std.grgeodef(charac *;charac **;AddRem **;)int:::EXIT160
+return == 0
+===========================================================================
+std.grgeodef(charac *;charac **;AddRem **;)int:::EXIT161
+pp2 has only one value
+addrem_ptr has only one value
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr114"
+return == 17
+===========================================================================
+std.grgeodef(charac *;charac **;AddRem **;)int:::EXIT
+pp2 == orig(pp2)
+addrem_ptr == orig(addrem_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+addrem_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 17 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.griddef1(charac *;charac **;Grid **;)int:::ENTER
+pp2 != null
+grid_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.griddef1(charac *;charac **;Grid **;)int:::EXIT167
+pp2 has only one value
+grid_ptr has only one value
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr29"
+return == 17
+===========================================================================
+std.griddef1(charac *;charac **;Grid **;)int:::EXIT168
+return == 0
+===========================================================================
+std.griddef1(charac *;charac **;Grid **;)int:::EXIT
+pp2 == orig(pp2)
+grid_ptr == orig(grid_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+grid_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 17 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.groupdef(charac *;charac **;Group **;)int:::ENTER
+pp2 != null
+group_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.groupdef(charac *;charac **;Group **;)int:::EXIT172
+return == 17
+===========================================================================
+std.groupdef(charac *;charac **;Group **;)int:::EXIT173
+return == 17
+===========================================================================
+std.groupdef(charac *;charac **;Group **;)int:::EXIT174
+return == 17
+===========================================================================
+std.groupdef(charac *;charac **;Group **;)int:::EXIT176
+return == 0
+===========================================================================
+std.groupdef(charac *;charac **;Group **;)int:::EXIT
+pp2 == orig(pp2)
+group_ptr == orig(group_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+group_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 17 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.grphaexc(charac *;charac **;GrPhaExc **;)int:::ENTER
+pp2 != null
+grphaexc_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.grphaexc(charac *;charac **;GrPhaExc **;)int:::EXIT177
+return == 1
+===========================================================================
+std.grphaexc(charac *;charac **;GrPhaExc **;)int:::EXIT178
+return == 0
+===========================================================================
+std.grphaexc(charac *;charac **;GrPhaExc **;)int:::EXIT180
+return == 0
+===========================================================================
+std.grphaexc(charac *;charac **;GrPhaExc **;)int:::EXIT182
+return == 0
+===========================================================================
+std.grphaexc(charac *;charac **;GrPhaExc **;)int:::EXIT183
+::GLOBLE_FILENAME[] one of { "inputs/gr192", "inputs/gr82" }
+return == 17
+===========================================================================
+std.grphaexc(charac *;charac **;GrPhaExc **;)int:::EXIT184
+return == 0
+===========================================================================
+std.grphaexc(charac *;charac **;GrPhaExc **;)int:::EXIT
+pp2 == orig(pp2)
+grphaexc_ptr == orig(grphaexc_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+grphaexc_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 1, 17 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.grwrite(Group *;char *;)int:::ENTER
+filename != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.grwrite(Group *;char *;)int:::EXIT
+filename == orig(filename)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+filename != null
+::GLOBLE_FILENAME != null
+return == 0
+filename[] == orig(filename[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.hexdef(charac *;charac **;Node **;)int:::ENTER
+pp2 != null
+node_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.hexdef(charac *;charac **;Node **;)int:::EXIT187
+::GLOBLE_FILENAME[] one of { "inputs/gr114", "inputs/gr42" }
+return == 1
+===========================================================================
+std.hexdef(charac *;charac **;Node **;)int:::EXIT190
+return == 0
+===========================================================================
+std.hexdef(charac *;charac **;Node **;)int:::EXIT
+pp2 == orig(pp2)
+node_ptr == orig(node_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+node_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.hexgrdef(charac *;charac **;double *;int *;)int:::ENTER
+size(pstep_ptr[]) == size(pstep_unit_ptr[])
+pp2 != null
+pstep_ptr != null
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+pstep_unit_ptr != null
+pstep_unit_ptr[] == [0]
+pstep_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+size(pstep_ptr[]) == 1
+size(pstep_unit_ptr[]) == 1
+===========================================================================
+std.hexgrdef(charac *;charac **;double *;int *;)int:::EXIT191
+pstep_ptr[] == orig(pstep_ptr[])
+pstep_unit_ptr[] == orig(pstep_unit_ptr[])
+return == size(pstep_ptr[])
+return == size(pstep_unit_ptr[])
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+pstep_unit_ptr[] == [0]
+pstep_unit_ptr[] elements == 0
+return == 1
+===========================================================================
+std.hexgrdef(charac *;charac **;double *;int *;)int:::EXIT192
+pstep_ptr[] == orig(pstep_ptr[])
+pstep_unit_ptr[] == orig(pstep_unit_ptr[])
+return == size(pstep_ptr[])-1
+return == size(pstep_unit_ptr[])-1
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+pstep_unit_ptr[] == [0]
+pstep_unit_ptr[] elements == 0
+return == 0
+===========================================================================
+std.hexgrdef(charac *;charac **;double *;int *;)int:::EXIT194
+return == size(pstep_ptr[])-1
+return == size(pstep_unit_ptr[])-1
+return == 0
+pstep_ptr[] > orig(pstep_ptr[]) (elementwise)
+===========================================================================
+std.hexgrdef(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+pstep_ptr == orig(pstep_ptr)
+pstep_unit_ptr == orig(pstep_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+size(pstep_ptr[]) == size(pstep_unit_ptr[])
+size(pstep_ptr[]) == orig(size(pstep_ptr[]))
+size(pstep_unit_ptr[]) == orig(size(pstep_unit_ptr[]))
+pp2 != null
+pstep_ptr != null
+pstep_ptr[] elements >= 0.0
+pstep_unit_ptr != null
+pstep_unit_ptr[] elements one of { 0, 1, 2 }
+pstep_unit_ptr[] one of { [0], [1], [2] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(pstep_ptr[]) == 1
+size(pstep_unit_ptr[]) == 1
+pstep_ptr[] >= orig(pstep_ptr[]) (elementwise)
+pstep_unit_ptr[] >= orig(pstep_unit_ptr[]) (elementwise)
+return <= size(pstep_ptr[])
+return >= size(pstep_ptr[])-1
+return <= size(pstep_unit_ptr[])
+return >= size(pstep_unit_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.intmax(int;int;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.intmax(int;int;)int:::EXIT200
+a == return
+a > b
+===========================================================================
+std.intmax(int;int;)int:::EXIT201
+b == return
+===========================================================================
+std.intmax(int;int;)int:::EXIT
+a == orig(a)
+b == orig(b)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+b <= return
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.intmin(int;int;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.intmin(int;int;)int:::EXIT202
+a == return
+a < b
+===========================================================================
+std.intmin(int;int;)int:::EXIT203
+b == return
+a >= b
+===========================================================================
+std.intmin(int;int;)int:::EXIT
+a == orig(a)
+b == orig(b)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+a >= return
+b >= return
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.isletter(char;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.isletter(char;)int:::EXIT206
+return == 1
+===========================================================================
+std.isletter(char;)int:::EXIT207
+ch == 32
+return == 0
+===========================================================================
+std.isletter(char;)int:::EXIT
+ch == orig(ch)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+ch > return
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.kwdsinit()void:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.kwdsinit()void:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.lenunit(charac **;int *;)int:::ENTER
+tp != null
+unit != null
+unit[] == [0]
+unit[] elements == 0
+::GLOBLE_FILENAME != null
+size(unit[]) == 1
+===========================================================================
+std.lenunit(charac **;int *;)int:::EXIT209
+unit[] == [0]
+unit[] elements == 0
+return == 14
+unit[] == orig(unit[]) (elementwise)
+unit[] is the reverse of orig(unit[])
+===========================================================================
+std.lenunit(charac **;int *;)int:::EXIT210
+return == size(unit[])-1
+return == orig(size(unit[]))-1
+return == 0
+===========================================================================
+std.lenunit(charac **;int *;)int:::EXIT
+tp == orig(tp)
+unit == orig(unit)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+size(unit[]) == orig(size(unit[]))
+tp != null
+unit != null
+unit[] elements >= 0
+::GLOBLE_FILENAME != null
+return one of { 0, 14 }
+size(unit[]) == 1
+unit[] >= orig(unit[]) (elementwise)
+return != size(unit[])
+return >= size(unit[])-1
+return != orig(size(unit[]))
+return >= orig(size(unit[]))-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.linconv(double *;int;)int:::ENTER
+x_ptr != null
+unit one of { 0, 2 }
+::GLOBLE_FILENAME != null
+===========================================================================
+std.linconv(double *;int;)int:::EXIT
+x_ptr == orig(x_ptr)
+unit == orig(unit)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(x_ptr[])-1
+x_ptr != null
+x_ptr[] == [1.12202]
+x_ptr[] elements == 1.12202
+unit one of { 0, 2 }
+::GLOBLE_FILENAME != null
+return == 0
+size(x_ptr[]) == 1
+x_ptr[] is the reverse of orig(x_ptr[])
+unit >= return
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.linpol(charac *;charac **;double *;int *;)int:::ENTER
+size(angle_ptr[]) == size(angle_unit_ptr[])
+pp2 != null
+angle_ptr != null
+angle_ptr[] == [90.0]
+angle_ptr[] elements == 90.0
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+size(angle_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+===========================================================================
+std.linpol(charac *;charac **;double *;int *;)int:::EXIT212
+angle_ptr[] == orig(angle_ptr[])
+return == size(angle_ptr[])
+return == size(angle_unit_ptr[])
+angle_ptr[] == [90.0]
+angle_ptr[] elements == 90.0
+return == 1
+===========================================================================
+std.linpol(charac *;charac **;double *;int *;)int:::EXIT213
+angle_ptr[] == orig(angle_ptr[])
+return == size(angle_ptr[])-1
+return == size(angle_unit_ptr[])-1
+angle_ptr[] == [90.0]
+angle_ptr[] elements == 90.0
+return == 0
+===========================================================================
+std.linpol(charac *;charac **;double *;int *;)int:::EXIT215
+return == size(angle_ptr[])-1
+return == size(angle_unit_ptr[])-1
+return == 0
+===========================================================================
+std.linpol(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+angle_ptr == orig(angle_ptr)
+angle_unit_ptr == orig(angle_unit_ptr)
+angle_unit_ptr[] == orig(angle_unit_ptr[])
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+size(angle_ptr[]) == size(angle_unit_ptr[])
+size(angle_ptr[]) == orig(size(angle_ptr[]))
+pp2 != null
+angle_ptr != null
+angle_ptr[] elements >= 0.0
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(angle_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+angle_ptr[] <= orig(angle_ptr[]) (elementwise)
+return <= size(angle_ptr[])
+return >= size(angle_ptr[])-1
+return <= size(angle_unit_ptr[])
+return >= size(angle_unit_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.main(int;char **;)int:::ENTER
+argc == 2
+argv != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.main(int;char **;)int:::EXIT
+argc == orig(argc)
+argv == orig(argv)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+argc == 2
+argv != null
+::GLOBLE_FILENAME != null
+return == 0
+===========================================================================
+std.mksblock(AddRem *;Geomnode **;Geomnode **;double;double;double;int *;int;double;double;)int:::ENTER
+first_node_ptr != null
+last_node_ptr != null
+nodes_num_ptr != null
+nodes_num_ptr[] elements >= 1
+elem_shape one of { 2, 3 }
+::GLOBLE_FILENAME != null
+size(nodes_num_ptr[]) == 1
+elem_shape > size(nodes_num_ptr[])
+===========================================================================
+std.mksblock(AddRem *;Geomnode **;Geomnode **;double;double;double;int *;int;double;double;)int:::EXIT
+first_node_ptr == orig(first_node_ptr)
+last_node_ptr == orig(last_node_ptr)
+pstep == orig(pstep)
+qstep == orig(qstep)
+angle == orig(angle)
+nodes_num_ptr == orig(nodes_num_ptr)
+elem_shape == orig(elem_shape)
+elem_pdim == orig(elem_pdim)
+elem_qdim == orig(elem_qdim)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(nodes_num_ptr[])-1
+return == orig(size(nodes_num_ptr[]))-1
+size(nodes_num_ptr[]) == orig(size(nodes_num_ptr[]))
+first_node_ptr != null
+last_node_ptr != null
+nodes_num_ptr != null
+nodes_num_ptr[] elements >= 1
+elem_shape one of { 2, 3 }
+::GLOBLE_FILENAME != null
+return == 0
+size(nodes_num_ptr[]) == 1
+elem_shape > return
+elem_shape > size(nodes_num_ptr[])
+elem_shape > orig(size(nodes_num_ptr[]))
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.mkshex(AddRem *;Geomnode **;Geomnode **;double;double;double;int *;int;double;double;)int:::ENTER
+elem_pdim == elem_qdim
+first_node_ptr != null
+last_node_ptr != null
+nodes_num_ptr != null
+nodes_num_ptr[] elements >= 1
+elem_shape == 2
+::GLOBLE_FILENAME != null
+size(nodes_num_ptr[]) == 1
+angle != elem_pdim
+===========================================================================
+std.mkshex(AddRem *;Geomnode **;Geomnode **;double;double;double;int *;int;double;double;)int:::EXIT
+first_node_ptr == orig(first_node_ptr)
+last_node_ptr == orig(last_node_ptr)
+pstep == orig(pstep)
+qstep == orig(qstep)
+angle == orig(angle)
+nodes_num_ptr == orig(nodes_num_ptr)
+elem_shape == orig(elem_shape)
+elem_pdim == elem_qdim
+elem_pdim == orig(elem_pdim)
+elem_pdim == orig(elem_qdim)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(nodes_num_ptr[])-1
+return == orig(size(nodes_num_ptr[]))-1
+size(nodes_num_ptr[]) == orig(size(nodes_num_ptr[]))
+first_node_ptr != null
+last_node_ptr != null
+nodes_num_ptr != null
+nodes_num_ptr[] == [7]
+nodes_num_ptr[] elements == 7
+elem_shape == 2
+::GLOBLE_FILENAME != null
+return == 0
+size(nodes_num_ptr[]) == 1
+angle != elem_pdim
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.mksnode(AddRem *;Geomnode **;Geomnode **;double;double;double;int *;int;double;double;)int:::ENTER
+first_node_ptr != null
+last_node_ptr != null
+nodes_num_ptr != null
+nodes_num_ptr[] elements >= 1
+elem_shape one of { 2, 3 }
+::GLOBLE_FILENAME != null
+size(nodes_num_ptr[]) == 1
+elem_shape > size(nodes_num_ptr[])
+===========================================================================
+std.mksnode(AddRem *;Geomnode **;Geomnode **;double;double;double;int *;int;double;double;)int:::EXIT
+first_node_ptr == orig(first_node_ptr)
+last_node_ptr == orig(last_node_ptr)
+pstep == orig(pstep)
+qstep == orig(qstep)
+angle == orig(angle)
+nodes_num_ptr == orig(nodes_num_ptr)
+elem_shape == orig(elem_shape)
+elem_pdim == orig(elem_pdim)
+elem_qdim == orig(elem_qdim)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(nodes_num_ptr[])-1
+return == orig(size(nodes_num_ptr[]))-1
+size(nodes_num_ptr[]) == orig(size(nodes_num_ptr[]))
+first_node_ptr != null
+last_node_ptr != null
+nodes_num_ptr != null
+nodes_num_ptr[] == [1]
+nodes_num_ptr[] elements == 1
+elem_shape one of { 2, 3 }
+::GLOBLE_FILENAME != null
+return == 0
+size(nodes_num_ptr[]) == 1
+nodes_num_ptr[] <= orig(nodes_num_ptr[]) (elementwise)
+elem_shape > return
+elem_shape > size(nodes_num_ptr[])
+elem_shape > orig(size(nodes_num_ptr[]))
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.mmconv(double *;int;)int:::ENTER
+x_ptr != null
+unit >= 0
+::GLOBLE_FILENAME != null
+===========================================================================
+std.mmconv(double *;int;)int:::EXIT
+x_ptr == orig(x_ptr)
+unit == orig(unit)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(x_ptr[])-1
+x_ptr != null
+unit >= 0
+::GLOBLE_FILENAME != null
+return == 0
+size(x_ptr[]) == 1
+x_ptr[] is the reverse of orig(x_ptr[])
+unit >= return
+unit >= size(x_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.moseinit()void:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.moseinit()void:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.nodecoor(charac *;charac **;int *;int *;)int:::ENTER
+size(pcoord_ptr[]) == size(qcoord_ptr[])
+pp2 != null
+pcoord_ptr != null
+qcoord_ptr != null
+::GLOBLE_FILENAME != null
+size(pcoord_ptr[]) == 1
+size(qcoord_ptr[]) == 1
+===========================================================================
+std.nodecoor(charac *;charac **;int *;int *;)int:::EXIT231
+===========================================================================
+std.nodecoor(charac *;charac **;int *;int *;)int:::EXIT
+pp2 == orig(pp2)
+pcoord_ptr == orig(pcoord_ptr)
+qcoord_ptr == orig(qcoord_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(pcoord_ptr[])-1
+return == size(qcoord_ptr[])-1
+return == orig(size(pcoord_ptr[]))-1
+return == orig(size(qcoord_ptr[]))-1
+size(pcoord_ptr[]) == size(qcoord_ptr[])
+size(pcoord_ptr[]) == orig(size(pcoord_ptr[]))
+size(pcoord_ptr[]) == orig(size(qcoord_ptr[]))
+size(qcoord_ptr[]) == orig(size(pcoord_ptr[]))
+size(qcoord_ptr[]) == orig(size(qcoord_ptr[]))
+pp2 != null
+pcoord_ptr != null
+qcoord_ptr != null
+::GLOBLE_FILENAME != null
+return == 0
+size(pcoord_ptr[]) == 1
+size(qcoord_ptr[]) == 1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.nodedef(charac *;charac **;Node **;)int:::ENTER
+pp2 != null
+node_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.nodedef(charac *;charac **;Node **;)int:::EXIT232
+return == 1
+===========================================================================
+std.nodedef(charac *;charac **;Node **;)int:::EXIT236
+return == 0
+===========================================================================
+std.nodedef(charac *;charac **;Node **;)int:::EXIT
+pp2 == orig(pp2)
+node_ptr == orig(node_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+node_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.nodorien(charac *;charac **;double *;double *;double *;int *;)int:::ENTER
+pp2 != null
+theta_ptr != null
+phi_ptr != null
+psi_ptr != null
+angle_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.nodorien(charac *;charac **;double *;double *;double *;int *;)int:::EXIT237
+return == 1
+===========================================================================
+std.nodorien(charac *;charac **;double *;double *;double *;int *;)int:::EXIT241
+return == 0
+===========================================================================
+std.nodorien(charac *;charac **;double *;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+theta_ptr == orig(theta_ptr)
+phi_ptr == orig(phi_ptr)
+psi_ptr == orig(psi_ptr)
+angle_unit_ptr == orig(angle_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(theta_ptr[])-1
+return == size(phi_ptr[])-1
+return == size(psi_ptr[])-1
+return == size(angle_unit_ptr[])-1
+size(theta_ptr[]) == size(phi_ptr[])
+size(theta_ptr[]) == size(psi_ptr[])
+size(theta_ptr[]) == size(angle_unit_ptr[])
+size(phi_ptr[]) == size(psi_ptr[])
+size(phi_ptr[]) == size(angle_unit_ptr[])
+size(psi_ptr[]) == size(angle_unit_ptr[])
+pp2 != null
+theta_ptr != null
+phi_ptr != null
+psi_ptr != null
+angle_unit_ptr != null
+angle_unit_ptr[] elements one of { 0, 1 }
+angle_unit_ptr[] one of { [0], [1] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(theta_ptr[]) == 1
+size(phi_ptr[]) == 1
+size(psi_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+theta_ptr[] is the reverse of orig(theta_ptr[])
+phi_ptr[] is the reverse of orig(phi_ptr[])
+psi_ptr[] is the reverse of orig(psi_ptr[])
+angle_unit_ptr[] is the reverse of orig(angle_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.nomefile(char *;)void:::ENTER
+fn != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.nomefile(char *;)void:::EXIT
+fn == orig(fn)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+fn != null
+::GLOBLE_FILENAME != null
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.parserro(charac *;int;char *;)void:::ENTER
+errcode >= 1
+s != null
+s[] == "testgroup"
+::GLOBLE_FILENAME != null
+===========================================================================
+std.parserro(charac *;int;char *;)void:::EXIT
+errcode == orig(errcode)
+s == orig(s)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+errcode >= 1
+s != null
+s[] == "testgroup"
+::GLOBLE_FILENAME != null
+s[] == orig(s[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.phaserot(charac *;charac **;double *;double *;int *;)int:::ENTER
+pp2 != null
+phase_start_ptr != null
+phase_step_ptr != null
+phase_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.phaserot(charac *;charac **;double *;double *;int *;)int:::EXIT244
+return == 1
+===========================================================================
+std.phaserot(charac *;charac **;double *;double *;int *;)int:::EXIT247
+return == 0
+===========================================================================
+std.phaserot(charac *;charac **;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+phase_start_ptr == orig(phase_start_ptr)
+phase_step_ptr == orig(phase_step_ptr)
+phase_unit_ptr == orig(phase_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(phase_start_ptr[])-1
+return == size(phase_step_ptr[])-1
+return == size(phase_unit_ptr[])-1
+size(phase_start_ptr[]) == size(phase_step_ptr[])
+size(phase_start_ptr[]) == size(phase_unit_ptr[])
+size(phase_step_ptr[]) == size(phase_unit_ptr[])
+pp2 != null
+phase_start_ptr != null
+phase_step_ptr != null
+phase_unit_ptr != null
+phase_unit_ptr[] == [0]
+phase_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(phase_start_ptr[]) == 1
+size(phase_step_ptr[]) == 1
+size(phase_unit_ptr[]) == 1
+phase_start_ptr[] is the reverse of orig(phase_start_ptr[])
+phase_step_ptr[] is the reverse of orig(phase_step_ptr[])
+phase_unit_ptr[] is the reverse of orig(phase_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.polor(charac *;charac **;double *;int *;)int:::ENTER
+size(angle_ptr[]) == size(angle_unit_ptr[])
+pp2 != null
+angle_ptr != null
+angle_ptr[] == [90.0]
+angle_ptr[] elements == 90.0
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+size(angle_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+===========================================================================
+std.polor(charac *;charac **;double *;int *;)int:::EXIT248
+angle_ptr[] == orig(angle_ptr[])
+return == size(angle_ptr[])
+return == size(angle_unit_ptr[])
+angle_ptr[] == [90.0]
+angle_ptr[] elements == 90.0
+return == 1
+===========================================================================
+std.polor(charac *;charac **;double *;int *;)int:::EXIT249
+return == size(angle_ptr[])-1
+return == size(angle_unit_ptr[])-1
+angle_ptr[] == [0.0]
+angle_ptr[] elements == 0.0
+return == 0
+angle_ptr[] < orig(angle_ptr[]) (elementwise)
+===========================================================================
+std.polor(charac *;charac **;double *;int *;)int:::EXIT250
+angle_ptr[] == orig(angle_ptr[])
+return == size(angle_ptr[])-1
+return == size(angle_unit_ptr[])-1
+angle_ptr[] == [90.0]
+angle_ptr[] elements == 90.0
+return == 0
+===========================================================================
+std.polor(charac *;charac **;double *;int *;)int:::EXIT251
+return == size(angle_ptr[])-1
+return == size(angle_unit_ptr[])-1
+return == 0
+===========================================================================
+std.polor(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+angle_ptr == orig(angle_ptr)
+angle_unit_ptr == orig(angle_unit_ptr)
+angle_unit_ptr[] == orig(angle_unit_ptr[])
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+size(angle_ptr[]) == size(angle_unit_ptr[])
+size(angle_ptr[]) == orig(size(angle_ptr[]))
+pp2 != null
+angle_ptr != null
+angle_ptr[] elements >= 0.0
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(angle_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+angle_ptr[] <= orig(angle_ptr[]) (elementwise)
+return <= size(angle_ptr[])
+return >= size(angle_ptr[])-1
+return <= size(angle_unit_ptr[])
+return >= size(angle_unit_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.polorbis(charac *;charac **;double *;int *;)int:::ENTER
+pp2 != null
+phepol_ptr != null
+phepol_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.polorbis(charac *;charac **;double *;int *;)int:::EXIT254
+return == size(phepol_ptr[])
+return == size(phepol_unit_ptr[])
+phepol_ptr[] == [90.0]
+phepol_ptr[] elements == 90.0
+return == 1
+===========================================================================
+std.polorbis(charac *;charac **;double *;int *;)int:::EXIT255
+return == size(phepol_ptr[])-1
+return == size(phepol_unit_ptr[])-1
+phepol_ptr[] == [0.0]
+phepol_ptr[] elements == 0.0
+return == 0
+===========================================================================
+std.polorbis(charac *;charac **;double *;int *;)int:::EXIT256
+return == size(phepol_ptr[])-1
+return == size(phepol_unit_ptr[])-1
+phepol_ptr[] == [90.0]
+phepol_ptr[] elements == 90.0
+return == 0
+===========================================================================
+std.polorbis(charac *;charac **;double *;int *;)int:::EXIT257
+return == size(phepol_ptr[])-1
+return == size(phepol_unit_ptr[])-1
+return == 0
+===========================================================================
+std.polorbis(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+phepol_ptr == orig(phepol_ptr)
+phepol_unit_ptr == orig(phepol_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+size(phepol_ptr[]) == size(phepol_unit_ptr[])
+pp2 != null
+phepol_ptr != null
+phepol_ptr[] elements >= 0.0
+phepol_unit_ptr != null
+phepol_unit_ptr[] == [0]
+phepol_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(phepol_ptr[]) == 1
+size(phepol_unit_ptr[]) == 1
+phepol_ptr[] is the reverse of orig(phepol_ptr[])
+phepol_unit_ptr[] is the reverse of orig(phepol_unit_ptr[])
+return <= size(phepol_ptr[])
+return >= size(phepol_ptr[])-1
+return <= size(phepol_unit_ptr[])
+return >= size(phepol_unit_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.polspec(charac *;charac **;int *;double *;int *;int *;)int:::ENTER
+pp2 != null
+polarization_ptr != null
+phepol_ptr != null
+phepol_unit_ptr != null
+direction_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.polspec(charac *;charac **;int *;double *;int *;int *;)int:::EXIT260
+return == size(polarization_ptr[])
+return == size(phepol_ptr[])
+return == size(phepol_unit_ptr[])
+return == size(direction_ptr[])
+polarization_ptr[] == [0]
+polarization_ptr[] elements == 0
+phepol_ptr[] == [90.0]
+phepol_ptr[] elements == 90.0
+direction_ptr[] == [0]
+direction_ptr[] elements == 0
+return == 1
+===========================================================================
+std.polspec(charac *;charac **;int *;double *;int *;int *;)int:::EXIT261
+return == size(polarization_ptr[])-1
+return == size(phepol_ptr[])-1
+return == size(phepol_unit_ptr[])-1
+return == size(direction_ptr[])-1
+polarization_ptr[] == [0]
+polarization_ptr[] elements == 0
+direction_ptr[] == [0]
+direction_ptr[] elements == 0
+return == 0
+===========================================================================
+std.polspec(charac *;charac **;int *;double *;int *;int *;)int:::EXIT263
+return == size(polarization_ptr[])-1
+return == size(phepol_ptr[])-1
+return == size(phepol_unit_ptr[])-1
+return == size(direction_ptr[])-1
+polarization_ptr[] == [1]
+polarization_ptr[] elements == 1
+phepol_ptr[] == [90.0]
+phepol_ptr[] elements == 90.0
+return == 0
+===========================================================================
+std.polspec(charac *;charac **;int *;double *;int *;int *;)int:::EXIT265
+pp2 has only one value
+polarization_ptr has only one value
+polarization_ptr[] == [1]
+polarization_ptr[] elements == 1
+phepol_ptr has only one value
+phepol_ptr[] == [90.0]
+phepol_ptr[] elements == 90.0
+phepol_unit_ptr has only one value
+direction_ptr has only one value
+direction_ptr[] == [0]
+direction_ptr[] elements == 0
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr13461"
+return == 17
+===========================================================================
+std.polspec(charac *;charac **;int *;double *;int *;int *;)int:::EXIT
+pp2 == orig(pp2)
+polarization_ptr == orig(polarization_ptr)
+phepol_ptr == orig(phepol_ptr)
+phepol_unit_ptr == orig(phepol_unit_ptr)
+direction_ptr == orig(direction_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+size(polarization_ptr[]) == size(phepol_ptr[])
+size(polarization_ptr[]) == size(phepol_unit_ptr[])
+size(polarization_ptr[]) == size(direction_ptr[])
+size(phepol_ptr[]) == size(phepol_unit_ptr[])
+size(phepol_ptr[]) == size(direction_ptr[])
+size(phepol_unit_ptr[]) == size(direction_ptr[])
+pp2 != null
+polarization_ptr != null
+polarization_ptr[] elements one of { 0, 1 }
+polarization_ptr[] one of { [0], [1] }
+phepol_ptr != null
+phepol_unit_ptr != null
+phepol_unit_ptr[] == [0]
+phepol_unit_ptr[] elements == 0
+direction_ptr != null
+direction_ptr[] elements one of { 0, 1 }
+direction_ptr[] one of { [0], [1] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1, 17 }
+size(polarization_ptr[]) == 1
+size(phepol_ptr[]) == 1
+size(phepol_unit_ptr[]) == 1
+size(direction_ptr[]) == 1
+polarization_ptr[] is the reverse of orig(polarization_ptr[])
+phepol_ptr[] is the reverse of orig(phepol_ptr[])
+phepol_unit_ptr[] is the reverse of orig(phepol_unit_ptr[])
+direction_ptr[] is the reverse of orig(direction_ptr[])
+return >= size(polarization_ptr[])-1
+return >= size(phepol_ptr[])-1
+return >= size(phepol_unit_ptr[])-1
+return >= size(direction_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.polydef(charac *;charac **;Node **;)int:::ENTER
+pp2 != null
+node_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.polydef(charac *;charac **;Node **;)int:::EXIT266
+===========================================================================
+std.polydef(charac *;charac **;Node **;)int:::EXIT
+pp2 == orig(pp2)
+node_ptr == orig(node_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+node_ptr != null
+::GLOBLE_FILENAME != null
+return == 1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.portamp(charac *;charac **;double *;int *;)int:::ENTER
+pp2 != null
+amp_ptr != null
+amp_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.portamp(charac *;charac **;double *;int *;)int:::EXIT269
+::GLOBLE_FILENAME[] one of { "inputs/gr133", "inputs/gr152", "inputs/gr205" }
+return == 1
+===========================================================================
+std.portamp(charac *;charac **;double *;int *;)int:::EXIT271
+return == 0
+===========================================================================
+std.portamp(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+amp_ptr == orig(amp_ptr)
+amp_unit_ptr == orig(amp_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(amp_ptr[])-1
+return == size(amp_unit_ptr[])-1
+size(amp_ptr[]) == size(amp_unit_ptr[])
+pp2 != null
+amp_ptr != null
+amp_unit_ptr != null
+amp_unit_ptr[] elements one of { 0, 1, 2 }
+amp_unit_ptr[] one of { [0], [1], [2] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(amp_ptr[]) == 1
+size(amp_unit_ptr[]) == 1
+amp_ptr[] is the reverse of orig(amp_ptr[])
+amp_unit_ptr[] is the reverse of orig(amp_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.portdef(charac *;charac **;Port *;int *;)int:::ENTER
+pp2 != null
+portnum_ptr != null
+portnum_ptr[] elements >= 1
+::GLOBLE_FILENAME != null
+size(portnum_ptr[]) == 1
+===========================================================================
+std.portdef(charac *;charac **;Port *;int *;)int:::EXIT272
+portnum_ptr[] == orig(portnum_ptr[])
+return == size(portnum_ptr[])
+return == 1
+===========================================================================
+std.portdef(charac *;charac **;Port *;int *;)int:::EXIT275
+portnum_ptr[] elements one of { 1, 2, 3 }
+portnum_ptr[] one of { [1], [2], [3] }
+::GLOBLE_FILENAME[] one of { "inputs/gr133", "inputs/gr152", "inputs/gr205" }
+return == 17
+orig(portnum_ptr[]) elements one of { 1, 2 }
+orig(portnum_ptr[]) one of { [1], [2] }
+===========================================================================
+std.portdef(charac *;charac **;Port *;int *;)int:::EXIT276
+pp2 has only one value
+portnum_ptr has only one value
+portnum_ptr[] == [1]
+portnum_ptr[] elements == 1
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr13462"
+return == 17
+portnum_ptr[] is the reverse of orig(portnum_ptr[])
+===========================================================================
+std.portdef(charac *;charac **;Port *;int *;)int:::EXIT277
+pp2 has only one value
+portnum_ptr has only one value
+portnum_ptr[] == [1]
+portnum_ptr[] elements == 1
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr13463"
+return == 17
+portnum_ptr[] is the reverse of orig(portnum_ptr[])
+===========================================================================
+std.portdef(charac *;charac **;Port *;int *;)int:::EXIT279
+return == size(portnum_ptr[])-1
+return == orig(size(portnum_ptr[]))-1
+return == 0
+orig(portnum_ptr[]) == portnum_ptr[] - 1
+portnum_ptr[] > orig(portnum_ptr[]) (elementwise)
+===========================================================================
+std.portdef(charac *;charac **;Port *;int *;)int:::EXIT
+pp2 == orig(pp2)
+portnum_ptr == orig(portnum_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+size(portnum_ptr[]) == orig(size(portnum_ptr[]))
+pp2 != null
+portnum_ptr != null
+portnum_ptr[] elements >= 1
+::GLOBLE_FILENAME != null
+return one of { 0, 1, 17 }
+size(portnum_ptr[]) == 1
+portnum_ptr[] >= orig(portnum_ptr[]) (elementwise)
+return >= size(portnum_ptr[])-1
+return >= orig(size(portnum_ptr[]))-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.portspec(charac *;charac **;int *;Port **;)int:::ENTER
+pp2 != null
+nports_ptr != null
+port_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.portspec(charac *;charac **;int *;Port **;)int:::EXIT280
+return == 1
+===========================================================================
+std.portspec(charac *;charac **;int *;Port **;)int:::EXIT282
+return == 17
+===========================================================================
+std.portspec(charac *;charac **;int *;Port **;)int:::EXIT283
+nports_ptr[] elements one of { 1, 3 }
+nports_ptr[] one of { [1], [3] }
+return == 17
+===========================================================================
+std.portspec(charac *;charac **;int *;Port **;)int:::EXIT284
+return == size(nports_ptr[])-1
+return == 0
+===========================================================================
+std.portspec(charac *;charac **;int *;Port **;)int:::EXIT
+pp2 == orig(pp2)
+nports_ptr == orig(nports_ptr)
+port_ptr == orig(port_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+nports_ptr != null
+nports_ptr[] elements >= 1
+port_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 1, 17 }
+size(nports_ptr[]) == 1
+nports_ptr[] is the reverse of orig(nports_ptr[])
+return != size(nports_ptr[])
+return >= size(nports_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.ppadef1(charac *;charac **;double *;int *;)int:::ENTER
+pp2 != null
+ppa_ptr != null
+ppa_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.ppadef1(charac *;charac **;double *;int *;)int:::EXIT285
+return == 1
+===========================================================================
+std.ppadef1(charac *;charac **;double *;int *;)int:::EXIT287
+return == 0
+===========================================================================
+std.ppadef1(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+ppa_ptr == orig(ppa_ptr)
+ppa_unit_ptr == orig(ppa_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(ppa_ptr[])-1
+return == size(ppa_unit_ptr[])-1
+size(ppa_ptr[]) == size(ppa_unit_ptr[])
+pp2 != null
+ppa_ptr != null
+ppa_unit_ptr != null
+ppa_unit_ptr[] elements one of { 0, 1 }
+ppa_unit_ptr[] one of { [0], [1] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(ppa_ptr[]) == 1
+size(ppa_unit_ptr[]) == 1
+ppa_ptr[] is the reverse of orig(ppa_ptr[])
+ppa_unit_ptr[] is the reverse of orig(ppa_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.pqlimits(Geomnode *;Geomnode **;Geomnode **;Geomnode **;Geomnode **;)int:::ENTER
+pmin_ptr != null
+pmax_ptr != null
+qmin_ptr != null
+qmax_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.pqlimits(Geomnode *;Geomnode **;Geomnode **;Geomnode **;Geomnode **;)int:::EXIT
+pmin_ptr == orig(pmin_ptr)
+pmax_ptr == orig(pmax_ptr)
+qmin_ptr == orig(qmin_ptr)
+qmax_ptr == orig(qmax_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pmin_ptr != null
+pmax_ptr != null
+qmin_ptr != null
+qmax_ptr != null
+::GLOBLE_FILENAME != null
+return == 0
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.prnfile(charac *;)void:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.prnfile(charac *;)void:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.pscdef1(charac *;charac **;double *;int *;)int:::ENTER
+pp2 != null
+psc_ptr != null
+psc_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.pscdef1(charac *;charac **;double *;int *;)int:::EXIT290
+return == 1
+===========================================================================
+std.pscdef1(charac *;charac **;double *;int *;)int:::EXIT291
+pp2 has only one value
+psc_ptr has only one value
+psc_unit_ptr has only one value
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr13463"
+return == 17
+===========================================================================
+std.pscdef1(charac *;charac **;double *;int *;)int:::EXIT292
+return == 0
+===========================================================================
+std.pscdef1(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+psc_ptr == orig(psc_ptr)
+psc_unit_ptr == orig(psc_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(psc_ptr[])-1
+return == size(psc_unit_ptr[])-1
+size(psc_ptr[]) == size(psc_unit_ptr[])
+pp2 != null
+psc_ptr != null
+psc_unit_ptr != null
+psc_unit_ptr[] == [0]
+psc_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1, 17 }
+size(psc_ptr[]) == 1
+size(psc_unit_ptr[]) == 1
+psc_ptr[] is the reverse of orig(psc_ptr[])
+psc_unit_ptr[] is the reverse of orig(psc_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.pshdef1(charac *;charac **;double *;int *;)int:::ENTER
+pp2 != null
+psh_ptr != null
+psh_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.pshdef1(charac *;charac **;double *;int *;)int:::EXIT293
+return == 1
+===========================================================================
+std.pshdef1(charac *;charac **;double *;int *;)int:::EXIT294
+pp2 has only one value
+psh_ptr has only one value
+psh_unit_ptr has only one value
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr13462"
+return == 17
+===========================================================================
+std.pshdef1(charac *;charac **;double *;int *;)int:::EXIT295
+return == 0
+===========================================================================
+std.pshdef1(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+psh_ptr == orig(psh_ptr)
+psh_unit_ptr == orig(psh_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(psh_ptr[])-1
+return == size(psh_unit_ptr[])-1
+size(psh_ptr[]) == size(psh_unit_ptr[])
+pp2 != null
+psh_ptr != null
+psh_unit_ptr != null
+psh_unit_ptr[] == [0]
+psh_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1, 17 }
+size(psh_ptr[]) == 1
+size(psh_unit_ptr[]) == 1
+psh_ptr[] is the reverse of orig(psh_ptr[])
+psh_unit_ptr[] is the reverse of orig(psh_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.readfil3(char *;charac **;charac **;)int:::ENTER
+filename != null
+firstel != null
+lastel != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.readfil3(char *;charac **;charac **;)int:::EXIT296
+return == 21
+===========================================================================
+std.readfil3(char *;charac **;charac **;)int:::EXIT301
+return == 0
+===========================================================================
+std.readfil3(char *;charac **;charac **;)int:::EXIT
+filename == orig(filename)
+firstel == orig(firstel)
+lastel == orig(lastel)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+filename != null
+firstel != null
+lastel != null
+::GLOBLE_FILENAME != null
+return one of { 0, 21 }
+filename[] == orig(filename[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.recgrdef(charac *;charac **;double *;double *;int *;)int:::ENTER
+size(pstep_ptr[]) == size(pqstep_unit_ptr[])
+pp2 != null
+pstep_ptr != null
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+qstep_ptr != null
+pqstep_unit_ptr != null
+pqstep_unit_ptr[] == [0]
+pqstep_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+size(pstep_ptr[]) == 1
+size(pqstep_unit_ptr[]) == 1
+===========================================================================
+std.recgrdef(charac *;charac **;double *;double *;int *;)int:::EXIT302
+pstep_ptr[] == orig(pstep_ptr[])
+pqstep_unit_ptr[] == orig(pqstep_unit_ptr[])
+return == size(pstep_ptr[])
+return == size(qstep_ptr[])
+return == size(pqstep_unit_ptr[])
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+qstep_ptr[] == [0.0]
+qstep_ptr[] elements == 0.0
+pqstep_unit_ptr[] == [0]
+pqstep_unit_ptr[] elements == 0
+return == 1
+===========================================================================
+std.recgrdef(charac *;charac **;double *;double *;int *;)int:::EXIT303
+pstep_ptr[] == orig(pstep_ptr[])
+pqstep_unit_ptr[] == orig(pqstep_unit_ptr[])
+return == size(pstep_ptr[])-1
+return == size(qstep_ptr[])-1
+return == size(pqstep_unit_ptr[])-1
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+qstep_ptr[] == [0.0]
+qstep_ptr[] elements == 0.0
+pqstep_unit_ptr[] == [0]
+pqstep_unit_ptr[] elements == 0
+return == 0
+===========================================================================
+std.recgrdef(charac *;charac **;double *;double *;int *;)int:::EXIT305
+return == size(pstep_ptr[])-1
+return == size(qstep_ptr[])-1
+return == size(pqstep_unit_ptr[])-1
+return == 0
+pstep_ptr[] > orig(pstep_ptr[]) (elementwise)
+===========================================================================
+std.recgrdef(charac *;charac **;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+pstep_ptr == orig(pstep_ptr)
+qstep_ptr == orig(qstep_ptr)
+pqstep_unit_ptr == orig(pqstep_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+size(pstep_ptr[]) == size(qstep_ptr[])
+size(pstep_ptr[]) == size(pqstep_unit_ptr[])
+size(pstep_ptr[]) == orig(size(pstep_ptr[]))
+size(qstep_ptr[]) == size(pqstep_unit_ptr[])
+size(pqstep_unit_ptr[]) == orig(size(pqstep_unit_ptr[]))
+pp2 != null
+pstep_ptr != null
+pstep_ptr[] elements >= 0.0
+qstep_ptr != null
+qstep_ptr[] elements >= 0.0
+pqstep_unit_ptr != null
+pqstep_unit_ptr[] elements one of { 0, 2 }
+pqstep_unit_ptr[] one of { [0], [2] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(pstep_ptr[]) == 1
+size(qstep_ptr[]) == 1
+size(pqstep_unit_ptr[]) == 1
+pstep_ptr[] >= orig(pstep_ptr[]) (elementwise)
+qstep_ptr[] is the reverse of orig(qstep_ptr[])
+pqstep_unit_ptr[] >= orig(pqstep_unit_ptr[]) (elementwise)
+return <= size(pstep_ptr[])
+return >= size(pstep_ptr[])-1
+return <= size(qstep_ptr[])
+return >= size(qstep_ptr[])-1
+return <= size(pqstep_unit_ptr[])
+return >= size(pqstep_unit_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.recspec(charac *;charac **;double *;double *;int *;)int:::ENTER
+pp2 != null
+pdim_ptr != null
+qdim_ptr != null
+pqdim_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.recspec(charac *;charac **;double *;double *;int *;)int:::EXIT306
+return == 1
+===========================================================================
+std.recspec(charac *;charac **;double *;double *;int *;)int:::EXIT307
+return == 17
+===========================================================================
+std.recspec(charac *;charac **;double *;double *;int *;)int:::EXIT308
+return == 17
+===========================================================================
+std.recspec(charac *;charac **;double *;double *;int *;)int:::EXIT309
+return == size(pdim_ptr[])-1
+return == size(qdim_ptr[])-1
+return == 0
+===========================================================================
+std.recspec(charac *;charac **;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+pdim_ptr == orig(pdim_ptr)
+qdim_ptr == orig(qdim_ptr)
+pqdim_unit_ptr == orig(pqdim_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(pqdim_unit_ptr[])-1
+size(pdim_ptr[]) == size(qdim_ptr[])
+size(pdim_ptr[]) == size(pqdim_unit_ptr[])
+size(qdim_ptr[]) == size(pqdim_unit_ptr[])
+pp2 != null
+pdim_ptr != null
+qdim_ptr != null
+pqdim_unit_ptr != null
+pqdim_unit_ptr[] elements one of { 0, 1, 2 }
+pqdim_unit_ptr[] one of { [0], [1], [2] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1, 17 }
+size(pdim_ptr[]) == 1
+size(qdim_ptr[]) == 1
+size(pqdim_unit_ptr[]) == 1
+pdim_ptr[] is the reverse of orig(pdim_ptr[])
+qdim_ptr[] is the reverse of orig(qdim_ptr[])
+pqdim_unit_ptr[] is the reverse of orig(pqdim_unit_ptr[])
+return != size(pdim_ptr[])
+return >= size(pdim_ptr[])-1
+return != size(qdim_ptr[])
+return >= size(qdim_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.remdef(charac *;charac **;AddRem **;)int:::ENTER
+pp2 != null
+addrem_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.remdef(charac *;charac **;AddRem **;)int:::EXIT310
+===========================================================================
+std.remdef(charac *;charac **;AddRem **;)int:::EXIT
+pp2 == orig(pp2)
+addrem_ptr == orig(addrem_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+addrem_ptr != null
+::GLOBLE_FILENAME != null
+return == 1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.secoramp(charac *;charac **;double *;double *;double *;double *;double *;int *;)int:::ENTER
+pp2 != null
+centre_ptr != null
+p1_et_ptr != null
+p2_et_ptr != null
+q1_et_ptr != null
+q2_et_ptr != null
+amp_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.secoramp(charac *;charac **;double *;double *;double *;double *;double *;int *;)int:::EXIT320
+::GLOBLE_FILENAME[] one of { "inputs/gr127", "inputs/gr143", "inputs/gr27" }
+return == 1
+===========================================================================
+std.secoramp(charac *;charac **;double *;double *;double *;double *;double *;int *;)int:::EXIT326
+return == 0
+===========================================================================
+std.secoramp(charac *;charac **;double *;double *;double *;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+centre_ptr == orig(centre_ptr)
+p1_et_ptr == orig(p1_et_ptr)
+p2_et_ptr == orig(p2_et_ptr)
+q1_et_ptr == orig(q1_et_ptr)
+q2_et_ptr == orig(q2_et_ptr)
+amp_unit_ptr == orig(amp_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(centre_ptr[])-1
+return == size(p1_et_ptr[])-1
+return == size(p2_et_ptr[])-1
+return == size(q1_et_ptr[])-1
+return == size(q2_et_ptr[])-1
+return == size(amp_unit_ptr[])-1
+size(centre_ptr[]) == size(p1_et_ptr[])
+size(centre_ptr[]) == size(p2_et_ptr[])
+size(centre_ptr[]) == size(q1_et_ptr[])
+size(centre_ptr[]) == size(q2_et_ptr[])
+size(centre_ptr[]) == size(amp_unit_ptr[])
+size(p1_et_ptr[]) == size(p2_et_ptr[])
+size(p1_et_ptr[]) == size(q1_et_ptr[])
+size(p1_et_ptr[]) == size(q2_et_ptr[])
+size(p1_et_ptr[]) == size(amp_unit_ptr[])
+size(p2_et_ptr[]) == size(q1_et_ptr[])
+size(p2_et_ptr[]) == size(q2_et_ptr[])
+size(p2_et_ptr[]) == size(amp_unit_ptr[])
+size(q1_et_ptr[]) == size(q2_et_ptr[])
+size(q1_et_ptr[]) == size(amp_unit_ptr[])
+size(q2_et_ptr[]) == size(amp_unit_ptr[])
+pp2 != null
+centre_ptr != null
+p1_et_ptr != null
+p2_et_ptr != null
+q1_et_ptr != null
+q2_et_ptr != null
+amp_unit_ptr != null
+amp_unit_ptr[] == [0]
+amp_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(centre_ptr[]) == 1
+size(p1_et_ptr[]) == 1
+size(p2_et_ptr[]) == 1
+size(q1_et_ptr[]) == 1
+size(q2_et_ptr[]) == 1
+size(amp_unit_ptr[]) == 1
+centre_ptr[] is the reverse of orig(centre_ptr[])
+p1_et_ptr[] is the reverse of orig(p1_et_ptr[])
+p2_et_ptr[] is the reverse of orig(p2_et_ptr[])
+q1_et_ptr[] is the reverse of orig(q1_et_ptr[])
+q2_et_ptr[] is the reverse of orig(q2_et_ptr[])
+amp_unit_ptr[] is the reverse of orig(amp_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.secorder(double;double;double;double;double;double;double;)double:::ENTER
+::GLOBLE_FILENAME != null
+a != e
+b != e
+b != x
+c != e
+c != x
+d != e
+d != x
+e != x
+e != y
+===========================================================================
+std.secorder(double;double;double;double;double;double;double;)double:::EXIT
+a == orig(a)
+b == orig(b)
+c == orig(c)
+d == orig(d)
+e == orig(e)
+x == orig(x)
+y == orig(y)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+a != e
+a < return
+b != e
+b != x
+b < return
+c != e
+c != x
+c < return
+d != e
+d != x
+d < return
+e != x
+e != y
+x != return
+y != return
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.secorpha(charac *;charac **;double *;double *;double *;double *;double *;int *;)int:::ENTER
+pp2 != null
+centre_ptr != null
+p1_ep_ptr != null
+p2_ep_ptr != null
+q1_ep_ptr != null
+q2_ep_ptr != null
+phase_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.secorpha(charac *;charac **;double *;double *;double *;double *;double *;int *;)int:::EXIT328
+return == 1
+===========================================================================
+std.secorpha(charac *;charac **;double *;double *;double *;double *;double *;int *;)int:::EXIT334
+return == 0
+===========================================================================
+std.secorpha(charac *;charac **;double *;double *;double *;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+centre_ptr == orig(centre_ptr)
+p1_ep_ptr == orig(p1_ep_ptr)
+p2_ep_ptr == orig(p2_ep_ptr)
+q1_ep_ptr == orig(q1_ep_ptr)
+q2_ep_ptr == orig(q2_ep_ptr)
+phase_unit_ptr == orig(phase_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(centre_ptr[])-1
+return == size(p1_ep_ptr[])-1
+return == size(p2_ep_ptr[])-1
+return == size(q1_ep_ptr[])-1
+return == size(q2_ep_ptr[])-1
+return == size(phase_unit_ptr[])-1
+size(centre_ptr[]) == size(p1_ep_ptr[])
+size(centre_ptr[]) == size(p2_ep_ptr[])
+size(centre_ptr[]) == size(q1_ep_ptr[])
+size(centre_ptr[]) == size(q2_ep_ptr[])
+size(centre_ptr[]) == size(phase_unit_ptr[])
+size(p1_ep_ptr[]) == size(p2_ep_ptr[])
+size(p1_ep_ptr[]) == size(q1_ep_ptr[])
+size(p1_ep_ptr[]) == size(q2_ep_ptr[])
+size(p1_ep_ptr[]) == size(phase_unit_ptr[])
+size(p2_ep_ptr[]) == size(q1_ep_ptr[])
+size(p2_ep_ptr[]) == size(q2_ep_ptr[])
+size(p2_ep_ptr[]) == size(phase_unit_ptr[])
+size(q1_ep_ptr[]) == size(q2_ep_ptr[])
+size(q1_ep_ptr[]) == size(phase_unit_ptr[])
+size(q2_ep_ptr[]) == size(phase_unit_ptr[])
+pp2 != null
+centre_ptr != null
+p1_ep_ptr != null
+p2_ep_ptr != null
+q1_ep_ptr != null
+q2_ep_ptr != null
+phase_unit_ptr != null
+phase_unit_ptr[] == [0]
+phase_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(centre_ptr[]) == 1
+size(p1_ep_ptr[]) == 1
+size(p2_ep_ptr[]) == 1
+size(q1_ep_ptr[]) == 1
+size(q2_ep_ptr[]) == 1
+size(phase_unit_ptr[]) == 1
+centre_ptr[] is the reverse of orig(centre_ptr[])
+p1_ep_ptr[] is the reverse of orig(p1_ep_ptr[])
+p2_ep_ptr[] is the reverse of orig(p2_ep_ptr[])
+q1_ep_ptr[] is the reverse of orig(q1_ep_ptr[])
+q2_ep_ptr[] is the reverse of orig(q2_ep_ptr[])
+phase_unit_ptr[] is the reverse of orig(phase_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.seqrothg(double;double;double;double;Geomnode *;)void:::ENTER
+angle_start one of { 0.0, 111.0 }
+phase_start one of { -109.0, 0.0 }
+angle_start != angle_step
+angle_start >= phase_start
+angle_start != phase_step
+angle_step != phase_start
+angle_step >= phase_step
+phase_start != phase_step
+- 0.0990990990990991 * angle_start + angle_step - phase_step == 0
+angle_step + 0.10091743119266056 * phase_start - phase_step == 0
+===========================================================================
+std.seqrothg(double;double;double;double;Geomnode *;)void:::EXIT
+angle_start == orig(angle_start)
+angle_step == orig(angle_step)
+phase_start == orig(phase_start)
+phase_step == orig(phase_step)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+angle_start one of { 0.0, 111.0 }
+phase_start one of { -109.0, 0.0 }
+angle_start != angle_step
+angle_start != phase_step
+angle_step != phase_start
+phase_start != phase_step
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+- 0.0990990990990991 * angle_start + angle_step - phase_step == 0
+angle_step + 0.10091743119266056 * phase_start - phase_step == 0
+===========================================================================
+std.seqrotrg(double;double;double;double;Geomnode *;)void:::ENTER
+angle_start == phase_start
+angle_step == phase_step
+::GLOBLE_FILENAME != null
+angle_start != angle_step
+===========================================================================
+std.seqrotrg(double;double;double;double;Geomnode *;)void:::EXIT
+angle_start == phase_start
+angle_start == orig(angle_start)
+angle_start == orig(phase_start)
+angle_step == phase_step
+angle_step == orig(angle_step)
+angle_step == orig(phase_step)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+angle_start != angle_step
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.serotdir(charac *;charac **;int *;)int:::ENTER
+pp2 != null
+direction_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.serotdir(charac *;charac **;int *;)int:::EXIT337
+direction_ptr[] == [0]
+direction_ptr[] elements == 0
+return == 0
+===========================================================================
+std.serotdir(charac *;charac **;int *;)int:::EXIT338
+direction_ptr[] == [1]
+direction_ptr[] elements == 1
+return == 0
+===========================================================================
+std.serotdir(charac *;charac **;int *;)int:::EXIT339
+return == 1
+===========================================================================
+std.serotdir(charac *;charac **;int *;)int:::EXIT
+pp2 == orig(pp2)
+direction_ptr == orig(direction_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(direction_ptr[])-1
+pp2 != null
+direction_ptr != null
+direction_ptr[] elements one of { 0, 1 }
+direction_ptr[] one of { [0], [1] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(direction_ptr[]) == 1
+direction_ptr[] is the reverse of orig(direction_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.serotpar(charac *;charac **;double *;double *;int *;double *;double *;int *;int *;)int:::ENTER
+pp2 != null
+angle_start_ptr != null
+angle_step_ptr != null
+omit_phase_ptr != null
+omit_phase_ptr[] == [0]
+omit_phase_ptr[] elements == 0
+phase_start_ptr != null
+phase_step_ptr != null
+angle_unit_ptr != null
+phase_unit_ptr != null
+::GLOBLE_FILENAME != null
+size(omit_phase_ptr[]) == 1
+===========================================================================
+std.serotpar(charac *;charac **;double *;double *;int *;double *;double *;int *;int *;)int:::EXIT341
+return == size(omit_phase_ptr[])
+omit_phase_ptr[] == [1]
+omit_phase_ptr[] elements == 1
+return == 1
+omit_phase_ptr[] > orig(omit_phase_ptr[]) (elementwise)
+===========================================================================
+std.serotpar(charac *;charac **;double *;double *;int *;double *;double *;int *;int *;)int:::EXIT343
+return == size(omit_phase_ptr[])-1
+omit_phase_ptr[] == [1]
+omit_phase_ptr[] elements == 1
+return == 0
+omit_phase_ptr[] > orig(omit_phase_ptr[]) (elementwise)
+===========================================================================
+std.serotpar(charac *;charac **;double *;double *;int *;double *;double *;int *;int *;)int:::EXIT344
+omit_phase_ptr[] == orig(omit_phase_ptr[])
+return == size(omit_phase_ptr[])-1
+omit_phase_ptr[] == [0]
+omit_phase_ptr[] elements == 0
+return == 0
+===========================================================================
+std.serotpar(charac *;charac **;double *;double *;int *;double *;double *;int *;int *;)int:::EXIT
+pp2 == orig(pp2)
+angle_start_ptr == orig(angle_start_ptr)
+angle_step_ptr == orig(angle_step_ptr)
+omit_phase_ptr == orig(omit_phase_ptr)
+phase_start_ptr == orig(phase_start_ptr)
+phase_step_ptr == orig(phase_step_ptr)
+angle_unit_ptr == orig(angle_unit_ptr)
+phase_unit_ptr == orig(phase_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(angle_start_ptr[])-1
+return == size(angle_step_ptr[])-1
+return == size(phase_start_ptr[])-1
+return == size(phase_step_ptr[])-1
+return == size(angle_unit_ptr[])-1
+return == size(phase_unit_ptr[])-1
+size(angle_start_ptr[]) == size(angle_step_ptr[])
+size(angle_start_ptr[]) == size(omit_phase_ptr[])
+size(angle_start_ptr[]) == size(phase_start_ptr[])
+size(angle_start_ptr[]) == size(phase_step_ptr[])
+size(angle_start_ptr[]) == size(angle_unit_ptr[])
+size(angle_start_ptr[]) == size(phase_unit_ptr[])
+size(angle_step_ptr[]) == size(omit_phase_ptr[])
+size(angle_step_ptr[]) == size(phase_start_ptr[])
+size(angle_step_ptr[]) == size(phase_step_ptr[])
+size(angle_step_ptr[]) == size(angle_unit_ptr[])
+size(angle_step_ptr[]) == size(phase_unit_ptr[])
+size(omit_phase_ptr[]) == size(phase_start_ptr[])
+size(omit_phase_ptr[]) == size(phase_step_ptr[])
+size(omit_phase_ptr[]) == size(angle_unit_ptr[])
+size(omit_phase_ptr[]) == size(phase_unit_ptr[])
+size(omit_phase_ptr[]) == orig(size(omit_phase_ptr[]))
+size(phase_start_ptr[]) == size(phase_step_ptr[])
+size(phase_start_ptr[]) == size(angle_unit_ptr[])
+size(phase_start_ptr[]) == size(phase_unit_ptr[])
+size(phase_step_ptr[]) == size(angle_unit_ptr[])
+size(phase_step_ptr[]) == size(phase_unit_ptr[])
+size(angle_unit_ptr[]) == size(phase_unit_ptr[])
+pp2 != null
+angle_start_ptr != null
+angle_step_ptr != null
+omit_phase_ptr != null
+omit_phase_ptr[] elements one of { 0, 1 }
+omit_phase_ptr[] one of { [0], [1] }
+phase_start_ptr != null
+phase_step_ptr != null
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+phase_unit_ptr != null
+phase_unit_ptr[] == [0]
+phase_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(angle_start_ptr[]) == 1
+size(angle_step_ptr[]) == 1
+size(omit_phase_ptr[]) == 1
+size(phase_start_ptr[]) == 1
+size(phase_step_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+size(phase_unit_ptr[]) == 1
+angle_start_ptr[] is the reverse of orig(angle_start_ptr[])
+angle_step_ptr[] is the reverse of orig(angle_step_ptr[])
+omit_phase_ptr[] >= orig(omit_phase_ptr[]) (elementwise)
+phase_start_ptr[] is the reverse of orig(phase_start_ptr[])
+phase_step_ptr[] is the reverse of orig(phase_step_ptr[])
+angle_unit_ptr[] is the reverse of orig(angle_unit_ptr[])
+phase_unit_ptr[] is the reverse of orig(phase_unit_ptr[])
+return <= size(omit_phase_ptr[])
+return >= size(omit_phase_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.serotpha(charac *;charac **;int *;int *;double *;double *;int *;double *;double *;int *;int *;)int:::ENTER
+pp2 != null
+direction_ptr != null
+omit_angle_ptr != null
+angle_start_ptr != null
+angle_step_ptr != null
+omit_phase_ptr != null
+phase_start_ptr != null
+phase_step_ptr != null
+angle_unit_ptr != null
+phase_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.serotpha(charac *;charac **;int *;int *;double *;double *;int *;double *;double *;int *;int *;)int:::EXIT345
+return == size(omit_angle_ptr[])
+return == size(omit_phase_ptr[])
+omit_angle_ptr[] == [0]
+omit_angle_ptr[] elements == 0
+omit_phase_ptr[] == [0]
+omit_phase_ptr[] elements == 0
+return == 1
+===========================================================================
+std.serotpha(charac *;charac **;int *;int *;double *;double *;int *;double *;double *;int *;int *;)int:::EXIT348
+return == size(omit_angle_ptr[])-1
+return == size(omit_phase_ptr[])-1
+return == 0
+===========================================================================
+std.serotpha(charac *;charac **;int *;int *;double *;double *;int *;double *;double *;int *;int *;)int:::EXIT
+pp2 == orig(pp2)
+direction_ptr == orig(direction_ptr)
+omit_angle_ptr == orig(omit_angle_ptr)
+angle_start_ptr == orig(angle_start_ptr)
+angle_step_ptr == orig(angle_step_ptr)
+omit_phase_ptr == orig(omit_phase_ptr)
+phase_start_ptr == orig(phase_start_ptr)
+phase_step_ptr == orig(phase_step_ptr)
+angle_unit_ptr == orig(angle_unit_ptr)
+phase_unit_ptr == orig(phase_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(direction_ptr[])-1
+return == size(angle_start_ptr[])-1
+return == size(angle_step_ptr[])-1
+return == size(phase_start_ptr[])-1
+return == size(phase_step_ptr[])-1
+return == size(angle_unit_ptr[])-1
+return == size(phase_unit_ptr[])-1
+size(direction_ptr[]) == size(omit_angle_ptr[])
+size(direction_ptr[]) == size(angle_start_ptr[])
+size(direction_ptr[]) == size(angle_step_ptr[])
+size(direction_ptr[]) == size(omit_phase_ptr[])
+size(direction_ptr[]) == size(phase_start_ptr[])
+size(direction_ptr[]) == size(phase_step_ptr[])
+size(direction_ptr[]) == size(angle_unit_ptr[])
+size(direction_ptr[]) == size(phase_unit_ptr[])
+size(omit_angle_ptr[]) == size(angle_start_ptr[])
+size(omit_angle_ptr[]) == size(angle_step_ptr[])
+size(omit_angle_ptr[]) == size(omit_phase_ptr[])
+size(omit_angle_ptr[]) == size(phase_start_ptr[])
+size(omit_angle_ptr[]) == size(phase_step_ptr[])
+size(omit_angle_ptr[]) == size(angle_unit_ptr[])
+size(omit_angle_ptr[]) == size(phase_unit_ptr[])
+size(angle_start_ptr[]) == size(angle_step_ptr[])
+size(angle_start_ptr[]) == size(omit_phase_ptr[])
+size(angle_start_ptr[]) == size(phase_start_ptr[])
+size(angle_start_ptr[]) == size(phase_step_ptr[])
+size(angle_start_ptr[]) == size(angle_unit_ptr[])
+size(angle_start_ptr[]) == size(phase_unit_ptr[])
+size(angle_step_ptr[]) == size(omit_phase_ptr[])
+size(angle_step_ptr[]) == size(phase_start_ptr[])
+size(angle_step_ptr[]) == size(phase_step_ptr[])
+size(angle_step_ptr[]) == size(angle_unit_ptr[])
+size(angle_step_ptr[]) == size(phase_unit_ptr[])
+size(omit_phase_ptr[]) == size(phase_start_ptr[])
+size(omit_phase_ptr[]) == size(phase_step_ptr[])
+size(omit_phase_ptr[]) == size(angle_unit_ptr[])
+size(omit_phase_ptr[]) == size(phase_unit_ptr[])
+size(phase_start_ptr[]) == size(phase_step_ptr[])
+size(phase_start_ptr[]) == size(angle_unit_ptr[])
+size(phase_start_ptr[]) == size(phase_unit_ptr[])
+size(phase_step_ptr[]) == size(angle_unit_ptr[])
+size(phase_step_ptr[]) == size(phase_unit_ptr[])
+size(angle_unit_ptr[]) == size(phase_unit_ptr[])
+pp2 != null
+direction_ptr != null
+direction_ptr[] elements one of { 0, 1 }
+direction_ptr[] one of { [0], [1] }
+omit_angle_ptr != null
+omit_angle_ptr[] elements one of { 0, 1 }
+omit_angle_ptr[] one of { [0], [1] }
+angle_start_ptr != null
+angle_step_ptr != null
+omit_phase_ptr != null
+omit_phase_ptr[] elements one of { 0, 1 }
+omit_phase_ptr[] one of { [0], [1] }
+phase_start_ptr != null
+phase_step_ptr != null
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+phase_unit_ptr != null
+phase_unit_ptr[] == [0]
+phase_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(direction_ptr[]) == 1
+size(omit_angle_ptr[]) == 1
+size(angle_start_ptr[]) == 1
+size(angle_step_ptr[]) == 1
+size(omit_phase_ptr[]) == 1
+size(phase_start_ptr[]) == 1
+size(phase_step_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+size(phase_unit_ptr[]) == 1
+direction_ptr[] is the reverse of orig(direction_ptr[])
+omit_angle_ptr[] is the reverse of orig(omit_angle_ptr[])
+angle_start_ptr[] is the reverse of orig(angle_start_ptr[])
+angle_step_ptr[] is the reverse of orig(angle_step_ptr[])
+omit_phase_ptr[] is the reverse of orig(omit_phase_ptr[])
+phase_start_ptr[] is the reverse of orig(phase_start_ptr[])
+phase_step_ptr[] is the reverse of orig(phase_step_ptr[])
+angle_unit_ptr[] is the reverse of orig(angle_unit_ptr[])
+phase_unit_ptr[] is the reverse of orig(phase_unit_ptr[])
+return <= size(omit_angle_ptr[])
+return >= size(omit_angle_ptr[])-1
+return <= size(omit_phase_ptr[])
+return >= size(omit_phase_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.sgramp2n(GrAmpExc *;Geomnode *;Port *;int;)int:::ENTER
+group_shape one of { 2, 3, 5 }
+::GLOBLE_FILENAME != null
+===========================================================================
+std.sgramp2n(GrAmpExc *;Geomnode *;Port *;int;)int:::EXIT349
+group_shape == return
+group_shape == 5
+return == 5
+===========================================================================
+std.sgramp2n(GrAmpExc *;Geomnode *;Port *;int;)int:::EXIT350
+group_shape one of { 2, 3 }
+return == 0
+group_shape > return
+===========================================================================
+std.sgramp2n(GrAmpExc *;Geomnode *;Port *;int;)int:::EXIT
+group_shape == orig(group_shape)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+group_shape one of { 2, 3, 5 }
+::GLOBLE_FILENAME != null
+return one of { 0, 5 }
+group_shape >= return
+return % group_shape == 0
+return is a bitwise subset of group_shape
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.sgrampun(GrAmpExc *;Geomnode *;Port *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.sgrampun(GrAmpExc *;Geomnode *;Port *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return == 0
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.sgrpha2n(GrPhaExc *;Geomnode *;Port *;int;)int:::ENTER
+group_shape one of { 2, 3, 5 }
+::GLOBLE_FILENAME != null
+===========================================================================
+std.sgrpha2n(GrPhaExc *;Geomnode *;Port *;int;)int:::EXIT352
+group_shape == return
+group_shape == 5
+return == 5
+===========================================================================
+std.sgrpha2n(GrPhaExc *;Geomnode *;Port *;int;)int:::EXIT353
+group_shape one of { 2, 3 }
+return == 0
+===========================================================================
+std.sgrpha2n(GrPhaExc *;Geomnode *;Port *;int;)int:::EXIT
+group_shape == orig(group_shape)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+group_shape one of { 2, 3, 5 }
+::GLOBLE_FILENAME != null
+return one of { 0, 5 }
+group_shape >= return
+return % group_shape == 0
+return is a bitwise subset of group_shape
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.sgrphasr(Group *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.sgrphasr(Group *;)int:::EXIT354
+return == 10
+===========================================================================
+std.sgrphasr(Group *;)int:::EXIT355
+return == 11
+===========================================================================
+std.sgrphasr(Group *;)int:::EXIT356
+return == 0
+===========================================================================
+std.sgrphasr(Group *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return one of { 0, 10, 11 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.sgrphaun(GrPhaExc *;Geomnode *;Port *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.sgrphaun(GrPhaExc *;Geomnode *;Port *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return == 0
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.sgrrot(Geomnode *;double;double;double;)int:::ENTER
+XC == YC
+XC == 0.0
+XC < phi
+===========================================================================
+std.sgrrot(Geomnode *;double;double;double;)int:::EXIT
+XC == YC
+XC == orig(XC)
+XC == orig(YC)
+phi == orig(phi)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+XC == 0.0
+return == 0
+XC < phi
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.simamp(Group *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.simamp(Group *;)int:::EXIT359
+return == 6
+===========================================================================
+std.simamp(Group *;)int:::EXIT360
+return == 0
+===========================================================================
+std.simamp(Group *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return one of { 0, 6 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.simgroup(Group *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.simgroup(Group *;)int:::EXIT361
+return == 8
+===========================================================================
+std.simgroup(Group *;)int:::EXIT362
+return == 0
+===========================================================================
+std.simgroup(Group *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return one of { 0, 8 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.simpha(Group *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.simpha(Group *;)int:::EXIT363
+return == 9
+===========================================================================
+std.simpha(Group *;)int:::EXIT364
+return == 0
+===========================================================================
+std.simpha(Group *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return one of { 0, 9 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.simpol(Group *;)int:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.simpol(Group *;)int:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+return == 0
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.sinelem(charac *;charac **;Elem **;)int:::ENTER
+pp2 != null
+elem_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.sinelem(charac *;charac **;Elem **;)int:::EXIT367
+return == 17
+===========================================================================
+std.sinelem(charac *;charac **;Elem **;)int:::EXIT368
+pp2 has only one value
+elem_ptr has only one value
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr13461"
+return == 17
+===========================================================================
+std.sinelem(charac *;charac **;Elem **;)int:::EXIT369
+return == 17
+===========================================================================
+std.sinelem(charac *;charac **;Elem **;)int:::EXIT370
+return == 0
+===========================================================================
+std.sinelem(charac *;charac **;Elem **;)int:::EXIT
+pp2 == orig(pp2)
+elem_ptr == orig(elem_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+pp2 != null
+elem_ptr != null
+::GLOBLE_FILENAME != null
+return one of { 0, 17 }
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.sinstep(charac *;charac **;double *;int *;)int:::ENTER
+size(step_ptr[]) == size(step_unit_ptr[])
+pp2 != null
+step_ptr != null
+step_ptr[] == [0.0]
+step_ptr[] elements == 0.0
+step_unit_ptr != null
+step_unit_ptr[] == [0]
+step_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+size(step_ptr[]) == 1
+size(step_unit_ptr[]) == 1
+===========================================================================
+std.sinstep(charac *;charac **;double *;int *;)int:::EXIT371
+step_ptr[] == orig(step_ptr[])
+step_unit_ptr[] == orig(step_unit_ptr[])
+return == size(step_ptr[])
+return == size(step_unit_ptr[])
+step_ptr[] == [0.0]
+step_ptr[] elements == 0.0
+step_unit_ptr[] == [0]
+step_unit_ptr[] elements == 0
+return == 1
+===========================================================================
+std.sinstep(charac *;charac **;double *;int *;)int:::EXIT373
+return == size(step_ptr[])-1
+return == size(step_unit_ptr[])-1
+return == 0
+step_ptr[] > orig(step_ptr[]) (elementwise)
+===========================================================================
+std.sinstep(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+step_ptr == orig(step_ptr)
+step_unit_ptr == orig(step_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+size(step_ptr[]) == size(step_unit_ptr[])
+size(step_ptr[]) == orig(size(step_ptr[]))
+size(step_unit_ptr[]) == orig(size(step_unit_ptr[]))
+pp2 != null
+step_ptr != null
+step_ptr[] elements >= 0.0
+step_unit_ptr != null
+step_unit_ptr[] elements >= 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(step_ptr[]) == 1
+size(step_unit_ptr[]) == 1
+step_ptr[] >= orig(step_ptr[]) (elementwise)
+step_unit_ptr[] >= orig(step_unit_ptr[]) (elementwise)
+return <= size(step_ptr[])
+return >= size(step_ptr[])-1
+return <= size(step_unit_ptr[])
+return >= size(step_unit_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.squgrdef(charac *;charac **;double *;int *;)int:::ENTER
+pp2 != null
+pstep_ptr != null
+pstep_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.squgrdef(charac *;charac **;double *;int *;)int:::EXIT374
+return == size(pstep_ptr[])
+return == size(pstep_unit_ptr[])
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+pstep_unit_ptr[] == [0]
+pstep_unit_ptr[] elements == 0
+return == 1
+===========================================================================
+std.squgrdef(charac *;charac **;double *;int *;)int:::EXIT375
+return == size(pstep_ptr[])-1
+return == size(pstep_unit_ptr[])-1
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+pstep_unit_ptr[] == [0]
+pstep_unit_ptr[] elements == 0
+return == 0
+===========================================================================
+std.squgrdef(charac *;charac **;double *;int *;)int:::EXIT377
+return == size(pstep_ptr[])-1
+return == size(pstep_unit_ptr[])-1
+return == 0
+===========================================================================
+std.squgrdef(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+pstep_ptr == orig(pstep_ptr)
+pstep_unit_ptr == orig(pstep_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+size(pstep_ptr[]) == size(pstep_unit_ptr[])
+pp2 != null
+pstep_ptr != null
+pstep_ptr[] elements >= 0.0
+pstep_unit_ptr != null
+pstep_unit_ptr[] elements one of { 0, 1, 3 }
+pstep_unit_ptr[] one of { [0], [1], [3] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(pstep_ptr[]) == 1
+size(pstep_unit_ptr[]) == 1
+pstep_ptr[] is the reverse of orig(pstep_ptr[])
+pstep_unit_ptr[] is the reverse of orig(pstep_unit_ptr[])
+return <= size(pstep_ptr[])
+return >= size(pstep_ptr[])-1
+return <= size(pstep_unit_ptr[])
+return >= size(pstep_unit_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.trigrdef(charac *;charac **;double *;int *;double *;double *;int *;double *;double *;double *;double *;int *;)int:::ENTER
+size(pstep_ptr[]) == size(qstep_ptr[])
+size(pstep_ptr[]) == size(pqstep_unit_ptr[])
+size(qstep_ptr[]) == size(pqstep_unit_ptr[])
+pp2 != null
+angle_ptr != null
+angle_unit_ptr != null
+pstep_ptr != null
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+qstep_ptr != null
+qstep_ptr[] == [0.0]
+qstep_ptr[] elements == 0.0
+pqstep_unit_ptr != null
+pqstep_unit_ptr[] == [0]
+pqstep_unit_ptr[] elements == 0
+px_ptr != null
+py_ptr != null
+qx_ptr != null
+qy_ptr != null
+pqxy_unit_ptr != null
+::GLOBLE_FILENAME != null
+size(pstep_ptr[]) == 1
+size(qstep_ptr[]) == 1
+size(pqstep_unit_ptr[]) == 1
+===========================================================================
+std.trigrdef(charac *;charac **;double *;int *;double *;double *;int *;double *;double *;double *;double *;int *;)int:::EXIT379
+pstep_ptr[] == orig(pstep_ptr[])
+qstep_ptr[] == orig(qstep_ptr[])
+pqstep_unit_ptr[] == orig(pqstep_unit_ptr[])
+return == size(angle_ptr[])
+return == size(angle_unit_ptr[])
+return == size(pstep_ptr[])
+return == size(qstep_ptr[])
+return == size(pqstep_unit_ptr[])
+return == size(px_ptr[])
+return == size(py_ptr[])
+return == size(qx_ptr[])
+return == size(qy_ptr[])
+return == size(pqxy_unit_ptr[])
+pp2 has only one value
+angle_ptr has only one value
+angle_ptr[] == [0.0]
+angle_ptr[] elements == 0.0
+angle_unit_ptr has only one value
+pstep_ptr has only one value
+pstep_ptr[] == [0.0]
+pstep_ptr[] elements == 0.0
+qstep_ptr has only one value
+qstep_ptr[] == [0.0]
+qstep_ptr[] elements == 0.0
+pqstep_unit_ptr has only one value
+pqstep_unit_ptr[] == [0]
+pqstep_unit_ptr[] elements == 0
+px_ptr has only one value
+px_ptr[] == [0.0]
+px_ptr[] elements == 0.0
+py_ptr has only one value
+py_ptr[] == [0.0]
+py_ptr[] elements == 0.0
+qx_ptr has only one value
+qx_ptr[] == [0.0]
+qx_ptr[] elements == 0.0
+qy_ptr has only one value
+qy_ptr[] == [0.0]
+qy_ptr[] elements == 0.0
+pqxy_unit_ptr has only one value
+pqxy_unit_ptr[] == [0]
+pqxy_unit_ptr[] elements == 0
+::GLOBLE_FILENAME has only one value
+::GLOBLE_FILENAME[] == "inputs/gr29"
+return == 1
+===========================================================================
+std.trigrdef(charac *;charac **;double *;int *;double *;double *;int *;double *;double *;double *;double *;int *;)int:::EXIT382
+return == size(angle_ptr[])-1
+return == size(angle_unit_ptr[])-1
+return == size(pstep_ptr[])-1
+return == size(qstep_ptr[])-1
+return == size(pqstep_unit_ptr[])-1
+return == size(px_ptr[])-1
+return == size(py_ptr[])-1
+return == size(qx_ptr[])-1
+return == size(qy_ptr[])-1
+return == size(pqxy_unit_ptr[])-1
+return == 0
+===========================================================================
+std.trigrdef(charac *;charac **;double *;int *;double *;double *;int *;double *;double *;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+angle_ptr == orig(angle_ptr)
+angle_unit_ptr == orig(angle_unit_ptr)
+pstep_ptr == orig(pstep_ptr)
+qstep_ptr == orig(qstep_ptr)
+pqstep_unit_ptr == orig(pqstep_unit_ptr)
+px_ptr == orig(px_ptr)
+py_ptr == orig(py_ptr)
+qx_ptr == orig(qx_ptr)
+qy_ptr == orig(qy_ptr)
+pqxy_unit_ptr == orig(pqxy_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+size(angle_ptr[]) == size(angle_unit_ptr[])
+size(angle_ptr[]) == size(pstep_ptr[])
+size(angle_ptr[]) == size(qstep_ptr[])
+size(angle_ptr[]) == size(pqstep_unit_ptr[])
+size(angle_ptr[]) == size(px_ptr[])
+size(angle_ptr[]) == size(py_ptr[])
+size(angle_ptr[]) == size(qx_ptr[])
+size(angle_ptr[]) == size(qy_ptr[])
+size(angle_ptr[]) == size(pqxy_unit_ptr[])
+size(angle_unit_ptr[]) == size(pstep_ptr[])
+size(angle_unit_ptr[]) == size(qstep_ptr[])
+size(angle_unit_ptr[]) == size(pqstep_unit_ptr[])
+size(angle_unit_ptr[]) == size(px_ptr[])
+size(angle_unit_ptr[]) == size(py_ptr[])
+size(angle_unit_ptr[]) == size(qx_ptr[])
+size(angle_unit_ptr[]) == size(qy_ptr[])
+size(angle_unit_ptr[]) == size(pqxy_unit_ptr[])
+size(pstep_ptr[]) == size(qstep_ptr[])
+size(pstep_ptr[]) == size(pqstep_unit_ptr[])
+size(pstep_ptr[]) == size(px_ptr[])
+size(pstep_ptr[]) == size(py_ptr[])
+size(pstep_ptr[]) == size(qx_ptr[])
+size(pstep_ptr[]) == size(qy_ptr[])
+size(pstep_ptr[]) == size(pqxy_unit_ptr[])
+size(pstep_ptr[]) == orig(size(pstep_ptr[]))
+size(qstep_ptr[]) == size(pqstep_unit_ptr[])
+size(qstep_ptr[]) == size(px_ptr[])
+size(qstep_ptr[]) == size(py_ptr[])
+size(qstep_ptr[]) == size(qx_ptr[])
+size(qstep_ptr[]) == size(qy_ptr[])
+size(qstep_ptr[]) == size(pqxy_unit_ptr[])
+size(qstep_ptr[]) == orig(size(qstep_ptr[]))
+size(pqstep_unit_ptr[]) == size(px_ptr[])
+size(pqstep_unit_ptr[]) == size(py_ptr[])
+size(pqstep_unit_ptr[]) == size(qx_ptr[])
+size(pqstep_unit_ptr[]) == size(qy_ptr[])
+size(pqstep_unit_ptr[]) == size(pqxy_unit_ptr[])
+size(pqstep_unit_ptr[]) == orig(size(pqstep_unit_ptr[]))
+size(px_ptr[]) == size(py_ptr[])
+size(px_ptr[]) == size(qx_ptr[])
+size(px_ptr[]) == size(qy_ptr[])
+size(px_ptr[]) == size(pqxy_unit_ptr[])
+size(py_ptr[]) == size(qx_ptr[])
+size(py_ptr[]) == size(qy_ptr[])
+size(py_ptr[]) == size(pqxy_unit_ptr[])
+size(qx_ptr[]) == size(qy_ptr[])
+size(qx_ptr[]) == size(pqxy_unit_ptr[])
+size(qy_ptr[]) == size(pqxy_unit_ptr[])
+pp2 != null
+angle_ptr != null
+angle_ptr[] elements >= 0.0
+angle_unit_ptr != null
+angle_unit_ptr[] == [0]
+angle_unit_ptr[] elements == 0
+pstep_ptr != null
+pstep_ptr[] elements >= 0.0
+qstep_ptr != null
+qstep_ptr[] elements >= 0.0
+pqstep_unit_ptr != null
+pqstep_unit_ptr[] elements one of { 0, 3 }
+pqstep_unit_ptr[] one of { [0], [3] }
+px_ptr != null
+py_ptr != null
+qx_ptr != null
+qy_ptr != null
+pqxy_unit_ptr != null
+pqxy_unit_ptr[] elements >= 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(angle_ptr[]) == 1
+size(angle_unit_ptr[]) == 1
+size(pstep_ptr[]) == 1
+size(qstep_ptr[]) == 1
+size(pqstep_unit_ptr[]) == 1
+size(px_ptr[]) == 1
+size(py_ptr[]) == 1
+size(qx_ptr[]) == 1
+size(qy_ptr[]) == 1
+size(pqxy_unit_ptr[]) == 1
+angle_ptr[] is the reverse of orig(angle_ptr[])
+angle_unit_ptr[] is the reverse of orig(angle_unit_ptr[])
+pstep_ptr[] >= orig(pstep_ptr[]) (elementwise)
+qstep_ptr[] >= orig(qstep_ptr[]) (elementwise)
+pqstep_unit_ptr[] >= orig(pqstep_unit_ptr[]) (elementwise)
+px_ptr[] is the reverse of orig(px_ptr[])
+py_ptr[] is the reverse of orig(py_ptr[])
+qx_ptr[] is the reverse of orig(qx_ptr[])
+qy_ptr[] is the reverse of orig(qy_ptr[])
+pqxy_unit_ptr[] is the reverse of orig(pqxy_unit_ptr[])
+return <= size(angle_ptr[])
+return >= size(angle_ptr[])-1
+return <= size(angle_unit_ptr[])
+return >= size(angle_unit_ptr[])-1
+return <= size(pstep_ptr[])
+return >= size(pstep_ptr[])-1
+return <= size(qstep_ptr[])
+return >= size(qstep_ptr[])-1
+return <= size(pqstep_unit_ptr[])
+return >= size(pqstep_unit_ptr[])-1
+return <= size(px_ptr[])
+return >= size(px_ptr[])-1
+return <= size(py_ptr[])
+return >= size(py_ptr[])-1
+return <= size(qx_ptr[])
+return >= size(qx_ptr[])-1
+return <= size(qy_ptr[])
+return >= size(qy_ptr[])-1
+return <= size(pqxy_unit_ptr[])
+return >= size(pqxy_unit_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.unaminit()void:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.unaminit()void:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.unifamp(charac *;charac **;double *;int *;)int:::ENTER
+pp2 != null
+unif_val_ptr != null
+amp_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.unifamp(charac *;charac **;double *;int *;)int:::EXIT384
+return == 1
+===========================================================================
+std.unifamp(charac *;charac **;double *;int *;)int:::EXIT385
+return == 0
+===========================================================================
+std.unifamp(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+unif_val_ptr == orig(unif_val_ptr)
+amp_unit_ptr == orig(amp_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(unif_val_ptr[])-1
+return == size(amp_unit_ptr[])-1
+size(unif_val_ptr[]) == size(amp_unit_ptr[])
+pp2 != null
+unif_val_ptr != null
+amp_unit_ptr != null
+amp_unit_ptr[] == [0]
+amp_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(unif_val_ptr[]) == 1
+size(amp_unit_ptr[]) == 1
+unif_val_ptr[] is the reverse of orig(unif_val_ptr[])
+amp_unit_ptr[] is the reverse of orig(amp_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.unifpha(charac *;charac **;double *;int *;)int:::ENTER
+pp2 != null
+unif_val_ptr != null
+phase_unit_ptr != null
+::GLOBLE_FILENAME != null
+===========================================================================
+std.unifpha(charac *;charac **;double *;int *;)int:::EXIT386
+return == 1
+===========================================================================
+std.unifpha(charac *;charac **;double *;int *;)int:::EXIT387
+return == 0
+===========================================================================
+std.unifpha(charac *;charac **;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+unif_val_ptr == orig(unif_val_ptr)
+phase_unit_ptr == orig(phase_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(unif_val_ptr[])-1
+return == size(phase_unit_ptr[])-1
+size(unif_val_ptr[]) == size(phase_unit_ptr[])
+pp2 != null
+unif_val_ptr != null
+phase_unit_ptr != null
+phase_unit_ptr[] elements one of { 0, 1 }
+phase_unit_ptr[] one of { [0], [1] }
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(unif_val_ptr[]) == 1
+size(phase_unit_ptr[]) == 1
+unif_val_ptr[] is the reverse of orig(unif_val_ptr[])
+phase_unit_ptr[] is the reverse of orig(phase_unit_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.uvdir(charac *;charac **;double *;double *;)int:::ENTER
+===========================================================================
+std.uvdir(charac *;charac **;double *;double *;)int:::EXIT388
+::GLOBLE_FILENAME[] one of { "inputs/gr192", "inputs/gr82" }
+return == 1
+===========================================================================
+std.uvdir(charac *;charac **;double *;double *;)int:::EXIT392
+return == 0
+===========================================================================
+std.uvdir(charac *;charac **;double *;double *;)int:::EXIT
+pp2 == orig(pp2)
+u_ptr == orig(u_ptr)
+v_ptr == orig(v_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(u_ptr[])-1
+return == size(v_ptr[])-1
+size(u_ptr[]) == size(v_ptr[])
+u_ptr[] == [0.5]
+u_ptr[] elements == 0.5
+v_ptr[] == [0.5]
+v_ptr[] elements == 0.5
+return one of { 0, 1 }
+size(u_ptr[]) == 1
+size(v_ptr[]) == 1
+u_ptr[] is the reverse of orig(u_ptr[])
+v_ptr[] is the reverse of orig(v_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.uvval(charac *;charac **;double *;)int:::ENTER
+===========================================================================
+std.uvval(charac *;charac **;double *;)int:::EXIT395
+===========================================================================
+std.uvval(charac *;charac **;double *;)int:::EXIT
+pp2 == orig(pp2)
+val_ptr == orig(val_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+return == size(val_ptr[])-1
+val_ptr[] == [0.5]
+val_ptr[] elements == 0.5
+return == 0
+size(val_ptr[]) == 1
+val_ptr[] is the reverse of orig(val_ptr[])
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.versdef(charac *;charac **;double *;double *;double *;double *;int *;)int:::ENTER
+size(px_ptr[]) == size(py_ptr[])
+size(px_ptr[]) == size(qx_ptr[])
+size(px_ptr[]) == size(qy_ptr[])
+size(px_ptr[]) == size(pqxy_unit_ptr[])
+size(py_ptr[]) == size(qx_ptr[])
+size(py_ptr[]) == size(qy_ptr[])
+size(py_ptr[]) == size(pqxy_unit_ptr[])
+size(qx_ptr[]) == size(qy_ptr[])
+size(qx_ptr[]) == size(pqxy_unit_ptr[])
+size(qy_ptr[]) == size(pqxy_unit_ptr[])
+pp2 != null
+px_ptr != null
+px_ptr[] == [0.0]
+px_ptr[] elements == 0.0
+py_ptr != null
+py_ptr[] == [0.0]
+py_ptr[] elements == 0.0
+qx_ptr != null
+qx_ptr[] == [0.0]
+qx_ptr[] elements == 0.0
+qy_ptr != null
+qy_ptr[] == [0.0]
+qy_ptr[] elements == 0.0
+pqxy_unit_ptr != null
+pqxy_unit_ptr[] == [0]
+pqxy_unit_ptr[] elements == 0
+::GLOBLE_FILENAME != null
+size(px_ptr[]) == 1
+size(py_ptr[]) == 1
+size(qx_ptr[]) == 1
+size(qy_ptr[]) == 1
+size(pqxy_unit_ptr[]) == 1
+===========================================================================
+std.versdef(charac *;charac **;double *;double *;double *;double *;int *;)int:::EXIT396
+px_ptr[] == orig(px_ptr[])
+py_ptr[] == orig(py_ptr[])
+qx_ptr[] == orig(qx_ptr[])
+qy_ptr[] == orig(qy_ptr[])
+pqxy_unit_ptr[] == orig(pqxy_unit_ptr[])
+return == size(px_ptr[])
+return == size(py_ptr[])
+return == size(qx_ptr[])
+return == size(qy_ptr[])
+return == size(pqxy_unit_ptr[])
+px_ptr[] == [0.0]
+px_ptr[] elements == 0.0
+py_ptr[] == [0.0]
+py_ptr[] elements == 0.0
+qx_ptr[] == [0.0]
+qx_ptr[] elements == 0.0
+qy_ptr[] == [0.0]
+qy_ptr[] elements == 0.0
+pqxy_unit_ptr[] == [0]
+pqxy_unit_ptr[] elements == 0
+return == 1
+===========================================================================
+std.versdef(charac *;charac **;double *;double *;double *;double *;int *;)int:::EXIT404
+return == size(px_ptr[])-1
+return == size(py_ptr[])-1
+return == size(qx_ptr[])-1
+return == size(qy_ptr[])-1
+return == size(pqxy_unit_ptr[])-1
+return == 0
+===========================================================================
+std.versdef(charac *;charac **;double *;double *;double *;double *;int *;)int:::EXIT
+pp2 == orig(pp2)
+px_ptr == orig(px_ptr)
+py_ptr == orig(py_ptr)
+qx_ptr == orig(qx_ptr)
+qy_ptr == orig(qy_ptr)
+pqxy_unit_ptr == orig(pqxy_unit_ptr)
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+size(px_ptr[]) == size(py_ptr[])
+size(px_ptr[]) == size(qx_ptr[])
+size(px_ptr[]) == size(qy_ptr[])
+size(px_ptr[]) == size(pqxy_unit_ptr[])
+size(px_ptr[]) == orig(size(px_ptr[]))
+size(py_ptr[]) == size(qx_ptr[])
+size(py_ptr[]) == size(qy_ptr[])
+size(py_ptr[]) == size(pqxy_unit_ptr[])
+size(py_ptr[]) == orig(size(py_ptr[]))
+size(qx_ptr[]) == size(qy_ptr[])
+size(qx_ptr[]) == size(pqxy_unit_ptr[])
+size(qx_ptr[]) == orig(size(qx_ptr[]))
+size(qy_ptr[]) == size(pqxy_unit_ptr[])
+size(qy_ptr[]) == orig(size(qy_ptr[]))
+size(pqxy_unit_ptr[]) == orig(size(pqxy_unit_ptr[]))
+pp2 != null
+px_ptr != null
+py_ptr != null
+qx_ptr != null
+qy_ptr != null
+pqxy_unit_ptr != null
+pqxy_unit_ptr[] elements >= 0
+::GLOBLE_FILENAME != null
+return one of { 0, 1 }
+size(px_ptr[]) == 1
+size(py_ptr[]) == 1
+size(qx_ptr[]) == 1
+size(qy_ptr[]) == 1
+size(pqxy_unit_ptr[]) == 1
+pqxy_unit_ptr[] >= orig(pqxy_unit_ptr[]) (elementwise)
+return <= size(px_ptr[])
+return >= size(px_ptr[])-1
+return <= size(py_ptr[])
+return >= size(py_ptr[])-1
+return <= size(qx_ptr[])
+return >= size(qx_ptr[])-1
+return <= size(qy_ptr[])
+return >= size(qy_ptr[])-1
+return <= size(pqxy_unit_ptr[])
+return >= size(pqxy_unit_ptr[])-1
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])
+===========================================================================
+std.waitcont()void:::ENTER
+::GLOBLE_FILENAME != null
+===========================================================================
+std.waitcont()void:::EXIT
+::GLOBLE_FILENAME == orig(::GLOBLE_FILENAME)
+::GLOBLE_FILENAME != null
+::GLOBLE_FILENAME[] == orig(::GLOBLE_FILENAME[])

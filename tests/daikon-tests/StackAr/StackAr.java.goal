@@ -1,0 +1,142 @@
+package DataStructures;
+
+// StackAr class
+//
+// CONSTRUCTION: with or without a capacity; default is 10
+//
+// ******************PUBLIC OPERATIONS*********************
+// void push( x )         --> Insert x
+// void pop( )            --> Remove most recently inserted item
+// Object top( )          --> Return most recently inserted item
+// Object topAndPop( )    --> Return and remove most recently inserted item
+// boolean isEmpty( )     --> Return true if empty; else false
+// boolean isFull( )      --> Return true if full; else false
+// void makeEmpty( )      --> Remove all items
+// ******************ERRORS********************************
+// Overflow and Underflow thrown as needed
+
+/**
+ * Array-based implementation of the stack.
+ * @author Mark Allen Weiss
+ */
+public class StackAr
+{
+
+    /*@ invariant this.theArray != null */
+    /*@ invariant \typeof(this.theArray) == \type(java.lang.Object[]) */
+    /*@ invariant this.topOfStack >= -1 */
+    /*@ invariant (\forall int i; (this.topOfStack+1 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)) */
+    /*@ invariant (\forall int i; (0 <= i && i <= this.topOfStack) ==> (this.theArray[i] != null)) */
+    /*@ invariant this.topOfStack <= this.theArray.length-1 */
+    /*@ invariant theArray.owner == this */
+    /*@ requires capacity >= 0 */
+    /*@ ensures capacity == this.theArray.length */
+    /*@ ensures this.topOfStack == -1 */
+    /**
+     * Construct the stack.
+     * @param capacity the capacity.
+     */
+    public StackAr( int capacity )
+    {
+        theArray = new Object[ capacity ];
+        /*@ set theArray.owner = this */
+        topOfStack = -1;
+    }
+
+    /**@ ensures (\result == false)  ==  (this.topOfStack >= 0) */
+    /*@ ensures (\result == true)  ==  (this.topOfStack == -1) */
+    /**
+     * Test if the stack is logically empty.
+     * @return true if empty, false otherwise.
+     */
+    public boolean isEmpty( )
+    {
+        return topOfStack == -1;
+    }
+
+    /*@ ensures (this.topOfStack < this.theArray.length-1)  ==  (\result == false) */
+    /**
+     * Test if the stack is logically full.
+     * @return true if full, false otherwise.
+     */
+    public boolean isFull( )
+    {
+        return topOfStack == theArray.length - 1;
+    }
+
+
+    /*@ modifies this.theArray[*], this.topOfStack */
+    /*@ ensures this.topOfStack == -1 */
+    /**
+     * Make the stack logically empty.
+     */
+    public void makeEmpty( )
+    {
+        java.util.Arrays.fill(theArray, 0, topOfStack + 1, null);
+        topOfStack = -1;
+    }
+
+    /*@ ensures (\result != null)  ==  (this.topOfStack >= 0) */
+    /**
+     * Get the most recently inserted item in the stack.
+     * Does not alter the stack.
+     * @return the most recently inserted item in the stack, or null, if empty.
+     */
+    public Object top( )
+    {
+        if( isEmpty( ) )
+            return null;
+        return theArray[ topOfStack ];
+    }
+
+    /**
+     * Remove the most recently inserted item from the stack.
+     * @exception Underflow if stack is already empty.
+     */
+    public void pop( ) throws Underflow
+    {
+        if( isEmpty( ) )
+            throw new Underflow( );
+        theArray[ topOfStack-- ] = null;
+    }
+
+    /*@ requires x != null */
+    /*@ requires this.topOfStack < this.theArray.length-1 */
+    /*@ modifies this.theArray[*], this.topOfStack */
+    /*@ ensures x == this.theArray[this.topOfStack] */
+    /*@ ensures (\forall int i, j; (0 <= i && i <= \old(this.topOfStack) && 0 <= j && j <= \old(this.topOfStack) && i == j) ==> ( this.theArray[i] == \old(this.theArray[j]) )) */
+    /*@ ensures \old(this.topOfStack) == this.topOfStack - 1 */
+    /**
+     * Insert a new item into the stack, if not already full.
+     * @param x the item to insert.
+     * @exception Overflow if stack is already full.
+     */
+    public void push( Object x ) throws Overflow
+    {
+        if( isFull( ) )
+            throw new Overflow( );
+        theArray[ ++topOfStack ] = x;
+    }
+
+    /*@ modifies this.theArray[*], this.topOfStack */
+    /*@ ensures (\forall int i, j; (0 <= i && i <= this.topOfStack && 0 <= j && j <= this.topOfStack && i == j) ==> ( this.theArray[i] == \old(this.theArray[j]) )) */
+    /*@ ensures (\old(this.topOfStack) >= 0)  ==  (\result != null) */
+    /*@ ensures (\old(this.topOfStack) >= 0)  ==>  (\old(this.topOfStack) == this.topOfStack + 1) */
+    /*@ ensures this.topOfStack <= \old(this.topOfStack) */
+    /**
+     * Return and remove most recently inserted item from the stack.
+     * @return most recently inserted item, or null, if stack is empty.
+     */
+    public Object topAndPop( )
+    {
+        if( isEmpty( ) )
+            return null;
+        Object topItem = top( );
+        theArray[ topOfStack-- ] = null;
+        return topItem;
+    }
+
+    /*@ spec_public */ private Object [ ] theArray;
+    /*@ spec_public */ private int        topOfStack;
+
+}

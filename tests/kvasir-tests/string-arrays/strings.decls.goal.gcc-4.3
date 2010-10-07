@@ -1,0 +1,110 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..f():::ENTER
+  ppt-type enter
+  variable arg
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable strings
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable strings[..]
+    var-kind array
+    enclosing-var strings
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..f():::EXIT0
+  ppt-type subexit
+  variable arg
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable strings
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable strings[..]
+    var-kind array
+    enclosing-var strings
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::strings
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags non_null 
+  variable ::strings[..]
+    var-kind array
+    enclosing-var ::strings
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::strings
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags non_null 
+  variable ::strings[..]
+    var-kind array
+    enclosing-var ::strings
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..uppercase():::ENTER
+  ppt-type enter
+  variable ::upcasestr
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable s
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..uppercase():::EXIT0
+  ppt-type subexit
+  variable ::upcasestr
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable return
+    var-kind variable
+    rep-type string
+    dec-type char*
+  variable s
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+

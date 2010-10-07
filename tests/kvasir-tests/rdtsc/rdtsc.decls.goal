@@ -1,0 +1,47 @@
+VarComparability
+none
+
+DECLARE
+..main():::ENTER
+argc
+int # isParam=true
+int
+22
+argv
+char** # isParam=true
+hashcode
+22
+argv[]
+char*[]
+java.lang.String[]
+22
+
+DECLARE
+..main():::EXIT0
+argc
+int # isParam=true
+int
+22
+argv
+char** # isParam=true
+hashcode
+22
+argv[]
+char*[]
+java.lang.String[]
+22
+return
+int
+int
+22
+
+DECLARE
+..read_tsc():::ENTER
+
+DECLARE
+..read_tsc():::EXIT0
+return
+unsigned long long int
+int
+22
+

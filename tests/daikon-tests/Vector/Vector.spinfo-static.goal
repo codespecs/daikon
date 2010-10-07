@@ -1,0 +1,110 @@
+REPLACE
+capacity()
+elementData.length
+contains(Object elem)
+indexOf(elem, 0)>= 0
+elements()
+new VectorEnumerator(this)
+indexOf(Object elem)
+indexOf(elem, 0)
+isEmpty()
+elementCount == 0
+lastIndexOf(Object elem)
+lastIndexOf(elem, elementCount-1)
+size()
+elementCount
+
+PPT_NAME javautil.Vector.addElement
+newcount > elementData.length
+orig(newcount > elementData.length)
+
+PPT_NAME javautil.Vector.contains
+indexOf(elem, 0)>= 0
+orig(indexOf(elem, 0)>= 0)
+
+PPT_NAME javautil.Vector.copyInto
+i-- > 0
+orig(i-- > 0)
+
+PPT_NAME javautil.Vector.elementAt
+index >= elementCount
+orig(index >= elementCount)
+
+PPT_NAME javautil.Vector.ensureCapacity
+minCapacity > elementData.length
+orig(minCapacity > elementData.length)
+
+PPT_NAME javautil.Vector.ensureCapacityHelper
+newCapacity < minCapacity
+orig(newCapacity < minCapacity)
+
+PPT_NAME javautil.Vector.firstElement
+elementCount == 0
+orig(elementCount == 0)
+
+PPT_NAME javautil.Vector.indexOf
+elem.equals(elementData[i])
+i < elementCount
+orig(elem.equals(elementData[i]))
+orig(i < elementCount)
+
+PPT_NAME javautil.Vector.insertElementAt
+index >= newcount
+newcount > elementData.length
+orig(index >= newcount)
+orig(newcount > elementData.length)
+
+PPT_NAME javautil.Vector.isEmpty
+elementCount == 0
+orig(elementCount == 0)
+
+PPT_NAME javautil.Vector.lastElement
+elementCount == 0
+orig(elementCount == 0)
+
+PPT_NAME javautil.Vector.lastIndexOf
+elem.equals(elementData[i])
+i >= 0
+orig(elem.equals(elementData[i]))
+orig(i >= 0)
+
+PPT_NAME javautil.Vector.removeAllElements
+i < elementCount
+orig(i < elementCount)
+
+PPT_NAME javautil.Vector.removeElement
+false
+i >= 0
+orig(false)
+orig(i >= 0)
+orig(true)
+true
+
+PPT_NAME javautil.Vector.removeElementAt
+index < 0
+index >= elementCount
+j > 0
+orig(index < 0)
+orig(index >= elementCount)
+orig(j > 0)
+
+PPT_NAME javautil.Vector.setElementAt
+index >= elementCount
+orig(index >= elementCount)
+
+PPT_NAME javautil.Vector.setSize
+(newSize > elementCount)&&(newSize > elementData.length)
+i < elementCount
+orig((newSize > elementCount)&&(newSize > elementData.length))
+orig(i < elementCount)
+
+PPT_NAME javautil.Vector.toString
+i < max
+i <= max
+orig(i < max)
+orig(i <= max)
+
+PPT_NAME javautil.Vector.trimToSize
+elementCount < oldCapacity
+orig(elementCount < oldCapacity)
+

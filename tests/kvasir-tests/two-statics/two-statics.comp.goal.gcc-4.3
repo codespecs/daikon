@@ -1,0 +1,56 @@
+..func1():::ENTER
+::buffer
+x
+
+..func1():::EXIT0
+::buffer
+return
+x
+
+..func2():::ENTER
+::buffer
+x
+
+..func2():::EXIT0
+::buffer
+return
+x
+
+..global_function1():::ENTER
+x
+
+..global_function1():::EXIT0
+return x
+
+..global_function2():::ENTER
+x
+
+..global_function2():::EXIT0
+return x
+
+..main():::ENTER
+
+..main():::EXIT0
+return
+
+two_statics.c.func3():::ENTER
+::buffer
+x
+
+two_statics.c.func3():::EXIT0
+::buffer
+return
+x
+
+unit1.c.static_function():::ENTER
+x
+
+unit1.c.static_function():::EXIT0
+return x
+
+unit2.c.static_function():::ENTER
+x
+
+unit2.c.static_function():::EXIT0
+return x
+

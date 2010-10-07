@@ -1,0 +1,100 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..check():::ENTER
+  ppt-type enter
+  variable ::counters
+    var-kind variable
+    rep-type hashcode
+    dec-type _counter*
+  variable ::counters[..]
+    var-kind array
+    enclosing-var ::counters
+    array 1
+    rep-type hashcode[]
+    dec-type _counter[]
+  variable ::counters[..].a
+    var-kind field a
+    enclosing-var ::counters[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::sum
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..check():::EXIT0
+  ppt-type subexit
+  variable ::counters
+    var-kind variable
+    rep-type hashcode
+    dec-type _counter*
+  variable ::counters[..]
+    var-kind array
+    enclosing-var ::counters
+    array 1
+    rep-type hashcode[]
+    dec-type _counter[]
+  variable ::counters[..].a
+    var-kind field a
+    enclosing-var ::counters[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::sum
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::counters
+    var-kind variable
+    rep-type hashcode
+    dec-type _counter*
+  variable ::counters[..]
+    var-kind array
+    enclosing-var ::counters
+    array 1
+    rep-type hashcode[]
+    dec-type _counter[]
+  variable ::counters[..].a
+    var-kind field a
+    enclosing-var ::counters[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::sum
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::counters
+    var-kind variable
+    rep-type hashcode
+    dec-type _counter*
+  variable ::counters[..]
+    var-kind array
+    enclosing-var ::counters
+    array 1
+    rep-type hashcode[]
+    dec-type _counter[]
+  variable ::counters[..].a
+    var-kind field a
+    enclosing-var ::counters[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::sum
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+

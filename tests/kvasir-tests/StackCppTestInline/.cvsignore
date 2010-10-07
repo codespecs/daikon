@@ -1,0 +1,9 @@
+StackCppTestInline
+StackCppTestInline.decls.diff
+StackCppTestInline.dtrace.diff
+StackCppTestInline.invs.diff
+StackCppTestInline.out
+StackCppTestInline.out.diff
+ran-kvasir
+*.counts *.counts.diff
+StackCppTestInline.comp StackCppTestInline.comp.diff

@@ -1,0 +1,36 @@
+package checkers.nullness.quals:
+annotation @Nullable:
+annotation @NonNull:
+
+package PolyCalc:
+class RatTermVec : // 164488/- obj/class samples
+  field wrapped :  // java.util.ArrayList
+  method <init>() : // 1042 samples
+    return: 
+  method addElement(LPolyCalc/RatTerm;) : // 749 samples
+    return: 
+    parameter #0 :  // t
+  method copy() : // 426 samples
+    return: 
+  method get(I) : // 37190 samples
+    return: 
+    parameter #0 :  // index
+  method insert(LPolyCalc/RatTerm;I) : // 116 samples
+    return: 
+    parameter #0 :  // t
+    parameter #1 :  // index
+  method printDebug() : // 26 samples
+    return: 
+  method remove(I) : // 96 samples
+    return: 
+    parameter #0 :  // index
+  method set(LPolyCalc/RatTerm;I) : // 518 samples
+    return: 
+    parameter #0 :  // t
+    parameter #1 :  // index
+  method size() : // 42576 samples
+    return: 
+  method toString() : // 26 samples
+    return: 
+
+

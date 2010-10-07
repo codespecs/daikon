@@ -1,0 +1,11 @@
+
+Everything proves.
+
+I have not explored how many are redundant.
+
+FIXED: We are missing the this.name != null invariant, since dfej
+doesn't instrument String hashCodes.  Mike is going to fix this.
+
+FIXED: Also, the owner stuff makes us die.  We should probably only
+say that we are the owner of array, or better yet, only own things
+which are created within the constructor (static analysis).

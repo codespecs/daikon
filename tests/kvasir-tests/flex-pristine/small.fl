@@ -1,0 +1,7 @@
+%%
+
+"Fargo's"                       { printf("Fargo's is a word\n") }
+"degeneracy's"                  { printf("degeneracy's is a word\n") }
+"human"                         { printf("human is a word\n") }
+"misjudged"                     { printf("misjudged is a word\n") }
+"overheats"                     { printf("overheats is a word\n") }

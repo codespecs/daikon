@@ -1,0 +1,619 @@
+===========================================================================
+DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable):::ENTER
+===========================================================================
+DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable):::EXIT13
+theElement == this.element == orig(theElement)
+this.left == this.right
+this.left == null
+this.color == 1
+===========================================================================
+DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable, DataStructures.RedBlackNode, DataStructures.RedBlackNode):::ENTER
+theElement == lt.element == lt.left.element == lt.right.element == rt.element == rt.left.element == rt.right.element
+lt == lt.left == lt.left.left == lt.left.right == lt.right == lt.right.left == lt.right.right == rt == rt.left == rt.left.left == rt.left.right == rt.right == rt.right.left == rt.right.right
+lt.left.color == 1
+lt.right.color == 1
+lt.color == 1
+rt.left.color == 1
+rt.right.color == 1
+rt.color == 1
+===========================================================================
+DataStructures.RedBlackNode.RedBlackNode(DataStructures.Comparable, DataStructures.RedBlackNode, DataStructures.RedBlackNode):::EXIT21
+theElement == lt.element == lt.left.element == lt.right.element == rt.element == rt.left.element == rt.right.element == this.element == this.left.element == this.left.left.element == this.left.right.element == this.right.element == this.right.left.element == this.right.right.element == orig(theElement) == orig(lt.element) == orig(lt.left.element) == orig(lt.right.element) == orig(rt.element) == orig(rt.left.element) == orig(rt.right.element)
+lt == lt.left == lt.left.left == lt.left.right == lt.right == lt.right.left == lt.right.right == rt == rt.left == rt.left.left == rt.left.right == rt.right == rt.right.left == rt.right.right == this.left == this.left.left == this.left.left.left == this.left.left.right == this.left.right == this.left.right.left == this.left.right.right == this.right == this.right.left == this.right.left.left == this.right.left.right == this.right.right == this.right.right.left == this.right.right.right == orig(lt) == orig(lt.left) == orig(lt.left.left) == orig(lt.left.right) == orig(lt.right) == orig(lt.right.left) == orig(lt.right.right) == orig(rt) == orig(rt.left) == orig(rt.left.left) == orig(rt.left.right) == orig(rt.right) == orig(rt.right.left) == orig(rt.right.right)
+this.color == orig(lt.left.color) == orig(lt.right.color) == orig(lt.color) == orig(rt.left.color) == orig(rt.right.color) == orig(rt.color)
+lt.left.color == 1
+lt.right.color == 1
+lt.color == 1
+rt.left.color == 1
+rt.right.color == 1
+rt.color == 1
+this.left.left.color == 1
+this.left.right.color == 1
+this.left.color == 1
+this.right.left.color == 1
+this.right.right.color == 1
+this.right.color == 1
+===========================================================================
+DataStructures.RedBlackTree:::CLASS
+RedBlackTree.nullNode == RedBlackTree.nullNode.left == RedBlackTree.nullNode.left.left == RedBlackTree.nullNode.left.right == RedBlackTree.nullNode.right == RedBlackTree.nullNode.right.left == RedBlackTree.nullNode.right.right == RedBlackTree.current.left == RedBlackTree.current.left.left == RedBlackTree.current.left.right == RedBlackTree.current.right == RedBlackTree.current.right.left == RedBlackTree.current.right.right == RedBlackTree.parent.left == RedBlackTree.parent.left.left == RedBlackTree.parent.left.right == RedBlackTree.parent.right.left == RedBlackTree.parent.right.right == RedBlackTree.grand.left.left == RedBlackTree.grand.right.left == RedBlackTree.grand.right.right
+RedBlackTree.nullNode.element == RedBlackTree.nullNode.left.element == RedBlackTree.nullNode.right.element == RedBlackTree.current.left.element == RedBlackTree.current.right.element == RedBlackTree.parent.left.element
+RedBlackTree.nullNode.left.color == RedBlackTree.nullNode.right.color == RedBlackTree.nullNode.color == RedBlackTree.current.left.color == RedBlackTree.current.right.color == RedBlackTree.parent.left.color == RedBlackTree.parent.color == RedBlackTree.grand.left.color == RedBlackTree.grand.right.color == RedBlackTree.great.right.color == RedBlackTree.great.color == RedBlackTree.BLACK
+RedBlackTree.parent == RedBlackTree.grand.left == RedBlackTree.great.left.left
+RedBlackTree.grand == RedBlackTree.great.left
+RedBlackTree.nullNode has only one value (hashcode=6794265)
+RedBlackTree.nullNode.left.color == 1
+RedBlackTree.current.element has only one value (hashcode=2570525)
+RedBlackTree.current.color == 0
+RedBlackTree.parent.element has only one value (hashcode=2943240)
+RedBlackTree.parent.right has only one value (hashcode=65624)
+RedBlackTree.parent.right.element has only one value (hashcode=4597841)
+RedBlackTree.parent.right.color == 0
+RedBlackTree.grand.element has only one value (hashcode=5298332)
+RedBlackTree.grand.left.element has only one value (hashcode=2943240)
+RedBlackTree.grand.left.right has only one value (hashcode=65624)
+RedBlackTree.grand.right has only one value (hashcode=4343712)
+RedBlackTree.grand.right.element has only one value (hashcode=4977422)
+RedBlackTree.grand.color == 0
+RedBlackTree.great.element has only one value (hashcode=2585423)
+RedBlackTree.great.left.element has only one value (hashcode=5298332)
+RedBlackTree.great.left.right has only one value (hashcode=4343712)
+RedBlackTree.great.left.color == 0
+RedBlackTree.great.right has only one value (hashcode=7469984)
+RedBlackTree.great.right.element has only one value (hashcode=2023852)
+RedBlackTree.great.right.left has only one value (hashcode=3556405)
+RedBlackTree.great.right.right has only one value (hashcode=3939074)
+RedBlackTree.RED == 0
+===========================================================================
+DataStructures.RedBlackTree:::OBJECT
+this.header.left == this.header.left.left == this.header.left.right == RedBlackTree.nullNode == RedBlackTree.nullNode.left == RedBlackTree.nullNode.left.left == RedBlackTree.nullNode.left.right == RedBlackTree.nullNode.right == RedBlackTree.nullNode.right.left == RedBlackTree.nullNode.right.right == RedBlackTree.parent.left.left == RedBlackTree.parent.left.right == RedBlackTree.parent.right.left == RedBlackTree.parent.right.right
+this.header.left.element == RedBlackTree.nullNode.element == RedBlackTree.nullNode.left.element == RedBlackTree.nullNode.right.element
+this.header.left.color == this.header.right.color == this.header.color == RedBlackTree.nullNode.left.color == RedBlackTree.nullNode.right.color == RedBlackTree.nullNode.color == RedBlackTree.parent.color == RedBlackTree.grand.left.color == RedBlackTree.BLACK
+this.header has only one value (hashcode=2042379)
+this.header.element has only one value (hashcode=8347303)
+this.header.left has only one value (hashcode=6794265)
+this.header.left.color == 1
+RedBlackTree.current.element != null
+RedBlackTree.current.left != null
+RedBlackTree.current.left.element != null
+RedBlackTree.current.left.left != null
+RedBlackTree.current.left.right != null
+RedBlackTree.current.left.color one of { 0, 1 }
+RedBlackTree.current.right != null
+RedBlackTree.current.right.element != null
+RedBlackTree.current.right.left != null
+RedBlackTree.current.right.right != null
+RedBlackTree.current.right.color one of { 0, 1 }
+RedBlackTree.current.color one of { 0, 1 }
+RedBlackTree.parent.element != null
+RedBlackTree.parent.left != null
+RedBlackTree.parent.left.element != null
+RedBlackTree.parent.left.color one of { 0, 1 }
+RedBlackTree.parent.right != null
+RedBlackTree.parent.right.element != null
+RedBlackTree.parent.right.color one of { 0, 1 }
+RedBlackTree.grand.element != null
+RedBlackTree.grand.left != null
+RedBlackTree.grand.left.element != null
+RedBlackTree.grand.left.left != null
+RedBlackTree.grand.left.right != null
+RedBlackTree.grand.right != null
+RedBlackTree.grand.right.element != null
+RedBlackTree.grand.right.left != null
+RedBlackTree.grand.right.right != null
+RedBlackTree.grand.right.color one of { 0, 1 }
+RedBlackTree.grand.color one of { 0, 1 }
+RedBlackTree.great.element != null
+RedBlackTree.great.left != null
+RedBlackTree.great.left.element != null
+RedBlackTree.great.left.left != null
+RedBlackTree.great.left.right != null
+RedBlackTree.great.left.color one of { 0, 1 }
+RedBlackTree.great.right != null
+RedBlackTree.great.right.element != null
+RedBlackTree.great.right.left != null
+RedBlackTree.great.right.right != null
+RedBlackTree.great.right.color one of { 0, 1 }
+RedBlackTree.great.color one of { 0, 1 }
+RedBlackTree.RED == 0
+this.header.left.element != RedBlackTree.parent.element
+this.header.left.element != RedBlackTree.grand.element
+this.header.left.element != RedBlackTree.great.element
+this.header.right != RedBlackTree.current.left
+this.header.right != RedBlackTree.current.left.left
+this.header.right != RedBlackTree.current.left.right
+this.header.right != RedBlackTree.current.right
+this.header.right != RedBlackTree.current.right.left
+this.header.right != RedBlackTree.current.right.right
+this.header.right != RedBlackTree.parent.left
+this.header.right != RedBlackTree.grand.left
+this.header.right != RedBlackTree.grand.left.left
+this.header.right != RedBlackTree.grand.left.right
+this.header.right != RedBlackTree.grand.right.left
+this.header.right != RedBlackTree.grand.right.right
+this.header.right != RedBlackTree.great.left
+this.header.right != RedBlackTree.great.left.left
+this.header.right != RedBlackTree.great.left.right
+this.header.right != RedBlackTree.great.right.left
+this.header.right != RedBlackTree.great.right.right
+this.header.right.left != RedBlackTree.parent
+this.header.right.left != RedBlackTree.parent.right
+this.header.right.left != RedBlackTree.grand.right
+this.header.right.left != RedBlackTree.great.right
+RedBlackTree.current != RedBlackTree.current.left
+RedBlackTree.current != RedBlackTree.current.left.left
+RedBlackTree.current != RedBlackTree.current.left.right
+RedBlackTree.current != RedBlackTree.current.right
+RedBlackTree.current != RedBlackTree.current.right.left
+RedBlackTree.current != RedBlackTree.current.right.right
+RedBlackTree.parent != RedBlackTree.parent.left
+RedBlackTree.parent != RedBlackTree.parent.right
+RedBlackTree.parent != RedBlackTree.grand.left.left
+RedBlackTree.parent != RedBlackTree.grand.left.right
+RedBlackTree.parent != RedBlackTree.grand.right.left
+RedBlackTree.parent != RedBlackTree.grand.right.right
+RedBlackTree.grand != RedBlackTree.grand.left
+RedBlackTree.grand != RedBlackTree.grand.left.left
+RedBlackTree.grand != RedBlackTree.grand.left.right
+RedBlackTree.grand != RedBlackTree.grand.right
+RedBlackTree.grand != RedBlackTree.grand.right.left
+RedBlackTree.grand != RedBlackTree.grand.right.right
+RedBlackTree.great != RedBlackTree.great.left
+RedBlackTree.great != RedBlackTree.great.left.left
+RedBlackTree.great != RedBlackTree.great.left.right
+RedBlackTree.great != RedBlackTree.great.right
+RedBlackTree.great != RedBlackTree.great.right.left
+RedBlackTree.great != RedBlackTree.great.right.right
+===========================================================================
+DataStructures.RedBlackTree.RedBlackTree(DataStructures.Comparable):::ENTER
+negInf has only one value (hashcode=8347303)
+===========================================================================
+DataStructures.RedBlackTree.RedBlackTree(DataStructures.Comparable):::EXIT32
+negInf == this.header.element == orig(negInf)
+this.header.left == this.header.right == this.header.right.left == this.header.right.right
+this.header.left.element == this.header.right.element
+RedBlackTree.current == RedBlackTree.parent == RedBlackTree.grand == RedBlackTree.great
+this.header.left has only one value (hashcode=6794265)
+this.header.left.element == null
+this.header.left.color == 1
+RedBlackTree.current == null
+===========================================================================
+DataStructures.RedBlackTree.find(DataStructures.Comparable):::ENTER
+this.header.left == RedBlackTree.parent.left == RedBlackTree.grand.left.left == RedBlackTree.grand.right.left == RedBlackTree.grand.right.right
+this.header.left.element == RedBlackTree.parent.left.element
+this.header.left.color == RedBlackTree.parent.left.color == RedBlackTree.grand.right.color == RedBlackTree.great.right.color == RedBlackTree.great.color
+RedBlackTree.parent.element == RedBlackTree.grand.left.element
+RedBlackTree.parent.right == RedBlackTree.grand.left.right
+RedBlackTree.parent.right.color == RedBlackTree.grand.color == RedBlackTree.great.left.color == RedBlackTree.RED
+RedBlackTree.grand.element == RedBlackTree.great.left.element
+RedBlackTree.grand.right == RedBlackTree.great.left.right
+x != null
+this.header.left has only one value (hashcode=6794265)
+this.header.left.color == 1
+this.header.right has only one value (hashcode=3014669)
+this.header.right.element has only one value (hashcode=3207485)
+this.header.right.left has only one value (hashcode=2381750)
+this.header.right.right has only one value (hashcode=2398389)
+RedBlackTree.current != null
+RedBlackTree.parent has only one value (hashcode=7804298)
+RedBlackTree.grand has only one value (hashcode=4001236)
+RedBlackTree.great has only one value (hashcode=228465)
+x != this.header.left.element
+x != RedBlackTree.current.element
+x != RedBlackTree.current.left.element
+x != RedBlackTree.current.right.element
+===========================================================================
+DataStructures.RedBlackTree.find(DataStructures.Comparable):::EXIT128
+x == this.header.left.element == RedBlackTree.nullNode.element == RedBlackTree.nullNode.left.element == RedBlackTree.nullNode.right.element == RedBlackTree.parent.left.element == orig(x)
+return == RedBlackTree.current.element
+this.header == orig(this.header)
+this.header.element == orig(this.header.element)
+this.header.left == RedBlackTree.parent.left == RedBlackTree.grand.left.left == RedBlackTree.grand.right.left == RedBlackTree.grand.right.right == orig(this.header.left) == orig(this.header.left.left) == orig(this.header.left.right) == orig(RedBlackTree.nullNode) == orig(RedBlackTree.nullNode.left) == orig(RedBlackTree.nullNode.left.left) == orig(RedBlackTree.nullNode.left.right) == orig(RedBlackTree.nullNode.right) == orig(RedBlackTree.nullNode.right.left) == orig(RedBlackTree.nullNode.right.right) == orig(RedBlackTree.parent.left) == orig(RedBlackTree.parent.left.left) == orig(RedBlackTree.parent.left.right) == orig(RedBlackTree.parent.right.left) == orig(RedBlackTree.parent.right.right) == orig(RedBlackTree.grand.left.left) == orig(RedBlackTree.grand.right.left) == orig(RedBlackTree.grand.right.right)
+this.header.left.color == RedBlackTree.parent.left.color == RedBlackTree.grand.right.color == RedBlackTree.great.right.color == RedBlackTree.great.color == orig(this.header.left.color) == orig(this.header.right.color) == orig(this.header.color) == orig(RedBlackTree.nullNode.left.color) == orig(RedBlackTree.nullNode.right.color) == orig(RedBlackTree.nullNode.color) == orig(RedBlackTree.parent.left.color) == orig(RedBlackTree.parent.color) == orig(RedBlackTree.grand.left.color) == orig(RedBlackTree.grand.right.color) == orig(RedBlackTree.great.right.color) == orig(RedBlackTree.great.color)
+this.header.right == orig(this.header.right)
+this.header.right.element == orig(this.header.right.element)
+this.header.right.left == orig(this.header.right.left)
+this.header.right.right == orig(this.header.right.right)
+RedBlackTree.parent == orig(RedBlackTree.parent) == orig(RedBlackTree.grand.left) == orig(RedBlackTree.great.left.left)
+RedBlackTree.parent.element == RedBlackTree.grand.left.element == orig(RedBlackTree.parent.element) == orig(RedBlackTree.grand.left.element)
+RedBlackTree.parent.right == RedBlackTree.grand.left.right == orig(RedBlackTree.parent.right) == orig(RedBlackTree.grand.left.right)
+RedBlackTree.parent.right.element == orig(RedBlackTree.parent.right.element)
+RedBlackTree.parent.right.color == RedBlackTree.grand.color == RedBlackTree.great.left.color == RedBlackTree.RED == orig(RedBlackTree.parent.right.color) == orig(RedBlackTree.grand.color) == orig(RedBlackTree.great.left.color)
+RedBlackTree.grand == orig(RedBlackTree.grand) == orig(RedBlackTree.great.left)
+RedBlackTree.grand.element == RedBlackTree.great.left.element == orig(RedBlackTree.grand.element) == orig(RedBlackTree.great.left.element)
+RedBlackTree.grand.right == RedBlackTree.great.left.right == orig(RedBlackTree.grand.right) == orig(RedBlackTree.great.left.right)
+RedBlackTree.grand.right.element == orig(RedBlackTree.grand.right.element)
+RedBlackTree.great == orig(RedBlackTree.great)
+RedBlackTree.great.element == orig(RedBlackTree.great.element)
+RedBlackTree.great.right == orig(RedBlackTree.great.right)
+RedBlackTree.great.right.element == orig(RedBlackTree.great.right.element)
+RedBlackTree.great.right.left == orig(RedBlackTree.great.right.left)
+RedBlackTree.great.right.right == orig(RedBlackTree.great.right.right)
+orig(this.header.left.element) == orig(RedBlackTree.nullNode.element) == orig(RedBlackTree.nullNode.left.element) == orig(RedBlackTree.nullNode.right.element) == orig(RedBlackTree.parent.left.element)
+RedBlackTree.current != null
+orig(this.header.left.element) != null
+orig(RedBlackTree.current.element) != null
+orig(RedBlackTree.current.left) != null
+orig(RedBlackTree.current.left.element) != null
+orig(RedBlackTree.current.left.left) != null
+orig(RedBlackTree.current.left.right) != null
+orig(RedBlackTree.current.left.color) one of { 0, 1 }
+orig(RedBlackTree.current.right) != null
+orig(RedBlackTree.current.right.element) != null
+orig(RedBlackTree.current.right.left) != null
+orig(RedBlackTree.current.right.right) != null
+orig(RedBlackTree.current.right.color) one of { 0, 1 }
+orig(RedBlackTree.current.color) one of { 0, 1 }
+x != return
+return != RedBlackTree.current.left.element
+return != RedBlackTree.current.right.element
+return != orig(this.header.left.element)
+return != orig(RedBlackTree.current.element)
+return != orig(RedBlackTree.current.left.element)
+RedBlackTree.current != orig(RedBlackTree.current)
+RedBlackTree.current != orig(RedBlackTree.current.left)
+RedBlackTree.current != orig(RedBlackTree.current.left.left)
+RedBlackTree.current != orig(RedBlackTree.current.left.right)
+RedBlackTree.current != orig(RedBlackTree.current.right.right)
+RedBlackTree.current.left.element != orig(this.header.left.element)
+RedBlackTree.current.left.element != orig(RedBlackTree.current.left.element)
+RedBlackTree.current.left.element != orig(RedBlackTree.current.right.element)
+RedBlackTree.current.left.left != orig(RedBlackTree.current)
+RedBlackTree.current.right != orig(RedBlackTree.current)
+RedBlackTree.current.right != orig(RedBlackTree.current.right)
+RedBlackTree.current.right.element != orig(this.header.left.element)
+RedBlackTree.current.right.element != orig(RedBlackTree.current.element)
+RedBlackTree.current.right.element != orig(RedBlackTree.current.left.element)
+RedBlackTree.current.right.element != orig(RedBlackTree.current.right.element)
+RedBlackTree.current.right.left != orig(RedBlackTree.current)
+RedBlackTree.current.right.right != orig(RedBlackTree.current)
+orig(RedBlackTree.current) != orig(RedBlackTree.current.left)
+orig(RedBlackTree.current) != orig(RedBlackTree.current.left.left)
+orig(RedBlackTree.current) != orig(RedBlackTree.current.left.right)
+orig(RedBlackTree.current) != orig(RedBlackTree.current.right)
+orig(RedBlackTree.current) != orig(RedBlackTree.current.right.left)
+orig(RedBlackTree.current) != orig(RedBlackTree.current.right.right)
+===========================================================================
+DataStructures.RedBlackTree.find(DataStructures.Comparable):::EXIT
+x == this.header.left.element == RedBlackTree.nullNode.element == RedBlackTree.nullNode.left.element == RedBlackTree.nullNode.right.element == RedBlackTree.parent.left.element == orig(x)
+return == RedBlackTree.current.element
+this.header == orig(this.header)
+this.header.element == orig(this.header.element)
+this.header.left == RedBlackTree.parent.left == RedBlackTree.grand.left.left == RedBlackTree.grand.right.left == RedBlackTree.grand.right.right == orig(this.header.left) == orig(this.header.left.left) == orig(this.header.left.right) == orig(RedBlackTree.nullNode) == orig(RedBlackTree.nullNode.left) == orig(RedBlackTree.nullNode.left.left) == orig(RedBlackTree.nullNode.left.right) == orig(RedBlackTree.nullNode.right) == orig(RedBlackTree.nullNode.right.left) == orig(RedBlackTree.nullNode.right.right) == orig(RedBlackTree.parent.left) == orig(RedBlackTree.parent.left.left) == orig(RedBlackTree.parent.left.right) == orig(RedBlackTree.parent.right.left) == orig(RedBlackTree.parent.right.right) == orig(RedBlackTree.grand.left.left) == orig(RedBlackTree.grand.right.left) == orig(RedBlackTree.grand.right.right)
+this.header.left.color == RedBlackTree.parent.left.color == RedBlackTree.grand.right.color == RedBlackTree.great.right.color == RedBlackTree.great.color == orig(this.header.left.color) == orig(this.header.right.color) == orig(this.header.color) == orig(RedBlackTree.nullNode.left.color) == orig(RedBlackTree.nullNode.right.color) == orig(RedBlackTree.nullNode.color) == orig(RedBlackTree.parent.left.color) == orig(RedBlackTree.parent.color) == orig(RedBlackTree.grand.left.color) == orig(RedBlackTree.grand.right.color) == orig(RedBlackTree.great.right.color) == orig(RedBlackTree.great.color)
+this.header.right == orig(this.header.right)
+this.header.right.element == orig(this.header.right.element)
+this.header.right.left == orig(this.header.right.left)
+this.header.right.right == orig(this.header.right.right)
+RedBlackTree.parent == orig(RedBlackTree.parent) == orig(RedBlackTree.grand.left) == orig(RedBlackTree.great.left.left)
+RedBlackTree.parent.element == RedBlackTree.grand.left.element == orig(RedBlackTree.parent.element) == orig(RedBlackTree.grand.left.element)
+RedBlackTree.parent.right == RedBlackTree.grand.left.right == orig(RedBlackTree.parent.right) == orig(RedBlackTree.grand.left.right)
+RedBlackTree.parent.right.element == orig(RedBlackTree.parent.right.element)
+RedBlackTree.parent.right.color == RedBlackTree.grand.color == RedBlackTree.great.left.color == orig(RedBlackTree.parent.right.color) == orig(RedBlackTree.grand.color) == orig(RedBlackTree.great.left.color)
+RedBlackTree.grand == orig(RedBlackTree.grand) == orig(RedBlackTree.great.left)
+RedBlackTree.grand.element == RedBlackTree.great.left.element == orig(RedBlackTree.grand.element) == orig(RedBlackTree.great.left.element)
+RedBlackTree.grand.right == RedBlackTree.great.left.right == orig(RedBlackTree.grand.right) == orig(RedBlackTree.great.left.right)
+RedBlackTree.grand.right.element == orig(RedBlackTree.grand.right.element)
+RedBlackTree.great == orig(RedBlackTree.great)
+RedBlackTree.great.element == orig(RedBlackTree.great.element)
+RedBlackTree.great.right == orig(RedBlackTree.great.right)
+RedBlackTree.great.right.element == orig(RedBlackTree.great.right.element)
+RedBlackTree.great.right.left == orig(RedBlackTree.great.right.left)
+RedBlackTree.great.right.right == orig(RedBlackTree.great.right.right)
+orig(this.header.left.element) == orig(RedBlackTree.nullNode.element) == orig(RedBlackTree.nullNode.left.element) == orig(RedBlackTree.nullNode.right.element) == orig(RedBlackTree.parent.left.element)
+RedBlackTree.current != null
+orig(this.header.left.element) != null
+orig(RedBlackTree.current.element) != null
+orig(RedBlackTree.current.left) != null
+orig(RedBlackTree.current.left.element) != null
+orig(RedBlackTree.current.left.left) != null
+orig(RedBlackTree.current.left.right) != null
+orig(RedBlackTree.current.left.color) one of { 0, 1 }
+orig(RedBlackTree.current.right) != null
+orig(RedBlackTree.current.right.element) != null
+orig(RedBlackTree.current.right.left) != null
+orig(RedBlackTree.current.right.right) != null
+orig(RedBlackTree.current.right.color) one of { 0, 1 }
+orig(RedBlackTree.current.color) one of { 0, 1 }
+x != return
+return != RedBlackTree.current.left.element
+return != RedBlackTree.current.right.element
+return != orig(this.header.left.element)
+return != orig(RedBlackTree.current.element)
+return != orig(RedBlackTree.current.left.element)
+RedBlackTree.current != orig(RedBlackTree.current)
+RedBlackTree.current != orig(RedBlackTree.current.left)
+RedBlackTree.current != orig(RedBlackTree.current.left.left)
+RedBlackTree.current != orig(RedBlackTree.current.left.right)
+RedBlackTree.current != orig(RedBlackTree.current.right.right)
+RedBlackTree.current.left.element != orig(this.header.left.element)
+RedBlackTree.current.left.element != orig(RedBlackTree.current.left.element)
+RedBlackTree.current.left.element != orig(RedBlackTree.current.right.element)
+RedBlackTree.current.left.left != orig(RedBlackTree.current)
+RedBlackTree.current.right != orig(RedBlackTree.current)
+RedBlackTree.current.right != orig(RedBlackTree.current.right)
+RedBlackTree.current.right.element != orig(this.header.left.element)
+RedBlackTree.current.right.element != orig(RedBlackTree.current.element)
+RedBlackTree.current.right.element != orig(RedBlackTree.current.left.element)
+RedBlackTree.current.right.element != orig(RedBlackTree.current.right.element)
+RedBlackTree.current.right.left != orig(RedBlackTree.current)
+RedBlackTree.current.right.right != orig(RedBlackTree.current)
+orig(RedBlackTree.current) != orig(RedBlackTree.current.left)
+orig(RedBlackTree.current) != orig(RedBlackTree.current.left.left)
+orig(RedBlackTree.current) != orig(RedBlackTree.current.left.right)
+orig(RedBlackTree.current) != orig(RedBlackTree.current.right)
+orig(RedBlackTree.current) != orig(RedBlackTree.current.right.left)
+orig(RedBlackTree.current) != orig(RedBlackTree.current.right.right)
+===========================================================================
+DataStructures.RedBlackTree.findMax():::ENTER
+this.header.left == RedBlackTree.current.left == RedBlackTree.current.left.left == RedBlackTree.current.left.right == RedBlackTree.current.right == RedBlackTree.current.right.left == RedBlackTree.current.right.right == RedBlackTree.parent.left == RedBlackTree.grand.left.left == RedBlackTree.grand.right.left == RedBlackTree.grand.right.right
+this.header.left.element == RedBlackTree.current.element == RedBlackTree.current.left.element == RedBlackTree.current.right.element == RedBlackTree.parent.left.element == RedBlackTree.parent.right.element
+this.header.left.color == RedBlackTree.current.left.color == RedBlackTree.current.right.color == RedBlackTree.parent.left.color == RedBlackTree.grand.right.color == RedBlackTree.great.right.color == RedBlackTree.great.color
+RedBlackTree.current == RedBlackTree.parent.right == RedBlackTree.grand.left.right
+RedBlackTree.current.color == RedBlackTree.parent.right.color == RedBlackTree.grand.color == RedBlackTree.great.left.color == RedBlackTree.RED
+RedBlackTree.parent.element == RedBlackTree.grand.left.element
+RedBlackTree.grand.element == RedBlackTree.great.left.element
+RedBlackTree.grand.right == RedBlackTree.great.left.right
+this.header.left has only one value (hashcode=6794265)
+this.header.left.color == 1
+this.header.right has only one value (hashcode=3014669)
+this.header.right.element has only one value (hashcode=3207485)
+this.header.right.left has only one value (hashcode=2381750)
+this.header.right.right has only one value (hashcode=2398389)
+RedBlackTree.parent has only one value (hashcode=7804298)
+RedBlackTree.grand has only one value (hashcode=4001236)
+RedBlackTree.great has only one value (hashcode=228465)
+===========================================================================
+DataStructures.RedBlackTree.findMax():::EXIT108
+this.header == orig(this.header)
+this.header.element == orig(this.header.element)
+this.header.left == RedBlackTree.current.left == RedBlackTree.current.left.left == RedBlackTree.current.left.right == RedBlackTree.current.right == RedBlackTree.current.right.left == RedBlackTree.current.right.right == RedBlackTree.parent.left == RedBlackTree.grand.left.left == RedBlackTree.grand.right.left == RedBlackTree.grand.right.right == orig(this.header.left) == orig(this.header.left.left) == orig(this.header.left.right) == orig(RedBlackTree.nullNode) == orig(RedBlackTree.nullNode.left) == orig(RedBlackTree.nullNode.left.left) == orig(RedBlackTree.nullNode.left.right) == orig(RedBlackTree.nullNode.right) == orig(RedBlackTree.nullNode.right.left) == orig(RedBlackTree.nullNode.right.right) == orig(RedBlackTree.current.left) == orig(RedBlackTree.current.left.left) == orig(RedBlackTree.current.left.right) == orig(RedBlackTree.current.right) == orig(RedBlackTree.current.right.left) == orig(RedBlackTree.current.right.right) == orig(RedBlackTree.parent.left) == orig(RedBlackTree.parent.left.left) == orig(RedBlackTree.parent.left.right) == orig(RedBlackTree.parent.right.left) == orig(RedBlackTree.parent.right.right) == orig(RedBlackTree.grand.left.left) == orig(RedBlackTree.grand.right.left) == orig(RedBlackTree.grand.right.right)
+this.header.left.element == RedBlackTree.current.element == RedBlackTree.current.left.element == RedBlackTree.current.right.element == RedBlackTree.parent.left.element == RedBlackTree.parent.right.element == orig(this.header.left.element) == orig(RedBlackTree.nullNode.element) == orig(RedBlackTree.nullNode.left.element) == orig(RedBlackTree.nullNode.right.element) == orig(RedBlackTree.current.element) == orig(RedBlackTree.current.left.element) == orig(RedBlackTree.current.right.element) == orig(RedBlackTree.parent.left.element) == orig(RedBlackTree.parent.right.element)
+this.header.left.color == RedBlackTree.current.left.color == RedBlackTree.current.right.color == RedBlackTree.parent.left.color == RedBlackTree.grand.right.color == RedBlackTree.great.right.color == RedBlackTree.great.color == orig(this.header.left.color) == orig(this.header.right.color) == orig(this.header.color) == orig(RedBlackTree.nullNode.left.color) == orig(RedBlackTree.nullNode.right.color) == orig(RedBlackTree.nullNode.color) == orig(RedBlackTree.current.left.color) == orig(RedBlackTree.current.right.color) == orig(RedBlackTree.parent.left.color) == orig(RedBlackTree.parent.color) == orig(RedBlackTree.grand.left.color) == orig(RedBlackTree.grand.right.color) == orig(RedBlackTree.great.right.color) == orig(RedBlackTree.great.color)
+this.header.right == orig(this.header.right)
+this.header.right.element == orig(this.header.right.element)
+this.header.right.left == orig(this.header.right.left)
+this.header.right.right == orig(this.header.right.right)
+RedBlackTree.current == RedBlackTree.parent.right == RedBlackTree.grand.left.right == orig(RedBlackTree.current) == orig(RedBlackTree.parent.right) == orig(RedBlackTree.grand.left.right)
+RedBlackTree.current.color == RedBlackTree.parent.right.color == RedBlackTree.grand.color == RedBlackTree.great.left.color == RedBlackTree.RED == orig(RedBlackTree.current.color) == orig(RedBlackTree.parent.right.color) == orig(RedBlackTree.grand.color) == orig(RedBlackTree.great.left.color)
+RedBlackTree.parent == orig(RedBlackTree.parent) == orig(RedBlackTree.grand.left) == orig(RedBlackTree.great.left.left)
+RedBlackTree.parent.element == RedBlackTree.grand.left.element == orig(RedBlackTree.parent.element) == orig(RedBlackTree.grand.left.element)
+RedBlackTree.grand == orig(RedBlackTree.grand) == orig(RedBlackTree.great.left)
+RedBlackTree.grand.element == RedBlackTree.great.left.element == orig(RedBlackTree.grand.element) == orig(RedBlackTree.great.left.element)
+RedBlackTree.grand.right == RedBlackTree.great.left.right == orig(RedBlackTree.grand.right) == orig(RedBlackTree.great.left.right)
+RedBlackTree.grand.right.element == orig(RedBlackTree.grand.right.element)
+RedBlackTree.great == orig(RedBlackTree.great)
+RedBlackTree.great.element == orig(RedBlackTree.great.element)
+RedBlackTree.great.right == orig(RedBlackTree.great.right)
+RedBlackTree.great.right.element == orig(RedBlackTree.great.right.element)
+RedBlackTree.great.right.left == orig(RedBlackTree.great.right.left)
+RedBlackTree.great.right.right == orig(RedBlackTree.great.right.right)
+return has only one value (hashcode=2570525)
+===========================================================================
+DataStructures.RedBlackTree.findMax():::EXIT
+this.header == orig(this.header)
+this.header.element == orig(this.header.element)
+this.header.left == RedBlackTree.current.left == RedBlackTree.current.left.left == RedBlackTree.current.left.right == RedBlackTree.current.right == RedBlackTree.current.right.left == RedBlackTree.current.right.right == RedBlackTree.parent.left == RedBlackTree.grand.left.left == RedBlackTree.grand.right.left == RedBlackTree.grand.right.right == orig(this.header.left) == orig(this.header.left.left) == orig(this.header.left.right) == orig(RedBlackTree.nullNode) == orig(RedBlackTree.nullNode.left) == orig(RedBlackTree.nullNode.left.left) == orig(RedBlackTree.nullNode.left.right) == orig(RedBlackTree.nullNode.right) == orig(RedBlackTree.nullNode.right.left) == orig(RedBlackTree.nullNode.right.right) == orig(RedBlackTree.current.left) == orig(RedBlackTree.current.left.left) == orig(RedBlackTree.current.left.right) == orig(RedBlackTree.current.right) == orig(RedBlackTree.current.right.left) == orig(RedBlackTree.current.right.right) == orig(RedBlackTree.parent.left) == orig(RedBlackTree.parent.left.left) == orig(RedBlackTree.parent.left.right) == orig(RedBlackTree.parent.right.left) == orig(RedBlackTree.parent.right.right) == orig(RedBlackTree.grand.left.left) == orig(RedBlackTree.grand.right.left) == orig(RedBlackTree.grand.right.right)
+this.header.left.element == RedBlackTree.current.element == RedBlackTree.current.left.element == RedBlackTree.current.right.element == RedBlackTree.parent.left.element == RedBlackTree.parent.right.element == orig(this.header.left.element) == orig(RedBlackTree.nullNode.element) == orig(RedBlackTree.nullNode.left.element) == orig(RedBlackTree.nullNode.right.element) == orig(RedBlackTree.current.element) == orig(RedBlackTree.current.left.element) == orig(RedBlackTree.current.right.element) == orig(RedBlackTree.parent.left.element) == orig(RedBlackTree.parent.right.element)
+this.header.left.color == RedBlackTree.current.left.color == RedBlackTree.current.right.color == RedBlackTree.parent.left.color == RedBlackTree.grand.right.color == RedBlackTree.great.right.color == RedBlackTree.great.color == orig(this.header.left.color) == orig(this.header.right.color) == orig(this.header.color) == orig(RedBlackTree.nullNode.left.color) == orig(RedBlackTree.nullNode.right.color) == orig(RedBlackTree.nullNode.color) == orig(RedBlackTree.current.left.color) == orig(RedBlackTree.current.right.color) == orig(RedBlackTree.parent.left.color) == orig(RedBlackTree.parent.color) == orig(RedBlackTree.grand.left.color) == orig(RedBlackTree.grand.right.color) == orig(RedBlackTree.great.right.color) == orig(RedBlackTree.great.color)
+this.header.right == orig(this.header.right)
+this.header.right.element == orig(this.header.right.element)
+this.header.right.left == orig(this.header.right.left)
+this.header.right.right == orig(this.header.right.right)
+RedBlackTree.current == RedBlackTree.parent.right == RedBlackTree.grand.left.right == orig(RedBlackTree.current) == orig(RedBlackTree.parent.right) == orig(RedBlackTree.grand.left.right)
+RedBlackTree.current.color == RedBlackTree.parent.right.color == RedBlackTree.grand.color == RedBlackTree.great.left.color == orig(RedBlackTree.current.color) == orig(RedBlackTree.parent.right.color) == orig(RedBlackTree.grand.color) == orig(RedBlackTree.great.left.color)
+RedBlackTree.parent == orig(RedBlackTree.parent) == orig(RedBlackTree.grand.left) == orig(RedBlackTree.great.left.left)
+RedBlackTree.parent.element == RedBlackTree.grand.left.element == orig(RedBlackTree.parent.element) == orig(RedBlackTree.grand.left.element)
+RedBlackTree.grand == orig(RedBlackTree.grand) == orig(RedBlackTree.great.left)
+RedBlackTree.grand.element == RedBlackTree.great.left.element == orig(RedBlackTree.grand.element) == orig(RedBlackTree.great.left.element)
+RedBlackTree.grand.right == RedBlackTree.great.left.right == orig(RedBlackTree.grand.right) == orig(RedBlackTree.great.left.right)
+RedBlackTree.grand.right.element == orig(RedBlackTree.grand.right.element)
+RedBlackTree.great == orig(RedBlackTree.great)
+RedBlackTree.great.element == orig(RedBlackTree.great.element)
+RedBlackTree.great.right == orig(RedBlackTree.great.right)
+RedBlackTree.great.right.element == orig(RedBlackTree.great.right.element)
+RedBlackTree.great.right.left == orig(RedBlackTree.great.right.left)
+RedBlackTree.great.right.right == orig(RedBlackTree.great.right.right)
+return has only one value (hashcode=2570525)
+===========================================================================
+DataStructures.RedBlackTree.findMin():::ENTER
+this.header.left == RedBlackTree.current.left == RedBlackTree.current.left.left == RedBlackTree.current.left.right == RedBlackTree.current.right == RedBlackTree.current.right.left == RedBlackTree.current.right.right == RedBlackTree.parent.left == RedBlackTree.grand.left.left == RedBlackTree.grand.right.left == RedBlackTree.grand.right.right
+this.header.left.element == RedBlackTree.current.element == RedBlackTree.current.left.element == RedBlackTree.current.right.element == RedBlackTree.parent.left.element == RedBlackTree.parent.right.element
+this.header.left.color == RedBlackTree.current.left.color == RedBlackTree.current.right.color == RedBlackTree.parent.left.color == RedBlackTree.grand.right.color == RedBlackTree.great.right.color == RedBlackTree.great.color
+RedBlackTree.current == RedBlackTree.parent.right == RedBlackTree.grand.left.right
+RedBlackTree.current.color == RedBlackTree.parent.right.color == RedBlackTree.grand.color == RedBlackTree.great.left.color == RedBlackTree.RED
+RedBlackTree.parent.element == RedBlackTree.grand.left.element
+RedBlackTree.grand.element == RedBlackTree.great.left.element
+RedBlackTree.grand.right == RedBlackTree.great.left.right
+this.header.left has only one value (hashcode=6794265)
+this.header.left.color == 1
+this.header.right has only one value (hashcode=3014669)
+this.header.right.element has only one value (hashcode=3207485)
+this.header.right.left has only one value (hashcode=2381750)
+this.header.right.right has only one value (hashcode=2398389)
+RedBlackTree.parent has only one value (hashcode=7804298)
+RedBlackTree.grand has only one value (hashcode=4001236)
+RedBlackTree.great has only one value (hashcode=228465)
+===========================================================================
+DataStructures.RedBlackTree.findMin():::EXIT91
+this.header == orig(this.header)
+this.header.element == orig(this.header.element)
+this.header.left == RedBlackTree.current.left == RedBlackTree.current.left.left == RedBlackTree.current.left.right == RedBlackTree.current.right == RedBlackTree.current.right.left == RedBlackTree.current.right.right == RedBlackTree.parent.left == RedBlackTree.grand.left.left == RedBlackTree.grand.right.left == RedBlackTree.grand.right.right == orig(this.header.left) == orig(this.header.left.left) == orig(this.header.left.right) == orig(RedBlackTree.nullNode) == orig(RedBlackTree.nullNode.left) == orig(RedBlackTree.nullNode.left.left) == orig(RedBlackTree.nullNode.left.right) == orig(RedBlackTree.nullNode.right) == orig(RedBlackTree.nullNode.right.left) == orig(RedBlackTree.nullNode.right.right) == orig(RedBlackTree.current.left) == orig(RedBlackTree.current.left.left) == orig(RedBlackTree.current.left.right) == orig(RedBlackTree.current.right) == orig(RedBlackTree.current.right.left) == orig(RedBlackTree.current.right.right) == orig(RedBlackTree.parent.left) == orig(RedBlackTree.parent.left.left) == orig(RedBlackTree.parent.left.right) == orig(RedBlackTree.parent.right.left) == orig(RedBlackTree.parent.right.right) == orig(RedBlackTree.grand.left.left) == orig(RedBlackTree.grand.right.left) == orig(RedBlackTree.grand.right.right)
+this.header.left.element == RedBlackTree.current.element == RedBlackTree.current.left.element == RedBlackTree.current.right.element == RedBlackTree.parent.left.element == RedBlackTree.parent.right.element == orig(this.header.left.element) == orig(RedBlackTree.nullNode.element) == orig(RedBlackTree.nullNode.left.element) == orig(RedBlackTree.nullNode.right.element) == orig(RedBlackTree.current.element) == orig(RedBlackTree.current.left.element) == orig(RedBlackTree.current.right.element) == orig(RedBlackTree.parent.left.element) == orig(RedBlackTree.parent.right.element)
+this.header.left.color == RedBlackTree.current.left.color == RedBlackTree.current.right.color == RedBlackTree.parent.left.color == RedBlackTree.grand.right.color == RedBlackTree.great.right.color == RedBlackTree.great.color == orig(this.header.left.color) == orig(this.header.right.color) == orig(this.header.color) == orig(RedBlackTree.nullNode.left.color) == orig(RedBlackTree.nullNode.right.color) == orig(RedBlackTree.nullNode.color) == orig(RedBlackTree.current.left.color) == orig(RedBlackTree.current.right.color) == orig(RedBlackTree.parent.left.color) == orig(RedBlackTree.parent.color) == orig(RedBlackTree.grand.left.color) == orig(RedBlackTree.grand.right.color) == orig(RedBlackTree.great.right.color) == orig(RedBlackTree.great.color)
+this.header.right == orig(this.header.right)
+this.header.right.element == orig(this.header.right.element)
+this.header.right.left == orig(this.header.right.left)
+this.header.right.right == orig(this.header.right.right)
+RedBlackTree.current == RedBlackTree.parent.right == RedBlackTree.grand.left.right == orig(RedBlackTree.current) == orig(RedBlackTree.parent.right) == orig(RedBlackTree.grand.left.right)
+RedBlackTree.current.color == RedBlackTree.parent.right.color == RedBlackTree.grand.color == RedBlackTree.great.left.color == RedBlackTree.RED == orig(RedBlackTree.current.color) == orig(RedBlackTree.parent.right.color) == orig(RedBlackTree.grand.color) == orig(RedBlackTree.great.left.color)
+RedBlackTree.parent == orig(RedBlackTree.parent) == orig(RedBlackTree.grand.left) == orig(RedBlackTree.great.left.left)
+RedBlackTree.parent.element == RedBlackTree.grand.left.element == orig(RedBlackTree.parent.element) == orig(RedBlackTree.grand.left.element)
+RedBlackTree.grand == orig(RedBlackTree.grand) == orig(RedBlackTree.great.left)
+RedBlackTree.grand.element == RedBlackTree.great.left.element == orig(RedBlackTree.grand.element) == orig(RedBlackTree.great.left.element)
+RedBlackTree.grand.right == RedBlackTree.great.left.right == orig(RedBlackTree.grand.right) == orig(RedBlackTree.great.left.right)
+RedBlackTree.grand.right.element == orig(RedBlackTree.grand.right.element)
+RedBlackTree.great == orig(RedBlackTree.great)
+RedBlackTree.great.element == orig(RedBlackTree.great.element)
+RedBlackTree.great.right == orig(RedBlackTree.great.right)
+RedBlackTree.great.right.element == orig(RedBlackTree.great.right.element)
+RedBlackTree.great.right.left == orig(RedBlackTree.great.right.left)
+RedBlackTree.great.right.right == orig(RedBlackTree.great.right.right)
+return has only one value (hashcode=5705082)
+===========================================================================
+DataStructures.RedBlackTree.findMin():::EXIT
+this.header == orig(this.header)
+this.header.element == orig(this.header.element)
+this.header.left == RedBlackTree.current.left == RedBlackTree.current.left.left == RedBlackTree.current.left.right == RedBlackTree.current.right == RedBlackTree.current.right.left == RedBlackTree.current.right.right == RedBlackTree.parent.left == RedBlackTree.grand.left.left == RedBlackTree.grand.right.left == RedBlackTree.grand.right.right == orig(this.header.left) == orig(this.header.left.left) == orig(this.header.left.right) == orig(RedBlackTree.nullNode) == orig(RedBlackTree.nullNode.left) == orig(RedBlackTree.nullNode.left.left) == orig(RedBlackTree.nullNode.left.right) == orig(RedBlackTree.nullNode.right) == orig(RedBlackTree.nullNode.right.left) == orig(RedBlackTree.nullNode.right.right) == orig(RedBlackTree.current.left) == orig(RedBlackTree.current.left.left) == orig(RedBlackTree.current.left.right) == orig(RedBlackTree.current.right) == orig(RedBlackTree.current.right.left) == orig(RedBlackTree.current.right.right) == orig(RedBlackTree.parent.left) == orig(RedBlackTree.parent.left.left) == orig(RedBlackTree.parent.left.right) == orig(RedBlackTree.parent.right.left) == orig(RedBlackTree.parent.right.right) == orig(RedBlackTree.grand.left.left) == orig(RedBlackTree.grand.right.left) == orig(RedBlackTree.grand.right.right)
+this.header.left.element == RedBlackTree.current.element == RedBlackTree.current.left.element == RedBlackTree.current.right.element == RedBlackTree.parent.left.element == RedBlackTree.parent.right.element == orig(this.header.left.element) == orig(RedBlackTree.nullNode.element) == orig(RedBlackTree.nullNode.left.element) == orig(RedBlackTree.nullNode.right.element) == orig(RedBlackTree.current.element) == orig(RedBlackTree.current.left.element) == orig(RedBlackTree.current.right.element) == orig(RedBlackTree.parent.left.element) == orig(RedBlackTree.parent.right.element)
+this.header.left.color == RedBlackTree.current.left.color == RedBlackTree.current.right.color == RedBlackTree.parent.left.color == RedBlackTree.grand.right.color == RedBlackTree.great.right.color == RedBlackTree.great.color == orig(this.header.left.color) == orig(this.header.right.color) == orig(this.header.color) == orig(RedBlackTree.nullNode.left.color) == orig(RedBlackTree.nullNode.right.color) == orig(RedBlackTree.nullNode.color) == orig(RedBlackTree.current.left.color) == orig(RedBlackTree.current.right.color) == orig(RedBlackTree.parent.left.color) == orig(RedBlackTree.parent.color) == orig(RedBlackTree.grand.left.color) == orig(RedBlackTree.grand.right.color) == orig(RedBlackTree.great.right.color) == orig(RedBlackTree.great.color)
+this.header.right == orig(this.header.right)
+this.header.right.element == orig(this.header.right.element)
+this.header.right.left == orig(this.header.right.left)
+this.header.right.right == orig(this.header.right.right)
+RedBlackTree.current == RedBlackTree.parent.right == RedBlackTree.grand.left.right == orig(RedBlackTree.current) == orig(RedBlackTree.parent.right) == orig(RedBlackTree.grand.left.right)
+RedBlackTree.current.color == RedBlackTree.parent.right.color == RedBlackTree.grand.color == RedBlackTree.great.left.color == orig(RedBlackTree.current.color) == orig(RedBlackTree.parent.right.color) == orig(RedBlackTree.grand.color) == orig(RedBlackTree.great.left.color)
+RedBlackTree.parent == orig(RedBlackTree.parent) == orig(RedBlackTree.grand.left) == orig(RedBlackTree.great.left.left)
+RedBlackTree.parent.element == RedBlackTree.grand.left.element == orig(RedBlackTree.parent.element) == orig(RedBlackTree.grand.left.element)
+RedBlackTree.grand == orig(RedBlackTree.grand) == orig(RedBlackTree.great.left)
+RedBlackTree.grand.element == RedBlackTree.great.left.element == orig(RedBlackTree.grand.element) == orig(RedBlackTree.great.left.element)
+RedBlackTree.grand.right == RedBlackTree.great.left.right == orig(RedBlackTree.grand.right) == orig(RedBlackTree.great.left.right)
+RedBlackTree.grand.right.element == orig(RedBlackTree.grand.right.element)
+RedBlackTree.great == orig(RedBlackTree.great)
+RedBlackTree.great.element == orig(RedBlackTree.great.element)
+RedBlackTree.great.right == orig(RedBlackTree.great.right)
+RedBlackTree.great.right.element == orig(RedBlackTree.great.right.element)
+RedBlackTree.great.right.left == orig(RedBlackTree.great.right.left)
+RedBlackTree.great.right.right == orig(RedBlackTree.great.right.right)
+return has only one value (hashcode=5705082)
+===========================================================================
+DataStructures.RedBlackTree.handleReorient(DataStructures.Comparable):::ENTER
+item == this.header.left.element == RedBlackTree.nullNode.element == RedBlackTree.nullNode.left.element == RedBlackTree.nullNode.right.element
+this.header.left.color == RedBlackTree.current.color
+item != null
+this.header.left has only one value (hashcode=6794265)
+this.header.left.color == 1
+this.header.right.element != null
+RedBlackTree.current != null
+RedBlackTree.parent != null
+RedBlackTree.parent.left.left != null
+RedBlackTree.parent.left.right != null
+RedBlackTree.parent.right.left != null
+RedBlackTree.parent.right.right != null
+RedBlackTree.parent.color one of { 0, 1 }
+RedBlackTree.grand != null
+RedBlackTree.grand.left.color one of { 0, 1 }
+RedBlackTree.great != null
+this.header.right != RedBlackTree.parent.left.left
+this.header.right != RedBlackTree.parent.left.right
+this.header.right != RedBlackTree.parent.right.left
+this.header.right != RedBlackTree.parent.right.right
+RedBlackTree.current != RedBlackTree.parent
+RedBlackTree.current != RedBlackTree.parent.left.left
+RedBlackTree.current != RedBlackTree.parent.left.right
+RedBlackTree.current != RedBlackTree.parent.right.left
+RedBlackTree.current != RedBlackTree.parent.right.right
+RedBlackTree.current != RedBlackTree.grand
+RedBlackTree.current != RedBlackTree.grand.left
+RedBlackTree.current != RedBlackTree.great
+RedBlackTree.current != RedBlackTree.great.left
+RedBlackTree.current != RedBlackTree.great.left.left
+RedBlackTree.current != RedBlackTree.great.left.right
+RedBlackTree.current.element != RedBlackTree.parent.element
+RedBlackTree.current.element != RedBlackTree.grand.element
+RedBlackTree.current.element != RedBlackTree.great.element
+RedBlackTree.current.left != RedBlackTree.parent
+RedBlackTree.current.left != RedBlackTree.grand
+RedBlackTree.current.left != RedBlackTree.great
+RedBlackTree.current.left != RedBlackTree.great.right
+RedBlackTree.current.left.element != RedBlackTree.parent.element
+RedBlackTree.current.left.element != RedBlackTree.grand.element
+RedBlackTree.current.left.element != RedBlackTree.great.element
+RedBlackTree.current.left.left != RedBlackTree.parent
+RedBlackTree.current.left.left != RedBlackTree.grand
+RedBlackTree.current.left.left != RedBlackTree.great
+RedBlackTree.current.left.left != RedBlackTree.great.right
+RedBlackTree.current.left.right != RedBlackTree.parent
+RedBlackTree.current.left.right != RedBlackTree.grand
+RedBlackTree.current.left.right != RedBlackTree.great
+RedBlackTree.current.left.right != RedBlackTree.great.right
+RedBlackTree.current.right != RedBlackTree.parent
+RedBlackTree.current.right != RedBlackTree.grand
+RedBlackTree.current.right != RedBlackTree.great
+RedBlackTree.current.right != RedBlackTree.great.right
+RedBlackTree.current.right.element != RedBlackTree.parent.element
+RedBlackTree.current.right.element != RedBlackTree.grand.element
+RedBlackTree.current.right.element != RedBlackTree.great.element
+RedBlackTree.current.right.left != RedBlackTree.parent
+RedBlackTree.current.right.left != RedBlackTree.grand
+RedBlackTree.current.right.left != RedBlackTree.great
+RedBlackTree.current.right.left != RedBlackTree.great.right
+RedBlackTree.current.right.right != RedBlackTree.parent
+RedBlackTree.current.right.right != RedBlackTree.grand
+RedBlackTree.current.right.right != RedBlackTree.great
+RedBlackTree.current.right.right != RedBlackTree.great.right
+RedBlackTree.parent != RedBlackTree.parent.left.left
+RedBlackTree.parent != RedBlackTree.parent.left.right
+RedBlackTree.parent != RedBlackTree.parent.right.left
+RedBlackTree.parent != RedBlackTree.parent.right.right
+RedBlackTree.parent != RedBlackTree.great.left
+RedBlackTree.parent.element != RedBlackTree.parent.left.element
+RedBlackTree.parent.element != RedBlackTree.parent.right.element
+RedBlackTree.parent.element != RedBlackTree.great.left.element
+RedBlackTree.parent.left != RedBlackTree.parent.right
+RedBlackTree.parent.left != RedBlackTree.grand
+RedBlackTree.parent.left != RedBlackTree.grand.right
+RedBlackTree.parent.left != RedBlackTree.great
+RedBlackTree.parent.left != RedBlackTree.great.right
+RedBlackTree.parent.left.element != RedBlackTree.grand.element
+RedBlackTree.parent.left.element != RedBlackTree.great.element
+RedBlackTree.parent.left.left != RedBlackTree.grand
+RedBlackTree.parent.left.left != RedBlackTree.great
+RedBlackTree.parent.left.left != RedBlackTree.great.right
+RedBlackTree.parent.left.right != RedBlackTree.grand
+RedBlackTree.parent.left.right != RedBlackTree.great
+RedBlackTree.parent.left.right != RedBlackTree.great.right
+RedBlackTree.parent.right != RedBlackTree.grand
+RedBlackTree.parent.right != RedBlackTree.grand.left
+RedBlackTree.parent.right != RedBlackTree.great
+RedBlackTree.parent.right != RedBlackTree.great.left
+RedBlackTree.parent.right != RedBlackTree.great.left.left
+RedBlackTree.parent.right != RedBlackTree.great.right.left
+RedBlackTree.parent.right.element != RedBlackTree.grand.element
+RedBlackTree.parent.right.element != RedBlackTree.great.element
+RedBlackTree.parent.right.left != RedBlackTree.grand
+RedBlackTree.parent.right.left != RedBlackTree.great
+RedBlackTree.parent.right.left != RedBlackTree.great.right
+RedBlackTree.parent.right.right != RedBlackTree.grand
+RedBlackTree.parent.right.right != RedBlackTree.great
+RedBlackTree.parent.right.right != RedBlackTree.great.right
+RedBlackTree.grand != RedBlackTree.great.left.left
+RedBlackTree.grand != RedBlackTree.great.left.right
+RedBlackTree.grand != RedBlackTree.great.right.left
+RedBlackTree.grand != RedBlackTree.great.right.right
+RedBlackTree.grand.element != RedBlackTree.grand.left.element
+RedBlackTree.grand.element != RedBlackTree.grand.right.element
+RedBlackTree.grand.left != RedBlackTree.grand.right
+RedBlackTree.grand.left != RedBlackTree.great
+RedBlackTree.grand.left != RedBlackTree.great.right
+RedBlackTree.grand.left.element != RedBlackTree.great.element
+RedBlackTree.grand.left.left != RedBlackTree.grand.right
+RedBlackTree.grand.left.left != RedBlackTree.great
+RedBlackTree.grand.left.left != RedBlackTree.great.right
+RedBlackTree.grand.left.right != RedBlackTree.great
+RedBlackTree.grand.left.right != RedBlackTree.great.right
+RedBlackTree.grand.right != RedBlackTree.great
+RedBlackTree.grand.right != RedBlackTree.great.left
+RedBlackTree.grand.right != RedBlackTree.great.left.left
+RedBlackTree.grand.right != RedBlackTree.great.right.left
+RedBlackTree.grand.right.element != RedBlackTree.great.element
+RedBlackTree.grand.right.left != RedBlackTree.great
+RedBlackTree.grand.right.left != RedBlackTree.great.right
+RedBlackTree.grand.right.right != RedBlackTree.great
+RedBlackTree.grand.right.right != RedBlackTree.great.right
+RedBlackTree.great.element != RedBlackTree.great.left.element
+RedBlackTree.great.element != RedBlackTree.great.right.element
+RedBlackTree.great.left != RedBlackTree.great.right
+RedBlackTree.great.left.left != RedBlackTree.great.right
+RedBlackTree.great.left.right != RedBlackTree.great.right
+RedBlackTree.great.right != RedBlackTree.great.right.left
+RedBlackTree.great.right != RedBlackTree.great.right.right

@@ -1,0 +1,52 @@
+===========================================================================
+..main():::ENTER
+::globalStruct has only one value
+::globalStruct.a == 0
+::globalStruct.b == 0
+::globalStruct.c == 0.0
+::unnamedGlobalEnum == 0
+===========================================================================
+..main():::EXIT
+::globalStruct == orig(::globalStruct)
+::unnamedGlobalEnum == orig(::unnamedGlobalEnum)
+::globalStruct has only one value
+::globalStruct.a == 5
+::globalStruct.b == 98
+::globalStruct.c == 3.14159
+::unnamedGlobalEnum == 0
+return == 0
+===========================================================================
+TypedefTest.c.createCopy():::ENTER
+::globalStruct.a == a.a
+::globalStruct.b == a.b
+::globalStruct.c == a.c
+::globalStruct has only one value
+::globalStruct.a == 5
+::globalStruct.b == 98
+::globalStruct.c == 3.14159
+::unnamedGlobalEnum == 0
+a has only one value
+x == 102
+===========================================================================
+TypedefTest.c.createCopy():::EXIT
+::globalStruct == orig(::globalStruct)
+::globalStruct.a == a.a
+::globalStruct.a == orig(::globalStruct.a)
+::globalStruct.a == orig(a.a)
+::globalStruct.b == a.b
+::globalStruct.b == orig(::globalStruct.b)
+::globalStruct.b == orig(a.b)
+::globalStruct.c == a.c
+::globalStruct.c == orig(::globalStruct.c)
+::globalStruct.c == orig(a.c)
+::unnamedGlobalEnum == orig(::unnamedGlobalEnum)
+::globalStruct has only one value
+::globalStruct.a == 5
+::globalStruct.b == 98
+::globalStruct.c == 3.14159
+::unnamedGlobalEnum == 0
+return has only one value
+return[] contains no nulls and has only one value, of length 1
+return[].a == [5]
+return[].b == [98]
+return[].c == [3.14159]

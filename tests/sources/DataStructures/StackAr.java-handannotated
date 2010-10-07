@@ -1,0 +1,148 @@
+package DataStructures;
+
+/**
+ * Array-based implementation of the stack.
+ * @author Mark Allen Weiss
+ */
+public class StackAr
+{
+
+  /**
+   * Construct the stack.
+   * @param capacity the capacity.
+   */
+  public StackAr( int capacity )
+  /*@ requires capacity >= 0 */
+  /*@ requires capacity <= 100 */
+  /*@ ensures theArray.length == capacity */
+  /*@ ensures topOfStack == -1 */
+  /*@ ensures (\forall int i; (0 <= i & i < theArray.length) ==> theArray[i] == null) */
+  {
+    topOfStack = -1;
+    theArray = new Object[ capacity ];
+    // Not from daikon; must add using heuristics
+    /*@ set theArray.owner = this */
+  }
+
+  /**
+   * Test if the stack is logically empty.
+   * @return true if empty, false otherwise.
+   */
+  public boolean isEmpty( )
+  /*@ ensures (topOfStack == -1) == (\result == true) */
+  /*@ ensures (topOfStack >= 0) == (\result == false) */
+  {
+    return topOfStack == -1;
+  }
+
+  /**
+   * Test if the stack is logically full.
+   * @return true if full, false otherwise.
+   */
+  public boolean isFull( )
+  /*@ ensures (topOfStack <  (theArray.length - 1)) == (\result == false) */
+  /*@ ensures (topOfStack == (theArray.length - 1)) == (\result == true) */
+  {
+    return topOfStack == theArray.length - 1;
+  }
+
+  /**
+   * Make the stack logically empty.
+   */
+  public void makeEmpty( )
+  // This method is not excercised by the test driver.
+  // Therefore, there are no invariants discovered for it.
+  {
+    java.util.Arrays.fill(theArray, 0, topOfStack + 1, null);
+    // We don't have a .spec file for the semantics of Arrays.fill
+    /*@ assume (\forall int i; (0 <= i & i < theArray.length) ==> theArray[i] == null) */
+    topOfStack = -1;
+  }
+
+  /**
+   * Get the most recently inserted item in the stack.
+   * Does not alter the stack.
+   * @return the most recently inserted item in the stack, or null, if empty.
+   */
+  public Object top( )
+  /*@ ensures (topOfStack >= 0) == (\result != null) */
+  /*@ ensures (topOfStack >= 0) ==> (\result == theArray[topOfStack]) */
+  /*@ ensures (topOfStack == -1) == (\result == null) */
+  {
+    if( isEmpty( ) ) {
+      return null;
+    }
+
+    return theArray[ topOfStack ];
+  }
+
+  /**
+   * Insert a new item into the stack, if not already full.
+   * @param x the item to insert.
+   * @exception Overflow if stack is already full.
+   */
+  public void push( Object x ) throws Overflow
+  /*@ modifies topOfStack */
+  /*@ modifies theArray */
+  /*@ requires x != null */
+  /*@ requires topOfStack < (theArray.length - 1) */
+  /*@ ensures theArray[topOfStack] == x */
+  /*@ ensures (\forall int i; (topOfStack+1 <= i && i < theArray.length) ==> (theArray[i] == \old(theArray)[i])) */
+  /*@ ensures (\forall int i; (0 <= i && i <= \old(topOfStack)) ==> (theArray[i] == \old(theArray)[i])) */
+  /*@ ensures topOfStack >= 0 */
+  /*@ ensures \old(topOfStack) == (topOfStack - 1) */
+  {
+    if( isFull( ) )
+      throw new Overflow( );
+    theArray[ ++topOfStack ] = x;
+  }
+
+  /**
+   * Return and remove most recently inserted item from the stack.
+   * @return most recently inserted item, or null, if stack is empty.
+   */
+  public Object topAndPop( )
+  /*@ requires topOfStack >= 0 */
+  /*@ requires topOfStack <= 99 */
+  /*@ modifies topOfStack */
+  /*@ modifies theArray */
+  /*@ ensures (\forall int i; (0 <= i && i <= \old(topOfStack)) ==> (theArray[i] == \old(theArray)[i])) */
+  /*@ ensures (\forall int i; (topOfStack+1 <= i && i < theArray.length) ==> (theArray[i] == \old(theArray)[i])) */
+  /*@ ensures \old(topOfStack) == topOfStack + 1 */
+  /*@ ensures \result != null */
+
+  // ESC cannot prove this; not sure why
+  /*! ensures \result == \old(theArray)[\old(topOfStack)] */
+  {
+    if( isEmpty( ) )
+      return null;
+    Object topItem = top( );
+
+    // The following assertion was added by hand to try to prove the
+    // final ensures clauses, to no avail.  It seems that ESC doesn't
+    // believe that theArray[topOfStack] == \old(theArray)[\old(topOfStack)],
+    // even though both isEmpty() and top() have no @modifies list.
+
+    /*@ assert topItem == theArray[topOfStack] */
+
+    theArray[ topOfStack-- ] = null;
+
+    return topItem;
+  }
+
+  /*@ spec_public */ private Object[] theArray;
+  /*@ invariant theArray != null */
+  /*@ invariant \typeof(theArray) == \type(Object[]) */
+  /*@ invariant theArray.length <= 100 */
+
+  /*@ spec_public */ private int topOfStack;
+  /*@ invariant topOfStack >= -1 */
+  /*@ invariant topOfStack <= theArray.length-1 */
+
+  /*@ invariant (\forall int i; (0 <= i & i <= topOfStack) ==> (theArray[i] != null)) */
+  /*@ invariant (\forall int i; ((topOfStack+1) <= i & i < theArray.length) ==> (theArray[i] == null)) */
+
+  // Not found by daikon, but we can probably add with a heuristic
+  /*@ invariant theArray.owner == this */
+
+}

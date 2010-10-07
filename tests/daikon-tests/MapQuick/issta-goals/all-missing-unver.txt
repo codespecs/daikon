@@ -1,0 +1,38 @@
+MapQuick/Address.java:53:  /*# also_ensures (\result == true)  ==>  (\typeof(other) == \type(MapQuick.Address)); */ // ESC bug
+MapQuick/KillfileReader.java:130:    /*# also_ensures this.line == \old(this.orig_line); */ // not sure: should have been suppressed?
+MapQuick2/CompositeRoute.java:103:  /*# also_ensures !(\forall int i; (0 <= i && i <= \result.length-1) ==> (\result[i] != this.elements.head)); */ // Is true, but beyond ESC
+MapQuick/PriorityQueue.java:19:    //@ invariant heap.containsNull == false // Since daikon-depth=1, was uninstrumented
+MapQuick/PriorityQueue.java:55:    //@ ensures \result >= 0 // Daikon has >=1 unjustified
+MapQuick/PriorityQueue.java:63:	//@ assume mistere >= 0 // inexpressable object invariant
+MapQuick/PriorityQueue.java:114:	//@ assume lastIndex >= 1 // incompleteness: modular analysis
+MapQuick/PriorityQueue.java:131:      return (Entry) heap.get(i); //@ nowarn Cast; // inexpressible: heterogenous container
+MapQuick/KillfileReader.java:31:  //@ requires dbdir.isDirectory // outside of Daikon's grammar
+MapQuick/KillfileReader.java:204:	    //@ assume false // engineering
+MapQuick/KillfileReader.java:210:	//@ assume false // engineering
+MapQuick/KillfileReader.java:223:	//@ assume false // engineering
+MapQuick/KillfileReader.java:241:    //@ ensures this.line != null // incompleteness: modular analysis
+MapQuick/KillfileReader.java:255:	//@ assume false // incompleteness: modular analysis
+MapQuick2/DirectionsFinder.java:136:    //@ ensures \result != null // code not instrumented
+MapQuick2/PathFinder.java:20:  //@ requires starts.elementType == \type(Path) // dfej non-List
+MapQuick2/PathFinder.java:21:  //@ requires starts.containsNull == false // dfej non-List
+MapQuick2/PathFinder.java:55:      //@ assume false // engineering
+MapQuick2/PathFinder.java:78:    //@ set paths.elementType = \type(Path) // local variable outside Daikon scope
+MapQuick2/PathFinder.java:90:	//@ assume jeremy_added.moreElements == true // not traced in Daikon, inexpressible in ESC
+MapQuick2/PathFinder.java:94:	try { active.insert(startpath.cost(), start); } catch (PriorityQueue.DuplicateElementException e) { //@ assume false // algorithmic understanding
+MapQuick2/PathFinder.java:110:      Object y = active.extractMin(); //@ nowarn Exception; // PriorityQueue not ghost-specified
+MapQuick2/PathFinder.java:125:	//@ assume z != null // local variable
+MapQuick2/PathFinder.java:142:	  //@ nowarn Exception; // local variable / algorithmic understanding
+MapQuick2/Graph.java:23:  //@ invariant adjMap.owner == this // merge heuristic not implemented
+MapQuick2/Graph.java:39:  //@ invariant adjMap.elementType == \type(Set) // dfej non-List
+MapQuick2/Graph.java:40:  //@ invariant adjMap.permitsNullValue == false // dfej non-List
+MapQuick2/Graph.java:113:    if (result == null) { //@ assume false; // engineering: specificied exception
+MapQuick2/RouteDirections.java:78:        firstSeg = (StreetSegment)iter.next(); //@ nowarn Cast // incompleteness (global analysis)
+MapQuick2/RouteDirections.java:83:            lastSeg = (StreetSegment)iter.next(); //@ nowarn Cast // incompleteness (global analysis)
+MapQuick2/StreetSegment.java:90:  //@ also_ensures \typeof(\result) == \type(StreetSegment) // uninstrumented
+MapQuick2/CompositeRoute.java:122:    //@ assume \nonnullelements(result); // incompleteness: shortest way to write
+MapQuick2/CompositeRoute.java:194:    //@ invariant this.head != null // dfej bug (doesn't write samples)
+MapQuick2/GeoSegment.java:77:  //@ ensures \result != null // sample feeding
+MapQuick2/Path.java:24:    //@ ensures \result != null // sample feeding: interfaces not traced
+MapQuick2/Path.java:42:    //@ ensures \result != null // sample feeding: interfaces not traced
+MapQuick2/Path.java:43:    //@ ensures \result.returnsNull == false // sample feeding: interfaces not traced
+MapQuick2/Path.java:44:    //@ ensures \result.moreElements // sample feeding: interfaces not traced

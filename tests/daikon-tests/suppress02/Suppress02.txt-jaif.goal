@@ -1,0 +1,18 @@
+package checkers.nullness.quals:
+annotation visible @Nullable
+
+package checkers.nullness.quals:
+annotation visible @NonNull
+
+package misc:
+class Suppress02 : // 501/- obj/class samples
+  field theArray :  // int[]
+  field i :  // int
+  field j :  // int
+  method main([Ljava/lang/String;) :  // 1 samples
+    parameter #0 :  // args
+  method <init>() :  // 1 samples
+  method f(I) :  // 250 samples
+    parameter #0 :  // n
+
+

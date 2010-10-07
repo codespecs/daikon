@@ -1,0 +1,71 @@
+===========================================================================
+six170.FixedSizeSet:::OBJECT
+this.bits != null
+size(this.bits[]) == 8
+===========================================================================
+six170.FixedSizeSet.FixedSizeSet():::EXIT
+this.bits[] == [0, 0, 0, 0, 0, 0, 0, 0]
+this.bits[] elements == false
+===========================================================================
+six170.FixedSizeSet.add(int):::ENTER
+n >= 0
+n <= size(this.bits[])-1
+===========================================================================
+six170.FixedSizeSet.add(int):::EXIT
+this.bits == orig(this.bits)
+size(this.bits[]) == orig(size(this.bits[]))
+orig(this.bits[post(n)-1]) == this.bits[orig(n)-1]
+orig(this.bits[post(n)+1..]) == this.bits[orig(n)+1..]
+orig(this.bits[0..post(n)-1]) == this.bits[0..orig(n)-1]
+this.bits[orig(n)] == true
+orig(n) <= size(this.bits[])-1
+===========================================================================
+six170.FixedSizeSet.contains(int):::ENTER
+n >= 0
+n <= size(this.bits[])-1
+===========================================================================
+six170.FixedSizeSet.contains(int):::EXIT
+return == orig(this.bits[post(n)])
+return == this.bits[orig(n)]
+return == orig(this.bits[n])
+this.bits == orig(this.bits)
+this.bits[] == orig(this.bits[])
+orig(n) <= size(this.bits[])-1
+===========================================================================
+six170.FixedSizeSet.intersect(six170.FixedSizeSet):::ENTER
+size(other.bits[]) == size(this.bits[])
+other != null
+===========================================================================
+six170.FixedSizeSet.intersect(six170.FixedSizeSet):::EXIT
+other.bits == orig(other.bits)
+other.bits[] == orig(other.bits[])
+this.bits == orig(this.bits)
+size(other.bits[]) == size(this.bits[])
+size(other.bits[]) == orig(size(this.bits[]))
+===========================================================================
+six170.FixedSizeSet.remove(int):::ENTER
+n >= 0
+this has only one value
+this.bits has only one value
+n <= size(this.bits[])-1
+===========================================================================
+six170.FixedSizeSet.remove(int):::EXIT
+this.bits == orig(this.bits)
+size(this.bits[]) == orig(size(this.bits[]))
+orig(this.bits[post(n)-1]) == this.bits[orig(n)-1]
+orig(this.bits[post(n)+1..]) == this.bits[orig(n)+1..]
+orig(this.bits[0..post(n)-1]) == this.bits[0..orig(n)-1]
+this.bits has only one value
+this.bits[orig(n)] == false
+orig(n) <= size(this.bits[])-1
+===========================================================================
+six170.FixedSizeSet.union(six170.FixedSizeSet):::ENTER
+size(other.bits[]) == size(this.bits[])
+other != null
+===========================================================================
+six170.FixedSizeSet.union(six170.FixedSizeSet):::EXIT
+other.bits == orig(other.bits)
+other.bits[] == orig(other.bits[])
+this.bits == orig(this.bits)
+size(other.bits[]) == size(this.bits[])
+size(other.bits[]) == orig(size(this.bits[]))

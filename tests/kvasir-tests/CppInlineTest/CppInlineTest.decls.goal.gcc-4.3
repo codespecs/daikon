@@ -1,0 +1,74 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..main():::ENTER
+  ppt-type enter
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt foo.definedOutside():::ENTER
+  ppt-type enter
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable this[0]
+    var-kind field [0]
+    enclosing-var this
+    rep-type hashcode
+    dec-type foo
+
+ppt foo.definedOutside():::EXIT0
+  ppt-type subexit
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable this[0]
+    var-kind field [0]
+    enclosing-var this
+    rep-type hashcode
+    dec-type foo
+
+ppt foo.visibleFunction():::ENTER
+  ppt-type enter
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable this[0]
+    var-kind field [0]
+    enclosing-var this
+    rep-type hashcode
+    dec-type foo
+
+ppt foo.visibleFunction():::EXIT0
+  ppt-type subexit
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable this
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable this[0]
+    var-kind field [0]
+    enclosing-var this
+    rep-type hashcode
+    dec-type foo
+

@@ -1,0 +1,126 @@
+package six170;
+
+// Taken from 6.170 Recitation 5, Spring 2001
+// Author: Jeremy Nimmer
+// Change from a bitwise rep to a boolean array
+
+/**
+ * A FixedSizeSet is a mutable set of integers drawn from the range [0..7]
+ * @specfield elements : subset of { n : integer | 0 <= n <= 7 }
+ */
+public class FixedSizeSet {
+
+  /*@ invariant this.bits != null; */
+  /*@ invariant this.bits.length == 8; */
+  /*@ invariant bits.owner == this; */
+  /*@ spec_public */ private boolean[] bits;
+
+  /*@ ensures (\forall int i; (0 <= i && i <= this.bits.length-1) ==> (this.bits[i] == false)); */
+  // Rep Invariant:
+  //   bits != null && bits.length == 8
+
+  // Abstraction Function:  a = AF(t)
+  //   a.elements = { n | bits[n] }
+
+  /**
+   * @effects Creates a new, empty FixedSizeSet (this.elements_post = {})
+   **/
+  public FixedSizeSet() {
+    this.bits = new boolean[8]; 
+  }
+
+  /*@ requires n >= 0; */
+  /*@ requires (n & this.bits.length) == 0; */
+  /*@ requires n <= this.bits.length-1; */
+  /*@ requires this.bits.length-1 == (n | this.bits.length-1); */
+  /*@ modifies this.bits[*]; */
+  /*@ ensures this.bits[\old(n)] == true; */
+  /*@ ensures (\old(n) & this.bits.length) == 0; */
+  /*@ ensures \old(n) <= this.bits.length-1; */
+  /*@ ensures this.bits.length-1 == (\old(n) | this.bits.length-1); */
+  /**
+   * @requires 0 <= n <= 7
+   * @effects this.elements_post = this.elements U { n }
+   */
+  public void add(int n) {
+    bits[n] = true;
+  }
+
+  /*@ requires this != null; */
+  /*@ requires this.bits != null; */
+  /*@ requires n >= 0; */
+  /*@ requires (n & this.bits.length) == 0; */
+  /*@ requires n <= this.bits.length-1; */
+  /*@ requires this.bits.length-1 == (n | this.bits.length-1); */
+  /*@ modifies this.bits[*]; */
+  /*@ ensures this.bits != null; */
+  /*@ ensures this.bits[\old(n)] == false; */
+  /*@ ensures (\old(n) & this.bits.length) == 0; */
+  /*@ ensures \old(n) <= this.bits.length-1; */
+  /*@ ensures this.bits.length-1 == (\old(n) | this.bits.length-1); */
+  /**
+   * @requires 0 <= n <= 7
+   * @effects this.elements_post = this.elements - { n }
+   */
+  public void remove(int n) {
+    bits[n] = false;
+  }
+
+  /*@ requires n >= 0; */
+  /*@ requires (n & this.bits.length) == 0; */
+  /*@ requires n <= this.bits.length-1; */
+  /*@ requires this.bits.length-1 == (n | this.bits.length-1); */
+  /*@ ensures \result == this.bits[\old(n)]; */
+  /*@ ensures \result == \old(this.bits[n]); */
+  /*@ ensures (\result == true)  ==>  (\old(this) != null); */
+  /*@ ensures (\result == true)  ==>  (this.bits != null); */
+  /*@ ensures (\old(n) & this.bits.length) == 0; */
+  /*@ ensures \old(n) <= this.bits.length-1; */
+  /*@ ensures this.bits.length-1 == (\old(n) | this.bits.length-1); */
+  /**
+   * @requires 0 <= n <= 7
+   * @returns true iff n in this.elements
+   */
+  public boolean contains(int n) {
+    return bits[n];
+  }
+
+  /*@ requires this.bits.length == other.bits.length; */
+  /*@ requires other != null; */
+  /*@ requires other.bits != null; */
+  /*@ modifies this.bits[*]; */
+  /*@ ensures this.bits.length == other.bits.length; */
+  /*@ ensures this.bits.length == \old(other.bits.length); */
+  /*@ ensures other.bits != null; */
+  /**
+   * @requires other != null
+   * @modifies this
+   * @effects this.elements_post = this.elements ^ other.elements
+   **/
+  public void intersect(FixedSizeSet other) {
+    for (int i=0; i<bits.length; i++) {
+      if (! other.bits[i])
+	bits[i] = false;
+    }
+  }
+
+  /*@ requires this.bits.length == other.bits.length; */
+  /*@ requires other != null; */
+  /*@ requires other.bits != null; */
+  /*@ modifies this.bits[*]; */
+  /*@ ensures this.bits.length == other.bits.length; */
+  /*@ ensures this.bits.length == \old(other.bits.length); */
+  /*@ ensures other.bits != null; */
+  /**
+   * @requires other != null
+   * @modifies this
+   * @effects this.elements_post = this.elements U other.elements
+   **/
+  public void union(FixedSizeSet other) {
+    for (int i=0; i<bits.length; i++) {
+      if (other.bits[i])
+	bits[i] = true;
+    }
+  }
+
+}

@@ -1,0 +1,7 @@
+FloatTest
+*.comp
+*.counts
+*.out
+*.diff
+ran-kvasir
+daikon-output

@@ -1,0 +1,64 @@
+
+Variable sets for six170.FixedSizeSet.<init>() enter
+Variable sets for six170.FixedSizeSet.<init>() exit
+  [1] [this]
+  [1] [Field bits]
+  [1] [Array Field bits[..]]
+
+Variable sets for six170.FixedSizeSet.add(I n) enter
+  [2] [Parameter n, Field bits]
+  [1] [this]
+  [1] [Array Field bits[..]]
+Variable sets for six170.FixedSizeSet.add(I n) exit
+  [2] [Parameter n, Field bits]
+  [1] [this]
+  [1] [Array Field bits[..]]
+
+Variable sets for six170.FixedSizeSet.remove(I n) enter
+  [2] [Parameter n, Field bits]
+  [1] [this]
+  [1] [Array Field bits[..]]
+Variable sets for six170.FixedSizeSet.remove(I n) exit
+  [2] [Parameter n, Field bits]
+  [1] [this]
+  [1] [Array Field bits[..]]
+
+Variable sets for six170.FixedSizeSet.contains(I n) enter
+  [2] [Parameter n, Field bits]
+  [1] [this]
+  [1] [Array Field bits[..]]
+Variable sets for six170.FixedSizeSet.contains(I n) exit
+  [2] [Parameter n, Field bits]
+  [2] [return, Array Field bits[..]]
+  [1] [this]
+
+Variable sets for six170.FixedSizeSet.intersect(six170.FixedSizeSet other) enter
+  [1] [Parameter other]
+  [2] [Field other.bits, Field bits]
+  [1] [Array other.bits[..]]
+  [1] [this]
+  [1] [Array Field bits[..]]
+Variable sets for six170.FixedSizeSet.intersect(six170.FixedSizeSet other) exit
+  [1] [Parameter other]
+  [2] [Field other.bits, Field bits]
+  [1] [Array other.bits[..]]
+  [1] [this]
+  [1] [Array Field bits[..]]
+
+Variable sets for six170.FixedSizeSet.union(six170.FixedSizeSet other) enter
+  [1] [Parameter other]
+  [2] [Field other.bits, Field bits]
+  [1] [Array other.bits[..]]
+  [1] [this]
+  [1] [Array Field bits[..]]
+Variable sets for six170.FixedSizeSet.union(six170.FixedSizeSet other) exit
+  [1] [Parameter other]
+  [2] [Field other.bits, Field bits]
+  [1] [Array other.bits[..]]
+  [1] [this]
+  [1] [Array Field bits[..]]
+
+Variable sets for six170.FixedSizeSet.equals(java.lang.Object obj) enter
+  not called
+Variable sets for six170.FixedSizeSet.equals(java.lang.Object obj) exit
+  not called

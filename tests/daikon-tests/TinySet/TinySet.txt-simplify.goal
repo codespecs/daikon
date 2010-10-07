@@ -1,0 +1,73 @@
+===========================================================================
+six170.TinySet:::OBJECT
+(>= (select |bits| |this|) 0)
+===========================================================================
+six170.TinySet.TinySet():::EXIT
+(EQ (select |bits| |this|) 0)
+===========================================================================
+six170.TinySet.add(int):::ENTER
+(>= |n| 0)
+===========================================================================
+six170.TinySet.add(int):::EXIT
+(>= (select |bits| |this|) 1)
+(EQ (select |bits| |this|) (|java-bitwise-or| (select |bits| |__orig__this|) (select |bits| |this|)))
+(>= (select |bits| |this|) (select |bits| |__orig__this|))
+(> (select |bits| |this|) |__orig__n|)
+===========================================================================
+six170.TinySet.contains(int):::ENTER
+(>= |n| 0)
+===========================================================================
+six170.TinySet.contains(int):::EXIT
+(EQ (select |bits| |this|) (select |bits| |__orig__this|))
+(IMPLIES (EQ |return| |@true|) (EQ (hash |__orig__this|) (hashcode (|long-int| 1 0 0 0 1188 2125))))
+(IMPLIES (EQ |return| |@true|) (> (select |bits| |this|) |__orig__n|))
+===========================================================================
+six170.TinySet.intersect(six170.TinySet):::ENTER
+(NEQ (hash |other|) null)
+(>= (select |bits| |other|) 0)
+(IMPLIES (EQ (select |bits| |other|) 0) (EQ (select |bits| |this|) 0))
+(IMPLIES (EQ (select |bits| |this|) 0) (EQ (select |bits| |other|) 0))
+===========================================================================
+six170.TinySet.intersect(six170.TinySet):::EXIT
+(EQ (select |bits| |other|) (select |bits| |__orig__other|))
+(>= (select |bits| |other|) 0)
+(IMPLIES (EQ (select |bits| |other|) 0) (EQ (select |bits| |this|) 0))
+(<= (select |bits| |this|) (select |bits| |other|))
+(EQ (select |bits| |other|) (|java-bitwise-or| (select |bits| |this|) (select |bits| |other|)))
+(IMPLIES (EQ (select |bits| |__orig__this|) 0) (EQ (select |bits| |this|) 0))
+(<= (select |bits| |this|) (select |bits| |__orig__this|))
+(EQ (select |bits| |__orig__this|) (|java-bitwise-or| (select |bits| |this|) (select |bits| |__orig__this|)))
+(IMPLIES (EQ (select |bits| |__orig__this|) 0) (EQ (select |bits| |other|) 0))
+(IMPLIES (EQ (select |bits| |other|) 0) (EQ (select |bits| |__orig__this|) 0))
+(EQ (select |bits| |this|) (|java-&| (select |bits| |other|) (select |bits| |__orig__this|)))
+===========================================================================
+six170.TinySet.remove(int):::ENTER
+(EQ (hash |this|) (hashcode (|long-int| 1 0 0 0 1188 2125)))
+(>= (select |bits| |this|) 1)
+(>= |n| 0)
+(> (select |bits| |this|) |n|)
+===========================================================================
+six170.TinySet.remove(int):::EXIT
+(<= (select |bits| |this|) (select |bits| |__orig__this|))
+(EQ (select |bits| |__orig__this|) (|java-bitwise-or| (select |bits| |this|) (select |bits| |__orig__this|)))
+===========================================================================
+six170.TinySet.union(six170.TinySet):::ENTER
+(NEQ (hash |other|) null)
+(>= (select |bits| |other|) 0)
+(IMPLIES (EQ (select |bits| |other|) 0) (EQ (select |bits| |this|) 0))
+(IMPLIES (EQ (select |bits| |this|) 0) (EQ (select |bits| |other|) 0))
+===========================================================================
+six170.TinySet.union(six170.TinySet):::EXIT
+(EQ (select |bits| |other|) (select |bits| |__orig__other|))
+(>= (select |bits| |other|) 0)
+(IMPLIES (EQ (select |bits| |other|) 0) (EQ (select |bits| |this|) 0))
+(IMPLIES (EQ (select |bits| |this|) 0) (EQ (select |bits| |other|) 0))
+(EQ (select |bits| |this|) (|java-bitwise-or| (select |bits| |other|) (select |bits| |this|)))
+(>= (select |bits| |this|) (select |bits| |other|))
+(IMPLIES (EQ (select |bits| |__orig__this|) 0) (EQ (select |bits| |this|) 0))
+(IMPLIES (EQ (select |bits| |this|) 0) (EQ (select |bits| |__orig__this|) 0))
+(EQ (select |bits| |this|) (|java-bitwise-or| (select |bits| |__orig__this|) (select |bits| |this|)))
+(>= (select |bits| |this|) (select |bits| |__orig__this|))
+(IMPLIES (EQ (select |bits| |__orig__this|) 0) (EQ (select |bits| |other|) 0))
+(IMPLIES (EQ (select |bits| |other|) 0) (EQ (select |bits| |__orig__this|) 0))
+(EQ (select |bits| |this|) (|java-bitwise-or| (select |bits| |other|) (select |bits| |__orig__this|)))

@@ -1,0 +1,18 @@
+package checkers.nullness.quals:
+annotation visible @Nullable
+
+package checkers.nullness.quals:
+annotation visible @NonNull
+
+package misc:
+class Fib : // 0/42 obj/class samples
+  field STEPS :  // int
+  field a :  // int
+  field b :  // int
+  field c :  // int
+  method increment() :  // 20 samples
+  method main([Ljava/lang/String;) :  // 1 samples
+    parameter #0 :  // args
+  method <init>() :  // 0 samples
+
+

@@ -1,0 +1,3 @@
+GlobalTest GlobalTest.decls.diff GlobalTest.dtrace.diff GlobalTest.invs.diff GlobalTest.out GlobalTest.out.diff ran-kvasir
+*.counts *.counts.diff
+GlobalTest.comp GlobalTest.comp.diff

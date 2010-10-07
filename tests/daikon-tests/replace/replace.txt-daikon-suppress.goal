@@ -1,0 +1,334 @@
+===========================================================================
+std.addstr(char;char *;int *;int;)int:::ENTER
+outset != null
+j != null
+*j >= 0
+maxset == 100
+*j <= maxset
+===========================================================================
+std.addstr(char;char *;int *;int;)int:::EXIT
+c == orig(c)
+outset == orig(outset)
+j == orig(j)
+maxset == orig(maxset)
+outset != null
+j != null
+*j >= 1
+maxset == 100
+return one of { 0, 1 }
+*j >= return
+maxset > return
+===========================================================================
+std.amatch(char *;int;char *;int;)int:::ENTER
+lin != null
+offset >= 0
+pat != null
+j >= 0
+===========================================================================
+std.amatch(char *;int;char *;int;)int:::EXIT
+lin == orig(lin)
+offset == return
+pat == orig(pat)
+lin != null
+offset >= -1
+pat != null
+j >= 0
+pat[] == orig(pat[])
+j >= orig(j)
+===========================================================================
+std.change(char *;char *;)void:::ENTER
+pat != null
+sub != null
+===========================================================================
+std.change(char *;char *;)void:::EXIT
+pat == orig(pat)
+sub == orig(sub)
+pat != null
+sub != null
+pat[] == orig(pat[])
+sub[] == orig(sub[])
+===========================================================================
+std.dodash(char;char *;int *;char *;int *;int;)void:::ENTER
+delim == 93
+src != null
+i != null
+*i >= 2
+dest != null
+j != null
+maxset == 100
+delim != *i
+delim != *j
+*i != maxset
+*j <= maxset
+===========================================================================
+std.dodash(char;char *;int *;char *;int *;int;)void:::EXIT
+delim == orig(delim)
+src == orig(src)
+i == orig(i)
+dest == orig(dest)
+j == orig(j)
+maxset == orig(maxset)
+delim == 93
+src != null
+i != null
+dest != null
+j != null
+maxset == 100
+delim != *i
+delim != *j
+delim != orig(*i)
+delim != orig(*j)
+*i != maxset
+maxset != orig(*i)
+src[] == orig(src[])
+*i >= orig(*i)
+dest[] == orig(dest[])
+*j <= maxset
+*j >= orig(*j)
+maxset >= orig(*j)
+===========================================================================
+std.esc(char *;int *;)char:::ENTER
+s != null
+i != null
+*i >= 0
+===========================================================================
+std.esc(char *;int *;)char:::EXIT
+s == orig(s)
+i == orig(i)
+s != null
+i != null
+*i >= 0
+s[] == orig(s[])
+*i >= orig(*i)
+===========================================================================
+std.getccl(char *;int *;char *;int *;)boolean:::ENTER
+arg != null
+i != null
+pat != null
+j != null
+===========================================================================
+std.getccl(char *;int *;char *;int *;)boolean:::EXIT
+arg == orig(arg)
+i == orig(i)
+pat == orig(pat)
+j == orig(j)
+arg != null
+i != null
+pat != null
+j != null
+return one of { 0, 1 }
+*i > return
+arg[] == orig(arg[])
+*i > orig(*i)
+*j > return
+*j > orig(*i)
+*j > orig(*j)
+===========================================================================
+std.getline(char *;int;)boolean:::ENTER
+s != null
+maxsize == 100
+===========================================================================
+std.getline(char *;int;)boolean:::EXIT
+s == orig(s)
+maxsize == orig(maxsize)
+s != null
+maxsize == 100
+return one of { 0, 1 }
+maxsize > return
+===========================================================================
+std.getpat(char *;char *;)int:::ENTER
+arg != null
+pat != null
+===========================================================================
+std.getpat(char *;char *;)int:::EXIT
+arg == orig(arg)
+pat == orig(pat)
+arg != null
+pat != null
+return one of { 0, 1 }
+arg[] == orig(arg[])
+===========================================================================
+std.getsub(char *;char *;)boolean:::ENTER
+arg != null
+sub != null
+===========================================================================
+std.getsub(char *;char *;)boolean:::EXIT
+arg == orig(arg)
+sub == orig(sub)
+arg != null
+sub != null
+return one of { 0, 1 }
+arg[] == orig(arg[])
+===========================================================================
+std.in_pat_set(char;)boolean:::ENTER
+===========================================================================
+std.in_pat_set(char;)boolean:::EXIT
+c == orig(c)
+return == 1
+c > return
+===========================================================================
+std.in_set_2(char;)boolean:::ENTER
+===========================================================================
+std.in_set_2(char;)boolean:::EXIT
+c == orig(c)
+return one of { 0, 1 }
+c > return
+===========================================================================
+std.locate(character;char *;int;)boolean:::ENTER
+pat != null
+offset >= 1
+c != offset
+===========================================================================
+std.locate(character;char *;int;)boolean:::EXIT
+c == orig(c)
+pat == orig(pat)
+offset == orig(offset)
+pat != null
+offset >= 1
+return one of { 0, 1 }
+c != offset
+c > return
+offset >= return
+pat[] == orig(pat[])
+===========================================================================
+std.main(int;char **;)int:::ENTER
+argc one of { 2, 3 }
+argv != null
+===========================================================================
+std.main(int;char **;)int:::EXIT
+argc == orig(argc)
+argv == orig(argv)
+argc one of { 2, 3 }
+argv != null
+return == 0
+argc > return
+===========================================================================
+std.makepat(char *;int;char;char *;)int:::ENTER
+start == delim
+arg != null
+start == 0
+delim == 0
+pat != null
+===========================================================================
+std.makepat(char *;int;char;char *;)int:::EXIT
+arg == orig(arg)
+arg[] == orig(arg[])
+start == delim
+start == orig(start)
+delim == orig(delim)
+pat == orig(pat)
+arg != null
+start == 0
+delim == 0
+pat != null
+return >= 0
+arg[] == orig(arg[])
+start <= return
+===========================================================================
+std.makesub(char *;int;character;char *;)int:::ENTER
+from == delim
+arg != null
+from == 0
+delim == 0
+sub != null
+===========================================================================
+std.makesub(char *;int;character;char *;)int:::EXIT
+arg == orig(arg)
+arg[] == orig(arg[])
+from == delim
+from == orig(from)
+delim == orig(delim)
+sub == orig(sub)
+arg != null
+from == 0
+delim == 0
+sub != null
+return >= 0
+arg[] == orig(arg[])
+from <= return
+===========================================================================
+std.omatch(char *;int *;char *;int;)boolean:::ENTER
+lin != null
+i != null
+*i >= 0
+pat != null
+j >= 0
+===========================================================================
+std.omatch(char *;int *;char *;int;)boolean:::EXIT
+lin == orig(lin)
+i == orig(i)
+pat == orig(pat)
+j == orig(j)
+lin != null
+i != null
+*i >= 0
+pat != null
+j >= 0
+return one of { 0, 1 }
+*i >= orig(*i)
+pat[] == orig(pat[])
+===========================================================================
+std.patsize(char *;int;)int:::ENTER
+pat != null
+n >= 0
+===========================================================================
+std.patsize(char *;int;)int:::EXIT
+pat == orig(pat)
+n == orig(n)
+pat != null
+n >= 0
+return >= 1
+pat[] == orig(pat[])
+===========================================================================
+std.putsub(char *;int;int;char *;)void:::ENTER
+lin != null
+s1 >= 0
+s2 >= 0
+sub != null
+s1 <= s2
+===========================================================================
+std.putsub(char *;int;int;char *;)void:::EXIT
+lin == orig(lin)
+s1 == orig(s1)
+s2 == orig(s2)
+sub == orig(sub)
+lin != null
+s1 >= 0
+s2 >= 0
+sub != null
+lin[] == orig(lin[])
+s1 <= s2
+sub[] == orig(sub[])
+===========================================================================
+std.stclose(char *;int *;int;)void:::ENTER
+pat != null
+j != null
+*j >= 2
+lastj >= 0
+*j > lastj
+===========================================================================
+std.stclose(char *;int *;int;)void:::EXIT
+pat == orig(pat)
+j == orig(j)
+lastj == orig(lastj)
+pat != null
+j != null
+lastj >= 0
+*j > lastj
+orig(*j) == *j - 1
+lastj < orig(*j)
+===========================================================================
+std.subline(char *;char *;char *;)void:::ENTER
+lin != null
+pat != null
+sub != null
+===========================================================================
+std.subline(char *;char *;char *;)void:::EXIT
+lin == orig(lin)
+pat == orig(pat)
+sub == orig(sub)
+lin != null
+pat != null
+sub != null
+pat[] == orig(pat[])
+sub[] == orig(sub[])

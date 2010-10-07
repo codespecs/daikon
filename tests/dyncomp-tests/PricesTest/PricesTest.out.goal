@@ -1,0 +1,100 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== Copyright (C) 2004-2005, Philip Guo, MIT CSAIL Program Analysis Group
+==PID== Using LibVEX rev 1139, a library for dynamic binary translation.
+==PID== Copyright (C) 2004, and GNU GPL'd, by OpenWorks LLP.
+==PID== Using valgrind-3.0.0.SVN, a dynamic binary instrumentation framework.
+==PID== Copyright (C) 2000-2005, and GNU GPL'd, by Julian Seward et al.
+==PID== For more details, rerun with: -v
+==PID== 
+***ENTER main at EBP=138*******, lowestESP=138*******, startPC=0x804****
+***ENTER totalCost at EBP=138*******, lowestESP=138*******, startPC=0x804****
+d (0)  new_tags[0]: 1789409, new_leader: 1789409, var_tags_v (old): 0, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1789412, new_leader: 1789412, var_tags_v (old): 0, var_tags[1]: 1789412 (a: 2970941012)
+tax (2)  new_tags[2]: 1789415, new_leader: 1789415, var_tags_v (old): 0, var_tags[2]: 1789415 (a: 2970941016)
+***EXIT totalCost - EBP=138*******, lowestESP=138*******
+d (0)  new_tags[0]: 1789409, new_leader: 1789409, var_tags_v (old): 0, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1789415, new_leader: 1789415, var_tags_v (old): 0, var_tags[1]: 1789415 (a: 2970941012)
+tax (2)  new_tags[2]: 1789415, new_leader: 1789415, var_tags_v (old): 0, var_tags[2]: 1789415 (a: 2970941016)
+return (3)  new_tags[3]: 1789415, new_leader: 1789415, var_tags_v (old): 0, var_tags[3]: 1789415 (a: 2974237660)
+***ENTER totalCost at EBP=138*******, lowestESP=138*******, startPC=0x804****
+d (0)  new_tags[0]: 1815881, new_leader: 1815881, var_tags_v (old): 1789409, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1815879, new_leader: 1815879, var_tags_v (old): 1789412, var_tags[1]: 1789415 (a: 2970941012)
+tax (2)  new_tags[2]: 1815876, new_leader: 1815876, var_tags_v (old): 1789415, var_tags[2]: 1789415 (a: 2970941016)
+***EXIT totalCost - EBP=138*******, lowestESP=138*******
+d (0)  new_tags[0]: 1815881, new_leader: 1815881, var_tags_v (old): 1789409, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1815876, new_leader: 1815876, var_tags_v (old): 1789415, var_tags[1]: 1789415 (a: 2970941012)
+tax (2)  new_tags[2]: 1815876, new_leader: 1815876, var_tags_v (old): 1789415, var_tags[2]: 1789415 (a: 2970941016)
+return (3)  new_tags[3]: 1815876, new_leader: 1815876, var_tags_v (old): 1789415, var_tags[3]: 1789415 (a: 2974237660)
+***ENTER totalCost at EBP=138*******, lowestESP=138*******, startPC=0x804****
+d (0)  new_tags[0]: 1815916, new_leader: 1815916, var_tags_v (old): 1789409, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1815914, new_leader: 1815914, var_tags_v (old): 1789415, var_tags[1]: 1789415 (a: 2970941012)
+tax (2)  new_tags[2]: 1815911, new_leader: 1815911, var_tags_v (old): 1789415, var_tags[2]: 1789415 (a: 2970941016)
+***EXIT totalCost - EBP=138*******, lowestESP=138*******
+d (0)  new_tags[0]: 1815916, new_leader: 1815916, var_tags_v (old): 1789409, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1815911, new_leader: 1815911, var_tags_v (old): 1789415, var_tags[1]: 1789415 (a: 2970941012)
+tax (2)  new_tags[2]: 1815911, new_leader: 1815911, var_tags_v (old): 1789415, var_tags[2]: 1789415 (a: 2970941016)
+return (3)  new_tags[3]: 1815911, new_leader: 1815911, var_tags_v (old): 1789415, var_tags[3]: 1789415 (a: 2974237660)
+***ENTER totalCost at EBP=138*******, lowestESP=138*******, startPC=0x804****
+d (0)  new_tags[0]: 1815951, new_leader: 1815951, var_tags_v (old): 1789409, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1815949, new_leader: 1815949, var_tags_v (old): 1789415, var_tags[1]: 1789415 (a: 2970941012)
+tax (2)  new_tags[2]: 1815946, new_leader: 1815946, var_tags_v (old): 1789415, var_tags[2]: 1789415 (a: 2970941016)
+***EXIT totalCost - EBP=138*******, lowestESP=138*******
+d (0)  new_tags[0]: 1815951, new_leader: 1815951, var_tags_v (old): 1789409, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1815946, new_leader: 1815946, var_tags_v (old): 1789415, var_tags[1]: 1789415 (a: 2970941012)
+tax (2)  new_tags[2]: 1815946, new_leader: 1815946, var_tags_v (old): 1789415, var_tags[2]: 1789415 (a: 2970941016)
+return (3)  new_tags[3]: 1815946, new_leader: 1815946, var_tags_v (old): 1789415, var_tags[3]: 1789415 (a: 2974237660)
+***ENTER totalCost at EBP=138*******, lowestESP=138*******, startPC=0x804****
+d (0)  new_tags[0]: 1815986, new_leader: 1815986, var_tags_v (old): 1789409, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1815984, new_leader: 1815984, var_tags_v (old): 1789415, var_tags[1]: 1789415 (a: 2970941012)
+tax (2)  new_tags[2]: 1815981, new_leader: 1815981, var_tags_v (old): 1789415, var_tags[2]: 1789415 (a: 2970941016)
+***EXIT totalCost - EBP=138*******, lowestESP=138*******
+d (0)  new_tags[0]: 1815986, new_leader: 1815986, var_tags_v (old): 1789409, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1815981, new_leader: 1815981, var_tags_v (old): 1789415, var_tags[1]: 1789415 (a: 2970941012)
+tax (2)  new_tags[2]: 1815981, new_leader: 1815981, var_tags_v (old): 1789415, var_tags[2]: 1789415 (a: 2970941016)
+return (3)  new_tags[3]: 1815981, new_leader: 1815981, var_tags_v (old): 1789415, var_tags[3]: 1789415 (a: 2974237660)
+***ENTER totalCost at EBP=138*******, lowestESP=138*******, startPC=0x804****
+d (0)  new_tags[0]: 1816021, new_leader: 1816021, var_tags_v (old): 1789409, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1816019, new_leader: 1816019, var_tags_v (old): 1789415, var_tags[1]: 1789415 (a: 2970941012)
+tax (2)  new_tags[2]: 1816016, new_leader: 1816016, var_tags_v (old): 1789415, var_tags[2]: 1789415 (a: 2970941016)
+***EXIT totalCost - EBP=138*******, lowestESP=138*******
+d (0)  new_tags[0]: 1816021, new_leader: 1816021, var_tags_v (old): 1789409, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1816016, new_leader: 1816016, var_tags_v (old): 1789415, var_tags[1]: 1789415 (a: 2970941012)
+tax (2)  new_tags[2]: 1816016, new_leader: 1816016, var_tags_v (old): 1789415, var_tags[2]: 1789415 (a: 2970941016)
+return (3)  new_tags[3]: 1816016, new_leader: 1816016, var_tags_v (old): 1789415, var_tags[3]: 1789415 (a: 2974237660)
+***ENTER totalCost at EBP=138*******, lowestESP=138*******, startPC=0x804****
+d (0)  new_tags[0]: 1816061, new_leader: 1816061, var_tags_v (old): 1789409, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1816059, new_leader: 1816059, var_tags_v (old): 1789415, var_tags[1]: 1789415 (a: 2970941012)
+tax (2)  new_tags[2]: 1816056, new_leader: 1816056, var_tags_v (old): 1789415, var_tags[2]: 1789415 (a: 2970941016)
+***EXIT totalCost - EBP=138*******, lowestESP=138*******
+d (0)  new_tags[0]: 1816061, new_leader: 1816061, var_tags_v (old): 1789409, var_tags[0]: 1789409 (a: 2970941008)
+base (1)  new_tags[1]: 1816056, new_leader: 1816056, var_tags_v (old): 1789415, var_tags[1]: 1789415 (a: 2970941012)
+tax (2)  new_tags[2]: 1816056, new_leader: 1816056, var_tags_v (old): 1789415, var_tags[2]: 1789415 (a: 2970941016)
+return (3)  new_tags[3]: 1816056, new_leader: 1816056, var_tags_v (old): 1789415, var_tags[3]: 1789415 (a: 2974237660)
+***EXIT main - EBP=138*******, lowestESP=138*******
+return (0)  new_tags[0]: 1816095, new_leader: 1816095, var_tags_v (old): 0, var_tags[0]: 1816095 (a: 2974237616)
+&uninitializedStackVar = 0x52bf****
+First try  (stack):  138*******
+Second try (stack): 138*******
+Third try  (stack):  138*******
+uninitializedHeapVarP = 0x1ba3****
+First try  (heap):  0
+Second try (heap): 0
+Third try  (heap):  0
+==PID== 
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+DC_extra_propagate_val_to_var_sets()
+Extra propagation: totalCost():::ENTER
+d (0)  var_tags_v: 1789409, leader: 1789409, var_tags[0]: 1789409 (final)
+base (1)  var_tags_v: 1789415, leader: 1789415, var_tags[1]: 1789415 (final)
+tax (2)  var_tags_v: 1789415, leader: 1789415, var_tags[2]: 1789415 (final)
+Extra propagation: totalCost():::EXIT
+d (0)  var_tags_v: 1789409, leader: 1789409, var_tags[0]: 1789409 (final)
+base (1)  var_tags_v: 1789415, leader: 1789415, var_tags[1]: 1789415 (final)
+tax (2)  var_tags_v: 1789415, leader: 1789415, var_tags[2]: 1789415 (final)
+return (3)  var_tags_v: 1789415, leader: 1789415, var_tags[3]: 1789415 (final)
+Extra propagation: main():::ENTER
+Extra propagation: main():::EXIT
+return (0)  var_tags_v: 1816095, leader: 1816095, var_tags[0]: 1816095 (final)
+
+*** nextTag: 1827111 ***
+

@@ -1,0 +1,766 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+misc.StaticInteresting:::CLASS
+misc.StaticInteresting.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+
+DECLARE
+misc.StaticInteresting:::OBJECT
+this
+misc.StaticInteresting # isParam=true
+hashcode
+3
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+7
+this.outer[..]
+int[]
+int[]
+6[6]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+5
+this.inner[..]
+int[]
+int[]
+6[4]
+this.y
+int # declaringClassPackageName=misc, 
+int
+6
+this.x
+int # declaringClassPackageName=misc, 
+int
+4
+misc.StaticInteresting.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+
+
+DECLARE
+misc.StaticInteresting.main(java.lang.String[]):::ENTER
+misc.StaticInteresting.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+5
+args
+java.lang.String[] # isParam=true
+hashcode
+2
+args.getClass()
+java.lang.Class
+java.lang.String
+1
+args[..]
+java.lang.String[]
+hashcode[]
+3
+args[..].toString
+java.lang.String[]
+java.lang.String[]
+4
+
+DECLARE
+misc.StaticInteresting.main(java.lang.String[]):::EXIT60
+misc.StaticInteresting.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+5
+args
+java.lang.String[] # isParam=true
+hashcode
+2
+args.getClass()
+java.lang.Class
+java.lang.String
+1
+args[..]
+java.lang.String[]
+hashcode[]
+3
+args[..].toString
+java.lang.String[]
+java.lang.String[]
+4
+
+
+DECLARE
+misc.StaticInteresting.work():::ENTER
+this
+misc.StaticInteresting # isParam=true
+hashcode
+3
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+7
+this.outer[..]
+int[]
+int[]
+6[6]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+5
+this.inner[..]
+int[]
+int[]
+6[4]
+this.y
+int # declaringClassPackageName=misc, 
+int
+6
+this.x
+int # declaringClassPackageName=misc, 
+int
+4
+misc.StaticInteresting.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+
+DECLARE
+misc.StaticInteresting.work():::EXIT71
+this
+misc.StaticInteresting # isParam=true
+hashcode
+3
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+7
+this.outer[..]
+int[]
+int[]
+6[6]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+5
+this.inner[..]
+int[]
+int[]
+6[4]
+this.y
+int # declaringClassPackageName=misc, 
+int
+6
+this.x
+int # declaringClassPackageName=misc, 
+int
+4
+misc.StaticInteresting.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+
+
+DECLARE
+misc.StaticInteresting.StaticInteresting():::ENTER
+
+DECLARE
+misc.StaticInteresting.StaticInteresting():::EXIT78
+this
+misc.StaticInteresting # isParam=true
+hashcode
+3
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+7
+this.outer[..]
+int[]
+int[]
+6[6]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+5
+this.inner[..]
+int[]
+int[]
+6[4]
+this.y
+int # declaringClassPackageName=misc, 
+int
+6
+this.x
+int # declaringClassPackageName=misc, 
+int
+4
+misc.StaticInteresting.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+
+
+DECLARE
+misc.StaticInteresting.equals(java.lang.Object):::ENTER
+this
+misc.StaticInteresting # isParam=true
+hashcode
+4
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+8
+this.outer[..]
+int[]
+int[]
+7[7]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+6
+this.inner[..]
+int[]
+int[]
+7[5]
+this.y
+int # declaringClassPackageName=misc, 
+int
+7
+this.x
+int # declaringClassPackageName=misc, 
+int
+5
+misc.StaticInteresting.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.StaticInteresting.equals(java.lang.Object):::EXIT1
+this
+misc.StaticInteresting # isParam=true
+hashcode
+5
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+9
+this.outer[..]
+int[]
+int[]
+8[8]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+7
+this.inner[..]
+int[]
+int[]
+8[6]
+this.y
+int # declaringClassPackageName=misc, 
+int
+8
+this.x
+int # declaringClassPackageName=misc, 
+int
+6
+misc.StaticInteresting.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+4
+
+
+DECLARE
+misc.StaticInteresting.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+misc.StaticInteresting # isParam=true
+hashcode
+4
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+8
+this.outer[..]
+int[]
+int[]
+7[7]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+6
+this.inner[..]
+int[]
+int[]
+7[5]
+this.y
+int # declaringClassPackageName=misc, 
+int
+7
+this.x
+int # declaringClassPackageName=misc, 
+int
+5
+misc.StaticInteresting.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.StaticInteresting.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+misc.StaticInteresting # isParam=true
+hashcode
+5
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+9
+this.outer[..]
+int[]
+int[]
+8[8]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+7
+this.inner[..]
+int[]
+int[]
+8[6]
+this.y
+int # declaringClassPackageName=misc, 
+int
+8
+this.x
+int # declaringClassPackageName=misc, 
+int
+6
+misc.StaticInteresting.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+4
+
+DECLARE
+misc.StaticInteresting2:::CLASS
+misc.StaticInteresting2.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+
+DECLARE
+misc.StaticInteresting2:::OBJECT
+this
+misc.StaticInteresting2 # isParam=true
+hashcode
+3
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+7
+this.outer[..]
+int[]
+int[]
+6[6]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+5
+this.inner[..]
+int[]
+int[]
+6[4]
+this.y
+int # declaringClassPackageName=misc, 
+int
+6
+this.x
+int # declaringClassPackageName=misc, 
+int
+4
+misc.StaticInteresting2.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+
+
+DECLARE
+misc.StaticInteresting2.main(java.lang.String[]):::ENTER
+misc.StaticInteresting2.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+5
+args
+java.lang.String[] # isParam=true
+hashcode
+2
+args.getClass()
+java.lang.Class
+java.lang.String
+1
+args[..]
+java.lang.String[]
+hashcode[]
+3
+args[..].toString
+java.lang.String[]
+java.lang.String[]
+4
+
+DECLARE
+misc.StaticInteresting2.main(java.lang.String[]):::EXIT104
+misc.StaticInteresting2.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+5
+args
+java.lang.String[] # isParam=true
+hashcode
+2
+args.getClass()
+java.lang.Class
+java.lang.String
+1
+args[..]
+java.lang.String[]
+hashcode[]
+3
+args[..].toString
+java.lang.String[]
+java.lang.String[]
+4
+
+
+DECLARE
+misc.StaticInteresting2.work():::ENTER
+this
+misc.StaticInteresting2 # isParam=true
+hashcode
+3
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+7
+this.outer[..]
+int[]
+int[]
+6[6]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+5
+this.inner[..]
+int[]
+int[]
+6[4]
+this.y
+int # declaringClassPackageName=misc, 
+int
+6
+this.x
+int # declaringClassPackageName=misc, 
+int
+4
+misc.StaticInteresting2.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+
+DECLARE
+misc.StaticInteresting2.work():::EXIT115
+this
+misc.StaticInteresting2 # isParam=true
+hashcode
+3
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+7
+this.outer[..]
+int[]
+int[]
+6[6]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+5
+this.inner[..]
+int[]
+int[]
+6[4]
+this.y
+int # declaringClassPackageName=misc, 
+int
+6
+this.x
+int # declaringClassPackageName=misc, 
+int
+4
+misc.StaticInteresting2.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+
+
+DECLARE
+misc.StaticInteresting2.StaticInteresting2():::ENTER
+
+DECLARE
+misc.StaticInteresting2.StaticInteresting2():::EXIT122
+this
+misc.StaticInteresting2 # isParam=true
+hashcode
+3
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+7
+this.outer[..]
+int[]
+int[]
+6[6]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+5
+this.inner[..]
+int[]
+int[]
+6[4]
+this.y
+int # declaringClassPackageName=misc, 
+int
+6
+this.x
+int # declaringClassPackageName=misc, 
+int
+4
+misc.StaticInteresting2.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+
+
+DECLARE
+misc.StaticInteresting2.equals(java.lang.Object):::ENTER
+this
+misc.StaticInteresting2 # isParam=true
+hashcode
+4
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+8
+this.outer[..]
+int[]
+int[]
+7[7]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+6
+this.inner[..]
+int[]
+int[]
+7[5]
+this.y
+int # declaringClassPackageName=misc, 
+int
+7
+this.x
+int # declaringClassPackageName=misc, 
+int
+5
+misc.StaticInteresting2.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.StaticInteresting2.equals(java.lang.Object):::EXIT1
+this
+misc.StaticInteresting2 # isParam=true
+hashcode
+5
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+9
+this.outer[..]
+int[]
+int[]
+8[8]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+7
+this.inner[..]
+int[]
+int[]
+8[6]
+this.y
+int # declaringClassPackageName=misc, 
+int
+8
+this.x
+int # declaringClassPackageName=misc, 
+int
+6
+misc.StaticInteresting2.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+4
+
+
+DECLARE
+misc.StaticInteresting2.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+misc.StaticInteresting2 # isParam=true
+hashcode
+4
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+8
+this.outer[..]
+int[]
+int[]
+7[7]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+6
+this.inner[..]
+int[]
+int[]
+7[5]
+this.y
+int # declaringClassPackageName=misc, 
+int
+7
+this.x
+int # declaringClassPackageName=misc, 
+int
+5
+misc.StaticInteresting2.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.StaticInteresting2.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+misc.StaticInteresting2 # isParam=true
+hashcode
+5
+this.outer
+int[] # declaringClassPackageName=misc, 
+hashcode
+9
+this.outer[..]
+int[]
+int[]
+8[8]
+this.inner
+int[] # declaringClassPackageName=misc, 
+hashcode
+7
+this.inner[..]
+int[]
+int[]
+8[6]
+this.y
+int # declaringClassPackageName=misc, 
+int
+8
+this.x
+int # declaringClassPackageName=misc, 
+int
+6
+misc.StaticInteresting2.rand
+java.util.Random # declaringClassPackageName=misc, 
+hashcode
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+4
+

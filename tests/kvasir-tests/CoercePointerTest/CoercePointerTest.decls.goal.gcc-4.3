@@ -1,0 +1,652 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::junk
+    var-kind variable
+    rep-type hashcode
+    dec-type baz
+  variable ::junk.baz_int
+    var-kind field baz_int
+    enclosing-var ::junk
+    rep-type int
+    dec-type int
+  variable ::junk.baz_str
+    var-kind field baz_str
+    enclosing-var ::junk
+    reference-type offset
+    rep-type string
+    dec-type char*
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::junk
+    var-kind variable
+    rep-type hashcode
+    dec-type baz
+  variable ::junk.baz_int
+    var-kind field baz_int
+    enclosing-var ::junk
+    rep-type int
+    dec-type int
+  variable ::junk.baz_str
+    var-kind field baz_str
+    enclosing-var ::junk
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..normal_view():::ENTER
+  ppt-type enter
+  variable ::junk
+    var-kind variable
+    rep-type hashcode
+    dec-type baz
+  variable ::junk.baz_int
+    var-kind field baz_int
+    enclosing-var ::junk
+    rep-type int
+    dec-type int
+  variable ::junk.baz_str
+    var-kind field baz_str
+    enclosing-var ::junk
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable f
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable f->foo_baz
+    var-kind field foo_baz
+    enclosing-var f
+    rep-type hashcode
+    dec-type baz*
+  variable f->foo_baz->baz_int
+    var-kind field baz_int
+    enclosing-var f->foo_baz
+    rep-type int
+    dec-type int
+  variable f->foo_baz->baz_str
+    var-kind field baz_str
+    enclosing-var f->foo_baz
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable f->foo_baz[0]
+    var-kind field [0]
+    enclosing-var f->foo_baz
+    rep-type hashcode
+    dec-type baz
+  variable f->foo_double
+    var-kind field foo_double
+    enclosing-var f
+    rep-type double
+    dec-type double
+  variable f->foo_int
+    var-kind field foo_int
+    enclosing-var f
+    rep-type int
+    dec-type int
+  variable f->foo_str
+    var-kind field foo_str
+    enclosing-var f
+    rep-type string
+    dec-type char*
+  variable f[0]
+    var-kind field [0]
+    enclosing-var f
+    rep-type hashcode
+    dec-type foo
+
+ppt ..normal_view():::EXIT0
+  ppt-type subexit
+  variable ::junk
+    var-kind variable
+    rep-type hashcode
+    dec-type baz
+  variable ::junk.baz_int
+    var-kind field baz_int
+    enclosing-var ::junk
+    rep-type int
+    dec-type int
+  variable ::junk.baz_str
+    var-kind field baz_str
+    enclosing-var ::junk
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable f
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable f->foo_baz
+    var-kind field foo_baz
+    enclosing-var f
+    rep-type hashcode
+    dec-type baz*
+  variable f->foo_baz->baz_int
+    var-kind field baz_int
+    enclosing-var f->foo_baz
+    rep-type int
+    dec-type int
+  variable f->foo_baz->baz_str
+    var-kind field baz_str
+    enclosing-var f->foo_baz
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable f->foo_baz[0]
+    var-kind field [0]
+    enclosing-var f->foo_baz
+    rep-type hashcode
+    dec-type baz
+  variable f->foo_double
+    var-kind field foo_double
+    enclosing-var f
+    rep-type double
+    dec-type double
+  variable f->foo_int
+    var-kind field foo_int
+    enclosing-var f
+    rep-type int
+    dec-type int
+  variable f->foo_str
+    var-kind field foo_str
+    enclosing-var f
+    rep-type string
+    dec-type char*
+  variable f[0]
+    var-kind field [0]
+    enclosing-var f
+    rep-type hashcode
+    dec-type foo
+
+ppt ..view_bar():::ENTER
+  ppt-type enter
+  variable ::junk
+    var-kind variable
+    rep-type hashcode
+    dec-type baz
+  variable ::junk.baz_int
+    var-kind field baz_int
+    enclosing-var ::junk
+    rep-type int
+    dec-type int
+  variable ::junk.baz_str
+    var-kind field baz_str
+    enclosing-var ::junk
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable b
+    var-kind variable
+    rep-type hashcode
+    dec-type bar*
+    flags is_param 
+  variable b->bar_int
+    var-kind field bar_int
+    enclosing-var b
+    rep-type int
+    dec-type int
+  variable b[0]
+    var-kind field [0]
+    enclosing-var b
+    rep-type hashcode
+    dec-type bar
+
+ppt ..view_bar():::EXIT0
+  ppt-type subexit
+  variable ::junk
+    var-kind variable
+    rep-type hashcode
+    dec-type baz
+  variable ::junk.baz_int
+    var-kind field baz_int
+    enclosing-var ::junk
+    rep-type int
+    dec-type int
+  variable ::junk.baz_str
+    var-kind field baz_str
+    enclosing-var ::junk
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable b
+    var-kind variable
+    rep-type hashcode
+    dec-type bar*
+    flags is_param 
+  variable b->bar_int
+    var-kind field bar_int
+    enclosing-var b
+    rep-type int
+    dec-type int
+  variable b[0]
+    var-kind field [0]
+    enclosing-var b
+    rep-type hashcode
+    dec-type bar
+
+ppt ..view_bar_as_foo():::ENTER
+  ppt-type enter
+  variable ::junk
+    var-kind variable
+    rep-type hashcode
+    dec-type baz
+  variable ::junk.baz_int
+    var-kind field baz_int
+    enclosing-var ::junk
+    rep-type int
+    dec-type int
+  variable ::junk.baz_str
+    var-kind field baz_str
+    enclosing-var ::junk
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable bar_as_foo
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable bar_as_foo->foo_baz
+    var-kind field foo_baz
+    enclosing-var bar_as_foo
+    rep-type hashcode
+    dec-type baz*
+  variable bar_as_foo->foo_baz->baz_int
+    var-kind field baz_int
+    enclosing-var bar_as_foo->foo_baz
+    rep-type int
+    dec-type int
+  variable bar_as_foo->foo_baz->baz_str
+    var-kind field baz_str
+    enclosing-var bar_as_foo->foo_baz
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable bar_as_foo->foo_baz[0]
+    var-kind field [0]
+    enclosing-var bar_as_foo->foo_baz
+    rep-type hashcode
+    dec-type baz
+  variable bar_as_foo->foo_double
+    var-kind field foo_double
+    enclosing-var bar_as_foo
+    rep-type double
+    dec-type double
+  variable bar_as_foo->foo_int
+    var-kind field foo_int
+    enclosing-var bar_as_foo
+    rep-type int
+    dec-type int
+  variable bar_as_foo->foo_str
+    var-kind field foo_str
+    enclosing-var bar_as_foo
+    rep-type string
+    dec-type char*
+  variable bar_as_foo[0]
+    var-kind field [0]
+    enclosing-var bar_as_foo
+    rep-type hashcode
+    dec-type foo
+
+ppt ..view_bar_as_foo():::EXIT0
+  ppt-type subexit
+  variable ::junk
+    var-kind variable
+    rep-type hashcode
+    dec-type baz
+  variable ::junk.baz_int
+    var-kind field baz_int
+    enclosing-var ::junk
+    rep-type int
+    dec-type int
+  variable ::junk.baz_str
+    var-kind field baz_str
+    enclosing-var ::junk
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable bar_as_foo
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable bar_as_foo->foo_baz
+    var-kind field foo_baz
+    enclosing-var bar_as_foo
+    rep-type hashcode
+    dec-type baz*
+  variable bar_as_foo->foo_baz->baz_int
+    var-kind field baz_int
+    enclosing-var bar_as_foo->foo_baz
+    rep-type int
+    dec-type int
+  variable bar_as_foo->foo_baz->baz_str
+    var-kind field baz_str
+    enclosing-var bar_as_foo->foo_baz
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable bar_as_foo->foo_baz[0]
+    var-kind field [0]
+    enclosing-var bar_as_foo->foo_baz
+    rep-type hashcode
+    dec-type baz
+  variable bar_as_foo->foo_double
+    var-kind field foo_double
+    enclosing-var bar_as_foo
+    rep-type double
+    dec-type double
+  variable bar_as_foo->foo_int
+    var-kind field foo_int
+    enclosing-var bar_as_foo
+    rep-type int
+    dec-type int
+  variable bar_as_foo->foo_str
+    var-kind field foo_str
+    enclosing-var bar_as_foo
+    rep-type string
+    dec-type char*
+  variable bar_as_foo[0]
+    var-kind field [0]
+    enclosing-var bar_as_foo
+    rep-type hashcode
+    dec-type foo
+
+ppt ..view_foo():::ENTER
+  ppt-type enter
+  variable ::junk
+    var-kind variable
+    rep-type hashcode
+    dec-type baz
+  variable ::junk.baz_int
+    var-kind field baz_int
+    enclosing-var ::junk
+    rep-type int
+    dec-type int
+  variable ::junk.baz_str
+    var-kind field baz_str
+    enclosing-var ::junk
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable f
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable f->foo_baz
+    var-kind field foo_baz
+    enclosing-var f
+    rep-type hashcode
+    dec-type baz*
+  variable f->foo_baz->baz_int
+    var-kind field baz_int
+    enclosing-var f->foo_baz
+    rep-type int
+    dec-type int
+  variable f->foo_baz->baz_str
+    var-kind field baz_str
+    enclosing-var f->foo_baz
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable f->foo_baz[0]
+    var-kind field [0]
+    enclosing-var f->foo_baz
+    rep-type hashcode
+    dec-type baz
+  variable f->foo_double
+    var-kind field foo_double
+    enclosing-var f
+    rep-type double
+    dec-type double
+  variable f->foo_int
+    var-kind field foo_int
+    enclosing-var f
+    rep-type int
+    dec-type int
+  variable f->foo_str
+    var-kind field foo_str
+    enclosing-var f
+    rep-type string
+    dec-type char*
+  variable f[0]
+    var-kind field [0]
+    enclosing-var f
+    rep-type hashcode
+    dec-type foo
+
+ppt ..view_foo():::EXIT0
+  ppt-type subexit
+  variable ::junk
+    var-kind variable
+    rep-type hashcode
+    dec-type baz
+  variable ::junk.baz_int
+    var-kind field baz_int
+    enclosing-var ::junk
+    rep-type int
+    dec-type int
+  variable ::junk.baz_str
+    var-kind field baz_str
+    enclosing-var ::junk
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable f
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable f->foo_baz
+    var-kind field foo_baz
+    enclosing-var f
+    rep-type hashcode
+    dec-type baz*
+  variable f->foo_baz->baz_int
+    var-kind field baz_int
+    enclosing-var f->foo_baz
+    rep-type int
+    dec-type int
+  variable f->foo_baz->baz_str
+    var-kind field baz_str
+    enclosing-var f->foo_baz
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable f->foo_baz[0]
+    var-kind field [0]
+    enclosing-var f->foo_baz
+    rep-type hashcode
+    dec-type baz
+  variable f->foo_double
+    var-kind field foo_double
+    enclosing-var f
+    rep-type double
+    dec-type double
+  variable f->foo_int
+    var-kind field foo_int
+    enclosing-var f
+    rep-type int
+    dec-type int
+  variable f->foo_str
+    var-kind field foo_str
+    enclosing-var f
+    rep-type string
+    dec-type char*
+  variable f[0]
+    var-kind field [0]
+    enclosing-var f
+    rep-type hashcode
+    dec-type foo
+
+ppt ..view_foo_and_bar():::ENTER
+  ppt-type enter
+  variable ::junk
+    var-kind variable
+    rep-type hashcode
+    dec-type baz
+  variable ::junk.baz_int
+    var-kind field baz_int
+    enclosing-var ::junk
+    rep-type int
+    dec-type int
+  variable ::junk.baz_str
+    var-kind field baz_str
+    enclosing-var ::junk
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable b
+    var-kind variable
+    rep-type hashcode
+    dec-type bar*
+    flags is_param 
+  variable b->bar_int
+    var-kind field bar_int
+    enclosing-var b
+    rep-type int
+    dec-type int
+  variable b[0]
+    var-kind field [0]
+    enclosing-var b
+    rep-type hashcode
+    dec-type bar
+  variable f
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable f->foo_baz
+    var-kind field foo_baz
+    enclosing-var f
+    rep-type hashcode
+    dec-type baz*
+  variable f->foo_baz->baz_int
+    var-kind field baz_int
+    enclosing-var f->foo_baz
+    rep-type int
+    dec-type int
+  variable f->foo_baz->baz_str
+    var-kind field baz_str
+    enclosing-var f->foo_baz
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable f->foo_baz[0]
+    var-kind field [0]
+    enclosing-var f->foo_baz
+    rep-type hashcode
+    dec-type baz
+  variable f->foo_double
+    var-kind field foo_double
+    enclosing-var f
+    rep-type double
+    dec-type double
+  variable f->foo_int
+    var-kind field foo_int
+    enclosing-var f
+    rep-type int
+    dec-type int
+  variable f->foo_str
+    var-kind field foo_str
+    enclosing-var f
+    rep-type string
+    dec-type char*
+  variable f[0]
+    var-kind field [0]
+    enclosing-var f
+    rep-type hashcode
+    dec-type foo
+
+ppt ..view_foo_and_bar():::EXIT0
+  ppt-type subexit
+  variable ::junk
+    var-kind variable
+    rep-type hashcode
+    dec-type baz
+  variable ::junk.baz_int
+    var-kind field baz_int
+    enclosing-var ::junk
+    rep-type int
+    dec-type int
+  variable ::junk.baz_str
+    var-kind field baz_str
+    enclosing-var ::junk
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable b
+    var-kind variable
+    rep-type hashcode
+    dec-type bar*
+    flags is_param 
+  variable b->bar_int
+    var-kind field bar_int
+    enclosing-var b
+    rep-type int
+    dec-type int
+  variable b[0]
+    var-kind field [0]
+    enclosing-var b
+    rep-type hashcode
+    dec-type bar
+  variable f
+    var-kind variable
+    rep-type hashcode
+    dec-type foo*
+    flags is_param 
+  variable f->foo_baz
+    var-kind field foo_baz
+    enclosing-var f
+    rep-type hashcode
+    dec-type baz*
+  variable f->foo_baz->baz_int
+    var-kind field baz_int
+    enclosing-var f->foo_baz
+    rep-type int
+    dec-type int
+  variable f->foo_baz->baz_str
+    var-kind field baz_str
+    enclosing-var f->foo_baz
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable f->foo_baz[0]
+    var-kind field [0]
+    enclosing-var f->foo_baz
+    rep-type hashcode
+    dec-type baz
+  variable f->foo_double
+    var-kind field foo_double
+    enclosing-var f
+    rep-type double
+    dec-type double
+  variable f->foo_int
+    var-kind field foo_int
+    enclosing-var f
+    rep-type int
+    dec-type int
+  variable f->foo_str
+    var-kind field foo_str
+    enclosing-var f
+    rep-type string
+    dec-type char*
+  variable f[0]
+    var-kind field [0]
+    enclosing-var f
+    rep-type hashcode
+    dec-type foo
+

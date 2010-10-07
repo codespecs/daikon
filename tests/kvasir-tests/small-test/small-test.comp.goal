@@ -1,0 +1,129 @@
+..baa():::ENTER
+a b
+
+..baa():::EXIT0
+a b
+
+..bab():::ENTER
+a b
+
+..bab():::EXIT0
+a b
+
+..bac():::ENTER
+a b
+
+..bac():::EXIT0
+a b
+
+..bad():::ENTER
+a
+b
+
+..bad():::EXIT0
+a
+b
+
+..bae():::ENTER
+a
+b
+
+..bae():::EXIT0
+a
+b
+
+..bar():::ENTER
+f
+f[..]
+f[..].a
+f[..].b
+
+..bar():::EXIT0
+f
+f[..]
+f[..].a
+f[..].b
+
+..baz():::ENTER
+n n[..].next->prev
+n[..]
+n[..].b
+n[..].next
+n[..].next->b
+n[..].next->next
+n[..].next->next->b
+n[..].next->next->next
+n[..].next->next->next[0]
+n[..].next->next->prev
+n[..].next->next->prev[0]
+n[..].next->next[0]
+n[..].next->prev[0]
+n[..].next[0]
+n[..].prev
+n[..].prev[0]
+
+..baz():::EXIT0
+n n[..].next->prev
+n[..]
+n[..].b
+n[..].next
+n[..].next->b
+n[..].next->next
+n[..].next->next->b
+n[..].next->next->next
+n[..].next->next->next[0]
+n[..].next->next->prev
+n[..].next->next->prev[0]
+n[..].next->next[0]
+n[..].next->prev[0]
+n[..].next[0]
+n[..].prev
+n[..].prev[0]
+
+..caa():::ENTER
+a b c
+
+..caa():::EXIT0
+a b c
+
+..cab():::ENTER
+a b c
+
+..cab():::EXIT0
+a b c
+
+..cac():::ENTER
+a
+b
+c
+
+..cac():::EXIT0
+a
+b
+c
+
+..cad():::ENTER
+a
+b
+c
+
+..cad():::EXIT0
+a
+b
+c
+
+..cae():::ENTER
+a
+b
+c
+
+..cae():::EXIT0
+a
+b
+c
+
+..main():::ENTER
+
+..main():::EXIT0
+return
+

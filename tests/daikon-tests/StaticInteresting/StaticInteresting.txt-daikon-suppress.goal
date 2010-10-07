@@ -1,0 +1,176 @@
+===========================================================================
+misc.StaticInteresting:::CLASS
+misc.StaticInteresting.rand has only one value
+misc.StaticInteresting.rand != null
+===========================================================================
+misc.StaticInteresting:::OBJECT
+this.x == size(this.inner[])-1
+this has only one value
+this.outer has only one value
+this.outer != null
+this.inner has only one value
+this.inner != null
+this.y == 25
+misc.StaticInteresting.rand has only one value
+misc.StaticInteresting.rand != null
+size(this.outer[]) == 100
+size(this.inner[]) == 1
+this.outer[this.y] != 0
+this.outer[this.y-1] != 0
+this.inner[this.x] != 0
+this.inner[this.x] in this.outer[]
+this.inner[] elements == this.inner[this.x]
+this.y != this.outer[this.y]
+this.y != this.outer[this.y-1]
+this.y != this.inner[this.x]
+this.x != this.outer[this.y]
+this.x != this.outer[this.y-1]
+this.x != this.inner[this.x]
+size(this.outer[]) != this.outer[this.y]
+size(this.outer[]) != this.outer[this.y-1]
+size(this.outer[]) != this.inner[this.x]
+size(this.outer[])-1 != this.outer[this.y]
+size(this.outer[])-1 != this.outer[this.y-1]
+size(this.outer[])-1 != this.inner[this.x]
+size(this.inner[]) != this.outer[this.y]
+size(this.inner[]) != this.outer[this.y-1]
+size(this.inner[]) != this.inner[this.x]
+this.outer[this.y] != this.outer[this.y-1]
+===========================================================================
+misc.StaticInteresting2:::CLASS
+misc.StaticInteresting2.rand has only one value
+misc.StaticInteresting2.rand != null
+===========================================================================
+misc.StaticInteresting2:::OBJECT
+this.x == size(this.inner[])-1
+this.outer[this.y] == this.inner[this.x]
+this has only one value
+this.outer has only one value
+this.outer != null
+this.inner has only one value
+this.inner != null
+this.y == 25
+misc.StaticInteresting2.rand has only one value
+misc.StaticInteresting2.rand != null
+size(this.outer[]) == 100
+size(this.inner[]) == 1
+this.inner[] elements == this.outer[this.y]
+this.y != this.outer[this.y]
+this.y != this.outer[this.y-1]
+this.x != this.outer[this.y]
+this.x != this.outer[this.y-1]
+size(this.outer[]) != this.outer[this.y]
+size(this.outer[]) != this.outer[this.y-1]
+size(this.outer[])-1 != this.outer[this.y]
+size(this.outer[])-1 != this.outer[this.y-1]
+size(this.inner[]) != this.outer[this.y]
+size(this.inner[]) != this.outer[this.y-1]
+this.outer[this.y] != this.outer[this.y-1]
+===========================================================================
+misc.StaticInteresting2.StaticInteresting2():::EXIT
+this.inner[] elements == -1339421172
+this.outer[this.y] == -1339421172
+this.outer[this.y-1] == 134578847
+===========================================================================
+misc.StaticInteresting2.main(java.lang.String[]):::ENTER
+args == null
+===========================================================================
+misc.StaticInteresting2.main(java.lang.String[]):::EXIT
+misc.StaticInteresting2.rand == orig(misc.StaticInteresting2.rand)
+===========================================================================
+misc.StaticInteresting2.work():::ENTER
+===========================================================================
+misc.StaticInteresting2.work():::EXIT
+this.outer == orig(this.outer)
+this.inner == orig(this.inner)
+this.y == orig(this.y)
+this.x == orig(this.x)
+this.x == orig(size(this.inner[]))-1
+misc.StaticInteresting2.rand == orig(misc.StaticInteresting2.rand)
+size(this.outer[]) == orig(size(this.outer[]))
+size(this.inner[]) == orig(size(this.inner[]))
+this.outer[this.y] == this.outer[orig(this.y)]
+this.outer[this.y] == this.inner[orig(this.x)]
+this.outer[this.y-1] == this.outer[orig(this.y)-1]
+orig(this.outer[post(this.y)]) == orig(this.inner[post(this.x)])
+orig(this.outer[post(this.y)]) == orig(this.outer[this.y])
+orig(this.outer[post(this.y)]) == orig(this.inner[this.x])
+orig(this.outer[post(this.y)-1]) == orig(this.outer[this.y-1])
+this.y != orig(this.outer[post(this.y)])
+this.y != orig(this.outer[post(this.y)-1])
+this.x != orig(this.outer[post(this.y)])
+this.x != orig(this.outer[post(this.y)-1])
+orig(this.inner[]) elements == orig(this.outer[post(this.y)])
+size(this.outer[]) != orig(this.outer[post(this.y)])
+size(this.outer[]) != orig(this.outer[post(this.y)-1])
+size(this.outer[])-1 != orig(this.outer[post(this.y)])
+size(this.outer[])-1 != orig(this.outer[post(this.y)-1])
+size(this.inner[]) != orig(this.outer[post(this.y)])
+size(this.inner[]) != orig(this.outer[post(this.y)-1])
+this.outer[this.y] != orig(this.outer[post(this.y)])
+this.outer[this.y] != orig(this.outer[post(this.y)-1])
+this.outer[this.y-1] != orig(this.outer[post(this.y)])
+this.outer[this.y-1] != orig(this.outer[post(this.y)-1])
+orig(this.outer[post(this.y)]) != orig(this.outer[post(this.y)-1])
+===========================================================================
+misc.StaticInteresting.StaticInteresting():::EXIT
+this.outer[this.y] == this.inner[this.x]
+this.inner[] elements == -1339421172
+this.outer[this.y] == -1339421172
+this.outer[this.y-1] == 134578847
+this.inner[] elements == this.outer[this.y]
+===========================================================================
+misc.StaticInteresting.main(java.lang.String[]):::ENTER
+args has only one value
+args.getClass() == java.lang.String[].class
+args[] == []
+args[].toString == []
+===========================================================================
+misc.StaticInteresting.main(java.lang.String[]):::EXIT
+misc.StaticInteresting.rand == orig(misc.StaticInteresting.rand)
+args[] == []
+args[].toString == []
+===========================================================================
+misc.StaticInteresting.work():::ENTER
+===========================================================================
+misc.StaticInteresting.work():::EXIT
+this.outer == orig(this.outer)
+this.inner == orig(this.inner)
+this.y == orig(this.y)
+this.x == orig(this.x)
+this.x == orig(size(this.inner[]))-1
+misc.StaticInteresting.rand == orig(misc.StaticInteresting.rand)
+size(this.outer[]) == orig(size(this.outer[]))
+size(this.inner[]) == orig(size(this.inner[]))
+this.outer[this.y] == this.outer[orig(this.y)]
+this.outer[this.y] == this.inner[this.x]
+this.outer[this.y] == this.inner[orig(this.x)]
+this.outer[this.y-1] == this.outer[orig(this.y)-1]
+orig(this.outer[post(this.y)]) == orig(this.outer[this.y])
+orig(this.outer[post(this.y)-1]) == orig(this.outer[this.y-1])
+orig(this.inner[post(this.x)]) == orig(this.inner[this.x])
+this.inner[] elements == this.outer[this.y]
+this.y != orig(this.outer[post(this.y)])
+this.y != orig(this.outer[post(this.y)-1])
+this.y != orig(this.inner[post(this.x)])
+this.x != orig(this.outer[post(this.y)])
+this.x != orig(this.outer[post(this.y)-1])
+this.x != orig(this.inner[post(this.x)])
+orig(this.inner[post(this.x)]) in orig(this.outer[])
+orig(this.inner[]) elements == orig(this.inner[post(this.x)])
+size(this.outer[]) != orig(this.outer[post(this.y)])
+size(this.outer[]) != orig(this.outer[post(this.y)-1])
+size(this.outer[]) != orig(this.inner[post(this.x)])
+size(this.outer[])-1 != orig(this.outer[post(this.y)])
+size(this.outer[])-1 != orig(this.outer[post(this.y)-1])
+size(this.outer[])-1 != orig(this.inner[post(this.x)])
+size(this.inner[]) != orig(this.outer[post(this.y)])
+size(this.inner[]) != orig(this.outer[post(this.y)-1])
+size(this.inner[]) != orig(this.inner[post(this.x)])
+this.outer[this.y] != orig(this.outer[post(this.y)])
+this.outer[this.y] != orig(this.outer[post(this.y)-1])
+this.outer[this.y] != orig(this.inner[post(this.x)])
+this.outer[this.y-1] != orig(this.outer[post(this.y)])
+this.outer[this.y-1] != orig(this.outer[post(this.y)-1])
+this.outer[this.y-1] != orig(this.inner[post(this.x)])
+orig(this.outer[post(this.y)]) != orig(this.outer[post(this.y)-1])

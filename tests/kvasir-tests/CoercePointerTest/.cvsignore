@@ -1,0 +1,11 @@
+CoercePointerTest
+CoercePointerTest.decls.diff
+CoercePointerTest.dtrace.diff
+CoercePointerTest.invs.diff
+CoercePointerTest.out
+CoercePointerTest.out.diff
+ran-kvasir
+*.counts
+*.counts.diff
+CoercePointerTest.comp
+CoercePointerTest.comp.diff

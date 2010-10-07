@@ -1,0 +1,13 @@
+
+Everything gets proved.
+
+Many cautions about a primitive parameter variable not being modified,
+when it is pulled out of an orig array slice as a range bound.
+
+WENT AWAY: Two errors, of what should be to daikon logically redundant
+invariants.  I suspect that missing "makes sense" guards would cause
+simplify to remove these and/or ESC to accept them.
+
+TODO: OneOf formatting could be updated so Simplify would remove one
+invariant.
+

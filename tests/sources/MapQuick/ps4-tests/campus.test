@@ -1,0 +1,190 @@
+# Build a map of MIT and test a few queries
+# Staff version number: $Revision: 1.1 $
+
+CreateGraph campus
+
+# Create the nodes of the graph, which are GeoSegments.  Note that for
+# two-way streets, each segment and it's reverse are added, since
+# travel can occur in two directions
+
+CreateGeoNode MemDrive0 42361797 -71079295 42360097 -71083996 Memorial_Dr
+AddNode campus MemDrive0
+CreateGeoNode MemDrive0rev 42360097 -71083996 42361797 -71079295 Memorial_Dr
+AddNode campus MemDrive0rev
+CreateGeoNode MemDrive1 42360097 -71083996 42358941 -71087240 Memorial_Dr
+AddNode campus MemDrive1
+CreateGeoNode MemDrive1rev 42358941 -71087240 42360097 -71083996 Memorial_Dr
+AddNode campus MemDrive1rev
+CreateGeoNode MemDrive2 42358941 -71087240 42357097 -71092896 Memorial_Dr
+AddNode campus MemDrive2
+CreateGeoNode MemDrive2rev 42357097 -71092896 42358941 -71087240 Memorial_Dr
+AddNode campus MemDrive2rev
+CreateGeoNode MemDrive3 42357097 -71092896 42353497 -71107296 Memorial_Dr
+AddNode campus MemDrive3
+CreateGeoNode MemDrive3rev 42353497 -71107296 42357097 -71092896 Memorial_Dr
+AddNode campus MemDrive3rev
+CreateGeoNode Main3 42361797 -71079295 42362297 -71084396 Main_St
+AddNode campus Main3
+CreateGeoNode Main3rev 42362297 -71084396 42361797 -71079295 Main_St
+AddNode campus Main3rev
+CreateGeoNode Main2 42362297 -71084396 42362597 -71088496 Main_St
+AddNode campus Main2
+CreateGeoNode Main2rev 42362597 -71088496 42362297 -71084396 Main_St
+AddNode campus Main2rev
+CreateGeoNode Main1 42362597 -71088496 42362697 -71090996 Main_St
+AddNode campus Main1
+CreateGeoNode Main1rev 42362697 -71090996 42362597 -71088496 Main_St
+AddNode campus Main1rev
+CreateGeoNode Main0 42362697 -71090996 42362997 -71099696 Main_St
+AddNode campus Main0
+CreateGeoNode Main0rev 42362997 -71099696 42362697 -71090996 Main_St
+AddNode campus Main0rev
+CreateGeoNode MassAve2 42362997 -71099696 42360297 -71095096 Massachusetts_Ave
+AddNode campus MassAve2
+CreateGeoNode MassAve2rev 42360297 -71095096 42362997 -71099696 Massachusetts_Ave
+AddNode campus MassAve2rev
+CreateGeoNode MassAve1 42360297 -71095096 42358297 -71093396 Massachusetts_Ave
+AddNode campus MassAve1
+CreateGeoNode MassAve1rev 42358297 -71093396 42360297 -71095096 Massachusetts_Ave
+AddNode campus MassAve1rev
+CreateGeoNode MassAve0 42358297 -71093396 42357097 -71092896 Massachusetts_Ave
+AddNode campus MassAve0
+CreateGeoNode MassAve0rev 42357097 -71092896 42358297 -71093396 Massachusetts_Ave
+AddNode campus MassAve0rev
+CreateGeoNode Vassar0 42362697 -71090996 42360297 -71095096 Vassar_St
+AddNode campus Vassar0
+CreateGeoNode Vassar0rev 42360297 -71095096 42362697 -71090996 Vassar_St
+AddNode campus Vassar0rev
+CreateGeoNode Vassar1 42360297 -71095096 42355397 -71104696 Vassar_St
+AddNode campus Vassar1
+CreateGeoNode Vassar1rev 42355397 -71104696 42360297 -71095096 Vassar_St
+AddNode campus Vassar1rev
+CreateGeoNode Vassar2 42355397 -71104696 42353497 -71107296 Vassar_St
+AddNode campus Vassar2
+CreateGeoNode Vassar2rev 42353497 -71107296 42355397 -71104696 Vassar_St
+AddNode campus Vassar2rev
+CreateGeoNode Amherst1 42358297 -71093396 42355397 -71104696 Amherst_St
+AddNode campus Amherst1
+CreateGeoNode Amherst1rev 42355397 -71104696 42358297 -71093396 Amherst_St
+AddNode campus Amherst1rev
+CreateGeoNode Amherst0 42361197 -71084696 42359246 -71087389 Amherst_St
+AddNode campus Amherst0
+CreateGeoNode Amherst0rev 42359246 -71087389 42361197 -71084696 Amherst_St
+AddNode campus Amherst0rev
+CreateGeoNode Wadsworth0 42362297 -71084396 42361197 -71084696 Wadsworth_St
+AddNode campus Wadsworth0
+CreateGeoNode Wadsworth0rev 42361197 -71084696 42362297 -71084396 Wadsworth_St
+AddNode campus Wadsworth0rev
+CreateGeoNode Wadsworth1 42361197 -71084696 42360097 -71083996 Wadsworth_St
+AddNode campus Wadsworth1
+CreateGeoNode Wadsworth1rev 42360097 -71083996 42361197 -71084696 Wadsworth_St
+AddNode campus Wadsworth1rev
+CreateGeoNode Ames0 42362597 -71088496 42359246 -71087389 Ames_St
+AddNode campus Ames0
+CreateGeoNode Ames0rev 42359246 -71087389 42362597 -71088496 Ames_St
+AddNode campus Ames0rev
+CreateGeoNode Ames1 42359246 -71087389 42358941 -71087240 Ames_St
+AddNode campus Ames1
+
+# Add the edges to the graph.  Each edge represents an allowed turn
+# from one street to another.
+
+AddEdge campus MemDrive0 MemDrive1
+AddEdge campus MemDrive0rev Main3
+AddEdge campus MemDrive1 MemDrive2
+AddEdge campus MemDrive1rev Wadsworth1rev
+AddEdge campus MemDrive1rev MemDrive0rev
+AddEdge campus MemDrive2rev MemDrive1rev
+AddEdge campus MemDrive2 MemDrive3
+AddEdge campus MemDrive2 MassAve0rev
+AddEdge campus MemDrive3 Vassar2rev
+AddEdge campus Main3rev MemDrive0
+AddEdge campus Main3 Main2
+AddEdge campus Main3 Wadsworth0
+AddEdge campus Main2rev Main3rev
+AddEdge campus Main2 Main1
+AddEdge campus Main2rev Wadsworth0
+AddEdge campus Main2 Ames0
+AddEdge campus Main1rev Ames0
+AddEdge campus Main1rev Main2rev
+AddEdge campus Main1 Main0
+AddEdge campus Main1 Vassar0
+AddEdge campus Main0rev Main1rev
+AddEdge campus Main0 MassAve2
+AddEdge campus Main0rev Vassar0
+AddEdge campus MassAve2 MassAve1
+AddEdge campus MassAve2rev Main0rev
+AddEdge campus MassAve2 Vassar0rev
+AddEdge campus MassAve2 Vassar1
+AddEdge campus MassAve1rev MassAve2rev
+AddEdge campus MassAve1 MassAve0
+AddEdge campus MassAve1rev Vassar0rev
+AddEdge campus MassAve1rev Vassar1
+AddEdge campus MassAve1 Amherst1
+AddEdge campus MassAve0 MemDrive3
+AddEdge campus MassAve0rev Amherst1
+AddEdge campus MassAve0rev MassAve1rev
+AddEdge campus Vassar0 Vassar1
+AddEdge campus Vassar0rev Main1rev
+AddEdge campus Vassar0rev Main0
+AddEdge campus Vassar0 MassAve1
+AddEdge campus Vassar0 MassAve2rev
+AddEdge campus Vassar1rev Vassar0rev
+AddEdge campus Vassar1 Vassar2
+AddEdge campus Vassar1rev MassAve1
+AddEdge campus Vassar1rev MassAve2rev
+AddEdge campus Vassar1 Amherst1rev
+AddEdge campus Vassar2rev Vassar1rev
+AddEdge campus Vassar2rev Amherst1rev
+AddEdge campus Vassar2 MemDrive3rev
+AddEdge campus Amherst1rev MassAve0
+AddEdge campus Amherst1rev MassAve1rev
+AddEdge campus Amherst1 Vassar1rev
+AddEdge campus Amherst1 Vassar2
+AddEdge campus Amherst0 Ames1
+AddEdge campus Amherst0 Ames0rev
+AddEdge campus Amherst0rev Wadsworth0rev
+AddEdge campus Amherst0rev Wadsworth1
+AddEdge campus Ames0 Ames1
+AddEdge campus Ames0rev Main2rev
+AddEdge campus Ames0rev Main1
+AddEdge campus Ames0 Amherst0rev
+AddEdge campus Ames1 MemDrive2
+AddEdge campus Wadsworth0 Wadsworth1
+AddEdge campus Wadsworth0 Amherst0
+AddEdge campus Wadsworth0rev Main2
+AddEdge campus Wadsworth0rev Main3rev
+AddEdge campus Wadsworth1 MemDrive0rev
+AddEdge campus Wadsworth1 MemDrive1
+AddEdge campus Wadsworth1rev Amherst0
+AddEdge campus Wadsworth1rev Wadsworth0rev
+
+# Run a handful of queries to lightly test path-finding on paths of
+# GeoSegments.  Note that we often search starting from each street
+# and its reverse, and search to the destination street and its
+# reverse, since you may start out driving in either direction, and
+# may end up driving in either direction.
+
+# MemDrive0 -> Vassar0
+FindGeoPath campus MemDrive0 MemDrive0rev -> Vassar0 Vassar0rev
+
+# Amherst1 -> MassAve0
+FindGeoPath campus Amherst1 Amherst1rev -> MassAve0 MassAve0rev
+
+# MemDrive0 -> MemDrive3
+FindGeoPath campus MemDrive0 MemDrive0rev -> MemDrive3 MemDrive3rev
+
+# Ames1 -> MassAve0
+FindGeoPath campus Ames1 -> MassAve0 MassAve0rev
+
+# Main3 -> MemDrive2
+FindGeoPath campus Main3 Main3rev -> MemDrive2 MemDrive2rev
+
+# Wadsworth0 -> Vassar1
+FindGeoPath campus Wadsworth0 Wadsworth0rev -> Vassar1 Vassar1rev
+
+# MemDrive0 -> MemDrive3
+FindGeoPath campus MemDrive0 MemDrive0rev -> MemDrive3 MemDrive3rev
+
+# MemDrive0 -> Main0
+FindGeoPath campus MemDrive0 MemDrive0rev -> Main0 Main0rev

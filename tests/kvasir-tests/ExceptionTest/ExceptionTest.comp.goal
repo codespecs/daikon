@@ -1,0 +1,17 @@
+..function(int):::ENTER
+a
+
+..function(int):::EXIT0
+a
+
+..main():::ENTER
+
+..main():::EXIT0
+return
+
+..thrower(int):::ENTER
+a
+
+..thrower(int):::EXIT0
+a
+

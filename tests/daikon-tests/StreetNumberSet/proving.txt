@@ -1,0 +1,35 @@
+
+JUnit assert statement needs to get annotated.
+
+Test suite yields strange upper bound errors, and needs to create a
+street with number zero.
+
+Constructor isn't getting a non-null argument invariant?
+
+Owner annotations should be set immediately after the object is
+assigned, or after the field initializer.
+
+Had to add this axiom:
+  /*@ axiom (\forall int i; ((i & 1) == 0) || ((i & 1) == 1)) */
+
+Contains has some weird RHSs of implications, since we don't have the
+entry ppt as a controlling thing for simplify.
+
+orderStatistic and size are too complicated for simplify to prove a
+positive result (given current annotations).  Perhaps adding the
+begins <= ends elementwise would be enough?
+
+isEmpty has some weird artifacs, like begins[*] > begins.length
+isEmpty is never called to return true
+
+min and max never got result >= 0
+
+min and max had \exists which didn't work out, perhaps because we need
+to require than !isEmpty?
+
+intersects never had argument != null, perhaps we're not calling it
+
+in equals(Object), ESC doesn't seem to know about instanceof
+
+equals and had some weird artifacs, like begins[*] > begins.length; in
+general too may artifacts

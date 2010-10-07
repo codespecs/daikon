@@ -1,0 +1,10 @@
+IntTest
+IntTest.decls.diff
+IntTest.dtrace.diff
+IntTest.out
+IntTest.out.diff
+daikon-output
+ran-kvasir
+IntTest.invs.diff
+*.counts *.counts.diff
+IntTest.comp IntTest.comp.diff

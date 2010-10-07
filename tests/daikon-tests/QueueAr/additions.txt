@@ -1,0 +1,12 @@
+//@ invariant (currentSize > 0) ==> ((front <= back) == (currentSize == back - front + 1))
+//@ invariant (currentSize > 0) ==> ((front > back) == (currentSize == theArray.length + back - front + 1))
+//@ invariant (currentSize == 0) ==> ((front <= back) == (front == 0 && back == theArray.length - 1))
+//@ invariant (currentSize == 0) ==> ((front > back) == (back == front - 1))
+
+//@ invariant (currentSize == 0) ==> (\forall int i; (0 <= i && i < theArray.length) ==> (theArray[i] == null))
+//@ invariant (currentSize > 0 && front <= back) ==> (\forall int i; (0 <= i && i < front) ==> (theArray[i] == null))
+//@ invariant (currentSize > 0 && front <= back) ==> (\forall int i; (i >= front && i <= back) ==> (theArray[i] != null))
+//@ invariant (currentSize > 0 && front <= back) ==> (\forall int i; (back < i && i < theArray.length) ==> (theArray[i] == null))
+//@ invariant (currentSize > 0 && back < front) ==> (\forall int i; (0 <= i && i <= back) ==> (theArray[i] != null))
+//@ invariant (currentSize > 0 && back < front) ==> (\forall int i; (i > back && i < front) ==> (theArray[i] == null))
+//@ invariant (currentSize > 0 && back < front) ==> (\forall int i; (front <= i && i < theArray.length) ==> (theArray[i] != null))

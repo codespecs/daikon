@@ -1,0 +1,52 @@
+#tests pathfinder on a relatively simple graph
+CreateNode n1 2
+CreateNode n2 20
+CreateNode n3 4
+CreateNode n4 4
+CreateNode n5 12
+CreateNode n6 1
+CreateNode n7 3
+CreateNode n8 9
+CreateNode n9 5
+CreateNode n10 3
+CreateNode n11 11
+CreateGraph A
+AddNode A n1
+AddNode A n2
+AddNode A n3
+AddNode A n4
+AddNode A n5
+AddNode A n6
+AddNode A n7
+AddNode A n8
+AddNode A n9
+AddNode A n10
+AddNode A n11
+AddEdge A n1 n2
+AddEdge A n1 n5
+AddEdge A n1 n8
+AddEdge A n2 n3
+AddEdge A n2 n7
+AddEdge A n3 n4
+AddEdge A n4 n3
+AddEdge A n4 n7
+AddEdge A n4 n11
+AddEdge A n5 n1
+AddEdge A n5 n2
+AddEdge A n5 n6
+AddEdge A n6 n9
+AddEdge A n6 n10
+AddEdge A n7 n11
+AddEdge A n8 n5
+AddEdge A n8 n9
+AddEdge A n9 n5
+AddEdge A n9 n6
+AddEdge A n9 n10
+AddEdge A n10 n7
+AddEdge A n11 n10
+AddEdge A n1 n1
+
+#path testing with edges
+FindPath A n1 -> n11
+FindPath A n2 -> n2
+FindPath A n1 -> n1

@@ -1,0 +1,130 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..f():::ENTER
+  ppt-type enter
+  variable ::global
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::global[..]
+    var-kind array
+    enclosing-var ::global
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable ::global[..][0]
+    var-kind field [0]
+    enclosing-var ::global[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ppp
+    var-kind variable
+    rep-type hashcode
+    dec-type int***
+    flags is_param 
+  variable ppp[..]
+    var-kind array
+    enclosing-var ppp
+    array 1
+    rep-type hashcode[]
+    dec-type int**[]
+  variable ppp[..][0]
+    var-kind field [0]
+    enclosing-var ppp[..]
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable ppp[..][0][0]
+    var-kind field [0]
+    enclosing-var ppp[..][0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..f():::EXIT0
+  ppt-type subexit
+  variable ::global
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::global[..]
+    var-kind array
+    enclosing-var ::global
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable ::global[..][0]
+    var-kind field [0]
+    enclosing-var ::global[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ppp
+    var-kind variable
+    rep-type hashcode
+    dec-type int***
+    flags is_param 
+  variable ppp[..]
+    var-kind array
+    enclosing-var ppp
+    array 1
+    rep-type hashcode[]
+    dec-type int**[]
+  variable ppp[..][0]
+    var-kind field [0]
+    enclosing-var ppp[..]
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable ppp[..][0][0]
+    var-kind field [0]
+    enclosing-var ppp[..][0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::global
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::global[..]
+    var-kind array
+    enclosing-var ::global
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable ::global[..][0]
+    var-kind field [0]
+    enclosing-var ::global[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::global
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+  variable ::global[..]
+    var-kind array
+    enclosing-var ::global
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable ::global[..][0]
+    var-kind field [0]
+    enclosing-var ::global[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+

@@ -1,0 +1,5491 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..fooOverload(int):::ENTER
+  ppt-type enter
+  parent user _buffers:::OBJECT 1
+  parent user <anonymous\_struct>:::OBJECT 2
+  variable ::abracadabra
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>
+  variable ::abracadabra.B
+    var-kind field B
+    enclosing-var ::abracadabra
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::abracadabra.B[..]
+    var-kind array
+    enclosing-var ::abracadabra.B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[2]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::abracadabra.foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::basicIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::basicIntArray[..]
+    var-kind array
+    enclosing-var ::basicIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::eightA[..]
+    var-kind array
+    enclosing-var ::eightA
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[2]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalInt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalIntPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntPtr[..]
+    var-kind array
+    enclosing-var ::globalIntPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::multiDimensional
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::multiDimensional[..]
+    var-kind array
+    enclosing-var ::multiDimensional
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+    flags non_null 
+  variable ::populationPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+  variable ::populationPtr[..]
+    var-kind array
+    enclosing-var ::populationPtr
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::populationPtr[..].SS
+    var-kind field SS
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::populationPtr[..].age
+    var-kind field age
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::populationPtr[..].firstName
+    var-kind field firstName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].lastName
+    var-kind field lastName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].middleName
+    var-kind field middleName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].weight
+    var-kind field weight
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::population[..]
+    var-kind array
+    enclosing-var ::population
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::population[..].SS
+    var-kind field SS
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::population[..].age
+    var-kind field age
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population[..].firstName
+    var-kind field firstName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].lastName
+    var-kind field lastName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::population[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].middleName
+    var-kind field middleName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].weight
+    var-kind field weight
+    enclosing-var ::population[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable over
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..fooOverload(int):::EXIT0
+  ppt-type subexit
+  parent user _buffers:::OBJECT 1
+  parent user <anonymous\_struct>:::OBJECT 2
+  variable ::abracadabra
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>
+  variable ::abracadabra.B
+    var-kind field B
+    enclosing-var ::abracadabra
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::abracadabra.B[..]
+    var-kind array
+    enclosing-var ::abracadabra.B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[2]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::abracadabra.foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::basicIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::basicIntArray[..]
+    var-kind array
+    enclosing-var ::basicIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::eightA[..]
+    var-kind array
+    enclosing-var ::eightA
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[2]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalInt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalIntPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntPtr[..]
+    var-kind array
+    enclosing-var ::globalIntPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::multiDimensional
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::multiDimensional[..]
+    var-kind array
+    enclosing-var ::multiDimensional
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+    flags non_null 
+  variable ::populationPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+  variable ::populationPtr[..]
+    var-kind array
+    enclosing-var ::populationPtr
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::populationPtr[..].SS
+    var-kind field SS
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::populationPtr[..].age
+    var-kind field age
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::populationPtr[..].firstName
+    var-kind field firstName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].lastName
+    var-kind field lastName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].middleName
+    var-kind field middleName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].weight
+    var-kind field weight
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::population[..]
+    var-kind array
+    enclosing-var ::population
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::population[..].SS
+    var-kind field SS
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::population[..].age
+    var-kind field age
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population[..].firstName
+    var-kind field firstName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].lastName
+    var-kind field lastName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::population[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].middleName
+    var-kind field middleName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].weight
+    var-kind field weight
+    enclosing-var ::population[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable over
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..fooOverload(short,\_char*):::ENTER
+  ppt-type enter
+  parent user _buffers:::OBJECT 1
+  parent user <anonymous\_struct>:::OBJECT 2
+  variable ::abracadabra
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>
+  variable ::abracadabra.B
+    var-kind field B
+    enclosing-var ::abracadabra
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::abracadabra.B[..]
+    var-kind array
+    enclosing-var ::abracadabra.B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[2]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::abracadabra.foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::basicIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::basicIntArray[..]
+    var-kind array
+    enclosing-var ::basicIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::eightA[..]
+    var-kind array
+    enclosing-var ::eightA
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[2]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalInt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalIntPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntPtr[..]
+    var-kind array
+    enclosing-var ::globalIntPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::multiDimensional
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::multiDimensional[..]
+    var-kind array
+    enclosing-var ::multiDimensional
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+    flags non_null 
+  variable ::populationPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+  variable ::populationPtr[..]
+    var-kind array
+    enclosing-var ::populationPtr
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::populationPtr[..].SS
+    var-kind field SS
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::populationPtr[..].age
+    var-kind field age
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::populationPtr[..].firstName
+    var-kind field firstName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].lastName
+    var-kind field lastName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].middleName
+    var-kind field middleName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].weight
+    var-kind field weight
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::population[..]
+    var-kind array
+    enclosing-var ::population
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::population[..].SS
+    var-kind field SS
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::population[..].age
+    var-kind field age
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population[..].firstName
+    var-kind field firstName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].lastName
+    var-kind field lastName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::population[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].middleName
+    var-kind field middleName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].weight
+    var-kind field weight
+    enclosing-var ::population[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ed
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable load
+    var-kind variable
+    rep-type int
+    dec-type short
+    flags is_param 
+
+ppt ..fooOverload(short,\_char*):::EXIT0
+  ppt-type subexit
+  parent user _buffers:::OBJECT 1
+  parent user <anonymous\_struct>:::OBJECT 2
+  variable ::abracadabra
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>
+  variable ::abracadabra.B
+    var-kind field B
+    enclosing-var ::abracadabra
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::abracadabra.B[..]
+    var-kind array
+    enclosing-var ::abracadabra.B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[2]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::abracadabra.foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::basicIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::basicIntArray[..]
+    var-kind array
+    enclosing-var ::basicIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::eightA[..]
+    var-kind array
+    enclosing-var ::eightA
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[2]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalInt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalIntPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntPtr[..]
+    var-kind array
+    enclosing-var ::globalIntPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::multiDimensional
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::multiDimensional[..]
+    var-kind array
+    enclosing-var ::multiDimensional
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+    flags non_null 
+  variable ::populationPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+  variable ::populationPtr[..]
+    var-kind array
+    enclosing-var ::populationPtr
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::populationPtr[..].SS
+    var-kind field SS
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::populationPtr[..].age
+    var-kind field age
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::populationPtr[..].firstName
+    var-kind field firstName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].lastName
+    var-kind field lastName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].middleName
+    var-kind field middleName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].weight
+    var-kind field weight
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::population[..]
+    var-kind array
+    enclosing-var ::population
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::population[..].SS
+    var-kind field SS
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::population[..].age
+    var-kind field age
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population[..].firstName
+    var-kind field firstName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].lastName
+    var-kind field lastName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::population[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].middleName
+    var-kind field middleName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].weight
+    var-kind field weight
+    enclosing-var ::population[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ed
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable load
+    var-kind variable
+    rep-type int
+    dec-type short
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..main():::ENTER
+  ppt-type enter
+  parent user _buffers:::OBJECT 1
+  parent user <anonymous\_struct>:::OBJECT 2
+  variable ::abracadabra
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>
+  variable ::abracadabra.B
+    var-kind field B
+    enclosing-var ::abracadabra
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::abracadabra.B[..]
+    var-kind array
+    enclosing-var ::abracadabra.B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[2]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::abracadabra.foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::basicIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::basicIntArray[..]
+    var-kind array
+    enclosing-var ::basicIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::eightA[..]
+    var-kind array
+    enclosing-var ::eightA
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[2]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalInt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalIntPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntPtr[..]
+    var-kind array
+    enclosing-var ::globalIntPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::multiDimensional
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::multiDimensional[..]
+    var-kind array
+    enclosing-var ::multiDimensional
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+    flags non_null 
+  variable ::populationPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+  variable ::populationPtr[..]
+    var-kind array
+    enclosing-var ::populationPtr
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::populationPtr[..].SS
+    var-kind field SS
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::populationPtr[..].age
+    var-kind field age
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::populationPtr[..].firstName
+    var-kind field firstName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].lastName
+    var-kind field lastName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].middleName
+    var-kind field middleName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].weight
+    var-kind field weight
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::population[..]
+    var-kind array
+    enclosing-var ::population
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::population[..].SS
+    var-kind field SS
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::population[..].age
+    var-kind field age
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population[..].firstName
+    var-kind field firstName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].lastName
+    var-kind field lastName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::population[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].middleName
+    var-kind field middleName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].weight
+    var-kind field weight
+    enclosing-var ::population[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  parent user _buffers:::OBJECT 1
+  parent user <anonymous\_struct>:::OBJECT 2
+  variable ::abracadabra
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>
+  variable ::abracadabra.B
+    var-kind field B
+    enclosing-var ::abracadabra
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::abracadabra.B[..]
+    var-kind array
+    enclosing-var ::abracadabra.B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[2]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::abracadabra.foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::basicIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::basicIntArray[..]
+    var-kind array
+    enclosing-var ::basicIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::eightA[..]
+    var-kind array
+    enclosing-var ::eightA
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[2]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalInt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalIntPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntPtr[..]
+    var-kind array
+    enclosing-var ::globalIntPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::multiDimensional
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::multiDimensional[..]
+    var-kind array
+    enclosing-var ::multiDimensional
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+    flags non_null 
+  variable ::populationPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+  variable ::populationPtr[..]
+    var-kind array
+    enclosing-var ::populationPtr
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::populationPtr[..].SS
+    var-kind field SS
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::populationPtr[..].age
+    var-kind field age
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::populationPtr[..].firstName
+    var-kind field firstName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].lastName
+    var-kind field lastName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].middleName
+    var-kind field middleName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].weight
+    var-kind field weight
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::population[..]
+    var-kind array
+    enclosing-var ::population
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::population[..].SS
+    var-kind field SS
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::population[..].age
+    var-kind field age
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population[..].firstName
+    var-kind field firstName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].lastName
+    var-kind field lastName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::population[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].middleName
+    var-kind field middleName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].weight
+    var-kind field weight
+    enclosing-var ::population[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
+  ppt-type enter
+  parent user _buffers:::OBJECT 1
+  parent user <anonymous\_struct>:::OBJECT 2
+  variable ::abracadabra
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>
+  variable ::abracadabra.B
+    var-kind field B
+    enclosing-var ::abracadabra
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::abracadabra.B[..]
+    var-kind array
+    enclosing-var ::abracadabra.B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[2]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::abracadabra.foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::basicIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::basicIntArray[..]
+    var-kind array
+    enclosing-var ::basicIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::eightA[..]
+    var-kind array
+    enclosing-var ::eightA
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[2]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalInt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalIntPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntPtr[..]
+    var-kind array
+    enclosing-var ::globalIntPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::multiDimensional
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::multiDimensional[..]
+    var-kind array
+    enclosing-var ::multiDimensional
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+    flags non_null 
+  variable ::populationPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+  variable ::populationPtr[..]
+    var-kind array
+    enclosing-var ::populationPtr
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::populationPtr[..].SS
+    var-kind field SS
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::populationPtr[..].age
+    var-kind field age
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::populationPtr[..].firstName
+    var-kind field firstName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].lastName
+    var-kind field lastName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].middleName
+    var-kind field middleName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].weight
+    var-kind field weight
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::population[..]
+    var-kind array
+    enclosing-var ::population
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::population[..].SS
+    var-kind field SS
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::population[..].age
+    var-kind field age
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population[..].firstName
+    var-kind field firstName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].lastName
+    var-kind field lastName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::population[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].middleName
+    var-kind field middleName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].weight
+    var-kind field weight
+    enclosing-var ::population[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable aStruct
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>
+    flags is_param 
+  variable aStruct.B
+    var-kind field B
+    enclosing-var aStruct
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable aStruct.B[..]
+    var-kind array
+    enclosing-var aStruct.B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable aStruct.B[..].B[0]
+    var-kind field [0]
+    enclosing-var aStruct.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable aStruct.B[..].B[0]->B
+    var-kind field B
+    enclosing-var aStruct.B[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable aStruct.B[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var aStruct.B[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable aStruct.B[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var aStruct.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable aStruct.B[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var aStruct.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable aStruct.B[..].B[0][0]
+    var-kind field [0]
+    enclosing-var aStruct.B[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable aStruct.B[..].B[1]
+    var-kind field B
+    enclosing-var aStruct.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable aStruct.B[..].B[1]->B
+    var-kind field B
+    enclosing-var aStruct.B[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable aStruct.B[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var aStruct.B[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable aStruct.B[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var aStruct.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable aStruct.B[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var aStruct.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable aStruct.B[..].B[1][0]
+    var-kind field [0]
+    enclosing-var aStruct.B[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable aStruct.B[..].B[2]
+    var-kind field B
+    enclosing-var aStruct.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable aStruct.B[..].B[2][0]
+    var-kind field [0]
+    enclosing-var aStruct.B[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable aStruct.B[..].foo_head
+    var-kind field foo_head
+    enclosing-var aStruct.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable aStruct.B[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var aStruct.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable aStruct.foo_head
+    var-kind field foo_head
+    enclosing-var aStruct
+    rep-type int
+    dec-type int
+  variable aStruct.foo_tail
+    var-kind field foo_tail
+    enclosing-var aStruct
+    rep-type int
+    dec-type int
+  variable bufferStruct
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers
+    flags is_param 
+  variable bufferStruct.SS
+    var-kind field SS
+    enclosing-var bufferStruct
+    rep-type int
+    dec-type unsigned\_int
+  variable bufferStruct.age
+    var-kind field age
+    enclosing-var bufferStruct
+    rep-type int
+    dec-type int
+  variable bufferStruct.firstName
+    var-kind field firstName
+    enclosing-var bufferStruct
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable bufferStruct.lastName
+    var-kind field lastName
+    enclosing-var bufferStruct
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable bufferStruct.mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var bufferStruct
+    rep-type string
+    dec-type char*
+  variable bufferStruct.middleName
+    var-kind field middleName
+    enclosing-var bufferStruct
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable bufferStruct.weight
+    var-kind field weight
+    enclosing-var bufferStruct
+    rep-type double
+    dec-type double
+  variable bufferStructPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+    flags is_param 
+  variable bufferStructPtr[..]
+    var-kind array
+    enclosing-var bufferStructPtr
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable bufferStructPtr[..].SS
+    var-kind field SS
+    enclosing-var bufferStructPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable bufferStructPtr[..].age
+    var-kind field age
+    enclosing-var bufferStructPtr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable bufferStructPtr[..].firstName
+    var-kind field firstName
+    enclosing-var bufferStructPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable bufferStructPtr[..].lastName
+    var-kind field lastName
+    enclosing-var bufferStructPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable bufferStructPtr[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var bufferStructPtr[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable bufferStructPtr[..].middleName
+    var-kind field middleName
+    enclosing-var bufferStructPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable bufferStructPtr[..].weight
+    var-kind field weight
+    enclosing-var bufferStructPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable myInt
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable myIntPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags is_param 
+  variable myIntPtr[..]
+    var-kind array
+    enclosing-var myIntPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
+  ppt-type subexit
+  parent user _buffers:::OBJECT 1
+  parent user <anonymous\_struct>:::OBJECT 2
+  variable ::abracadabra
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>
+  variable ::abracadabra.B
+    var-kind field B
+    enclosing-var ::abracadabra
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::abracadabra.B[..]
+    var-kind array
+    enclosing-var ::abracadabra.B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[2]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::abracadabra.foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::basicIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::basicIntArray[..]
+    var-kind array
+    enclosing-var ::basicIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::eightA[..]
+    var-kind array
+    enclosing-var ::eightA
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[2]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalInt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalIntPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntPtr[..]
+    var-kind array
+    enclosing-var ::globalIntPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::multiDimensional
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::multiDimensional[..]
+    var-kind array
+    enclosing-var ::multiDimensional
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+    flags non_null 
+  variable ::populationPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+  variable ::populationPtr[..]
+    var-kind array
+    enclosing-var ::populationPtr
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::populationPtr[..].SS
+    var-kind field SS
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::populationPtr[..].age
+    var-kind field age
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::populationPtr[..].firstName
+    var-kind field firstName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].lastName
+    var-kind field lastName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].middleName
+    var-kind field middleName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].weight
+    var-kind field weight
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::population[..]
+    var-kind array
+    enclosing-var ::population
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::population[..].SS
+    var-kind field SS
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::population[..].age
+    var-kind field age
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population[..].firstName
+    var-kind field firstName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].lastName
+    var-kind field lastName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::population[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].middleName
+    var-kind field middleName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].weight
+    var-kind field weight
+    enclosing-var ::population[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable aStruct
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>
+    flags is_param 
+  variable aStruct.B
+    var-kind field B
+    enclosing-var aStruct
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable aStruct.B[..]
+    var-kind array
+    enclosing-var aStruct.B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable aStruct.B[..].B[0]
+    var-kind field [0]
+    enclosing-var aStruct.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable aStruct.B[..].B[0]->B
+    var-kind field B
+    enclosing-var aStruct.B[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable aStruct.B[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var aStruct.B[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable aStruct.B[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var aStruct.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable aStruct.B[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var aStruct.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable aStruct.B[..].B[0][0]
+    var-kind field [0]
+    enclosing-var aStruct.B[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable aStruct.B[..].B[1]
+    var-kind field B
+    enclosing-var aStruct.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable aStruct.B[..].B[1]->B
+    var-kind field B
+    enclosing-var aStruct.B[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable aStruct.B[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var aStruct.B[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable aStruct.B[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var aStruct.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable aStruct.B[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var aStruct.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable aStruct.B[..].B[1][0]
+    var-kind field [0]
+    enclosing-var aStruct.B[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable aStruct.B[..].B[2]
+    var-kind field B
+    enclosing-var aStruct.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable aStruct.B[..].B[2][0]
+    var-kind field [0]
+    enclosing-var aStruct.B[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable aStruct.B[..].foo_head
+    var-kind field foo_head
+    enclosing-var aStruct.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable aStruct.B[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var aStruct.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable aStruct.foo_head
+    var-kind field foo_head
+    enclosing-var aStruct
+    rep-type int
+    dec-type int
+  variable aStruct.foo_tail
+    var-kind field foo_tail
+    enclosing-var aStruct
+    rep-type int
+    dec-type int
+  variable bufferStruct
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers
+    flags is_param 
+  variable bufferStruct.SS
+    var-kind field SS
+    enclosing-var bufferStruct
+    rep-type int
+    dec-type unsigned\_int
+  variable bufferStruct.age
+    var-kind field age
+    enclosing-var bufferStruct
+    rep-type int
+    dec-type int
+  variable bufferStruct.firstName
+    var-kind field firstName
+    enclosing-var bufferStruct
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable bufferStruct.lastName
+    var-kind field lastName
+    enclosing-var bufferStruct
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable bufferStruct.mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var bufferStruct
+    rep-type string
+    dec-type char*
+  variable bufferStruct.middleName
+    var-kind field middleName
+    enclosing-var bufferStruct
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable bufferStruct.weight
+    var-kind field weight
+    enclosing-var bufferStruct
+    rep-type double
+    dec-type double
+  variable bufferStructPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+    flags is_param 
+  variable bufferStructPtr[..]
+    var-kind array
+    enclosing-var bufferStructPtr
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable bufferStructPtr[..].SS
+    var-kind field SS
+    enclosing-var bufferStructPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable bufferStructPtr[..].age
+    var-kind field age
+    enclosing-var bufferStructPtr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable bufferStructPtr[..].firstName
+    var-kind field firstName
+    enclosing-var bufferStructPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable bufferStructPtr[..].lastName
+    var-kind field lastName
+    enclosing-var bufferStructPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable bufferStructPtr[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var bufferStructPtr[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable bufferStructPtr[..].middleName
+    var-kind field middleName
+    enclosing-var bufferStructPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable bufferStructPtr[..].weight
+    var-kind field weight
+    enclosing-var bufferStructPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable myInt
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable myIntPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags is_param 
+  variable myIntPtr[..]
+    var-kind array
+    enclosing-var myIntPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+  variable return[..]
+    var-kind array
+    enclosing-var return
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable return[..].B[0]
+    var-kind field [0]
+    enclosing-var return[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable return[..].B[0]->B
+    var-kind field B
+    enclosing-var return[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable return[..].B[0]->B->B
+    var-kind field B
+    enclosing-var return[..].B[0]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable return[..].B[0]->B->B[0]
+    var-kind field [0]
+    enclosing-var return[..].B[0]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable return[..].B[0]->B->foo_head
+    var-kind field foo_head
+    enclosing-var return[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].B[0]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var return[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var return[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable return[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var return[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var return[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].B[0][0]
+    var-kind field [0]
+    enclosing-var return[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable return[..].B[1]
+    var-kind field B
+    enclosing-var return[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable return[..].B[1]->B
+    var-kind field B
+    enclosing-var return[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable return[..].B[1]->B->B
+    var-kind field B
+    enclosing-var return[..].B[1]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable return[..].B[1]->B->B[0]
+    var-kind field [0]
+    enclosing-var return[..].B[1]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable return[..].B[1]->B->foo_head
+    var-kind field foo_head
+    enclosing-var return[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].B[1]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var return[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var return[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable return[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var return[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var return[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].B[1][0]
+    var-kind field [0]
+    enclosing-var return[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable return[..].B[2]
+    var-kind field B
+    enclosing-var return[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable return[..].B[2][0]
+    var-kind field [0]
+    enclosing-var return[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable return[..].foo_head
+    var-kind field foo_head
+    enclosing-var return[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var return[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt <anonymous\_struct>:::OBJECT
+  ppt-type object
+  variable this->B
+    var-kind field B
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable this->B[..]
+    var-kind array
+    enclosing-var this->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable this->B[..].B[0]
+    var-kind field [0]
+    enclosing-var this->B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable this->B[..].B[0]->B
+    var-kind field B
+    enclosing-var this->B[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable this->B[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var this->B[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable this->B[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var this->B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable this->B[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var this->B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable this->B[..].B[0][0]
+    var-kind field [0]
+    enclosing-var this->B[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable this->B[..].B[1]
+    var-kind field B
+    enclosing-var this->B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable this->B[..].B[1]->B
+    var-kind field B
+    enclosing-var this->B[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable this->B[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var this->B[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable this->B[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var this->B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable this->B[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var this->B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable this->B[..].B[1][0]
+    var-kind field [0]
+    enclosing-var this->B[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable this->B[..].B[2]
+    var-kind field B
+    enclosing-var this->B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable this->B[..].B[2][0]
+    var-kind field [0]
+    enclosing-var this->B[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable this->B[..].foo_head
+    var-kind field foo_head
+    enclosing-var this->B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable this->B[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var this->B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable this->foo_head
+    var-kind field foo_head
+    rep-type int
+    dec-type int
+  variable this->foo_tail
+    var-kind field foo_tail
+    rep-type int
+    dec-type int
+
+ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
+  ppt-type enter
+  parent user _buffers:::OBJECT 1
+  parent user <anonymous\_struct>:::OBJECT 2
+  variable ::abracadabra
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>
+  variable ::abracadabra.B
+    var-kind field B
+    enclosing-var ::abracadabra
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::abracadabra.B[..]
+    var-kind array
+    enclosing-var ::abracadabra.B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[2]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::abracadabra.foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::basicIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::basicIntArray[..]
+    var-kind array
+    enclosing-var ::basicIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::eightA[..]
+    var-kind array
+    enclosing-var ::eightA
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[2]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalInt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalIntPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntPtr[..]
+    var-kind array
+    enclosing-var ::globalIntPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::multiDimensional
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::multiDimensional[..]
+    var-kind array
+    enclosing-var ::multiDimensional
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+    flags non_null 
+  variable ::populationPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+  variable ::populationPtr[..]
+    var-kind array
+    enclosing-var ::populationPtr
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::populationPtr[..].SS
+    var-kind field SS
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::populationPtr[..].age
+    var-kind field age
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::populationPtr[..].firstName
+    var-kind field firstName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].lastName
+    var-kind field lastName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].middleName
+    var-kind field middleName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].weight
+    var-kind field weight
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::population[..]
+    var-kind array
+    enclosing-var ::population
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::population[..].SS
+    var-kind field SS
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::population[..].age
+    var-kind field age
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population[..].firstName
+    var-kind field firstName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].lastName
+    var-kind field lastName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::population[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].middleName
+    var-kind field middleName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].weight
+    var-kind field weight
+    enclosing-var ::population[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags is_param 
+  variable b[..]
+    var-kind array
+    enclosing-var b
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
+  ppt-type subexit
+  parent user _buffers:::OBJECT 1
+  parent user <anonymous\_struct>:::OBJECT 2
+  variable ::abracadabra
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>
+  variable ::abracadabra.B
+    var-kind field B
+    enclosing-var ::abracadabra
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::abracadabra.B[..]
+    var-kind array
+    enclosing-var ::abracadabra.B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B
+    var-kind field B
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].B[2]
+    var-kind field B
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::abracadabra.B[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::abracadabra.B[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::abracadabra.B[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.B[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra.B[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::abracadabra.foo_head
+    var-kind field foo_head
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::abracadabra.foo_tail
+    var-kind field foo_tail
+    enclosing-var ::abracadabra
+    rep-type int
+    dec-type int
+  variable ::basicIntArray
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::basicIntArray[..]
+    var-kind array
+    enclosing-var ::basicIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA
+    var-kind variable
+    rep-type hashcode
+    dec-type <anonymous\_struct>*
+    flags non_null 
+  variable ::eightA[..]
+    var-kind array
+    enclosing-var ::eightA
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[0]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[0]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[0]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[0][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[0]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B
+    var-kind field B
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[1]->B->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->B->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]->B
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->B[0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]->B
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[1]->foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1]->foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..].B[1]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].B[1][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[1]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].B[2]
+    var-kind field B
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>*[]
+    flags non_null 
+  variable ::eightA[..].B[2][0]
+    var-kind field [0]
+    enclosing-var ::eightA[..].B[2]
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type <anonymous\_struct>[]
+  variable ::eightA[..].foo_head
+    var-kind field foo_head
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::eightA[..].foo_tail
+    var-kind field foo_tail
+    enclosing-var ::eightA[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalInt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalIntPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+  variable ::globalIntPtr[..]
+    var-kind array
+    enclosing-var ::globalIntPtr
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::multiDimensional
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::multiDimensional[..]
+    var-kind array
+    enclosing-var ::multiDimensional
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+    flags non_null 
+  variable ::populationPtr
+    var-kind variable
+    rep-type hashcode
+    dec-type _buffers*
+  variable ::populationPtr[..]
+    var-kind array
+    enclosing-var ::populationPtr
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::populationPtr[..].SS
+    var-kind field SS
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::populationPtr[..].age
+    var-kind field age
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::populationPtr[..].firstName
+    var-kind field firstName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].lastName
+    var-kind field lastName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].middleName
+    var-kind field middleName
+    enclosing-var ::populationPtr[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::populationPtr[..].weight
+    var-kind field weight
+    enclosing-var ::populationPtr[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::population[..]
+    var-kind array
+    enclosing-var ::population
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type _buffers[]
+  variable ::population[..].SS
+    var-kind field SS
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type unsigned\_int[]
+  variable ::population[..].age
+    var-kind field age
+    enclosing-var ::population[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::population[..].firstName
+    var-kind field firstName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].lastName
+    var-kind field lastName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].mallocMePlease
+    var-kind field mallocMePlease
+    enclosing-var ::population[..]
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].middleName
+    var-kind field middleName
+    enclosing-var ::population[..]
+    reference-type offset
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable ::population[..].weight
+    var-kind field weight
+    enclosing-var ::population[..]
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags is_param 
+  variable b[..]
+    var-kind array
+    enclosing-var b
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt _buffers:::OBJECT
+  ppt-type object
+  variable this->SS
+    var-kind field SS
+    rep-type int
+    dec-type unsigned\_int
+  variable this->age
+    var-kind field age
+    rep-type int
+    dec-type int
+  variable this->firstName
+    var-kind field firstName
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable this->lastName
+    var-kind field lastName
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable this->mallocMePlease
+    var-kind field mallocMePlease
+    rep-type string
+    dec-type char*
+  variable this->middleName
+    var-kind field middleName
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable this->weight
+    var-kind field weight
+    rep-type double
+    dec-type double
+

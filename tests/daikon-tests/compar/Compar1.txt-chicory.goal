@@ -1,0 +1,3377 @@
+// Declarations for misc.Compar1
+// Declarations written Thu Oct 15 13:09:53 EDT 2009
+
+decl-version 2.0
+var-comparability none
+
+ppt misc.Compar1.Compar1():::ENTER
+ppt-type enter
+
+ppt misc.Compar1.Compar1():::EXIT4
+ppt-type subexit
+parent parent misc.Compar1:::OBJECT 1
+  variable this
+    var-kind variable 
+    dec-type misc.Compar1
+    rep-type hashcode
+    flags is_param
+    comparability 22
+    parent misc.Compar1:::OBJECT 1
+
+ppt misc.Compar1.main(java.lang.String[]):::ENTER
+ppt-type enter
+  variable args
+    var-kind variable 
+    dec-type java.lang.String[]
+    rep-type hashcode
+    flags is_param
+    comparability 22
+  variable args.getClass()
+    var-kind function getClass()
+    enclosing-var args
+    dec-type java.lang.Class
+    rep-type java.lang.String
+    flags synthetic classname
+    comparability 22
+  variable args[..]
+    var-kind array 
+    enclosing-var args
+    array 1
+    dec-type java.lang.String[]
+    rep-type hashcode[]
+    comparability 22
+  variable args[..].toString
+    var-kind function toString()
+    enclosing-var args[..]
+    array 1
+    dec-type java.lang.String[]
+    rep-type java.lang.String[]
+    flags synthetic to_string
+    comparability 22
+
+ppt misc.Compar1.main(java.lang.String[]):::EXIT19
+ppt-type subexit
+  variable args
+    var-kind variable 
+    dec-type java.lang.String[]
+    rep-type hashcode
+    flags is_param
+    comparability 22
+  variable args.getClass()
+    var-kind function getClass()
+    enclosing-var args
+    dec-type java.lang.Class
+    rep-type java.lang.String
+    flags synthetic classname
+    comparability 22
+  variable args[..]
+    var-kind array 
+    enclosing-var args
+    array 1
+    dec-type java.lang.String[]
+    rep-type hashcode[]
+    comparability 22
+  variable args[..].toString
+    var-kind function toString()
+    enclosing-var args[..]
+    array 1
+    dec-type java.lang.String[]
+    rep-type java.lang.String[]
+    flags synthetic to_string
+    comparability 22
+
+ppt misc.Compar1.bar(int,\_int,\_int,\_int):::ENTER
+ppt-type enter
+  variable i
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags is_param
+    comparability 22
+  variable j
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags is_param
+    comparability 22
+  variable k
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags is_param
+    comparability 22
+  variable l
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags is_param
+    comparability 22
+
+ppt misc.Compar1.bar(int,\_int,\_int,\_int):::EXIT29
+ppt-type subexit
+  variable i
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags is_param
+    comparability 22
+  variable j
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags is_param
+    comparability 22
+  variable k
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags is_param
+    comparability 22
+  variable l
+    var-kind variable 
+    dec-type int
+    rep-type int
+    flags is_param
+    comparability 22
+
+ppt misc.Compar1:::OBJECT
+ppt-type object
+  variable this
+    var-kind variable 
+    dec-type misc.Compar1
+    rep-type hashcode
+    flags is_param
+    comparability 22
+
+misc.Compar1.main(java.lang.String[]):::ENTER
+this_invocation_nonce
+0
+args
+16713087
+1
+args.getClass()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+1
+i
+0
+1
+j
+1
+1
+k
+2
+1
+l
+3
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+1
+i
+0
+1
+j
+1
+1
+k
+2
+1
+l
+3
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+2
+i
+1
+1
+j
+2
+1
+k
+3
+1
+l
+4
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+2
+i
+1
+1
+j
+2
+1
+k
+3
+1
+l
+4
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+3
+i
+2
+1
+j
+3
+1
+k
+4
+1
+l
+5
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+3
+i
+2
+1
+j
+3
+1
+k
+4
+1
+l
+5
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+4
+i
+3
+1
+j
+4
+1
+k
+5
+1
+l
+6
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+4
+i
+3
+1
+j
+4
+1
+k
+5
+1
+l
+6
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+5
+i
+4
+1
+j
+5
+1
+k
+6
+1
+l
+7
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+5
+i
+4
+1
+j
+5
+1
+k
+6
+1
+l
+7
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+6
+i
+5
+1
+j
+6
+1
+k
+7
+1
+l
+8
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+6
+i
+5
+1
+j
+6
+1
+k
+7
+1
+l
+8
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+7
+i
+6
+1
+j
+7
+1
+k
+8
+1
+l
+9
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+7
+i
+6
+1
+j
+7
+1
+k
+8
+1
+l
+9
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+8
+i
+7
+1
+j
+8
+1
+k
+9
+1
+l
+10
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+8
+i
+7
+1
+j
+8
+1
+k
+9
+1
+l
+10
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+9
+i
+8
+1
+j
+9
+1
+k
+10
+1
+l
+11
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+9
+i
+8
+1
+j
+9
+1
+k
+10
+1
+l
+11
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+10
+i
+9
+1
+j
+10
+1
+k
+11
+1
+l
+12
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+10
+i
+9
+1
+j
+10
+1
+k
+11
+1
+l
+12
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+11
+i
+10
+1
+j
+11
+1
+k
+12
+1
+l
+13
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+11
+i
+10
+1
+j
+11
+1
+k
+12
+1
+l
+13
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+12
+i
+11
+1
+j
+12
+1
+k
+13
+1
+l
+14
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+12
+i
+11
+1
+j
+12
+1
+k
+13
+1
+l
+14
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+13
+i
+12
+1
+j
+13
+1
+k
+14
+1
+l
+15
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+13
+i
+12
+1
+j
+13
+1
+k
+14
+1
+l
+15
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+14
+i
+13
+1
+j
+14
+1
+k
+15
+1
+l
+16
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+14
+i
+13
+1
+j
+14
+1
+k
+15
+1
+l
+16
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+15
+i
+14
+1
+j
+15
+1
+k
+16
+1
+l
+17
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+15
+i
+14
+1
+j
+15
+1
+k
+16
+1
+l
+17
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+16
+i
+15
+1
+j
+16
+1
+k
+17
+1
+l
+18
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+16
+i
+15
+1
+j
+16
+1
+k
+17
+1
+l
+18
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+17
+i
+16
+1
+j
+17
+1
+k
+18
+1
+l
+19
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+17
+i
+16
+1
+j
+17
+1
+k
+18
+1
+l
+19
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+18
+i
+17
+1
+j
+18
+1
+k
+19
+1
+l
+20
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+18
+i
+17
+1
+j
+18
+1
+k
+19
+1
+l
+20
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+19
+i
+18
+1
+j
+19
+1
+k
+20
+1
+l
+21
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+19
+i
+18
+1
+j
+19
+1
+k
+20
+1
+l
+21
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+20
+i
+19
+1
+j
+20
+1
+k
+21
+1
+l
+22
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+20
+i
+19
+1
+j
+20
+1
+k
+21
+1
+l
+22
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+21
+i
+20
+1
+j
+21
+1
+k
+22
+1
+l
+23
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+21
+i
+20
+1
+j
+21
+1
+k
+22
+1
+l
+23
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+22
+i
+21
+1
+j
+22
+1
+k
+23
+1
+l
+24
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+22
+i
+21
+1
+j
+22
+1
+k
+23
+1
+l
+24
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+23
+i
+22
+1
+j
+23
+1
+k
+24
+1
+l
+25
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+23
+i
+22
+1
+j
+23
+1
+k
+24
+1
+l
+25
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+24
+i
+23
+1
+j
+24
+1
+k
+25
+1
+l
+26
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+24
+i
+23
+1
+j
+24
+1
+k
+25
+1
+l
+26
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+25
+i
+24
+1
+j
+25
+1
+k
+26
+1
+l
+27
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+25
+i
+24
+1
+j
+25
+1
+k
+26
+1
+l
+27
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+26
+i
+25
+1
+j
+26
+1
+k
+27
+1
+l
+28
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+26
+i
+25
+1
+j
+26
+1
+k
+27
+1
+l
+28
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+27
+i
+26
+1
+j
+27
+1
+k
+28
+1
+l
+29
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+27
+i
+26
+1
+j
+27
+1
+k
+28
+1
+l
+29
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+28
+i
+27
+1
+j
+28
+1
+k
+29
+1
+l
+30
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+28
+i
+27
+1
+j
+28
+1
+k
+29
+1
+l
+30
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+29
+i
+28
+1
+j
+29
+1
+k
+30
+1
+l
+31
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+29
+i
+28
+1
+j
+29
+1
+k
+30
+1
+l
+31
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+30
+i
+29
+1
+j
+30
+1
+k
+31
+1
+l
+32
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+30
+i
+29
+1
+j
+30
+1
+k
+31
+1
+l
+32
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+31
+i
+30
+1
+j
+31
+1
+k
+32
+1
+l
+33
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+31
+i
+30
+1
+j
+31
+1
+k
+32
+1
+l
+33
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+32
+i
+31
+1
+j
+32
+1
+k
+33
+1
+l
+34
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+32
+i
+31
+1
+j
+32
+1
+k
+33
+1
+l
+34
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+33
+i
+32
+1
+j
+33
+1
+k
+34
+1
+l
+35
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+33
+i
+32
+1
+j
+33
+1
+k
+34
+1
+l
+35
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+34
+i
+33
+1
+j
+34
+1
+k
+35
+1
+l
+36
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+34
+i
+33
+1
+j
+34
+1
+k
+35
+1
+l
+36
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+35
+i
+34
+1
+j
+35
+1
+k
+36
+1
+l
+37
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+35
+i
+34
+1
+j
+35
+1
+k
+36
+1
+l
+37
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+36
+i
+35
+1
+j
+36
+1
+k
+37
+1
+l
+38
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+36
+i
+35
+1
+j
+36
+1
+k
+37
+1
+l
+38
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+37
+i
+36
+1
+j
+37
+1
+k
+38
+1
+l
+39
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+37
+i
+36
+1
+j
+37
+1
+k
+38
+1
+l
+39
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+38
+i
+37
+1
+j
+38
+1
+k
+39
+1
+l
+40
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+38
+i
+37
+1
+j
+38
+1
+k
+39
+1
+l
+40
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+39
+i
+38
+1
+j
+39
+1
+k
+40
+1
+l
+41
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+39
+i
+38
+1
+j
+39
+1
+k
+40
+1
+l
+41
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+40
+i
+39
+1
+j
+40
+1
+k
+41
+1
+l
+42
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+40
+i
+39
+1
+j
+40
+1
+k
+41
+1
+l
+42
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+41
+i
+40
+1
+j
+41
+1
+k
+42
+1
+l
+43
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+41
+i
+40
+1
+j
+41
+1
+k
+42
+1
+l
+43
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+42
+i
+41
+1
+j
+42
+1
+k
+43
+1
+l
+44
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+42
+i
+41
+1
+j
+42
+1
+k
+43
+1
+l
+44
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+43
+i
+42
+1
+j
+43
+1
+k
+44
+1
+l
+45
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+43
+i
+42
+1
+j
+43
+1
+k
+44
+1
+l
+45
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+44
+i
+43
+1
+j
+44
+1
+k
+45
+1
+l
+46
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+44
+i
+43
+1
+j
+44
+1
+k
+45
+1
+l
+46
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+45
+i
+44
+1
+j
+45
+1
+k
+46
+1
+l
+47
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+45
+i
+44
+1
+j
+45
+1
+k
+46
+1
+l
+47
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+46
+i
+45
+1
+j
+46
+1
+k
+47
+1
+l
+48
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+46
+i
+45
+1
+j
+46
+1
+k
+47
+1
+l
+48
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+47
+i
+46
+1
+j
+47
+1
+k
+48
+1
+l
+49
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+47
+i
+46
+1
+j
+47
+1
+k
+48
+1
+l
+49
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+48
+i
+47
+1
+j
+48
+1
+k
+49
+1
+l
+50
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+48
+i
+47
+1
+j
+48
+1
+k
+49
+1
+l
+50
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+49
+i
+48
+1
+j
+49
+1
+k
+50
+1
+l
+51
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+49
+i
+48
+1
+j
+49
+1
+k
+50
+1
+l
+51
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+50
+i
+49
+1
+j
+50
+1
+k
+51
+1
+l
+52
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+50
+i
+49
+1
+j
+50
+1
+k
+51
+1
+l
+52
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+51
+i
+50
+1
+j
+51
+1
+k
+52
+1
+l
+53
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+51
+i
+50
+1
+j
+51
+1
+k
+52
+1
+l
+53
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+52
+i
+51
+1
+j
+52
+1
+k
+53
+1
+l
+54
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+52
+i
+51
+1
+j
+52
+1
+k
+53
+1
+l
+54
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+53
+i
+52
+1
+j
+53
+1
+k
+54
+1
+l
+55
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+53
+i
+52
+1
+j
+53
+1
+k
+54
+1
+l
+55
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+54
+i
+53
+1
+j
+54
+1
+k
+55
+1
+l
+56
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+54
+i
+53
+1
+j
+54
+1
+k
+55
+1
+l
+56
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+55
+i
+54
+1
+j
+55
+1
+k
+56
+1
+l
+57
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+55
+i
+54
+1
+j
+55
+1
+k
+56
+1
+l
+57
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+56
+i
+55
+1
+j
+56
+1
+k
+57
+1
+l
+58
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+56
+i
+55
+1
+j
+56
+1
+k
+57
+1
+l
+58
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+57
+i
+56
+1
+j
+57
+1
+k
+58
+1
+l
+59
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+57
+i
+56
+1
+j
+57
+1
+k
+58
+1
+l
+59
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+58
+i
+57
+1
+j
+58
+1
+k
+59
+1
+l
+60
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+58
+i
+57
+1
+j
+58
+1
+k
+59
+1
+l
+60
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+59
+i
+58
+1
+j
+59
+1
+k
+60
+1
+l
+61
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+59
+i
+58
+1
+j
+59
+1
+k
+60
+1
+l
+61
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+60
+i
+59
+1
+j
+60
+1
+k
+61
+1
+l
+62
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+60
+i
+59
+1
+j
+60
+1
+k
+61
+1
+l
+62
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+61
+i
+60
+1
+j
+61
+1
+k
+62
+1
+l
+63
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+61
+i
+60
+1
+j
+61
+1
+k
+62
+1
+l
+63
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+62
+i
+61
+1
+j
+62
+1
+k
+63
+1
+l
+64
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+62
+i
+61
+1
+j
+62
+1
+k
+63
+1
+l
+64
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+63
+i
+62
+1
+j
+63
+1
+k
+64
+1
+l
+65
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+63
+i
+62
+1
+j
+63
+1
+k
+64
+1
+l
+65
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+64
+i
+63
+1
+j
+64
+1
+k
+65
+1
+l
+66
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+64
+i
+63
+1
+j
+64
+1
+k
+65
+1
+l
+66
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+65
+i
+64
+1
+j
+65
+1
+k
+66
+1
+l
+67
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+65
+i
+64
+1
+j
+65
+1
+k
+66
+1
+l
+67
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+66
+i
+65
+1
+j
+66
+1
+k
+67
+1
+l
+68
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+66
+i
+65
+1
+j
+66
+1
+k
+67
+1
+l
+68
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+67
+i
+66
+1
+j
+67
+1
+k
+68
+1
+l
+69
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+67
+i
+66
+1
+j
+67
+1
+k
+68
+1
+l
+69
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+68
+i
+67
+1
+j
+68
+1
+k
+69
+1
+l
+70
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+68
+i
+67
+1
+j
+68
+1
+k
+69
+1
+l
+70
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+69
+i
+68
+1
+j
+69
+1
+k
+70
+1
+l
+71
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+69
+i
+68
+1
+j
+69
+1
+k
+70
+1
+l
+71
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+70
+i
+69
+1
+j
+70
+1
+k
+71
+1
+l
+72
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+70
+i
+69
+1
+j
+70
+1
+k
+71
+1
+l
+72
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+71
+i
+70
+1
+j
+71
+1
+k
+72
+1
+l
+73
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+71
+i
+70
+1
+j
+71
+1
+k
+72
+1
+l
+73
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+72
+i
+71
+1
+j
+72
+1
+k
+73
+1
+l
+74
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+72
+i
+71
+1
+j
+72
+1
+k
+73
+1
+l
+74
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+73
+i
+72
+1
+j
+73
+1
+k
+74
+1
+l
+75
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+73
+i
+72
+1
+j
+73
+1
+k
+74
+1
+l
+75
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+74
+i
+73
+1
+j
+74
+1
+k
+75
+1
+l
+76
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+74
+i
+73
+1
+j
+74
+1
+k
+75
+1
+l
+76
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+75
+i
+74
+1
+j
+75
+1
+k
+76
+1
+l
+77
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+75
+i
+74
+1
+j
+75
+1
+k
+76
+1
+l
+77
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+76
+i
+75
+1
+j
+76
+1
+k
+77
+1
+l
+78
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+76
+i
+75
+1
+j
+76
+1
+k
+77
+1
+l
+78
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+77
+i
+76
+1
+j
+77
+1
+k
+78
+1
+l
+79
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+77
+i
+76
+1
+j
+77
+1
+k
+78
+1
+l
+79
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+78
+i
+77
+1
+j
+78
+1
+k
+79
+1
+l
+80
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+78
+i
+77
+1
+j
+78
+1
+k
+79
+1
+l
+80
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+79
+i
+78
+1
+j
+79
+1
+k
+80
+1
+l
+81
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+79
+i
+78
+1
+j
+79
+1
+k
+80
+1
+l
+81
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+80
+i
+79
+1
+j
+80
+1
+k
+81
+1
+l
+82
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+80
+i
+79
+1
+j
+80
+1
+k
+81
+1
+l
+82
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+81
+i
+80
+1
+j
+81
+1
+k
+82
+1
+l
+83
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+81
+i
+80
+1
+j
+81
+1
+k
+82
+1
+l
+83
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+82
+i
+81
+1
+j
+82
+1
+k
+83
+1
+l
+84
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+82
+i
+81
+1
+j
+82
+1
+k
+83
+1
+l
+84
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+83
+i
+82
+1
+j
+83
+1
+k
+84
+1
+l
+85
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+83
+i
+82
+1
+j
+83
+1
+k
+84
+1
+l
+85
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+84
+i
+83
+1
+j
+84
+1
+k
+85
+1
+l
+86
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+84
+i
+83
+1
+j
+84
+1
+k
+85
+1
+l
+86
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+85
+i
+84
+1
+j
+85
+1
+k
+86
+1
+l
+87
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+85
+i
+84
+1
+j
+85
+1
+k
+86
+1
+l
+87
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+86
+i
+85
+1
+j
+86
+1
+k
+87
+1
+l
+88
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+86
+i
+85
+1
+j
+86
+1
+k
+87
+1
+l
+88
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+87
+i
+86
+1
+j
+87
+1
+k
+88
+1
+l
+89
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+87
+i
+86
+1
+j
+87
+1
+k
+88
+1
+l
+89
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+88
+i
+87
+1
+j
+88
+1
+k
+89
+1
+l
+90
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+88
+i
+87
+1
+j
+88
+1
+k
+89
+1
+l
+90
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+89
+i
+88
+1
+j
+89
+1
+k
+90
+1
+l
+91
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+89
+i
+88
+1
+j
+89
+1
+k
+90
+1
+l
+91
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+90
+i
+89
+1
+j
+90
+1
+k
+91
+1
+l
+92
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+90
+i
+89
+1
+j
+90
+1
+k
+91
+1
+l
+92
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+91
+i
+90
+1
+j
+91
+1
+k
+92
+1
+l
+93
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+91
+i
+90
+1
+j
+91
+1
+k
+92
+1
+l
+93
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+92
+i
+91
+1
+j
+92
+1
+k
+93
+1
+l
+94
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+92
+i
+91
+1
+j
+92
+1
+k
+93
+1
+l
+94
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+93
+i
+92
+1
+j
+93
+1
+k
+94
+1
+l
+95
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+93
+i
+92
+1
+j
+93
+1
+k
+94
+1
+l
+95
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+94
+i
+93
+1
+j
+94
+1
+k
+95
+1
+l
+96
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+94
+i
+93
+1
+j
+94
+1
+k
+95
+1
+l
+96
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+95
+i
+94
+1
+j
+95
+1
+k
+96
+1
+l
+97
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+95
+i
+94
+1
+j
+95
+1
+k
+96
+1
+l
+97
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+96
+i
+95
+1
+j
+96
+1
+k
+97
+1
+l
+98
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+96
+i
+95
+1
+j
+96
+1
+k
+97
+1
+l
+98
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+97
+i
+96
+1
+j
+97
+1
+k
+98
+1
+l
+99
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+97
+i
+96
+1
+j
+97
+1
+k
+98
+1
+l
+99
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+98
+i
+97
+1
+j
+98
+1
+k
+99
+1
+l
+100
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+98
+i
+97
+1
+j
+98
+1
+k
+99
+1
+l
+100
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+99
+i
+98
+1
+j
+99
+1
+k
+100
+1
+l
+101
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+99
+i
+98
+1
+j
+99
+1
+k
+100
+1
+l
+101
+1
+
+misc.Compar1.bar(int, int, int, int):::ENTER
+this_invocation_nonce
+100
+i
+99
+1
+j
+100
+1
+k
+101
+1
+l
+102
+1
+
+misc.Compar1.bar(int, int, int, int):::EXIT29
+this_invocation_nonce
+100
+i
+99
+1
+j
+100
+1
+k
+101
+1
+l
+102
+1
+
+misc.Compar1.main(java.lang.String[]):::EXIT19
+this_invocation_nonce
+0
+args
+16713087
+1
+args.getClass()
+"java.lang.String[]"
+1
+args[..]
+[]
+1
+args[..].toString
+[]
+1
+

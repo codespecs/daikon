@@ -1,0 +1,120 @@
+===========================================================================
+DataStructures.DisjSets:::OBJECT
+this.s != null
+this.s[] elements >= -1
+this.s[i] != i
+this.s[] elements <= size(this.s[])-1
+===========================================================================
+DataStructures.DisjSets.DisjSets(int):::ENTER
+numElements >= 1
+===========================================================================
+DataStructures.DisjSets.DisjSets(int):::EXIT
+orig(numElements) == size(this.s[])
+this.s[] elements == -1
+this.s[i] < i
+this.s[orig(numElements)..] == []
+this.s[] elements == this.s[orig(numElements)-1]
+size(this.s[])-1 > this.s[orig(numElements)-1]
+===========================================================================
+DataStructures.DisjSets.find(int):::ENTER
+x >= 0
+this.s[i] != i
+x != this.s[x]
+===========================================================================
+DataStructures.DisjSets.find(int):::EXIT68
+return == orig(x)
+orig(this.s[post(x)..]) == this.s[return..]
+orig(this.s[post(x)+1..]) == this.s[return+1..]
+orig(this.s[0..post(x)]) == this.s[0..return]
+orig(this.s[0..post(x)-1]) == this.s[0..return-1]
+this.s[i] != i
+orig(this.s[post(x)]) == -1
+return > orig(this.s[post(x)])
+this.s[] elements >= orig(this.s[post(x)])
+size(this.s[])-1 > orig(this.s[post(x)])
+===========================================================================
+DataStructures.DisjSets.find(int):::EXIT70
+this.s[i] != i
+orig(this.s[post(x)]) >= 0
+return in this.s[]
+return != orig(x)
+orig(this.s[post(x)]) > this.s[return]
+===========================================================================
+DataStructures.DisjSets.find(int):::EXIT
+this.s == orig(this.s)
+this.s[] == orig(this.s[])
+return >= 0
+this.s[i] != i
+this.s[return] == -1
+return > this.s[return]
+this.s[] elements >= this.s[return]
+orig(x) != orig(this.s[post(x)])
+orig(x) > this.s[return]
+size(this.s[])-1 > this.s[return]
+===========================================================================
+DataStructures.DisjSets.unionCareful(int, int):::ENTER
+set1 >= 0
+set2 >= 0
+this.s[i] != i
+set1 != this.s[set1]
+set2 != this.s[set2]
+===========================================================================
+DataStructures.DisjSets.unionCareful(int, int):::EXIT
+this.s == orig(this.s)
+size(this.s[]) == orig(size(this.s[]))
+orig(this.s[post(set1)]) == this.s[orig(set1)]
+this.s[i] != i
+orig(this.s[post(i)]) != i
+this.s[] >= orig(this.s[]) (elementwise)
+this.s[] is a bitwise subset of orig(this.s[]) (elementwise)
+orig(this.s[post(set2)]) in this.s[]
+orig(set1) != orig(this.s[post(set1)])
+orig(set2) != orig(this.s[post(set2)])
+orig(set2) != this.s[orig(set2)]
+orig(this.s[]) elements <= size(this.s[])-1
+orig(this.s[post(set1)..]) <= this.s[orig(set1)..] (elementwise)
+orig(this.s[post(set1)+1..]) <= this.s[orig(set1)+1..] (elementwise)
+orig(this.s[0..post(set1)]) <= this.s[0..orig(set1)] (elementwise)
+orig(this.s[0..post(set1)-1]) <= this.s[0..orig(set1)-1] (elementwise)
+orig(this.s[post(set2)..]) <= this.s[orig(set2)..] (elementwise)
+orig(this.s[post(set2)+1..]) <= this.s[orig(set2)+1..] (elementwise)
+orig(this.s[0..post(set2)]) <= this.s[0..orig(set2)] (elementwise)
+orig(this.s[0..post(set2)-1]) <= this.s[0..orig(set2)-1] (elementwise)
+===========================================================================
+DataStructures.DisjSets.unionDisjoint(int, int):::ENTER
+this.s[root1] == this.s[root2]
+root1 >= 0
+root2 >= 0
+this.s[i] != i
+this.s[root1] == -1
+root1 != root2
+root1 > this.s[root1]
+root2 > this.s[root1]
+this.s[] elements >= this.s[root1]
+size(this.s[])-1 > this.s[root1]
+===========================================================================
+DataStructures.DisjSets.unionDisjoint(int, int):::EXIT
+this.s == orig(this.s)
+this.s[] > orig(this.s[]) (lexically)
+orig(root1) == this.s[orig(root2)]
+size(this.s[]) == orig(size(this.s[]))
+orig(this.s[post(root1)]) == orig(this.s[post(root2)])
+orig(this.s[post(root1)]) == this.s[orig(root1)]
+orig(this.s[post(root1)]) == orig(this.s[root2])
+this.s[i] != i
+orig(this.s[post(i)]) != i
+orig(this.s[post(root1)]) == -1
+this.s[] >= orig(this.s[]) (elementwise)
+this.s[] is a bitwise subset of orig(this.s[]) (elementwise)
+this.s[] elements >= orig(this.s[post(root1)])
+orig(root1) > orig(this.s[post(root1)])
+orig(root2) > orig(this.s[post(root1)])
+orig(this.s[]) elements <= size(this.s[])-1
+orig(this.s[]) elements >= orig(this.s[post(root1)])
+size(this.s[])-1 > orig(this.s[post(root1)])
+orig(this.s[post(root1)..]) <= this.s[orig(root1)..] (elementwise)
+orig(this.s[post(root1)+1..]) <= this.s[orig(root1)+1..] (elementwise)
+orig(this.s[0..post(root1)]) <= this.s[0..orig(root1)] (elementwise)
+orig(this.s[0..post(root1)-1]) <= this.s[0..orig(root1)-1] (elementwise)
+orig(this.s[post(root2)..]) <= this.s[orig(root2)..] (elementwise)
+orig(this.s[0..post(root2)]) <= this.s[0..orig(root2)] (elementwise)

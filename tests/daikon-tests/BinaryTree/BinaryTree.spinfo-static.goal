@@ -1,0 +1,60 @@
+REPLACE
+elementAt(BinaryNode<E> t)
+t == null ? null : t.element
+find(E x)
+elementAt(find(x, root))
+findMax()
+elementAt(findMax(root))
+findMin()
+elementAt(findMin(root))
+isEmpty()
+root == null
+
+PPT_NAME DataStructures.BinarySearchTree.find
+orig(t == null)
+orig(x.compareTo(t.element)< 0)
+orig(x.compareTo(t.element)> 0)
+t == null
+x.compareTo(t.element)< 0
+x.compareTo(t.element)> 0
+
+PPT_NAME DataStructures.BinarySearchTree.findMax
+orig(t != null)
+orig(t.right != null)
+t != null
+t.right != null
+
+PPT_NAME DataStructures.BinarySearchTree.findMin
+orig(t == null)
+orig(t.left == null)
+t == null
+t.left == null
+
+PPT_NAME DataStructures.BinarySearchTree.insert
+orig(t == null)
+orig(x.compareTo(t.element)< 0)
+orig(x.compareTo(t.element)> 0)
+t == null
+x.compareTo(t.element)< 0
+x.compareTo(t.element)> 0
+
+PPT_NAME DataStructures.BinarySearchTree.isEmpty
+orig(root == null)
+root == null
+
+PPT_NAME DataStructures.BinarySearchTree.printTree
+isEmpty()
+orig(isEmpty())
+orig(t != null)
+t != null
+
+PPT_NAME DataStructures.BinarySearchTree.remove
+orig(t == null)
+orig(t.left != null && t.right != null)
+orig(x.compareTo(t.element)< 0)
+orig(x.compareTo(t.element)> 0)
+t == null
+t.left != null && t.right != null
+x.compareTo(t.element)< 0
+x.compareTo(t.element)> 0
+

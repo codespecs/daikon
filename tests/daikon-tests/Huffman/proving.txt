@@ -1,0 +1,15 @@
+
+Semtics of Daikon don't match ESC, casuing great pain, e.g
+ in Daikon     this.symbol.symbol != null
+ really means  ((this != null) && (this.symbol != null)) ==> (this.symbol.symbol != null)
+
+Some non-nullness invariants were missing, which didn't help.
+
+We didn't get anything about the elemnt type of the java.util.Lists -
+perhaps dfej doesn't instrument or take the elements of these?  Since
+we downcast out of them, this would be important to have.
+
+Daikon is very slow - symbol():::EXIT takes >1000 seconds to run,
+mostly in the conditional ppt phase (the initial_processing isn't too
+bad).
+

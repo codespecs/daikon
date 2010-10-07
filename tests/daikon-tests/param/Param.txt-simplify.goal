@@ -1,0 +1,90 @@
+===========================================================================
+misc.Param:::OBJECT
+(EQ (hash |this|) (hashcode 1001))
+(EQ (select |gi1| |this|) 0)
+(EQ (select |gi2| |this|) 5)
+(EQ (hash (select |gs1| |this|)) (hashcode 1002))
+(NEQ (hash (select |gs1| |this|)) null)
+(EQ (select |b| (select |gs1| |this|)) 15)
+(EQ (hash (select |gs2| |this|)) (hashcode 1003))
+(NEQ (hash (select |gs2| |this|)) null)
+(EQ (select |a| (select |gs2| |this|)) 20)
+(EQ (select |b| (select |gs2| |this|)) 25)
+(< (select |gi1| |this|) (select |a| (select |gs1| |this|)))
+(< (select |gi2| |this|) (select |a| (select |gs1| |this|)))
+(EQ (|java->>| (select |a| (select |gs1| |this|)) (select |b| (select |gs1| |this|))) 0)
+(EQ (|java->>| (select |a| (select |gs1| |this|)) (select |a| (select |gs2| |this|))) 0)
+(EQ (|java->>| (select |a| (select |gs1| |this|)) (select |b| (select |gs2| |this|))) 0)
+===========================================================================
+misc.Param.Param():::EXIT
+(EQ (select |a| (select |gs1| |this|)) 10)
+===========================================================================
+misc.Param.main():::ENTER
+(EQ (select |a| (select |gs1| |this|)) 10)
+===========================================================================
+misc.Param.main():::EXIT
+(EQ (select |gi1| |this|) (select |gi1| |__orig__this|))
+(EQ (select |gi2| |this|) (select |gi2| |__orig__this|))
+(EQ (hash (select |gs1| |this|)) (hash (select |gs1| |__orig__this|)))
+(EQ (select |b| (select |gs1| |this|)) (select |b| (select |gs1| |__orig__this|)))
+(EQ (hash (select |gs2| |this|)) (hash (select |gs2| |__orig__this|)))
+(EQ (select |a| (select |gs2| |this|)) (select |a| (select |gs2| |__orig__this|)))
+(EQ (select |b| (select |gs2| |this|)) (select |b| (select |gs2| |__orig__this|)))
+(EQ (select |a| (select |gs1| |this|)) 110)
+===========================================================================
+misc.Param.main(java.lang.String[]):::ENTER
+(EQ (hash |args|) (hashcode 1004))
+(EQ (typeof |args|) |T_java.lang.String[]|)
+(AND (EQ (arrayLength |args|) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |args|) 1))) (NEQ (select (select elems |args|) |i|)  null))))
+(EQ (arrayLength |args|) 0)
+===========================================================================
+misc.Param.main(java.lang.String[]):::EXIT
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |args|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |__orig__args|) 1)) (EQ |i| |j|)) (EQ (select (select elems |args|) |i|) (select (select elems |__orig__args|) |j|))))
+(AND (EQ (arrayLength |args|) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |args|) 1))) (NEQ (select (select elems |args|) |i|)  null))))
+(EQ (arrayLength |args|) 0)
+===========================================================================
+misc.Param.work(int, int, misc.ParamType, misc.ParamType):::ENTER
+(EQ (select |gi1| |this|) |pi1|)
+(EQ (select |gi2| |this|) |pi2|)
+(EQ (hash (select |gs1| |this|)) (hash |ps1|))
+(EQ (select |a| (select |gs1| |this|)) (select |a| |ps1|))
+(EQ (select |b| (select |gs1| |this|)) (select |b| |ps1|))
+(EQ (hash (select |gs2| |this|)) (hash |ps2|))
+(EQ (select |a| (select |gs2| |this|)) (select |a| |ps2|))
+(EQ (select |b| (select |gs2| |this|)) (select |b| |ps2|))
+===========================================================================
+misc.Param.work(int, int, misc.ParamType, misc.ParamType):::EXIT
+(EQ (select |gi1| |this|) (select |gi1| |__orig__this|))
+(EQ (select |gi1| |this|) |__orig__pi1|)
+(EQ (select |gi2| |this|) (select |gi2| |__orig__this|))
+(EQ (select |gi2| |this|) |__orig__pi2|)
+(EQ (hash (select |gs1| |this|)) (hash (select |gs1| |__orig__this|)))
+(EQ (hash (select |gs1| |this|)) (hash |__orig__ps1|))
+(EQ (select |a| (select |gs1| |this|)) (select |a| |ps1|))
+(EQ (select |b| (select |gs1| |this|)) (select |b| |ps1|))
+(EQ (hash (select |gs2| |this|)) (hash (select |gs2| |__orig__this|)))
+(EQ (hash (select |gs2| |this|)) (hash |__orig__ps2|))
+(EQ (select |a| (select |gs2| |this|)) (select |a| (select |gs2| |__orig__this|)))
+(EQ (select |a| (select |gs2| |this|)) (select |a| |__orig__ps2|))
+(EQ (select |b| (select |gs2| |this|)) (select |b| (select |gs2| |__orig__this|)))
+(EQ (select |b| (select |gs2| |this|)) (select |b| |__orig__ps2|))
+(EQ (select |b| |ps1|) (select |b| (select |gs1| |__orig__this|)))
+(EQ (select |b| |ps1|) (select |b| |__orig__ps1|))
+(EQ (select |b| |ps1|) 15)
+(< (select |gi1| |this|) (select |a| |ps1|))
+(< (select |gi1| |this|) (select |a| |__orig__ps1|))
+(< (select |gi2| |this|) (select |a| |ps1|))
+(< (select |gi2| |this|) (select |a| |__orig__ps1|))
+(EQ (|java->>| (select |a| |ps1|) (select |a| (select |gs2| |this|))) 0)
+(EQ (|java->>| (select |a| |__orig__ps1|) (select |a| (select |gs2| |this|))) 0)
+(EQ (|java->>| (select |a| |ps1|) (select |b| (select |gs2| |this|))) 0)
+(EQ (|java->>| (select |a| |__orig__ps1|) (select |b| (select |gs2| |this|))) 0)
+(EQ (|java->>| (select |a| |ps1|) (select |b| |ps1|)) 0)
+(EQ 0 (+ (+ (select |a| |ps1|) (* -1 (select |a| |__orig__ps1|))) -1))
+(EQ (|java->>| (select |a| |__orig__ps1|) (select |b| |ps1|)) 0)
+===========================================================================
+misc.ParamType:::OBJECT
+(EQ (select |a| |this|) (select |b| |this|))
+(EQ (select |a| |this|) 0)
+===========================================================================
+misc.ParamType.ParamType():::EXIT

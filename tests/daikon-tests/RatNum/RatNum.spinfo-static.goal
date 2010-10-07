@@ -1,0 +1,86 @@
+REPLACE
+add(RatNum arg)
+new RatNum(this.numer*arg.denom + arg.numer*this.denom, this.denom*arg.denom)
+debugPrint()
+"RatNum<numer:"+this.numer+" denom:"+this.denom+">"
+hashCode()
+this.numer*2 + this.denom*3
+isNaN()
+(denom == 0)
+isNegative()
+(this.denom != 0)&&(this.numer < 0)
+isPositive()
+(this.denom == 0)||(this.numer > 0)
+mul(RatNum arg)
+new RatNum(this.numer*arg.numer, this.denom*arg.denom)
+negate()
+new RatNum(- this.numer , this.denom)
+sub(RatNum arg)
+this.add(arg.negate())
+toString()
+debugPrint()
+
+PPT_NAME PolyCalc.RatNum.RatNum
+d == 0
+denom < 0
+orig(d == 0)
+orig(denom < 0)
+
+PPT_NAME PolyCalc.RatNum.approx
+isNaN()
+orig(isNaN())
+
+PPT_NAME PolyCalc.RatNum.compareTo
+orig(rn.isNaN())
+orig(this.isNaN()&& rn.isNaN())
+orig(this.isNaN())
+rn.isNaN()
+this.isNaN()
+this.isNaN()&& rn.isNaN()
+
+PPT_NAME PolyCalc.RatNum.div
+arg.isNaN()
+orig(arg.isNaN())
+
+PPT_NAME PolyCalc.RatNum.equals
+false
+obj instanceof RatNum
+orig(false)
+orig(obj instanceof RatNum)
+orig(this.isNaN()&& rn.isNaN())
+orig(this.numer == rn.numer && this.denom == rn.denom)
+orig(true)
+this.isNaN()&& rn.isNaN()
+this.numer == rn.numer && this.denom == rn.denom
+true
+
+PPT_NAME PolyCalc.RatNum.gcd
+b != 0
+b == 0
+orig(b != 0)
+orig(b == 0)
+
+PPT_NAME PolyCalc.RatNum.isNaN
+(denom == 0)
+orig((denom == 0))
+
+PPT_NAME PolyCalc.RatNum.isNegative
+(this.denom != 0)&&(this.numer < 0)
+orig((this.denom != 0)&&(this.numer < 0))
+
+PPT_NAME PolyCalc.RatNum.isPositive
+(this.denom == 0)||(this.numer > 0)
+orig((this.denom == 0)||(this.numer > 0))
+
+PPT_NAME PolyCalc.RatNum.parse
+orig(ratStr.equals("NaN"))
+orig(slashLoc == -1)
+ratStr.equals("NaN")
+slashLoc == -1
+
+PPT_NAME PolyCalc.RatNum.unparse
+denom != 1
+isNaN()
+orig(denom != 1)
+orig(isNaN())
+

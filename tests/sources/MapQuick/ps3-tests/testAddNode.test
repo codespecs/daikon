@@ -1,0 +1,6 @@
+#Test creating a node
+CreateNode n1 2
+CreateNode n2 20
+CreateGraph A
+AddNode A n1
+AddNode A n2

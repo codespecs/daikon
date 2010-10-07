@@ -1,0 +1,12 @@
+#create the nodes we'll use
+created node n1 with cost 2
+created node n2 with cost 20
+created node n3 with cost 4
+created node n4 with cost 4
+created node n5 with cost 12
+created node n6 with cost 1
+created node n7 with cost 3
+created node n8 with cost 9
+created node n9 with cost 5
+created node n10 with cost 3
+created node n11 with cost 11

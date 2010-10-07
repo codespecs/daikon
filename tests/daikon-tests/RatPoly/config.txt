@@ -1,0 +1,2 @@
+daikon.split.SplitterList.all_splitters = false
+

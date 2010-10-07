@@ -1,0 +1,368 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== Copyright (C) 2004-2006, Philip Guo, MIT CSAIL Program Analysis Group
+==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
+==PID== Command: ./povray +Icylinder1.pov +L./ +O/tmp/scene.tga +FT +W2 +H2 +V +X
+==PID== 
+Unexpected unnamed parameter in my_term_source
+Unexpected unnamed parameter in Read_Line
+Unexpected unnamed parameter in Receive_RenderAll
+Unexpected unnamed parameter in Receive_RenderAll
+Unexpected unnamed parameter in Receive_RenderAll
+Unexpected unnamed parameter in Receive_RenderAll
+Unexpected unnamed parameter in Receive_RenderStop
+Unexpected unnamed parameter in Receive_RenderStop
+Unexpected unnamed parameter in Receive_RenderStop
+Unexpected unnamed parameter in Receive_RenderStop
+Unexpected unnamed parameter in Receive_RenderArea
+Unexpected unnamed parameter in Receive_RenderArea
+Unexpected unnamed parameter in Receive_RenderArea
+Unexpected unnamed parameter in Receive_RenderOptions
+Unexpected unnamed parameter in Receive_RenderOptions
+Unexpected unnamed parameter in TTF_Normal
+Unexpected unnamed parameter in Scale_TTF
+Unexpected unnamed parameter in Rotate_TTF
+Unexpected unnamed parameter in Translate_TTF
+Unexpected unnamed parameter in POV_Std_Display_Plot
+Unexpected unnamed parameter in directoutput
+Unexpected unnamed parameter in directoutput
+Unexpected unnamed parameter in Rotate_Box
+Unexpected unnamed parameter in Fractal_Normal
+Unexpected unnamed parameter in Scale_Fractal
+Unexpected unnamed parameter in Rotate_Fractal
+Unexpected unnamed parameter in Translate_Fractal
+Unexpected unnamed parameter in Normal_Calc_HCompl
+Unexpected unnamed parameter in Normal_Calc_HCompl_z3
+Unexpected unnamed parameter in Normal_Calc_HCompl_Reciprocal
+Unexpected unnamed parameter in Scale_HField
+Unexpected unnamed parameter in Rotate_HField
+Unexpected unnamed parameter in Translate_HField
+Unexpected unnamed parameter in Intersect_Light_Tree
+Unexpected unnamed parameter in Scale_Mesh
+Unexpected unnamed parameter in Rotate_Mesh
+Unexpected unnamed parameter in Translate_Mesh
+Unexpected unnamed parameter in test_hit
+Unexpected unnamed parameter in Default_UVCoord
+Unexpected unnamed parameter in UCS2_To_String
+Unexpected unnamed parameter in Parse_Chr
+Unexpected unnamed parameter in fractal_interior_color
+Unexpected unnamed parameter in ChooseRay
+Unexpected unnamed parameter in addSurfacePhoton
+Unexpected unnamed parameter in sortAndSubdivide
+Unexpected unnamed parameter in Rotate_Plane
+Unexpected unnamed parameter in Plane_Normal
+Unexpected unnamed parameter in Scale_Light_Source
+Unexpected unnamed parameter in Rotate_Light_Source
+Unexpected unnamed parameter in Scale_Poly
+Unexpected unnamed parameter in Rotate_Poly
+Unexpected unnamed parameter in Translate_Poly
+Unexpected unnamed parameter in Inside_Polygon
+Unexpected unnamed parameter in Inside_Polygon
+Unexpected unnamed parameter in Polygon_Normal
+Unexpected unnamed parameter in Invert_Polygon
+Unexpected unnamed parameter in Scale_Polygon
+Unexpected unnamed parameter in Rotate_Polygon
+Unexpected unnamed parameter in Translate_Polygon
+Unexpected unnamed parameter in Scale_Prism
+Unexpected unnamed parameter in Rotate_Prism
+Unexpected unnamed parameter in Translate_Prism
+Unexpected unnamed parameter in Scale_Quadric
+Unexpected unnamed parameter in Rotate_Quadric
+Unexpected unnamed parameter in Translate_Quadric
+Unexpected unnamed parameter in Normal_Calc_z3
+Unexpected unnamed parameter in Normal_Calc_Julia
+Unexpected unnamed parameter in Scale_Sor
+Unexpected unnamed parameter in Rotate_Sor
+Unexpected unnamed parameter in Translate_Sor
+Unexpected unnamed parameter in Rotate_Sphere
+Unexpected unnamed parameter in Sphere_Sweep_Normal
+Unexpected unnamed parameter in Rotate_Sphere_Sweep
+Unexpected unnamed parameter in Scale_Superellipsoid
+Unexpected unnamed parameter in Rotate_Superellipsoid
+Unexpected unnamed parameter in Translate_Superellipsoid
+Unexpected unnamed parameter in SuppressTIFFWarnings
+Unexpected unnamed parameter in SuppressTIFFWarnings
+Unexpected unnamed parameter in SuppressTIFFWarnings
+Unexpected unnamed parameter in Tiff_Map
+Unexpected unnamed parameter in Tiff_Map
+Unexpected unnamed parameter in Tiff_Map
+Unexpected unnamed parameter in Tiff_Unmap
+Unexpected unnamed parameter in Tiff_Unmap
+Unexpected unnamed parameter in Tiff_Unmap
+Unexpected unnamed parameter in Scale_Torus
+Unexpected unnamed parameter in Rotate_Torus
+Unexpected unnamed parameter in Translate_Torus
+Unexpected unnamed parameter in Inside_Triangle
+Unexpected unnamed parameter in Inside_Triangle
+Unexpected unnamed parameter in Triangle_Normal
+Unexpected unnamed parameter in Invert_Triangle
+Unexpected unnamed parameter in Invert_Smooth_Triangle
+Unexpected unnamed parameter in Rotate_Smooth_Triangle
+Unexpected unnamed parameter in Scale_Smooth_Triangle
+Unexpected unnamed parameter in Translate_Smooth_Triangle
+Unexpected unnamed parameter in Rotate_Triangle
+Unexpected unnamed parameter in Scale_Triangle
+Unexpected unnamed parameter in Translate_Triangle
+Unexpected unnamed parameter in Inside_Bicubic_Patch
+Unexpected unnamed parameter in Inside_Bicubic_Patch
+Unexpected unnamed parameter in Bicubic_Patch_Normal
+Unexpected unnamed parameter in Invert_Bicubic_Patch
+Unexpected unnamed parameter in Bicubic_Patch_UVCoord
+Unexpected unnamed parameter in Rotate_Bicubic_Patch
+Unexpected unnamed parameter in Scale_Bicubic_Patch
+Unexpected unnamed parameter in Translate_Bicubic_Patch
+Unexpected unnamed parameter in Scale_Blob
+Unexpected unnamed parameter in Rotate_Blob
+Unexpected unnamed parameter in Translate_Blob
+Unexpected unnamed parameter in Scale_Cone
+Unexpected unnamed parameter in Rotate_Cone
+Unexpected unnamed parameter in Translate_Cone
+Unexpected unnamed parameter in Disc_Normal
+Unexpected unnamed parameter in Scale_Disc
+Unexpected unnamed parameter in Rotate_Disc
+Unexpected unnamed parameter in Translate_Disc
+Unexpected unnamed parameter in f_blob
+Unexpected unnamed parameter in f_witch_of_agnesi
+Unexpected unnamed parameter in f_umbrella
+Unexpected unnamed parameter in f_torus_gumdrop
+Unexpected unnamed parameter in f_torus2
+Unexpected unnamed parameter in f_strophoid
+Unexpected unnamed parameter in f_steiners_roman
+Unexpected unnamed parameter in f_quartic_cylinder
+Unexpected unnamed parameter in f_quartic_saddle
+Unexpected unnamed parameter in f_quartic_paraboloid
+Unexpected unnamed parameter in f_piriform
+Unexpected unnamed parameter in f_pillow
+Unexpected unnamed parameter in f_parabolic_torus
+Unexpected unnamed parameter in f_paraboloid
+Unexpected unnamed parameter in f_ovals_of_cassini
+Unexpected unnamed parameter in f_odd
+Unexpected unnamed parameter in f_nodal_cubic
+Unexpected unnamed parameter in f_mitre
+Unexpected unnamed parameter in f_lemniscate_of_gerono
+Unexpected unnamed parameter in f_kummer_surface_v2
+Unexpected unnamed parameter in f_kummer_surface_v1
+Unexpected unnamed parameter in f_klein_bottle
+Unexpected unnamed parameter in f_kampyle_of_eudoxus
+Unexpected unnamed parameter in f_hyperbolic_torus
+Unexpected unnamed parameter in f_hunt_surface
+Unexpected unnamed parameter in f_heart
+Unexpected unnamed parameter in f_glob
+Unexpected unnamed parameter in f_folium_surface
+Unexpected unnamed parameter in f_enneper
+Unexpected unnamed parameter in f_dupin_cyclid
+Unexpected unnamed parameter in f_devils_curve
+Unexpected unnamed parameter in f_cushion
+Unexpected unnamed parameter in f_cubic_saddle
+Unexpected unnamed parameter in f_crossed_trough
+Unexpected unnamed parameter in f_boy_surface
+Unexpected unnamed parameter in f_bifolia
+Unexpected unnamed parameter in f_bicorn
+Unexpected unnamed parameter in f_noise_generator
+Unexpected unnamed parameter in f_noise3d
+Unexpected unnamed parameter in f_ridge
+Unexpected unnamed parameter in f_torus
+Unexpected unnamed parameter in f_sphere
+Unexpected unnamed parameter in f_rounded_box
+Unexpected unnamed parameter in f_r
+Unexpected unnamed parameter in f_poly4
+Unexpected unnamed parameter in f_ellipsoid
+Unexpected unnamed parameter in f_witch_of_agnesi_2d
+Unexpected unnamed parameter in f_strophoid_2d
+Unexpected unnamed parameter in f_polytubes
+Unexpected unnamed parameter in f_piriform_2d
+Unexpected unnamed parameter in f_lemniscate_of_gerono_2d
+Unexpected unnamed parameter in f_kampyle_of_eudoxus_2d
+Unexpected unnamed parameter in f_folium_surface_2d
+Unexpected unnamed parameter in f_devils_curve_2d
+Unexpected unnamed parameter in f_algbr_cyl4
+Unexpected unnamed parameter in f_algbr_cyl3
+Unexpected unnamed parameter in f_algbr_cyl2
+Unexpected unnamed parameter in f_algbr_cyl1
+Unexpected unnamed parameter in f_th
+Unexpected unnamed parameter in f_ph
+Unexpected unnamed parameter in f_comma
+Unexpected unnamed parameter in f_superellipsoid
+Unexpected unnamed parameter in f_helix2
+Unexpected unnamed parameter in f_spiral
+Unexpected unnamed parameter in f_mesh1
+Unexpected unnamed parameter in f_hex_y
+Unexpected unnamed parameter in f_hex_x
+Unexpected unnamed parameter in f_helix1
+Unexpected unnamed parameter in f_helical_torus
+Unexpected unnamed parameter in f_spikes_2d
+Unexpected unnamed parameter in f_spikes
+Unexpected unnamed parameter in f_quantum
+Unexpected unnamed parameter in f_isect_ellipsoids
+Unexpected unnamed parameter in f_flange_cover
+Unexpected unnamed parameter in f_cross_ellipsoids
+Unexpected unnamed parameter in f_blob2
+Unexpected unnamed parameter in Inside_Parametric
+Unexpected unnamed parameter in Inside_Parametric
+Unexpected unnamed parameter in Invert_Parametric
+Unexpected unnamed parameter in Scale_Parametric
+Unexpected unnamed parameter in Rotate_Parametric
+Unexpected unnamed parameter in Translate_Parametric
+Unexpected unnamed parameter in Init_Interior
+Unexpected unnamed parameter in Scale_IsoSurface
+Unexpected unnamed parameter in Rotate_IsoSurface
+Unexpected unnamed parameter in Translate_IsoSurface
+Unexpected unnamed parameter in Scale_Lathe
+Unexpected unnamed parameter in Rotate_Lathe
+Unexpected unnamed parameter in Translate_Lathe
+Unexpected unnamed parameter in expr_noop
+Unexpected unnamed parameter in expr_noop
+Unexpected unnamed parameter in expr_noop
+Unexpected unnamed parameter in expr_err
+Unexpected unnamed parameter in expr_err
+Unexpected unnamed parameter in expr_ret
+Unexpected unnamed parameter in expr_ret
+Unexpected unnamed parameter in expr_ret
+Unexpected unnamed parameter in expr_new
+Unexpected unnamed parameter in expr_new
+Unexpected unnamed parameter in POVMS_Sys_QueueReceive_Default
+Unexpected unnamed parameter in ReadSpecialOptionHandler
+Unexpected unnamed parameter in ReadSpecialOptionHandler
+Unexpected unnamed parameter in ReadSpecialOptionHandler
+Unexpected unnamed parameter in ReadSpecialSwitchHandler
+Unexpected unnamed parameter in ReadSpecialSwitchHandler
+Unexpected unnamed parameter in ReadSpecialSwitchHandler
+Unexpected unnamed parameter in ReadSpecialSwitchHandler
+Unexpected unnamed parameter in WriteSpecialOptionHandler
+Unexpected unnamed parameter in WriteSpecialOptionHandler
+Unexpected unnamed parameter in WriteSpecialOptionHandler
+Unexpected unnamed parameter in WriteOptionFilter
+Unexpected unnamed parameter in ProcessUnknownSwitch
+Unexpected unnamed parameter in ProcessUnknownSwitch
+Unexpected unnamed parameter in ProcessUnknownSwitch
+Unexpected unnamed parameter in ProcessUnknownString
+Unexpected unnamed parameter in ProcessUnknownString
+Unexpected unnamed parameter in directoutput
+Unexpected unnamed parameter in directoutput
+Unexpected unnamed parameter in rawoutput
+Unexpected unnamed parameter in rawoutput
+Unexpected unnamed parameter in DebugInfo
+Unexpected unnamed parameter in DebugInfo
+Unexpected unnamed parameter in Progress
+Unexpected unnamed parameter in Progress
+Unexpected unnamed parameter in RenderDone
+Unexpected unnamed parameter in RenderDone
+Unexpected unnamed parameter in RenderStatistics
+Unexpected unnamed parameter in RenderStatistics
+Unexpected unnamed parameter in ParseStatistics
+Unexpected unnamed parameter in ParseStatistics
+Unexpected unnamed parameter in FrameStatistics
+Unexpected unnamed parameter in FrameStatistics
+Unexpected unnamed parameter in RenderStarted
+Unexpected unnamed parameter in RenderStarted
+Unexpected unnamed parameter in RenderOptions
+Unexpected unnamed parameter in RenderOptions
+Unexpected unnamed parameter in InitInfo
+Unexpected unnamed parameter in InitInfo
+Unexpected unnamed parameter in FatalError
+Unexpected unnamed parameter in FatalError
+Unexpected unnamed parameter in Error
+Unexpected unnamed parameter in Error
+Unexpected unnamed parameter in Warning
+Unexpected unnamed parameter in Warning
+Unexpected unnamed parameter in OpenFileForWrite
+Unexpected unnamed parameter in ReadSpecialSwitchHandler
+Unexpected unnamed parameter in RenderStarted
+Unexpected unnamed parameter in RenderStarted
+Unexpected unnamed parameter in RenderStarted
+Unexpected unnamed parameter in RenderDone
+Unexpected unnamed parameter in RenderDone
+Unexpected unnamed parameter in RenderDone
+povray: I/O restrictions are disabled.
+Persistence of Vision(tm) Ray Tracer Version 3.6.1 (g++ 4.1.2 @
+ i686-pc-linux-gnu)
+This is an unofficial version compiled by:
+ KVASIR TEST SUITE <rudd@csail.mit.edu>
+ The POV-Ray Team(tm) is not responsible for supporting this version.
+POV-Ray is based on DKBTrace 2.12 by David K. Buck & Aaron A. Collins
+Copyright 1991-2003 Persistence of Vision Team
+Copyright 2003-2004 Persistence of Vision Raytracer Pty. Ltd.
+
+Primary POV-Ray 3.5/3.6 Developers: (Alphabetically)
+  Chris Cason         Thorsten Froehlich  Nathan Kopp         Ron Parker        
+
+Contributing Authors: (Alphabetically)
+  Steve Anger         Eric Barish         Dieter Bayer        Steve A. Bennett  
+  David K. Buck       Nicolas Calimet     Aaron A. Collins    Chris Dailey      
+  Steve Demlow        Andreas Dilger      Alexander Enzmann   Dan Farmer        
+  Mark Gordon         Christoph Hormann   Mike Hough          Chris Huff        
+  Kari Kivisalo       Lutz Kretzschmar    Jochen Lippert      Pascal Massimino  
+  Jim McElhiney       Douglas Muir        Juha Nieminen       Bill Pulver       
+  Eduard Schwan       Wlodzimierz Skiba   Robert Skinner      Yvo Smellenbergh  
+  Zsolt Szalavari     Scott Taylor        Massimo Valentini   Timothy Wegner    
+  Drew Wells          Chris Young       
+
+Other contributors are listed in the documentation.
+
+Support libraries used by POV-Ray:
+  ZLib 1.2.1, Copyright 1995-1998 Jean-loup Gailly and Mark Adler
+  LibPNG 1.2.5, Copyright 1998-2002 Glenn Randers-Pehrson
+  LibJPEG 6b, Copyright 1998 Thomas G. Lane
+  LibTIFF 3.6.1, Copyright 1988-1997 Sam Leffler, 1991-1997 SGI
+Redirecting Options
+  All Streams to console..........On 
+  Debug Stream to console.........On 
+  Fatal Stream to console.........On 
+  Render Stream to console........On 
+  Statistics Stream to console....On 
+  Warning Stream to console.......On 
+MISMATCHED on exit_function! f: POVMS_MessageReceiver.ReceiveHandler(POVMSData*, POVMSData*, int, void*) !=  POVMS_Object.operator()()
+DetectedEntryIP: <STATIC_ADDR> - AssumedEntryIP: <STATIC_ADDR>
+DetctedExitIP: <STATIC_ADDR> - AssumedExitIp: <STATIC_ADDR>
+Parsing Options
+  Input file: cylinder1.pov (compatible to version 3.61)
+  Remove bounds........On 
+  Split unions.........Off
+  Library paths:
+    ./
+Output Options
+  Image resolution 2 by 2 (rows 1 to 2, columns 1 to 2).
+  Output file: /tmp/scene.tga, 24 bpp Targa
+  Graphic display......Off
+  Mosaic preview.......Off
+  CPU usage histogram..Off
+  Continued trace......Off
+Tracing Options
+  Quality:  9
+  Bounding boxes.......On   Bounding threshold: 25
+  Light Buffer.........On 
+  Vista Buffer.........On   Draw Vista Buffer....Off
+  Antialiasing.........Off
+  Clock value:    0.000  (Animation off)
+
+  <TIME> Parsing
+File: cylinder1.pov  Line: 8
+Possible Parse Error: Could not find file 'colors.inc'
+File: cylinder1.pov  Line: 8
+File Context (5 lines):
+//
+// -w320 -h320
+// -w512 -h512 +a0.3
+#include "colors.inc"
+Parse Error: Cannot open include file colors.inc.
+File: cylinder1.pov  Line: 8
+Parse Warning: Check that the file is in a directory specifed with a +L switch
+ or 'Library_Path=' .INI item. Standard include files are in the include
+ directory or folder. Please read your documentation carefully.
+MISMATCHED on exit_function! f: ..povray_cooperate() !=  ..povray_exit(int)
+DetectedEntryIP: <STATIC_ADDR> - AssumedEntryIP: <STATIC_ADDR>
+DetctedExitIP: <STATIC_ADDR> - AssumedExitIp: <STATIC_ADDR>
+
+  <TIME> Reclaiming memory
+Memory leakage detected, see file 'Memory.Log' for list
+
+1739 bytes reclaimed
+Total Scene Processing Times
+<TIME>
+<TIME>
+<TIME>
+<TIME>
+MISMATCHED on exit_function! f: POVMS_MessageReceiver.ReceiveHandler(POVMSData*, POVMSData*, int, void*) !=  POVMS_Object.operator()()
+DetectedEntryIP: <STATIC_ADDR> - AssumedEntryIP: <STATIC_ADDR>
+DetctedExitIP: <STATIC_ADDR> - AssumedExitIp: <STATIC_ADDR>
+==PID== 
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

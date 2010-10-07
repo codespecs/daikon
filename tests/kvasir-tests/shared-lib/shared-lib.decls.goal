@@ -1,0 +1,37 @@
+VarComparability
+none
+
+DECLARE
+global.main():::ENTER
+argc
+int # isParam=true
+int
+22
+argv
+char[][] # isParam=true
+hashcode
+22
+argv[]
+char[]
+String
+22
+
+DECLARE
+global.main():::EXIT0
+argc
+int # isParam=true
+int
+22
+argv
+char[][] # isParam=true
+hashcode
+22
+argv[]
+char[]
+String
+22
+return
+int
+int
+22
+

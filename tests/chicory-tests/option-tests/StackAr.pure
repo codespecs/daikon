@@ -1,0 +1,3 @@
+public boolean DataStructures.StackAr.isFull()
+public boolean DataStructures.StackAr.isEmpty()
+public Object Datastructures.StackAr.top()

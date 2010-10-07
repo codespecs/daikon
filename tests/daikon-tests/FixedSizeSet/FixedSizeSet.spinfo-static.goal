@@ -1,0 +1,20 @@
+REPLACE
+contains(int n)
+bits[n]
+
+PPT_NAME six170.FixedSizeSet.contains
+bits[n]
+orig(bits[n])
+
+PPT_NAME six170.FixedSizeSet.intersect
+! other.bits[i]
+i<bits.length
+orig(! other.bits[i])
+orig(i<bits.length)
+
+PPT_NAME six170.FixedSizeSet.union
+i<bits.length
+orig(i<bits.length)
+orig(other.bits[i])
+other.bits[i]
+

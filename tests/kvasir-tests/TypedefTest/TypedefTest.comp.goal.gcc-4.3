@@ -1,0 +1,29 @@
+..main():::ENTER
+::globalStruct ::globalStruct.a
+::globalStruct.b
+::globalStruct.c
+::unnamedGlobalEnum
+
+..main():::EXIT0
+::globalStruct ::globalStruct.a
+::globalStruct.b
+::globalStruct.c
+::unnamedGlobalEnum
+return
+
+TypedefTest.c.createCopy():::ENTER
+::globalStruct ::globalStruct.a a a.a
+::globalStruct.b a.b
+::globalStruct.c a.c
+::unnamedGlobalEnum
+x
+
+TypedefTest.c.createCopy():::EXIT0
+::globalStruct ::globalStruct.a a a.a return[..].a
+::globalStruct.b a.b return[..].b
+::globalStruct.c a.c return[..].c
+::unnamedGlobalEnum
+return
+return[..]
+x
+

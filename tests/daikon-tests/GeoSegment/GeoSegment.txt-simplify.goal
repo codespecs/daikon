@@ -1,0 +1,333 @@
+===========================================================================
+MapQuick1.GeoPoint:::CLASS
+===========================================================================
+MapQuick1.GeoPoint:::OBJECT
+(> (select |latitude| |this|) (select |longitude| |this|))
+===========================================================================
+MapQuick1.GeoPoint.GeoPoint(int, int):::ENTER
+|latitude|  isPointer
+|longitude|  isPointer
+(> |latitude| |longitude|)
+===========================================================================
+MapQuick1.GeoPoint.GeoPoint(int, int):::EXIT
+(EQ (select |latitude| |this|) |__orig__latitude|)
+(EQ (select |longitude| |this|) |__orig__longitude|)
+(select |latitude| |this|)  isPointer
+(select |longitude| |this|)  isPointer
+===========================================================================
+MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::ENTER
+(select |latitude| |this|)  isPointer
+(select |longitude| |this|)  isPointer
+(NEQ (hash |gp|) null)
+(select |latitude| |gp|)  isPointer
+(select |longitude| |gp|)  isPointer
+(> (select |latitude| |this|) (select |longitude| |gp|))
+(< (select |longitude| |this|) (select |latitude| |gp|))
+(> (select |latitude| |gp|) (select |longitude| |gp|))
+===========================================================================
+MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint):::EXIT
+(EQ (select |latitude| |this|) (select |latitude| |__orig__this|))
+(EQ (select |longitude| |this|) (select |longitude| |__orig__this|))
+(EQ (select |latitude| |gp|) (select |latitude| |__orig__gp|))
+(EQ (select |longitude| |gp|) (select |longitude| |__orig__gp|))
+(select |latitude| |this|)  isPointer
+(select |longitude| |this|)  isPointer
+(select |latitude| |gp|)  isPointer
+(select |longitude| |gp|)  isPointer
+(> (select |REP_SCALE_FACTOR| (select |GeoPoint| |MapQuick1|)) |return|)
+(> (select |latitude| |this|) (select |longitude| |gp|))
+(< (select |longitude| |this|) (select |latitude| |gp|))
+(> (select |latitude| |gp|) (select |longitude| |gp|))
+===========================================================================
+MapQuick1.GeoPoint.equals(java.lang.Object):::ENTER
+(NEQ (hash |o|) null)
+(EQ (typeof |o|) |T_MapQuick1.GeoPoint|)
+===========================================================================
+MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT69
+===========================================================================
+MapQuick1.GeoPoint.equals(java.lang.Object):::EXIT
+(EQ (select |latitude| |this|) (select |latitude| |__orig__this|))
+(EQ (select |longitude| |this|) (select |longitude| |__orig__this|))
+===========================================================================
+MapQuick1.GeoPoint.hashCode():::ENTER
+(select |latitude| |this|)  isPointer
+(select |longitude| |this|)  isPointer
+===========================================================================
+MapQuick1.GeoPoint.hashCode():::EXIT
+(EQ (select |latitude| |this|) (select |latitude| |__orig__this|))
+(EQ (select |longitude| |this|) (select |longitude| |__orig__this|))
+(select |latitude| |this|)  isPointer
+(select |longitude| |this|)  isPointer
+|return|  isPointer
+(< (select |latitude| |this|) |return|)
+(< (select |longitude| |this|) |return|)
+(AND)
+===========================================================================
+MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::ENTER
+(select |latitude| |this|)  isPointer
+(select |longitude| |this|)  isPointer
+(NEQ (hash |gp|) null)
+(select |latitude| |gp|)  isPointer
+(select |longitude| |gp|)  isPointer
+(NEQ (select |latitude| |this|) (select |latitude| |gp|))
+(> (select |latitude| |this|) (select |longitude| |gp|))
+(< (select |longitude| |this|) (select |latitude| |gp|))
+(NEQ (select |longitude| |this|) (select |longitude| |gp|))
+(> (select |latitude| |gp|) (select |longitude| |gp|))
+===========================================================================
+MapQuick1.GeoPoint.headingTo(MapQuick1.GeoPoint):::EXIT
+(EQ (select |latitude| |this|) (select |latitude| |__orig__this|))
+(EQ (select |longitude| |this|) (select |longitude| |__orig__this|))
+(EQ (select |latitude| |gp|) (select |latitude| |__orig__gp|))
+(EQ (select |longitude| |gp|) (select |longitude| |__orig__gp|))
+(select |latitude| |this|)  isPointer
+(select |longitude| |this|)  isPointer
+(select |latitude| |gp|)  isPointer
+(select |longitude| |gp|)  isPointer
+(> (select |REP_SCALE_FACTOR| (select |GeoPoint| |MapQuick1|)) |return|)
+(NEQ (select |latitude| |this|) (select |latitude| |gp|))
+(> (select |latitude| |this|) (select |longitude| |gp|))
+(< (select |longitude| |this|) (select |latitude| |gp|))
+(NEQ (select |longitude| |this|) (select |longitude| |gp|))
+(> (select |latitude| |gp|) (select |longitude| |gp|))
+===========================================================================
+MapQuick1.GeoSegment:::OBJECT
+(NEQ (hash (select |name| |this|)) null)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: this.name.toString is printable
+(NEQ (hash (select |p1| |this|)) null)
+(NEQ (hash (select |p2| |this|)) null)
+(> (select |latitude| (select |p1| |this|)) (select |longitude| (select |p1| |this|)))
+(> (select |latitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
+(< (select |longitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
+(> (select |latitude| (select |p2| |this|)) (select |longitude| (select |p2| |this|)))
+===========================================================================
+MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::ENTER
+(NEQ (hash |name|) null)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: name.toString is printable
+(NEQ (hash |p1|) null)
+(select |latitude| |p1|)  isPointer
+(select |longitude| |p1|)  isPointer
+(NEQ (hash |p2|) null)
+(select |latitude| |p2|)  isPointer
+(select |longitude| |p2|)  isPointer
+(> (select |latitude| |p1|) (select |longitude| |p1|))
+(> (select |latitude| |p1|) (select |longitude| |p2|))
+(< (select |longitude| |p1|) (select |latitude| |p2|))
+(> (select |latitude| |p2|) (select |longitude| |p2|))
+===========================================================================
+MapQuick1.GeoSegment.GeoSegment(java.lang.String, MapQuick1.GeoPoint, MapQuick1.GeoPoint):::EXIT
+(EQ (hash (select |name| |this|)) (hash |__orig__name|))
+(EQ (hash (select |p1| |this|)) (hash |__orig__p1|))
+(EQ (select |latitude| (select |p1| |this|)) (select |latitude| |p1|))
+(EQ (select |longitude| (select |p1| |this|)) (select |longitude| |p1|))
+(EQ (hash (select |p2| |this|)) (hash |__orig__p2|))
+(EQ (select |latitude| (select |p2| |this|)) (select |latitude| |p2|))
+(EQ (select |longitude| (select |p2| |this|)) (select |longitude| |p2|))
+(EQ (select |latitude| |p1|) (select |latitude| |__orig__p1|))
+(EQ (select |longitude| |p1|) (select |longitude| |__orig__p1|))
+(EQ (select |latitude| |p2|) (select |latitude| |__orig__p2|))
+(EQ (select |longitude| |p2|) (select |longitude| |__orig__p2|))
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: name.toString is printable
+(select |latitude| |p1|)  isPointer
+(select |longitude| |p1|)  isPointer
+(select |latitude| |p2|)  isPointer
+(select |longitude| |p2|)  isPointer
+(EQ (select |toString| (select |name| |this|)) (select |toString| |name|))
+(EQ (select |toString| |name|) (select |toString| |__orig__name|))
+(> (select |latitude| |p1|) (select |longitude| |p1|))
+(> (select |latitude| |p1|) (select |longitude| |p2|))
+(< (select |longitude| |p1|) (select |latitude| |p2|))
+(> (select |latitude| |p2|) (select |longitude| |p2|))
+===========================================================================
+MapQuick1.GeoSegment.equals(java.lang.Object):::ENTER
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+(NEQ (hash |o|) null)
+(EQ (typeof |o|) |T_MapQuick1.GeoSegment|)
+(NEQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
+(NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
+===========================================================================
+MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT135
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+===========================================================================
+MapQuick1.GeoSegment.equals(java.lang.Object):::EXIT
+(EQ (hash (select |name| |this|)) (hash (select |name| |__orig__this|)))
+(EQ (hash (select |p1| |this|)) (hash (select |p1| |__orig__this|)))
+(EQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p1| |__orig__this|)))
+(EQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p1| |__orig__this|)))
+(EQ (hash (select |p2| |this|)) (hash (select |p2| |__orig__this|)))
+(EQ (select |latitude| (select |p2| |this|)) (select |latitude| (select |p2| |__orig__this|)))
+(EQ (select |longitude| (select |p2| |this|)) (select |longitude| (select |p2| |__orig__this|)))
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+(EQ |return| |@false|)
+(EQ (select |toString| (select |name| |this|)) (select |toString| (select |name| |__orig__this|)))
+(NEQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
+(NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
+===========================================================================
+MapQuick1.GeoSegment.hashCode():::ENTER
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+===========================================================================
+MapQuick1.GeoSegment.hashCode():::EXIT
+(EQ (hash (select |name| |this|)) (hash (select |name| |__orig__this|)))
+(EQ (hash (select |p1| |this|)) (hash (select |p1| |__orig__this|)))
+(EQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p1| |__orig__this|)))
+(EQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p1| |__orig__this|)))
+(EQ (hash (select |p2| |this|)) (hash (select |p2| |__orig__this|)))
+(EQ (select |latitude| (select |p2| |this|)) (select |latitude| (select |p2| |__orig__this|)))
+(EQ (select |longitude| (select |p2| |this|)) (select |longitude| (select |p2| |__orig__this|)))
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+|return|  isPointer
+(NEQ |return| 0)
+(EQ (select |toString| (select |name| |this|)) (select |toString| (select |name| |__orig__this|)))
+(NEQ (select |latitude| (select |p1| |this|)) |return|)
+(NEQ (select |longitude| (select |p1| |this|)) |return|)
+(NEQ (select |latitude| (select |p2| |this|)) |return|)
+(NEQ (select |longitude| (select |p2| |this|)) |return|)
+===========================================================================
+MapQuick1.GeoSegment.heading():::ENTER
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+(NEQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
+(NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
+===========================================================================
+MapQuick1.GeoSegment.heading():::EXIT
+(EQ (hash (select |name| |this|)) (hash (select |name| |__orig__this|)))
+(EQ (hash (select |p1| |this|)) (hash (select |p1| |__orig__this|)))
+(EQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p1| |__orig__this|)))
+(EQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p1| |__orig__this|)))
+(EQ (hash (select |p2| |this|)) (hash (select |p2| |__orig__this|)))
+(EQ (select |latitude| (select |p2| |this|)) (select |latitude| (select |p2| |__orig__this|)))
+(EQ (select |longitude| (select |p2| |this|)) (select |longitude| (select |p2| |__orig__this|)))
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+(EQ (select |toString| (select |name| |this|)) (select |toString| (select |name| |__orig__this|)))
+(> (select |REP_SCALE_FACTOR| (select |GeoPoint| |MapQuick1|)) |return|)
+(NEQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
+(NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
+===========================================================================
+MapQuick1.GeoSegment.length():::ENTER
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+(NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
+===========================================================================
+MapQuick1.GeoSegment.length():::EXIT
+(EQ (hash (select |name| |this|)) (hash (select |name| |__orig__this|)))
+(EQ (hash (select |p1| |this|)) (hash (select |p1| |__orig__this|)))
+(EQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p1| |__orig__this|)))
+(EQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p1| |__orig__this|)))
+(EQ (hash (select |p2| |this|)) (hash (select |p2| |__orig__this|)))
+(EQ (select |latitude| (select |p2| |this|)) (select |latitude| (select |p2| |__orig__this|)))
+(EQ (select |longitude| (select |p2| |this|)) (select |longitude| (select |p2| |__orig__this|)))
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+(EQ (select |toString| (select |name| |this|)) (select |toString| (select |name| |__orig__this|)))
+(> (select |REP_SCALE_FACTOR| (select |GeoPoint| |MapQuick1|)) |return|)
+(NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
+===========================================================================
+MapQuick1.GeoSegment.name():::ENTER
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+(NEQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
+(NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
+===========================================================================
+MapQuick1.GeoSegment.name():::EXIT
+(EQ (hash (select |name| |this|)) (hash |return|))
+(EQ (hash (select |p1| |this|)) (hash (select |p1| |__orig__this|)))
+(EQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p1| |__orig__this|)))
+(EQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p1| |__orig__this|)))
+(EQ (hash (select |p2| |this|)) (hash (select |p2| |__orig__this|)))
+(EQ (select |latitude| (select |p2| |this|)) (select |latitude| (select |p2| |__orig__this|)))
+(EQ (select |longitude| (select |p2| |this|)) (select |longitude| (select |p2| |__orig__this|)))
+(EQ (hash |return|) (hash (select |name| |__orig__this|)))
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+(NEQ (hash |return|) null)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.toString is printable
+(EQ (select |toString| (select |name| |this|)) (select |toString| |return|))
+(NEQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
+(NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
+(EQ (select |toString| |return|) (select |toString| (select |name| |__orig__this|)))
+===========================================================================
+MapQuick1.GeoSegment.p1():::ENTER
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+(NEQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p2| |this|)))
+(NEQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p2| |this|)))
+===========================================================================
+MapQuick1.GeoSegment.p1():::EXIT
+(EQ (hash (select |name| |this|)) (hash (select |name| |__orig__this|)))
+(EQ (hash (select |p1| |this|)) (hash |return|))
+(EQ (select |latitude| (select |p1| |this|)) (select |latitude| |return|))
+(EQ (select |longitude| (select |p1| |this|)) (select |longitude| |return|))
+(EQ (hash (select |p2| |this|)) (hash (select |p2| |__orig__this|)))
+(EQ (select |latitude| (select |p2| |this|)) (select |latitude| (select |p2| |__orig__this|)))
+(EQ (select |longitude| (select |p2| |this|)) (select |longitude| (select |p2| |__orig__this|)))
+(EQ (hash |return|) (hash (select |p1| |__orig__this|)))
+(EQ (select |latitude| |return|) (select |latitude| (select |p1| |__orig__this|)))
+(EQ (select |longitude| |return|) (select |longitude| (select |p1| |__orig__this|)))
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+(NEQ (hash |return|) null)
+(select |latitude| |return|)  isPointer
+(select |longitude| |return|)  isPointer
+(EQ (select |toString| (select |name| |this|)) (select |toString| (select |name| |__orig__this|)))
+(NEQ (select |latitude| (select |p2| |this|)) (select |latitude| |return|))
+(> (select |latitude| (select |p2| |this|)) (select |longitude| |return|))
+(< (select |longitude| (select |p2| |this|)) (select |latitude| |return|))
+(NEQ (select |longitude| (select |p2| |this|)) (select |longitude| |return|))
+(> (select |latitude| |return|) (select |longitude| |return|))
+===========================================================================
+MapQuick1.GeoSegment.p2():::ENTER
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(select |latitude| (select |p2| |this|))  isPointer
+(select |longitude| (select |p2| |this|))  isPointer
+===========================================================================
+MapQuick1.GeoSegment.p2():::EXIT
+(EQ (hash (select |name| |this|)) (hash (select |name| |__orig__this|)))
+(EQ (hash (select |p1| |this|)) (hash (select |p1| |__orig__this|)))
+(EQ (select |latitude| (select |p1| |this|)) (select |latitude| (select |p1| |__orig__this|)))
+(EQ (select |longitude| (select |p1| |this|)) (select |longitude| (select |p1| |__orig__this|)))
+(EQ (hash (select |p2| |this|)) (hash |return|))
+(EQ (select |latitude| (select |p2| |this|)) (select |latitude| |return|))
+(EQ (select |longitude| (select |p2| |this|)) (select |longitude| |return|))
+(EQ (hash |return|) (hash (select |p2| |__orig__this|)))
+(EQ (select |latitude| |return|) (select |latitude| (select |p2| |__orig__this|)))
+(EQ (select |longitude| |return|) (select |longitude| (select |p2| |__orig__this|)))
+(select |latitude| (select |p1| |this|))  isPointer
+(select |longitude| (select |p1| |this|))  isPointer
+(NEQ (hash |return|) null)
+(select |latitude| |return|)  isPointer
+(select |longitude| |return|)  isPointer
+(EQ (select |toString| (select |name| |this|)) (select |toString| (select |name| |__orig__this|)))
+(> (select |latitude| (select |p1| |this|)) (select |longitude| |return|))
+(< (select |longitude| (select |p1| |this|)) (select |latitude| |return|))
+(> (select |latitude| |return|) (select |longitude| |return|))

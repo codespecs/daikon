@@ -1,0 +1,1499 @@
+===========================================================================
+std.ALIM()int:::ENTER
+::High_Confidence == 1
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep != ::Down_Separation
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::Cur_Vertical_Sep != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::High_Confidence >= ::Two_of_Three_Reports_Valid
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence >= ::Other_RAC
+::High_Confidence >= ::Other_Capability
+::High_Confidence >= ::Climb_Inhibit
+::High_Confidence < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid >= ::Other_Capability
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Two_of_Three_Reports_Valid < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate != ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Up_Separation
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])-1
+::Own_Tracked_Alt_Rate != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Other_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value <= size(::Positive_RA_Alt_Thresh[])-1
+::Alt_Layer_Value < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_RAC < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+size(::Positive_RA_Alt_Thresh[]) < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+===========================================================================
+std.ALIM()int:::EXIT
+::Cur_Vertical_Sep == orig(::Cur_Vertical_Sep)
+::High_Confidence == orig(::High_Confidence)
+::Two_of_Three_Reports_Valid == orig(::Two_of_Three_Reports_Valid)
+::Own_Tracked_Alt == orig(::Own_Tracked_Alt)
+::Own_Tracked_Alt_Rate == orig(::Own_Tracked_Alt_Rate)
+::Other_Tracked_Alt == orig(::Other_Tracked_Alt)
+::Alt_Layer_Value == orig(::Alt_Layer_Value)
+::Positive_RA_Alt_Thresh == orig(::Positive_RA_Alt_Thresh)
+::Positive_RA_Alt_Thresh[] == orig(::Positive_RA_Alt_Thresh[])
+::Up_Separation == orig(::Up_Separation)
+::Down_Separation == orig(::Down_Separation)
+::Other_RAC == orig(::Other_RAC)
+::Other_Capability == orig(::Other_Capability)
+::Climb_Inhibit == orig(::Climb_Inhibit)
+return == ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+return == orig(::Positive_RA_Alt_Thresh[post(::Alt_Layer_Value)])
+return == ::Positive_RA_Alt_Thresh[orig(::Alt_Layer_Value)]
+return == orig(::Positive_RA_Alt_Thresh[::Alt_Layer_Value])
+::High_Confidence == 1
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep != ::Down_Separation
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep != return
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence < return
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid < return
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt != return
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate != ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Up_Separation
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate != return
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])-1
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt != return
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value < return
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < return
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < return
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < return
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+return > size(::Positive_RA_Alt_Thresh[])
+===========================================================================
+std.Inhibit_Biased_Climb()int:::ENTER
+::High_Confidence == 1
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::High_Confidence >= ::Two_of_Three_Reports_Valid
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence >= ::Other_RAC
+::High_Confidence >= ::Other_Capability
+::High_Confidence >= ::Climb_Inhibit
+::High_Confidence < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid >= ::Other_Capability
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Two_of_Three_Reports_Valid < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate != ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])-1
+::Own_Tracked_Alt_Rate != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Other_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value <= size(::Positive_RA_Alt_Thresh[])-1
+::Alt_Layer_Value < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_RAC < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+size(::Positive_RA_Alt_Thresh[]) < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+===========================================================================
+std.Inhibit_Biased_Climb()int:::EXIT
+::Cur_Vertical_Sep == orig(::Cur_Vertical_Sep)
+::High_Confidence == orig(::High_Confidence)
+::Two_of_Three_Reports_Valid == orig(::Two_of_Three_Reports_Valid)
+::Own_Tracked_Alt == orig(::Own_Tracked_Alt)
+::Own_Tracked_Alt_Rate == orig(::Own_Tracked_Alt_Rate)
+::Other_Tracked_Alt == orig(::Other_Tracked_Alt)
+::Alt_Layer_Value == orig(::Alt_Layer_Value)
+::Positive_RA_Alt_Thresh == orig(::Positive_RA_Alt_Thresh)
+::Positive_RA_Alt_Thresh[] == orig(::Positive_RA_Alt_Thresh[])
+::Up_Separation == orig(::Up_Separation)
+::Down_Separation == orig(::Down_Separation)
+::Other_RAC == orig(::Other_RAC)
+::Other_Capability == orig(::Other_Capability)
+::Climb_Inhibit == orig(::Climb_Inhibit)
+::High_Confidence == 1
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence < return
+::High_Confidence < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid < return
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Two_of_Three_Reports_Valid < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt != return
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate != ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])-1
+::Own_Tracked_Alt_Rate != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt != return
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Other_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value < return
+::Alt_Layer_Value < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < return
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_RAC < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Capability < return
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Climb_Inhibit < return
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+return > size(::Positive_RA_Alt_Thresh[])
+size(::Positive_RA_Alt_Thresh[]) < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+===========================================================================
+std.Non_Crossing_Biased_Climb()boolean:::ENTER
+::High_Confidence == 1
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::High_Confidence >= ::Two_of_Three_Reports_Valid
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence >= ::Other_RAC
+::High_Confidence >= ::Other_Capability
+::High_Confidence >= ::Climb_Inhibit
+::High_Confidence < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid >= ::Other_Capability
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Two_of_Three_Reports_Valid < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate != ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])-1
+::Own_Tracked_Alt_Rate != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Other_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value <= size(::Positive_RA_Alt_Thresh[])-1
+::Alt_Layer_Value < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_RAC < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+size(::Positive_RA_Alt_Thresh[]) < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+===========================================================================
+std.Non_Crossing_Biased_Climb()boolean:::EXIT
+::Cur_Vertical_Sep == orig(::Cur_Vertical_Sep)
+::High_Confidence == orig(::High_Confidence)
+::Two_of_Three_Reports_Valid == orig(::Two_of_Three_Reports_Valid)
+::Own_Tracked_Alt == orig(::Own_Tracked_Alt)
+::Own_Tracked_Alt_Rate == orig(::Own_Tracked_Alt_Rate)
+::Other_Tracked_Alt == orig(::Other_Tracked_Alt)
+::Alt_Layer_Value == orig(::Alt_Layer_Value)
+::Positive_RA_Alt_Thresh == orig(::Positive_RA_Alt_Thresh)
+::Positive_RA_Alt_Thresh[] == orig(::Positive_RA_Alt_Thresh[])
+::Up_Separation == orig(::Up_Separation)
+::Down_Separation == orig(::Down_Separation)
+::Other_RAC == orig(::Other_RAC)
+::Other_Capability == orig(::Other_Capability)
+::Climb_Inhibit == orig(::Climb_Inhibit)
+::High_Confidence == 1
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+return one of { 0, 1 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep > return
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence >= return
+::High_Confidence < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Two_of_Three_Reports_Valid < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt > return
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate != ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate > return
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])-1
+::Own_Tracked_Alt_Rate != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt > return
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Other_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > return
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > return
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_RAC < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+return < size(::Positive_RA_Alt_Thresh[])-1
+return < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+size(::Positive_RA_Alt_Thresh[]) < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+===========================================================================
+std.Non_Crossing_Biased_Descend()boolean:::ENTER
+::High_Confidence == 1
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::High_Confidence >= ::Two_of_Three_Reports_Valid
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence >= ::Other_RAC
+::High_Confidence >= ::Other_Capability
+::High_Confidence >= ::Climb_Inhibit
+::High_Confidence < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid >= ::Other_Capability
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Two_of_Three_Reports_Valid < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate != ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])-1
+::Own_Tracked_Alt_Rate != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Other_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value <= size(::Positive_RA_Alt_Thresh[])-1
+::Alt_Layer_Value < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_RAC < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+size(::Positive_RA_Alt_Thresh[]) < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+===========================================================================
+std.Non_Crossing_Biased_Descend()boolean:::EXIT
+::Cur_Vertical_Sep == orig(::Cur_Vertical_Sep)
+::High_Confidence == orig(::High_Confidence)
+::Two_of_Three_Reports_Valid == orig(::Two_of_Three_Reports_Valid)
+::Own_Tracked_Alt == orig(::Own_Tracked_Alt)
+::Own_Tracked_Alt_Rate == orig(::Own_Tracked_Alt_Rate)
+::Other_Tracked_Alt == orig(::Other_Tracked_Alt)
+::Alt_Layer_Value == orig(::Alt_Layer_Value)
+::Positive_RA_Alt_Thresh == orig(::Positive_RA_Alt_Thresh)
+::Positive_RA_Alt_Thresh[] == orig(::Positive_RA_Alt_Thresh[])
+::Up_Separation == orig(::Up_Separation)
+::Down_Separation == orig(::Down_Separation)
+::Other_RAC == orig(::Other_RAC)
+::Other_Capability == orig(::Other_Capability)
+::Climb_Inhibit == orig(::Climb_Inhibit)
+::High_Confidence == 1
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+return one of { 0, 1 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep > return
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence >= return
+::High_Confidence < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Two_of_Three_Reports_Valid < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt > return
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate != ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate > return
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])-1
+::Own_Tracked_Alt_Rate != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt > return
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Other_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > return
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > return
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_RAC < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+return < size(::Positive_RA_Alt_Thresh[])-1
+return < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+size(::Positive_RA_Alt_Thresh[]) < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+===========================================================================
+std.Own_Above_Threat()boolean:::ENTER
+::High_Confidence == 1
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep != ::Up_Separation
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::High_Confidence >= ::Two_of_Three_Reports_Valid
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence >= ::Other_RAC
+::High_Confidence >= ::Other_Capability
+::High_Confidence >= ::Climb_Inhibit
+::High_Confidence < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid >= ::Other_Capability
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Two_of_Three_Reports_Valid < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate > ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Up_Separation
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate >= size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt_Rate != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Other_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value <= size(::Positive_RA_Alt_Thresh[])-1
+::Alt_Layer_Value < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_RAC < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+size(::Positive_RA_Alt_Thresh[]) < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+===========================================================================
+std.Own_Above_Threat()boolean:::EXIT
+::Cur_Vertical_Sep == orig(::Cur_Vertical_Sep)
+::High_Confidence == orig(::High_Confidence)
+::Two_of_Three_Reports_Valid == orig(::Two_of_Three_Reports_Valid)
+::Own_Tracked_Alt == orig(::Own_Tracked_Alt)
+::Own_Tracked_Alt_Rate == orig(::Own_Tracked_Alt_Rate)
+::Other_Tracked_Alt == orig(::Other_Tracked_Alt)
+::Alt_Layer_Value == orig(::Alt_Layer_Value)
+::Positive_RA_Alt_Thresh == orig(::Positive_RA_Alt_Thresh)
+::Positive_RA_Alt_Thresh[] == orig(::Positive_RA_Alt_Thresh[])
+::Up_Separation == orig(::Up_Separation)
+::Down_Separation == orig(::Down_Separation)
+::Other_RAC == orig(::Other_RAC)
+::Other_Capability == orig(::Other_Capability)
+::Climb_Inhibit == orig(::Climb_Inhibit)
+::High_Confidence == 1
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+return one of { 0, 1 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep != ::Up_Separation
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep > return
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence >= return
+::High_Confidence < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Two_of_Three_Reports_Valid < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt > return
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate > ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Up_Separation
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate > return
+::Own_Tracked_Alt_Rate != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt > return
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Other_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > return
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > return
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_RAC < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+return < size(::Positive_RA_Alt_Thresh[])-1
+return < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+size(::Positive_RA_Alt_Thresh[]) < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+===========================================================================
+std.Own_Below_Threat()boolean:::ENTER
+::High_Confidence == 1
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Own_Tracked_Alt_Rate >= 2
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep != ::Down_Separation
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::Cur_Vertical_Sep != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::High_Confidence >= ::Two_of_Three_Reports_Valid
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence >= ::Other_RAC
+::High_Confidence >= ::Other_Capability
+::High_Confidence >= ::Climb_Inhibit
+::High_Confidence < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid >= ::Other_Capability
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Two_of_Three_Reports_Valid < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate != ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])-1
+::Own_Tracked_Alt_Rate != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Other_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value <= size(::Positive_RA_Alt_Thresh[])-1
+::Alt_Layer_Value < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_RAC < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+size(::Positive_RA_Alt_Thresh[]) < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+===========================================================================
+std.Own_Below_Threat()boolean:::EXIT
+::Cur_Vertical_Sep == orig(::Cur_Vertical_Sep)
+::High_Confidence == orig(::High_Confidence)
+::Two_of_Three_Reports_Valid == orig(::Two_of_Three_Reports_Valid)
+::Own_Tracked_Alt == orig(::Own_Tracked_Alt)
+::Own_Tracked_Alt_Rate == orig(::Own_Tracked_Alt_Rate)
+::Other_Tracked_Alt == orig(::Other_Tracked_Alt)
+::Alt_Layer_Value == orig(::Alt_Layer_Value)
+::Positive_RA_Alt_Thresh == orig(::Positive_RA_Alt_Thresh)
+::Positive_RA_Alt_Thresh[] == orig(::Positive_RA_Alt_Thresh[])
+::Up_Separation == orig(::Up_Separation)
+::Down_Separation == orig(::Down_Separation)
+::Other_RAC == orig(::Other_RAC)
+::Other_Capability == orig(::Other_Capability)
+::Climb_Inhibit == orig(::Climb_Inhibit)
+::High_Confidence == 1
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Own_Tracked_Alt_Rate >= 2
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+return one of { 0, 1 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep > ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep != ::Down_Separation
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep > return
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::Cur_Vertical_Sep != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence >= return
+::High_Confidence < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Two_of_Three_Reports_Valid < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt > return
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate != ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate > return
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])-1
+::Own_Tracked_Alt_Rate != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt > return
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Other_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > return
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > return
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_RAC < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+return < size(::Positive_RA_Alt_Thresh[])-1
+return < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+size(::Positive_RA_Alt_Thresh[]) < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+===========================================================================
+std.alt_sep_test()int:::ENTER
+::High_Confidence one of { 0, 1 }
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep != ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence < size(::Positive_RA_Alt_Thresh[])-1
+::High_Confidence < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Two_of_Three_Reports_Valid < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate != ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])-1
+::Own_Tracked_Alt_Rate != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value <= size(::Positive_RA_Alt_Thresh[])-1
+::Alt_Layer_Value < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_RAC < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+size(::Positive_RA_Alt_Thresh[]) < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+===========================================================================
+std.alt_sep_test()int:::EXIT
+::Cur_Vertical_Sep == orig(::Cur_Vertical_Sep)
+::High_Confidence == orig(::High_Confidence)
+::Two_of_Three_Reports_Valid == orig(::Two_of_Three_Reports_Valid)
+::Own_Tracked_Alt == orig(::Own_Tracked_Alt)
+::Own_Tracked_Alt_Rate == orig(::Own_Tracked_Alt_Rate)
+::Other_Tracked_Alt == orig(::Other_Tracked_Alt)
+::Alt_Layer_Value == orig(::Alt_Layer_Value)
+::Positive_RA_Alt_Thresh == orig(::Positive_RA_Alt_Thresh)
+::Positive_RA_Alt_Thresh[] == orig(::Positive_RA_Alt_Thresh[])
+::Up_Separation == orig(::Up_Separation)
+::Down_Separation == orig(::Down_Separation)
+::Other_RAC == orig(::Other_RAC)
+::Other_Capability == orig(::Other_Capability)
+::Climb_Inhibit == orig(::Climb_Inhibit)
+::High_Confidence one of { 0, 1 }
+::Two_of_Three_Reports_Valid one of { 0, 1 }
+::Alt_Layer_Value >= 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Positive_RA_Alt_Thresh[] sorted by <
+::Other_RAC one of { 0, 1 }
+::Other_Capability one of { 0, 1 }
+::Climb_Inhibit one of { 0, 1 }
+return one of { 0, 1, 2 }
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] elements one of { 400, 500, 640 }
+::Cur_Vertical_Sep > ::High_Confidence
+::Cur_Vertical_Sep > ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep != ::Own_Tracked_Alt
+::Cur_Vertical_Sep != ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep != ::Other_Tracked_Alt
+::Cur_Vertical_Sep > ::Alt_Layer_Value
+::Cur_Vertical_Sep > ::Other_RAC
+::Cur_Vertical_Sep > ::Other_Capability
+::Cur_Vertical_Sep > ::Climb_Inhibit
+::Cur_Vertical_Sep > return
+::Cur_Vertical_Sep > size(::Positive_RA_Alt_Thresh[])
+::High_Confidence < ::Own_Tracked_Alt
+::High_Confidence < ::Own_Tracked_Alt_Rate
+::High_Confidence < ::Other_Tracked_Alt
+::High_Confidence < ::Up_Separation
+::High_Confidence < ::Down_Separation
+::High_Confidence < size(::Positive_RA_Alt_Thresh[])-1
+::High_Confidence < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid < ::Other_Tracked_Alt
+::Two_of_Three_Reports_Valid < ::Up_Separation
+::Two_of_Three_Reports_Valid < ::Down_Separation
+::Two_of_Three_Reports_Valid < size(::Positive_RA_Alt_Thresh[])-1
+::Two_of_Three_Reports_Valid < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt != ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt != ::Other_Tracked_Alt
+::Own_Tracked_Alt > ::Alt_Layer_Value
+::Own_Tracked_Alt != ::Up_Separation
+::Own_Tracked_Alt != ::Down_Separation
+::Own_Tracked_Alt > ::Other_RAC
+::Own_Tracked_Alt > ::Other_Capability
+::Own_Tracked_Alt > ::Climb_Inhibit
+::Own_Tracked_Alt > return
+::Own_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Own_Tracked_Alt != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Own_Tracked_Alt_Rate != ::Other_Tracked_Alt
+::Own_Tracked_Alt_Rate != ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate != ::Down_Separation
+::Own_Tracked_Alt_Rate > ::Other_RAC
+::Own_Tracked_Alt_Rate > ::Other_Capability
+::Own_Tracked_Alt_Rate > ::Climb_Inhibit
+::Own_Tracked_Alt_Rate > return
+::Own_Tracked_Alt_Rate != size(::Positive_RA_Alt_Thresh[])-1
+::Own_Tracked_Alt_Rate != ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Tracked_Alt > ::Alt_Layer_Value
+::Other_Tracked_Alt != ::Up_Separation
+::Other_Tracked_Alt != ::Down_Separation
+::Other_Tracked_Alt > ::Other_RAC
+::Other_Tracked_Alt > ::Other_Capability
+::Other_Tracked_Alt > ::Climb_Inhibit
+::Other_Tracked_Alt > return
+::Other_Tracked_Alt > size(::Positive_RA_Alt_Thresh[])
+::Alt_Layer_Value < ::Up_Separation
+::Alt_Layer_Value < ::Down_Separation
+::Alt_Layer_Value < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Up_Separation > ::Other_RAC
+::Up_Separation > ::Other_Capability
+::Up_Separation > ::Climb_Inhibit
+::Up_Separation > return
+::Up_Separation > size(::Positive_RA_Alt_Thresh[])
+::Down_Separation > ::Other_RAC
+::Down_Separation > ::Other_Capability
+::Down_Separation > ::Climb_Inhibit
+::Down_Separation > return
+::Down_Separation > size(::Positive_RA_Alt_Thresh[])
+::Other_RAC < size(::Positive_RA_Alt_Thresh[])-1
+::Other_RAC < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Other_Capability < size(::Positive_RA_Alt_Thresh[])-1
+::Other_Capability < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+::Climb_Inhibit < size(::Positive_RA_Alt_Thresh[])-1
+::Climb_Inhibit < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+return < size(::Positive_RA_Alt_Thresh[])-1
+return < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+size(::Positive_RA_Alt_Thresh[]) < ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+===========================================================================
+std.initialize()void:::ENTER
+::Cur_Vertical_Sep == ::High_Confidence
+::Cur_Vertical_Sep == ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep == ::Own_Tracked_Alt
+::Cur_Vertical_Sep == ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep == ::Alt_Layer_Value
+::Cur_Vertical_Sep == ::Up_Separation
+::Cur_Vertical_Sep == ::Other_RAC
+::Cur_Vertical_Sep == ::Other_Capability
+::Cur_Vertical_Sep == ::Climb_Inhibit
+::High_Confidence == ::Two_of_Three_Reports_Valid
+::High_Confidence == ::Own_Tracked_Alt
+::High_Confidence == ::Own_Tracked_Alt_Rate
+::High_Confidence == ::Alt_Layer_Value
+::High_Confidence == ::Up_Separation
+::High_Confidence == ::Other_RAC
+::High_Confidence == ::Other_Capability
+::High_Confidence == ::Climb_Inhibit
+::Two_of_Three_Reports_Valid == ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid == ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid == ::Alt_Layer_Value
+::Two_of_Three_Reports_Valid == ::Up_Separation
+::Two_of_Three_Reports_Valid == ::Other_RAC
+::Two_of_Three_Reports_Valid == ::Other_Capability
+::Two_of_Three_Reports_Valid == ::Climb_Inhibit
+::Own_Tracked_Alt == ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt == ::Other_Tracked_Alt
+::Own_Tracked_Alt == ::Alt_Layer_Value
+::Own_Tracked_Alt == ::Up_Separation
+::Own_Tracked_Alt == ::Other_RAC
+::Own_Tracked_Alt == ::Other_Capability
+::Own_Tracked_Alt == ::Climb_Inhibit
+::Own_Tracked_Alt_Rate == ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate == ::Up_Separation
+::Own_Tracked_Alt_Rate == ::Other_RAC
+::Own_Tracked_Alt_Rate == ::Other_Capability
+::Own_Tracked_Alt_Rate == ::Climb_Inhibit
+::Alt_Layer_Value == ::Up_Separation
+::Alt_Layer_Value == ::Other_RAC
+::Alt_Layer_Value == ::Other_Capability
+::Alt_Layer_Value == ::Climb_Inhibit
+::Up_Separation == ::Down_Separation
+::Up_Separation == ::Other_RAC
+::Up_Separation == ::Other_Capability
+::Up_Separation == ::Climb_Inhibit
+::Other_RAC == ::Other_Capability
+::Other_RAC == ::Climb_Inhibit
+::Other_Capability == ::Climb_Inhibit
+::Cur_Vertical_Sep == 0
+::High_Confidence == 0
+::Two_of_Three_Reports_Valid == 0
+::Own_Tracked_Alt == 0
+::Own_Tracked_Alt_Rate == 0
+::Alt_Layer_Value == 0
+::Positive_RA_Alt_Thresh != null
+::Up_Separation == 0
+::Other_RAC == 0
+::Other_Capability == 0
+::Climb_Inhibit == 0
+::Up_Separation in ::Positive_RA_Alt_Thresh[]
+===========================================================================
+std.initialize()void:::EXIT
+::Cur_Vertical_Sep == ::High_Confidence
+::Cur_Vertical_Sep == ::Two_of_Three_Reports_Valid
+::Cur_Vertical_Sep == ::Own_Tracked_Alt
+::Cur_Vertical_Sep == ::Own_Tracked_Alt_Rate
+::Cur_Vertical_Sep == ::Alt_Layer_Value
+::Cur_Vertical_Sep == ::Up_Separation
+::Cur_Vertical_Sep == ::Other_RAC
+::Cur_Vertical_Sep == ::Other_Capability
+::Cur_Vertical_Sep == ::Climb_Inhibit
+::Cur_Vertical_Sep == orig(::Cur_Vertical_Sep)
+::High_Confidence == ::Two_of_Three_Reports_Valid
+::High_Confidence == ::Own_Tracked_Alt
+::High_Confidence == ::Own_Tracked_Alt_Rate
+::High_Confidence == ::Alt_Layer_Value
+::High_Confidence == ::Up_Separation
+::High_Confidence == ::Other_RAC
+::High_Confidence == ::Other_Capability
+::High_Confidence == ::Climb_Inhibit
+::High_Confidence == orig(::High_Confidence)
+::Two_of_Three_Reports_Valid == ::Own_Tracked_Alt
+::Two_of_Three_Reports_Valid == ::Own_Tracked_Alt_Rate
+::Two_of_Three_Reports_Valid == ::Alt_Layer_Value
+::Two_of_Three_Reports_Valid == ::Up_Separation
+::Two_of_Three_Reports_Valid == ::Other_RAC
+::Two_of_Three_Reports_Valid == ::Other_Capability
+::Two_of_Three_Reports_Valid == ::Climb_Inhibit
+::Two_of_Three_Reports_Valid == orig(::Two_of_Three_Reports_Valid)
+::Own_Tracked_Alt == ::Own_Tracked_Alt_Rate
+::Own_Tracked_Alt == ::Other_Tracked_Alt
+::Own_Tracked_Alt == ::Alt_Layer_Value
+::Own_Tracked_Alt == ::Up_Separation
+::Own_Tracked_Alt == ::Other_RAC
+::Own_Tracked_Alt == ::Other_Capability
+::Own_Tracked_Alt == ::Climb_Inhibit
+::Own_Tracked_Alt == orig(::Own_Tracked_Alt)
+::Own_Tracked_Alt == orig(::Other_Tracked_Alt)
+::Own_Tracked_Alt_Rate == ::Alt_Layer_Value
+::Own_Tracked_Alt_Rate == ::Up_Separation
+::Own_Tracked_Alt_Rate == ::Other_RAC
+::Own_Tracked_Alt_Rate == ::Other_Capability
+::Own_Tracked_Alt_Rate == ::Climb_Inhibit
+::Own_Tracked_Alt_Rate == orig(::Own_Tracked_Alt_Rate)
+::Alt_Layer_Value == ::Up_Separation
+::Alt_Layer_Value == ::Other_RAC
+::Alt_Layer_Value == ::Other_Capability
+::Alt_Layer_Value == ::Climb_Inhibit
+::Alt_Layer_Value == orig(::Alt_Layer_Value)
+::Positive_RA_Alt_Thresh == orig(::Positive_RA_Alt_Thresh)
+::Up_Separation == ::Down_Separation
+::Up_Separation == ::Other_RAC
+::Up_Separation == ::Other_Capability
+::Up_Separation == ::Climb_Inhibit
+::Up_Separation == orig(::Up_Separation)
+::Up_Separation == orig(::Down_Separation)
+::Other_RAC == ::Other_Capability
+::Other_RAC == ::Climb_Inhibit
+::Other_RAC == orig(::Other_RAC)
+::Other_Capability == ::Climb_Inhibit
+::Other_Capability == orig(::Other_Capability)
+::Climb_Inhibit == orig(::Climb_Inhibit)
+::Cur_Vertical_Sep == 0
+::High_Confidence == 0
+::Two_of_Three_Reports_Valid == 0
+::Own_Tracked_Alt == 0
+::Own_Tracked_Alt_Rate == 0
+::Alt_Layer_Value == 0
+::Positive_RA_Alt_Thresh != null
+::Positive_RA_Alt_Thresh[] == [400, 500, 640, 740]
+::Up_Separation == 0
+::Other_RAC == 0
+::Other_Capability == 0
+::Climb_Inhibit == 0
+size(::Positive_RA_Alt_Thresh[]) == 4
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] == [500, 640, 740]
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..] elements one of { 500, 640, 740 }
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value] == [400]
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value] elements == 400
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1] == []
+::Positive_RA_Alt_Thresh[] is the reverse of orig(::Positive_RA_Alt_Thresh[])
+orig(::Positive_RA_Alt_Thresh[post(::Alt_Layer_Value)]) in ::Positive_RA_Alt_Thresh[]
+::Up_Separation in orig(::Positive_RA_Alt_Thresh[])
+::Positive_RA_Alt_Thresh[::Alt_Layer_Value] in orig(::Positive_RA_Alt_Thresh[])
+orig(::Positive_RA_Alt_Thresh[]) is the reverse of ::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..]
+orig(::Positive_RA_Alt_Thresh[]) is the reverse of ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value]
+orig(::Positive_RA_Alt_Thresh[]) is the reverse of ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1]
+::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value] elements == ::Positive_RA_Alt_Thresh[::Alt_Layer_Value]
+orig(::Positive_RA_Alt_Thresh[post(::Alt_Layer_Value)]) in ::Positive_RA_Alt_Thresh[::Alt_Layer_Value+1..]
+orig(::Positive_RA_Alt_Thresh[post(::Alt_Layer_Value)]) in ::Positive_RA_Alt_Thresh[0..::Alt_Layer_Value-1]

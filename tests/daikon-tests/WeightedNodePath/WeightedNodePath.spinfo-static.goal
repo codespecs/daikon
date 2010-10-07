@@ -1,0 +1,40 @@
+REPLACE
+cost()
+cost
+equals(WeightedNodePath wnp)
+(wnp != null)&& this.node.equals(wnp.node)&&(this.path == null ? wnp.path==null : this.path.equals(wnp.path))
+extend(WeightedNode node)
+new WeightedNodePath(node, this)
+hashCode()
+node.hashCode()+(this.path==null ? 0 : 13 * path.hashCode())
+
+PPT_NAME MapQuick.WeightedNodePath.WeightedNodePath
+node == null
+orig(node == null)
+orig(path != null)
+path != null
+
+PPT_NAME MapQuick.WeightedNodePath.elements
+orig(wnp != null)
+wnp != null
+
+PPT_NAME MapQuick.WeightedNodePath.equals
+(wnp != null)&& this.node.equals(wnp.node)&&(this.path == null ? wnp.path==null : this.path.equals(wnp.path))
+false
+o instanceof WeightedNodePath
+orig((wnp != null)&& this.node.equals(wnp.node)&&(this.path == null ? wnp.path==null : this.path.equals(wnp.path)))
+orig(false)
+orig(o instanceof WeightedNodePath)
+orig(this.equals((WeightedNodePath)o))
+this.equals((WeightedNodePath)o)
+
+PPT_NAME MapQuick.WeightedNodePath.extend
+o instanceof WeightedNode
+orig(o instanceof WeightedNode)
+
+PPT_NAME MapQuick.WeightedNodePath.toString
+i.hasNext()
+i.hasNext()
+orig(i.hasNext())
+orig(i.hasNext())
+

@@ -1,0 +1,10 @@
+PointerTest
+PointerTest.decls.diff
+PointerTest.dtrace.diff
+PointerTest.out
+PointerTest.out.diff
+daikon-output
+ran-kvasir
+PointerTest.invs.diff
+*.counts *.counts.diff
+PointerTest.comp PointerTest.comp.diff

@@ -1,0 +1,9 @@
+CppInlineTest
+CppInlineTest.decls.diff
+CppInlineTest.dtrace.diff
+CppInlineTest.invs.diff
+CppInlineTest.out
+CppInlineTest.out.diff
+ran-kvasir
+*.counts *.counts.diff
+CppInlineTest.comp CppInlineTest.comp.diff

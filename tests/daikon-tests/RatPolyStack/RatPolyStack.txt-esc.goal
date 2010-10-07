@@ -1,0 +1,216 @@
+===========================================================================
+PolyCalc.Cons:::OBJECT
+    Variables: this this.head this.tail this.tail.head this.tail.tail this.tail.tail.head this.tail.tail.tail
+this.head != null
+(this.tail != null)  ==>  (this.tail.head != null)
+((this.tail != null) && (this.tail.tail != null))  ==>  (this.tail.tail.head != null)
+===========================================================================
+PolyCalc.Cons.Cons(PolyCalc.RatPoly, PolyCalc.Cons):::ENTER
+    Variables: h t t.head t.tail t.tail.head t.tail.tail
+h != null
+(t != null)  ==>  (t.head != null)
+((t != null) && (t.tail != null))  ==>  (t.tail.head != null)
+===========================================================================
+PolyCalc.Cons.Cons(PolyCalc.RatPoly, PolyCalc.Cons):::EXIT
+    Variables: this this.head this.tail this.tail.head this.tail.tail this.tail.tail.head this.tail.tail.tail h t t.head t.tail t.tail.head t.tail.tail orig(h) orig(t) orig(t.head) orig(t.tail) orig(t.tail.head) orig(t.tail.tail)
+      Unmodified variables: h t t.head t.tail t.tail.head t.tail.tail
+this.head == \old(h)
+this.tail == \old(t)
+((this.tail != null) && (t != null))  ==>  (this.tail.head == t.head)
+((this.tail != null) && (t != null))  ==>  (this.tail.tail == t.tail)
+((this.tail != null) && (this.tail.tail != null) && (t != null) && (t.tail != null))  ==>  (this.tail.tail.head == t.tail.head)
+((this.tail != null) && (this.tail.tail != null) && (t != null) && (t.tail != null))  ==>  (this.tail.tail.tail == t.tail.tail)
+(t != null)  ==>  (t.head != null)
+((t != null) && (t.tail != null))  ==>  (t.tail.head != null)
+===========================================================================
+PolyCalc.RatPolyStack:::OBJECT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+(this.polys != null)  ==>  (this.polys.head != null)
+((this.polys != null) && (this.polys.tail != null))  ==>  (this.polys.tail.head != null)
+this.size >= 0
+===========================================================================
+PolyCalc.RatPolyStack.RatPolyStack():::EXIT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+this.polys == null
+this.size == 0
+===========================================================================
+PolyCalc.RatPolyStack.add():::ENTER
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+this.size == 2 || this.size == 3
+===========================================================================
+PolyCalc.RatPolyStack.add():::EXIT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size orig(this) orig(this.polys) orig(this.polys.head) orig(this.polys.tail) orig(this.polys.tail.head) orig(this.polys.tail.tail) orig(this.size)
+      Modified variables: this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+      Unmodified variables: this
+modifies this.polys, this.polys.head, this.polys.tail, this.polys.tail.head, this.polys.tail.tail, this.size
+this.polys.tail == \old(this.polys.tail.tail)
+(this.polys.tail != null)  ==>  (this.polys.tail.tail == null)
+this.size == 1 || this.size == 2
+===========================================================================
+PolyCalc.RatPolyStack.clear():::ENTER
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+this.polys.head != null
+this.size == 3
+===========================================================================
+PolyCalc.RatPolyStack.clear():::EXIT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size orig(this) orig(this.polys) orig(this.polys.head) orig(this.polys.tail) orig(this.polys.tail.head) orig(this.polys.tail.tail) orig(this.size)
+      Modified variables: this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+      Unmodified variables: this
+modifies this.polys, this.polys.head, this.polys.tail, this.polys.tail.head, this.polys.tail.tail, this.size
+this.polys == null
+this.size == 0
+===========================================================================
+PolyCalc.RatPolyStack.div():::ENTER
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+this != null
+this.size == 2 || this.size == 3 || this.size == 4
+===========================================================================
+PolyCalc.RatPolyStack.div():::EXIT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size orig(this) orig(this.polys) orig(this.polys.head) orig(this.polys.tail) orig(this.polys.tail.head) orig(this.polys.tail.tail) orig(this.size)
+      Modified variables: this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+      Unmodified variables: this
+modifies this.polys, this.polys.head, this.polys.tail, this.polys.tail.head, this.polys.tail.tail, this.size
+this.polys.tail == \old(this.polys.tail.tail)
+this.size == 1 || this.size == 2 || this.size == 3
+===========================================================================
+PolyCalc.RatPolyStack.dup():::ENTER
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+this.size == 1 || this.size == 2 || this.size == 3
+===========================================================================
+PolyCalc.RatPolyStack.dup():::EXIT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size orig(this) orig(this.polys) orig(this.polys.head) orig(this.polys.tail) orig(this.polys.tail.head) orig(this.polys.tail.tail) orig(this.size)
+      Modified variables: this.polys this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+      Unmodified variables: this this.polys.head
+modifies this.polys, this.polys.tail, this.polys.tail.head, this.polys.tail.tail, this.size
+this.polys.head == this.polys.tail.head
+this.polys.tail == \old(this.polys)
+this.polys.tail.tail == \old(this.polys.tail)
+this.size == 2 || this.size == 3 || this.size == 4
+===========================================================================
+PolyCalc.RatPolyStack.get(int):::ENTER
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size index
+this.polys != null
+this.polys.head != null
+(this.polys.tail != null)  ==>  (this.polys.tail.head != null)
+this.size >= 1
+index >= 0
+this.size > index
+===========================================================================
+PolyCalc.RatPolyStack.get(int):::EXIT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size index return orig(this) orig(this.polys) orig(this.polys.head) orig(this.polys.tail) orig(this.polys.tail.head) orig(this.polys.tail.tail) orig(this.size) orig(index)
+      Unmodified variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size index
+this.polys != null
+this.polys.head != null
+(this.polys.tail != null)  ==>  (this.polys.tail.head != null)
+this.size >= 1
+\result != null
+this.size > \old(index)
+===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::ENTER
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size index
+this.polys != null
+this.polys.head != null
+(this.polys.tail != null)  ==>  (this.polys.tail.head != null)
+this.size >= 1
+index >= 0
+this.size > index
+===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::EXIT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size index return return.head return.tail return.tail.head return.tail.tail orig(this) orig(this.polys) orig(this.polys.head) orig(this.polys.tail) orig(this.polys.tail.head) orig(this.polys.tail.tail) orig(this.size) orig(index)
+      Modified primitive arguments: index
+      Unmodified variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+this.polys != null
+this.polys.head != null
+(this.polys.tail != null)  ==>  (this.polys.tail.head != null)
+this.size >= 1
+\result != null
+\result.head != null
+(\result.tail != null)  ==>  (\result.tail.head != null)
+this.size > \old(index)
+===========================================================================
+PolyCalc.RatPolyStack.mul():::ENTER
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+this.size == 2 || this.size == 3
+===========================================================================
+PolyCalc.RatPolyStack.mul():::EXIT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size orig(this) orig(this.polys) orig(this.polys.head) orig(this.polys.tail) orig(this.polys.tail.head) orig(this.polys.tail.tail) orig(this.size)
+      Modified variables: this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+      Unmodified variables: this
+modifies this.polys, this.polys.head, this.polys.tail, this.polys.tail.head, this.polys.tail.tail, this.size
+this.polys.tail == \old(this.polys.tail.tail)
+(this.polys.tail != null)  ==>  (this.polys.tail.tail == null)
+this.size == 1 || this.size == 2
+===========================================================================
+PolyCalc.RatPolyStack.pop():::ENTER
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+this.polys != null
+this.polys.head != null
+(this.polys.tail != null)  ==>  (this.polys.tail.head != null)
+this.size >= 1
+===========================================================================
+PolyCalc.RatPolyStack.pop():::EXIT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size return orig(this) orig(this.polys) orig(this.polys.head) orig(this.polys.tail) orig(this.polys.tail.head) orig(this.polys.tail.tail) orig(this.size)
+      Modified variables: this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+      Unmodified variables: this
+modifies this.polys, this.polys.head, this.polys.tail, this.polys.tail.head, this.polys.tail.tail, this.size
+this.polys == \old(this.polys.tail)
+((this.polys != null) && (\old(this.polys.tail) != null))  ==>  (this.polys.head == \old(this.polys.tail.head))
+((this.polys != null) && (\old(this.polys.tail) != null))  ==>  (this.polys.tail == \old(this.polys.tail.tail))
+\result == \old(this.polys.head)
+\result != null
+this.size - \old(this.size) + 1 == 0
+===========================================================================
+PolyCalc.RatPolyStack.push(PolyCalc.RatPoly):::ENTER
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size p
+p != null
+===========================================================================
+PolyCalc.RatPolyStack.push(PolyCalc.RatPoly):::EXIT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size p orig(this) orig(this.polys) orig(this.polys.head) orig(this.polys.tail) orig(this.polys.tail.head) orig(this.polys.tail.tail) orig(this.size) orig(p)
+      Modified variables: this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+      Unmodified variables: this p
+modifies this.polys, this.polys.head, this.polys.tail, this.polys.tail.head, this.polys.tail.tail, this.size
+this.polys.head == \old(p)
+this.polys.tail == \old(this.polys)
+((this.polys.tail != null) && (\old(this.polys) != null))  ==>  (this.polys.tail.head == \old(this.polys.head))
+((this.polys.tail != null) && (\old(this.polys) != null))  ==>  (this.polys.tail.tail == \old(this.polys.tail))
+this.polys != null
+(this.polys.tail != null)  ==>  (this.polys.tail.head != null)
+this.size >= 1
+this.size - \old(this.size) - 1 == 0
+===========================================================================
+PolyCalc.RatPolyStack.size():::ENTER
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+===========================================================================
+PolyCalc.RatPolyStack.size():::EXIT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size return orig(this) orig(this.polys) orig(this.polys.head) orig(this.polys.tail) orig(this.polys.tail.head) orig(this.polys.tail.tail) orig(this.size)
+      Unmodified variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+this.size == \result
+\result == \old(this.size)
+\result >= 0
+===========================================================================
+PolyCalc.RatPolyStack.sub():::ENTER
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+this.size == 2 || this.size == 3 || this.size == 4
+===========================================================================
+PolyCalc.RatPolyStack.sub():::EXIT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size orig(this) orig(this.polys) orig(this.polys.head) orig(this.polys.tail) orig(this.polys.tail.head) orig(this.polys.tail.tail) orig(this.size)
+      Modified variables: this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+      Unmodified variables: this
+modifies this.polys, this.polys.head, this.polys.tail, this.polys.tail.head, this.polys.tail.tail, this.size
+this.polys.tail == \old(this.polys.tail.tail)
+this.size == 1 || this.size == 2 || this.size == 3
+===========================================================================
+PolyCalc.RatPolyStack.swap():::ENTER
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size
+this.size == 2 || this.size == 3
+===========================================================================
+PolyCalc.RatPolyStack.swap():::EXIT
+    Variables: this this.polys this.polys.head this.polys.tail this.polys.tail.head this.polys.tail.tail this.size orig(this) orig(this.polys) orig(this.polys.head) orig(this.polys.tail) orig(this.polys.tail.head) orig(this.polys.tail.tail) orig(this.size)
+      Modified variables: this.polys this.polys.head this.polys.tail this.polys.tail.head
+      Unmodified variables: this this.polys.tail.tail this.size
+modifies this.polys, this.polys.head, this.polys.tail, this.polys.tail.head
+this.polys == \old(this.polys.tail)
+this.polys.head == \old(this.polys.tail.head)
+this.polys.tail == \old(this.polys)
+this.polys.tail.head == \old(this.polys.head)
+this.size == 2 || this.size == 3

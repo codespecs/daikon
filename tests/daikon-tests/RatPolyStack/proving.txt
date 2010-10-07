@@ -1,0 +1,7 @@
+
+Most of the invariants are inexpressible.
+
+There are a few interesting things here, so it's probably worth trying
+to merge and get working.  See desired.txt for my short list.
+
+

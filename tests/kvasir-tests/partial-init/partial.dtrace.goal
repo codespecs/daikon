@@ -1,0 +1,325 @@
+..main():::ENTER
+/global
+134518640
+1
+/global[]
+[ 0 0 0 0 0 0 0 0 ]
+1
+argc
+1
+1
+argv
+1388306772
+1
+argv[]
+[ "./partial" ]
+1
+
+..test_bits():::ENTER
+/global
+134518640
+1
+/global[]
+[ 0 0 0 0 0 0 0 0 ]
+1
+p
+134518640
+1
+p[]
+[ 0 0 0 0 0 0 0 0 ]
+1
+
+..print_bits():::ENTER
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+134518640
+1
+bits[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+len
+36
+1
+
+..print_bits():::EXIT0
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+134518640
+1
+bits[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+len
+36
+1
+
+..print_bits():::ENTER
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+134518640
+1
+bits[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+len
+64
+1
+
+..print_bits():::EXIT0
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+134518640
+1
+bits[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+len
+64
+1
+
+..test_bits():::EXIT0
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+p
+134518640
+1
+p[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+
+..test_bits():::ENTER
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+p
+463728680
+1
+p[]
+[ ]
+1
+
+..print_bits():::ENTER
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+463728680
+1
+bits[]
+[ 10 0 0 0 10 ]
+1
+len
+36
+1
+
+..print_bits():::EXIT0
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+463728680
+1
+bits[]
+[ 10 0 0 0 10 ]
+1
+len
+36
+1
+
+..print_bits():::ENTER
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+463728680
+1
+bits[]
+[ 10 0 0 0 10 ]
+1
+len
+64
+1
+
+..print_bits():::EXIT0
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+463728680
+1
+bits[]
+[ 10 0 0 0 10 ]
+1
+len
+64
+1
+
+..test_bits():::EXIT0
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+p
+463728680
+1
+p[]
+[ 10 0 0 0 10 ]
+1
+
+..test_bits():::ENTER
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+p
+1388306664
+1
+p[]
+[ ]
+1
+
+..print_bits():::ENTER
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+1388306664
+1
+bits[]
+[ 10 0 0 0 10 ]
+1
+len
+36
+1
+
+..print_bits():::EXIT0
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+1388306664
+1
+bits[]
+[ 10 0 0 0 10 ]
+1
+len
+36
+1
+
+..print_bits():::ENTER
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+1388306664
+1
+bits[]
+[ 10 0 0 0 10 ]
+1
+len
+64
+1
+
+..print_bits():::EXIT0
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+1388306664
+1
+bits[]
+[ 10 0 0 0 10 ]
+1
+len
+64
+1
+
+..test_bits():::EXIT0
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+p
+1388306664
+1
+p[]
+[ 10 0 0 0 10 ]
+1
+
+..main():::EXIT0
+/global
+134518640
+1
+/global[]
+[ 10 0 0 0 10 0 0 0 ]
+1
+argc
+1
+1
+argv
+1388306772
+1
+argv[]
+[ "./partial" ]
+1
+return
+0
+1
+

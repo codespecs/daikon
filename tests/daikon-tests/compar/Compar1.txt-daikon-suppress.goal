@@ -1,0 +1,16 @@
+===========================================================================
+misc.Compar1.bar(int, int, int, int):::ENTER
+j == i + 1
+l == k + 1
+===========================================================================
+misc.Compar1.bar(int, int, int, int):::EXIT
+===========================================================================
+misc.Compar1.main(java.lang.String[]):::ENTER
+args has only one value
+args.getClass() == java.lang.String[].class
+args[] == []
+args[].toString == []
+===========================================================================
+misc.Compar1.main(java.lang.String[]):::EXIT
+args[] == []
+args[].toString == []

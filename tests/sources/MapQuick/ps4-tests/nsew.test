@@ -1,0 +1,35 @@
+# Test moving straight north, south, east, and west
+
+CreateGraph nsew
+
+#             C
+#             | ^ North
+#             |
+#   < West    | v South
+#     East >  |
+# A ----------B
+#
+# A = -71100000 42360040
+# B = -71079295 42360040
+# C = -71079295 42361797
+#
+
+# Create the nodes of the graph, which are GeoSegments
+
+CreateGeoNode North 42360040 -71079295 42361797 -71079295 Road
+AddNode nsew North
+CreateGeoNode South 42361797 -71079295 42360040 -71079295 Road
+AddNode nsew South
+CreateGeoNode West 42361797 -71079295 42361797 -71100000 Road
+AddNode nsew West
+CreateGeoNode East 42361797 -71100000 42361797 -71079295 Road
+AddNode nsew East
+
+# Add edges (4 turns and two 90-deg turns)
+
+AddEdge nsew East North
+AddEdge nsew South West
+
+# Queries
+
+FindGeoPath nsew West -> South

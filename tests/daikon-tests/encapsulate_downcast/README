@@ -1,0 +1,101 @@
+Date: Wed, 03 Jan 2001 12:20:03 -0800
+From: Josh Kataoka <kataoka@cs.washington.edu>
+To: mernst@cs.washington.edu
+Cc: notkin@cs.washington.edu
+Subject: Class of vector elements in Encapsulate Downcast refactoring
+
+Mike,
+
+I found that Daikon would be helpful to find the possibility of
+"Encapsulate Downcast" refactoring. Although I have found a couple of
+examples in Nebulous source code, I started with a small example from
+Fowler's.
+
+However I have the followin problem.
+
+First of all, please take a look at the sample program.
+
+----
+import java.util.*;
+
+class Person {
+
+    private String _name;
+    private int _height;
+    private int _weight;
+    
+    public Person(String name, int height, int weight) {
+	_name = name;
+	_height = height;
+	_weight = weight;
+    }
+
+    public String getName() {
+	return _name;
+    }
+}
+
+public class EncapsulateDowncast {
+
+    static final int CASES = 64;
+    static final int SEED = 327;
+
+    static Random random = new Random(SEED);
+
+    static void showLastPerson(Vector list) {
+	    Person last = (Person)list.lastElement();
+	    System.out.println("The last person in the list: " + last.getName());
+    }
+	
+    public static void main(String argv[]) {
+	for (int i = 0;
+	     i < CASES;
+	     i++) {
+	    Vector list = new Vector();
+	    for (int j = 0;
+		 j < random.nextInt(CASES);
+		 j++) {
+		String name = "name" + j;
+		int height = random.nextInt(12);
+		int weight = random.nextInt(100) + 100;
+		Person person = new Person(name, height, weight);
+		list.addElement(person);
+	    }
+	    showLastPerson(list);
+	}
+    }
+}
+----
+
+The point is in "showLastPerson" method. Although "list" is a Vector
+object which elements are Object, all element in the list should be
+Person. I expected that Daikon would report that all the element in
+the list belong to Person class but it didn't. Here's the Daikon
+output.
+
+----
+===========================================================================
+EncapsulateDowncast.showLastPerson(Ljava/util/Vector;)V:::EXIT30  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: list list.class EncapsulateDowncast.random EncapsulateDowncast.CASES EncapsulateDowncast.SEED orig(list) orig(list.class) orig(EncapsulateDowncast.random) size(list) list[-2] list[-1] list[0] list[1]
+list = orig(list)		(no slice)
+EncapsulateDowncast.random = orig(EncapsulateDowncast.random)		(1 value, 64 samples)
+EncapsulateDowncast.random = -166176341		(1 value, 64 samples)
+EncapsulateDowncast.CASES = 64		(1 value, 64 samples)
+EncapsulateDowncast.SEED = 327		(1 value, 64 samples)
+list[-1] != null		(64 values, 64 samples)
+list[0] != null		(64 values, 64 samples)
+EncapsulateDowncast.CASES > size(list)		(19 values, 64 samples)
+EncapsulateDowncast.SEED > size(list)		(19 values, 64 samples)
+===========================================================================
+----
+
+Although there is "list.class" in the variable list, there is no
+invariant related with "list.class." I expected Daikon could find
+invariants like "all element in the 'list.class' are 'Person.'"
+
+Can't Daikon detect such invariants?
+
+Regards,
+Josh
+

@@ -1,0 +1,297 @@
+===========================================================================
+PolyCalc.RatNum:::OBJECT
+(>= (select |denom| |this|) 0)
+===========================================================================
+PolyCalc.RatNum.RatNum(int):::ENTER
+===========================================================================
+PolyCalc.RatNum.RatNum(int):::EXIT
+(EQ (select |numer| |this|) |__orig__n|)
+(EQ (select |denom| |this|) 1)
+===========================================================================
+PolyCalc.RatNum.RatNum(int, int):::ENTER
+===========================================================================
+PolyCalc.RatNum.RatNum(int, int):::EXIT55
+(EQ (select |numer| |this|) |__orig__n|)
+(EQ (select |denom| |this|) |__orig__d|)
+(EQ (select |denom| |this|) 0)
+===========================================================================
+PolyCalc.RatNum.RatNum(int, int):::EXIT67
+(>= (select |denom| |this|) 1)
+(NEQ |__orig__d| 0)
+(EQ 0 (MOD |__orig__d| (select |denom| |this|)))
+===========================================================================
+PolyCalc.RatNum.RatNum(int, int):::EXIT
+(IFF (EQ (select |denom| |this|) 0) (EQ |__orig__d| 0))
+(IMPLIES (EQ (select |denom| |this|) 0) |__orig__d|  isPointer)
+(IMPLIES (EQ (select |denom| |this|) 0) (select |denom| |this|)  isPointer)
+(IMPLIES (EQ (select |denom| |this|) 0) (EQ (select |denom| |this|) |__orig__d|))
+(IMPLIES (EQ (select |denom| |this|) 0) (EQ (select |numer| |this|) |__orig__n|))
+(IMPLIES (EQ |__orig__n| 0) (EQ (select |numer| |this|) 0))
+(IMPLIES (EQ (select |numer| |this|) 0) (EQ |__orig__n| 0))
+(IMPLIES (EQ |__orig__d| 0) (EQ (select |denom| |this|) 0))
+(IMPLIES (EQ (select |denom| |this|) 0) (EQ |__orig__d| 0))
+===========================================================================
+PolyCalc.RatNum.add(PolyCalc.RatNum):::ENTER
+(NEQ (hash |arg|) null)
+(>= (select |denom| |arg|) 0)
+===========================================================================
+PolyCalc.RatNum.add(PolyCalc.RatNum):::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+(EQ (select |numer| |arg|) (select |numer| |__orig__arg|))
+(EQ (select |denom| |arg|) (select |denom| |__orig__arg|))
+(>= (select |denom| |arg|) 0)
+(NEQ (hash |return|) null)
+(>= (select |denom| |return|) 0)
+(IMPLIES (EQ (select |denom| |this|) 0) (EQ (select |denom| |return|) 0))
+(IMPLIES (EQ (select |denom| |arg|) 0) (EQ (select |denom| |return|) 0))
+===========================================================================
+PolyCalc.RatNum.approx():::ENTER
+===========================================================================
+PolyCalc.RatNum.approx():::EXIT117
+(EQ (select |denom| |this|) 0)
+(EQ |return| NaN)
+(NEQ (select |numer| |this|) (select |denom| |this|))
+===========================================================================
+PolyCalc.RatNum.approx():::EXIT120
+(>= (select |denom| |this|) 1)
+===========================================================================
+PolyCalc.RatNum.approx():::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+(IMPLIES (EQ (select |denom| |this|) 0) (EQ |return| NaN))
+(IMPLIES (EQ (select |denom| |this|) 0) (select |denom| |this|)  isPointer)
+(IMPLIES (EQ (select |denom| |this|) 0) (NEQ (select |numer| |this|) (select |denom| |this|)))
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::ENTER
+(NEQ (hash |rn|) null)
+(>= (select |denom| |rn|) 0)
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT101
+(>= (select |denom| |this|) 1)
+(>= (select |denom| |rn|) 1)
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT94
+(EQ (select |denom| |this|) |return|)
+(EQ (select |denom| |rn|) |return|)
+(EQ |return| (select |denom| |__orig__this|))
+(EQ |return| (select |denom| |__orig__rn|))
+(EQ |return| 0)
+(NEQ (select |numer| |this|) |return|)
+(NEQ (select |numer| |rn|) |return|)
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96
+(EQ (select |denom| |this|) 0)
+(>= (select |numer| |rn|) -1)
+(>= (select |denom| |rn|) 1)
+(EQ |return| 1)
+(NEQ (select |numer| |this|) (select |denom| |this|))
+(< (select |denom| |this|) (select |denom| |rn|))
+(>= (select |denom| |rn|) |return|)
+(EQ |return| (gcd (select |numer| |rn|) (select |denom| |rn|)))
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT98
+(>= (select |denom| |this|) 1)
+(NEQ (select |numer| |rn|) 0)
+(EQ (select |denom| |rn|) 0)
+(EQ |return| -1)
+(> (select |denom| |this|) (select |denom| |rn|))
+(> (select |denom| |this|) |return|)
+(NEQ (select |numer| |rn|) (select |denom| |rn|))
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+(EQ (select |numer| |rn|) (select |numer| |__orig__rn|))
+(EQ (select |denom| |rn|) (select |denom| |__orig__rn|))
+(>= (select |denom| |rn|) 0)
+===========================================================================
+PolyCalc.RatNum.debugPrint():::ENTER
+===========================================================================
+PolyCalc.RatNum.debugPrint():::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+(NEQ (hash |return|) null)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.toString is printable
+===========================================================================
+PolyCalc.RatNum.div(PolyCalc.RatNum):::ENTER
+(NEQ (hash |arg|) null)
+(>= (select |denom| |arg|) 0)
+===========================================================================
+PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT187
+(EQ (select |numer| |arg|) (select |numer| |return|))
+(EQ (select |denom| |arg|) (select |denom| |return|))
+(EQ (hash |return|) (hash |__orig__arg|))
+(EQ (select |denom| |arg|) 0)
+(IMPLIES (EQ (select |numer| |arg|) 0) (EQ (select |numer| |this|) 0))
+(>= (select |denom| |this|) (select |denom| |arg|))
+===========================================================================
+PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT189
+(>= (select |denom| |arg|) 1)
+(IMPLIES (EQ (select |numer| |this|) 0) (EQ (select |numer| |return|) 0))
+===========================================================================
+PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+(EQ (select |numer| |arg|) (select |numer| |__orig__arg|))
+(EQ (select |denom| |arg|) (select |denom| |__orig__arg|))
+(IMPLIES (EQ (select |denom| |arg|) 0) (IMPLIES (EQ (select |numer| |arg|) 0) (EQ (select |numer| |this|) 0)))
+(IMPLIES (EQ (select |denom| |arg|) 0) (select |denom| |arg|)  isPointer)
+(IMPLIES (EQ (select |denom| |arg|) 0) (EQ (select |denom| |arg|) (select |denom| |return|)))
+(IMPLIES (EQ (select |denom| |arg|) 0) (EQ (select |numer| |arg|) (select |numer| |return|)))
+(IMPLIES (EQ (select |denom| |arg|) 0) (EQ (hash |return|) (hash |__orig__arg|)))
+(IMPLIES (EQ (select |denom| |arg|) 0) (select |denom| |return|)  isPointer)
+(IMPLIES (EQ (select |denom| |arg|) 0) (EQ (select |denom| |return|) 0))
+(IMPLIES (EQ (select |denom| |arg|) 0) (>= (select |denom| |this|) (select |denom| |arg|)))
+(IMPLIES (EQ (select |denom| |arg|) 0) (>= (select |denom| |this|) (select |denom| |return|)))
+(>= (select |denom| |arg|) 0)
+(NEQ (hash |return|) null)
+(>= (select |denom| |return|) 0)
+(IMPLIES (EQ (select |numer| |return|) 0) (EQ (select |numer| |this|) 0))
+(IMPLIES (EQ (select |denom| |this|) 0) (EQ (select |denom| |return|) 0))
+(IMPLIES (EQ (select |numer| |arg|) 0) (EQ (select |denom| |return|) 0))
+(IMPLIES (EQ (select |denom| |arg|) 0) (EQ (select |denom| |return|) 0))
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::ENTER
+(NEQ (hash |obj|) null)
+(EQ (typeof |obj|) |T_PolyCalc.RatNum|)
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT230
+(EQ (select |denom| |this|) 0)
+(EQ |return| |@true|)
+(NEQ (select |numer| |this|) (select |denom| |this|))
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT232
+(IMPLIES (EQ |return| |@true|) (>= (select |denom| |this|) 1))
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+===========================================================================
+PolyCalc.RatNum.gcd(int, int):::ENTER
+(NEQ |_b| 0)
+===========================================================================
+PolyCalc.RatNum.gcd(int, int):::EXIT209
+===========================================================================
+PolyCalc.RatNum.gcd(int, int):::EXIT
+(NEQ |return| 0)
+(EQ 0 (MOD |__orig___a| |return|))
+(EQ 0 (MOD |__orig___b| |return|))
+===========================================================================
+PolyCalc.RatNum.isNaN():::ENTER
+===========================================================================
+PolyCalc.RatNum.isNaN():::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+(IFF (EQ (select |denom| |this|) 0) (EQ |return| |@true|))
+(IMPLIES (EQ (select |denom| |this|) 0) (select |denom| |this|)  isPointer)
+===========================================================================
+PolyCalc.RatNum.isNegative():::ENTER
+===========================================================================
+PolyCalc.RatNum.isNegative():::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+(IMPLIES (EQ |return| |@true|) (>= (select |denom| |this|) 1))
+(IMPLIES (EQ |return| |@true|) (< (select |numer| |this|) (select |denom| |this|)))
+(IMPLIES (EQ |return| |@true|) (<= (select |numer| |this|) -1))
+===========================================================================
+PolyCalc.RatNum.isPositive():::ENTER
+===========================================================================
+PolyCalc.RatNum.isPositive():::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+(IMPLIES (EQ |return| |@false|) (< (select |numer| |this|) (select |denom| |this|)))
+(IMPLIES (EQ |return| |@true|) (NEQ (select |numer| |this|) 0))
+===========================================================================
+PolyCalc.RatNum.mul(PolyCalc.RatNum):::ENTER
+(NEQ (hash |arg|) null)
+(>= (select |denom| |arg|) 0)
+===========================================================================
+PolyCalc.RatNum.mul(PolyCalc.RatNum):::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+(EQ (select |numer| |arg|) (select |numer| |__orig__arg|))
+(EQ (select |denom| |arg|) (select |denom| |__orig__arg|))
+(>= (select |denom| |arg|) 0)
+(NEQ (hash |return|) null)
+(>= (select |denom| |return|) 0)
+(IMPLIES (EQ (select |numer| |this|) 0) (EQ (select |numer| |return|) 0))
+(IMPLIES (EQ (select |denom| |this|) 0) (EQ (select |denom| |return|) 0))
+(IMPLIES (EQ (select |numer| |arg|) 0) (EQ (select |numer| |return|) 0))
+(IMPLIES (EQ (select |denom| |arg|) 0) (EQ (select |denom| |return|) 0))
+===========================================================================
+PolyCalc.RatNum.negate():::ENTER
+===========================================================================
+PolyCalc.RatNum.negate():::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |return|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+(NEQ (hash |return|) null)
+(IMPLIES (EQ (select |numer| |return|) 0) (EQ (select |numer| |this|) 0))
+(IMPLIES (EQ (select |numer| |this|) 0) (EQ (select |numer| |return|) 0))
+(EQ 0 (+ (select |numer| |this|) (select |numer| |return|)))
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::ENTER
+(NEQ (hash |ratStr|) null)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: ratStr.toString is printable
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::EXIT264
+(EQ (select |toString| |ratStr|) |_string_NaN|)
+(EQ (select |numer| |return|) 1)
+(EQ (select |denom| |return|) 0)
+(EQ (hash |__orig__ratStr|) (hashcode 1001))
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::EXIT267
+(EQ (select |denom| |return|) 1)
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::EXIT273
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::EXIT
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: ratStr.toString is printable
+(NEQ (hash |return|) null)
+(>= (select |denom| |return|) 0)
+(EQ (select |toString| |ratStr|) (select |toString| |__orig__ratStr|))
+===========================================================================
+PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
+(NEQ (hash |arg|) null)
+(>= (select |denom| |arg|) 0)
+===========================================================================
+PolyCalc.RatNum.sub(PolyCalc.RatNum):::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+(EQ (select |numer| |arg|) (select |numer| |__orig__arg|))
+(EQ (select |denom| |arg|) (select |denom| |__orig__arg|))
+(>= (select |denom| |arg|) 0)
+(NEQ (hash |return|) null)
+(>= (select |denom| |return|) 0)
+(IMPLIES (EQ (select |denom| |this|) 0) (EQ (select |denom| |return|) 0))
+(IMPLIES (EQ (select |denom| |arg|) 0) (EQ (select |denom| |return|) 0))
+===========================================================================
+PolyCalc.RatNum.toString():::ENTER
+===========================================================================
+PolyCalc.RatNum.toString():::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+(NEQ (hash |return|) null)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.toString is printable
+===========================================================================
+PolyCalc.RatNum.unparse():::ENTER
+===========================================================================
+PolyCalc.RatNum.unparse():::EXIT133
+(EQ (select |denom| |this|) 0)
+(EQ (hash |return|) (hashcode 1001))
+(EQ (select |toString| |return|) |_string_NaN|)
+===========================================================================
+PolyCalc.RatNum.unparse():::EXIT135
+(NEQ (select |numer| |this|) 0)
+(>= (select |denom| |this|) 2)
+(NEQ (select |numer| |this|) (select |denom| |this|))
+===========================================================================
+PolyCalc.RatNum.unparse():::EXIT137
+(EQ (select |denom| |this|) 1)
+===========================================================================
+PolyCalc.RatNum.unparse():::EXIT
+(EQ (select |numer| |this|) (select |numer| |__orig__this|))
+(EQ (select |denom| |this|) (select |denom| |__orig__this|))
+(NEQ (hash |return|) null)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: return.toString is printable

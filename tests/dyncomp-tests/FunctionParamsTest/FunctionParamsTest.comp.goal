@@ -1,0 +1,65 @@
+..floatCompAfter():::ENTER
+a b c
+
+..floatCompAfter():::EXIT0
+a b c
+
+..floatCompInternal():::ENTER
+x y
+z
+
+..floatCompInternal():::EXIT0
+return x y
+z
+
+..floatIntComp():::ENTER
+a b
+
+..floatIntComp():::EXIT0
+a b
+
+..floatNonComp():::ENTER
+a
+b
+c
+
+..floatNonComp():::EXIT0
+a
+b
+c
+
+..intComp():::ENTER
+a b c
+
+..intComp():::EXIT0
+a b c
+
+..intCompAfter():::ENTER
+a b c
+
+..intCompAfter():::EXIT0
+a b c
+
+..intCompInternal():::ENTER
+x y
+z
+
+..intCompInternal():::EXIT0
+return x y
+z
+
+..intNonComp():::ENTER
+a
+b
+c
+
+..intNonComp():::EXIT0
+a
+b
+c
+
+..main():::ENTER
+
+..main():::EXIT0
+return
+

@@ -1,0 +1,9 @@
+..doubleAdd() ENTER/15: 1 EXIT0/18: 1
+..doubleDivide() ENTER/15: 1 EXIT0/18: 1
+..doubleMultiply() ENTER/15: 1 EXIT0/18: 1
+..doubleSub() ENTER/15: 1 EXIT0/18: 1
+..floatAdd() ENTER/15: 1 EXIT0/18: 1
+..floatDivide() ENTER/15: 1 EXIT0/18: 1
+..floatMultiply() ENTER/15: 1 EXIT0/18: 1
+..floatSub() ENTER/15: 1 EXIT0/18: 1
+..main() ENTER/9: 1 EXIT0/12: 1

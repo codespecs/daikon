@@ -1,0 +1,643 @@
+Reading declaration files .
+Reading data trace files .
+Read 1 declaration file, 1 dtrace file.
+===========================================================================
+ExtractClass:::CLASS-STATIC  2 samples
+    Samples breakdown: mux=0; mUx=0; Mux=2; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: ExtractClass.CASES ExtractClass.RANDOM_SEED ExtractClass.DAYS ExtractClass.BASE ExtractClass.RANGE ExtractClass.CLIENTS ExtractClass.random
+ExtractClass.CASES = 64		(1 value, 2 samples)
+ExtractClass.RANDOM_SEED = 327		(1 value, 2 samples)
+ExtractClass.DAYS = 30		(1 value, 2 samples)
+ExtractClass.BASE = 100		(1 value, 2 samples)
+ExtractClass.RANGE = 50		(1 value, 2 samples)
+ExtractClass.CLIENTS = 8		(1 value, 2 samples)
+ExtractClass.random has only one value (hashcode=-352308059)		(1 value, 2 samples)
+===========================================================================
+ExtractClass.getSalary_E(III)V:::ENTER  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: baseSalary workDays salary ExtractClass.CASES ExtractClass.RANDOM_SEED ExtractClass.DAYS ExtractClass.BASE ExtractClass.RANGE ExtractClass.CLIENTS ExtractClass.random
+ExtractClass.CASES = 64		(1 value, 64 samples)
+ExtractClass.RANDOM_SEED = 327		(1 value, 64 samples)
+ExtractClass.DAYS = 30		(1 value, 64 samples)
+ExtractClass.BASE = 100		(1 value, 64 samples)
+ExtractClass.RANGE = 50		(1 value, 64 samples)
+ExtractClass.CLIENTS = 8		(1 value, 64 samples)
+ExtractClass.random has only one value (hashcode=-352308059)		(1 value, 64 samples)
+baseSalary > workDays		(64 values, 64 samples)
+baseSalary > ExtractClass.CASES		(38 values, 64 samples)
+baseSalary < ExtractClass.RANDOM_SEED		(38 values, 64 samples)
+baseSalary > ExtractClass.DAYS		(38 values, 64 samples)
+baseSalary > ExtractClass.BASE		(38 values, 64 samples)
+baseSalary > ExtractClass.RANGE		(38 values, 64 samples)
+baseSalary > ExtractClass.CLIENTS		(38 values, 64 samples)
+workDays <= salary		(63 values, 64 samples)
+workDays < ExtractClass.CASES		(23 values, 64 samples)
+workDays < ExtractClass.RANDOM_SEED		(23 values, 64 samples)
+workDays < ExtractClass.DAYS		(23 values, 64 samples)
+workDays < ExtractClass.BASE		(23 values, 64 samples)
+workDays < ExtractClass.RANGE		(23 values, 64 samples)
+===========================================================================
+ExtractClass.getSalary_E(III)V:::EXIT13  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: baseSalary workDays salary ExtractClass.CASES ExtractClass.RANDOM_SEED ExtractClass.DAYS ExtractClass.BASE ExtractClass.RANGE ExtractClass.CLIENTS ExtractClass.random orig(baseSalary) orig(workDays) orig(salary) orig(ExtractClass.random)
+baseSalary = orig(baseSalary)		(38 values, 64 samples)
+workDays = orig(workDays)		(23 values, 64 samples)
+salary = orig(salary)		(63 values, 64 samples)
+ExtractClass.random = orig(ExtractClass.random)		(1 value, 64 samples)
+ExtractClass.CASES = 64		(1 value, 64 samples)
+ExtractClass.RANDOM_SEED = 327		(1 value, 64 samples)
+ExtractClass.DAYS = 30		(1 value, 64 samples)
+ExtractClass.BASE = 100		(1 value, 64 samples)
+ExtractClass.RANGE = 50		(1 value, 64 samples)
+ExtractClass.CLIENTS = 8		(1 value, 64 samples)
+ExtractClass.random has only one value (hashcode=-352308059)		(1 value, 64 samples)
+baseSalary > workDays		(64 values, 64 samples)
+baseSalary > ExtractClass.CASES		(38 values, 64 samples)
+baseSalary < ExtractClass.RANDOM_SEED		(38 values, 64 samples)
+baseSalary > ExtractClass.DAYS		(38 values, 64 samples)
+baseSalary > ExtractClass.BASE		(38 values, 64 samples)
+baseSalary > ExtractClass.RANGE		(38 values, 64 samples)
+baseSalary > ExtractClass.CLIENTS		(38 values, 64 samples)
+workDays <= salary		(63 values, 64 samples)
+workDays < ExtractClass.CASES		(23 values, 64 samples)
+workDays < ExtractClass.RANDOM_SEED		(23 values, 64 samples)
+workDays < ExtractClass.DAYS		(23 values, 64 samples)
+workDays < ExtractClass.BASE		(23 values, 64 samples)
+workDays < ExtractClass.RANGE		(23 values, 64 samples)
+===========================================================================
+ExtractClass.main([Ljava/lang/String;)V:::ENTER  1 sample
+    Samples breakdown: mux=0; mUx=0; Mux=1; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: argv ExtractClass.CASES ExtractClass.RANDOM_SEED ExtractClass.DAYS ExtractClass.BASE ExtractClass.RANGE ExtractClass.CLIENTS ExtractClass.random
+argv = []		(1 value, 1 sample)
+ExtractClass.CASES = 64		(1 value, 1 sample)
+ExtractClass.RANDOM_SEED = 327		(1 value, 1 sample)
+ExtractClass.DAYS = 30		(1 value, 1 sample)
+ExtractClass.BASE = 100		(1 value, 1 sample)
+ExtractClass.RANGE = 50		(1 value, 1 sample)
+ExtractClass.CLIENTS = 8		(1 value, 1 sample)
+ExtractClass.random has only one value (hashcode=-352308059)		(1 value, 1 sample)
+===========================================================================
+ExtractClass.main([Ljava/lang/String;)V:::EXIT48  1 sample
+    Samples breakdown: mux=0; mUx=0; Mux=1; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: argv ExtractClass.CASES ExtractClass.RANDOM_SEED ExtractClass.DAYS ExtractClass.BASE ExtractClass.RANGE ExtractClass.CLIENTS ExtractClass.random orig(argv) orig(ExtractClass.random)
+ExtractClass.random = orig(ExtractClass.random)		(1 value, 1 sample)
+argv = []		(1 value, 1 sample)
+ExtractClass.CASES = 64		(1 value, 1 sample)
+ExtractClass.RANDOM_SEED = 327		(1 value, 1 sample)
+ExtractClass.DAYS = 30		(1 value, 1 sample)
+ExtractClass.BASE = 100		(1 value, 1 sample)
+ExtractClass.RANGE = 50		(1 value, 1 sample)
+ExtractClass.CLIENTS = 8		(1 value, 1 sample)
+ExtractClass.random has only one value (hashcode=-352308059)		(1 value, 1 sample)
+orig(argv) = []		(1 value, 1 sample)
+===========================================================================
+ExtractClass.main_E(Ljava/util/Vector;)V:::ENTER  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: clients clients.getClass() ExtractClass.CASES ExtractClass.RANDOM_SEED ExtractClass.DAYS ExtractClass.BASE ExtractClass.RANGE ExtractClass.CLIENTS ExtractClass.random size(clients) size(clients)-1 clients[-2] clients[-1] clients[0] clients[1]
+ExtractClass.CLIENTS = size(clients)		(1 value, 64 samples)
+clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 64 samples)
+clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 64 samples)
+ExtractClass.CASES = 64		(1 value, 64 samples)
+ExtractClass.RANDOM_SEED = 327		(1 value, 64 samples)
+ExtractClass.DAYS = 30		(1 value, 64 samples)
+ExtractClass.BASE = 100		(1 value, 64 samples)
+ExtractClass.RANGE = 50		(1 value, 64 samples)
+ExtractClass.CLIENTS = 8		(1 value, 64 samples)
+ExtractClass.random has only one value (hashcode=-352308059)		(1 value, 64 samples)
+clients[-2] has only one value (hashcode=860587467)		(1 value, 64 samples)
+clients[-1] has only one value (hashcode=860587468)		(1 value, 64 samples)
+clients[0] has only one value (hashcode=860587461)		(1 value, 64 samples)
+clients[1] has only one value (hashcode=860587462)		(1 value, 64 samples)
+===========================================================================
+ExtractClass.main_E(Ljava/util/Vector;)V:::EXIT16  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: clients clients.getClass() ExtractClass.CASES ExtractClass.RANDOM_SEED ExtractClass.DAYS ExtractClass.BASE ExtractClass.RANGE ExtractClass.CLIENTS ExtractClass.random orig(clients) orig(clients.getClass()) orig(ExtractClass.random) size(clients) size(clients)-1 clients[-2] clients[-1] clients[0] clients[1]
+clients = orig(clients)		(1 value, 64 samples)
+ExtractClass.CLIENTS = size(clients)		(1 value, 64 samples)
+ExtractClass.random = orig(ExtractClass.random)		(1 value, 64 samples)
+clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 64 samples)
+clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 64 samples)
+ExtractClass.CASES = 64		(1 value, 64 samples)
+ExtractClass.RANDOM_SEED = 327		(1 value, 64 samples)
+ExtractClass.DAYS = 30		(1 value, 64 samples)
+ExtractClass.BASE = 100		(1 value, 64 samples)
+ExtractClass.RANGE = 50		(1 value, 64 samples)
+ExtractClass.CLIENTS = 8		(1 value, 64 samples)
+ExtractClass.random has only one value (hashcode=-352308059)		(1 value, 64 samples)
+orig(clients.getClass()) = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 64 samples)
+clients[-2] has only one value (hashcode=860587467)		(1 value, 64 samples)
+clients[-1] has only one value (hashcode=860587468)		(1 value, 64 samples)
+clients[0] has only one value (hashcode=860587461)		(1 value, 64 samples)
+clients[1] has only one value (hashcode=860587462)		(1 value, 64 samples)
+===========================================================================
+Person:::CLASS  3648 samples
+    Samples breakdown: mux=0; mUx=0; Mux=128; MUx=3520; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+this._officeTelephone != null		(64 values, 3648 samples)
+this._salary != null		(64 values, 3648 samples)
+this._salary._baseSalary <= 149		(38 values, 3648 samples)
+this._salary._baseSalary >= 101		(38 values, 3648 samples)
+this._clients contains no duplicates		(9 values, 3648 samples)
+this._clients elements != null		(9 values, 3648 samples)
+this._clients elements = 860587461		(9 values, 3648 samples)
+this._clients.getClass() elements = "\"java.lang.String\""		(9 values, 3648 samples)
+size(this._clients) <= 8		(9 values, 3648 samples)
+this._clients[-2] != null		(7 values, 3328 samples)
+this._clients[-1] != null		(8 values, 3456 samples)
+this._clients[0] has only one value (hashcode=860587461)		(1 value, 3456 samples)
+this._clients[1] has only one value (hashcode=860587462)		(1 value, 3328 samples)
+this._clients[this._salary._workDays] != null		(5 values, 424 samples)
+this._clients[this._salary._workDays-1] != null		(5 values, 450 samples)
+this._clients[this._salary._workDays..] contains no duplicates		(22 values, 564 samples)
+this._clients[this._salary._workDays..] elements != null		(22 values, 564 samples)
+this._clients[this._salary._workDays..] elements one of { 860587461, 860587463, 860587465, 860587467, 860587468 }		(22 values, 564 samples)
+this._clients[this._salary._workDays+1..] contains no duplicates		(17 values, 424 samples)
+this._clients[this._salary._workDays+1..] elements != null		(17 values, 424 samples)
+this._clients[this._salary._workDays+1..] elements one of { 860587462, 860587464, 860587466, 860587468 }		(17 values, 424 samples)
+this._clients[0..this._salary._workDays] elements != null		(5 values, 424 samples)
+this._clients[0..this._salary._workDays] elements one of { 860587461, 860587462, 860587463 }		(5 values, 424 samples)
+this._clients[0..this._salary._workDays] one of { [860587461], [860587461, 860587462, 860587463], [860587461, 860587462, 860587463, 860587464, 860587465], [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467], [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468] }		(5 values, 424 samples)
+this._clients[0..this._salary._workDays-1] contains no duplicates		(6 values, 564 samples)
+this._clients[0..this._salary._workDays-1] elements != null		(6 values, 564 samples)
+this._officeTelephone != this._clients[-2]		(448 values, 3328 samples)
+this._officeTelephone != this._clients[-1]		(512 values, 3456 samples)
+this._officeTelephone != this._clients[this._salary._workDays]		(9 values, 424 samples)
+this._officeTelephone != this._clients[this._salary._workDays-1]		(10 values, 450 samples)
+this._salary != this._clients[-2]		(448 values, 3328 samples)
+this._salary != this._clients[-1]		(512 values, 3456 samples)
+this._salary != this._clients[this._salary._workDays]		(9 values, 424 samples)
+this._salary != this._clients[this._salary._workDays-1]		(10 values, 450 samples)
+this._salary._baseSalary > this._salary._workDays		(64 values, 3648 samples)
+this._salary._baseSalary > size(this._clients)		(342 values, 3648 samples)
+===========================================================================
+Person.<init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;II)V:::ENTER  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: name areaCode number baseSalary workDays
+baseSalary > workDays		(64 values, 64 samples)
+===========================================================================
+Person.<init>(Ljava/lang/String;Ljava/lang/String;Ljava/lang/String;II)V:::EXIT101  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: name areaCode number baseSalary workDays this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() orig(name) orig(areaCode) orig(number) orig(baseSalary) orig(workDays) size(this._clients) size(this._clients)-1
+name = this._name = orig(name)
+areaCode = this._officeTelephone._areaCode = orig(areaCode)
+number = this._officeTelephone._number = orig(number)
+baseSalary = this._salary._baseSalary = orig(baseSalary)		(38 values, 64 samples)
+workDays = this._salary._workDays = orig(workDays)		(23 values, 64 samples)
+this._clients = []		(1 value, 64 samples)
+this._clients.getClass() = []		(1 value, 64 samples)
+size(this._clients) = 0		(1 value, 64 samples)
+workDays >= size(this._clients)		(23 values, 64 samples)
+===========================================================================
+Person.getBaseSalary()I:::ENTER  320 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=256; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 320 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 320 samples)
+size(this._clients) = 8		(1 value, 320 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 320 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 320 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 45 samples)
+===========================================================================
+Person.getBaseSalary()I:::EXIT140  320 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=256; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: return this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() orig(this._name) orig(this._officeTelephone) orig(this._officeTelephone._areaCode) orig(this._officeTelephone._number) orig(this._salary) orig(this._salary._baseSalary) orig(this._salary._workDays) orig(this._clients) orig(this._clients.getClass()) size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+return = this._salary._baseSalary = orig(this._salary._baseSalary)		(38 values, 320 samples)
+this._name = orig(this._name)
+this._officeTelephone = orig(this._officeTelephone)		(64 values, 320 samples)
+this._officeTelephone._areaCode = orig(this._officeTelephone._areaCode)
+this._officeTelephone._number = orig(this._officeTelephone._number)
+this._salary = orig(this._salary)		(64 values, 320 samples)
+this._salary._workDays = orig(this._salary._workDays)		(23 values, 320 samples)
+this._clients = orig(this._clients)		(1 value, 320 samples)
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 320 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 320 samples)
+orig(this._clients.getClass()) = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 320 samples)
+size(this._clients) = 8		(1 value, 320 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 320 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 320 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 45 samples)
+===========================================================================
+Person.getClients()Ljava/util/Vector;:::ENTER  640 samples
+    Samples breakdown: mux=0; mUx=0; Mux=119; MUx=521; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+===========================================================================
+Person.getClients()Ljava/util/Vector;:::EXIT148  640 samples
+    Samples breakdown: mux=0; mUx=0; Mux=119; MUx=521; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: return return.getClass() this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() orig(this._name) orig(this._officeTelephone) orig(this._officeTelephone._areaCode) orig(this._officeTelephone._number) orig(this._salary) orig(this._salary._baseSalary) orig(this._salary._workDays) orig(this._clients) orig(this._clients.getClass()) size(return) size(return)-1 return[-2] return[-1] return[0] return[1] return[this._salary._workDays] return[this._salary._workDays-1] return[this._salary._workDays..] return[this._salary._workDays+1..] return[0..this._salary._workDays] return[0..this._salary._workDays-1]
+return = this._clients = orig(this._clients)		(9 values, 640 samples)
+this._name = orig(this._name)
+this._officeTelephone = orig(this._officeTelephone)		(64 values, 640 samples)
+this._officeTelephone._areaCode = orig(this._officeTelephone._areaCode)
+this._officeTelephone._number = orig(this._officeTelephone._number)
+this._salary = orig(this._salary)		(64 values, 640 samples)
+this._salary._baseSalary = orig(this._salary._baseSalary)		(38 values, 640 samples)
+this._salary._workDays = orig(this._salary._workDays)		(23 values, 640 samples)
+return.getClass() elements = "\"java.lang.String\""		(9 values, 640 samples)
+orig(this._clients.getClass()) elements = "\"java.lang.String\""		(9 values, 640 samples)
+size(return) <= 8		(9 values, 640 samples)
+return[-2] != null		(7 values, 512 samples)
+return[-1] != null		(8 values, 576 samples)
+return[0] has only one value (hashcode=860587461)		(1 value, 576 samples)
+return[1] has only one value (hashcode=860587462)		(1 value, 512 samples)
+return[this._salary._workDays] != null		(5 values, 50 samples)
+return[this._salary._workDays-1] != null		(5 values, 45 samples)
+return[this._salary._workDays..] contains no duplicates		(22 values, 65 samples)
+return[this._salary._workDays..] elements != null		(22 values, 65 samples)
+return[this._salary._workDays..] elements one of { 860587461, 860587463, 860587465, 860587467, 860587468 }		(22 values, 65 samples)
+return[this._salary._workDays+1..] contains no duplicates		(17 values, 50 samples)
+return[this._salary._workDays+1..] elements != null		(17 values, 50 samples)
+return[this._salary._workDays+1..] elements one of { 860587462, 860587464, 860587466, 860587468 }		(17 values, 50 samples)
+return[0..this._salary._workDays] elements != null		(5 values, 50 samples)
+return[0..this._salary._workDays] elements one of { 860587461, 860587462, 860587463 }		(5 values, 50 samples)
+return[0..this._salary._workDays] one of { [860587461], [860587461, 860587462, 860587463], [860587461, 860587462, 860587463, 860587464, 860587465], [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467], [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468] }		(5 values, 50 samples)
+return[0..this._salary._workDays-1] contains no duplicates		(6 values, 65 samples)
+return[0..this._salary._workDays-1] elements != null		(6 values, 65 samples)
+this._officeTelephone != return[-2]		(448 values, 512 samples)
+this._officeTelephone != return[-1]		(512 values, 576 samples)
+this._officeTelephone != return[this._salary._workDays]		(9 values, 50 samples)
+this._officeTelephone != return[this._salary._workDays-1]		(10 values, 45 samples)
+this._salary != return[-2]		(448 values, 512 samples)
+this._salary != return[-1]		(512 values, 576 samples)
+this._salary != return[this._salary._workDays]		(9 values, 50 samples)
+this._salary != return[this._salary._workDays-1]		(10 values, 45 samples)
+this._salary._baseSalary > size(return)		(342 values, 640 samples)
+===========================================================================
+Person.getName()Ljava/lang/String;:::ENTER  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 64 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 64 samples)
+size(this._clients) = 8		(1 value, 64 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 64 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 64 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 9 samples)
+===========================================================================
+Person.getName()Ljava/lang/String;:::EXIT104  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: return this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() orig(this._name) orig(this._officeTelephone) orig(this._officeTelephone._areaCode) orig(this._officeTelephone._number) orig(this._salary) orig(this._salary._baseSalary) orig(this._salary._workDays) orig(this._clients) orig(this._clients.getClass()) size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+return = this._name = orig(this._name)
+this._officeTelephone = orig(this._officeTelephone)		(64 values, 64 samples)
+this._officeTelephone._areaCode = orig(this._officeTelephone._areaCode)
+this._officeTelephone._number = orig(this._officeTelephone._number)
+this._salary = orig(this._salary)		(64 values, 64 samples)
+this._salary._baseSalary = orig(this._salary._baseSalary)		(38 values, 64 samples)
+this._salary._workDays = orig(this._salary._workDays)		(23 values, 64 samples)
+this._clients = orig(this._clients)		(1 value, 64 samples)
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 64 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 64 samples)
+orig(this._clients.getClass()) = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 64 samples)
+size(this._clients) = 8		(1 value, 64 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 64 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 64 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 9 samples)
+===========================================================================
+Person.getOfficeAreaCode()Ljava/lang/String;:::ENTER  128 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=64; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 128 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 128 samples)
+size(this._clients) = 8		(1 value, 128 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 128 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 128 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 18 samples)
+===========================================================================
+Person.getOfficeAreaCode()Ljava/lang/String;:::EXIT124  128 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=64; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: return this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() orig(this._name) orig(this._officeTelephone) orig(this._officeTelephone._areaCode) orig(this._officeTelephone._number) orig(this._salary) orig(this._salary._baseSalary) orig(this._salary._workDays) orig(this._clients) orig(this._clients.getClass()) size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+return = this._officeTelephone._areaCode = orig(this._officeTelephone._areaCode)
+this._name = orig(this._name)
+this._officeTelephone = orig(this._officeTelephone)		(64 values, 128 samples)
+this._officeTelephone._number = orig(this._officeTelephone._number)
+this._salary = orig(this._salary)		(64 values, 128 samples)
+this._salary._baseSalary = orig(this._salary._baseSalary)		(38 values, 128 samples)
+this._salary._workDays = orig(this._salary._workDays)		(23 values, 128 samples)
+this._clients = orig(this._clients)		(1 value, 128 samples)
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 128 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 128 samples)
+orig(this._clients.getClass()) = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 128 samples)
+size(this._clients) = 8		(1 value, 128 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 128 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 128 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 18 samples)
+===========================================================================
+Person.getOfficeNumber()Ljava/lang/String;:::ENTER  128 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=64; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 128 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 128 samples)
+size(this._clients) = 8		(1 value, 128 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 128 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 128 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 18 samples)
+===========================================================================
+Person.getOfficeNumber()Ljava/lang/String;:::EXIT132  128 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=64; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: return this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() orig(this._name) orig(this._officeTelephone) orig(this._officeTelephone._areaCode) orig(this._officeTelephone._number) orig(this._salary) orig(this._salary._baseSalary) orig(this._salary._workDays) orig(this._clients) orig(this._clients.getClass()) size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+return = this._officeTelephone._number = orig(this._officeTelephone._number)
+this._name = orig(this._name)
+this._officeTelephone = orig(this._officeTelephone)		(64 values, 128 samples)
+this._officeTelephone._areaCode = orig(this._officeTelephone._areaCode)
+this._salary = orig(this._salary)		(64 values, 128 samples)
+this._salary._baseSalary = orig(this._salary._baseSalary)		(38 values, 128 samples)
+this._salary._workDays = orig(this._salary._workDays)		(23 values, 128 samples)
+this._clients = orig(this._clients)		(1 value, 128 samples)
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 128 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 128 samples)
+orig(this._clients.getClass()) = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 128 samples)
+size(this._clients) = 8		(1 value, 128 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 128 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 128 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 18 samples)
+===========================================================================
+Person.getSalary()I:::ENTER  128 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=64; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 128 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 128 samples)
+size(this._clients) = 8		(1 value, 128 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 128 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 128 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 18 samples)
+===========================================================================
+Person.getSalary()I:::EXIT120  128 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=64; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: return this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() orig(this._name) orig(this._officeTelephone) orig(this._officeTelephone._areaCode) orig(this._officeTelephone._number) orig(this._salary) orig(this._salary._baseSalary) orig(this._salary._workDays) orig(this._clients) orig(this._clients.getClass()) size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[return] this._clients[return-1] this._clients[return..] this._clients[return+1..] this._clients[0..return] this._clients[0..return-1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+this._name = orig(this._name)
+this._officeTelephone = orig(this._officeTelephone)		(64 values, 128 samples)
+this._officeTelephone._areaCode = orig(this._officeTelephone._areaCode)
+this._officeTelephone._number = orig(this._officeTelephone._number)
+this._salary = orig(this._salary)		(64 values, 128 samples)
+this._salary._baseSalary = orig(this._salary._baseSalary)		(38 values, 128 samples)
+this._salary._workDays = orig(this._salary._workDays)		(23 values, 128 samples)
+this._clients = orig(this._clients) = this._clients[return..]		(1 value, 128 samples)
+this._clients[0] = this._clients[return]		(1 value, 128 samples)
+return >= 0		(63 values, 128 samples)
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 128 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 128 samples)
+orig(this._clients.getClass()) = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 128 samples)
+size(this._clients) = 8		(1 value, 128 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 128 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 128 samples)
+this._clients[return+1..] = [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 4 samples)
+this._clients[0..return] = [860587461]		(1 value, 4 samples)
+this._clients[0..return-1] = []		(1 value, 4 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 18 samples)
+return >= this._salary._workDays		(63 values, 128 samples)
+===========================================================================
+Person.getSalary_E(II)V:::ENTER  128 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=64; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: baseSalary workDays this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[workDays] this._clients[workDays-1] this._clients[workDays..] this._clients[workDays+1..] this._clients[0..workDays] this._clients[0..workDays-1]
+baseSalary = this._salary._baseSalary		(38 values, 128 samples)
+workDays = this._salary._workDays		(23 values, 128 samples)
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 128 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 128 samples)
+size(this._clients) = 8		(1 value, 128 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 128 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 128 samples)
+this._clients[workDays..] contains no duplicates		(6 values, 24 samples)
+this._clients[workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 18 samples)
+this._clients[0..workDays] elements one of { 860587461, 860587462, 860587463 }		(5 values, 18 samples)
+this._clients[0..workDays] one of { [860587461], [860587461, 860587462, 860587463], [860587461, 860587462, 860587463, 860587464, 860587465], [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467], [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468] }		(5 values, 18 samples)
+this._clients[0..workDays-1] contains no duplicates		(6 values, 24 samples)
+===========================================================================
+Person.getSalary_E(II)V:::EXIT116  128 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=64; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: baseSalary workDays this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() orig(baseSalary) orig(workDays) orig(this._name) orig(this._officeTelephone) orig(this._officeTelephone._areaCode) orig(this._officeTelephone._number) orig(this._salary) orig(this._salary._baseSalary) orig(this._salary._workDays) orig(this._clients) orig(this._clients.getClass()) size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[workDays] this._clients[workDays-1] this._clients[workDays..] this._clients[workDays+1..] this._clients[0..workDays] this._clients[0..workDays-1]
+baseSalary = this._salary._baseSalary = orig(baseSalary) = orig(this._salary._baseSalary)		(38 values, 128 samples)
+workDays = this._salary._workDays = orig(workDays) = orig(this._salary._workDays)		(23 values, 128 samples)
+this._name = orig(this._name)
+this._officeTelephone = orig(this._officeTelephone)		(64 values, 128 samples)
+this._officeTelephone._areaCode = orig(this._officeTelephone._areaCode)
+this._officeTelephone._number = orig(this._officeTelephone._number)
+this._salary = orig(this._salary)		(64 values, 128 samples)
+this._clients = orig(this._clients)		(1 value, 128 samples)
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 128 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 128 samples)
+orig(this._clients.getClass()) = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 128 samples)
+size(this._clients) = 8		(1 value, 128 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 128 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 128 samples)
+this._clients[workDays..] contains no duplicates		(6 values, 24 samples)
+this._clients[workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 18 samples)
+this._clients[0..workDays] elements one of { 860587461, 860587462, 860587463 }		(5 values, 18 samples)
+this._clients[0..workDays] one of { [860587461], [860587461, 860587462, 860587463], [860587461, 860587462, 860587463, 860587464, 860587465], [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467], [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468] }		(5 values, 18 samples)
+this._clients[0..workDays-1] contains no duplicates		(6 values, 24 samples)
+===========================================================================
+Person.getTelephoneNumber()Ljava/lang/String;:::ENTER  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 64 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 64 samples)
+size(this._clients) = 8		(1 value, 64 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 64 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 64 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 9 samples)
+===========================================================================
+Person.getTelephoneNumber()Ljava/lang/String;:::EXIT112  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: return this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() orig(this._name) orig(this._officeTelephone) orig(this._officeTelephone._areaCode) orig(this._officeTelephone._number) orig(this._salary) orig(this._salary._baseSalary) orig(this._salary._workDays) orig(this._clients) orig(this._clients.getClass()) size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+this._name = orig(this._name)
+this._officeTelephone = orig(this._officeTelephone)		(64 values, 64 samples)
+this._officeTelephone._areaCode = orig(this._officeTelephone._areaCode)
+this._officeTelephone._number = orig(this._officeTelephone._number)
+this._salary = orig(this._salary)		(64 values, 64 samples)
+this._salary._baseSalary = orig(this._salary._baseSalary)		(38 values, 64 samples)
+this._salary._workDays = orig(this._salary._workDays)		(23 values, 64 samples)
+this._clients = orig(this._clients)		(1 value, 64 samples)
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 64 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 64 samples)
+orig(this._clients.getClass()) = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 64 samples)
+size(this._clients) = 8		(1 value, 64 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 64 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 64 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 9 samples)
+===========================================================================
+Person.getTelephoneNumber_E(Ljava/lang/String;Ljava/lang/String;)V:::ENTER  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: areacode number this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+areacode = this._officeTelephone._areaCode
+number = this._officeTelephone._number
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 64 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 64 samples)
+size(this._clients) = 8		(1 value, 64 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 64 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 64 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 9 samples)
+===========================================================================
+Person.getTelephoneNumber_E(Ljava/lang/String;Ljava/lang/String;)V:::EXIT108  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: areacode number this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() orig(areacode) orig(number) orig(this._name) orig(this._officeTelephone) orig(this._officeTelephone._areaCode) orig(this._officeTelephone._number) orig(this._salary) orig(this._salary._baseSalary) orig(this._salary._workDays) orig(this._clients) orig(this._clients.getClass()) size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+areacode = this._officeTelephone._areaCode = orig(areacode) = orig(this._officeTelephone._areaCode)
+number = this._officeTelephone._number = orig(number) = orig(this._officeTelephone._number)
+this._name = orig(this._name)
+this._officeTelephone = orig(this._officeTelephone)		(64 values, 64 samples)
+this._salary = orig(this._salary)		(64 values, 64 samples)
+this._salary._baseSalary = orig(this._salary._baseSalary)		(38 values, 64 samples)
+this._salary._workDays = orig(this._salary._workDays)		(23 values, 64 samples)
+this._clients = orig(this._clients)		(1 value, 64 samples)
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 64 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 64 samples)
+orig(this._clients.getClass()) = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 64 samples)
+size(this._clients) = 8		(1 value, 64 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 64 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 64 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 9 samples)
+===========================================================================
+Person.getWorkDays()I:::ENTER  320 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=256; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[this._salary._workDays] this._clients[this._salary._workDays-1] this._clients[this._salary._workDays..] this._clients[this._salary._workDays+1..] this._clients[0..this._salary._workDays] this._clients[0..this._salary._workDays-1]
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 320 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 320 samples)
+size(this._clients) = 8		(1 value, 320 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 320 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 320 samples)
+this._clients[this._salary._workDays+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 45 samples)
+===========================================================================
+Person.getWorkDays()I:::EXIT144  320 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=256; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: return this._name this._officeTelephone this._officeTelephone._areaCode this._officeTelephone._number this._salary this._salary._baseSalary this._salary._workDays this._clients this._clients.getClass() orig(this._name) orig(this._officeTelephone) orig(this._officeTelephone._areaCode) orig(this._officeTelephone._number) orig(this._salary) orig(this._salary._baseSalary) orig(this._salary._workDays) orig(this._clients) orig(this._clients.getClass()) size(this._clients) size(this._clients)-1 this._clients[-2] this._clients[-1] this._clients[0] this._clients[1] this._clients[return] this._clients[return-1] this._clients[return..] this._clients[return+1..] this._clients[0..return] this._clients[0..return-1]
+return = this._salary._workDays = orig(this._salary._workDays)		(23 values, 320 samples)
+this._name = orig(this._name)
+this._officeTelephone = orig(this._officeTelephone)		(64 values, 320 samples)
+this._officeTelephone._areaCode = orig(this._officeTelephone._areaCode)
+this._officeTelephone._number = orig(this._officeTelephone._number)
+this._salary = orig(this._salary)		(64 values, 320 samples)
+this._salary._baseSalary = orig(this._salary._baseSalary)		(38 values, 320 samples)
+this._clients = orig(this._clients)		(1 value, 320 samples)
+this._clients = [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468]		(1 value, 320 samples)
+this._clients.getClass() = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 320 samples)
+orig(this._clients.getClass()) = ["java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String", "java.lang.String"]		(1 value, 320 samples)
+size(this._clients) = 8		(1 value, 320 samples)
+this._clients[-2] has only one value (hashcode=860587467)		(1 value, 320 samples)
+this._clients[-1] has only one value (hashcode=860587468)		(1 value, 320 samples)
+this._clients[return] != null		(5 values, 45 samples)
+this._clients[return-1] != null		(5 values, 50 samples)
+this._clients[return..] contains no duplicates		(6 values, 60 samples)
+this._clients[return..] elements != null		(6 values, 60 samples)
+this._clients[return+1..] elements != null		(5 values, 45 samples)
+this._clients[return+1..] one of { [], [860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468], [860587464, 860587465, 860587466, 860587467, 860587468], [860587466, 860587467, 860587468], [860587468] }		(5 values, 45 samples)
+this._clients[0..return] elements != null		(5 values, 45 samples)
+this._clients[0..return] elements one of { 860587461, 860587462, 860587463 }		(5 values, 45 samples)
+this._clients[0..return] one of { [860587461], [860587461, 860587462, 860587463], [860587461, 860587462, 860587463, 860587464, 860587465], [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467], [860587461, 860587462, 860587463, 860587464, 860587465, 860587466, 860587467, 860587468] }		(5 values, 45 samples)
+this._clients[0..return-1] contains no duplicates		(6 values, 60 samples)
+this._clients[0..return-1] elements != null		(6 values, 60 samples)
+return < this._salary._baseSalary		(64 values, 320 samples)
+this._officeTelephone != this._clients[return]		(9 values, 45 samples)
+this._officeTelephone != this._clients[return-1]		(10 values, 50 samples)
+this._salary != this._clients[return]		(9 values, 45 samples)
+this._salary != this._clients[return-1]		(10 values, 50 samples)
+===========================================================================
+Salary:::CLASS  1344 samples
+    Samples breakdown: mux=0; mUx=0; Mux=1344; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: this._baseSalary this._workDays
+this._baseSalary <= 149		(38 values, 1344 samples)
+this._baseSalary >= 101		(38 values, 1344 samples)
+this._baseSalary > this._workDays		(64 values, 1344 samples)
+===========================================================================
+Salary.<init>(II)V:::ENTER  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: baseSalary workDays
+baseSalary > workDays		(64 values, 64 samples)
+===========================================================================
+Salary.<init>(II)V:::EXIT81  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: baseSalary workDays this._baseSalary this._workDays orig(baseSalary) orig(workDays)
+baseSalary = this._baseSalary = orig(baseSalary)		(38 values, 64 samples)
+workDays = this._workDays = orig(workDays)		(23 values, 64 samples)
+===========================================================================
+Salary.getBaseSalary()I:::ENTER  320 samples
+    Samples breakdown: mux=0; mUx=0; Mux=320; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: this._baseSalary this._workDays
+===========================================================================
+Salary.getBaseSalary()I:::EXIT84  320 samples
+    Samples breakdown: mux=0; mUx=0; Mux=320; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: return this._baseSalary this._workDays orig(this._baseSalary) orig(this._workDays)
+return = this._baseSalary = orig(this._baseSalary)		(38 values, 320 samples)
+this._workDays = orig(this._workDays)		(23 values, 320 samples)
+===========================================================================
+Salary.getWorkDays()I:::ENTER  320 samples
+    Samples breakdown: mux=0; mUx=0; Mux=320; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: this._baseSalary this._workDays
+===========================================================================
+Salary.getWorkDays()I:::EXIT88  320 samples
+    Samples breakdown: mux=0; mUx=0; Mux=320; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: return this._baseSalary this._workDays orig(this._baseSalary) orig(this._workDays)
+return = this._workDays = orig(this._workDays)		(23 values, 320 samples)
+this._baseSalary = orig(this._baseSalary)		(38 values, 320 samples)
+return < this._baseSalary		(64 values, 320 samples)
+[No views for TelephoneNumber:::CLASS]
+[No views for TelephoneNumber.<init>(Ljava/lang/String;Ljava/lang/String;)V:::ENTER]
+===========================================================================
+TelephoneNumber.<init>(Ljava/lang/String;Ljava/lang/String;)V:::EXIT55  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: areaCode number this._areaCode this._number orig(areaCode) orig(number)
+areaCode = this._areaCode = orig(areaCode)
+number = this._number = orig(number)
+[No views for TelephoneNumber.getAreaCode()Ljava/lang/String;:::ENTER]
+===========================================================================
+TelephoneNumber.getAreaCode()Ljava/lang/String;:::EXIT58  128 samples
+    Samples breakdown: mux=0; mUx=0; Mux=128; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: return this._areaCode this._number orig(this._areaCode) orig(this._number)
+return = this._areaCode = orig(this._areaCode)
+this._number = orig(this._number)
+[No views for TelephoneNumber.getNumber()Ljava/lang/String;:::ENTER]
+===========================================================================
+TelephoneNumber.getNumber()Ljava/lang/String;:::EXIT66  128 samples
+    Samples breakdown: mux=0; mUx=0; Mux=128; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: return this._areaCode this._number orig(this._areaCode) orig(this._number)
+return = this._number = orig(this._number)
+this._areaCode = orig(this._areaCode)
+===========================================================================
+TelephoneNumber.setAreaCode(Ljava/lang/String;)V:::ENTER  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: arg this._areaCode this._number
+this._areaCode = this._number		(1 value, 64 samples)
+this._areaCode = "null"		(1 value, 64 samples)
+===========================================================================
+TelephoneNumber.setAreaCode(Ljava/lang/String;)V:::EXIT63  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: arg this._areaCode this._number orig(arg) orig(this._areaCode) orig(this._number)
+arg = this._areaCode = orig(arg)
+this._number = orig(this._areaCode) = orig(this._number)		(1 value, 64 samples)
+this._number = "null"		(1 value, 64 samples)
+===========================================================================
+TelephoneNumber.setNumber(Ljava/lang/String;)V:::ENTER  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: arg this._areaCode this._number
+this._number = "null"		(1 value, 64 samples)
+===========================================================================
+TelephoneNumber.setNumber(Ljava/lang/String;)V:::EXIT71  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: arg this._areaCode this._number orig(arg) orig(this._areaCode) orig(this._number)
+arg = this._number = orig(arg)
+this._areaCode = orig(this._areaCode)
+orig(this._number) = "null"		(1 value, 64 samples)
+Variables:
+  non_canonical_variables = 147
+  can_be_missing_variables = 0
+  canonical_variables = 577
+  total variables = 724
+Derivation:
+  derived_variables = 272
+  suppressed derived variables = 214
+    nonsensical_suppressed_derived_variables = 198
+    tautological_suppressed_derived_variables = 16
+Inference:
+Non-instantiated: 2443
+  true = 1430
+    implied_noninstantiated_invariants = 12
+    subexact_noninstantiated_invariants = 1418
+  false = 1013
+    implied_false_noninstantiated_invariants = 96
+    partially_implied_invariants = 917
+Instantiated: 18053 = 18053
+  falsified_invariants = 16022
+  non_falsified_invariants = 2031 = 315
+    unjustified = 0
+      too_few_samples_invariants = 0
+      unjustified_invariants = 0
+    implied = 0
+      non_canonical_invariants = 0
+      obvious_invariants = 0
+    reported_invariants = 315
+Exiting

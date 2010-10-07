@@ -1,0 +1,28 @@
+==PID== kvasir-dtrace-VERSION C Language Front-End for Daikon for x86-linux.
+==PID== Copyright (C) 2004, Philip Guo, MIT CSAIL Program Analysis Group
+==PID== Using valgrind-2.2.0, a program supervision framework for x86-linux.
+==PID== Copyright (C) 2000-2004, and GNU GPL'd, by Julian Seward et al.
+==PID== For more details, rerun with: -v
+==PID== 
+01010000 00000000 00000000 00000000 0101 
+01010000 00000000 00000000 00000000 01010000 00000000 00000000 00000000 
+01010000 00000000 00000000 00000000 0101 
+01010000 00000000 00000000 00000000 0101==PID== Syscall param write(buf) contains uninitialised or unaddressable byte(s)
+==PID==    at 0x1B9D****: write (in /lib/libc-2.3.2.so)
+==PID==    by 0x804****: test_bits (partial.c:32)
+==PID==    by 0x804****: main (partial.c:43)
+==PID==  Address 0x52BF**** is on thread 1's stack
+0000 00000000 00000000 00000000 
+01010000 00000000 00000000 00000000 0101 
+01010000 00000000 00000000 00000000 0101==PID== 
+==PID== Syscall param write(buf) contains uninitialised or unaddressable byte(s)
+==PID==    at 0x1B9D****: write (in /lib/libc-2.3.2.so)
+==PID==    by 0x804****: test_bits (partial.c:32)
+==PID==    by 0x804****: main (partial.c:45)
+==PID==  Address 0x52BF**** is on thread 1's stack
+0111 10100101 11000101 11011000 
+Global:
+Dynamic:
+Stack:
+==PID== 
+==PID== ERROR SUMMARY: 56 errors from 2 contexts (suppressed: 0 from 0)

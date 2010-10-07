@@ -1,0 +1,91 @@
+<DataStructures.StackAr:::OBJECT>
+  <null, this.theArray[0..this.topOfStack] contains no duplicates {0.0001+}> (UInt,MJ)
+<DataStructures.StackAr.<init>(I)V:::ENTER>
+  <capacity >= 0 {0+}, capacity >= 2 {1-}> (UInt,DJU)
+<DataStructures.StackAr.<init>(I)V:::EXIT>
+  <null, this.theArray[] elements == this.theArray[capacity-1] {0+}> (Bin,MJ)
+  <null, this.theArray[capacity-1] == this.theArray[orig(capacity)-1] {0+}> (Bin,MJ)
+  <this.theArray != null {0.0077+}, this.theArray != null {0.1317-}> (UInt,SJU)
+  <this.theArray[capacity..] elements != null {0.0077+}, this.theArray[capacity..] elements != null {0.1317-}> (UInt,SJU)
+  <null, this.theArray[capacity..] == [] {0+}> (UInt,MJ)
+<DataStructures.StackAr.<init>(I)V:::EXIT33>
+  <null, this.theArray[] elements == this.theArray[capacity-1] {0+}> (Bin,MJ)
+  <this.theArray != null {0.0077+}, this.theArray != null {0.1317-}> (UInt,SJU)
+  <this.theArray[capacity..] elements != null {0.0077+}, this.theArray[capacity..] elements != null {0.1317-}> (UInt,SJU)
+  <null, this.theArray[capacity..] == [] {0+}> (UInt,MJ)
+<DataStructures.StackAr.isEmpty()Z:::ENTER>
+  <null, this.theArray[0..this.topOfStack] contains no duplicates {0.0001+}> (UInt,MJ)
+<DataStructures.StackAr.isEmpty()Z:::EXIT>
+  <null, this.theArray[0..this.topOfStack] contains no duplicates {0.0001+}> (UInt,MJ)
+<DataStructures.StackAr.isEmpty()Z:::EXIT41>
+  <null, this.theArray[0..this.topOfStack] contains no duplicates {0.0001+}> (UInt,MJ)
+<DataStructures.StackAr.isFull()Z:::ENTER>
+  <null, this.topOfStack < size(this.theArray[])-1 {0.0001+}> (Bin,MJ)
+<DataStructures.StackAr.isFull()Z:::EXIT>
+  <null, this.topOfStack < size(this.theArray[])-1 {0.0001+}> (Bin,MJ)
+  <null, return == false {0+}> (UInt,MJ)
+<DataStructures.StackAr.isFull()Z:::EXIT50>
+  <null, this.topOfStack < size(this.theArray[])-1 {0.0001+}> (Bin,MJ)
+  <null, return == false {0+}> (UInt,MJ)
+<DataStructures.StackAr.makeEmpty()V:::ENTER>
+  <this.topOfStack <= size(this.theArray[])-1 {0.0072+}, null> (Bin,JM)
+  <this.theArray[this.topOfStack+1..] elements == null {0+}, null> (UInt,JM)
+  <this.theArray[0..this.topOfStack] elements are equal {0+}, null> (UInt,JM)
+  <this.theArray.class == "[Ljava.lang.Object;" {0+}, this.theArray.class one of {  } {1-}> (UInt,DJU)
+<DataStructures.StackAr.makeEmpty()V:::EXIT>
+  <size(this.theArray[]) == orig(size(this.theArray[])) {0+}, null> (Bin,JM)
+  <this.theArray == orig(this.theArray) {0+}, null> (Bin,JM)
+  <orig(this.topOfStack) <= size(this.theArray[])-1 {0.0072+}, null> (Bin,JM)
+  <this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..]) {0+}, null> (Bin,JM)
+  <this.theArray.class == orig(this.theArray.class) {0+}, null> (Bin,JM)
+  <this.topOfStack == -1 {0+}, this.topOfStack one of {  } {1-}> (UInt,DJU)
+  <this.theArray[] elements == null {0+}, this.theArray[] elements one of {  } {1-}> (UInt,DJU)
+  <orig(this.theArray[0..this.topOfStack]) elements are equal {0+}, null> (UInt,JM)
+  <this.theArray[0..this.topOfStack] == [] {0+}, null> (UInt,JM)
+  <this.theArray.class == "[Ljava.lang.Object;" {0+}, this.theArray.class one of {  } {1-}> (UInt,DJU)
+  <this.theArray[].class elements == null {0+}, this.theArray[].class elements one of {  } {1-}> (UInt,DJU)
+<DataStructures.StackAr.makeEmpty()V:::EXIT61>
+  <orig(this.topOfStack) <= size(this.theArray[])-1 {0.0072+}, null> (Bin,JM)
+  <this.topOfStack == -1 {0+}, null> (UInt,JM)
+  <this.theArray[] elements == null {0+}, null> (UInt,JM)
+  <orig(this.theArray[0..this.topOfStack]) elements are equal {0+}, null> (UInt,JM)
+  <this.theArray[0..this.topOfStack] == [] {0+}, null> (UInt,JM)
+  <this.theArray.class == "[Ljava.lang.Object;" {0+}, null> (UInt,JM)
+  <this.theArray[].class elements == null {0+}, null> (UInt,JM)
+<DataStructures.StackAr.top()Ljava/lang/Object;:::ENTER>
+  <this.topOfStack >= -1 {0+}, this.topOfStack >= 0 {0+}> (UInt,DJJ)
+<DataStructures.StackAr.top()Ljava/lang/Object;:::EXIT>
+  <null, return == orig(this.theArray[post(this.topOfStack)]) {0+}> (Bin,MJ)
+  <null, return == orig(this.theArray[this.topOfStack]) {0+}> (Bin,MJ)
+  <null, return == this.theArray[orig(this.topOfStack)] {0+}> (Bin,MJ)
+  <null, return == this.theArray[this.topOfStack] {0+}> (Bin,MJ)
+  <this.topOfStack >= -1 {0+}, this.topOfStack >= 0 {0+}> (UInt,DJJ)
+  <null, return != null {0.0001+}> (UInt,MJ)
+<DataStructures.StackAr.top()Ljava/lang/Object;:::EXIT71>
+  <this.theArray[] elements == return {0+}, this.theArray[] elements == return {1-}> (Bin,SJU)
+  <this.theArray[] == orig(this.theArray[post(this.topOfStack+1)..]) {0+}, null> (Bin,JM)
+  <this.theArray[] == orig(this.theArray[this.topOfStack+1..]) {0+}, null> (Bin,JM)
+  <this.theArray != null {0.0001+}, null> (UInt,JM)
+  <return == null {0+}, return one of {  } {1-}> (UInt,DJU)
+  <this.topOfStack == -1 {0+}, this.topOfStack one of {  } {1-}> (UInt,DJU)
+  <this.theArray[0..this.topOfStack] elements != null {0.0001+}, null> (UInt,JM)
+  <this.theArray[] elements == null {0+}, this.theArray[] elements one of {  } {1-}> (UInt,DJU)
+  <return.class == null {0+}, return.class one of {  } {1-}> (UInt,DJU)
+  <this.theArray.class == "[Ljava.lang.Object;" {0+}, null> (UInt,JM)
+  <this.theArray[].class elements == null {0+}, this.theArray[].class elements one of {  } {1-}> (UInt,DJU)
+<DataStructures.StackAr.top()Ljava/lang/Object;:::EXIT72>
+  <return == orig(this.theArray[post(this.topOfStack)]) {0+}, null> (Bin,JM)
+  <return == orig(this.theArray[this.topOfStack]) {0+}, null> (Bin,JM)
+  <return == this.theArray[orig(this.topOfStack)] {0+}, null> (Bin,JM)
+  <return == this.theArray[this.topOfStack] {0+}, null> (Bin,JM)
+  <this.theArray[0..this.topOfStack-1] == orig(this.theArray[0..post(this.topOfStack-1)]) {0+}, null> (Bin,JM)
+  <this.theArray[0..this.topOfStack-1] == orig(this.theArray[0..this.topOfStack-1]) {0+}, null> (Bin,JM)
+  <this.theArray[this.topOfStack..] == orig(this.theArray[post(this.topOfStack)..]) {0+}, null> (Bin,JM)
+  <this.theArray[this.topOfStack..] == orig(this.theArray[this.topOfStack..]) {0+}, null> (Bin,JM)
+<DataStructures.StackAr.topAndPop()Ljava/lang/Object;:::EXIT>
+  <null, return in orig(this.theArray[]) {0+}> (Bin,MJ)
+  <null, return in orig(this.theArray[post(this.topOfStack+1)..]) {0+}> (Bin,MJ)
+  <null, this.topOfStack < size(this.theArray[])-1 {0.0001+}> (Bin,MJ)
+<DataStructures.StackAr.topAndPop()Ljava/lang/Object;:::EXIT105>
+  <null, return in this.theArray[] {0+}> (Bin,MJ)
+  <null, this.theArray[0..this.topOfStack] == [] {0+}> (UInt,MJ)

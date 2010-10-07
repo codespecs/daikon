@@ -1,0 +1,69 @@
+Reading declaration files .
+Reading data trace files .
+Read 1 declaration file, 1 dtrace file.
+===========================================================================
+EncapsulateDowncast.showLastPerson(Ljava/util/Vector;)V:::ENTER  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: list list.getClass() EncapsulateDowncast.random EncapsulateDowncast.CASES EncapsulateDowncast.SEED size(list) size(list)-1 list[-2] list[-1] list[0] list[1]
+list contains no duplicates		(64 values, 64 samples)
+list elements != null		(64 values, 64 samples)
+list.getClass() elements == "\"Person\""		(19 values, 64 samples)
+EncapsulateDowncast.random has only one value (hashcode=-166176341)		(1 value, 64 samples)
+EncapsulateDowncast.CASES == 64		(1 value, 64 samples)
+EncapsulateDowncast.SEED == 327		(1 value, 64 samples)
+list[-2] != null		(62 values, 62 samples)
+list[-1] != null		(64 values, 64 samples)
+list[0] != null		(64 values, 64 samples)
+list[1] != null		(62 values, 62 samples)
+EncapsulateDowncast.CASES > size(list)		(19 values, 64 samples)
+EncapsulateDowncast.SEED > size(list)		(19 values, 64 samples)
+list[0] != list[1]		(62 values, 62 samples)
+===========================================================================
+EncapsulateDowncast.showLastPerson(Ljava/util/Vector;)V:::EXIT30  64 samples
+    Samples breakdown: mux=0; mUx=0; Mux=64; MUx=0; muX=0; mUX=0; MuX=0; MUX=0
+    Variables: list list.getClass() EncapsulateDowncast.random EncapsulateDowncast.CASES EncapsulateDowncast.SEED orig(list) orig(list.getClass()) orig(EncapsulateDowncast.random) size(list) size(list)-1 list[-2] list[-1] list[0] list[1]
+list == orig(list)		(64 values, 64 samples)
+EncapsulateDowncast.random == orig(EncapsulateDowncast.random)		(1 value, 64 samples)
+list contains no duplicates		(64 values, 64 samples)
+list elements != null		(64 values, 64 samples)
+list.getClass() elements == "\"Person\""		(19 values, 64 samples)
+EncapsulateDowncast.random has only one value (hashcode=-166176341)		(1 value, 64 samples)
+EncapsulateDowncast.CASES == 64		(1 value, 64 samples)
+EncapsulateDowncast.SEED == 327		(1 value, 64 samples)
+orig(list.getClass()) elements == "\"Person\""		(19 values, 64 samples)
+list[-2] != null		(62 values, 62 samples)
+list[-1] != null		(64 values, 64 samples)
+list[0] != null		(64 values, 64 samples)
+list[1] != null		(62 values, 62 samples)
+EncapsulateDowncast.CASES > size(list)		(19 values, 64 samples)
+EncapsulateDowncast.SEED > size(list)		(19 values, 64 samples)
+list[0] != list[1]		(62 values, 62 samples)
+Variables:
+  non_canonical_variables = 2
+  can_be_missing_variables = 0
+  canonical_variables = 23
+  total variables = 25
+Derivation:
+  derived_variables = 12
+  suppressed derived variables = 24
+    nonsensical_suppressed_derived_variables = 24
+    tautological_suppressed_derived_variables = 0
+Inference:
+Non-instantiated: 225
+  true = 210
+    implied_noninstantiated_invariants = 8
+    subexact_noninstantiated_invariants = 202
+  false = 15
+    implied_false_noninstantiated_invariants = 0
+    partially_implied_invariants = 15
+Instantiated: 682 = 682
+  falsified_invariants = 628
+  non_falsified_invariants = 54 = 27
+    unjustified = 0
+      too_few_samples_invariants = 0
+      unjustified_invariants = 0
+    implied = 0
+      non_canonical_invariants = 0
+      obvious_invariants = 0
+    reported_invariants = 27
+Exiting

@@ -1,0 +1,28 @@
+REPLACE
+size()
+size
+
+PPT_NAME PolyCalc.RatPolyStack.dup
+orig(size <= 0)
+size <= 0
+
+PPT_NAME PolyCalc.RatPolyStack.get
+orig(size <= index)
+size <= index
+
+PPT_NAME PolyCalc.RatPolyStack.getCons
+curr == null
+curr == null
+index > 0
+orig(curr == null)
+orig(curr == null)
+orig(index > 0)
+
+PPT_NAME PolyCalc.RatPolyStack.pop
+orig(size <= 0)
+size <= 0
+
+PPT_NAME PolyCalc.RatPolyStack.swap
+orig(size <= 1)
+size <= 1
+

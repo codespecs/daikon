@@ -1,0 +1,10 @@
+TypesTest
+TypesTest.decls.diff
+TypesTest.dtrace.diff
+TypesTest.out
+TypesTest.out.diff
+daikon-output
+ran-kvasir
+TypesTest.invs.diff
+*.counts *.counts.diff
+TypesTest.comp TypesTest.comp.diff

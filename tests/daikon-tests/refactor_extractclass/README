@@ -1,0 +1,6 @@
+The old system of Makefiles didn't even run this test anymore, since
+it was based only on .decls and .dtrace files (not source) and the
+format had changed.  If we find the source, perhaps we can add these
+tests back again.
+
+

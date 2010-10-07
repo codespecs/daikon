@@ -1,0 +1,724 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..fchar():::ENTER
+  ppt-type enter
+  variable ::DIM1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::DIM2
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalBoo
+    var-kind variable
+    rep-type hashcode
+    dec-type boo
+  variable ::globalBoo.a
+    var-kind field a
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.b
+    var-kind field b
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.c
+    var-kind field c
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalBoo.c[..]
+    var-kind array
+    enclosing-var ::globalBoo.c
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalBoo.d
+    var-kind field d
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type void*
+    flags non_null 
+  variable ::globalBoo.d[..]
+    var-kind array
+    enclosing-var ::globalBoo.d
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable p
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable p[..]
+    var-kind array
+    enclosing-var p
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..fchar():::EXIT0
+  ppt-type subexit
+  variable ::DIM1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::DIM2
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalBoo
+    var-kind variable
+    rep-type hashcode
+    dec-type boo
+  variable ::globalBoo.a
+    var-kind field a
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.b
+    var-kind field b
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.c
+    var-kind field c
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalBoo.c[..]
+    var-kind array
+    enclosing-var ::globalBoo.c
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalBoo.d
+    var-kind field d
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type void*
+    flags non_null 
+  variable ::globalBoo.d[..]
+    var-kind array
+    enclosing-var ::globalBoo.d
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable p
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable p[..]
+    var-kind array
+    enclosing-var p
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..fcrashint():::ENTER
+  ppt-type enter
+  variable ::DIM1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::DIM2
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalBoo
+    var-kind variable
+    rep-type hashcode
+    dec-type boo
+  variable ::globalBoo.a
+    var-kind field a
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.b
+    var-kind field b
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.c
+    var-kind field c
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalBoo.c[..]
+    var-kind array
+    enclosing-var ::globalBoo.c
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalBoo.d
+    var-kind field d
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type void*
+    flags non_null 
+  variable ::globalBoo.d[..]
+    var-kind array
+    enclosing-var ::globalBoo.d
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable booParam
+    var-kind variable
+    rep-type hashcode
+    dec-type boo
+    flags is_param 
+  variable booParam.a
+    var-kind field a
+    enclosing-var booParam
+    rep-type int
+    dec-type int
+  variable booParam.b
+    var-kind field b
+    enclosing-var booParam
+    rep-type int
+    dec-type int
+  variable booParam.c
+    var-kind field c
+    enclosing-var booParam
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable booParam.c[..]
+    var-kind array
+    enclosing-var booParam.c
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable booParam.d
+    var-kind field d
+    enclosing-var booParam
+    rep-type hashcode
+    dec-type void*
+    flags non_null 
+  variable booParam.d[..]
+    var-kind array
+    enclosing-var booParam.d
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable param
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+    flags is_param 
+  variable param[..]
+    var-kind array
+    enclosing-var param
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable param[..][0]
+    var-kind field [0]
+    enclosing-var param[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..fcrashint():::EXIT0
+  ppt-type subexit
+  variable ::DIM1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::DIM2
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalBoo
+    var-kind variable
+    rep-type hashcode
+    dec-type boo
+  variable ::globalBoo.a
+    var-kind field a
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.b
+    var-kind field b
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.c
+    var-kind field c
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalBoo.c[..]
+    var-kind array
+    enclosing-var ::globalBoo.c
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalBoo.d
+    var-kind field d
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type void*
+    flags non_null 
+  variable ::globalBoo.d[..]
+    var-kind array
+    enclosing-var ::globalBoo.d
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable booParam
+    var-kind variable
+    rep-type hashcode
+    dec-type boo
+    flags is_param 
+  variable booParam.a
+    var-kind field a
+    enclosing-var booParam
+    rep-type int
+    dec-type int
+  variable booParam.b
+    var-kind field b
+    enclosing-var booParam
+    rep-type int
+    dec-type int
+  variable booParam.c
+    var-kind field c
+    enclosing-var booParam
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable booParam.c[..]
+    var-kind array
+    enclosing-var booParam.c
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable booParam.d
+    var-kind field d
+    enclosing-var booParam
+    rep-type hashcode
+    dec-type void*
+    flags non_null 
+  variable booParam.d[..]
+    var-kind array
+    enclosing-var booParam.d
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable param
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+    flags is_param 
+  variable param[..]
+    var-kind array
+    enclosing-var param
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable param[..][0]
+    var-kind field [0]
+    enclosing-var param[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..ffixedint():::ENTER
+  ppt-type enter
+  variable ::DIM1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::DIM2
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalBoo
+    var-kind variable
+    rep-type hashcode
+    dec-type boo
+  variable ::globalBoo.a
+    var-kind field a
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.b
+    var-kind field b
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.c
+    var-kind field c
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalBoo.c[..]
+    var-kind array
+    enclosing-var ::globalBoo.c
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalBoo.d
+    var-kind field d
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type void*
+    flags non_null 
+  variable ::globalBoo.d[..]
+    var-kind array
+    enclosing-var ::globalBoo.d
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable param
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+    flags is_param 
+  variable param[..]
+    var-kind array
+    enclosing-var param
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable param[..][0]
+    var-kind field [0]
+    enclosing-var param[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..ffixedint():::EXIT0
+  ppt-type subexit
+  variable ::DIM1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::DIM2
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalBoo
+    var-kind variable
+    rep-type hashcode
+    dec-type boo
+  variable ::globalBoo.a
+    var-kind field a
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.b
+    var-kind field b
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.c
+    var-kind field c
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalBoo.c[..]
+    var-kind array
+    enclosing-var ::globalBoo.c
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalBoo.d
+    var-kind field d
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type void*
+    flags non_null 
+  variable ::globalBoo.d[..]
+    var-kind array
+    enclosing-var ::globalBoo.d
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable param
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+    flags is_param 
+  variable param[..]
+    var-kind array
+    enclosing-var param
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable param[..][0]
+    var-kind field [0]
+    enclosing-var param[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..fint():::ENTER
+  ppt-type enter
+  variable ::DIM1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::DIM2
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalBoo
+    var-kind variable
+    rep-type hashcode
+    dec-type boo
+  variable ::globalBoo.a
+    var-kind field a
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.b
+    var-kind field b
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.c
+    var-kind field c
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalBoo.c[..]
+    var-kind array
+    enclosing-var ::globalBoo.c
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalBoo.d
+    var-kind field d
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type void*
+    flags non_null 
+  variable ::globalBoo.d[..]
+    var-kind array
+    enclosing-var ::globalBoo.d
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable param
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+    flags is_param 
+  variable param[..]
+    var-kind array
+    enclosing-var param
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable param[..][0]
+    var-kind field [0]
+    enclosing-var param[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..fint():::EXIT0
+  ppt-type subexit
+  variable ::DIM1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::DIM2
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalBoo
+    var-kind variable
+    rep-type hashcode
+    dec-type boo
+  variable ::globalBoo.a
+    var-kind field a
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.b
+    var-kind field b
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.c
+    var-kind field c
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalBoo.c[..]
+    var-kind array
+    enclosing-var ::globalBoo.c
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalBoo.d
+    var-kind field d
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type void*
+    flags non_null 
+  variable ::globalBoo.d[..]
+    var-kind array
+    enclosing-var ::globalBoo.d
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable param
+    var-kind variable
+    rep-type hashcode
+    dec-type int**
+    flags is_param 
+  variable param[..]
+    var-kind array
+    enclosing-var param
+    array 1
+    rep-type hashcode[]
+    dec-type int*[]
+  variable param[..][0]
+    var-kind field [0]
+    enclosing-var param[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::DIM1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::DIM2
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalBoo
+    var-kind variable
+    rep-type hashcode
+    dec-type boo
+  variable ::globalBoo.a
+    var-kind field a
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.b
+    var-kind field b
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.c
+    var-kind field c
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalBoo.c[..]
+    var-kind array
+    enclosing-var ::globalBoo.c
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalBoo.d
+    var-kind field d
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type void*
+    flags non_null 
+  variable ::globalBoo.d[..]
+    var-kind array
+    enclosing-var ::globalBoo.d
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::DIM1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::DIM2
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalBoo
+    var-kind variable
+    rep-type hashcode
+    dec-type boo
+  variable ::globalBoo.a
+    var-kind field a
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.b
+    var-kind field b
+    enclosing-var ::globalBoo
+    rep-type int
+    dec-type int
+  variable ::globalBoo.c
+    var-kind field c
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::globalBoo.c[..]
+    var-kind array
+    enclosing-var ::globalBoo.c
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::globalBoo.d
+    var-kind field d
+    enclosing-var ::globalBoo
+    rep-type hashcode
+    dec-type void*
+    flags non_null 
+  variable ::globalBoo.d[..]
+    var-kind array
+    enclosing-var ::globalBoo.d
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+

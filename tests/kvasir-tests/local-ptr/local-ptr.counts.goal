@@ -1,0 +1,4 @@
+..foo() ENTER/78: 1 EXIT0/78: 1
+..leaf() ENTER/78: 1 EXIT0/78: 1
+..main() ENTER/78: 1 EXIT0/81: 1
+..nonleaf() ENTER/78: 1 EXIT0/78: 1

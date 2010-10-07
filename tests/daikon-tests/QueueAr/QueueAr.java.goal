@@ -1,0 +1,184 @@
+// [[ This is an edited version compared to the DSAA book.  Jeremy has
+// removed the no-arg constructor, inlined the increment method, and
+// updated the makeEmpty method. ]]
+
+package DataStructures;
+
+// QueueAr class
+//
+
+// ******************PUBLIC OPERATIONS*********************
+// void enqueue( x )      --> Insert x
+// Object getFront( )     --> Return least recently inserted item
+// Object dequeue( )      --> Return and remove least recent item
+// boolean isEmpty( )     --> Return true if empty; else false
+// boolean isFull( )      --> Return true if capacity reached
+// void makeEmpty( )      --> Remove all items
+// ******************ERRORS********************************
+// Overflow thrown for enqueue on full queue
+
+/**
+ * Array-based implementation of the queue.
+ * @author Mark Allen Weiss
+ */
+public class QueueAr
+{
+
+  /*@ invariant this.theArray != null; */
+  /*@ invariant \typeof(this.theArray) == \type(java.lang.Object[]); */
+  /*@ invariant this.currentSize >= 0; */
+  /*@ invariant this.front >= 0; */
+  /*@ invariant this.back >= 0; */
+  /*@ invariant this.currentSize <= this.theArray.length; */
+  /*@ invariant this.front <= this.theArray.length-1; */
+  /*@ invariant this.back <= this.theArray.length-1; */
+  /*@ invariant theArray.owner == this; */
+
+  //@ invariant (currentSize > 0) ==> ((front <= back) == (currentSize == back - front + 1))
+  //@ invariant (currentSize > 0) ==> ((front > back) == (currentSize == theArray.length + back - front + 1))
+  //@ invariant (currentSize == 0) ==> ((front <= back) == (front == 0 && back == theArray.length - 1))
+  //@ invariant (currentSize == 0) ==> ((front > back) == (back == front - 1))
+
+  //@ invariant (currentSize == 0) ==> (\forall int i; (0 <= i && i < theArray.length) ==> (theArray[i] == null))
+  //@ invariant (currentSize > 0 && front <= back) ==> (\forall int i; (0 <= i && i < front) ==> (theArray[i] == null))
+  //@ invariant (currentSize > 0 && front <= back) ==> (\forall int i; (i >= front && i <= back) ==> (theArray[i] != null))
+  //@ invariant (currentSize > 0 && front <= back) ==> (\forall int i; (back < i && i < theArray.length) ==> (theArray[i] == null))
+  //@ invariant (currentSize > 0 && back < front) ==> (\forall int i; (0 <= i && i <= back) ==> (theArray[i] != null))
+  //@ invariant (currentSize > 0 && back < front) ==> (\forall int i; (i > back && i < front) ==> (theArray[i] == null))
+  //@ invariant (currentSize > 0 && back < front) ==> (\forall int i; (front <= i && i < theArray.length) ==> (theArray[i] != null))
+
+  //@ requires capacity >= 1
+  /*@ ensures this.currentSize == this.front; */
+  /*@ ensures \old(capacity) == this.theArray.length; */
+  /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)); */
+  /*@ ensures this.currentSize == 0; */
+  /*@ ensures \old(capacity) == this.back + 1; */
+  /**
+   * Construct the queue.
+   **/
+  public QueueAr( int capacity )
+  {
+    theArray = new Object[ capacity ];
+    /*@ set theArray.owner = this; */
+    currentSize = 0;
+    front = 0;
+    back = theArray.length-1;
+  }
+
+  /**@ ensures (\result == false)  ==  (this.currentSize >= 1); */
+  /*@ ensures (\result == false)  ==  (this.theArray[this.back] != null); */
+  /*@ ensures (\result == false)  ==  (this.theArray[this.front] != null); */
+  /*@ ensures (\result == true)  ==  (this.currentSize == 0); */
+  /**@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) == \typeof(null)))); */
+  /*@ ensures (this.currentSize == 0)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))); */
+  /**
+   * Test if the queue is logically empty.
+   * @return true if empty, false otherwise.
+   **/
+  public boolean isEmpty( )
+  {
+    return currentSize == 0;
+  }
+
+  /*@ ensures (this.currentSize <= this.theArray.length-1)  ==  (\result == false); */
+  /**
+   * Test if the queue is logically full.
+   * @return true if full, false otherwise.
+   **/
+  public boolean isFull( )
+  {
+    return currentSize == theArray.length;
+  }
+
+  /*@ modifies this.theArray[*], this.currentSize, this.front, this.back; */
+  /*@ ensures this.currentSize == this.front; */
+  /*@ ensures this.back == this.theArray.length-1; */
+  /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)); */
+  /*@ ensures this.currentSize == 0; */
+  /**
+   * Make the queue logically empty.
+   **/
+  public void makeEmpty( )
+  {
+    currentSize = 0;
+    front = 0;
+    back = theArray.length-1;
+    java.util.Arrays.fill(theArray, 0, theArray.length, null);
+  }
+
+  /*@ ensures \result == this.theArray[this.front]; */
+  /*@ ensures (\result != null)  ==  (this.currentSize >= 1); */
+  /**@ ensures (\result == null)  ==>  ((\forall int i; (0 <= i && i <= \old(this.theArray.length-1)) ==> (\old(\typeof(this.theArray[i])) == \typeof(null)))); */
+  /*@ ensures (\result == null)  ==>  ((\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null))); */
+  /*@ ensures (this.currentSize >= 1)  ==  (this.theArray[this.back] != null); */
+  /**
+   * Get the least recently inserted item in the queue.
+   * Does not alter the queue.
+   * @return the least recently inserted item in the queue, or null, if empty.
+   **/
+  public Object getFront( )
+  {
+    if( isEmpty( ) )
+      return null;
+    return theArray[ front ];
+  }
+
+  /*@ requires this.theArray[this.front] != null; */
+  /*@ requires this.theArray[this.back] != null; */
+  /*@ modifies this.theArray[*], this.currentSize, this.front; */
+  /*@ ensures \result == \old(this.theArray[this.front]); */
+  /*@ ensures (\forall int i, j; (this.front <= i && i <= this.theArray.length-1 && \old(this.front+1) <= j && j <= \old(this.theArray.length-1) && (i-(this.front)) == (j-(\old(this.front+1)))) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
+  /**@ ensures (\forall int i, j; (\old(this.front)+1 <= i && i <= this.theArray.length-1 && this.front <= j && j <= \old(this.theArray.length-1) && (i-(\old(this.front)+1)) == (j-(this.front))) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
+  /*@ ensures (\forall int i, j; (0 <= i && i <= \old(this.front)-1 && 0 <= j && j <= \old(this.front-1) && i == j) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
+  /*@ ensures this.theArray[\old(this.front)] == null; */
+  /*@ ensures \old(this.currentSize) == this.currentSize + 1; */
+  /*@ ensures !(\forall int i; (\old(this.front) <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != this.theArray[this.currentSize])); */
+  /**
+   * Return and remove the least recently inserted item from the queue.
+   * @return the least recently inserted item in the queue, or null, if empty.
+   **/
+  public Object dequeue( )
+  {
+    if( isEmpty( ) )
+      return null;
+    currentSize--;
+
+    Object frontItem = theArray[ front ];
+    theArray[ front ] = null;
+    if ( ++front == theArray.length )
+      front = 0;
+    return frontItem;
+  }
+
+  /*@ requires x != null; */
+  /*@ requires this.currentSize <= this.theArray.length-1; */
+  /*@ modifies this.theArray[*], this.currentSize, this.back; */
+  /*@ ensures \old(x) == this.theArray[this.back]; */
+  /*! ensures (\forall int i, j; (this.back+1 <= i && i <= this.theArray.length-1 && this.back+1 <= j && j <= \old(this.theArray.length-1) && (i-(this.back+1)) == (j-this.back+1))) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
+  /**@ ensures (\forall int i, j; (0 <= i && i <= this.back-1 && 0 <= j && j <= \old(this.back) && i == j) ==> ( this.theArray[i] == this.theArray[j] )); */
+  /*! ensures (\forall int i, j; (0 <= i && i <= this.back-1 && 0 <= j && j <= this.back-1 && i == j) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
+  /*! ensures \old(this.theArray[\new(this.back)]) == null; */
+  /*@ ensures (\forall int i, j; (0 <= i && i <= this.back-1 && 0 <= j && j <= \old(this.back) && i == j) ==> ( this.theArray[i] == \old(this.theArray[j]) )); */
+  /*@ ensures this.theArray[this.front] != null; */
+  /*@ ensures \old(this.currentSize) == this.currentSize - 1; */
+  /**
+   * Insert a new item into the queue.
+   * @param x the item to insert.
+   * @exception Overflow if queue is full.
+   **/
+  public void enqueue( Object x ) throws Overflow
+  {
+    if( isFull( ) )
+      throw new Overflow( );
+    if ( ++back == theArray.length )
+      back = 0;
+    theArray[ back ] = x;
+    currentSize++;
+  }
+
+  /*@ spec_public */ private Object [ ] theArray;
+  /*@ spec_public */ private int        currentSize;
+  /*@ spec_public */ private int        front;
+  /*@ spec_public */ private int        back;
+
+}

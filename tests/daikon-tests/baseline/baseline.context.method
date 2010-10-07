@@ -1,0 +1,264 @@
+===========================================================================
+DataAvg:::OBJECT
+this.count <= 1000
+this.count >= 0
+this.sum >= this.count
+===========================================================================
+DataAvg.DataAvg():::ENTER
+<Called from RandomMean.compute> or <Called from TestScores.classAve>
+===========================================================================
+DataAvg.DataAvg():::EXIT13
+this.sum == 0
+===========================================================================
+DataAvg.average():::ENTER
+(<Called from RandomMean.compute>)  <==>  (this.count == 1000)
+(<Called from RandomMean.compute>)  <==>  (this.sum == 123856)
+<Called from RandomMean.compute> or <Called from TestScores.classAve>
+this.count >= 5
+this.sum > this.count
+===========================================================================
+DataAvg.average():::ENTER;condition="<Called from TestScores.classAve>"
+<Called from TestScores.classAve>
+===========================================================================
+DataAvg.average():::ENTER;condition="not(<Called from TestScores.classAve>)"
+<Called from RandomMean.compute>
+this.sum == 123856
+this.count == 1000
+===========================================================================
+DataAvg.average():::ENTER;condition="<Called from RandomMean.compute>"
+<Called from RandomMean.compute>
+this.sum == 123856
+this.count == 1000
+===========================================================================
+DataAvg.average():::ENTER;condition="not(<Called from RandomMean.compute>)"
+<Called from TestScores.classAve>
+===========================================================================
+DataAvg.average():::EXIT24
+this.sum == orig(this.sum)
+this.count == orig(this.count)
+(<Called from TestScores.classAve>)  <==>  (return <= 100)
+(<Called from RandomMean.compute>)  <==>  (return == 123)
+(<Called from RandomMean.compute>)  <==>  (this.count == 1000)
+(<Called from RandomMean.compute>)  <==>  (this.sum == 123856)
+return < this.sum
+return != this.count
+===========================================================================
+DataAvg.average():::EXIT24;condition="<Called from TestScores.classAve>"
+<Called from TestScores.classAve>
+return <= 100
+this.count >= 5
+return > this.count
+this.sum > this.count
+===========================================================================
+DataAvg.average():::EXIT24;condition="not(<Called from TestScores.classAve>)"
+<Called from RandomMean.compute>
+return == 123
+this.sum == 123856
+this.count == 1000
+===========================================================================
+DataAvg.average():::EXIT24;condition="<Called from RandomMean.compute>"
+<Called from RandomMean.compute>
+return == 123
+this.sum == 123856
+this.count == 1000
+===========================================================================
+DataAvg.average():::EXIT24;condition="not(<Called from RandomMean.compute>)"
+<Called from TestScores.classAve>
+return <= 100
+this.count >= 5
+return > this.count
+this.sum > this.count
+===========================================================================
+DataAvg.insert(int):::ENTER
+(<Called from TestScores.classAve>)  ==>  (element <= 100)
+(<Called from TestScores.classAve>)  ==>  (element > this.count)
+(<Called from RandomMean.compute>)  ==>  (element != this.sum)
+element != 0
+element <= 1275
+element >= -1023
+<Called from RandomMean.compute> or <Called from TestScores.classAve>
+element != this.count
+===========================================================================
+DataAvg.insert(int):::ENTER;condition="<Called from TestScores.classAve>"
+element <= 100
+<Called from TestScores.classAve>
+element > this.count
+===========================================================================
+DataAvg.insert(int):::ENTER;condition="not(<Called from TestScores.classAve>)"
+<Called from RandomMean.compute>
+element != this.sum
+===========================================================================
+DataAvg.insert(int):::ENTER;condition="<Called from RandomMean.compute>"
+<Called from RandomMean.compute>
+element != this.sum
+===========================================================================
+DataAvg.insert(int):::ENTER;condition="not(<Called from RandomMean.compute>)"
+element <= 100
+<Called from TestScores.classAve>
+element > this.count
+===========================================================================
+DataAvg.insert(int):::EXIT19
+element == orig(element)
+element <= this.sum
+element != this.count
+this.sum > this.count
+this.sum != orig(this.sum)
+this.count != orig(this.sum)
+orig(this.count) == this.count - 1
+orig(this.sum) == - element + this.sum
+===========================================================================
+DataAvg.insert(int):::EXIT19;condition="<Called from TestScores.classAve>"
+element <= 100
+<Called from TestScores.classAve>
+orig(this.sum) >= 0
+orig(this.count) >= 0
+element > this.count
+element > orig(this.count)
+this.sum > orig(this.sum)
+orig(this.sum) >= orig(this.count)
+===========================================================================
+DataAvg.insert(int):::EXIT19;condition="not(<Called from TestScores.classAve>)"
+element != 0
+element <= 1275
+element >= -1023
+<Called from RandomMean.compute>
+element != orig(this.sum)
+element != orig(this.count)
+orig(this.sum) >= orig(this.count)
+===========================================================================
+DataAvg.insert(int):::EXIT19;condition="<Called from RandomMean.compute>"
+element != 0
+element <= 1275
+element >= -1023
+<Called from RandomMean.compute>
+element != orig(this.sum)
+element != orig(this.count)
+orig(this.sum) >= orig(this.count)
+===========================================================================
+DataAvg.insert(int):::EXIT19;condition="not(<Called from RandomMean.compute>)"
+element <= 100
+<Called from TestScores.classAve>
+orig(this.sum) >= 0
+orig(this.count) >= 0
+element > this.count
+element > orig(this.count)
+this.sum > orig(this.sum)
+orig(this.sum) >= orig(this.count)
+===========================================================================
+Main.main(java.lang.String[]):::ENTER
+args has only one value
+args.class == "[Ljava.lang.String;"
+args[] == []
+args[].toString == []
+<Called from UnknownClass.unknownMethod>
+size(args[]) == 0
+===========================================================================
+Main.main(java.lang.String[]):::EXIT10
+args == orig(args)
+args[] == []
+args[].toString == []
+===========================================================================
+RandomMean.compute():::ENTER
+<Called from Main.main>
+===========================================================================
+RandomMean.compute():::EXIT20
+===========================================================================
+TestScores.classAve(int[]):::ENTER
+scores != null
+scores[i] > i
+size(scores[]) >= 5
+scores[] elements >= size(scores[])-1
+===========================================================================
+TestScores.classAve(int[]):::ENTER;condition="<Called from TestScores.six170>"
+<Called from TestScores.six170>
+===========================================================================
+TestScores.classAve(int[]):::ENTER;condition="not(<Called from TestScores.six170>)"
+<Called from TestScores.six821> or <Called from TestScores.six893>
+scores[] elements > size(scores[])
+===========================================================================
+TestScores.classAve(int[]):::ENTER;condition="<Called from TestScores.six821>"
+<Called from TestScores.six821>
+===========================================================================
+TestScores.classAve(int[]):::ENTER;condition="not(<Called from TestScores.six821>)"
+<Called from TestScores.six170> or <Called from TestScores.six893>
+===========================================================================
+TestScores.classAve(int[]):::ENTER;condition="<Called from TestScores.six893>"
+scores[] == [100, 100, 100, 100, 100]
+scores[] elements == 100
+<Called from TestScores.six893>
+size(scores[]) == 5
+===========================================================================
+TestScores.classAve(int[]):::ENTER;condition="not(<Called from TestScores.six893>)"
+<Called from TestScores.six170> or <Called from TestScores.six821> or <Called from TestScores.six893>
+===========================================================================
+TestScores.classAve(int[]):::ENTER;condition="<Called from TestScores.six893>"
+OneOf problem: num_elts 5, num_mod 3: scores[] elements one of { 60, 70, 80, 90, 100 }
+scores[] elements one of { 60, 70, 80, 90, 100 }
+<Called from TestScores.six893>
+size(scores[]) == 5
+===========================================================================
+TestScores.classAve(int[]):::ENTER;condition="not(<Called from TestScores.six893>)"
+<Called from TestScores.six170> or <Called from TestScores.six821> or <Called from TestScores.six893>
+===========================================================================
+TestScores.classAve(int[]):::EXIT17
+scores == orig(scores)
+scores[] == orig(scores[])
+(<Called from TestScores.six170>)  <==>  (return one of { 65, 67, 70 })
+return <= 100
+size(scores[]) >= 5
+scores[] elements >= size(scores[])-1
+return > size(scores[])
+===========================================================================
+TestScores.classAve(int[]):::EXIT17;condition="<Called from TestScores.six170>"
+<Called from TestScores.six170>
+return one of { 65, 67, 70 }
+===========================================================================
+TestScores.classAve(int[]):::EXIT17;condition="not(<Called from TestScores.six170>)"
+scores[i] > i
+<Called from TestScores.six821> or <Called from TestScores.six893>
+scores[] elements > size(scores[])
+===========================================================================
+TestScores.classAve(int[]):::EXIT17;condition="<Called from TestScores.six821>"
+<Called from TestScores.six821>
+===========================================================================
+TestScores.classAve(int[]):::EXIT17;condition="not(<Called from TestScores.six821>)"
+scores[i] > i
+<Called from TestScores.six170> or <Called from TestScores.six893>
+===========================================================================
+TestScores.classAve(int[]):::EXIT17;condition="<Called from TestScores.six893>"
+scores[] == [100, 100, 100, 100, 100]
+scores[] elements == 100
+<Called from TestScores.six893>
+return == 100
+size(scores[]) == 5
+===========================================================================
+TestScores.classAve(int[]):::EXIT17;condition="not(<Called from TestScores.six893>)"
+scores[i] > i
+<Called from TestScores.six170> or <Called from TestScores.six821> or <Called from TestScores.six893>
+===========================================================================
+TestScores.classAve(int[]):::EXIT17;condition="<Called from TestScores.six893>"
+OneOf problem: num_elts 5, num_mod 3: scores[] elements one of { 60, 70, 80, 90, 100 }
+scores[] elements one of { 60, 70, 80, 90, 100 }
+<Called from TestScores.six893>
+return == 80
+OneOf problem: num_elts 5, num_mod 3: orig(scores[]) elements one of { 60, 70, 80, 90, 100 }
+size(scores[]) == 5
+===========================================================================
+TestScores.classAve(int[]):::EXIT17;condition="not(<Called from TestScores.six893>)"
+scores[i] > i
+<Called from TestScores.six170> or <Called from TestScores.six821> or <Called from TestScores.six893>
+===========================================================================
+TestScores.six170():::ENTER
+<Called from Main.main>
+===========================================================================
+TestScores.six170():::EXIT32
+===========================================================================
+TestScores.six821():::ENTER
+<Called from Main.main>
+===========================================================================
+TestScores.six821():::EXIT46
+===========================================================================
+TestScores.six893():::ENTER
+<Called from Main.main>
+===========================================================================
+TestScores.six893():::EXIT70

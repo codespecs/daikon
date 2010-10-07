@@ -1,0 +1,297 @@
+===========================================================================
+std.check_delimiter(char;)int:::ENTER
+ch >= -1
+===========================================================================
+std.check_delimiter(char;)int:::EXIT20
+return == 1
+===========================================================================
+std.check_delimiter(char;)int:::EXIT21
+return == 0
+ch > return
+===========================================================================
+std.check_delimiter(char;)int:::EXIT
+ch == orig(ch)
+ch >= -1
+return one of { 0, 1 }
+ch != return
+===========================================================================
+std.constant(int;char *;int;)int:::ENTER
+state one of { 27, 29 }
+token_str != null
+token_ind >= 2
+state > token_ind
+===========================================================================
+std.constant(int;char *;int;)int:::EXIT38
+state == 27
+return == 27
+token_str[] == orig(token_str[])
+===========================================================================
+std.constant(int;char *;int;)int:::EXIT39
+state == 29
+token_ind one of { 2, 3 }
+return == 29
+===========================================================================
+std.constant(int;char *;int;)int:::EXIT
+state == return
+state == orig(state)
+token_str == orig(token_str)
+token_ind == orig(token_ind)
+state one of { 27, 29 }
+token_str != null
+token_ind >= 2
+return one of { 27, 29 }
+state > token_ind
+token_ind < return
+===========================================================================
+std.error_or_eof_case(token_stream;token;int;char *;int;char;)token:::ENTER
+cu_state one of { 0, 26 }
+token_str != null
+token_ind >= 1
+ch one of { -1, 0, 62 }
+cu_state != token_ind
+cu_state is a bitwise subset of ch
+token_ind != ch
+===========================================================================
+std.error_or_eof_case(token_stream;token;int;char *;int;char;)token:::EXIT18
+ch == -1
+cu_state > ch
+token_ind > ch
+===========================================================================
+std.error_or_eof_case(token_stream;token;int;char *;int;char;)token:::EXIT19
+cu_state == 0
+token_str[] one of { "", ">" }
+token_ind == 1
+ch one of { 0, 62 }
+cu_state <= ch
+===========================================================================
+std.error_or_eof_case(token_stream;token;int;char *;int;char;)token:::EXIT
+cu_state == orig(cu_state)
+token_str == orig(token_str)
+token_ind == orig(token_ind)
+ch == orig(ch)
+cu_state one of { 0, 26 }
+token_str != null
+token_ind >= 1
+ch one of { -1, 0, 62 }
+cu_state != token_ind
+cu_state is a bitwise subset of ch
+token_ind != ch
+token_str[] == orig(token_str[])
+===========================================================================
+std.get_actual_token(char *;int;)int:::ENTER
+token_str != null
+token_ind >= 1
+===========================================================================
+std.get_actual_token(char *;int;)int:::EXIT
+token_str == orig(token_str)
+token_ind == orig(token_ind)
+token_str != null
+token_ind >= 1
+===========================================================================
+std.get_char(character_stream;)CHARACTER:::EXIT
+return >= -1
+===========================================================================
+std.is_end_of_character_stream(character_stream;)BOOLEAN:::EXIT4
+return == 1
+===========================================================================
+std.is_end_of_character_stream(character_stream;)BOOLEAN:::EXIT5
+return == 0
+===========================================================================
+std.is_end_of_character_stream(character_stream;)BOOLEAN:::EXIT
+return one of { 0, 1 }
+===========================================================================
+std.is_eof_token(token;)BOOLEAN:::EXIT45
+return == 1
+===========================================================================
+std.is_eof_token(token;)BOOLEAN:::EXIT46
+return == 0
+===========================================================================
+std.is_eof_token(token;)BOOLEAN:::EXIT
+return one of { 0, 1 }
+===========================================================================
+std.keyword(int;)int:::ENTER
+===========================================================================
+std.keyword(int;)int:::EXIT22
+state == 6
+return == 6
+===========================================================================
+std.keyword(int;)int:::EXIT23
+state == 9
+return == 9
+===========================================================================
+std.keyword(int;)int:::EXIT24
+state == 11
+return == 11
+===========================================================================
+std.keyword(int;)int:::EXIT25
+state == 13
+return == 13
+===========================================================================
+std.keyword(int;)int:::EXIT26
+state == 16
+return == 16
+===========================================================================
+std.keyword(int;)int:::EXIT
+state == return
+state == orig(state)
+===========================================================================
+std.next_state(int;char;)int:::ENTER
+ch >= -1
+===========================================================================
+std.next_state(int;char;)int:::EXIT41
+state == return
+state one of { -3, -2, -1 }
+return one of { -3, -2, -1 }
+state <= ch
+===========================================================================
+std.next_state(int;char;)int:::EXIT42
+state >= 0
+return >= 0
+state < ch
+ch > return
+===========================================================================
+std.next_state(int;char;)int:::EXIT43
+return != 0
+state != ch
+===========================================================================
+std.next_state(int;char;)int:::EXIT44
+state >= 0
+return one of { -3, -1, 17 }
+return != 0
+state != return
+===========================================================================
+std.next_state(int;char;)int:::EXIT
+state == orig(state)
+ch == orig(ch)
+ch >= -1
+ch >= return
+===========================================================================
+std.numeric_case(token_stream;token;char;char *;int;)token:::ENTER
+ch >= -1
+token_str != null
+token_ind one of { 2, 3 }
+ch != token_ind
+===========================================================================
+std.numeric_case(token_stream;token;char;char *;int;)token:::EXIT16
+orig(token_ind) == 2
+ch != orig(ch)
+token_ind < orig(ch)
+orig(ch) > orig(token_ind)
+===========================================================================
+std.numeric_case(token_stream;token;char;char *;int;)token:::EXIT17
+ch == orig(ch)
+token_ind one of { 1, 2 }
+token_ind < orig(token_ind)
+===========================================================================
+std.numeric_case(token_stream;token;char;char *;int;)token:::EXIT
+token_str == orig(token_str)
+ch >= -1
+token_str != null
+token_ind >= 1
+ch != token_ind
+ch != orig(token_ind)
+token_ind != orig(ch)
+===========================================================================
+std.open_character_stream(string;)character_stream:::ENTER
+FILENAME == null
+===========================================================================
+std.open_character_stream(string;)character_stream:::EXIT
+FILENAME == orig(FILENAME)
+FILENAME == null
+===========================================================================
+std.open_token_stream(string;)token_stream:::ENTER
+FILENAME == null
+===========================================================================
+std.open_token_stream(string;)token_stream:::EXIT
+FILENAME == orig(FILENAME)
+FILENAME == null
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT47
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT48
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT49
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT50
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT51
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT52
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT53
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT54
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT55
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT56
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT57
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT58
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT59
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT60
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT61
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT62
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT63
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT64
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT65
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT
+return == 1
+===========================================================================
+std.special(int;)int:::ENTER
+===========================================================================
+std.special(int;)int:::EXIT28
+state == 19
+return == 19
+===========================================================================
+std.special(int;)int:::EXIT29
+state == 20
+return == 20
+===========================================================================
+std.special(int;)int:::EXIT30
+state == 21
+return == 21
+===========================================================================
+std.special(int;)int:::EXIT31
+state == 22
+return == 22
+===========================================================================
+std.special(int;)int:::EXIT32
+state == 23
+return == 23
+===========================================================================
+std.special(int;)int:::EXIT33
+state == 24
+return == 24
+===========================================================================
+std.special(int;)int:::EXIT34
+state == 25
+return == 25
+===========================================================================
+std.special(int;)int:::EXIT35
+state == 32
+return == 32
+===========================================================================
+std.special(int;)int:::EXIT
+state == return
+state == orig(state)
+===========================================================================
+std.unget_char(CHARACTER;character_stream;)void:::ENTER
+ch != 0
+ch >= -1
+===========================================================================
+std.unget_char(CHARACTER;character_stream;)void:::EXIT7
+===========================================================================
+std.unget_char(CHARACTER;character_stream;)void:::EXIT
+ch == orig(ch)
+ch != 0
+ch >= -1

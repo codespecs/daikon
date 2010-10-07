@@ -1,0 +1,47 @@
+===========================================================================
+..main():::ENTER
+::global_const == 50
+::static_const == 100
+A::static_const_member == 10
+argc == 1
+argv has only one value
+argv[] == [./ConstantTest]
+===========================================================================
+..main():::EXIT
+::global_const == orig(::global_const)
+::static_const == orig(::static_const)
+A::static_const_member == orig(A::static_const_member)
+::global_const == 50
+::static_const == 100
+A::static_const_member == 10
+argv[] == [./ConstantTest]
+return == 0
+===========================================================================
+A.A():::ENTER
+::global_const == 50
+::static_const == 100
+A::static_const_member == 10
+this has only one value
+===========================================================================
+A.A():::EXIT
+::global_const == orig(::global_const)
+::static_const == orig(::static_const)
+A::static_const_member == orig(A::static_const_member)
+::global_const == 50
+::static_const == 100
+A::static_const_member == 10
+===========================================================================
+A.getInt():::ENTER
+::global_const == 50
+::static_const == 100
+A::static_const_member == 10
+this has only one value
+===========================================================================
+A.getInt():::EXIT
+::global_const == orig(::global_const)
+::static_const == orig(::static_const)
+A::static_const_member == orig(A::static_const_member)
+::global_const == 50
+::static_const == 100
+A::static_const_member == 10
+return == 10

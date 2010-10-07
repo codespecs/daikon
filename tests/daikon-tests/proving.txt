@@ -1,0 +1,33 @@
+
+I don't always keep this up to date, but it is usually close.
+See the paper-%: rule in ./Makefile for what I expect to be using.
+
+Ready (enough)
+ FixedSizeSet
+ StackAr
+ DisjSets
+ GeoSegment (& GeoPoint)
+ RatNum
+
+Proving problems
+ QueueAr
+ LinkedList
+ Graph
+ TinySet
+
+TestSuite
+ StreetNumberSet
+ ArrayList
+ JML (?)
+ Vector
+
+Further investication
+ RatPoly
+ RatPolyStack
+
+Losers
+ RatTermVec
+ WeightedNodePath
+ Huffman (?)
+ CursorList (??)
+

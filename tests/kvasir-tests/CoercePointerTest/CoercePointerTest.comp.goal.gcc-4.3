@@ -1,0 +1,113 @@
+..main():::ENTER
+::junk ::junk.baz_int
+::junk.baz_str
+
+..main():::EXIT0
+::junk ::junk.baz_int
+::junk.baz_str
+return
+
+..normal_view():::ENTER
+::junk ::junk.baz_int
+::junk.baz_str
+f
+f->foo_baz
+f->foo_baz->baz_int f->foo_baz[0]
+f->foo_baz->baz_str
+f->foo_double
+f->foo_int f[0]
+f->foo_str
+
+..normal_view():::EXIT0
+::junk ::junk.baz_int
+::junk.baz_str
+f
+f->foo_baz
+f->foo_baz->baz_int f->foo_baz[0]
+f->foo_baz->baz_str
+f->foo_double
+f->foo_int f[0]
+f->foo_str
+
+..view_bar():::ENTER
+::junk ::junk.baz_int
+::junk.baz_str
+b
+b->bar_int b[0]
+
+..view_bar():::EXIT0
+::junk ::junk.baz_int
+::junk.baz_str
+b
+b->bar_int b[0]
+
+..view_bar_as_foo():::ENTER
+::junk ::junk.baz_int
+::junk.baz_str
+bar_as_foo
+bar_as_foo->foo_baz
+bar_as_foo->foo_baz->baz_int bar_as_foo->foo_baz[0]
+bar_as_foo->foo_baz->baz_str
+bar_as_foo->foo_double
+bar_as_foo->foo_int bar_as_foo[0]
+bar_as_foo->foo_str
+
+..view_bar_as_foo():::EXIT0
+::junk ::junk.baz_int
+::junk.baz_str
+bar_as_foo
+bar_as_foo->foo_baz
+bar_as_foo->foo_baz->baz_int bar_as_foo->foo_baz[0]
+bar_as_foo->foo_baz->baz_str
+bar_as_foo->foo_double
+bar_as_foo->foo_int bar_as_foo[0]
+bar_as_foo->foo_str
+
+..view_foo():::ENTER
+::junk ::junk.baz_int
+::junk.baz_str
+f
+f->foo_baz
+f->foo_baz->baz_int f->foo_baz[0]
+f->foo_baz->baz_str
+f->foo_double
+f->foo_int f[0]
+f->foo_str
+
+..view_foo():::EXIT0
+::junk ::junk.baz_int
+::junk.baz_str
+f
+f->foo_baz
+f->foo_baz->baz_int f->foo_baz[0]
+f->foo_baz->baz_str
+f->foo_double
+f->foo_int f[0]
+f->foo_str
+
+..view_foo_and_bar():::ENTER
+::junk ::junk.baz_int
+::junk.baz_str
+b
+b->bar_int b[0]
+f
+f->foo_baz
+f->foo_baz->baz_int f->foo_baz[0]
+f->foo_baz->baz_str
+f->foo_double
+f->foo_int f[0]
+f->foo_str
+
+..view_foo_and_bar():::EXIT0
+::junk ::junk.baz_int
+::junk.baz_str
+b
+b->bar_int b[0]
+f
+f->foo_baz
+f->foo_baz->baz_int f->foo_baz[0]
+f->foo_baz->baz_str
+f->foo_double
+f->foo_int f[0]
+f->foo_str
+

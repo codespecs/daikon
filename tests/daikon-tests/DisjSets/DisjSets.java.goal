@@ -1,0 +1,125 @@
+package DataStructures;
+
+// DisjSets class
+//
+// CONSTRUCTION: with int representing initial number of sets
+//
+// ******************PUBLIC OPERATIONS*********************
+// void union( root1, root2 ) --> Merge two sets
+// int find( x )              --> Return set containing x
+// ******************ERRORS********************************
+// No error checking is performed
+
+/**
+ * Disjoint set class. (Package friendly so not used accidentally)
+ * Does not use union heuristics or path compression.
+ * Elements in the set are numbered starting at 0.
+ * @author Mark Allen Weiss
+ * @see DisjSetsFast
+ */
+class DisjSets
+{
+
+  /*@ invariant this.s != null */
+  /*@ invariant (\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] >= -1)) */
+  /*@ invariant (\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] != i)) */
+  /*@ invariant (\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] <= this.s.length-1)) */
+  /*@ invariant s.owner == this */
+  /*@ requires numElements >= 1 */
+  /*@ ensures numElements == this.s.length */
+  /*@ ensures (\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] == -1)) */
+  /**
+   * Construct the disjoint sets object.
+   * @param numElements the initial number of disjoint sets.
+   */
+  public DisjSets( int numElements )
+  {
+    s = new int [ numElements ];
+    /*@ set s.owner = this */
+    for( int i = 0; i < s.length; i++ )
+      s[ i ] = -1;
+  }
+
+  /*@ requires this.s[root1] == this.s[root2] */
+  /*@ requires root1 >= 0 */
+  /*@ requires root2 >= 0 */
+  /*@ requires this.s[root1] == -1 */
+  /*@ requires root1 != root2 */
+  /*@ requires root1 <= this.s.length-1 */
+  /*@ requires root2 <= this.s.length-1 */
+  /*@ modifies this.s[*] */
+  /*@ ensures root1 == this.s[root2] */
+  /**@ ensures this.s[root1] == \old(this.s[root1]) */
+  /**@ ensures this.s[root1] == \old(this.s[root2]) */
+  /*@ ensures (\forall int i; (root2+1 <= i && i <= this.s.length-1) ==> ( this.s[i] == \old(this.s[i]) )) */
+  /*@ ensures (\forall int i; (0 <= i && i <= root2-1) ==> ( this.s[i] == \old(this.s[i]) )) */
+  /**@ ensures root1 <= this.s.length-1 */
+  /**@ ensures root2 <= this.s.length-1 */
+  /**@ ensures (\forall int i, j; (0 <= i && i <= this.s.length-1 && 0 <= j && j <= \old(this.s.length-1) && i == j) ==> (this.s[i] >= \old(this.s[j]))) */
+  /**@ ensures (\forall int i, j; (root1 <= i && i <= this.s.length-1 && \old(root1) <= j && j <= \old(this.s.length-1) && (i-(root1)) == (j-(\old(root1)))) ==> (this.s[i] >= \old(this.s[j]))) */
+  /**@ ensures (\forall int i, j; (root1+1 <= i && i <= this.s.length-1 && \old(root1+1) <= j && j <= \old(this.s.length-1) && (i-(root1+1)) == (j-(\old(root1+1)))) ==> (this.s[i] >= \old(this.s[j]))) */
+  /**@ ensures (\forall int i, j; (root2 <= i && i <= this.s.length-1 && \old(root2) <= j && j <= \old(this.s.length-1) && (i-(root2)) == (j-(\old(root2)))) ==> (this.s[i] >= \old(this.s[j]))) */
+  /**
+   * Union two disjoint sets.  For simplicity, we assume root1 and
+   * root2 are distinct and represent set names.
+   * 
+   * @param root1 the root of set 1.
+   * @param root2 the root of set 2.
+   **/
+  public void unionDisjoint( int root1, int root2 )
+  {
+    s[ root2 ] = root1;
+  }
+
+  /*@ requires set1 >= 0 */
+  /*@ requires set2 >= 0 */
+  /*@ requires set1 <= this.s.length-1 */
+  /*@ requires set2 <= this.s.length-1 */
+  /*@ modifies this.s[*] */
+  /*@ ensures this.s[set1] == \old(this.s[set1]) */
+  /**@ ensures set1 <= this.s.length-1 */
+  /**@ ensures set2 <= this.s.length-1 */
+  /*@ ensures (\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] >= \old(this.s[i]))) */
+  /*@ ensures !(\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] != \old(this.s[set2]))) */
+  /**@ ensures (\forall int i, j; (set1 <= i && i <= this.s.length-1 && \old(set1) <= j && j <= \old(this.s.length-1) && (i-(set1)) == (j-(\old(set1)))) ==> (this.s[i] >= \old(this.s[j]))) */
+  /**@ ensures (\forall int i, j; (set1+1 <= i && i <= this.s.length-1 && \old(set1+1) <= j && j <= \old(this.s.length-1) && (i-(set1+1)) == (j-(\old(set1+1)))) ==> (this.s[i] >= \old(this.s[j]))) */
+  /**@ ensures this.s[set2] >= \old(this.s[set2]) */
+  /**@ ensures (\forall int i, j; (set2 <= i && i <= this.s.length-1 && \old(set2) <= j && j <= \old(this.s.length-1) && (i-(set2)) == (j-(\old(set2)))) ==> (this.s[i] >= \old(this.s[j]))) */
+  /**@ ensures (\forall int i, j; (set2+1 <= i && i <= this.s.length-1 && \old(set2+1) <= j && j <= \old(this.s.length-1) && (i-(set2+1)) == (j-(\old(set2+1)))) ==> (this.s[i] >= \old(this.s[j]))) */
+  /**
+   * Union any two sets.
+   * @param set1 element in set 1.
+   * @param set2 element in set 2.
+   **/
+  public void unionCareful( int set1, int set2 )
+  {
+    int root1 = find(set1);
+    int root2 = find(set2);
+    if (root1 != root2)
+      unionDisjoint(root1, root2);
+  }
+
+  /*@ requires x >= 0 */
+  /*@ requires x <= this.s.length-1 */
+  /*@ ensures (this.s[x] >= 0)  ==>  (!(\forall int i; (0 <= i && i <= this.s.length-1) ==> (this.s[i] != \result))) */
+  /*@ ensures \result >= 0 */
+  /*@ ensures this.s[\result] == -1 */
+  /**@ ensures x <= this.s.length-1 */
+  /*@ ensures (x != \result)  ==  (this.s[x] >= 0) */
+  /**
+   * Perform a find.
+   * Error checks omitted again for simplicity.
+   * @param x the element being searched for.
+   * @return the set containing x.
+   **/
+  public int find( int x )
+  {
+    if( s[ x ] < 0 )
+      return x;
+    else
+      return find( s[ x ] );
+  }
+
+  /*@ spec_public */ private int [ ] s;
+
+}

@@ -1,0 +1,77 @@
+#Test that there's no aliasing between two graphs for PathFinder
+CreateNode n1 2
+CreateNode n2 20
+CreateNode n3 4
+CreateNode n4 4
+CreateNode n5 12
+CreateNode n6 1
+CreateNode n7 3
+CreateNode n8 9
+CreateNode n9 5
+CreateNode n10 3
+CreateNode n11 11
+#set up 1st graph
+CreateGraph A
+AddNode A n1
+AddNode A n2
+AddNode A n3
+AddNode A n4
+AddNode A n5
+AddNode A n6
+AddNode A n7
+AddNode A n8
+AddNode A n9
+AddNode A n10
+AddNode A n11
+AddEdge A n1 n2
+AddEdge A n1 n5
+AddEdge A n1 n8
+AddEdge A n2 n3
+AddEdge A n2 n7
+AddEdge A n3 n4
+AddEdge A n4 n3
+AddEdge A n4 n7
+AddEdge A n4 n11
+AddEdge A n5 n1
+AddEdge A n5 n2
+AddEdge A n5 n6
+AddEdge A n6 n9
+AddEdge A n6 n10
+AddEdge A n7 n11
+AddEdge A n8 n5
+AddEdge A n8 n9
+AddEdge A n9 n5
+AddEdge A n9 n6
+AddEdge A n9 n10
+AddEdge A n10 n7
+AddEdge A n11 n10
+#add more nodes & edges in a disjoint set
+CreateNode n20 1
+CreateNode n21 2
+CreateNode n22 3
+AddNode A n20
+AddNode A n21
+AddNode A n22
+AddEdge A n20 n21
+AddEdge A n20 n22
+AddEdge A n21 n22
+AddEdge A n21 n20
+AddEdge A n22 n20
+AddEdge A n22 n21
+#create a second graph and add some of the same nodes to it
+CreateGraph B
+AddNode B n1
+AddNode B n2
+AddNode B n3
+AddNode B n20
+AddNode B n21
+AddEdge B n1 n20
+AddEdge B n20 n21
+AddEdge B n21 n2
+AddEdge B n2 n1
+
+#do some pathfinding that would work in 1st graph, but not in 2nd
+FindPath A n1 -> n3
+
+#do some pathfinding that would work in 2nd, but not in 1st
+FindPath B n1 -> n21

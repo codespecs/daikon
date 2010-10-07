@@ -1,0 +1,121 @@
+===========================================================================
+..default_args_func(int, int, int):::ENTER
+::globalA == 1000
+::globalB == 2000
+a == 1
+b one of { 2, 5 }
+c one of { 3, 10 }
+===========================================================================
+..default_args_func(int, int, int):::EXIT
+::globalA == orig(::globalA)
+::globalB == orig(::globalB)
+::globalA == 1000
+::globalB == 2000
+===========================================================================
+..main():::ENTER
+::globalA == 1000
+::globalB == 2000
+===========================================================================
+..main():::EXIT
+::globalA == orig(::globalA)
+::globalB == orig(::globalB)
+::globalA == 1000
+::globalB == 2000
+return == 0
+===========================================================================
+..overloaded_foo(char*, char*):::ENTER
+::globalA == 1000
+::globalB == 2000
+a == "hello"
+b == "world"
+===========================================================================
+..overloaded_foo(char*, char*):::EXIT
+::globalA == orig(::globalA)
+::globalB == orig(::globalB)
+::globalA == 1000
+::globalB == 2000
+return == 223
+===========================================================================
+..overloaded_foo(double, double):::ENTER
+::globalA == 1000
+::globalB == 2000
+a == 1.56
+b == 2.15
+===========================================================================
+..overloaded_foo(double, double):::EXIT
+::globalA == orig(::globalA)
+::globalB == orig(::globalB)
+::globalA == 1000
+::globalB == 2000
+return == 3
+===========================================================================
+..overloaded_foo(int):::ENTER
+::globalA == 1000
+::globalB == 2000
+a == 100
+===========================================================================
+..overloaded_foo(int):::EXIT
+::globalA == orig(::globalA)
+::globalB == orig(::globalB)
+::globalA == 1000
+::globalB == 2000
+return == 42
+===========================================================================
+..overloaded_foo(int, int):::ENTER
+::globalA == 1000
+::globalB == 2000
+a == 1
+b == 2
+===========================================================================
+..overloaded_foo(int, int):::EXIT
+::globalA == orig(::globalA)
+::globalB == orig(::globalB)
+::globalA == 1000
+::globalB == 2000
+return == 3
+===========================================================================
+..pass_by_const_reference(int const&):::ENTER
+::globalA == 1000
+::globalB == 2000
+cref_a == 15
+===========================================================================
+..pass_by_const_reference(int const&):::EXIT
+::globalA == orig(::globalA)
+::globalB == orig(::globalB)
+::globalA == 1000
+::globalB == 2000
+===========================================================================
+..pass_by_reference(int&, int):::ENTER
+::globalA == 1000
+::globalB == 2000
+val_b == 10
+===========================================================================
+..pass_by_reference(int&, int):::EXIT
+::globalA == orig(::globalA)
+::globalB == orig(::globalB)
+::globalA == 1000
+::globalB == 2000
+===========================================================================
+..pass_ptr_by_reference(int*&):::ENTER
+::globalA == 1000
+::globalB == 2000
+ref_a has only one value
+ref_a[] == [1000]
+===========================================================================
+..pass_ptr_by_reference(int*&):::EXIT
+::globalA == orig(::globalA)
+::globalB == orig(::globalB)
+::globalA == 1000
+::globalB == 2000
+===========================================================================
+..return_reference(int&):::ENTER
+::globalA == 1000
+::globalB == 2000
+a == 15
+===========================================================================
+..return_reference(int&):::EXIT
+::globalA == orig(::globalA)
+::globalB == orig(::globalB)
+::globalA == 1000
+::globalB == 2000
+return == -999

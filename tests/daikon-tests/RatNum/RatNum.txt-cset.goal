@@ -1,0 +1,134 @@
+
+Variable sets for PolyCalc.RatNum.<init>(I n) enter
+  [1] [Parameter n]
+Variable sets for PolyCalc.RatNum.<init>(I n) exit
+  [2] [Parameter n, Field numer]
+  [1] [this]
+  [1] [Field denom]
+
+Variable sets for PolyCalc.RatNum.<init>(I n, I d) enter
+  [1] [Parameter d]
+  [1] [Parameter n]
+Variable sets for PolyCalc.RatNum.<init>(I n, I d) exit
+  [4] [Parameter d, Parameter n, Field denom, Field numer]
+  [1] [this]
+
+Variable sets for PolyCalc.RatNum.isNaN() enter
+  [1] [this]
+  [2] [Field denom, Field numer]
+Variable sets for PolyCalc.RatNum.isNaN() exit
+  [1] [return]
+  [1] [this]
+  [2] [Field denom, Field numer]
+
+Variable sets for PolyCalc.RatNum.isNegative() enter
+  [1] [this]
+  [2] [Field denom, Field numer]
+Variable sets for PolyCalc.RatNum.isNegative() exit
+  [1] [return]
+  [1] [this]
+  [2] [Field denom, Field numer]
+
+Variable sets for PolyCalc.RatNum.isPositive() enter
+  [1] [this]
+  [2] [Field denom, Field numer]
+Variable sets for PolyCalc.RatNum.isPositive() exit
+  [1] [return]
+  [1] [this]
+  [2] [Field denom, Field numer]
+
+Variable sets for PolyCalc.RatNum.compareTo(PolyCalc.RatNum rn) enter
+  [2] [Parameter rn, this]
+  [4] [Field rn.denom, Field rn.numer, Field denom, Field numer]
+Variable sets for PolyCalc.RatNum.compareTo(PolyCalc.RatNum rn) exit
+  [5] [return, Field rn.denom, Field rn.numer, Field denom, Field numer]
+  [2] [Parameter rn, this]
+
+Variable sets for PolyCalc.RatNum.approx() enter
+  [1] [this]
+  [2] [Field denom, Field numer]
+Variable sets for PolyCalc.RatNum.approx() exit
+  [3] [return, Field denom, Field numer]
+  [1] [this]
+
+Variable sets for PolyCalc.RatNum.unparse() enter
+  [1] [this]
+  [2] [Field denom, Field numer]
+Variable sets for PolyCalc.RatNum.unparse() exit
+  [1] [return]
+  [1] [String return.toString]
+  [1] [this]
+  [2] [Field denom, Field numer]
+
+Variable sets for PolyCalc.RatNum.negate() enter
+  [1] [this]
+  [2] [Field denom, Field numer]
+Variable sets for PolyCalc.RatNum.negate() exit
+  [1] [return]
+  [4] [Field return.denom, Field return.numer, Field denom, Field numer]
+  [1] [this]
+
+Variable sets for PolyCalc.RatNum.add(PolyCalc.RatNum arg) enter
+  [2] [Parameter arg, this]
+  [4] [Field arg.denom, Field arg.numer, Field denom, Field numer]
+Variable sets for PolyCalc.RatNum.add(PolyCalc.RatNum arg) exit
+  [2] [Parameter arg, this]
+  [6] [Field arg.denom, Field arg.numer, Field return.denom, Field return.numer, Field denom, Field numer]
+  [1] [return]
+
+Variable sets for PolyCalc.RatNum.sub(PolyCalc.RatNum arg) enter
+  [2] [Parameter arg, this]
+  [4] [Field arg.denom, Field arg.numer, Field denom, Field numer]
+Variable sets for PolyCalc.RatNum.sub(PolyCalc.RatNum arg) exit
+  [2] [Parameter arg, this]
+  [6] [Field arg.denom, Field arg.numer, Field return.denom, Field return.numer, Field denom, Field numer]
+  [1] [return]
+
+Variable sets for PolyCalc.RatNum.mul(PolyCalc.RatNum arg) enter
+  [2] [Parameter arg, this]
+  [4] [Field arg.denom, Field arg.numer, Field denom, Field numer]
+Variable sets for PolyCalc.RatNum.mul(PolyCalc.RatNum arg) exit
+  [2] [Parameter arg, this]
+  [6] [Field arg.denom, Field arg.numer, Field return.denom, Field return.numer, Field denom, Field numer]
+  [1] [return]
+
+Variable sets for PolyCalc.RatNum.div(PolyCalc.RatNum arg) enter
+  [2] [Parameter arg, this]
+  [4] [Field arg.denom, Field arg.numer, Field denom, Field numer]
+Variable sets for PolyCalc.RatNum.div(PolyCalc.RatNum arg) exit
+  [3] [Parameter arg, return, this]
+  [6] [Field arg.denom, Field arg.numer, Field return.denom, Field return.numer, Field denom, Field numer]
+
+Variable sets for PolyCalc.RatNum.gcd(I _a, I _b) enter
+  [2] [Parameter _a, Parameter _b]
+Variable sets for PolyCalc.RatNum.gcd(I _a, I _b) exit
+  [3] [Parameter _a, Parameter _b, return]
+
+Variable sets for PolyCalc.RatNum.hashCode() enter
+  not called
+Variable sets for PolyCalc.RatNum.hashCode() exit
+  not called
+
+Variable sets for PolyCalc.RatNum.equals(java.lang.Object obj) enter
+  [2] [Parameter obj, this]
+  [1] [Class of obj]
+  [2] [Field denom, Field numer]
+Variable sets for PolyCalc.RatNum.equals(java.lang.Object obj) exit
+  [2] [Parameter obj, this]
+  [1] [Class of obj]
+  [1] [return]
+  [2] [Field denom, Field numer]
+
+Variable sets for PolyCalc.RatNum.debugPrint() enter
+  not called
+Variable sets for PolyCalc.RatNum.debugPrint() exit
+  not called
+
+Variable sets for PolyCalc.RatNum.parse(java.lang.String ratStr) enter
+  [1] [Parameter ratStr]
+  [1] [String ratStr.toString]
+Variable sets for PolyCalc.RatNum.parse(java.lang.String ratStr) exit
+  [1] [Parameter ratStr]
+  [1] [String ratStr.toString]
+  [1] [return]
+  [2] [Field return.denom, Field return.numer]

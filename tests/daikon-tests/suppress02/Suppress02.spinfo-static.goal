@@ -1,0 +1,8 @@
+PPT_NAME misc.Suppress02.Suppress02
+i < theArray.length
+orig(i < theArray.length)
+
+PPT_NAME misc.Suppress02.main
+n < 250
+orig(n < 250)
+

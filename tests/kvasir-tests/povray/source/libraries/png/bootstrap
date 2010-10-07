@@ -1,0 +1,12 @@
+#!/bin/sh -x
+
+# bootstrap for the source distribution of POV-Ray 3.6 for UNIX
+# Written by Nicolas Calimet <pov4grasp@free.fr>
+# Run this script if configure.ac or any Makefile.am has changed
+
+rm -f config.log config.status
+
+aclocal
+autoheader --warnings=all
+automake --warnings=all
+autoconf --warnings=all

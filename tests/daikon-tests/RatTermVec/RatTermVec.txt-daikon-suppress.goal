@@ -1,0 +1,121 @@
+===========================================================================
+PolyCalc.RatTermVec:::OBJECT
+this.wrapped != null
+this.wrapped[] elements != null
+this.wrapped[].getClass() elements == "PolyCalc.RatTerm"
+===========================================================================
+PolyCalc.RatTermVec.RatTermVec():::EXIT
+this.wrapped[] == []
+this.wrapped[].getClass() == []
+===========================================================================
+PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::ENTER
+t != null
+this.wrapped[] contains no duplicates
+===========================================================================
+PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::EXIT
+this.wrapped == orig(this.wrapped)
+size(this.wrapped[])-1 == orig(size(this.wrapped[]))
+this.wrapped[] contains no duplicates
+size(this.wrapped[]) >= 1
+orig(t) in this.wrapped[]
+orig(this.wrapped[]) is a subsequence of this.wrapped[]
+===========================================================================
+PolyCalc.RatTermVec.copy():::ENTER
+this.wrapped[] contains no duplicates
+===========================================================================
+PolyCalc.RatTermVec.copy():::EXIT
+return.wrapped[] == this.wrapped[]
+return.wrapped[] == orig(this.wrapped[])
+this.wrapped == orig(this.wrapped)
+return != null
+return.wrapped[] contains no duplicates
+===========================================================================
+PolyCalc.RatTermVec.get(int):::ENTER
+index >= 0
+size(this.wrapped[]) >= 1
+this.wrapped[index+1..] contains no duplicates
+this.wrapped[0..index] contains no duplicates
+===========================================================================
+PolyCalc.RatTermVec.get(int):::EXIT
+return == orig(this.wrapped[post(index)])
+this.wrapped == orig(this.wrapped)
+this.wrapped[] == orig(this.wrapped[])
+return != null
+size(this.wrapped[]) >= 1
+orig(this.wrapped[post(index)+1..]) contains no duplicates
+orig(this.wrapped[0..post(index)]) contains no duplicates
+return in this.wrapped[]
+return in orig(this.wrapped[post(index)..])
+return in orig(this.wrapped[0..post(index)])
+===========================================================================
+PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::ENTER
+t != null
+index >= 0
+this.wrapped[0..index-1] contains no duplicates
+===========================================================================
+PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::EXIT
+this.wrapped == orig(this.wrapped)
+orig(t) == this.wrapped[orig(index)]
+size(this.wrapped[])-1 == orig(size(this.wrapped[]))
+orig(this.wrapped[post(index)..]) == this.wrapped[orig(index)+1..]
+orig(this.wrapped[0..post(index)-1]) == this.wrapped[0..orig(index)-1]
+size(this.wrapped[]) >= 1
+orig(this.wrapped[0..post(index)-1]) contains no duplicates
+orig(t) in this.wrapped[]
+orig(t) in this.wrapped[orig(index)..]
+orig(t) in this.wrapped[0..orig(index)]
+===========================================================================
+PolyCalc.RatTermVec.printDebug():::ENTER
+===========================================================================
+PolyCalc.RatTermVec.printDebug():::EXIT
+this.wrapped == orig(this.wrapped)
+this.wrapped[] == orig(this.wrapped[])
+return != null
+===========================================================================
+PolyCalc.RatTermVec.remove(int):::ENTER
+index >= 0
+this.wrapped[] contains no duplicates
+size(this.wrapped[]) >= 1
+===========================================================================
+PolyCalc.RatTermVec.remove(int):::EXIT
+this.wrapped == orig(this.wrapped)
+size(this.wrapped[]) == orig(size(this.wrapped[]))-1
+orig(this.wrapped[post(index)+1..]) == this.wrapped[orig(index)..]
+orig(this.wrapped[0..post(index)-1]) == this.wrapped[0..orig(index)-1]
+this.wrapped[] contains no duplicates
+===========================================================================
+PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::ENTER
+t != null
+index >= 0
+this.wrapped[] contains no duplicates
+size(this.wrapped[]) >= 1
+===========================================================================
+PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::EXIT
+this.wrapped == orig(this.wrapped)
+orig(t) == this.wrapped[orig(index)]
+size(this.wrapped[]) == orig(size(this.wrapped[]))
+orig(this.wrapped[post(index)+1..]) == this.wrapped[orig(index)+1..]
+orig(this.wrapped[0..post(index)-1]) == this.wrapped[0..orig(index)-1]
+this.wrapped[] contains no duplicates
+size(this.wrapped[]) >= 1
+orig(t) in this.wrapped[]
+orig(t) in this.wrapped[orig(index)..]
+orig(t) in this.wrapped[0..orig(index)]
+===========================================================================
+PolyCalc.RatTermVec.size():::ENTER
+this.wrapped[] contains no duplicates
+===========================================================================
+PolyCalc.RatTermVec.size():::EXIT
+return == size(this.wrapped[])
+return == orig(size(this.wrapped[]))
+this.wrapped == orig(this.wrapped)
+this.wrapped[] == orig(this.wrapped[])
+this.wrapped[] contains no duplicates
+this.wrapped[return..] == []
+===========================================================================
+PolyCalc.RatTermVec.toString():::ENTER
+===========================================================================
+PolyCalc.RatTermVec.toString():::EXIT
+this.wrapped == orig(this.wrapped)
+this.wrapped[] == orig(this.wrapped[])
+return != null

@@ -1,0 +1,18 @@
+
+Every CursorList created uses a header node, which is not freed when
+the list is garbage-collected, so creating many lists uses up lots of
+the node space.  I wonder if the book says anything about this?
+
+Certain invariants we find depend not only on that fact that every
+element in any list is non-null, but also that everything in the free
+list has a null element.
+
+Certain operations require 0..99 bound, or must ensure those those
+results.  Since 0 is the free list pointer, and the test suite doesn't
+push up to 99, we don't get these bounds.
+
+ESC has lots of cautions about parameters used in \old() notation,
+since many of the quantifications simply pull out the int parameter
+from within an orig slice.  There's often at least 50+ of these
+cautions.
+

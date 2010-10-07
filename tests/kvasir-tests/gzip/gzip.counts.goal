@@ -1,0 +1,145 @@
+..add_envopt() ENTER/357: 1 EXIT0/360: 1
+..base_name() ENTER/342: 2 EXIT0/345: 2
+..bi_init() ENTER/351: 1 EXIT0/351: 1
+..bi_reverse() ENTER/354: 465 EXIT0/357: 465
+..bi_windup() ENTER/348: 1 EXIT0/348: 1
+..clear_bufs() ENTER/339: 1 EXIT0/339: 1
+..ct_init() ENTER/783: 1 EXIT0/783: 1
+..ct_tally() ENTER/777: 393 EXIT0/780: 393
+..deflate() ENTER/378: 1 EXIT0/381: 1
+..display_ratio() ENTER/351: 1 EXIT0/351: 1
+..file_read() ENTER/351: 2 EXIT0/354: 2
+..flush_block() ENTER/783: 2 EXIT0/786: 2
+..flush_outbuf() ENTER/339: 1 EXIT0/339: 1
+..lm_init() ENTER/387: 1 EXIT0/387: 1
+..longest_match() ENTER/381: 194 EXIT0/384: 194
+..main() ENTER/354: 1
+..send_bits() ENTER/354: 704 EXIT0/354: 704
+..strlwr() ENTER/342: 1 EXIT0/345: 1
+..updcrc() ENTER/351: 2 EXIT0/354: 2
+..write_buf() ENTER/351: 1 EXIT0/351: 1
+..xunlink() ENTER/342: 1 EXIT0/345: 1
+..zip() ENTER/351: 1 EXIT0/354: 1
+deflate.c.deflate_fast() ENTER/378: 1 EXIT0/381: 1
+deflate.c.fill_window() ENTER/378: 1 EXIT0/378: 1
+gzip.c.check_ofname() ENTER/345: 1 EXIT0/348: 1
+gzip.c.copy_stat() ENTER/417: 1 EXIT0/417: 1
+gzip.c.create_outfile() ENTER/345: 1 EXIT0/348: 1
+gzip.c.do_exit() ENTER/351: 1
+gzip.c.do_stat() ENTER/420: 1 EXIT0/423: 1
+gzip.c.get_istat() ENTER/426: 1 EXIT0/429: 1
+gzip.c.get_suffix() ENTER/354: 1 EXIT0/357: 1
+gzip.c.input_eof() ENTER/345: 1 EXIT0/348: 1
+gzip.c.make_ofname() ENTER/345: 1 EXIT0/348: 1
+gzip.c.name_too_long() ENTER/420: 1 EXIT0/423: 1
+gzip.c.reset_times() ENTER/420: 1 EXIT0/420: 1
+gzip.c.treat_file() ENTER/348: 1 EXIT0/348: 1
+ppt ..abort_gzip() ENTER/538: 1 EXIT0/538: 1
+ppt ..add_envopt() ENTER/559: 1 EXIT0/563: 1
+ppt ..base_name() ENTER/531: 1 EXIT0/535: 1
+ppt ..bi_init() ENTER/543: 1 EXIT0/543: 1
+ppt ..bi_reverse() ENTER/548: 1 EXIT0/552: 1
+ppt ..bi_windup() ENTER/538: 1 EXIT0/538: 1
+ppt ..check_zipfile() ENTER/531: 1 EXIT0/535: 1
+ppt ..clear_bufs() ENTER/526: 1 EXIT0/526: 1
+ppt ..copy() ENTER/536: 1 EXIT0/540: 1
+ppt ..copy_block() ENTER/553: 1 EXIT0/553: 1
+ppt ..ct_init() ENTER/1363: 1 EXIT0/1363: 1
+ppt ..ct_tally() ENTER/1351: 1 EXIT0/1355: 1
+ppt ..deflate() ENTER/590: 1 EXIT0/594: 1
+ppt ..display_ratio() ENTER/547: 1 EXIT0/547: 1
+ppt ..error() ENTER/531: 1 EXIT0/531: 1
+ppt ..file_read() ENTER/544: 1 EXIT0/548: 1
+ppt ..fill_inbuf() ENTER/531: 1 EXIT0/535: 1
+ppt ..flush_block() ENTER/1361: 1 EXIT0/1365: 1
+ppt ..flush_outbuf() ENTER/526: 1 EXIT0/526: 1
+ppt ..flush_window() ENTER/526: 1 EXIT0/526: 1
+ppt ..fprint_off() ENTER/547: 1 EXIT0/547: 1
+ppt ..huft_build() ENTER/711: 1 EXIT0/715: 1
+ppt ..huft_free() ENTER/651: 1 EXIT0/655: 1
+ppt ..inflate() ENTER/586: 1 EXIT0/590: 1
+ppt ..inflate_block() ENTER/597: 1 EXIT0/601: 1
+ppt ..inflate_codes() ENTER/726: 1 EXIT0/730: 1
+ppt ..inflate_dynamic() ENTER/586: 1 EXIT0/590: 1
+ppt ..inflate_fixed() ENTER/586: 1 EXIT0/590: 1
+ppt ..inflate_stored() ENTER/586: 1 EXIT0/590: 1
+ppt ..lm_init() ENTER/606: 1 EXIT0/606: 1
+ppt ..longest_match() ENTER/595: 1 EXIT0/599: 1
+ppt ..lzw() ENTER/540: 1 EXIT0/544: 1
+ppt ..main() ENTER/554: 1 EXIT0/558: 1
+ppt ..make_simple_name() ENTER/531: 1 EXIT0/531: 1
+ppt ..read_error() ENTER/526: 1 EXIT0/526: 1
+ppt ..send_bits() ENTER/548: 1 EXIT0/548: 1
+ppt ..strlwr() ENTER/531: 1 EXIT0/535: 1
+ppt ..unlzh() ENTER/584: 1 EXIT0/588: 1
+ppt ..unlzw() ENTER/536: 1 EXIT0/540: 1
+ppt ..unpack() ENTER/604: 1 EXIT0/608: 1
+ppt ..unzip() ENTER/536: 1 EXIT0/540: 1
+ppt ..updcrc() ENTER/546: 1 EXIT0/550: 1
+ppt ..warning() ENTER/531: 1 EXIT0/531: 1
+ppt ..write_buf() ENTER/547: 1 EXIT0/547: 1
+ppt ..write_error() ENTER/526: 1 EXIT0/526: 1
+ppt ..xmalloc() ENTER/531: 1 EXIT0/541: 1
+ppt ..xunlink() ENTER/531: 1 EXIT0/535: 1
+ppt ..yesno() ENTER/526: 1 EXIT0/530: 1
+ppt ..zip() ENTER/544: 1 EXIT0/548: 1
+ppt deflate.c.deflate_fast() ENTER/590: 1 EXIT0/594: 1
+ppt deflate.c.fill_window() ENTER/590: 1 EXIT0/590: 1
+ppt deflate.c.rsync_roll() ENTER/600: 1 EXIT0/600: 1
+ppt gzip.c.check_ofname() ENTER/538: 1 EXIT0/542: 1
+ppt gzip.c.copy_stat() ENTER/681: 1 EXIT0/681: 1
+ppt gzip.c.create_outfile() ENTER/538: 1 EXIT0/542: 1
+ppt gzip.c.do_exit() ENTER/547: 1 EXIT0/547: 1
+ppt gzip.c.do_list() ENTER/564: 1 EXIT0/564: 1
+ppt gzip.c.do_stat() ENTER/686: 1 EXIT0/690: 1
+ppt gzip.c.get_istat() ENTER/698: 1 EXIT0/702: 1
+ppt gzip.c.get_method() ENTER/543: 1 EXIT0/547: 1
+ppt gzip.c.get_suffix() ENTER/555: 1 EXIT0/559: 1
+ppt gzip.c.help() ENTER/550: 1 EXIT0/550: 1
+ppt gzip.c.input_eof() ENTER/538: 1 EXIT0/542: 1
+ppt gzip.c.license() ENTER/538: 1 EXIT0/538: 1
+ppt gzip.c.make_ofname() ENTER/538: 1 EXIT0/542: 1
+ppt gzip.c.name_too_long() ENTER/686: 1 EXIT0/690: 1
+ppt gzip.c.progerror() ENTER/543: 1 EXIT0/543: 1
+ppt gzip.c.reset_times() ENTER/686: 1 EXIT0/686: 1
+ppt gzip.c.same_file() ENTER/824: 1 EXIT0/828: 1
+ppt gzip.c.shorten_name() ENTER/543: 1 EXIT0/543: 1
+ppt gzip.c.treat_dir() ENTER/543: 1 EXIT0/543: 1
+ppt gzip.c.treat_file() ENTER/543: 1 EXIT0/543: 1
+ppt gzip.c.treat_stdin() ENTER/538: 1 EXIT0/538: 1
+ppt gzip.c.usage() ENTER/538: 1 EXIT0/538: 1
+ppt gzip.c.version() ENTER/538: 1 EXIT0/538: 1
+ppt trees.c.build_bl_tree() ENTER/1341: 1 EXIT0/1345: 1
+ppt trees.c.build_tree() ENTER/1484: 1 EXIT0/1484: 1
+ppt trees.c.compress_block() ENTER/1435: 1 EXIT0/1435: 1
+ppt trees.c.gen_bitlen() ENTER/1484: 1 EXIT0/1484: 1
+ppt trees.c.gen_codes() ENTER/1393: 1 EXIT0/1393: 1
+ppt trees.c.init_block() ENTER/1341: 1 EXIT0/1341: 1
+ppt trees.c.pqdownheap() ENTER/1393: 1 EXIT0/1393: 1
+ppt trees.c.scan_tree() ENTER/1393: 1 EXIT0/1393: 1
+ppt trees.c.send_all_trees() ENTER/1356: 1 EXIT0/1356: 1
+ppt trees.c.send_tree() ENTER/1393: 1 EXIT0/1393: 1
+ppt trees.c.set_file_type() ENTER/1341: 1 EXIT0/1341: 1
+ppt unlzh.c.decode() ENTER/594: 1 EXIT0/598: 1
+ppt unlzh.c.decode_c() ENTER/574: 1 EXIT0/578: 1
+ppt unlzh.c.decode_p() ENTER/574: 1 EXIT0/578: 1
+ppt unlzh.c.decode_start() ENTER/574: 1 EXIT0/574: 1
+ppt unlzh.c.fillbuf() ENTER/579: 1 EXIT0/579: 1
+ppt unlzh.c.getbits() ENTER/579: 1 EXIT0/583: 1
+ppt unlzh.c.huf_decode_start() ENTER/574: 1 EXIT0/574: 1
+ppt unlzh.c.init_getbits() ENTER/574: 1 EXIT0/574: 1
+ppt unlzh.c.make_table() ENTER/606: 1 EXIT0/606: 1
+ppt unlzh.c.read_c_len() ENTER/574: 1 EXIT0/574: 1
+ppt unlzh.c.read_pt_len() ENTER/589: 1 EXIT0/589: 1
+ppt unpack.c.build_tree() ENTER/594: 1 EXIT0/594: 1
+ppt unpack.c.read_tree() ENTER/594: 1 EXIT0/594: 1
+trees.c.build_bl_tree() ENTER/771: 2 EXIT0/774: 2
+trees.c.build_tree() ENTER/843: 6 EXIT0/843: 6
+trees.c.compress_block() ENTER/819: 2 EXIT0/819: 2
+trees.c.gen_bitlen() ENTER/843: 6 EXIT0/843: 6
+trees.c.gen_codes() ENTER/798: 7 EXIT0/798: 7
+trees.c.init_block() ENTER/771: 3 EXIT0/771: 3
+trees.c.pqdownheap() ENTER/798: 354 EXIT0/798: 354
+trees.c.scan_tree() ENTER/798: 4 EXIT0/798: 4
+trees.c.send_all_trees() ENTER/780: 2 EXIT0/780: 2
+trees.c.send_tree() ENTER/798: 4 EXIT0/798: 4

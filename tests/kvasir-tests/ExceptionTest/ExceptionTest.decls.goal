@@ -1,0 +1,46 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..function(int):::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..function(int):::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..main():::ENTER
+  ppt-type enter
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..thrower(int):::ENTER
+  ppt-type enter
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..thrower(int):::EXIT0
+  ppt-type subexit
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+

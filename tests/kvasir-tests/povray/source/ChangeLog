@@ -1,0 +1,1389 @@
+===============================================================================
+POV-Ray 3.6 for UNIX/Linux - ChangeLog
+===============================================================================
+
+This file lists the platform-specific changes of POV-Ray for UNIX
+from version 3.50c.
+
+A list of changes for the platform independent part of the program
+can be found in doc/revision.txt .
+
+
+2 August 2004 - 3.6.1 release
+-----------------------------
+
+Change 3030 on 2004/08/02 17:16:18 by calimet@lavender
+
+	[unix] COPYING, install.txt (INSTALL): minor update
+
+Change 3029 on 2004/08/02 17:14:35 by calimet@lavender
+
+	[unix] misc updates
+	  configure.ac: bump version to 3.6.1, add defs for VERSION_BASE (3.6)
+	    and support for pentium-m arch
+	  prebuild.sh: replace all @VERSION@ by @VERSION_BASE@
+	  unix.cpp: replace all VERSION by VERSION_BASE
+	  xwin.cpp: ditto, abort render when closing the display window
+	    and using +x or Test_Abort=true (W. Wieser)
+
+Change 3016 on 2004/07/29 07:11:25 by calimet@lavender
+
+	[unix] acinclude.m4, configure.ac: workaround the build failure when
+	  C|CPLUS_INCLUDE_PATH incorrectly contains the "." path
+
+Change 3013 on 2004/07/27 21:09:01 by calimet@lavender
+
+	[unix] remove "povproto.h" (*.cpp) and add "benchmark.h" (unix.cpp)
+
+Change 3009 on 2004/07/27 12:47:30 by calimet@lavender
+
+	[unix] prebuild.sh: 'make check' does not recurse in libraries (fix
+	  included in 3.6.0 source release)
+
+
+18 July 2004 - 3.6.0 source release
+-----------------------------------
+
+Change 2991 on 2004/07/16 04:51:53 by calimet@lavender
+
+	[unix] configure.ac: add fallbacks for non-working -march
+
+Change 2989 on 2004/07/15 20:33:03 by calimet@lavender
+
+	[unix] configure.ac: prefer 'head -n 1' to 'head -1'; add a few logs
+
+Change 2980 on 2004/07/14 21:22:36 by calimet@lavender
+
+	[unix] final updates (3) for the UNIX source release
+	  configure.ac: add test for sizeof(size_t) and support for AMD64
+	  install.txt: small updates
+
+Change 2971 on 2004/07/13 06:42:28 by calimet@lavender
+
+	[unix] final updates (2) for the UNIX source release
+	  COPYING, install.txt: adds and corrections
+	  prebuild.sh: add source-license.txt to doc/ and a 'make check'
+	    target to run a short test render after compiling
+
+Change 2961 on 2004/07/08 21:32:21 by calimet@lavender
+
+	[unix] final updates for the UNIX source release
+	  configure.ac: add the --disable-vsnprintf-check option
+	  install.txt: document this option, various corrections
+
+Change 2950 on 2004/07/05 12:41:10 by calimet@lavender
+
+	[unix] Some "I hope it won't break the build" changes
+	  configure.ac:
+	    - fix build failure with tiff_pov.cpp under MSYS/MinGW (same stuff
+	      as for Cygwin/MinGW)
+	    - stop on error when vsnprintf is not found; comment unused tests
+	    - the --without-x (--with-x=no) option should now always work
+	    - add another -Ipath for libtiff (builddir)
+	    - various changes/tweaks to detect x86 platforms, hopefully with
+	      better support of FreeBSD
+	    - if -mtune/-mcpu don't work with -march, try only the latter
+	    - add support for the tiff/port directory
+	  install.txt:
+	    - update compatibility section
+	  prebuild.sh:
+	    - add distribution-license.txt in doc/
+	    - remove some tiff-generated files in the 'dist-hook' target
+	    - add a possible workaround (nearly untested) to build failure
+	      of libtiff by adding support for the tiff/port directory
+	    - force libtiff to create tiffvers.h in builddir but not srcdir
+
+Change 2930 on 2004/07/01 17:48:54 by calimet@lavender
+
+	[unix] update copyright notice in source files and misc tweaks
+
+Change 2925 on 2004/06/29 16:45:22 by calimet@lavender
+
+	[unix] preparing for public beta-testing of the sources
+	  README: update configure-related stuff
+	  config/: streamlining of the GNU files (some from automake-1.8.5)
+	  prebuild.sh: post-process DIST_COMMON in unix/Makefile.in and remove
+	    the related beware message; 'make dist-hook' does not need to
+	    remove the GNUish files from unix/ any longer
+
+Change 2923 on 2004/06/29 09:56:48 by calimet@lavender
+
+	[unix] small tweak/updates
+	  configure.ac: fix one test for "-march -mcpu" that could not work
+	  install.txt: update compatible platforms
+
+Change 2921 on 2004/06/28 17:03:48 by calimet@lavender
+
+	[unix] acinclude.m4: compare standard error with and without the
+	  compiler flags being tested; add more log info
+
+Change 2919 on 2004/06/28 13:04:59 by calimet@lavender
+
+	[unix] configure.ac: use the C compiler to detect the supporting
+	  libraries, which seems to prevent build failure on some systems
+	  (tested on FreeBSD 4.9)
+
+Change 2917 on 2004/06/28 10:51:37 by calimet@lavender
+
+	[unix] update COPYING (still unfinished for one POV-Ray license)
+
+Change 2916 on 2004/06/28 10:44:31 by calimet@lavender
+
+	[unix] update install.txt (source INSTALL)
+
+Change 2915 on 2004/06/28 10:42:13 by calimet@lavender
+
+	[unix] unix.cpp, xwin.cpp: replace some more "povray" with PACKAGE
+
+Change 2914 on 2004/06/28 10:37:35 by calimet@lavender
+
+	[unix] yet another update of the build system
+	  acinclude.m4:
+	    - workaround for FreeBSD/Darwin in compiler flag checks
+	    - correct "accepts" spelling  :-)
+	  configure.ac:
+	    - COMPILED_BY must be provided for configure to start;
+	      add instruction message otherwise
+	    - define DISTRIBUTION_MESSAGE_2 in conf.h and remove unnecessary
+	      handling of optout.h (now source is truely read-only)
+	    - export more vars for supporting libraries, force libtiff
+	      to build when either zlib or libjpeg is missing
+	  prebuild.sh:
+	    - add temporary workaround for unprocessed <sectionuid> in docs
+	    - warn about potential problem with unix/Makefile.am + workaround
+	    - remove now unnecessary handling of optout.h
+	    - add several $(DESTDIR) for the 'make uninstall' target
+	    - don't forget to make configure executable after processing it
+	    - source/base/ and frontend/ Makefile.am now use INCZ and INCPNG
+	      paths, required when "config.h" includes "png.h" (linux)
+	    - libraries/png/configure.gnu now correctly uses INCZ path
+	    - libraries/tiff/configure.gnu: ditto; append rather than prepend
+	      $ENVOPTS (probably makes no real difference)
+
+Change 2907 on 2004/06/24 14:10:11 by calimet@lavender
+
+	[unix] install.txt: several updates, in particular for the COMPILED_BY
+	  and C99_COMPATIBLE_RADIOSITY options
+
+Change 2906 on 2004/06/24 14:08:28 by calimet@lavender
+
+	[unix] configure.ac:
+	  - clarify the message for using COMPILED_BY
+	  - more tweaks to optimize for pentium4 and k8 archs
+	  - add basic tests for more optimizations under FreeBSD (4.9)
+
+Change 2899 on 2004/06/19 07:08:34 by calimet@lavender
+
+	[unix] first draft for COPYING and small updates for install.txt
+
+Change 2896 on 2004/06/17 16:24:44 by calimet@lavender
+
+	[unix] configure.ac:
+	  - check that the mingw32 library is present for --without-cygwin-dll
+	  - slightly rearranged SVGAlib detection
+	  - add simple optimization tweaks for x86
+
+Change 2895 on 2004/06/17 08:54:25 by calimet@lavender
+
+	[unix] install.txt: near-final version of the source INSTALL file;
+	  comments and corrections wanted  :-)
+
+
+9 June 2004 - 3.6.0 binary release
+----------------------------------
+
+Change 2871 on 2004/06/09 16:40:24 by chormann@chho
+
+	changes for the final package:
+	[unix] prebuild.sh - adapted to the docs changes
+	[docs] config-unixhelp.txt - minor change for toc.html
+
+Change 2863 on 2004/06/09 08:16:47 by calimet@lavender
+
+	[unix] config.h: bracket all macro arguments
+	       xwin.cpp: tweak a few messages for background image
+
+Change 2858 on 2004/06/08 16:33:27 by calimet@lavender
+
+	[docs] update povwhere.txt for PC-Linux and Generic Unix
+
+Change 2855 on 2004/06/08 15:01:38 by calimet@lavender
+
+	[docs] small update (e.g. typos) of the unix docs
+
+Change 2843 on 2004/06/08 03:18:10 by thorsten@g4macosx
+
+	[Docs] Unix menu tweak
+
+Change 2836 on 2004/06/07 17:10:15 by chormann@chho
+
+	[unix] NEWS: adding a short note about the problems of Konqueror
+	with the formula images in the docs and give a workaround
+	suggestion.  
+
+Change 2831 on 2004/06/07 12:56:39 by calimet@lavender
+
+	[docs] update of the 2.5.4 section for Linux and Generic Unix
+
+Change 2830 on 2004/06/07 12:25:42 by calimet@lavender
+
+	[unix] update of README.unix with hopefully final filenames
+
+Change 2817 on 2004/06/06 14:05:38 by calimet@lavender
+
+	[docs] updates of the unix documentation
+
+Change 2816 on 2004/06/06 10:34:09 by chormann@chho
+
+	[docs] unix navigation images 2nd try (from Thorsten)
+
+Change 2814 on 2004/06/06 09:14:05 by chormann@chho
+
+	[docs] trying to fix the unix navigation image color
+
+Change 2813 on 2004/06/06 08:11:45 by chormann@chho
+
+	[doc] changed comments in unix_splash.html/unix_frame.html to
+	HTML style.
+	
+	[unix] removed beta stuff from install script, minor changes
+	in README.bin.
+
+Change 2780 on 2004/06/04 14:55:21 by calimet@lavender
+
+	[unix] README.unix: some corrections, slight change of the layout
+
+Change 2779 on 2004/06/04 14:13:43 by calimet@lavender
+
+	[unix] README.unix: add a paragraph for the user-supplied background
+	  image in the X Window Display section
+
+Change 2778 on 2004/06/04 13:25:25 by calimet@lavender
+
+	[unix] install.txt: update, still incomplete though (I've submitted
+	  the file by mistake in the last change, so here it is with a few
+	  more updates)
+
+Change 2777 on 2004/06/04 12:52:15 by calimet@lavender
+
+	[unix] config.h: wrap #include "conf.h" with #ifdef HAVE_CONFIG_H
+
+Change 2776 on 2004/06/04 12:35:34 by calimet@lavender
+
+	[unix] essentially a little cleaning (remove sysproto.h)
+	  acinclude.m4: replace all $build_ by $host_; add a notice message
+	  config.h: explicitely #include "conf.h"
+	  configure.ac: fix various typos and messages
+	  prebuild.sh: remove sysproto.h from source files
+	  sysproto.h: removed
+	  unix.cpp: do not #include "sysproto.h" anymore
+	  unix.h: do not #include "conf.h" anymore (done in config.h instead)
+	  xwin.cpp: update some comments
+
+Change 2775 on 2004/06/04 09:55:11 by calimet@lavender
+
+	[unix] remove conf.h.in
+
+Change 2766 on 2004/06/03 11:54:14 by calimet@lavender
+
+	[unix] unix.cpp: add missing <signal.h> which I probably removed
+	  unintentionally at some point...  signal handler works again
+
+Change 2763 on 2004/06/02 by calimet@lavender
+
+	[unix] configure.ac, prebuild.sh: create povray.ini in builddir
+
+Change 2760 on 2004/06/01 by calimet@lavender
+
+	[unix] update README (source only) and README.unix
+
+Change 2726 on 2004/05/25 by calimet@lavender
+
+	[unix] update AUTHORS from the help display, and add AUTHORS.old
+	  for reference.
+
+Change 2725 on 2004/05/25 by calimet@lavender
+
+	[unix] povray.1: update of the man page
+
+Change 2717 on 2004/05/23 by calimet@lavender
+
+	[unix] configure.ac: add -D__CYGWIN for configure --without-cygwin-dll
+	  to fix the build failure of tiff_pov.cpp under Cygwin/MinGW
+
+Change 2716 on 2004/05/23 by calimet@lavender
+
+	[unix] xwin.cpp: re-enable support for the user background image
+	  - fix the segfault when freeing theBackground (Massimo)
+	  - tweak locally the value of Stage for meaningful error message
+	  - comment out support for TIF files as reading them is not safe
+
+Change 2712 on 2004/05/23 by calimet@lavender
+
+	[unix] prebuild.sh: don't use wildcards in list entries
+
+Change 2708 on 2004/05/21 by calimet@lavender
+
+	[unix] configure.ac:
+	  - prepend rather than append X Window-related flags
+	  - add support for the compiler -pipe option (default);
+	    add the --disable-pipe configure option
+
+Change 2705 on 2004/05/18 by calimet@lavender
+
+	[unix] config.h: add "#include <limits.h>" and define FILE_NAME_LENGTH
+
+Change 2696 on 2004/05/15 by calimet@lavender
+
+	[unix] updated povray.conf
+
+Change 2695 on 2004/05/15 by calimet@lavender
+
+	[docs] some updates of the unix-specific docs
+
+Change 2694 on 2004/05/15 by calimet@lavender
+
+	[unix] small updates.
+	  configure.ac:
+	    - disable I/O restrictions when cross-compiling and trying to
+	      check for getenv (ie only when getcwd() is not found)
+	    - remove -DDEBUG flag in CFLAGS/CXXFLAGS when using --enable-debug
+	      since not everybody is willing to get its display filled
+	      with unix-specific or libraries debug messages.  Instead one
+	      can pass -DUNIX_DEBUG to the CXXFLAGS option of configure.
+	  unix.cpp:
+	    - replace "#ifdef DEBUG" by "#ifdef UNIX_DEBUG"
+	    - add a small workaround (no_error_call flag) to prevent calling
+	      Error() before stream redirections are initialized (which used
+	      to cause segmentation fault in some situations).
+
+Change 2692 on 2004/05/14 by calimet@lavender
+
+	[unix] unix.cpp: various updates including a security fix.
+	  - re-enable and update unix_basename() to not use canonicalization
+	    (i.e. do not over-canonicalize)
+	  - update unix_dirname() to not use canonicalization
+	  - use unix_dirname() in unix_readlink()
+	  - security fix: update UNIX_canonicalize_path() so as to resolve
+	    all symlinks in the input path (and not only in its basename)
+	  - fix wrong modification of (const char *) through (char *)
+	  - add unix_try_temp_file() to locate a permitted directory for
+	    writing temporary files
+	  - update unix_subdir() to not use canonicalization
+	  - remove the now unnecessary unix_allow_file_write_or_warn()
+	  - cleanup and additional debug messages
+
+Change 2691 on 2004/05/13 by calimet@lavender
+
+	[unix] prebuild.sh: edit jpeg/Makefile only when it exists
+
+Change 2690 on 2004/05/13 by calimet@lavender
+
+	[unix] small various updates
+	  README, install.txt: more corrections
+	  prebuild.sh: account for changes in icons/
+
+Change 2687 on 2004/05/12 by chormann@titon
+
+	[unix] - new icons for different KDE styles as well as source to 
+	       generate them (requires ImageMagick).  The build system will
+	       need a smaller update not to include the icon source dir in 
+	       the source package.
+	       - updated install script to install the new icons
+	       - removed the old icons
+
+Change 2686 on 2004/05/12 by calimet@lavender
+
+	[unix] README, install.txt: additional updates.  I had to merge the
+	  previous updates with my somewhat large modifications (install.txt)
+	  but I cannot guaranty all were correctly included.  Changes are
+	  still unfinished, but I submit them immediatly to ease further
+	  merges if necessary.
+
+Change 2685 on 2004/05/12 by chormann@titon
+
+	[unix] Spell checking and streamlining of the text files
+	       (NEWS, README, README.bin, install.txt)
+
+Change 2683 on 2004/05/11 by calimet@lavender
+
+	[unix] Update of the build system, codename "I'm really getting crazy"
+	  acinclude.m4:
+	    - wrap some code with autoconf macros for better logging.
+	    - tweak again (see codename above ;-) the detection of compiler
+	      flags to properly deal with single-caracter flags (e.g. -X);
+	      still not perfect though; also remove the ICC-specific parts
+	      which were already obsoleted before this change.
+	  configure.ac:
+	    - slightly rework the way CXXFLAGS and CFLAGS are handled, so that
+	      there are actually used in most tests but those for compiler
+	      flags; this allows e.g. 64 bit specific compiler flags to be
+	      passed on the command line and used both for the main source
+	      code and the supporting libraries.
+	    - add a tweak for IRIX64 (untested) at X Window detection, which
+	      will affect the whole build; formerly was only for IRIX (32 bit).
+	    - add support for the -mtune compiler flag to i?86 and k? archs.
+
+Change 2682 on 2004/05/11 by calimet@lavender
+
+	[unix] unix.cpp:
+	  - check for I/O restrictions before writing benchmark files, and
+	    replace the related Error() call by fprintf(stderr)
+	  - code in DEBUG blocks always write debug messages to stderr
+
+Change 2680 on 2004/05/11 by chormann@titon
+
+	[docs] some updates to the unix docs
+
+Change 2673 on 2004/05/08 by calimet@lavender
+
+	[unix] configure.ac, prebuild.sh: create jversion.h in builddir/source
+	  instead of srcdir/unix; various internal tweaks.
+
+Change 2672 on 2004/05/07 by calimet@lavender
+
+	[unix] unix.cpp, xwin.cpp: replace all "povray:" by "%s:" and PACKAGE
+
+Change 2671 on 2004/05/07 by calimet@lavender
+
+	[unix] Yet another update of the build system
+	  acinclude.m4:
+	    - use autoconf macros to write the conftest file used in checking
+	      for compiler flags
+	    - add missing "#include <string.h>" in the macro detecting the
+	      various supporting libraries
+	  configure.ac:
+	    - changed an option help string since it cannot use variables
+	    - force using CXX instead of CC for most checks
+	    - add support for compiler (linker) -v flag to help debugging
+	      autodetection of the supporting libraries
+	    - pass all optimization flags to the supporting libraries
+	  prebuild.sh:
+	    - add a missing @DEFS@ in the unix/ Makefile.am
+	    - slightly edit the generated Makefile in libraries/jpeg so as to
+	      only build libjpeg.a
+	  svga.cpp, unix.cpp, unix.h, xwin.cpp: add wrapper around conf.h
+
+
+Change 2663 on 2004/05/04 by calimet@lavender
+
+	[unix] prebuild.sh:
+	  - try to conform a bit closer to POSIX by replacing "cp -rf" with
+	    "cp -f -R", "rm -rf" by "rm -f -r", and "ln -fs" by "ln -f -s"
+	  - add "--with-DSO=no" to the libtiff configure.gnu so as to build
+	    only a static library (and avoiding darwin to fail when trying
+	    to resolve libjpeg symbols)
+
+Change 2651 on 2004/04/27 by calimet@lavender
+
+	[unix] Small update of the build system
+	  configure.ac: modifies optout.h in the build directory
+	  prebuild.sh:
+	    - handle the change with optout.h
+	    - add kde_install.sh in the distribution
+	    - disable automatic dependency tracking
+	    - another tweak for building libtiff wrt jpeg location
+
+Change 2650 on 2004/04/27 by calimet@lavender
+
+	[unix] added I/O restriction function/check for writing temp. files
+
+Change 2648 on 2004/04/25 by calimet@lavender
+
+	[unix] Little file reorganisation, essentially to add unix.h
+	  config.h:
+	    - include unix.h instead of conf.h
+	    - remove default values for constants determined with configure
+	    - move prototypes and declaration of function pointers to unix.h
+	  configure.ac: always define PRECISION_TIMER_AVAILABLE,
+	    IO_RESTRICTIONS_DISABLED and MEM_STATS in conf.h
+	  prebuild.sh: add unix.h to the source files
+	  svga.cpp: include conf.h instead of config.h
+	  svga.h: remove depecrated comment
+	  unix.cpp: include conf.h instead of config.h, include unix.h
+	  unix.h: added
+	  xwin.cpp: include conf.h instead of config.h, include unix.h
+	  xwin.h: remove depecrated comment
+
+Change 2645 on 2004/04/25 by calimet@lavender
+
+	[unix] prebuild.sh: always check for working 'cp -u', and make file
+          creation and cleaning more verbose.
+
+Change 2642 on 2004/04/24 by chormann@titon
+
+	[unix] tweaks to the last change, sysproto.h is now obsolete but i left
+	  it in for the moment in case this changes again.
+
+Change 2641 on 2004/04/24 by chormann@titon
+
+	[unix] removed all POV_NAMESPACE wrappers
+	       moved a lot of things from sysproto.h to config.h
+	       this surely still needs some tweaks and streamlining
+
+Change 2637 on 2004/04/23 by calimet@lavender
+
+	[unix] Update of the build system
+	  acinclude.m4:
+	    - tweak the tweak for compiler flags, hopefully the last
+	    - add POV_PROG_CC_FLAGS from POV_PROG_CXX_FLAGS
+	    - rename POV_PROG_CC_STATIC to POV_PROG_CXX_STATIC
+	    - some cleanup
+	  configure.ac
+	    - add --enable-strip option to produce smaller binaries
+	    - change --disable-cygwin-dll to --with(out)-cygwin-dll for
+	      consisteny with X and SVGA
+	    - add again tests for C compiler since it can be used for
+	      detecting compiler flags to pass to the supporting libraries
+	      (such as -O3, -s, -mno-cygwin)
+	    - change all $build to $host
+	    - additional cleanup
+	  prebuild.sh:
+	    - fix the 'cp -u' test which was just crap
+	    - autoconf/automake versions are not checked for docs or cleaning
+	    - add post-fix to configure for working --help=recursive
+	      when builddir != srcdir
+	    - fix the declaration of MISSING for png and zlib configure's
+	    - remove the now unnecessary cygwin tweaks for libtiff, but
+	      export more variables (ENVOPTS and now GCOPTS, OPTIMIZER)
+	    - few tweaks in files backup stuff
+	
+	Note: tiff_pov.cpp fails to build with -mno-cygwin due to some
+	spurious problem with IStream (namespace ? clash with w32api ?).
+
+Change 2620 on 2004/04/15 by calimet@lavender
+
+	[unix] Updates for the build system
+	  acinclude.m4:
+	    - display compiler version
+	    - tweaked again the detection of compiler flags
+	  configure.ac: essentially a few tweaks for IRIX and Cygwin
+	  prebuild.sh:
+	    - don't hardcode library version but read them from their sources
+	    - added detection of autoconf/automake and version checks
+	    - added a test for working 'cp -u'
+	    - kde_install.sh is placed under the root (still to be tested)
+	    - partial but working fix for path to jpeglib when building libtiff
+
+Change 2619 on 2004/04/15 by chormann@titon
+
+	[unix] prebuild.sh: adding code to generate a kde_install.sh
+	       script from 'install'.  This needs to be integrated into 
+	       the source package installation, feel free to adapt.
+	       install: minor tweaks
+
+Change 2618 on 2004/04/15 by calimet@lavender
+
+	[unix] xwin.cpp:
+	  - placed the user background image code under control of
+	    #define USER_SUPPLIED_BACKGROUND 0  (disabled)
+	  - added "Click on window to render next frame" message where
+	    appropriate.
+
+Change 2617 on 2004/04/14 by calimet@lavender
+
+	[unix] xwin.cpp: a few more tweaks; commented out the last call to
+	  Destroy_Image(theBackground) which seems to still be the cause of
+	  more-or-less random segfault occuring once the render is complete.
+
+Change 2615 on 2004/04/13 by calimet@lavender
+
+	[unix] xwin.cpp: get rid of xwin_image_to_pixmap() which basically
+	  became obsolated by change 2593 (fix for background image w/ partial
+	  rendering).  Pros: since the function was an ugly hack around
+	  PlotPixel(), and was depending on the size of the background image
+	  (speed and memory-wise) whatever the size of the display window,
+	  I only see advantages to remove it.  The display window should
+	  appear somewhat faster now.  Cons: why did I wrote it in the first
+	  place ?  ;-)
+
+Change 2594 on 2004/04/11 by calimet@lavender
+
+	[unix] configure.ac: changed most warnings to simple notices as
+	  they are not important for the success of the build process.
+
+Change 2593 on 2004/04/11 by calimet@lavender
+
+	[unix] xwin.cpp:
+	  - re-enable background image
+	  - fix "missing" background occuring with partial renderings
+	
+	Notes: apparently change 2567 fixed the ugly (wrong) background image
+	  that could occur depending on platform/image format and motivated
+	  to disable this feature in change 2566.  Also the segfault reported
+	  in change 2560 seems fixed as well.  I'm not yet satisfied with the
+	  handling of the default background when alpha channel is used.
+
+Change 2588 on 2004/04/10 by calimet@lavender
+
+	[unix] Update of the build system to allow srcdir != builddir in libs.
+	acinclude.m4, configure.ac, prebuild.sh:
+	  - considers the latest library versions in perforce
+	  - all libs are configured at the end of the configure run rather than
+	    as soon as their version is detected (use of AC_CONFIG_SUBDIRS).
+	  - create a configure.ac and related tools for zlib
+	  - create a configure.gnu in all libraries
+	  - COMPILER_VER now contains the compiler version (!) when possible
+	  - removed detection of C compiler at configure time (only C++)
+	  - rewrote the checks for compiler flags (hopefully more universal)
+	  - added/tweaked warning messages
+	  - added a tweak for X11 under IRIX
+	  - lots of various non-visible changes and tweaks
+	povxlib.c, povxlib.h: removed
+	unix.cpp: tweak for unix_getline() to prevent possible endless loop
+	
+	NOTE: before syncing with this update, it is recommanded to do a
+	'make clean; make maintainer-clean; cd unix && ./prebuild.sh clean'.
+	The first two commands are now supported in prebuild.sh .
+	
+	Known problems: should change the way optout.h is handled to allow
+	parallel builds of the source code; and probably many others  ;-)
+
+Change 2566 on 2004/03/31 by calimet@lavender
+
+	[unix] xwin.cpp: disable reading background.* files for now, since
+	  it's too buggy for beta3 release; the checkered background still
+	  works (note: with +ua it's possible to see a slight color change
+	  of the background when rendering on screen depths < 24 bits).
+
+Change 2560 on 2004/03/30 by calimet@lavender
+
+	[Unix] Various updates right before the next beta  :-)
+	  sysproto.h, unix.cpp: rename several unix_* functions to UNIX_ and
+	    move their definitions to sysproto.
+	  xwin.cpp:
+	    - changed all pclass(p) to p->c_class; this will let us remove
+	      povxlib.c,h when the build system will be updated.
+	    - added support for window background image in various formats.
+	      The image must be ~/.povray/3.6/background.* and the extensions
+	      are searched in the following order (all lowercase only):
+	        jpg, jpeg, png, tif, tiff, ppm, tga, gif.
+	      Tested with various image types and screen depths and/or visual
+	      (including 8/16/24 bit, truecolor/directcolor/pseudocolor/static-
+	      color/grayscale/staticgray).  For some (unknown) reason, in some
+	      modes (e.g. forced pseudocolor on 8 bit display) the background
+	      image is crappy, while it works in the same non-forced mode.
+	      Also there seem to be an "eisenbug" that makes povray segfault
+	      after completion: not always reproductible, not detected when
+	      running in a debugger (sigh).  Needs more testing...
+
+Change 2546 on 2004/03/20 by calimet@lavender
+
+	[unix] More changes.
+	configure.ac:
+	  - changed --disable-watch-cursor into --enable (no cursor by default)
+	  - added a few warnings
+	unix.cpp:
+	  - reorganized the parsing of .conf files for (hopefully) more
+	    consistency and clarity
+	  - user settings don't abort povray anymore
+	  - added more checkings/warnings for unexpected settings
+	xwin.cpp: splitted one if test for clarity
+
+Change 2545 on 2004/03/19 by calimet@lavender
+
+	[unix] Misc updates
+	configure.ac:
+	  - use the watch cursor for X Window; added --disable-watch-cursor
+	  - remove povray.ini at each configure (forced to be build)
+	  - added brackets around compiler version
+	prebuild.sh:
+	  - add xbgmap.xpm and xpovicon.xpm as source files
+	  - various fixes for build/install failure when builddir != srcdir
+	unix.cpp: removed #include "pov_util.h"
+	xwin.cpp: added several XFreePixmap() calls, which will be actually
+	  useful only if X Window display re-opening is implemented.
+
+Change 2543 on 2004/03/15 by calimet@lavender
+
+	[unix] Added xbgmap.xpm and updated xwin.cpp
+	  Some more fun with libXpm: changed the background of the X Window
+	  display with a gray/white checker a la Windows (quite useful for
+	  images rendered with alpha channel).
+
+Change 2539 on 2004/03/15 by chormann@titon
+
+	[unix] final updates to install of beta 2
+
+Change 2527 on 2004/03/14 by calimet@lavender
+
+	[unix] configure.ac, xwin.cpp: added support for the POV color icon
+	  under X Window using libXpm.  The code is wrapped with
+	  '#ifdef HAVE_LIBXPM' which is determined at configure time.
+
+Change 2511 on 2004/03/12 by chormann@titon
+
+	[unix] more fixes for script problems
+
+Change 2508 on 2004/03/11 by chormann@titon
+
+	[unix] another change to the render scripts solving 
+	       problems with scenes using another scenes output image.
+
+Change 2502 on 2004/03/10 by chormann@titon
+
+	[unix]
+	  - README.bin: added documentation of new install options
+	  - install: added test function and some fixes
+	  - scripts/*: fixed problems in sample scene scripts (i hope)
+
+Change 2500 on 2004/03/08 by chormann@titon
+
+	[unix] fixes for binary version install 
+	       and sample scenes render scripts (untested)
+
+Change 2494 on 2004/03/07 by calimet@lavender
+
+	[unix] prebuild.sh: ignore foolish automake warning as I did till the
+	  last change, and revert 'DISTFILES=' to 'distdir:'.
+
+Change 2490 on 2004/03/05 by calimet@lavender
+
+	[unix]
+	acinclude.m4: added POV_ARG_ENABLE() and POV_ARG_WITH() macros.
+	configure.ac:
+	- uses the macros above
+	- added --disable-lib-checks option for future cross-compiling support
+	- added --with-svga for consistency with --with-x
+	- added the dist-bzip2 option for automake
+	- tweaked usage of compiler -fxxx options wrt -O2 or -O3
+	prebuild.sh:
+	- added options 'doc(s)clean'; 'clean' does not remove docs anymore
+	- use empty DISTFILES instead of redefining distdir target (libraries)
+	- disable all dependencies for libpng
+	- add missing unix/images files in doc/
+	xwin.cpp: replaced commented Warning()'s by fprintf(stderr)
+
+Change 2489 on 2004/03/03 by chormann@titon
+
+	[unix] 
+	  install: added uninstall feature
+
+Change 2481 on 2004/02/25 by calimet@lavender
+
+	[unix] Make several files executable in config/ and scripts/
+
+Change 2480 on 2004/02/25 by calimet@lavender
+
+	[unix] Reorganisation of the unix source to better match bin distro.
+	prebuild.sh:
+	  - changes to reflect source reorganisation
+	  - html docs and images installed under html/
+	  - scripts are now installed with the proper chmod
+	  - man page is finally installed (at last)
+	  - various add-on in uninstall target
+	configure.ac: updated for source reorganisation
+	config.guess, config.sub, depcomp, install-sh, missing, mkinstalldirs:
+	  moved to unix/config
+	povrayrc, test.sh: removed
+
+Change 2476 on 2004/02/25 by chormann@titon
+
+	[unix]
+	  - install: updated to new configuration file locations,
+	             other tweaks, still needs testing
+	  - unix.cpp: changed 'getchar()' to 'fgets(s, 2, stdin)'
+
+Change 2469 on 2004/02/23 by calimet@lavender
+
+	[unix]
+	  unix.cpp:
+	  - reworked again the handling of conf and ini files.
+	  - removed deprecated unix_copy_sys_file() and commented code
+	  for backward compatibility of conf file locations.
+
+Change 2465 on 2004/02/22 by calimet@lavender
+
+	[unix]
+	  prebuild.sh: backup existing user conf,ini files when installing
+	  unix.cpp: allows for double or single quotes in permitted_paths
+
+Change 2464 on 2004/02/22 by chormann@titon
+
+	[unix]
+	  prebuild.sh - some modifications to the documentation handling:
+	                 * allow building in original directory (build=..)
+	                 * removing some files from the docs dir after building
+	              - make 'configure' executable at the end
+
+Change 2463 on 2004/02/21 by calimet@lavender
+
+	[unix]
+	  prebuild.sh:
+	  - install system povray.conf,ini in $prefix/etc/povray/3.6
+	  - install user povray.conf,ini in $HOME/.povray/3.6
+	  unix.cpp:
+	  - added unix_getline() for reading conf file (no more static buffer)
+	  - missing user conf,ini files don't abort povray but "pause" it
+	  - contains commented out code for eventual backward comp. with 3.5
+
+Change 2455 on 2004/02/12 by calimet@lavender
+
+	[unix]
+	  unix.cpp:
+	  - reorganized code that handles povray.conf by using struct's.
+	  - merged read_paths and write_paths into permitted_paths; they
+	    are now searched in the same order they are stored (was reversed).
+	  - tweaked error handling in conf files.
+	  - create default user INI and conf files (when missing) from system
+	    files, and abort when the latter are also missing.
+	  - various house-keeping stuffs.
+	  prebuild.sh: doc/ is now installed|uninstalled; povray.conf|ini are
+	    placed in etc/povray-3.6; few tweaks + bugfixes.
+	  config.guess, config.sub, depcomp, install-sh, missing,
+	    mkinstalldirs: updated with versions from automake-1.8.2.
+
+Change 2451 on 2004/02/02 by calimet@lavender
+
+	[unix]
+	  NEWS: updated with what Christoph posted on p.beta-test
+	  README: first draft for 3.6
+	  install.txt: (source INSTALL) first draft for 3.6
+	  povray.1: more updates to the man page
+	  prebuild.sh: added the 'doc' (or 'docs') option to build the docs
+	    using makedocs.php, unfinished though (not yet UNIX-html specific)
+
+Change 2447 on 2004/01/30 by chormann@titon
+
+	[unix]
+	  unix.cpp:
+	    - removed wrong POV_FREE() in benchmark code
+	    - changed POV_LIB_DIR to "/usr/local/share/povray-3.6"
+	      (was "/usr/local/lib/povray-3.6")
+
+Change 2439 on 2004/01/28 by chormann@titon
+
+	[unix] unix.cpp: small add-on to last change
+
+Change 2438 on 2004/01/28 by chormann@titon
+
+	[unix]
+	  povray.conf: activated io-restrictions by default.
+	  unix.cpp: added benchmark render mode, loosely based on the
+	            windows version code.
+	  install: small tweaks and adding benchmark item to KDE menu.
+	  README.bin: updating options documentation of install script.
+
+Change 2437 on 2004/01/24 by chormann@titon
+
+	[unix]
+	  - install script: minor tweaks, changes to the kde installation:
+	    * adding entry to view license to panel
+	    * changing sample scene render and view entries
+	  - scripts/allscene.sh, allanim.sh:
+	    * added code to generate HTML files with sample scene listings
+	  - scripts/render_anim.sh: make ffmpeg optional, small bugfix
+
+Change 2430 on 2004/01/20 by calimet@lavender
+
+	[unix] Updated povray.1: small corrections to the man page.
+
+Change 2429 on 2004/01/20 by calimet@lavender
+
+	[unix]
+	Updated acinclude.m4, configure.ac: tweaks for the Intel C++ compiler.
+
+Change 2427 on 2004/01/20 by chormann@titon
+
+	[unix]
+	  - small changes in binary version readme
+	  - updated man-page
+
+Change 2425 on 2004/01/20 by calimet@lavender
+
+	[unix]
+	Updated configure.ac:
+	  - updated header copyrights
+	  - added the missing X_DISPLAY_MISSING definition when checking for
+	  XFlush in X11 detection.  The missing test would make static linking
+	  fail under some systems due to X11.  This happens for instance on
+	  RedHat Fedora where libX11 cannot be linked statically due to some
+	  libc system calls (e.g. gethostbyname, getservbyname).  I might work
+	  around this problem later.
+
+Change 2416 on 2004/01/18 by chormann@titon
+
+	[unix]
+	  - changed EXPIRE_AT in unix.cpp to 2004-03-15
+	  - added small text about beta status to install script
+
+Change 2415 on 2004/01/18 by calimet@lavender
+
+	[unix]
+	Updated acinclude.m4: POV version number
+	Updated config.h, povxlib.c, povxlib.h, svga.cpp, svga.h, sysproto.h,
+	  unix.cpp, xwin.cpp, xwin.h: header comments now follow that of
+	  the core source files (updated copyright notice, added RCS keywords).
+
+Change 2405 on 2004/01/17 by chormann@titon
+
+	[sample scenes] Comments for render parameters added to most scenes, 
+	the unix sample scene render scripts look for a comment in the first 
+	50 lines matching the regexp '^//[ ]+[+-]{1}[^ -]'.
+	
+	Additional change: the advanced/balcony scene had an include file
+	glass.inc - changed this to bglass.inc to avoid interference with 
+	system include file.
+
+Change 2395 on 2004/01/12 by chormann@titon
+
+	[unix]
+	overdue update of scripts:
+	  install: binary version install script (as in the most recent
+	    test package)
+	  scripts/*.sh: sample scene render scripts, these need modified
+	    scene files which are not yet in perforce
+
+Change 2391 on 2004/01/09 by calimet@lavender
+
+	[unix]
+	Removed autogen.sh: deprecated
+	Updated unix.cpp: small cosmetics
+	Updated xwin.cpp, config.h: replaced malloc and friends by their
+	  POV_MALLOC equivalents.
+
+Change 2364 on 2003/11/30 by calimet@lavender
+
+	[unix] Updated xwin.cpp: fixed segfault introduced in last change.
+
+Change 2363 on 2003/11/30 by calimet@lavender
+
+	[unix] Updated xwin.cpp: applied the two patches proposed by W. Wieser
+	  on p.programming.  However there is a difference concerning the
+	  window-closing event: closing the window does close the display
+	  window but does _not_ stop rendering.  Moreover, once it is closed,
+	  no new display window will open for the next frames of an animation.
+	  This behaviour allows to close the display at any time, for instance
+	  to speed up rendering when the display is used by mistake.  Termina-
+	  ting the rendering itself requires another user abort (e.g. ctrl+c).
+	
+	  NOTE: this is a very quick change that needs testing.  Expect
+	  some possible crash and memory leak (if possible, I plan to replace
+	  all calls to malloc/free by their POV_MALLOC equivalents).
+
+Change 2362 on 2003/11/28 by chormann@titon
+
+	[unix] icons should be binary of course
+
+Change 2361 on 2003/11/28 by chormann@titon
+
+	[unix]
+	  - linux binary version install script:
+	    adding kde stuff (WIP, needs testing)
+	    minor tweaks and adding warnings for changed format of povray.conf
+	  - adding png icons (unix/icons)
+
+Change 2359 on 2003/11/27 by calimet@lavender
+
+	[unix] Updated prebuild.sh: minor tweak for libraries/png
+
+Change 2358 on 2003/11/27 by calimet@lavender
+
+	[unix] Removed Makefile.am
+
+Change 2357 on 2003/11/27 by thorsten@g4macosx
+
+	[unix] Fixes function naming problem
+
+Change 2356 on 2003/11/27 by calimet@lavender
+
+	[unix] Updated configure.ac: added MEM_TAG for debug mode
+	       Updated xwin.cpp: applied W. Wieser's bugfix (ControlMask)
+
+Change 2355 on 2003/11/26 by chormann@titon
+
+	[unix] changed UNIX_Test_Abort to UNIX_test_abort at one place
+	in unix.cpp
+
+Change 2348 on 2003/11/24 by calimet@lavender
+
+	[unix] Updated prebuild.sh, svga.cpp, unix.cpp: re-enabled automatic
+	  dependancy tracking in the Makefile's (it was never in use, but
+	  this is definitely a plus for maintainers, so here it is) and
+	  made the changes proposed by Christoph for SVGA init -- to be
+	  tested, as usual.
+
+Change 2329 on 2003/11/14 by chormann@titon
+
+	[unix] changes to svga.cpp to compile with recent core code changes
+
+Change 2328 on 2003/11/13 by calimet@lavender
+
+	[unix] Updated config.h, svga.cpp, svga.h, sysproto.h, unix.cpp,
+	               xwin.cpp, xwin.h:
+	  Applied Thorsten's changes to the unix platform and did some more
+	  cleanup/reorganisation of the code.
+
+Change 2319 on 2003/11/11 by calimet@lavender
+
+	[unix] Updated svga.cpp: same changes as in #2317
+
+Change 2318 on 2003/11/11 by calimet@lavender
+
+	[unix] Updated prebuild.sh: fixed libraries/png/Makefile.am for a
+	  small bug introduced in the last update.
+
+Change 2317 on 2003/11/11 by calimet@lavender
+
+	[unix] Updated config.h, configure.ac, prebuild.sh, unix.cpp, xwin.cpp:
+	  This is a quick-and-dirty adaptation to the recent changes in source
+	  layout and interface.  Essentially it means commenting out all
+	  offending code (all stream_printf() calls).  Ini files and conf
+	  files are not processed at the moment, I need to understand what
+	  changes to make -- but lack time for it right now.  The unix binary
+	  is working (including X display) although some output messages are
+	  obviously missing.
+
+Change 2302 on 2003/11/04 by calimet@lavender
+
+	[unix] Updated unix.cpp : fixed wrong init of shellout_allowed and
+	  added a warning when the system povray.conf file is not found.
+
+Change 2297 on 2003/11/03 by calimet@lavender
+
+	[unix] Updated unix.cpp : added #include "povmsgid.h"
+
+Change 2292 on 2003/11/02 by calimet@lavender
+
+	[unix] Updated config.h, configure.ac, povray.conf, sysproto.h,
+	  unix.cpp, xwin.cpp:
+	  - makes the I/O restriction code compliant with the docs (at last);
+	  - uses again POV_MALLOC and friends (instead of malloc);
+	  - added POV_MEM_RELEASE_ALL def in config.h to handle memory freeing;
+	  - shows again the 3.6.beta.1 message (instead of 3.6);
+	  - a few minor tweaks.
+
+Change 2289 on 2003/11/01 by thorsten@g4macosx
+
+	Adds Unix doc updates
+	Reorganises help dirs
+	 NOTE: It is possible not everything will build with this change!
+	 More changes still to come.
+
+Change 2277 on 2003/10/27 by calimet@lavender
+
+	[unix] Updated configure.ac : following Thorsten's suggestion, added
+	  a new  ./configure C99_COMPATIBLE_RADIOSITY=[1-4]  option to handle
+	  possible non-ieee floating point with octree.cpp.  If not specified,
+	  configure checks  sizeof(int)==4 && sizeof(float)==4  and tries
+	  the various functions in this order: copysign, ilogbf, ilogb, logbf,
+	  logb.  If none works, configure stops on error.
+
+Change 2275 on 2003/10/27 by calimet@lavender
+
+	[unix] Updated configure.ac, svga.cpp, svga.h, unix.cpp : fixed
+	   problem with missing -lvgagl and added test for HAVE_LIBVGAGL.
+
+Change 2267 on 2003/10/23 by calimet@lavender
+
+	[unix] Updated povray.conf, unix.cpp, xwin.cpp : a few tweaks.
+	       Updated acinclude.m4, configure.ac, prebuild.sh : improved
+	         detection of the libraries and fixed some ordering problems
+	         and failures.  All libraries should compile with at least
+	         the minimum optimization level (-O); this is not affected
+	         by the --disable-optimiz option of configure.  Compiling
+	         for cygwin/MinGW (--disable-cygwin-dll) now gives a binary
+	         without any cygwin dependancy (X and SVGAlibs are disabled).
+
+Change 2266 on 2003/10/23 by chormann@titon
+
+	[unix] changed version number in README.bin
+
+Change 2257 on 2003/10/21 by chormann@titon
+
+	[unix] 
+	  - minor changes in povray.conf
+	  - updated install script for binary version
+
+Change 2256 on 2003/10/21 by calimet@lavender
+
+	[unix] Updated povray.conf, svga.cpp, unix.cpp, xwin.cpp : just some
+	         more housekeeping.
+	       Updated prebuild.sh : now a 'configure; make install' without
+	         an intermediate 'make' should be able to compile the required
+	         supporting libraries.
+
+Change 2254 on 2003/10/21 by calimet@lavender
+
+	[unix] Updated config.h, configure.ac : a few more tweaks.
+	       Updated unix.cpp, povray.conf :
+	       - reorganized code for reading INI files.
+	       - updated code for reading .conf files and improved robustness.
+	       - changed the syntax of the .conf files: merged permitted
+	         input/output paths in a single section, and removed the
+	         [Current Directory Read/Write] section.  See the comments
+	         in the sample povray.conf file for details.
+
+Change 2252 on 2003/10/17 by calimet@lavender
+
+	[unix] Updated config.h, configure.ac, prebuild.sh :
+	  Many tweaks to make compilation work on more architectures.
+	  This has been tested in particular on cygwin/mingw.
+	  Most important changes:
+	  - CPPFLAGS and LDFLAGS are now passed to the supporting libraries,
+	    e.g. -mno-cygwin.  Added the option --disable-cygwin-dll to
+	    configure in order to simplify the process even further.
+	    See the Note below. 
+	  - Removed the -ansi compilation flag.
+	  - Now optout.h is correctly restored with a new call to 'configure'
+	    or to 'make distclean'.
+	
+	Updated unix.cpp, xwin.cpp :
+	  Essentially fixed a few problems, e.g.
+	  - missing \#include <setjmp.h> for non-linux archs
+	  - possible segfaults when parsing X Window-specific options;
+	    I guess this was a very old issue in povray  :-)
+	
+	Note: with  ./configure --disable-cygwin-dll  I get a working compile
+	  of povray without any change in the source code.  However the X
+	  library still comes from cygwin (cygX11-6.dll) and causes povray
+	  to crash when displaying under the X environment.  Will try to fix
+	  that later.  Also the I/O restrictions are disabled since configure
+	  cannot find a working readlink function.
+
+Change 2250 on 2003/10/13 by calimet@lavender
+
+	[unix] Updated config.h, configure.ac : some more tweaks and cleanup.
+	       Updated unix.cpp : the I/O restriction code now handles
+	         symbolic links with the added unix_readlink() function.
+	         Yet I'm not sure whether this code works in all cases since
+	         I had to use a little trick for directory paths.  The point
+	         is that the UNIX readlink function in <unistd.h> translates
+	         symlinks only when it is the basename component of a path.
+	         To avoid the I/O restriction to fail with directory paths
+	         (i.e. a path without a filename), all directories get an
+	         extra '/' at the end which prevents symlink translation.
+	         Multiple '/' caracters are removed by the canonicalization.
+	         The symlink code might be deleted in case it's problematic.
+
+Change 2237 on 2003/10/08 by calimet@lavender
+
+	[unix] Updated config.h, configure.ac :
+	         Fixed missing last S of MEM_STATS.  Still the memory stats
+	         always report 0 bytes usage...
+	       Updated svga.cpp, svga.h, sysproto.h, unix.cpp, xwin.cpp :
+	         Try again to fix svga problems with Christoph's reports...
+
+Change 2236 on 2003/10/08 by calimet@lavender
+
+	[unix] Updated svga.cpp, unix.cpp : try to fix the svga problems.
+
+Change 2235 on 2003/10/07 by calimet@lavender
+
+	[unix] Updated svga.cpp, svga.h, xwin.h with a few tweaks.
+
+Change 2233 on 2003/10/07 by calimet@lavender
+
+	[unix] Updated config.h, configure.ac, prebuild.sh, sysproto.h, unix.cpp
+	       Added svga.cpp, svga.h, xwin.cpp, xwin.h
+	       Removed gamma.gif, gamma.gif.txt, platform.html
+	
+	Essentially the whole I/O restriction code has been rewritten to
+	remove all static buffers used - mostly - to store caracter strings.
+	Thus, all (?) potential security holes and portability problems
+	in manipulating the strings (side-effects) should be "terminated"  :-)
+	Note however that the new code has not yet been extensively tested...
+	Also X Window/SVGA-specific code has been moved to seperated files
+	for clarity.  Started large code cleaning to remove most deprecated
+	and unused stuff.
+
+Change 2219 on 2003/09/24 by calimet@lavender
+
+	[unix] Added sysproto.h which is mostly taken from config.h (contains
+	       all variables definitions and functions prototypes) to follow
+	       Thorsten's suggestions.
+
+Change 2218 on 2003/09/24 by calimet@lavender
+
+	[unix] Updated config.h, unix.cpp to comply with namespace changes.
+
+Change 2211 on 2003/09/17 by chormann@titon
+
+	[unix] 
+	- changing text output in unix.cpp according to
+	  Thorsten's suggestions
+	- updated binary version install script (untested, still
+	  subject to changes)
+	
+	The segfault mentioned in change 2208 seems fixed now.
+
+Change 2207 on 2003/09/16 by calimet@lavender
+
+	Updated unix/unix.cpp : Replaced all Status_Info()
+
+Change 2206 on 2003/09/16 by calimet@lavender
+
+	[unix] Updated acinclude.m4
+	       Updated config.h
+	       Updated configure.ac
+	       Updated prebuild.sh
+	       Updated unix.cpp
+	
+	acinclude.m4, configure.ac, prebuild.sh :
+	- Changed POV version to 3.6
+	- Improved detection of supporting libraries
+	- Moved -DCOMPILER_VER definition into conf.h
+	- Several small internal changes
+	
+	config.h, unix.cpp :
+	- Removed all references to PARAMS()
+	- Tried to adapt to Thorsten's POVMS changes (see notes below).
+	In particular, moved code out of UNIX_init_povray() to process
+	X-Windows-specific command-line options with the GETCOMMANDLINE macro
+	which calls the new UNIX_get_command_line() function.
+	- Starting large file layout cleanup
+	
+	Notes:
+	- With Thorsten's changes number 5, povray can compile but crashes
+	immediately, most probably when it tries to output the first
+	messages.
+	- With the last changes (number 6), Status_Info is not known anymore
+	and must be replaced in order to compile. By what, I've no idea, so
+	I don't know what other problems can occur.
+	- Code in unix.cpp is thus still problematic.
+	- I have a working rewrite of the "infamous" canonicalize_path()
+	function which will be included when all the other problems are
+	solved, otherwise it's just useless  ;-)
+
+Change 2177 on 2003/08/18 by calimet@lavender
+
+	[unix] Updated configure.ac: a few internal mods for sanity.
+	       Updated prebuild.sh:
+	       - fix for build failure in unix/ on cygwin (misuse of X_CFLAGS
+	         inherited from 3.5)
+	       - little tweaks in the install and uninstall targets.
+
+Change 2175 on 2003/08/15 by calimet@lavender
+
+	[unix] Updated configure.ac
+	       Updated prebuild.sh
+	
+	Most important changes follow.
+	
+	configure.ac:
+	  * POV_RAY_VERSION in source/optout.h is changed to "3.5.1".
+	  * The povray binary is built in unix/ instead of source/ .
+	  * Disabled most warnings (i.e. removed -W -Wall)
+	  * Added the following options for better control over compilation:
+	     --enable-debug    (essential adds the -g flag)
+	     --enable-profile  (adds flags for program profiling)
+	     --disable-optimiz (turns off all compiler optimizations)
+	  * Extra flags are now passed after all others so that any particular
+	    default flag can be disabled; for instance:
+	    ./configure CXXFLAGS="-O -W -Wall" will add these flags after
+	    those set by configure.
+	
+	prebuild.sh:
+	  * Added a 'clean' option to remove all generated files.  This should
+	    be called like this after any build:
+	    % make clean; make maintainer-clean; cd unix; ./prebuild.sh clean
+	  * The script cannot be run accidentaly from outside unix/ .
+	  * I finally managed (hope !) to support the following targets:
+	    make, make install, make uninstall, make clean, make distclean,
+	    make maintainer-clean.
+	  * Most supporting & data files are now installed.  The docs (html)
+	    are still missing.
+
+Change 2167 on 2003/08/11 by calimet@lavender
+
+	[unix] Deleted INSTALL (copy of install.txt, generated by prebuild.sh)
+	       Deleted POVLEGAL.DOC (old, generated from ../distribution)
+
+Change 2166 on 2003/08/11 by calimet@lavender
+
+	[unix] Updated acinclude.m4, config.guess and config.sub
+	       Removed old configure.in and src.Makefile.am
+
+Change 2150 on 2003/07/25 by chormann@chho
+
+	trying to update the files in the unix/scripts dir again...
+
+Change 2149 on 2003/07/24 by calimet@lavender
+
+	[unix] Delete Makefile.in (auto-generated by prebuild.sh)
+
+Change 2148 on 2003/07/24 by chormann@chho
+
+	2nd try updating the unix files ...
+
+Change 2147 on 2003/07/24 by chormann@chho
+
+	Adding Unix specific files again.  These include the last changes
+	i got from Nicolas, a few no more necessary files are removed and
+	i made some changes in prebuild.sh
+
+Change 2146 on 2003/07/22 by thorsten@g4macosx
+
+	Unix documentation in the new format
+
+Change 2077 on 2003/06/08 by chormann@chho
+
+	Unix specific changes:
+	- removing obsolete makefile from unix dir on Nicolas's request
+	- changing SVGAMode() in unix.cpp to catch ttyname() returning NULL
+	  (as mentioned in povray.unix) (untested but trivial)
+
+Change 2065 on 2003/05/28 by chormann@chho
+
+	unix specific changes:
+	  - allowing compilation without x support
+	  - improved portability
+
+Change 2049 on 2003/05/01 by chormann@chho
+
+	Changed files for the unix 3.51 distribution.  This is my first try
+	with perforce, i hope i do things right...
+
+Change 2047 on 2003/04/03 by chrisc@lilliput
+
+	Update makefiles to suit new libpng version.
+
+Change 2046 on 2003/03/27 by thorsten@host27
+
+	Unix source archive documentation updates in files "AUTHORS"
+	and "INSTALL"
+
+Change 2036 on 2003/02/25 by mtgordon@mtgordon
+
+	Generate version number in man page (doc/Makefile.am).
+
+Change 2035 on 2003/02/25 by mtgordon@mtgordon
+
+	Use generated version number to construct docs path in man page.
+
+Change 2033 on 2003/02/21 by mtgordon@mtgordon
+
+	Team coordinator email address update.
+
+Change 2032 on 2003/02/21 by mtgordon@mtgordon
+
+	Needed to dist povray35.css
+
+Change 2030 on 2003/02/21 by mtgordon@mtgordon
+
+	Adding css, docs image format handling
+
+Change 2029 on 2003/02/21 by mtgordon@mtgordon
+
+	Updates from Christoph
+
+Change 2028 on 2003/02/21 by mtgordon@mtgordon
+
+	Oops, s/Young/Cason/
+
+Change 2027 on 2003/02/20 by mtgordon@mtgordon
+
+	Initial checkin of the Linux install script.  Should have done this
+	a while ago...
+
+Change 2026 on 2003/02/20 by mtgordon@mtgordon
+
+	Changed version to 3.51	
+
+Change 2025 on 2003/02/20 by mtgordon@mtgordon
+
+	Necessary changes to parse_ini_file, from Christoph	
+
+Change 1993 on 2003/01/06 by mtgordon@mtgordon
+
+	Removing arch-specific CFLAGS.

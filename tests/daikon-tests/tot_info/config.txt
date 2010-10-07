@@ -1,0 +1,103 @@
+# You can pretend this file is -*- perl -*-
+
+# Each configuration option corresponds to a variable in the Daikon source
+# code.  Those variables have names identical to the configuration options,
+# except that the variable names start with "dkconfig_" (for example,
+# daikon.FileIO.dkconfig_add_changed).  That prefix makes them easy to find
+# and reminds the reader that those variables should be set only via the
+# configuration mechanism, never via direct assignment in Java code.
+
+### INVARIANT CONFIGURATION
+
+daikon.derive.binary.SequenceScalarIntersection.enabled = 0
+daikon.derive.binary.SequenceScalarUnion.enabled = 0
+daikon.derive.binary.SequenceScalarSubscript.enabled = 0
+daikon.derive.binary.SequenceScalarSubsequence.enabled = 0
+daikon.derive.binary.SequenceStringSubscript.enabled = 0
+daikon.derive.binary.SequenceStringSubsequence.enabled = 0
+daikon.derive.binary.SequencesConcat.enabled = 0
+daikon.derive.binary.SequencesJoin.enabled = 0
+daikon.derive.binary.SequencesPredicate.enabled = 0
+daikon.derive.binary.SequencesPredicate.fieldOnly = 0
+daikon.derive.binary.SequencesPredicate.boolOnly = 0
+daikon.derive.binary.SequenceStringIntersection.enabled = 0
+daikon.derive.binary.SequenceStringUnion.enabled = 0
+
+#daikon.derive.unary.SequenceInitial.enabled
+#daikon.derive.unary.SequenceLength.enabled
+#daikon.derive.unary.SequenceMax.enabled
+#daikon.derive.unary.SequenceMin.enabled
+#daikon.derive.unary.SequenceSum.enabled
+
+# daikon.inv.Invariant.probability_limit
+# daikon.inv.binary.sequenceScalar.Member.enabled
+# daikon.inv.binary.sequenceScalar.SeqIntEqual.enabled
+# daikon.inv.binary.sequenceScalar.SeqIntLessThan.enabled
+# daikon.inv.binary.sequenceScalar.SeqIntGreaterThan.enabled
+# daikon.inv.binary.sequenceScalar.SeqIntLessEqual.enabled
+# daikon.inv.binary.sequenceScalar.SeqIntGreaterEqual.enabled
+# daikon.inv.binary.sequenceString.MemberString.enabled
+# daikon.inv.binary.twoScalar.IntEqual.enabled
+# daikon.inv.binary.twoScalar.IntGreaterEqual.enabled
+# daikon.inv.binary.twoScalar.IntGreaterThan.enabled
+# daikon.inv.binary.twoScalar.IntLessEqual.enabled
+# daikon.inv.binary.twoScalar.IntLessThan.enabled
+# daikon.inv.binary.twoScalar.IntNonEqual.enabled
+# daikon.inv.binary.twoScalar.LinearBinary.enabled
+# daikon.inv.binary.twoSequence.PairwiseIntEqual.enabled
+# daikon.inv.binary.twoSequence.PairwiseIntLessThan.enabled
+# daikon.inv.binary.twoSequence.PairwiseIntGreaterThan.enabled
+# daikon.inv.binary.twoSequence.PairwiseIntLessEqual.enabled
+# daikon.inv.binary.twoSequence.PairwiseIntGreaterEqual.enabled
+# daikon.inv.binary.twoSequence.PairwiseLinearBinary.enabled
+# daikon.inv.binary.twoSequence.Reverse.enabled
+# daikon.inv.binary.twoSequence.SeqSeqIntEqual.enabled
+# daikon.inv.binary.twoSequence.SeqSeqIntLessThan.enabled
+# daikon.inv.binary.twoSequence.SeqSeqIntGreaterThan.enabled
+# daikon.inv.binary.twoSequence.SeqSeqIntLessEqual.enabled
+# daikon.inv.binary.twoSequence.SeqSeqIntGreaterEqual.enabled
+# daikon.inv.binary.twoSequence.SubSequence.enabled
+# daikon.inv.binary.twoSequence.SubSet.enabled
+# daikon.inv.binary.twoSequence.SuperSet.enabled
+# daikon.inv.ternary.threeScalar.FunctionBinary.enabled
+# daikon.inv.ternary.threeScalar.LinearTernary.enabled
+# daikon.inv.unary.scalar.LowerBound.enabled
+# daikon.inv.unary.scalar.LowerBound.maximal_interesting
+# daikon.inv.unary.scalar.LowerBound.minimal_interesting
+# daikon.inv.unary.scalar.Modulus.enabled
+# daikon.inv.unary.scalar.NonModulus.enabled
+# daikon.inv.unary.scalar.NonZero.enabled
+# daikon.inv.unary.scalar.OneOfScalar.enabled
+# daikon.inv.unary.scalar.OneOfScalar.size
+# daikon.inv.unary.scalar.UpperBound.enabled
+# daikon.inv.unary.scalar.UpperBound.maximal_interesting
+# daikon.inv.unary.scalar.UpperBound.minimal_interesting
+# daikon.inv.unary.sequence.CommonSequence.enabled
+# daikon.inv.unary.sequence.EltLowerBound.enabled
+# daikon.inv.unary.sequence.EltLowerBound.maximal_interesting
+# daikon.inv.unary.sequence.EltLowerBound.minimal_interesting
+# daikon.inv.unary.sequence.EltNonZero.enabled
+# daikon.inv.unary.sequence.EltOneOf.enabled
+# daikon.inv.unary.sequence.EltOneOf.size
+# daikon.inv.unary.sequence.EltUpperBound.enabled
+# daikon.inv.unary.sequence.EltUpperBound.maximal_interesting
+# daikon.inv.unary.sequence.EltUpperBound.minimal_interesting
+# daikon.inv.unary.sequence.EltwiseIntComparison.enabled
+# daikon.inv.unary.sequence.NoDuplicates.enabled
+# daikon.inv.unary.sequence.OneOfSequence.enabled
+# daikon.inv.unary.sequence.OneOfSequence.size
+# daikon.inv.unary.sequence.SeqIndexComparison.enabled
+# daikon.inv.unary.sequence.SeqIndexNonEqual.enabled
+# daikon.inv.unary.string.OneOfString.enabled
+# daikon.inv.unary.string.OneOfString.size
+# daikon.inv.unary.stringsequence.CommonStringSequence.enabled
+# daikon.inv.unary.stringsequence.EltOneOfString.enabled
+# daikon.inv.unary.stringsequence.EltOneOfString.size
+# daikon.inv.unary.stringsequence.OneOfStringSequence.enabled
+# daikon.inv.unary.stringsequence.OneOfStringSequence.size
+# daikon.split.ContextSplitterFactory.granularity
+# daikon.split.FileCompiler.compiler
+# daikon.split.SplitterFactory.delete_splitters_on_exit
+# daikon.split.SplitterList.all_splitters
+# daikon.split.TimedProcess.compile_timeout
+

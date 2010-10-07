@@ -1,0 +1,410 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..default_args_func(int,\_int,\_int):::ENTER
+  ppt-type enter
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..default_args_func(int,\_int,\_int):::EXIT0
+  ppt-type subexit
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..overloaded_foo(char*,\_char*):::ENTER
+  ppt-type enter
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+
+ppt ..overloaded_foo(char*,\_char*):::EXIT0
+  ppt-type subexit
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type string
+    dec-type char*
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..overloaded_foo(double,\_double):::ENTER
+  ppt-type enter
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+
+ppt ..overloaded_foo(double,\_double):::EXIT0
+  ppt-type subexit
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..overloaded_foo(int):::ENTER
+  ppt-type enter
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..overloaded_foo(int):::EXIT0
+  ppt-type subexit
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..overloaded_foo(int,\_int):::ENTER
+  ppt-type enter
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..overloaded_foo(int,\_int):::EXIT0
+  ppt-type subexit
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..pass_by_const_reference(int\_const&):::ENTER
+  ppt-type enter
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable cref_a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..pass_by_const_reference(int\_const&):::EXIT0
+  ppt-type subexit
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable cref_a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..pass_by_reference(int&,\_int):::ENTER
+  ppt-type enter
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ref_a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable val_b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..pass_by_reference(int&,\_int):::EXIT0
+  ppt-type subexit
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ref_a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable val_b
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..pass_ptr_by_reference(int*&):::ENTER
+  ppt-type enter
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ref_a
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags is_param 
+  variable ref_a[..]
+    var-kind array
+    enclosing-var ref_a
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..pass_ptr_by_reference(int*&):::EXIT0
+  ppt-type subexit
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ref_a
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags is_param 
+  variable ref_a[..]
+    var-kind array
+    enclosing-var ref_a
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt ..return_reference(int&):::ENTER
+  ppt-type enter
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..return_reference(int&):::EXIT0
+  ppt-type subexit
+  variable ::globalA
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::globalB
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+

@@ -1,0 +1,42 @@
+----SECTION----
+function: ..normal_view()
+f
+P
+
+----SECTION----
+function: ..view_foo()
+f
+P foo
+
+----SECTION----
+function: ..view_bar()
+b
+P bar
+
+----SECTION----
+function: ..view_foo_and_bar()
+f
+P foo
+b
+P bar
+
+----SECTION----
+function: ..view_bar_as_foo()
+bar_as_foo
+P foo
+
+----SECTION----
+function: ..main()
+
+----SECTION----
+globals
+
+----SECTION----
+usertype.foo
+foo_str
+S
+foo_baz
+P baz
+
+----SECTION----
+usertype.bar

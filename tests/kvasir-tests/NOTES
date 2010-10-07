@@ -1,0 +1,79 @@
+-----------------------------------------------------------------------------
+OVERVIEW
+
+This document contains a short overview of the Kvasir regression test suite.
+
+The tests are split into two categories: small tests, and actual applications.
+
+The small tests are very brief tests intended to test Kvasir's handling of some
+language feature. Most of these tests are named after the feature they are testing.
+Examples include: ArrayTest, IntTest, GlobalTest, etc.
+
+The actual applications are a small set of actual C/C++ applications that we run
+through Kvasir. We test the following applications.
+
+A reference implementation of the rijndael encryption algorithm.
+bzip2
+bc
+flex (A special single-file version, as well as a pristine copy)
+gzip
+md5
+perl
+wordplay
+
+Of the test, we only produce .dtrace files for bc, md5, and wordplay as the other
+programs would produce dtraces of a size that would be unfeasible for nightly
+testing.
+
+------------------------------------------------------------------------------
+NOTES
+
+UnionComp is a special test meant to illustrate a known dyncomp bug that is caused
+by a limitation in Kvasir's handling of unions. More detail can be found in
+the comments of UnionComp.c.
+
+In addition to comparability issues, unions tend to produce a lot of garbage in the
+dtrace output. This can cause problems when testing the regression of different versions
+of the same binary (for example,such issues were encountered during the regression testing
+while moving from GCC 3 to GCC 4). Generally this can be handled by simply converting
+all unions to structs in the target program. 
+
+dtrace-append is a test meant to check if Kvasir correctly outputs appended traces
+
+------------------------------------------------------------------------------
+NON-WORKING TESTS
+
+These tests are meant to illustrate some features that Kvasir does not currently support,
+mainly due to it's handling of function entry/exit.
+
+pthread-test - used to gauge the ability of Fjalar to handle multithreaded situations. 
+This is a simple test which forces an interleaving of 2 functions.
+
+ExceptionTest -  a simple test of C++ Exception handling
+
+setjmp-test - Test of setjmp/longjump
+
+------------------------------------------------------------------------------
+TODO
+
+- Test more command line arguments. These occasionally pop up and tend to be
+very irritating to the user
+
+- The test suite currently creates an entire set of goal files for every compiler 
+version with differences. Currently this is not a problem, but if the amount of
+different goal file sets we need to maintain becomes large, it may be more prudent
+to keep one canonical goal file set and maintain the rest as diffs (or possibly utilize
+some other scheme)
+
+------------------------------------------------------------------------------
+DYNCOMP ARCHITECTURAL ISSUES
+
+The following tests have known comparability issues due to handling of comparability
+with regards to registers. Please see 
+$INV/valgrind-3/valgrind/fjalar/notes/dyncomp-architectural-issues.txt  for more info.
+
+PointerTest - Fields of a struct merged due to the entire struct being put into a single
+              register.
+TrivialTest - Same as above, plus use of memset.
+TypedefTest - Same as above, however struct was 13 bytes (meaning it was split across 2 registers,
+              and all fields which shared a register were combined)

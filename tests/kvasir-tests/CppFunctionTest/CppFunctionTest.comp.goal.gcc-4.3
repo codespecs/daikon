@@ -1,0 +1,104 @@
+..default_args_func(int,\_int,\_int):::ENTER
+::globalA
+::globalB
+a
+b
+c
+
+..default_args_func(int,\_int,\_int):::EXIT0
+::globalA
+::globalB
+a
+b
+c
+
+..main():::ENTER
+::globalA
+::globalB
+
+..main():::EXIT0
+::globalA
+::globalB
+return
+
+..overloaded_foo(char*,\_char*):::ENTER
+::globalA
+::globalB
+a b
+
+..overloaded_foo(char*,\_char*):::EXIT0
+::globalA
+::globalB
+a b return
+
+..overloaded_foo(double,\_double):::ENTER
+::globalA
+::globalB
+a b
+
+..overloaded_foo(double,\_double):::EXIT0
+::globalA
+::globalB
+a b return
+
+..overloaded_foo(int):::ENTER
+::globalA
+::globalB
+a
+
+..overloaded_foo(int):::EXIT0
+::globalA
+::globalB
+a
+return
+
+..overloaded_foo(int,\_int):::ENTER
+::globalA
+::globalB
+a b
+
+..overloaded_foo(int,\_int):::EXIT0
+::globalA
+::globalB
+a b return
+
+..pass_by_const_reference(int\_const&):::ENTER
+::globalA
+::globalB
+cref_a
+
+..pass_by_const_reference(int\_const&):::EXIT0
+::globalA
+::globalB
+cref_a
+
+..pass_by_reference(int&,\_int):::ENTER
+::globalA
+::globalB
+ref_a
+val_b
+
+..pass_by_reference(int&,\_int):::EXIT0
+::globalA
+::globalB
+ref_a
+val_b
+
+..pass_ptr_by_reference(int*&):::ENTER
+::globalA ::globalB ref_a[..]
+ref_a
+
+..pass_ptr_by_reference(int*&):::EXIT0
+::globalA ::globalB ref_a[..]
+ref_a
+
+..return_reference(int&):::ENTER
+::globalA
+::globalB
+a
+
+..return_reference(int&):::EXIT0
+::globalA
+::globalB
+a return
+

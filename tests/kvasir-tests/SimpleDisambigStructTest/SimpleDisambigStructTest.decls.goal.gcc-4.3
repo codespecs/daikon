@@ -1,0 +1,216 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..bar():::ENTER
+  ppt-type enter
+  variable actualB
+    var-kind variable
+    rep-type hashcode
+    dec-type Buffer
+    flags is_param 
+  variable actualB.dynamicIntArray
+    var-kind field dynamicIntArray
+    enclosing-var actualB
+    rep-type hashcode
+    dec-type int*
+  variable actualB.dynamicIntArray[..]
+    var-kind array
+    enclosing-var actualB.dynamicIntArray
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable actualB.dynamicString
+    var-kind field dynamicString
+    enclosing-var actualB
+    rep-type string
+    dec-type char*
+  variable actualB.number
+    var-kind field number
+    enclosing-var actualB
+    rep-type int
+    dec-type int
+  variable actualB.staticIntArray
+    var-kind field staticIntArray
+    enclosing-var actualB
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable actualB.staticIntArray[..]
+    var-kind array
+    enclosing-var actualB.staticIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable actualB.staticString
+    var-kind field staticString
+    enclosing-var actualB
+    reference-type offset
+    rep-type string
+    dec-type char*
+
+ppt ..bar():::EXIT0
+  ppt-type subexit
+  variable actualB
+    var-kind variable
+    rep-type hashcode
+    dec-type Buffer
+    flags is_param 
+  variable actualB.dynamicIntArray
+    var-kind field dynamicIntArray
+    enclosing-var actualB
+    rep-type hashcode
+    dec-type int*
+  variable actualB.dynamicIntArray[..]
+    var-kind array
+    enclosing-var actualB.dynamicIntArray
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable actualB.dynamicString
+    var-kind field dynamicString
+    enclosing-var actualB
+    rep-type string
+    dec-type char*
+  variable actualB.number
+    var-kind field number
+    enclosing-var actualB
+    rep-type int
+    dec-type int
+  variable actualB.staticIntArray
+    var-kind field staticIntArray
+    enclosing-var actualB
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable actualB.staticIntArray[..]
+    var-kind array
+    enclosing-var actualB.staticIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable actualB.staticString
+    var-kind field staticString
+    enclosing-var actualB
+    reference-type offset
+    rep-type string
+    dec-type char*
+
+ppt ..foo():::ENTER
+  ppt-type enter
+  variable b
+    var-kind variable
+    rep-type hashcode
+    dec-type Buffer*
+    flags is_param 
+  variable b->dynamicIntArray
+    var-kind field dynamicIntArray
+    enclosing-var b
+    rep-type hashcode
+    dec-type int*
+  variable b->dynamicIntArray[..]
+    var-kind array
+    enclosing-var b->dynamicIntArray
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable b->dynamicString
+    var-kind field dynamicString
+    enclosing-var b
+    rep-type string
+    dec-type char*
+  variable b->number
+    var-kind field number
+    enclosing-var b
+    rep-type int
+    dec-type int
+  variable b->staticIntArray
+    var-kind field staticIntArray
+    enclosing-var b
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable b->staticIntArray[..]
+    var-kind array
+    enclosing-var b->staticIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable b->staticString
+    var-kind field staticString
+    enclosing-var b
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable b[0]
+    var-kind field [0]
+    enclosing-var b
+    rep-type hashcode
+    dec-type Buffer
+
+ppt ..foo():::EXIT0
+  ppt-type subexit
+  variable b
+    var-kind variable
+    rep-type hashcode
+    dec-type Buffer*
+    flags is_param 
+  variable b->dynamicIntArray
+    var-kind field dynamicIntArray
+    enclosing-var b
+    rep-type hashcode
+    dec-type int*
+  variable b->dynamicIntArray[..]
+    var-kind array
+    enclosing-var b->dynamicIntArray
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable b->dynamicString
+    var-kind field dynamicString
+    enclosing-var b
+    rep-type string
+    dec-type char*
+  variable b->number
+    var-kind field number
+    enclosing-var b
+    rep-type int
+    dec-type int
+  variable b->staticIntArray
+    var-kind field staticIntArray
+    enclosing-var b
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable b->staticIntArray[..]
+    var-kind array
+    enclosing-var b->staticIntArray
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable b->staticString
+    var-kind field staticString
+    enclosing-var b
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable b[0]
+    var-kind field [0]
+    enclosing-var b
+    rep-type hashcode
+    dec-type Buffer
+
+ppt ..main():::ENTER
+  ppt-type enter
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+

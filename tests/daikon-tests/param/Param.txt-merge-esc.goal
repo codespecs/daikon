@@ -1,0 +1,117 @@
+package misc;
+
+/**
+ * For testing of isParam flag to Daikon.  We change the param with
+ * "2" in it and see what Daikon produces.
+ **/
+
+public class Param
+{
+  /*@ invariant this != null; */
+  /*@ invariant this.gi1 == 0; */
+  /*@ invariant this.gi2 == 5; */
+  /*@ invariant this.gs1 != null; */
+  /*@ invariant this.gs1 != null; */
+  /*@ invariant this.gs1.b == 15; */
+  /*@ invariant this.gs2 != null; */
+  /*@ invariant this.gs2 != null; */
+  /*@ invariant this.gs2.a == 20; */
+  /*@ invariant this.gs2.b == 25; */
+  /*@ invariant this.gi1 < this.gs1.a; */
+  /*@ invariant this.gi2 < this.gs1.a; */
+  public int gi1;
+  public int gi2;
+  public ParamType gs1;
+  public ParamType gs2;
+
+  /*@ requires args != null; */
+  /*@ requires \typeof(args) == \type(java.lang.String[]); */
+  /*@ requires (args.length == 0) && ((\forall int i; (0 <= i && i <= args.length-1) ==> (args[i] != null))); */
+  /*@ ensures (args.length == 0) && ((\forall int i; (0 <= i && i <= args.length-1) ==> (args[i] != null))); */
+  public static void main(String[] args)
+  {
+    Param me = new Param();
+    me.main();
+  }
+
+
+  /*@ requires this.gs1.a == 10; */
+  /*@ modifies this.gs1.a; */
+  /*@ ensures this.gs1.a == 110; */
+  public void main() {
+    for (int i = 0; i < 100; i++) {
+      work (gi1, gi2, gs1, gs2);
+    }
+  }
+
+  /*@ requires this.gi1 == pi1; */
+  /*@ requires this.gi2 == pi2; */
+  /*@ requires this.gs1 == ps1; */
+  /*@ requires this.gs1.a == ps1.a; */
+  /*@ requires this.gs1.b == ps1.b; */
+  /*@ requires this.gs2 == ps2; */
+  /*@ requires this.gs2.a == ps2.a; */
+  /*@ requires this.gs2.b == ps2.b; */
+  /*@ modifies this.gs1.a, ps1.a, ps2.a, ps2.b; */
+  /*@ ensures this.gi1 == \old(pi1); */
+  /*@ ensures this.gi2 == \old(pi2); */
+  /*@ ensures this.gs1 == \old(ps1); */
+  /*@ ensures this.gs1.a == ps1.a; */
+  /*@ ensures this.gs1.b == ps1.b; */
+  /*@ ensures this.gs2 == \old(ps2); */
+  /*@ ensures this.gs2.a == \old(ps2.a); */
+  /*@ ensures this.gs2.b == \old(ps2.b); */
+  /*@ ensures ps1.b == \old(this.gs1.b); */
+  /*@ ensures ps1.b == 15; */
+  /*@ ensures this.gi1 < ps1.a; */
+  /*@ ensures this.gi1 < \old(ps1.a); */
+  /*@ ensures this.gi2 < ps1.a; */
+  /*@ ensures this.gi2 < \old(ps1.a); */
+  /*@ ensures ps1.a - \old(ps1.a) - 1 == 0; */
+  /**
+   *
+   **/
+  public void work(int pi1, int pi2, ParamType ps1, ParamType ps2)
+  {
+    pi2 ++;
+
+    ps2 = new ParamType();
+
+    ps1.a ++;
+    ps2.a ++;
+
+    
+  }
+
+  /*@ ensures this.gs1.a == 10; */
+  public Param() {
+    gi1 = 0;
+    gi2 = 5;
+
+    gs1 = new ParamType();
+    gs1.a = 10;
+    gs1.b = 15;
+
+    gs2 = new ParamType();
+    gs2.a = 20;
+    gs2.b = 25;
+
+
+  }
+
+}
+
+
+class ParamType {
+
+  /*@ invariant this.a == this.b; */
+  /*@ invariant this.a == 0; */
+  public int a;
+  public int b;
+
+  public ParamType () {
+    a = 0;
+    b = 0;
+  }
+
+}

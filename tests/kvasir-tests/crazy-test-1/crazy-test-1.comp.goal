@@ -1,0 +1,216 @@
+..copyComplexStruct():::ENTER
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+cp
+cp[..]
+cp[..].basic1
+cp[..].basic1.char_val cp[..].basic1.short_val cp[..].basic1.uchar_val cp[..].basic2->char_val cp[..].basic2->short_val cp[..].basic2->uchar_val
+cp[..].basic1.int_val cp[..].basic2->int_val
+cp[..].basic1.ushort_val cp[..].basic2->ushort_val
+cp[..].basic2
+cp[..].basic2[0]
+cp[..].day_of_week
+cp[..].footer
+cp[..].myString
+cp[..].myString[0]
+cp[..].myString[0][0]
+
+..copyComplexStruct():::EXIT0
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+cp
+cp[..]
+cp[..].basic1
+cp[..].basic1.char_val cp[..].basic1.short_val cp[..].basic1.uchar_val cp[..].basic2->char_val cp[..].basic2->short_val cp[..].basic2->uchar_val return.basic1 return.basic1.char_val return.basic1.short_val return.basic1.uchar_val return.basic2[..].char_val return.basic2[..].short_val return.basic2[..].uchar_val
+cp[..].basic1.int_val cp[..].basic2->int_val return.basic1.int_val return.basic2[..].int_val
+cp[..].basic1.ushort_val cp[..].basic2->ushort_val return.basic1.ushort_val return.basic2[..].ushort_val
+cp[..].basic2 return.basic2
+cp[..].basic2[0]
+cp[..].day_of_week return return.day_of_week
+cp[..].footer return.footer
+cp[..].myString return.myString
+cp[..].myString[0] return.myString[..]
+cp[..].myString[0][0]
+return.basic2[..]
+return.myString[..][0]
+
+..initBasicTypesStruct():::ENTER
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+a
+b
+bp
+bp[..] cp[..]->basic2
+bp[..]->char_val bp[..]->short_val bp[..]->uchar_val cp[..]->basic1.char_val cp[..]->basic1.short_val cp[..]->basic1.uchar_val cp[..]->basic2->char_val cp[..]->basic2->short_val cp[..]->basic2->uchar_val
+bp[..]->int_val cp[..]->basic1.int_val cp[..]->basic2->int_val
+bp[..]->ushort_val cp[..]->basic1.ushort_val cp[..]->basic2->ushort_val
+bp[..][0]
+c
+cp
+cp[..]
+cp[..]->basic1
+cp[..]->basic2[0]
+cp[..]->day_of_week
+cp[..]->footer
+cp[..]->myString
+cp[..]->myString[0]
+cp[..]->myString[0][0]
+cp[..][0]
+d
+e
+f
+
+..initBasicTypesStruct():::EXIT0
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+a
+b
+bp
+bp[..] cp[..]->basic2 return[..][0]->basic2
+bp[..]->char_val bp[..]->short_val bp[..]->uchar_val cp[..]->basic1.char_val cp[..]->basic1.short_val cp[..]->basic1.uchar_val cp[..]->basic2->char_val cp[..]->basic2->short_val cp[..]->basic2->uchar_val return[..][0]->basic1.char_val return[..][0]->basic1.short_val return[..][0]->basic1.uchar_val return[..][0]->basic2->char_val return[..][0]->basic2->short_val return[..][0]->basic2->uchar_val
+bp[..]->int_val cp[..]->basic1.int_val cp[..]->basic2->int_val return[..][0]->basic1.int_val return[..][0]->basic2->int_val
+bp[..]->ushort_val cp[..]->basic1.ushort_val cp[..]->basic2->ushort_val return[..][0]->basic1.ushort_val return[..][0]->basic2->ushort_val
+bp[..][0]
+c
+cp return[..]
+cp[..] return[..][0]
+cp[..]->basic1
+cp[..]->basic2[0]
+cp[..]->day_of_week return[..][0]->day_of_week
+cp[..]->footer return[..][0]->footer
+cp[..]->myString return[..][0]->myString
+cp[..]->myString[0] return[..][0]->myString[0]
+cp[..]->myString[0][0]
+cp[..][0]
+d
+e
+f
+return
+return[..][0]->basic1
+return[..][0]->basic2[0]
+return[..][0]->myString[0][0]
+return[..][0][0]
+
+..main():::ENTER
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+
+..main():::EXIT0
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+return
+
+..printHelloWorld():::ENTER
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+routebaga
+turnip
+
+..printHelloWorld():::EXIT0
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+return
+routebaga
+turnip
+
+..readStruct():::ENTER
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+a a.char_val a.short_val a.uchar_val
+a.int_val
+a.ushort_val
+
+..readStruct():::EXIT0
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+a a.char_val a.short_val a.uchar_val return return.char_val return.short_val return.uchar_val
+a.int_val return.int_val
+a.ushort_val return.ushort_val
+
+..returnDoublePtr():::ENTER
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+Int64PtrVar
+Int64PtrVar[..] uintPtrVar[..]
+uintPtrVar
+
+..returnDoublePtr():::EXIT0
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+Int64PtrVar
+Int64PtrVar[..] return[..] uintPtrVar[..]
+return
+uintPtrVar
+
+..returnFooString():::ENTER
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+::returnVal doubleIntPtr[..][0] ushortValue
+doubleIntPtr
+doubleIntPtr[..]
+
+..returnFooString():::EXIT0
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+::returnVal doubleIntPtr[..][0] return ushortValue
+doubleIntPtr
+doubleIntPtr[..]
+
+..returnWeekday():::ENTER
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+day
+
+..returnWeekday():::EXIT0
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+day return
+
+..valueAt():::ENTER
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+index myArray
+myArray[..]
+
+..valueAt():::EXIT0
+::globalDouble
+::globalInt
+::globalLong
+::globalStr
+index myArray
+myArray[..] return
+

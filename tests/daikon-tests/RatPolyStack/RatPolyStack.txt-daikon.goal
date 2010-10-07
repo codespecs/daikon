@@ -1,0 +1,168 @@
+===========================================================================
+PolyCalc.Cons:::OBJECT
+this.head != null
+this.tail.head != null
+this.tail.tail.head != null
+===========================================================================
+PolyCalc.Cons.Cons(PolyCalc.RatPoly, PolyCalc.Cons):::ENTER
+h != null
+t.head != null
+t.tail.head != null
+===========================================================================
+PolyCalc.Cons.Cons(PolyCalc.RatPoly, PolyCalc.Cons):::EXIT
+this.head == orig(h)
+this.tail == orig(t)
+this.tail.head == t.head
+this.tail.tail == t.tail
+this.tail.tail.head == t.tail.head
+this.tail.tail.tail == t.tail.tail
+t.head == orig(t.head)
+t.tail == orig(t.tail)
+t.tail.head == orig(t.tail.head)
+t.tail.tail == orig(t.tail.tail)
+t.head != null
+t.tail.head != null
+===========================================================================
+PolyCalc.RatPolyStack:::OBJECT
+this.polys.head != null
+this.polys.tail.head != null
+this.size >= 0
+===========================================================================
+PolyCalc.RatPolyStack.RatPolyStack():::EXIT
+this.polys == null
+this.size == 0
+===========================================================================
+PolyCalc.RatPolyStack.add():::ENTER
+this.size one of { 2, 3 }
+===========================================================================
+PolyCalc.RatPolyStack.add():::EXIT
+this.polys.tail == orig(this.polys.tail.tail)
+this.polys.tail.tail == null
+this.size one of { 1, 2 }
+===========================================================================
+PolyCalc.RatPolyStack.clear():::ENTER
+this.polys.head has only one value
+this.size == 3
+===========================================================================
+PolyCalc.RatPolyStack.clear():::EXIT
+this.polys == null
+this.size == 0
+===========================================================================
+PolyCalc.RatPolyStack.div():::ENTER
+this has only one value
+this.size one of { 2, 3, 4 }
+===========================================================================
+PolyCalc.RatPolyStack.div():::EXIT
+this.polys.tail == orig(this.polys.tail.tail)
+this.size one of { 1, 2, 3 }
+===========================================================================
+PolyCalc.RatPolyStack.dup():::ENTER
+this.size one of { 1, 2, 3 }
+===========================================================================
+PolyCalc.RatPolyStack.dup():::EXIT
+this.polys.head == this.polys.tail.head
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys)
+this.polys.tail.tail == orig(this.polys.tail)
+this.size one of { 2, 3, 4 }
+===========================================================================
+PolyCalc.RatPolyStack.get(int):::ENTER
+this.polys != null
+this.size >= 1
+index >= 0
+this.size > index
+===========================================================================
+PolyCalc.RatPolyStack.get(int):::EXIT
+this.polys == orig(this.polys)
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys.tail)
+this.polys.tail.head == orig(this.polys.tail.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == orig(this.size)
+this.polys != null
+this.size >= 1
+return != null
+this.size > orig(index)
+===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::ENTER
+this.polys != null
+this.size >= 1
+index >= 0
+this.size > index
+===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::EXIT
+this.polys == orig(this.polys)
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys.tail)
+this.polys.tail.head == orig(this.polys.tail.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == orig(this.size)
+this.polys != null
+this.size >= 1
+return != null
+return.head != null
+return.tail.head != null
+this.size > orig(index)
+===========================================================================
+PolyCalc.RatPolyStack.mul():::ENTER
+this.size one of { 2, 3 }
+===========================================================================
+PolyCalc.RatPolyStack.mul():::EXIT
+this.polys.tail == orig(this.polys.tail.tail)
+this.polys.tail.tail == null
+this.size one of { 1, 2 }
+===========================================================================
+PolyCalc.RatPolyStack.pop():::ENTER
+this.polys != null
+this.size >= 1
+===========================================================================
+PolyCalc.RatPolyStack.pop():::EXIT
+this.polys == orig(this.polys.tail)
+this.polys.head == orig(this.polys.tail.head)
+this.polys.tail == orig(this.polys.tail.tail)
+return == orig(this.polys.head)
+return != null
+this.size - orig(this.size) + 1 == 0
+===========================================================================
+PolyCalc.RatPolyStack.push(PolyCalc.RatPoly):::ENTER
+p != null
+===========================================================================
+PolyCalc.RatPolyStack.push(PolyCalc.RatPoly):::EXIT
+this.polys.head == orig(p)
+this.polys.tail == orig(this.polys)
+this.polys.tail.head == orig(this.polys.head)
+this.polys.tail.tail == orig(this.polys.tail)
+this.polys != null
+this.size >= 1
+this.size - orig(this.size) - 1 == 0
+===========================================================================
+PolyCalc.RatPolyStack.size():::ENTER
+===========================================================================
+PolyCalc.RatPolyStack.size():::EXIT
+this.polys == orig(this.polys)
+this.polys.head == orig(this.polys.head)
+this.polys.tail == orig(this.polys.tail)
+this.polys.tail.head == orig(this.polys.tail.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == return
+return == orig(this.size)
+return >= 0
+===========================================================================
+PolyCalc.RatPolyStack.sub():::ENTER
+this.size one of { 2, 3, 4 }
+===========================================================================
+PolyCalc.RatPolyStack.sub():::EXIT
+this.polys.tail == orig(this.polys.tail.tail)
+this.size one of { 1, 2, 3 }
+===========================================================================
+PolyCalc.RatPolyStack.swap():::ENTER
+this.size one of { 2, 3 }
+===========================================================================
+PolyCalc.RatPolyStack.swap():::EXIT
+this.polys == orig(this.polys.tail)
+this.polys.head == orig(this.polys.tail.head)
+this.polys.tail == orig(this.polys)
+this.polys.tail.head == orig(this.polys.head)
+this.polys.tail.tail == orig(this.polys.tail.tail)
+this.size == orig(this.size)
+this.size one of { 2, 3 }

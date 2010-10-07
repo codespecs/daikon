@@ -1,0 +1,125 @@
+===========================================================================
+MapQuick.WeightedNodePath:::OBJECT
+(NEQ (hash (select |node| |this|)) null)
+(NEQ (hash (select |node| (select |path| |this|))) null)
+(NEQ (hash (select |node| (select |path| (select |path| |this|)))) null)
+(>= (select |cost| (select |path| (select |path| |this|))) 1)
+(>= (select |cost| (select |path| |this|)) 1)
+(>= (select |cost| |this|) 1)
+(< (select |cost| (select |path| (select |path| |this|))) (select |cost| (select |path| |this|)))
+(< (select |cost| (select |path| (select |path| |this|))) (select |cost| |this|))
+(< (select |cost| (select |path| |this|)) (select |cost| |this|))
+===========================================================================
+MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::ENTER
+(NEQ (hash |node|) null)
+===========================================================================
+MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::EXIT
+(EQ (hash (select |node| |this|)) (hash |__orig__node|))
+(EQ (hash (select |path| |this|)) null)
+===========================================================================
+MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::ENTER
+(NEQ (hash |node|) null)
+(NEQ (hash (select |node| |path|)) null)
+(NEQ (hash (select |node| (select |path| |path|))) null)
+(>= (select |cost| (select |path| |path|)) 1)
+(>= (select |cost| |path|) 1)
+(< (select |cost| (select |path| |path|)) (select |cost| |path|))
+===========================================================================
+MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::EXIT
+(EQ (hash (select |node| |this|)) (hash |__orig__node|))
+(EQ (hash (select |path| |this|)) (hash |__orig__path|))
+(EQ (hash (select |node| (select |path| |this|))) (hash (select |node| |path|)))
+(EQ (hash (select |path| (select |path| |this|))) (hash (select |path| |path|)))
+(EQ (hash (select |node| (select |path| (select |path| |this|)))) (hash (select |node| (select |path| |path|))))
+(EQ (hash (select |path| (select |path| (select |path| |this|)))) (hash (select |path| (select |path| |path|))))
+(EQ (select |cost| (select |path| (select |path| |this|))) (select |cost| (select |path| |path|)))
+(EQ (select |cost| (select |path| |this|)) (select |cost| |path|))
+(EQ (hash (select |node| |path|)) (hash (select |node| |__orig__path|)))
+(EQ (hash (select |path| |path|)) (hash (select |path| |__orig__path|)))
+(EQ (hash (select |node| (select |path| |path|))) (hash (select |node| (select |path| |__orig__path|))))
+(EQ (hash (select |path| (select |path| |path|))) (hash (select |path| (select |path| |__orig__path|))))
+(EQ (select |cost| (select |path| |path|)) (select |cost| (select |path| |__orig__path|)))
+(EQ (select |cost| |path|) (select |cost| |__orig__path|))
+(NEQ (hash (select |node| |path|)) null)
+(NEQ (hash (select |node| (select |path| |path|))) null)
+(>= (select |cost| (select |path| |path|)) 1)
+(>= (select |cost| |path|) 1)
+(> (select |cost| |this|) (select |cost| (select |path| |path|)))
+(> (select |cost| |this|) (select |cost| |path|))
+(< (select |cost| (select |path| |path|)) (select |cost| |path|))
+===========================================================================
+MapQuick.WeightedNodePath.cost():::ENTER
+===========================================================================
+MapQuick.WeightedNodePath.cost():::EXIT
+(EQ (hash (select |node| |this|)) (hash (select |node| |__orig__this|)))
+(EQ (hash (select |path| |this|)) (hash (select |path| |__orig__this|)))
+(EQ (hash (select |node| (select |path| |this|))) (hash (select |node| (select |path| |__orig__this|))))
+(EQ (hash (select |path| (select |path| |this|))) (hash (select |path| (select |path| |__orig__this|))))
+(EQ (hash (select |node| (select |path| (select |path| |this|)))) (hash (select |node| (select |path| (select |path| |__orig__this|)))))
+(EQ (hash (select |path| (select |path| (select |path| |this|)))) (hash (select |path| (select |path| (select |path| |__orig__this|)))))
+(EQ (select |cost| (select |path| (select |path| |this|))) (select |cost| (select |path| (select |path| |__orig__this|))))
+(EQ (select |cost| (select |path| |this|)) (select |cost| (select |path| |__orig__this|)))
+(EQ (select |cost| |this|) (select |cost| |__orig__this|))
+(>= |return| 1.0d0)
+===========================================================================
+MapQuick.WeightedNodePath.elements():::ENTER
+(EQ (|java->>| (select |cost| |this|) (select |cost| (select |path| |this|))) 0)
+===========================================================================
+MapQuick.WeightedNodePath.elements():::EXIT
+(EQ (hash (select |node| |this|)) (hash (select |node| |__orig__this|)))
+(EQ (hash (select |path| |this|)) (hash (select |path| |__orig__this|)))
+(EQ (hash (select |node| (select |path| |this|))) (hash (select |node| (select |path| |__orig__this|))))
+(EQ (hash (select |path| (select |path| |this|))) (hash (select |path| (select |path| |__orig__this|))))
+(EQ (hash (select |node| (select |path| (select |path| |this|)))) (hash (select |node| (select |path| (select |path| |__orig__this|)))))
+(EQ (hash (select |path| (select |path| (select |path| |this|)))) (hash (select |path| (select |path| (select |path| |__orig__this|)))))
+(EQ (select |cost| (select |path| (select |path| |this|))) (select |cost| (select |path| (select |path| |__orig__this|))))
+(EQ (select |cost| (select |path| |this|)) (select |cost| (select |path| |__orig__this|)))
+(EQ (select |cost| |this|) (select |cost| |__orig__this|))
+(NEQ (hash |return|) null)
+(EQ (typeof |return|) |T_java.util.Collections$UnmodifiableCollection$1|)
+(EQ (|java->>| (select |cost| |this|) (select |cost| (select |path| |this|))) 0)
+===========================================================================
+MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::ENTER
+(NEQ (hash |node|) null)
+===========================================================================
+MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::EXIT
+(EQ (hash (select |node| |this|)) (hash (select |node| |__orig__this|)))
+(EQ (hash (select |path| |this|)) (hash (select |path| |__orig__this|)))
+(EQ (hash (select |node| (select |path| |this|))) (hash (select |node| (select |path| |__orig__this|))))
+(EQ (hash (select |path| (select |path| |this|))) (hash (select |path| (select |path| |__orig__this|))))
+(EQ (hash (select |node| (select |path| (select |path| |this|)))) (hash (select |node| (select |path| (select |path| |__orig__this|)))))
+(EQ (hash (select |path| (select |path| (select |path| |this|)))) (hash (select |path| (select |path| (select |path| |__orig__this|)))))
+(EQ (select |cost| (select |path| (select |path| |this|))) (select |cost| (select |path| (select |path| |__orig__this|))))
+(EQ (select |cost| (select |path| |this|)) (select |cost| (select |path| |__orig__this|)))
+(EQ (select |cost| |this|) (select |cost| |__orig__this|))
+(NEQ (hash |return|) null)
+(EQ (typeof |return|) |T_MapQuick.WeightedNodePath|)
+===========================================================================
+MapQuick.WeightedNodePath.extend(java.lang.Object):::ENTER
+(NEQ (hash |o|) null)
+(EQ (typeof |o|) |T_MapQuick.WeightedNode|)
+===========================================================================
+MapQuick.WeightedNodePath.extend(java.lang.Object):::EXIT
+(EQ (hash (select |node| |this|)) (hash (select |node| |__orig__this|)))
+(EQ (hash (select |path| |this|)) (hash (select |path| |__orig__this|)))
+(EQ (hash (select |node| (select |path| |this|))) (hash (select |node| (select |path| |__orig__this|))))
+(EQ (hash (select |path| (select |path| |this|))) (hash (select |path| (select |path| |__orig__this|))))
+(EQ (hash (select |node| (select |path| (select |path| |this|)))) (hash (select |node| (select |path| (select |path| |__orig__this|)))))
+(EQ (hash (select |path| (select |path| (select |path| |this|)))) (hash (select |path| (select |path| (select |path| |__orig__this|)))))
+(EQ (select |cost| (select |path| (select |path| |this|))) (select |cost| (select |path| (select |path| |__orig__this|))))
+(EQ (select |cost| (select |path| |this|)) (select |cost| (select |path| |__orig__this|)))
+(EQ (select |cost| |this|) (select |cost| |__orig__this|))
+(NEQ (hash |return|) null)
+(EQ (typeof |return|) |T_MapQuick.WeightedNodePath|)
+warning: method daikon.inv.binary.twoString.StdString$SubString.format(OutputFormat:Simplify) needs to be implemented: orig(o.getClass()) is a substring of return.getClass()
+(NEQ (typeof |return|) (typeof |__orig__o|))
+===========================================================================
+MapQuick.WeightedNodePath.hashCode():::ENTER
+(EQ (hash (select |path| |this|)) null)
+===========================================================================
+MapQuick.WeightedNodePath.hashCode():::EXIT
+(EQ (hash (select |node| |this|)) (hash (select |node| |__orig__this|)))
+(EQ (hash (select |path| |this|)) (hash (select |path| |__orig__this|)))
+(EQ (select |cost| |this|) (select |cost| |__orig__this|))
+(EQ (hash (select |path| |this|)) null)
+(< (select |cost| |this|) |return|)

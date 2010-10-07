@@ -1,0 +1,57 @@
+===========================================================================
+..main():::ENTER
+::globalIntArray has only one value
+::globalIntArray[] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+::globalX == 5
+::whatsUp == "what's up dawg!!!"
+===========================================================================
+..main():::EXIT
+::globalIntArray == orig(::globalIntArray)
+::globalIntArray[] == orig(::globalIntArray[])
+::globalX == orig(::globalX)
+::globalIntArray has only one value
+::globalIntArray[] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+::globalX == 5
+::whatsUp == "what's up dawg!!!"
+return == 0
+::whatsUp == orig(::whatsUp)
+===========================================================================
+..returnIntSum():::ENTER
+::globalIntArray has only one value
+::globalIntArray[] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+::globalX == 5
+::whatsUp == "what's up dawg!!!"
+a has only one value
+a[] == [2.71799994]
+a[] elements == 2.71799994
+b has only one value
+b[] contains no nulls and has only one value, of length 1
+dummy has only one value
+dummy[] contains no nulls and has only one value, of length 1
+dummy[][0] == [what's up dawg!!!]
+str one of { "t's up dawg!!!", "what's up dawg!!!" }
+u[] == [13, 12, 11, 10, 9, 8, 6, 5, 4, 3, 0, 0, 0]
+u[] elements >= 0
+::globalX in u[]
+===========================================================================
+..returnIntSum():::EXIT
+::globalIntArray == orig(::globalIntArray)
+::globalIntArray[] == orig(::globalIntArray[])
+::globalX == orig(::globalX)
+b[] == orig(b[])
+dummy[] == orig(dummy[])
+u[] == orig(u[])
+::globalIntArray has only one value
+::globalIntArray[] == [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12, 13, 14, 15, 16, 17, 18]
+::globalX == 5
+::whatsUp == "what's up dawg!!!"
+a[] == [2.71799994]
+b[] contains no nulls and has only one value, of length 1
+dummy[] contains no nulls and has only one value, of length 1
+dummy[][0] == [what's up dawg!!!]
+u[] == [13, 12, 11, 10, 9, 8, 6, 5, 4, 3, 0, 0, 0]
+u[] elements >= 0
+::globalX in u[]
+::whatsUp == orig(::whatsUp)
+a[] == orig(a[]) (elementwise)
+a[] is the reverse of orig(a[])

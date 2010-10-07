@@ -1,0 +1,390 @@
+===========================================================================
+std.check_delimiter(char;)int:::ENTER
+    Variables: ch
+ch >= -1
+===========================================================================
+std.check_delimiter(char;)int:::EXIT20
+    Variables: ch return orig(ch)
+\result == 1
+===========================================================================
+std.check_delimiter(char;)int:::EXIT21
+    Variables: ch return orig(ch)
+\result == 0
+===========================================================================
+std.check_delimiter(char;)int:::EXIT
+    Variables: ch return orig(ch)
+ch == \old(ch)
+(\result == 0)  ==>  (\result  isPointer)
+(\result == 1)  ==>  (ch >= -1)
+ch >= -1
+\result == 0 || \result == 1
+===========================================================================
+std.constant(int;char *;int;)int:::ENTER
+    Variables: state token_str token_str[] token_ind
+state == 27 || state == 29
+token_str != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: token_str[] is printable
+token_ind >= 2
+===========================================================================
+std.constant(int;char *;int;)int:::EXIT38
+    Variables: state token_str token_str[] token_ind return orig(state) orig(token_str) orig(token_str[]) orig(token_ind)
+state == 27
+\result == 27
+token_str.equals(\old(token_str))
+===========================================================================
+std.constant(int;char *;int;)int:::EXIT39
+    Variables: state token_str token_str[] token_ind return orig(state) orig(token_str) orig(token_str[]) orig(token_ind)
+assignable token_str[*]
+state == 29
+token_ind == 2 || token_ind == 3
+\result == 29
+token_str.compareTo(\old(token_str)) < 0
+===========================================================================
+std.constant(int;char *;int;)int:::EXIT
+    Variables: state token_str token_str[] token_ind return orig(state) orig(token_str) orig(token_str[]) orig(token_ind)
+assignable token_str[*]
+state == \old(state)
+token_str == \old(token_str)
+token_ind == \old(token_ind)
+state == 27 || state == 29
+token_str != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: token_str[] is printable
+token_ind >= 2
+\result == 27 || \result == 29
+token_str.compareTo(\old(token_str)) <= 0
+===========================================================================
+std.error_or_eof_case(token_stream;token;int;char *;int;char;)token:::ENTER
+    Variables: cu_state token_str token_str[] token_ind ch
+cu_state == 0 || cu_state == 26
+token_str != null
+token_ind >= 1
+ch == -1 || ch == 0 || ch == 62
+===========================================================================
+std.error_or_eof_case(token_stream;token;int;char *;int;char;)token:::EXIT18
+    Variables: cu_state token_str token_str[] token_ind ch orig(cu_state) orig(token_str) orig(token_str[]) orig(token_ind) orig(ch)
+cu_state % 26 == 0
+ch == -1
+===========================================================================
+std.error_or_eof_case(token_stream;token;int;char *;int;char;)token:::EXIT19
+    Variables: cu_state token_str token_str[] token_ind ch orig(cu_state) orig(token_str) orig(token_str[]) orig(token_ind) orig(ch)
+cu_state == 0
+token_str.equals("") || token_str.equals(">")
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: token_str[] is printable
+token_ind == 1
+ch == 0 || ch == 62
+ch % 62 == 0
+===========================================================================
+std.error_or_eof_case(token_stream;token;int;char *;int;char;)token:::EXIT
+    Variables: cu_state token_str token_str[] token_ind ch orig(cu_state) orig(token_str) orig(token_str[]) orig(token_ind) orig(ch)
+cu_state == \old(cu_state)
+token_str == \old(token_str)
+token_ind == \old(token_ind)
+ch == \old(ch)
+(ch == -1)  ==>  (cu_state % 26 == 0)
+(ch == -1)  ==>  (cu_state == 0 || cu_state == 26)
+(ch == 0 || ch == 62)  ==>  (ch % 62 == 0)
+(ch == 0 || ch == 62)  ==>  (cu_state  isPointer)
+(ch == 0 || ch == 62)  ==>  (cu_state == 0)
+(ch == 0 || ch == 62)  ==>  (token_ind == 1)
+(ch == 0 || ch == 62)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: token_str[] is printable)
+(ch == 0 || ch == 62)  ==>  (token_str.equals("") || token_str.equals(">"))
+cu_state == 0 || cu_state == 26
+token_str != null
+token_ind >= 1
+ch == -1 || ch == 0 || ch == 62
+token_str.equals(\old(token_str))
+===========================================================================
+std.get_actual_token(char *;int;)int:::ENTER
+    Variables: token_str token_str[] token_ind
+token_str != null
+token_ind >= 1
+===========================================================================
+std.get_actual_token(char *;int;)int:::EXIT
+    Variables: token_str token_str[] token_ind return orig(token_str) orig(token_str[]) orig(token_ind)
+assignable token_str[*]
+token_str == \old(token_str)
+token_ind == \old(token_ind)
+token_str != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: token_str[] is printable
+token_ind >= 1
+\old(token_str).contains(token_str)
+===========================================================================
+std.get_char(character_stream;)CHARACTER:::EXIT
+    Variables: return
+\result >= -1
+===========================================================================
+std.is_end_of_character_stream(character_stream;)BOOLEAN:::EXIT4
+    Variables: return
+\result == 1
+===========================================================================
+std.is_end_of_character_stream(character_stream;)BOOLEAN:::EXIT5
+    Variables: return
+\result == 0
+===========================================================================
+std.is_end_of_character_stream(character_stream;)BOOLEAN:::EXIT
+    Variables: return
+(\result == 0)  ==>  (\result  isPointer)
+\result == 0 || \result == 1
+===========================================================================
+std.is_eof_token(token;)BOOLEAN:::EXIT45
+    Variables: return
+\result == 1
+===========================================================================
+std.is_eof_token(token;)BOOLEAN:::EXIT46
+    Variables: return
+\result == 0
+===========================================================================
+std.is_eof_token(token;)BOOLEAN:::EXIT
+    Variables: return
+(\result == 0)  ==>  (\result  isPointer)
+\result == 0 || \result == 1
+===========================================================================
+std.keyword(int;)int:::ENTER
+    Variables: state
+===========================================================================
+std.keyword(int;)int:::EXIT22
+    Variables: state return orig(state)
+state == 6
+\result == 6
+===========================================================================
+std.keyword(int;)int:::EXIT23
+    Variables: state return orig(state)
+state == 9
+\result == 9
+===========================================================================
+std.keyword(int;)int:::EXIT24
+    Variables: state return orig(state)
+state == 11
+\result == 11
+===========================================================================
+std.keyword(int;)int:::EXIT25
+    Variables: state return orig(state)
+state == 13
+\result == 13
+===========================================================================
+std.keyword(int;)int:::EXIT26
+    Variables: state return orig(state)
+state == 16
+\result == 16
+===========================================================================
+std.keyword(int;)int:::EXIT
+    Variables: state return orig(state)
+state == \old(state)
+===========================================================================
+std.next_state(int;char;)int:::ENTER
+    Variables: state ch
+ch >= -1
+===========================================================================
+std.next_state(int;char;)int:::EXIT41
+    Variables: state ch return orig(state) orig(ch)
+state == -3 || state == -2 || state == -1
+\result == -3 || \result == -2 || \result == -1
+===========================================================================
+std.next_state(int;char;)int:::EXIT42
+    Variables: state ch return orig(state) orig(ch)
+state >= 0
+\result >= 0
+===========================================================================
+std.next_state(int;char;)int:::EXIT43
+    Variables: state ch return orig(state) orig(ch)
+\result != 0
+===========================================================================
+std.next_state(int;char;)int:::EXIT44
+    Variables: state ch return orig(state) orig(ch)
+state >= 0
+\result == -3 || \result == -1 || \result == 17
+\result != 0
+\result % 2 == 1
+===========================================================================
+std.next_state(int;char;)int:::EXIT
+    Variables: state ch return orig(state) orig(ch)
+state == \old(state)
+ch == \old(ch)
+ch >= -1
+===========================================================================
+std.numeric_case(token_stream;token;char;char *;int;)token:::ENTER
+    Variables: ch token_str token_str[] token_ind
+ch >= -1
+token_str != null
+token_ind == 2 || token_ind == 3
+===========================================================================
+std.numeric_case(token_stream;token;char;char *;int;)token:::EXIT16
+    Variables: ch token_str token_str[] token_ind orig(ch) orig(token_str) orig(token_str[]) orig(token_ind)
+assignable ch, token_str[*], token_ind
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: orig(token_str[]) is printable
+\old(token_ind) == 2
+ch != \old(ch)
+token_str.contains(\old(token_str))
+token_str.compareTo(\old(token_str)) >= 0
+token_ind >= \old(token_ind)
+===========================================================================
+std.numeric_case(token_stream;token;char;char *;int;)token:::EXIT17
+    Variables: ch token_str token_str[] token_ind orig(ch) orig(token_str) orig(token_str[]) orig(token_ind)
+assignable token_str[*], token_ind
+ch == \old(ch)
+token_ind == 1 || token_ind == 2
+!token_str.equals(\old(token_str))
+\old(token_str).contains(token_str)
+token_ind < \old(token_ind)
+===========================================================================
+std.numeric_case(token_stream;token;char;char *;int;)token:::EXIT
+    Variables: ch token_str token_str[] token_ind orig(ch) orig(token_str) orig(token_str[]) orig(token_ind)
+assignable ch, token_str[*], token_ind
+token_str == \old(token_str)
+(ch != \old(ch))  <==>  (token_ind >= \old(token_ind))
+(ch != \old(ch))  ==>  (\old(token_ind) == 2)
+(ch != \old(ch))  ==>  (token_str.contains(\old(token_str)))
+(ch != \old(ch))  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: orig(token_str[]) is printable)
+(ch != \old(ch))  ==>  (token_str.compareTo(\old(token_str)) >= 0)
+(ch == \old(ch))  <==>  (token_ind < \old(token_ind))
+(ch == \old(ch))  ==>  (\old(ch) >= -1)
+(ch == \old(ch))  ==>  (\old(token_ind) == 2 || \old(token_ind) == 3)
+(ch == \old(ch))  ==>  (token_ind == 1 || token_ind == 2)
+(ch == \old(ch))  ==>  (!token_str.equals(\old(token_str)))
+(ch == \old(ch))  ==>  (\old(token_str).contains(token_str))
+ch >= -1
+token_str != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: token_str[] is printable
+token_ind >= 1
+===========================================================================
+std.open_character_stream(string;)character_stream:::ENTER
+    Variables: FILENAME FILENAME[]
+FILENAME == null
+===========================================================================
+std.open_character_stream(string;)character_stream:::EXIT
+    Variables: FILENAME FILENAME[] orig(FILENAME) orig(FILENAME[])
+assignable FILENAME[*]
+FILENAME == \old(FILENAME)
+FILENAME == null
+===========================================================================
+std.open_token_stream(string;)token_stream:::ENTER
+    Variables: FILENAME FILENAME[]
+FILENAME == null
+===========================================================================
+std.open_token_stream(string;)token_stream:::EXIT
+    Variables: FILENAME FILENAME[] orig(FILENAME) orig(FILENAME[])
+assignable FILENAME[*]
+FILENAME == \old(FILENAME)
+FILENAME == null
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT47
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT48
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT49
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT50
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT51
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT52
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT53
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT54
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT55
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT56
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT57
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT58
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT59
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT60
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT61
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT62
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT63
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT64
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT65
+    Variables: return
+===========================================================================
+std.print_token(token;)BOOLEAN:::EXIT
+    Variables: return
+\result == 1
+===========================================================================
+std.special(int;)int:::ENTER
+    Variables: state
+===========================================================================
+std.special(int;)int:::EXIT28
+    Variables: state return orig(state)
+state == 19
+\result == 19
+===========================================================================
+std.special(int;)int:::EXIT29
+    Variables: state return orig(state)
+state == 20
+\result == 20
+===========================================================================
+std.special(int;)int:::EXIT30
+    Variables: state return orig(state)
+state == 21
+\result == 21
+===========================================================================
+std.special(int;)int:::EXIT31
+    Variables: state return orig(state)
+state == 22
+\result == 22
+===========================================================================
+std.special(int;)int:::EXIT32
+    Variables: state return orig(state)
+state == 23
+\result == 23
+===========================================================================
+std.special(int;)int:::EXIT33
+    Variables: state return orig(state)
+state == 24
+\result == 24
+===========================================================================
+std.special(int;)int:::EXIT34
+    Variables: state return orig(state)
+state == 25
+\result == 25
+===========================================================================
+std.special(int;)int:::EXIT35
+    Variables: state return orig(state)
+state == 32
+\result == 32
+===========================================================================
+std.special(int;)int:::EXIT
+    Variables: state return orig(state)
+state == \old(state)
+===========================================================================
+std.unget_char(CHARACTER;character_stream;)void:::ENTER
+    Variables: ch
+ch != 0
+ch >= -1
+===========================================================================
+std.unget_char(CHARACTER;character_stream;)void:::EXIT7
+    Variables: ch orig(ch)
+===========================================================================
+std.unget_char(CHARACTER;character_stream;)void:::EXIT
+    Variables: ch orig(ch)
+ch == \old(ch)
+ch != 0
+ch >= -1

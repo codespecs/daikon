@@ -1,0 +1,9 @@
+
+Invariants are good, but can't be proved by ESC because it doesn't know
+about the semantics of bitwise operations.  One consideration would be
+to write up some axioms about bitwise logic, and say how it affects
+integers, but this may require some bitwise semantics to say anything
+at all (or perhaps we can get around that by saying everything is very
+labored, specific statements, like these integer ranges imply this bit
+is set, etc.).
+

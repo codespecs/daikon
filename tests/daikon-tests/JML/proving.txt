@@ -1,0 +1,35 @@
+Modifier.java:/*@ invariant \typeof(Modifier.meaning) == \type(java.lang.String[]) */
+Modifier.java:/*@ invariant Modifier.meaning.length == 24 */
+Modifier.java:/*@ invariant \nonnullelements(Modifier.meaning) */ // added
+Modifier.java:/*@ invariant this.modifier >= 0 */ // added
+Modifier.java:/*@ invariant this.strMod != null */ // added
+
+Modifier.java:/*@ requires mod != null */ // added
+Modifier.java:/*@ ensures mod == this.strMod */
+Modifier.java:/*@ ensures modifier >= 0 */ // added
+Modifier.java:/*@ requires mod != null */ // added
+Modifier.java:/*@ ensures \result >= 0 */ // added
+Modifier.java:/*@ modifies Modifier.meaning[*] */
+Modifier.java:/*@ requires mod >= 0 */ // added (never called?)
+Modifier.java:/*@ ensures \result != null */ // added (never called?)
+Modifier.java:/*@ modifies Modifier.meaning[*] */
+Modifier.java:/*@ ensures \result == this.modifier */
+Modifier.java:/*# requires this.modifier <= 2097152 */
+Modifier.java:/*# requires this.modifier >= 2 */
+
+ModifierSet.java:/*@ invariant this.modifierSet >= 0 */
+ModifierSet.java:/*@ ensures this.modifierSet == 0 */
+ModifierSet.java:/*# ensures this.modifierSet <= 64 */
+ModifierSet.java:/*# ensures this.modifierSet >= 2 */
+ModifierSet.java:/*@ requires mod != null */
+ModifierSet.java:/*# requires m >= 2 */
+ModifierSet.java:/*@ requires m >= 0 */ // added
+ModifierSet.java:/*@ ensures m == this.modifierSet */
+ModifierSet.java:/*@ requires mod != null */
+ModifierSet.java:/*# requires this.modifierSet <= 68 */
+ModifierSet.java:/*# requires this.modifierSet >= 2 */
+ModifierSet.java:/*@ ensures \result != null */
+ModifierSet.java:/*@ ensures mods != \result */
+ModifierSet.java:/*@ requires mods != null */
+ModifierSet.java:/*# ensures \result == false */
+ModifierSet.java:/*@ requires mods != null */

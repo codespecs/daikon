@@ -1,0 +1,235 @@
+===========================================================================
+misc.Smithnosky:::OBJECT
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() size(this.s[]) size(this.s[])-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
+warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.size == size(this.s[])
+this != null
+this.b >= 0
+this.c >= 0
+this.size == 0 || this.size == 1 || this.size == 2
+this.s != null
+this.s != null
+warning: method daikon.inv.unary.sequence.EltOneOf.format(OutputFormat:ESC/Java) needs to be implemented: this.s[] elements has only one value
+this.s.containsNull == false
+this.s.elementType == \type(java.lang.String)
+warning: method daikon.inv.unary.sequence.OneOfSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[this.size..] == []
+(this.a == 0) ==> (this.b == 0)
+this.a >= this.b
+(this.a == 0) ==> (this.c == 0)
+this.a >= this.c
+(this.a == 0) ==> (this.size == 0)
+this.a >= this.size
+this.a == (this.size | this.a)
+(this.b == 0) ==> (this.c == 0)
+this.b >= this.c
+(this.aXb == 0) ==> (this.b == 0)
+this.b <= this.aXb
+(this.b == 0) ==> (this.size == 0)
+this.b >= this.size
+this.b == (this.size | this.b)
+(this.aXb == 0) ==> (this.c == 0)
+this.c <= this.aXb
+this.c <= this.aXc
+(this.c == 0) ==> (this.size == 0)
+this.c >= this.size
+this.c == (this.size | this.c)
+(this.aXb == 0) ==> (this.size == 0)
+this.aXb >= this.size
+this.aXc > this.size
+warning: method daikon.inv.binary.twoScalar.NumericInt$BitwiseAndZero.format(OutputFormat:ESC/Java) needs to be implemented: (this.size & size(this.s[])-1) == 0
+3 * this.a - 3.5 * this.b + 0.5 * this.aXb - 3 == 0
+11 * this.a - 11.5 * this.b + 1.5 * this.aXc - 12 == 0
+3 * this.a - 3.5 * this.c + 0.5 * this.aXb - 3 == 0
+11 * this.a - 11.5 * this.c + 1.5 * this.aXc - 12 == 0
+16 * this.a - 3.5 * this.aXb - 0.5 * this.aXc - 12 == 0
+3 * this.a + 0.5 * this.aXb - 10.5 * this.size - 3 == 0
+warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:ESC/Java) needs to be implemented: 3 * this.a + 0.5 * this.aXb - 10.5 * size(this.s[])-1 - 13.5 == 0
+3.5 * this.a + this.aXc - 11.5 * this.size - 8 == 0
+warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:ESC/Java) needs to be implemented: 3.5 * this.a + this.aXc - 11.5 * size(this.s[])-1 - 19.5 == 0
+11 * this.b - 11.5 * this.c + 1.5 * this.aXc - 12 == 0
+16 * this.b - 5.5 * this.aXb + 1.5 * this.aXc - 12 == 0
+3.5 * this.b + this.aXc - 11.5 * this.size - 8 == 0
+warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:ESC/Java) needs to be implemented: 3.5 * this.b + this.aXc - 11.5 * size(this.s[])-1 - 19.5 == 0
+16 * this.c - 5.5 * this.aXb + 1.5 * this.aXc - 12 == 0
+4.5 * this.c - 0.5 * this.aXb - 9 * this.size - 3 == 0
+warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:ESC/Java) needs to be implemented: 4.5 * this.c - 0.5 * this.aXb - 9 * size(this.s[])-1 - 12 == 0
+3.5 * this.c + 0.5 * this.aXc - 11 * this.size - 4 == 0
+warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:ESC/Java) needs to be implemented: 3.5 * this.c + 0.5 * this.aXc - 11 * size(this.s[])-1 - 15 == 0
+3.5 * this.aXb + 0.5 * this.aXc - 32 * this.size - 4 == 0
+warning: method daikon.inv.ternary.threeScalar.LinearTernary.format(OutputFormat:ESC/Java) needs to be implemented: 3.5 * this.aXb + 0.5 * this.aXc - 32 * size(this.s[])-1 - 36 == 0
+===========================================================================
+misc.Smithnosky.Smithnosky(int, int, int):::ENTER
+    Variables: a b c
+a == 2
+b == 3
+c == 4
+===========================================================================
+misc.Smithnosky.Smithnosky(int, int, int):::EXIT
+    Variables: a b c this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() orig(a) orig(b) orig(c) size(this.s[]) size(this.s[])-1 this.s[a] this.s[a-1] this.s[a..] this.s[a+1..] this.s[0..a] this.s[0..a-1] this.s[b] this.s[b-1] this.s[b..] this.s[b+1..] this.s[0..b] this.s[0..b-1] this.s[c] this.s[c-1] this.s[c..] this.s[c+1..] this.s[0..c] this.s[0..c-1] this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1] this.s[orig(a)] this.s[orig(a)-1] this.s[orig(a)..] this.s[orig(a)+1..] this.s[0..orig(a)] this.s[0..orig(a)-1] this.s[orig(b)] this.s[orig(b)-1] this.s[orig(b)..] this.s[orig(b)+1..] this.s[0..orig(b)] this.s[0..orig(b)-1] this.s[orig(c)] this.s[orig(c)-1] this.s[orig(c)..] this.s[orig(c)+1..] this.s[0..orig(c)] this.s[0..orig(c)-1]
+      Modified primitive arguments: a b c
+this.a == this.b
+this.a == this.c
+this.a == this.size
+warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.a == size(this.s[])
+this.aXb == 6
+this.aXc == 8
+warning: method daikon.inv.unary.sequence.OneOfSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[] == []
+warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[].getClass() == []
+===========================================================================
+misc.Smithnosky.add(java.lang.Object):::ENTER
+    Variables: o o.getClass() this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() size(this.s[]) size(this.s[])-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
+this.a == this.b
+this.a == this.c
+this.aXb == this.aXc
+o != null
+\typeof(o) == \type(java.lang.String)
+this.a == 3
+this.aXb == 9
+this.size == 0 || this.size == 1
+this.s.elementType == \type(java.lang.String)
+warning: method daikon.inv.binary.sequenceScalar.SeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.s[] elements == o
+===========================================================================
+misc.Smithnosky.add(java.lang.Object):::EXIT
+    Variables: o o.getClass() this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() orig(o) orig(o.getClass()) orig(this) orig(this.a) orig(this.b) orig(this.c) orig(this.aXb) orig(this.aXc) orig(this.size) orig(this.s) orig(this.s[]) orig(this.s[].getClass()) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] orig(this.s[post(this.a)]) orig(this.s[post(this.a)-1]) orig(this.s[post(this.a)..]) orig(this.s[post(this.a)+1..]) orig(this.s[0..post(this.a)]) orig(this.s[0..post(this.a)-1]) this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] orig(this.s[post(this.b)]) orig(this.s[post(this.b)-1]) orig(this.s[post(this.b)..]) orig(this.s[post(this.b)+1..]) orig(this.s[0..post(this.b)]) orig(this.s[0..post(this.b)-1]) this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] orig(this.s[post(this.c)]) orig(this.s[post(this.c)-1]) orig(this.s[post(this.c)..]) orig(this.s[post(this.c)+1..]) orig(this.s[0..post(this.c)]) orig(this.s[0..post(this.c)-1]) this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] orig(this.s[post(this.aXb)]) orig(this.s[post(this.aXb)-1]) orig(this.s[post(this.aXb)..]) orig(this.s[post(this.aXb)+1..]) orig(this.s[0..post(this.aXb)]) orig(this.s[0..post(this.aXb)-1]) this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] orig(this.s[post(this.aXc)]) orig(this.s[post(this.aXc)-1]) orig(this.s[post(this.aXc)..]) orig(this.s[post(this.aXc)+1..]) orig(this.s[0..post(this.aXc)]) orig(this.s[0..post(this.aXc)-1]) this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1] orig(this.s[post(this.size)]) orig(this.s[post(this.size)-1]) orig(this.s[post(this.size)..]) orig(this.s[post(this.size)+1..]) orig(this.s[0..post(this.size)]) orig(this.s[0..post(this.size)-1]) this.s[orig(this.a)] this.s[orig(this.a)-1] this.s[orig(this.a)..] this.s[orig(this.a)+1..] this.s[0..orig(this.a)] this.s[0..orig(this.a)-1] this.s[orig(this.b)] this.s[orig(this.b)-1] this.s[orig(this.b)..] this.s[orig(this.b)+1..] this.s[0..orig(this.b)] this.s[0..orig(this.b)-1] this.s[orig(this.c)] this.s[orig(this.c)-1] this.s[orig(this.c)..] this.s[orig(this.c)+1..] this.s[0..orig(this.c)] this.s[0..orig(this.c)-1] this.s[orig(this.aXb)] this.s[orig(this.aXb)-1] this.s[orig(this.aXb)..] this.s[orig(this.aXb)+1..] this.s[0..orig(this.aXb)] this.s[0..orig(this.aXb)-1] this.s[orig(this.aXc)] this.s[orig(this.aXc)-1] this.s[orig(this.aXc)..] this.s[orig(this.aXc)+1..] this.s[0..orig(this.aXc)] this.s[0..orig(this.aXc)-1] this.s[orig(this.size)] this.s[orig(this.size)-1] this.s[orig(this.size)..] this.s[orig(this.size)+1..] this.s[0..orig(this.size)] this.s[0..orig(this.size)-1] orig(this.s[this.a]) orig(this.s[this.a-1]) orig(this.s[this.a..]) orig(this.s[this.a+1..]) orig(this.s[0..this.a]) orig(this.s[0..this.a-1]) orig(this.s[this.b]) orig(this.s[this.b-1]) orig(this.s[this.b..]) orig(this.s[this.b+1..]) orig(this.s[0..this.b]) orig(this.s[0..this.b-1]) orig(this.s[this.c]) orig(this.s[this.c-1]) orig(this.s[this.c..]) orig(this.s[this.c+1..]) orig(this.s[0..this.c]) orig(this.s[0..this.c-1]) orig(this.s[this.aXb]) orig(this.s[this.aXb-1]) orig(this.s[this.aXb..]) orig(this.s[this.aXb+1..]) orig(this.s[0..this.aXb]) orig(this.s[0..this.aXb-1]) orig(this.s[this.aXc]) orig(this.s[this.aXc-1]) orig(this.s[this.aXc..]) orig(this.s[this.aXc+1..]) orig(this.s[0..this.aXc]) orig(this.s[0..this.aXc-1]) orig(this.s[this.size]) orig(this.s[this.size-1]) orig(this.s[this.size..]) orig(this.s[this.size+1..]) orig(this.s[0..this.size]) orig(this.s[0..this.size-1])
+      Modified variables: o o.getClass() this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() size(this.s[]) this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
+modifies o, this.a, this.b, this.c, this.aXb, this.aXc, this.size, this.s
+this.a == this.b
+this.a == this.c
+this.a == \old(this.b)
+this.a == \old(this.c)
+this.aXb == this.aXc
+this.aXb == \old(this.aXc)
+warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: orig(o) == this.s[this.size-1]
+warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: orig(o) == this.s[orig(this.size)]
+warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: orig(this.size) == size(this.s[])-1
+warning: method daikon.inv.binary.twoSequence.SeqSeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: orig(this.s[]) == this.s[0..orig(this.size)-1]
+this.a == 3
+this.aXb == 9
+this.size == 1 || this.size == 2
+this.s.elementType == \type(java.lang.String)
+warning: method daikon.inv.unary.sequence.OneOfSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[orig(this.size)..] contains no nulls and has only one value, of length 1
+warning: method daikon.inv.binary.sequenceScalar.SeqIntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.s[] elements == orig(o)
+warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:ESC/Java) needs to be implemented: orig(o.getClass()) in this.s[].getClass()
+===========================================================================
+misc.Smithnosky.incA():::ENTER
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() size(this.s[]) size(this.s[])-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
+this.a == this.b
+this.a == this.c
+this.a == 0 || this.a == 1 || this.a == 2
+this.aXb == 1 || this.aXb == 4 || this.aXb == 6
+this.aXc == 1 || this.aXc == 4 || this.aXc == 8
+warning: method daikon.inv.unary.sequence.OneOfSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[] == []
+warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[].getClass() == []
+(this.aXc >> this.aXb == 0)
+===========================================================================
+misc.Smithnosky.incA():::EXIT
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() orig(this) orig(this.a) orig(this.b) orig(this.c) orig(this.aXb) orig(this.aXc) orig(this.size) orig(this.s) orig(this.s[]) orig(this.s[].getClass()) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] orig(this.s[post(this.a)]) orig(this.s[post(this.a)-1]) orig(this.s[post(this.a)..]) orig(this.s[post(this.a)+1..]) orig(this.s[0..post(this.a)]) orig(this.s[0..post(this.a)-1]) this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] orig(this.s[post(this.b)]) orig(this.s[post(this.b)-1]) orig(this.s[post(this.b)..]) orig(this.s[post(this.b)+1..]) orig(this.s[0..post(this.b)]) orig(this.s[0..post(this.b)-1]) this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] orig(this.s[post(this.c)]) orig(this.s[post(this.c)-1]) orig(this.s[post(this.c)..]) orig(this.s[post(this.c)+1..]) orig(this.s[0..post(this.c)]) orig(this.s[0..post(this.c)-1]) this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] orig(this.s[post(this.aXb)]) orig(this.s[post(this.aXb)-1]) orig(this.s[post(this.aXb)..]) orig(this.s[post(this.aXb)+1..]) orig(this.s[0..post(this.aXb)]) orig(this.s[0..post(this.aXb)-1]) this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] orig(this.s[post(this.aXc)]) orig(this.s[post(this.aXc)-1]) orig(this.s[post(this.aXc)..]) orig(this.s[post(this.aXc)+1..]) orig(this.s[0..post(this.aXc)]) orig(this.s[0..post(this.aXc)-1]) this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1] orig(this.s[post(this.size)]) orig(this.s[post(this.size)-1]) orig(this.s[post(this.size)..]) orig(this.s[post(this.size)+1..]) orig(this.s[0..post(this.size)]) orig(this.s[0..post(this.size)-1]) this.s[orig(this.a)] this.s[orig(this.a)-1] this.s[orig(this.a)..] this.s[orig(this.a)+1..] this.s[0..orig(this.a)] this.s[0..orig(this.a)-1] this.s[orig(this.b)] this.s[orig(this.b)-1] this.s[orig(this.b)..] this.s[orig(this.b)+1..] this.s[0..orig(this.b)] this.s[0..orig(this.b)-1] this.s[orig(this.c)] this.s[orig(this.c)-1] this.s[orig(this.c)..] this.s[orig(this.c)+1..] this.s[0..orig(this.c)] this.s[0..orig(this.c)-1] this.s[orig(this.aXb)] this.s[orig(this.aXb)-1] this.s[orig(this.aXb)..] this.s[orig(this.aXb)+1..] this.s[0..orig(this.aXb)] this.s[0..orig(this.aXb)-1] this.s[orig(this.aXc)] this.s[orig(this.aXc)-1] this.s[orig(this.aXc)..] this.s[orig(this.aXc)+1..] this.s[0..orig(this.aXc)] this.s[0..orig(this.aXc)-1] this.s[orig(this.size)] this.s[orig(this.size)-1] this.s[orig(this.size)..] this.s[orig(this.size)+1..] this.s[0..orig(this.size)] this.s[0..orig(this.size)-1] orig(this.s[this.a]) orig(this.s[this.a-1]) orig(this.s[this.a..]) orig(this.s[this.a+1..]) orig(this.s[0..this.a]) orig(this.s[0..this.a-1]) orig(this.s[this.b]) orig(this.s[this.b-1]) orig(this.s[this.b..]) orig(this.s[this.b+1..]) orig(this.s[0..this.b]) orig(this.s[0..this.b-1]) orig(this.s[this.c]) orig(this.s[this.c-1]) orig(this.s[this.c..]) orig(this.s[this.c+1..]) orig(this.s[0..this.c]) orig(this.s[0..this.c-1]) orig(this.s[this.aXb]) orig(this.s[this.aXb-1]) orig(this.s[this.aXb..]) orig(this.s[this.aXb+1..]) orig(this.s[0..this.aXb]) orig(this.s[0..this.aXb-1]) orig(this.s[this.aXc]) orig(this.s[this.aXc-1]) orig(this.s[this.aXc..]) orig(this.s[this.aXc+1..]) orig(this.s[0..this.aXc]) orig(this.s[0..this.aXc-1]) orig(this.s[this.size]) orig(this.s[this.size-1]) orig(this.s[this.size..]) orig(this.s[this.size+1..]) orig(this.s[0..this.size]) orig(this.s[0..this.size-1])
+      Modified variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() size(this.s[]) this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
+modifies this.a, this.b, this.c, this.aXb, this.aXc, this.size, this.s
+this.b == this.c
+this.b == \old(this.a)
+this.b == \old(this.c)
+warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.size == orig(size(this.s[]))
+this.a == 1 || this.a == 2 || this.a == 3
+this.b == 0 || this.b == 1 || this.b == 2
+this.aXb == 0 || this.aXb == 2 || this.aXb == 6
+this.aXc == 1 || this.aXc == 4 || this.aXc == 8
+warning: method daikon.inv.unary.sequence.OneOfSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[] == []
+warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[].getClass() == []
+(this.aXb >> this.a == 0)
+this.aXb % this.a == 0
+(this.a & this.aXc) == 0
+(this.a & \old(this.aXb)) == 0
+(this.b == 0) ==> (this.aXb == 0)
+(this.aXc >> \old(this.aXb) == 0)
+warning: method daikon.inv.ternary.threeScalar.FunctionBinary$MultiplyLong_zxy.format(OutputFormat:ESC/Java) needs to be implemented: this.aXb == (this.a * this.b)
+warning: method daikon.inv.ternary.threeScalar.FunctionBinary$DivisionLong_yzx.format(OutputFormat:ESC/Java) needs to be implemented: this.b == (this.aXb / this.a)
+===========================================================================
+misc.Smithnosky.incB():::ENTER
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() size(this.s[]) size(this.s[])-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
+this.b == this.c
+this.a == 1 || this.a == 2 || this.a == 3
+this.b == 0 || this.b == 1 || this.b == 2
+this.aXb == 0 || this.aXb == 2 || this.aXb == 6
+this.aXc == 1 || this.aXc == 4 || this.aXc == 8
+warning: method daikon.inv.unary.sequence.OneOfSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[] == []
+warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[].getClass() == []
+(this.aXb >> this.a == 0)
+this.aXb % this.a == 0
+(this.a & this.aXc) == 0
+(this.b == 0) ==> (this.aXb == 0)
+warning: method daikon.inv.ternary.threeScalar.FunctionBinary$MultiplyLong_zxy.format(OutputFormat:ESC/Java) needs to be implemented: this.aXb == (this.a * this.b)
+warning: method daikon.inv.ternary.threeScalar.FunctionBinary$DivisionLong_yzx.format(OutputFormat:ESC/Java) needs to be implemented: this.b == (this.aXb / this.a)
+===========================================================================
+misc.Smithnosky.incB():::EXIT
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() orig(this) orig(this.a) orig(this.b) orig(this.c) orig(this.aXb) orig(this.aXc) orig(this.size) orig(this.s) orig(this.s[]) orig(this.s[].getClass()) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] orig(this.s[post(this.a)]) orig(this.s[post(this.a)-1]) orig(this.s[post(this.a)..]) orig(this.s[post(this.a)+1..]) orig(this.s[0..post(this.a)]) orig(this.s[0..post(this.a)-1]) this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] orig(this.s[post(this.b)]) orig(this.s[post(this.b)-1]) orig(this.s[post(this.b)..]) orig(this.s[post(this.b)+1..]) orig(this.s[0..post(this.b)]) orig(this.s[0..post(this.b)-1]) this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] orig(this.s[post(this.c)]) orig(this.s[post(this.c)-1]) orig(this.s[post(this.c)..]) orig(this.s[post(this.c)+1..]) orig(this.s[0..post(this.c)]) orig(this.s[0..post(this.c)-1]) this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] orig(this.s[post(this.aXb)]) orig(this.s[post(this.aXb)-1]) orig(this.s[post(this.aXb)..]) orig(this.s[post(this.aXb)+1..]) orig(this.s[0..post(this.aXb)]) orig(this.s[0..post(this.aXb)-1]) this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] orig(this.s[post(this.aXc)]) orig(this.s[post(this.aXc)-1]) orig(this.s[post(this.aXc)..]) orig(this.s[post(this.aXc)+1..]) orig(this.s[0..post(this.aXc)]) orig(this.s[0..post(this.aXc)-1]) this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1] orig(this.s[post(this.size)]) orig(this.s[post(this.size)-1]) orig(this.s[post(this.size)..]) orig(this.s[post(this.size)+1..]) orig(this.s[0..post(this.size)]) orig(this.s[0..post(this.size)-1]) this.s[orig(this.a)] this.s[orig(this.a)-1] this.s[orig(this.a)..] this.s[orig(this.a)+1..] this.s[0..orig(this.a)] this.s[0..orig(this.a)-1] this.s[orig(this.b)] this.s[orig(this.b)-1] this.s[orig(this.b)..] this.s[orig(this.b)+1..] this.s[0..orig(this.b)] this.s[0..orig(this.b)-1] this.s[orig(this.c)] this.s[orig(this.c)-1] this.s[orig(this.c)..] this.s[orig(this.c)+1..] this.s[0..orig(this.c)] this.s[0..orig(this.c)-1] this.s[orig(this.aXb)] this.s[orig(this.aXb)-1] this.s[orig(this.aXb)..] this.s[orig(this.aXb)+1..] this.s[0..orig(this.aXb)] this.s[0..orig(this.aXb)-1] this.s[orig(this.aXc)] this.s[orig(this.aXc)-1] this.s[orig(this.aXc)..] this.s[orig(this.aXc)+1..] this.s[0..orig(this.aXc)] this.s[0..orig(this.aXc)-1] this.s[orig(this.size)] this.s[orig(this.size)-1] this.s[orig(this.size)..] this.s[orig(this.size)+1..] this.s[0..orig(this.size)] this.s[0..orig(this.size)-1] orig(this.s[this.a]) orig(this.s[this.a-1]) orig(this.s[this.a..]) orig(this.s[this.a+1..]) orig(this.s[0..this.a]) orig(this.s[0..this.a-1]) orig(this.s[this.b]) orig(this.s[this.b-1]) orig(this.s[this.b..]) orig(this.s[this.b+1..]) orig(this.s[0..this.b]) orig(this.s[0..this.b-1]) orig(this.s[this.c]) orig(this.s[this.c-1]) orig(this.s[this.c..]) orig(this.s[this.c+1..]) orig(this.s[0..this.c]) orig(this.s[0..this.c-1]) orig(this.s[this.aXb]) orig(this.s[this.aXb-1]) orig(this.s[this.aXb..]) orig(this.s[this.aXb+1..]) orig(this.s[0..this.aXb]) orig(this.s[0..this.aXb-1]) orig(this.s[this.aXc]) orig(this.s[this.aXc-1]) orig(this.s[this.aXc..]) orig(this.s[this.aXc+1..]) orig(this.s[0..this.aXc]) orig(this.s[0..this.aXc-1]) orig(this.s[this.size]) orig(this.s[this.size-1]) orig(this.s[this.size..]) orig(this.s[this.size+1..]) orig(this.s[0..this.size]) orig(this.s[0..this.size-1])
+      Modified variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() size(this.s[]) this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
+modifies this.a, this.b, this.c, this.aXb, this.aXc, this.size, this.s
+this.a == this.b
+this.c == \old(this.b)
+warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.size == orig(size(this.s[]))
+this.a == 1 || this.a == 2 || this.a == 3
+this.c == 0 || this.c == 1 || this.c == 2
+this.aXb == 1 || this.aXb == 4 || this.aXb == 9
+this.aXc == 1 || this.aXc == 4 || this.aXc == 8
+warning: method daikon.inv.unary.sequence.OneOfSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[] == []
+warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[].getClass() == []
+this.aXb % this.a == 0
+this.aXb == this.a**2
+(this.a & this.aXc) == 0
+(\old(this.aXb) >> this.a == 0)
+\old(this.aXb) % this.a == 0
+(this.c & this.aXb) == 0
+(\old(this.aXb) == 0) ==> (this.c == 0)
+(this.c == 0) ==> (\old(this.aXb) == 0)
+(this.aXb & this.aXc) == 0
+(this.aXb & \old(this.aXb)) == 0
+warning: method daikon.inv.ternary.threeScalar.FunctionBinary$MultiplyLong_zxy.format(OutputFormat:ESC/Java) needs to be implemented: orig(this.aXb) == (this.a * this.c)
+warning: method daikon.inv.ternary.threeScalar.FunctionBinary$DivisionLong_yzx.format(OutputFormat:ESC/Java) needs to be implemented: this.c == (orig(this.aXb) / this.a)
+warning: method daikon.inv.ternary.threeScalar.FunctionBinary$GcdLong_xyz.format(OutputFormat:ESC/Java) needs to be implemented: this.a == (plume.MathMDE.gcd(this.aXb, orig(this.aXb)))
+===========================================================================
+misc.Smithnosky.incC():::ENTER
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() size(this.s[]) size(this.s[])-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
+this.a == this.b
+this.a == 1 || this.a == 2 || this.a == 3
+this.c == 0 || this.c == 1 || this.c == 2
+this.aXb == 1 || this.aXb == 4 || this.aXb == 9
+this.aXc == 1 || this.aXc == 4 || this.aXc == 8
+warning: method daikon.inv.unary.sequence.OneOfSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[] == []
+warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[].getClass() == []
+this.aXb % this.a == 0
+this.aXb == this.a**2
+(this.a & this.aXc) == 0
+(this.c & this.aXb) == 0
+(this.aXb & this.aXc) == 0
+===========================================================================
+misc.Smithnosky.incC():::EXIT
+    Variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() orig(this) orig(this.a) orig(this.b) orig(this.c) orig(this.aXb) orig(this.aXc) orig(this.size) orig(this.s) orig(this.s[]) orig(this.s[].getClass()) size(this.s[]) size(this.s[])-1 orig(size(this.s[])) orig(size(this.s[]))-1 this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] orig(this.s[post(this.a)]) orig(this.s[post(this.a)-1]) orig(this.s[post(this.a)..]) orig(this.s[post(this.a)+1..]) orig(this.s[0..post(this.a)]) orig(this.s[0..post(this.a)-1]) this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] orig(this.s[post(this.b)]) orig(this.s[post(this.b)-1]) orig(this.s[post(this.b)..]) orig(this.s[post(this.b)+1..]) orig(this.s[0..post(this.b)]) orig(this.s[0..post(this.b)-1]) this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] orig(this.s[post(this.c)]) orig(this.s[post(this.c)-1]) orig(this.s[post(this.c)..]) orig(this.s[post(this.c)+1..]) orig(this.s[0..post(this.c)]) orig(this.s[0..post(this.c)-1]) this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] orig(this.s[post(this.aXb)]) orig(this.s[post(this.aXb)-1]) orig(this.s[post(this.aXb)..]) orig(this.s[post(this.aXb)+1..]) orig(this.s[0..post(this.aXb)]) orig(this.s[0..post(this.aXb)-1]) this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] orig(this.s[post(this.aXc)]) orig(this.s[post(this.aXc)-1]) orig(this.s[post(this.aXc)..]) orig(this.s[post(this.aXc)+1..]) orig(this.s[0..post(this.aXc)]) orig(this.s[0..post(this.aXc)-1]) this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1] orig(this.s[post(this.size)]) orig(this.s[post(this.size)-1]) orig(this.s[post(this.size)..]) orig(this.s[post(this.size)+1..]) orig(this.s[0..post(this.size)]) orig(this.s[0..post(this.size)-1]) this.s[orig(this.a)] this.s[orig(this.a)-1] this.s[orig(this.a)..] this.s[orig(this.a)+1..] this.s[0..orig(this.a)] this.s[0..orig(this.a)-1] this.s[orig(this.b)] this.s[orig(this.b)-1] this.s[orig(this.b)..] this.s[orig(this.b)+1..] this.s[0..orig(this.b)] this.s[0..orig(this.b)-1] this.s[orig(this.c)] this.s[orig(this.c)-1] this.s[orig(this.c)..] this.s[orig(this.c)+1..] this.s[0..orig(this.c)] this.s[0..orig(this.c)-1] this.s[orig(this.aXb)] this.s[orig(this.aXb)-1] this.s[orig(this.aXb)..] this.s[orig(this.aXb)+1..] this.s[0..orig(this.aXb)] this.s[0..orig(this.aXb)-1] this.s[orig(this.aXc)] this.s[orig(this.aXc)-1] this.s[orig(this.aXc)..] this.s[orig(this.aXc)+1..] this.s[0..orig(this.aXc)] this.s[0..orig(this.aXc)-1] this.s[orig(this.size)] this.s[orig(this.size)-1] this.s[orig(this.size)..] this.s[orig(this.size)+1..] this.s[0..orig(this.size)] this.s[0..orig(this.size)-1] orig(this.s[this.a]) orig(this.s[this.a-1]) orig(this.s[this.a..]) orig(this.s[this.a+1..]) orig(this.s[0..this.a]) orig(this.s[0..this.a-1]) orig(this.s[this.b]) orig(this.s[this.b-1]) orig(this.s[this.b..]) orig(this.s[this.b+1..]) orig(this.s[0..this.b]) orig(this.s[0..this.b-1]) orig(this.s[this.c]) orig(this.s[this.c-1]) orig(this.s[this.c..]) orig(this.s[this.c+1..]) orig(this.s[0..this.c]) orig(this.s[0..this.c-1]) orig(this.s[this.aXb]) orig(this.s[this.aXb-1]) orig(this.s[this.aXb..]) orig(this.s[this.aXb+1..]) orig(this.s[0..this.aXb]) orig(this.s[0..this.aXb-1]) orig(this.s[this.aXc]) orig(this.s[this.aXc-1]) orig(this.s[this.aXc..]) orig(this.s[this.aXc+1..]) orig(this.s[0..this.aXc]) orig(this.s[0..this.aXc-1]) orig(this.s[this.size]) orig(this.s[this.size-1]) orig(this.s[this.size..]) orig(this.s[this.size+1..]) orig(this.s[0..this.size]) orig(this.s[0..this.size-1])
+      Modified variables: this this.a this.b this.c this.aXb this.aXc this.size this.s this.s[] this.s[].getClass() size(this.s[]) this.s[this.a] this.s[this.a-1] this.s[this.a..] this.s[this.a+1..] this.s[0..this.a] this.s[0..this.a-1] this.s[this.b] this.s[this.b-1] this.s[this.b..] this.s[this.b+1..] this.s[0..this.b] this.s[0..this.b-1] this.s[this.c] this.s[this.c-1] this.s[this.c..] this.s[this.c+1..] this.s[0..this.c] this.s[0..this.c-1] this.s[this.aXb] this.s[this.aXb-1] this.s[this.aXb..] this.s[this.aXb+1..] this.s[0..this.aXb] this.s[0..this.aXb-1] this.s[this.aXc] this.s[this.aXc-1] this.s[this.aXc..] this.s[this.aXc+1..] this.s[0..this.aXc] this.s[0..this.aXc-1] this.s[this.size] this.s[this.size-1] this.s[this.size..] this.s[this.size+1..] this.s[0..this.size] this.s[0..this.size-1]
+modifies this.a, this.b, this.c, this.aXb, this.aXc, this.size, this.s
+this.a == this.b
+this.a == this.c
+this.a == \old(this.b)
+this.aXb == this.aXc
+warning: method daikon.inv.binary.twoScalar.IntEqual.format(OutputFormat:ESC/Java) needs to be implemented: this.size == orig(size(this.s[]))
+this.a == 1 || this.a == 2 || this.a == 3
+this.aXb == 1 || this.aXb == 4 || this.aXb == 9
+warning: method daikon.inv.unary.sequence.OneOfSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[] == []
+warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: this.s[].getClass() == []
+this.aXb % this.a == 0
+this.aXb == this.a**2
+(this.a & \old(this.aXc)) == 0
+(this.aXb & \old(this.c)) == 0
+(this.aXb & \old(this.aXc)) == 0
+===========================================================================
+misc.Smithnosky.main(java.lang.String[]):::ENTER
+    Variables: args args.getClass() args[] args[].toString size(args[]) size(args[])-1
+args != null
+\typeof(args) == \type(java.lang.String[])
+warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: args[] == []
+===========================================================================
+misc.Smithnosky.main(java.lang.String[]):::EXIT
+    Variables: args args.getClass() args[] args[].toString orig(args) orig(args.getClass()) orig(args[]) orig(args[].toString) size(args[]) size(args[])-1 orig(size(args[])) orig(size(args[]))-1
+      Modified variables: args args.getClass() args[] args[].toString
+      Modified primitive arguments: size(args[])
+modifies args, args[*]
+warning: method daikon.inv.unary.stringsequence.OneOfStringSequence.format(OutputFormat:ESC/Java) needs to be implemented: args[] == []

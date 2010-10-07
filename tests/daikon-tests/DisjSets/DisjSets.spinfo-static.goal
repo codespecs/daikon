@@ -1,0 +1,12 @@
+PPT_NAME DataStructures.DisjSets.DisjSets
+i < s.length
+orig(i < s.length)
+
+PPT_NAME DataStructures.DisjSets.find
+orig(s[x] < 0)
+s[x] < 0
+
+PPT_NAME DataStructures.DisjSets.unionCareful
+orig(root1 != root2)
+root1 != root2
+

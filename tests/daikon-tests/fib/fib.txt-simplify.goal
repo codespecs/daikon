@@ -1,0 +1,46 @@
+===========================================================================
+misc.Fib:::CLASS
+(>= (select |a| (select |Fib| |misc|)) 0)
+(EQ (|java->>| (select |a| (select |Fib| |misc|)) (select |STEPS| (select |Fib| |misc|))) 0)
+(NEQ (select |STEPS| (select |Fib| |misc|)) (select |a| (select |Fib| |misc|)))
+(EQ (|java->>| (select |b| (select |Fib| |misc|)) (select |STEPS| (select |Fib| |misc|))) 0)
+(NEQ (select |STEPS| (select |Fib| |misc|)) (select |b| (select |Fib| |misc|)))
+(EQ (|java->>| (select |c| (select |Fib| |misc|)) (select |STEPS| (select |Fib| |misc|))) 0)
+(NEQ (select |STEPS| (select |Fib| |misc|)) (select |c| (select |Fib| |misc|)))
+(IMPLIES (EQ (select |b| (select |Fib| |misc|)) 0) (EQ (select |a| (select |Fib| |misc|)) 0))
+(<= (select |a| (select |Fib| |misc|)) (select |b| (select |Fib| |misc|)))
+(IMPLIES (EQ (select |c| (select |Fib| |misc|)) 0) (EQ (select |a| (select |Fib| |misc|)) 0))
+(<= (select |a| (select |Fib| |misc|)) (select |c| (select |Fib| |misc|)))
+(IMPLIES (EQ (select |b| (select |Fib| |misc|)) 0) (EQ (select |c| (select |Fib| |misc|)) 0))
+(IMPLIES (EQ (select |c| (select |Fib| |misc|)) 0) (EQ (select |b| (select |Fib| |misc|)) 0))
+(<= (select |b| (select |Fib| |misc|)) (select |c| (select |Fib| |misc|)))
+(EQ 0 (+ (select |a| (select |Fib| |misc|)) (select |b| (select |Fib| |misc|)) (* -1 (select |c| (select |Fib| |misc|)))))
+===========================================================================
+misc.Fib.increment():::ENTER
+(< (select |a| (select |Fib| |misc|)) (select |c| (select |Fib| |misc|)))
+===========================================================================
+misc.Fib.increment():::EXIT
+(EQ (select |a| (select |Fib| |misc|)) (select |b| (select |Fib| |__orig__misc|)))
+(EQ (select |b| (select |Fib| |misc|)) (select |c| (select |Fib| |__orig__misc|)))
+(< (select |a| (select |Fib| |misc|)) (select |c| (select |Fib| |misc|)))
+(>= (select |a| (select |Fib| |misc|)) (select |a| (select |Fib| |__orig__misc|)))
+(< (select |b| (select |Fib| |misc|)) (select |c| (select |Fib| |misc|)))
+(> (select |b| (select |Fib| |misc|)) (select |a| (select |Fib| |__orig__misc|)))
+(> (select |c| (select |Fib| |misc|)) (select |a| (select |Fib| |__orig__misc|)))
+(EQ 0 (+ (select |a| (select |Fib| |misc|)) (* -1 (select |b| (select |Fib| |misc|))) (select |a| (select |Fib| |__orig__misc|))))
+(EQ 0 (+ (* 2 (select |a| (select |Fib| |misc|))) (* -1 (select |c| (select |Fib| |misc|))) (select |a| (select |Fib| |__orig__misc|))))
+(EQ 0 (+ (* 2 (select |b| (select |Fib| |misc|))) (* -1 (select |c| (select |Fib| |misc|))) (* -1 (select |a| (select |Fib| |__orig__misc|)))))
+===========================================================================
+misc.Fib.main(java.lang.String[]):::ENTER
+(EQ (select |a| (select |Fib| |misc|)) (select |b| (select |Fib| |misc|)))
+(EQ (select |a| (select |Fib| |misc|)) (select |c| (select |Fib| |misc|)))
+(EQ (select |a| (select |Fib| |misc|)) (arrayLength |args|))
+(EQ (hash |args|) (hashcode (|long-int| 1 0 0 0 3884 4392)))
+(EQ (typeof |args|) |T_java.lang.String[]|)
+(EQ (arrayLength |args|) 0)
+===========================================================================
+misc.Fib.main(java.lang.String[]):::EXIT
+(EQ (select |a| (select |Fib| |misc|)) 6765)
+(EQ (select |b| (select |Fib| |misc|)) 10946)
+(EQ (select |c| (select |Fib| |misc|)) 17711)
+(EQ (arrayLength |args|) 0)

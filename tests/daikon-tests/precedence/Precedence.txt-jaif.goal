@@ -1,0 +1,17 @@
+package checkers.nullness.quals:
+annotation @Nullable:
+annotation @NonNull:
+
+package misc:
+class Precedence : // 3/- obj/class samples
+  field i :  // int
+  method main([Ljava/lang/String;) : // 1 samples
+    return: 
+    parameter #0 :  // args
+  method <init>() : // 1 samples
+    return: 
+  method lets_calculate(I) : // 1 samples
+    return: 
+    parameter #0 :  // j
+
+

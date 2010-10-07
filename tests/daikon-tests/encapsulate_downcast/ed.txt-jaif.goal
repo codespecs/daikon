@@ -1,0 +1,33 @@
+package checkers.nullness.quals:
+annotation @Nullable:
+annotation @NonNull:
+
+package misc:
+class EncapsulateDowncast : // 0/130 obj/class samples
+  field CASES :  // int
+  field SEED :  // int
+  field random :  // java.util.Random
+  method main([Ljava/lang/String;) : // 1 samples
+    return: 
+    parameter #0 :  // argv
+  method showLastPerson(Ljava/util/Vector;) : // 64 samples
+    return: 
+    parameter #0 :  // list
+  method <init>() : // 0 samples
+    return: 
+
+
+package misc:
+class Person : // 662/- obj/class samples
+  field _name :  // java.lang.String
+  field _height :  // int
+  field _weight :  // int
+  method <init>(Ljava/lang/String;II) : // 662 samples
+    return: 
+    parameter #0 :  // name
+    parameter #1 :  // height
+    parameter #2 :  // weight
+  method getName() : // 0 samples
+    return: 
+
+

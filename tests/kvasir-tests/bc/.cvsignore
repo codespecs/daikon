@@ -1,0 +1,4 @@
+bc bc.decls.diff bc.dtrace.diff bc.out bc.out.diff ran-kvasir
+*.counts *.counts.diff
+bc.comp bc.comp.diff
+bc.invs.diff

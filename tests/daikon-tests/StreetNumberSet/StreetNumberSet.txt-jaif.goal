@@ -1,0 +1,43 @@
+package checkers.nullness.quals:
+annotation @Nullable:
+annotation @NonNull:
+
+package MapQuick1:
+class StreetNumberSet : // 41796/- obj/class samples
+  field begins :  // int[]
+  field ends :  // int[]
+  method parityOf(I) : // 176250 samples
+    return: 
+    parameter #0 :  // i
+  method <init>(Ljava/lang/String;) : // 242 samples
+    return: 
+    parameter #0 :  // numbers
+  method checkRep() : // 13526 samples
+    return: 
+  method contains(I) : // 2171 samples
+    return: 
+    parameter #0 :  // n
+  method equals(LMapQuick1/StreetNumberSet;) : // 364 samples
+    return: 
+    parameter #0 : @Nullable  // other
+  method equals(Ljava/lang/Object;) : // 89 samples
+    return: 
+    parameter #0 : @Nullable  // o
+  method hashCode() : // 2 samples
+    return: 
+  method intersects(LMapQuick1/StreetNumberSet;) : // 135 samples
+    return: 
+    parameter #0 :  // other
+  method isEmpty() : // 308 samples
+    return: 
+  method max() : // 606 samples
+    return: 
+  method min() : // 770 samples
+    return: 
+  method orderStatistic(I) : // 1384 samples
+    return: 
+    parameter #0 :  // n
+  method size() : // 1422 samples
+    return: 
+
+

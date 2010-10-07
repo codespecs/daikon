@@ -1,0 +1,64 @@
+
+Variable sets for six170.Hanoi.<init>(I height) enter
+  [1] [Parameter height]
+Variable sets for six170.Hanoi.<init>(I height) exit
+  [3] [Parameter height, Field diskLocation, Field height]
+  [1] [this]
+  [1] [Array Field diskLocation[..]]
+  [1] [Field noOutput]
+
+Variable sets for six170.Hanoi.<init>(I height, Z noOutput) enter
+  [1] [Parameter height]
+  [1] [Parameter noOutput]
+Variable sets for six170.Hanoi.<init>(I height, Z noOutput) exit
+  [3] [Parameter height, Field diskLocation, Field height]
+  [2] [Parameter noOutput, Field noOutput]
+  [1] [this]
+  [1] [Array Field diskLocation[..]]
+
+Variable sets for six170.Hanoi.moveDisk(I fromPeg, I toPeg) enter
+  [3] [Parameter fromPeg, Array Field diskLocation[..], Parameter toPeg]
+  [1] [this]
+  [2] [Field diskLocation, Field height]
+  [1] [Field noOutput]
+Variable sets for six170.Hanoi.moveDisk(I fromPeg, I toPeg) exit
+  [3] [Parameter fromPeg, Array Field diskLocation[..], Parameter toPeg]
+  [1] [this]
+  [2] [Field diskLocation, Field height]
+  [1] [Field noOutput]
+
+Variable sets for six170.Hanoi.otherPeg(I pegA, I pegB) enter
+  [1] [Parameter pegA]
+  [1] [Parameter pegB]
+Variable sets for six170.Hanoi.otherPeg(I pegA, I pegB) exit
+  [1] [Parameter pegA]
+  [1] [Parameter pegB]
+  [1] [return]
+
+Variable sets for six170.Hanoi.moveTower(I fromPeg, I toPeg, I towerHeight) enter
+  [1] [Parameter fromPeg]
+  [1] [this]
+  [3] [Field diskLocation, Field height, Parameter towerHeight]
+  [2] [Array Field diskLocation[..], Parameter toPeg]
+  [1] [Field noOutput]
+Variable sets for six170.Hanoi.moveTower(I fromPeg, I toPeg, I towerHeight) exit
+  [3] [Parameter fromPeg, Array Field diskLocation[..], Parameter toPeg]
+  [1] [this]
+  [3] [Field diskLocation, Field height, Parameter towerHeight]
+  [1] [Field noOutput]
+
+Variable sets for six170.Hanoi.showTowers() enter
+  [1] [this]
+  [2] [Field diskLocation, Field height]
+  [1] [Array Field diskLocation[..]]
+  [1] [Field noOutput]
+Variable sets for six170.Hanoi.showTowers() exit
+  [1] [this]
+  [2] [Field diskLocation, Field height]
+  [1] [Array Field diskLocation[..]]
+  [1] [Field noOutput]
+
+Variable sets for six170.Hanoi.equals(java.lang.Object obj) enter
+  not called
+Variable sets for six170.Hanoi.equals(java.lang.Object obj) exit
+  not called

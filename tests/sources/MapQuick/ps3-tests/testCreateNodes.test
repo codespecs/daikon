@@ -1,0 +1,12 @@
+#create the nodes we'll use
+CreateNode n1 2
+CreateNode n2 20
+CreateNode n3 4
+CreateNode n4 4
+CreateNode n5 12
+CreateNode n6 1
+CreateNode n7 3
+CreateNode n8 9
+CreateNode n9 5
+CreateNode n10 3
+CreateNode n11 11

@@ -1,0 +1,53 @@
+===========================================================================
+MapQuick1.Graph:::OBJECT
+(NEQ (hash (select |adjMap| |this|)) null)
+===========================================================================
+MapQuick1.Graph.Graph():::EXIT
+===========================================================================
+MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::ENTER
+(NEQ (hash |from|) null)
+(EQ (typeof |from|) |T_MapQuick1.GeoSegment|)
+(NEQ (hash |to|) null)
+(EQ (typeof |from|) (typeof |to|))
+===========================================================================
+MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::EXIT
+(EQ (hash (select |adjMap| |this|)) (hash (select |adjMap| |__orig__this|)))
+===========================================================================
+MapQuick1.Graph.addNode(java.lang.Object):::ENTER
+(NEQ (hash |node|) null)
+(EQ (typeof |node|) |T_MapQuick1.GeoSegment|)
+===========================================================================
+MapQuick1.Graph.addNode(java.lang.Object):::EXIT
+(EQ (hash (select |adjMap| |this|)) (hash (select |adjMap| |__orig__this|)))
+===========================================================================
+MapQuick1.Graph.adjTo(java.lang.Object):::ENTER
+(NEQ (hash |node|) null)
+(EQ (typeof |node|) |T_MapQuick1.GeoSegment|)
+===========================================================================
+MapQuick1.Graph.adjTo(java.lang.Object):::EXIT
+(EQ (hash (select |adjMap| |this|)) (hash (select |adjMap| |__orig__this|)))
+(NEQ (hash |return|) null)
+(EQ (typeof |return|) |T_java.util.LinkedHashSet|)
+(NEQ (typeof |return|) (typeof |__orig__node|))
+===========================================================================
+MapQuick1.Graph.checkRep():::ENTER
+===========================================================================
+MapQuick1.Graph.checkRep():::EXIT
+(EQ (hash (select |adjMap| |this|)) (hash (select |adjMap| |__orig__this|)))
+===========================================================================
+MapQuick1.Graph.childrenOf(java.lang.Object):::ENTER
+(NEQ (hash |node|) null)
+(EQ (typeof |node|) |T_MapQuick1.GeoSegment|)
+===========================================================================
+MapQuick1.Graph.childrenOf(java.lang.Object):::EXIT
+(EQ (hash (select |adjMap| |this|)) (hash (select |adjMap| |__orig__this|)))
+(NEQ (hash |return|) null)
+(EQ (typeof |return|) |T_java.util.LinkedHashSet|)
+(NEQ (typeof |return|) (typeof |__orig__node|))
+===========================================================================
+MapQuick1.Graph.containsNode(java.lang.Object):::ENTER
+(NEQ (hash |node|) null)
+(EQ (typeof |node|) |T_MapQuick1.GeoSegment|)
+===========================================================================
+MapQuick1.Graph.containsNode(java.lang.Object):::EXIT
+(EQ (hash (select |adjMap| |this|)) (hash (select |adjMap| |__orig__this|)))

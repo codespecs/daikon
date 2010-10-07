@@ -1,0 +1,194 @@
+===========================================================================
+DataStructures.BinarySearchTree:::OBJECT
+    Variables: this this.root
+===========================================================================
+DataStructures.BinarySearchTree.BinarySearchTree():::EXIT
+    Variables: this this.root
+this.root == null
+===========================================================================
+DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::ENTER
+    Variables: this this.root t
+===========================================================================
+DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::EXIT
+    Variables: this this.root t return return.getClass() orig(this) orig(this.root) orig(t)
+      Unmodified variables: this this.root t
+(\result != null)  ==>  (\typeof(\result) == \type(DataStructures.MyInteger))
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable):::ENTER
+    Variables: this this.root x x.getClass()
+x != null
+\typeof(x) == \type(DataStructures.MyInteger)
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable):::EXIT
+    Variables: this this.root x x.getClass() return return.getClass() orig(this) orig(this.root) orig(x) orig(x.getClass())
+      Unmodified variables: this this.root x x.getClass()
+(\result != null)  ==>  (\typeof(\result) == \type(DataStructures.MyInteger))
+(\result != null)  ==>  (\typeof(\result) == \old(\typeof(x)))
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+    Variables: this this.root x x.getClass() t
+x != null
+\typeof(x) == \type(DataStructures.MyInteger)
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196
+    Variables: this this.root x x.getClass() t return orig(this) orig(this.root) orig(x) orig(x.getClass()) orig(t)
+      Unmodified variables: this this.root x x.getClass() t
+\result == \old(t)
+\result == null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198
+    Variables: this this.root x x.getClass() t return orig(this) orig(this.root) orig(x) orig(x.getClass()) orig(t)
+      Unmodified variables: this this.root x x.getClass() t
+this.root != null
+\old(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200
+    Variables: this this.root x x.getClass() t return orig(this) orig(this.root) orig(x) orig(x.getClass()) orig(t)
+      Unmodified variables: this this.root x x.getClass() t
+this.root != null
+\old(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202
+    Variables: this this.root x x.getClass() t return orig(this) orig(this.root) orig(x) orig(x.getClass()) orig(t)
+      Unmodified variables: this this.root x x.getClass() t
+\result == \old(t)
+this.root != null
+\result != null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
+    Variables: this this.root x x.getClass() t return orig(this) orig(this.root) orig(x) orig(x.getClass()) orig(t)
+      Unmodified variables: this this.root x x.getClass() t
+===========================================================================
+DataStructures.BinarySearchTree.findMax():::ENTER
+    Variables: this this.root
+===========================================================================
+DataStructures.BinarySearchTree.findMax():::EXIT
+    Variables: this this.root return return.getClass() orig(this) orig(this.root)
+      Unmodified variables: this this.root
+(\result != null)  ==>  (\typeof(\result) == \type(DataStructures.MyInteger))
+===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::ENTER
+    Variables: this this.root t
+this.root == t
+===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT
+    Variables: this this.root t return orig(this) orig(this.root) orig(t)
+      Modified primitive arguments: t
+      Unmodified variables: this this.root
+this.root == \old(t)
+===========================================================================
+DataStructures.BinarySearchTree.findMin():::ENTER
+    Variables: this this.root
+===========================================================================
+DataStructures.BinarySearchTree.findMin():::EXIT
+    Variables: this this.root return return.getClass() orig(this) orig(this.root)
+      Unmodified variables: this this.root
+(\result != null)  ==>  (\typeof(\result) == \type(DataStructures.MyInteger))
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::ENTER
+    Variables: this this.root t
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167
+    Variables: this this.root t return orig(this) orig(this.root) orig(t)
+      Unmodified variables: this this.root t
+this.root == \result
+\result == \old(this.root)
+\result == \old(t)
+\result == null
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169
+    Variables: this this.root t return orig(this) orig(this.root) orig(t)
+      Unmodified variables: this this.root t
+\result == \old(t)
+this.root != null
+\result != null
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170
+    Variables: this this.root t return orig(this) orig(this.root) orig(t)
+      Unmodified variables: this this.root t
+this.root != null
+\result != null
+\old(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT
+    Variables: this this.root t return orig(this) orig(this.root) orig(t)
+      Unmodified variables: this this.root t
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::ENTER
+    Variables: this this.root x x.getClass()
+x != null
+(x != null)  ==>  (\typeof(x) == \type(DataStructures.MyInteger))
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXIT
+    Variables: this this.root x x.getClass() orig(this) orig(this.root) orig(x) orig(x.getClass())
+      Modified variables: this.root
+      Unmodified variables: this x x.getClass()
+modifies this.root
+this.root != null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+    Variables: this this.root x x.getClass() t
+x != null
+(x != null)  ==>  (\typeof(x) == \type(DataStructures.MyInteger))
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
+    Variables: this this.root x x.getClass() t return orig(this) orig(this.root) orig(x) orig(x.getClass()) orig(t)
+      Modified primitive arguments: t
+      Unmodified variables: this this.root x x.getClass()
+\result != null
+===========================================================================
+DataStructures.BinarySearchTree.isEmpty():::ENTER
+    Variables: this this.root
+===========================================================================
+DataStructures.BinarySearchTree.isEmpty():::EXIT
+    Variables: this this.root return orig(this) orig(this.root)
+      Unmodified variables: this this.root
+(this.root != null)  ==  (\result == false)
+(this.root == null)  ==  (\result == true)
+===========================================================================
+DataStructures.BinarySearchTree.makeEmpty():::ENTER
+    Variables: this this.root
+===========================================================================
+DataStructures.BinarySearchTree.makeEmpty():::EXIT
+    Variables: this this.root orig(this) orig(this.root)
+      Modified variables: this.root
+      Unmodified variables: this
+modifies this.root
+this.root == null
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::ENTER
+    Variables: this this.root x x.getClass()
+x != null
+\typeof(x) == \type(DataStructures.MyInteger)
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::EXIT
+    Variables: this this.root x x.getClass() orig(this) orig(this.root) orig(x) orig(x.getClass())
+      Modified variables: this.root
+      Unmodified variables: this x x.getClass()
+modifies this.root
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+    Variables: this this.root x x.getClass() t
+x != null
+\typeof(x) == \type(DataStructures.MyInteger)
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144
+    Variables: this this.root x x.getClass() t return orig(this) orig(this.root) orig(x) orig(x.getClass()) orig(t)
+      Unmodified variables: this this.root x x.getClass() t
+\result == \old(t)
+\result == null
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156
+    Variables: this this.root x x.getClass() t return orig(this) orig(this.root) orig(x) orig(x.getClass()) orig(t)
+      Modified primitive arguments: t
+      Unmodified variables: this this.root x x.getClass()
+this.root != null
+\old(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
+    Variables: this this.root x x.getClass() t return orig(this) orig(this.root) orig(x) orig(x.getClass()) orig(t)
+      Modified primitive arguments: t
+      Unmodified variables: this this.root x x.getClass()
+(\old(t) != null)  ==>  (this.root != null)
+(\old(t) == null)  ==>  (\result == null)
+(\old(t) == null)  ==>  (\result == \old(t))

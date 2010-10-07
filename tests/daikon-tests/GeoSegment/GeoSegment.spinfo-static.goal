@@ -1,0 +1,42 @@
+REPLACE
+hashCode()
+name.hashCode()+ p1.hashCode()* 7 + p2.hashCode()* 17
+length()
+p1.distanceTo(p2)
+name()
+this.name
+p1()
+this.p1
+p2()
+this.p2
+reverse()
+new GeoSegment(name, p2, p1)
+toString()
+"Seg{" + name + "," + p1 + "," + p2 + "}"
+
+PPT_NAME MapQuick1.GeoSegment.equals
+!(o instanceof GeoSegment)
+false
+orig(!(o instanceof GeoSegment))
+orig(false)
+orig(this.p1.equals(other.p1)&& this.p2.equals(other.p2)&& this.name.equals(other.name))
+this.p1.equals(other.p1)&& this.p2.equals(other.p2)&& this.name.equals(other.name)
+
+REPLACE
+hashCode()
+latitude * 7 + longitude * 41
+toString()
+"Pt{" +(latitude / REP_SCALE_FACTOR)+ "," +(longitude / REP_SCALE_FACTOR)+ "}"
+
+PPT_NAME MapQuick1.GeoPoint.equals
+!(o instanceof GeoPoint)
+(this.latitude == other.latitude)&&(this.longitude == other.longitude)
+false
+orig(!(o instanceof GeoPoint))
+orig((this.latitude == other.latitude)&&(this.longitude == other.longitude))
+orig(false)
+
+PPT_NAME MapQuick1.GeoPoint.headingTo
+angle < 0
+orig(angle < 0)
+

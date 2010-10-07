@@ -1,0 +1,6 @@
+..main() ENTER/54: 1 EXIT0/57: 1
+A.setEverything() ENTER/69: 13 EXIT0/69: 13
+B.setEverything() ENTER/105: 11 EXIT0/105: 11
+C.setEverything() ENTER/69: 12 EXIT0/69: 12
+D.setEverything() ENTER/69: 12 EXIT0/69: 12
+E.setEverything() ENTER/78: 12 EXIT0/78: 12

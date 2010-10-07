@@ -1,0 +1,9 @@
+SimpleDisambigStructTest
+SimpleDisambigStructTest.decls.diff
+SimpleDisambigStructTest.dtrace.diff
+SimpleDisambigStructTest.invs.diff
+SimpleDisambigStructTest.out
+SimpleDisambigStructTest.out.diff
+ran-kvasir
+*.counts *.counts.diff
+SimpleDisambigStructTest.comp SimpleDisambigStructTest.comp.diff

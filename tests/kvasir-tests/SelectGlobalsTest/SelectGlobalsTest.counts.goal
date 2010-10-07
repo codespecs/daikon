@@ -1,0 +1,4 @@
+..fun_all_filtered() ENTER/15: 1 EXIT0/18: 1
+..fun_none_filtered() ENTER/24: 1 EXIT0/27: 1
+..fun_some_filtered() ENTER/18: 1 EXIT0/21: 1
+..main() ENTER/12: 1 EXIT0/15: 1

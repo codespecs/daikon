@@ -1,0 +1,26 @@
+===========================================================================
+misc.Precedence:::OBJECT
+(EQ (hash |this|) (hashcode 1001))
+(OR (EQ (select |i| |this|) 0) (EQ (select |i| |this|) 2) (EQ (select |i| |this|) 10))
+===========================================================================
+misc.Precedence.Precedence():::EXIT
+(EQ (select |i| |this|) 0)
+===========================================================================
+misc.Precedence.lets_calculate(int):::ENTER
+(EQ (select |i| |this|) 10)
+(EQ |j| 4)
+===========================================================================
+misc.Precedence.lets_calculate(int):::EXIT
+(EQ (select |i| |this|) 2)
+(EQ |return| 6)
+===========================================================================
+misc.Precedence.main(java.lang.String[]):::ENTER
+(EQ (hash |args|) (hashcode 1002))
+(EQ (typeof |args|) |T_java.lang.String[]|)
+(AND (EQ (arrayLength |args|) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |args|) 1))) (NEQ (select (select elems |args|) |i|)  null))))
+(EQ (arrayLength |args|) 0)
+===========================================================================
+misc.Precedence.main(java.lang.String[]):::EXIT
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |args|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |__orig__args|) 1)) (EQ |i| |j|)) (EQ (select (select elems |args|) |i|) (select (select elems |__orig__args|) |j|))))
+(AND (EQ (arrayLength |args|) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |args|) 1))) (NEQ (select (select elems |args|) |i|)  null))))
+(EQ (arrayLength |args|) 0)

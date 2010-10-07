@@ -1,0 +1,56 @@
+===============================================================================
+POV-Ray 3.6 for UNIX/Linux - NEWS
+===============================================================================
+
+A list of changes for the platform independent part of the program
+can be found in doc/revision.txt .
+
+
+========================================
+New features and changes from 3.5 to 3.6
+========================================
+
+  a) PC-Linux binary version
+
+     - a new install script that allows both system wide (as root) and user
+       level install.  There are various possibilities to do the installation
+       so there might be problems in some cases.  Before you report a problem
+       make sure you read the text the install script prints on the screen
+       carefully, in some cases there are additional actions required to get 
+       a working installation.
+
+  b) generic UNIX source version
+
+     - a completely rewritten and much more universal configure script.
+       see INSTALL for more information.
+
+  c) all versions
+
+     - new documentation format.  It has been tested with several newer
+       browsers, Netscape 4.x will not work well unless you disable style 
+       sheets.
+
+       Note some of the png images do not display correctly in some newer 
+       versions of Konqueror.  This is a bug in Konqueror.  A possible 
+       workaround would be to process all png images through the NetPBM
+       tools:
+
+         pngtopnm image_old.png | pnmtopng > image.png
+
+     - new default locations for the configuration files (povray.ini and
+       povray.conf).  See chapter 1 of the documentation for details.
+
+     - a new io-restrictions configuration file format.  The new format is 
+       not compatible to 3.5 but due to the changed file locations this
+       does not prevent parallel use of POV-Ray 3.5 and 3.6.
+
+     - sample scene render scripts.  See section 1.3.6 of the docs for
+       instructions how to use them.
+
+     - a benchmark rendering mode: see section 1.6.2 of the docs.
+
+     - KDE integration (file types and panel icons)  If someone here is
+       familiar with doing the same kind of thing in GNOME this would be 
+       helpful.
+
+     - various internal changes not directly visible to the user.

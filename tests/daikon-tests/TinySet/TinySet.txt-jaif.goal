@@ -1,0 +1,22 @@
+package checkers.nullness.quals:
+annotation visible @Nullable
+
+package checkers.nullness.quals:
+annotation visible @NonNull
+
+package six170:
+class TinySet : // 11329/- obj/class samples
+  field bits :  // int
+  method <init>() :  // 101 samples
+  method add(I) :  // 548 samples
+    parameter #0 :  // n
+  method contains(I) :  // 4816 samples
+    parameter #0 :  // n
+  method intersect(Lsix170/TinySet;) :  // 27 samples
+    parameter #0 :  // other
+  method remove(I) :  // 200 samples
+    parameter #0 :  // n
+  method union(Lsix170/TinySet;) :  // 23 samples
+    parameter #0 :  // other
+
+

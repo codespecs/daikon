@@ -1,0 +1,50 @@
+
+Variable sets for six170.TinySet.<init>() enter
+Variable sets for six170.TinySet.<init>() exit
+  [1] [this]
+  [1] [Field bits]
+
+Variable sets for six170.TinySet.add(I n) enter
+  [2] [Parameter n, Field bits]
+  [1] [this]
+Variable sets for six170.TinySet.add(I n) exit
+  [2] [Parameter n, Field bits]
+  [1] [this]
+
+Variable sets for six170.TinySet.remove(I n) enter
+  [2] [Parameter n, Field bits]
+  [1] [this]
+Variable sets for six170.TinySet.remove(I n) exit
+  [2] [Parameter n, Field bits]
+  [1] [this]
+
+Variable sets for six170.TinySet.contains(I n) enter
+  [2] [Parameter n, Field bits]
+  [1] [this]
+Variable sets for six170.TinySet.contains(I n) exit
+  [2] [Parameter n, Field bits]
+  [1] [return]
+  [1] [this]
+
+Variable sets for six170.TinySet.intersect(six170.TinySet other) enter
+  [1] [Parameter other]
+  [2] [Field other.bits, Field bits]
+  [1] [this]
+Variable sets for six170.TinySet.intersect(six170.TinySet other) exit
+  [1] [Parameter other]
+  [2] [Field other.bits, Field bits]
+  [1] [this]
+
+Variable sets for six170.TinySet.union(six170.TinySet other) enter
+  [1] [Parameter other]
+  [2] [Field other.bits, Field bits]
+  [1] [this]
+Variable sets for six170.TinySet.union(six170.TinySet other) exit
+  [1] [Parameter other]
+  [2] [Field other.bits, Field bits]
+  [1] [this]
+
+Variable sets for six170.TinySet.equals(java.lang.Object obj) enter
+  not called
+Variable sets for six170.TinySet.equals(java.lang.Object obj) exit
+  not called

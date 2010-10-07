@@ -1,0 +1,54 @@
+REPLACE
+isEmpty()
+currentSize == 0
+isFull()
+currentSize == array.length - 1
+
+PPT_NAME DataStructures.BinaryHeap.buildHeap
+i > 0
+orig(i > 0)
+
+PPT_NAME DataStructures.BinaryHeap.deleteMin
+isEmpty()
+orig(isEmpty())
+
+PPT_NAME DataStructures.BinaryHeap.findMin
+isEmpty()
+orig(isEmpty())
+
+PPT_NAME DataStructures.BinaryHeap.insert
+hole > 1 && x.compareTo(array[hole / 2])< 0
+isFull()
+orig(hole > 1 && x.compareTo(array[hole / 2])< 0)
+orig(isFull())
+
+PPT_NAME DataStructures.BinaryHeap.isEmpty
+currentSize == 0
+orig(currentSize == 0)
+
+PPT_NAME DataStructures.BinaryHeap.isFull
+currentSize == array.length - 1
+orig(currentSize == array.length - 1)
+
+PPT_NAME DataStructures.BinaryHeap.main
+((MyInteger)(h.deleteMin())).intValue()!= i
+((MyInteger)(h.deleteMin())).intValue()!= i
+i != 0
+i != 0
+i < numItems
+i <= numItems
+orig(((MyInteger)(h.deleteMin())).intValue()!= i)
+orig(((MyInteger)(h.deleteMin())).intValue()!= i)
+orig(i != 0)
+orig(i != 0)
+orig(i < numItems)
+orig(i <= numItems)
+
+PPT_NAME DataStructures.BinaryHeap.percolateDown
+array[child].compareTo(tmp)< 0
+child != currentSize && /* 6*/                  array[child + 1].compareTo(array[child])< 0
+hole * 2 <= currentSize
+orig(array[child].compareTo(tmp)< 0)
+orig(child != currentSize && /* 6*/                  array[child + 1].compareTo(array[child])< 0)
+orig(hole * 2 <= currentSize)
+

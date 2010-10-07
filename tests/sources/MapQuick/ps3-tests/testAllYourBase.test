@@ -1,0 +1,53 @@
+#Test the All Your Base graph
+CreateGraph fun
+
+CreateNode You 1
+CreateNode All 1
+CreateNode belong 1
+CreateNode to 1
+CreateNode us 1
+CreateNode chance 1
+CreateNode make 1
+CreateNode your 1
+CreateNode base 1
+CreateNode are 1
+CreateNode have 1
+CreateNode no 1
+CreateNode time 1
+CreateNode survive 1
+
+AddNode fun You
+AddNode fun All
+AddNode fun belong
+AddNode fun to
+AddNode fun us
+AddNode fun chance
+AddNode fun make
+AddNode fun your
+AddNode fun base
+AddNode fun are
+AddNode fun have
+AddNode fun no
+AddNode fun time
+AddNode fun survive
+
+AddEdge fun chance base
+AddEdge fun your base
+AddEdge fun are belong
+AddEdge fun make your
+AddEdge fun to us
+AddEdge fun You have
+AddEdge fun your time
+AddEdge fun have no
+AddEdge fun no chance
+AddEdge fun chance to
+AddEdge fun base are
+AddEdge fun to survive
+AddEdge fun All your
+AddEdge fun survive make
+AddEdge fun belong to
+
+FindPath fun All -> us
+FindPath fun You -> time
+
+

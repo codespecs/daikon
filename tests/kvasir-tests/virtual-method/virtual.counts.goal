@@ -1,0 +1,7 @@
+..main() ENTER/10: 1 EXIT0/13: 1
+Shape.Shape() ENTER/4: 10 EXIT0/4: 10
+Shape.compare(Shape*, Shape*) ENTER/7: 2 EXIT0/10: 2
+Square.Square() ENTER/4: 5 EXIT0/4: 5
+Square.num_sides() ENTER/4: 8 EXIT0/7: 8
+Triangle.Triangle() ENTER/4: 5 EXIT0/4: 5
+Triangle.num_sides() ENTER/4: 6 EXIT0/7: 6

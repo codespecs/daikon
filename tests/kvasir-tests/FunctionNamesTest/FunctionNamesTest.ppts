@@ -1,0 +1,5 @@
+#FunctionNamesTest.cpp.staticFoo(int, int)
+#..firstFileFunction(int)
+..main()
+#second_file.cpp.staticFoo(int, int)
+..secondFileFunction()

@@ -1,0 +1,2305 @@
+===========================================================================
+..main():::ENTER
+::arrayOfBees has only one value
+::arrayOfBees[] contains no nulls and has only one value, of length 10
+::arrayOfBees[].C.privateIntC == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].C.protectedIntC == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].C.publicIntC == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].D.privateIntD == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].D.protectedIntD == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].D.publicIntD == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].E.A.privateIntA == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].E.A.protectedIntA == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].E.A.publicIntA == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].E.privateIntE == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].E.protectedIntE == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].E.publicIntE == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].privateIntB == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].protectedIntB == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+::arrayOfBees[].publicIntB == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+===========================================================================
+..main():::EXIT
+::arrayOfBees == orig(::arrayOfBees)
+::arrayOfBees[] == orig(::arrayOfBees[])
+::arrayOfBees has only one value
+::arrayOfBees[] contains no nulls and has only one value, of length 10
+::arrayOfBees[].C.privateIntC == [6, 6, 6, 6, 6, 6, 6, 6, 6, 6]
+::arrayOfBees[].C.protectedIntC == [5, 5, 5, 5, 5, 5, 5, 5, 5, 5]
+::arrayOfBees[].C.publicIntC == [4, 4, 4, 4, 4, 4, 4, 4, 4, 4]
+::arrayOfBees[].D.privateIntD == [9, 9, 9, 9, 9, 9, 9, 9, 9, 9]
+::arrayOfBees[].D.protectedIntD == [8, 8, 8, 8, 8, 8, 8, 8, 8, 8]
+::arrayOfBees[].D.publicIntD == [7, 7, 7, 7, 7, 7, 7, 7, 7, 7]
+::arrayOfBees[].E.A.privateIntA == [15, 15, 15, 15, 15, 15, 15, 15, 15, 15]
+::arrayOfBees[].E.A.protectedIntA == [14, 14, 14, 14, 14, 14, 14, 14, 14, 14]
+::arrayOfBees[].E.A.publicIntA == [13, 13, 13, 13, 13, 13, 13, 13, 13, 13]
+::arrayOfBees[].E.privateIntE == [12, 12, 12, 12, 12, 12, 12, 12, 12, 12]
+::arrayOfBees[].E.protectedIntE == [11, 11, 11, 11, 11, 11, 11, 11, 11, 11]
+::arrayOfBees[].E.publicIntE == [10, 10, 10, 10, 10, 10, 10, 10, 10, 10]
+::arrayOfBees[].privateIntB == [3, 3, 3, 3, 3, 3, 3, 3, 3, 3]
+::arrayOfBees[].protectedIntB == [2, 2, 2, 2, 2, 2, 2, 2, 2, 2]
+::arrayOfBees[].publicIntB == [1, 1, 1, 1, 1, 1, 1, 1, 1, 1]
+return == 0
+===========================================================================
+A:::OBJECT
+this->privateIntA one of { 0, 15 }
+this->protectedIntA one of { 0, 14 }
+this->publicIntA one of { 0, 13 }
+===========================================================================
+A.setEverything():::ENTER
+::arrayOfBees has only one value
+::arrayOfBees[] contains no nulls and has only one value, of length 10
+::arrayOfBees[].C.privateIntC elements one of { 0, 6 }
+::arrayOfBees[].C.privateIntC sorted by >=
+::arrayOfBees[].C.protectedIntC elements one of { 0, 5 }
+::arrayOfBees[].C.protectedIntC sorted by >=
+::arrayOfBees[].C.publicIntC elements one of { 0, 4 }
+::arrayOfBees[].C.publicIntC sorted by >=
+::arrayOfBees[].D.privateIntD elements one of { 0, 9 }
+::arrayOfBees[].D.privateIntD sorted by >=
+::arrayOfBees[].D.protectedIntD elements one of { 0, 8 }
+::arrayOfBees[].D.protectedIntD sorted by >=
+::arrayOfBees[].D.publicIntD elements one of { 0, 7 }
+::arrayOfBees[].D.publicIntD sorted by >=
+::arrayOfBees[].E.A.privateIntA elements one of { 0, 15 }
+::arrayOfBees[].E.A.privateIntA sorted by >=
+::arrayOfBees[].E.A.protectedIntA elements one of { 0, 14 }
+::arrayOfBees[].E.A.protectedIntA sorted by >=
+::arrayOfBees[].E.A.publicIntA elements one of { 0, 13 }
+::arrayOfBees[].E.A.publicIntA sorted by >=
+::arrayOfBees[].E.privateIntE elements one of { 0, 12 }
+::arrayOfBees[].E.privateIntE sorted by >=
+::arrayOfBees[].E.protectedIntE elements one of { 0, 11 }
+::arrayOfBees[].E.protectedIntE sorted by >=
+::arrayOfBees[].E.publicIntE elements one of { 0, 10 }
+::arrayOfBees[].E.publicIntE sorted by >=
+::arrayOfBees[].privateIntB elements one of { 0, 3 }
+::arrayOfBees[].privateIntB sorted by >=
+::arrayOfBees[].protectedIntB elements one of { 0, 2 }
+::arrayOfBees[].protectedIntB sorted by >=
+::arrayOfBees[].publicIntB elements one of { 0, 1 }
+::arrayOfBees[].publicIntB sorted by >=
+this->privateIntA == 0
+this->protectedIntA == 0
+this->publicIntA == 0
+::arrayOfBees[].C.privateIntC elements >= this->privateIntA
+::arrayOfBees[].C.privateIntC elements >= this->protectedIntA
+::arrayOfBees[].C.privateIntC elements >= this->publicIntA
+::arrayOfBees[].C.protectedIntC elements >= this->privateIntA
+::arrayOfBees[].C.protectedIntC elements >= this->protectedIntA
+::arrayOfBees[].C.protectedIntC elements >= this->publicIntA
+::arrayOfBees[].C.publicIntC elements >= this->privateIntA
+::arrayOfBees[].C.publicIntC elements >= this->protectedIntA
+::arrayOfBees[].C.publicIntC elements >= this->publicIntA
+::arrayOfBees[].D.privateIntD elements >= this->privateIntA
+::arrayOfBees[].D.privateIntD elements >= this->protectedIntA
+::arrayOfBees[].D.privateIntD elements >= this->publicIntA
+::arrayOfBees[].D.protectedIntD elements >= this->privateIntA
+::arrayOfBees[].D.protectedIntD elements >= this->protectedIntA
+::arrayOfBees[].D.protectedIntD elements >= this->publicIntA
+::arrayOfBees[].D.publicIntD elements >= this->privateIntA
+::arrayOfBees[].D.publicIntD elements >= this->protectedIntA
+::arrayOfBees[].D.publicIntD elements >= this->publicIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->privateIntA
+this->privateIntA in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->protectedIntA
+this->protectedIntA in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->publicIntA
+this->publicIntA in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->privateIntA
+this->privateIntA in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->protectedIntA
+this->protectedIntA in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->publicIntA
+this->publicIntA in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->privateIntA
+this->privateIntA in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->protectedIntA
+this->protectedIntA in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->publicIntA
+this->publicIntA in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.privateIntE elements >= this->privateIntA
+::arrayOfBees[].E.privateIntE elements >= this->protectedIntA
+::arrayOfBees[].E.privateIntE elements >= this->publicIntA
+::arrayOfBees[].E.protectedIntE elements >= this->privateIntA
+::arrayOfBees[].E.protectedIntE elements >= this->protectedIntA
+::arrayOfBees[].E.protectedIntE elements >= this->publicIntA
+::arrayOfBees[].E.publicIntE elements >= this->privateIntA
+::arrayOfBees[].E.publicIntE elements >= this->protectedIntA
+::arrayOfBees[].E.publicIntE elements >= this->publicIntA
+::arrayOfBees[].privateIntB elements >= this->privateIntA
+::arrayOfBees[].privateIntB elements >= this->protectedIntA
+::arrayOfBees[].privateIntB elements >= this->publicIntA
+::arrayOfBees[].protectedIntB elements >= this->privateIntA
+::arrayOfBees[].protectedIntB elements >= this->protectedIntA
+::arrayOfBees[].protectedIntB elements >= this->publicIntA
+::arrayOfBees[].publicIntB elements >= this->privateIntA
+::arrayOfBees[].publicIntB elements >= this->protectedIntA
+::arrayOfBees[].publicIntB elements >= this->publicIntA
+===========================================================================
+A.setEverything():::EXIT
+::arrayOfBees == orig(::arrayOfBees)
+::arrayOfBees[] == orig(::arrayOfBees[])
+::arrayOfBees[].C.privateIntC == orig(::arrayOfBees[].C.privateIntC)
+::arrayOfBees[].C.protectedIntC == orig(::arrayOfBees[].C.protectedIntC)
+::arrayOfBees[].C.publicIntC == orig(::arrayOfBees[].C.publicIntC)
+::arrayOfBees[].D.privateIntD == orig(::arrayOfBees[].D.privateIntD)
+::arrayOfBees[].D.protectedIntD == orig(::arrayOfBees[].D.protectedIntD)
+::arrayOfBees[].D.publicIntD == orig(::arrayOfBees[].D.publicIntD)
+::arrayOfBees[].E.privateIntE == orig(::arrayOfBees[].E.privateIntE)
+::arrayOfBees[].E.protectedIntE == orig(::arrayOfBees[].E.protectedIntE)
+::arrayOfBees[].E.publicIntE == orig(::arrayOfBees[].E.publicIntE)
+::arrayOfBees[].privateIntB == orig(::arrayOfBees[].privateIntB)
+::arrayOfBees[].protectedIntB == orig(::arrayOfBees[].protectedIntB)
+::arrayOfBees[].publicIntB == orig(::arrayOfBees[].publicIntB)
+this[0] == orig(this[0])
+::arrayOfBees has only one value
+::arrayOfBees[] contains no nulls and has only one value, of length 10
+::arrayOfBees[].C.privateIntC elements one of { 0, 6 }
+::arrayOfBees[].C.privateIntC sorted by >=
+::arrayOfBees[].C.protectedIntC elements one of { 0, 5 }
+::arrayOfBees[].C.protectedIntC sorted by >=
+::arrayOfBees[].C.publicIntC elements one of { 0, 4 }
+::arrayOfBees[].C.publicIntC sorted by >=
+::arrayOfBees[].D.privateIntD elements one of { 0, 9 }
+::arrayOfBees[].D.privateIntD sorted by >=
+::arrayOfBees[].D.protectedIntD elements one of { 0, 8 }
+::arrayOfBees[].D.protectedIntD sorted by >=
+::arrayOfBees[].D.publicIntD elements one of { 0, 7 }
+::arrayOfBees[].D.publicIntD sorted by >=
+::arrayOfBees[].E.A.privateIntA elements one of { 0, 15 }
+::arrayOfBees[].E.A.privateIntA sorted by >=
+::arrayOfBees[].E.A.protectedIntA elements one of { 0, 14 }
+::arrayOfBees[].E.A.protectedIntA sorted by >=
+::arrayOfBees[].E.A.publicIntA elements one of { 0, 13 }
+::arrayOfBees[].E.A.publicIntA sorted by >=
+::arrayOfBees[].E.privateIntE elements one of { 0, 12 }
+::arrayOfBees[].E.privateIntE sorted by >=
+::arrayOfBees[].E.protectedIntE elements one of { 0, 11 }
+::arrayOfBees[].E.protectedIntE sorted by >=
+::arrayOfBees[].E.publicIntE elements one of { 0, 10 }
+::arrayOfBees[].E.publicIntE sorted by >=
+::arrayOfBees[].privateIntB elements one of { 0, 3 }
+::arrayOfBees[].privateIntB sorted by >=
+::arrayOfBees[].protectedIntB elements one of { 0, 2 }
+::arrayOfBees[].protectedIntB sorted by >=
+::arrayOfBees[].publicIntB elements one of { 0, 1 }
+::arrayOfBees[].publicIntB sorted by >=
+this->privateIntA == 15
+this->protectedIntA == 14
+this->publicIntA == 13
+this[0] != null
+::arrayOfBees[].C.privateIntC elements < this->privateIntA
+::arrayOfBees[].C.privateIntC elements < this->protectedIntA
+::arrayOfBees[].C.privateIntC elements < this->publicIntA
+::arrayOfBees[].C.privateIntC elements >= orig(this->privateIntA)
+::arrayOfBees[].C.privateIntC elements >= orig(this->protectedIntA)
+::arrayOfBees[].C.privateIntC elements >= orig(this->publicIntA)
+::arrayOfBees[].C.protectedIntC elements < this->privateIntA
+::arrayOfBees[].C.protectedIntC elements < this->protectedIntA
+::arrayOfBees[].C.protectedIntC elements < this->publicIntA
+::arrayOfBees[].C.protectedIntC elements >= orig(this->privateIntA)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->protectedIntA)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->publicIntA)
+::arrayOfBees[].C.publicIntC elements < this->privateIntA
+::arrayOfBees[].C.publicIntC elements < this->protectedIntA
+::arrayOfBees[].C.publicIntC elements < this->publicIntA
+::arrayOfBees[].C.publicIntC elements >= orig(this->privateIntA)
+::arrayOfBees[].C.publicIntC elements >= orig(this->protectedIntA)
+::arrayOfBees[].C.publicIntC elements >= orig(this->publicIntA)
+::arrayOfBees[].D.privateIntD elements < this->privateIntA
+::arrayOfBees[].D.privateIntD elements < this->protectedIntA
+::arrayOfBees[].D.privateIntD elements < this->publicIntA
+::arrayOfBees[].D.privateIntD elements >= orig(this->privateIntA)
+::arrayOfBees[].D.privateIntD elements >= orig(this->protectedIntA)
+::arrayOfBees[].D.privateIntD elements >= orig(this->publicIntA)
+::arrayOfBees[].D.protectedIntD elements < this->privateIntA
+::arrayOfBees[].D.protectedIntD elements < this->protectedIntA
+::arrayOfBees[].D.protectedIntD elements < this->publicIntA
+::arrayOfBees[].D.protectedIntD elements >= orig(this->privateIntA)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->protectedIntA)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->publicIntA)
+::arrayOfBees[].D.publicIntD elements < this->privateIntA
+::arrayOfBees[].D.publicIntD elements < this->protectedIntA
+::arrayOfBees[].D.publicIntD elements < this->publicIntA
+::arrayOfBees[].D.publicIntD elements >= orig(this->privateIntA)
+::arrayOfBees[].D.publicIntD elements >= orig(this->protectedIntA)
+::arrayOfBees[].D.publicIntD elements >= orig(this->publicIntA)
+::arrayOfBees[].E.A.privateIntA elements <= this->privateIntA
+::arrayOfBees[].E.A.privateIntA >= orig(::arrayOfBees[].E.A.privateIntA) (elementwise)
+orig(::arrayOfBees[].E.A.privateIntA) is a bitwise subset of ::arrayOfBees[].E.A.privateIntA (elementwise)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->privateIntA)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->protectedIntA)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->publicIntA)
+::arrayOfBees[].E.A.protectedIntA elements < this->privateIntA
+::arrayOfBees[].E.A.protectedIntA elements <= this->protectedIntA
+::arrayOfBees[].E.A.protectedIntA >= orig(::arrayOfBees[].E.A.protectedIntA) (elementwise)
+orig(::arrayOfBees[].E.A.protectedIntA) is a bitwise subset of ::arrayOfBees[].E.A.protectedIntA (elementwise)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->privateIntA)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->protectedIntA)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->publicIntA)
+::arrayOfBees[].E.A.publicIntA elements < this->privateIntA
+::arrayOfBees[].E.A.publicIntA elements < this->protectedIntA
+::arrayOfBees[].E.A.publicIntA elements <= this->publicIntA
+::arrayOfBees[].E.A.publicIntA >= orig(::arrayOfBees[].E.A.publicIntA) (elementwise)
+orig(::arrayOfBees[].E.A.publicIntA) is a bitwise subset of ::arrayOfBees[].E.A.publicIntA (elementwise)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->privateIntA)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->protectedIntA)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->publicIntA)
+::arrayOfBees[].E.privateIntE elements < this->privateIntA
+::arrayOfBees[].E.privateIntE elements < this->protectedIntA
+::arrayOfBees[].E.privateIntE elements < this->publicIntA
+::arrayOfBees[].E.privateIntE elements >= orig(this->privateIntA)
+::arrayOfBees[].E.privateIntE elements >= orig(this->protectedIntA)
+::arrayOfBees[].E.privateIntE elements >= orig(this->publicIntA)
+::arrayOfBees[].E.protectedIntE elements < this->privateIntA
+::arrayOfBees[].E.protectedIntE elements < this->protectedIntA
+::arrayOfBees[].E.protectedIntE elements < this->publicIntA
+::arrayOfBees[].E.protectedIntE elements >= orig(this->privateIntA)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->protectedIntA)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->publicIntA)
+::arrayOfBees[].E.publicIntE elements < this->privateIntA
+::arrayOfBees[].E.publicIntE elements < this->protectedIntA
+::arrayOfBees[].E.publicIntE elements < this->publicIntA
+::arrayOfBees[].E.publicIntE elements >= orig(this->privateIntA)
+::arrayOfBees[].E.publicIntE elements >= orig(this->protectedIntA)
+::arrayOfBees[].E.publicIntE elements >= orig(this->publicIntA)
+::arrayOfBees[].privateIntB elements < this->privateIntA
+::arrayOfBees[].privateIntB elements < this->protectedIntA
+::arrayOfBees[].privateIntB elements < this->publicIntA
+::arrayOfBees[].privateIntB elements >= orig(this->privateIntA)
+::arrayOfBees[].privateIntB elements >= orig(this->protectedIntA)
+::arrayOfBees[].privateIntB elements >= orig(this->publicIntA)
+::arrayOfBees[].protectedIntB elements < this->privateIntA
+::arrayOfBees[].protectedIntB elements < this->protectedIntA
+::arrayOfBees[].protectedIntB elements < this->publicIntA
+::arrayOfBees[].protectedIntB elements >= orig(this->privateIntA)
+::arrayOfBees[].protectedIntB elements >= orig(this->protectedIntA)
+::arrayOfBees[].protectedIntB elements >= orig(this->publicIntA)
+::arrayOfBees[].publicIntB elements < this->privateIntA
+::arrayOfBees[].publicIntB elements < this->protectedIntA
+::arrayOfBees[].publicIntB elements < this->publicIntA
+::arrayOfBees[].publicIntB elements >= orig(this->privateIntA)
+::arrayOfBees[].publicIntB elements >= orig(this->protectedIntA)
+::arrayOfBees[].publicIntB elements >= orig(this->publicIntA)
+orig(::arrayOfBees[].E.A.privateIntA) elements <= this->privateIntA
+orig(::arrayOfBees[].E.A.protectedIntA) elements < this->privateIntA
+orig(::arrayOfBees[].E.A.publicIntA) elements < this->privateIntA
+orig(::arrayOfBees[].E.A.protectedIntA) elements <= this->protectedIntA
+orig(::arrayOfBees[].E.A.publicIntA) elements < this->protectedIntA
+orig(::arrayOfBees[].E.A.publicIntA) elements <= this->publicIntA
+===========================================================================
+B:::OBJECT
+this->privateIntB one of { 0, 3 }
+this->protectedIntB one of { 0, 2 }
+this->publicIntB one of { 0, 1 }
+===========================================================================
+B.setEverything():::ENTER
+::arrayOfBees has only one value
+::arrayOfBees[] contains no nulls and has only one value, of length 10
+::arrayOfBees[].C.privateIntC elements one of { 0, 6 }
+::arrayOfBees[].C.privateIntC sorted by >=
+::arrayOfBees[].C.protectedIntC elements one of { 0, 5 }
+::arrayOfBees[].C.protectedIntC sorted by >=
+::arrayOfBees[].C.publicIntC elements one of { 0, 4 }
+::arrayOfBees[].C.publicIntC sorted by >=
+::arrayOfBees[].D.privateIntD elements one of { 0, 9 }
+::arrayOfBees[].D.privateIntD sorted by >=
+::arrayOfBees[].D.protectedIntD elements one of { 0, 8 }
+::arrayOfBees[].D.protectedIntD sorted by >=
+::arrayOfBees[].D.publicIntD elements one of { 0, 7 }
+::arrayOfBees[].D.publicIntD sorted by >=
+::arrayOfBees[].E.A.privateIntA elements one of { 0, 15 }
+::arrayOfBees[].E.A.privateIntA sorted by >=
+::arrayOfBees[].E.A.protectedIntA elements one of { 0, 14 }
+::arrayOfBees[].E.A.protectedIntA sorted by >=
+::arrayOfBees[].E.A.publicIntA elements one of { 0, 13 }
+::arrayOfBees[].E.A.publicIntA sorted by >=
+::arrayOfBees[].E.privateIntE elements one of { 0, 12 }
+::arrayOfBees[].E.privateIntE sorted by >=
+::arrayOfBees[].E.protectedIntE elements one of { 0, 11 }
+::arrayOfBees[].E.protectedIntE sorted by >=
+::arrayOfBees[].E.publicIntE elements one of { 0, 10 }
+::arrayOfBees[].E.publicIntE sorted by >=
+::arrayOfBees[].privateIntB elements one of { 0, 3 }
+::arrayOfBees[].privateIntB sorted by >=
+::arrayOfBees[].protectedIntB elements one of { 0, 2 }
+::arrayOfBees[].protectedIntB sorted by >=
+::arrayOfBees[].publicIntB elements one of { 0, 1 }
+::arrayOfBees[].publicIntB sorted by >=
+this->C.privateIntC == 0
+this->C.protectedIntC == 0
+this->C.publicIntC == 0
+this->D.privateIntD == 0
+this->D.protectedIntD == 0
+this->D.publicIntD == 0
+this->E.A.privateIntA == 0
+this->E.A.protectedIntA == 0
+this->E.A.publicIntA == 0
+this->E.privateIntE == 0
+this->E.protectedIntE == 0
+this->E.publicIntE == 0
+this->privateIntB == 0
+this->protectedIntB == 0
+this->publicIntB == 0
+this[0] in ::arrayOfBees[]
+::arrayOfBees[].C.privateIntC elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.protectedIntC elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.publicIntC elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].D.privateIntD elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.protectedIntD elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.publicIntD elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].E.A.privateIntA elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.privateIntE elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.protectedIntE elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.publicIntE elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].privateIntB elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].privateIntB
+::arrayOfBees[].privateIntB elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].privateIntB
+::arrayOfBees[].protectedIntB elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].protectedIntB elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].protectedIntB
+::arrayOfBees[].publicIntB elements >= this->C.privateIntC
+this->C.privateIntC in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->C.protectedIntC
+this->C.protectedIntC in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->C.publicIntC
+this->C.publicIntC in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->D.privateIntD
+this->D.privateIntD in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->D.protectedIntD
+this->D.protectedIntD in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->D.publicIntD
+this->D.publicIntD in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->E.A.privateIntA
+this->E.A.privateIntA in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->E.A.protectedIntA
+this->E.A.protectedIntA in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->E.A.publicIntA
+this->E.A.publicIntA in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->E.privateIntE
+this->E.privateIntE in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->E.protectedIntE
+this->E.protectedIntE in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->E.publicIntE
+this->E.publicIntE in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->privateIntB
+this->privateIntB in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->protectedIntB
+this->protectedIntB in ::arrayOfBees[].publicIntB
+::arrayOfBees[].publicIntB elements >= this->publicIntB
+this->publicIntB in ::arrayOfBees[].publicIntB
+===========================================================================
+B.setEverything():::EXIT
+::arrayOfBees == orig(::arrayOfBees)
+::arrayOfBees[] == orig(::arrayOfBees[])
+this[0] == orig(this[0])
+::arrayOfBees has only one value
+::arrayOfBees[] contains no nulls and has only one value, of length 10
+::arrayOfBees[].C.privateIntC elements one of { 0, 6 }
+::arrayOfBees[].C.privateIntC sorted by >=
+::arrayOfBees[].C.protectedIntC elements one of { 0, 5 }
+::arrayOfBees[].C.protectedIntC sorted by >=
+::arrayOfBees[].C.publicIntC elements one of { 0, 4 }
+::arrayOfBees[].C.publicIntC sorted by >=
+::arrayOfBees[].D.privateIntD elements one of { 0, 9 }
+::arrayOfBees[].D.privateIntD sorted by >=
+::arrayOfBees[].D.protectedIntD elements one of { 0, 8 }
+::arrayOfBees[].D.protectedIntD sorted by >=
+::arrayOfBees[].D.publicIntD elements one of { 0, 7 }
+::arrayOfBees[].D.publicIntD sorted by >=
+::arrayOfBees[].E.A.privateIntA elements one of { 0, 15 }
+::arrayOfBees[].E.A.privateIntA sorted by >=
+::arrayOfBees[].E.A.protectedIntA elements one of { 0, 14 }
+::arrayOfBees[].E.A.protectedIntA sorted by >=
+::arrayOfBees[].E.A.publicIntA elements one of { 0, 13 }
+::arrayOfBees[].E.A.publicIntA sorted by >=
+::arrayOfBees[].E.privateIntE elements one of { 0, 12 }
+::arrayOfBees[].E.privateIntE sorted by >=
+::arrayOfBees[].E.protectedIntE elements one of { 0, 11 }
+::arrayOfBees[].E.protectedIntE sorted by >=
+::arrayOfBees[].E.publicIntE elements one of { 0, 10 }
+::arrayOfBees[].E.publicIntE sorted by >=
+::arrayOfBees[].privateIntB elements one of { 0, 3 }
+::arrayOfBees[].privateIntB sorted by >=
+::arrayOfBees[].protectedIntB elements one of { 0, 2 }
+::arrayOfBees[].protectedIntB sorted by >=
+::arrayOfBees[].publicIntB elements one of { 0, 1 }
+::arrayOfBees[].publicIntB sorted by >=
+this->C.privateIntC == 6
+this->C.protectedIntC == 5
+this->C.publicIntC == 4
+this->D.privateIntD == 9
+this->D.protectedIntD == 8
+this->D.publicIntD == 7
+this->E.A.privateIntA == 15
+this->E.A.protectedIntA == 14
+this->E.A.publicIntA == 13
+this->E.privateIntE == 12
+this->E.protectedIntE == 11
+this->E.publicIntE == 10
+this->privateIntB == 3
+this->protectedIntB == 2
+this->publicIntB == 1
+orig(this[0]) in ::arrayOfBees[]
+::arrayOfBees[].C.privateIntC elements <= this->C.privateIntC
+::arrayOfBees[].C.privateIntC elements < this->D.privateIntD
+::arrayOfBees[].C.privateIntC elements < this->D.protectedIntD
+::arrayOfBees[].C.privateIntC elements < this->D.publicIntD
+::arrayOfBees[].C.privateIntC elements < this->E.A.privateIntA
+::arrayOfBees[].C.privateIntC elements < this->E.A.protectedIntA
+::arrayOfBees[].C.privateIntC elements < this->E.A.publicIntA
+::arrayOfBees[].C.privateIntC elements < this->E.privateIntE
+::arrayOfBees[].C.privateIntC elements < this->E.protectedIntE
+::arrayOfBees[].C.privateIntC elements < this->E.publicIntE
+::arrayOfBees[].C.privateIntC >= orig(::arrayOfBees[].C.privateIntC) (elementwise)
+orig(::arrayOfBees[].C.privateIntC) is a bitwise subset of ::arrayOfBees[].C.privateIntC (elementwise)
+::arrayOfBees[].C.privateIntC elements >= orig(this->C.privateIntC)
+::arrayOfBees[].C.privateIntC elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].C.privateIntC elements >= orig(this->C.publicIntC)
+::arrayOfBees[].C.privateIntC elements >= orig(this->D.privateIntD)
+::arrayOfBees[].C.privateIntC elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].C.privateIntC elements >= orig(this->D.publicIntD)
+::arrayOfBees[].C.privateIntC elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].C.privateIntC elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].C.privateIntC elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].C.privateIntC elements >= orig(this->E.privateIntE)
+::arrayOfBees[].C.privateIntC elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].C.privateIntC elements >= orig(this->E.publicIntE)
+::arrayOfBees[].C.privateIntC elements >= orig(this->privateIntB)
+::arrayOfBees[].C.privateIntC elements >= orig(this->protectedIntB)
+::arrayOfBees[].C.privateIntC elements >= orig(this->publicIntB)
+::arrayOfBees[].C.protectedIntC elements < this->C.privateIntC
+::arrayOfBees[].C.protectedIntC elements <= this->C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements < this->D.privateIntD
+::arrayOfBees[].C.protectedIntC elements < this->D.protectedIntD
+::arrayOfBees[].C.protectedIntC elements < this->D.publicIntD
+::arrayOfBees[].C.protectedIntC elements < this->E.A.privateIntA
+::arrayOfBees[].C.protectedIntC elements < this->E.A.protectedIntA
+::arrayOfBees[].C.protectedIntC elements < this->E.A.publicIntA
+::arrayOfBees[].C.protectedIntC elements < this->E.privateIntE
+::arrayOfBees[].C.protectedIntC elements < this->E.protectedIntE
+::arrayOfBees[].C.protectedIntC elements < this->E.publicIntE
+::arrayOfBees[].C.protectedIntC >= orig(::arrayOfBees[].C.protectedIntC) (elementwise)
+orig(::arrayOfBees[].C.protectedIntC) is a bitwise subset of ::arrayOfBees[].C.protectedIntC (elementwise)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->C.privateIntC)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->C.publicIntC)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->D.privateIntD)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->D.publicIntD)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->E.privateIntE)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->E.publicIntE)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->privateIntB)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->protectedIntB)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->publicIntB)
+::arrayOfBees[].C.publicIntC elements < this->C.privateIntC
+::arrayOfBees[].C.publicIntC elements < this->C.protectedIntC
+::arrayOfBees[].C.publicIntC elements <= this->C.publicIntC
+::arrayOfBees[].C.publicIntC elements < this->D.privateIntD
+::arrayOfBees[].C.publicIntC elements < this->D.protectedIntD
+::arrayOfBees[].C.publicIntC elements < this->D.publicIntD
+::arrayOfBees[].C.publicIntC elements < this->E.A.privateIntA
+::arrayOfBees[].C.publicIntC elements < this->E.A.protectedIntA
+::arrayOfBees[].C.publicIntC elements < this->E.A.publicIntA
+::arrayOfBees[].C.publicIntC elements < this->E.privateIntE
+::arrayOfBees[].C.publicIntC elements < this->E.protectedIntE
+::arrayOfBees[].C.publicIntC elements < this->E.publicIntE
+::arrayOfBees[].C.publicIntC >= orig(::arrayOfBees[].C.publicIntC) (elementwise)
+orig(::arrayOfBees[].C.publicIntC) is a bitwise subset of ::arrayOfBees[].C.publicIntC (elementwise)
+::arrayOfBees[].C.publicIntC elements >= orig(this->C.privateIntC)
+::arrayOfBees[].C.publicIntC elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].C.publicIntC elements >= orig(this->C.publicIntC)
+::arrayOfBees[].C.publicIntC elements >= orig(this->D.privateIntD)
+::arrayOfBees[].C.publicIntC elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].C.publicIntC elements >= orig(this->D.publicIntD)
+::arrayOfBees[].C.publicIntC elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].C.publicIntC elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].C.publicIntC elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].C.publicIntC elements >= orig(this->E.privateIntE)
+::arrayOfBees[].C.publicIntC elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].C.publicIntC elements >= orig(this->E.publicIntE)
+::arrayOfBees[].C.publicIntC elements >= orig(this->privateIntB)
+::arrayOfBees[].C.publicIntC elements >= orig(this->protectedIntB)
+::arrayOfBees[].C.publicIntC elements >= orig(this->publicIntB)
+::arrayOfBees[].D.privateIntD elements <= this->D.privateIntD
+::arrayOfBees[].D.privateIntD elements < this->E.A.privateIntA
+::arrayOfBees[].D.privateIntD elements < this->E.A.protectedIntA
+::arrayOfBees[].D.privateIntD elements < this->E.A.publicIntA
+::arrayOfBees[].D.privateIntD elements < this->E.privateIntE
+::arrayOfBees[].D.privateIntD elements < this->E.protectedIntE
+::arrayOfBees[].D.privateIntD elements < this->E.publicIntE
+::arrayOfBees[].D.privateIntD >= orig(::arrayOfBees[].D.privateIntD) (elementwise)
+orig(::arrayOfBees[].D.privateIntD) is a bitwise subset of ::arrayOfBees[].D.privateIntD (elementwise)
+::arrayOfBees[].D.privateIntD elements >= orig(this->C.privateIntC)
+::arrayOfBees[].D.privateIntD elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].D.privateIntD elements >= orig(this->C.publicIntC)
+::arrayOfBees[].D.privateIntD elements >= orig(this->D.privateIntD)
+::arrayOfBees[].D.privateIntD elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].D.privateIntD elements >= orig(this->D.publicIntD)
+::arrayOfBees[].D.privateIntD elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].D.privateIntD elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].D.privateIntD elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].D.privateIntD elements >= orig(this->E.privateIntE)
+::arrayOfBees[].D.privateIntD elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].D.privateIntD elements >= orig(this->E.publicIntE)
+::arrayOfBees[].D.privateIntD elements >= orig(this->privateIntB)
+::arrayOfBees[].D.privateIntD elements >= orig(this->protectedIntB)
+::arrayOfBees[].D.privateIntD elements >= orig(this->publicIntB)
+::arrayOfBees[].D.protectedIntD elements < this->D.privateIntD
+::arrayOfBees[].D.protectedIntD elements <= this->D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements < this->E.A.privateIntA
+::arrayOfBees[].D.protectedIntD elements < this->E.A.protectedIntA
+::arrayOfBees[].D.protectedIntD elements < this->E.A.publicIntA
+::arrayOfBees[].D.protectedIntD elements < this->E.privateIntE
+::arrayOfBees[].D.protectedIntD elements < this->E.protectedIntE
+::arrayOfBees[].D.protectedIntD elements < this->E.publicIntE
+::arrayOfBees[].D.protectedIntD >= orig(::arrayOfBees[].D.protectedIntD) (elementwise)
+orig(::arrayOfBees[].D.protectedIntD) is a bitwise subset of ::arrayOfBees[].D.protectedIntD (elementwise)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->C.privateIntC)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->C.publicIntC)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->D.privateIntD)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->D.publicIntD)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->E.privateIntE)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->E.publicIntE)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->privateIntB)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->protectedIntB)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->publicIntB)
+::arrayOfBees[].D.publicIntD elements < this->D.privateIntD
+::arrayOfBees[].D.publicIntD elements < this->D.protectedIntD
+::arrayOfBees[].D.publicIntD elements <= this->D.publicIntD
+::arrayOfBees[].D.publicIntD elements < this->E.A.privateIntA
+::arrayOfBees[].D.publicIntD elements < this->E.A.protectedIntA
+::arrayOfBees[].D.publicIntD elements < this->E.A.publicIntA
+::arrayOfBees[].D.publicIntD elements < this->E.privateIntE
+::arrayOfBees[].D.publicIntD elements < this->E.protectedIntE
+::arrayOfBees[].D.publicIntD elements < this->E.publicIntE
+::arrayOfBees[].D.publicIntD >= orig(::arrayOfBees[].D.publicIntD) (elementwise)
+orig(::arrayOfBees[].D.publicIntD) is a bitwise subset of ::arrayOfBees[].D.publicIntD (elementwise)
+::arrayOfBees[].D.publicIntD elements >= orig(this->C.privateIntC)
+::arrayOfBees[].D.publicIntD elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].D.publicIntD elements >= orig(this->C.publicIntC)
+::arrayOfBees[].D.publicIntD elements >= orig(this->D.privateIntD)
+::arrayOfBees[].D.publicIntD elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].D.publicIntD elements >= orig(this->D.publicIntD)
+::arrayOfBees[].D.publicIntD elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].D.publicIntD elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].D.publicIntD elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].D.publicIntD elements >= orig(this->E.privateIntE)
+::arrayOfBees[].D.publicIntD elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].D.publicIntD elements >= orig(this->E.publicIntE)
+::arrayOfBees[].D.publicIntD elements >= orig(this->privateIntB)
+::arrayOfBees[].D.publicIntD elements >= orig(this->protectedIntB)
+::arrayOfBees[].D.publicIntD elements >= orig(this->publicIntB)
+::arrayOfBees[].E.A.privateIntA elements <= this->E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA >= orig(::arrayOfBees[].E.A.privateIntA) (elementwise)
+orig(::arrayOfBees[].E.A.privateIntA) is a bitwise subset of ::arrayOfBees[].E.A.privateIntA (elementwise)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->C.privateIntC)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->C.publicIntC)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->D.privateIntD)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->D.publicIntD)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->E.privateIntE)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->E.publicIntE)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->privateIntB)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->protectedIntB)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->publicIntB)
+::arrayOfBees[].E.A.protectedIntA elements < this->E.A.privateIntA
+::arrayOfBees[].E.A.protectedIntA elements <= this->E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA >= orig(::arrayOfBees[].E.A.protectedIntA) (elementwise)
+orig(::arrayOfBees[].E.A.protectedIntA) is a bitwise subset of ::arrayOfBees[].E.A.protectedIntA (elementwise)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->C.privateIntC)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->C.publicIntC)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->D.privateIntD)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->D.publicIntD)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->E.privateIntE)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->E.publicIntE)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->privateIntB)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->protectedIntB)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->publicIntB)
+::arrayOfBees[].E.A.publicIntA elements < this->E.A.privateIntA
+::arrayOfBees[].E.A.publicIntA elements < this->E.A.protectedIntA
+::arrayOfBees[].E.A.publicIntA elements <= this->E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA >= orig(::arrayOfBees[].E.A.publicIntA) (elementwise)
+orig(::arrayOfBees[].E.A.publicIntA) is a bitwise subset of ::arrayOfBees[].E.A.publicIntA (elementwise)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->C.privateIntC)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->C.publicIntC)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->D.privateIntD)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->D.publicIntD)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->E.privateIntE)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->E.publicIntE)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->privateIntB)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->protectedIntB)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->publicIntB)
+::arrayOfBees[].E.privateIntE elements < this->E.A.privateIntA
+::arrayOfBees[].E.privateIntE elements < this->E.A.protectedIntA
+::arrayOfBees[].E.privateIntE elements < this->E.A.publicIntA
+::arrayOfBees[].E.privateIntE elements <= this->E.privateIntE
+::arrayOfBees[].E.privateIntE >= orig(::arrayOfBees[].E.privateIntE) (elementwise)
+orig(::arrayOfBees[].E.privateIntE) is a bitwise subset of ::arrayOfBees[].E.privateIntE (elementwise)
+::arrayOfBees[].E.privateIntE elements >= orig(this->C.privateIntC)
+::arrayOfBees[].E.privateIntE elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].E.privateIntE elements >= orig(this->C.publicIntC)
+::arrayOfBees[].E.privateIntE elements >= orig(this->D.privateIntD)
+::arrayOfBees[].E.privateIntE elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].E.privateIntE elements >= orig(this->D.publicIntD)
+::arrayOfBees[].E.privateIntE elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].E.privateIntE elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].E.privateIntE elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].E.privateIntE elements >= orig(this->E.privateIntE)
+::arrayOfBees[].E.privateIntE elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].E.privateIntE elements >= orig(this->E.publicIntE)
+::arrayOfBees[].E.privateIntE elements >= orig(this->privateIntB)
+::arrayOfBees[].E.privateIntE elements >= orig(this->protectedIntB)
+::arrayOfBees[].E.privateIntE elements >= orig(this->publicIntB)
+::arrayOfBees[].E.protectedIntE elements < this->E.A.privateIntA
+::arrayOfBees[].E.protectedIntE elements < this->E.A.protectedIntA
+::arrayOfBees[].E.protectedIntE elements < this->E.A.publicIntA
+::arrayOfBees[].E.protectedIntE elements < this->E.privateIntE
+::arrayOfBees[].E.protectedIntE elements <= this->E.protectedIntE
+::arrayOfBees[].E.protectedIntE >= orig(::arrayOfBees[].E.protectedIntE) (elementwise)
+orig(::arrayOfBees[].E.protectedIntE) is a bitwise subset of ::arrayOfBees[].E.protectedIntE (elementwise)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->C.privateIntC)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->C.publicIntC)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->D.privateIntD)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->D.publicIntD)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->E.privateIntE)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->E.publicIntE)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->privateIntB)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->protectedIntB)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->publicIntB)
+::arrayOfBees[].E.publicIntE elements < this->E.A.privateIntA
+::arrayOfBees[].E.publicIntE elements < this->E.A.protectedIntA
+::arrayOfBees[].E.publicIntE elements < this->E.A.publicIntA
+::arrayOfBees[].E.publicIntE elements < this->E.privateIntE
+::arrayOfBees[].E.publicIntE elements < this->E.protectedIntE
+::arrayOfBees[].E.publicIntE elements <= this->E.publicIntE
+::arrayOfBees[].E.publicIntE >= orig(::arrayOfBees[].E.publicIntE) (elementwise)
+orig(::arrayOfBees[].E.publicIntE) is a bitwise subset of ::arrayOfBees[].E.publicIntE (elementwise)
+::arrayOfBees[].E.publicIntE elements >= orig(this->C.privateIntC)
+::arrayOfBees[].E.publicIntE elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].E.publicIntE elements >= orig(this->C.publicIntC)
+::arrayOfBees[].E.publicIntE elements >= orig(this->D.privateIntD)
+::arrayOfBees[].E.publicIntE elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].E.publicIntE elements >= orig(this->D.publicIntD)
+::arrayOfBees[].E.publicIntE elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].E.publicIntE elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].E.publicIntE elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].E.publicIntE elements >= orig(this->E.privateIntE)
+::arrayOfBees[].E.publicIntE elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].E.publicIntE elements >= orig(this->E.publicIntE)
+::arrayOfBees[].E.publicIntE elements >= orig(this->privateIntB)
+::arrayOfBees[].E.publicIntE elements >= orig(this->protectedIntB)
+::arrayOfBees[].E.publicIntE elements >= orig(this->publicIntB)
+::arrayOfBees[].privateIntB elements < this->C.privateIntC
+::arrayOfBees[].privateIntB elements < this->C.protectedIntC
+::arrayOfBees[].privateIntB elements < this->C.publicIntC
+::arrayOfBees[].privateIntB elements < this->D.privateIntD
+::arrayOfBees[].privateIntB elements < this->D.protectedIntD
+::arrayOfBees[].privateIntB elements < this->D.publicIntD
+::arrayOfBees[].privateIntB elements < this->E.A.privateIntA
+::arrayOfBees[].privateIntB elements < this->E.A.protectedIntA
+::arrayOfBees[].privateIntB elements < this->E.A.publicIntA
+::arrayOfBees[].privateIntB elements < this->E.privateIntE
+::arrayOfBees[].privateIntB elements < this->E.protectedIntE
+::arrayOfBees[].privateIntB elements < this->E.publicIntE
+::arrayOfBees[].privateIntB elements <= this->privateIntB
+::arrayOfBees[].privateIntB >= orig(::arrayOfBees[].privateIntB) (elementwise)
+orig(::arrayOfBees[].privateIntB) is a bitwise subset of ::arrayOfBees[].privateIntB (elementwise)
+::arrayOfBees[].privateIntB elements >= orig(this->C.privateIntC)
+::arrayOfBees[].privateIntB elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].privateIntB elements >= orig(this->C.publicIntC)
+::arrayOfBees[].privateIntB elements >= orig(this->D.privateIntD)
+::arrayOfBees[].privateIntB elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].privateIntB elements >= orig(this->D.publicIntD)
+::arrayOfBees[].privateIntB elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].privateIntB elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].privateIntB elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].privateIntB elements >= orig(this->E.privateIntE)
+::arrayOfBees[].privateIntB elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].privateIntB elements >= orig(this->E.publicIntE)
+::arrayOfBees[].privateIntB elements >= orig(this->privateIntB)
+::arrayOfBees[].privateIntB elements >= orig(this->protectedIntB)
+::arrayOfBees[].privateIntB elements >= orig(this->publicIntB)
+::arrayOfBees[].protectedIntB elements < this->C.privateIntC
+::arrayOfBees[].protectedIntB elements < this->C.protectedIntC
+::arrayOfBees[].protectedIntB elements < this->C.publicIntC
+::arrayOfBees[].protectedIntB elements < this->D.privateIntD
+::arrayOfBees[].protectedIntB elements < this->D.protectedIntD
+::arrayOfBees[].protectedIntB elements < this->D.publicIntD
+::arrayOfBees[].protectedIntB elements < this->E.A.privateIntA
+::arrayOfBees[].protectedIntB elements < this->E.A.protectedIntA
+::arrayOfBees[].protectedIntB elements < this->E.A.publicIntA
+::arrayOfBees[].protectedIntB elements < this->E.privateIntE
+::arrayOfBees[].protectedIntB elements < this->E.protectedIntE
+::arrayOfBees[].protectedIntB elements < this->E.publicIntE
+::arrayOfBees[].protectedIntB elements < this->privateIntB
+::arrayOfBees[].protectedIntB elements <= this->protectedIntB
+::arrayOfBees[].protectedIntB >= orig(::arrayOfBees[].protectedIntB) (elementwise)
+orig(::arrayOfBees[].protectedIntB) is a bitwise subset of ::arrayOfBees[].protectedIntB (elementwise)
+::arrayOfBees[].protectedIntB elements >= orig(this->C.privateIntC)
+::arrayOfBees[].protectedIntB elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].protectedIntB elements >= orig(this->C.publicIntC)
+::arrayOfBees[].protectedIntB elements >= orig(this->D.privateIntD)
+::arrayOfBees[].protectedIntB elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].protectedIntB elements >= orig(this->D.publicIntD)
+::arrayOfBees[].protectedIntB elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].protectedIntB elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].protectedIntB elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].protectedIntB elements >= orig(this->E.privateIntE)
+::arrayOfBees[].protectedIntB elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].protectedIntB elements >= orig(this->E.publicIntE)
+::arrayOfBees[].protectedIntB elements >= orig(this->privateIntB)
+::arrayOfBees[].protectedIntB elements >= orig(this->protectedIntB)
+::arrayOfBees[].protectedIntB elements >= orig(this->publicIntB)
+::arrayOfBees[].publicIntB elements < this->C.privateIntC
+::arrayOfBees[].publicIntB elements < this->C.protectedIntC
+::arrayOfBees[].publicIntB elements < this->C.publicIntC
+::arrayOfBees[].publicIntB elements < this->D.privateIntD
+::arrayOfBees[].publicIntB elements < this->D.protectedIntD
+::arrayOfBees[].publicIntB elements < this->D.publicIntD
+::arrayOfBees[].publicIntB elements < this->E.A.privateIntA
+::arrayOfBees[].publicIntB elements < this->E.A.protectedIntA
+::arrayOfBees[].publicIntB elements < this->E.A.publicIntA
+::arrayOfBees[].publicIntB elements < this->E.privateIntE
+::arrayOfBees[].publicIntB elements < this->E.protectedIntE
+::arrayOfBees[].publicIntB elements < this->E.publicIntE
+::arrayOfBees[].publicIntB elements < this->privateIntB
+::arrayOfBees[].publicIntB elements < this->protectedIntB
+::arrayOfBees[].publicIntB elements <= this->publicIntB
+::arrayOfBees[].publicIntB >= orig(::arrayOfBees[].publicIntB) (elementwise)
+orig(::arrayOfBees[].publicIntB) is a bitwise subset of ::arrayOfBees[].publicIntB (elementwise)
+::arrayOfBees[].publicIntB elements >= orig(this->C.privateIntC)
+::arrayOfBees[].publicIntB elements >= orig(this->C.protectedIntC)
+::arrayOfBees[].publicIntB elements >= orig(this->C.publicIntC)
+::arrayOfBees[].publicIntB elements >= orig(this->D.privateIntD)
+::arrayOfBees[].publicIntB elements >= orig(this->D.protectedIntD)
+::arrayOfBees[].publicIntB elements >= orig(this->D.publicIntD)
+::arrayOfBees[].publicIntB elements >= orig(this->E.A.privateIntA)
+::arrayOfBees[].publicIntB elements >= orig(this->E.A.protectedIntA)
+::arrayOfBees[].publicIntB elements >= orig(this->E.A.publicIntA)
+::arrayOfBees[].publicIntB elements >= orig(this->E.privateIntE)
+::arrayOfBees[].publicIntB elements >= orig(this->E.protectedIntE)
+::arrayOfBees[].publicIntB elements >= orig(this->E.publicIntE)
+::arrayOfBees[].publicIntB elements >= orig(this->privateIntB)
+::arrayOfBees[].publicIntB elements >= orig(this->protectedIntB)
+::arrayOfBees[].publicIntB elements >= orig(this->publicIntB)
+orig(::arrayOfBees[].C.privateIntC) elements <= this->C.privateIntC
+orig(::arrayOfBees[].C.protectedIntC) elements < this->C.privateIntC
+orig(::arrayOfBees[].C.publicIntC) elements < this->C.privateIntC
+orig(::arrayOfBees[].privateIntB) elements < this->C.privateIntC
+orig(::arrayOfBees[].protectedIntB) elements < this->C.privateIntC
+orig(::arrayOfBees[].publicIntB) elements < this->C.privateIntC
+orig(::arrayOfBees[].C.protectedIntC) elements <= this->C.protectedIntC
+orig(::arrayOfBees[].C.publicIntC) elements < this->C.protectedIntC
+orig(::arrayOfBees[].privateIntB) elements < this->C.protectedIntC
+orig(::arrayOfBees[].protectedIntB) elements < this->C.protectedIntC
+orig(::arrayOfBees[].publicIntB) elements < this->C.protectedIntC
+orig(::arrayOfBees[].C.publicIntC) elements <= this->C.publicIntC
+orig(::arrayOfBees[].privateIntB) elements < this->C.publicIntC
+orig(::arrayOfBees[].protectedIntB) elements < this->C.publicIntC
+orig(::arrayOfBees[].publicIntB) elements < this->C.publicIntC
+orig(::arrayOfBees[].C.privateIntC) elements < this->D.privateIntD
+orig(::arrayOfBees[].C.protectedIntC) elements < this->D.privateIntD
+orig(::arrayOfBees[].C.publicIntC) elements < this->D.privateIntD
+orig(::arrayOfBees[].D.privateIntD) elements <= this->D.privateIntD
+orig(::arrayOfBees[].D.protectedIntD) elements < this->D.privateIntD
+orig(::arrayOfBees[].D.publicIntD) elements < this->D.privateIntD
+orig(::arrayOfBees[].privateIntB) elements < this->D.privateIntD
+orig(::arrayOfBees[].protectedIntB) elements < this->D.privateIntD
+orig(::arrayOfBees[].publicIntB) elements < this->D.privateIntD
+orig(::arrayOfBees[].C.privateIntC) elements < this->D.protectedIntD
+orig(::arrayOfBees[].C.protectedIntC) elements < this->D.protectedIntD
+orig(::arrayOfBees[].C.publicIntC) elements < this->D.protectedIntD
+orig(::arrayOfBees[].D.protectedIntD) elements <= this->D.protectedIntD
+orig(::arrayOfBees[].D.publicIntD) elements < this->D.protectedIntD
+orig(::arrayOfBees[].privateIntB) elements < this->D.protectedIntD
+orig(::arrayOfBees[].protectedIntB) elements < this->D.protectedIntD
+orig(::arrayOfBees[].publicIntB) elements < this->D.protectedIntD
+orig(::arrayOfBees[].C.privateIntC) elements < this->D.publicIntD
+orig(::arrayOfBees[].C.protectedIntC) elements < this->D.publicIntD
+orig(::arrayOfBees[].C.publicIntC) elements < this->D.publicIntD
+orig(::arrayOfBees[].D.publicIntD) elements <= this->D.publicIntD
+orig(::arrayOfBees[].privateIntB) elements < this->D.publicIntD
+orig(::arrayOfBees[].protectedIntB) elements < this->D.publicIntD
+orig(::arrayOfBees[].publicIntB) elements < this->D.publicIntD
+orig(::arrayOfBees[].C.privateIntC) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].C.protectedIntC) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].C.publicIntC) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].D.privateIntD) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].D.protectedIntD) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].D.publicIntD) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].E.A.privateIntA) elements <= this->E.A.privateIntA
+orig(::arrayOfBees[].E.A.protectedIntA) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].E.A.publicIntA) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].E.privateIntE) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].E.protectedIntE) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].E.publicIntE) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].privateIntB) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].protectedIntB) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].publicIntB) elements < this->E.A.privateIntA
+orig(::arrayOfBees[].C.privateIntC) elements < this->E.A.protectedIntA
+orig(::arrayOfBees[].C.protectedIntC) elements < this->E.A.protectedIntA
+orig(::arrayOfBees[].C.publicIntC) elements < this->E.A.protectedIntA
+orig(::arrayOfBees[].D.privateIntD) elements < this->E.A.protectedIntA
+orig(::arrayOfBees[].D.protectedIntD) elements < this->E.A.protectedIntA
+orig(::arrayOfBees[].D.publicIntD) elements < this->E.A.protectedIntA
+orig(::arrayOfBees[].E.A.protectedIntA) elements <= this->E.A.protectedIntA
+orig(::arrayOfBees[].E.A.publicIntA) elements < this->E.A.protectedIntA
+orig(::arrayOfBees[].E.privateIntE) elements < this->E.A.protectedIntA
+orig(::arrayOfBees[].E.protectedIntE) elements < this->E.A.protectedIntA
+orig(::arrayOfBees[].E.publicIntE) elements < this->E.A.protectedIntA
+orig(::arrayOfBees[].privateIntB) elements < this->E.A.protectedIntA
+orig(::arrayOfBees[].protectedIntB) elements < this->E.A.protectedIntA
+orig(::arrayOfBees[].publicIntB) elements < this->E.A.protectedIntA
+orig(::arrayOfBees[].C.privateIntC) elements < this->E.A.publicIntA
+orig(::arrayOfBees[].C.protectedIntC) elements < this->E.A.publicIntA
+orig(::arrayOfBees[].C.publicIntC) elements < this->E.A.publicIntA
+orig(::arrayOfBees[].D.privateIntD) elements < this->E.A.publicIntA
+orig(::arrayOfBees[].D.protectedIntD) elements < this->E.A.publicIntA
+orig(::arrayOfBees[].D.publicIntD) elements < this->E.A.publicIntA
+orig(::arrayOfBees[].E.A.publicIntA) elements <= this->E.A.publicIntA
+orig(::arrayOfBees[].E.privateIntE) elements < this->E.A.publicIntA
+orig(::arrayOfBees[].E.protectedIntE) elements < this->E.A.publicIntA
+orig(::arrayOfBees[].E.publicIntE) elements < this->E.A.publicIntA
+orig(::arrayOfBees[].privateIntB) elements < this->E.A.publicIntA
+orig(::arrayOfBees[].protectedIntB) elements < this->E.A.publicIntA
+orig(::arrayOfBees[].publicIntB) elements < this->E.A.publicIntA
+orig(::arrayOfBees[].C.privateIntC) elements < this->E.privateIntE
+orig(::arrayOfBees[].C.protectedIntC) elements < this->E.privateIntE
+orig(::arrayOfBees[].C.publicIntC) elements < this->E.privateIntE
+orig(::arrayOfBees[].D.privateIntD) elements < this->E.privateIntE
+orig(::arrayOfBees[].D.protectedIntD) elements < this->E.privateIntE
+orig(::arrayOfBees[].D.publicIntD) elements < this->E.privateIntE
+orig(::arrayOfBees[].E.privateIntE) elements <= this->E.privateIntE
+orig(::arrayOfBees[].E.protectedIntE) elements < this->E.privateIntE
+orig(::arrayOfBees[].E.publicIntE) elements < this->E.privateIntE
+orig(::arrayOfBees[].privateIntB) elements < this->E.privateIntE
+orig(::arrayOfBees[].protectedIntB) elements < this->E.privateIntE
+orig(::arrayOfBees[].publicIntB) elements < this->E.privateIntE
+orig(::arrayOfBees[].C.privateIntC) elements < this->E.protectedIntE
+orig(::arrayOfBees[].C.protectedIntC) elements < this->E.protectedIntE
+orig(::arrayOfBees[].C.publicIntC) elements < this->E.protectedIntE
+orig(::arrayOfBees[].D.privateIntD) elements < this->E.protectedIntE
+orig(::arrayOfBees[].D.protectedIntD) elements < this->E.protectedIntE
+orig(::arrayOfBees[].D.publicIntD) elements < this->E.protectedIntE
+orig(::arrayOfBees[].E.protectedIntE) elements <= this->E.protectedIntE
+orig(::arrayOfBees[].E.publicIntE) elements < this->E.protectedIntE
+orig(::arrayOfBees[].privateIntB) elements < this->E.protectedIntE
+orig(::arrayOfBees[].protectedIntB) elements < this->E.protectedIntE
+orig(::arrayOfBees[].publicIntB) elements < this->E.protectedIntE
+orig(::arrayOfBees[].C.privateIntC) elements < this->E.publicIntE
+orig(::arrayOfBees[].C.protectedIntC) elements < this->E.publicIntE
+orig(::arrayOfBees[].C.publicIntC) elements < this->E.publicIntE
+orig(::arrayOfBees[].D.privateIntD) elements < this->E.publicIntE
+orig(::arrayOfBees[].D.protectedIntD) elements < this->E.publicIntE
+orig(::arrayOfBees[].D.publicIntD) elements < this->E.publicIntE
+orig(::arrayOfBees[].E.publicIntE) elements <= this->E.publicIntE
+orig(::arrayOfBees[].privateIntB) elements < this->E.publicIntE
+orig(::arrayOfBees[].protectedIntB) elements < this->E.publicIntE
+orig(::arrayOfBees[].publicIntB) elements < this->E.publicIntE
+orig(::arrayOfBees[].privateIntB) elements <= this->privateIntB
+orig(::arrayOfBees[].protectedIntB) elements < this->privateIntB
+orig(::arrayOfBees[].publicIntB) elements < this->privateIntB
+orig(::arrayOfBees[].protectedIntB) elements <= this->protectedIntB
+orig(::arrayOfBees[].publicIntB) elements < this->protectedIntB
+orig(::arrayOfBees[].publicIntB) elements <= this->publicIntB
+===========================================================================
+C:::OBJECT
+this->privateIntC one of { 0, 6 }
+this->protectedIntC one of { 0, 5 }
+this->publicIntC one of { 0, 4 }
+===========================================================================
+C.setEverything():::ENTER
+::arrayOfBees has only one value
+::arrayOfBees[] contains no nulls and has only one value, of length 10
+::arrayOfBees[].C.privateIntC elements one of { 0, 6 }
+::arrayOfBees[].C.privateIntC sorted by >=
+::arrayOfBees[].C.protectedIntC elements one of { 0, 5 }
+::arrayOfBees[].C.protectedIntC sorted by >=
+::arrayOfBees[].C.publicIntC elements one of { 0, 4 }
+::arrayOfBees[].C.publicIntC sorted by >=
+::arrayOfBees[].D.privateIntD elements one of { 0, 9 }
+::arrayOfBees[].D.privateIntD sorted by >=
+::arrayOfBees[].D.protectedIntD elements one of { 0, 8 }
+::arrayOfBees[].D.protectedIntD sorted by >=
+::arrayOfBees[].D.publicIntD elements one of { 0, 7 }
+::arrayOfBees[].D.publicIntD sorted by >=
+::arrayOfBees[].E.A.privateIntA elements one of { 0, 15 }
+::arrayOfBees[].E.A.privateIntA sorted by >=
+::arrayOfBees[].E.A.protectedIntA elements one of { 0, 14 }
+::arrayOfBees[].E.A.protectedIntA sorted by >=
+::arrayOfBees[].E.A.publicIntA elements one of { 0, 13 }
+::arrayOfBees[].E.A.publicIntA sorted by >=
+::arrayOfBees[].E.privateIntE elements one of { 0, 12 }
+::arrayOfBees[].E.privateIntE sorted by >=
+::arrayOfBees[].E.protectedIntE elements one of { 0, 11 }
+::arrayOfBees[].E.protectedIntE sorted by >=
+::arrayOfBees[].E.publicIntE elements one of { 0, 10 }
+::arrayOfBees[].E.publicIntE sorted by >=
+::arrayOfBees[].privateIntB elements one of { 0, 3 }
+::arrayOfBees[].privateIntB sorted by >=
+::arrayOfBees[].protectedIntB elements one of { 0, 2 }
+::arrayOfBees[].protectedIntB sorted by >=
+::arrayOfBees[].publicIntB elements one of { 0, 1 }
+::arrayOfBees[].publicIntB sorted by >=
+this->privateIntC == 0
+this->protectedIntC == 0
+this->publicIntC == 0
+::arrayOfBees[].C.privateIntC elements >= this->privateIntC
+this->privateIntC in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->protectedIntC
+this->protectedIntC in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.privateIntC elements >= this->publicIntC
+this->publicIntC in ::arrayOfBees[].C.privateIntC
+::arrayOfBees[].C.protectedIntC elements >= this->privateIntC
+this->privateIntC in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->protectedIntC
+this->protectedIntC in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.protectedIntC elements >= this->publicIntC
+this->publicIntC in ::arrayOfBees[].C.protectedIntC
+::arrayOfBees[].C.publicIntC elements >= this->privateIntC
+this->privateIntC in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->protectedIntC
+this->protectedIntC in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].C.publicIntC elements >= this->publicIntC
+this->publicIntC in ::arrayOfBees[].C.publicIntC
+::arrayOfBees[].D.privateIntD elements >= this->privateIntC
+this->privateIntC in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->protectedIntC
+this->protectedIntC in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->publicIntC
+this->publicIntC in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.protectedIntD elements >= this->privateIntC
+this->privateIntC in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->protectedIntC
+this->protectedIntC in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->publicIntC
+this->publicIntC in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.publicIntD elements >= this->privateIntC
+this->privateIntC in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->protectedIntC
+this->protectedIntC in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->publicIntC
+this->publicIntC in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].E.A.privateIntA elements >= this->privateIntC
+this->privateIntC in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->protectedIntC
+this->protectedIntC in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->publicIntC
+this->publicIntC in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->privateIntC
+this->privateIntC in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->protectedIntC
+this->protectedIntC in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->publicIntC
+this->publicIntC in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->privateIntC
+this->privateIntC in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->protectedIntC
+this->protectedIntC in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->publicIntC
+this->publicIntC in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.privateIntE elements >= this->privateIntC
+this->privateIntC in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->protectedIntC
+this->protectedIntC in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->publicIntC
+this->publicIntC in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.protectedIntE elements >= this->privateIntC
+this->privateIntC in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->protectedIntC
+this->protectedIntC in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->publicIntC
+this->publicIntC in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.publicIntE elements >= this->privateIntC
+this->privateIntC in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->protectedIntC
+this->protectedIntC in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->publicIntC
+this->publicIntC in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].privateIntB elements >= this->privateIntC
+::arrayOfBees[].privateIntB elements >= this->protectedIntC
+::arrayOfBees[].privateIntB elements >= this->publicIntC
+::arrayOfBees[].protectedIntB elements >= this->privateIntC
+::arrayOfBees[].protectedIntB elements >= this->protectedIntC
+::arrayOfBees[].protectedIntB elements >= this->publicIntC
+::arrayOfBees[].publicIntB elements >= this->privateIntC
+::arrayOfBees[].publicIntB elements >= this->protectedIntC
+::arrayOfBees[].publicIntB elements >= this->publicIntC
+===========================================================================
+C.setEverything():::EXIT
+::arrayOfBees == orig(::arrayOfBees)
+::arrayOfBees[] == orig(::arrayOfBees[])
+::arrayOfBees[].D.privateIntD == orig(::arrayOfBees[].D.privateIntD)
+::arrayOfBees[].D.protectedIntD == orig(::arrayOfBees[].D.protectedIntD)
+::arrayOfBees[].D.publicIntD == orig(::arrayOfBees[].D.publicIntD)
+::arrayOfBees[].E.A.privateIntA == orig(::arrayOfBees[].E.A.privateIntA)
+::arrayOfBees[].E.A.protectedIntA == orig(::arrayOfBees[].E.A.protectedIntA)
+::arrayOfBees[].E.A.publicIntA == orig(::arrayOfBees[].E.A.publicIntA)
+::arrayOfBees[].E.privateIntE == orig(::arrayOfBees[].E.privateIntE)
+::arrayOfBees[].E.protectedIntE == orig(::arrayOfBees[].E.protectedIntE)
+::arrayOfBees[].E.publicIntE == orig(::arrayOfBees[].E.publicIntE)
+::arrayOfBees[].privateIntB == orig(::arrayOfBees[].privateIntB)
+::arrayOfBees[].protectedIntB == orig(::arrayOfBees[].protectedIntB)
+::arrayOfBees[].publicIntB == orig(::arrayOfBees[].publicIntB)
+this[0] == orig(this[0])
+::arrayOfBees has only one value
+::arrayOfBees[] contains no nulls and has only one value, of length 10
+::arrayOfBees[].C.privateIntC elements one of { 0, 6 }
+::arrayOfBees[].C.privateIntC sorted by >=
+::arrayOfBees[].C.protectedIntC elements one of { 0, 5 }
+::arrayOfBees[].C.protectedIntC sorted by >=
+::arrayOfBees[].C.publicIntC elements one of { 0, 4 }
+::arrayOfBees[].C.publicIntC sorted by >=
+::arrayOfBees[].D.privateIntD elements one of { 0, 9 }
+::arrayOfBees[].D.privateIntD sorted by >=
+::arrayOfBees[].D.protectedIntD elements one of { 0, 8 }
+::arrayOfBees[].D.protectedIntD sorted by >=
+::arrayOfBees[].D.publicIntD elements one of { 0, 7 }
+::arrayOfBees[].D.publicIntD sorted by >=
+::arrayOfBees[].E.A.privateIntA elements one of { 0, 15 }
+::arrayOfBees[].E.A.privateIntA sorted by >=
+::arrayOfBees[].E.A.protectedIntA elements one of { 0, 14 }
+::arrayOfBees[].E.A.protectedIntA sorted by >=
+::arrayOfBees[].E.A.publicIntA elements one of { 0, 13 }
+::arrayOfBees[].E.A.publicIntA sorted by >=
+::arrayOfBees[].E.privateIntE elements one of { 0, 12 }
+::arrayOfBees[].E.privateIntE sorted by >=
+::arrayOfBees[].E.protectedIntE elements one of { 0, 11 }
+::arrayOfBees[].E.protectedIntE sorted by >=
+::arrayOfBees[].E.publicIntE elements one of { 0, 10 }
+::arrayOfBees[].E.publicIntE sorted by >=
+::arrayOfBees[].privateIntB elements one of { 0, 3 }
+::arrayOfBees[].privateIntB sorted by >=
+::arrayOfBees[].protectedIntB elements one of { 0, 2 }
+::arrayOfBees[].protectedIntB sorted by >=
+::arrayOfBees[].publicIntB elements one of { 0, 1 }
+::arrayOfBees[].publicIntB sorted by >=
+this->privateIntC == 6
+this->protectedIntC == 5
+this->publicIntC == 4
+this[0] != null
+::arrayOfBees[].C.privateIntC elements <= this->privateIntC
+::arrayOfBees[].C.privateIntC >= orig(::arrayOfBees[].C.privateIntC) (elementwise)
+orig(::arrayOfBees[].C.privateIntC) is a bitwise subset of ::arrayOfBees[].C.privateIntC (elementwise)
+::arrayOfBees[].C.privateIntC elements >= orig(this->privateIntC)
+::arrayOfBees[].C.privateIntC elements >= orig(this->protectedIntC)
+::arrayOfBees[].C.privateIntC elements >= orig(this->publicIntC)
+::arrayOfBees[].C.protectedIntC elements < this->privateIntC
+::arrayOfBees[].C.protectedIntC elements <= this->protectedIntC
+::arrayOfBees[].C.protectedIntC >= orig(::arrayOfBees[].C.protectedIntC) (elementwise)
+orig(::arrayOfBees[].C.protectedIntC) is a bitwise subset of ::arrayOfBees[].C.protectedIntC (elementwise)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->privateIntC)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->protectedIntC)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->publicIntC)
+::arrayOfBees[].C.publicIntC elements < this->privateIntC
+::arrayOfBees[].C.publicIntC elements < this->protectedIntC
+::arrayOfBees[].C.publicIntC elements <= this->publicIntC
+::arrayOfBees[].C.publicIntC >= orig(::arrayOfBees[].C.publicIntC) (elementwise)
+orig(::arrayOfBees[].C.publicIntC) is a bitwise subset of ::arrayOfBees[].C.publicIntC (elementwise)
+::arrayOfBees[].C.publicIntC elements >= orig(this->privateIntC)
+::arrayOfBees[].C.publicIntC elements >= orig(this->protectedIntC)
+::arrayOfBees[].C.publicIntC elements >= orig(this->publicIntC)
+::arrayOfBees[].D.privateIntD elements >= orig(this->privateIntC)
+orig(this->privateIntC) in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= orig(this->protectedIntC)
+orig(this->protectedIntC) in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= orig(this->publicIntC)
+orig(this->publicIntC) in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.protectedIntD elements >= orig(this->privateIntC)
+orig(this->privateIntC) in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= orig(this->protectedIntC)
+orig(this->protectedIntC) in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= orig(this->publicIntC)
+orig(this->publicIntC) in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.publicIntD elements >= orig(this->privateIntC)
+orig(this->privateIntC) in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= orig(this->protectedIntC)
+orig(this->protectedIntC) in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= orig(this->publicIntC)
+orig(this->publicIntC) in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->privateIntC)
+orig(this->privateIntC) in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->protectedIntC)
+orig(this->protectedIntC) in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->publicIntC)
+orig(this->publicIntC) in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->privateIntC)
+orig(this->privateIntC) in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->protectedIntC)
+orig(this->protectedIntC) in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->publicIntC)
+orig(this->publicIntC) in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->privateIntC)
+orig(this->privateIntC) in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->protectedIntC)
+orig(this->protectedIntC) in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->publicIntC)
+orig(this->publicIntC) in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.privateIntE elements >= orig(this->privateIntC)
+orig(this->privateIntC) in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= orig(this->protectedIntC)
+orig(this->protectedIntC) in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= orig(this->publicIntC)
+orig(this->publicIntC) in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.protectedIntE elements >= orig(this->privateIntC)
+orig(this->privateIntC) in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= orig(this->protectedIntC)
+orig(this->protectedIntC) in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= orig(this->publicIntC)
+orig(this->publicIntC) in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.publicIntE elements >= orig(this->privateIntC)
+orig(this->privateIntC) in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= orig(this->protectedIntC)
+orig(this->protectedIntC) in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= orig(this->publicIntC)
+orig(this->publicIntC) in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].privateIntB elements < this->privateIntC
+::arrayOfBees[].privateIntB elements < this->protectedIntC
+::arrayOfBees[].privateIntB elements < this->publicIntC
+::arrayOfBees[].privateIntB elements >= orig(this->privateIntC)
+::arrayOfBees[].privateIntB elements >= orig(this->protectedIntC)
+::arrayOfBees[].privateIntB elements >= orig(this->publicIntC)
+::arrayOfBees[].protectedIntB elements < this->privateIntC
+::arrayOfBees[].protectedIntB elements < this->protectedIntC
+::arrayOfBees[].protectedIntB elements < this->publicIntC
+::arrayOfBees[].protectedIntB elements >= orig(this->privateIntC)
+::arrayOfBees[].protectedIntB elements >= orig(this->protectedIntC)
+::arrayOfBees[].protectedIntB elements >= orig(this->publicIntC)
+::arrayOfBees[].publicIntB elements < this->privateIntC
+::arrayOfBees[].publicIntB elements < this->protectedIntC
+::arrayOfBees[].publicIntB elements < this->publicIntC
+::arrayOfBees[].publicIntB elements >= orig(this->privateIntC)
+::arrayOfBees[].publicIntB elements >= orig(this->protectedIntC)
+::arrayOfBees[].publicIntB elements >= orig(this->publicIntC)
+orig(::arrayOfBees[].C.privateIntC) elements <= this->privateIntC
+orig(::arrayOfBees[].C.protectedIntC) elements < this->privateIntC
+orig(::arrayOfBees[].C.publicIntC) elements < this->privateIntC
+orig(::arrayOfBees[].C.protectedIntC) elements <= this->protectedIntC
+orig(::arrayOfBees[].C.publicIntC) elements < this->protectedIntC
+orig(::arrayOfBees[].C.publicIntC) elements <= this->publicIntC
+===========================================================================
+D:::OBJECT
+this->privateIntD one of { 0, 9 }
+this->protectedIntD one of { 0, 8 }
+this->publicIntD one of { 0, 7 }
+===========================================================================
+D.setEverything():::ENTER
+::arrayOfBees has only one value
+::arrayOfBees[] contains no nulls and has only one value, of length 10
+::arrayOfBees[].C.privateIntC elements one of { 0, 6 }
+::arrayOfBees[].C.privateIntC sorted by >=
+::arrayOfBees[].C.protectedIntC elements one of { 0, 5 }
+::arrayOfBees[].C.protectedIntC sorted by >=
+::arrayOfBees[].C.publicIntC elements one of { 0, 4 }
+::arrayOfBees[].C.publicIntC sorted by >=
+::arrayOfBees[].D.privateIntD elements one of { 0, 9 }
+::arrayOfBees[].D.privateIntD sorted by >=
+::arrayOfBees[].D.protectedIntD elements one of { 0, 8 }
+::arrayOfBees[].D.protectedIntD sorted by >=
+::arrayOfBees[].D.publicIntD elements one of { 0, 7 }
+::arrayOfBees[].D.publicIntD sorted by >=
+::arrayOfBees[].E.A.privateIntA elements one of { 0, 15 }
+::arrayOfBees[].E.A.privateIntA sorted by >=
+::arrayOfBees[].E.A.protectedIntA elements one of { 0, 14 }
+::arrayOfBees[].E.A.protectedIntA sorted by >=
+::arrayOfBees[].E.A.publicIntA elements one of { 0, 13 }
+::arrayOfBees[].E.A.publicIntA sorted by >=
+::arrayOfBees[].E.privateIntE elements one of { 0, 12 }
+::arrayOfBees[].E.privateIntE sorted by >=
+::arrayOfBees[].E.protectedIntE elements one of { 0, 11 }
+::arrayOfBees[].E.protectedIntE sorted by >=
+::arrayOfBees[].E.publicIntE elements one of { 0, 10 }
+::arrayOfBees[].E.publicIntE sorted by >=
+::arrayOfBees[].privateIntB elements one of { 0, 3 }
+::arrayOfBees[].privateIntB sorted by >=
+::arrayOfBees[].protectedIntB elements one of { 0, 2 }
+::arrayOfBees[].protectedIntB sorted by >=
+::arrayOfBees[].publicIntB elements one of { 0, 1 }
+::arrayOfBees[].publicIntB sorted by >=
+this->privateIntD == 0
+this->protectedIntD == 0
+this->publicIntD == 0
+::arrayOfBees[].C.privateIntC elements >= this->privateIntD
+::arrayOfBees[].C.privateIntC elements >= this->protectedIntD
+::arrayOfBees[].C.privateIntC elements >= this->publicIntD
+::arrayOfBees[].C.protectedIntC elements >= this->privateIntD
+::arrayOfBees[].C.protectedIntC elements >= this->protectedIntD
+::arrayOfBees[].C.protectedIntC elements >= this->publicIntD
+::arrayOfBees[].C.publicIntC elements >= this->privateIntD
+::arrayOfBees[].C.publicIntC elements >= this->protectedIntD
+::arrayOfBees[].C.publicIntC elements >= this->publicIntD
+::arrayOfBees[].D.privateIntD elements >= this->privateIntD
+this->privateIntD in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->protectedIntD
+this->protectedIntD in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.privateIntD elements >= this->publicIntD
+this->publicIntD in ::arrayOfBees[].D.privateIntD
+::arrayOfBees[].D.protectedIntD elements >= this->privateIntD
+this->privateIntD in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->protectedIntD
+this->protectedIntD in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.protectedIntD elements >= this->publicIntD
+this->publicIntD in ::arrayOfBees[].D.protectedIntD
+::arrayOfBees[].D.publicIntD elements >= this->privateIntD
+this->privateIntD in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->protectedIntD
+this->protectedIntD in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].D.publicIntD elements >= this->publicIntD
+this->publicIntD in ::arrayOfBees[].D.publicIntD
+::arrayOfBees[].E.A.privateIntA elements >= this->privateIntD
+this->privateIntD in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->protectedIntD
+this->protectedIntD in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->publicIntD
+this->publicIntD in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->privateIntD
+this->privateIntD in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->protectedIntD
+this->protectedIntD in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->publicIntD
+this->publicIntD in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->privateIntD
+this->privateIntD in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->protectedIntD
+this->protectedIntD in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->publicIntD
+this->publicIntD in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.privateIntE elements >= this->privateIntD
+this->privateIntD in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->protectedIntD
+this->protectedIntD in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->publicIntD
+this->publicIntD in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.protectedIntE elements >= this->privateIntD
+this->privateIntD in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->protectedIntD
+this->protectedIntD in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->publicIntD
+this->publicIntD in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.publicIntE elements >= this->privateIntD
+this->privateIntD in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->protectedIntD
+this->protectedIntD in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->publicIntD
+this->publicIntD in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].privateIntB elements >= this->privateIntD
+::arrayOfBees[].privateIntB elements >= this->protectedIntD
+::arrayOfBees[].privateIntB elements >= this->publicIntD
+::arrayOfBees[].protectedIntB elements >= this->privateIntD
+::arrayOfBees[].protectedIntB elements >= this->protectedIntD
+::arrayOfBees[].protectedIntB elements >= this->publicIntD
+::arrayOfBees[].publicIntB elements >= this->privateIntD
+::arrayOfBees[].publicIntB elements >= this->protectedIntD
+::arrayOfBees[].publicIntB elements >= this->publicIntD
+===========================================================================
+D.setEverything():::EXIT
+::arrayOfBees == orig(::arrayOfBees)
+::arrayOfBees[] == orig(::arrayOfBees[])
+::arrayOfBees[].C.privateIntC == orig(::arrayOfBees[].C.privateIntC)
+::arrayOfBees[].C.protectedIntC == orig(::arrayOfBees[].C.protectedIntC)
+::arrayOfBees[].C.publicIntC == orig(::arrayOfBees[].C.publicIntC)
+::arrayOfBees[].E.A.privateIntA == orig(::arrayOfBees[].E.A.privateIntA)
+::arrayOfBees[].E.A.protectedIntA == orig(::arrayOfBees[].E.A.protectedIntA)
+::arrayOfBees[].E.A.publicIntA == orig(::arrayOfBees[].E.A.publicIntA)
+::arrayOfBees[].E.privateIntE == orig(::arrayOfBees[].E.privateIntE)
+::arrayOfBees[].E.protectedIntE == orig(::arrayOfBees[].E.protectedIntE)
+::arrayOfBees[].E.publicIntE == orig(::arrayOfBees[].E.publicIntE)
+::arrayOfBees[].privateIntB == orig(::arrayOfBees[].privateIntB)
+::arrayOfBees[].protectedIntB == orig(::arrayOfBees[].protectedIntB)
+::arrayOfBees[].publicIntB == orig(::arrayOfBees[].publicIntB)
+this[0] == orig(this[0])
+::arrayOfBees has only one value
+::arrayOfBees[] contains no nulls and has only one value, of length 10
+::arrayOfBees[].C.privateIntC elements one of { 0, 6 }
+::arrayOfBees[].C.privateIntC sorted by >=
+::arrayOfBees[].C.protectedIntC elements one of { 0, 5 }
+::arrayOfBees[].C.protectedIntC sorted by >=
+::arrayOfBees[].C.publicIntC elements one of { 0, 4 }
+::arrayOfBees[].C.publicIntC sorted by >=
+::arrayOfBees[].D.privateIntD elements one of { 0, 9 }
+::arrayOfBees[].D.privateIntD sorted by >=
+::arrayOfBees[].D.protectedIntD elements one of { 0, 8 }
+::arrayOfBees[].D.protectedIntD sorted by >=
+::arrayOfBees[].D.publicIntD elements one of { 0, 7 }
+::arrayOfBees[].D.publicIntD sorted by >=
+::arrayOfBees[].E.A.privateIntA elements one of { 0, 15 }
+::arrayOfBees[].E.A.privateIntA sorted by >=
+::arrayOfBees[].E.A.protectedIntA elements one of { 0, 14 }
+::arrayOfBees[].E.A.protectedIntA sorted by >=
+::arrayOfBees[].E.A.publicIntA elements one of { 0, 13 }
+::arrayOfBees[].E.A.publicIntA sorted by >=
+::arrayOfBees[].E.privateIntE elements one of { 0, 12 }
+::arrayOfBees[].E.privateIntE sorted by >=
+::arrayOfBees[].E.protectedIntE elements one of { 0, 11 }
+::arrayOfBees[].E.protectedIntE sorted by >=
+::arrayOfBees[].E.publicIntE elements one of { 0, 10 }
+::arrayOfBees[].E.publicIntE sorted by >=
+::arrayOfBees[].privateIntB elements one of { 0, 3 }
+::arrayOfBees[].privateIntB sorted by >=
+::arrayOfBees[].protectedIntB elements one of { 0, 2 }
+::arrayOfBees[].protectedIntB sorted by >=
+::arrayOfBees[].publicIntB elements one of { 0, 1 }
+::arrayOfBees[].publicIntB sorted by >=
+this->privateIntD == 9
+this->protectedIntD == 8
+this->publicIntD == 7
+this[0] != null
+::arrayOfBees[].C.privateIntC elements < this->privateIntD
+::arrayOfBees[].C.privateIntC elements < this->protectedIntD
+::arrayOfBees[].C.privateIntC elements < this->publicIntD
+::arrayOfBees[].C.privateIntC elements >= orig(this->privateIntD)
+::arrayOfBees[].C.privateIntC elements >= orig(this->protectedIntD)
+::arrayOfBees[].C.privateIntC elements >= orig(this->publicIntD)
+::arrayOfBees[].C.protectedIntC elements < this->privateIntD
+::arrayOfBees[].C.protectedIntC elements < this->protectedIntD
+::arrayOfBees[].C.protectedIntC elements < this->publicIntD
+::arrayOfBees[].C.protectedIntC elements >= orig(this->privateIntD)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->protectedIntD)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->publicIntD)
+::arrayOfBees[].C.publicIntC elements < this->privateIntD
+::arrayOfBees[].C.publicIntC elements < this->protectedIntD
+::arrayOfBees[].C.publicIntC elements < this->publicIntD
+::arrayOfBees[].C.publicIntC elements >= orig(this->privateIntD)
+::arrayOfBees[].C.publicIntC elements >= orig(this->protectedIntD)
+::arrayOfBees[].C.publicIntC elements >= orig(this->publicIntD)
+::arrayOfBees[].D.privateIntD elements <= this->privateIntD
+::arrayOfBees[].D.privateIntD >= orig(::arrayOfBees[].D.privateIntD) (elementwise)
+orig(::arrayOfBees[].D.privateIntD) is a bitwise subset of ::arrayOfBees[].D.privateIntD (elementwise)
+::arrayOfBees[].D.privateIntD elements >= orig(this->privateIntD)
+::arrayOfBees[].D.privateIntD elements >= orig(this->protectedIntD)
+::arrayOfBees[].D.privateIntD elements >= orig(this->publicIntD)
+::arrayOfBees[].D.protectedIntD elements < this->privateIntD
+::arrayOfBees[].D.protectedIntD elements <= this->protectedIntD
+::arrayOfBees[].D.protectedIntD >= orig(::arrayOfBees[].D.protectedIntD) (elementwise)
+orig(::arrayOfBees[].D.protectedIntD) is a bitwise subset of ::arrayOfBees[].D.protectedIntD (elementwise)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->privateIntD)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->protectedIntD)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->publicIntD)
+::arrayOfBees[].D.publicIntD elements < this->privateIntD
+::arrayOfBees[].D.publicIntD elements < this->protectedIntD
+::arrayOfBees[].D.publicIntD elements <= this->publicIntD
+::arrayOfBees[].D.publicIntD >= orig(::arrayOfBees[].D.publicIntD) (elementwise)
+orig(::arrayOfBees[].D.publicIntD) is a bitwise subset of ::arrayOfBees[].D.publicIntD (elementwise)
+::arrayOfBees[].D.publicIntD elements >= orig(this->privateIntD)
+::arrayOfBees[].D.publicIntD elements >= orig(this->protectedIntD)
+::arrayOfBees[].D.publicIntD elements >= orig(this->publicIntD)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->privateIntD)
+orig(this->privateIntD) in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->protectedIntD)
+orig(this->protectedIntD) in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->publicIntD)
+orig(this->publicIntD) in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->privateIntD)
+orig(this->privateIntD) in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->protectedIntD)
+orig(this->protectedIntD) in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->publicIntD)
+orig(this->publicIntD) in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->privateIntD)
+orig(this->privateIntD) in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->protectedIntD)
+orig(this->protectedIntD) in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->publicIntD)
+orig(this->publicIntD) in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.privateIntE elements >= orig(this->privateIntD)
+orig(this->privateIntD) in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= orig(this->protectedIntD)
+orig(this->protectedIntD) in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= orig(this->publicIntD)
+orig(this->publicIntD) in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.protectedIntE elements >= orig(this->privateIntD)
+orig(this->privateIntD) in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= orig(this->protectedIntD)
+orig(this->protectedIntD) in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= orig(this->publicIntD)
+orig(this->publicIntD) in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.publicIntE elements >= orig(this->privateIntD)
+orig(this->privateIntD) in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= orig(this->protectedIntD)
+orig(this->protectedIntD) in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= orig(this->publicIntD)
+orig(this->publicIntD) in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].privateIntB elements < this->privateIntD
+::arrayOfBees[].privateIntB elements < this->protectedIntD
+::arrayOfBees[].privateIntB elements < this->publicIntD
+::arrayOfBees[].privateIntB elements >= orig(this->privateIntD)
+::arrayOfBees[].privateIntB elements >= orig(this->protectedIntD)
+::arrayOfBees[].privateIntB elements >= orig(this->publicIntD)
+::arrayOfBees[].protectedIntB elements < this->privateIntD
+::arrayOfBees[].protectedIntB elements < this->protectedIntD
+::arrayOfBees[].protectedIntB elements < this->publicIntD
+::arrayOfBees[].protectedIntB elements >= orig(this->privateIntD)
+::arrayOfBees[].protectedIntB elements >= orig(this->protectedIntD)
+::arrayOfBees[].protectedIntB elements >= orig(this->publicIntD)
+::arrayOfBees[].publicIntB elements < this->privateIntD
+::arrayOfBees[].publicIntB elements < this->protectedIntD
+::arrayOfBees[].publicIntB elements < this->publicIntD
+::arrayOfBees[].publicIntB elements >= orig(this->privateIntD)
+::arrayOfBees[].publicIntB elements >= orig(this->protectedIntD)
+::arrayOfBees[].publicIntB elements >= orig(this->publicIntD)
+orig(::arrayOfBees[].D.privateIntD) elements <= this->privateIntD
+orig(::arrayOfBees[].D.protectedIntD) elements < this->privateIntD
+orig(::arrayOfBees[].D.publicIntD) elements < this->privateIntD
+orig(::arrayOfBees[].D.protectedIntD) elements <= this->protectedIntD
+orig(::arrayOfBees[].D.publicIntD) elements < this->protectedIntD
+orig(::arrayOfBees[].D.publicIntD) elements <= this->publicIntD
+===========================================================================
+E:::OBJECT
+this->privateIntE one of { 0, 12 }
+this->protectedIntE one of { 0, 11 }
+this->publicIntE one of { 0, 10 }
+===========================================================================
+E.setEverything():::ENTER
+::arrayOfBees has only one value
+::arrayOfBees[] contains no nulls and has only one value, of length 10
+::arrayOfBees[].C.privateIntC elements one of { 0, 6 }
+::arrayOfBees[].C.privateIntC sorted by >=
+::arrayOfBees[].C.protectedIntC elements one of { 0, 5 }
+::arrayOfBees[].C.protectedIntC sorted by >=
+::arrayOfBees[].C.publicIntC elements one of { 0, 4 }
+::arrayOfBees[].C.publicIntC sorted by >=
+::arrayOfBees[].D.privateIntD elements one of { 0, 9 }
+::arrayOfBees[].D.privateIntD sorted by >=
+::arrayOfBees[].D.protectedIntD elements one of { 0, 8 }
+::arrayOfBees[].D.protectedIntD sorted by >=
+::arrayOfBees[].D.publicIntD elements one of { 0, 7 }
+::arrayOfBees[].D.publicIntD sorted by >=
+::arrayOfBees[].E.A.privateIntA elements one of { 0, 15 }
+::arrayOfBees[].E.A.privateIntA sorted by >=
+::arrayOfBees[].E.A.protectedIntA elements one of { 0, 14 }
+::arrayOfBees[].E.A.protectedIntA sorted by >=
+::arrayOfBees[].E.A.publicIntA elements one of { 0, 13 }
+::arrayOfBees[].E.A.publicIntA sorted by >=
+::arrayOfBees[].E.privateIntE elements one of { 0, 12 }
+::arrayOfBees[].E.privateIntE sorted by >=
+::arrayOfBees[].E.protectedIntE elements one of { 0, 11 }
+::arrayOfBees[].E.protectedIntE sorted by >=
+::arrayOfBees[].E.publicIntE elements one of { 0, 10 }
+::arrayOfBees[].E.publicIntE sorted by >=
+::arrayOfBees[].privateIntB elements one of { 0, 3 }
+::arrayOfBees[].privateIntB sorted by >=
+::arrayOfBees[].protectedIntB elements one of { 0, 2 }
+::arrayOfBees[].protectedIntB sorted by >=
+::arrayOfBees[].publicIntB elements one of { 0, 1 }
+::arrayOfBees[].publicIntB sorted by >=
+this->A.privateIntA == 0
+this->A.protectedIntA == 0
+this->A.publicIntA == 0
+this->privateIntE == 0
+this->protectedIntE == 0
+this->publicIntE == 0
+::arrayOfBees[].C.privateIntC elements >= this->A.privateIntA
+::arrayOfBees[].C.privateIntC elements >= this->A.protectedIntA
+::arrayOfBees[].C.privateIntC elements >= this->A.publicIntA
+::arrayOfBees[].C.privateIntC elements >= this->privateIntE
+::arrayOfBees[].C.privateIntC elements >= this->protectedIntE
+::arrayOfBees[].C.privateIntC elements >= this->publicIntE
+::arrayOfBees[].C.protectedIntC elements >= this->A.privateIntA
+::arrayOfBees[].C.protectedIntC elements >= this->A.protectedIntA
+::arrayOfBees[].C.protectedIntC elements >= this->A.publicIntA
+::arrayOfBees[].C.protectedIntC elements >= this->privateIntE
+::arrayOfBees[].C.protectedIntC elements >= this->protectedIntE
+::arrayOfBees[].C.protectedIntC elements >= this->publicIntE
+::arrayOfBees[].C.publicIntC elements >= this->A.privateIntA
+::arrayOfBees[].C.publicIntC elements >= this->A.protectedIntA
+::arrayOfBees[].C.publicIntC elements >= this->A.publicIntA
+::arrayOfBees[].C.publicIntC elements >= this->privateIntE
+::arrayOfBees[].C.publicIntC elements >= this->protectedIntE
+::arrayOfBees[].C.publicIntC elements >= this->publicIntE
+::arrayOfBees[].D.privateIntD elements >= this->A.privateIntA
+::arrayOfBees[].D.privateIntD elements >= this->A.protectedIntA
+::arrayOfBees[].D.privateIntD elements >= this->A.publicIntA
+::arrayOfBees[].D.privateIntD elements >= this->privateIntE
+::arrayOfBees[].D.privateIntD elements >= this->protectedIntE
+::arrayOfBees[].D.privateIntD elements >= this->publicIntE
+::arrayOfBees[].D.protectedIntD elements >= this->A.privateIntA
+::arrayOfBees[].D.protectedIntD elements >= this->A.protectedIntA
+::arrayOfBees[].D.protectedIntD elements >= this->A.publicIntA
+::arrayOfBees[].D.protectedIntD elements >= this->privateIntE
+::arrayOfBees[].D.protectedIntD elements >= this->protectedIntE
+::arrayOfBees[].D.protectedIntD elements >= this->publicIntE
+::arrayOfBees[].D.publicIntD elements >= this->A.privateIntA
+::arrayOfBees[].D.publicIntD elements >= this->A.protectedIntA
+::arrayOfBees[].D.publicIntD elements >= this->A.publicIntA
+::arrayOfBees[].D.publicIntD elements >= this->privateIntE
+::arrayOfBees[].D.publicIntD elements >= this->protectedIntE
+::arrayOfBees[].D.publicIntD elements >= this->publicIntE
+::arrayOfBees[].E.A.privateIntA elements >= this->A.privateIntA
+this->A.privateIntA in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->A.protectedIntA
+this->A.protectedIntA in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->A.publicIntA
+this->A.publicIntA in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->privateIntE
+this->privateIntE in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->protectedIntE
+this->protectedIntE in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.privateIntA elements >= this->publicIntE
+this->publicIntE in ::arrayOfBees[].E.A.privateIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->A.privateIntA
+this->A.privateIntA in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->A.protectedIntA
+this->A.protectedIntA in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->A.publicIntA
+this->A.publicIntA in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->privateIntE
+this->privateIntE in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->protectedIntE
+this->protectedIntE in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA elements >= this->publicIntE
+this->publicIntE in ::arrayOfBees[].E.A.protectedIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->A.privateIntA
+this->A.privateIntA in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->A.protectedIntA
+this->A.protectedIntA in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->A.publicIntA
+this->A.publicIntA in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->privateIntE
+this->privateIntE in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->protectedIntE
+this->protectedIntE in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.A.publicIntA elements >= this->publicIntE
+this->publicIntE in ::arrayOfBees[].E.A.publicIntA
+::arrayOfBees[].E.privateIntE elements >= this->A.privateIntA
+this->A.privateIntA in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->A.protectedIntA
+this->A.protectedIntA in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->A.publicIntA
+this->A.publicIntA in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->privateIntE
+this->privateIntE in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->protectedIntE
+this->protectedIntE in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.privateIntE elements >= this->publicIntE
+this->publicIntE in ::arrayOfBees[].E.privateIntE
+::arrayOfBees[].E.protectedIntE elements >= this->A.privateIntA
+this->A.privateIntA in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->A.protectedIntA
+this->A.protectedIntA in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->A.publicIntA
+this->A.publicIntA in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->privateIntE
+this->privateIntE in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->protectedIntE
+this->protectedIntE in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.protectedIntE elements >= this->publicIntE
+this->publicIntE in ::arrayOfBees[].E.protectedIntE
+::arrayOfBees[].E.publicIntE elements >= this->A.privateIntA
+this->A.privateIntA in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->A.protectedIntA
+this->A.protectedIntA in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->A.publicIntA
+this->A.publicIntA in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->privateIntE
+this->privateIntE in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->protectedIntE
+this->protectedIntE in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].E.publicIntE elements >= this->publicIntE
+this->publicIntE in ::arrayOfBees[].E.publicIntE
+::arrayOfBees[].privateIntB elements >= this->A.privateIntA
+::arrayOfBees[].privateIntB elements >= this->A.protectedIntA
+::arrayOfBees[].privateIntB elements >= this->A.publicIntA
+::arrayOfBees[].privateIntB elements >= this->privateIntE
+::arrayOfBees[].privateIntB elements >= this->protectedIntE
+::arrayOfBees[].privateIntB elements >= this->publicIntE
+::arrayOfBees[].protectedIntB elements >= this->A.privateIntA
+::arrayOfBees[].protectedIntB elements >= this->A.protectedIntA
+::arrayOfBees[].protectedIntB elements >= this->A.publicIntA
+::arrayOfBees[].protectedIntB elements >= this->privateIntE
+::arrayOfBees[].protectedIntB elements >= this->protectedIntE
+::arrayOfBees[].protectedIntB elements >= this->publicIntE
+::arrayOfBees[].publicIntB elements >= this->A.privateIntA
+::arrayOfBees[].publicIntB elements >= this->A.protectedIntA
+::arrayOfBees[].publicIntB elements >= this->A.publicIntA
+::arrayOfBees[].publicIntB elements >= this->privateIntE
+::arrayOfBees[].publicIntB elements >= this->protectedIntE
+::arrayOfBees[].publicIntB elements >= this->publicIntE
+===========================================================================
+E.setEverything():::EXIT
+::arrayOfBees == orig(::arrayOfBees)
+::arrayOfBees[] == orig(::arrayOfBees[])
+::arrayOfBees[].C.privateIntC == orig(::arrayOfBees[].C.privateIntC)
+::arrayOfBees[].C.protectedIntC == orig(::arrayOfBees[].C.protectedIntC)
+::arrayOfBees[].C.publicIntC == orig(::arrayOfBees[].C.publicIntC)
+::arrayOfBees[].D.privateIntD == orig(::arrayOfBees[].D.privateIntD)
+::arrayOfBees[].D.protectedIntD == orig(::arrayOfBees[].D.protectedIntD)
+::arrayOfBees[].D.publicIntD == orig(::arrayOfBees[].D.publicIntD)
+::arrayOfBees[].privateIntB == orig(::arrayOfBees[].privateIntB)
+::arrayOfBees[].protectedIntB == orig(::arrayOfBees[].protectedIntB)
+::arrayOfBees[].publicIntB == orig(::arrayOfBees[].publicIntB)
+this[0] == orig(this[0])
+::arrayOfBees has only one value
+::arrayOfBees[] contains no nulls and has only one value, of length 10
+::arrayOfBees[].C.privateIntC elements one of { 0, 6 }
+::arrayOfBees[].C.privateIntC sorted by >=
+::arrayOfBees[].C.protectedIntC elements one of { 0, 5 }
+::arrayOfBees[].C.protectedIntC sorted by >=
+::arrayOfBees[].C.publicIntC elements one of { 0, 4 }
+::arrayOfBees[].C.publicIntC sorted by >=
+::arrayOfBees[].D.privateIntD elements one of { 0, 9 }
+::arrayOfBees[].D.privateIntD sorted by >=
+::arrayOfBees[].D.protectedIntD elements one of { 0, 8 }
+::arrayOfBees[].D.protectedIntD sorted by >=
+::arrayOfBees[].D.publicIntD elements one of { 0, 7 }
+::arrayOfBees[].D.publicIntD sorted by >=
+::arrayOfBees[].E.A.privateIntA elements one of { 0, 15 }
+::arrayOfBees[].E.A.privateIntA sorted by >=
+::arrayOfBees[].E.A.protectedIntA elements one of { 0, 14 }
+::arrayOfBees[].E.A.protectedIntA sorted by >=
+::arrayOfBees[].E.A.publicIntA elements one of { 0, 13 }
+::arrayOfBees[].E.A.publicIntA sorted by >=
+::arrayOfBees[].E.privateIntE elements one of { 0, 12 }
+::arrayOfBees[].E.privateIntE sorted by >=
+::arrayOfBees[].E.protectedIntE elements one of { 0, 11 }
+::arrayOfBees[].E.protectedIntE sorted by >=
+::arrayOfBees[].E.publicIntE elements one of { 0, 10 }
+::arrayOfBees[].E.publicIntE sorted by >=
+::arrayOfBees[].privateIntB elements one of { 0, 3 }
+::arrayOfBees[].privateIntB sorted by >=
+::arrayOfBees[].protectedIntB elements one of { 0, 2 }
+::arrayOfBees[].protectedIntB sorted by >=
+::arrayOfBees[].publicIntB elements one of { 0, 1 }
+::arrayOfBees[].publicIntB sorted by >=
+this->A.privateIntA == 15
+this->A.protectedIntA == 14
+this->A.publicIntA == 13
+this->privateIntE == 12
+this->protectedIntE == 11
+this->publicIntE == 10
+this[0] != null
+::arrayOfBees[].C.privateIntC elements < this->A.privateIntA
+::arrayOfBees[].C.privateIntC elements < this->A.protectedIntA
+::arrayOfBees[].C.privateIntC elements < this->A.publicIntA
+::arrayOfBees[].C.privateIntC elements < this->privateIntE
+::arrayOfBees[].C.privateIntC elements < this->protectedIntE
+::arrayOfBees[].C.privateIntC elements < this->publicIntE
+::arrayOfBees[].C.privateIntC elements >= orig(this->A.privateIntA)
+::arrayOfBees[].C.privateIntC elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].C.privateIntC elements >= orig(this->A.publicIntA)
+::arrayOfBees[].C.privateIntC elements >= orig(this->privateIntE)
+::arrayOfBees[].C.privateIntC elements >= orig(this->protectedIntE)
+::arrayOfBees[].C.privateIntC elements >= orig(this->publicIntE)
+::arrayOfBees[].C.protectedIntC elements < this->A.privateIntA
+::arrayOfBees[].C.protectedIntC elements < this->A.protectedIntA
+::arrayOfBees[].C.protectedIntC elements < this->A.publicIntA
+::arrayOfBees[].C.protectedIntC elements < this->privateIntE
+::arrayOfBees[].C.protectedIntC elements < this->protectedIntE
+::arrayOfBees[].C.protectedIntC elements < this->publicIntE
+::arrayOfBees[].C.protectedIntC elements >= orig(this->A.privateIntA)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->A.publicIntA)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->privateIntE)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->protectedIntE)
+::arrayOfBees[].C.protectedIntC elements >= orig(this->publicIntE)
+::arrayOfBees[].C.publicIntC elements < this->A.privateIntA
+::arrayOfBees[].C.publicIntC elements < this->A.protectedIntA
+::arrayOfBees[].C.publicIntC elements < this->A.publicIntA
+::arrayOfBees[].C.publicIntC elements < this->privateIntE
+::arrayOfBees[].C.publicIntC elements < this->protectedIntE
+::arrayOfBees[].C.publicIntC elements < this->publicIntE
+::arrayOfBees[].C.publicIntC elements >= orig(this->A.privateIntA)
+::arrayOfBees[].C.publicIntC elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].C.publicIntC elements >= orig(this->A.publicIntA)
+::arrayOfBees[].C.publicIntC elements >= orig(this->privateIntE)
+::arrayOfBees[].C.publicIntC elements >= orig(this->protectedIntE)
+::arrayOfBees[].C.publicIntC elements >= orig(this->publicIntE)
+::arrayOfBees[].D.privateIntD elements < this->A.privateIntA
+::arrayOfBees[].D.privateIntD elements < this->A.protectedIntA
+::arrayOfBees[].D.privateIntD elements < this->A.publicIntA
+::arrayOfBees[].D.privateIntD elements < this->privateIntE
+::arrayOfBees[].D.privateIntD elements < this->protectedIntE
+::arrayOfBees[].D.privateIntD elements < this->publicIntE
+::arrayOfBees[].D.privateIntD elements >= orig(this->A.privateIntA)
+::arrayOfBees[].D.privateIntD elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].D.privateIntD elements >= orig(this->A.publicIntA)
+::arrayOfBees[].D.privateIntD elements >= orig(this->privateIntE)
+::arrayOfBees[].D.privateIntD elements >= orig(this->protectedIntE)
+::arrayOfBees[].D.privateIntD elements >= orig(this->publicIntE)
+::arrayOfBees[].D.protectedIntD elements < this->A.privateIntA
+::arrayOfBees[].D.protectedIntD elements < this->A.protectedIntA
+::arrayOfBees[].D.protectedIntD elements < this->A.publicIntA
+::arrayOfBees[].D.protectedIntD elements < this->privateIntE
+::arrayOfBees[].D.protectedIntD elements < this->protectedIntE
+::arrayOfBees[].D.protectedIntD elements < this->publicIntE
+::arrayOfBees[].D.protectedIntD elements >= orig(this->A.privateIntA)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->A.publicIntA)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->privateIntE)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->protectedIntE)
+::arrayOfBees[].D.protectedIntD elements >= orig(this->publicIntE)
+::arrayOfBees[].D.publicIntD elements < this->A.privateIntA
+::arrayOfBees[].D.publicIntD elements < this->A.protectedIntA
+::arrayOfBees[].D.publicIntD elements < this->A.publicIntA
+::arrayOfBees[].D.publicIntD elements < this->privateIntE
+::arrayOfBees[].D.publicIntD elements < this->protectedIntE
+::arrayOfBees[].D.publicIntD elements < this->publicIntE
+::arrayOfBees[].D.publicIntD elements >= orig(this->A.privateIntA)
+::arrayOfBees[].D.publicIntD elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].D.publicIntD elements >= orig(this->A.publicIntA)
+::arrayOfBees[].D.publicIntD elements >= orig(this->privateIntE)
+::arrayOfBees[].D.publicIntD elements >= orig(this->protectedIntE)
+::arrayOfBees[].D.publicIntD elements >= orig(this->publicIntE)
+::arrayOfBees[].E.A.privateIntA elements <= this->A.privateIntA
+::arrayOfBees[].E.A.privateIntA >= orig(::arrayOfBees[].E.A.privateIntA) (elementwise)
+orig(::arrayOfBees[].E.A.privateIntA) is a bitwise subset of ::arrayOfBees[].E.A.privateIntA (elementwise)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->A.privateIntA)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->A.publicIntA)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->privateIntE)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->protectedIntE)
+::arrayOfBees[].E.A.privateIntA elements >= orig(this->publicIntE)
+::arrayOfBees[].E.A.protectedIntA elements < this->A.privateIntA
+::arrayOfBees[].E.A.protectedIntA elements <= this->A.protectedIntA
+::arrayOfBees[].E.A.protectedIntA >= orig(::arrayOfBees[].E.A.protectedIntA) (elementwise)
+orig(::arrayOfBees[].E.A.protectedIntA) is a bitwise subset of ::arrayOfBees[].E.A.protectedIntA (elementwise)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->A.privateIntA)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->A.publicIntA)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->privateIntE)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->protectedIntE)
+::arrayOfBees[].E.A.protectedIntA elements >= orig(this->publicIntE)
+::arrayOfBees[].E.A.publicIntA elements < this->A.privateIntA
+::arrayOfBees[].E.A.publicIntA elements < this->A.protectedIntA
+::arrayOfBees[].E.A.publicIntA elements <= this->A.publicIntA
+::arrayOfBees[].E.A.publicIntA >= orig(::arrayOfBees[].E.A.publicIntA) (elementwise)
+orig(::arrayOfBees[].E.A.publicIntA) is a bitwise subset of ::arrayOfBees[].E.A.publicIntA (elementwise)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->A.privateIntA)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->A.publicIntA)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->privateIntE)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->protectedIntE)
+::arrayOfBees[].E.A.publicIntA elements >= orig(this->publicIntE)
+::arrayOfBees[].E.privateIntE elements < this->A.privateIntA
+::arrayOfBees[].E.privateIntE elements < this->A.protectedIntA
+::arrayOfBees[].E.privateIntE elements < this->A.publicIntA
+::arrayOfBees[].E.privateIntE elements <= this->privateIntE
+::arrayOfBees[].E.privateIntE >= orig(::arrayOfBees[].E.privateIntE) (elementwise)
+orig(::arrayOfBees[].E.privateIntE) is a bitwise subset of ::arrayOfBees[].E.privateIntE (elementwise)
+::arrayOfBees[].E.privateIntE elements >= orig(this->A.privateIntA)
+::arrayOfBees[].E.privateIntE elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].E.privateIntE elements >= orig(this->A.publicIntA)
+::arrayOfBees[].E.privateIntE elements >= orig(this->privateIntE)
+::arrayOfBees[].E.privateIntE elements >= orig(this->protectedIntE)
+::arrayOfBees[].E.privateIntE elements >= orig(this->publicIntE)
+::arrayOfBees[].E.protectedIntE elements < this->A.privateIntA
+::arrayOfBees[].E.protectedIntE elements < this->A.protectedIntA
+::arrayOfBees[].E.protectedIntE elements < this->A.publicIntA
+::arrayOfBees[].E.protectedIntE elements < this->privateIntE
+::arrayOfBees[].E.protectedIntE elements <= this->protectedIntE
+::arrayOfBees[].E.protectedIntE >= orig(::arrayOfBees[].E.protectedIntE) (elementwise)
+orig(::arrayOfBees[].E.protectedIntE) is a bitwise subset of ::arrayOfBees[].E.protectedIntE (elementwise)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->A.privateIntA)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->A.publicIntA)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->privateIntE)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->protectedIntE)
+::arrayOfBees[].E.protectedIntE elements >= orig(this->publicIntE)
+::arrayOfBees[].E.publicIntE elements < this->A.privateIntA
+::arrayOfBees[].E.publicIntE elements < this->A.protectedIntA
+::arrayOfBees[].E.publicIntE elements < this->A.publicIntA
+::arrayOfBees[].E.publicIntE elements < this->privateIntE
+::arrayOfBees[].E.publicIntE elements < this->protectedIntE
+::arrayOfBees[].E.publicIntE elements <= this->publicIntE
+::arrayOfBees[].E.publicIntE >= orig(::arrayOfBees[].E.publicIntE) (elementwise)
+orig(::arrayOfBees[].E.publicIntE) is a bitwise subset of ::arrayOfBees[].E.publicIntE (elementwise)
+::arrayOfBees[].E.publicIntE elements >= orig(this->A.privateIntA)
+::arrayOfBees[].E.publicIntE elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].E.publicIntE elements >= orig(this->A.publicIntA)
+::arrayOfBees[].E.publicIntE elements >= orig(this->privateIntE)
+::arrayOfBees[].E.publicIntE elements >= orig(this->protectedIntE)
+::arrayOfBees[].E.publicIntE elements >= orig(this->publicIntE)
+::arrayOfBees[].privateIntB elements < this->A.privateIntA
+::arrayOfBees[].privateIntB elements < this->A.protectedIntA
+::arrayOfBees[].privateIntB elements < this->A.publicIntA
+::arrayOfBees[].privateIntB elements < this->privateIntE
+::arrayOfBees[].privateIntB elements < this->protectedIntE
+::arrayOfBees[].privateIntB elements < this->publicIntE
+::arrayOfBees[].privateIntB elements >= orig(this->A.privateIntA)
+::arrayOfBees[].privateIntB elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].privateIntB elements >= orig(this->A.publicIntA)
+::arrayOfBees[].privateIntB elements >= orig(this->privateIntE)
+::arrayOfBees[].privateIntB elements >= orig(this->protectedIntE)
+::arrayOfBees[].privateIntB elements >= orig(this->publicIntE)
+::arrayOfBees[].protectedIntB elements < this->A.privateIntA
+::arrayOfBees[].protectedIntB elements < this->A.protectedIntA
+::arrayOfBees[].protectedIntB elements < this->A.publicIntA
+::arrayOfBees[].protectedIntB elements < this->privateIntE
+::arrayOfBees[].protectedIntB elements < this->protectedIntE
+::arrayOfBees[].protectedIntB elements < this->publicIntE
+::arrayOfBees[].protectedIntB elements >= orig(this->A.privateIntA)
+::arrayOfBees[].protectedIntB elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].protectedIntB elements >= orig(this->A.publicIntA)
+::arrayOfBees[].protectedIntB elements >= orig(this->privateIntE)
+::arrayOfBees[].protectedIntB elements >= orig(this->protectedIntE)
+::arrayOfBees[].protectedIntB elements >= orig(this->publicIntE)
+::arrayOfBees[].publicIntB elements < this->A.privateIntA
+::arrayOfBees[].publicIntB elements < this->A.protectedIntA
+::arrayOfBees[].publicIntB elements < this->A.publicIntA
+::arrayOfBees[].publicIntB elements < this->privateIntE
+::arrayOfBees[].publicIntB elements < this->protectedIntE
+::arrayOfBees[].publicIntB elements < this->publicIntE
+::arrayOfBees[].publicIntB elements >= orig(this->A.privateIntA)
+::arrayOfBees[].publicIntB elements >= orig(this->A.protectedIntA)
+::arrayOfBees[].publicIntB elements >= orig(this->A.publicIntA)
+::arrayOfBees[].publicIntB elements >= orig(this->privateIntE)
+::arrayOfBees[].publicIntB elements >= orig(this->protectedIntE)
+::arrayOfBees[].publicIntB elements >= orig(this->publicIntE)
+orig(::arrayOfBees[].E.A.privateIntA) elements <= this->A.privateIntA
+orig(::arrayOfBees[].E.A.protectedIntA) elements < this->A.privateIntA
+orig(::arrayOfBees[].E.A.publicIntA) elements < this->A.privateIntA
+orig(::arrayOfBees[].E.privateIntE) elements < this->A.privateIntA
+orig(::arrayOfBees[].E.protectedIntE) elements < this->A.privateIntA
+orig(::arrayOfBees[].E.publicIntE) elements < this->A.privateIntA
+orig(::arrayOfBees[].E.A.protectedIntA) elements <= this->A.protectedIntA
+orig(::arrayOfBees[].E.A.publicIntA) elements < this->A.protectedIntA
+orig(::arrayOfBees[].E.privateIntE) elements < this->A.protectedIntA
+orig(::arrayOfBees[].E.protectedIntE) elements < this->A.protectedIntA
+orig(::arrayOfBees[].E.publicIntE) elements < this->A.protectedIntA
+orig(::arrayOfBees[].E.A.publicIntA) elements <= this->A.publicIntA
+orig(::arrayOfBees[].E.privateIntE) elements < this->A.publicIntA
+orig(::arrayOfBees[].E.protectedIntE) elements < this->A.publicIntA
+orig(::arrayOfBees[].E.publicIntE) elements < this->A.publicIntA
+orig(::arrayOfBees[].E.privateIntE) elements <= this->privateIntE
+orig(::arrayOfBees[].E.protectedIntE) elements < this->privateIntE
+orig(::arrayOfBees[].E.publicIntE) elements < this->privateIntE
+orig(::arrayOfBees[].E.protectedIntE) elements <= this->protectedIntE
+orig(::arrayOfBees[].E.publicIntE) elements < this->protectedIntE
+orig(::arrayOfBees[].E.publicIntE) elements <= this->publicIntE

@@ -1,0 +1,837 @@
+===============================================================================
+POV-Ray 3.6 for UNIX/Linux - INSTALL file
+
+Compiling and installing the POV-Ray source code
+===============================================================================
+
+
+This file documents basic and detailed instructions to compile and install
+the source distribution of POV-Ray for UNIX/Linux systems.  The information
+here is mostly intended for those who are already familiar with compiling
+programs on UNIX platforms using the GNU build system.  POV-Ray users running
+PC-Linux who are not familiar with compiling programs should consider using
+the official binary distribution (available at www.povray.org) rather than
+this source code distribution.
+
+
+==============
+1. Quick start 
+==============
+
+As in most GNU packages available nowadays, compiling and installing POV-Ray
+is done by running the usual 'configure' and 'make' commands:
+
+% ./configure COMPILED_BY="your name <email@address>" [options]
+% make check
+% su
+$ make install
+
+And voila !  Hopefully this should work flawlessly.  Otherwise you should
+go through the rest of this document, where the various configure options
+are also described.  These options are listed with 'configure --help'.
+
+The COMPILED_BY argument is required to configure the package.  It is used
+to identify unambiguously that the binary you are preparing will NOT be
+supported by the POV-Team(tm) but, rather, that YOU are responsible for
+supporting this binary in case you intend to distribute it.  This argument
+allows configure to automatically update the DISTRIBUTION_MESSAGE definitions
+in the source/optout.h file.  Please refer to the POV-Ray Source License
+(source-license.txt) for details.
+
+The 'make' command builds the program once it is configured.  The optional
+'check' argument allows to run a short test render after POV-Ray is compiled
+and before it is installed with 'make install'.  A display preview is used
+for the test render but the image is not saved to an output file.  Once the
+test render is complete, POV-Ray pauses until you close the display window
+(if any) or press the <enter> key; then POV-Ray terminates normally.  The
+test render can be skipped by invoquing make without the 'check' argument.
+
+By default (i.e. as root), the 'make install' command installs the POV-Ray
+binary (executable), data (e.g. ini, include and scene files), documentation,
+and configuration files (povray.ini and povray.conf) under /usr/local/bin,
+/usr/local/share/povray-3.6, /usr/local/share/doc/povray-3.6, and
+/usr/local/etc/povray/3.6, respectively.  Installing POV-Ray as root or
+as non-privileged user (see below) additionally creates the $HOME/.povray/3.6
+directory in which povray.ini and povray.conf are copied.  Note that the
+povray.ini file was known as $HOME/.povrayrc in POV-Ray 3.5 and earlier.
+Also, the format of the povray.conf file (introduced in POV-Ray 3.5) has
+changed in POV-Ray 3.6.  For further details, please read the instructions
+specific to POV-Ray for UNIX in doc/README.unix and in chapter 1 of the
+documentation.
+
+Note: compiling the POV-Ray sources may issue several warnings related to
+type conversions (for instance from a 'double' to an 'int').  These warnings
+can be ignored -- the resulting binary should work as intended.
+
+
+========================
+2. Software requirements
+========================
+
+Building POV-Ray on a UNIX platform requires a relatively modern C++ compiler,
+the 'make' utility, and a Bourne-compatible shell (e.g. bash).  The latter
+is usually found on any decent UNIX system.  It is used to run the configure
+script and to perform the various file operations (among others) required to
+compile the POV-Ray source code and install the program data files (includes,
+scenes, and so on).  Therefore, before even trying to configure the POV-Ray
+source package, be sure that your system is providing you with:
+
+- a modern C++ compiler which supports C++ templates and follows the ISO C++
+  standard as much as possible.  For instance, the GNU GCC compiler (g++)
+  version 3.3 and above, and the Intel C++ compiler (icc) version 8.0
+  are known to compile correctly the POV-Ray sources.  These C++ compilers
+  are available at:
+    http://www.gnu.org/software/gcc
+    http://www.intel.com/software/products/compilers
+
+  Note: if the configure script detects that any support image library must
+  build with the POV-Ray source code, a C compiler is also required.  Provided
+  you have a working C++ compiler installed on your system, such a requirement
+  is in principle automatically fulfilled.  Further details about the support
+  libraries are given in the Appendix A and in the README file.
+
+- a working 'make' utility.  We strongly recommand to use GNU Make version 3.79
+  or above.  Most GNU/Linux distribution should come with it.  Other platforms
+  should install it before running configure.  GNU make can be found at:
+    http://www.gnu.org/software/make
+
+- in the unlikely case you don't have a Bourne-compatible shell installed
+  on your system or that the shell fails running POV-Ray's configure, it is
+  recommanded to install GNU bash first.  Download it at:
+    http://www.gnu.org/software/bash
+
+
+================
+3. Compatibility
+================
+
+This source distribution of POV-Ray for UNIX has been reported to compile
+successfully on different platforms:
+
+  * Mips SGI IRIX 6.5 with GCC 3.2.1 (g++ 3.2.1 @ mips-sgi-irix6.5)
+    using the n32 ABI (32 bit)
+  * Mips SGI IRIX 6.5 with the MIPSpro C/C++ compiler version 7.4
+    (CC 7.4 @ mips-sgi-irix6.5) using the n32 ABI
+
+  * PC Cygwin with GCC 3.3.1 (g++ 3.3.1 @ i686-pc-cygwin)
+  * PC Cygwin with GCC 3.3.1 (g++ 3.3.1 @ i686-pc-cygwin) and linking with
+    the mingw32 library instead of the cygwin DLL, i.e. --without-cygwin-dll
+
+  * PC FreeBSD 4.9 with GCC 2.95.4 as C compiler and g++ 3.4.1
+    (g++34 3.4.1 @ i386-unknown-freebsd4.9)
+
+  * PC GNU/Linux with GCC 3.4.1  (g++ 3.4.1 @ i686-pc-linux-gnu)
+  * PC GNU/Linux with GCC 3.4.0  (g++ 3.4.0 @ i686-pc-linux-gnu)
+  * PC GNU/Linux with GCC 3.3.3  (g++ 3.3.3 @ i686-pc-linux-gnu)
+  * PC GNU/Linux with GCC 3.3.1  (g++ 3.3.1 @ i686-pc-linux-gnu)
+  * PC GNU/Linux with GCC 2.95.4 (g++ 2.95.4 @ i686-pc-linux-gnu)
+  * PC GNU/Linux with ICC 8.0    (icc 8.0 @ i686-pc-linux-gnu)
+  The above platforms concern various recent GNU/Linux distributions
+  (such as: RedHat Fedora Core 1, SuSE, Debian, Knoppix, and Gentoo)
+  using several Linux kernels among the 2.4.x and 2.6.x series.
+
+  * PC GNU/Linux 64 bit with GCC 3.4.1 (g++ 3.4.1 @ x86_64-unknown-linux-gnu)
+  Gentoo Linux on an AMD64 system
+
+  * PC MSYS/MinGW with GCC 3.4.0 (g++ 3.4.0 @ i686-pc-mingw32)
+
+  * PPC MacOS 10.3.4 with GCC 3.3 (g++ 3.3 @ powerpc-apple-darwin7.4.0)
+
+  * Sparc Solaris 8 with GCC 2.95.3 (g++2 2.95.3 @ sparc-sun-solaris2.8)
+
+  * Sparc NetBSD 1.6 with GCC 2.95.3 (g++ 2.95.3 @ sparc-unknown-netbsdelf1.6)
+
+Note that the GCC 2.x series are not recommanded for compiling POV-Ray 3.6
+for UNIX.  Please use an alternate compiler if possible (ideally GCC 3.4.x
+and above, or ICC 8.0 and above).
+
+
+The following platforms are known to fail compiling the source code
+of POV-Ray for UNIX or to fail producing a workable binary:
+
+  * HP-UX 10.20 with GCC 3.3 - build fails (missing vsnprintf)
+
+  * Sparc Solaris 8 with GCC 3.3.1 - binary crashes
+  * Sparc Solaris 8 with Sun CC (Sun WorkShop 6 update 2 C++ 5.3
+    Patch 111685-12 2002/12/16) - build fails
+  * Sparc Solaris 2.5.1 with GCC 3.3.2 - build fails (missing vsnprintf)
+
+In case the configure script or any part of the compilation/installation fails
+on your system, you may report the problem(s) on the povray.unix newsgroup
+(news.povray.org).  Please try to be as specific as possible in your report,
+i.e. mention at least the following information:
+
+  - machine type (or architecture), e.g. PC AMD AthlonXP or SGI MIPS R10000
+    and the host configuration triplet, e.g. mips-sgi-irix6.5
+  - operating system and vendor, e.g. Gentoo Linux with kernel 2.6.5
+  - if possible, the version of the C library, e.g. GNU C library 2.3.2 
+  - full output of the configure script (when it fails) or the last 50 lines
+    of output generated by running 'make' and which includes the final error
+    messages.
+
+
+====================================================
+4. Configuring, building, and (un)installing POV-Ray
+====================================================
+
+Configuring the POV-Ray source package means that the build system will know
+as much as possible of your platform before POV-Ray is compiled and installed
+on it.  This includes detecting a working C++ compiler, the availability and
+version of the 3rd-party libraries required by POV-Ray, whether POV-Ray can
+use the X Window system or the SVGA library to display the rendered image,
+and various other things.  The configure script then generates the required
+Makefiles and several header files targeted at your environment.  Therefore,
+running the configure script is a pre-requesite to build successfully POV-Ray
+from sources.
+
+Configuring POV-Ray also allows to specify in which directories the program
+and its accompanying documentation and data files will be installed.  For
+instance, the POV-Ray binary (executable) is installed in /usr/local/bin
+by default.  Using default installation directories requires you to install
+POV-Ray as root (this is the recommanded method if you have the choice).
+Alternatively, you can install POV-Ray anywhere you have write access to.
+The alternate locations may be specified using the --prefix option.  See the
+example below.
+
+
+4.1 Building and installing
+    =======================
+
+4.1.1 As root
+      -------
+
+Configure POV-Ray for building and installing in standard directories:
+
+% ./configure COMPILED_BY="your name <email@address>"
+% make check    # build the program (binary) and run a test render
+% su            # log as root
+$ make install  # install binary, doc, scenes... in the /usr/local hierarchy
+
+Here, these commands are to be run in the source directory of POV-Ray (but
+this is not required, see section 4.1.3 below).  Note that the COMPILED_BY
+argument is mandatory.  The 'check' target for 'make' can be omitted (no
+test render is performed) in particular when building POV-Ray in batch.
+
+The root Makefile generated by configure supports at least the following
+make targets:
+
+% make                   # build the program
+% make check             # (build and) perform of short test render
+% make clean             # clean all object files created by make
+% make dist              # create distributions in .tar.gz and .tar.bz2 formats
+% make dist-bzip2        # create distribution in .tar.bz2 format only
+% make dist-gzip         # create distribution in .tar.gz format only
+% make distclean         # clean all files created by configure and make
+% make install           # (build and) install the program, data, and docs
+% make maintainer-clean  # caution: maintainers only (see Appendix A)
+% make uninstall         # uninstall the program, data, and docs
+
+The usual 'distcheck' target is not supported at the moment.
+
+
+4.1.2 As non-privileged user
+      ----------------------
+
+When you don't have root priviledges, you may configure POV-Ray for installing
+in non-standard directories where you must have write access:
+
+% ./configure --prefix=/install/path COMPILED_BY="your name <email@address>"
+% make check install
+
+The compilation, test render, and installation are invoqued with a single
+'make check install' since no intermediate 'su' is required here.  All make
+targets listed above are also supported when building POV-Ray as non-root
+user.  The test render can be skipped by simply invoquing 'make install'.
+
+If you are willing to compile POV-Ray without installing, simply run:
+
+% ./configure COMPILED_BY="your name <email@address>"
+% make check  # or simply 'make' to skip the test render
+
+since the --prefix option is not required anymore (yet POV-Ray will look
+for its configuration files in the /usr/local/etc hierarchy).
+
+Note that compiling POV-Ray without installing is NOT the recommanded way
+for most users, as it will make POV-Ray somewhat more complicated to use
+in conjunction with its large base of provided include files.  Compiling
+without installing is however fine for testing purposes.  In this case,
+the povray binary is to be found under the unix/ directory of the package.
+
+
+4.1.3 Building in-place or elsewhere
+      ------------------------------
+
+As presented above, the configure command is ran from the source directory
+of POV-Ray.  This is commonly referred to as building the package "in-place".
+It is also possible (and often recommanded) to build the platform-specific
+object files and executable in a different location than the source tree.
+Such a procedure is useful e.g. for parallel builds on different platforms
+using a single copy of the source tree (over network).  For instance:
+
+% mkdir -p /tmp/build/povray && cd /tmp/build/povray
+% /path/to/configure COMPILED_BY="your name <email@address>" [options]
+% make check install
+
+Doing so creates a mirror of the POV-Ray source hierarchy under the
+/tmp/build/povray directory.  No source files are copied, but only the
+Makefiles and the corresponding directory tree.  All object and libraries
+(files with .o and .a extensions) as well as the povray executable are
+created therein.  Hence, the source tree remains unchanged during the
+configuration and compilation process.
+
+
+4.1.4 Cross-compiling POV-Ray
+      -----------------------
+
+Cross-compiling is the procedure by which a compiler running on one system
+produces executables for another system.  Cross-compiling is important in
+particular when the target system doesn't have a native set of compilation
+tools.  Such a situation can happen for instance with embedded systems.
+
+While the configure script for POV-Ray has been written with this concept
+in mind, it has not been tested in a cross-compiling environment.  Thus,
+it is likely that the configure script will fail in this particular context.
+If you have any experience in setting up a cross-compiling toolchain and
+are able to test POV-Ray's configure with it, you are welcome to report
+any success or patches on the povray.unix newsgroup (news.povray.org).
+
+
+4.2 Uninstalling POV-Ray
+    ====================
+
+Regardless of the way POV-Ray was installed (as root or as non-privileged
+user), the program, documentation, configuration and data files may be
+uninstalled by running:
+
+% make uninstall
+
+in the main source directory of POV-Ray (or in the build directory where
+the package has been configured, see section 4.1.3).
+
+Note that the uninstall procedure will only work if:
+(a) you have write access to the directory where POV-Ray is installed, and
+(b) POV-Ray has not been re-configured in between the two 'make install'
+    and 'make uninstall' commands using another --prefix path.
+
+Currently there is no mechanism (unlike in the PC-Linux binary distribution
+of POV-Ray) to log which files have been installed.  Therefore ALL files
+present in the data, docs, and configuration directories of POV-Ray are
+removed unconditionally.  Similarly, the povray.ini and povray.conf files
+created under $HOME/.povray/3.6 are removed.  Empty directories left at this
+stage are also removed.
+
+
+===============================
+5. Additional configure options
+===============================
+
+More options can be passed to the configure script in order to tweak the
+configuration process to specific needs.  The full list of supported options
+is displayed with:
+
+% ./configure --help
+
+
+A shorter list (POV-Ray specific configure options) is displayed with:
+
+% ./configure --help=short
+
+
+For information purposes only, it is also possible to list the available
+options of the configure scripts in the support libraries:
+
+% ./configure --help=recursive
+
+The configure options specific to the support libraries are ignored
+by POV-Ray's configure and won't be described in the next sections.
+
+
+5.1 Generic configure options
+    =========================
+
+Most of these options, such as the --prefix one described above, are common
+to all configure scripts.  Not all of them, however, are usually useful in
+configuring POV-Ray.  The list below describes those generic options that
+might be the most relevant:
+
+--prefix=PREFIX
+    allows to install the package under PREFIX.  You must have write access
+    to the PREFIX directory.  The package is installed under the PREFIX/bin,
+    PREFIX/etc, PREFIX/man, and PREFIX/share directories.
+
+--with-x (default) or --without-x
+    tells POV-Ray to use the X Window System (when possible) or not.  The
+    X Window System allows to display the image POV-Ray is rendering in a
+    seperate graphics window.  In order to use the X Window System, the
+    POV-Ray binary is linked with the X11 library installed on your system.
+
+CC="C compiler (path)name"
+CXX="C++ compiler (path)name"
+CFLAGS="C compiler flags"
+CXXFLAGS="C++ compiler flags"
+LDFLAGS="linker flags"
+LIBS="additional libraries to link with"
+    allows to specify which C++ and C compiler to use and the corresponding
+    compiler and linker flags, instead of those determined by configure.
+    For instance, if one wants to use the Intel C++ compiler instead of GCC
+    and a safe optimization mode, one can type (the COMPILED_BY argument is
+    omitted for clarity):
+
+    % ./configure CXX=icc CXXFLAGS="-O2" CC=icc CFLAGS="-O2"
+
+    Note that the C compiler and its corresponding flags are also specified,
+    in case any support library should be built together with the POV-Ray
+    sources.  Here, the -O2 compiler option will not override the list of
+    optimization options that configure will try to guess on your system,
+    but will be appended to this list (effectively replacing any -O option
+    set previously).  In case no other optimization flags are wanted, use
+    the --disable-optimiz configure option described in the next section.
+
+    The LDFLAGS are meant to be used for the linker only.  Using this option
+    should be useful in only very rare cases (if any).
+
+    LIBS can be used to specify extra libraries for POV-Ray to link with,
+    for example: LIBS=-ljunk or LIBS=/usr/local/lib/libjunk.a .  Using this
+    option is usually not necessary, but might be useful in some very
+    specific cases (see e.g. the --disable-shared option below).
+
+
+5.2 POV-Ray specific configure options
+    ==================================
+
+Additional POV-Ray specific options are given in the help list.  Most of
+them can be combined at the command-line.  The available options are:
+
+--with-svga (default) or --without-svga
+    tells POV-Ray to use the SVGA library (when possible) or not.  This option
+    is similar to the --with-x option above.  It is meaningful on GNU/Linux
+    systems only, as the SVGA library works on the Linux console.  This is
+    an alternative to the more memory consuming X Window System.  Refer to
+    doc/README.unix for details.
+
+--with-cygwin-dll (default) or --without-cygwin-dll
+    on the Cygwin platform, tells POV-Ray to link with the Cygwin DLL or not.
+    The --without-cygwin-dll option allows to build a POV-Ray binary that
+    should work on any Cygwin release.  It requires having the MinGW tools
+    (Minimalist GNU for Windows, http://www.mingw.org) installed on your
+    machine.  You might also use the --disable-shared option with it; see
+    below.
+
+--enable-watch-cursor
+    enables the mouse pointer to show up as a watch cursor over the X Window
+    display while rendering the image.
+
+--enable-strip
+    enables the compiler to strip all symbols from the object files, resulting
+    in (usually) much smaller executable.  This option cannot be used when
+    specifying the debugging and/or profiling mode described below.
+
+--enable-debug
+    enables compiler debugging mode, i.e. ask the compiler to insert debug
+    information in the binaries to be used with a debugger such as the
+    GNU debugger GDB (http://www.gnu.org/software/gdb).  The debugging mode
+    is essentially targeted at developers who want to experiment with
+    the POV-Ray source code.  Using this mode increases dramatically the
+    size of the POV-Ray executable.  For best results, it is recommended
+    to disable all compiler optimizations; see below.
+
+--enable-profile
+    enables execution profiling, i.e. ask the compiler to generate run-time
+    information that details in which parts of the code the program spends
+    most of the CPU time.  This mode is targeted at developers who are willing
+    to experiment with the code.  Using this mode requires debug information
+    in the binary, so configure automatically turns on --enable-debug when
+    --enable-profile is used.
+
+--disable-optimiz
+    disables all compiler optimizations, i.e. the configure script will not
+    try to set any optimization flags suitable for your system.  This option
+    is particularly useful in conjunction with CFLAGS and CXXFLAGS.
+
+--disable-pipe
+    disables the use of pipes for communication between the various stages
+    of compilation, and use temporary files instead (this is slower, but on
+    some systems pipes cannot work properly).
+
+--disable-shared
+    disables linking with shared libraries, i.e. the POV-Ray binary will
+    include all the machine code that corresponds to its own source AND
+    that of the functions of the external libraries it uses.  This option
+    is useful to create a "static" binary that you can copy on any machine
+    working with the same operating system (this is how the official POV-Ray
+    binary for PC-Linux is prepared).  Obviously, the file size increases
+    dramatically since parts of the required libraries are included in the
+    binary itself.  Using this option is preferred to redefining LDFLAGS, as
+    configure will try to guess and test what option the linker really needs
+    to link with the static (rather than the shared) libraries.
+
+    Note: Some platforms (e.g. several GNU/Linux distributions, Solaris) can
+    not statically link the X11 library with POV-Ray for various reasons, and
+    might either disable support for the X Window display or cause a linkage
+    error.  In the first situation, it might be required to pass additional
+    libraries to the linker, e.g. LIBS=-ldl (the exact libraries can be
+    guessed by inspecting the config.log file).  In the second situation,
+    specify --without-x or do not use the --disable-shared option.
+
+--disable-lib-checks
+    disables checking for the presence and version of the 3rd-party libraries.
+    This option enforces configure to build the support libraries in the
+    POV-Ray package and to link them statically in the final executable.
+    It has no effect on any other external library (e.g. X11 or SVGAlib).
+
+--disable-vsnprintf-check
+    disables checking for the availability of the C99 vsnprintf() function
+    which is normally required to compile POV-Ray.  In case your system
+    lacks this function, configure stops and informs you that you should
+    upgrade your system's C library, as it is too old.  POV-Ray does not
+    come with its own vsnprintf() implementation since, at best, it would
+    be only a partial solution to the problem (POV-Ray running on such an
+    old platform might not work as expected).  However, to give you the
+    chance to complete configuration and to start compiling POV-Ray, you
+    can use this option which only skips the test for vsnprintf() presence.
+    Using this option will not prevent the build to fail as long as you
+    don't upgrade your system with a working vsnprintf() function, or,
+    better, an up-to-date C library.
+
+    Note: the simplistic "workaround" to make POV-Ray compile on your system
+    that consists in replacing all calls to vsnprintf() in the source code
+    by its unsecured vsprintf() ancestor is a *very bad* idea.
+
+--disable-io-restrictions
+    disables all file input/output restrictions, meaning that POV-Ray will
+    never try to check whether it is allowed or not to perform file and/or
+    shellout operations.  For more details about I/O restrictions, please
+    refer to chapter 1 of the POV-Ray documentation.  Use this option at
+    your own risk.
+
+COMPILED_BY="your name <email@address>"
+    customizes the POV-Ray "unofficial version" message; this is *required*
+    when configuring the source package.  Since POV-Ray 3.5 it is necessary
+    that you fill in your name in the definition of DISTRIBUTION_MESSAGE_2
+    (see source/optout.h).  Please provide with a valid contact information
+    that will be included in the executable and displayed whenever POV-Ray
+    (or a modified version of it) is started.
+
+C99_COMPATIBLE_RADIOSITY={1,2,3,4}
+    adapts the POV-Ray radiosity code to use non-IEEE 754 floating point
+    on machines that do not support this standard.  You must specify one
+    of the possible values given above (e.g. C99_COMPATIBLE_RADIOSITY=2).
+    Each value corresponds to the C function 'logbf', 'ilogbf', 'logb',
+    and 'ilogb', respectively, to be used with the C function 'copysign'.
+    This option requires having an ISO C99 compiler and its accompanying
+    C library installed on your machine.  More details are given near the
+    top of the source/octree.cpp file.  On platforms where integer ('int')
+    and single-precision floating-point ('float') numbers are not 32-bit,
+    configure will try to determine automatically which function to use.
+
+
+==========================================
+Appendix A. Bootstrapping POV-Ray for UNIX
+==========================================
+
+This section is mostly intended for those who are willing to modify the
+POV-Ray source code, e.g. patch developers.  It briefly describes the
+procedure used to automatically (re)generate the configure script and/or
+its associated Makefile.in files (see below for a description of the
+various files needed by the build system).  This procedure is commonly
+referred to as "bootstrapping" the source package.  Bootstrapping is
+required for instance when adding new files to the source tree.
+
+Important note: Bootstrapping is NOT required for building the official
+source distribution of POV-Ray for UNIX.
+
+In order to modify the build system of POV-Ray for UNIX, a good knowledge
+on how to write Makefiles in general is strongly recommanded.  Some basic
+knowledge of the GNU build system is also preferable, in particular if you
+intend to make changes to the configure script itself.  See Appendix B
+for a short presentation of the GNU build system.
+
+
+A.1 Required software
+    =================
+
+Bootstrapping the source package of POV-Ray for UNIX uses the GNU autoconf
+and automake utilities, which are available at:
+
+  http://www.gnu.org/software/autoconf
+  http://www.gnu.org/software/automake
+
+Autoconf version 2.57 or above and automake 1.7 or above are required.
+The official source package of POV-Ray for UNIX has been prepared with
+autoconf 2.57 and automake 1.7.9 (automake version 1.7.6 is also known
+to work).  Newer versions of autoconf (e.g. autoconf 2.59) and automake
+(e.g. automake 1.8.5) were not tested and may lead to incompatibilities
+with some systems that do not support e.g. shell functions.
+
+GNU autoconf comes with the autoheader utility which is also used for
+bootstrapping.  Similarly, GNU automake provides with the aclocal utility
+which is used to generate automake-specific macros that can be invoqued
+in the template of the configure script (see below).
+
+Important note: GNU autoconf/automake are required ONLY for bootstrapping.
+They are NOT required for users who simply want to compile POV-Ray for UNIX
+as described in the previous sections.
+ 
+
+A.2 Template files
+    ==============
+
+The core of the build system is articulated around a small set of so-called
+"template" files.  These templates are used to generate the various configure
+scripts and Makefile.in files.  The list below summarizes the minimal set
+of files required for bootstrapping the POV-Ray for UNIX package (paths are
+relative to its root directory):
+
+  ./Makefile.am
+  ./acinclude.m4
+  ./configure.ac
+  ./libraries/Makefile.am
+  ./libraries/png/Makefile.am
+  ./libraries/png/configure.ac
+  ./libraries/zlib/Makefile.am
+  ./libraries/zlib/configure.ac
+  ./source/base/Makefile.am
+  ./source/frontend/Makefile.am
+  ./source/Makefile.am
+  ./unix/Makefile.am
+
+
+A.2.1 Makefile templates
+      ------------------
+
+The Makefile.am files are templates used by GNU automake to generate the
+corresponding Makefile.in files (which in turn serve as templates to
+generate the Makefiles when running configure).  The Makefile.am files
+follow the conventions used for writing standard Makefiles with additional
+automake facilities.  See the GNU automake manual for details.  There is
+a Makefile.am template for each directory of the source tree.
+
+
+A.2.2 Configure templates
+      -------------------
+
+The configure.ac files are templates used by GNU autoconf to generate the
+various configure scripts.  They are written using mostly the GNU autoconf
+macro-language and eventually standard Bourne-compatible shell commands.
+Autoconf macros are all prefixed with "AC_".  The configure.ac templates
+may also contain automake-specific macros, prefixed with "AM_", which are
+defined in the aclocal.m4 file (not listed above).  The latter is generated
+by running automake's 'aclocal' utility; see below.  The "m4" file extension
+refers to the M4 macro preprocessor which is used by GNU autoconf and should
+be available on most UNIX systems.  The root ./configure.ac template also
+uses POV-Ray specific macros, prefixed with "POV_", which are defined in
+the acinclude.m4 file (note that with automake 1.7.x the acinclude.m4 file
+is copied at the beginning of the generated aclocal.m4 file).  See the
+GNU autoconf manual for details on writing configure.ac templates.
+
+Patch developers should *always* modify the following macro defined near
+the top of ./configure.ac:
+
+  AC_INIT([POV-Ray], [3.6], [pov4grasp@free.fr], [povray])
+
+For instance, in the MegaPOV patch of POV-Ray, one can replace this macro
+with something like:
+
+  AC_INIT([MegaPOV], [1.0], [email-address-of-megapov-maintainers], [megapov])
+
+where the first parameter is the full name of the program, the second is
+its version, the third is the contact information, and the last is the
+base name of the package (giving megapov-1.0 in this example).  Doing so
+will also allow to modify automatically all installation paths described
+in the previous sections.
+
+
+A.2.3 Managing the support libraries
+      ------------------------------
+
+In order to build, POV-Ray needs a few libraries which are used to support
+several image formats.  When configure detects that a library is too old
+or is missing on the system, it asks the support library (which sources
+are found under the ./libraries directory) to configure itself so as to
+build together with the POV-Ray sources.  Therefore each support library
+must have its own configure script and a common interface with POV-Ray's
+configure.
+
+As listed previously, the PNG and ZLIB libraries have their own configure.ac
+and Makefile.am files while the JPEG and TIFF libraries don't.  These files
+are not found in the original PNG and ZLIB libraries but were added to the
+source package of POV-Ray for UNIX.  They are needeed for the following
+reasons:
+- the PNG library comes with neither configure nor Makefile.in files, but
+  instead with a bunch of platform-specific Makefiles from which one must
+  choose that of his platform (see the ./libraries/png/scripts directory).
+- the ZLIB library originally comes with a configure script that does not
+  support building the library outside its source tree.  See section 4.1.3
+  for related informations.
+
+All support libraries (JPEG, PNG, TIFF, and ZLIB) are supplemented with
+a configure.gnu script which is basically a wrapper to their respective
+configure scripts.  While the configure.gnu files are not needed for boot-
+strapping, they are required at configure time and, as such, are part of
+the POV-Ray build system.  In particular, the configure.gnu scripts allow to
+uniformize the way each support library exposes itself to the main POV-Ray
+configure script.  They are also used to tweak the configuration of the
+support libraries.
+
+Additionally, the root ./config directory contains various shell scripts
+which are used by the build system but are not required for bootstrapping.
+These scripts are also copied in the PNG and ZLIB libraries.  Note that
+those shell scripts are not covered by the POV-Ray licenses.  See COPYING
+for details.
+
+
+A.3 Bootstrapping
+    =============
+
+When the various configure.ac or Makefiles.am templates have been modified,
+for instance to reflect a change in the POV-Ray source tree, the derived
+configure and Makefile.in files must be regenerated.  This bootstrapping
+procedure requires to run the GNU automake/autoconf tools and some of their
+accompanying utilities in a specific order.  To facilitate bootstrapping,
+the source package of POV-Ray for UNIX provides you with a set of "bootstrap"
+shell scripts, as listed below (relative to the package root directory):
+
+  ./bootstrap
+  ./libraries/png/bootstrap
+  ./libraries/zlib/bootstrap
+
+The bootstrap scripts typically invoque the following commands:
+
+% aclocal     # create the aclocal.m4 file for additional autoconf macros
+% autoheader  # create a template header file useful for configure
+% automake    # create all Makefile.in files from their Makefile.am templates
+% autoconf    # create the configure script from its configure.ac template
+
+Most of these commands accept various options.  Refer to their manuals for
+details.  An interesting option concerns a GNU automake feature which is
+described in the next section.
+
+Once the boostrapping step is complete, run again configure as usual.
+
+
+A.4 Automatic dependency tracking
+    =============================
+
+The GNU automake utility can generate Makefile rules to automatically track
+dependency changes between source files.  Such a feature is particularly
+useful during development, when inter-dependent source files are constantly
+modified.  By default GNU automake implements dependency tracking at build
+time for maximum reliability.  This automatic dependency tracking usually
+slows down compilation and is not required for end-users who compile the
+source package only once.
+
+In the official source distribution of POV-Ray for UNIX, the automatic
+dependency tracking is disabled by passing the following option to automake:
+
+% automake --ignore-deps
+
+Automatic dependency tracking can be easily enabled again by commenting out
+this option in the ./bootstrap script.  Then simply run:
+
+% make maintainer-clean
+% ./bootstrap
+
+Note that the automatic dependency tracking is also disabled for the PNG
+and ZLIB support libraries.  Here, the relevant option is passed to
+GNU automake as an argument ('no-dependencies') of the AM_INIT_AUTOMAKE
+macro invoqued in their respective configure.ac files.  Enabling automatic
+dependency tracking in the support libraries does not make much sense
+when compiling the POV-Ray source code.
+
+
+================================================
+Appendix B. The build system of POV-Ray for UNIX
+================================================
+
+This section briefly presents the GNU build system which is used in many
+GNU and non-GNU packages (such as POV-Ray).  For historical purposes, this
+section also summarizes the evolution of the POV-Ray build system along
+the 3.x series.
+
+
+B.1 Presentation of the GNU build system
+    ====================================
+
+Compiling and installing POV-Ray is based on the GNU build system which,
+to make it simple, relies on a so-called 'configure' script.  This shell
+script aims at creating a simple, uniform way of compiling a program on
+any UNIX-based system.  In the GNU/Linux community in particular, the
+configure script has become a widely used form of "exposing" a package
+to anyone (including other packages) who wants to build it from its
+sources.  Indeed, a package which lacks a configure script tends to
+become a sign of either old software or lack of support for the UNIX
+platforms, as the build process is then usually harder to manage.
+
+Quoting the generic GNU software installation instructions (as found
+in many INSTALL documents of GNU packages):
+
+"The `configure' shell script attempts to guess correct values for
+various system-dependent variables used during compilation.  It uses
+those values to create a `Makefile' in each directory of the package.
+It may also create one or more `.h' files containing system-dependent
+definitions.  Finally, it creates a shell script `config.status' that
+you can run in the future to recreate the current configuration, a file
+`config.cache' that saves the results of its tests to speed up
+reconfiguring, and a file `config.log' containing compiler output
+(useful mainly for debugging `configure')."
+
+Notice especially these words in the first sentence: "attempts to guess".
+They mean that this "magic" configure script can sometimes fail to detect
+your environment correctly, or to generate Makefiles that will work
+on your particular system.  There are at least two reasons for this.
+First, the UNIX world consists of dozens of architectures and operating
+systems, each coming in usually many different variants (the best example
+being GNU/Linux).  Second, one has to keep in mind that the configure script
+has to be written specifically for the package, here POV-Ray, meaning
+that human flaws are still inevitable.  Nevertheless, in many packages
+the configure script proves to be reliable enough to smoothly obtain
+a working program from its sources.
+
+More information on the GNU build system (which is actually a small set
+of softwares used to create the configure and various Makefiles, see the
+Appendix A) can be found at:
+
+  http://www.gnu.org/software/autoconf
+  http://www.gnu.org/software/automake
+
+
+B.2 History of the POV-Ray build system
+    ===================================
+
+In the past (until POV-Ray 3.1g inclusive), POV-Ray was released with several
+Makefiles that were written specifically to work on a few platforms only.
+Moreover, three different variants of POV-Ray could be built depending
+on the display that one wanted to use (X Window, SVGA, console display).
+Although POV-Ray was reasonably easy to build for those who are familiar
+with the UNIX 'make' utility, the process was cumbersome and definitely
+not at the level of the program itself.
+
+This situation changed lately when Mark Gordon, former UNIX developer
+of the POV-Team, introduced the use of a configure script in POV-Ray 3.5.
+Mark did a big step forward in making POV-Ray easier to build on the
+UNIX platforms, which also included the merging of the three different
+UNIX variants of POV-Ray.  Sadly the configure script included in the final
+version of POV-Ray 3.5 was not mature enough to deal with the large variety
+of UNIX platforms that exist.  It turned out that, as is, the configure script
+would only work on GNU/Linux.  On other platforms there were at least some
+manual modifications required before the compilation could be started.
+
+For POV-Ray 3.6, the POV-Team decided to integrate all 3rd-party libraries
+(JPEG, TIFF, PNG, and ZLIB) directly in the build process so as to make it
+even easier.  Such task was complicated due to the fact that these libraries
+are shipped with a very basic configure script or even none.  On the other
+hand, the POV-Ray configure script should work not only on GNU/Linux, as
+suggested by the recurrent reports of build problems on various platforms
+and by the results of the April 2003 Linux/UNIX user survey posted on the
+povray.unix newsgroup (news.povray.org).
+
+The 3.6 version of POV-Ray now comes with a completely redesigned configure
+script and accompanying Makefiles which have been reported to work on
+different kinds of UNIX-based platforms (see above).  The goals were to
+make it work regardless of the platform (as it is intended to be), without
+requiring any file editing (so as to fully automate the build process), and
+with the ability to build the support libraries when needed.  We hope that
+those goals have been reached.
+
+
+Nicolas Calimet <pov4grasp@free.fr>, July 2004

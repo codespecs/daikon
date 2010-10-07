@@ -1,0 +1,9 @@
+ArraysInStructTest
+ArraysInStructTest.decls.diff
+ArraysInStructTest.dtrace.diff
+ArraysInStructTest.invs.diff
+ArraysInStructTest.out
+ArraysInStructTest.out.diff
+ran-kvasir
+*.counts *.counts.diff
+ArraysInStructTest.comp ArraysInStructTest.comp.diff

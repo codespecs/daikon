@@ -1,0 +1,8 @@
+SimpleStructTest
+SimpleStructTest.dtrace.diff
+SimpleStructTest.comp
+SimpleStructTest.comp.diff
+SimpleStructTest.invs.diff
+SimpleStructTest.out
+ran-kvasir
+*.counts *.counts.diff

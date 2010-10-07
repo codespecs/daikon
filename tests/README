@@ -1,0 +1,24 @@
+
+This directory contains Daikon's regression tests.  (The Daikon unit tests
+are separate and can be found in directory java/daikon/test/ in the main
+repository and distribution.)
+
+As is the case with many parts of this system, typing 'make help' at the
+prompt will list the options available to you.
+
+The primary target you will use is 'make diffs'.  This command runs
+all of the regression tests and displays the results at the end.  The
+final output of the command is a listing of all of the difference
+files.  You can inspect the list for non-empty files, and investigate
+them more fully.
+
+You may also find 'make summary' useful.  It simply displays the
+difference file sizes (without re-running any tests).
+
+Since the full suite takes so long to run, you may wish to only check
+one program for regressions.  You can do that by changing to some
+subdirectory and running the Makefile from there.  As usual, 'make
+help' will list the options available to you.  The target you will use
+in subdirectories is 'make diffs' or 'make txt-diff'.
+
+If you have suggestions for this system, please do share them.

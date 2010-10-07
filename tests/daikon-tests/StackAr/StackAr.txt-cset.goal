@@ -1,0 +1,105 @@
+
+Variable sets for DataStructures.StackAr.<init>(I capacity) enter
+  [1] [Parameter capacity]
+Variable sets for DataStructures.StackAr.<init>(I capacity) exit
+  [2] [Parameter capacity, Field theArray]
+  [1] [this]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+  [1] [Field topOfStack]
+
+Variable sets for DataStructures.StackAr.isEmpty() enter
+  [2] [this, Array Field theArray[..]]
+  [2] [Field theArray, Field topOfStack]
+  [1] [Class of Field theArray]
+  [1] [Class of Field theArray[..]]
+Variable sets for DataStructures.StackAr.isEmpty() exit
+  [1] [return]
+  [2] [this, Array Field theArray[..]]
+  [2] [Field theArray, Field topOfStack]
+  [1] [Class of Field theArray]
+  [1] [Class of Field theArray[..]]
+
+Variable sets for DataStructures.StackAr.isFull() enter
+  [2] [this, Array Field theArray[..]]
+  [2] [Field theArray, Field topOfStack]
+  [1] [Class of Field theArray]
+  [1] [Class of Field theArray[..]]
+Variable sets for DataStructures.StackAr.isFull() exit
+  [1] [return]
+  [2] [this, Array Field theArray[..]]
+  [2] [Field theArray, Field topOfStack]
+  [1] [Class of Field theArray]
+  [1] [Class of Field theArray[..]]
+
+Variable sets for DataStructures.StackAr.makeEmpty() enter
+  [2] [this, Array Field theArray[..]]
+  [2] [Field theArray, Field topOfStack]
+  [1] [Class of Field theArray]
+  [1] [Class of Field theArray[..]]
+Variable sets for DataStructures.StackAr.makeEmpty() exit
+  [1] [this]
+  [1] [Field theArray]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+  [1] [Field topOfStack]
+
+Variable sets for DataStructures.StackAr.top() enter
+  [2] [this, Array Field theArray[..]]
+  [2] [Field theArray, Field topOfStack]
+  [1] [Class of Field theArray]
+  [1] [Class of Field theArray[..]]
+Variable sets for DataStructures.StackAr.top() exit
+  [3] [return, this, Array Field theArray[..]]
+  [1] [Class of return]
+  [2] [Field theArray, Field topOfStack]
+  [1] [Class of Field theArray]
+  [1] [Class of Field theArray[..]]
+
+Variable sets for DataStructures.StackAr.pop() enter
+  [1] [this]
+  [2] [Field theArray, Field topOfStack]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+Variable sets for DataStructures.StackAr.pop() exit
+  [1] [this]
+  [2] [Field theArray, Field topOfStack]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+
+Variable sets for DataStructures.StackAr.push(java.lang.Object x) enter
+  [3] [this, Array Field theArray[..], Parameter x]
+  [2] [Field theArray, Field topOfStack]
+  [1] [Class of Field theArray]
+  [1] [Class of Field theArray[..]]
+  [1] [Class of x]
+Variable sets for DataStructures.StackAr.push(java.lang.Object x) exit
+  [3] [this, Array Field theArray[..], Parameter x]
+  [2] [Field theArray, Field topOfStack]
+  [1] [Class of Field theArray]
+  [1] [Class of Field theArray[..]]
+  [1] [Class of x]
+
+Variable sets for DataStructures.StackAr.topAndPop() enter
+  [1] [this]
+  [2] [Field theArray, Field topOfStack]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+Variable sets for DataStructures.StackAr.topAndPop() exit
+  [1] [return]
+  [1] [Class of return]
+  [1] [this]
+  [2] [Field theArray, Field topOfStack]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+
+Variable sets for DataStructures.StackAr.equals(java.lang.Object obj) enter
+  not called
+Variable sets for DataStructures.StackAr.equals(java.lang.Object obj) exit
+  not called

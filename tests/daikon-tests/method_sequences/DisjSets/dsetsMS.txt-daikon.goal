@@ -1,0 +1,99 @@
+===========================================================================
+DisjSets:::OBJECT
+this.s != null
+this.s[] elements >= -1
+this.s[i] != i
+this.s[] elements <= size(this.s[])-1
+===========================================================================
+DisjSets.DisjSets(int):::ENTER
+numElements >= 1
+===========================================================================
+DisjSets.DisjSets(int):::EXIT32
+numElements == orig(numElements) == size(this.s[])
+this.s[] elements == -1
+===========================================================================
+DisjSets.find(int):::ENTER
+x >= 0
+x <= size(this.s[])-1
+===========================================================================
+DisjSets.find(int):::EXIT68
+x == return
+===========================================================================
+DisjSets.find(int):::EXIT70
+this.s[x] >= 0
+return in this.s[]
+===========================================================================
+DisjSets.find(int):::EXIT
+x == orig(x)
+this.s == orig(this.s)
+this.s[] == orig(this.s[])
+(this.s[x] >= 0)  ==>  (return in this.s[])
+(x != return)  <==>  (this.s[x] >= 0)
+return >= 0
+this.s[return] == -1
+x <= size(this.s[])-1
+===========================================================================
+DisjSets.unionCareful(int, int):::ENTER
+set1 >= 0
+set2 >= 0
+set1 <= size(this.s[])-1
+set2 <= size(this.s[])-1
+===========================================================================
+DisjSets.unionCareful(int, int):::EXIT57
+set1 == orig(set1)
+set2 == orig(set2)
+this.s == orig(this.s)
+this.s[set1] == orig(this.s[set1])
+set1 <= size(this.s[])-1
+set2 <= size(this.s[])-1
+this.s[] >= orig(this.s[]) (elementwise)
+this.s[] >= orig(this.s[0..set1]) (lexically)
+this.s[] > orig(this.s[0..set1-1]) (lexically)
+orig(this.s[set2]) in this.s[]
+this.s[] >= orig(this.s[0..set2]) (lexically)
+this.s[] > orig(this.s[0..set2-1]) (lexically)
+this.s[set1..] >= orig(this.s[set1..]) (elementwise)
+this.s[set1+1..] >= orig(this.s[set1+1..]) (elementwise)
+this.s[0..set1] > orig(this.s[0..set1-1]) (lexically)
+this.s[set2] >= orig(this.s[set2])
+this.s[set2..] >= orig(this.s[set2..]) (elementwise)
+this.s[set2+1..] >= orig(this.s[set2+1..]) (elementwise)
+this.s[0..set2] > orig(this.s[0..set2-1]) (lexically)
+===========================================================================
+DisjSets.unionDisjoint(int, int):::ENTER
+this.s[root1] == this.s[root2]
+root1 >= 0
+root2 >= 0
+this.s[root1] == -1
+root1 != root2
+root1 <= size(this.s[])-1
+root2 <= size(this.s[])-1
+===========================================================================
+DisjSets.unionDisjoint(int, int):::EXIT44
+root1 == orig(root1) == this.s[root2]
+root2 == orig(root2)
+this.s == orig(this.s)
+this.s[root1] == orig(this.s[root1]) == orig(this.s[root2])
+this.s[root2+1..] == orig(this.s[root2+1..])
+this.s[0..root2-1] == orig(this.s[0..root2-1])
+root1 <= size(this.s[])-1
+root2 <= size(this.s[])-1
+this.s[] > orig(this.s[]) (lexically)
+this.s[] >= orig(this.s[]) (elementwise)
+this.s[] > orig(this.s[0..root1]) (lexically)
+this.s[] > orig(this.s[0..root1-1]) (lexically)
+this.s[] > orig(this.s[0..root2]) (lexically)
+orig(this.s[]) < this.s[0..root2] (lexically)
+orig(this.s[]) > this.s[0..root2-1] (lexically)
+this.s[root1..] >= orig(this.s[root1..]) (elementwise)
+this.s[root1+1..] >= orig(this.s[root1+1..]) (elementwise)
+this.s[0..root1] > orig(this.s[0..root1-1]) (lexically)
+orig(this.s[root1..]) < this.s[root2..] (lexically)
+orig(this.s[0..root1]) < this.s[0..root2] (lexically)
+orig(this.s[0..root1-1]) < this.s[0..root2] (lexically)
+this.s[root2..] > orig(this.s[root2..]) (lexically)
+this.s[root2..] >= orig(this.s[root2..]) (elementwise)
+this.s[root2+1..] is a subsequence of orig(this.s[root2..])
+this.s[0..root2] > orig(this.s[0..root2]) (lexically)
+this.s[0..root2-1] < orig(this.s[0..root2]) (lexically)
+this.s[0..root2-1] is a subsequence of orig(this.s[0..root2])

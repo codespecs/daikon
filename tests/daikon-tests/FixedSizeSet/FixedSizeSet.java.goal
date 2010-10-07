@@ -1,0 +1,104 @@
+package six170;
+
+// Taken from 6.170 Recitation 5, Spring 2001
+// Author: Jeremy Nimmer
+// Change from a bitwise rep to a boolean array
+
+/**
+ * A FixedSizeSet is a mutable set of integers drawn from the range [0..7]
+ * @specfield elements : subset of { n : integer | 0 <= n <= 7 }
+ */
+public class FixedSizeSet {
+
+  /*@ invariant this.bits != null */
+  /*@ invariant this.bits.length == 8 */
+  /*@ invariant bits.owner == this */
+  /*@ spec_public */ private boolean[] bits;
+
+  /*@ ensures (\forall int i; (0 <= i && i <= this.bits.length-1) ==> (this.bits[i] == false)) */
+  // Rep Invariant:
+  //   bits != null && bits.length == 8
+
+  // Abstraction Function:  a = AF(t)
+  //   a.elements = { n | bits[n] }
+
+  /**
+   * @effects Creates a new, empty FixedSizeSet (this.elements_post = {})
+   **/
+  public FixedSizeSet() {
+    this.bits = new boolean[8];
+  /*@ set bits.owner = this */
+  }
+
+  /*@ requires n >= 0 */
+  /*@ requires n <= this.bits.length-1 */
+  /*@ modifies this.bits[*] */
+  /**@ ensures (\forall int i, j; (n+1 <= i && i <= this.bits.length-1 && \old(n+1) <= j && j <= \old(this.bits.length-1) && (i-(n+1)) == (j-(\old(n+1)))) ==> ( this.bits[i] == \old(this.bits[j]) )) */
+  /**@ ensures (\forall int i, j; (0 <= i && i <= n-1 && 0 <= j && j <= \old(n-1) && i == j) ==> ( this.bits[i] == \old(this.bits[j]) )) */
+  /*@ ensures this.bits[n] == true */
+  /**@ ensures n <= this.bits.length-1 */
+  /**
+   * @requires 0 <= n <= 7
+   * @effects this.elements_post = this.elements U { n }
+   */
+  public void add(int n) {
+    bits[n] = true;
+  }
+
+  /*@ requires n >= 0 */
+  /*@ requires n <= this.bits.length-1 */
+  /*@ modifies this.bits[*] */
+  /**@ ensures (\forall int i, j; (n+1 <= i && i <= this.bits.length-1 && \old(n+1) <= j && j <= \old(this.bits.length-1) && (i-(n+1)) == (j-(\old(n+1)))) ==> ( this.bits[i] == \old(this.bits[j]) )) */
+  /**@ ensures (\forall int i, j; (0 <= i && i <= n-1 && 0 <= j && j <= \old(n-1) && i == j) ==> ( this.bits[i] == \old(this.bits[j]) )) */
+  /*@ ensures this.bits[n] == false */
+  /**@ ensures n <= this.bits.length-1 */
+  /**
+   * @requires 0 <= n <= 7
+   * @effects this.elements_post = this.elements - { n }
+   */
+  public void remove(int n) {
+    bits[n] = false;
+  }
+
+  /*@ requires n >= 0 */
+  /*@ requires n <= this.bits.length-1 */
+  /*@ ensures \result == this.bits[n] */
+  /**@ ensures n <= this.bits.length-1 */
+  /**
+   * @requires 0 <= n <= 7
+   * @returns true iff n in this.elements
+   */
+  public boolean contains(int n) {
+    return bits[n];
+  }
+
+  /*@ requires other != null */
+  /*@ modifies this.bits[*] */
+  /**@ ensures other.bits.length == this.bits.length */
+  /**
+   * @requires other != null
+   * @modifies this
+   * @effects this.elements_post = this.elements ^ other.elements
+   **/
+  public void intersect(FixedSizeSet other) {
+    for (int i=0; i<bits.length; i++) {
+      if (! other.bits[i])
+        bits[i] = false;
+    }
+  }
+
+  /*@ requires other != null */
+  /*@ modifies this.bits[*] */
+  /**
+   * @requires other != null
+   * @modifies this
+   * @effects this.elements_post = this.elements U other.elements
+   **/
+  public void union(FixedSizeSet other) {
+    for (int i=0; i<bits.length; i++) {
+      if (other.bits[i])
+        bits[i] = true;
+    }
+  }
+
+}

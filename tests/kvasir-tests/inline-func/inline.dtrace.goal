@@ -1,0 +1,32 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+
+..foo():::ENTER
+this_invocation_nonce
+1
+x
+3
+1
+
+..foo():::EXIT0
+this_invocation_nonce
+1
+return
+5
+1
+x
+3
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+return
+0
+1
+

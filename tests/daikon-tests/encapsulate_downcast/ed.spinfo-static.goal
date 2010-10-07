@@ -1,0 +1,10 @@
+REPLACE
+getName()
+_name
+
+PPT_NAME misc.EncapsulateDowncast.main
+i < CASES
+j <= random.nextInt(CASES)
+orig(i < CASES)
+orig(j <= random.nextInt(CASES))
+

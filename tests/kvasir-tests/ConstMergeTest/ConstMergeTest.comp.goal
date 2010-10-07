@@ -1,0 +1,13 @@
+..getVar():::ENTER
+::var3
+
+..getVar():::EXIT0
+::var3 return
+
+..main():::ENTER
+::var3
+
+..main():::EXIT0
+::var3
+return
+

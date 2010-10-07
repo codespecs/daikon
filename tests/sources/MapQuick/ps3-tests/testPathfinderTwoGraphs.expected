@@ -1,0 +1,77 @@
+#Test that there's no aliasing between two graphs for PathFinder
+created node n1 with cost 2
+created node n2 with cost 20
+created node n3 with cost 4
+created node n4 with cost 4
+created node n5 with cost 12
+created node n6 with cost 1
+created node n7 with cost 3
+created node n8 with cost 9
+created node n9 with cost 5
+created node n10 with cost 3
+created node n11 with cost 11
+#set up 1st graph
+created graph A
+added node n1 to A
+added node n2 to A
+added node n3 to A
+added node n4 to A
+added node n5 to A
+added node n6 to A
+added node n7 to A
+added node n8 to A
+added node n9 to A
+added node n10 to A
+added node n11 to A
+added edge from n1 to n2 in A
+added edge from n1 to n5 in A
+added edge from n1 to n8 in A
+added edge from n2 to n3 in A
+added edge from n2 to n7 in A
+added edge from n3 to n4 in A
+added edge from n4 to n3 in A
+added edge from n4 to n7 in A
+added edge from n4 to n11 in A
+added edge from n5 to n1 in A
+added edge from n5 to n2 in A
+added edge from n5 to n6 in A
+added edge from n6 to n9 in A
+added edge from n6 to n10 in A
+added edge from n7 to n11 in A
+added edge from n8 to n5 in A
+added edge from n8 to n9 in A
+added edge from n9 to n5 in A
+added edge from n9 to n6 in A
+added edge from n9 to n10 in A
+added edge from n10 to n7 in A
+added edge from n11 to n10 in A
+#add more nodes & edges in a disjoint set
+created node n20 with cost 1
+created node n21 with cost 2
+created node n22 with cost 3
+added node n20 to A
+added node n21 to A
+added node n22 to A
+added edge from n20 to n21 in A
+added edge from n20 to n22 in A
+added edge from n21 to n22 in A
+added edge from n21 to n20 in A
+added edge from n22 to n20 in A
+added edge from n22 to n21 in A
+#create a second graph and add some of the same nodes to it
+created graph B
+added node n1 to B
+added node n2 to B
+added node n3 to B
+added node n20 to B
+added node n21 to B
+added edge from n1 to n20 in B
+added edge from n20 to n21 in B
+added edge from n21 to n2 in B
+added edge from n2 to n1 in B
+
+#do some pathfinding that would work in 1st graph, but not in 2nd
+shortest path in A: n1 n2 n3
+
+#do some pathfinding that would work in 2nd, but not in 1st
+shortest path in B: n1 n20 n21

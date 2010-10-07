@@ -1,0 +1,38 @@
+%s s1
+%x s2
+%x s3
+%x incl
+%x quote
+
+DIGIT   [0-9]
+ID      [a-z][a-z0-9]*
+%%
+
+[/]		printf("Paren: %s\n", yytext);
+['/']		printf("Paren: %s\n", yytext);
+[\/]		printf("Paren: %s\n", yytext);
+"'*'"		printf("Paren: %s\n", yytext);
+\*		printf("* : %s\n", yytext);
+"*"		printf("* : %s\n", yytext);
+"."		printf("found a dot\n");
+
+{DIGIT}*        {
+                printf("An integer: %s (%d)\n", yytext, atoi(yytext));
+                }
+
+{DIGIT}+"."{DIGIT}*     {
+                printf("A float: %s (%g)\n", yytext, atof(yytext));
+                }
+
+z{2,5}          printf("Two to five z's: %s\n", yytext);
+s{2,}           printf("Two or more s's: %s\n", yytext);
+u{4}            printf("Exactly 4 u's: %s\n", yytext);
+
+<<EOF>> {
+        if (*++filelist)
+                yyin = fopen(*filelist, "r");
+        else
+                yyterminate();
+        }
+
+%%

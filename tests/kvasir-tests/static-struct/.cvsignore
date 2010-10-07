@@ -1,0 +1,8 @@
+ran-kvasir struct struct.decls.diff struct.dtrace.diff struct.invs.diff struct.out struct.out.diff
+*.counts *.counts.diff
+struct.comp struct.comp.diff
+static-struct.comp.diff
+static-struct.decls.diff
+static-struct.dtrace.diff
+static-struct.invs.diff
+static-struct.out.diff

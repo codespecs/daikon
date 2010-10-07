@@ -1,0 +1,47 @@
+===========================================================================
+misc.Fib:::CLASS
+misc.Fib.a <= misc.Fib.b
+misc.Fib.a <= misc.Fib.c
+misc.Fib.a != misc.Fib.STEPS
+misc.Fib.b <= misc.Fib.c
+misc.Fib.b != misc.Fib.STEPS
+misc.Fib.c != misc.Fib.STEPS
+misc.Fib.a + misc.Fib.b - misc.Fib.c == 0
+===========================================================================
+misc.Fib:::OBJECT
+misc.Fib.a != misc.Fib.STEPS
+misc.Fib.b != misc.Fib.STEPS
+misc.Fib.c != misc.Fib.STEPS
+misc.Fib.a + misc.Fib.b - misc.Fib.c == 0
+===========================================================================
+misc.Fib.increment():::ENTER
+misc.Fib.a < misc.Fib.c
+===========================================================================
+misc.Fib.increment():::EXIT
+misc.Fib.a == orig(misc.Fib.b)
+misc.Fib.b == orig(misc.Fib.c)
+misc.Fib.a < misc.Fib.c
+misc.Fib.b < misc.Fib.c
+misc.Fib.b > orig(misc.Fib.a)
+misc.Fib.c > orig(misc.Fib.a)
+misc.Fib.STEPS != orig(misc.Fib.a)
+- misc.Fib.a + misc.Fib.b - orig(misc.Fib.a) == 0
+- 2 * misc.Fib.a + misc.Fib.c - orig(misc.Fib.a) == 0
+2 * misc.Fib.b - misc.Fib.c - orig(misc.Fib.a) == 0
+===========================================================================
+misc.Fib.main(java.lang.String[]):::ENTER
+misc.Fib.a == misc.Fib.b
+misc.Fib.a == misc.Fib.c
+misc.Fib.a == size(args[])
+args has only one value
+args.getClass() == java.lang.String[].class
+args[] == []
+args[].toString == []
+misc.Fib.a == 0
+===========================================================================
+misc.Fib.main(java.lang.String[]):::EXIT
+args[] == []
+args[].toString == []
+misc.Fib.a == 6765
+misc.Fib.b == 10946
+misc.Fib.c == 17711

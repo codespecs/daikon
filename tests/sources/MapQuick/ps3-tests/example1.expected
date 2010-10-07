@@ -1,0 +1,22 @@
+# Sample Testing file
+
+# Create a graph
+created graph graph1
+
+# Add a pair of nodes
+created node n1 with cost 5
+created node n2 with cost 5
+added node n1 to graph1
+added node n2 to graph1
+
+# Add an edge
+added edge from n1 to n2 in graph1
+
+# Print some stuff
+graph1 contains: n1 n2
+the children of n1 in graph1 are: n2
+the children of n2 in graph1 are: 
+
+# Find a path
+shortest path in graph1: n1 n2
+

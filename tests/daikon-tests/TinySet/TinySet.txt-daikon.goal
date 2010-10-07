@@ -1,0 +1,81 @@
+===========================================================================
+six170.TinySet:::OBJECT
+this.bits >= 0
+===========================================================================
+six170.TinySet.TinySet():::EXIT
+this.bits == 0
+===========================================================================
+six170.TinySet.add(int):::ENTER
+n >= 0
+===========================================================================
+six170.TinySet.add(int):::EXIT
+this.bits >= 1
+orig(this.bits) is a bitwise subset of this.bits
+this.bits >= orig(this.bits)
+this.bits > orig(n)
+===========================================================================
+six170.TinySet.contains(int):::ENTER
+n >= 0
+===========================================================================
+six170.TinySet.contains(int):::EXIT
+this.bits == orig(this.bits)
+(return == true)  ==>  (orig(this) has only one value)
+(return == true)  ==>  (this.bits > orig(n))
+===========================================================================
+six170.TinySet.contains(int):::EXIT;condition="return == true"
+return == true
+orig(this) has only one value
+this.bits > orig(n)
+===========================================================================
+six170.TinySet.contains(int):::EXIT;condition="not(return == true)"
+return == false
+===========================================================================
+six170.TinySet.intersect(six170.TinySet):::ENTER
+other != null
+other.bits >= 0
+(other.bits == 0) ==> (this.bits == 0)
+(this.bits == 0) ==> (other.bits == 0)
+===========================================================================
+six170.TinySet.intersect(six170.TinySet):::EXIT
+other.bits == orig(other.bits)
+other.bits >= 0
+(other.bits == 0) ==> (this.bits == 0)
+this.bits <= other.bits
+this.bits is a bitwise subset of other.bits
+(orig(this.bits) == 0) ==> (this.bits == 0)
+this.bits <= orig(this.bits)
+this.bits is a bitwise subset of orig(this.bits)
+(orig(this.bits) == 0) ==> (other.bits == 0)
+(other.bits == 0) ==> (orig(this.bits) == 0)
+this.bits == (other.bits & orig(this.bits))
+===========================================================================
+six170.TinySet.remove(int):::ENTER
+this has only one value
+this.bits >= 1
+n >= 0
+this.bits > n
+===========================================================================
+six170.TinySet.remove(int):::EXIT
+this.bits <= orig(this.bits)
+this.bits is a bitwise subset of orig(this.bits)
+===========================================================================
+six170.TinySet.union(six170.TinySet):::ENTER
+other != null
+other.bits >= 0
+(other.bits == 0) ==> (this.bits == 0)
+(this.bits == 0) ==> (other.bits == 0)
+===========================================================================
+six170.TinySet.union(six170.TinySet):::EXIT
+other.bits == orig(other.bits)
+other.bits >= 0
+(other.bits == 0) ==> (this.bits == 0)
+(this.bits == 0) ==> (other.bits == 0)
+other.bits is a bitwise subset of this.bits
+this.bits >= other.bits
+(orig(this.bits) == 0) ==> (this.bits == 0)
+(this.bits == 0) ==> (orig(this.bits) == 0)
+orig(this.bits) is a bitwise subset of this.bits
+this.bits >= orig(this.bits)
+(orig(this.bits) == 0) ==> (other.bits == 0)
+(other.bits == 0) ==> (orig(this.bits) == 0)
+this.bits == (other.bits | orig(this.bits))

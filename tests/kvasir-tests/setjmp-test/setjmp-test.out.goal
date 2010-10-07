@@ -1,0 +1,9 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== Copyright (C) 2004-2006, Philip Guo, MIT CSAIL Program Analysis Group
+==PID== Using Valgrind-3.5.0-TEST1 and LibVEX; rerun with -h for copyright info
+==PID== Command: ./setjmp-test
+==PID== 
+
+MISMATCHED on exit_function! ..func() != f: ..main()
+==PID== 
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

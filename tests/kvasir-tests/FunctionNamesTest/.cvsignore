@@ -1,0 +1,10 @@
+FunctionNamesTest
+FunctionNamesTest.decls.diff
+FunctionNamesTest.dtrace.diff
+FunctionNamesTest.invs.diff
+FunctionNamesTest.out
+FunctionNamesTest.out.diff
+FunctionNamesTest.comp
+FunctionNamesTest.comp.diff
+ran-kvasir
+*.counts *.counts.diff

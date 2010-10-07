@@ -1,0 +1,258 @@
+===========================================================================
+std.InfoTbl(int;int;const long *;int *;)double:::ENTER
+r == ::r
+c == ::c
+f == ::f
+f != null
+pdf != null
+*pdf >= 0
+::line != null
+::line[] is printable
+size(::f[]) >= 1
+*f in ::f[]
+(size(::f[])-1 == 0) ==> (*pdf == 0)
+*pdf <= size(::f[])-1
+===========================================================================
+std.InfoTbl(int;int;const long *;int *;)double:::EXIT
+r == ::r
+r == orig(r)
+r == orig(::r)
+c == ::c
+c == orig(c)
+c == orig(::c)
+f == ::f
+f == orig(f)
+f == orig(::f)
+*f == orig(*f)
+pdf == orig(pdf)
+::line == orig(::line)
+::f[] == orig(::f[])
+f != null
+pdf != null
+*pdf >= 0
+::line != null
+::line[] is printable
+size(::f[]) >= 1
+*f in ::f[]
+(*pdf == 0) ==> (orig(*pdf) == 0)
+(size(::f[])-1 == 0) ==> (*pdf == 0)
+*pdf <= size(::f[])-1
+::line[] == orig(::line[])
+(size(::f[])-1 == 0) ==> (orig(*pdf) == 0)
+orig(*pdf) <= size(::f[])-1
+===========================================================================
+std.LGamma(double;)double:::ENTER
+x >= 0.5
+::line != null
+::f != null
+::r >= 2
+::c != 0
+===========================================================================
+std.LGamma(double;)double:::EXIT6
+::r == ::c
+::r == orig(::c)
+x == -0.5
+::r one of { 2, 4 }
+::r == 0  (mod 2)
+return == 0.572365
+orig(x) == 0.5
+===========================================================================
+std.LGamma(double;)double:::EXIT7
+orig(x) >= 1.0
+x - orig(x) - 5 == 0
+===========================================================================
+std.LGamma(double;)double:::EXIT
+::line == orig(::line)
+::f == orig(::f)
+::f[] == orig(::f[])
+::r == orig(::r)
+::c == orig(::c)
+(orig(x) >= 1.0)  ==>  (return >= -0.120782)
+(orig(x) >= 1.0)  ==>  (x - orig(x) - 5 == 0)
+(x == -0.5)  <==>  (orig(x) == 0.5)
+(x == -0.5)  <==>  (x < orig(x))
+(x == -0.5)  ==>  (::c == 0  (mod 2))
+(x == -0.5)  ==>  (::c one of { 2, 4 })
+(x == -0.5)  ==>  (::r == 0  (mod 2))
+(x == -0.5)  ==>  (::r == ::c)
+(x == -0.5)  ==>  (::r one of { 2, 4 })
+(x == -0.5)  ==>  (return == 0.572365)
+(x == -0.5)  ==>  (return > orig(x))
+(x == -0.5)  ==>  (x < return)
+x != 0
+x >= -0.5
+::line != null
+::f != null
+::r >= 2
+::c != 0
+return != 0
+return >= -0.120782
+x != return
+x != orig(x)
+::line[] == orig(::line[])
+return != orig(x)
+===========================================================================
+std.QChiSq(double;int;)double:::ENTER
+chisq >= 0.0
+df >= 1
+::line != null
+::f != null
+::r >= 2
+::c != 0
+===========================================================================
+std.QChiSq(double;int;)double:::EXIT
+chisq == orig(chisq)
+df == orig(df)
+::line == orig(::line)
+::f == orig(::f)
+::f[] == orig(::f[])
+::r == orig(::r)
+::c == orig(::c)
+chisq >= 0.0
+df >= 1
+::line != null
+::f != null
+::r >= 2
+::c != 0
+chisq != return
+::line[] == orig(::line[])
+===========================================================================
+std.QGamma(double;double;)double:::ENTER
+a >= 0.5
+x >= 0.0
+::line != null
+::f != null
+::r >= 2
+::c != 0
+a != x
+===========================================================================
+std.QGamma(double;double;)double:::EXIT
+a == orig(a)
+x == orig(x)
+::line == orig(::line)
+::f == orig(::f)
+::f[] == orig(::f[])
+::r == orig(::r)
+::c == orig(::c)
+a >= 0.5
+x >= 0.0
+::line != null
+::f != null
+::r >= 2
+::c != 0
+a != x
+x != return
+::line[] == orig(::line[])
+===========================================================================
+std.gcf(double;double;)double:::ENTER
+a >= 0.5
+::line != null
+::f != null
+::r >= 2
+::c >= 2
+===========================================================================
+std.gcf(double;double;)double:::EXIT11
+===========================================================================
+std.gcf(double;double;)double:::EXIT
+a == orig(a)
+x == orig(x)
+::line == orig(::line)
+::f == orig(::f)
+::f[] == orig(::f[])
+::r == orig(::r)
+::c == orig(::c)
+a >= 0.5
+::line != null
+::f != null
+::r >= 2
+::c >= 2
+::line[] == orig(::line[])
+===========================================================================
+std.gser(double;double;)double:::ENTER
+a >= 0.5
+::line != null
+::f != null
+::r >= 2
+::c != 0
+===========================================================================
+std.gser(double;double;)double:::EXIT8
+x == 0.0
+::r one of { 2, 4, 6 }
+::r == 0  (mod 2)
+::c >= 2
+return == 0.0
+(::r >> ::c == 0)
+===========================================================================
+std.gser(double;double;)double:::EXIT9
+===========================================================================
+std.gser(double;double;)double:::EXIT
+a == orig(a)
+x == orig(x)
+::line == orig(::line)
+::f == orig(::f)
+::f[] == orig(::f[])
+::r == orig(::r)
+::c == orig(::c)
+a >= 0.5
+::line != null
+::f != null
+::r >= 2
+::c != 0
+::line[] == orig(::line[])
+===========================================================================
+std.main(int;char **;)int:::ENTER
+::r == ::c
+argc == 1
+argv != null
+::line != null
+::f != null
+::r == 0
+===========================================================================
+std.main(int;char **;)int:::EXIT1
+::f[] elements >= 0
+return == 1
+size(::f[]) == 0  (mod 2)
+::f[] elements >= orig(::r)
+::r >= ::c
+::r > orig(::r)
+::c >= orig(::r)
+===========================================================================
+std.main(int;char **;)int:::EXIT2
+::line[] is printable
+return == 1
+::r > orig(::r)
+::c > orig(::r)
+===========================================================================
+std.main(int;char **;)int:::EXIT3
+::line[] is printable
+return == 1
+::r > orig(::r)
+::c > orig(::r)
+===========================================================================
+std.main(int;char **;)int:::EXIT4
+::line[] one of { "\n", " \n", "  \n" }
+::c >= 0
+return == 1
+::c >= orig(::r)
+===========================================================================
+std.main(int;char **;)int:::EXIT5
+::line[] one of { "\n", " \n", "  \n" }
+::r >= 2
+::c != 0
+return == 0
+::r > orig(::r)
+::c != orig(::r)
+===========================================================================
+std.main(int;char **;)int:::EXIT
+argc == orig(argc)
+argv == orig(argv)
+::line == orig(::line)
+::f == orig(::f)
+argc == 1
+argv != null
+::line != null
+::f != null
+::r >= 0
+return one of { 0, 1 }
+size(::f[]) >= 1
+::r >= orig(::r)

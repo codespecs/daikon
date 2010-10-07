@@ -1,0 +1,11 @@
+# Pretend this file is -*- sh -*-
+
+daikon.inv.unary.scalar.UpperBound.enabled = 1
+daikon.inv.unary.scalar.UpperBound.minimal_interesting = -5000
+daikon.inv.unary.scalar.UpperBound.maximal_interesting = 5000
+daikon.inv.unary.scalar.LowerBound.enabled = 1
+daikon.inv.unary.scalar.LowerBound.minimal_interesting = -5000
+daikon.inv.unary.scalar.LowerBound.maximal_interesting = 5000
+
+daikon.inv.unary.sequence.OneOfSequence.size = 1
+

@@ -1,0 +1,122 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable argc
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable argv
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable argv[..]
+    var-kind array
+    enclosing-var argv
+    array 1
+    rep-type string[]
+    dec-type char*[]
+
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable argc
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable argv
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable argv[..]
+    var-kind array
+    enclosing-var argv
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
+
+ppt ..thread1():::ENTER
+  ppt-type enter
+  variable arg
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+    flags is_param 
+  variable arg[..]
+    var-kind array
+    enclosing-var arg
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+
+ppt ..thread1():::EXIT0
+  ppt-type subexit
+  variable arg
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+    flags is_param 
+  variable arg[..]
+    var-kind array
+    enclosing-var arg
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable return
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+  variable return[..]
+    var-kind array
+    enclosing-var return
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+
+ppt ..thread2():::ENTER
+  ppt-type enter
+  variable arg
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+    flags is_param 
+  variable arg[..]
+    var-kind array
+    enclosing-var arg
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+
+ppt ..thread2():::EXIT0
+  ppt-type subexit
+  variable arg
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+    flags is_param 
+  variable arg[..]
+    var-kind array
+    enclosing-var arg
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+  variable return
+    var-kind variable
+    rep-type hashcode
+    dec-type void*
+  variable return[..]
+    var-kind array
+    enclosing-var return
+    array 1
+    rep-type hashcode[]
+    dec-type void[]
+

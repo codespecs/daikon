@@ -1,0 +1,57 @@
+cd /afs/csail.mit.edu/u/m/mernst/research/invariants/java/
+make -k xlint
+daikon/PptSlice.java:184: warning: [deprecation] falsified(daikon.inv.Invariant) in daikon.suppress.NIS has been deprecated
+        NIS.falsified (inv);
+           ^
+daikon/DiscReasonMap.java:160: warning: [unchecked] unchecked conversion
+found   : java.util.List
+required: java.util.Collection<? extends daikon.inv.DiscardInfo>
+      result.addAll((List) listIter.next());
+                    ^
+daikon/Quant.java:8540: warning: [unchecked] unchecked call to <T>toArray(T[]) as a member of the raw type java.util.Collection
+    Object[] seq1_array = (Object[]) seq1.toArray(new Object[]{});
+                                                 ^
+daikon/Quant.java:8562: warning: [unchecked] unchecked call to <T>toArray(T[]) as a member of the raw type java.util.Collection
+    Object[] seq1_array = (Object[]) seq1.toArray(new Object[]{});
+                                                 ^
+daikon/Quant.java:8569: warning: [unchecked] unchecked call to <T>toArray(T[]) as a member of the raw type java.util.Collection
+    Object[] seq2_array = (Object[]) seq2.toArray(new Object[]{});
+                                                 ^
+daikon/Quant.java:8834: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: java.util.AbstractCollection<java.lang.Object>
+        return (Object[])((java.util.AbstractCollection<Object>)fieldObj).toArray(new Object[]{}); // unchecked cast
+                                                                ^
+daikon/Quant.java:9334: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: java.util.AbstractCollection<java.lang.String>
+        return (String[])((java.util.AbstractCollection<String>)fieldObj).toArray(new String[]{}); // unchecked cast
+                                                                ^
+daikon/Quant.java:9588: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: java.util.AbstractCollection<java.lang.Object>
+      return ((AbstractCollection<Object>)o).toArray(new java.lang.Object[]{}); // unchecked cast
+                                          ^
+daikon/chicory/DTraceWriter.java:245: warning: [unchecked] unchecked conversion
+found   : java.util.List
+required: java.util.List<java.lang.Object>
+            return nonsenseList;
+                   ^
+daikon/chicory/DTraceWriter.java:506: warning: [unchecked] unchecked conversion
+found   : java.util.List
+required: java.util.List<java.lang.String>
+            return nonsenseList;
+                   ^
+daikon/chicory/StringInfo.java:31: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: java.util.List<java.lang.String>
+            return getStringList((List<String>)val); // unchecked cast
+                                               ^
+daikon/chicory/DaikonClassInfo.java:38: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: java.util.List<java.lang.Object>
+            return StringInfo.getStringList(DTraceWriter.getTypeNameList((List<Object>) val));
+                                                                                        ^
+12 warnings
+
+Compilation finished at Sun Sep 25 19:39:33

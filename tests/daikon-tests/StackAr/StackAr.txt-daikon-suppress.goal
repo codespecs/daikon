@@ -1,0 +1,147 @@
+===========================================================================
+DataStructures.StackAr:::OBJECT
+this.theArray != null
+this.theArray.getClass() == java.lang.Object[].class
+this.topOfStack >= -1
+this.theArray[this.topOfStack+1..] elements == null
+this.theArray[0..this.topOfStack] elements != null
+this.topOfStack <= size(this.theArray[])-1
+===========================================================================
+DataStructures.StackAr.StackAr(int):::ENTER
+capacity >= 0
+===========================================================================
+DataStructures.StackAr.StackAr(int):::EXIT
+orig(capacity) == size(this.theArray[])
+this.theArray[] elements == null
+this.theArray[].getClass() elements == null
+this.topOfStack == -1
+this.theArray[0..this.topOfStack] == []
+===========================================================================
+DataStructures.StackAr.isEmpty():::ENTER
+===========================================================================
+DataStructures.StackAr.isEmpty():::EXIT
+this.theArray == orig(this.theArray)
+this.theArray[] == orig(this.theArray[])
+this.topOfStack == orig(this.topOfStack)
+this.theArray.getClass() == orig(this.theArray.getClass())
+===========================================================================
+DataStructures.StackAr.isFull():::ENTER
+===========================================================================
+DataStructures.StackAr.isFull():::EXIT
+this.theArray == orig(this.theArray)
+this.theArray[] == orig(this.theArray[])
+this.topOfStack == orig(this.topOfStack)
+this.theArray.getClass() == orig(this.theArray.getClass())
+===========================================================================
+DataStructures.StackAr.makeEmpty():::ENTER
+===========================================================================
+DataStructures.StackAr.makeEmpty():::EXIT
+this.theArray == orig(this.theArray)
+size(this.theArray[]) == orig(size(this.theArray[]))
+this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
+this.theArray[] elements == null
+this.theArray[].getClass() elements == null
+this.topOfStack == -1
+this.theArray[0..this.topOfStack] == []
+this.theArray.getClass() == orig(this.theArray.getClass())
+this.topOfStack <= orig(this.topOfStack)
+orig(this.topOfStack) <= size(this.theArray[])-1
+===========================================================================
+DataStructures.StackAr.pop():::ENTER
+this.topOfStack >= 0
+this.theArray[0..this.topOfStack] contains no duplicates
+===========================================================================
+DataStructures.StackAr.pop():::EXIT
+this.theArray == orig(this.theArray)
+size(this.theArray[]) == orig(size(this.theArray[]))
+this.theArray[0..this.topOfStack] == orig(this.theArray[0..this.topOfStack-1])
+this.theArray[0..this.topOfStack] == orig(this.theArray[0..this.topOfStack-1])
+this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
+this.theArray[orig(this.topOfStack)] == null
+this.theArray[0..orig(this.topOfStack)] contains no duplicates
+this.theArray.getClass() == orig(this.theArray.getClass())
+orig(this.topOfStack) == this.topOfStack + 1
+this.topOfStack < size(this.theArray[])-1
+this.theArray[this.topOfStack+1..] elements == this.theArray[orig(this.topOfStack)]
+this.theArray[orig(this.topOfStack)+1..] elements == this.theArray[orig(this.topOfStack)]
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::ENTER
+x != null
+this.topOfStack < size(this.theArray[])-1
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::EXIT
+this.theArray == orig(this.theArray)
+orig(x) == this.theArray[this.topOfStack]
+size(this.theArray[]) == orig(size(this.theArray[]))
+this.theArray[this.topOfStack+1..] == orig(this.theArray[this.topOfStack+2..])
+this.theArray[0..this.topOfStack-1] == orig(this.theArray[0..this.topOfStack])
+this.theArray[0..this.topOfStack-1] == orig(this.theArray[0..this.topOfStack])
+this.topOfStack >= 0
+orig(this.theArray[this.topOfStack+1..]) elements == null
+this.theArray.getClass() == orig(this.theArray.getClass())
+orig(this.topOfStack) == this.topOfStack - 1
+orig(this.topOfStack) < size(this.theArray[])-1
+this.theArray[this.topOfStack+1..] elements == orig(this.theArray[this.topOfStack+1])
+orig(this.theArray[this.topOfStack+1..]) elements == orig(this.theArray[this.topOfStack+1])
+===========================================================================
+DataStructures.StackAr.top():::ENTER
+===========================================================================
+DataStructures.StackAr.top():::EXIT74
+this.theArray[] == orig(this.theArray[post(this.topOfStack)+1..])
+this.theArray[] == orig(this.theArray[this.topOfStack+1..])
+return == null
+this.theArray[] elements == null
+this.theArray[].getClass() elements == null
+this.topOfStack == -1
+this.theArray[0..this.topOfStack] == []
+this.theArray[] elements == return
+===========================================================================
+DataStructures.StackAr.top():::EXIT75
+return == this.theArray[this.topOfStack]
+return == this.theArray[orig(this.topOfStack)]
+return == orig(this.theArray[post(this.topOfStack)])
+return == orig(this.theArray[this.topOfStack])
+this.theArray[this.topOfStack..] == orig(this.theArray[this.topOfStack..])
+this.theArray[0..this.topOfStack-1] == orig(this.theArray[0..this.topOfStack-1])
+this.topOfStack >= 0
+===========================================================================
+DataStructures.StackAr.top():::EXIT
+this.theArray == orig(this.theArray)
+this.theArray[] == orig(this.theArray[])
+this.topOfStack == orig(this.topOfStack)
+this.theArray.getClass() == orig(this.theArray.getClass())
+===========================================================================
+DataStructures.StackAr.topAndPop():::ENTER
+this.theArray[0..this.topOfStack] contains no duplicates
+===========================================================================
+DataStructures.StackAr.topAndPop():::EXIT108
+this.theArray[] == orig(this.theArray[])
+this.topOfStack == orig(this.topOfStack)
+return == null
+this.theArray[] elements == null
+this.theArray[].getClass() elements == null
+this.topOfStack == -1
+this.theArray[0..this.topOfStack] == []
+this.theArray[] elements == return
+===========================================================================
+DataStructures.StackAr.topAndPop():::EXIT111
+return == orig(this.theArray[this.topOfStack])
+this.theArray[0..this.topOfStack] == orig(this.theArray[0..this.topOfStack-1])
+orig(this.topOfStack) >= 0
+this.theArray[orig(this.topOfStack)] == null
+orig(this.topOfStack) == this.topOfStack + 1
+this.topOfStack < size(this.theArray[])-1
+this.theArray[this.topOfStack+1..] elements == this.theArray[orig(this.topOfStack)]
+this.theArray[orig(this.topOfStack)+1..] elements == this.theArray[orig(this.topOfStack)]
+===========================================================================
+DataStructures.StackAr.topAndPop():::EXIT
+this.theArray == orig(this.theArray)
+size(this.theArray[]) == orig(size(this.theArray[]))
+this.theArray[0..this.topOfStack] == orig(this.theArray[0..post(this.topOfStack)])
+this.theArray[orig(this.topOfStack)+1..] == orig(this.theArray[this.topOfStack+1..])
+this.theArray[0..this.topOfStack] contains no duplicates
+this.theArray[orig(this.topOfStack)+1..] elements == null
+this.theArray[0..orig(this.topOfStack)] contains no duplicates
+this.theArray.getClass() == orig(this.theArray.getClass())
+this.topOfStack <= orig(this.topOfStack)
+orig(this.topOfStack) <= size(this.theArray[])-1

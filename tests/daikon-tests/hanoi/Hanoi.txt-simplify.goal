@@ -1,0 +1,122 @@
+===========================================================================
+six170.Hanoi:::OBJECT
+(EQ (select |height| |this|) (arrayLength (select |diskLocation| |this|)))
+(NEQ (hash (select |diskLocation| |this|)) null)
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1))) (OR (EQ (select (select elems (select |diskLocation| |this|)) |i|) 0) (EQ (select (select elems (select |diskLocation| |this|)) |i|) 1) (EQ (select (select elems (select |diskLocation| |this|)) |i|) 2))))
+(EQ (+ 1 (- (- (arrayLength (select |diskLocation| |this|)) 1) (select |height| |this|))) 0)
+===========================================================================
+six170.Hanoi.Hanoi(int):::ENTER
+===========================================================================
+six170.Hanoi.Hanoi(int):::EXIT
+(EQ (select |height| |this|) |__orig__height|)
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1))) (EQ (select (select elems (select |diskLocation| |this|)) |i|) 0)))
+(EQ (select |noOutput| |this|) |@false|)
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1))) (EQ (select (select elems (select |diskLocation| |this|)) |i|) (select (select elems (select |diskLocation| |this|)) (- (select |height| |this|) 1)))))
+===========================================================================
+six170.Hanoi.Hanoi(int, boolean):::ENTER
+(EQ |noOutput| |@true|)
+===========================================================================
+six170.Hanoi.Hanoi(int, boolean):::EXIT
+(EQ (select |height| |this|) |__orig__height|)
+(EQ (select |noOutput| |this|) |__orig__noOutput|)
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1))) (EQ (select (select elems (select |diskLocation| |this|)) |i|) 0)))
+(EQ (select |noOutput| |this|) |@true|)
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1))) (EQ (select (select elems (select |diskLocation| |this|)) |i|) (select (select elems (select |diskLocation| |this|)) (- (select |height| |this|) 1)))))
+===========================================================================
+six170.Hanoi.moveDisk(int, int):::ENTER
+(EQ (select |noOutput| |this|) |@true|)
+(OR (EQ |fromPeg| 0) (EQ |fromPeg| 1) (EQ |fromPeg| 2))
+(OR (EQ |toPeg| 0) (EQ |toPeg| 1) (EQ |toPeg| 2))
+(NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1))) (NEQ (select (select elems (select |diskLocation| |this|)) |i|) |fromPeg|))))
+(EQ (|java-&| |fromPeg| |toPeg|) 0)
+(NEQ |fromPeg| |toPeg|)
+===========================================================================
+six170.Hanoi.moveDisk(int, int):::EXIT
+(EQ (hash (select |diskLocation| |this|)) (hash (select |diskLocation| |__orig__this|)))
+(EQ (select |height| |this|) (select |height| |__orig__this|))
+(EQ (select |height| |this|) (arrayLength (select |diskLocation| |__orig__this|)))
+(EQ (select |noOutput| |this|) (select |noOutput| |__orig__this|))
+(EQ (select |noOutput| |this|) |@true|)
+(NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1))) (NEQ (select (select elems (select |diskLocation| |this|)) |i|) |__orig__toPeg|))))
+===========================================================================
+six170.Hanoi.moveTower(int, int, int):::ENTER
+(EQ |fromPeg| (select (select elems (select |diskLocation| |this|)) (- |towerHeight| 1)))
+(EQ (select |noOutput| |this|) |@true|)
+(OR (EQ |fromPeg| 0) (EQ |fromPeg| 1) (EQ |fromPeg| 2))
+(OR (EQ |toPeg| 0) (EQ |toPeg| 1) (EQ |toPeg| 2))
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |towerHeight| 1)) (<= 0 |j|) (<= |j| (- |towerHeight| 1)) (EQ (+ |i| 1) |j|)) (EQ (select (select elems (select |diskLocation| |this|)) |i|) (select (select elems (select |diskLocation| |this|)) |j|))))
+(>= (select |height| |this|) |towerHeight|)
+(FORALL (|i|) (IMPLIES (AND (<= |towerHeight| |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1))) (<= (select (select elems (select |diskLocation| |this|)) |i|) (select |height| |this|))))
+(EQ (|java-&| |fromPeg| |toPeg|) 0)
+(NEQ |fromPeg| |toPeg|)
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |towerHeight| 1))) (EQ (select (select elems (select |diskLocation| |this|)) |i|) |fromPeg|)))
+===========================================================================
+six170.Hanoi.moveTower(int, int, int):::EXIT
+(EQ (hash (select |diskLocation| |this|)) (hash (select |diskLocation| |__orig__this|)))
+(EQ (select |height| |this|) (select |height| |__orig__this|))
+(EQ (select |height| |this|) (arrayLength (select |diskLocation| |__orig__this|)))
+(EQ (select |noOutput| |this|) (select |noOutput| |__orig__this|))
+(EQ |__orig__fromPeg| (select (select elems (select |diskLocation| |__orig__this|)) (- |towerHeight| 1)))
+(EQ |__orig__toPeg| (select (select elems (select |diskLocation| |this|)) (- |__orig__towerHeight| 1)))
+(FORALL (|i| |j|) (IMPLIES (AND (<= |__orig__towerHeight| |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1)) (<= |towerHeight| |j|) (<= |j| (- (arrayLength (select |diskLocation| |__orig__this|)) 1)) (EQ (- |i| |__orig__towerHeight|) (- |j| |towerHeight|))) (EQ (select (select elems (select |diskLocation| |this|)) |i|) (select (select elems (select |diskLocation| |__orig__this|)) |j|))))
+(FORALL (|i| |j|) (IMPLIES (AND (<= |__orig__towerHeight| |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1)) (<= |__orig__towerHeight| |j|) (<= |j| (- (arrayLength (select |diskLocation| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |diskLocation| |this|)) |i|) (select (select elems (select |diskLocation| |__orig__this|)) |j|))))
+(EQ (select |noOutput| |this|) |@true|)
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |__orig__towerHeight| 1)) (<= 0 |j|) (<= |j| (- |__orig__towerHeight| 1)) (EQ (+ |i| 1) |j|)) (EQ (select (select elems (select |diskLocation| |this|)) |i|) (select (select elems (select |diskLocation| |this|)) |j|))))
+(>= (select |height| |this|) |__orig__towerHeight|)
+(FORALL (|i|) (IMPLIES (AND (<= |__orig__towerHeight| |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1))) (<= (select (select elems (select |diskLocation| |this|)) |i|) (select |height| |this|))))
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- |__orig__towerHeight| 1))) (EQ (select (select elems (select |diskLocation| |this|)) |i|) |__orig__toPeg|)))
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::ENTER
+(OR (EQ |pegA| 0) (EQ |pegA| 1) (EQ |pegA| 2))
+(OR (EQ |pegB| 0) (EQ |pegB| 1) (EQ |pegB| 2))
+(EQ (|java-&| |pegA| |pegB|) 0)
+(NEQ |pegA| |pegB|)
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT65
+(EQ |return| 2)
+(EQ |__orig__pegA| 0)
+(EQ |__orig__pegB| 1)
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT66
+(EQ |return| 2)
+(EQ |__orig__pegA| 1)
+(EQ |__orig__pegB| 0)
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT67
+(EQ |return| 1)
+(EQ |__orig__pegA| 0)
+(EQ |__orig__pegB| 2)
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT68
+(EQ |return| 1)
+(EQ |__orig__pegA| 2)
+(EQ |__orig__pegB| 0)
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT69
+(EQ |return| 0)
+(EQ |__orig__pegA| 1)
+(EQ |__orig__pegB| 2)
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT70
+(EQ |return| 0)
+(EQ |__orig__pegA| 2)
+(EQ |__orig__pegB| 1)
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT
+(OR (EQ |return| 0) (EQ |return| 1) (EQ |return| 2))
+(EQ (|java-&| |return| |__orig__pegA|) 0)
+(NEQ |return| |__orig__pegA|)
+(EQ (|java-&| |return| |__orig__pegB|) 0)
+(NEQ |return| |__orig__pegB|)
+(EQ 0 (+ (+ |return| |__orig__pegA| |__orig__pegB|) -3))
+===========================================================================
+six170.Hanoi.showTowers():::ENTER
+(EQ (select |noOutput| |this|) |@true|)
+===========================================================================
+six170.Hanoi.showTowers():::EXIT
+(EQ (hash (select |diskLocation| |this|)) (hash (select |diskLocation| |__orig__this|)))
+(FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |diskLocation| |this|)) 1)) (<= 0 |j|) (<= |j| (- (arrayLength (select |diskLocation| |__orig__this|)) 1)) (EQ |i| |j|)) (EQ (select (select elems (select |diskLocation| |this|)) |i|) (select (select elems (select |diskLocation| |__orig__this|)) |j|))))
+(EQ (select |height| |this|) (select |height| |__orig__this|))
+(EQ (select |height| |this|) (arrayLength (select |diskLocation| |__orig__this|)))
+(EQ (select |noOutput| |this|) (select |noOutput| |__orig__this|))
+(EQ (select |noOutput| |this|) |@true|)

@@ -1,0 +1,200 @@
+package MapQuick1;
+
+import MapQuick.*;
+import java.util.*;
+import junit.framework.Assert;
+
+/**
+ * Graph represents a mutable, directed graph.
+ *
+ * @specfield  nodes : set                      // the nodes in this Graph
+ * @specfield  edges : binary relation on nodes // the pairs of adjacent nodes in this Graph
+ * @endspec
+ * <p>
+ *
+ * The equality of the nodes stored in this graph, as determined by
+ * their equals(Object) method, must not change while the node is in
+ * the Graph.
+ **/
+public class Graph
+{
+
+  /*@ invariant this.adjMap != null; */
+  /**
+   * @effects Creates a new, empty Graph
+   **/
+  public Graph()
+  {
+    adjMap = new LinkedHashMap();
+    checkRep();
+  }
+
+  // Object -> Set[Object]
+  /*@ spec_public */ private final LinkedHashMap adjMap;
+
+  public void checkRep()
+  {
+    Iterator nodes = adjMap.keySet().iterator();
+    while (nodes.hasNext()) {
+      Object node = nodes.next();
+      Assert.assertNotNull(node);
+      Set childrenSet = (Set) adjMap.get(node);
+      Assert.assertNotNull(childrenSet);
+      Iterator children = childrenSet.iterator();
+      while (children.hasNext()) {
+	Object child = children.next();
+	Assert.assertNotNull(child);
+	Assert.assertTrue(adjMap.containsKey(child));
+      }
+    }
+  }
+
+  /*@ requires node != null; */
+  /*@ requires \typeof(node) == \type(MapQuick1.GeoSegment); */
+  /**
+   * @requires node != null
+   * @modifies this.nodes
+   * @effects adds the node to this.nodes
+   * @throws DuplicateNodeException if node is already in in this.nodes
+   **/
+  public void addNode(Object node) throws DuplicateNodeException
+  {
+    Assert.assertNotNull(node);
+    checkRep();
+
+    if (adjMap.containsKey(node))
+      throw new DuplicateNodeException(node.toString());
+
+    adjMap.put(node, new LinkedHashSet(4));
+
+    checkRep();
+  }
+
+  /*@ requires node != null; */
+  /*@ requires \typeof(node) == \type(MapQuick1.GeoSegment); */
+  /**
+   * @requires node != null
+   * @returns true iff node in this.nodes
+   **/
+  public boolean containsNode(Object node)
+  {
+    return adjMap.containsKey(node);
+  }
+
+  /*@ modifies this.adjMap; */
+  /**
+   * @requires node != null
+   * @returns an immutable view of the nodes in this.
+   * Changes which are made to the graph are reflected in this view.
+   **/
+  public Set nodeSet()
+  {
+    // ESC can't handle the Collections class from JDK1.3
+    return adjMap.keySet(); // Collections.unmodifiableSet(adjMap.keySet());
+  }
+
+  /*@ requires node != null; */
+  /*@ requires \typeof(node) == \type(MapQuick1.GeoSegment); */
+  /*@ ensures \result != null; */
+  /*@ ensures \typeof(\result) == \type(java.util.LinkedHashSet); */
+  /*@ ensures \typeof(\result) != \old(\typeof(node)); */
+  /**
+   * @requires node != null
+   * @returns a reference to the adjacency list for the given node
+   *          (which then may be mutated directly)
+   * @throws NoNodeException if node not in this.nodes
+   **/
+  private Set adjTo(Object node) throws NoNodeException
+  {
+    Assert.assertNotNull(node);
+    Set result = (Set) adjMap.get(node);
+    // //@ assume result.elementType == \type(Object);
+    if (result == null) throw new NoNodeException(node.toString());
+    return result;
+  }
+
+  /*@ requires from != null; */
+  /*@ requires \typeof(from) == \type(MapQuick1.GeoSegment); */
+  /*@ requires to != null; */
+  /*@ requires \typeof(from) == \typeof(to); */
+  /**
+   * @requires from, to != null
+   * @modifies this.edges
+   * @effects adds an edge from "from" to "to"
+   * @throws NoNodeException if from or to not in this.nodes
+   * @throws DuplicateEdgeException if (from, to) already in this.edges
+   **/
+  public void addEdge(Object from, Object to) throws NoNodeException, DuplicateEdgeException
+  {
+    Assert.assertNotNull(from);
+    Assert.assertNotNull(to);
+    checkRep();
+
+    Set adj = adjTo(from);
+    if (!this.containsNode(to))
+      throw new NoNodeException(to.toString());
+
+    if (adj.contains(to))
+      throw new DuplicateEdgeException("(" + from + "," + to + ")");
+
+    adj.add(to);
+
+    checkRep();
+  }
+
+  /*@ requires node != null; */
+  /*@ requires \typeof(node) == \type(MapQuick1.GeoSegment); */
+  /*@ ensures \result != null; */
+  /*@ ensures \typeof(\result) == \type(java.util.LinkedHashSet); */
+  /*@ ensures \typeof(\result) != \old(\typeof(node)); */
+  /**
+   * @requires node != null
+   * @returns an immutable view of the children of the given node.
+   * Changes which are made to the graph are reflected in this view.
+   * @thows NoNodeException if node not in this.nodes
+   **/
+  public Collection childrenOf(Object node) throws NoNodeException
+  {
+    Assert.assertNotNull(node);
+    checkRep();
+
+    Set adj = adjTo(node);
+    // ESC can't handle the Collections class from JDK1.3
+    Collection result = adj; // Collections.unmodifiableCollection(adj);
+
+    checkRep();
+    return result;
+  }
+
+  // ==================== Exceptions ====================
+
+  public abstract class GraphException
+    extends RuntimeException
+  {
+    public GraphException() { }
+    public GraphException(String s) { super(s); }
+    /** @return the Graph which caused this exception */
+    public Graph getGraph() { return Graph.this; }
+  }
+
+  public class DuplicateNodeException
+    extends GraphException
+  {
+    public DuplicateNodeException() { }
+    public DuplicateNodeException(String s) { super(s); }
+  }
+
+  public class NoNodeException
+    extends GraphException
+  {
+    public NoNodeException() { }
+    public NoNodeException(String s) { super(s); }
+  }
+
+  public class DuplicateEdgeException
+    extends GraphException
+  {
+    public DuplicateEdgeException() { }
+    public DuplicateEdgeException(String s) { super(s); }
+  }
+}

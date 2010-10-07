@@ -1,0 +1,15 @@
+foo:::ENTER
+this_invocation_nonce
+0
+
+bar:::ENTER
+this_invocation_nonce
+1
+
+bar:::EXIT
+this_invocation_nonce
+1
+
+foo:::EXIT
+this_invocation_nonce
+0

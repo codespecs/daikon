@@ -1,0 +1,37 @@
+..bar():::ENTER
+actualB actualB.dynamicIntArray actualB.dynamicIntArray[..]
+actualB.dynamicString
+actualB.number
+actualB.staticIntArray
+actualB.staticIntArray[..]
+actualB.staticString
+
+..bar():::EXIT0
+actualB actualB.dynamicIntArray actualB.dynamicIntArray[..]
+actualB.dynamicString
+actualB.number
+actualB.staticIntArray
+actualB.staticIntArray[..]
+actualB.staticString
+
+..foo():::ENTER
+b b->staticIntArray[..]
+b->dynamicIntArray b->dynamicIntArray[..] b[0]
+b->dynamicString
+b->number
+b->staticIntArray
+b->staticString
+
+..foo():::EXIT0
+b b->staticIntArray[..]
+b->dynamicIntArray b->dynamicIntArray[..] b[0]
+b->dynamicString
+b->number
+b->staticIntArray
+b->staticString
+
+..main():::ENTER
+
+..main():::EXIT0
+return
+

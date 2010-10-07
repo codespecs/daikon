@@ -1,0 +1,15 @@
+
+dfej breaks the code, so I have to edit the instrumented source by
+hand.  This is minor.
+
+TODO: Contains one test suite artifact -- containsNode never called to
+return false.
+
+Only warnings are about Set typing requirements - we never set the
+refined types, so ESC goes crazy.  Even saying as much as I can to ESC
+(Set[GeoSegment -> Set]), it still needs to know that the type of the
+inner Set, which I don't know how to say.  It would be nice if ESC
+defaultd to Object for collection types always, and only if you wanted
+to enfore a refined type would it beat on you.
+
+DONE: We also need to annotate JUnit assert to say what it does.

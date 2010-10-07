@@ -1,0 +1,13 @@
+..main():::ENTER
+::globalIntArray ::globalIntArray[..]
+
+..main():::EXIT0
+::globalIntArray ::globalIntArray[..]
+return
+
+..secondFileFunction():::ENTER
+::globalIntArray ::globalIntArray[..]
+
+..secondFileFunction():::EXIT0
+::globalIntArray ::globalIntArray[..]
+

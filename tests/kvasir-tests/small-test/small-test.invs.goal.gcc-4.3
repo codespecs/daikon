@@ -1,0 +1,89 @@
+===========================================================================
+..baa():::ENTER
+2 * a - b + 3 == 0
+a < b
+===========================================================================
+..baa():::EXIT
+===========================================================================
+..bab():::ENTER
+(a == 0) ==> (b == 0)
+(b == 0) ==> (a == 0)
+a <= b
+b == a**2
+===========================================================================
+..bab():::EXIT
+===========================================================================
+..bac():::ENTER
+a - b + 3 == 0
+===========================================================================
+..bac():::EXIT
+===========================================================================
+..bar():::ENTER
+f has only one value
+f[] contains no nulls and has only one value, of length 1
+f[].a == [1]
+f[].b == [2]
+===========================================================================
+..bar():::EXIT
+f[] == orig(f[])
+f[].a == orig(f[].a)
+f[].b == orig(f[].b)
+f[] contains no nulls and has only one value, of length 1
+f[].a == [1]
+f[].b == [2]
+===========================================================================
+..baz():::ENTER
+n has only one value
+n[] contains no nulls and has only one value, of length 1
+n[].b == [2]
+n[].next contains no nulls and has only one value, of length 1
+n[].next->b == [2]
+n[].next->next == [null]
+n[].next->prev contains no nulls and has only one value, of length 1
+n[].next->prev[0] contains no nulls and has only one value, of length 1
+n[].next[0] contains no nulls and has only one value, of length 1
+n[].prev == [null]
+===========================================================================
+..baz():::EXIT
+n[] == orig(n[])
+n[].b == orig(n[].b)
+n[].next == orig(n[].next)
+n[].next->b == orig(n[].next->b)
+n[].next->next == orig(n[].next->next)
+n[].next->prev == orig(n[].next->prev)
+n[].next->prev[0] == orig(n[].next->prev[0])
+n[].next[0] == orig(n[].next[0])
+n[].prev == orig(n[].prev)
+n[] contains no nulls and has only one value, of length 1
+n[].b == [2]
+n[].next contains no nulls and has only one value, of length 1
+n[].next->b == [2]
+n[].next->next == [null]
+n[].next->prev contains no nulls and has only one value, of length 1
+n[].next->prev[0] contains no nulls and has only one value, of length 1
+n[].next[0] contains no nulls and has only one value, of length 1
+n[].prev == [null]
+===========================================================================
+..caa():::ENTER
+a - b + 2 == 0
+(a == 0) ==> (c == 0)
+(c == 0) ==> (a == 0)
+a <= c
+c % b == 0
+a == (c / b)
+c == (a * b)
+===========================================================================
+..caa():::EXIT
+===========================================================================
+..cab():::ENTER
+a - b + 3 == 0
+2 * a - c + 3 == 0
+a < c
+2 * b - c - 3 == 0
+b <= c
+a == (c % b)
+===========================================================================
+..cab():::EXIT
+===========================================================================
+..main():::EXIT
+return == 0

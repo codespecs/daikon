@@ -1,0 +1,90 @@
+package checkers.nullness.quals:
+annotation @Nullable:
+annotation @NonNull:
+
+package javautil:
+class Vector : // 42090/42090 obj/class samples
+  field serialVersionUID :  // long
+  field elementData :  // java.lang.Object[]
+  field elementCount :  // int
+  field capacityIncrement :  // int
+  method <init>() : // 5 samples
+    return: 
+  method <init>(I) : // 325 samples
+    return: 
+    parameter #0 :  // initialCapacity
+  method <init>(II) : // 1850 samples
+    return: 
+    parameter #0 :  // initialCapacity
+    parameter #1 :  // capacityIncrement
+  method addElement(Ljava/lang/Object;) : // 3890 samples
+    return: 
+    parameter #0 : @Nullable  // obj
+  method capacity() : // 0 samples
+    return: 
+  method clone() : // 150 samples
+    return: 
+  method contains(Ljava/lang/Object;) : // 300 samples
+    return: 
+    parameter #0 :  // elem
+  method copyInto([Ljava/lang/Object;) : // 450 samples
+    return: 
+    parameter #0 :  // anArray
+  method elementAt(I) : // 375 samples
+    return: @Nullable 
+    parameter #0 :  // index
+  method elements() : // 300 samples
+    return: 
+  method ensureCapacity(I) : // 900 samples
+    return: 
+    parameter #0 :  // minCapacity
+  method ensureCapacityHelper(I) : // 1450 samples
+    return: 
+    parameter #0 :  // minCapacity
+  method firstElement() : // 125 samples
+    return: @Nullable 
+  method indexOf(Ljava/lang/Object;) : // 900 samples
+    return: 
+    parameter #0 :  // elem
+  method indexOf(Ljava/lang/Object;I) : // 5700 samples
+    return: 
+    parameter #0 :  // elem
+    parameter #1 :  // index
+  method insertElementAt(Ljava/lang/Object;I) : // 150 samples
+    return: 
+    parameter #0 : @Nullable  // obj
+    parameter #1 :  // index
+  method isEmpty() : // 150 samples
+    return: 
+  method lastElement() : // 125 samples
+    return: @Nullable 
+  method lastIndexOf(Ljava/lang/Object;) : // 750 samples
+    return: 
+    parameter #0 :  // elem
+  method lastIndexOf(Ljava/lang/Object;I) : // 2625 samples
+    return: 
+    parameter #0 :  // elem
+    parameter #1 :  // index
+  method removeAllElements() : // 150 samples
+    return: 
+  method removeElement(Ljava/lang/Object;) : // 150 samples
+    return: 
+    parameter #0 :  // obj
+  method removeElementAt(I) : // 190 samples
+    return: 
+    parameter #0 :  // index
+  method setElementAt(Ljava/lang/Object;I) : // 375 samples
+    return: 
+    parameter #0 : @Nullable  // obj
+    parameter #1 :  // index
+  method setSize(I) : // 150 samples
+    return: 
+    parameter #0 :  // newSize
+  method size() : // 300 samples
+    return: 
+  method toString() : // 150 samples
+    return: 
+  method trimToSize() : // 150 samples
+    return: 
+
+

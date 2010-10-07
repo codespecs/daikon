@@ -1,0 +1,139 @@
+# Common makefile to the diff tests
+
+# Generates two .inv.gz files from two trace files and a decls file,
+# then compares the .inv.gz using invariant diff.  The ouptut must
+# equal the goal output.  This is done for several different options
+# of Diff.
+
+
+INV ?= ${DAIKONDIR}
+
+# Standard setting of classpath to include everything be correct
+# for both Windows, Mac, and Linux
+include $(INV)/tests/Makefile.classpath
+
+
+PROGRAM := $(notdir $(shell pwd))
+DAIKON := java -Xmx800m daikon.Daikon
+INV_DIFF := java -Xmx800m daikon.diff.Diff
+DAIKON_CLASS?=$(INV)/java/daikon/Daikon.class
+DIFF_CLASS?=$(INV)/java/daikon/diff/Diff.class
+
+INV_FILES := $(PROGRAM)-1.inv.gz $(PROGRAM)-2.inv.gz
+# An output file must satisfy the pattern program%.txt, where the % is
+# the options passed to Diff
+## Must reinstate -a and -ap and -p in V3 as soon as possible.  -MDE 6/10/2003
+# OUTPUT := $(PROGRAM).txt $(PROGRAM)-u.txt $(PROGRAM)-a.txt $(PROGRAM)-p.txt \
+# 	  $(PROGRAM)-e.txt $(PROGRAM)-ap.txt $(PROGRAM)-t.txt \
+# 	  $(PROGRAM)-jt.txt
+OUTPUT := $(PROGRAM).txt $(PROGRAM)-u.txt \
+	  $(PROGRAM)-e.txt $(PROGRAM)-t.txt \
+	  $(PROGRAM)-jt.txt
+# Must be handled differently than OUTPUT, because map files are
+# written instead of textual output
+# 1m2mxor.txt, 2m1mxor.txt, and xorm1m2m2m1.txt should be empty
+# 1m2mxor means (1 - 2) - xor
+# xorm1m2m2m1 means (xor - (1 - 2)) - (2 - 1)
+# unionm1m2m2.txt should be empty
+# unionm1m2m2 means (union - (1 - 2) - 2)
+MAP_OUTPUT := $(PROGRAM)-1m2.txt $(PROGRAM)-2m1.txt $(PROGRAM)-xor.txt \
+	      $(PROGRAM)-union.txt \
+	      $(PROGRAM)-1m2mxor.txt $(PROGRAM)-2m1mxor.txt \
+	      $(PROGRAM)-xorm1m2m2m1.txt \
+	      $(PROGRAM)-unionm1m2m2.txt
+DIFF := $(addsuffix .diff,$(OUTPUT) $(MAP_OUTPUT))
+
+default: summary
+
+.PRECIOUS: $(INV_FILES)
+inv: $(INV_FILES)
+# The strange substitution command is necessary in order to have $(DAIKON_CLASS)
+# as a dependency but still use the other dependencies in the command
+# line (ie, use $^).  The dependencies can't simply be repeated since
+# the % substitutions only work on the dependency line.
+$(INV_FILES): %.inv.gz: %.dtrace.gz $(PROGRAM).decls $(DAIKON_CLASS)
+	@echo "Temporary debugging output in invariants/tests/diff-tests/Makefile.common:  CLASSPATH = ${CLASSPATH}"
+	$(DAIKON) --config ../config.txt --no_text_output -o $@ \
+		$(subst $(DAIKON_CLASS),,$^)
+
+.PRECIOUS: $(OUTPUT)
+output: $(OUTPUT)
+$(OUTPUT): $(PROGRAM)%.txt: $(INV_FILES)
+	$(INV_DIFF) $* $^ > $@
+
+.PRECIOUS: $(MAP_OUTPUT)
+map-output: $(MAP_OUTPUT)
+$(MAP_OUTPUT): $(PROGRAM)-%.txt: $(PROGRAM)-%.map
+	$(INV_DIFF) $< > $@
+
+$(PROGRAM)-1m2.map: $(INV_FILES)
+	$(INV_DIFF) -m -o $@ $^
+
+$(PROGRAM)-2m1.map: $(INV_FILES)
+# Reverse the order of the arguments to diff
+	$(INV_DIFF) -m -o $@ \
+	  $(shell perl -e 'print $$ARGV[1]," ",$$ARGV[0]' $^)
+
+$(PROGRAM)-xor.map: $(INV_FILES)
+	$(INV_DIFF) -x -o $@ $^
+
+$(PROGRAM)-union.map: $(INV_FILES)
+	$(INV_DIFF) -n -o $@ $^
+
+$(PROGRAM)-1m2mxor.map: $(PROGRAM)-1m2.map $(PROGRAM)-xor.map
+	$(INV_DIFF) -m -o $@ $^
+
+$(PROGRAM)-2m1mxor.map: $(PROGRAM)-2m1.map $(PROGRAM)-xor.map
+	$(INV_DIFF) -m -o $@ $^
+
+$(PROGRAM)-xorm1m2.map: $(PROGRAM)-xor.map $(PROGRAM)-1m2.map
+	$(INV_DIFF) -m -o $@ $^
+
+$(PROGRAM)-xorm1m2m2m1.map: $(PROGRAM)-xorm1m2.map $(PROGRAM)-2m1.map
+	$(INV_DIFF) -m -o $@ $^
+
+$(PROGRAM)-unionm1m2.map: $(PROGRAM)-union.map $(PROGRAM)-1m2.map
+	$(INV_DIFF) -m -o $@ $^
+
+$(PROGRAM)-unionm1m2m2.map: $(PROGRAM)-unionm1m2.map $(PROGRAM)-2.inv.gz
+	$(INV_DIFF) -m -o $@ $^
+
+
+.PRECIOUS: $(DIFF)
+diff: $(DIFF)
+$(DIFF): %.diff: %.goal %
+	diff -u --strip-trailing-cr $^ > $@ || true
+
+.PHONY: update-goals
+update-goals: $(OUTPUT) $(MAP_OUTPUT)
+	for file in $(OUTPUT) $(MAP_OUTPUT); do cp -pf $$file $$file.goal; rm -f $$file.diff; done
+
+.PHONY: summary
+summary: $(DIFF)
+	@for file in $(subst .diff,,$(DIFF)); do \
+	  if [ -s $$file.diff ]; then \
+	    echo "FAILED  $$file"; \
+	  else \
+	    echo "OK      $$file"; \
+	  fi; \
+	done
+
+.PHONY: results
+results: summary
+
+.PHONY: clean
+clean:
+	rm -f $(INV_FILES) $(OUTPUT) $(MAP_OUTPUT) $(DIFF) *.map
+
+.PHONY: clean-output
+clean-output:
+	rm -f $(OUTPUT) $(MAP_OUTPUT) $(DIFF) *map
+
+.PHONY: showvars
+showvars:
+	@echo "CLASSPATH = $(CLASSPATH)"
+
+
+### Local Variables:
+### mode: makefile
+### End:

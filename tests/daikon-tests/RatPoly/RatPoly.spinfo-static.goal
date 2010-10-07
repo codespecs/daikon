@@ -1,0 +1,290 @@
+PPT_NAME PolyCalc.RatPoly.RatPoly
+c != 0
+orig(c != 0)
+
+PPT_NAME PolyCalc.RatPoly.add
+i<p.terms.size()
+orig(i<p.terms.size())
+orig(p.isNaN())
+orig(this.isNaN())
+p.isNaN()
+this.isNaN()
+
+PPT_NAME PolyCalc.RatPoly.appendTerm
+!c.equals(new RatNum(1))
+c.equals(new RatNum(0))
+e != 0
+e != 1
+e == 0 || !c.equals(new RatNum(1))
+orig(!c.equals(new RatNum(1)))
+orig(c.equals(new RatNum(0)))
+orig(e != 0)
+orig(e != 1)
+orig(e == 0 || !c.equals(new RatNum(1)))
+
+PPT_NAME PolyCalc.RatPoly.assertSorted
+i<v.size()
+orig(i<v.size())
+
+PPT_NAME PolyCalc.RatPoly.checkRep
+i < terms.size()
+orig(i < terms.size())
+
+PPT_NAME PolyCalc.RatPoly.coeff
+i<terms.size()
+orig(i<terms.size())
+orig(t.expt == deg)
+t.expt == deg
+
+PPT_NAME PolyCalc.RatPoly.containsNaN
+false
+i<vec.size()
+orig(false)
+orig(i<vec.size())
+orig(term.coeff.equals(RatNum.parse("NaN")))
+orig(true)
+term.coeff.equals(RatNum.parse("NaN"))
+true
+
+PPT_NAME PolyCalc.RatPoly.degree
+orig(terms.size()> 0)
+terms.size()> 0
+
+PPT_NAME PolyCalc.RatPoly.div
+orig(this.isNaN()|| p.isNaN()|| p.unparse().equals((new RatPoly()).unparse()))
+this.isNaN()|| p.isNaN()|| p.unparse().equals((new RatPoly()).unparse())
+
+PPT_NAME PolyCalc.RatPoly.divAndRem
+!q_k.equals(new RatNum(0))
+!quotient.mul(p).add(remainder).unparse().equals(this.unparse())
+j>=k
+k >= 0
+orig(!q_k.equals(new RatNum(0)))
+orig(!quotient.mul(p).add(remainder).unparse().equals(this.unparse()))
+orig(j>=k)
+orig(k >= 0)
+orig(r_Terms.size()> 0)
+orig(t.expt >= n)
+r_Terms.size()> 0
+t.expt >= n
+
+PPT_NAME PolyCalc.RatPoly.eval
+i<terms.size()
+orig(i<terms.size())
+
+PPT_NAME PolyCalc.RatPoly.findTermIndex
+i<ts.size()
+orig(i<ts.size())
+orig(t.expt < expt)
+orig(t.expt == expt)
+t.expt < expt
+t.expt == expt
+
+PPT_NAME PolyCalc.RatPoly.hintedGet
+i < ts.size()
+ith.expt == expt
+orig(i < ts.size())
+orig(ith.expt == expt)
+
+PPT_NAME PolyCalc.RatPoly.incremExpt
+i<vec.size()
+orig(i<vec.size())
+
+PPT_NAME PolyCalc.RatPoly.isNaN
+false
+i<terms.size()
+orig(false)
+orig(i<terms.size())
+orig(terms.get(i).coeff.isNaN())
+orig(true)
+terms.get(i).coeff.isNaN()
+true
+
+PPT_NAME PolyCalc.RatPoly.mul
+i<this.terms.size()
+orig(i<this.terms.size())
+orig(p.isNaN())
+orig(this.isNaN())
+p.isNaN()
+this.isNaN()
+
+PPT_NAME PolyCalc.RatPoly.parse
+!coeff.equals(new RatNum(0))
+c1.equals("x")
+nextTermIsNegative
+numberStrings.hasMoreTokens()
+numberStrings.hasMoreTokens()
+numberStrings.hasMoreTokens()
+orig(!coeff.equals(new RatNum(0)))
+orig(c1.equals("x"))
+orig(nextTermIsNegative)
+orig(numberStrings.hasMoreTokens())
+orig(numberStrings.hasMoreTokens())
+orig(numberStrings.hasMoreTokens())
+orig(termStrings.hasMoreTokens())
+orig(termToken.equals("+"))
+orig(termToken.equals("-"))
+termStrings.hasMoreTokens()
+termToken.equals("+")
+termToken.equals("-")
+
+PPT_NAME PolyCalc.RatPoly.replaceExpt
+!term.coeff.equals(new RatNum(0))
+!term.coeff.equals(new RatNum(0))
+!term.coeff.equals(new RatNum(0))
+index < ts.size()
+orig(!term.coeff.equals(new RatNum(0)))
+orig(!term.coeff.equals(new RatNum(0)))
+orig(!term.coeff.equals(new RatNum(0)))
+orig(index < ts.size())
+orig(t.expt == term.expt)
+t.expt == term.expt
+
+PPT_NAME PolyCalc.RatPoly.scaleCoeff
+i<vec.size()
+orig(i<vec.size())
+
+PPT_NAME PolyCalc.RatPoly.sortedAdd
+!newTerm.coeff.equals(new RatNum(0))
+!newTerm.coeff.equals(new RatNum(0))
+i<vec.size()
+newCoeffValue.equals(new RatNum(0))
+orig(!newTerm.coeff.equals(new RatNum(0)))
+orig(!newTerm.coeff.equals(new RatNum(0)))
+orig(i<vec.size())
+orig(newCoeffValue.equals(new RatNum(0)))
+orig(rt.expt < newTerm.expt)
+orig(rt.expt == newTerm.expt)
+rt.expt < newTerm.expt
+rt.expt == newTerm.expt
+
+PPT_NAME PolyCalc.RatPoly.sub
+orig(p.isNaN())
+orig(this.isNaN())
+p.isNaN()
+this.isNaN()
+
+PPT_NAME PolyCalc.RatPoly.unparse
+i<terms.size()
+num.equals(new RatNum(0))
+num.isNegative()
+orig(i<terms.size())
+orig(num.equals(new RatNum(0)))
+orig(num.isNegative())
+orig(sb.length()== 0)
+orig(term.coeff.isNegative())
+orig(terms.size()== 0)
+sb.length()== 0
+term.coeff.isNegative()
+terms.size()== 0
+
+REPLACE
+get(int index)
+(RatTerm)wrapped.get(index)
+printDebug()
+"RatTermVec<wrapped:"+this.wrapped+">"
+size()
+wrapped.size()
+toString()
+printDebug()
+
+REPLACE
+debugPrint()
+"Term<coeff:"+this.coeff.unparse()+" expt:"+this.expt+">"
+toString()
+debugPrint()
+
+PPT_NAME PolyCalc.RatTerm.equals
+false
+obj instanceof RatTerm
+orig(false)
+orig(obj instanceof RatTerm)
+orig(this.expt == rt.expt && this.coeff.equals(rt.coeff))
+this.expt == rt.expt && this.coeff.equals(rt.coeff)
+
+REPLACE
+add(RatNum arg)
+new RatNum(this.numer*arg.denom + arg.numer*this.denom, this.denom*arg.denom)
+debugPrint()
+"RatNum<numer:"+this.numer+" denom:"+this.denom+">"
+hashCode()
+this.numer*2 + this.denom*3
+isNaN()
+(denom == 0)
+isNegative()
+(this.denom != 0)&&(this.numer < 0)
+isPositive()
+(this.denom == 0)||(this.numer > 0)
+mul(RatNum arg)
+new RatNum(this.numer*arg.numer, this.denom*arg.denom)
+negate()
+new RatNum(- this.numer , this.denom)
+sub(RatNum arg)
+this.add(arg.negate())
+toString()
+debugPrint()
+
+PPT_NAME PolyCalc.RatNum.RatNum
+d == 0
+denom < 0
+orig(d == 0)
+orig(denom < 0)
+
+PPT_NAME PolyCalc.RatNum.approx
+isNaN()
+orig(isNaN())
+
+PPT_NAME PolyCalc.RatNum.compareTo
+orig(rn.isNaN())
+orig(this.isNaN()&& rn.isNaN())
+orig(this.isNaN())
+rn.isNaN()
+this.isNaN()
+this.isNaN()&& rn.isNaN()
+
+PPT_NAME PolyCalc.RatNum.div
+arg.isNaN()
+orig(arg.isNaN())
+
+PPT_NAME PolyCalc.RatNum.equals
+false
+obj instanceof RatNum
+orig(false)
+orig(obj instanceof RatNum)
+orig(this.isNaN()&& rn.isNaN())
+orig(this.numer == rn.numer && this.denom == rn.denom)
+orig(true)
+this.isNaN()&& rn.isNaN()
+this.numer == rn.numer && this.denom == rn.denom
+true
+
+PPT_NAME PolyCalc.RatNum.gcd
+b != 0
+b == 0
+orig(b != 0)
+orig(b == 0)
+
+PPT_NAME PolyCalc.RatNum.isNaN
+(denom == 0)
+orig((denom == 0))
+
+PPT_NAME PolyCalc.RatNum.isNegative
+(this.denom != 0)&&(this.numer < 0)
+orig((this.denom != 0)&&(this.numer < 0))
+
+PPT_NAME PolyCalc.RatNum.isPositive
+(this.denom == 0)||(this.numer > 0)
+orig((this.denom == 0)||(this.numer > 0))
+
+PPT_NAME PolyCalc.RatNum.parse
+orig(ratStr.equals("NaN"))
+orig(slashLoc == -1)
+ratStr.equals("NaN")
+slashLoc == -1
+
+PPT_NAME PolyCalc.RatNum.unparse
+denom != 1
+isNaN()
+orig(denom != 1)
+orig(isNaN())
+

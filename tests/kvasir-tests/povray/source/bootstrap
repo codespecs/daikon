@@ -1,0 +1,30 @@
+#!/bin/sh -x
+
+# bootstrap for the source distribution of POV-Ray 3.6 for UNIX
+# Written by Nicolas Calimet <pov4grasp@free.fr>
+# Run this script if configure.ac or any Makefile.am has changed
+
+# The cache directory is no more written thanks to $HOME/.autom4te.cfg:
+#   begin-language: "Autoconf"
+#   args: --no-cache
+#   end-language: "Autoconf"
+
+rm -f config.log config.status
+
+# Create aclocal.m4 for extra automake and autoconf macros.
+# Merge acincludes.m4 with aclocal.m4 .
+aclocal
+
+# Create conf.h.in .
+autoheader --warnings=all
+
+# Create all Makefile.in's from Makefile.am's .
+automake --warnings=all --ignore-deps  ###
+
+# Create configure from configure.ac .
+autoconf --warnings=all
+
+# Small post-fix of 'configure': add --srcdir when using --help=recursive
+sed 's,configure.gnu  --help=recursive,& --srcdir=$ac_srcdir,g' ./configure > ./configure.tmp
+mv ./configure.tmp ./configure
+chmod +x ./configure

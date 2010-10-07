@@ -1,0 +1,210 @@
+# Build a map of MIT and test a few queries
+# Staff version number: $Revision: 1.1 $
+
+created graph campus
+
+# Create the nodes of the graph, which are GeoSegments.  Note that for
+# two-way streets, each segment and it's reverse are added, since
+# travel can occur in two directions
+
+created node MemDrive0: 42361797 -71079295 42360097 -71083996 Memorial_Dr
+added node MemDrive0 to campus
+created node MemDrive0rev: 42360097 -71083996 42361797 -71079295 Memorial_Dr
+added node MemDrive0rev to campus
+created node MemDrive1: 42360097 -71083996 42358941 -71087240 Memorial_Dr
+added node MemDrive1 to campus
+created node MemDrive1rev: 42358941 -71087240 42360097 -71083996 Memorial_Dr
+added node MemDrive1rev to campus
+created node MemDrive2: 42358941 -71087240 42357097 -71092896 Memorial_Dr
+added node MemDrive2 to campus
+created node MemDrive2rev: 42357097 -71092896 42358941 -71087240 Memorial_Dr
+added node MemDrive2rev to campus
+created node MemDrive3: 42357097 -71092896 42353497 -71107296 Memorial_Dr
+added node MemDrive3 to campus
+created node MemDrive3rev: 42353497 -71107296 42357097 -71092896 Memorial_Dr
+added node MemDrive3rev to campus
+created node Main3: 42361797 -71079295 42362297 -71084396 Main_St
+added node Main3 to campus
+created node Main3rev: 42362297 -71084396 42361797 -71079295 Main_St
+added node Main3rev to campus
+created node Main2: 42362297 -71084396 42362597 -71088496 Main_St
+added node Main2 to campus
+created node Main2rev: 42362597 -71088496 42362297 -71084396 Main_St
+added node Main2rev to campus
+created node Main1: 42362597 -71088496 42362697 -71090996 Main_St
+added node Main1 to campus
+created node Main1rev: 42362697 -71090996 42362597 -71088496 Main_St
+added node Main1rev to campus
+created node Main0: 42362697 -71090996 42362997 -71099696 Main_St
+added node Main0 to campus
+created node Main0rev: 42362997 -71099696 42362697 -71090996 Main_St
+added node Main0rev to campus
+created node MassAve2: 42362997 -71099696 42360297 -71095096 Massachusetts_Ave
+added node MassAve2 to campus
+created node MassAve2rev: 42360297 -71095096 42362997 -71099696 Massachusetts_Ave
+added node MassAve2rev to campus
+created node MassAve1: 42360297 -71095096 42358297 -71093396 Massachusetts_Ave
+added node MassAve1 to campus
+created node MassAve1rev: 42358297 -71093396 42360297 -71095096 Massachusetts_Ave
+added node MassAve1rev to campus
+created node MassAve0: 42358297 -71093396 42357097 -71092896 Massachusetts_Ave
+added node MassAve0 to campus
+created node MassAve0rev: 42357097 -71092896 42358297 -71093396 Massachusetts_Ave
+added node MassAve0rev to campus
+created node Vassar0: 42362697 -71090996 42360297 -71095096 Vassar_St
+added node Vassar0 to campus
+created node Vassar0rev: 42360297 -71095096 42362697 -71090996 Vassar_St
+added node Vassar0rev to campus
+created node Vassar1: 42360297 -71095096 42355397 -71104696 Vassar_St
+added node Vassar1 to campus
+created node Vassar1rev: 42355397 -71104696 42360297 -71095096 Vassar_St
+added node Vassar1rev to campus
+created node Vassar2: 42355397 -71104696 42353497 -71107296 Vassar_St
+added node Vassar2 to campus
+created node Vassar2rev: 42353497 -71107296 42355397 -71104696 Vassar_St
+added node Vassar2rev to campus
+created node Amherst1: 42358297 -71093396 42355397 -71104696 Amherst_St
+added node Amherst1 to campus
+created node Amherst1rev: 42355397 -71104696 42358297 -71093396 Amherst_St
+added node Amherst1rev to campus
+created node Amherst0: 42361197 -71084696 42359246 -71087389 Amherst_St
+added node Amherst0 to campus
+created node Amherst0rev: 42359246 -71087389 42361197 -71084696 Amherst_St
+added node Amherst0rev to campus
+created node Wadsworth0: 42362297 -71084396 42361197 -71084696 Wadsworth_St
+added node Wadsworth0 to campus
+created node Wadsworth0rev: 42361197 -71084696 42362297 -71084396 Wadsworth_St
+added node Wadsworth0rev to campus
+created node Wadsworth1: 42361197 -71084696 42360097 -71083996 Wadsworth_St
+added node Wadsworth1 to campus
+created node Wadsworth1rev: 42360097 -71083996 42361197 -71084696 Wadsworth_St
+added node Wadsworth1rev to campus
+created node Ames0: 42362597 -71088496 42359246 -71087389 Ames_St
+added node Ames0 to campus
+created node Ames0rev: 42359246 -71087389 42362597 -71088496 Ames_St
+added node Ames0rev to campus
+created node Ames1: 42359246 -71087389 42358941 -71087240 Ames_St
+added node Ames1 to campus
+
+# Add the edges to the graph.  Each edge represents an allowed turn
+# from one street to another.
+
+added edge from MemDrive0 to MemDrive1 in campus
+added edge from MemDrive0rev to Main3 in campus
+added edge from MemDrive1 to MemDrive2 in campus
+added edge from MemDrive1rev to Wadsworth1rev in campus
+added edge from MemDrive1rev to MemDrive0rev in campus
+added edge from MemDrive2rev to MemDrive1rev in campus
+added edge from MemDrive2 to MemDrive3 in campus
+added edge from MemDrive2 to MassAve0rev in campus
+added edge from MemDrive3 to Vassar2rev in campus
+added edge from Main3rev to MemDrive0 in campus
+added edge from Main3 to Main2 in campus
+added edge from Main3 to Wadsworth0 in campus
+added edge from Main2rev to Main3rev in campus
+added edge from Main2 to Main1 in campus
+added edge from Main2rev to Wadsworth0 in campus
+added edge from Main2 to Ames0 in campus
+added edge from Main1rev to Ames0 in campus
+added edge from Main1rev to Main2rev in campus
+added edge from Main1 to Main0 in campus
+added edge from Main1 to Vassar0 in campus
+added edge from Main0rev to Main1rev in campus
+added edge from Main0 to MassAve2 in campus
+added edge from Main0rev to Vassar0 in campus
+added edge from MassAve2 to MassAve1 in campus
+added edge from MassAve2rev to Main0rev in campus
+added edge from MassAve2 to Vassar0rev in campus
+added edge from MassAve2 to Vassar1 in campus
+added edge from MassAve1rev to MassAve2rev in campus
+added edge from MassAve1 to MassAve0 in campus
+added edge from MassAve1rev to Vassar0rev in campus
+added edge from MassAve1rev to Vassar1 in campus
+added edge from MassAve1 to Amherst1 in campus
+added edge from MassAve0 to MemDrive3 in campus
+added edge from MassAve0rev to Amherst1 in campus
+added edge from MassAve0rev to MassAve1rev in campus
+added edge from Vassar0 to Vassar1 in campus
+added edge from Vassar0rev to Main1rev in campus
+added edge from Vassar0rev to Main0 in campus
+added edge from Vassar0 to MassAve1 in campus
+added edge from Vassar0 to MassAve2rev in campus
+added edge from Vassar1rev to Vassar0rev in campus
+added edge from Vassar1 to Vassar2 in campus
+added edge from Vassar1rev to MassAve1 in campus
+added edge from Vassar1rev to MassAve2rev in campus
+added edge from Vassar1 to Amherst1rev in campus
+added edge from Vassar2rev to Vassar1rev in campus
+added edge from Vassar2rev to Amherst1rev in campus
+added edge from Vassar2 to MemDrive3rev in campus
+added edge from Amherst1rev to MassAve0 in campus
+added edge from Amherst1rev to MassAve1rev in campus
+added edge from Amherst1 to Vassar1rev in campus
+added edge from Amherst1 to Vassar2 in campus
+added edge from Amherst0 to Ames1 in campus
+added edge from Amherst0 to Ames0rev in campus
+added edge from Amherst0rev to Wadsworth0rev in campus
+added edge from Amherst0rev to Wadsworth1 in campus
+added edge from Ames0 to Ames1 in campus
+added edge from Ames0rev to Main2rev in campus
+added edge from Ames0rev to Main1 in campus
+added edge from Ames0 to Amherst0rev in campus
+added edge from Ames1 to MemDrive2 in campus
+added edge from Wadsworth0 to Wadsworth1 in campus
+added edge from Wadsworth0 to Amherst0 in campus
+added edge from Wadsworth0rev to Main2 in campus
+added edge from Wadsworth0rev to Main3rev in campus
+added edge from Wadsworth1 to MemDrive0rev in campus
+added edge from Wadsworth1 to MemDrive1 in campus
+added edge from Wadsworth1rev to Amherst0 in campus
+added edge from Wadsworth1rev to Wadsworth0rev in campus
+
+# Run a handful of queries to lightly test path-finding on paths of
+# GeoSegments.  Note that we often search starting from each street
+# and its reverse, and search to the destination street and its
+# reverse, since you may start out driving in either direction, and
+# may end up driving in either direction.
+
+# MemDrive0 -> Vassar0
+shortest path in campus
+Turn right onto Memorial_Dr and go 0.3 miles.
+Turn sharp left onto Main_St and go 0.6 miles.
+Turn slight left onto Vassar_St and go 0.3 miles.
+
+# Amherst1 -> MassAve0
+shortest path in campus
+Turn right onto Amherst_St and go 0.6 miles.
+Turn right onto Massachusetts_Ave and go 0.1 miles.
+
+# MemDrive0 -> MemDrive3
+shortest path in campus
+Turn left onto Memorial_Dr and go 1.5 miles.
+
+# Ames1 -> MassAve0
+shortest path in campus
+Turn sharp right onto Ames_St and go 0.0 miles.
+Turn right onto Memorial_Dr and go 0.3 miles.
+Turn right onto Massachusetts_Ave and go 0.1 miles.
+
+# Main3 -> MemDrive2
+shortest path in campus
+Turn left onto Main_St and go 0.3 miles.
+Turn left onto Wadsworth_St and go 0.1 miles.
+Turn slight right onto Amherst_St and go 0.2 miles.
+Turn left onto Ames_St and go 0.0 miles.
+Turn right onto Memorial_Dr and go 0.3 miles.
+
+# Wadsworth0 -> Vassar1
+shortest path in campus
+Turn slight right onto Wadsworth_St and go 0.1 miles.
+Turn left onto Main_St and go 0.3 miles.
+Turn slight left onto Vassar_St and go 0.9 miles.
+
+# MemDrive0 -> MemDrive3
+shortest path in campus
+Turn left onto Memorial_Dr and go 1.5 miles.
+
+# MemDrive0 -> Main0
+shortest path in campus
+Turn right onto Memorial_Dr and go 0.3 miles.
+Turn sharp left onto Main_St and go 1.0 miles.

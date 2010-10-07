@@ -1,0 +1,64 @@
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:106: warning: [unchecked] unchecked call to putAll(java.util.Map<? extends K,? extends V>) as a member of the raw type java.util.Hashtable
+      repair.settable.putAll(settable);
+                            ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:107: warning: [unchecked] unchecked call to addAll(java.util.Collection<? extends E>) as a member of the raw type java.util.HashSet
+      repair.usednames.addAll(usednames);
+                             ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:108: warning: [unchecked] unchecked call to putAll(java.util.Map<? extends K,? extends V>) as a member of the raw type java.util.Hashtable
+      repair.relationtable.putAll(relationtable);
+                                 ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:112: warning: [unchecked] unchecked call to putAll(java.util.Map<? extends K,? extends V>) as a member of the raw type java.util.HashMap
+      repair.quantifiers.putAll(quantifiers);
+                               ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:113: warning: [unchecked] unchecked call to putAll(java.util.Map<? extends K,? extends V>) as a member of the raw type java.util.HashMap
+      repair.revquantifiers.putAll(revquantifiers);
+                                  ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:209: warning: [unchecked] unchecked call to put(K,V) as a member of the raw type java.util.Hashtable
+      settable.put(t,setname);
+                  ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:292: warning: [unchecked] unchecked call to put(K,V) as a member of the raw type java.util.Hashtable
+      relationtable.put(t,relationname);
+                       ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:337: warning: [unchecked] unchecked call to put(K,V) as a member of the raw type java.util.Hashtable
+      settable.put(t,setname);
+                  ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:371: warning: [unchecked] unchecked call to put(K,V) as a member of the raw type java.util.HashMap
+        quantifiers.put(q,set);
+                       ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:372: warning: [unchecked] unchecked call to put(K,V) as a member of the raw type java.util.HashMap
+        revquantifiers.put(set,q);
+                          ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:408: warning: [unchecked] unchecked call to put(K,V) as a member of the raw type java.util.Hashtable
+      relationtable.put(t,relationname);
+                       ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:440: warning: [unchecked] unchecked call to put(K,V) as a member of the raw type java.util.Hashtable
+        settable.put(t,setname);
+                    ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:472: warning: [unchecked] unchecked call to put(K,V) as a member of the raw type java.util.Hashtable
+      relationtable.put(t,relationname);
+                       ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:519: warning: [unchecked] unchecked call to put(K,V) as a member of the raw type java.util.Hashtable
+      settable.put(t,setname);
+                  ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:655: warning: [unchecked] unchecked call to add(E) as a member of the raw type java.util.HashSet
+          usednames.add(t);
+                       ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:674: warning: [unchecked] unchecked call to add(E) as a member of the raw type java.util.HashSet
+          usednames.add(t);
+                       ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:801: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: java.util.Hashtable<java.lang.String,java.lang.String>
+        rangetable = (Hashtable<String,String>) rangetable.clone(); // unchecked cast
+                                                                ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/inv/OutputFormat.java:802: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: java.util.HashSet<java.lang.String>
+        globaltable = (HashSet<String>) globaltable.clone(); // unchecked cast
+                                                         ^
+/afs/csail.mit.edu/u/m/mernst/research/invariants/java/daikon/PptSplitter.java:163: warning: [unchecked] unchecked cast
+found   : java.util.ArrayList[]
+required: java.util.ArrayList<daikon.inv.Invariant>[]
+    List<Invariant> suppressed_invs[] = (ArrayList<Invariant>[]) new ArrayList[ppts.length]; // unchecked cast
+                                                                 ^
+19 warnings

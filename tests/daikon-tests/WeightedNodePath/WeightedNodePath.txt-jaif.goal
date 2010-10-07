@@ -1,0 +1,38 @@
+package checkers.nullness.quals:
+annotation @Nullable:
+annotation @NonNull:
+
+package MapQuick:
+class WeightedNodePath : // 1142/- obj/class samples
+  field node :  // MapQuick.WeightedNode
+  field path : @Nullable  // MapQuick.WeightedNodePath
+  field cost :  // int
+  method <init>(LMapQuick/WeightedNode;) : // 32 samples
+    return: 
+    parameter #0 :  // node
+  method <init>(LMapQuick/WeightedNode;LMapQuick/;) : // 160 samples
+    return: 
+    parameter #0 :  // node
+    parameter #1 : @Nullable  // path
+  method cost() : // 103 samples
+    return: 
+  method elements() : // 84 samples
+    return: 
+  method equals(LMapQuick/WeightedNodePath;) : // 0 samples
+    return: 
+    parameter #0 :  // wnp
+  method equals(Ljava/lang/Object;) : // 0 samples
+    return: 
+    parameter #0 :  // o
+  method extend(LMapQuick/WeightedNode;) : // 128 samples
+    return: 
+    parameter #0 :  // node
+  method extend(Ljava/lang/Object;) : // 128 samples
+    return: 
+    parameter #0 :  // o
+  method hashCode() : // 32 samples
+    return: 
+  method toString() : // 0 samples
+    return: 
+
+

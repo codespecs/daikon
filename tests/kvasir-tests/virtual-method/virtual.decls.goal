@@ -1,0 +1,141 @@
+VarComparability
+none
+
+DECLARE
+..main():::ENTER
+argc
+int # isParam=true
+int
+22
+argv
+char** # isParam=true
+hashcode
+22
+argv[]
+char*[]
+java.lang.String[]
+22
+
+DECLARE
+..main():::EXIT0
+argc
+int # isParam=true
+int
+22
+argv
+char** # isParam=true
+hashcode
+22
+argv[]
+char*[]
+java.lang.String[]
+22
+return
+int
+int
+22
+
+DECLARE
+Shape.Shape():::ENTER
+this
+Shape* # isParam=true
+hashcode
+22
+
+DECLARE
+Shape.Shape():::EXIT0
+this
+Shape* # isParam=true
+hashcode
+22
+
+DECLARE
+Shape.compare(Shape*, Shape*):::ENTER
+s1
+Shape* # isParam=true
+hashcode
+22
+s2
+Shape* # isParam=true
+hashcode
+22
+
+DECLARE
+Shape.compare(Shape*, Shape*):::EXIT0
+return
+bool
+boolean
+22
+s1
+Shape* # isParam=true
+hashcode
+22
+s2
+Shape* # isParam=true
+hashcode
+22
+
+DECLARE
+Square.Square():::ENTER
+this
+Square* # isParam=true
+hashcode
+22
+
+DECLARE
+Square.Square():::EXIT0
+this
+Square* # isParam=true
+hashcode
+22
+
+DECLARE
+Square.num_sides():::ENTER
+this
+Square* # isParam=true
+hashcode
+22
+
+DECLARE
+Square.num_sides():::EXIT0
+return
+int
+int
+22
+this
+Square* # isParam=true
+hashcode
+22
+
+DECLARE
+Triangle.Triangle():::ENTER
+this
+Triangle* # isParam=true
+hashcode
+22
+
+DECLARE
+Triangle.Triangle():::EXIT0
+this
+Triangle* # isParam=true
+hashcode
+22
+
+DECLARE
+Triangle.num_sides():::ENTER
+this
+Triangle* # isParam=true
+hashcode
+22
+
+DECLARE
+Triangle.num_sides():::EXIT0
+return
+int
+int
+22
+this
+Triangle* # isParam=true
+hashcode
+22
+

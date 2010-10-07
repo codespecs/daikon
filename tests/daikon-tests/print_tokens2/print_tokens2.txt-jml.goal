@@ -1,0 +1,578 @@
+===========================================================================
+std.get_char(character_stream;)char:::ENTER
+    Variables: ::buffer ::buffer[]
+::buffer != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+===========================================================================
+std.get_char(character_stream;)char:::EXIT
+    Variables: ::buffer ::buffer[] return orig(::buffer) orig(::buffer[])
+::buffer == \old(::buffer)
+::buffer != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result >= -1
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.get_token(token_stream;)token:::ENTER
+    Variables: ::buffer ::buffer[]
+::buffer != null
+(::buffer != null)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable)
+===========================================================================
+std.get_token(token_stream;)token:::EXIT10
+    Variables: ::buffer ::buffer[] return return[] orig(::buffer) orig(::buffer[])
+assignable ::buffer[*]
+::buffer.equals("")
+===========================================================================
+std.get_token(token_stream;)token:::EXIT11
+    Variables: ::buffer ::buffer[] return return[] orig(::buffer) orig(::buffer[])
+assignable ::buffer[*]
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\old(::buffer).equals("") || \old(::buffer).equals("'") || \old(::buffer).equals(")")
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: orig(::buffer[]) is printable
+===========================================================================
+std.get_token(token_stream;)token:::EXIT13
+    Variables: ::buffer ::buffer[] return return[] orig(::buffer) orig(::buffer[])
+assignable ::buffer[*]
+::buffer.equals("")
+===========================================================================
+std.get_token(token_stream;)token:::EXIT7
+    Variables: ::buffer ::buffer[] return return[] orig(::buffer) orig(::buffer[])
+assignable ::buffer[*]
+::buffer.equals("\377")
+(\old(::buffer) != null)  ==>  (::buffer.compareTo(\old(::buffer)) > 0)
+===========================================================================
+std.get_token(token_stream;)token:::EXIT8
+    Variables: ::buffer ::buffer[] return return[] orig(::buffer) orig(::buffer[])
+assignable ::buffer[*]
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: orig(::buffer[]) is printable
+===========================================================================
+std.get_token(token_stream;)token:::EXIT9
+    Variables: ::buffer ::buffer[] return return[] orig(::buffer) orig(::buffer[])
+assignable ::buffer[*]
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+(\old(::buffer) != null)  ==>  (!::buffer.equals(\old(::buffer)))
+===========================================================================
+std.get_token(token_stream;)token:::EXIT
+    Variables: ::buffer ::buffer[] return return[] orig(::buffer) orig(::buffer[])
+assignable ::buffer[*]
+::buffer == \result
+::buffer == \old(::buffer)
+::buffer != null
+::buffer.equals(\result)
+===========================================================================
+std.is_char_constant(token;)int:::ENTER
+    Variables: str str[] ::buffer ::buffer[]
+str != null
+::buffer != null
+===========================================================================
+std.is_char_constant(token;)int:::EXIT38
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: str[] is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 1
+===========================================================================
+std.is_char_constant(token;)int:::EXIT39
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals("") || str.equals("#5") || str.equals("\377")
+::buffer.equals("") || ::buffer.equals("#5") || ::buffer.equals("\377")
+\result == 0
+===========================================================================
+std.is_char_constant(token;)int:::EXIT
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str == \old(str)
+::buffer == \old(::buffer)
+(\result == 0)  ==>  (::buffer.equals("") || ::buffer.equals("#5") || ::buffer.equals("\377"))
+(\result == 0)  ==>  (\result  isPointer)
+(\result == 0)  ==>  (str.equals("") || str.equals("#5") || str.equals("\377"))
+(\result == 1)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable)
+(\result == 1)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: str[] is printable)
+str != null
+::buffer != null
+\result == 0 || \result == 1
+str.equals(\old(str))
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.is_comment(token;)int:::ENTER
+    Variables: ident ident[] ::buffer ::buffer[]
+ident != null
+ident.equals("") || ident.equals("#5") || ident.equals("\377")
+::buffer != null
+::buffer.equals("") || ::buffer.equals("#5") || ::buffer.equals("\377")
+===========================================================================
+std.is_comment(token;)int:::EXIT35
+    Variables: ident ident[] ::buffer ::buffer[] return orig(ident) orig(ident[]) orig(::buffer) orig(::buffer[])
+===========================================================================
+std.is_comment(token;)int:::EXIT
+    Variables: ident ident[] ::buffer ::buffer[] return orig(ident) orig(ident[]) orig(::buffer) orig(::buffer[])
+ident == \old(ident)
+::buffer == \old(::buffer)
+ident != null
+ident.equals("") || ident.equals("#5") || ident.equals("\377")
+::buffer != null
+::buffer.equals("") || ::buffer.equals("#5") || ::buffer.equals("\377")
+\result == 0
+ident.equals(\old(ident))
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.is_eof_token(token;)int:::ENTER
+    Variables: tok tok[] ::buffer ::buffer[]
+tok != null
+::buffer != null
+===========================================================================
+std.is_eof_token(token;)int:::EXIT32
+    Variables: tok tok[] ::buffer ::buffer[] return orig(tok) orig(tok[]) orig(::buffer) orig(::buffer[])
+tok.equals("\377")
+\result == 1
+tok.compareTo(::buffer) >= 0
+===========================================================================
+std.is_eof_token(token;)int:::EXIT33
+    Variables: tok tok[] ::buffer ::buffer[] return orig(tok) orig(tok[]) orig(::buffer) orig(::buffer[])
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: tok[] is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 0
+===========================================================================
+std.is_eof_token(token;)int:::EXIT
+    Variables: tok tok[] ::buffer ::buffer[] return orig(tok) orig(tok[]) orig(::buffer) orig(::buffer[])
+tok == \old(tok)
+::buffer == \old(::buffer)
+(\result == 0)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable)
+(\result == 0)  ==>  (\result  isPointer)
+(\result == 0)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: tok[] is printable)
+(\result == 1)  ==>  (tok.equals("\377"))
+(\result == 1)  ==>  (tok.compareTo(::buffer) >= 0)
+tok != null
+::buffer != null
+\result == 0 || \result == 1
+tok.equals(\old(tok))
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.is_identifier(token;)int:::ENTER
+    Variables: str str[] ::buffer ::buffer[]
+str != null
+::buffer != null
+===========================================================================
+std.is_identifier(token;)int:::EXIT47
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: str[] is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 1
+===========================================================================
+std.is_identifier(token;)int:::EXIT48
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+\result == 0
+===========================================================================
+std.is_identifier(token;)int:::EXIT
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str == \old(str)
+::buffer == \old(::buffer)
+str != null
+::buffer != null
+\result == 0 || \result == 1
+str.equals(\old(str))
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.is_keyword(token;)int:::ENTER
+    Variables: str str[] ::buffer ::buffer[]
+str != null
+::buffer != null
+===========================================================================
+std.is_keyword(token;)int:::EXIT36
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: str[] is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 1
+===========================================================================
+std.is_keyword(token;)int:::EXIT37
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+\result == 0
+===========================================================================
+std.is_keyword(token;)int:::EXIT
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str == \old(str)
+::buffer == \old(::buffer)
+(\result == 0)  ==>  (\result  isPointer)
+(\result == 1)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable)
+(\result == 1)  ==>  (warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: str[] is printable)
+str != null
+::buffer != null
+\result == 0 || \result == 1
+str.equals(\old(str))
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.is_num_constant(token;)int:::ENTER
+    Variables: str str[] ::buffer ::buffer[]
+str != null
+::buffer != null
+===========================================================================
+std.is_num_constant(token;)int:::EXIT41
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: str[] is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 1
+===========================================================================
+std.is_num_constant(token;)int:::EXIT42
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+\result == 0
+===========================================================================
+std.is_num_constant(token;)int:::EXIT
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str == \old(str)
+::buffer == \old(::buffer)
+str != null
+::buffer != null
+\result == 0 || \result == 1
+str.equals(\old(str))
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.is_spec_symbol(token;)int:::ENTER
+    Variables: str str[] ::buffer ::buffer[]
+str != null
+::buffer != null
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT57
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals("(")
+::buffer.equals("") || ::buffer.equals("(")
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 1
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT58
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals(")")
+::buffer.equals("") || ::buffer.equals(")")
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 1
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT59
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals("[")
+::buffer.equals("") || ::buffer.equals("[")
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 1
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT60
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals("]")
+::buffer.equals("") || ::buffer.equals("]")
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 1
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT61
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals("'")
+::buffer.equals("") || ::buffer.equals("'")
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 1
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT62
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals("`")
+::buffer.equals("") || ::buffer.equals("`")
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 1
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT63
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals(",")
+::buffer.equals("") || ::buffer.equals(",")
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 1
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT64
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+\result == 0
+===========================================================================
+std.is_spec_symbol(token;)int:::EXIT
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str == \old(str)
+::buffer == \old(::buffer)
+str != null
+::buffer != null
+\result == 0 || \result == 1
+str.equals(\old(str))
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.is_str_constant(token;)int:::ENTER
+    Variables: str str[] ::buffer ::buffer[]
+str != null
+::buffer != null
+===========================================================================
+std.is_str_constant(token;)int:::EXIT43
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: str[] is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 1
+===========================================================================
+std.is_str_constant(token;)int:::EXIT45
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+\result == 0
+===========================================================================
+std.is_str_constant(token;)int:::EXIT
+    Variables: str str[] ::buffer ::buffer[] return orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str == \old(str)
+::buffer == \old(::buffer)
+str != null
+::buffer != null
+\result == 0 || \result == 1
+str.equals(\old(str))
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.is_token_end(int;char;)int:::ENTER
+    Variables: str_com_id ch ::buffer ::buffer[]
+str_com_id == 0 || str_com_id == 1
+ch != 0
+ch >= -1
+::buffer != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT14
+    Variables: str_com_id ch ::buffer ::buffer[] return orig(str_com_id) orig(ch) orig(::buffer) orig(::buffer[])
+str_com_id == 0
+ch == -1
+\result == 1
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT15
+    Variables: str_com_id ch ::buffer ::buffer[] return orig(str_com_id) orig(ch) orig(::buffer) orig(::buffer[])
+str_com_id == 1
+ch == 34
+\result == 1
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT16
+    Variables: str_com_id ch ::buffer ::buffer[] return orig(str_com_id) orig(ch) orig(::buffer) orig(::buffer[])
+str_com_id == 1
+\result == 0
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT19
+    Variables: str_com_id ch ::buffer ::buffer[] return orig(str_com_id) orig(ch) orig(::buffer) orig(::buffer[])
+str_com_id == 0
+::buffer.equals("")
+\result == 1
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT20
+    Variables: str_com_id ch ::buffer ::buffer[] return orig(str_com_id) orig(ch) orig(::buffer) orig(::buffer[])
+str_com_id == 0
+ch == 32
+::buffer.equals("")
+\result == 1
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT21
+    Variables: str_com_id ch ::buffer ::buffer[] return orig(str_com_id) orig(ch) orig(::buffer) orig(::buffer[])
+str_com_id == 0
+\result == 0
+===========================================================================
+std.is_token_end(int;char;)int:::EXIT
+    Variables: str_com_id ch ::buffer ::buffer[] return orig(str_com_id) orig(ch) orig(::buffer) orig(::buffer[])
+str_com_id == \old(str_com_id)
+ch == \old(ch)
+::buffer == \old(::buffer)
+str_com_id == 0 || str_com_id == 1
+ch != 0
+ch >= -1
+::buffer != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 0 || \result == 1
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.open_character_stream(char *;)character_stream:::ENTER
+    Variables: fname fname[] ::buffer ::buffer[]
+fname == null
+::buffer != null
+===========================================================================
+std.open_character_stream(char *;)character_stream:::EXIT
+    Variables: fname fname[] ::buffer ::buffer[] orig(fname) orig(fname[]) orig(::buffer) orig(::buffer[])
+assignable fname[*], ::buffer[*]
+fname == \old(fname)
+::buffer == \old(::buffer)
+fname == null
+::buffer != null
+===========================================================================
+std.open_token_stream(char *;)token_stream:::ENTER
+    Variables: fname fname[] ::buffer ::buffer[]
+fname != null
+fname.equals("")
+::buffer != null
+===========================================================================
+std.open_token_stream(char *;)token_stream:::EXIT
+    Variables: fname fname[] ::buffer ::buffer[] orig(fname) orig(fname[]) orig(::buffer) orig(::buffer[])
+assignable ::buffer[*]
+fname == \old(fname)
+::buffer == \old(::buffer)
+fname != null
+fname.equals("")
+::buffer != null
+fname.equals(\old(fname))
+===========================================================================
+std.print_spec_symbol(token;)void:::ENTER
+    Variables: str str[] ::buffer ::buffer[]
+str != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: str[] is printable
+::buffer != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT50
+    Variables: str str[] ::buffer ::buffer[] orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals("(")
+::buffer.equals("(")
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT51
+    Variables: str str[] ::buffer ::buffer[] orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals(")")
+::buffer.equals(")")
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT52
+    Variables: str str[] ::buffer ::buffer[] orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals("[")
+::buffer.equals("[")
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT53
+    Variables: str str[] ::buffer ::buffer[] orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals("]")
+::buffer.equals("]")
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT54
+    Variables: str str[] ::buffer ::buffer[] orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals("'")
+::buffer.equals("'")
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT55
+    Variables: str str[] ::buffer ::buffer[] orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals("`")
+::buffer.equals("`")
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT56
+    Variables: str str[] ::buffer ::buffer[] orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str.equals(",")
+::buffer.equals(",")
+===========================================================================
+std.print_spec_symbol(token;)void:::EXIT
+    Variables: str str[] ::buffer ::buffer[] orig(str) orig(str[]) orig(::buffer) orig(::buffer[])
+str == \old(str)
+::buffer == \old(::buffer)
+str != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: str[] is printable
+::buffer != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+str.equals(\old(str))
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.print_token(token;)int:::ENTER
+    Variables: tok tok[] ::buffer ::buffer[]
+tok == ::buffer
+tok != null
+tok.equals(::buffer)
+===========================================================================
+std.print_token(token;)int:::EXIT
+    Variables: tok tok[] ::buffer ::buffer[] return orig(tok) orig(tok[]) orig(::buffer) orig(::buffer[])
+assignable tok, tok[*]
+::buffer == \old(tok)
+::buffer == \old(::buffer)
+tok != null
+::buffer != null
+tok.compareTo(::buffer) >= 0
+::buffer.contains(tok)
+::buffer.equals(\old(tok))
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.token_type(token;)int:::ENTER
+    Variables: tok tok[] ::buffer ::buffer[]
+tok != null
+::buffer != null
+===========================================================================
+std.token_type(token;)int:::EXIT22
+    Variables: tok tok[] ::buffer ::buffer[] return orig(tok) orig(tok[]) orig(::buffer) orig(::buffer[])
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: tok[] is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 1
+===========================================================================
+std.token_type(token;)int:::EXIT23
+    Variables: tok tok[] ::buffer ::buffer[] return orig(tok) orig(tok[]) orig(::buffer) orig(::buffer[])
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: tok[] is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 2
+===========================================================================
+std.token_type(token;)int:::EXIT24
+    Variables: tok tok[] ::buffer ::buffer[] return orig(tok) orig(tok[]) orig(::buffer) orig(::buffer[])
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: tok[] is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 3
+===========================================================================
+std.token_type(token;)int:::EXIT25
+    Variables: tok tok[] ::buffer ::buffer[] return orig(tok) orig(tok[]) orig(::buffer) orig(::buffer[])
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: tok[] is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 41
+===========================================================================
+std.token_type(token;)int:::EXIT26
+    Variables: tok tok[] ::buffer ::buffer[] return orig(tok) orig(tok[]) orig(::buffer) orig(::buffer[])
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: tok[] is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 42
+===========================================================================
+std.token_type(token;)int:::EXIT27
+    Variables: tok tok[] ::buffer ::buffer[] return orig(tok) orig(tok[]) orig(::buffer) orig(::buffer[])
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: tok[] is printable
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 43
+===========================================================================
+std.token_type(token;)int:::EXIT29
+    Variables: tok tok[] ::buffer ::buffer[] return orig(tok) orig(tok[]) orig(::buffer) orig(::buffer[])
+tok.equals("\377")
+::buffer.equals("\377")
+\result == 6
+===========================================================================
+std.token_type(token;)int:::EXIT30
+    Variables: tok tok[] ::buffer ::buffer[] return orig(tok) orig(tok[]) orig(::buffer) orig(::buffer[])
+tok.equals("") || tok.equals("#5")
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: tok[] is printable
+::buffer.equals("") || ::buffer.equals("#5")
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+\result == 0
+===========================================================================
+std.token_type(token;)int:::EXIT
+    Variables: tok tok[] ::buffer ::buffer[] return orig(tok) orig(tok[]) orig(::buffer) orig(::buffer[])
+tok == \old(tok)
+::buffer == \old(::buffer)
+tok != null
+::buffer != null
+\result >= 0
+tok.equals(\old(tok))
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.unget_char(char;character_stream;)char:::ENTER
+    Variables: ch ::buffer ::buffer[]
+ch != 0
+ch >= -1
+::buffer != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+===========================================================================
+std.unget_char(char;character_stream;)char:::EXIT4
+    Variables: ch ::buffer ::buffer[] return orig(ch) orig(::buffer) orig(::buffer[])
+ch == -1
+===========================================================================
+std.unget_char(char;character_stream;)char:::EXIT5
+    Variables: ch ::buffer ::buffer[] return orig(ch) orig(::buffer) orig(::buffer[])
+::buffer.equals("")
+===========================================================================
+std.unget_char(char;character_stream;)char:::EXIT
+    Variables: ch ::buffer ::buffer[] return orig(ch) orig(::buffer) orig(::buffer[])
+ch == \result
+ch == \old(ch)
+::buffer == \old(::buffer)
+(ch >= 39)  ==>  (::buffer.equals(""))
+ch != 0
+ch >= -1
+::buffer != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+::buffer.equals(\old(::buffer))
+===========================================================================
+std.unget_error(token_stream;)int:::ENTER
+    Variables: ::buffer ::buffer[]
+::buffer != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+===========================================================================
+std.unget_error(token_stream;)int:::EXIT
+    Variables: ::buffer ::buffer[] return orig(::buffer) orig(::buffer[])
+::buffer == \old(::buffer)
+::buffer != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::buffer[] is printable
+::buffer.equals(\old(::buffer))

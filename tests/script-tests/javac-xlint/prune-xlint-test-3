@@ -1,0 +1,129 @@
+cd /afs/csail.mit.edu/u/m/mernst/research/invariants/java/myLib/
+make -k xlint
+javac -g -g -J-Xmx800m -Xlint -Xmaxwarns 1000 ./MathMDE.java ./ArraysMDE.java ./Assert.java ./CountingPrintWriter.java ./Digest.java ./FileIOException.java ./Filter.java ./Fmt.java ./FuzzyFloat.java ./Hasher.java ./Intern.java ./MultiRandSelector.java ./OrderedPairIterator.java ./Pair.java ./Partitioner.java ./RandomSelector.java ./Stopwatch.java ./StrTok.java ./TestUtilMDE.java ./UtilMDE.java ./LimitedSizeIntSet.java ./BCELUtil.java ./WeakIdentityHashMap.java ./SimpleLog.java ./FileCompiler.java ./TimeLimitProcess.java ./WeakHasherMap.java ./Triple.java ./NoType.java | prune-xlint.pl
+./ArraysMDE.java:899: warning: [unchecked] unchecked cast
+found   : java.lang.Object[]
+required: T[]
+    T[] result = (T[]) new Object[a.length + b.length]; // unchecked cast
+                       ^
+./ArraysMDE.java:914: warning: [unchecked] unchecked cast
+found   : java.lang.Object[]
+required: T[]
+    if (a == null) return (T[]) b.toArray(); // unchecked cast
+                                         ^
+./ArraysMDE.java:916: warning: [unchecked] unchecked cast
+found   : java.lang.Object[]
+required: T[]
+    T[] result = (T[]) new Object[a.length + b.size()]; // unchecked cast
+                       ^
+./ArraysMDE.java:935: warning: [unchecked] unchecked cast
+found   : java.lang.Object[]
+required: T[]
+    if (b == null) return (T[]) a.toArray(); // unchecked cast
+                                         ^
+./ArraysMDE.java:936: warning: [unchecked] unchecked cast
+found   : java.lang.Object[]
+required: T[]
+    T[] result = (T[]) new Object[a.size() + b.length]; // unchecked cast
+                       ^
+./ArraysMDE.java:954: warning: [unchecked] unchecked cast
+found   : java.lang.Object[]
+required: T[]
+    if (a == null) return (T[]) b.toArray(); // unchecked cast
+                                         ^
+./ArraysMDE.java:955: warning: [unchecked] unchecked cast
+found   : java.lang.Object[]
+required: T[]
+    if (b == null) return (T[]) a.toArray(); // unchecked cast
+                                         ^
+./ArraysMDE.java:956: warning: [unchecked] unchecked cast
+found   : java.lang.Object[]
+required: T[]
+    T[] result = (T[]) new Object[a.size() + b.size()]; // unchecked cast
+                       ^
+./Intern.java:670: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: myLib.Intern.SequenceAndIndices<T>
+      return ((SequenceAndIndices<T>) a1).equals ((SequenceAndIndices<T>) a2); // unchecked cast
+                                                                          ^
+./Intern.java:670: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: myLib.Intern.SequenceAndIndices<T>
+      return ((SequenceAndIndices<T>) a1).equals ((SequenceAndIndices<T>) a2); // unchecked cast
+                                      ^
+./WeakHasherMap.java:163: warning: [unchecked] unchecked conversion
+found   : java.lang.ref.ReferenceQueue
+required: java.lang.ref.ReferenceQueue<? super K>
+	    super(k, q);
+                     ^
+./WeakHasherMap.java:208: warning: [unchecked] unchecked cast
+found   : java.lang.ref.Reference
+required: myLib.WeakHasherMap<K,V>.WeakKey
+	while ((wk = (WeakKey)queue.poll()) != null) { // unchecked cast
+                                        ^
+./WeakHasherMap.java:294: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: K
+	return hash.containsKey(WeakKeyCreate((K)key));
+                                                 ^
+./WeakHasherMap.java:308: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: K
+	return hash.get(WeakKeyCreate((K)key)); // unchecked cast
+                                         ^
+./WeakHasherMap.java:341: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: K
+	return hash.remove(WeakKeyCreate((K)key)); // unchecked cast
+                                            ^
+./WeakHasherMap.java:424: warning: [unchecked] unchecked call to Entry(java.util.Map.Entry<K,V>,K) as a member of the raw type myLib.WeakHasherMap.Entry
+			next = new Entry(ent, k);
+                               ^
+./WeakHasherMap.java:424: warning: [unchecked] unchecked conversion
+found   : myLib.WeakHasherMap.Entry
+required: java.util.Map.Entry<K,V>
+			next = new Entry(ent, k);
+                               ^
+./WeakHasherMap.java:458: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: java.util.Map.Entry<K,V>
+	    Map.Entry<K,V> e = (Map.Entry<K,V>)o;
+                                               ^
+./WeakHasherMap.java:473: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: java.util.Map.Entry<myLib.WeakHasherMap<K,V>.WeakKey,V>
+		Map.Entry<WeakKey,V> ent = (Map.Entry<WeakKey,V>) i.next();
+                                                                        ^
+./OrderedPairIterator.java:77: warning: [unchecked] unchecked cast
+found   : T
+required: java.lang.Comparable<T>
+          comparison = ((Comparable<T>)next1).compareTo(next2); // unchecked cast
+                                       ^
+./WeakIdentityHashMap.java:199: warning: [unchecked] unchecked cast
+found   : myLib.WeakIdentityHashMap.Entry[]
+required: myLib.WeakIdentityHashMap.Entry<K,V>[]
+        table = (Entry<K,V>[]) new Entry[capacity]; // can't create generic array -MDE
+                               ^
+./WeakIdentityHashMap.java:225: warning: [unchecked] unchecked cast
+found   : myLib.WeakIdentityHashMap.Entry[]
+required: myLib.WeakIdentityHashMap.Entry<K,V>[]
+        table = (Entry<K,V>[]) new Entry[DEFAULT_INITIAL_CAPACITY]; // can't create generic array -MDE
+                               ^
+./WeakIdentityHashMap.java:294: warning: [unchecked] unchecked cast
+found   : java.lang.ref.Reference<capture of ? extends K>
+required: myLib.WeakIdentityHashMap.Entry<K,V>
+        while ( (e = (Entry<K,V>) queue.poll()) != null) { // unchecked cast
+                                            ^
+./WeakIdentityHashMap.java:417: warning: [unchecked] unchecked cast
+found   : java.lang.Object
+required: K
+        K k = (K) maskNull(key); // unchecked cast
+                          ^
+./WeakIdentityHashMap.java:461: warning: [unchecked] unchecked cast
+found   : myLib.WeakIdentityHashMap.Entry[]
+required: myLib.WeakIdentityHashMap.Entry<K,V>[]
+        Entry<K,V>[] newTable = (Entry<K,V>[]) new Entry[newCapacity]; // can't make generic arrays -MDE
+                                               ^
+25 warnings
+
+Compilation finished at Sun Sep 25 20:36:02

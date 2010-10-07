@@ -1,0 +1,14 @@
+
+We will never be able to prove the gcd invariant.
+
+All but one of the verified but redundant invariants are that T's rep
+invariant holds on arguments of type T, and on objects returned of
+type T.  In the future, it would be reasonable to say this.
+
+FIXED: This example looks promising, but has a really bad test suite.
+Also, we might consider fixing up the Bound.jpp invariants to use a
+different statistical test, if test suite additions don't fix things.
+
+FIXED: Parse needs a non-null argument (string pointer dfej fixed).
+
+

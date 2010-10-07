@@ -1,0 +1,22 @@
+===========================================================================
+..f():::ENTER
+::global has only one value
+::global[] contains no nulls and has only one value, of length 1
+ppp has only one value
+ppp[] contains no nulls and has only one value, of length 1
+===========================================================================
+..f():::EXIT
+::global == orig(::global)
+::global[] == orig(::global[])
+ppp[] == orig(ppp[])
+::global has only one value
+::global[] contains no nulls and has only one value, of length 1
+ppp[] contains no nulls and has only one value, of length 1
+===========================================================================
+..main():::ENTER
+::global == null
+===========================================================================
+..main():::EXIT
+::global has only one value
+::global[] contains no nulls and has only one value, of length 1
+return == 0

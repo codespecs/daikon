@@ -1,0 +1,10 @@
+daikon-output
+function-pointer
+function-pointer.decls.diff
+function-pointer.dtrace.diff
+function-pointer.out
+function-pointer.out.diff
+ran-kvasir
+function-pointer.invs.diff
+*.counts *.counts.diff
+function-pointer.comp function-pointer.comp.diff

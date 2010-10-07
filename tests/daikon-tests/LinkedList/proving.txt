@@ -1,0 +1,18 @@
+
+The ListNode invariants did not get merged - perhaps the lack of a
+public modifier confused merge-esc.pl.
+
+We get many "pointer != pointer" invariants in the set, I should
+really diable that invariant during EXPERIMENTS.
+
+There are two or three null dereference errors noted by ESC.  To
+remove these, we have to say that the closure of the list (after the
+header) has elements which are all non-null.  I don't know of a
+straightforward way to say this in ESC.  In any case, we do get this
+in Daikon:
+
+  this.header.~next~[].element elements != null
+
+Perhaps the daikon-depth needs to be hight to find this?  If Daikon
+can be made find it, it would be an interesting example for the
+problems section of the paper.

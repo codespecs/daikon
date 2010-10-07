@@ -1,0 +1,80 @@
+===========================================================================
+misc.Param:::OBJECT
+this has only one value
+this.gi1 == 0
+this.gi2 == 5
+this.gs1 has only one value
+this.gs1 != null
+this.gs1.b == 15
+this.gs2 has only one value
+this.gs2 != null
+this.gs2.a == 20
+this.gs2.b == 25
+this.gi1 < this.gs1.a
+this.gi2 < this.gs1.a
+===========================================================================
+misc.Param.Param():::EXIT
+this.gs1.a == 10
+===========================================================================
+misc.Param.main():::ENTER
+this.gs1.a == 10
+===========================================================================
+misc.Param.main():::EXIT
+this.gi1 == orig(this.gi1)
+this.gi2 == orig(this.gi2)
+this.gs1 == orig(this.gs1)
+this.gs1.b == orig(this.gs1.b)
+this.gs2 == orig(this.gs2)
+this.gs2.a == orig(this.gs2.a)
+this.gs2.b == orig(this.gs2.b)
+this.gs1.a == 110
+===========================================================================
+misc.Param.main(java.lang.String[]):::ENTER
+args has only one value
+args.getClass() == java.lang.String[].class
+args[] == []
+===========================================================================
+misc.Param.main(java.lang.String[]):::EXIT
+args[] == []
+===========================================================================
+misc.Param.work(int, int, misc.ParamType, misc.ParamType):::ENTER
+pi1 == this.gi1
+pi2 == this.gi2
+ps1 == this.gs1
+ps1.a == this.gs1.a
+ps1.b == this.gs1.b
+ps2 == this.gs2
+ps2.a == this.gs2.a
+ps2.b == this.gs2.b
+===========================================================================
+misc.Param.work(int, int, misc.ParamType, misc.ParamType):::EXIT
+ps1.a == this.gs1.a
+ps1.b == this.gs1.b
+ps1.b == orig(ps1.b)
+ps1.b == orig(this.gs1.b)
+this.gi1 == orig(pi1)
+this.gi1 == orig(this.gi1)
+this.gi2 == orig(pi2)
+this.gi2 == orig(this.gi2)
+this.gs1 == orig(ps1)
+this.gs1 == orig(this.gs1)
+this.gs2 == orig(ps2)
+this.gs2 == orig(this.gs2)
+this.gs2.a == orig(ps2.a)
+this.gs2.a == orig(this.gs2.a)
+this.gs2.b == orig(ps2.b)
+this.gs2.b == orig(this.gs2.b)
+ps1.b == 15
+ps1.a > this.gi1
+ps1.a > this.gi2
+orig(ps1.a) == ps1.a - 1
+this.gi1 < orig(ps1.a)
+this.gi2 < orig(ps1.a)
+===========================================================================
+misc.ParamType:::OBJECT
+this.a >= 0
+this.b one of { 0, 15, 25 }
+===========================================================================
+misc.ParamType.ParamType():::EXIT
+this.a == this.b
+this.a == 0

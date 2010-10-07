@@ -1,0 +1,200 @@
+package misc;
+
+import java.util.Vector;
+
+// Daikon test by Jesse Smithnosky
+public class Smithnosky {
+
+  /*@ invariant this != null; */
+  /*@ invariant this.b >= 0; */
+  /*@ invariant this.c >= 0; */
+  /*@ invariant this.size == 0 || this.size == 1 || this.size == 2; */
+  /*@ invariant this.s != null; */
+  /*@ invariant this.s != null; */
+  /*@ invariant this.s.containsNull == false; */
+  /*@ invariant this.s.elementType == \type(java.lang.String); */
+  /*@ invariant (this.a == 0) ==> (this.b == 0); */
+  /*@ invariant this.a >= this.b; */
+  /*@ invariant (this.a == 0) ==> (this.c == 0); */
+  /*@ invariant this.a >= this.c; */
+  /*@ invariant (this.a == 0) ==> (this.size == 0); */
+  /*@ invariant this.a >= this.size; */
+  /*@ invariant this.a == (this.size | this.a); */
+  /*@ invariant (this.b == 0) ==> (this.c == 0); */
+  /*@ invariant this.b >= this.c; */
+  /*@ invariant (this.aXb == 0) ==> (this.b == 0); */
+  /*@ invariant this.b <= this.aXb; */
+  /*@ invariant (this.b == 0) ==> (this.size == 0); */
+  /*@ invariant this.b >= this.size; */
+  /*@ invariant this.b == (this.size | this.b); */
+  /*@ invariant (this.aXb == 0) ==> (this.c == 0); */
+  /*@ invariant this.c <= this.aXb; */
+  /*@ invariant this.c <= this.aXc; */
+  /*@ invariant (this.c == 0) ==> (this.size == 0); */
+  /*@ invariant this.c >= this.size; */
+  /*@ invariant this.c == (this.size | this.c); */
+  /*@ invariant (this.aXb == 0) ==> (this.size == 0); */
+  /*@ invariant this.aXb >= this.size; */
+  /*@ invariant this.aXc > this.size; */
+  /*@ invariant 3 * this.a - 3.5 * this.b + 0.5 * this.aXb - 3 == 0; */
+  /*@ invariant 11 * this.a - 11.5 * this.b + 1.5 * this.aXc - 12 == 0; */
+  /*@ invariant 3 * this.a - 3.5 * this.c + 0.5 * this.aXb - 3 == 0; */
+  /*@ invariant 11 * this.a - 11.5 * this.c + 1.5 * this.aXc - 12 == 0; */
+  /*@ invariant 16 * this.a - 3.5 * this.aXb - 0.5 * this.aXc - 12 == 0; */
+  /*@ invariant 3 * this.a + 0.5 * this.aXb - 10.5 * this.size - 3 == 0; */
+  /*@ invariant 3.5 * this.a + this.aXc - 11.5 * this.size - 8 == 0; */
+  /*@ invariant 11 * this.b - 11.5 * this.c + 1.5 * this.aXc - 12 == 0; */
+  /*@ invariant 16 * this.b - 5.5 * this.aXb + 1.5 * this.aXc - 12 == 0; */
+  /*@ invariant 3.5 * this.b + this.aXc - 11.5 * this.size - 8 == 0; */
+  /*@ invariant 16 * this.c - 5.5 * this.aXb + 1.5 * this.aXc - 12 == 0; */
+  /*@ invariant 4.5 * this.c - 0.5 * this.aXb - 9 * this.size - 3 == 0; */
+  /*@ invariant 3.5 * this.c + 0.5 * this.aXc - 11 * this.size - 4 == 0; */
+  /*@ invariant 3.5 * this.aXb + 0.5 * this.aXc - 32 * this.size - 4 == 0; */
+  /*@ spec_public */ private int a;
+  /*@ spec_public */ private int b;
+  /*@ spec_public */ private int c;
+  /*@ spec_public */ private int aXb;
+  /*@ spec_public */ private int aXc;
+  /*@ spec_public */ private int size;
+  /*@ spec_public */ private Vector s;
+
+  /*@ requires a == 2; */
+  /*@ requires b == 3; */
+  /*@ requires c == 4; */
+  /*@ ensures this.a == this.b; */
+  /*@ ensures this.a == this.c; */
+  /*@ ensures this.a == this.size; */
+  /*@ ensures this.aXb == 6; */
+  /*@ ensures this.aXc == 8; */
+  public Smithnosky(int a, int b, int c) {
+    a = a;
+    b = b;
+    c = c;
+    aXb = a*b;
+    aXc = a*c;
+    s = new Vector();
+    /*@ set s.elementType = \type(java.lang.String); */
+    size = 0;
+  }
+
+  /*@ requires this.a == this.b; */
+  /*@ requires this.a == this.c; */
+  /*@ requires this.a == 0 || this.a == 1 || this.a == 2; */
+  /*@ requires this.aXb == 1 || this.aXb == 4 || this.aXb == 6; */
+  /*@ requires this.aXc == 1 || this.aXc == 4 || this.aXc == 8; */
+  /*@ modifies this.a, this.b, this.c, this.aXb, this.aXc, this.size, this.s; */
+  /*@ ensures this.b == this.c; */
+  /*@ ensures this.b == \old(this.a); */
+  /*@ ensures this.b == \old(this.c); */
+  /*@ ensures this.a == 1 || this.a == 2 || this.a == 3; */
+  /*@ ensures this.b == 0 || this.b == 1 || this.b == 2; */
+  /*@ ensures this.aXb == 0 || this.aXb == 2 || this.aXb == 6; */
+  /*@ ensures this.aXc == 1 || this.aXc == 4 || this.aXc == 8; */
+  /*@ ensures this.aXb % this.a == 0; */
+  /*@ ensures (this.a & this.aXc) == 0; */
+  /*@ ensures (this.a & \old(this.aXb)) == 0; */
+  /*@ ensures (this.b == 0) ==> (this.aXb == 0); */
+  public void incA() {
+    a = a + 1;
+    aXb = a*b;
+  }
+
+  /*@ requires this.b == this.c; */
+  /*@ requires this.a == 1 || this.a == 2 || this.a == 3; */
+  /*@ requires this.b == 0 || this.b == 1 || this.b == 2; */
+  /*@ requires this.aXb == 0 || this.aXb == 2 || this.aXb == 6; */
+  /*@ requires this.aXc == 1 || this.aXc == 4 || this.aXc == 8; */
+  /*@ requires this.aXb % this.a == 0; */
+  /*@ requires (this.a & this.aXc) == 0; */
+  /*@ requires (this.b == 0) ==> (this.aXb == 0); */
+  /*@ modifies this.a, this.b, this.c, this.aXb, this.aXc, this.size, this.s; */
+  /*@ ensures this.a == this.b; */
+  /*@ ensures this.c == \old(this.b); */
+  /*@ ensures this.a == 1 || this.a == 2 || this.a == 3; */
+  /*@ ensures this.c == 0 || this.c == 1 || this.c == 2; */
+  /*@ ensures this.aXb == 1 || this.aXb == 4 || this.aXb == 9; */
+  /*@ ensures this.aXc == 1 || this.aXc == 4 || this.aXc == 8; */
+  /*@ ensures this.aXb % this.a == 0; */
+  /*@ ensures this.aXb == this.a**2; */
+  /*@ ensures (this.a & this.aXc) == 0; */
+  /*@ ensures \old(this.aXb) % this.a == 0; */
+  /*@ ensures (this.c & this.aXb) == 0; */
+  /*@ ensures (\old(this.aXb) == 0) ==> (this.c == 0); */
+  /*@ ensures (this.c == 0) ==> (\old(this.aXb) == 0); */
+  /*@ ensures (this.aXb & this.aXc) == 0; */
+  /*@ ensures (this.aXb & \old(this.aXb)) == 0; */
+  public void incB() {
+    b++;
+    aXb = a*b;
+  }
+
+  /*@ requires this.a == this.b; */
+  /*@ requires this.a == 1 || this.a == 2 || this.a == 3; */
+  /*@ requires this.c == 0 || this.c == 1 || this.c == 2; */
+  /*@ requires this.aXb == 1 || this.aXb == 4 || this.aXb == 9; */
+  /*@ requires this.aXc == 1 || this.aXc == 4 || this.aXc == 8; */
+  /*@ requires this.aXb % this.a == 0; */
+  /*@ requires this.aXb == this.a**2; */
+  /*@ requires (this.a & this.aXc) == 0; */
+  /*@ requires (this.c & this.aXb) == 0; */
+  /*@ requires (this.aXb & this.aXc) == 0; */
+  /*@ modifies this.a, this.b, this.c, this.aXb, this.aXc, this.size, this.s; */
+  /*@ ensures this.a == this.b; */
+  /*@ ensures this.a == this.c; */
+  /*@ ensures this.a == \old(this.b); */
+  /*@ ensures this.aXb == this.aXc; */
+  /*@ ensures this.a == 1 || this.a == 2 || this.a == 3; */
+  /*@ ensures this.aXb == 1 || this.aXb == 4 || this.aXb == 9; */
+  /*@ ensures this.aXb % this.a == 0; */
+  /*@ ensures this.aXb == this.a**2; */
+  /*@ ensures (this.a & \old(this.aXc)) == 0; */
+  /*@ ensures (this.aXb & \old(this.c)) == 0; */
+  /*@ ensures (this.aXb & \old(this.aXc)) == 0; */
+  public void incC() {
+    c++;
+    aXc = a*c;
+  }
+
+  /*@ requires this.a == this.b; */
+  /*@ requires this.a == this.c; */
+  /*@ requires this.aXb == this.aXc; */
+  /*@ requires o != null; */
+  /*@ requires \typeof(o) == \type(java.lang.String); */
+  /*@ requires this.a == 3; */
+  /*@ requires this.aXb == 9; */
+  /*@ requires this.size == 0 || this.size == 1; */
+  /*@ requires this.s.elementType == \type(java.lang.String); */
+  /*@ modifies o, this.a, this.b, this.c, this.aXb, this.aXc, this.size, this.s; */
+  /*@ ensures this.a == this.b; */
+  /*@ ensures this.a == this.c; */
+  /*@ ensures this.a == \old(this.b); */
+  /*@ ensures this.a == \old(this.c); */
+  /*@ ensures this.aXb == this.aXc; */
+  /*@ ensures this.aXb == \old(this.aXc); */
+  /*@ ensures this.a == 3; */
+  /*@ ensures this.aXb == 9; */
+  /*@ ensures this.size == 1 || this.size == 2; */
+  /*@ ensures this.s.elementType == \type(java.lang.String); */
+  public void add(Object o) {
+    s.add(o);
+    size++;
+  }
+
+  /*@ requires args != null; */
+  /*@ requires \typeof(args) == \type(java.lang.String[]); */
+  /*@ modifies args, args[*]; */
+  public static void main(String args[]) {
+    Smithnosky myTest = new Smithnosky(2,3,4);
+    myTest.incA();
+    myTest.incB();
+    myTest.incC();
+    myTest.incA();
+    myTest.incB();
+    myTest.incC();
+    myTest.incA();
+    myTest.incB();
+    myTest.incC();
+    myTest.add("A");
+    myTest.add("A");
+  }
+}

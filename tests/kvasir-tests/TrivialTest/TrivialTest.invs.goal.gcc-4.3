@@ -1,0 +1,140 @@
+===========================================================================
+..initBasicTypesStruct():::ENTER
+cp[]->basic1.char_val == cp[]->footer
+cp[]->basic1.int_val == cp[]->footer
+cp[]->basic1.short_val == cp[]->footer
+cp[]->next == cp[]->prev
+::globalDouble == 12345.67890123
+::globalInt == 5555
+::globalLong == 6969696969696969L
+::globalStr == "MR FURLEY\t\nis a good man\rhello\tworld\t\n\n\n\\ \r \r a\r  \\b \\c"
+::globalWkdayA == 4
+a == 3.1415926
+bp has only one value
+bp[] contains no nulls and has only one value, of length 1
+bp[]->char_val == [1]
+bp[]->int_val == [5]
+bp[]->short_val == [3]
+bp[]->uchar_val == [2]
+bp[]->ushort_val == [4]
+bp[][0] contains no nulls and has only one value, of length 1
+c == 96
+cp has only one value
+cp[] contains no nulls and has only one value, of length 1
+cp[]->basic1 contains no nulls and has only one value, of length 1
+cp[]->basic1.uchar_val == [0]
+cp[]->basic1.ushort_val == [0]
+cp[]->basic2 == [null]
+cp[]->day_of_week == [0]
+cp[]->footer == [0]
+cp[]->myString == [null]
+cp[]->next == [null]
+cp[][0] contains no nulls and has only one value, of length 1
+e == 1234567890123456789L
+f == 30000
+===========================================================================
+..initBasicTypesStruct():::EXIT
+::globalDouble == orig(::globalDouble)
+::globalInt == orig(::globalInt)
+::globalLong == orig(::globalLong)
+::globalWkdayA == orig(::globalWkdayA)
+bp[] == cp[]->basic2
+bp[] == return[][0]->basic2
+bp[] == orig(bp[])
+bp[]->char_val == cp[]->basic1.char_val
+bp[]->char_val == return[][0]->basic1.char_val
+bp[]->int_val == cp[]->basic1.int_val
+bp[]->int_val == return[][0]->basic1.int_val
+bp[]->short_val == cp[]->basic1.short_val
+bp[]->short_val == return[][0]->basic1.short_val
+bp[]->uchar_val == cp[]->basic1.uchar_val
+bp[]->uchar_val == return[][0]->basic1.uchar_val
+bp[]->ushort_val == cp[]->basic1.ushort_val
+bp[]->ushort_val == return[][0]->basic1.ushort_val
+bp[][0] == orig(bp[][0])
+cp[] == return[][0]
+cp[] == orig(cp[])
+cp[]->basic1 == orig(cp[]->basic1)
+cp[]->day_of_week == return[][0]->day_of_week
+cp[]->footer == return[][0]->footer
+cp[]->myString == return[][0]->myString
+cp[]->next == cp[]->prev
+cp[]->next == return[][0]->next
+cp[]->next == return[][0]->prev
+cp[]->next == orig(cp[]->next)
+cp[]->next == orig(cp[]->prev)
+cp[][0] == orig(cp[][0])
+::globalDouble == 12345.67890123
+::globalInt == 5555
+::globalLong == 6969696969696969L
+::globalStr == "MR FURLEY\t\nis a good man\rhello\tworld\t\n\n\n\\ \r \r a\r  \\b \\c"
+::globalWkdayA == 4
+bp[] contains no nulls and has only one value, of length 1
+bp[]->char_val == [-42]
+bp[]->int_val == [1234567890]
+bp[]->short_val == [-28000]
+bp[]->uchar_val == [42]
+bp[]->ushort_val == [28000]
+bp[][0] contains no nulls and has only one value, of length 1
+cp[] contains no nulls and has only one value, of length 1
+cp[]->basic1 contains no nulls and has only one value, of length 1
+cp[]->basic2[0] contains no nulls and has only one value, of length 1
+cp[]->day_of_week == [3]
+cp[]->footer == [-123456]
+cp[]->myString contains no nulls and has only one value, of length 1
+cp[]->myString[0] contains no nulls and has only one value, of length 1
+cp[]->myString[0][0] == [MR FURLEY	
+is a good manhello	world	
+
+
+\   a  \b \c]
+cp[]->next == [null]
+cp[][0] contains no nulls and has only one value, of length 1
+return has only one value
+return[] contains no nulls and has only one value, of length 1
+return[][0]->basic1 contains no nulls and has only one value, of length 1
+return[][0]->basic2[0] contains no nulls and has only one value, of length 1
+return[][0]->myString[0] contains no nulls and has only one value, of length 1
+return[][0][0] contains no nulls and has only one value, of length 1
+::globalStr == orig(::globalStr)
+===========================================================================
+..main():::ENTER
+::globalDouble == 12345.67890123
+::globalInt == 5555
+::globalLong == 6969696969696969L
+::globalStr == "MR FURLEY\t\nis a good man\rhello\tworld\t\n\n\n\\ \r \r a\r  \\b \\c"
+::globalWkdayA == 4
+===========================================================================
+..main():::EXIT
+::globalDouble == orig(::globalDouble)
+::globalInt == orig(::globalInt)
+::globalLong == orig(::globalLong)
+::globalWkdayA == orig(::globalWkdayA)
+::globalDouble == 12345.67890123
+::globalInt == 5555
+::globalLong == 6969696969696969L
+::globalStr == "MR FURLEY\t\nis a good man\rhello\tworld\t\n\n\n\\ \r \r a\r  \\b \\c"
+::globalWkdayA == 4
+return == 0
+::globalStr == orig(::globalStr)
+===========================================================================
+..returnWeekday():::ENTER
+::globalDouble == 12345.67890123
+::globalInt == 5555
+::globalLong == 6969696969696969L
+::globalStr == "MR FURLEY\t\nis a good man\rhello\tworld\t\n\n\n\\ \r \r a\r  \\b \\c"
+::globalWkdayA == 4
+day == 5
+===========================================================================
+..returnWeekday():::EXIT
+::globalDouble == orig(::globalDouble)
+::globalInt == orig(::globalInt)
+::globalLong == orig(::globalLong)
+::globalWkdayA == orig(::globalWkdayA)
+::globalDouble == 12345.67890123
+::globalInt == 5555
+::globalLong == 6969696969696969L
+::globalStr == "MR FURLEY\t\nis a good man\rhello\tworld\t\n\n\n\\ \r \r a\r  \\b \\c"
+::globalWkdayA == 4
+return == 5
+::globalStr == orig(::globalStr)

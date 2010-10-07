@@ -1,0 +1,24 @@
+----SECTION----
+function: ..foo()
+b
+P
+
+----SECTION----
+function: ..bar()
+
+----SECTION----
+function: ..main()
+
+----SECTION----
+globals
+
+----SECTION----
+usertype.Buffer
+dynamicIntArray
+A
+staticIntArray
+A
+dynamicString
+S
+staticString
+S

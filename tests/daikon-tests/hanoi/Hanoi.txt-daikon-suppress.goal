@@ -1,0 +1,114 @@
+===========================================================================
+six170.Hanoi:::OBJECT
+this.height == size(this.diskLocation[])
+this.diskLocation != null
+this.diskLocation[] elements one of { 0, 1, 2 }
+this.diskLocation[this.height..] == []
+===========================================================================
+six170.Hanoi.Hanoi(int):::ENTER
+===========================================================================
+six170.Hanoi.Hanoi(int):::EXIT
+this.height == orig(height)
+this.diskLocation[] elements == 0
+this.noOutput == false
+this.diskLocation[] elements == this.diskLocation[this.height-1]
+===========================================================================
+six170.Hanoi.Hanoi(int, boolean):::ENTER
+noOutput == true
+===========================================================================
+six170.Hanoi.Hanoi(int, boolean):::EXIT
+this.height == orig(height)
+this.noOutput == orig(noOutput)
+this.diskLocation[] elements == 0
+this.noOutput == true
+this.diskLocation[] elements == this.diskLocation[this.height-1]
+===========================================================================
+six170.Hanoi.moveDisk(int, int):::ENTER
+fromPeg one of { 0, 1, 2 }
+toPeg one of { 0, 1, 2 }
+this.noOutput == true
+fromPeg != toPeg
+fromPeg in this.diskLocation[]
+===========================================================================
+six170.Hanoi.moveDisk(int, int):::EXIT
+this.diskLocation == orig(this.diskLocation)
+this.height == orig(this.height)
+this.height == orig(size(this.diskLocation[]))
+this.noOutput == orig(this.noOutput)
+this.noOutput == true
+orig(toPeg) in this.diskLocation[]
+===========================================================================
+six170.Hanoi.moveTower(int, int, int):::ENTER
+fromPeg == this.diskLocation[towerHeight-1]
+fromPeg one of { 0, 1, 2 }
+toPeg one of { 0, 1, 2 }
+this.noOutput == true
+this.diskLocation[0..towerHeight-1] elements are equal
+fromPeg != toPeg
+this.diskLocation[0..towerHeight-1] elements == fromPeg
+===========================================================================
+six170.Hanoi.moveTower(int, int, int):::EXIT
+this.diskLocation == orig(this.diskLocation)
+this.height == orig(this.height)
+this.height == orig(size(this.diskLocation[]))
+this.noOutput == orig(this.noOutput)
+orig(fromPeg) == orig(this.diskLocation[post(towerHeight)-1])
+orig(toPeg) == this.diskLocation[orig(towerHeight)-1]
+orig(this.diskLocation[post(towerHeight)..]) == this.diskLocation[orig(towerHeight)..]
+this.noOutput == true
+orig(this.diskLocation[0..post(towerHeight)-1]) elements are equal
+this.diskLocation[0..orig(towerHeight)-1] elements are equal
+orig(this.diskLocation[0..post(towerHeight)-1]) elements == orig(fromPeg)
+this.diskLocation[0..orig(towerHeight)-1] elements == orig(toPeg)
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::ENTER
+pegA one of { 0, 1, 2 }
+pegB one of { 0, 1, 2 }
+pegA != pegB
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT65
+return == 2
+orig(pegA) == 0
+orig(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT66
+return == 2
+orig(pegA) == 1
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT67
+return == 1
+orig(pegA) == 0
+orig(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT68
+return == 1
+orig(pegA) == 2
+orig(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT69
+return == 0
+orig(pegA) == 1
+orig(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT70
+return == 0
+orig(pegA) == 2
+orig(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT
+return one of { 0, 1, 2 }
+return != orig(pegA)
+return != orig(pegB)
+- return - orig(pegA) - orig(pegB) + 3 == 0
+===========================================================================
+six170.Hanoi.showTowers():::ENTER
+this.noOutput == true
+===========================================================================
+six170.Hanoi.showTowers():::EXIT
+this.diskLocation == orig(this.diskLocation)
+this.diskLocation[] == orig(this.diskLocation[])
+this.height == orig(this.height)
+this.height == orig(size(this.diskLocation[]))
+this.noOutput == orig(this.noOutput)
+this.noOutput == true
