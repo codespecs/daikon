@@ -189,6 +189,10 @@ public class Runtime
     }
 
 
+    // Whenever a method call occurs in the target program, output
+    // information about that call to the trace file.  However, if the
+    // method is a pure method that is being called to create a value for
+    // the trace file, don't record it.
     private static boolean invokingPure = false;
     public static boolean dontProcessPpts()
     {
