@@ -1284,8 +1284,8 @@ The purpose of dataflow hierarchy is to reduce the presence of
 redundant invariants by only keeping invariants at the highest parent
 at which they apply.  This saves both time and space.
 
-There are many ways that program points can be connected.  Daikon
-provides for four ways.  First, @code{:::CLASS} program points are parents of
+Daikon currently provides four ways that program points can be connected.
+First, @code{:::CLASS} program points are parents of
 all their method program points.  Second, between two classes that are
 related by inheritance, corresponding program points relate --- for
 example, @code{java.util.Vector:::CLASS} is a child of
