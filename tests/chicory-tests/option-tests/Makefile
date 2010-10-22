@@ -47,37 +47,37 @@ $(CLASS_FILES) :
 	javac -g `find . -name *.java`
 
 online.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java daikon.Chicory --daikon-online \
-	  --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
+	java daikon.Chicory \
+	  --daikon-online --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 pptsel.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java daikon.Chicory --ppt-select-pattern 'push|pop' --daikon \
-	  --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
+	java daikon.Chicory --ppt-select-pattern 'push|pop' \
+	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 pptomit.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java daikon.Chicory --ppt-omit-pattern 'push|pop' --daikon \
-	  --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
+	java daikon.Chicory --ppt-omit-pattern 'push|pop' \
+	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 nesting.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java daikon.Chicory --nesting-depth 0 --daikon-online \
-	  --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
+	java daikon.Chicory --nesting-depth 0 \
+	  --daikon-online --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 stdvis.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java daikon.Chicory --std-visibility --daikon \
-	  --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
+	java daikon.Chicory --std-visibility \
+	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 varomit.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java daikon.Chicory --omit-var theArray --daikon \
-	  --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
+	java daikon.Chicory --omit-var theArray \
+	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 samples.inv.gz : $(CLASS_FILES) $(CHICORY)
-	java daikon.Chicory --sample-start=100 --daikon \
-	  --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
+	java daikon.Chicory --sample-start=100 \
+	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 misc.inv.gz : $(CLASS_FILES) $(CHICORY)
 	java daikon.Chicory --purity-file=StackAr.pure \
-	--premain=$(PREMAIN) \
-	--heap_size=100m --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
+	--premain=$(PREMAIN) --heap_size=100m \
+	  --daikon --daikon-args '$(DAIKON_ARGS)' $(TARGET_ARGS)
 
 %.daikon.diff : %.inv.gz %.inv.txt.goal
 	java daikon.PrintInvariants $< > $*.inv.txt
