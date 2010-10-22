@@ -2003,6 +2003,10 @@ Fields with defaults can be omitted.
 As a rule, each line of the declaration file is of the form
 @code{<field-name> <field-value>}.
 
+Some additional details about the declaration file format appear in file
+@code{daikon/doc/decl_format.txt} in the Daikon source code.
+
+
 @menu
 * Declaration-related records::  
 * Program point declarations::  
