@@ -1,8 +1,12 @@
-Perhaps the manual should be moved out of this directory and put in
-a directory of its own, parallel to www.  Or perhaps not:  the manual is
-the primary documentation, after all.
+This directory contains documentation for the Daikon invariant detector,
+Daikon version 4.6.4, released June 23, 2010.
 
-VERSION describes the NEXT version of Daikon to be released.  That is, it
-is typically incremented by 1 as compared to the distributed release.
+See file
+  index.html
+for a list of the documentation available in this directory.
 
 Javadoc for the Daikon implementation appears in directory ../java/doc/.
+
+File VERSION describes the NEXT version of Daikon to be released.  That is,
+it is typically incremented by 1 as compared to the distributed release
+(and the number at the top of this file).

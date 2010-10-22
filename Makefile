@@ -18,8 +18,7 @@ DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html CHANGES \
 				  daikon.texinfo developer.texinfo config-options.texinfo \
 				  invariants-doc.texinfo developer.pdf developer.ps
 # EMACS_PATHS := emacs/daikon-context-gui.el
-README_FILES := README-dist.txt README-dist.html README-dist-doc.txt README-daikon-java.txt
-README_PATHS := $(addprefix doc/,$(README_FILES))
+README_PATHS := README.txt README.html doc/README.txt java/README.txt
 # Files that contain the (automatically updated) version number and date.
 DIST_VERSION_FILES := ${README_PATHS} \
 	doc/daikon.texinfo doc/developer.texinfo \
@@ -439,9 +438,9 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	mkdir ${TMPDIR}/daikon
 
 	mkdir ${TMPDIR}/daikon/doc
-	cp -p doc/README-dist.txt ${TMPDIR}/daikon/README.txt
-	cp -p doc/README-dist.html ${TMPDIR}/daikon/README.html
-	cp -p doc/README-dist-doc.txt ${TMPDIR}/daikon/doc/README.txt
+	cp -p README-dist.txt ${TMPDIR}/daikon/README.txt
+	cp -p README-dist.html ${TMPDIR}/daikon/README.html
+	cp -p doc/README.txt ${TMPDIR}/daikon/doc/README.txt
 	cd doc && cp -p $(DOC_FILES_NO_IMAGES) ${TMPDIR}/daikon/doc
 	mkdir ${TMPDIR}/daikon/doc/images
 	cd doc && cp -p $(IMAGE_PARTIAL_PATHS) ${TMPDIR}/daikon/doc/images
@@ -492,7 +491,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	# Daikon itself
 	(cd java; tar chf ${TMPDIR}/daikon-java.tar --exclude daikon-java --exclude daikon-output --exclude Makefile.user daikon)
 	(mkdir ${TMPDIR}/daikon/java; cd ${TMPDIR}/daikon/java; tar xf ${TMPDIR}/daikon-java.tar; rm ${TMPDIR}/daikon-java.tar)
-	cp -p doc/README-daikon-java.txt ${TMPDIR}/daikon/java/README.txt
+	cp -p java/README.txt ${TMPDIR}/daikon/java/README.txt
 	cp -p java/Makefile ${TMPDIR}/daikon/java/Makefile
 	cp -p java/Makefile-dist.user ${TMPDIR}/daikon/java/Makefile.user
 	# Maybe I should do  $(MAKE) doc
