@@ -177,18 +177,18 @@ else
 VALGRIND_ARCH := x86
 endif
 
-valgrind-3/auto-everything.sh:
-	cvs co -P valgrind-3
+../fjalar/auto-everything.sh:
+	cd .. && hg clone https://fjalar.googlecode.com/hg/ fjalar
 	touch $@
 
-kvasir/fjalar/Makefile.in: valgrind-3/auto-everything.sh
-	ln -nsf valgrind-3/valgrind kvasir
+kvasir/fjalar/Makefile.in: ../fjalar/auto-everything.sh
+	ln -nsf ../fjalar/valgrind kvasir
 	touch $@
 
-kvasir/configure: valgrind-3/auto-everything.sh
-	cd valgrind-3 && ./auto-everything.sh
+kvasir/configure: ../fjalar/auto-everything.sh
+	cd ../fjalar && ./auto-everything.sh
 
-kvasir/config.status: kvasir/fjalar/Makefile.in valgrind-3/valgrind/VEX/pub/libvex.h kvasir/configure
+kvasir/config.status: kvasir/fjalar/Makefile.in ../fjalar/valgrind/VEX/pub/libvex.h kvasir/configure
 	cd kvasir && ./configure --prefix=`pwd`/inst
 
 kvasir/coregrind/valgrind: kvasir/configure kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
@@ -553,7 +553,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 
 	# Kvasir C front end
 	@# "rsync -C" means "copy, ignoring the same files CVS would"
-	rsync -rCp valgrind-3/ ${TMPDIR}/daikon/kvasir
+	rsync -rCp ../fjalar/ ${TMPDIR}/daikon/kvasir
 	@# Generate configure file
 	(cd ${TMPDIR}/daikon/kvasir/valgrind; ./autogen.sh )
 	@# CVS-only build script
