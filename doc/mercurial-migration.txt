@@ -1,0 +1,121 @@
+
+Migrate Daikon to Mercurial at Google Code.
+
+----
+
+Here are all relevant CVS checkouts:
+
+  cd /afs/csail.mit.edu/u/m/mernst/research
+  cvs -d /afs/csail.mit.edu/group/pag/projects/invariants/.CVS checkout -P -ko invariants
+  cd /afs/csail.mit.edu/u/m/mernst/research/invariants
+  cvs -d /afs/csail.mit.edu/group/pag/projects/invariants/.CVS checkout -P -ko demos
+  cd /afs/csail.mit.edu/u/m/mernst/research/invariants/front-end
+  cvs -d /afs/csail.mit.edu/group/pag/projects/invariants/.CVS checkout -P -ko galar
+  cd /afs/csail.mit.edu/u/m/mernst/research/invariants
+  cvs -d /afs/csail.mit.edu/group/pag/projects/invariants/.CVS checkout -P -ko papers
+  cd /afs/csail.mit.edu/u/m/mernst/research/invariants
+  cvs -d /afs/csail.mit.edu/group/pag/projects/invariants/.CVS checkout -P -ko valgrind-3
+
+----
+
+Create Mercurial repository (make a fresh checkout to do this):
+
+# Do all this at CSAIL
+
+mkdir -p /scratch/mernst/invariants-hg-convert
+cd /scratch/mernst/invariants-hg-convert
+# Takes 13 minutes.
+cp -pR /afs/csail.mit.edu/group/pag/projects/invariants/.CVS CVS-REPOS
+# Takes 1 minute.
+rm -rf invariants invariants-hg
+# Takes <1 minute
+cvs -d `pwd`/CVS-REPOS checkout -P -ko invariants
+# Needs to do about 11300 commits.
+# Without filemap, takes 10 hours to get to #5421, by which time each one
+# is very slow.  (Different commits do seem to take different amounts of time.)
+# Tests are removed from history, need to be re-added.  Anything else?
+# 15 minutes with filemap that excludes tests/.
+time hg convert --filemap $inv/notes/hg-convert-filemap --authors $inv/notes/hg-convert-authors invariants
+
+# Check it.
+hg clone invariants-hg invariants-hg-clone
+cd invariants-hg-clone
+# To see deleted files:
+hg log --template "{rev}: {file_dels}\n" | grep -v ':\s*$'
+# Are all the files there, from all the repositories?  It seems so:
+diff -u -b -r --exclude=CVS=.hg --exclude=.hgtags --exclude=.svn --exclude='*.class' /afs/csail.mit.edu/u/m/mernst/research/invariants/ /scratch/mernst/invariants-hg-convert/invariants-hg-clone
+
+# Now, restore parts of $inv/notes/hg-convert-filemap
+cp -pR ../invariants/tests tests
+rm -rf tests/dfec-tests tests/dfej-tests
+rm -rf `find . -name CVS`
+hg addremove
+hg commit -m "Add current revision of tests"
+hg push
+# Keep galar separate.
+## cp -pR ../invariants/front-end/galar front-end
+# Keep kvasir (just a symlink?) and valgrind-3 separate?
+## I think so...
+
+# Does it compile and pass tests?
+
+# Do I want to eliminate ENGINE_V2_PATCHES branch?
+
+# reset the repository (http://code.google.com/p/daikon/source/sync?repo=default)
+# 
+# Upload to Google Code.
+cd ..
+hg push https://daikon.googlecode.com/hg
+# If that failed, do the following:
+# #!/bin/bash
+# REPO_URL=https://daikon.googlecode.com/hg
+# # Compute last revision number with with "hg tip":
+# NUM_OF_REVS=9079
+# for rev in {1..${NUM_OF_REVS}}
+# do
+#   hg push -r $rev $REPO_URL
+# done
+
+# Check out and test, but *do from a new account*:
+cd ~/research
+hg clone https://ductilej.googlecode.com/hg invariants-hg
+ln -s invariants-hg invariants
+make compile
+make test
+
+
+
+Need to warn other developers before I do this for real.
+... and wait for Sung to finish with Galar
+
+----------------
+
+Galar:
+similar to valgrind-3, below.
+
+----------------
+
+DONE:
+
+# For valgrind-3 (which should be renamed to fjalar, probably):
+
+mkdir -p /scratch/mernst/invariants-hg-convert
+cd /scratch/mernst/invariants-hg-convert
+# Takes 13 minutes.
+cp -pR /afs/csail.mit.edu/group/pag/projects/invariants/.CVS CVS-REPOS
+# Takes 1 minute.
+rm -rf valgrind-3 valgrind-3-hg
+# Takes <1 minute
+cvs -d `pwd`/CVS-REPOS checkout -P -ko valgrind-3
+# Needs to do about 11300 commits.
+# Without filemap, takes 10 hours to get to #5421, by which time each one
+# is very slow.  (Different commits do seem to take different amounts of time.)
+# Tests are removed from history, need to be re-added.  Anything else?
+# 15 minutes with filemap that excludes tests/.
+time hg convert --authors $inv/notes/hg-convert-authors valgrind-3
+
+hg clone valgrind-3-hg valgrind-3-hg-clone
+
+cd valgrind-3-hg
+hg push https://fjalar.googlecode.com/hg
+
