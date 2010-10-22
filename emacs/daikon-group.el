@@ -1,6 +1,6 @@
-(if (not (getenv "INV"))
-    (error "Environment variable $INV is not defined."))
-(setq load-path (cons (substitute-in-file-name "${INV}/emacs/")
+(if (not (getenv "DAIKONDIR"))
+    (error "Environment variable $DAIKONDIR is not defined."))
+(setq load-path (cons (substitute-in-file-name "${DAIKONDIR}/daikon/emacs/")
                       load-path))
 
 ;;; Update timestamps when writing files.
@@ -122,7 +122,7 @@ This particular function doesn't adjust the block beginning at all."
   "Use the Daikon TAGS table.
 Remake it first if it is more than a week old."
   (interactive)
-  (let* ((tags-file (substitute-in-file-name "$inv/java/TAGS"))
+  (let* ((tags-file (substitute-in-file-name "$DAIKONDIR/daikon/java/TAGS"))
          (tags-file-exists (file-exists-p tags-file)))
     (if (or (not tags-file-exists)
             ;; TAGS file is at least one week old
@@ -131,7 +131,7 @@ Remake it first if it is more than a week old."
                                             (car tags-file-modtime-ints))
                                          (cadr tags-file-modtime-ints))))
               (> (float-time) (+ tags-file-modtime (* 60 60 24 7)))))
-        (let ((default-directory (substitute-in-file-name "$inv/java/"))
+        (let ((default-directory (substitute-in-file-name "$DAIKONDIR/daikon/java/"))
               (verb (if tags-file-exists "Updating" "Making")))
           (message "%s the Daikon tags table..." verb)
           (call-process "make" nil nil nil "tags-nogen")
@@ -149,7 +149,7 @@ Remake it first if it is more than a week old."
   (interactive)
   (if (not basename)
       (setq basename "daikon"))
-  (let* ((dir (substitute-in-file-name "$inv/doc/"))
+  (let* ((dir (substitute-in-file-name "$DAIKONDIR/daikon/doc/"))
 	 (infofile (concat dir basename ".info"))
 	 (texinfofile (concat dir basename ".texinfo"))
 	 (remake (or (and (get-file-buffer texinfofile)
@@ -212,7 +212,7 @@ Does nothing if a compilation is already running unless `force' is non-nil."
   (interactive)
   (require 'compile)
   (if (or force (not (compilation-is-running)))
-      (let ((default-directory (substitute-in-file-name "$inv/doc/")))
+      (let ((default-directory (substitute-in-file-name "$DAIKONDIR/daikon/doc/")))
         (save-some-buffers (not compilation-ask-about-save) nil)
         (compile-internal "make -k " "No more errors" "make-daikon-info"))))
 
