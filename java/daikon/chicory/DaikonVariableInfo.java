@@ -427,6 +427,7 @@ public abstract class DaikonVariableInfo
     /**
      * Adds class variables (i.e., the fields) for the given type and
      * attach new nodes as children of this node.
+     * @param type the class whose fields should all be added to this node
      */
     protected void addClassVars(ClassInfo cinfo, boolean dontPrintInstanceVars,
                                 Class<?> type, String offset, int depth) {
@@ -472,10 +473,7 @@ public abstract class DaikonVariableInfo
                         dontPrintInstanceVars, isArray);
 
 
-        for (int i = 0; i < fields.length; i++)
-        {
-
-            Field classField = fields[i];
+        for (Field classField : fields) {
             boolean is_static = Modifier.isStatic (classField.getModifiers());
 
             // Skip created variables (they were probably created by us)
