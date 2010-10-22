@@ -305,12 +305,24 @@ Program point names
   Information on the type of the program point is contained in a separate
   ppt-type record that specifies the type of the record.  The possible
   types of program points are class, object, enter, exit, subexit and point.  
+
   The 'subexit' type is used for multiple exits from the same method.
   When 'subexit' is used, the program point name must still be made
   distinct.  This can be accomplished by adding the line number of the
   various exits as is done today or by some other front-end specific
   manner.  The 'point' type is used for program points that are not
   of the typical method enter/exit, object, class style.
+
+  As an example of 'subexit', consider the following procedure:
+    int foo() {
+      if (...)
+	return 2*x;
+      else
+	return 2*x+1;
+    }
+  A Daikon front end would create two subexit points for this procedure --
+  one for each return statement.  No instrumentation is needed for the
+  overall exit point, which generalizes the two subexit points.
 
 Parent Ppt/variable
 
