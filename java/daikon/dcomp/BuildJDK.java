@@ -451,7 +451,7 @@ public class BuildJDK {
       System.out.printf
         ("Warning, the following JDK methods could not be instrumented.%n"
          + "These are known problems.  Dyncomp will still work as long as%n"
-         + "these methods are not called by your applications."
+         + "these methods are not called by your applications.%n"
          + "If one is called, A NoSuchMethodException will be generated.%n");
       for (String method : skipped_methods) {
         System.out.printf ("  %s%n", method);
@@ -459,7 +459,7 @@ public class BuildJDK {
     } else { // some methods have not been previously seen
       System.out.printf
         ("Warning: the following JDK methods could not be instrumetned.%n"
-         + "Some of these are known problems, others are unexpected%n"
+         + "Some of these are known problems, others are unexpected.%n"
          + "Please report the new ones so we can look into them.%n"
          + "Dyncomp will still work as long as these methods are not called%n"
          + "by your applications.  "
