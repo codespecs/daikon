@@ -495,6 +495,7 @@ dcomp_premain.jar : $(wildcard $(DCOMP_JAVA_FILES)) daikon/dcomp/manifest.txt
 	$(MAKE) dcomp-test
 
 # Runs a simple sanity test on DynComp/Java without an instrumented JDK
+# Also creates file ./Test.decls-DynComp
 .PHONY: dcomp-test
 dcomp-test : daikon/dcomp/std_dcomp_out.diff
 daikon/dcomp/std_dcomp_out.diff : dcomp_premain.jar
