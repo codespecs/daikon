@@ -108,9 +108,9 @@ public class AnnotateNullable {
 
       String name = ppt.name().replaceFirst ("[(].*$", "");
       int lastdot = name.lastIndexOf ('.');
+      /*@KeyFor("class_map")*/ // class_map has entry per class, and this method is in some class
       String classname = name.substring (0, lastdot);
       // System.out.printf ("classname for ppt %s is '%s'%n", name, classname);
-      @SuppressWarnings("nullness") // Map.get: class_map has entry per class, and this method is in some class
       /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get (classname);
       assert static_methods != null : classname;
       static_methods.add (ppt);
