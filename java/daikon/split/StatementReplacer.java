@@ -71,8 +71,10 @@ class StatementReplacer extends DepthFirstVisitor {
         replacedExpression = Ast.format(root);
         replacements++;
       } catch (IllegalStateException e) {
+        @SuppressWarnings("nullness") // library: ParseException is not yet annotated
+        /*@NonNull*/ String message = e.getMessage();
         // ParseException does not accept optional "cause" argument
-        throw new ParseException(e.getMessage());
+        throw new ParseException(message);
       }
     } while ((replacements < MAXREPLACEMENTS)
              && (! replacedExpression.equals(expression)));
