@@ -12,6 +12,8 @@ java/ChicoryPremain.jar
 java/dcomp_premain.jar
 java/*.class
 java/**/*.class
+# Temporary file used during compilation
+java/java_files.txt
 
 # DynComp testing
 java/daikon/dcomp/std_dcomp_out.diff
