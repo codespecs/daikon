@@ -7,10 +7,9 @@ kvasir
 Makefile.user
 java/Makefile.user
 
-# Compiled Java files files
+# Compiled Java files
 java/ChicoryPremain.jar
 java/dcomp_premain.jar
-java/lib/plume.jar
 java/*.class
 java/**/*.class
 
@@ -19,6 +18,8 @@ java/daikon/dcomp/std_dcomp_out.diff
 java/daikon/dcomp/std_dcomp_out.txt
 java/Test.decls-DynComp
 
+# Obtained via Mercurial
+plume-lib
 # Generated from plume-lib
 java/daikon/util
 
