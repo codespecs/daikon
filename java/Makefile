@@ -6,24 +6,22 @@
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-### INV and DAIKONBIN need to be set early, because they are used below.
-
-INV ?= ${DAIKONDIR}
+### DAIKONDIR and DAIKONBIN need to be set early, because they are used below.
 
 # Test that the directory exists.  There must be a better way to do this.
-INV:=$(wildcard $(INV))
-ifndef INV
-  $(error Environment variable INV is not set to an existing directory)
+DAIKONDIR:=$(wildcard $(DAIKONDIR))
+ifndef DAIKONDIR
+  $(error Environment variable DAIKONDIR is not set to an existing directory)
 endif
 
 # Set DAIKONBIN to scripts/ if it exists, otherwise to bin/.
-ifeq "$(wildcard ${INV}/scripts)" "${INV}/scripts"
-    DAIKONBIN ?= ${INV}/scripts
+ifeq "$(wildcard ${DAIKONDIR}/scripts)" "${DAIKONDIR}/scripts"
+    DAIKONBIN ?= ${DAIKONDIR}/scripts
 else
-    DAIKONBIN ?= ${INV}/bin
+    DAIKONBIN ?= ${DAIKONDIR}/bin
 endif
 
-PLUMEBIN ?= ${INV}/plume-lib/bin
+PLUMEBIN ?= ${DAIKONDIR}/plume-lib/bin
 
 
 #
@@ -57,7 +55,8 @@ else
   JAVA ?= java -ea
 endif
 
-# When type-checking, need to use checkers.jar.  No harm using it if available.
+# When type-checking, must use checkers.jar.
+# No harm using it, if available, during ordinary compilation.
 ifdef JSR308
   CHECKERS ?= ${JSR308}/checker-framework/checkers
 endif
@@ -65,6 +64,8 @@ ifdef CHECKERS
   CHECKERSJAR ?= ${CHECKERS}/checkers.jar
 endif
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers-quals.jar
+# Version of javac that supports pluggable type-checking.
+JAVAC_FOR_CHECKERS ?= ${CHECKERS}/binary/javac
 
 jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*
 
@@ -72,7 +73,7 @@ jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.q
 
 JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
 # When running the checkers, it is important not to pass in "-source 5".
-JAVAC_COMMAND_NO_ARGS = ${JAVAC} -Xlint -J-Xmx1024m
+JAVAC_COMMAND_FOR_CHECKERS = ${JAVAC_FOR_CHECKERS} -Xlint -J-Xmx1024m
 
 
 
@@ -83,8 +84,8 @@ JAVAC_COMMAND_NO_ARGS = ${JAVAC} -Xlint -J-Xmx1024m
 # These jar files only exist for the development version, not the
 # distributed version, of Daikon.  The if clause avoids a (harmless but
 # annoying) javac error message that they don't exist.
-ifeq "$(wildcard $(INV)/java/lib/bcel.jar)" "$(INV)/java/lib/bcel.jar"
-    CLASSPATH_JARS = :$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar:$(INV)/java/lib/plume.jar
+ifeq "$(wildcard $(DAIKONDIR)/java/lib/bcel.jar)" "$(DAIKONDIR)/java/lib/bcel.jar"
+    CLASSPATH_JARS = :$(DAIKONDIR)/java/lib/bcel.jar:$(DAIKONDIR)/java/lib/java-getopt.jar:$(DAIKONDIR)/java/lib/commons-io.jar:$(DAIKONDIR)/java/lib/junit.jar:$(DAIKONDIR)/java/lib/plume.jar
 endif
 ifeq "$(wildcard ${CHECKERSJAR})" "${CHECKERSJAR}"
     CLASSPATH_JARS2 = ${CHECKERSJAR}
@@ -824,14 +825,14 @@ show_nullness_java_files:
 intern: check-interning
 interning: check-interning
 check-interning: ${INTERNING_JAVA_FILES} compile
-	${JAVAC_COMMAND_NO_ARGS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${INTERNING_JAVA_FILES}
+	${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${INTERNING_JAVA_FILES}
 
 # Run the interning checker on all Java files, not just those that contain an
 # @Interned annotation.
 interning-all: check-interning-all
 check-interning-all: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_INTERNING_ARGS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 check-nullness: check-nullness-all
 
@@ -841,40 +842,40 @@ check-nullness-all: check-nullness-all-withstubs-warns
 
 check-nullness-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
 	$(MAKE) compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-nullness-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-nullness-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_NO_ARGS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-prototype: check-prototype-all
 
 check-prototype-all: check-prototype-all-withstubs
 
 check-prototype-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-igj-all-nostubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_IGJ_ARGS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_IGJ_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 check-igj-all-withstubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${CHECKERS_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 check-javari-all-nostubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_JAVARI_ARGS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_JAVARI_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 check-javari-all-withstubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_NO_ARGS} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${CHECKERS_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 TYPEQUALS_JAVA_FILES = $(wildcard typequals/*.java)
 TYPEQUALS_CLASSES = $(subst .java,.class,${TYPEQUALS_JAVA_FILES})
@@ -968,14 +969,14 @@ junit-all: junit
 CLOVER := $(HOME)/clover
 CLOVER_CMD := ${JAVA} -cp $(CLOVER)/clover-1.3.1/lib/clover.jar \
 									com.cenqua.clover.CloverInstr -jdk14
-CLOVER_CP := $(subst $(INV)/java,$(CLOVER)/java,$(CLASSPATH))
+CLOVER_CP := $(subst $(DAIKONDIR)/java,$(CLOVER)/java,$(CLASSPATH))
 CLOVER_CP := $(CLOVER_CP):$(CLOVER)/clover-1.3.1/lib/clover.jar
 
 clover: all_directly
 	/bin/rm -rf $(CLOVER)/java
 	mkdir $(CLOVER)/java
-	cd $(CLOVER)/java; ln -s $(INV)/java/jtb
-	cd $(CLOVER)/java; ln -s $(INV)/java/lib
+	cd $(CLOVER)/java; ln -s $(DAIKONDIR)/java/jtb
+	cd $(CLOVER)/java; ln -s $(DAIKONDIR)/java/lib
 	cp Makefile $(CLOVER)/java
 	mkdir $(CLOVER)/java/daikon
 	(cd daikon; tar cf - .) | (cd $(CLOVER)/java/daikon; tar xfBp -)
@@ -1090,13 +1091,14 @@ showvars:
 	which java
 	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
 	@echo CLASSPATH = "${CLASSPATH}"
+	@echo CLASSPATH_JARS = $(CLASSPATH_JARS)
 	@echo CLASSPATH_JARS2 = $(CLASSPATH_JARS2)
 	@echo OSTYPE = $(OSTYPE)
 	@echo PATH = $(PATH)
+	@echo DAIKONDIR = "${DAIKONDIR}"
 	@echo DAIKONBIN = ${DAIKONBIN}
 	@echo PLUMEBIN = ${PLUMEBIN}
 	@echo DAIKON_JAVA_FILES = $(DAIKON_JAVA_FILES)
-	@echo INV = "${INV}"
 	@echo JAVA = ${JAVA}
 	@echo JAVAC = ${JAVAC}
 	@echo JAVAC_ARGS = ${JAVAC_ARGS}
