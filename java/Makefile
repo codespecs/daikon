@@ -390,7 +390,7 @@ AUTO_GENERATED_FILES_2 = \
 
 AUTO_GENERATED_CLASSES_2 = $(subst .java,.class,${AUTO_GENERATED_FILES_2})
 
-ALL_GENERATED_FILES = ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2} lib/plume.jar
+ALL_GENERATED_FILES = ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 
 
 ###########################################################################
@@ -446,11 +446,11 @@ java_files.txt: ${JAVA_FILES}
 	@echo ${JAVA_FILES} > java_files.txt
 
 .PHONY: plume-copy-and-check
-plume-copy-and-check: plume-lib-update lib/plume.jar plume-copy
+plume-copy-and-check: plume-lib-update plume-lib-compile plume-copy
 
 .PHONY : daikon compile_daikon
 daikon: compile_daikon junit
-compile_daikon : ../plume-lib $(AUTO_GENERATED_FILES) lib/plume.jar
+compile_daikon : ../plume-lib $(AUTO_GENERATED_FILES)
 	@echo $(JAVAC_COMMAND) 'daikon/*.java ...'
 	@$(JAVAC_COMMAND) $(DAIKON_JAVA_FILES)
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -568,13 +568,19 @@ PLUME=${PLUMEJAVA}/src/plume
 plume-lib-update:
 	${MAKE} -C .. plume-lib-update
 
-../plume-lib/java/plume.jar: ../plume-lib
-	$(MAKE) -C ../plume-lib/java plume.jar
+# The class files are not used; this is just to sanity-check
+plume-lib-compile:
+	${MAKE} -C ../plume-lib/java compile
 
-# TODO: just check in a stable version of plume.jar
-lib/plume.jar: ../plume-lib/java/plume.jar
-	install -d lib
-	cp -p $< $@
+# # A stable version of plume.jar is checked in, so that all this is not necessary.
+# lib/plume.jar: ../plume-lib/java/plume.jar
+# 	install -d lib
+# 	cp -p $< $@
+# 
+# # The file is real, but the commands should always be re-run even if it exists.
+# .PHONY: ../plume-lib/java/plume.jar
+# ../plume-lib/java/plume.jar: ../plume-lib
+# 	$(MAKE) JAVAC=${JAVAC_FOR_CHECKERS} JAVAC_TARGET_FLAGS="-target 5" -C ../plume-lib/java plume.jar
 
 daikon/util/README: plume-lib-update daikon/util/.timestamp-daikonutil
 
@@ -614,12 +620,12 @@ plume-import-check :
 #
 WSMATCH_JAVA_FILES = daikon/tools/WSMatch.java daikon/chicory/*.java
 wsmatch : daikon/tools/WSMatch.class
-daikon/tools/WSMatch.class : $(wildcard $(WSMATCH_JAVA_FILES)) lib/plume.jar
+daikon/tools/WSMatch.class : $(wildcard $(WSMATCH_JAVA_FILES))
 	$(JAVAC_COMMAND) $(WSMATCH_JAVA_FILES)
 
 ## Use this when you don't want $inv/tests makefiles to restart
 JAVA_FILES_EXCEPT_DAIKON = $(subst ./daikon/Daikon.java,,${JAVA_FILES})
-all_except_daikon: ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar
+all_except_daikon: ../plume-lib ${AUTO_GENERATED_FILES}
 	@echo ${JAVAC_COMMAND} '*.java ... (except Daikon.java)'
 	@${JAVAC_COMMAND} ${JAVA_FILES_EXCEPT_DAIKON}
 	@chmod -w ${AUTO_GENERATED_FILES}
@@ -652,13 +658,13 @@ jikes:	all_via_jikes
 
 # These rules are undesirable, because Daikon.class (or Diff.class) might
 # be up to date even if other files aren't.
-daikon/Daikon.class: daikon/Daikon.java	../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar
+daikon/Daikon.class: daikon/Daikon.java	../plume-lib ${AUTO_GENERATED_FILES}
 	${JAVAC_COMMAND} daikon/Daikon.java
 
-daikon/Diff.class: Diff.java ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar
+daikon/Diff.class: Diff.java ../plume-lib ${AUTO_GENERATED_FILES}
 	${JAVAC_COMMAND} daikon/Diff.java
 
-daikon/Runtime.class: daikon/Runtime.java lib/plume.jar
+daikon/Runtime.class: daikon/Runtime.java
 	${JAVAC_COMMAND} daikon/Runtime.java
 
 
@@ -740,7 +746,7 @@ findbugs-nocompile:
 findbugs-cat:
 	cat .findbugs-output
 
-../daikon.jar: ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar compile
+../daikon.jar: ../plume-lib ${AUTO_GENERATED_FILES} compile
 	cd .. && $(MAKE) daikon.jar
 
 checkstyle: checkstyle-cs checkstyle-sun
@@ -748,7 +754,7 @@ checkstyle-cs: .checkstyle-cschecks-output
 checkstyle-sun: .checkstyle-sunchecks-output
 .PHONY: checkstyle checkstyle-cs checkstyle-sun
 
-.checkstyle-sunchecks-output: ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar
+.checkstyle-sunchecks-output: ../plume-lib ${AUTO_GENERATED_FILES}
 	  ${JAVA} \
 	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
 	    -Dcheckstyle.suppressions.file=${inv}/java/.checkstyle-suppressions.xml \
@@ -757,7 +763,7 @@ checkstyle-sun: .checkstyle-sunchecks-output
 	    -c /g2/users/mernst/java/checkstyle-3.4/docs/sun_checks.xml \
 	    -r daikon | tee .checkstyle-sunchecks-output
 
-.checkstyle-cschecks-output: ../plume-lib ${AUTO_GENERATED_FILES} lib/plume.jar
+.checkstyle-cschecks-output: ../plume-lib ${AUTO_GENERATED_FILES}
 	  ${JAVA} \
 	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
 	    -Dcheckstyle.suppressions.file=.checkstyle-suppressions.xml \
