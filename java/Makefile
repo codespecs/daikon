@@ -842,9 +842,7 @@ check-interning-all: ${ALL_GENERATED_FILES} compile
 
 check-nullness: check-nullness-all
 
-## Once this actually works, stop using the -warns version
-# check-nullness-all: check-nullness-all-withstubs
-check-nullness-all: check-nullness-all-withstubs-warns
+check-nullness-all: check-nullness-all-withstubs
 
 check-nullness-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
 	$(MAKE) compile
@@ -855,6 +853,7 @@ check-nullness-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
+# Version that issues warnings, not errors.
 check-nullness-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
