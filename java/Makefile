@@ -428,7 +428,7 @@ xlint: chicory ${ALL_GENERATED_FILES}
 
 ## ${JAVA_FILES} is so long I can't see the result on the same screen as the command.
 # Do not mark this target as .PHONY.  We want it to
-# alway recompile, whether recompilation is necessary or not.
+# always recompile, whether recompilation is necessary or not.  (Why?)
 all_directly: ../plume-lib ${AUTO_GENERATED_FILES} plume-copy-and-check java_files.txt
 # # If SplitterFactoryTestUpdater.java is newer than SplitterFactoryTest.java, then delete the latter.
 # 	if [ daikon/test/split/SplitterFactoryTestUpdater.java -nt daikon/test/split/SplitterFactoryTest.java ] ; then rm -f daikon/test/split/SplitterFactoryTest.java; fi
@@ -787,7 +787,7 @@ audit:
 # Pluggable type qualifier checkers
 
 CHECKERS_BOOTCLASSPATH = -Xbootclasspath/p:${CHECKERS}/jdk/jdk.jar
-CHECKERS_ARGS = -source 7 -Awarns
+# CHECKERS_ARGS = -source 7 -Awarns
 
 ## All of the following targets need to depend on "compile".
 
