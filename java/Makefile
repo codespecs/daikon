@@ -882,7 +882,7 @@ TYPEQUALS_CLASSES = $(subst .java,.class,${TYPEQUALS_JAVA_FILES})
 
 compile-typequals: ${TYPEQUALS_CLASSES}
 ${TYPEQUALS_CLASSES}: ${TYPEQUALS_JAVA_FILES}
-	${JAVAC_COMMAND} ${TYPEQUALS_JAVA_FILES}
+	${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_ARGS} ${TYPEQUALS_JAVA_FILES}
 
 # These targets run the Interning checker on just one file.  They use ${JAVAC}
 # instead of ${JAVAC_COMMAND}, to display a shorter, easier-to-read command.
