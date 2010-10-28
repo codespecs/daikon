@@ -61,12 +61,21 @@ public abstract class DaikonVariableInfo
     private static boolean skip_synthetic = true;
 
     /**
-     * The three strings needed for the .decls info, in addition to
-     * the variable name are typeName, repTypeName, and
-     * compareInfoString.
+     * The printed type that will appear in the .decls declaration.  May
+     * include aux information at the end, such as isParamString.
+     * @see #getTypeName()
+     * @see #getTypeNameOnly()
      */
-    protected String typeName;
+    protected String typeName; 
+    /**
+     * The printed representation type that will appear in the .decls
+     * declaration.
+     */
     protected String repTypeName;
+    /**
+     * The printed comparability information that will appear in the .decls
+     * declaration.
+     */
     protected String compareInfoString = compareInfoDefaultString;
 
     /** Value of static constants.  Access via {@link #get_const_val} method. **/
@@ -435,11 +444,11 @@ public abstract class DaikonVariableInfo
         //DaikonVariableInfo corresponding to the "this" object
         DaikonVariableInfo thisInfo;
 
-        //must be first level of recursion to print "this" field
+        //must be at the first level of recursion (not lower) to print "this" field
         if (!dontPrintInstanceVars && offset.equals(""))
         {
+            // "this" variable
             thisInfo = new ThisObjInfo();
-
             thisInfo.typeName = type.getName() + isParamString;
             thisInfo.repTypeName = getRepName(type, false);
             addChild(thisInfo);
@@ -458,8 +467,9 @@ public abstract class DaikonVariableInfo
             // Create a non-printing root for static variables.
             thisInfo = new StaticObjInfo(type);
             addChild (thisInfo);
-        } else
+        } else {
             thisInfo = this;
+        }
 
         // Get the fields
         // System.out.printf ("getting fields for %s%n", type);
@@ -1208,7 +1218,9 @@ public abstract class DaikonVariableInfo
    }
 
    /**
-    * Returns the declared type name of this variable.
+    * Returns the declared type name of this variable.  May include
+    * auxiliary information (represented as a suffix starting with "#").
+    * @see #getTypeNameOnly()
     */
    public String getTypeName()
    {
@@ -1217,10 +1229,13 @@ public abstract class DaikonVariableInfo
        return typeName;
    }
 
-    /** Return the type name without aux information **/
-    public String getTypeNameOnly() {
-        return typeName.replaceFirst (" # .*", "");
-    }
+   /**
+    * Return the type name without aux information.
+    * @see #getTypeName()
+    */
+   public String getTypeNameOnly() {
+       return typeName.replaceFirst (" # .*", "");
+   }
 
    /**
     * Returns the representation type name of this variable.
