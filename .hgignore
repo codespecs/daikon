@@ -15,6 +15,11 @@ java/**/*.class
 # Temporary file used during compilation
 java/java_files.txt
 
+# DynComp
+java/dcomp-rt/dcomp_jdk_static_map
+java/dcomp-rt/dcomp_jdk_static_map
+dcomp-rt/java/lang/jdk_classes.txt
+dcomp-rt.jar
 # DynComp testing
 java/daikon/dcomp/std_dcomp_out.diff
 java/daikon/dcomp/std_dcomp_out.txt
