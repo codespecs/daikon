@@ -151,7 +151,9 @@ public class MethodInfo {
     {
         int mod = member.getModifiers();
 
-
+        //TODO: Consider purity on methods which take parameters (LJT)
+        //TODO: Just delete final expression (LJT)     
+        
         // Only consider purity on non-abstract, non-static, non-constructor
         // methods which return a value and take no parameters!
         if (!Modifier.isAbstract(mod) && !Modifier.isStatic(mod) &&

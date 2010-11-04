@@ -17,6 +17,16 @@ public class PureMethodInfo extends DaikonVariableInfo
     /** The MethodInfo object for this pure method **/
     private MethodInfo minfo;
 
+    /** An array containing the chosen variable parameters of this pure method,
+     *  if this pure method has no args, then args.size() = 0
+     */
+    //TODO: Does it make sense to have args static?
+    private static DaikonVariableInfo[] args;
+    
+    
+    //TODO: Should the intialization be entirely changed instead of creating
+    //		separate initialization method? (LJT)
+    
     public PureMethodInfo(String name, MethodInfo methInfo, boolean inArray)
     {
         super(name, inArray);
@@ -24,7 +34,21 @@ public class PureMethodInfo extends DaikonVariableInfo
         assert methInfo.isPure() : "Method " + methInfo + " is not pure";
 
         minfo = methInfo;
+        
+        this.args = new DaikonVariableInfo[0];
     }
+    
+    public PureMethodInfo(String name, MethodInfo methInfo, boolean inArray, DaikonVariableInfo[] args)
+    {
+    	super(name, inArray);
+    	
+    	assert methInfo.isPure(): "Method " + methInfo + " is not pure";
+    	
+    	minfo = methInfo;
+    	
+    	this.args = args;
+    }
+    
 
     /**
      * Invokes this pure method on the given parentVal.
@@ -89,6 +113,8 @@ public class PureMethodInfo extends DaikonVariableInfo
 
         return retVal;
     }
+    
+    //TODO: Need to make sure invoke works correctly... (LJT)
 
     private static Object executePureMethod(Method meth, Object objectVal)
     {
@@ -100,7 +126,11 @@ public class PureMethodInfo extends DaikonVariableInfo
             // called)
             Runtime.startPure();
 
-            retVal = meth.invoke(objectVal);
+            if(args.length == 0) {
+            	retVal = meth.invoke(objectVal);
+            } else {
+            	retVal = meth.invoke(objectVal, getParams(objectVal));
+            }
 
             if (meth.getReturnType().isPrimitive())
                 retVal = convertWrapper(retVal);
@@ -129,6 +159,20 @@ public class PureMethodInfo extends DaikonVariableInfo
         return retVal;
     }
 
+    // TODO:Helper Method; Is it needed? (LJT)
+    private static Object[] getParams(Object objectVal) {
+    	
+    	Object[] params = new Object[args.length];
+    	
+    	int counter = 0;
+    	
+    	for (DaikonVariableInfo field : args) {
+    		params[i] = field.getMyValFromParentVal(objectVal);
+    		i++;
+    	}
+    	return params; 
+    }
+     
 
     /**
      * Convert standard wrapped Objects (i.e., Integers) to Chicory wrappers (ie,
@@ -179,7 +223,7 @@ public class PureMethodInfo extends DaikonVariableInfo
         }
 
     }
-
+    
     public VarKind get_var_kind() {
         return VarKind.FUNCTION;
     }

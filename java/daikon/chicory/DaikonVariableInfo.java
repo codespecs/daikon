@@ -552,6 +552,9 @@ public abstract class DaikonVariableInfo
             debug_vars.exdent();
         }
 
+        //TODO: Do something here? (LJT)
+        //TODO: Since creation of pure method nodes is last, there shouldn't be a
+        //		problem with calling all other sibling nodes (LJT)
 
         // If appropriate, print out decls information for pure methods
         // and add to the tree
@@ -573,18 +576,22 @@ public abstract class DaikonVariableInfo
                 typeInfo = null;
             }
 
+            //TODO: Create two separate for each loops to insure that 
+            
             if (typeInfo != null)
             {
+            	//TODO: Currently running through loop twice....
                 for (MethodInfo meth : typeInfo.method_infos)
-                {
-                    if (meth.isPure())
+                {	
+                	// pure methods with no parameters
+                    if (meth.isPure() && meth.arg_names.length == 0)
                     {
                         StringBuffer buf = new StringBuffer();
                         DaikonVariableInfo newChild = thisInfo.addPureMethodDecl(
                                 cinfo, meth, offset, depth,
                                 buf);
                         String newOffset = buf.toString();
-                        debug_vars.indent ("Pure method");
+                        debug_vars.indent ("Pure method"); // Should I differentiate type of pure method? (LJT)
                         assert meth.member != null : "@SuppressWarnings(nullness): member of method_infos have .member field"; // fix with dependent type
                         newChild.addChildNodes(cinfo,
                                                ((Method) meth.member).getReturnType(),
@@ -595,6 +602,34 @@ public abstract class DaikonVariableInfo
 
                     }
                 }
+                
+                for (MethodInfo meth : typeInfo.method_infos)
+                {
+                	// pure methods with one parameter
+                	if (meth.isPure() && meth.arg_names.length == 1) {
+                		for (DaikonVariableInfo sib : thisInfo.children) {
+                			if (meth.arg_type_strings[0].equals(sib.getTypeNameOnly()))
+                			{
+                				DaikonVariableInfo[] arg = {sib};
+                				StringBuffer buf = new StringBuffer();
+                                DaikonVariableInfo newChild = thisInfo.addPureMethodWithParamDecl(
+                                        cinfo, meth, offset, depth,
+                                        buf, arg);
+                                String newOffset = buf.toString();
+                                debug_vars.indent ("Pure method"); // Should I differentiate type of pure method? (LJT)
+                                assert meth.member != null : "@SuppressWarnings(nullness): member of method_infos have .member field"; // fix with dependent type
+                                newChild.addChildNodes(cinfo,
+                                                       ((Method) meth.member).getReturnType(),
+                                                       meth.member.getName(),
+                                                       newOffset,
+                                                       depth);
+                                debug_vars.exdent();
+                			}
+                		}
+                		
+                	}
+                }
+                
             }
         }
     }
@@ -627,6 +662,8 @@ public abstract class DaikonVariableInfo
     }
 
 
+    //TODO: Need to make separate section to handle pure methods with parameters (LJT)
+    
     /**
      * Adds the decl info for a pure method.
      */
@@ -667,6 +704,76 @@ public abstract class DaikonVariableInfo
 
         DaikonVariableInfo newPure = new PureMethodInfo(offset + theName, minfo,
                 isArray);
+
+        String type_name = stdClassName (type);
+        newPure.typeName = type_name + arr_str;
+        newPure.repTypeName = getRepName(type, isArray) + arr_str;
+
+        addChild(newPure);
+
+        newPure.checkForDerivedVariables(type, theName, offset);
+
+        buf.append(offset);
+
+        if (changedAccess)
+        {
+            meth.setAccessible(false);
+        }
+
+        return newPure;
+    }
+    
+    //TODO: Clean separate method for adding decl info for pure method with parameters
+    
+    /**
+     * Adds the decl info for a pure method with parameters.
+     */
+    //TODO factor out shared code with printDeclVar
+    protected DaikonVariableInfo addPureMethodWithParamDecl(ClassInfo curClass,
+            MethodInfo minfo, String offset, int depth,
+            StringBuffer buf, DaikonVariableInfo[] args)
+    {
+        String arr_str = "";
+        if (isArray)
+        {
+            arr_str = "[]";
+        }
+        
+        @SuppressWarnings("nullness") // method precondition
+        /*@NonNull*/ Method meth = (Method) minfo.member;
+
+
+        boolean changedAccess = false;
+
+        //we want to access all fields...
+        if (!meth.isAccessible())
+        {
+            changedAccess = true;
+            meth.setAccessible(true);
+        }
+
+        Class<?> type = meth.getReturnType();
+        assert type != null;
+
+        String theName = meth.getName() + "(" + args[0].getName();
+        
+        if (args.length > 1) {
+        	for(int i; i < args.length - 1; i++) {
+        		theName += ", " + args[i + 1].getName();
+        	}
+        }
+        theName += ")";
+
+        if (offset.length() > 0) // offset already starts with "this"
+        {
+        }
+        else
+        {
+            offset = "this.";
+        }
+
+        DaikonVariableInfo newPure = new PureMethodInfo(offset + theName, minfo,
+                isArray, args);
 
         String type_name = stdClassName (type);
         newPure.typeName = type_name + arr_str;
@@ -1229,6 +1336,8 @@ public abstract class DaikonVariableInfo
        return typeName;
    }
 
+   //TODO: Use this for getting type info for comparison (LJT)
+   
    /**
     * Return the type name without aux information.
     * @see #getTypeName()
