@@ -90,7 +90,7 @@ public class PureMethodInfo extends DaikonVariableInfo
         return retVal;
     }
 
-    private static Object executePureMethod(Method meth, Object objectVal)
+    private static Object executePureMethod(Method meth, Object receiverVal)
     {
         Object retVal = null;
         try
@@ -100,7 +100,7 @@ public class PureMethodInfo extends DaikonVariableInfo
             // called)
             Runtime.startPure();
 
-            retVal = meth.invoke(objectVal);
+            retVal = meth.invoke(receiverVal);
 
             if (meth.getReturnType().isPrimitive())
                 retVal = convertWrapper(retVal);
