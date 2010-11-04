@@ -758,8 +758,8 @@ public abstract class DaikonVariableInfo
         String theName = meth.getName() + "(" + args[0].getName();
         
         if (args.length > 1) {
-        	for(int i; i < args.length - 1; i++) {
-        		theName += ", " + args[i + 1].getName();
+        	for(int i = 1; i < args.length - 1; i++) {
+        		theName += ", " + args[i].getName();
         	}
         }
         theName += ")";

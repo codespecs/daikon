@@ -164,7 +164,7 @@ public class PureMethodInfo extends DaikonVariableInfo
     	
     	Object[] params = new Object[args.length];
     	
-    	int counter = 0;
+    	int i = 0;
     	
     	for (DaikonVariableInfo field : args) {
     		params[i] = field.getMyValFromParentVal(objectVal);
