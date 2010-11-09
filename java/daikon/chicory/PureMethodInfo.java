@@ -21,7 +21,7 @@ public class PureMethodInfo extends DaikonVariableInfo
      *  if this pure method has no args, then args.size() = 0
      */
     //TODO: Does it make sense to have args static?
-    private static DaikonVariableInfo[] args;
+    private DaikonVariableInfo[] args;
     
     
     //TODO: Should the intialization be entirely changed instead of creating
@@ -70,6 +70,8 @@ public class PureMethodInfo extends DaikonVariableInfo
             meth.setAccessible(true);
         }
 
+        
+       //TODO: What is occurring here? (LJT) 
         if (isArray)
         {
             // First check if parentVal is null or nonsensical
@@ -84,9 +86,22 @@ public class PureMethodInfo extends DaikonVariableInfo
                 for (Object val : (List<Object>) parentVal) // unchecked cast
                 {
                     if (val == null || val instanceof NonsensicalObject)
+                    {
                         retList.add(NonsensicalObject.getInstance());
+                    }
                     else
-                        retList.add(executePureMethod(meth, val));
+                    {
+                    	Object[] params = new Object[args.length];
+                 	   
+                    	int i = 0;
+                    	
+                    	for (DaikonVariableInfo field : args) {
+                    		params[i] = field.getMyValFromParentVal(parentVal);
+                    		i++;
+                    	}
+                    	
+                        retList.add(executePureMethod(meth, val, params));
+                    }
                 }
 
                 retVal = retList;
@@ -101,7 +116,16 @@ public class PureMethodInfo extends DaikonVariableInfo
             }
             else
             {
-                retVal = executePureMethod(meth, parentVal);
+            	Object[] params = new Object[args.length];
+            	   
+            	int i = 0;
+            	
+            	for (DaikonVariableInfo field : args) {
+            		params[i] = field.getMyValFromParentVal(parentVal);
+            		i++;
+            	}
+            	
+                retVal = executePureMethod(meth, parentVal, params);
             }
 
         }
@@ -114,9 +138,12 @@ public class PureMethodInfo extends DaikonVariableInfo
         return retVal;
     }
     
+    // Helper method:
+    
+    
     //TODO: Need to make sure invoke works correctly... (LJT)
 
-    private static Object executePureMethod(Method meth, Object objectVal)
+    private static Object executePureMethod(Method meth, Object objectVal, Object[] argVals)
     {
         Object retVal = null;
         try
@@ -126,12 +153,8 @@ public class PureMethodInfo extends DaikonVariableInfo
             // called)
             Runtime.startPure();
 
-            if(args.length == 0) {
-            	retVal = meth.invoke(objectVal);
-            } else {
-            	retVal = meth.invoke(objectVal, getParams(objectVal));
-            }
-
+            retVal = meth.invoke(objectVal, argVals);
+           
             if (meth.getReturnType().isPrimitive())
                 retVal = convertWrapper(retVal);
         }
@@ -157,20 +180,6 @@ public class PureMethodInfo extends DaikonVariableInfo
         }
 
         return retVal;
-    }
-
-    // TODO:Helper Method; Is it needed? (LJT)
-    private static Object[] getParams(Object objectVal) {
-    	
-    	Object[] params = new Object[args.length];
-    	
-    	int i = 0;
-    	
-    	for (DaikonVariableInfo field : args) {
-    		params[i] = field.getMyValFromParentVal(objectVal);
-    		i++;
-    	}
-    	return params; 
     }
      
 
