@@ -1,6 +1,0 @@
-_user_default: default
-
-# Use ":=" to override any environment setting for JAVAC.
-# Use "?=" to provide a default if there is no environment setting for JAVAC.
-# JAVAC ?= jikes -g +E +F
-
