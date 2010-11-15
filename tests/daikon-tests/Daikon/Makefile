@@ -5,7 +5,7 @@
 # Basics
 ESC_ON:=1
 INSTRUMENT:=infer
-SOURCES:=$(INV)/java
+SOURCES:=$(DAIKONDIR)/java
 
 # Input for daikon under test
 INPUTS_DECLS:=${PWD}/inputs/print_tokens2.decls

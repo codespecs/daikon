@@ -3,8 +3,8 @@
 #
 
 # Add the basic jars to the classpath if they aren't already there
-ifeq "$(wildcard $(INV)/java/lib/bcel.jar)" "$(INV)/java/lib/bcel.jar"
-    CLASSPATH_JARS = :$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/commons-io.jar:$(INV)/java/lib/junit.jar:$(INV)/java/lib/plume.jar
+ifeq "$(wildcard $(DAIKONDIR)/java/lib/bcel.jar)" "$(DAIKONDIR)/java/lib/bcel.jar"
+    CLASSPATH_JARS = :$(DAIKONDIR)/java/lib/bcel.jar:$(DAIKONDIR)/java/lib/java-getopt.jar:$(DAIKONDIR)/java/lib/commons-io.jar:$(DAIKONDIR)/java/lib/junit.jar:$(DAIKONDIR)/java/lib/plume.jar
 endif
 
 # Add necessary items to the classpath if they are not already there
@@ -12,7 +12,7 @@ ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
   CLASSPATH := .:$(CLASSPATH)
 endif
 ifneq (invariants/java:,$(findstring invariants/java:,$(CLASSPATH)))
-    CLASSPATH := $(CLASSPATH):$(INV)/java
+    CLASSPATH := $(CLASSPATH):$(DAIKONDIR)/java
 endif
 ifdef CLASSPATH_JARS
   ifneq (bcel.jar,$(findstring bcel.jar,$(CLASSPATH)))
