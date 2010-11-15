@@ -1,7 +1,0 @@
-order deny,allow
-deny from all
-allow from mit.edu
-allow from cs.washington.edu
-allow from 141.85.37.240
-allow from 213.154.142.62
-allow from baesystems.com

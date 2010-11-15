@@ -1,8 +1,0 @@
-*.decls
-*.dtrace
-*.invs
-*.invs-goal
-xi*.lisp
-*-instrumented.lisp
-gries-instrumented.decls-orig
-p180-15.1.1.dtrace-noloop

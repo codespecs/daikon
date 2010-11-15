@@ -142,12 +142,6 @@ daikon.pdf: daikon.dvi images/dfepl-flow.eps
 developer.pdf: developer.dvi
 	dvipdfm $<
 
-# If the source file below doesn't exist, you may need to check out
-# the eclipse-plugins CVS module by saying "cvs checkout
-# eclipse-plugins" in $INV.
-daikonEclipseHelp.html: ../eclipse-plugins/workspace/DaikonUI/html/daikonHelp.html
-	cp -p $< $@
-
 # Note that the clean target does not remove invariants-doc.texinfo or
 # config-options.texinfo.
 

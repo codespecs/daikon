@@ -348,6 +348,8 @@ Problems running Daikon
 
 Large data trace (.dtrace) files
 
+* Compression::                 
+* Scratch directory::           
 * Run Daikon online::           
 * Multiple smaller files::      
 * Less information per file::   
@@ -381,7 +383,7 @@ Details
 @chapter Introduction
 
 @c If you edit the introduction, then re-generate daikon.html and insert
-@c its ``Introduction'' section into $inv/doc/www/index.html .
+@c its ``Introduction'' section into $DAIKONDIR/doc/www/index.html .
 
 
 @uref{http://pag.csail.mit.edu/daikon/, ,Daikon} is an implementation of
@@ -8679,6 +8681,8 @@ This section describes ways to work around this problem.
 
 
 @menu
+* Compression::                 
+* Scratch directory::           
 * Run Daikon online::           
 * Multiple smaller files::      
 * Less information per file::   
@@ -8687,7 +8691,26 @@ This section describes ways to work around this problem.
 * Reducing executions::         
 @end menu
 
-@node Run Daikon online, Multiple smaller files, Large dtrace files, Large dtrace files
+
+@node Compression, Scratch directory, Large dtrace files, Large dtrace files
+@subsection Compressed .dtrace files
+
+You can reduce file size by specifying a trace file name that includes
+@file{.gz} at the end.  See the @option{--dtrace-file=FILENAME} argument
+to Chicory or Kvasir, or the @samp{DTRACEFILE} environment variable.
+(Compression is the default if you don't specify a filename.)
+
+
+@node Scratch directory, Run Daikon online, Compression, Large dtrace files
+@subsection Save large files in a scratch directory
+
+Sometimes, the problem is just filling up your user account with large
+files.  You can instead create dtrace files in a temporary directory.
+Under Unix, this is often called @file{/scratch}.  Typically you should
+create a subdirectory called @file{/scratch/$USER/}.
+
+
+@node Run Daikon online, Multiple smaller files, Scratch directory, Large dtrace files
 @subsection Run Daikon online
 
 The term ``online execution'' refers to running Daikon at the same time
@@ -9153,6 +9176,8 @@ end was reasonably reliable.  The Lisp front end instrumented procedure
 entries, exits, and loop heads; the C front ends instrumented only
 procedure entries and exits; and the Java front end instrumented program
 points for object invariants as well as procedure entries and exits.
+Daikon 1 and its Lisp front end were only removed from Daikon version
+control repository in November 2010, though they had long been obsolete.
 
 Daikon 2 was a complete rewrite in the Java programming language and was
 the first version to contain a substantive manual.  Daikon 2 uses the
