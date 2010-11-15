@@ -1,5 +1,5 @@
-
-Migrate Daikon to Mercurial at Google Code.
+This file describes how Daikon was migrated from CVS to Mercurial.
+The Mercurial repository is hosted at Google Code.
 
 ----
 
@@ -84,11 +84,9 @@ make compile
 make test
 
 
-
-Need to warn other developers before I do this for real.
-... and wait for Sung to finish with Galar
-
 ----------------
+
+TO DO (?):
 
 Galar:
 similar to valgrind-3, below.
@@ -119,3 +117,20 @@ hg clone valgrind-3-hg valgrind-3-hg-clone
 cd valgrind-3-hg
 hg push https://fjalar.googlecode.com/hg
 
+----------------
+
+To upload CVS repository to Google Code:
+
+Note that the maximum Google Code upload size is 100MB, but the
+inv-cvs.tar.gz file is over 900MB.
+So, instead try something like
+  zip -s 99m -r inv-cvs invariants
+or the zipsplit program.
+
+
+  cd /afs/csail.mit.edu/group/pag/projects/invariants/.CVS/
+  # tar czf ~mernst/www/tmp/inv-cvs.tar.gz invariants
+  ~/bin/install/zip30/zip -s 97656k -r inv-cvs invariants
+
+Problem:  CSAIL doesn't have a version of zip that supports -s installed.
+So, I should install that.  Yuck...

@@ -1,0 +1,14 @@
+exclude demos
+exclude dfec-v2
+exclude eclipse-plugins
+exclude front-end/c
+exclude galar
+exclude kvasir
+exclude mangel-wurzel
+exclude papers
+exclude tests
+exclude tests/dfec-tests
+exclude tests/dfej-tests
+exclude tests/dyncomp-tests
+exclude tests/kvasir-tests
+exclude valgrind-3
