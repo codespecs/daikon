@@ -8,6 +8,7 @@ Makefile.user
 java/Makefile.user
 
 # Compiled Java files
+daikon.jar
 java/ChicoryPremain.jar
 java/dcomp_premain.jar
 java/*.class
@@ -18,7 +19,9 @@ java/java_files.txt
 # DynComp
 java/dcomp-rt/dcomp_jdk_static_map
 java/dcomp-rt/dcomp_jdk_static_map
-dcomp-rt/java/lang/jdk_classes.txt
+java/dcomp-rt/META-INF/MANIFEST.MF
+java/dcomp-rt/java/lang/jdk_classes.txt
+java/dcomp_rt.jar
 dcomp-rt.jar
 # DynComp testing
 java/daikon/dcomp/std_dcomp_out.diff
