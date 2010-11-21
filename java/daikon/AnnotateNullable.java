@@ -19,7 +19,8 @@ import plume.*;
  * Since only the NonZero invariant is used, Daikon processing time can be
  * significantly reduced by turning off derived variables and all
  * invariants other than daikon.inv.unary.scalar.NonZero.  This is not
- * necessary, however, for correct operation.
+ * necessary, however, for correct operation.  File
+ * <tt>annotate_nullable.config</tt> in the distribution does this.
  */
 public class AnnotateNullable {
 
