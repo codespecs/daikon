@@ -158,8 +158,7 @@ public class MethodInfo {
         // methods which return a value and take no parameters!
         if (!Modifier.isAbstract(mod) && !Modifier.isStatic(mod) &&
                 !(member instanceof Constructor<?>) &&
-                !((Method) member).getReturnType().equals(Void.TYPE) &&
-                ((Method) member).getParameterTypes().length == 0)
+                !((Method) member).getReturnType().equals(Void.TYPE))
         {
             if (ChicoryPremain.isMethodPure(member))
             {
