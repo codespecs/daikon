@@ -221,7 +221,7 @@ public class SplitterFactory {
     if (ppt.name.equals(ppt_name))
       return true;
     if (ppt_name.endsWith(":::EXIT")) {
-      String regex = UtilMDE.patternQuote(ppt_name) + "[0-9]+";
+      String regex = Pattern.quote(ppt_name) + "[0-9]+";
       if (matchPptRegex(regex, ppt))
         return true;
     }
@@ -232,13 +232,13 @@ public class SplitterFactory {
     int index = ppt_name.indexOf("OBJECT");
     if (index == -1) {
       // Didn't find "OBJECT" suffix; add ".*EXIT".
-      regex = UtilMDE.patternQuote(ppt_name) + ".*EXIT";
+      regex = Pattern.quote(ppt_name) + ".*EXIT";
     } else {
       // Found "OBJECT" suffix.
       if (ppt_name.length() > 6) {
-        regex = UtilMDE.patternQuote(ppt_name.substring(0, index-1)) + ":::OBJECT";
+        regex = Pattern.quote(ppt_name.substring(0, index-1)) + ":::OBJECT";
       } else {
-        regex = UtilMDE.patternQuote(ppt_name);
+        regex = Pattern.quote(ppt_name);
       }
     }
     return matchPptRegex(regex, ppt);
