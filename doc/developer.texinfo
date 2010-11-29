@@ -3123,7 +3123,7 @@ compile-time constants (e.g., static final variables in Java) are
 omitted from the trace record, since they would have the same value
 every time.
 
-Neither the declarations nor the trace records contains derived
+Furthermore, neither the declarations nor the trace records contains derived
 variables (@pxref{Variable names,,,./daikon,Daikon User Manual}).
 
 
