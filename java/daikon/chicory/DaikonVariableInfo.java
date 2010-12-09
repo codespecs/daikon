@@ -580,7 +580,7 @@ public abstract class DaikonVariableInfo
             
             if (typeInfo != null)
             {
-            	//TODO: Currently running through loop twice....
+            	//Case of pure methods with no parameters
                 for (MethodInfo meth : typeInfo.method_infos)
                 {	
                 	// pure methods with no parameters
@@ -603,12 +603,43 @@ public abstract class DaikonVariableInfo
                     }
                 }
                 
+                // Case of pure methods with one parameter
+                
+                // List containing all sibling nodes, which excludes all pure methods with parameters
+                List<DaikonVariableInfo> siblings = new ArrayList<DaikonVariableInfo>(thisInfo.children);
+                
                 for (MethodInfo meth : typeInfo.method_infos)
                 {
-                	// pure methods with one parameter
                 	if (meth.isPure() && meth.arg_names.length == 1) {
-                		for (DaikonVariableInfo sib : thisInfo.children) {
-                			if (meth.arg_type_strings[0].equals(sib.getTypeNameOnly()))
+                		// TODO: Properly comment this section.
+                		for (DaikonVariableInfo sib : siblings) {
+                			String sibType = sib.getTypeNameOnly();
+                			Class<?> sibClass = null;
+                			
+                			// Handle special case of primitive types
+                			if (sibType.equals("boolean"))
+                				sibClass = boolean.class;
+                			if (sibType.equals("byte"))
+                				sibClass = byte.class;
+                			if (sibType.equals("char"))
+                				sibClass = char.class;
+                			if (sibType.equals("double"))
+                				sibClass = double.class;
+                			if (sibType.equals("float"))
+                				sibClass = float.class;
+                			if (sibType.equals("int"))
+                				sibClass = int.class;
+                			if (sibType.equals("long"))
+                				sibClass = long.class;
+                			if (sibType.equals("short"))
+                				sibClass = short.class;
+                			
+                			try {
+                				sibClass = Class.forName(sibType);
+                			} catch (Exception e) {
+                			}
+                			
+                			if (isSubtype(sibClass, meth.arg_types[0]))
                 			{
                 				DaikonVariableInfo[] arg = {sib};
                 				StringBuffer buf = new StringBuffer();
@@ -632,6 +663,31 @@ public abstract class DaikonVariableInfo
                 
             }
         }
+    }
+    
+    /**
+     * Helper method to decide if class sub is a subtype of Class sup.
+     */
+    private boolean isSubtype(Class<?> sub, Class<?> sup) {
+    	if (sub == sup) {
+    		return true;
+    	}
+    	Class<?> parent = sub.getSuperclass();
+    	// If parent == null, sub == Object
+    	if(parent == null) {
+    		return false;
+    	}
+    	if (parent == sup || isSubtype(parent, sup)) {
+    		return true;
+    	}
+    	
+    	for (Class<?> ifc : sub.getInterfaces()) {
+    		 if (ifc == sup || isSubtype(ifc, sup)) {
+    		   return true;
+    		}
+    	}
+
+    	return false;
     }
 
     /**

@@ -24,18 +24,12 @@ public class PureMethodInfo extends DaikonVariableInfo
     private DaikonVariableInfo[] args;
     
     
-    //TODO: Should the intialization be entirely changed instead of creating
+    //TODO: Should the initialization be entirely changed instead of creating
     //		separate initialization method? (LJT)
     
     public PureMethodInfo(String name, MethodInfo methInfo, boolean inArray)
     {
-        super(name, inArray);
-
-        assert methInfo.isPure() : "Method " + methInfo + " is not pure";
-
-        minfo = methInfo;
-        
-        this.args = new DaikonVariableInfo[0];
+        this(name, methInfo, inArray, new DaikonVariableInfo[0]);
     }
     
     public PureMethodInfo(String name, MethodInfo methInfo, boolean inArray, DaikonVariableInfo[] args)
@@ -121,7 +115,12 @@ public class PureMethodInfo extends DaikonVariableInfo
             	int i = 0;
             	
             	for (DaikonVariableInfo field : args) {
-            		params[i] = field.getMyValFromParentVal(parentVal);
+            		if(field.getMyValFromParentVal(parentVal) instanceof Runtime.PrimitiveWrapper) {
+            			Runtime.PrimitiveWrapper x = (Runtime.PrimitiveWrapper) field.getMyValFromParentVal(parentVal);
+            			params[i] = x.getJavaWrap();
+            		} else {
+            			params[i] = field.getMyValFromParentVal(parentVal);
+            		}
             		i++;
             	}
             	
@@ -137,9 +136,6 @@ public class PureMethodInfo extends DaikonVariableInfo
 
         return retVal;
     }
-    
-    // Helper method:
-    
     
     //TODO: Need to make sure invoke works correctly... (LJT)
 
