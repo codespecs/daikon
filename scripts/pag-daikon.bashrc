@@ -3,8 +3,8 @@
 
 export LC_ALL=${LC_ALL:-en_US}
 
-export DAIKONPARENT=${DAIKONPARENT:-${HOME}/research}
-export DAIKONDIR=${DAIKONPARENT}/invariants
+export DAIKONPARENT=${DAIKONPARENT:-${HOME}/research/invariants}
+export DAIKONDIR=${DAIKONPARENT}/daikon
 
 if [ ! -d "${DAIKONDIR}" ]; then
   echo "*****"
@@ -27,8 +27,8 @@ fi
 
 export DAIKONBIN=${DAIKONDIR}/scripts
 export PLUMEBIN=${DAIKONDIR}/plume-lib/bin
-export INV=${DAIKONDIR}
-export inv=${INV}
+# export INV=${DAIKONDIR}
+# export inv=${INV}
 export DAIKONCLASS_SOURCES=1
 export PAG=/afs/csail.mit.edu/group/pag
 export pag=${PAG}
@@ -39,12 +39,12 @@ export JAVA_HOME=${JAVA_HOME:-/afs/csail/group/pag/software/pkg/jdk}
 export PATH=/usr/local/bin:${PATH}:/afs/csail/group/pag/projects/invariants/binaries:$DAIKONDIR/front-end/c
 
 # "source" is a bash, not sh, feature, so use "." instead
-. ${INV}/scripts/daikon.bashrc
+. ${DAIKONDIR}/scripts/daikon.bashrc
 
 export LD_LIBRARY_PATH=/usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 
 export DAIKON_LIBS=`/usr/bin/perl -e 'print join(":", @ARGV);' ${INV}/java/lib/*.jar`
-export CLASSPATH=.:${CLASSPATH}:${DAIKON_LIBS}:${INV}/plume-lib/java/plume.jar
+export CLASSPATH=${DAIKON_LIBS}:.:${CLASSPATH}
 unset DAIKON_LIBS
 
 export LACKWIT_HOME=${INV}/front-end/c/lackwit
