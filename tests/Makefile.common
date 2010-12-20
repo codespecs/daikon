@@ -4,7 +4,7 @@
 # in the same directory as this one, or use the individual Makefiles
 # in the project subdirectories.
 
-# See "Makefile.user" below on how you can customize your settings
+# Search for "Makefile.user" below to learn how to customize your settings
 
 ###########################################################################
 
@@ -155,9 +155,9 @@ ifndef COMMON_HERE
 endif
 
 # Put user-specific changes in your own Makefile.user
-#  (such as changes to PLUME_DIR or JAVAC).
-# Make will silently continue if file does not exist.
-# File can be in the project dir or in the tests dir (or both).
+#  (such as changes to PLUME_DIR or JAVAC or PATH).
+# Make will silently continue if the file does not exist.
+# The file can be in the project dir, or in the tests dir, or both.
 -include Makefile.user
 -include $(COMMON_HERE)/Makefile.user
 
@@ -720,7 +720,7 @@ ${PROJECT_FILE}.txt-chicory.diff: ${PROJECT_FILE}.txt-chicory.goal \
 	@echo "### dtrace diff (${PROJECT_FILE})"
 	@echo
 	-rm -f $@
-	-java -ea daikon.tools.DtraceDiff \
+	-java -cp "${CLASSPATH}" -ea daikon.tools.DtraceDiff \
 	    ${PROJECT_FILE}.txt-chicory.goal \
 	    ${PROJECT_FILE}.txt-chicory.dtrace > $@ 2>&1
 	cat $@
@@ -742,11 +742,11 @@ txt-jaif: $(PROJECT_FILE).txt-jaif
 	@echo
 	@echo "### AnnotateNullable (${PROJECT_FILE})"
 	@echo
-	$(JAVA) -ea -Xmx1024M daikon.Daikon --no_text_output \
+	$(JAVA) -cp "$(CLASSPATH)" -ea -Xmx1024M daikon.Daikon --no_text_output \
 	  $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz \
 	  --config $(DAIKONDIR)/java/daikon/annotate_nullable.config \
 	  -o $(PROJECT_FILE)-jaif.inv.gz
-	$(JAVA) -ea -Xmx1024M daikon.AnnotateNullable $(PROJECT_FILE)-jaif.inv.gz \
+	$(JAVA) -cp "$(CLASSPATH)" -ea -Xmx1024M daikon.AnnotateNullable $(PROJECT_FILE)-jaif.inv.gz \
 	  > $@-failed 2>&1
 	mv $@-failed $@
 else
@@ -1346,8 +1346,17 @@ showvars:
 	@echo "SCRIPTS             =" $(SCRIPTS)
 	@echo "COMMON_HERE         =" $(COMMON_HERE)
 	@echo "CWD                 =" ${CWD}
+
+	@echo "JAVA_HOME           =" ${JAVA_HOME}
+	@echo "JAVA6_HOME          =" ${JAVA6_HOME}
 	@echo "RUN_JAVA            =" ${RUN_JAVA}
+	@echo "java version:"
+	@${RUN_JAVA} -v
+	@echo "CLASSPATH           =" ${CLASSPATH}
+	@echo "SHELL               =" ${SHELL}
+	@echo "PATH                =" ${PATH}
 	@echo "GZCAT               =" ${GZCAT}
+
 	@echo "DAIKON              =" ${DAIKON}
 	@echo "DAIKON_OPTIONS      =" ${DAIKON_OPTIONS}
 	@echo "PRINT_INVARIANTS    =" ${PRINT_INVARIANTS}
@@ -1377,7 +1386,6 @@ ifdef ESC_ON
 endif
 	@echo "NO_JML              =" ${NO_JML}
 	@echo "NO_MERGE            =" ${NO_MERGE}
-	@echo "CLASSPATH           =" ${CLASSPATH}
 	@echo "USER_DAIKON_OPTIONS =" ${USER_DAIKON_OPTIONS}
 	@echo "PERSONAL_DAIKON_OPTIONS =" ${PERSONAL_DAIKON_OPTIONS}
 	@echo "SCRATCH_MACHINE     =" ${SCRATCH_MACHINE}
@@ -1385,7 +1393,6 @@ endif
 	@echo "SCRATCH_BASE2       =" ${SCRATCH_BASE2}
 	@echo "SCRATCH_FOR_DAIKON_BASE =" ${SCRATCH_FOR_DAIKON_BASE}
 	@echo "SCRATCH_FOR_DAIKON  =" ${SCRATCH_FOR_DAIKON}
-	@echo "SHELL               =" ${SHELL}
 
 
 results summary:
