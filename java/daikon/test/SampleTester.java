@@ -119,7 +119,7 @@ public class SampleTester extends TestCase {
            " (Should be in daikon.test and it must be within the classpath)");
 
     SampleTester ts = new SampleTester();
-    ts.proc_sample_file (commands);
+    ts.proc_sample_file (commands, "SampleTester.commands");
     System.out.println ("Test Passes");
   }
 
@@ -149,10 +149,10 @@ public class SampleTester extends TestCase {
            " (Should be in daikon.test and it must be within the classpath)");
 
     SampleTester ts = new SampleTester();
-    ts.proc_sample_file (commands);
+    ts.proc_sample_file (commands, "SampleTester.commands");
   }
 
-  public void proc_sample_file (InputStream commands) throws IOException {
+  public void proc_sample_file (InputStream commands, String filename) throws IOException {
 
     if (PrintInvariants.dkconfig_print_inv_class) {
       System.out.println ("Warning: turning off " +
@@ -192,7 +192,7 @@ public class SampleTester extends TestCase {
       else if (ltype.equals ("vars"))
         proc_vars (cmd);
       else if (ltype.equals ("data"))
-        proc_data (cmd);
+        proc_data (cmd, fp, filename);
       else if (ltype.equals ("assert"))
         proc_assert (cmd);
       else
@@ -283,7 +283,7 @@ public class SampleTester extends TestCase {
    *
    * Neither orig nor derived variables are added.
    */
-  private void proc_data (String data) {
+  private void proc_data (String data, LineNumberReader reader, String filename) {
 
     if (vars == null)
       parse_error ("vars must be specified before data");
@@ -308,7 +308,7 @@ public class SampleTester extends TestCase {
       if (da[i].equals("-"))
         continue;
       VarInfo vi = vars[i];
-      vals[vi.value_index] = vi.rep_type.parse_value (da[i]);
+      vals[vi.value_index] = vi.rep_type.parse_value (da[i], reader, filename);
       mods[vi.value_index] = ValueTuple.parseModified ("1");
     }
 

@@ -539,9 +539,9 @@ class FormatTestCase {
       // If generating goals, goalOutput will have the proper first line
       // Otherwise, currentLine will have the proper first sample line
       if (generateGoals)
-        getSamples(types, (BufferedReader)commands, samples, generateGoals, goalOutput);
+        getSamples(types, commands, samples, generateGoals, goalOutput);
       else
-        getSamples(types, (BufferedReader)commands, samples, generateGoals, currentLine);
+        getSamples(types, commands, samples, generateGoals, currentLine);
     }
 
     // Use the add_modified function of the appropriate invariant to
@@ -691,7 +691,7 @@ class FormatTestCase {
   }
 
 
-  private static void getSamples(ProglangType[] types, BufferedReader commands, List<Object[]> samples, boolean generateGoals, String firstLine) {
+  private static void getSamples(ProglangType[] types, LineNumberReader commands, List<Object[]> samples, boolean generateGoals, String firstLine) {
     String currentLine = (firstLine == null ? InvariantFormatTester.COMMENT_STARTER_STRING :
                                        firstLine);
 
@@ -719,7 +719,7 @@ class FormatTestCase {
           for (int i=0; i<types.length; i++) {
             // Parse each line according to a type in the paramTypes array
             // System.out.println("in getSamples right before parse, currentLine = \"" + currentLine + "\"");
-            sample[i] = types[i].parse_value(currentLine);
+            sample[i] = types[i].parse_value(currentLine, commands, "test case");
             currentLine = commands.readLine();
           }
           samples.add(sample);

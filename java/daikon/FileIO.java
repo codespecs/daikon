@@ -692,7 +692,7 @@ public final class FileIO {
 
     if (static_constant_value_string != null) {
       static_constant_value =
-        rep_type.parse_value(static_constant_value_string);
+        rep_type.parse_value(static_constant_value_string, file, filename);
       // Why can't the value be null?
       assert static_constant_value != null;
     }
@@ -2218,7 +2218,7 @@ public final class FileIO {
         // "(modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
 
         try {
-          vals[val_index] = vi.rep_type.parse_value(value_rep);
+          vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
           if (vals[val_index] == null) {
             if (debug_missing && !vi.canBeMissing)
               System.out.printf ("Var %s ppt %s at line %d null-not missing%n",
@@ -2894,7 +2894,7 @@ public final class FileIO {
       /*@Interned*/ String constant_str = need (scanner, "constant value");
       need_eol (scanner);
       try {
-        static_constant_value = rep_type.parse_value (constant_str);
+        static_constant_value = rep_type.parse_value (constant_str, null, "parse_constant");
       } catch (Error e) {
         decl_error (state, e.getMessage());
       }
