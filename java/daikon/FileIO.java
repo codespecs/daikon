@@ -1694,6 +1694,7 @@ public final class FileIO {
    * supply it to the program point for flowing.
    * @param vt trace data only; modified by side effect to add derived vars
    **/
+  /*@NonNullOnEntry("FileIO.data_trace_state")*/
   public static void process_sample(
                                     PptMap all_ppts,
                                     PptTopLevel ppt,
@@ -2013,7 +2014,7 @@ public final class FileIO {
   // This procedure reads a single record from a trace file and
   // fills up vals and mods by side effect.  The ppt name and
   // invocation nonce (if any) have already been read.
-  /*@NonNullOnEntry("data_trace_state")*/
+  /*@NonNullOnEntry("FileIO.data_trace_state")*/
   private static void read_vals_and_mods_from_trace_file
                         (LineNumberReader reader, String filename,
                          PptTopLevel ppt, /*@Nullable*/ Object[] vals, int[] mods)
@@ -2281,7 +2282,7 @@ public final class FileIO {
    * a matching enter.  See dkconfig_ignore_missing_enter for more info.
    * If true is returned, this ppt should be ignored by the caller
    **/
-  /*@NonNullOnEntry("data_trace_state")*/
+  /*@NonNullOnEntry("FileIO.data_trace_state")*/
   public static boolean add_orig_variables(PptTopLevel ppt,
                                      // HashMap cumulative_modbits,
                                      /*@Nullable*/ Object[] vals, int[] mods,
