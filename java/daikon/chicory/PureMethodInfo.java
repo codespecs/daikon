@@ -17,15 +17,9 @@ public class PureMethodInfo extends DaikonVariableInfo
     /** The MethodInfo object for this pure method **/
     private MethodInfo minfo;
 
-    /** An array containing the chosen variable parameters of this pure method,
-     *  if this pure method has no args, then args.size() = 0
-     */
-    //TODO: Does it make sense to have args static?
+    /** An array containing the parameters of this pure method **/
     private DaikonVariableInfo[] args;
     
-    
-    //TODO: Should the initialization be entirely changed instead of creating
-    //		separate initialization method? (LJT)
     
     public PureMethodInfo(String name, MethodInfo methInfo, boolean inArray)
     {
@@ -65,7 +59,6 @@ public class PureMethodInfo extends DaikonVariableInfo
         }
 
         
-       //TODO: What is occurring here? (LJT) 
         if (isArray)
         {
             // First check if parentVal is null or nonsensical
@@ -89,8 +82,16 @@ public class PureMethodInfo extends DaikonVariableInfo
                  	   
                     	int i = 0;
                     	
-                    	for (DaikonVariableInfo field : args) {
-                    		params[i] = field.getMyValFromParentVal(parentVal);
+                    	for (DaikonVariableInfo field : args) 
+                    	{
+                    		if (field.getMyValFromParentVal(parentVal) instanceof Runtime.PrimitiveWrapper) 
+                    		{
+                    			Runtime.PrimitiveWrapper x = (Runtime.PrimitiveWrapper) field.getMyValFromParentVal(parentVal);
+                    			params[i] = x.getJavaWrap();
+                    		} else 
+                    		{
+                    			params[i] = field.getMyValFromParentVal(parentVal);
+                    		}
                     		i++;
                     	}
                     	
@@ -114,11 +115,15 @@ public class PureMethodInfo extends DaikonVariableInfo
             	   
             	int i = 0;
             	
-            	for (DaikonVariableInfo field : args) {
-            		if(field.getMyValFromParentVal(parentVal) instanceof Runtime.PrimitiveWrapper) {
+            	for (DaikonVariableInfo field : args) 
+            	{
+            		if (field.getMyValFromParentVal(parentVal) instanceof Runtime.PrimitiveWrapper)
+            		{
+            			// Convert Chicory primitive wrapper to java.lang's primitive wrapper
             			Runtime.PrimitiveWrapper x = (Runtime.PrimitiveWrapper) field.getMyValFromParentVal(parentVal);
             			params[i] = x.getJavaWrap();
-            		} else {
+            		} else 
+            		{
             			params[i] = field.getMyValFromParentVal(parentVal);
             		}
             		i++;
@@ -136,8 +141,6 @@ public class PureMethodInfo extends DaikonVariableInfo
 
         return retVal;
     }
-    
-    //TODO: Need to make sure invoke works correctly... (LJT)
 
     private static Object executePureMethod(Method meth, Object objectVal, Object[] argVals)
     {

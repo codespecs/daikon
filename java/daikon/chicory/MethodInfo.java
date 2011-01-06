@@ -71,7 +71,7 @@ public class MethodInfo {
   /**
    * Whether or not the method is pure (has no side-effects).
    * Will only be set to true if the --purity-analysis switch is given
-   * to Chicory, and the method returns some value and takes no parameters.
+   * to Chicory, and the method returns some value.
    * Only set during initViaReflection() method
    */
   private boolean isPure;
@@ -151,11 +151,9 @@ public class MethodInfo {
     {
         int mod = member.getModifiers();
 
-        //TODO: Consider purity on methods which take parameters (LJT)
-        //TODO: Just delete final expression (LJT)     
         
-        // Only consider purity on non-abstract, non-static, non-constructor
-        // methods which return a value and take no parameters!
+        // Only consider purity on non-abstract, non-static, and non-constructor
+        // methods which return a value!
         if (!Modifier.isAbstract(mod) && !Modifier.isStatic(mod) &&
                 !(member instanceof Constructor<?>) &&
                 !((Method) member).getReturnType().equals(Void.TYPE))
