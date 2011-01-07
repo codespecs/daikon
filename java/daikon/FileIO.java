@@ -1114,6 +1114,7 @@ public final class FileIO {
    * each sample.
    */
   public static class Processor {
+    @NonNullOnEntry("FileIO.data_trace_state")
     public void process_sample(
                                PptMap all_ppts,
                                PptTopLevel ppt,

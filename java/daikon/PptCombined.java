@@ -84,6 +84,7 @@ public class PptCombined extends PptTopLevel {
     }
   }
 
+  /*@AssertNonNullAfter("assemblies")*/
   private static void loadAssemblies(String assembliesFile) {
     if (assemblies == null)
       assemblies = AsmFile.getAsmFile(assembliesFile);
@@ -259,6 +260,7 @@ public class PptCombined extends PptTopLevel {
   }
 
 
+  /*@NonNullOnEntry("assemblies")*/
   public static List<PptTopLevel> findIntermediateBlocks(PptTopLevel dest, PptTopLevel source) {
 
     Set<PptTopLevel> visited = new LinkedHashSet<PptTopLevel>();
@@ -981,6 +983,7 @@ public class PptCombined extends PptTopLevel {
   // analysis, they are deemed equal by Daikon's dynamic analysis.
   //
   // Returns 0 if all tests pass, 1 if something goes wrong.
+  /*@NonNullOnEntry("assemblies")*/
   public static int redundantVarsTest(PptMap all_ppts) {
     int retval = 0;
     for (PptTopLevel ppt : all_ppts.all_ppts()) {
