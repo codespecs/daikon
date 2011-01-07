@@ -93,7 +93,7 @@ It describes Daikon version 4.6.4, released June 23, 2010.
 Extending Daikon
 
 * Compiling Daikon::            
-* CVS repository::              
+* Hg repository::              
 * Using Eclipse::               
 * New invariants::              
 * New derived variables::       
@@ -234,7 +234,7 @@ This chapter describes how to customize or modify Daikon.
 
 @menu
 * Compiling Daikon::            
-* CVS repository::              
+* Hg repository::              
 * Using Eclipse::               
 * New invariants::              
 * New derived variables::       
@@ -244,7 +244,7 @@ This chapter describes how to customize or modify Daikon.
 * System.exit::                 
 @end menu
 
-@node    Compiling Daikon, CVS repository, Extending Daikon, Extending Daikon
+@node    Compiling Daikon, Hg repository, Extending Daikon, Extending Daikon
 @section Compiling Daikon
 @cindex compiling daikon
 
@@ -337,20 +337,19 @@ Java 1.5 on MacOSX:
   export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
 @end smallexample
   
-@node    CVS repository, Using Eclipse, Compiling Daikon, Extending Daikon
-@section CVS repository
+
+@node     Hg repository, Using Eclipse, Compiling Daikon, Extending Daikon
+@section Version control repository
 @cindex CVS repository
+@cindex Hg repository
+@cindex Mercurial repository
+@cindex version control repository
 
-The layout of the Daikon CVS repository differs slightly from that of
-the distribution.  For example, the top-level directory is named
-@file{invariants/} instead of @file{daikon/}, and the subdirectory with
-helper programs is named @file{scripts/} instead of @file{bin/}.
-
-For information about obtaining Daikon via CVS, see
-@uref{http://groups.csail.mit.edu/@/pag/daikon/mit/}.
+The Daikon Mercurial repository is at Google Code; see
+@uref{http://code.google.com/p/daikon/}.
 
 
-@node    Using Eclipse, New invariants, CVS repository, Extending Daikon
+@node    Using Eclipse, New invariants, Hg repository, Extending Daikon
 @section Using Eclipse
 @cindex Eclipse
 
@@ -1366,7 +1365,8 @@ behavior and possibly update the goals.
 
 The Daikon distribution contains unit tests, but not regression tests
 (which would make the distribution much larger).  The regression tests
-appear in Daikon's CVS repository.
+appear in Daikon's version control repository (@pxref{Version control
+repository}).
 
 @menu
 * Unit testing::                
@@ -1682,7 +1682,7 @@ Most Daikon regression tests appear in @file{$DAIKONDIR/tests/daikon-tests}.  Ea
 test is placed in a separate directory.  That directory contains a
 simple makefile and the goal files for the tests.  The source files
 for the test are stored in @file{$DAIKONDIR/tests/sources}.  For example,
-the @file{StackAr} directory contains the following files in CVS:
+the @file{StackAr} directory contains the following files in the repository:
 @example
 Makefile
 Stackar.spinfo-static.goal
@@ -1721,7 +1721,7 @@ empty versions of each.  They execute @samp{make diffs} to run the test and
 produce results.  When the results are as expected execute 
 @samp{make update-goals} to copy the results in to the goal files.  
 Release the test by committing the goal files, Makefile, and source files
-to the CVS repository.
+to the repository.
 
 The common makefile contains a number of other useful targets.  A brief
 explanation of each can be found by executing @samp{make} (without a target).
@@ -1938,7 +1938,7 @@ put a semi-colon at the end of your expression!).
 @subsection Using Mercurial with Eclipse
 
 TODO, although you can just do all the editing, compiling, and
-running from the Eclipse IDE while doing CVS commands from the shell
+running from the Eclipse IDE while doing version control commands from the shell
 or whatever current system you use.
 
 
@@ -2021,13 +2021,15 @@ target.
 @b{To do:}  Time each step, and put those times here.  That will help
 someone who is making a release to plan.
 
+@b{To do:}  All references to CVS should be changed to Mercurial.
+
 
 @enumerate
 
 @item
  It is suggested that you use the @samp{daikonuser} account
     to publish a distribution.  This ensures that everything has been
-    committed to CVS and that nothing extraneous in your account gets
+    committed to Mercurial and that nothing extraneous in your account gets
     included in the distribution.  Ask a senior group member for the
     password.  Note that all of the following instructions should work
     from other accounts as well.
@@ -2367,6 +2369,14 @@ distribution.  If you are a researcher who uses the Daikon version
 control history, please let us know of any publications so that we can
 publicize them at
 @uref{http://pag.csail.mit.edu/daikon/pubs/#daikon-testsubject}.
+
+The layout of the Daikon CVS repository differs slightly from that of
+the distribution.  For example, the top-level directory is named
+@file{invariants/} instead of @file{daikon/}, and the subdirectory with
+helper programs is named @file{scripts/} instead of @file{bin/}.
+More information about obtaining Daikon via CVS, was available in
+directory @code{invariants/doc/www/mit}.
+
 
 The remainder of this section points out some pitfalls for such
 researchers.  Although
