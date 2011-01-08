@@ -78,7 +78,7 @@ public class InstructionUtils {
   public static Map<String, Set<String>> computeRedundantVarsFake(
       List<IInstruction> path) {
     Map<String, Set<String>> redundants = new LinkedHashMap<String, Set<String>>();
-    Set</*@KeyFor("leaders")*/ String> varsUsedPreviously = new LinkedHashSet<String>();
+    Set</*@KeyFor("leaders")*/ String> varsUsedPreviously = new LinkedHashSet</*@KeyFor("leaders")*/ String>();
     Map<String, String> leaders = new LinkedHashMap<String, String>();
     for (IInstruction instr : path) {
       for (String varName : instr.getBinaryVarNames()) {
@@ -97,7 +97,7 @@ public class InstructionUtils {
       }
     }
     Map<String, Set<String>> redundantsFinal = new LinkedHashMap<String, Set<String>>();
-    for (Map.Entry<String, Set<String>> e : redundants.entrySet()) {
+    for (Map.Entry</*@KeyFor("redundants")*/ String, Set<String>> e : redundants.entrySet()) {
       if (!e.getValue().isEmpty()) {
         redundantsFinal.put(e.getKey(), e.getValue());
       }
@@ -254,7 +254,7 @@ public class InstructionUtils {
     int totalVars = 0;
     Map<String,String> result = new LinkedHashMap<String, String>();
     //Map<String, Set<String>> redundantVarsFinal = new LinkedHashMap<String, Set<String>>();
-    for (Map.Entry<String, Set<String>> e : redundantVars.entrySet()) {
+    for (Map.Entry</*@KeyFor("redundantVars")*/ String, Set<String>> e : redundantVars.entrySet()) {
       totalVars++;
       if (!e.getValue().isEmpty()) {
         for (String rvar : e.getValue()) {

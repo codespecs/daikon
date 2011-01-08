@@ -4383,7 +4383,7 @@ class DCInstrument {
   public static void save_static_map (File file) throws IOException {
 
     PrintStream ps = new PrintStream (file);
-    for (Map.Entry<String,Integer> entry : static_map.entrySet()) {
+    for (Map.Entry</*@KeyFor("static_map")*/ String,Integer> entry : static_map.entrySet()) {
       ps.printf ("%s  %d%n", entry.getKey(), entry.getValue());
     }
     ps.close();

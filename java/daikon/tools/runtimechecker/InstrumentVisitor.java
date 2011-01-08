@@ -601,7 +601,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         code.append("try {\n");
         code.append("daikonProperties = new daikon.tools.runtimechecker.Property[" + varNumCounter  + "];\n");
 
-        for (Map.Entry e : xmlStringToIndex.entrySet()) {
+        for (Map.Entry</*@KeyFor("xmlStringToIndex")*/ String,String> e : xmlStringToIndex.entrySet()) {
             code.append("daikonProperties[" + e.getValue() + "] = ");
             code.append("daikon.tools.runtimechecker.Property.get(");
             code.append("\"");

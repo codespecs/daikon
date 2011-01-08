@@ -23,7 +23,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
   // For debugging purposes.
   private void printShadowingMap() {
     System.out.println("Shadowing map:");
-    for (Map.Entry<String,Stack<ClassOrInterfaceType>> e : shadowingMap.entrySet()) {
+    for (Map.Entry</*@KeyFor("shadowingMap")*/ String,Stack<ClassOrInterfaceType>> e : shadowingMap.entrySet()) {
       System.out.print("  " + e.getKey() + " stack: ");
       for (ClassOrInterfaceType t : e.getValue()) {
         StringWriter w = new StringWriter();
@@ -242,7 +242,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     // 2. Only the first <IDENTIFIER> may possibly be associated
     //    with a type argument. If we find it in typeParametersInScope,
     //    we replace t with [...]
-    for (Map.Entry<String,Stack<ClassOrInterfaceType>> entry : shadowingMap.entrySet()) {
+    for (Map.Entry</*@KeyFor("shadowingMap")*/ String,Stack<ClassOrInterfaceType>> entry : shadowingMap.entrySet()) {
       if (entry.getKey().equals(n.f0.tokenImage)) {
         ClassOrInterfaceType c = entry.getValue().peek();
         //System.out.println("c:" + Ast.format(c));
@@ -283,7 +283,7 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
     HashMap<String,Stack<ClassOrInterfaceType>> newMap = new HashMap<String,Stack<ClassOrInterfaceType>>();
 
-    for (Map.Entry<String,Stack<ClassOrInterfaceType>> e : m.entrySet()) {
+    for (Map.Entry</*@KeyFor("m")*/ String,Stack<ClassOrInterfaceType>> e : m.entrySet()) {
       String key = e.getKey();
       Stack<ClassOrInterfaceType> oldStack = e.getValue();
       @SuppressWarnings("unchecked")

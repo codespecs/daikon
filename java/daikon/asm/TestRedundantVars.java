@@ -60,7 +60,7 @@ public class TestRedundantVars {
 
         boolean success = true;
 
-        for (Map.Entry<String, List<String>> e : reds.records.entrySet()) {
+        for (Map.Entry</*@KeyFor("reds.records")*/ String, List<String>> e : reds.records.entrySet()) {
 
             if (e.getValue().size() == 0) {
                 // No redundant vars for this ppt.

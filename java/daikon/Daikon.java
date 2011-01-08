@@ -2020,7 +2020,7 @@ public final class Daikon {
       }
       System.out.println ("  vars       = " + ppt.var_infos.length);
       System.out.println ("  leaders    = " + leader_cnt);
-      for (Map.Entry<ProglangType,Count> e : type_map.entrySet()) {
+      for (Map.Entry</*@KeyFor("type_map")*/ ProglangType,Count> e : type_map.entrySet()) {
         ProglangType file_rep_type = e.getKey();
         Count cnt = e.getValue();
         System.out.printf ("  %s  = %d%n", file_rep_type, cnt.val);

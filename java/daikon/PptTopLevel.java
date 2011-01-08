@@ -3057,7 +3057,7 @@ public class PptTopLevel extends Ppt {
         }
         int max_demerits = -1;
         Vector<Lemma> worst = new Vector<Lemma>();
-        for (Map.Entry<Lemma,Integer> ent : demerits.entrySet()) {
+        for (Map.Entry</*@KeyFor("demerits")*/ Lemma,Integer> ent : demerits.entrySet()) {
           int value = ent.getValue().intValue();
           if (value == max_demerits) {
             worst.add(ent.getKey());
@@ -3668,7 +3668,7 @@ public class PptTopLevel extends Ppt {
         continue;
       Map<VarInfo.Pair,VarInfo.Pair> eq_new = rel.get_child_equalities_as_parent();
       // Cannot use foreach loop, due to desire to remove from emap.
-      for (Iterator<VarInfo.Pair> j = emap.keySet().iterator(); j.hasNext();) {
+      for (Iterator</*@KeyFor("emap")*/ VarInfo.Pair> j = emap.keySet().iterator(); j.hasNext();) {
         VarInfo.Pair curpair = j.next();
         VarInfo.Pair newpair = eq_new.get(curpair);
         if (newpair == null)
@@ -3847,7 +3847,7 @@ public class PptTopLevel extends Ppt {
 
     // Remove the NI suppressed invariants in the children that we
     // previously created
-    for (Map.Entry<PptTopLevel,List<Invariant>> entry : suppressed_invs.entrySet()) {
+    for (Map.Entry</*@KeyFor("suppressed_invs")*/ PptTopLevel,List<Invariant>> entry : suppressed_invs.entrySet()) {
       PptTopLevel child = entry.getKey();
       List<Invariant> suppressed_list = entry.getValue();
       child.remove_invs(suppressed_list);

@@ -416,7 +416,7 @@ public class PptSplitter implements Serializable {
     // Remove exclusive invariants from the different invariants list
     // It would be better not to have added them in the first place,
     // but this is easier for now.
-    for (Iterator<Invariant[]> ii = different_invs_vec.iterator(); ii.hasNext(); ) {
+    for (Iterator</*@KeyFor("different_invs_vec")*/ Invariant[]> ii = different_invs_vec.iterator(); ii.hasNext(); ) {
       Invariant[] diff_invs = ii.next();
       if (diff_invs[0] != null) {
         assert diff_invs[1] == null;

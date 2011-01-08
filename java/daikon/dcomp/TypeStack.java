@@ -373,7 +373,7 @@ public final class TypeStack
 
     private static <K, V> void dumpMap(Map<K, V> map)
     {
-        for (K k : map.keySet())
+        for (/*@KeyFor("map")*/ K k : map.keySet())
         {
             System.out.printf("key: %s, value: %s%n", k, map.get(k));
         }

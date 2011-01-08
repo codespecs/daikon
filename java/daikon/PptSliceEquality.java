@@ -325,7 +325,7 @@ public class PptSliceEquality
     Equality[] resultArray = new Equality[multiMap.values().size()
                                           + out_of_bounds.size()];
     int resultCount = 0;
-    for (Map.Entry<Object,List<VarInfo>> entry : multiMap.entrySet()) {
+    for (Map.Entry</*@KeyFor("multiMap")*/ Object,List<VarInfo>> entry : multiMap.entrySet()) {
       Object key = entry.getKey();
       List<VarInfo> list = entry.getValue();
       assert list.size() > 0;

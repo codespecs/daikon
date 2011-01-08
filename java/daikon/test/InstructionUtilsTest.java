@@ -37,7 +37,7 @@ public class InstructionUtilsTest extends TestCase {
     if (redundantVars.length == 0) return;
     Set<String> redExpected = new LinkedHashSet<String>(Arrays.<String>asList(redundantVars));
     Set<String> redActual = new LinkedHashSet<String>(); //redMap.get(leader);
-    for (Map.Entry<String, String> e : redMap.entrySet()) {
+    for (Map.Entry</*@KeyFor("redMap")*/ String, String> e : redMap.entrySet()) {
       if (e.getValue().equals(leader))
         redActual.add(e.getKey());
     }

@@ -68,7 +68,7 @@ public class CoverageStats
     // Compute coverage
     Map<String,HashSet<Integer>> all = new HashMap<String,HashSet<Integer>>();
     Map<String,HashSet<Integer>> covered = new HashMap<String,HashSet<Integer>>();
-    for (Map.Entry<String,Set<Integer>> entry : hits.entrySet()) {
+    for (Map.Entry</*@KeyFor("hits")*/ String,Set<Integer>> entry : hits.entrySet()) {
       String file = entry.getKey();
       Set<Integer> lines = entry.getValue();
       if (! relevant.contains(file)) continue;
@@ -77,7 +77,7 @@ public class CoverageStats
       if (! covered.containsKey(file)) covered.put(file, new HashSet<Integer>());
       covered.get(file).addAll(lines);
     }
-    for (Map.Entry<String,Set<Integer>> entry : misses.entrySet()) {
+    for (Map.Entry</*@KeyFor("misses")*/ String,Set<Integer>> entry : misses.entrySet()) {
       String file = entry.getKey();
       Set<Integer> lines = entry.getValue();
       if (! relevant.contains(file)) continue;

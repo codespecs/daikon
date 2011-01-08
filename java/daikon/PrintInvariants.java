@@ -1158,7 +1158,7 @@ public final class PrintInvariants {
     }
 
     if (dkconfig_replace_prestate) {
-      for (Map.Entry<String,String> e : exprToVar.entrySet()) {
+      for (Map.Entry</*@KeyFor("exprToVar")*/ String,String> e : exprToVar.entrySet()) {
         out.println("prestate assignment: " + e.getValue() + "=" + e.getKey());
       }
       resetPrestateExpressions();
@@ -1344,7 +1344,7 @@ public final class PrintInvariants {
 
     log.fine (ppt.name() + ": " + invs_array.length);
 
-    for (Map.Entry</*@Nullable*/ Class<? extends InvariantFilter>,Map<Class<? extends Invariant>,Integer>> entry : filter_map.entrySet()) {
+    for (Map.Entry</*@Nullable*/ /*@KeyFor("filter_map")*/ Class<? extends InvariantFilter>,Map<Class<? extends Invariant>,Integer>> entry : filter_map.entrySet()) {
       Class<? extends InvariantFilter> filter_class = entry.getKey();
       Map<Class<? extends Invariant>,Integer> inv_map = entry.getValue();
       int total = 0;
@@ -1355,7 +1355,7 @@ public final class PrintInvariants {
         log.fine (" : Accepted Invariants : " + total);
       else
         log.fine (" : " + filter_class.getName() + ": " + total);
-      for (Map.Entry<Class<? extends Invariant>,Integer> entry2 : inv_map.entrySet()) {
+      for (Map.Entry</*@KeyFor("inv_map")*/ Class<? extends Invariant>,Integer> entry2 : inv_map.entrySet()) {
         Class<? extends Invariant> inv_class = entry2.getKey();
         Integer cnt = entry2.getValue();
         log.fine (" : : " + inv_class.getName() + ": " + cnt.intValue());
