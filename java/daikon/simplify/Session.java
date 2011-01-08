@@ -66,7 +66,7 @@ public class Session
    * also be directed to a file named simplifyN.in (where N is a
    * number starting from 0) in the current directory. Simplify's
    * operation can then be reproduced with a command like
-   * <samp>Simplify -nosc <simplify0.in</samp>.
+   * <samp>Simplify -nosc &lt;simplify0.in</samp>.
    * This is intended primarily for debugging
    * when Simplify fails.
    **/
@@ -109,11 +109,14 @@ public class Session
         trace_file = new PrintStream(new FileOutputStream(f));
       }
 
-      // set up command stream and turn off prompting
-      SessionManager.debugln("Session: prompt off");
+      // set up command stream
       input = new PrintStream(process.getOutputStream());
-      sendLine("(PROMPT_OFF)");
+      // set up result stream
+      output = new BufferedReader(new InputStreamReader(is));
 
+      // turn off prompting
+      SessionManager.debugln("Session: prompt off");
+      sendLine("(PROMPT_OFF)");
       SessionManager.debugln("Session: eat prompt");
       // eat first (and only, because we turn it off) prompt
       InputStream is = process.getInputStream();
@@ -124,16 +127,12 @@ public class Session
       assert expect.equals(actual)
         : "Prompt expected, got '" + actual + "'";
 
-      // set up result stream
-      output = new BufferedReader(new InputStreamReader(is));
-
     } catch (IOException e) {
       throw new SimplifyError(e.toString());
     }
   }
 
-  /*@NonNullOnEntry("input")*/
-  /* package access */ void sendLine(String s) /*@Raw*/ {
+  /* package access */ void sendLine(String s) {
     if (dkconfig_trace_input) {
       assert trace_file != null
         : "@SuppressWarnings(nullness): dependent: trace_file is set in constructor if dkconfig_trace_input is true";
