@@ -111,7 +111,9 @@ public class Session
 
       // set up command stream
       input = new PrintStream(process.getOutputStream());
+
       // set up result stream
+      InputStream is = process.getInputStream();
       output = new BufferedReader(new InputStreamReader(is));
 
       // turn off prompting
@@ -119,7 +121,6 @@ public class Session
       sendLine("(PROMPT_OFF)");
       SessionManager.debugln("Session: eat prompt");
       // eat first (and only, because we turn it off) prompt
-      InputStream is = process.getInputStream();
       String expect = ">\t";
       byte[] buf = new byte[expect.length()];
       int pos = is.read(buf);
