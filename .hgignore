@@ -18,6 +18,11 @@ java/java_files.txt
 # Javadoc
 java/doc
 
+# Eclipse files
+java/bin
+java/.classpath
+
+
 # DynComp
 java/dcomp-rt/dcomp_jdk_static_map
 java/dcomp-rt/dcomp_jdk_static_map
