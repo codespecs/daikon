@@ -10,6 +10,7 @@ import junit.framework.TestCase;
 
 public class PptCombinedTests extends TestCase {
 
+  /*@NonNullOnEntry("PptCombined.assemblies")*/
   public void testFindIntermediateBlocks1() {
 
     PptTopLevel p1 = new PptTopLevel("ppt:::1", new VarInfo[0]);
@@ -29,7 +30,8 @@ public class PptCombinedTests extends TestCase {
 
   }
 
- public void testFindIntermediateBlocks2() {
+  /*@NonNullOnEntry("PptCombined.assemblies")*/
+  public void testFindIntermediateBlocks2() {
 
     PptTopLevel p1 = new PptTopLevel("ppt:::1", new VarInfo[0]);
     PptTopLevel p2 = new PptTopLevel("ppt:::2", new VarInfo[0]);
@@ -52,7 +54,8 @@ public class PptCombinedTests extends TestCase {
 
   }
 
- public void testFindIntermediateBlocks3() {
+  /*@NonNullOnEntry("PptCombined.assemblies")*/
+  public void testFindIntermediateBlocks3() {
 
    PptTopLevel p1 = new PptTopLevel("ppt:::1", new VarInfo[0]);
    PptTopLevel p2 = new PptTopLevel("ppt:::2", new VarInfo[0]);
@@ -66,7 +69,8 @@ public class PptCombinedTests extends TestCase {
    assertListDoesNotContain(list, p1);
  }
 
- public void testFindIntermediateBlocks4() {
+  /*@NonNullOnEntry("PptCombined.assemblies")*/
+  public void testFindIntermediateBlocks4() {
 
    PptTopLevel p1 = new PptTopLevel("ppt:::1", new VarInfo[0]);
    PptTopLevel p2 = new PptTopLevel("ppt:::2", new VarInfo[0]);

@@ -86,8 +86,10 @@ public class InstructionUtils {
         if (!varsUsedPreviously.contains(varName)) {
           // Make it a leader.
           redundants.put(varFullName, new LinkedHashSet<String>());
-          varsUsedPreviously.add(varName);
           leaders.put(varName, varFullName);
+          @SuppressWarnings("keyfor") // checker weakness: flow and Map.put
+          /*@KeyFor("leaders")*/ String varName2 = varName;
+          varsUsedPreviously.add(varName2);
         } else {
           // Add it to redundants.
           @SuppressWarnings("nullness") // Map.get: varName in varsUsedPreviously => all map keys OK, inserted on previous iteration

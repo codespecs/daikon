@@ -3687,7 +3687,9 @@ public class PptTopLevel extends Ppt {
     }
 
     // Build actual equality sets that match the pairs we found
-    equality_view.instantiate_from_pairs(emap.keySet());
+    @SuppressWarnings("keyfor") // checker weakness: keyfor: read-only Set permits covariance
+    Set<VarInfo.Pair> emap_keySet = emap.keySet();
+    equality_view.instantiate_from_pairs(emap_keySet);
     if (debugMerge.isLoggable(Level.FINE)) {
       debugMerge.fine("Built equality sets ");
       for (Invariant inv : equality_view.invs) {

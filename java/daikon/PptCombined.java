@@ -260,7 +260,7 @@ public class PptCombined extends PptTopLevel {
   }
 
 
-  /*@NonNullOnEntry("assemblies")*/
+  /*@NonNullOnEntry("PptCombined.assemblies")*/
   public static List<PptTopLevel> findIntermediateBlocks(PptTopLevel dest, PptTopLevel source) {
 
     Set<PptTopLevel> visited = new LinkedHashSet<PptTopLevel>();
