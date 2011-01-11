@@ -140,7 +140,9 @@ The correct way to build the system is to run 'make'.
    * If the argument is null or not an array or collection, returns a
    * default value (BAD_VALUE).
    **/
+#if defined(BOOLEAN)
   /*@AssertNonNullIfTrue("#0")*/
+#endif
   /* pure */ public static BAD_VALUE_QUALIFIER _TYPE GET_ELEMENT (Object o, long i) {
     if (o == null) { return BAD_VALUE; } // return default value
     java.lang.Class<?> c = o.getClass();
@@ -153,7 +155,9 @@ The correct way to build the system is to run 'make'.
     }
   }
 
+#if defined(BOOLEAN)
   /*@AssertNonNullIfTrue("#0")*/
+#endif
   /* pure */ public static BAD_VALUE_QUALIFIER _TYPE GET_ELEMENT (_TYPE[] arr, long i) {
     if (arr == null) { return BAD_VALUE; } // return default value
     return arr[(int)i];
