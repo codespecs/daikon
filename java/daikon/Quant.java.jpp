@@ -171,7 +171,7 @@ public final class Quant {
 
   /** @see #typeArray(Object[])
    */
-  /*@AssertNonNullIfTrue("#0")*/
+  /*TODO: @AssertNonNullIfNonNull({"#0"})*/
   /* pure */ public static String /*@PolyNull*/ [] typeArray(/*@PolyNull*/ Object seq) {
     if (seq == null) { return null; }
     return typeArray(toObjArray(seq));
@@ -293,7 +293,7 @@ public final class Quant {
 
   /** @see #slice(Object[], int, int)
    */
-  /*@AssertNonNullIfTrue("#0")*/
+  /*TODO: @AssertNonNullIfNonNull("#0")*/
   /* pure */ public static Object /*@PolyNull*/ [] slice(/*@PolyNull*/ Object seq, int start, int end) {
     if (seq == null) { return null; }
     return slice(toObjArray(seq), start, end);
@@ -342,7 +342,7 @@ public final class Quant {
   /** Returns an Object[] array, either by casting or by conversion from an
    * AbstractCollection.
    */
-  /*@AssertNonNullIfTrue("#0")*/
+  /*TODO: @AssertNonNullIfNonNull("#0")*/
   public static Object /*@PolyNull*/ [] toObjArray(/*@PolyNull*/ Object o) {
     if (o == null) { return null; }
     if (o instanceof java.util.AbstractCollection<?>) {
