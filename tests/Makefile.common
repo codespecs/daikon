@@ -494,7 +494,10 @@ DCOMP_ARGS  = '--ppt-select-pattern=$(INST_FILES)' \
 			  --shiny-print=$(SHINY_PRINT)
 DCOMP_RT ?= $(wildcard $(DAIKONDIR)/java/dcomp_rt.jar)
 ifeq ($(DCOMP_RT),)
-  DCOMP_RT := $(pag)/software/pkg/DynComp/dcomp_rt.jar
+  DCOMP_RT := $(wildcard $(pag)/software/pkg/DynComp/dcomp_rt.jar)
+endif
+ifndef DCOMP_RT
+  $(info dcomp_rt.jar is not in $DAIKONDIR/java; it must be on the classpath.)
 endif
 JAVA_DCOMP := $(RUN_JAVA) -esa -ea \
 			  "-Xbootclasspath:$(DCOMP_RT):$(CLASSPATH):$(SCRATCH_FOR_DAIKON)"
