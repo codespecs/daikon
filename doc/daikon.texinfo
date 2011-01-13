@@ -407,10 +407,7 @@ observed executions.
 Daikon can detect properties in C, C++, Eiffel, Java, and Perl programs;
 in spreadsheet files; and in other data sources.  (Dynamic invariant
 detection is a machine learning technique that can be applied to
-arbitrary data.)  It is easy to extend Daikon to other applications; as
-one example, an interface exists to the Java PathFinder model checker.
-@c Removed this because it was the biggest link on the page, which is
-@c not the desired effect:  @uref{http://ase.arc.nasa.gov/visser/jpf/, , }
+arbitrary data.)  It is easy to extend Daikon to other applications.
 
 Daikon is freely available for download from
 @uref{http://pag.csail.mit.edu/daikon/download/}.  The distribution
