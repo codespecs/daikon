@@ -336,6 +336,7 @@ Problems running Daikon
 
 * Too much output::             
 * Missing output invariants::   
+* True invariants are not reported::  
 * No samples::                  
 * No return from procedure::    
 * Unsupported class version::   
@@ -2592,7 +2593,7 @@ configuration options}).
 @end menu
 
 @node    Redundant invariants, Equal variables, Interpreting output, Interpreting output
-@subsection Redundant
+@subsection Redundant invariants
 
 By default, Daikon does not display redundant invariants --- those
 that are implied by other invariants in the output --- because such
@@ -2609,16 +2610,16 @@ then using the PrintInvariants (@pxref{Printing invariants}) or Diff
 @node    Equal variables, Has only one value variables, Redundant invariants, Interpreting output
 @subsection Equal variables
 
-When two or more variables are always equal, any invariant that
-is true over one variable is true over all of the variables.  Daikon
-prints invariants only over one variable (the leader) from the equal
-set.
+If two variables @code{x} and @code{y} are equal, then any invariant
+about @code{x} is also true about @code{y}.  Daikon chooses one variable
+(the leader) from the set of equal variables, and only prints invariants
+over the leader.
+@c This is true, but I believe it detracts from the point.
+@c Daikon also prints equalities about the varibles in the set.
 
-An equality invariant is printed for each non-leader in the equal set.
-For example, if the variables @code{a}, @code{b}, and @code{c} are all
-equal and @code{a} is chosen as the leader, the printed invariants will
-include any invariants over @code{a} and the equality invariants @samp{a=b}
-and @samp{a=c}.
+Suppose that @code{a = b = c}.  Then Daikon will print @code{a = b} and
+@code{a = c}, but not @code{b = c}.  Furthermore, Daikon might print
+@code{a > d}, but would not print @code{b > d} or @code{c > d}.
 
 You can control which variables are in an equality set; @ref{Variable comparability,,,./developer,Daikon Developer Manual}.
 
@@ -2701,10 +2702,14 @@ change in some object other than the one that was passed in.
 
 
 @cindex ObviousFilter
-@item ObviousFilter:  suppress obvious invariants
+@cindex implied invariant
+@cindex redundant invariant
+@item ObviousFilter:  suppress ``obvious'', or redundant, invariants ---
+that is, invariants that are implied by some other invariant
 
-This filter suppresses invariants because they are obvious from looking
-at other invariants.  Some examples are:
+This filter suppresses any invariant that is a logical consequence of
+other invariants that are printed.  This keeps the output from becoming
+cluttered with redundant facts.  Some examples are:
 
 @itemize @bullet
 
@@ -8226,6 +8231,7 @@ understand Daikon's operation; @xref{Daikon debugging options}.
 @menu
 * Too much output::             
 * Missing output invariants::   
+* True invariants are not reported::  
 * No samples::                  
 * No return from procedure::    
 * Unsupported class version::   
@@ -8291,19 +8297,17 @@ useful:  the former tell you about your program, and the latter tell you
 about your test suite (and how to improve it!).
 
 
-@node Missing output invariants, No samples, Too much output, Daikon problems
+@node Missing output invariants, True invariants are not reported, Too much output, Daikon problems
 @subsection Missing output invariants
 
-Daikon will sometimes not output invariants that are expected.  There 
-are a number of reasons why this may happen:
+Daikon will sometimes not output invariants that are expected.  Here 
+are some reasons why this may happen:
 
 @itemize
 @item There is a sample that violates the invariant
-@item The invariant is true, but does not pass one of the output filters
-@item One or more of the variables in the invariant always has the same
-value as another variable.  Daikon only prints invariants over one
-variable (the leader) from the set of equal variables (@pxref{Equal variables}).
 @item The program point had no samples (@pxref{No samples}).
+@item The invariant is true, but Daikon does not report it (@pxref{True
+invariants are not reported}).
 @end itemize
 
 There are two command line options (--disc_reason and --track) that
@@ -8319,7 +8323,50 @@ point) of the invariant must be entered carefully.  It may be helpful
 to try the option on a similar invariant that is printed to make sure
 that each is specified correctly.
 
-@node    No samples, No return from procedure, Missing output invariants, Daikon problems
+
+@node    True invariants are not reported, No samples, Missing output invariants, Daikon problems
+@subsection True invariants are not reported
+
+Sometimes, Daikon does not report an invariant, even though Daikon has
+computed that the invariant is true throughout the sample data.  Daikon
+only reports invariants that satisfy all the output filters
+(@pxref{Invariant filters}).
+
+Here, we discuss two common reasons for filtering: 
+statistical justification, and implication.
+
+Daikon only reports a property if it is statistically justified, and
+Daikon needs to see enough samples for the statistical test to work.
+So, there may be a property that is true, but if too few samples were
+seen, then Daikon will not report it.  In a longer trace, Daikon would
+report the property.  You can adjust Daikon's confidence limit so that
+the property is reported even in the short executions; see the
+command-line option @code{--conf_limit}.  For instance, supplying
+@code{--conf_limit 0} causes all properties that have not been falsified
+to be printed.
+
+Daikon does not report redundant, or implied, invariants
+(@pxref{Redundant invariants}).  The purpose
+of this is to avoid cluttering the output with facts that add no new
+information.  Here are a few examples:
+@itemize
+@item
+Suppose that both @code{i < j} and
+@code{i <= j} are true.  Daikon would report
+only @code{i < j}; Daikon would not report @code{i <= j}, which is
+implied by what Daikon has reported.  Further suppose that a longer
+execution had a sample containing @code{i=22, j=22}.  Only @code{i <= j}
+would be true in the second execution, and Daikon would report it.
+(The invariant @code{i < j} is an example of a false positive or
+overfitting in the first execution.)
+@item
+If two or more variables are found to be equal, then Daikon chooses one
+of them (the leader) and only prints invariants over the leader, not the
+other variables (@pxref{Equal variables}).
+@end itemize
+
+
+@node    No samples, No return from procedure, True invariants are not reported, Daikon problems
 @subsection No samples and no output
 
 @cindex no output from Daikon
@@ -8638,32 +8685,10 @@ have been some accidental property of the shorter executions that is not
 true in the longer ones.
 
 Even though fewer invariants are true on the second execution, Daikon may
-report invariants that it did not report on the first execution.  We
-mention two reasons that Daikon might not report an invariant that is true:
-statistical justification, and implication.
-
-The second execution may report @strong{more} invariants, because of Daikon's
-statistical justification tests.  Daikon only reports a property if it is
-statistically justified, and Daikon needs to see enough samples for the
-statistical test to work.  So, there may have been a property that was true
-both in the short trace and in the long one, but Daikon only reported it
-for the long one.  If you want to prevent this from happening, you can
-adjust the confidence limit so that the property is reported even in the
-short executions; see the command-line option @code{--conf_limit}.  For
-instance, supplying @code{--conf_limit 0} causes all properties that have
-not been falsified to be printed.
-
-Another reason that the second execution might report @strong{more}
-invariants (more specifically, might report an invariant that did not
-appear in the first execution) is because Daikon does not report
-redundant, or implied, invariants.  Suppose that both @code{i < j} and
-@code{i <= j} were true on the first execution.  Daikon would report
-only @code{i < j}; Daikon would not report @code{i <= j}, which is
-implied by what Daikon has reported.  Further suppose that the second
-execution had a sample containing @code{i=22, j=22}.  Only @code{i <= j}
-would be true in the second execution, and Daikon would report it.
-(The invariant @code{i < j} is an example of a false positive or
-overfitting in the first execution.)
+report invariants that it did not report on the first execution.
+The invariants were true on the first execution, but were not reported
+by Daikon.  @ref{True invariants are not reported} describes why this
+might happen.
 
 
 @node    Large dtrace files, Parsing Java 5.0 code, Daikon problems, Troubleshooting

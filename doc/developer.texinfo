@@ -93,7 +93,7 @@ It describes Daikon version 4.6.4, released June 23, 2010.
 Extending Daikon
 
 * Compiling Daikon::            
-* Hg repository::              
+* Version control repository::  
 * Using Eclipse::               
 * New invariants::              
 * New derived variables::       
@@ -234,7 +234,7 @@ This chapter describes how to customize or modify Daikon.
 
 @menu
 * Compiling Daikon::            
-* Hg repository::              
+* Version control repository::  
 * Using Eclipse::               
 * New invariants::              
 * New derived variables::       
@@ -244,7 +244,7 @@ This chapter describes how to customize or modify Daikon.
 * System.exit::                 
 @end menu
 
-@node    Compiling Daikon, Hg repository, Extending Daikon, Extending Daikon
+@node    Compiling Daikon, Version control repository, Extending Daikon, Extending Daikon
 @section Compiling Daikon
 @cindex compiling daikon
 
@@ -338,7 +338,7 @@ Java 1.5 on MacOSX:
 @end smallexample
   
 
-@node     Hg repository, Using Eclipse, Compiling Daikon, Extending Daikon
+@node     Version control repository, Using Eclipse, Compiling Daikon, Extending Daikon
 @section Version control repository
 @cindex CVS repository
 @cindex Hg repository
@@ -349,7 +349,7 @@ The Daikon Mercurial repository is at Google Code; see
 @uref{http://code.google.com/p/daikon/}.
 
 
-@node    Using Eclipse, New invariants, Hg repository, Extending Daikon
+@node    Using Eclipse, New invariants, Version control repository, Extending Daikon
 @section Using Eclipse
 @cindex Eclipse
 
