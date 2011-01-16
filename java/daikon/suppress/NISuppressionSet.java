@@ -12,6 +12,8 @@ import java.util.*;
 /**
  * Class that defines a set of non-instantiating suppressions for a single
  * invariant (suppressee).
+ *
+ * Not immutable:  see recurse_definitions().
  */
 public class NISuppressionSet implements Iterable<NISuppression> {
 
@@ -478,6 +480,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
 
   /**
+   * Side-effects this NISuppressionSet.
    * Each suppression where a suppressor matches the suppressee in ss is
    * augmented by additional suppression(s) where the suppressor is replaced
    * by each of its suppressions.  This allows recursive suppressions.
