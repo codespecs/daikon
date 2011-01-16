@@ -68,6 +68,7 @@ public final class ValueTuple implements Cloneable {
   public boolean isModified(VarInfo vi) { return vi.isModified(this); }
   public boolean isMissingNonsensical(VarInfo vi) { return vi.isMissingNonsensical(this); }
   public boolean isMissingFlow(VarInfo vi) { return vi.isMissingFlow(this); }
+  @SuppressWarnings("nullness") // postcondition: array expression
   /*@AssertNonNullIfFalse("vals[#0.value_index]")*/
   public boolean isMissing(VarInfo vi) { return vi.isMissing(this); }
 
@@ -76,6 +77,7 @@ public final class ValueTuple implements Cloneable {
   boolean isModified(int value_index) { return mods[value_index] == MODIFIED; }
   boolean isMissingNonsensical(int value_index) { return mods[value_index] == MISSING_NONSENSICAL; }
   boolean isMissingFlow(int value_index) { return mods[value_index] == MISSING_FLOW; }
+  @SuppressWarnings("nullness") // postcondition: array expression
   /*@AssertNonNullIfFalse("vals[#0]")*/
   boolean isMissing(int value_index) { return (isMissingNonsensical(value_index)
                                                || isMissingFlow(value_index)); }

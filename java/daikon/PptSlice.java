@@ -382,6 +382,7 @@ public abstract class PptSlice
    * exists.  Otherwise returns null.  An exact match requires that
    * the invariants be of the same class and have the same formula
    */
+  /*@Pure*/
   public /*@Nullable*/ Invariant find_inv_exact (Invariant inv) {
 
     for (Invariant mine : invs) {

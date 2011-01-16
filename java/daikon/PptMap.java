@@ -59,7 +59,8 @@ public class PptMap
    * They are only available through their parent.
    */
   /*@Pure*/
-  /*@AssertNonNullIfTrue("get(#0)")*/
+  @SuppressWarnings("nullness") // postcondition: linked maps
+  /*@AssertNonNullIfTrue("get(#0)")*/ // get(#0) == nameToPpt.get(#0)
   public boolean containsName(String name) {
     return nameToPpt.containsKey(name);
   }
@@ -86,8 +87,10 @@ public class PptMap
   // is "nameToPpt", not "this.nameToPpt".  (Yes, nameToPpt is a private
   // variable, but I'd like the annotation to work anyway, at least for the
   // moment.)
-  public Collection</*@KeyFor("nameToPpt")*/ String> nameStringSet() {
-    return Collections.unmodifiableSet(nameToPpt.keySet());
+  public Collection</*@KeyFor("this.nameToPpt")*/ String> nameStringSet() {
+    // return Collections.unmodifiableSet(nameToPpt.keySet());
+    Set</*@KeyFor("this.nameToPpt")*/ String> s = nameToPpt.keySet();
+    return Collections.unmodifiableSet(s);
   }
 
   /**
