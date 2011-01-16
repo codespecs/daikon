@@ -54,9 +54,9 @@ public class PptMap
   }
 
   /**
-   * Returns whether or not 'name' is the name of a Ppt in the map.  Note that conditional
-   * program points are not stored in the map by name.  They are only
-   * available through their parent.
+   * Returns whether or not 'name' is the name of a Ppt in the map.  Note
+   * that conditional program points are not stored in the map by name.
+   * They are only available through their parent.
    */
   /*@Pure*/
   /*@AssertNonNullIfTrue("get(#0)")*/
