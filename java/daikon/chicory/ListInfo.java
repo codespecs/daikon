@@ -19,7 +19,7 @@ public class ListInfo extends DaikonVariableInfo
 
     public ListInfo(String theName, Class<? extends List<?>> theType)
     {
-        super(theName, true);
+        super(theName, theType.getName(), "hashcode[]", true);
         listType = theType;
     }
 

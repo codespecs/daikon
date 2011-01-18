@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import static java.lang.System.out;
 
+@SuppressWarnings("nullness") // uninitialized fields default to null
 class Test {
 
   A at;

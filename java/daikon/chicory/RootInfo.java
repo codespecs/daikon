@@ -16,8 +16,8 @@ public class RootInfo extends DaikonVariableInfo
 {
     private RootInfo()
     {
-        //the root needs no name, but give it one to preserve nullness property
-        super(" RootInfo Object ");
+        //the root needs no name, etc. but set them to preserve nullness property
+        super(" RootInfo Object ", " RootInfo Object type ", " RootInfo Object reptype ");
     }
 
     @Override
@@ -106,10 +106,8 @@ public class RootInfo extends DaikonVariableInfo
             if (!(returnType.equals(Void.TYPE)))
             {
                 // add a new ReturnInfo object to the traversal tree
-                DaikonVariableInfo retInfo = new ReturnInfo();
+                DaikonVariableInfo retInfo = new ReturnInfo(returnType);
 
-                retInfo.typeName = stdClassName(returnType);
-                retInfo.repTypeName = getRepName(returnType, false);
                 root.addChild(retInfo);
 
                 retInfo.checkForDerivedVariables(returnType, "return", "");

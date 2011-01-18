@@ -223,8 +223,9 @@ public final class StackVer {
 	/** The Verifier that created this. */
 	// private Verifier myOwner;
 
-    /** The types on the stack for each instruction by byte code offset **/
-    private StackTypes stack_types;
+  /** The types on the stack for each instruction by byte code offset **/
+  // Set by do_stack_ver().
+  /*@LazyNonNull*/ private StackTypes stack_types;
 
 	/**
 	 * This class should only be instantiated by a Verifier.
@@ -253,7 +254,7 @@ public final class StackVer {
 		final Random random = new Random();
 		InstructionContextQueue icq = new InstructionContextQueue();
 
-        stack_types.set (start.getInstruction().getPosition(), vanillaFrame);
+    stack_types.set (start.getInstruction().getPosition(), vanillaFrame);
 		start.execute(vanillaFrame, new ArrayList(), icv, ev);	// new ArrayList() <=>	no Instruction was executed before
 																									//									=> Top-Level routine (no jsr call before)
 		icq.add(start, new ArrayList<InstructionContext>());
@@ -314,8 +315,8 @@ public final class StackVer {
 					throw new AssertionViolatedException("RET '"+u.getInstruction()+"' info inconsistent: jump back to '"+theSuccessor+"' or '"+cfg.contextOf(jsr.physicalSuccessor())+"'?");
 				}
 
-                Frame f = u.getOutFrame(oldchain);
-                stack_types.set (theSuccessor.getInstruction().getPosition(),
+        Frame f = u.getOutFrame(oldchain);
+        stack_types.set (theSuccessor.getInstruction().getPosition(),
                                   f);
 				if (theSuccessor.execute(f, newchain, icv, ev)){
           // This makes 5.0 grumpy: icq.add(theSuccessor, (ArrayList) newchain.clone());
@@ -328,8 +329,8 @@ public final class StackVer {
 				InstructionContext[] succs = u.getSuccessors();
 				for (int s=0; s<succs.length; s++){
 					InstructionContext v = succs[s];
-                    Frame f = u.getOutFrame(oldchain);
-                    stack_types.set (v.getInstruction().getPosition(), f);
+          Frame f = u.getOutFrame(oldchain);
+          stack_types.set (v.getInstruction().getPosition(), f);
 					if (v.execute(f, newchain, icv, ev)){
             // This makes 5.0 grumpy: icq.add(v, (ArrayList) newchain.clone());
             icq.add(v, new ArrayList<InstructionContext>(newchain));
@@ -414,7 +415,7 @@ public final class StackVer {
 		ev.setConstantPoolGen(constantPoolGen);
 
 		try{
-            stack_types = new StackTypes (mg);
+      stack_types = new StackTypes (mg);
 
 			icv.setMethodGen(mg);
 

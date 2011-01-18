@@ -204,6 +204,11 @@ public final class FileIO {
     PptRelationType rel_type;
     /*@Interned*/ String parent_ppt_name;
     int id;
+    public ParentRelation(PptRelationType rel_type, /*@Interned*/ String parent_ppt_name, int id) {
+      this.rel_type = rel_type;
+      this.parent_ppt_name = parent_ppt_name;
+      this.id = id;
+    }
     public String toString() { return parent_ppt_name + "[" + id + "] "
                                  + rel_type; };
     private void readObject(ObjectInputStream in)
@@ -447,12 +452,12 @@ public final class FileIO {
   private static ParentRelation parse_ppt_parent (ParseState state,
        Scanner scanner) throws DeclError {
 
-    ParentRelation pr = new ParentRelation();
     PptRelationType rel_type = parse_enum_val (state, scanner, PptRelationType.class,
                                       "relation type");
-    pr.rel_type = rel_type;
-    pr.parent_ppt_name = need (state, scanner, "ppt name");
-    pr.id = Integer.parseInt (need (state, scanner, "relation id"));
+    String parent_ppt_name = need (state, scanner, "ppt name");
+    int id = Integer.parseInt (need (state, scanner, "relation id"));
+    ParentRelation pr = new ParentRelation(rel_type, parent_ppt_name, id);
+
     need_eol (state, scanner);
     return (pr);
   }
@@ -1217,7 +1222,7 @@ public final class FileIO {
     public /*@Nullable*/ ValueTuple vt;
 
     /** Miscellaneous text in the parsed item **/
-    public Object payload;      // used when state=COMMENT
+    public /*@Nullable*/ Object payload;      // used when state=COMMENT
 
 
     /** Start parsing the given file. */

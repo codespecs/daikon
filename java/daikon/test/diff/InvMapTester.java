@@ -9,7 +9,7 @@ import java.util.*;
 
 public class InvMapTester extends TestCase {
 
-  private InvMap map;
+  private /*@LazyNonNull*/ InvMap map; // initialized by setUp()
   private PptTopLevel pptA = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
   private PptTopLevel pptB = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
   private PptTopLevel pptC = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
@@ -32,6 +32,7 @@ public class InvMapTester extends TestCase {
   }
 
   public void testABC() {
+    assert map != null : "@SuppressWarnings(nullness): implicit flow: setUp was called by JUnit";
     map.put(pptA, invsA);
     map.put(pptB, invsB);
     map.put(pptC, invsC);

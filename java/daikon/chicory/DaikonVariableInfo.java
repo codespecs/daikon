@@ -48,7 +48,7 @@ public abstract class DaikonVariableInfo
     private static final String compareInfoDefaultString = "22";
 
     /**used to assert that a given variable is a parameter to a method**/
-    private static final String isParamString = " # isParam=true";
+    protected static final String isParamString = " # isParam=true";
 
     // Certain hardcoded class names
     protected static final String classClassName = "java.lang.Class";
@@ -108,9 +108,9 @@ public abstract class DaikonVariableInfo
     /** Constructs a non-array type DaikonVariableInfo object
      * @param theName The name of the variable
      */
-    public DaikonVariableInfo(String theName)
+    public DaikonVariableInfo(String theName, String typeName, String repTypeName)
     {
-        this(theName, false);
+        this(theName, typeName, repTypeName, false);
     }
 
     /**
@@ -118,12 +118,14 @@ public abstract class DaikonVariableInfo
      * @param theName The variable's name
      * @param arr True iff the variable is an array
      */
-    public DaikonVariableInfo(String theName, boolean arr)
+    public DaikonVariableInfo(String theName, String typeName, String repTypeName, boolean arr)
     {
         // Intern the names because there will be many of the
         // same variable names at different program points within
         // the same class.
         name = theName.intern();
+        this.typeName = typeName.intern();
+        this.repTypeName = repTypeName.intern();
 
         children = new ArrayList<DaikonVariableInfo> ();
         isArray = arr;
@@ -153,7 +155,7 @@ public abstract class DaikonVariableInfo
      * Should only be called while the tree is being constructed.
      *
      * @param info The child object, must be non-null.  The child's
-     * fields name, typeName, repTypeName, and compareInofString
+     * fields name, typeName, repTypeName, and compareInfoString
      * should also be non-null.
      */
     protected void addChild(DaikonVariableInfo info)
@@ -448,18 +450,13 @@ public abstract class DaikonVariableInfo
         if (!dontPrintInstanceVars && offset.equals(""))
         {
             // "this" variable
-            thisInfo = new ThisObjInfo();
-            thisInfo.typeName = type.getName() + isParamString;
-            thisInfo.repTypeName = getRepName(type, false);
+            thisInfo = new ThisObjInfo(type);
             addChild(thisInfo);
 
             //.class variable
             if (shouldAddRuntimeClass(type))
             {
-                DaikonVariableInfo thisClass = new DaikonClassInfo("this.getClass()", false);
-
-                thisClass.typeName = classClassName;
-                thisClass.repTypeName = stringClassName;
+                DaikonVariableInfo thisClass = new DaikonClassInfo("this.getClass()", classClassName, stringClassName, false);
                 thisInfo.addChild(thisClass);
             }
         }
@@ -614,9 +611,6 @@ public abstract class DaikonVariableInfo
         DaikonVariableInfo newChild = new ParameterInfo(offset + name, argNum,
                                                         type, param_offset);
 
-        newChild.typeName = stdClassName(type) + isParamString;
-        newChild.repTypeName = getRepName(type, false);
-
         addChild(newChild);
 
         boolean ignore = newChild.check_for_dup_names();
@@ -665,12 +659,10 @@ public abstract class DaikonVariableInfo
             offset = "this.";
         }
 
-        DaikonVariableInfo newPure = new PureMethodInfo(offset + theName, minfo,
-                isArray);
-
         String type_name = stdClassName (type);
-        newPure.typeName = type_name + arr_str;
-        newPure.repTypeName = getRepName(type, isArray) + arr_str;
+        DaikonVariableInfo newPure = new PureMethodInfo(offset + theName, minfo,
+                                                        type_name + arr_str, getRepName(type, isArray) + arr_str,
+                                                        isArray);
 
         addChild(newPure);
 
@@ -726,12 +718,9 @@ public abstract class DaikonVariableInfo
         type_name += appendAuxInfo(field);
 
         DaikonVariableInfo newField = new FieldInfo(offset + theName, field,
+                                                    type_name, getRepName(type, false) + arr_str,
                                                     isArray);
         boolean ignore = newField.check_for_dup_names();
-
-        newField.typeName = type_name;
-        newField.repTypeName = getRepName(type, false) + arr_str;
-
 
         if (DaikonWriter.isStaticConstField(field) && !isArray)
         {
@@ -1007,9 +996,6 @@ public abstract class DaikonVariableInfo
            DaikonVariableInfo child = new ListInfo(offset + theName + "[]",
                                               (Class<? extends List<?>>)type);
 
-           child.typeName = type.getName();
-           child.repTypeName = "hashcode[]";
-
            addChild(child);
 
            boolean ignore = child.check_for_dup_names();
@@ -1017,10 +1003,7 @@ public abstract class DaikonVariableInfo
            // .getClass() var
            if (!ignore) {
                DaikonVariableInfo childClass
-                   = new DaikonClassInfo(offset + theName + "[]" + class_suffix, true);
-
-               childClass.typeName = classClassName + "[]";
-               childClass.repTypeName = stringClassName + "[]" ;
+                   = new DaikonClassInfo(offset + theName + "[]" + class_suffix, classClassName + "[]", stringClassName + "[]", true);
 
                child.addChild(childClass);
            }
@@ -1045,10 +1028,9 @@ public abstract class DaikonVariableInfo
        // add daikoninfo type
        DaikonVariableInfo classInfo
            = new DaikonClassInfo(offset + theName + class_suffix,
+                                 classClassName + postString,
+                                 stringClassName + postString,  
                                  (offset+theName).contains("[]"));
-
-       classInfo.typeName = classClassName + postString;
-       classInfo.repTypeName = stringClassName + postString;
 
        addChild(classInfo);
    }
@@ -1069,10 +1051,9 @@ public abstract class DaikonVariableInfo
 
        // add DaikonVariableInfo type
        DaikonVariableInfo stringInfo = new StringInfo(offset + theName + ".toString",
+                                                      stringClassName + postString,
+                                                      stringClassName + postString,
                (offset+theName).contains("[]"));
-
-       stringInfo.typeName = stringClassName + postString;
-       stringInfo.repTypeName = stringClassName + postString;
 
        addChild(stringInfo);
 
@@ -1133,9 +1114,6 @@ public abstract class DaikonVariableInfo
                DaikonVariableInfo newChild
                    = new ArrayInfo(offset + theName + "[]", eltType);
 
-               newChild.typeName = eltType.getName() + "[]";
-               newChild.repTypeName = getRepName(eltType, true) + "[]";
-
                newChild.check_for_dup_names();
 
                addChild(newChild);
@@ -1146,8 +1124,6 @@ public abstract class DaikonVariableInfo
                DaikonVariableInfo newChild
                    = new ArrayInfo(offset + theName + "[]", eltType);
 
-               newChild.typeName = eltType.getName() + "[]";
-               newChild.repTypeName = getRepName(eltType, true) + "[]";
                newChild.check_for_dup_names();
 
                addChild(newChild);
@@ -1162,8 +1138,6 @@ public abstract class DaikonVariableInfo
                DaikonVariableInfo newChild
                    = new ArrayInfo(offset + theName + "[]", eltType);
 
-               newChild.typeName = eltType.getName() + "[]";
-               newChild.repTypeName = getRepName(eltType, true) + "[]";
                boolean ignore = newChild.check_for_dup_names();
 
                addChild(newChild);

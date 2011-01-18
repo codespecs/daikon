@@ -10,14 +10,14 @@ public class ThisObjInfo extends DaikonVariableInfo
 {
     public Class<?> type;
 
-    public ThisObjInfo()
-    {
-        super("this");
-    }
+//     public ThisObjInfo(String typeName, String repTypeName)
+//     {
+//         super("this");
+//     }
 
     public ThisObjInfo (Class<?> type)
     {
-        super ("this");
+        super ("this", type.getName() + isParamString, getRepName(type, false));
         this.type = type;
     }
 

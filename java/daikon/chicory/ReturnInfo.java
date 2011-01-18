@@ -10,15 +10,16 @@ public class ReturnInfo extends DaikonVariableInfo
     // Under what circumstances is this null?  Maybe it's unused. -MDE
 //    Class<?> return_type = null;
 
-    public ReturnInfo()
-    {
-        super("return");
-    }
+//     public ReturnInfo()
+//     {
+//         super("return");
+//     }
 
-    public ReturnInfo (Class<?> return_type)
+    public ReturnInfo (Class<?> returnType)
     {
-        super("return");
-//        this.return_type = return_type;
+        super("return", stdClassName(returnType), getRepName(returnType, false));
+
+//        this.return_type = returnType;
     }
 
     @Override

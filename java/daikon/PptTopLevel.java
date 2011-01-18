@@ -342,6 +342,7 @@ public class PptTopLevel extends Ppt {
   public PptTopLevel (String name, PptType type, List<ParentRelation> parents,
                       EnumSet<PptFlags> flags, /*@Nullable*/ List<String> ppt_successors,
                       /*@Nullable*/ /*@Interned*/ String function_id, int bb_length, VarInfo[] var_infos) {
+    super(var_infos);
 
     this.name = name;
     if (!name.contains (":::")) {
@@ -354,7 +355,7 @@ public class PptTopLevel extends Ppt {
     this.ppt_successors = ppt_successors;
     this.function_id = function_id;
     this.bb_length = bb_length;
-    init_vars (var_infos);
+    init_vars ();
   }
 
   /** Restore/Create interns when reading serialized object **/
@@ -374,17 +375,18 @@ public class PptTopLevel extends Ppt {
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
   public PptTopLevel(String name, VarInfo[] var_infos) {
+    super(var_infos);
     this.name = name;
     ppt_name = new PptName(name);
-    init_vars (var_infos);
+    init_vars ();
   }
 
-  private void init_vars (VarInfo[] var_infos) /*@Raw*/ {
+  /*@NonNullOnEntry("var_infos")*/
+  private void init_vars () /*@Raw*/ {
 
     debug_varinfo.log_tb ("initializing var_infos %s",
                            Arrays.toString(var_infos));
 
-    this.var_infos = var_infos;
     int val_idx = 0;
     num_static_constant_vars = 0;
     for (int i = 0; i < var_infos.length; i++) {

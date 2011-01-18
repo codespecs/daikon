@@ -24,10 +24,10 @@ public class ValueSource {
   Throwable stack_trace;
 
   /** Left subtree for binary/unary operations **/
-  ValueSource left;
+  /*@Nullable*/ ValueSource left;
 
   /** Right subtree for binary operations **/
-  ValueSource right;
+  /*@Nullable*/ ValueSource right;
 
   /** ValueSet used for the null reference value **/
   public static ValueSource null_value_source
@@ -48,7 +48,7 @@ public class ValueSource {
     this.descr = descr;
     this.stack_trace = stack_trace;
     this.left = left;
-    this.right= right;
+    this.right = right;
   }
 
   /**

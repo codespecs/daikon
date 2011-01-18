@@ -21,7 +21,8 @@ public final class TypeStack
     private final Map<InstructionHandle, InstructionHandle> parentMap = new HashMap<InstructionHandle, InstructionHandle>();
     private final Type[] argTypes;
     private final Type retType;
-    private OperandStack stack; // initialized by createMap
+    // initialized by createMap, which is called be the constructor
+    private OperandStack stack;
 
     private static final int MAX = Integer.MAX_VALUE;
 

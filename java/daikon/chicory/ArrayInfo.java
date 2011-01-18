@@ -18,7 +18,7 @@ public class ArrayInfo extends DaikonVariableInfo
      */
     public ArrayInfo (String theName, Class<?> array_type) {
 
-        super (theName, true);
+        super (theName, array_type.getName() + "[]", getRepName(array_type, true) + "[]", true);
         this.array_type = array_type;
     }
 

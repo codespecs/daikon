@@ -17,9 +17,9 @@ public class PureMethodInfo extends DaikonVariableInfo
     /** The MethodInfo object for this pure method **/
     private MethodInfo minfo;
 
-    public PureMethodInfo(String name, MethodInfo methInfo, boolean inArray)
+    public PureMethodInfo(String name, MethodInfo methInfo, String typeName, String repTypeName, boolean inArray)
     {
-        super(name, inArray);
+        super(name, typeName, repTypeName, inArray);
 
         assert methInfo.isPure() : "Method " + methInfo + " is not pure";
 

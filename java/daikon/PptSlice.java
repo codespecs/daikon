@@ -60,8 +60,8 @@ public abstract class PptSlice
   public Invariants invs;
 
   PptSlice(PptTopLevel parent, VarInfo[] var_infos) {
+    super(var_infos);
     this.parent = parent;
-    this.var_infos = var_infos;
     invs = new Invariants();
     // Ensure that the VarInfo objects are in order (and not duplicated).
     for (int i=0; i<var_infos.length-1; i++) {

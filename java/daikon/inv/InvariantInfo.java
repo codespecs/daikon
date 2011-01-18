@@ -16,9 +16,9 @@ public class InvariantInfo {
   /** If null, treated as a wildcard. */
   private /*@Nullable*/ String className;
 
-  private InvariantInfo() {
-    // Make the default constructor private, this should never be called
-  }
+//   private InvariantInfo() {
+//     // Make the default constructor private, this should never be called
+//   }
 
   // It's ok if vars isn't given in sorted order, we'll sort it here
   public InvariantInfo(String ppt, /*@Nullable*/ String vars, /*@Nullable*/ String className) {

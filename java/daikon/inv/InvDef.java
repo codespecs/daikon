@@ -25,7 +25,7 @@ public class InvDef {
    * invariant, if v2 is not null, then this is a binary invariant
    */
   VarInfo v1;
-  VarInfo v2;
+  /*@Nullable*/ VarInfo v2;
 
   /**
    * Argument indices used by the invariant.
@@ -37,8 +37,8 @@ public class InvDef {
   /** invariant class. **/
   Class<? extends Invariant> inv_class;
 
-  /** State to check for invariants with state. **/
-  Object state;
+  /** State to check.  Only for invariants with state. **/
+  /*@Nullable*/ Object state;
 
   /** True if the order of the variables was swapped. **/
   boolean swap = false;
@@ -57,6 +57,7 @@ public class InvDef {
 
   public InvDef (VarInfo v1, Class<? extends Invariant> cls) {
     this.v1 = v1;
+    this.v2 = null;
     inv_class = cls;
   }
 
