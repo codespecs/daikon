@@ -31,8 +31,8 @@ public class InvMapTester extends TestCase {
     map = new InvMap();
   }
 
+  /*@NonNullOnEntry("map")*/  // implicit flow: setUp was called by JUnit";
   public void testABC() {
-    assert map != null : "@SuppressWarnings(nullness): implicit flow: setUp was called by JUnit";
     map.put(pptA, invsA);
     map.put(pptB, invsB);
     map.put(pptC, invsC);
@@ -50,6 +50,7 @@ public class InvMapTester extends TestCase {
     assert invsC == map.get(pptC);
   }
 
+  /*@NonNullOnEntry("map")*/  // implicit flow: setUp was called by JUnit";
   public void testCAB() {
     map.put(pptC, invsC);
     map.put(pptA, invsA);

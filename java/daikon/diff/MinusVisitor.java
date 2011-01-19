@@ -9,7 +9,7 @@ import daikon.inv.*;
 public class MinusVisitor extends DepthFirstVisitor {
 
   private InvMap result = new InvMap();
-  private PptTopLevel currentPpt;
+  private /*@LazyNonNull*/ PptTopLevel currentPpt;
 
   /** If the first ppt is non-null, it should be part of the result. **/
   public void visit(PptNode node) {
@@ -22,6 +22,7 @@ public class MinusVisitor extends DepthFirstVisitor {
   }
 
   /** Possibly add the first invariant to the result set. **/
+  /*@NonNullOnEntry("currentPpt")*/ // visitor invariant
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();

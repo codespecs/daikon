@@ -33,7 +33,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * the PrimaryExpression currently being visited and one
    * of the members of methodNames is found.
    */
-  private boolean matchFound;
+  private boolean matchFound = false;
 
   /**
    * Creates a new instance of StatementReplacer that makes the

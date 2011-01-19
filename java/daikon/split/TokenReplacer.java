@@ -26,10 +26,10 @@ class TokenReplacer extends DepthFirstVisitor {
   // the replacement for the ith element of oldVars.
 
   /** the last token visited. */
-  private NodeToken lastToken;
+  private /*@LazyNonNull*/ NodeToken lastToken;
 
   /** the token visited before lastToken. */
-  private NodeToken twoTokensAgo;
+  private /*@LazyNonNull*/ NodeToken twoTokensAgo;
 
   /**
    * Creates a new TokenReplacer with ith element of oldVars being

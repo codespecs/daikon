@@ -103,7 +103,7 @@ import org.apache.bcel.verifier.structurals.UninitializedObjectType;
  * @author <A HREF="http://www.inf.fu-berlin.de/~ehaase"/>Enver Haase</A>
  * @see #get_stack_types()
  */
-@SuppressWarnings("rawtypes")
+@SuppressWarnings({"rawtypes", "nullness"}) // third-party code
 public final class StackVer {
 	/* TODO:	Throughout pass 3b, upper halves of LONG and DOUBLE
 						are represented by Type.UNKNOWN. This should be changed

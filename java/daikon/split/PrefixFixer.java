@@ -18,13 +18,13 @@ import jtb.ParseException;
 class PrefixFixer extends DepthFirstVisitor {
 
   /** The last token visited by this. */
-  private NodeToken lastToken;
+  private /*@LazyNonNull*/ NodeToken lastToken;
 
   /** The token visited before lastToken. */
-  private NodeToken twoTokensAgo;
+  private /*@LazyNonNull*/ NodeToken twoTokensAgo;
 
   /** The token visited before twoTokensAgo. */
-  private NodeToken threeTokensAgo;
+  private /*@LazyNonNull*/ NodeToken threeTokensAgo;
 
   /**
    * Creates a new instance of PrefixRemover to remove prefix.

@@ -213,11 +213,21 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   class ClassFieldInfo {
     // List<FieldDeclaration> fieldDecls;
-    List<String> allFieldNames;
+    // List<String> allFieldNames;
     List<String> ownedFieldNames;
     List<String> finalFieldNames;
     List<String> notContainsNullFieldNames;
     Map<String,String> elementTypeFieldNames;
+
+    ClassFieldInfo(List<String> ownedFieldNames,
+                   List<String> finalFieldNames,
+                   List<String> notContainsNullFieldNames,
+                   Map<String,String> elementTypeFieldNames) {
+      this.ownedFieldNames = ownedFieldNames;
+      this.finalFieldNames = finalFieldNames;
+      this.notContainsNullFieldNames = notContainsNullFieldNames;
+      this.elementTypeFieldNames = elementTypeFieldNames;
+    }
   }
 
 
@@ -241,20 +251,22 @@ public class AnnotateVisitor extends DepthFirstVisitor {
       object_ppt = ppts.get(pptname); // might *still* be null; we'll check later
     }
 
-    ClassFieldInfo cfi = new ClassFieldInfo();
+    ClassFieldInfo cfi;
     { // set fieldNames slots
       CollectFieldsVisitor cfv = new CollectFieldsVisitor(n, false);
-      cfi.ownedFieldNames = cfv.ownedFieldNames();
-      cfi.finalFieldNames = cfv.finalFieldNames();
       if (object_ppt == null) {
-        cfi.notContainsNullFieldNames = new ArrayList<String>();
-        cfi.elementTypeFieldNames = new HashMap<String,String>();
+        cfi = new ClassFieldInfo(cfv.ownedFieldNames(),
+                                 cfv.finalFieldNames(),
+                                 new ArrayList<String>(),
+                                 new HashMap<String,String>());
       } else {
-        cfi.notContainsNullFieldNames = not_contains_null_fields(object_ppt, cfv.allFieldNames());
-        cfi.elementTypeFieldNames = element_type_fields(object_ppt, cfv.allFieldNames());
+        cfi = new ClassFieldInfo(cfv.ownedFieldNames(),
+                                 cfv.finalFieldNames(),
+                                 not_contains_null_fields(object_ppt, cfv.allFieldNames()),
+                                 element_type_fields(object_ppt, cfv.allFieldNames()));
       }
-      cfis.push(cfi);
     }
+    cfis.push(cfi);
 
     super.visit(n);             // call "accept(this)" on each field
 
@@ -924,9 +936,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     PrintWriter pw = new PrintWriter(sw);
     PrintInvariants.print_modified_vars(ppt, pw);
 
-    InvariantsAndModifiedVars retval = new InvariantsAndModifiedVars();
-    retval.invariants = Ast.getInvariants(ppt, pptmap);
-    retval.modifiedVars = sw.toString();
+    InvariantsAndModifiedVars retval = new InvariantsAndModifiedVars(Ast.getInvariants(ppt, pptmap), sw.toString());
 
     // PrintInvariants.print_modified_vars(ppt, pw) returns possibly
     // several lines. In such a case, we're only interested in the second
@@ -948,6 +958,12 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   private static class InvariantsAndModifiedVars {
     public List<Invariant> invariants;
     public String modifiedVars;
+
+    public InvariantsAndModifiedVars(List<Invariant> invariants, String modifiedVars) {
+      this.invariants = invariants;
+      this.modifiedVars = modifiedVars;
+    }
+
   }
 
   // Consider a line L1 of text that contains some tabs.

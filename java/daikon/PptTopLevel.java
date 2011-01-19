@@ -330,7 +330,7 @@ public class PptTopLevel extends Ppt {
    * Holds Equality invariants.  Never null after invariants are
    * instantiated.
    **/
-  public PptSliceEquality equality_view;
+  public /*@LazyNonNull*/ PptSliceEquality equality_view;
 
   // The redundant_invs* variables are filled in by method
   // mark_implied_via_simplify.
@@ -382,6 +382,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /*@NonNullOnEntry("var_infos")*/
+  /*@AssertNonNullAfter({"mbtracker", "views", "value_sets"})*/
   private void init_vars () /*@Raw*/ {
 
     debug_varinfo.log_tb ("initializing var_infos %s",
@@ -2744,6 +2745,7 @@ public class PptTopLevel extends Ppt {
    * parameter VarInfos so that each equality set contains only the
    * interesting one.
    **/
+  /*@NonNullOnEntry("equality_view")*/
   public void postProcessEquality() {
     if (debugEqualTo.isLoggable(Level.FINE)) {
       debugEqualTo.fine("PostProcessingEquality for: " + this.name());
@@ -3746,6 +3748,7 @@ public class PptTopLevel extends Ppt {
    * by first creating all of the suppressed invariants in each of the
    * children, performing the merge, and then removing them.
    */
+  /*@NonNullOnEntry("equality_view")*/
   public void merge_invs_multiple_children() {
 
     // Debug print ppt and children
@@ -4272,7 +4275,8 @@ public class PptTopLevel extends Ppt {
     public int instantiated_slice_cnt = 0;
 
     /** program point of the stat **/
-    public PptTopLevel ppt;
+    // Initialized by the set() method.
+    public /*@LazyNonNull*/ PptTopLevel ppt;
 
     int const_slice_cnt = 0;
     int const_inv_cnt = 0;

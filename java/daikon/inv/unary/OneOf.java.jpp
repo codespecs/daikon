@@ -285,7 +285,9 @@ public final class ONEOFSCALAR
   // (That depends on the slice; maybe not until the slice is cleared out.
   // But so few values is cheap, so this is quite fine for now and long-term.)
 
+  /*@Unused(when=Prototype.class)*/
   private INT[] elts;
+  /*@Unused(when=Prototype.class)*/
   private int num_elts;
 
 

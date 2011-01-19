@@ -11,7 +11,7 @@ import java.util.logging.Level;
 public class XorVisitor extends DepthFirstVisitor {
 
   private InvMap result = new InvMap();
-  private PptTopLevel currentPpt;
+  private /*@LazyNonNull*/ PptTopLevel currentPpt;
 
   public static final Logger debug = Logger.getLogger ("daikon.diff.XorVisitor");
 
@@ -33,6 +33,7 @@ public class XorVisitor extends DepthFirstVisitor {
    * If one invariant is null and the other is not, add the non-null
    * invariant to the result set.
    **/
+  /*@NonNullOnEntry("currentPpt")*/ // visitor invariant
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();

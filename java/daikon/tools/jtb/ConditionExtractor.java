@@ -23,8 +23,8 @@ class ConditionExtractor extends DepthFirstVisitor {
 
   private String packageName;
   private String className; // The class name.
-  private String curMethodName; // Name of current method being parsed
-  private String curMethodDeclaration;
+  private /*@Nullable*/ String curMethodName; // Name of current method being parsed
+  private /*@Nullable*/ String curMethodDeclaration;
   boolean enterMethod;   // true if the current Node is a Method
                          // declaration ie. we just entered a method.
 
@@ -122,6 +122,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     curMethodName = className + "." + Ast.format(n.f0);
     addMethod (Ast.format(n), curMethodName);
     super.visit(n);
+    // should reset curMethodName to null here??
   }
 
   /**

@@ -269,19 +269,20 @@ public class PptRelation implements Serializable {
         + relationship);
     Map<VarInfo.Pair,VarInfo.Pair> emap = new LinkedHashMap<VarInfo.Pair,VarInfo.Pair>();
 
-    if (child.equality_view == null)
-      System.out.println(
-        "equality_view.invs == null in child ppt: "
+    if (child.equality_view == null) {
+      throw new Error(
+        "child.equality_view == null for child ppt: "
           + child.name()
           + " samples = "
           + child.num_samples());
-    else if (child.equality_view.invs == null) {
-      System.out.println(
-        "equality_view.invs == null in child ppt: "
+    }
+    if (child.equality_view.invs == null) {
+      throw new Error(
+        "child.equality_view.invs == null for child ppt: "
           + child.name()
           + " samples = "
-          + child.num_samples());
-      System.out.println("children = " + child.children);
+          + child.num_samples()
+          + "children = " + child.children);
     }
 
     // Loop through each equality set in the child

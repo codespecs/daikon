@@ -46,6 +46,53 @@ import java.util.regex.*;
  */
 public class Annotation {
 
+  // Maps into all the Annotation objects created.
+  private static HashMap<Integer,Annotation>
+    annotationsMap = new HashMap<Integer,Annotation>();
+
+  /** Daikon representation (as output by Daikon's default output format). */
+  private final String daikonRep;
+  /** The way this annotation would be printed by Daikon. */
+  public String daikonRep() {
+    return daikonRep;
+  }
+
+  private final String method;
+  /** The method that this annotation refers to. */
+  public String method() {
+    return method;
+  }
+
+  private final Kind kind;
+  /** The kind of this annotation. */
+  public Kind kind() {
+    return kind;
+  }
+
+  private String invRep;
+  /**
+   * Representation of this annotation (the format depends on
+   * which output format was used to create the annotation in Daikon; it's
+   * one of JAVA, JML, ESC or DBC).
+   */
+  public String invRep() {
+    return invRep;
+  }
+
+  public String daikonClass;
+  /** The Daikon class name that this invariant represents an instance of. */
+  public String daikonClass() {
+    return daikonClass;
+  }
+
+  private Annotation(Kind kind, String daikonRep, String method, String invRep, String daikonClass) {
+    this.kind = kind;
+    this.daikonRep = daikonRep;
+    this.method = method;
+    this.invRep = invRep;
+    this.daikonClass = daikonClass;
+  }
+
   /**
    * <p>Parse a String and return the annotation that it represents.
    *
@@ -82,19 +129,10 @@ public class Annotation {
       annoString.replaceFirst(".*<DAIKON>(.*)</DAIKON>.*", "$1").trim();
     String theMethod =
       annoString.replaceFirst(".*<METHOD>(.*)</METHOD>.*", "$1").trim();
+    String theInvRep = annoString.replaceFirst(".*<INV>(.*)</INV>.*", "$1").trim();
+    String theDaikonClass = annoString.replaceFirst(".*<DAIKONCLASS>(.*)</DAIKONCLASS>.*", "$1").trim();
 
-    Annotation anno = Annotation.get(k, theDaikonRep, theMethod);
-
-    if (annoString.matches(".*<INV>(.*)</INV>.*")) {
-      anno.invRep = annoString.replaceFirst(".*<INV>(.*)</INV>.*", "$1").trim();
-    }
-
-    if (annoString.matches(".*<DAIKONCLASS>(.*)</DAIKONCLASS>.*")) {
-      anno.daikonClass =
-        annoString
-        .replaceFirst(".*<DAIKONCLASS>(.*)</DAIKONCLASS>.*", "$1")
-        .trim();
-    }
+    Annotation anno = Annotation.get(k, theDaikonRep, theMethod, theInvRep, theDaikonClass);
 
     return anno;
   }
@@ -182,36 +220,6 @@ public class Annotation {
     });
   }
 
-  /**
-   * Daikon representation (as output by Daikon's default output format).
-   */
-  private final String daikonRep;
-
-  /**
-   *  The way this annotation would be printed by Daikon.
-   */
-  public String daikonRep() {
-    return daikonRep;
-  }
-
-  private final String method;
-
-  /**
-   *  The method that this annotation refers to.
-   */
-  public String method() {
-    return method;
-  }
-
-  private final Kind kind;
-
-  /**
-   * The kind of this annotation.
-   */
-  public Kind kind() {
-    return kind;
-  }
-
   // This class should really be an enum.
   /**
    * <p> A class representing the kind of an annotation. An invariant
@@ -256,30 +264,7 @@ public class Annotation {
     public static final Kind objectInvariant = new Kind("obj invariant", "<OBJECT>");
   }
 
-  private String invRep;
-
-  /**
-   * Representation of this annotation (the format depends on
-   * which output format was used to create the annotation in Daikon; it's
-   * one of JAVA, JML, ESC or DBC.
-   *
-   */
-  public String invRep() {
-    return invRep;
-  }
-
-  public String daikonClass;
-
-  /**
-   * The Daikon class name that this invariant represents an instance of.
-   */
-  public String daikonClass() {
-    return daikonClass;
-  }
-
-  /**
-   * Easy-on-the-eye format.
-   */
+  /** Easy-on-the-eye format. */
   public String toString() {
     return kind.toString()
       + " : "
@@ -310,24 +295,14 @@ public class Annotation {
   }
 
 
-  // Maps into all the Annotation objects created.
-  private static HashMap<Integer,Annotation>
-    annotationsMap = new HashMap<Integer,Annotation>();
-
-  private Annotation(Kind kind, String daikonRep, String method) {
-    this.kind = kind;
-    this.daikonRep = daikonRep;
-    this.method = method;
-  }
-
   /**
    * <p>Get the annotation with corresponding properties.
    *
    */
-  public static Annotation get(Kind kind, String daikonRep, String method)
+  public static Annotation get(Kind kind, String daikonRep, String method, String invRep, String daikonClass)
     throws Annotation.MalformedAnnotationException {
 
-    Annotation anno = new Annotation(kind, daikonRep, method);
+    Annotation anno = new Annotation(kind, daikonRep, method, invRep, daikonClass);
     Integer key = new Integer(anno.hashCode());
     if (annotationsMap.containsKey(key)) {
       return annotationsMap.get(key);

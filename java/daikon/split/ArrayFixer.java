@@ -33,8 +33,11 @@ class ArrayFixer extends DepthFirstVisitor {
   private VarInfo[] varInfos;
   // varNames and varInfo must be the same length and be in the same order.
 
-  /** the token previously visited. */
-  private NodeToken lastToken;
+  /**
+   * The token previously visited.  Null only when visiting the first token.
+   * Non-null if lastTokenMayBeElements or lastTokenMayBeIdentity is true.
+   */
+  private /*@LazyNonNull*/ NodeToken lastToken;
 
   /**
    * True if the last token visited could be the name of a variable that
@@ -107,6 +110,7 @@ class ArrayFixer extends DepthFirstVisitor {
   public void visit(NodeToken n) {
     if (lastTokenMayBeIdentity &&
         (! (Visitors.isLBracket(n) || Visitors.isDot(n)))) {
+      assert lastToken != null : "@SuppressWarnings(nullness): dependent: because lastTokenMayBeIdentity == true";
       lastToken.tokenImage = lastToken.tokenImage + "_identity";
       lastToken.endColumn = lastToken.endColumn + 9;
       columnshift = columnshift + 9;
@@ -114,6 +118,7 @@ class ArrayFixer extends DepthFirstVisitor {
     }
     else if (lastTokenMayBeElements &&
              (Visitors.isLBracket(n) || Visitors.isDot(n))) {
+      assert lastToken != null : "@SuppressWarnings(nullness): dependent: because lastTokenMayBeElements == true";
       lastToken.tokenImage = lastToken.tokenImage + "_array";
       lastToken.endColumn = lastToken.endColumn + 6;
       columnshift = columnshift + 6;
@@ -149,6 +154,7 @@ class ArrayFixer extends DepthFirstVisitor {
 
   private void fixLastToken() {
     if (lastTokenMayBeIdentity) {
+      assert lastToken != null : "@SuppressWarnings(nullness): dependent: because lastTokenMayBeIdentity == true";
       lastToken.tokenImage = lastToken.tokenImage + "_identity";
       lastToken.endColumn = lastToken.endColumn + 9;
       columnshift = columnshift + 9;

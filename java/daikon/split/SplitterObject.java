@@ -11,16 +11,17 @@ import java.io.*;
  **/
 public class SplitterObject implements Comparable<SplitterObject> {
 
-  private Splitter splitter;
+  private /*@LazyNonNull*/ Splitter splitter;
   private String condition; // the condition
   private String className = "Unassigned"; // the Java classname of this Splitter
   private String directory; // the directory where it resides
   private String pptName; // the program point with which it is associated
   private boolean exists = false;
   private String testString = "Unassigned";
-  private String errorMessage;
+  // Not necessarily an error message -- really just a status message.
+  private String errorMessage = "Splitter not yet loaded";
   private int guid = -999;      // -999 indicates not yet set
-  private File classFile; // class file containing compiled code for this splitter
+  private /*@LazyNonNull*/ File classFile; // class file containing compiled code for this splitter
 
   public boolean dummyDesired = false;
   public /*@Nullable*/ String daikonFormat   = null;
@@ -52,10 +53,13 @@ public class SplitterObject implements Comparable<SplitterObject> {
         splitter = (Splitter) tempClass.newInstance();
       } catch (ClassFormatError ce) {
         ce.printStackTrace(System.out);
+        throw new Error(ce);
       } catch (InstantiationException ie) {
         ie.printStackTrace(System.out);
+        throw new Error(ie);
       } catch (IllegalAccessException iae) {
         iae.printStackTrace(System.out);
+        throw new Error(iae);
       }
       DummyInvariant dummy = new /*@Prototype*/ DummyInvariant(
          daikonFormat, javaFormat, escFormat, simplifyFormat,

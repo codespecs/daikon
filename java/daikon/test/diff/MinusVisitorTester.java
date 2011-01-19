@@ -9,7 +9,7 @@ import daikon.test.*;
 
 public class MinusVisitorTester extends TestCase {
 
-  private Diff diff = new Diff(true);
+  private Diff diff = new Diff(true, new Invariant.ClassVarnameFormulaComparator());
 
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs (LogHelper.INFO);
@@ -65,7 +65,6 @@ public class MinusVisitorTester extends TestCase {
     map2.put(C, Arrays.asList(Z));
     map2.put(D, Arrays.asList(unjM, N));
 
-    diff.setAllInvComparators(new Invariant.ClassVarnameFormulaComparator());
     RootNode root = diff.diffInvMap(map1, map2, false);
     MinusVisitor v = new MinusVisitor();
     root.accept(v);

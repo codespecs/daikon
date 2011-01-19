@@ -9,7 +9,7 @@ import daikon.inv.*;
 public class UnionVisitor extends DepthFirstVisitor {
 
   private InvMap result = new InvMap();
-  private PptTopLevel currentPpt;
+  private /*@LazyNonNull*/ PptTopLevel currentPpt;
 
   public InvMap getResult() {
     return result;
@@ -34,6 +34,7 @@ public class UnionVisitor extends DepthFirstVisitor {
    * invariants are non-null, add the invariant with the better
    * (higher) confidence.
    **/
+  /*@NonNullOnEntry("currentPpt")*/ // visitor invariant
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();

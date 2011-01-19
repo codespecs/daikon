@@ -24,7 +24,7 @@ public class CommonStringSequence
    **/
   public static boolean dkconfig_enabled = false;
 
-  private int elts;
+  private int elts = 0;
   /**
    * Null means no samples have been seen yet.
    * Empty array means intersection is empty.
