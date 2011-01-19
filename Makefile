@@ -156,8 +156,8 @@ help:
 	@echo " test-staged-dist         -- tests the distribution in staging-dist/"
 	@echo " staging-to-www           -- copies staging-dist/ to website"
 	@echo " "
-	@echo "This Makefile is for manipulations of the entire invariants module."
-	@echo "Daikon proper can be found in the java/daikon subdirectory (but you"
+	@echo "This Makefile is for manipulating the entire Daikon system."
+	@echo "Daikon source code is in the java/daikon subdirectory (but you"
 	@echo "can perform basic operations like compiling it from here)."
 
 ### Compiling the code
