@@ -18,10 +18,10 @@ class OrigFixer extends DepthFirstVisitor {
   private boolean foundOrig = false;
 
   /** The last NodeToken visited. */
-  private NodeToken lastToken;
+  private /*@LazyNonNull*/ NodeToken lastToken;
 
   /** The token visited before lastToken. */
-  private NodeToken twoTokensAgo;
+  private /*@LazyNonNull*/ NodeToken twoTokensAgo;
 
   /** Blocks public constructor. */
   private OrigFixer() {

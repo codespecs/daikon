@@ -9,7 +9,7 @@ import daikon.test.*;
 
 public class UnionVisitorTester extends TestCase {
 
-  private Diff diff = new Diff(true);
+  private Diff diff = new Diff(true, new Invariant.ClassVarnameFormulaComparator());
 
   public static void main(String[] args) {
     daikon.LogHelper.setupLogs (LogHelper.INFO);
@@ -68,7 +68,6 @@ public class UnionVisitorTester extends TestCase {
     map2.put(C, Arrays.asList(Z));
     map2.put(D, Arrays.asList(M_1, N_0001));
 
-    diff.setAllInvComparators(new Invariant.ClassVarnameFormulaComparator());
     RootNode root = diff.diffInvMap(map1, map2);
     UnionVisitor v = new UnionVisitor();
     root.accept(v);

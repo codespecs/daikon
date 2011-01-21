@@ -159,6 +159,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   // such, should stay constant between front-ends. They should not be
   // changed without good reason; if you do change them, make sure to
   // also change the corresponding constants in Daikon front ends!
+  // Adding a new enum is fine, but should also be done in all locations.
   public enum VarKind {FIELD, FUNCTION, ARRAY, VARIABLE, RETURN};
   public enum VarFlags {IS_PARAM, NO_DUPS, NOT_ORDERED, NO_SIZE, NOMOD,
                         SYNTHETIC, CLASSNAME, TO_STRING, NON_NULL};

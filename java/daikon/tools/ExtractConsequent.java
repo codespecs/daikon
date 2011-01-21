@@ -158,7 +158,7 @@ public class ExtractConsequent {
     TreeSet<String> allConds = new TreeSet<String>();
     for ( String pptname : pptname_to_conditions.keySet() ) {
       Map<String,Map<String,HashedConsequent>> cluster_to_conditions = pptname_to_conditions.get(pptname);
-      for ( Map.Entry<String,Map<String,HashedConsequent>> entry : cluster_to_conditions.entrySet()) {
+      for ( Map.Entry</*@KeyFor("cluster_to_conditions")*/ String,Map<String,HashedConsequent>> entry : cluster_to_conditions.entrySet()) {
         String predicate = entry.getKey();
         Map<String,HashedConsequent> conditions = entry.getValue();
         StringBuffer conjunctionJava = new StringBuffer();
@@ -166,7 +166,7 @@ public class ExtractConsequent {
         StringBuffer conjunctionESC = new StringBuffer();
         StringBuffer conjunctionSimplify = new StringBuffer("(AND ");
         int count = 0;
-        for (Map.Entry<String,HashedConsequent> entry2 : conditions.entrySet()) {
+        for (Map.Entry</*@KeyFor("conditions")*/ String,HashedConsequent> entry2 : conditions.entrySet()) {
           count++;
           String condIndex = entry2.getKey();
           HashedConsequent cond = entry2.getValue();

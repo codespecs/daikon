@@ -22,7 +22,7 @@ class Visitors implements JavaParserConstants {
   public static Node getJtbTree(String expression)
     throws ParseException {
     class ExpressionExtractor extends DepthFirstVisitor {
-      private Node expressionNode;
+      private /*@Nullable*/ Node expressionNode;
       public void visit(VariableInitializer n) {
         expressionNode = n.f0;
       }
@@ -33,6 +33,7 @@ class Visitors implements JavaParserConstants {
     Node root = parser.CompilationUnit();
     ExpressionExtractor expressionExtractor = new ExpressionExtractor();
     root.accept(expressionExtractor);
+    assert expressionExtractor.expressionNode != null : "@SuppressWarnings(nullness): control flow: visitor pattern";
     return expressionExtractor.expressionNode;
   }
 

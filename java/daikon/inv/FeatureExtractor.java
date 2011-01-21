@@ -284,7 +284,7 @@ public final class FeatureExtractor {
     // and a Map of numbers to names
     TreeSet<IntDoublePair> allFeatures = new TreeSet<IntDoublePair>();
     HashMap<IntDoublePair,String> numbersToNames = new HashMap<IntDoublePair,String>();
-    for (Map.Entry<Object,Integer> entry : lookup.entrySet()) {
+    for (Map.Entry</*@KeyFor("lookup")*/ Object,Integer> entry : lookup.entrySet()) {
       Object key = entry.getKey();
       int num = entry.getValue().intValue();
       IntDoublePair pair = new IntDoublePair(num, 0);

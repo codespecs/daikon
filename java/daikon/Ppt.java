@@ -35,14 +35,15 @@ public abstract class Ppt
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20040914L;
 
+  public VarInfo[] var_infos;
+
+  protected Ppt(VarInfo[] var_infos) {
+    this.var_infos = var_infos;
+  }
+
   // The "name" and "ppt_name" fields were moved to PptTopLevel:  they take
   // up too much space in PptSlice objects.
   public abstract String name();
-
-  protected Ppt() {
-  }
-
-  public VarInfo[] var_infos;
 
   /** Trim the collections used in this Ppt. */
   public void trimToSize() {

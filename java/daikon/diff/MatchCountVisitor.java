@@ -124,6 +124,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
   }
 
   /** Returns true if the pair of invariants should be printed **/
+  @SuppressWarnings("assertiftrue.postcondition.not.satisfied") // determineRelationship returns REL_SAME_JUST1_JUST2 only if inv1 and inv2 are nonnull
   /*@AssertNonNullIfTrue({"#0", "#1"})*/
   protected static boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
 

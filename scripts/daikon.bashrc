@@ -57,6 +57,7 @@ fi
 if [ ! -z "$CLASSPATH" ]; then
   export CLASSPATH=${CPADD}:${CLASSPATH}
 else
+  if [ -n "$PS1" ]; then echo "Warning: daikon.bashrc is setting CLASSPATH, which was previously unset"; fi
   export CLASSPATH=${CPADD}
 fi
 

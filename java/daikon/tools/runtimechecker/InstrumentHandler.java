@@ -184,11 +184,15 @@ public class InstrumentHandler extends CommandHandler {
 
     private static class Arguments {
         public String invFile;
-
         public List<String> javaFileNames;
+        public Arguments(String invFile, List<String> javaFileNames) {
+            this.invFile = invFile;
+            this.javaFileNames = javaFileNames;
+        }
     }
 
-    private static Arguments errorWhileReadingArguments = new Arguments();
+    private static Arguments errorWhileReadingArguments
+        = new Arguments("error while reading arguments", new ArrayList<String>());
 
     private Arguments readArguments(String[] args) {
 
@@ -271,9 +275,6 @@ public class InstrumentHandler extends CommandHandler {
             javaFileNames.add(javafile);
         }
 
-        Arguments ret = new Arguments();
-        ret.invFile = invfile;
-        ret.javaFileNames = javaFileNames;
-        return ret;
+        return new Arguments(invfile, javaFileNames);
     }
 }

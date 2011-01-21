@@ -54,12 +54,13 @@ public class PptMap
   }
 
   /**
-   * Returns whether or not 'name' is the name of a Ppt in the map.  Note that conditional
-   * program points are not stored in the map by name.  They are only
-   * available through their parent.
+   * Returns whether or not 'name' is the name of a Ppt in the map.  Note
+   * that conditional program points are not stored in the map by name.
+   * They are only available through their parent.
    */
   /*@Pure*/
-  /*@AssertNonNullIfTrue("get(#0)")*/
+  @SuppressWarnings("nullness") // postcondition: linked maps
+  /*@AssertNonNullIfTrue("get(#0)")*/ // get(#0) == nameToPpt.get(#0)
   public boolean containsName(String name) {
     return nameToPpt.containsKey(name);
   }
@@ -80,8 +81,16 @@ public class PptMap
   /**
    * @return an unmodifiable version of the keySet
    */
-  public Collection</*@KeyFor("nameToPpt")*/ String> nameStringSet() {
-    return Collections.unmodifiableSet(nameToPpt.keySet());
+  // daikon/tools/compare/LogicalCompare.java:745 does not typecheck, no
+  // matter whether the annotation argument is "this.nameToPpt" or
+  // "nameToPpt".  This method only typechecks if the annotation argument
+  // is "nameToPpt", not "this.nameToPpt".  (Yes, nameToPpt is a private
+  // variable, but I'd like the annotation to work anyway, at least for the
+  // moment.)
+  public Collection</*@KeyFor("this.nameToPpt")*/ String> nameStringSet() {
+    // return Collections.unmodifiableSet(nameToPpt.keySet());
+    Set</*@KeyFor("this.nameToPpt")*/ String> s = nameToPpt.keySet();
+    return Collections.unmodifiableSet(s);
   }
 
   /**

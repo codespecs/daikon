@@ -18,7 +18,7 @@ JMLDIR:=/g4/projects/invariants/tests/jml/JML
 
 JAVA_ARGS:=-Djml.src.path="${JMLDIR}/JDK:/g2/j2sdk1.3.0/src" -Djml.out.dir="${HOME}/tmp"
 MAIN_CLASS:=edu.iastate.cs.jml.checker.JmlParserDriver
-MAIN_ARGS:=$(INV)/java/daikon/VarInfoName.java
+MAIN_ARGS:=$(DAIKONDIR)/java/daikon/VarInfoName.java
 
 CLASSPATH:=${JMLDIR}/antlr.jar:${JMLDIR}:${CLASSPATH}
 

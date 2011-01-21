@@ -243,10 +243,9 @@ public class CreateSpinfo {
       List<String> method_conds = conditions.get(method);
       Collections.sort(method_conds);
       if (method_conds.size() > 0) {
-        if (packageName != null) {
-          method = packageName + "." + method;
-        }
-        output.println("PPT_NAME " + method);
+        String qualifiedMethod
+          = (packageName == null) ? method : packageName + "." + method;
+        output.println("PPT_NAME " + qualifiedMethod);
         for (int i = 0; i < method_conds.size(); i++) {
           output.println(removeNewlines(method_conds.get(i)));
         }

@@ -155,69 +155,69 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
   /*@AssertNonNullIfTrue({"#0", "#1"})*/
   protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
 
-    if (5 == 5) {
-      if (inv1 == null || inv2 == null) {
-        return false;
-      }
-      return  inv1.format().equals (inv2.format()) ||
-        targSet.contains (inv1.format());
+    if (inv1 == null || inv2 == null) {
+      return false;
     }
+    return  inv1.format().equals (inv2.format()) ||
+      targSet.contains (inv1.format());
 
-    int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
-    if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2 ) {
-
-      // got rid of unjustified
-      //   rel == DetailedStatisticsVisitor.REL_SAME_UNJUST1_UNJUST2)
-
-      // Added to get rid of constants other than -1, 0, 1 in the
-      // invariant's format_java() string... this change was made to
-      // filter out targets that could never really be achived
-      // example:   num >= 10378
-
-      if (filterOut (inv1) || filterOut (inv2)) {
-        return false;
-      }
-
-      // now you have a match
-
-      return true;
-    }
-
-
-    return false;
+    //     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
+    //     if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2 ) {
+    // 
+    //       // got rid of unjustified
+    //       //   rel == DetailedStatisticsVisitor.REL_SAME_UNJUST1_UNJUST2)
+    // 
+    //       // Added to get rid of constants other than -1, 0, 1 in the
+    //       // invariant's format_java() string... this change was made to
+    //       // filter out targets that could never really be achived
+    //       // example:   num >= 10378
+    // 
+    //       if (filterOut (inv1) || filterOut (inv2)) {
+    //         return false;
+    //       }
+    // 
+    //       // now you have a match
+    // 
+    //       return true;
+    //     }
+    // 
+    // 
+    //     return false;
   }
 
   /** returns true iff any token of inv.format_java() contains
    *  a number other than -1, 0, 1 or is null. */
   private static boolean filterOut (/*@Nullable*/ Invariant inv) {
 
-    if (5 == 5) return false;
-
-
-    if (inv == null) return true;
-    String str = inv.format_using(OutputFormat.JAVA);
-    StringTokenizer st = new StringTokenizer (str, " ()],[");
-    while (st.hasMoreTokens()) {
-      String oneToken = st.nextToken();
-      try {
-        char firstChar = oneToken.charAt(0);
-        // remember identifiers can not begin with [0-9\-]
-        if (Character.isDigit (firstChar) || firstChar == '-') {
-          if (acceptableNumber (oneToken)) {
-            continue;
-          }
-          else return true;
-        }
-
-      }
-      catch (NumberFormatException e) {
-        System.out.println ("Should never get here... " +
-                            "NumberFormatException in filterOut: " +
-                            oneToken);
-        continue;
-      }
-    }
     return false;
+
+    //     if (5 == 5) return false;
+    // 
+    // 
+    //     if (inv == null) return true;
+    //     String str = inv.format_using(OutputFormat.JAVA);
+    //     StringTokenizer st = new StringTokenizer (str, " ()],[");
+    //     while (st.hasMoreTokens()) {
+    //       String oneToken = st.nextToken();
+    //       try {
+    //         char firstChar = oneToken.charAt(0);
+    //         // remember identifiers can not begin with [0-9\-]
+    //         if (Character.isDigit (firstChar) || firstChar == '-') {
+    //           if (acceptableNumber (oneToken)) {
+    //             continue;
+    //           }
+    //           else return true;
+    //         }
+    // 
+    //       }
+    //       catch (NumberFormatException e) {
+    //         System.out.println ("Should never get here... " +
+    //                             "NumberFormatException in filterOut: " +
+    //                             oneToken);
+    //         continue;
+    //       }
+    //     }
+    //     return false;
   }
 
   public double calcRecall() {

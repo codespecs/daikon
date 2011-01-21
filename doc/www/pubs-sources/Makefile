@@ -8,8 +8,8 @@ BIBFILES = ${BIBDIR}/bibstring-unabbrev.bib ${BIBDIR}/ernst.bib ${BIBDIR}/invari
 BPHOME ?= /afs/csail.mit.edu/u/m/mernst/bin/src/perl/bibtex2web/lib
 BWBIN = ${BPHOME}/../bin
 MDEWWW ?= /afs/csail.mit.edu/u/m/mernst/www
-PLUMEBIN ?= ${INV}/plume-lib/bin
-PERLLIB := $(INV)/scripts:$(INV)/plume-lib/bin:/afs/csail.mit.edu/u/m/mernst/bin/src/perl/bibtex2web/lib
+PLUMEBIN ?= ${DAIKONDIR}/plume-lib/bin
+PERLLIB := $(DAIKONDIR)/scripts:$(DAIKONDIR)/plume-lib/bin:/afs/csail.mit.edu/u/m/mernst/bin/src/perl/bibtex2web/lib
 ###########################################################################
 
 # Files in $pag/www/daikon/pubs-sources/
@@ -21,7 +21,7 @@ html: HTML
 HTML: abstracts index.html
 
 update-from-checkout:
-	cd ${INV}/doc/www/pubs-sources; cp -pf ${FILES_FROM_CHECKOUT} ${pag}/www/daikon/pubs-sources/
+	cd ${DAIKONDIR}/doc/www/pubs-sources; cp -pf ${FILES_FROM_CHECKOUT} ${pag}/www/daikon/pubs-sources/
 
 # Remove generated files.
 clean-abstracts:

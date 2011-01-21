@@ -45,7 +45,7 @@ public class ParameterInfo extends DaikonVariableInfo
     public ParameterInfo(String theName, int theArgNum, Class<?> argType,
                          int param_offset)
     {
-        super(theName);
+        super(theName, stdClassName(argType) + DaikonVariableInfo.isParamString, getRepName(argType, false));
 
         argNum = theArgNum;
         this.param_offset = param_offset;
@@ -59,10 +59,7 @@ public class ParameterInfo extends DaikonVariableInfo
      */
     public ParameterInfo (MethodInfo mi, int theArgNum, int param_offset)
     {
-        super (mi.arg_names[theArgNum]);
-        argNum = theArgNum;
-        this.param_offset = param_offset;
-        argType = mi.arg_types[argNum];
+        this (mi.arg_names[theArgNum], theArgNum, mi.arg_types[theArgNum], param_offset);
     }
 
     /**

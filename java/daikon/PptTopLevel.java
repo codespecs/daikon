@@ -330,7 +330,7 @@ public class PptTopLevel extends Ppt {
    * Holds Equality invariants.  Never null after invariants are
    * instantiated.
    **/
-  public PptSliceEquality equality_view;
+  public /*@LazyNonNull*/ PptSliceEquality equality_view;
 
   // The redundant_invs* variables are filled in by method
   // mark_implied_via_simplify.
@@ -342,6 +342,7 @@ public class PptTopLevel extends Ppt {
   public PptTopLevel (String name, PptType type, List<ParentRelation> parents,
                       EnumSet<PptFlags> flags, /*@Nullable*/ List<String> ppt_successors,
                       /*@Nullable*/ /*@Interned*/ String function_id, int bb_length, VarInfo[] var_infos) {
+    super(var_infos);
 
     this.name = name;
     if (!name.contains (":::")) {
@@ -354,7 +355,7 @@ public class PptTopLevel extends Ppt {
     this.ppt_successors = ppt_successors;
     this.function_id = function_id;
     this.bb_length = bb_length;
-    init_vars (var_infos);
+    init_vars ();
   }
 
   /** Restore/Create interns when reading serialized object **/
@@ -374,17 +375,19 @@ public class PptTopLevel extends Ppt {
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
   public PptTopLevel(String name, VarInfo[] var_infos) {
+    super(var_infos);
     this.name = name;
     ppt_name = new PptName(name);
-    init_vars (var_infos);
+    init_vars ();
   }
 
-  private void init_vars (VarInfo[] var_infos) /*@Raw*/ {
+  /*@NonNullOnEntry("var_infos")*/
+  /*@AssertNonNullAfter({"mbtracker", "views", "value_sets"})*/
+  private void init_vars () /*@Raw*/ {
 
     debug_varinfo.log_tb ("initializing var_infos %s",
                            Arrays.toString(var_infos));
 
-    this.var_infos = var_infos;
     int val_idx = 0;
     num_static_constant_vars = 0;
     for (int i = 0; i < var_infos.length; i++) {
@@ -2742,6 +2745,7 @@ public class PptTopLevel extends Ppt {
    * parameter VarInfos so that each equality set contains only the
    * interesting one.
    **/
+  /*@NonNullOnEntry("equality_view")*/
   public void postProcessEquality() {
     if (debugEqualTo.isLoggable(Level.FINE)) {
       debugEqualTo.fine("PostProcessingEquality for: " + this.name());
@@ -3057,7 +3061,7 @@ public class PptTopLevel extends Ppt {
         }
         int max_demerits = -1;
         Vector<Lemma> worst = new Vector<Lemma>();
-        for (Map.Entry<Lemma,Integer> ent : demerits.entrySet()) {
+        for (Map.Entry</*@KeyFor("demerits")*/ Lemma,Integer> ent : demerits.entrySet()) {
           int value = ent.getValue().intValue();
           if (value == max_demerits) {
             worst.add(ent.getKey());
@@ -3668,7 +3672,7 @@ public class PptTopLevel extends Ppt {
         continue;
       Map<VarInfo.Pair,VarInfo.Pair> eq_new = rel.get_child_equalities_as_parent();
       // Cannot use foreach loop, due to desire to remove from emap.
-      for (Iterator<VarInfo.Pair> j = emap.keySet().iterator(); j.hasNext();) {
+      for (Iterator</*@KeyFor("emap")*/ VarInfo.Pair> j = emap.keySet().iterator(); j.hasNext();) {
         VarInfo.Pair curpair = j.next();
         VarInfo.Pair newpair = eq_new.get(curpair);
         if (newpair == null)
@@ -3687,7 +3691,9 @@ public class PptTopLevel extends Ppt {
     }
 
     // Build actual equality sets that match the pairs we found
-    equality_view.instantiate_from_pairs(emap.keySet());
+    @SuppressWarnings("keyfor") // checker weakness: keyfor: read-only Set permits covariance
+    Set<VarInfo.Pair> emap_keySet = emap.keySet();
+    equality_view.instantiate_from_pairs(emap_keySet);
     if (debugMerge.isLoggable(Level.FINE)) {
       debugMerge.fine("Built equality sets ");
       for (Invariant inv : equality_view.invs) {
@@ -3742,6 +3748,7 @@ public class PptTopLevel extends Ppt {
    * by first creating all of the suppressed invariants in each of the
    * children, performing the merge, and then removing them.
    */
+  /*@NonNullOnEntry("equality_view")*/
   public void merge_invs_multiple_children() {
 
     // Debug print ppt and children
@@ -3847,7 +3854,7 @@ public class PptTopLevel extends Ppt {
 
     // Remove the NI suppressed invariants in the children that we
     // previously created
-    for (Map.Entry<PptTopLevel,List<Invariant>> entry : suppressed_invs.entrySet()) {
+    for (Map.Entry</*@KeyFor("suppressed_invs")*/ PptTopLevel,List<Invariant>> entry : suppressed_invs.entrySet()) {
       PptTopLevel child = entry.getKey();
       List<Invariant> suppressed_list = entry.getValue();
       child.remove_invs(suppressed_list);
@@ -4268,7 +4275,8 @@ public class PptTopLevel extends Ppt {
     public int instantiated_slice_cnt = 0;
 
     /** program point of the stat **/
-    public PptTopLevel ppt;
+    // Initialized by the set() method.
+    public /*@LazyNonNull*/ PptTopLevel ppt;
 
     int const_slice_cnt = 0;
     int const_inv_cnt = 0;

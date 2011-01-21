@@ -21,14 +21,14 @@ public class PureMethodInfo extends DaikonVariableInfo
     private DaikonVariableInfo[] args;
     
     
-    public PureMethodInfo(String name, MethodInfo methInfo, boolean inArray)
+    public PureMethodInfo(String name, MethodInfo methInfo, String typeName, String repTypeName, boolean inArray)
     {
-        this(name, methInfo, inArray, new DaikonVariableInfo[0]);
+        this(name, methInfo, typeName, repTypeName, inArray, new DaikonVariableInfo[0]);
     }
     
-    public PureMethodInfo(String name, MethodInfo methInfo, boolean inArray, DaikonVariableInfo[] args)
+    public PureMethodInfo(String name, MethodInfo methInfo, String typeName, String repTypeName, boolean inArray, DaikonVariableInfo[] args)
     {
-    	super(name, inArray);
+    	super(name, typeName, repTypeName, inArray);
     	
     	assert methInfo.isPure(): "Method " + methInfo + " is not pure";
     	

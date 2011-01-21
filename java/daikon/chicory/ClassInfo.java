@@ -8,29 +8,31 @@ import java.lang.reflect.*;
  * Keeps information about a class that is useful for writing out
  * decl and/or dtrace information.  Original information is filled
  * out during the transformation and other information is added the
- * after the class is first loaded
+ * after the class is first loaded.
  */
 public class ClassInfo {
 
   /** fully qualified name of the  class **/
   public String class_name;
 
+  // set by initViaReflection()
   /** reflection object for this class **/
-  public Class<?> clazz;
+  public /*@LazyNonNull*/ Class<?> clazz;
 
   // Does not include class initializers, so each element's .member field
   // is non-null.
   /** list of methods in the class **/
   public List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
 
-  /** this class's classloader**/
+  /** this class's classloader **/
   private ClassLoader loader;
 
+  // traversalClass and traversalObject are set by init_traversal().
   /** DaikonVariables for the object (instance and static) **/
-  public RootInfo traversalObject;
+  public /*@LazyNonNull*/ RootInfo traversalObject;
 
   /** DaikonVariables for the class (static vars only) **/
-  public RootInfo traversalClass;
+  public /*@LazyNonNull*/ RootInfo traversalClass;
 
   /** Whether or not any methods in this class were instrumented **/
   public boolean shouldInclude = false;

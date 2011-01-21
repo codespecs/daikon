@@ -22,7 +22,7 @@ class PrefixRemover extends DepthFirstVisitor {
   private String prefix;
 
   /** The last token visited by this. */
-  private NodeToken lastToken;
+  private /*@LazyNonNull*/ NodeToken lastToken;
 
   private int columnshift = 0;
   private int columnshiftline = -1;

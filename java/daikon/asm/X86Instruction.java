@@ -25,7 +25,12 @@ public class X86Instruction implements IInstruction {
   public /*@Nullable*/ String owner = null;
 
   // See method parseInstruction. It sets all fields appropriately.
-  private X86Instruction() {
+  private X86Instruction(String dllName, String address, String opName, List<String> args, List <String> killedVars) {
+    this.dllName = dllName;
+    this.address = address;
+    this.opName = opName;
+    this.args = args;
+    this.killedVars = killedVars;
   }
 
   public String getOpName() {
@@ -133,15 +138,13 @@ public class X86Instruction implements IInstruction {
     if (tokens.length < 2)
       throw new IllegalArgumentException("Invalid instruction string: " + s);
 
-    X86Instruction inst = new X86Instruction();
-
     // Set dllName and address fields.
     String[] dllAddr = tokens[0].split(":");
     if (dllAddr.length != 2)
       throw new IllegalArgumentException("Invalid instruction string: " + s);
     if (!(dllAddr[0].endsWith(".dll") || dllAddr[0].endsWith(".exe")))
       throw new IllegalArgumentException("Invalid instruction string: " + s);
-    inst.dllName = dllAddr[0];
+    String inst_dllName = dllAddr[0];
     if (!dllAddr[1].startsWith("0x"))
       throw new IllegalArgumentException("Invalid instruction string: " + s);
     try {
@@ -149,15 +152,15 @@ public class X86Instruction implements IInstruction {
     } catch (NumberFormatException e) {
       throw new IllegalArgumentException("Invalid instruction string: " + s);
     }
-    inst.address = dllAddr[1];
+    String inst_address = dllAddr[1];
 
     // Set opName field.
     if (!isValidOp(tokens[1]))
       throw new IllegalArgumentException("Invalid instruction string: " + s);
-    inst.opName = tokens[1];
+    String inst_opName = tokens[1];
 
     // Set args
-    inst.args = new ArrayList<String>();
+    List<String> inst_args = new ArrayList<String>();
     int i = 2;
     for (; i < tokens.length; i++) {
       if (tokens[i].equals("->")) {
@@ -168,19 +171,19 @@ public class X86Instruction implements IInstruction {
       }
       if (!isValidLHSOp(tokens[i]))
         throw new IllegalArgumentException("Invalid instruction string: " + s);
-      inst.args.add(tokens[i]);
+      inst_args.add(tokens[i]);
     }
 
     // Set resultVars.
-    inst.killedVars = new ArrayList<String>();
+    List<String> inst_killedVars = new ArrayList<String>();
     for (; i < tokens.length; i++) {
       if (!isValidRHSVar(tokens[i])) {
         throw new IllegalArgumentException("Invalid instruction string: " + s);
       }
-      inst.killedVars.add(tokens[i]);
+      inst_killedVars.add(tokens[i]);
     }
 
-    return inst;
+    return new X86Instruction(inst_dllName, inst_address, inst_opName, inst_args, inst_killedVars);
   }
 
   // TODO fill in if necessary.

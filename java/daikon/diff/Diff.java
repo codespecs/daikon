@@ -85,16 +85,33 @@ public final class Diff {
 
   public Diff() {
     this(false, false);
-    setAllInvComparators(new Invariant.ClassVarnameComparator());
   }
 
   public Diff(boolean examineAllPpts) {
     this (examineAllPpts, false);
   }
 
+  public Diff(boolean examineAllPpts, Comparator<Invariant> c) {
+    this(examineAllPpts, false);
+    setAllInvComparators(c);
+  }
+
   public Diff (boolean examineAllPpts, boolean ignoreNumberedExits) {
     this.examineAllPpts = examineAllPpts;
     this.ignoreNumberedExits = ignoreNumberedExits;
+    setAllInvComparators(new Invariant.ClassVarnameComparator());
+  }
+
+  public Diff (boolean examineAllPpts, boolean ignoreNumberedExits,
+               /*@Nullable*/ String invSortComparator1Classname,
+               /*@Nullable*/ String invSortComparator2Classname,
+               /*@Nullable*/ String invPairComparatorClassname,
+               Comparator<Invariant> defaultComparator) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
+    this.examineAllPpts = examineAllPpts;
+    this.ignoreNumberedExits = ignoreNumberedExits;
+    this.invSortComparator1 = selectComparator(invSortComparator1Classname, defaultComparator);
+    this.invSortComparator2 = selectComparator(invSortComparator2Classname, defaultComparator);
+    this.invPairComparator = selectComparator(invPairComparatorClassname, defaultComparator);
   }
 
   /**
@@ -304,22 +321,19 @@ public final class Diff {
     if (logging)
       System.err.println("Invariant Diff: Creating Diff Object");
 
-    Diff diff = new Diff(examineAllPpts, ignoreNumberedExits);
-
-    // Set the comparators based on the command-line options
-
     Comparator<Invariant> defaultComparator;
     if (minus || xor || union) {
       defaultComparator = new Invariant.ClassVarnameFormulaComparator();
     } else {
       defaultComparator = new Invariant.ClassVarnameComparator();
     }
-    diff.setInvSortComparator1
-      (selectComparator(invSortComparator1Classname, defaultComparator));
-    diff.setInvSortComparator2
-      (selectComparator(invSortComparator2Classname, defaultComparator));
-    diff.setInvPairComparator
-      (selectComparator(invPairComparatorClassname, defaultComparator));
+
+    // Set the comparators based on the command-line options
+
+    Diff diff = new Diff(examineAllPpts, ignoreNumberedExits,
+                         invSortComparator1Classname,
+                         invSortComparator2Classname,
+                         invPairComparatorClassname, defaultComparator);
 
     if ((!(diff.invSortComparator1.getClass().toString().equals
            (diff.invSortComparator2.getClass().toString()))) ||
@@ -849,6 +863,7 @@ public final class Diff {
    * Use the comparator for sorting both sets and creating the pair
    * tree.
    **/
+  /*@AssertNonNullAfter({"invSortComparator1", "invSortComparator2", "invPairComparator"})*/
   public void setAllInvComparators(Comparator<Invariant> c) {
     setInvSortComparator1(c);
     setInvSortComparator2(c);

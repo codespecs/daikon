@@ -11,6 +11,7 @@ public abstract class Joiner
   public Invariant left;
   public Invariant right;
 
+  @SuppressWarnings("nullness") // initialization: checker weakness:  unused constructor
   protected Joiner(PptSlice ppt) {
     super(ppt);
     throw new Error("Don't instantiate a Joiner this way.");

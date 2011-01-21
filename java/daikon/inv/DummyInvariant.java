@@ -24,12 +24,12 @@ public class DummyInvariant
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030220L;
 
-  private String daikonFormat;
-  private String javaFormat;
-  private String escFormat;
-  private String simplifyFormat;
-  private String jmlFormat;
-  private String dbcFormat;
+  private /*@Nullable*/ String daikonFormat;
+  private /*@Nullable*/ String javaFormat;
+  private /*@Nullable*/ String escFormat;
+  private /*@Nullable*/ String simplifyFormat;
+  private /*@Nullable*/ String jmlFormat;
+  private /*@Nullable*/ String dbcFormat;
 
   private boolean negated = false;
 
@@ -39,42 +39,45 @@ public class DummyInvariant
   // slice for the invariant to live in.
   public boolean valid = false;
 
-  public DummyInvariant(PptSlice ppt) {
-    super(ppt);
-  }
-
-  public /*@Prototype*/ DummyInvariant() {
-    super();
-  }
-
-  public void setFormats(/*@Nullable*/ String daikonStr, /*@Nullable*/ String java, /*@Nullable*/ String esc,
+  public DummyInvariant(PptSlice ppt,
+                        /*@Nullable*/ String daikonStr, /*@Nullable*/ String java, /*@Nullable*/ String esc,
                          /*@Nullable*/ String simplify, /*@Nullable*/ String jml,
                          /*@Nullable*/ String dbc, boolean desired) {
-    if (daikonStr != null)
-      daikonFormat = daikonStr;
-    if (java != null)
-      javaFormat = java;
-    if (esc != null)
-      escFormat = esc;
-    if (simplify != null)
-      simplifyFormat = simplify;
-    if (jml != null)
-      jmlFormat = jml;
-    if (dbc != null)
-      dbcFormat = dbc;
+    super(ppt);
+    daikonFormat = daikonStr;
+    javaFormat = java;
+    escFormat = esc;
+    simplifyFormat = simplify;
+    jmlFormat = jml;
+    dbcFormat = dbc;
+    valid = desired;
+  }
 
-    valid |= desired;
+  public /*@Prototype*/ DummyInvariant(/*@Nullable*/ String daikonStr, /*@Nullable*/ String java, /*@Nullable*/ String esc,
+                         /*@Nullable*/ String simplify, /*@Nullable*/ String jml,
+                         /*@Nullable*/ String dbc, boolean desired) {
+    super();
+    daikonFormat = daikonStr;
+    javaFormat = java;
+    escFormat = esc;
+    simplifyFormat = simplify;
+    jmlFormat = jml;
+    dbcFormat = dbc;
+    valid = desired;
   }
 
   public DummyInvariant instantiate(PptTopLevel parent, VarInfo[] vars) {
-    DummyInvariant inv = new DummyInvariant(ppt);
-    inv.daikonFormat = this.daikonFormat;
-    inv.javaFormat = this.javaFormat;
-    inv.escFormat = this.escFormat;
-    inv.simplifyFormat = this.simplifyFormat;
-    inv.valid = false; // Not valid until we find a slice for it
     assert !this.negated
         : "Only instantiated invariants should be negated";
+    DummyInvariant inv = new DummyInvariant(ppt, 
+                                            daikonFormat,
+                                            javaFormat,
+                                            escFormat,
+                                            simplifyFormat,
+                                            jmlFormat,
+                                            dbcFormat,
+                                            // Not valid until we find a slice for it
+                                            /*valid=*/ false);
 
     // Find between 1 and 3 unique variables, to pick a slice to put
     // this in.

@@ -204,6 +204,11 @@ public final class FileIO {
     PptRelationType rel_type;
     /*@Interned*/ String parent_ppt_name;
     int id;
+    public ParentRelation(PptRelationType rel_type, /*@Interned*/ String parent_ppt_name, int id) {
+      this.rel_type = rel_type;
+      this.parent_ppt_name = parent_ppt_name;
+      this.id = id;
+    }
     public String toString() { return parent_ppt_name + "[" + id + "] "
                                  + rel_type; };
     private void readObject(ObjectInputStream in)
@@ -447,12 +452,12 @@ public final class FileIO {
   private static ParentRelation parse_ppt_parent (ParseState state,
        Scanner scanner) throws DeclError {
 
-    ParentRelation pr = new ParentRelation();
     PptRelationType rel_type = parse_enum_val (state, scanner, PptRelationType.class,
                                       "relation type");
-    pr.rel_type = rel_type;
-    pr.parent_ppt_name = need (state, scanner, "ppt name");
-    pr.id = Integer.parseInt (need (state, scanner, "relation id"));
+    String parent_ppt_name = need (state, scanner, "ppt name");
+    int id = Integer.parseInt (need (state, scanner, "relation id"));
+    ParentRelation pr = new ParentRelation(rel_type, parent_ppt_name, id);
+
     need_eol (state, scanner);
     return (pr);
   }
@@ -692,7 +697,7 @@ public final class FileIO {
 
     if (static_constant_value_string != null) {
       static_constant_value =
-        rep_type.parse_value(static_constant_value_string);
+        rep_type.parse_value(static_constant_value_string, file, filename);
       // Why can't the value be null?
       assert static_constant_value != null;
     }
@@ -1114,6 +1119,7 @@ public final class FileIO {
    * each sample.
    */
   public static class Processor {
+    /*@NonNullOnEntry("FileIO.data_trace_state")*/
     public void process_sample(
                                PptMap all_ppts,
                                PptTopLevel ppt,
@@ -1216,7 +1222,7 @@ public final class FileIO {
     public /*@Nullable*/ ValueTuple vt;
 
     /** Miscellaneous text in the parsed item **/
-    public Object payload;      // used when state=COMMENT
+    public /*@Nullable*/ Object payload;      // used when state=COMMENT
 
 
     /** Start parsing the given file. */
@@ -1694,6 +1700,7 @@ public final class FileIO {
    * supply it to the program point for flowing.
    * @param vt trace data only; modified by side effect to add derived vars
    **/
+  /*@NonNullOnEntry("FileIO.data_trace_state")*/
   public static void process_sample(
                                     PptMap all_ppts,
                                     PptTopLevel ppt,
@@ -2013,7 +2020,7 @@ public final class FileIO {
   // This procedure reads a single record from a trace file and
   // fills up vals and mods by side effect.  The ppt name and
   // invocation nonce (if any) have already been read.
-  /*@NonNullOnEntry("data_trace_state")*/
+  /*@NonNullOnEntry("FileIO.data_trace_state")*/
   private static void read_vals_and_mods_from_trace_file
                         (LineNumberReader reader, String filename,
                          PptTopLevel ppt, /*@Nullable*/ Object[] vals, int[] mods)
@@ -2218,7 +2225,7 @@ public final class FileIO {
         // "(modIsMissing=" + ValueTuple.modIsMissing(mod) + ")");
 
         try {
-          vals[val_index] = vi.rep_type.parse_value(value_rep);
+          vals[val_index] = vi.rep_type.parse_value(value_rep, reader, filename);
           if (vals[val_index] == null) {
             if (debug_missing && !vi.canBeMissing)
               System.out.printf ("Var %s ppt %s at line %d null-not missing%n",
@@ -2281,7 +2288,7 @@ public final class FileIO {
    * a matching enter.  See dkconfig_ignore_missing_enter for more info.
    * If true is returned, this ppt should be ignored by the caller
    **/
-  /*@NonNullOnEntry("data_trace_state")*/
+  /*@NonNullOnEntry("FileIO.data_trace_state")*/
   public static boolean add_orig_variables(PptTopLevel ppt,
                                      // HashMap cumulative_modbits,
                                      /*@Nullable*/ Object[] vals, int[] mods,
@@ -2894,7 +2901,7 @@ public final class FileIO {
       /*@Interned*/ String constant_str = need (scanner, "constant value");
       need_eol (scanner);
       try {
-        static_constant_value = rep_type.parse_value (constant_str);
+        static_constant_value = rep_type.parse_value (constant_str, null, "parse_constant");
       } catch (Error e) {
         decl_error (state, e.getMessage());
       }

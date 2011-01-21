@@ -343,22 +343,22 @@ public final /*@Interned*/ class ProglangType
    */
   // The implementations only need to deal with representation types, not
   // with all types in the underlying programming language.
-  public final /*@Nullable*/ /*@Interned*/ Object parse_value(String value) {
+  public final /*@Nullable*/ /*@Interned*/ Object parse_value(String value, LineNumberReader reader, String filename) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
     switch (dimensions) {
     case 0:
-      return parse_value_scalar(value);
+      return parse_value_scalar(value, reader, filename);
     case 1:
-      return parse_value_array_1d(value);
+      return parse_value_array_1d(value, reader, filename);
     case 2:
-      return parse_value_array_2d(value);
+      return parse_value_array_2d(value, reader, filename);
     default:
       throw new Error("Can't parse a value of type " + format());
     }
   }
 
-  public final /*@Nullable*/ /*@Interned*/ Object parse_value_scalar(String value) {
+  public final /*@Nullable*/ /*@Interned*/ Object parse_value_scalar(String value, LineNumberReader reader, String filename) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
     assert dimensions == 0;
@@ -367,15 +367,23 @@ public final /*@Interned*/ class ProglangType
       if (value.equals("null")) {
         return null;
       }
-      if (! (value.startsWith("\"") && value.endsWith("\""))) {
-        System.out.println("Unquoted string value: " + value);
-        Throwable stack = new Throwable("unquoted string");
-        stack.fillInStackTrace();
-        stack.printStackTrace();
-      }
       // assert value.startsWith("\"") && value.endsWith("\"");
-      if (value.startsWith("\"") && value.endsWith("\""))
+      if (value.startsWith("\"") && value.endsWith("\"")) {
         value = value.substring(1, value.length()-1);
+      } else {
+        // Unfortunately, there is not a convenient way to communicate what
+        // the variable name is, which would make the error message even
+        // more specific.
+        if (! value.startsWith("\"")) {
+          System.out.printf("Warning: unquoted string value at %s line %d: %s%n",
+                            filename, reader.getLineNumber(), value);
+        } else {
+          assert ! value.endsWith("\"");
+          System.out.printf("Warning: unterminated string value at %s line %d: %s%n",
+                            filename, reader.getLineNumber(), value);
+        }
+        System.out.printf("Proceeding anyway.  Please report a bug in the tool that made the data trace file.");
+      }
       value = UtilMDE.unescapeNonJava(value);
       return value.intern();
     } else if (base == BASE_CHAR) {
@@ -401,7 +409,7 @@ public final /*@Interned*/ class ProglangType
       // File rep type might be int, boolean, or hashcode.
       // If we had the actual type, we could do error-checking here.
       // (Example:  no hashcode should be negative, nor any boolean > 1.)
-      if (value.equals ("nonsensical"))
+      if (value.equals("nonsensical"))
         return null;
       if (value.equals("false") || value.equals("0"))
         return LongZero;
@@ -426,7 +434,7 @@ public final /*@Interned*/ class ProglangType
     }
   }
 
-  public final /*@Nullable*/ /*@Interned*/ Object parse_value_array_1d(String value) {
+  public final /*@Nullable*/ /*@Interned*/ Object parse_value_array_1d(String value, LineNumberReader reader, String filename) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
     String value_orig = value;  // we will side-effect the parameter
@@ -468,7 +476,9 @@ public final /*@Interned*/ class ProglangType
           } else if (parser.ttype == StreamTokenizer.TT_NUMBER) {
             v.add(Integer.toString((int)parser.nval));
           } else {
-            System.out.println("Bad ttype " + (char)parser.ttype + " [int=" + parser.ttype + "] while parsing " + value_orig);
+            System.out.printf("Warning: at %s line %d%n  bad ttype %c [int=%d] while parsing %s%n  Proceeding with value 'null'%n",
+                              filename, reader.getLineNumber(),
+                              (char)parser.ttype, parser.ttype, value_orig);
             v.add(null);
           }
         }
@@ -542,7 +552,7 @@ public final /*@Interned*/ class ProglangType
 
   }
 
-  public final /*@Nullable*/ /*@Interned*/ Object parse_value_array_2d(String value) {
+  public final /*@Nullable*/ /*@Interned*/ Object parse_value_array_2d(String value, LineNumberReader reader, String filename) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
     assert dimensions == 2;

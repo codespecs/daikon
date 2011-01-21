@@ -4,7 +4,7 @@
 # in the same directory as this one, or use the individual Makefiles
 # in the project subdirectories.
 
-# See "Makefile.user" below on how you can customize your settings
+# Search for "Makefile.user" below to learn how to customize your settings
 
 ###########################################################################
 
@@ -137,27 +137,27 @@ ifdef ESC_ON
 endif
 
 
-# INV is where the 'invariants' project is checked out from CVS
-INV?=$(DAIKONDIR)
-INV?=$(HOME)/research/invariants
+# DAIKONDIR is where the 'daikon' project is checked out from Mercurial
+DAIKONDIR?=$(DAIKONDIR)
+DAIKONDIR?=$(HOME)/research/invariants
 # Test that the directory exists.  There must be a better way to do this.
-INV:=$(wildcard $(INV))
-ifndef INV
-  $(error Environment variable INV is not set to an existing directory)
+DAIKONDIR:=$(wildcard $(DAIKONDIR))
+ifndef DAIKONDIR
+  $(error Environment variable DAIKONDIR is not set to an existing directory)
 endif
 
 # COMMON_HERE is where the Makefile.common is located.
-COMMON_HERE?=$(INV)/tests
+COMMON_HERE?=$(DAIKONDIR)/tests
 # Test that the directory exists.  There must be a better way to do this.
 COMMON_HERE:=$(wildcard $(COMMON_HERE))
 ifndef COMMON_HERE
-  $(error Test directory $(INV)/tests does not exist)
+  $(error Test directory $(DAIKONDIR)/tests does not exist)
 endif
 
 # Put user-specific changes in your own Makefile.user
-#  (such as changes to PLUME_DIR or JAVAC).
-# Make will silently continue if file does not exist.
-# File can be in the project dir or in the tests dir (or both).
+#  (such as changes to PLUME_DIR or JAVAC or PATH).
+# Make will silently continue if the file does not exist.
+# The file can be in the project dir, or in the tests dir, or both.
 -include Makefile.user
 -include $(COMMON_HERE)/Makefile.user
 
@@ -210,8 +210,8 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # On Darwin, java/javac aren't in a standard JDK directory, so we presume
 # they are on the path.
 ifeq (cygwin, $(OSTYPE))
-  JAVA := $(INV)/plume-lib/bin/java-cygwin
-  JAVAC := $(INV)/plume-lib/bin/javac-cygwin
+  JAVA := $(DAIKONDIR)/plume-lib/bin/java-cygwin
+  JAVAC := $(DAIKONDIR)/plume-lib/bin/javac-cygwin
 else
   ifeq (darwin, $(OSTYPE))
     JAVA  := java
@@ -223,8 +223,8 @@ else
 endif
 CP    := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
-CPDAIKON := $(INV)/java:$(INV)/java/lib/bcel.jar:$(INV)/java/lib/java-getopt.jar:$(INV)/java/lib/junit.jar:$(INV)/java/lib/plume.jar:${CP}
-CPJUNIT := $(INV)/java/lib/junit.jar
+CPDAIKON := $(DAIKONDIR)/java:$(DAIKONDIR)/java/lib/bcel.jar:$(DAIKONDIR)/java/lib/java-getopt.jar:$(DAIKONDIR)/java/lib/junit.jar:$(DAIKONDIR)/java/lib/plume.jar:${CP}
+CPJUNIT := $(DAIKONDIR)/java/lib/junit.jar
 
 export CLASSPATH := .:$(CP):$(SCRATCH_FOR_DAIKON):$(CPDAIKON)
 ifeq (cygwin,$(OSTYPE))
@@ -232,15 +232,15 @@ ifeq (cygwin,$(OSTYPE))
 endif
 
 # Dynamic instrumentation based java front end command.
-CHICORY := $(JAVA) -ea daikon.Chicory
-CHICORY_EXEC := $(INV)/java/daikon/Chicory.class
+CHICORY := $(JAVA) -ea -cp "$(CLASSPATH)" daikon.Chicory
+CHICORY_EXEC := $(DAIKONDIR)/java/daikon/Chicory.class
 
 # As of JDK 1.3 (and 1.4, I think), don't use "-server" here.
 # It causes incorrect optimizations that are evidenced by ">>" right shifts.
-RUN_JAVA?=$(JAVA) -ea -Xmx1590m  # -XX:MaxPermSize=256M
-DAIKON_CLASS?=$(INV)/java/daikon/Daikon.class
+RUN_JAVA?=$(JAVA) -ea -Xmx1590m -cp "$(CLASSPATH)"  # -XX:MaxPermSize=256M
+DAIKON_CLASS?=$(DAIKONDIR)/java/daikon/Daikon.class
 DAIKON = $(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.Daikon
-PRINT_INVARIANTS_CLASS?=$(INV)/java/daikon/PrintInvariants.class
+PRINT_INVARIANTS_CLASS?=$(DAIKONDIR)/java/daikon/PrintInvariants.class
 PRINT_INVARIANTS?=$(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.PrintInvariants
 DAIKON_OPTIONS?=
 PRINT_INVARIANTS_OPTIONS?=
@@ -264,13 +264,13 @@ endif
 # the "include ../../Makefile.common" line.
 #DAIKON_OPTIONS:=$(subst --suppress_redundant,,${DAIKON_OPTIONS})
 
-SCRIPTS?=$(INV)/scripts
-MERGE_ESC_CLASS?=$(INV)/java/daikon/tools/jtb/Annotate.class
-MERGE_ESC_VISITOR_CLASS?=$(INV)/java/daikon/tools/jtb/AnnotateVisitor.class
+SCRIPTS?=$(DAIKONDIR)/scripts
+MERGE_ESC_CLASS?=$(DAIKONDIR)/java/daikon/tools/jtb/Annotate.class
+MERGE_ESC_VISITOR_CLASS?=$(DAIKONDIR)/java/daikon/tools/jtb/AnnotateVisitor.class
 MERGE_ESC?=$(RUN_JAVA) daikon.tools.jtb.Annotate
 # MERGE_ESC_OPTIONS is for this Makefile to set (not needed yet)
 # USER_MERGE_ESC_OPTIONS is for others (using Makefiles, user) to set
-CREATESPINFO_CLASS?=$(INV)/java/daikon/tools/jtb/CreateSpinfo.class
+CREATESPINFO_CLASS?=$(DAIKONDIR)/java/daikon/tools/jtb/CreateSpinfo.class
 CREATESPINFO?=$(RUN_JAVA) daikon.tools.jtb.CreateSpinfo
 CONTEXT_SPINFO_PL:=$(SCRIPTS)/context-spinfo.pl
 CONTEXT_REMAP_PL:=$(SCRIPTS)/context-remap.pl
@@ -279,7 +279,7 @@ CONVERTCSV?=$(SCRIPTS)/convertcsv.pl
 
 #JAVA_COMPILER?=$(shell which javac)
 
-JTRACE_LIBPATH?=$(INV)/front-end/jtrace
+JTRACE_LIBPATH?=$(DAIKONDIR)/front-end/jtrace
 
 ifndef GZCAT
   GZCAT = gunzip -c
@@ -387,7 +387,7 @@ ${ALL_LIST_FILE}: ${SCRATCH_FOR_DAIKON}/.exists
 	@echo
 	@echo "### figure out the necessary files (${PROJECT_FILE})"
 	@echo
-	$(INV)/plume-lib/bin/java-dependencies $(SOURCES) "$(MAIN_JAVA) $(MAIN2_JAVA)" $(JAVAC) \
+	$(DAIKONDIR)/plume-lib/bin/java-dependencies $(SOURCES) "$(MAIN_JAVA) $(MAIN2_JAVA)" $(JAVAC) \
 		> $(ALL_LIST_FILE)
 
 
@@ -481,7 +481,7 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make dyncomp        : Create comparability data using DynComp/Java";\
   echo "  make dyncomp-diff   : Diff new DynComp data against goal file"
 
-DCOMP_PREMAIN := $(INV)/java/dcomp_premain.jar
+DCOMP_PREMAIN := $(DAIKONDIR)/java/dcomp_premain.jar
 DCOMP_PREMAIN_W := $(DCOMP_PREMAIN)
 ifeq (cygwin,$(OSTYPE))
   DCOMP_PREMAIN_W := $(shell cygpath -m "$(DCOMP_PREMAIN)")
@@ -492,9 +492,12 @@ DCOMP_ARGS  = '--ppt-select-pattern=$(INST_FILES)' \
 			  --decl_file $(PROJECT_FILE).decls-DynComp \
               --trace-sets-file=$(PROJECT_FILE).txt-trace \
 			  --shiny-print=$(SHINY_PRINT)
-DCOMP_RT ?= $(wildcard $(INV)/java/dcomp_rt.jar)
+DCOMP_RT ?= $(wildcard $(DAIKONDIR)/java/dcomp_rt.jar)
 ifeq ($(DCOMP_RT),)
-  DCOMP_RT := $(pag)/software/pkg/DynComp/dcomp_rt.jar
+  DCOMP_RT := $(wildcard $(pag)/software/pkg/DynComp/dcomp_rt.jar)
+endif
+ifndef DCOMP_RT
+  $(info dcomp_rt.jar is not in ${DAIKONDIR}/java; it must be on the classpath.)
 endif
 JAVA_DCOMP := $(RUN_JAVA) -esa -ea \
 			  "-Xbootclasspath:$(DCOMP_RT):$(CLASSPATH):$(SCRATCH_FOR_DAIKON)"
@@ -546,7 +549,7 @@ ifeq (generated,${TRACE_SOURCE})
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make data           : runs the source under test"
 data: $(SCRATCH_FOR_DAIKON)/.run-timestamp
-$(SCRATCH_FOR_DAIKON)/.run-timestamp: $(SCRATCH_FOR_DAIKON)/.compile-timestamp ${INV}/java/daikon/Runtime.class
+$(SCRATCH_FOR_DAIKON)/.run-timestamp: $(SCRATCH_FOR_DAIKON)/.compile-timestamp ${DAIKONDIR}/java/daikon/Runtime.class
 	@echo
 	@echo "### data (${PROJECT_FILE})"
 	@echo
@@ -568,7 +571,7 @@ accept-aborted accept-aborted-data:
 	gzip `find $(SCRATCH_FOR_DAIKON)/ $(FINDARGS) -name '*.dtrace'`
 	touch $(SCRATCH_FOR_DAIKON)/.run-timestamp
 
-${INV}/java/daikon/Runtime.class: ${INV}/java/daikon/Runtime.java
+${DAIKONDIR}/java/daikon/Runtime.class: ${DAIKONDIR}/java/daikon/Runtime.java
 	${JAVA_COMPILER} -g @^
 endif
 
@@ -706,7 +709,7 @@ ${PROJECT_FILE}.txt-chicory.dtrace : $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrac
 	  > ${PROJECT_FILE}.txt-chicory.dtrace
     #trace-untruncate fails on dos style files 
 	dos2unix ${PROJECT_FILE}.txt-chicory.dtrace
-	trace-untruncate ${PROJECT_FILE}.txt-chicory.dtrace
+	${TRACE_UNTRUNCATE} ${PROJECT_FILE}.txt-chicory.dtrace
 
 txt-chicory-diff: ${PROJECT_FILE}.txt-chicory.diff
 
@@ -720,7 +723,7 @@ ${PROJECT_FILE}.txt-chicory.diff: ${PROJECT_FILE}.txt-chicory.goal \
 	@echo "### dtrace diff (${PROJECT_FILE})"
 	@echo
 	-rm -f $@
-	-java -ea daikon.tools.DtraceDiff \
+	-java -cp "${CLASSPATH}" -ea daikon.tools.DtraceDiff \
 	    ${PROJECT_FILE}.txt-chicory.goal \
 	    ${PROJECT_FILE}.txt-chicory.dtrace > $@ 2>&1
 	cat $@
@@ -742,11 +745,11 @@ txt-jaif: $(PROJECT_FILE).txt-jaif
 	@echo
 	@echo "### AnnotateNullable (${PROJECT_FILE})"
 	@echo
-	$(JAVA) -ea -Xmx1024M daikon.Daikon --no_text_output \
+	$(JAVA) -cp "$(CLASSPATH)" -ea -Xmx1024M daikon.Daikon --no_text_output \
 	  $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz \
-	  --config $(INV)/java/daikon/annotate_nullable.config \
+	  --config $(DAIKONDIR)/java/daikon/annotate_nullable.config \
 	  -o $(PROJECT_FILE)-jaif.inv.gz
-	$(JAVA) -ea -Xmx1024M daikon.AnnotateNullable $(PROJECT_FILE)-jaif.inv.gz \
+	$(JAVA) -cp "$(CLASSPATH)" -ea -Xmx1024M daikon.AnnotateNullable $(PROJECT_FILE)-jaif.inv.gz \
 	  > $@-failed 2>&1
 	mv $@-failed $@
 else
@@ -788,7 +791,7 @@ dtrace-trunc:
 	@echo
 	@echo "### dtrace-trunc (${PROJECT_FILE})"
 	@echo
-	${GZCAT} ${DTRACE_FILES} | head -1000000 | trace-untruncate | gzip > $(SCRATCH_FOR_DAIKON)/trunc.dtrace.gz
+	${GZCAT} ${DTRACE_FILES} | head -1000000 | ${TRACE_UNTRUNCATE} | gzip > $(SCRATCH_FOR_DAIKON)/trunc.dtrace.gz
 	find $(SCRATCH_FOR_DAIKON)/ $(FINDARGS) -name 'trunc.dtrace.gz' -prune -o -name '*.dtrace.gz' -exec rm {} \;
 
 .PHONY: txt-daikon
@@ -821,7 +824,7 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
 		${DTRACE_FILES} \
 		${DECLS_FILES} \
 		${SPINFO_FILES} \
-		${MAP_FILES} > $@ 2>&1 && cp $@ ${INV}/tests/daikon-direct-output.txt) || (cp $@ ${INV}/tests/daikon-direct-output.txt && mv $@ $@-failed && false)
+		${MAP_FILES} > $@ 2>&1 && cp $@ ${DAIKONDIR}/tests/daikon-direct-output.txt) || (cp $@ ${DAIKONDIR}/tests/daikon-direct-output.txt && mv $@ $@-failed && false)
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-simplify   : creates simplify-style output from the inv file"
@@ -1175,7 +1178,7 @@ endif # ifdef ESC_ON
 
 
 
-RTC_EXEC := $(INV)/java/daikon/tools/runtimechecker/Main.class $(INV)/java/daikon/tools/runtimechecker/WriteViolationFile.class
+RTC_EXEC := $(DAIKONDIR)/java/daikon/tools/runtimechecker/Main.class $(DAIKONDIR)/java/daikon/tools/runtimechecker/WriteViolationFile.class
 
 ifeq (generated,${TRACE_SOURCE})
 # generated
@@ -1342,12 +1345,21 @@ endif
 	  > ${PROJECT_FILE}-xcheck.diff
 
 showvars:
-	@echo "INV                 =" $(INV)
+	@echo "DAIKONDIR           =" $(DAIKONDIR)
 	@echo "SCRIPTS             =" $(SCRIPTS)
 	@echo "COMMON_HERE         =" $(COMMON_HERE)
 	@echo "CWD                 =" ${CWD}
+
+	@echo "JAVA_HOME           =" ${JAVA_HOME}
+	@echo "JAVA6_HOME          =" ${JAVA6_HOME}
 	@echo "RUN_JAVA            =" ${RUN_JAVA}
+	@echo "java version:"
+	@${RUN_JAVA} -v
+	@echo "CLASSPATH           =" ${CLASSPATH}
+	@echo "SHELL               =" ${SHELL}
+	@echo "PATH                =" ${PATH}
 	@echo "GZCAT               =" ${GZCAT}
+
 	@echo "DAIKON              =" ${DAIKON}
 	@echo "DAIKON_OPTIONS      =" ${DAIKON_OPTIONS}
 	@echo "PRINT_INVARIANTS    =" ${PRINT_INVARIANTS}
@@ -1377,7 +1389,6 @@ ifdef ESC_ON
 endif
 	@echo "NO_JML              =" ${NO_JML}
 	@echo "NO_MERGE            =" ${NO_MERGE}
-	@echo "CLASSPATH           =" ${CLASSPATH}
 	@echo "USER_DAIKON_OPTIONS =" ${USER_DAIKON_OPTIONS}
 	@echo "PERSONAL_DAIKON_OPTIONS =" ${PERSONAL_DAIKON_OPTIONS}
 	@echo "SCRATCH_MACHINE     =" ${SCRATCH_MACHINE}
@@ -1385,7 +1396,6 @@ endif
 	@echo "SCRATCH_BASE2       =" ${SCRATCH_BASE2}
 	@echo "SCRATCH_FOR_DAIKON_BASE =" ${SCRATCH_FOR_DAIKON_BASE}
 	@echo "SCRATCH_FOR_DAIKON  =" ${SCRATCH_FOR_DAIKON}
-	@echo "SHELL               =" ${SHELL}
 
 
 results summary:

@@ -47,7 +47,7 @@ public final class VarComparabilityImplicit
    */
   int dimensions;
 
-  private VarComparabilityImplicit cached_element_type;
+  private /*@LazyNonNull*/ VarComparabilityImplicit cached_element_type;
 
   public static final VarComparabilityImplicit unknown = new VarComparabilityImplicit(-3, null, 0);
 

@@ -19,43 +19,62 @@ public class Property implements Serializable {
 
     private static final long serialVersionUID = 1L;
 
+    // Maps into all the Property objects created.
+    private static HashMap<Integer, Property> propertiesMap = new HashMap<Integer, Property>();
 
     // The name of the method that this property describes.
-    private final String method;
-
-    // The kind of proerty (enter, exit or objectInvariant).
-    private final Kind kind;
-
+    private final /*@Nullable*/ String method;
     /**
      * The name of the method that this property describes. ("null" for object
-     * invariants).
+     * invariants.)
      */
-    public String method() {
+    public /*@Nullable*/ String method() {
         return method;
     }
 
-    /**
-     * The kind of property (enter, exit or objectInvariant).
-     */
+    // The kind of proerty (enter, exit or objectInvariant).
+    private final Kind kind;
+    /** The kind of property (enter, exit or objectInvariant). */
     public Kind kind() {
         return kind;
     }
 
-    /**
-     * The set of property that this belongs to.
-     */
-    //public static PropertiesForClass properties = null;
-
-    /**
-     * Daikon representation (as output by Daikon's default output format).
-     */
+    /** Daikon representation (as output by Daikon's default output format). */
     private final String daikonRep;
-
-    /**
-     * Daikon representation (as output by Daikon's default output format).
-     */
+    /** Daikon representation (as output by Daikon's default output format). */
     public String daikonRep() {
         return daikonRep;
+    }
+
+    /** JML representation of this property. */
+    public String invRep;
+
+    /**
+     * A measure of a property's universality: whether it captures the general
+     * behavior of the program. The measure ranges from 0 (no confidence) to 1
+     * (high confidence).
+     */
+    public double confidence;
+
+    /** The Daikon class name that this property represents. */
+    public String daikonClass;
+
+
+    // Creates a new property with the given attributes.
+    private Property(Kind kind, String daikonRep, String method, String invRep, String daikonClass, double confidence) {
+        this.kind = kind;
+        this.daikonRep = daikonRep;
+        this.method = method;
+        this.invRep = invRep;
+        this.daikonClass = daikonClass;
+        this.confidence = confidence;
+    }
+
+    /**
+     * Easy-on-the-eye string representation.
+     */
+    public String toString() {
+        return kind.toString() + " : " + daikonRep();
     }
 
     /**
@@ -126,34 +145,10 @@ public class Property implements Serializable {
     }
 
     /**
-     * JML representation of this property.
-     */
-    public String invRep;
-
-    /**
-     * <p>
-     * A measure of a property's universality: whether it captures the general
-     * behavior of the program. The measure ranges from 0 (no confidence) to 1
-     * (high confidence).
-     */
-    public double confidence;
-
-    /**
-     * The Daikon class name that this property represents.
-     */
-    public String daikonClass;
-
-    /**
-     * Easy-on-the-eye string representation.
-     */
-    public String toString() {
-        return kind.toString() + " : " + daikonRep();
-    }
-
-    /**
      * <p>
      * Two properties are equal if their fields <code>daikonRep</code>,
      * <code>method</code> and <code>kind</code> are equal.
+     * The other fields may differ.
      */
     /*@AssertNonNullIfTrue("#0")*/
     public boolean equals(/*@Nullable*/ Object o) {
@@ -170,7 +165,9 @@ public class Property implements Serializable {
     }
 
     public int hashCode() {
-        return daikonRep.hashCode() + kind.hashCode() + method.hashCode();
+        return daikonRep.hashCode()
+            + kind.hashCode()
+            + (method == null ? 0 : method.hashCode());
     }
 
     /**
@@ -198,8 +195,8 @@ public class Property implements Serializable {
      * The above string should actually span only one line.
      *
      * <p>
-     * To be well-formed, an property should be enclosed in
-     * <code><INVINFO</code> tags, contain <code><DAIKON></code> and
+     * To be well-formed, a property should be enclosed in
+     * <code><INVINFO></code> tags, contain <code><DAIKON></code> and
      * <code><METHOD></code> tags, and exactly one of <code><ENTER></code>,
      * <code><EXIT></code>,<code><OBJECT></code>, or <code><CLASS></code>.
      */
@@ -236,24 +233,15 @@ public class Property implements Serializable {
         String theMethod = annoString.replaceFirst(".*<METHOD>(.*)</METHOD>.*",
                 "$1").trim();
 
-        Property anno = Property.get(k, theDaikonRep, theMethod);
-
-        if (annoString.matches(".*<INV>(.*)</INV>.*")) {
-            anno.invRep = annoString.replaceFirst(".*<INV>(.*)</INV>.*", "$1")
-                    .trim();
-        }
-
-        if (annoString.matches(".*<DAIKONCLASS>(.*)</DAIKONCLASS>.*")) {
-            anno.daikonClass = annoString.replaceFirst(
+        String theInvRep = annoString.replaceFirst(".*<INV>(.*)</INV>.*", "$1").trim();
+        String theDaikonClass = annoString.replaceFirst(
                     ".*<DAIKONCLASS>(.*)</DAIKONCLASS>.*", "$1").trim();
-        }
+        double theConfidence = -1;
         if (annoString.matches(".*<CONFIDENCE>(.*)</CONFIDENCE>.*")) {
-            anno.confidence = Double.parseDouble(annoString.replaceFirst(
+            theConfidence = Double.parseDouble(annoString.replaceFirst(
                     ".*<CONFIDENCE>(.*)</CONFIDENCE>.*", "$1").trim());
-        } else {
-            anno.confidence = anno.calculateConfidence();
         }
-        return anno;
+        return Property.get(k, theDaikonRep, theMethod, theInvRep, theDaikonClass, theConfidence);
     }
 
     /**
@@ -262,11 +250,14 @@ public class Property implements Serializable {
      * output here.
      */
     public String xmlString() {
-        return "<INVINFO> " + kind.xmlString() + "<DAIKON>" + daikonRep
-                + " </DAIKON> " + "<METHOD> " + method + " </METHOD>" + "<INV>"
-                + invRep + "</INV>" + " <CONFIDENCE>" + confidence
-                + " </CONFIDENCE>" + " <DAIKONCLASS>" + daikonClass
-                + " </DAIKONCLASS>" + "</INVINFO>";
+        return "<INVINFO> "
+            + kind.xmlString()
+            + "<DAIKON>" + daikonRep + " </DAIKON> "
+            + "<METHOD> " + method + " </METHOD>"
+            + "<INV>" + invRep + "</INV>"
+            + " <CONFIDENCE>" + confidence + " </CONFIDENCE>"
+            + " <DAIKONCLASS>" + daikonClass + " </DAIKONCLASS>"
+            + "</INVINFO>";
     }
 
     /**
@@ -278,11 +269,13 @@ public class Property implements Serializable {
      * <code>this.equals(Property.get(this.xmlStringNoJml())</code>
      */
     public String xmlStringNoJml() {
-        return "<INVINFO> " + kind.xmlString() + "<DAIKON>" + daikonRep
-                + " </DAIKON> " + "<METHOD> " + method + " </METHOD>"
-                + " <CONFIDENCE>" + confidence + " </CONFIDENCE>"
-                + " <DAIKONCLASS>" + daikonClass + " </DAIKONCLASS>"
-                + "</INVINFO>";
+        return "<INVINFO> "
+            + kind.xmlString()
+            + "<DAIKON>" + daikonRep + " </DAIKON> "
+            + "<METHOD> " + method + " </METHOD>"
+            + " <CONFIDENCE>" + confidence + " </CONFIDENCE>"
+            + " <DAIKONCLASS>" + daikonClass + " </DAIKONCLASS>"
+            + "</INVINFO>";
     }
 
     /**
@@ -330,28 +323,21 @@ public class Property implements Serializable {
         return annos.toArray(new Property[] {});
     }
 
-    // Maps into all the Property objects created.
-    private static HashMap<Integer, Property> propertiesMap = new HashMap<Integer, Property>();
-
-    // Creates a new property with the given attributes.
-    private Property(Kind kind, String daikonRep, String method) {
-        this.kind = kind;
-        this.daikonRep = daikonRep;
-        this.method = method;
-    }
-
     /**
      * <p>
      * Get the property with the given attributes.
      */
-    private static Property get(Kind kind, String daikonRep, String method)
+    private static Property get(Kind kind, String daikonRep, String method, String invRep, String daikonClass, double confidence)
             throws MalformedPropertyException {
 
-        Property anno = new Property(kind, daikonRep, method);
+        Property anno = new Property(kind, daikonRep, method, invRep, daikonClass, confidence);
         Integer key = new Integer(anno.hashCode());
         if (propertiesMap.containsKey(key)) {
             return propertiesMap.get(key);
         } else {
+            if (confidence == -1) {
+                anno.confidence = anno.calculateConfidence();
+            }
             propertiesMap.put(key, anno);
             return anno;
         }
@@ -537,16 +523,10 @@ public class Property implements Serializable {
     private Object readResolve() throws ObjectStreamException {
         try {
 
-            Property anno = get(kind(), daikonRep(), method());
+            Property anno = get(kind(), daikonRep(), method(), invRep, daikonClass, confidence);
             assert anno.invRep == null || anno.invRep.equals(this.invRep) : "anno.invRep==" + anno.invRep + " this.invRep==" + this.invRep;
             assert anno.daikonClass == null || anno.daikonClass.equals(this.daikonClass) : "anno.daikonClass==" + anno.daikonClass + " this.daikonClass==" + this.daikonClass;
             assert anno.confidence == 0 || anno.confidence == this.confidence : "anno.confidence==" + anno.confidence + " this.confidence==" + this.confidence;
-            if (anno.invRep == null) {
-                anno.invRep = this.invRep;
-                anno.daikonClass = this.daikonClass;
-                anno.confidence = this.confidence;
-            }
-
             return anno;
 
         } catch (MalformedPropertyException e) {

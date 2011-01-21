@@ -63,7 +63,7 @@ public class CLASSNAME
 
   static final boolean debugCommonSequence = false;
 
-  private int elts;
+  private int elts = 0;
 
   /**
    * Null means no samples have been seen yet.

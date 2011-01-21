@@ -30,6 +30,7 @@ public class SpinfoFileParser {
   /**
    * A Replacer constructed out of the replace statements from the spinfo file.
    */
+  // It is set by parseFile(), which is called by the constructor.
   private StatementReplacer statementReplacer;
 
   /**
@@ -37,7 +38,8 @@ public class SpinfoFileParser {
    * each array of SplitterObjects contains all the SplitterObjects
    * for a single Ppt.
    */
-  // for all i, j, and k:
+  // It is set by parseFile(), which is called by the constructor.
+  // Invariant: for all i, j, and k:
   // splitterObject[i][j].getPptName() == splitterObject[i][k].getPptName()
   // splitterObject[i][k].getPptName() != splitterObject[j][k].getPptName() || i = j
   private SplitterObject[][] splitterObjects;

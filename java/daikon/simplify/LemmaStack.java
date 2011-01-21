@@ -55,7 +55,7 @@ public class LemmaStack {
   public static boolean dkconfig_synchronous_errors = false;
 
   private Stack<Lemma> lemmas;
-  private SessionManager session;
+  private /*@LazyNonNull*/ SessionManager session;
 
   /** Tell Simplify to assume a lemma, which should already be on our
    * stack. */
@@ -89,6 +89,7 @@ public class LemmaStack {
   }
 
   /** Try to start Simplify. */
+  /*@AssertNonNullAfter("this.session")*/
   private void startProver() /*@Raw*/ throws SimplifyError {
     SessionManager session_try = SessionManager.attemptProverStartup();
     if (session_try != null) {

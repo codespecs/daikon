@@ -48,7 +48,9 @@ public class InvTranslate {
   Invariant inv2;
 
   /** an empty translation **/
-  public InvTranslate () {
+  private InvTranslate () {
+    inv1 = null;
+    inv2 = null;
     quality = 0;
   }
 
@@ -56,7 +58,7 @@ public class InvTranslate {
    * Setup a translation from i1 to i2.  The quality and the variable
    * map is set accordingly.
    */
-  public void translate (Invariant i1, Invariant i2) {
+  public InvTranslate (Invariant i1, Invariant i2) {
 
     inv1 = i1;
     inv2 = i2;

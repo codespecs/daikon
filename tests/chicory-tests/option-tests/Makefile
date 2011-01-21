@@ -3,8 +3,8 @@
 #
 
 # StackAr sources are used for option testing
-INV ?= $(DAIKONDIR)
-SRC_DIR = $(INV)/tests/sources
+DAIKONDIR ?= $(DAIKONDIR)
+SRC_DIR = $(DAIKONDIR)/tests/sources
 SRC_FILES = DataStructures/Comparable.java \
 			DataStructures/Hashable.java \
 			DataStructures/MyInteger.java \
@@ -15,7 +15,7 @@ SRC_FILES = DataStructures/Comparable.java \
 CLASS_FILES = $(subst .java,.class,$(SRC_FILES))
 TARGET_ARGS = DataStructures.StackArTester
 DAIKON_ARGS = --no_text_output --config config.txt -o $@
-CHICORY     = $(INV)/java/ChicoryPremain.jar
+CHICORY     = $(DAIKONDIR)/java/ChicoryPremain.jar
 PREMAIN		= $(CHICORY)
 
 # On cygwin, translate the premain path to windows format.  Only do so if
@@ -33,10 +33,10 @@ TESTS		= online pptsel pptomit nesting stdvis varomit samples misc
 
 HERE := $(shell /bin/pwd)
 
-INV ?= $(DAIKONDIR)
+DAIKONDIR ?= $(DAIKONDIR)
 
 # Standard setup of CLASSPATH that works for Linux, Windows, and MacOSX
-include $(INV)/tests/Makefile.classpath
+include $(DAIKONDIR)/tests/Makefile.classpath
 
 diffs : $(foreach x, $(TESTS), $x.daikon.diff)
 

@@ -29,6 +29,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   // True if the above three lists are up-to-date.
   private boolean cached = false;
 
+  /*@AssertNonNullAfter({"allNames" , "ownedNames", "finalNames"})*/
   private void updateCache() {
     if (cached) {
       return;

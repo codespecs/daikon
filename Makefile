@@ -1,3 +1,8 @@
+# Put user-specific changes in your own Makefile.user file in this directory.
+# Make will silently continue if Makefile.user does not exist.
+-include Makefile.user
+
+
 ##########################################################################
 ### Variables
 ###
@@ -90,7 +95,7 @@ WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
 
 C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
 
-BCEL_DIR := $(INV)/java/lib/bcel.jar
+BCEL_DIR := $(DAIKONDIR)/java/lib/bcel.jar
 DIST_DIR := $(WWW_DIR)/dist
 MIT_DIR  := $(WWW_DIR)/mit
 DIST_BIN_DIR := $(DIST_DIR)/binaries
@@ -147,12 +152,12 @@ help:
 	@echo " kvasir                   -- make Kvasir, the C front end"
 	@echo "Creating the Daikon distribution:"
 	@echo " daikon.tar daikon.jar    -- just makes the tar files"
-	@echo " staging                  -- moves all release file to $inv/staging-dist"
-	@echo " test-staged-dist         -- tests the distribution in $inv/staging-dist"
-	@echo " staging-to-www           -- copies $inv/staging-dist to website"
+	@echo " staging                  -- moves all release file to staging-dist/"
+	@echo " test-staged-dist         -- tests the distribution in staging-dist/"
+	@echo " staging-to-www           -- copies staging-dist/ to website"
 	@echo " "
-	@echo "This Makefile is for manipulations of the entire invariants module."
-	@echo "Daikon proper can be found in the java/daikon subdirectory (but you"
+	@echo "This Makefile is for manipulating the entire Daikon system."
+	@echo "Daikon source code is in the java/daikon subdirectory (but you"
 	@echo "can perform basic operations like compiling it from here)."
 
 ### Compiling the code
@@ -209,13 +214,13 @@ build-kvasir: kvasir
 ### Rebuild everything; used for monthly releases, for example
 
 rebuild-everything:
-	${MAKE} -C $(INV)/java very-clean
-	${MAKE} -C $(INV)/java tags compile
-	${MAKE} -C $(INV) daikon.jar
-	${MAKE} -C $(INV)/java dcomp_rt.jar
-	${MAKE} -C $(INV)/doc clean
-	${MAKE} -C $(INV)/doc
-	-${MAKE} -C $(INV)/kvasir distclean
+	${MAKE} -C $(DAIKONDIR)/java very-clean
+	${MAKE} -C $(DAIKONDIR)/java tags compile
+	${MAKE} -C $(DAIKONDIR) daikon.jar
+	${MAKE} -C $(DAIKONDIR)/java dcomp_rt.jar
+	${MAKE} -C $(DAIKONDIR)/doc clean
+	${MAKE} -C $(DAIKONDIR)/doc
+	-${MAKE} -C $(DAIKONDIR)/kvasir distclean
 	${MAKE} kvasir
 
 ### Testing the code

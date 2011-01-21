@@ -1,8 +1,8 @@
 ###########################################################################
 # Read Makefile in parent directory to see what this all means
 
-INV?=$(HOME)/research/invariants
-SCRIPTS?=$(INV)/scripts
+DAIKONDIR?=$(HOME)/research/invariants
+SCRIPTS?=$(DAIKONDIR)/scripts
 
 # Help system
 default help: help-recurse
@@ -98,14 +98,14 @@ stats-table: paper-stats
 	@echo "You should probably have already run  make merge  and possibly made fixups."
 	@rm -f stats.tex
 	${SCRIPTS}/esc-stats-latex.pl ${PAPER_STATS_FILES} > table-stats.tex
-#	cp -p table-stats.tex ${INV}/papers/esc-specs-paper/
+#	cp -p table-stats.tex ${DAIKONDIR}/papers/esc-specs-paper/
 	cat table-stats.tex
 
 stats-tables-single: paper-stats
 #	${SCRIPTS}/esc-stats-latex.pl -s StackAr/stackar.stats > table-stats-stackar.tex
-#	cp -p table-stats-stackar.tex ${INV}/papers/esc-specs-paper/
+#	cp -p table-stats-stackar.tex ${DAIKONDIR}/papers/esc-specs-paper/
 	${SCRIPTS}/esc-stats-latex.pl -s RatPoly/ratpoly.stats > table-stats-ratpoly.tex
-	cp -p table-stats-ratpoly.tex ${INV}/papers/esc-specs-paper/
+	cp -p table-stats-ratpoly.tex ${DAIKONDIR}/papers/esc-specs-paper/
 
 # x: stats-table stats-tables-single
 

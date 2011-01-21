@@ -25,7 +25,7 @@ public class InvDef {
    * invariant, if v2 is not null, then this is a binary invariant
    */
   VarInfo v1;
-  VarInfo v2;
+  /*@Nullable*/ VarInfo v2;
 
   /**
    * Argument indices used by the invariant.
@@ -37,8 +37,8 @@ public class InvDef {
   /** invariant class. **/
   Class<? extends Invariant> inv_class;
 
-  /** State to check for invariants with state. **/
-  Object state;
+  /** State to check.  Only for invariants with state. **/
+  /*@Nullable*/ Object state;
 
   /** True if the order of the variables was swapped. **/
   boolean swap = false;
@@ -57,6 +57,7 @@ public class InvDef {
 
   public InvDef (VarInfo v1, Class<? extends Invariant> cls) {
     this.v1 = v1;
+    this.v2 = null;
     inv_class = cls;
   }
 
@@ -96,23 +97,23 @@ public class InvDef {
     debug.fine ("Created " + this);
   }
 
-  /**
-   * Defines a ternary invariant independent of specific variables by
-   * using the var_info instead.  The class must be correctly permuted
-   * to match the variable order (i.e., the indices must be 0, 1, 2).
-   * This is ok for now, since we are only using these to define
-   * suppressees and we always know the correct permuation in that
-   * instance
-   */
-  public InvDef (int v1_index, int v2_index, int v3_index, Class<? extends Invariant> inv_class) {
-
-    assert v1_index < v2_index;
-    assert v2_index < v3_index;
-    this.v1_index = v1_index;
-    this.v2_index = v2_index;
-    this.v3_index = v3_index;
-    this.inv_class = inv_class;
-  }
+//   /**
+//    * Defines a ternary invariant independent of specific variables by
+//    * using the var_info instead.  The class must be correctly permuted
+//    * to match the variable order (i.e., the indices must be 0, 1, 2).
+//    * This is ok for now, since we are only using these to define
+//    * suppressees and we always know the correct permuation in that
+//    * instance.
+//    */
+//   public InvDef (int v1_index, int v2_index, int v3_index, Class<? extends Invariant> inv_class) {
+// 
+//     assert v1_index < v2_index;
+//     assert v2_index < v3_index;
+//     this.v1_index = v1_index;
+//     this.v2_index = v2_index;
+//     this.v3_index = v3_index;
+//     this.inv_class = inv_class;
+//   }
 
 
   public String toString() {

@@ -59,6 +59,7 @@ endif
 if ($?CLASSPATH) then
   setenv CLASSPATH ${CPADD}:${CLASSPATH}
 else
+  if ( $?prompt != 0 ) echo "Warning: daikon.cshrc is setting CLASSPATH, which was previously unset"
   setenv CLASSPATH ${CPADD}
 endif
 

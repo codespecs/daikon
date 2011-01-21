@@ -32,9 +32,9 @@ public class FieldInfo extends DaikonVariableInfo
      **/
     public /*@LazyNonNull*/ DCRuntime.FieldTag field_tag = null;
 
-    public FieldInfo(String theName, Field theField, boolean isArr)
+    public FieldInfo(String theName, Field theField, String typeName, String repTypeName, boolean isArr)
     {
-       super(theName, isArr);
+       super(theName, typeName, repTypeName, isArr);
        field = theField;
 
        is_static = Modifier.isStatic(field.getModifiers());

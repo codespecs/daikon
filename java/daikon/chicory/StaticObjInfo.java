@@ -15,17 +15,15 @@ public class StaticObjInfo extends DaikonVariableInfo
 {
     public Class<?> type;
 
-    public StaticObjInfo()
-    {
-        super("this");
-    }
+//     public StaticObjInfo(String typeName, String repTypeName)
+//     {
+//         super("this", typeName, repTypeName);
+//     }
 
     public StaticObjInfo (Class<?> type)
     {
-        super ("this");
+        super ("this", type.getName(), getRepName (type, false));
         this.type = type;
-        typeName = type.getName();
-        repTypeName = getRepName (type, false);
     }
 
     /* (non-Javadoc)

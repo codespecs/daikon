@@ -331,8 +331,6 @@ public class InvariantChecker {
 
   public static class InvariantCheckProcessor extends FileIO.Processor {
 
-    PptMap all_ppts;
-
     Map<Integer,EnterCall> call_map = new LinkedHashMap<Integer,EnterCall>();
 
     /**
@@ -342,8 +340,6 @@ public class InvariantChecker {
     /*@NonNullOnEntry("FileIO.data_trace_state")*/
     public void process_sample (PptMap all_ppts, PptTopLevel ppt,
                                 ValueTuple vt, /*@Nullable*/ Integer nonce) {
-
-      this.all_ppts = all_ppts;
 
       debug.fine ("processing sample from: " + ppt.name);
 
@@ -377,7 +373,7 @@ public class InvariantChecker {
         if (ec != null) {
           call_map.remove (nonce);
           debug.fine ("Processing enter sample from " + ec.ppt.name);
-          add (ec.ppt, ec.vt);
+          add (ec.ppt, ec.vt, all_ppts);
         } else { // didn't find the enter
           if (!quiet)
             System.out.printf ("couldn't find enter for nonce %d at ppt %s\n",
@@ -386,18 +382,18 @@ public class InvariantChecker {
         }
       }
 
-      add (ppt, vt);
+      add (ppt, vt, all_ppts);
     }
 
     /*@NonNullOnEntry("FileIO.data_trace_state")*/
-    private void add (PptTopLevel ppt, ValueTuple vt) {
+    private void add (PptTopLevel ppt, ValueTuple vt, PptMap all_ppts) {
       // Add the sample to any splitters
       if (ppt.has_splitters()) {
         assert ppt.splitters != null; // because ppt.has_splitters() = true
         for (PptSplitter ppt_split : ppt.splitters) {
           PptConditional ppt_cond = ppt_split.choose_conditional (vt);
           if (ppt_cond != null)
-            add (ppt_cond, vt);
+            add (ppt_cond, vt, all_ppts);
           else
             debug.fine (": sample doesn't pick conditional");
         }
@@ -409,7 +405,7 @@ public class InvariantChecker {
         PptTopLevel parent = all_ppts.get (ppt.ppt_name.makeExit());
         if (parent != null) {
           parent.get_missingOutOfBounds (ppt, vt);
-          add (parent, vt);
+          add (parent, vt, all_ppts);
         }
       }
 

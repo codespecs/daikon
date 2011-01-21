@@ -1026,14 +1026,14 @@ doc: ../plume-lib $(AUTO_GENERATED_FILES) doc-dkconfig
 	javadoc -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
 		daikon @java-files.txt
 	@rm -f java-files.txt
-	cd doc && preplace '^ *&#64;cindex.*' ''
+	cd doc && ../../plume-lib/bin/preplace '^ *&#64;cindex.*' ''
 
 ## Make doc with private fields for people working on source code
 doc-private: ../plume-lib $(AUTO_GENERATED_FILES)
 	mkdir -p doc
 	javadoc -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
-	cd doc && preplace '^ *&#64;cindex.*' ''
+	cd doc && ../../plume-lib/bin/preplace '^ *&#64;cindex.*' ''
 
 ## This doesn't seem necessary any more
 # javadoc-lookup: doc-javadoc-lookup

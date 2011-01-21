@@ -23,6 +23,13 @@ public class ParseResults {
 
   public CompilationUnit compilationUnit;
 
+  private ParseResults(String packageName, String fileName, CompilationUnit compilationUnit) {
+    this.packageName = packageName;
+    this.fileName = fileName;
+    this.compilationUnit = compilationUnit;
+  }
+
+
   public String toString() {
     return "package name: " + packageName + ", " + "file name: "
       + fileName;
@@ -54,19 +61,15 @@ public class ParseResults {
 
   public static ParseResults parse(String javaFileName, boolean discardComments) {
 
-      ParseResults results = new ParseResults();
-
       CompilationUnit compilationUnit = null;
 
       System.out.println("Parsing file " + javaFileName);
 
       File file = new File(javaFileName);
-      String name = file.getName();
-      assert name.endsWith(".java")
+      String fileName = file.getName();
+      assert fileName.endsWith(".java")
         : "Found a java-file argument that doesn't end in .java: "
                         + file;
-
-      results.fileName = name;
 
       try {
         Reader input = new FileReader(javaFileName);
@@ -96,9 +99,8 @@ public class ParseResults {
         throw new Error(e);
       }
 
-      results.compilationUnit = compilationUnit;
-
       // Construct the package name.
+      String packageNameString;
       NodeOptional packageDeclarationMaybe = compilationUnit.f0;
       if (packageDeclarationMaybe.present()) {
         PackageDeclaration packageDeclaration =
@@ -107,10 +109,12 @@ public class ParseResults {
         StringWriter stringWriter = new StringWriter();
         TreeDumper dumper = new TreeDumper(stringWriter);
         dumper.visit(packageName);
-        results.packageName = stringWriter.toString().trim();
+        packageNameString = stringWriter.toString().trim();
       } else {
-        results.packageName = "";
+        packageNameString = "";
       }
+
+      ParseResults results = new ParseResults(fileName, packageNameString, compilationUnit);
 
       // Find the class name.
       NodeListOptional typeDeclarationMaybe = compilationUnit.f2;

@@ -19,7 +19,8 @@ import plume.*;
  * Since only the NonZero invariant is used, Daikon processing time can be
  * significantly reduced by turning off derived variables and all
  * invariants other than daikon.inv.unary.scalar.NonZero.  This is not
- * necessary, however, for correct operation.
+ * necessary, however, for correct operation.  File
+ * <tt>annotate_nullable.config</tt> in the distribution does this.
  */
 public class AnnotateNullable {
 
@@ -108,6 +109,7 @@ public class AnnotateNullable {
 
       String name = ppt.name().replaceFirst ("[(].*$", "");
       int lastdot = name.lastIndexOf ('.');
+      @SuppressWarnings("keyfor") // appliction invariant:  KeyFor and substring
       /*@KeyFor("class_map")*/ // class_map has entry per class, and this method is in some class
       String classname = name.substring (0, lastdot);
       // System.out.printf ("classname for ppt %s is '%s'%n", name, classname);

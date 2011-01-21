@@ -21,7 +21,8 @@ public final class TypeStack
     private final Map<InstructionHandle, InstructionHandle> parentMap = new HashMap<InstructionHandle, InstructionHandle>();
     private final Type[] argTypes;
     private final Type retType;
-    private OperandStack stack; // initialized by createMap
+    // Initialized by createMap, which is called be the constructor.  But, if the createMap argument is empty or null, then stack does not get initialized!
+    private OperandStack stack;
 
     private static final int MAX = Integer.MAX_VALUE;
 
@@ -373,7 +374,7 @@ public final class TypeStack
 
     private static <K, V> void dumpMap(Map<K, V> map)
     {
-        for (K k : map.keySet())
+        for (/*@KeyFor("map")*/ K k : map.keySet())
         {
             System.out.printf("key: %s, value: %s%n", k, map.get(k));
         }

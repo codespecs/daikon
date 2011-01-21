@@ -742,8 +742,8 @@ public class LogicalCompare {
     } else if (num_args == 2) {
       startProver();
 
-      Collection<String> app_ppt_names = app_ppts.nameStringSet();
-      Collection<String> test_ppt_names = test_ppts.nameStringSet();
+      Collection</*@KeyFor("app_ppts.nameToPpt")*/ String> app_ppt_names = app_ppts.nameStringSet();
+      Collection</*@KeyFor("test_ppts.nameToPpt")*/ String> test_ppt_names = test_ppts.nameStringSet();
       // These are keys in both app_ppts and test_ppts.
       Set<String> common_names = new TreeSet<String>();
 

@@ -60,7 +60,7 @@ public class TestRedundantVars {
 
         boolean success = true;
 
-        for (Map.Entry<String, List<String>> e : reds.records.entrySet()) {
+        for (Map.Entry</*@KeyFor("reds.records")*/ String, List<String>> e : reds.records.entrySet()) {
 
             if (e.getValue().size() == 0) {
                 // No redundant vars for this ppt.
@@ -77,7 +77,7 @@ public class TestRedundantVars {
     }
 
     // Returns true iff all tests pass.
-    /*@NonNullOnEntry("reds.records.get(#0)")*/
+    /*@NonNullOnEntry("this.reds.records.get(#0)")*/
     private static boolean process_ppt(String ppt) {
 
         List<String> invsWithout = without.records.get(ppt);

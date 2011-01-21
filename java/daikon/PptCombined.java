@@ -84,6 +84,7 @@ public class PptCombined extends PptTopLevel {
     }
   }
 
+  /*@AssertNonNullAfter("assemblies")*/
   private static void loadAssemblies(String assembliesFile) {
     if (assemblies == null)
       assemblies = AsmFile.getAsmFile(assembliesFile);
@@ -259,6 +260,7 @@ public class PptCombined extends PptTopLevel {
   }
 
 
+  /*@NonNullOnEntry("PptCombined.assemblies")*/
   public static List<PptTopLevel> findIntermediateBlocks(PptTopLevel dest, PptTopLevel source) {
 
     Set<PptTopLevel> visited = new LinkedHashSet<PptTopLevel>();
@@ -478,7 +480,7 @@ public class PptCombined extends PptTopLevel {
       String cppt_name = ppts.get(0).name() + ".." + ppts.get(ppts.size() - 1).ppt_name.name();
       if (false) {
         System.out.println("Redundant vars for ppt " + cppt_name);
-        for (Map.Entry<String, String> e : redundantVariables.entrySet()) {
+        for (Map.Entry</*@KeyFor("redundantVariables")*/ String, String> e : redundantVariables.entrySet()) {
           System.out.println("   " + e.getKey() + "(" + e.getValue() + ")");
         }
         System.out.println("End redundant vars");
@@ -487,7 +489,7 @@ public class PptCombined extends PptTopLevel {
         assert rvars_stream != null : "@SuppressWarnings(nullness): dependent: dkconfig_rvars_file is non-null";
         rvars_stream.println("===========================================================================");
         rvars_stream.println(cppt_name);
-        for (Map.Entry<String, String> e : redundantVariables.entrySet()) {
+        for (Map.Entry</*@KeyFor("redundantVariables")*/ String, String> e : redundantVariables.entrySet()) {
           rvars_stream.println(e.getKey() + "(" + e.getValue() + ")");
         }
       }
@@ -981,6 +983,7 @@ public class PptCombined extends PptTopLevel {
   // analysis, they are deemed equal by Daikon's dynamic analysis.
   //
   // Returns 0 if all tests pass, 1 if something goes wrong.
+  /*@NonNullOnEntry("assemblies")*/
   public static int redundantVarsTest(PptMap all_ppts) {
     int retval = 0;
     for (PptTopLevel ppt : all_ppts.all_ppts()) {
@@ -988,7 +991,7 @@ public class PptCombined extends PptTopLevel {
         PptCombined cp = (PptCombined) ppt;
         int numRedVars = 0;
 
-        for (Map.Entry<String, String> e : cp.rvars.entrySet()) {
+        for (Map.Entry</*@KeyFor("cp.rvars")*/ String, String> e : cp.rvars.entrySet()) {
           String rvar = e.getKey();
           String leader = e.getValue();
           //System.out.println("Testing " + rvar);

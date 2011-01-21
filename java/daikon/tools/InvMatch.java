@@ -87,8 +87,7 @@ public class InvMatch {
     Invariant inv_p_gt_r = IntGreaterThan.get_proto().instantiate (slice_pr_40);
     slice_pr_40.addInvariant (inv_p_gt_r);
 
-    // InvTranslate xlate = new InvTranslate();
-    // xlate.translate (inv_x_lt_y, inv_p_lt_q);
+    // InvTranslate xlate = new InvTranslate(inv_x_lt_y, inv_p_lt_q);
 
     // Try to matchup the program points
     List<List<InvTranslate>> valid_translations = match_ppt (ppt35, ppt40);
@@ -129,8 +128,7 @@ public class InvMatch {
       xlate_list.add (inv_xlate_list);
       for (Iterator<Invariant> j = ppt2.invariants_iterator(); j.hasNext(); ) {
         Invariant inv2 = j.next();
-        InvTranslate xlate = new InvTranslate();
-        xlate.translate (inv1, inv2);
+        InvTranslate xlate = new InvTranslate(inv1, inv2);
         if (xlate.quality > 0)
           inv_xlate_list.add (xlate);
       }

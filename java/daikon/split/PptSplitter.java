@@ -237,11 +237,11 @@ public class PptSplitter implements Serializable {
     // Maps permuted invariants to their original invariants
     Map<Invariant,Invariant> orig_invs = new LinkedHashMap<Invariant,Invariant>();
 
-    Vector</*@KeyFor("orig_invs")*/ Invariant> same_invs_vec = new Vector<Invariant>();
+    Vector</*@KeyFor("orig_invs")*/ Invariant> same_invs_vec = new Vector</*@KeyFor("orig_invs")*/ Invariant>();
 
-    Vector</*@KeyFor("orig_invs")*/ Invariant[]> exclusive_invs_vec = new Vector<Invariant[]>();
+    Vector</*@KeyFor("orig_invs")*/ Invariant[]> exclusive_invs_vec = new Vector</*@KeyFor("orig_invs")*/ Invariant[]>();
 
-    Vector</*@KeyFor("orig_invs")*/ Invariant[]> different_invs_vec = new Vector<Invariant[]>();
+    Vector</*@KeyFor("orig_invs")*/ Invariant[]> different_invs_vec = new Vector</*@KeyFor("orig_invs")*/ Invariant[]>();
 
 /// ??? MDE
     // Loop through each possible parent slice
@@ -416,7 +416,7 @@ public class PptSplitter implements Serializable {
     // Remove exclusive invariants from the different invariants list
     // It would be better not to have added them in the first place,
     // but this is easier for now.
-    for (Iterator<Invariant[]> ii = different_invs_vec.iterator(); ii.hasNext(); ) {
+    for (Iterator</*@KeyFor("orig_invs")*/ Invariant[]> ii = different_invs_vec.iterator(); ii.hasNext(); ) {
       Invariant[] diff_invs = ii.next();
       if (diff_invs[0] != null) {
         assert diff_invs[1] == null;

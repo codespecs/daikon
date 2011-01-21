@@ -287,7 +287,7 @@ public class Quantify {
   public static class ESCQuantification {
 
     private EnumSet<QuantFlags> flags;
-    private VarInfo[] vars;
+    // private VarInfo[] vars;
     private VarInfo[] arr_vars;
     private String[] arr_vars_indexed;
     private String[] quants;
