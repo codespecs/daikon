@@ -237,7 +237,7 @@ public final class StackVer {
 
    /**
     * Return the types on the stack at each byte code offset.  Only valid
-    * after do_stack_ver() is called
+    * after do_stack_ver() is called.
     */
     public StackTypes get_stack_types () {
       return (stack_types);
