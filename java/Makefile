@@ -73,7 +73,8 @@ jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.q
 
 JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
 # When running the checkers, it is important not to pass in "-source 5".
-JAVAC_COMMAND_FOR_CHECKERS = ${JAVAC_FOR_CHECKERS} -Xlint -J-Xmx1024m
+# Also avoid -Xlint that activates warnings about failure to use == for interned values.
+JAVAC_COMMAND_FOR_CHECKERS = ${JAVAC_FOR_CHECKERS} -J-Xmx1024m
 
 
 
