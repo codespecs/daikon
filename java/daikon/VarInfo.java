@@ -775,6 +775,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns true if this variable is a derived variable **/
+  /*@Pure*/
   /*@AssertNonNullIfTrue("derived")*/
   public boolean isDerived() {
     return (derived != null);
