@@ -297,14 +297,13 @@ public class LOWERBOUNDCORE
 
     for (VarInfo vi : pptt.var_infos) {
       if (vi.isStaticConstant()) {
-        // If variable is a double, then use fuzzy comparison
         if (vi.rep_type == ProglangType.DOUBLE) {
+          // If variable is a double, then use fuzzy comparison
           Double constantVal = (Double)vi.constantValue();
           if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1)))
             return true;
-        }
-        // Otherwise just use the equals method
-        else {
+        } else {
+          // Otherwise just use the equals method
           Object constantVal = vi.constantValue();
           if (constantVal.equals(MIN1)) {
             return true;
