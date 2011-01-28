@@ -1620,7 +1620,7 @@ The regression tests run Daikon on many different inputs and compare
 Daikon's output to expected output.  They take about an hour to run.
 
 The regression tests appear in the @file{$DAIKONDIR/tests/} directory.  Type
-@samp{make} in that directory to see a list of makefile targets.  The
+@samp{make} in that directory to see a list of Makefile targets.  The
 most common target is @samp{make diffs}; if any resulting file has
 non-zero size, the tests fail.  You do not generally need to do
 @samp{make clean}, which forces re-instrumentation (a possibly slow
@@ -1678,31 +1678,41 @@ correct output, then run @samp{make update-inv-goals} to update the Daikon
 @cindex adding new regression tests
 @cindex new regression tests
 
-Most Daikon regression tests appear in @file{$DAIKONDIR/tests/daikon-tests}.  Each
-test is placed in a separate directory.  That directory contains a
-simple makefile and the goal files for the tests.  The source files
-for the test are stored in @file{$DAIKONDIR/tests/sources}.  For example,
-the @file{StackAr} directory contains the following files in the repository:
-@example
-Makefile
-Stackar.spinfo-static.goal
-StackAr.txt-daikon.goal
-StackAr.txt-esc.goal
-StackAr.txt-jml.goal
-StackAr.txt-merge-esc.goal
-StackAr.txt-merge-jml.goal
-@end example
+Most Daikon regression tests appear in subdirectories of
+@file{$DAIKONDIR/tests/daikon-tests/}.
+(There is also a @file{$DAIKONDIR/tests/chicory-tests/} directory,
+but it is usually better to put tests in
+@file{$DAIKONDIR/tests/daikon-tests/}, even if they are exercising
+Chicory-specific behavior.)
 
-The @file{Makefile} must contain the following entries.
+To create a new test, perform the following steps.
+
+@enumerate
+@item
+Create a new subdirectory of
+@file{$DAIKONDIR/tests/daikon-tests/}.
+
+@item
+Put the source files for the test under @file{$DAIKONDIR/tests/sources/},
+not in the test directory itself.  You may be able to re-use existing
+Java source code that appears in that directory.
+
+@item
+It is expedient to copy a Makefile from another subdirectory, such as
+@file{$DAIKONDIR/tests/daikon-tests/StackAr/}, then modify it.
+
+The @file{Makefile} must contain at least the following entries.
 
 @table @samp
 @item MAIN_CLASS
 Dot separated fully qualified name of the class that contains the main
-entry point for the test.  For example 
+entry point for the test.  For example,
+@example
 MAIN_CLASS := DataStructures.StackArTester.
+@end example
 
 @item include ../../Makefile.common
-This includes the common portion of the test makefiles that does most
+This includes the common portion of the test Makefiles that does most
 of the work.  See it for more information on the details of regression
 testing.
 
@@ -1715,20 +1725,42 @@ instrument-files-revise:
 
 @end table
 
-The goal files are the expected results of running daikon and its
-associated tools.  The easiest way to create them is to simply create
-empty versions of each.  They execute @samp{make diffs} to run the test and
-produce results.  When the results are as expected execute 
-@samp{make update-goals} to copy the results in to the goal files.  
-Release the test by committing the goal files, Makefile, and source files
+If you run @samp{make} (without a target), you will see a description of
+all of the Makefile's functionality.  Most of that is inherited from
+@file{$DAIKONDIR/tests/Makefile.common}.
+
+@item
+The @file{.goal} files are the expected results of running Daikon and its
+associated tools.
+
+For example, the @file{StackAr}
+directory contains the following @file{.goal} files, among others:
+@example
+Makefile
+Stackar.spinfo-static.goal
+StackAr.txt-daikon.goal
+StackAr.txt-esc.goal
+StackAr.txt-jml.goal
+StackAr.txt-merge-esc.goal
+StackAr.txt-merge-jml.goal
+@end example
+
+If you omit some @file{.goal} files, then the related tests will not be run.
+
+You can start out with the @file{.goal} files empty.
+Execute @samp{make diffs}, to produce output; the tests will fail
+because the output is not identical to the empty @file{.goal} files.
+When the test output is satisfactory, execute 
+@samp{make update-goals} to copy the actual results to the @file{.goal} files.  
+Then, commit the goal files, Makefile, and source files
 to the repository.
 
-The common makefile contains a number of other useful targets.  A brief
-explanation of each can be found by executing @samp{make} (without a target).
-
+@item
 The test can be added into the standard tests (either @samp{everything} or
-@samp{quick} by adding the test the appropriate list in 
+@samp{quick}) by adding the test the appropriate list in 
 @file{$DAIKONDIR/tests/daikon-tests/Makefile}.
+
+@end enumerate
 
 
 @node    Editing, Distribution, Testing, Top
@@ -1791,7 +1823,7 @@ confusing workaround.
 It is strongly recommended that you make the following customizations to Eclipse:
 
 @example
-Window >> Preferences >> Workbench >> Refresh Workspace on Starup
+Window >> Preferences >> Workbench >> Refresh Workspace on Startup
 Window >> Preferences >> Java >> Compiler >> Problems >> Unused imports >> Ignore
 Window >> Preferences >> Java >> Compiler >> Style >> Non-static access >> >> Ignore
 @end example
@@ -2068,7 +2100,7 @@ The @samp{cvs -q diff} command should produce no output.
 @end example
 
 @item
- Run the kvasir regression tests.
+ Run the Kvasir regression tests.
          [Time: 18 min]
 @example
         make -C $DAIKONDIR/tests/kvasir-tests clean clean-all nightly-summary-w-daikon
@@ -2157,7 +2189,7 @@ Another good source of information is the CVS logs over the
     machine with Cygwin installed, as a guest user (or at least one without
     environment variables such as $DAIKONDIR defined!), download the staged daikon.tar.gz
     file, extract the files, set the appropriate environment variables
-    and run the top level makefile.  This is
+    and run the top level Makefile.  This is
     successful if the make command runs to conclusion without an error.
     The last line should indicate that Kvasir was not built because
     it is not a linux platform.
@@ -3850,7 +3882,7 @@ specify classes that implement lists; @xref{Options to control invariant detecti
 @c  LocalWords:  jtb cvs checkin smallexample checkins printindex Dataflow gcc
 @c  LocalWords:  convertcsv Mangel Wurzel malloc TerminationMessage un Mozilla FSE cd
 @c  LocalWords:  dataflow czf mernst pag calloc Mbytes Miryung ifnotinfo env di
-@c  LocalWords:  bashrc cshrc DAIKONCLASS makeinfo InvariantStatus itemx
+@c  LocalWords:  bashrc cshrc DAIKONCLASS makeinfo InvariantStatus itemx vis su
 @c  LocalWords:  ObviousFilter StackAr DataStructures structs StackArTester Ren
 @c  LocalWords:  INST Xiaoxia regex printf DiscardInfo instanceof UpperBound Xu
 @c  LocalWords:  DiscardCode Kapfhammer GB ListImplementors pptname MacOSX rt
@@ -3858,5 +3890,9 @@ specify classes that implement lists; @xref{Options to control invariant detecti
 @c  LocalWords:  dfepl uninstrumented classname subexit inline dec hashcode len
 @c  LocalWords:  hashCode param dups NonZero rel varname topOfStack MyInteger
 @c  LocalWords:  hasDuplicates hasOrder hasNull nullTerminated isParam DynComp
-@c  LocalWords:  Hashcodes birthyear topLevel bottomLevel pptInfo toplevel
-@c  LocalWords:  bottomlevel namespace namespaces
+@c  LocalWords:  Hashcodes birthyear topLevel bottomLevel pptInfo toplevel conf
+@c  LocalWords:  bottomlevel namespace namespaces startup Makefiles toolset oro
+@c  LocalWords:  boolean deallocations suppressions substring traceback emacs
+@c  LocalWords:  filename tracebacks inferencing ExistingProjectIntoWorkspace
+@c  LocalWords:  screenshot popup junit jakarta getopt breakpoint TODO url Baz
+@c  LocalWords:  daikonuser mangold
