@@ -327,9 +327,9 @@ clean-output:
 	@echo
 	@echo "### clean-output (${PROJECT_FILE})"
 	@echo
-	rm -f *.bak *.diff ${PROJECT_FILE}.{inv{,.gz},decls-DynComp,txt{,-merge}-{chicory,daikon,simplify,esc,jml,repair,cset,daikon-suppress,daikon-suppress-diffed}{,-failed},esc,context,stats,linecov}
+	rm -f *.bak *.diff ${PROJECT_FILE}.{inv{,.gz},decls-DynComp,txt{,-merge}-{chicory,daikon,simplify,esc,jml,repair,cset,daikon-suppress,daikon-suppress-diffed,jaif,trace}{,-failed},esc,context,stats,linecov,spinfo-static}
 	rm -rf merged *txt-chicory.dtrace
-	rm -f *.bak *.diff ${PROJECT_FILE}-suppress.inv.gz
+	rm -f *.bak *.diff ${PROJECT_FILE}-suppress.inv.gz ${PROJECT_FILE}-jaif.inv.gz
 ifeq (csv,${STORED_TRACE_FORMAT})
 	rm -f ${PROJECT_FILE}.dtrace.gz ${PROJECT_FILE}.decls
 endif
