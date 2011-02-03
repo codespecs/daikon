@@ -8305,6 +8305,10 @@ are some reasons why this may happen:
 
 @itemize
 @item There is a sample that violates the invariant
+@item The invariant is true, but does not pass one of the output filters.
+@item One or more of the variables in the invariant always has the same
+value as another variable.  Daikon only prints invariants over one
+variable (the leader) from the set of equal variables (@pxref{Equal variables}).
 @item The program point had no samples (@pxref{No samples}).
 @item The invariant is true, but Daikon does not report it (@pxref{True
 invariants are not reported}).
