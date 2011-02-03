@@ -1,0 +1,4 @@
+All the files in daikon/tests/sources/DataStructures came from the book
+"Data Structures and Algorithm Analysis in Java" by Mark Allen Weiss.  New
+files should not be added there, and in general the existing files should
+not be changed.
