@@ -63,6 +63,7 @@ endif
 ifdef CHECKERS
   CHECKERSJAR ?= ${CHECKERS}/checkers.jar
 endif
+# If actually checking, override to checkers.jar.
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers-quals.jar
 # Version of javac that supports pluggable type-checking.
 JAVAC_FOR_CHECKERS ?= ${CHECKERS}/binary/javac
