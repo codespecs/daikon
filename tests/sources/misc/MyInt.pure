@@ -1,0 +1,8 @@
+public int DataStructures.MyInt.getValue()
+public int DataStructures.MyInt.getShift()
+public boolean DataStructures.MyInt.isHeavy()
+public java.lang.Number DataStructures.MyInt.getNum()
+public java.lang.Integer DataStructures.MyInt.getJWrap()
+public int DataStructures.MyInt.sum(java.lang.Number)
+public int DataStructures.MyInt.scale(int)
+public int DataStructures.MyInt.retrieve(java.util.List)

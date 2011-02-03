@@ -1,5 +1,5 @@
 // Declarations for misc.Compar1
-// Declarations written Thu Oct 15 13:09:53 EDT 2009
+// Declarations written Thu Jan 27 02:25:42 PST 2011
 
 decl-version 2.0
 var-comparability none
@@ -147,7 +147,7 @@ misc.Compar1.main(java.lang.String[]):::ENTER
 this_invocation_nonce
 0
 args
-16713087
+10284430
 1
 args.getClass()
 "java.lang.String[]"
@@ -3363,7 +3363,7 @@ misc.Compar1.main(java.lang.String[]):::EXIT19
 this_invocation_nonce
 0
 args
-16713087
+10284430
 1
 args.getClass()
 "java.lang.String[]"
