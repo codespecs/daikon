@@ -29,6 +29,7 @@ public class CmdCheck
   }
 
   /** For documentation, read the class overview. */
+  /*@NonNullOnEntry("s.input")*/
   public void apply(Session s) {
     try {
 

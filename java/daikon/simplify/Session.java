@@ -133,7 +133,8 @@ public class Session
     }
   }
 
-  /* package access */ void sendLine(String s) {
+  /*@NonNullOnEntry("input")*/
+  /* package access */ void sendLine(String s) /*@Raw*/ {
     if (dkconfig_trace_input) {
       assert trace_file != null
         : "@SuppressWarnings(nullness): dependent: trace_file is set in constructor if dkconfig_trace_input is true";
