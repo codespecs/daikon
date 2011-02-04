@@ -159,22 +159,22 @@ public class ChicoryPremain {
   private static void readPurityFile(File purityFileName, /*@Nullable*/ File pathLoc)
   {
     pureMethods = new HashSet<String>();
+    File purityFile = new File(pathLoc, purityFileName.getPath());
 
     BufferedReader reader = null;
     try
       {
-        reader = UtilMDE.bufferedFileReader(
-                                            new File(pathLoc, purityFileName.getPath()));
+        reader = UtilMDE.bufferedFileReader(purityFile);
       }
     catch (FileNotFoundException e)
       {
-        System.err.printf("%nCould not find file %s%n", purityFileName);
+        System.err.printf("%nCould not find purity file %s = %s%n", purityFileName, purityFile);
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       }
     catch (IOException e)
       {
-        throw new Error("Problem reading file " + purityFileName, e);
+        throw new Error("Problem reading purity file " + purityFileName + " = " + purityFile, e);
       }
 
     if (Chicory.verbose)
@@ -189,7 +189,7 @@ public class ChicoryPremain {
           }
         catch (IOException e)
           {
-            throw new Error("Error reading file " + purityFileName, e);
+            throw new Error("Error reading file " + purityFileName + " = " + purityFile, e);
           }
 
         if (line != null) {
