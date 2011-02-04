@@ -700,7 +700,7 @@ public abstract class Invariant
    * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
-  public String format() /*@NonPrototype*/ {
+  public /*@Pure*/ String format() /*@NonPrototype*/ {
     String result = format_using(OutputFormat.DAIKON);
     if (PrintInvariants.dkconfig_print_inv_class) {
       String classname = getClass().getName();
@@ -1108,6 +1108,7 @@ public abstract class Invariant
   /**
    * Returns whether or not this invariant is ni-suppressed.
    */
+  @SuppressWarnings("nullness") // tricky control flow, need to mark get_ni_suppressions as @Pure if that's true
   /*@AssertNonNullIfTrue("get_ni_suppressions()")*/
   public boolean is_ni_suppressed() {
 

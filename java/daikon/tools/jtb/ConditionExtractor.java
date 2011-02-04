@@ -119,8 +119,9 @@ class ConditionExtractor extends DepthFirstVisitor {
   public void visit(MethodDeclarator n) {
     // This goes on the PPT_NAME line of the spinfo file.
     // eg. QueueAr.isEmpty
-    curMethodName = className + "." + Ast.format(n.f0);
-    addMethod (Ast.format(n), curMethodName);
+    String methName = className + "." + Ast.format(n.f0);
+    curMethodName = methName;
+    addMethod (Ast.format(n), methName);
     super.visit(n);
     // should reset curMethodName to null here??
   }
@@ -138,8 +139,9 @@ class ConditionExtractor extends DepthFirstVisitor {
   public void visit(ConstructorDeclaration n) {
     // This goes on the PPT_NAME line of the spinfo file.
     // eg. QueueAr.isEmpty
-    curMethodName = className + "." + Ast.format(n.f1);
-    addMethod(className + Ast.format(n), curMethodName);
+    String methName = className + "." + Ast.format(n.f1);
+    curMethodName = methName;
+    addMethod(className + Ast.format(n), methName);
     resultTypes.push("constructor");
     super.visit(n);
     resultTypes.pop();

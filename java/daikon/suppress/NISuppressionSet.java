@@ -85,6 +85,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
     // Get the ppt we are working in
     PptTopLevel ppt = inv.ppt.parent;
+    assert ppt.equality_view != null : "@SuppressWarnings(nullness): haven't reasoned through the reason";
 
     // For now all suppressors are unary/binary and
     // all suppressees are unary, binary or ternary

@@ -122,53 +122,53 @@ public class NISuppressee {
     return (instantiate (slice));
   }
 
-  /**
-   * Instantiates the suppressee invariant on all of the slices
-   * specified by vis in the specified ppt.  Multiple slices can
-   * be specified by vis if a slot in vis is null.  The slot will be
-   * filled by all leaders that can correctly fill the slot and an
-   * invariant created for each. @return a list of all of the created
-   * invariants.
-   */
-  public List<Invariant> instantiate_all (VarInfo[] vis, PptTopLevel ppt) {
-
-    List<Invariant> created_list = new ArrayList<Invariant>();
-
-    // Check for empty slots in vis, fail if there is more than one
-    int missing_index = -1;
-    for (int i = 0; i < vis.length; i++)
-      if (vis[i] == null) {
-        assert missing_index == -1 : "Multiple empty vars";
-        missing_index = i;
-      }
-
-    // If all of the slots were full, create the invariant
-    if (missing_index == -1) {
-      if (ppt.is_slice_ok (vis, vis.length)) {
-        Invariant inv = instantiate (vis, ppt);
-        if (inv != null)
-          created_list.add (inv);
-      }
-      return (created_list);
-    }
-
-    // Fill in the missing slot with each possible matching leader and
-    // create an invariant for it.
-    VarInfo leaders[] = ppt.equality_view.get_leaders_sorted();
-    for (int i = 0; i < leaders.length; i++) {
-      VarInfo v = leaders[i];
-      vis[missing_index] = v;
-      if (!ppt.vis_order_ok (vis))
-        continue;
-      if (!ppt.is_slice_ok (vis, vis.length))
-        continue;
-      Invariant inv = instantiate (vis, ppt);
-      if (inv != null)
-        created_list.add (inv);
-    }
-
-    return (created_list);
-  }
+//   /**
+//    * Instantiates the suppressee invariant on all of the slices
+//    * specified by vis in the specified ppt.  Multiple slices can
+//    * be specified by vis if a slot in vis is null.  The slot will be
+//    * filled by all leaders that can correctly fill the slot and an
+//    * invariant created for each. @return a list of all of the created
+//    * invariants.
+//    */
+//   public List<Invariant> instantiate_all (VarInfo[] vis, PptTopLevel ppt) {
+// 
+//     List<Invariant> created_list = new ArrayList<Invariant>();
+// 
+//     // Check for empty slots in vis, fail if there is more than one
+//     int missing_index = -1;
+//     for (int i = 0; i < vis.length; i++)
+//       if (vis[i] == null) {
+//         assert missing_index == -1 : "Multiple empty vars";
+//         missing_index = i;
+//       }
+// 
+//     // If all of the slots were full, create the invariant
+//     if (missing_index == -1) {
+//       if (ppt.is_slice_ok (vis, vis.length)) {
+//         Invariant inv = instantiate (vis, ppt);
+//         if (inv != null)
+//           created_list.add (inv);
+//       }
+//       return (created_list);
+//     }
+// 
+//     // Fill in the missing slot with each possible matching leader and
+//     // create an invariant for it.
+//     VarInfo leaders[] = ppt.equality_view.get_leaders_sorted();
+//     for (int i = 0; i < leaders.length; i++) {
+//       VarInfo v = leaders[i];
+//       vis[missing_index] = v;
+//       if (!ppt.vis_order_ok (vis))
+//         continue;
+//       if (!ppt.is_slice_ok (vis, vis.length))
+//         continue;
+//       Invariant inv = instantiate (vis, ppt);
+//       if (inv != null)
+//         created_list.add (inv);
+//     }
+// 
+//     return (created_list);
+//   }
 
   /**
    * Finds the suppressee invariants on all of the slices

@@ -61,6 +61,7 @@ public class ClassInfo {
    * Gets the reflection object Class for this class, and the Method objects
    * for each method that is already in method_infos.
    */
+  /*@AssertNonNullAfter("clazz")*/
   public void initViaReflection() {
 
     // get the reflection class

@@ -23,12 +23,12 @@ public class Property implements Serializable {
     private static HashMap<Integer, Property> propertiesMap = new HashMap<Integer, Property>();
 
     // The name of the method that this property describes.
-    private final /*@Nullable*/ String method;
+    private final String method;
     /**
      * The name of the method that this property describes. ("null" for object
      * invariants.)
      */
-    public /*@Nullable*/ String method() {
+    public String method() {
         return method;
     }
 

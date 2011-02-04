@@ -74,6 +74,8 @@ class PrefixFixer extends DepthFirstVisitor {
    */
   private void fixLastToken() {
     if (threeTokensAgo != null &&
+        twoTokensAgo != null && // redundant, but for Nullness Checker
+        lastToken != null && // redundant, but for Nullness Checker
         Visitors.isIdentifier(lastToken) &&
         Visitors.isDot(twoTokensAgo) &&
         Visitors.isIdentifier(threeTokensAgo) &&
@@ -89,6 +91,7 @@ class PrefixFixer extends DepthFirstVisitor {
    * Return whether n is at the end of a set of node tokens
    * that form a prefixed name needing fixing.
    */
+  /*@AssertNonNullIfTrue({"lastToken","twoTokensAgo","threeTokensAgo"})*/
   private boolean isMatch(NodeToken n) {
     return ((! Visitors.isLParen(n)) &&
             lastToken != null &&

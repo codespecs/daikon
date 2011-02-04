@@ -47,12 +47,12 @@ public class InvTranslate {
   /** destination invariant **/
   Invariant inv2;
 
-  /** an empty translation **/
-  private InvTranslate () {
-    inv1 = null;
-    inv2 = null;
-    quality = 0;
-  }
+  // /** an empty translation **/
+  // private InvTranslate () {
+  //   inv1 = null;
+  //   inv2 = null;
+  //   quality = 0;
+  // }
 
   /**
    * Setup a translation from i1 to i2.  The quality and the variable
@@ -91,10 +91,10 @@ public class InvTranslate {
     }
   }
 
-  private static InvTranslate no_translate = new InvTranslate();
-  static InvTranslate no_translate() {
-    return no_translate;
-  }
+  // private static InvTranslate no_translate = new InvTranslate();
+  // static InvTranslate no_translate() {
+  //   return no_translate;
+  // }
 
   /**
    * Add the specified variable names to the variable translation.

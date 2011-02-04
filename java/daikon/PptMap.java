@@ -87,9 +87,9 @@ public class PptMap
   // is "nameToPpt", not "this.nameToPpt".  (Yes, nameToPpt is a private
   // variable, but I'd like the annotation to work anyway, at least for the
   // moment.)
-  public Collection</*@KeyFor("this.nameToPpt")*/ String> nameStringSet() {
+  public Collection</*@KeyFor("nameToPpt")*/ String> nameStringSet() {
     // return Collections.unmodifiableSet(nameToPpt.keySet());
-    Set</*@KeyFor("this.nameToPpt")*/ String> s = nameToPpt.keySet();
+    Set</*@KeyFor("nameToPpt")*/ String> s = nameToPpt.keySet();
     return Collections.unmodifiableSet(s);
   }
 

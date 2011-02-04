@@ -91,6 +91,7 @@ public abstract class Derivation
   // This is in each class, but I can't have a private abstract method.
   protected abstract VarInfo makeVarInfo();
 
+  /*@NonNullOnEntry("this_var_info")*/
   protected void makeVarInfo_common_setup(VarInfo vi) {
     // Common tasks that are abstracted into here.
     vi.derived = this;

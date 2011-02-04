@@ -133,7 +133,6 @@ public class Session
     }
   }
 
-  /*@NonNullOnEntry("input")*/
   /* package access */ void sendLine(String s) /*@Raw*/ {
     if (dkconfig_trace_input) {
       assert trace_file != null

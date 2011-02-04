@@ -330,6 +330,8 @@ public class PptTopLevel extends Ppt {
    * Holds Equality invariants.  Never null after invariants are
    * instantiated.
    **/
+  // Is set by Daikon.setupEquality.  Remains null if
+  // Daikon.using_DaikonSimple==true or Daikon.use_equality_optimization==false
   public /*@LazyNonNull*/ PptSliceEquality equality_view;
 
   // The redundant_invs* variables are filled in by method
@@ -1025,6 +1027,7 @@ public class PptTopLevel extends Ppt {
 
     // Add the samples to all of the equality sets, breaking sets as required
     if (Daikon.use_equality_optimization) {
+      assert equality_view != null : "@SuppressWarnings(nullness): dependent: non-null if use_equality_optimization==true";
       weakened_invs.addAll(equality_view.add(vt, count));
     }
 
@@ -2745,7 +2748,6 @@ public class PptTopLevel extends Ppt {
    * parameter VarInfos so that each equality set contains only the
    * interesting one.
    **/
-  /*@NonNullOnEntry("equality_view")*/
   public void postProcessEquality() {
     if (debugEqualTo.isLoggable(Level.FINE)) {
       debugEqualTo.fine("PostProcessingEquality for: " + this.name());
@@ -2753,6 +2755,7 @@ public class PptTopLevel extends Ppt {
     if (num_samples() == 0)
       return;
     assert equality_view != null : "ppt = " + ppt_name +" children = " + children;
+    assert equality_view != null : "@SuppressWarnings(nullness): application invariant";
     Invariants equalityInvs = equality_view.invs;
 
     // Pivot invariants to new equality leaders if needed, if old
@@ -4291,6 +4294,7 @@ public class PptTopLevel extends Ppt {
      * Sets each of the stats from the current info in ppt and the specified
      * time (msecs) and memory (bytes).
      */
+    /*@AssertNonNullAfter("ppt")*/
     void set(PptTopLevel ppt, int time, int memory) {
       set_cnt = 0;
       var_cnt = 0;
@@ -4328,6 +4332,7 @@ public class PptTopLevel extends Ppt {
           + " Memory (bytes) : Time (msecs) ");
     }
 
+    /*@NonNullOnEntry("ppt")*/
     void dump(Logger log) {
 
       DecimalFormat dfmt = new DecimalFormat();

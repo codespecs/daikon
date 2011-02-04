@@ -63,6 +63,7 @@ class TokenReplacer extends DepthFirstVisitor {
     Node root = Visitors.getJtbTree(expression);
     TokenReplacer tokenReplacer = new TokenReplacer(oldVars, newVars);
     root.accept(tokenReplacer);
+    assert tokenReplacer.lastToken != null : "@SuppressWarnings(nullness) : accept just set lastToken";
     tokenReplacer.replaceLastToken();
     return Ast.format(root);
   }
@@ -70,6 +71,7 @@ class TokenReplacer extends DepthFirstVisitor {
   /**
    * Replaces lastToken if needed.
    */
+  /*@NonNullOnEntry("lastToken")*/
   private void replaceLastToken() {
     if (Visitors.isIdentifier(lastToken) &&
         (twoTokensAgo == null || (! Visitors.isDot(twoTokensAgo)))) {

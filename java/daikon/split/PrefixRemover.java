@@ -66,6 +66,7 @@ class PrefixRemover extends DepthFirstVisitor {
    */
   public void visit(NodeToken n) {
     if (Visitors.isDot(n) &&
+        lastToken != null && // redundant if isDot(n)==true; but for Nullness Checker
         Visitors.isIdentifier(lastToken) &&
         lastToken.tokenImage.equals(prefix)) {
       columnshift = columnshift - lastToken.tokenImage.length();

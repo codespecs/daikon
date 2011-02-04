@@ -1938,10 +1938,11 @@ public final class Daikon {
     // Equality data for each PptTopLevel.
     if (Daikon.use_equality_optimization && !Daikon.dkconfig_undo_opts) {
       debugProgress.fine("Equality Post Process ... ");
+      // Can't use a new-style for-each loop with an Iterator :-(
       for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator();
-        itor.hasNext();
-        ) {
+           itor.hasNext(); ) {
         PptTopLevel ppt = itor.next();
+        // ppt.equality_view can be null here
         ppt.postProcessEquality();
       }
       debugProgress.fine("Equality Post Process ... done");
