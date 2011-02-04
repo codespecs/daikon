@@ -7,7 +7,6 @@ import daikon.util.*;
 
 import daikon.Chicory;
 
-
 /**
  * Each DaikonVariableInfo object is a node in the tree structure of the
  * variables in the target application.  The tree structure is built in the
@@ -569,12 +568,13 @@ public abstract class DaikonVariableInfo
                 // Could not find the class... no further purity analysis
                 typeInfo = null;
             }
-
+            
             if (typeInfo != null)
             {
+            	//Pure methods with no parameters
                 for (MethodInfo meth : typeInfo.method_infos)
-                {
-                    if (meth.isPure())
+                {	
+                    if (meth.isPure() && meth.arg_names.length == 0)
                     {
                         StringBuffer buf = new StringBuffer();
                         DaikonVariableInfo newChild = thisInfo.addPureMethodDecl(
@@ -592,6 +592,68 @@ public abstract class DaikonVariableInfo
 
                     }
                 }
+                
+                // List containing all class variables, excluding pure methods with parameters
+                List<DaikonVariableInfo> siblings = new ArrayList<DaikonVariableInfo>(thisInfo.children);
+                
+                // Pure methods with one parameter
+                for (MethodInfo meth : typeInfo.method_infos)
+                {
+                	if (meth.isPure() && meth.arg_names.length == 1)
+                	{
+                		for (DaikonVariableInfo sib : siblings)
+                		{
+                			String sibType = sib.getTypeNameOnly();
+                			Class<?> sibClass = null;
+                			
+                			// Get class type of the class variable
+                			try
+                			{
+                				sibClass = Class.forName(sibType);
+                			} catch (Exception e)
+                			{
+                    			// Handle special case of primitive types
+                    			if (sibType.equals("boolean"))
+                    				sibClass = boolean.class;
+                    			if (sibType.equals("byte"))
+                    				sibClass = byte.class;
+                    			if (sibType.equals("char"))
+                    				sibClass = char.class;
+                    			if (sibType.equals("double"))
+                    				sibClass = double.class;
+                    			if (sibType.equals("float"))
+                    				sibClass = float.class;
+                    			if (sibType.equals("int"))
+                    				sibClass = int.class;
+                    			if (sibType.equals("long"))
+                    				sibClass = long.class;
+                    			if (sibType.equals("short"))
+                    				sibClass = short.class;
+                			}
+                			
+                			//  Add node if the class variable can be used as the pure method's parameter
+                			if (UtilMDE.isSubtype(sibClass, meth.arg_types[0]))
+                			{
+                				DaikonVariableInfo[] arg = {sib};
+                				StringBuffer buf = new StringBuffer();
+                                DaikonVariableInfo newChild = thisInfo.addPureMethodWithParamDecl(
+                                        cinfo, meth, offset, depth,
+                                        buf, arg);
+                                String newOffset = buf.toString();
+                                debug_vars.indent ("Pure method");
+                                assert meth.member != null : "@SuppressWarnings(nullness): member of method_infos have .member field"; // fix with dependent type
+                                newChild.addChildNodes(cinfo,
+                                                       ((Method) meth.member).getReturnType(),
+                                                       meth.member.getName(),
+                                                       newOffset,
+                                                       depth);
+                                debug_vars.exdent();
+                			}
+                		}
+                		
+                	}
+                }
+                
             }
         }
     }
@@ -619,10 +681,9 @@ public abstract class DaikonVariableInfo
 
         return newChild;
     }
-
-
+    
     /**
-     * Adds the decl info for a pure method.
+     * Adds the decl info for a pure method with no parameters.
      */
     //TODO factor out shared code with printDeclVar
     protected DaikonVariableInfo addPureMethodDecl(ClassInfo curClass,
@@ -663,6 +724,73 @@ public abstract class DaikonVariableInfo
         DaikonVariableInfo newPure = new PureMethodInfo(offset + theName, minfo,
                                                         type_name + arr_str, getRepName(type, isArray) + arr_str,
                                                         isArray);
+
+        addChild(newPure);
+
+        newPure.checkForDerivedVariables(type, theName, offset);
+
+        buf.append(offset);
+
+        if (changedAccess)
+        {
+            meth.setAccessible(false);
+        }
+
+        return newPure;
+    }
+    
+    /**
+     * Adds the decl info for a pure method with parameters
+     */
+    //TODO factor out shared code with printDeclVar
+    protected DaikonVariableInfo addPureMethodWithParamDecl(ClassInfo curClass,
+            MethodInfo minfo, String offset, int depth,
+            StringBuffer buf, DaikonVariableInfo[] args)
+    {
+        String arr_str = "";
+        if (isArray)
+        {
+            arr_str = "[]";
+        }
+        
+        @SuppressWarnings("nullness") // method precondition
+        /*@NonNull*/ Method meth = (Method) minfo.member;
+
+
+        boolean changedAccess = false;
+
+        //we want to access all fields...
+        if (!meth.isAccessible())
+        {
+            changedAccess = true;
+            meth.setAccessible(true);
+        }
+
+        Class<?> type = meth.getReturnType();
+        assert type != null;
+
+        String theName = meth.getName() + "(" + args[0].getName();
+        
+        if (args.length > 1) 
+        {
+        	for (int i = 1; i < args.length - 1; i++) {
+        		theName += ", " + args[i].getName();
+        	}
+        }
+        theName += ")";
+
+        if (offset.length() > 0) // offset already starts with "this"
+        {
+        }
+        else
+        {
+            offset = "this.";
+        }
+
+        String type_name = stdClassName (type);
+        DaikonVariableInfo newPure = new PureMethodInfo(offset + theName, minfo,
+                type_name + arr_str, getRepName(type, isArray) + arr_str,
+                isArray, args);
 
         addChild(newPure);
 
@@ -1202,7 +1330,7 @@ public abstract class DaikonVariableInfo
 
        return typeName;
    }
-
+   
    /**
     * Return the type name without aux information.
     * @see #getTypeName()
