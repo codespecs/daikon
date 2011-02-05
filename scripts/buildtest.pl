@@ -116,7 +116,7 @@ if (! $success{"daikon_checkout"}) {
 }
 
 # Inherit the environment of the group-wide init file
-%ENV = get_env("$DAIKONPARENT/invariants/scripts/pag-daikon.bashrc");
+%ENV = get_env("$DAIKONPARENT/daikon/scripts/pag-daikon.bashrc");
 
 my $INV = $ENV{"INV"};
 print_log("INV = $INV\n");
@@ -228,7 +228,7 @@ mkdir("diffs", 0777) or die "can't make directory diffs: $!\n";
 
 foreach my $subdir ("daikon", "diff", "kvasir") {
   mkdir("diffs/$subdir", 0777) or die "can't make directory diffs/$subdir: $!\n";
-  my $diffs = `find invariants/tests/$subdir-tests -name "*.diff"`;
+  my $diffs = `find daikon/tests/$subdir-tests -name "*.diff"`;
   foreach my $file (split '\n',$diffs) {
     `cp -p $file diffs/$subdir`;
     die "can't copy diff file $file to diffs/$subdir\n" if ($CHILD_ERROR);
@@ -267,7 +267,7 @@ sub daikon_checkout {
 # Update the daikon directory to the ENGINE_V2_PATCHES tag
 sub daikon_update {
   print_log("Updating Daikon...");
-  my $daikon_dir = "invariants/java/daikon";
+  my $daikon_dir = "daikon/java/daikon";
   chdir($daikon_dir) or die "can't chdir to $daikon_dir: $!\n";
   `cvs -d $CVS_REP up &> ../../../daikon_update.out`;
   chdir($DAIKONPARENT) or die "can't chdir to $DAIKONPARENT: $!\n";
@@ -284,7 +284,7 @@ sub daikon_update {
 # Update the tests directory to the ENGINE_V2_PATCHES tag
 sub tests_update {
   print_log("Updating tests...");
-  my $tests_dir = "invariants/tests";
+  my $tests_dir = "daikon/tests";
   chdir($tests_dir) or die "can't chdir to $tests_dir: $!\n";
   `cvs -d $CVS_REP up &> ../../tests_update.out`;
   chdir($DAIKONPARENT) or die "can't chdir to $DAIKONPARENT: $!\n";

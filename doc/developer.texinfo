@@ -1380,7 +1380,7 @@ repository}).
 @cindex new unit tests
 @cindex adding new unit tests
 
-The unit tests are found in @file{invariants/java/daikon/test/}; they use
+The unit tests are found in @file{daikon/java/daikon/test/}; they use
 the JUnit unit testing framework.  They take a few seconds to run.  They
 are automatically run each time you compile Daikon (by running
 @samp{make} in @file{$DAIKONDIR/java} or any of its subdirectories).  You can

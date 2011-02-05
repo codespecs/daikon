@@ -52,7 +52,7 @@ inv: $(INV_FILES)
 # line (ie, use $^).  The dependencies can't simply be repeated since
 # the % substitutions only work on the dependency line.
 $(INV_FILES): %.inv.gz: %.dtrace.gz $(PROGRAM).decls $(DAIKON_CLASS)
-	@echo "Temporary debugging output in invariants/tests/diff-tests/Makefile.common:  CLASSPATH = ${CLASSPATH}"
+	@echo "Temporary debugging output in daikon/tests/diff-tests/Makefile.common:  CLASSPATH = ${CLASSPATH}"
 	$(DAIKON) --config ../config.txt --no_text_output -o $@ \
 		$(subst $(DAIKON_CLASS),,$^)
 

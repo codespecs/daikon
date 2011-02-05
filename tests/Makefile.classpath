@@ -11,7 +11,7 @@ endif
 ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
   CLASSPATH := .:$(CLASSPATH)
 endif
-ifneq (invariants/java:,$(findstring invariants/java:,$(CLASSPATH)))
+ifneq (daikon/java:,$(findstring daikon/java:,$(CLASSPATH)))
     CLASSPATH := $(CLASSPATH):$(DAIKONDIR)/java
 endif
 ifdef CLASSPATH_JARS

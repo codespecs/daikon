@@ -5,9 +5,9 @@
 # How to setup an account for nightly build/test:
 # 1. Create user named 'daikonuser'
 # 2. Login as user 'daikonuser'
-# 3. `mkdir $HOME/build $HOME/research`
-# 4. `cd $HOME/research`
-# 5. `cvs -d $CVS_REPOSITORY co invariants/scripts`
-# 6. `crontab $HOME/research/invariants/scripts/buildtest.crontab`
+# 3. mkdir $HOME/build $HOME/research
+# 4. cd $HOME/research
+# 5. hg clone $HG_REPOSITORY
+# 6. crontab $HOME/research/daikon/scripts/buildtest.crontab
 cd $HOME/build
-exec /usr/bin/env perl $HOME/research/invariants/scripts/buildtest.pl --quiet $*
+exec /usr/bin/env perl $HOME/research/daikon/scripts/buildtest.pl --quiet $*

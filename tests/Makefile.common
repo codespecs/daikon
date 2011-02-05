@@ -184,7 +184,7 @@ SOURCES?=$(COMMON_HERE)/sources
 # PROJECT is the relative directory for the project resides
 # (e.g. esc-experiments/StackAr)
 CWD:=$(shell pwd)
-PROJECT?=$(shell echo ${CWD} | perl -pe 's|.*/invariants/tests(\.ver[23])?/||;')
+PROJECT?=$(shell echo ${CWD} | perl -pe 's|.*/daikon/tests(\.ver[23])?/||;')
 
 # This is the name for the output files ($.inv.gz $.txt-daikon ...)
 # Default is the last name on the path to the project; most projects
