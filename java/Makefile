@@ -923,14 +923,18 @@ interning-counts:
 # "tail -1" is required when wc is given multiple arguments
 nullness-counts:
 	@echo -n "Annotated files: "
-	@echo ${NULLNESS_JAVA_FILES} | sed 's/ /\n/g' | wc -l
-	@echo -n " / "
-	@echo ${DAIKON_JAVA_FILES} | sed 's/ /\n/g' | wc -l
-#	@echo ${NULLNESS_JAVA_FILES}
-	@echo -n "Lines in annotated files: "
-	@echo ${NULLNESS_JAVA_FILES} | xargs wc -l | tail -1 | cut -d ' ' -f 2
-	@echo -n " / "
-	@echo ${DAIKON_JAVA_FILES} | xargs wc -l | tail -1 | cut -d ' ' -f 2
+	@echo ${NULLNESS_JAVA_FILES} | xargs sclc | tail -1
+	@echo -n "Total files: "
+	@echo ${DAIKON_JAVA_FILES} | xargs sclc | tail -1
+# 	@echo -n "Annotated files: "
+# 	@echo ${NULLNESS_JAVA_FILES} | sed 's/ /\n/g' | wc -l
+# 	@echo -n " / "
+# 	@echo ${DAIKON_JAVA_FILES} | sed 's/ /\n/g' | wc -l
+# #	@echo ${NULLNESS_JAVA_FILES}
+# 	@echo -n "Lines in annotated files: "
+# 	@echo ${NULLNESS_JAVA_FILES} | xargs wc -l | tail -1 | cut -d ' ' -f 2
+# 	@echo -n " / "
+# 	@echo ${DAIKON_JAVA_FILES} | xargs wc -l | tail -1 | cut -d ' ' -f 2
 	@echo -n "Lines with nullness annotations: "
 	@grep '@AssertNonNullIfFalse\|@AssertNonNullIfTrue\|@AssertParametersNonNull\|@KeyFor\|@LazyNonNull\|@NonNull\|@NonNullOnEntry\|@NonRaw\|@Nullable\|@PolyNull\|@PolyRaw\|@Pure\|@Raw' ${NULLNESS_JAVA_FILES} | wc -l
 	@echo -n "Lines with @SuppressWarnings annotation or castNonNull method call: "
