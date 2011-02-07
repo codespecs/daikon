@@ -942,6 +942,13 @@ nullness-counts:
 	@grep -n '@SuppressWarnings.*nullness\|castNonNull' ${NULLNESS_JAVA_FILES}
 
 
+JAVAC_COUNT_ARGS = -processor checkers.util.count.Locations -implicit:class -Xlint:-processing
+possible-annos: ${ALL_GENERATED_FILES} compile-typequals compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_COUNT_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_COUNT_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
+
+
 ###
 ### Testing
 ###
