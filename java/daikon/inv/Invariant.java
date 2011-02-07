@@ -31,6 +31,7 @@ import java.io.Serializable;
  * of invariant I(a, b).
  **/
 /*@Prototype*/
+@UsesObjectEquals
 public abstract class Invariant
   implements Serializable, Cloneable // but don't YOU clone it
 {

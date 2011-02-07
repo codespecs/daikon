@@ -595,12 +595,12 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     relative_name = vi.relative_name;
   }
 
-  /** Creates and returns a copy of this. **/
-  // Default implementation to quiet Findbugs.
-  @SuppressWarnings("interning")  // temporary?
-  public VarInfo clone() throws CloneNotSupportedException {
-    return (VarInfo) super.clone();
-  }
+  // /** Creates and returns a copy of this. **/
+  // // Default implementation to quiet Findbugs.
+  // @SuppressWarnings("interning")  // temporary?
+  // public VarInfo clone() throws CloneNotSupportedException {
+  //   return (VarInfo) super.clone();
+  // }
 
   /** Create the prestate, or "orig()", version of the variable. **/
   public static VarInfo origVarInfo(VarInfo vi) {
@@ -1549,7 +1549,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           : (vari_shift >= varj_shift));
     }
     // different variables
-    @SuppressWarnings("interning") // assertion (PptTopLevel)
     boolean samePpt = (vari.ppt == varj.ppt);
     assert samePpt;
     PptSlice indices_ppt = vari.ppt.findSlice_unordered(vari, varj);
@@ -1712,7 +1711,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Check if two VarInfos are truly (non guarded) equal to each other
    * right now.
    **/
-  @SuppressWarnings("interning") // Equality
   public boolean isEqualTo(VarInfo other) {
     assert equalitySet != null;
     return this.equalitySet == other.equalitySet;
@@ -1826,7 +1824,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     VarInfo var1 = this;
     // Can only compare in the same ppt because otherwise
     // comparability info may not make sense.
-    @SuppressWarnings("interning") // assertion (PptTopLevel)
     boolean samePpt = (var1.ppt == var2.ppt);
     assert samePpt;
 

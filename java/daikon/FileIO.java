@@ -1169,6 +1169,7 @@ public final class FileIO {
    *   method read_data_trace_record when it reads a record.
    * </ol>
    **/
+  @UsesObjectEquals
   public static class ParseState {
 
     //
@@ -1473,7 +1474,6 @@ public final class FileIO {
 
     // Abstract out the test result into a variable because Java doesn't
     // permit suppressing warnings on a statement.  Yuck.
-    @SuppressWarnings("interning")
     boolean stateOK = (state == FileIO.data_trace_state);
     assert stateOK;
 
@@ -1794,7 +1794,6 @@ public final class FileIO {
                 // it.remove();
               } else {
                 assert sp != null : successor;
-                @SuppressWarnings("interning") // PptTopLevel
                 boolean same_function_id = (sp.function_id == p.function_id);
                 if (! same_function_id) {
                   System.out.printf ("Warning: successor %s (func %s) in "
@@ -1915,7 +1914,6 @@ public final class FileIO {
   }
 
   /** Returns true if this procedure has an unmatched entry. **/
-  @SuppressWarnings("interning") // PptTopLevel
   static boolean has_unmatched_procedure_entry(PptTopLevel ppt) {
     for (Invocation invok : call_hashmap.values()) {
       if (invok.ppt == ppt) {

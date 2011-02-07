@@ -277,7 +277,7 @@ public class PptSliceEquality
    * Dummy value that's incomparable to everything else to indicate
    * missings in createEqualityInvs.
    **/
-  private static final Object dummyMissing = new StringBuffer("Dummy missing");
+  private static final Object dummyMissing = new Object(); // StringBuffer("Dummy missing");
 
   /**
    * Create a List of Equality invariants based on the values given
@@ -330,7 +330,6 @@ public class PptSliceEquality
       List<VarInfo> list = entry.getValue();
       assert list.size() > 0;
       Equality eq = new Equality (list, this);
-      @SuppressWarnings("interning") // Special value
       boolean isMissing = (key == dummyMissing);
       if (isMissing) {
         eq.setSamples (leader.numSamples() - count);
@@ -593,7 +592,6 @@ public class PptSliceEquality
     }
   }
 
-  @SuppressWarnings("interning") // PptTopLevel
   public void repCheck() {
     for (Invariant inv : invs) {
       inv.repCheck();
