@@ -175,9 +175,11 @@ public class NISuppressee {
    * specified by vis in the specified ppt.  Multiple slices can
    * be specified by vis if a slot in vis is null.  The slot will be
    * filled by all leaders that can correctly fill the slot and SupInv
-   * created for each. @return a list describing all of the invariants
-   * The cinvs array is an array of the actual invariants that were
-   * found for each slot.  It is used for for debug printing only.
+   * created for each.
+   *
+   * @param cinvs an array of the actual invariants that were found
+   * for each slot.  It is used for for debug printing only.
+   * @return a list describing all of the invariants.
    */
   public List<NIS.SupInv> find_all (VarInfo[] vis, PptTopLevel ppt,
                                     /*@Nullable*/ Invariant /*@Nullable*/ [] cinvs) {
