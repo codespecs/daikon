@@ -397,7 +397,7 @@ public class PptSplitter implements Serializable {
           assert !cond1.splitter_inverse;
           assert cond2.splitter_inverse;
           dummy2.negate();
-          @SuppressWarnings("nullness") // BUG in Daikon, possibly, because these are not keys, I think; need to investigate
+          @SuppressWarnings("keyfor") // BUG in Daikon, possibly, because these are not keys, I think; need to investigate
           /*@KeyFor("orig_invs")*/ Invariant[] dummy_pair = new /*@KeyFor("orig_invs")*/ Invariant[] {dummy1, dummy2};
           exclusive_invs_vec.add(dummy_pair);
           different_invs_vec.add(dummy_pair);
