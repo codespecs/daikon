@@ -90,7 +90,7 @@ public class TestRedundantVars {
 
         assert invsWith != null : "@SuppressWarnings(nullness): dependent: same nullness as invsWithout, which was checked";
 
-        @SuppressWarnings("nullness") // Map.get: ppt is in reds.records when process_ppt is called
+        @SuppressWarnings("nullness") // map: ppt is in reds.records when process_ppt is called
         /*@NonNull*/ List<String> redVars = reds.records.get(ppt);
         assert redVars != null : ppt;
 

@@ -1768,7 +1768,7 @@ public final class FileIO {
     if (ppt.is_basic_block() && !ppt.combined_ppts_init
         && (ppt.function_id != null)) {
       if (!dkconfig_merge_basic_blocks) {
-        @SuppressWarnings("nullness") // Map.get
+        @SuppressWarnings("nullness") // map
         /*@NonNull*/ List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
         for (PptTopLevel p : ppts) {
           p.combined_subsumed = false;
@@ -1776,7 +1776,7 @@ public final class FileIO {
         }
       } else {
         // Sanity check the ppts in this function
-        @SuppressWarnings("nullness") // Map.get
+        @SuppressWarnings("nullness") // map
         /*@NonNull*/ List<PptTopLevel> ppts = func_ppts.get (ppt.function_id);
         assert ppts != null : ppt.name() + " func id " + ppt.function_id;
         assert ppts.size() > 0 : ppt.name();
@@ -1818,7 +1818,7 @@ public final class FileIO {
             System.out.printf ("  %s\n", p.name());
             if (p.ppt_successors != null) {
               for (String successorName : p.ppt_successors) {
-                @SuppressWarnings("nullness") // Map.get:  successorName is in p.ppt_successors
+                @SuppressWarnings("nullness") // map:  successorName is in p.ppt_successors
                 /*@NonNull*/ PptTopLevel successorPpt = all_ppts.get (successorName);
                 System.out.printf ("    %s\n", successorPpt.name());
               }
@@ -1834,7 +1834,7 @@ public final class FileIO {
         for (PptTopLevel p : ppts) {
           if (p.ppt_successors != null) {
             for (String succName : p.ppt_successors) {
-              @SuppressWarnings("nullness") // Map.get: any successor is in the map
+              @SuppressWarnings("nullness") // map: any successor is in the map
               /*@NonNull*/ PptTopLevel succPpt = all_ppts.get(succName);
               assert succPpt.predecessors != null : "@SuppressWarnings(nullness): this is a successor, so the predecessor exists";
               succPpt.predecessors.add(p);

@@ -827,7 +827,7 @@ public final class Diff {
     for ( String somePptName : manip.nameStringSet() ) {
       // A conditional Ppt always contains the normal Ppt
       if (targ.equals (somePptName)) {
-        @SuppressWarnings("nullness") // Map.get: iterating over keySet
+        @SuppressWarnings("nullness") // map: iterating over keySet
         /*@NonNull*/ PptTopLevel repl = manip.get (somePptName);
         return repl.getInvariants();
       }
@@ -848,7 +848,7 @@ public final class Diff {
     for ( String somePptName : manip.nameStringSet() ) {
       // A conditional Ppt always contains the normal Ppt
       if (targetName.equals (somePptName)) {
-        @SuppressWarnings("nullness") // Map.get: iterating over keySet
+        @SuppressWarnings("nullness") // map: iterating over keySet
         /*@NonNull*/ PptTopLevel repl = manip.get (somePptName);
         return UtilMDE.sortList(repl.getInvariants(), PptTopLevel.icfp);
       }

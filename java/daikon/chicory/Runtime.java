@@ -317,7 +317,7 @@ public class Runtime
         // Skip this call if it was not sampled at entry to the method
         if (sample_start > 0) {
           CallInfo ci = null;
-          @SuppressWarnings("nullness") // Map.get: key was put in map by enter()
+          @SuppressWarnings("nullness") // map: key was put in map by enter()
           /*@NonNull*/ Stack<CallInfo> callstack
               = thread_to_callstack.get (Thread.currentThread());
           while (!callstack.empty()) {

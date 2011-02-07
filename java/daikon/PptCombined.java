@@ -510,7 +510,7 @@ public class PptCombined extends PptTopLevel {
 
       } else if (redundantVariables != null
                  && redundantVariables.containsKey(vi.name())) {
-        @SuppressWarnings("nullness") // map: just called containsKey (checker bug???)
+        @SuppressWarnings("nullness") // map: just called containsKey, and name() is pure (checker bug???)
         /*@NonNull*/ String rleader = redundantVariables.get(vi.name());
 
         // Variable is considered redundant. Don't add it to var_info
@@ -639,10 +639,10 @@ public class PptCombined extends PptTopLevel {
     for (PptTopLevel ppt : func_ppts) {
       List<PptTopLevel> this_pp = new ArrayList<PptTopLevel>();
       pp.put(ppt, this_pp);
-      @SuppressWarnings("nullness") // postdoms contains every PptTopLevel
+      @SuppressWarnings("nullness") // map: postdoms contains every PptTopLevel
       /*@NonNull*/ List<PptTopLevel> ppt_postdoms = postdoms.get(ppt);
       for (PptTopLevel candidate : ppt_postdoms) {
-        @SuppressWarnings("nullness") // postdoms contains every PptTopLevel
+        @SuppressWarnings("nullness") // map: postdoms contains every PptTopLevel
         /*@NonNull*/ List<PptTopLevel> candidate_predoms = predoms.get(candidate);
         if (candidate_predoms.contains(ppt)) {
           this_pp.add(candidate);
@@ -677,7 +677,7 @@ public class PptCombined extends PptTopLevel {
     // in each one's pp entry.
     PpSizeComparator ppComparator = new PpSizeComparator(pp);
     for (PptTopLevel ppt : func_ppts) {
-      @SuppressWarnings("nullness") // all func_ppts are in pp
+      @SuppressWarnings("nullness") // map: all func_ppts are in pp
       /*@NonNull*/ List<PptTopLevel> pp_elt = pp.get(ppt);
       Collections.sort(pp_elt, ppComparator);
     }
@@ -687,7 +687,7 @@ public class PptCombined extends PptTopLevel {
     // Make the combined program points.
     Map<PptTopLevel,PptCombined> trigger_comb = new LinkedHashMap<PptTopLevel, PptCombined>();
     for (PptTopLevel ppt : func_ppts) {
-      @SuppressWarnings("nullness") // pp contains all elements of func_ppts
+      @SuppressWarnings("nullness") // map: pp contains all elements of func_ppts
       /*@NonNull*/ List<PptTopLevel> this_pp = pp.get(ppt);
       if (this_pp.get(this_pp.size()-1) == ppt) {
         @SuppressWarnings("nullness") // map: predoms contains ppt
@@ -701,7 +701,7 @@ public class PptCombined extends PptTopLevel {
 
     // Actually do the work of side-effecting the ppts.
     for (PptTopLevel ppt : func_ppts) {
-      @SuppressWarnings("nullness") // pp contains all elements of func_ppts
+      @SuppressWarnings("nullness") // map: pp contains all elements of func_ppts
       /*@NonNull*/ List<PptTopLevel> this_pp = pp.get(ppt);
       PptTopLevel this_trigger = this_pp.get(this_pp.size()-1);
 
@@ -724,9 +724,9 @@ public class PptCombined extends PptTopLevel {
     public int compare(PptTopLevel ppt1, PptTopLevel ppt2) {
       if (ppt1 == ppt2)
         return 0;
-      @SuppressWarnings("nullness") // map key
+      @SuppressWarnings("nullness") // map
       /*@NonNull*/ List<PptTopLevel> list1 = pp.get(ppt1);
-      @SuppressWarnings("nullness") // map key
+      @SuppressWarnings("nullness") // map
       /*@NonNull*/ List<PptTopLevel> list2 = pp.get(ppt2);
       int len1 = list1.size();
       int len2 = list2.size();
@@ -893,7 +893,7 @@ public class PptCombined extends PptTopLevel {
       String succs = "";
       if (ppt.ppt_successors != null) {
         for (String succ : ppt.ppt_successors) {
-          @SuppressWarnings("nullness") // map key
+          @SuppressWarnings("nullness") // map
           /*@NonNull*/ PptTopLevel ppt_succ = Daikon.all_ppts.get (succ);
           if (succs == "")      // "interned"
             succs = bb_short_name (ppt_succ);

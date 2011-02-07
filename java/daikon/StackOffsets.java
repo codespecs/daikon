@@ -121,7 +121,7 @@ public class StackOffsets {
 
       // Find the StackInfo for this function
       String function_id = ppt.function_id;
-      @SuppressWarnings("nullness") // Map.get: ppt.function_id is a key in all_ppts
+      @SuppressWarnings("nullness") // map: ppt.function_id is a key in all_ppts
       /*@NonNull*/ PptTopLevel func_ppt = all_ppts.get(function_id);
       StackInfo si = stack_info_map.get (func_ppt);
       if (si == null) {
@@ -148,7 +148,7 @@ public class StackOffsets {
       = new LinkedHashMap<PptTopLevel,List<PptTopLevel>>();
     for (Iterator<PptTopLevel> ii = all_ppts.pptIterator(); ii.hasNext(); ) {
       PptTopLevel ppt = ii.next();
-      @SuppressWarnings("nullness") // Map.get: ppt.function_id is a key in all_ppts
+      @SuppressWarnings("nullness") // map: ppt.function_id is a key in all_ppts
       /*@NonNull*/ PptTopLevel func = all_ppts.get(ppt.function_id);
       List<PptTopLevel> bbs = func_map.get (func);
       if (bbs == null) {
@@ -171,7 +171,7 @@ public class StackOffsets {
           : prev.name() + "  not adjacent to " + bb.name();
         if (bb.ppt_successors != null) {
           for (String succ : bb.ppt_successors) {
-            @SuppressWarnings("nullness") // Map.get: successor is a Ppt
+            @SuppressWarnings("nullness") // map: successor is a Ppt
             /*@NonNull*/ PptTopLevel ppt_succ = all_ppts.get (succ);
             System.out.printf ("%04X ", ppt_succ.bb_offset() & 0xFFFF);
             assert ppt_succ.function_id != null && ppt_succ.function_id.equals (ppt.function_id);

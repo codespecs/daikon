@@ -450,7 +450,7 @@ public class PptSplitter implements Serializable {
     for (Invariant[] invs : exclusive_invs_vec) {
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (con_invs[jj] == null) {
-          @SuppressWarnings("nullness") // Map.get
+          @SuppressWarnings("nullness") // map
           /*@NonNull*/ Invariant orig = orig_invs.get (invs[jj]);
           if ((orig.isObvious() == null) && !orig.is_ni_suppressed())
             con_invs[jj] = invs[jj];
@@ -647,9 +647,9 @@ public class PptSplitter implements Serializable {
     assert predicate != null;
     assert consequent != null;
 
-    @SuppressWarnings("nullness") // Map.get: method precondition
+    @SuppressWarnings("nullness") // map: method precondition
     /*@NonNull*/ Invariant orig_pred = orig_invs.get (predicate);
-    @SuppressWarnings("nullness") // Map.get: method precondition
+    @SuppressWarnings("nullness") // map: method precondition
     /*@NonNull*/ Invariant orig_cons = orig_invs.get (consequent);
     assert orig_pred != null;
     assert orig_cons != null;

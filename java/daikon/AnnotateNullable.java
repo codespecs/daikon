@@ -131,7 +131,7 @@ public class AnnotateNullable {
     for (Iterator<PptTopLevel> ii = ppts.pptIterator(); ii.hasNext(); ) {
       PptTopLevel ppt = ii.next();
       if (ppt.is_class()) {
-        @SuppressWarnings("nullness") // Map.get: retrieve class name from class Ppt name
+        @SuppressWarnings("nullness") // map: retrieve class name from class Ppt name
         /*@NonNull*/ List<PptTopLevel> static_methods
           = class_map.get (ppt.name().replace (":::CLASS", ""));
         int child_cnt = 0;
@@ -247,7 +247,7 @@ public class AnnotateNullable {
     } else {
       String classname = object_ppt.ppt_name.getFullClassName();
       assert classname != null;
-      @SuppressWarnings("nullness") // Map.get: class_map has entry per classname
+      @SuppressWarnings("nullness") // map: class_map has entry per classname
       /*@NonNull*/ List<PptTopLevel> static_methods = class_map.get (classname);
       assert static_methods != null : classname;
       for (PptTopLevel child : static_methods)

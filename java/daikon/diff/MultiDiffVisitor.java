@@ -129,7 +129,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             String key = st.nextToken(); // a Ppt name
             String data = st.nextToken();
             try {
-                @SuppressWarnings("nullness") // Map.get
+                @SuppressWarnings("nullness") // map
                 /*@NonNull*/ ArrayList<String> formatAndFrequencyList = lastMap.get(key);
                 formatAndFrequencyList.add (data);
             } catch (Exception e) {System.out.println (key + " error in MultiDiffVisitor");}
@@ -189,7 +189,7 @@ public class MultiDiffVisitor extends PrintNullDiffVisitor {
             String key = st.nextToken();
             String data = st.nextToken();
             try {
-                @SuppressWarnings("nullness") // Map.get
+                @SuppressWarnings("nullness") // map
                 /*@NonNull*/ ArrayList<String> formatAndFrequencyList = lastMap.get(key);
                 formatAndFrequencyList.add (data);
             } catch (Exception e) { out.println (key + " error in MultiDiffVisitor");}

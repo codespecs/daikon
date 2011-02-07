@@ -535,7 +535,7 @@ public class LogicalCompare {
           }
           formula = formula.trim();
           comment = comment.trim();
-          @SuppressWarnings("nullness") // Map.get: on previous loop iteration, this key was added to map
+          @SuppressWarnings("nullness") // map: on previous loop iteration, this key was added to map
           /*@NonNull*/ Vector<Lemma> assumption_vec = extra_assumptions.get(ppt_name);
           assumption_vec.add(new Lemma(comment, formula));
         } else {
@@ -750,7 +750,7 @@ public class LogicalCompare {
       Set<String> common_names = new TreeSet<String>();
 
       for (String name : app_ppt_names) {
-        @SuppressWarnings("nullness") // Map.get: iterating over keyset
+        @SuppressWarnings("nullness") // map: iterating over keyset
         /*@NonNull*/ PptTopLevel app_ppt = app_ppts.get(name);
 
         if (!app_ppt.ppt_name.isEnterPoint()) {
@@ -769,14 +769,14 @@ public class LogicalCompare {
 
       for (String name : common_names) {
         System.out.println("Looking at " + name);
-        @SuppressWarnings("nullness") // Map.get: iterating over subset of keySet
+        @SuppressWarnings("nullness") // map: iterating over subset of keySet
         /*@NonNull*/ PptTopLevel app_enter_ppt = app_ppts.get(name);
-        @SuppressWarnings("nullness") // Map.get: iterating over subset of keySet
+        @SuppressWarnings("nullness") // map: iterating over subset of keySet
         /*@NonNull*/ PptTopLevel test_enter_ppt = test_ppts.get(name);
-        @SuppressWarnings("nullness") // Map.get: exit should be in map if enter is
+        @SuppressWarnings("nullness") // map: exit should be in map if enter is
         /*@NonNull*/ PptTopLevel app_exit_ppt =
           app_ppts.get(app_enter_ppt.ppt_name.makeExit());
-        @SuppressWarnings("nullness") // Map.get: exit should be in map if enter is
+        @SuppressWarnings("nullness") // map: exit should be in map if enter is
         /*@NonNull*/ PptTopLevel test_exit_ppt =
           test_ppts.get(test_enter_ppt.ppt_name.makeExit());
 

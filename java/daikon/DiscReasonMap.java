@@ -150,7 +150,7 @@ public final class DiscReasonMap {
   // with a set of vars at a ppt.  Only called when we know ppt has at
   // least 1 DiscardInfo associated with it.
   private static List<DiscardInfo> all_vars_tied_from_ppt(String ppt) {
-    @SuppressWarnings("nullness") // Map.get:  method precondition
+    @SuppressWarnings("nullness") // map:  method precondition
     /*@NonNull*/ HashMap<String,List<DiscardInfo>> vars_map = the_map.get(ppt);
     assert vars_map != null;
 
