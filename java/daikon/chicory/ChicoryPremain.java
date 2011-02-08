@@ -168,13 +168,13 @@ public class ChicoryPremain {
       }
     catch (FileNotFoundException e)
       {
-        System.err.printf("%nCould not find purity file %s = %s%n", purityFileName, purityFile);
+        System.err.printf("%nCould not find purity file %s = %s%n", purityFileName, purityFile.getAbsolutePath());
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       }
     catch (IOException e)
       {
-        throw new Error("Problem reading purity file " + purityFileName + " = " + purityFile, e);
+	  throw new Error("Problem reading purity file " + purityFileName + " = " + purityFile.getAbsolutePath(), e);
       }
 
     if (Chicory.verbose)
@@ -189,7 +189,7 @@ public class ChicoryPremain {
           }
         catch (IOException e)
           {
-            throw new Error("Error reading file " + purityFileName + " = " + purityFile, e);
+            throw new Error("Error reading file " + purityFileName + " = " + purityFile.getAbsolutePath(), e);
           }
 
         if (line != null) {
