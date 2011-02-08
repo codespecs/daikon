@@ -27,7 +27,7 @@ import daikon.inv.Invariant;    // for emptyInvList
 // functions such as num_vars() and var_info_iterator().
 
 // The common interface for all Ppt objects.
-@UsesObjectEquals
+/*@UsesObjectEquals*/
 public abstract class Ppt
   implements Serializable
 {

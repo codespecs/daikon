@@ -1169,7 +1169,7 @@ public final class FileIO {
    *   method read_data_trace_record when it reads a record.
    * </ol>
    **/
-  @UsesObjectEquals
+  /*@UsesObjectEquals*/
   public static class ParseState {
 
     //
