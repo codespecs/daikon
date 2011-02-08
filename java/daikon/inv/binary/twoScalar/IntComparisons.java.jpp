@@ -1014,8 +1014,10 @@ public final class INTEQUAL
       return (null);
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
       return (null);
-    SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
-    SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
+    @SuppressWarnings("nullness") // checker bug in flow
+    @NonNull SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
+    @SuppressWarnings("nullness") // checker bug in flow
+    @NonNull SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
     if  (der1.index_shift != der2.index_shift)
       return (null);
 
@@ -1049,6 +1051,8 @@ public final class INTEQUAL
     VarInfo v2 = vis[1];
     if (!v2.isDerived() || !(v2.derived instanceof SequenceLength))
       return (null);
+    assert v1.derived != null : "@SuppressWarnings(nullness): checker bug: flow";
+    assert v2.derived != null : "@SuppressWarnings(nullness): checker bug: flow";
     if (!v1.derived.isSameFormula (v2.derived))
       return (null);
 
@@ -1080,8 +1084,10 @@ public final class INTEQUAL
       return (null);
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
       return (null);
-    SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
-    SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
+    @SuppressWarnings("nullness") // checker bug: flow
+    @NonNull SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
+    @SuppressWarnings("nullness") // checker bug: flow
+    @NonNull SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
 
     // The sequence vars must be equal (or the same)
     if (!ppt.parent.is_equal (der1.seqvar().canonicalRep(),

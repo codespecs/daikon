@@ -2089,6 +2089,7 @@ public final class Daikon {
 
     // Create the initial equality sets
     ppt.equality_view = new PptSliceEquality(ppt);
+    assert ppt.equality_view != null : "@SuppressWarnings(nullness): checker bug in flow";
     ppt.equality_view.instantiate_invariants();
   }
 

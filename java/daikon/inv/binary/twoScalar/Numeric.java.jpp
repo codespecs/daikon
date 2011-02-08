@@ -367,8 +367,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSEQUENCE))
       return (null);
 
-    SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
-    SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
+    @SuppressWarnings("nullness") // checker bug: flow
+    @NonNull SEQ_SUBSEQUENCE der1 = (SEQ_SUBSEQUENCE) v1.derived;
+    @SuppressWarnings("nullness") // checker bug: flow
+    @NonNull SEQ_SUBSEQUENCE der2 = (SEQ_SUBSEQUENCE) v2.derived;
 
     // Both of the indices must be either from the start or up to the end.
     // It is not necessary to check that they match in any other way since
@@ -404,8 +406,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
     if (!v2.isDerived() || !(v2.derived instanceof SEQ_SUBSCRIPT))
       return (null);
 
-    SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
-    SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
+    @SuppressWarnings("nullness") // checker bug: flow
+    @NonNull SEQ_SUBSCRIPT der1 = (SEQ_SUBSCRIPT) v1.derived;
+    @SuppressWarnings("nullness") // checker bug: flow
+    @NonNull SEQ_SUBSCRIPT der2 = (SEQ_SUBSCRIPT) v2.derived;
 
     // Make sure the shifts match
     if (der1.index_shift != der2.index_shift)

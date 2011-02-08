@@ -1416,7 +1416,8 @@ public final class ONEOFSCALAR
     // just apply to all arrays.
     if (v.isDerived() && (v.derived instanceof SequenceLength)
       && (num_elts == 1) && (elts[0] == 0)) {
-      VarInfo[] bv = v.derived.getBases();
+      @SuppressWarnings("nullness") // checker bug: flow
+      @NonNull VarInfo[] bv = v.derived.getBases();
       if (!bv[0].isDerived()) {
         if (logOn())
           dlog.log ("isObviousDynamically '" + v.name()
@@ -1426,7 +1427,8 @@ public final class ONEOFSCALAR
     }
 
     if (v.isDerived() && (v.derived instanceof SequenceLength)) {
-      SequenceLength sl = (SequenceLength) v.derived;
+      @SuppressWarnings("nullness") // checker bug: flow
+      @NonNull SequenceLength sl = (SequenceLength) v.derived;
       if (sl.shift != 0) {
         String discardString = v.name() + " is derived with shift!=0 (shift==" + sl.shift + ")";
         return new DiscardInfo(this, DiscardCode.obvious, discardString);

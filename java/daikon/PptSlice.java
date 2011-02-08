@@ -407,6 +407,7 @@ public abstract class PptSlice
    * occur if the invariant exists in this slice, is suppressed,
    * or is obvious statically.
    */
+  @SuppressWarnings("nullness") // checker bug with flow and static fields
   public boolean is_inv_true (Invariant inv) {
 
     if (contains_inv_exact (inv)) {

@@ -348,6 +348,7 @@ public class PptCombined extends PptTopLevel {
    * in this context).  Splitters are also not created.  Equality ses are
    * always setup (since this is always a leaf in the hierarchy)
    **/
+  @SuppressWarnings("nullness") // checker bug with flow
   private void init() {
     if (!Derivation.dkconfig_disable_derived_variables) {
       create_derived_variables();
@@ -409,6 +410,7 @@ public class PptCombined extends PptTopLevel {
     // add the derived variables
     while (index < vals_array_size) {
       assert (var_infos[index].isDerived());
+      @SuppressWarnings("nullness") // checker bug in flow
       ValueAndModified vm =
         var_infos[index].derived.computeValueAndModified(partial_vt);
       vals[index] = vm.value;

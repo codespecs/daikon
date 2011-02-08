@@ -440,6 +440,7 @@ public abstract class DaikonVariableInfo
      * attach new nodes as children of this node.
      * @param type the class whose fields should all be added to this node
      */
+    @NonNullOnEntry("cinfo.clazz")
     protected void addClassVars(ClassInfo cinfo, boolean dontPrintInstanceVars,
                                 Class<?> type, String offset, int depth) {
 

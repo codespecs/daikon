@@ -181,6 +181,7 @@ public class NISuppressee {
    * for each slot.  It is used for for debug printing only.
    * @return a list describing all of the invariants.
    */
+  @NonNullOnEntry("ppt.equality_view")
   public List<NIS.SupInv> find_all (VarInfo[] vis, PptTopLevel ppt,
                                     /*@Nullable*/ Invariant /*@Nullable*/ [] cinvs) {
 

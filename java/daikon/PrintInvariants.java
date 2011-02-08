@@ -1133,8 +1133,10 @@ public final class PrintInvariants {
       }
     }
     finally_print_the_invariants(accepted_invariants, out, ppt);
-    if (false && ppt.constants != null)
+    if (false && ppt.constants != null) {
+      assert ppt.constants != null : "@SuppressWarnings(nullness) checker bug: flow";
       ppt.constants.print_missing (out);
+    }
   }
 
   /**
