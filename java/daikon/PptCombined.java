@@ -512,7 +512,7 @@ public class PptCombined extends PptTopLevel {
 
       } else if (redundantVariables != null
                  && redundantVariables.containsKey(vi.name())) {
-        @SuppressWarnings("nullness") // map: just called containsKey, and name() is pure (checker bug???)
+        @SuppressWarnings("nullness") // map: just called containsKey, and VarInfo.name() is pure (checker bug???)
         /*@NonNull*/ String rleader = redundantVariables.get(vi.name());
 
         // Variable is considered redundant. Don't add it to var_info
@@ -726,9 +726,9 @@ public class PptCombined extends PptTopLevel {
     public int compare(PptTopLevel ppt1, PptTopLevel ppt2) {
       if (ppt1 == ppt2)
         return 0;
-      @SuppressWarnings("nullness") // map
+      @SuppressWarnings("nullness") // application invariant: only called on values that are keys for the map
       /*@NonNull*/ List<PptTopLevel> list1 = pp.get(ppt1);
-      @SuppressWarnings("nullness") // map
+      @SuppressWarnings("nullness") // application invariant: only called on values that are keys for the map
       /*@NonNull*/ List<PptTopLevel> list2 = pp.get(ppt2);
       int len1 = list1.size();
       int len2 = list2.size();
