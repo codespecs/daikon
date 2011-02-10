@@ -342,7 +342,7 @@ public final class Daikon {
 
   public static /*@LazyNonNull*/ File server_dir = null; //YOAV: the directory from which we read the dtrace files
 
-  // A pptMap which contains all the Program Points
+  // A PptMap (mapping String -> PptTopLevel) that contains all the Program Points
   public static PptMap all_ppts;
 
   /** current invariant (used for debugging) **/
