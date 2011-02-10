@@ -723,13 +723,12 @@ public class PptCombined extends PptTopLevel {
     public PpSizeComparator(Map<PptTopLevel,List<PptTopLevel>> pp) {
       this.pp = pp;
     }
-    public int compare(PptTopLevel ppt1, PptTopLevel ppt2) {
+    @SuppressWarnings("keyfor") // application invariant:  about what values will be passed to compare
+    public int compare(@KeyFor("pp") PptTopLevel ppt1, @KeyFor("pp") PptTopLevel ppt2) {
       if (ppt1 == ppt2)
         return 0;
-      @SuppressWarnings("nullness") // map
-      /*@NonNull*/ List<PptTopLevel> list1 = pp.get(ppt1);
-      @SuppressWarnings("nullness") // map
-      /*@NonNull*/ List<PptTopLevel> list2 = pp.get(ppt2);
+      List<PptTopLevel> list1 = pp.get(ppt1);
+      List<PptTopLevel> list2 = pp.get(ppt2);
       int len1 = list1.size();
       int len2 = list2.size();
       return len1 - len2;
