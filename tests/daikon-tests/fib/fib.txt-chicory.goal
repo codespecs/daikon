@@ -1,5 +1,5 @@
 // Declarations for misc.Fib
-// Declarations written Thu Oct 15 13:10:46 EDT 2009
+// Declarations written Thu Jan 27 02:26:15 PST 2011
 
 decl-version 2.0
 var-comparability none
@@ -317,7 +317,7 @@ misc.Fib.c
 0
 1
 args
-16713087
+10284430
 1
 args.getClass()
 "java.lang.String[]"
@@ -862,7 +862,7 @@ misc.Fib.c
 17711
 1
 args
-16713087
+10284430
 1
 args.getClass()
 "java.lang.String[]"
