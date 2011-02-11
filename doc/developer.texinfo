@@ -1746,6 +1746,8 @@ StackAr.txt-merge-jml.goal
 @end example
 
 If you omit some @file{.goal} files, then the related tests will not be run.
+(If you can't figure out how to ensure the tests are not run, it may be
+easier to just add the additional @file{.goal} files.)
 
 You can start out with the @file{.goal} files empty.
 Execute @samp{make diffs}, to produce output; the tests will fail
