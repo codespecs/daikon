@@ -4,7 +4,7 @@
 
 MAIN_CLASS:=misc.PurityTester
 
-CHICORY_USER_FLAGS = --purity-file=${DAIKONDIR}/tests/daikon-tests/Purity/Purity.pure
+CHICORY_USER_FLAGS = --purity-file=${DAIKONDIR}/tests/daikon-tests/purity/purity.pure
 
 include ../../Makefile.common
 

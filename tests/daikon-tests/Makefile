@@ -49,7 +49,7 @@ large-%: # do-Flex-% do-JML-%
 # Doesn't work in V3 as of 7/26/2003
 taoxie-%: do-IntStackRetObjectArray-% do-Library-% do-UBStack-%
 	@echo ${HR}
-special-cases-%: do-encapsulate_downcast-% do-compar-% do-precedence-% do-fib-% do-hanoi-% do-param-% do-suppress01-% do-suppress02-% do-StaticInteresting-% do-pine_mdiep-% #do-ioa-%
+special-cases-%: do-encapsulate_downcast-% do-compar-% do-precedence-% do-fib-% do-hanoi-% do-param-% do-suppress01-% do-suppress02-% do-StaticInteresting-% do-pine_mdiep-% do-purity-% #do-ioa-%
 	@echo ${HR}
 siemens-%: do-print_tokens-% do-print_tokens2-% do-replace-% do-schedule-% do-schedule2-% do-tcas-% do-tot_info-% do-space-%
 	@echo ${HR}
