@@ -1,0 +1,8 @@
+public int misc.Purity.getValue()
+public int misc.Purity.getShift()
+public boolean misc.Purity.isHeavy()
+public java.lang.Number misc.Purity.getNum()
+public java.lang.Integer misc.Purity.getJWrap()
+public int misc.Purity.sum(java.lang.Number)
+public int misc.Purity.scale(int)
+public int misc.Purity.retrieve(java.util.List)

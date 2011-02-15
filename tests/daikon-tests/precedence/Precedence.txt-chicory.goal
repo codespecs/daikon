@@ -1,5 +1,5 @@
 // Declarations for misc.Precedence
-// Declarations written Thu Oct 15 13:10:19 EDT 2009
+// Declarations written Thu Jan 27 02:25:59 PST 2011
 
 decl-version 2.0
 var-comparability none
@@ -159,7 +159,7 @@ misc.Precedence.main(java.lang.String[]):::ENTER
 this_invocation_nonce
 0
 args
-19330907
+29791654
 1
 args.getClass()
 "java.lang.String[]"
@@ -179,7 +179,7 @@ misc.Precedence.Precedence():::EXIT3
 this_invocation_nonce
 1
 this
-20559758
+9097070
 1
 this.i
 0
@@ -189,7 +189,7 @@ misc.Precedence.lets_calculate(int):::ENTER
 this_invocation_nonce
 2
 this
-20559758
+9097070
 1
 this.i
 10
@@ -202,7 +202,7 @@ misc.Precedence.lets_calculate(int):::EXIT18
 this_invocation_nonce
 2
 this
-20559758
+9097070
 1
 this.i
 2
@@ -218,7 +218,7 @@ misc.Precedence.main(java.lang.String[]):::EXIT10
 this_invocation_nonce
 0
 args
-19330907
+29791654
 1
 args.getClass()
 "java.lang.String[]"
