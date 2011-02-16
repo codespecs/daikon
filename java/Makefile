@@ -536,7 +536,8 @@ dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
 	install -d $(DCOMP_RT)
-	$(JAVA) -Xmx1590m daikon.dcomp.BuildJDK "$(ORIG_RT)" $(DCOMP_RT)
+# was 1590
+	$(JAVA) -Xmx1500m daikon.dcomp.BuildJDK "$(ORIG_RT)" $(DCOMP_RT)
 	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 dyncomp-jdk-no-primitives dcomp-jdk-no-primitives  : dcomp_premain.jar
