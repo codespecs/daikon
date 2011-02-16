@@ -724,7 +724,7 @@ public class PptCombined extends PptTopLevel {
       this.pp = pp;
     }
     @SuppressWarnings("keyfor") // application invariant:  about what values will be passed to compare
-    public int compare(@KeyFor("pp") PptTopLevel ppt1, @KeyFor("pp") PptTopLevel ppt2) {
+    public int compare(/*@KeyFor("pp")*/ PptTopLevel ppt1, /*@KeyFor("pp")*/ PptTopLevel ppt2) {
       if (ppt1 == ppt2)
         return 0;
       List<PptTopLevel> list1 = pp.get(ppt1);
