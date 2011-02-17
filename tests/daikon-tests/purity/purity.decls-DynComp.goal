@@ -1,0 +1,1011 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+misc.Purity:::CLASS
+
+DECLARE
+misc.Purity:::OBJECT
+this
+misc.Purity # isParam=true
+hashcode
+2
+this.value
+int # declaringClassPackageName=misc, 
+int
+7
+this.shift
+int # declaringClassPackageName=misc, 
+int
+7
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+3
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+4
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+5
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+6
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+misc.Purity.Purity(int, int):::ENTER
+value
+int # isParam=true
+int
+2
+shift
+int # isParam=true
+int
+2
+
+DECLARE
+misc.Purity.Purity(int, int):::EXIT24
+this
+misc.Purity # isParam=true
+hashcode
+3
+this.value
+int # declaringClassPackageName=misc, 
+int
+2
+this.shift
+int # declaringClassPackageName=misc, 
+int
+2
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+4
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+5
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+6
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+7
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+value
+int # isParam=true
+int
+2
+shift
+int # isParam=true
+int
+2
+
+
+DECLARE
+misc.Purity.getValue():::ENTER
+this
+misc.Purity # isParam=true
+hashcode
+2
+this.value
+int # declaringClassPackageName=misc, 
+int
+7
+this.shift
+int # declaringClassPackageName=misc, 
+int
+7
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+3
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+4
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+5
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+6
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.Purity.getValue():::EXIT27
+this
+misc.Purity # isParam=true
+hashcode
+3
+this.value
+int # declaringClassPackageName=misc, 
+int
+2
+this.shift
+int # declaringClassPackageName=misc, 
+int
+2
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+4
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+5
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+6
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+7
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+2
+
+
+DECLARE
+misc.Purity.getShift():::ENTER
+this
+misc.Purity # isParam=true
+hashcode
+2
+this.value
+int # declaringClassPackageName=misc, 
+int
+7
+this.shift
+int # declaringClassPackageName=misc, 
+int
+7
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+3
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+4
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+5
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+6
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.Purity.getShift():::EXIT31
+this
+misc.Purity # isParam=true
+hashcode
+3
+this.value
+int # declaringClassPackageName=misc, 
+int
+2
+this.shift
+int # declaringClassPackageName=misc, 
+int
+2
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+4
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+5
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+6
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+7
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+2
+
+
+DECLARE
+misc.Purity.isHeavy():::ENTER
+this
+misc.Purity # isParam=true
+hashcode
+2
+this.value
+int # declaringClassPackageName=misc, 
+int
+7
+this.shift
+int # declaringClassPackageName=misc, 
+int
+7
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+3
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+4
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+5
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+6
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.Purity.isHeavy():::EXIT35
+this
+misc.Purity # isParam=true
+hashcode
+3
+this.value
+int # declaringClassPackageName=misc, 
+int
+7
+this.shift
+int # declaringClassPackageName=misc, 
+int
+7
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+2
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+4
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+5
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+6
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+2
+
+
+DECLARE
+misc.Purity.getNum():::ENTER
+this
+misc.Purity # isParam=true
+hashcode
+2
+this.value
+int # declaringClassPackageName=misc, 
+int
+7
+this.shift
+int # declaringClassPackageName=misc, 
+int
+7
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+3
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+4
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+5
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+6
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.Purity.getNum():::EXIT39
+this
+misc.Purity # isParam=true
+hashcode
+3
+this.value
+int # declaringClassPackageName=misc, 
+int
+8
+this.shift
+int # declaringClassPackageName=misc, 
+int
+8
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+4
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+5
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+6
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+7
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+java.lang.Number
+hashcode
+2
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+misc.Purity.getJWrap():::ENTER
+this
+misc.Purity # isParam=true
+hashcode
+2
+this.value
+int # declaringClassPackageName=misc, 
+int
+7
+this.shift
+int # declaringClassPackageName=misc, 
+int
+7
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+3
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+4
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+5
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+6
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.Purity.getJWrap():::EXIT43
+this
+misc.Purity # isParam=true
+hashcode
+3
+this.value
+int # declaringClassPackageName=misc, 
+int
+8
+this.shift
+int # declaringClassPackageName=misc, 
+int
+8
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+4
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+5
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+6
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+7
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+java.lang.Integer
+hashcode
+2
+
+
+DECLARE
+misc.Purity.scale(int):::ENTER
+this
+misc.Purity # isParam=true
+hashcode
+3
+this.value
+int # declaringClassPackageName=misc, 
+int
+2
+this.shift
+int # declaringClassPackageName=misc, 
+int
+2
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+4
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+5
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+6
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+7
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+scale
+int # isParam=true
+int
+2
+
+DECLARE
+misc.Purity.scale(int):::EXIT47
+this
+misc.Purity # isParam=true
+hashcode
+3
+this.value
+int # declaringClassPackageName=misc, 
+int
+2
+this.shift
+int # declaringClassPackageName=misc, 
+int
+2
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+4
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+5
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+6
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+7
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+scale
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+
+DECLARE
+misc.Purity.sum(java.lang.Number):::ENTER
+this
+misc.Purity # isParam=true
+hashcode
+3
+this.value
+int # declaringClassPackageName=misc, 
+int
+8
+this.shift
+int # declaringClassPackageName=misc, 
+int
+8
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+4
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+5
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+6
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+7
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+n
+java.lang.Number # isParam=true
+hashcode
+2
+n.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.Purity.sum(java.lang.Number):::EXIT51
+this
+misc.Purity # isParam=true
+hashcode
+4
+this.value
+int # declaringClassPackageName=misc, 
+int
+3
+this.shift
+int # declaringClassPackageName=misc, 
+int
+3
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+5
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+6
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+7
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+8
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+n
+java.lang.Number # isParam=true
+hashcode
+2
+n.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+
+DECLARE
+misc.Purity.retrieve(java.util.List):::ENTER
+this
+misc.Purity # isParam=true
+hashcode
+3
+this.value
+int # declaringClassPackageName=misc, 
+int
+8
+this.shift
+int # declaringClassPackageName=misc, 
+int
+8
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+4
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+5
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+6
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+7
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+l
+java.util.List # isParam=true
+hashcode
+2
+l.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.Purity.retrieve(java.util.List):::EXIT55
+this
+misc.Purity # isParam=true
+hashcode
+4
+this.value
+int # declaringClassPackageName=misc, 
+int
+9
+this.shift
+int # declaringClassPackageName=misc, 
+int
+9
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+5
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+6
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+7
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+8
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+l
+java.util.List # isParam=true
+hashcode
+2
+l.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+
+DECLARE
+misc.Purity.equals(java.lang.Object):::ENTER
+this
+misc.Purity # isParam=true
+hashcode
+3
+this.value
+int # declaringClassPackageName=misc, 
+int
+8
+this.shift
+int # declaringClassPackageName=misc, 
+int
+8
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+4
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+5
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+6
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+7
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.Purity.equals(java.lang.Object):::EXIT1
+this
+misc.Purity # isParam=true
+hashcode
+4
+this.value
+int # declaringClassPackageName=misc, 
+int
+9
+this.shift
+int # declaringClassPackageName=misc, 
+int
+9
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+5
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+6
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+7
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+8
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+misc.Purity.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+misc.Purity # isParam=true
+hashcode
+3
+this.value
+int # declaringClassPackageName=misc, 
+int
+8
+this.shift
+int # declaringClassPackageName=misc, 
+int
+8
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+4
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+5
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+6
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+7
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+misc.Purity.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+misc.Purity # isParam=true
+hashcode
+4
+this.value
+int # declaringClassPackageName=misc, 
+int
+9
+this.shift
+int # declaringClassPackageName=misc, 
+int
+9
+this.heavy
+boolean # declaringClassPackageName=misc, 
+boolean
+5
+this.list1
+java.util.LinkedList # declaringClassPackageName=misc, 
+hashcode
+6
+this.list1[..]
+java.util.LinkedList
+hashcode[]
+7
+this.list1[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.list2
+java.util.List # declaringClassPackageName=misc, 
+hashcode
+8
+this.list2.getClass()
+java.lang.Class
+java.lang.String
+1
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
