@@ -511,7 +511,7 @@ public class DTraceWriter extends DaikonWriter
     /**
      * Get the type of val, removing any PrimitiveWrapper if it exists
      * For example, if we execute removeWRappers(val, boolean.class, true)
-     * and (val instanceof Runtime.PrimitiveWrapper), then the method returns
+     * where (val instanceof Runtime.PrimitiveWrapper), then the method returns
      * boolean.class
      *
      * @param val The object whose type we are examining
