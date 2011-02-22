@@ -575,7 +575,7 @@ public abstract class DaikonVariableInfo
             {
                 //Pure methods with no parameters
                 for (MethodInfo meth : typeInfo.method_infos)
-                {	
+                {    
                     if (meth.isPure() && meth.arg_names.length == 0)
                     {
                         StringBuffer buf = new StringBuffer();
@@ -613,7 +613,7 @@ public abstract class DaikonVariableInfo
                             {
                                 sibClass = UtilMDE.classForName(sibType);
                             } catch (Exception e)
-                            {	
+                            {    
                             }
 
                             // Add node if the class variable can be used as the pure method's parameter
@@ -634,7 +634,7 @@ public abstract class DaikonVariableInfo
                                                        depth);
                                 debug_vars.exdent();
                             }
-                        }            		
+                        }                    
                     }
                 }
             }
@@ -696,13 +696,17 @@ public abstract class DaikonVariableInfo
         Class<?> type = meth.getReturnType();
         assert type != null;
 
-        String theName = meth.getName() + "(" + args[0].getName();
+        String theName = meth.getName() + "(";
+        
+        if(args.length > 0) {
+            theName += args[0].getName();
+        }
         
         if (args.length > 1) 
         {
-        	for (int i = 1; i < args.length - 1; i++) {
-        		theName += ", " + args[i].getName();
-        	}
+            for (int i = 1; i < args.length - 1; i++) {
+                theName += ", " + args[i].getName();
+            }
         }
         theName += ")";
 

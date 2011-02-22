@@ -751,8 +751,8 @@ public class Runtime
 
   public static interface PrimitiveWrapper
   {
-	  // returns corresponding java.lang wrapper
-	  public Object getJavaWrapper();
+    // returns corresponding java.lang wrapper
+    public Object getJavaWrapper();
   }
 
   /** wrapper used for boolean arguments **/

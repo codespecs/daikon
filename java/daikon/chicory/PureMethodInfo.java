@@ -28,13 +28,13 @@ public class PureMethodInfo extends DaikonVariableInfo
     
     public PureMethodInfo(String name, MethodInfo methInfo, String typeName, String repTypeName, boolean inArray, DaikonVariableInfo[] args)
     {
-    	super(name, typeName, repTypeName, inArray);
-    	
+        super(name, typeName, repTypeName, inArray);
+
         assert methInfo.isPure() : "Method " + methInfo + " is not pure";
-    	
-    	minfo = methInfo;
-    	
-    	this.args = args;
+
+        minfo = methInfo;
+        
+        this.args = args;
     } 
 
     /**
@@ -76,23 +76,23 @@ public class PureMethodInfo extends DaikonVariableInfo
                     }
                     else
                     {
-                    	Object[] params = new Object[args.length];
-                 	   
-                    	int i = 0;
-                    	
-                    	for (DaikonVariableInfo field : args) 
-                    	{
-                    		if (field.getMyValFromParentVal(parentVal) instanceof Runtime.PrimitiveWrapper) 
-                    		{
-                    			Runtime.PrimitiveWrapper x = (Runtime.PrimitiveWrapper) field.getMyValFromParentVal(parentVal);
-                    			params[i] = x.getJavaWrapper();
-                    		} else 
-                    		{
-                    			params[i] = field.getMyValFromParentVal(parentVal);
-                    		}
-                    		i++;
-                    	}
-                    	
+                        Object[] params = new Object[args.length];
+                        
+                        int i = 0;
+                        
+                        for (DaikonVariableInfo field : args) 
+                        {
+                            if (field.getMyValFromParentVal(parentVal) instanceof Runtime.PrimitiveWrapper) 
+                            {
+                                Runtime.PrimitiveWrapper x = (Runtime.PrimitiveWrapper) field.getMyValFromParentVal(parentVal);
+                                params[i] = x.getJavaWrapper();
+                            } else 
+                            {
+                                params[i] = field.getMyValFromParentVal(parentVal);
+                            }
+                            i++;
+                        }
+                        
                         retList.add(executePureMethod(meth, val, params));
                     }
                 }
@@ -109,24 +109,24 @@ public class PureMethodInfo extends DaikonVariableInfo
             }
             else
             {
-            	Object[] params = new Object[args.length];
-            	   
-            	int i = 0;
-            	
-            	for (DaikonVariableInfo field : args) 
-            	{
-            		if (field.getMyValFromParentVal(parentVal) instanceof Runtime.PrimitiveWrapper)
-            		{
-            			// Convert Chicory primitive wrapper to java.lang's primitive wrapper
-            			Runtime.PrimitiveWrapper x = (Runtime.PrimitiveWrapper) field.getMyValFromParentVal(parentVal);
-            			params[i] = x.getJavaWrapper();
-            		} else 
-            		{
-            			params[i] = field.getMyValFromParentVal(parentVal);
-            		}
-            		i++;
-            	}
-            	
+                Object[] params = new Object[args.length];
+                   
+                int i = 0;
+                
+                for (DaikonVariableInfo field : args) 
+                {
+                    if (field.getMyValFromParentVal(parentVal) instanceof Runtime.PrimitiveWrapper)
+                    {
+                        // Convert Chicory primitive wrapper to java.lang's primitive wrapper
+                        Runtime.PrimitiveWrapper x = (Runtime.PrimitiveWrapper) field.getMyValFromParentVal(parentVal);
+                        params[i] = x.getJavaWrapper();
+                    } else 
+                    {
+                        params[i] = field.getMyValFromParentVal(parentVal);
+                    }
+                    i++;
+                }
+                
                 retVal = executePureMethod(meth, parentVal, params);
             }
 
