@@ -30,13 +30,12 @@ public class PureMethodInfo extends DaikonVariableInfo
     {
     	super(name, typeName, repTypeName, inArray);
     	
-    	assert methInfo.isPure(): "Method " + methInfo + " is not pure";
+        assert methInfo.isPure() : "Method " + methInfo + " is not pure";
     	
     	minfo = methInfo;
     	
     	this.args = args;
-    }
-    
+    } 
 
     /**
      * Invokes this pure method on the given parentVal.
@@ -51,13 +50,12 @@ public class PureMethodInfo extends DaikonVariableInfo
         boolean changedAccess = false;
         Object retVal;
 
-        // we want to access all fields...
+        // we want to access all methods...
         if (!meth.isAccessible())
         {
             changedAccess = true;
             meth.setAccessible(true);
         }
-
         
         if (isArray)
         {
@@ -87,7 +85,7 @@ public class PureMethodInfo extends DaikonVariableInfo
                     		if (field.getMyValFromParentVal(parentVal) instanceof Runtime.PrimitiveWrapper) 
                     		{
                     			Runtime.PrimitiveWrapper x = (Runtime.PrimitiveWrapper) field.getMyValFromParentVal(parentVal);
-                    			params[i] = x.getJavaWrap();
+                    			params[i] = x.getJavaWrapper();
                     		} else 
                     		{
                     			params[i] = field.getMyValFromParentVal(parentVal);
@@ -121,7 +119,7 @@ public class PureMethodInfo extends DaikonVariableInfo
             		{
             			// Convert Chicory primitive wrapper to java.lang's primitive wrapper
             			Runtime.PrimitiveWrapper x = (Runtime.PrimitiveWrapper) field.getMyValFromParentVal(parentVal);
-            			params[i] = x.getJavaWrap();
+            			params[i] = x.getJavaWrapper();
             		} else 
             		{
             			params[i] = field.getMyValFromParentVal(parentVal);
@@ -142,7 +140,7 @@ public class PureMethodInfo extends DaikonVariableInfo
         return retVal;
     }
 
-    private static Object executePureMethod(Method meth, Object objectVal, Object[] argVals)
+    private static Object executePureMethod(Method meth, Object receiverVal, Object[] argVals)
     {
         Object retVal = null;
         try
@@ -152,7 +150,7 @@ public class PureMethodInfo extends DaikonVariableInfo
             // called)
             Runtime.startPure();
 
-            retVal = meth.invoke(objectVal, argVals);
+            retVal = meth.invoke(receiverVal, argVals);
            
             if (meth.getReturnType().isPrimitive())
                 retVal = convertWrapper(retVal);
