@@ -3949,8 +3949,10 @@ switch to specify its name.  For example:
 
 @item --heap-size=@var{max_heap}
 Specifies the maximum size, in bytes, of the memory allocation pool for
-the target program.  The size is specified in the same manner as the
--Xmx switch to java.
+the target program.  Also applies to Daikon, if the @option{--daikon}
+command-line argument is given.
+The size is specified in the same manner as the
+-Xmx switch to java; for example: @option{--heap-size=2048m}.
 
 @end table
 

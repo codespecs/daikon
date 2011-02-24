@@ -55,7 +55,7 @@ public class Chicory {
   public static /*@Nullable*/ Pattern boot_classes = null;
 
   @Option ("Size of the heap for the target program")
-  public static String heap_size = "128M";
+  public static String heap_size = "500m";
 
   @Option ("Print information about each ppt name as it is created")
   public static boolean debug_ppt_names = false;
@@ -451,11 +451,11 @@ public class Chicory {
 
     String cmdstr;
     if (daikon_online) {
-      cmdstr = String.format("java -Xmx500m -cp %s -ea daikon.Daikon %s +",
-                             cp, daikon_args);
+      cmdstr = String.format("java -Xmx%s -cp %s -ea daikon.Daikon %s +",
+                             heap_size, cp, daikon_args);
     } else {
-      cmdstr = String.format("java -Xmx500m -cp %s -ea daikon.Daikon "
-                             + "%s %s/%s", cp, daikon_args, output_dir, dtrace_file);
+      cmdstr = String.format("java -Xmx%s -cp %s -ea daikon.Daikon %s %s/%s",
+                             heap_size, cp, daikon_args, output_dir, dtrace_file);
     }
 
     //System.out.println("daikon command is " + daikon_cmd);
