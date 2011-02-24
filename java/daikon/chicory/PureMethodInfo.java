@@ -75,25 +75,8 @@ public class PureMethodInfo extends DaikonVariableInfo
                         retList.add(NonsensicalObject.getInstance());
                     }
                     else
-                    {
-                        Object[] params = new Object[args.length];
-                        
-                        int i = 0;
-                        
-                        for (DaikonVariableInfo field : args) 
-                        {
-                            if (field.getMyValFromParentVal(parentVal) instanceof Runtime.PrimitiveWrapper) 
-                            {
-                                Runtime.PrimitiveWrapper x = (Runtime.PrimitiveWrapper) field.getMyValFromParentVal(parentVal);
-                                params[i] = x.getJavaWrapper();
-                            } else 
-                            {
-                                params[i] = field.getMyValFromParentVal(parentVal);
-                            }
-                            i++;
-                        }
-                        
-                        retList.add(executePureMethod(meth, val, params));
+                    { 
+                        retList.add(executePureMethod(meth, val, getArgVals(parentVal)));
                     }
                 }
 
@@ -108,26 +91,8 @@ public class PureMethodInfo extends DaikonVariableInfo
                 retVal = NonsensicalObject.getInstance();
             }
             else
-            {
-                Object[] params = new Object[args.length];
-                   
-                int i = 0;
-                
-                for (DaikonVariableInfo field : args) 
-                {
-                    if (field.getMyValFromParentVal(parentVal) instanceof Runtime.PrimitiveWrapper)
-                    {
-                        // Convert Chicory primitive wrapper to java.lang's primitive wrapper
-                        Runtime.PrimitiveWrapper x = (Runtime.PrimitiveWrapper) field.getMyValFromParentVal(parentVal);
-                        params[i] = x.getJavaWrapper();
-                    } else 
-                    {
-                        params[i] = field.getMyValFromParentVal(parentVal);
-                    }
-                    i++;
-                }
-                
-                retVal = executePureMethod(meth, parentVal, params);
+            {   
+                retVal = executePureMethod(meth, parentVal, getArgVals(parentVal));
             }
 
         }
@@ -138,6 +103,31 @@ public class PureMethodInfo extends DaikonVariableInfo
         }
 
         return retVal;
+    }
+    
+    /**
+     * Returns an array corresponding to the current values of this pure method's arguments
+     * based on the given parentVal.
+     */
+    private Object[] getArgVals(Object parentVal)
+    {
+        Object[] params = new Object[args.length];
+        
+    	for(int i = 0; i < args.length; i++) 
+    	{
+    		Object currentVal = args[i].getMyValFromParentVal(parentVal);
+    		
+    		if (currentVal instanceof Runtime.PrimitiveWrapper)
+            {
+                // Convert Chicory primitive wrapper to java.lang's primitive wrapper
+                Runtime.PrimitiveWrapper x = (Runtime.PrimitiveWrapper) currentVal;
+                params[i] = x.getJavaWrapper();
+            } else 
+            {
+                params[i] = currentVal;
+            }
+    	}
+    	return params;
     }
 
     private static Object executePureMethod(Method meth, Object receiverVal, Object[] argVals)

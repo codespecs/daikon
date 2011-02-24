@@ -580,8 +580,8 @@ public abstract class DaikonVariableInfo
                     {
                         StringBuffer buf = new StringBuffer();
                         DaikonVariableInfo newChild = thisInfo.addPureMethodDecl(
-                                cinfo, meth, offset, depth,
-                                buf, new DaikonVariableInfo[] {});
+                                cinfo, meth, new DaikonVariableInfo[] {}, offset,
+                                depth, buf);
                         String newOffset = buf.toString();
                         debug_vars.indent ("Pure method");
                         assert meth.member != null : "@SuppressWarnings(nullness): member of method_infos have .member field"; // fix with dependent type
@@ -612,8 +612,9 @@ public abstract class DaikonVariableInfo
                             try
                             {
                                 sibClass = UtilMDE.classForName(sibType);
-                            } catch (Exception e)
+                            } catch (ClassNotFoundException e)
                             {    
+                            	throw new Error(e);
                             }
 
                             // Add node if the class variable can be used as the pure method's parameter
@@ -622,8 +623,8 @@ public abstract class DaikonVariableInfo
                                 DaikonVariableInfo[] arg = {sib};
                                 StringBuffer buf = new StringBuffer();
                                 DaikonVariableInfo newChild = thisInfo.addPureMethodDecl(
-                                        cinfo, meth, offset, depth,
-                                        buf, arg);
+                                        cinfo, meth, arg, offset, depth,
+                                        buf);
                                 String newOffset = buf.toString();
                                 debug_vars.indent ("Pure method");
                                 assert meth.member != null : "@SuppressWarnings(nullness): member of method_infos have .member field"; // fix with dependent type
@@ -667,12 +668,12 @@ public abstract class DaikonVariableInfo
     
     
     /**
-     * Adds the decl info for a pure method with no parameters.
+     * Adds the decl info for a pure method.
      */
     //TODO factor out shared code with printDeclVar
     protected DaikonVariableInfo addPureMethodDecl(ClassInfo curClass,
-            MethodInfo minfo, String offset, int depth,
-            StringBuffer buf, DaikonVariableInfo[] args)
+            MethodInfo minfo, DaikonVariableInfo[] args, String offset,
+            int depth, StringBuffer buf)
     {
         String arr_str = "";
         if (isArray)
@@ -697,11 +698,9 @@ public abstract class DaikonVariableInfo
         assert type != null;
 
         String theName = meth.getName() + "(";
-        
         if(args.length > 0) {
             theName += args[0].getName();
         }
-        
         if (args.length > 1) 
         {
             for (int i = 1; i < args.length - 1; i++) {
@@ -794,7 +793,7 @@ public abstract class DaikonVariableInfo
                     if (value == null) {
                         isPrimitive = false;
                         String className = field.getDeclaringClass().getName();
-                        // If the class has already been statically initalized, get its hash
+                        // If the class has already been statically initialized, get its hash
                         if (Runtime.isInitialized(className)) {
                             try {
                                 value = Integer.toString(System.identityHashCode(field.get(null)));
@@ -902,7 +901,7 @@ public abstract class DaikonVariableInfo
      */
     protected static boolean shouldAddRuntimeClass(Class<?> type)
     {
-        // For some reason, abstacts seems to be set on arrays
+        // For some reason, abstracts seems to be set on arrays
         // and primitives.  This is a temporary fix to get things
         // close.
         if (type.isPrimitive())
@@ -978,7 +977,7 @@ public abstract class DaikonVariableInfo
         if (!std_visibility)
             return (false);
 
-        // Everythign in the same class is visible
+        // Everything in the same class is visible
         if (current == fclass)
             return true;
 
