@@ -162,6 +162,10 @@ public final /*(at)Interned*/ class Equality
   ////////////////////////
   // Printing
 
+  // The format methods aren't called, because for output, we
+  // convert to normal two-way IntEqual type invariants.  However,
+  // they can be called if desired.
+
   public String repr() {
     return "Equality: size=" + size()
       + " leader: " + leader().name() + " with "
@@ -202,9 +206,6 @@ public final /*(at)Interned*/ class Equality
   }
 
 
-  // These format methods aren't called, because for output, we
-  // convert to normal two-way IntEqual type invariants.  However,
-  // they can be called if desired.
   public String format_java() {
     VarInfo leader = leader();
     String leaderName = leader.name();
