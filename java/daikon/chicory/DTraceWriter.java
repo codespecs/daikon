@@ -517,58 +517,22 @@ public class DTraceWriter extends DaikonWriter
      * @param val The object whose type we are examining
      * @param declared the declared type of the variable corresponding to val
      * @param runtime Should we use the runtime type or declared type?
-     * @return The variable's type, with primitive wrappers removed
+     * @return The variable's type, with primitive wrappers removed, or null if the value is non-null
      */
     public static /*@Nullable*/ Class<?> removeWrappers(Object val, Class<?> declared, boolean runtime)
     {
-        if (!(val instanceof Runtime.PrimitiveWrapper))
-        {
-            if (!runtime)
-                return declared;
-            else
-            {
-                if (val != null)
-                    return val.getClass();
-                else
-                    return null;
-            }
+        if (!runtime)
+            return declared;
+
+        if (val instanceof Runtime.PrimitiveWrapper) {
+            return ((Runtime.PrimitiveWrapper) val).primitiveClass();
         }
 
-        if (val instanceof Runtime.BooleanWrap)
-        {
-            return boolean.class;
+        if (val == null) {
+            return null;
         }
-        else if (val instanceof Runtime.IntWrap)
-        {
-            return int.class;
-        }
-        else if (val instanceof Runtime.DoubleWrap)
-        {
-            return double.class;
-        }
-        else if (val instanceof Runtime.FloatWrap)
-        {
-            return float.class;
-        }
-        else if (val instanceof Runtime.LongWrap)
-        {
-            return long.class;
-        }
-        else if (val instanceof Runtime.ByteWrap)
-        {
-            return byte.class;
-        }
-        else if (val instanceof Runtime.CharWrap)
-        {
-            return char.class;
-        }
-        else if (val instanceof Runtime.ShortWrap)
-        {
-            return short.class;
-        }
-        else
-            throw new RuntimeException("Could not find correct primitive wrapper class for class " + val.getClass());
+
+        return val.getClass();
     }
-
 
 }

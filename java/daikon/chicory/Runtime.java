@@ -753,22 +753,25 @@ public class Runtime
   {
     // returns corresponding java.lang wrapper
     public Object getJavaWrapper();
+    public Class primitiveClass();
   }
 
   /** wrapper used for boolean arguments **/
   public static class BooleanWrap implements PrimitiveWrapper{
     boolean val;
     public BooleanWrap (boolean val) { this.val = val; }
-    public String toString() {return Boolean.toString(val);}
-    public Boolean getJavaWrapper() {return new Boolean(val);}
+    public String toString() { return Boolean.toString(val); }
+    public Boolean getJavaWrapper() { return new Boolean(val); }
+    public Class primitiveClass() { return boolean.class; }
   }
 
   /** wrapper used for int arguments **/
   public static class ByteWrap implements PrimitiveWrapper{
     byte val;
     public ByteWrap (byte val) { this.val = val; }
-    public String toString() {return Byte.toString(val);}
-    public Byte getJavaWrapper() {return new Byte(val);}
+    public String toString() { return Byte.toString(val); }
+    public Byte getJavaWrapper() { return new Byte(val); }
+    public Class primitiveClass() { return byte.class; }
   }
 
   /** wrapper used for int arguments **/
@@ -776,48 +779,54 @@ public class Runtime
     char val;
     public CharWrap (char val) { this.val = val; }
     // Print characters as integers.
-    public String toString() {return Integer.toString(val);}
-    public Character getJavaWrapper() {return new Character(val);}
+    public String toString() { return Integer.toString(val); }
+    public Character getJavaWrapper() { return new Character(val); }
+    public Class primitiveClass() { return char.class; }
   }
 
   /** wrapper used for int arguments **/
   public static class FloatWrap implements PrimitiveWrapper{
     float val;
     public FloatWrap (float val) { this.val = val; }
-    public String toString() {return Float.toString(val);}
-    public Float getJavaWrapper() {return new Float(val);}
+    public String toString() { return Float.toString(val); }
+    public Float getJavaWrapper() { return new Float(val); }
+    public Class primitiveClass() { return float.class; }
   }
 
   /** wrapper used for int arguments **/
   public static class IntWrap implements PrimitiveWrapper{
     int val;
     public IntWrap (int val) { this.val = val; }
-    public String toString() {return Integer.toString(val);}
-    public Integer getJavaWrapper() {return new Integer(val);}
+    public String toString() { return Integer.toString(val); }
+    public Integer getJavaWrapper() { return new Integer(val); }
+    public Class primitiveClass() { return int.class; }
   }
 
   /** wrapper used for int arguments **/
   public static class LongWrap implements PrimitiveWrapper{
     long val;
     public LongWrap (long val) { this.val = val; }
-    public String toString() {return Long.toString(val);}
-    public Long getJavaWrapper() {return new Long(val);}
+    public String toString() { return Long.toString(val); }
+    public Long getJavaWrapper() { return new Long(val); }
+    public Class primitiveClass() { return long.class; }
   }
 
   /** wrapper used for int arguments **/
   public static class ShortWrap implements PrimitiveWrapper{
     short val;
     public ShortWrap (short val) { this.val = val; }
-    public String toString() {return Short.toString(val);}
-    public Short getJavaWrapper() {return new Short(val);}
+    public String toString() { return Short.toString(val); }
+    public Short getJavaWrapper() { return new Short(val); }
+    public Class primitiveClass() { return short.class; }
   }
 
   /** wrapper used for double arguments **/
   public static class DoubleWrap implements PrimitiveWrapper{
     double val;
     public DoubleWrap (double val) { this.val = val; }
-    public String toString() {return Double.toString(val);}
-    public Double getJavaWrapper() {return new Double(val);}
+    public String toString() { return Double.toString(val); }
+    public Double getJavaWrapper() { return new Double(val); }
+    public Class primitiveClass() { return double.class; }
   }
 
 
