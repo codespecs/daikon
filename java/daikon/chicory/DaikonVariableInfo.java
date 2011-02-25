@@ -570,17 +570,18 @@ public abstract class DaikonVariableInfo
                 // Could not find the class... no further purity analysis
                 typeInfo = null;
             }
-
+            
             if (typeInfo != null)
             {
+                //Pure methods with no parameters
                 for (MethodInfo meth : typeInfo.method_infos)
-                {
-                    if (meth.isPure())
+                {    
+                    if (meth.isPure() && meth.arg_names.length == 0)
                     {
                         StringBuffer buf = new StringBuffer();
                         DaikonVariableInfo newChild = thisInfo.addPureMethodDecl(
-                                cinfo, meth, offset, depth,
-                                buf);
+                                cinfo, meth, new DaikonVariableInfo[] {}, offset,
+                                depth, buf);
                         String newOffset = buf.toString();
                         debug_vars.indent ("Pure method");
                         assert meth.member != null : "@SuppressWarnings(nullness): member of method_infos have .member field"; // fix with dependent type
@@ -591,6 +592,50 @@ public abstract class DaikonVariableInfo
                                                depth);
                         debug_vars.exdent();
 
+                    }
+                }
+                
+                // List containing all class variables, excluding pure methods with parameters
+                List<DaikonVariableInfo> siblings = new ArrayList<DaikonVariableInfo>(thisInfo.children);
+                
+                // Pure methods with one parameter
+                for (MethodInfo meth : typeInfo.method_infos)
+                {
+                    if (meth.isPure() && meth.arg_names.length == 1)
+                    {
+                        for (DaikonVariableInfo sib : siblings)
+                        {
+                            String sibType = sib.getTypeNameOnly();
+                            Class<?> sibClass = null;
+
+                            // Get class type of the class variable
+                            try
+                            {
+                                sibClass = UtilMDE.classForName(sibType);
+                            } catch (ClassNotFoundException e)
+                            {    
+                            	throw new Error(e);
+                            }
+
+                            // Add node if the class variable can be used as the pure method's parameter
+                            if (UtilMDE.isSubtype(sibClass, meth.arg_types[0]))
+                            {
+                                DaikonVariableInfo[] arg = {sib};
+                                StringBuffer buf = new StringBuffer();
+                                DaikonVariableInfo newChild = thisInfo.addPureMethodDecl(
+                                        cinfo, meth, arg, offset, depth,
+                                        buf);
+                                String newOffset = buf.toString();
+                                debug_vars.indent ("Pure method");
+                                assert meth.member != null : "@SuppressWarnings(nullness): member of method_infos have .member field"; // fix with dependent type
+                                newChild.addChildNodes(cinfo,
+                                                       ((Method) meth.member).getReturnType(),
+                                                       meth.member.getName(),
+                                                       newOffset,
+                                                       depth);
+                                debug_vars.exdent();
+                            }
+                        }                    
                     }
                 }
             }
@@ -620,20 +665,22 @@ public abstract class DaikonVariableInfo
 
         return newChild;
     }
-
-
+    
+    
     /**
      * Adds the decl info for a pure method.
      */
     //TODO factor out shared code with printDeclVar
     protected DaikonVariableInfo addPureMethodDecl(ClassInfo curClass,
-            MethodInfo minfo, String offset, int depth,
-            StringBuffer buf)
+            MethodInfo minfo, DaikonVariableInfo[] args, String offset,
+            int depth, StringBuffer buf)
     {
         String arr_str = "";
         if (isArray)
+        {
             arr_str = "[]";
-
+        }
+        
         @SuppressWarnings("nullness") // method precondition
         /*@NonNull*/ Method meth = (Method) minfo.member;
 
@@ -650,7 +697,17 @@ public abstract class DaikonVariableInfo
         Class<?> type = meth.getReturnType();
         assert type != null;
 
-        String theName = meth.getName() + "()";
+        String theName = meth.getName() + "(";
+        if(args.length > 0) {
+            theName += args[0].getName();
+        }
+        if (args.length > 1) 
+        {
+            for (int i = 1; i < args.length - 1; i++) {
+                theName += ", " + args[i].getName();
+            }
+        }
+        theName += ")";
 
         if (offset.length() > 0) // offset already starts with "this"
         {
@@ -662,8 +719,8 @@ public abstract class DaikonVariableInfo
 
         String type_name = stdClassName (type);
         DaikonVariableInfo newPure = new PureMethodInfo(offset + theName, minfo,
-                                                        type_name + arr_str, getRepName(type, isArray) + arr_str,
-                                                        isArray);
+                type_name + arr_str, getRepName(type, isArray) + arr_str,
+                isArray, args);
 
         addChild(newPure);
 
@@ -736,7 +793,7 @@ public abstract class DaikonVariableInfo
                     if (value == null) {
                         isPrimitive = false;
                         String className = field.getDeclaringClass().getName();
-                        // If the class has already been statically initalized, get its hash
+                        // If the class has already been statically initialized, get its hash
                         if (Runtime.isInitialized(className)) {
                             try {
                                 value = Integer.toString(System.identityHashCode(field.get(null)));
@@ -844,7 +901,7 @@ public abstract class DaikonVariableInfo
      */
     protected static boolean shouldAddRuntimeClass(Class<?> type)
     {
-        // For some reason, abstacts seems to be set on arrays
+        // For some reason, abstracts seems to be set on arrays
         // and primitives.  This is a temporary fix to get things
         // close.
         if (type.isPrimitive())
@@ -920,7 +977,7 @@ public abstract class DaikonVariableInfo
         if (!std_visibility)
             return (false);
 
-        // Everythign in the same class is visible
+        // Everything in the same class is visible
         if (current == fclass)
             return true;
 
@@ -1203,7 +1260,7 @@ public abstract class DaikonVariableInfo
 
        return typeName;
    }
-
+   
    /**
     * Return the type name without aux information.
     * @see #getTypeName()

@@ -751,6 +751,8 @@ public class Runtime
 
   public static interface PrimitiveWrapper
   {
+    // returns corresponding java.lang wrapper
+    public Object getJavaWrapper();
   }
 
   /** wrapper used for boolean arguments **/
@@ -758,6 +760,7 @@ public class Runtime
     boolean val;
     public BooleanWrap (boolean val) { this.val = val; }
     public String toString() {return Boolean.toString(val);}
+    public Boolean getJavaWrapper() {return new Boolean(val);}
   }
 
   /** wrapper used for int arguments **/
@@ -765,6 +768,7 @@ public class Runtime
     byte val;
     public ByteWrap (byte val) { this.val = val; }
     public String toString() {return Byte.toString(val);}
+    public Byte getJavaWrapper() {return new Byte(val);}
   }
 
   /** wrapper used for int arguments **/
@@ -773,6 +777,7 @@ public class Runtime
     public CharWrap (char val) { this.val = val; }
     // Print characters as integers.
     public String toString() {return Integer.toString(val);}
+    public Character getJavaWrapper() {return new Character(val);}
   }
 
   /** wrapper used for int arguments **/
@@ -780,6 +785,7 @@ public class Runtime
     float val;
     public FloatWrap (float val) { this.val = val; }
     public String toString() {return Float.toString(val);}
+    public Float getJavaWrapper() {return new Float(val);}
   }
 
   /** wrapper used for int arguments **/
@@ -787,6 +793,7 @@ public class Runtime
     int val;
     public IntWrap (int val) { this.val = val; }
     public String toString() {return Integer.toString(val);}
+    public Integer getJavaWrapper() {return new Integer(val);}
   }
 
   /** wrapper used for int arguments **/
@@ -794,6 +801,7 @@ public class Runtime
     long val;
     public LongWrap (long val) { this.val = val; }
     public String toString() {return Long.toString(val);}
+    public Long getJavaWrapper() {return new Long(val);}
   }
 
   /** wrapper used for int arguments **/
@@ -801,6 +809,7 @@ public class Runtime
     short val;
     public ShortWrap (short val) { this.val = val; }
     public String toString() {return Short.toString(val);}
+    public Short getJavaWrapper() {return new Short(val);}
   }
 
   /** wrapper used for double arguments **/
@@ -808,6 +817,7 @@ public class Runtime
     double val;
     public DoubleWrap (double val) { this.val = val; }
     public String toString() {return Double.toString(val);}
+    public Double getJavaWrapper() {return new Double(val);}
   }
 
 

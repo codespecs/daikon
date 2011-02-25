@@ -17,14 +17,25 @@ public class PureMethodInfo extends DaikonVariableInfo
     /** The MethodInfo object for this pure method **/
     private MethodInfo minfo;
 
+    /** An array containing the parameters of this pure method **/
+    private DaikonVariableInfo[] args;
+    
+    
     public PureMethodInfo(String name, MethodInfo methInfo, String typeName, String repTypeName, boolean inArray)
+    {
+        this(name, methInfo, typeName, repTypeName, inArray, new DaikonVariableInfo[0]);
+    }
+    
+    public PureMethodInfo(String name, MethodInfo methInfo, String typeName, String repTypeName, boolean inArray, DaikonVariableInfo[] args)
     {
         super(name, typeName, repTypeName, inArray);
 
         assert methInfo.isPure() : "Method " + methInfo + " is not pure";
 
         minfo = methInfo;
-    }
+        
+        this.args = args;
+    } 
 
     /**
      * Invokes this pure method on the given parentVal.
@@ -39,13 +50,13 @@ public class PureMethodInfo extends DaikonVariableInfo
         boolean changedAccess = false;
         Object retVal;
 
-        // we want to access all fields...
+        // we want to access all methods...
         if (!meth.isAccessible())
         {
             changedAccess = true;
             meth.setAccessible(true);
         }
-
+        
         if (isArray)
         {
             // First check if parentVal is null or nonsensical
@@ -60,9 +71,13 @@ public class PureMethodInfo extends DaikonVariableInfo
                 for (Object val : (List<Object>) parentVal) // unchecked cast
                 {
                     if (val == null || val instanceof NonsensicalObject)
+                    {
                         retList.add(NonsensicalObject.getInstance());
+                    }
                     else
-                        retList.add(executePureMethod(meth, val));
+                    { 
+                        retList.add(executePureMethod(meth, val, getArgVals(parentVal)));
+                    }
                 }
 
                 retVal = retList;
@@ -76,8 +91,8 @@ public class PureMethodInfo extends DaikonVariableInfo
                 retVal = NonsensicalObject.getInstance();
             }
             else
-            {
-                retVal = executePureMethod(meth, parentVal);
+            {   
+                retVal = executePureMethod(meth, parentVal, getArgVals(parentVal));
             }
 
         }
@@ -89,8 +104,33 @@ public class PureMethodInfo extends DaikonVariableInfo
 
         return retVal;
     }
+    
+    /**
+     * Returns an array corresponding to the current values of this pure method's arguments
+     * based on the given parentVal.
+     */
+    private Object[] getArgVals(Object parentVal)
+    {
+        Object[] params = new Object[args.length];
+        
+    	for(int i = 0; i < args.length; i++) 
+    	{
+    		Object currentVal = args[i].getMyValFromParentVal(parentVal);
+    		
+    		if (currentVal instanceof Runtime.PrimitiveWrapper)
+            {
+                // Convert Chicory primitive wrapper to java.lang's primitive wrapper
+                Runtime.PrimitiveWrapper x = (Runtime.PrimitiveWrapper) currentVal;
+                params[i] = x.getJavaWrapper();
+            } else 
+            {
+                params[i] = currentVal;
+            }
+    	}
+    	return params;
+    }
 
-    private static Object executePureMethod(Method meth, Object receiverVal)
+    private static Object executePureMethod(Method meth, Object receiverVal, Object[] argVals)
     {
         Object retVal = null;
         try
@@ -100,8 +140,8 @@ public class PureMethodInfo extends DaikonVariableInfo
             // called)
             Runtime.startPure();
 
-            retVal = meth.invoke(receiverVal);
-
+            retVal = meth.invoke(receiverVal, argVals);
+           
             if (meth.getReturnType().isPrimitive())
                 retVal = convertWrapper(retVal);
         }
@@ -128,7 +168,7 @@ public class PureMethodInfo extends DaikonVariableInfo
 
         return retVal;
     }
-
+     
 
     /**
      * Convert standard wrapped Objects (i.e., Integers) to Chicory wrappers (ie,
@@ -179,7 +219,7 @@ public class PureMethodInfo extends DaikonVariableInfo
         }
 
     }
-
+    
     public VarKind get_var_kind() {
         return VarKind.FUNCTION;
     }
