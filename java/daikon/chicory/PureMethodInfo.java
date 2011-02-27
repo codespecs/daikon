@@ -106,12 +106,12 @@ public class PureMethodInfo extends DaikonVariableInfo
     }
 
     /**
-     * Returns an array corresponding to the current values of this pure method's arguments
-     * based on the given parentVal.
+     * Returns an array corresponding to the current values of this pure
+     * method's arguments based on the given parentVal.
      */
-    private Object[] getArgVals(Object parentVal)
+    private /*@Nullable*/ Object[] getArgVals(Object parentVal)
     {
-        Object[] params = new Object[args.length];
+        /*@Nullable*/ Object[] params = new /*@Nullable*/ Object[args.length];
 
         for(int i = 0; i < args.length; i++)
         {
@@ -130,7 +130,7 @@ public class PureMethodInfo extends DaikonVariableInfo
         return params;
     }
 
-    private static Object executePureMethod(Method meth, Object receiverVal, Object[] argVals)
+    private static Object executePureMethod(Method meth, Object receiverVal, /*@Nullable*/ Object[] argVals)
     {
         Object retVal = null;
         try
