@@ -1,6 +1,8 @@
 package daikon;
 
 import java.util.logging.*;
+import java.util.HashSet;
+import java.util.Set;
 
 /**
  * Standard methods for setting up logging.
@@ -50,6 +52,7 @@ public final class LogHelper {
       root.removeHandler(handler);
     root.addHandler (app);
     root.setLevel(l);
+    allLoggers.add(root);
 
     // Logger.global.addHandler(app);
     // Logger.global.setLevel(l);
@@ -136,11 +139,23 @@ public final class LogHelper {
     setupLogs (l, new DaikonLogFormatter());
   }
 
+  private static final Set<Logger> allLoggers = new HashSet<Logger>();
+
   /**
-   * Changes the logging priority of a sub category.
+   * Changes the logging priority of a sub category.  Also caches the
+   * logger to avoid garbage-collection and recreation with the old level.
+   **/
+  public static void setLevel(Logger lg, Level l) {
+    lg.setLevel(l);
+    allLoggers.add(lg); // to prevent garbage-collection and re-initialization
+  }
+
+  /**
+   * Changes the logging priority of a sub category.  Also caches the
+   * logger to avoid garbage-collection and recreation with the old level.
    **/
   public static void setLevel(String s, Level l) {
-    Logger.getLogger(s).setLevel(l);
+    setLevel(Logger.getLogger(s), l);
   }
 
 }

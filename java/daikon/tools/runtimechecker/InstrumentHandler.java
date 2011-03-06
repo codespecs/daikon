@@ -221,7 +221,7 @@ public class InstrumentHandler extends CommandHandler {
                 String option_name = longopts[g.getLongind()].getName();
 
                 if (debug_SWITCH.equals(option_name)) {
-                    debug.setLevel(Level.FINE);
+                    LogHelper.setLevel(debug, Level.FINE);
                 } else if (create_checker_classes_SWITCH.equals(option_name)) {
                     createCheckerClasses = true;
                 } else if (output_only_high_conf_invariants_SWITCH.equals(option_name)) {

@@ -382,7 +382,7 @@ public class SampleTester extends TestCase {
     if (name.equals ("inv")) {
       result = proc_inv_assert (args);
       if (!result && !negate) {
-        debug.setLevel (Level.FINE);
+        LogHelper.setLevel(debug, Level.FINE);
         proc_inv_assert (args);
       }
     } else if (name.equals ("show_invs")) {
