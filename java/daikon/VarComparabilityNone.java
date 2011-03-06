@@ -59,6 +59,6 @@ public final class VarComparabilityNone
   }
 
   public String toString() {
-    return ("no-compare");
+    return ("no-comparability");
   }
 }
