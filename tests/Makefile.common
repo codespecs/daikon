@@ -467,6 +467,7 @@ $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz : $(SCRATCH_FOR_DAIKON)/.copy-ti
 	  --ppt-select-pattern='$(INST_FILES)' ${MAIN_CLASS} ${MAIN_ARGS}
 	touch $(SCRATCH_FOR_DAIKON)/.run-timestamp
 endif
+# end of "ifeq (generated,${TRACE_SOURCE})"
 
 ifeq (stored,${TRACE_SOURCE})
 # stored
