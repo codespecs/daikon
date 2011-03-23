@@ -1994,7 +1994,7 @@ ppt name that does not match the omit patterns is included.
 All of the regular expressions used by Daikon use Java's
 regular expression syntax, which is similar to Perl's but not
 exactly the same.  Details are available at
-@uref{http://java.sun.com/j2se/1.5.0/docs/api/java/util/regex/Pattern.html#sum}.
+@uref{http://download.oracle.com/javase/1.5.0/docs/api/java/util/regex/Pattern.html#sum}.
 Multiple items can be matched by using the logical or operator (|), 
 for example @var{var1|var2|var3}.
 
