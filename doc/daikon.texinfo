@@ -1957,11 +1957,6 @@ options.
 @node Processing only part of the trace file, Daikon configuration options, Options to control invariant detection, Running Daikon
 @section Processing only part of the trace file
 
-Using @option{--ppt-select-pattern} and @option{--ppt-omit-pattern} can
-save time even if there are no samples for the excluded program points,
-as Daikon can skip the declarations and need not initialize data
-structures that would be used if samples were encountered.
-
 @table @option
 @item --ppt-select-pattern=@var{ppt_regexp}
 Only process program points whose names match the regular expression.
@@ -1983,6 +1978,13 @@ This takes priority over the @option{--var-select-pattern} argument.
 
 @end table
 
+All of the regular expressions used by Daikon use Java's
+regular expression syntax, which is similar to Perl's but not
+exactly the same.  Details are available at
+@uref{http://download.oracle.com/javase/1.5.0/docs/api/java/util/regex/Pattern.html#sum}.
+Multiple items can be matched by using the logical or operator (|), 
+for example @var{var1|var2|var3}.
+
 The @var{...-omit-pattern} arguments take precedence:  if a name matches
 an omit pattern, it is excluded.  If a name does not match an omit
 pattern, it is tested against the select pattern (if any).  If any
@@ -1990,13 +1992,18 @@ select patterns are specified, the name must match one of the patterns
 in order to be included.  If no select patterns are specified, then any
 ppt name that does not match the omit patterns is included.
 
+Using @option{--ppt-select-pattern} and @option{--ppt-omit-pattern} can
+save time even if there are no samples for the excluded program points,
+as Daikon can skip the declarations and need not initialize data
+structures that would be used if samples were encountered.
 
-All of the regular expressions used by Daikon use Java's
-regular expression syntax, which is similar to Perl's but not
-exactly the same.  Details are available at
-@uref{http://download.oracle.com/javase/1.5.0/docs/api/java/util/regex/Pattern.html#sum}.
-Multiple items can be matched by using the logical or operator (|), 
-for example @var{var1|var2|var3}.
+Front ends such as Chicory (@pxref{Program points in Chicory output})
+and Kvasir (@pxref{Kvasir options}), and other tools such as DynComp
+(@pxref{DynComp for Java options}) and PrintInvariants (@pxref{Printing
+invariants}), also support these command-line options (Kvasir names them
+slightly differently).  Passing the command-line option to the front end
+means that the target program will run faster and the trace file will be
+smaller.
 
 
 @node Daikon configuration options, Daikon debugging options, Processing only part of the trace file, Running Daikon
