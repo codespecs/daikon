@@ -10,7 +10,10 @@ Longer-term issues
     Possibly have it take an argument indicating which fields to
     include/ignore.
 
-  - Add --exception switch to allow instrumentation of exceptions
+  - Add --exception switch to allow instrumentation of exceptions.
+    To handle exceptional exits, Chicory would need to put a catch statement
+    around every method body in the subject program, and add a new program
+    point for each thrown exception.
 
   - Consider choosing a new file representation that would be both more
     compact and faster to read and write.  For instance, there is no need
