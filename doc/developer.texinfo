@@ -2372,7 +2372,7 @@ Bash version:
 @cindex Version control repository
 
 @c Old info about how to create a distribution of the repository was
-@c removed from this file in on 12 Nov 2010.
+@c removed from this file on 12 Nov 2010.
 
 Daikon's Mercurial repository, available at
 @url{http://code.google.com/p/daikon/}, contains complete development
