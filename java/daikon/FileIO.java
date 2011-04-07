@@ -942,7 +942,10 @@ public final class FileIO {
   static Stack<Invocation> call_stack = new Stack<Invocation>();
   static HashMap<Integer,Invocation> call_hashmap = new HashMap<Integer,Invocation>();
 
-  /** Reads data trace files using the default sample processor. **/
+  /**
+   * Reads data trace files using the default sample processor.
+   * @see #read_data_trace_files(Collection,PptMap,Processor,boolean)
+   **/
   public static void read_data_trace_files(Collection<String> files,
                                            PptMap all_ppts) throws IOException {
 
@@ -1376,7 +1379,8 @@ public final class FileIO {
 
   /**
    * Read declarations OR samples (not just sample data as the name might
-   * imply) from .dtrace file.
+   * imply) from .dtrace file.  Calls processor on each record read from
+   * the file.
    **/
   public static void read_data_trace_file(String filename, PptMap all_ppts,
                                    Processor processor,
