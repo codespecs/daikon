@@ -464,7 +464,7 @@ His paper says:
 
 Appendix A - Supporting Exception exits in the Daikon PPT Hierarchy
 
-Mikes proposal:
+Mike's proposal:
 
   Add new program points for exceptional exit.
 
@@ -632,3 +632,93 @@ Jeff's Proposal:
   they were not.
 
 
+Appendix B - Supporting exceptional exit points in a front end
+
+Goals:
+ * Create more complete specifications, such as "exsures" clauses.
+ * Create more accurate preconditions, since presently all entries
+   associated with exceptional exit are ignored.
+ * Separate "expected" exceptions that don't necessarily indicate undesired
+   behavior (while running a test suite) from "unexpected" exceptions that
+   indicate a code failure.  (This is related to the above.)
+ * Perhaps (for Lee and others), get output even when there is never an
+   exit (a tail call to another routine, and eventually System.exit() is
+   called without any return having occurred.
+
+Technique:
+
+The general idea is to add a new exit point for each declared Exception,
+plus one for undeclared Exceptions/Errors/Throwables.  
+
+There will be three types of procedure exit:
+ * possibly many from return statements
+ * possibly many resulting from throwing different declared exceptions
+ * exactly one for throwing an undeclared exception (e.g., Error,
+   RuntimeException, Throwable)
+
+What does the hierarchy look like?  For example, when combining exit points
+into a single aggregate exit point, how should the new exceptional program
+points factor in?  Undeclared exceptions should not be combined with normal
+returns, but how should declared exceptions be handled?  Should there be 2
+or 3 top-level exit points, and if 2, with what should declared exceptions
+be combined (probably the normal returns)?  These decisions affect what
+preconditions (and other invariants) are inferred for the routine.  I lean
+somewhat toward:
+
+		    exit
+		  /      \
+       normalexit          declexception
+      /    |    \           /         \
+  exit1  exit2  exit3    declexc1  declexc2    error
+
+with the error point completely unrelated to any other point in the
+hierarchy.  But I haven't fully thought this through yet, so I welcome
+comments.
+
+
+Implementation:
+
+If a method declares that it throws DeclaredEx1, DeclaredEx2, and
+DeclaredEx3, then I transform it as follows.  The exceptions must be
+ordered from most to least general, lest latter ones have no chance of
+getting caught.  The Throwable clause isn't necessary if one of the
+declared exceptions is Throwable.
+
+This code:
+
+  int foo() throws DeclaredEx1, DeclaredEx2, DeclaredEx3 {
+    body
+  }
+
+is transformed into one of the following:
+
+  int foo() throws DeclaredEx1, DeclaredEx2, DeclaredEx3 {
+    try {
+      body		// includes instrumentation for normal entry and exit
+    } catch (DeclaredEx1 daikon_exception_1) {
+      print exceptional exit program point
+      throw daikon_exception_1;		// rethrow
+    } catch (DeclaredEx2 daikon_exception_2) {
+      print exceptional exit program point
+      throw daikon_exception_2;		// rethrow
+    } catch (DeclaredEx3 daikon_exception_3) {
+      print exceptional exit program point
+      throw daikon_exception_3;		// rethrow
+    } catch (java.lang.Throwable daikon_exception_4) {
+      // for RuntimeException, Error, and any other undeclared Throwable
+      print exceptional exit program point
+      throw daikon_exception_4;		// rethrow
+    }
+  }
+
+or
+
+  int foo() throws DeclaredEx1, DeclaredEx2, DeclaredEx3 {
+    try {
+      body		// includes instrumentation for normal entry and exit
+    } catch (Throwable daikon_exception) {
+      switch statement to print program point name
+      print rest of exceptional exit program point
+      throw daikon_exception;		// rethrow
+    }
+  }
