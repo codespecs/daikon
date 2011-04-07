@@ -722,3 +722,7 @@ or
       throw daikon_exception;		// rethrow
     }
   }
+
+Also, note that the existing DynComp tool may already do this.  See the
+various comments about cleaning up the tag stack on an exception exit from
+a method, such as in dcomp/DCRuntime.java .
