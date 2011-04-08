@@ -3091,11 +3091,11 @@ but @samp{a} for the identity of the array itself.)
 @cindex missing values for variables, see nonsensical values
 
 @c the Daikon code sometimes calls this "missing" rather than "nonsensical".
-The value may also be the string @code{nonsensical}; @xref{Nonsensical
+The value representation may also be the string @code{nonsensical}; @xref{Nonsensical
 values}.
-A string or array value is never @code{null}.  A reference to a
-string or array may be @code{null}, in which case the string or array is
-@code{nonsensical}.
+A string or array @emph{value} is never @code{null}.  A @emph{reference} to a
+string or array may be @code{null}, in which case the string or array
+value is printed as @code{nonsensical}.
 
 @item modified? (0, 1, or 2).
 @cindex modified bit
