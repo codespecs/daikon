@@ -602,8 +602,7 @@ Implementation:
 If a method declares that it throws DeclaredEx1, DeclaredEx2, and
 DeclaredEx3, then transform it as follows.  The exceptions must be
 ordered from most to least general, lest latter ones have no chance of
-getting caught.  The Throwable clause isn't necessary if one of the
-declared exceptions is Throwable.
+getting caught.
 
 This code:
 
@@ -615,35 +614,29 @@ is transformed into one of the following:
 
   int foo() throws DeclaredEx1, DeclaredEx2, DeclaredEx3 {
     try {
-      body		// includes instrumentation for normal entry and exit
-    } catch (DeclaredEx1 daikon_exception_1) {
+      body              // includes instrumentation for normal entry and exit
+    } catch (DeclaredEx1 e1) {
       print exceptional exit program point
-      throw daikon_exception_1;		// rethrow
-    } catch (DeclaredEx2 daikon_exception_2) {
+      throw e1;         // rethrow
+    } catch (DeclaredEx2 e2) {
       print exceptional exit program point
-      throw daikon_exception_2;		// rethrow
-    } catch (DeclaredEx3 daikon_exception_3) {
+      throw e2;         // rethrow
+    } catch (DeclaredEx3 e3) {
       print exceptional exit program point
-      throw daikon_exception_3;		// rethrow
-    } catch (java.lang.Throwable daikon_exception_4) {
-      // for RuntimeException, Error, and any other undeclared Throwable
+      throw e3;         // rethrow
+    } catch (RuntimeException e4) {
       print exceptional exit program point
-      throw daikon_exception_4;		// rethrow
+      throw e4;         // rethrow
+    } catch (Error e5) {
+      print exceptional exit program point
+      throw e5;         // rethrow
     }
   }
 
-or
+A challenge is that this transformation must be done in bytecode, and
+with as little code duplication as possible..
 
-  int foo() throws DeclaredEx1, DeclaredEx2, DeclaredEx3 {
-    try {
-      body		// includes instrumentation for normal entry and exit
-    } catch (Throwable daikon_exception) {
-      switch statement to print program point name
-      print rest of exceptional exit program point
-      throw daikon_exception;		// rethrow
-    }
-  }
-
-Also, note that the existing DynComp tool may already do this.  See the
-various comments about cleaning up the tag stack on an exception exit from
-a method, such as in dcomp/DCRuntime.java .
+Also, note that the existing DynComp tool may already do something like
+thes catchingand rethrowing of exceptions.  See the various comments about
+cleaning up the tag stack on an exception exit from a method, such as in
+dcomp/DCRuntime.java .
