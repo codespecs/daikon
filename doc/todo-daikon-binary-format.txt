@@ -1,0 +1,154 @@
+For details about Daikon's file formats, see Appendix A of the Daikon
+Developer manual:
+http://groups.csail.mit.edu/pag/daikon/download/doc/developer.html#File-formats
+
+For example, here is a record in Daikon's current ASCII format:
+
+     StackAr.push(java.lang.Object):::ENTER
+     this_invocation_nonce
+     55
+     x
+     1217030
+     1
+     x.getClass()
+     "DataStructures.MyInteger"
+     1
+     this.theArray
+     3852104
+     1
+     this.theArray.getClass()
+     "java.lang.Object[]"
+     1
+     this.theArray[]
+     [null]
+     1
+     this.theArray[].getClass()
+     [null]
+     1
+     this.topOfStack
+     -1
+     1
+
+Let's look at the different pieces:
+
+First, it indicates the name of the program point.
+
+     StackAr.push(java.lang.Object):::ENTER
+
+Then, it gives a nonce that helps to match up enter and exit program
+points.
+
+     this_invocation_nonce
+     55
+
+Finally, it gives variable names and their values, and some "modified"
+information that is currently always "1".
+
+     x
+     1217030
+     1
+
+     x.getClass()
+     "DataStructures.MyInteger"
+     1
+
+     this.theArray
+     3852104
+     1
+
+     ...
+
+The trace information could be much more compactly represented.
+
+ * Instead of the program point name in ASCII, just give a one-word
+   (32-bit) index.  For instance, if the word's value is 22, it means this
+   is a sample for the 22nd program point that was declared in the file.
+
+ * The nonce, too, can be a single word.
+
+ * The variables always appear in the same order, so we don't need their
+   names.  We also don't need the "modified" information.  And instead of
+   printing numbers in ASCII, just put them in the file in binary format.
+   A number like "1217030" only needs to be 1 word, not 8 bytes (counting the
+   terminating newline) in the file.  No delimiters are needed between values,
+   except lengths (or terminators) for variable-length data such as
+   strings.
+
+The binary format should not itself implement any kind of compression; if
+desired, that is best done by an external tool.
+
+There isn't a need to create a binary form for the declarations.  There are
+relatively few of them in any file, so reading them isn't the main
+performance bottleneck.  They should appear in the trace file in their
+current ASCII form.  The trace file format needs a way to indicate how it
+transitions between the declaration parts and the sample parts of the file.
+
+The project would proceed in these phases.
+
+ 1. Define the binary file format.  Write documentation of it, get
+    feedback, and iterate until there is agreement on it.  The above is
+    already a draft of this aspect of the project.
+    In parallel with this, Mike can improve the Daikon file format documentation.
+    For example, note what doesn't appear in the trace file:
+     * static constant vars
+     * derived vars don't appear in decl or in trace
+ 2. Write a converter from the ASCII format into the binary format.
+ 3. Measure the compression achieved by the binary format.
+    Even if there is little size benefit, we may wish to continue the
+    project because there may be a time benefit for the
+    front end (more importantly) or for Daikon.
+ 4. Write a converter from the binary format into the ASCII format.
+    This will enable all users to use files that are supplied to them in
+    the binary format.
+    Verify that converting ASCII->binary->ASCII or binary->ASCII->binary
+    always yields a file identical to the original.
+ 5. Change Daikon so that it can read the new file format.
+    Measure whether Daikon runs faster.
+ 6. Change each of Daikon's front ends to produce the new file format.
+    This is a big project.  You should probably start by modifying Chicory,
+    which is the simplest front end.
+    Measure whether the front end runs faster.  It should, since it will
+    spend less time formatting and printing values.
+
+Some additional details:
+
+For #2, converting from ASCII format to binary format:
+In file java/daikon/FileIO.java is a method called read_data_trace_file.
+That method reads a Daikon input file, and then calls another method
+(namely, method process_sample of class FileIO.Processor) on each data
+sample that appears in the input file.  You should write a new subclass of
+FileIO.Processor that, for each data sample, outputs the compressed version
+of that data sample.  Then, you can call read_data_trace_file, passing your
+custom processor.
+
+(Actually, method process_sample only gets access to data samples in the
+input file.  Eventually you will want access to other information in the
+input file, such as declarations.  Your program will need to copy that
+information to the output file, thus creating a complete Daikon input file
+with both declarations and (compressed) data samples.  But first, just get
+the data samples written.)
+
+For #3, comparing file sizes:
+It may be most fair to compare:
+ * gzipped text format
+ * gzipped binary format
+(rather than or in addition to comparing the uncompressed versions).
+The reason is that file I/O can dominate other costs when Daikon is run
+over large files.
+
+For #4 and #5, converting from the compressed file format to the ASCII file
+format and enabling Daikon to use the binary file format:
+You will eventually want to create a method similar to read_data_trace_file
+that calls method process_sample (of class FileIO.Processor) on each data
+sample.  That will permit integrating your reader into Daikon smoothly.  In
+the short term, you could either do that (which I would tend to recommend),
+or write new code for reading & writing files if it is too hard to use the
+capabilities built into Daikon.
+InvariantChecker is a small independent program that creates a subclass of
+FileIO.Processor), that you could use as an example.
+
+For all parts:  perform all experiments on all programs in Daikon's test
+suite.  Do not overfit your solution to just one program.  In particular,
+avoid getting bogged down considering programs with lots of arrays and
+strings.  In a data trace files with many arrays, the arrays dominate the
+file size and run time anyway.
