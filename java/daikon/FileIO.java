@@ -122,7 +122,7 @@ public final class FileIO {
   /** True if declaration records are in the new format **/
   public static /*@LazyNonNull*/ Boolean new_decl_format = null;
 
-  /** 
+  /**
    * If true, modified all ppt names to remove duplicate routine
    * names within the ppt name.  This is used when a stack trace
    * (of active methods) is used as the ppt name.  The routine names
@@ -199,11 +199,11 @@ public final class FileIO {
   /**
    * Parents in the ppt/variable hierarchy for a particular program point
    */
-  static final class ParentRelation implements java.io.Serializable {
+  public static final class ParentRelation implements java.io.Serializable {
     static final long serialVersionUID = 20060622L;
-    PptRelationType rel_type;
-    /*@Interned*/ String parent_ppt_name;
-    int id;
+    public PptRelationType rel_type;
+    public /*@Interned*/ String parent_ppt_name;
+    public int id;
     public ParentRelation(PptRelationType rel_type, /*@Interned*/ String parent_ppt_name, int id) {
       this.rel_type = rel_type;
       this.parent_ppt_name = parent_ppt_name;
@@ -399,7 +399,7 @@ public final class FileIO {
         if (msg == null) { throw e; }
         decl_error (state, msg);
       }
-    }  
+    }
 
     // If we are excluding this ppt, just read the data and throw it away
     if (!ppt_included (ppt_name)) {
@@ -1122,14 +1122,56 @@ public final class FileIO {
    * each sample.
    */
   public static class Processor {
+    /** Process a data sample record. */
     /*@NonNullOnEntry("FileIO.data_trace_state")*/
-    public void process_sample(
-                               PptMap all_ppts,
+    public void process_sample(PptMap all_ppts,
                                PptTopLevel ppt,
                                ValueTuple vt,
                                /*@Nullable*/ Integer nonce) {
       FileIO.process_sample(all_ppts, ppt, vt, nonce);
     }
+
+    /** Process a program point declaration record. */
+    public void process_decl(PptMap all_ppts,
+                             PptTopLevel ppt) {
+    }
+
+    /** Process a ppt decl format record. */
+    public void process_decl_version(String format) {
+    }
+
+    /** Process a VarComparability declaration. */
+    public void process_comparability(String comparability) {
+    }
+
+    /** Process a ListImplementors declaration. */
+    public void process_list_implementors(String implementors) {
+    }
+
+    /** Process an input-language declaration. */
+    public void process_input_language(String language) {
+    }
+
+    /** Process a null record (haven't read anything yet). */
+    public void process_null() {
+    }
+
+    /** Process a comment. */
+    public void process_comment(String comment) {
+    }
+
+    /** Process indication of end of file. */
+    public void process_eof() {
+    }
+
+    /** Process indication of exceeding file size limit. */
+    public void process_truncated() {
+    }
+
+    /** Process continuable error. */
+    public void process_error() {
+    }
+
   }
 
 
@@ -2277,7 +2319,7 @@ public final class FileIO {
       line = reader.readLine(); // next variable name
     }
     assert (line == null) || (line.equals(""))
-      : "Expected blank line in " + data_trace_state.filename + " at line " 
+      : "Expected blank line in " + data_trace_state.filename + " at line "
         + reader.getLineNumber() + ": " + line;
   }
 
@@ -2599,7 +2641,7 @@ public final class FileIO {
   }
 
   /**
-   * Converts the declaration record versoin of a name into its correct
+   * Converts the declaration record version of a name into its correct
    * version.  In the declaration record, blanks are encoded as \_ and
    * backslashes as \\.
    */
@@ -2654,6 +2696,16 @@ public final class FileIO {
     return sb.toString();
   }
 
+  // The reverse of unescape_decl.  Test them together.
+  /**
+   * Converts a name into its declaration record version.  In the
+   * declaration record, blanks are encoded as \_ and backslashes as \\.
+   */
+  private static String escape_decl (String orig) {
+    throw new Error("To be implemented: escape_decl(" + orig + ")");
+  }
+
+
   /**
    * Class that holds all of the information from the declaration
    * record concerning a particular variable.  Used because a VarInfo
@@ -2676,9 +2728,9 @@ public final class FileIO {
     /** Type of the variable (required) **/
     public VarKind kind = null;
     /** Variable that contains this variable (optional) **/
-    public String enclosing_var;
+    public /*@Nullable*/ String enclosing_var;
     /** the simple (not fully specified) name of this variable (optional) **/
-    public String relative_name = null;
+    public /*@Nullable*/ String relative_name = null;
     /** Type of reference for structure/class variables **/
     public RefType ref_type = RefType.POINTER;
     /** Number of array dimensions (0 or 1) **/
@@ -2699,9 +2751,9 @@ public final class FileIO {
     /** One of the relationship IDs for this ppt (optional) **/
     public int parent_relation_id = 0;
     /** The parent var name in the parent ppt (defaults to this name) **/
-    public String parent_variable = null;
+    public /*@Nullable*/ String parent_variable = null;
     /** Set if this 'variable' always has the same value (optional) **/
-    public /*@Interned*/ Object static_constant_value = null;
+    public /*@Nullable*/ /*@Interned*/ Object static_constant_value = null;
 
     /** Check representation invariants. */
     public void checkRep() {
@@ -3000,7 +3052,7 @@ public final class FileIO {
     if (!dkconfig_rm_stack_dups)
       return ppt_name;
 
-    // System.out.printf ("removing stack dups (%b)in fileio%n", 
+    // System.out.printf ("removing stack dups (%b)in fileio%n",
     //                    dkconfig_rm_stack_dups);
 
     String[] stack = ppt_name.split ("[|]");
@@ -3011,6 +3063,6 @@ public final class FileIO {
       nd_stack.add (si);
     }
     return UtilMDE.join (nd_stack, "|").intern();
-  }    
+  }
 
 }
