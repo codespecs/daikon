@@ -2707,16 +2707,20 @@ public final class FileIO {
 
 
   /**
-   * Class that holds all of the information from the declaration
-   * record concerning a particular variable.  Used because a VarInfo
-   * cannot be created until much of this information is present.
-   * More detailed information about each of the fields can be found
-   * in the 'Variable declarations' section of the 'File Formats'
-   * appendix of the Daikon developers manual.  Specifics can also be
-   * found in the 'parse_[field]' methods of the class (eg,
-   * parse_var_kind, parse_enclosing_var, etc).  In general, each
-   * field has a one-to-one relation with the corresponding entry in
-   * the variable definition block in the trace file.
+   * Class that holds information from the declaration record (in the
+   * file).  Once collected, this information is used to create a VarInfo.
+   * This class is necessary because a VarInfo cannot be created until much
+   * of this information is present:  the constructor requires all the
+   * information at the time of construction, and some of the fields are
+   * final.
+   * <p>
+   * In general, each field has a one-to-one relation with the
+   * corresponding entry in the variable definition block in the trace
+   * file.  More detailed information about each of the fields can be found
+   * in the 'Variable declarations' section of the 'File Formats' appendix
+   * of the Daikon developers manual.  Specifics can also be found in the
+   * 'parse_[field]' methods of the class (eg, parse_var_kind,
+   * parse_enclosing_var, etc).
    */
   @SuppressWarnings("nullness") // undocumented class needs documentation before annotating with nullness
   public static class VarDefinition implements java.io.Serializable, Cloneable{
@@ -2735,7 +2739,9 @@ public final class FileIO {
     public RefType ref_type = RefType.POINTER;
     /** Number of array dimensions (0 or 1) **/
     public int arr_dims = 0;
-    public /*@Nullable*/ List<String> function_args = null; // non-null iff (vardef.kind == VarKind.FUNCTION)
+    /** Non-null iff (vardef.kind == VarKind.FUNCTION).
+     * The arguments that were used to create this function application. **/
+    public /*@Nullable*/ List<String> function_args = null;
     /** The type of the variable as stored in the dtrace file (required) **/
     public ProglangType rep_type = null;
     /** Declared type of the variable as an arbitrary string (required) **/
