@@ -175,6 +175,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   // Under what circumstances is this null?
   public /*@Nullable*/ VarInfo enclosing_var;
   public int arr_dims = 0;
+  /** The arguments that were used to create this function application.
+   * Null if this variable is not a function application. **/
   public /*@LazyNonNull*/ List<VarInfo> function_args = null;
 
   /** Parent ppt for this variable (if any) **/
@@ -369,7 +371,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       }
     }
 
-    // Find all function arguments (if any)
+    // Convert vardef.function_args, which is a list of Strings,
+    // into this.function_args, which is a list of VarInfos.
     if (vardef.function_args != null) {
       function_args = new ArrayList<VarInfo>(vardef.function_args.size());
       for (String varname : vardef.function_args) {
@@ -394,7 +397,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * applying a function to the other variables.  Much of the
    * information is inferred from (arbitrarily) the first argument to
    * the function.
-   *
+   * <p>
    * The parent_ppt field is set if each VarInfo in the derivation has
    * the same parent.  The parent_variable field is set if there is a
    * parent_ppt and one or more of the bases has a non-default parent
