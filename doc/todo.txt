@@ -601,8 +601,8 @@ Implementation:
 
 If a method declares that it throws DeclaredEx1, DeclaredEx2, and
 DeclaredEx3, then transform it as follows.  The exceptions must be
-ordered from most to least general, lest latter ones have no chance of
-getting caught.
+ordered from most specific to most general, lest latter ones have no chance
+of getting caught.
 
 This code:
 
