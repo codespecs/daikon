@@ -359,6 +359,8 @@ public final class FileIO {
           vardef.parse_reference_type (scanner);
         } else if (record == "array") { // interned
           vardef.parse_array (scanner);
+        } else if (record == "function-args") { // interned
+          vardef.parse_function_args (scanner);
         } else if (record == "rep-type") { // interned
           vardef.parse_rep_type (scanner);
         } else if (record == "dec-type") { // interned
