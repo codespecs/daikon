@@ -3012,13 +3012,17 @@ parent program point.  If the names are the same, it can be omitted.
 @item @code{constant <value>}
 
 Optionally specifies a constant value for this variable.  If the variable has
-compile-time constant value, it must be omitted from the data trace
+a compile-time constant value that is specified in the declaration, then
+the variable must be omitted from the data trace
 records.
 
 @item @code{function-args <arg1> <arg2> ...}
 
-Optionally specifies the arguments to a function (if any).  Specified by the
-external name of the argument variables.  Multiple arguments are
+If this variable is computed as a function of some other variable,
+specifies the arguments to the function; otherwise, the
+@code{function-args} line must be omitted.
+The arguments are specified by their 
+external variable name.  Multiple arguments are
 blank separated.  For example
 @example
 function-args a.b this.f1
