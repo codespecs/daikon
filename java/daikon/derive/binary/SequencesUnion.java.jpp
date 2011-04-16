@@ -37,6 +37,14 @@ import daikon.derive.*;
 
 import plume.*;
 
+/**
+ * Represents the setwise union of two base variables, each of which is a
+ * collection.
+ * This variable contains every element that is in either of the base
+ * variables, but this variable contains no duplicate elements.
+ * Elements are in order of first appearance in the base variables
+ * (base1 first).
+ */
 public final class SCALARSEQUENCESUNION
   extends BinaryDerivation
 {
