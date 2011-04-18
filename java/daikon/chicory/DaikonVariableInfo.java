@@ -92,9 +92,9 @@ public abstract class DaikonVariableInfo
 
     /**
      * If false, use standard dfej behavior (any field in an
-     * instrumented class is visible) If true, use standard java
+     * instrumented class is visible).  If true, use standard Java
      * behavior (if the field is in a class in a different package, it
-     * is only visible if public, etc.)
+     * is only visible if public, etc.).
      */
     public static boolean std_visibility = false;
 
