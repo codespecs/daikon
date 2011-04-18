@@ -231,9 +231,9 @@ public abstract class DaikonVariableInfo
     }
 
     /**
-     * Given an object value corresponding to the parent of this DaikonVariableInfo variable,
-     * return the value (of the corresponding value in the target application)
-     * of this DaikonVariableInfo variable.
+     * Given an object value corresponding to the parent of this
+     * DaikonVariableInfo variable, return the value (of the corresponding
+     * value in the target application) of this DaikonVariableInfo variable.
      *
      * For instance, if the variable a has a field b, then calling
      * getMyValFromParentVal(val_of_a) will return the value of a.b
