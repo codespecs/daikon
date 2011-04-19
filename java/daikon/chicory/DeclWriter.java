@@ -531,6 +531,12 @@ public class DeclWriter extends DaikonWriter {
         String const_val = var.get_const_val();
         if (const_val != null)
           outFile.println ("    constant " + const_val);
+        
+        // Write out the arguments used to create (if present) the variable if it is a function
+        String function_args = var.get_function_args();
+        if (function_args != null)
+          outFile.println("    function-args " + function_args);
+        
 
         // Write out the variable flags if any are set
         EnumSet<VarFlags> var_flags = var.get_var_flags();

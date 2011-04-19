@@ -80,7 +80,10 @@ public abstract class DaikonVariableInfo
 
     /** Value of static constants.  Access via {@link #get_const_val} method. **/
     /*@Nullable*/ String const_val = null;
-
+    
+    /** Arguments used to create a function. Access via {@link #get_func_args()} method. **/
+    /*@Nullable*/ String function_args = null;
+    
     /** True iff the DeclWriter should print this variable **/
     protected boolean declShouldPrint = true;
 
@@ -1291,6 +1294,14 @@ public abstract class DaikonVariableInfo
      */
     public /*@Nullable*/ String get_const_val() {
         return const_val;
+    }
+    
+    /**
+     * Returns the function args of the variable. If the variable is not a
+     * function, or does not have any arguments, returns null.
+     */
+    public /*@Nullable*/ String get_function_args() {
+    	return function_args;
     }
 
    /**

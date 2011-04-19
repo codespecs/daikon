@@ -35,6 +35,14 @@ public class PureMethodInfo extends DaikonVariableInfo
         minfo = methInfo;
 
         this.args = args;
+        
+        // Update function_args if the pure method variable has parameters
+        if (this.args.length != 0) {
+            function_args = args[0].getName();
+            for (int i = 1; i < args.length; i++) {
+                function_args += " " + args[i].getName();
+            }
+        }
     }
 
     /**
@@ -219,7 +227,7 @@ public class PureMethodInfo extends DaikonVariableInfo
         }
 
     }
-
+    
     public VarKind get_var_kind() {
         return VarKind.FUNCTION;
     }
