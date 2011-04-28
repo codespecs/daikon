@@ -1692,7 +1692,7 @@ were declared, but since every stand-alone program uses the
 
 CITADEL is an Eiffel front-end to the Daikon invariant detector.
 You can obtain Citadel and its documentation from
-@uref{http://se.inf.ethz.ch/people/polikarpova/citadel.html}.
+@uref{http://se.inf.ethz.ch/people/polikarpova/citadel/}.
 
 
 @node    Running Daikon, Daikon output, Example usage, Top
@@ -7262,7 +7262,7 @@ Manual}.
 @cindex instrumentation, of Eiffel programs
 
 A front end for the Eiffel programming language is distributed
-separately; see @uref{http://se.inf.ethz.ch/people/polikarpova/citadel.html}.
+separately; see @uref{http://se.inf.ethz.ch/people/polikarpova/citadel/}.
 
 @cindex front end for IOA
 @cindex IOA front end
