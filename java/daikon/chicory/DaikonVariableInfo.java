@@ -80,7 +80,10 @@ public abstract class DaikonVariableInfo
 
     /** Value of static constants.  Access via {@link #get_const_val} method. **/
     /*@Nullable*/ String const_val = null;
-
+    
+    /** Arguments used to create a function. Access via {@link #get_func_args()} method. **/
+    /*@Nullable*/ String function_args = null;
+    
     /** True iff the DeclWriter should print this variable **/
     protected boolean declShouldPrint = true;
 
@@ -457,7 +460,7 @@ public abstract class DaikonVariableInfo
             //.class variable
             if (shouldAddRuntimeClass(type))
             {
-                DaikonVariableInfo thisClass = new DaikonClassInfo("this.getClass()", classClassName, stringClassName, false);
+                DaikonVariableInfo thisClass = new DaikonClassInfo("this.getClass()", classClassName, stringClassName, "this", false);
                 thisInfo.addChild(thisClass);
             }
         }
@@ -718,8 +721,9 @@ public abstract class DaikonVariableInfo
         }
 
         String type_name = stdClassName (type);
+        // TODO: Passing incorrect receiver name????
         DaikonVariableInfo newPure = new PureMethodInfo(offset + theName, minfo,
-                type_name + arr_str, getRepName(type, isArray) + arr_str,
+                type_name + arr_str, getRepName(type, isArray) + arr_str, offset.substring(0, offset.length() - 1),
                 isArray, args);
 
         addChild(newPure);
@@ -1061,7 +1065,7 @@ public abstract class DaikonVariableInfo
            // .getClass() var
            if (!ignore) {
                DaikonVariableInfo childClass
-                   = new DaikonClassInfo(offset + theName + "[]" + class_suffix, classClassName + "[]", stringClassName + "[]", true);
+                   = new DaikonClassInfo(offset + theName + "[]" + class_suffix, classClassName + "[]", stringClassName + "[]", offset + theName + "[]", true);
 
                child.addChild(childClass);
            }
@@ -1087,7 +1091,8 @@ public abstract class DaikonVariableInfo
        DaikonVariableInfo classInfo
            = new DaikonClassInfo(offset + theName + class_suffix,
                                  classClassName + postString,
-                                 stringClassName + postString,  
+                                 stringClassName + postString,
+                                 offset + theName,
                                  (offset+theName).contains("[]"));
 
        addChild(classInfo);
@@ -1111,6 +1116,7 @@ public abstract class DaikonVariableInfo
        DaikonVariableInfo stringInfo = new StringInfo(offset + theName + ".toString",
                                                       stringClassName + postString,
                                                       stringClassName + postString,
+                                                      offset + theName,
                (offset+theName).contains("[]"));
 
        addChild(stringInfo);
@@ -1291,6 +1297,14 @@ public abstract class DaikonVariableInfo
      */
     public /*@Nullable*/ String get_const_val() {
         return const_val;
+    }
+    
+    /**
+     * Returns the function args of the variable. If the variable is not a
+     * function, returns null.
+     */
+    public /*@Nullable*/ String get_function_args() {
+    	return function_args;
     }
 
    /**

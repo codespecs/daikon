@@ -20,9 +20,11 @@ public class DaikonClassInfo extends DaikonVariableInfo
      * @param theName The name of the variable
      * @param isArr True iff the variable represents an array of runtime classes
      */
-    public DaikonClassInfo(String theName, String typeName, String repTypeName, boolean isArr)
+    public DaikonClassInfo(String theName, String typeName, String repTypeName, String receiverName, boolean isArr)
     {
         super(theName, typeName, repTypeName, isArr);
+        
+        function_args = receiverName; 
     }
 
     //.class variables are derived, so just keep the parent value

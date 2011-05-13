@@ -9,9 +9,11 @@ import java.util.*;
  */
 public class StringInfo extends DaikonVariableInfo
 {
-    public StringInfo(String theName, String typeName, String repTypeName, boolean arr)
+    public StringInfo(String theName, String typeName, String repTypeName, String receiverName, boolean arr)
     {
         super(theName, typeName, repTypeName, arr);
+        
+        function_args = receiverName;
     }
 
     @Override
