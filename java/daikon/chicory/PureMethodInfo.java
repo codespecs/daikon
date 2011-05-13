@@ -21,12 +21,12 @@ public class PureMethodInfo extends DaikonVariableInfo
     private DaikonVariableInfo[] args;
 
 
-    public PureMethodInfo(String name, MethodInfo methInfo, String typeName, String repTypeName, boolean inArray)
+    public PureMethodInfo(String name, MethodInfo methInfo, String typeName, String repTypeName, String receiverName, boolean inArray)
     {
-        this(name, methInfo, typeName, repTypeName, inArray, new DaikonVariableInfo[0]);
+        this(name, methInfo, typeName, repTypeName, receiverName, inArray, new DaikonVariableInfo[0]);
     }
 
-    public PureMethodInfo(String name, MethodInfo methInfo, String typeName, String repTypeName, boolean inArray, DaikonVariableInfo[] args)
+    public PureMethodInfo(String name, MethodInfo methInfo, String typeName, String repTypeName, String receiverName, boolean inArray, DaikonVariableInfo[] args)
     {
         super(name, typeName, repTypeName, inArray);
 
@@ -36,10 +36,10 @@ public class PureMethodInfo extends DaikonVariableInfo
 
         this.args = args;
         
-        // Update function_args if the pure method variable has parameters
+        // Update functon_args
+       function_args = receiverName;
         if (this.args.length != 0) {
-            function_args = args[0].getName();
-            for (int i = 1; i < args.length; i++) {
+            for (int i = 0; i < args.length; i++) {
                 function_args += " " + args[i].getName();
             }
         }
