@@ -36,8 +36,8 @@ public class PureMethodInfo extends DaikonVariableInfo
 
         this.args = args;
         
-        // Update functon_args
-       function_args = receiverName;
+        // Update function_args
+        function_args = receiverName;
         if (this.args.length != 0) {
             for (int i = 0; i < args.length; i++) {
                 function_args += " " + args[i].getName();
