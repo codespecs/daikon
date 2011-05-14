@@ -383,7 +383,9 @@ ALL_LIST_FILE:=${SCRATCH_FOR_DAIKON}/.all-files
 INST_LIST_FILE:=${SCRATCH_FOR_DAIKON}/.instrument-files
 
 ifeq (infer,${INSTRUMENT})
-${ALL_LIST_FILE}: ${SCRATCH_FOR_DAIKON}/.exists
+# Adding the dependency on the per-project Makefile is not enough, but does
+# help, for instance if the MAIN_CLASS setting in Makefile changes.
+${ALL_LIST_FILE}: ${SCRATCH_FOR_DAIKON}/.exists ./Makefile
 	@echo
 	@echo "### figure out the necessary files (${PROJECT_FILE})"
 	@echo
