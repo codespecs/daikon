@@ -1,5 +1,5 @@
 // Declarations for misc.Fib
-// Declarations written Thu Jan 27 02:26:15 PST 2011
+// Declarations written Sat May 14 07:48:35 PDT 2011
 
 decl-version 2.0
 var-comparability none
@@ -90,6 +90,7 @@ parent parent misc.Fib:::CLASS 1
     enclosing-var args
     dec-type java.lang.Class
     rep-type java.lang.String
+    function-args args
     flags nomod synthetic classname
     comparability 22
   variable args[..]
@@ -106,6 +107,7 @@ parent parent misc.Fib:::CLASS 1
     array 1
     dec-type java.lang.String[]
     rep-type java.lang.String[]
+    function-args args[]
     flags nomod synthetic to_string
     comparability 22
 
@@ -152,6 +154,7 @@ parent parent misc.Fib:::CLASS 1
     enclosing-var args
     dec-type java.lang.Class
     rep-type java.lang.String
+    function-args args
     flags nomod synthetic classname
     comparability 22
   variable args[..]
@@ -168,6 +171,7 @@ parent parent misc.Fib:::CLASS 1
     array 1
     dec-type java.lang.String[]
     rep-type java.lang.String[]
+    function-args args[]
     flags nomod synthetic to_string
     comparability 22
 
@@ -317,7 +321,7 @@ misc.Fib.c
 0
 1
 args
-10284430
+23738841
 1
 args.getClass()
 "java.lang.String[]"
@@ -862,7 +866,7 @@ misc.Fib.c
 17711
 1
 args
-10284430
+23738841
 1
 args.getClass()
 "java.lang.String[]"

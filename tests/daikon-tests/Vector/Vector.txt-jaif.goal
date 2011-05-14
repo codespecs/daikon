@@ -3,21 +3,21 @@ annotation @Nullable:
 annotation @NonNull:
 
 package javautil:
-class Vector : // 42090/42090 obj/class samples
+class Vector : // 41700/41700 obj/class samples
   field serialVersionUID :  // long
   field elementData :  // java.lang.Object[]
   field elementCount :  // int
   field capacityIncrement :  // int
   method <init>() : // 5 samples
     return: 
-  method <init>(I) : // 325 samples
+  method <init>(I) : // 260 samples
     return: 
     parameter #0 :  // initialCapacity
-  method <init>(II) : // 1850 samples
+  method <init>(II) : // 1785 samples
     return: 
     parameter #0 :  // initialCapacity
     parameter #1 :  // capacityIncrement
-  method addElement(Ljava/lang/Object;) : // 3890 samples
+  method addElement(Ljava/lang/Object;) : // 3760 samples
     return: 
     parameter #0 : @Nullable  // obj
   method capacity() : // 0 samples

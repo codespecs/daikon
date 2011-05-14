@@ -2,7 +2,8 @@
 
 # Read Makefile.common for what all of this means
 
-MAIN_CLASS:=javautil.VectorTest
+#MAIN_CLASS:=javautil.VectorTest
+MAIN_CLASS:=javautil.VectorTestDeterministic
 #MAIN_CLASS:=javautil.VectorTestAug
 
 ESC_ON:=1

@@ -1,5 +1,5 @@
 // Declarations for misc.Precedence
-// Declarations written Thu Jan 27 02:25:59 PST 2011
+// Declarations written Sat May 14 07:47:36 PDT 2011
 
 decl-version 2.0
 var-comparability none
@@ -38,6 +38,7 @@ ppt-type enter
     enclosing-var args
     dec-type java.lang.Class
     rep-type java.lang.String
+    function-args args
     flags synthetic classname
     comparability 22
   variable args[..]
@@ -53,6 +54,7 @@ ppt-type enter
     array 1
     dec-type java.lang.String[]
     rep-type java.lang.String[]
+    function-args args[]
     flags synthetic to_string
     comparability 22
 
@@ -69,6 +71,7 @@ ppt-type subexit
     enclosing-var args
     dec-type java.lang.Class
     rep-type java.lang.String
+    function-args args
     flags synthetic classname
     comparability 22
   variable args[..]
@@ -84,6 +87,7 @@ ppt-type subexit
     array 1
     dec-type java.lang.String[]
     rep-type java.lang.String[]
+    function-args args[]
     flags synthetic to_string
     comparability 22
 
@@ -159,7 +163,7 @@ misc.Precedence.main(java.lang.String[]):::ENTER
 this_invocation_nonce
 0
 args
-29791654
+8167849
 1
 args.getClass()
 "java.lang.String[]"
@@ -179,7 +183,7 @@ misc.Precedence.Precedence():::EXIT3
 this_invocation_nonce
 1
 this
-9097070
+5857945
 1
 this.i
 0
@@ -189,7 +193,7 @@ misc.Precedence.lets_calculate(int):::ENTER
 this_invocation_nonce
 2
 this
-9097070
+5857945
 1
 this.i
 10
@@ -202,7 +206,7 @@ misc.Precedence.lets_calculate(int):::EXIT18
 this_invocation_nonce
 2
 this
-9097070
+5857945
 1
 this.i
 2
@@ -218,7 +222,7 @@ misc.Precedence.main(java.lang.String[]):::EXIT10
 this_invocation_nonce
 0
 args
-29791654
+8167849
 1
 args.getClass()
 "java.lang.String[]"

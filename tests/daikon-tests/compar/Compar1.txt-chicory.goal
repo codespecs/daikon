@@ -1,5 +1,5 @@
 // Declarations for misc.Compar1
-// Declarations written Thu Jan 27 02:25:42 PST 2011
+// Declarations written Sat May 14 07:46:50 PDT 2011
 
 decl-version 2.0
 var-comparability none
@@ -31,6 +31,7 @@ ppt-type enter
     enclosing-var args
     dec-type java.lang.Class
     rep-type java.lang.String
+    function-args args
     flags synthetic classname
     comparability 22
   variable args[..]
@@ -46,6 +47,7 @@ ppt-type enter
     array 1
     dec-type java.lang.String[]
     rep-type java.lang.String[]
+    function-args args[]
     flags synthetic to_string
     comparability 22
 
@@ -62,6 +64,7 @@ ppt-type subexit
     enclosing-var args
     dec-type java.lang.Class
     rep-type java.lang.String
+    function-args args
     flags synthetic classname
     comparability 22
   variable args[..]
@@ -77,6 +80,7 @@ ppt-type subexit
     array 1
     dec-type java.lang.String[]
     rep-type java.lang.String[]
+    function-args args[]
     flags synthetic to_string
     comparability 22
 
@@ -147,7 +151,7 @@ misc.Compar1.main(java.lang.String[]):::ENTER
 this_invocation_nonce
 0
 args
-10284430
+12582080
 1
 args.getClass()
 "java.lang.String[]"
@@ -3363,7 +3367,7 @@ misc.Compar1.main(java.lang.String[]):::EXIT19
 this_invocation_nonce
 0
 args
-10284430
+12582080
 1
 args.getClass()
 "java.lang.String[]"
