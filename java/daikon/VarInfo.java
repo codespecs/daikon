@@ -2844,7 +2844,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return enclosing_var.esc_name (index) + "." + relative_name;
       return str_name;
     case FUNCTION:
-      assert function_args == null : "function args not implemented";
+//function_args      assert function_args == null : "function args not implemented";
       if (var_flags.contains (VarFlags.CLASSNAME))
         return ("\\typeof(" + enclosing_var.esc_name(index) +")");
       if (var_flags.contains (VarFlags.TO_STRING))
@@ -2914,7 +2914,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         return enclosing_var.jml_name (index) + "." + relative_name;
       return str_name;
     case FUNCTION:
-      assert function_args == null : "function args not implemented";
+//function_args      assert function_args == null : "function args not implemented";
       if (var_flags.contains (VarFlags.CLASSNAME)) {
         if (arr_dims > 0)
           return String.format ("daikon.Quant.typeArray(%s)",
@@ -2968,7 +2968,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return String.format ("(select |%s| %s)", relative_name,
                             enclosing_var.simplify_name(index));
     case FUNCTION:
-      assert function_args == null : "function args not implemented";
+//function_args      assert function_args == null : "function args not implemented";
       if (var_flags.contains (VarFlags.CLASSNAME))
         return ("(typeof " + enclosing_var.simplify_name(index) +")");
       if (var_flags.contains (VarFlags.TO_STRING))
