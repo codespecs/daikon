@@ -1301,7 +1301,7 @@ public abstract class DaikonVariableInfo
     
     /**
      * Returns the function args of the variable. If the variable is not a
-     * function, returns null.
+     * function, or does not have any arguments, returns null.
      */
     public /*@Nullable*/ String get_function_args() {
     	return function_args;
