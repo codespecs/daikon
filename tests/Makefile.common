@@ -1061,6 +1061,7 @@ merged/.merged-esc: ${INV_FILE} ${DAIKON_CLASS} ${MERGE_ESC_CLASS} ${MERGE_ESC_V
 	tar cf - -C ${SOURCES} `cat ${ALL_LIST_FILE}` | tar -xf - -C $(CWD)/merged
 #	For use with daikon.tools.MergeESC.  Must compile first for MergeESC.
 	cd merged && ${JAVAC} `find . $(FINDARGS) -name '*.java'`
+	echo INST_LIST_FILE = ${INST_LIST_FILE}
 	cd merged && ${MERGE_ESC} \
 		${MERGE_ESC_OPTIONS} ${USER_MERGE_ESC_OPTIONS} \
 		${INV_FILE} \
