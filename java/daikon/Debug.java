@@ -86,7 +86,7 @@ public class Debug {
       // "SeqSeqIntLessThan",
       // "SeqSeqIntGreaterThan",
       // "OneOf"
-      // "StringComparison",
+      // "StringEqual",
       // "StringLessThan",
       // "StringGreaterThan",
       // "Modlong_zxy",

@@ -2,8 +2,8 @@ package daikon.inv;
 
 import daikon.*;
 
-// An interface satisfied by IntComparison, SeqComparison,
-// StringComparison, etc.  (Maybe that's the whole list.)
+// An interface satisfied by IntEqual, SeqEqual,
+// StringEqual, etc.  (Maybe that's the whole list.)
 public interface Comparison {
   /**
    * If the invariant is a equality invariant, then its confidence.
