@@ -101,9 +101,10 @@ public final /*@Interned*/ class ProglangType
   }
 
   /**
-   * Like parse, but does certain conversions for representation types, in
-   * order to return real file representation types even if the
-   * file contains something slightly different than the prescribed format.
+   * Like parse, but normalizes representation types (such as converting
+   * "float" to "double"), in order to return real file representation types
+   * even if the file contains something slightly different than the
+   * prescribed format.
    **/
   public static ProglangType rep_parse(String rep) {
     ProglangType candidate = parse(rep);
