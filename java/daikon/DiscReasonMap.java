@@ -123,7 +123,7 @@ public final class DiscReasonMap {
     if (invInfo.vars() != null) {
       // The user entered the vars in a specific order, but let's give
       // them matching invariants that have those vars in any order.
-      @SuppressWarnings("null") // because invInfo.vars() != null
+      @SuppressWarnings("nullness") // because invInfo.vars() != null
       /*@NonNull*/ List<String> var_perms = invInfo.var_permutations();
       for (String var_perm : var_perms) {
         List<DiscardInfo> temp = vars_map_from_ppt.get(var_perm);
