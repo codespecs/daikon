@@ -7651,22 +7651,21 @@ annotated includes logical shift operators. @xref{Known bugs}.
 @cindex inference, of Nullable type
 
 AnnotateNullable determines which variables in a Java program were ever
-null during execution.  Its primary use is for performing inference for
-a type system that detects null dereference errors.  An example is the
-Nullness checker that is part of the
+null during execution.  AnnotateNullable makes it easier to use 
+the @uref{http://types.cs.washington.edu/checker-framework/current/checkers-manual.html#nullness-checker, Nullness Checker}
+that is part of the
 @uref{http://types.cs.washington.edu/checker-framework/, Checker Framework}.
 
-The Nullness checker requires a programmer to annotate some references
-with @code{@@Nullable}, meaning the variable might be null; references
-that are left unannotated are never null at run time.  (Alternately, the
-checker can use @code{@@NonNull} for references that are never
-null, and leave unannotated for references that might be null.  The
-Nullness checker supports either choice of default.)  The checker
-then warns the programmer about possible null dereference errors.
+The Nullness Checker
+warns the programmer about possible null dereference errors.
+This is useful, but it requires the programmer to write a @code{@@Nullable}
+annotation anywhere that a variable might contain null.
+(An unannotated reference is assumed to never be
+null at run time.)
 
-The Nullness checker is useful, but writing all the annotations is tedious.
 The AnnotateNullable tool automatically and soundly determines a subset of the
-proper @code{@@Nullable} annotations.  Each annotation that it infers is
+proper @code{@@Nullable} annotations, reducing the programmer's burden.
+Each annotation that AnnotateNullable infers is
 correct.  The programmer may need to write some additional
 @code{@@Nullable} annotations, but that is much easier than writing them all.
 
@@ -7675,14 +7674,12 @@ follow these steps:
 
 @enumerate
 @item
-Run your application one or more times to create a trace file.  As
-always, the runs should exercise the application as thoroughly as
-possible.  No incorrect @code{@@Nullable} annotations are ever produced,
-but more thorough runs produce a larger number of @code{@@Nullable}
-annotations.
+Run your application one or more times to create a trace file.
+The more thorough your test runs, the larger number of
+@code{@@Nullable} annotations AnnotateNullable will produce.
 
 @smallexample
-java daikon.Chicory --dtrace-file=an.dtrace.gz @emph{your-command-and-options}
+java daikon.Chicory --dtrace-file=an.dtrace.gz @emph{mypackage.MyClass arg1 arg2 ...}
 @end smallexample
 
 @item Run Daikon on the resulting .dtrace file:
@@ -7692,13 +7689,13 @@ java daikon.Daikon an.dtrace.gz --no_text_output \
     --config @var{daikondir}/java/daikon/annotate_nullable.config
 @end smallexample
 
-The example uses the @file{annotate_nullable.config} configuration file
-that is included in the Daikon distribution.
-You may use any configuration file, or none, as long as the NonZero
-invariant is enabled.  The @file{annotate_nullable.config} enables
-@emph{only} the NonZero invariant.  This makes Daikon run much faster,
-but the resulting @file{.inv} file is useful only for the
-AnnotateNullable tool.
+@c The example uses the @file{annotate_nullable.config} configuration file
+@c that is included in the Daikon distribution.
+@c You may use any configuration file, or none, as long as the NonZero
+@c invariant is enabled.  The @file{annotate_nullable.config} enables
+@c @emph{only} the NonZero invariant.  This makes Daikon run much faster,
+@c but the resulting @file{.inv} file is useful only for the
+@c AnnotateNullable tool.
 
 @c This is an implementation detail, so leave it out of the manual.
 @c AnnotateNullable determines which variables have seen null values by
@@ -7718,11 +7715,14 @@ java daikon.AnnotateNullable an.inv.gz > nullable-annotations.jaif
 @item
 Use the
 @uref{http://types.cs.washington.edu/@/annotation-file-utilities/,
-Annotation File Utilities} to insert the annotations in your .class or .java
+Annotation File Utilities} to insert the annotations in your
+@file{.class} or @file{.java}
 file.
 
 @smallexample
+# To insert in classfiles:
 insert-annotations @var{mypackage.MyClass} nullable-annotations.jaif
+# To insert in soure files:
 insert-annotations-to-source nullable-annotations.jaif \
     mypackage/MyClass.java annotated/mypackage/MyClass.java
 @end smallexample
