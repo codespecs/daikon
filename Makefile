@@ -600,21 +600,6 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 ### Utilities
 ###
 
-# Copies PAG specific files to the website and group area
-WWW_PAG_FILES := doc/www/mit/eclipse-pag.html \
-				 doc/www/mit/index.html \
-				 doc/www/mit/edg-nda-noncomm.pdf \
-				 scripts/log2html.php \
-				 scripts/emacs_launch.php
-GROUP_FILES   := scripts/pag-daikon.bashrc scripts/pag-daikon.cshrc
-
-pag-install:
-	install --mode=ugo=r -p $(WWW_PAG_FILES) $(MIT_DIR)
-	install --mode=ugo=r -p $(GROUP_FILES) \
-		/afs/csail/group/pag/software/arch/common/bin
-	install --mode=ugo=r -p emacs/daikon-group.el \
-	  /afs/csail/group/pag/software/config/emacs-daikon-group.el
-
 showvars:
 	@echo "DAIKON_JAVA_FILES = " $(DAIKON_JAVA_FILES)
 	@echo "WWW_FILES = " $(WWW_FILES)

@@ -1815,7 +1815,8 @@ Just run the command @samp{eclipse} at the command shell.
 There is one big catch:  take note of where you launch Eclipse and
 @b{always} launch Eclipse from the same location. For example, you might
 want to alias run-eclipse with '@samp{cd $HOME; eclipse}'.
-For convenience, this is already done for you if you source the pag-daikon
+For convenience, this is already done for you if you source the
+daikon-dev.bashrc or daikon-dev.cshrc
 startup scripts.
 There are ways around the launch location inconvenience, such as
 the -data switch, but the alias trick should be the simplest and least

@@ -115,8 +115,8 @@ if (! $success{"daikon_checkout"}) {
   goto PRINT_FAILURES;
 }
 
-# Inherit the environment of the group-wide init file
-%ENV = get_env("$DAIKONPARENT/daikon/scripts/pag-daikon.bashrc");
+# Inherit the environment of the developer init file
+%ENV = get_env("$DAIKONPARENT/daikon/scripts/daikon-dev.bashrc");
 
 my $INV = $ENV{"INV"};
 print_log("INV = $INV\n");

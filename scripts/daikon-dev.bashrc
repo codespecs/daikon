@@ -1,5 +1,5 @@
-# pag-daikon.bashrc
-# This file should be kept in sync with pag-daikon.cshrc.
+# daikon-dev.bashrc
+# This file should be kept in sync with daikon-dev.cshrc.
 
 export LC_ALL=${LC_ALL:-en_US}
 
@@ -8,7 +8,7 @@ export DAIKONDIR=${DAIKONPARENT}/daikon
 
 if [ ! -d "${DAIKONDIR}" ]; then
   echo "*****"
-  echo "pag-daikon.bashrc cannot find ${DAIKONDIR}"
+  echo "daikon-dev.bashrc cannot find ${DAIKONDIR}"
   echo "Please check out Daikon to correct this problem."
   echo "Or, if you've checked it out to a different location, set the"
   echo "DAIKONPARENT environment variable to point to the directory that"
