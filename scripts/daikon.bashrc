@@ -13,21 +13,21 @@
 
 if [ -z "$JAVA_HOME" ]; then
   echo "JAVA_HOME environment variable is not set."
-  echo "Bailing out of daikon.bashrc ."
+  echo "Please fix this before proceeding.  Aborting daikon.bashrc ."
   return 2
 elif [ ! -d "$JAVA_HOME" -a "$JAVA_HOME" != "none" ]; then
   echo "JAVA_HOME is set to non-existent directory: $JAVA_HOME"
-  echo "Bailing out of daikon.bashrc ."
+  echo "Please fix this before proceeding.  Aborting daikon.bashrc ."
   return 2
 fi
 
 if [ -z "$DAIKONDIR" ]; then
   echo "DAIKONDIR environment variable is not set."
-  echo "Bailing out of daikon.bashrc ."
+  echo "Please fix this before proceeding.  Aborting daikon.bashrc ."
   return 2
 elif [ ! -d "$DAIKONDIR" ]; then
   echo "DAIKONDIR is set to non-existent directory: $DAIKONDIR"
-  echo "Bailing out of daikon.bashrc ."
+  echo "Please fix this before proceeding.  Aborting daikon.bashrc ."
   return 2
 fi
 
@@ -38,7 +38,7 @@ if [ -z "$DAIKONBIN" ]; then
     export DAIKONBIN=${DAIKONDIR}/scripts
   else
     echo "Cannot choose a value for environment variable DAIKONBIN."
-    echo "Bailing out of daikon.bashrc ."
+    echo "Please fix this before proceeding.  Aborting daikon.bashrc ."
     return 2
   fi
 fi

@@ -1,5 +1,5 @@
-# pag-daikon.cshrc
-# This file should be kept in sync with pag-daikon.bashrc.
+# daikon-dev.cshrc
+# This file should be kept in sync with daikon-dev.bashrc.
 
 if (! $?LC_ALL) setenv LC_ALL en_US
 
@@ -8,7 +8,7 @@ setenv DAIKONDIR ${DAIKONPARENT}/invariants
 
 if (! -d ${DAIKONDIR}) then
   echo "*****"
-  echo "pag-daikon.cshrc cannot find ${DAIKONDIR}"
+  echo "daikon-dev.cshrc cannot find ${DAIKONDIR}"
   echo "Please check out Daikon to correct this problem."
   echo "Or, if you've checked it out to a different location, set the"
   echo "DAIKONPARENT environment variable to point to the directory that"
@@ -40,7 +40,7 @@ setenv PATH /usr/local/bin:${PATH}:/afs/csail/group/pag/projects/invariants/bina
 
 if ($?debuglogin) echo "about to source daikon.cshrc: ${INV}/scripts/daikon.cshrc"
 source ${INV}/scripts/daikon.cshrc
-if ($?debuglogin) echo "sourced daikon.cshrc from pag-daikon.cshrc"
+if ($?debuglogin) echo "sourced daikon.cshrc from daikon-dev.cshrc"
 
 setenv LD_LIBRARY_PATH /usr/X11R6/lib:/usr/local/lib:/usr/lib:/lib
 

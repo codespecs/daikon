@@ -14,24 +14,24 @@ REM You should not need to edit this file directly.
 
 if "%JAVA_HOME%"=="" (
   echo JAVA_HOME environment variable is not set.
-  echo Bailing out of daikonenv.bat .
+  echo Please fix this before proceeding.  Aborting daikonenv.bat .
   exit /b 2
 ) else (
   if not exist "%JAVA_HOME%" (
     echo JAVA_HOME is set to non-existent directory: %JAVA_HOME%
-    echo Bailing out of daikonenv.bat .
+    echo Please fix this before proceeding.  Aborting daikonenv.bat .
     exit /b 2
   )
 )
 
 if "%DAIKONDIR%"=="" (
   echo DAIKONDIR environment variable is not set.
-  echo Bailing out of daikonenv.bat .
+  echo Please fix this before proceeding.  Aborting daikonenv.bat .
   exit /b 2
 ) else (
   if not exist "%DAIKONDIR%" (
     echo DAIKONDIR is set to non-existent directory: %DAIKONDIR%
-    echo Bailing out of daikonenv.bat .
+    echo Please fix this before proceeding.  Aborting daikonenv.bat .
     exit /b 2
   )
 )
@@ -44,7 +44,7 @@ if "$DAIKONBIN"=="" (
       set DAIKONBIN=%DAIKONDIR%\scripts
     ) else (
       echo Cannot choose a value for environment variable DAIKONBIN.
-      echo Bailing out of daikonenv.bat .
+      echo Please fix this before proceeding.  Aborting daikonenv.bat .
       exit /b 2
     )
   )
