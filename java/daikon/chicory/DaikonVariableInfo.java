@@ -898,7 +898,13 @@ public abstract class DaikonVariableInfo
     }
 
     /**
-     * Determines if type needs a corresponding .class runtime class variable
+     * Determines if type needs a corresponding .class runtime class variable.
+     * <p>
+     * The .class variable is printed for interfaces, abstract classes, and
+     * Object.  For these types, the run-time class is always (or, for
+     * Object, usually) different than the declared type.  An alternate,
+     * and possibly more useful, heuristic would be to print the .class
+     * variable for any type that has subtypes.
      *
      * @param type
      *            The variable's Type
