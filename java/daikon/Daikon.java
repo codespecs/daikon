@@ -1375,12 +1375,13 @@ public final class Daikon {
   }
 
   /**
-   * Creates upper program points by merging together the invariants
+   * Creates invariants for upper program points by merging together the invariants
    * from all of the lower points.
    */
   public static void createUpperPpts (PptMap all_ppts) {
 
     // Process each ppt that doesn't have a parent
+    // (mergeInvs is called on a root, and recursively processes children)
     for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext(); ) {
       PptTopLevel ppt = i.next();
       // System.out.printf ("considering ppt %s parents: %s, children: %s\n",
@@ -1931,6 +1932,7 @@ public final class Daikon {
     // Calculate invariants at all non-leaf ppts
     if (use_dataflow_hierarchy) {
       debugProgress.fine("createUpperPpts");
+      // calculates invariants; does not actually create any ppts
       createUpperPpts(all_ppts);
       debugProgress.fine("createUpperPpts ... done");
     }

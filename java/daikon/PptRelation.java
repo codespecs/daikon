@@ -97,6 +97,8 @@ public class PptRelation implements Serializable {
    * Create a relation between the specified parent and child.  The actual
    * variable relations are filled in by the caller.  Note that this creates
    * the connection between this relation and the parent/child.
+   * As a side effect, the constructed PptRelation is stored in both the
+   * parent and the child.
    */
   private PptRelation(PptTopLevel parent, PptTopLevel child,
                       PptRelationType rel_type) {
@@ -500,6 +502,8 @@ public class PptRelation implements Serializable {
       if (vp.isStaticConstant()) {
         boolean found = rel.relate(vp, vp.name());
         // Static constants are not always placed at each level in hierarchy
+        // (due to mutually recursive constants that contain one another as
+        // fields).
         // assert found;
       } else {
         // VarInfoName orig_name = vp.name.applyPrestate().intern();
@@ -949,6 +953,8 @@ public class PptRelation implements Serializable {
     for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext();) {
       PptTopLevel ppt = i.next();
       PptName pname = ppt.ppt_name;
+      // rels is solely for debugging; each relation is stored in the
+      // parent and child ppts
       List<PptRelation> rels = new ArrayList<PptRelation>();
       Daikon.debugProgress.fine ("Processing ppt " + pname);
       debug.fine("Processing ppt " + pname);
@@ -982,8 +988,7 @@ public class PptRelation implements Serializable {
           rels.add (newCombinedExitExitNNRel(parent, ppt));
 
       // Connect combined exit points to enter points over orig variables
-      } else if (ppt.is_combined_exit())
-      if (ppt.is_combined_exit()) {
+      } else if (ppt.is_combined_exit()) {
         PptTopLevel enter = all_ppts.get(pname.makeEnter());
         if (enter != null) {
           rels.add (PptRelation.newEnterExitRel(enter, ppt));
