@@ -265,6 +265,7 @@ public class NISuppression {
       if ((idx + 1) == suppressors.length) {
 
         // Create descriptions of the suppressed invariants
+        @SuppressWarnings("class.not.found.nullness.parse.error") // bug: fields in precondition expressions
         List<NIS.SupInv> new_invs = suppressee.find_all (cvis, ppt, null);
         unsuppressed_invs.addAll (new_invs);
 
@@ -358,6 +359,7 @@ public class NISuppression {
         }
 
         // Create descriptions of the suppressed invariants
+        @SuppressWarnings("class.not.found.nullness.parse.error") // bug: fields in precondition expressions
         List<NIS.SupInv> new_invs = suppressee.find_all (cvis, ppt, cinvs);
         if (debug)
           System.out.printf ("created %s new invariants", new_invs);

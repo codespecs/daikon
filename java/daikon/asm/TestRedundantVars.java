@@ -45,6 +45,7 @@ public class TestRedundantVars {
     private static PptFile with;
     private static PptFile reds;
 
+    @SuppressWarnings("nullness.parse.error") // bug: fields in precondition expressions
     public static void main(String[] args) {
 
         System.out.print("Reading invariant list file 1...");
@@ -77,6 +78,7 @@ public class TestRedundantVars {
     }
 
     // Returns true iff all tests pass.
+    @SuppressWarnings("field.not.found.nullness.parse.error") // bug: fields in precondition expressions
     /*@NonNullOnEntry("this.reds.records.get(#0)")*/
     private static boolean process_ppt(String ppt) {
 

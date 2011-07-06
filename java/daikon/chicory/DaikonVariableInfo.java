@@ -443,6 +443,7 @@ public abstract class DaikonVariableInfo
      * attach new nodes as children of this node.
      * @param type the class whose fields should all be added to this node
      */
+    @SuppressWarnings("field.not.found.nullness.parse.error") // bug: fields in precondition expressions
     /*@NonNullOnEntry("cinfo.clazz")*/
     protected void addClassVars(ClassInfo cinfo, boolean dontPrintInstanceVars,
                                 Class<?> type, String offset, int depth) {
@@ -1166,6 +1167,7 @@ public abstract class DaikonVariableInfo
     *                be "this." in which case offset + name would be
     *                "this.ballCount."
     */
+   @SuppressWarnings("class.not.found.nullness.parse.error") // bug: fields in precondition expressions
    protected void addChildNodes(ClassInfo cinfo, Class<?> type, String theName,
                                 String offset, int depthRemaining) {
 

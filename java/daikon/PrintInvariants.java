@@ -1019,6 +1019,7 @@ public final class PrintInvariants {
    * Print invariants for a single program point, once we know that
    * this ppt is worth printing.
    **/
+  @SuppressWarnings("class.not.found.nullness.parse.error") // bug: fields in precondition expressions
   public static void print_invariants(PptTopLevel ppt, PrintWriter out,
                                       PptMap ppt_map) {
 
@@ -1142,6 +1143,7 @@ public final class PrintInvariants {
   /**
    * Does the actual printing of the invariants.
    **/
+  @SuppressWarnings("class.not.found.nullness.parse.error") // bug: fields in precondition expressions
   private static void finally_print_the_invariants(List<Invariant> invariants,
                                                    PrintWriter out,
                                                    PptTopLevel ppt) {

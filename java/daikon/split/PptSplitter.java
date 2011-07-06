@@ -245,6 +245,7 @@ public class PptSplitter implements Serializable {
 
 /// ??? MDE
     // Loop through each possible parent slice
+    @SuppressWarnings("class.not.found.nullness.parse.error") // bug: fields in precondition expressions
     List<VarInfo[]> slices = possible_slices();
 
     for (VarInfo[] vis : slices) {
@@ -497,6 +498,7 @@ public class PptSplitter implements Serializable {
    * because there may be implications created from invariants in child
    * slices that only exist in one child.
    **/
+  @SuppressWarnings("field.not.found.nullness.parse.error") // bug: fields in precondition expressions
   /*@NonNullOnEntry("parent.equality_view")*/
   private List<VarInfo[]> possible_slices() {
 

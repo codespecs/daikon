@@ -216,7 +216,8 @@ public class ChicoryPremain {
    * Write a *.pure file to the given location
    * @param fileName Where to write the file to (full path)
    */
-  /*@NonNullOnEntry("ChicoryPremain.pureMethods")*/
+  // not handled: /*@NonNullOnEntry("ChicoryPremain.pureMethods")*/
+  /*@NonNullOnEntry("pureMethods")*/
   private static void writePurityFile(String fileName, String parentDir)
   {
     PrintWriter pureFileWriter = null;
@@ -262,7 +263,8 @@ public class ChicoryPremain {
    * Return true iff Chicory has run a purity analysis or read a *.pure file
    */
   @SuppressWarnings("nullness") // dependent:  pureMethods is non-null if doPurity is true
-  /*@AssertNonNullIfTrue("ChicoryPremain.pureMethods")*/
+  // /*@AssertNonNullIfTrue("ChicoryPremain.pureMethods")*/
+  /*@AssertNonNullIfTrue("pureMethods")*/
   public static boolean shouldDoPurity()
   {
     return doPurity;
@@ -274,7 +276,8 @@ public class ChicoryPremain {
    *
    * @return true iff member is a pure method
    */
-  /*@NonNullOnEntry("ChicoryPremain.pureMethods")*/
+  // /*@NonNullOnEntry("ChicoryPremain.pureMethods")*/
+  /*@NonNullOnEntry("pureMethods")*/
   public static boolean isMethodPure(Member member)
   {
     assert shouldDoPurity() : "Can't query for purity if no purity analysis was executed";
@@ -292,7 +295,8 @@ public class ChicoryPremain {
   /**
    * Return an unmodifiable Set of the pure methods
    */
-  /*@NonNullOnEntry("ChicoryPremain.pureMethods")*/
+  // /*@NonNullOnEntry("ChicoryPremain.pureMethods")*/
+  /*@NonNullOnEntry("pureMethods")*/
   public static Set<String> getPureMethods()
   {
     return Collections.unmodifiableSet(pureMethods);
