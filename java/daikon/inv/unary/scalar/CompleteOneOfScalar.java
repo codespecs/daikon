@@ -31,6 +31,7 @@ public final class CompleteOneOfScalar extends SingleScalar
   }
 
   /** List of values seen **/
+  @Unused(when=Prototype.class)
   public List<Info> vals;
 
   /**

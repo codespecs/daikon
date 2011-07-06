@@ -21,11 +21,11 @@ import jtb.visitor.*;
 
 class ConditionExtractor extends DepthFirstVisitor {
 
-  private String packageName;
-  private String className; // The class name.
+  private /*@Nullable*/ String packageName;
+  private String className = "classname field is uninitialized"; // The class name.
   private /*@Nullable*/ String curMethodName; // Name of current method being parsed
   private /*@Nullable*/ String curMethodDeclaration;
-  boolean enterMethod;   // true if the current Node is a Method
+  boolean enterMethod = false;   // true if the current Node is a Method
                          // declaration ie. we just entered a method.
 
   // Contains the resultType of the current method.  If the current method is a
@@ -350,7 +350,7 @@ class ConditionExtractor extends DepthFirstVisitor {
     return replaceStatements;
   }
 
-  public String getPackageName() {
+  public /*@Nullable*/ String getPackageName() {
     return packageName;
   }
 

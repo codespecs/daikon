@@ -66,6 +66,7 @@ public final class CLASSNAME
   public PRIMITIVE[] x_cache = new PRIMITIVE[MINPAIRS];
   public PRIMITIVE[] y_cache = new PRIMITIVE[MINPAIRS];
 
+  @SuppressWarnings("fields.uninitialized") // delayed initialization
   public CLASSNAME(Invariant wrapper) {
     this.wrapper = wrapper;
   }

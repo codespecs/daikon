@@ -228,7 +228,7 @@ public class CreateSpinfo {
   private static void printSpinfoFile(PrintWriter output,
                                       Map<String,List<String>> conditions,
                                       Map<String,String> replaceStatements,
-                                      String packageName)
+                                      /*@Nullable*/ String packageName)
     throws IOException {
     if (!replaceStatements.values().isEmpty()) {
       output.println("REPLACE");

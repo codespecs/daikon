@@ -241,6 +241,7 @@ public class LOWERBOUND
    **/
   public static long dkconfig_maximal_interesting = 2;
 
+  @Unused(when=Prototype.class)
   private LOWERBOUNDCORE core;
 
   @SuppressWarnings("nullness") // circular initialization

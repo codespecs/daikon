@@ -81,6 +81,7 @@ public class CLASSNAME
   public static final boolean debugLinearTernary = false;
   // public static final boolean debugLinearTernary = true;
 
+  @Unused(when=Prototype.class)
   public CORECLASS core;
 
   @SuppressWarnings("nullness") // circular initialization

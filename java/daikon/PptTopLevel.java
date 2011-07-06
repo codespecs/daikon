@@ -341,6 +341,7 @@ public class PptTopLevel extends Ppt {
   /** The canonical VarInfo for the equality. */
   public Set<VarInfo> redundant_invs_equality = new LinkedHashSet<VarInfo>(0);
 
+  @SuppressWarnings("fields.uninitialized") // todo: initialization and helper methods
   public PptTopLevel (String name, PptType type, List<ParentRelation> parents,
                       EnumSet<PptFlags> flags, /*@Nullable*/ List<String> ppt_successors,
                       /*@Nullable*/ /*@Interned*/ String function_id, int bb_length, VarInfo[] var_infos) {
@@ -376,6 +377,7 @@ public class PptTopLevel extends Ppt {
   }
 
   // Used by DaikonSimple, InvMap, and tests.  Violates invariants.
+  @SuppressWarnings("fields.uninitialized") // violates invariants; also uses helper function
   public PptTopLevel(String name, VarInfo[] var_infos) {
     super(var_infos);
     this.name = name;

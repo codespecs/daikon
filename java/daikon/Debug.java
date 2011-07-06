@@ -155,13 +155,13 @@ public class Debug {
   // subclass of Invariant -- for instance, it might be a subclass of
   // BinaryDerivationFactory.
   /** cached class */
-  public Class<?> cache_class;
+  public /*@Nullable*/ Class<?> cache_class;
 
   /** cached ppt */
-  public Ppt cache_ppt;
+  public /*@Nullable*/ Ppt cache_ppt;
 
   /** cached variables */
-  public VarInfo[] cache_vis;
+  public VarInfo /*@Nullable*/ [] cache_vis;
 
   /**
    * Sets the cache for class, ppt, and vis so that future calls to log

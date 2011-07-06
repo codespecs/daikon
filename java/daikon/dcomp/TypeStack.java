@@ -66,11 +66,14 @@ public final class TypeStack
         return type;
     }
 
+    @AssertNonNullAfter("stack")
     private void createMap(final InstructionList l,
             final CodeExceptionGen[] exceptionTable)
     {
-        if (l == null)
-            return;
+        if (l == null) {
+            // return;
+            throw new Error("No InstructionList in createMap");
+        }
 
         //System.out.println("**********************");
         if (!initParents(l.getStart(), l.getInstructionHandles(),exceptionTable))
