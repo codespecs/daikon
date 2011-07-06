@@ -37,7 +37,7 @@ public final class CompleteOneOfString extends SingleString
   }
 
   /** List of values seen **/
-  @Unused(when=Prototype.class)
+  /*@Unused(when=Prototype.class)*/
   public List<Info> vals;
 
   /**
