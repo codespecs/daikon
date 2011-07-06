@@ -66,7 +66,7 @@ public final class TypeStack
         return type;
     }
 
-    @AssertNonNullAfter("stack")
+    /*@AssertNonNullAfter("stack")*/
     private void createMap(final InstructionList l,
             final CodeExceptionGen[] exceptionTable)
     {
