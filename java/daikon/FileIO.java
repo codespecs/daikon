@@ -893,7 +893,7 @@ public final class FileIO {
         else if (val instanceof int[])
           pw.print(ArraysMDE.toString((int[]) val));
         else if (val instanceof String)
-          pw.print(val == null ? "null" : UtilMDE.escapeNonASCII((String) val));
+          pw.print(UtilMDE.escapeNonASCII((String) val));
         else
           pw.print(val);
       }
