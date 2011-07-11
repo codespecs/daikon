@@ -1138,6 +1138,10 @@ public abstract class DaikonVariableInfo
     */
    public static boolean implementsList(Class<?> type)
    {
+       if (type.equals(java.util.List.class)) {
+           return true;
+       }
+
        // System.out.println(type);
        Class<?>[] interfaces = type.getInterfaces();
        for (Class<?> inter: interfaces)
