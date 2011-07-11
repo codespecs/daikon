@@ -1918,7 +1918,7 @@ debugging options}).
 Indicate that the given class implements the @code{java.util.List}
 interface.  The preferred mechanism for indicating such information is
 the @code{ListImplementors} section of the @file{.decls} file.
-See @ref{V1 ListImplementors declaration,,,./developer,Daikon Developer Manual}.
+See @ref{ListImplementors declaration,,,./developer,Daikon Developer Manual}.
 
 @item --nohierarchy
 @cindex hierarchy, disabling
