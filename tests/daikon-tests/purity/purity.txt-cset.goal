@@ -11,6 +11,8 @@ Variable sets for misc.Purity.<init>(I value, I shift) exit
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [2] [Field value, Parameter value]
 
 Variable sets for misc.Purity.getValue() enter
@@ -21,6 +23,8 @@ Variable sets for misc.Purity.getValue() enter
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [1] [Field shift]
   [1] [Field value]
 Variable sets for misc.Purity.getValue() exit
@@ -32,6 +36,8 @@ Variable sets for misc.Purity.getValue() exit
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [1] [Field shift]
 
 Variable sets for misc.Purity.getShift() enter
@@ -42,6 +48,8 @@ Variable sets for misc.Purity.getShift() enter
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [1] [Field shift]
   [1] [Field value]
 Variable sets for misc.Purity.getShift() exit
@@ -53,6 +61,8 @@ Variable sets for misc.Purity.getShift() exit
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [1] [Field value]
 
 Variable sets for misc.Purity.isHeavy() enter
@@ -63,6 +73,8 @@ Variable sets for misc.Purity.isHeavy() enter
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [1] [Field shift]
   [1] [Field value]
 Variable sets for misc.Purity.isHeavy() exit
@@ -73,6 +85,8 @@ Variable sets for misc.Purity.isHeavy() exit
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [1] [Field shift]
   [1] [Field value]
 
@@ -84,6 +98,8 @@ Variable sets for misc.Purity.getNum() enter
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [1] [Field shift]
   [1] [Field value]
 Variable sets for misc.Purity.getNum() exit
@@ -96,6 +112,8 @@ Variable sets for misc.Purity.getNum() exit
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [1] [Field shift]
   [1] [Field value]
 
@@ -107,6 +125,8 @@ Variable sets for misc.Purity.getJWrap() enter
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [1] [Field shift]
   [1] [Field value]
 Variable sets for misc.Purity.getJWrap() exit
@@ -118,6 +138,8 @@ Variable sets for misc.Purity.getJWrap() exit
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [1] [Field shift]
   [1] [Field value]
 
@@ -130,6 +152,8 @@ Variable sets for misc.Purity.scale(I scale) enter
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [1] [Field shift]
 Variable sets for misc.Purity.scale(I scale) exit
   [4] [return, Parameter scale, Field shift, Field value]
@@ -140,6 +164,8 @@ Variable sets for misc.Purity.scale(I scale) exit
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
 
 Variable sets for misc.Purity.sum(java.lang.Number n) enter
   [1] [Parameter n]
@@ -151,6 +177,8 @@ Variable sets for misc.Purity.sum(java.lang.Number n) enter
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [2] [Field shift, Field value]
 Variable sets for misc.Purity.sum(java.lang.Number n) exit
   [1] [Parameter n]
@@ -163,10 +191,14 @@ Variable sets for misc.Purity.sum(java.lang.Number n) exit
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
 
 Variable sets for misc.Purity.retrieve(java.util.List l) enter
   [1] [Parameter l]
   [1] [Class of l]
+  [1] [List l[..]]
+  [1] [Class of l[..]]
   [1] [this]
   [1] [Field heavy]
   [1] [Field list1]
@@ -174,10 +206,14 @@ Variable sets for misc.Purity.retrieve(java.util.List l) enter
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [2] [Field shift, Field value]
 Variable sets for misc.Purity.retrieve(java.util.List l) exit
   [1] [Parameter l]
   [1] [Class of l]
+  [1] [List l[..]]
+  [1] [Class of l[..]]
   [1] [return]
   [1] [this]
   [1] [Field heavy]
@@ -186,6 +222,8 @@ Variable sets for misc.Purity.retrieve(java.util.List l) exit
   [1] [Class of Field list1[..]]
   [1] [Field list2]
   [1] [Class of Field list2]
+  [1] [List Field list2[..]]
+  [1] [Class of Field list2[..]]
   [2] [Field shift, Field value]
 
 Variable sets for misc.Purity.equals(java.lang.Object obj) enter
