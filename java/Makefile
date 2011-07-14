@@ -23,6 +23,7 @@ endif
 
 PLUMEBIN ?= ${DAIKONDIR}/plume-lib/bin
 
+USER ?= daikonbuild
 
 #
 # Do some basic configuration checking:
@@ -711,9 +712,6 @@ clean-generated-files:
 run:	all
 	${JAVA} daikon.Daikon
 
-run_gui:	all
-	${JAVA} daikon.gui.InvariantsGUI /g1/users/mhao/daikon/inv_files/dsaa.inv 2>&1 | grep -v Font
-
 TAGS:	tags
 .PHONY: etags tags
 etags:	tags
@@ -757,26 +755,6 @@ checkstyle: checkstyle-cs checkstyle-sun
 checkstyle-cs: .checkstyle-cschecks-output
 checkstyle-sun: .checkstyle-sunchecks-output
 .PHONY: checkstyle checkstyle-cs checkstyle-sun
-
-.checkstyle-sunchecks-output: ../plume-lib ${AUTO_GENERATED_FILES}
-	  ${JAVA} \
-	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
-	    -Dcheckstyle.suppressions.file=${inv}/java/.checkstyle-suppressions.xml \
-	    -Dbasedir=/g2/users/mernst/java/checkstyle-3.4/docs \
-	    -jar ~mernst/java/checkstyle-3.4/checkstyle-all-3.4.jar \
-	    -c /g2/users/mernst/java/checkstyle-3.4/docs/sun_checks.xml \
-	    -r daikon | tee .checkstyle-sunchecks-output
-
-.checkstyle-cschecks-output: ../plume-lib ${AUTO_GENERATED_FILES}
-	  ${JAVA} \
-	    -Dcheckstyle.header.file=/g2/users/mernst/java/checkstyle-3.4/docs/java.header \
-	    -Dcheckstyle.suppressions.file=.checkstyle-suppressions.xml \
-	    -Dtranslation.severity=error \
-	    -Dindent.severity=error \
-	    -jar /g2/users/mernst/java/checkstyle-3.4/checkstyle-all-3.4.jar \
-	    -c /g2/users/mernst/java/checkstyle-3.4/docs/checkstyle_checks.xml \
-	    -r daikon | tee .checkstyle-cschecks-output
-
 
 jlint:
 	jlint . | grep -v "Value of referenced variable '.*' may be NULL" | grep -v "Compare strings as object references" | perl -p -e 's:^daikon/::'
