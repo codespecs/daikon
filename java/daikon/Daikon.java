@@ -1393,8 +1393,9 @@ public final class Daikon {
   }
 
   /**
-   * Create combined exit points, setup splitters, and add orig and
-   * derived variables,
+   * Setup splitters.
+   * Add orig and derived variables.
+   * Recursively call init_ppt on splits.
    */
   public static void init_ppt (PptTopLevel ppt, PptMap all_ppts) {
 
@@ -1528,8 +1529,8 @@ public final class Daikon {
     return new_list;
   }
   /**
-   * Add orig() variables to the given EXIT/EXITnn point, Does nothing if
-   * exit_ppt is not an EXIT/EXITnn.
+   * Add orig() variables to the given EXIT/EXITnn point.
+   * Does nothing if exit_ppt is not an EXIT/EXITnn.
    */
   private static void create_orig_vars(PptTopLevel exit_ppt, PptMap ppts) {
     if (! exit_ppt.ppt_name.isExitPoint()) {

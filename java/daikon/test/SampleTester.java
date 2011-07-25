@@ -320,8 +320,8 @@ public class SampleTester extends TestCase {
     // give them the same value at enter and exit.  Both of these calls
     // are in FileIO
 
-    // add_orig_variables (ppt, vt.vals, vt.mods, nonce);
-    // add_derived_variables (ppt, vt.vals, vt.mods);
+    // compute_orig_variables (ppt, vt.vals, vt.mods, nonce);
+    // compute_derived_variables (ppt, vt.vals, vt.mods);
 
     // Causes interning
     vt = new ValueTuple (vt.vals, vt.mods);

@@ -346,8 +346,8 @@ public class InvariantChecker {
 
       // Add orig and derived variables
       assert vt.vals != null : "@SuppressWarnings(nullness): bug: Checker Framework bug:  vals is a non-null array, but is reported as nullable";
-      FileIO.add_orig_variables(ppt, vt.vals, vt.mods, nonce);
-      FileIO.add_derived_variables(ppt, vt.vals, vt.mods);
+      FileIO.compute_orig_variables(ppt, vt.vals, vt.mods, nonce);
+      FileIO.compute_derived_variables(ppt, vt.vals, vt.mods);
 
       // Intern the sample
       vt = new ValueTuple(vt.vals, vt.mods);

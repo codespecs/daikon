@@ -1758,7 +1758,7 @@ public final class FileIO {
     // Add orig variables.  This must be above the check below because
     // it saves away the orig values from enter points for later use
     // by exit points.
-    boolean ignore = add_orig_variables(ppt, vt.vals, vt.mods, nonce);
+    boolean ignore = compute_orig_variables(ppt, vt.vals, vt.mods, nonce);
     if (ignore)
       return;
 
@@ -1793,7 +1793,7 @@ public final class FileIO {
     }
 
     // Add derived variables
-    add_derived_variables(ppt, vt.vals, vt.mods);
+    compute_derived_variables(ppt, vt.vals, vt.mods);
 
     // Causes interning
     vt = new ValueTuple(vt.vals, vt.mods);
@@ -2327,15 +2327,15 @@ public final class FileIO {
 
 
   /**
-   * If this is an function entry ppt, stores the values of all of the
+   * If this is a function entry ppt, stores the values of all of the
    * variables away for use at the exit.  If this is an exit, finds the
-   * values at enter and adds them as the value sof the orig variables.
+   * values at enter and adds them as the values of the orig variables.
    * Normally returns false.  Returns true if this is an exit without
    * a matching enter.  See dkconfig_ignore_missing_enter for more info.
-   * If true is returned, this ppt should be ignored by the caller
+   * If true is returned, this ppt should be ignored by the caller.
    **/
   /*@NonNullOnEntry("FileIO.data_trace_state")*/
-  public static boolean add_orig_variables(PptTopLevel ppt,
+  public static boolean compute_orig_variables(PptTopLevel ppt,
                                      // HashMap cumulative_modbits,
                                      /*@Nullable*/ Object[] vals, int[] mods,
                                            /*@Nullable*/ Integer nonce) {
@@ -2447,8 +2447,8 @@ public final class FileIO {
     return false;
   }
 
-  /** Add derived variables **/
-  public static void add_derived_variables(PptTopLevel ppt,
+  /** Computes values of derived variables **/
+  public static void compute_derived_variables(PptTopLevel ppt,
                                            /*@Nullable*/ Object[] vals,
                                             int[] mods) {
     // This ValueTuple is temporary:  we're temporarily suppressing interning,

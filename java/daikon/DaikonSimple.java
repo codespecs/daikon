@@ -470,8 +470,8 @@ public class DaikonSimple {
       ValueTuple receiver_vt = new ValueTuple(values, mods);
 
       // @SuppressWarnings(nullness):  bug: ValueTuple.vals should be @Nullable Object @NonNull [], so why is it reported otherwise?
-      FileIO.add_orig_variables(receiver, receiver_vt.vals, receiver_vt.mods, nonce);
-      FileIO.add_derived_variables(receiver, receiver_vt.vals, receiver_vt.mods);
+      FileIO.compute_orig_variables(receiver, receiver_vt.vals, receiver_vt.mods, nonce);
+      FileIO.compute_derived_variables(receiver, receiver_vt.vals, receiver_vt.mods);
 
       return receiver_vt;
 
@@ -488,8 +488,8 @@ public class DaikonSimple {
 
       // Add samples to orig and derived variables
       // @SuppressWarnings(nullness):  bug: ValueTuple.vals should be @Nullable Object @NonNull [], so why is it reported otherwise?
-      FileIO.add_orig_variables(ppt, vt.vals, vt.mods, nonce);
-      FileIO.add_derived_variables(ppt, vt.vals, vt.mods);
+      FileIO.compute_orig_variables(ppt, vt.vals, vt.mods, nonce);
+      FileIO.compute_derived_variables(ppt, vt.vals, vt.mods);
 
       // Intern the sample
       vt = new ValueTuple(vt.vals, vt.mods);
