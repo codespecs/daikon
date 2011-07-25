@@ -252,16 +252,21 @@ public class Instrument implements ClassFileTransformer {
 
       if (c_info.shouldInclude) {
         // System.out.println ("Instrumented class " + className);
+        // String filename = "/homes/gws/mernst/tmp/" + className + "Transformed.class";
+        // System.out.println ("About to dump class " + className + " to " + filename);
+        // cg.getJavaClass().dump(filename);
         return (cg.getJavaClass().getBytes());
       } else {
         debug_transform.log ("not including class %s (filtered out)",
                              className);
+        // No changes to the bytecodes
         return null;
       }
 
     } catch (Throwable e) {
       out.format ("Unexpected error %s in transform", e);
       e.printStackTrace();
+      // No changes to the bytecodes
       return (null);
     }
 
