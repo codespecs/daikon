@@ -813,7 +813,7 @@ public class PptRelation implements Serializable {
             debug.fine(dstr + " Skipping, already has a parent");
             continue;
           }
-          if (vc.is_this()) {
+          if (vc.isThis()) {
             debug.fine(dstr + " skipping, name is 'this'");
             continue;
           }

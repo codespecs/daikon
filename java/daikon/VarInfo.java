@@ -3055,14 +3055,6 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns whether or not this variable is the 'this' variable
-   */
-  public boolean is_this() {
-    return name().equals ("this");
-    // return (get_VarInfoName().equals (VarInfoName.THIS));
-  }
-
-  /**
    * Returns true if this variable contains a simple variable whose
    * name is varname
    */
@@ -3460,9 +3452,16 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /**
-   * Returns whether or not this name refers to the 'this' variable
-   * of a class.  True for both normal and prestate versions of the
-   * variable
+   * Returns whether or not this variable is the 'this' variable.
+   */
+  public boolean is_this() {
+    return name().equals ("this");
+    // return (get_VarInfoName().equals (VarInfoName.THIS));
+  }
+
+  /**
+   * Returns whether or not this variable is the 'this' variable.
+   * True for both normal and prestate versions of the variable.
    */
   public boolean isThis() {
     return var_info_name.isThis();
