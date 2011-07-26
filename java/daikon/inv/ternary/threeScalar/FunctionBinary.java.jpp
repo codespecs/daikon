@@ -554,6 +554,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #define FUNC(arg1,arg2) arg1 * arg2
 #define METHOD_NAME {"", " * ", ""}
 #define EXACT
+#define EXTRA_INV_DOC
 #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
 #define FUNCTION Minimum
@@ -598,7 +599,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
   #define BOOLEAN_ARGS 1
   #define FUNC(arg1,arg2) (((arg1 != 0) && (arg2 != 0)) ? 1 : 0)
   #define METHOD_NAME {"", " && ", ""}
+  #define EXTRA_INV_DOC For logical operations, Daikon treats 0 as false and all other values as true.
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
+  #define EXTRA_INV_DOC
 
   #define FUNCTION BitwiseXor
   #assert FTYPE (BitwiseXor)
@@ -612,7 +615,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
   #define FUNC(arg1,arg2) (((arg1 != 0) ^ (arg2 != 0)) ? 1 : 0)
   // #define METHOD_NAME {"", " ^ ", ""}
   #define METHOD_NAME {"plume.MathMDE.logicalXor(", ", ", ")"}
+  #define EXTRA_INV_DOC For logical operations, Daikon treats 0 as false and all other values as true.
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
+  #define EXTRA_INV_DOC
 
   #define FUNCTION BitwiseOr
   #assert FTYPE (BitwiseOr)
@@ -626,7 +631,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
   #define BOOLEAN_ARGS 1
   #define FUNC(arg1,arg2) (((arg1 != 0) || (arg2 != 0)) ? 1 : 0)
   #define METHOD_NAME {"", " || ", ""}
+  #define EXTRA_INV_DOC For logical operations, Daikon treats 0 as false and all other values as true.
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
+  #define EXTRA_INV_DOC
 
   #define FUNCTION Gcd
   #assert FTYPE (Gcd)
