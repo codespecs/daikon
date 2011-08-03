@@ -6,7 +6,7 @@ package PolyCalc:
 class Cons : // 87/- obj/class samples
   field head :  // PolyCalc.RatPoly
   field tail : @Nullable  // PolyCalc.Cons
-  method <init>(LPolyCalc/RatPoly;LPolyCalc/;) : // 87 samples
+  method <init>(LPolyCalc/RatPoly;LPolyCalc/;)V : // 87 samples
     return: 
     parameter #0 :  // h
     parameter #1 : @Nullable  // t
@@ -16,34 +16,34 @@ package PolyCalc:
 class RatPolyStack : // 825/- obj/class samples
   field polys : @Nullable  // PolyCalc.Cons
   field size :  // int
-  method <init>() : // 23 samples
+  method <init>()V : // 23 samples
     return: 
-  method add() : // 5 samples
+  method add()V : // 5 samples
     return: 
-  method clear() : // 2 samples
+  method clear()V : // 2 samples
     return: 
-  method div() : // 4 samples
+  method div()V : // 4 samples
     return: 
-  method dup() : // 3 samples
+  method dup()V : // 3 samples
     return: 
-  method get(I) : // 99 samples
-    return: 
-    parameter #0 :  // index
-  method getCons(I) : // 99 samples
+  method get(I)LPolyCalc/RatPoly; : // 99 samples
     return: 
     parameter #0 :  // index
-  method mul() : // 5 samples
+  method getCons(I)LPolyCalc/Cons; : // 99 samples
     return: 
-  method pop() : // 41 samples
+    parameter #0 :  // index
+  method mul()V : // 5 samples
     return: 
-  method push(LPolyCalc/RatPoly;) : // 84 samples
+  method pop()LPolyCalc/RatPoly; : // 41 samples
+    return: 
+  method push(LPolyCalc/RatPoly;)V : // 84 samples
     return: 
     parameter #0 :  // p
-  method size() : // 51 samples
+  method size()I : // 51 samples
     return: 
-  method sub() : // 5 samples
+  method sub()V : // 5 samples
     return: 
-  method swap() : // 3 samples
+  method swap()V : // 3 samples
     return: 
 
 

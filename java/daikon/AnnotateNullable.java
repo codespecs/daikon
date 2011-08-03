@@ -413,7 +413,15 @@ public class AnnotateNullable {
     // System.out.printf ("m/s/a = %s %s %s%n", method, java_sig, java_args);
     if (method.equals (ppt.ppt_name.getShortClassName()))
       method = "<init>";
-    return method + UtilMDE.arglistToJvm(java_args);
+
+    // Problem:  I need the return type, but Chicory does not output it.
+    // So, I could try to retrieve it from the "return" variable in the
+    // program point (which is, fortunately, always an exit point), or
+    // change Chicory to output it.
+    VarInfo returnVar = ppt.find_var_by_name("return");
+    String returnType = returnVar == null ? "V" : UtilMDE.classnameToJvm(returnVar.type.toString());
+
+    return method + UtilMDE.arglistToJvm(java_args) + returnType;
   }
 
 

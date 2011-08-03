@@ -8,83 +8,83 @@ class Vector : // 41700/41700 obj/class samples
   field elementData :  // java.lang.Object[]
   field elementCount :  // int
   field capacityIncrement :  // int
-  method <init>() : // 5 samples
+  method <init>()V : // 5 samples
     return: 
-  method <init>(I) : // 260 samples
+  method <init>(I)V : // 260 samples
     return: 
     parameter #0 :  // initialCapacity
-  method <init>(II) : // 1785 samples
+  method <init>(II)V : // 1785 samples
     return: 
     parameter #0 :  // initialCapacity
     parameter #1 :  // capacityIncrement
-  method addElement(Ljava/lang/Object;) : // 3760 samples
+  method addElement(Ljava/lang/Object;)V : // 3760 samples
     return: 
     parameter #0 : @Nullable  // obj
-  method capacity() : // 0 samples
+  method capacity()I : // 0 samples
     return: 
-  method clone() : // 150 samples
+  method clone()Ljava/lang/Object; : // 150 samples
     return: 
-  method contains(Ljava/lang/Object;) : // 300 samples
+  method contains(Ljava/lang/Object;)Z : // 300 samples
     return: 
     parameter #0 :  // elem
-  method copyInto([Ljava/lang/Object;) : // 450 samples
+  method copyInto([Ljava/lang/Object;)V : // 450 samples
     return: 
     parameter #0 :  // anArray
-  method elementAt(I) : // 375 samples
+  method elementAt(I)Ljava/lang/Object; : // 375 samples
     return: @Nullable 
     parameter #0 :  // index
-  method elements() : // 300 samples
+  method elements()Ljava/util/Enumeration; : // 300 samples
     return: 
-  method ensureCapacity(I) : // 900 samples
-    return: 
-    parameter #0 :  // minCapacity
-  method ensureCapacityHelper(I) : // 1450 samples
+  method ensureCapacity(I)V : // 900 samples
     return: 
     parameter #0 :  // minCapacity
-  method firstElement() : // 125 samples
+  method ensureCapacityHelper(I)V : // 1450 samples
+    return: 
+    parameter #0 :  // minCapacity
+  method firstElement()Ljava/lang/Object; : // 125 samples
     return: @Nullable 
-  method indexOf(Ljava/lang/Object;) : // 900 samples
+  method indexOf(Ljava/lang/Object;)I : // 900 samples
     return: 
     parameter #0 :  // elem
-  method indexOf(Ljava/lang/Object;I) : // 5700 samples
+  method indexOf(Ljava/lang/Object;I)I : // 5700 samples
     return: 
     parameter #0 :  // elem
     parameter #1 :  // index
-  method insertElementAt(Ljava/lang/Object;I) : // 150 samples
+  method insertElementAt(Ljava/lang/Object;I)V : // 150 samples
     return: 
     parameter #0 : @Nullable  // obj
     parameter #1 :  // index
-  method isEmpty() : // 150 samples
+  method isEmpty()Z : // 150 samples
     return: 
-  method lastElement() : // 125 samples
+  method lastElement()Ljava/lang/Object; : // 125 samples
     return: @Nullable 
-  method lastIndexOf(Ljava/lang/Object;) : // 750 samples
+  method lastIndexOf(Ljava/lang/Object;)I : // 750 samples
     return: 
     parameter #0 :  // elem
-  method lastIndexOf(Ljava/lang/Object;I) : // 2625 samples
+  method lastIndexOf(Ljava/lang/Object;I)I : // 2625 samples
     return: 
     parameter #0 :  // elem
     parameter #1 :  // index
-  method removeAllElements() : // 150 samples
+  method removeAllElements()V : // 150 samples
     return: 
-  method removeElement(Ljava/lang/Object;) : // 150 samples
+  method removeElement(Ljava/lang/Object;)Z : // 150 samples
     return: 
     parameter #0 :  // obj
-  method removeElementAt(I) : // 190 samples
+  method removeElementAt(I)V : // 190 samples
     return: 
     parameter #0 :  // index
-  method setElementAt(Ljava/lang/Object;I) : // 375 samples
+  method setElementAt(Ljava/lang/Object;I)V : // 375 samples
     return: 
     parameter #0 : @Nullable  // obj
     parameter #1 :  // index
-  method setSize(I) : // 150 samples
+  method setSize(I)V : // 150 samples
     return: 
     parameter #0 :  // newSize
-  method size() : // 300 samples
+  method size()I : // 300 samples
     return: 
-  method toString() : // 150 samples
+  method toString()Ljava/lang/String; : // 150 samples
     return: 
-  method trimToSize() : // 150 samples
+  method trimToSize()V : // 150 samples
     return: 
 
 

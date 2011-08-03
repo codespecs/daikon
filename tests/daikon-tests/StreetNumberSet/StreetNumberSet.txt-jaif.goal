@@ -6,38 +6,38 @@ package MapQuick1:
 class StreetNumberSet : // 41796/- obj/class samples
   field begins :  // int[]
   field ends :  // int[]
-  method parityOf(I) : // 176250 samples
+  method parityOf(I)I : // 176250 samples
     return: 
     parameter #0 :  // i
-  method <init>(Ljava/lang/String;) : // 242 samples
+  method <init>(Ljava/lang/String;)V : // 242 samples
     return: 
     parameter #0 :  // numbers
-  method checkRep() : // 13526 samples
+  method checkRep()V : // 13526 samples
     return: 
-  method contains(I) : // 2171 samples
+  method contains(I)Z : // 2171 samples
     return: 
     parameter #0 :  // n
-  method equals(LMapQuick1/StreetNumberSet;) : // 364 samples
+  method equals(LMapQuick1/StreetNumberSet;)Z : // 364 samples
     return: 
     parameter #0 : @Nullable  // other
-  method equals(Ljava/lang/Object;) : // 89 samples
+  method equals(Ljava/lang/Object;)Z : // 89 samples
     return: 
     parameter #0 : @Nullable  // o
-  method hashCode() : // 2 samples
+  method hashCode()I : // 2 samples
     return: 
-  method intersects(LMapQuick1/StreetNumberSet;) : // 135 samples
+  method intersects(LMapQuick1/StreetNumberSet;)Z : // 135 samples
     return: 
     parameter #0 :  // other
-  method isEmpty() : // 308 samples
+  method isEmpty()Z : // 308 samples
     return: 
-  method max() : // 606 samples
+  method max()I : // 606 samples
     return: 
-  method min() : // 770 samples
+  method min()I : // 770 samples
     return: 
-  method orderStatistic(I) : // 1384 samples
+  method orderStatistic(I)I : // 1384 samples
     return: 
     parameter #0 :  // n
-  method size() : // 1422 samples
+  method size()I : // 1422 samples
     return: 
 
 

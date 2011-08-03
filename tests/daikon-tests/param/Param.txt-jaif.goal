@@ -8,14 +8,14 @@ class Param : // 203/- obj/class samples
   field gi2 :  // int
   field gs1 :  // misc.ParamType
   field gs2 :  // misc.ParamType
-  method main([Ljava/lang/String;) : // 1 samples
+  method main([Ljava/lang/String;)V : // 1 samples
     return: 
     parameter #0 :  // args
-  method <init>() : // 1 samples
+  method <init>()V : // 1 samples
     return: 
-  method main() : // 1 samples
+  method main()V : // 1 samples
     return: 
-  method work(IILmisc/ParamType;Lmisc/ParamType;) : // 100 samples
+  method work(IILmisc/ParamType;Lmisc/ParamType;)V : // 100 samples
     return: 
     parameter #0 :  // pi1
     parameter #1 :  // pi2
@@ -27,7 +27,7 @@ package misc:
 class ParamType : // 102/- obj/class samples
   field a :  // int
   field b :  // int
-  method <init>() : // 102 samples
+  method <init>()V : // 102 samples
     return: 
 
 

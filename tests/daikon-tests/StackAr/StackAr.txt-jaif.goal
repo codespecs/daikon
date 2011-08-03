@@ -6,23 +6,23 @@ package DataStructures:
 class StackAr : // 5193/- obj/class samples
   field theArray :  // java.lang.Object[]
   field topOfStack :  // int
-  method <init>(I) : // 29 samples
+  method <init>(I)V : // 29 samples
     return: 
     parameter #0 :  // capacity
-  method isEmpty() : // 1190 samples
+  method isEmpty()Z : // 1190 samples
     return: 
-  method isFull() : // 573 samples
+  method isFull()Z : // 573 samples
     return: 
-  method makeEmpty() : // 55 samples
+  method makeEmpty()V : // 55 samples
     return: 
-  method pop() : // 48 samples
+  method pop()V : // 48 samples
     return: 
-  method push(Ljava/lang/Object;) : // 199 samples
+  method push(Ljava/lang/Object;)V : // 199 samples
     return: 
     parameter #0 :  // x
-  method top() : // 431 samples
+  method top()Ljava/lang/Object; : // 431 samples
     return: @Nullable 
-  method topAndPop() : // 86 samples
+  method topAndPop()Ljava/lang/Object; : // 86 samples
     return: @Nullable 
 
 

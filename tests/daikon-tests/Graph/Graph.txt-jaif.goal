@@ -5,27 +5,27 @@ annotation @NonNull:
 package MapQuick1:
 class Graph : // 5621/- obj/class samples
   field adjMap :  // java.util.LinkedHashMap
-  method <init>() : // 3 samples
+  method <init>()V : // 3 samples
     return: 
-  method addEdge(Ljava/lang/Object;Ljava/lang/Object;) : // 140 samples
+  method addEdge(Ljava/lang/Object;Ljava/lang/Object;)V : // 140 samples
     return: 
     parameter #0 :  // from
     parameter #1 :  // to
-  method addNode(Ljava/lang/Object;) : // 82 samples
+  method addNode(Ljava/lang/Object;)V : // 82 samples
     return: 
     parameter #0 :  // node
-  method adjTo(Ljava/lang/Object;) : // 528 samples
+  method adjTo(Ljava/lang/Object;)Ljava/util/Set; : // 528 samples
     return: 
     parameter #0 :  // node
-  method checkRep() : // 1223 samples
+  method checkRep()V : // 1223 samples
     return: 
-  method childrenOf(Ljava/lang/Object;) : // 388 samples
-    return: 
-    parameter #0 :  // node
-  method containsNode(Ljava/lang/Object;) : // 448 samples
+  method childrenOf(Ljava/lang/Object;)Ljava/util/Collection; : // 388 samples
     return: 
     parameter #0 :  // node
-  method nodeSet() : // 0 samples
+  method containsNode(Ljava/lang/Object;)Z : // 448 samples
+    return: 
+    parameter #0 :  // node
+  method nodeSet()Ljava/util/Set; : // 0 samples
     return: 
 
 

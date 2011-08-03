@@ -5,21 +5,21 @@ annotation @NonNull:
 package six170:
 class FixedSizeSet : // 23458/- obj/class samples
   field bits :  // boolean[]
-  method <init>() : // 102 samples
+  method <init>()V : // 102 samples
     return: 
-  method add(I) : // 1186 samples
-    return: 
-    parameter #0 :  // n
-  method contains(I) : // 10040 samples
+  method add(I)V : // 1186 samples
     return: 
     parameter #0 :  // n
-  method intersect(Lsix170/FixedSizeSet;) : // 31 samples
+  method contains(I)Z : // 10040 samples
+    return: 
+    parameter #0 :  // n
+  method intersect(Lsix170/FixedSizeSet;)V : // 31 samples
     return: 
     parameter #0 :  // other
-  method remove(I) : // 402 samples
+  method remove(I)V : // 402 samples
     return: 
     parameter #0 :  // n
-  method union(Lsix170/FixedSizeSet;) : // 19 samples
+  method union(Lsix170/FixedSizeSet;)V : // 19 samples
     return: 
     parameter #0 :  // other
 

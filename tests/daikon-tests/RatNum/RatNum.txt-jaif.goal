@@ -6,55 +6,55 @@ package PolyCalc:
 class RatNum : // 185420/- obj/class samples
   field numer :  // int
   field denom :  // int
-  method gcd(II) : // 11298 samples
+  method gcd(II)I : // 11298 samples
     return: 
     parameter #0 :  // _a
     parameter #1 :  // _b
-  method parse(Ljava/lang/String;) : // 171 samples
+  method parse(Ljava/lang/String;)LPolyCalc/RatNum; : // 171 samples
     return: 
     parameter #0 :  // ratStr
-  method <init>(I) : // 16856 samples
+  method <init>(I)V : // 16856 samples
     return: 
     parameter #0 :  // n
-  method <init>(II) : // 16356 samples
+  method <init>(II)V : // 16356 samples
     return: 
     parameter #0 :  // n
     parameter #1 :  // d
-  method add(LPolyCalc/RatNum;) : // 5192 samples
+  method add(LPolyCalc/RatNum;)LPolyCalc/RatNum; : // 5192 samples
     return: 
     parameter #0 :  // arg
-  method approx() : // 1719 samples
+  method approx()D : // 1719 samples
     return: 
-  method compareTo(LPolyCalc/RatNum;) : // 1887 samples
+  method compareTo(LPolyCalc/RatNum;)I : // 1887 samples
     return: 
     parameter #0 :  // rn
-  method debugPrint() : // 94 samples
+  method debugPrint()Ljava/lang/String; : // 94 samples
     return: 
-  method div(LPolyCalc/RatNum;) : // 2083 samples
+  method div(LPolyCalc/RatNum;)LPolyCalc/RatNum; : // 2083 samples
     return: 
     parameter #0 :  // arg
-  method equals(Ljava/lang/Object;) : // 15102 samples
+  method equals(Ljava/lang/Object;)Z : // 15102 samples
     return: 
     parameter #0 :  // obj
-  method hashCode() : // 0 samples
+  method hashCode()I : // 0 samples
     return: 
-  method isNaN() : // 31457 samples
+  method isNaN()Z : // 31457 samples
     return: 
-  method isNegative() : // 2527 samples
+  method isNegative()Z : // 2527 samples
     return: 
-  method isPositive() : // 1697 samples
+  method isPositive()Z : // 1697 samples
     return: 
-  method mul(LPolyCalc/RatNum;) : // 2611 samples
-    return: 
-    parameter #0 :  // arg
-  method negate() : // 5007 samples
-    return: 
-  method sub(LPolyCalc/RatNum;) : // 3226 samples
+  method mul(LPolyCalc/RatNum;)LPolyCalc/RatNum; : // 2611 samples
     return: 
     parameter #0 :  // arg
-  method toString() : // 94 samples
+  method negate()LPolyCalc/RatNum; : // 5007 samples
     return: 
-  method unparse() : // 3408 samples
+  method sub(LPolyCalc/RatNum;)LPolyCalc/RatNum; : // 3226 samples
+    return: 
+    parameter #0 :  // arg
+  method toString()Ljava/lang/String; : // 94 samples
+    return: 
+  method unparse()Ljava/lang/String; : // 3408 samples
     return: 
 
 
