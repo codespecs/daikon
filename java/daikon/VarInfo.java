@@ -2071,10 +2071,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   static Set<String> addVarMessages = new HashSet<String>();
 
   /**
-   * Finds a list of variables that must be guarded for a VarInfo to be
+   * Finds a list of variables that must be guarded for this VarInfo to be
    * guaranteed to not be missing.  This list never includes "this", as it
    * can never be null.  The variables are returned in the order in which
    * their guarding prefixes are supposed to print.
+   * <p>
+   * For example, if this VarInfo is "a.b.c", then the guarding list
+   * consists of the variables "a" and "a.b".  If "a" is null or "a.b" is
+   * null, then "a.b.c" is missing (does not exist).
    **/
   public List<VarInfo> getGuardingList() {
 

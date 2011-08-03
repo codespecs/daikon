@@ -1651,12 +1651,23 @@ public abstract class Invariant
     return guardingPredicate;
   }
 
-  // Gets a list of all the variables that must be guarded for this
-  // invariant.
+  /**
+   * Return a list of all the variables that must be non-null in order for
+   * this invariant to be evaluated.  For instance, it this invariant is
+   * "a.b.c > d.e" (where c and e are of integer type), then it doesn't
+   * make sense to evaluate the invariant unless "a" is non-null, "a.b" is
+   * non-null, and "d" is non-null.  So, another way to write the invariant
+   * (in "guarded" form) would be
+   * "a != null && a.b != null && d != null && a.b.c > d.e".
+   */
   public List<VarInfo> getGuardingList() /*@NonPrototype*/ {
     return getGuardingList(ppt.var_infos);
   }
 
+  /**
+   * Returns the union of calling VarInfo.getGuardingList on each element
+   * of the argument.
+   */
   public static List<VarInfo> getGuardingList(VarInfo[] varInfos) {
     List<VarInfo> guardingList = new ArrayList<VarInfo>();
 
