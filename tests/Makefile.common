@@ -245,6 +245,10 @@ PRINT_INVARIANTS?=$(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.PrintInvariants
 DAIKON_OPTIONS?=
 PRINT_INVARIANTS_OPTIONS?=
 
+# USER_DAIKON_OPTIONS is sometimes set in a Makefile.
+# PERSONAL_DAIKON_OPTIONS is never set by a checked-in Makefile; a user can
+# be assured use of it will never conflict with the mainline of Daikon.
+
 # include the generic config.txt file unless there is one already specified
 ifeq (,$(findstring --config,$(DAIKON_OPTIONS)))
   DAIKON_OPTIONS := $(DAIKON_OPTIONS) --config ../config.txt
