@@ -675,7 +675,7 @@ SPINFO_FILES_W := $(shell $(WIN_CONVERT) "$(SPINFO_FILES)")
 MAP_FILES_W	   := $(shell $(WIN_CONVERT) "$(MAP_FILES)")
 INV_FILE_W	   := $(shell $(WIN_CONVERT) "$(INV_FILE)")
 endif
-${INV_FILE}: ${DECLS_FILES} ${DTRACE_FILES} ${SPINFO_FILES}
+${INV_FILE}: ${DECLS_FILES} ${DTRACE_FILES} ${SPINFO_FILES} ${MAP_FILES}
 	@echo
 	@echo "### inv (${PROJECT_FILE})"
 	@echo
@@ -814,7 +814,7 @@ txt-daikon-direct: ${PROJECT_FILE}.txt-daikon-direct
 
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-daikon-direct : creates daikon-style output without making an inv file"
-%.txt-daikon-direct: ${DECLS_FILES} ${DTRACE_FILES} ${SPINFO_FILES}
+%.txt-daikon-direct: ${DECLS_FILES} ${DTRACE_FILES} ${SPINFO_FILES} ${MAP_FILES}
 %.txt-daikon-direct:
 	@echo
 	@echo "### txt-daikon-direct (${PROJECT_FILE})"
