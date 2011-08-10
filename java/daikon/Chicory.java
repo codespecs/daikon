@@ -21,7 +21,8 @@ public class Chicory {
   @Option ("File in which to put dtrace output")
   public static /*@LazyNonNull*/ File dtrace_file = null;
 
-  @Option ("Omit variables that match this regular expression")
+  /** Also see Daikon's --var-omit-pattern command-line argument. */
+  @Option ("Omit variables that match this regular expression.")
   public static /*@Nullable*/ Pattern omit_var = null;
 
   @Option ("Directory in which to create output files")
