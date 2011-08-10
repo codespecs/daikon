@@ -8309,7 +8309,7 @@ about your test suite (and how to improve it!).
 @node Missing output invariants, True invariants are not reported, Too much output, Daikon problems
 @subsection Missing output invariants
 
-Daikon will sometimes not output invariants that are expected.  Here 
+Daikon will sometimes not output invariants that you might expect it to.  Here 
 are some reasons why this may happen:
 
 @itemize
