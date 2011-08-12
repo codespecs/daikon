@@ -2053,8 +2053,7 @@ create the @file{daikon.tar} or @file{daikon.tar.gz} file in your own
 directory, then simply run @samp{make} with the desired file as the
 target.
 
-@b{To do:}  Time each step, and put those times here.  That will help
-someone who is making a release to plan.
+All times are on godwit, as of 8/2011.
 
 @b{To do:}  All references to CVS should be changed to Mercurial.
 
@@ -2075,28 +2074,17 @@ someone who is making a release to plan.
     (Alternately, you can do @samp{su - daikonuser} instead.)
 
 @item
- Update daikon in daikonuser to the most recent version.  [Time: 8 min]
+ Update Daikon to the most recent version.  [Time: moments]
 
 @example
-        cd $DAIKONDIR
-        cvs -q update -d
-        echo "**************** diff output follows ****************"
-        cvs -q diff
+        cd $DAIKONDIR && hg fetch && hg outgoing && hg status
 @end example
 
-The @samp{cvs -q diff} command should produce no output.
-
-@item
- Make sure that Daikon compiles under Java 5.
-         <!-- All times are on mangold, as of 12/2009. -->
-         [Time: 3 min]
-@example
-        make -C $DAIKONDIR/java JAVAC=$pag/software/pkg/jdk-5/bin/javac clean all
-@end example
+The last line printed should be @samp{no changes found}.
 
 @item
  Rebuild everything.
-         [Time: 40 min]
+         [Time: ?? (3pm)]
 
 @example
         make rebuild-everything
@@ -2104,7 +2092,7 @@ The @samp{cvs -q diff} command should produce no output.
 
 @item
  Run the Kvasir regression tests.
-         [Time: 18 min]
+         [Time: ??18 min]
 @example
         make -C $DAIKONDIR/tests/kvasir-tests clean clean-all nightly-summary-w-daikon
 @end example
@@ -2113,7 +2101,7 @@ The @samp{cvs -q diff} command should produce no output.
 @item
  Run the regression tests.
          The last line printed should be "All tests succeeded."
-         [Time: 55 min]
+         [Time: ??55 min]
 
 @example
         make -C $DAIKONDIR/tests clean diffs
@@ -2142,7 +2130,7 @@ Another good source of information is the CVS logs over the
     Optionally, adjust the version number in file $DAIKONDIR/doc/VERSION.
     Optionally, override the distribution date (default: today) by
     redefining environment variable TODAY (e.g., 'TODAY=November 1 2004').
-    [Time: a few seconds]
+    [Time: moments]
 
 @example
         cd $DAIKONDIR
@@ -2154,7 +2142,7 @@ Another good source of information is the CVS logs over the
     area (@uref{http://www.pag.csail.mit.edu/daikon/staging-daikon/}).  The final
     output will be a list of files that were added/removed since the
     last release.
-    [Time: 11 min]
+    [Time: ??11 min]
 
 @example
         make staging
@@ -2181,7 +2169,7 @@ Another good source of information is the CVS logs over the
  Test the distribution in the staging area, on a 64-bit machine
     such as mangold. Success is indicated by invariant output being written
     to the screen.
-    [Time: 24 min]
+    [Time: ??24 min]
 
 @example
         make test-staged-dist
@@ -2196,7 +2184,7 @@ Another good source of information is the CVS logs over the
     successful if the make command runs to conclusion without an error.
     The last line should indicate that Kvasir was not built because
     it is not a linux platform.
-    [Time: 32 min]
+    [Time: ??32 min]
 
 @itemize
 @item
