@@ -383,9 +383,11 @@ public class DTraceWriter extends DaikonWriter
         if (arrayVal instanceof NonsensicalObject)
             return nonsenseList;
 
-        if (!arrayVal.getClass().isArray())
-            throw new RuntimeException("The object --- " + arrayVal
-                    + " --- is not an array");
+        if (!arrayVal.getClass().isArray()) {
+            throw new RuntimeException(String.format(
+              "The object \"%s\" of type %s is not an array", 
+              arrayVal, arrayVal.getClass()));
+        }
 
         int len = Array.getLength(arrayVal);
         List<Object> arrList = new ArrayList<Object>(len);
