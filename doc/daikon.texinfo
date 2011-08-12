@@ -8253,6 +8253,17 @@ understand Daikon's operation; @xref{Daikon debugging options}.
 @end menu
 
 
+@node    Can't run Daikon, Missing output invariants, Daikon problems, Daikon problems
+@subsection Can't run Daikon: NoClassDefFoundError
+
+If you can't run Daikon at all and you get an error such as 
+@example
+Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
+@end example
+@noindent
+then you have not put @file{daikon.jar} on your classpath; @pxref{Simple installation}.
+
+
 @node    Too much output, Missing output invariants, Daikon problems, Daikon problems
 @subsection Too much output
 
