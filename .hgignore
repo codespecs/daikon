@@ -7,6 +7,8 @@ kvasir
 # (Each filename matches in all directories.)
 Makefile.user
 
+java/TAGS
+
 # Compiled Java files
 daikon.jar
 java/ChicoryPremain.jar
