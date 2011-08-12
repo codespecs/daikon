@@ -2915,7 +2915,8 @@ boolean procedure returns true or false.  Additionally, Daikon can read
 predicates from a file called a splitter info (@file{.spinfo}) file and find
 implications based on those predicates.  The splitter info file can be produced
 automatically, such as by static analysis of the program using the CreateSpinfo
-and CreateSpinfoC programs or by cluster analysis of the
+and CreateSpinfoC programs (@pxref{Static analysis for splitters})
+or by cluster analysis of the
 traced values in the data trace file.  Details of these techniques and usage
 guides can be found in @ref{Enhancing conditional invariant detection}.  Users
 can also create splitter info files by hand or manually augment
