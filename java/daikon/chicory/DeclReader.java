@@ -324,12 +324,14 @@ public class DeclReader {
     }
   }
 
-  public DeclPpt find_ppt (String ppt_name) {
+  // This can return null.  Example:  when DynComp is run to compute
+  // comparability information, it produces no information (not even a
+  // declaration) for program points that are never exeuted.  But, Chicory
+  // outputs a declaration for every program point, and this lookup can
+  // fail when using the --comparability-file=... command-line argument
+  // with a file produced by DynComp.
+  public /*@Nullable*/ DeclPpt find_ppt (String ppt_name) {
     DeclPpt result = ppts.get (ppt_name);
-    // I'm curious whether this will ever fail. -MDE 6/28/2009
-    assert result != null;
-    // It seems not to.
-    assert result != null : "@SuppressWarnings(nullness): method precondition (I think)";
     return result;
   }
 
