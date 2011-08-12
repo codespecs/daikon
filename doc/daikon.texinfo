@@ -334,6 +334,7 @@ Troubleshooting
 
 Problems running Daikon
 
+* Can't run Daikon::            
 * Too much output::             
 * Missing output invariants::   
 * True invariants are not reported::  
@@ -8238,6 +8239,7 @@ understand Daikon's operation; @xref{Daikon debugging options}.
 
 
 @menu
+* Can't run Daikon::            
 * Too much output::             
 * Missing output invariants::   
 * True invariants are not reported::  
@@ -8253,7 +8255,7 @@ understand Daikon's operation; @xref{Daikon debugging options}.
 @end menu
 
 
-@node    Can't run Daikon, Missing output invariants, Daikon problems, Daikon problems
+@node    Can't run Daikon, Too much output, Daikon problems, Daikon problems
 @subsection Can't run Daikon: NoClassDefFoundError
 
 If you can't run Daikon at all and you get an error such as 
@@ -8264,7 +8266,7 @@ Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
 then you have not put @file{daikon.jar} on your classpath; @pxref{Simple installation}.
 
 
-@node    Too much output, Missing output invariants, Daikon problems, Daikon problems
+@node    Too much output, Missing output invariants, Can't run Daikon, Daikon problems
 @subsection Too much output
 
 @cindex too much output from Daikon
