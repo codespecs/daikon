@@ -225,6 +225,10 @@ public final class FileIO {
     return s != null && (s.startsWith("//") || s.startsWith("#"));
   }
 
+  // Nullness-checking of read_data_trace_record(ParseState) works even
+  // without these two lines, since StringBuilderDelimited accepts null values.
+  @SuppressWarnings("nullness:assertiftrue.postcondition.not.satisfied") // readLine() assertion is ensured by call to reset()
+  /*@AssertNonNullIfTrue("#0.readLine()")*/
   public static final boolean nextLineIsComment(BufferedReader reader) {
     boolean result = false;
     try {
