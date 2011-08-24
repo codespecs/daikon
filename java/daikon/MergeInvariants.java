@@ -209,9 +209,7 @@ public final class MergeInvariants {
           merge_ppts = FileIO.read_serialized_pptmap (file, true);
         else {
           PptMap pmap = FileIO.read_serialized_pptmap (file, true);
-          for (Iterator<PptTopLevel> ii = pmap.pptIterator();
-               ii.hasNext(); ) {
-            PptTopLevel ppt = ii.next();
+          for (PptTopLevel ppt : pmap.pptIterable()) {
             if (merge_ppts.containsName (ppt.name())) {
               // System.out.printf ("Not adding ppt %s from %s\n", ppt, file);
               continue;
@@ -258,8 +256,7 @@ public final class MergeInvariants {
     // so that the normal processing will create the invariants at
     // upper points.
     debugProgress.fine ("Building hierarchy between leaves of the maps");
-    for (Iterator<PptTopLevel> i = merge_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : merge_ppts.pptIterable()) {
 
       // Skip everything that is not a final exit point
       if (!ppt.ppt_name.isExitPoint()) {
@@ -333,8 +330,7 @@ public final class MergeInvariants {
     // Debug print the hierarchy is a more readable manner
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("PPT Hierarchy");
-      for (Iterator<PptTopLevel> i = merge_ppts.pptIterator(); i.hasNext(); ) {
-        PptTopLevel ppt = i.next();
+      for (PptTopLevel ppt : merge_ppts.pptIterable()) {
         if (ppt.parents.size() == 0)
           ppt.debug_print_tree (debug, 0, null);
       }
@@ -355,8 +351,7 @@ public final class MergeInvariants {
     stopwatch.reset();
     // System.out.println("Creating implications ");
     debugProgress.fine ("Adding Implications ... ");
-    for (Iterator<PptTopLevel> itor = merge_ppts.pptIterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = itor.next();
+    for (PptTopLevel ppt : merge_ppts.pptIterable()) {
       if (ppt.num_samples() > 0)
         ppt.addImplications();
     }
@@ -365,8 +360,7 @@ public final class MergeInvariants {
 
     // Remove the PptRelation links so that when the file is written
     // out it only includes the new information
-    for (Iterator<PptTopLevel> i = merge_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : merge_ppts.pptIterable()) {
       if (!ppt.ppt_name.isExitPoint())
         continue;
       if (ppt.ppt_name.isCombinedExitPoint())

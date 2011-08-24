@@ -58,7 +58,7 @@ public class InvMapTester extends TestCase {
 
     // Test the keys
     Iterator<PptTopLevel> i = map.pptIterator();
-    assert pptC ==i.next();
+    assert pptC == i.next();
     assert pptA == i.next();
     assert pptB == i.next();
     assert !i.hasNext();

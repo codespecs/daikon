@@ -146,8 +146,7 @@ public class StackOffsets {
     // build function information
     Map<PptTopLevel,List<PptTopLevel>> func_map
       = new LinkedHashMap<PptTopLevel,List<PptTopLevel>>();
-    for (Iterator<PptTopLevel> ii = all_ppts.pptIterator(); ii.hasNext(); ) {
-      PptTopLevel ppt = ii.next();
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
       @SuppressWarnings("nullness") // map: ppt.function_id is a key in all_ppts
       /*@NonNull*/ PptTopLevel func = all_ppts.get(ppt.function_id);
       List<PptTopLevel> bbs = func_map.get (func);

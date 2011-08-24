@@ -628,8 +628,7 @@ public final class Daikon {
     // print out the invariants for each program point
     if (Daikon.dkconfig_undo_opts) {
       // Print out the invariants for each program point (sort first)
-      for (Iterator<PptTopLevel> t = all_ppts.pptIterator(); t.hasNext();) {
-        PptTopLevel ppt = t.next();
+      for (PptTopLevel ppt : all_ppts.pptIterable()) {
 
         // We do not need to print out program points that have not seen
         // any samples.
@@ -1382,8 +1381,7 @@ public final class Daikon {
 
     // Process each ppt that doesn't have a parent
     // (mergeInvs is called on a root, and recursively processes children)
-    for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
       // System.out.printf ("considering ppt %s parents: %s, children: %s\n",
       //                     ppt.name, ppt.parents, ppt.children);
       if (ppt.parents.size() == 0) {
@@ -1441,8 +1439,7 @@ public final class Daikon {
     // are iterating over it, so store them temporarily in this map.
     PptMap exit_ppts = new PptMap();
 
-    for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : ppts.pptIterable()) {
       // skip unless its an EXITnn
       if (!ppt.is_subexit())
         continue;
@@ -1490,8 +1487,7 @@ public final class Daikon {
     }
 
     // Now add the newly created Ppts to the global map.
-    for (Iterator<PptTopLevel> i = exit_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : exit_ppts.pptIterable()) {
       ppts.add(ppt);
     }
   }
@@ -1888,8 +1884,7 @@ public final class Daikon {
     //     }
 
     // Print equality set info
-    //     for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext(); ) {
-    //       PptTopLevel ppt = i.next();
+    //     for (PptTopLevel ppt : all_ppts.pptIteble()) {
     //       System.out.printf ("ppt: %s", ppt.name);
     //       if ((ppt.equality_view == null) || (ppt.equality_view.invs == null))
     //       continue;
@@ -1977,8 +1972,7 @@ public final class Daikon {
     fileio_progress.clear();
     if (! PptSplitter.dkconfig_disable_splitting) {
       debugProgress.fine("Adding Implications ... ");
-      for (Iterator<PptTopLevel> ii = all_ppts.pptIterator(); ii.hasNext();) {
-        PptTopLevel ppt = ii.next();
+      for (PptTopLevel ppt : all_ppts.pptIterable()) {
         // debugProgress.fine ("  Adding Implications for " + ppt.name);
         ppt.addImplications();
       }
@@ -2002,8 +1996,7 @@ public final class Daikon {
 
     int all_ppt_cnt = 0;
     int ppt_w_sample_cnt = 0;
-    for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
       all_ppt_cnt++;
       if (ppt.num_samples() == 0)
         continue;

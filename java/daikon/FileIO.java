@@ -2535,8 +2535,7 @@ public final class FileIO {
         // System.err.printf ("Restoring an InvMap%n");
         InvMap invs = (InvMap) obj;
         PptMap ppts = new PptMap();
-        for (Iterator<PptTopLevel> i = invs.pptIterator(); i.hasNext();) {
-          PptTopLevel ppt = i.next();
+        for (PptTopLevel ppt : invs.pptIterable()) {
           PptTopLevel nppt = new PptTopLevel(ppt.name, ppt.var_infos);
           nppt.set_sample_number(ppt.num_samples());
           ppts.add(nppt);

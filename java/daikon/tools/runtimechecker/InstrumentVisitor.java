@@ -82,8 +82,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         this.pptmap = pptmap;
         this.pptMatcher = new PptNameMatcher(root);
 
-        for (Iterator<PptTopLevel> i = pptmap.pptIterator() ; i.hasNext() ; ) {
-            PptTopLevel ppt = i.next();
+        for (PptTopLevel ppt : pptmap.pptIterable()) {
 
             if (ppt.ppt_name.isExitPoint()
                 && !ppt.ppt_name.isCombinedExitPoint()) {

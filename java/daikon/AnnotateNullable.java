@@ -89,8 +89,7 @@ public class AnnotateNullable {
     // static variables)
 
     // First find all of the classes
-    for (Iterator<PptTopLevel> ii = ppts.pptIterator(); ii.hasNext(); ) {
-      PptTopLevel ppt = ii.next();
+    for (PptTopLevel ppt : ppts.pptIterable()) {
       if (ppt.is_object()) {
         String classname = ppt.name().replace (":::OBJECT", "");
         assert !class_map.containsKey (classname) : classname;
@@ -102,8 +101,7 @@ public class AnnotateNullable {
     // Then, add combined exit points for static methods to their class.  A
     // static method can be identified because it will not have the OBJECT
     // point as a parent.
-    for (Iterator<PptTopLevel> ii = ppts.pptIterator(); ii.hasNext(); ) {
-      PptTopLevel ppt = ii.next();
+    for (PptTopLevel ppt : ppts.pptIterable()) {
       if (!ppt.is_combined_exit() || !is_static_method(ppt))
         continue;
 
@@ -128,8 +126,7 @@ public class AnnotateNullable {
 
     // Make sure that the static methods found by inference, match those
     // found for any class ppts
-    for (Iterator<PptTopLevel> ii = ppts.pptIterator(); ii.hasNext(); ) {
-      PptTopLevel ppt = ii.next();
+    for (PptTopLevel ppt : ppts.pptIterable()) {
       if (ppt.is_class()) {
         @SuppressWarnings("nullness") // map: retrieve class name from class Ppt name, with string manipulation
         /*@NonNull*/ List<PptTopLevel> static_methods
@@ -151,8 +148,7 @@ public class AnnotateNullable {
 
 
     // Process each class.
-    for (Iterator<PptTopLevel> ii = ppts.pptIterator(); ii.hasNext(); ) {
-      PptTopLevel ppt = ii.next();
+    for (PptTopLevel ppt : ppts.pptIterable()) {
 
       // Skip synthetic program points
       if (ppt.name().startsWith ("$"))

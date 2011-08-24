@@ -4417,8 +4417,7 @@ public class PptTopLevel extends Ppt {
     Map<PptTopLevel,List<Stats>> stats_map = Global.stats_map;
 
     Stats.dump_header(debug);
-    for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext();) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
       List<Stats> slist = stats_map.get(ppt);
       if (slist == null)
         continue;

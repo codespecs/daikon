@@ -96,6 +96,10 @@ public class PptMap
   /**
    * @return an iterator over the PptTopLevels in this, sorted by
    * Ppt.NameComparator on their names.  This is good for consistency.
+   * <p>
+   * If you wish to merely iterate over the result in a Java new-style for
+   * loop ("foreach loop"), use {@link pptIterable} instead.
+   * @see #pptIterable()
    **/
   public Iterator<PptTopLevel> pptIterator() {
     TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
@@ -121,9 +125,25 @@ public class PptMap
   }
 
   /**
+   * @return an iterable over the PptTopLevels in this, sorted by
+   * Ppt.NameComparator on their names.  This is good for consistency.
+   * <p>
+   * It is a wrapper around {@link pptIterator()} that can be used in a
+   * Java new-style for loop ("foreach loop").
+   * @see #pptIterator()
+   */ 
+  public Iterable<PptTopLevel> pptIterable() {
+    return new IterableIterator<PptTopLevel>(pptIterator());
+  }
+
+  /**
    * @return an iterator over the PptTopLevels in this, sorted by
    * Ppt.NameComparator on their names.  This differs from pptIterator()
    * in that it includes all ppts (including conditional ppts).
+   * <p>
+   * If you wish to merely iterate over the result in a Java new-style for
+   * loop ("foreach loop"), use {@link ppt_all_iterable} instead.
+   * @see #ppt_all_iterable()
    **/
   public Iterator<PptTopLevel> ppt_all_iterator() {
     TreeSet<PptTopLevel> sorted = new TreeSet<PptTopLevel>(new Ppt.NameComparator());
@@ -156,6 +176,19 @@ public class PptMap
       };
   }
 
+  /**
+   * @return an iterable over the PptTopLevels in this, sorted by
+   * Ppt.NameComparator on their names.  This differs from pptIterable()
+   * in that it includes all ppts (including conditional ppts).
+   * <p>
+   * It is a wrapper around {@link ppt_all_iterator()} that can be used in a
+   * Java new-style for loop ("foreach loop").
+   * @see #ppt_all_iterator()
+   */ 
+  public Iterable<PptTopLevel> ppt_all_iterable() {
+    return new IterableIterator<PptTopLevel>(pptIterator());
+  }
+
   /** Iterate over the PptTopLevels and trim them. */
   public void trimToSize() {
     for (PptTopLevel ppt : nameToPpt.values()) {
@@ -167,8 +200,7 @@ public class PptMap
    * Check the rep invariant of this.  Throws an Error if incorrect.
    **/
   public void repCheck() {
-    for (Iterator<PptTopLevel> i = this.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : this.pptIterable()) {
       ppt.repCheck();
     }
   }
@@ -178,8 +210,7 @@ public class PptMap
    **/
   public int countSlices() {
     int result = 0;
-    for (Iterator<PptTopLevel> i = this.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : this.pptIterable()) {
       result += ppt.numViews();
     }
     return result;

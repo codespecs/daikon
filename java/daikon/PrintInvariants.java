@@ -393,8 +393,7 @@ public final class PrintInvariants {
     // Debug print the hierarchy is a more readable manner
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("Printing PPT Hierarchy");
-      for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
-        PptTopLevel my_ppt = i.next();
+      for (PptTopLevel my_ppt : ppts.pptIterable()) {
         if (my_ppt.parents.size() == 0)
           my_ppt.debug_print_tree (debug, 0, null);
       }
@@ -652,8 +651,8 @@ public final class PrintInvariants {
     // so that it is easier to look behind and ahead.
     PptTopLevel[] ppts = new PptTopLevel [all_ppts.size()];
     int ii = 0;
-    for (Iterator<PptTopLevel> itor = all_ppts.pptIterator(); itor.hasNext();){
-      ppts[ii++] = itor.next();
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
+      ppts[ii++] = ppt;
       // System.out.printf ("considering ppt %s%n", ppts[ii-1].name());
     }
 
@@ -1179,8 +1178,7 @@ public final class PrintInvariants {
   public static void print_all_ternary_invs (PptMap all_ppts) {
 
     // loop through each ppt
-    for (Iterator<PptTopLevel> itor = all_ppts.pptIterator(); itor.hasNext(); ) {
-      PptTopLevel ppt = itor.next();
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
 
       // if (ppt.num_samples() == 0)
       //  continue;
@@ -1371,8 +1369,7 @@ public final class PrintInvariants {
 
     // Count printable invariants
     long inv_cnt = 0;
-    for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : ppts.pptIterable()) {
       for (Invariant inv : ppt.getInvariants()) {
         InvariantFilters fi = InvariantFilters.defaultFilters();
         if (fi.shouldKeep (inv) == null)
@@ -1383,22 +1380,19 @@ public final class PrintInvariants {
 
     // Count all of the stored invariants
     inv_cnt = 0;
-    for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : ppts.pptIterable()) {
       inv_cnt += ppt.invariant_cnt();
     }
     System.out.printf ("%d physical invariants%n", inv_cnt);
 
     //undo suppressions
-    for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : ppts.pptIterable()) {
       NIS.create_suppressed_invs(ppt);
     }
 
     // Recount with suppressions removed
     inv_cnt = 0;
-    for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : ppts.pptIterable()) {
       inv_cnt += ppt.invariant_cnt();
     }
     System.out.printf ("%d invariants with suppressions removed\n",
@@ -1406,8 +1400,7 @@ public final class PrintInvariants {
 
     // Count invariants again, adjusting the count for equality sets
     inv_cnt = 0;
-    for (Iterator<PptTopLevel> i = ppts.pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : ppts.pptIterable()) {
       List<Invariant> invs = ppt.getInvariants();
       for (Invariant inv : invs) {
         int cnt = 1;

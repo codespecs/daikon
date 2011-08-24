@@ -4,6 +4,7 @@ import java.io.*;
 import java.util.*;
 import daikon.*;
 import daikon.inv.*;
+import plume.IterableIterator;
 
 /**
  * Maps ppts to lists of invariants.  Has an iterator to return the
@@ -64,6 +65,17 @@ public class InvMap implements Serializable {
     return ppts.iterator();
   }
 
+  /**
+   * Returns an iterable over the ppts, in the order they were added to the
+   * map.  Each element is a PptTopLevel.  These ppts are only used as
+   * keys:  do not look in these Ppts to find the invariants associated
+   * with them in the InvMap!  Use invariantIterator instead.
+   * @see #invariantIterator()
+   **/
+  public Iterable<PptTopLevel> pptIterable() {
+    return new IterableIterator<PptTopLevel>(pptIterator());
+  }
+
   // Returns a sorted iterator over the Ppts using c as the comparator
   public Iterator<PptTopLevel> pptSortedIterator(Comparator<PptTopLevel> c) {
     List<PptTopLevel> ppts_copy = new ArrayList<PptTopLevel>(ppts);
@@ -87,8 +99,7 @@ public class InvMap implements Serializable {
 
   public String toString() {
     String result = "";
-    for (Iterator<PptTopLevel> i = pptIterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : pptIterable()) {
       result += ppt.name() + Global.lineSep;
       List<Invariant> invs = get(ppt);
       for (Invariant inv : invs) {

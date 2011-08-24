@@ -715,8 +715,7 @@ public class PptRelation implements Serializable {
    */
   public static void init_hierarchy(PptMap all_ppts) {
 
-    for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext();) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
       PptName pname = ppt.ppt_name;
       PptRelation rel = null;
       Daikon.debugProgress.fine ("Processing ppt " + pname);
@@ -874,8 +873,7 @@ public class PptRelation implements Serializable {
     // Then AC1 is the parent of BC1 and AC2 is the parent of BC2
 
     // Loop over each ppt and process each non-leaf with splitters
-    for (Iterator<PptTopLevel> pi = all_ppts.pptIterator(); pi.hasNext();) {
-      PptTopLevel ppt = pi.next();
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
       if (ppt.ppt_name.isNumberedExitPoint())
         continue;
       if (!ppt.has_splitters())
@@ -925,8 +923,7 @@ public class PptRelation implements Serializable {
     // Debug print the hierarchy in a more readable manner
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("PPT Hierarchy");
-      for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext();) {
-        PptTopLevel ppt = i.next();
+      for (PptTopLevel ppt : all_ppts.pptIterable()) {
         if (ppt.parents.size() == 0)
           ppt.debug_print_tree(debug, 0, null);
       }
@@ -934,8 +931,7 @@ public class PptRelation implements Serializable {
 
     // Debug print the equality sets for each ppt
     if (debug.isLoggable(Level.FINE)) {
-      for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext();) {
-        PptTopLevel ppt = i.next();
+      for (PptTopLevel ppt : all_ppts.pptIterable()) {
         debug.fine(ppt.name() + " equality sets: " + ppt.equality_sets_txt());
       }
     }
@@ -950,8 +946,7 @@ public class PptRelation implements Serializable {
    */
   public static void init_hierarchy_new (PptMap all_ppts) {
 
-    for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext();) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
       PptName pname = ppt.ppt_name;
       // rels is solely for debugging; each relation is stored in the
       // parent and child ppts
@@ -1034,8 +1029,7 @@ public class PptRelation implements Serializable {
     // Then AC1 is the parent of BC1 and AC2 is the parent of BC2
 
     // Loop over each ppt and process each non-leaf with splitters
-    for (Iterator<PptTopLevel> pi = all_ppts.pptIterator(); pi.hasNext();) {
-      PptTopLevel ppt = pi.next();
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
       if (ppt.is_subexit())
         continue;
       if (!ppt.has_splitters())
@@ -1085,8 +1079,7 @@ public class PptRelation implements Serializable {
     // any ppt without children that doesn't already have them.  This can
     // happen when there are ppts such as OBJECT or CLASS that don't end up
     // with any children (due to the program source or because of ppt filtering
-    for (Iterator<PptTopLevel> pi = all_ppts.pptIterator(); pi.hasNext();) {
-      PptTopLevel ppt = pi.next();
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
       if ((ppt.children.size() == 0) && (ppt.equality_view == null)) {
         assert ppt.is_object() || ppt.is_class() || ppt.is_enter() : ppt;
         ppt.equality_view = new PptSliceEquality(ppt);
@@ -1097,8 +1090,7 @@ public class PptRelation implements Serializable {
     // Debug print the hierarchy in a more readable manner
     if (debug.isLoggable(Level.FINE)) {
       debug.fine("PPT Hierarchy");
-      for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext();) {
-        PptTopLevel ppt = i.next();
+      for (PptTopLevel ppt : all_ppts.pptIterable()) {
         if (ppt.parents.size() == 0)
           ppt.debug_print_tree(debug, 0, null);
       }
@@ -1106,8 +1098,7 @@ public class PptRelation implements Serializable {
 
     // Debug print the equality sets for each ppt
     if (debug.isLoggable(Level.FINE)) {
-      for (Iterator<PptTopLevel> i = all_ppts.pptIterator(); i.hasNext();) {
-        PptTopLevel ppt = i.next();
+      for (PptTopLevel ppt : all_ppts.pptIterable()) {
         debug.fine(ppt.name() + " equality sets: " + ppt.equality_sets_txt());
       }
     }

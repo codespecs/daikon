@@ -129,8 +129,7 @@ public class PptNameMatcher {
 
     List<PptTopLevel> result = new ArrayList<PptTopLevel>();
 
-    for (Iterator<PptTopLevel> itor = ppts.pptIterator() ; itor.hasNext() ; ) {
-      PptTopLevel ppt = itor.next();
+    for (PptTopLevel ppt : ppts.pptIterable()) {
       PptName ppt_name = ppt.ppt_name;
 
       if (matches(ppt_name, methodOrConstructorDeclaration)) {

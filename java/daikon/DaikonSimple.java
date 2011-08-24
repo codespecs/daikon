@@ -152,8 +152,7 @@ public class DaikonSimple {
     //System.exit(0);
 
     // Print out the invariants for each program point (sort first)
-    for (Iterator<PptTopLevel> t = all_ppts.pptIterator(); t.hasNext();) {
-      PptTopLevel ppt = t.next();
+    for (PptTopLevel ppt : all_ppts.pptIterable()) {
 
       // We do not need to print out program points that have not seen
       // any samples.
