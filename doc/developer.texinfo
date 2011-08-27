@@ -2989,11 +2989,11 @@ return  - comparability 8
 
 A comparability entry is required in each variable block.
 
-@item @code{parent <parent-ppt> <rel-id> [<parent-variable>]}
+@item @code{parent <parent-ppt> <relation-id> [<parent-variable>]}
 
 Optionally specifies the parent variable of this variable in the program
 point/variable hierarchy.  The @var{parent-ppt} is the name of the
-parent program point.  The @var{rel-id} must be one of the
+parent program point.  The @var{relation-id} must be one of the
 relationship ids specified for this program point.  The
 @var{parent-variable} is the name of this variable's parent in the
 parent program point.  If the names are the same, it can be omitted.
