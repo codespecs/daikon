@@ -770,7 +770,7 @@ audit:
 # (Don't run these until after you have compiled Daikon at least once.)
 
 CHECKERS_BOOTCLASSPATH = -Xbootclasspath/p:${CHECKERS}/jdk/jdk.jar
-# CHECKERS_ARGS = -source 7 -Awarns
+# CHECKERS_ARGS = -source 7
 
 ## All of the following targets need to depend on "compile".
 
@@ -782,6 +782,7 @@ JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src -J-Dcheckers.ski
 JAVAC_PROTOTYPE_ARGS = -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing
 # JAVAC_PROTOTYPE_STUBS = -Astubs=typequals/prototype-stubs.astub
 JAVAC_PROTOTYPE_STUBS = -J-Dcheckers.skipUses='^java\.'
+JAVAC_REGEX_ARGS = -processor checkers.regex.RegexChecker -Alint=-dotequals -implicit:class -Xlint:-processing
 JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker -implicit:class -Xlint:-processing
 JAVAC_JAVARI_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 JAVAC_IGJ_ARGS = -processor checkers.igj.IGJChecker -implicit:class -Xlint:-processing
@@ -838,8 +839,8 @@ check-nullness-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
 
 # Version that issues warnings, not errors.
 check-nullness-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKERS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKERS} -Awarns -Xmaxwarns 10000 ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-prototype: check-prototype-all
 
@@ -848,6 +849,10 @@ check-prototype-all: check-prototype-all-withstubs
 check-prototype-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
+check-regex: ${ALL_GENERATED_FILES} compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_REGEX_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_REGEX_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 check-igj-all-nostubs: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_IGJ_ARGS} ${CHECKERS_ARGS} ...
