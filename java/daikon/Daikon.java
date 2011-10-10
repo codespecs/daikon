@@ -1884,7 +1884,7 @@ public final class Daikon {
     //     }
 
     // Print equality set info
-    //     for (PptTopLevel ppt : all_ppts.pptIteble()) {
+    //     for (PptTopLevel ppt : all_ppts.pptIterable()) {
     //       System.out.printf ("ppt: %s", ppt.name);
     //       if ((ppt.equality_view == null) || (ppt.equality_view.invs == null))
     //       continue;
