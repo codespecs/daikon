@@ -423,7 +423,7 @@ public final class PrintInvariants {
     // Makes things faster if a ppt is specified
     if (discPpt != null) {
       PptTopLevel ppt = ppts.get(discPpt);
-      if (ppt==null) {
+      if (ppt == null) {
         System.out.println("No such ppt found: "+discPpt);
       }
       else {
