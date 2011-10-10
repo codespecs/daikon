@@ -486,7 +486,7 @@ public final class Daikon {
     Set<String> dtrace_files = files.dtrace;
     Set<File> spinfo_files = files.spinfo;
     Set<File> map_files = files.map;
-    if (server_dir==null && (decls_files.size() == 0) && (dtrace_files.size() == 0)) {
+    if (server_dir == null && (decls_files.size() == 0) && (dtrace_files.size() == 0)) {
       System.out.println("No .decls or .dtrace files specified");
       throw new Daikon.TerminationMessage("No .decls or .dtrace files specified");
     }
