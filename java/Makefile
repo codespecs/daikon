@@ -69,7 +69,7 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers-quals.jar
 # Version of javac that supports pluggable type-checking.
 JAVAC_FOR_CHECKERS ?= ${CHECKERS}/binary/javac
 
-jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*
+jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.regex.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*
 
 ### end of user customizations
 
