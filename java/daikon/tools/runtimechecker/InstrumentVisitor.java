@@ -65,11 +65,11 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     // returns unique values for unique Properties, then I should be
     // able to use hashcode. So: make sure that the statements above
     // are all correct, and then use hashcode. ]]
-    private Map<String, String> xmlStringToIndex = new HashMap<String,String>();
+    private final Map<String, String> xmlStringToIndex = new HashMap<String,String>();
 
     private int varNumCounter = 0;
 
-    private PptNameMatcher pptMatcher;
+    private final PptNameMatcher pptMatcher;
 
     /**
      * Create a visitor that will insert code to check the invariants
@@ -101,6 +101,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
      * If makeAllFieldsPublic == true, then it makes this field
      * declaration public.
      */
+    @Override
     public void visit(FieldDeclaration fd) {
 
         // Fix any line/col inconsistencies first
@@ -158,6 +159,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
      *
      * Add code that initializes the properties array.
      */
+    @Override
     public void visit(ClassOrInterfaceBody clazz) {
 
         checkerClasses.addCheckerClass(clazz);
@@ -206,6 +208,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
      * Adds code to check postcontiions, class and object invariants
      * on exit.
      */
+    @Override
     public void visit(ConstructorDeclaration ctor) {
 
         visitedConstructors.add(Ast.getConstructor(ctor));
@@ -294,6 +297,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     /**
      *
      */
+    @Override
     public void visit(MethodDeclaration method) {
 
         // Fix any line/col inconsistencies first
@@ -1074,7 +1078,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         for (CheckerClass cc : checkerClasses.classes) {
 
-            Class c = Ast.getClass(cc.fclassbody);
+            Class<?> c = Ast.getClass(cc.fclassbody);
 
             // Check that all declared methods were in fact visited.
             for (Method m : c.getDeclaredMethods()) {
@@ -1098,7 +1102,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                 }
             }
 
-            for (Constructor cons : c.getConstructors()) {
+            for (Constructor<?> cons : c.getConstructors()) {
                 if (!visitedConstructors.contains(cons)) {
                     cc.addDeclaration(createEmptyDeclaration(cons));
                 }
@@ -1110,7 +1114,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         List<String> parameters = new ArrayList<String>();
         int paramCounter = 0;
-        for (Class c : m.getParameterTypes()) {
+        for (Class<?> c : m.getParameterTypes()) {
             parameters.add(Ast.classnameForSourceOutput(c) + " param" + paramCounter++);
         }
 
@@ -1139,11 +1143,11 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         return code;
     }
 
-    private StringBuffer createEmptyDeclaration(Constructor c) {
+    private StringBuffer createEmptyDeclaration(Constructor<?> c) {
 
         List<String> parameters = new ArrayList<String>();
         int paramCounter = 0;
-        for (Class cls : c.getParameterTypes()) {
+        for (Class<?> cls : c.getParameterTypes()) {
             parameters.add(Ast.classnameForSourceOutput(cls) + " param" + paramCounter++);
         }
 

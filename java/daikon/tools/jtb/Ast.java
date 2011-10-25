@@ -141,7 +141,7 @@ public class Ast {
 
 
   // Creates an AST from a String
-  public static Node create(String type, Class[] argTypes, Object[] args, String stringRep) {
+  public static Node create(String type, Class<?>[] argTypes, Object[] args, String stringRep) {
     JavaParser parser = new JavaParser(new StringReader(stringRep));
     Node n = null;
     try {
@@ -482,12 +482,13 @@ public class Ast {
   public static void addComment(Node n, NodeToken comment, boolean first) {
     class AddCommentVisitor extends DepthFirstVisitor {
       private boolean seenToken = false;
-      private NodeToken comment;
-      private boolean first;
+      private final NodeToken comment;
+      private final boolean first;
       public AddCommentVisitor(NodeToken comment, boolean first) {
         this.comment = comment;
         this.first = first;
       }
+      @Override
       public void visit(NodeToken node) {
         if (! seenToken) {
           seenToken = true;
@@ -541,12 +542,13 @@ public class Ast {
   public static void findLineAndCol(Node n, NodeToken comment, boolean first) {
     class AddCommentVisitor extends DepthFirstVisitor {
       private boolean seenToken = false;
-      private NodeToken comment;
-      private boolean first;
+      private final NodeToken comment;
+      private final boolean first;
       public AddCommentVisitor(NodeToken comment, boolean first) {
         this.comment = comment;
         this.first = first;
       }
+      @Override
       public void visit(NodeToken node) {
         if (! seenToken) {
           seenToken = true;
@@ -607,6 +609,7 @@ public class Ast {
     // last NodeToken visited.
     class LastNodeTokenVisitor extends DepthFirstVisitor {
       public NodeToken lastNodeToken = null;
+      @Override
       public void visit(NodeToken node) {
         lastNodeToken = node;
       }
@@ -617,10 +620,11 @@ public class Ast {
     class NextNodeTokenVisitor extends DepthFirstVisitor {
       private boolean seenPredecessor = false;
       public NodeToken nextNodeToken;
-      private NodeToken predecessor;
+      private final NodeToken predecessor;
       public NextNodeTokenVisitor(NodeToken predecessor) {
         this.predecessor = predecessor;
       }
+      @Override
       public void visit(NodeToken node) {
         if (! seenPredecessor) {
           if (node == predecessor) {
@@ -663,6 +667,7 @@ public class Ast {
   public static void removeAnnotations(MethodDeclaration m) {
     class RemoveAnnotationsVisitor extends DepthFirstVisitor {
       private boolean seenToken = false;
+      @Override
       public void visit(NodeToken n) {
         if (! seenToken) {
           seenToken = true;
@@ -698,7 +703,7 @@ public class Ast {
   /// Reflection
   ///
 
-  public static Class getClass(Node n) {
+  public static Class<?> getClass(Node n) {
     String ast_classname = getClassName(n);
     if (ast_classname.indexOf("$inner") != -1) {
       return null;
@@ -706,9 +711,9 @@ public class Ast {
     return getClass(ast_classname);
   }
 
-  public static Class getClass(String s) {
+  public static Class<?> getClass(String s) {
     try {
-      Class c = Class.forName(s);
+      Class<?> c = Class.forName(s);
       assert c != null;
       return c;
     } catch (ClassNotFoundException e) {
@@ -724,7 +729,7 @@ public class Ast {
         s = s.substring(0,dot_pos) + "$" + s.substring(dot_pos+1);
         // System.out.println("Lookup trying: " + s);
         try {
-          Class c = Class.forName(s);
+          Class<?> c = Class.forName(s);
           assert c != null;
           return c;
         } catch (ClassNotFoundException ex) {
@@ -735,11 +740,11 @@ public class Ast {
   }
 
   public static Method getMethod(MethodDeclaration methoddecl) {
-    Class c = getClass(methoddecl);
+    Class<?> c = getClass(methoddecl);
     return getMethod(c, methoddecl);
   }
 
-  public static Method getMethod(Class c, MethodDeclaration methoddecl) {
+  public static Method getMethod(Class<?> c, MethodDeclaration methoddecl) {
     String ast_methodname = getName(methoddecl);
     List<FormalParameter> ast_params = getParameters(methoddecl);
 
@@ -760,7 +765,7 @@ public class Ast {
         continue;
       }
 
-      Class[] params = meth.getParameterTypes();
+      Class<?>[] params = meth.getParameterTypes();
       if (paramsMatch(params, ast_params)) {
         // System.out.println("getMatch succeeded: " + ppt.name());
         return meth;
@@ -769,32 +774,32 @@ public class Ast {
     return null;
   }
 
-  public static Constructor getConstructor(ConstructorDeclaration constructordecl) {
-    Class c = getClass(constructordecl);
+  public static Constructor<?> getConstructor(ConstructorDeclaration constructordecl) {
+    Class<?> c = getClass(constructordecl);
     return getConstructor(c, constructordecl);
   }
 
-  public static Constructor getConstructor(Class c, ConstructorDeclaration constructordecl) {
+  public static Constructor<?> getConstructor(Class<?> c, ConstructorDeclaration constructordecl) {
     String ast_constructorname = getName(constructordecl);
 
     List<FormalParameter> ast_params = getParameters(constructordecl);
 
 
-    List<Constructor> publicConstructors = Arrays.<Constructor>asList(c.getConstructors());
-    List<Constructor> declaredConstructors = Arrays.<Constructor>asList(c.getDeclaredConstructors());
-    List<Constructor> allConstructors = new ArrayList<Constructor>();
+    List<Constructor<?>> publicConstructors = Arrays.<Constructor<?>>asList(c.getConstructors());
+    List<Constructor<?>> declaredConstructors = Arrays.<Constructor<?>>asList(c.getDeclaredConstructors());
+    List<Constructor<?>> allConstructors = new ArrayList<Constructor<?>>();
     allConstructors.addAll(publicConstructors);
     allConstructors.addAll(declaredConstructors);
 
-    Constructor[] constrs = allConstructors.toArray(new Constructor[0]);
+    Constructor<?>[] constrs = allConstructors.toArray(new Constructor<?>[0]);
 
     for (int i=0; i<constrs.length; i++) {
 
-      Constructor constr = constrs[i];
+      Constructor<?> constr = constrs[i];
       if (! typeMatch(constr.getName(), ast_constructorname)) {
         continue;
       }
-      Class[] params = constr.getParameterTypes();
+      Class<?>[] params = constr.getParameterTypes();
       if (paramsMatch(params, ast_params)) {
         // System.out.println("getMatch succeeded: " + ppt.name());
         return constr;
@@ -803,7 +808,7 @@ public class Ast {
     return null;
   }
 
-  public static boolean paramsMatch(Class[] params, List<FormalParameter> ast_params) {
+  public static boolean paramsMatch(Class<?>[] params, List<FormalParameter> ast_params) {
 
     if (params.length != ast_params.size()) {
       return false;
@@ -813,7 +818,7 @@ public class Ast {
     int j=0;
     for (Iterator<FormalParameter> itor = ast_params.iterator(); itor.hasNext(); j++) {
       String ast_param = getType(itor.next());
-      Class param = params[j];
+      Class<?> param = params[j];
       //System.out.println("Comparing " + param + " to " + ast_param + ":");
       if (! typeMatch(classnameForSourceOutput(param), ast_param)) {
         return false;
@@ -830,7 +835,7 @@ public class Ast {
     if (classOrInterface != null && isInterface(classOrInterface)) {
       return false;
     }
-    Class c = getClass(methdecl);
+    Class<?> c = getClass(methdecl);
     if (c == null) {
       return false;
     }
@@ -839,14 +844,14 @@ public class Ast {
   }
 
   // return true if methdecl is defined in c or any of its superclasses
-  public static boolean isOverride(Class c, MethodDeclaration methdecl) {
+  public static boolean isOverride(Class<?> c, MethodDeclaration methdecl) {
     // System.out.println("isOverride(" + c.getName() + ", " + getName(methdecl) + ")");
     Method meth = getMethod(c, methdecl);
     if (meth != null) {
       // System.out.println("isOverride => true");
       return true;
     }
-    Class superclass = c.getSuperclass();
+    Class<?> superclass = c.getSuperclass();
     if (superclass == null) {
       return false;
     }
@@ -861,12 +866,12 @@ public class Ast {
     if (classOrInterface != null && isInterface(classOrInterface)) {
       return false;
     }
-    Class c = getClass(methdecl);
+    Class<?> c = getClass(methdecl);
     if (c == null) {
       return false;
     }
     // System.out.println("isImplementation(" + getName(methdecl) + "): class=" + c.getName());
-    Class[] interfaces = c.getInterfaces();
+    Class<?>[] interfaces = c.getInterfaces();
     for (int i=0; i<interfaces.length; i++) {
       if (isImplementation(interfaces[i], methdecl)) {
         return true;
@@ -876,14 +881,14 @@ public class Ast {
   }
 
   // return true if methdecl is defined in c or any of its interfaces
-  public static boolean isImplementation(Class c, MethodDeclaration methdecl) {
+  public static boolean isImplementation(Class<?> c, MethodDeclaration methdecl) {
     // System.out.println("isImplementation(" + c.getName() + ", " + getName(methdecl) + ")");
     Method meth = getMethod(c, methdecl);
     if (meth != null) {
       // System.out.println("isImplementation => true");
       return true;
     }
-    Class[] interfaces = c.getInterfaces();
+    Class<?>[] interfaces = c.getInterfaces();
     for (int i=0; i<interfaces.length; i++) {
       if (isImplementation(interfaces[i], methdecl)) {
         return true;
@@ -900,7 +905,7 @@ public class Ast {
   // Following the chain of parent pointers from the child, returns
   // the first node of the specified type or a subtype.  Returns null
   // if no parent of that type.
-  public static /*@Nullable*/ Node getParent(Class type, Node child) {
+  public static /*@Nullable*/ Node getParent(Class<?> type, Node child) {
     Node currentNode = child.getParent();
     while (true) {
       if (type.isInstance(currentNode)) {
@@ -961,10 +966,11 @@ public class Ast {
   public static boolean contains(Node n, String s) {
     class ContainsVisitor extends DepthFirstVisitor {
       public boolean found = false;
-      private String s;
+      private final String s;
       public ContainsVisitor(String s) {
         this.s = s;
       }
+      @Override
       public void visit(NodeToken node) {
         found = found || s.equals(node.tokenImage);
       }
@@ -1004,6 +1010,7 @@ public class Ast {
   public static List<FormalParameter> getParameters(MethodDeclaration m) {
     class GetParametersVisitor extends DepthFirstVisitor {
       public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
+      @Override
       public void visit(FormalParameter p) {
         parameters.add(p);
       }
@@ -1020,6 +1027,7 @@ public class Ast {
   public static List<FormalParameter> getParametersNoImplicit(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
       public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
+      @Override
       public void visit(FormalParameter p) {
         parameters.add(p);
       }
@@ -1036,6 +1044,7 @@ public class Ast {
   public static List<FormalParameter> getParameters(ConstructorDeclaration cd) {
     class GetParametersVisitor extends DepthFirstVisitor {
       public List<FormalParameter> parameters = new ArrayList<FormalParameter>();
+      @Override
       public void visit(FormalParameter p) {
         parameters.add(p);
       }
@@ -1093,6 +1102,7 @@ public class Ast {
     class GetSymbolNamesVisitor extends DepthFirstVisitor {
       public Set<String> symbolNames = new HashSet<String>();
 
+      @Override
       public void visit(Name n) {
         Node gp = n.getParent().getParent();
         if (gp instanceof PrimaryPrefix) {
@@ -1352,7 +1362,7 @@ public class Ast {
     return opt.present();
   }
 
-  public static String classnameForSourceOutput(Class c) {
+  public static String classnameForSourceOutput(Class<?> c) {
 
         assert !c.equals(Void.TYPE);
 
