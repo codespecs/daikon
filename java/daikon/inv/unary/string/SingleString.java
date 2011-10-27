@@ -37,7 +37,7 @@ public abstract class SingleString
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(String,int)}.
-  public InvariantStatus add(Object val, int mod_index, int count) {
+  public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
     assert ! falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     String value = (String) val;
@@ -48,7 +48,7 @@ public abstract class SingleString
     }
   }
 
-  public InvariantStatus check(Object val, int mod_index, int count) {
+  public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
     assert ! falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     String value = (String) val;
@@ -64,19 +64,19 @@ public abstract class SingleString
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract InvariantStatus add_modified(String value, int count);
+  public abstract InvariantStatus add_modified(/*@Interned*/ String value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public InvariantStatus add_unmodified(String value, int count) {
+  public InvariantStatus add_unmodified(/*@Interned*/ String value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
-  public abstract InvariantStatus check_modified(String value, int count);
+  public abstract InvariantStatus check_modified(/*@Interned*/ String value, int count);
 
-  public InvariantStatus check_unmodified(String value, int count) {
+  public InvariantStatus check_unmodified(/*@Interned*/ String value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 

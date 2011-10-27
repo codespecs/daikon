@@ -31,8 +31,8 @@ public abstract class UnaryInvariant
     return this;
   }
 
-  public abstract InvariantStatus add(Object val, int mod_index, int count);
+  public abstract InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count);
 
-  public abstract InvariantStatus check(Object val1, int mod_index, int count);
+  public abstract InvariantStatus check(/*@Interned*/ Object val1, int mod_index, int count);
 
 }

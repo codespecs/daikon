@@ -342,7 +342,7 @@ public final class PPTSLICE1 extends PptSlice {
   }
 
 #if defined (ARITY1)
-  public List<Invariant> add_val_bu (Object val1, int mod1, int count) {
+  public List<Invariant> add_val_bu (/*@Interned*/ Object val1, int mod1, int count) {
 
     assert mod1 != ValueTuple.MISSING_FLOW
                       && mod1 != ValueTuple.MISSING_NONSENSICAL;
@@ -367,7 +367,7 @@ public final class PPTSLICE1 extends PptSlice {
   }
 #elif defined (ARITY2)
 
-  public List<Invariant> add_val_bu (Object val1, Object val2,
+  public List<Invariant> add_val_bu (/*@Interned*/ Object val1, /*@Interned*/ Object val2,
                                         int mod1, int mod2, int count) {
 
     assert (mod1 != ValueTuple.MISSING_FLOW
@@ -431,7 +431,7 @@ public final class PPTSLICE1 extends PptSlice {
     return (result);
   }
 #elif defined (ARITY3)
-  public List<Invariant> add_val_bu (Object val1, Object val2, Object val3,
+  public List<Invariant> add_val_bu (/*@Interned*/ Object val1, /*@Interned*/ Object val2, /*@Interned*/ Object val3,
                                      int mod1, int mod2, int mod3, int count) {
 
     assert (mod1 != ValueTuple.MISSING_FLOW

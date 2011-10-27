@@ -72,7 +72,7 @@ public abstract class CLASSNAME
     return ppt.var_infos[2];
   }
 
-  public InvariantStatus check(Object val1, Object val2, Object val3, int mod_index, int count) {
+  public InvariantStatus check(/*@Interned*/ Object val1, /*@Interned*/ Object val2, /*@Interned*/ Object val3, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     assert ! falsified;
@@ -92,7 +92,7 @@ public abstract class CLASSNAME
     }
   }
 
-  public InvariantStatus add(Object val1, Object val2, Object val3, int mod_index, int count) {
+  public InvariantStatus add(/*@Interned*/ Object val1, /*@Interned*/ Object val2, /*@Interned*/ Object val3, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     assert ! falsified;

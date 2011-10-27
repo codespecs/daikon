@@ -19,6 +19,7 @@
 #if (defined(EQUAL) || defined(NONEQUAL) || defined(LESSTHAN) \
     || defined(LESSEQUAL) || defined(GREATERTHAN) || defined(GREATEREQUAL))
   #define PRIMITIVE long
+  #define PRIMITIVENONCOMMENT long
   #define IS_NUMERIC 1
   #define IS_INT 1
   #define ISTYPE isIntegral()
@@ -42,6 +43,7 @@
   #define IS_NUMERIC 1
   #define IS_FLOAT 1
   #define PRIMITIVE double
+  #define PRIMITIVENONCOMMENT double
   #define ISTYPE isFloat()
   #define SUPERCLASS TwoFloat
   #define MEMBER Member
@@ -59,14 +61,15 @@
   #define EQUAL_CLASS FloatEqual
 #else
   #define IS_STRING 1
-  #define PRIMITIVE String
+  #define PRIMITIVE /*@Interned*/ String
+  #define PRIMITIVENONCOMMENT String
   #define ISTYPE isString()
   #define SUPERCLASS TwoString
   #define MEMBER MemberString
   #define INT(x) String ## x
   #define SEQSEQINTEQUAL SeqSeqStringEqual
   #define SEQ_SUBSCRIPT SequenceStringSubscript
-  #define INT_TYPE String
+  #define INT_TYPE /*@Interned*/ String
   #define ONEOF OneOfString
   #define LESS_THAN_CLASS StringLessThan
   #define GREATER_THAN_CLASS StringGreaterThan
@@ -336,8 +339,7 @@ import java.util.logging.Level;
 import java.util.*;
 
 /**
- * Represents an invariant of EQUALSstring between two
- * PRIMITIVE scalars.
+ * Represents an invariant of EQUALSstring between two PRIMITIVENONCOMMENT scalars.
  **/
 public final class INTEQUAL
   extends SUPERCLASS IMPLEMENTSCOMPARISON {
@@ -755,7 +757,7 @@ public final class INTEQUAL
   //   super.destroy();
   // }
 
-  public InvariantStatus add(Object v1, Object v2, int mod_index, int count) {
+  public InvariantStatus add(/*@Interned*/ Object v1, /*@Interned*/ Object v2, int mod_index, int count) {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine(INTEQUALstring + ppt.varNames() + ".add("
                  + v1 + "," + v2

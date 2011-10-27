@@ -1261,7 +1261,8 @@ public final class CLASSNAME
       if (values_seen != other.values_seen)
         return (false);
       for (int ii = 0; ii < values_seen; ii++) {
-        if (def_points[ii] != other.def_points[ii])
+        // used to use !=, but that test seems wrong
+        if (! def_points[ii].equals(other.def_points[ii]))
           return (false);
       }
       return (true);

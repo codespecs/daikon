@@ -189,8 +189,9 @@ public final class CLASSNAME
       }
       return new ValueAndModified (Intern.intern(result), mod);
     } else if (val1 instanceof Object[]) {
-      Object[] result = new Object[count];
-      Object[] values = (Object[]) val1;
+      /*@Interned*/ Object[] result = new /*@Interned*/ Object[count];
+      @SuppressWarnings("interning") // object invariant: array elements are interned
+      /*@Interned*/ Object[] values = (/*@Interned*/ Object[]) val1;
       int j = 0;
       for (int i = 0; i < length1; i++) {
         if ((predicate[i] == choose) ^ !keep) {

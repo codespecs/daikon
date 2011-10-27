@@ -291,13 +291,13 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
     for (int i = 0; i < suppression_set.length; i++ ) {
 
-      String status = suppression_set[i].check (ppt, vis, inv);
-      if (status == NIS.VALID) {
+      NIS.SuppressState status = suppression_set[i].check (ppt, vis, inv);
+      if (status == NIS.SuppressState.VALID) {
         if (NIS.debug.isLoggable (Level.FINE))
           NIS.debug.fine ("suppression " + suppression_set[i] + " is valid");
         return;
       }
-      assert status != NIS.NONSENSICAL;
+      assert status != NIS.SuppressState.NONSENSICAL;
     }
 
     if (NIS.debug.isLoggable (Level.FINE))
@@ -348,8 +348,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
     // Check each suppression to see if it is valid
     for (int i = 0; i < suppression_set.length; i++ ) {
-      String status = suppression_set[i].check (ppt, var_infos, null);
-      if (status == NIS.VALID) {
+      NIS.SuppressState status = suppression_set[i].check (ppt, var_infos, null);
+      if (status == NIS.SuppressState.VALID) {
         if (Debug.logOn() || NIS.debug.isLoggable (Level.FINE))
           Debug.log (NIS.debug, getClass(), ppt, var_infos, "suppression "
             + suppression_set[i] + " is " + status + " in ppt " + ppt
@@ -386,8 +386,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
     // Check each suppression to see if it is valid
     for (int i = 0; i < suppression_set.length; i++ ) {
-      String status = suppression_set[i].check (ppt, var_infos, null);
-      if ((status == NIS.VALID) || (status == NIS.NONSENSICAL)) {
+      NIS.SuppressState status = suppression_set[i].check (ppt, var_infos, null);
+      if ((status == NIS.SuppressState.VALID) || (status == NIS.SuppressState.NONSENSICAL)) {
         if (Debug.logOn() || NIS.debug.isLoggable (Level.FINE))
           Debug.log (NIS.debug, getClass(), ppt, var_infos, "suppression "
             + suppression_set[i] + " is " + status + " in ppt " + ppt

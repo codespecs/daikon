@@ -202,7 +202,7 @@ public final class CLASSNAME
       + (is_pointer() ? "null" : "0") + ")" + form[2];
   }
 
-  public InvariantStatus check_modified(PRIMITIVE[] a, int count) {
+  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     for (int ai=0; ai<a.length; ai++) {
       PRIMITIVE v = a[ai];
 
@@ -213,7 +213,7 @@ public final class CLASSNAME
     return InvariantStatus.NO_CHANGE;
   }
 
-  public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
+  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
 
     //if (logOn()) {
     //  VALUE_SET vs = (VALUE_SET) ppt.var_infos[0].get_value_set();

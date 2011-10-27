@@ -74,8 +74,10 @@ public final class SequencesConcat
 
     } else if (var1().rep_type == ProglangType.STRING_ARRAY) {
       // val1 instanceof String[] || val2 instanceof String[]
-      String[] result = ArraysMDE.concat (val1 == null ? null : (String[]) val1,
-                                          val2 == null ? null : (String[]) val2);
+      @SuppressWarnings("interning") // object invariant: array elements are interned
+      /*@Interned*/ String[] result
+        = ArraysMDE.concat (val1 == null ? null : (/*@Interned*/ String[]) val1,
+                            val2 == null ? null : (/*@Interned*/ String[]) val2);
       return new ValueAndModified(Intern.intern(result), mod);
     } else {
       throw new Error ("Attempted to concatenate unknown arrays");

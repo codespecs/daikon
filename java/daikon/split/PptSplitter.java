@@ -17,6 +17,7 @@ import java.io.Serializable;
  * is presumed in the implementation.  However, this could easily
  * be extended by extending this class with specific other implementations.
  */
+/*@UsesObjectEquals*/
 public class PptSplitter implements Serializable {
 
   // We are Serializable, so we specify a version to allow changes to

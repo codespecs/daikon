@@ -1274,7 +1274,7 @@ public final class FileIO {
     public /*@Nullable*/ ValueTuple vt;
 
     /** Miscellaneous text in the parsed item **/
-    public /*@Nullable*/ Object payload;      // used when state=COMMENT
+    public /*@Nullable*/ Object payload;      // used when status=COMMENT
 
 
     /** Start parsing the given file. */

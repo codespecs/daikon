@@ -20,7 +20,7 @@ The correct way to build the system is to run 'make'.
   #define SCALARSEQUENCESINTERSECTION_STRING "SequenceFloatIntersection"
   #define INTERN(v) Intern.internedDouble(v)
 #elif defined(STRING)
-  #define SCALAR String
+  #define SCALAR /*@Interned*/ String
   #define SCALARSEQUENCESINTERSECTION SequenceStringIntersection
   #define SCALARSEQUENCESINTERSECTION_STRING "SequenceStringIntersection"
   #if 0

@@ -371,7 +371,7 @@ public class PptCombined extends PptTopLevel {
     int vals_array_size = var_infos.length - num_static_constant_vars;
 
     // Allocate arrays for the combined values and mod information
-    /*@Nullable*/ Object[] vals = new Object[vals_array_size];
+    /*@Nullable*/ /*@Interned*/ Object[] vals = new /*@Interned*/ Object[vals_array_size];
     int[] mods = new int[vals_array_size];
     ValueTuple partial_vt = ValueTuple.makeUninterned (vals, mods);
 
@@ -414,7 +414,7 @@ public class PptCombined extends PptTopLevel {
       ValueAndModified vm =
         var_infos[index].derived.computeValueAndModified(partial_vt);
       vals[index] = vm.value;
-      mods[index]= vm.modified;
+      mods[index] = vm.modified;
       index++;
     }
 

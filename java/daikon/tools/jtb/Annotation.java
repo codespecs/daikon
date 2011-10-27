@@ -286,8 +286,8 @@ public class Annotation {
     Annotation anno = (Annotation) o;
     return (
             this.daikonRep().equals(anno.daikonRep())
-            && (this.method() == anno.method())
-            && (this.kind() == anno.kind()));
+            && (this.method().equals(anno.method()))
+            && (this.kind().equals(anno.kind())));
   }
 
   public int hashCode() {

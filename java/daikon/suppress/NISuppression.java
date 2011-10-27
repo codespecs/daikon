@@ -84,26 +84,26 @@ public class NISuppression {
    * @param ppt     Program point in which to check suppression
    * @param vis     Variables over which to check suppression
    * @param inv     Falsified invariant (if any).  Any suppressor
-   *                that matches inv will be marked as NIS.MATCH
+   *                that matches inv will be marked as NIS.SuppressState.MATCH
    *
-   * @return NIS.VALID if the suppression is valid, NIS.NONSENSICAL if one or
+   * @return NIS.SuppressState.VALID if the suppression is valid, NIS.SuppressState.NONSENSICAL if one or
    *         more suppressors were nonsensical and the rest were valid,
-   *         NIS.INVALID otherwise
+   *         NIS.SuppressState.INVALID otherwise
    */
-  public String check (PptTopLevel ppt, VarInfo[] vis, /*@Nullable*/ Invariant inv) {
+  public NIS.SuppressState check (PptTopLevel ppt, VarInfo[] vis, /*@Nullable*/ Invariant inv) {
 
-    String status = NIS.VALID;
+    NIS.SuppressState status = NIS.SuppressState.VALID;
     boolean set = false;
     for (int i = 0; i < suppressors.length; i++) {
       NISuppressor ssor = suppressors[i];
-      String st = ssor.check (ppt, vis, inv);
+      NIS.SuppressState st = ssor.check (ppt, vis, inv);
 
       if (!set) {
-        if (st == NIS.NONSENSICAL)
-          status = NIS.NONSENSICAL;
-        else if (st != NIS.VALID) {
-          status = (NIS.INVALID);
-          if (st == NIS.INVALID) {
+        if (st == NIS.SuppressState.NONSENSICAL)
+          status = NIS.SuppressState.NONSENSICAL;
+        else if (st != NIS.SuppressState.VALID) {
+          status = (NIS.SuppressState.INVALID);
+          if (st == NIS.SuppressState.INVALID) {
             return status;
           }
             // !valid in this case means invalid or match
@@ -136,10 +136,10 @@ public class NISuppression {
     boolean inv_match = false;
     for (int i = 0; i < suppressors.length; i++) {
       NISuppressor ssor = suppressors[i];
-      assert ssor.state != NIS.NONSENSICAL;
-      if (ssor.state == NIS.MATCH) {
+      assert ssor.state != NIS.SuppressState.NONSENSICAL;
+      if (ssor.state == NIS.SuppressState.MATCH) {
         inv_match = true;
-      } else if (ssor.state != NIS.VALID)
+      } else if (ssor.state != NIS.SuppressState.VALID)
         return (false);
     }
     return (inv_match);

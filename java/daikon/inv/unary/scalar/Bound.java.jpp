@@ -160,10 +160,10 @@ The correct way to build the system is to run 'make'.
   #define IS_ELT
   #define SCALAR sequence
   #if defined(ELTLOWER) || defined(ELTUPPER)
-    #define LONG long[]
+    #define LONG long /*@Interned*/ []
     #define SINGLESCALAR SingleScalarSequence
   #elif defined(ELTLOWERFLOAT) || defined(ELTUPPERFLOAT)
-    #define LONG double[]
+    #define LONG double /*@Interned*/ []
     #define SINGLESCALAR SingleFloatSequence
   #endif
 #endif

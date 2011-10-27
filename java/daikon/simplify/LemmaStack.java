@@ -405,7 +405,9 @@ public class LemmaStack {
     int spliceOut = -1;
     for (int i = 0; i < lemmas.size(); i++) {
       Lemma lem = lemmas.elementAt(i);
-      if (lem == bad) {
+      @SuppressWarnings("interning") // value in list
+      boolean isBad = (lem == bad);
+      if (isBad) {
         spliceOut = i;
       } else {
         try {

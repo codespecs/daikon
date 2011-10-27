@@ -135,7 +135,7 @@ public class CLASSNAME
     return "daikon.Quant.noDups(" + var().name_using(format) + ")";
   }
 
-  public InvariantStatus check_modified(PRIMITIVE[] a, int count) {
+  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     // if (logDetail())
     //   log ("sample " + ArraysMDE.toString (a));
     for (int i=1; i<a.length; i++) {
@@ -148,7 +148,7 @@ public class CLASSNAME
     return InvariantStatus.NO_CHANGE;
   }
 
-  public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
+  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     InvariantStatus status = check_modified(a, count);
     if (debug.isLoggable(Level.FINE) && (status == InvariantStatus.FALSIFIED)) {
       debug.fine ("Destroying myself with: " + var().name());

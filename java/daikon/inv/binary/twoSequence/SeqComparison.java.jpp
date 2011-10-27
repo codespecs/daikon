@@ -272,6 +272,7 @@ public class SEQSEQINTEQUAL
    **/
   static final Logger debug = Logger.getLogger ("daikon.inv.binary.twoSequence." + SEQSEQINTEQUALstring);
 
+  @SuppressWarnings("interning")  // bug with generics
   static Comparator<PRIMITIVE[]> comparator = ARRAYCOMPARATOR;
 
   boolean orderMatters;
@@ -434,7 +435,7 @@ public class SEQSEQINTEQUAL
     #endif
   }
 
-  public InvariantStatus check_modified(PRIMITIVE[] v1, PRIMITIVE[] v2, int count) {
+  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
     /// This does not do the right thing; I really want to avoid comparisons
     /// if one is missing, but not if one is zero-length.
     // // Don't make comparisons with empty arrays.
@@ -457,7 +458,7 @@ public class SEQSEQINTEQUAL
     return InvariantStatus.NO_CHANGE;
   }
 
-  public InvariantStatus add_modified(PRIMITIVE[] v1, PRIMITIVE[] v2, int count) {
+  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE /*@Interned*/ [] v2, int count) {
     if (logDetail())
       log ("add_modified (" + ArraysMDE.toString(v1) + ", " +
            ArraysMDE.toString(v2) + ") ");

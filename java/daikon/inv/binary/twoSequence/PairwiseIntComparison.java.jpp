@@ -436,7 +436,7 @@ public class PAIRWISEINTEQUAL
       + ", " + var2().name_using(format) + ")";
   }
 
-  public InvariantStatus check_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
+  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2, int count) {
     assert a1 != null && a2 != null
       : var1() + " " + var2() + " " + FileIO.get_linenum();
     if (a1.length != a2.length || a1.length == 0 || a2.length == 0) {
@@ -459,7 +459,7 @@ public class PAIRWISEINTEQUAL
     return InvariantStatus.NO_CHANGE;
   }
 
-    public InvariantStatus add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2,
+    public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2,
                                         int count) {
       if (logDetail())
         log (debug, "saw add_modified (" + ArraysMDE.toString(a1) +

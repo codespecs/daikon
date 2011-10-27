@@ -339,10 +339,9 @@ public class CLASSNAME
         subvar.derived instanceof SEQUENCESCALARINTERSECTION ||
         subvar.derived instanceof SEQUENCESCALARUNION) {
       discardCode = DiscardCode.obvious;
-      discardString = "Invariants involving subsets/subsequences of unions/intersections"+
-        "are suppressed";
+      discardString = "Invariants involving subsets/subsequences of unions/intersections are suppressed";
       debug.fine ("  returning true because of union or intersection");
-      return Pair.of(discardCode, discardString);
+      return Pair.<DiscardCode,String>of(discardCode, discardString);
     }
 
     if (subvar.derived instanceof SEQUENCESPREDICATE) {

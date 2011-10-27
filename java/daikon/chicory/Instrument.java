@@ -654,6 +654,12 @@ public class Instrument implements ClassFileTransformer {
     return class_info;
   }
 
+  // This method exists only to suppress interning warnings
+  @SuppressWarnings("interning") // special, unique value
+  private static boolean isVoid(Type t) {
+    return t == Type.VOID;
+  }
+
   /**
    * Transforms return instructions to first assign the result to a local
    * variable (return__$trace2_val) and then do the return.  Also, calls
@@ -687,7 +693,7 @@ public class Instrument implements ClassFileTransformer {
 
     Type type = c.mgen.getReturnType();
     InstructionList il = new InstructionList();
-    if (type != Type.VOID) {
+    if (! isVoid(type)) {
       LocalVariableGen return_loc = get_return_local (c.mgen, type);
       il.append (InstructionFactory.createDup (type.getSize()));
       il.append (InstructionFactory.createStore (type, return_loc.getIndex()));
@@ -890,7 +896,7 @@ public class Instrument implements ClassFileTransformer {
     // value is a primitive, wrap it in the appropriate runtime wrapper
     if (method_name.equals ("exit")) {
       Type ret_type = mgen.getReturnType();
-      if (ret_type == Type.VOID) {
+      if (isVoid(ret_type)) {
         il.append (new ACONST_NULL());
       } else {
         LocalVariableGen return_local = get_return_local (mgen, ret_type);

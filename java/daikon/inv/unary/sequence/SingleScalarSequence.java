@@ -44,7 +44,7 @@ public abstract class SingleScalarSequence
   // Should never be called with modified == ValueTuple.MISSING.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
-  public InvariantStatus add(Object val, int mod_index, int count) {
+  public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
     assert ! falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val) : "not interned: " + val + "/"
@@ -62,7 +62,7 @@ public abstract class SingleScalarSequence
   }
 
 
-  public InvariantStatus check(Object val, int mod_index, int count) {
+  public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
     assert ! falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
@@ -80,20 +80,20 @@ public abstract class SingleScalarSequence
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract InvariantStatus add_modified(long[] value, int count);
+  public abstract InvariantStatus add_modified(long /*@Interned*/ [] value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public InvariantStatus add_unmodified(long[] value, int count) {
+  public InvariantStatus add_unmodified(long /*@Interned*/ [] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
-  public abstract InvariantStatus check_modified(long[] value, int count);
+  public abstract InvariantStatus check_modified(long /*@Interned*/ [] value, int count);
 
 
-  public InvariantStatus check_unmodified(long[] value, int count) {
+  public InvariantStatus check_unmodified(long /*@Interned*/ [] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 

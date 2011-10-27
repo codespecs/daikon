@@ -320,7 +320,7 @@ public class CLASSNAME extends SUPERCLASS {
       + form[3];
   }
 
-  public InvariantStatus check_modified(PRIMITIVE[] a, int count) {
+  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     for (int i=0; i<a.length; i++) {
       if (!EQUALS (a[i], i))
         return InvariantStatus.FALSIFIED;
@@ -328,7 +328,7 @@ public class CLASSNAME extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
-  public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
+  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
 
     if (logDetail())
       log ("Entered add_modified: ppt.num_values()==" +

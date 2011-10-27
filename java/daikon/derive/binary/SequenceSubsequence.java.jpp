@@ -16,7 +16,7 @@ The correct way to build the system is to run 'make'.
   #define SCALAR double
   #define SEQUENCESCALARSUBSEQUENCE SequenceFloatSubsequence
 #elif defined(STRING)
-  #define SCALAR String
+  #define SCALAR /*@Interned*/ String
   #define SEQUENCESCALARSUBSEQUENCE SequenceStringSubsequence
 #else
   #error "One of SCALAR, FLOAT, or STRING must be defined"

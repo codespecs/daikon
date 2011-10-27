@@ -186,7 +186,7 @@ public class CLASSNAME
     return pre_buf.toString();
   }
 
-  public InvariantStatus check_modified(PRIMITIVE[] a, int count) {
+  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     if (a == null) {
       return InvariantStatus.FALSIFIED;
     } else if (intersect==null) {
@@ -202,7 +202,7 @@ public class CLASSNAME
   }
 
 
-  public InvariantStatus add_modified(PRIMITIVE[] a, int count) {
+  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     // System.out.println ("common: " + ArraysMDE.toString (a));
     if (a == null) {
       return InvariantStatus.FALSIFIED;

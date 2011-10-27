@@ -8,37 +8,44 @@
   #define PACKAGE twoScalar
   #define CLASSNAME TwoFloat
   #define PRIMITIVE double
+  #define PRIMITIVENONCOMMENT double
   #define GET_VAL(obj) (((Double) obj).doubleValue())
   #define BASE_IS_TYPE baseIsFloat()
 #elif defined(TYPELONG)
   #define PACKAGE twoScalar
   #define CLASSNAME TwoScalar
   #define PRIMITIVE long
+  #define PRIMITIVENONCOMMENT long
   #define GET_VAL(obj) (((Long) obj).longValue())
   #define BASE_IS_TYPE baseIsScalar()
 #elif defined(TYPESTRING)
   #define PACKAGE twoString
   #define CLASSNAME TwoString
-  #define PRIMITIVE String
-  #define GET_VAL(obj) ((String) obj)
+  #define PRIMITIVE /*@Interned*/ String
+  #define PRIMITIVE_SUPPRESS_INTERNED @SuppressWarnings("interned") // cast from interned value
+  #define PRIMITIVENONCOMMENT String
+  #define GET_VAL(obj) ((PRIMITIVE) obj)
   #define BASE_IS_TYPE baseIsString()
 #elif defined(TYPEDOUBLESEQ)
   #define PACKAGE twoSequence
   #define CLASSNAME TwoSequenceFloat
-  #define PRIMITIVE double[]
-  #define GET_VAL(obj) ((double[]) obj)
+  #define PRIMITIVE double /*@Interned*/ []
+  #define PRIMITIVENONCOMMENT double[]
+  #define GET_VAL(obj) ((PRIMITIVE) obj)
   #define BASE_IS_TYPE baseIsFloat()
 #elif defined(TYPELONGSEQ)
   #define PACKAGE twoSequence
   #define CLASSNAME TwoSequence
-  #define PRIMITIVE long[]
-  #define GET_VAL(obj) ((long[]) obj)
+  #define PRIMITIVE long /*@Interned*/ []
+  #define PRIMITIVENONCOMMENT long[]
+  #define GET_VAL(obj) ((PRIMITIVE) obj)
   #define BASE_IS_TYPE baseIsScalar()
 #elif defined(TYPESTRINGSEQ)
   #define PACKAGE twoSequence
   #define CLASSNAME TwoSequenceString
-  #define PRIMITIVE String[]
-  #define GET_VAL(obj) ((String[]) obj)
+  #define PRIMITIVE /*@Interned*/ String /*@Interned*/ []
+  #define PRIMITIVENONCOMMENT String[]
+  #define GET_VAL(obj) ((PRIMITIVE) obj)
   #define BASE_IS_TYPE baseIsString()
 #else
   #error "type(primitive/seq) must be defined"
@@ -60,7 +67,7 @@ import daikon.*;
 import daikon.inv.InvariantStatus;
 
 /**
- * Base class for two variable PRIMITIVE invariants.  Provides a simpler
+ * Base class for two variable PRIMITIVENONCOMMENT invariants.  Provides a simpler
  * mechanism for non-symmetric invariants to function over both permutations
  * of their variables.
  *
@@ -194,7 +201,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
       return vis[1];
   }
 
-  public InvariantStatus check(Object val1, Object val2, int mod_index,
+  public InvariantStatus check(/*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index,
                                int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
@@ -215,7 +222,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     }
   }
 
-  public InvariantStatus add(Object val1, Object val2, int mod_index, int count) {
+  public InvariantStatus add(/*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
     // Tests for whether a value is missing should be performed before
     // making this call, so as to reduce overall work.
     assert ! falsified;

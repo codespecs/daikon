@@ -185,7 +185,7 @@ public class CLASSNAME
       + " " + index + "))))))";
   }
 
-  public InvariantStatus check_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
+  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2, int count) {
     if (a1.length != a2.length) {
       return InvariantStatus.FALSIFIED;
     }
@@ -198,7 +198,7 @@ public class CLASSNAME
     return InvariantStatus.NO_CHANGE;
   }
 
-  public InvariantStatus add_modified(PRIMITIVE[] a1, PRIMITIVE[] a2, int count) {
+  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a1, PRIMITIVE /*@Interned*/ [] a2, int count) {
     return check_modified(a1, a2, count);
   }
 

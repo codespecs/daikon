@@ -43,7 +43,7 @@ public abstract class SingleScalar
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
-  public InvariantStatus add(Object val, int mod_index, int count) {
+  public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
     assert ! falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     long value = ((Long) val).longValue();
@@ -55,7 +55,7 @@ public abstract class SingleScalar
   }
 
 
-  public InvariantStatus check(Object val, int mod_index, int count) {
+  public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
     assert ! falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     long value = ((Long) val).longValue();

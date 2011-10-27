@@ -289,7 +289,7 @@ public final class SEQINTEQUAL
       + seqvar().name_using(format) + ", " + sclvar().name_using(format) + ")";
   }
 
-  public InvariantStatus check_modified(PRIMITIVE[] a, PRIMITIVE x, int count) {
+  public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, PRIMITIVE x, int count) {
     /*if (logDetail() || debug.isLoggable(Level.FINE))
       log(debug,"(" + EQUALSstring + " " + ArraysMDE.toString(a)
       + " " + x);*/
@@ -303,7 +303,7 @@ public final class SEQINTEQUAL
     return InvariantStatus.NO_CHANGE;
   }
 
-  public InvariantStatus add_modified(PRIMITIVE[] a, PRIMITIVE x, int count) {
+  public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, PRIMITIVE x, int count) {
     return check_modified(a, x, count);
   }
 

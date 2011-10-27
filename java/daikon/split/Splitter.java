@@ -23,6 +23,7 @@ import java.io.Serializable;
 // Should not be "implements Serializable":  the classes are created on
 // demand, so the class doesn't exist when a serialized object is being
 // re-read.
+/*@UsesObjectEquals*/
 public abstract class Splitter
   implements Serializable
 {

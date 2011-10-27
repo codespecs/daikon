@@ -163,6 +163,7 @@ public final class Quant {
 
   /** @see #noDups(Object[])
    */
+  @SuppressWarnings("interning") // cast from Object
   /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean noDups(Object seq) {
     if (seq == null) { return false; }
@@ -171,14 +172,16 @@ public final class Quant {
 
   /** @see #typeArray(Object[])
    */
+  @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#0"})*/
-  /* pure */ public static String /*@PolyNull*/ [] typeArray(/*@PolyNull*/ Object seq) {
+  /* pure */ public static String /*@PolyNull*/ /*@PolyInterned*/ [] typeArray(/*@PolyNull*/ /*@PolyInterned*/ Object seq) {
     if (seq == null) { return null; }
     return typeArray(toObjArray(seq));
   }
 
   /** @see #eltwiseEqual(Object[])
    */
+  @SuppressWarnings("interning") // cast from Object
   /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean eltwiseEqual(Object seq) {
     if (seq == null) { return false; }
@@ -187,6 +190,7 @@ public final class Quant {
 
   /** @see #eltwiseNotEqual(Object[])
    */
+  @SuppressWarnings("interning") // cast from Object
   /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean eltwiseNotEqual(Object seq) {
     if (seq == null) { return false; }
@@ -195,8 +199,9 @@ public final class Quant {
 
   /** @see #concat(Object[], Object[])
    */
+  @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#0","#1"})*/
-  /* pure */ public static /*@Nullable*/ java.lang.Object /*@PolyNull*/ [] concat(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
+  /* pure */ public static /*@Nullable*/ java.lang.Object /*@PolyNull*/ /*@PolyInterned*/ [] concat(/*@PolyNull*/ /*@PolyInterned*/ Object seq1, /*@PolyNull*/ /*@PolyInterned*/ Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return concat(toObjArray(seq1), toObjArray(seq2));
@@ -204,8 +209,9 @@ public final class Quant {
 
   /** @see #union(Object[], Object[])
    */
+  @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#0","#1"})*/
-  /* pure */ public static java.lang.Object /*@PolyNull*/ [] union(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
+  /* pure */ public static java.lang.Object /*@PolyNull*/ /*@PolyInterned*/ [] union(/*@PolyNull*/ /*@PolyInterned*/ Object seq1, /*@PolyNull*/ /*@PolyInterned*/ Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return union(toObjArray(seq1), toObjArray(seq2));
@@ -213,8 +219,9 @@ public final class Quant {
 
   /** @see #intersection(Object[], Object[])
    */
+  @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#0","#1"})*/
-  /* pure */ public static java.lang.Object /*@PolyNull*/ [] intersection(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
+  /* pure */ public static java.lang.Object /*@PolyNull*/ /*@PolyInterned*/ [] intersection(/*@PolyNull*/ /*@PolyInterned*/ Object seq1, /*@PolyNull*/ /*@PolyInterned*/ Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return intersection(toObjArray(seq1), toObjArray(seq2));
@@ -222,8 +229,9 @@ public final class Quant {
 
   /** @see #setDiff(Object[], Object[])
    */
+  @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#0","#1"})*/
-  /* pure */ public static java.lang.Object /*@PolyNull*/ [] setDiff(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
+  /* pure */ public static java.lang.Object /*@PolyNull*/ /*@PolyInterned*/ [] setDiff(/*@PolyNull*/ /*@PolyInterned*/ Object seq1, /*@PolyNull*/ /*@PolyInterned*/ Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return setDiff(toObjArray(seq1), toObjArray(seq2));
@@ -231,6 +239,7 @@ public final class Quant {
 
   /** @see #setEqual(Object[], Object[])
    */
+  @SuppressWarnings("interning")  // cast from Object
   /*@AssertNonNullIfTrue({"#0","#1"})*/
   /* pure */ public static boolean setEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
@@ -241,6 +250,7 @@ public final class Quant {
   /** @see #isReverse(Object[], Object[])
    */
   /*@AssertNonNullIfTrue({"#0","#1"})*/
+  @SuppressWarnings("interning")  // cast from Object
   /* pure */ public static boolean isReverse(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
@@ -249,6 +259,7 @@ public final class Quant {
 
   /** @see #pairwiseEqual(Object[], Object[])
    */
+  @SuppressWarnings("interning")  // cast from Object
   /*@AssertNonNullIfTrue({"#0","#1"})*/
   /* pure */ public static boolean pairwiseEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
@@ -258,6 +269,7 @@ public final class Quant {
 
   /** @see #pairwiseNotEqual(Object[], Object[])
    */
+  @SuppressWarnings("interning")  // cast from Object
   /*@AssertNonNullIfTrue({"#0","#1"})*/
   /* pure */ public static boolean pairwiseNotEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
@@ -267,6 +279,7 @@ public final class Quant {
 
   /** @see #lexEqual(Object[], Object[])
    */
+  @SuppressWarnings("interning")  // cast from Object
   /*@AssertNonNullIfTrue({"#0","#1"})*/
   /* pure */ public static boolean lexEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
@@ -276,6 +289,7 @@ public final class Quant {
 
   /** @see #lexNotEqual(Object[], Object[])
    */
+  @SuppressWarnings("interning")  // cast from Object
   /*@AssertNonNullIfTrue({"#0","#1"})*/
   /* pure */ public static boolean lexNotEqual(/*@Nullable*/ Object seq1, /*@Nullable*/ Object seq2) {
     if (seq1 == null) { return false; }
@@ -285,6 +299,7 @@ public final class Quant {
 
   /** @see #memberOf(Object, Object[])
    */
+  @SuppressWarnings("interning")  // cast from Object
   /*@AssertNonNullIfTrue("#1")*/
   /* pure */ public static boolean memberOf(Object elt, /*@Nullable*/ Object arr) {
     if (arr == null) { return false; }
@@ -293,14 +308,16 @@ public final class Quant {
 
   /** @see #slice(Object[], int, int)
    */
+  @SuppressWarnings("interning")  // cast from Object
   /*TODO: @AssertNonNullIfNonNull("#0")*/
-  /* pure */ public static Object /*@PolyNull*/ [] slice(/*@PolyNull*/ Object seq, int start, int end) {
+  /* pure */ public static Object /*@PolyNull*/ /*@PolyInterned*/ [] slice(/*@PolyNull*/ /*@PolyInterned*/ Object seq, int start, int end) {
     if (seq == null) { return null; }
     return slice(toObjArray(seq), start, end);
   }
 
   /** @see #eltsEqual(Object[], Object)
    */
+  @SuppressWarnings("interning")  // cast from Object
   /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean eltsEqual(/*@Nullable*/ Object arr, Object elt) {
     if (arr == null) { return false; }
@@ -309,6 +326,7 @@ public final class Quant {
 
   /** @see #eltsNotEqual(Object[], Object)
    */
+  @SuppressWarnings("interning")  // cast from Object
   /*@AssertNonNullIfTrue("#0")*/
   /* pure */ public static boolean eltsNotEqual(/*@Nullable*/ Object arr, Object elt) {
     if (arr == null) { return false; }
@@ -343,12 +361,15 @@ public final class Quant {
    * AbstractCollection.
    */
   /*TODO: @AssertNonNullIfNonNull("#0")*/
-  public static Object /*@PolyNull*/ [] toObjArray(/*@PolyNull*/ Object o) {
+  public static Object /*@PolyNull*/ /*@PolyInterned*/ [] toObjArray(/*@PolyNull*/ /*@PolyInterned*/ Object o) {
     if (o == null) { return null; }
     if (o instanceof java.util.AbstractCollection<?>) {
-      @SuppressWarnings("unchecked")
-        AbstractCollection<Object> ac = (AbstractCollection<Object>)o;
-      return ac.toArray(new java.lang.Object[]{});
+      @SuppressWarnings({"unchecked", "interning"})
+        AbstractCollection<Object> ac = (AbstractCollection</*@PolyInterned*/ Object>)o;
+      @SuppressWarnings("interning") // generics bug in checker?
+      Object /*@PolyNull*/ /*@PolyInterned*/ [] result
+        = ac.toArray(new java.lang.Object /*@PolyNull*/ /*@PolyInterned*/ []{});
+      return result;
     } else if (o.getClass().isArray()) {
       return (Object[])o;
     } else {

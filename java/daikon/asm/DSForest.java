@@ -16,8 +16,8 @@ import java.util.*;
  * This implementation has the additional requirement that all new
  * elements added to the partition must be non-equal, where equality
  * is determined according to the equals/hashCode methods. In other
- * words, if at some point the operation add(t) is performed for some
- * t, and t1.equals(t2), then attempting to perform add(t2) will
+ * words, if at some point the operation add(t1) is performed for some
+ * t1, and t1.equals(t2), then attempting to perform add(t2) will
  * result in an IllegalArgumentException.
  */
 public class DSForest {
@@ -30,6 +30,7 @@ public class DSForest {
   private static int idCounter = 0;
 
   // A node in the tree.
+  /*@UsesObjectEquals*/
   private class DSForestNode {
     public String element;
     public DSForestNode parent;
@@ -81,7 +82,9 @@ public class DSForest {
     if (yNode == null) throw new IllegalArgumentException();
     DSForestNode xRoot = find(xNode);
     DSForestNode yRoot = find(yNode);
-    assert x == y ? xRoot == yRoot : true;
+    @SuppressWarnings("interning")
+    boolean sameRoot = (x == y ? xRoot == yRoot : true);
+    assert sameRoot;
     if (xRoot == yRoot) return; // x and y already in the same set.
     if (xRoot.rank > yRoot.rank) {
       yRoot.parent = xRoot;

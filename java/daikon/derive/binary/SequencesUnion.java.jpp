@@ -18,7 +18,7 @@ The correct way to build the system is to run 'make'.
   #define SCALARSEQUENCESUNION SequenceFloatUnion
   #define INTERN(v) Intern.internedDouble(v)
 #elif defined(STRING)
-  #define SCALAR String
+  #define SCALAR /*@Interned*/ String
   #define SCALARSEQUENCESUNION SequenceStringUnion
   #if 0
     // In this particular case, the string is already interned

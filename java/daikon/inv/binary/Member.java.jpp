@@ -326,7 +326,7 @@ public final class CLASSNAME
   }
 #endif
 
-  public InvariantStatus check_modified(SCALAR[] a, SCALAR i, int count) {
+  public InvariantStatus check_modified(SCALAR /*@Interned*/ [] a, SCALAR i, int count) {
     if (a == null) {
       return InvariantStatus.FALSIFIED;
     } else if (INDEXOF(a, i) == -1) {
@@ -336,7 +336,7 @@ public final class CLASSNAME
   }
 
 
-  public InvariantStatus add_modified(SCALAR[] a, SCALAR i, int count) {
+  public InvariantStatus add_modified(SCALAR /*@Interned*/ [] a, SCALAR i, int count) {
 
     InvariantStatus is = check_modified(a, i, count);
     if (debug.isLoggable(Level.FINE) && (is == InvariantStatus.FALSIFIED))

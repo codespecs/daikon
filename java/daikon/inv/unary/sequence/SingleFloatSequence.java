@@ -34,7 +34,7 @@ public abstract class SingleFloatSequence
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
-  public InvariantStatus add(Object val, int mod_index, int count) {
+  public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
     assert ! falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
@@ -50,7 +50,7 @@ public abstract class SingleFloatSequence
   }
 
 
-  public InvariantStatus check(Object val, int mod_index, int count) {
+  public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
     assert ! falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
@@ -68,19 +68,19 @@ public abstract class SingleFloatSequence
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract InvariantStatus add_modified(double[] value, int count);
+  public abstract InvariantStatus add_modified(double /*@Interned*/ [] value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public InvariantStatus add_unmodified(double[] value, int count) {
+  public InvariantStatus add_unmodified(double /*@Interned*/ [] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
-  public abstract InvariantStatus check_modified(double[] value, int count);
+  public abstract InvariantStatus check_modified(double /*@Interned*/ [] value, int count);
 
-  public InvariantStatus check_unmodified(double[] value, int count) {
+  public InvariantStatus check_unmodified(double /*@Interned*/ [] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 

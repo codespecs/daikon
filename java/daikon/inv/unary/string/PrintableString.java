@@ -60,12 +60,12 @@ public final class PrintableString extends SingleString
   }
 
   /** Check to see if a only contains printable ascii characters **/
-  public InvariantStatus add_modified(String a, int count) {
+  public InvariantStatus add_modified(/*@Interned*/ String a, int count) {
     return check_modified (a, count);
   }
 
   /** Check to see if a only contains printable ascii characters **/
-  public InvariantStatus check_modified(String a, int count) {
+  public InvariantStatus check_modified(/*@Interned*/ String a, int count) {
     for (int ii = 0; ii < a.length(); ii++) {
       char ch = a.charAt(ii);
       if (ch > 126)

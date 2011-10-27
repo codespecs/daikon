@@ -280,7 +280,9 @@ class FormatTestCase {
     for (int i=0; i<testCases.size(); i++) {
       currentDiffString = testCases.get(i).getDiffString();
       result.append(currentDiffString);
-      if (i != testCases.size() && currentDiffString != "") // "interned"
+      // interned if the empty string, but use .equals to avoid an
+      // Interning Checker warning
+      if (i != testCases.size() && ! currentDiffString.equals(""))
         result.append(lineSep + lineSep);
     }
 

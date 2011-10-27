@@ -90,7 +90,7 @@ public class CommonStringSequence
     return (printIntersect() + " subset of " + var().name());
   }
 
-  public InvariantStatus check_modified(String[] a, int count) {
+  public InvariantStatus check_modified(/*@Interned*/ String /*@Interned*/ [] a, int count) {
     if (a == null) {
       return InvariantStatus.FALSIFIED;
     } else if (intersect==null) {
@@ -113,14 +113,14 @@ public class CommonStringSequence
   }
 
 
-  public InvariantStatus add_modified(String[] a, int count) {
+  public InvariantStatus add_modified(/*@Interned*/ String /*@Interned*/ [] a, int count) {
     if (a == null) {
       return InvariantStatus.FALSIFIED;
     } else if (intersect==null) {
       intersect = Intern.intern(a);
       return InvariantStatus.NO_CHANGE;
     } else {
-      String[] tmp = new String[intersect.length];
+      /*@Interned*/ String[] tmp = new /*@Interned*/ String[intersect.length];
       int    size = 0;
       for (int i=1; i<a.length; i++) {
         if ((ArraysMDE.indexOf(intersect, a[i])!=-1) &&

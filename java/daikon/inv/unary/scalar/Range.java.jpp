@@ -148,7 +148,7 @@ public abstract class RANGE extends SUPERCLASS {
   }
 
 #if defined(SEQ)
-  public InvariantStatus check_modified (PRIMITIVE[] x, int count) {
+  public InvariantStatus check_modified (PRIMITIVE /*@Interned*/ [] x, int count) {
     for (int i = 0; i < x.length; i++) {
       if (!eq_check (x[i]))
         return InvariantStatus.FALSIFIED;
@@ -156,7 +156,7 @@ public abstract class RANGE extends SUPERCLASS {
     return InvariantStatus.NO_CHANGE;
   }
 
-  public InvariantStatus add_modified (PRIMITIVE[] x, int count) {
+  public InvariantStatus add_modified (PRIMITIVE /*@Interned*/ [] x, int count) {
     return check_modified (x, count);
   }
 

@@ -18,50 +18,68 @@ The correct way to build the system is to run 'make'.
 #endif
 
 #undef _TYPE
+#undef _TYPE_ARG
+#undef _TYPE_NAME
 #undef _TYPE_WRAPPER_NAME
+#undef _TYPE_ARG
+#define _TYPE_ARG
 #undef ARRAY_GET_NAME
 #undef BAD_VALUE
 #undef BAD_VALUE_QUALIFIER
 #define BAD_VALUE_QUALIFIER
 #if defined(BOOLEAN)
   #define _TYPE boolean
+  #define _TYPE_NAME boolean
   #define _TYPE_WRAPPER_NAME Boolean
   #define BAD_VALUE false
 #elif defined(BYTE)
   #define _TYPE byte
+  #define _TYPE_NAME byte
   #define _TYPE_WRAPPER_NAME Byte
   #define BAD_VALUE Byte.MAX_VALUE
 #elif defined(CHAR)
   #define _TYPE char
+  #define _TYPE_NAME char
   #define _TYPE_WRAPPER_NAME Character
   #define BAD_VALUE Character.MAX_VALUE
 #elif defined(DOUBLE)
   #define _TYPE double
+  #define _TYPE_NAME double
   #define _TYPE_WRAPPER_NAME Double
   #define BAD_VALUE Double.NaN
 #elif defined(FLOAT)
   #define _TYPE float
+  #define _TYPE_NAME float
   #define _TYPE_WRAPPER_NAME Float
   #define BAD_VALUE Float.NaN
 #elif defined(INT)
   #define _TYPE int
+  #define _TYPE_NAME int
   #define _TYPE_WRAPPER_NAME Integer
   #define BAD_VALUE Integer.MAX_VALUE
 #elif defined(LONG)
   #define _TYPE long
+  #define _TYPE_NAME long
   #define _TYPE_WRAPPER_NAME Long
   #define BAD_VALUE Long.MAX_VALUE
 #elif defined(SHORT)
   #define _TYPE short
+  #define _TYPE_NAME short
   #define _TYPE_WRAPPER_NAME Short
   #define BAD_VALUE Short.MAX_VALUE
 #elif defined(OBJECT)
-  #define _TYPE Object
+  #define _TYPE /*@Interned*/ Object
+  #define _TYPE_NAME Object
+  #undef _TYPE_ARG
+  #define _TYPE_ARG </*@Interned*/ Object>
   #define BAD_VALUE null
   #undef BAD_VALUE_QUALIFIER
   #define BAD_VALUE_QUALIFIER /*@Nullable*/
 #elif defined(STRING)
-  #define _TYPE String
+  #define _TYPE /*@Interned*/ String
+  #define _TYPE_NAME String
+  #undef _TYPE_ARG
+  #define _TYPE_ARG </*@Interned*/ String>
   #define BAD_VALUE null
   #undef BAD_VALUE_QUALIFIER
   #define BAD_VALUE_QUALIFIER /*@Nullable*/
@@ -72,7 +90,7 @@ The correct way to build the system is to run 'make'.
 #elif defined(STRING)
   #define GETVALUE(object) (String)object
 #else
-  #define GETVALUE(object) ((_TYPE_WRAPPER_NAME)fieldObj)._TYPE ## Value()
+  #define GETVALUE(object) ((_TYPE_WRAPPER_NAME)fieldObj)._TYPE_NAME ## Value()
 #endif
 #undef ARRAY_GET_NAME
 #if defined(OBJECT)
@@ -88,9 +106,9 @@ The correct way to build the system is to run 'make'.
 #endif
 
 
-#define COLLECT_TYPE collect ## _TYPE
-#define COLLECT_TYPE_FIELD collect ## _TYPE ## _field
-#define GET_ELEMENT getElement_ ## _TYPE
+#define COLLECT_TYPE collect ## _TYPE_NAME
+#define COLLECT_TYPE_FIELD collect ## _TYPE_NAME ## _field
+#define GET_ELEMENT getElement_ ## _TYPE_NAME
 
 #if 0
   This file gets included multiple times, so it is crucial to undefine
@@ -140,6 +158,7 @@ The correct way to build the system is to run 'make'.
    * If the argument is null or not an array or collection, returns a
    * default value (BAD_VALUE).
    **/
+  @SuppressWarnings("interning") // reflection
 #if defined(BOOLEAN)
   /*@AssertNonNullIfTrue("#0")*/
 #endif
@@ -155,10 +174,11 @@ The correct way to build the system is to run 'make'.
     }
   }
 
+  @SuppressWarnings("interning") // called reflectively
 #if defined(BOOLEAN)
   /*@AssertNonNullIfTrue("#0")*/
 #endif
-  /* pure */ public static BAD_VALUE_QUALIFIER _TYPE GET_ELEMENT (_TYPE[] arr, long i) {
+  /* pure */ public static BAD_VALUE_QUALIFIER _TYPE GET_ELEMENT (_TYPE_NAME[] arr, long i) {
     if (arr == null) { return BAD_VALUE; } // return default value
     return arr[(int)i];
   }
@@ -244,7 +264,7 @@ The correct way to build the system is to run 'make'.
 
   /** True iff both sequences are non-null and have the same length. */
   /*@AssertNonNullIfTrue({"#0", "#1"})*/
-  /* pure */ public static boolean sameLength(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
+  /* pure */ public static boolean sameLength(_TYPE_NAME /*@Nullable*/ [] seq1, _TYPE_NAME /*@Nullable*/ [] seq2) {
     return ((seq1 != null)
             && (seq2 != null)
             && seq1.length == seq2.length);
@@ -253,7 +273,7 @@ The correct way to build the system is to run 'make'.
 #ifdef COMPATIBLE
   /** True iff both sequences are non-null and have the same length. */
   /*@AssertNonNullIfTrue({"#0", "#1"})*/
-  /* pure */ public static boolean sameLength(_TYPE /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
+  /* pure */ public static boolean sameLength(_TYPE_NAME /*@Nullable*/ [] seq1, COMPATIBLE /*@Nullable*/ [] seq2) {
     return ((seq1 != null)
             && (seq2 != null)
             && seq1.length == seq2.length);
@@ -496,10 +516,11 @@ The test ensures that the method only appears once in the output.
    * If either array is empty, returns only those elements in the other array.
    * If both arrays are empty, returns a new empty array.
    */
+  @SuppressWarnings("interning") // generics bug in Checker Framework?
   /* pure */ public static _TYPE /*@PolyNull*/ [] concat(_TYPE /*@PolyNull*/ [] seq1, _TYPE /*@PolyNull*/ [] seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
-    return plume.ArraysMDE.concat(seq1, seq2);
+    return plume.ArraysMDE._TYPE_ARG concat(seq1, seq2);
   }
 
 #ifdef COMPATIBLE
@@ -1102,14 +1123,16 @@ The "defined(INT)" test ensures that it only appears once in the output.
   /* pure */ public static boolean pairwiseEqual(/*@Nullable*/ AbstractCollection<_TYPE> seq1, _TYPE /*@Nullable*/ [] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
-    return pairwiseEqual(seq1.toArray(), seq2);
+    _TYPE[] seq1a = (_TYPE[]) seq1.toArray();
+    return pairwiseEqual(seq1a, seq2);
   }
 
   /*@AssertNonNullIfTrue({"#0","#1"})*/
   /* pure */ public static boolean pairwiseEqual(_TYPE /*@Nullable*/ [] seq1, /*@Nullable*/ AbstractCollection<_TYPE> seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
-    return pairwiseEqual(seq1, seq2.toArray());
+    _TYPE[] seq2a = (_TYPE[]) seq2.toArray();
+    return pairwiseEqual(seq1, seq2a);
   }
 #endif
 
@@ -1776,7 +1799,8 @@ The "defined(INT)" test ensures that it only appears once in the output.
    *
    * Returns null if any array or field access causes an exception.
    */
-  /* pure */ public static _TYPE /*@Nullable*/ [] COLLECT_TYPE (Object object, String fieldStr) {
+  @SuppressWarnings("interning") // reflection
+  /* pure */ public static _TYPE_NAME /*@Nullable*/ [] COLLECT_TYPE (Object object, String fieldStr) {
 
     if (object == null) { return null; }
     if (fieldStr == null) { return null; }
@@ -1788,11 +1812,12 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return retval;
   }
 
+  @SuppressWarnings("interning") // reflection
   /** Helper method for COLLECT_TYPE(Object, String).
    * Operates on the fields specified in fields[fieldsStartIdx..].
    * @see COLLECT_TYPE(Object, String)
    */
-  /* pure */ private static _TYPE /*@Nullable*/ [] COLLECT_TYPE (Object object,
+  /* pure */ private static _TYPE_NAME /*@Nullable*/ [] COLLECT_TYPE (Object object,
                                                    String[] fields, int fieldsStartIdx) {
 
     // @PolyNull does not work for return type, because null is returned elsewhere.
@@ -1868,7 +1893,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
         _TYPE[] intermediate = new _TYPE[collection.size()];
         int index = 0;
         for (Iterator<?> i = collection.iterator() ; i.hasNext() ; ) {
-          _TYPE[] oneEltArray = COLLECT_TYPE (i.next(), fields, fieldsStartIdx + 1);
+          _TYPE_NAME[] oneEltArray = COLLECT_TYPE (i.next(), fields, fieldsStartIdx + 1);
           assert oneEltArray != null : "@SuppressWarnings(nullness)"; // not sure why
           //assert oneEltArray.length == 1;
           intermediate[index++] = oneEltArray[0];
@@ -1880,7 +1905,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
         // collect elements across array
         _TYPE[] intermediate = new _TYPE[Array.getLength(fieldObj)];
         for (int i = 0 ; i < intermediate.length ; i++) {
-          _TYPE[] oneEltArray = COLLECT_TYPE (Array.get(fieldObj, i),
+          _TYPE_NAME[] oneEltArray = COLLECT_TYPE (Array.get(fieldObj, i),
                                              fields, fieldsStartIdx + 1);
           assert oneEltArray != null : "@SuppressWarnings(nullness)"; // not sure why
           //assert oneEltArray.length == 1;
@@ -1898,7 +1923,8 @@ The "defined(INT)" test ensures that it only appears once in the output.
   // Returns the results of dereferencing the fields specified in
   // fields[fieldsStartIdx..] for 'object'.
   // Returns a default value if any field access causes an exception.
-  /* pure */ public static BAD_VALUE_QUALIFIER _TYPE COLLECT_TYPE_FIELD (Object object, String fieldStr) {
+  @SuppressWarnings("interning") // reflection
+  /* pure */ public static BAD_VALUE_QUALIFIER _TYPE_NAME COLLECT_TYPE_FIELD (Object object, String fieldStr) {
 
     if (object == null) { return BAD_VALUE; } // return default value
     if (fieldStr == null) { return BAD_VALUE; } // return default value

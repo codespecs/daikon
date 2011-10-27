@@ -30,8 +30,8 @@ public abstract class TernaryInvariant
     throw new Error("to implement");
   }
 
-  public abstract InvariantStatus add(Object val1, Object val2, Object val3, int mod_index, int count);
+  public abstract InvariantStatus add(/*@Interned*/ Object val1, /*@Interned*/ Object val2, /*@Interned*/ Object val3, int mod_index, int count);
 
-  public abstract InvariantStatus check(Object val1, Object val2, Object val3, int mod_index, int count);
+  public abstract InvariantStatus check(/*@Interned*/ Object val1, /*@Interned*/ Object val2, /*@Interned*/ Object val3, int mod_index, int count);
 
 }

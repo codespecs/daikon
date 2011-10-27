@@ -89,12 +89,12 @@ public final class CompleteOneOfString extends SingleString
   }
 
   /** Check to see if a only contains printable ascii characters **/
-  public InvariantStatus add_modified(String a, int count) {
+  public InvariantStatus add_modified(/*@Interned*/ String a, int count) {
     return check_modified (a, count);
   }
 
   /** Check to see if a only contains printable ascii characters **/
-  public InvariantStatus check_modified(String a, int count) {
+  public InvariantStatus check_modified(/*@Interned*/ String a, int count) {
     for (Info val : vals) {
       if (val.val.equals(a)) {
         val.cnt += count;

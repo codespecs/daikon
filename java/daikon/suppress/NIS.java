@@ -84,18 +84,26 @@ public class NIS {
    */
   public static boolean dkconfig_skip_hashcode_type = true;
 
-  // Possible states for suppressors and suppressions.  When a suppression
-  // is checked, it sets one of these states on each suppressor
+  /**
+   * Possible states for suppressors and suppressions.  When a suppression
+   * is checked, it sets one of these states on each suppressor.
+   */
+  public enum SuppressState {
+    /** initial state -- suppressor has not been checked yet **/
+    NONE,
+      /** suppressor matches the falsified invariant **/
+      MATCH,
+      /** suppressor is true **/
+      VALID,
+      /** suppressor is not true **/
+      INVALID,
+      /** suppressor contains a variable that has always been nonsensical **/
+      NONSENSICAL
+      }
+
+  // This should be an enum!!
   /** initial state -- suppressor has not been checked yet **/
-  static final String NONE = "none";
-  /** suppressor matches the falsified invariant **/
-  static final String MATCH = "match";
-  /** suppressor is true **/
-  static final String VALID = "valid";
-  /** suppressor is not true **/
-  static final String INVALID = "invalid";
-  /** suppressor contains a variable that has always been nonsensical **/
-  static final String NONSENSICAL = "nonsensical";
+  static final /*@Interned*/ String NONE = "none";
 
   /**
    * Map from invariant class to a list of all of the suppression sets
@@ -955,14 +963,11 @@ public class NIS {
 
     /** Return string representation of the suppressed invariant **/
     public String toString () {
-      String out = "";
+      String[] names = new String[vis.length];
       for (int i = 0; i < vis.length; i++) {
-        if (out != "")          // interned
-          out += ", ";
-        out += vis[i].name();
+        names[i] = vis[i].name();
       }
-      out = suppressee + "[" + out + "]";
-      return (out);
+      return suppressee + "[" + UtilMDE.join(names, ", ") + "]";
     }
   }
 

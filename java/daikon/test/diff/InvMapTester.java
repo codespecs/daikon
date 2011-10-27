@@ -7,6 +7,7 @@ import daikon.inv.Invariant;
 
 import java.util.*;
 
+@SuppressWarnings("interning")  // use of == in test code
 public class InvMapTester extends TestCase {
 
   private /*@LazyNonNull*/ InvMap map; // initialized by setUp()

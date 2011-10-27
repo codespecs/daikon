@@ -48,6 +48,8 @@ The correct way to build the system is to run 'make'.
 #if defined(SCALAR)
   #define SCALARPKG scalar
   #define INT long
+  #define INTARRAY long[]
+  #define INTARRAY_UNINTERNED long[]
   #define INT_PRINTED long
   #define ONEOFSCALAR OneOfScalar
   #define ONEOFSCALAR_STRING "OneOfScalar"
@@ -70,6 +72,8 @@ The correct way to build the system is to run 'make'.
   #define JAVA_EQUALS_STRING(x) ".equals(" + x + ")"
   #define SCALARPKG scalar
   #define INT double
+  #define INTARRAY double[]
+  #define INTARRAY_UNINTERNED double[]
   #define INT_PRINTED double
   #define ONEOFSCALAR OneOfFloat
   #define ONEOFSCALAR_STRING "OneOfFloat"
@@ -87,7 +91,9 @@ The correct way to build the system is to run 'make'.
   #undef JAVA_EQUALS_STRING
   #define JAVA_EQUALS_STRING(x) ".equals(" + x + ")"
   #define SCALARPKG string
-  #define INT /*(at)Interned*/ String
+  #define INT /*@Interned*/ String
+  #define INTARRAY /*@Interned*/ String[]
+  #define INTARRAY_UNINTERNED String[]
   #define INT_PRINTED String
   #define ONEOFSCALAR OneOfString
   #define ONEOFSCALAR_STRING "OneOfString"
@@ -97,7 +103,9 @@ The correct way to build the system is to run 'make'.
   #define NAME var().name()
 #elif defined(SEQUENCE)
   #define SCALARPKG sequence
-  #define INT long[/*(at)Interned*/]
+  #define INT long /*@Interned*/ []
+  #define INTARRAY long[] /*@Interned*/ []
+  #define INTARRAY_UNINTERNED long[][]
   #define INT_PRINTED long[]
   #define ONEOFSCALAR OneOfSequence
   #define ONEOFSCALAR_STRING "OneOfSequence"
@@ -109,7 +117,9 @@ The correct way to build the system is to run 'make'.
   #define NAME var().name()
 #elif defined(FLOATSEQUENCE)
   #define SCALARPKG sequence
-  #define INT double[/*(at)Interned*/]
+  #define INT double /*@Interned*/ []
+  #define INTARRAY double[] /*@Interned*/ []
+  #define INTARRAY_UNINTERNED double[][]
   #define INT_PRINTED double[]
   #define ONEOFSCALAR OneOfFloatSequence
   #define ONEOFSCALAR_STRING "OneOfSequenceFloat"
@@ -121,7 +131,9 @@ The correct way to build the system is to run 'make'.
   #define NAME var().name()
 #elif defined(STRINGSEQUENCE)
   #define SCALARPKG stringsequence
-  #define INT String[/*(at)Interned*/]
+  #define INT /*@Interned*/ String /*@Interned*/ []
+  #define INTARRAY /*@Interned*/ String[] /*@Interned*/ []
+  #define INTARRAY_UNINTERNED /*@Interned*/ String[][]
   #define INT_PRINTED String[]
   #define ONEOFSCALAR OneOfStringSequence
   #define ONEOFSCALAR_STRING "OneOfStringSequence"
@@ -134,6 +146,8 @@ The correct way to build the system is to run 'make'.
 #elif defined(ELT)
   #define SCALARPKG sequence
   #define INT long
+  #define INTARRAY long[]
+  #define INTARRAY_UNINTERNED long[]
   #define INT_PRINTED long
   #define NUMWRAPPER Long
   #define ONEOFSCALAR EltOneOf
@@ -150,6 +164,8 @@ The correct way to build the system is to run 'make'.
   #define EQUALS(a,b) (Global.fuzzy.eq(a, b) || (Double.isNaN(a) && Double.isNaN(b)))
   #define SCALARPKG sequence
   #define INT double
+  #define INTARRAY double[]
+  #define INTARRAY_UNINTERNED double[]
   #define INT_PRINTED double
   #define NUMWRAPPER Double
   #define ONEOFSCALAR EltOneOfFloat
@@ -163,7 +179,9 @@ The correct way to build the system is to run 'make'.
   #define UPPERBOUND UpperBoundFloat
 #elif defined(ELTSTRING)
   #define SCALARPKG stringsequence
-  #define INT /*(at)Interned*/ String
+  #define INT /*@Interned*/ String
+  #define INTARRAY /*@Interned*/ String[]
+  #define INTARRAY_UNINTERNED String[]
   #define INT_PRINTED String
   #define ONEOFSCALAR EltOneOfString
   #define ONEOFSCALAR_STRING "EltOneOfString"
@@ -286,7 +304,7 @@ public final class ONEOFSCALAR
   // But so few values is cheap, so this is quite fine for now and long-term.)
 
   /*@Unused(when=Prototype.class)*/
-  private INT[] elts;
+  private INTARRAY elts;
   /*@Unused(when=Prototype.class)*/
   private int num_elts;
 
@@ -307,15 +325,15 @@ public final class ONEOFSCALAR
 #if defined(SEQUENCE)
     // Elements are interned, so can test with ==
     // (in the general online case, it's not worth interning).
-    elts = new long[dkconfig_size][];
+    elts = new long[dkconfig_size] /*@Interned*/ [];
 #elif defined(FLOATSEQUENCE)
     // Elements are interned, so can test with == (except that NaN != NaN)
     // (in the general online case, it's not worth interning).
-    elts = new double[dkconfig_size][];
+    elts = new double[dkconfig_size] /*@Interned*/ [];
 #elif defined(STRINGSEQUENCE)
     // Elements are interned, so can test with ==
     // (in the general online case, it's not worth interning).
-    elts = new String[dkconfig_size][];
+    elts = new /*@Interned*/ String [dkconfig_size] /*@Interned*/ [];
 #else
     elts = new INT[dkconfig_size];
 #endif
@@ -357,6 +375,7 @@ public final class ONEOFSCALAR
   }
 #endif
 
+  @SuppressWarnings("interning") // clone method re-does interning
   public ONEOFSCALAR clone() {
     ONEOFSCALAR result = (ONEOFSCALAR) super.clone();
     result.elts = elts.clone();
@@ -391,6 +410,7 @@ public final class ONEOFSCALAR
 #endif
   }
 
+  @SuppressWarnings("interning") // generics bug in (at least interning) checker
 #if defined(STRING) || defined(ELTSTRING)
   static Comparator<String> comparator = new UtilMDE.NullableStringComparator();
   #define COMPARATOR_ARG , comparator
@@ -426,7 +446,7 @@ public final class ONEOFSCALAR
   }
 
   // Assumes the other array is already sorted
-  public boolean compare_rep(int num_other_elts, INT[] other_elts) {
+  public boolean compare_rep(int num_other_elts, INTARRAY other_elts) {
     if (num_elts != num_other_elts)
       return false;
     sort_rep();
@@ -1236,11 +1256,11 @@ public final class ONEOFSCALAR
 
 #if defined(IS_ELT)
 
-  public InvariantStatus add_modified(INT[] a, int count) {
+  public InvariantStatus add_modified(INTARRAY a, int count) {
     return runValue(a, count, true);
   }
 
-  public InvariantStatus check_modified(INT[] a, int count) {
+  public InvariantStatus check_modified(INTARRAY a, int count) {
     return runValue(a, count, false);
   }
 
@@ -1690,6 +1710,7 @@ public final class ONEOFSCALAR
 
   // Interning is lost when an object is serialized and deserialized.
   // Manually re-intern any interned fields upon deserialization.
+  @SuppressWarnings("interning") // readObject re-interns
   private void readObject(ObjectInputStream in) throws IOException,
     ClassNotFoundException {
     in.defaultReadObject();
@@ -1714,6 +1735,7 @@ public final class ONEOFSCALAR
    *                   the variable order in parent_ppt.
    * @param parent_ppt Slice that will contain the new invariant
    */
+  @SuppressWarnings("interning") // cloning requires re-interning
   public /*@Nullable*/ Invariant merge (List<Invariant> invs, PptSlice parent_ppt) {
 
     // Create the initial parent invariant from the first child
@@ -1754,9 +1776,10 @@ public final class ONEOFSCALAR
 
   /**
    * Setup the invariant with the specified elements.  Normally
-   * used when searching for a specified OneOf
+   * used when searching for a specified OneOf.  The elemens of vals
+   * are not necessarily interned; this method interns each element.
    */
-  public void set_one_of_val (INT[] vals) {
+  public void set_one_of_val (INTARRAY_UNINTERNED vals) {
 
     num_elts = vals.length;
     for (int i = 0; i < num_elts; i++)
@@ -1776,7 +1799,7 @@ public final class ONEOFSCALAR
     if (!(state instanceof INT[]))
       System.out.println ("state is of class '" + state.getClass().getName()
                           + "'");
-    INT[] e = (INT[]) state;
+    INTARRAY e = (INTARRAY) state;
     for (int i = 0; i < num_elts; i++) {
       boolean match = false;
       for (int j = 0; j < e.length; j++) {

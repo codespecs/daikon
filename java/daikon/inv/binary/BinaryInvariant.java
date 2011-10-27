@@ -22,10 +22,10 @@ public abstract class BinaryInvariant extends Invariant {
     super();
   }
 
-  public abstract InvariantStatus check(Object val1, Object val2,
+  public abstract InvariantStatus check(/*@Interned*/ Object val1, /*@Interned*/ Object val2,
                                         int mod_index, int count);
 
-  public abstract InvariantStatus add(Object val1, Object val2, int mod_index,
+  public abstract InvariantStatus add(/*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index,
                                       int count);
 
   /**
@@ -33,7 +33,7 @@ public abstract class BinaryInvariant extends Invariant {
    * is an array and the first variable is not, the order of the values
    * is reversed (so that the array is always the first argument).
    */
-  public InvariantStatus add_unordered (Object val1, Object val2, int mod_index,
+  public InvariantStatus add_unordered (/*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index,
                                         int count) {
 
     VarInfo v1 = ppt.var_infos[0];
@@ -55,7 +55,7 @@ public abstract class BinaryInvariant extends Invariant {
    * The values are checked rather than the variables because this is
    * sometimes called on prototype invariants.
    */
-  public InvariantStatus check_unordered (Object val1, Object val2,
+  public InvariantStatus check_unordered (/*@Interned*/ Object val1, /*@Interned*/ Object val2,
                                           int mod_index, int count) /*@Prototype*/ {
 
     // If one argument is scalar and the other an array, put the scalar first.

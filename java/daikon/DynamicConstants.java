@@ -103,7 +103,7 @@ public class DynamicConstants implements Serializable {
    * to the same variable.  This allows these to be stored in
    * sets.
    **/
-  public static class Constant implements Serializable {
+  public static /*@Interned*/ class Constant implements Serializable {
 
     // We are Serializable, so we specify a version to allow changes to
     // method signatures without breaking serialization.  If you add or
@@ -393,7 +393,7 @@ public class DynamicConstants implements Serializable {
    * the variable is not constant or prev_constant.  But, it is apparently
    * only called on constants with a value.
    **/
-  public Object constant_value (VarInfo vi) {
+  public /*@Interned*/ Object constant_value (VarInfo vi) {
 
     @SuppressWarnings("nullness") // non-missing value, so non-null val field
     /*@NonNull*/ Object result = getConstant(vi).val;

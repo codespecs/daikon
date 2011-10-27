@@ -435,7 +435,7 @@ public class DaikonSimple {
       // Make the vt for the receiver ppt
 //      Object[] values = new Object[receiver.num_tracevars];
 //      int[] mods = new int[receiver.num_tracevars];
-      /*@Nullable*/ Object[] values = new Object[receiver.var_infos.length - receiver.num_static_constant_vars];
+      /*@Nullable*/ /*@Interned*/ Object[] values = new /*@Interned*/ Object[receiver.var_infos.length - receiver.num_static_constant_vars];
       int[] mods = new int[receiver.var_infos.length - receiver.num_static_constant_vars];
 
       // Build the vt for the receiver ppt by looking through the current

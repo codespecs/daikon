@@ -150,7 +150,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
     return vis[scl_index()];
   }
 
-  public InvariantStatus check(Object val1, Object val2, int mod_index, int count) {
+  public InvariantStatus check(/*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
     assert ! falsified;
     assert (mod_index >= 0) && (mod_index < 4);
     PRIMITIVE[] v1 = (PRIMITIVE[]) val1;
@@ -165,7 +165,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
   }
 
 
-  public InvariantStatus add(Object val1, Object val2, int mod_index, int count) {
+  public InvariantStatus add(/*@Interned*/ Object val1, /*@Interned*/ Object val2, int mod_index, int count) {
     assert ! falsified;
     assert (mod_index >= 0) && (mod_index < 4);
     PRIMITIVE[] v1 = (PRIMITIVE[]) val1;
@@ -179,9 +179,9 @@ public abstract class CLASSNAME extends BinaryInvariant {
     return InvariantStatus.NO_CHANGE;
   }
 
-  public abstract InvariantStatus check_modified(PRIMITIVE[] v1, PRIMITIVE v2, int count);
+  public abstract InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE v2, int count);
 
-  public InvariantStatus check_unmodified(PRIMITIVE[] v1, PRIMITIVE v2, int count) {
+  public InvariantStatus check_unmodified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE v2, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -189,13 +189,13 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract InvariantStatus add_modified(PRIMITIVE[] v1, PRIMITIVE v2, int count);
+  public abstract InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE v2, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public InvariantStatus add_unmodified(PRIMITIVE[] v1, PRIMITIVE v2, int count) {
+  public InvariantStatus add_unmodified(PRIMITIVE /*@Interned*/ [] v1, PRIMITIVE v2, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 

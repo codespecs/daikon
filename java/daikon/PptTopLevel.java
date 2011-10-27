@@ -969,16 +969,17 @@ public class PptTopLevel extends Ppt {
     // Debug print some (program specific) variables
     if (debug.isLoggable(Level.FINE)) {
       System.out.println ("Processing samples at " + name());
-      String out = "";
-      for (int i = 0; i < vt.size(); i++) {
-        VarInfo vi = var_infos[i];
-        if (!vi.name().startsWith ("xx"))
-          continue;
-        out += String.format ("%s %b %s ", vi.name(), vt.isMissing(i),
-                              vt.getValue (vi));
-      }
-      if (out != "")            // interned
+      if (vt.size() > 0) {
+        StringBuilder out = new StringBuilder();
+        for (int i = 0; i < vt.size(); i++) {
+          VarInfo vi = var_infos[i];
+          if (!vi.name().startsWith ("xx"))
+            continue;
+          out.append(String.format ("%s %b %s ", vi.name(), vt.isMissing(i),
+                                 vt.getValue (vi)));
+        }
         System.out.printf ("%s vals: %s%n", name(), out);
+      }
     }
 
     assert vt.size() == var_infos.length - num_static_constant_vars : name;
@@ -2137,8 +2138,8 @@ public class PptTopLevel extends Ppt {
       OneOfSequence oos =
         (OneOfSequence) OneOfSequence.get_proto().instantiate(slice);
       if (oos != null) {
-        long[][] one_of = new long[1][];
-        one_of[0] = new long[0];
+        long [] /*@Interned*/ [] one_of = new long [1] /*@Interned*/ [];
+        one_of[0] = new long /*@Interned*/ [0];
         oos.set_one_of_val(one_of);
         inv = oos;
       }
@@ -2146,8 +2147,8 @@ public class PptTopLevel extends Ppt {
       OneOfFloatSequence oos =
         (OneOfFloatSequence) OneOfFloatSequence.get_proto().instantiate(slice);
       if (oos != null) {
-        double[][] one_of = new double[1][];
-        one_of[0] = new double[0];
+        double[] /*@Interned*/ [] one_of = new double[1] /*@Interned*/ [];
+        one_of[0] = new double /*@Interned*/ [0];
         oos.set_one_of_val(one_of);
         inv = oos;
       }
@@ -2156,8 +2157,8 @@ public class PptTopLevel extends Ppt {
         (OneOfStringSequence) OneOfStringSequence.get_proto().instantiate(
           slice);
       if (oos != null) {
-        String[][] one_of = new String[1][];
-        one_of[0] = new String[0];
+        /*@Interned*/ String[] /*@Interned*/ [] one_of = new /*@Interned*/ String[1] /*@Interned*/ [];
+        one_of[0] = new /*@Interned*/ String /*@Interned*/ [0];
         oos.set_one_of_val(one_of);
         inv = oos;
       }
@@ -3084,7 +3085,9 @@ public class PptTopLevel extends Ppt {
         proverStack.popToMark(backgroundMark);
         boolean isInvariant = false;
         for (int i = 0; i < lemmas.length; i++) {
-          if (lemmas[i] == bad) { // equality checking pattern
+          @SuppressWarnings("interning") // list membership
+          boolean isBad = (lemmas[i] == bad);
+          if (isBad) {
             present[i] = false;
             isInvariant = true;
           } else if (present[i]) {

@@ -330,6 +330,7 @@ public class PptSliceEquality
       List<VarInfo> list = entry.getValue();
       assert list.size() > 0;
       Equality eq = new Equality (list, this);
+      @SuppressWarnings("interning") // special value
       boolean isMissing = (key == dummyMissing);
       if (isMissing) {
         eq.setSamples (leader.numSamples() - count);

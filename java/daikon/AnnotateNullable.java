@@ -38,7 +38,7 @@ public class AnnotateNullable {
 
   // The package for the previous class.  Used to reduce duplication in
   // output file.
-  static String last_package = "";
+  static /*@Interned*/ String last_package = "";
 
   /**
    * Write an output file in the stub class format (see the Checker

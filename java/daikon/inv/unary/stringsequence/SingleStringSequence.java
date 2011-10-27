@@ -38,12 +38,12 @@ public abstract class SingleStringSequence
   // Should never be called with modified == ValueTuple.MISSING_NONSENSICAL.
   // Subclasses need not override this except in special cases;
   // just implement @link{add_modified(Object,int)}.
-  public InvariantStatus add(Object val, int mod_index, int count) {
+  public InvariantStatus add(/*@Interned*/ Object val, int mod_index, int count) {
     assert ! falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
     // System.out.println("SingleStringSequence.add(" + ArraysMDE.toString(value) + ", " + modified + ", " + count + ")");
-    String[] value = (String[]) val;
+    /*@Interned*/ String[] value = (/*@Interned*/ String[]) val;
     if (value == null) {
     } else if (mod_index == 0) {
       return add_unmodified(value, count);
@@ -53,11 +53,11 @@ public abstract class SingleStringSequence
     return InvariantStatus.NO_CHANGE;
   }
 
-  public InvariantStatus check(Object val, int mod_index, int count) {
+  public InvariantStatus check(/*@Interned*/ Object val, int mod_index, int count) {
     assert ! falsified;
     assert (mod_index >= 0) && (mod_index < 2);
     assert Intern.isInterned(val);
-    String[] value = (String[]) val;
+    /*@Interned*/ String[] value = (/*@Interned*/ String[]) val;
     if (value == null) {
       return InvariantStatus.NO_CHANGE;
     } else if (mod_index == 0) {
@@ -67,9 +67,9 @@ public abstract class SingleStringSequence
     }
   }
 
-  public abstract InvariantStatus check_modified(String[] value, int count);
+  public abstract InvariantStatus check_modified(/*@Interned*/ String /*@Interned*/ [] value, int count);
 
-  public InvariantStatus check_unmodified(String[] value, int count) {
+  public InvariantStatus check_unmodified(/*@Interned*/ String /*@Interned*/ [] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
@@ -77,13 +77,13 @@ public abstract class SingleStringSequence
    * This method need not check for falsified;
    * that is done by the caller.
    **/
-  public abstract InvariantStatus add_modified(String[] value, int count);
+  public abstract InvariantStatus add_modified(/*@Interned*/ String /*@Interned*/ [] value, int count);
 
   /**
    * By default, do nothing if the value hasn't been seen yet.
    * Subclasses can override this.
    **/
-  public InvariantStatus add_unmodified(String[] value, int count) {
+  public InvariantStatus add_unmodified(/*@Interned*/ String /*@Interned*/ [] value, int count) {
     return InvariantStatus.NO_CHANGE;
   }
 
