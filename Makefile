@@ -7,6 +7,9 @@
 ### Variables
 ###
 
+# Set the NONETWORK variable to avoid network operations.  Example:
+#   make NONETWORK=true compile
+
 # note that for right now, we are only copying the html and texinfo
 # versions of the developer manual (though all other versions are built)
 IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps dfepl-flow.jpg
@@ -648,7 +651,9 @@ plume-lib:
 
 .PHONY: plume-lib-update
 plume-lib-update: plume-lib
+ifndef NONETWORK
 	(cd plume-lib; ${HG_PULL_U})
+endif
 
 # plume.jar is now checked in.
 # # The file is real, but the commands should always be re-run even if it exists.
