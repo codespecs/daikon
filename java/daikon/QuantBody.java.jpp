@@ -1123,7 +1123,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
   /* pure */ public static boolean pairwiseEqual(/*@Nullable*/ AbstractCollection<_TYPE> seq1, _TYPE /*@Nullable*/ [] seq2) {
     if (seq1 == null) { return false; }
     if (seq2 == null) { return false; }
-    _TYPE[] seq1a = (_TYPE[]) seq1.toArray();
+    _TYPE[] seq1a = (_TYPE[]) seq1.toArray(new _TYPE[0]);
     return pairwiseEqual(seq1a, seq2);
   }
 
