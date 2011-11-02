@@ -35,7 +35,6 @@ public class ValueSource {
 
   private static String blank_string = "                 ";
 
-  @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
   // ValueSource (String descr) { this.descr = descr; }

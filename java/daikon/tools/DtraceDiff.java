@@ -116,7 +116,7 @@ public class DtraceDiff {
             String regexp_string = g.getOptarg();
             // System.out.println("Regexp = " + regexp_string);
             Daikon.ppt_regexp = Pattern.compile(regexp_string);
-          } catch (Exception e) {
+          } catch (PatternSyntaxException e) {
             throw new Error(e);
           }
           break;
@@ -129,7 +129,7 @@ public class DtraceDiff {
             String regexp_string = g.getOptarg();
             // System.out.println("Regexp = " + regexp_string);
             Daikon.ppt_omit_regexp = Pattern.compile(regexp_string);
-          } catch (Exception e) {
+          } catch (PatternSyntaxException e) {
             throw new Error(e);
           }
           break;
@@ -142,7 +142,7 @@ public class DtraceDiff {
             String regexp_string = g.getOptarg();
             // System.out.println("Regexp = " + regexp_string);
             Daikon.var_regexp = Pattern.compile(regexp_string);
-          } catch (Exception e) {
+          } catch (PatternSyntaxException e) {
             throw new Error(e);
           }
           break;
@@ -155,7 +155,7 @@ public class DtraceDiff {
             String regexp_string = g.getOptarg();
             // System.out.println("Regexp = " + regexp_string);
             Daikon.var_omit_regexp = Pattern.compile(regexp_string);
-          } catch (Exception e) {
+          } catch (PatternSyntaxException e) {
             throw new Error(e);
           }
           break;

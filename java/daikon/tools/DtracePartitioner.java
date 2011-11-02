@@ -13,7 +13,6 @@ public class DtracePartitioner
   implements Partitioner<String,String>, Iterator<String>
 {
 
-  @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
   // reading from the file as a lazy iterator

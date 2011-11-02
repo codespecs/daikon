@@ -41,7 +41,6 @@ public class InsertCommentFormatter
   //    column shifting being done, applies only to specified line
 
 
-  @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
   public InsertCommentFormatter(Vector<NodeToken> comments) {

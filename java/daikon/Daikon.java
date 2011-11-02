@@ -30,6 +30,7 @@ import java.util.TreeSet;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import java.util.regex.Pattern;
+import java.util.regex.PatternSyntaxException;
 
 import plume.EntryReader;
 import plume.FileIOException;
@@ -930,7 +931,7 @@ public final class Daikon {
               // System.out.println("Regexp = " + regexp_string);
               ppt_regexp =
                 Pattern.compile(regexp_string);
-            } catch (Exception e) {
+           } catch (PatternSyntaxException e) {
               throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_regexp_SWITCH + ": " + e.getMessage());
             }
             break;
@@ -945,7 +946,7 @@ public final class Daikon {
               // System.out.println("Regexp = " + regexp_string);
               ppt_omit_regexp =
                 Pattern.compile(regexp_string);
-            } catch (Exception e) {
+            } catch (PatternSyntaxException e) {
               throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_omit_regexp_SWITCH + ": " + e.getMessage());
             }
             break;
@@ -960,7 +961,7 @@ public final class Daikon {
               // System.out.println("Regexp = " + regexp_string);
               var_regexp =
                 Pattern.compile(regexp_string);
-            } catch (Exception e) {
+            } catch (PatternSyntaxException e) {
               throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_regexp_SWITCH + ": " + e.getMessage());
             }
             break;
@@ -975,7 +976,7 @@ public final class Daikon {
               // System.out.println("Regexp = " + regexp_string);
               var_omit_regexp =
                 Pattern.compile(regexp_string);
-            } catch (Exception e) {
+            } catch (PatternSyntaxException e) {
               throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_omit_regexp_SWITCH + ": " + e.getMessage());
             }
             break;

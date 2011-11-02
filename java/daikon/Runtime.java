@@ -22,7 +22,6 @@ import java.io.*;
  **/
 public final class Runtime {
 
-  @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
   // Constructor

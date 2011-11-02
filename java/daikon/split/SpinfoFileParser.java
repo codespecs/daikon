@@ -44,7 +44,6 @@ public class SpinfoFileParser {
   // splitterObject[i][k].getPptName() != splitterObject[j][k].getPptName() || i = j
   private SplitterObject[][] splitterObjects;
 
-  @SuppressWarnings("nullness") // line.separator property always exists
   private static String lineSep = System.getProperty("line.separator");
 
   /**

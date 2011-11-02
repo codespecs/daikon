@@ -461,7 +461,7 @@ public class ExtractConsequent {
       useless_inv_pattern_2
         = Pattern.compile("(^| && )(.*) < -?[0-9]+ &.*& \\2 < -?[0-9]+($| && )");
     } catch (PatternSyntaxException me) {
-      throw new Error("ExtractConsequent: Error while compiling pattern" + me);
+      throw new Error("ExtractConsequent: Error while compiling pattern " + me.getMessage());
     }
   }
 }

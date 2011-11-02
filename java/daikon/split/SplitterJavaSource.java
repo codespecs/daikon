@@ -34,7 +34,6 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /** Java reserved words that are replaced by replaceReservedWords. */
   private static final String[] reservedWords = new String[]{"return"};
 
-  @SuppressWarnings("nullness") // line.separator property always exists
   private static final String lineSep = System.getProperty("line.separator");
 
   /**

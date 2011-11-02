@@ -25,7 +25,6 @@ public final class Global {
   /// Constants
   ///
 
-  @SuppressWarnings("nullness") // line.separator property always exists
   public static final String lineSep = System.getProperty("line.separator");
 
   // Regular expressions
@@ -34,7 +33,8 @@ public final class Global {
   static {
     try {
       ws_regexp = Pattern.compile("[ \\t]+");
-    } catch (Exception e) {
+    } catch (PatternSyntaxException e) {
+      // this can't happen
       throw new Error(e);
     }
   }
