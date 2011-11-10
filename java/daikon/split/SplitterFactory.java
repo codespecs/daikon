@@ -242,7 +242,7 @@ public class SplitterFactory {
     return matchPptRegex(regex, ppt);
   }
 
-  private static boolean matchPptRegex(String ppt_regex, PptTopLevel ppt) {
+  private static boolean matchPptRegex(/*@Regex*/ String ppt_regex, PptTopLevel ppt) {
     // System.out.println("matchPptRegex: " + ppt_regex);
     Pattern pattern = Pattern.compile(ppt_regex);
     String name = ppt.name;

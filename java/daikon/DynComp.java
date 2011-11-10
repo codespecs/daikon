@@ -198,8 +198,14 @@ public class DynComp {
     // The the separator for items in the class path
     String separator = System.getProperty("path.separator");
     basic.log("separator = %s\n", separator);
-    if (separator == null)
+    if (separator == null) {
       separator = ";"; //should work for windows at least...
+    } else {
+      if (!UtilMDE.isRegex(separator)) {
+        throw new Daikon.TerminationMessage("Bad regexp " + separator + " for path.separator: " + UtilMDE.regexError(separator));
+      }
+      separator = UtilMDE.asRegex(separator); // EMS - remove when flow-sensitivity works for isRegex
+    }
 
     // Look for dcomp_premain.jar along the classpath
     if (premain == null)

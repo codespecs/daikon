@@ -422,7 +422,7 @@ public class BuildJDK {
   }
 
   private List<String> classesWithoutInterfaces() {
-    return Arrays.asList("java.lang.Object", "java.lang.String",
+    return Arrays.<String>asList("java.lang.Object", "java.lang.String",
                          "java.lang.Class");
   }
 

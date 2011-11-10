@@ -22,7 +22,7 @@ public class DerivedVariableFilter extends InvariantFilter {
    * be filtered out.  If null, nothing will be filtered out.
    **/
   // dkconfig_* means a configuration option, set from command line or file
-  public static /*@Nullable*/ String dkconfig_class_re = null;
+  public static /*@Nullable*/ /*@Regex*/ String dkconfig_class_re = null;
   public static /*@Nullable*/ Pattern class_re = null;
 
   /**
@@ -36,7 +36,7 @@ public class DerivedVariableFilter extends InvariantFilter {
     }
   }
 
-  public /*@Nullable*/ String get_derivation_class_re() {
+  public /*@Nullable*/ /*@Regex*/ String get_derivation_class_re() {
     return dkconfig_class_re;
   }
 

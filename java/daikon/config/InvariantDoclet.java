@@ -22,7 +22,7 @@ public class InvariantDoclet
    * are purposefully missing enable variables.  Any others will
    * throw an exception
    */
-  private static String[] invs_without_enables = new String[]
+  private static /*@Regex*/ String[] invs_without_enables = new /*@Regex*/ String[]
     {
       "FunctionBinary.*",
       ".*RangeFloat.*",

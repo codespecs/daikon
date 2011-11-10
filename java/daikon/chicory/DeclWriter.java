@@ -2,6 +2,7 @@ package daikon.chicory;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.lang.reflect.*;
 
 import daikon.PptTopLevel.PptType;
@@ -465,7 +466,8 @@ public class DeclWriter extends DaikonWriter {
       String out = parent_ppt_name + " " + id;
       if (!var.isStatic() && (local_prefix != null)
           && !local_prefix.equals (parent_prefix))
-        out += " " + var.getName().replaceFirst (local_prefix, parent_prefix);
+        out += " " + var.getName().replaceFirst (Pattern.quote(local_prefix),
+            parent_prefix);
       return out;
     }
 

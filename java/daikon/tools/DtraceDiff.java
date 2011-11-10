@@ -112,52 +112,48 @@ public class DtraceDiff {
             throw new Error("multiple --"
                             + Daikon.ppt_regexp_SWITCH
                             + " regular expressions supplied on command line");
-          try {
-            String regexp_string = g.getOptarg();
-            // System.out.println("Regexp = " + regexp_string);
-            Daikon.ppt_regexp = Pattern.compile(regexp_string);
-          } catch (PatternSyntaxException e) {
-            throw new Error(e);
+          String regexp_string = g.getOptarg();
+          if (!UtilMDE.isRegex(regexp_string)) {
+            throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.ppt_regexp_SWITCH + ": " + UtilMDE.regexError(regexp_string));
           }
+          regexp_string = UtilMDE.asRegex(regexp_string); // EMS - remove when flow-sensitivity works for isRegex
+          Daikon.ppt_regexp = Pattern.compile(regexp_string);
           break;
         } else if (Daikon.ppt_omit_regexp_SWITCH.equals(option_name)) {
           if (Daikon.ppt_omit_regexp != null)
             throw new Error("multiple --"
                             + Daikon.ppt_omit_regexp_SWITCH
                             + " regular expressions supplied on command line");
-          try {
-            String regexp_string = g.getOptarg();
-            // System.out.println("Regexp = " + regexp_string);
-            Daikon.ppt_omit_regexp = Pattern.compile(regexp_string);
-          } catch (PatternSyntaxException e) {
-            throw new Error(e);
+          String regexp_string = g.getOptarg();
+          if (!UtilMDE.isRegex(regexp_string)) {
+            throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.ppt_omit_regexp_SWITCH + ": " + UtilMDE.regexError(regexp_string));
           }
+          regexp_string = UtilMDE.asRegex(regexp_string); // EMS - remove when flow-sensitivity works for isRegex
+          Daikon.ppt_omit_regexp = Pattern.compile(regexp_string);
           break;
         } else if (Daikon.var_regexp_SWITCH.equals(option_name)) {
           if (Daikon.var_regexp != null)
             throw new Error("multiple --"
                             + Daikon.var_regexp_SWITCH
                             + " regular expressions supplied on command line");
-          try {
-            String regexp_string = g.getOptarg();
-            // System.out.println("Regexp = " + regexp_string);
-            Daikon.var_regexp = Pattern.compile(regexp_string);
-          } catch (PatternSyntaxException e) {
-            throw new Error(e);
+          String regexp_string = g.getOptarg();
+          if (!UtilMDE.isRegex(regexp_string)) {
+            throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.var_regexp_SWITCH + ": " + UtilMDE.regexError(regexp_string));
           }
+          regexp_string = UtilMDE.asRegex(regexp_string); // EMS - remove when flow-sensitivity works for isRegex
+          Daikon.var_regexp = Pattern.compile(regexp_string);
           break;
         } else if (Daikon.var_omit_regexp_SWITCH.equals(option_name)) {
           if (Daikon.var_omit_regexp != null)
             throw new Error("multiple --"
                             + Daikon.var_omit_regexp_SWITCH
                             + " regular expressions supplied on command line");
-          try {
-            String regexp_string = g.getOptarg();
-            // System.out.println("Regexp = " + regexp_string);
-            Daikon.var_omit_regexp = Pattern.compile(regexp_string);
-          } catch (PatternSyntaxException e) {
-            throw new Error(e);
+          String regexp_string = g.getOptarg();
+          if (!UtilMDE.isRegex(regexp_string)) {
+            throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.var_omit_regexp_SWITCH + ": " + UtilMDE.regexError(regexp_string));
           }
+          regexp_string = UtilMDE.asRegex(regexp_string);  // EMS - remove when flow-sensitivity works for isRegex
+          Daikon.var_omit_regexp = Pattern.compile(regexp_string);
           break;
         } else if (Daikon.config_SWITCH.equals(option_name)) {
           String config_file = g.getOptarg();

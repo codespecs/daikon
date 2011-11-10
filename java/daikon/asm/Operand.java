@@ -69,7 +69,9 @@ public class Operand {
     registers32Bit.add("ebp");
     b.append("|ebp");
 
-    registers32BitRegExp = Pattern.compile(b.toString());
+    @SuppressWarnings("regex") // EMS - not supported
+    String regex = (/*@Regex*/ String) b.toString();
+    registers32BitRegExp = Pattern.compile(regex);
   }
 
   static boolean isExtendedReg(String s) {

@@ -927,13 +927,11 @@ public final class Daikon {
                   + ppt_regexp_SWITCH
                   + " regular expressions supplied on command line");
             String regexp_string = g.getOptarg();
-            try {
-              // System.out.println("Regexp = " + regexp_string);
-              ppt_regexp =
-                Pattern.compile(regexp_string);
-           } catch (PatternSyntaxException e) {
-              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_regexp_SWITCH + ": " + e.getMessage());
+            if (!UtilMDE.isRegex(regexp_string)) {
+              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_regexp_SWITCH + ": " + UtilMDE.regexError(regexp_string));
             }
+            regexp_string = UtilMDE.asRegex(regexp_string); // EMS - remove when flow-sensitivity works for isRegex
+            ppt_regexp = Pattern.compile(regexp_string);
             break;
           } else if (ppt_omit_regexp_SWITCH.equals(option_name)) {
             if (ppt_omit_regexp != null)
@@ -942,13 +940,11 @@ public final class Daikon {
                   + ppt_omit_regexp_SWITCH
                   + " regular expressions supplied on command line");
             String regexp_string = g.getOptarg();
-            try {
-              // System.out.println("Regexp = " + regexp_string);
-              ppt_omit_regexp =
-                Pattern.compile(regexp_string);
-            } catch (PatternSyntaxException e) {
-              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_omit_regexp_SWITCH + ": " + e.getMessage());
+            if (!UtilMDE.isRegex(regexp_string)) {
+              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_omit_regexp_SWITCH + ": " + UtilMDE.regexError(regexp_string));
             }
+            regexp_string = UtilMDE.asRegex(regexp_string); // EMS - remove when flow-sensitivity works for isRegex
+            ppt_omit_regexp = Pattern.compile(regexp_string);
             break;
           } else if (var_regexp_SWITCH.equals(option_name)) {
             if (var_regexp != null)
@@ -957,13 +953,11 @@ public final class Daikon {
                   + var_regexp_SWITCH
                   + " regular expressions supplied on command line");
             String regexp_string = g.getOptarg();
-            try {
-              // System.out.println("Regexp = " + regexp_string);
-              var_regexp =
-                Pattern.compile(regexp_string);
-            } catch (PatternSyntaxException e) {
-              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_regexp_SWITCH + ": " + e.getMessage());
+            if (!UtilMDE.isRegex(regexp_string)) {
+              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_regexp_SWITCH + ": " + UtilMDE.regexError(regexp_string));
             }
+            regexp_string = UtilMDE.asRegex(regexp_string); // EMS - remove when flow-sensitivity works for isRegex
+            var_regexp = Pattern.compile(regexp_string);
             break;
           } else if (var_omit_regexp_SWITCH.equals(option_name)) {
             if (var_omit_regexp != null)
@@ -972,13 +966,11 @@ public final class Daikon {
                   + var_omit_regexp_SWITCH
                   + " regular expressions supplied on command line");
             String regexp_string = g.getOptarg();
-            try {
-              // System.out.println("Regexp = " + regexp_string);
-              var_omit_regexp =
-                Pattern.compile(regexp_string);
-            } catch (PatternSyntaxException e) {
-              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_omit_regexp_SWITCH + ": " + e.getMessage());
+            if (!UtilMDE.isRegex(regexp_string)) {
+              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_omit_regexp_SWITCH + ": " + UtilMDE.regexError(regexp_string));
             }
+            regexp_string = UtilMDE.asRegex(regexp_string); // EMS - remove when flow-sensitivity works for isRegex
+            var_omit_regexp = Pattern.compile(regexp_string);
             break;
           }
           else if (server_SWITCH.equals(option_name)) {

@@ -32,7 +32,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   private StatementReplacer statementReplacer;
 
   /** Java reserved words that are replaced by replaceReservedWords. */
-  private static final String[] reservedWords = new String[]{"return"};
+  private static final /*@Regex*/ String[] reservedWords = new /*@Regex*/ String[]{"return"};
 
   private static final String lineSep = System.getProperty("line.separator");
 
@@ -283,6 +283,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     string = "(" + string + ")";
     for (int i = 0; i < reservedWords.length; i++) {
       String reservedWord = reservedWords[i];
+      @SuppressWarnings("regex") // EMS - not supported (yet?)
       Pattern p = Pattern.compile("([\\W])(" + reservedWord + ")([\\W])");
       Matcher m = p.matcher(string);
       while (m.find()) {

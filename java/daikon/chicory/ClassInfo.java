@@ -2,6 +2,7 @@ package daikon.chicory;
 
 import java.io.*;
 import java.util.*;
+import java.util.regex.Pattern;
 import java.lang.reflect.*;
 
 /**
@@ -116,7 +117,7 @@ public class ClassInfo {
       // A heuristical way to determine if the method is in this class.
       // Match anything of the form: ____class_name.____(____
       // Where ____ corresponds to any sequence of characters
-      return methodName.matches(".*" + class_name + "\\..*\\(.*");
+      return methodName.matches(".*" + Pattern.quote(class_name) + "\\..*\\(.*");
   }
 
   /** dumps all of the class info to the specified stream **/
