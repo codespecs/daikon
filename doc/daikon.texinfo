@@ -3277,7 +3277,7 @@ then you forgot to run CPP before running CreateSpinfoC@.
 If you get an error such as
 @example
 CreateSpinfoC encountered errors during parse.
-Encountered "__extension__ typedef struct {  ...
+Encountered "__extension__ typedef struct @{  ...
 @end example
 @noindent
 then your program uses non-standard C syntax.  The @samp{__extension__}
