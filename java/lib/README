@@ -38,3 +38,6 @@ plume-lib (plume.jar)
 - Note to Daikon developers: you manually have to update plume.jar
   with the correct build; this file is not automatically rebuilt from
   the plume-lib source in the Daikon root directory!
+  plume.jar needs to be compiled with a JSR 308 compiler, so its annotations
+  are present in the .jar file.  However, it has to be compiled with "-target
+  5" or the like, so that it can be used by a Java 5 JVM.
