@@ -30,7 +30,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   private boolean cached = false;
 
   /*@AssertNonNullAfter({"allNames" , "ownedNames", "finalNames"})*/
-  private void updateCache() {
+  private void updateCache() /*@Raw*/ {
     if (cached) {
       return;
     }
@@ -71,11 +71,11 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
     cached = true;
   }
 
-  private String name(VariableDeclarator n) {
+  private static String name(VariableDeclarator n) {
     return n.f0.f0.tokenImage;
   }
 
-  private boolean hasModifier(FieldDeclaration n, String mod) {
+  private static boolean hasModifier(FieldDeclaration n, String mod) {
     return Ast.contains(n.f0, mod);
   }
 
