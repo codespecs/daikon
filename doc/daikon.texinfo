@@ -3284,7 +3284,10 @@ then your program uses non-standard C syntax.  The @samp{__extension__}
 keyword is supported only by the gcc compiler, and isn't handled by
 the CreateSpinfoC program.  You could extend the CreateSpinfoC program
 to handle non-standard gcc extensions, or you could remove non-standard
-gcc extensions from your program.
+gcc extensions from your program.  The extensions might also result from
+standard libraries rather than your own program --- removing a
+directives such as @samp{#include <stdio.h>} when preprocessing may also
+resolve the problem.
 
 
 @node   Cluster analysis for splitters, Random selection for splitters, Static analysis for splitters, Enhancing conditional invariant detection
