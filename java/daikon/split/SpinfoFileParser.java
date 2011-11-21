@@ -90,7 +90,9 @@ public class SpinfoFileParser {
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed.
    * @throws IOException if an I/O error occurs
    */
-  public void parseFile(LineNumberReader spinfoFile) throws IOException {
+  /*@NonNullOnEntry("tempDir")*/
+  /*@AssertNonNullAfter({"statementReplacer", "splitterObjects"})*/
+  public void parseFile(LineNumberReader spinfoFile) /*@Raw*/ throws IOException {
     List<ReplaceStatement> replaceStatements = new ArrayList<ReplaceStatement>();
     List<List<String>> pptSections = new ArrayList<List<String>>();
     try {
@@ -143,7 +145,7 @@ public class SpinfoFileParser {
    */
   @SuppressWarnings("nullness") // bug exposed by test case Asserts.assertTwice().
   private void readReplaceStatements(LineNumberReader spinfoFile,
-                                     List<ReplaceStatement> replaceStatements)
+                                     List<ReplaceStatement> replaceStatements) /*@Raw*/
     throws IOException, ParseException {
     String methodDeclaration = spinfoFile.readLine();
     while (! isBlank(methodDeclaration)) {
@@ -174,7 +176,7 @@ public class SpinfoFileParser {
    */
   private void readPptStatements(LineNumberReader spinfoFile,
                                    List<List<String>> pptSections,
-                                   String pptName)
+                                 String pptName) /*@Raw*/
     throws IOException {
     List<String> pptSection = new ArrayList<String>();
     pptSection.add(pptName);
@@ -194,7 +196,8 @@ public class SpinfoFileParser {
    * @return an array of arrays with each array containing the
    *  SplitterObjects for one of lists of ppt statements found in pptSections.
    */
-  private SplitterObject[][] createSplitterObjects(List<List<String>> pptSections) {
+  /*@NonNullOnEntry("tempDir")*/
+  private SplitterObject[][] createSplitterObjects(List<List<String>> pptSections) /*@Raw*/ {
     List<SplitterObject[]> splittersForAllPpts = new ArrayList<SplitterObject[]>();
     for (List<String> pptSection : pptSections) {
       List<SplitterObject> splittersForThisPpt = new ArrayList<SplitterObject>();
@@ -233,7 +236,7 @@ public class SpinfoFileParser {
    * @param obj the splitterObject for which command is intended.
    * @param command the formatting command to be applied to obj.
    */
-  private void setFormatting(SplitterObject obj, String command) {
+  static private void setFormatting(SplitterObject obj, String command) {
     command = command.trim();
     if (command.startsWith("DAIKON_FORMAT")) {
       obj.daikonFormat = command.substring("DAIKON_FORMAT".length()).trim();

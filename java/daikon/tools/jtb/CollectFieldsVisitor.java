@@ -32,6 +32,9 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   /*@AssertNonNullAfter({"allNames" , "ownedNames", "finalNames"})*/
   private void updateCache() /*@Raw*/ {
     if (cached) {
+      assert allNames != null : "@SuppressWarnings(nullness): flag indicates initialization";
+      assert ownedNames != null : "@SuppressWarnings(nullness): flag indicates initialization";
+      assert finalNames != null : "@SuppressWarnings(nullness): flag indicates initialization";
       return;
     }
     allNames = new ArrayList<String>();

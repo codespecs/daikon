@@ -315,13 +315,6 @@ public final class ONEOFSCALAR
 
   public ONEOFSCALAR (PptSlice slice) {
     super (slice);
-
-#if defined(IS_ELT) || defined(IS_SEQUENCE)
-    // var() is initialized by the super constructor
-    assert var().is_array() :
-    String.format ("ProglangType (var %s type %s) must be pseudo-array for %s",
-                     var().name(), var().type, ONEOFSCALAR_STRING);
-#endif
 #if defined(SEQUENCE)
     // Elements are interned, so can test with ==
     // (in the general online case, it's not worth interning).
@@ -338,6 +331,13 @@ public final class ONEOFSCALAR
     elts = new INT[dkconfig_size];
 #endif
     num_elts = 0;
+
+#if defined(IS_ELT) || defined(IS_SEQUENCE)
+    // var() is initialized by the super constructor
+    assert var().is_array() :
+      String.format ("ProglangType (var %s type %s) must be pseudo-array for %s",
+                     var().name(), var().type, ONEOFSCALAR_STRING);
+#endif
   }
 
   private static /*@Prototype*/ ONEOFSCALAR proto;
