@@ -196,7 +196,7 @@ public final class TypeStack
             return inChainHelper(parentMap.get(h1), h2);
     }
 
-    @AssertNonNullAfter("stack")
+    /*@AssertNonNullAfter("stack")*/
     private void initStack(InstructionHandle hand)
     {
         Instruction inst = hand.getInstruction();
