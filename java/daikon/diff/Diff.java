@@ -889,16 +889,19 @@ public final class Diff {
   }
 
   /** Use the comparator for sorting the first set. **/
+  /*@AssertNonNullAfter("invSortComparator1")*/
   public void setInvSortComparator1(Comparator<Invariant> c) {
     invSortComparator1 = c;
   }
 
   /** Use the comparator for sorting the second set. **/
+  /*@AssertNonNullAfter("invSortComparator2")*/
   public void setInvSortComparator2(Comparator<Invariant> c) {
     invSortComparator2 = c;
   }
 
   /** Use the comparator for creating the pair tree. **/
+  /*@AssertNonNullAfter("invPairComparator")*/
   public void setInvPairComparator(Comparator<Invariant> c) {
     invPairComparator = c;
   }

@@ -72,7 +72,7 @@ public final class TypeStack
     {
         if (l == null) {
             // return;
-            throw new Error("No InstructionList in createMap");
+            throw new IllegalArgumentException("InstructionList is null in createMap");
         }
 
         //System.out.println("**********************");
@@ -91,6 +91,12 @@ public final class TypeStack
         {
             initStack(hand);
         }
+
+        // parameter l must have been empty, so the above loop didn't get executed
+        if (stack == null) {
+            throw new IllegalArgumentException("Empty InstructionList in createMap");
+        }
+            
     }
 
     private boolean initParents(final InstructionHandle hand,
@@ -190,6 +196,7 @@ public final class TypeStack
             return inChainHelper(parentMap.get(h1), h2);
     }
 
+    @AssertNonNullAfter("stack")
     private void initStack(InstructionHandle hand)
     {
         Instruction inst = hand.getInstruction();
