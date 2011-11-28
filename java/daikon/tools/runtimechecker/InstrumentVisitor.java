@@ -120,7 +120,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         if (makeAllFieldsPublic) {
             NodeSequence seq = (NodeSequence)fd.getParent().getParent();
             Modifiers modifiers = (Modifiers)seq.elementAt(0);
-            List modifierList = modifiers.f0.nodes;
+            List<Node> modifierList = modifiers.f0.nodes;
 
 
             List<Node> newModifiers = new ArrayList<Node>();
