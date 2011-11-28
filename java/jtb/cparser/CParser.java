@@ -11,8 +11,8 @@ import java.io.IOException;
 
 @SuppressWarnings({"unchecked","rawtypes"})
 public class CParser implements CParserConstants {
-   private static Hashtable types = new Hashtable();
-   private static Stack typedefParsingStack = new Stack();
+   private static Hashtable<String, Boolean> types = new Hashtable<String, Boolean>();
+   private static Stack<Boolean> typedefParsingStack = new Stack<Boolean>();
    private static boolean isType(String type)
    {
       if ( types.get(type) != null )
@@ -590,7 +590,7 @@ public class CParser implements CParserConstants {
         n1.addNode(n2);
     }
      n1.nodes.trimToSize();
-      if ( !(typedefParsingStack.empty()) && ((Boolean)typedefParsingStack.peek()).booleanValue() )
+      if ( !(typedefParsingStack.empty()) && (typedefParsingStack.peek()).booleanValue() )
       {
          typedefParsingStack.pop();
       }
@@ -965,7 +965,7 @@ public class CParser implements CParserConstants {
                            n1 = JTBToolkit.makeNodeToken(n2);
             Token t;
             t = n2;
-            if ( !(typedefParsingStack.empty()) && ((Boolean)typedefParsingStack.peek()).booleanValue() )
+            if ( !(typedefParsingStack.empty()) && (typedefParsingStack.peek()).booleanValue() )
             {
                addType(t.image);
             }
@@ -6179,7 +6179,7 @@ public class CParser implements CParserConstants {
       return (jj_ntk = jj_nt.kind);
   }
 
-  static private java.util.Vector jj_expentries = new java.util.Vector();
+  static private java.util.Vector<int[]> jj_expentries = new java.util.Vector<int[]>();
   static private int[] jj_expentry;
   static private int jj_kind = -1;
   static private int[] jj_lasttokens = new int[100];
@@ -6250,7 +6250,7 @@ public class CParser implements CParserConstants {
     jj_add_error_token(0, 0);
     int[][] exptokseq = new int[jj_expentries.size()][];
     for (int i = 0; i < jj_expentries.size(); i++) {
-      exptokseq[i] = (int[])jj_expentries.elementAt(i);
+      exptokseq[i] = jj_expentries.elementAt(i);
     }
     return new ParseException(token, exptokseq, tokenImage);
   }
