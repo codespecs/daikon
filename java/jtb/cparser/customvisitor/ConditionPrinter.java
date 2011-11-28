@@ -9,8 +9,8 @@ import java.io.*;
 @SuppressWarnings({"rawtypes", "unchecked"})
 public class ConditionPrinter extends DepthFirstVisitor {
 
-    private Printer printer;
-    private Converter converter = new Converter();
+    private final Printer printer;
+    private final Converter converter = new Converter();
     private ArrayList<String> actualStrings;
     private ArrayList<String> stringArrays;
     private HashMap<String,ArrayList<String>> actualStringsByFunction;
@@ -42,6 +42,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
      * f3 -> CompoundStatement()
      */
 
+    @Override
     public void visit(FunctionDefinition n) {
         String functionName = n.f1.f1.f0.choice.toString();
         this.actualStrings = actualStringsByFunction.get(functionName);
@@ -70,7 +71,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
                 Node n = ((TypeSpecifier)(temp.nodes.get(0))).f0.choice;
                 if (n instanceof TypedefName) {
                     TypedefName type = (TypedefName) n;
-                    Vector decls = new Vector();
+                    Vector<Object> decls = new Vector<Object>();
                     InitDeclaratorList list = (InitDeclaratorList) d.f1.node;
                     decls.add(list.f0); // get the first in "boolean first, second,third;"
                     // get the second, third, in "boolean first, second, third"
@@ -93,7 +94,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
 
                 }
                 else {
-                    Vector decls = new Vector();
+                    Vector<Object> decls = new Vector<Object>();
                     InitDeclaratorList list = (InitDeclaratorList) d.f1.node;
                     decls.add(list.f0); // get the first in "boolean first, second,third;"
                     // get the second, third, in "boolean first, second, third"
@@ -119,6 +120,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
 
 
 
+    @Override
     public void visit(IterationStatement n) {
         NodeSequence seq = (NodeSequence)n.f0.choice;
         String loop = seq.nodes.get(0).toString();
@@ -150,6 +152,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
     /**
      * f0 -> ( <IF> "(" Expression() ")" Statement() [ <ELSE> Statement() ] | <SWITCH> "(" Expression() ")" Statement() )
      */
+    @Override
     public void visit(SelectionStatement n) {
         NodeSequence seq = (NodeSequence) n.f0.choice;
         if (seq.nodes.get(0).toString().equals("if")) {
@@ -162,6 +165,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
     // the following methods check that the nodes not not null before visiting them
     // because the AST is modified by the Converter to have null pointers
 
+    @Override
     public void visit(LogicalANDExpression n) {
 	if (n.f0 !=null) {
 	    n.f0.accept(this);
@@ -169,6 +173,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
 	n.f1.accept(this);
     }
 
+    @Override
     public void visit(LogicalORExpression n) {
 	if (n.f0 !=null) {
 	    n.f0.accept(this);
@@ -176,6 +181,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
 	n.f1.accept(this);
     }
 
+    @Override
     public void visit(EqualityExpression n) {
         if (n.f0 != null) {
             n.f0.accept(this);
@@ -183,6 +189,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
         n.f1.accept(this);
     }
 
+    @Override
     public void visit(RelationalExpression n) {
         if (n.f0 != null) {
             n.f0.accept(this);
