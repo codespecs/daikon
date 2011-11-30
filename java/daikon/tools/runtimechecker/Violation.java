@@ -50,6 +50,8 @@ public class Violation implements Serializable {
      * This class contains only two (static) objects: <code>onEntry</code> and
      * <code>onExit</code>.
      */
+    // This should be an enum
+    /*@UsesObjectEquals*/
     public static class Time implements Serializable {
 
         private static final long serialVersionUID = 1L;
@@ -61,17 +63,6 @@ public class Violation implements Serializable {
         private Time(String name, String xmlname) {
             this.name = name;
             this.xmlname = xmlname;
-        }
-
-        /*@AssertNonNullIfTrue("#0")*/
-        public boolean equals(/*@Nullable*/ Object o) {
-            if (o == null) {
-                return false;
-            }
-            if (!(o instanceof Time)) {
-                return false;
-            }
-            return name.equals(((Time) o).name);
         }
 
         public int hashCode() {

@@ -624,6 +624,7 @@ public class Ast {
         this.predecessor = predecessor;
       }
       @Override
+      @SuppressWarnings("interned")
       public void visit(NodeToken node) {
         if (! seenPredecessor) {
           if (node == predecessor) {

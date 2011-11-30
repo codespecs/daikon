@@ -182,6 +182,7 @@ public class InstrumentHandler extends CommandHandler {
         return true;
     }
 
+    /*@UsesObjectEquals*/
     private static class Arguments {
         public String invFile;
         public List<String> javaFileNames;

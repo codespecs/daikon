@@ -38,6 +38,7 @@ public class CheckerClasses {
     return classes;
   }
 
+  @SuppressWarnings("interned")
   public void addDeclaration(ClassOrInterfaceBody clazz,
                              StringBuffer decl) {
 

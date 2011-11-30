@@ -83,6 +83,8 @@ public class Property implements Serializable {
      * <code>Kind.enter</code>,<code>Kind.exit</code>, or
      * <code>Kind.objectInvariant</code>
      */
+    // This should be an enum.
+    /*@UsesObjectEquals*/
     public static class Kind implements Serializable {
         private static final long serialVersionUID = 1L;
 
@@ -93,17 +95,6 @@ public class Property implements Serializable {
         private Kind(String name, String xmlname) {
             this.name = name;
             this.xmlname = xmlname;
-        }
-
-        /*@AssertNonNullIfTrue("#0")*/
-        public boolean equals(/*@Nullable*/ Object o) {
-            if (o == null) {
-                return false;
-            }
-            if (!(o instanceof Kind)) {
-                return false;
-            }
-            return name.equals(((Kind) o).name);
         }
 
         public int hashCode() {

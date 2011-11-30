@@ -233,22 +233,13 @@ public class Annotation {
    * || a.kind == Kind.objectInvariant
    *
    */
+  /*@UsesObjectEquals*/
   public static class Kind {
     public final String name;
     public final String xmlname;
     private Kind(String name, String xmlname) {
       this.name = name;
       this.xmlname = xmlname;
-    }
-    /*@AssertNonNullIfTrue("#0")*/
-    public boolean equals(/*@Nullable*/ Object o) {
-      if (o == null) {
-        return false;
-      }
-      if (!(o instanceof Kind)) {
-        return false;
-      }
-      return name.equals(((Kind) o).name);
     }
     public int hashCode() {
       return name.hashCode();
