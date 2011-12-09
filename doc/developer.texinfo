@@ -3033,7 +3033,7 @@ A data trace record (also known as a ``sample'') contains run-time value
 information.  Its format is:
 @example
 <program-point-name>
-this-invocation-nonce
+this_invocation_nonce
 <nonce-string>
 <varname-1>
 <var-value-1>
@@ -3056,7 +3056,7 @@ This is necessary in concurrent systems because there may
 be several invocations of a procedure active at once and they do not
 necessarily follow a stack discipline, being exited in the reverse order of
 entry.  For non-concurrent systems, this nonce is not necessary, and
-both the line @code{this-invocation-nonce} and the nonce value may be
+both the line @code{this_invocation_nonce} and the nonce value may be
 omitted.
 
 
