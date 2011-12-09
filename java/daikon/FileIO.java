@@ -2707,7 +2707,7 @@ public final class FileIO {
    * declaration record, blanks are encoded as \_ and backslashes as \\.
    */
   private static String escape_decl (String orig) {
-    throw new Error("To be implemented: escape_decl(" + orig + ")");
+    return orig.replace("\\", "\\\\").replace(" ", "\\_").replace("\n", "\\n").replace("\r", "\\r");
   }
 
 
