@@ -402,7 +402,7 @@ public abstract class Invariant
     this.ppt = ppt;
   }
 
-  protected /*@Prototype*/ Invariant() {
+  protected Invariant() /*@Prototype*/ {
     this.ppt = null;
   }
 

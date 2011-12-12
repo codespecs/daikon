@@ -69,14 +69,13 @@ public class CLASSNAME
    * Null means no samples have been seen yet.
    * Empty array means intersection is empty.
    */
-  /*@LazyNonNull*/
-  private PRIMITIVE [] intersect = null;
+  private PRIMITIVE /*@LazyNonNull*/ [] intersect = null;
 
   protected CLASSNAME(PptSlice ppt) {
     super(ppt);
   }
 
-  protected /*@Prototype*/ CLASSNAME() {
+  protected CLASSNAME() /*@Prototype*/ {
     super();
   }
 

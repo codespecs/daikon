@@ -225,7 +225,7 @@ public final class StackVer {
 
   /** The types on the stack for each instruction by byte code offset **/
   // Set by do_stack_ver().
-  /*@LazyNonNull*/ private StackTypes stack_types;
+  private /*@LazyNonNull*/ StackTypes stack_types;
 
 	/**
 	 * This class should only be instantiated by a Verifier.
