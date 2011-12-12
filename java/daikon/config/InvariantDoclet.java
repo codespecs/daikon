@@ -235,7 +235,7 @@ public class InvariantDoclet
           permutes += ", " + fb_permute;
           permute_cnt++;
         } else /* new type of function binary */ {
-          if (last_fb != "") {  // interned
+          if (! last_fb.equals("")) { // actually, == test would work here
             out.println ();
             out.println ("@item " + fb_type + "." + last_fb + "_@{" + permutes
                        + "@}");

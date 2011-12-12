@@ -891,29 +891,25 @@ public class PptCombined extends PptTopLevel {
   public static void dump(List<PptTopLevel> ppts) {
 
     for (PptTopLevel ppt : ppts) {
-      String succs = "";
+      List<String> succs = new ArrayList<String>();
       if (ppt.ppt_successors != null) {
         for (String succ : ppt.ppt_successors) {
           @SuppressWarnings("nullness") // map
           /*@NonNull*/ PptTopLevel ppt_succ = Daikon.all_ppts.get (succ);
-          if (succs == "")      // "interned"
-            succs = bb_short_name (ppt_succ);
-          else
-            succs += " " + bb_short_name (ppt_succ);
+          succs.add(bb_short_name (ppt_succ));
         }
       }
-      String preds = "";
+      List<String> preds = new ArrayList<String>();
       if (ppt.predecessors != null) {
         for (PptTopLevel pred : ppt.predecessors) {
-          if (preds == "")      // "interned"
-            preds = bb_short_name (pred);
-          else
-            preds += " " + bb_short_name (pred);
+          preds.add(bb_short_name (pred));
         }
       }
       System.out.printf ("      %s: [%s] {%s} %s "
                          + "combined_ppt: %s\n",
-                         bb_short_name (ppt), succs, preds,
+                         bb_short_name (ppt),
+                         UtilMDE.join(succs, " "),
+                         UtilMDE.join(preds, " "),
                          ppt.combined_subsumed ? "subsumed" : "trigger",
                          ((ppt.combined_ppt == null)
                           ? "null" : ppt.combined_ppt.short_name()));

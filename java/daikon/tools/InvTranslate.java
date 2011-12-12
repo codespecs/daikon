@@ -110,17 +110,19 @@ public class InvTranslate {
    * Returns a somewhat verbose description of the translation.
    */
   public String toString () {
+    StringBuilder out = new StringBuilder();
 
-    String out = "";
+    List<String> mappings = new ArrayList<String>();
     for (String key : var_map.keySet()) {
       String value = var_map.get (key);
-      if (out != "")            // interned
-        out += ", ";
-      out += key + "->" + value;
+      mappings.add(key + "->" + value);
     }
-    out += " [Quality=" + quality + "]";
+    out.append(UtilMDE.join(mappings, ", "));
+
+    out.append(" [Quality=" + quality + "]");
     if ((inv1 != null) && (inv2 != null))
-      out += " [" + inv1.format() + " -> " + inv2.format() + "]";
-    return (out);
+      out.append(" [" + inv1.format() + " -> " + inv2.format() + "]");
+
+    return out.toString();
   }
 }
