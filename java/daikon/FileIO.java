@@ -1946,7 +1946,8 @@ public final class FileIO {
 
       // Add the sample to the ppt.  Ppts that are part of a combined ppt
       // are handled as part of the combined ppt.
-      if (!ppt.combined_subsumed && (ppt.combined_ppt != null)) {
+      if ((!ppt.combined_subsumed) && (ppt.combined_ppt != null)) {
+        assert ppt.combined_ppt != null : "@SuppressWarnings(nullness): bug in flow with respect to fields";
         ppt.combined_ppt.add_combined();
       }
     } else {
