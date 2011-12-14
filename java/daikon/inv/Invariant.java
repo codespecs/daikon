@@ -1640,7 +1640,7 @@ public abstract class Invariant
     // If the guarding predicate has been previously constructed, return it.
     // Otherwise, we will return the newly constructed one.
     // This algorithm is inefficient.
-    if (mustBeGuarded.size() > 1) {
+    if (guardingPredicate != null) { // equivalently: mustBeGuarded.size() > 1
       Invariants joinerViewInvs = ppt.parent.joiner_view.invs;
       for (Invariant currentInv : joinerViewInvs) {
         if (currentInv.isSameInvariant(guardingPredicate)) {
