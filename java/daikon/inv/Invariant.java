@@ -930,7 +930,6 @@ public abstract class Invariant
    * Compare based on arity, then printed representation.
    **/
   public static final class InvariantComparatorForPrinting implements Comparator<Invariant> {
-    /*@NonNullOnEntry("FileIO.new_decl_format")*/
     public int compare(/*@NonPrototype*/ Invariant inv1, /*@NonPrototype*/ Invariant inv2) {
       if (inv1 == inv2)
         return 0;
@@ -997,7 +996,8 @@ public abstract class Invariant
       // System.out.println("ICFP: default rule yields "
       //                    + inv1.format().compareTo(inv2.format())
       //                    + " for " + inv1.format() + ", " + inv2.format());
-      if (PrintInvariants.dkconfig_old_array_names && FileIO.new_decl_format)
+      // (Actually, FileIO.new_decl_format should always be non-null here.)
+      if (PrintInvariants.dkconfig_old_array_names && FileIO.new_decl_format != null && FileIO.new_decl_format)
         return inv1.format().replace ("[..]", "[]")
           .compareTo (inv2.format().replace ("[..]", "[]"));
       else

@@ -13,7 +13,7 @@ public final class ReturnTrueSplitter
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20020122L;
 
-  /*@Nullable*/ VarInfo return_varinfo;
+  private /*@Nullable*/ VarInfo return_varinfo;
 
   public ReturnTrueSplitter() {
   }
@@ -33,6 +33,7 @@ public final class ReturnTrueSplitter
             && (return_varinfo.type == ProglangType.BOOLEAN));
   }
 
+  @SuppressWarnings("nullness:override.pre.method.annotation.invalid") // application invariant about private variable
   /*@NonNullOnEntry("return_varinfo")*/
   public boolean test(ValueTuple vt) {
     return (return_varinfo.getIntValue(vt) != 0);

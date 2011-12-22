@@ -13,9 +13,9 @@ public final class SplitterExample
   static final long serialVersionUID = 20030218L;
 
   static DummyInvariant dummyInvFactory;
-  /*@Nullable*/ DummyInvariant dummyInv;
+  private /*@Nullable*/ DummyInvariant dummyInv;
 
-  /*@Nullable*/ VarInfo x_varinfo;
+  private /*@Nullable*/ VarInfo x_varinfo;
 
   public SplitterExample() {
   }
@@ -34,6 +34,7 @@ public final class SplitterExample
     return (x_varinfo != null);
   }
 
+  @SuppressWarnings("nullness:override.pre.method.annotation.invalid") // application invariant about private variable
   /*@NonNullOnEntry("x_varinfo")*/
   public boolean test(ValueTuple vt) {
     // Alternately, if x represents an array, use
