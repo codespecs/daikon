@@ -280,7 +280,7 @@ public class LOWERBOUND
     }
 
   /** instantiate an invariant on the specified slice **/
-  public LOWERBOUND instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+  public LOWERBOUND instantiate_dyn (/*@Prototype LOWERBOUND this,*/ PptSlice slice) {
     return new LOWERBOUND (slice);
   }
 

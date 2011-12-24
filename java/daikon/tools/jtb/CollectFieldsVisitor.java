@@ -30,7 +30,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   private boolean cached = false;
 
   /*@AssertNonNullAfter({"allNames" , "ownedNames", "finalNames"})*/
-  private void updateCache() /*@Raw*/ {
+  private void updateCache(/*@Raw CollectFieldsVisitor this*/) {
     if (cached) {
       assert allNames != null : "@SuppressWarnings(nullness): flag indicates initialization";
       assert ownedNames != null : "@SuppressWarnings(nullness): flag indicates initialization";
