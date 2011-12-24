@@ -64,7 +64,7 @@ public final class CompleteOneOfScalar extends SingleScalar
   }
 
   /** instantiate an invariant on the specified slice **/
-  public CompleteOneOfScalar instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+  public CompleteOneOfScalar instantiate_dyn (/*@Prototype Info this,*/ PptSlice slice) {
     return new CompleteOneOfScalar(slice);
   }
 

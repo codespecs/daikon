@@ -91,7 +91,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
   }
 
   /** instantiate an invariant on the specified slice **/
-  protected CNAME(FUNCTION,PERM_NAME) instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+  protected CNAME(FUNCTION,PERM_NAME) instantiate_dyn (/*@Prototype CNAME(FUNCTION,PERM_NAME) this,*/ PptSlice slice) {
     return new CNAME(FUNCTION,PERM_NAME) (slice);
   }
 
@@ -99,7 +99,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     super (slice);
   }
 
-  public CNAME(FUNCTION,PERM_NAME) () /*@Prototype*/ {
+  public /*@Prototype*/ CNAME(FUNCTION,PERM_NAME) () {
     super ();
   }
 

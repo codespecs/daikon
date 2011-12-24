@@ -341,7 +341,7 @@ public class SEQSEQINTEQUAL
   }
 
   /** Instantiates the invariant on the specified slice **/
-  protected SEQSEQINTEQUAL instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+  protected SEQSEQINTEQUAL instantiate_dyn (/*@Prototype SEQSEQINTEQUAL this,*/ PptSlice slice) {
     boolean has_order = slice.var_infos[0].aux.getFlag(VarInfoAux.HAS_ORDER)
                       && slice.var_infos[1].aux.getFlag(VarInfoAux.HAS_ORDER);
     return new SEQSEQINTEQUAL(slice, has_order);

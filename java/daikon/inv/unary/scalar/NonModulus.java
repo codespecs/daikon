@@ -75,7 +75,7 @@ public class NonModulus
   }
 
   /** instantiate an invariant on the specified slice **/
-  protected NonModulus instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+  protected NonModulus instantiate_dyn (/*@Prototype NonModulus this,*/ PptSlice slice) {
     return new NonModulus (slice);
   }
 
