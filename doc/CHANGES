@@ -893,7 +893,7 @@ Daikon
 
 4.2.13 (January 1, 2007)
 
-A server mode was added to Daikon.  Two new command lined switches
+A server mode was added to Daikon.  Two new command line switches
 were added to InvariantChecker to more finely control what invariants
 are checked.
 
