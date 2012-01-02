@@ -185,7 +185,7 @@ VALGRIND_ARCH := x86
 endif
 
 ../fjalar/auto-everything.sh:
-	cd .. && hg clone https://fjalar.googlecode.com/hg/ fjalar
+	cd .. && hg clone https://code.google.com/p/fjalar/ fjalar
 	touch $@
 
 kvasir/fjalar/Makefile.in: ../fjalar/auto-everything.sh
@@ -647,7 +647,7 @@ showvars:
 
 plume-lib:
 	rm -rf java/utilMDE java/lib/utilMDE.jar
-	hg clone https://plume-lib.googlecode.com/hg/ plume-lib
+	hg clone https://code.google.com/p/plume-lib/ plume-lib
 
 .PHONY: plume-lib-update
 plume-lib-update: plume-lib

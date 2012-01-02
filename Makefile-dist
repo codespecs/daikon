@@ -48,7 +48,7 @@ kvasir:
 
 plume-lib:
 	rm -rf java/utilMDE java/lib/utilMDE.jar
-	hg clone https://plume-lib.googlecode.com/hg/ plume-lib
+	hg clone https://code.google.com/p/plume-lib/ plume-lib
 
 # the plume-lib in the distribution is an archive and can't be updated
 .PHONY: plume-lib-update
