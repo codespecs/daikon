@@ -211,7 +211,7 @@ public final class SEQINTEQUAL
   }
 
   /** instantiates the invariant on the specified slice **/
-  protected SEQINTEQUAL instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+  protected SEQINTEQUAL instantiate_dyn (/*@Prototype SEQINTEQUAL this,*/ PptSlice slice) {
     return new SEQINTEQUAL (slice);
   }
 

@@ -69,7 +69,7 @@ public class Modulus
   }
 
   /** Instantiate an invariant on the specified slice **/
-  protected Modulus instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+  protected Modulus instantiate_dyn (/*@Prototype Modulus this,*/ PptSlice slice) {
     return new Modulus (slice);
   }
 
