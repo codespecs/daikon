@@ -597,7 +597,8 @@ daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
   ${PLUMEJAVA}/*.manifest) ${PLUMEJAVA}/Makefile
 	$(MAKE) -C ${PLUMEJAVA}
 	/bin/rm -rf daikon/util
-	install -d daikon/util/
+# TODO: Why is the /usr/bin needed here, but not a few lines further down?
+	/usr/bin/install -d daikon/util/
 	cp ${PLUME}/*.java daikon/util
 	chmod 444 daikon/util/*.java
 	#install -t daikon/util/ -m 444 ${PLUME}/*.java
