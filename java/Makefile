@@ -56,6 +56,8 @@ else
   JAVA ?= java -ea
 endif
 
+INSTALL ?= /usr/bin/install
+
 # When type-checking, must use checkers.jar.
 # No harm using it, if available, during ordinary compilation.
 ifdef JSR308
@@ -540,14 +542,14 @@ J2SDK15		:= /usr/lib/j2sdk1.5-sun
 dyncomp-jdk dcomp-jdk   : dcomp_rt.jar
 dcomp_rt.jar : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
-	install -d $(DCOMP_RT)
+	$(INSTALL) -d $(DCOMP_RT)
 # was 1590
 	$(JAVA) -Xmx1500m daikon.dcomp.BuildJDK "$(ORIG_RT)" $(DCOMP_RT)
 	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
 dyncomp-jdk-no-primitives dcomp-jdk-no-primitives  : dcomp_premain.jar
 	/bin/rm -rf $(DCOMP_RT)
-	install -d $(DCOMP_RT)
+	$(INSTALL) -d $(DCOMP_RT)
 	$(JAVA) -Xmx1600m daikon.dcomp.BuildJDK --no-primitives $(ORIG_RT) $(DCOMP_RT)
 	$(JAR) cmf $(DCOMP_RT)/META-INF/MANIFEST.MF dcomp_rt.jar -C $(DCOMP_RT) .
 
@@ -597,12 +599,11 @@ daikon/util/.timestamp-daikonutil: $(wildcard ${PLUME}/*.java ${PLUME}/*.jpp \
   ${PLUMEJAVA}/*.manifest) ${PLUMEJAVA}/Makefile
 	$(MAKE) -C ${PLUMEJAVA}
 	/bin/rm -rf daikon/util
-# TODO: Why is the /usr/bin needed here, but not a few lines further down?
-	/usr/bin/install -d daikon/util/
+	$(INSTALL) -d daikon/util/
 	cp ${PLUME}/*.java daikon/util
 	chmod 444 daikon/util/*.java
 	#install -t daikon/util/ -m 444 ${PLUME}/*.java
-	install -m 444 daikon/dcomp/daikon.util.README daikon/util/README
+	$(INSTALL) -m 444 daikon/dcomp/daikon.util.README daikon/util/README
 	# change the package declarations
 	perl -p -i -e 's/package plume/package daikon.util/' daikon/util/*.java
 	# change relevant imports (make sure to get "import static" as well)
