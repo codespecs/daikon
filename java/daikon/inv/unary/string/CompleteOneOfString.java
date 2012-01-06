@@ -69,7 +69,7 @@ public final class CompleteOneOfString extends SingleString
   }
 
   /** instantiate an invariant on the specified slice **/
-  public CompleteOneOfString instantiate_dyn (/*@Prototype Info this,*/ PptSlice slice) {
+  public CompleteOneOfString instantiate_dyn (/*>>> @Prototype Info this,*/ PptSlice slice) {
     return new CompleteOneOfString(slice);
   }
 

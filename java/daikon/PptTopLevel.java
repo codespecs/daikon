@@ -387,7 +387,7 @@ public class PptTopLevel extends Ppt {
 
   /*@NonNullOnEntry("var_infos")*/
   /*@AssertNonNullAfter({"mbtracker", "views", "value_sets"})*/
-  private void init_vars (/*@Raw CondIterator this*/) {
+  private void init_vars (/*>>> @Raw CondIterator this*/) {
 
     debug_varinfo.log_tb ("initializing var_infos %s",
                            Arrays.toString(var_infos));

@@ -55,7 +55,7 @@ public abstract class BinaryInvariant extends Invariant {
    * The values are checked rather than the variables because this is
    * sometimes called on prototype invariants.
    */
-  public InvariantStatus check_unordered (/*@Prototype BinaryInvariant this,*/ /*@Interned*/ Object val1, /*@Interned*/ Object val2,
+  public InvariantStatus check_unordered (/*>>> @Prototype BinaryInvariant this,*/ /*@Interned*/ Object val1, /*@Interned*/ Object val2,
                                           int mod_index, int count) {
 
     // If one argument is scalar and the other an array, put the scalar first.

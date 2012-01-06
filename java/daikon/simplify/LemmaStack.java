@@ -90,7 +90,7 @@ public class LemmaStack {
 
   /** Try to start Simplify. */
   /*@AssertNonNullAfter("session")*/
-  private void startProver(/*@Raw LemmaStack this*/) throws SimplifyError {
+  private void startProver(/*>>> @Raw LemmaStack this*/) throws SimplifyError {
     SessionManager session_try = SessionManager.attemptProverStartup();
     if (session_try != null) {
       session = session_try;
