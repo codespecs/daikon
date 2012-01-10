@@ -239,25 +239,25 @@ public class DtraceDiff {
         // read from dtracefile1 until we get a data trace record or EOF
         while (true) {
           FileIO.read_data_trace_record_setstate (state1);
-          if (state1.status == FileIO.ParseStatus.SAMPLE)
+          if (state1.rtype == FileIO.RecordType.SAMPLE)
             break;
-          else if ((state1.status == FileIO.ParseStatus.EOF)
-                   || (state1.status == FileIO.ParseStatus.TRUNCATED))
+          else if ((state1.rtype == FileIO.RecordType.EOF)
+                   || (state1.rtype == FileIO.RecordType.TRUNCATED))
             break;
         }
         // read from dtracefile2 until we get a data trace record or EOF
         while (true) {
           FileIO.read_data_trace_record_setstate (state2);
-          if (state2.status == FileIO.ParseStatus.SAMPLE)
+          if (state2.rtype == FileIO.RecordType.SAMPLE)
             break;
-          else if ((state2.status == FileIO.ParseStatus.EOF)
-                   || (state2.status == FileIO.ParseStatus.TRUNCATED))
+          else if ((state2.rtype == FileIO.RecordType.EOF)
+                   || (state2.rtype == FileIO.RecordType.TRUNCATED))
             break;
         }
 
         // things had better be the same
-        if (state1.status == state2.status) {
-          if (state1.status == FileIO.ParseStatus.SAMPLE) {
+        if (state1.rtype == state2.rtype) {
+          if (state1.rtype == FileIO.RecordType.SAMPLE) {
             @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
             /*@NonNull*/ PptTopLevel ppt1 = state1.ppt;
             @SuppressWarnings("nullness") // dependent:  state1 is SAMPLE
@@ -319,10 +319,10 @@ public class DtraceDiff {
           else
             return;  // EOF on both files ==> normal return
         }
-        else if ((state1.status == FileIO.ParseStatus.TRUNCATED)
-                 || (state1.status == FileIO.ParseStatus.TRUNCATED))
+        else if ((state1.rtype == FileIO.RecordType.TRUNCATED)
+                 || (state1.rtype == FileIO.RecordType.TRUNCATED))
           return;  // either file reached truncation limit, return quietly
-        else if (state1.status == FileIO.ParseStatus.EOF) {
+        else if (state1.rtype == FileIO.RecordType.EOF) {
           assert state2.ppt != null : "@SuppressWarnings(nullness): application invariant: status is not EOF or TRUNCATED";
           throw new DiffError(String.format (
                         "ppt %s (%s at line %d) is missing at end of %s",

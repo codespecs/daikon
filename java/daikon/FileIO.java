@@ -1190,7 +1190,7 @@ public final class FileIO {
 
 
   /** The type of the record that was most recently read. */
-  public enum ParseStatus {
+  public enum RecordType {
     SAMPLE,             // got a sample
 
     DECL,               // got a ppt decl
@@ -1214,7 +1214,7 @@ public final class FileIO {
    *   a decl or dtrace file.
    * <li>
    *   The record that was most recently read; thus, ParseState is
-   *   essentially a discriminated union whose tag is a ParseStatus.
+   *   essentially a discriminated union whose tag is a RecordType.
    *   (TODO:  These are poor names that should probably be swapped!)
    *   ParseState is what is returned (actually, side-effected) by
    *   method read_data_trace_record when it reads a record.
@@ -1259,7 +1259,7 @@ public final class FileIO {
     // & garbage-collecting these values many times.)
     //
 
-    public ParseStatus status;
+    public RecordType rtype;
 
     /** Current ppt.  Used when status=DECL or SAMPLE.  Can be null if this
      * declaration was skipped because of --ppt-select-pattern or
@@ -1351,7 +1351,7 @@ public final class FileIO {
       }
 
       varcomp_format = VarComparability.IMPLICIT;
-      status = ParseStatus.NULL;
+      rtype = RecordType.NULL;
       ppt = null;
     }
 
@@ -1457,9 +1457,9 @@ public final class FileIO {
     while (true) {
       read_data_trace_record (data_trace_state);
 
-      if (data_trace_state.status == ParseStatus.SAMPLE) {
-        assert data_trace_state.ppt != null : "@SuppressWarnings(nullness): dependent: ParseStatus.SAMPLE";
-        assert data_trace_state.vt != null : "@SuppressWarnings(nullness): dependent: ParseStatus.SAMPLE";
+      if (data_trace_state.rtype == RecordType.SAMPLE) {
+        assert data_trace_state.ppt != null : "@SuppressWarnings(nullness): dependent: RecordType.SAMPLE";
+        assert data_trace_state.vt != null : "@SuppressWarnings(nullness): dependent: RecordType.SAMPLE";
         // Nonce may be null
         samples_processed++;
         // Add orig and derived variables; pass to inference (add_and_flow)
@@ -1481,8 +1481,8 @@ public final class FileIO {
           }
         }
       }
-      else if ((data_trace_state.status == ParseStatus.EOF)
-               || (data_trace_state.status == ParseStatus.TRUNCATED)) {
+      else if ((data_trace_state.rtype == RecordType.EOF)
+               || (data_trace_state.rtype == RecordType.TRUNCATED)) {
         break;
       }
       else
@@ -1546,7 +1546,7 @@ public final class FileIO {
           commentLines.append(reader.readLine());
         }
         state.payload = commentLines.toString();
-        state.status = ParseStatus.COMMENT;
+        state.rtype = RecordType.COMMENT;
         return;
       }
 
@@ -1554,7 +1554,7 @@ public final class FileIO {
       if ((dkconfig_max_line_number > 0)
           && (reader.getLineNumber() > dkconfig_max_line_number))
         {
-          state.status = ParseStatus.TRUNCATED;
+          state.rtype = RecordType.TRUNCATED;
           return;
         }
 
@@ -1564,7 +1564,7 @@ public final class FileIO {
       if (line.startsWith ("decl-version")) {
         read_decl_version (state, line);
         state.payload = (new_decl_format ? "2.0" : "1.0");
-        state.status = ParseStatus.DECL_VERSION;
+        state.rtype = RecordType.DECL_VERSION;
         return;
       }
 
@@ -1572,7 +1572,7 @@ public final class FileIO {
       if (line.startsWith ("input-language")) {
         String input_language = read_input_language (state, line);
         state.payload = input_language;
-        state.status = ParseStatus.INPUT_LANGUAGE;
+        state.rtype = RecordType.INPUT_LANGUAGE;
         return;
       }
 
@@ -1603,18 +1603,18 @@ public final class FileIO {
             }
           }
         }
-        state.status = ParseStatus.DECL;
+        state.rtype = RecordType.DECL;
         return;
       }
       if (line.equals ("VarComparability")
           || line.startsWith ("var-comparability")) {
         state.varcomp_format = read_var_comparability (state, line);
-        state.status = ParseStatus.COMPARABILITY;
+        state.rtype = RecordType.COMPARABILITY;
         return;
       }
       if (line.equals("ListImplementors")) {
         state.payload = read_list_implementors (reader);
-        state.status = ParseStatus.LIST_IMPLEMENTORS;
+        state.rtype = RecordType.LIST_IMPLEMENTORS;
         return;
       }
       String ppt_name = line;
@@ -1715,7 +1715,7 @@ public final class FileIO {
           System.out.println ();
           System.out.println ("WARNING: Unexpected EOF while processing "
                         + "trace file - last record of trace file ignored");
-          state.status = ParseStatus.EOF;
+          state.rtype = RecordType.EOF;
           return;
         } else if (dkconfig_continue_after_file_exception) {
           System.out.println ();
@@ -1738,11 +1738,11 @@ public final class FileIO {
       state.ppt = ppt;
       state.nonce = nonce;
       state.vt = ValueTuple.makeUninterned(vals, mods);
-      state.status = ParseStatus.SAMPLE;
+      state.rtype = RecordType.SAMPLE;
       return;
     }
 
-    state.status = ParseStatus.EOF;
+    state.rtype = RecordType.EOF;
     return;
   }
 
