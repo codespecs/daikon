@@ -1517,6 +1517,7 @@ public final class FileIO {
   /**
    * Read a single record of ANY type (sample, declaration, comparability,
    * etc.) from a dtrace file.
+   * If the record is anything but a sample, also processes it.
    * The record is stored by side effect into the state argument.
    */
   // TODO:  For clarity, this should perhaps return its side-effected argument.
