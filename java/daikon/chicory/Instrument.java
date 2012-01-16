@@ -1009,9 +1009,32 @@ public class Instrument implements ClassFileTransformer {
     int param_offset = 1;
     if (mgen.isStatic())
       param_offset = 0;
+
+    int lv_start = 0;
+    // If this is an inner class constructor, then its first parameter is
+    // the outer class constructor.  I need to detect this and adjust the
+    // parameter names appropriately.  This check is ugly.
+    if (mgen.getName().equals("<init>") && mgen.getArgumentTypes().length > 0) {
+      int dollarPos = mgen.getClassName().lastIndexOf("$");
+      if (dollarPos >= 0
+          &&
+          // type of first parameter is classname up to the "$"
+          mgen.getClassName().substring(0, dollarPos).equals(mgen.getArgumentType(0).toString())) {
+        // As a further check, for javac-generated classfiles, the
+        // constant pool index #1 is "this$0", and the first 5 bytes of
+        // the bytecode are:
+        //   0: aload_0       
+        //   1: aload_1       
+        //   2: putfield      #1
+
+        lv_start++;
+        param_offset--;
+      }
+    }
+
     if (lvs != null)
       {
-        for (int ii = 0; ii < arg_names.length; ii++)
+        for (int ii = lv_start; ii < arg_names.length; ii++)
           {
             if ((ii + param_offset) < lvs.length)
               arg_names[ii] = lvs[ii + param_offset].getName();
