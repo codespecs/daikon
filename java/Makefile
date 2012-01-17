@@ -71,7 +71,7 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers-quals.jar
 # Version of javac that supports pluggable type-checking.
 JAVAC_FOR_CHECKERS ?= ${CHECKERS}/binary/javac
 
-jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.regex.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*
+jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.regex.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*:checkers.signature.quals.*
 
 ### end of user customizations
 
@@ -782,6 +782,7 @@ CHECKERS_BOOTCLASSPATH = -Xbootclasspath/p:${CHECKERS}/jdk/jdk.jar
 
 # JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'
+JAVAC_SIGNATURE_ARGS = -processor checkers.signature.SignatureChecker -implicit:class -Xlint:-processing
 JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing -Alint=advancedchecks
 ## The "-J-Dcheckers.skipUses='^daikon.Debug'" should really be just for rawness, not for nullness.
 JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src -J-Dcheckers.skipUses='^daikon.Debug'
@@ -821,12 +822,17 @@ interning: check-interning
 check-interning: ${INTERNING_JAVA_FILES} compile
 	${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${INTERNING_JAVA_FILES}
 
-# Run the interning checker on all Java files, not just those that contain an
-# @Interned annotation.
+# Run the interning checker on all Java files, not just those in the daikon package.
+# For instance, this includes jtb, which is not annotated with @Interned.
 interning-all: check-interning-all
 check-interning-all: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
+
+signature: check-interning-all
+check-signature: ${ALL_GENERATED_FILES} compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_SIGNATURE_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_SIGNATURE_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 check-nullness: check-nullness-all
 
