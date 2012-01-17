@@ -186,7 +186,7 @@ public abstract class DaikonWriter
         if (arg_str.length() > 0)
           arg_str += ", ";
         if (arg.isArray())
-          arg_str += UtilMDE.classnameFromJvm (arg.getName());
+          arg_str += UtilMDE.fieldDescriptorToBinaryName (arg.getName());
         else
           arg_str += arg.getName();
       }
