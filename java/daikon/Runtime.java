@@ -78,8 +78,24 @@ public final class Runtime {
   /**
    * Convert a classname from JVML format to Java format.
    * For example, convert "[Ljava/lang/Object;" to "java.lang.Object[]".
+   * <p>
+   * If the argument is not a field descriptor, returns it as is.
+   * This enables this method to be used on the output of {@link Class#getName()}.
    **/
-  public static String classnameFromJvm(String classname) {
+  @Deprecated
+  public static /*@BinaryName*/ String classnameFromJvm(/*@FieldDescriptor*/ String classname) {
+    return fieldDescriptorToBinaryName(classname);
+  }
+
+  /**
+   * Convert a classname from JVML format to Java format.
+   * For example, convert "[Ljava/lang/Object;" to "java.lang.Object[]".
+   * <p>
+   * If the argument is not a field descriptor, returns it as is.
+   * This enables this method to be used on the output of {@link Class#getName()}.
+   **/
+  @SuppressWarnings("signature") // conversion function
+  public static /*@BinaryName*/ String fieldDescriptorToBinaryName(/*@FieldDescriptor*/ String classname) {
     int dims = 0;
     while (classname.startsWith("[")) {
       dims++;
@@ -92,10 +108,8 @@ public final class Runtime {
     } else {
       result = primitiveClassesFromJvm.get(classname);
       if (result == null) {
-        // As a failsafe, use the input; perhaps it is in Java, not JVML,
-        // format.
+        // If the input is not a field descriptor, return it.
         result = classname;
-        // throw new Error("Malformed base class: " + classname);
       }
     }
     for (int i=0; i<dims; i++) {
@@ -308,7 +322,7 @@ public final class Runtime {
     if (x == null) {
       ps.print("null");
     } else {
-      print_String(ps, classnameFromJvm(x.getClass().getName()));
+      print_String(ps, fieldDescriptorToBinaryName(x.getClass().getName()));
     }
   }
 
@@ -325,7 +339,7 @@ public final class Runtime {
       ps.println("nonsensical");
       println_modbit_missing(ps);
     } else {
-      println_String(ps, classnameFromJvm(x.getClass().getName()));
+      println_String(ps, fieldDescriptorToBinaryName(x.getClass().getName()));
       println_modbit_modified(ps);
     }
   }

@@ -13,8 +13,8 @@ import java.lang.reflect.*;
  */
 public class ClassInfo {
 
-  /** fully qualified name of the  class **/
-  public String class_name;
+  /** binary name of the  class **/
+  public /*@BinaryName*/ String class_name;
 
   // set by initViaReflection()
   /** reflection object for this class **/
@@ -44,7 +44,7 @@ public class ClassInfo {
   public Map <String, String> staticMap = new HashMap<String,String>();
 
   /** Create ClassInfo with specified name **/
-  public ClassInfo (String class_name, ClassLoader theLoader) {
+  public ClassInfo (/*@BinaryName*/ String class_name, ClassLoader theLoader) {
     this.class_name = class_name;
     loader = theLoader;
   }

@@ -711,7 +711,7 @@ public class Ast {
     return getClass(ast_classname);
   }
 
-  public static Class<?> getClass(String s) {
+  public static Class<?> getClass(/*@BinaryName*/ String s) {
     try {
       Class<?> c = Class.forName(s);
       assert c != null;
@@ -1369,7 +1369,7 @@ public class Ast {
         if (c.isPrimitive()) {
             return c.getName();
         } else if (c.isArray()) {
-            return UtilMDE.classnameFromJvm(c.getName());
+            return UtilMDE.fieldDescriptorToBinaryName(c.getName());
         } else {
             return c.getName();
         }

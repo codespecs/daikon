@@ -152,13 +152,14 @@ public final class Configuration
     int dot = name.lastIndexOf('.');
     assert dot >= 0 : "Name must contain a period (.)";
 
-    String classname = name.substring(0, dot);
+    @SuppressWarnings("signature") // substring operation
+    /*@BinaryName*/ String classname = name.substring(0, dot);
     String fieldname = name.substring(dot+1);
 
     apply(classname, fieldname, value);
   }
 
-  public void apply(String classname, String fieldname, String value) {
+  public void apply(/*@BinaryName*/ String classname, String fieldname, String value) {
     assert classname != null;
     assert fieldname != null;
     assert value != null;

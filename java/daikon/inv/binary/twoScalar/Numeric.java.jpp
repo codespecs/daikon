@@ -416,7 +416,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return (null);
 
     // Look for this invariant over a sequence
-    String cstr = getClass().getName();
+    /*@BinaryName*/ String cstr = getClass().getName();
     cstr = cstr.replaceFirst ("Numeric", "PairwiseNumeric");
     cstr = cstr.replaceFirst ("twoScalar", "twoSequence");
     cstr = cstr.replaceFirst ("twoFloat", "twoSequence");

@@ -850,7 +850,7 @@ public abstract class DaikonVariableInfo
      */
     public static String stdClassName (Class<?> type)
     {
-        return Runtime.classnameFromJvm (type.getName());
+        return Runtime.fieldDescriptorToBinaryName (type.getName());
     }
 
     /**
@@ -1283,7 +1283,8 @@ public abstract class DaikonVariableInfo
     * Return the type name without aux information.
     * @see #getTypeName()
     */
-   public String getTypeNameOnly() {
+   @SuppressWarnings("signature") // substring
+   public /*@BinaryName*/ String getTypeNameOnly() {
        return typeName.replaceFirst (" # .*", "");
    }
 

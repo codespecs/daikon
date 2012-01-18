@@ -623,6 +623,7 @@ public final class FeatureExtractor {
           name.substring(name.indexOf(".ver3") + 5);
 
       try {
+        @SuppressWarnings("signature")
         Class<? extends Invariant> current = asInvClass(Class.forName(name));
         if ((Invariant.class.isAssignableFrom(current)) ||
             (Ppt.class.isAssignableFrom(current)) ||

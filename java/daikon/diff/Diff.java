@@ -875,7 +875,7 @@ public final class Diff {
    * classname.  Else, returns the default.
    **/
   private static Comparator<Invariant> selectComparator
-    (/*@Nullable*/ String classname, Comparator<Invariant> defaultComparator) throws
+    (/*@Nullable*/ /*@BinaryName*/ String classname, Comparator<Invariant> defaultComparator) throws
     ClassNotFoundException, InstantiationException, IllegalAccessException {
 
     if (classname != null) {

@@ -25,7 +25,8 @@ class WriteViolationFile {
       usage();
       System.exit(1);
     }
-    String class_name = args[0];
+    @SuppressWarnings("signature") // will be checked immediately below, and exception is caught
+    /*@BinaryName*/ String class_name = args[0];
     String[] main_args = new String[args.length-1];
     for (int i=0; i<main_args.length; i++) {
       main_args[i] = args[i+1];

@@ -2075,7 +2075,7 @@ class DCInstrument {
 
    **/
   protected boolean has_instrumented (String method_name, Type return_type,
-                                      Type[] arg_types, String classname) {
+                                      Type[] arg_types, /*@BinaryName*/ String classname) {
 
     // Since we can't instrument Object, it never has an instrumented method
     if (classname.equals ("java.lang.Object"))

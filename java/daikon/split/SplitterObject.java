@@ -13,7 +13,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
 
   private /*@LazyNonNull*/ Splitter splitter;
   private String condition; // the condition
-  private String className = "Unassigned"; // the Java classname of this Splitter
+  private /*@BinaryName*/ String className = "Unassigned"; // the Java classname of this Splitter
   private String directory; // the directory where it resides
   private String pptName; // the program point with which it is associated
   private boolean exists = false;
@@ -147,7 +147,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   /**
    * Set the className of this Splitter.
    */
-  public void setClassName(String className) {
+  public void setClassName(/*@BinaryName*/ String className) {
     this.className = className;
     classFile = new File(directory + className + ".class");
   }
@@ -155,7 +155,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   /**
    * @return the className of the Splitter
    */
-  public String getClassName() {
+  public /*@BinaryName*/ String getClassName() {
     return this.className;
   }
 

@@ -738,7 +738,7 @@ public class InvariantAddAndCheckTester extends TestCase {
      * @return a Class object representing the class name if such a class is
      *         defined, otherwise null
      **/
-    private static Class<?> getClass(String classInfo) {
+    private static Class<?> getClass(/*@BinaryName*/ String classInfo) {
       try {
         return ClassLoader.getSystemClassLoader().loadClass(classInfo);
       }

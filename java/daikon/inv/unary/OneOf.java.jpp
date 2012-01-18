@@ -651,7 +651,7 @@ public final class ONEOFSCALAR
             return varname + " == " + "null";
           } else {
             if (str.startsWith("[")) {
-              str = UtilMDE.classnameFromJvm(str);
+              str = UtilMDE.fieldDescriptorToBinaryName(str);
             }
             if (PrintInvariants.dkconfig_static_const_infer) {
               PptTopLevel pptt = ppt.parent;
@@ -716,7 +716,7 @@ public final class ONEOFSCALAR
     }
     String type_str;
     if (str.startsWith("[")) {
-      type_str = UtilMDE.classnameFromJvm(str);
+      type_str = UtilMDE.fieldDescriptorToBinaryName(str);
     } else {
       type_str = str;
       if (type_str.startsWith("\"") && type_str.endsWith("\"")) {
@@ -1007,7 +1007,7 @@ public final class ONEOFSCALAR
           result += varname + " == " + "null";
         } else {
           if (str.startsWith("[")) {
-            str = UtilMDE.classnameFromJvm(str);
+            str = UtilMDE.fieldDescriptorToBinaryName(str);
           }
           // ".class" (which is a suffix for a type name) and not
           // getClassSuffix (which is a suffix for an expression).
@@ -1073,7 +1073,7 @@ public final class ONEOFSCALAR
         if (value == null) {
           // do nothing
         } else if (value.startsWith("[")) {
-          value = UtilMDE.classnameFromJvm(value);
+          value = UtilMDE.fieldDescriptorToBinaryName(value);
         } else if (value.startsWith("\"") && value.endsWith("\"")) {
           value = value.substring(1, value.length()-1);
         }

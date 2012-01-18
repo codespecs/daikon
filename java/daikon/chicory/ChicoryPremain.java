@@ -458,7 +458,7 @@ public class ChicoryPremain {
       return (name.replace (".", "/") + ".class");
     }
 
-    protected Class<?> loadClass (String name, boolean resolve)
+    protected Class<?> loadClass (/*@BinaryName*/ String name, boolean resolve)
       throws java.lang.ClassNotFoundException {
 
       // If we are not loading from our jar, just use the normal mechanism
