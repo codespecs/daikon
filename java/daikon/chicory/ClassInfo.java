@@ -8,7 +8,7 @@ import java.lang.reflect.*;
 /**
  * Keeps information about a class that is useful for writing out
  * decl and/or dtrace information.  Original information is filled
- * out during the transformation and other information is added the
+ * out during the transformation and other information is added
  * after the class is first loaded.
  */
 public class ClassInfo {
