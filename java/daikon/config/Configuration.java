@@ -159,7 +159,7 @@ public final class Configuration
     apply(classname, fieldname, value);
   }
 
-  public void apply(/*@BinaryName*/ String classname, String fieldname, String value) {
+  public void apply(/*@ClassGetName*/ String classname, String fieldname, String value) {
     assert classname != null;
     assert fieldname != null;
     assert value != null;

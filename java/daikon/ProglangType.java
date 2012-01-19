@@ -45,7 +45,7 @@ public final /*@Interned*/ class ProglangType
   private static HashMap</*@Interned*/ String,Vector<ProglangType>> all_known_types = new HashMap</*@Interned*/ String,Vector<ProglangType>>();
 
   // The set of (interned) names of classes that implement java.util.List.
-  public static HashSet<String> list_implementors = new LinkedHashSet<String>();
+  public static HashSet</*@ClassGetName*/ String> list_implementors = new LinkedHashSet</*@ClassGetName*/ String>();
 
   /**
    * If true, treat 32 bit values whose high bit is on, as a negative
@@ -726,7 +726,7 @@ public final /*@Interned*/ class ProglangType
     return false;
   }
 
-  public String format() {
+  public /*@BinaryName*/ String format() {
     if (dimensions == 0)
       return base;
 
@@ -745,7 +745,7 @@ public final /*@Interned*/ class ProglangType
     return ("[" + out + "]");
   }
 
-  public String toString() {
+  public /*@BinaryName*/ String toString() {
     return format();
   }
 

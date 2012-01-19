@@ -314,7 +314,7 @@ public abstract class DaikonWriter
      */
     public static String stdClassName (Class<?> type)
     {
-        return Runtime.fieldDescriptorToBinaryName (type.getName());
+        return Runtime.classGetNameToBinaryName (type.getName());
     }
 
   /**

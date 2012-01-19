@@ -910,6 +910,7 @@ public class Runtime
    * If the argument is not a field descriptor, returns it as is.
    * This enables this method to be used on the output of {@link Class#getName()}.
    **/
+  @SuppressWarnings("signature")                  // conversion routine
   public static String fieldDescriptorToBinaryName(/*@FieldDescriptor*/ String classname) {
 
       //System.out.println(classname);
@@ -944,6 +945,16 @@ public class Runtime
     }
     return result;
   }
+
+  @SuppressWarnings("signature") // conversion method
+  public static final /*@BinaryName*/ String classGetNameToBinaryName(/*@ClassGetName*/ String cgn) {
+    if (cgn.startsWith("[")) {
+      return fieldDescriptorToBinaryName(cgn);
+    } else {
+      return cgn;
+    }
+  }
+
 
   ///////////////////////////////////////////////////////////////////////////
   /// end of copied code

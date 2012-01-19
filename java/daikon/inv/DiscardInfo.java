@@ -65,7 +65,7 @@ public final class DiscardInfo {
     return this.discardString;
   }
 
-  public String className() {
+  public /*@ClassGetName*/ String className() {
     return this.inv.getClass().getName();
   }
 

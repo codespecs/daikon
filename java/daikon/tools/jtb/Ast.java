@@ -266,7 +266,7 @@ public class Ast {
   // Return the fully qualified name of the class containing the node.
   // (The result does not include the trailing period, though it did once.)
   // <package>.<class>*.<method>
-  public static String getClassName(Node d) {
+  public static /*@ClassGetName*/ String getClassName(Node d) {
 
     ClassOrInterfaceDeclaration n =
       (d instanceof ClassOrInterfaceDeclaration)
@@ -711,7 +711,7 @@ public class Ast {
     return getClass(ast_classname);
   }
 
-  public static Class<?> getClass(/*@BinaryName*/ String s) {
+  public static Class<?> getClass(/*@ClassGetName*/ String s) {
     try {
       Class<?> c = Class.forName(s);
       assert c != null;

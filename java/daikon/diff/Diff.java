@@ -103,9 +103,9 @@ public final class Diff {
   }
 
   public Diff (boolean examineAllPpts, boolean ignoreNumberedExits,
-               /*@Nullable*/ String invSortComparator1Classname,
-               /*@Nullable*/ String invSortComparator2Classname,
-               /*@Nullable*/ String invPairComparatorClassname,
+               /*@Nullable*/ /*@ClassGetName*/ String invSortComparator1Classname,
+               /*@Nullable*/ /*@ClassGetName*/ String invSortComparator2Classname,
+               /*@Nullable*/ /*@ClassGetName*/ String invPairComparatorClassname,
                Comparator<Invariant> defaultComparator) throws ClassNotFoundException, InstantiationException, IllegalAccessException {
     this.examineAllPpts = examineAllPpts;
     this.ignoreNumberedExits = ignoreNumberedExits;
@@ -875,7 +875,7 @@ public final class Diff {
    * classname.  Else, returns the default.
    **/
   private static Comparator<Invariant> selectComparator
-    (/*@Nullable*/ /*@BinaryName*/ String classname, Comparator<Invariant> defaultComparator) throws
+    (/*@Nullable*/ /*@ClassGetName*/ String classname, Comparator<Invariant> defaultComparator) throws
     ClassNotFoundException, InstantiationException, IllegalAccessException {
 
     if (classname != null) {

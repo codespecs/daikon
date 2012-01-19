@@ -322,7 +322,7 @@ public final class Runtime {
     if (x == null) {
       ps.print("null");
     } else {
-      print_String(ps, fieldDescriptorToBinaryName(x.getClass().getName()));
+      print_String(ps, classGetNameToBinaryName(x.getClass().getName()));
     }
   }
 
@@ -339,8 +339,17 @@ public final class Runtime {
       ps.println("nonsensical");
       println_modbit_missing(ps);
     } else {
-      println_String(ps, fieldDescriptorToBinaryName(x.getClass().getName()));
+      println_String(ps, classGetNameToBinaryName(x.getClass().getName()));
       println_modbit_modified(ps);
+    }
+  }
+
+  @SuppressWarnings("signature") // conversion method
+  public static final /*@BinaryName*/ String classGetNameToBinaryName(/*@ClassGetName*/ String cgn) {
+    if (cgn.startsWith("[")) {
+      return fieldDescriptorToBinaryName(cgn);
+    } else {
+      return cgn;
     }
   }
 

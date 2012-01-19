@@ -416,13 +416,15 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return (null);
 
     // Look for this invariant over a sequence
-    /*@BinaryName*/ String cstr = getClass().getName();
+    String cstr = getClass().getName();
     cstr = cstr.replaceFirst ("Numeric", "PairwiseNumeric");
     cstr = cstr.replaceFirst ("twoScalar", "twoSequence");
     cstr = cstr.replaceFirst ("twoFloat", "twoSequence");
     Class<? extends Invariant> pairwise_class;
     try {
-      pairwise_class = asInvClass(Class.forName (cstr));
+      @SuppressWarnings("signature") // string manipulation; application invariants
+      /*@ClassGetName*/ String cstr_cgn = cstr;
+      pairwise_class = asInvClass(Class.forName (cstr_cgn));
     } catch (Exception e) {
       throw new Error ("can't create class for " + cstr, e);
     }
