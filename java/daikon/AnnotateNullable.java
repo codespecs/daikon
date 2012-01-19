@@ -415,7 +415,7 @@ public class AnnotateNullable {
     // program point (which is, fortunately, always an exit point), or
     // change Chicory to output it.
     VarInfo returnVar = ppt.find_var_by_name("return");
-    String returnType = returnVar == null ? "V" : UtilMDE.fullyQualifiedNameToFieldDescriptor(returnVar.type.toString());
+    String returnType = returnVar == null ? "V" : UtilMDE.binaryNameToFieldDescriptor(returnVar.type.toString());
 
     return method + UtilMDE.arglistToJvm(java_args) + returnType;
   }
