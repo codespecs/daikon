@@ -313,7 +313,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     if (n instanceof MethodDeclaration) {
       matching_ppts = pptMatcher.getMatches(ppts, (MethodDeclaration)n);
     } else if (n instanceof ConstructorDeclaration) {
-      matching_ppts = pptMatcher.getMatches(ppts, (ConstructorDeclaration)n);
+      ConstructorDeclaration cd = (ConstructorDeclaration)n;
+      matching_ppts = pptMatcher.getMatches(ppts, cd);
     } else {
       throw new Error("Node must be MethodDeclaration or ConstructorDeclaration");
     }
@@ -329,6 +330,10 @@ public class AnnotateVisitor extends DepthFirstVisitor {
         ensures_invs = invariants_for(ppt, ppts);
       }
     }
+
+    // if (debug) {
+    //   System.out.printf("get_requires_and_ensures(%s):%n  => requires=%s%n  => ensures=%s%n", n, requires_invs, ensures_invs);
+    // }
 
     return new /*@Nullable*/ InvariantsAndModifiedVars[] { requires_invs, ensures_invs };
   }
