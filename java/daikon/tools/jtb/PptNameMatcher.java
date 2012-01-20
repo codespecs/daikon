@@ -137,7 +137,7 @@ public class PptNameMatcher {
       }
     }
 
-    if (debug_getMatches) System.out.println("getMatch => " + result);
+    if (debug_getMatches) System.out.println("getMatchesInternal => " + result);
     return result;
   }
 
@@ -167,15 +167,10 @@ public class PptNameMatcher {
                       + methodOrConstructorDeclaration);
     }
 
-    if (debug_getMatches) System.out.println("getMatches(" + classname + ", " + methodname + ", ...)");
+    if (debug_getMatches) System.out.printf("getMatches(%s, %s, ...)%n", classname, methodname);
     if (methodname.equals("<init>")) {
-      int dotpos = classname.lastIndexOf('.');
-      if (dotpos == -1) {
-        methodname = classname;
-      } else {
-        methodname = classname.substring(dotpos + 1);
-      }
-      if (debug_getMatches) System.out.println("getMatches(" + classname + ", " + methodname + ", ...)");
+      methodname = simpleName(classname);
+      if (debug_getMatches) System.out.printf("new methodname: getMatches(%s, %s, ...)%n", classname, methodname);
     }
 
     if (debug_getMatches) System.out.println("getMatch goal = " + classname + " " + methodname);
@@ -191,17 +186,54 @@ public class PptNameMatcher {
                                  String methodname,
                                  List<FormalParameter> method_params) {
 
-      if (!(classname.equals(pptName.getFullClassName())
-            && methodname.equals(pptName.getMethodName()))) {
-        if (debug_getMatches) System.out.println("getMatch: class name and method name DO NOT match candidate.");
+      // The goal is a fully qualified classname such as
+      // samples.calculator.Calculator.AbstractOperandState, but
+      // pptName.getFullClassName() can be a binary name such as
+      // samples.calculator.Calculator$AbstractOperandState, at least for the
+      // :::OBJECT program point.  Is that a bug?
+
+      // Furthermore, pptName.getMethodName may be null for a constructor.
+
+      if (!((classname.equals(pptName.getFullClassName())
+             || classname.equals(pptName.getFullClassName().replace('$', '.')))
+            && (methodname.equals(pptName.getMethodName())
+                || ((pptName.getMethodName() != null)
+                    && (pptName.getMethodName().indexOf('$') >= 0)
+                    && methodname.equals(pptName.getMethodName().substring(pptName.getMethodName().lastIndexOf('$') + 1)))))) {
+        if (debug_getMatches) System.out.printf("getMatch: class name %s and method name %s DO NOT match candidate.%n", pptName.getFullClassName(), pptName.getMethodName());
         return false;
       }
+      if (debug_getMatches) System.out.printf("getMatch: class name %s and method name %s DO match candidate.%n", classname, methodname);
 
       List<String> pptTypeStrings = extractPptArgs(pptName);
 
       if (pptTypeStrings.size() != method_params.size()) {
-        if (debug_getMatches) System.out.println("arg lengths mismatch: " + pptTypeStrings.size() + ", " + method_params.size());
-        return false;
+
+        // An inner class constructor may have an extra first parameter
+        // that is an implicit outer this parameter.  If so, remove it
+        // before checking for a match.
+        boolean OK_outer_this = false;
+        if (pptTypeStrings.size() == method_params.size() + 1) {
+          String icName = innerConstructorName(pptName);
+          System.out.printf("icName = %s%n", icName);
+          if (icName != null) {
+            String param0Full = pptTypeStrings.get(0);
+            String param0Simple = simpleName(pptTypeStrings.get(0));
+            System.out.printf("param0Full = %s%n", param0Full);
+            System.out.printf("param0Simple = %s%n", param0Simple);
+            // Need to check whether param0Simple is the superclass of icName.  How to do that?
+            if (classname.startsWith(param0Full + ".")) {
+              OK_outer_this = true;
+              pptTypeStrings = new ArrayList<String>(pptTypeStrings);
+              pptTypeStrings.remove(0);
+            }
+          }
+        }
+        if (! OK_outer_this) {
+          if (debug_getMatches) System.out.println("arg lengths mismatch: " + pptTypeStrings.size() + ", " + method_params.size());
+          return false;
+        }
+
       }
 
       boolean unmatched = false;
@@ -257,7 +289,7 @@ public class PptNameMatcher {
     @SuppressWarnings("nullness") // application invariant
     /*@NonNull*/ String pptFullMethodName = ppt_name.getSignature();
 
-    if (debug_getMatches) System.out.println("pptFullMethodName = " + pptFullMethodName);
+    if (debug_getMatches) System.out.println("in extractPptArgs: pptFullMethodName = " + pptFullMethodName);
     int lparen = pptFullMethodName.indexOf('(');
     int rparen = pptFullMethodName.indexOf(')');
     assert lparen > 0;
@@ -273,6 +305,32 @@ public class PptNameMatcher {
   }
 
 
+  /**
+   * Returns simple name of inner class, or null if ppt_name is not an
+   * inner constructor.
+   */
+  private static String innerConstructorName(PptName pptName) {
+    String mname = pptName.getMethodName();
+    int dollarpos = mname.lastIndexOf('$');
+    if (dollarpos >= 0) {
+      return mname.substring(dollarpos + 1);
+    }
+    return null;
+  }
 
+  /**
+   * Returns the simple name of a possibly-fully-qualified class name.
+   * The argument can be a fully-qualified name or a binary name.
+   */
+  private static String simpleName(String classname) {
+    int dotpos = classname.lastIndexOf('.');
+    int dollarpos = classname.lastIndexOf('$');
+    int pos = Math.max(dotpos, dollarpos);
+    if (pos == -1) {
+      return classname;
+    } else {
+      return classname.substring(pos + 1);
+    }
+  }
 
 }
