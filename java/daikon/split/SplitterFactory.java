@@ -167,7 +167,9 @@ public class SplitterFactory {
         continue;
       }
       String fileAddress = tempdir + fileName;
-      splitObj.setClassName(fileName);
+      @SuppressWarnings("signature") // safe, has been quoted
+      /*@BinaryName*/ String fileName_bn = fileName;
+      splitObj.setClassName(fileName_bn);
       try {
         BufferedWriter writer = UtilMDE.bufferedFileWriter(fileAddress + ".java");
         if (dkconfig_delete_splitters_on_exit) {

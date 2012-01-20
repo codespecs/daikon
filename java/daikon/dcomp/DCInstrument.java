@@ -2072,10 +2072,9 @@ class DCInstrument {
    *
    * The above statement is NOT true.  Calling this routine will change
    * the order of loading and cause other problems.
-
    **/
   protected boolean has_instrumented (String method_name, Type return_type,
-                                      Type[] arg_types, /*@BinaryName*/ String classname) {
+                                      Type[] arg_types, /*@BinaryNameForNonArray*/ String classname) {
 
     // Since we can't instrument Object, it never has an instrumented method
     if (classname.equals ("java.lang.Object"))
@@ -2597,6 +2596,16 @@ class DCInstrument {
     return (return_local);
   }
 
+  @SuppressWarnings("signature") // conversion routine
+  private static /*@ClassGetName*/ String typeToClassGetName(Type t) {
+    if (t instanceof ObjectType) {
+      return ((ObjectType) t).getClassName();
+    } else {
+      // Array type: just convert '/' to '.'
+      return t.getSignature().replace('/', '.');
+    }
+  }
+
   /**
    * Creates a MethodInfo corresponding to the specified method.  The
    * exit locations are filled in, but the reflection information is
@@ -2628,13 +2637,9 @@ class DCInstrument {
 
     // Get the argument types for this method
     Type[] arg_types = mgen.getArgumentTypes();
-    String[] arg_type_strings = new String[arg_types.length];
+    /*@ClassGetName*/ String[] arg_type_strings = new /*@ClassGetName*/ String[arg_types.length];
     for (int ii = 0; ii < arg_types.length; ii++) {
-      Type t = arg_types[ii];
-      if (t instanceof ObjectType)
-        arg_type_strings[ii] = ((ObjectType) t).getClassName();
-      else
-        arg_type_strings[ii] = t.getSignature().replace('/', '.');
+      arg_type_strings[ii] = typeToClassGetName(arg_types[ii]);
     }
 
     // Loop through each instruction and find the line number for each
@@ -3475,18 +3480,11 @@ class DCInstrument {
       return (Long.TYPE);
     else if (t == Type.SHORT)
       return (Short.TYPE);
-    else if (t instanceof ObjectType) {
-      try {
-        return Class.forName (((ObjectType)t).getClassName(), false, loader);
-      } catch (Exception e) {
-        throw new Error ("can't get class "+((ObjectType)t).getClassName(), e);
-      }
-    } else if (t instanceof ArrayType) {
-      String sig = t.getSignature().replace ('/', '.');
+    else if (t instanceof ObjectType || t instanceof ArrayType) {
+      /*@ClassGetName*/ String sig = typeToClassGetName(t);
       try {
         return Class.forName (sig, false, loader);
       } catch (Exception e) {
-        //System.out.printf ("classname of object[] = '%s'%n", Object[].class);
         throw new Error ("can't get class " + sig, e);
       }
     } else {

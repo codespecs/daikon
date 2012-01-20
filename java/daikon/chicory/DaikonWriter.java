@@ -309,10 +309,11 @@ public abstract class DaikonWriter
     }
 
     /**
-     * Returns the class name of the specified class in 'java' format
-     * (i.e., as the class would have been declared in java source code)
+     * Returns the class name of the specified class as a binary name
+     * (i.e., as the class would have been declared in Java source code,
+     * except with '$' instead of '.' separating outer and inner classes)
      */
-    public static String stdClassName (Class<?> type)
+    public static /*@BinaryName*/ String stdClassName (Class<?> type)
     {
         return Runtime.classGetNameToBinaryName (type.getName());
     }

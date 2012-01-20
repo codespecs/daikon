@@ -372,7 +372,8 @@ class FormatTestCase {
     String line = getNextRealLine((BufferedReader)commands);
     if (line == null) return null;
     String[] tokens = line.split ("  *");
-    String className = tokens[0];
+    @SuppressWarnings("signature") // user input, should be checked
+    /*@BinaryName*/ String className = tokens[0];
     int arg_count = (tokens.length - 1) / 2;
     Class<?>[] arg_types  = new Class<?>[arg_count];
     Object[] arg_vals = new Object[arg_count];

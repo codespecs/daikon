@@ -423,7 +423,9 @@ public class SampleTester extends TestCase {
                                  ppt));
     } else { // must be a classname
       try {
-        cls = Class.forName (arg0);
+        @SuppressWarnings("signature") // user input (?); throws exception if fails
+        /*@ClassGetName*/ String arg0_cgn = arg0;
+        cls = Class.forName (arg0_cgn);
       } catch (Exception e) {
         throw new RuntimeException ("Can't find class " + arg0, e);
       }

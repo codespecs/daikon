@@ -615,7 +615,7 @@ public abstract class DaikonVariableInfo
                             // Get class type of the class variable
                             try
                             {
-                                sibClass = UtilMDE.classForName(sibType);
+                                sibClass = UtilMDE.classForName(UtilMDE.binaryNameToClassGetName(sibType));
                             } catch (ClassNotFoundException e)
                             {    
                             	throw new Error(e);
@@ -845,10 +845,11 @@ public abstract class DaikonVariableInfo
     }
 
     /**
-     * Returns the class name of the specified class in 'Java' format
-     * (i.e., as the class would have been declared in Java source code)
+     * Returns the class name of the specified class as a binary name
+     * (i.e., as the class would have been declared in Java source code,
+     * except with '$' instead of '.' separating outer and inner classes)
      */
-    public static String stdClassName (Class<?> type)
+    public static /*@BinaryName*/ String stdClassName (Class<?> type)
     {
         return Runtime.classGetNameToBinaryName (type.getName());
     }

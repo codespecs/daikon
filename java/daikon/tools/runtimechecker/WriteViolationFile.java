@@ -15,7 +15,8 @@ class WriteViolationFile {
 
   public static void usage() {
     System.out.println("Usage:  java WriteViolationFile CLASS ARGS");
-    System.out.println("  CLASS and ARGS are just as they would be when being run directly");
+    System.out.println("  CLASS and ARGS are just as they would be when being run directly,");
+    System.out.println("  except that CLASS is written as a binary name, not a fully-qualified name");
     System.out.println("Output is written to file \"violations.txt\" in the current directory.");
   }
 
@@ -26,7 +27,7 @@ class WriteViolationFile {
       System.exit(1);
     }
     @SuppressWarnings("signature") // will be checked immediately below, and exception is caught
-    /*@BinaryName*/ String class_name = args[0];
+    /*@BinaryNameForNonArray*/ String class_name = args[0];
     String[] main_args = new String[args.length-1];
     for (int i=0; i<main_args.length; i++) {
       main_args[i] = args[i+1];

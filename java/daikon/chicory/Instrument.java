@@ -981,10 +981,10 @@ public class Instrument implements ClassFileTransformer {
    * Return an array of strings, each corresponding to mgen's argument types
    * @return an array of strings, each corresponding to mgen's argument types
    */
-  String[] getArgTypes(MethodGen mgen)
+  /*@BinaryName*/ String[] getArgTypes(MethodGen mgen)
   {
     Type[] arg_types = mgen.getArgumentTypes();
-    String[] arg_type_strings = new String[arg_types.length];
+    /*@BinaryName*/ String[] arg_type_strings = new /*@BinaryName*/ String[arg_types.length];
     for (int ii = 0; ii < arg_types.length; ii++)
       {
         Type t = arg_types[ii];
@@ -998,6 +998,17 @@ public class Instrument implements ClassFileTransformer {
 
     return arg_type_strings;
   }
+
+  @SuppressWarnings("signature") // conversion routine
+  private static /*@ClassGetName*/ String typeToClassGetName(Type t) {
+    if (t instanceof ObjectType) {
+      return ((ObjectType) t).getClassName();
+    } else {
+      // Array type: just convert '/' to '.'
+      return t.getSignature().replace('/', '.');
+    }
+  }
+
 
   //creates a MethodInfo struct corresponding to mgen
   @SuppressWarnings("unchecked")
@@ -1050,14 +1061,10 @@ public class Instrument implements ClassFileTransformer {
 
     // Get the argument types for this method
     Type[] arg_types = mgen.getArgumentTypes();
-    String[] arg_type_strings = new String[arg_types.length];
+    /*@ClassGetName*/ String[] arg_type_strings = new /*@ClassGetName*/ String[arg_types.length];
     for (int ii = 0; ii < arg_types.length; ii++)
       {
-        Type t = arg_types[ii];
-        if (t instanceof ObjectType)
-          arg_type_strings[ii] = ((ObjectType) t).getClassName();
-        else
-          arg_type_strings[ii] = t.getSignature().replace('/', '.');
+        arg_type_strings[ii] = typeToClassGetName(arg_types[ii]);
       }
 
     // Loop through each instruction and find the line number for each

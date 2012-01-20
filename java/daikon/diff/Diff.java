@@ -163,9 +163,9 @@ public final class Diff {
     boolean continuousJustification = false;
     boolean logging = false;
     File outputFile = null;
-    String invSortComparator1Classname = null;
-    String invSortComparator2Classname = null;
-    String invPairComparatorClassname = null;
+    /*@ClassGetName*/ String invSortComparator1Classname = null;
+    /*@ClassGetName*/ String invSortComparator2Classname = null;
+    /*@ClassGetName*/ String invPairComparatorClassname = null;
 
     boolean optionSelected = false;
 
@@ -203,19 +203,25 @@ public final class Diff {
             throw new Error("multiple --" + INV_SORT_COMPARATOR1_SWITCH +
                             " classnames supplied on command line");
           }
-          invSortComparator1Classname = g.getOptarg();
+          @SuppressWarnings("signature") // user input, should be checked
+          /*@ClassGetName*/ String cgn = g.getOptarg();
+          invSortComparator1Classname = cgn;
         } else if (INV_SORT_COMPARATOR2_SWITCH.equals(optionName)) {
           if (invSortComparator2Classname != null) {
             throw new Error("multiple --" + INV_SORT_COMPARATOR2_SWITCH +
                             " classnames supplied on command line");
           }
-          invSortComparator2Classname = g.getOptarg();
+          @SuppressWarnings("signature") // user input, should be checked
+          /*@ClassGetName*/ String cgn = g.getOptarg();
+          invSortComparator2Classname = cgn;
         } else if (INV_PAIR_COMPARATOR_SWITCH.equals(optionName)) {
           if (invPairComparatorClassname != null) {
             throw new Error("multiple --" + INV_PAIR_COMPARATOR_SWITCH +
                             " classnames supplied on command line");
           }
-          invPairComparatorClassname = g.getOptarg();
+          @SuppressWarnings("signature") // user input, should be checked
+          /*@ClassGetName*/ String cgn = g.getOptarg();
+          invPairComparatorClassname = cgn;
         } else if (IGNORE_UNJUSTIFIED_SWITCH.equals(optionName)) {
           optionSelected = true;
           includeUnjustified = false;

@@ -208,7 +208,8 @@ public class ParameterDoclet
   private String getDefaultString(String field) {
     try {
       int i = field.lastIndexOf('.');
-      String classname = field.substring(0, i);
+      @SuppressWarnings("signature") // application invariant
+      /*@ClassGetName*/ String classname = field.substring(0, i);
       String fieldname = field.substring(i+1);
       Class<?> c = UtilMDE.classForName (classname);
       Field f = c.getField(Configuration.PREFIX + fieldname);

@@ -493,7 +493,8 @@ public class InvariantAddAndCheckTester extends TestCase {
 
       results = new StringBuffer();
 
-      String className = getNextRealLine(commands);
+      @SuppressWarnings("signature") // user input, should be checked
+      /*@BinaryName*/ String className = getNextRealLine(commands);
 
       // End of file reached
       if (className == null) return true;

@@ -241,7 +241,7 @@ public class Ast {
 
   // Returns the classname if the given type declaration declares a
   // ClassOrInterfaceDeclaration. Otherwise returns null.
-  public static /*@Nullable*/ String getClassNameForType(TypeDeclaration d) {
+  public static /*@Nullable*/ /*@BinaryNameForNonArray*/ String getClassNameForType(TypeDeclaration d) {
 
     /**
      * Grammar production for TypeDeclaration:
@@ -265,8 +265,7 @@ public class Ast {
 
   // Return the fully qualified name of the class containing the node.
   // (The result does not include the trailing period, though it did once.)
-  // <package>.<class>*.<method>
-  public static /*@ClassGetName*/ String getClassName(Node d) {
+  public static /*@BinaryNameForNonArray*/ String getClassName(Node d) {
 
     ClassOrInterfaceDeclaration n =
       (d instanceof ClassOrInterfaceDeclaration)
@@ -314,6 +313,8 @@ public class Ast {
       Node n1 = b.getParent();
       assert n1 instanceof ClassOrInterfaceDeclaration;
       if (isInner((ClassOrInterfaceDeclaration)n1)) {
+        // TODO: This works for anonymous classes (maybe), but is wrong for
+        // non-anonymous inner classes.
         className = "$inner" + "." + className;
         currentNode = b;
       } else {
@@ -327,7 +328,10 @@ public class Ast {
     if (result.endsWith(".")) {
       result = result.substring(0, result.length() - 1);
     }
-    return result;
+
+    @SuppressWarnings("signature") // string concatenation, etc.
+    /*@BinaryNameForNonArray*/ String result_bnfna = result;
+    return result_bnfna;
 
   }
 
@@ -726,7 +730,9 @@ public class Ast {
         if (dot_pos == -1) {
           throw new Error("Didn't find class " + orig_s);
         }
-        s = s.substring(0,dot_pos) + "$" + s.substring(dot_pos+1);
+        @SuppressWarnings("signature") // string concatenation
+        /*@ClassGetName*/ String new_s = s.substring(0,dot_pos) + "$" + s.substring(dot_pos+1);
+        s = new_s;
         // System.out.println("Lookup trying: " + s);
         try {
           Class<?> c = Class.forName(s);

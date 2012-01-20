@@ -45,7 +45,9 @@ public final /*@Interned*/ class ProglangType
   private static HashMap</*@Interned*/ String,Vector<ProglangType>> all_known_types = new HashMap</*@Interned*/ String,Vector<ProglangType>>();
 
   // The set of (interned) names of classes that implement java.util.List.
-  public static HashSet</*@ClassGetName*/ String> list_implementors = new LinkedHashSet</*@ClassGetName*/ String>();
+  // For a Java class, this is a @BinaryNameForNonArray, but when Daikon is
+  // processing programs written in other languages, it can be arbitrary.
+  public static HashSet<String> list_implementors = new LinkedHashSet<String>();
 
   /**
    * If true, treat 32 bit values whose high bit is on, as a negative
@@ -65,6 +67,8 @@ public final /*@Interned*/ class ProglangType
     list_implementors.add("java.util.Stack");
   }
 
+  // For a Java class, this is a binary name.  When Daikon is processing
+  // other languages, the format is arbitrary.
   private /*@Interned*/ String base;          // interned name of base type
   public /*@Interned*/ String base() { return base; }
   private int dimensions;       // number of dimensions
@@ -726,7 +730,8 @@ public final /*@Interned*/ class ProglangType
     return false;
   }
 
-  public /*@BinaryName*/ String format() {
+  // For Java programs, a @BinaryName.
+  public String format() {
     if (dimensions == 0)
       return base;
 
@@ -745,7 +750,8 @@ public final /*@Interned*/ class ProglangType
     return ("[" + out + "]");
   }
 
-  public /*@BinaryName*/ String toString() {
+  // For Java programs, a @BinaryName.
+  public String toString() {
     return format();
   }
 

@@ -35,7 +35,7 @@ public class MethodInfo {
    * example: "public static void examineObject(Object x)" would have
    * arg_types {"java.lang.Object"}
    **/
-  public /*@BinaryName*/ String[] arg_type_strings;
+  public /*@ClassGetName*/ String[] arg_type_strings;
 
   /** Array of argument types as classes for this method **/
   public Class<?>[] arg_types;
@@ -81,7 +81,7 @@ public class MethodInfo {
    * exit locations
    */
   public MethodInfo (ClassInfo class_info, String method_name,
-                     String[] arg_names, /*@BinaryName*/ String[] arg_type_strings,
+                     String[] arg_names, /*@ClassGetName*/ String[] arg_type_strings,
                      List<Integer> exit_locations,
                      List<Boolean> is_included) {
 

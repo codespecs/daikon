@@ -153,7 +153,7 @@ public final class Configuration
     assert dot >= 0 : "Name must contain a period (.)";
 
     @SuppressWarnings("signature") // substring operation
-    /*@BinaryName*/ String classname = name.substring(0, dot);
+    /*@ClassGetName*/ String classname = name.substring(0, dot);
     String fieldname = name.substring(dot+1);
 
     apply(classname, fieldname, value);

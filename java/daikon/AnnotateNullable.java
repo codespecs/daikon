@@ -415,6 +415,7 @@ public class AnnotateNullable {
     // program point (which is, fortunately, always an exit point), or
     // change Chicory to output it.
     VarInfo returnVar = ppt.find_var_by_name("return");
+    @SuppressWarnings("signature") // application invariant: returnVar.type.toString() is a binary name (if returnVar is non-null), because we are processing a Java program
     String returnType = returnVar == null ? "V" : UtilMDE.binaryNameToFieldDescriptor(returnVar.type.toString());
 
     return method + UtilMDE.arglistToJvm(java_args) + returnType;

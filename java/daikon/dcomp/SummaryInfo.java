@@ -52,7 +52,7 @@ public class SummaryInfo {
   }
 
   String invoke_type;           // interned
-  String original_classname;
+  /*@BinaryNameForNonArray*/ String original_classname;
   String original_methodname;
   java.lang.reflect.Method method;
 
@@ -90,7 +90,9 @@ public class SummaryInfo {
     // Find the class and method name of the original call
     String full_name = si[1];
     int lastdot = full_name.lastIndexOf ('.');
-    original_classname = full_name.substring (0, lastdot);
+    @SuppressWarnings("signature") // substring
+    /*@BinaryNameForNonArray*/ String bnfna = full_name.substring (0, lastdot);
+    original_classname = bnfna;
     original_methodname = full_name.substring (lastdot+1);
 
     // Remember the new routine
