@@ -194,13 +194,21 @@ public class PptNameMatcher {
 
       // Furthermore, pptName.getMethodName may be null for a constructor.
 
-      if (!((classname.equals(pptName.getFullClassName())
-             || classname.equals(pptName.getFullClassName().replace('$', '.')))
-            && (methodname.equals(pptName.getMethodName())
-                || ((pptName.getMethodName() != null)
-                    && (pptName.getMethodName().indexOf('$') >= 0)
-                    && methodname.equals(pptName.getMethodName().substring(pptName.getMethodName().lastIndexOf('$') + 1)))))) {
-        if (debug_getMatches) System.out.printf("getMatch: class name %s and method name %s DO NOT match candidate.%n", pptName.getFullClassName(), pptName.getMethodName());
+      String pptClassName = pptName.getFullClassName();
+      boolean classname_matches
+        = (classname.equals(pptClassName)
+           || ((pptClassName != null)
+               && classname.equals(pptClassName.replace('$', '.'))));
+      String pptMethodName = pptName.getMethodName();
+      boolean methodname_matches
+        = (methodname.equals(pptMethodName)
+           || ((pptMethodName != null)
+               && (pptMethodName.indexOf('$') >= 0)
+               && methodname.equals(pptMethodName.substring(pptMethodName.lastIndexOf('$') + 1))));
+
+      if (!(classname_matches
+            && methodname_matches)) {
+        if (debug_getMatches) System.out.printf("getMatch: class name %s and method name %s DO NOT match candidate.%n", pptClassName, pptMethodName);
         return false;
       }
       if (debug_getMatches) System.out.printf("getMatch: class name %s and method name %s DO match candidate.%n", classname, methodname);
@@ -309,8 +317,11 @@ public class PptNameMatcher {
    * Returns simple name of inner class, or null if ppt_name is not an
    * inner constructor.
    */
-  private static String innerConstructorName(PptName pptName) {
+  private static /*@Nullable*/ String innerConstructorName(PptName pptName) {
     String mname = pptName.getMethodName();
+    if (mname == null) {
+      return null;
+    }
     int dollarpos = mname.lastIndexOf('$');
     if (dollarpos >= 0) {
       return mname.substring(dollarpos + 1);
