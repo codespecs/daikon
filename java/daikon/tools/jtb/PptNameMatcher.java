@@ -223,12 +223,9 @@ public class PptNameMatcher {
         boolean OK_outer_this = false;
         if (pptTypeStrings.size() == method_params.size() + 1) {
           String icName = innerConstructorName(pptName);
-          System.out.printf("icName = %s%n", icName);
           if (icName != null) {
             String param0Full = pptTypeStrings.get(0);
             String param0Simple = simpleName(pptTypeStrings.get(0));
-            System.out.printf("param0Full = %s%n", param0Full);
-            System.out.printf("param0Simple = %s%n", param0Simple);
             // Need to check whether param0Simple is the superclass of icName.  How to do that?
             if (classname.startsWith(param0Full + ".")) {
               OK_outer_this = true;
