@@ -93,6 +93,7 @@ public final class VarComparabilityImplicit
     // String rep_ = rep;          // for debugging
 
     Vector<String> dim_reps = new Vector<String>();
+    // handle array types
     while (rep.endsWith("]")) {
       int openpos = rep.lastIndexOf("[");
       dim_reps.add(0, rep.substring(openpos+1, rep.length()-1));
