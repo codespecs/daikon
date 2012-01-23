@@ -205,6 +205,9 @@ SCRATCH_FOR_DAIKON?=${SCRATCH_FOR_DAIKON_BASE}/${PROJECT}
 RTC_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_rtc
 ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 
+# CP_PARENTS := cp -pf --parents
+CP_PARENTS := rsync -aR
+
 # Must use Java 1.5 or later.  On windows we use a script that converts
 # the unix style pathnames in this makefile to windows pathnames.
 # On Darwin, java/javac aren't in a standard JDK directory, so we presume
@@ -244,6 +247,12 @@ PRINT_INVARIANTS_CLASS?=$(DAIKONDIR)/java/daikon/PrintInvariants.class
 PRINT_INVARIANTS?=$(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.PrintInvariants
 DAIKON_OPTIONS?=
 PRINT_INVARIANTS_OPTIONS?=
+
+$(PRINT_INVARIANTS_CLASS):
+	make -C $(DAIKONDIR)/java
+
+$(CHICORY_EXEC):
+	make -C $(DAIKONDIR)/java
 
 # USER_DAIKON_OPTIONS is sometimes set in a Makefile.
 # PERSONAL_DAIKON_OPTIONS is never set by a checked-in Makefile; a user can
@@ -1362,7 +1371,7 @@ showvars:
 	@echo "JAVA6_HOME          =" ${JAVA6_HOME}
 	@echo "RUN_JAVA            =" ${RUN_JAVA}
 	@echo "java version:"
-	@${RUN_JAVA} -v
+	@${RUN_JAVA} -version
 	@echo "CLASSPATH           =" ${CLASSPATH}
 	@echo "SHELL               =" ${SHELL}
 	@echo "PATH                =" ${PATH}
@@ -1436,7 +1445,7 @@ ${PROJECT_FILE}.linecov: ${ALL_LIST_FILE} ${INST_LIST_FILE}
 	@echo
 	rm -rf $(SCRATCH_FOR_DAIKON)/linecov
 	mkdir $(SCRATCH_FOR_DAIKON)/linecov
-	cd ${SOURCES} && cp -pf --parents `cat ${ALL_LIST_FILE}` ${SCRATCH_FOR_DAIKON}/linecov
+	cd ${SOURCES} && ${CP_PARENTS} `cat ${ALL_LIST_FILE}` ${SCRATCH_FOR_DAIKON}/linecov
 	cd $(SCRATCH_FOR_DAIKON)/linecov && ${JAVAC} -g -d . `find . $(FINDARGS) -name '*.java'`
 	cd $(SCRATCH_FOR_DAIKON)/linecov && ${GRETEL}/bin/gretel instrument ${SCRATCH_FOR_DAIKON}/linecov `find . $(FINDARGS) -name '*.class'`
 	${RUN_JAVA} -classpath $(SCRATCH_FOR_DAIKON)/linecov:${GRETEL}/lib/Gretel-runtime.jar:${CLASSPATH} ${JAVA_ARGS} ${MAIN_CLASS} ${MAIN_ARGS}
@@ -1467,7 +1476,7 @@ brcov: ${INST_CLASSES_LIST_FILE} ${ALL_LIST_FILE}
 	@echo ""
 	rm -rf $(SCRATCH_FOR_DAIKON)/brcov
 	mkdir $(SCRATCH_FOR_DAIKON)/brcov
-	cd ${SOURCES} && cp -pf --parents `cat ${ALL_LIST_FILE}` ${SCRATCH_FOR_DAIKON}/brcov
+	cd ${SOURCES} && ${CP_PARENTS} `cat ${ALL_LIST_FILE}` ${SCRATCH_FOR_DAIKON}/brcov
 	cd $(SCRATCH_FOR_DAIKON)/brcov && ${JAVAC} -g -d . `find . $(FINDARGS) -name '*.java'`
 	cd ${GLASSJARTOOLKIT_BIN}/.. && ./bin/iclass \
 		-classpath ${SCRATCH_FOR_DAIKON}/brcov:${CLASSPATH} \
