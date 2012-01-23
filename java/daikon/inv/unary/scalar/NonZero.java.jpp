@@ -132,7 +132,7 @@ public class NONZERO
   }
 
   /** instantiate an invariant on the specified slice **/
-  public NONZERO instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+  public NONZERO instantiate_dyn (/*>>> @Prototype NONZERO this,*/ PptSlice slice) {
     return new NONZERO (slice);
   }
 
@@ -147,7 +147,7 @@ public class NONZERO
     }
   }
 
-  public String format_using(OutputFormat format) /*@Prototype*/ {
+  public String format_using(/*>>> @Prototype NONZERO this,*/ OutputFormat format) {
     // // var() fails for prototype invariants
     // if (ppt == null) {
     //   return "Prototype " + NONZEROSTRING + " invariant (ppt == null)";
