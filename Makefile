@@ -405,17 +405,15 @@ update-doc-dist-version:
 update-dist-version-file:
 	perl -wpi -e 's/\.(-?[0-9]+)$$/"." . ($$1+1)/e' doc/VERSION
 
-chicory:
-	$(MAKE) -C java chicory
-
-## Problem: "make -C java veryclean; make daikon.jar" fails.
+## Problem: "make -C java veryclean; make daikon.jar" fails, as does
+## "make -C java clean; make daikon.jar".
 ## It seems that one must do "make compile" before "make daikon.jar".
 # Perhaps daikon.jar shouldn't include JUnit or the test files.
-daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) chicory
+daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	-rm -rf $@ ${TMPDIR}/daikon-jar
 	install -d ${TMPDIR}/daikon-jar
 	# Compile Daikon and copy the resulting class files
-	# in the ${TMPDIR}/daikon-jar directory
+	# to the ${TMPDIR}/daikon-jar directory
 	$(MAKE) -C java all_directly
 	cd java && find . \( -name dcomp-rt \) -prune -o -name '*.class' -print \
 		-exec cp --parents '{}' ${TMPDIR}/daikon-jar \;

@@ -1436,7 +1436,7 @@ ${PROJECT_FILE}.linecov: ${ALL_LIST_FILE} ${INST_LIST_FILE}
 	@echo
 	rm -rf $(SCRATCH_FOR_DAIKON)/linecov
 	mkdir $(SCRATCH_FOR_DAIKON)/linecov
-	cd ${SOURCES} && cp -pf --parents --target-directory=${SCRATCH_FOR_DAIKON}/linecov `cat ${ALL_LIST_FILE}`
+	cd ${SOURCES} && cp -pf --parents `cat ${ALL_LIST_FILE}` ${SCRATCH_FOR_DAIKON}/linecov
 	cd $(SCRATCH_FOR_DAIKON)/linecov && ${JAVAC} -g -d . `find . $(FINDARGS) -name '*.java'`
 	cd $(SCRATCH_FOR_DAIKON)/linecov && ${GRETEL}/bin/gretel instrument ${SCRATCH_FOR_DAIKON}/linecov `find . $(FINDARGS) -name '*.class'`
 	${RUN_JAVA} -classpath $(SCRATCH_FOR_DAIKON)/linecov:${GRETEL}/lib/Gretel-runtime.jar:${CLASSPATH} ${JAVA_ARGS} ${MAIN_CLASS} ${MAIN_ARGS}
@@ -1467,7 +1467,7 @@ brcov: ${INST_CLASSES_LIST_FILE} ${ALL_LIST_FILE}
 	@echo ""
 	rm -rf $(SCRATCH_FOR_DAIKON)/brcov
 	mkdir $(SCRATCH_FOR_DAIKON)/brcov
-	cd ${SOURCES} && cp -pf --parents --target-directory=${SCRATCH_FOR_DAIKON}/brcov `cat ${ALL_LIST_FILE}`
+	cd ${SOURCES} && cp -pf --parents `cat ${ALL_LIST_FILE}` ${SCRATCH_FOR_DAIKON}/brcov
 	cd $(SCRATCH_FOR_DAIKON)/brcov && ${JAVAC} -g -d . `find . $(FINDARGS) -name '*.java'`
 	cd ${GLASSJARTOOLKIT_BIN}/.. && ./bin/iclass \
 		-classpath ${SCRATCH_FOR_DAIKON}/brcov:${CLASSPATH} \
