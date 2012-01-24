@@ -294,10 +294,10 @@ public final class PrintInvariants {
             throw new Error("multiple --" + Daikon.ppt_regexp_SWITCH
                   + " regular expressions supplied on command line");
           String regexp_string = g.getOptarg();
-          if (!UtilMDE.isRegex(regexp_string)) {
-            throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.ppt_regexp_SWITCH + ": " + UtilMDE.regexError(regexp_string));
+          if (!RegexUtil.isRegex(regexp_string)) {
+            throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.ppt_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
           }
-          regexp_string = UtilMDE.asRegex(regexp_string); // EMS - remove when flow-sensitivity works for isRegex
+          regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
           ppt_regexp = Pattern.compile(regexp_string);
         } else if (Daikon.disc_reason_SWITCH.equals(option_name)) {
           try { PrintInvariants.discReasonSetup(g.getOptarg()); }

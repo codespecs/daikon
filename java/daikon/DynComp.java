@@ -201,10 +201,10 @@ public class DynComp {
     if (separator == null) {
       separator = ";"; //should work for windows at least...
     } else {
-      if (!UtilMDE.isRegex(separator)) {
-        throw new Daikon.TerminationMessage("Bad regexp " + separator + " for path.separator: " + UtilMDE.regexError(separator));
+      if (!RegexUtil.isRegex(separator)) {
+        throw new Daikon.TerminationMessage("Bad regexp " + separator + " for path.separator: " + RegexUtil.regexError(separator));
       }
-      separator = UtilMDE.asRegex(separator); // EMS - remove when flow-sensitivity works for isRegex
+      separator = RegexUtil.asRegex(separator);   // @SuppressWarnings("regex") // flow-sensitivity
     }
 
     // Look for dcomp_premain.jar along the classpath

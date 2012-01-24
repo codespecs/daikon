@@ -36,6 +36,7 @@ import plume.EntryReader;
 import plume.FileIOException;
 import plume.Stopwatch;
 import plume.UtilMDE;
+import plume.RegexUtil;
 import daikon.config.Configuration;
 import daikon.derive.Derivation;
 import daikon.inv.Equality;
@@ -927,10 +928,10 @@ public final class Daikon {
                   + ppt_regexp_SWITCH
                   + " regular expressions supplied on command line");
             String regexp_string = g.getOptarg();
-            if (!UtilMDE.isRegex(regexp_string)) {
-              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_regexp_SWITCH + ": " + UtilMDE.regexError(regexp_string));
+            if (!RegexUtil.isRegex(regexp_string)) {
+              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
             }
-            regexp_string = UtilMDE.asRegex(regexp_string); // EMS - remove when flow-sensitivity works for isRegex
+            regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
             ppt_regexp = Pattern.compile(regexp_string);
             break;
           } else if (ppt_omit_regexp_SWITCH.equals(option_name)) {
@@ -940,10 +941,10 @@ public final class Daikon {
                   + ppt_omit_regexp_SWITCH
                   + " regular expressions supplied on command line");
             String regexp_string = g.getOptarg();
-            if (!UtilMDE.isRegex(regexp_string)) {
-              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_omit_regexp_SWITCH + ": " + UtilMDE.regexError(regexp_string));
+            if (!RegexUtil.isRegex(regexp_string)) {
+              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_omit_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
             }
-            regexp_string = UtilMDE.asRegex(regexp_string); // EMS - remove when flow-sensitivity works for isRegex
+            regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
             ppt_omit_regexp = Pattern.compile(regexp_string);
             break;
           } else if (var_regexp_SWITCH.equals(option_name)) {
@@ -953,10 +954,10 @@ public final class Daikon {
                   + var_regexp_SWITCH
                   + " regular expressions supplied on command line");
             String regexp_string = g.getOptarg();
-            if (!UtilMDE.isRegex(regexp_string)) {
-              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_regexp_SWITCH + ": " + UtilMDE.regexError(regexp_string));
+            if (!RegexUtil.isRegex(regexp_string)) {
+              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
             }
-            regexp_string = UtilMDE.asRegex(regexp_string); // EMS - remove when flow-sensitivity works for isRegex
+            regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
             var_regexp = Pattern.compile(regexp_string);
             break;
           } else if (var_omit_regexp_SWITCH.equals(option_name)) {
@@ -966,10 +967,10 @@ public final class Daikon {
                   + var_omit_regexp_SWITCH
                   + " regular expressions supplied on command line");
             String regexp_string = g.getOptarg();
-            if (!UtilMDE.isRegex(regexp_string)) {
-              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_omit_regexp_SWITCH + ": " + UtilMDE.regexError(regexp_string));
+            if (!RegexUtil.isRegex(regexp_string)) {
+              throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_omit_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
             }
-            regexp_string = UtilMDE.asRegex(regexp_string); // EMS - remove when flow-sensitivity works for isRegex
+            regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
             var_omit_regexp = Pattern.compile(regexp_string);
             break;
           }
