@@ -49,6 +49,8 @@ JAVAC ?= javac
 # Add flags like "-source 5" or "-target 5" to JAVAC_TARGET_FLAGS.
 JAVAC_ARGS ?= -g ${JAVAC_TARGET_FLAGS}
 
+JAVADOC ?= javadoc
+
 JAR ?= jar
 ifeq (cygwin,$(OSTYPE))
   JAVA ?= $(PLUMEBIN)/java-cygwin -ea -cp "${CLASSPATH}"
@@ -1012,7 +1014,8 @@ clover: all_directly
 JAVADOC_DEST  = doc
 JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
-                -linkoffline http://java.sun.com/j2se/1.5.0/docs/api/ http://java.sun.com/j2se/1.5.0/docs/api/
+                -linkoffline http://java.sun.com/j2se/1.5.0/docs/api/ http://java.sun.com/j2se/1.5.0/docs/api/ \
+                -docletpath ${CLASSPATH}
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 # JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v '\#'`
 JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | sort)
@@ -1032,7 +1035,7 @@ doc: ../plume-lib $(AUTO_GENERATED_FILES) doc-dkconfig
 	mkdir -p doc
 	@rm -f java-files.txt
 	find . -name "*.java" -print | grep -v typequals > java-files.txt
-	javadoc -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
+	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
 		daikon @java-files.txt
 	@rm -f java-files.txt
 	cd doc && ../../plume-lib/bin/preplace '^ *&#64;cindex.*' ''
@@ -1040,7 +1043,7 @@ doc: ../plume-lib $(AUTO_GENERATED_FILES) doc-dkconfig
 ## Make doc with private fields for people working on source code
 doc-private: ../plume-lib $(AUTO_GENERATED_FILES)
 	mkdir -p doc
-	javadoc -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
+	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
 	cd doc && ../../plume-lib/bin/preplace '^ *&#64;cindex.*' ''
 
@@ -1053,7 +1056,7 @@ doc-private: ../plume-lib $(AUTO_GENERATED_FILES)
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: ../plume-lib $(AUTO_GENERATED_FILES)
-	javadoc -J-Xmx1000m -J-ea -doclet daikon.config.InvariantDoclet \
+	${JAVADOC} -J-Xmx1000m -J-ea -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -1067,7 +1070,7 @@ doc-invariant: ../doc/invariants-doc.texinfo
 # It depends on "all", which forces compilation, to avoid errors like
 #   "java.lang.ClassFormatError: Truncated class file".
 ../doc/config-options.texinfo: ../plume-lib $(AUTO_GENERATED_FILES) all
-	javadoc -J-Xmx1000m -J-ea -doclet daikon.config.ParameterDoclet \
+	${JAVADOC} -J-Xmx1000m -J-ea -docletpath ${CLASSPATH} -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 	perl -pi -e 's/&#64;cindex/\@cindex/g' $@
@@ -1077,12 +1080,12 @@ doc-dkconfig: ../doc/config-options.texinfo
 
 # This file is no longer used; there's no point in keeping it around.
 # daikon/config/configurable.txt: $(AUTO_GENERATED_FILES)
-# 	javadoc -J-ea -doclet daikon.config.ParameterDoclet \
+# 	${JAVADOC} -J-ea -doclet daikon.config.ParameterDoclet \
 # 		--list $@ \
 # 		$(JDOC_FILES)
 
 ../doc/category-options.texinfo: ../plume-lib $(AUTO_GENERATED_FILES)
-	javadoc -J-Xmx1000m -J-ea -doclet daikon.config.ParameterDocletCategory \
+	${JAVADOC} -J-Xmx1000m -J-ea -doclet daikon.config.ParameterDocletCategory \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
