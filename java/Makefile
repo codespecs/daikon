@@ -1036,7 +1036,7 @@ doc: ../plume-lib $(AUTO_GENERATED_FILES) doc-dkconfig
 	@rm -f java-files.txt
 	find . -name "*.java" -print | grep -v typequals > java-files.txt
 	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
-		daikon @java-files.txt
+		@java-files.txt
 	@rm -f java-files.txt
 	cd doc && ../../plume-lib/bin/preplace '^ *&#64;cindex.*' ''
 
