@@ -283,7 +283,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     string = "(" + string + ")";
     for (int i = 0; i < reservedWords.length; i++) {
       String reservedWord = reservedWords[i];
-      @SuppressWarnings("regex") // EMS - concatenation of partial regexps is not supported (yet?)
+      @SuppressWarnings("regex") // partial regex concatenation
       Pattern p = Pattern.compile("([\\W])(" + reservedWord + ")([\\W])");
       Matcher m = p.matcher(string);
       while (m.find()) {

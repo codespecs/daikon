@@ -69,7 +69,7 @@ public class Operand {
     registers32Bit.add("ebp");
     b.append("|ebp");
 
-    @SuppressWarnings("regex") // EMS - building a regex with a StringBuilder is not supported
+    @SuppressWarnings("regex") // StringBuilder
     /*@Regex*/ String regex = b.toString();
     registers32BitRegExp = Pattern.compile(regex);
   }
