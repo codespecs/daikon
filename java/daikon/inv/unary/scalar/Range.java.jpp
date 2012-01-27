@@ -274,7 +274,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public EqualZero instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    public EqualZero instantiate_dyn (/*>>> @Prototype EqualZero this,*/ PptSlice slice) {
       return new EqualZero (slice);
     }
 
@@ -325,7 +325,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public EqualOne instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    public EqualOne instantiate_dyn (/*>>> @Prototype EqualOne this,*/ PptSlice slice) {
       return new EqualOne (slice);
     }
 
@@ -376,7 +376,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public EqualMinusOne instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    public EqualMinusOne instantiate_dyn (/*>>> @Prototype EqualMinusOne this,*/ PptSlice slice) {
       return new EqualMinusOne (slice);
     }
 
@@ -427,7 +427,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public GreaterEqualZero instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    public GreaterEqualZero instantiate_dyn (/*>>> @Prototype GreaterEqualZero this,*/ PptSlice slice) {
       return new GreaterEqualZero (slice);
     }
 
@@ -478,7 +478,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public GreaterEqual64 instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    public GreaterEqual64 instantiate_dyn (/*>>> @Prototype GreaterEqual64 this,*/ PptSlice slice) {
       return new GreaterEqual64 (slice);
     }
 
@@ -530,7 +530,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public BooleanVal instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    public BooleanVal instantiate_dyn (/*>>> @Prototype BooleanVal this,*/ PptSlice slice) {
       return new BooleanVal (slice);
     }
 
@@ -585,7 +585,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public PowerOfTwo instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    public PowerOfTwo instantiate_dyn (/*>>> @Prototype PowerOfTwo this,*/ PptSlice slice) {
       return new PowerOfTwo (slice);
     }
 
@@ -660,7 +660,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public Even instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    public Even instantiate_dyn (/*>>> @Prototype Even this,*/ PptSlice slice) {
       return new Even (slice);
     }
 
@@ -724,7 +724,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public Bound0_63 instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    public Bound0_63 instantiate_dyn (/*>>> @Prototype Even this,*/ PptSlice slice) {
       return new Bound0_63 (slice);
     }
 

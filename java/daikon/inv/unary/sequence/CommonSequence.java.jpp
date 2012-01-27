@@ -75,7 +75,7 @@ public class CLASSNAME
     super(ppt);
   }
 
-  protected CLASSNAME() /*@Prototype*/ {
+  protected CLASSNAME(/*>>> @Prototype CLASSNAME this*/) {
     super();
   }
 
@@ -106,7 +106,7 @@ public class CLASSNAME
   }
 
   /** instantiate an invariant on the specified slice **/
-  protected CLASSNAME instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+  protected CLASSNAME instantiate_dyn (/*>>> @Prototype CLASSNAME this,*/ PptSlice slice) {
     return new CLASSNAME(slice);
   }
 
