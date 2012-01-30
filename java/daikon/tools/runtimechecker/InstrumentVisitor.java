@@ -174,30 +174,34 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         }
 
         // add method to check object and class invariants.
-        ClassOrInterfaceDeclaration ucd = (ClassOrInterfaceDeclaration) clazz
+        
+        // just skip anonymous classes for now, hard to get a name for them without a decl node...
+        if ((clazz.getParent() instanceof ClassOrInterfaceDeclaration)) {
+        	ClassOrInterfaceDeclaration ucd = (ClassOrInterfaceDeclaration) clazz
                 .getParent();
-        String classname = Ast.getClassName(ucd);
-        ClassOrInterfaceBodyDeclaration objInvDecl = checkObjectInvariants_instrumentDeclaration(classname);
-        Ast.addDeclaration(clazz, objInvDecl);
+	        String classname = Ast.getClassName(ucd);
+	        ClassOrInterfaceBodyDeclaration objInvDecl = checkObjectInvariants_instrumentDeclaration(classname);
+	        Ast.addDeclaration(clazz, objInvDecl);
+	
+	        checkerClasses.addDeclaration(clazz, checkObjectInvariants_instrumentDeclaration_checker(classname,
+	                                                                                                 false /* check minor properties */));
+	        checkerClasses.addDeclaration(clazz, checkObjectInvariants_instrumentDeclaration_checker(classname,
+	                                                                                                 true /* check major properties */));
 
-        checkerClasses.addDeclaration(clazz, checkObjectInvariants_instrumentDeclaration_checker(classname,
-                                                                                                 false /* check minor properties */));
-        checkerClasses.addDeclaration(clazz, checkObjectInvariants_instrumentDeclaration_checker(classname,
-                                                                                                 true /* check major properties */));
-
-        boolean isNested = false;
-        boolean isStatic = false;
-        if (!Ast.isInner(ucd) || Ast.isStatic(ucd)) {
-            ClassOrInterfaceBodyDeclaration classInvDecl = checkClassInvariantsInstrumentDeclaration(classname);
-            checkerClasses.addDeclaration(clazz, checkClassInvariantsInstrumentDeclaration_checker(classname,
-                                                                                                   false /* check minor properties */));
-            checkerClasses.addDeclaration(clazz, checkClassInvariantsInstrumentDeclaration_checker(classname,
-                                                                                                   true /* check minor properties */));
-            Ast.addDeclaration(clazz, classInvDecl);
-            Ast.addDeclaration(clazz, getInvariantsDecl());
-            Ast.addDeclaration(clazz, isInstrumentedDecl());
-            Ast.addDeclaration(clazz, staticPropertyDecl());
-            Ast.addDeclaration(clazz, staticPropertyInit());
+	        boolean isNested = false;
+	        boolean isStatic = false;
+	        if (!Ast.isInner(ucd) || Ast.isStatic(ucd)) {
+	            ClassOrInterfaceBodyDeclaration classInvDecl = checkClassInvariantsInstrumentDeclaration(classname);
+	            checkerClasses.addDeclaration(clazz, checkClassInvariantsInstrumentDeclaration_checker(classname,
+	                                                                                                   false /* check minor properties */));
+	            checkerClasses.addDeclaration(clazz, checkClassInvariantsInstrumentDeclaration_checker(classname,
+	                                                                                                   true /* check minor properties */));
+	            Ast.addDeclaration(clazz, classInvDecl);
+	            Ast.addDeclaration(clazz, getInvariantsDecl());
+	            Ast.addDeclaration(clazz, isInstrumentedDecl());
+	            Ast.addDeclaration(clazz, staticPropertyDecl());
+	            Ast.addDeclaration(clazz, staticPropertyInit());
+	        }
         }
     }
 
@@ -310,8 +314,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
     @SuppressWarnings("nullness") // application invariant: method node is always in a class or interface
         /*@NonNull*/ ClassOrInterfaceDeclaration clsdecl =
             (ClassOrInterfaceDeclaration)Ast.getParent(ClassOrInterfaceDeclaration.class, method);
-
-        if (Ast.isInterface(clsdecl)) {
+    
+    	 // skip anonymous nested classes for now, hard to refer to the right this object there...
+        if (Ast.isInterface(clsdecl) || Ast.isInAnonymousClass(method)) {
             return;
         }
 
@@ -455,6 +460,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         // Rename the original method, and make it private.
         Ast.setName(method, "internal$" + name);
         Ast.setAccess(method, "private");
+        Ast.removeMethodDeclAnnotations(method);
     }
 
     // vioTime can be the name of a variable (which should be in scope)

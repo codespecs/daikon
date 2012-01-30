@@ -944,18 +944,44 @@ public class Ast {
     NodeListOptional options = modifiers.f0;
     for (Enumeration e = options.elements(); e.hasMoreElements(); ) { // non-generic due to JTB
       NodeChoice c = (NodeChoice) e.nextElement();
-      NodeToken t = (NodeToken) c.choice;
-      String token = t.tokenImage;
-      if (token.equals("public") || token.equals("protected") ||
-          token.equals("private")) {
-        t.tokenImage = access;
-        return;
+      
+      if (c.choice instanceof NodeToken) {
+	      NodeToken t = (NodeToken) c.choice;
+	      String token = t.tokenImage;
+	      if (token.equals("public") || token.equals("protected") ||
+	          token.equals("private")) {
+	        t.tokenImage = access;
+	        return;
+	      }
       }
     }
     // The method did not have any modifier
     NodeToken t = new NodeToken(access);
     NodeChoice c = new NodeChoice(t);
     options.addNode(c);
+  }
+
+  public static void removeMethodDeclAnnotations(MethodDeclaration method) {
+    // The following four confusing lines are a following of the
+    // syntax tree to get to the modifiers.
+    ClassOrInterfaceBodyDeclaration decl =
+      (ClassOrInterfaceBodyDeclaration)Ast.getParent(ClassOrInterfaceBodyDeclaration.class, method);
+    NodeChoice nc = decl.f0;
+    NodeSequence sequence = (NodeSequence)nc.choice;
+    Modifiers modifiers = (Modifiers)sequence.elementAt(0);
+    NodeListOptional options = modifiers.f0;
+    
+    NodeListOptional filteredOptions = new NodeListOptional();
+    
+    for (Enumeration e = options.elements(); e.hasMoreElements(); ) { // non-generic due to JTB
+      NodeChoice c = (NodeChoice) e.nextElement();
+      
+      if (!(c.choice instanceof jtb.syntaxtree.Annotation)) {
+  	    filteredOptions.addNode(c);
+      }
+    }
+    
+    modifiers.f0 = filteredOptions;
   }
 
 
@@ -1289,9 +1315,12 @@ public class Ast {
     NodeListOptional list = modifiers.f0;
     for (int i = 0 ; i < list.size() ; i++) {
       NodeChoice nodeChoice = (NodeChoice)list.elementAt(i);
-      NodeToken keyword = (NodeToken)nodeChoice.choice;
-      if (keyword.toString().equals(modifierString)) {
-        return true;
+      
+      if (nodeChoice.choice instanceof NodeToken) {
+	      NodeToken keyword = (NodeToken)nodeChoice.choice;
+	      if (keyword.toString().equals(modifierString)) {
+	        return true;
+	      }
       }
     }
     return false;
@@ -1305,7 +1334,18 @@ public class Ast {
     }
   }
 
+  public static boolean isInAnonymousClass(Node node) {
+	  ClassOrInterfaceBody clsbody = (ClassOrInterfaceBody)Ast.getParent(ClassOrInterfaceBody.class, node);
+	  return (!(clsbody.getParent() instanceof ClassOrInterfaceDeclaration));    
+  }
+  
   public static boolean isInterface(ClassOrInterfaceBody n) {
+	// n.getParent won't be an ClassOrInterfaceDeclaration for anonymous
+	// class bodies such as in  new List() { ... }  -- anonymous classes can
+	// never be interfaces, however, so that's simple enough to handle. :)
+	if (!(n.getParent() instanceof ClassOrInterfaceDeclaration))
+		return false;
+		
     return isInterface((ClassOrInterfaceDeclaration)n.getParent());
   }
 

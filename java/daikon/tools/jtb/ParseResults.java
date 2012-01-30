@@ -114,7 +114,7 @@ public class ParseResults {
         packageNameString = "";
       }
 
-      ParseResults results = new ParseResults(fileName, packageNameString, compilationUnit);
+      ParseResults results = new ParseResults(packageNameString, fileName, compilationUnit);
 
       // Find the class name.
       NodeListOptional typeDeclarationMaybe = compilationUnit.f2;

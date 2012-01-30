@@ -1040,6 +1040,8 @@ public class Instrument implements ClassFileTransformer {
 
         lv_start++;
         param_offset--;
+        
+        arg_names[0] = mgen.getArgumentType(0).toString() + ".this";
       }
     }
 
