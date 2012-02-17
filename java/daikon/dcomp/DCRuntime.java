@@ -33,7 +33,7 @@ public final class DCRuntime {
   /** Depth to follow fields in classes **/
   public static int depth = 2;
 
-  /** static count in the JDK.  Used as an offset for non-JDK code. **/
+  /** static count of tags in the JDK.  Used as an offset for non-JDK code. **/
   static int max_jdk_static = 100000;
 
   /** If the application exits with an exception, it should be placed here **/
@@ -300,6 +300,14 @@ public final class DCRuntime {
         return_val = ((Boolean)(m.invoke(o1, o2)));
       }
     } catch (NoSuchMethodException e) {
+      System.err.printf("dcomp_super_equals(%s, %s)%n", o1, o2);
+      System.err.printf("o1super %s%n", o1super);
+      for (Class<?> c : o1superifaces) {
+        System.err.printf("  o1super interface %s%n", c);
+      }
+      for (Method m : o1super.getClass().getDeclaredMethods()) {
+        System.err.printf("  o1super method %s%n", m);
+      }
       throw new RuntimeException(e);
     } catch (IllegalAccessException e) {
       throw new RuntimeException(e);

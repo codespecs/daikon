@@ -73,7 +73,7 @@ public final class PrintInvariants {
    * This option must be given with "--format Java" option.
    *
    * Instead of outputting prestate expressions as "\old(E)" within an
-   * invariant, output a variable names (e.g. `v1'). At the end of
+   * invariant, output a variable name (e.g. `v1'). At the end of
    * each program point, output the list of variable-to-expression
    * mappings. For example: with this option set to false, a program
    * point might print like this:
