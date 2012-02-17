@@ -130,7 +130,7 @@ public final /*@Interned*/ class ProglangType
         || (base == BASE_LONG)
         || (base == BASE_LONG_LONG)
         || (base == BASE_SHORT))
-      return intern("int", dimensions);
+      return intern(BASE_INT, dimensions);
     return this;
   }
 
@@ -340,14 +340,16 @@ public final /*@Interned*/ class ProglangType
    * this ProglangType), return the (canonicalized) interpretation of that value.
    * <p>
    *
+   * This ProglangType (the method receiver) is assumed to be a representation
+   * type, not an arbitrary type in the underlying programming language.
+   * <p>
+   *
    * If the type is an array and there
    * are any nonsensical elements in the array, the entire array is
    * considered to be nonsensical (indicated by returning null).  This
    * is not really correct, but it is a reasonable path to take for now.
    * (jhp, Feb 12, 2005)
    */
-  // The implementations only need to deal with representation types, not
-  // with all types in the underlying programming language.
   public final /*@Nullable*/ /*@Interned*/ Object parse_value(String value, LineNumberReader reader, String filename) {
     // System.out.println(format() + ".parse(\"" + value + "\")");
 
@@ -406,13 +408,9 @@ public final /*@Interned*/ class ProglangType
       else
         throw new IllegalArgumentException("Bad character: " + value);
       return Intern.internedLong(Character.getNumericValue(c));
-    } else if ((base == BASE_INT)
-               || (base == BASE_BOOLEAN)
-               || (base == BASE_LONG)
-               || (base == BASE_LONG_LONG)
-               || (base == BASE_SHORT)) {
+    } else if (base == BASE_INT) {
       // File rep type might be int, boolean, or hashcode.
-      // If we had the actual type, we could do error-checking here.
+      // If we had the declared type, we could do error-checking here.
       // (Example:  no hashcode should be negative, nor any boolean > 1.)
       if (value.equals("nonsensical"))
         return null;
@@ -434,8 +432,14 @@ public final /*@Interned*/ class ProglangType
       if (value.equalsIgnoreCase("-Infinity") || value.equals("-inf"))
         return DoubleNegativeInfinity;
       return Intern.internedDouble(value);
+    } else if ((base == BASE_BOOLEAN)
+               || (base == BASE_HASHCODE)
+               || (base == BASE_LONG)
+               || (base == BASE_LONG_LONG)
+               || (base == BASE_SHORT)) {
+      throw new Error("not a rep type: illegal base type " + base);
     } else {
-      throw new Error("unrecognized type " + base);
+      throw new Error("unrecognized base type " + base);
     }
   }
 
