@@ -130,7 +130,7 @@ public class Premain {
         return (null);
 
       if (DynComp.verbose)
-        System.out.format ("In Transform: class = %s\n", className);
+        System.out.format ("In dcomp.Premain.Transform(): class = %s\n", className);
 
       try {
         // Parse the bytes of the classfile, die on any errors

@@ -139,7 +139,7 @@ public class Instrument implements ClassFileTransformer {
     String fullClassName = className.replace("/", ".");
     //String fullClassName = className;
 
-      debug_transform.log ("In Transform: class = %s%n", className);
+      debug_transform.log ("In chicory.Instrument.transform(): class = %s%n", className);
 
     // Don't instrument boot classes.  They are uninteresting and will
     // not be able to access daikon.chicory.Runtime (because it is not
