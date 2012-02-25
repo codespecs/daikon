@@ -2047,7 +2047,6 @@ public final class Daikon {
   /**
    * Initialize the equality sets for each variable
    */
-
   public static void setupEquality (PptTopLevel ppt) {
 
     if (!Daikon.use_equality_optimization)
