@@ -114,8 +114,7 @@ CVS_REPOSITORY := /afs/csail.mit.edu/group/pag/projects/invariants/.CVS
 RTJAR := $(JAVA_HOME)/jre/lib/rt.jar
 TOOLSJAR := $(JAVA_HOME)/lib/tools.jar
 
-# CP_PARENTS := cp -pf --parents
-CP_PARENTS := rsync -aR
+RSYNC_AR := rsync -aR
 
 JAVAC ?= javac -target 5
 
@@ -318,7 +317,7 @@ staging: doc/CHANGES
 	cp -pR doc/daikon_manual_html $(STAGING_DIR)/download/doc
 	cp -pR doc/images $(STAGING_DIR)/download/doc/daikon_manual_html
 	cp -pR doc/developer_manual_html $(STAGING_DIR)/download/doc
-	cd doc/www && ${CP_PARENTS} $(WWW_DAIKON_FILES) $(STAGING_DIR)
+	cd doc/www && ${RSYNC_AR} $(WWW_DAIKON_FILES) $(STAGING_DIR)
 	# Build pubs and copy the results
 	@echo "]2;Building Pubs"
 	cd doc/www && make pubs
@@ -419,7 +418,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	# to the ${TMPDIR}/daikon-jar directory
 	$(MAKE) -C java all_directly
 	cd java && find . \( -name dcomp-rt \) -prune -o -name '*.class' -print \
-		-exec ${CP_PARENTS} '{}' ${TMPDIR}/daikon-jar \;
+		-exec ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar \;
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
 	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar
@@ -427,7 +426,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/commons-io.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/plume.jar
-	(cd java; ${CP_PARENTS} --target-directory=${TMPDIR}/daikon-jar $(DAIKON_RESOURCE_FILES))
+	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
 	  jar cfm $@ $(INV_DIR)/java/daikon/chicory/manifest.txt *
 	mv ${TMPDIR}/daikon-jar/$@ $@
