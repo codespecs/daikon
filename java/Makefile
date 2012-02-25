@@ -1015,7 +1015,8 @@ JAVADOC_DEST  = doc
 JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
                 -linkoffline http://java.sun.com/j2se/1.5.0/docs/api/ http://java.sun.com/j2se/1.5.0/docs/api/ \
-                -docletpath ${CLASSPATH}
+                -docletpath ${CLASSPATH} \
+                -classpath ${CLASSPATH}
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 # JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v '\#'`
 JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | sort)
@@ -1056,7 +1057,7 @@ doc-private: ../plume-lib $(AUTO_GENERATED_FILES)
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: ../plume-lib $(AUTO_GENERATED_FILES)
-	${JAVADOC} -J-Xmx1000m -J-ea -doclet daikon.config.InvariantDoclet \
+	${JAVADOC} -J-Xmx1000m -J-ea -docletpath ${CLASSPATH} -classpath ${CLASSPATH} -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 
@@ -1070,7 +1071,7 @@ doc-invariant: ../doc/invariants-doc.texinfo
 # It depends on "all", which forces compilation, to avoid errors like
 #   "java.lang.ClassFormatError: Truncated class file".
 ../doc/config-options.texinfo: ../plume-lib $(AUTO_GENERATED_FILES) all
-	${JAVADOC} -J-Xmx1000m -J-ea -docletpath ${CLASSPATH} -doclet daikon.config.ParameterDoclet \
+	${JAVADOC} -J-Xmx1000m -J-ea -docletpath ${CLASSPATH} -classpath ${CLASSPATH} -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 	perl -pi -e 's/&#64;cindex/\@cindex/g' $@
