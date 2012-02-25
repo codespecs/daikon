@@ -500,7 +500,7 @@ If 5 values had been seen, then this implementation would return 31/32,
 which is the likelihood that all 5 values seen so far were even not purely
 by chance.  An invariant is printed only if its probability of not
 occurring by chance alone is large enough (by default, greater than .99;
-see Daikon's @samp{--conf_limit} command-line option.
+see Daikon's @option{--conf_limit} command-line option.
 
 @item public String format ()
 @itemx public String repr ()
@@ -2711,7 +2711,7 @@ ListImplementors
 
 Each classname is in Java format (for example, ``java.util.LinkedList'').
 
-The @samp{--list_type} command-line option to Daikon can also be used to
+The @option{--list_type} command-line option to Daikon can also be used to
 specify classes that implement lists; @xref{Options to control invariant
 detection,,,./daikon,Daikon User Manual}.
 
@@ -2893,7 +2893,7 @@ One or more flags may optionally be specified.  Possible values are:
 @item @code{is_param}
 
 Indicates that a given variable is a parameter to a procedure.  Some
-procedures reassign parameters -- essentially using them as local
+procedures reassign parameters --- essentially using them as local
 variables.  Such uses are not relevant to the procedure's external
 specification.  The @code{is_param} flag causes Daikon not to print
 certain invariants, if the variable has been reassigned.
@@ -3843,7 +3843,7 @@ ListImplementors
 
 Each classname is in Java format (for example, ``java.util.LinkedList'').
 
-The @samp{--list_type} command-line option to Daikon can also be used to
+The @option{--list_type} command-line option to Daikon can also be used to
 specify classes that implement lists; @xref{Options to control invariant detection,,,./daikon,Daikon User Manual}.
 
 

@@ -4215,14 +4215,14 @@ Empty lists indicate that no non-assignment interactions occurred in the series 
 interactions connecting the two variables.
 
 Elements of these lists are essentially parts of stack traces.  The maximum number
-of stack trace levels displayed is set by @code{--trace-line-depth}, which is equal to 1 by default.
+of stack trace levels displayed is set by @option{--trace-line-depth}, which is equal to 1 by default.
 
-For these files, DynComp also has a @code{--abridged-vars} option that replaces text
+For these files, DynComp also has a @option{--abridged-vars} option that replaces text
 like @code{daikon.chicory.ParameterInfo:d2} with text like @code{Parameter d2} in the @file{cset}
 and @file{trace} files.  It writes @code{this} instead of
 @code{daikon.chicory.ThisObjInfo:this}; and @code{return} instead of
 @code{daikon.chicory.ReturnInfo:return}.  This option is off by default, but can be
-turned on with @code{--abridged-vars}.
+turned on with @option{--abridged-vars}.
 
 @menu
 * Instrumenting the JDK with DynComp::  
@@ -4331,7 +4331,7 @@ that occurred.  Default behavior is to not create the file.
 
 @item --trace-line-depth=@var{n}
 Controls size of the stack displayed in tracing the interactions that
-occurred.  Default behavior is to only display one element in the stack --
+occurred.  Default behavior is to only display one element in the stack ---
 that is, display at most the topmost function on the stack when the
 interaction occurred.  This switch has no effect if @option{--trace-sets-file}
 is not specified, or is null.
@@ -5852,7 +5852,7 @@ two different terminals.
 @node Online execution with DynComp for C/C++,  , Online execution, Online execution
 @subsubsection Online execution with DynComp for C/C++
 
-When running Kvasir with DynComp (using the @file{--with-dyncomp}
+When running Kvasir with DynComp (using the @option{--with-dyncomp}
 option), Kvasir generates the .decls file after it generates the .dtrace
 file, so it is not possible to perform online execution using one run.
 The recommended way to perform online execution with DynComp is to run
@@ -5875,7 +5875,7 @@ kvasir-dtrace --dtrace-no-decs --dtrace-file=- ./foo \
 When you run Kvasir the second time, you don't need to run DynComp
 again since you are only interested in the .dtrace file.  Notice that
 the .dtrace output
-is directed to standard out (@file{--dtrace-file=-}) and does not
+is directed to standard out (@option{--dtrace-file=-}) and does not
 contain any declarations (@option{--dtrace-no-decs}) because the .decls
 file already contains the declarations.  You can simply
 pipe that .dtrace output out to Daikon, which is invoked using the
@@ -6220,7 +6220,7 @@ the options list passed directly to the wurzel preprocessor.  See the
 
 @cindex INCLUDE environment variable
 @cindex CPATH environment variable
-On Windows, mangel implicitly adds @samp{-I} options for all of the
+On Windows, mangel implicitly adds @option{-I} options for all of the
 pathnames specified in the environment variable @env{INCLUDE}, which is
 also used by the Microsoft C compiler to specify the location of its
 default system libraries.  On Unix, it uses the path specified in the
@@ -6601,7 +6601,7 @@ possible workaround is to preprocess the code with the host compiler's
 preprocessor before running it through Mangel-Wurzel.
 
 @item If you are getting compilation errors from the host C compiler, you can
-use the @samp{-E} option to mangel to produce a @file{.int.c} file
+use the @option{-E} option to mangel to produce a @file{.int.c} file
 containing the code as preprocessed by wurzel, which you can examine to track
 down the cause of the errors.
 
@@ -7646,7 +7646,7 @@ If Annotate issues a warning message of the form
 @noindent
 then the Annotate tool found a variable in the source code that is was
 computed by Daikon.  This can happen if Daikon was run omitting the
-variable, for instance due to --std-visibility.  It can also happen due
+variable, for instance due to @option{--std-visibility}.  It can also happen due
 to a bug in Annotate or Daikon; if that is the case, please report it to
 the Daikon developers.
 
@@ -8353,11 +8353,11 @@ variable (the leader) from the set of equal variables (@pxref{Equal variables}).
 invariants are not reported}).
 @end itemize
 
-There are two command line options (--disc_reason and --track) that
+There are two command-line options (@option{--disc_reason} and @option{--track}) that
 will display information about invariants that are not printed.  The
-@var{--disc_reason} option will indicate why a particular invariant
+@option{--disc_reason} option will indicate why a particular invariant
 was discarded in most cases.  If it does not provide enough
-information, try the @var{--track} option which traces the invariant
+information, try the @option{--track} option which traces the invariant
 through all of Daikon's processing steps.  See @ref{Daikon debugging
 options} for more information.
 
@@ -8384,8 +8384,8 @@ So, there may be a property that is true, but if too few samples were
 seen, then Daikon will not report it.  In a longer trace, Daikon would
 report the property.  You can adjust Daikon's confidence limit so that
 the property is reported even in the short executions; see the
-command-line option @code{--conf_limit}.  For instance, supplying
-@code{--conf_limit 0} causes all properties that have not been falsified
+command-line option @option{--conf_limit}.  For instance, supplying
+@option{--conf_limit 0} causes all properties that have not been falsified
 to be printed.
 
 Daikon does not report redundant, or implied, invariants
