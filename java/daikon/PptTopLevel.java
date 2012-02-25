@@ -225,7 +225,7 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /** returns an iterator over all of the splitters at this ppt **/
+  /** returns an iterator over all of the PptConditionals at this ppt **/
   public CondIterator cond_iterator() {
     return new CondIterator();
   }
@@ -992,7 +992,7 @@ public class PptTopLevel extends Ppt {
 
     // If there are conditional program points, add the sample there instead
     if (has_splitters()) {
-      assert splitters != null; // guaranteed by call te has_splitters
+      assert splitters != null; // guaranteed by call to has_splitters
       for (PptSplitter ppt_split : splitters) {
         ppt_split.add_bottom_up(vt, count);
       }
@@ -2670,7 +2670,9 @@ public class PptTopLevel extends Ppt {
 
   public void addConditions(Splitter[] splits) {
 
-    debugConditional.fine("Applying splits to " + name());
+    debugConditional.fine("Applying "
+                          + UtilMDE.nplural(((splits == null) ? 0 : splits.length), "split")
+                          + " to " + name());
 
     if ((splits == null) || (splits.length == 0)) {
       debugConditional.fine("No splits for " + name());
@@ -3508,7 +3510,8 @@ public class PptTopLevel extends Ppt {
 
     // If we don't have any children, there is nothing to do.
     if (children.size() == 0) {
-      assert equality_view != null : this;
+      assert equality_view != null
+        : "children.size() == 0 and equality_view == null for " + this;
       return;
     }
 
