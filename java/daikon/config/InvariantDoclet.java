@@ -358,7 +358,14 @@ public class InvariantDoclet
           int i = fullname.lastIndexOf('.');
           @SuppressWarnings("signature") // application invariant, substring
           /*@ClassGetName*/ String classname = fullname.substring(0, i);
-          Class<?> c = UtilMDE.classForName(classname);
+          Class<?> c;
+          try {
+            c = UtilMDE.classForName(classname);
+          } catch (Throwable e) {
+            System.err.printf("Exception in UtilMDE.classForName(%s): %s",
+                              fullname, e);
+            return -1;
+          }
           Field f = c.getField (enable_name);
           @SuppressWarnings("nullness") // f has boolean type, so result is non-null Boolean
           /*@NonNull*/ Object value = f.get(null);
