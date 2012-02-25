@@ -38,7 +38,8 @@ public class SplitterFactory {
    * Splitters.  This can be the full path name or whatever is used on
    * the commandline.
    **/
-  public static String dkconfig_compiler = "javac";
+  public static String dkconfig_compiler
+    = "javac -classpath " + new File(System.getenv("DAIKONDIR"), "daikon.jar");
 
   /**
    * Positive integer.  Specifies the Splitter compilation timeout, in
@@ -188,11 +189,16 @@ public class SplitterFactory {
     for (int i = 0; i < splitterObjects.length; i++) {
       fileNames.add(splitterObjects[i].getFullSourcePath());
     }
+    String errorOutput = "";
     try {
-      compileFiles(fileNames);
+      errorOutput = compileFiles(fileNames);
     } catch (IOException ioe) {
       System.out.println("Error while compiling Splitter files: ");
       debugPrintln(ioe.toString());
+    }
+    if (errorOutput != "") {    // interned
+      System.out.println("Errors while compiling Splitter files: ");
+      System.out.println(errorOutput);
     }
     SplitterLoader loader = new SplitterLoader();
     for (int i = 0; i < splitterObjects.length; i++) {
@@ -200,7 +206,7 @@ public class SplitterFactory {
     }
   }
 
-  private static void compileFiles(List<String> fileNames) throws IOException {
+  private static String compileFiles(List<String> fileNames) throws IOException {
     // We delay setting fileCompiler until now because we want to permit
     // the user to set the dkconfig_compiler variable.  Note that our
     // timeout is specified in seconds, but the parameter to FileCompiler
@@ -209,7 +215,7 @@ public class SplitterFactory {
       fileCompiler = new FileCompiler(dkconfig_compiler,
                                       1000 * (long) dkconfig_compile_timeout);
     }
-    fileCompiler.compileFiles(fileNames);
+    return fileCompiler.compileFiles(fileNames);
   }
 
 
