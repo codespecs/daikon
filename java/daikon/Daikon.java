@@ -1619,6 +1619,8 @@ public final class Daikon {
       create_splitters(spinfo_files);
       System.out.print(" (read ");
       System.out.print(UtilMDE.nplural(spinfo_files.size(), "spinfo file"));
+      System.out.print(" , ");
+      System.out.print(UtilMDE.nplural(parsedSplitters.size(), "splitter"));
       System.out.println(")");
     } catch (IOException e) {
       System.out.println();
