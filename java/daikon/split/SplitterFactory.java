@@ -189,14 +189,14 @@ public class SplitterFactory {
     for (int i = 0; i < splitterObjects.length; i++) {
       fileNames.add(splitterObjects[i].getFullSourcePath());
     }
-    String errorOutput = "";
+    String errorOutput = null;
     try {
       errorOutput = compileFiles(fileNames);
     } catch (IOException ioe) {
       System.out.println("Error while compiling Splitter files: ");
       debugPrintln(ioe.toString());
     }
-    if (errorOutput != "") {    // interned
+    if (errorOutput != null) {
       System.out.println("Errors while compiling Splitter files: ");
       System.out.println(errorOutput);
     }
