@@ -207,11 +207,11 @@ Configuration options
 
 Conditional invariants and implications
 
-* Splitter info file::          
+* Splitter info file format::   
 * Indiscriminate splitting::    
 * Example splitter info file::  
 
-Splitter info file
+Splitter info file format
 
 * Program point sections::      
 * Replacement sections::        
@@ -337,7 +337,7 @@ Problems running Daikon
 * Can't run Daikon::            
 * Too much output::             
 * Missing output invariants::   
-* True invariants are not reported::  
+* True invariants are not reported due to output filters::  
 * No samples::                  
 * No return from procedure::    
 * Unsupported class version::   
@@ -2984,13 +2984,13 @@ the splitter info file, and the configuration option
 non-zero value (see @ref{List of configuration options}).
 
 @menu
-* Splitter info file::          
+* Splitter info file format::   
 * Indiscriminate splitting::    
 * Example splitter info file::  
 @end menu
 
-@node    Splitter info file, Indiscriminate splitting, Conditional invariants, Conditional invariants
-@subsection Splitter info file
+@node    Splitter info file format, Indiscriminate splitting, Conditional invariants, Conditional invariants
+@subsection Splitter info file format
 @cindex splitter info file
 @cindex .spinfo file
 @cindex spinfo file
@@ -3007,7 +3007,7 @@ sections and replacement sections.
 * Replacement sections::        
 @end menu
 
-@node    Program point sections, Replacement sections, Splitter info file, Splitter info file
+@node    Program point sections, Replacement sections, Splitter info file format, Splitter info file format
 @subsubsection Program point sections
 
 Program point sections have a line specifying a program point name
@@ -3051,7 +3051,7 @@ condition specified by the splitter in each of Daikon's output
 formats, to allow the splitting condition to be used as a dummy
 invariant.
 
-@node    Replacement sections,  , Program point sections, Splitter info file
+@node    Replacement sections,  , Program point sections, Splitter info file format
 @subsubsection Replacement sections
 
 Ordinarily, a splitting condition may not invoke user-defined methods,
@@ -3073,7 +3073,7 @@ of @var{procedurei}.  In each condition, Daikon replaces procedure
 calls by their replacements.  A replace section may appear anywhere in
 the splitter info file.
 
-@node    Indiscriminate splitting, Example splitter info file, Splitter info file, Conditional invariants
+@node    Indiscriminate splitting, Example splitter info file, Splitter info file format, Conditional invariants
 @subsection Indiscriminate splitting
 
 Ordinarily, each condition in an @file{.spinfo} file gives rise to
@@ -8259,7 +8259,7 @@ understand Daikon's operation; @xref{Daikon debugging options}.
 * Can't run Daikon::            
 * Too much output::             
 * Missing output invariants::   
-* True invariants are not reported::  
+* True invariants are not reported due to output filters::  
 * No samples::                  
 * No return from procedure::    
 * Unsupported class version::   
@@ -8336,21 +8336,20 @@ useful:  the former tell you about your program, and the latter tell you
 about your test suite (and how to improve it!).
 
 
-@node Missing output invariants, True invariants are not reported, Too much output, Daikon problems
+@node Missing output invariants, True invariants are not reported due to output filters, Too much output, Daikon problems
 @subsection Missing output invariants
 
-Daikon will sometimes not output invariants that you might expect it to.  Here 
-are some reasons why this may happen:
+Daikon may sometimes fail to output invariants that you expect it to output.
+Here are some reasons why this may happen:
 
 @itemize
 @item There is a sample that violates the invariant
-@item The invariant is true, but does not pass one of the output filters.
+@item The invariant is true, but does not pass one of the output filters
+(@pxref{True invariants are not reported due to output filters}).
 @item One or more of the variables in the invariant always has the same
 value as another variable.  Daikon only prints invariants over one
 variable (the leader) from the set of equal variables (@pxref{Equal variables}).
 @item The program point had no samples (@pxref{No samples}).
-@item The invariant is true, but Daikon does not report it (@pxref{True
-invariants are not reported}).
 @end itemize
 
 There are two command-line options (@option{--disc_reason} and @option{--track}) that
@@ -8367,8 +8366,8 @@ to try the option on a similar invariant that is printed to make sure
 that each is specified correctly.
 
 
-@node    True invariants are not reported, No samples, Missing output invariants, Daikon problems
-@subsection True invariants are not reported
+@node    True invariants are not reported due to output filters, No samples, Missing output invariants, Daikon problems
+@subsection True invariants are not reported due to output filters
 
 Sometimes, Daikon does not report an invariant, even though Daikon has
 computed that the invariant is true throughout the sample data.  Daikon
@@ -8409,7 +8408,7 @@ other variables (@pxref{Equal variables}).
 @end itemize
 
 
-@node    No samples, No return from procedure, True invariants are not reported, Daikon problems
+@node    No samples, No return from procedure, True invariants are not reported due to output filters, Daikon problems
 @subsection No samples and no output
 
 @cindex no output from Daikon
@@ -8730,7 +8729,7 @@ true in the longer ones.
 Even though fewer invariants are true on the second execution, Daikon may
 report invariants that it did not report on the first execution.
 The invariants were true on the first execution, but were not reported
-by Daikon.  @ref{True invariants are not reported} describes why this
+by Daikon.  @ref{True invariants are not reported due to output filters} describes why this
 might happen.
 
 
