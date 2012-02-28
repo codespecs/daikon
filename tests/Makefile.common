@@ -208,8 +208,9 @@ ECLAT_SCRATCH = $(SCRATCH_FOR_DAIKON_BASE)/$(PROJECT)_eclat
 # CP_PARENTS := cp -pf --parents
 CP_PARENTS := rsync -aR
 
-# Must use Java 1.5 or later.  On windows we use a script that converts
-# the unix style pathnames in this makefile to windows pathnames.
+# Must use Java 1.5 or later.
+# On Cygwin, we use a script that converts the Unix-style pathnames in this
+# makefile to Windows pathnames.
 # On Darwin, java/javac aren't in a standard JDK directory, so we presume
 # they are on the path.
 ifeq (cygwin, $(OSTYPE))
