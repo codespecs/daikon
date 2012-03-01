@@ -1,12 +1,14 @@
 ### User customizations
 
+DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
+
 # Put user-specific changes (such as changes to the JAVAC variable:
 #   JAVAC ?= jikes -g +E +F
 # ) in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
-### DAIKONDIR and DAIKONBIN need to be set early, because they are used below.
+DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
 
 # Test that the directory exists.  There must be a better way to do this.
 DAIKONDIR:=$(wildcard $(DAIKONDIR))
@@ -31,32 +33,39 @@ USER ?= daikonbuild
 #  - On Windows, make sure that find is the Unix find and not the Windows find
 #
 ifeq (cygwin,$(OSTYPE))
+else
+  UNAME := $(shell uname)
+  ifeq (CYGWIN,$(findstring CYGWIN,$(UNAME)))
+    # OSTYPE is a bash variable, not an environment variable.  Set it if necessary
+    OSTYPE := cygwin
+  endif
+endif
+ifeq (cygwin,$(OSTYPE))
   FIND_VERSION := $(shell find -version)
   ifneq (GNU,$(findstring GNU,$(FIND_VERSION)))
     $(error the find command in the path must be the Linux(GNU) find $(FIND_VERSION))
   endif
-else
-  UNAME := $(shell uname)
-  ifeq (CYGWIN,$(findstring CYGWIN,$(UNAME)))
-    $(error uname returns '$(UNAME)', but OSTYPE is not 'cygwin')
-  endif
 endif
 
-# For debugging, uncomment this line, or do:  JAVAC="javac -verbose" make
-# JAVAC ?= javac -verbose
+# For debugging, add -verbose flag to javac command
 
-JAVAC ?= javac
-# Add flags like "-source 5" or "-target 5" to JAVAC_TARGET_FLAGS.
-JAVAC_ARGS ?= -g ${JAVAC_TARGET_FLAGS}
-
-JAVADOC ?= javadoc
-
-JAR ?= jar
-ifeq (cygwin,$(OSTYPE))
-  JAVA ?= $(PLUMEBIN)/java-cygwin -ea -cp "${CLASSPATH}"
+ifeq (cygwin, $(OSTYPE))
+  ## Make the classpath explicit on the command line so it can be processed by *-cygwin
+  JAVA ?= ${PLUMEBIN}/java-cygwin -ea -classpath "${CLASSPATH}"
+  JAVAC ?= ${PLUMEBIN}/javac-cygwin -classpath "${CLASSPATH}"
+  JAVADOC ?= ${PLUMEBIN}/javadoc-cygwin -classpath "${CLASSPATH}"
+  JAR ?= ${JAVA_HOME}/bin/jar
 else
   JAVA ?= java -ea
+  # JAVAC ?= javac -g -Xlint:unchecked
+  # JAVAC ?= jikes -g +E +F
+  JAVAC ?= javac
+  JAVADOC ?= javadoc
+  JAR ?= jar
 endif
+
+# Add flags like "-source 5" or "-target 5" to JAVAC_TARGET_FLAGS.
+JAVAC_ARGS ?= -g ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
@@ -120,14 +129,15 @@ ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
   CLASSPATH := $(CLASSPATH):${JAVA_HOME}/lib/tools.jar:${JAVA_HOME}/jre/lib/rt.jar
 endif
 
-# On cygwin, translate the classpath to windows format.  Only do so if
-# this has not already been done (which is determined by looking for
-# semicolons (;) in the classpath
-ifeq (cygwin,$(OSTYPE))
-  ifneq (;,$(findstring ;,$(CLASSPATH)))
-    CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
-  endif
-endif
+## Not necessary due to use of *-cygwin versions of Java programs.
+# # On cygwin, translate the classpath to windows format.  Only do so if
+# # this has not already been done (which is determined by looking for
+# # semicolons (;) in the classpath
+# ifeq (cygwin,$(OSTYPE))
+#   ifneq (;,$(findstring ;,$(CLASSPATH)))
+#     CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
+#   endif
+# endif
 
 export CLASSPATH
 
