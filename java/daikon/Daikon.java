@@ -1915,6 +1915,7 @@ public final class Daikon {
 
     // Initialize the partial order hierarchy
     debugProgress.fine("Init Hierarchy ... ");
+    assert FileIO.new_decl_format != null : "@SuppressWarnings(nullness): read data, so new_decl_format is set";
     if (FileIO.new_decl_format)
       PptRelation.init_hierarchy_new (all_ppts);
     else

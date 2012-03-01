@@ -798,6 +798,7 @@ public final class FileIO {
     return input_lang;
   }
 
+  /*@AssertNonNullAfter("new_decl_format")*/
   private static void read_decl_version (ParseState state, String line)
     throws IOException {
     Scanner scanner = new Scanner (line);
@@ -1523,6 +1524,7 @@ public final class FileIO {
    */
   // TODO:  For clarity, this should perhaps return its side-effected argument.
   /*@NonNullOnEntry("FileIO.data_trace_state")*/
+  // not guaranteed: File might be empty  AssertNonNullAfter("FileIO.new_decl_format")
   public static void read_data_trace_record (ParseState state)
     throws IOException {
 
