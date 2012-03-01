@@ -998,7 +998,8 @@ and the Daikon output is written to the terminal.
 The Daikon distribution contains some sample programs that will help
 you get practice in running Daikon.
 
-To detect invariants in the StackAr sample program, perform the following steps.
+To detect invariants in the StackAr sample program, perform the
+following steps after installing Daikon (@pxref{Installing Daikon}).
 
 @enumerate
 @item
