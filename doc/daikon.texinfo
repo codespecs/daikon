@@ -9042,9 +9042,11 @@ Exception in thread "main" java.lang.VerifyError:
 @end smallexample
 @noindent
 then the problem is most likely that your classpath contains a version
-of the BCEL library (@file{bcel.jar}) that is not compatible with Java
-5.  You should either remove that version of BCEL from your classpath,
-or you should ensure that it appears after @file{daikon.jar}.  (If you
+of the BCEL library that is not compatible with Java 5.  The
+incompatible version might appear in @file{bcel.jar}, in Java's
+@file{rt.jar}, or elsewhere.  You should either remove that version of
+BCEL from your classpath, or you should ensure that it appears after
+@file{daikon.jar}, which contains its own version of BCEL@.  (If you
 are running Daikon from sources rather than from @file{daikon.jar}, then
 ensure that @file{$DAIKONDIR/java/lib/bcel.jar} is the first version of
 BCEL on your classpath.)
