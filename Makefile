@@ -1,7 +1,10 @@
+DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST))))
+
 # Put user-specific changes in your own Makefile.user file in this directory.
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
+DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
 
 ##########################################################################
 ### Variables
@@ -119,8 +122,11 @@ RSYNC_AR := rsync -aR
 JAVAC ?= javac -target 5
 
 # A good alternative for Makefile.user is: hg fetch
-# When disconnected from network, change this to a no-op.
+# When disconnected from network, change this to a no-op, or (better) just
+# set NONETWORK to true.
 HG_PULL_U ?= hg pull -u
+# Example Makefile.user line, on cygwin: HG_OPTIONS=--insecure
+HG_OPTIONS ?=
 
 JUNIT_VERSION := junit3.8.1
 
@@ -187,7 +193,7 @@ VALGRIND_ARCH := x86
 endif
 
 ../fjalar/auto-everything.sh:
-	cd .. && hg clone https://code.google.com/p/fjalar/ fjalar
+	cd .. && hg clone ${HG_OPTIONS} https://code.google.com/p/fjalar/ fjalar
 	touch $@
 
 kvasir/fjalar/Makefile.in: ../fjalar/auto-everything.sh
@@ -647,12 +653,12 @@ showvars:
 
 plume-lib:
 	rm -rf java/utilMDE java/lib/utilMDE.jar
-	hg clone https://code.google.com/p/plume-lib/ plume-lib
+	hg clone ${HG_OPTIONS} https://code.google.com/p/plume-lib/ plume-lib
 
 .PHONY: plume-lib-update
 plume-lib-update: plume-lib
 ifndef NONETWORK
-	(cd plume-lib; ${HG_PULL_U})
+	(cd plume-lib; ${HG_PULL_U} ${HG_OPTIONS})
 endif
 
 # plume.jar is now checked in.
