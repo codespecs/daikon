@@ -758,6 +758,7 @@ public final class FileIO {
       aux);
   }
 
+  /*@NonNullOnEntry("FileIO.new_decl_format")*/
   private static int read_var_comparability (ParseState state, String line)
     throws IOException {
 
@@ -3047,6 +3048,7 @@ public final class FileIO {
   }
 
   /** Returns whether the line is the start of a ppt declaration **/
+  /*@NonNullOnEntry("FileIO.new_decl_format")*/
   private static boolean is_declaration_header (String line) {
     if (new_decl_format)
       return (line.startsWith ("ppt "));
