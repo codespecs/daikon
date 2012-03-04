@@ -179,6 +179,9 @@ public final class FileIO {
 
   public static final SimpleLog debug_decl = new SimpleLog(false);
 
+  // Are these supposed to be printed like Daikon.TerminationMessage, or
+  // intended to indicate internal Daikon errors, or both?  There is no
+  // documentation of this.  The latter ("both") would be bad design.
   /** Errors while processing ppt declarations */
   public static class DeclError extends IOException {
 
@@ -188,11 +191,31 @@ public final class FileIO {
       super (msg);
     }
 
+    public DeclError (String msg, Throwable cause) {
+      super (msg, cause);
+    }
+
     public static DeclError detail (ParseState state, String format,
+                                    /*@Nullable*/ Object... args) {
+       String msg = String.format (format, args)
+         + state.line_file_message();
+      return new DeclError (msg);
+    }
+
+    public static DeclError detail (ParseState state, Throwable cause) {
+      String msg = cause.getMessage()
+        + state.line_file_message();
+      if (msg.startsWith("null at")) {
+        msg = msg.substring(5);
+      }
+      return new DeclError (msg, cause);
+    }
+
+    public static DeclError detail (ParseState state, Throwable cause, String format,
                                     /*@Nullable*/ Object... args) {
       String msg = String.format (format, args)
         + state.line_file_message();
-      return new DeclError (msg);
+      return new DeclError (msg, cause);
     }
   }
 
@@ -383,9 +406,7 @@ public final class FileIO {
           try {
             vardef.checkRep();  // make sure the previous variable is ok
           } catch (AssertionError e) {
-            String msg = e.getMessage();
-            if (msg == null) { throw e; }
-            decl_error (state, msg);
+            decl_error (state, e);
           }
           vardef = new VarDefinition (state, scanner);
           if (varmap.containsKey (vardef.name))
@@ -401,9 +422,7 @@ public final class FileIO {
       try {
         vardef.checkRep();
       } catch (AssertionError e) {
-        String msg = e.getMessage();
-        if (msg == null) { throw e; }
-        decl_error (state, msg);
+        decl_error (state, e);
       }
     }
 
@@ -1603,7 +1622,7 @@ public final class FileIO {
             try {
               Daikon.init_ppt(state.ppt, state.all_ppts);
             } catch (Exception e) {
-              decl_error (state, "unexpected error: %s", e);
+              decl_error (state, e);
             }
           }
         }
@@ -1690,7 +1709,8 @@ public final class FileIO {
         nonce_exists = NONCE_HEADER.equals(nonce_header_peekahead);
       }
       if (nonce_exists) {
-        String nonce_header = reader.readLine();   // read & discard header
+        @SuppressWarnings("nullness") // nonce_exists is true, so readLine() returns non-null
+        /*@NonNull*/ String nonce_header = reader.readLine();   // read & discard header
         assert NONCE_HEADER.equals(nonce_header);
         String nonce_number = reader.readLine();
         if (nonce_number == null) {
@@ -2973,7 +2993,7 @@ public final class FileIO {
       try {
         static_constant_value = rep_type.parse_value (constant_str, null, "parse_constant");
       } catch (Error e) {
-        decl_error (state, e.getMessage());
+        decl_error (state, e);
       }
     }
 
@@ -3047,6 +3067,15 @@ public final class FileIO {
   private static void decl_error (ParseState state, String format,
                                   /*@Nullable*/ Object... args) throws DeclError {
     throw DeclError.detail (state, format, args);
+  }
+
+  private static void decl_error (ParseState state, Throwable cause, String format,
+                                  /*@Nullable*/ Object... args) throws DeclError {
+    throw DeclError.detail (state, cause, format, args);
+  }
+
+  private static void decl_error (ParseState state, Throwable cause) throws DeclError {
+    throw DeclError.detail (state, cause);
   }
 
   /** Returns whether the line is the start of a ppt declaration **/
