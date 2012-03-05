@@ -678,7 +678,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected Divides instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    protected Divides instantiate_dyn (/*>>> @Prototype Divides this,*/ PptSlice slice) {
       return new Divides (slice, swap);
     }
 
@@ -865,7 +865,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
-    protected Square instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    protected Square instantiate_dyn (/*>>> @Prototype Square this,*/ PptSlice slice) {
       return new Square (slice, swap);
     }
 
@@ -938,7 +938,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected ZeroTrack instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    protected ZeroTrack instantiate_dyn (/*>>> @Prototype ZeroTrack this,*/ PptSlice slice) {
       return new ZeroTrack (slice, swap);
     }
 
@@ -1020,7 +1020,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected BitwiseComplement instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    protected BitwiseComplement instantiate_dyn (/*>>> @Prototype BitwiseComplement this,*/ PptSlice slice) {
       return new BitwiseComplement (slice);
     }
 
@@ -1083,7 +1083,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    public BitwiseSubset instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    public BitwiseSubset instantiate_dyn (/*>>> @Prototype BitwiseSubset this,*/ PptSlice slice) {
       return new BitwiseSubset (slice, swap);
     }
 
@@ -1183,7 +1183,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    public BitwiseAndZero instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    public BitwiseAndZero instantiate_dyn (/*>>> @Prototype BitwiseAndZero this,*/ PptSlice slice) {
       return new BitwiseAndZero (slice);
     }
 
@@ -1270,7 +1270,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected ShiftZero instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    protected ShiftZero instantiate_dyn (/*>>> @Prototype ShiftZero this,*/ PptSlice slice) {
       return new ShiftZero (slice, swap);
     }
 
@@ -1355,7 +1355,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() { return dkconfig_enabled; }
 
-    protected SubString instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+    protected SubString instantiate_dyn (/*>>> @Prototype SubString this,*/ PptSlice slice) {
       return new SubString (slice, swap);
     }
 
