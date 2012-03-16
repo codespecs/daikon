@@ -413,11 +413,18 @@ update-doc-dist-version:
 update-dist-version-file:
 	perl -wpi -e 's/\.(-?[0-9]+)$$/"." . ($$1+1)/e' doc/VERSION
 
+JAR_FILES = \
+$(INV_DIR)/java/lib/bcel.jar \
+$(INV_DIR)/java/lib/commons-io.jar \
+$(INV_DIR)/java/lib/java-getopt.jar \
+$(INV_DIR)/java/lib/junit.jar \
+$(INV_DIR)/java/lib/plume.jar
+
 ## Problem: "make -C java veryclean; make daikon.jar" fails, as does
 ## "make -C java clean; make daikon.jar".
 ## It seems that one must do "make compile" before "make daikon.jar".
 # Perhaps daikon.jar shouldn't include JUnit or the test files.
-daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
+daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $(JAR_FILES)
 	-rm -rf $@ ${TMPDIR}/daikon-jar
 	install -d ${TMPDIR}/daikon-jar
 	# Compile Daikon and copy the resulting class files
@@ -427,10 +434,10 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES))
 		-exec ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar \;
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
-	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/commons-io.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/plume.jar
 	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
