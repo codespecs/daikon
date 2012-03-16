@@ -233,7 +233,9 @@ public final class PrintInvariants {
       "  --" + Daikon.debug_SWITCH + " logger",
       "      Turns on the specified debug logger",
       "  --" + Daikon.track_SWITCH + " class<var1,var2,var3>@ppt",
-      "      Print debug info on the specified invariant class, vars, and ppt"
+      "      Print debug info on the specified invariant class, vars, and ppt",
+      "  --" + Daikon.wrap_xml_SWITCH,
+      "      Print extra info about invariants, and wrap in XML tags"
       );
 
   /**
@@ -278,6 +280,7 @@ public final class PrintInvariants {
       new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(Daikon.wrap_xml_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.PrintInvariants", args, "h", longopts);
     int c;
@@ -341,6 +344,8 @@ public final class PrintInvariants {
             throw new Daikon.TerminationMessage ("Error parsing track argument '"
                                 + g.getOptarg() + "' - " + error);
           }
+        } else if (Daikon.wrap_xml_SWITCH.equals (option_name)) {
+            wrap_xml = true;
         } else {
           throw new RuntimeException("Unknown long option received: " +
                                      option_name);

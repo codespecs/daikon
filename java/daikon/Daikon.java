@@ -341,6 +341,7 @@ public final class Daikon {
   public static final String track_SWITCH = "track";
   public static final String disc_reason_SWITCH = "disc_reason";
   public static final String mem_stat_SWITCH = "mem_stat";
+  public static final String wrap_xml_SWITCH = "wrap_xml";
 
   public static /*@LazyNonNull*/ File server_dir = null; //YOAV: the directory from which we read the dtrace files
 
