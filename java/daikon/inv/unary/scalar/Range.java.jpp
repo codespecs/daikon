@@ -724,7 +724,7 @@ public abstract class RANGE extends SUPERCLASS {
     }
 
     /** instantiates the invariant on the specified slice **/
-    public Bound0_63 instantiate_dyn (/*>>> @Prototype Even this,*/ PptSlice slice) {
+    public Bound0_63 instantiate_dyn (/*>>> @Prototype Bound0_63 this,*/ PptSlice slice) {
       return new Bound0_63 (slice);
     }
 

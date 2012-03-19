@@ -727,7 +727,7 @@ public abstract /*@Interned*/ class VarInfoName
    * Returns a name for the size of this (this object should be a
    * sequence).  Form is like "size(a[])" or "a.length".
    **/
-  public VarInfoName applySize(/*>>> @Interned Simple this*/) {
+  public VarInfoName applySize(/*>>> @Interned VarInfoName this*/) {
     // The simple approach:
     //   return (new SizeOf((Elements) this)).intern();
     // is wrong because this might be "orig(a[])".
@@ -766,7 +766,7 @@ public abstract /*@Interned*/ class VarInfoName
    * and upper bounds, which can be subtracted to get one less than
    * its size.
    */
-  public /*@Interned*/ VarInfoName[] getSliceBounds(/*>>> @Interned Simple this*/) {
+  public /*@Interned*/ VarInfoName[] getSliceBounds(/*>>> @Interned VarInfoName this*/) {
     VarInfoName vin = this;
     boolean inPrestate = false;
     if (vin instanceof Prestate) {
@@ -896,7 +896,7 @@ public abstract /*@Interned*/ class VarInfoName
    * Returns a name for a unary function applied to this object.
    * The result is like "sum(this)".
    **/
-  public VarInfoName applyFunction(/*>>> @Interned SizeOf this,*/ String function) {
+  public VarInfoName applyFunction(/*>>> @Interned VarInfoName this,*/ String function) {
     return (new FunctionOf(function, this)).intern();
   }
 
@@ -1086,7 +1086,7 @@ public abstract /*@Interned*/ class VarInfoName
    * Returns a name for the intersection of with another sequence, like
    * "intersect(a[], b[])".
    **/
-  public VarInfoName applyIntersection(/*>>> @Interned FunctionOfN this,*/ VarInfoName seq2) {
+  public VarInfoName applyIntersection(/*>>> @Interned VarInfoName this,*/ VarInfoName seq2) {
     assert seq2 != null;
     return (new Intersection(this, seq2)).intern();
   }
@@ -1111,7 +1111,7 @@ public abstract /*@Interned*/ class VarInfoName
    * Returns a name for the union of this with another sequence, like
    * "union(a[], b[])".
    **/
-  public VarInfoName applyUnion(/*>>> @Interned Intersection this,*/ VarInfoName seq2) {
+  public VarInfoName applyUnion(/*>>> @Interned VarInfoName this,*/ VarInfoName seq2) {
     assert seq2 != null;
     return (new Union(this, seq2)).intern();
   }
@@ -1138,7 +1138,7 @@ public abstract /*@Interned*/ class VarInfoName
    * Returns a 'getter' operation for some field of this name, like
    * a.foo if this is a.
    **/
-  public VarInfoName applyField(/*>>> @Interned Union this,*/ String field) {
+  public VarInfoName applyField(/*>>> @Interned VarInfoName this,*/ String field) {
     return (new Field(this, field)).intern();
   }
 
@@ -1320,7 +1320,7 @@ public abstract /*@Interned*/ class VarInfoName
    * Returns a name for the type of this object; form is like
    * "this.getClass()" or "\typeof(this)".
    **/
-  public VarInfoName applyTypeOf(/*>>> @Interned Field this*/) {
+  public VarInfoName applyTypeOf(/*>>> @Interned VarInfoName this*/) {
     return (new TypeOf(this)).intern();
   }
 
@@ -1382,7 +1382,7 @@ public abstract /*@Interned*/ class VarInfoName
    * Returns a name for a the prestate value of this object; form is
    * like "orig(this)" or "\old(this)".
    **/
-  public VarInfoName applyPrestate(/*>>> @Interned TypeOf this*/) {
+  public VarInfoName applyPrestate(/*>>> @Interned VarInfoName this*/) {
     if (this instanceof Poststate) {
       return ((Poststate)this).term;
     } else if ((this instanceof Add) && ((Add)this).term instanceof Poststate) {
@@ -1472,7 +1472,7 @@ public abstract /*@Interned*/ class VarInfoName
    * Returns a name for a the poststate value of this object; form is
    * like "new(this)" or "\new(this)".
    **/
-  public VarInfoName applyPoststate(/*>>> @Interned Prestate this*/) {
+  public VarInfoName applyPoststate(/*>>> @Interned VarInfoName this*/) {
     return (new Poststate(this)).intern();
   }
 
@@ -1527,7 +1527,7 @@ public abstract /*@Interned*/ class VarInfoName
    * Returns a name for the this term plus a constant, like "this-1"
    * or "this+1".
    **/
-  public VarInfoName applyAdd(/*>>> @Interned Poststate this,*/ int amount) {
+  public VarInfoName applyAdd(/*>>> @Interned VarInfoName this,*/ int amount) {
     if (amount == 0) {
       return this;
     } else {
@@ -1592,12 +1592,12 @@ public abstract /*@Interned*/ class VarInfoName
   }
 
   /** Returns a name for the decrement of this term, like "this-1". **/
-  public VarInfoName applyDecrement(/*>>> @Interned Add this*/) {
+  public VarInfoName applyDecrement(/*>>> @Interned VarInfoName this*/) {
     return applyAdd(-1);
   }
 
   /** Returns a name for the increment of this term, like "this+1". **/
-  public VarInfoName applyIncrement(/*>>> @Interned Add this*/) {
+  public VarInfoName applyIncrement(/*>>> @Interned VarInfoName this*/) {
     return applyAdd(+1);
   }
 
@@ -1605,7 +1605,7 @@ public abstract /*@Interned*/ class VarInfoName
    * Returns a name for the elements of a container (as opposed to the
    * identity of the container) like "this[]" or "(elements this)".
    **/
-  public VarInfoName applyElements(/*>>> @Interned Add this*/) {
+  public VarInfoName applyElements(/*>>> @Interned VarInfoName this*/) {
     return (new Elements(this)).intern();
   }
 
@@ -1734,7 +1734,7 @@ public abstract /*@Interned*/ class VarInfoName
    * Returns a name for an element selected from a sequence, like
    * "this[i]".
    **/
-  public VarInfoName applySubscript(/*>>> @Interned Elements this,*/ VarInfoName index) {
+  public VarInfoName applySubscript(/*>>> @Interned VarInfoName this,*/ VarInfoName index) {
     assert index != null;
     ElementsFinder finder = new ElementsFinder(this);
     Elements elems = finder.elems();
@@ -1834,7 +1834,7 @@ public abstract /*@Interned*/ class VarInfoName
    * like "this[i..j]".  If an endpoint is null, it means "from the
    * start" or "to the end".
    **/
-  public VarInfoName applySlice(/*>>> @Interned Subscript this,*/ /*@Nullable*/ VarInfoName i, /*@Nullable*/ VarInfoName j) {
+  public VarInfoName applySlice(/*>>> @Interned VarInfoName this,*/ /*@Nullable*/ VarInfoName i, /*@Nullable*/ VarInfoName j) {
     // a[] -> a[index..]
     // orig(a[]) -> orig(a[post(index)..])
     ElementsFinder finder = new ElementsFinder(this);
