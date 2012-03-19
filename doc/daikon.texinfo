@@ -8661,6 +8661,10 @@ Annotate (@pxref{Annotate}) automatically ignores unformattable invariants.
 It can sometimes be slow to create a trace for Daikon to analyze, and it
 can be slow for Daikon to analyze that trace.
 
+If Daikon runs too slowly, the problem may be that Daikon is
+spending too much time collecting, then outputting, large amounts of
+data about your program execution.
+
 For additional details on improving Daikon's performance, see @ref{Out of
 memory}, and @ref{Large dtrace files}.
 
