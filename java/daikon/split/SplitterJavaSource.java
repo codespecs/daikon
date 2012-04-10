@@ -283,8 +283,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     string = "(" + string + ")";
     for (int i = 0; i < reservedWords.length; i++) {
       String reservedWord = reservedWords[i];
-      @SuppressWarnings("regex") // partial regex concatenation
-      /*@Regex(3)*/ Pattern p = Pattern.compile("([\\W])(" + reservedWord + ")([\\W])");
+      Pattern p = Pattern.compile("([\\W])(" + reservedWord + ")([\\W])");
       Matcher m = p.matcher(string);
       while (m.find()) {
         string = m.replaceFirst(m.group(1) + "daikon" +reservedWord + m.group(3));
