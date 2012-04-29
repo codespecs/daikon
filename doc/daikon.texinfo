@@ -8533,15 +8533,23 @@ in memory.  The number of invariants created depends on the number of
 program points and the number of variables at each program point.
 In addition to the solutions discussed in @ref{Reducing program points},
 you can try increasing the amount of memory available to Java
-with the @option{-mx} argument to @command{java}.  (This flag is
+with the @option{-Xmx} argument to @command{java}.  (This flag is
 JVM-specific; see your JVM documentation for details.  For instance,
-its correct name in JDK versions 1.3 and later is @option{-Xmx}.)
+its name in JDK versions 1.2 and earlier is @option{-mx}.)
 However, the value you use should be less your system's total amount
 of physical memory.
 The default may be 64 megabytes or less; to permit use of up to 256
 megabytes, you would run Java like so:
 @example
-java -mx256m ...
+java -Xmx256m ...
+@end example
+
+If you are using Chicory's @option{--daikon} command-line argument to
+run Daikon, then you must separately indicate the amount of memory
+available to Chicory and to Daikon (the latter with Chicory's
+@option{--heap-size} command-line argument).  For example:
+@example
+java -Xmx256m daikon.Chicory --daikon --heap-size=1600m mypackage.MyClass arg1 arg2 arg3
 @end example
 
 When using the Java HotSpot JVM, an additional parameter may need to
