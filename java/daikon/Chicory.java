@@ -55,8 +55,10 @@ public class Chicory {
   @Option ("Treat classes that match the regex as boot classes (do not instrument)")
   public static /*@Nullable*/ Pattern boot_classes = null;
 
-  @Option ("Size of the heap for the target program")
-  public static String heap_size = "500m";
+  // Should perhaps permit specifying the heap for the target program and
+  // for Daikon separately.
+  @Option ("Size of the heap for the target program, and for Daikon if it is run")
+  public static String heap_size = "1000m";
 
   @Option ("Print information about each ppt name as it is created")
   public static boolean debug_ppt_names = false;
