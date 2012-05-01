@@ -932,7 +932,6 @@ public final class Daikon {
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
             }
-            regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
             ppt_regexp = Pattern.compile(regexp_string);
             break;
           } else if (ppt_omit_regexp_SWITCH.equals(option_name)) {
@@ -945,7 +944,6 @@ public final class Daikon {
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + ppt_omit_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
             }
-            regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
             ppt_omit_regexp = Pattern.compile(regexp_string);
             break;
           } else if (var_regexp_SWITCH.equals(option_name)) {
@@ -958,7 +956,6 @@ public final class Daikon {
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
             }
-            regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
             var_regexp = Pattern.compile(regexp_string);
             break;
           } else if (var_omit_regexp_SWITCH.equals(option_name)) {
@@ -971,7 +968,6 @@ public final class Daikon {
             if (!RegexUtil.isRegex(regexp_string)) {
               throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + var_omit_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
             }
-            regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
             var_omit_regexp = Pattern.compile(regexp_string);
             break;
           }
@@ -1160,7 +1156,7 @@ public final class Daikon {
       // Printable String
       proto_invs.add (PrintableString.get_proto());
 
-      // Complete One Of 
+      // Complete One Of
       proto_invs.add (CompleteOneOfString.get_proto());
       proto_invs.add (CompleteOneOfScalar.get_proto());
 
@@ -1715,7 +1711,8 @@ public final class Daikon {
      * setting this.  The stopping happens later, and calls clear() anyway.
      **/
     public boolean shouldStop = false;
-    private DateFormat df;
+    private final DateFormat df;
+    @Override
     public void run() {
       if (dkconfig_progress_delay == -1)
         return;

@@ -116,7 +116,6 @@ public class DtraceDiff {
           if (!RegexUtil.isRegex(regexp_string)) {
             throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.ppt_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
           }
-          regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
           Daikon.ppt_regexp = Pattern.compile(regexp_string);
           break;
         } else if (Daikon.ppt_omit_regexp_SWITCH.equals(option_name)) {
@@ -128,7 +127,6 @@ public class DtraceDiff {
           if (!RegexUtil.isRegex(regexp_string)) {
             throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.ppt_omit_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
           }
-          regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
           Daikon.ppt_omit_regexp = Pattern.compile(regexp_string);
           break;
         } else if (Daikon.var_regexp_SWITCH.equals(option_name)) {
@@ -140,7 +138,6 @@ public class DtraceDiff {
           if (!RegexUtil.isRegex(regexp_string)) {
             throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.var_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
           }
-          regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
           Daikon.var_regexp = Pattern.compile(regexp_string);
           break;
         } else if (Daikon.var_omit_regexp_SWITCH.equals(option_name)) {
@@ -152,7 +149,6 @@ public class DtraceDiff {
           if (!RegexUtil.isRegex(regexp_string)) {
             throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.var_omit_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
           }
-          regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
           Daikon.var_omit_regexp = Pattern.compile(regexp_string);
           break;
         } else if (Daikon.config_SWITCH.equals(option_name)) {
