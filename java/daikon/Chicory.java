@@ -234,7 +234,6 @@ public class Chicory {
       if (!RegexUtil.isRegex(separator)) {
         throw new Daikon.TerminationMessage("Bad regexp " + separator + " for path.separator: " + RegexUtil.regexError(separator));
       }
-      separator = RegexUtil.asRegex(separator);   // @SuppressWarnings("regex") // flow-sensitivity
     }
 
     // Look for ChicoryPremain.jar along the classpath

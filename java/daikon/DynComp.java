@@ -200,11 +200,8 @@ public class DynComp {
     basic.log("separator = %s\n", separator);
     if (separator == null) {
       separator = ";"; //should work for windows at least...
-    } else {
-      if (!RegexUtil.isRegex(separator)) {
-        throw new Daikon.TerminationMessage("Bad regexp " + separator + " for path.separator: " + RegexUtil.regexError(separator));
-      }
-      separator = RegexUtil.asRegex(separator);   // @SuppressWarnings("regex") // flow-sensitivity
+    } else if (!RegexUtil.isRegex(separator)) {
+      throw new Daikon.TerminationMessage("Bad regexp " + separator + " for path.separator: " + RegexUtil.regexError(separator));
     }
 
     // Look for dcomp_premain.jar along the classpath
