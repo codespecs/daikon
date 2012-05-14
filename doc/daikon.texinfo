@@ -3762,7 +3762,7 @@ be equal or not equal to other variables.
 If depth=1, then also @code{MyA.b}, @code{myList.next}, and the integers
 @code{myA.x} and @code{myList.val} would be examined.
 @item
-If depth=2, then also @code{MyA.b.y}, @code{MyA.b.y},
+If depth=2, then also @code{MyA.b.y}, @code{MyA.b.z},
 @code{myList.next.next}, and @code{myList.next.val} would be examined.
 @end itemize
 
