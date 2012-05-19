@@ -832,18 +832,19 @@ show_nullness_java_files:
 intern: check-interning
 interning: check-interning
 check-interning: ${INTERNING_JAVA_FILES} compile
-	${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${INTERNING_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${INTERNING_JAVA_FILES}
 
 # Run the interning checker on all Java files, not just those in the daikon package.
 # For instance, this includes jtb, which is not annotated with @Interned.
 interning-all: check-interning-all
 check-interning-all: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ...
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 signature: check-interning-all
 check-signature: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_SIGNATURE_ARGS} ...
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_SIGNATURE_ARGS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_SIGNATURE_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 check-nullness: check-nullness-all
@@ -873,7 +874,7 @@ check-prototype-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-regex: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_REGEX_ARGS} ...
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_REGEX_ARGS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_REGEX_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 check-igj-all-nostubs: ${ALL_GENERATED_FILES} compile
