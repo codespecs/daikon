@@ -3817,7 +3817,7 @@ class Point @{
 @}
 @end example
 
-I @code{radiusSquared()} has been specified as pure, then for each point
+If @code{radiusSquared()} has been specified as pure, then for each point
 @var{p}, Chicory will output the variables @code{@var{p}.x},
 @code{@var{p}.y}, and @code{@var{p}.radiusSquared()}.  Use of pure
 methods can improve the Daikon output, since they represent information
