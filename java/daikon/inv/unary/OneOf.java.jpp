@@ -355,7 +355,7 @@ public final class ONEOFSCALAR
   }
 
   /** instantiate an invariant on the specified slice **/
-  public ONEOFSCALAR instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+  public ONEOFSCALAR instantiate_dyn (/*>>> @Prototype ONEOFSCALAR this,*/ PptSlice slice) {
     return new ONEOFSCALAR(slice);
   }
 

@@ -4,7 +4,7 @@ package java.lang;
 
 class Object {
 //     Object();
-    Class<?> getClass() @Prototype;
+    Class<?> getClass(@Prototype Object this);
 //     int hashCode();
 //     boolean equals(Object arg0);
 //     protected Object clone() throws CloneNotSupportedException;
