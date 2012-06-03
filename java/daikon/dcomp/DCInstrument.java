@@ -4161,7 +4161,8 @@ class DCInstrument {
           System.out.printf ("param %s %s%n", arg_types[ii], arg_names[ii]);
         for (LocalVariableGen lvg : locals)
           System.out.printf ("local[%d] = %s%n", lvg.getIndex(), lvg);
-        throw new Error(mg.getClassName() + "." + mg + " "
+        throw new Error("first_local > locals.length: "
+                        + mg.getClassName() + "." + mg + " "
                         + first_local + " " + locals.length);
       }
 
