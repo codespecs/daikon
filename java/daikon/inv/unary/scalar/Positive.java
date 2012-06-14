@@ -57,7 +57,7 @@ public class Positive
   }
 
   /** instantiate an invariant on the specified slice **/
-  public Positive instantiate_dyn (PptSlice slice) /*@Prototype*/ {
+  public Positive instantiate_dyn (/*>>> @Prototype Positive this,*/ PptSlice slice) {
     return new Positive(slice);
   }
 
