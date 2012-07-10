@@ -72,7 +72,7 @@ INSTALL ?= /usr/bin/install
 # When type-checking, must use checkers.jar.
 # No harm using it, if available, during ordinary compilation.
 ifdef JSR308
-  CHECKERS ?= ${JSR308}/checker-framework/checkers
+ CHECKERS ?= ${JSR308}/checker-framework/checkers
 endif
 ifdef CHECKERS
   CHECKERSJAR ?= ${CHECKERS}/checkers.jar

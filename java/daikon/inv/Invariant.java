@@ -710,7 +710,7 @@ public abstract class Invariant
     return result;
   }
 
-  public abstract String format_using(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) ;
+  public abstract /*@Pure*/ String format_using(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) ;
 
   /**
    * @return conjuction of mapping the same function of our
@@ -1015,6 +1015,7 @@ public abstract class Invariant
    *
    * @exception RuntimeException if other.getClass() != this.getClass()
    **/
+  /*@Pure*/
   public boolean isSameFormula(/*>>> @Prototype Invariant this,*/ Invariant other) {
     return false;
   }
