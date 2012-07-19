@@ -530,7 +530,7 @@ public class PptRelation implements Serializable {
       // Get a child version of each of the bases of the derivation
       VarInfo[] vp_bases = vp.derived.getBases();
       // TODO: Is this "@Nullable" annotation correct?  (That is, can the
-      // value actually be null?)
+      // element value actually be null?)
       /*@Nullable*/ VarInfo[] child_vp_bases = new VarInfo[vp_bases.length];
       for (int j = 0; j < vp_bases.length; j++)
         child_vp_bases[j] = rel.childVar(vp_bases[j]);
