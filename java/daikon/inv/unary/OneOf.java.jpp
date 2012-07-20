@@ -1776,7 +1776,7 @@ public final class ONEOFSCALAR
 
   /**
    * Setup the invariant with the specified elements.  Normally
-   * used when searching for a specified OneOf.  The elemens of vals
+   * used when searching for a specified OneOf.  The elements of vals
    * are not necessarily interned; this method interns each element.
    */
   public void set_one_of_val (INTARRAY_UNINTERNED vals) {
