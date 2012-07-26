@@ -829,6 +829,8 @@ show_nullness_java_files:
 	@echo DAIKON_JAVA_FILES:
 	@echo ${DAIKON_JAVA_FILES}
 
+check-all: check-interning check-signature check-nullness check-regex
+
 intern: check-interning
 interning: check-interning
 check-interning: ${INTERNING_JAVA_FILES} compile
