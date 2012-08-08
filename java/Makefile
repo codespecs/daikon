@@ -795,7 +795,8 @@ CHECKERS_BOOTCLASSPATH = -Xbootclasspath/p:${CHECKERS}/jdk/jdk.jar
 # JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'
 JAVAC_SIGNATURE_ARGS = -processor checkers.signature.SignatureChecker -implicit:class -Xlint:-processing
-JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing -Alint=advancedchecks
+JAVAC_NULLNESS_RAW_ARGS = -processor checkers.nonnull.NonNullRawnessChecker -implicit:class -Xlint:-processing -Alint=advancedchecks
+JAVAC_NULLNESS_FBC_ARGS = -processor checkers.nonnull.NonNullFbcChecker -implicit:class -Xlint:-processing -Alint=advancedchecks
 ## The "-J-Dcheckers.skipUses='^daikon.Debug'" should really be just for rawness, not for nullness.
 JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src -J-Dcheckers.skipUses='^daikon.Debug'
 JAVAC_PROTOTYPE_ARGS = -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing
@@ -853,19 +854,37 @@ check-nullness: check-nullness-all
 
 check-nullness-all: check-nullness-all-withstubs
 
-check-nullness-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
-	$(MAKE) compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+check-nullness-all-nostubs: check-nullness-raw-all-nostubs check-nullness-fbc-all-nostubs
 
-check-nullness-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+check-nullness-raw-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
+	$(MAKE) compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
+check-nullness-fbc-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
+	$(MAKE) compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
+check-nullness-all-withstubs: check-nullness-raw-all-withstubs check-nullness-fbc-all-withstubs
+
+check-nullness-raw-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
+check-nullness-fbc-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
 
 # Version that issues warnings, not errors.
-check-nullness-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+check-nullness-raw-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
+check-nullness-fbc-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-prototype: check-prototype-all
 
