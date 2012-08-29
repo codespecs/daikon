@@ -2967,20 +2967,22 @@ implications.
 
 In some cases, the default policy of selecting predicates from
 Daikon's output may be insufficient.  For instance, Daikon might not
-detect any invariant equivalent to the splitting condition, if it is
+detect any invariant equivalent to the splitting condition, if the
+splitting condition is
 sufficiently complex or application-specific.  In such situations,
-Daikon can also use the splitting condition itself as the predicate of
-an implication, as what is called a ``dummy invariant''.  A ``dummy
-invariant'' is one whose meaning is not dealt with directly by Daikon;
-instead Daikon knows only how to print the invariant in its output.
-When a tool or a user writes a splitter info file, the file can
-specify a way to print the condition represented by the splitter in
-any of Daikon's output formats.  If the use of dummy invariants is
-enabled, invariants with the supplied output formats will be used as
-the predicates of conditional invariants.
-
-To use dummy invariants, a condition's formatting must be specified in
-the splitter info file, and the configuration option
+Daikon can also use the splitting condition itself, as what is called a
+``dummy invariant''.
+@c @c This information seems irrelevant and not useful at this point in
+@c @c the manual.
+@c   A ``dummy
+@c invariant'' is one whose meaning is not dealt with directly by Daikon;
+@c instead Daikon knows only how to print the invariant in its output.
+@c When a tool or a user writes a splitter info file, the file can
+@c specify a way to print the condition represented by the splitter in
+@c any of Daikon's output formats.  If the use of dummy invariants is
+@c enabled, invariants with the supplied output formats will be used as
+@c the predicates of conditional invariants.
+To use dummy invariants, the configuration option
 @option{daikon.split.PptSplitter.dummy_invariant_level} must be set to a
 non-zero value (see @ref{List of configuration options}).
 
@@ -3275,7 +3277,7 @@ may create a @file{.spinfo} file that mentions a program point named
 mentions a program point named @samp{..foo}.  Such a mismatch will cause
 Daikon to produce no conditional invariants for the given program point.
 This is a bug that needs to be fixed!  (Patches are welcome.)  In the
-meanwhile, you can adjust the @file{.spinfo} file to conform to the
+meanwhile, you can edit the generated @file{.spinfo} file to conform to the
 @file{.dtrace} file's naming conventions.
 
 If you get an error such as
