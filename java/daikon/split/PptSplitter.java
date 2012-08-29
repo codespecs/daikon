@@ -195,12 +195,12 @@ public class PptSplitter implements Serializable {
    * invariants true at each one.  The algorithm divides the invariants
    * into two groups:
    * <ol>
-   *   <li>the "same" invariants are true at both program points, and
-   *   <li>the "different" invariants are all other invariants.
+   *   <li>the "same" invariants:  those that are true at both program points, and
+   *   <li>the "different" invariants:  all other invariants.
    * </ol>
    * The "exclusive" invariants (a subset of the "different" inviariants)
    * are true at one program point, and their negation is true at the other
-   * program point
+   * program point.
    * At the first program point, for each exclusive invariant and each
    * different invariant, create a conditional of the form "exclusive =>
    * different".  Do the same at the second program point.
@@ -233,7 +233,7 @@ public class PptSplitter implements Serializable {
       }
     }
 
-    debug.fine ("Adding Implications for " + parent.name);
+    debug.fine ("add_implications_pair: parent = " + parent.name);
 
     // Maps permuted invariants to their original invariants
     Map<Invariant,Invariant> orig_invs = new LinkedHashMap<Invariant,Invariant>();
@@ -416,7 +416,7 @@ public class PptSplitter implements Serializable {
       return;
     }
 
-    // Remove exclusive invariants from the different invariants list
+    // Remove exclusive invariants from the different invariants list.
     // It would be better not to have added them in the first place,
     // but this is easier for now.
     for (Iterator</*@KeyFor("orig_invs")*/ Invariant[]> ii = different_invs_vec.iterator(); ii.hasNext(); ) {
@@ -614,7 +614,7 @@ public class PptSplitter implements Serializable {
 
   /**
    * Determine which elements of invs1 are the same as elements of invs2.
-   * Result elements are Invariants (from the invs1 list)
+   * Result elements are Invariants (from the invs1 list).
    * All the arguments should be over the same program point.
    */
   Vector</*@Nullable*/ Invariant> same_invariants(Invariants invs1, Invariants invs2) {
@@ -666,9 +666,9 @@ public class PptSplitter implements Serializable {
     // side.  This would have the pleasant side effect of not forcing
     // all of the suppressed invariants to be created before
     // determining implications.
-    if ((orig_cons.isObvious() != null) || orig_cons.is_ni_suppressed())
+    if ((orig_cons.isObvious() != null) || orig_cons.is_ni_suppressed()) {
       return;
-
+    }
 
     // System.out.println("add_implication:");
     // System.out.println("  predicate = " + predicate.format());
@@ -691,10 +691,11 @@ public class PptSplitter implements Serializable {
 
     Implication imp = Implication.makeImplication (ppt, predicate, consequent,
                                                    iff, orig_pred, orig_cons);
-    if (imp == null)
+    if (imp == null) {
       // The predicate is the same as the consequent, or the implication
       // already exists.
       return;
+    }
 
     ppt.joiner_view.addInvariant (imp);
   }
