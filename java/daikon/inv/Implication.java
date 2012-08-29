@@ -31,7 +31,8 @@ public class Implication
   // and orig_right is used in isObvious*.
   /** The original predicate invariant from its original conditional ppt. */
   private Invariant orig_left;
-  /** The original consequent invariant from its original conditional ppt. */
+  /** The original consequent invariant from its original conditional ppt.
+   *  Or, right itself if right is a DummyInvariant from a splitter file.  */
   private Invariant orig_right;
 
   public Invariant predicate() { return left; }
