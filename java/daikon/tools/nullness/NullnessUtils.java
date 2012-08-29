@@ -4,6 +4,10 @@ package daikon.tools.nullness;
  * Utilities class for the Nullness Checker.
  * <p>
  *
+ * To avoid the need to write the NullnessUtils class name, do:
+ * <pre>import static daikon.tools.NullnessUtils.castNonNull;</pre>
+ * <p>
+ *
  * <b>Runtime Dependency</b>
  * <p>
  *
@@ -14,11 +18,13 @@ package daikon.tools.nullness;
  * To eliminate this dependency, you can simply copy this class into your
  * own project.
  */
-@SuppressWarnings("nullness")   // nullness utilities
+// nullness utilities
+// casts look redundant if Nullness Checker is not run
+@SuppressWarnings({"nullness", "cast"})
 public final class NullnessUtils {
 
     private NullnessUtils()
-    { throw new AssertionError("shouldn't be intiantiated"); }
+    { throw new AssertionError("shouldn't be instantiated"); }
 
     /**
      * A method that suppresses warnings from the Nullness Checker.
@@ -59,13 +65,65 @@ public final class NullnessUtils {
      * by using it in a circumstance where its argument can be null.
      * <p>
      *
+     * If the argument is an array, it is recursively checked to ensure that
+     * all elements are non-null.
+     *
      * @param ref a possibly-null reference
      * @return the argument, casted to have the type qualifier @NonNull
      */
     /*@AssertParametersNonNull*/
-    @SuppressWarnings("cast")   // cast looks redundant if Nullness Checker is not run
     public static <T extends /*@Nullable*/ Object> /*@NonNull*/ T castNonNull(T ref) {
-        assert ref != null : "misuse of castNonNull, which should never be called on a null argument";
-        return (/*@NonNull*/ T)ref;
+        assert ref != null : "Misuse of castNonNull: called with a null argument";
+        if (ref.getClass().isArray()) {
+            castNonNull((Object[])ref);
+        }
+        return (/*@NonNull*/ T) ref;
+    }
+
+    /*@AssertParametersNonNull*/
+    public static
+    <T extends /*@Nullable*/ Object> /*@NonNull*/ T /*@NonNull*/ []
+            castNonNull(T /*@Nullable*/ [] arr) {
+        return (/*@NonNull*/ T[]) castNonNullArray(arr);
+    }
+
+    /*@AssertParametersNonNull*/
+    public static
+    <T extends /*@Nullable*/ Object> /*@NonNull*/ T /*@NonNull*/ [][]
+            castNonNull(T /*@Nullable*/ [] /*@Nullable*/ [] arr) {
+        return (/*@NonNull*/ T[][]) castNonNullArray(arr);
+    }
+
+    /*@AssertParametersNonNull*/
+    public static
+    <T extends /*@Nullable*/ Object> /*@NonNull*/ T /*@NonNull*/ [][][]
+            castNonNull(T /*@Nullable*/ [] /*@Nullable*/ [] /*@Nullable*/ [] arr) {
+        return (/*@NonNull*/ T[][][]) castNonNullArray(arr);
+    }
+
+    /*@AssertParametersNonNull*/
+    public static
+    <T extends /*@Nullable*/ Object> /*@NonNull*/ T /*@NonNull*/ [][][][]
+            castNonNull(T /*@Nullable*/ [] /*@Nullable*/ [] /*@Nullable*/ [] /*@Nullable*/ [] arr) {
+        return (/*@NonNull*/ T[][][][]) castNonNullArray(arr);
+    }
+
+    /*@AssertParametersNonNull*/
+    public static
+    <T extends /*@Nullable*/ Object> /*@NonNull*/ T /*@NonNull*/ [][][][][]
+            castNonNull(T /*@Nullable*/ [] /*@Nullable*/ [] /*@Nullable*/ [] /*@Nullable*/ [] /*@Nullable*/ [] arr) {
+        return (/*@NonNull*/ T[][][][][]) castNonNullArray(arr);
+    }
+
+    /*@AssertParametersNonNull*/
+    private static <T extends /*@Nullable*/ Object> /*@NonNull*/ T /*@NonNull*/ [] castNonNullArray(T /*@Nullable*/ [] arr) {
+        assert arr != null : "Misuse of castNonNull: called with a null array argument";
+        for (int i = 0; i < arr.length; ++i) {
+            assert arr[i] != null : "Misuse of castNonNull: called with a null array element";
+            if (arr[i].getClass().isArray()) {
+                castNonNullArray((Object[])(arr[i]));
+            }
+        }
+        return (/*@NonNull*/ T[]) arr;
     }
 }
