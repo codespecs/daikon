@@ -657,9 +657,6 @@ all_except_daikon: ../plume-lib ${AUTO_GENERATED_FILES}
 .PHONY: all_pass2
 all_pass2: ${AUTO_GENERATED_CLASSES_2}
 
-${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
-	${JAVAC_COMMAND} ${AUTO_GENERATED_FILES_2}
-
 all_except: all_except_daikon
 
 all_force:	all_directly
@@ -1068,7 +1065,7 @@ doc-private: ../plume-lib $(AUTO_GENERATED_FILES)
 # 	find doc -name '*.html' | xargs -n 100 ${PLUMEBIN}/jdk-add-munged-anchor-names
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
-../doc/invariants-doc.texinfo: ../plume-lib $(AUTO_GENERATED_FILES)
+../doc/invariants-doc.texinfo: ../plume-lib ${JAVA_FILES} $(AUTO_GENERATED_FILES)
 	${JAVADOC} -J-Xmx1000m -J-ea -docletpath ${CLASSPATH} -classpath ${CLASSPATH} -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
@@ -1077,12 +1074,13 @@ doc-invariant: ../doc/invariants-doc.texinfo
 
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
 # resulting in a duplicate class warning.
-# This must depend on java/daikon/config/ParameterDoclet.class.
-# Instead, it depends on "all", which forces compilation.  (An experiment
-# with not depending on "all" showed that ParameterDoclet.class was needed.)
-# It depends on "all", which forces compilation, to avoid errors like
-#   "java.lang.ClassFormatError: Truncated class file".
-../doc/config-options.texinfo: ../plume-lib $(AUTO_GENERATED_FILES) all
+# This must depend on daikon/config/ParameterDoclet.class.
+## I'm trying again to depend just on ParameterDoclet.class
+# # Instead, it depends on "all", which forces compilation.  (An experiment
+# # with not depending on "all" showed that ParameterDoclet.class was needed.)
+# # It depends on "all", which forces compilation, to avoid errors like
+# #   "java.lang.ClassFormatError: Truncated class file".
+../doc/config-options.texinfo: ../plume-lib ${JAVA_FILES} $(AUTO_GENERATED_FILES) daikon/config/ParameterDoclet.class
 	${JAVADOC} -J-Xmx1000m -J-ea -docletpath ${CLASSPATH} -classpath ${CLASSPATH} -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
@@ -1097,12 +1095,6 @@ doc-dkconfig: ../doc/config-options.texinfo
 # 		--list $@ \
 # 		$(JDOC_FILES)
 
-../doc/category-options.texinfo: ../plume-lib $(AUTO_GENERATED_FILES)
-	${JAVADOC} -J-Xmx1000m -J-ea -doclet daikon.config.ParameterDocletCategory \
-		--texinfo $@ \
-		$(JDOC_FILES)
-
-doc-category: ../doc/category-options.texinfo
 
 ###
 ### Switching between version 2 and version 3 (temporary)
@@ -1162,9 +1154,12 @@ daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTes
 	${JAVA} daikon.test.split.SplitterFactoryTestUpdater
 	chmod a-w $@
 
-## I don't understand why this is necessary, but it seems to be
-daikon/test/split/SplitterFactoryTest.class: daikon/test/split/SplitterFactoryTest.java
-	${JAVAC_COMMAND} $<
+${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
+	${JAVAC_COMMAND} ${AUTO_GENERATED_FILES_2}
+
+## This would be an alternative to the above rule for ${AUTO_GENERATED_CLASSES_2}.
+# daikon/test/split/SplitterFactoryTest.class: daikon/test/split/SplitterFactoryTest.java
+# 	${JAVAC_COMMAND} $<
 
 # Create the auto-generated files with jpp
 .PHONY: jpp
