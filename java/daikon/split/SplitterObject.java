@@ -40,6 +40,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
     this.pptName = pptName;
     this.directory = directory;
     this.javaFormat = condition;
+    this.daikonFormat = condition;
   }
 
   /**
