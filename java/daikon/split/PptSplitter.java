@@ -242,6 +242,8 @@ public class PptSplitter implements Serializable {
 
     Vector</*@KeyFor("orig_invs")*/ Invariant[]> exclusive_invs_vec = new Vector</*@KeyFor("orig_invs")*/ Invariant[]>();
 
+    // Does not contain anything that is in exclusive_invs_vec.
+    // (Those may be added temporarily, but are removed later.)
     Vector</*@KeyFor("orig_invs")*/ Invariant[]> different_invs_vec = new Vector</*@KeyFor("orig_invs")*/ Invariant[]>();
 
 /// ??? MDE
@@ -391,10 +393,12 @@ public class PptSplitter implements Serializable {
         debug.fine ("addImplications: resorting to dummy");
         PptConditional cond1 = (PptConditional)ppt1;
         PptConditional cond2 = (PptConditional)ppt2;
+        debug.fine ("addImplications: cond1 " + cond1 + " cond2 " + cond2);
         cond1.splitter.instantiateDummy(ppt1);
         cond2.splitter.instantiateDummy(ppt2);
         DummyInvariant dummy1 = cond1.dummyInvariant();
         DummyInvariant dummy2 = cond2.dummyInvariant();
+        debug.fine ("addImplications: dummy1 " + dummy1 + " dummy2 " + dummy2);
         if (dummy1 != null && dummy1.valid && dummy2 != null && dummy2.valid) {
           assert !cond1.splitter_inverse;
           assert cond2.splitter_inverse;
@@ -402,7 +406,10 @@ public class PptSplitter implements Serializable {
           @SuppressWarnings("keyfor") // BUG in Daikon, possibly, because these are not keys, I think; need to investigate
           /*@KeyFor("orig_invs")*/ Invariant[] dummy_pair = new /*@KeyFor("orig_invs")*/ Invariant[] {dummy1, dummy2};
           exclusive_invs_vec.add(dummy_pair);
-          different_invs_vec.add(dummy_pair);
+          // Don't add the dummy_pair, as it would just be removed afterward.
+          // different_invs_vec.add(dummy_pair);
+        } else {
+          // nothing to do
         }
       }
     }
@@ -588,7 +595,7 @@ public class PptSplitter implements Serializable {
   /**
    * Determine which elements of invs1 differ from elements of invs2.
    * Result elements are pairs of Invariants (with one or the other
-   * possibly null).
+   * always null).
    * All the arguments should be over the same program point.
    */
   Vector</*@Nullable*/ Invariant[]> different_invariants (Invariants invs1,
@@ -623,18 +630,24 @@ public class PptSplitter implements Serializable {
     ss1.addAll(invs1);
     SortedSet<Invariant> ss2 = new TreeSet<Invariant>(icfp);
     ss2.addAll(invs2);
-    Vector</*@Nullable*/ Invariant> result = new Vector</*@Nullable*/ Invariant>();
-    for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
-                                    ss2.iterator(), icfp);
-         opi.hasNext(); ) {
-      Pair</*@Nullable*/ Invariant,/*@Nullable*/ Invariant> pair = opi.next();
-      if (pair.a != null && pair.b != null) {
-        Invariant inv1 = pair.a;
-        Invariant inv2 = pair.b;
-        result.add(inv1);
-      }
-    }
-    return result;
+
+    ss1.retainAll(ss2);
+    return new Vector<Invariant>(ss1);
+
+    // // This seems like a rather complicated implementation.  Why can't it
+    // // just use set intersection?
+    // Vector</*@Nullable*/ Invariant> result = new Vector</*@Nullable*/ Invariant>();
+    // for (OrderedPairIterator<Invariant> opi = new OrderedPairIterator<Invariant>(ss1.iterator(),
+    //                                 ss2.iterator(), icfp);
+    //      opi.hasNext(); ) {
+    //   Pair</*@Nullable*/ Invariant,/*@Nullable*/ Invariant> pair = opi.next();
+    //   if (pair.a != null && pair.b != null) {
+    //     Invariant inv1 = pair.a;
+    //     Invariant inv2 = pair.b;
+    //     result.add(inv1);
+    //   }
+    // }
+    // return result;
   }
 
   /**
@@ -646,15 +659,19 @@ public class PptSplitter implements Serializable {
   public void add_implication (PptTopLevel ppt, Invariant predicate,
                                Invariant consequent, boolean iff,
                                Map<Invariant,Invariant> orig_invs) {
+    debug.fine ("add_implication " + ppt + " " + predicate + " " + consequent + " " + iff);
 
     assert predicate != null;
     assert consequent != null;
 
     @SuppressWarnings("nullness") // map: method precondition
     /*@NonNull*/ Invariant orig_pred = orig_invs.get (predicate);
-    @SuppressWarnings("nullness") // map: method precondition
-    /*@NonNull*/ Invariant orig_cons = orig_invs.get (consequent);
-    assert orig_pred != null;
+    Invariant orig_cons = orig_invs.get (consequent);
+    if (orig_cons == null) {
+      assert (consequent instanceof DummyInvariant);
+      orig_cons = consequent;
+    }
+    assert orig_pred != null : "predicate is not in orig_invs: " + predicate;
     assert orig_cons != null;
 
     // Don't add consequents that are obvious or suppressed.
@@ -666,7 +683,12 @@ public class PptSplitter implements Serializable {
     // side.  This would have the pleasant side effect of not forcing
     // all of the suppressed invariants to be created before
     // determining implications.
-    if ((orig_cons.isObvious() != null) || orig_cons.is_ni_suppressed()) {
+    if (orig_cons.isObvious() != null) {
+      debug.fine ("add_implication obvious: " + orig_cons.isObvious().format());
+      return;
+    }
+    if (orig_cons.is_ni_suppressed()) {
+      debug.fine ("add_implication suppressed: " + orig_cons.is_ni_suppressed());
       return;
     }
 
@@ -694,6 +716,7 @@ public class PptSplitter implements Serializable {
     if (imp == null) {
       // The predicate is the same as the consequent, or the implication
       // already exists.
+      debug.fine ("add_implication imp == null");
       return;
     }
 
