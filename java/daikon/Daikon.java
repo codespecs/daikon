@@ -1968,7 +1968,7 @@ public final class Daikon {
     if (! PptSplitter.dkconfig_disable_splitting) {
       debugProgress.fine("Adding Implications ... ");
       for (PptTopLevel ppt : all_ppts.pptIterable()) {
-        // debugProgress.fine ("  Adding Implications for " + ppt.name);
+        // debugProgress.fine ("  Adding implications for " + ppt.name);
         ppt.addImplications();
       }
       debugProgress.fine("Time spent adding implications: "
