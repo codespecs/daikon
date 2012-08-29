@@ -35,6 +35,9 @@ public class DummyInvariant
 
   // Pre-instatiate(), set to true if we have reason to believe the user
   // explicitly wanted this invariant to appear in the output.
+  // [What evidence is required, and when does the evidence show the user
+  // didn't want it?  Does the fact that this is a DummyInvariant indicate
+  // the user explicitly cares?]
   // After instantiation, also requires that we've found an appropriate
   // slice for the invariant to live in.
   public boolean valid = false;
@@ -141,7 +144,8 @@ public class DummyInvariant
       }
       inv.ppt = slice;
     }
-    inv.valid = this.valid;
+    // We found a slice, so set the DummyInvariant to valid.
+    inv.valid = true;
     return inv;
   }
 
@@ -171,7 +175,7 @@ public class DummyInvariant
     else
       df = daikonFormat;
     if (negated)
-      return "not " + df;
+      return "not(" + df + ")";
     else
       return df;
   }
