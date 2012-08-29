@@ -8,12 +8,19 @@ import java.util.Iterator;
  * This is a special invariant used internally by Daikon to represent
  * invariants whose meaning Daikon doesn't understand. The only
  * operation that can be performed on a DummyInvariant is to print it.
- * For instance, dummy invariants can be created to correspond to
- * splitting conditions, when no other invariant in Daikon's grammar
- * is equivalent to the condition.
+ * <p>
  *
- * To use dummy invariants for splitting conditions, the configuration
- * option <samp>daikon.split.PptSplitter.dummy_invariant_level</samp> must be set,
+ * The main use for a dummy invariant is to represent a splitting condition
+ * that appears in a .spinfo file.  The .spinfo file can indicate an
+ * arbitrary Java expression, which might not be equivalent to any
+ * invariant in Daikon's grammar.
+ * <p>
+ *
+ * Ordinarily, Daikon uses splitting conditions to split data, then seeks
+ * to use that split data to form conditional invariants out of its
+ * standard built-in invariants.  If you wish the expression in the .spinfo
+ * file to be printed as an invariant, then the configuration option
+ * <samp>daikon.split.PptSplitter.dummy_invariant_level</samp> must be set,
  * and formatting information must be supplied in the splitter info file.
  **/
 public class DummyInvariant
