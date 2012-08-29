@@ -3267,6 +3267,17 @@ java daikon.tools.jtb.CreateSpinfoC \
 @end example
 @noindent
 
+WARNING:  The names produced by @command{CreateSpinfoC} sometimes differ
+from the names produced by Kvasir.  For example, suppose you have a C
+file that contains a function @samp{foo}.  Then @command{CreateSpinfoC}
+may create a @file{.spinfo} file that mentions a program point named
+@samp{std.foo}, whereas Kvasir creates a @file{.dtrace} file that
+mentions a program point named @samp{..foo}.  Such a mismatch will cause
+Daikon to produce no conditional invariants for the given program point.
+This is a bug that needs to be fixed!  (Patches are welcome.)  In the
+meanwhile, you can adjust the @file{.spinfo} file to conform to the
+@file{.dtrace} file's naming conventions.
+
 If you get an error such as
 @example
 ... Lexical error at line 5, column 1.
