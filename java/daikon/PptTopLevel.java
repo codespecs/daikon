@@ -1101,14 +1101,21 @@ public class PptTopLevel extends Ppt {
 
     values_num_samples += count;
 
+    vt.checkRep(); // temporary, for debugging
+
     // Keep track of what variables are present on this sample
     mbtracker.add(vt, count);
+
+    vt.checkRep(); // temporary, for debugging
 
     // Keep track of the distinct values seen
     for (int i=0; i<vt.vals.length; i++) {
       if (! vt.isMissing(i)) {
         Object val = vt.vals[i];
         ValueSet vs = value_sets[i];
+        if (val == null) {      // temporary, for debugging
+          System.out.printf("Null value at index %s in ValueTuple %s, ValueSet=%s%n", i, vt, vs);
+        }
         vs.add(val);
       }
     }
