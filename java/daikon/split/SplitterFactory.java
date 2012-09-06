@@ -193,11 +193,11 @@ public class SplitterFactory {
     try {
       errorOutput = compileFiles(fileNames);
     } catch (IOException ioe) {
-      System.out.println("Error while compiling Splitter files: ");
+      System.out.println("Error while compiling Splitter files (Daikon will continue):");
       debugPrintln(ioe.toString());
     }
     if (errorOutput != null) {
-      System.out.println("Errors while compiling Splitter files: ");
+      System.out.println("Errors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);
     }
     SplitterLoader loader = new SplitterLoader();
