@@ -73,7 +73,7 @@ public class PptSplitter implements Serializable {
    * PptTopLevel if the PptSplitter represents two exit points (for which
    * no splitter is required).
    **/
-  public PptTopLevel[] ppts = new PptTopLevel[2];
+  public PptTopLevel[] ppts = new /*@Nullable*/ PptTopLevel[2];
 
   private static final Comparator<Invariant> icfp
                             = new Invariant.InvariantComparatorForPrinting();
@@ -179,7 +179,7 @@ public class PptSplitter implements Serializable {
 
     // Create any NIS suppressed invariants in each conditional
     @SuppressWarnings({"unchecked", "rawtypes"})
-    List<Invariant> suppressed_invs[] = (ArrayList<Invariant>[]) new ArrayList[ppts.length];
+    List<Invariant> suppressed_invs[] = (ArrayList<Invariant>[]) new /*@Nullable*/ ArrayList[ppts.length];
     for (int i = 0; i < ppts.length; i++)
       suppressed_invs[i] = NIS.create_suppressed_invs (ppts[i]);
 
@@ -256,7 +256,7 @@ public class PptSplitter implements Serializable {
       int num_children = ppts.length;
       // Each element is an invariant from the indexth child, permuted to
       // the parent (and with a parent slice as its ppt slot).
-      Invariants[] invs = new Invariants[num_children];
+      Invariants[] invs = new /*@Nullable*/ Invariants[num_children];
 
       // find the parent slice
       PptSlice pslice = parent.get_or_instantiate_slice (vis);
@@ -273,9 +273,9 @@ public class PptSplitter implements Serializable {
         invs[childno] = new Invariants(); // permuted to parent
 
         // Get the child vis in the correct order
-        VarInfo[] cvis_non_canonical = new VarInfo[vis.length];
-        VarInfo[] cvis = new VarInfo[vis.length];
-        VarInfo[] cvis_sorted = new VarInfo[vis.length];
+        VarInfo[] cvis_non_canonical = new /*@Nullable*/ VarInfo[vis.length];
+        VarInfo[] cvis = new /*@Nullable*/ VarInfo[vis.length];
+        VarInfo[] cvis_sorted = new /*@Nullable*/ VarInfo[vis.length];
         for (int kk = 0; kk < vis.length; kk++) {
           cvis_non_canonical[kk] = matching_var (child_ppt, parent, vis[kk]);
           cvis[kk] = cvis_non_canonical[kk].canonicalRep();
@@ -455,7 +455,7 @@ public class PptSplitter implements Serializable {
     // We pick the first one that is neither obvious or suppressed.
     // If all are either obvious or suppressed, we just pick the first
     // one in the list
-    Invariant[] con_invs = new Invariant[2];
+    Invariant[] con_invs = new /*@Nullable*/ Invariant[2];
     for (Invariant[] invs : exclusive_invs_vec) {
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (con_invs[jj] == null) {

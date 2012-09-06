@@ -347,8 +347,8 @@ public final class PPTSLICE1 extends PptSlice {
     assert mod1 != ValueTuple.MISSING_FLOW
                       && mod1 != ValueTuple.MISSING_NONSENSICAL;
     List<Invariant> result = new ArrayList<Invariant>();
-    for (int i=0; i < invs.size(); i++) {
-      UnaryInvariant inv = (UnaryInvariant) invs.get(i);
+    for (Invariant invariant : invs) {
+      UnaryInvariant inv = (UnaryInvariant) invariant;
       if (inv.is_false()) continue;
       InvariantStatus status = inv.add(val1, mod1, count);
       if (status == InvariantStatus.FALSIFIED) {
@@ -379,8 +379,8 @@ public final class PPTSLICE1 extends PptSlice {
     boolean array1 = var_infos[0].rep_type.isArray();
     boolean array2 = var_infos[1].rep_type.isArray();
     if (array2 && ! array1) {
-      for (int i=0; i < invs.size(); i++) {
-        BinaryInvariant inv = (BinaryInvariant) invs.get(i);
+      for (Invariant invariant : invs) {
+        BinaryInvariant inv = (BinaryInvariant) invariant;
         if (inv.is_false()) continue;
         InvariantStatus status = inv.add(val2, val1, mod1, count);
         if (status == InvariantStatus.FALSIFIED) {
@@ -398,8 +398,8 @@ public final class PPTSLICE1 extends PptSlice {
         }
       }
     } else {
-      for (int i=0; i < invs.size(); i++) {
-        BinaryInvariant inv = (BinaryInvariant) invs.get(i);
+      for (Invariant invariant : invs) {
+        BinaryInvariant inv = (BinaryInvariant) invariant;
         if (inv.is_false()) continue;
         Invariant clone = inv.clone();
         InvariantStatus status = inv.add(val1, val2, mod1, count);
@@ -442,8 +442,8 @@ public final class PPTSLICE1 extends PptSlice {
                         && mod3 != ValueTuple.MISSING_NONSENSICAL);
 
     List<Invariant> result = new ArrayList<Invariant>();
-    for (int i=0; i < invs.size(); i++) {
-      TernaryInvariant inv = (TernaryInvariant) invs.get(i);
+    for (Invariant invariant : invs) {
+      TernaryInvariant inv = (TernaryInvariant) invariant;
       if (inv.is_false()) continue;
       Invariant clone = inv.clone();
       InvariantStatus status = inv.add(val1, val2, val3, mod1, count);

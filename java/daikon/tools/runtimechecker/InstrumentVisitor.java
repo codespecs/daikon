@@ -124,9 +124,9 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
 
             List<Node> newModifiers = new ArrayList<Node>();
-            for (int i = 0 ; i < modifierList.size() ; i++) {
-                NodeChoice nc = (NodeChoice)modifierList.get(i);
-                NodeToken token = (NodeToken)nc.choice;
+            for (Node modifier : modifierList) {
+                NodeChoice nc = (NodeChoice) modifier;
+                NodeToken token = (NodeToken) nc.choice;
                 if (!token.tokenImage.equals("public")
                     && !token.tokenImage.equals("protected")
                     && !token.tokenImage.equals("private")) {

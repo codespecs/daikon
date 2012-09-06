@@ -83,6 +83,7 @@ public class DynamicConstants implements Serializable {
    **/
   List<Constant> missing_list = new ArrayList<Constant>();
 
+  // Same contents in both.  Why two data structures?
   /** List of all variables.  Some may be non-constant. **/
   Constant[] all_vars;
   List<Constant> all_list = new ArrayList<Constant>();
@@ -240,13 +241,12 @@ public class DynamicConstants implements Serializable {
     this.ppt = ppt;
 
     // Start everything off as missing (since we haven't seen any values yet)
-    all_vars = new Constant[ppt.var_infos.length];
-    for (int i = 0; i < all_vars.length; i++) {
-      VarInfo vi = ppt.var_infos[i];
-      all_vars[i] = new Constant (vi);
-      all_list.add (all_vars[i]);
-      missing_list.add (all_vars[i]);
+    for (VarInfo vi : ppt.var_infos) {
+      Constant c = new Constant (vi);
+      all_list.add (c);
+      missing_list.add (c);
     }
+    all_vars = all_list.toArray(new Constant[all_list.size()]);
 
   }
 

@@ -39,9 +39,9 @@ public class Main extends CommandHandler {
         CommandHandler h = null;
         try {
 
-            for (int i = 0 ; i < handlers.size() ; i++) {
-                h = handlers.get(i);
-                if (h.handles(command)) {
+            for (CommandHandler handler : handlers) {
+                if (handler.handles(command)) {
+                    h = handler;
                     success = h.handle(args);
                     if (!success) {
                         System.err

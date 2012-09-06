@@ -469,10 +469,10 @@ public final class FeatureExtractor {
                                        ArrayList<String> nonusefulStrings,
                                        File outputFile) throws IOException {
     PrintStream output = new PrintStream(new FileOutputStream(outputFile));
-    for (int i = 0; i < usefulStrings.size(); i++)
-      output.println(usefulStrings.get(i));
-    for (int i = 0; i < nonusefulStrings.size(); i++)
-      output.println(nonusefulStrings.get(i));
+    for (String s : usefulStrings)
+      output.println(s);
+    for (String s : nonusefulStrings)
+      output.println(s);
     output.close();
   }
 
@@ -537,8 +537,7 @@ public final class FeatureExtractor {
     File top = new File(CLASSES);
     List<Class<? extends Invariant>> classes = getInvariantClasses(top);
 
-    for (int i = 0; i < classes.size(); i++) {
-      Class<? extends Invariant> currentClass = classes.get(i);
+    for (Class<? extends Invariant> currentClass : classes) {
       Field[] fields = currentClass.getFields();
       Method[] methods = currentClass.getMethods();
       //handle the class
@@ -647,8 +646,8 @@ public final class FeatureExtractor {
     throws IllegalAccessException, InvocationTargetException {
     ArrayList<TreeSet<IntDoublePair>> answer = new ArrayList<TreeSet<IntDoublePair>>();
     // for each invariant, extract all the features and build a new TreeSet
-    for (int i = 0; i < invariants.size(); i++) {
-      answer.add(new TreeSet<IntDoublePair>(getReflectFeatures(invariants.get(i), lookup)));
+    for (Invariant inv : invariants) {
+      answer.add(new TreeSet<IntDoublePair>(getReflectFeatures(inv, lookup)));
     }
     return answer;
   }
@@ -1033,15 +1032,14 @@ public final class FeatureExtractor {
                                      String label, PrintStream ps)
     throws IOException {
 
-    for (int i = 0; i < one.size(); i++)
-      for (int j = 0; j < two.size(); j++) {
-        String first = one.get(i);
-        String second = two.get(j);
+    for (String first : one) {
+      for (String second : two) {
         String answer = first.substring(first.indexOf(" ") + 1) +
           shift(second);
         answer = (new StringTokenizer(answer)).countTokens() + " " + answer;
         ps.println(answer + label);
       }
+    }
   }
 
   private static String shift(String vector) {

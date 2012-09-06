@@ -24,6 +24,7 @@ public final class TestClassOrInterfaceTypeDecorateVisitor extends TestCase {
 
 
   public static class UngenerifiedTypeCollector extends DepthFirstVisitor {
+    // These two lists have the same length.
     List<ClassOrInterfaceType> generifieds = new ArrayList<ClassOrInterfaceType>();
     List<ClassOrInterfaceType> ungenerifieds = new ArrayList<ClassOrInterfaceType>();
     public void visit(ClassOrInterfaceType n) {

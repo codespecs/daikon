@@ -64,7 +64,7 @@ public class ModBitTracker
   public ModBitTracker(int num_vars) {
     assert num_vars >= 0;
     this.num_vars = num_vars;
-    modbits_arrays = new BitSet[num_vars];
+    modbits_arrays = new /*@Nullable*/ BitSet[num_vars];
     if (num_vars > 0) {
       modbits_arrays[0] = new BitSet();
     }

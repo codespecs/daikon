@@ -433,11 +433,11 @@ public final class FileIO {
     }
 
     // Build the var infos from the var definitions.
-    VarInfo[] vi_array = new VarInfo[varmap.size()];
-    int ii = 0;
+    List<VarInfo> vi_list = new ArrayList<VarInfo>(varmap.size());
     for (VarDefinition vd : varmap.values()) {
-      vi_array[ii++] = new VarInfo (vd);
+      vi_list.add(new VarInfo(vd));
     }
+    VarInfo[] vi_array = vi_list.toArray(new VarInfo[vi_list.size()]);
 
     // Check to see if the program point is new
     if (state.all_ppts.containsName(ppt_name)) {
@@ -929,7 +929,7 @@ public final class FileIO {
 
     /** Change uses of hashcodes to canonical_hashcode. **/
     public /*@Interned*/ Invocation canonicalize() {
-      Object[] new_vals = new Object[vals.length];
+      /*@Nullable*/ Object[] new_vals = new /*@Nullable*/ Object[vals.length];
       System.arraycopy(vals, 0, new_vals, 0, vals.length);
       VarInfo[] vis = ppt.var_infos;
       // Warning: abstraction violation!
@@ -2109,7 +2109,7 @@ public final class FileIO {
       // We've not encountered this program point before.  The nulls in
       // this array will compare non-equal to whatever is in the trace
       // file, which is the desired behavior.
-      oldvalue_reps = new String[num_tracevars];
+      oldvalue_reps = new /*@Nullable*/ String[num_tracevars];
     }
 
     if (Global.debugPrintDtrace) {

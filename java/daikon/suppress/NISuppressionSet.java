@@ -521,8 +521,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     for (int i = 0; i < suppression_set.length; i++)
       new_array[i] = suppression_set[i];
     for (int i = 0; i < new_suppressions.size(); i++)
-      new_array[suppression_set.length + i]
-        = new_suppressions.get(i);
+      new_array[suppression_set.length + i] = new_suppressions.get(i);
     suppression_set = new_array;
 
   }

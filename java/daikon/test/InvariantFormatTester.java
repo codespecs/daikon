@@ -294,8 +294,7 @@ public class InvariantFormatTester extends TestCase
       String debugTemp;
 
       try {
-        for (int i=0; i<invariantTestCases.size(); i++) {
-          FormatTestCase currentCase = invariantTestCases.get(i);
+        for (FormatTestCase currentCase : invariantTestCases) {
           // System.out.println("Goal output #" + i);
           debugTemp = currentCase.generateGoalOutput(commands);
           // System.out.println(debugTemp);

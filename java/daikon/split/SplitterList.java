@@ -224,8 +224,8 @@ public abstract class SplitterList
         int j = 0; boolean duplicate = false;
         // Weed out splitters with the same condition.
         if (!splitters.isEmpty()) {
-          for (j = 0; j < splitters.size(); j++) {
-            if ((tempsplitter.condition().trim()).equals( splitters.elementAt(j).condition().trim())) {
+          for (Splitter splitter : splitters) {
+            if ((tempsplitter.condition().trim()).equals( splitter.condition().trim())) {
               // System.err.println(" duplicate " + tempsplitter.condition()); System.err.println();
               duplicate = true;
               break;

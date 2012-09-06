@@ -244,13 +244,8 @@ public class Quantify {
    * used as a subscript for each sequence.  If any of the vars are not
    * sequences, no index is calculated for them.
    **/
-  public static QuantifyReturn[] quantify( VarInfo[] vars) {
+  public static QuantifyReturn[] quantify(VarInfo[] vars) {
     assert vars != null;
-
-    // create empty result
-    QuantifyReturn[] result = new QuantifyReturn[vars.length];
-    for (int ii = 0; ii < vars.length; ii++)
-      result[ii] = new QuantifyReturn (vars[ii]);
 
     // Determine all of the simple identifiers used by these variables
     Set<String> simples = new HashSet<String>();
@@ -260,10 +255,14 @@ public class Quantify {
     }
     // System.out.printf ("simple names = %s\n", simples);
 
+    // create empty result
+    List<QuantifyReturn> result = new ArrayList<QuantifyReturn>(vars.length);
+
     // Loop through each of the variables, choosing an index for each
     char tmp = 'i';
-    for (int ii = 0; ii < vars.length; ii++) {
-      VarInfo vi = vars[ii];
+    for (VarInfo vi : vars) {
+      QuantifyReturn qr = new QuantifyReturn(vi);
+      result.add(qr);
 
       // If this variable is not an array, there is not much to do
       if (!vi.file_rep_type.isArray())
@@ -275,9 +274,9 @@ public class Quantify {
         idx_name = String.valueOf(tmp++);
       } while (simples.contains(idx_name));
       assert tmp <= 'z' : "Ran out of letters in quantification";
-      result[ii].index = new FreeVar(idx_name);
+      qr.index = new FreeVar(idx_name);
     }
-    return (result);
+    return (result.toArray(new QuantifyReturn[result.size()]));
   }
 
 
@@ -375,7 +374,7 @@ public class Quantify {
     EnumSet<QuantFlags> flags;
     String quantification;
     String[] arr_vars_indexed;
-    String[] indices;
+    /*@Nullable*/ String[] indices;
 
     public SimplifyQuantification (EnumSet<QuantFlags> flags, VarInfo... vars){
       this.flags = flags.clone();
@@ -449,23 +448,26 @@ public class Quantify {
         + conditions + ") ";
 
       // stringify the terms
-      arr_vars_indexed = new String[vars.length];
-      for (int i=0; i < qrets.length; i++) {
-        QuantifyReturn qret = qrets[i];
+      List<String> avi_list = new ArrayList<String>(vars.length);
+      for (QuantifyReturn qret : qrets) {
+        String arr_var_indexed;
         if (qret.index != null) {
           Term index = qret.index;
           VarInfo arr_var = qret.var.get_array_var();
-          arr_vars_indexed[i] = arr_var.simplify_name (index.simplify_name());
+          arr_var_indexed = arr_var.simplify_name (index.simplify_name());
           // System.out.printf ("vi = %s, arr_var = %s\n", vi, arr_var);
-        } else
-          arr_vars_indexed[i] = qret.var.simplify_name();
+        } else {
+          arr_var_indexed = qret.var.simplify_name();
+        }
+        avi_list.add(arr_var_indexed);
         // result[i+1] = qret.root_primes[i].simplify_name();
       }
+      arr_vars_indexed = avi_list.toArray(new String[avi_list.size()]);
 
       // stringify the indices,
       // note that the index should be relative to the slice, not relative
       // to the original array (we used to get this wrong)
-      indices = new String[vars.length];
+      indices = new /*@Nullable*/ String[vars.length];
       for (int i=0; i < qrets.length; i++) {
         // Term[] boundv = qret.bound_vars.get(i);
         // Term idx_var = boundv[0];
@@ -498,6 +500,7 @@ public class Quantify {
 
     /** Returns the specified index **/
     public String get_index (int num) {
+      assert indices[num] != null; // will this assertion fail?
       return indices[num];
     }
 

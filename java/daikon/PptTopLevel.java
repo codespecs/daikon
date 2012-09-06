@@ -405,8 +405,7 @@ public class PptTopLevel extends Ppt {
         val_idx++;
       }
     }
-    for (int i = 0; i < var_infos.length; i++) {
-      VarInfo vi = var_infos[i];
+    for (VarInfo vi : var_infos) {
       assert (vi.value_index == -1) || (!vi.is_static_constant);
     }
 
@@ -418,9 +417,8 @@ public class PptTopLevel extends Ppt {
     assert num_static_constant_vars == num_declvars - num_tracevars;
     assert num_tracevars == var_infos.length - num_static_constant_vars;
     mbtracker = new ModBitTracker(num_tracevars);
-    value_sets = new ValueSet[num_tracevars];
-    for (int i = 0; i < var_infos.length; i++) {
-      VarInfo vi = var_infos[i];
+    value_sets = new /*@Nullable*/ ValueSet[num_tracevars];
+    for (VarInfo vi : var_infos) {
       int value_index = vi.value_index;
       if (value_index == -1) {
         continue;
@@ -428,8 +426,8 @@ public class PptTopLevel extends Ppt {
       assert value_sets[value_index] == null;
       value_sets[value_index] = ValueSet.factory(vi);
     }
-    for (int i = 0; i < num_tracevars; i++) {
-      assert value_sets[i] != null;
+    for (ValueSet vs : value_sets) {
+      assert vs != null;
     }
 
     for (VarInfo vi : var_infos) {
@@ -455,8 +453,8 @@ public class PptTopLevel extends Ppt {
   // Appears to be used only in the memory monitor.
   public int num_array_vars() {
     int num_arrays = 0;
-    for (int i = 0; i < var_infos.length; i++)
-      if (var_infos[i].rep_type.isArray())
+    for (VarInfo vi : var_infos)
+      if (vi.rep_type.isArray())
         num_arrays++;
     return num_arrays;
   }
@@ -587,7 +585,7 @@ public class PptTopLevel extends Ppt {
     if (vis.length == 0)
       return;
     int old_length = var_infos.length;
-    VarInfo[] new_var_infos = new VarInfo[var_infos.length + vis.length];
+    VarInfo[] new_var_infos = new /*@Nullable*/ VarInfo[var_infos.length + vis.length];
     assert mbtracker.num_samples() == 0;
     mbtracker = new ModBitTracker(mbtracker.num_vars() + vis.length);
     System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
@@ -600,7 +598,7 @@ public class PptTopLevel extends Ppt {
     }
     var_infos = new_var_infos;
     int old_vs_length = value_sets.length;
-    ValueSet[] new_value_sets = new ValueSet[old_vs_length + vis.length];
+    ValueSet[] new_value_sets = new /*@Nullable*/ ValueSet[old_vs_length + vis.length];
     System.arraycopy(value_sets, 0, new_value_sets, 0, old_vs_length);
     for (int i = 0; i < vis.length; i++) {
       new_value_sets[old_vs_length + i] = ValueSet.factory(vis[i]);
@@ -1143,7 +1141,7 @@ public class PptTopLevel extends Ppt {
       // since NISuppressions will add new slices/invariants as others are
       // falsified.
       PptSlice[] slices = views.values().toArray(
-          new PptSlice[views.values().size()]);
+          new /*@Nullable*/ PptSlice[views.values().size()]);
       for (int i = 0; i < slices.length; i++) {
         slices[i].remove_falsified();
       }
@@ -1463,10 +1461,11 @@ public class PptTopLevel extends Ppt {
       lower = upper;
       upper += ders.length;
 
-      VarInfo[] vis = new VarInfo[ders.length];
-      for (int i = 0; i < ders.length; i++) {
-        vis[i] = ders[i].getVarInfo();
+      List<VarInfo> vis_list = new ArrayList<VarInfo>(ders.length);
+      for (Derivation der : ders) {
+        vis_list.add(der.getVarInfo());
       }
+      VarInfo[] vis = vis_list.toArray(new VarInfo[vis_list.size()]);
       if (Global.debugDerive.isLoggable(Level.FINE)) {
         for (int i = 0; i < ders.length; i++) {
           Global.debugDerive.fine("Derived " + vis[i].name());
@@ -2138,8 +2137,7 @@ public class PptTopLevel extends Ppt {
       OneOfSequence oos =
         (OneOfSequence) OneOfSequence.get_proto().instantiate(slice);
       if (oos != null) {
-        long [] /*@Interned*/ [] one_of = new long [1] /*@Interned*/ [];
-        one_of[0] = new long /*@Interned*/ [0];
+        long [] /*@Interned*/ [] one_of = new long [] /*@Interned*/ [] { new long /*@Interned*/ [0] };
         oos.set_one_of_val(one_of);
         inv = oos;
       }
@@ -2147,8 +2145,7 @@ public class PptTopLevel extends Ppt {
       OneOfFloatSequence oos =
         (OneOfFloatSequence) OneOfFloatSequence.get_proto().instantiate(slice);
       if (oos != null) {
-        double[] /*@Interned*/ [] one_of = new double[1] /*@Interned*/ [];
-        one_of[0] = new double /*@Interned*/ [0];
+        double[] /*@Interned*/ [] one_of = new double[] /*@Interned*/ [] { new double /*@Interned*/ [0] };
         oos.set_one_of_val(one_of);
         inv = oos;
       }
@@ -2157,8 +2154,7 @@ public class PptTopLevel extends Ppt {
         (OneOfStringSequence) OneOfStringSequence.get_proto().instantiate(
           slice);
       if (oos != null) {
-        /*@Interned*/ String[] /*@Interned*/ [] one_of = new /*@Interned*/ String[1] /*@Interned*/ [];
-        one_of[0] = new /*@Interned*/ String /*@Interned*/ [0];
+        /*@Interned*/ String[] /*@Interned*/ [] one_of = new /*@Interned*/ String[] /*@Interned*/ [] { new /*@Interned*/ String /*@Interned*/ [0] };
         oos.set_one_of_val(one_of);
         inv = oos;
       }
@@ -2782,7 +2778,6 @@ public class PptTopLevel extends Ppt {
     }
     for (Iterator<PptSlice> iSlices = slices.iterator(); iSlices.hasNext();) {
       PptSlice slice = iSlices.next();
-      VarInfo[] newVis = new VarInfo[slice.arity()];
       boolean needPivoting = false;
       for (int i = 0; i < slice.arity(); i++) {
         if (slice.var_infos[i].canonicalRep() != slice.var_infos[i])
@@ -2790,9 +2785,11 @@ public class PptTopLevel extends Ppt {
       }
       if (!needPivoting)
         continue;
-      for (int i = 0; i < slice.arity(); i++) {
-        newVis[i] = slice.var_infos[i].canonicalRep();
+      List<VarInfo> newVis_list = new ArrayList<VarInfo>(slice.arity());
+      for (VarInfo vi : slice.var_infos) {
+        newVis_list.add(vi.canonicalRep());
       }
+      VarInfo[] newVis = newVis_list.toArray(new VarInfo[newVis_list.size()]);
       PptSlice newSlice = slice.cloneAndPivot(newVis);
       if (slice != newSlice) {
         pivoted.add(newSlice);
@@ -2997,7 +2994,7 @@ public class PptTopLevel extends Ppt {
 
     int backgroundMark = proverStack.markLevel();
 
-    InvariantLemma[] lemmas = new InvariantLemma[invs.length];
+    InvariantLemma[] lemmas = new /*@Nullable*/ InvariantLemma[invs.length];
     for (int i = 0; i < invs.length; i++)
       lemmas[i] = new InvariantLemma(invs[i]);
     boolean[] present = new boolean[lemmas.length];
@@ -3581,7 +3578,7 @@ public class PptTopLevel extends Ppt {
     }
     int num_tracevars = mbtracker.num_vars();
     // warning: shadows field of same name
-    Object[] vals = new Object[num_tracevars];
+    Object[] vals = new /*@Nullable*/ Object[num_tracevars];
     int[] mods = new int[num_tracevars];
     ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
     for (PptRelation rel : children) {
@@ -3944,7 +3941,7 @@ public class PptTopLevel extends Ppt {
    */
   public VarInfo /*@Nullable*/ [] parent_vis(PptRelation rel, PptSlice slice) {
 
-    VarInfo[] pvis = new VarInfo[slice.var_infos.length];
+    VarInfo[] pvis = new /*@Nullable*/ VarInfo[slice.var_infos.length];
     for (int j = 0; j < slice.var_infos.length; j++) {
       VarInfo cv = slice.var_infos[j]; // child variable
       VarInfo pv = null;               // parent variable
@@ -4628,7 +4625,7 @@ public class PptTopLevel extends Ppt {
 
   /**
    * Returns true if all successor basic blocks eventually end up at
-   * the specified progrm point.  All paths must go to ppt for this
+   * the specified program point.  All paths must go to ppt for this
    * to return true.  The visited_set should contain each program
    * point visited along this path so far.
    */

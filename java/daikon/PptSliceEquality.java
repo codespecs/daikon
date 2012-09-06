@@ -109,8 +109,7 @@ public class PptSliceEquality
     // If each variable gets its own set, create those sets and return
     if (dkconfig_set_per_var) {
       // Debug.debugTrack.fine ("Vars for " + parent.name());
-      for (int i = 0; i < var_infos.length; i++) {
-        VarInfo vi = var_infos[i];
+      for (VarInfo vi : var_infos) {
         List<VarInfo> vi_list = Collections.singletonList(vi);
         Equality eq = new Equality (vi_list, this);
         invs.add (eq);
@@ -124,8 +123,7 @@ public class PptSliceEquality
       debug.fine ("InstantiateInvariants: " + parent.name() + " vars:") ;
     }
     LinkedHashMap<VarInfoAndComparability,List<VarInfo>> multiMap = new LinkedHashMap<VarInfoAndComparability,List<VarInfo>>();
-    for (int i = 0; i < var_infos.length; i++) {
-      VarInfo vi = var_infos[i];
+    for (VarInfo vi : var_infos) {
       VarInfoAndComparability viac = new VarInfoAndComparability(vi);
       addToBindingList (multiMap, viac, vi);
       if (debug.isLoggable(Level.FINE)) {
@@ -135,7 +133,7 @@ public class PptSliceEquality
     if (debug.isLoggable(Level.FINE)) {
       debug.fine (Integer.toString(multiMap.keySet().size()));
     }
-    Equality[] newInvs = new Equality[multiMap.keySet().size()];
+    Equality[] newInvs = new /*@Nullable*/ Equality[multiMap.keySet().size()];
     int varCount = 0;
     int invCount = 0;
     for (List<VarInfo> list : multiMap.values()) {
@@ -189,8 +187,7 @@ public class PptSliceEquality
     // for each.  Note that variables that are distinct still have an
     // equality set (albeit with only the one variable)
     ArrayList<Invariant> newInvs = new ArrayList<Invariant>();
-    for (int i = 0; i < var_infos.length; i++) {
-      VarInfo v = var_infos[i];
+    for (VarInfo v : var_infos) {
       if (v.equalitySet != null)
         continue;
       List<VarInfo> vlist = varmap.get (v);
@@ -322,7 +319,7 @@ public class PptSliceEquality
       }
     }
     // Why use an array?  Because we'll be sorting shortly
-    Equality[] resultArray = new Equality[multiMap.values().size()
+    Equality[] resultArray = new /*@Nullable*/ Equality[multiMap.values().size()
                                           + out_of_bounds.size()];
     int resultCount = 0;
     for (Map.Entry</*@KeyFor("multiMap")*/ Object,List<VarInfo>> entry : multiMap.entrySet()) {
@@ -371,7 +368,7 @@ public class PptSliceEquality
        assert vis.size() > 0;
 
        // Why use an array?  Because we'll be sorting shortly
-       Equality[] resultArray = new Equality[vis.size()];
+       Equality[] resultArray = new /*@Nullable*/ Equality[vis.size()];
        int resultCount = 0;
        for (VarInfo vi : vis) {
          List<VarInfo> list = new ArrayList<VarInfo>();
@@ -455,7 +452,7 @@ public class PptSliceEquality
       if (slice.containsVar(leader)) {
 
         // Substitute new leader for old leader and create new slices/invs
-        VarInfo[] toFill = new VarInfo[slice.var_infos.length];
+        VarInfo[] toFill = new /*@Nullable*/ VarInfo[slice.var_infos.length];
         copyInvsFromLeaderHelper (leader, newVis, slice, newSlices,
                                   0, -1, toFill);
 
@@ -629,13 +626,14 @@ public class PptSliceEquality
    * for this equality view.
    */
   public VarInfo[] get_leaders_sorted() {
-    VarInfo[] leaders = new VarInfo[invs.size()];
-    for (int i = 0; i < invs.size(); i++) {
-      leaders[i] = ((Equality) invs.get(i)).leader();
-      assert leaders[i] != null;
+    List<VarInfo> leaders = new ArrayList<VarInfo>(invs.size());
+    for (Invariant inv : invs) {
+      VarInfo leader = ((Equality) inv).leader();
+      assert leader != null;
+      leaders.add(leader);
     }
-    Arrays.sort (leaders, VarInfo.IndexComparator.getInstance());
-    return (leaders);
+    Collections.sort (leaders, VarInfo.IndexComparator.getInstance());
+    return (leaders.toArray(new VarInfo[leaders.size()]));
   }
 
 }

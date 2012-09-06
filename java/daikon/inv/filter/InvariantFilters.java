@@ -255,7 +255,7 @@ public class InvariantFilters {
 
   }
 
-  // For debugging
+  // For debugging (not very efficient)
   static String reprVarInfoList(List<VarInfo> vis) {
     String result = "";
     for (int i=0; i<vis.size(); i++) {

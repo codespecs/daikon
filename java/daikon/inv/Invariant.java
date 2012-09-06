@@ -1211,7 +1211,7 @@ public abstract class Invariant
     DiscardInfo result = isObviousStatically();
     if (result != null) return result;
     return isObviousStatically_SomeInEqualityHelper (this.ppt.var_infos,
-                                                     new VarInfo[this.ppt.var_infos.length],
+                                                     new /*@Nullable*/ VarInfo[this.ppt.var_infos.length],
                                                      0);
   }
 
@@ -1252,6 +1252,7 @@ public abstract class Invariant
    * should override isObviousStatically or isObviousDynamically.  Wherever
    * possible, suppression, rather than this, should do the dynamic checking.
    **/
+  /*@Pure*/
   public final /*@Nullable*/ DiscardInfo isObvious(/*>>> @NonPrototype Invariant this*/) {
     // Actually actually, we'll eliminate invariants as they become obvious
     // rather than on output; the point of this is to speed up computation.
@@ -1348,7 +1349,7 @@ public abstract class Invariant
     if (result != null)
       return result;
     return isObviousDynamically_SomeInEqualityHelper (this.ppt.var_infos,
-                                                     new VarInfo[this.ppt.var_infos.length],
+                                                     new /*@Nullable*/ VarInfo[this.ppt.var_infos.length],
                                                      0);
   }
 
