@@ -2331,6 +2331,7 @@ public final class FileIO {
 
     }
 
+    // Does oldvalue_reps now have no null elements???
     ppt_to_value_reps.put(ppt, oldvalue_reps);
 
     if (Global.debugPrintDtrace) {

@@ -499,6 +499,7 @@ public class Quantify {
     }
 
     /** Returns the specified index **/
+    @SuppressWarnings("nullness:return.type.incompatible") // possible application invariant?
     public String get_index (int num) {
       assert indices[num] != null; // will this assertion fail?
       return indices[num];
