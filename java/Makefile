@@ -107,10 +107,14 @@ ifeq "$(wildcard ${CHECKERSJAR})" "${CHECKERSJAR}"
     CLASSPATH_JARS2 = ${CHECKERSJAR}
 endif
 
+# This probably shouldn't be unconditional??
+CLASSPATH := :$(DAIKONDIR)/java:$(CLASSPATH)
+
 # Add necessary items to the classpath if they are not already there
 ifneq (.:,$(findstring .:,$(subst ;,:,$(CLASSPATH))))
   CLASSPATH := .:$(CLASSPATH)
 endif
+# This DAIKON_CLASSPATH_PREFIX is intended to be set in Makefile.user
 ifdef DAIKON_CLASSPATH_PREFIX
   CLASSPATH := ${DAIKON_CLASSPATH_PREFIX}:${CLASSPATH}
 endif
@@ -797,6 +801,9 @@ JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src -J-Dcheckers.ski
 JAVAC_PROTOTYPE_ARGS = -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing
 # JAVAC_PROTOTYPE_STUBS = -Astubs=typequals/prototype-stubs.astub
 JAVAC_PROTOTYPE_STUBS = -J-Dcheckers.skipUses='^java\.'
+JAVAC_VINDEX_ARGS = -processor checkers.basic.BasicChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing
+# JAVAC_VINDEX_STUBS = -Astubs=typequals/vindex-stubs.astub
+JAVAC_VINDEX_STUBS = -J-Dcheckers.skipUses='^java\.'
 JAVAC_REGEX_ARGS = -processor checkers.regex.RegexChecker -implicit:class -Xlint:-processing
 JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker -implicit:class -Xlint:-processing
 JAVAC_JAVARI_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
@@ -870,6 +877,14 @@ check-prototype-all: check-prototype-all-withstubs
 check-prototype-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
+check-vindex: check-vindex-all
+
+check-vindex-all: check-vindex-all-withstubs
+
+check-vindex-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_VINDEX_ARGS} ${JAVAC_VINDEX_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${JAVAC_VINDEX_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-regex: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_REGEX_ARGS} ${CHECKERS_ARGS} ...
