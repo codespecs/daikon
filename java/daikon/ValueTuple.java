@@ -335,7 +335,7 @@ public final class ValueTuple implements Cloneable {
   }
 
   /**
-   * Return the values of this tuple.
+   * Return the values of this tuple ("missing" is used for each missing value).
    * If vis is non-null, the values are annotated with the VarInfo name that
    * would be associated with the value.
    **/
