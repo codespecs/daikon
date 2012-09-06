@@ -10,6 +10,7 @@ import daikon.*;
  * This class's main method can be used to update both the
  * target files of SplitterFactoryTest and the code of the
  * SplitterFactoryTest itself.
+ * <p>
  *
  * To use this program to update SplitterFactoryTest
  * and the target files, run
@@ -17,16 +18,13 @@ import daikon.*;
  *      rm $inv/java/daikon/test/split/SplitterFactoryTest.java</pre>
  * Then simply run the main method without any arguments
  * in the $INV/java directory, and then re-compile the SplitterFactoryTest.
+ * <p>
  *
  * To add additional tests to this test program, place the .spinfo
  * and decls files into the "targets" directory then add a call to
  * generateSplitters with the new files.  generateSplitters is
- * overloaded; therefore if there are only one .spinfo file and
- * only decls file then only the names of those two files need to be
- * used as arguments to generateSplitters.  However, if there are
- * multiple .spinfo files or multiple decls files, the file names
- * should be placed into Lists then passed to generateSplitters.
- * See generateSplitters for more information.
+ * overloaded, and takes either one .spinfo file and
+ * one decls file, or else a list of each.
  */
 public class SplitterFactoryTestUpdater {
   public static java.lang.Runtime commander = java.lang.Runtime.getRuntime();
@@ -62,7 +60,8 @@ public class SplitterFactoryTestUpdater {
 
   /**
    * This is a short-cut method if only one spinfo file and only
-   * one decls files is to be used.  See generateSplitters(List, List).
+   * one decls files is to be used.
+   * @see generateSplitters(List, List)
    */
   private static void generateSplitters(String spinfoFile, String declsFile) {
     List<String> spinfo = new ArrayList<String>();
