@@ -1151,7 +1151,8 @@ list_java_files: showvar_JAVA_FILES
 daikon/test/split/SplitterFactoryTest.java: daikon/test/split/SplitterFactoryTestUpdater.java
 	${JAVAC_COMMAND} $<
 	rm -f $@
-	${JAVA} daikon.test.split.SplitterFactoryTestUpdater
+# Has expected errors while compiling splitter files
+	${JAVA} daikon.test.split.SplitterFactoryTestUpdater > /dev/null
 	chmod a-w $@
 
 ${AUTO_GENERATED_CLASSES_2}: ${AUTO_GENERATED_FILES_2}
