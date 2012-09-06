@@ -1,6 +1,7 @@
 package daikon.split;
 
 import daikon.*;
+import daikon.util.ArraysMDE;
 import jtb.syntaxtree.*;
 import jtb.ParseException;
 import java.util.*;
@@ -12,6 +13,8 @@ import java.util.regex.*;
  * buffer for a given condition, Ppt, and StatementReplacer.
  */
 class SplitterJavaSource implements jtb.JavaParserConstants {
+
+  static final boolean debug = false;
 
   /** The text contents of the splitter file, a java class. */
   private StringBuffer fileText = new StringBuffer();
@@ -335,11 +338,13 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    */
   private static VarInfo[] filterNonVars(VarInfo[] varInfos) {
     List<VarInfo> filteredList = new ArrayList<VarInfo>();
-    for (int i = 0; i < varInfos.length; i++) {
-      if (isNormalVar(varInfos[i])) {
-        filteredList.add(varInfos[i]);
+    for (VarInfo vi : varInfos) {
+      if (isNormalVar(vi)) {
+        filteredList.add(vi);
       } else {
-        // System.out.println("filterNonVars removed " + varInfos[i].name.name());
+        if (debug) {
+          System.out.println("filterNonVars removed " + vi.name());
+        }
       }
     }
     return filteredList.toArray(new VarInfo[0]);
@@ -697,11 +702,12 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     throws ParseException {
     List<VariableManager> variableManagerList = new ArrayList<VariableManager>();
     List<String> classVars = findPossibleClassVariables(condition);
-    for (int i = 0; i < varInfos.length; i++) {
-      VarInfo varInfo = varInfos[i];
+    for (VarInfo varInfo : varInfos) {
       try {
         String compilableName = compilableName(varInfo, className);
-        // System.out.println("varInfo " + varInfo.name.name() + ", compilableName=" + compilableName + ", isNeeded=" + isNeeded(compilableName, classVars));
+        if (debug) {
+          System.out.printf("varInfo %s, isNeeded(%s, %s)=%s%n", varInfo.name(), compilableName, classVars, isNeeded(compilableName, classVars));
+        }
         if (isNeeded(compilableName, classVars)) {
           variableManagerList.add(new VariableManager(varInfo, condition, className));
         }
@@ -723,46 +729,53 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   /**
    * requires: condition is a string representation of a conditional
    * @return a list of all possible variable variable names in condition.
-   *    arrays appear with "[]" at the end if their elements or accessed
+   *    This attempts not to return method names nor the base names of
+   *    qualified names (why not the latter?).
+   *    Arrays appear with "[]" at the end if their elements or accessed
    *    in the condition.
    */
   private static List<String> findPossibleClassVariables(String condition)
     throws ParseException {
     NodeToken[] tokens = TokenExtractor.extractTokens(condition);
-    // System.out.println("TokenExtractor.extractTokens(" + condition + ") ==> " + ArraysMDE.toString(tokens));
-    List<String> variables = new ArrayList<String>();
+    if (debug) {
+      System.out.println("TokenExtractor.extractTokens(" + condition + ") ==> " + ArraysMDE.toString(tokens));
+    }
+    Set<String> variables = new LinkedHashSet<String>();
+    // Identifier as first token
     if (tokens.length >= 1) {
-      if (tokens[0].kind == IDENTIFIER &&
+      NodeToken token = tokens[0];
+      if (token.kind == IDENTIFIER &&
           (tokens.length <= 1 || tokens[1].kind != LPAREN)) {
-        variables.add(tokens[0].tokenImage);
+        variables.add(token.tokenImage);
       }
     }
     if (tokens.length >= 2) {
-      if (tokens[1].kind == IDENTIFIER &&
-          (tokens.length <= 2 || tokens[2].kind != LPAREN) &&
-          (! variables.contains(tokens[1].tokenImage))) {
-        variables.add(tokens[1].tokenImage);
+      NodeToken token = tokens[1];
+      if (token.kind == IDENTIFIER &&
+          (tokens.length <= 2 || tokens[2].kind != LPAREN)) {
+        variables.add(token.tokenImage);
       }
     }
     for (int i = 2; i < tokens.length - 1; i++) {
       NodeToken token = tokens[i];
       if (token.kind == IDENTIFIER &&
-          tokens[i - 1].kind != DOT &&
-          tokens[i+1].kind != LPAREN &&
-          (! variables.contains(token.tokenImage))) {
+          tokens[i-1].kind != DOT &&
+          tokens[i+1].kind != LPAREN) {
         variables.add(token.tokenImage);
       }
     }
     if (tokens.length >= 3) {
       int lastIndex = tokens.length - 1;
-      if (tokens[lastIndex].kind == IDENTIFIER &&
-          tokens[lastIndex - 1].kind != DOT &&
-          (! variables.contains(tokens[lastIndex].tokenImage))) {
-        variables.add(tokens[lastIndex].tokenImage);
+      NodeToken token = tokens[lastIndex];
+      if (token.kind == IDENTIFIER &&
+          tokens[lastIndex-1].kind != DOT) {
+        variables.add(token.tokenImage);
       }
     }
-    // System.out.println("findPossibleClassVariables(" + condition + ") ==> " + variables.toString());
-    return variables;
+    if (debug) {
+      System.out.println("findPossibleClassVariables(" + condition + ") ==> " + variables.toString());
+    }
+    return new ArrayList<String>(variables);
   }
 
   /**
