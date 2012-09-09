@@ -8,6 +8,9 @@ DAIKONDIR_DEFAULT := $(realpath $(dir $(lastword $(MAKEFILE_LIST)))..)
 # Make will silently continue if Makefile.user does not exist.
 -include Makefile.user
 
+# Note about CHECKERS_ARGS: if this contains any -Alint option, it will
+# override (not augment) any other use of -Alint in this Makefile.
+
 DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
 
 # Test that the directory exists.  There must be a better way to do this.
