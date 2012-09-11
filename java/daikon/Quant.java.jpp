@@ -178,7 +178,7 @@ public final class Quant {
    */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#0"})*/
-  /* pure */ public static String /*@PolyAll*/ [] typeArray(/*@PolyAll*/ Object seq) {
+  /* pure */ public static String /*@PolyNull*/ [] typeArray(/*@PolyNull*/ Object seq) {
     if (seq == null) { return null; }
     return typeArray(toObjArray(seq));
   }
@@ -205,7 +205,7 @@ public final class Quant {
    */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#0","#1"})*/
-  /* pure */ public static /*@Nullable*/ java.lang.Object /*@PolyAll*/ [] concat(/*@PolyAll*/ Object seq1, /*@PolyAll*/ Object seq2) {
+  /* pure */ public static java.lang.Object /*@PolyNull*/ [] concat(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return concat(toObjArray(seq1), toObjArray(seq2));
@@ -215,7 +215,7 @@ public final class Quant {
    */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#0","#1"})*/
-  /* pure */ public static java.lang.Object /*@PolyAll*/ [] union(/*@PolyAll*/ Object seq1, /*@PolyAll*/ Object seq2) {
+  /* pure */ public static java.lang.Object /*@PolyNull*/ [] union(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return union(toObjArray(seq1), toObjArray(seq2));
@@ -225,7 +225,7 @@ public final class Quant {
    */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#0","#1"})*/
-  /* pure */ public static java.lang.Object /*@PolyAll*/ [] intersection(/*@PolyAll*/ Object seq1, /*@PolyAll*/ Object seq2) {
+  /* pure */ public static java.lang.Object /*@PolyNull*/ [] intersection(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return intersection(toObjArray(seq1), toObjArray(seq2));
@@ -235,7 +235,7 @@ public final class Quant {
    */
   @SuppressWarnings("interning") // cast from Object
   /*TODO: @AssertNonNullIfNonNull({"#0","#1"})*/
-  /* pure */ public static java.lang.Object /*@PolyAll*/ [] setDiff(/*@PolyAll*/ Object seq1, /*@PolyAll*/ Object seq2) {
+  /* pure */ public static java.lang.Object /*@PolyNull*/ [] setDiff(/*@PolyNull*/ Object seq1, /*@PolyNull*/ Object seq2) {
     if (seq1 == null) { return null; }
     if (seq2 == null) { return null; }
     return setDiff(toObjArray(seq1), toObjArray(seq2));
@@ -314,7 +314,7 @@ public final class Quant {
    */
   @SuppressWarnings("interning")  // cast from Object
   /*TODO: @AssertNonNullIfNonNull("#0")*/
-  /* pure */ public static Object /*@PolyAll*/ [] slice(/*@PolyAll*/ Object seq, int start, int end) {
+  /* pure */ public static Object /*@PolyNull*/ [] slice(/*@PolyNull*/ Object seq, int start, int end) {
     if (seq == null) { return null; }
     return slice(toObjArray(seq), start, end);
   }
