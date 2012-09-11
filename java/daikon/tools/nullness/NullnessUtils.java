@@ -1,3 +1,4 @@
+// package checkers.nullness;
 package daikon.tools.nullness;
 
 /**
@@ -6,6 +7,8 @@ package daikon.tools.nullness;
  *
  * To avoid the need to write the NullnessUtils class name, do:
  * <pre>import static daikon.tools.NullnessUtils.castNonNull;</pre>
+ * or
+ * <pre>import static daikon.tools.NullnessUtils.*;</pre>
  * <p>
  *
  * <b>Runtime Dependency</b>
@@ -18,9 +21,10 @@ package daikon.tools.nullness;
  * To eliminate this dependency, you can simply copy this class into your
  * own project.
  */
-// nullness utilities
-// casts look redundant if Nullness Checker is not run
-@SuppressWarnings({"nullness", "cast"})
+// Nullness utilities are trusted regarding nullness.
+// Casts look redundant if Nullness Checker is not run.
+@SuppressWarnings({/*>>> "nullness", */
+    "cast"})
 public final class NullnessUtils {
 
     private NullnessUtils()
@@ -65,7 +69,7 @@ public final class NullnessUtils {
      * by using it in a circumstance where its argument can be null.
      * <p>
      *
-     * @param ref a possibly-null reference
+     * @param ref a reference of @Nullable type
      * @return the argument, casted to have the type qualifier @NonNull
      */
     /*@AssertParametersNonNull*/
@@ -76,9 +80,12 @@ public final class NullnessUtils {
         return (/*@NonNull*/ T) ref;
     }
 
-    /*
-     * If the argument is an array, it is recursively checked to ensure that
-     * all elements are non-null.
+    /**
+     * Like castNonNull, but whereas that method only checks and casts the
+     * reference itself, this traverses all levels of the argument array.
+     * The array is recursively checked to ensure that all elements at
+     * every array level are non-null.
+     * @see #castNonNull(Object)
      */
     /*@AssertParametersNonNull*/
     public static
@@ -88,6 +95,13 @@ public final class NullnessUtils {
         return (/*@NonNull*/ T[]) castNonNullArray(arr);
     }
 
+    /**
+     * Like castNonNull, but whereas that method only checks and casts the
+     * reference itself, this traverses all levels of the argument array.
+     * The array is recursively checked to ensure that all elements at
+     * every array level are non-null.
+     * @see #castNonNull(Object)
+     */
     /*@AssertParametersNonNull*/
     public static
     <T extends /*@Nullable*/ Object>
@@ -96,6 +110,13 @@ public final class NullnessUtils {
         return (/*@NonNull*/ T[][]) castNonNullArray(arr);
     }
 
+    /**
+     * Like castNonNull, but whereas that method only checks and casts the
+     * reference itself, this traverses all levels of the argument array.
+     * The array is recursively checked to ensure that all elements at
+     * every array level are non-null.
+     * @see #castNonNull(Object)
+     */
     /*@AssertParametersNonNull*/
     public static
     <T extends /*@Nullable*/ Object>
@@ -104,6 +125,13 @@ public final class NullnessUtils {
         return (/*@NonNull*/ T[][][]) castNonNullArray(arr);
     }
 
+    /**
+     * Like castNonNull, but whereas that method only checks and casts the
+     * reference itself, this traverses all levels of the argument array.
+     * The array is recursively checked to ensure that all elements at
+     * every array level are non-null.
+     * @see #castNonNull(Object)
+     */
     /*@AssertParametersNonNull*/
     public static
     <T extends /*@Nullable*/ Object>
@@ -112,6 +140,13 @@ public final class NullnessUtils {
         return (/*@NonNull*/ T[][][][]) castNonNullArray(arr);
     }
 
+    /**
+     * Like castNonNull, but whereas that method only checks and casts the
+     * reference itself, this traverses all levels of the argument array.
+     * The array is recursively checked to ensure that all elements at
+     * every array level are non-null.
+     * @see #castNonNull(Object)
+     */
     /*@AssertParametersNonNull*/
     public static
     <T extends /*@Nullable*/ Object>
