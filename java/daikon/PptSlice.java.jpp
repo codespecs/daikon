@@ -56,6 +56,8 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+
 import plume.*;
 
 /**
@@ -602,8 +604,8 @@ public final class PPTSLICE1 extends PptSlice {
       }
 
       // Child variable info
-      VarInfo[] cvis = new VarInfo[var_infos.length];
-      VarInfo[] cvis_sorted = new VarInfo[var_infos.length];
+      /*NNC:@LazyNonNull*/ VarInfo[] cvis = new VarInfo[var_infos.length];
+      /*NNC:@LazyNonNull*/ VarInfo[] cvis_sorted = new VarInfo[var_infos.length];
 
       // Build the corresponding array of VarInfos for the child.  If any
       // of the vars don't exist in this child, skip the child (since we
@@ -616,6 +618,9 @@ public final class PPTSLICE1 extends PptSlice {
         cvis[j] = cv.canonicalRep();
         cvis_sorted[j] = cv.canonicalRep();
       }
+
+      cvis = castNonNullDeep(cvis); // issue 154
+      cvis_sorted = castNonNullDeep(cvis_sorted); // issue 154
 
       // If any of the child variables have always been missing, this
       // particular slice in the child received no samples.  If dynamic
@@ -676,7 +681,7 @@ public final class PPTSLICE1 extends PptSlice {
         Invariant inv = orig_inv.clone_and_permute (permute);
         all_invs.add (inv);
         if (Invariant.logOn()) {
-          VarInfo[] child_vars = new VarInfo[var_infos.length];
+          /*NNC:@LazyNonNull*/ VarInfo[] child_vars = new VarInfo[var_infos.length];
           for (int k = 0; k < var_infos.length; k++) {
             VarInfo pv = var_infos[k];
             @SuppressWarnings("nullness")
@@ -684,6 +689,7 @@ public final class PPTSLICE1 extends PptSlice {
             assert cv != null;
             child_vars[k] = cv.canonicalRep();
           }
+          child_vars = castNonNullDeep(child_vars); // issue 154
           orig_inv.log ("org inv");
           inv.log ("Created " + inv + " from " + orig_inv + " using permute "
                    + ArraysMDE.toString(permute) + " cvis_sorted = "

@@ -12,6 +12,8 @@ import static daikon.VarInfo.VarKind;
 import static daikon.VarInfo.VarFlags;
 import static daikon.VarInfo.LangFlags;
 
+import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+
 import plume.*;
 
 import java.io.*;
@@ -2104,12 +2106,12 @@ public final class FileIO {
     VarInfo[] vis = ppt.var_infos;
     int num_tracevars = ppt.num_tracevars;
 
-    String[] oldvalue_reps = ppt_to_value_reps.get(ppt);
+    /*NNC:@Nullable*/ String[] oldvalue_reps = ppt_to_value_reps.get(ppt);
     if (oldvalue_reps == null) {
       // We've not encountered this program point before.  The nulls in
       // this array will compare non-equal to whatever is in the trace
       // file, which is the desired behavior.
-      oldvalue_reps = new /*@Nullable*/ String[num_tracevars];
+      oldvalue_reps = new /*NNC:@Nullable*/ String[num_tracevars];
     }
 
     if (Global.debugPrintDtrace) {
@@ -2332,6 +2334,7 @@ public final class FileIO {
     }
 
     // Does oldvalue_reps now have no null elements???
+    oldvalue_reps = castNonNullDeep(oldvalue_reps); // issue 154
     ppt_to_value_reps.put(ppt, oldvalue_reps);
 
     if (Global.debugPrintDtrace) {

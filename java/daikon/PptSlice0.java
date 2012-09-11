@@ -2,6 +2,8 @@ package daikon;
 
 import daikon.inv.*;
 
+import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+
 import plume.*;
 
 import java.util.*;
@@ -37,10 +39,11 @@ public class PptSlice0
   // sliceTemplate, but marked as prestate (i.e., orig(x) rather than x).
   public static PptSlice makeFakePrestate(PptSlice sliceTemplate) {
     PptSlice0 fake = new PptSlice0(sliceTemplate.parent);
-    fake.var_infos = new /*@Nullable*/ VarInfo[sliceTemplate.var_infos.length];
+    fake.var_infos = new /*NNC:@LazyNonNull*/ VarInfo[sliceTemplate.var_infos.length];
     for (int i=0; i < fake.var_infos.length; i++) {
       fake.var_infos[i] = VarInfo.origVarInfo(sliceTemplate.var_infos[i]);
     }
+    fake.var_infos = castNonNullDeep(fake.var_infos); // issue 154
     return fake;
   }
 

@@ -12,6 +12,8 @@ import daikon.simplify.SimpUtil;
 import daikon.simplify.LemmaStack;
 import static daikon.inv.Invariant.asInvClass;
 
+import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+
 import plume.*;
 
 import java.util.logging.Logger;
@@ -1211,7 +1213,7 @@ public abstract class Invariant
     DiscardInfo result = isObviousStatically();
     if (result != null) return result;
     return isObviousStatically_SomeInEqualityHelper (this.ppt.var_infos,
-                                                     new /*@Nullable*/ VarInfo[this.ppt.var_infos.length],
+                                                     new /*NNC:@LazyNonNull*/ VarInfo[this.ppt.var_infos.length],
                                                      0);
   }
 
@@ -1221,7 +1223,7 @@ public abstract class Invariant
    **/
   protected /*@Nullable*/ DiscardInfo
     isObviousStatically_SomeInEqualityHelper(/*>>> @NonPrototype Invariant this,*/ VarInfo[] vis,
-                                             VarInfo[] assigned,
+                                             /*NNC:@LazyNonNull*/ VarInfo[] assigned,
                                              int position) {
     if (position == vis.length) {
       if (debugIsObvious.isLoggable(Level.FINE)) {
@@ -1233,6 +1235,7 @@ public abstract class Invariant
         debugIsObvious.fine (sb.toString());
       }
 
+      assigned = castNonNullDeep(assigned); // issue 154
       return isObviousStatically(assigned);
     } else {
       for (VarInfo vi : vis[position].get_equalitySet_vars ()) {
@@ -1349,7 +1352,7 @@ public abstract class Invariant
     if (result != null)
       return result;
     return isObviousDynamically_SomeInEqualityHelper (this.ppt.var_infos,
-                                                     new /*@Nullable*/ VarInfo[this.ppt.var_infos.length],
+                                                     new /*NNC:@LazyNonNull*/ VarInfo[this.ppt.var_infos.length],
                                                      0);
   }
 

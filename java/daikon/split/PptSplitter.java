@@ -3,6 +3,9 @@ package daikon.split;
 import daikon.*;
 import daikon.inv.*;
 import daikon.suppress.*;
+
+import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+
 import plume.*;
 
 import java.util.*;
@@ -73,7 +76,7 @@ public class PptSplitter implements Serializable {
    * PptTopLevel if the PptSplitter represents two exit points (for which
    * no splitter is required).
    **/
-  public PptTopLevel[] ppts = new /*@Nullable*/ PptTopLevel[2];
+  public PptTopLevel[] ppts;
 
   private static final Comparator<Invariant> icfp
                             = new Invariant.InvariantComparatorForPrinting();
@@ -87,8 +90,9 @@ public class PptSplitter implements Serializable {
 
     this.parent = parent;
     this.splitter = splitter;
-    ppts[0] = new PptConditional (parent, splitter, false);
-    ppts[1] = new PptConditional (parent, splitter, true);
+    ppts = new PptTopLevel[] {
+      new PptConditional (parent, splitter, false),
+      new PptConditional (parent, splitter, true) };
 
     if (Debug.logDetail()) {
       debug.fine ("VarInfos for " + parent.name());
@@ -106,8 +110,7 @@ public class PptSplitter implements Serializable {
                       PptTopLevel exit2) {
     this.parent = parent;
     this.splitter = null;
-    ppts[0] = exit1;
-    ppts[1] = exit2;
+    ppts = new PptTopLevel[] { exit1, exit2 };
   }
 
 
@@ -256,7 +259,7 @@ public class PptSplitter implements Serializable {
       int num_children = ppts.length;
       // Each element is an invariant from the indexth child, permuted to
       // the parent (and with a parent slice as its ppt slot).
-      Invariants[] invs = new /*@Nullable*/ Invariants[num_children];
+      /*NNC:@LazyNonNull*/ Invariants[] invs = new Invariants[num_children];
 
       // find the parent slice
       PptSlice pslice = parent.get_or_instantiate_slice (vis);
@@ -273,15 +276,19 @@ public class PptSplitter implements Serializable {
         invs[childno] = new Invariants(); // permuted to parent
 
         // Get the child vis in the correct order
-        VarInfo[] cvis_non_canonical = new /*@Nullable*/ VarInfo[vis.length];
-        VarInfo[] cvis = new /*@Nullable*/ VarInfo[vis.length];
-        VarInfo[] cvis_sorted = new /*@Nullable*/ VarInfo[vis.length];
+        /*NNC:@LazyNonNull*/ VarInfo[] cvis_non_canonical = new VarInfo[vis.length];
+        /*NNC:@LazyNonNull*/ VarInfo[] cvis = new VarInfo[vis.length];
+        /*NNC:@LazyNonNull*/ VarInfo[] cvis_sorted = new VarInfo[vis.length];
         for (int kk = 0; kk < vis.length; kk++) {
           cvis_non_canonical[kk] = matching_var (child_ppt, parent, vis[kk]);
           cvis[kk] = cvis_non_canonical[kk].canonicalRep();
           cvis_sorted[kk] = cvis[kk];
         }
         Arrays.sort (cvis_sorted, VarInfo.IndexComparator.getInstance());
+
+        cvis_non_canonical = castNonNullDeep(cvis_non_canonical); // issue 154
+        cvis = castNonNullDeep(cvis); // issue 154
+        cvis_sorted = castNonNullDeep(cvis_sorted); // issue 154
 
         // Look for an equality invariant in the non-canonical slice (if any).
         // Note that only an equality invariant can exist in a non-canonical
@@ -338,6 +345,8 @@ public class PptSplitter implements Serializable {
           orig_invs.put (inv, orig_inv);
         }
       } // children loop
+
+      invs = castNonNullDeep(invs); // issue 154
 
 
       // If neither child slice has invariants there is nothing to do
@@ -455,7 +464,7 @@ public class PptSplitter implements Serializable {
     // We pick the first one that is neither obvious or suppressed.
     // If all are either obvious or suppressed, we just pick the first
     // one in the list
-    Invariant[] con_invs = new /*@Nullable*/ Invariant[2];
+    /*NNC:@LazyNonNull*/ Invariant[] con_invs = new Invariant[2];
     for (Invariant[] invs : exclusive_invs_vec) {
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (con_invs[jj] == null) {
@@ -475,6 +484,7 @@ public class PptSplitter implements Serializable {
         con_invs[jj] = first[jj];
       }
     }
+    con_invs = castNonNullDeep(con_invs); // issue 154
 
     // Create double-implications for each exclusive invariant
     for (Invariant[] invs : exclusive_invs_vec) {
@@ -632,7 +642,7 @@ public class PptSplitter implements Serializable {
     ss2.addAll(invs2);
 
     ss1.retainAll(ss2);
-    return new Vector<Invariant>(ss1);
+    return new Vector</*@Nullable*/ Invariant>(ss1);
 
     // // This seems like a rather complicated implementation.  Why can't it
     // // just use set intersection?

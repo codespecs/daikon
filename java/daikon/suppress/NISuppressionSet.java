@@ -3,6 +3,9 @@ package daikon.suppress;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.*;
+
+import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+
 import plume.*;
 
 import java.lang.reflect.*;
@@ -98,9 +101,8 @@ public class NISuppressionSet implements Iterable<NISuppression> {
       // Create all of the valid unary slices that use the vars from inv
       // and check to see if the invariant should be created for each slice
       if (inv.ppt.var_infos.length == 1) {
-        VarInfo[] vis = new VarInfo[1];
         VarInfo v1 = inv.ppt.var_infos[0];
-        vis[0] = v1;
+        VarInfo[] vis = new VarInfo[] { v1 };
 
         // Make sure the slice is interesting and has valid types over the
         // suppressee invariant
@@ -117,11 +119,9 @@ public class NISuppressionSet implements Iterable<NISuppression> {
       // Create all of the valid binary slices that use the vars from inv
       // and check to see if the invariant should be created for each slice
       if (inv.ppt.var_infos.length == 2) {
-        VarInfo[] vis = new VarInfo[2];
         VarInfo v1 = inv.ppt.var_infos[0];
         VarInfo v2 = inv.ppt.var_infos[1];
-        vis[0] = v1;
-        vis[1] = v2;
+        VarInfo[] vis = new VarInfo[] { v1, v2 };
 
         // Make sure the slice is interesting and has valid types over the
         // suppressee invariant
@@ -131,7 +131,6 @@ public class NISuppressionSet implements Iterable<NISuppression> {
         }
 
       } else /* must be unary */{
-        VarInfo[] vis = new VarInfo[2];
         VarInfo v1 = inv.ppt.var_infos[0];
         VarInfo[] leaders = ppt.equality_view.get_leaders_sorted();
         for (int i = 0; i < leaders.length; i++) {
@@ -149,13 +148,13 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           if (!ppt.is_slice_ok(v1, l1))
             continue;
 
+          VarInfo[] vis;
+
           // Sort the variables
           if (v1.varinfo_index <= l1.varinfo_index) {
-            vis[0] = v1;
-            vis[1] = l1;
+            vis = new VarInfo[] { v1, l1 };
           } else {
-            vis[0] = l1;
-            vis[1] = v1;
+            vis = new VarInfo[] { l1, v1 };
           }
 
           if (!suppression_set[0].suppressee.sample_inv.valid_types(vis))
@@ -177,7 +176,6 @@ public class NISuppressionSet implements Iterable<NISuppression> {
       // Create all of the valid ternary slices that use the vars from inv
       // and check to see if the invariant should be created for each slice
       if (inv.ppt.var_infos.length == 2) {
-        VarInfo[] vis = new VarInfo[3];
         VarInfo v1 = inv.ppt.var_infos[0];
         VarInfo v2 = inv.ppt.var_infos[1];
         VarInfo[] leaders = ppt.equality_view.get_leaders_sorted();
@@ -195,19 +193,15 @@ public class NISuppressionSet implements Iterable<NISuppression> {
               || v2.missingOutOfBounds())
             continue;
 
+          VarInfo[] vis;
+
           // Order the variables,
           if (l.varinfo_index <= v1.varinfo_index) {
-            vis[0] = l;
-            vis[1] = v1;
-            vis[2] = v2;
+            vis = new VarInfo[] { l, v1, v2 };
           } else if (l.varinfo_index <= v2.varinfo_index) {
-            vis[0] = v1;
-            vis[1] = l;
-            vis[2] = v2;
+            vis = new VarInfo[] { v1, l, v2 };
           } else {
-            vis[0] = v1;
-            vis[1] = v2;
-            vis[2] = l;
+            vis = new VarInfo[] { v1, v2, l };
           }
 
           if (!suppression_set[0].suppressee.sample_inv.valid_types(vis))
@@ -220,7 +214,6 @@ public class NISuppressionSet implements Iterable<NISuppression> {
           check_falsified (ppt, vis, inv, new_invs);
         }
       } else /* must be unary */ {
-        VarInfo[] vis = new VarInfo[3];
         VarInfo v1 = inv.ppt.var_infos[0];
         VarInfo[] leaders = ppt.equality_view.get_leaders_sorted();
         for (int i = 0; i < leaders.length; i++) {
@@ -246,19 +239,15 @@ public class NISuppressionSet implements Iterable<NISuppression> {
             if (!ppt.is_slice_ok (v1, l1, l2))
               continue;
 
+            VarInfo[] vis;
+
             // Sort the variables
             if (v1.varinfo_index <= l1.varinfo_index) {
-              vis[0] = v1;
-              vis[1] = l1;
-              vis[2] = l2;
+              vis = new VarInfo[] { v1, l1, l2 };
             } else if (v1.varinfo_index <= l2.varinfo_index) {
-              vis[0] = l1;
-              vis[1] = v1;
-              vis[2] = l2;
+              vis = new VarInfo[] { l1, v1, l2 };
             } else {
-              vis[0] = l1;
-              vis[1] = l2;
-              vis[2] = v1;
+              vis = new VarInfo[] { l1, l2, v1 };
             }
 
             if (!suppression_set[0].suppressee.sample_inv.valid_types(vis))
@@ -516,12 +505,13 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     // assert new_suppressions.size() > 0;
 
     // Create a new suppression set with all of the suppressions.
-    NISuppression[] new_array
+    /*NNC:@LazyNonNull*/ NISuppression[] new_array
       = new NISuppression [suppression_set.length + new_suppressions.size()];
     for (int i = 0; i < suppression_set.length; i++)
       new_array[i] = suppression_set[i];
     for (int i = 0; i < new_suppressions.size(); i++)
       new_array[suppression_set.length + i] = new_suppressions.get(i);
+    new_array = castNonNullDeep(new_array); // issue 154
     suppression_set = new_array;
 
   }
@@ -535,10 +525,11 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     NISuppression[] swap_sups = new NISuppression[suppression_set.length];
     for (int i = 0; i < swap_sups.length; i++) {
       NISuppression std_sup = suppression_set[i];
-      NISuppressor[] sors = new NISuppressor[std_sup.suppressors.length];
+      /*NNC:@LazyNonNull*/ NISuppressor[] sors = new NISuppressor[std_sup.suppressors.length];
       for (int j = 0; j < sors.length; j++) {
         sors[j] = std_sup.suppressors[j].swap();
       }
+      sors = castNonNullDeep(sors); // issue 154
       swap_sups[i] = new NISuppression (sors, std_sup.suppressee.swap());
     }
     NISuppressionSet new_ss = new NISuppressionSet (swap_sups);

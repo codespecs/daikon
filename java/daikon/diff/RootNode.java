@@ -28,5 +28,3 @@ public class RootNode extends Node<Void,PptNode> {
   }
 
 }
-
-

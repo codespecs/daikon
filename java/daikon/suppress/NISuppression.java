@@ -3,6 +3,9 @@ package daikon.suppress;
 import daikon.*;
 import daikon.inv.*;
 import daikon.inv.binary.*;
+
+import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+
 import plume.*;
 
 import java.lang.reflect.*;
@@ -457,7 +460,7 @@ public class NISuppression {
   List<Invariant> /*@Nullable*/ [] antecedents_for_suppressors (NIS.Antecedents ants) {
 
     @SuppressWarnings({"unchecked", "rawtypes"})
-    List<Invariant> antecedents[] = (List<Invariant>[]) new List[suppressors.length];
+    /*NNC:@LazyNonNull*/ List<Invariant> antecedents[] = (List<Invariant>[]) new List[suppressors.length];
 
     // Find the list of antecedents that matches each suppressor.  If any
     // suppressor doesn't have any matching antecedents, there can't be
@@ -473,6 +476,8 @@ public class NISuppression {
     if (debug)
       System.out.println (suppressee.sup_class.getName() + " " +
                           antecedents_for_suppression (antecedents));
+
+    antecedents = castNonNullDeep(antecedents); // issue 154
 
     return (antecedents);
   }

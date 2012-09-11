@@ -32,7 +32,8 @@ public class ModBitTracker
   /** The BitSets themselves. **/
   // In the future, I could imagine trying to optimize this with (say)
   // run-length encoding; but it's probably not worth it.
-  private BitSet[] modbits_arrays;
+  // All elements of modbits_arrays at or past num_sets are null.
+  private /*@Nullable*/ BitSet[] modbits_arrays;
 
   /**
    * Conceptually, there is a BitSet per variable.  In actuality, when two
@@ -121,6 +122,7 @@ public class ModBitTracker
    * Returns a BitSet of modbit values for the given variable.
    * The caller must not modify the returned value!
    **/
+  @SuppressWarnings("nullness") // application invariant: index[varindex] is an index for a non-null BitSet in modbits_arrays
   public BitSet get(int varindex) {
     return modbits_arrays[index[varindex]];
   }
@@ -138,7 +140,9 @@ public class ModBitTracker
    * Returns the index of the copy.
    **/
   private int split(int split_index) {
-    modbits_arrays[num_sets] = (BitSet) modbits_arrays[split_index].clone();
+    @SuppressWarnings("nullness") // application invariant: split_index is in range
+    /*@NonNull*/ BitSet bs = (BitSet) modbits_arrays[split_index].clone();
+    modbits_arrays[num_sets] = bs;
     num_sets++;
     return num_sets-1;
   }
@@ -184,7 +188,9 @@ public class ModBitTracker
       }
     }
     for (int i=0; i<num_sets; i++) {
-      modbits_arrays[i].set(num_samples, num_samples+count, this_bits[i]);
+      @SuppressWarnings("nullness") // application invariant: non-null up to index=num_sets
+      /*@NonNull*/ BitSet bs = modbits_arrays[i];
+      bs.set(num_samples, num_samples+count, this_bits[i]);
     }
     num_samples += count;
 

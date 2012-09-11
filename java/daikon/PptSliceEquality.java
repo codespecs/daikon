@@ -4,6 +4,8 @@ import daikon.inv.*;
 import daikon.suppress.*;
 import daikon.inv.ternary.threeScalar.*;
 
+import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+
 import plume.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
@@ -133,7 +135,7 @@ public class PptSliceEquality
     if (debug.isLoggable(Level.FINE)) {
       debug.fine (Integer.toString(multiMap.keySet().size()));
     }
-    Equality[] newInvs = new /*@Nullable*/ Equality[multiMap.keySet().size()];
+    Equality[] newInvs = new Equality[multiMap.keySet().size()];
     int varCount = 0;
     int invCount = 0;
     for (List<VarInfo> list : multiMap.values()) {
@@ -319,7 +321,7 @@ public class PptSliceEquality
       }
     }
     // Why use an array?  Because we'll be sorting shortly
-    Equality[] resultArray = new /*@Nullable*/ Equality[multiMap.values().size()
+    /*NNC:@LazyNonNull*/ Equality[] resultArray = new Equality[multiMap.values().size()
                                           + out_of_bounds.size()];
     int resultCount = 0;
     for (Map.Entry</*@KeyFor("multiMap")*/ Object,List<VarInfo>> entry : multiMap.entrySet()) {
@@ -345,6 +347,7 @@ public class PptSliceEquality
       resultArray[resultCount] = new Equality (list, this);
       resultCount++;
     }
+    resultArray = castNonNullDeep(resultArray); // issue 154
 
     // Sort for determinism
     Arrays.sort (resultArray, EqualityComparator.theInstance);
@@ -368,16 +371,16 @@ public class PptSliceEquality
        assert vis.size() > 0;
 
        // Why use an array?  Because we'll be sorting shortly
-       Equality[] resultArray = new /*@Nullable*/ Equality[vis.size()];
-       int resultCount = 0;
-       for (VarInfo vi : vis) {
+       /*NNC:@LazyNonNull*/ Equality[] resultArray = new Equality[vis.size()];
+       for (int i = 0; i < vis.size(); i++) {
+         VarInfo vi = vis.get(i);
          List<VarInfo> list = new ArrayList<VarInfo>();
          list.add(vi);
          Equality eq = new Equality(list, this);
          eq.setSamples(leader.numSamples());
-         resultArray[resultCount] = eq;
-         resultCount++;
+         resultArray[i] = eq;
        }
+       resultArray = castNonNullDeep(resultArray); // issue 154
 
        // Sort for determinism
        Arrays.sort(
@@ -452,7 +455,7 @@ public class PptSliceEquality
       if (slice.containsVar(leader)) {
 
         // Substitute new leader for old leader and create new slices/invs
-        VarInfo[] toFill = new /*@Nullable*/ VarInfo[slice.var_infos.length];
+        VarInfo[] toFill = new VarInfo[slice.var_infos.length];
         copyInvsFromLeaderHelper (leader, newVis, slice, newSlices,
                                   0, -1, toFill);
 

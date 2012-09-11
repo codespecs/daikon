@@ -22,6 +22,8 @@ import daikon.inv.filter.InvariantFilters;
 import static daikon.FileIO.ParentRelation;
 import static daikon.PptRelation.PptRelationType;
 
+import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
+
 import plume.*;
 
 import java.util.*;
@@ -417,18 +419,20 @@ public class PptTopLevel extends Ppt {
     assert num_static_constant_vars == num_declvars - num_tracevars;
     assert num_tracevars == var_infos.length - num_static_constant_vars;
     mbtracker = new ModBitTracker(num_tracevars);
-    value_sets = new /*@Nullable*/ ValueSet[num_tracevars];
+    /*NNC:@LazyNonNull*/ ValueSet[] new_value_sets = new ValueSet[num_tracevars];
     for (VarInfo vi : var_infos) {
       int value_index = vi.value_index;
       if (value_index == -1) {
         continue;
       }
-      assert value_sets[value_index] == null;
-      value_sets[value_index] = ValueSet.factory(vi);
+      assert new_value_sets[value_index] == null;
+      new_value_sets[value_index] = ValueSet.factory(vi);
     }
-    for (ValueSet vs : value_sets) {
+    for (ValueSet vs : new_value_sets) {
       assert vs != null;
     }
+    new_value_sets = castNonNullDeep(new_value_sets); // issue 154
+    value_sets = new_value_sets;
 
     for (VarInfo vi : var_infos) {
       // TODO: This should not be necessary, since initialization is now complete
@@ -585,24 +589,26 @@ public class PptTopLevel extends Ppt {
     if (vis.length == 0)
       return;
     int old_length = var_infos.length;
-    VarInfo[] new_var_infos = new /*@Nullable*/ VarInfo[var_infos.length + vis.length];
+    /*NNC:@LazyNonNull*/ VarInfo[] new_var_infos = new VarInfo[var_infos.length + vis.length];
     assert mbtracker.num_samples() == 0;
     mbtracker = new ModBitTracker(mbtracker.num_vars() + vis.length);
     System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
     System.arraycopy(vis, 0, new_var_infos, old_length, vis.length);
+    new_var_infos = castNonNullDeep(new_var_infos); // issue 154
     for (int i = old_length; i < new_var_infos.length; i++) {
       VarInfo vi = new_var_infos[i];
       vi.varinfo_index = i;
       vi.value_index = i - num_static_constant_vars;
       vi.ppt = this;
     }
-    var_infos = new_var_infos;
+    var_infos = castNonNullDeep(new_var_infos);
     int old_vs_length = value_sets.length;
-    ValueSet[] new_value_sets = new /*@Nullable*/ ValueSet[old_vs_length + vis.length];
+    /*NNC:@LazyNonNull*/ ValueSet[] new_value_sets = new ValueSet[old_vs_length + vis.length];
     System.arraycopy(value_sets, 0, new_value_sets, 0, old_vs_length);
     for (int i = 0; i < vis.length; i++) {
       new_value_sets[old_vs_length + i] = ValueSet.factory(vis[i]);
     }
+    new_value_sets = castNonNullDeep(new_value_sets); // issue 154
     value_sets = new_value_sets;
 
     // Relate the variables to one another
@@ -3001,9 +3007,10 @@ public class PptTopLevel extends Ppt {
 
     int backgroundMark = proverStack.markLevel();
 
-    InvariantLemma[] lemmas = new /*@Nullable*/ InvariantLemma[invs.length];
+    /*NNC:@LazyNonNull*/ InvariantLemma[] lemmas = new InvariantLemma[invs.length];
     for (int i = 0; i < invs.length; i++)
       lemmas[i] = new InvariantLemma(invs[i]);
+    lemmas = castNonNullDeep(lemmas); // issue 154
     boolean[] present = new boolean[lemmas.length];
     Arrays.fill(present, 0, present.length, true);
     for (int checking = invs.length - 1; checking >= 0; checking--) {
@@ -3585,7 +3592,7 @@ public class PptTopLevel extends Ppt {
     }
     int num_tracevars = mbtracker.num_vars();
     // warning: shadows field of same name
-    Object[] vals = new /*@Nullable*/ Object[num_tracevars];
+    /*@Nullable*/ Object[] vals = new Object[num_tracevars];
     int[] mods = new int[num_tracevars];
     ValueTuple vt = ValueTuple.makeUninterned(vals, mods);
     for (PptRelation rel : children) {
@@ -3948,7 +3955,7 @@ public class PptTopLevel extends Ppt {
    */
   public VarInfo /*@Nullable*/ [] parent_vis(PptRelation rel, PptSlice slice) {
 
-    VarInfo[] pvis = new /*@Nullable*/ VarInfo[slice.var_infos.length];
+    /*NNC:@LazyNonNull*/ VarInfo[] pvis = new VarInfo[slice.var_infos.length];
     for (int j = 0; j < slice.var_infos.length; j++) {
       VarInfo cv = slice.var_infos[j]; // child variable
       VarInfo pv = null;               // parent variable
@@ -3985,6 +3992,7 @@ public class PptTopLevel extends Ppt {
 
       // assert !pv.missingOutOfBounds();
     }
+    pvis = castNonNullDeep(pvis); // issue 154
     return (pvis);
   }
 
