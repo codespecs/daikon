@@ -365,14 +365,14 @@ public final class Quant {
    * AbstractCollection.
    */
   /*TODO: @AssertNonNullIfNonNull("#0")*/
-  public static Object /*@PolyAll*/ [] toObjArray(/*@PolyAll*/ Object o) {
+  public static Object /*@PolyNull*/ [] toObjArray(/*@PolyNull*/ Object o) {
     if (o == null) { return null; }
     if (o instanceof java.util.AbstractCollection<?>) {
       @SuppressWarnings({"unchecked", "interning"})
-        AbstractCollection<Object> ac = (AbstractCollection</*@PolyInterned*/ Object>)o;
+        AbstractCollection<Object> ac = (AbstractCollection<Object>)o;
       @SuppressWarnings("interning") // generics bug in checker?
-      Object /*@PolyAll*/ [] result
-        = ac.toArray(new java.lang.Object /*@PolyAll*/ []{});
+      Object [] result
+        = ac.toArray(new java.lang.Object []{});
       return result;
     } else if (o.getClass().isArray()) {
       return (Object[])o;
