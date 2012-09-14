@@ -3650,7 +3650,7 @@ Variable comparability information helps Daikon to avoid computing
 information over unrelated variables.  This saves time and (more
 importantly) improves the quality of Daikon's output.  For more details,
 see the paper
-@uref{http://www.cs.washington.edu/homes/mernst/pubs/invariants-relevance-icse2000-abstract.html,
+@uref{http://homes.cs.washington.edu/~mernst/pubs/invariants-relevance-icse2000-abstract.html,
 , ``Quickly detecting relevant program invariants''}.
 
 Variable comparability information may be obtained dynamically
