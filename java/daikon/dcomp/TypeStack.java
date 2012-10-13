@@ -177,7 +177,7 @@ public final class TypeStack
         return inChainHelper(parentMap.get(h), h);
     }
 
-    /*@AssertNonNullIfTrue("#1")*/
+    /*@AssertNonNullIfTrue("#2")*/
     private boolean inChainHelper(final /*@Nullable*/ InstructionHandle h1,
                                   final /*@Nullable*/ InstructionHandle h2)
     {

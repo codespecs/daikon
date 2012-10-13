@@ -144,7 +144,7 @@ public final /*@Interned*/ class ProglangType
   }
 
   // Is this necessary?  It will be inherited from Object.
-  // /*@AssertNonNullIfTrue("#0")*/
+  // /*@AssertNonNullIfTrue("#1")*/
   // public boolean equals(/*@Nullable*/ Object o) {
   //   return this == o;
   // }

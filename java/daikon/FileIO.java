@@ -245,7 +245,7 @@ public final class FileIO {
   }
 
   // Utilities
-  /*@AssertNonNullIfTrue("#0")*/
+  /*@AssertNonNullIfTrue("#1")*/
   public static final boolean isComment(/*@Nullable*/ String s) {
     return s != null && (s.startsWith("//") || s.startsWith("#"));
   }
@@ -253,7 +253,7 @@ public final class FileIO {
   // Nullness-checking of read_data_trace_record(ParseState) works even
   // without these two lines, since StringBuilderDelimited accepts null values.
   @SuppressWarnings("nullness:assertiftrue.postcondition.not.satisfied") // readLine() assertion is ensured by call to reset()
-  /*@AssertNonNullIfTrue("#0.readLine()")*/
+  /*@AssertNonNullIfTrue("#1.readLine()")*/
   public static final boolean nextLineIsComment(BufferedReader reader) {
     boolean result = false;
     try {
@@ -945,7 +945,7 @@ public final class FileIO {
     }
 
     // Return true if the invocations print the same
-    /*@AssertNonNullIfTrue("#0")*/
+    /*@AssertNonNullIfTrue("#1")*/
     public boolean equals(/*@Nullable*/ Object other) {
       if (other instanceof FileIO.Invocation)
         return this.format().equals(((FileIO.Invocation) other).format());

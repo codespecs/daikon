@@ -205,7 +205,7 @@ public class Violation implements Serializable {
     /**
      * Two violations are equal if their properties and times are equal.
      */
-    /*@AssertNonNullIfTrue("#0")*/
+    /*@AssertNonNullIfTrue("#1")*/
     public boolean equals(/*@Nullable*/ Object o) {
         if (o == null) {
             return false;

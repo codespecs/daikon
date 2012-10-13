@@ -1558,7 +1558,7 @@ public abstract class Invariant
       this.inv = inv;
     }
 
-    /*@AssertNonNullIfTrue("#0")*/
+    /*@AssertNonNullIfTrue("#1")*/
     public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof Match))
         return (false);

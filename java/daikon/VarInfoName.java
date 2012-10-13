@@ -561,12 +561,12 @@ public abstract /*@Interned*/ class VarInfoName
   // ============================================================
   // The usual Object methods
 
-  /*@AssertNonNullIfTrue("#0")*/
+  /*@AssertNonNullIfTrue("#1")*/
   public boolean equals(/*@Nullable*/ Object o) {
     return (o instanceof VarInfoName) && equals((VarInfoName) o);
   }
 
-  /*@AssertNonNullIfTrue("#0")*/
+  /*@AssertNonNullIfTrue("#1")*/
   public boolean equals(/*>>> @Interned VarInfoName this,*/ VarInfoName other) {
     return ((other == this)     // "interned": equality optimization pattern
             || ((other != null)
@@ -2178,7 +2178,7 @@ public abstract /*@Interned*/ class VarInfoName
     /**
      * Returns true iff some part of root is contained in this.goals.
      **/
-    /*@AssertNonNullIfTrue("getPart(#0")*/
+    /*@AssertNonNullIfTrue("getPart(#1")*/
     public boolean contains (VarInfoName root) {
       VarInfoName o = getPart(root);
       return (o != null);

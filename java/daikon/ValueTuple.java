@@ -69,7 +69,7 @@ public final class ValueTuple implements Cloneable {
   public boolean isMissingNonsensical(VarInfo vi) { return vi.isMissingNonsensical(this); }
   public boolean isMissingFlow(VarInfo vi) { return vi.isMissingFlow(this); }
   @SuppressWarnings("nullness") // postcondition: array expression
-  /*@AssertNonNullIfFalse("vals[#0.value_index]")*/
+  /*@AssertNonNullIfFalse("vals[#1.value_index]")*/
   public boolean isMissing(VarInfo vi) { return vi.isMissing(this); }
 
   int getModified(int value_index) { return mods[value_index]; }
@@ -78,7 +78,7 @@ public final class ValueTuple implements Cloneable {
   boolean isMissingNonsensical(int value_index) { return mods[value_index] == MISSING_NONSENSICAL; }
   boolean isMissingFlow(int value_index) { return mods[value_index] == MISSING_FLOW; }
   @SuppressWarnings("nullness") // postcondition: array expression
-  /*@AssertNonNullIfFalse("vals[#0]")*/
+  /*@AssertNonNullIfFalse("vals[#1]")*/
   boolean isMissing(int value_index) { return (isMissingNonsensical(value_index)
                                                || isMissingFlow(value_index)); }
 
@@ -304,7 +304,7 @@ public final class ValueTuple implements Cloneable {
 
   // These definitions are intended to make different ValueTuples with the
   // same contents compare identically.
-  /*@AssertNonNullIfTrue("#0")*/
+  /*@AssertNonNullIfTrue("#1")*/
   public boolean equals(/*@Nullable*/ Object obj) {
     if (! (obj instanceof ValueTuple))
       return false;

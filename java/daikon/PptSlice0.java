@@ -188,7 +188,7 @@ public class PptSlice0
     }
 
     // Returns the value of "isSameInvariant()".
-    /*@AssertNonNullIfTrue("#0")*/
+    /*@AssertNonNullIfTrue("#1")*/
     public boolean equals(/*@Nullable*/ Object o) {
       if (o == null)
         return false;

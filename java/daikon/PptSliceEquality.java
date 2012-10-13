@@ -79,7 +79,7 @@ public class PptSliceEquality
       return vi.file_rep_type.hashCode();
     }
 
-    /*@AssertNonNullIfTrue("#0")*/
+    /*@AssertNonNullIfTrue("#1")*/
     public boolean equals (/*@Nullable*/ Object o) {
       if (!(o instanceof VarInfoAndComparability)) return false;
       return equals ((VarInfoAndComparability) o);
@@ -90,7 +90,7 @@ public class PptSliceEquality
      * whether they are comparableNWay.  Since we do not yet handle
      * inheritance, we require that the comptability go both ways.
      **/
-    /*@AssertNonNullIfTrue("#0")*/
+    /*@AssertNonNullIfTrue("#1")*/
     public boolean equals (VarInfoAndComparability o) {
 
       return (vi.comparableNWay (o.vi)

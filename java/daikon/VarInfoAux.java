@@ -245,7 +245,7 @@ public final class VarInfoAux
   }
 
 
-  /*@AssertNonNullIfTrue("#0")*/
+  /*@AssertNonNullIfTrue("#1")*/
   public boolean equals(/*@Nullable*/ Object o) {
     if (o instanceof VarInfoAux) {
       return equals((VarInfoAux) o);
@@ -254,7 +254,7 @@ public final class VarInfoAux
     }
   }
 
-  /*@AssertNonNullIfTrue("#0")*/
+  /*@AssertNonNullIfTrue("#1")*/
   public boolean equals(VarInfoAux o) {
     return this.map.equals(o.map);
   }

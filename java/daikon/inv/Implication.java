@@ -213,7 +213,7 @@ public class Implication
             && super.isSameFormula(other_implic));
   }
 
-  /*@AssertNonNullIfTrue("#0")*/
+  /*@AssertNonNullIfTrue("#1")*/
   public boolean isSameInvariant(Invariant other) {
     if (other == null)
       return false;

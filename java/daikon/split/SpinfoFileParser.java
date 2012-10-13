@@ -259,7 +259,7 @@ public class SpinfoFileParser {
   /**
    * Returns whether the line is blank (or null).
    */
-  /*@AssertNonNullIfFalse("#0")*/
+  /*@AssertNonNullIfFalse("#1")*/
   private static boolean isBlank(/*@Nullable*/ String line) {
     return (line == null) || line.trim().equals("");
   }

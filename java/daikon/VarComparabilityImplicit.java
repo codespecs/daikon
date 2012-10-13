@@ -70,13 +70,13 @@ public final class VarComparabilityImplicit
     return base;
   }
 
-  /*@AssertNonNullIfTrue("#0")*/
+  /*@AssertNonNullIfTrue("#1")*/
   public boolean equals (/*@Nullable*/ Object o) {
     if (!(o instanceof VarComparabilityImplicit)) return false;
     return equals ((VarComparabilityImplicit) o);
   }
 
-  /*@AssertNonNullIfTrue("#0")*/
+  /*@AssertNonNullIfTrue("#1")*/
   public boolean equals (VarComparabilityImplicit o) {
     return equality_set_ok (o);
   }

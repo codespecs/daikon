@@ -431,12 +431,12 @@ public class PptName
     return fullname;
   }
 
-  /*@AssertNonNullIfTrue("#0")*/
+  /*@AssertNonNullIfTrue("#1")*/
   public boolean equals(/*@Nullable*/ Object o) {
     return (o instanceof PptName) && equals((PptName) o);
   }
 
-  /*@AssertNonNullIfTrue("#0")*/
+  /*@AssertNonNullIfTrue("#1")*/
   public boolean equals(PptName o) {
     return (o != null) && (o.fullname == fullname);
   }

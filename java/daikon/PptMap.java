@@ -60,7 +60,7 @@ public class PptMap
    */
   /*@Pure*/
   @SuppressWarnings("nullness") // postcondition: linked maps
-  /*@AssertNonNullIfTrue("get(#0)")*/ // get(#0) == nameToPpt.get(#0)
+  /*@AssertNonNullIfTrue("get(#1)")*/ // get(#1) == nameToPpt.get(#1)
   public boolean containsName(String name) {
     return nameToPpt.containsKey(name);
   }

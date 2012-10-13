@@ -79,7 +79,7 @@ public class TestRedundantVars {
 
     // Returns true iff all tests pass.
     @SuppressWarnings("field.not.found.nullness.parse.error") // bug: fields in precondition expressions
-    /*@NonNullOnEntry("this.reds.records.get(#0)")*/
+    /*@NonNullOnEntry("this.reds.records.get(#1)")*/
     private static boolean process_ppt(String ppt) {
 
         List<String> invsWithout = without.records.get(ppt);

@@ -888,7 +888,7 @@ public class NIS {
     }
 
     /** Equal iff classes / swap variable / and variables match exactly **/
-    /*@AssertNonNullIfTrue("#0")*/
+    /*@AssertNonNullIfTrue("#1")*/
     public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof SupInv))
         return (false);
