@@ -874,7 +874,7 @@ check-nullness-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals com
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 # These targets run the Nullness checker on just one file.
-check-nullness-onefile:
+check-nullness-onefile: ${ALL_GENERATED_FILES} compile-typequals compile
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} daikon/derive/binary/SequenceStringUnion.java
 
 check-prototype: check-prototype-all
