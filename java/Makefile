@@ -869,13 +869,17 @@ check-nullness-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 # Version that issues warnings, not errors.
+## (Actually, it's identical to the above!  TODO: Fix that.)
 check-nullness-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 # These targets run the Nullness checker on just one file.
+# Typical command: 
+# NULLNESS_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-nullness-onefile
+NULLNESS_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
 check-nullness-onefile: ${ALL_GENERATED_FILES} compile-typequals compile
-	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} daikon/derive/binary/SequenceStringUnion.java
+	${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_ONEFILE}
 
 check-prototype: check-prototype-all
 
