@@ -245,7 +245,8 @@ public final class ValueTuple implements Cloneable {
   public void checkRep() {
     assert vals.length == mods.length;
     for (int i=0; i<vals.length; i++) {
-      assert 0 <= mods[i] && mods[i] < MODBIT_VALUES;
+      assert 0 <= mods[i] && mods[i] < MODBIT_VALUES
+        : String.format("mods: %s i:%d mods[i]: %s%n", mods, i, mods[i]);
       assert (isMissing(i) ? vals[i] == null : true);
     }
   }
