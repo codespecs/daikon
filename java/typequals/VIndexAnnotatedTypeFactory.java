@@ -1,4 +1,4 @@
-package checkers.regex;
+package typequals;
 
 import java.util.ArrayList;
 import java.util.List;
