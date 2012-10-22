@@ -819,13 +819,15 @@ INTERNING_SKIPDEFS = daikon\.dcomp
 # and has 60 @Interned annotations and quite a few SuppressWarnings.
 INTERNING_JAVA_FILES_SKIP_COUNTS = Intern.java\|VarInfoName.java\|daikon/dcomp
 ## Which files to check.
-INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES}
+INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES} daikon/util/*.java
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | sort)
 ## Setting this to a subset of directories only works if every file has been
 ## previously compiled with the Java 7 compiler in annotations-in-comments
 ## mode, so that annotations in the files with @SuppressWarnings are respected.
 NULLNESS_JAVA_FILES = \
-  ${DAIKON_JAVA_FILES}
+  ${DAIKON_JAVA_FILES} \
+  daikon/util/*.java
+
 #  $(shell find daikon -name '*.java' -a -exec grep -L "^@SuppressWarnings.*nullness" {} \; | sort)
 #   $(shell find typequals/ -name '*.java')
 
