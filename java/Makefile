@@ -819,14 +819,14 @@ INTERNING_SKIPDEFS = daikon\.dcomp
 # and has 60 @Interned annotations and quite a few SuppressWarnings.
 INTERNING_JAVA_FILES_SKIP_COUNTS = Intern.java\|VarInfoName.java\|daikon/dcomp
 ## Which files to check.
-INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES} daikon/util/*.java
+INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES} $(shell find daikon/util/ -name '*.java')
 INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | sort)
 ## Setting this to a subset of directories only works if every file has been
 ## previously compiled with the Java 7 compiler in annotations-in-comments
 ## mode, so that annotations in the files with @SuppressWarnings are respected.
 NULLNESS_JAVA_FILES = \
   ${DAIKON_JAVA_FILES} \
-  daikon/util/*.java
+  $(shell find daikon/util/ -name '*.java')
 
 #  $(shell find daikon -name '*.java' -a -exec grep -L "^@SuppressWarnings.*nullness" {} \; | sort)
 #   $(shell find typequals/ -name '*.java')
@@ -841,7 +841,7 @@ check-all: check-interning check-signature check-nullness check-regex
 
 intern: check-interning
 interning: check-interning
-check-interning: ${INTERNING_JAVA_FILES} compile
+check-interning: daikon/util/README ${INTERNING_JAVA_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${INTERNING_JAVA_FILES}
 
@@ -857,7 +857,7 @@ check-signature: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_SIGNATURE_ARGS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_SIGNATURE_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
-check-nullness: check-nullness-all
+check-nullness: daikon/util/README check-nullness-all
 
 check-nullness-all: check-nullness-all-withstubs
 
