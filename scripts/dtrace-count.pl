@@ -18,7 +18,7 @@ my %long_names;
 
 $/ = ""; # Read by paragraph
 while (<>) {
-    next if /^VarComparability/ or /^DECLARE/ or /^decl/ or /^input/; # Skip .decls-like paras
+    next if /^VarComparability/ or /^DECLARE/ or /^decl/ or /^ppt/ or /^var/ or /^input/ or /^\/\//; # Skip .decls-like paras
     /^(.*):::([A-Z\d]+)$/m or die "Can't parse PPT name from <$_>";
     my $name = "$1:::$2";
     $long_names{$1}{$2} = 1;

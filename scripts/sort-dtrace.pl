@@ -27,7 +27,7 @@ while (<>) {
     if ((/^VarComparability/)) {
 	print;
 	next;
-    } elsif((/^decl\-input.+/) || (/^input-language.+/) || (/^var\-comparability.+/)) {
+    } elsif ((/^decl\-version.+/) || (/^decl\-input.+/) || (/^input\-language.+/) || (/^var\-comparability.+/)) {
         $decls_2 = 1;
         print;
         next;
