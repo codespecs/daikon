@@ -78,7 +78,7 @@ ifdef JSR308
   CHECKERS ?= ${JSR308}/checker-framework/checkers
 endif
 ifdef CHECKERS
-  CHECKERSJAR ?= ${CHECKERS}/checkers.jar
+  CHECKERSJAR ?= ${CHECKERS}/binary/checkers.jar
 endif
 # If actually checking, override to checkers.jar.
 CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers-quals.jar
