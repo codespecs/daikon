@@ -30,7 +30,7 @@ public class FieldInfo extends DaikonVariableInfo
      * Accessed only by methods DCRuntime.get_field_tag and
      * DCRuntime.get_field_tag_refs_only.
      **/
-    public /*@LazyNonNull*/ DCRuntime.FieldTag field_tag = null;
+    public DCRuntime. /*@LazyNonNull*/ FieldTag field_tag = null;
 
     public FieldInfo(String theName, Field theField, String typeName, String repTypeName, boolean isArr)
     {

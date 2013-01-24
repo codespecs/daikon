@@ -177,7 +177,7 @@ public class DeclWriter extends DaikonWriter {
      * and the information in the variable is used if it is not.
      */
     private void traverseDecl(DaikonVariableInfo curInfo,
-                              /*@Nullable*/ DeclReader.DeclPpt decl_ppt)
+                              DeclReader. /*@Nullable*/ DeclPpt decl_ppt)
     {
       if (curInfo.declShouldPrint()) {
 
