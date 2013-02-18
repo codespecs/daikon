@@ -2064,6 +2064,8 @@ class DCInstrument {
     return (il);
   }
 
+  // I believe that this method is dead (never called) and can be removed.
+  // See method DCRuntime.has_instrumented().
   /**
    * Determine if the specified method is instrumented in the
    * specified class or any of its superclasses.

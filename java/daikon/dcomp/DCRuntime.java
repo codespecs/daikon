@@ -459,7 +459,7 @@ public final class DCRuntime {
 
   /**
    * Returns true if c or any of its superclasses has an instrumented
-   * version of method.  method should be an Object method with no
+   * version of method_name.  method_name should be an Object method with no
    * arguments
    */
   public static boolean has_instrumented (Class<?> c, String method_name) {
@@ -489,7 +489,7 @@ public final class DCRuntime {
         m = c.getDeclaredMethod (method_name, args);
       } catch (Exception e) {
       }
-      System.out.printf ("Class %s instrumented %s = %s%n", c, method_name, m);
+      // System.out.printf ("Class %s instrumented %s = %s%n", c, method_name, m);
       if (m != null) {
         return true;
       }
