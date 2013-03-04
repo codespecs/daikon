@@ -475,6 +475,7 @@ public class DeclWriter extends DaikonWriter {
      * Two VarRelations are equal if the refer to the same program point and
      * local variable
      */
+    @Override
     /*@AssertNonNullIfTrue("#1")*/
     public boolean equals (/*@Nullable*/ Object o) {
       if (!(o instanceof VarRelation) || (o == null))
@@ -485,6 +486,13 @@ public class DeclWriter extends DaikonWriter {
                   || ((vr.local_variable != null)
                       && vr.local_variable.equals (local_variable))));
     }
+
+    @Override
+    public int hashCode() {
+      return (parent_ppt_name.hashCode()
+              + ((local_variable == null) ? 0 : local_variable.hashCode()));
+    }
+
   }
 
     /**
