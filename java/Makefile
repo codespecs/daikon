@@ -1139,6 +1139,7 @@ use-%:
 
 showvars:
 	which java
+	which javac
 	@echo AUTO_GENERATED_FILES = ${AUTO_GENERATED_FILES}
 	@echo CLASSPATH = "${CLASSPATH}"
 	@echo CLASSPATH_JARS = $(CLASSPATH_JARS)
