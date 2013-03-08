@@ -85,7 +85,7 @@ public final class VarComparabilityImplicit
     return (base < 0);
   }
 
-  public boolean alwaysComparable() {
+  public /*@Pure*/ boolean alwaysComparable() {
     return (dimensions == 0) && (base < 0);
   }
 
@@ -140,7 +140,7 @@ public final class VarComparabilityImplicit
     return unknown;
   }
 
-  public VarComparability indexType(int dim) {
+  public /*@Pure*/ VarComparability indexType(int dim) {
     // When Ajax is modified to output non-atomic info for arrays, this
     // check will no longer be necessary.
     if (dim < dimensions) {
@@ -151,8 +151,9 @@ public final class VarComparabilityImplicit
     }
   }
 
-  static boolean comparable (VarComparabilityImplicit type1,
-                            VarComparabilityImplicit type2) {
+  @SuppressWarnings("pure")    // Override the purity checker
+  static /*@Pure*/ boolean comparable (VarComparabilityImplicit type1,
+                                       VarComparabilityImplicit type2) {
     if (type1.alwaysComparable())
       return true;
     if (type2.alwaysComparable())

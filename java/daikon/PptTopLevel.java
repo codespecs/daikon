@@ -33,6 +33,10 @@ import java.io.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import dataflow.quals.Pure;
+*/
+
 /**
  * All information about a single program point.
  * A Ppt may also represent just part of the data: see PptConditional.
