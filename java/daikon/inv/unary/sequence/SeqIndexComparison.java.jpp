@@ -170,7 +170,7 @@ public class CLASSNAME extends SUPERCLASS {
    **/
   public static boolean dkconfig_enabled = false;
 
-  private CLASSNAME (/*>>> @Prototype CLASSNAME this*/) {
+  private /*@Prototype*/ CLASSNAME () {
     super ();
   }
 
