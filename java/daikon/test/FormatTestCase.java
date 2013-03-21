@@ -376,7 +376,7 @@ class FormatTestCase {
     for (int i = 1; i < tokens.length; i+=2) {
       String arg_type_name = tokens[i].intern();
       if (i+1 >= tokens.length)
-        throw new RuntimeException ("No matching arg val for argument  type"
+        throw new RuntimeException ("No matching arg val for argument type "
                                     + arg_type_name);
       String arg_val = tokens[i+1];
       Object val;
