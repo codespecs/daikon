@@ -37,7 +37,7 @@ class ArrayFixer extends DepthFirstVisitor {
    * The token previously visited.  Null only when visiting the first token.
    * Non-null if lastTokenMayBeElements or lastTokenMayBeIdentity is true.
    */
-  private /*@LazyNonNull*/ NodeToken lastToken;
+  private /*@MonotonicNonNull*/ NodeToken lastToken;
 
   /**
    * True if the last token visited could be the name of a variable that

@@ -11,7 +11,7 @@ import java.util.logging.Level;
 public class XorVisitor extends DepthFirstVisitor {
 
   private InvMap result = new InvMap();
-  private /*@LazyNonNull*/ PptTopLevel currentPpt;
+  private /*@MonotonicNonNull*/ PptTopLevel currentPpt;
 
   public static final Logger debug = Logger.getLogger ("daikon.diff.XorVisitor");
 
@@ -54,12 +54,12 @@ public class XorVisitor extends DepthFirstVisitor {
   }
 
 
-  /*@AssertNonNullIfTrue("#1")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
   private static boolean shouldAddInv1(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     return ((inv1 != null) && (inv2 == null));
   }
 
-  /*@AssertNonNullIfTrue("#2")*/
+  /*@EnsuresNonNullIf(result=true, expression="#2")*/
   private static boolean shouldAddInv2(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     return ((inv2 != null) && (inv1 == null));
   }

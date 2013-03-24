@@ -47,7 +47,7 @@ public final class VarComparabilityImplicit
    */
   int dimensions;
 
-  private /*@LazyNonNull*/ VarComparabilityImplicit cached_element_type;
+  private /*@MonotonicNonNull*/ VarComparabilityImplicit cached_element_type;
 
   public static final VarComparabilityImplicit unknown = new VarComparabilityImplicit(-3, null, 0);
 
@@ -70,13 +70,13 @@ public final class VarComparabilityImplicit
     return base;
   }
 
-  /*@AssertNonNullIfTrue("#1")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
   public boolean equals (/*@Nullable*/ Object o) {
     if (!(o instanceof VarComparabilityImplicit)) return false;
     return equals ((VarComparabilityImplicit) o);
   }
 
-  /*@AssertNonNullIfTrue("#1")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
   public boolean equals (VarComparabilityImplicit o) {
     return equality_set_ok (o);
   }

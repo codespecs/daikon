@@ -40,7 +40,7 @@ public class PptCombined extends PptTopLevel {
 
   static int maxVarInfoSize = 10000;
 
-  private static /*@LazyNonNull*/ AsmFile assemblies = null;
+  private static /*@MonotonicNonNull*/ AsmFile assemblies = null;
 
   /**
    * Map from the name of a redundant variable to its leader (the earliest
@@ -61,7 +61,7 @@ public class PptCombined extends PptTopLevel {
    * See dkconfig_asm_path_name above.
    */
   public static /*@Nullable*/ String dkconfig_rvars_file = null;
-  private static /*@LazyNonNull*/ PrintStream rvars_stream = null;
+  private static /*@MonotonicNonNull*/ PrintStream rvars_stream = null;
 
   public PptCombined (List<PptTopLevel> ppts, CombinedVisResults vis) {
 
@@ -84,7 +84,7 @@ public class PptCombined extends PptTopLevel {
     }
   }
 
-  /*@AssertNonNullAfter("assemblies")*/
+  /*@EnsuresNonNull("assemblies")*/
   private static void loadAssemblies(String assembliesFile) {
     if (assemblies == null)
       assemblies = AsmFile.getAsmFile(assembliesFile);

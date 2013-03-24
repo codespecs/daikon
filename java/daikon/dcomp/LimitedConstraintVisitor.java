@@ -82,7 +82,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
 	 * @see #locals()
 	 * @see #stack()
 	 */
-	private /*@LazyNonNull*/ Frame frame = null;
+	private /*@MonotonicNonNull*/ Frame frame = null;
 
 	/**
 	 * The ConstantPoolGen we're working on.

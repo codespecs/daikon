@@ -82,7 +82,7 @@ public abstract class Derivation
     }
     return this_var_info;
   }
-  private /*@LazyNonNull*/ VarInfo this_var_info;
+  private /*@MonotonicNonNull*/ VarInfo this_var_info;
 
   /**
    * Used by all child classes to actually create the VarInfo this

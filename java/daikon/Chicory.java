@@ -19,7 +19,7 @@ import daikon.util.*;
 public class Chicory {
 
   @Option ("File in which to put dtrace output")
-  public static /*@LazyNonNull*/ File dtrace_file = null;
+  public static /*@MonotonicNonNull*/ File dtrace_file = null;
 
   /** Also see Daikon's --var-omit-pattern command-line argument. */
   @Option ("Omit variables that match this regular expression.")
@@ -75,7 +75,7 @@ public class Chicory {
    * @see ChicoryPremain#premain
    **/
   @Option ("Path to the Chicory agent jar file")
-  public static /*@LazyNonNull*/ File premain = null;
+  public static /*@MonotonicNonNull*/ File premain = null;
 
   /**
    * The name of the file to read for a list of pure methods.  Should

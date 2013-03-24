@@ -49,7 +49,7 @@ public final class CallerContextSplitter
     this.condition = condition;
   }
 
-  /*@AssertNonNullIfTrue("caller_varinfo")*/
+  /*@EnsuresNonNullIf(result=true, expression="caller_varinfo")*/
   public boolean valid() {
     return (caller_varinfo != null);
   }

@@ -25,7 +25,7 @@ public class ChicoryPremain {
 
   /** Set of pure methods returned by Alexandru Salcianu's purity analysis **/
   // Non-null if doPurity == true
-  private static /*@LazyNonNull*/ Set<String> pureMethods = null;
+  private static /*@MonotonicNonNull*/ Set<String> pureMethods = null;
 
   /**
    * True iff Chicory should add variables based on pure methods
@@ -263,8 +263,8 @@ public class ChicoryPremain {
    * Return true iff Chicory has run a purity analysis or read a *.pure file
    */
   @SuppressWarnings("nullness") // dependent:  pureMethods is non-null if doPurity is true
-  // /*@AssertNonNullIfTrue("ChicoryPremain.pureMethods")*/
-  /*@AssertNonNullIfTrue("pureMethods")*/
+  // /*@EnsuresNonNullIf(result=true, expression="ChicoryPremain.pureMethods")*/
+  /*@EnsuresNonNullIf(result=true, expression="pureMethods")*/
   public static boolean shouldDoPurity()
   {
     return doPurity;

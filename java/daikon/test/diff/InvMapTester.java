@@ -10,7 +10,7 @@ import java.util.*;
 @SuppressWarnings("interning")  // use of == in test code
 public class InvMapTester extends TestCase {
 
-  private /*@LazyNonNull*/ InvMap map; // initialized by setUp()
+  private /*@MonotonicNonNull*/ InvMap map; // initialized by setUp()
   private PptTopLevel pptA = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
   private PptTopLevel pptB = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
   private PptTopLevel pptC = new PptTopLevel("A:::OBJECT", new VarInfo[0]);

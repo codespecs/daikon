@@ -19,7 +19,7 @@ public class MethodInfo {
    *    Null if a class initializer, &lt;clinit&gt; (see {@link #is_class_init()}.
    */
   // The code often assumes that member != null.
-  public /*@LazyNonNull*/ Member member = null;
+  public /*@MonotonicNonNull*/ Member member = null;
 
   /**
    * Method name.  For example: "public static void sort(int[] arr)"
@@ -53,14 +53,14 @@ public class MethodInfo {
    *
    * Set by DeclWriter and read by DTraceWriter.
    **/
-  public /*@LazyNonNull*/ RootInfo traversalEnter = null;
+  public /*@MonotonicNonNull*/ RootInfo traversalEnter = null;
 
   /**
    * The root of the variable tree for the method exit program point(s).
    *
    * Set by DeclWriter and read by DTraceWriter.
    **/
-  public /*@LazyNonNull*/ RootInfo traversalExit = null;
+  public /*@MonotonicNonNull*/ RootInfo traversalExit = null;
 
   /** The number of times this method has been called **/
   public int call_cnt = 0;

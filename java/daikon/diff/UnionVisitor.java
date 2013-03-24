@@ -9,7 +9,7 @@ import daikon.inv.*;
 public class UnionVisitor extends DepthFirstVisitor {
 
   private InvMap result = new InvMap();
-  private /*@LazyNonNull*/ PptTopLevel currentPpt;
+  private /*@MonotonicNonNull*/ PptTopLevel currentPpt;
 
   public InvMap getResult() {
     return result;

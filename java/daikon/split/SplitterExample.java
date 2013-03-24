@@ -29,7 +29,7 @@ public final class SplitterExample
     return new SplitterExample(ppt);
   }
 
-  /*@AssertNonNullIfTrue("x_varinfo")*/
+  /*@EnsuresNonNullIf(result=true, expression="x_varinfo")*/
   public boolean valid() {
     return (x_varinfo != null);
   }

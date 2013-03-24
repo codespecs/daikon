@@ -21,7 +21,7 @@ public class X86Instruction implements IInstruction {
 
   // For debugging printing purposes.
   /** The name of the basic block that contains this instruction. */
-  // (Maybe this should be @LazyNonNull?)
+  // (Maybe this should be @MonotonicNonNull?)
   public /*@Nullable*/ String owner = null;
 
   // See method parseInstruction. It sets all fields appropriately.

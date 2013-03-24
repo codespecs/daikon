@@ -27,7 +27,7 @@ public final class ReturnTrueSplitter
     return new ReturnTrueSplitter(ppt);
   }
 
-  /*@AssertNonNullIfTrue("return_varinfo")*/
+  /*@EnsuresNonNullIf(result=true, expression="return_varinfo")*/
   public boolean valid() {
     return ((return_varinfo != null)
             && (return_varinfo.type == ProglangType.BOOLEAN));

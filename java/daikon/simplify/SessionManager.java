@@ -94,7 +94,7 @@ public class SessionManager
     worker = null;
   }
 
-  private static /*@LazyNonNull*/ String prover_background = null;
+  private static /*@MonotonicNonNull*/ String prover_background = null;
 
   private static String proverBackground() {
     if (prover_background == null) {

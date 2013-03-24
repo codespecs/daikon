@@ -16,7 +16,7 @@ public class ObviousFilter extends InvariantFilter {
 
 
   @SuppressWarnings("nullness") // condition hidden in local variable
-  /*@AssertNonNullIfTrue("#1.isObvious()")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1.isObvious()")*/
   boolean shouldDiscardInvariant( Invariant invariant ) {
     // if ((invariant.ppt.arity() == 1) || IsEqualityComparison.it.accept(invariant)) {
     DiscardInfo discard = invariant.isObvious();

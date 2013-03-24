@@ -103,7 +103,7 @@ public class WSMatch {
     public int hashCode() {
       return v1.name.hashCode() * v2.name.hashCode();
     }
-    /*@AssertNonNullIfTrue("#1")*/
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals(/*@Nullable*/ Object other) {
       if (other instanceof VarPair) {
         VarPair vp = (VarPair) other;

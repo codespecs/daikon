@@ -343,7 +343,7 @@ public final class Daikon {
   public static final String mem_stat_SWITCH = "mem_stat";
   public static final String wrap_xml_SWITCH = "wrap_xml";
 
-  public static /*@LazyNonNull*/ File server_dir = null; //YOAV: the directory from which we read the dtrace files
+  public static /*@MonotonicNonNull*/ File server_dir = null; //YOAV: the directory from which we read the dtrace files
 
   // A PptMap (mapping String -> PptTopLevel) that contains all the Program Points
   public static PptMap all_ppts;
@@ -1694,7 +1694,7 @@ public final class Daikon {
 
   // Is set unconditionally in mainHelper
   /** Takes precedence over the progress variable. */
-  private static /*@LazyNonNull*/ FileIOProgress fileio_progress = null;
+  private static /*@MonotonicNonNull*/ FileIOProgress fileio_progress = null;
 
   /**
    * Outputs FileIO progress information.

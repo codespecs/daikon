@@ -148,7 +148,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /*@Nullable*/ /*@Interned*/ Object static_constant_value;
 
   /** Whether and how derived.  Null if this is not derived. **/
-  public /*@LazyNonNull*/ Derivation derived;
+  public /*@MonotonicNonNull*/ Derivation derived;
 
   // Various enums used for information about variables
   public enum RefType {POINTER, OFFSET};
@@ -177,7 +177,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   public int arr_dims = 0;
   /** The arguments that were used to create this function application.
    * Null if this variable is not a function application. **/
-  public /*@LazyNonNull*/ List<VarInfo> function_args = null;
+  public /*@MonotonicNonNull*/ List<VarInfo> function_args = null;
 
   /** Parent ppt for this variable (if any) **/
   public /*@Nullable*/ String parent_ppt = null;
@@ -258,7 +258,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns whether or not constant_value is a legal constant **/
-  /*@AssertNonNullIfFalse("#1")*/
+  /*@EnsuresNonNullIf(result=false, expression="#1")*/
   static boolean legalConstant (/*@Nullable*/ Object constant_value) {
     return ((constant_value == null) || (constant_value instanceof Long)
             || (constant_value instanceof Double));
@@ -737,7 +737,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Returns whether or not this variable is a static constant **/
   /*@Pure*/
-  /*@AssertNonNullIfTrue({"constantValue()", "static_constant_value"})*/
+  /*@EnsuresNonNullIf(result=true, expression={"constantValue()", "static_constant_value"})*/
   public boolean isStaticConstant() {
     return is_static_constant;
   }
@@ -755,7 +755,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Returns true if this is an "orig()" variable **/
-  /*@AssertNonNullIfTrue("postState")*/
+  /*@EnsuresNonNullIf(result=true, expression="postState")*/
   public boolean isPrestate() {
     return postState != null;
   }
@@ -779,7 +779,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Returns true if this variable is a derived variable **/
   /*@Pure*/
-  /*@AssertNonNullIfTrue("this.derived")*/
+  /*@EnsuresNonNullIf(result=true, expression="this.derived")*/
   public boolean isDerived() {
     return (derived != null);
   }
@@ -865,7 +865,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /** Cached value for isDerivedParam(). **/
   // Boolean rather than boolean so we can use "null" to indicate "not yet set".
-  public /*@LazyNonNull*/ Boolean isDerivedParamCached = null;
+  public /*@MonotonicNonNull*/ Boolean isDerivedParamCached = null;
 
   /**
    * Returns true if this is a param according to aux info, or this is
@@ -880,7 +880,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * values the first time this method is called.  Subsequent calls
    * use these cached values.
    **/
-  /*@AssertNonNullIfTrue("getDerivedParam()")*/
+  /*@EnsuresNonNullIf(result=true, expression="getDerivedParam()")*/
   public boolean isDerivedParam() {
     if (isDerivedParamCached != null) {
       // System.out.printf ("var %s is-derived-param = %b\n", name(),
@@ -972,7 +972,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return derivedParamCached;
   }
 
-  private /*@LazyNonNull*/ Boolean isDerivedParamAndUninterestingCached = null;
+  private /*@MonotonicNonNull*/ Boolean isDerivedParamAndUninterestingCached = null;
 
   /**
    * Returns true if a given VarInfo is a parameter or derived from
@@ -2489,7 +2489,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       this.samples = samples;
     }
 
-    /*@AssertNonNullIfTrue("#1")*/
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals(/*@Nullable*/ Object obj) {
       if (!(obj instanceof Pair))
         return (false);

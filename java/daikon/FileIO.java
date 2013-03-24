@@ -122,7 +122,7 @@ public final class FileIO {
   public static long dkconfig_dtrace_line_count = 0;
 
   /** True if declaration records are in the new format **/
-  public static /*@LazyNonNull*/ Boolean new_decl_format = null;
+  public static /*@MonotonicNonNull*/ Boolean new_decl_format = null;
 
   /**
    * If true, modified all ppt names to remove duplicate routine
@@ -245,7 +245,7 @@ public final class FileIO {
   }
 
   // Utilities
-  /*@AssertNonNullIfTrue("#1")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
   public static final boolean isComment(/*@Nullable*/ String s) {
     return s != null && (s.startsWith("//") || s.startsWith("#"));
   }
@@ -253,7 +253,7 @@ public final class FileIO {
   // Nullness-checking of read_data_trace_record(ParseState) works even
   // without these two lines, since StringBuilderDelimited accepts null values.
   @SuppressWarnings("nullness:assertiftrue.postcondition.not.satisfied") // readLine() assertion is ensured by call to reset()
-  /*@AssertNonNullIfTrue("#1.readLine()")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1.readLine()")*/
   public static final boolean nextLineIsComment(BufferedReader reader) {
     boolean result = false;
     try {
@@ -445,7 +445,7 @@ public final class FileIO {
     if (state.all_ppts.containsName(ppt_name)) {
       PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
-      assert existing_ppt != null : "@SuppressWarnings(nullness): bug: containsName() is annotated as @AssertNonNullIfTrue('get(#0)')";
+      assert existing_ppt != null : "@SuppressWarnings(nullness): bug: containsName() is annotated as @EnsuresNonNullIf(result=true, expression='get(#0)')";
       if (state.ppts_are_new) {
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
@@ -555,7 +555,7 @@ public final class FileIO {
     if (state.all_ppts.containsName(ppt_name)) {
       PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
-      assert existing_ppt != null : "@SuppressWarnings(nullness): bug: containsName() is annotated as @AssertNonNullIfTrue('get(#0)')";
+      assert existing_ppt != null : "@SuppressWarnings(nullness): bug: containsName() is annotated as @EnsuresNonNullIf(result=true, expression='get(#0)')";
       if (state.ppts_are_new) {
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
@@ -819,7 +819,7 @@ public final class FileIO {
     return input_lang;
   }
 
-  /*@AssertNonNullAfter("new_decl_format")*/
+  /*@EnsuresNonNull("new_decl_format")*/
   private static void read_decl_version (ParseState state, String line)
     throws IOException {
     Scanner scanner = new Scanner (line);
@@ -945,7 +945,7 @@ public final class FileIO {
     }
 
     // Return true if the invocations print the same
-    /*@AssertNonNullIfTrue("#1")*/
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals(/*@Nullable*/ Object other) {
       if (other instanceof FileIO.Invocation)
         return this.format().equals(((FileIO.Invocation) other).format());
@@ -1429,9 +1429,9 @@ public final class FileIO {
    * It is used for status output, and to give the line number at which
    * a problem was detected.
    */
-  // The @LazyNonNull property is not true globally, but within every
+  // The @MonotonicNonNull property is not true globally, but within every
   // method it's true, so it is a useful annotation.
-  public static /*@LazyNonNull*/ ParseState data_trace_state = null;
+  public static /*@MonotonicNonNull*/ ParseState data_trace_state = null;
   // The variable is only ever cleared at the end of a routine that set it.
   @SuppressWarnings("nullness") // reinitialization
   private static void clear_data_trace_state() {
@@ -1545,7 +1545,7 @@ public final class FileIO {
    */
   // TODO:  For clarity, this should perhaps return its side-effected argument.
   /*@NonNullOnEntry("FileIO.data_trace_state")*/
-  // not guaranteed: File might be empty  AssertNonNullAfter("FileIO.new_decl_format")
+  // not guaranteed: File might be empty  EnsuresNonNull("FileIO.new_decl_format")
   public static void read_data_trace_record (ParseState state)
     throws IOException {
 

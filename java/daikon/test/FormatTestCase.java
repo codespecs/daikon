@@ -64,7 +64,7 @@ class FormatTestCase {
     /**
      * A cached copy of the result achieved by invoking the output method.
      **/
-    private /*@LazyNonNull*/ String resultCache;
+    private /*@MonotonicNonNull*/ String resultCache;
 
     /**
      * A string containing the format that this particular test case represented.

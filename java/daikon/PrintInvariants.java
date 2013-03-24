@@ -207,9 +207,9 @@ public final class PrintInvariants {
   // words, if print_discarded_invariants == true).  But they can be null
   // even in that case, which means to output a discard-reason for every
   // invariant.
-  private static /*@LazyNonNull*/ String discClass = null;
-  private static /*@LazyNonNull*/ String discVars = null;
-  private static /*@LazyNonNull*/ String discPpt = null;
+  private static /*@MonotonicNonNull*/ String discClass = null;
+  private static /*@MonotonicNonNull*/ String discVars = null;
+  private static /*@MonotonicNonNull*/ String discPpt = null;
 
   // Avoid problems if daikon.Runtime is loaded at analysis (rather than
   // test-run) time.  This might have to change when JTrace is used.

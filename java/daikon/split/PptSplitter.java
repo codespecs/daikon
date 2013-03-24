@@ -259,7 +259,7 @@ public class PptSplitter implements Serializable {
       int num_children = ppts.length;
       // Each element is an invariant from the indexth child, permuted to
       // the parent (and with a parent slice as its ppt slot).
-      /*NNC:@LazyNonNull*/ Invariants[] invs = new Invariants[num_children];
+      /*NNC:@MonotonicNonNull*/ Invariants[] invs = new Invariants[num_children];
 
       // find the parent slice
       PptSlice pslice = parent.get_or_instantiate_slice (vis);
@@ -276,9 +276,9 @@ public class PptSplitter implements Serializable {
         invs[childno] = new Invariants(); // permuted to parent
 
         // Get the child vis in the correct order
-        /*NNC:@LazyNonNull*/ VarInfo[] cvis_non_canonical = new VarInfo[vis.length];
-        /*NNC:@LazyNonNull*/ VarInfo[] cvis = new VarInfo[vis.length];
-        /*NNC:@LazyNonNull*/ VarInfo[] cvis_sorted = new VarInfo[vis.length];
+        /*NNC:@MonotonicNonNull*/ VarInfo[] cvis_non_canonical = new VarInfo[vis.length];
+        /*NNC:@MonotonicNonNull*/ VarInfo[] cvis = new VarInfo[vis.length];
+        /*NNC:@MonotonicNonNull*/ VarInfo[] cvis_sorted = new VarInfo[vis.length];
         for (int kk = 0; kk < vis.length; kk++) {
           cvis_non_canonical[kk] = matching_var (child_ppt, parent, vis[kk]);
           cvis[kk] = cvis_non_canonical[kk].canonicalRep();
@@ -464,7 +464,7 @@ public class PptSplitter implements Serializable {
     // We pick the first one that is neither obvious or suppressed.
     // If all are either obvious or suppressed, we just pick the first
     // one in the list
-    /*NNC:@LazyNonNull*/ Invariant[] con_invs = new Invariant[2];
+    /*NNC:@MonotonicNonNull*/ Invariant[] con_invs = new Invariant[2];
     for (Invariant[] invs : exclusive_invs_vec) {
       for (int jj = 0; jj < con_invs.length; jj++) {
         if (con_invs[jj] == null) {

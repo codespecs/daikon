@@ -9,7 +9,7 @@ import daikon.inv.*;
 public class MinusVisitor extends DepthFirstVisitor {
 
   private InvMap result = new InvMap();
-  private /*@LazyNonNull*/ PptTopLevel currentPpt;
+  private /*@MonotonicNonNull*/ PptTopLevel currentPpt;
 
   /** If the first ppt is non-null, it should be part of the result. **/
   public void visit(PptNode node) {
@@ -36,7 +36,7 @@ public class MinusVisitor extends DepthFirstVisitor {
    * If the first invariant is non-null and justified, and the second
    * one is null or unjustified, the first invariant should be added.
    **/
-  /*@AssertNonNullIfTrue("#1")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
   private static boolean shouldAdd(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
     return ((inv1 != null) && (inv2 == null));
   }
