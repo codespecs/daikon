@@ -34,7 +34,7 @@ public class XorVisitor extends DepthFirstVisitor {
    * invariant to the result set.
    **/
   @SuppressWarnings("nullness:override.pre.method.annotation.invalid") // visitor invariant, because the PptNode has already been visited
-  /*@NonNullOnEntry("currentPpt")*/ // visitor invariant
+  /*@RequiresNonNull("currentPpt")*/ // visitor invariant
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();

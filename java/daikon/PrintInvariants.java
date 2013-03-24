@@ -789,7 +789,7 @@ public final class PrintInvariants {
    * if Daikon.output_num_samples is enabled or the format is ESCJAVA,
    * JML, or DBCJAVA.
    */
-  /*@NonNullOnEntry("FileIO.new_decl_format")*/
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_sample_data(PptTopLevel ppt, PrintWriter out) {
 
     if (Daikon.output_num_samples) {
@@ -943,7 +943,7 @@ public final class PrintInvariants {
   private static String reason = "";
 
   /** Prints the specified invariant to out. **/
-  /*@NonNullOnEntry("FileIO.new_decl_format")*/
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariant(Invariant inv, PrintWriter out,
                                      int invCounter, PptTopLevel ppt) {
     int inv_num_samps = inv.ppt.num_samples();

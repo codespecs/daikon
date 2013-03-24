@@ -71,7 +71,7 @@ class TokenReplacer extends DepthFirstVisitor {
   /**
    * Replaces lastToken if needed.
    */
-  /*@NonNullOnEntry("lastToken")*/
+  /*@RequiresNonNull("lastToken")*/
   private void replaceLastToken() {
     if (Visitors.isIdentifier(lastToken) &&
         (twoTokensAgo == null || (! Visitors.isDot(twoTokensAgo)))) {

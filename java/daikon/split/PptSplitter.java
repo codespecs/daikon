@@ -517,7 +517,7 @@ public class PptSplitter implements Serializable {
    * slices that only exist in one child.
    **/
   @SuppressWarnings("field.not.found.nullness.parse.error") // bug: fields in precondition expressions
-  /*@NonNullOnEntry("parent.equality_view")*/
+  /*@RequiresNonNull("parent.equality_view")*/
   private List<VarInfo[]> possible_slices() {
 
     List<VarInfo[]> result = new ArrayList<VarInfo[]>();

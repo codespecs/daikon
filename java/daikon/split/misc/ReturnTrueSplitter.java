@@ -34,7 +34,7 @@ public final class ReturnTrueSplitter
   }
 
   @SuppressWarnings("nullness:override.pre.method.annotation.invalid") // application invariant about private variable
-  /*@NonNullOnEntry("return_varinfo")*/
+  /*@RequiresNonNull("return_varinfo")*/
   public boolean test(ValueTuple vt) {
     return (return_varinfo.getIntValue(vt) != 0);
   }

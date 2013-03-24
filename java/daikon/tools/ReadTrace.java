@@ -49,7 +49,7 @@ public class ReadTrace {
     public Map<PptTopLevel,List<ValueTuple>> samples = new LinkedHashMap<PptTopLevel,List<ValueTuple>>();
 
     /** Process the sample, by adding it to the <tt>samples</tt> map. */
-    /*@NonNullOnEntry("FileIO.data_trace_state")*/
+    /*@RequiresNonNull("FileIO.data_trace_state")*/
     public void process_sample (PptMap all_ppts, PptTopLevel ppt,
                                 ValueTuple vt, /*@Nullable*/ Integer nonce) {
 

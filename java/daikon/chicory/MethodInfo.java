@@ -180,7 +180,7 @@ public class MethodInfo {
   }
 
   /** Returns whether or not this method is static **/
-  /*@NonNullOnEntry("member")*/
+  /*@RequiresNonNull("member")*/
   public boolean is_static() {
     return Modifier.isStatic(member.getModifiers());
   }

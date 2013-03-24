@@ -338,7 +338,7 @@ public class InvariantChecker {
      * and issuing an error if any invariant is falsified or weakened.
      */
     @SuppressWarnings("class.not.found.nullness.parse.error") // bug: fields in precondition expressions
-    /*@NonNullOnEntry("FileIO.data_trace_state")*/
+    /*@RequiresNonNull("FileIO.data_trace_state")*/
     public void process_sample (PptMap all_ppts, PptTopLevel ppt,
                                 ValueTuple vt, /*@Nullable*/ Integer nonce) {
 
@@ -387,7 +387,7 @@ public class InvariantChecker {
     }
 
     @SuppressWarnings("class.not.found.nullness.parse.error") // bug: fields in precondition expressions
-    /*@NonNullOnEntry("FileIO.data_trace_state")*/
+    /*@RequiresNonNull("FileIO.data_trace_state")*/
     private void add (PptTopLevel ppt, ValueTuple vt, PptMap all_ppts) {
       // Add the sample to any splitters
       if (ppt.has_splitters()) {

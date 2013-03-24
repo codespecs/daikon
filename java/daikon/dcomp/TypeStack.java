@@ -652,7 +652,7 @@ public final class TypeStack
         }
     }
 
-    /*@NonNullOnEntry("stack")*/  // is this right, or too strict?
+    /*@RequiresNonNull("stack")*/  // is this right, or too strict?
     private void handleBranch(BranchInstruction inst)
     {
         if (inst instanceof GotoInstruction)

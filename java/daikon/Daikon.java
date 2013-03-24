@@ -1578,7 +1578,7 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Read decls, dtrace, etc. files
 
-  /*@NonNullOnEntry("fileio_progress")*/ // set in mainHelper
+  /*@RequiresNonNull("fileio_progress")*/ // set in mainHelper
   private static PptMap load_decls_files(Set<File> decl_files) {
     stopwatch.reset();
     try {
@@ -1795,7 +1795,7 @@ public final class Daikon {
    * been instantiated.  This routine processes data to falsify the
    * candidate invariants.
    **/
-  /*@NonNullOnEntry("fileio_progress")*/ // set in mainHelper
+  /*@RequiresNonNull("fileio_progress")*/ // set in mainHelper
   private static void process_data(PptMap all_ppts, Set<String> dtrace_files) {
     MemMonitor monitor = null;
     if (use_mem_monitor) {

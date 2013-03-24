@@ -779,7 +779,7 @@ public final class FileIO {
       aux);
   }
 
-  /*@NonNullOnEntry("FileIO.new_decl_format")*/
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
   private static int read_var_comparability (ParseState state, String line)
     throws IOException {
 
@@ -1152,7 +1152,7 @@ public final class FileIO {
    */
   public static class Processor {
     /** Process a data sample record. */
-    /*@NonNullOnEntry("FileIO.data_trace_state")*/
+    /*@RequiresNonNull("FileIO.data_trace_state")*/
     public void process_sample(PptMap all_ppts,
                                PptTopLevel ppt,
                                ValueTuple vt,
@@ -1544,7 +1544,7 @@ public final class FileIO {
    * The record is stored by side effect into the state argument.
    */
   // TODO:  For clarity, this should perhaps return its side-effected argument.
-  /*@NonNullOnEntry("FileIO.data_trace_state")*/
+  /*@RequiresNonNull("FileIO.data_trace_state")*/
   // not guaranteed: File might be empty  EnsuresNonNull("FileIO.new_decl_format")
   public static void read_data_trace_record (ParseState state)
     throws IOException {
@@ -1778,7 +1778,7 @@ public final class FileIO {
    * supply it to the program point for flowing.
    * @param vt trace data only; modified by side effect to add derived vars
    **/
-  /*@NonNullOnEntry("FileIO.data_trace_state")*/
+  /*@RequiresNonNull("FileIO.data_trace_state")*/
   public static void process_sample(
                                     PptMap all_ppts,
                                     PptTopLevel ppt,
@@ -2097,7 +2097,7 @@ public final class FileIO {
   // This procedure reads a single record from a trace file and
   // fills up vals and mods by side effect.  The ppt name and
   // invocation nonce (if any) have already been read.
-  /*@NonNullOnEntry("FileIO.data_trace_state")*/
+  /*@RequiresNonNull("FileIO.data_trace_state")*/
   private static void read_vals_and_mods_from_trace_file
                         (LineNumberReader reader, String filename,
                          PptTopLevel ppt, /*@Nullable*/ Object[] vals, int[] mods)
@@ -2367,7 +2367,7 @@ public final class FileIO {
    * a matching enter.  See dkconfig_ignore_missing_enter for more info.
    * If true is returned, this ppt should be ignored by the caller.
    **/
-  /*@NonNullOnEntry("FileIO.data_trace_state")*/
+  /*@RequiresNonNull("FileIO.data_trace_state")*/
   public static boolean compute_orig_variables(PptTopLevel ppt,
                                      // HashMap cumulative_modbits,
                                      /*@Nullable*/ Object[] vals, int[] mods,
@@ -2522,7 +2522,7 @@ public final class FileIO {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20060905L;
 
-    /*@NonNullOnEntry("FileIO.new_decl_format")*/
+    /*@RequiresNonNull("FileIO.new_decl_format")*/
     public SerialFormat(PptMap map, Configuration config) {
       this.map = map;
       this.config = config;
@@ -3083,7 +3083,7 @@ public final class FileIO {
   }
 
   /** Returns whether the line is the start of a ppt declaration **/
-  /*@NonNullOnEntry("FileIO.new_decl_format")*/
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
   private static boolean is_declaration_header (String line) {
     if (new_decl_format)
       return (line.startsWith ("ppt "));

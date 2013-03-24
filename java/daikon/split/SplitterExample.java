@@ -35,7 +35,7 @@ public final class SplitterExample
   }
 
   @SuppressWarnings("nullness:override.pre.method.annotation.invalid") // application invariant about private variable
-  /*@NonNullOnEntry("x_varinfo")*/
+  /*@RequiresNonNull("x_varinfo")*/
   public boolean test(ValueTuple vt) {
     // Alternately, if x represents an array, use
     //   vt.getIntArrayValue(x_varinfo);

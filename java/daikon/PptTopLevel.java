@@ -391,7 +391,7 @@ public class PptTopLevel extends Ppt {
     init_vars ();
   }
 
-  /*@NonNullOnEntry("var_infos")*/
+  /*@RequiresNonNull("var_infos")*/
   /*@EnsuresNonNull({"mbtracker", "views", "value_sets"})*/
   private void init_vars (/*>>> @Raw PptTopLevel this*/) {
 
@@ -2885,7 +2885,7 @@ public class PptTopLevel extends Ppt {
    * logically implied by others.  Uses the provided test interface to
    * determine if an invariant is within the domain of inspection.
    **/
-  /*@NonNullOnEntry("proverStack")*/
+  /*@RequiresNonNull("proverStack")*/
   private void markImpliedViaSimplify_int(
     PptMap all_ppts,
     SimplifyInclusionTester test)
@@ -3131,7 +3131,7 @@ public class PptTopLevel extends Ppt {
 
   /** Go though an array of invariants, marking those that can be
    * proved as consequences of others as redundant. */
-  /*@NonNullOnEntry("proverStack")*/
+  /*@RequiresNonNull("proverStack")*/
   private void flagRedundantRecursive(
     InvariantLemma[] lemmas,
     boolean[] present,
@@ -3774,7 +3774,7 @@ public class PptTopLevel extends Ppt {
    * by first creating all of the suppressed invariants in each of the
    * children, performing the merge, and then removing them.
    */
-  /*@NonNullOnEntry("equality_view")*/
+  /*@RequiresNonNull("equality_view")*/
   public void merge_invs_multiple_children() {
 
     // Debug print ppt and children
@@ -4356,7 +4356,7 @@ public class PptTopLevel extends Ppt {
           + " Memory (bytes) : Time (msecs) ");
     }
 
-    /*@NonNullOnEntry("ppt")*/
+    /*@RequiresNonNull("ppt")*/
     void dump(Logger log) {
 
       DecimalFormat dfmt = new DecimalFormat();
