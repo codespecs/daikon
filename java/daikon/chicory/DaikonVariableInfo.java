@@ -444,7 +444,7 @@ public abstract class DaikonVariableInfo
      * @param type the class whose fields should all be added to this node
      */
     @SuppressWarnings("field.not.found.nullness.parse.error") // bug: fields in precondition expressions
-    /*@NonNullOnEntry("cinfo.clazz")*/
+    /*@RequiresNonNull("cinfo.clazz")*/
     protected void addClassVars(ClassInfo cinfo, boolean dontPrintInstanceVars,
                                 Class<?> type, String offset, int depth) {
 

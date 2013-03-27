@@ -505,7 +505,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     // assert new_suppressions.size() > 0;
 
     // Create a new suppression set with all of the suppressions.
-    /*NNC:@LazyNonNull*/ NISuppression[] new_array
+    /*NNC:@MonotonicNonNull*/ NISuppression[] new_array
       = new NISuppression [suppression_set.length + new_suppressions.size()];
     for (int i = 0; i < suppression_set.length; i++)
       new_array[i] = suppression_set[i];
@@ -525,7 +525,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     NISuppression[] swap_sups = new NISuppression[suppression_set.length];
     for (int i = 0; i < swap_sups.length; i++) {
       NISuppression std_sup = suppression_set[i];
-      /*NNC:@LazyNonNull*/ NISuppressor[] sors = new NISuppressor[std_sup.suppressors.length];
+      /*NNC:@MonotonicNonNull*/ NISuppressor[] sors = new NISuppressor[std_sup.suppressors.length];
       for (int j = 0; j < sors.length; j++) {
         sors[j] = std_sup.suppressors[j].swap();
       }

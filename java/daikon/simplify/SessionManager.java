@@ -94,7 +94,7 @@ public class SessionManager
     worker = null;
   }
 
-  private static /*@LazyNonNull*/ String prover_background = null;
+  private static /*@MonotonicNonNull*/ String prover_background = null;
 
   private static String proverBackground() {
     if (prover_background == null) {
@@ -198,7 +198,7 @@ public class SessionManager
       }
     }
 
-    /*@NonNullOnEntry("session")*/
+    /*@RequiresNonNull("session")*/
     private void session_done() {
       finished = true;
       Session tmp = session;

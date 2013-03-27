@@ -207,9 +207,9 @@ public final class PrintInvariants {
   // words, if print_discarded_invariants == true).  But they can be null
   // even in that case, which means to output a discard-reason for every
   // invariant.
-  private static /*@LazyNonNull*/ String discClass = null;
-  private static /*@LazyNonNull*/ String discVars = null;
-  private static /*@LazyNonNull*/ String discPpt = null;
+  private static /*@MonotonicNonNull*/ String discClass = null;
+  private static /*@MonotonicNonNull*/ String discVars = null;
+  private static /*@MonotonicNonNull*/ String discPpt = null;
 
   // Avoid problems if daikon.Runtime is loaded at analysis (rather than
   // test-run) time.  This might have to change when JTrace is used.
@@ -789,7 +789,7 @@ public final class PrintInvariants {
    * if Daikon.output_num_samples is enabled or the format is ESCJAVA,
    * JML, or DBCJAVA.
    */
-  /*@NonNullOnEntry("FileIO.new_decl_format")*/
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_sample_data(PptTopLevel ppt, PrintWriter out) {
 
     if (Daikon.output_num_samples) {
@@ -943,7 +943,7 @@ public final class PrintInvariants {
   private static String reason = "";
 
   /** Prints the specified invariant to out. **/
-  /*@NonNullOnEntry("FileIO.new_decl_format")*/
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariant(Invariant inv, PrintWriter out,
                                      int invCounter, PptTopLevel ppt) {
     int inv_num_samps = inv.ppt.num_samples();

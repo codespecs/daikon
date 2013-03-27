@@ -275,7 +275,7 @@ public class PptName
   /**
    * @return true iff this name refers to a procedure exit point
    **/
-  /*@AssertNonNullIfTrue("point")*/
+  /*@EnsuresNonNullIf(result=true, expression="point")*/
   public boolean isExitPoint() {
     return (point != null) && point.startsWith(FileIO.exit_suffix);
   }
@@ -283,7 +283,7 @@ public class PptName
   /**
    * @return true iff this name refers to an abrupt completion point
    **/
-  /*@AssertNonNullIfTrue("point")*/
+  /*@EnsuresNonNullIf(result=true, expression="point")*/
   public boolean isThrowsPoint() {
     return (point != null) && point.startsWith(FileIO.throws_suffix);
   }
@@ -292,7 +292,7 @@ public class PptName
    * @return true iff this name refers to a combined (synthetic) procedure
    *         exit point
    **/
-  /*@AssertNonNullIfTrue("point")*/
+  /*@EnsuresNonNullIf(result=true, expression="point")*/
   public boolean isCombinedExitPoint() {
     return (point != null) && point.equals(FileIO.exit_suffix);
   }
@@ -301,7 +301,7 @@ public class PptName
    * @return true iff this name refers to an actual (not combined)
    * procedure exit point (eg, EXIT22)
    */
-  /*@AssertNonNullIfTrue("point")*/
+  /*@EnsuresNonNullIf(result=true, expression="point")*/
   public boolean isNumberedExitPoint() {
     return ((point != null) && (isExitPoint() && !isCombinedExitPoint()));
   }
@@ -309,7 +309,7 @@ public class PptName
   /**
    * @return true iff this name refers to a procedure exit point
    **/
-  /*@AssertNonNullIfTrue("point")*/
+  /*@EnsuresNonNullIf(result=true, expression="point")*/
   public boolean isEnterPoint() {
     return (point != null) && point.startsWith(FileIO.enter_suffix);
   }
@@ -431,12 +431,12 @@ public class PptName
     return fullname;
   }
 
-  /*@AssertNonNullIfTrue("#1")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
   public boolean equals(/*@Nullable*/ Object o) {
     return (o instanceof PptName) && equals((PptName) o);
   }
 
-  /*@AssertNonNullIfTrue("#1")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
   public boolean equals(PptName o) {
     return (o != null) && (o.fullname == fullname);
   }

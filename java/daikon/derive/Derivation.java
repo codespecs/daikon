@@ -82,7 +82,7 @@ public abstract class Derivation
     }
     return this_var_info;
   }
-  private /*@LazyNonNull*/ VarInfo this_var_info;
+  private /*@MonotonicNonNull*/ VarInfo this_var_info;
 
   /**
    * Used by all child classes to actually create the VarInfo this
@@ -91,7 +91,7 @@ public abstract class Derivation
   // This is in each class, but I can't have a private abstract method.
   protected abstract VarInfo makeVarInfo();
 
-  /*@NonNullOnEntry("this_var_info")*/
+  /*@RequiresNonNull("this_var_info")*/
   protected void makeVarInfo_common_setup(VarInfo vi) {
     // Common tasks that are abstracted into here.
     vi.derived = this;

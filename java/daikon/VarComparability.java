@@ -91,8 +91,9 @@ public abstract class VarComparability {
   }
 
   /** Returns whether two comparabilities are comparable. **/
-  public static boolean comparable (VarComparability type1,
-                                    VarComparability type2) {
+  @SuppressWarnings("pure")    // Override the purity checker
+  public static /*@Pure*/ boolean comparable (VarComparability type1,
+                                              VarComparability type2) {
 
     if (type1 != null && type2 != null && type1.getClass() != type2.getClass())
       throw new Error(String.format ("Trying to compare VarComparabilities " +

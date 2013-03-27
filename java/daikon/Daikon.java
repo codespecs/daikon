@@ -343,7 +343,7 @@ public final class Daikon {
   public static final String mem_stat_SWITCH = "mem_stat";
   public static final String wrap_xml_SWITCH = "wrap_xml";
 
-  public static /*@LazyNonNull*/ File server_dir = null; //YOAV: the directory from which we read the dtrace files
+  public static /*@MonotonicNonNull*/ File server_dir = null; //YOAV: the directory from which we read the dtrace files
 
   // A PptMap (mapping String -> PptTopLevel) that contains all the Program Points
   public static PptMap all_ppts;
@@ -1578,7 +1578,7 @@ public final class Daikon {
   ///////////////////////////////////////////////////////////////////////////
   // Read decls, dtrace, etc. files
 
-  /*@NonNullOnEntry("fileio_progress")*/ // set in mainHelper
+  /*@RequiresNonNull("fileio_progress")*/ // set in mainHelper
   private static PptMap load_decls_files(Set<File> decl_files) {
     stopwatch.reset();
     try {
@@ -1694,7 +1694,7 @@ public final class Daikon {
 
   // Is set unconditionally in mainHelper
   /** Takes precedence over the progress variable. */
-  private static /*@LazyNonNull*/ FileIOProgress fileio_progress = null;
+  private static /*@MonotonicNonNull*/ FileIOProgress fileio_progress = null;
 
   /**
    * Outputs FileIO progress information.
@@ -1795,7 +1795,7 @@ public final class Daikon {
    * been instantiated.  This routine processes data to falsify the
    * candidate invariants.
    **/
-  /*@NonNullOnEntry("fileio_progress")*/ // set in mainHelper
+  /*@RequiresNonNull("fileio_progress")*/ // set in mainHelper
   private static void process_data(PptMap all_ppts, Set<String> dtrace_files) {
     MemMonitor monitor = null;
     if (use_mem_monitor) {

@@ -98,7 +98,7 @@ public class DynComp {
    **/
   // Set by start_target()
   @Option ("Path to the DynComp agent jar file (usually dcomp_premain.jar)")
-  public static /*@LazyNonNull*/ File premain = null;
+  public static /*@MonotonicNonNull*/ File premain = null;
 
 
   /** Thread that copies output from target to our output **/

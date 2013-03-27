@@ -712,7 +712,7 @@ public abstract class Invariant
     return result;
   }
 
-  public abstract String format_using(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) ;
+  public abstract /*@Pure*/ String format_using(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) ;
 
   /**
    * @return conjuction of mapping the same function of our
@@ -1017,6 +1017,7 @@ public abstract class Invariant
    *
    * @exception RuntimeException if other.getClass() != this.getClass()
    **/
+  /*@Pure*/
   public boolean isSameFormula(/*>>> @Prototype Invariant this,*/ Invariant other) {
     return false;
   }
@@ -1110,7 +1111,7 @@ public abstract class Invariant
    * Returns whether or not this invariant is ni-suppressed.
    */
   @SuppressWarnings("nullness") // tricky control flow, need to mark get_ni_suppressions as @Pure if that's true
-  /*@AssertNonNullIfTrue("get_ni_suppressions()")*/
+  /*@EnsuresNonNullIf(result=true, expression="get_ni_suppressions()")*/
   public boolean is_ni_suppressed() {
 
     NISuppressionSet ss = get_ni_suppressions();
@@ -1213,7 +1214,7 @@ public abstract class Invariant
     DiscardInfo result = isObviousStatically();
     if (result != null) return result;
     return isObviousStatically_SomeInEqualityHelper (this.ppt.var_infos,
-                                                     new /*NNC:@LazyNonNull*/ VarInfo[this.ppt.var_infos.length],
+                                                     new /*NNC:@MonotonicNonNull*/ VarInfo[this.ppt.var_infos.length],
                                                      0);
   }
 
@@ -1223,7 +1224,7 @@ public abstract class Invariant
    **/
   protected /*@Nullable*/ DiscardInfo
     isObviousStatically_SomeInEqualityHelper(/*>>> @NonPrototype Invariant this,*/ VarInfo[] vis,
-                                             /*NNC:@LazyNonNull*/ VarInfo[] assigned,
+                                             /*NNC:@MonotonicNonNull*/ VarInfo[] assigned,
                                              int position) {
     if (position == vis.length) {
       if (debugIsObvious.isLoggable(Level.FINE)) {
@@ -1352,7 +1353,7 @@ public abstract class Invariant
     if (result != null)
       return result;
     return isObviousDynamically_SomeInEqualityHelper (this.ppt.var_infos,
-                                                     new /*NNC:@LazyNonNull*/ VarInfo[this.ppt.var_infos.length],
+                                                     new /*NNC:@MonotonicNonNull*/ VarInfo[this.ppt.var_infos.length],
                                                      0);
   }
 
@@ -1558,7 +1559,7 @@ public abstract class Invariant
       this.inv = inv;
     }
 
-    /*@AssertNonNullIfTrue("#1")*/
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof Match))
         return (false);

@@ -266,7 +266,7 @@ public class Annotation {
    * Two annotations are equal iff their fields "daikonRep", "method"
    * and "kind" are equal.
    */
-  /*@AssertNonNullIfTrue("#1")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
   public boolean equals(/*@Nullable*/ Object o) {
     if (o == null) {
       return false;

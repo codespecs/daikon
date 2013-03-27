@@ -49,13 +49,13 @@ public final class CallerContextSplitter
     this.condition = condition;
   }
 
-  /*@AssertNonNullIfTrue("caller_varinfo")*/
+  /*@EnsuresNonNullIf(result=true, expression="caller_varinfo")*/
   public boolean valid() {
     return (caller_varinfo != null);
   }
 
   @SuppressWarnings("nullness:override.pre.method.annotation.invalid") // application invariant about private variable
-  /*@NonNullOnEntry("caller_varinfo")*/
+  /*@RequiresNonNull("caller_varinfo")*/
   public boolean test(ValueTuple vt) {
     long caller = caller_varinfo.getIntValue(vt);
     return (ArraysMDE.indexOf(ids, caller) >= 0);

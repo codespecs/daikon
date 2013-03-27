@@ -50,8 +50,8 @@ public final class Diff {
   private static boolean treeManip = false;
 
   // this is set only when the manip flag is set "-z", that is when treeManip != null
-  private static /*@LazyNonNull*/ PptMap manip1 = null;
-  private static /*@LazyNonNull*/ PptMap manip2 = null;
+  private static /*@MonotonicNonNull*/ PptMap manip1 = null;
+  private static /*@MonotonicNonNull*/ PptMap manip2 = null;
 
   /** The long command line options. **/
   private static final String HELP_SWITCH =
@@ -869,7 +869,7 @@ public final class Diff {
    * Use the comparator for sorting both sets and creating the pair
    * tree.
    **/
-  /*@AssertNonNullAfter({"invSortComparator1", "invSortComparator2", "invPairComparator"})*/
+  /*@EnsuresNonNull({"invSortComparator1", "invSortComparator2", "invPairComparator"})*/
   public void setAllInvComparators(Comparator<Invariant> c) {
     setInvSortComparator1(c);
     setInvSortComparator2(c);
@@ -895,19 +895,19 @@ public final class Diff {
   }
 
   /** Use the comparator for sorting the first set. **/
-  /*@AssertNonNullAfter("invSortComparator1")*/
+  /*@EnsuresNonNull("invSortComparator1")*/
   public void setInvSortComparator1(Comparator<Invariant> c) {
     invSortComparator1 = c;
   }
 
   /** Use the comparator for sorting the second set. **/
-  /*@AssertNonNullAfter("invSortComparator2")*/
+  /*@EnsuresNonNull("invSortComparator2")*/
   public void setInvSortComparator2(Comparator<Invariant> c) {
     invSortComparator2 = c;
   }
 
   /** Use the comparator for creating the pair tree. **/
-  /*@AssertNonNullAfter("invPairComparator")*/
+  /*@EnsuresNonNull("invPairComparator")*/
   public void setInvPairComparator(Comparator<Invariant> c) {
     invPairComparator = c;
   }

@@ -90,8 +90,8 @@ public class SpinfoFileParser {
    * @param spinfoFile a LineNumberReader for the spinfo file being parsed.
    * @throws IOException if an I/O error occurs
    */
-  /*@NonNullOnEntry("tempDir")*/
-  /*@AssertNonNullAfter({"statementReplacer", "splitterObjects"})*/
+  /*@RequiresNonNull("tempDir")*/
+  /*@EnsuresNonNull({"statementReplacer", "splitterObjects"})*/
   public void parseFile(/*>>> @Raw SpinfoFileParser this,*/ LineNumberReader spinfoFile) throws IOException {
     List<ReplaceStatement> replaceStatements = new ArrayList<ReplaceStatement>();
     List<List<String>> pptSections = new ArrayList<List<String>>();
@@ -196,7 +196,7 @@ public class SpinfoFileParser {
    * @return an array of arrays with each array containing the
    *  SplitterObjects for one of lists of ppt statements found in pptSections.
    */
-  /*@NonNullOnEntry("tempDir")*/
+  /*@RequiresNonNull("tempDir")*/
   private SplitterObject[][] createSplitterObjects(/*>>> @Raw SpinfoFileParser this,*/ List<List<String>> pptSections) {
     List<SplitterObject[]> splittersForAllPpts = new ArrayList<SplitterObject[]>();
     for (List<String> pptSection : pptSections) {
@@ -259,7 +259,7 @@ public class SpinfoFileParser {
   /**
    * Returns whether the line is blank (or null).
    */
-  /*@AssertNonNullIfFalse("#1")*/
+  /*@EnsuresNonNullIf(result=false, expression="#1")*/
   private static boolean isBlank(/*@Nullable*/ String line) {
     return (line == null) || line.trim().equals("");
   }

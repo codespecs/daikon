@@ -40,7 +40,7 @@ public class PptCombined extends PptTopLevel {
 
   static int maxVarInfoSize = 10000;
 
-  private static /*@LazyNonNull*/ AsmFile assemblies = null;
+  private static /*@MonotonicNonNull*/ AsmFile assemblies = null;
 
   /**
    * Map from the name of a redundant variable to its leader (the earliest
@@ -61,7 +61,7 @@ public class PptCombined extends PptTopLevel {
    * See dkconfig_asm_path_name above.
    */
   public static /*@Nullable*/ String dkconfig_rvars_file = null;
-  private static /*@LazyNonNull*/ PrintStream rvars_stream = null;
+  private static /*@MonotonicNonNull*/ PrintStream rvars_stream = null;
 
   public PptCombined (List<PptTopLevel> ppts, CombinedVisResults vis) {
 
@@ -84,7 +84,7 @@ public class PptCombined extends PptTopLevel {
     }
   }
 
-  /*@AssertNonNullAfter("assemblies")*/
+  /*@EnsuresNonNull("assemblies")*/
   private static void loadAssemblies(String assembliesFile) {
     if (assemblies == null)
       assemblies = AsmFile.getAsmFile(assembliesFile);
@@ -101,7 +101,7 @@ public class PptCombined extends PptTopLevel {
   }
 
   // Preconditions: assemblies != null.
-  /*@NonNullOnEntry("assemblies")*/
+  /*@RequiresNonNull("assemblies")*/
   private static Map<String, String> computeRedundantVariables(List<PptTopLevel> ppts) {
     assert assemblies != null;
     //System.out.println("Computing redundant variables in combined ppt...");
@@ -133,7 +133,7 @@ public class PptCombined extends PptTopLevel {
     return result;
   }
 
-  /*@NonNullOnEntry("assemblies")*/
+  /*@RequiresNonNull("assemblies")*/
   private static List<IInstruction> createPath(List<PptTopLevel> ppts) {
     List<IInstruction> path;
     path = new ArrayList<IInstruction>();
@@ -188,7 +188,7 @@ public class PptCombined extends PptTopLevel {
   // Checks that variables in var_infos are the same are the variables
   // obtained from the asm file for this set of basic blocks.
   // Happens to return number of variables (TODO remove this ugliness).
-  /*@NonNullOnEntry("assemblies")*/
+  /*@RequiresNonNull("assemblies")*/
   private static int checkVarsOk(List<PptTopLevel> ppts, List<VarInfo> list) {
 
     // Create the set of variables in var_infos.
@@ -260,7 +260,7 @@ public class PptCombined extends PptTopLevel {
   }
 
 
-  /*@NonNullOnEntry("PptCombined.assemblies")*/
+  /*@RequiresNonNull("PptCombined.assemblies")*/
   public static List<PptTopLevel> findIntermediateBlocks(PptTopLevel dest, PptTopLevel source) {
 
     Set<PptTopLevel> visited = new LinkedHashSet<PptTopLevel>();
@@ -294,7 +294,7 @@ public class PptCombined extends PptTopLevel {
   }
 
   // WORKAROUND FOR BUG IN GALAR (x86 front end), which does not output self-cycles.
-  /*@NonNullOnEntry("assemblies")*/
+  /*@RequiresNonNull("assemblies")*/
   private static boolean has_self_cycle(PptTopLevel ppt) {
     assert assemblies != null;
 
@@ -980,7 +980,7 @@ public class PptCombined extends PptTopLevel {
   // analysis, they are deemed equal by Daikon's dynamic analysis.
   //
   // Returns 0 if all tests pass, 1 if something goes wrong.
-  /*@NonNullOnEntry("assemblies")*/
+  /*@RequiresNonNull("assemblies")*/
   public static int redundantVarsTest(PptMap all_ppts) {
     int retval = 0;
     for (PptTopLevel ppt : all_ppts.all_ppts()) {

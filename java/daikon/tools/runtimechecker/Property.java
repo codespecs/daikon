@@ -141,7 +141,7 @@ public class Property implements Serializable {
      * <code>method</code> and <code>kind</code> are equal.
      * The other fields may differ.
      */
-    /*@AssertNonNullIfTrue("#1")*/
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals(/*@Nullable*/ Object o) {
         if (o == null) {
             return false;
