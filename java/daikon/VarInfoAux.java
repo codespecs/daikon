@@ -181,7 +181,7 @@ public final class VarInfoAux
   /**
    * Map for interning.
    **/
-  private static /*@LazyNonNull*/ Map<VarInfoAux,/*@Interned*/ VarInfoAux> interningMap = null;
+  private static /*@MonotonicNonNull*/ Map<VarInfoAux,/*@Interned*/ VarInfoAux> interningMap = null;
 
 
 
@@ -245,7 +245,7 @@ public final class VarInfoAux
   }
 
 
-  /*@AssertNonNullIfTrue("#1")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
   public boolean equals(/*@Nullable*/ Object o) {
     if (o instanceof VarInfoAux) {
       return equals((VarInfoAux) o);
@@ -254,7 +254,7 @@ public final class VarInfoAux
     }
   }
 
-  /*@AssertNonNullIfTrue("#1")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
   public boolean equals(VarInfoAux o) {
     return this.map.equals(o.map);
   }

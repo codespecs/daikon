@@ -117,7 +117,7 @@ public class DynamicConstants implements Serializable {
     /** The value of the constant, or the previous constant value if
      * constant==false  and  previous_constant==true.  Null iff count=0.
      **/
-    public /*@LazyNonNull*/ /*@Interned*/ Object val = null;
+    public /*@MonotonicNonNull*/ /*@Interned*/ Object val = null;
 
     /** The sample count of the constant. **/
     public int count = 0;
@@ -182,7 +182,7 @@ public class DynamicConstants implements Serializable {
     }
 
 
-    /*@AssertNonNullIfTrue("#1")*/
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof Constant))
         return (false);

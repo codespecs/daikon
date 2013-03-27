@@ -732,7 +732,7 @@ public final class FeatureExtractor {
     }
 
     @Override
-      /*@AssertNonNullIfTrue("#1")*/
+      /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals(/*@Nullable*/ Object o) {
       if (o instanceof IntDoublePair) {
         IntDoublePair other = (IntDoublePair) o;

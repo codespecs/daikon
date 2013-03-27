@@ -18,13 +18,13 @@ import jtb.ParseException;
 class PrefixFixer extends DepthFirstVisitor {
 
   /** The last token visited by this. */
-  private /*@LazyNonNull*/ NodeToken lastToken;
+  private /*@MonotonicNonNull*/ NodeToken lastToken;
 
   /** The token visited before lastToken. */
-  private /*@LazyNonNull*/ NodeToken twoTokensAgo;
+  private /*@MonotonicNonNull*/ NodeToken twoTokensAgo;
 
   /** The token visited before twoTokensAgo. */
-  private /*@LazyNonNull*/ NodeToken threeTokensAgo;
+  private /*@MonotonicNonNull*/ NodeToken threeTokensAgo;
 
   /**
    * Creates a new instance of PrefixRemover to remove prefix.
@@ -91,7 +91,7 @@ class PrefixFixer extends DepthFirstVisitor {
    * Return whether n is at the end of a set of node tokens
    * that form a prefixed name needing fixing.
    */
-  /*@AssertNonNullIfTrue({"lastToken","twoTokensAgo","threeTokensAgo"})*/
+  /*@EnsuresNonNullIf(result=true, expression={"lastToken","twoTokensAgo","threeTokensAgo"})*/
   private boolean isMatch(NodeToken n) {
     return ((! Visitors.isLParen(n)) &&
             lastToken != null &&

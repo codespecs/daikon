@@ -97,7 +97,7 @@ public class DummyInvariant
     int sliceSize = uniqVarsSet.size();
     if (sliceSize > 3)
       sliceSize = 3;
-    /*NNC:@LazyNonNull*/ VarInfo[] newVars = new VarInfo[sliceSize];
+    /*NNC:@MonotonicNonNull*/ VarInfo[] newVars = new VarInfo[sliceSize];
     {
       Iterator<VarInfo> it = uniqVarsSet.iterator();
       int i = 0;

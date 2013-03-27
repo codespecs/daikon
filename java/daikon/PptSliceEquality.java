@@ -79,7 +79,7 @@ public class PptSliceEquality
       return vi.file_rep_type.hashCode();
     }
 
-    /*@AssertNonNullIfTrue("#1")*/
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals (/*@Nullable*/ Object o) {
       if (!(o instanceof VarInfoAndComparability)) return false;
       return equals ((VarInfoAndComparability) o);
@@ -90,7 +90,7 @@ public class PptSliceEquality
      * whether they are comparableNWay.  Since we do not yet handle
      * inheritance, we require that the comptability go both ways.
      **/
-    /*@AssertNonNullIfTrue("#1")*/
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals (VarInfoAndComparability o) {
 
       return (vi.comparableNWay (o.vi)
@@ -321,7 +321,7 @@ public class PptSliceEquality
       }
     }
     // Why use an array?  Because we'll be sorting shortly
-    /*NNC:@LazyNonNull*/ Equality[] resultArray = new Equality[multiMap.values().size()
+    /*NNC:@MonotonicNonNull*/ Equality[] resultArray = new Equality[multiMap.values().size()
                                           + out_of_bounds.size()];
     int resultCount = 0;
     for (Map.Entry</*@KeyFor("multiMap")*/ Object,List<VarInfo>> entry : multiMap.entrySet()) {
@@ -371,7 +371,7 @@ public class PptSliceEquality
        assert vis.size() > 0;
 
        // Why use an array?  Because we'll be sorting shortly
-       /*NNC:@LazyNonNull*/ Equality[] resultArray = new Equality[vis.size()];
+       /*NNC:@MonotonicNonNull*/ Equality[] resultArray = new Equality[vis.size()];
        for (int i = 0; i < vis.size(); i++) {
          VarInfo vi = vis.get(i);
          List<VarInfo> list = new ArrayList<VarInfo>();

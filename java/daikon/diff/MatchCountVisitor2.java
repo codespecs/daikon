@@ -152,7 +152,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
   // Cannot be static because it uses instance variable "targSet"
   /** Returns true if the pair of invariants should be printed **/
-  /*@AssertNonNullIfTrue({"#1", "#2"})*/
+  /*@EnsuresNonNullIf(result=true, expression={"#1", "#2"})*/
   protected boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
 
     if (inv1 == null || inv2 == null) {

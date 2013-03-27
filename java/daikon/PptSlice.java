@@ -368,7 +368,7 @@ public abstract class PptSlice
    * for the specified invariant.  An exact match requires that the
    * invariants be of the same class and have the same formula
    */
-  /*@AssertNonNullIfTrue("find_inv_exact(#1)")*/
+  /*@EnsuresNonNullIf(result=true, expression="find_inv_exact(#1)")*/
   public boolean contains_inv_exact (Invariant inv) {
 
     return (find_inv_exact(inv) != null);
