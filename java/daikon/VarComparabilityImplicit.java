@@ -144,7 +144,7 @@ public final class VarComparabilityImplicit
     // When Ajax is modified to output non-atomic info for arrays, this
     // check will no longer be necessary.
     if (dim < dimensions) {
-      assert indexTypes != null : "@SuppressWarnings(nullness): dependent: not the unknown type";
+      assert indexTypes != null : "@AssumeAssertion(nullness): dependent: not the unknown type";
       return indexTypes[dim];
     } else {
       return unknown;

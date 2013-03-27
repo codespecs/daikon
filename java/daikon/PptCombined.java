@@ -488,7 +488,7 @@ public class PptCombined extends PptTopLevel {
         System.out.println("End redundant vars");
       }
       if (dkconfig_rvars_file != null) {
-        assert rvars_stream != null : "@SuppressWarnings(nullness): dependent: dkconfig_rvars_file is non-null";
+        assert rvars_stream != null : "@AssumeAssertion(nullness): dependent: dkconfig_rvars_file is non-null";
         rvars_stream.println("===========================================================================");
         rvars_stream.println(cppt_name);
         for (Map.Entry</*@KeyFor("redundantVariables")*/ String, String> e : redundantVariables.entrySet()) {

@@ -765,9 +765,9 @@ public final class Diff {
       Collections.sort(invs2, invSortComparator2);
     } else {
       if ( false && treeManip && isCond (ppt1)) {
-        assert ppt1 != null : "@SuppressWarnings(nullness): dead code";
-        assert manip1 != null : "@SuppressWarnings(nullness): dependent on boolean treeManip";
-        assert manip2 != null : "@SuppressWarnings(nullness): dependent on boolean treeManip";
+        assert ppt1 != null : "@AssumeAssertion(nullness): dead code";
+        assert manip1 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
+        assert manip2 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
 
         // remember, only want to mess with the second list
         invs2 = findCondPpt (manip1, ppt1);
@@ -782,8 +782,8 @@ public final class Diff {
         Collections.sort(invs2, invSortComparator2);
       }
       else if (treeManip && ppt2 != null && !isCond(ppt2)) {
-        assert manip1 != null : "@SuppressWarnings(nullness): dependent on boolean treeManip";
-        assert manip2 != null : "@SuppressWarnings(nullness): dependent on boolean treeManip";
+        assert manip1 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
+        assert manip2 != null : "@AssumeAssertion(nullness): dependent on boolean treeManip";
 
         invs2 = findNormalPpt (manip1, ppt2);
         invs2.addAll ( findNormalPpt (manip2, ppt2));

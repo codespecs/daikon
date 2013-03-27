@@ -626,7 +626,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
       // Fix the enclosing variable to point to the prestate version
       if (result_vardef.enclosing_var != null) {
-        assert vi.enclosing_var != null : "@SuppressWarnings(nullness): dependent: result_vardef was copied from vi and their enclosing_var fields are the same";
+        assert vi.enclosing_var != null : "@AssumeAssertion(nullness): dependent: result_vardef was copied from vi and their enclosing_var fields are the same";
         result_vardef.enclosing_var = vi.enclosing_var.prestate_name();
       }
 
@@ -1058,7 +1058,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
         }
       } else { // new decl format
         assert enclosing_var != null : this;
-        assert enclosing_var != null : "@SuppressWarnings(nullness)";
+        assert enclosing_var != null : "@AssumeAssertion(nullness)";
 
         // The class of a parameter can't change in the caller
         if (var_flags.contains (VarFlags.CLASSNAME) && enclosing_var.isParam())
@@ -2542,7 +2542,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // Static constants don't have value sets, so we must make one
     if (is_static_constant) {
       ValueSet vs = ValueSet.factory(this);
-      assert static_constant_value != null : "@SuppressWarnings(nullness): dependent: is_static_constant";
+      assert static_constant_value != null : "@AssumeAssertion(nullness): dependent: is_static_constant";
       vs.add(static_constant_value);
       return (vs);
     }
@@ -2697,7 +2697,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
             System.out.printf ("%s %s%n", vi, vi.var_kind);
           assert var.enclosing_var != null : this + " " + var;
         }
-        assert var.enclosing_var != null : "@SuppressWarnings(nullness): just tested";
+        assert var.enclosing_var != null : "@AssumeAssertion(nullness): just tested";
         var = var.enclosing_var;
       }
       return var;

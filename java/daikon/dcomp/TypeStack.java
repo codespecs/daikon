@@ -215,7 +215,7 @@ public final class TypeStack
                 initStack(parent);
                 parentStack = stackMap.get(parent);
                 assert parentStack != null : "Could not initialize parent stack!!!";
-                assert parentStack != null : "@SuppressWarnings(nullness): just checked";
+                assert parentStack != null : "@AssumeAssertion(nullness): just checked";
             }
         }
         else

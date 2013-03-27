@@ -88,7 +88,7 @@ public class ClassInfo {
             {
                 boolean foundMatch = false;
                 for (MethodInfo mi: method_infos) {
-                  assert mi.member != null : "@SuppressWarnings(nullness): member of method_infos have .member field"; // fix with dependent type
+                  assert mi.member != null : "@AssumeAssertion(nullness): member of method_infos have .member field"; // fix with dependent type
                   // System.out.printf("compare %s to pure %s%n",
                   //                  mi.member.toString() , pureMeth);
                   if (mi.member.toString().trim().equals(pureMeth)) {

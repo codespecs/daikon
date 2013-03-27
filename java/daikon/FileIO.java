@@ -445,7 +445,7 @@ public final class FileIO {
     if (state.all_ppts.containsName(ppt_name)) {
       PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
-      assert existing_ppt != null : "@SuppressWarnings(nullness): bug: containsName() is annotated as @EnsuresNonNullIf(result=true, expression='get(#0)')";
+      assert existing_ppt != null : "@AssumeAssertion(nullness): bug: containsName() is annotated as @EnsuresNonNullIf(result=true, expression='get(#0)')";
       if (state.ppts_are_new) {
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
@@ -555,7 +555,7 @@ public final class FileIO {
     if (state.all_ppts.containsName(ppt_name)) {
       PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
-      assert existing_ppt != null : "@SuppressWarnings(nullness): bug: containsName() is annotated as @EnsuresNonNullIf(result=true, expression='get(#0)')";
+      assert existing_ppt != null : "@AssumeAssertion(nullness): bug: containsName() is annotated as @EnsuresNonNullIf(result=true, expression='get(#0)')";
       if (state.ppts_are_new) {
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
@@ -1481,8 +1481,8 @@ public final class FileIO {
       read_data_trace_record (data_trace_state);
 
       if (data_trace_state.rtype == RecordType.SAMPLE) {
-        assert data_trace_state.ppt != null : "@SuppressWarnings(nullness): dependent: RecordType.SAMPLE";
-        assert data_trace_state.vt != null : "@SuppressWarnings(nullness): dependent: RecordType.SAMPLE";
+        assert data_trace_state.ppt != null : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
+        assert data_trace_state.vt != null : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
         // Nonce may be null
         samples_processed++;
         // Add orig and derived variables; pass to inference (add_and_flow)
@@ -1618,7 +1618,7 @@ public final class FileIO {
         // --ppt-select-pattern or --ppt-omit-pattern.
         if (state.ppt != null) {
           if (!state.all_ppts.containsName (state.ppt.name())) {
-            assert state.ppt != null : "@SuppressWarnings(nullness): bug: not side-effected since check, and only pure methods have been called since";
+            assert state.ppt != null : "@AssumeAssertion(nullness): bug: not side-effected since check, and only pure methods have been called since";
             state.all_ppts.add(state.ppt);
             assert state.ppt != null; // for nullness checker
             try {
@@ -1913,7 +1913,7 @@ public final class FileIO {
             for (String succName : p.ppt_successors) {
               @SuppressWarnings("nullness") // map: any successor is in the map
               /*@NonNull*/ PptTopLevel succPpt = all_ppts.get(succName);
-              assert succPpt.predecessors != null : "@SuppressWarnings(nullness): this is a successor, so the predecessor exists";
+              assert succPpt.predecessors != null : "@AssumeAssertion(nullness): this is a successor, so the predecessor exists";
               succPpt.predecessors.add(p);
             }
           }
@@ -1929,7 +1929,7 @@ public final class FileIO {
           // Every block except the first should have at least one predecessor
           for (int i = 1; i < ppts.size(); i++) {
             PptTopLevel p = ppts.get(i);
-            assert p.predecessors != null : "@SuppressWarnings(nullness): dependent: building combined program points";
+            assert p.predecessors != null : "@AssumeAssertion(nullness): dependent: building combined program points";
             if (p.predecessors.size() == 0)
               System.out.printf ("ERROR: ppt %s has no predecessors\n", p);
           }
@@ -1973,7 +1973,7 @@ public final class FileIO {
       // Add the sample to the ppt.  Ppts that are part of a combined ppt
       // are handled as part of the combined ppt.
       if ((!ppt.combined_subsumed) && (ppt.combined_ppt != null)) {
-        assert ppt.combined_ppt != null : "@SuppressWarnings(nullness): bug in flow with respect to fields";
+        assert ppt.combined_ppt != null : "@AssumeAssertion(nullness): bug in flow with respect to fields";
         ppt.combined_ppt.add_combined();
       }
     } else {

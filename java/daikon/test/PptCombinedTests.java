@@ -104,7 +104,7 @@ public class PptCombinedTests extends TestCase {
     PptTopLevel main = ppts[0];
     main.predecessors = new ArrayList<PptTopLevel>();
     for (int i = 1 ; i < ppts.length ; i++) {
-      assert main.predecessors != null : "@SuppressWarnings(nullness): add() has no side effects to main.predecessors";
+      assert main.predecessors != null : "@AssumeAssertion(nullness): add() has no side effects to main.predecessors";
       main.predecessors.add(ppts[i]);
     }
   }

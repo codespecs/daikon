@@ -1037,7 +1037,7 @@ public class PptTopLevel extends Ppt {
 
     // Add the samples to all of the equality sets, breaking sets as required
     if (Daikon.use_equality_optimization) {
-      assert equality_view != null : "@SuppressWarnings(nullness): dependent: non-null if use_equality_optimization==true";
+      assert equality_view != null : "@AssumeAssertion(nullness): dependent: non-null if use_equality_optimization==true";
       weakened_invs.addAll(equality_view.add(vt, count));
     }
 
@@ -1272,7 +1272,7 @@ public class PptTopLevel extends Ppt {
     for (int ii = 0; ii < ppt.var_infos.length; ii++) {
       if (ppt.var_infos[ii].missingOutOfBounds()) {
         int mod = vt.getModified(ppt.var_infos[ii]);
-        assert var_infos[ii].derived != null : "@SuppressWarnings(nullness)";
+        assert var_infos[ii].derived != null : "@AssumeAssertion(nullness)";
         if (mod == ValueTuple.MISSING_NONSENSICAL)
           var_infos[ii].derived.missing_array_bounds = true;
       }
@@ -2772,7 +2772,7 @@ public class PptTopLevel extends Ppt {
     if (num_samples() == 0)
       return;
     assert equality_view != null : "ppt = " + ppt_name +" children = " + children;
-    assert equality_view != null : "@SuppressWarnings(nullness): application invariant";
+    assert equality_view != null : "@AssumeAssertion(nullness): application invariant";
     Invariants equalityInvs = equality_view.invs;
 
     // Pivot invariants to new equality leaders if needed, if old
@@ -4380,7 +4380,7 @@ public class PptTopLevel extends Ppt {
                         + memory + ": "
                         + time);
       if (cnt_inv_classes) {
-        assert inv_map != null : "@SuppressWarnings(nullness) : dependent: cnt_inv_classes is true";
+        assert inv_map != null : "@AssumeAssertion(nullness) : dependent: cnt_inv_classes is true";
         for (Class<? extends Invariant> inv_class : inv_map.keySet()) {
           Cnt cnt = inv_map.get(inv_class);
           log.fine(" : " + inv_class + ": " + cnt.cnt);

@@ -90,7 +90,7 @@ public class TestRedundantVars {
             return true; // We don't consider missing ppts as failures.
         }
 
-        assert invsWith != null : "@SuppressWarnings(nullness): dependent: same nullness as invsWithout, which was checked";
+        assert invsWith != null : "@AssumeAssertion(nullness): dependent: same nullness as invsWithout, which was checked";
 
         @SuppressWarnings("nullness") // map: ppt is in reds.records when process_ppt is called
         /*@NonNull*/ List<String> redVars = reds.records.get(ppt);

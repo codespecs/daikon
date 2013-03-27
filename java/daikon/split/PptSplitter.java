@@ -320,7 +320,7 @@ public class PptSplitter implements Serializable {
         if (cslice == null) {
           if (eq_inv != null) {
             if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
-              assert child_ppt.constants != null : "@SuppressWarnings(nullness):  dependent:  config var";
+              assert child_ppt.constants != null : "@AssumeAssertion(nullness):  dependent:  config var";
               for (int i = 0; i < cvis_sorted.length; i++)
                 System.out.println ("con val = "
                    + child_ppt.constants.getConstant(cvis_sorted[i]));

@@ -311,7 +311,7 @@ public class PptSliceEquality
           System.out.printf ("null value for variable %s, mod=%d at ppt %s%n",
                 vi.name(), vt.getModified(vi), parent.name());
           VarInfo rv = parent.find_var_by_name ("return");
-          assert rv != null : "@SuppressWarnings(nullness)";
+          assert rv != null : "@AssumeAssertion(nullness)";
           System.out.println ("return value = "
                               + Debug.toString (rv.getValue(vt)));
           System.out.println ("At line number "
@@ -542,7 +542,7 @@ public class PptSliceEquality
           PptSlice newSlice = slice.cloneAndPivot(soFar);
           // Debug.debugTrack.fine ("LeaderHelper: Created Slice " + newSlice);
           if (Debug.logOn()) {
-            assert dlog != null : "@SuppressWarnings(nullness): dependent: set if Debug.logOn()";
+            assert dlog != null : "@AssumeAssertion(nullness): dependent: set if Debug.logOn()";
             dlog.log ("Created slice " + newSlice + " Leader equality set = "
                       + soFar[0].equalitySet);
             Debug.log (getClass(), newSlice, "Created this slice");
@@ -565,7 +565,7 @@ public class PptSliceEquality
         }
       } else {
         if (Debug.logOn()) {
-            assert dlog != null : "@SuppressWarnings(nullness): dependent: set if Debug.logOn()";
+            assert dlog != null : "@AssumeAssertion(nullness): dependent: set if Debug.logOn()";
           dlog.log ("Slice already existed " +
                     parent.findSlice_unordered (soFar));
         }

@@ -183,7 +183,7 @@ public class SessionManager
           mgr.pending = null;
           mgr.notifyAll();
           try { mgr.wait(0); } catch (InterruptedException e) { }
-          assert mgr.pending != null : "@SuppressWarnings(nullness)";
+          assert mgr.pending != null : "@AssumeAssertion(nullness)";
           // session != null && mgr.pending != null;
         }
         error = null;

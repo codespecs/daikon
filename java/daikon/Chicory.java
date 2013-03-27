@@ -422,8 +422,8 @@ public class Chicory {
 
       // Make sure all output is forwarded before we finish
       try {
-        assert daikon_err != null : "@SuppressWarnings(nullness): dependent: because daikon_online is true";
-        assert daikon_out != null : "@SuppressWarnings(nullness): dependent: because daikon_online is true";
+        assert daikon_err != null : "@AssumeAssertion(nullness): dependent: because daikon_online is true";
+        assert daikon_out != null : "@AssumeAssertion(nullness): dependent: because daikon_online is true";
         daikon_err.join();
         daikon_out.join();
       } catch (InterruptedException e) {

@@ -54,7 +54,7 @@ public class PptFile {
                 //System.out.println("LINE " + line);
                 if (line.startsWith("====================")) {
                     // End of record.
-                    assert name != null : "@SuppressWarnings(nullness): was set on previous loop iteration";
+                    assert name != null : "@AssumeAssertion(nullness): was set on previous loop iteration";
                     records.put(name, lines);
                     name = null;
                     lines = new ArrayList<String>();

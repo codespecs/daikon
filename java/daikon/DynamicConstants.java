@@ -739,7 +739,7 @@ public class DynamicConstants implements Serializable {
     // Consider all of the ternary slices with one new non-constant
     for (int i = 0; i < new_leaders.size(); i++) {
       Constant con1 = new_leaders.get(i);
-      assert con1.val != null : "@SuppressWarnings(nullness)";
+      assert con1.val != null : "@AssumeAssertion(nullness)";
       for (int j = 0; j < vars.size(); j++ ) {
         Constant con2 = vars.get(j);
         assert con1 != con2;
@@ -792,7 +792,7 @@ public class DynamicConstants implements Serializable {
     // Consider all of the ternary slices with two new non-constants
     for (int i = 0; i < new_leaders.size(); i++) {
       Constant con1 = new_leaders.get(i);
-      assert con1.val != null : "@SuppressWarnings(nullness)";
+      assert con1.val != null : "@AssumeAssertion(nullness)";
       for (int j = i; j < new_leaders.size(); j++ ) {
         Constant con2 = new_leaders.get(j);
         for (int k = 0; k < vars.size(); k++ ) {
@@ -823,7 +823,7 @@ public class DynamicConstants implements Serializable {
 
             lt = LinearTernary.get_proto().instantiate (slice);
             if (lt != null) {
-              assert con2.val != null : "@SuppressWarnings(nullness)";
+              assert con2.val != null : "@AssumeAssertion(nullness)";
               sts = ((LinearTernary) lt).setup (oo, con1.vi,
                         ((Long) con1.val).longValue(),
                         con2.vi, ((Long) con2.val).longValue());
@@ -986,7 +986,7 @@ public class DynamicConstants implements Serializable {
       }
 
       if (con.count > 0) {
-        assert con.val != null : "@SuppressWarnings(nullness): dependent: val when count>0";
+        assert con.val != null : "@AssumeAssertion(nullness): dependent: val when count>0";
         slice1.add_val_bu(con.val, mod, con.count);
       }
       if (slice1.invs.size() > 0)
@@ -1082,7 +1082,7 @@ public class DynamicConstants implements Serializable {
    * Creates OneOf invariants for each constant
    */
   public void instantiate_oneof (Constant con) {
-    assert con.val != null : "@SuppressWarnings(nullness)";
+    assert con.val != null : "@AssumeAssertion(nullness)";
 
     // @NonNull, but not marked that way to ease warning suppression.
     Invariant inv;
@@ -1108,7 +1108,7 @@ public class DynamicConstants implements Serializable {
     } else {
       throw new Error("Unrecognized rep_type in instantiate_oneof");
     }
-    assert inv != null : "@SuppressWarnings(nullness): instantiation of the given invariants always succeeds";
+    assert inv != null : "@AssumeAssertion(nullness): instantiation of the given invariants always succeeds";
     slice1.addInvariant (inv);
 
     // Add the value to it

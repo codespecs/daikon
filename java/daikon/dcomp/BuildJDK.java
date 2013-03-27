@@ -374,7 +374,7 @@ public class BuildJDK {
     if (verbose)
       System.out.printf("processing target %s\n", classname);
     JavaClass jc = classmap.get(classname);
-    assert jc != null : "@SuppressWarnings(nullness): seems to be non-null";
+    assert jc != null : "@AssumeAssertion(nullness): seems to be non-null";
     DCInstrument dci = new DCInstrument (jc, true, null);
     if (false) {
       System.out.printf ("Comparing type stacks for class %s%n", classname);

@@ -1896,7 +1896,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
         int index = 0;
         for (Iterator<?> i = collection.iterator() ; i.hasNext() ; ) {
           _TYPE_NAME[] oneEltArray = COLLECT_TYPE (i.next(), fields, fieldsStartIdx + 1);
-          assert oneEltArray != null : "@SuppressWarnings(nullness)"; // not sure why
+          assert oneEltArray != null : "@AssumeAssertion(nullness)"; // not sure why
           //assert oneEltArray.length == 1;
           intermediate[index++] = oneEltArray[0];
         }
@@ -1909,7 +1909,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
         for (int i = 0 ; i < intermediate.length ; i++) {
           _TYPE_NAME[] oneEltArray = COLLECT_TYPE (Array.get(fieldObj, i),
                                              fields, fieldsStartIdx + 1);
-          assert oneEltArray != null : "@SuppressWarnings(nullness)"; // not sure why
+          assert oneEltArray != null : "@AssumeAssertion(nullness)"; // not sure why
           //assert oneEltArray.length == 1;
           intermediate[i] = oneEltArray[0];
         }

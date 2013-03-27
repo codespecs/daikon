@@ -345,7 +345,7 @@ public class InvariantChecker {
       debug.fine ("processing sample from: " + ppt.name);
 
       // Add orig and derived variables
-      assert vt.vals != null : "@SuppressWarnings(nullness): bug: Checker Framework bug:  vals is a non-null array, but is reported as nullable";
+      assert vt.vals != null : "@AssumeAssertion(nullness): bug: Checker Framework bug:  vals is a non-null array, but is reported as nullable";
       FileIO.compute_orig_variables(ppt, vt.vals, vt.mods, nonce);
       FileIO.compute_derived_variables(ppt, vt.vals, vt.mods);
 
@@ -354,7 +354,7 @@ public class InvariantChecker {
 
       // If this is an enter point, just remember it for later
       if (ppt.ppt_name.isEnterPoint()) {
-        assert nonce != null : "@SuppressWarnings(nullness): nonce exists for enter & exit points";
+        assert nonce != null : "@AssumeAssertion(nullness): nonce exists for enter & exit points";
         if (dir_file!=null) {
           //Yoav: I had to do a hack to handle the case that several dtrace files are concatenated together,
           // and Sung's dtrace files have unterminated calls, and when concatenating two files you can have the same nonce.
@@ -369,7 +369,7 @@ public class InvariantChecker {
 
       // If this is an exit point, process the saved enter point
       if (ppt.ppt_name.isExitPoint()) {
-        assert nonce != null : "@SuppressWarnings(nullness): nonce exists for enter & exit points";
+        assert nonce != null : "@AssumeAssertion(nullness): nonce exists for enter & exit points";
         EnterCall ec = call_map.get (nonce);
         if (ec != null) {
           call_map.remove (nonce);

@@ -304,7 +304,7 @@ public final class PrintInvariants {
         } else if (Daikon.disc_reason_SWITCH.equals(option_name)) {
           try { PrintInvariants.discReasonSetup(g.getOptarg()); }
           catch (IllegalArgumentException e) {
-            assert e.getMessage() != null : "@SuppressWarnings(nullness):  application invariant:  if discReasonSetup throws IllegalArgumentException, its message is non-null";
+            assert e.getMessage() != null : "@AssumeAssertion(nullness):  application invariant:  if discReasonSetup throws IllegalArgumentException, its message is non-null";
             throw new Daikon.TerminationMessage(e.getMessage());
           }
         } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
@@ -506,7 +506,7 @@ public final class PrintInvariants {
           DiscardInfo di;
           if (propFilter instanceof ObviousFilter) {
             di = nextInv.isObvious();
-            assert di != null : "@SuppressWarnings(nullness)";
+            assert di != null : "@AssumeAssertion(nullness)";
             if (Invariant.logOn())
               nextInv.log ("DiscardInfo's stuff: " + di.className() + lineSep
                            + di.format());
@@ -1138,7 +1138,7 @@ public final class PrintInvariants {
     }
     finally_print_the_invariants(accepted_invariants, out, ppt);
     if (false && ppt.constants != null) {
-      assert ppt.constants != null : "@SuppressWarnings(nullness) checker bug: flow";
+      assert ppt.constants != null : "@AssumeAssertion(nullness) checker bug: flow";
       ppt.constants.print_missing (out);
     }
   }
