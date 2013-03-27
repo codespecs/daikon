@@ -61,7 +61,7 @@ public class SplitterFactoryTestUpdater {
   /**
    * This is a short-cut method if only one spinfo file and only
    * one decls files is to be used.
-   * @see generateSplitters(List, List)
+   * @see #generateSplitters(List, List)
    */
   private static void generateSplitters(String spinfoFile, String declsFile) {
     List<String> spinfo = new ArrayList<String>();

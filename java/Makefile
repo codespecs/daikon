@@ -1049,11 +1049,13 @@ clover: all_directly
 .PHONY: doc
 
 JAVADOC_DEST  = doc
+# $(DAIKONDIR)/java should not be in classpath, to avoid Javadoc error
+# "Multiple sources of package comments found for package"
 JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
                 -linkoffline http://java.sun.com/j2se/1.5.0/docs/api/ http://java.sun.com/j2se/1.5.0/docs/api/ \
                 -docletpath ${CLASSPATH} \
-                -classpath ${CLASSPATH}
+                -classpath $(subst $(DAIKONDIR)/java,${CLASSPATH_JARS}:${CLASSPATH_JARS2},${CLASSPATH})
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 # JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v '\#'`
 JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | sort)

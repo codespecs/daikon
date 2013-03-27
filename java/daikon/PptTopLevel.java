@@ -583,7 +583,6 @@ public class PptTopLevel extends Ppt {
    * Method is not private so that FileIO can access it; should not be
    * called by other classes.
    * @param vis must not contain static constant VarInfos
-   * @see #addVarInfo(VarInfo)
    **/
   void addVarInfos(VarInfo[] vis) {
     if (vis.length == 0)

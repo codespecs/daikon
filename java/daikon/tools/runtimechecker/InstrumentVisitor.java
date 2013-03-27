@@ -561,9 +561,6 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         return inv;
     }
 
-    /**
-     * @return
-     */
     private ClassOrInterfaceBodyDeclaration isInstrumentedDecl() {
         return (ClassOrInterfaceBodyDeclaration)
             Ast.create("ClassOrInterfaceBodyDeclaration",
@@ -572,9 +569,6 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                        "public static boolean isDaikonInstrumented() { return true; }");
     }
 
-    /**
-     * @return
-     */
     private ClassOrInterfaceBodyDeclaration getInvariantsDecl() {
         StringBuffer code = new StringBuffer();
         code.append("public static java.util.Set getDaikonInvariants() {");
@@ -588,9 +582,6 @@ public class InstrumentVisitor extends DepthFirstVisitor {
                                                             .toString());
     }
 
-    /**
-     * @return
-     */
     private ClassOrInterfaceBodyDeclaration staticPropertyDecl() {
         StringBuffer code = new StringBuffer();
 
