@@ -75,7 +75,7 @@ public class CLASSNAME
     super(ppt);
   }
 
-  protected CLASSNAME(/*>>> @Prototype CLASSNAME this*/) {
+  protected /*@Prototype*/ CLASSNAME() {
     super();
   }
 
