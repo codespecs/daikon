@@ -79,7 +79,7 @@ public class TestRedundantVars {
 
     // Returns true iff all tests pass.
     @SuppressWarnings("field.not.found.nullness.parse.error") // bug: fields in precondition expressions
-    /*@NonNullOnEntry("this.reds.records.get(#1)")*/
+    /*@RequiresNonNull("this.reds.records.get(#1)")*/
     private static boolean process_ppt(String ppt) {
 
         List<String> invsWithout = without.records.get(ppt);
@@ -90,7 +90,7 @@ public class TestRedundantVars {
             return true; // We don't consider missing ppts as failures.
         }
 
-        assert invsWith != null : "@SuppressWarnings(nullness): dependent: same nullness as invsWithout, which was checked";
+        assert invsWith != null : "@AssumeAssertion(nullness): dependent: same nullness as invsWithout, which was checked";
 
         @SuppressWarnings("nullness") // map: ppt is in reds.records when process_ppt is called
         /*@NonNull*/ List<String> redVars = reds.records.get(ppt);

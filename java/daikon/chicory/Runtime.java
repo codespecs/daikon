@@ -726,7 +726,7 @@ public class Runtime
               if (cinfo.clazz == null)
                 cinfo.initViaReflection();
 
-              assert cinfo.clazz != null : "@SuppressWarnings(nullness): checker bug: flow problem (postcondition)";
+              assert cinfo.clazz != null : "@AssumeAssertion(nullness): checker bug: flow problem (postcondition)";
 
               if (cinfo.clazz.equals(type))
                 return cinfo;

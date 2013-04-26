@@ -44,7 +44,7 @@ public class CreateSpinfoC {
             temp.delete();
           System.exit(1);
         }
-        assert temp != null : "@SuppressWarnings(nullness)";
+        assert temp != null : "@AssumeAssertion(nullness)";
         try {
           parser = new CParser(new FileInputStream(temp));
           TranslationUnit root = CParser.TranslationUnit();

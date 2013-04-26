@@ -604,8 +604,8 @@ public final class PPTSLICE1 extends PptSlice {
       }
 
       // Child variable info
-      /*NNC:@LazyNonNull*/ VarInfo[] cvis = new VarInfo[var_infos.length];
-      /*NNC:@LazyNonNull*/ VarInfo[] cvis_sorted = new VarInfo[var_infos.length];
+      /*NNC:@MonotonicNonNull*/ VarInfo[] cvis = new VarInfo[var_infos.length];
+      /*NNC:@MonotonicNonNull*/ VarInfo[] cvis_sorted = new VarInfo[var_infos.length];
 
       // Build the corresponding array of VarInfos for the child.  If any
       // of the vars don't exist in this child, skip the child (since we
@@ -681,7 +681,7 @@ public final class PPTSLICE1 extends PptSlice {
         Invariant inv = orig_inv.clone_and_permute (permute);
         all_invs.add (inv);
         if (Invariant.logOn()) {
-          /*NNC:@LazyNonNull*/ VarInfo[] child_vars = new VarInfo[var_infos.length];
+          /*NNC:@MonotonicNonNull*/ VarInfo[] child_vars = new VarInfo[var_infos.length];
           for (int k = 0; k < var_infos.length; k++) {
             VarInfo pv = var_infos[k];
             @SuppressWarnings("nullness")

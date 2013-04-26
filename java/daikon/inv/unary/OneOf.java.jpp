@@ -761,7 +761,7 @@ public final class ONEOFSCALAR
       } else { // base is not an array, presume it is a collection
         VarInfo collection = base.get_enclosing_var();
         assert collection != null : "no enclosing var for " + base.name();
-        assert collection != null : "@SuppressWarnings(nullness)";
+        assert collection != null : "@AssumeAssertion(nullness)";
         result = collection.esc_name() + ".elementType == "
             + format_esc_string2type(elts[0]);
         // Do not use the \forall, return this directly

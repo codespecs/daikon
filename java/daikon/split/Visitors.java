@@ -33,7 +33,7 @@ class Visitors implements JavaParserConstants {
     Node root = parser.CompilationUnit();
     ExpressionExtractor expressionExtractor = new ExpressionExtractor();
     root.accept(expressionExtractor);
-    assert expressionExtractor.expressionNode != null : "@SuppressWarnings(nullness): control flow: visitor pattern";
+    assert expressionExtractor.expressionNode != null : "@AssumeAssertion(nullness): control flow: visitor pattern";
     return expressionExtractor.expressionNode;
   }
 

@@ -64,7 +64,7 @@ public final class SEQUENCESCALARSUBSCRIPT
   public VarInfo seq_enclosing_var() {
     VarInfo result = seqvar().enclosing_var;
     // When using old dtrace file format, this can fail.
-    assert result != null : "@SuppressWarnings(nullness): foo[] has enclosing_var foo";
+    assert result != null : "@AssumeAssertion(nullness): foo[] has enclosing_var foo";
     return result;
   }
 

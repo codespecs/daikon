@@ -64,7 +64,7 @@ class FormatTestCase {
     /**
      * A cached copy of the result achieved by invoking the output method.
      **/
-    private /*@LazyNonNull*/ String resultCache;
+    private /*@MonotonicNonNull*/ String resultCache;
 
     /**
      * A string containing the format that this particular test case represented.
@@ -376,7 +376,7 @@ class FormatTestCase {
     for (int i = 1; i < tokens.length; i+=2) {
       String arg_type_name = tokens[i].intern();
       if (i+1 >= tokens.length)
-        throw new RuntimeException ("No matching arg val for argument  type"
+        throw new RuntimeException ("No matching arg val for argument type "
                                     + arg_type_name);
       String arg_val = tokens[i+1];
       Object val;

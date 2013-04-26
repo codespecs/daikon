@@ -476,7 +476,7 @@ public class DeclWriter extends DaikonWriter {
      * local variable
      */
     @Override
-    /*@AssertNonNullIfTrue("#1")*/
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals (/*@Nullable*/ Object o) {
       if (!(o instanceof VarRelation) || (o == null))
         return false;
