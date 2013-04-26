@@ -387,7 +387,12 @@ public class BuildJDK {
       inst_jc = dci.instrument_jdk();
     skipped_methods.addAll(dci.get_skipped_methods());
     File classfile = new File(classname.replace('.', '/') + ".class");
-    @SuppressWarnings("nullness") // classfile has a parent
+    File dir;
+    if (classfile.getParent() == null) {
+      dir = dfile;
+    } else {
+      dir = new File(dfile, classfile.getParent());
+    }
     File dir = new File(dfile, classfile.getParent());
     dir.mkdirs();
     File classpath = new File(dir, classfile.getName());
