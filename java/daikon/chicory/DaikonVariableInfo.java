@@ -444,7 +444,7 @@ public abstract class DaikonVariableInfo
      * @param type the class whose fields should all be added to this node
      */
     @SuppressWarnings("field.not.found.nullness.parse.error") // bug: fields in precondition expressions
-    /*@NonNullOnEntry("cinfo.clazz")*/
+    /*@RequiresNonNull("cinfo.clazz")*/
     protected void addClassVars(ClassInfo cinfo, boolean dontPrintInstanceVars,
                                 Class<?> type, String offset, int depth) {
 
@@ -588,7 +588,7 @@ public abstract class DaikonVariableInfo
                                 depth, buf);
                         String newOffset = buf.toString();
                         debug_vars.indent ("Pure method");
-                        assert meth.member != null : "@SuppressWarnings(nullness): member of method_infos have .member field"; // fix with dependent type
+                        assert meth.member != null : "@AssumeAssertion(nullness): member of method_infos have .member field"; // fix with dependent type
                         newChild.addChildNodes(cinfo,
                                                ((Method) meth.member).getReturnType(),
                                                meth.member.getName(),
@@ -631,7 +631,7 @@ public abstract class DaikonVariableInfo
                                         buf);
                                 String newOffset = buf.toString();
                                 debug_vars.indent ("Pure method");
-                                assert meth.member != null : "@SuppressWarnings(nullness): member of method_infos have .member field"; // fix with dependent type
+                                assert meth.member != null : "@AssumeAssertion(nullness): member of method_infos have .member field"; // fix with dependent type
                                 newChild.addChildNodes(cinfo,
                                                        ((Method) meth.member).getReturnType(),
                                                        meth.member.getName(),

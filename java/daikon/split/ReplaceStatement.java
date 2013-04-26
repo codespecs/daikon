@@ -74,7 +74,7 @@ class ReplaceStatement {
     // But also seems to depend on methodName being set already...
     root.accept(visitor);
     assert methodName != null;
-    assert parameters != null : "@SuppressWarnings(nullness) : initialization via helper method (visitor pattern)";
+    assert parameters != null : "@AssumeAssertion(nullness) : initialization via helper method (visitor pattern)";
   }
 
   /**

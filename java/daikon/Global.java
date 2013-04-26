@@ -192,7 +192,7 @@ public final class Global {
   public static final boolean debugPrintDtrace = false;
 
   // used only if debugPrintDtrace is true.  Users need not set this.
-  public static /*@LazyNonNull*/ PrintWriter dtraceWriter = null;
+  public static /*@MonotonicNonNull*/ PrintWriter dtraceWriter = null;
 
   //Global Fuzzy Float comparator to use
   public static FuzzyFloat fuzzy = new FuzzyFloat ();

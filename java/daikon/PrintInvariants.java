@@ -207,9 +207,9 @@ public final class PrintInvariants {
   // words, if print_discarded_invariants == true).  But they can be null
   // even in that case, which means to output a discard-reason for every
   // invariant.
-  private static /*@LazyNonNull*/ String discClass = null;
-  private static /*@LazyNonNull*/ String discVars = null;
-  private static /*@LazyNonNull*/ String discPpt = null;
+  private static /*@MonotonicNonNull*/ String discClass = null;
+  private static /*@MonotonicNonNull*/ String discVars = null;
+  private static /*@MonotonicNonNull*/ String discPpt = null;
 
   // Avoid problems if daikon.Runtime is loaded at analysis (rather than
   // test-run) time.  This might have to change when JTrace is used.
@@ -304,7 +304,7 @@ public final class PrintInvariants {
         } else if (Daikon.disc_reason_SWITCH.equals(option_name)) {
           try { PrintInvariants.discReasonSetup(g.getOptarg()); }
           catch (IllegalArgumentException e) {
-            assert e.getMessage() != null : "@SuppressWarnings(nullness):  application invariant:  if discReasonSetup throws IllegalArgumentException, its message is non-null";
+            assert e.getMessage() != null : "@AssumeAssertion(nullness):  application invariant:  if discReasonSetup throws IllegalArgumentException, its message is non-null";
             throw new Daikon.TerminationMessage(e.getMessage());
           }
         } else if (Daikon.suppress_redundant_SWITCH.equals(option_name)) {
@@ -506,7 +506,7 @@ public final class PrintInvariants {
           DiscardInfo di;
           if (propFilter instanceof ObviousFilter) {
             di = nextInv.isObvious();
-            assert di != null : "@SuppressWarnings(nullness)";
+            assert di != null : "@AssumeAssertion(nullness)";
             if (Invariant.logOn())
               nextInv.log ("DiscardInfo's stuff: " + di.className() + lineSep
                            + di.format());
@@ -789,7 +789,7 @@ public final class PrintInvariants {
    * if Daikon.output_num_samples is enabled or the format is ESCJAVA,
    * JML, or DBCJAVA.
    */
-  /*@NonNullOnEntry("FileIO.new_decl_format")*/
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_sample_data(PptTopLevel ppt, PrintWriter out) {
 
     if (Daikon.output_num_samples) {
@@ -943,7 +943,7 @@ public final class PrintInvariants {
   private static String reason = "";
 
   /** Prints the specified invariant to out. **/
-  /*@NonNullOnEntry("FileIO.new_decl_format")*/
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariant(Invariant inv, PrintWriter out,
                                      int invCounter, PptTopLevel ppt) {
     int inv_num_samps = inv.ppt.num_samples();
@@ -1138,7 +1138,7 @@ public final class PrintInvariants {
     }
     finally_print_the_invariants(accepted_invariants, out, ppt);
     if (false && ppt.constants != null) {
-      assert ppt.constants != null : "@SuppressWarnings(nullness) checker bug: flow";
+      assert ppt.constants != null : "@AssumeAssertion(nullness) checker bug: flow";
       ppt.constants.print_missing (out);
     }
   }

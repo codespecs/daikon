@@ -18,10 +18,10 @@ class OrigFixer extends DepthFirstVisitor {
   private boolean foundOrig = false;
 
   /** The last NodeToken visited. */
-  private /*@LazyNonNull*/ NodeToken lastToken;
+  private /*@MonotonicNonNull*/ NodeToken lastToken;
 
   /** The token visited before lastToken. */
-  private /*@LazyNonNull*/ NodeToken twoTokensAgo;
+  private /*@MonotonicNonNull*/ NodeToken twoTokensAgo;
 
   /** Blocks public constructor. */
   private OrigFixer() {
@@ -121,7 +121,7 @@ class OrigFixer extends DepthFirstVisitor {
    * Returns if the the last token represents a
    * variable name.
    */
-  /*@AssertNonNullIfTrue("lastToken")*/
+  /*@EnsuresNonNullIf(result=true, expression="lastToken")*/
   private boolean isLastTokenVar(NodeToken n) {
     return (lastToken != null &&
             Visitors.isIdentifier(lastToken) &&

@@ -162,6 +162,7 @@ public class Implication
    * the invariant of interest.  The standard version passes the vis
    * from the slice containing the implication itself (slice 0).
    **/
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     return orig_right.isObviousStatically_SomeInEquality();
 //     DiscardInfo result = isObviousStatically (orig_right.ppt.var_infos);
@@ -186,6 +187,7 @@ public class Implication
    * the invariant of interest.  The standard version passes the vis
    * from the slice containing the implication itself (slice 0).
    **/
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
 
     // If the consequent is ni-suppressed in its original program point,
@@ -213,7 +215,7 @@ public class Implication
             && super.isSameFormula(other_implic));
   }
 
-  /*@AssertNonNullIfTrue("#1")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
   public boolean isSameInvariant(Invariant other) {
     if (other == null)
       return false;

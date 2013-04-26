@@ -53,8 +53,8 @@ public final class VarComparabilityNone
    * representation types in the data trace file are the same.  This
    * lets us compare integers to longs, but not integers to arrays.
    **/
-  static boolean comparable(VarComparabilityNone vcomp1,
-                            VarComparabilityNone vcomp2) {
+  static /*@Pure*/  boolean comparable(VarComparabilityNone vcomp1,
+                                       VarComparabilityNone vcomp2) {
     return true;
   }
 

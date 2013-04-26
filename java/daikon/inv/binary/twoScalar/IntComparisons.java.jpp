@@ -1053,8 +1053,8 @@ public final class INTEQUAL
     VarInfo v2 = vis[1];
     if (!v2.isDerived() || !(v2.derived instanceof SequenceLength))
       return (null);
-    assert v1.derived != null : "@SuppressWarnings(nullness): checker bug: flow";
-    assert v2.derived != null : "@SuppressWarnings(nullness): checker bug: flow";
+    assert v1.derived != null : "@AssumeAssertion(nullness): checker bug: flow";
+    assert v2.derived != null : "@AssumeAssertion(nullness): checker bug: flow";
     if (!v1.derived.isSameFormula (v2.derived))
       return (null);
 

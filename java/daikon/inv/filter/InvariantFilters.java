@@ -71,7 +71,7 @@ public class InvariantFilters {
   }
 
 
-  private static /*@LazyNonNull*/ InvariantFilters default_filters = null;
+  private static /*@MonotonicNonNull*/ InvariantFilters default_filters = null;
 
   public static InvariantFilters defaultFilters() {
     if (default_filters == null)

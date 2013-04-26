@@ -11,7 +11,7 @@ import java.io.*;
  **/
 public class SplitterObject implements Comparable<SplitterObject> {
 
-  private /*@LazyNonNull*/ Splitter splitter;
+  private /*@MonotonicNonNull*/ Splitter splitter;
   private String condition; // the condition
   private /*@BinaryName*/ String className = "Unassigned"; // the Java classname of this Splitter
   private String directory; // the directory where it resides
@@ -21,7 +21,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   // Not necessarily an error message -- really just a status message.
   private String errorMessage = "Splitter not yet loaded";
   private int guid = -999;      // -999 indicates not yet set
-  private /*@LazyNonNull*/ File classFile; // class file containing compiled code for this splitter
+  private /*@MonotonicNonNull*/ File classFile; // class file containing compiled code for this splitter
 
   public boolean dummyDesired = false;
   public /*@Nullable*/ String daikonFormat   = null;

@@ -144,7 +144,7 @@ public final /*@Interned*/ class ProglangType
   }
 
   // Is this necessary?  It will be inherited from Object.
-  // /*@AssertNonNullIfTrue("#1")*/
+  // /*@EnsuresNonNullIf(result=true, expression="#1")*/
   // public boolean equals(/*@Nullable*/ Object o) {
   //   return this == o;
   // }
@@ -477,7 +477,7 @@ public final /*@Interned*/ class ProglangType
           if (parser.ttype == '\"') {
             v.add(parser.sval);
           } else if (parser.ttype == StreamTokenizer.TT_WORD) {
-            assert parser.sval != null : "@SuppressWarnings(nullness): dependent: representation invariant of StreamTokenizer";
+            assert parser.sval != null : "@AssumeAssertion(nullness): dependent: representation invariant of StreamTokenizer";
             if (parser.sval.equals ("nonsensical"))
               return null;
             assert parser.sval.equals("null");

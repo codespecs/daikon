@@ -660,7 +660,7 @@ showvars:
 
 plume-lib:
 	rm -rf java/utilMDE java/lib/utilMDE.jar
-	hg clone ${HG_OPTIONS} https://code.google.com/p/plume-lib/ plume-lib
+	hg clone ${HG_OPTIONS} https://code.google.com/p/plume-lib.dff-temp/ plume-lib
 
 .PHONY: plume-lib-update
 plume-lib-update: plume-lib

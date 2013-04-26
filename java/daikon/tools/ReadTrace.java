@@ -49,12 +49,12 @@ public class ReadTrace {
     public Map<PptTopLevel,List<ValueTuple>> samples = new LinkedHashMap<PptTopLevel,List<ValueTuple>>();
 
     /** Process the sample, by adding it to the <tt>samples</tt> map. */
-    /*@NonNullOnEntry("FileIO.data_trace_state")*/
+    /*@RequiresNonNull("FileIO.data_trace_state")*/
     public void process_sample (PptMap all_ppts, PptTopLevel ppt,
                                 ValueTuple vt, /*@Nullable*/ Integer nonce) {
 
       // Add orig and derived variables to the ValueTuple
-      assert vt.vals != null : "@SuppressWarnings(nullness): bug: Checker Framework bug:  vals is a non-null array, but is reported as nullable";
+      assert vt.vals != null : "@AssumeAssertion(nullness): bug: Checker Framework bug:  vals is a non-null array, but is reported as nullable";
       FileIO.compute_orig_variables(ppt, vt.vals, vt.mods, nonce);
       FileIO.compute_derived_variables(ppt, vt.vals, vt.mods);
 
