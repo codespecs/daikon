@@ -389,9 +389,9 @@ public class BuildJDK {
     File classfile = new File(classname.replace('.', '/') + ".class");
     File dir;
     if (classfile.getParent() == null) {
-        dir = dfile;
+      dir = dfile;
     } else {
-        dir = new File(dfile, classfile.getParent());
+      dir = new File(dfile, classfile.getParent());
     }
     dir.mkdirs();
     File classpath = new File(dir, classfile.getName());
