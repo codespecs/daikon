@@ -393,7 +393,6 @@ public class BuildJDK {
     } else {
       dir = new File(dfile, classfile.getParent());
     }
-    File dir = new File(dfile, classfile.getParent());
     dir.mkdirs();
     File classpath = new File(dir, classfile.getName());
     inst_jc.dump (classpath);
