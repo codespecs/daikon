@@ -85,7 +85,7 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers-quals.jar
 # Version of javac that supports pluggable type-checking.
 JAVAC_FOR_CHECKERS ?= ${CHECKERS}/binary/javac
 
-jsr308_imports = dataflow.quals.*:checkers.interning.quals.*:checkers.nullness.quals.*:checkers.regex.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*:checkers.signature.quals.*
+jsr308_imports = dataflow.quals.*:checkers.initialization.quals.*:checkers.interning.quals.*:checkers.nullness.quals.*:checkers.regex.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*:checkers.signature.quals.*
 
 ### end of user customizations
 
