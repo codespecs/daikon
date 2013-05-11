@@ -151,7 +151,7 @@ public final class VarComparabilityImplicit
     }
   }
 
-  @SuppressWarnings("pure")    // Override the purity checker
+  @SuppressWarnings("purity")    // Override the purity checker
   static /*@Pure*/ boolean comparable (VarComparabilityImplicit type1,
                                        VarComparabilityImplicit type2) {
     if (type1.alwaysComparable())
