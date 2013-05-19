@@ -1425,7 +1425,7 @@ public final class FileIO {
 
 
   /**
-   * Logically, this is a local variable in method read_data_trace_file.
+   * Logically, this is a local variable in static method read_data_trace_file.
    * It is used for status output, and to give the line number at which
    * a problem was detected.
    */
@@ -1435,7 +1435,7 @@ public final class FileIO {
   // The variable is only ever cleared at the end of a routine that set it.
   @SuppressWarnings("nullness") // reinitialization
   private static void clear_data_trace_state() {
-    data_trace_state = null;
+    FileIO.data_trace_state = null;
   }
 
 
@@ -1514,7 +1514,7 @@ public final class FileIO {
 
     if (Global.debugPrintDtrace) {
       assert Global.dtraceWriter != null
-        : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
+        : "@AssumeAssertion(nullness): dependent: set if debugPrintDtrace is true";
       Global.dtraceWriter.close();
     }
 
@@ -1588,6 +1588,7 @@ public final class FileIO {
       // Check for the file format
       if (line.startsWith ("decl-version")) {
         read_decl_version (state, line);
+        assert new_decl_format != null : "@AssumeAssertion(nullness): bug in Checker Framework:  read_decl_version is annotated as @EnsuresNonNull(new_decl_format)";
         state.payload = (new_decl_format ? "2.0" : "1.0");
         state.rtype = RecordType.DECL_VERSION;
         return;
@@ -1986,7 +1987,7 @@ public final class FileIO {
 
     if (Global.debugPrintDtrace) {
       assert Global.dtraceWriter != null
-        : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
+        : "@AssumeAssertion(nullness): dependent: set if debugPrintDtrace is true";
       Global.dtraceWriter.close();
     }
 
@@ -2116,7 +2117,7 @@ public final class FileIO {
 
     if (Global.debugPrintDtrace) {
       assert Global.dtraceWriter != null
-        : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
+        : "@AssumeAssertion(nullness): dependent: set if debugPrintDtrace is true";
       Global.dtraceWriter.println(ppt.name());
 
       if (to_write_nonce) {
@@ -2255,7 +2256,7 @@ public final class FileIO {
 
       if (Global.debugPrintDtrace) {
         assert Global.dtraceWriter != null
-          : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
+          : "@AssumeAssertion(nullness): dependent: set if debugPrintDtrace is true";
         Global.dtraceWriter.println(vi.name());
         Global.dtraceWriter.println(value_rep);
         Global.dtraceWriter.println(mod);
@@ -2339,7 +2340,7 @@ public final class FileIO {
 
     if (Global.debugPrintDtrace) {
       assert Global.dtraceWriter != null
-        : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
+        : "@AssumeAssertion(nullness): dependent: set if debugPrintDtrace is true";
       Global.dtraceWriter.println();
     }
 
@@ -2497,7 +2498,7 @@ public final class FileIO {
       assert ppt.var_infos[i].derived != null
         : "variable not derived: " + ppt.var_infos[i].repr();
       assert ppt.var_infos[i].derived != null
-        : "@SuppressWarnings(nullness): application invariant";
+        : "@AssumeAssertion(nullness): application invariant";
       // Add this derived variable's value
       ValueAndModified vm =
         ppt.var_infos[i].derived.computeValueAndModified(partial_vt);

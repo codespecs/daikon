@@ -117,6 +117,7 @@ public class PptRelation implements Serializable {
    * Adds this relation to its child's parent list and its parent's
    * children list.
    */
+  @SuppressWarnings("rawness") // won't be used until initialization is finished
   private void connect(/*>>>@UnknownInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this*/) {
     assert !child.parents.contains(this);
     assert !parent.children.contains(this);
@@ -539,6 +540,7 @@ public class PptRelation implements Serializable {
       for (VarInfo vc : child.var_infos) {
         if (vc.derived == null)
           continue;
+        assert vp.derived != null : "@AssumeAssertion(nullness): bug in Nullness Checker";
         if (vc.derived.isSameFormula(vp.derived)) {
           assert vc.derived != null;
           VarInfo[] vc_bases = vc.derived.getBases();
@@ -1058,6 +1060,7 @@ public class PptRelation implements Serializable {
           break;
         }
 
+        assert ppt != null : "@AssumeAssertion(nullness): bug in Nullness Checker";
         // If we didn't find a matching splitter at each child, can't merge
         // this point.  Just remove it from the list of splitters
         if (split_children.size() != ppt.children.size()) {
