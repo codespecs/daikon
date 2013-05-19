@@ -73,7 +73,7 @@ public class WSMatch {
     }
 
     /** Sort based on percentage of matches **/
-    public int compareTo (MatchInfo m1) {
+    /*@Pure*/ public int compareTo (MatchInfo m1) {
       if (this.perc_match == m1.perc_match)
         return 0;
       else if (this.perc_match < m1.perc_match)
@@ -82,7 +82,7 @@ public class WSMatch {
         return 1;
     }
 
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
       return String.format ("%5.2f  %s.%s  %s.%s", perc_match,
                             ppt1.get_short_name(), var1.name,
                             ppt2.get_short_name(), var2.name);
@@ -218,7 +218,7 @@ public class WSMatch {
      * each of the inputs from the first operation must match a distinct
      * input in the second operation and at least one output must match
      */
-    public boolean is_valid() {
+    /*@Pure*/ public boolean is_valid() {
       if (input_matches.size() != ppt1_inputs.size())
         return false;
 
@@ -354,7 +354,7 @@ public class WSMatch {
     RowMatch (int index1, int index2) {
       this.index1 = index1; this.index2 = index2;
     }
-    public String toString () {
+    /*@SideEffectFree*/ public String toString () {
       return (index1 + "-" + index2);
     }
   }
@@ -752,7 +752,7 @@ public class WSMatch {
     }
   }
 
-  public static boolean is_input (DeclVarInfo v) {
+  /*@Pure*/ public static boolean is_input (DeclVarInfo v) {
     return v.name.startsWith ("input");
   }
 

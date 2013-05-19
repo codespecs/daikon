@@ -227,6 +227,7 @@ public final class SEQINTEQUAL
    * uninteresting comparisons (except when op is GreaterEqual for max
    * and LessEqual for min)
    */
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
 
     SequenceMin seqmin = null;
@@ -330,7 +331,7 @@ public final class SEQINTEQUAL
     #endif
   }
 
-  public boolean isExact() {
+  /*@Pure*/ public boolean isExact() {
     #if (defined(EQUAL) || defined(EQUALFLOAT))
       return true;
     #else
@@ -338,11 +339,11 @@ public final class SEQINTEQUAL
     #endif
   }
 
-  public boolean isSameFormula(Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 
@@ -364,6 +365,7 @@ public final class SEQINTEQUAL
    *  (A[] == [])                        ==> (x op A[])
    *
    */
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
@@ -449,6 +451,7 @@ public final class SEQINTEQUAL
   /**
    * Returns a list of non-instantiating suppressions for this invariant.
    */
+  /*@Deterministic*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return (suppressions);
   }

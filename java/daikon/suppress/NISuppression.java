@@ -588,7 +588,7 @@ public class NISuppression {
   /**
    * Returns 'suppressor && suppressor ... => suppressee'
    */
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return (UtilMDE.join(suppressors, " && ")
             + " ==> " + suppressee);
   }

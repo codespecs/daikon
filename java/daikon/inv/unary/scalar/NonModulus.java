@@ -167,7 +167,7 @@ public class NonModulus
     return 1 - Math.pow(probability_one_elt_nonmodulus, ppt.num_samples());
   }
 
-  public boolean isSameFormula(Invariant o) {
+  /*@Pure*/ public boolean isSameFormula(Invariant o) {
     NonModulus other = (NonModulus) o;
 
     updateResults();
@@ -195,7 +195,7 @@ public class NonModulus
   }
 
 
-  public boolean isExclusiveFormula(Invariant o) {
+  /*@Pure*/ public boolean isExclusiveFormula(Invariant o) {
     updateResults();
     if (no_result_yet)
       return false;

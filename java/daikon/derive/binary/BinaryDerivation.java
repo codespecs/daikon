@@ -43,8 +43,16 @@ public abstract class BinaryDerivation
     }
   }
 
-  public VarInfo[] getBases() {
+  /*@SideEffectFree*/ public VarInfo[] getBases() {
     return new VarInfo[] { base1, base2 };
+  }
+
+  /*@Pure*/ public VarInfo getBase(int i) {
+    switch (i) {
+    case 0: return base1;
+    case 1: return base2;
+    default: throw new Error("bad base: " + i);
+    }
   }
 
   public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
@@ -76,7 +84,7 @@ public abstract class BinaryDerivation
   protected abstract ValueAndModified computeValueAndModifiedImpl(ValueTuple vt);
 
 
-  protected boolean isParam() {
+  /*@Pure*/ protected boolean isParam() {
     return (base1.isParam() || base2.isParam());
     // VIN
     // return (base1.aux.getFlag(VarInfoAux.IS_PARAM)
@@ -92,7 +100,7 @@ public abstract class BinaryDerivation
     return base1.canBeMissing || base2.canBeMissing;
   }
 
-  public boolean isDerivedFromNonCanonical() {
+  /*@Pure*/ public boolean isDerivedFromNonCanonical() {
     // We insist that both are canonical, not just one.
     return !(base1.isCanonical() && base2.isCanonical());
   }

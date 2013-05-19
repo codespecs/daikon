@@ -324,7 +324,7 @@ public class InvariantFormatTester extends TestCase
    * @return true if the line is a comment (that is, not to be interpretted as a command)
    *         false otherwise
    **/
-  static boolean isComment(String line) {
+  /*@Pure*/ static boolean isComment(String line) {
     return line.startsWith(COMMENT_STARTER_STRING);
   }
 
@@ -334,7 +334,7 @@ public class InvariantFormatTester extends TestCase
    * @param line the line in question
    * @return true if the line is made up only of whitespace, false otherwise
    **/
-  static boolean isWhitespace(String line) {
+  /*@Pure*/ static boolean isWhitespace(String line) {
     for (int x=0; x<line.length(); x++) {
       if (!Character.isWhitespace(line.charAt(x)))
         return false;

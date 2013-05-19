@@ -31,7 +31,7 @@ public class CmdAssume
 
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return "CmdAssume: " + proposition;
   }
 

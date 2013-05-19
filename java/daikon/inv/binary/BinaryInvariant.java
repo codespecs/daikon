@@ -74,7 +74,7 @@ public abstract class BinaryInvariant extends Invariant {
    * Returns true if the binary function is symmetric (x,y ==> y,x).
    * Subclasses that are symmetric should override.
    */
-  public boolean is_symmetric() {
+  /*@Pure*/ public boolean is_symmetric() {
     return (false);
   }
 

@@ -73,7 +73,7 @@ public class Property implements Serializable {
     /**
      * Easy-on-the-eye string representation.
      */
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
         return kind.toString() + " : " + daikonRep();
     }
 
@@ -101,7 +101,7 @@ public class Property implements Serializable {
             return name.hashCode();
         }
 
-        public String toString() {
+        /*@SideEffectFree*/ public String toString() {
             return name;
         }
 

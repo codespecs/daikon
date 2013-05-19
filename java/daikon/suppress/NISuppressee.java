@@ -265,7 +265,7 @@ public class NISuppressee {
       return (new NISuppressee (sup_class, true));
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
 
     String extra = "";
     if (var_count == 2) {

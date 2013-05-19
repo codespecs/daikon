@@ -129,7 +129,7 @@ public class ValueSource {
   public Throwable get_stack_trace() {
     return stack_trace;
   }
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     String left_descr = "-";
     if (left != null)
       left_descr = left.toString();

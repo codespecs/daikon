@@ -26,7 +26,7 @@ public class CmdRaw
 
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return "CmdRaw: " + cmd;
   }
 

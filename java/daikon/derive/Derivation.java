@@ -54,7 +54,12 @@ public abstract class Derivation
   /**
    * @return array of the VarInfos this was derived from
    **/
-  public abstract VarInfo[] getBases();
+  public abstract /*@SideEffectFree*/ VarInfo[] getBases();
+
+  /**
+   * @return one of the VarInfos this was derived from
+   **/
+  public abstract /*@Pure*/ VarInfo getBase(int i);
 
   /**
    * @return a pair of: the derived value and whether the variable
@@ -105,7 +110,7 @@ public abstract class Derivation
   }
 
   // Set whether the derivation is a param according to aux info
-  protected abstract boolean isParam();
+  /*@Pure*/ protected abstract boolean isParam();
 
   public boolean missing_array_bounds = false;
   /**
@@ -126,7 +131,7 @@ public abstract class Derivation
    * before performing the derivation that this would be the case --
    * for instance, when deriving before any values are seen.
    **/
-  public abstract boolean isDerivedFromNonCanonical();
+  /*@Pure*/ public abstract boolean isDerivedFromNonCanonical();
 
   /**
    * Returns how many levels of derivation this Derivation is based
@@ -140,7 +145,7 @@ public abstract class Derivation
    * will just checks runtime type, but subclasses with state
    * (e.g. SequenceInitial index) should match that, too.
    **/
-  public abstract boolean isSameFormula(Derivation other);
+  /*@Pure*/ public abstract boolean isSameFormula(Derivation other);
 
   public abstract boolean canBeMissing();
 
@@ -173,7 +178,7 @@ public abstract class Derivation
    * is specified, it is used as an array index.  It is an error to
    * specify an index on a non-array variable
    */
-  public String esc_name (String index) {
+  /*@SideEffectFree*/ public String esc_name(String index) {
     throw new RuntimeException ("esc_name not implemented for " + this);
   }
 
@@ -187,7 +192,7 @@ public abstract class Derivation
   }
 
   /** Returns the name of this variable in simplify format **/
-  public String simplify_name() {
+  /*@SideEffectFree*/ public String simplify_name() {
     throw new RuntimeException ("simplify_name not implemented for "
                                 + this.getClass() + " (" + this + ")");
   }
@@ -197,7 +202,7 @@ public abstract class Derivation
    * if this and d are of the same derivation with the same formula
    * and have the same bases.
    */
-  public boolean is_prestate_version (Derivation d) {
+  /*@Pure*/ public boolean is_prestate_version (Derivation d) {
 
     // The derivations must be of the same type
     if (getClass() != d.getClass())

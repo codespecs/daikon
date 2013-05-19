@@ -253,7 +253,7 @@ public class PptName
    * @return true iff this name refers to a synthetic object instance
    * program point
    **/
-  public boolean isObjectInstanceSynthetic() {
+  /*@Pure*/ public boolean isObjectInstanceSynthetic() {
     return FileIO.object_suffix.equals(point);
   }
 
@@ -261,14 +261,14 @@ public class PptName
    * @return true iff this name refers to a synthetic class instance
    * program point
    **/
-  public boolean isClassStaticSynthetic() {
+  /*@Pure*/ public boolean isClassStaticSynthetic() {
     return FileIO.class_static_suffix.equals(point);
   }
 
   /**
    * @return true iff this name refers to program globals
    **/
-  public boolean isGlobalPoint() {
+  /*@Pure*/ public boolean isGlobalPoint() {
     return FileIO.global_suffix.equals (point);
   }
 
@@ -276,7 +276,7 @@ public class PptName
    * @return true iff this name refers to a procedure exit point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  public boolean isExitPoint() {
+  /*@Pure*/ public boolean isExitPoint() {
     return (point != null) && point.startsWith(FileIO.exit_suffix);
   }
 
@@ -284,7 +284,7 @@ public class PptName
    * @return true iff this name refers to an abrupt completion point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  public boolean isThrowsPoint() {
+  /*@Pure*/ public boolean isThrowsPoint() {
     return (point != null) && point.startsWith(FileIO.throws_suffix);
   }
 
@@ -293,7 +293,7 @@ public class PptName
    *         exit point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  public boolean isCombinedExitPoint() {
+  /*@Pure*/ public boolean isCombinedExitPoint() {
     return (point != null) && point.equals(FileIO.exit_suffix);
   }
 
@@ -302,7 +302,7 @@ public class PptName
    * procedure exit point (eg, EXIT22)
    */
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  public boolean isNumberedExitPoint() {
+  /*@Pure*/ public boolean isNumberedExitPoint() {
     return ((point != null) && (isExitPoint() && !isCombinedExitPoint()));
   }
 
@@ -310,7 +310,7 @@ public class PptName
    * @return true iff this name refers to a procedure exit point
    **/
   /*@EnsuresNonNullIf(result=true, expression="point")*/
-  public boolean isEnterPoint() {
+  /*@Pure*/ public boolean isEnterPoint() {
     return (point != null) && point.startsWith(FileIO.enter_suffix);
   }
 
@@ -337,7 +337,7 @@ public class PptName
    * format does not have <init> but their method name includes the class
    * name.  For compatibility both mechanisms are checked.
    **/
-  public boolean isConstructor() {
+  /*@Pure*/ public boolean isConstructor() {
 
     if (method != null) {
 
@@ -427,7 +427,7 @@ public class PptName
   // ==================== OBJECT METHODS ====================
 
   /* @return interned string such that this.equals(new PptName(this.toString())) */
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return fullname;
   }
 

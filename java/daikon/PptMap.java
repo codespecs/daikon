@@ -220,7 +220,7 @@ public class PptMap
     return nameToPpt.size();
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return "PptMap: " + nameToPpt.toString();
   }
 

@@ -234,7 +234,7 @@ public final class FileIO {
       this.parent_ppt_name = parent_ppt_name;
       this.id = id;
     }
-    public String toString() { return parent_ppt_name + "[" + id + "] "
+    /*@SideEffectFree*/ public String toString() { return parent_ppt_name + "[" + id + "] "
                                  + rel_type; };
     private void readObject(ObjectInputStream in)
       throws IOException, ClassNotFoundException {
@@ -246,7 +246,7 @@ public final class FileIO {
 
   // Utilities
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  public static final boolean isComment(/*@Nullable*/ String s) {
+  /*@Pure*/ public static final boolean isComment(/*@Nullable*/ String s) {
     return s != null && (s.startsWith("//") || s.startsWith("#"));
   }
 
@@ -953,7 +953,7 @@ public final class FileIO {
         return false;
     }
 
-    public int compareTo(Invocation other) {
+    /*@Pure*/ public int compareTo(Invocation other) {
       return ppt.name().compareTo(other.ppt.name());
     }
 
@@ -3084,7 +3084,7 @@ public final class FileIO {
 
   /** Returns whether the line is the start of a ppt declaration **/
   /*@RequiresNonNull("FileIO.new_decl_format")*/
-  private static boolean is_declaration_header (String line) {
+  /*@Pure*/ private static boolean is_declaration_header (String line) {
     if (new_decl_format)
       return (line.startsWith ("ppt "));
     else

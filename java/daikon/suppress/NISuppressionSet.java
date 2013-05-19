@@ -360,7 +360,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * suppressions are valid.  A suppression is valid if all of its
    * non-missing suppressors are true.
    */
-  public boolean is_instantiate_ok (PptSlice slice) {
+  /*@Pure*/ public boolean is_instantiate_ok (PptSlice slice) {
 
     return (is_instantiate_ok (slice.parent, slice.var_infos));
   }
@@ -371,7 +371,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * suppression is invalid.  A suppression is valid if all of
    * its non-missing suppressors are true.
    */
-  public boolean is_instantiate_ok (PptTopLevel ppt, VarInfo[] var_infos) {
+  /*@Pure*/ public boolean is_instantiate_ok (PptTopLevel ppt, VarInfo[] var_infos) {
 
     // Check each suppression to see if it is valid
     for (int i = 0; i < suppression_set.length; i++ ) {
@@ -553,7 +553,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   /**
    * Returns a string containing each suppression separated by commas.
    */
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return UtilMDE.join(suppression_set, ", ");
   }
 

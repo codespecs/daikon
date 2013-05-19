@@ -69,7 +69,7 @@ public class Violation implements Serializable {
             return name.hashCode();
         }
 
-        public String toString() {
+        /*@SideEffectFree*/ public String toString() {
             return name;
         }
 
@@ -191,14 +191,14 @@ public class Violation implements Serializable {
     /**
      * String representation.
      */
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
         return time.toString() + " : " + property.toString();
     }
 
     /**
      * String representation.
      */
-    public String toStringWithMethod() {
+    /*@SideEffectFree*/ public String toStringWithMethod() {
         return time.toString() + "of " + property.method() + " : " + property.toString();
     }
 

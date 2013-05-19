@@ -200,7 +200,7 @@ class DCInstrument {
     public boolean contains (int offset) {
       return (offset >= start_pc) && (offset < (start_pc + len));
     }
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
       return String.format ("Code range: %d..%d", start_pc, start_pc+len-1);
     }
   }
@@ -225,7 +225,7 @@ class DCInstrument {
   }
 
   /** Returns true if we are instrumenting for dataflow **/
-  public boolean is_data_flow() {
+  /*@Pure*/ public boolean is_data_flow() {
     return this instanceof DFInstrument;
   }
 
@@ -1916,7 +1916,7 @@ class DCInstrument {
   }
 
   /** Returns true if the specified method is Object.equals() **/
-  boolean is_object_equals (String method_name, Type ret_type, Type[] args) {
+  /*@Pure*/ boolean is_object_equals (String method_name, Type ret_type, Type[] args) {
     return (method_name.equals("equals")
             && ret_type == Type.BOOLEAN
             && args.length == 1
@@ -1924,13 +1924,13 @@ class DCInstrument {
   }
 
   /** Returns true if the specified method is Object.clone() **/
-  boolean is_object_clone (String method_name, Type ret_type, Type[] args) {
+  /*@Pure*/ boolean is_object_clone (String method_name, Type ret_type, Type[] args) {
       return method_name.equals("clone") && ret_type.equals(javalangObject)
         && (args.length == 0);
   }
 
   /** Returns true if the specified method is Object.toString() **/
-  boolean is_object_toString (String method_name, Type ret_type, Type[] args) {
+  /*@Pure*/ boolean is_object_toString (String method_name, Type ret_type, Type[] args) {
     return method_name.equals ("toString") && ret_type.equals(Type.STRING)
       && (args.length == 0);
   }
@@ -2144,7 +2144,7 @@ class DCInstrument {
    * is never instrumented and returns false.  Otherwise true is returned
    * unless the class in in the JDK and we are using an uninstrumented JDK
    */
-  protected boolean is_instrumented (Class<?> c) {
+  /*@Pure*/ protected boolean is_instrumented (Class<?> c) {
 
     if (c.equals (java.lang.Object.class))
       return false;
@@ -3309,7 +3309,7 @@ class DCInstrument {
    * Returns whether or not the specified type is a primitive (int, float,
    * double, etc)
    */
-  protected boolean is_primitive (Type type) {
+  /*@Pure*/ protected boolean is_primitive (Type type) {
     return ((type instanceof BasicType) && (type != Type.VOID));
   }
 
@@ -3317,7 +3317,7 @@ class DCInstrument {
    * Returns whether or not the specified type is a category 2 (8 byte)
    * type
    */
-  protected boolean is_category2 (Type type) {
+  /*@Pure*/ protected boolean is_category2 (Type type) {
     return ((type == Type.DOUBLE) || (type == Type.LONG));
   }
 
@@ -3404,7 +3404,7 @@ class DCInstrument {
    * Returns whether or not the invoke specified invokes a native method.
    * This requires that the class that contains the method to be loaded.
    */
-  public boolean is_native (InvokeInstruction invoke) {
+  /*@Pure*/ public boolean is_native (InvokeInstruction invoke) {
 
     // Get the class of the method
     ClassLoader loader = getClass().getClassLoader();
@@ -4228,7 +4228,7 @@ class DCInstrument {
   }
 
   /** Returns whether or not the method is defined in Object **/
-  public boolean is_object_method (String method_name, Type[] arg_types) {
+  /*@Pure*/ public boolean is_object_method (String method_name, Type[] arg_types) {
     for (MethodDef md : obj_methods) {
       if (md.equals (method_name, arg_types)) {
         return (true);
@@ -4241,7 +4241,7 @@ class DCInstrument {
    * Returns whether or not the class is one of those that has values
    * initialized by the JVM or native methods
    */
-  public boolean is_uninit_class (String classname) {
+  /*@Pure*/ public boolean is_uninit_class (String classname) {
 
     for (String u_name : uninit_classes)
       if (u_name.equals (classname))

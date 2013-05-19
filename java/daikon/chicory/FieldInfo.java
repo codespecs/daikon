@@ -132,7 +132,7 @@ public class FieldInfo extends DaikonVariableInfo
         return (field_num);
     }
 
-    public boolean isPrimitive() {
+  /*@Pure*/ public boolean isPrimitive() {
         return is_primitive;
     }
 

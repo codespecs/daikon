@@ -260,7 +260,7 @@ public class SpinfoFileParser {
    * Returns whether the line is blank (or null).
    */
   /*@EnsuresNonNullIf(result=false, expression="#1")*/
-  private static boolean isBlank(/*@Nullable*/ String line) {
+  /*@Pure*/ private static boolean isBlank(/*@Nullable*/ String line) {
     return (line == null) || line.trim().equals("");
   }
 
@@ -268,7 +268,7 @@ public class SpinfoFileParser {
    * Returns whether the line is a spinfo file comment line.
    * A line is a comment if it starts with a (possibly indented) "#".
    */
-  private static boolean isComment(String line) {
+  /*@Pure*/ private static boolean isComment(String line) {
     return (line.trim().startsWith("#"));
   }
 
@@ -277,7 +277,7 @@ public class SpinfoFileParser {
    * A line is a formatting command if line is indented with
    * a tab, "\t", or spaces, " ".
    */
-  private static boolean isFormatting(String line) {
+  /*@Pure*/ private static boolean isFormatting(String line) {
     return (line.startsWith("\t") || line.startsWith(" "));
   }
 

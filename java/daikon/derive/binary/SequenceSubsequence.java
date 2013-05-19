@@ -86,7 +86,7 @@ public abstract class SequenceSubsequence
   }
 
   /** Returns the ESC name **/
-  public String esc_name (String index) {
+  /*@SideEffectFree*/ public String esc_name(String index) {
     return String.format ("%s[%s..%s]", seqvar().esc_name(),
                  get_lower_bound().esc_name(), get_upper_bound().esc_name());
   }

@@ -236,7 +236,7 @@ public final class VarInfoAux
     return (VarInfoAux) super.clone();
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return map.toString();
   }
 
@@ -299,7 +299,7 @@ public final class VarInfoAux
   }
 
   /** Returns whether or not this is a parameter **/
-  public boolean isParam() {
+  /*@Pure*/ public boolean isParam() {
     return getFlag (IS_PARAM);
   }
 

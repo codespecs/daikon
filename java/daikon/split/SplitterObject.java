@@ -187,12 +187,12 @@ public class SplitterObject implements Comparable<SplitterObject> {
     System.out.println(s);
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return (className + ": " + "condition: " + condition + ", testString: " + testString
             + ", @ " + pptName);
   }
 
-  public int compareTo(SplitterObject o) {
+  /*@Pure*/ public int compareTo(SplitterObject o) {
     return this.guid - o.getGUID();
   }
 }

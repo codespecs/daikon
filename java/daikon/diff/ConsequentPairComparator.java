@@ -19,7 +19,7 @@ public class ConsequentPairComparator implements Comparator<Invariant> {
     this.c = c;
   }
 
-  public int compare(Invariant inv1, Invariant inv2) {
+  /*@Pure*/ public int compare(Invariant inv1, Invariant inv2) {
     if (inv2 instanceof Implication) {
       Implication imp2 = (Implication) inv2;
       inv2 = imp2.consequent();

@@ -150,7 +150,7 @@ public class ClassInfo {
 
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return (String.format ("ClassInfo %08X [%s] %s",
                            System.identityHashCode (this), class_name, clazz));
   }

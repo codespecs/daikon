@@ -836,7 +836,7 @@ public class NIS {
   /**
    * Returns true if the specified class is an antecedent in any NI suppression
    */
-  public static boolean is_suppressor (Class<? extends Invariant> cls) {
+  /*@Pure*/ public static boolean is_suppressor (Class<? extends Invariant> cls) {
     return (suppressor_map.containsKey (cls));
   }
 
@@ -926,7 +926,8 @@ public class NIS {
     }
 
     /** Returns true if the invariant is still suppressed **/
-    public boolean is_ni_suppressed() {
+    @SuppressWarnings("purity") // new object is not returned
+    /*@Pure*/ public boolean is_ni_suppressed() {
 
       NISuppressionSet ss = suppressee.sample_inv.get_ni_suppressions();
       assert ss != null :
@@ -962,7 +963,7 @@ public class NIS {
     }
 
     /** Return string representation of the suppressed invariant **/
-    public String toString () {
+    /*@SideEffectFree*/ public String toString () {
       String[] names = new String[vis.length];
       for (int i = 0; i < vis.length; i++) {
         names[i] = vis[i].name();
@@ -1069,7 +1070,7 @@ public class NIS {
     /**
      * Returns a string representation of all of the antecedents by class
      */
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
 
       String out = "Comparability " + comparability + " : ";
 

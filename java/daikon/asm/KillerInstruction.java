@@ -40,7 +40,7 @@ public class KillerInstruction implements IInstruction {
     return false;
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     StringBuilder b = new StringBuilder();
     for (X86Instruction i : instructions) {
       b.append("(potential)" + i + "\n");

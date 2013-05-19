@@ -318,7 +318,7 @@ public class TraceSelect {
 class InvocationComparator implements Comparator<String> {
     /** Requires:  s1 and s2 are String representations of invocations
      *  from a tracefile. */
-    public int compare (String s1, String s2) {
+    /*@Pure*/ public int compare (String s1, String s2) {
       if (s1 == s2) {
         return 0;
       }
