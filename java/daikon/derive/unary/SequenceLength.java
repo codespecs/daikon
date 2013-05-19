@@ -98,14 +98,14 @@ public final class SequenceLength
                                          shift);
   }
 
-  public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public  boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceLength)
       && (((SequenceLength) other).shift == this.shift);
   }
 
   /** Returns the ESC name **/
   @SuppressWarnings("nullness")
-  public String esc_name (String index) {
+  /*@SideEffectFree*/ public String esc_name(String index) {
     // This should be able to use Quantify.Length to calculate the name,
     // but it can't because the old version formatted these slightly
     // differently.  But this could be used when the old regression results
@@ -127,7 +127,7 @@ public final class SequenceLength
     return ql.jml_name();
   }
 
-  public String simplify_name () {
+  /*@SideEffectFree*/ public String simplify_name() {
     Quantify.Length ql = new Quantify.Length (base, shift);
     return ql.simplify_name();
   }

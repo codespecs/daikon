@@ -134,7 +134,7 @@ public class SummaryInfo {
    * Returns the full signature of the original method.  Uses reflection
    * to get the parameter types and may change class loading order
    */
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     List<String> param_names = new ArrayList<String>();
     for (Class<?> p : original_params())
       param_names.add (p.getSimpleName());

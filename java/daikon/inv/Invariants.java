@@ -71,7 +71,7 @@ public final class Invariants
   }
 
   // Works for non-negative
-  private static final boolean isPowerOfTwo(int x) {
+  /*@Pure*/ private static final boolean isPowerOfTwo(int x) {
     if (x == 0)
       return true;
     // If x is a power of two, then x - 1 has no bits in common with x

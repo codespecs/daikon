@@ -473,7 +473,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns the full name of the ppt **/
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return name();
   }
 
@@ -1283,7 +1283,7 @@ public class PptTopLevel extends Ppt {
    * Returns whether or not the specified variable is dynamically constant.
    */
   /*@EnsuresNonNullIf(result=true, expression="constants")*/
-  public boolean is_constant(VarInfo v) {
+  /*@Pure*/ public boolean is_constant(VarInfo v) {
     return ((constants != null) && constants.is_constant(v));
   }
 
@@ -1293,7 +1293,7 @@ public class PptTopLevel extends Ppt {
    * processing.
    */
   /*@EnsuresNonNullIf(result=true, expression="constants")*/
-  public boolean is_prev_constant(VarInfo v) {
+  /*@Pure*/ public boolean is_prev_constant(VarInfo v) {
     return ((constants != null)
             && constants.is_prev_constant(v));
   }
@@ -1303,7 +1303,7 @@ public class PptTopLevel extends Ppt {
    * for all samples seen so far.
    */
   /*@EnsuresNonNullIf(result=true, expression="constants")*/
-  public boolean is_missing(VarInfo v) {
+  /*@Pure*/ public boolean is_missing(VarInfo v) {
     return ((constants != null) && constants.is_missing(v));
   }
 
@@ -1312,7 +1312,7 @@ public class PptTopLevel extends Ppt {
    * was missing at the beginning of constants processing.
    **/
   /*@EnsuresNonNullIf(result=true, expression="constants")*/
-  public boolean is_prev_missing(VarInfo v) {
+  /*@Pure*/ public boolean is_prev_missing(VarInfo v) {
     return ((constants != null) && constants.is_prev_missing(v));
   }
 
@@ -1750,7 +1750,8 @@ public class PptTopLevel extends Ppt {
    * Looks up the slice for v1.  If the slice does not exist, one is
    * created (but not added into the list of slices for this ppt).
    */
-  public PptSlice get_temp_slice(VarInfo v) {
+  @SuppressWarnings("purity")   // caching
+  /*@Pure*/ public PptSlice get_temp_slice(VarInfo v) {
 
     PptSlice slice = findSlice(v);
     if (slice == null)
@@ -1764,7 +1765,8 @@ public class PptTopLevel extends Ppt {
    * in order.  If the slice does not exist, one  is created (but
    * not added into the list of slices for this ppt).
    */
-  public PptSlice get_temp_slice(VarInfo v1, VarInfo v2) {
+  @SuppressWarnings("purity")   // caching
+  /*@Pure*/ public PptSlice get_temp_slice(VarInfo v1, VarInfo v2) {
 
     PptSlice slice = findSlice_unordered(v1, v2);
     if (slice == null) {
@@ -1930,7 +1932,8 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns whether or not v1 is a subset of v2.
    */
-  public boolean is_subset(VarInfo v1, VarInfo v2) {
+  @SuppressWarnings("purity")   // side effects to local state
+  /*@Pure*/ public boolean is_subset(VarInfo v1, VarInfo v2) {
 
     // Find the slice for v1 and v2.  If no slice exists, create it,
     // but don't add it to the slices for this ppt.  It only exists
@@ -1959,7 +1962,8 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns whether or not v1 is always non-zero **/
-  public boolean is_nonzero (VarInfo v) {
+  @SuppressWarnings("purity")   // caching
+  /*@Pure*/ public boolean is_nonzero (VarInfo v) {
 
     // find the slice for v.  If the slice doesn't exist, the non-zero
     // invariant can't exist
@@ -1996,7 +2000,7 @@ public class PptTopLevel extends Ppt {
    * Returns whether or not the specified variables are equal (ie,
    * an equality invariant exists between them)
    */
-  public boolean is_equal(VarInfo v1, VarInfo v2) {
+  /*@Pure*/ public boolean is_equal(VarInfo v1, VarInfo v2) {
 
     // System.out.printf ("checking equality on %s and %s%n", v1, v2);
 
@@ -2052,7 +2056,7 @@ public class PptTopLevel extends Ppt {
    * Returns true if (v1+v1_shift) <= (v2+v2_shift) is known
    * to be true.  Returns false otherwise.  Integers only.
    */
-  public boolean is_less_equal(
+  /*@Pure*/ public boolean is_less_equal(
     VarInfo v1,
     int v1_shift,
     VarInfo v2,
@@ -2103,7 +2107,7 @@ public class PptTopLevel extends Ppt {
    * is true if the subsequence invariant exists or if it it
    * suppressed
    */
-  public boolean is_subsequence(VarInfo v1, VarInfo v2) {
+  /*@Pure*/ public boolean is_subsequence(VarInfo v1, VarInfo v2) {
 
     // Find the slice for v1 and v2.  If no slice exists, create it,
     // but don't add it to the slices for this ppt.  It only exists
@@ -2136,7 +2140,7 @@ public class PptTopLevel extends Ppt {
    * Returns true if varr is empty.  Supports ints, doubles, and
    * strings.
    */
-  public boolean is_empty(VarInfo varr) {
+  /*@Pure*/ public boolean is_empty(VarInfo varr) {
 
     // Find the slice for varr.  If no slice exists, create it, but
     // don't add it to the slices for this ppt.  It only exists as a
@@ -2338,7 +2342,7 @@ public class PptTopLevel extends Ppt {
    * Returns whether the variable should be involved in an unary slice. The
    * variable must be a leader, not a constant, and not always missing.
    */
-  private boolean is_var_ok_unary(VarInfo var) {
+  /*@Pure*/ private boolean is_var_ok_unary(VarInfo var) {
 
     if (DynamicConstants.dkconfig_use_dynamic_constant_optimization && constants == null)
       return (false);
@@ -2366,7 +2370,7 @@ public class PptTopLevel extends Ppt {
    * suitable for binary slices, then we do not need to look at
    * x with any other variable in a binary slice (fail fast).
    */
-  private boolean is_var_ok_binary(VarInfo var) {
+  /*@Pure*/ private boolean is_var_ok_binary(VarInfo var) {
 
     if (DynamicConstants.dkconfig_use_dynamic_constant_optimization && constants == null)
       return (false);
@@ -2394,7 +2398,7 @@ public class PptTopLevel extends Ppt {
    *
    * @see #is_var_ok_binary(VarInfo)
    */
-  private boolean is_var_ok_ternary(VarInfo var) {
+  /*@Pure*/ private boolean is_var_ok_ternary(VarInfo var) {
     if (DynamicConstants.dkconfig_use_dynamic_constant_optimization && constants == null)
       return (false);
 
@@ -2419,7 +2423,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns whether or not the specified slice should be created.
    */
-  public boolean is_slice_ok(VarInfo[] vis, int arity) {
+  /*@Pure*/ public boolean is_slice_ok(VarInfo[] vis, int arity) {
     if (arity == 1)
       return (is_slice_ok(vis[0]));
     else if (arity == 2)
@@ -2435,7 +2439,7 @@ public class PptTopLevel extends Ppt {
    *
    * @see #is_var_ok_unary(VarInfo)
    */
-  public boolean is_slice_ok(VarInfo var1) {
+  /*@Pure*/ public boolean is_slice_ok(VarInfo var1) {
 
     return is_var_ok_unary(var1);
   }
@@ -2450,7 +2454,7 @@ public class PptTopLevel extends Ppt {
    *
    * @see #is_var_ok_binary(VarInfo)
    */
-  public boolean is_slice_ok(VarInfo var1, VarInfo var2) {
+  /*@Pure*/ public boolean is_slice_ok(VarInfo var1, VarInfo var2) {
 
     if (!is_var_ok_binary(var1) || !is_var_ok_binary(var2))
       return (false);
@@ -2494,7 +2498,7 @@ public class PptTopLevel extends Ppt {
    *
    * @see #is_var_ok_ternary(VarInfo)
    */
-  public boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
+  /*@Pure*/ public boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
 
     Debug dlog = null;
     if (Debug.logOn() || debug.isLoggable(Level.FINE))
@@ -3201,7 +3205,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns variables in this Ppt that are parameters.
    **/
-  public Set<VarInfo> getParamVars() {
+  /*@Pure*/ public Set<VarInfo> getParamVars() {
     if (paramVars != null) {
       return paramVars;
     }
@@ -4540,7 +4544,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Is this is an exit ppt (combined or specific)? **/
-  public boolean is_exit() {
+  /*@Pure*/ public boolean is_exit() {
     if (type != null)
       return ((type == PptType.EXIT) || (type == PptType.SUBEXIT));
     else
@@ -4548,7 +4552,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** is this an enter ppt **/
-  public boolean is_enter() {
+  /*@Pure*/ public boolean is_enter() {
     if (type != null)
       return (type == PptType.ENTER);
     else
@@ -4556,12 +4560,12 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Is this a basic block ppt **/
-  public boolean is_basic_block() {
+  /*@Pure*/ public boolean is_basic_block() {
     return type == PptType.BASIC_BLOCK;
   }
 
   /** Is this a combined exit point? **/
-  public boolean is_combined_exit() {
+  /*@Pure*/ public boolean is_combined_exit() {
     if (type != null)
       return (type == PptType.EXIT);
     else
@@ -4569,7 +4573,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Is this a numbered (specific) exit point? **/
-  public boolean is_subexit() {
+  /*@Pure*/ public boolean is_subexit() {
     if (type != null)
       return (type == PptType.SUBEXIT);
     else
@@ -4577,7 +4581,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Is this a ppt that represents an object? **/
-  public boolean is_object() {
+  /*@Pure*/ public boolean is_object() {
     if (type != null)
       return (type == PptType.OBJECT);
     else
@@ -4586,7 +4590,7 @@ public class PptTopLevel extends Ppt {
 
   /** Is this a ppt that represents a class? **/
   /*@EnsuresNonNullIf(result=true, expression="type")*/
-  public boolean is_class() {
+  /*@Pure*/ public boolean is_class() {
     return (type != null && type == PptType.CLASS);
   }
 

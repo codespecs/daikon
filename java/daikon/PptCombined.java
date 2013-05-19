@@ -334,14 +334,13 @@ public class PptCombined extends PptTopLevel {
     return address.substring(address.length() - 4, address.length());
   }
 
-/** Returns a name basic on its constituent ppts **/
-/*
-  public String name() {
-    String name = ppts.get(0).name();
-    name += ".." + ppts.get(ppts.size()-1).ppt_name.name();
-    return name;
-  }
-*/
+  // /** Returns a name basic on its constituent ppts **/
+  // /*@SideEffectFree*/ public String name() {
+  //   String name = ppts.get(0).name();
+  //   name += ".." + ppts.get(ppts.size()-1).ppt_name.name();
+  //   return name;
+  // }
+
   /**
    * Initialize the ppt.  This is similar to init_ppt in Daikon.java
    * except that orig variables are never created (they don't make sense
@@ -724,7 +723,7 @@ public class PptCombined extends PptTopLevel {
       this.pp = pp;
     }
     @SuppressWarnings("keyfor") // application invariant:  about what values will be passed to compare
-    public int compare(/*@KeyFor("pp")*/ PptTopLevel ppt1, /*@KeyFor("pp")*/ PptTopLevel ppt2) {
+    /*@Pure*/ public int compare(/*@KeyFor("pp")*/ PptTopLevel ppt1, /*@KeyFor("pp")*/ PptTopLevel ppt2) {
       if (ppt1 == ppt2)
         return 0;
       List<PptTopLevel> list1 = pp.get(ppt1);

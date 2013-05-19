@@ -276,7 +276,7 @@ public class CLASSNAME
 #endif
   }
 
-  public boolean isExact() {
+  /*@Pure*/ public boolean isExact() {
 #if defined(EQUAL) || defined(EQUALFLOAT)
     return true;
 #else
@@ -284,7 +284,7 @@ public class CLASSNAME
 #endif
   }
 
-  public boolean isSameFormula(Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
     return (other instanceof CLASSNAME);
   }
 
@@ -292,7 +292,7 @@ public class CLASSNAME
   // Also, reasonably complicated, need to ensure exact correctness, not sure if the
   // regression tests test this functionality
 
-  public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
     // This whole approach is wrong in the case when the sequence can
     // ever consist of only one element.  For now, just forget
     // it. -SMcC
@@ -359,6 +359,7 @@ public class CLASSNAME
     return (vs.multi_arr_cnt() > 0);
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {

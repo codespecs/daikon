@@ -58,7 +58,7 @@ public final class VarComparabilityNone
     return true;
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return ("no-comparability");
   }
 }

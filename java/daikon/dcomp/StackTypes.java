@@ -53,7 +53,7 @@ public final class StackTypes {
     return (os_arr[offset]);
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
 
     StringBuffer sb = new StringBuffer();
 
@@ -72,7 +72,7 @@ public final class StackTypes {
   /**
    * TODO
    */
-  public String toString (OperandStack os) {
+  /*@SideEffectFree*/ public String toString (OperandStack os) {
 
     String buff = "";
 
@@ -92,7 +92,7 @@ public final class StackTypes {
   /**
    * TODO
    */
-  public String toString (LocalVariables lv) {
+  /*@SideEffectFree*/ public String toString (LocalVariables lv) {
 
     String buff = "";
 

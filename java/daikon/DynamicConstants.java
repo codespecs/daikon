@@ -177,7 +177,7 @@ public class DynamicConstants implements Serializable {
      * returns whether the specified variable is currently a constant OR
      * was a constant at the beginning of constants processing.
      **/
-    public boolean is_prev_constant () {
+    /*@Pure*/ public boolean is_prev_constant () {
       return constant || previous_constant;
     }
 
@@ -194,7 +194,8 @@ public class DynamicConstants implements Serializable {
       return (vi.hashCode());
     }
 
-    public String toString() {
+    @SuppressWarnings("purity") // string creation
+    /*@SideEffectFree*/ public String toString() {
 
       StringBuffer out = new StringBuffer();
       out.append (vi.name());
@@ -222,7 +223,7 @@ public class DynamicConstants implements Serializable {
     private ConIndexComparator() {
     }
 
-    public int compare(Constant con1, Constant con2) {
+    /*@Pure*/ public int compare(Constant con1, Constant con2) {
       return (con1.vi.varinfo_index - con2.vi.varinfo_index);
     }
 
@@ -366,7 +367,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /** Returns the Constant for the specified variable. */
-  public Constant getConstant(VarInfo vi) {
+  /*@Pure*/ public Constant getConstant(VarInfo vi) {
 
     Constant result = all_vars[vi.varinfo_index];
     result.checkRep();
@@ -374,7 +375,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /** Returns whether the specified variable is currently a constant. **/
-  public boolean is_constant (VarInfo vi) {
+  /*@Pure*/ public boolean is_constant (VarInfo vi) {
 
     return getConstant(vi).constant;
   }
@@ -383,7 +384,7 @@ public class DynamicConstants implements Serializable {
    * returns whether the specified variable is currently a constant OR
    * was a constant at the beginning of constants processing.
    **/
-  public boolean is_prev_constant (VarInfo vi) {
+  /*@Pure*/ public boolean is_prev_constant (VarInfo vi) {
 
     return getConstant(vi).is_prev_constant();
   }
@@ -401,7 +402,7 @@ public class DynamicConstants implements Serializable {
   }
 
   /** Returns whether the specified variable missing for all values so far. **/
-  public boolean is_missing (VarInfo vi) {
+  /*@Pure*/ public boolean is_missing (VarInfo vi) {
 
     return (getConstant(vi).always_missing);
   }
@@ -410,7 +411,7 @@ public class DynamicConstants implements Serializable {
    * returns whether the specified variable is currently missing OR
    * was missing at the beginning of constants processing.
    **/
-  public boolean is_prev_missing (VarInfo vi) {
+  /*@Pure*/ public boolean is_prev_missing (VarInfo vi) {
 
     Constant c = all_vars[vi.varinfo_index];
     return (c.always_missing || c.previous_missing);

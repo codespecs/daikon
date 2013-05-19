@@ -192,7 +192,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * For example "get(5)" and "Collections.sort(new ArrayList())"
    * are "non-this" method calls.
    */
-  private boolean isNonThisMethod(PrimaryExpression n) {
+  /*@Pure*/ private boolean isNonThisMethod(PrimaryExpression n) {
     return (n.f0.f0.choice instanceof Name &&
             n.f1.size() > 0 &&
             n.f1.elementAt(0) instanceof PrimarySuffix &&
@@ -204,7 +204,7 @@ class StatementReplacer extends DepthFirstVisitor {
    * "This" methods calls are prefixed with "this.".
    * For example "this.get(5)" is a "this" method call.
    */
-  private boolean isThisDotMethod(PrimaryExpression n) {
+  /*@Pure*/ private boolean isThisDotMethod(PrimaryExpression n) {
     return (n.f0.f0.choice instanceof NodeToken &&
             Visitors.isThis((NodeToken) n.f0.f0.choice) &&
             n.f1.size() == 2 &&

@@ -325,7 +325,7 @@ public class DaikonSimple {
   // This method is exclusively for checking variables participating
   // in ternary invariants. The variable must be integer or float, and
   // can not be an array.
-  public static boolean is_var_ok(VarInfo var) {
+  /*@Pure*/ public static boolean is_var_ok(VarInfo var) {
 
     return (var.file_rep_type.isIntegral() || var.file_rep_type.isFloat())
         && !var.rep_type.isArray();
@@ -344,7 +344,7 @@ public class DaikonSimple {
    * @see daikon.PptTopLevel#is_slice_ok(VarInfo, VarInfo)
    *
    */
-  public static boolean is_slice_ok(VarInfo v1, VarInfo v2) {
+  /*@Pure*/ public static boolean is_slice_ok(VarInfo v1, VarInfo v2) {
 
     return v1.compatible(v2);
   }
@@ -364,7 +364,7 @@ public class DaikonSimple {
    * @see daikon.PptTopLevel#is_slice_ok(VarInfo, VarInfo, VarInfo)
    *
    */
-  public static boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
+  /*@Pure*/ public static boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
 
     // Vars must be compatible
     return (v1.compatible(v2) && v1.compatible(v3) && v2.compatible(v3));

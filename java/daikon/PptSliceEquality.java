@@ -600,7 +600,7 @@ public class PptSliceEquality
     }
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     StringBuffer result = new StringBuffer("PptSliceEquality: [");
     for (Invariant inv : invs) {
       result.append (inv.repr());
@@ -618,7 +618,7 @@ public class PptSliceEquality
     private EqualityComparator() {
 
     }
-    public int compare(Equality eq1, Equality eq2) {
+    /*@Pure*/ public int compare(Equality eq1, Equality eq2) {
       return VarInfo.IndexComparator.theInstance.compare (eq1.leader(), eq2.leader());
     }
 

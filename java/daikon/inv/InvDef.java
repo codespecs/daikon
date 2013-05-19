@@ -116,7 +116,7 @@ public class InvDef {
 //   }
 
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     String out = "v1=" + v1.name();
     if (v2 != null)
       out += ", v2=" + v2.name();

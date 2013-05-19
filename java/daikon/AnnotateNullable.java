@@ -450,7 +450,7 @@ public class AnnotateNullable {
    * This does not work for enter ppts, because constructors do not
    * have the object as a parent on entry.
    */
-  public static boolean is_static_method (PptTopLevel ppt) {
+  /*@Pure*/ public static boolean is_static_method (PptTopLevel ppt) {
 
     assert ppt.is_exit() : ppt;
     for (PptRelation rel : ppt.parents) {

@@ -209,7 +209,7 @@ public class Modulus
     return 1 - Math.pow(probability_one_elt_modulus, ppt.num_samples());
   }
 
-  public boolean isSameFormula(Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
     Modulus otherModulus = (Modulus) other;
 
     boolean thisMeaningless = (modulus == 0 || modulus == 1);
@@ -227,7 +227,7 @@ public class Modulus
     }
   }
 
-  public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
     if ((modulus == 0) || (modulus == 1))
       return false;
 
@@ -262,6 +262,7 @@ public class Modulus
    *    size(x[]) = r (mod m) ==> size(x[])-1 = (r-1) (mod m)
    * </pre>
    **/
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // Do not show x-1 = a (mod b).  There must be a different mod

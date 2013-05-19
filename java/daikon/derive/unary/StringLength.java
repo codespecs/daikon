@@ -44,13 +44,13 @@ public final class StringLength extends UnaryDerivation
     return VarInfo.make_scalar_str_func ("length", ProglangType.INT, base);
   }
 
-  public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public  boolean isSameFormula(Derivation other) {
     return (other instanceof StringLength);
   }
 
   /** Returns the ESC name **/
   @SuppressWarnings("nullness")
-  public String esc_name (String index) {
+  /*@SideEffectFree*/ public String esc_name(String index) {
     return String.format ("%s.length()", base.enclosing_var.esc_name());
   }
 
@@ -62,7 +62,7 @@ public final class StringLength extends UnaryDerivation
 
   /** Returns the simplify name **/
   @SuppressWarnings("nullness")
-  public String simplify_name () {
+  /*@SideEffectFree*/ public String simplify_name() {
     return String.format ("(stringLength %s)", base.enclosing_var.simplify_name());
   }
 

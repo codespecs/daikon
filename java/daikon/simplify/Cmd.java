@@ -10,5 +10,5 @@ public interface Cmd
   /**
    * @return a string for debugging only.
    **/
-  public String toString();
+  /*@SideEffectFree*/ public String toString();
 }

@@ -131,7 +131,7 @@ public final class CLASSNAME
     protected Point clone() throws CloneNotSupportedException {
       return (Point) super.clone();
     }
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
       return ("(" + x + ", " + y + " ," + z + ")");
     }
   }
@@ -253,7 +253,7 @@ public final class CLASSNAME
   // the invariant must have seen enough samples and not be a line for all the
   // other calculations and comparisons done to be sensible, meaning that
   // a full linear ternary invariant exists, not a degenerate one
-  public boolean isActive() {
+  /*@Pure*/ public boolean isActive() {
     return (line_flag == Flag.NO_LINE && values_seen >= MINTRIPLES && a != 0 && b != 0 && c != 0);
   }
 
@@ -1252,7 +1252,7 @@ public final class CLASSNAME
   //   return format(y, x, a, -b/a);
   // }
 
-  public boolean isSameFormula(CLASSNAME other) {
+  /*@Pure*/ public boolean isSameFormula(CLASSNAME other) {
 
     // If both have yet to see enough values
     if (!isActive() && !other.isActive()) {
@@ -1278,7 +1278,7 @@ public final class CLASSNAME
   }
 
 
-  public boolean isExclusiveFormula(CLASSNAME other) {
+  /*@Pure*/ public boolean isExclusiveFormula(CLASSNAME other) {
     if (!isActive() ||
         !other.isActive()) {
       return false;

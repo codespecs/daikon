@@ -199,7 +199,7 @@ public final class VarComparabilityImplicit
   }
 
   // for debugging
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     String result = "" + base;
     for (int i=0; i<dimensions; i++) {
       result += "[" + indexType(i) + "]";

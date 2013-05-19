@@ -42,12 +42,12 @@ public abstract class Joiner
 
   public abstract String format_using(OutputFormat format);
 
-  public boolean isValidEscExpression() {
+  /*@Pure*/ public boolean isValidEscExpression() {
     return left.isValidEscExpression() &&
       right.isValidEscExpression();
   }
 
-  public boolean isObviousDerived() {
+  /*@Pure*/ public boolean isObviousDerived() {
     return false;
   }
 
@@ -55,7 +55,7 @@ public abstract class Joiner
     return null;
   }
 
-  public boolean isSameInvariant(Invariant other) {
+  /*@Pure*/ public boolean isSameInvariant(Invariant other) {
     if (!getClass().equals(other.getClass()))
       return false;
 
@@ -68,7 +68,7 @@ public abstract class Joiner
       right.isSameInvariant(otherAsJoiner.right);
   }
 
-  public boolean isSameFormula(Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
     if (! getClass().equals(other.getClass()))
       return false;
     Joiner other_joiner = (Joiner) other;
@@ -86,7 +86,7 @@ public abstract class Joiner
             );
   }
 
-  public boolean isInteresting() {
+  /*@Pure*/ public boolean isInteresting() {
     return (left.isInteresting() && right.isInteresting());
   }
 }

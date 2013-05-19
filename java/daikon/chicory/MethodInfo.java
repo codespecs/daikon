@@ -170,18 +170,18 @@ public class MethodInfo {
    * Returns true iff this method is a constructor
    * @return true iff this method is a constructor
    */
-  public boolean is_constructor() {
+  /*@Pure*/ public boolean is_constructor() {
     return (method_name.equals ("<init>") || method_name.equals(""));
   }
 
   /** Returns whether or not this method is a class initializer **/
-  public boolean is_class_init() {
+  /*@Pure*/ public boolean is_class_init() {
     return (method_name.equals ("<clinit>"));
   }
 
   /** Returns whether or not this method is static **/
   /*@RequiresNonNull("member")*/
-  public boolean is_static() {
+  /*@Pure*/ public boolean is_static() {
     return Modifier.isStatic(member.getModifiers());
   }
 
@@ -205,7 +205,7 @@ public class MethodInfo {
   }
 
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     String out = "";
     if (class_info != null)
       out = class_info.class_name + ".";

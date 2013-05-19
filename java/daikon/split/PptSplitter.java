@@ -761,7 +761,7 @@ public class PptSplitter implements Serializable {
     return (v);
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
 
     return "Splitter " + splitter + ": ppt1 " + ppts[0].name() + ": ppt2 "
             + ppts[1].name;

@@ -131,7 +131,7 @@ public class PptRelation implements Serializable {
     return (parent_to_child_map.size());
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }
 
@@ -192,7 +192,7 @@ public class PptRelation implements Serializable {
    * object->method,and exit->exitNN) form a simple tree without duplication
    */
 
-  public boolean is_primary() {
+  /*@Pure*/ public boolean is_primary() {
     return ((relationship != PptRelationType.USER) &&
             (relationship != PptRelationType.ENTER_EXIT));
   }

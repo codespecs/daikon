@@ -50,8 +50,17 @@ public abstract class TernaryDerivation
     }
   }
 
-  public VarInfo[] getBases() {
+  /*@SideEffectFree*/ public VarInfo[] getBases() {
     return new VarInfo[] { base1, base2, base3 };
+  }
+
+  /*@Pure*/ public VarInfo getBase(int i) {
+    switch (i) {
+    case 0: return base1;
+    case 1: return base2;
+    case 2: return base3;
+    default: throw new Error("bad base: " + i);
+    }
   }
 
   public Derivation switchVars(VarInfo[] old_vars, VarInfo[] new_vars) {
@@ -64,7 +73,7 @@ public abstract class TernaryDerivation
 
   public abstract ValueAndModified computeValueAndModified(ValueTuple full_vt);
 
-  protected boolean isParam() {
+  /*@Pure*/ protected boolean isParam() {
     return (base1.isParam() || base2.isParam() || base3.isParam());
     // VIN
     // return (base1.aux.getFlag(VarInfoAux.IS_PARAM)
@@ -82,7 +91,7 @@ public abstract class TernaryDerivation
     return base1.canBeMissing || base2.canBeMissing || base3.canBeMissing;
   }
 
-  public boolean isDerivedFromNonCanonical() {
+  /*@Pure*/ public boolean isDerivedFromNonCanonical() {
     // We insist that both are canonical, not just one.
     return !(base1.isCanonical() && base2.isCanonical()
              && base3.isCanonical());

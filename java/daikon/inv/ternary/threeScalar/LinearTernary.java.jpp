@@ -321,7 +321,7 @@ public class CLASSNAME
   //   return core.format_reversed(var1().name.name(), var2().name.name(), var3().name.name());
   // }
 
-  public boolean isActive() {
+  /*@Pure*/ public boolean isActive() {
     return core.isActive();
   }
 
@@ -351,10 +351,11 @@ public class CLASSNAME
     return core.computeConfidence();
   }
 
-  public boolean isExact() {
+  /*@Pure*/ public boolean isExact() {
     return true;
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -369,11 +370,11 @@ public class CLASSNAME
     return null;
   }
 
-  public boolean isSameFormula(Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((CLASSNAME) other).core);
   }
 
-  public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof CLASSNAME) {
       return core.isExclusiveFormula(((CLASSNAME) other).core);
     }
