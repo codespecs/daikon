@@ -1060,7 +1060,8 @@ public class PptRelation implements Serializable {
           break;
         }
 
-        assert ppt != null : "@AssumeAssertion(nullness): bug in Nullness Checker";
+        assert ppt != null : "@AssumeAssertion(nullness): bug in Nullness Checker"; // also, accesses of ppt worked earlier
+        assert ppt.children != null : "@AssumeAssertion(nullness): bug in Nullness Checker"; // The "children" field is declared to be non-null
         // If we didn't find a matching splitter at each child, can't merge
         // this point.  Just remove it from the list of splitters
         if (split_children.size() != ppt.children.size()) {

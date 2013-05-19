@@ -819,7 +819,7 @@ public final class FileIO {
     return input_lang;
   }
 
-  /*@EnsuresNonNull("new_decl_format")*/
+  /*@EnsuresNonNull("FileIO.new_decl_format")*/
   private static void read_decl_version (ParseState state, String line)
     throws IOException {
     Scanner scanner = new Scanner (line);
@@ -1589,7 +1589,9 @@ public final class FileIO {
       if (line.startsWith ("decl-version")) {
         read_decl_version (state, line);
         assert new_decl_format != null : "@AssumeAssertion(nullness): bug in Checker Framework:  read_decl_version is annotated as @EnsuresNonNull(new_decl_format)";
+        assert FileIO.new_decl_format != null : "@AssumeAssertion(nullness): bug in Checker Framework:  read_decl_version is annotated as @EnsuresNonNull(new_decl_format)";
         state.payload = (new_decl_format ? "2.0" : "1.0");
+        state.payload = (FileIO.new_decl_format ? "2.0" : "1.0");
         state.rtype = RecordType.DECL_VERSION;
         return;
       }
