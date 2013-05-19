@@ -199,6 +199,7 @@ public class PptTopLevel extends Ppt {
     int splitter_index = 0;
     int ppts_index = 0;
 
+    @SuppressWarnings("flowexpr.parse.error") // Checker Framework bug: splitters is a field in this class
     /*@EnsuresNonNullIf(result=true, expression="splitters")*/
     public boolean hasNext() {
       if (splitters == null)
@@ -237,6 +238,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns whether or not this ppt has any splitters. */
+  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug: problem with "splitters" again
   /*@EnsuresNonNullIf(result=true, expression="splitters")*/
   public boolean has_splitters() {
     return (splitters != null) && (splitters.size() > 0);
@@ -1282,6 +1284,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns whether or not the specified variable is dynamically constant.
    */
+  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug
   /*@EnsuresNonNullIf(result=true, expression="constants")*/
   /*@Pure*/ public boolean is_constant(VarInfo v) {
     return ((constants != null) && constants.is_constant(v));
@@ -1292,6 +1295,7 @@ public class PptTopLevel extends Ppt {
    * constant, or was a dynamic constant at the beginning of constant
    * processing.
    */
+  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug
   /*@EnsuresNonNullIf(result=true, expression="constants")*/
   /*@Pure*/ public boolean is_prev_constant(VarInfo v) {
     return ((constants != null)
@@ -1302,6 +1306,7 @@ public class PptTopLevel extends Ppt {
    * Returns whether or not the specified variable has been missing
    * for all samples seen so far.
    */
+  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug
   /*@EnsuresNonNullIf(result=true, expression="constants")*/
   /*@Pure*/ public boolean is_missing(VarInfo v) {
     return ((constants != null) && constants.is_missing(v));
@@ -1311,6 +1316,7 @@ public class PptTopLevel extends Ppt {
    * returns whether the specified variable is currently missing OR
    * was missing at the beginning of constants processing.
    **/
+  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug
   /*@EnsuresNonNullIf(result=true, expression="constants")*/
   /*@Pure*/ public boolean is_prev_missing(VarInfo v) {
     return ((constants != null) && constants.is_prev_missing(v));
