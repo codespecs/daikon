@@ -794,7 +794,8 @@ audit:
 
 CHECKERS_BOOTCLASSPATH = -Xbootclasspath/p:${CHECKERS}/jdk/jdk.jar
 # CHECKERS_ARGS = -source 7
-CHECKERS_ARGS ?= -AsuppressWarnings=purity,flowexpr.parameter.not.final
+# CHECKERS_ARGS ?= -AsuppressWarnings=purity,flowexpr.parameter.not.final
+CHECKERS_ARGS ?= -AsuppressWarnings=flowexpr.parameter.not.final
 
 ## All of the following targets need to depend on "compile".
 
