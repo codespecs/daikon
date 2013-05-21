@@ -56,7 +56,7 @@ public abstract class Ppt
   protected static final List<Invariant> emptyInvList = new ArrayList<Invariant>();
 
   /** Returns a string rep of the specified variable names **/
-  @SuppressWarnings("purity")    // Impure side effects do not escape
+  @SuppressWarnings("purity")    // Impure side effects do not escape (string creation)
   public static /*@Pure*/ String varNames(VarInfo[] infos) {
     StringBuffer sb = new StringBuffer();
     sb.append("(");

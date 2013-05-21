@@ -194,7 +194,7 @@ public class DynamicConstants implements Serializable {
       return (vi.hashCode());
     }
 
-    @SuppressWarnings("purity") // string creation
+    @SuppressWarnings("purity") // side effects to local state (string creation)
     /*@SideEffectFree*/ public String toString() {
 
       StringBuffer out = new StringBuffer();
