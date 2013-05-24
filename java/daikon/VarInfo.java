@@ -964,7 +964,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * use these cached values.
    * @return null if the above condition doesn't hold.
    **/
-  @Pure public /*@Nullable*/ VarInfo getDerivedParam() {
+  /*@Pure*/ public /*@Nullable*/ VarInfo getDerivedParam() {
     if (isDerivedParamCached == null) {
       // fill in the cache
       isDerivedParam();
@@ -1119,7 +1119,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   }
 
   /** Convenience methods that return information from the ValueTuple. **/
-  @Pure public int getModified(ValueTuple vt) {
+  /*@Pure*/ public int getModified(ValueTuple vt) {
     if (is_static_constant)
       // return ValueTuple.STATIC_CONSTANT;
       return ValueTuple.MODIFIED;

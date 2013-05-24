@@ -833,7 +833,7 @@ public abstract /*@Interned*/ class VarInfoName
     }
 
     /** Returns the hashcode that is the base of the array **/
-    @Pure public VarInfoName get_term() {
+    /*@Pure*/ public VarInfoName get_term() {
       if (sequence instanceof Elements)
         return ((Elements) sequence).term;
       else if (sequence instanceof Prestate) {
