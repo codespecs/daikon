@@ -1,11 +1,8 @@
 package typequals;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
 import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.ExecutableElement;
 
 import javacutils.InternalUtils;
 import javacutils.TypesUtils;
@@ -14,16 +11,10 @@ import checkers.basetype.BaseTypeChecker;
 import checkers.types.AnnotatedTypeMirror;
 import checkers.types.BasicAnnotatedTypeFactory;
 import checkers.types.TreeAnnotator;
-import checkers.util.*;
 
 import com.sun.source.tree.BinaryTree;
 import com.sun.source.tree.CompilationUnitTree;
-import com.sun.source.tree.CompoundAssignmentTree;
-import com.sun.source.tree.ExpressionTree;
-import com.sun.source.tree.LiteralTree;
-import com.sun.source.tree.MethodInvocationTree;
 import com.sun.source.tree.Tree;
-import com.sun.source.tree.Tree.Kind;
 
 /**
  * Adds a type qualifier from the VIndex type system to the type of tree,
@@ -46,7 +37,7 @@ public class VIndexAnnotatedTypeFactory extends BasicAnnotatedTypeFactory<VIndex
 
     private class VIndexTreeAnnotator extends TreeAnnotator {
 
-        public VIndexTreeAnnotator(BaseTypeChecker checker) {
+        public VIndexTreeAnnotator(BaseTypeChecker<?> checker) {
             super(checker, VIndexAnnotatedTypeFactory.this);
         }
 

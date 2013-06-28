@@ -2,6 +2,7 @@ package typequals;
 
 import checkers.basetype.BaseTypeChecker;
 import checkers.quals.*;
+import checkers.types.BasicAnnotatedTypeFactory;
 
 /**
  * The prototype checker is relevant only to Invariant and its subclasses.
@@ -18,4 +19,4 @@ import checkers.quals.*;
  **/
 
 @TypeQualifiers({ Prototype.class, NonPrototype.class })
-public final class PrototypeChecker extends BaseTypeChecker { }
+public final class PrototypeChecker extends BaseTypeChecker<BasicAnnotatedTypeFactory<PrototypeChecker>> { }
