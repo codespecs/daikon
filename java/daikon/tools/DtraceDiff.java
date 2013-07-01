@@ -397,8 +397,8 @@ public class DtraceDiff {
     } else {
       // scalar case
       if (type.isPointerFileRep()) {
-        Long v1 = ((Long)val1).longValue();
-        Long v2 = ((Long)val2).longValue();
+        long v1 = ((Long)val1).longValue();
+        long v2 = ((Long)val2).longValue();
         return !(((v1 == 0) || (v2 == 0)) && (v1 != v2));
       }
       else if (type.isScalar())
