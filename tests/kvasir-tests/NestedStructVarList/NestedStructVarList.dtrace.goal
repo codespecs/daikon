@@ -6,11 +6,8 @@ var-comparability none
 this_invocation_nonce
 0
 ::counters
-0
+<STATIC_ADDR>
 1
-::counters[..]
-nonsensical
-2
 ::counters[..].a
 nonsensical
 2
@@ -22,10 +19,7 @@ nonsensical
 this_invocation_nonce
 1
 ::counters
-85430336
-1
-::counters[..]
-[ 85430336 85430340 85430344 85430348 85430352 85430356 85430360 85430364 85430368 85430372 ]
+<STATIC_ADDR>
 1
 ::counters[..].a
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -38,10 +32,7 @@ this_invocation_nonce
 this_invocation_nonce
 1
 ::counters
-85430336
-1
-::counters[..]
-[ 85430336 85430340 85430344 85430348 85430352 85430356 85430360 85430364 85430368 85430372 ]
+<STATIC_ADDR>
 1
 ::counters[..].a
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -54,10 +45,7 @@ this_invocation_nonce
 this_invocation_nonce
 2
 ::counters
-85430336
-1
-::counters[..]
-[ 85430336 85430340 85430344 85430348 85430352 85430356 85430360 85430364 85430368 85430372 ]
+<STATIC_ADDR>
 1
 ::counters[..].a
 [ 1 0 0 0 0 0 0 0 0 0 ]
@@ -70,10 +58,7 @@ this_invocation_nonce
 this_invocation_nonce
 2
 ::counters
-85430336
-1
-::counters[..]
-[ 85430336 85430340 85430344 85430348 85430352 85430356 85430360 85430364 85430368 85430372 ]
+<STATIC_ADDR>
 1
 ::counters[..].a
 [ 1 0 0 0 0 0 0 0 0 0 ]
@@ -86,10 +71,7 @@ this_invocation_nonce
 this_invocation_nonce
 3
 ::counters
-85430336
-1
-::counters[..]
-[ 85430336 85430340 85430344 85430348 85430352 85430356 85430360 85430364 85430368 85430372 ]
+<STATIC_ADDR>
 1
 ::counters[..].a
 [ 1 0 0 0 0 1 0 0 0 0 ]
@@ -102,10 +84,7 @@ this_invocation_nonce
 this_invocation_nonce
 3
 ::counters
-85430336
-1
-::counters[..]
-[ 85430336 85430340 85430344 85430348 85430352 85430356 85430360 85430364 85430368 85430372 ]
+<STATIC_ADDR>
 1
 ::counters[..].a
 [ 1 0 0 0 0 1 0 0 0 0 ]
@@ -118,10 +97,7 @@ this_invocation_nonce
 this_invocation_nonce
 4
 ::counters
-85430336
-1
-::counters[..]
-[ 85430336 85430340 85430344 85430348 85430352 85430356 85430360 85430364 85430368 85430372 ]
+<STATIC_ADDR>
 1
 ::counters[..].a
 [ 1 0 0 0 0 1 0 0 0 100 ]
@@ -134,10 +110,7 @@ this_invocation_nonce
 this_invocation_nonce
 4
 ::counters
-85430336
-1
-::counters[..]
-[ 85430336 85430340 85430344 85430348 85430352 85430356 85430360 85430364 85430368 85430372 ]
+<STATIC_ADDR>
 1
 ::counters[..].a
 [ 1 0 0 0 0 1 0 0 0 100 ]
@@ -150,10 +123,7 @@ this_invocation_nonce
 this_invocation_nonce
 5
 ::counters
-85430336
-1
-::counters[..]
-[ 85430336 85430340 85430344 85430348 85430352 85430356 85430360 85430364 85430368 85430372 ]
+<STATIC_ADDR>
 1
 ::counters[..].a
 [ 3 0 0 0 0 1 0 0 0 100 ]
@@ -166,10 +136,7 @@ this_invocation_nonce
 this_invocation_nonce
 5
 ::counters
-85430336
-1
-::counters[..]
-[ 85430336 85430340 85430344 85430348 85430352 85430356 85430360 85430364 85430368 85430372 ]
+<STATIC_ADDR>
 1
 ::counters[..].a
 [ 3 0 0 0 0 1 0 0 0 100 ]
@@ -182,10 +149,7 @@ this_invocation_nonce
 this_invocation_nonce
 0
 ::counters
-85430336
-1
-::counters[..]
-[ 85430336 85430340 85430344 85430348 85430352 85430356 85430360 85430364 85430368 85430372 ]
+<STATIC_ADDR>
 1
 ::counters[..].a
 [ 3 0 0 0 0 1 0 0 0 100 ]

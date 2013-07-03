@@ -15,7 +15,7 @@ ppt ..initBasicTypesStruct():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -417,7 +417,7 @@ ppt ..initBasicTypesStruct():::ENTER
   variable e
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
     flags is_param 
   variable f
     var-kind variable
@@ -438,7 +438,7 @@ ppt ..initBasicTypesStruct():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -840,7 +840,7 @@ ppt ..initBasicTypesStruct():::EXIT0
   variable e
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
     flags is_param 
   variable f
     var-kind variable
@@ -1189,7 +1189,7 @@ ppt ..main():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1212,7 +1212,7 @@ ppt ..main():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1239,7 +1239,7 @@ ppt ..readStruct():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1292,7 +1292,7 @@ ppt ..readStruct():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1374,7 +1374,7 @@ ppt ..returnWeekday():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1402,7 +1402,7 @@ ppt ..returnWeekday():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string

@@ -4,7 +4,7 @@
 ::buf[..].__jmpbuf[0]
 ::buf[..].__jmpbuf[0][0]
 ::buf[..].__jmpbuf[1]
-::buf[..].__jmpbuf[1][0]
+::buf[..].__jmpbuf[1][0] ::buf[..].__jmpbuf[6][0] ::buf[..].__jmpbuf[7][0]
 ::buf[..].__jmpbuf[2]
 ::buf[..].__jmpbuf[2][0]
 ::buf[..].__jmpbuf[3]
@@ -13,6 +13,8 @@
 ::buf[..].__jmpbuf[4][0]
 ::buf[..].__jmpbuf[5]
 ::buf[..].__jmpbuf[5][0]
+::buf[..].__jmpbuf[6]
+::buf[..].__jmpbuf[7]
 ::buf[..].__mask_was_saved
 ::buf[..].__saved_mask
 ::buf[..].__saved_mask.__val
@@ -25,7 +27,7 @@ a
 ::buf[..].__jmpbuf[0]
 ::buf[..].__jmpbuf[0][0]
 ::buf[..].__jmpbuf[1]
-::buf[..].__jmpbuf[1][0]
+::buf[..].__jmpbuf[1][0] ::buf[..].__jmpbuf[6][0] ::buf[..].__jmpbuf[7][0]
 ::buf[..].__jmpbuf[2]
 ::buf[..].__jmpbuf[2][0]
 ::buf[..].__jmpbuf[3]
@@ -34,6 +36,8 @@ a
 ::buf[..].__jmpbuf[4][0]
 ::buf[..].__jmpbuf[5]
 ::buf[..].__jmpbuf[5][0]
+::buf[..].__jmpbuf[6]
+::buf[..].__jmpbuf[7]
 ::buf[..].__mask_was_saved
 ::buf[..].__saved_mask
 ::buf[..].__saved_mask.__val
@@ -46,7 +50,7 @@ a
 ::buf[..].__jmpbuf[0]
 ::buf[..].__jmpbuf[0][0]
 ::buf[..].__jmpbuf[1]
-::buf[..].__jmpbuf[1][0]
+::buf[..].__jmpbuf[1][0] ::buf[..].__jmpbuf[6][0] ::buf[..].__jmpbuf[7][0]
 ::buf[..].__jmpbuf[2]
 ::buf[..].__jmpbuf[2][0]
 ::buf[..].__jmpbuf[3]
@@ -55,6 +59,8 @@ a
 ::buf[..].__jmpbuf[4][0]
 ::buf[..].__jmpbuf[5]
 ::buf[..].__jmpbuf[5][0]
+::buf[..].__jmpbuf[6]
+::buf[..].__jmpbuf[7]
 ::buf[..].__mask_was_saved
 ::buf[..].__saved_mask
 ::buf[..].__saved_mask.__val
@@ -66,7 +72,7 @@ a
 ::buf[..].__jmpbuf[0]
 ::buf[..].__jmpbuf[0][0]
 ::buf[..].__jmpbuf[1]
-::buf[..].__jmpbuf[1][0]
+::buf[..].__jmpbuf[1][0] ::buf[..].__jmpbuf[6][0] ::buf[..].__jmpbuf[7][0]
 ::buf[..].__jmpbuf[2]
 ::buf[..].__jmpbuf[2][0]
 ::buf[..].__jmpbuf[3]
@@ -75,6 +81,8 @@ a
 ::buf[..].__jmpbuf[4][0]
 ::buf[..].__jmpbuf[5]
 ::buf[..].__jmpbuf[5][0]
+::buf[..].__jmpbuf[6]
+::buf[..].__jmpbuf[7]
 ::buf[..].__mask_was_saved
 ::buf[..].__saved_mask
 ::buf[..].__saved_mask.__val

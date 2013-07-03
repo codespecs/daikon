@@ -5,6 +5,24 @@ var-comparability none
 ..main():::ENTER
 this_invocation_nonce
 0
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 0
 1
@@ -14,6 +32,24 @@ Stack::publicNumLinksCreated
 
 Stack.Stack(char*):::ENTER
 this_invocation_nonce
+1
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
 1
 Stack::numStacksCreated
 0
@@ -25,7 +61,7 @@ name
 "My first stack"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
 nonsensical
@@ -73,6 +109,24 @@ nonsensical
 Stack.Stack(char*):::EXIT0
 this_invocation_nonce
 1
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -83,10 +137,10 @@ name
 "My first stack"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -125,12 +179,30 @@ this->numElements
 0
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.push(char*):::ENTER
 this_invocation_nonce
 2
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -141,10 +213,10 @@ dat
 "First line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -183,12 +255,30 @@ this->numElements
 0
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Link.initialize(char*,\_Stack::Link*):::ENTER
 this_invocation_nonce
 3
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -199,7 +289,7 @@ dat
 "First line"
 1
 nxt
-0
+<STATIC_ADDR>
 1
 nxt[..]
 nonsensical
@@ -241,7 +331,7 @@ nxt[..].next[0]
 nonsensical
 2
 this
-69644392
+<STATIC_ADDR>
 1
 this->data
 nonsensical
@@ -286,6 +376,24 @@ nonsensical
 Link.initialize(char*,\_Stack::Link*):::EXIT0
 this_invocation_nonce
 3
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -296,7 +404,7 @@ dat
 "First line"
 1
 nxt
-0
+<STATIC_ADDR>
 1
 nxt[..]
 nonsensical
@@ -338,13 +446,13 @@ nxt[..].next[0]
 nonsensical
 2
 this
-69644392
+<STATIC_ADDR>
 1
 this->data
 "First line"
 1
 this->next
-0
+<HEAP_ADDR>
 1
 this->next[..]
 nonsensical
@@ -377,12 +485,30 @@ this->next[..].next[0]
 nonsensical
 2
 this[0]
-69644392
+<HEAP_ADDR>
 1
 
 Stack.push(char*):::EXIT0
 this_invocation_nonce
 2
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -393,19 +519,19 @@ dat
 "First line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644392
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "First line" ]
 1
 this->head[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 nonsensical
@@ -435,12 +561,30 @@ this->numElements
 1
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.push(char*):::ENTER
 this_invocation_nonce
 4
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -451,19 +595,19 @@ dat
 "Second line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644392
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "First line" ]
 1
 this->head[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 nonsensical
@@ -493,12 +637,30 @@ this->numElements
 1
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Link.initialize(char*,\_Stack::Link*):::ENTER
 this_invocation_nonce
 5
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -509,16 +671,16 @@ dat
 "Second line"
 1
 nxt
-69644392
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "First line" ]
 1
 nxt[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 nonsensical
@@ -551,7 +713,7 @@ nxt[..].next[0]
 nonsensical
 2
 this
-69644448
+<STATIC_ADDR>
 1
 this->data
 nonsensical
@@ -596,6 +758,24 @@ nonsensical
 Link.initialize(char*,\_Stack::Link*):::EXIT0
 this_invocation_nonce
 5
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -606,16 +786,16 @@ dat
 "Second line"
 1
 nxt
-69644392
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "First line" ]
 1
 nxt[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 nonsensical
@@ -648,22 +828,22 @@ nxt[..].next[0]
 nonsensical
 2
 this
-69644448
+<STATIC_ADDR>
 1
 this->data
 "Second line"
 1
 this->next
-69644392
+<HEAP_ADDR>
 1
 this->next[..]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].data
 [ "First line" ]
 1
 this->next[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->data
 nonsensical
@@ -687,12 +867,30 @@ this->next[..].next[0]
 nonsensical
 2
 this[0]
-69644448
+<HEAP_ADDR>
 1
 
 Stack.push(char*):::EXIT0
 this_invocation_nonce
 4
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -703,25 +901,25 @@ dat
 "Second line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644448
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Second line" ]
 1
 this->head[..].next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "First line" ]
 1
 this->head[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 nonsensical
@@ -736,7 +934,7 @@ this->head[..].next->next[0]
 nonsensical
 2
 this->head[..].next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -745,12 +943,30 @@ this->numElements
 2
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.push(char*):::ENTER
 this_invocation_nonce
 6
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -761,25 +977,25 @@ dat
 "Third line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644448
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Second line" ]
 1
 this->head[..].next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "First line" ]
 1
 this->head[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 nonsensical
@@ -794,7 +1010,7 @@ this->head[..].next->next[0]
 nonsensical
 2
 this->head[..].next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -803,12 +1019,30 @@ this->numElements
 2
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Link.initialize(char*,\_Stack::Link*):::ENTER
 this_invocation_nonce
 7
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -819,22 +1053,22 @@ dat
 "Third line"
 1
 nxt
-69644448
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "Second line" ]
 1
 nxt[..].next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 [ "First line" ]
 1
 nxt[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->data
 nonsensical
@@ -858,10 +1092,10 @@ nxt[..].next->next[0]
 nonsensical
 2
 nxt[..].next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this
-69644504
+<STATIC_ADDR>
 1
 this->data
 nonsensical
@@ -906,6 +1140,24 @@ nonsensical
 Link.initialize(char*,\_Stack::Link*):::EXIT0
 this_invocation_nonce
 7
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -916,22 +1168,22 @@ dat
 "Third line"
 1
 nxt
-69644448
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "Second line" ]
 1
 nxt[..].next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 [ "First line" ]
 1
 nxt[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->data
 nonsensical
@@ -955,31 +1207,31 @@ nxt[..].next->next[0]
 nonsensical
 2
 nxt[..].next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this
-69644504
+<STATIC_ADDR>
 1
 this->data
 "Third line"
 1
 this->next
-69644448
+<HEAP_ADDR>
 1
 this->next[..]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].data
 [ "Second line" ]
 1
 this->next[..].next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->data
 [ "First line" ]
 1
 this->next[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->next->data
 nonsensical
@@ -994,15 +1246,33 @@ this->next[..].next->next[0]
 nonsensical
 2
 this->next[..].next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this[0]
-69644504
+<HEAP_ADDR>
 1
 
 Stack.push(char*):::EXIT0
 this_invocation_nonce
 6
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1013,40 +1283,40 @@ dat
 "Third line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644504
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Third line" ]
 1
 this->head[..].next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Second line" ]
 1
 this->head[..].next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "First line" ]
 1
 this->head[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
 nonsensical
 2
 this->head[..].next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -1055,12 +1325,30 @@ this->numElements
 3
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.push(char*):::ENTER
 this_invocation_nonce
 8
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1071,40 +1359,40 @@ dat
 "Fourth line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644504
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Third line" ]
 1
 this->head[..].next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Second line" ]
 1
 this->head[..].next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "First line" ]
 1
 this->head[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
 nonsensical
 2
 this->head[..].next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -1113,12 +1401,30 @@ this->numElements
 3
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Link.initialize(char*,\_Stack::Link*):::ENTER
 this_invocation_nonce
 9
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1129,28 +1435,28 @@ dat
 "Fourth line"
 1
 nxt
-69644504
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "Third line" ]
 1
 nxt[..].next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 [ "Second line" ]
 1
 nxt[..].next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->data
 [ "First line" ]
 1
 nxt[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->next->data
 nonsensical
@@ -1165,13 +1471,13 @@ nxt[..].next->next->next[0]
 nonsensical
 2
 nxt[..].next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this
-69644560
+<STATIC_ADDR>
 1
 this->data
 nonsensical
@@ -1216,6 +1522,24 @@ nonsensical
 Link.initialize(char*,\_Stack::Link*):::EXIT0
 this_invocation_nonce
 9
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1226,28 +1550,28 @@ dat
 "Fourth line"
 1
 nxt
-69644504
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "Third line" ]
 1
 nxt[..].next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 [ "Second line" ]
 1
 nxt[..].next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->data
 [ "First line" ]
 1
 nxt[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->next->data
 nonsensical
@@ -1262,57 +1586,75 @@ nxt[..].next->next->next[0]
 nonsensical
 2
 nxt[..].next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this
-69644560
+<STATIC_ADDR>
 1
 this->data
 "Fourth line"
 1
 this->next
-69644504
+<HEAP_ADDR>
 1
 this->next[..]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].data
 [ "Third line" ]
 1
 this->next[..].next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->data
 [ "Second line" ]
 1
 this->next[..].next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->next->data
 [ "First line" ]
 1
 this->next[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->next->next[0]
 nonsensical
 2
 this->next[..].next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this[0]
-69644560
+<HEAP_ADDR>
 1
 
 Stack.push(char*):::EXIT0
 this_invocation_nonce
 8
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1323,40 +1665,40 @@ dat
 "Fourth line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644560
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Fourth line" ]
 1
 this->head[..].next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Third line" ]
 1
 this->head[..].next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Second line" ]
 1
 this->head[..].next->next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -1365,12 +1707,30 @@ this->numElements
 4
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.push(char*):::ENTER
 this_invocation_nonce
 10
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1381,40 +1741,40 @@ dat
 "Fifth line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644560
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Fourth line" ]
 1
 this->head[..].next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Third line" ]
 1
 this->head[..].next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Second line" ]
 1
 this->head[..].next->next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -1423,12 +1783,30 @@ this->numElements
 4
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Link.initialize(char*,\_Stack::Link*):::ENTER
 this_invocation_nonce
 11
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1439,49 +1817,49 @@ dat
 "Fifth line"
 1
 nxt
-69644560
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "Fourth line" ]
 1
 nxt[..].next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 [ "Third line" ]
 1
 nxt[..].next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->data
 [ "Second line" ]
 1
 nxt[..].next->next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->next->data
 [ "First line" ]
 1
 nxt[..].next->next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->next->next[0]
 nonsensical
 2
 nxt[..].next->next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this
-69644616
+<STATIC_ADDR>
 1
 this->data
 nonsensical
@@ -1526,6 +1904,24 @@ nonsensical
 Link.initialize(char*,\_Stack::Link*):::EXIT0
 this_invocation_nonce
 11
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1536,93 +1932,111 @@ dat
 "Fifth line"
 1
 nxt
-69644560
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "Fourth line" ]
 1
 nxt[..].next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 [ "Third line" ]
 1
 nxt[..].next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->data
 [ "Second line" ]
 1
 nxt[..].next->next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->next->data
 [ "First line" ]
 1
 nxt[..].next->next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->next->next[0]
 nonsensical
 2
 nxt[..].next->next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this
-69644616
+<STATIC_ADDR>
 1
 this->data
 "Fifth line"
 1
 this->next
-69644560
+<HEAP_ADDR>
 1
 this->next[..]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].data
 [ "Fourth line" ]
 1
 this->next[..].next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->data
 [ "Third line" ]
 1
 this->next[..].next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->next->data
 [ "Second line" ]
 1
 this->next[..].next->next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this[0]
-69644616
+<HEAP_ADDR>
 1
 
 Stack.push(char*):::EXIT0
 this_invocation_nonce
 10
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1633,40 +2047,40 @@ dat
 "Fifth line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644616
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644616 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Fifth line" ]
 1
 this->head[..].next
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Fourth line" ]
 1
 this->head[..].next->next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Third line" ]
 1
 this->head[..].next->next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -1675,12 +2089,30 @@ this->numElements
 5
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.peek():::ENTER
 this_invocation_nonce
 12
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1688,40 +2120,40 @@ Stack::publicNumLinksCreated
 5
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644616
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644616 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Fifth line" ]
 1
 this->head[..].next
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Fourth line" ]
 1
 this->head[..].next->next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Third line" ]
 1
 this->head[..].next->next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -1730,12 +2162,30 @@ this->numElements
 5
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.peek():::EXIT0
 this_invocation_nonce
 12
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1746,40 +2196,40 @@ return
 "Fifth line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644616
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644616 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Fifth line" ]
 1
 this->head[..].next
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Fourth line" ]
 1
 this->head[..].next->next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Third line" ]
 1
 this->head[..].next->next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -1788,12 +2238,30 @@ this->numElements
 5
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.getName():::ENTER
 this_invocation_nonce
 13
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1801,40 +2269,40 @@ Stack::publicNumLinksCreated
 5
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644616
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644616 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Fifth line" ]
 1
 this->head[..].next
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Fourth line" ]
 1
 this->head[..].next->next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Third line" ]
 1
 this->head[..].next->next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -1843,12 +2311,30 @@ this->numElements
 5
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.privateStuff():::ENTER
 this_invocation_nonce
 14
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1856,40 +2342,40 @@ Stack::publicNumLinksCreated
 5
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644616
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644616 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Fifth line" ]
 1
 this->head[..].next
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Fourth line" ]
 1
 this->head[..].next->next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Third line" ]
 1
 this->head[..].next->next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -1898,12 +2384,30 @@ this->numElements
 5
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.privateStuff():::EXIT0
 this_invocation_nonce
 14
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1914,40 +2418,40 @@ return
 42
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644616
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644616 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Fifth line" ]
 1
 this->head[..].next
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Fourth line" ]
 1
 this->head[..].next->next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Third line" ]
 1
 this->head[..].next->next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -1956,12 +2460,30 @@ this->numElements
 5
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.getName():::EXIT0
 this_invocation_nonce
 13
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -1972,40 +2494,40 @@ return
 "My first stack"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644616
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644616 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Fifth line" ]
 1
 this->head[..].next
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Fourth line" ]
 1
 this->head[..].next->next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Third line" ]
 1
 this->head[..].next->next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -2014,12 +2536,30 @@ this->numElements
 5
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.pop():::ENTER
 this_invocation_nonce
 15
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2027,40 +2567,40 @@ Stack::publicNumLinksCreated
 5
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644616
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644616 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Fifth line" ]
 1
 this->head[..].next
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Fourth line" ]
 1
 this->head[..].next->next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Third line" ]
 1
 this->head[..].next->next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -2069,12 +2609,30 @@ this->numElements
 5
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.pop():::EXIT0
 this_invocation_nonce
 15
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2085,40 +2643,40 @@ return
 "Fifth line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644560
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Fourth line" ]
 1
 this->head[..].next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Third line" ]
 1
 this->head[..].next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Second line" ]
 1
 this->head[..].next->next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -2127,12 +2685,30 @@ this->numElements
 4
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.pop():::ENTER
 this_invocation_nonce
 16
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2140,40 +2716,40 @@ Stack::publicNumLinksCreated
 5
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644560
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644560 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Fourth line" ]
 1
 this->head[..].next
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Third line" ]
 1
 this->head[..].next->next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Second line" ]
 1
 this->head[..].next->next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -2182,12 +2758,30 @@ this->numElements
 4
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.pop():::EXIT0
 this_invocation_nonce
 16
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2198,40 +2792,40 @@ return
 "Fourth line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644504
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Third line" ]
 1
 this->head[..].next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Second line" ]
 1
 this->head[..].next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "First line" ]
 1
 this->head[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
 nonsensical
 2
 this->head[..].next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -2240,12 +2834,30 @@ this->numElements
 3
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.pop():::ENTER
 this_invocation_nonce
 17
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2253,40 +2865,40 @@ Stack::publicNumLinksCreated
 5
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644504
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644504 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Third line" ]
 1
 this->head[..].next
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Second line" ]
 1
 this->head[..].next->next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "First line" ]
 1
 this->head[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
 nonsensical
 2
 this->head[..].next->next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -2295,12 +2907,30 @@ this->numElements
 3
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.pop():::EXIT0
 this_invocation_nonce
 17
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2311,25 +2941,25 @@ return
 "Third line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644448
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Second line" ]
 1
 this->head[..].next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "First line" ]
 1
 this->head[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 nonsensical
@@ -2344,7 +2974,7 @@ this->head[..].next->next[0]
 nonsensical
 2
 this->head[..].next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -2353,12 +2983,30 @@ this->numElements
 2
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.pop():::ENTER
 this_invocation_nonce
 18
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2366,25 +3014,25 @@ Stack::publicNumLinksCreated
 5
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644448
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644448 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Second line" ]
 1
 this->head[..].next
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "First line" ]
 1
 this->head[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 nonsensical
@@ -2399,7 +3047,7 @@ this->head[..].next->next[0]
 nonsensical
 2
 this->head[..].next[0]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My first stack"
@@ -2408,12 +3056,30 @@ this->numElements
 2
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.pop():::EXIT0
 this_invocation_nonce
 18
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2424,19 +3090,19 @@ return
 "Second line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644392
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "First line" ]
 1
 this->head[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 nonsensical
@@ -2466,12 +3132,30 @@ this->numElements
 1
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.pop():::ENTER
 this_invocation_nonce
 19
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2479,19 +3163,19 @@ Stack::publicNumLinksCreated
 5
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-69644392
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644392 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "First line" ]
 1
 this->head[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 nonsensical
@@ -2521,12 +3205,30 @@ this->numElements
 1
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.pop():::EXIT0
 this_invocation_nonce
 19
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2537,10 +3239,10 @@ return
 "First line"
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -2579,12 +3281,30 @@ this->numElements
 0
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.pop():::ENTER
 this_invocation_nonce
 20
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2592,10 +3312,10 @@ Stack::publicNumLinksCreated
 5
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -2634,12 +3354,30 @@ this->numElements
 0
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.pop():::EXIT0
 this_invocation_nonce
 20
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2650,10 +3388,10 @@ return
 nonsensical
 2
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -2692,12 +3430,30 @@ this->numElements
 0
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.getNumStacksCreated():::ENTER
 this_invocation_nonce
 21
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2708,6 +3464,24 @@ Stack::publicNumLinksCreated
 Stack.getNumStacksCreated():::EXIT0
 this_invocation_nonce
 21
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2721,6 +3495,24 @@ return
 Stack.Stack(char*):::ENTER
 this_invocation_nonce
 22
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 1
 1
@@ -2731,7 +3523,7 @@ name
 "My second stack"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
 nonsensical
@@ -2779,6 +3571,24 @@ nonsensical
 Stack.Stack(char*):::EXIT0
 this_invocation_nonce
 22
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -2789,10 +3599,10 @@ name
 "My second stack"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -2831,12 +3641,30 @@ this->numElements
 0
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.push(char*):::ENTER
 this_invocation_nonce
 23
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -2847,10 +3675,10 @@ dat
 "Uno"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -2889,12 +3717,30 @@ this->numElements
 0
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Link.initialize(char*,\_Stack::Link*):::ENTER
 this_invocation_nonce
 24
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -2905,7 +3751,7 @@ dat
 "Uno"
 1
 nxt
-0
+<STATIC_ADDR>
 1
 nxt[..]
 nonsensical
@@ -2947,7 +3793,7 @@ nxt[..].next[0]
 nonsensical
 2
 this
-69644736
+<STATIC_ADDR>
 1
 this->data
 nonsensical
@@ -2992,6 +3838,24 @@ nonsensical
 Link.initialize(char*,\_Stack::Link*):::EXIT0
 this_invocation_nonce
 24
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -3002,7 +3866,7 @@ dat
 "Uno"
 1
 nxt
-0
+<STATIC_ADDR>
 1
 nxt[..]
 nonsensical
@@ -3044,13 +3908,13 @@ nxt[..].next[0]
 nonsensical
 2
 this
-69644736
+<STATIC_ADDR>
 1
 this->data
 "Uno"
 1
 this->next
-0
+<HEAP_ADDR>
 1
 this->next[..]
 nonsensical
@@ -3083,12 +3947,30 @@ this->next[..].next[0]
 nonsensical
 2
 this[0]
-69644736
+<HEAP_ADDR>
 1
 
 Stack.push(char*):::EXIT0
 this_invocation_nonce
 23
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -3099,19 +3981,19 @@ dat
 "Uno"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644736
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Uno" ]
 1
 this->head[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 nonsensical
@@ -3141,12 +4023,30 @@ this->numElements
 1
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.push(char*):::ENTER
 this_invocation_nonce
 25
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -3157,19 +4057,19 @@ dat
 "Dos"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644736
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Uno" ]
 1
 this->head[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 nonsensical
@@ -3199,12 +4099,30 @@ this->numElements
 1
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Link.initialize(char*,\_Stack::Link*):::ENTER
 this_invocation_nonce
 26
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -3215,16 +4133,16 @@ dat
 "Dos"
 1
 nxt
-69644736
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "Uno" ]
 1
 nxt[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 nonsensical
@@ -3257,7 +4175,7 @@ nxt[..].next[0]
 nonsensical
 2
 this
-69644792
+<STATIC_ADDR>
 1
 this->data
 nonsensical
@@ -3302,6 +4220,24 @@ nonsensical
 Link.initialize(char*,\_Stack::Link*):::EXIT0
 this_invocation_nonce
 26
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -3312,16 +4248,16 @@ dat
 "Dos"
 1
 nxt
-69644736
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "Uno" ]
 1
 nxt[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 nonsensical
@@ -3354,22 +4290,22 @@ nxt[..].next[0]
 nonsensical
 2
 this
-69644792
+<STATIC_ADDR>
 1
 this->data
 "Dos"
 1
 this->next
-69644736
+<HEAP_ADDR>
 1
 this->next[..]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].data
 [ "Uno" ]
 1
 this->next[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->data
 nonsensical
@@ -3393,12 +4329,30 @@ this->next[..].next[0]
 nonsensical
 2
 this[0]
-69644792
+<HEAP_ADDR>
 1
 
 Stack.push(char*):::EXIT0
 this_invocation_nonce
 25
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -3409,25 +4363,25 @@ dat
 "Dos"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644792
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Dos" ]
 1
 this->head[..].next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Uno" ]
 1
 this->head[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 nonsensical
@@ -3442,7 +4396,7 @@ this->head[..].next->next[0]
 nonsensical
 2
 this->head[..].next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -3451,12 +4405,30 @@ this->numElements
 2
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.push(char*):::ENTER
 this_invocation_nonce
 27
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -3467,25 +4439,25 @@ dat
 "Tres"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644792
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Dos" ]
 1
 this->head[..].next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Uno" ]
 1
 this->head[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 nonsensical
@@ -3500,7 +4472,7 @@ this->head[..].next->next[0]
 nonsensical
 2
 this->head[..].next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -3509,12 +4481,30 @@ this->numElements
 2
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Link.initialize(char*,\_Stack::Link*):::ENTER
 this_invocation_nonce
 28
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -3525,22 +4515,22 @@ dat
 "Tres"
 1
 nxt
-69644792
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "Dos" ]
 1
 nxt[..].next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 [ "Uno" ]
 1
 nxt[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->data
 nonsensical
@@ -3564,10 +4554,10 @@ nxt[..].next->next[0]
 nonsensical
 2
 nxt[..].next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this
-69644848
+<STATIC_ADDR>
 1
 this->data
 nonsensical
@@ -3612,6 +4602,24 @@ nonsensical
 Link.initialize(char*,\_Stack::Link*):::EXIT0
 this_invocation_nonce
 28
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -3622,22 +4630,22 @@ dat
 "Tres"
 1
 nxt
-69644792
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "Dos" ]
 1
 nxt[..].next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 [ "Uno" ]
 1
 nxt[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->data
 nonsensical
@@ -3661,31 +4669,31 @@ nxt[..].next->next[0]
 nonsensical
 2
 nxt[..].next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this
-69644848
+<STATIC_ADDR>
 1
 this->data
 "Tres"
 1
 this->next
-69644792
+<HEAP_ADDR>
 1
 this->next[..]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].data
 [ "Dos" ]
 1
 this->next[..].next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->data
 [ "Uno" ]
 1
 this->next[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->next->data
 nonsensical
@@ -3700,15 +4708,33 @@ this->next[..].next->next[0]
 nonsensical
 2
 this->next[..].next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this[0]
-69644848
+<HEAP_ADDR>
 1
 
 Stack.push(char*):::EXIT0
 this_invocation_nonce
 27
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -3719,40 +4745,40 @@ dat
 "Tres"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644848
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Tres" ]
 1
 this->head[..].next
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Dos" ]
 1
 this->head[..].next->next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Uno" ]
 1
 this->head[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
 nonsensical
 2
 this->head[..].next->next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -3761,12 +4787,30 @@ this->numElements
 3
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.push(char*):::ENTER
 this_invocation_nonce
 29
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -3777,40 +4821,40 @@ dat
 "Cuatro"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644848
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Tres" ]
 1
 this->head[..].next
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Dos" ]
 1
 this->head[..].next->next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Uno" ]
 1
 this->head[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
 nonsensical
 2
 this->head[..].next->next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -3819,12 +4863,30 @@ this->numElements
 3
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Link.initialize(char*,\_Stack::Link*):::ENTER
 this_invocation_nonce
 30
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -3835,28 +4897,28 @@ dat
 "Cuatro"
 1
 nxt
-69644848
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "Tres" ]
 1
 nxt[..].next
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 [ "Dos" ]
 1
 nxt[..].next->next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->data
 [ "Uno" ]
 1
 nxt[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->next->data
 nonsensical
@@ -3871,13 +4933,13 @@ nxt[..].next->next->next[0]
 nonsensical
 2
 nxt[..].next->next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next[0]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this
-69644904
+<STATIC_ADDR>
 1
 this->data
 nonsensical
@@ -3922,6 +4984,24 @@ nonsensical
 Link.initialize(char*,\_Stack::Link*):::EXIT0
 this_invocation_nonce
 30
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -3932,28 +5012,28 @@ dat
 "Cuatro"
 1
 nxt
-69644848
+<STATIC_ADDR>
 1
 nxt[..]
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].data
 [ "Tres" ]
 1
 nxt[..].next
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->data
 [ "Dos" ]
 1
 nxt[..].next->next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->data
 [ "Uno" ]
 1
 nxt[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next->next->next->data
 nonsensical
@@ -3968,57 +5048,75 @@ nxt[..].next->next->next[0]
 nonsensical
 2
 nxt[..].next->next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 nxt[..].next[0]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this
-69644904
+<STATIC_ADDR>
 1
 this->data
 "Cuatro"
 1
 this->next
-69644848
+<HEAP_ADDR>
 1
 this->next[..]
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].data
 [ "Tres" ]
 1
 this->next[..].next
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->data
 [ "Dos" ]
 1
 this->next[..].next->next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->next->data
 [ "Uno" ]
 1
 this->next[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next->next->next[0]
 nonsensical
 2
 this->next[..].next->next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->next[..].next[0]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this[0]
-69644904
+<HEAP_ADDR>
 1
 
 Stack.push(char*):::EXIT0
 this_invocation_nonce
 29
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4029,40 +5127,40 @@ dat
 "Cuatro"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644904
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644904 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Cuatro" ]
 1
 this->head[..].next
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Tres" ]
 1
 this->head[..].next->next
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Dos" ]
 1
 this->head[..].next->next->next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -4071,12 +5169,30 @@ this->numElements
 4
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.getName():::ENTER
 this_invocation_nonce
 31
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4084,40 +5200,40 @@ Stack::publicNumLinksCreated
 9
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644904
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644904 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Cuatro" ]
 1
 this->head[..].next
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Tres" ]
 1
 this->head[..].next->next
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Dos" ]
 1
 this->head[..].next->next->next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -4126,12 +5242,30 @@ this->numElements
 4
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.privateStuff():::ENTER
 this_invocation_nonce
 32
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4139,40 +5273,40 @@ Stack::publicNumLinksCreated
 9
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644904
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644904 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Cuatro" ]
 1
 this->head[..].next
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Tres" ]
 1
 this->head[..].next->next
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Dos" ]
 1
 this->head[..].next->next->next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -4181,12 +5315,30 @@ this->numElements
 4
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.privateStuff():::EXIT0
 this_invocation_nonce
 32
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4197,40 +5349,40 @@ return
 42
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644904
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644904 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Cuatro" ]
 1
 this->head[..].next
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Tres" ]
 1
 this->head[..].next->next
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Dos" ]
 1
 this->head[..].next->next->next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -4239,12 +5391,30 @@ this->numElements
 4
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.getName():::EXIT0
 this_invocation_nonce
 31
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4255,40 +5425,40 @@ return
 "My second stack"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644904
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644904 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Cuatro" ]
 1
 this->head[..].next
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Tres" ]
 1
 this->head[..].next->next
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Dos" ]
 1
 this->head[..].next->next->next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -4297,12 +5467,30 @@ this->numElements
 4
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.pop():::ENTER
 this_invocation_nonce
 33
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4310,40 +5498,40 @@ Stack::publicNumLinksCreated
 9
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644904
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644904 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Cuatro" ]
 1
 this->head[..].next
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Tres" ]
 1
 this->head[..].next->next
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Dos" ]
 1
 this->head[..].next->next->next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next[0]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -4352,12 +5540,30 @@ this->numElements
 4
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.pop():::EXIT0
 this_invocation_nonce
 33
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4368,40 +5574,40 @@ return
 "Cuatro"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644848
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Tres" ]
 1
 this->head[..].next
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Dos" ]
 1
 this->head[..].next->next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Uno" ]
 1
 this->head[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
 nonsensical
 2
 this->head[..].next->next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -4410,12 +5616,30 @@ this->numElements
 3
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.pop():::ENTER
 this_invocation_nonce
 34
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4423,40 +5647,40 @@ Stack::publicNumLinksCreated
 9
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644848
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644848 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Tres" ]
 1
 this->head[..].next
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Dos" ]
 1
 this->head[..].next->next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 [ "Uno" ]
 1
 this->head[..].next->next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->next[0]
 nonsensical
 2
 this->head[..].next->next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next[0]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -4465,12 +5689,30 @@ this->numElements
 3
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.pop():::EXIT0
 this_invocation_nonce
 34
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4481,25 +5723,25 @@ return
 "Tres"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644792
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Dos" ]
 1
 this->head[..].next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Uno" ]
 1
 this->head[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 nonsensical
@@ -4514,7 +5756,7 @@ this->head[..].next->next[0]
 nonsensical
 2
 this->head[..].next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -4523,12 +5765,30 @@ this->numElements
 2
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.pop():::ENTER
 this_invocation_nonce
 35
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4536,25 +5796,25 @@ Stack::publicNumLinksCreated
 9
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644792
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644792 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Dos" ]
 1
 this->head[..].next
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 [ "Uno" ]
 1
 this->head[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->next->data
 nonsensical
@@ -4569,7 +5829,7 @@ this->head[..].next->next[0]
 nonsensical
 2
 this->head[..].next[0]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->myName
 "My second stack"
@@ -4578,12 +5838,30 @@ this->numElements
 2
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.pop():::EXIT0
 this_invocation_nonce
 35
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4594,19 +5872,19 @@ return
 "Dos"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644736
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Uno" ]
 1
 this->head[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 nonsensical
@@ -4636,12 +5914,30 @@ this->numElements
 1
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.pop():::ENTER
 this_invocation_nonce
 36
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4649,19 +5945,19 @@ Stack::publicNumLinksCreated
 9
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-69644736
+<STACK_ADDR>
 1
 this->head[..]
-[ 69644736 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].data
 [ "Uno" ]
 1
 this->head[..].next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 this->head[..].next->data
 nonsensical
@@ -4691,12 +5987,30 @@ this->numElements
 1
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.pop():::EXIT0
 this_invocation_nonce
 36
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4707,10 +6021,10 @@ return
 "Uno"
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -4749,12 +6063,30 @@ this->numElements
 0
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.pop():::ENTER
 this_invocation_nonce
 37
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4762,10 +6094,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -4804,12 +6136,30 @@ this->numElements
 0
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.pop():::EXIT0
 this_invocation_nonce
 37
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4820,10 +6170,10 @@ return
 nonsensical
 2
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -4862,12 +6212,30 @@ this->numElements
 0
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.getNumStacksCreated():::ENTER
 this_invocation_nonce
 38
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4878,6 +6246,24 @@ Stack::publicNumLinksCreated
 Stack.getNumStacksCreated():::EXIT0
 this_invocation_nonce
 38
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4891,6 +6277,24 @@ return
 Stack.~Stack():::ENTER
 this_invocation_nonce
 39
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4898,10 +6302,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -4940,12 +6344,30 @@ this->numElements
 0
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.~Stack():::EXIT0
 this_invocation_nonce
 39
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -4953,10 +6375,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-3198246532
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -4995,12 +6417,30 @@ this->numElements
 0
 1
 this[0]
-3198246532
+<STACK_ADDR>
 1
 
 Stack.~Stack():::ENTER
 this_invocation_nonce
 40
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -5008,10 +6448,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -5050,12 +6490,30 @@ this->numElements
 0
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 Stack.~Stack():::EXIT0
 this_invocation_nonce
 40
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1
@@ -5063,10 +6521,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-3198246544
+<STATIC_ADDR>
 1
 this->head
-0
+<STACK_ADDR>
 1
 this->head[..]
 nonsensical
@@ -5105,12 +6563,30 @@ this->numElements
 0
 1
 this[0]
-3198246544
+<STACK_ADDR>
 1
 
 ..main():::EXIT0
 this_invocation_nonce
 0
+::__numeric_traits_integer<char>::__max
+127
+1
+::__numeric_traits_integer<int>::__min
+-2147483648
+1
+::__numeric_traits_integer<long>::__min
+-9223372036854775808
+1
+::__numeric_traits_integer<short>::__max
+32767
+1
+::__numeric_traits_integer<short>::__min
+-32768
+1
+::__numeric_traits_integer<unsigned\_long>::__digits
+64
+1
 Stack::numStacksCreated
 2
 1

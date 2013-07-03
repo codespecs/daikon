@@ -1,0 +1,133 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+
+..foo():::ENTER
+this_invocation_nonce
+1
+b
+<HEAP_ADDR>
+1
+b->dynamicIntArray
+nonsensical
+2
+b->dynamicIntArray[..]
+nonsensical
+2
+b->dynamicString
+nonsensical
+2
+b->number
+nonsensical
+2
+b->staticIntArray
+nonsensical
+2
+b->staticIntArray[..]
+nonsensical
+2
+b->staticString
+nonsensical
+2
+b[0]
+nonsensical
+2
+
+..foo():::EXIT0
+this_invocation_nonce
+1
+b
+<HEAP_ADDR>
+1
+b->dynamicIntArray
+<HEAP_ADDR>
+1
+b->dynamicIntArray[..]
+[ 0 1 2 3 4 ]
+1
+b->dynamicString
+"Hello world\n"
+1
+b->number
+42
+1
+b->staticIntArray
+<HEAP_ADDR>
+1
+b->staticIntArray[..]
+[ 10 9 8 7 6 5 4 3 2 1 ]
+1
+b->staticString
+"Hello1234"
+1
+b[0]
+<HEAP_ADDR>
+1
+
+..bar():::ENTER
+this_invocation_nonce
+2
+actualB
+<STATIC_ADDR>
+1
+actualB.dynamicIntArray
+<HEAP_ADDR>
+1
+actualB.dynamicIntArray[..]
+[ 0 1 2 3 4 ]
+1
+actualB.dynamicString
+"Hello world\n"
+1
+actualB.number
+42
+1
+actualB.staticIntArray
+<STACK_ADDR>
+1
+actualB.staticIntArray[..]
+[ 10 9 8 7 6 5 4 3 2 1 ]
+1
+actualB.staticString
+"Hello1234"
+1
+
+..bar():::EXIT0
+this_invocation_nonce
+2
+actualB
+<STATIC_ADDR>
+1
+actualB.dynamicIntArray
+<HEAP_ADDR>
+1
+actualB.dynamicIntArray[..]
+[ 0 1 2 3 4 ]
+1
+actualB.dynamicString
+"Hello world\n"
+1
+actualB.number
+42
+1
+actualB.staticIntArray
+<STACK_ADDR>
+1
+actualB.staticIntArray[..]
+[ 10 9 8 7 6 5 4 3 2 1 ]
+1
+actualB.staticString
+"Hello1234"
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+return
+0
+1
+

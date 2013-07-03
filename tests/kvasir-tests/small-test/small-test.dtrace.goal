@@ -10,10 +10,10 @@ this_invocation_nonce
 this_invocation_nonce
 1
 f
-68505640
+<STATIC_ADDR>
 1
 f[..]
-[ 68505640 ]
+[ <HEAP_ADDR> ]
 1
 f[..].a
 [ 1 ]
@@ -26,10 +26,10 @@ f[..].b
 this_invocation_nonce
 1
 f
-68505640
+<STATIC_ADDR>
 1
 f[..]
-[ 68505640 ]
+[ <HEAP_ADDR> ]
 1
 f[..].a
 [ 1 ]
@@ -42,22 +42,22 @@ f[..].b
 this_invocation_nonce
 2
 n
-68505696
+<STATIC_ADDR>
 1
 n[..]
-[ 68505696 ]
+[ <HEAP_ADDR> ]
 1
 n[..].b
 [ 2 ]
 1
 n[..].next
-[ 68505760 ]
+[ <HEAP_ADDR> ]
 1
 n[..].next->b
 [ 2 ]
 1
 n[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 n[..].next->next->b
 nonsensical
@@ -78,16 +78,16 @@ n[..].next->next[0]
 nonsensical
 2
 n[..].next->prev
-[ 68505696 ]
+[ <HEAP_ADDR> ]
 1
 n[..].next->prev[0]
-[ 68505696 ]
+[ <HEAP_ADDR> ]
 1
 n[..].next[0]
-[ 68505760 ]
+[ <HEAP_ADDR> ]
 1
 n[..].prev
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 n[..].prev[0]
 nonsensical
@@ -97,22 +97,22 @@ nonsensical
 this_invocation_nonce
 2
 n
-68505696
+<STATIC_ADDR>
 1
 n[..]
-[ 68505696 ]
+[ <HEAP_ADDR> ]
 1
 n[..].b
 [ 2 ]
 1
 n[..].next
-[ 68505760 ]
+[ <HEAP_ADDR> ]
 1
 n[..].next->b
 [ 2 ]
 1
 n[..].next->next
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 n[..].next->next->b
 nonsensical
@@ -133,16 +133,16 @@ n[..].next->next[0]
 nonsensical
 2
 n[..].next->prev
-[ 68505696 ]
+[ <HEAP_ADDR> ]
 1
 n[..].next->prev[0]
-[ 68505696 ]
+[ <HEAP_ADDR> ]
 1
 n[..].next[0]
-[ 68505760 ]
+[ <HEAP_ADDR> ]
 1
 n[..].prev
-[ 0 ]
+[ <HEAP_ADDR> ]
 1
 n[..].prev[0]
 nonsensical

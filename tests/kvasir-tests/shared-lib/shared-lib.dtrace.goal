@@ -1,23 +1,31 @@
-global.main():::ENTER
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
 argc
 1
 1
 argv
-1342168884
+<STATIC_ADDR>
 1
-argv[]
-"./shared-lib"
+argv[..]
+[ "./shared-lib" ]
 1
 
-global.main():::EXIT0
+..main():::EXIT0
+this_invocation_nonce
+0
 argc
 1
 1
 argv
-1342168884
+<STATIC_ADDR>
 1
-argv[]
-"./shared-lib"
+argv[..]
+[ "./shared-lib" ]
 1
 return
 0

@@ -98,7 +98,7 @@ int main()
   char localString33[33];
   int localInt = 100;
   buffer* cur_buffer = 0;
-  printf("buffer population[999]: %u\n", (unsigned long)population);
+  printf("buffer population[999]: %p\n", (unsigned long)population);
   printf("buffer multiDimensional[4][5][12]: %p\n", multiDimensional);
 
   cur_buffer = population;

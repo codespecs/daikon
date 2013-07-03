@@ -1,0 +1,884 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+::abracadabra
+<STATIC_ADDR>
+1
+::abracadabra.MIT_id
+<STATIC_ADDR>
+1
+::abracadabra.MIT_id[..]
+[ 5 4 6 3 7 2 8 1 9 ]
+1
+::abracadabra.birthday
+<STATIC_ADDR>
+1
+::abracadabra.birthday[..]
+[ 1983 10 30 ]
+1
+::abracadabra.social_security
+<STATIC_ADDR>
+1
+::abracadabra.social_security[..]
+[ 1 1 2 3 5 8 13 21 35 ]
+1
+::basicIntArray
+<STATIC_ADDR>
+1
+::basicIntArray[..]
+[ 10 9 8 7 6 5 4 3 2 1 ]
+1
+::eightA
+<STATIC_ADDR>
+1
+::eightA[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->C
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->C.baz_head
+[ 300 33 333 3333 33333 333333 3333333 33333333 ]
+1
+::eightA[..].B[0]->C.baz_tail
+[ 50000 55 555 5555 55555 555555 5555555 55555555 ]
+1
+::eightA[..].B[0]->C.y
+[ 4000 44 444 4444 44444 444444 4444444 44444444 ]
+1
+::eightA[..].B[0]->D
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->D->neverSeeMe
+[ 1 0 0 0 0 0 0 0 ]
+1
+::eightA[..].B[0]->D[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->bar_head
+[ 20 22 222 2222 22222 222222 2222222 22222222 ]
+1
+::eightA[..].B[0]->bar_tail
+[ 600000 66 666 6666 66666 666666 6666666 66666666 ]
+1
+::eightA[..].B[0][0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->C
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->C.baz_head
+[ -6 66 66 66 66 66 66 66 ]
+1
+::eightA[..].B[1]->C.baz_tail
+[ -10 100 1000 10000 100000 1000000 10000000 100000000 ]
+1
+::eightA[..].B[1]->C.y
+[ -8 88 888 8888 88888 888888 8888888 88888888 ]
+1
+::eightA[..].B[1]->D
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->D->neverSeeMe
+[ 1 0 0 0 0 0 0 0 ]
+1
+::eightA[..].B[1]->D[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->bar_head
+[ -4 44 44 44 44 44 44 44 ]
+1
+::eightA[..].B[1]->bar_tail
+[ -12 1200 12000 120000 1200000 1200000 12000000 120000000 ]
+1
+::eightA[..].B[1][0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->C
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->C.baz_head
+[ 9 99 999 9999 99999 999999 9999999 99999999 ]
+1
+::eightA[..].B[2]->C.baz_tail
+[ 15 1500 15000 150000 1500000 1500000 15000000 150000000 ]
+1
+::eightA[..].B[2]->C.y
+[ 12 1200 12000 120000 1200000 1200000 12000000 120000000 ]
+1
+::eightA[..].B[2]->D
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->D->neverSeeMe
+[ 1 0 0 0 0 0 0 0 ]
+1
+::eightA[..].B[2]->D[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->bar_head
+[ 6 66 666 6666 66666 666666 6666666 66666666 ]
+1
+::eightA[..].B[2]->bar_tail
+[ 18 1800 18000 180000 1800000 1800000 18000000 180000000 ]
+1
+::eightA[..].B[2][0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].foo_head
+[ 1 11 111 1111 11111 111111 1111111 11111111 ]
+1
+::eightA[..].foo_tail
+[ 7 77 777 7777 77777 777777 7777777 77777777 ]
+1
+::globalInt
+0
+1
+::globalIntPtr
+0x0
+1
+::globalIntPtr[..]
+nonsensical
+2
+::multiDimensional
+<STATIC_ADDR>
+1
+::multiDimensional[..]
+[ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
+1
+::population
+<STATIC_ADDR>
+1
+::populationPtr
+0x0
+1
+::populationPtr[..]
+nonsensical
+2
+::populationPtr[..].SS
+nonsensical
+2
+::populationPtr[..].age
+nonsensical
+2
+::populationPtr[..].firstName
+nonsensical
+2
+::populationPtr[..].lastName
+nonsensical
+2
+::populationPtr[..].mallocMePlease
+nonsensical
+2
+::populationPtr[..].middleName
+nonsensical
+2
+::populationPtr[..].weight
+nonsensical
+2
+::population[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::population[..].SS
+[ 71 72 73 74 75 ]
+1
+::population[..].age
+[ 51 52 53 54 55 ]
+1
+::population[..].firstName
+[ "hello1" "hello2" "hello3" "hello4" "hello5" ]
+1
+::population[..].lastName
+[ "baby1" "baby2" "baby3" "baby4" "baby5" ]
+1
+::population[..].mallocMePlease
+[ nonsensical nonsensical nonsensical nonsensical nonsensical ]
+1
+::population[..].middleName
+[ "world1" "world2" "world3" "world4" "world5" ]
+1
+::population[..].weight
+[ 6.1 6.2 6.3 6.4 6.5 ]
+1
+
+ArrayTest.c.returnIntSum():::ENTER
+this_invocation_nonce
+1
+::abracadabra
+<STATIC_ADDR>
+1
+::abracadabra.MIT_id
+<STATIC_ADDR>
+1
+::abracadabra.MIT_id[..]
+[ 5 4 6 3 7 2 8 1 9 ]
+1
+::abracadabra.birthday
+<STATIC_ADDR>
+1
+::abracadabra.birthday[..]
+[ 1983 10 30 ]
+1
+::abracadabra.social_security
+<STATIC_ADDR>
+1
+::abracadabra.social_security[..]
+[ 1 1 2 3 5 8 13 21 35 ]
+1
+::basicIntArray
+<STATIC_ADDR>
+1
+::basicIntArray[..]
+[ 10 9 8 7 6 5 4 3 2 1 ]
+1
+::eightA
+<STATIC_ADDR>
+1
+::eightA[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->C
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->C.baz_head
+[ 300 33 333 3333 33333 333333 3333333 33333333 ]
+1
+::eightA[..].B[0]->C.baz_tail
+[ 50000 55 555 5555 55555 555555 5555555 55555555 ]
+1
+::eightA[..].B[0]->C.y
+[ 4000 44 444 4444 44444 444444 4444444 44444444 ]
+1
+::eightA[..].B[0]->D
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->D->neverSeeMe
+[ 1 0 0 0 0 0 0 0 ]
+1
+::eightA[..].B[0]->D[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->bar_head
+[ 20 22 222 2222 22222 222222 2222222 22222222 ]
+1
+::eightA[..].B[0]->bar_tail
+[ 600000 66 666 6666 66666 666666 6666666 66666666 ]
+1
+::eightA[..].B[0][0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->C
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->C.baz_head
+[ -6 66 66 66 66 66 66 66 ]
+1
+::eightA[..].B[1]->C.baz_tail
+[ -10 100 1000 10000 100000 1000000 10000000 100000000 ]
+1
+::eightA[..].B[1]->C.y
+[ -8 88 888 8888 88888 888888 8888888 88888888 ]
+1
+::eightA[..].B[1]->D
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->D->neverSeeMe
+[ 1 0 0 0 0 0 0 0 ]
+1
+::eightA[..].B[1]->D[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->bar_head
+[ -4 44 44 44 44 44 44 44 ]
+1
+::eightA[..].B[1]->bar_tail
+[ -12 1200 12000 120000 1200000 1200000 12000000 120000000 ]
+1
+::eightA[..].B[1][0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->C
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->C.baz_head
+[ 9 99 999 9999 99999 999999 9999999 99999999 ]
+1
+::eightA[..].B[2]->C.baz_tail
+[ 15 1500 15000 150000 1500000 1500000 15000000 150000000 ]
+1
+::eightA[..].B[2]->C.y
+[ 12 1200 12000 120000 1200000 1200000 12000000 120000000 ]
+1
+::eightA[..].B[2]->D
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->D->neverSeeMe
+[ 1 0 0 0 0 0 0 0 ]
+1
+::eightA[..].B[2]->D[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->bar_head
+[ 6 66 666 6666 66666 666666 6666666 66666666 ]
+1
+::eightA[..].B[2]->bar_tail
+[ 18 1800 18000 180000 1800000 1800000 18000000 180000000 ]
+1
+::eightA[..].B[2][0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].foo_head
+[ 1 11 111 1111 11111 111111 1111111 11111111 ]
+1
+::eightA[..].foo_tail
+[ 7 77 777 7777 77777 777777 7777777 77777777 ]
+1
+::globalInt
+6170
+1
+::globalIntPtr
+<HEAP_ADDR>
+1
+::globalIntPtr[..]
+[ 6111 ]
+1
+::multiDimensional
+<STATIC_ADDR>
+1
+::multiDimensional[..]
+[ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
+1
+::population
+<STATIC_ADDR>
+1
+::populationPtr
+<HEAP_ADDR>
+1
+::populationPtr[..]
+[ <HEAP_ADDR> ]
+1
+::populationPtr[..].SS
+[ 12121212 ]
+1
+::populationPtr[..].age
+[ 69 ]
+1
+::populationPtr[..].firstName
+[ "123456789" ]
+1
+::populationPtr[..].lastName
+[ "supercalifragilisticexpialadocious" ]
+1
+::populationPtr[..].mallocMePlease
+nonsensical
+2
+::populationPtr[..].middleName
+[ "Ricky" ]
+1
+::populationPtr[..].weight
+[ 155.5 ]
+1
+::population[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::population[..].SS
+[ 12121212 72 73 74 75 ]
+1
+::population[..].age
+[ 51 52 53 69 55 ]
+1
+::population[..].firstName
+[ "123456789" "hello2" "hello3" "hello4" "hello5" ]
+1
+::population[..].lastName
+[ "supercalifragilisticexpialadocious" "baby2" "baby3" "baby4" "baby5" ]
+1
+::population[..].mallocMePlease
+[ "i just got malloc'ed - 00000!\n\n	" nonsensical "i just got malloc'ed - 22222!\n\n	" nonsensical "i just got malloc'ed - 44444!\n\n	" ]
+1
+::population[..].middleName
+[ "Ricky" "world2" "world3" "world4" "world5" ]
+1
+::population[..].weight
+[ 155 6.2 6.3 6.4 6.5 ]
+1
+::static_local_array
+<STATIC_ADDR>
+1
+::static_local_array[..]
+[ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
+1
+a
+250
+1
+b
+<HEAP_ADDR>
+1
+b[..]
+[ 61 61 62 63 65 68 ]
+1
+
+ArrayTest.c.returnIntSum():::EXIT0
+this_invocation_nonce
+1
+::abracadabra
+<STATIC_ADDR>
+1
+::abracadabra.MIT_id
+<STATIC_ADDR>
+1
+::abracadabra.MIT_id[..]
+[ 5 4 6 3 7 2 8 1 9 ]
+1
+::abracadabra.birthday
+<STATIC_ADDR>
+1
+::abracadabra.birthday[..]
+[ 1983 10 30 ]
+1
+::abracadabra.social_security
+<STATIC_ADDR>
+1
+::abracadabra.social_security[..]
+[ 1 1 2 3 5 8 13 21 35 ]
+1
+::basicIntArray
+<STATIC_ADDR>
+1
+::basicIntArray[..]
+[ 10 9 8 7 6 5 4 3 2 1 ]
+1
+::eightA
+<STATIC_ADDR>
+1
+::eightA[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->C
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->C.baz_head
+[ 300 33 333 3333 33333 333333 3333333 33333333 ]
+1
+::eightA[..].B[0]->C.baz_tail
+[ 50000 55 555 5555 55555 555555 5555555 55555555 ]
+1
+::eightA[..].B[0]->C.y
+[ 4000 44 444 4444 44444 444444 4444444 44444444 ]
+1
+::eightA[..].B[0]->D
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->D->neverSeeMe
+[ 1 0 0 0 0 0 0 0 ]
+1
+::eightA[..].B[0]->D[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->bar_head
+[ 20 22 222 2222 22222 222222 2222222 22222222 ]
+1
+::eightA[..].B[0]->bar_tail
+[ 600000 66 666 6666 66666 666666 6666666 66666666 ]
+1
+::eightA[..].B[0][0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->C
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->C.baz_head
+[ -6 66 66 66 66 66 66 66 ]
+1
+::eightA[..].B[1]->C.baz_tail
+[ -10 100 1000 10000 100000 1000000 10000000 100000000 ]
+1
+::eightA[..].B[1]->C.y
+[ -8 88 888 8888 88888 888888 8888888 88888888 ]
+1
+::eightA[..].B[1]->D
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->D->neverSeeMe
+[ 1 0 0 0 0 0 0 0 ]
+1
+::eightA[..].B[1]->D[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->bar_head
+[ -4 44 44 44 44 44 44 44 ]
+1
+::eightA[..].B[1]->bar_tail
+[ -12 1200 12000 120000 1200000 1200000 12000000 120000000 ]
+1
+::eightA[..].B[1][0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->C
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->C.baz_head
+[ 9 99 999 9999 99999 999999 9999999 99999999 ]
+1
+::eightA[..].B[2]->C.baz_tail
+[ 15 1500 15000 150000 1500000 1500000 15000000 150000000 ]
+1
+::eightA[..].B[2]->C.y
+[ 12 1200 12000 120000 1200000 1200000 12000000 120000000 ]
+1
+::eightA[..].B[2]->D
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->D->neverSeeMe
+[ 1 0 0 0 0 0 0 0 ]
+1
+::eightA[..].B[2]->D[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->bar_head
+[ 6 66 666 6666 66666 666666 6666666 66666666 ]
+1
+::eightA[..].B[2]->bar_tail
+[ 18 1800 18000 180000 1800000 1800000 18000000 180000000 ]
+1
+::eightA[..].B[2][0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].foo_head
+[ 1 11 111 1111 11111 111111 1111111 11111111 ]
+1
+::eightA[..].foo_tail
+[ 7 77 777 7777 77777 777777 7777777 77777777 ]
+1
+::globalInt
+6170
+1
+::globalIntPtr
+<HEAP_ADDR>
+1
+::globalIntPtr[..]
+[ 6111 ]
+1
+::multiDimensional
+<STATIC_ADDR>
+1
+::multiDimensional[..]
+[ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
+1
+::population
+<STATIC_ADDR>
+1
+::populationPtr
+<HEAP_ADDR>
+1
+::populationPtr[..]
+[ <HEAP_ADDR> ]
+1
+::populationPtr[..].SS
+[ 12121212 ]
+1
+::populationPtr[..].age
+[ 69 ]
+1
+::populationPtr[..].firstName
+[ "123456789" ]
+1
+::populationPtr[..].lastName
+[ "supercalifragilisticexpialadocious" ]
+1
+::populationPtr[..].mallocMePlease
+nonsensical
+2
+::populationPtr[..].middleName
+[ "Ricky" ]
+1
+::populationPtr[..].weight
+[ 155.5 ]
+1
+::population[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::population[..].SS
+[ 12121212 72 73 74 75 ]
+1
+::population[..].age
+[ 51 52 53 69 55 ]
+1
+::population[..].firstName
+[ "123456789" "hello2" "hello3" "hello4" "hello5" ]
+1
+::population[..].lastName
+[ "supercalifragilisticexpialadocious" "baby2" "baby3" "baby4" "baby5" ]
+1
+::population[..].mallocMePlease
+[ "i just got malloc'ed - 00000!\n\n	" nonsensical "i just got malloc'ed - 22222!\n\n	" nonsensical "i just got malloc'ed - 44444!\n\n	" ]
+1
+::population[..].middleName
+[ "Ricky" "world2" "world3" "world4" "world5" ]
+1
+::population[..].weight
+[ 155 6.2 6.3 6.4 6.5 ]
+1
+::static_local_array
+<STATIC_ADDR>
+1
+::static_local_array[..]
+[ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
+1
+a
+250
+1
+b
+<HEAP_ADDR>
+1
+b[..]
+[ 61 61 62 63 65 68 ]
+1
+return
+311
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+::abracadabra
+<STATIC_ADDR>
+1
+::abracadabra.MIT_id
+<STATIC_ADDR>
+1
+::abracadabra.MIT_id[..]
+[ 5 4 6 3 7 2 8 1 9 ]
+1
+::abracadabra.birthday
+<STATIC_ADDR>
+1
+::abracadabra.birthday[..]
+[ 1983 10 30 ]
+1
+::abracadabra.social_security
+<STATIC_ADDR>
+1
+::abracadabra.social_security[..]
+[ 1 1 2 3 5 8 13 21 35 ]
+1
+::basicIntArray
+<STATIC_ADDR>
+1
+::basicIntArray[..]
+[ 10 9 8 7 6 5 4 3 2 1 ]
+1
+::eightA
+<STATIC_ADDR>
+1
+::eightA[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->C
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->C.baz_head
+[ 300 33 333 3333 33333 333333 3333333 33333333 ]
+1
+::eightA[..].B[0]->C.baz_tail
+[ 50000 55 555 5555 55555 555555 5555555 55555555 ]
+1
+::eightA[..].B[0]->C.y
+[ 4000 44 444 4444 44444 444444 4444444 44444444 ]
+1
+::eightA[..].B[0]->D
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->D->neverSeeMe
+[ 1 0 0 0 0 0 0 0 ]
+1
+::eightA[..].B[0]->D[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[0]->bar_head
+[ 20 22 222 2222 22222 222222 2222222 22222222 ]
+1
+::eightA[..].B[0]->bar_tail
+[ 600000 66 666 6666 66666 666666 6666666 66666666 ]
+1
+::eightA[..].B[0][0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->C
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->C.baz_head
+[ -6 66 66 66 66 66 66 66 ]
+1
+::eightA[..].B[1]->C.baz_tail
+[ -10 100 1000 10000 100000 1000000 10000000 100000000 ]
+1
+::eightA[..].B[1]->C.y
+[ -8 88 888 8888 88888 888888 8888888 88888888 ]
+1
+::eightA[..].B[1]->D
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->D->neverSeeMe
+[ 1 0 0 0 0 0 0 0 ]
+1
+::eightA[..].B[1]->D[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[1]->bar_head
+[ -4 44 44 44 44 44 44 44 ]
+1
+::eightA[..].B[1]->bar_tail
+[ -12 1200 12000 120000 1200000 1200000 12000000 120000000 ]
+1
+::eightA[..].B[1][0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->C
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->C.baz_head
+[ 9 99 999 9999 99999 999999 9999999 99999999 ]
+1
+::eightA[..].B[2]->C.baz_tail
+[ 15 1500 15000 150000 1500000 1500000 15000000 150000000 ]
+1
+::eightA[..].B[2]->C.y
+[ 12 1200 12000 120000 1200000 1200000 12000000 120000000 ]
+1
+::eightA[..].B[2]->D
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->D->neverSeeMe
+[ 1 0 0 0 0 0 0 0 ]
+1
+::eightA[..].B[2]->D[0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].B[2]->bar_head
+[ 6 66 666 6666 66666 666666 6666666 66666666 ]
+1
+::eightA[..].B[2]->bar_tail
+[ 18 1800 18000 180000 1800000 1800000 18000000 180000000 ]
+1
+::eightA[..].B[2][0]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::eightA[..].foo_head
+[ 1 11 111 1111 11111 111111 1111111 11111111 ]
+1
+::eightA[..].foo_tail
+[ 7 77 777 7777 77777 777777 7777777 77777777 ]
+1
+::globalInt
+6170
+1
+::globalIntPtr
+<HEAP_ADDR>
+1
+::globalIntPtr[..]
+[ 6111 ]
+1
+::multiDimensional
+<STATIC_ADDR>
+1
+::multiDimensional[..]
+[ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
+1
+::population
+<STATIC_ADDR>
+1
+::populationPtr
+<HEAP_ADDR>
+1
+::populationPtr[..]
+[ <HEAP_ADDR> ]
+1
+::populationPtr[..].SS
+[ 12121212 ]
+1
+::populationPtr[..].age
+[ 69 ]
+1
+::populationPtr[..].firstName
+[ "123456789" ]
+1
+::populationPtr[..].lastName
+[ "supercalifragilisticexpialadocious" ]
+1
+::populationPtr[..].mallocMePlease
+nonsensical
+2
+::populationPtr[..].middleName
+[ "Ricky" ]
+1
+::populationPtr[..].weight
+[ 155.5 ]
+1
+::population[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::population[..].SS
+[ 12121212 72 73 74 75 ]
+1
+::population[..].age
+[ 51 52 53 69 55 ]
+1
+::population[..].firstName
+[ "123456789" "hello2" "hello3" "hello4" "hello5" ]
+1
+::population[..].lastName
+[ "supercalifragilisticexpialadocious" "baby2" "baby3" "baby4" "baby5" ]
+1
+::population[..].mallocMePlease
+[ "i just got malloc'ed - 00000!\n\n	" nonsensical "i just got malloc'ed - 22222!\n\n	" nonsensical "i just got malloc'ed - 44444!\n\n	" ]
+1
+::population[..].middleName
+[ "Ricky" "world2" "world3" "world4" "world5" ]
+1
+::population[..].weight
+[ 155 6.2 6.3 6.4 6.5 ]
+1
+return
+0
+1
+

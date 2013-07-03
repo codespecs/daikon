@@ -19,7 +19,7 @@ dat
 101
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -31,13 +31,13 @@ this->numElts
 0
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 nonsensical
 2
 this[0]
-3197599372
+3197472264
 1
 
 Stack.push(int):::EXIT0
@@ -50,7 +50,7 @@ dat
 101
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -62,13 +62,13 @@ this->numElts
 1
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.push(int):::ENTER
@@ -81,7 +81,7 @@ dat
 102
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -93,13 +93,13 @@ this->numElts
 1
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.push(int):::EXIT0
@@ -112,7 +112,7 @@ dat
 102
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -124,13 +124,13 @@ this->numElts
 2
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.push(int):::ENTER
@@ -143,7 +143,7 @@ dat
 103
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -155,13 +155,13 @@ this->numElts
 2
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.push(int):::EXIT0
@@ -174,7 +174,7 @@ dat
 103
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -186,13 +186,13 @@ this->numElts
 3
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.push(int):::ENTER
@@ -205,7 +205,7 @@ dat
 104
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -217,13 +217,13 @@ this->numElts
 3
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.push(int):::EXIT0
@@ -236,7 +236,7 @@ dat
 104
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -248,13 +248,13 @@ this->numElts
 4
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.push(int):::ENTER
@@ -267,7 +267,7 @@ dat
 105
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -279,13 +279,13 @@ this->numElts
 4
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.push(int):::EXIT0
@@ -298,7 +298,7 @@ dat
 105
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -310,13 +310,13 @@ this->numElts
 5
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.getMaxElts():::ENTER
@@ -326,7 +326,7 @@ Stack::numStacksCreated
 1
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -338,13 +338,13 @@ this->numElts
 5
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.getMaxElts():::EXIT0
@@ -357,7 +357,7 @@ return
 10
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -369,13 +369,13 @@ this->numElts
 5
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.getName():::ENTER
@@ -385,7 +385,7 @@ Stack::numStacksCreated
 1
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -397,13 +397,13 @@ this->numElts
 5
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.getName():::EXIT0
@@ -416,7 +416,7 @@ return
 "My first stack"
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -428,13 +428,13 @@ this->numElts
 5
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.getNumStacksCreated():::ENTER
@@ -461,7 +461,7 @@ Stack::numStacksCreated
 1
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -473,13 +473,13 @@ this->numElts
 5
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.privateStuff():::ENTER
@@ -489,7 +489,7 @@ Stack::numStacksCreated
 1
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -501,13 +501,13 @@ this->numElts
 5
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.privateStuff():::EXIT0
@@ -520,7 +520,7 @@ return
 42
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -532,13 +532,13 @@ this->numElts
 5
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.pop():::EXIT0
@@ -551,7 +551,7 @@ return
 105
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -563,13 +563,13 @@ this->numElts
 4
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.pop():::ENTER
@@ -579,7 +579,7 @@ Stack::numStacksCreated
 1
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -591,13 +591,13 @@ this->numElts
 4
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.privateStuff():::ENTER
@@ -607,7 +607,7 @@ Stack::numStacksCreated
 1
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -619,13 +619,13 @@ this->numElts
 4
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.privateStuff():::EXIT0
@@ -638,7 +638,7 @@ return
 42
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -650,13 +650,13 @@ this->numElts
 4
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.pop():::EXIT0
@@ -669,7 +669,7 @@ return
 104
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -681,13 +681,13 @@ this->numElts
 3
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.pop():::ENTER
@@ -697,7 +697,7 @@ Stack::numStacksCreated
 1
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -709,13 +709,13 @@ this->numElts
 3
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.privateStuff():::ENTER
@@ -725,7 +725,7 @@ Stack::numStacksCreated
 1
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -737,13 +737,13 @@ this->numElts
 3
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.privateStuff():::EXIT0
@@ -756,7 +756,7 @@ return
 42
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -768,13 +768,13 @@ this->numElts
 3
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.pop():::EXIT0
@@ -787,7 +787,7 @@ return
 103
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -799,13 +799,13 @@ this->numElts
 2
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.pop():::ENTER
@@ -815,7 +815,7 @@ Stack::numStacksCreated
 1
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -827,13 +827,13 @@ this->numElts
 2
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.privateStuff():::ENTER
@@ -843,7 +843,7 @@ Stack::numStacksCreated
 1
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -855,13 +855,13 @@ this->numElts
 2
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.privateStuff():::EXIT0
@@ -874,7 +874,7 @@ return
 42
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -886,13 +886,13 @@ this->numElts
 2
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.pop():::EXIT0
@@ -905,7 +905,7 @@ return
 102
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -917,13 +917,13 @@ this->numElts
 1
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.pop():::ENTER
@@ -933,7 +933,7 @@ Stack::numStacksCreated
 1
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -945,13 +945,13 @@ this->numElts
 1
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.privateStuff():::ENTER
@@ -961,7 +961,7 @@ Stack::numStacksCreated
 1
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -973,13 +973,13 @@ this->numElts
 1
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.privateStuff():::EXIT0
@@ -992,7 +992,7 @@ return
 42
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -1004,13 +1004,13 @@ this->numElts
 1
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.pop():::EXIT0
@@ -1023,7 +1023,7 @@ return
 101
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -1035,13 +1035,13 @@ this->numElts
 0
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.pop():::ENTER
@@ -1051,7 +1051,7 @@ Stack::numStacksCreated
 1
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -1063,13 +1063,13 @@ this->numElts
 0
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.pop():::EXIT0
@@ -1082,7 +1082,7 @@ return
 0
 1
 this
-3197599372
+3197472264
 1
 this->maxElts
 10
@@ -1094,13 +1094,13 @@ this->numElts
 0
 1
 this->stackRep
-69644392
+69881960
 1
 this->stackRep[..]
 [ 101 102 103 104 105 ]
 1
 this[0]
-3197599372
+3197472264
 1
 
 Stack.push(int):::ENTER
@@ -1113,7 +1113,7 @@ dat
 1001
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1125,13 +1125,13 @@ this->numElts
 0
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 nonsensical
 2
 this[0]
-3197599356
+3197472248
 1
 
 Stack.push(int):::EXIT0
@@ -1144,7 +1144,7 @@ dat
 1001
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1156,13 +1156,13 @@ this->numElts
 1
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.push(int):::ENTER
@@ -1175,7 +1175,7 @@ dat
 1002
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1187,13 +1187,13 @@ this->numElts
 1
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.push(int):::EXIT0
@@ -1206,7 +1206,7 @@ dat
 1002
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1218,13 +1218,13 @@ this->numElts
 2
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.push(int):::ENTER
@@ -1237,7 +1237,7 @@ dat
 1003
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1249,13 +1249,13 @@ this->numElts
 2
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.push(int):::EXIT0
@@ -1268,7 +1268,7 @@ dat
 1003
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1280,13 +1280,13 @@ this->numElts
 3
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.getMaxElts():::ENTER
@@ -1296,7 +1296,7 @@ Stack::numStacksCreated
 2
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1308,13 +1308,13 @@ this->numElts
 3
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.getMaxElts():::EXIT0
@@ -1327,7 +1327,7 @@ return
 5
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1339,13 +1339,13 @@ this->numElts
 3
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.getName():::ENTER
@@ -1355,7 +1355,7 @@ Stack::numStacksCreated
 2
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1367,13 +1367,13 @@ this->numElts
 3
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.getName():::EXIT0
@@ -1386,7 +1386,7 @@ return
 "My second stack"
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1398,13 +1398,13 @@ this->numElts
 3
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.getNumStacksCreated():::ENTER
@@ -1431,7 +1431,7 @@ Stack::numStacksCreated
 2
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1443,13 +1443,13 @@ this->numElts
 3
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.privateStuff():::ENTER
@@ -1459,7 +1459,7 @@ Stack::numStacksCreated
 2
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1471,13 +1471,13 @@ this->numElts
 3
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.privateStuff():::EXIT0
@@ -1490,7 +1490,7 @@ return
 42
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1502,13 +1502,13 @@ this->numElts
 3
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.pop():::EXIT0
@@ -1521,7 +1521,7 @@ return
 1003
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1533,13 +1533,13 @@ this->numElts
 2
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.pop():::ENTER
@@ -1549,7 +1549,7 @@ Stack::numStacksCreated
 2
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1561,13 +1561,13 @@ this->numElts
 2
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.privateStuff():::ENTER
@@ -1577,7 +1577,7 @@ Stack::numStacksCreated
 2
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1589,13 +1589,13 @@ this->numElts
 2
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.privateStuff():::EXIT0
@@ -1608,7 +1608,7 @@ return
 42
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1620,13 +1620,13 @@ this->numElts
 2
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.pop():::EXIT0
@@ -1639,7 +1639,7 @@ return
 1002
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1651,13 +1651,13 @@ this->numElts
 1
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.pop():::ENTER
@@ -1667,7 +1667,7 @@ Stack::numStacksCreated
 2
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1679,13 +1679,13 @@ this->numElts
 1
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.privateStuff():::ENTER
@@ -1695,7 +1695,7 @@ Stack::numStacksCreated
 2
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1707,13 +1707,13 @@ this->numElts
 1
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.privateStuff():::EXIT0
@@ -1726,7 +1726,7 @@ return
 42
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1738,13 +1738,13 @@ this->numElts
 1
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.pop():::EXIT0
@@ -1757,7 +1757,7 @@ return
 1001
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1769,13 +1769,13 @@ this->numElts
 0
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.pop():::ENTER
@@ -1785,7 +1785,7 @@ Stack::numStacksCreated
 2
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1797,13 +1797,13 @@ this->numElts
 0
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 Stack.pop():::EXIT0
@@ -1816,7 +1816,7 @@ return
 0
 1
 this
-3197599356
+3197472248
 1
 this->maxElts
 5
@@ -1828,13 +1828,13 @@ this->numElts
 0
 1
 this->stackRep
-69644544
+69882112
 1
 this->stackRep[..]
 [ 1001 1002 1003 ]
 1
 this[0]
-3197599356
+3197472248
 1
 
 ..main():::EXIT0

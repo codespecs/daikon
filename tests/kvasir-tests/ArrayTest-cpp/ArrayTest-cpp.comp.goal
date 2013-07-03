@@ -8,6 +8,7 @@
 ::abracadabra.social_security[..]
 ::basicIntArray
 ::basicIntArray[..]
+::charBuffer
 ::eightA
 ::eightA[..]
 ::eightA[..].B[0]
@@ -80,6 +81,7 @@ over
 ::abracadabra.social_security[..]
 ::basicIntArray
 ::basicIntArray[..]
+::charBuffer
 ::eightA
 ::eightA[..]
 ::eightA[..].B[0]
@@ -153,6 +155,7 @@ return
 ::abracadabra.social_security[..]
 ::basicIntArray
 ::basicIntArray[..]
+::charBuffer
 ::eightA
 ::eightA[..]
 ::eightA[..].B[0]
@@ -226,6 +229,7 @@ load
 ::abracadabra.social_security[..]
 ::basicIntArray
 ::basicIntArray[..]
+::charBuffer
 ::eightA
 ::eightA[..]
 ::eightA[..].B[0]
@@ -303,38 +307,34 @@ return
 ::eightA[..]
 ::eightA[..].B[0]
 ::eightA[..].B[0]->C
-::eightA[..].B[0]->C.baz_head
+::eightA[..].B[0]->C.baz_head ::eightA[..].B[0]->bar_head ::eightA[..].foo_head
 ::eightA[..].B[0]->C.baz_tail
 ::eightA[..].B[0]->C.y
 ::eightA[..].B[0]->D
 ::eightA[..].B[0]->D->neverSeeMe
 ::eightA[..].B[0]->D[0]
-::eightA[..].B[0]->bar_head
 ::eightA[..].B[0]->bar_tail
 ::eightA[..].B[0][0]
 ::eightA[..].B[1]
 ::eightA[..].B[1]->C
-::eightA[..].B[1]->C.baz_head
+::eightA[..].B[1]->C.baz_head ::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->C.baz_tail
 ::eightA[..].B[1]->C.y
 ::eightA[..].B[1]->D
 ::eightA[..].B[1]->D->neverSeeMe
 ::eightA[..].B[1]->D[0]
-::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->bar_tail
 ::eightA[..].B[1][0]
 ::eightA[..].B[2]
 ::eightA[..].B[2]->C
-::eightA[..].B[2]->C.baz_head
+::eightA[..].B[2]->C.baz_head ::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->C.baz_tail
 ::eightA[..].B[2]->C.y
 ::eightA[..].B[2]->D
 ::eightA[..].B[2]->D->neverSeeMe
 ::eightA[..].B[2]->D[0]
-::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->bar_tail
 ::eightA[..].B[2][0]
-::eightA[..].foo_head
 ::eightA[..].foo_tail
 ::globalInt
 ::globalIntPtr
@@ -347,16 +347,16 @@ return
 ::populationPtr[..].SS
 ::populationPtr[..].age
 ::populationPtr[..].firstName
-::populationPtr[..].lastName ::population[..].lastName
+::populationPtr[..].lastName
 ::populationPtr[..].mallocMePlease
 ::populationPtr[..].middleName
 ::populationPtr[..].weight ::population[..].weight
 ::population[..]
 ::population[..].SS
-::population[..].age
+::population[..].age ::population[..].middleName
 ::population[..].firstName
+::population[..].lastName
 ::population[..].mallocMePlease
-::population[..].middleName
 
 ..main():::EXIT0
 ::abracadabra ::abracadabra.social_security[..]
@@ -371,38 +371,34 @@ return
 ::eightA[..]
 ::eightA[..].B[0]
 ::eightA[..].B[0]->C
-::eightA[..].B[0]->C.baz_head
+::eightA[..].B[0]->C.baz_head ::eightA[..].B[0]->bar_head ::eightA[..].foo_head
 ::eightA[..].B[0]->C.baz_tail
 ::eightA[..].B[0]->C.y
 ::eightA[..].B[0]->D
 ::eightA[..].B[0]->D->neverSeeMe
 ::eightA[..].B[0]->D[0]
-::eightA[..].B[0]->bar_head
 ::eightA[..].B[0]->bar_tail
 ::eightA[..].B[0][0]
 ::eightA[..].B[1]
 ::eightA[..].B[1]->C
-::eightA[..].B[1]->C.baz_head
+::eightA[..].B[1]->C.baz_head ::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->C.baz_tail
 ::eightA[..].B[1]->C.y
 ::eightA[..].B[1]->D
 ::eightA[..].B[1]->D->neverSeeMe
 ::eightA[..].B[1]->D[0]
-::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->bar_tail
 ::eightA[..].B[1][0]
 ::eightA[..].B[2]
 ::eightA[..].B[2]->C
-::eightA[..].B[2]->C.baz_head
+::eightA[..].B[2]->C.baz_head ::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->C.baz_tail
 ::eightA[..].B[2]->C.y
 ::eightA[..].B[2]->D
 ::eightA[..].B[2]->D->neverSeeMe
 ::eightA[..].B[2]->D[0]
-::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->bar_tail
 ::eightA[..].B[2][0]
-::eightA[..].foo_head
 ::eightA[..].foo_tail
 ::globalInt
 ::globalIntPtr
@@ -415,16 +411,16 @@ return
 ::populationPtr[..].SS
 ::populationPtr[..].age
 ::populationPtr[..].firstName
-::populationPtr[..].lastName ::population[..].lastName
+::populationPtr[..].lastName
 ::populationPtr[..].mallocMePlease
 ::populationPtr[..].middleName
 ::populationPtr[..].weight ::population[..].weight
 ::population[..]
 ::population[..].SS
-::population[..].age
+::population[..].age ::population[..].middleName
 ::population[..].firstName
+::population[..].lastName
 ::population[..].mallocMePlease
-::population[..].middleName
 return
 
 ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
@@ -686,15 +682,7 @@ return[..].B[2][0]
 return[..].foo_head
 return[..].foo_tail
 
-._24:::OBJECT
-
-._25:::OBJECT
-
-._26:::OBJECT
-
-._27:::OBJECT
-
-._28:::OBJECT
+A:::OBJECT
 
 ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
 ::abracadabra ::abracadabra.social_security[..]
@@ -709,38 +697,34 @@ ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
 ::eightA[..]
 ::eightA[..].B[0]
 ::eightA[..].B[0]->C
-::eightA[..].B[0]->C.baz_head
+::eightA[..].B[0]->C.baz_head ::eightA[..].B[0]->bar_head ::eightA[..].foo_head
 ::eightA[..].B[0]->C.baz_tail
 ::eightA[..].B[0]->C.y
 ::eightA[..].B[0]->D
 ::eightA[..].B[0]->D->neverSeeMe
 ::eightA[..].B[0]->D[0]
-::eightA[..].B[0]->bar_head
 ::eightA[..].B[0]->bar_tail
 ::eightA[..].B[0][0]
 ::eightA[..].B[1]
 ::eightA[..].B[1]->C
-::eightA[..].B[1]->C.baz_head
+::eightA[..].B[1]->C.baz_head ::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->C.baz_tail
 ::eightA[..].B[1]->C.y
 ::eightA[..].B[1]->D
 ::eightA[..].B[1]->D->neverSeeMe
 ::eightA[..].B[1]->D[0]
-::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->bar_tail
 ::eightA[..].B[1][0]
 ::eightA[..].B[2]
 ::eightA[..].B[2]->C
-::eightA[..].B[2]->C.baz_head
+::eightA[..].B[2]->C.baz_head ::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->C.baz_tail
 ::eightA[..].B[2]->C.y
 ::eightA[..].B[2]->D
 ::eightA[..].B[2]->D->neverSeeMe
 ::eightA[..].B[2]->D[0]
-::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->bar_tail
 ::eightA[..].B[2][0]
-::eightA[..].foo_head
 ::eightA[..].foo_tail
 ::globalInt
 ::globalIntPtr
@@ -753,16 +737,18 @@ ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
 ::populationPtr[..].SS
 ::populationPtr[..].age
 ::populationPtr[..].firstName
-::populationPtr[..].lastName ::population[..].lastName
+::populationPtr[..].lastName
 ::populationPtr[..].mallocMePlease
 ::populationPtr[..].middleName
 ::populationPtr[..].weight ::population[..].weight
 ::population[..]
 ::population[..].SS
-::population[..].age
+::population[..].age ::population[..].middleName
 ::population[..].firstName
+::population[..].lastName
 ::population[..].mallocMePlease
-::population[..].middleName
+::static_local_array
+::static_local_array[..]
 a b[..]
 b
 
@@ -779,38 +765,34 @@ ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
 ::eightA[..]
 ::eightA[..].B[0]
 ::eightA[..].B[0]->C
-::eightA[..].B[0]->C.baz_head
+::eightA[..].B[0]->C.baz_head ::eightA[..].B[0]->bar_head ::eightA[..].foo_head
 ::eightA[..].B[0]->C.baz_tail
 ::eightA[..].B[0]->C.y
 ::eightA[..].B[0]->D
 ::eightA[..].B[0]->D->neverSeeMe
 ::eightA[..].B[0]->D[0]
-::eightA[..].B[0]->bar_head
 ::eightA[..].B[0]->bar_tail
 ::eightA[..].B[0][0]
 ::eightA[..].B[1]
 ::eightA[..].B[1]->C
-::eightA[..].B[1]->C.baz_head
+::eightA[..].B[1]->C.baz_head ::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->C.baz_tail
 ::eightA[..].B[1]->C.y
 ::eightA[..].B[1]->D
 ::eightA[..].B[1]->D->neverSeeMe
 ::eightA[..].B[1]->D[0]
-::eightA[..].B[1]->bar_head
 ::eightA[..].B[1]->bar_tail
 ::eightA[..].B[1][0]
 ::eightA[..].B[2]
 ::eightA[..].B[2]->C
-::eightA[..].B[2]->C.baz_head
+::eightA[..].B[2]->C.baz_head ::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->C.baz_tail
 ::eightA[..].B[2]->C.y
 ::eightA[..].B[2]->D
 ::eightA[..].B[2]->D->neverSeeMe
 ::eightA[..].B[2]->D[0]
-::eightA[..].B[2]->bar_head
 ::eightA[..].B[2]->bar_tail
 ::eightA[..].B[2][0]
-::eightA[..].foo_head
 ::eightA[..].foo_tail
 ::globalInt
 ::globalIntPtr
@@ -823,18 +805,28 @@ ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
 ::populationPtr[..].SS
 ::populationPtr[..].age
 ::populationPtr[..].firstName
-::populationPtr[..].lastName ::population[..].lastName
+::populationPtr[..].lastName
 ::populationPtr[..].mallocMePlease
 ::populationPtr[..].middleName
 ::populationPtr[..].weight ::population[..].weight
 ::population[..]
 ::population[..].SS
-::population[..].age
+::population[..].age ::population[..].middleName
 ::population[..].firstName
+::population[..].lastName
 ::population[..].mallocMePlease
-::population[..].middleName
+::static_local_array
+::static_local_array[..]
 a b[..] return
 b
 
 _buffers:::OBJECT
+
+array_struct:::OBJECT
+
+unnamed_DWARF_ID_1:::OBJECT
+
+unnamed_DWARF_ID_2:::OBJECT
+
+unnamed_DWARF_ID_3:::OBJECT
 

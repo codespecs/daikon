@@ -3,8 +3,7 @@
 ==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
 ==PID== Command: ./ArrayTest
 ==PID== 
-
-buffer population[999]: 134******
+buffer population[999]: <STATIC_ADDR>
 buffer multiDimensional[4][5][12]: <STATIC_ADDR>
 123456789 51 Ricky 155.000000 supercalifragilisticexpialadocious 12121212
 123456789 69 Ricky 155.500000 supercalifragilisticexpialadocious 12121212

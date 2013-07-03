@@ -3,7 +3,7 @@
 ==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
 ==PID== Command: ./gzip -v1 file
 ==PID== 
-file:	 27.0% -- replaced with file.gz
+file:	 28.5% -- replaced with file.gz
 ==PID== 
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
 0000000 1f 8b 08 08 ce fa ed fe 04 03 66 69 6c 65 00 6c

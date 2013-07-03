@@ -40,10 +40,10 @@ b
 123456789
 1
 bp
-3197115992
+<STATIC_ADDR>
 1
 bp[..]
-[ 3197115996 ]
+[ <STACK_ADDR> ]
 1
 bp[..]->char_val
 [ 1 ]
@@ -61,19 +61,19 @@ bp[..]->ushort_val
 [ 4 ]
 1
 bp[..][0]
-[ 3197115996 ]
+[ <STACK_ADDR> ]
 1
 c
 96
 1
 cp
-3197115960
+<STATIC_ADDR>
 1
 cp[..]
-[ 3197115964 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->basic1
-[ 3197115968 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->basic1.char_val
 [ 0 ]
@@ -91,7 +91,7 @@ cp[..]->basic1.ushort_val
 [ 0 ]
 1
 cp[..]->basic2
-[ 0 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->basic2->char_val
 nonsensical
@@ -118,7 +118,7 @@ cp[..]->footer
 [ 0 ]
 1
 cp[..]->myString
-[ 0 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->myString[0]
 nonsensical
@@ -127,7 +127,7 @@ cp[..]->myString[0][0]
 nonsensical
 2
 cp[..][0]
-[ 3197115964 ]
+[ <STACK_ADDR> ]
 1
 d
 2.71817994
@@ -155,7 +155,7 @@ this_invocation_nonce
 "ABCDEFGHIJKLMNOPQRSTUVWXYV1234567890"
 1
 a
-1655190020
+<STATIC_ADDR>
 1
 a.char_val
 -42
@@ -189,7 +189,7 @@ this_invocation_nonce
 "ABCDEFGHIJKLMNOPQRSTUVWXYV1234567890"
 1
 a
-1655190020
+<STATIC_ADDR>
 1
 a.char_val
 -42
@@ -207,7 +207,7 @@ a.ushort_val
 28000
 1
 return
-3197115712
+<STATIC_ADDR>
 1
 return.char_val
 -42
@@ -288,10 +288,10 @@ b
 123456789
 1
 bp
-3197115992
+<STATIC_ADDR>
 1
 bp[..]
-[ 3197115996 ]
+[ <STACK_ADDR> ]
 1
 bp[..]->char_val
 [ -42 ]
@@ -309,19 +309,19 @@ bp[..]->ushort_val
 [ 28000 ]
 1
 bp[..][0]
-[ 3197115996 ]
+[ <STACK_ADDR> ]
 1
 c
 96
 1
 cp
-3197115960
+<STATIC_ADDR>
 1
 cp[..]
-[ 3197115964 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->basic1
-[ 3197115968 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->basic1.char_val
 [ -42 ]
@@ -339,7 +339,7 @@ cp[..]->basic1.ushort_val
 [ 28000 ]
 1
 cp[..]->basic2
-[ 3197115996 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->basic2->char_val
 [ -42 ]
@@ -357,7 +357,7 @@ cp[..]->basic2->ushort_val
 [ 28000 ]
 1
 cp[..]->basic2[0]
-[ 3197115996 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->day_of_week
 [ 3 ]
@@ -366,16 +366,16 @@ cp[..]->footer
 [ -123456 ]
 1
 cp[..]->myString
-[ 134515000 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->myString[0]
-[ 1951627629 ]
+[ <STATIC_ADDR> ]
 1
 cp[..]->myString[0][0]
 nonsensical
 2
 cp[..][0]
-[ 3197115964 ]
+[ <STACK_ADDR> ]
 1
 d
 2.71817994
@@ -387,16 +387,16 @@ f
 30000
 1
 return
-3197115840
+0x3a86bb48
 1
 return[..]
-[ 3197115960 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]
-[ 3197115964 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]->basic1
-[ 3197115968 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]->basic1.char_val
 [ -42 ]
@@ -414,7 +414,7 @@ return[..][0]->basic1.ushort_val
 [ 28000 ]
 1
 return[..][0]->basic2
-[ 3197115996 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]->basic2->char_val
 [ -42 ]
@@ -432,7 +432,7 @@ return[..][0]->basic2->ushort_val
 [ 28000 ]
 1
 return[..][0]->basic2[0]
-[ 3197115996 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]->day_of_week
 [ 3 ]
@@ -441,16 +441,16 @@ return[..][0]->footer
 [ -123456 ]
 1
 return[..][0]->myString
-[ 134515000 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]->myString[0]
-[ 1951627629 ]
+[ <STATIC_ADDR> ]
 1
 return[..][0]->myString[0][0]
 nonsensical
 2
 return[..][0][0]
-[ 3197115964 ]
+[ <STACK_ADDR> ]
 1
 
 ..copyComplexStruct():::ENTER
@@ -469,13 +469,13 @@ this_invocation_nonce
 "ABCDEFGHIJKLMNOPQRSTUVWXYV1234567890"
 1
 cp
-3197115964
+<STATIC_ADDR>
 1
 cp[..]
-[ 3197115964 ]
+[ <STACK_ADDR> ]
 1
 cp[..].basic1
-[ 3197115968 ]
+[ <STACK_ADDR> ]
 1
 cp[..].basic1.char_val
 [ -42 ]
@@ -493,7 +493,7 @@ cp[..].basic1.ushort_val
 [ 28000 ]
 1
 cp[..].basic2
-[ 3197115996 ]
+[ <STACK_ADDR> ]
 1
 cp[..].basic2->char_val
 [ -42 ]
@@ -511,7 +511,7 @@ cp[..].basic2->ushort_val
 [ 28000 ]
 1
 cp[..].basic2[0]
-[ 3197115996 ]
+[ <STACK_ADDR> ]
 1
 cp[..].day_of_week
 [ 3 ]
@@ -520,10 +520,10 @@ cp[..].footer
 [ -123456 ]
 1
 cp[..].myString
-[ 134515000 ]
+[ <STACK_ADDR> ]
 1
 cp[..].myString[0]
-[ 1951627629 ]
+[ <STATIC_ADDR> ]
 1
 cp[..].myString[0][0]
 nonsensical
@@ -545,13 +545,13 @@ this_invocation_nonce
 "ABCDEFGHIJKLMNOPQRSTUVWXYV1234567890"
 1
 cp
-3197115964
+<STATIC_ADDR>
 1
 cp[..]
-[ 3197115964 ]
+[ <STACK_ADDR> ]
 1
 cp[..].basic1
-[ 3197115968 ]
+[ <STACK_ADDR> ]
 1
 cp[..].basic1.char_val
 [ -42 ]
@@ -569,7 +569,7 @@ cp[..].basic1.ushort_val
 [ 28000 ]
 1
 cp[..].basic2
-[ 3197115996 ]
+[ <STACK_ADDR> ]
 1
 cp[..].basic2->char_val
 [ -42 ]
@@ -587,7 +587,7 @@ cp[..].basic2->ushort_val
 [ 28000 ]
 1
 cp[..].basic2[0]
-[ 3197115996 ]
+[ <STACK_ADDR> ]
 1
 cp[..].day_of_week
 [ 3 ]
@@ -596,19 +596,19 @@ cp[..].footer
 [ -123456 ]
 1
 cp[..].myString
-[ 134515000 ]
+[ <STACK_ADDR> ]
 1
 cp[..].myString[0]
-[ 1951627629 ]
+[ <STATIC_ADDR> ]
 1
 cp[..].myString[0][0]
 nonsensical
 2
 return
-3197115856
+<STACK_ADDR>
 1
 return.basic1
-3197115860
+<STACK_ADDR>
 1
 return.basic1.char_val
 -42
@@ -626,10 +626,10 @@ return.basic1.ushort_val
 28000
 1
 return.basic2
-3197115996
+<STACK_ADDR>
 1
 return.basic2[..]
-[ 3197115996 ]
+[ <STACK_ADDR> ]
 1
 return.basic2[..].char_val
 [ -42 ]
@@ -653,10 +653,10 @@ return.footer
 -123456
 1
 return.myString
-134515000
+<STACK_ADDR>
 1
 return.myString[..]
-[ 1951627629 ]
+[ <STATIC_ADDR> ]
 1
 return.myString[..][0]
 nonsensical
@@ -728,10 +728,10 @@ this_invocation_nonce
 ""
 1
 doubleIntPtr
-3197115952
+<STATIC_ADDR>
 1
 doubleIntPtr[..]
-[ 3197115956 ]
+[ <STACK_ADDR> ]
 1
 doubleIntPtr[..][0]
 [ 30 ]
@@ -759,10 +759,10 @@ this_invocation_nonce
 "uvwxyzabcdefghijklmnopqrstuvwx"
 1
 doubleIntPtr
-3197115952
+<STATIC_ADDR>
 1
 doubleIntPtr[..]
-[ 3197115956 ]
+[ <STACK_ADDR> ]
 1
 doubleIntPtr[..][0]
 [ 30 ]
@@ -790,13 +790,13 @@ this_invocation_nonce
 "ABCDEFGHIJKLMNOPQRSTUVWXYV1234567890"
 1
 Int64PtrVar
-3197115896
+<STATIC_ADDR>
 1
 Int64PtrVar[..]
 [ 57005 ]
 1
 uintPtrVar
-3197115948
+<STATIC_ADDR>
 1
 uintPtrVar[..]
 [ 57015 ]
@@ -818,19 +818,19 @@ this_invocation_nonce
 "ABCDEFGHIJKLMNOPQRSTUVWXYV1234567890"
 1
 Int64PtrVar
-3197115896
+<STATIC_ADDR>
 1
 Int64PtrVar[..]
 [ 57005 ]
 1
 return
-68505640
+0x3a86bb48
 1
 return[..]
 [ 1.4285714285714287 ]
 1
 uintPtrVar
-3197115948
+<STATIC_ADDR>
 1
 uintPtrVar[..]
 [ 57015 ]
@@ -855,7 +855,7 @@ index
 9
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -880,7 +880,7 @@ index
 9
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -949,7 +949,7 @@ index
 8
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -974,7 +974,7 @@ index
 8
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1043,7 +1043,7 @@ index
 7
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1068,7 +1068,7 @@ index
 7
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1137,7 +1137,7 @@ index
 6
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1162,7 +1162,7 @@ index
 6
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1231,7 +1231,7 @@ index
 5
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1256,7 +1256,7 @@ index
 5
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1325,7 +1325,7 @@ index
 4
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1350,7 +1350,7 @@ index
 4
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1419,7 +1419,7 @@ index
 3
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1444,7 +1444,7 @@ index
 3
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1513,7 +1513,7 @@ index
 2
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1538,7 +1538,7 @@ index
 2
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1607,7 +1607,7 @@ index
 1
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1632,7 +1632,7 @@ index
 1
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1701,7 +1701,7 @@ index
 0
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1726,7 +1726,7 @@ index
 0
 1
 myArray
-3197115908
+<STATIC_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]

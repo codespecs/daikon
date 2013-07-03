@@ -1,0 +1,473 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+::array1
+<STATIC_ADDR>
+1
+::array1[..]
+[ 0 0 0 0 0 0 0 0 0 0 ]
+1
+::array2
+<STATIC_ADDR>
+1
+::array2[..]
+[ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
+1
+::bar
+<STATIC_ADDR>
+1
+::bar.answer
+42
+1
+::bar.dyn_array
+<STATIC_ADDR>
+1
+::bar.dyn_array[..]
+[ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
+1
+::foo
+<STATIC_ADDR>
+1
+::foo.answer
+42
+1
+::foo.dyn_array
+<STATIC_ADDR>
+1
+::foo.dyn_array[..]
+[ 0 0 0 0 0 0 0 0 0 0 ]
+1
+
+..examine():::ENTER
+this_invocation_nonce
+1
+::array1
+<STATIC_ADDR>
+1
+::array1[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+::array2
+<STATIC_ADDR>
+1
+::array2[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::bar
+<STATIC_ADDR>
+1
+::bar.answer
+42
+1
+::bar.dyn_array
+<STATIC_ADDR>
+1
+::bar.dyn_array[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::foo
+<STATIC_ADDR>
+1
+::foo.answer
+42
+1
+::foo.dyn_array
+<STATIC_ADDR>
+1
+::foo.dyn_array[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+p
+<STATIC_ADDR>
+1
+p[..]
+[ <STATIC_ADDR> ]
+1
+p[..].answer
+[ 42 ]
+1
+p[..].dyn_array
+[ <STATIC_ADDR> ]
+1
+p[..].dyn_array[0]
+[ 0 ]
+1
+
+..examine():::EXIT0
+this_invocation_nonce
+1
+::array1
+<STATIC_ADDR>
+1
+::array1[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+::array2
+<STATIC_ADDR>
+1
+::array2[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::bar
+<STATIC_ADDR>
+1
+::bar.answer
+42
+1
+::bar.dyn_array
+<STATIC_ADDR>
+1
+::bar.dyn_array[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::foo
+<STATIC_ADDR>
+1
+::foo.answer
+42
+1
+::foo.dyn_array
+<STATIC_ADDR>
+1
+::foo.dyn_array[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+p
+<STATIC_ADDR>
+1
+p[..]
+[ <STATIC_ADDR> ]
+1
+p[..].answer
+[ 42 ]
+1
+p[..].dyn_array
+[ <STATIC_ADDR> ]
+1
+p[..].dyn_array[0]
+[ 0 ]
+1
+
+..examine():::ENTER
+this_invocation_nonce
+2
+::array1
+<STATIC_ADDR>
+1
+::array1[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+::array2
+<STATIC_ADDR>
+1
+::array2[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::bar
+<STATIC_ADDR>
+1
+::bar.answer
+42
+1
+::bar.dyn_array
+<STATIC_ADDR>
+1
+::bar.dyn_array[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::foo
+<STATIC_ADDR>
+1
+::foo.answer
+42
+1
+::foo.dyn_array
+<STATIC_ADDR>
+1
+::foo.dyn_array[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+p
+<STATIC_ADDR>
+1
+p[..]
+[ <STATIC_ADDR> ]
+1
+p[..].answer
+[ 42 ]
+1
+p[..].dyn_array
+[ <STATIC_ADDR> ]
+1
+p[..].dyn_array[0]
+[ 0 ]
+1
+
+..examine():::EXIT0
+this_invocation_nonce
+2
+::array1
+<STATIC_ADDR>
+1
+::array1[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+::array2
+<STATIC_ADDR>
+1
+::array2[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::bar
+<STATIC_ADDR>
+1
+::bar.answer
+42
+1
+::bar.dyn_array
+<STATIC_ADDR>
+1
+::bar.dyn_array[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::foo
+<STATIC_ADDR>
+1
+::foo.answer
+42
+1
+::foo.dyn_array
+<STATIC_ADDR>
+1
+::foo.dyn_array[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+p
+<STATIC_ADDR>
+1
+p[..]
+[ <STATIC_ADDR> ]
+1
+p[..].answer
+[ 42 ]
+1
+p[..].dyn_array
+[ <STATIC_ADDR> ]
+1
+p[..].dyn_array[0]
+[ 0 ]
+1
+
+..second_examine():::ENTER
+this_invocation_nonce
+3
+::array1
+<STATIC_ADDR>
+1
+::array1[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+::array2
+<STATIC_ADDR>
+1
+::array2[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::count
+100
+1
+::second_int
+182
+1
+::second_int_array
+<STATIC_ADDR>
+1
+::second_int_array[..]
+[ 1 1 2 3 5 ]
+1
+p
+<STATIC_ADDR>
+1
+p[..]
+[ <STATIC_ADDR> ]
+1
+p[..].answer
+[ 42 ]
+1
+p[..].dyn_array
+[ <STATIC_ADDR> ]
+1
+p[..].dyn_array[0]
+[ 0 ]
+1
+
+..second_examine_int():::ENTER
+this_invocation_nonce
+4
+::array1
+<STATIC_ADDR>
+1
+::array1[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+::array2
+<STATIC_ADDR>
+1
+::array2[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::second_int
+182
+1
+::second_int_array
+<STATIC_ADDR>
+1
+::second_int_array[..]
+[ 1 1 2 3 5 ]
+1
+int_array
+<STATIC_ADDR>
+1
+int_array[..]
+[ 1 1 2 3 5 ]
+1
+numPtr
+<STATIC_ADDR>
+1
+numPtr[..]
+[ 182 ]
+1
+
+..second_examine_int():::EXIT0
+this_invocation_nonce
+4
+::array1
+<STATIC_ADDR>
+1
+::array1[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+::array2
+<STATIC_ADDR>
+1
+::array2[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::second_int
+182
+1
+::second_int_array
+<STATIC_ADDR>
+1
+::second_int_array[..]
+[ 1 1 2 3 5 ]
+1
+int_array
+<STATIC_ADDR>
+1
+int_array[..]
+[ 1 1 2 3 5 ]
+1
+numPtr
+<STATIC_ADDR>
+1
+numPtr[..]
+[ 182 ]
+1
+return
+0x3a86bb98
+1
+return[..]
+[ 182 ]
+1
+
+..second_examine():::EXIT0
+this_invocation_nonce
+3
+::array1
+<STATIC_ADDR>
+1
+::array1[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+::array2
+<STATIC_ADDR>
+1
+::array2[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::count
+100
+1
+::second_int
+182
+1
+::second_int_array
+<STATIC_ADDR>
+1
+::second_int_array[..]
+[ 1 1 2 3 5 ]
+1
+p
+<STATIC_ADDR>
+1
+p[..]
+[ <STATIC_ADDR> ]
+1
+p[..].answer
+[ 42 ]
+1
+p[..].dyn_array
+[ <STATIC_ADDR> ]
+1
+p[..].dyn_array[0]
+[ 0 ]
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+::array1
+<STATIC_ADDR>
+1
+::array1[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+::array2
+<STATIC_ADDR>
+1
+::array2[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::bar
+<STATIC_ADDR>
+1
+::bar.answer
+42
+1
+::bar.dyn_array
+<STATIC_ADDR>
+1
+::bar.dyn_array[..]
+[ 0 2 4 6 8 10 12 14 16 18 20 22 24 26 28 30 32 34 36 38 ]
+1
+::foo
+<STATIC_ADDR>
+1
+::foo.answer
+42
+1
+::foo.dyn_array
+<STATIC_ADDR>
+1
+::foo.dyn_array[..]
+[ 0 1 2 3 4 5 6 7 8 9 ]
+1
+return
+0
+1
+

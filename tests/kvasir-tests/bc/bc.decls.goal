@@ -8480,7 +8480,7 @@ ppt ..bc_num2long():::EXIT0
   variable return
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
 
 ppt ..bc_out_long():::ENTER
   ppt-type enter
@@ -8507,7 +8507,7 @@ ppt ..bc_out_long():::ENTER
   variable val
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
     flags is_param 
 
 ppt ..bc_out_long():::EXIT0
@@ -8535,7 +8535,7 @@ ppt ..bc_out_long():::EXIT0
   variable val
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
     flags is_param 
 
 ppt ..bc_out_num():::ENTER
@@ -13490,7 +13490,7 @@ ppt ..def_label():::ENTER
   variable lab
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
     flags is_param 
 
 ppt ..def_label():::EXIT0
@@ -13498,7 +13498,7 @@ ppt ..def_label():::EXIT0
   variable lab
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
     flags is_param 
 
 ppt ..execute():::ENTER
@@ -14326,7 +14326,7 @@ ppt ..get_array_num():::ENTER
   variable index
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
     flags is_param 
   variable var_index
     var-kind variable
@@ -14339,7 +14339,7 @@ ppt ..get_array_num():::EXIT0
   variable index
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
     flags is_param 
   variable return
     var-kind variable
@@ -15555,7 +15555,7 @@ ppt ..long_val():::EXIT0
   variable return
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
   variable str
     var-kind variable
     rep-type hashcode

@@ -1,0 +1,17 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== Copyright (C) 2004-2006, Philip Guo, MIT CSAIL Program Analysis Group
+==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
+==PID== Command: ./virtual-method
+==PID== 
+Shape 0 has 4 sides
+Shape 1 has 3 sides
+Shape 2 has 4 sides
+Shape 3 has 3 sides
+Shape 4 has 4 sides
+Shape 5 has 3 sides
+Shape 6 has 4 sides
+Shape 7 has 3 sides
+Shape 8 has 4 sides
+Shape 9 has 3 sides
+==PID== 
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

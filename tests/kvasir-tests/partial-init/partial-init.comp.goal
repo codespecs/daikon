@@ -1,0 +1,37 @@
+..main():::ENTER
+::global
+::global[..]
+argc
+argv
+argv[..]
+
+..main():::EXIT0
+::global
+::global[..]
+argc
+argv
+argv[..]
+return
+
+..print_bits():::ENTER
+::global
+::global[..] bits[..]
+bits
+len
+
+..print_bits():::EXIT0
+::global
+::global[..] bits[..]
+bits
+len
+
+..test_bits():::ENTER
+::global
+::global[..] p[..]
+p
+
+..test_bits():::EXIT0
+::global
+::global[..] p[..]
+p
+

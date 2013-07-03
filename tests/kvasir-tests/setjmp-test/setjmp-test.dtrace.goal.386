@@ -1,0 +1,184 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+::buf
+<STATIC_ADDR>
+1
+::buf[..]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[0]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[0][0]
+[ 0 ]
+1
+::buf[..].__jmpbuf[1]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[1][0]
+[ 0 ]
+1
+::buf[..].__jmpbuf[2]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[2][0]
+[ 0 ]
+1
+::buf[..].__jmpbuf[3]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[3][0]
+[ 0 ]
+1
+::buf[..].__jmpbuf[4]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[4][0]
+[ 0 ]
+1
+::buf[..].__jmpbuf[5]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[5][0]
+[ 0 ]
+1
+::buf[..].__mask_was_saved
+[ 0 ]
+1
+::buf[..].__saved_mask
+[ <STATIC_ADDR> ]
+1
+::buf[..].__saved_mask.__val
+[ <STATIC_ADDR> ]
+1
+::buf[..].__saved_mask.__val[0]
+[ 0 ]
+1
+
+..func():::ENTER
+this_invocation_nonce
+1
+::buf
+<STATIC_ADDR>
+1
+::buf[..]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[0]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[0][0]
+[ 68698100 ]
+1
+::buf[..].__jmpbuf[1]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[1][0]
+[ -1097661724 ]
+1
+::buf[..].__jmpbuf[2]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[2][0]
+[ 1 ]
+1
+::buf[..].__jmpbuf[3]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[3][0]
+[ -1097661928 ]
+1
+::buf[..].__jmpbuf[4]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[4][0]
+[ 715399299 ]
+1
+::buf[..].__jmpbuf[5]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[5][0]
+[ 94877678 ]
+1
+::buf[..].__mask_was_saved
+[ 0 ]
+1
+::buf[..].__saved_mask
+[ <STATIC_ADDR> ]
+1
+::buf[..].__saved_mask.__val
+[ <STATIC_ADDR> ]
+1
+::buf[..].__saved_mask.__val[0]
+[ 0 ]
+1
+a
+1
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+::buf
+<STATIC_ADDR>
+1
+::buf[..]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[0]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[0][0]
+[ 68698100 ]
+1
+::buf[..].__jmpbuf[1]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[1][0]
+[ -1097661724 ]
+1
+::buf[..].__jmpbuf[2]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[2][0]
+[ 1 ]
+1
+::buf[..].__jmpbuf[3]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[3][0]
+[ -1097661928 ]
+1
+::buf[..].__jmpbuf[4]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[4][0]
+[ 715399299 ]
+1
+::buf[..].__jmpbuf[5]
+[ <STATIC_ADDR> ]
+1
+::buf[..].__jmpbuf[5][0]
+[ 94877678 ]
+1
+::buf[..].__mask_was_saved
+[ 0 ]
+1
+::buf[..].__saved_mask
+[ <STATIC_ADDR> ]
+1
+::buf[..].__saved_mask.__val
+[ <STATIC_ADDR> ]
+1
+::buf[..].__saved_mask.__val[0]
+[ 0 ]
+1
+return
+0
+1
+

@@ -1,4 +1,4 @@
-NAME := flex
+NAME := flex-rothermel
 SOURCES := flex.c
 PROGRAM_ARGS := output n14.fl
 EXTRA_OUTPUTS := output lex.yy.c

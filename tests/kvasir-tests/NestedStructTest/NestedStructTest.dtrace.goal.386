@@ -1,0 +1,577 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+::globalBetterFoo
+<STATIC_ADDR>
+1
+::globalBetterFoo.betterAge
+0
+1
+::globalBetterFoo.betterName
+nonsensical
+2
+::globalBetterFoo.namedBar
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.betterA
+0
+1
+::globalBetterFoo.namedBar.betterB
+0
+1
+::globalBetterFoo.namedBar.crappyFoo
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.crappyFoo.age
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.b
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.crappyFoo.b.a
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.b.b
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.name
+nonsensical
+2
+::globalBetterFoo.namedBar.myBazzz
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.myBazzz.hello
+""
+1
+::globalBetterFoo.namedBar.myBazzz.world
+""
+1
+::globalFoo
+<STATIC_ADDR>
+1
+::globalFoo[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::globalFoo[..].age
+[ 0 0 0 0 ]
+1
+::globalFoo[..].b
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::globalFoo[..].b.a
+[ 0 0 0 0 ]
+1
+::globalFoo[..].b.b
+[ 0 0 0 0 ]
+1
+::globalFoo[..].name
+[ nonsensical nonsensical nonsensical nonsensical ]
+1
+
+..returnF():::ENTER
+this_invocation_nonce
+1
+::globalBetterFoo
+<STATIC_ADDR>
+1
+::globalBetterFoo.betterAge
+0
+1
+::globalBetterFoo.betterName
+nonsensical
+2
+::globalBetterFoo.namedBar
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.betterA
+0
+1
+::globalBetterFoo.namedBar.betterB
+0
+1
+::globalBetterFoo.namedBar.crappyFoo
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.crappyFoo.age
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.b
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.crappyFoo.b.a
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.b.b
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.name
+nonsensical
+2
+::globalBetterFoo.namedBar.myBazzz
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.myBazzz.hello
+""
+1
+::globalBetterFoo.namedBar.myBazzz.world
+""
+1
+::globalFoo
+<STATIC_ADDR>
+1
+::globalFoo[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::globalFoo[..].age
+[ 13 23 33 43 ]
+1
+::globalFoo[..].b
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::globalFoo[..].b.a
+[ 0 1 2 3 ]
+1
+::globalFoo[..].b.b
+[ 0 100 200 300 ]
+1
+::globalFoo[..].name
+[ "globalFoo[0]" "globalFoo[1]" "globalFoo[2]" "globalFoo[3]" ]
+1
+blah
+<STACK_ADDR>
+1
+blah[..]
+nonsensical
+2
+f
+<STACK_ADDR>
+1
+f[..]
+nonsensical
+2
+f[..].age
+nonsensical
+2
+f[..].b
+nonsensical
+2
+f[..].b.a
+nonsensical
+2
+f[..].b.b
+nonsensical
+2
+f[..].name
+nonsensical
+2
+
+..returnF():::EXIT0
+this_invocation_nonce
+1
+::globalBetterFoo
+<STATIC_ADDR>
+1
+::globalBetterFoo.betterAge
+0
+1
+::globalBetterFoo.betterName
+nonsensical
+2
+::globalBetterFoo.namedBar
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.betterA
+0
+1
+::globalBetterFoo.namedBar.betterB
+0
+1
+::globalBetterFoo.namedBar.crappyFoo
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.crappyFoo.age
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.b
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.crappyFoo.b.a
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.b.b
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.name
+nonsensical
+2
+::globalBetterFoo.namedBar.myBazzz
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.myBazzz.hello
+""
+1
+::globalBetterFoo.namedBar.myBazzz.world
+""
+1
+::globalFoo
+<STATIC_ADDR>
+1
+::globalFoo[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::globalFoo[..].age
+[ 13 23 33 43 ]
+1
+::globalFoo[..].b
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::globalFoo[..].b.a
+[ 0 1 2 3 ]
+1
+::globalFoo[..].b.b
+[ 0 100 200 300 ]
+1
+::globalFoo[..].name
+[ "globalFoo[0]" "globalFoo[1]" "globalFoo[2]" "globalFoo[3]" ]
+1
+blah
+<STACK_ADDR>
+1
+blah[..]
+nonsensical
+2
+f
+<STACK_ADDR>
+1
+f[..]
+nonsensical
+2
+f[..].age
+nonsensical
+2
+f[..].b
+nonsensical
+2
+f[..].b.a
+nonsensical
+2
+f[..].b.b
+nonsensical
+2
+f[..].name
+nonsensical
+2
+return
+<STACK_ADDR>
+1
+return[..]
+nonsensical
+2
+return[..].age
+nonsensical
+2
+return[..].b
+nonsensical
+2
+return[..].b.a
+nonsensical
+2
+return[..].b.b
+nonsensical
+2
+return[..].name
+nonsensical
+2
+
+..returnF():::ENTER
+this_invocation_nonce
+2
+::globalBetterFoo
+<STATIC_ADDR>
+1
+::globalBetterFoo.betterAge
+0
+1
+::globalBetterFoo.betterName
+nonsensical
+2
+::globalBetterFoo.namedBar
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.betterA
+0
+1
+::globalBetterFoo.namedBar.betterB
+0
+1
+::globalBetterFoo.namedBar.crappyFoo
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.crappyFoo.age
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.b
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.crappyFoo.b.a
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.b.b
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.name
+nonsensical
+2
+::globalBetterFoo.namedBar.myBazzz
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.myBazzz.hello
+""
+1
+::globalBetterFoo.namedBar.myBazzz.world
+""
+1
+::globalFoo
+<STATIC_ADDR>
+1
+::globalFoo[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::globalFoo[..].age
+[ 13 23 33 43 ]
+1
+::globalFoo[..].b
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::globalFoo[..].b.a
+[ 0 1 2 3 ]
+1
+::globalFoo[..].b.b
+[ 0 100 200 300 ]
+1
+::globalFoo[..].name
+[ "globalFoo[0]" "globalFoo[1]" "globalFoo[2]" "globalFoo[3]" ]
+1
+blah
+<HEAP_ADDR>
+1
+blah[..]
+[ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
+1
+f
+<STATIC_ADDR>
+1
+f[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+f[..].age
+[ 13 23 33 43 ]
+1
+f[..].b
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+f[..].b.a
+[ 0 1 2 3 ]
+1
+f[..].b.b
+[ 0 100 200 300 ]
+1
+f[..].name
+[ "globalFoo[0]" "globalFoo[1]" "globalFoo[2]" "globalFoo[3]" ]
+1
+
+..returnF():::EXIT0
+this_invocation_nonce
+2
+::globalBetterFoo
+<STATIC_ADDR>
+1
+::globalBetterFoo.betterAge
+0
+1
+::globalBetterFoo.betterName
+nonsensical
+2
+::globalBetterFoo.namedBar
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.betterA
+0
+1
+::globalBetterFoo.namedBar.betterB
+0
+1
+::globalBetterFoo.namedBar.crappyFoo
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.crappyFoo.age
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.b
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.crappyFoo.b.a
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.b.b
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.name
+nonsensical
+2
+::globalBetterFoo.namedBar.myBazzz
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.myBazzz.hello
+""
+1
+::globalBetterFoo.namedBar.myBazzz.world
+""
+1
+::globalFoo
+<STATIC_ADDR>
+1
+::globalFoo[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::globalFoo[..].age
+[ 13 23 33 43 ]
+1
+::globalFoo[..].b
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::globalFoo[..].b.a
+[ 0 1 2 3 ]
+1
+::globalFoo[..].b.b
+[ 0 100 200 300 ]
+1
+::globalFoo[..].name
+[ "globalFoo[0]" "globalFoo[1]" "globalFoo[2]" "globalFoo[3]" ]
+1
+blah
+<HEAP_ADDR>
+1
+blah[..]
+[ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
+1
+f
+<STATIC_ADDR>
+1
+f[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+f[..].age
+[ 13 23 33 43 ]
+1
+f[..].b
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+f[..].b.a
+[ 0 1 2 3 ]
+1
+f[..].b.b
+[ 0 100 200 300 ]
+1
+f[..].name
+[ "globalFoo[0]" "globalFoo[1]" "globalFoo[2]" "globalFoo[3]" ]
+1
+return
+<STATIC_ADDR>
+1
+return[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+return[..].age
+[ 13 23 33 43 ]
+1
+return[..].b
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+return[..].b.a
+[ 0 1 2 3 ]
+1
+return[..].b.b
+[ 0 100 200 300 ]
+1
+return[..].name
+[ "globalFoo[0]" "globalFoo[1]" "globalFoo[2]" "globalFoo[3]" ]
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+::globalBetterFoo
+<STATIC_ADDR>
+1
+::globalBetterFoo.betterAge
+0
+1
+::globalBetterFoo.betterName
+nonsensical
+2
+::globalBetterFoo.namedBar
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.betterA
+0
+1
+::globalBetterFoo.namedBar.betterB
+0
+1
+::globalBetterFoo.namedBar.crappyFoo
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.crappyFoo.age
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.b
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.crappyFoo.b.a
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.b.b
+0
+1
+::globalBetterFoo.namedBar.crappyFoo.name
+nonsensical
+2
+::globalBetterFoo.namedBar.myBazzz
+<STATIC_ADDR>
+1
+::globalBetterFoo.namedBar.myBazzz.hello
+""
+1
+::globalBetterFoo.namedBar.myBazzz.world
+""
+1
+::globalFoo
+<STATIC_ADDR>
+1
+::globalFoo[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::globalFoo[..].age
+[ 13 23 33 43 ]
+1
+::globalFoo[..].b
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::globalFoo[..].b.a
+[ 0 1 2 3 ]
+1
+::globalFoo[..].b.b
+[ 0 100 200 300 ]
+1
+::globalFoo[..].name
+[ "globalFoo[0]" "globalFoo[1]" "globalFoo[2]" "globalFoo[3]" ]
+1
+return
+0
+1
+

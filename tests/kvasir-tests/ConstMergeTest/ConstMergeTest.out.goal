@@ -3,9 +3,6 @@
 ==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
 ==PID== Command: ./ConstMergeTest
 ==PID== 
-
-
-
-
-3 2 5 5==PID== 
+3 2 5 5
+==PID== 
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

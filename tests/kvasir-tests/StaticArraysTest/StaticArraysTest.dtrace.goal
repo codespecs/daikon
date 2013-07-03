@@ -6,13 +6,13 @@ var-comparability none
 this_invocation_nonce
 0
 ::staticShorts
-134518784
+<STATIC_ADDR>
 1
 ::staticShorts[..]
 [ 101 102 103 104 105 106 107 108 109 ]
 1
 ::staticStrings
-134518816
+<STATIC_ADDR>
 1
 ::staticStrings[..]
 [ "STATIC apple" "STATIC banana" "STATIC carrot" "STATIC daikon" "STATIC eggplant" "STATIC fig" "STATIC grape" nonsensical ]
@@ -31,7 +31,7 @@ arg
 "banana"
 1
 strings
-3203882616
+<STATIC_ADDR>
 1
 strings[..]
 [ "apple" "banana" "carrot" "daikon" "eggplant" "fig" "grape" nonsensical ]
@@ -50,7 +50,7 @@ return
 12
 1
 strings
-3203882616
+<STATIC_ADDR>
 1
 strings[..]
 [ "apple" "banana" "carrot" "daikon" "eggplant" "fig" "grape" nonsensical ]
@@ -66,7 +66,7 @@ arg
 "STATIC banana"
 1
 strings
-134518816
+<STATIC_ADDR>
 1
 strings[..]
 [ "STATIC apple" "STATIC banana" "STATIC carrot" "STATIC daikon" "STATIC eggplant" "MODIFIED STATIC fig" "STATIC grape" nonsensical ]
@@ -85,7 +85,7 @@ return
 12
 1
 strings
-134518816
+<STATIC_ADDR>
 1
 strings[..]
 [ "STATIC apple" "STATIC banana" "STATIC carrot" "STATIC daikon" "STATIC eggplant" "MODIFIED STATIC fig" "STATIC grape" nonsensical ]
@@ -98,7 +98,7 @@ this_invocation_nonce
 ""
 1
 manyShorts
-3203882594
+<STATIC_ADDR>
 1
 manyShorts[..]
 [ 1 2 3 4 5 6 7 8 9 10 11 ]
@@ -114,7 +114,7 @@ this_invocation_nonce
 ""
 1
 manyShorts
-3203882594
+<STATIC_ADDR>
 1
 manyShorts[..]
 [ 1 2 3 4 5 6 7 8 9 10 11 ]
@@ -133,7 +133,7 @@ this_invocation_nonce
 ""
 1
 manyShorts
-134518784
+<STATIC_ADDR>
 1
 manyShorts[..]
 [ 101 102 8192 104 105 106 107 108 109 ]
@@ -149,7 +149,7 @@ this_invocation_nonce
 ""
 1
 manyShorts
-134518784
+<STATIC_ADDR>
 1
 manyShorts[..]
 [ 101 102 8192 104 105 106 107 108 109 ]
@@ -165,13 +165,13 @@ return
 this_invocation_nonce
 0
 ::staticShorts
-134518784
+<STATIC_ADDR>
 1
 ::staticShorts[..]
 [ 42 42 42 42 42 42 42 42 42 ]
 1
 ::staticStrings
-134518816
+<STATIC_ADDR>
 1
 ::staticStrings[..]
 [ "STATIC apple" "STATIC banana" "STATIC carrot" "STATIC daikon" "STATIC eggplant" "MODIFIED STATIC fig" "STATIC grape" "MODIFIED STATIC horseradish" ]

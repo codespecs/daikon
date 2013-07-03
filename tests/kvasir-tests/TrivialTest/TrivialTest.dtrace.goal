@@ -46,10 +46,10 @@ b
 nonsensical
 2
 bp
-3198316152
+<STATIC_ADDR>
 1
 bp[..]
-[ 3198316156 ]
+[ <STACK_ADDR> ]
 1
 bp[..]->char_val
 [ 1 ]
@@ -67,19 +67,19 @@ bp[..]->ushort_val
 [ 4 ]
 1
 bp[..][0]
-[ 3198316156 ]
+[ <STACK_ADDR> ]
 1
 c
 96
 1
 cp
-3198316112
+<STATIC_ADDR>
 1
 cp[..]
-[ 3198316116 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->basic1
-[ 3198316120 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->basic1.char_val
 [ 0 ]
@@ -97,7 +97,7 @@ cp[..]->basic1.ushort_val
 [ 0 ]
 1
 cp[..]->basic2
-[ 0 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->basic2[0]
 nonsensical
@@ -109,7 +109,7 @@ cp[..]->footer
 [ 0 ]
 1
 cp[..]->myString
-[ 0 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->myString[0]
 nonsensical
@@ -118,7 +118,7 @@ cp[..]->myString[0][0]
 nonsensical
 2
 cp[..]->next
-[ 0 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->next->basic1
 nonsensical
@@ -226,13 +226,13 @@ cp[..]->next[0]
 nonsensical
 2
 cp[..]->prev
-[ 0 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->prev[0]
 nonsensical
 2
 cp[..][0]
-[ 3198316116 ]
+[ <STACK_ADDR> ]
 1
 d
 nonsensical
@@ -316,10 +316,10 @@ b
 nonsensical
 2
 bp
-3198316152
+<STATIC_ADDR>
 1
 bp[..]
-[ 3198316156 ]
+[ <STACK_ADDR> ]
 1
 bp[..]->char_val
 [ -42 ]
@@ -337,19 +337,19 @@ bp[..]->ushort_val
 [ 28000 ]
 1
 bp[..][0]
-[ 3198316156 ]
+[ <STACK_ADDR> ]
 1
 c
 96
 1
 cp
-3198316112
+<STATIC_ADDR>
 1
 cp[..]
-[ 3198316116 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->basic1
-[ 3198316120 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->basic1.char_val
 [ -42 ]
@@ -367,10 +367,10 @@ cp[..]->basic1.ushort_val
 [ 28000 ]
 1
 cp[..]->basic2
-[ 3198316156 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->basic2[0]
-[ 3198316156 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->day_of_week
 [ 3 ]
@@ -379,16 +379,16 @@ cp[..]->footer
 [ -123456 ]
 1
 cp[..]->myString
-[ 3198316048 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->myString[0]
-[ 134518648 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->myString[0][0]
 [ "MR FURLEY	\nis a good man\rhello	world	\n\n\n\\ \r \r a\r  \\b \\c" ]
 1
 cp[..]->next
-[ 0 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->next->basic1
 nonsensical
@@ -496,13 +496,13 @@ cp[..]->next[0]
 nonsensical
 2
 cp[..]->prev
-[ 0 ]
+[ <STACK_ADDR> ]
 1
 cp[..]->prev[0]
 nonsensical
 2
 cp[..][0]
-[ 3198316116 ]
+[ <STACK_ADDR> ]
 1
 d
 nonsensical
@@ -514,16 +514,16 @@ f
 30000
 1
 return
-3198316104
+0x3a86bb48
 1
 return[..]
-[ 3198316112 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]
-[ 3198316116 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]->basic1
-[ 3198316120 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]->basic1.char_val
 [ -42 ]
@@ -541,10 +541,10 @@ return[..][0]->basic1.ushort_val
 [ 28000 ]
 1
 return[..][0]->basic2
-[ 3198316156 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]->basic2[0]
-[ 3198316156 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]->day_of_week
 [ 3 ]
@@ -553,16 +553,16 @@ return[..][0]->footer
 [ -123456 ]
 1
 return[..][0]->myString
-[ 3198316048 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]->myString[0]
-[ 134518648 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]->myString[0][0]
 [ "MR FURLEY	\nis a good man\rhello	world	\n\n\n\\ \r \r a\r  \\b \\c" ]
 1
 return[..][0]->next
-[ 0 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]->next->basic1
 nonsensical
@@ -670,13 +670,13 @@ return[..][0]->next[0]
 nonsensical
 2
 return[..][0]->prev
-[ 0 ]
+[ <STACK_ADDR> ]
 1
 return[..][0]->prev[0]
 nonsensical
 2
 return[..][0][0]
-[ 3198316116 ]
+[ <STACK_ADDR> ]
 1
 
 ..main():::EXIT0

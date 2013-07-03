@@ -10,7 +10,7 @@ this_invocation_nonce
 this_invocation_nonce
 1
 b
-68505640
+<STATIC_ADDR>
 1
 b->dynamicIntArray
 nonsensical
@@ -41,10 +41,10 @@ nonsensical
 this_invocation_nonce
 1
 b
-68505640
+<STATIC_ADDR>
 1
 b->dynamicIntArray
-68505752
+<HEAP_ADDR>
 1
 b->dynamicIntArray[..]
 [ 0 1 2 3 4 ]
@@ -56,7 +56,7 @@ b->number
 42
 1
 b->staticIntArray
-68505644
+<HEAP_ADDR>
 1
 b->staticIntArray[..]
 [ 10 9 8 7 6 5 4 3 2 1 ]
@@ -65,17 +65,17 @@ b->staticString
 "Hello1234"
 1
 b[0]
-68505640
+<HEAP_ADDR>
 1
 
 ..bar():::ENTER
 this_invocation_nonce
 2
 actualB
-1656455352
+<STATIC_ADDR>
 1
 actualB.dynamicIntArray
-68505752
+<STATIC_ADDR>
 1
 actualB.dynamicIntArray[..]
 [ 0 1 2 3 4 ]
@@ -87,7 +87,7 @@ actualB.number
 42
 1
 actualB.staticIntArray
-3199643188
+<STACK_ADDR>
 1
 actualB.staticIntArray[..]
 [ 10 9 8 7 6 5 4 3 2 1 ]
@@ -100,10 +100,10 @@ actualB.staticString
 this_invocation_nonce
 2
 actualB
-1656455352
+<STATIC_ADDR>
 1
 actualB.dynamicIntArray
-68505752
+<STATIC_ADDR>
 1
 actualB.dynamicIntArray[..]
 [ 0 1 2 3 4 ]
@@ -115,7 +115,7 @@ actualB.number
 42
 1
 actualB.staticIntArray
-3199643188
+<STACK_ADDR>
 1
 actualB.staticIntArray[..]
 [ 10 9 8 7 6 5 4 3 2 1 ]

@@ -143,12 +143,12 @@ ppt ..returnLongSum():::ENTER
   variable a
     var-kind variable
     rep-type int
-    dec-type long\_long\_int
+    dec-type long
     flags is_param 
   variable b
     var-kind variable
     rep-type int
-    dec-type long\_long\_int
+    dec-type long
     flags is_param 
 
 ppt ..returnLongSum():::EXIT0
@@ -156,17 +156,17 @@ ppt ..returnLongSum():::EXIT0
   variable a
     var-kind variable
     rep-type int
-    dec-type long\_long\_int
+    dec-type long
     flags is_param 
   variable b
     var-kind variable
     rep-type int
-    dec-type long\_long\_int
+    dec-type long
     flags is_param 
   variable return
     var-kind variable
     rep-type int
-    dec-type long\_long\_int
+    dec-type long
 
 ppt ..returnShortSum():::ENTER
   ppt-type enter
@@ -263,7 +263,7 @@ ppt ..returnULongProduct():::ENTER
   variable a
     var-kind variable
     rep-type int
-    dec-type long\_long\_int
+    dec-type long
     flags is_param 
   variable b
     var-kind variable
@@ -276,7 +276,7 @@ ppt ..returnULongProduct():::EXIT0
   variable a
     var-kind variable
     rep-type int
-    dec-type long\_long\_int
+    dec-type long
     flags is_param 
   variable b
     var-kind variable
@@ -286,7 +286,7 @@ ppt ..returnULongProduct():::EXIT0
   variable return
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
 
 ppt ..returnUShortProduct():::ENTER
   ppt-type enter

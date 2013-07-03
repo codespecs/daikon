@@ -20,7 +20,7 @@ y
 this_invocation_nonce
 1
 return
-3199737368
+<STATIC_ADDR>
 1
 return.x
 34
@@ -49,7 +49,7 @@ y
 this_invocation_nonce
 2
 return
-3199737360
+<STATIC_ADDR>
 1
 return.x
 10

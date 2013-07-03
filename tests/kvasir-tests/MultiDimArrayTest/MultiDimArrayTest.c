@@ -18,7 +18,7 @@ void fint(int param[DIM1][DIM2]) {
 
 void ffixedint(int param[987][654][321]) {};
 
-void fcrashint(int param[10000][321], struct boo booParam) {
+void __attribute__(()) fcrashint(int param[10000][321], struct boo booParam) {
   printf("fcrashint: &param=%p &booParam=%p, diff=%d\n",
          &param, &booParam, (int)(&booParam) - (int)(&param));
 };

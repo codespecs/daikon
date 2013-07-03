@@ -1,13 +1,31 @@
 ..main():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 
 ..main():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 return
 
 Link.initialize(char*,\_Stack::Link*):::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 dat nxt[..].data nxt[..].next->data nxt[..].next->next->data nxt[..].next->next->next->data this->data this->next[..].data this->next[..].next->data this->next[..].next->next->data
@@ -24,6 +42,12 @@ this->next[..].next[0]
 this[0]
 
 Link.initialize(char*,\_Stack::Link*):::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 dat nxt[..].data nxt[..].next->data nxt[..].next->next->data nxt[..].next->next->next->data this->data this->next[..].data this->next[..].next->data this->next[..].next->next->data
@@ -42,6 +66,12 @@ this[0]
 Link:::OBJECT
 
 Stack.Stack(char*):::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 name this->myName
@@ -60,6 +90,12 @@ this->head[..].next[0]
 this->numElements this[0]
 
 Stack.Stack(char*):::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 name this->myName
@@ -78,6 +114,12 @@ this->head[..].next[0]
 this->numElements this[0]
 
 Stack.getName():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 this
@@ -96,6 +138,12 @@ this->myName
 this->numElements this[0]
 
 Stack.getName():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 return this->myName
@@ -114,14 +162,32 @@ this->head[..].next[0]
 this->numElements this[0]
 
 Stack.getNumStacksCreated():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 
 Stack.getNumStacksCreated():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated return
 Stack::publicNumLinksCreated
 
 Stack.peek():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 this
@@ -140,6 +206,12 @@ this->myName
 this->numElements this[0]
 
 Stack.peek():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 return this->head[..].data
@@ -158,6 +230,12 @@ this->myName
 this->numElements this[0]
 
 Stack.pop():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 this
@@ -171,6 +249,12 @@ this->myName
 this->numElements this[0]
 
 Stack.pop():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 return this->head[..].data this->head[..].next->data this->head[..].next->next->data
@@ -184,6 +268,12 @@ this->myName
 this->numElements this[0]
 
 Stack.privateStuff():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 this
@@ -202,6 +292,12 @@ this->myName
 this->numElements this[0]
 
 Stack.privateStuff():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 return
@@ -221,6 +317,12 @@ this->myName
 this->numElements this[0]
 
 Stack.push(char*):::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 dat this->head[..].data this->head[..].next->data this->head[..].next->next->data
@@ -234,6 +336,12 @@ this->myName
 this->numElements this[0]
 
 Stack.push(char*):::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 dat this->head[..].data this->head[..].next->data this->head[..].next->next->data
@@ -247,6 +355,12 @@ this->myName
 this->numElements this[0]
 
 Stack.~Stack():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 this
@@ -265,6 +379,12 @@ this->myName
 this->numElements this[0]
 
 Stack.~Stack():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 Stack::publicNumLinksCreated
 this

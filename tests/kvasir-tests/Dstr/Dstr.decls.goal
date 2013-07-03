@@ -3683,7 +3683,7 @@ ppt Dstr.operator+=(long):::ENTER
   variable val
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
     flags is_param 
 
 ppt Dstr.operator+=(long):::EXIT0
@@ -3752,7 +3752,7 @@ ppt Dstr.operator+=(long):::EXIT0
   variable val
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
     flags is_param 
 
 ppt Dstr.operator+=(long\_long):::ENTER
@@ -3802,7 +3802,7 @@ ppt Dstr.operator+=(long\_long):::ENTER
   variable val
     var-kind variable
     rep-type int
-    dec-type long\_long\_int
+    dec-type long
     flags is_param 
 
 ppt Dstr.operator+=(long\_long):::EXIT0
@@ -3871,7 +3871,7 @@ ppt Dstr.operator+=(long\_long):::EXIT0
   variable val
     var-kind variable
     rep-type int
-    dec-type long\_long\_int
+    dec-type long
     flags is_param 
 
 ppt Dstr.operator+=(unsigned\_int):::ENTER
@@ -4040,7 +4040,7 @@ ppt Dstr.operator+=(unsigned\_long):::ENTER
   variable val
     var-kind variable
     rep-type int
-    dec-type unsigned\_int
+    dec-type unsigned\_long
     flags is_param 
 
 ppt Dstr.operator+=(unsigned\_long):::EXIT0
@@ -4109,7 +4109,7 @@ ppt Dstr.operator+=(unsigned\_long):::EXIT0
   variable val
     var-kind variable
     rep-type int
-    dec-type unsigned\_int
+    dec-type unsigned\_long
     flags is_param 
 
 ppt Dstr.operator-=(unsigned\_int):::ENTER

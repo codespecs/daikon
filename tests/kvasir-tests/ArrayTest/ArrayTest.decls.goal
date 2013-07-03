@@ -339,7 +339,7 @@ ppt ..main():::ENTER
     enclosing-var ::populationPtr[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ::populationPtr[..].age
     var-kind field age
     enclosing-var ::populationPtr[..]
@@ -391,7 +391,7 @@ ppt ..main():::ENTER
     enclosing-var ::population[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ::population[..].age
     var-kind field age
     enclosing-var ::population[..]
@@ -769,7 +769,7 @@ ppt ..main():::EXIT0
     enclosing-var ::populationPtr[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ::populationPtr[..].age
     var-kind field age
     enclosing-var ::populationPtr[..]
@@ -821,7 +821,7 @@ ppt ..main():::EXIT0
     enclosing-var ::population[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ::population[..].age
     var-kind field age
     enclosing-var ::population[..]
@@ -1203,7 +1203,7 @@ ppt ..structTester():::ENTER
     enclosing-var ::populationPtr[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ::populationPtr[..].age
     var-kind field age
     enclosing-var ::populationPtr[..]
@@ -1255,7 +1255,7 @@ ppt ..structTester():::ENTER
     enclosing-var ::population[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ::population[..].age
     var-kind field age
     enclosing-var ::population[..]
@@ -1428,7 +1428,7 @@ ppt ..structTester():::ENTER
     var-kind field SS
     enclosing-var bufferStruct
     rep-type int
-    dec-type unsigned\_int
+    dec-type unsigned\_long
   variable bufferStruct.age
     var-kind field age
     enclosing-var bufferStruct
@@ -1478,7 +1478,7 @@ ppt ..structTester():::ENTER
     enclosing-var bufferStructPtr[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable bufferStructPtr[..].age
     var-kind field age
     enclosing-var bufferStructPtr[..]
@@ -1872,7 +1872,7 @@ ppt ..structTester():::EXIT0
     enclosing-var ::populationPtr[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ::populationPtr[..].age
     var-kind field age
     enclosing-var ::populationPtr[..]
@@ -1924,7 +1924,7 @@ ppt ..structTester():::EXIT0
     enclosing-var ::population[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ::population[..].age
     var-kind field age
     enclosing-var ::population[..]
@@ -2097,7 +2097,7 @@ ppt ..structTester():::EXIT0
     var-kind field SS
     enclosing-var bufferStruct
     rep-type int
-    dec-type unsigned\_int
+    dec-type unsigned\_long
   variable bufferStruct.age
     var-kind field age
     enclosing-var bufferStruct
@@ -2147,7 +2147,7 @@ ppt ..structTester():::EXIT0
     enclosing-var bufferStructPtr[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable bufferStructPtr[..].age
     var-kind field age
     enclosing-var bufferStructPtr[..]
@@ -2773,7 +2773,7 @@ ppt ArrayTest.c.returnIntSum():::ENTER
     enclosing-var ::populationPtr[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ::populationPtr[..].age
     var-kind field age
     enclosing-var ::populationPtr[..]
@@ -2825,7 +2825,7 @@ ppt ArrayTest.c.returnIntSum():::ENTER
     enclosing-var ::population[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ::population[..].age
     var-kind field age
     enclosing-var ::population[..]
@@ -3231,7 +3231,7 @@ ppt ArrayTest.c.returnIntSum():::EXIT0
     enclosing-var ::populationPtr[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ::populationPtr[..].age
     var-kind field age
     enclosing-var ::populationPtr[..]
@@ -3283,7 +3283,7 @@ ppt ArrayTest.c.returnIntSum():::EXIT0
     enclosing-var ::population[..]
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ::population[..].age
     var-kind field age
     enclosing-var ::population[..]

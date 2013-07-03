@@ -1,12 +1,12 @@
 ..main():::ENTER
 argc
 argv
-argv[]
+argv[..]
 
 ..main():::EXIT0
 argc
 argv
-argv[]
+argv[..]
 return
 
 ..read_tsc():::ENTER

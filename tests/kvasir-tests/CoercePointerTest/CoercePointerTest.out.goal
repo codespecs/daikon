@@ -4,7 +4,6 @@
 ==PID== Command: ./CoercePointerTest
 ==PID== 
 
-
 Begin processing disambiguation file "./CoercePointerTest.disambig" ...
   .disambig: Coerced variable f into type 'foo'
   .disambig: Coerced variable b into type 'bar'

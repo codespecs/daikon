@@ -10,7 +10,7 @@ DTRACE_DIFF := dtrace-diff-fast.pl
 # COMPRESS_DTRACE := 1
 COUNTS_ONLY := 1
 
-default: summary
+#default: summary
 
 include ../Makefile.common
 

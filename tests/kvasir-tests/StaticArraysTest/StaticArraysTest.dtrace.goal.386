@@ -1,0 +1,185 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+::staticShorts
+<STATIC_ADDR>
+1
+::staticShorts[..]
+[ 101 102 103 104 105 106 107 108 109 ]
+1
+::staticStrings
+<STATIC_ADDR>
+1
+::staticStrings[..]
+[ "STATIC apple" "STATIC banana" "STATIC carrot" "STATIC daikon" "STATIC eggplant" "STATIC fig" "STATIC grape" nonsensical ]
+1
+::trueGlobalStaticBuffer
+""
+1
+
+..f():::ENTER
+this_invocation_nonce
+1
+::trueGlobalStaticBuffer
+""
+1
+arg
+"banana"
+1
+strings
+<STACK_ADDR>
+1
+strings[..]
+[ "apple" "banana" "carrot" "daikon" "eggplant" "fig" "grape" nonsensical ]
+1
+
+..f():::EXIT0
+this_invocation_nonce
+1
+::trueGlobalStaticBuffer
+""
+1
+arg
+"banana"
+1
+return
+12
+1
+strings
+<STACK_ADDR>
+1
+strings[..]
+[ "apple" "banana" "carrot" "daikon" "eggplant" "fig" "grape" nonsensical ]
+1
+
+..f():::ENTER
+this_invocation_nonce
+2
+::trueGlobalStaticBuffer
+""
+1
+arg
+"STATIC banana"
+1
+strings
+<STATIC_ADDR>
+1
+strings[..]
+[ "STATIC apple" "STATIC banana" "STATIC carrot" "STATIC daikon" "STATIC eggplant" "MODIFIED STATIC fig" "STATIC grape" nonsensical ]
+1
+
+..f():::EXIT0
+this_invocation_nonce
+2
+::trueGlobalStaticBuffer
+""
+1
+arg
+"STATIC banana"
+1
+return
+12
+1
+strings
+<STATIC_ADDR>
+1
+strings[..]
+[ "STATIC apple" "STATIC banana" "STATIC carrot" "STATIC daikon" "STATIC eggplant" "MODIFIED STATIC fig" "STATIC grape" nonsensical ]
+1
+
+..b():::ENTER
+this_invocation_nonce
+3
+::trueGlobalStaticBuffer
+""
+1
+manyShorts
+<STACK_ADDR>
+1
+manyShorts[..]
+[ 1 2 3 4 5 6 7 8 9 10 11 ]
+1
+oneShort
+6
+1
+
+..b():::EXIT0
+this_invocation_nonce
+3
+::trueGlobalStaticBuffer
+""
+1
+manyShorts
+<STACK_ADDR>
+1
+manyShorts[..]
+[ 1 2 3 4 5 6 7 8 9 10 11 ]
+1
+oneShort
+6
+1
+return
+42
+1
+
+..b():::ENTER
+this_invocation_nonce
+4
+::trueGlobalStaticBuffer
+""
+1
+manyShorts
+<STATIC_ADDR>
+1
+manyShorts[..]
+[ 101 102 8192 104 105 106 107 108 109 ]
+1
+oneShort
+106
+1
+
+..b():::EXIT0
+this_invocation_nonce
+4
+::trueGlobalStaticBuffer
+""
+1
+manyShorts
+<STATIC_ADDR>
+1
+manyShorts[..]
+[ 101 102 8192 104 105 106 107 108 109 ]
+1
+oneShort
+106
+1
+return
+42
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+::staticShorts
+<STATIC_ADDR>
+1
+::staticShorts[..]
+[ 42 42 42 42 42 42 42 42 42 ]
+1
+::staticStrings
+<STATIC_ADDR>
+1
+::staticStrings[..]
+[ "STATIC apple" "STATIC banana" "STATIC carrot" "STATIC daikon" "STATIC eggplant" "MODIFIED STATIC fig" "STATIC grape" "MODIFIED STATIC horseradish" ]
+1
+::trueGlobalStaticBuffer
+""
+1
+return
+0
+1
+

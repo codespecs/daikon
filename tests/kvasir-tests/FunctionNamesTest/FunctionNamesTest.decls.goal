@@ -4,6 +4,11 @@ var-comparability none
 
 ppt ..main():::ENTER
   ppt-type enter
+  variable ::anotherGlobalIntArray[..]
+    var-kind array
+    array 1
+    rep-type int[]
+    dec-type int[]
   variable ::globalIntArray
     var-kind variable
     rep-type hashcode
@@ -17,6 +22,11 @@ ppt ..main():::ENTER
 
 ppt ..main():::EXIT0
   ppt-type subexit
+  variable ::anotherGlobalIntArray[..]
+    var-kind array
+    array 1
+    rep-type int[]
+    dec-type int[]
   variable ::globalIntArray
     var-kind variable
     rep-type hashcode
@@ -34,6 +44,11 @@ ppt ..main():::EXIT0
 
 ppt ..secondFileFunction():::ENTER
   ppt-type enter
+  variable ::anotherGlobalIntArray[..]
+    var-kind array
+    array 1
+    rep-type int[]
+    dec-type int[]
   variable ::globalIntArray
     var-kind variable
     rep-type hashcode
@@ -47,6 +62,11 @@ ppt ..secondFileFunction():::ENTER
 
 ppt ..secondFileFunction():::EXIT0
   ppt-type subexit
+  variable ::anotherGlobalIntArray[..]
+    var-kind array
+    array 1
+    rep-type int[]
+    dec-type int[]
   variable ::globalIntArray
     var-kind variable
     rep-type hashcode

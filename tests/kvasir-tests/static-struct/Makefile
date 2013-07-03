@@ -1,4 +1,4 @@
-NAME := struct
-SOURCES := struct.c second-file.c
+NAME := static-struct
+SOURCES := static-struct.c second-file.c
 
 include ../Makefile.common

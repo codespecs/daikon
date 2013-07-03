@@ -15,7 +15,7 @@ ppt ..copyComplexStruct():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -153,7 +153,7 @@ ppt ..copyComplexStruct():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -393,7 +393,7 @@ ppt ..initBasicTypesStruct():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -593,7 +593,7 @@ ppt ..initBasicTypesStruct():::ENTER
   variable e
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
     flags is_param 
   variable f
     var-kind variable
@@ -614,7 +614,7 @@ ppt ..initBasicTypesStruct():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -814,7 +814,7 @@ ppt ..initBasicTypesStruct():::EXIT0
   variable e
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
     flags is_param 
   variable f
     var-kind variable
@@ -965,7 +965,7 @@ ppt ..main():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -984,7 +984,7 @@ ppt ..main():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1007,7 +1007,7 @@ ppt ..printHelloWorld():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1036,7 +1036,7 @@ ppt ..printHelloWorld():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1069,7 +1069,7 @@ ppt ..readStruct():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1118,7 +1118,7 @@ ppt ..readStruct():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1196,7 +1196,7 @@ ppt ..returnDoublePtr():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1204,14 +1204,14 @@ ppt ..returnDoublePtr():::ENTER
   variable Int64PtrVar
     var-kind variable
     rep-type hashcode
-    dec-type long\_long\_int*
+    dec-type long*
     flags is_param 
   variable Int64PtrVar[..]
     var-kind array
     enclosing-var Int64PtrVar
     array 1
     rep-type int[]
-    dec-type long\_long\_int[]
+    dec-type long[]
   variable uintPtrVar
     var-kind variable
     rep-type hashcode
@@ -1237,7 +1237,7 @@ ppt ..returnDoublePtr():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1245,14 +1245,14 @@ ppt ..returnDoublePtr():::EXIT0
   variable Int64PtrVar
     var-kind variable
     rep-type hashcode
-    dec-type long\_long\_int*
+    dec-type long*
     flags is_param 
   variable Int64PtrVar[..]
     var-kind array
     enclosing-var Int64PtrVar
     array 1
     rep-type int[]
-    dec-type long\_long\_int[]
+    dec-type long[]
   variable return
     var-kind variable
     rep-type hashcode
@@ -1288,7 +1288,7 @@ ppt ..returnFooString():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1334,7 +1334,7 @@ ppt ..returnFooString():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1384,7 +1384,7 @@ ppt ..returnWeekday():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1408,7 +1408,7 @@ ppt ..returnWeekday():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1436,7 +1436,7 @@ ppt ..valueAt():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -1471,7 +1471,7 @@ ppt ..valueAt():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string

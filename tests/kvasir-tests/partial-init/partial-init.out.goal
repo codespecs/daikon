@@ -1,0 +1,30 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== Copyright (C) 2004-2006, Philip Guo, MIT CSAIL Program Analysis Group
+==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
+==PID== Command: ./partial-init
+==PID== 
+01010000 00000000 00000000 00000000 0101 
+01010000 00000000 00000000 00000000 01010000 00000000 00000000 00000000 
+01010000 00000000 00000000 00000000 0101 
+01010000 00000000 00000000 00000000 0101==PID== Syscall param write(buf) points to uninitialised byte(s)
+==PID==    at 0x3E22CE4950: __write_nocancel (in /usr/lib64/libc-2.15.so)
+==PID==    by <STATIC_ADDR>: print_bits (partial-init.c:17)
+==PID==    by <STATIC_ADDR>: test_bits (partial-init.c:32)
+==PID==    by <STATIC_ADDR>: main (partial-init.c:43)
+==PID==  Address <STACK_ADDR> is on thread 1's stack
+==PID== 
+0000 00000000 00000000 00000000 
+01010000 00000000 00000000 00000000 0101 
+01010000 00000000 00000000 00000000 0101==PID== Syscall param write(buf) points to uninitialised byte(s)
+==PID==    at 0x3E22CE4950: __write_nocancel (in /usr/lib64/libc-2.15.so)
+==PID==    by <STATIC_ADDR>: print_bits (partial-init.c:17)
+==PID==    by <STATIC_ADDR>: test_bits (partial-init.c:32)
+==PID==    by <STATIC_ADDR>: main (partial-init.c:45)
+==PID==  Address <STACK_ADDR> is on thread 1's stack
+==PID== 
+0000 00000000 00000000 00000000 
+Global:
+Dynamic:
+Stack:
+==PID== 
+==PID== ERROR SUMMARY: 56 errors from 2 contexts (suppressed: 0 from 0)

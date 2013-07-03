@@ -1,0 +1,79 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+::strings
+<STATIC_ADDR>
+1
+::strings[..]
+[ "apple" "banana" "carrot" "daikon" "eggplant" "fig" "grape" nonsensical ]
+1
+
+..f():::ENTER
+this_invocation_nonce
+1
+arg
+"banana"
+1
+strings
+<STATIC_ADDR>
+1
+strings[..]
+[ "apple" "banana" "carrot" "daikon" "eggplant" "fig" "grape" nonsensical ]
+1
+
+..f():::EXIT0
+this_invocation_nonce
+1
+arg
+"banana"
+1
+return
+12
+1
+strings
+<STATIC_ADDR>
+1
+strings[..]
+[ "apple" "banana" "carrot" "daikon" "eggplant" "fig" "grape" nonsensical ]
+1
+
+..uppercase():::ENTER
+this_invocation_nonce
+2
+::upcasestr
+""
+1
+s
+"huckleberry"
+1
+
+..uppercase():::EXIT0
+this_invocation_nonce
+2
+::upcasestr
+"HUCKLEBERRY"
+1
+return
+"HUCKLEBERRY"
+1
+s
+"huckleberry"
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+::strings
+<STATIC_ADDR>
+1
+::strings[..]
+[ "apple" "banana" "carrot" "daikon" "eggplant" "fig" "grape" nonsensical ]
+1
+return
+0
+1
+

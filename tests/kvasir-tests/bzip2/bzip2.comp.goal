@@ -622,10 +622,9 @@ verbosity
 ::zSuffix
 ::zSuffix[..]
 action
-strm
+strm strm[..].avail_out
 strm[..]
 strm[..].avail_in
-strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -669,10 +668,9 @@ strm[..].total_in_hi32 strm[..].total_in_lo32 strm[..].total_out_hi32 strm[..].t
 ::zSuffix[..]
 action
 return
-strm
+strm strm[..].avail_out
 strm[..]
 strm[..].avail_in
-strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -8815,10 +8813,9 @@ fullProgName
 
 bzlib.c.add_pair_to_block():::ENTER
 ::BZ2_crc32Table
-::BZ2_crc32Table[..] s s[..].arr2[0] s[..].blockCRC s[..].block[0] s[..].state_in_ch s[..].state_in_len s[..].strm->next_in s[..].strm->state
+::BZ2_crc32Table[..] ::blockSize100k s s[..].arr1 s[..].arr2 s[..].arr2[0] s[..].block s[..].blockCRC s[..].blockSize100k s[..].block[0] s[..].combinedCRC s[..].ftab s[..].mtfv s[..].nblock s[..].nblockMAX s[..].numZ s[..].ptr s[..].state_in_ch s[..].state_in_len s[..].state_out_pos s[..].strm->next_in s[..].strm->state
 ::BZ2_rNums
 ::BZ2_rNums[..]
-::blockSize100k s[..].arr1 s[..].arr2 s[..].block s[..].blockSize100k s[..].combinedCRC s[..].ftab s[..].mtfv s[..].nblock s[..].nblockMAX s[..].numZ s[..].ptr s[..].state_out_pos
 ::bzerrorstrings
 ::bzerrorstrings[..]
 ::deleteOutputOnInterrupt
@@ -8907,8 +8904,7 @@ s[..].selectorMtf
 s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -8926,10 +8922,9 @@ s[..].zbits[0]
 
 bzlib.c.add_pair_to_block():::EXIT0
 ::BZ2_crc32Table
-::BZ2_crc32Table[..] s s[..].arr2[0] s[..].blockCRC s[..].block[0] s[..].state_in_ch s[..].state_in_len s[..].strm->next_in s[..].strm->state
+::BZ2_crc32Table[..] ::blockSize100k s s[..].arr1 s[..].arr2 s[..].arr2[0] s[..].block s[..].blockCRC s[..].blockSize100k s[..].block[0] s[..].combinedCRC s[..].ftab s[..].mtfv s[..].nblock s[..].nblockMAX s[..].numZ s[..].ptr s[..].state_in_ch s[..].state_in_len s[..].state_out_pos s[..].strm->next_in s[..].strm->state
 ::BZ2_rNums
 ::BZ2_rNums[..]
-::blockSize100k s[..].arr1 s[..].arr2 s[..].block s[..].blockSize100k s[..].combinedCRC s[..].ftab s[..].mtfv s[..].nblock s[..].nblockMAX s[..].numZ s[..].ptr s[..].state_out_pos
 ::bzerrorstrings
 ::bzerrorstrings[..]
 ::deleteOutputOnInterrupt
@@ -9018,8 +9013,7 @@ s[..].selectorMtf
 s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9274,8 +9268,7 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9386,8 +9379,7 @@ s[..].selectorMtf[0]
 s[..].selector[0]
 s[..].state
 s[..].state_in_len
-s[..].strm
-s[..].strm->avail_out
+s[..].strm s[..].strm->avail_out
 s[..].strm->bzalloc
 s[..].strm->bzalloc[0]
 s[..].strm->bzfree
@@ -9962,10 +9954,9 @@ bzlib.c.handle_compress():::ENTER
 ::workFactor
 ::zSuffix
 ::zSuffix[..]
-strm
+strm strm[..].avail_out
 strm[..]
 strm[..].avail_in
-strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree
@@ -10008,10 +9999,9 @@ bzlib.c.handle_compress():::EXIT0
 ::zSuffix
 ::zSuffix[..]
 return
-strm
+strm strm[..].avail_out
 strm[..]
 strm[..].avail_in
-strm[..].avail_out
 strm[..].bzalloc
 strm[..].bzalloc[0]
 strm[..].bzfree

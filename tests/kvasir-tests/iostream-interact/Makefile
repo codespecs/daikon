@@ -1,5 +1,5 @@
-NAME := interact
-SOURCES := interact.cc
+NAME := iostream-interact
+SOURCES := iostream-interact.cc
 CPLUSPLUS := 1
 
 include ../Makefile.common

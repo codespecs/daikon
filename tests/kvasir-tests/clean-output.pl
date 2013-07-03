@@ -1,21 +1,34 @@
 #!/usr/bin/env perl
 
+my $machine_type;
+
+chomp($machine_type = `uname -m`);
+
 while (<>) {
     s/: +[0-9]+ Aborted +/: Aborted: /;
     s/\(core dumped\) *//;
     s/==\d+==/==PID==/;
-    #s/0x([0-9a-f]{1,2})([0-9a-f]{6})/0x$1****/ig;
-    s/0xb[ef]([0-9a-f]{6})/<STACK_ADDR>/ig;  # Valgrind x86/Linux location
-    s/0xf[ef]([0-9a-f]{6})/<STACK_ADDR>/ig;  # Valgrind 32-on-64/Linux location
-    s/0x7f([0-9a-f]{7})/<STACK_ADDR>/ig;     # Valgrind AMD64/Linux location
 
-    s/0x4[0-8]([0-9a-f]{5})/<HEAP_ADDR>/ig;  # Valgrind x86/Linux location
-    s/0x6[0-3]([0-9a-f]{5})/<HEAP_ADDR>/ig;  # Valgrind 32-on-64/Linux location
-    s/0x4d([0-9a-f]{5})/<HEAP_ADDR>/ig;      # Valgrind AMD64/Linux location
+    if ($machine_type eq "x86_64") {
+        # Valgrind AMD64/Linux locations
+        s/0x7f([0-9a-f]{7,10})/<STACK_ADDR>/ig;  # stack
+        s/0x4[01]([0-9a-f]{7})/<STATIC_ADDR>/ig; # r/w data
+        s/0x4[cd]([0-9a-f]{5})/<HEAP_ADDR>/ig;   # heap
+        s/0x4[01]([0-9a-f]{4})/<STATIC_ADDR>/ig; # r/o data
+        s/0x6[01]([0-9a-f]{4})/<STATIC_ADDR>/ig; # r/w data
+    } else {
+        # we just assume ...
+        # Valgrind X86/Linux locations
+        s/0xb[ef]([0-9a-f]{6})/<STACK_ADDR>/ig;  # stack
+        s/0x6[23]([0-9a-f]{6})/<STATIC_ADDR>/ig; # r/w data
+        s/0x4[0-8]([0-9a-f]{5})/<HEAP_ADDR>/ig;  # heap
+        s/0x8[01]([0-9a-f]{5})/<STATIC_ADDR>/ig; # r/o and r/w data
+    }    
 
-    s/0x8[01]([0-9a-f]{5})/<STATIC_ADDR>/ig; # Valgrind x86/Linux location
-    s/0x4[01]([0-9a-f]{4})/<STATIC_ADDR>/ig; # Valgrind AMD64/Linux rodata
-    s/0x5[01]([0-9a-f]{4})/<STATIC_ADDR>/ig; # Valgrind AMD64/Linux data
+# old/unused address substitutions
+#        s/0xf[ef]([0-9a-f]{6})/<STACK_ADDR>/ig;  # Valgrind 32-on-64/Linux location
+#        s/0x6[0-3]([0-9a-f]{5})/<HEAP_ADDR>/ig;  # Valgrind 32-on-64/Linux location
+#        s/0x5[01]([0-9a-f]{4})/<STATIC_ADDR>/ig; # Valgrind AMD64/Linux data
 
 
     s/[0-9]:[0-9]{2}:[0-9]{2}/<TIME>/g;      
@@ -31,12 +44,8 @@ while (<>) {
     s/Total Alloc.*/<Allocation statistics>/g;
     s/Peak memory.*/<Allocation statistics>/g;
 
-    s/134\d{7}/134*******/g;
-    s/134\d{6}/134******/g;
-    s/138\d{7}/138*******/g;
-    s/138\d{6}/138******/g;
     s/kvasir-[\d.]+,/kvasir-VERSION/;
-    s[Using Valgrind-3.6.0.SVN and LibVEX; rerun with \-h for copyright info]
+    s[Using Valgrind-3.9.0.SVN and LibVEX; rerun with \-h for copyright info]
       [Using Valgrind and LibVEX; rerun with \-h for copyright info];
     s/\(vg_replace_malloc.c:(\d+)\)/(vg_replace_malloc.c:XXX)/;
     print;

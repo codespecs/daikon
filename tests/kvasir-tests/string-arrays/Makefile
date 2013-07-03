@@ -1,3 +1,3 @@
-NAME := strings
+NAME := string-arrays
 
 include ../Makefile.common

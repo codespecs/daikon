@@ -1,0 +1,369 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 0 0 0 0 0 0 0 0 ]
+1
+argc
+1
+1
+argv
+<STACK_ADDR>
+1
+argv[..]
+[ "./partial-init" ]
+1
+
+..test_bits():::ENTER
+this_invocation_nonce
+1
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 0 0 0 0 0 0 0 0 ]
+1
+p
+<STATIC_ADDR>
+1
+p[..]
+[ 0 0 0 0 0 0 0 0 ]
+1
+
+..print_bits():::ENTER
+this_invocation_nonce
+2
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+<STATIC_ADDR>
+1
+bits[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+len
+36
+1
+
+..print_bits():::EXIT0
+this_invocation_nonce
+2
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+<STATIC_ADDR>
+1
+bits[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+len
+36
+1
+
+..print_bits():::ENTER
+this_invocation_nonce
+3
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+<STATIC_ADDR>
+1
+bits[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+len
+64
+1
+
+..print_bits():::EXIT0
+this_invocation_nonce
+3
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+<STATIC_ADDR>
+1
+bits[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+len
+64
+1
+
+..test_bits():::EXIT0
+this_invocation_nonce
+1
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+p
+<STATIC_ADDR>
+1
+p[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+
+..test_bits():::ENTER
+this_invocation_nonce
+4
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+p
+<HEAP_ADDR>
+1
+p[..]
+nonsensical
+2
+
+..print_bits():::ENTER
+this_invocation_nonce
+5
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+<HEAP_ADDR>
+1
+bits[..]
+[ 10 0 0 0 nonsensical ]
+1
+len
+36
+1
+
+..print_bits():::EXIT0
+this_invocation_nonce
+5
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+<HEAP_ADDR>
+1
+bits[..]
+[ 10 0 0 0 nonsensical ]
+1
+len
+36
+1
+
+..print_bits():::ENTER
+this_invocation_nonce
+6
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+<HEAP_ADDR>
+1
+bits[..]
+[ 10 0 0 0 nonsensical ]
+1
+len
+64
+1
+
+..print_bits():::EXIT0
+this_invocation_nonce
+6
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+<HEAP_ADDR>
+1
+bits[..]
+[ 10 0 0 0 nonsensical ]
+1
+len
+64
+1
+
+..test_bits():::EXIT0
+this_invocation_nonce
+4
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+p
+<HEAP_ADDR>
+1
+p[..]
+[ 10 0 0 0 nonsensical ]
+1
+
+..test_bits():::ENTER
+this_invocation_nonce
+7
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+p
+<STACK_ADDR>
+1
+p[..]
+nonsensical
+2
+
+..print_bits():::ENTER
+this_invocation_nonce
+8
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+<STACK_ADDR>
+1
+bits[..]
+[ 10 0 0 0 nonsensical nonsensical nonsensical nonsensical ]
+1
+len
+36
+1
+
+..print_bits():::EXIT0
+this_invocation_nonce
+8
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+<STACK_ADDR>
+1
+bits[..]
+[ 10 0 0 0 nonsensical nonsensical nonsensical nonsensical ]
+1
+len
+36
+1
+
+..print_bits():::ENTER
+this_invocation_nonce
+9
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+<STACK_ADDR>
+1
+bits[..]
+[ 10 0 0 0 nonsensical nonsensical nonsensical nonsensical ]
+1
+len
+64
+1
+
+..print_bits():::EXIT0
+this_invocation_nonce
+9
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+bits
+<STACK_ADDR>
+1
+bits[..]
+[ 10 0 0 0 nonsensical nonsensical nonsensical nonsensical ]
+1
+len
+64
+1
+
+..test_bits():::EXIT0
+this_invocation_nonce
+7
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+p
+<STACK_ADDR>
+1
+p[..]
+[ 10 0 0 0 nonsensical nonsensical nonsensical nonsensical ]
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+::global
+<STATIC_ADDR>
+1
+::global[..]
+[ 10 0 0 0 10 0 0 0 ]
+1
+argc
+1
+1
+argv
+<STACK_ADDR>
+1
+argv[..]
+[ "./partial-init" ]
+1
+return
+0
+1
+

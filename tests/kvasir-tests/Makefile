@@ -65,7 +65,7 @@ clean-all:
 
 
 default-projects__%: pgbovine-tests__% smcc-tests__% small-crypto-tests__% \
-	             tiny-real-tests__% tws-tests__%
+	             tiny-real-tests__% tws-tests__% 
 	@
 
 cpp-tests__%: do-CppFunctionTest__% do-SimpleClassesTest__% \
@@ -73,23 +73,30 @@ cpp-tests__%: do-CppFunctionTest__% do-SimpleClassesTest__% \
               do-StackCppTest__%  do-StackCppTestInline__% do-StackArrayCppTest__%
 	@
 
-medium-tests__%: rothermel-tests__% medium-real-tests__% medium-crypto-tests__%
+medium-tests__%: rothermel-tests__% medium-real-tests__% medium-crypto-tests__% \
+                 missing-tests__%
 	@
 
-medium-easy-tests__%: rothermel-tests__% medium-real-easy-tests__% medium-crypto-tests__%
+medium-easy-tests__%: rothermel-tests__% medium-real-easy-tests__% medium-crypto-tests__% \
+                 missing-tests__%
 	@
 
 pgbovine-tests__%: do-IntTest__% do-PointerTest__% do-TrivialTest__% \
-                   do-TypesTest__% do-crazy-test-1__% do-ArrayTest__% \
-	           do-GlobalTest__% do-NestedStructTest__% \
+		   do-TypesTest__% do-crazy-test-1__% do-ArrayTest__% \
+		   do-GlobalTest__% do-NestedStructTest__% \
 		   do-StaticArraysTest__% do-StructPtrTest__% do-TypedefTest__% \
 		   do-small-test__% do-DisambigTest__% do-SimpleDisambigStructTest__% \
-	           do-StackCppTest__%  do-StackCppTestInline__% do-StackArrayCppTest__% \
+		   do-StackCppTest__%  do-StackCppTestInline__% do-StackArrayCppTest__% \
 		   do-Dstr__% do-MultiDimArrayTest__% do-ArraysInStructTest__% \
 		   do-FunctionNamesTest__% do-CoercePointerTest__% \
 		   do-CppFunctionTest__% do-SimpleClassesTest__% \
 		   do-CppInlineTest__% do-ArrayTest-cpp__% do-FloatTest__% \
 		   do-NestedStructVarList__%
+	@
+
+missing-tests__%: do-ConstantTest__% do-ConstMergeTest__% do-ExceptionTest__% \
+		   do-partial-init__%  do-pthread-test__% do-rdtsc__% do-setjmp-test__% \
+		   do-shared-lib__%  do-UnionComp__% do-virtual-method__% 
 	@
 
 tws-tests__%: do-SelectGlobalsTest__%
@@ -116,10 +123,11 @@ tiny-real-tests__%: do-wordplay__% do-bc__%
 small-real-tests__%:
 	@
 
-medium-real-tests__%: do-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  do-povray__%
+medium-real-tests__%: do-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  do-povray__% \
+                      do-tcas__%
 	@
 
-# Omits perl and povray
+# Omits perl and povray and tcas
 medium-real-easy-tests__%: do-gzip__% do-flex-pristine__% do-bzip2__%
 	@
 
@@ -128,8 +136,6 @@ small-crypto-tests__%: do-md5__%
 
 medium-crypto-tests__%: do-rijndael__%
 	@
-
-siemens-tests__%: do-tcas__%
 
 # 'make do-SomeDiectory_target'
 # e.g. 'make do-bzip2__clean'

@@ -1,4 +1,3 @@
-NAME := partial
-KVASIR_OPTIONS := --bit-level-precision
+NAME := partial-init
 
 include ../Makefile.common

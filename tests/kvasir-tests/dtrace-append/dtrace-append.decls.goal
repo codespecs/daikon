@@ -11,7 +11,7 @@ ppt ..main():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -44,7 +44,7 @@ ppt ..main():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -81,7 +81,7 @@ ppt ..returnChar():::ENTER
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string
@@ -125,7 +125,7 @@ ppt ..returnChar():::EXIT0
   variable ::globalLong
     var-kind variable
     rep-type int
-    dec-type unsigned\_long\_long\_int
+    dec-type unsigned\_long
   variable ::globalStr
     var-kind variable
     rep-type string

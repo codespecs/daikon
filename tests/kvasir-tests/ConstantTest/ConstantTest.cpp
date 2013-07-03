@@ -14,8 +14,8 @@ public:
 };
 
 int main(int argc, char** argv) {
-  cout << "hi";
+  cout << "hi" << endl;
   A a;
-  cout << global_const << " - " << static_const << " - " << a.getInt();
+  cout << global_const << " - " << static_const << " - " << a.getInt() << endl;
   return 0;
 }

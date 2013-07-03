@@ -1,0 +1,344 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+
+..fooTiles():::ENTER
+this_invocation_nonce
+1
+t
+<STACK_ADDR>
+1
+t[..]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
+1
+t[..].a
+[ 1 2 3 4 5 ]
+1
+t[..].b
+[ "first" "second" "third" "fourth" "fifth" ]
+1
+t[..].c
+[ 10 20 30 40 50 ]
+1
+
+..fooTiles():::EXIT0
+this_invocation_nonce
+1
+return
+100
+1
+t
+<STACK_ADDR>
+1
+t[..]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
+1
+t[..].a
+[ 1 2 3 4 5 ]
+1
+t[..].b
+[ "first" "second" "third" "fourth" "fifth" ]
+1
+t[..].c
+[ 10 20 30 40 50 ]
+1
+
+..fooTiles():::ENTER
+this_invocation_nonce
+2
+t
+<STACK_ADDR>
+1
+t[..]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
+1
+t[..].a
+[ 2 3 4 5 ]
+1
+t[..].b
+[ "second" "third" "fourth" "fifth" ]
+1
+t[..].c
+[ 20 30 40 50 ]
+1
+
+..fooTiles():::EXIT0
+this_invocation_nonce
+2
+return
+100
+1
+t
+<STACK_ADDR>
+1
+t[..]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
+1
+t[..].a
+[ 2 3 4 5 ]
+1
+t[..].b
+[ "second" "third" "fourth" "fifth" ]
+1
+t[..].c
+[ 20 30 40 50 ]
+1
+
+..fooTiles():::ENTER
+this_invocation_nonce
+3
+t
+<STACK_ADDR>
+1
+t[..]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
+1
+t[..].a
+[ 3 4 5 ]
+1
+t[..].b
+[ "third" "fourth" "fifth" ]
+1
+t[..].c
+[ 30 40 50 ]
+1
+
+..fooTiles():::EXIT0
+this_invocation_nonce
+3
+return
+100
+1
+t
+<STACK_ADDR>
+1
+t[..]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
+1
+t[..].a
+[ 3 4 5 ]
+1
+t[..].b
+[ "third" "fourth" "fifth" ]
+1
+t[..].c
+[ 30 40 50 ]
+1
+
+..fooTiles():::ENTER
+this_invocation_nonce
+4
+t
+<STACK_ADDR>
+1
+t[..]
+[ <STACK_ADDR> <STACK_ADDR> ]
+1
+t[..].a
+[ 4 5 ]
+1
+t[..].b
+[ "fourth" "fifth" ]
+1
+t[..].c
+[ 40 50 ]
+1
+
+..fooTiles():::EXIT0
+this_invocation_nonce
+4
+return
+100
+1
+t
+<STACK_ADDR>
+1
+t[..]
+[ <STACK_ADDR> <STACK_ADDR> ]
+1
+t[..].a
+[ 4 5 ]
+1
+t[..].b
+[ "fourth" "fifth" ]
+1
+t[..].c
+[ 40 50 ]
+1
+
+..fooTiles():::ENTER
+this_invocation_nonce
+5
+t
+<STACK_ADDR>
+1
+t[..]
+[ <STACK_ADDR> ]
+1
+t[..].a
+[ 5 ]
+1
+t[..].b
+[ "fifth" ]
+1
+t[..].c
+[ 50 ]
+1
+
+..fooTiles():::EXIT0
+this_invocation_nonce
+5
+return
+100
+1
+t
+<STACK_ADDR>
+1
+t[..]
+[ <STACK_ADDR> ]
+1
+t[..].a
+[ 5 ]
+1
+t[..].b
+[ "fifth" ]
+1
+t[..].c
+[ 50 ]
+1
+
+..barMaps():::ENTER
+this_invocation_nonce
+6
+m
+<STATIC_ADDR>
+1
+m.mapName
+"tiles map"
+1
+m.numTiles
+5
+1
+m.tiles
+<STACK_ADDR>
+1
+m.tiles[..]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
+1
+m.tiles[..].a
+[ 1 2 3 4 5 ]
+1
+m.tiles[..].b
+[ "first" "second" "third" "fourth" "fifth" ]
+1
+m.tiles[..].c
+[ 10 20 30 40 50 ]
+1
+
+..barMaps():::EXIT0
+this_invocation_nonce
+6
+m
+<STATIC_ADDR>
+1
+m.mapName
+"tiles map"
+1
+m.numTiles
+5
+1
+m.tiles
+<STACK_ADDR>
+1
+m.tiles[..]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
+1
+m.tiles[..].a
+[ 1 2 3 4 5 ]
+1
+m.tiles[..].b
+[ "first" "second" "third" "fourth" "fifth" ]
+1
+m.tiles[..].c
+[ 10 20 30 40 50 ]
+1
+return
+300
+1
+
+..bazMapPtr():::ENTER
+this_invocation_nonce
+7
+m
+<STACK_ADDR>
+1
+m[..]
+[ <STACK_ADDR> ]
+1
+m[..].mapName
+[ "tiles map" ]
+1
+m[..].numTiles
+[ 5 ]
+1
+m[..].tiles
+[ <STACK_ADDR> ]
+1
+m[..].tiles->a
+[ 1 ]
+1
+m[..].tiles->b
+[ "first" ]
+1
+m[..].tiles->c
+[ 10 ]
+1
+m[..].tiles[0]
+[ <STACK_ADDR> ]
+1
+
+..bazMapPtr():::EXIT0
+this_invocation_nonce
+7
+m
+<STACK_ADDR>
+1
+m[..]
+[ <STACK_ADDR> ]
+1
+m[..].mapName
+[ "tiles map" ]
+1
+m[..].numTiles
+[ 5 ]
+1
+m[..].tiles
+[ <STACK_ADDR> ]
+1
+m[..].tiles->a
+[ 1 ]
+1
+m[..].tiles->b
+[ "first" ]
+1
+m[..].tiles->c
+[ 10 ]
+1
+m[..].tiles[0]
+[ <STACK_ADDR> ]
+1
+return
+500
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+return
+0
+1
+

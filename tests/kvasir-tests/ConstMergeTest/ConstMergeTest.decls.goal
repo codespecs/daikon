@@ -4,6 +4,14 @@ var-comparability none
 
 ppt ..getVar():::ENTER
   ppt-type enter
+  variable ::var1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::var2
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::var3
     var-kind variable
     rep-type int
@@ -11,6 +19,14 @@ ppt ..getVar():::ENTER
 
 ppt ..getVar():::EXIT0
   ppt-type subexit
+  variable ::var1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::var2
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::var3
     var-kind variable
     rep-type int
@@ -22,6 +38,14 @@ ppt ..getVar():::EXIT0
 
 ppt ..main():::ENTER
   ppt-type enter
+  variable ::var1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::var2
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::var3
     var-kind variable
     rep-type int
@@ -29,6 +53,14 @@ ppt ..main():::ENTER
 
 ppt ..main():::EXIT0
   ppt-type subexit
+  variable ::var1
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::var2
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::var3
     var-kind variable
     rep-type int

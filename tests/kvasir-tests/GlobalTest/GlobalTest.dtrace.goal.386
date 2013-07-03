@@ -1,0 +1,57 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+::globalDouble
+12345.67890123
+1
+::globalInt
+5555
+1
+::globalLong
+6969696969696969
+1
+::globalStr
+"MR FURLEY	\nis a good man\rhello	world	\n\n\n\\ \r \r a\r  \\b \\c"
+1
+::globalWkdayA
+4
+1
+::localAddr
+0x0
+1
+::localAddr[..]
+nonsensical
+2
+
+..main():::EXIT0
+this_invocation_nonce
+0
+::globalDouble
+12345.67890123
+1
+::globalInt
+5555
+1
+::globalLong
+6969696969696969
+1
+::globalStr
+"MR FURLEY	\nis a good man\rhello	world	\n\n\n\\ \r \r a\r  \\b \\c"
+1
+::globalWkdayA
+4
+1
+::localAddr
+0x0
+1
+::localAddr[..]
+nonsensical
+2
+return
+0
+1
+

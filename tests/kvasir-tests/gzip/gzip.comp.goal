@@ -12882,7 +12882,7 @@ gzip.c.get_istat():::ENTER
 ::save_orig_name
 ::strstart
 ::suffixes
-::suffixes[..]
+::suffixes[..] ::z_len
 ::test
 ::time_stamp
 ::to_stdout
@@ -12892,7 +12892,6 @@ gzip.c.get_istat():::ENTER
 ::window
 ::work
 ::work[..]
-::z_len
 sbuf
 sbuf[..]
 sbuf[..].st_atim
@@ -12992,7 +12991,7 @@ gzip.c.get_istat():::EXIT0
 ::save_orig_name
 ::strstart
 ::suffixes
-::suffixes[..]
+::suffixes[..] ::z_len
 ::test
 ::time_stamp
 ::to_stdout
@@ -13002,7 +13001,6 @@ gzip.c.get_istat():::EXIT0
 ::window
 ::work
 ::work[..]
-::z_len
 return
 sbuf
 sbuf[..]
@@ -13299,7 +13297,7 @@ gzip.c.get_suffix():::ENTER
 ::istat.st_uid
 ::key
 ::known_suffixes
-::known_suffixes[..]
+::known_suffixes[..] ::z_len
 ::last_member
 ::lbits
 ::level
@@ -13344,7 +13342,6 @@ gzip.c.get_suffix():::ENTER
 ::window
 ::work
 ::work[..]
-::z_len
 
 gzip.c.get_suffix():::EXIT0
 ::args
@@ -13400,7 +13397,7 @@ gzip.c.get_suffix():::EXIT0
 ::istat.st_uid
 ::key
 ::known_suffixes
-::known_suffixes[..]
+::known_suffixes[..] ::z_len
 ::last_member
 ::lbits
 ::level
@@ -13445,7 +13442,6 @@ gzip.c.get_suffix():::EXIT0
 ::window
 ::work
 ::work[..]
-::z_len
 return
 
 gzip.c.help():::ENTER

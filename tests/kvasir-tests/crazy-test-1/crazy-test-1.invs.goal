@@ -89,7 +89,9 @@ return.myString[] contains no nulls and has only one value, of length 1
 ::globalStr == orig(::globalStr)
 ===========================================================================
 ..initBasicTypesStruct():::ENTER
-cp[]->basic1.char_val == cp[]->basic1.short_val
+cp[]->basic1.char_val == cp[]->footer
+cp[]->basic1.int_val == cp[]->footer
+cp[]->basic1.short_val == cp[]->footer
 ::globalDouble == 12345.67890123
 ::globalInt == 5555
 ::globalLong == 6969696969696969L
@@ -108,8 +110,6 @@ c == 96
 cp has only one value
 cp[] contains no nulls and has only one value, of length 1
 cp[]->basic1 contains no nulls and has only one value, of length 1
-cp[]->basic1.char_val == [0]
-cp[]->basic1.int_val == [0]
 cp[]->basic1.uchar_val == [0]
 cp[]->basic1.ushort_val == [0]
 cp[]->basic2 == [null]

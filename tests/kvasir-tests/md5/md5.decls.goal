@@ -20,7 +20,7 @@ ppt ..MD5Final():::ENTER
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].bits[0][0]
     var-kind field [0]
@@ -28,13 +28,13 @@ ppt ..MD5Final():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].bits[1]
     var-kind field bits
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].bits[1][0]
     var-kind field [0]
@@ -42,13 +42,13 @@ ppt ..MD5Final():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[0]
     var-kind field [0]
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[0][0]
     var-kind field [0]
@@ -56,13 +56,13 @@ ppt ..MD5Final():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[1]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[1][0]
     var-kind field [0]
@@ -70,13 +70,13 @@ ppt ..MD5Final():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[2]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[2][0]
     var-kind field [0]
@@ -84,13 +84,13 @@ ppt ..MD5Final():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[3]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[3][0]
     var-kind field [0]
@@ -98,7 +98,7 @@ ppt ..MD5Final():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].in
     var-kind field in
     enclosing-var ctx[..]
@@ -143,7 +143,7 @@ ppt ..MD5Final():::EXIT0
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].bits[0][0]
     var-kind field [0]
@@ -151,13 +151,13 @@ ppt ..MD5Final():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].bits[1]
     var-kind field bits
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].bits[1][0]
     var-kind field [0]
@@ -165,13 +165,13 @@ ppt ..MD5Final():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[0]
     var-kind field [0]
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[0][0]
     var-kind field [0]
@@ -179,13 +179,13 @@ ppt ..MD5Final():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[1]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[1][0]
     var-kind field [0]
@@ -193,13 +193,13 @@ ppt ..MD5Final():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[2]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[2][0]
     var-kind field [0]
@@ -207,13 +207,13 @@ ppt ..MD5Final():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[3]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[3][0]
     var-kind field [0]
@@ -221,7 +221,7 @@ ppt ..MD5Final():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].in
     var-kind field in
     enclosing-var ctx[..]
@@ -266,7 +266,7 @@ ppt ..MD5Init():::ENTER
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].bits[0][0]
     var-kind field [0]
@@ -274,13 +274,13 @@ ppt ..MD5Init():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].bits[1]
     var-kind field bits
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].bits[1][0]
     var-kind field [0]
@@ -288,13 +288,13 @@ ppt ..MD5Init():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[0]
     var-kind field [0]
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[0][0]
     var-kind field [0]
@@ -302,13 +302,13 @@ ppt ..MD5Init():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[1]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[1][0]
     var-kind field [0]
@@ -316,13 +316,13 @@ ppt ..MD5Init():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[2]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[2][0]
     var-kind field [0]
@@ -330,13 +330,13 @@ ppt ..MD5Init():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[3]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[3][0]
     var-kind field [0]
@@ -344,7 +344,7 @@ ppt ..MD5Init():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].in
     var-kind field in
     enclosing-var ctx[..]
@@ -378,7 +378,7 @@ ppt ..MD5Init():::EXIT0
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].bits[0][0]
     var-kind field [0]
@@ -386,13 +386,13 @@ ppt ..MD5Init():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].bits[1]
     var-kind field bits
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].bits[1][0]
     var-kind field [0]
@@ -400,13 +400,13 @@ ppt ..MD5Init():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[0]
     var-kind field [0]
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[0][0]
     var-kind field [0]
@@ -414,13 +414,13 @@ ppt ..MD5Init():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[1]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[1][0]
     var-kind field [0]
@@ -428,13 +428,13 @@ ppt ..MD5Init():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[2]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[2][0]
     var-kind field [0]
@@ -442,13 +442,13 @@ ppt ..MD5Init():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[3]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[3][0]
     var-kind field [0]
@@ -456,7 +456,7 @@ ppt ..MD5Init():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].in
     var-kind field in
     enclosing-var ctx[..]
@@ -477,50 +477,50 @@ ppt ..MD5Transform():::ENTER
   variable buf
     var-kind variable
     rep-type hashcode
-    dec-type unsigned\_int*
+    dec-type unsigned\_long*
     flags is_param 
   variable buf[..]
     var-kind array
     enclosing-var buf
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable in
     var-kind variable
     rep-type hashcode
-    dec-type unsigned\_int*
+    dec-type unsigned\_long*
     flags is_param 
   variable in[..]
     var-kind array
     enclosing-var in
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
 
 ppt ..MD5Transform():::EXIT0
   ppt-type subexit
   variable buf
     var-kind variable
     rep-type hashcode
-    dec-type unsigned\_int*
+    dec-type unsigned\_long*
     flags is_param 
   variable buf[..]
     var-kind array
     enclosing-var buf
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable in
     var-kind variable
     rep-type hashcode
-    dec-type unsigned\_int*
+    dec-type unsigned\_long*
     flags is_param 
   variable in[..]
     var-kind array
     enclosing-var in
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
 
 ppt ..MD5Update():::ENTER
   ppt-type enter
@@ -551,7 +551,7 @@ ppt ..MD5Update():::ENTER
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].bits[0][0]
     var-kind field [0]
@@ -559,13 +559,13 @@ ppt ..MD5Update():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].bits[1]
     var-kind field bits
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].bits[1][0]
     var-kind field [0]
@@ -573,13 +573,13 @@ ppt ..MD5Update():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[0]
     var-kind field [0]
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[0][0]
     var-kind field [0]
@@ -587,13 +587,13 @@ ppt ..MD5Update():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[1]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[1][0]
     var-kind field [0]
@@ -601,13 +601,13 @@ ppt ..MD5Update():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[2]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[2][0]
     var-kind field [0]
@@ -615,13 +615,13 @@ ppt ..MD5Update():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[3]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[3][0]
     var-kind field [0]
@@ -629,7 +629,7 @@ ppt ..MD5Update():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].in
     var-kind field in
     enclosing-var ctx[..]
@@ -679,7 +679,7 @@ ppt ..MD5Update():::EXIT0
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].bits[0][0]
     var-kind field [0]
@@ -687,13 +687,13 @@ ppt ..MD5Update():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].bits[1]
     var-kind field bits
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].bits[1][0]
     var-kind field [0]
@@ -701,13 +701,13 @@ ppt ..MD5Update():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[0]
     var-kind field [0]
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[0][0]
     var-kind field [0]
@@ -715,13 +715,13 @@ ppt ..MD5Update():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[1]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[1][0]
     var-kind field [0]
@@ -729,13 +729,13 @@ ppt ..MD5Update():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[2]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[2][0]
     var-kind field [0]
@@ -743,13 +743,13 @@ ppt ..MD5Update():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].buf[3]
     var-kind field buf
     enclosing-var ctx[..]
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ctx[..].buf[3][0]
     var-kind field [0]
@@ -757,7 +757,7 @@ ppt ..MD5Update():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable ctx[..].in
     var-kind field in
     enclosing-var ctx[..]

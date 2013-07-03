@@ -46,19 +46,13 @@ return.myString[..][0]
 a
 b
 bp
-bp[..] cp[..]->basic2
-bp[..]->char_val bp[..]->short_val bp[..]->uchar_val cp[..]->basic1.char_val cp[..]->basic1.short_val cp[..]->basic1.uchar_val cp[..]->basic2->char_val cp[..]->basic2->short_val cp[..]->basic2->uchar_val
-bp[..]->int_val cp[..]->basic1.int_val cp[..]->basic2->int_val
-bp[..]->ushort_val cp[..]->basic1.ushort_val cp[..]->basic2->ushort_val
+bp[..] bp[..]->char_val bp[..]->int_val bp[..]->short_val bp[..]->uchar_val bp[..]->ushort_val cp[..]->basic1.char_val cp[..]->basic1.int_val cp[..]->basic1.short_val cp[..]->basic1.uchar_val cp[..]->basic1.ushort_val cp[..]->basic2 cp[..]->basic2->char_val cp[..]->basic2->int_val cp[..]->basic2->short_val cp[..]->basic2->uchar_val cp[..]->basic2->ushort_val cp[..]->day_of_week cp[..]->footer cp[..]->myString
 bp[..][0]
 c
 cp
 cp[..]
 cp[..]->basic1
 cp[..]->basic2[0]
-cp[..]->day_of_week
-cp[..]->footer
-cp[..]->myString
 cp[..]->myString[0]
 cp[..]->myString[0][0]
 cp[..][0]
@@ -74,19 +68,13 @@ f
 a
 b
 bp
-bp[..] cp[..]->basic2 return[..][0]->basic2
-bp[..]->char_val bp[..]->short_val bp[..]->uchar_val cp[..]->basic1.char_val cp[..]->basic1.short_val cp[..]->basic1.uchar_val cp[..]->basic2->char_val cp[..]->basic2->short_val cp[..]->basic2->uchar_val return[..][0]->basic1.char_val return[..][0]->basic1.short_val return[..][0]->basic1.uchar_val return[..][0]->basic2->char_val return[..][0]->basic2->short_val return[..][0]->basic2->uchar_val
-bp[..]->int_val cp[..]->basic1.int_val cp[..]->basic2->int_val return[..][0]->basic1.int_val return[..][0]->basic2->int_val
-bp[..]->ushort_val cp[..]->basic1.ushort_val cp[..]->basic2->ushort_val return[..][0]->basic1.ushort_val return[..][0]->basic2->ushort_val
+bp[..] bp[..]->char_val bp[..]->int_val bp[..]->short_val bp[..]->uchar_val bp[..]->ushort_val cp[..]->basic1.char_val cp[..]->basic1.int_val cp[..]->basic1.short_val cp[..]->basic1.uchar_val cp[..]->basic1.ushort_val cp[..]->basic2 cp[..]->basic2->char_val cp[..]->basic2->int_val cp[..]->basic2->short_val cp[..]->basic2->uchar_val cp[..]->basic2->ushort_val cp[..]->day_of_week cp[..]->footer cp[..]->myString return[..][0]->basic1.char_val return[..][0]->basic1.int_val return[..][0]->basic1.short_val return[..][0]->basic1.uchar_val return[..][0]->basic1.ushort_val return[..][0]->basic2 return[..][0]->basic2->char_val return[..][0]->basic2->int_val return[..][0]->basic2->short_val return[..][0]->basic2->uchar_val return[..][0]->basic2->ushort_val return[..][0]->day_of_week return[..][0]->footer return[..][0]->myString
 bp[..][0]
 c
 cp return[..]
 cp[..] return[..][0]
 cp[..]->basic1
 cp[..]->basic2[0]
-cp[..]->day_of_week return[..][0]->day_of_week
-cp[..]->footer return[..][0]->footer
-cp[..]->myString return[..][0]->myString
 cp[..]->myString[0] return[..][0]->myString[0]
 cp[..]->myString[0][0]
 cp[..][0]

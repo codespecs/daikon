@@ -109,8 +109,6 @@ Stack.push(int):::EXIT
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 this->maxElts == orig(this->maxElts)
 this->stackRep == orig(this->stackRep)
-this->stackRep[] > orig(this->stackRep[]) (lexically)
-this->stackRep[] >= orig(this->stackRep[]) (lexically)
 this[0] == orig(this[0])
 Stack::numStacksCreated one of { 1, 2 }
 this->stackRep[] elements > Stack::numStacksCreated

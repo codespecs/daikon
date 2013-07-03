@@ -4,7 +4,7 @@ class Shape {
 public:
     virtual int num_sides() = 0;
 
-    static bool Shape::compare(Shape *s1, Shape *s2);
+    static bool compare(Shape *s1, Shape *s2);
 };
 
 bool Shape::compare(Shape *s1, Shape *s2) {

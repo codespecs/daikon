@@ -6,10 +6,10 @@ var-comparability none
 this_invocation_nonce
 0
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -61,10 +61,10 @@ A.setEverything():::ENTER
 this_invocation_nonce
 1
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -112,7 +112,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694804
+<STATIC_ADDR>
 1
 this->privateIntA
 nonsensical
@@ -131,10 +131,10 @@ A.setEverything():::EXIT0
 this_invocation_nonce
 1
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -182,7 +182,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694804
+<STATIC_ADDR>
 1
 this->privateIntA
 15
@@ -194,17 +194,17 @@ this->publicIntA
 13
 1
 this[0]
-3202694804
+<STACK_ADDR>
 1
 
 B.setEverything():::ENTER
 this_invocation_nonce
 2
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -252,7 +252,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694696
+<STATIC_ADDR>
 1
 this->C.privateIntC
 nonsensical
@@ -307,10 +307,10 @@ C.setEverything():::ENTER
 this_invocation_nonce
 3
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -358,7 +358,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694696
+<STATIC_ADDR>
 1
 this->privateIntC
 nonsensical
@@ -377,10 +377,10 @@ C.setEverything():::EXIT0
 this_invocation_nonce
 3
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -428,7 +428,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694696
+<STATIC_ADDR>
 1
 this->privateIntC
 6
@@ -440,17 +440,17 @@ this->publicIntC
 4
 1
 this[0]
-3202694696
+<STACK_ADDR>
 1
 
 D.setEverything():::ENTER
 this_invocation_nonce
 4
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -498,7 +498,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694708
+<STATIC_ADDR>
 1
 this->privateIntD
 nonsensical
@@ -517,10 +517,10 @@ D.setEverything():::EXIT0
 this_invocation_nonce
 4
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -568,7 +568,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694708
+<STATIC_ADDR>
 1
 this->privateIntD
 9
@@ -580,17 +580,17 @@ this->publicIntD
 7
 1
 this[0]
-3202694708
+<STACK_ADDR>
 1
 
 E.setEverything():::ENTER
 this_invocation_nonce
 5
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -638,7 +638,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694720
+<STATIC_ADDR>
 1
 this->A.privateIntA
 nonsensical
@@ -666,10 +666,10 @@ A.setEverything():::ENTER
 this_invocation_nonce
 6
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -717,7 +717,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694720
+<STATIC_ADDR>
 1
 this->privateIntA
 nonsensical
@@ -736,10 +736,10 @@ A.setEverything():::EXIT0
 this_invocation_nonce
 6
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -787,7 +787,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694720
+<STATIC_ADDR>
 1
 this->privateIntA
 15
@@ -799,17 +799,17 @@ this->publicIntA
 13
 1
 this[0]
-3202694720
+<STACK_ADDR>
 1
 
 E.setEverything():::EXIT0
 this_invocation_nonce
 5
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -857,7 +857,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694720
+<STATIC_ADDR>
 1
 this->A.privateIntA
 15
@@ -878,17 +878,17 @@ this->publicIntE
 10
 1
 this[0]
-3202694720
+<STACK_ADDR>
 1
 
 B.setEverything():::EXIT0
 this_invocation_nonce
 2
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -936,7 +936,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694696
+<STATIC_ADDR>
 1
 this->C.privateIntC
 6
@@ -984,17 +984,17 @@ this->publicIntB
 1
 1
 this[0]
-3202694696
+<STACK_ADDR>
 1
 
 C.setEverything():::ENTER
 this_invocation_nonce
 7
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -1042,7 +1042,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694792
+<STATIC_ADDR>
 1
 this->privateIntC
 nonsensical
@@ -1061,10 +1061,10 @@ C.setEverything():::EXIT0
 this_invocation_nonce
 7
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -1112,7 +1112,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694792
+<STATIC_ADDR>
 1
 this->privateIntC
 6
@@ -1124,17 +1124,17 @@ this->publicIntC
 4
 1
 this[0]
-3202694792
+<STACK_ADDR>
 1
 
 D.setEverything():::ENTER
 this_invocation_nonce
 8
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -1182,7 +1182,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694780
+<STATIC_ADDR>
 1
 this->privateIntD
 nonsensical
@@ -1201,10 +1201,10 @@ D.setEverything():::EXIT0
 this_invocation_nonce
 8
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -1252,7 +1252,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694780
+<STATIC_ADDR>
 1
 this->privateIntD
 9
@@ -1264,17 +1264,17 @@ this->publicIntD
 7
 1
 this[0]
-3202694780
+<STACK_ADDR>
 1
 
 E.setEverything():::ENTER
 this_invocation_nonce
 9
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -1322,7 +1322,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694756
+<STATIC_ADDR>
 1
 this->A.privateIntA
 nonsensical
@@ -1350,10 +1350,10 @@ A.setEverything():::ENTER
 this_invocation_nonce
 10
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -1401,7 +1401,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694756
+<STATIC_ADDR>
 1
 this->privateIntA
 nonsensical
@@ -1420,10 +1420,10 @@ A.setEverything():::EXIT0
 this_invocation_nonce
 10
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -1471,7 +1471,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694756
+<STATIC_ADDR>
 1
 this->privateIntA
 15
@@ -1483,17 +1483,17 @@ this->publicIntA
 13
 1
 this[0]
-3202694756
+<STACK_ADDR>
 1
 
 E.setEverything():::EXIT0
 this_invocation_nonce
 9
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -1541,7 +1541,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-3202694756
+<STATIC_ADDR>
 1
 this->A.privateIntA
 15
@@ -1562,17 +1562,17 @@ this->publicIntE
 10
 1
 this[0]
-3202694756
+<STACK_ADDR>
 1
 
 B.setEverything():::ENTER
 this_invocation_nonce
 11
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -1620,7 +1620,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-134518688
+<STATIC_ADDR>
 1
 this->C.privateIntC
 0
@@ -1668,17 +1668,17 @@ this->publicIntB
 0
 1
 this[0]
-134518688
+<STATIC_ADDR>
 1
 
 C.setEverything():::ENTER
 this_invocation_nonce
 12
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 0 0 0 0 0 0 0 0 0 0 ]
@@ -1726,7 +1726,7 @@ this_invocation_nonce
 [ 1 0 0 0 0 0 0 0 0 0 ]
 1
 this
-134518688
+<STATIC_ADDR>
 1
 this->privateIntC
 0
@@ -1738,17 +1738,17 @@ this->publicIntC
 0
 1
 this[0]
-134518688
+<STATIC_ADDR>
 1
 
 C.setEverything():::EXIT0
 this_invocation_nonce
 12
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 0 0 0 0 0 0 0 0 0 ]
@@ -1796,7 +1796,7 @@ this_invocation_nonce
 [ 1 0 0 0 0 0 0 0 0 0 ]
 1
 this
-134518688
+<STATIC_ADDR>
 1
 this->privateIntC
 6
@@ -1808,17 +1808,17 @@ this->publicIntC
 4
 1
 this[0]
-134518688
+<STATIC_ADDR>
 1
 
 D.setEverything():::ENTER
 this_invocation_nonce
 13
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 0 0 0 0 0 0 0 0 0 ]
@@ -1866,7 +1866,7 @@ this_invocation_nonce
 [ 1 0 0 0 0 0 0 0 0 0 ]
 1
 this
-134518700
+<STATIC_ADDR>
 1
 this->privateIntD
 0
@@ -1878,17 +1878,17 @@ this->publicIntD
 0
 1
 this[0]
-134518700
+<STATIC_ADDR>
 1
 
 D.setEverything():::EXIT0
 this_invocation_nonce
 13
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 0 0 0 0 0 0 0 0 0 ]
@@ -1936,7 +1936,7 @@ this_invocation_nonce
 [ 1 0 0 0 0 0 0 0 0 0 ]
 1
 this
-134518700
+<STATIC_ADDR>
 1
 this->privateIntD
 9
@@ -1948,17 +1948,17 @@ this->publicIntD
 7
 1
 this[0]
-134518700
+<STATIC_ADDR>
 1
 
 E.setEverything():::ENTER
 this_invocation_nonce
 14
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 0 0 0 0 0 0 0 0 0 ]
@@ -2006,7 +2006,7 @@ this_invocation_nonce
 [ 1 0 0 0 0 0 0 0 0 0 ]
 1
 this
-134518712
+<STATIC_ADDR>
 1
 this->A.privateIntA
 0
@@ -2027,17 +2027,17 @@ this->publicIntE
 0
 1
 this[0]
-134518712
+<STATIC_ADDR>
 1
 
 A.setEverything():::ENTER
 this_invocation_nonce
 15
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 0 0 0 0 0 0 0 0 0 ]
@@ -2085,7 +2085,7 @@ this_invocation_nonce
 [ 1 0 0 0 0 0 0 0 0 0 ]
 1
 this
-134518712
+<STATIC_ADDR>
 1
 this->privateIntA
 0
@@ -2097,17 +2097,17 @@ this->publicIntA
 0
 1
 this[0]
-134518712
+<STATIC_ADDR>
 1
 
 A.setEverything():::EXIT0
 this_invocation_nonce
 15
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 0 0 0 0 0 0 0 0 0 ]
@@ -2155,7 +2155,7 @@ this_invocation_nonce
 [ 1 0 0 0 0 0 0 0 0 0 ]
 1
 this
-134518712
+<STATIC_ADDR>
 1
 this->privateIntA
 15
@@ -2167,17 +2167,17 @@ this->publicIntA
 13
 1
 this[0]
-134518712
+<STATIC_ADDR>
 1
 
 E.setEverything():::EXIT0
 this_invocation_nonce
 14
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 0 0 0 0 0 0 0 0 0 ]
@@ -2225,7 +2225,7 @@ this_invocation_nonce
 [ 1 0 0 0 0 0 0 0 0 0 ]
 1
 this
-134518712
+<STATIC_ADDR>
 1
 this->A.privateIntA
 15
@@ -2246,17 +2246,17 @@ this->publicIntE
 10
 1
 this[0]
-134518712
+<STATIC_ADDR>
 1
 
 B.setEverything():::EXIT0
 this_invocation_nonce
 11
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 0 0 0 0 0 0 0 0 0 ]
@@ -2304,7 +2304,7 @@ this_invocation_nonce
 [ 1 0 0 0 0 0 0 0 0 0 ]
 1
 this
-134518688
+<STATIC_ADDR>
 1
 this->C.privateIntC
 6
@@ -2352,17 +2352,17 @@ this->publicIntB
 1
 1
 this[0]
-134518688
+<STATIC_ADDR>
 1
 
 B.setEverything():::ENTER
 this_invocation_nonce
 16
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 0 0 0 0 0 0 0 0 0 ]
@@ -2410,7 +2410,7 @@ this_invocation_nonce
 [ 1 0 0 0 0 0 0 0 0 0 ]
 1
 this
-134518748
+<STATIC_ADDR>
 1
 this->C.privateIntC
 0
@@ -2458,17 +2458,17 @@ this->publicIntB
 0
 1
 this[0]
-134518748
+<STATIC_ADDR>
 1
 
 C.setEverything():::ENTER
 this_invocation_nonce
 17
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 0 0 0 0 0 0 0 0 0 ]
@@ -2516,7 +2516,7 @@ this_invocation_nonce
 [ 1 1 0 0 0 0 0 0 0 0 ]
 1
 this
-134518748
+<STATIC_ADDR>
 1
 this->privateIntC
 0
@@ -2528,17 +2528,17 @@ this->publicIntC
 0
 1
 this[0]
-134518748
+<STATIC_ADDR>
 1
 
 C.setEverything():::EXIT0
 this_invocation_nonce
 17
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 0 0 0 0 0 0 0 0 ]
@@ -2586,7 +2586,7 @@ this_invocation_nonce
 [ 1 1 0 0 0 0 0 0 0 0 ]
 1
 this
-134518748
+<STATIC_ADDR>
 1
 this->privateIntC
 6
@@ -2598,17 +2598,17 @@ this->publicIntC
 4
 1
 this[0]
-134518748
+<STATIC_ADDR>
 1
 
 D.setEverything():::ENTER
 this_invocation_nonce
 18
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 0 0 0 0 0 0 0 0 ]
@@ -2656,7 +2656,7 @@ this_invocation_nonce
 [ 1 1 0 0 0 0 0 0 0 0 ]
 1
 this
-134518760
+<STATIC_ADDR>
 1
 this->privateIntD
 0
@@ -2668,17 +2668,17 @@ this->publicIntD
 0
 1
 this[0]
-134518760
+<STATIC_ADDR>
 1
 
 D.setEverything():::EXIT0
 this_invocation_nonce
 18
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 0 0 0 0 0 0 0 0 ]
@@ -2726,7 +2726,7 @@ this_invocation_nonce
 [ 1 1 0 0 0 0 0 0 0 0 ]
 1
 this
-134518760
+<STATIC_ADDR>
 1
 this->privateIntD
 9
@@ -2738,17 +2738,17 @@ this->publicIntD
 7
 1
 this[0]
-134518760
+<STATIC_ADDR>
 1
 
 E.setEverything():::ENTER
 this_invocation_nonce
 19
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 0 0 0 0 0 0 0 0 ]
@@ -2796,7 +2796,7 @@ this_invocation_nonce
 [ 1 1 0 0 0 0 0 0 0 0 ]
 1
 this
-134518772
+<STATIC_ADDR>
 1
 this->A.privateIntA
 0
@@ -2817,17 +2817,17 @@ this->publicIntE
 0
 1
 this[0]
-134518772
+<STATIC_ADDR>
 1
 
 A.setEverything():::ENTER
 this_invocation_nonce
 20
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 0 0 0 0 0 0 0 0 ]
@@ -2875,7 +2875,7 @@ this_invocation_nonce
 [ 1 1 0 0 0 0 0 0 0 0 ]
 1
 this
-134518772
+<STATIC_ADDR>
 1
 this->privateIntA
 0
@@ -2887,17 +2887,17 @@ this->publicIntA
 0
 1
 this[0]
-134518772
+<STATIC_ADDR>
 1
 
 A.setEverything():::EXIT0
 this_invocation_nonce
 20
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 0 0 0 0 0 0 0 0 ]
@@ -2945,7 +2945,7 @@ this_invocation_nonce
 [ 1 1 0 0 0 0 0 0 0 0 ]
 1
 this
-134518772
+<STATIC_ADDR>
 1
 this->privateIntA
 15
@@ -2957,17 +2957,17 @@ this->publicIntA
 13
 1
 this[0]
-134518772
+<STATIC_ADDR>
 1
 
 E.setEverything():::EXIT0
 this_invocation_nonce
 19
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 0 0 0 0 0 0 0 0 ]
@@ -3015,7 +3015,7 @@ this_invocation_nonce
 [ 1 1 0 0 0 0 0 0 0 0 ]
 1
 this
-134518772
+<STATIC_ADDR>
 1
 this->A.privateIntA
 15
@@ -3036,123 +3036,17 @@ this->publicIntE
 10
 1
 this[0]
-134518772
+<STATIC_ADDR>
 1
 
 B.setEverything():::EXIT0
 this_invocation_nonce
 16
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
-1
-::arrayOfBees[..].C.privateIntC
-[ 6 6 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].C.protectedIntC
-[ 5 5 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].C.publicIntC
-[ 4 4 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].D.privateIntD
-[ 9 9 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].D.protectedIntD
-[ 8 8 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].D.publicIntD
-[ 7 7 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].E.A.privateIntA
-[ 15 15 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].E.A.protectedIntA
-[ 14 14 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].E.A.publicIntA
-[ 13 13 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].E.privateIntE
-[ 12 12 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].E.protectedIntE
-[ 11 11 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].E.publicIntE
-[ 10 10 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].privateIntB
-[ 3 3 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].protectedIntB
-[ 2 2 0 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].publicIntB
-[ 1 1 0 0 0 0 0 0 0 0 ]
-1
-this
-134518748
-1
-this->C.privateIntC
-6
-1
-this->C.protectedIntC
-5
-1
-this->C.publicIntC
-4
-1
-this->D.privateIntD
-9
-1
-this->D.protectedIntD
-8
-1
-this->D.publicIntD
-7
-1
-this->E.A.privateIntA
-15
-1
-this->E.A.protectedIntA
-14
-1
-this->E.A.publicIntA
-13
-1
-this->E.privateIntE
-12
-1
-this->E.protectedIntE
-11
-1
-this->E.publicIntE
-10
-1
-this->privateIntB
-3
-1
-this->protectedIntB
-2
-1
-this->publicIntB
-1
-1
-this[0]
-134518748
-1
-
-B.setEverything():::ENTER
-this_invocation_nonce
-21
-::arrayOfBees
-134518688
-1
-::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 0 0 0 0 0 0 0 0 ]
@@ -3200,7 +3094,113 @@ this_invocation_nonce
 [ 1 1 0 0 0 0 0 0 0 0 ]
 1
 this
-134518808
+<STATIC_ADDR>
+1
+this->C.privateIntC
+6
+1
+this->C.protectedIntC
+5
+1
+this->C.publicIntC
+4
+1
+this->D.privateIntD
+9
+1
+this->D.protectedIntD
+8
+1
+this->D.publicIntD
+7
+1
+this->E.A.privateIntA
+15
+1
+this->E.A.protectedIntA
+14
+1
+this->E.A.publicIntA
+13
+1
+this->E.privateIntE
+12
+1
+this->E.protectedIntE
+11
+1
+this->E.publicIntE
+10
+1
+this->privateIntB
+3
+1
+this->protectedIntB
+2
+1
+this->publicIntB
+1
+1
+this[0]
+<STATIC_ADDR>
+1
+
+B.setEverything():::ENTER
+this_invocation_nonce
+21
+::arrayOfBees
+<STATIC_ADDR>
+1
+::arrayOfBees[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::arrayOfBees[..].C.privateIntC
+[ 6 6 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].C.protectedIntC
+[ 5 5 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].C.publicIntC
+[ 4 4 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].D.privateIntD
+[ 9 9 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].D.protectedIntD
+[ 8 8 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].D.publicIntD
+[ 7 7 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].E.A.privateIntA
+[ 15 15 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].E.A.protectedIntA
+[ 14 14 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].E.A.publicIntA
+[ 13 13 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].E.privateIntE
+[ 12 12 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].E.protectedIntE
+[ 11 11 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].E.publicIntE
+[ 10 10 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].privateIntB
+[ 3 3 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].protectedIntB
+[ 2 2 0 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].publicIntB
+[ 1 1 0 0 0 0 0 0 0 0 ]
+1
+this
+<STATIC_ADDR>
 1
 this->C.privateIntC
 0
@@ -3248,17 +3248,17 @@ this->publicIntB
 0
 1
 this[0]
-134518808
+<STATIC_ADDR>
 1
 
 C.setEverything():::ENTER
 this_invocation_nonce
 22
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 0 0 0 0 0 0 0 0 ]
@@ -3306,7 +3306,7 @@ this_invocation_nonce
 [ 1 1 1 0 0 0 0 0 0 0 ]
 1
 this
-134518808
+<STATIC_ADDR>
 1
 this->privateIntC
 0
@@ -3318,17 +3318,17 @@ this->publicIntC
 0
 1
 this[0]
-134518808
+<STATIC_ADDR>
 1
 
 C.setEverything():::EXIT0
 this_invocation_nonce
 22
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 0 0 0 0 0 0 0 ]
@@ -3376,7 +3376,7 @@ this_invocation_nonce
 [ 1 1 1 0 0 0 0 0 0 0 ]
 1
 this
-134518808
+<STATIC_ADDR>
 1
 this->privateIntC
 6
@@ -3388,17 +3388,17 @@ this->publicIntC
 4
 1
 this[0]
-134518808
+<STATIC_ADDR>
 1
 
 D.setEverything():::ENTER
 this_invocation_nonce
 23
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 0 0 0 0 0 0 0 ]
@@ -3446,7 +3446,7 @@ this_invocation_nonce
 [ 1 1 1 0 0 0 0 0 0 0 ]
 1
 this
-134518820
+<STATIC_ADDR>
 1
 this->privateIntD
 0
@@ -3458,17 +3458,17 @@ this->publicIntD
 0
 1
 this[0]
-134518820
+<STATIC_ADDR>
 1
 
 D.setEverything():::EXIT0
 this_invocation_nonce
 23
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 0 0 0 0 0 0 0 ]
@@ -3516,7 +3516,7 @@ this_invocation_nonce
 [ 1 1 1 0 0 0 0 0 0 0 ]
 1
 this
-134518820
+<STATIC_ADDR>
 1
 this->privateIntD
 9
@@ -3528,17 +3528,17 @@ this->publicIntD
 7
 1
 this[0]
-134518820
+<STATIC_ADDR>
 1
 
 E.setEverything():::ENTER
 this_invocation_nonce
 24
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 0 0 0 0 0 0 0 ]
@@ -3586,7 +3586,7 @@ this_invocation_nonce
 [ 1 1 1 0 0 0 0 0 0 0 ]
 1
 this
-134518832
+<STATIC_ADDR>
 1
 this->A.privateIntA
 0
@@ -3607,17 +3607,17 @@ this->publicIntE
 0
 1
 this[0]
-134518832
+<STATIC_ADDR>
 1
 
 A.setEverything():::ENTER
 this_invocation_nonce
 25
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 0 0 0 0 0 0 0 ]
@@ -3665,7 +3665,7 @@ this_invocation_nonce
 [ 1 1 1 0 0 0 0 0 0 0 ]
 1
 this
-134518832
+<STATIC_ADDR>
 1
 this->privateIntA
 0
@@ -3677,17 +3677,17 @@ this->publicIntA
 0
 1
 this[0]
-134518832
+<STATIC_ADDR>
 1
 
 A.setEverything():::EXIT0
 this_invocation_nonce
 25
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 0 0 0 0 0 0 0 ]
@@ -3735,7 +3735,7 @@ this_invocation_nonce
 [ 1 1 1 0 0 0 0 0 0 0 ]
 1
 this
-134518832
+<STATIC_ADDR>
 1
 this->privateIntA
 15
@@ -3747,17 +3747,17 @@ this->publicIntA
 13
 1
 this[0]
-134518832
+<STATIC_ADDR>
 1
 
 E.setEverything():::EXIT0
 this_invocation_nonce
 24
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 0 0 0 0 0 0 0 ]
@@ -3805,7 +3805,7 @@ this_invocation_nonce
 [ 1 1 1 0 0 0 0 0 0 0 ]
 1
 this
-134518832
+<STATIC_ADDR>
 1
 this->A.privateIntA
 15
@@ -3826,123 +3826,17 @@ this->publicIntE
 10
 1
 this[0]
-134518832
+<STATIC_ADDR>
 1
 
 B.setEverything():::EXIT0
 this_invocation_nonce
 21
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
-1
-::arrayOfBees[..].C.privateIntC
-[ 6 6 6 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].C.protectedIntC
-[ 5 5 5 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].C.publicIntC
-[ 4 4 4 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].D.privateIntD
-[ 9 9 9 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].D.protectedIntD
-[ 8 8 8 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].D.publicIntD
-[ 7 7 7 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].E.A.privateIntA
-[ 15 15 15 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].E.A.protectedIntA
-[ 14 14 14 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].E.A.publicIntA
-[ 13 13 13 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].E.privateIntE
-[ 12 12 12 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].E.protectedIntE
-[ 11 11 11 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].E.publicIntE
-[ 10 10 10 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].privateIntB
-[ 3 3 3 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].protectedIntB
-[ 2 2 2 0 0 0 0 0 0 0 ]
-1
-::arrayOfBees[..].publicIntB
-[ 1 1 1 0 0 0 0 0 0 0 ]
-1
-this
-134518808
-1
-this->C.privateIntC
-6
-1
-this->C.protectedIntC
-5
-1
-this->C.publicIntC
-4
-1
-this->D.privateIntD
-9
-1
-this->D.protectedIntD
-8
-1
-this->D.publicIntD
-7
-1
-this->E.A.privateIntA
-15
-1
-this->E.A.protectedIntA
-14
-1
-this->E.A.publicIntA
-13
-1
-this->E.privateIntE
-12
-1
-this->E.protectedIntE
-11
-1
-this->E.publicIntE
-10
-1
-this->privateIntB
-3
-1
-this->protectedIntB
-2
-1
-this->publicIntB
-1
-1
-this[0]
-134518808
-1
-
-B.setEverything():::ENTER
-this_invocation_nonce
-26
-::arrayOfBees
-134518688
-1
-::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 0 0 0 0 0 0 0 ]
@@ -3990,7 +3884,113 @@ this_invocation_nonce
 [ 1 1 1 0 0 0 0 0 0 0 ]
 1
 this
-134518868
+<STATIC_ADDR>
+1
+this->C.privateIntC
+6
+1
+this->C.protectedIntC
+5
+1
+this->C.publicIntC
+4
+1
+this->D.privateIntD
+9
+1
+this->D.protectedIntD
+8
+1
+this->D.publicIntD
+7
+1
+this->E.A.privateIntA
+15
+1
+this->E.A.protectedIntA
+14
+1
+this->E.A.publicIntA
+13
+1
+this->E.privateIntE
+12
+1
+this->E.protectedIntE
+11
+1
+this->E.publicIntE
+10
+1
+this->privateIntB
+3
+1
+this->protectedIntB
+2
+1
+this->publicIntB
+1
+1
+this[0]
+<STATIC_ADDR>
+1
+
+B.setEverything():::ENTER
+this_invocation_nonce
+26
+::arrayOfBees
+<STATIC_ADDR>
+1
+::arrayOfBees[..]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
+1
+::arrayOfBees[..].C.privateIntC
+[ 6 6 6 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].C.protectedIntC
+[ 5 5 5 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].C.publicIntC
+[ 4 4 4 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].D.privateIntD
+[ 9 9 9 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].D.protectedIntD
+[ 8 8 8 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].D.publicIntD
+[ 7 7 7 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].E.A.privateIntA
+[ 15 15 15 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].E.A.protectedIntA
+[ 14 14 14 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].E.A.publicIntA
+[ 13 13 13 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].E.privateIntE
+[ 12 12 12 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].E.protectedIntE
+[ 11 11 11 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].E.publicIntE
+[ 10 10 10 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].privateIntB
+[ 3 3 3 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].protectedIntB
+[ 2 2 2 0 0 0 0 0 0 0 ]
+1
+::arrayOfBees[..].publicIntB
+[ 1 1 1 0 0 0 0 0 0 0 ]
+1
+this
+<STATIC_ADDR>
 1
 this->C.privateIntC
 0
@@ -4038,17 +4038,17 @@ this->publicIntB
 0
 1
 this[0]
-134518868
+<STATIC_ADDR>
 1
 
 C.setEverything():::ENTER
 this_invocation_nonce
 27
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 0 0 0 0 0 0 0 ]
@@ -4096,7 +4096,7 @@ this_invocation_nonce
 [ 1 1 1 1 0 0 0 0 0 0 ]
 1
 this
-134518868
+<STATIC_ADDR>
 1
 this->privateIntC
 0
@@ -4108,17 +4108,17 @@ this->publicIntC
 0
 1
 this[0]
-134518868
+<STATIC_ADDR>
 1
 
 C.setEverything():::EXIT0
 this_invocation_nonce
 27
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 0 0 0 0 0 0 ]
@@ -4166,7 +4166,7 @@ this_invocation_nonce
 [ 1 1 1 1 0 0 0 0 0 0 ]
 1
 this
-134518868
+<STATIC_ADDR>
 1
 this->privateIntC
 6
@@ -4178,17 +4178,17 @@ this->publicIntC
 4
 1
 this[0]
-134518868
+<STATIC_ADDR>
 1
 
 D.setEverything():::ENTER
 this_invocation_nonce
 28
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 0 0 0 0 0 0 ]
@@ -4236,7 +4236,7 @@ this_invocation_nonce
 [ 1 1 1 1 0 0 0 0 0 0 ]
 1
 this
-134518880
+<STATIC_ADDR>
 1
 this->privateIntD
 0
@@ -4248,17 +4248,17 @@ this->publicIntD
 0
 1
 this[0]
-134518880
+<STATIC_ADDR>
 1
 
 D.setEverything():::EXIT0
 this_invocation_nonce
 28
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 0 0 0 0 0 0 ]
@@ -4306,7 +4306,7 @@ this_invocation_nonce
 [ 1 1 1 1 0 0 0 0 0 0 ]
 1
 this
-134518880
+<STATIC_ADDR>
 1
 this->privateIntD
 9
@@ -4318,17 +4318,17 @@ this->publicIntD
 7
 1
 this[0]
-134518880
+<STATIC_ADDR>
 1
 
 E.setEverything():::ENTER
 this_invocation_nonce
 29
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 0 0 0 0 0 0 ]
@@ -4376,7 +4376,7 @@ this_invocation_nonce
 [ 1 1 1 1 0 0 0 0 0 0 ]
 1
 this
-134518892
+<STATIC_ADDR>
 1
 this->A.privateIntA
 0
@@ -4397,17 +4397,17 @@ this->publicIntE
 0
 1
 this[0]
-134518892
+<STATIC_ADDR>
 1
 
 A.setEverything():::ENTER
 this_invocation_nonce
 30
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 0 0 0 0 0 0 ]
@@ -4455,7 +4455,7 @@ this_invocation_nonce
 [ 1 1 1 1 0 0 0 0 0 0 ]
 1
 this
-134518892
+<STATIC_ADDR>
 1
 this->privateIntA
 0
@@ -4467,17 +4467,17 @@ this->publicIntA
 0
 1
 this[0]
-134518892
+<STATIC_ADDR>
 1
 
 A.setEverything():::EXIT0
 this_invocation_nonce
 30
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 0 0 0 0 0 0 ]
@@ -4525,7 +4525,7 @@ this_invocation_nonce
 [ 1 1 1 1 0 0 0 0 0 0 ]
 1
 this
-134518892
+<STATIC_ADDR>
 1
 this->privateIntA
 15
@@ -4537,17 +4537,17 @@ this->publicIntA
 13
 1
 this[0]
-134518892
+<STATIC_ADDR>
 1
 
 E.setEverything():::EXIT0
 this_invocation_nonce
 29
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 0 0 0 0 0 0 ]
@@ -4595,7 +4595,7 @@ this_invocation_nonce
 [ 1 1 1 1 0 0 0 0 0 0 ]
 1
 this
-134518892
+<STATIC_ADDR>
 1
 this->A.privateIntA
 15
@@ -4616,17 +4616,17 @@ this->publicIntE
 10
 1
 this[0]
-134518892
+<STATIC_ADDR>
 1
 
 B.setEverything():::EXIT0
 this_invocation_nonce
 26
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 0 0 0 0 0 0 ]
@@ -4674,7 +4674,7 @@ this_invocation_nonce
 [ 1 1 1 1 0 0 0 0 0 0 ]
 1
 this
-134518868
+<STATIC_ADDR>
 1
 this->C.privateIntC
 6
@@ -4722,17 +4722,17 @@ this->publicIntB
 1
 1
 this[0]
-134518868
+<STATIC_ADDR>
 1
 
 B.setEverything():::ENTER
 this_invocation_nonce
 31
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 0 0 0 0 0 0 ]
@@ -4780,7 +4780,7 @@ this_invocation_nonce
 [ 1 1 1 1 0 0 0 0 0 0 ]
 1
 this
-134518928
+<STATIC_ADDR>
 1
 this->C.privateIntC
 0
@@ -4828,17 +4828,17 @@ this->publicIntB
 0
 1
 this[0]
-134518928
+<STATIC_ADDR>
 1
 
 C.setEverything():::ENTER
 this_invocation_nonce
 32
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 0 0 0 0 0 0 ]
@@ -4886,7 +4886,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 0 0 0 0 0 ]
 1
 this
-134518928
+<STATIC_ADDR>
 1
 this->privateIntC
 0
@@ -4898,17 +4898,17 @@ this->publicIntC
 0
 1
 this[0]
-134518928
+<STATIC_ADDR>
 1
 
 C.setEverything():::EXIT0
 this_invocation_nonce
 32
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 0 0 0 0 0 ]
@@ -4956,7 +4956,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 0 0 0 0 0 ]
 1
 this
-134518928
+<STATIC_ADDR>
 1
 this->privateIntC
 6
@@ -4968,17 +4968,17 @@ this->publicIntC
 4
 1
 this[0]
-134518928
+<STATIC_ADDR>
 1
 
 D.setEverything():::ENTER
 this_invocation_nonce
 33
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 0 0 0 0 0 ]
@@ -5026,7 +5026,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 0 0 0 0 0 ]
 1
 this
-134518940
+<STATIC_ADDR>
 1
 this->privateIntD
 0
@@ -5038,17 +5038,17 @@ this->publicIntD
 0
 1
 this[0]
-134518940
+<STATIC_ADDR>
 1
 
 D.setEverything():::EXIT0
 this_invocation_nonce
 33
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 0 0 0 0 0 ]
@@ -5096,7 +5096,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 0 0 0 0 0 ]
 1
 this
-134518940
+<STATIC_ADDR>
 1
 this->privateIntD
 9
@@ -5108,17 +5108,17 @@ this->publicIntD
 7
 1
 this[0]
-134518940
+<STATIC_ADDR>
 1
 
 E.setEverything():::ENTER
 this_invocation_nonce
 34
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 0 0 0 0 0 ]
@@ -5166,7 +5166,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 0 0 0 0 0 ]
 1
 this
-134518952
+<STATIC_ADDR>
 1
 this->A.privateIntA
 0
@@ -5187,17 +5187,17 @@ this->publicIntE
 0
 1
 this[0]
-134518952
+<STATIC_ADDR>
 1
 
 A.setEverything():::ENTER
 this_invocation_nonce
 35
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 0 0 0 0 0 ]
@@ -5245,7 +5245,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 0 0 0 0 0 ]
 1
 this
-134518952
+<STATIC_ADDR>
 1
 this->privateIntA
 0
@@ -5257,17 +5257,17 @@ this->publicIntA
 0
 1
 this[0]
-134518952
+<STATIC_ADDR>
 1
 
 A.setEverything():::EXIT0
 this_invocation_nonce
 35
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 0 0 0 0 0 ]
@@ -5315,7 +5315,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 0 0 0 0 0 ]
 1
 this
-134518952
+<STATIC_ADDR>
 1
 this->privateIntA
 15
@@ -5327,17 +5327,17 @@ this->publicIntA
 13
 1
 this[0]
-134518952
+<STATIC_ADDR>
 1
 
 E.setEverything():::EXIT0
 this_invocation_nonce
 34
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 0 0 0 0 0 ]
@@ -5385,7 +5385,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 0 0 0 0 0 ]
 1
 this
-134518952
+<STATIC_ADDR>
 1
 this->A.privateIntA
 15
@@ -5406,17 +5406,17 @@ this->publicIntE
 10
 1
 this[0]
-134518952
+<STATIC_ADDR>
 1
 
 B.setEverything():::EXIT0
 this_invocation_nonce
 31
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 0 0 0 0 0 ]
@@ -5464,7 +5464,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 0 0 0 0 0 ]
 1
 this
-134518928
+<STATIC_ADDR>
 1
 this->C.privateIntC
 6
@@ -5512,17 +5512,17 @@ this->publicIntB
 1
 1
 this[0]
-134518928
+<STATIC_ADDR>
 1
 
 B.setEverything():::ENTER
 this_invocation_nonce
 36
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 0 0 0 0 0 ]
@@ -5570,7 +5570,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 0 0 0 0 0 ]
 1
 this
-134518988
+<STATIC_ADDR>
 1
 this->C.privateIntC
 0
@@ -5618,17 +5618,17 @@ this->publicIntB
 0
 1
 this[0]
-134518988
+<STATIC_ADDR>
 1
 
 C.setEverything():::ENTER
 this_invocation_nonce
 37
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 0 0 0 0 0 ]
@@ -5676,7 +5676,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 0 0 0 0 ]
 1
 this
-134518988
+<STATIC_ADDR>
 1
 this->privateIntC
 0
@@ -5688,17 +5688,17 @@ this->publicIntC
 0
 1
 this[0]
-134518988
+<STATIC_ADDR>
 1
 
 C.setEverything():::EXIT0
 this_invocation_nonce
 37
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 0 0 0 0 ]
@@ -5746,7 +5746,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 0 0 0 0 ]
 1
 this
-134518988
+<STATIC_ADDR>
 1
 this->privateIntC
 6
@@ -5758,17 +5758,17 @@ this->publicIntC
 4
 1
 this[0]
-134518988
+<STATIC_ADDR>
 1
 
 D.setEverything():::ENTER
 this_invocation_nonce
 38
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 0 0 0 0 ]
@@ -5816,7 +5816,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 0 0 0 0 ]
 1
 this
-134519000
+<STATIC_ADDR>
 1
 this->privateIntD
 0
@@ -5828,17 +5828,17 @@ this->publicIntD
 0
 1
 this[0]
-134519000
+<STATIC_ADDR>
 1
 
 D.setEverything():::EXIT0
 this_invocation_nonce
 38
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 0 0 0 0 ]
@@ -5886,7 +5886,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 0 0 0 0 ]
 1
 this
-134519000
+<STATIC_ADDR>
 1
 this->privateIntD
 9
@@ -5898,17 +5898,17 @@ this->publicIntD
 7
 1
 this[0]
-134519000
+<STATIC_ADDR>
 1
 
 E.setEverything():::ENTER
 this_invocation_nonce
 39
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 0 0 0 0 ]
@@ -5956,7 +5956,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 0 0 0 0 ]
 1
 this
-134519012
+<STATIC_ADDR>
 1
 this->A.privateIntA
 0
@@ -5977,17 +5977,17 @@ this->publicIntE
 0
 1
 this[0]
-134519012
+<STATIC_ADDR>
 1
 
 A.setEverything():::ENTER
 this_invocation_nonce
 40
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 0 0 0 0 ]
@@ -6035,7 +6035,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 0 0 0 0 ]
 1
 this
-134519012
+<STATIC_ADDR>
 1
 this->privateIntA
 0
@@ -6047,17 +6047,17 @@ this->publicIntA
 0
 1
 this[0]
-134519012
+<STATIC_ADDR>
 1
 
 A.setEverything():::EXIT0
 this_invocation_nonce
 40
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 0 0 0 0 ]
@@ -6105,7 +6105,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 0 0 0 0 ]
 1
 this
-134519012
+<STATIC_ADDR>
 1
 this->privateIntA
 15
@@ -6117,17 +6117,17 @@ this->publicIntA
 13
 1
 this[0]
-134519012
+<STATIC_ADDR>
 1
 
 E.setEverything():::EXIT0
 this_invocation_nonce
 39
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 0 0 0 0 ]
@@ -6175,7 +6175,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 0 0 0 0 ]
 1
 this
-134519012
+<STATIC_ADDR>
 1
 this->A.privateIntA
 15
@@ -6196,17 +6196,17 @@ this->publicIntE
 10
 1
 this[0]
-134519012
+<STATIC_ADDR>
 1
 
 B.setEverything():::EXIT0
 this_invocation_nonce
 36
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 0 0 0 0 ]
@@ -6254,7 +6254,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 0 0 0 0 ]
 1
 this
-134518988
+<STATIC_ADDR>
 1
 this->C.privateIntC
 6
@@ -6302,17 +6302,17 @@ this->publicIntB
 1
 1
 this[0]
-134518988
+<STATIC_ADDR>
 1
 
 B.setEverything():::ENTER
 this_invocation_nonce
 41
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 0 0 0 0 ]
@@ -6360,7 +6360,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 0 0 0 0 ]
 1
 this
-134519048
+<STATIC_ADDR>
 1
 this->C.privateIntC
 0
@@ -6408,17 +6408,17 @@ this->publicIntB
 0
 1
 this[0]
-134519048
+<STATIC_ADDR>
 1
 
 C.setEverything():::ENTER
 this_invocation_nonce
 42
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 0 0 0 0 ]
@@ -6466,7 +6466,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 0 0 0 ]
 1
 this
-134519048
+<STATIC_ADDR>
 1
 this->privateIntC
 0
@@ -6478,17 +6478,17 @@ this->publicIntC
 0
 1
 this[0]
-134519048
+<STATIC_ADDR>
 1
 
 C.setEverything():::EXIT0
 this_invocation_nonce
 42
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 0 0 0 ]
@@ -6536,7 +6536,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 0 0 0 ]
 1
 this
-134519048
+<STATIC_ADDR>
 1
 this->privateIntC
 6
@@ -6548,17 +6548,17 @@ this->publicIntC
 4
 1
 this[0]
-134519048
+<STATIC_ADDR>
 1
 
 D.setEverything():::ENTER
 this_invocation_nonce
 43
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 0 0 0 ]
@@ -6606,7 +6606,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 0 0 0 ]
 1
 this
-134519060
+<STATIC_ADDR>
 1
 this->privateIntD
 0
@@ -6618,17 +6618,17 @@ this->publicIntD
 0
 1
 this[0]
-134519060
+<STATIC_ADDR>
 1
 
 D.setEverything():::EXIT0
 this_invocation_nonce
 43
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 0 0 0 ]
@@ -6676,7 +6676,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 0 0 0 ]
 1
 this
-134519060
+<STATIC_ADDR>
 1
 this->privateIntD
 9
@@ -6688,17 +6688,17 @@ this->publicIntD
 7
 1
 this[0]
-134519060
+<STATIC_ADDR>
 1
 
 E.setEverything():::ENTER
 this_invocation_nonce
 44
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 0 0 0 ]
@@ -6746,7 +6746,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 0 0 0 ]
 1
 this
-134519072
+<STATIC_ADDR>
 1
 this->A.privateIntA
 0
@@ -6767,17 +6767,17 @@ this->publicIntE
 0
 1
 this[0]
-134519072
+<STATIC_ADDR>
 1
 
 A.setEverything():::ENTER
 this_invocation_nonce
 45
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 0 0 0 ]
@@ -6825,7 +6825,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 0 0 0 ]
 1
 this
-134519072
+<STATIC_ADDR>
 1
 this->privateIntA
 0
@@ -6837,17 +6837,17 @@ this->publicIntA
 0
 1
 this[0]
-134519072
+<STATIC_ADDR>
 1
 
 A.setEverything():::EXIT0
 this_invocation_nonce
 45
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 0 0 0 ]
@@ -6895,7 +6895,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 0 0 0 ]
 1
 this
-134519072
+<STATIC_ADDR>
 1
 this->privateIntA
 15
@@ -6907,17 +6907,17 @@ this->publicIntA
 13
 1
 this[0]
-134519072
+<STATIC_ADDR>
 1
 
 E.setEverything():::EXIT0
 this_invocation_nonce
 44
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 0 0 0 ]
@@ -6965,7 +6965,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 0 0 0 ]
 1
 this
-134519072
+<STATIC_ADDR>
 1
 this->A.privateIntA
 15
@@ -6986,17 +6986,17 @@ this->publicIntE
 10
 1
 this[0]
-134519072
+<STATIC_ADDR>
 1
 
 B.setEverything():::EXIT0
 this_invocation_nonce
 41
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 0 0 0 ]
@@ -7044,7 +7044,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 0 0 0 ]
 1
 this
-134519048
+<STATIC_ADDR>
 1
 this->C.privateIntC
 6
@@ -7092,17 +7092,17 @@ this->publicIntB
 1
 1
 this[0]
-134519048
+<STATIC_ADDR>
 1
 
 B.setEverything():::ENTER
 this_invocation_nonce
 46
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 0 0 0 ]
@@ -7150,7 +7150,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 0 0 0 ]
 1
 this
-134519108
+<STATIC_ADDR>
 1
 this->C.privateIntC
 0
@@ -7198,17 +7198,17 @@ this->publicIntB
 0
 1
 this[0]
-134519108
+<STATIC_ADDR>
 1
 
 C.setEverything():::ENTER
 this_invocation_nonce
 47
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 0 0 0 ]
@@ -7256,7 +7256,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 0 0 ]
 1
 this
-134519108
+<STATIC_ADDR>
 1
 this->privateIntC
 0
@@ -7268,17 +7268,17 @@ this->publicIntC
 0
 1
 this[0]
-134519108
+<STATIC_ADDR>
 1
 
 C.setEverything():::EXIT0
 this_invocation_nonce
 47
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 0 0 ]
@@ -7326,7 +7326,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 0 0 ]
 1
 this
-134519108
+<STATIC_ADDR>
 1
 this->privateIntC
 6
@@ -7338,17 +7338,17 @@ this->publicIntC
 4
 1
 this[0]
-134519108
+<STATIC_ADDR>
 1
 
 D.setEverything():::ENTER
 this_invocation_nonce
 48
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 0 0 ]
@@ -7396,7 +7396,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 0 0 ]
 1
 this
-134519120
+<STATIC_ADDR>
 1
 this->privateIntD
 0
@@ -7408,17 +7408,17 @@ this->publicIntD
 0
 1
 this[0]
-134519120
+<STATIC_ADDR>
 1
 
 D.setEverything():::EXIT0
 this_invocation_nonce
 48
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 0 0 ]
@@ -7466,7 +7466,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 0 0 ]
 1
 this
-134519120
+<STATIC_ADDR>
 1
 this->privateIntD
 9
@@ -7478,17 +7478,17 @@ this->publicIntD
 7
 1
 this[0]
-134519120
+<STATIC_ADDR>
 1
 
 E.setEverything():::ENTER
 this_invocation_nonce
 49
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 0 0 ]
@@ -7536,7 +7536,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 0 0 ]
 1
 this
-134519132
+<STATIC_ADDR>
 1
 this->A.privateIntA
 0
@@ -7557,17 +7557,17 @@ this->publicIntE
 0
 1
 this[0]
-134519132
+<STATIC_ADDR>
 1
 
 A.setEverything():::ENTER
 this_invocation_nonce
 50
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 0 0 ]
@@ -7615,7 +7615,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 0 0 ]
 1
 this
-134519132
+<STATIC_ADDR>
 1
 this->privateIntA
 0
@@ -7627,17 +7627,17 @@ this->publicIntA
 0
 1
 this[0]
-134519132
+<STATIC_ADDR>
 1
 
 A.setEverything():::EXIT0
 this_invocation_nonce
 50
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 0 0 ]
@@ -7685,7 +7685,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 0 0 ]
 1
 this
-134519132
+<STATIC_ADDR>
 1
 this->privateIntA
 15
@@ -7697,17 +7697,17 @@ this->publicIntA
 13
 1
 this[0]
-134519132
+<STATIC_ADDR>
 1
 
 E.setEverything():::EXIT0
 this_invocation_nonce
 49
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 0 0 ]
@@ -7755,7 +7755,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 0 0 ]
 1
 this
-134519132
+<STATIC_ADDR>
 1
 this->A.privateIntA
 15
@@ -7776,17 +7776,17 @@ this->publicIntE
 10
 1
 this[0]
-134519132
+<STATIC_ADDR>
 1
 
 B.setEverything():::EXIT0
 this_invocation_nonce
 46
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 0 0 ]
@@ -7834,7 +7834,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 0 0 ]
 1
 this
-134519108
+<STATIC_ADDR>
 1
 this->C.privateIntC
 6
@@ -7882,17 +7882,17 @@ this->publicIntB
 1
 1
 this[0]
-134519108
+<STATIC_ADDR>
 1
 
 B.setEverything():::ENTER
 this_invocation_nonce
 51
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 0 0 ]
@@ -7940,7 +7940,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 0 0 ]
 1
 this
-134519168
+<STATIC_ADDR>
 1
 this->C.privateIntC
 0
@@ -7988,17 +7988,17 @@ this->publicIntB
 0
 1
 this[0]
-134519168
+<STATIC_ADDR>
 1
 
 C.setEverything():::ENTER
 this_invocation_nonce
 52
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 0 0 ]
@@ -8046,7 +8046,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 0 ]
 1
 this
-134519168
+<STATIC_ADDR>
 1
 this->privateIntC
 0
@@ -8058,17 +8058,17 @@ this->publicIntC
 0
 1
 this[0]
-134519168
+<STATIC_ADDR>
 1
 
 C.setEverything():::EXIT0
 this_invocation_nonce
 52
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 0 ]
@@ -8116,7 +8116,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 0 ]
 1
 this
-134519168
+<STATIC_ADDR>
 1
 this->privateIntC
 6
@@ -8128,17 +8128,17 @@ this->publicIntC
 4
 1
 this[0]
-134519168
+<STATIC_ADDR>
 1
 
 D.setEverything():::ENTER
 this_invocation_nonce
 53
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 0 ]
@@ -8186,7 +8186,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 0 ]
 1
 this
-134519180
+<STATIC_ADDR>
 1
 this->privateIntD
 0
@@ -8198,17 +8198,17 @@ this->publicIntD
 0
 1
 this[0]
-134519180
+<STATIC_ADDR>
 1
 
 D.setEverything():::EXIT0
 this_invocation_nonce
 53
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 0 ]
@@ -8256,7 +8256,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 0 ]
 1
 this
-134519180
+<STATIC_ADDR>
 1
 this->privateIntD
 9
@@ -8268,17 +8268,17 @@ this->publicIntD
 7
 1
 this[0]
-134519180
+<STATIC_ADDR>
 1
 
 E.setEverything():::ENTER
 this_invocation_nonce
 54
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 0 ]
@@ -8326,7 +8326,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 0 ]
 1
 this
-134519192
+<STATIC_ADDR>
 1
 this->A.privateIntA
 0
@@ -8347,17 +8347,17 @@ this->publicIntE
 0
 1
 this[0]
-134519192
+<STATIC_ADDR>
 1
 
 A.setEverything():::ENTER
 this_invocation_nonce
 55
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 0 ]
@@ -8405,7 +8405,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 0 ]
 1
 this
-134519192
+<STATIC_ADDR>
 1
 this->privateIntA
 0
@@ -8417,17 +8417,17 @@ this->publicIntA
 0
 1
 this[0]
-134519192
+<STATIC_ADDR>
 1
 
 A.setEverything():::EXIT0
 this_invocation_nonce
 55
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 0 ]
@@ -8475,7 +8475,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 0 ]
 1
 this
-134519192
+<STATIC_ADDR>
 1
 this->privateIntA
 15
@@ -8487,17 +8487,17 @@ this->publicIntA
 13
 1
 this[0]
-134519192
+<STATIC_ADDR>
 1
 
 E.setEverything():::EXIT0
 this_invocation_nonce
 54
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 0 ]
@@ -8545,7 +8545,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 0 ]
 1
 this
-134519192
+<STATIC_ADDR>
 1
 this->A.privateIntA
 15
@@ -8566,17 +8566,17 @@ this->publicIntE
 10
 1
 this[0]
-134519192
+<STATIC_ADDR>
 1
 
 B.setEverything():::EXIT0
 this_invocation_nonce
 51
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 0 ]
@@ -8624,7 +8624,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 0 ]
 1
 this
-134519168
+<STATIC_ADDR>
 1
 this->C.privateIntC
 6
@@ -8672,17 +8672,17 @@ this->publicIntB
 1
 1
 this[0]
-134519168
+<STATIC_ADDR>
 1
 
 B.setEverything():::ENTER
 this_invocation_nonce
 56
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 0 ]
@@ -8730,7 +8730,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 0 ]
 1
 this
-134519228
+<STATIC_ADDR>
 1
 this->C.privateIntC
 0
@@ -8778,17 +8778,17 @@ this->publicIntB
 0
 1
 this[0]
-134519228
+<STATIC_ADDR>
 1
 
 C.setEverything():::ENTER
 this_invocation_nonce
 57
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 0 ]
@@ -8836,7 +8836,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 1 ]
 1
 this
-134519228
+<STATIC_ADDR>
 1
 this->privateIntC
 0
@@ -8848,17 +8848,17 @@ this->publicIntC
 0
 1
 this[0]
-134519228
+<STATIC_ADDR>
 1
 
 C.setEverything():::EXIT0
 this_invocation_nonce
 57
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 6 ]
@@ -8906,7 +8906,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 1 ]
 1
 this
-134519228
+<STATIC_ADDR>
 1
 this->privateIntC
 6
@@ -8918,17 +8918,17 @@ this->publicIntC
 4
 1
 this[0]
-134519228
+<STATIC_ADDR>
 1
 
 D.setEverything():::ENTER
 this_invocation_nonce
 58
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 6 ]
@@ -8976,7 +8976,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 1 ]
 1
 this
-134519240
+<STATIC_ADDR>
 1
 this->privateIntD
 0
@@ -8988,17 +8988,17 @@ this->publicIntD
 0
 1
 this[0]
-134519240
+<STATIC_ADDR>
 1
 
 D.setEverything():::EXIT0
 this_invocation_nonce
 58
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 6 ]
@@ -9046,7 +9046,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 1 ]
 1
 this
-134519240
+<STATIC_ADDR>
 1
 this->privateIntD
 9
@@ -9058,17 +9058,17 @@ this->publicIntD
 7
 1
 this[0]
-134519240
+<STATIC_ADDR>
 1
 
 E.setEverything():::ENTER
 this_invocation_nonce
 59
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 6 ]
@@ -9116,7 +9116,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 1 ]
 1
 this
-134519252
+<STATIC_ADDR>
 1
 this->A.privateIntA
 0
@@ -9137,17 +9137,17 @@ this->publicIntE
 0
 1
 this[0]
-134519252
+<STATIC_ADDR>
 1
 
 A.setEverything():::ENTER
 this_invocation_nonce
 60
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 6 ]
@@ -9195,7 +9195,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 1 ]
 1
 this
-134519252
+<STATIC_ADDR>
 1
 this->privateIntA
 0
@@ -9207,17 +9207,17 @@ this->publicIntA
 0
 1
 this[0]
-134519252
+<STATIC_ADDR>
 1
 
 A.setEverything():::EXIT0
 this_invocation_nonce
 60
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 6 ]
@@ -9265,7 +9265,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 1 ]
 1
 this
-134519252
+<STATIC_ADDR>
 1
 this->privateIntA
 15
@@ -9277,17 +9277,17 @@ this->publicIntA
 13
 1
 this[0]
-134519252
+<STATIC_ADDR>
 1
 
 E.setEverything():::EXIT0
 this_invocation_nonce
 59
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 6 ]
@@ -9335,7 +9335,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 1 ]
 1
 this
-134519252
+<STATIC_ADDR>
 1
 this->A.privateIntA
 15
@@ -9356,17 +9356,17 @@ this->publicIntE
 10
 1
 this[0]
-134519252
+<STATIC_ADDR>
 1
 
 B.setEverything():::EXIT0
 this_invocation_nonce
 56
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 6 ]
@@ -9414,7 +9414,7 @@ this_invocation_nonce
 [ 1 1 1 1 1 1 1 1 1 1 ]
 1
 this
-134519228
+<STATIC_ADDR>
 1
 this->C.privateIntC
 6
@@ -9462,17 +9462,17 @@ this->publicIntB
 1
 1
 this[0]
-134519228
+<STATIC_ADDR>
 1
 
 ..main():::EXIT0
 this_invocation_nonce
 0
 ::arrayOfBees
-134518688
+<STATIC_ADDR>
 1
 ::arrayOfBees[..]
-[ 134518688 134518748 134518808 134518868 134518928 134518988 134519048 134519108 134519168 134519228 ]
+[ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]
 1
 ::arrayOfBees[..].C.privateIntC
 [ 6 6 6 6 6 6 6 6 6 6 ]

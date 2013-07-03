@@ -1,3 +1,3 @@
-NAME := levels
+NAME := pointer-levels
 
 include ../Makefile.common

@@ -21,7 +21,7 @@ ppt ..func():::ENTER
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[0][0]
     var-kind field [0]
@@ -29,13 +29,13 @@ ppt ..func():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[1]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[1][0]
     var-kind field [0]
@@ -43,13 +43,13 @@ ppt ..func():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[2]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[2][0]
     var-kind field [0]
@@ -57,13 +57,13 @@ ppt ..func():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[3]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[3][0]
     var-kind field [0]
@@ -71,13 +71,13 @@ ppt ..func():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[4]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[4][0]
     var-kind field [0]
@@ -85,13 +85,13 @@ ppt ..func():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[5]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[5][0]
     var-kind field [0]
@@ -99,7 +99,35 @@ ppt ..func():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
+  variable ::buf[..].__jmpbuf[6]
+    var-kind field __jmpbuf
+    enclosing-var ::buf[..]
+    array 1
+    rep-type hashcode[]
+    dec-type long*[]
+    flags non_null 
+  variable ::buf[..].__jmpbuf[6][0]
+    var-kind field [0]
+    enclosing-var ::buf[..].__jmpbuf[6]
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable ::buf[..].__jmpbuf[7]
+    var-kind field __jmpbuf
+    enclosing-var ::buf[..]
+    array 1
+    rep-type hashcode[]
+    dec-type long*[]
+    flags non_null 
+  variable ::buf[..].__jmpbuf[7][0]
+    var-kind field [0]
+    enclosing-var ::buf[..].__jmpbuf[7]
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
   variable ::buf[..].__mask_was_saved
     var-kind field __mask_was_saved
     enclosing-var ::buf[..]
@@ -117,7 +145,7 @@ ppt ..func():::ENTER
     enclosing-var ::buf[..].__saved_mask
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ::buf[..].__saved_mask.__val[0]
     var-kind field [0]
@@ -125,7 +153,7 @@ ppt ..func():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable a
     var-kind variable
     rep-type int
@@ -151,7 +179,7 @@ ppt ..func():::EXIT0
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[0][0]
     var-kind field [0]
@@ -159,13 +187,13 @@ ppt ..func():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[1]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[1][0]
     var-kind field [0]
@@ -173,13 +201,13 @@ ppt ..func():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[2]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[2][0]
     var-kind field [0]
@@ -187,13 +215,13 @@ ppt ..func():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[3]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[3][0]
     var-kind field [0]
@@ -201,13 +229,13 @@ ppt ..func():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[4]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[4][0]
     var-kind field [0]
@@ -215,13 +243,13 @@ ppt ..func():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[5]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[5][0]
     var-kind field [0]
@@ -229,7 +257,35 @@ ppt ..func():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
+  variable ::buf[..].__jmpbuf[6]
+    var-kind field __jmpbuf
+    enclosing-var ::buf[..]
+    array 1
+    rep-type hashcode[]
+    dec-type long*[]
+    flags non_null 
+  variable ::buf[..].__jmpbuf[6][0]
+    var-kind field [0]
+    enclosing-var ::buf[..].__jmpbuf[6]
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable ::buf[..].__jmpbuf[7]
+    var-kind field __jmpbuf
+    enclosing-var ::buf[..]
+    array 1
+    rep-type hashcode[]
+    dec-type long*[]
+    flags non_null 
+  variable ::buf[..].__jmpbuf[7][0]
+    var-kind field [0]
+    enclosing-var ::buf[..].__jmpbuf[7]
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
   variable ::buf[..].__mask_was_saved
     var-kind field __mask_was_saved
     enclosing-var ::buf[..]
@@ -247,7 +303,7 @@ ppt ..func():::EXIT0
     enclosing-var ::buf[..].__saved_mask
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ::buf[..].__saved_mask.__val[0]
     var-kind field [0]
@@ -255,7 +311,7 @@ ppt ..func():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable a
     var-kind variable
     rep-type int
@@ -281,7 +337,7 @@ ppt ..main():::ENTER
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[0][0]
     var-kind field [0]
@@ -289,13 +345,13 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[1]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[1][0]
     var-kind field [0]
@@ -303,13 +359,13 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[2]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[2][0]
     var-kind field [0]
@@ -317,13 +373,13 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[3]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[3][0]
     var-kind field [0]
@@ -331,13 +387,13 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[4]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[4][0]
     var-kind field [0]
@@ -345,13 +401,13 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[5]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[5][0]
     var-kind field [0]
@@ -359,7 +415,35 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
+  variable ::buf[..].__jmpbuf[6]
+    var-kind field __jmpbuf
+    enclosing-var ::buf[..]
+    array 1
+    rep-type hashcode[]
+    dec-type long*[]
+    flags non_null 
+  variable ::buf[..].__jmpbuf[6][0]
+    var-kind field [0]
+    enclosing-var ::buf[..].__jmpbuf[6]
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable ::buf[..].__jmpbuf[7]
+    var-kind field __jmpbuf
+    enclosing-var ::buf[..]
+    array 1
+    rep-type hashcode[]
+    dec-type long*[]
+    flags non_null 
+  variable ::buf[..].__jmpbuf[7][0]
+    var-kind field [0]
+    enclosing-var ::buf[..].__jmpbuf[7]
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
   variable ::buf[..].__mask_was_saved
     var-kind field __mask_was_saved
     enclosing-var ::buf[..]
@@ -377,7 +461,7 @@ ppt ..main():::ENTER
     enclosing-var ::buf[..].__saved_mask
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ::buf[..].__saved_mask.__val[0]
     var-kind field [0]
@@ -385,7 +469,7 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
 
 ppt ..main():::EXIT0
   ppt-type subexit
@@ -406,7 +490,7 @@ ppt ..main():::EXIT0
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[0][0]
     var-kind field [0]
@@ -414,13 +498,13 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[1]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[1][0]
     var-kind field [0]
@@ -428,13 +512,13 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[2]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[2][0]
     var-kind field [0]
@@ -442,13 +526,13 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[3]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[3][0]
     var-kind field [0]
@@ -456,13 +540,13 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[4]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[4][0]
     var-kind field [0]
@@ -470,13 +554,13 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::buf[..].__jmpbuf[5]
     var-kind field __jmpbuf
     enclosing-var ::buf[..]
     array 1
     rep-type hashcode[]
-    dec-type int*[]
+    dec-type long*[]
     flags non_null 
   variable ::buf[..].__jmpbuf[5][0]
     var-kind field [0]
@@ -484,7 +568,35 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
+  variable ::buf[..].__jmpbuf[6]
+    var-kind field __jmpbuf
+    enclosing-var ::buf[..]
+    array 1
+    rep-type hashcode[]
+    dec-type long*[]
+    flags non_null 
+  variable ::buf[..].__jmpbuf[6][0]
+    var-kind field [0]
+    enclosing-var ::buf[..].__jmpbuf[6]
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable ::buf[..].__jmpbuf[7]
+    var-kind field __jmpbuf
+    enclosing-var ::buf[..]
+    array 1
+    rep-type hashcode[]
+    dec-type long*[]
+    flags non_null 
+  variable ::buf[..].__jmpbuf[7][0]
+    var-kind field [0]
+    enclosing-var ::buf[..].__jmpbuf[7]
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
   variable ::buf[..].__mask_was_saved
     var-kind field __mask_was_saved
     enclosing-var ::buf[..]
@@ -502,7 +614,7 @@ ppt ..main():::EXIT0
     enclosing-var ::buf[..].__saved_mask
     array 1
     rep-type hashcode[]
-    dec-type unsigned\_int*[]
+    dec-type unsigned\_long*[]
     flags non_null 
   variable ::buf[..].__saved_mask.__val[0]
     var-kind field [0]
@@ -510,7 +622,7 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type int[]
-    dec-type unsigned\_int[]
+    dec-type unsigned\_long[]
   variable return
     var-kind variable
     rep-type int

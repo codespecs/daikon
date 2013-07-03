@@ -4,9 +4,7 @@
 ==PID== Command: ./NestedStructVarList
 ==PID== 
 
-
-
-
-
+Begin processing variable list file "NestedStructVarList.vars" ...
+Done processing variable list file "NestedStructVarList.vars"
 ==PID== 
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

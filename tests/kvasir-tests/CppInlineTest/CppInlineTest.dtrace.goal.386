@@ -1,0 +1,38 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+
+foo.visibleFunction():::ENTER
+this_invocation_nonce
+1
+this
+<STACK_ADDR>
+1
+this[0]
+nonsensical
+2
+
+foo.visibleFunction():::EXIT0
+this_invocation_nonce
+1
+return
+2
+1
+this
+<STACK_ADDR>
+1
+this[0]
+nonsensical
+2
+
+..main():::EXIT0
+this_invocation_nonce
+0
+return
+0
+1
+

@@ -1,0 +1,59 @@
+input-language C/C++
+decl-version 2.0
+var-comparability none
+
+..main():::ENTER
+this_invocation_nonce
+0
+::anotherGlobalIntArray[..]
+nonsensical
+2
+::globalIntArray
+0x0
+1
+::globalIntArray[..]
+nonsensical
+2
+
+..secondFileFunction():::ENTER
+this_invocation_nonce
+1
+::anotherGlobalIntArray[..]
+nonsensical
+2
+::globalIntArray
+<HEAP_ADDR>
+1
+::globalIntArray[..]
+[ 1 2 3 4 5 6 7 8 9 10 ]
+1
+
+..secondFileFunction():::EXIT0
+this_invocation_nonce
+1
+::anotherGlobalIntArray[..]
+nonsensical
+2
+::globalIntArray
+<HEAP_ADDR>
+1
+::globalIntArray[..]
+[ 1 2 3 4 5 6 7 8 9 10 ]
+1
+
+..main():::EXIT0
+this_invocation_nonce
+0
+::anotherGlobalIntArray[..]
+nonsensical
+2
+::globalIntArray
+<HEAP_ADDR>
+1
+::globalIntArray[..]
+[ 1 2 3 4 5 6 7 8 9 10 ]
+1
+return
+0
+1
+

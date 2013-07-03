@@ -1,9 +1,0 @@
-ArrayTest
-ArrayTest.decls.diff
-ArrayTest.dtrace.diff
-ArrayTest.invs.diff
-ArrayTest.out
-ArrayTest.out.diff
-ran-kvasir
-*.counts *.counts.diff
-ArrayTest.comp ArrayTest.comp.diff

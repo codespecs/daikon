@@ -325,8 +325,6 @@ orig(num[0]->n_next[].n_len) elements == num[0]->n_len
 num[0]->n_ptr == num[0]->n_value
 num[0]->n_ptr == orig(num[0]->n_ptr)
 num[0]->n_ptr == orig(num[0]->n_value)
-num[0]->n_refs % orig(num[0]->n_refs) == 0
-orig(num[0]->n_refs) is a bitwise subset of num[0]->n_refs
 num[0]->n_scale in orig(num[0]->n_next[].n_refs)
 orig(num[0]->n_next[].n_refs) elements == num[0]->n_scale
 num[0]->n_sign in orig(num[0]->n_next[].n_sign)

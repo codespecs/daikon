@@ -1,3 +1,3 @@
-NAME := interact
+NAME := printf-interact
 
 include ../Makefile.common

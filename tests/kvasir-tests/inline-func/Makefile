@@ -1,3 +1,3 @@
-NAME := inline
+NAME := inline-func
 
 include ../Makefile.common

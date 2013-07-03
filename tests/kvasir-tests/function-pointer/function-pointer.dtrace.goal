@@ -10,7 +10,7 @@ this_invocation_nonce
 this_invocation_nonce
 1
 fp
-134513296
+<STATIC_ADDR>
 1
 fp[..]
 nonsensical
@@ -23,7 +23,7 @@ val
 this_invocation_nonce
 1
 fp
-134513296
+<STATIC_ADDR>
 1
 fp[..]
 nonsensical

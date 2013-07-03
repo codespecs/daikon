@@ -10,10 +10,10 @@ this_invocation_nonce
 this_invocation_nonce
 1
 t
-3202010720
+<STATIC_ADDR>
 1
 t[..]
-[ 3202010720 3202010732 3202010744 3202010756 3202010768 ]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
 1
 t[..].a
 [ 1 2 3 4 5 ]
@@ -32,10 +32,10 @@ return
 100
 1
 t
-3202010720
+<STATIC_ADDR>
 1
 t[..]
-[ 3202010720 3202010732 3202010744 3202010756 3202010768 ]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
 1
 t[..].a
 [ 1 2 3 4 5 ]
@@ -51,10 +51,10 @@ t[..].c
 this_invocation_nonce
 2
 t
-3202010732
+<STATIC_ADDR>
 1
 t[..]
-[ 3202010732 3202010744 3202010756 3202010768 ]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
 1
 t[..].a
 [ 2 3 4 5 ]
@@ -73,10 +73,10 @@ return
 100
 1
 t
-3202010732
+<STATIC_ADDR>
 1
 t[..]
-[ 3202010732 3202010744 3202010756 3202010768 ]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
 1
 t[..].a
 [ 2 3 4 5 ]
@@ -92,10 +92,10 @@ t[..].c
 this_invocation_nonce
 3
 t
-3202010744
+<STATIC_ADDR>
 1
 t[..]
-[ 3202010744 3202010756 3202010768 ]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
 1
 t[..].a
 [ 3 4 5 ]
@@ -114,10 +114,10 @@ return
 100
 1
 t
-3202010744
+<STATIC_ADDR>
 1
 t[..]
-[ 3202010744 3202010756 3202010768 ]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
 1
 t[..].a
 [ 3 4 5 ]
@@ -133,10 +133,10 @@ t[..].c
 this_invocation_nonce
 4
 t
-3202010756
+<STATIC_ADDR>
 1
 t[..]
-[ 3202010756 3202010768 ]
+[ <STACK_ADDR> <STACK_ADDR> ]
 1
 t[..].a
 [ 4 5 ]
@@ -155,10 +155,10 @@ return
 100
 1
 t
-3202010756
+<STATIC_ADDR>
 1
 t[..]
-[ 3202010756 3202010768 ]
+[ <STACK_ADDR> <STACK_ADDR> ]
 1
 t[..].a
 [ 4 5 ]
@@ -174,10 +174,10 @@ t[..].c
 this_invocation_nonce
 5
 t
-3202010768
+<STATIC_ADDR>
 1
 t[..]
-[ 3202010768 ]
+[ <STACK_ADDR> ]
 1
 t[..].a
 [ 5 ]
@@ -196,10 +196,10 @@ return
 100
 1
 t
-3202010768
+<STATIC_ADDR>
 1
 t[..]
-[ 3202010768 ]
+[ <STACK_ADDR> ]
 1
 t[..].a
 [ 5 ]
@@ -215,7 +215,7 @@ t[..].c
 this_invocation_nonce
 6
 m
-1657639216
+<STATIC_ADDR>
 1
 m.mapName
 "tiles map"
@@ -224,10 +224,10 @@ m.numTiles
 5
 1
 m.tiles
-3202010720
+<STATIC_ADDR>
 1
 m.tiles[..]
-[ 3202010720 3202010732 3202010744 3202010756 3202010768 ]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
 1
 m.tiles[..].a
 [ 1 2 3 4 5 ]
@@ -243,7 +243,7 @@ m.tiles[..].c
 this_invocation_nonce
 6
 m
-1657639216
+<STATIC_ADDR>
 1
 m.mapName
 "tiles map"
@@ -252,10 +252,10 @@ m.numTiles
 5
 1
 m.tiles
-3202010720
+<STATIC_ADDR>
 1
 m.tiles[..]
-[ 3202010720 3202010732 3202010744 3202010756 3202010768 ]
+[ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
 1
 m.tiles[..].a
 [ 1 2 3 4 5 ]
@@ -274,10 +274,10 @@ return
 this_invocation_nonce
 7
 m
-3202010708
+<STATIC_ADDR>
 1
 m[..]
-[ 3202010708 ]
+[ <STACK_ADDR> ]
 1
 m[..].mapName
 [ "tiles map" ]
@@ -286,7 +286,7 @@ m[..].numTiles
 [ 5 ]
 1
 m[..].tiles
-[ 3202010720 ]
+[ <STACK_ADDR> ]
 1
 m[..].tiles->a
 [ 1 ]
@@ -298,17 +298,17 @@ m[..].tiles->c
 [ 10 ]
 1
 m[..].tiles[0]
-[ 3202010720 ]
+[ <STACK_ADDR> ]
 1
 
 ..bazMapPtr():::EXIT0
 this_invocation_nonce
 7
 m
-3202010708
+<STATIC_ADDR>
 1
 m[..]
-[ 3202010708 ]
+[ <STACK_ADDR> ]
 1
 m[..].mapName
 [ "tiles map" ]
@@ -317,7 +317,7 @@ m[..].numTiles
 [ 5 ]
 1
 m[..].tiles
-[ 3202010720 ]
+[ <STACK_ADDR> ]
 1
 m[..].tiles->a
 [ 1 ]
@@ -329,7 +329,7 @@ m[..].tiles->c
 [ 10 ]
 1
 m[..].tiles[0]
-[ 3202010720 ]
+[ <STACK_ADDR> ]
 1
 return
 500

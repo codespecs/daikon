@@ -1,4 +1,4 @@
-NAME := flex
+NAME := flex-pristine
 SOURCES := ccl.c dfa.c ecs.c gen.c main.c misc.c nfa.c parse.c \
 	   scan.c skel.c sym.c tblcmp.c yylex.c
 PROGRAM_ARGS := small.fl
