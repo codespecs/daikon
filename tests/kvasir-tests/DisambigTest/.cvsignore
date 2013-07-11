@@ -1,9 +1,0 @@
-DisambigTest
-DisambigTest.decls.diff
-DisambigTest.dtrace.diff
-DisambigTest.invs.diff
-DisambigTest.out
-DisambigTest.out.diff
-ran-kvasir
-*.counts *.counts.diff
-DisambigTest.comp DisambigTest.comp.diff

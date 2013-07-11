@@ -1,3 +1,0 @@
-StaticArraysTest StaticArraysTest.decls.diff StaticArraysTest.dtrace.diff StaticArraysTest.invs.diff StaticArraysTest.out StaticArraysTest.out.diff ran-kvasir
-*.counts *.counts.diff
-StaticArraysTest.comp StaticArraysTest.comp.diff

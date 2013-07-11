@@ -46,7 +46,7 @@ b
 nonsensical
 2
 bp
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 bp[..]
 [ <STACK_ADDR> ]
@@ -73,7 +73,7 @@ c
 96
 1
 cp
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 cp[..]
 [ <STACK_ADDR> ]
@@ -316,7 +316,7 @@ b
 nonsensical
 2
 bp
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 bp[..]
 [ <STACK_ADDR> ]
@@ -343,7 +343,7 @@ c
 96
 1
 cp
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 cp[..]
 [ <STACK_ADDR> ]
@@ -514,7 +514,7 @@ f
 30000
 1
 return
-0x3a86bb48
+<STACK_ADDR>
 1
 return[..]
 [ <STACK_ADDR> ]

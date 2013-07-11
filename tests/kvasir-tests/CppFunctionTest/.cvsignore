@@ -1,9 +1,0 @@
-CppFunctionTest
-CppFunctionTest.decls.diff
-CppFunctionTest.dtrace.diff
-CppFunctionTest.invs.diff
-CppFunctionTest.out
-CppFunctionTest.out.diff
-ran-kvasir
-*.counts *.counts.diff
-CppFunctionTest.comp CppFunctionTest.comp.diff

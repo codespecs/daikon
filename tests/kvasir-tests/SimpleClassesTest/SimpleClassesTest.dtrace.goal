@@ -112,7 +112,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntA
 nonsensical
@@ -182,7 +182,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntA
 15
@@ -252,7 +252,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->C.privateIntC
 nonsensical
@@ -358,7 +358,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntC
 nonsensical
@@ -428,7 +428,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntC
 6
@@ -498,7 +498,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntD
 nonsensical
@@ -568,7 +568,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntD
 9
@@ -638,7 +638,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->A.privateIntA
 nonsensical
@@ -717,7 +717,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntA
 nonsensical
@@ -787,7 +787,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntA
 15
@@ -857,7 +857,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->A.privateIntA
 15
@@ -936,7 +936,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->C.privateIntC
 6
@@ -1042,7 +1042,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntC
 nonsensical
@@ -1112,7 +1112,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntC
 6
@@ -1182,7 +1182,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntD
 nonsensical
@@ -1252,7 +1252,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntD
 9
@@ -1322,7 +1322,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->A.privateIntA
 nonsensical
@@ -1401,7 +1401,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntA
 nonsensical
@@ -1471,7 +1471,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->privateIntA
 15
@@ -1541,7 +1541,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 ]
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->A.privateIntA
 15

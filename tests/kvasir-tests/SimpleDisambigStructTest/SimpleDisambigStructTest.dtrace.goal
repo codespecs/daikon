@@ -10,7 +10,7 @@ this_invocation_nonce
 this_invocation_nonce
 1
 b
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 b->dynamicIntArray
 nonsensical
@@ -41,7 +41,7 @@ nonsensical
 this_invocation_nonce
 1
 b
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 b->dynamicIntArray
 <HEAP_ADDR>
@@ -75,7 +75,7 @@ actualB
 <STATIC_ADDR>
 1
 actualB.dynamicIntArray
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 actualB.dynamicIntArray[..]
 [ 0 1 2 3 4 ]
@@ -103,7 +103,7 @@ actualB
 <STATIC_ADDR>
 1
 actualB.dynamicIntArray
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 actualB.dynamicIntArray[..]
 [ 0 1 2 3 4 ]

@@ -61,7 +61,7 @@ name
 "My first stack"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
 nonsensical
@@ -137,10 +137,10 @@ name
 "My first stack"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical
@@ -213,10 +213,10 @@ dat
 "First line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical
@@ -289,7 +289,7 @@ dat
 "First line"
 1
 nxt
-<STATIC_ADDR>
+0x0
 1
 nxt[..]
 nonsensical
@@ -331,7 +331,7 @@ nxt[..].next[0]
 nonsensical
 2
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 nonsensical
@@ -404,7 +404,7 @@ dat
 "First line"
 1
 nxt
-<STATIC_ADDR>
+0x0
 1
 nxt[..]
 nonsensical
@@ -446,13 +446,13 @@ nxt[..].next[0]
 nonsensical
 2
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 "First line"
 1
 this->next
-<HEAP_ADDR>
+0x0
 1
 this->next[..]
 nonsensical
@@ -519,10 +519,10 @@ dat
 "First line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -595,10 +595,10 @@ dat
 "Second line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -671,7 +671,7 @@ dat
 "Second line"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -713,7 +713,7 @@ nxt[..].next[0]
 nonsensical
 2
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 nonsensical
@@ -786,7 +786,7 @@ dat
 "Second line"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -828,7 +828,7 @@ nxt[..].next[0]
 nonsensical
 2
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 "Second line"
@@ -901,10 +901,10 @@ dat
 "Second line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -977,10 +977,10 @@ dat
 "Third line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -1053,7 +1053,7 @@ dat
 "Third line"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -1095,7 +1095,7 @@ nxt[..].next[0]
 [ <HEAP_ADDR> ]
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 nonsensical
@@ -1168,7 +1168,7 @@ dat
 "Third line"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -1210,7 +1210,7 @@ nxt[..].next[0]
 [ <HEAP_ADDR> ]
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 "Third line"
@@ -1283,10 +1283,10 @@ dat
 "Third line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -1359,10 +1359,10 @@ dat
 "Fourth line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -1435,7 +1435,7 @@ dat
 "Fourth line"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -1477,7 +1477,7 @@ nxt[..].next[0]
 [ <HEAP_ADDR> ]
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 nonsensical
@@ -1550,7 +1550,7 @@ dat
 "Fourth line"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -1592,7 +1592,7 @@ nxt[..].next[0]
 [ <HEAP_ADDR> ]
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 "Fourth line"
@@ -1665,10 +1665,10 @@ dat
 "Fourth line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -1741,10 +1741,10 @@ dat
 "Fifth line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -1817,7 +1817,7 @@ dat
 "Fifth line"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -1859,7 +1859,7 @@ nxt[..].next[0]
 [ <HEAP_ADDR> ]
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 nonsensical
@@ -1932,7 +1932,7 @@ dat
 "Fifth line"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -1974,7 +1974,7 @@ nxt[..].next[0]
 [ <HEAP_ADDR> ]
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 "Fifth line"
@@ -2047,10 +2047,10 @@ dat
 "Fifth line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -2120,10 +2120,10 @@ Stack::publicNumLinksCreated
 5
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -2196,10 +2196,10 @@ return
 "Fifth line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -2269,10 +2269,10 @@ Stack::publicNumLinksCreated
 5
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -2342,10 +2342,10 @@ Stack::publicNumLinksCreated
 5
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -2418,10 +2418,10 @@ return
 42
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -2494,10 +2494,10 @@ return
 "My first stack"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -2567,10 +2567,10 @@ Stack::publicNumLinksCreated
 5
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -2643,10 +2643,10 @@ return
 "Fifth line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -2716,10 +2716,10 @@ Stack::publicNumLinksCreated
 5
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -2792,10 +2792,10 @@ return
 "Fourth line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -2865,10 +2865,10 @@ Stack::publicNumLinksCreated
 5
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -2941,10 +2941,10 @@ return
 "Third line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -3014,10 +3014,10 @@ Stack::publicNumLinksCreated
 5
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -3090,10 +3090,10 @@ return
 "Second line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -3163,10 +3163,10 @@ Stack::publicNumLinksCreated
 5
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -3239,10 +3239,10 @@ return
 "First line"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical
@@ -3312,10 +3312,10 @@ Stack::publicNumLinksCreated
 5
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical
@@ -3388,10 +3388,10 @@ return
 nonsensical
 2
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical
@@ -3523,7 +3523,7 @@ name
 "My second stack"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
 nonsensical
@@ -3599,10 +3599,10 @@ name
 "My second stack"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical
@@ -3675,10 +3675,10 @@ dat
 "Uno"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical
@@ -3751,7 +3751,7 @@ dat
 "Uno"
 1
 nxt
-<STATIC_ADDR>
+0x0
 1
 nxt[..]
 nonsensical
@@ -3793,7 +3793,7 @@ nxt[..].next[0]
 nonsensical
 2
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 nonsensical
@@ -3866,7 +3866,7 @@ dat
 "Uno"
 1
 nxt
-<STATIC_ADDR>
+0x0
 1
 nxt[..]
 nonsensical
@@ -3908,13 +3908,13 @@ nxt[..].next[0]
 nonsensical
 2
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 "Uno"
 1
 this->next
-<HEAP_ADDR>
+0x0
 1
 this->next[..]
 nonsensical
@@ -3981,10 +3981,10 @@ dat
 "Uno"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -4057,10 +4057,10 @@ dat
 "Dos"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -4133,7 +4133,7 @@ dat
 "Dos"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -4175,7 +4175,7 @@ nxt[..].next[0]
 nonsensical
 2
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 nonsensical
@@ -4248,7 +4248,7 @@ dat
 "Dos"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -4290,7 +4290,7 @@ nxt[..].next[0]
 nonsensical
 2
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 "Dos"
@@ -4363,10 +4363,10 @@ dat
 "Dos"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -4439,10 +4439,10 @@ dat
 "Tres"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -4515,7 +4515,7 @@ dat
 "Tres"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -4557,7 +4557,7 @@ nxt[..].next[0]
 [ <HEAP_ADDR> ]
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 nonsensical
@@ -4630,7 +4630,7 @@ dat
 "Tres"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -4672,7 +4672,7 @@ nxt[..].next[0]
 [ <HEAP_ADDR> ]
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 "Tres"
@@ -4745,10 +4745,10 @@ dat
 "Tres"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -4821,10 +4821,10 @@ dat
 "Cuatro"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -4897,7 +4897,7 @@ dat
 "Cuatro"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -4939,7 +4939,7 @@ nxt[..].next[0]
 [ <HEAP_ADDR> ]
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 nonsensical
@@ -5012,7 +5012,7 @@ dat
 "Cuatro"
 1
 nxt
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 nxt[..]
 [ <HEAP_ADDR> ]
@@ -5054,7 +5054,7 @@ nxt[..].next[0]
 [ <HEAP_ADDR> ]
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this->data
 "Cuatro"
@@ -5127,10 +5127,10 @@ dat
 "Cuatro"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -5200,10 +5200,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -5273,10 +5273,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -5349,10 +5349,10 @@ return
 42
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -5425,10 +5425,10 @@ return
 "My second stack"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -5498,10 +5498,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -5574,10 +5574,10 @@ return
 "Cuatro"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -5647,10 +5647,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -5723,10 +5723,10 @@ return
 "Tres"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -5796,10 +5796,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -5872,10 +5872,10 @@ return
 "Dos"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -5945,10 +5945,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+<HEAP_ADDR>
 1
 this->head[..]
 [ <HEAP_ADDR> ]
@@ -6021,10 +6021,10 @@ return
 "Uno"
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical
@@ -6094,10 +6094,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical
@@ -6170,10 +6170,10 @@ return
 nonsensical
 2
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical
@@ -6302,10 +6302,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical
@@ -6375,10 +6375,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical
@@ -6448,10 +6448,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical
@@ -6521,10 +6521,10 @@ Stack::publicNumLinksCreated
 9
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this->head
-<STACK_ADDR>
+0x0
 1
 this->head[..]
 nonsensical

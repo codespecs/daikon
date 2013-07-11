@@ -28,7 +28,7 @@ this_invocation_nonce
 ""
 1
 f
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 f->foo_baz
 <HEAP_ADDR>
@@ -68,7 +68,7 @@ this_invocation_nonce
 ""
 1
 f
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 f->foo_baz
 <HEAP_ADDR>
@@ -108,7 +108,7 @@ this_invocation_nonce
 ""
 1
 f
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 f->foo_baz
 <HEAP_ADDR>
@@ -148,7 +148,7 @@ this_invocation_nonce
 ""
 1
 f
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 f->foo_baz
 <HEAP_ADDR>
@@ -188,7 +188,7 @@ this_invocation_nonce
 ""
 1
 b
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 b->bar_int
 123456
@@ -210,7 +210,7 @@ this_invocation_nonce
 ""
 1
 b
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 b->bar_int
 123456
@@ -232,7 +232,7 @@ this_invocation_nonce
 ""
 1
 b
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 b->bar_int
 123456
@@ -241,7 +241,7 @@ b[0]
 <HEAP_ADDR>
 1
 f
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 f->foo_baz
 <HEAP_ADDR>
@@ -281,7 +281,7 @@ this_invocation_nonce
 ""
 1
 b
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 b->bar_int
 123456
@@ -290,7 +290,7 @@ b[0]
 <HEAP_ADDR>
 1
 f
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 f->foo_baz
 <HEAP_ADDR>
@@ -330,7 +330,7 @@ this_invocation_nonce
 ""
 1
 bar_as_foo
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 bar_as_foo->foo_baz
 <HEAP_ADDR>
@@ -370,7 +370,7 @@ this_invocation_nonce
 ""
 1
 bar_as_foo
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 bar_as_foo->foo_baz
 <HEAP_ADDR>

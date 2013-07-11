@@ -10,7 +10,7 @@ this_invocation_nonce
 this_invocation_nonce
 1
 f
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 f[..]
 [ <HEAP_ADDR> ]
@@ -26,7 +26,7 @@ f[..].b
 this_invocation_nonce
 1
 f
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 f[..]
 [ <HEAP_ADDR> ]
@@ -42,7 +42,7 @@ f[..].b
 this_invocation_nonce
 2
 n
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 n[..]
 [ <HEAP_ADDR> ]
@@ -97,7 +97,7 @@ nonsensical
 this_invocation_nonce
 2
 n
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 n[..]
 [ <HEAP_ADDR> ]

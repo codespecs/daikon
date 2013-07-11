@@ -6,7 +6,7 @@ var-comparability none
 this_invocation_nonce
 0
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -16,7 +16,7 @@ this_invocation_nonce
 this_invocation_nonce
 1
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -32,7 +32,7 @@ b
 this_invocation_nonce
 1
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -51,7 +51,7 @@ return
 this_invocation_nonce
 2
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -67,7 +67,7 @@ b
 this_invocation_nonce
 2
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -86,7 +86,7 @@ return
 this_invocation_nonce
 3
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -102,7 +102,7 @@ b
 this_invocation_nonce
 3
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -121,7 +121,7 @@ return
 this_invocation_nonce
 4
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -137,7 +137,7 @@ b
 this_invocation_nonce
 4
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -156,7 +156,7 @@ return
 this_invocation_nonce
 5
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -172,7 +172,7 @@ b
 this_invocation_nonce
 5
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -191,7 +191,7 @@ return
 this_invocation_nonce
 6
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -207,7 +207,7 @@ b
 this_invocation_nonce
 6
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -226,7 +226,7 @@ return
 this_invocation_nonce
 7
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -242,7 +242,7 @@ b
 this_invocation_nonce
 7
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -261,7 +261,7 @@ return
 this_invocation_nonce
 8
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -277,7 +277,7 @@ b
 this_invocation_nonce
 8
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]
@@ -296,7 +296,7 @@ return
 this_invocation_nonce
 0
 ::globalDouble
-134518592
+<STATIC_ADDR>
 1
 ::globalDouble[..]
 [ 0.000123 1230 1230000000000 1.2300000000000001e+102 inf ]

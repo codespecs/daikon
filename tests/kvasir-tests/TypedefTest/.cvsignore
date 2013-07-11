@@ -1,3 +1,0 @@
-TypedefTest TypedefTest.decls.diff TypedefTest.dtrace.diff TypedefTest.invs.diff TypedefTest.out TypedefTest.out.diff ran-kvasir
-*.counts *.counts.diff
-TypedefTest.comp TypedefTest.comp.diff

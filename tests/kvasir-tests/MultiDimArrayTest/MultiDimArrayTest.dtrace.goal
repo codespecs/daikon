@@ -64,7 +64,7 @@ this_invocation_nonce
 nonsensical
 2
 param
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 param[..]
 [ <STACK_ADDR> ]
@@ -104,7 +104,7 @@ this_invocation_nonce
 nonsensical
 2
 param
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 param[..]
 [ <STACK_ADDR> ]
@@ -165,7 +165,7 @@ booParam.d[..]
 nonsensical
 2
 param
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 param[..]
 [ <STACK_ADDR> ]
@@ -226,7 +226,7 @@ booParam.d[..]
 nonsensical
 2
 param
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 param[..]
 [ <STACK_ADDR> ]

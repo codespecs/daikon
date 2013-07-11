@@ -10,7 +10,7 @@ this_invocation_nonce
 this_invocation_nonce
 1
 t
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 t[..]
 [ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
@@ -32,7 +32,7 @@ return
 100
 1
 t
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 t[..]
 [ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
@@ -51,7 +51,7 @@ t[..].c
 this_invocation_nonce
 2
 t
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 t[..]
 [ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
@@ -73,7 +73,7 @@ return
 100
 1
 t
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 t[..]
 [ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
@@ -92,7 +92,7 @@ t[..].c
 this_invocation_nonce
 3
 t
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 t[..]
 [ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
@@ -114,7 +114,7 @@ return
 100
 1
 t
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 t[..]
 [ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
@@ -133,7 +133,7 @@ t[..].c
 this_invocation_nonce
 4
 t
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 t[..]
 [ <STACK_ADDR> <STACK_ADDR> ]
@@ -155,7 +155,7 @@ return
 100
 1
 t
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 t[..]
 [ <STACK_ADDR> <STACK_ADDR> ]
@@ -174,7 +174,7 @@ t[..].c
 this_invocation_nonce
 5
 t
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 t[..]
 [ <STACK_ADDR> ]
@@ -196,7 +196,7 @@ return
 100
 1
 t
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 t[..]
 [ <STACK_ADDR> ]
@@ -224,7 +224,7 @@ m.numTiles
 5
 1
 m.tiles
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 m.tiles[..]
 [ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
@@ -252,7 +252,7 @@ m.numTiles
 5
 1
 m.tiles
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 m.tiles[..]
 [ <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> <STACK_ADDR> ]
@@ -274,7 +274,7 @@ return
 this_invocation_nonce
 7
 m
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 m[..]
 [ <STACK_ADDR> ]
@@ -305,7 +305,7 @@ m[..].tiles[0]
 this_invocation_nonce
 7
 m
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 m[..]
 [ <STACK_ADDR> ]

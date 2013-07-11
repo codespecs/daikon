@@ -142,13 +142,13 @@ nonsensical
 [ "globalFoo[0]" "globalFoo[1]" "globalFoo[2]" "globalFoo[3]" ]
 1
 blah
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 blah[..]
 nonsensical
 2
 f
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 f[..]
 nonsensical
@@ -239,13 +239,13 @@ nonsensical
 [ "globalFoo[0]" "globalFoo[1]" "globalFoo[2]" "globalFoo[3]" ]
 1
 blah
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 blah[..]
 nonsensical
 2
 f
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 f[..]
 nonsensical
@@ -266,7 +266,7 @@ f[..].name
 nonsensical
 2
 return
-0x3a86bb48
+<STACK_ADDR>
 1
 return[..]
 nonsensical
@@ -357,7 +357,7 @@ nonsensical
 [ "globalFoo[0]" "globalFoo[1]" "globalFoo[2]" "globalFoo[3]" ]
 1
 blah
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 blah[..]
 [ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
@@ -454,7 +454,7 @@ nonsensical
 [ "globalFoo[0]" "globalFoo[1]" "globalFoo[2]" "globalFoo[3]" ]
 1
 blah
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 blah[..]
 [ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
@@ -481,7 +481,7 @@ f[..].name
 [ "globalFoo[0]" "globalFoo[1]" "globalFoo[2]" "globalFoo[3]" ]
 1
 return
-0x3a86bb48
+<STATIC_ADDR>
 1
 return[..]
 [ <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> <STATIC_ADDR> ]

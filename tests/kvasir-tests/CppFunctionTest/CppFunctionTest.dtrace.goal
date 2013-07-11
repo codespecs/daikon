@@ -430,7 +430,7 @@ this_invocation_nonce
 2000
 1
 ref_a
-<STACK_ADDR>
+<STATIC_ADDR>
 1
 ref_a[..]
 [ 1000 ]
@@ -446,7 +446,7 @@ this_invocation_nonce
 2000
 1
 ref_a
-<STACK_ADDR>
+<STATIC_ADDR>
 1
 ref_a[..]
 [ 2000 ]

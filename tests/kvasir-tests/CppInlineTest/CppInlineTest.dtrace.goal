@@ -10,7 +10,7 @@ foo.visibleFunction():::ENTER
 this_invocation_nonce
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this[0]
 nonsensical
@@ -23,7 +23,7 @@ return
 2
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this[0]
 nonsensical

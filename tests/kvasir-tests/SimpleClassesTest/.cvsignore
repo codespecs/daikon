@@ -1,9 +1,0 @@
-SimpleClassesTest
-SimpleClassesTest.decls.diff
-SimpleClassesTest.dtrace.diff
-SimpleClassesTest.invs.diff
-SimpleClassesTest.out
-SimpleClassesTest.out.diff
-ran-kvasir
-*.counts *.counts.diff
-SimpleClassesTest.comp SimpleClassesTest.comp.diff

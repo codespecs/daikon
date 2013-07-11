@@ -147,7 +147,7 @@ this_invocation_nonce
 0
 1
 ::globalIntPtr
-<STATIC_ADDR>
+0x0
 1
 ::globalIntPtr[..]
 nonsensical
@@ -162,7 +162,7 @@ nonsensical
 <STATIC_ADDR>
 1
 ::populationPtr
-<STATIC_ADDR>
+0x0
 1
 ::populationPtr[..]
 nonsensical
@@ -358,7 +358,7 @@ this_invocation_nonce
 6170
 1
 ::globalIntPtr
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 ::globalIntPtr[..]
 [ 6111 ]
@@ -373,7 +373,7 @@ this_invocation_nonce
 <STATIC_ADDR>
 1
 ::populationPtr
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 ::populationPtr[..]
 [ <HEAP_ADDR> ]
@@ -433,7 +433,7 @@ a
 250
 1
 b
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 b[..]
 [ 61 61 62 63 65 68 ]
@@ -584,7 +584,7 @@ this_invocation_nonce
 6170
 1
 ::globalIntPtr
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 ::globalIntPtr[..]
 [ 6111 ]
@@ -599,7 +599,7 @@ this_invocation_nonce
 <STATIC_ADDR>
 1
 ::populationPtr
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 ::populationPtr[..]
 [ <HEAP_ADDR> ]
@@ -659,7 +659,7 @@ a
 250
 1
 b
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 b[..]
 [ 61 61 62 63 65 68 ]
@@ -813,7 +813,7 @@ this_invocation_nonce
 6170
 1
 ::globalIntPtr
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 ::globalIntPtr[..]
 [ 6111 ]
@@ -828,7 +828,7 @@ this_invocation_nonce
 <STATIC_ADDR>
 1
 ::populationPtr
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 ::populationPtr[..]
 [ <HEAP_ADDR> ]
