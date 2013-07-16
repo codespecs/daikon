@@ -96,14 +96,14 @@ nonsensical
 nonsensical
 2
 argc
-nonsensical
-2
+5
+1
 argv
-nonsensical
-2
+<STACK_ADDR>
+1
 argv[..]
-nonsensical
-2
+[ "./wordplay" ]
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -1014,11 +1014,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ADMIXTURE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -1120,11 +1120,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ADMIXTURE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -1629,11 +1629,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ALIEN"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -1735,11 +1735,11 @@ return
 "ADGIKRRSSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ALIEN"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -2447,11 +2447,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ALLEYWAY"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -2553,11 +2553,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ALLEYWAY"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -3062,11 +3062,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ANECDOTE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -3168,11 +3168,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ANECDOTE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -3677,11 +3677,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ANNUM"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -3783,11 +3783,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ANNUM"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -4292,11 +4292,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ANTITHETIC"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -4398,11 +4398,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ANTITHETIC"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -4907,11 +4907,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ARIZONA"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -5013,11 +5013,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ARIZONA"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -5522,11 +5522,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"BALMY"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -5628,11 +5628,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"BALMY"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -6137,11 +6137,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"BANKRUPT"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -6243,11 +6243,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"BANKRUPT"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -6752,11 +6752,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"BEECHWOOD"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -6858,11 +6858,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"BEECHWOOD"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -7367,11 +7367,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"BILATERAL"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -7473,11 +7473,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"BILATERAL"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -7982,11 +7982,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"BUSH"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -8088,11 +8088,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"BUSH"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -8597,11 +8597,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CADET"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -8703,11 +8703,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CADET"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -9212,11 +9212,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CAHOOT"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -9318,11 +9318,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CAHOOT"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -9827,11 +9827,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CAMDEN"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -9933,11 +9933,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CAMDEN"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -10442,11 +10442,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CAPTIVE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -10548,11 +10548,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CAPTIVE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -11057,11 +11057,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CATCHUP"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -11163,11 +11163,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CATCHUP"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -11672,11 +11672,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CLAN"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -11778,11 +11778,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CLAN"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -12287,11 +12287,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CLOAKROOM"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -12393,11 +12393,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CLOAKROOM"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -12902,11 +12902,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"COLICKY"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -13008,11 +13008,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"COLICKY"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -13517,11 +13517,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"COPYRIGHT"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -13623,11 +13623,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"COPYRIGHT"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -14132,11 +14132,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"COPYWRITER"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -14238,11 +14238,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"COPYWRITER"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -14747,11 +14747,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CRIMP"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -14853,11 +14853,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CRIMP"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -15362,11 +15362,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CUSTOM"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -15468,11 +15468,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"CUSTOM"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -15977,11 +15977,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DANGER"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -16083,11 +16083,11 @@ return
 "AIIKLRSSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DANGER"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -16795,11 +16795,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DARK"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -16901,11 +16901,11 @@ return
 "AEGIILNRSSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DARK"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -17613,11 +17613,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DEALT"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -17719,11 +17719,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DEALT"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -18228,11 +18228,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DEVIANT"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -18334,11 +18334,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DEVIANT"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -18843,11 +18843,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DOORMEN"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -18949,11 +18949,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DOORMEN"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -19458,11 +19458,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DORIS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -19564,11 +19564,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DORIS"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -20073,11 +20073,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DRINK"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -20179,11 +20179,11 @@ return
 "AAEGILRSSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DRINK"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -20891,11 +20891,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DUGAN"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -20997,11 +20997,11 @@ return
 "AEIIKLRRSSSVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DUGAN"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -21709,11 +21709,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DUNLOP"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -21815,11 +21815,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"DUNLOP"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -22324,11 +22324,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"EMIT"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -22430,11 +22430,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"EMIT"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -22939,11 +22939,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ENVELOPE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -23045,11 +23045,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ENVELOPE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -23554,11 +23554,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"EXPLICIT"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -23660,11 +23660,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"EXPLICIT"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -24169,11 +24169,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"EXTREMUM"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -24275,11 +24275,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"EXTREMUM"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -24784,11 +24784,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"FAILSAFE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -24890,11 +24890,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"FAILSAFE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -25399,11 +25399,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"FLABBERGAST"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -25505,11 +25505,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"FLABBERGAST"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -26014,11 +26014,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"FORK"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -26120,11 +26120,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"FORK"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -26629,11 +26629,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"FRUGAL"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -26735,11 +26735,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"FRUGAL"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -27244,11 +27244,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GANDER"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -27350,11 +27350,11 @@ return
 "AIIKLRSSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GANDER"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -28062,11 +28062,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GARDEN"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -28168,11 +28168,11 @@ return
 "AIIKLRSSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GARDEN"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -28880,11 +28880,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GARLAND"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -28986,11 +28986,11 @@ return
 "EIIKRSSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GARLAND"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -29698,11 +29698,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GASES"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -29804,11 +29804,11 @@ return
 "ADIIKLNRRSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GASES"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -30516,11 +30516,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GIGAVOLT"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -30622,11 +30622,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GIGAVOLT"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -31131,11 +31131,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GILMORE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -31237,11 +31237,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GILMORE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -31746,11 +31746,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GNEISS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -31852,11 +31852,11 @@ return
 "AADIKLRRSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GNEISS"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -32564,11 +32564,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GOLDENEYE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -32670,11 +32670,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GOLDENEYE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -33179,11 +33179,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GONDOLA"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -33285,11 +33285,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GONDOLA"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -33794,11 +33794,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GORGE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -33900,11 +33900,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GORGE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -34409,11 +34409,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GOVERNOR"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -34515,11 +34515,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GOVERNOR"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -35024,11 +35024,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GRASSLAND"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -35130,11 +35130,11 @@ return
 "EIIKRSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"GRASSLAND"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -35842,11 +35842,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"HETEROGAMOUS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -35948,11 +35948,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"HETEROGAMOUS"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -36457,11 +36457,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"INCOMPATIBLE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -36563,11 +36563,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"INCOMPATIBLE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -37072,11 +37072,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"INCONSIDERABLE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -37178,11 +37178,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"INCONSIDERABLE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -37687,11 +37687,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"INERT"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -37793,11 +37793,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"INERT"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -38302,11 +38302,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"INFILTRATE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -38408,11 +38408,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"INFILTRATE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -38917,11 +38917,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"INFINITESIMAL"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -39023,11 +39023,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"INFINITESIMAL"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -39532,11 +39532,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"INSCRIPTION"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -39638,11 +39638,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"INSCRIPTION"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -40147,11 +40147,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"JOINT"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -40253,11 +40253,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"JOINT"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -40762,11 +40762,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"JUNKY"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -40868,11 +40868,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"JUNKY"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -41377,11 +41377,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"KIEV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -41483,11 +41483,11 @@ return
 "AADGILNRRSSSUV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"KIEV"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -42195,11 +42195,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"KISS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -42301,11 +42301,11 @@ return
 "AADEGILNRRSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"KISS"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -43013,11 +43013,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"LUMINOSITY"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -43119,11 +43119,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"LUMINOSITY"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -43628,11 +43628,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"MANTLEPIECE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -43734,11 +43734,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"MANTLEPIECE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -44243,11 +44243,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"MARE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -44349,11 +44349,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"MARE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -44858,11 +44858,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"MENARCHE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -44964,11 +44964,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"MENARCHE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -45473,11 +45473,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"NANKING"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -45579,11 +45579,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"NANKING"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -46088,11 +46088,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"NOW"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -46194,11 +46194,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"NOW"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -46703,11 +46703,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"OPPENHEIMER"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -46809,11 +46809,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"OPPENHEIMER"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -47318,11 +47318,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"OSTEOPOROSIS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -47424,11 +47424,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"OSTEOPOROSIS"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -47933,11 +47933,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PATRICIAN"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -48039,11 +48039,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PATRICIAN"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -48548,11 +48548,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PIGMENTATION"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -48654,11 +48654,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PIGMENTATION"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -49163,11 +49163,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PLAYHOUSE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -49269,11 +49269,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PLAYHOUSE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -49778,11 +49778,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"POPLAR"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -49884,11 +49884,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"POPLAR"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -50393,11 +50393,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"POSTMARK"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -50499,11 +50499,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"POSTMARK"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -51008,11 +51008,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"POYNTING"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -51114,11 +51114,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"POYNTING"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -51623,11 +51623,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PRECINCT"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -51729,11 +51729,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PRECINCT"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -52238,11 +52238,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PREDICTOR"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -52344,11 +52344,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PREDICTOR"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -52853,11 +52853,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PROMENADE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -52959,11 +52959,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PROMENADE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -53468,11 +53468,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PROTACTINIUM"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -53574,11 +53574,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"PROTACTINIUM"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -54083,11 +54083,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"RABBI"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -54189,11 +54189,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"RABBI"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -54698,11 +54698,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"RESCUE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -54804,11 +54804,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"RESCUE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -55313,11 +55313,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"RISK"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -55419,11 +55419,11 @@ return
 "AADEGILNRSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"RISK"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -56131,11 +56131,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ROOM"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -56237,11 +56237,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ROOM"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -56746,11 +56746,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"RUTHENIUM"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -56852,11 +56852,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"RUTHENIUM"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -57361,11 +57361,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SALTY"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -57467,11 +57467,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SALTY"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -57976,11 +57976,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SCYTHE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -58082,11 +58082,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SCYTHE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -58591,11 +58591,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SERENE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -58697,11 +58697,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SERENE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -59206,11 +59206,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SERMON"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -59312,11 +59312,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SERMON"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -59821,11 +59821,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SETUP"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -59927,11 +59927,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SETUP"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -60436,11 +60436,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SHIED"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -60542,11 +60542,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SHIED"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -61051,11 +61051,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SHOVE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -61157,11 +61157,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SHOVE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -61666,11 +61666,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SILVER"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -61772,11 +61772,11 @@ return
 "AADGIKNRSSUV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SILVER"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -62484,11 +62484,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SINFUL"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -62590,11 +62590,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SINFUL"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -63099,11 +63099,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SKYE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -63205,11 +63205,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SKYE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -63714,11 +63714,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SKYJACK"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -63820,11 +63820,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SKYJACK"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -64329,11 +64329,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SLADANG"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -64435,11 +64435,11 @@ return
 "EIIKRRSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SLADANG"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -65147,11 +65147,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SLEUTH"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -65253,11 +65253,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SLEUTH"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -65762,11 +65762,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SLIVER"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -65868,11 +65868,11 @@ return
 "AADGIKNRSSUV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SLIVER"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -66580,11 +66580,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SMEAR"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -66686,11 +66686,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SMEAR"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -67195,11 +67195,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SOVEREIGNTY"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -67301,11 +67301,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SOVEREIGNTY"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -67810,11 +67810,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SOWBELLY"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -67916,11 +67916,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SOWBELLY"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -68425,11 +68425,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SQUANDER"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -68531,11 +68531,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SQUANDER"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -69040,11 +69040,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"STANDPOINT"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -69146,11 +69146,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"STANDPOINT"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -69655,11 +69655,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"STANTON"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -69761,11 +69761,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"STANTON"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -70270,11 +70270,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"STEARNS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -70376,11 +70376,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"STEARNS"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -70885,11 +70885,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SURVIVAL"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -70991,11 +70991,11 @@ return
 "ADEGIKNRSS"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SURVIVAL"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -71703,11 +71703,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SURVIVE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -71809,11 +71809,11 @@ return
 "AADGIKLNRSS"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SURVIVE"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -72521,11 +72521,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SURVIVE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -72627,11 +72627,11 @@ return
 "AADGIKLNRSS"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"SURVIVE"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -73339,11 +73339,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"TACKY"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -73445,11 +73445,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"TACKY"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -73954,11 +73954,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"THEATRIC"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -74060,11 +74060,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"THEATRIC"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -74569,11 +74569,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"TOWN"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -74675,11 +74675,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"TOWN"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -75184,11 +75184,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"TUFF"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -75290,11 +75290,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"TUFF"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -75799,11 +75799,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"VANGUARD"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -75905,11 +75905,11 @@ return
 "EIIKLRSSSV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"VANGUARD"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -76617,11 +76617,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"VIRUS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -76723,11 +76723,11 @@ return
 "AADEGIKLNRSSV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"VIRUS"
+1
 
 ..uppercase():::ENTER
 this_invocation_nonce
@@ -77435,11 +77435,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"WATERGATE"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -77541,11 +77541,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"WATERGATE"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -78050,11 +78050,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"WILL"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -78156,11 +78156,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"WILL"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -78665,11 +78665,11 @@ nonsensical
 nonsensical
 2
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ZACHARY"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -78771,11 +78771,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ZACHARY"
+1
 
 ..alphabetic():::ENTER
 this_invocation_nonce
@@ -97115,11 +97115,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AADGLNR"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -97221,11 +97221,11 @@ return
 "EIIKRSSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AADGLNR"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -97833,11 +97833,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"EIIKRSSSUVV"
+1
 s2
-nonsensical
-2
+"EIKV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -97939,11 +97939,11 @@ return
 "IRSSSUV"
 1
 s1
-nonsensical
-2
+"EIIKRSSSUVV"
+1
 s2
-nonsensical
-2
+"EIKV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -98551,11 +98551,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IRSSSUV"
+1
 s2
-nonsensical
-2
+"IRSUV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -98657,11 +98657,11 @@ return
 "SS"
 1
 s1
-nonsensical
-2
+"IRSSSUV"
+1
 s2
-nonsensical
-2
+"IRSUV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -99105,11 +99105,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"EIIKRSSSUVV"
+1
 s2
-nonsensical
-2
+"EIRSUVV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -99211,11 +99211,11 @@ return
 "IKSS"
 1
 s1
-nonsensical
-2
+"EIIKRSSSUVV"
+1
 s2
-nonsensical
-2
+"EIRSUVV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -99823,11 +99823,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -99929,11 +99929,11 @@ return
 ""
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..anagramr7():::EXIT0
 this_invocation_nonce
@@ -100147,11 +100147,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"EIIKRSSSUVV"
+1
 s2
-nonsensical
-2
+"EIRSUVV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -100253,11 +100253,11 @@ return
 "IKSS"
 1
 s1
-nonsensical
-2
+"EIIKRSSSUVV"
+1
 s2
-nonsensical
-2
+"EIRSUVV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -100865,11 +100865,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -100971,11 +100971,11 @@ return
 ""
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..anagramr7():::EXIT0
 this_invocation_nonce
@@ -101304,11 +101304,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AADGLNRSS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -101410,11 +101410,11 @@ return
 "EIIKRSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AADGLNRSS"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -102022,11 +102022,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"EIIKRSUVV"
+1
 s2
-nonsensical
-2
+"EIKV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -102128,11 +102128,11 @@ return
 "IRSUV"
 1
 s1
-nonsensical
-2
+"EIIKRSUVV"
+1
 s2
-nonsensical
-2
+"EIKV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -102740,11 +102740,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IRSUV"
+1
 s2
-nonsensical
-2
+"IRSUV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -102846,11 +102846,11 @@ return
 ""
 1
 s1
-nonsensical
-2
+"IRSUV"
+1
 s2
-nonsensical
-2
+"IRSUV"
+1
 
 ..anagramr7():::EXIT0
 this_invocation_nonce
@@ -103064,11 +103064,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"EIIKRSUVV"
+1
 s2
-nonsensical
-2
+"EIRSUVV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -103170,11 +103170,11 @@ return
 "IK"
 1
 s1
-nonsensical
-2
+"EIIKRSUVV"
+1
 s2
-nonsensical
-2
+"EIRSUVV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -103897,11 +103897,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"EIIKRSUVV"
+1
 s2
-nonsensical
-2
+"EIRSUVV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -104003,11 +104003,11 @@ return
 "IK"
 1
 s1
-nonsensical
-2
+"EIIKRSUVV"
+1
 s2
-nonsensical
-2
+"EIRSUVV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -104845,11 +104845,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AADGLNS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -104951,11 +104951,11 @@ return
 "EIIKRRSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AADGLNS"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -105563,11 +105563,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"EIIKRRSSUVV"
+1
 s2
-nonsensical
-2
+"EIKV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -105669,11 +105669,11 @@ return
 "IRRSSUV"
 1
 s1
-nonsensical
-2
+"EIIKRRSSUVV"
+1
 s2
-nonsensical
-2
+"EIKV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -106281,11 +106281,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IRRSSUV"
+1
 s2
-nonsensical
-2
+"IRSUV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -106387,11 +106387,11 @@ return
 "RS"
 1
 s1
-nonsensical
-2
+"IRRSSUV"
+1
 s2
-nonsensical
-2
+"IRSUV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -106835,11 +106835,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"EIIKRRSSUVV"
+1
 s2
-nonsensical
-2
+"EIRSUVV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -106941,11 +106941,11 @@ return
 "IKRS"
 1
 s1
-nonsensical
-2
+"EIIKRRSSUVV"
+1
 s2
-nonsensical
-2
+"EIRSUVV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -107553,11 +107553,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IKRS"
+1
 s2
-nonsensical
-2
+"IKRS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -107659,11 +107659,11 @@ return
 ""
 1
 s1
-nonsensical
-2
+"IKRS"
+1
 s2
-nonsensical
-2
+"IKRS"
+1
 
 ..extract():::ENTER
 this_invocation_nonce
@@ -107762,11 +107762,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IKRS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -107868,11 +107868,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"IKRS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..anagramr7():::EXIT0
 this_invocation_nonce
@@ -108086,11 +108086,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"EIIKRRSSUVV"
+1
 s2
-nonsensical
-2
+"EIRSUVV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -108192,11 +108192,11 @@ return
 "IKRS"
 1
 s1
-nonsensical
-2
+"EIIKRRSSUVV"
+1
 s2
-nonsensical
-2
+"EIRSUVV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -108804,11 +108804,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IKRS"
+1
 s2
-nonsensical
-2
+"IKRS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -108910,11 +108910,11 @@ return
 ""
 1
 s1
-nonsensical
-2
+"IKRS"
+1
 s2
-nonsensical
-2
+"IKRS"
+1
 
 ..extract():::ENTER
 this_invocation_nonce
@@ -109013,11 +109013,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IKRS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -109119,11 +109119,11 @@ return
 "0"
 1
 s1
-nonsensical
-2
+"IKRS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..anagramr7():::EXIT0
 this_invocation_nonce
@@ -109452,11 +109452,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AADGNRUV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -109558,11 +109558,11 @@ return
 "EIIKLRSSSV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AADGNRUV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -110170,11 +110170,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"EIIKLRSSSV"
+1
 s2
-nonsensical
-2
+"EIKV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -110276,11 +110276,11 @@ return
 "ILRSSS"
 1
 s1
-nonsensical
-2
+"EIIKLRSSSV"
+1
 s2
-nonsensical
-2
+"EIKV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -111003,11 +111003,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"EIIKLRSSSV"
+1
 s2
-nonsensical
-2
+"EILRSV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -111109,11 +111109,11 @@ return
 "IKSS"
 1
 s1
-nonsensical
-2
+"EIIKLRSSSV"
+1
 s2
-nonsensical
-2
+"EILRSV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -111721,11 +111721,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -111827,11 +111827,11 @@ return
 ""
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..anagramr7():::EXIT0
 this_invocation_nonce
@@ -112045,11 +112045,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"EIIKLRSSSV"
+1
 s2
-nonsensical
-2
+"EILRSV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -112151,11 +112151,11 @@ return
 "IKSS"
 1
 s1
-nonsensical
-2
+"EIIKLRSSSV"
+1
 s2
-nonsensical
-2
+"EILRSV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -112763,11 +112763,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -112869,11 +112869,11 @@ return
 ""
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..anagramr7():::EXIT0
 this_invocation_nonce
@@ -113202,11 +113202,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ADEGNR"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -113308,11 +113308,11 @@ return
 "AIIKLRSSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ADEGNR"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -113920,11 +113920,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AIIKLRSSSUVV"
+1
 s2
-nonsensical
-2
+"AILRSUVV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -114026,11 +114026,11 @@ return
 "IKSS"
 1
 s1
-nonsensical
-2
+"AIIKLRSSSUVV"
+1
 s2
-nonsensical
-2
+"AILRSUVV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -114638,11 +114638,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -114744,11 +114744,11 @@ return
 ""
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..anagramr7():::EXIT0
 this_invocation_nonce
@@ -115077,11 +115077,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ADEGNR"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -115183,11 +115183,11 @@ return
 "AIIKLRSSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ADEGNR"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -115795,11 +115795,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AIIKLRSSSUVV"
+1
 s2
-nonsensical
-2
+"AILRSUVV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -115901,11 +115901,11 @@ return
 "IKSS"
 1
 s1
-nonsensical
-2
+"AIIKLRSSSUVV"
+1
 s2
-nonsensical
-2
+"AILRSUVV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -116513,11 +116513,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -116619,11 +116619,11 @@ return
 ""
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..anagramr7():::EXIT0
 this_invocation_nonce
@@ -116952,11 +116952,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ADEGNR"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -117058,11 +117058,11 @@ return
 "AIIKLRSSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ADEGNR"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -117670,11 +117670,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AIIKLRSSSUVV"
+1
 s2
-nonsensical
-2
+"AILRSUVV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -117776,11 +117776,11 @@ return
 "IKSS"
 1
 s1
-nonsensical
-2
+"AIIKLRSSSUVV"
+1
 s2
-nonsensical
-2
+"AILRSUVV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -118388,11 +118388,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -118494,11 +118494,11 @@ return
 ""
 1
 s1
-nonsensical
-2
+"IKSS"
+1
 s2
-nonsensical
-2
+"IKSS"
+1
 
 ..anagramr7():::EXIT0
 this_invocation_nonce
@@ -118827,11 +118827,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ADGNU"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -118933,11 +118933,11 @@ return
 "AEIIKLRRSSSVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ADGNU"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -119660,11 +119660,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ADKR"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -119766,11 +119766,11 @@ return
 "AEGIILNRSSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"ADKR"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -120378,11 +120378,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AEGIILNRSSSUVV"
+1
 s2
-nonsensical
-2
+"AEGSS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -120484,11 +120484,11 @@ return
 "IILNRSUVV"
 1
 s1
-nonsensical
-2
+"AEGIILNRSSSUVV"
+1
 s2
-nonsensical
-2
+"AEGSS"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -121096,11 +121096,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"IILNRSUVV"
+1
 s2
-nonsensical
-2
+"IRSUV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -121202,11 +121202,11 @@ return
 "ILNV"
 1
 s1
-nonsensical
-2
+"IILNRSUVV"
+1
 s2
-nonsensical
-2
+"IRSUV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -121650,11 +121650,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AEGIILNRSSSUVV"
+1
 s2
-nonsensical
-2
+"AEILN"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -121756,11 +121756,11 @@ return
 "GIRSSSUVV"
 1
 s1
-nonsensical
-2
+"AEGIILNRSSSUVV"
+1
 s2
-nonsensical
-2
+"AEILN"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -122483,11 +122483,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AEGIILNRSSSUVV"
+1
 s2
-nonsensical
-2
+"AILRSUVV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -122589,11 +122589,11 @@ return
 "EGINSS"
 1
 s1
-nonsensical
-2
+"AEGIILNRSSSUVV"
+1
 s2
-nonsensical
-2
+"AILRSUVV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -123201,11 +123201,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"EGINSS"
+1
 s2
-nonsensical
-2
+"EGINSS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -123307,11 +123307,11 @@ return
 ""
 1
 s1
-nonsensical
-2
+"EGINSS"
+1
 s2
-nonsensical
-2
+"EGINSS"
+1
 
 ..anagramr7():::EXIT0
 this_invocation_nonce
@@ -123640,11 +123640,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AEGSS"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -123746,11 +123746,11 @@ return
 "ADIIKLNRRSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AEGSS"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -124358,11 +124358,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"ADIIKLNRRSUVV"
+1
 s2
-nonsensical
-2
+"AILRSUVV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -124464,11 +124464,11 @@ return
 "DIKNR"
 1
 s1
-nonsensical
-2
+"ADIIKLNRRSUVV"
+1
 s2
-nonsensical
-2
+"AILRSUVV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -125076,11 +125076,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"DIKNR"
+1
 s2
-nonsensical
-2
+"DIKNR"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -125182,11 +125182,11 @@ return
 ""
 1
 s1
-nonsensical
-2
+"DIKNR"
+1
 s2
-nonsensical
-2
+"DIKNR"
+1
 
 ..anagramr7():::EXIT0
 this_invocation_nonce
@@ -125515,11 +125515,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AEILN"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -125621,11 +125621,11 @@ return
 "ADGIKRRSSSUVV"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AEILN"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -126348,11 +126348,11 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AILRSUVV"
+1
 
 ..extract():::EXIT0
 this_invocation_nonce
@@ -126454,11 +126454,11 @@ return
 "ADEGIKNRSS"
 1
 s1
-nonsensical
-2
+"AADEGIIKLNRRSSSUVV"
+1
 s2
-nonsensical
-2
+"AILRSUVV"
+1
 
 ..anagramr7():::ENTER
 this_invocation_nonce
@@ -127293,14 +127293,14 @@ this_invocation_nonce
 [ "AADGLNR" "AADGLNRSS" "AADGLNS" "AADGNRUV" "ADEGNR" "ADEGNR" "ADEGNR" "ADGNU" "ADKR" "AEGSS" "AEILN" "AILRSUVV" "DIKNR" "EGINSS" "EIKV" "EILRSV" "EILRSV" "EIRSUVV" "EIRSUVV" "IKRS" "IKSS" "IRSUV" ]
 1
 argc
-nonsensical
-2
+5
+1
 argv
-nonsensical
-2
+<STACK_ADDR>
+1
 argv[..]
-nonsensical
-2
+[ "./wordplay" ]
+1
 return
 0
 1

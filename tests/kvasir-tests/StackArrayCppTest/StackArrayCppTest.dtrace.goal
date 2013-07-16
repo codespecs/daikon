@@ -49,8 +49,8 @@ Stack::numStacksCreated
 0
 1
 maxSize
-nonsensical
-2
+10
+1
 name
 "My first stack"
 1
@@ -101,8 +101,8 @@ Stack::numStacksCreated
 1
 1
 maxSize
-nonsensical
-2
+10
+1
 name
 "My first stack"
 1
@@ -1931,8 +1931,8 @@ Stack::numStacksCreated
 1
 1
 maxSize
-nonsensical
-2
+5
+1
 name
 "My second stack"
 1
@@ -1983,8 +1983,8 @@ Stack::numStacksCreated
 2
 1
 maxSize
-nonsensical
-2
+5
+1
 name
 "My second stack"
 1
