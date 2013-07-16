@@ -67,7 +67,7 @@ param
 <STACK_ADDR>
 1
 param[..]
-[ <STACK_ADDR> ]
+[ 0x0 ]
 1
 param[..][0]
 nonsensical
@@ -107,7 +107,7 @@ param
 <STACK_ADDR>
 1
 param[..]
-[ <STACK_ADDR> ]
+[ 0x0 ]
 1
 param[..][0]
 nonsensical
@@ -168,7 +168,7 @@ param
 <STACK_ADDR>
 1
 param[..]
-[ <STACK_ADDR> ]
+[ 0x0 ]
 1
 param[..][0]
 nonsensical
@@ -229,7 +229,7 @@ param
 <STACK_ADDR>
 1
 param[..]
-[ <STACK_ADDR> ]
+[ 0x0 ]
 1
 param[..][0]
 nonsensical

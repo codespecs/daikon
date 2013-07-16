@@ -57,7 +57,7 @@ n[..].next->b
 [ 2 ]
 1
 n[..].next->next
-[ <HEAP_ADDR> ]
+[ 0x0 ]
 1
 n[..].next->next->b
 nonsensical
@@ -87,7 +87,7 @@ n[..].next[0]
 [ <HEAP_ADDR> ]
 1
 n[..].prev
-[ <HEAP_ADDR> ]
+[ 0x0 ]
 1
 n[..].prev[0]
 nonsensical
@@ -112,7 +112,7 @@ n[..].next->b
 [ 2 ]
 1
 n[..].next->next
-[ <HEAP_ADDR> ]
+[ 0x0 ]
 1
 n[..].next->next->b
 nonsensical
@@ -142,7 +142,7 @@ n[..].next[0]
 [ <HEAP_ADDR> ]
 1
 n[..].prev
-[ <HEAP_ADDR> ]
+[ 0x0 ]
 1
 n[..].prev[0]
 nonsensical
