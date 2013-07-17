@@ -2,10 +2,11 @@ package typequals;
 
 import java.util.Set;
 
-import javax.lang.model.element.AnnotationMirror;
-
+import javacutils.AnnotationUtils;
 import javacutils.InternalUtils;
 import javacutils.TypesUtils;
+
+import javax.lang.model.element.AnnotationMirror;
 
 import checkers.basetype.BaseTypeChecker;
 import checkers.types.AnnotatedTypeMirror;
@@ -23,10 +24,12 @@ import com.sun.source.tree.Tree;
  */
 public class VIndexAnnotatedTypeFactory extends BasicAnnotatedTypeFactory<VIndexChecker> {
 
+    private final AnnotationMirror VINDEXTOP;
+
     public VIndexAnnotatedTypeFactory(VIndexChecker checker,
             CompilationUnitTree root) {
         super(checker, root);
-
+        VINDEXTOP = AnnotationUtils.fromClass(elements, VIndexTop.class);
         this.postInit();
     }
 
@@ -47,7 +50,7 @@ public class VIndexAnnotatedTypeFactory extends BasicAnnotatedTypeFactory<VIndex
          */
         @Override
         public Void visitBinary(BinaryTree tree, AnnotatedTypeMirror type) {
-            if (!type.isAnnotated()
+            if (!type.isAnnotatedInHierarchy(VINDEXTOP)
                 && tree.getKind() == Tree.Kind.PLUS
                 && TypesUtils.isDeclaredOfName(InternalUtils.typeOf(tree), "int")) {
                 AnnotatedTypeMirror lExpr = getAnnotatedType(tree.getLeftOperand());
