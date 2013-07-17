@@ -40,7 +40,7 @@ b
 123456789
 1
 bp
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 bp[..]
 [ <STACK_ADDR> ]
@@ -67,7 +67,7 @@ c
 96
 1
 cp
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 cp[..]
 [ <STACK_ADDR> ]
@@ -91,7 +91,7 @@ cp[..]->basic1.ushort_val
 [ 0 ]
 1
 cp[..]->basic2
-[ <STACK_ADDR> ]
+[ 0x0 ]
 1
 cp[..]->basic2->char_val
 nonsensical
@@ -118,7 +118,7 @@ cp[..]->footer
 [ 0 ]
 1
 cp[..]->myString
-[ <STACK_ADDR> ]
+[ 0x0 ]
 1
 cp[..]->myString[0]
 nonsensical
@@ -288,7 +288,7 @@ b
 123456789
 1
 bp
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 bp[..]
 [ <STACK_ADDR> ]
@@ -315,7 +315,7 @@ c
 96
 1
 cp
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 cp[..]
 [ <STACK_ADDR> ]
@@ -366,10 +366,10 @@ cp[..]->footer
 [ -123456 ]
 1
 cp[..]->myString
-[ <STACK_ADDR> ]
+[ <STATIC_ADDR> ]
 1
 cp[..]->myString[0]
-[ <STATIC_ADDR> ]
+[ 0x676e69727453796d ]
 1
 cp[..]->myString[0][0]
 nonsensical
@@ -387,7 +387,7 @@ f
 30000
 1
 return
-0x3a86bb48
+<STACK_ADDR>
 1
 return[..]
 [ <STACK_ADDR> ]
@@ -441,10 +441,10 @@ return[..][0]->footer
 [ -123456 ]
 1
 return[..][0]->myString
-[ <STACK_ADDR> ]
+[ <STATIC_ADDR> ]
 1
 return[..][0]->myString[0]
-[ <STATIC_ADDR> ]
+[ 0x676e69727453796d ]
 1
 return[..][0]->myString[0][0]
 nonsensical
@@ -469,7 +469,7 @@ this_invocation_nonce
 "ABCDEFGHIJKLMNOPQRSTUVWXYV1234567890"
 1
 cp
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 cp[..]
 [ <STACK_ADDR> ]
@@ -520,10 +520,10 @@ cp[..].footer
 [ -123456 ]
 1
 cp[..].myString
-[ <STACK_ADDR> ]
+[ <STATIC_ADDR> ]
 1
 cp[..].myString[0]
-[ <STATIC_ADDR> ]
+[ 0x676e69727453796d ]
 1
 cp[..].myString[0][0]
 nonsensical
@@ -545,7 +545,7 @@ this_invocation_nonce
 "ABCDEFGHIJKLMNOPQRSTUVWXYV1234567890"
 1
 cp
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 cp[..]
 [ <STACK_ADDR> ]
@@ -596,10 +596,10 @@ cp[..].footer
 [ -123456 ]
 1
 cp[..].myString
-[ <STACK_ADDR> ]
+[ <STATIC_ADDR> ]
 1
 cp[..].myString[0]
-[ <STATIC_ADDR> ]
+[ 0x676e69727453796d ]
 1
 cp[..].myString[0][0]
 nonsensical
@@ -653,10 +653,10 @@ return.footer
 -123456
 1
 return.myString
-<STACK_ADDR>
+<STATIC_ADDR>
 1
 return.myString[..]
-[ <STATIC_ADDR> ]
+[ 0x676e69727453796d ]
 1
 return.myString[..][0]
 nonsensical
@@ -728,7 +728,7 @@ this_invocation_nonce
 ""
 1
 doubleIntPtr
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 doubleIntPtr[..]
 [ <STACK_ADDR> ]
@@ -759,7 +759,7 @@ this_invocation_nonce
 "uvwxyzabcdefghijklmnopqrstuvwx"
 1
 doubleIntPtr
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 doubleIntPtr[..]
 [ <STACK_ADDR> ]
@@ -790,13 +790,13 @@ this_invocation_nonce
 "ABCDEFGHIJKLMNOPQRSTUVWXYV1234567890"
 1
 Int64PtrVar
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 Int64PtrVar[..]
 [ 57005 ]
 1
 uintPtrVar
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 uintPtrVar[..]
 [ 57015 ]
@@ -818,19 +818,19 @@ this_invocation_nonce
 "ABCDEFGHIJKLMNOPQRSTUVWXYV1234567890"
 1
 Int64PtrVar
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 Int64PtrVar[..]
 [ 57005 ]
 1
 return
-0x3a86bb48
+<HEAP_ADDR>
 1
 return[..]
 [ 1.4285714285714287 ]
 1
 uintPtrVar
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 uintPtrVar[..]
 [ 57015 ]
@@ -855,7 +855,7 @@ index
 9
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -880,7 +880,7 @@ index
 9
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -949,7 +949,7 @@ index
 8
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -974,7 +974,7 @@ index
 8
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1043,7 +1043,7 @@ index
 7
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1068,7 +1068,7 @@ index
 7
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1137,7 +1137,7 @@ index
 6
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1162,7 +1162,7 @@ index
 6
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1231,7 +1231,7 @@ index
 5
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1256,7 +1256,7 @@ index
 5
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1325,7 +1325,7 @@ index
 4
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1350,7 +1350,7 @@ index
 4
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1419,7 +1419,7 @@ index
 3
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1444,7 +1444,7 @@ index
 3
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1513,7 +1513,7 @@ index
 2
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1538,7 +1538,7 @@ index
 2
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1607,7 +1607,7 @@ index
 1
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1632,7 +1632,7 @@ index
 1
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1701,7 +1701,7 @@ index
 0
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]
@@ -1726,7 +1726,7 @@ index
 0
 1
 myArray
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 myArray[..]
 [ 0 1 2 3 4 5 6 7 8 9 ]

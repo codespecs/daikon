@@ -6,7 +6,7 @@ var-comparability none
 this_invocation_nonce
 0
 ::globalIntArray
-134518720
+<STATIC_ADDR>
 1
 ::globalIntArray[..]
 [ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 ]
@@ -22,7 +22,7 @@ this_invocation_nonce
 this_invocation_nonce
 1
 ::globalIntArray
-134518720
+<STATIC_ADDR>
 1
 ::globalIntArray[..]
 [ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 ]
@@ -34,25 +34,25 @@ this_invocation_nonce
 "what's up dawg!!!"
 1
 a
-3199028756
+<STACK_ADDR>
 1
 a[..]
 nonsensical
 2
 b
-3199028740
+<STACK_ADDR>
 1
 b[..]
-[ 3199028744 ]
+[ <STACK_ADDR> ]
 1
 b[..][0]
 nonsensical
 2
 dummy
-3199028736
+<STACK_ADDR>
 1
 dummy[..]
-[ 134518692 ]
+[ <STATIC_ADDR> ]
 1
 dummy[..][0]
 [ "what's up dawg!!!" ]
@@ -61,7 +61,7 @@ str
 "what's up dawg!!!"
 1
 u
-3199028684
+<STACK_ADDR>
 1
 u[..]
 [ 13 12 11 10 9 8 6 5 4 3 0 0 0 ]
@@ -74,7 +74,7 @@ nonsensical
 this_invocation_nonce
 2
 ::globalIntArray
-134518720
+<STATIC_ADDR>
 1
 ::globalIntArray[..]
 [ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 ]
@@ -86,25 +86,25 @@ this_invocation_nonce
 "what's up dawg!!!"
 1
 a
-3199028756
+<STACK_ADDR>
 1
 a[..]
 [ 2.71799994 ]
 1
 b
-3199028740
+<STACK_ADDR>
 1
 b[..]
-[ 3199028744 ]
+[ <STACK_ADDR> ]
 1
 b[..][0]
 nonsensical
 2
 dummy
-3199028736
+<STACK_ADDR>
 1
 dummy[..]
-[ 134518692 ]
+[ <STATIC_ADDR> ]
 1
 dummy[..][0]
 [ "what's up dawg!!!" ]
@@ -113,7 +113,7 @@ str
 "t's up dawg!!!"
 1
 u
-0
+0x0
 1
 u[..]
 nonsensical
@@ -126,7 +126,7 @@ nonsensical
 this_invocation_nonce
 2
 ::globalIntArray
-134518720
+<STATIC_ADDR>
 1
 ::globalIntArray[..]
 [ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 ]
@@ -138,31 +138,31 @@ this_invocation_nonce
 "what's up dawg!!!"
 1
 a
-3199028756
+<STACK_ADDR>
 1
 a[..]
 [ 2.71799994 ]
 1
 b
-3199028740
+<STACK_ADDR>
 1
 b[..]
-[ 3199028744 ]
+[ <STACK_ADDR> ]
 1
 b[..][0]
 nonsensical
 2
 dummy
-3199028736
+<STACK_ADDR>
 1
 dummy[..]
-[ 134518692 ]
+[ <STATIC_ADDR> ]
 1
 dummy[..][0]
 [ "what's up dawg!!!" ]
 1
 return
-3735936685
+0xdeaddead
 1
 return[..]
 nonsensical
@@ -177,7 +177,7 @@ str
 "t's up dawg!!!"
 1
 u
-0
+0x0
 1
 u[..]
 nonsensical
@@ -190,7 +190,7 @@ nonsensical
 this_invocation_nonce
 1
 ::globalIntArray
-134518720
+<STATIC_ADDR>
 1
 ::globalIntArray[..]
 [ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 ]
@@ -202,31 +202,31 @@ this_invocation_nonce
 "what's up dawg!!!"
 1
 a
-3199028756
+<STACK_ADDR>
 1
 a[..]
 [ 2.71799994 ]
 1
 b
-3199028740
+<STACK_ADDR>
 1
 b[..]
-[ 3199028744 ]
+[ <STACK_ADDR> ]
 1
 b[..][0]
 nonsensical
 2
 dummy
-3199028736
+<STACK_ADDR>
 1
 dummy[..]
-[ 134518692 ]
+[ <STATIC_ADDR> ]
 1
 dummy[..][0]
 [ "what's up dawg!!!" ]
 1
 return
-2881142511
+0xabbabeef
 1
 return[..]
 nonsensical
@@ -241,7 +241,7 @@ str
 "what's up dawg!!!"
 1
 u
-3199028684
+<STACK_ADDR>
 1
 u[..]
 [ 13 12 11 10 9 8 6 5 4 3 0 0 0 ]
@@ -254,7 +254,7 @@ nonsensical
 this_invocation_nonce
 0
 ::globalIntArray
-134518720
+<STATIC_ADDR>
 1
 ::globalIntArray[..]
 [ 1 2 3 4 5 6 7 8 9 10 11 12 13 14 15 16 17 18 ]
