@@ -12,7 +12,7 @@ ppt ..main():::ENTER
     var-kind field a
     enclosing-var ::globalStruct
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalStruct.b
     var-kind field b
     enclosing-var ::globalStruct
@@ -38,7 +38,7 @@ ppt ..main():::EXIT0
     var-kind field a
     enclosing-var ::globalStruct
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalStruct.b
     var-kind field b
     enclosing-var ::globalStruct
@@ -68,7 +68,7 @@ ppt TypedefTest.c.createCopy():::ENTER
     var-kind field a
     enclosing-var ::globalStruct
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalStruct.b
     var-kind field b
     enclosing-var ::globalStruct
@@ -92,7 +92,7 @@ ppt TypedefTest.c.createCopy():::ENTER
     var-kind field a
     enclosing-var a
     rep-type int
-    dec-type int
+    dec-type long
   variable a.b
     var-kind field b
     enclosing-var a
@@ -119,7 +119,7 @@ ppt TypedefTest.c.createCopy():::EXIT0
     var-kind field a
     enclosing-var ::globalStruct
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalStruct.b
     var-kind field b
     enclosing-var ::globalStruct
@@ -143,7 +143,7 @@ ppt TypedefTest.c.createCopy():::EXIT0
     var-kind field a
     enclosing-var a
     rep-type int
-    dec-type int
+    dec-type long
   variable a.b
     var-kind field b
     enclosing-var a
@@ -169,7 +169,7 @@ ppt TypedefTest.c.createCopy():::EXIT0
     enclosing-var return[..]
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable return[..].b
     var-kind field b
     enclosing-var return[..]

@@ -2,8 +2,16 @@
 
 #include <stdio.h>
 
+// On x86-64 (AMD64) small struct arguments are pass by value in registers.
+// However, Dyncomp (by design) only allocates a single tag per register.
+// This causes 'a' and 'b' below to be marked with a false interaction.
+// I'm making 'a' a long for now; but if we ever change this implementation
+// (i.e., allocate byte tags for registers like we do for memory) then we
+// should change it back to int. (markro)
+
 typedef struct {
-  int a;
+//int a;
+  long a;
   char b;
   double c;
 } anonymousStruct;
