@@ -15,7 +15,7 @@ argc
 1
 1
 argv
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 argv[..]
 [ "./partial-init" ]
@@ -139,7 +139,7 @@ this_invocation_nonce
 [ 10 0 0 0 10 0 0 0 ]
 1
 p
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 p[..]
 nonsensical
@@ -155,7 +155,7 @@ this_invocation_nonce
 [ 10 0 0 0 10 0 0 0 ]
 1
 bits
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 bits[..]
 [ 10 0 0 0 nonsensical ]
@@ -174,7 +174,7 @@ this_invocation_nonce
 [ 10 0 0 0 10 0 0 0 ]
 1
 bits
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 bits[..]
 [ 10 0 0 0 nonsensical ]
@@ -193,7 +193,7 @@ this_invocation_nonce
 [ 10 0 0 0 10 0 0 0 ]
 1
 bits
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 bits[..]
 [ 10 0 0 0 nonsensical ]
@@ -212,7 +212,7 @@ this_invocation_nonce
 [ 10 0 0 0 10 0 0 0 ]
 1
 bits
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 bits[..]
 [ 10 0 0 0 nonsensical ]
@@ -231,7 +231,7 @@ this_invocation_nonce
 [ 10 0 0 0 10 0 0 0 ]
 1
 p
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 p[..]
 [ 10 0 0 0 nonsensical ]
@@ -247,7 +247,7 @@ this_invocation_nonce
 [ 10 0 0 0 10 0 0 0 ]
 1
 p
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 p[..]
 nonsensical
@@ -263,7 +263,7 @@ this_invocation_nonce
 [ 10 0 0 0 10 0 0 0 ]
 1
 bits
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 bits[..]
 [ 10 0 0 0 nonsensical nonsensical nonsensical nonsensical ]
@@ -282,7 +282,7 @@ this_invocation_nonce
 [ 10 0 0 0 10 0 0 0 ]
 1
 bits
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 bits[..]
 [ 10 0 0 0 nonsensical nonsensical nonsensical nonsensical ]
@@ -301,7 +301,7 @@ this_invocation_nonce
 [ 10 0 0 0 10 0 0 0 ]
 1
 bits
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 bits[..]
 [ 10 0 0 0 nonsensical nonsensical nonsensical nonsensical ]
@@ -320,7 +320,7 @@ this_invocation_nonce
 [ 10 0 0 0 10 0 0 0 ]
 1
 bits
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 bits[..]
 [ 10 0 0 0 nonsensical nonsensical nonsensical nonsensical ]
@@ -339,7 +339,7 @@ this_invocation_nonce
 [ 10 0 0 0 10 0 0 0 ]
 1
 p
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 p[..]
 [ 10 0 0 0 nonsensical nonsensical nonsensical nonsensical ]
@@ -358,7 +358,7 @@ argc
 1
 1
 argv
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 argv[..]
 [ "./partial-init" ]

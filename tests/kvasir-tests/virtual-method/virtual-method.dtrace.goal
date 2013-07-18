@@ -9,7 +9,7 @@ argc
 1
 1
 argv
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 argv[..]
 [ "./virtual-method" ]
@@ -19,7 +19,7 @@ Square.Square():::ENTER
 this_invocation_nonce
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -29,7 +29,7 @@ Shape.Shape():::ENTER
 this_invocation_nonce
 2
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -39,7 +39,7 @@ Shape.Shape():::EXIT0
 this_invocation_nonce
 2
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -49,7 +49,7 @@ Square.Square():::EXIT0
 this_invocation_nonce
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -59,7 +59,7 @@ Triangle.Triangle():::ENTER
 this_invocation_nonce
 3
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -69,7 +69,7 @@ Shape.Shape():::ENTER
 this_invocation_nonce
 4
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -79,7 +79,7 @@ Shape.Shape():::EXIT0
 this_invocation_nonce
 4
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -89,7 +89,7 @@ Triangle.Triangle():::EXIT0
 this_invocation_nonce
 3
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -99,7 +99,7 @@ Square.Square():::ENTER
 this_invocation_nonce
 5
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -109,7 +109,7 @@ Shape.Shape():::ENTER
 this_invocation_nonce
 6
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -119,7 +119,7 @@ Shape.Shape():::EXIT0
 this_invocation_nonce
 6
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -129,7 +129,7 @@ Square.Square():::EXIT0
 this_invocation_nonce
 5
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -139,7 +139,7 @@ Triangle.Triangle():::ENTER
 this_invocation_nonce
 7
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -149,7 +149,7 @@ Shape.Shape():::ENTER
 this_invocation_nonce
 8
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -159,7 +159,7 @@ Shape.Shape():::EXIT0
 this_invocation_nonce
 8
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -169,7 +169,7 @@ Triangle.Triangle():::EXIT0
 this_invocation_nonce
 7
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -179,7 +179,7 @@ Square.Square():::ENTER
 this_invocation_nonce
 9
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -189,7 +189,7 @@ Shape.Shape():::ENTER
 this_invocation_nonce
 10
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -199,7 +199,7 @@ Shape.Shape():::EXIT0
 this_invocation_nonce
 10
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -209,7 +209,7 @@ Square.Square():::EXIT0
 this_invocation_nonce
 9
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -219,7 +219,7 @@ Triangle.Triangle():::ENTER
 this_invocation_nonce
 11
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -229,7 +229,7 @@ Shape.Shape():::ENTER
 this_invocation_nonce
 12
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -239,7 +239,7 @@ Shape.Shape():::EXIT0
 this_invocation_nonce
 12
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -249,7 +249,7 @@ Triangle.Triangle():::EXIT0
 this_invocation_nonce
 11
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -259,7 +259,7 @@ Square.Square():::ENTER
 this_invocation_nonce
 13
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -269,7 +269,7 @@ Shape.Shape():::ENTER
 this_invocation_nonce
 14
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -279,7 +279,7 @@ Shape.Shape():::EXIT0
 this_invocation_nonce
 14
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -289,7 +289,7 @@ Square.Square():::EXIT0
 this_invocation_nonce
 13
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -299,7 +299,7 @@ Triangle.Triangle():::ENTER
 this_invocation_nonce
 15
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -309,7 +309,7 @@ Shape.Shape():::ENTER
 this_invocation_nonce
 16
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -319,7 +319,7 @@ Shape.Shape():::EXIT0
 this_invocation_nonce
 16
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -329,7 +329,7 @@ Triangle.Triangle():::EXIT0
 this_invocation_nonce
 15
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -339,7 +339,7 @@ Square.Square():::ENTER
 this_invocation_nonce
 17
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -349,7 +349,7 @@ Shape.Shape():::ENTER
 this_invocation_nonce
 18
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -359,7 +359,7 @@ Shape.Shape():::EXIT0
 this_invocation_nonce
 18
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -369,7 +369,7 @@ Square.Square():::EXIT0
 this_invocation_nonce
 17
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -379,7 +379,7 @@ Triangle.Triangle():::ENTER
 this_invocation_nonce
 19
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -389,7 +389,7 @@ Shape.Shape():::ENTER
 this_invocation_nonce
 20
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -399,7 +399,7 @@ Shape.Shape():::EXIT0
 this_invocation_nonce
 20
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -409,7 +409,7 @@ Triangle.Triangle():::EXIT0
 this_invocation_nonce
 19
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -419,7 +419,7 @@ Square.num_sides():::ENTER
 this_invocation_nonce
 21
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -432,7 +432,7 @@ return
 4
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -442,7 +442,7 @@ Triangle.num_sides():::ENTER
 this_invocation_nonce
 22
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -455,7 +455,7 @@ return
 3
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -465,7 +465,7 @@ Square.num_sides():::ENTER
 this_invocation_nonce
 23
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -478,7 +478,7 @@ return
 4
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -488,7 +488,7 @@ Triangle.num_sides():::ENTER
 this_invocation_nonce
 24
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -501,7 +501,7 @@ return
 3
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -511,7 +511,7 @@ Square.num_sides():::ENTER
 this_invocation_nonce
 25
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -524,7 +524,7 @@ return
 4
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -534,7 +534,7 @@ Triangle.num_sides():::ENTER
 this_invocation_nonce
 26
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -547,7 +547,7 @@ return
 3
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -557,7 +557,7 @@ Square.num_sides():::ENTER
 this_invocation_nonce
 27
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -570,7 +570,7 @@ return
 4
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -580,7 +580,7 @@ Triangle.num_sides():::ENTER
 this_invocation_nonce
 28
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -593,7 +593,7 @@ return
 3
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -603,7 +603,7 @@ Square.num_sides():::ENTER
 this_invocation_nonce
 29
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -616,7 +616,7 @@ return
 4
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -626,7 +626,7 @@ Triangle.num_sides():::ENTER
 this_invocation_nonce
 30
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -639,7 +639,7 @@ return
 3
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -649,13 +649,13 @@ Shape.compare(Shape*,\_Shape*):::ENTER
 this_invocation_nonce
 31
 s1
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 s1[..]
 [ <HEAP_ADDR> ]
 1
 s2
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 s2[..]
 [ <HEAP_ADDR> ]
@@ -665,7 +665,7 @@ Square.num_sides():::ENTER
 this_invocation_nonce
 32
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -678,7 +678,7 @@ return
 4
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -688,7 +688,7 @@ Triangle.num_sides():::ENTER
 this_invocation_nonce
 33
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -701,7 +701,7 @@ return
 3
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -714,13 +714,13 @@ return
 0
 1
 s1
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 s1[..]
 [ <HEAP_ADDR> ]
 1
 s2
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 s2[..]
 [ <HEAP_ADDR> ]
@@ -730,13 +730,13 @@ Shape.compare(Shape*,\_Shape*):::ENTER
 this_invocation_nonce
 34
 s1
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 s1[..]
 [ <HEAP_ADDR> ]
 1
 s2
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 s2[..]
 [ <HEAP_ADDR> ]
@@ -746,7 +746,7 @@ Square.num_sides():::ENTER
 this_invocation_nonce
 35
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -759,7 +759,7 @@ return
 4
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -769,7 +769,7 @@ Square.num_sides():::ENTER
 this_invocation_nonce
 36
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -782,7 +782,7 @@ return
 4
 1
 this
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 this[0]
 <HEAP_ADDR>
@@ -795,13 +795,13 @@ return
 1
 1
 s1
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 s1[..]
 [ <HEAP_ADDR> ]
 1
 s2
-<STATIC_ADDR>
+<HEAP_ADDR>
 1
 s2[..]
 [ <HEAP_ADDR> ]
@@ -814,7 +814,7 @@ argc
 1
 1
 argv
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 argv[..]
 [ "./virtual-method" ]

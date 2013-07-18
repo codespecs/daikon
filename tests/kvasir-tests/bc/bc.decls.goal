@@ -12570,7 +12570,7 @@ ppt ..byte():::ENTER
     var-kind field pc_func
     enclosing-var pc
     rep-type int
-    dec-type int
+    dec-type long
   variable pc[0]
     var-kind field [0]
     enclosing-var pc
@@ -12593,7 +12593,7 @@ ppt ..byte():::EXIT0
     var-kind field pc_func
     enclosing-var pc
     rep-type int
-    dec-type int
+    dec-type long
   variable pc[0]
     var-kind field [0]
     enclosing-var pc
@@ -16822,7 +16822,7 @@ ppt ..process_params():::ENTER
     var-kind field pc_func
     enclosing-var pc
     rep-type int
-    dec-type int
+    dec-type long
   variable pc[0]
     var-kind field [0]
     enclosing-var pc
@@ -16850,7 +16850,7 @@ ppt ..process_params():::EXIT0
     var-kind field pc_func
     enclosing-var pc
     rep-type int
-    dec-type int
+    dec-type long
   variable pc[0]
     var-kind field [0]
     enclosing-var pc
@@ -16883,7 +16883,7 @@ ppt ..push_b10_const():::ENTER
     var-kind field pc_func
     enclosing-var pc
     rep-type int
-    dec-type int
+    dec-type long
   variable pc[0]
     var-kind field [0]
     enclosing-var pc
@@ -16906,7 +16906,7 @@ ppt ..push_b10_const():::EXIT0
     var-kind field pc_func
     enclosing-var pc
     rep-type int
-    dec-type int
+    dec-type long
   variable pc[0]
     var-kind field [0]
     enclosing-var pc

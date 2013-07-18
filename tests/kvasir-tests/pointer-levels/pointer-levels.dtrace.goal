@@ -22,7 +22,7 @@ this_invocation_nonce
 <STACK_ADDR>
 1
 ::global[..]
-[ <STACK_ADDR> ]
+[ 0x1 ]
 1
 ::global[..][0]
 nonsensical
@@ -47,7 +47,7 @@ this_invocation_nonce
 <STACK_ADDR>
 1
 ::global[..]
-[ <STACK_ADDR> ]
+[ 0x1 ]
 1
 ::global[..][0]
 nonsensical
@@ -72,7 +72,7 @@ this_invocation_nonce
 <STACK_ADDR>
 1
 ::global[..]
-[ <STACK_ADDR> ]
+[ 0x1 ]
 1
 ::global[..][0]
 nonsensical

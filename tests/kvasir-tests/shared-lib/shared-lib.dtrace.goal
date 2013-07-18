@@ -9,7 +9,7 @@ argc
 1
 1
 argv
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 argv[..]
 [ "./shared-lib" ]
@@ -22,7 +22,7 @@ argc
 1
 1
 argv
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 argv[..]
 [ "./shared-lib" ]

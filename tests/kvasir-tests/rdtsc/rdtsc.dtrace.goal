@@ -9,7 +9,7 @@ argc
 1
 1
 argv
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 argv[..]
 [ "./rdtsc" ]
@@ -23,7 +23,7 @@ this_invocation_nonce
 this_invocation_nonce
 1
 return
-3638570638
+1596209054
 1
 
 ..read_tsc():::ENTER
@@ -34,7 +34,7 @@ this_invocation_nonce
 this_invocation_nonce
 2
 return
-3638793798
+1596438250
 1
 
 ..read_tsc():::ENTER
@@ -45,7 +45,7 @@ this_invocation_nonce
 this_invocation_nonce
 3
 return
-2742627384
+700316624
 1
 
 ..main():::EXIT0
@@ -55,7 +55,7 @@ argc
 1
 1
 argv
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 argv[..]
 [ "./rdtsc" ]

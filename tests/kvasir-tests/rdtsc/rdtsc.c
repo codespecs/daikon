@@ -17,6 +17,6 @@ int main(int argc, char **argv) {
     t2 = read_tsc();
     //printf("%llu\n", t2);
     mhz = (double)(t2 - t1) / (1000 * 1000);
-    printf("Clock rate about %g MHz\n", mhz);
+    //printf("Clock rate about %g MHz\n", mhz);
     return 0;
 }

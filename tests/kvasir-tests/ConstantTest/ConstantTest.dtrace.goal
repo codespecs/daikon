@@ -33,7 +33,7 @@ argc
 1
 1
 argv
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 argv[..]
 [ "./ConstantTest" ]
@@ -67,7 +67,7 @@ this_invocation_nonce
 100
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this[0]
 nonsensical
@@ -101,7 +101,7 @@ this_invocation_nonce
 100
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this[0]
 nonsensical
@@ -135,7 +135,7 @@ this_invocation_nonce
 100
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this[0]
 nonsensical
@@ -172,7 +172,7 @@ return
 10
 1
 this
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 this[0]
 nonsensical
@@ -209,7 +209,7 @@ argc
 1
 1
 argv
-<STATIC_ADDR>
+<STACK_ADDR>
 1
 argv[..]
 [ "./ConstantTest" ]

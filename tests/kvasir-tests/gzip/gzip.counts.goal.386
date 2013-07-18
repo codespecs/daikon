@@ -23,16 +23,16 @@
 deflate.c.deflate_fast() ENTER/378: 1 EXIT0/381: 1
 deflate.c.fill_window() ENTER/378: 1 EXIT0/378: 1
 gzip.c.check_ofname() ENTER/345: 1 EXIT0/348: 1
-gzip.c.copy_stat() ENTER/429: 1 EXIT0/429: 1
+gzip.c.copy_stat() ENTER/417: 1 EXIT0/417: 1
 gzip.c.create_outfile() ENTER/345: 1 EXIT0/348: 1
 gzip.c.do_exit() ENTER/351: 1
-gzip.c.do_stat() ENTER/432: 1 EXIT0/435: 1
-gzip.c.get_istat() ENTER/438: 1 EXIT0/441: 1
+gzip.c.do_stat() ENTER/420: 1 EXIT0/423: 1
+gzip.c.get_istat() ENTER/426: 1 EXIT0/429: 1
 gzip.c.get_suffix() ENTER/354: 1 EXIT0/357: 1
 gzip.c.input_eof() ENTER/345: 1 EXIT0/348: 1
 gzip.c.make_ofname() ENTER/345: 1 EXIT0/348: 1
-gzip.c.name_too_long() ENTER/432: 1 EXIT0/435: 1
-gzip.c.reset_times() ENTER/432: 1 EXIT0/432: 1
+gzip.c.name_too_long() ENTER/420: 1 EXIT0/423: 1
+gzip.c.reset_times() ENTER/420: 1 EXIT0/420: 1
 gzip.c.treat_file() ENTER/348: 1 EXIT0/348: 1
 trees.c.build_bl_tree() ENTER/771: 2 EXIT0/774: 2
 trees.c.build_tree() ENTER/843: 6 EXIT0/843: 6

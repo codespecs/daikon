@@ -4,7 +4,7 @@ void f(int ***ppp) { return; }
 
 int main()
 {
-  int x = 1;
+  long x = 1;
   int *ptr;
   int **ptrptr = &ptr;
 

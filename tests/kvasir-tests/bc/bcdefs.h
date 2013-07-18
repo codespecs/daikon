@@ -100,7 +100,7 @@ typedef struct
 
 /* Code addresses. */
 typedef struct {
-      int pc_func;
+      long pc_func;
       int pc_addr;
     } program_counter;
 
