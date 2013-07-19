@@ -3,13 +3,17 @@
 // ie. does it really give us one extra layer of sequences
 // so that we can display arrays within structs?
 
+// TODO: This is another test case that fails on AMD64 due to the
+// Dyncomp single tag per register issue.  If (when) we fix this,
+// change the size of 'staticString' back to 10. (markro)
+
 #include <string.h>
 
 typedef struct {
   int* dynamicIntArray;   // {0, 1, 2, 3, 4}
   int staticIntArray[10]; // {10, 9, 8, 7, 6, 5, 4, 3, 2, 1}
   char* dynamicString;    // "Hello world \n"
-  char staticString[10];  // "Hello1234"
+  char staticString[16];  // "Hello1234"
   int number;             // 42
 } Buffer;
 

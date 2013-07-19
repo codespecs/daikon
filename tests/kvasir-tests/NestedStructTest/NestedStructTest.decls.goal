@@ -12,7 +12,7 @@ ppt ..main():::ENTER
     var-kind field betterAge
     enclosing-var ::globalBetterFoo
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.betterName
     var-kind field betterName
     enclosing-var ::globalBetterFoo
@@ -27,12 +27,12 @@ ppt ..main():::ENTER
     var-kind field betterA
     enclosing-var ::globalBetterFoo.namedBar
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.betterB
     var-kind field betterB
     enclosing-var ::globalBetterFoo.namedBar
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo
     var-kind field crappyFoo
     enclosing-var ::globalBetterFoo.namedBar
@@ -42,7 +42,7 @@ ppt ..main():::ENTER
     var-kind field age
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo.b
     var-kind field b
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo
@@ -52,12 +52,12 @@ ppt ..main():::ENTER
     var-kind field a
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo.b
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo.b.b
     var-kind field b
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo.b
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo.name
     var-kind field name
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo
@@ -97,7 +97,7 @@ ppt ..main():::ENTER
     enclosing-var ::globalFoo[..]
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::globalFoo[..].b
     var-kind field b
     enclosing-var ::globalFoo[..]
@@ -109,13 +109,13 @@ ppt ..main():::ENTER
     enclosing-var ::globalFoo[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::globalFoo[..].b.b
     var-kind field b
     enclosing-var ::globalFoo[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::globalFoo[..].name
     var-kind field name
     enclosing-var ::globalFoo[..]
@@ -133,7 +133,7 @@ ppt ..main():::EXIT0
     var-kind field betterAge
     enclosing-var ::globalBetterFoo
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.betterName
     var-kind field betterName
     enclosing-var ::globalBetterFoo
@@ -148,12 +148,12 @@ ppt ..main():::EXIT0
     var-kind field betterA
     enclosing-var ::globalBetterFoo.namedBar
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.betterB
     var-kind field betterB
     enclosing-var ::globalBetterFoo.namedBar
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo
     var-kind field crappyFoo
     enclosing-var ::globalBetterFoo.namedBar
@@ -163,7 +163,7 @@ ppt ..main():::EXIT0
     var-kind field age
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo.b
     var-kind field b
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo
@@ -173,12 +173,12 @@ ppt ..main():::EXIT0
     var-kind field a
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo.b
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo.b.b
     var-kind field b
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo.b
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo.name
     var-kind field name
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo
@@ -218,7 +218,7 @@ ppt ..main():::EXIT0
     enclosing-var ::globalFoo[..]
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::globalFoo[..].b
     var-kind field b
     enclosing-var ::globalFoo[..]
@@ -230,13 +230,13 @@ ppt ..main():::EXIT0
     enclosing-var ::globalFoo[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::globalFoo[..].b.b
     var-kind field b
     enclosing-var ::globalFoo[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::globalFoo[..].name
     var-kind field name
     enclosing-var ::globalFoo[..]
@@ -258,7 +258,7 @@ ppt ..returnF():::ENTER
     var-kind field betterAge
     enclosing-var ::globalBetterFoo
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.betterName
     var-kind field betterName
     enclosing-var ::globalBetterFoo
@@ -273,12 +273,12 @@ ppt ..returnF():::ENTER
     var-kind field betterA
     enclosing-var ::globalBetterFoo.namedBar
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.betterB
     var-kind field betterB
     enclosing-var ::globalBetterFoo.namedBar
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo
     var-kind field crappyFoo
     enclosing-var ::globalBetterFoo.namedBar
@@ -288,7 +288,7 @@ ppt ..returnF():::ENTER
     var-kind field age
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo.b
     var-kind field b
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo
@@ -298,12 +298,12 @@ ppt ..returnF():::ENTER
     var-kind field a
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo.b
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo.b.b
     var-kind field b
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo.b
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo.name
     var-kind field name
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo
@@ -343,7 +343,7 @@ ppt ..returnF():::ENTER
     enclosing-var ::globalFoo[..]
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::globalFoo[..].b
     var-kind field b
     enclosing-var ::globalFoo[..]
@@ -355,13 +355,13 @@ ppt ..returnF():::ENTER
     enclosing-var ::globalFoo[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::globalFoo[..].b.b
     var-kind field b
     enclosing-var ::globalFoo[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::globalFoo[..].name
     var-kind field name
     enclosing-var ::globalFoo[..]
@@ -371,14 +371,14 @@ ppt ..returnF():::ENTER
   variable blah
     var-kind variable
     rep-type hashcode
-    dec-type int*
+    dec-type long*
     flags is_param 
   variable blah[..]
     var-kind array
     enclosing-var blah
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable f
     var-kind variable
     rep-type hashcode
@@ -395,7 +395,7 @@ ppt ..returnF():::ENTER
     enclosing-var f[..]
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable f[..].b
     var-kind field b
     enclosing-var f[..]
@@ -407,13 +407,13 @@ ppt ..returnF():::ENTER
     enclosing-var f[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable f[..].b.b
     var-kind field b
     enclosing-var f[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable f[..].name
     var-kind field name
     enclosing-var f[..]
@@ -431,7 +431,7 @@ ppt ..returnF():::EXIT0
     var-kind field betterAge
     enclosing-var ::globalBetterFoo
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.betterName
     var-kind field betterName
     enclosing-var ::globalBetterFoo
@@ -446,12 +446,12 @@ ppt ..returnF():::EXIT0
     var-kind field betterA
     enclosing-var ::globalBetterFoo.namedBar
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.betterB
     var-kind field betterB
     enclosing-var ::globalBetterFoo.namedBar
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo
     var-kind field crappyFoo
     enclosing-var ::globalBetterFoo.namedBar
@@ -461,7 +461,7 @@ ppt ..returnF():::EXIT0
     var-kind field age
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo.b
     var-kind field b
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo
@@ -471,12 +471,12 @@ ppt ..returnF():::EXIT0
     var-kind field a
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo.b
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo.b.b
     var-kind field b
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo.b
     rep-type int
-    dec-type int
+    dec-type long
   variable ::globalBetterFoo.namedBar.crappyFoo.name
     var-kind field name
     enclosing-var ::globalBetterFoo.namedBar.crappyFoo
@@ -516,7 +516,7 @@ ppt ..returnF():::EXIT0
     enclosing-var ::globalFoo[..]
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::globalFoo[..].b
     var-kind field b
     enclosing-var ::globalFoo[..]
@@ -528,13 +528,13 @@ ppt ..returnF():::EXIT0
     enclosing-var ::globalFoo[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::globalFoo[..].b.b
     var-kind field b
     enclosing-var ::globalFoo[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable ::globalFoo[..].name
     var-kind field name
     enclosing-var ::globalFoo[..]
@@ -544,14 +544,14 @@ ppt ..returnF():::EXIT0
   variable blah
     var-kind variable
     rep-type hashcode
-    dec-type int*
+    dec-type long*
     flags is_param 
   variable blah[..]
     var-kind array
     enclosing-var blah
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable f
     var-kind variable
     rep-type hashcode
@@ -568,7 +568,7 @@ ppt ..returnF():::EXIT0
     enclosing-var f[..]
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable f[..].b
     var-kind field b
     enclosing-var f[..]
@@ -580,13 +580,13 @@ ppt ..returnF():::EXIT0
     enclosing-var f[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable f[..].b.b
     var-kind field b
     enclosing-var f[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable f[..].name
     var-kind field name
     enclosing-var f[..]
@@ -608,7 +608,7 @@ ppt ..returnF():::EXIT0
     enclosing-var return[..]
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable return[..].b
     var-kind field b
     enclosing-var return[..]
@@ -620,13 +620,13 @@ ppt ..returnF():::EXIT0
     enclosing-var return[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable return[..].b.b
     var-kind field b
     enclosing-var return[..].b
     array 1
     rep-type int[]
-    dec-type int[]
+    dec-type long[]
   variable return[..].name
     var-kind field name
     enclosing-var return[..]

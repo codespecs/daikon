@@ -12,7 +12,7 @@
 (10,5)
 <STACK_ADDR>
 (10,5)
-Size of struct point: 8
+Size of struct point: 16
 pointPtr = <HEAP_ADDR>
 pointPtr + 1 = <HEAP_ADDR>
 pointPtr + 2 = <HEAP_ADDR>

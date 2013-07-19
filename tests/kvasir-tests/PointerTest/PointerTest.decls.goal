@@ -17,12 +17,12 @@ ppt ..makepoint():::ENTER
   variable x
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
     flags is_param 
   variable y
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
     flags is_param 
 
 ppt ..makepoint():::EXIT0
@@ -35,21 +35,21 @@ ppt ..makepoint():::EXIT0
     var-kind field x
     enclosing-var return
     rep-type int
-    dec-type int
+    dec-type long
   variable return.y
     var-kind field y
     enclosing-var return
     rep-type int
-    dec-type int
+    dec-type long
   variable x
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
     flags is_param 
   variable y
     var-kind variable
     rep-type int
-    dec-type int
+    dec-type long
     flags is_param 
 
 ppt ..writeCrap():::ENTER

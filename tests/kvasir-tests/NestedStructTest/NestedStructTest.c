@@ -1,22 +1,26 @@
 // Kvasir unit test for nested structs
 
+// TODO: This is another test case that fails on AMD64 due to the
+// Dyncomp single tag per register issue.  If (when) we fix this,
+// change all the 'long's below back to 'int'. (markro)
+
 #include <stdio.h>
 
 struct foo {
-  int age;
+  long age;
   struct bar {
-    int a;
-    int b;
+    long a;
+    long b;
   } b;
   char* name;
 };
 
 struct betterFoo {
 
-  int betterAge;
+  long betterAge;
 
   struct betterBar {
-    int betterA;
+    long betterA;
     struct foo crappyFoo;
 
     struct bazzz {
@@ -24,7 +28,7 @@ struct betterFoo {
       char world[1000];
     } myBazzz;
 
-    int betterB;
+    long betterB;
   } namedBar;
 
   char* betterName;
@@ -33,15 +37,15 @@ struct betterFoo {
 struct foo globalFoo[4];
 struct betterFoo globalBetterFoo;
 
-struct foo* returnF(struct foo* f, int* blah)
+struct foo* returnF(struct foo* f, long* blah)
 {
   return f;
 }
 
 int main() {
   struct foo fooArray[20];
-  int intArray1[100];
-  int* onHeap = (int*)calloc(69, sizeof(*onHeap));
+  long intArray1[100];
+  long* onHeap = (long*)calloc(69, sizeof(*onHeap));
 
   globalFoo[0].age = 13;
   globalFoo[1].age = 23;

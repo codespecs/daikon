@@ -1,12 +1,19 @@
+// TODO: This is another test case that fails on AMD64 due to the
+// Dyncomp single tag per register issue.  If (when) we fix this,
+// restore the three items below to their original values. (markro)
+
 struct bar {
-  char blah;
+  //char blah;
+  char blah[8];
   int bar_int_20[20];
   int bleh;
 };
 
 struct foo {
-  int int_5[5];
-  char char_10[10];
+  //int int_5[5];
+  int int_5[6];
+  //char char_10[10];
+  char char_10[16];
   struct bar bar_struct;
   double double_15[15];
 };

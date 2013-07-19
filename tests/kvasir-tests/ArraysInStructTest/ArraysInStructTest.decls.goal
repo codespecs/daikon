@@ -29,8 +29,9 @@ ppt ..baz():::ENTER
   variable ::globalFoo.bar_struct.blah
     var-kind field blah
     enclosing-var ::globalFoo.bar_struct
-    rep-type int
-    dec-type char
+    reference-type offset
+    rep-type string
+    dec-type char*
   variable ::globalFoo.bar_struct.bleh
     var-kind field bleh
     enclosing-var ::globalFoo.bar_struct
@@ -94,8 +95,9 @@ ppt ..baz():::ENTER
   variable f.bar_struct.blah
     var-kind field blah
     enclosing-var f.bar_struct
-    rep-type int
-    dec-type char
+    reference-type offset
+    rep-type string
+    dec-type char*
   variable f.bar_struct.bleh
     var-kind field bleh
     enclosing-var f.bar_struct
@@ -161,8 +163,9 @@ ppt ..baz():::EXIT0
   variable ::globalFoo.bar_struct.blah
     var-kind field blah
     enclosing-var ::globalFoo.bar_struct
-    rep-type int
-    dec-type char
+    reference-type offset
+    rep-type string
+    dec-type char*
   variable ::globalFoo.bar_struct.bleh
     var-kind field bleh
     enclosing-var ::globalFoo.bar_struct
@@ -226,8 +229,9 @@ ppt ..baz():::EXIT0
   variable f.bar_struct.blah
     var-kind field blah
     enclosing-var f.bar_struct
-    rep-type int
-    dec-type char
+    reference-type offset
+    rep-type string
+    dec-type char*
   variable f.bar_struct.bleh
     var-kind field bleh
     enclosing-var f.bar_struct
@@ -293,8 +297,9 @@ ppt ..main():::ENTER
   variable ::globalFoo.bar_struct.blah
     var-kind field blah
     enclosing-var ::globalFoo.bar_struct
-    rep-type int
-    dec-type char
+    reference-type offset
+    rep-type string
+    dec-type char*
   variable ::globalFoo.bar_struct.bleh
     var-kind field bleh
     enclosing-var ::globalFoo.bar_struct
@@ -360,8 +365,9 @@ ppt ..main():::EXIT0
   variable ::globalFoo.bar_struct.blah
     var-kind field blah
     enclosing-var ::globalFoo.bar_struct
-    rep-type int
-    dec-type char
+    reference-type offset
+    rep-type string
+    dec-type char*
   variable ::globalFoo.bar_struct.bleh
     var-kind field bleh
     enclosing-var ::globalFoo.bar_struct

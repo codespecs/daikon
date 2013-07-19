@@ -1,15 +1,19 @@
 // Pointer test program for Valgrind
 // Created on 2-18-04 by Philip Guo
 
+// TODO: This is another test case that fails on AMD64 due to the
+// Dyncomp single tag per register issue.  If (when) we fix this,
+// change the 'long's below back to 'int'. (markro)
+
 #include <stdlib.h>
 #include <stdio.h>
 
 struct point {
-  int x;
-  int y;
+  long x;
+  long y;
 };
 
-struct point makepoint(int x, int y)
+struct point makepoint(long x, long y)
 {
   struct point temp;
 

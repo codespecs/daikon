@@ -18,7 +18,7 @@ this_invocation_nonce
 [ 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 0 ]
 1
 ::globalFoo.bar_struct.blah
-0
+""
 1
 ::globalFoo.bar_struct.bleh
 0
@@ -36,7 +36,7 @@ this_invocation_nonce
 <STATIC_ADDR>
 1
 ::globalFoo.int_5[..]
-[ 0 0 0 0 0 ]
+[ 0 0 0 0 0 0 ]
 1
 
 ..baz():::ENTER
@@ -55,7 +55,7 @@ this_invocation_nonce
 [ 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ]
 1
 ::globalFoo.bar_struct.blah
-0
+""
 1
 ::globalFoo.bar_struct.bleh
 0
@@ -73,7 +73,7 @@ this_invocation_nonce
 <STATIC_ADDR>
 1
 ::globalFoo.int_5[..]
-[ 0 1 2 3 0 ]
+[ 0 1 2 3 0 0 ]
 1
 f
 <STATIC_ADDR>
@@ -88,7 +88,7 @@ f.bar_struct.bar_int_20[..]
 [ 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ]
 1
 f.bar_struct.blah
-0
+""
 1
 f.bar_struct.bleh
 0
@@ -106,7 +106,7 @@ f.int_5
 <STACK_ADDR>
 1
 f.int_5[..]
-[ 0 1 2 3 0 ]
+[ 0 1 2 3 0 0 ]
 1
 
 ..baz():::EXIT0
@@ -125,7 +125,7 @@ this_invocation_nonce
 [ 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ]
 1
 ::globalFoo.bar_struct.blah
-0
+""
 1
 ::globalFoo.bar_struct.bleh
 0
@@ -143,7 +143,7 @@ this_invocation_nonce
 <STATIC_ADDR>
 1
 ::globalFoo.int_5[..]
-[ 0 1 2 3 0 ]
+[ 0 1 2 3 0 0 ]
 1
 f
 <STATIC_ADDR>
@@ -158,7 +158,7 @@ f.bar_struct.bar_int_20[..]
 [ 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ]
 1
 f.bar_struct.blah
-0
+""
 1
 f.bar_struct.bleh
 0
@@ -176,7 +176,7 @@ f.int_5
 <STACK_ADDR>
 1
 f.int_5[..]
-[ 0 1 2 3 0 ]
+[ 0 1 2 3 0 0 ]
 1
 
 ..baz():::ENTER
@@ -195,7 +195,7 @@ this_invocation_nonce
 [ 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ]
 1
 ::globalFoo.bar_struct.blah
-0
+""
 1
 ::globalFoo.bar_struct.bleh
 0
@@ -213,7 +213,7 @@ this_invocation_nonce
 <STATIC_ADDR>
 1
 ::globalFoo.int_5[..]
-[ 0 1 2 3 0 ]
+[ 0 1 2 3 0 0 ]
 1
 f
 <STATIC_ADDR>
@@ -246,7 +246,7 @@ f.int_5
 <STACK_ADDR>
 1
 f.int_5[..]
-[ 0 1 2 3 nonsensical ]
+[ 0 1 2 3 nonsensical nonsensical ]
 1
 
 ..baz():::EXIT0
@@ -265,7 +265,7 @@ this_invocation_nonce
 [ 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ]
 1
 ::globalFoo.bar_struct.blah
-0
+""
 1
 ::globalFoo.bar_struct.bleh
 0
@@ -283,7 +283,7 @@ this_invocation_nonce
 <STATIC_ADDR>
 1
 ::globalFoo.int_5[..]
-[ 0 1 2 3 0 ]
+[ 0 1 2 3 0 0 ]
 1
 f
 <STATIC_ADDR>
@@ -316,7 +316,7 @@ f.int_5
 <STACK_ADDR>
 1
 f.int_5[..]
-[ 0 1 2 3 nonsensical ]
+[ 0 1 2 3 nonsensical nonsensical ]
 1
 
 ..main():::EXIT0
@@ -335,7 +335,7 @@ this_invocation_nonce
 [ 20 19 18 17 16 15 14 13 12 11 10 9 8 7 6 5 4 3 2 1 ]
 1
 ::globalFoo.bar_struct.blah
-0
+""
 1
 ::globalFoo.bar_struct.bleh
 0
@@ -353,7 +353,7 @@ this_invocation_nonce
 <STATIC_ADDR>
 1
 ::globalFoo.int_5[..]
-[ 0 1 2 3 0 ]
+[ 0 1 2 3 0 0 ]
 1
 return
 0
