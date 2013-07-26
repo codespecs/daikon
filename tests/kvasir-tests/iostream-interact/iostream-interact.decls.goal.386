@@ -4,6 +4,26 @@ var-comparability none
 
 ppt ..examine(int,\_int,\_int):::ENTER
   ppt-type enter
+  variable ::__numeric_traits_integer<char>::__max
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::__numeric_traits_integer<int>::__min
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::__numeric_traits_integer<short>::__max
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<short>::__min
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<unsigned\_long>::__digits
+    var-kind variable
+    rep-type int
+    dec-type int
   variable which
     var-kind variable
     rep-type int
@@ -22,6 +42,26 @@ ppt ..examine(int,\_int,\_int):::ENTER
 
 ppt ..examine(int,\_int,\_int):::EXIT0
   ppt-type subexit
+  variable ::__numeric_traits_integer<char>::__max
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::__numeric_traits_integer<int>::__min
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::__numeric_traits_integer<short>::__max
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<short>::__min
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<unsigned\_long>::__digits
+    var-kind variable
+    rep-type int
+    dec-type int
   variable which
     var-kind variable
     rep-type int
@@ -40,9 +80,49 @@ ppt ..examine(int,\_int,\_int):::EXIT0
 
 ppt ..main():::ENTER
   ppt-type enter
+  variable ::__numeric_traits_integer<char>::__max
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::__numeric_traits_integer<int>::__min
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::__numeric_traits_integer<short>::__max
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<short>::__min
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<unsigned\_long>::__digits
+    var-kind variable
+    rep-type int
+    dec-type int
 
 ppt ..main():::EXIT0
   ppt-type subexit
+  variable ::__numeric_traits_integer<char>::__max
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::__numeric_traits_integer<int>::__min
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::__numeric_traits_integer<short>::__max
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<short>::__min
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<unsigned\_long>::__digits
+    var-kind variable
+    rep-type int
+    dec-type int
   variable return
     var-kind variable
     rep-type int

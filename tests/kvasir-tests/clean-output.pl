@@ -20,7 +20,7 @@ while (<>) {
         # we just assume ...
         # Valgrind X86/Linux locations
         s/0xb[ef]([0-9a-f]{6})/<STACK_ADDR>/ig;  # stack
-        s/0x6[23]([0-9a-f]{6})/<STATIC_ADDR>/ig; # r/w data
+        s/0x6[123]([0-9a-f]{6})/<STATIC_ADDR>/ig;# r/w data
         s/0x4[0-8]([0-9a-f]{5})/<HEAP_ADDR>/ig;  # heap
         s/0x8[01]([0-9a-f]{5})/<STATIC_ADDR>/ig; # r/o and r/w data
     }    

@@ -5,15 +5,15 @@ var-comparability none
 ppt ..fooOverload(int):::ENTER
   ppt-type enter
   parent user _buffers:::OBJECT 1
-  parent user ._25:::OBJECT 2
-  parent user ._26:::OBJECT 3
-  parent user ._27:::OBJECT 4
-  parent user ._28:::OBJECT 5
-  parent user ._29:::OBJECT 6
+  parent user array_struct:::OBJECT 2
+  parent user A:::OBJECT 3
+  parent user unnamed_DWARF_ID_1:::OBJECT 4
+  parent user unnamed_DWARF_ID_2:::OBJECT 5
+  parent user unnamed_DWARF_ID_3:::OBJECT 6
   variable ::abracadabra
     var-kind variable
     rep-type hashcode
-    dec-type ._25
+    dec-type array_struct
   variable ::abracadabra.MIT_id
     var-kind field MIT_id
     enclosing-var ::abracadabra
@@ -65,10 +65,15 @@ ppt ..fooOverload(int):::ENTER
     array 1
     rep-type int[]
     dec-type int[]
+  variable ::charBuffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
   variable ::eightA
     var-kind variable
     rep-type hashcode
-    dec-type ._26*
+    dec-type A*
     flags non_null 
   variable ::eightA[..]
     var-kind array
@@ -76,20 +81,20 @@ ppt ..fooOverload(int):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._26[]
+    dec-type A[]
   variable ::eightA[..].B[0]
     var-kind field [0]
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[0]->C
     var-kind field C
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[0]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[0]->C
@@ -113,7 +118,7 @@ ppt ..fooOverload(int):::ENTER
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[0]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -127,7 +132,7 @@ ppt ..fooOverload(int):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[0]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[0]
@@ -146,20 +151,20 @@ ppt ..fooOverload(int):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[1]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[1]->C
     var-kind field C
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[1]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[1]->C
@@ -183,7 +188,7 @@ ppt ..fooOverload(int):::ENTER
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[1]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -197,7 +202,7 @@ ppt ..fooOverload(int):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[1]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[1]
@@ -216,20 +221,20 @@ ppt ..fooOverload(int):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[2]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[2]->C
     var-kind field C
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[2]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[2]->C
@@ -253,7 +258,7 @@ ppt ..fooOverload(int):::ENTER
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[2]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -267,7 +272,7 @@ ppt ..fooOverload(int):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[2]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[2]
@@ -286,7 +291,7 @@ ppt ..fooOverload(int):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].foo_head
     var-kind field foo_head
     enclosing-var ::eightA[..]
@@ -446,15 +451,15 @@ ppt ..fooOverload(int):::ENTER
 ppt ..fooOverload(int):::EXIT0
   ppt-type subexit
   parent user _buffers:::OBJECT 1
-  parent user ._25:::OBJECT 2
-  parent user ._26:::OBJECT 3
-  parent user ._27:::OBJECT 4
-  parent user ._28:::OBJECT 5
-  parent user ._29:::OBJECT 6
+  parent user array_struct:::OBJECT 2
+  parent user A:::OBJECT 3
+  parent user unnamed_DWARF_ID_1:::OBJECT 4
+  parent user unnamed_DWARF_ID_2:::OBJECT 5
+  parent user unnamed_DWARF_ID_3:::OBJECT 6
   variable ::abracadabra
     var-kind variable
     rep-type hashcode
-    dec-type ._25
+    dec-type array_struct
   variable ::abracadabra.MIT_id
     var-kind field MIT_id
     enclosing-var ::abracadabra
@@ -506,10 +511,15 @@ ppt ..fooOverload(int):::EXIT0
     array 1
     rep-type int[]
     dec-type int[]
+  variable ::charBuffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
   variable ::eightA
     var-kind variable
     rep-type hashcode
-    dec-type ._26*
+    dec-type A*
     flags non_null 
   variable ::eightA[..]
     var-kind array
@@ -517,20 +527,20 @@ ppt ..fooOverload(int):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._26[]
+    dec-type A[]
   variable ::eightA[..].B[0]
     var-kind field [0]
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[0]->C
     var-kind field C
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[0]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[0]->C
@@ -554,7 +564,7 @@ ppt ..fooOverload(int):::EXIT0
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[0]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -568,7 +578,7 @@ ppt ..fooOverload(int):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[0]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[0]
@@ -587,20 +597,20 @@ ppt ..fooOverload(int):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[1]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[1]->C
     var-kind field C
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[1]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[1]->C
@@ -624,7 +634,7 @@ ppt ..fooOverload(int):::EXIT0
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[1]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -638,7 +648,7 @@ ppt ..fooOverload(int):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[1]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[1]
@@ -657,20 +667,20 @@ ppt ..fooOverload(int):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[2]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[2]->C
     var-kind field C
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[2]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[2]->C
@@ -694,7 +704,7 @@ ppt ..fooOverload(int):::EXIT0
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[2]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -708,7 +718,7 @@ ppt ..fooOverload(int):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[2]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[2]
@@ -727,7 +737,7 @@ ppt ..fooOverload(int):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].foo_head
     var-kind field foo_head
     enclosing-var ::eightA[..]
@@ -891,15 +901,15 @@ ppt ..fooOverload(int):::EXIT0
 ppt ..fooOverload(short,\_char*):::ENTER
   ppt-type enter
   parent user _buffers:::OBJECT 1
-  parent user ._25:::OBJECT 2
-  parent user ._26:::OBJECT 3
-  parent user ._27:::OBJECT 4
-  parent user ._28:::OBJECT 5
-  parent user ._29:::OBJECT 6
+  parent user array_struct:::OBJECT 2
+  parent user A:::OBJECT 3
+  parent user unnamed_DWARF_ID_1:::OBJECT 4
+  parent user unnamed_DWARF_ID_2:::OBJECT 5
+  parent user unnamed_DWARF_ID_3:::OBJECT 6
   variable ::abracadabra
     var-kind variable
     rep-type hashcode
-    dec-type ._25
+    dec-type array_struct
   variable ::abracadabra.MIT_id
     var-kind field MIT_id
     enclosing-var ::abracadabra
@@ -951,10 +961,15 @@ ppt ..fooOverload(short,\_char*):::ENTER
     array 1
     rep-type int[]
     dec-type int[]
+  variable ::charBuffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
   variable ::eightA
     var-kind variable
     rep-type hashcode
-    dec-type ._26*
+    dec-type A*
     flags non_null 
   variable ::eightA[..]
     var-kind array
@@ -962,20 +977,20 @@ ppt ..fooOverload(short,\_char*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._26[]
+    dec-type A[]
   variable ::eightA[..].B[0]
     var-kind field [0]
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[0]->C
     var-kind field C
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[0]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[0]->C
@@ -999,7 +1014,7 @@ ppt ..fooOverload(short,\_char*):::ENTER
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[0]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -1013,7 +1028,7 @@ ppt ..fooOverload(short,\_char*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[0]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[0]
@@ -1032,20 +1047,20 @@ ppt ..fooOverload(short,\_char*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[1]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[1]->C
     var-kind field C
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[1]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[1]->C
@@ -1069,7 +1084,7 @@ ppt ..fooOverload(short,\_char*):::ENTER
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[1]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -1083,7 +1098,7 @@ ppt ..fooOverload(short,\_char*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[1]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[1]
@@ -1102,20 +1117,20 @@ ppt ..fooOverload(short,\_char*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[2]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[2]->C
     var-kind field C
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[2]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[2]->C
@@ -1139,7 +1154,7 @@ ppt ..fooOverload(short,\_char*):::ENTER
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[2]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -1153,7 +1168,7 @@ ppt ..fooOverload(short,\_char*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[2]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[2]
@@ -1172,7 +1187,7 @@ ppt ..fooOverload(short,\_char*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].foo_head
     var-kind field foo_head
     enclosing-var ::eightA[..]
@@ -1337,15 +1352,15 @@ ppt ..fooOverload(short,\_char*):::ENTER
 ppt ..fooOverload(short,\_char*):::EXIT0
   ppt-type subexit
   parent user _buffers:::OBJECT 1
-  parent user ._25:::OBJECT 2
-  parent user ._26:::OBJECT 3
-  parent user ._27:::OBJECT 4
-  parent user ._28:::OBJECT 5
-  parent user ._29:::OBJECT 6
+  parent user array_struct:::OBJECT 2
+  parent user A:::OBJECT 3
+  parent user unnamed_DWARF_ID_1:::OBJECT 4
+  parent user unnamed_DWARF_ID_2:::OBJECT 5
+  parent user unnamed_DWARF_ID_3:::OBJECT 6
   variable ::abracadabra
     var-kind variable
     rep-type hashcode
-    dec-type ._25
+    dec-type array_struct
   variable ::abracadabra.MIT_id
     var-kind field MIT_id
     enclosing-var ::abracadabra
@@ -1397,10 +1412,15 @@ ppt ..fooOverload(short,\_char*):::EXIT0
     array 1
     rep-type int[]
     dec-type int[]
+  variable ::charBuffer
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
   variable ::eightA
     var-kind variable
     rep-type hashcode
-    dec-type ._26*
+    dec-type A*
     flags non_null 
   variable ::eightA[..]
     var-kind array
@@ -1408,20 +1428,20 @@ ppt ..fooOverload(short,\_char*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._26[]
+    dec-type A[]
   variable ::eightA[..].B[0]
     var-kind field [0]
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[0]->C
     var-kind field C
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[0]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[0]->C
@@ -1445,7 +1465,7 @@ ppt ..fooOverload(short,\_char*):::EXIT0
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[0]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -1459,7 +1479,7 @@ ppt ..fooOverload(short,\_char*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[0]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[0]
@@ -1478,20 +1498,20 @@ ppt ..fooOverload(short,\_char*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[1]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[1]->C
     var-kind field C
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[1]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[1]->C
@@ -1515,7 +1535,7 @@ ppt ..fooOverload(short,\_char*):::EXIT0
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[1]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -1529,7 +1549,7 @@ ppt ..fooOverload(short,\_char*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[1]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[1]
@@ -1548,20 +1568,20 @@ ppt ..fooOverload(short,\_char*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[2]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[2]->C
     var-kind field C
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[2]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[2]->C
@@ -1585,7 +1605,7 @@ ppt ..fooOverload(short,\_char*):::EXIT0
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[2]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -1599,7 +1619,7 @@ ppt ..fooOverload(short,\_char*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[2]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[2]
@@ -1618,7 +1638,7 @@ ppt ..fooOverload(short,\_char*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].foo_head
     var-kind field foo_head
     enclosing-var ::eightA[..]
@@ -1787,15 +1807,15 @@ ppt ..fooOverload(short,\_char*):::EXIT0
 ppt ..main():::ENTER
   ppt-type enter
   parent user _buffers:::OBJECT 1
-  parent user ._25:::OBJECT 2
-  parent user ._26:::OBJECT 3
-  parent user ._27:::OBJECT 4
-  parent user ._28:::OBJECT 5
-  parent user ._29:::OBJECT 6
+  parent user array_struct:::OBJECT 2
+  parent user A:::OBJECT 3
+  parent user unnamed_DWARF_ID_1:::OBJECT 4
+  parent user unnamed_DWARF_ID_2:::OBJECT 5
+  parent user unnamed_DWARF_ID_3:::OBJECT 6
   variable ::abracadabra
     var-kind variable
     rep-type hashcode
-    dec-type ._25
+    dec-type array_struct
   variable ::abracadabra.MIT_id
     var-kind field MIT_id
     enclosing-var ::abracadabra
@@ -1850,7 +1870,7 @@ ppt ..main():::ENTER
   variable ::eightA
     var-kind variable
     rep-type hashcode
-    dec-type ._26*
+    dec-type A*
     flags non_null 
   variable ::eightA[..]
     var-kind array
@@ -1858,20 +1878,20 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._26[]
+    dec-type A[]
   variable ::eightA[..].B[0]
     var-kind field [0]
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[0]->C
     var-kind field C
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[0]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[0]->C
@@ -1895,7 +1915,7 @@ ppt ..main():::ENTER
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[0]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -1909,7 +1929,7 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[0]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[0]
@@ -1928,20 +1948,20 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[1]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[1]->C
     var-kind field C
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[1]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[1]->C
@@ -1965,7 +1985,7 @@ ppt ..main():::ENTER
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[1]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -1979,7 +1999,7 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[1]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[1]
@@ -1998,20 +2018,20 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[2]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[2]->C
     var-kind field C
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[2]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[2]->C
@@ -2035,7 +2055,7 @@ ppt ..main():::ENTER
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[2]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -2049,7 +2069,7 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[2]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[2]
@@ -2068,7 +2088,7 @@ ppt ..main():::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].foo_head
     var-kind field foo_head
     enclosing-var ::eightA[..]
@@ -2223,15 +2243,15 @@ ppt ..main():::ENTER
 ppt ..main():::EXIT0
   ppt-type subexit
   parent user _buffers:::OBJECT 1
-  parent user ._25:::OBJECT 2
-  parent user ._26:::OBJECT 3
-  parent user ._27:::OBJECT 4
-  parent user ._28:::OBJECT 5
-  parent user ._29:::OBJECT 6
+  parent user array_struct:::OBJECT 2
+  parent user A:::OBJECT 3
+  parent user unnamed_DWARF_ID_1:::OBJECT 4
+  parent user unnamed_DWARF_ID_2:::OBJECT 5
+  parent user unnamed_DWARF_ID_3:::OBJECT 6
   variable ::abracadabra
     var-kind variable
     rep-type hashcode
-    dec-type ._25
+    dec-type array_struct
   variable ::abracadabra.MIT_id
     var-kind field MIT_id
     enclosing-var ::abracadabra
@@ -2286,7 +2306,7 @@ ppt ..main():::EXIT0
   variable ::eightA
     var-kind variable
     rep-type hashcode
-    dec-type ._26*
+    dec-type A*
     flags non_null 
   variable ::eightA[..]
     var-kind array
@@ -2294,20 +2314,20 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._26[]
+    dec-type A[]
   variable ::eightA[..].B[0]
     var-kind field [0]
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[0]->C
     var-kind field C
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[0]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[0]->C
@@ -2331,7 +2351,7 @@ ppt ..main():::EXIT0
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[0]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -2345,7 +2365,7 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[0]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[0]
@@ -2364,20 +2384,20 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[1]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[1]->C
     var-kind field C
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[1]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[1]->C
@@ -2401,7 +2421,7 @@ ppt ..main():::EXIT0
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[1]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -2415,7 +2435,7 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[1]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[1]
@@ -2434,20 +2454,20 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[2]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[2]->C
     var-kind field C
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[2]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[2]->C
@@ -2471,7 +2491,7 @@ ppt ..main():::EXIT0
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[2]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -2485,7 +2505,7 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[2]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[2]
@@ -2504,7 +2524,7 @@ ppt ..main():::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].foo_head
     var-kind field foo_head
     enclosing-var ::eightA[..]
@@ -2663,15 +2683,15 @@ ppt ..main():::EXIT0
 ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
   ppt-type enter
   parent user _buffers:::OBJECT 1
-  parent user ._25:::OBJECT 2
-  parent user ._26:::OBJECT 3
-  parent user ._27:::OBJECT 4
-  parent user ._28:::OBJECT 5
-  parent user ._29:::OBJECT 6
+  parent user array_struct:::OBJECT 2
+  parent user A:::OBJECT 3
+  parent user unnamed_DWARF_ID_1:::OBJECT 4
+  parent user unnamed_DWARF_ID_2:::OBJECT 5
+  parent user unnamed_DWARF_ID_3:::OBJECT 6
   variable ::abracadabra
     var-kind variable
     rep-type hashcode
-    dec-type ._25
+    dec-type array_struct
   variable ::abracadabra.MIT_id
     var-kind field MIT_id
     enclosing-var ::abracadabra
@@ -2726,7 +2746,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
   variable ::eightA
     var-kind variable
     rep-type hashcode
-    dec-type ._26*
+    dec-type A*
     flags non_null 
   variable ::eightA[..]
     var-kind array
@@ -2734,20 +2754,20 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._26[]
+    dec-type A[]
   variable ::eightA[..].B[0]
     var-kind field [0]
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[0]->C
     var-kind field C
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[0]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[0]->C
@@ -2771,7 +2791,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[0]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -2785,7 +2805,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[0]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[0]
@@ -2804,20 +2824,20 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[1]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[1]->C
     var-kind field C
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[1]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[1]->C
@@ -2841,7 +2861,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[1]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -2855,7 +2875,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[1]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[1]
@@ -2874,20 +2894,20 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[2]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[2]->C
     var-kind field C
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[2]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[2]->C
@@ -2911,7 +2931,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[2]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -2925,7 +2945,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[2]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[2]
@@ -2944,7 +2964,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].foo_head
     var-kind field foo_head
     enclosing-var ::eightA[..]
@@ -3098,13 +3118,13 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
   variable aStruct
     var-kind variable
     rep-type hashcode
-    dec-type ._26
+    dec-type A
     flags is_param 
   variable aStruct.B
     var-kind field B
     enclosing-var aStruct
     rep-type hashcode
-    dec-type ._27*
+    dec-type unnamed_DWARF_ID_1*
     flags non_null 
   variable aStruct.B[..]
     var-kind array
@@ -3112,13 +3132,13 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable aStruct.B[..].C
     var-kind field C
     enclosing-var aStruct.B[..]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable aStruct.B[..].C.baz_head
     var-kind field baz_head
     enclosing-var aStruct.B[..].C
@@ -3142,7 +3162,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     enclosing-var aStruct.B[..]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable aStruct.B[..].D[0]->neverSeeMe
     var-kind field neverSeeMe
@@ -3156,13 +3176,13 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable aStruct.B[..].D[1]
     var-kind field D
     enclosing-var aStruct.B[..]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable aStruct.B[..].D[1]->neverSeeMe
     var-kind field neverSeeMe
@@ -3176,13 +3196,13 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable aStruct.B[..].D[2]
     var-kind field D
     enclosing-var aStruct.B[..]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable aStruct.B[..].D[2]->neverSeeMe
     var-kind field neverSeeMe
@@ -3196,7 +3216,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable aStruct.B[..].bar_head
     var-kind field bar_head
     enclosing-var aStruct.B[..]
@@ -3338,15 +3358,15 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::ENTER
 ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
   ppt-type subexit
   parent user _buffers:::OBJECT 1
-  parent user ._25:::OBJECT 2
-  parent user ._26:::OBJECT 3
-  parent user ._27:::OBJECT 4
-  parent user ._28:::OBJECT 5
-  parent user ._29:::OBJECT 6
+  parent user array_struct:::OBJECT 2
+  parent user A:::OBJECT 3
+  parent user unnamed_DWARF_ID_1:::OBJECT 4
+  parent user unnamed_DWARF_ID_2:::OBJECT 5
+  parent user unnamed_DWARF_ID_3:::OBJECT 6
   variable ::abracadabra
     var-kind variable
     rep-type hashcode
-    dec-type ._25
+    dec-type array_struct
   variable ::abracadabra.MIT_id
     var-kind field MIT_id
     enclosing-var ::abracadabra
@@ -3401,7 +3421,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
   variable ::eightA
     var-kind variable
     rep-type hashcode
-    dec-type ._26*
+    dec-type A*
     flags non_null 
   variable ::eightA[..]
     var-kind array
@@ -3409,20 +3429,20 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._26[]
+    dec-type A[]
   variable ::eightA[..].B[0]
     var-kind field [0]
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[0]->C
     var-kind field C
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[0]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[0]->C
@@ -3446,7 +3466,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[0]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -3460,7 +3480,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[0]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[0]
@@ -3479,20 +3499,20 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[1]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[1]->C
     var-kind field C
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[1]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[1]->C
@@ -3516,7 +3536,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[1]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -3530,7 +3550,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[1]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[1]
@@ -3549,20 +3569,20 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[2]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[2]->C
     var-kind field C
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[2]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[2]->C
@@ -3586,7 +3606,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[2]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -3600,7 +3620,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[2]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[2]
@@ -3619,7 +3639,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].foo_head
     var-kind field foo_head
     enclosing-var ::eightA[..]
@@ -3773,13 +3793,13 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
   variable aStruct
     var-kind variable
     rep-type hashcode
-    dec-type ._26
+    dec-type A
     flags is_param 
   variable aStruct.B
     var-kind field B
     enclosing-var aStruct
     rep-type hashcode
-    dec-type ._27*
+    dec-type unnamed_DWARF_ID_1*
     flags non_null 
   variable aStruct.B[..]
     var-kind array
@@ -3787,13 +3807,13 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable aStruct.B[..].C
     var-kind field C
     enclosing-var aStruct.B[..]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable aStruct.B[..].C.baz_head
     var-kind field baz_head
     enclosing-var aStruct.B[..].C
@@ -3817,7 +3837,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     enclosing-var aStruct.B[..]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable aStruct.B[..].D[0]->neverSeeMe
     var-kind field neverSeeMe
@@ -3831,13 +3851,13 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable aStruct.B[..].D[1]
     var-kind field D
     enclosing-var aStruct.B[..]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable aStruct.B[..].D[1]->neverSeeMe
     var-kind field neverSeeMe
@@ -3851,13 +3871,13 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable aStruct.B[..].D[2]
     var-kind field D
     enclosing-var aStruct.B[..]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable aStruct.B[..].D[2]->neverSeeMe
     var-kind field neverSeeMe
@@ -3871,7 +3891,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable aStruct.B[..].bar_head
     var-kind field bar_head
     enclosing-var aStruct.B[..]
@@ -4012,26 +4032,26 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
   variable return
     var-kind variable
     rep-type hashcode
-    dec-type ._26*
+    dec-type A*
   variable return[..]
     var-kind array
     enclosing-var return
     array 1
     rep-type hashcode[]
-    dec-type ._26[]
+    dec-type A[]
   variable return[..].B[0]
     var-kind field [0]
     enclosing-var return[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable return[..].B[0]->C
     var-kind field C
     enclosing-var return[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable return[..].B[0]->C.baz_head
     var-kind field baz_head
     enclosing-var return[..].B[0]->C
@@ -4055,7 +4075,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     enclosing-var return[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable return[..].B[0]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -4069,7 +4089,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable return[..].B[0]->bar_head
     var-kind field bar_head
     enclosing-var return[..].B[0]
@@ -4088,20 +4108,20 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable return[..].B[1]
     var-kind field B
     enclosing-var return[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable return[..].B[1]->C
     var-kind field C
     enclosing-var return[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable return[..].B[1]->C.baz_head
     var-kind field baz_head
     enclosing-var return[..].B[1]->C
@@ -4125,7 +4145,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     enclosing-var return[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable return[..].B[1]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -4139,7 +4159,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable return[..].B[1]->bar_head
     var-kind field bar_head
     enclosing-var return[..].B[1]
@@ -4158,20 +4178,20 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable return[..].B[2]
     var-kind field B
     enclosing-var return[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable return[..].B[2]->C
     var-kind field C
     enclosing-var return[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable return[..].B[2]->C.baz_head
     var-kind field baz_head
     enclosing-var return[..].B[2]->C
@@ -4195,7 +4215,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     enclosing-var return[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable return[..].B[2]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -4209,7 +4229,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable return[..].B[2]->bar_head
     var-kind field bar_head
     enclosing-var return[..].B[2]
@@ -4228,7 +4248,7 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable return[..].foo_head
     var-kind field foo_head
     enclosing-var return[..]
@@ -4242,54 +4262,15 @@ ppt ..structTester(A,\__buffers,\__buffers*,\_int,\_int*):::EXIT0
     rep-type int[]
     dec-type int[]
 
-ppt ._25:::OBJECT
+ppt A:::OBJECT
   ppt-type object
-  variable this->MIT_id
-    var-kind field MIT_id
-    rep-type hashcode
-    dec-type int*
-    flags non_null 
-  variable this->MIT_id[..]
-    var-kind array
-    enclosing-var this->MIT_id
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type int[]
-  variable this->birthday
-    var-kind field birthday
-    rep-type hashcode
-    dec-type int*
-    flags non_null 
-  variable this->birthday[..]
-    var-kind array
-    enclosing-var this->birthday
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type int[]
-  variable this->social_security
-    var-kind field social_security
-    rep-type hashcode
-    dec-type int*
-    flags non_null 
-  variable this->social_security[..]
-    var-kind array
-    enclosing-var this->social_security
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type int[]
-
-ppt ._26:::OBJECT
-  ppt-type object
-  parent user ._28:::OBJECT 1
-  parent user ._29:::OBJECT 2
-  parent user ._27:::OBJECT 3
+  parent user unnamed_DWARF_ID_2:::OBJECT 1
+  parent user unnamed_DWARF_ID_3:::OBJECT 2
+  parent user unnamed_DWARF_ID_1:::OBJECT 3
   variable this->B
     var-kind field B
     rep-type hashcode
-    dec-type ._27*
+    dec-type unnamed_DWARF_ID_1*
     flags non_null 
   variable this->B[..]
     var-kind array
@@ -4297,13 +4278,13 @@ ppt ._26:::OBJECT
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable this->B[..].C
     var-kind field C
     enclosing-var this->B[..]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable this->B[..].C.baz_head
     var-kind field baz_head
     enclosing-var this->B[..].C
@@ -4327,7 +4308,7 @@ ppt ._26:::OBJECT
     enclosing-var this->B[..]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable this->B[..].D[0]->neverSeeMe
     var-kind field neverSeeMe
@@ -4341,13 +4322,13 @@ ppt ._26:::OBJECT
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable this->B[..].D[1]
     var-kind field D
     enclosing-var this->B[..]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable this->B[..].D[1]->neverSeeMe
     var-kind field neverSeeMe
@@ -4361,13 +4342,13 @@ ppt ._26:::OBJECT
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable this->B[..].D[2]
     var-kind field D
     enclosing-var this->B[..]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable this->B[..].D[2]->neverSeeMe
     var-kind field neverSeeMe
@@ -4381,7 +4362,7 @@ ppt ._26:::OBJECT
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable this->B[..].bar_head
     var-kind field bar_head
     enclosing-var this->B[..]
@@ -4403,90 +4384,18 @@ ppt ._26:::OBJECT
     rep-type int
     dec-type int
 
-ppt ._27:::OBJECT
-  ppt-type object
-  parent user ._28:::OBJECT 4
-  parent user ._29:::OBJECT 5
-  variable this->C
-    var-kind field C
-    rep-type hashcode
-    dec-type ._28
-  variable this->C.baz_head
-    var-kind field baz_head
-    enclosing-var this->C
-    rep-type int
-    dec-type int
-  variable this->C.baz_tail
-    var-kind field baz_tail
-    enclosing-var this->C
-    rep-type int
-    dec-type int
-  variable this->C.y
-    var-kind field y
-    enclosing-var this->C
-    rep-type int
-    dec-type int
-  variable this->D
-    var-kind field D
-    rep-type hashcode
-    dec-type ._29*
-    flags non_null 
-  variable this->D[..]
-    var-kind array
-    enclosing-var this->D
-    reference-type offset
-    array 1
-    rep-type hashcode[]
-    dec-type ._29[]
-  variable this->D[..].neverSeeMe
-    var-kind field neverSeeMe
-    enclosing-var this->D[..]
-    array 1
-    rep-type int[]
-    dec-type int[]
-  variable this->bar_head
-    var-kind field bar_head
-    rep-type int
-    dec-type int
-  variable this->bar_tail
-    var-kind field bar_tail
-    rep-type int
-    dec-type int
-
-ppt ._28:::OBJECT
-  ppt-type object
-  variable this->baz_head
-    var-kind field baz_head
-    rep-type int
-    dec-type int
-  variable this->baz_tail
-    var-kind field baz_tail
-    rep-type int
-    dec-type int
-  variable this->y
-    var-kind field y
-    rep-type int
-    dec-type int
-
-ppt ._29:::OBJECT
-  ppt-type object
-  variable this->neverSeeMe
-    var-kind field neverSeeMe
-    rep-type int
-    dec-type int
-
 ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
   ppt-type enter
   parent user _buffers:::OBJECT 1
-  parent user ._25:::OBJECT 2
-  parent user ._26:::OBJECT 3
-  parent user ._27:::OBJECT 4
-  parent user ._28:::OBJECT 5
-  parent user ._29:::OBJECT 6
+  parent user array_struct:::OBJECT 2
+  parent user A:::OBJECT 3
+  parent user unnamed_DWARF_ID_1:::OBJECT 4
+  parent user unnamed_DWARF_ID_2:::OBJECT 5
+  parent user unnamed_DWARF_ID_3:::OBJECT 6
   variable ::abracadabra
     var-kind variable
     rep-type hashcode
-    dec-type ._25
+    dec-type array_struct
   variable ::abracadabra.MIT_id
     var-kind field MIT_id
     enclosing-var ::abracadabra
@@ -4541,7 +4450,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
   variable ::eightA
     var-kind variable
     rep-type hashcode
-    dec-type ._26*
+    dec-type A*
     flags non_null 
   variable ::eightA[..]
     var-kind array
@@ -4549,20 +4458,20 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._26[]
+    dec-type A[]
   variable ::eightA[..].B[0]
     var-kind field [0]
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[0]->C
     var-kind field C
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[0]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[0]->C
@@ -4586,7 +4495,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[0]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -4600,7 +4509,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[0]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[0]
@@ -4619,20 +4528,20 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[1]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[1]->C
     var-kind field C
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[1]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[1]->C
@@ -4656,7 +4565,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[1]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -4670,7 +4579,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[1]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[1]
@@ -4689,20 +4598,20 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[2]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[2]->C
     var-kind field C
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[2]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[2]->C
@@ -4726,7 +4635,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[2]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -4740,7 +4649,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[2]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[2]
@@ -4759,7 +4668,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].foo_head
     var-kind field foo_head
     enclosing-var ::eightA[..]
@@ -4910,6 +4819,18 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
     array 1
     rep-type double[]
     dec-type double[]
+  variable ::static_local_array
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::static_local_array[..]
+    var-kind array
+    enclosing-var ::static_local_array
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
   variable a
     var-kind variable
     rep-type int
@@ -4930,15 +4851,15 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::ENTER
 ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
   ppt-type subexit
   parent user _buffers:::OBJECT 1
-  parent user ._25:::OBJECT 2
-  parent user ._26:::OBJECT 3
-  parent user ._27:::OBJECT 4
-  parent user ._28:::OBJECT 5
-  parent user ._29:::OBJECT 6
+  parent user array_struct:::OBJECT 2
+  parent user A:::OBJECT 3
+  parent user unnamed_DWARF_ID_1:::OBJECT 4
+  parent user unnamed_DWARF_ID_2:::OBJECT 5
+  parent user unnamed_DWARF_ID_3:::OBJECT 6
   variable ::abracadabra
     var-kind variable
     rep-type hashcode
-    dec-type ._25
+    dec-type array_struct
   variable ::abracadabra.MIT_id
     var-kind field MIT_id
     enclosing-var ::abracadabra
@@ -4993,7 +4914,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
   variable ::eightA
     var-kind variable
     rep-type hashcode
-    dec-type ._26*
+    dec-type A*
     flags non_null 
   variable ::eightA[..]
     var-kind array
@@ -5001,20 +4922,20 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._26[]
+    dec-type A[]
   variable ::eightA[..].B[0]
     var-kind field [0]
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[0]->C
     var-kind field C
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[0]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[0]->C
@@ -5038,7 +4959,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
     enclosing-var ::eightA[..].B[0]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[0]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -5052,7 +4973,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[0]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[0]
@@ -5071,20 +4992,20 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[1]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[1]->C
     var-kind field C
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[1]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[1]->C
@@ -5108,7 +5029,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
     enclosing-var ::eightA[..].B[1]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[1]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -5122,7 +5043,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[1]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[1]
@@ -5141,20 +5062,20 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].B[2]
     var-kind field B
     enclosing-var ::eightA[..]
     array 1
     rep-type hashcode[]
-    dec-type ._27*[]
+    dec-type unnamed_DWARF_ID_1*[]
     flags non_null 
   variable ::eightA[..].B[2]->C
     var-kind field C
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._28[]
+    dec-type unnamed_DWARF_ID_2[]
   variable ::eightA[..].B[2]->C.baz_head
     var-kind field baz_head
     enclosing-var ::eightA[..].B[2]->C
@@ -5178,7 +5099,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
     enclosing-var ::eightA[..].B[2]
     array 1
     rep-type hashcode[]
-    dec-type ._29*[]
+    dec-type unnamed_DWARF_ID_3*[]
     flags non_null 
   variable ::eightA[..].B[2]->D->neverSeeMe
     var-kind field neverSeeMe
@@ -5192,7 +5113,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._29[]
+    dec-type unnamed_DWARF_ID_3[]
   variable ::eightA[..].B[2]->bar_head
     var-kind field bar_head
     enclosing-var ::eightA[..].B[2]
@@ -5211,7 +5132,7 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
     reference-type offset
     array 1
     rep-type hashcode[]
-    dec-type ._27[]
+    dec-type unnamed_DWARF_ID_1[]
   variable ::eightA[..].foo_head
     var-kind field foo_head
     enclosing-var ::eightA[..]
@@ -5362,6 +5283,18 @@ ppt ArrayTest_cpp.cpp.returnIntSum(int,\_int*):::EXIT0
     array 1
     rep-type double[]
     dec-type double[]
+  variable ::static_local_array
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::static_local_array[..]
+    var-kind array
+    enclosing-var ::static_local_array
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
   variable a
     var-kind variable
     rep-type int
@@ -5416,4 +5349,115 @@ ppt _buffers:::OBJECT
     var-kind field weight
     rep-type double
     dec-type double
+
+ppt array_struct:::OBJECT
+  ppt-type object
+  variable this->MIT_id
+    var-kind field MIT_id
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable this->MIT_id[..]
+    var-kind array
+    enclosing-var this->MIT_id
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable this->birthday
+    var-kind field birthday
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable this->birthday[..]
+    var-kind array
+    enclosing-var this->birthday
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable this->social_security
+    var-kind field social_security
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable this->social_security[..]
+    var-kind array
+    enclosing-var this->social_security
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+
+ppt unnamed_DWARF_ID_1:::OBJECT
+  ppt-type object
+  parent user unnamed_DWARF_ID_2:::OBJECT 4
+  parent user unnamed_DWARF_ID_3:::OBJECT 5
+  variable this->C
+    var-kind field C
+    rep-type hashcode
+    dec-type unnamed_DWARF_ID_2
+  variable this->C.baz_head
+    var-kind field baz_head
+    enclosing-var this->C
+    rep-type int
+    dec-type int
+  variable this->C.baz_tail
+    var-kind field baz_tail
+    enclosing-var this->C
+    rep-type int
+    dec-type int
+  variable this->C.y
+    var-kind field y
+    enclosing-var this->C
+    rep-type int
+    dec-type int
+  variable this->D
+    var-kind field D
+    rep-type hashcode
+    dec-type unnamed_DWARF_ID_3*
+    flags non_null 
+  variable this->D[..]
+    var-kind array
+    enclosing-var this->D
+    reference-type offset
+    array 1
+    rep-type hashcode[]
+    dec-type unnamed_DWARF_ID_3[]
+  variable this->D[..].neverSeeMe
+    var-kind field neverSeeMe
+    enclosing-var this->D[..]
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable this->bar_head
+    var-kind field bar_head
+    rep-type int
+    dec-type int
+  variable this->bar_tail
+    var-kind field bar_tail
+    rep-type int
+    dec-type int
+
+ppt unnamed_DWARF_ID_2:::OBJECT
+  ppt-type object
+  variable this->baz_head
+    var-kind field baz_head
+    rep-type int
+    dec-type int
+  variable this->baz_tail
+    var-kind field baz_tail
+    rep-type int
+    dec-type int
+  variable this->y
+    var-kind field y
+    rep-type int
+    dec-type int
+
+ppt unnamed_DWARF_ID_3:::OBJECT
+  ppt-type object
+  variable this->neverSeeMe
+    var-kind field neverSeeMe
+    rep-type int
+    dec-type int
 
