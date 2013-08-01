@@ -55,7 +55,7 @@ public class VIndexAnnotatedTypeFactory extends BasicAnnotatedTypeFactory<VIndex
                 && TypesUtils.isDeclaredOfName(InternalUtils.typeOf(tree), "int")) {
                 AnnotatedTypeMirror lExpr = getAnnotatedType(tree.getLeftOperand());
                 AnnotatedTypeMirror rExpr = getAnnotatedType(tree.getRightOperand());
-                Set<AnnotationMirror> lubs = qualHierarchy.leastUpperBounds(lExpr.getAnnotations(), rExpr.getAnnotations());
+                Set<? extends AnnotationMirror> lubs = qualHierarchy.leastUpperBounds(lExpr.getAnnotations(), rExpr.getAnnotations());
                 type.replaceAnnotations(lubs);
             }
             return null; // super.visitBinary(tree, type);
