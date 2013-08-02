@@ -57,8 +57,7 @@ b
 
 ..returnUIntProduct():::EXIT0
 a
-b
-return
+b return
 
 ..returnULongProduct():::ENTER
 a b
