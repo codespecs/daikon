@@ -25,7 +25,8 @@ p
 p[..]
 
 ..fcrashint():::ENTER
-::DIM1 ::DIM2 param param[..]
+::DIM1
+::DIM2
 ::globalBoo ::globalBoo.a booParam booParam.a
 ::globalBoo.b booParam.b
 ::globalBoo.c
@@ -35,10 +36,12 @@ p[..]
 booParam.c
 booParam.d
 booParam.d[..]
+param param[..]
 param[..][0]
 
 ..fcrashint():::EXIT0
-::DIM1 ::DIM2 param param[..]
+::DIM1
+::DIM2
 ::globalBoo ::globalBoo.a booParam booParam.a
 ::globalBoo.b booParam.b
 ::globalBoo.c
@@ -48,6 +51,7 @@ param[..][0]
 booParam.c
 booParam.d
 booParam.d[..]
+param param[..]
 param[..][0]
 
 ..ffixedint():::ENTER
@@ -79,27 +83,32 @@ param[..]
 param[..][0]
 
 ..fint():::ENTER
-::DIM1 ::DIM2 param param[..]
+::DIM1
+::DIM2
 ::globalBoo ::globalBoo.a
 ::globalBoo.b
 ::globalBoo.c
 ::globalBoo.c[..]
 ::globalBoo.d
 ::globalBoo.d[..]
+param param[..]
 param[..][0]
 
 ..fint():::EXIT0
-::DIM1 ::DIM2 param param[..]
+::DIM1
+::DIM2
 ::globalBoo ::globalBoo.a
 ::globalBoo.b
 ::globalBoo.c
 ::globalBoo.c[..]
 ::globalBoo.d
 ::globalBoo.d[..]
+param param[..]
 param[..][0]
 
 ..main():::ENTER
-::DIM1 ::DIM2
+::DIM1
+::DIM2
 ::globalBoo ::globalBoo.a
 ::globalBoo.b
 ::globalBoo.c
@@ -108,7 +117,8 @@ param[..][0]
 ::globalBoo.d[..]
 
 ..main():::EXIT0
-::DIM1 ::DIM2
+::DIM1
+::DIM2
 ::globalBoo ::globalBoo.a
 ::globalBoo.b
 ::globalBoo.c
