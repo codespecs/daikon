@@ -95,16 +95,16 @@ It describes Daikon version 4.6.4, released June 23, 2010.
 @end ifnottex
 
 @menu
-* Introduction::                
-* Installing Daikon::           
-* Example usage::               
-* Running Daikon::              
-* Daikon output::               
-* Enhancing Daikon output::     
-* Front ends (instrumentation)::  
-* Tools::                       
-* Troubleshooting::             
-* Details::                     
+* Introduction::
+* Installing Daikon::
+* Example usage::
+* Running Daikon::
+* Daikon output::
+* Enhancing Daikon output::
+* Front ends (instrumentation)::
+* Tools::
+* Troubleshooting::
+* Details::
 * Index::
 
 @ifhtml
@@ -117,247 +117,247 @@ It describes Daikon version 4.6.4, released June 23, 2010.
 
 Introduction
 
-* Mailing lists::               
+* Mailing lists::
 
 Installing Daikon
 
-* Simple installation::         
-* Complete installation::       
+* Simple installation::
+* Complete installation::
 
 Complete installation instructions
 
-* Requirements::                
-* Unix/Linux/MacOS installation::  
-* Windows installation::        
-* Running Daikon under Windows::  
+* Requirements::
+* Unix/Linux/MacOS installation::
+* Windows installation::
+* Running Daikon under Windows::
 
 Requirements for running Daikon
 
-* Optional requirements::       
+* Optional requirements::
 
 Running Daikon under Windows
 
-* Windows command line::        
-* Cygwin shell::                
+* Windows command line::
+* Cygwin shell::
 
 Example usage for Java, C/C++, Perl, and Eiffel
 
-* Detecting invariants in Java programs::  
-* Detecting invariants in C/C++ programs::  
-* Detecting invariants in Perl programs::  
-* Detecting invariants in Eiffel programs::  
+* Detecting invariants in Java programs::
+* Detecting invariants in C/C++ programs::
+* Detecting invariants in Perl programs::
+* Detecting invariants in Eiffel programs::
 
 Detecting invariants in Java programs
 
-* StackAr example::             
-* Using DynComp with Java programs::  
-* Understanding the invariants::  
-* Understanding DynComp::       
-* Second Java example::         
+* StackAr example::
+* Using DynComp with Java programs::
+* Understanding the invariants::
+* Understanding DynComp::
+* Second Java example::
 
 Detecting invariants in C/C++ programs
 
-* C examples::                  
-* Using DynComp with C programs::  
-* Dealing with large examples::  
+* C examples::
+* Using DynComp with C programs::
+* Dealing with large examples::
 
 Detecting invariants in Perl programs
 
-* Instrumenting Perl programs::  
-* Perl examples::               
+* Instrumenting Perl programs::
+* Perl examples::
 
 Running Daikon
 
-* Options to control Daikon output::  
-* Options to control invariant detection::  
-* Processing only part of the trace file::  
-* Daikon configuration options::  
-* Daikon debugging options::    
+* Options to control Daikon output::
+* Options to control invariant detection::
+* Processing only part of the trace file::
+* Daikon configuration options::
+* Daikon debugging options::
 
 Daikon output
 
-* Invariant syntax::            
-* Program points::              
-* Variable names::              
-* Interpreting output::         
-* Invariant list::              
-* Invariant filters::           
+* Invariant syntax::
+* Program points::
+* Variable names::
+* Interpreting output::
+* Invariant list::
+* Invariant filters::
 
 Variable names
 
-* orig variable example::       
+* orig variable example::
 
 Interpreting Daikon output
 
-* Redundant invariants::        
-* Equal variables::             
-* Has only one value variables::  
+* Redundant invariants::
+* Equal variables::
+* Has only one value variables::
 
 Enhancing Daikon output
 
-* Configuration options::       
-* Conditional invariants::      
-* Enhancing conditional invariant detection::  
-* Dynamic abstract type inference (DynComp)::  
-* Loop invariants::             
+* Configuration options::
+* Conditional invariants::
+* Enhancing conditional invariant detection::
+* Dynamic abstract type inference (DynComp)::
+* Loop invariants::
 
 Configuration options
 
-* List of configuration options::  
+* List of configuration options::
 
 Conditional invariants and implications
 
-* Splitter info file format::   
-* Indiscriminate splitting::    
-* Example splitter info file::  
+* Splitter info file format::
+* Indiscriminate splitting::
+* Example splitter info file::
 
 Splitter info file format
 
-* Program point sections::      
-* Replacement sections::        
+* Program point sections::
+* Replacement sections::
 
 Example splitter info file
 
-* Example class::               
-* Resulting .spinfo file::      
+* Example class::
+* Resulting .spinfo file::
 
 Enhancing conditional invariant detection
 
-* Static analysis for splitters::  
-* Cluster analysis for splitters::  
-* Random selection for splitters::  
+* Static analysis for splitters::
+* Cluster analysis for splitters::
+* Random selection for splitters::
 
 Front ends (instrumentation)
 
-* Chicory::                     
-* DynComp for Java::            
-* Kvasir::                      
-* Mangel-Wurzel::               
-* dfepl::                       
-* convertcsv.pl::               
-* Other front ends::            
+* Chicory::
+* DynComp for Java::
+* Kvasir::
+* Mangel-Wurzel::
+* dfepl::
+* convertcsv.pl::
+* Other front ends::
 
 Java front end Chicory
 
-* Chicory options::             
-* Static fields (global variables)::  
+* Chicory options::
+* Static fields (global variables)::
 
 Chicory options
 
-* Program points in Chicory output::  
-* Variables in Chicory output::  
-* Chicory miscellaneous options::  
+* Program points in Chicory output::
+* Variables in Chicory output::
+* Chicory miscellaneous options::
 
 DynComp dynamic comparability (abstract type) analysis for Java
 
-* Instrumenting the JDK with DynComp::  
-* DynComp for Java options::    
-* Instrumentation of Object methods::  
-* DynComp for Java known bugs::  
+* Instrumenting the JDK with DynComp::
+* DynComp for Java options::
+* Instrumentation of Object methods::
+* DynComp for Java known bugs::
 
 C/C++ front end Kvasir
 
-* Using Kvasir::                
-* Kvasir options::              
-* DynComp for C/C++::           
-* Tracing only part of a program::  
-* Pointer type disambiguation::  
-* C++ support::                 
-* Online execution::            
-* Installing Kvasir::           
-* Kvasir limitations::          
+* Using Kvasir::
+* Kvasir options::
+* DynComp for C/C++::
+* Tracing only part of a program::
+* Pointer type disambiguation::
+* C++ support::
+* Online execution::
+* Installing Kvasir::
+* Kvasir limitations::
 
 Pointer type disambiguation
 
-* Pointer type coercion::       
-* Pointer type disambiguation example::  
-* Using pointer type disambiguation with partial program tracing::  
+* Pointer type coercion::
+* Pointer type disambiguation example::
+* Using pointer type disambiguation with partial program tracing::
 
 Online execution
 
-* Online execution with DynComp for C/C++::  
+* Online execution with DynComp for C/C++::
 
 Source-based C/C++ front end Mangel-Wurzel
 
-* Using Mangel-Wurzel::         
-* Mangel options::              
-* Pointer/array disambiguation in Mangel-Wurzel::  
-* Mangel-Wurzel usage notes::   
-* Interaction with Purify::     
-* Installing Mangel-Wurzel::    
+* Using Mangel-Wurzel::
+* Mangel options::
+* Pointer/array disambiguation in Mangel-Wurzel::
+* Mangel-Wurzel usage notes::
+* Interaction with Purify::
+* Installing Mangel-Wurzel::
 
 Mangel options
 
-* Standard compiler options for Mangel::  
-* Mangel configuration options::  
-* Mangel annotation options::   
-* Options files for Mangel::    
+* Standard compiler options for Mangel::
+* Mangel configuration options::
+* Mangel annotation options::
+* Options files for Mangel::
 
 Mangel-Wurzel usage notes
 
-* Using Mangel-Wurzel on Unix::  
-* Using Mangel-Wurzel on Windows::  
+* Using Mangel-Wurzel on Unix::
+* Using Mangel-Wurzel on Windows::
 
 Perl front end dfepl
 
-* dfepl options::               
+* dfepl options::
 
 Tools for use with Daikon
 
-* Tools for manipulating invariants::  
-* DtraceDiff utility::          
+* Tools for manipulating invariants::
+* DtraceDiff utility::
 
 Tools for manipulating invariants
 
-* Printing invariants::         
-* MergeInvariants::             
-* Invariant Diff::              
-* Annotate::                    
-* AnnotateNullable::            
-* Runtime-check instrumenter::  
-* InvariantChecker::            
-* LogicalCompare::              
+* Printing invariants::
+* MergeInvariants::
+* Invariant Diff::
+* Annotate::
+* AnnotateNullable::
+* Runtime-check instrumenter::
+* InvariantChecker::
+* LogicalCompare::
 
 Runtime-check instrumenter (runtimechecker)
 
-* Accessing violations::        
+* Accessing violations::
 
 Troubleshooting
 
-* Daikon problems::             
-* Large dtrace files::          
-* Parsing Java 5.0 code::       
-* Chicory problems::            
-* Reporting problems::          
-* Known bugs::                  
-* Further reading::             
+* Daikon problems::
+* Large dtrace files::
+* Parsing Java 5.0 code::
+* Chicory problems::
+* Reporting problems::
+* Known bugs::
+* Further reading::
 
 Problems running Daikon
 
-* Can't run Daikon::            
-* Too much output::             
-* Missing output invariants::   
-* True invariants are not reported due to output filters::  
-* No samples::                  
-* No return from procedure::    
-* Unsupported class version::   
-* Out of memory::               
-* Simplify errors::             
-* Contradictory invariants::    
-* Method needs to be implemented::  
-* Daikon runs slowly::          
-* Bigger traces cause invariants to appear::  
+* Can't run Daikon::
+* Too much output::
+* Missing output invariants::
+* True invariants are not reported due to output filters::
+* No samples::
+* No return from procedure::
+* Unsupported class version::
+* Out of memory::
+* Simplify errors::
+* Contradictory invariants::
+* Method needs to be implemented::
+* Daikon runs slowly::
+* Bigger traces cause invariants to appear::
 
 Large data trace (.dtrace) files
 
-* Compression::                 
-* Scratch directory::           
-* Run Daikon online::           
-* Multiple smaller files::      
-* Less information per file::   
-* Reducing program points::     
-* Reducing variables::          
-* Reducing executions::         
+* Compression::
+* Scratch directory::
+* Run Daikon online::
+* Multiple smaller files::
+* Less information per file::
+* Reducing program points::
+* Reducing variables::
+* Reducing executions::
 
 Record or read less information in the data trace file
 
@@ -367,15 +367,15 @@ Record or read less information in the data trace file
 
 Problems with Chicory
 
-* VerifyError constant pool index error::  
+* VerifyError constant pool index error::
 
 Details
 
-* History::                     
-* License::                     
-* Mailing lists reminder::      
-* Credits::                     
-* Citing Daikon::               
+* History::
+* License::
+* Mailing lists reminder::
+* Credits::
+* Citing Daikon::
 
 @end detailmenu
 @end ifnothtml
@@ -428,7 +428,7 @@ ends for new languages.  It also contains information about the
 implementation and about debugging flags.
 
 @menu
-* Mailing lists::               
+* Mailing lists::
 @end menu
 
 @node    Mailing lists,  , Introduction, Introduction
@@ -484,8 +484,8 @@ subscribe to one of the mailing lists (@pxref{Mailing lists}).
 
 
 @menu
-* Simple installation::         
-* Complete installation::       
+* Simple installation::
+* Complete installation::
 @end menu
 
 @node    Simple installation, Complete installation, Installing Daikon, Installing Daikon
@@ -538,10 +538,10 @@ For more complete information on compiling Daikon, @pxref{Compiling
 Daikon,,,./developer,Daikon Developer Manual} in the Daikon Developer Manual.
 
 @menu
-* Requirements::                
-* Unix/Linux/MacOS installation::  
-* Windows installation::        
-* Running Daikon under Windows::  
+* Requirements::
+* Unix/Linux/MacOS installation::
+* Windows installation::
+* Running Daikon under Windows::
 @end menu
 
 
@@ -553,7 +553,7 @@ In order to run Daikon, you must have a Java 5.0 (or later) JVM
 have a Java 5.0 (or later) compiler.
 
 @menu
-* Optional requirements::       
+* Optional requirements::
 @end menu
 
 @node    Optional requirements,  , Requirements, Requirements
@@ -806,8 +806,8 @@ than by double-clicking their icons.  In any event, double-clicking
 would not supply the proper arguments to the program.
 
 @menu
-* Windows command line::        
-* Cygwin shell::                
+* Windows command line::
+* Cygwin shell::
 @end menu
 
 
@@ -931,10 +931,10 @@ information about these and other front ends that are available for
 Daikon, @ref{Front ends (instrumentation)}.
 
 @menu
-* Detecting invariants in Java programs::  
-* Detecting invariants in C/C++ programs::  
-* Detecting invariants in Perl programs::  
-* Detecting invariants in Eiffel programs::  
+* Detecting invariants in Java programs::
+* Detecting invariants in C/C++ programs::
+* Detecting invariants in Perl programs::
+* Detecting invariants in Eiffel programs::
 @end menu
 
 @node    Detecting invariants in Java programs, Detecting invariants in C/C++ programs, Example usage, Example usage
@@ -960,11 +960,11 @@ and the Daikon output is written to the terminal.
 
 
 @menu
-* StackAr example::             
-* Using DynComp with Java programs::  
-* Understanding the invariants::  
-* Understanding DynComp::       
-* Second Java example::         
+* StackAr example::
+* Using DynComp with Java programs::
+* Understanding the invariants::
+* Understanding DynComp::
+* Second Java example::
 @end menu
 
 @c Commented out as of summer 2005, because David Cok doesn't seem likely
@@ -1312,9 +1312,9 @@ documentation on its command-line options, see @ref{Kvasir}.
 
 
 @menu
-* C examples::                  
-* Using DynComp with C programs::  
-* Dealing with large examples::  
+* C examples::
+* Using DynComp with C programs::
+* Dealing with large examples::
 @end menu
 
 @node    C examples, Using DynComp with C programs, Detecting invariants in C/C++ programs, Detecting invariants in C/C++ programs
@@ -1524,8 +1524,8 @@ This is necessary because Perl programs do not contain type declarations.
 dfepl requires version 5.8 or later of Perl.
 
 @menu
-* Instrumenting Perl programs::  
-* Perl examples::               
+* Instrumenting Perl programs::
+* Perl examples::
 @end menu
 
 
@@ -1755,11 +1755,11 @@ options}).
 
 
 @menu
-* Options to control Daikon output::  
-* Options to control invariant detection::  
-* Processing only part of the trace file::  
-* Daikon configuration options::  
-* Daikon debugging options::    
+* Options to control Daikon output::
+* Options to control invariant detection::
+* Processing only part of the trace file::
+* Daikon configuration options::
+* Daikon debugging options::
 @end menu
 
 
@@ -2103,12 +2103,12 @@ other tools use this data structure.
 
 
 @menu
-* Invariant syntax::            
-* Program points::              
-* Variable names::              
-* Interpreting output::         
-* Invariant list::              
-* Invariant filters::           
+* Invariant syntax::
+* Program points::
+* Variable names::
+* Interpreting output::
+* Invariant list::
+* Invariant filters::
 @end menu
 
 @node    Invariant syntax, Program points, Daikon output, Daikon output
@@ -2504,7 +2504,7 @@ field could use that to infer the type of any Daikon expression.)
 
 
 @menu
-* orig variable example::       
+* orig variable example::
 @end menu
 
 @node    orig variable example,  , Variable names, Variable names
@@ -2596,9 +2596,9 @@ configuration options}).
 
 
 @menu
-* Redundant invariants::        
-* Equal variables::             
-* Has only one value variables::  
+* Redundant invariants::
+* Equal variables::
+* Has only one value variables::
 @end menu
 
 @node    Redundant invariants, Equal variables, Interpreting output, Interpreting output
@@ -2803,11 +2803,11 @@ This filter is only useful for ESC output.
 @chapter Enhancing Daikon output
 
 @menu
-* Configuration options::       
-* Conditional invariants::      
-* Enhancing conditional invariant detection::  
-* Dynamic abstract type inference (DynComp)::  
-* Loop invariants::             
+* Configuration options::
+* Conditional invariants::
+* Enhancing conditional invariant detection::
+* Dynamic abstract type inference (DynComp)::
+* Loop invariants::
 @end menu
 
 @node    Configuration options, Conditional invariants, Enhancing Daikon output, Enhancing Daikon output
@@ -2846,7 +2846,7 @@ The debugging flags permit Daikon to produce debugging
 output, but they do not affect the invariants that Daikon computes.
 
 @menu
-* List of configuration options::  
+* List of configuration options::
 @end menu
 
 @node    List of configuration options,  , Configuration options, Configuration options
@@ -2987,9 +2987,9 @@ To use dummy invariants, the configuration option
 non-zero value (see @ref{List of configuration options}).
 
 @menu
-* Splitter info file format::   
-* Indiscriminate splitting::    
-* Example splitter info file::  
+* Splitter info file format::
+* Indiscriminate splitting::
+* Example splitter info file::
 @end menu
 
 @node    Splitter info file format, Indiscriminate splitting, Conditional invariants, Conditional invariants
@@ -3006,8 +3006,8 @@ sections and replacement sections.
 @xref{Example splitter info file}, for an example splitter info file.
 
 @menu
-* Program point sections::      
-* Replacement sections::        
+* Program point sections::
+* Replacement sections::
 @end menu
 
 @node    Program point sections, Replacement sections, Splitter info file format, Splitter info file format
@@ -3120,8 +3120,8 @@ the one that @command{CreateSpinfo} would create for that class, but
 also demonstrates some other features.
 
 @menu
-* Example class::               
-* Resulting .spinfo file::      
+* Example class::
+* Resulting .spinfo file::
 @end menu
 
 @node    Example class, Resulting .spinfo file, Example splitter info file, Example splitter info file
@@ -3209,9 +3209,9 @@ conditional invariants.  To ease this task, there are two methods to
 automatically create splitter info files for use by Daikon.
 
 @menu
-* Static analysis for splitters::  
-* Cluster analysis for splitters::  
-* Random selection for splitters::  
+* Static analysis for splitters::
+* Cluster analysis for splitters::
+* Random selection for splitters::
 @end menu
 
 @node   Static analysis for splitters, Cluster analysis for splitters, Enhancing conditional invariant detection, Enhancing conditional invariant detection
@@ -3535,13 +3535,13 @@ ends,,,./developer,Daikon Developer Manual}.
 
 
 @menu
-* Chicory::                     
-* DynComp for Java::            
-* Kvasir::                      
-* Mangel-Wurzel::               
-* dfepl::                       
-* convertcsv.pl::               
-* Other front ends::            
+* Chicory::
+* DynComp for Java::
+* Kvasir::
+* Mangel-Wurzel::
+* dfepl::
+* convertcsv.pl::
+* Other front ends::
 @end menu
 
 @node    Chicory, DynComp for Java, Front ends (instrumentation), Front ends (instrumentation)
@@ -3590,8 +3590,8 @@ Chicory must be run in a version 5.0 JVM, but it is backward-compatible
 with older versions of Java code.
 
 @menu
-* Chicory options::             
-* Static fields (global variables)::  
+* Chicory options::
+* Static fields (global variables)::
 @end menu
 
 @node    Chicory options, Static fields (global variables), Chicory, Chicory
@@ -3613,9 +3613,9 @@ This section lists the optional command-line arguments to Chicory, which
 appear before the @var{classname} on the Chicory command line.
 
 @menu
-* Program points in Chicory output::  
-* Variables in Chicory output::  
-* Chicory miscellaneous options::  
+* Program points in Chicory output::
+* Variables in Chicory output::
+* Chicory miscellaneous options::
 @end menu
 
 @node    Program points in Chicory output, Variables in Chicory output, Chicory options, Chicory options
@@ -4239,10 +4239,10 @@ and @file{trace} files.  It writes @code{this} instead of
 turned on with @option{--abridged-vars}.
 
 @menu
-* Instrumenting the JDK with DynComp::  
-* DynComp for Java options::    
-* Instrumentation of Object methods::  
-* DynComp for Java known bugs::  
+* Instrumenting the JDK with DynComp::
+* DynComp for Java options::
+* Instrumentation of Object methods::
+* DynComp for Java known bugs::
 @end menu
 
 @node Instrumenting the JDK with DynComp, DynComp for Java options, DynComp for Java, DynComp for Java
@@ -4500,15 +4500,15 @@ non-Linux or non-x86 platforms, see @ref{Instrumenting C
 programs,,,./developer,Daikon Developer Manual}.
 
 @menu
-* Using Kvasir::                
-* Kvasir options::              
-* DynComp for C/C++::           
-* Tracing only part of a program::  
-* Pointer type disambiguation::  
-* C++ support::                 
-* Online execution::            
-* Installing Kvasir::           
-* Kvasir limitations::          
+* Using Kvasir::
+* Kvasir options::
+* DynComp for C/C++::
+* Tracing only part of a program::
+* Pointer type disambiguation::
+* C++ support::
+* Online execution::
+* Installing Kvasir::
+* Kvasir limitations::
 @end menu
 
 @node Using Kvasir, Kvasir options, Kvasir, Kvasir
@@ -5386,9 +5386,9 @@ retain their default values.
 
 
 @menu
-* Pointer type coercion::       
-* Pointer type disambiguation example::  
-* Using pointer type disambiguation with partial program tracing::  
+* Pointer type coercion::
+* Pointer type disambiguation example::
+* Using pointer type disambiguation with partial program tracing::
 @end menu
 
 @node    Pointer type coercion, Pointer type disambiguation example, Pointer type disambiguation, Pointer type disambiguation
@@ -5860,7 +5860,7 @@ two different terminals.
 
 
 @menu
-* Online execution with DynComp for C/C++::  
+* Online execution with DynComp for C/C++::
 @end menu
 
 @node Online execution with DynComp for C/C++,  , Online execution, Online execution
@@ -6062,12 +6062,12 @@ consumption before compiling it.
 
 
 @menu
-* Using Mangel-Wurzel::         
-* Mangel options::              
-* Pointer/array disambiguation in Mangel-Wurzel::  
-* Mangel-Wurzel usage notes::   
-* Interaction with Purify::     
-* Installing Mangel-Wurzel::    
+* Using Mangel-Wurzel::
+* Mangel options::
+* Pointer/array disambiguation in Mangel-Wurzel::
+* Mangel-Wurzel usage notes::
+* Interaction with Purify::
+* Installing Mangel-Wurzel::
 @end menu
 
 @node Using Mangel-Wurzel, Mangel options, Mangel-Wurzel, Mangel-Wurzel
@@ -6188,10 +6188,10 @@ can also include object and archive files on the command line, which are
 passed directly to the linker.
 
 @menu
-* Standard compiler options for Mangel::  
-* Mangel configuration options::  
-* Mangel annotation options::   
-* Options files for Mangel::    
+* Standard compiler options for Mangel::
+* Mangel configuration options::
+* Mangel annotation options::
+* Options files for Mangel::
 @end menu
 
 @node Standard compiler options for Mangel, Mangel configuration options, Mangel options, Mangel options
@@ -6626,8 +6626,8 @@ to perform the preprocessing on one machine and then compile, link, and run
 on another platform supported by Rational Purify.
 
 @menu
-* Using Mangel-Wurzel on Unix::  
-* Using Mangel-Wurzel on Windows::  
+* Using Mangel-Wurzel on Unix::
+* Using Mangel-Wurzel on Windows::
 @end menu
 
 @node Using Mangel-Wurzel on Unix, Using Mangel-Wurzel on Windows, Mangel-Wurzel usage notes, Mangel-Wurzel usage notes
@@ -6966,7 +6966,7 @@ execution traces in files with the extension @file{.dtrace} in the a
 directory @file{daikon-output}.
 
 @menu
-* dfepl options::               
+* dfepl options::
 @end menu
 
 @node dfepl options,  , dfepl, dfepl
@@ -7325,8 +7325,8 @@ Mangel-Wurzel (source-based, for all other platforms; @pxref{Mangel-Wurzel}).
 This chapter describes various tools that are included with the Daikon
 distribution.
 @menu
-* Tools for manipulating invariants::  
-* DtraceDiff utility::          
+* Tools for manipulating invariants::
+* DtraceDiff utility::
 @end menu
 
 @node Tools for manipulating invariants, DtraceDiff utility, Tools, Tools
@@ -7340,14 +7340,14 @@ This section gives information about tools that manipulate invariants
 
 
 @menu
-* Printing invariants::         
-* MergeInvariants::             
-* Invariant Diff::              
-* Annotate::                    
-* AnnotateNullable::            
-* Runtime-check instrumenter::  
-* InvariantChecker::            
-* LogicalCompare::              
+* Printing invariants::
+* MergeInvariants::
+* Invariant Diff::
+* Annotate::
+* AnnotateNullable::
+* Runtime-check instrumenter::
+* InvariantChecker::
+* LogicalCompare::
 @end menu
 
 
@@ -7848,7 +7848,7 @@ The throwable is not rethrown.
 
 
 @menu
-* Accessing violations::        
+* Accessing violations::
 @end menu
 
 @node    Accessing violations,  , Runtime-check instrumenter, Runtime-check instrumenter
@@ -8254,13 +8254,13 @@ unable to solve your problem, you may wish to send mail to one of the
 mailing lists (@pxref{Mailing lists}).
 
 @menu
-* Daikon problems::             
-* Large dtrace files::          
-* Parsing Java 5.0 code::       
-* Chicory problems::            
-* Reporting problems::          
-* Known bugs::                  
-* Further reading::             
+* Daikon problems::
+* Large dtrace files::
+* Parsing Java 5.0 code::
+* Chicory problems::
+* Reporting problems::
+* Known bugs::
+* Further reading::
 @end menu
 
 
@@ -8274,19 +8274,19 @@ understand Daikon's operation; @xref{Daikon debugging options}.
 
 
 @menu
-* Can't run Daikon::            
-* Too much output::             
-* Missing output invariants::   
-* True invariants are not reported due to output filters::  
-* No samples::                  
-* No return from procedure::    
-* Unsupported class version::   
-* Out of memory::               
-* Simplify errors::             
-* Contradictory invariants::    
-* Method needs to be implemented::  
-* Daikon runs slowly::          
-* Bigger traces cause invariants to appear::  
+* Can't run Daikon::
+* Too much output::
+* Missing output invariants::
+* True invariants are not reported due to output filters::
+* No samples::
+* No return from procedure::
+* Unsupported class version::
+* Out of memory::
+* Simplify errors::
+* Contradictory invariants::
+* Method needs to be implemented::
+* Daikon runs slowly::
+* Bigger traces cause invariants to appear::
 @end menu
 
 
@@ -8779,14 +8779,14 @@ This section describes ways to work around this problem.
 
 
 @menu
-* Compression::                 
-* Scratch directory::           
-* Run Daikon online::           
-* Multiple smaller files::      
-* Less information per file::   
-* Reducing program points::     
-* Reducing variables::          
-* Reducing executions::         
+* Compression::
+* Scratch directory::
+* Run Daikon online::
+* Multiple smaller files::
+* Less information per file::
+* Reducing program points::
+* Reducing variables::
+* Reducing executions::
 @end menu
 
 
@@ -9052,7 +9052,7 @@ Chicory; please report it if it is not already explained in this manual.
 
 
 @menu
-* VerifyError constant pool index error::  
+* VerifyError constant pool index error::
 @end menu
 
 @node    VerifyError constant pool index error,  , Chicory problems, Chicory problems
@@ -9237,11 +9237,11 @@ and about debugging flags.
 
 
 @menu
-* History::                     
-* License::                     
-* Mailing lists reminder::      
-* Credits::                     
-* Citing Daikon::               
+* History::
+* License::
+* Mailing lists reminder::
+* Credits::
+* Citing Daikon::
 @end menu
 
 @node    History, License, Details, Details

@@ -71,15 +71,15 @@ It describes Daikon version 4.6.4, released June 23, 2010.
 @end ifnottex
 
 @menu
-* Introduction::                
-* Extending Daikon::            
-* Debugging Daikon::            
-* Daikon internals::            
-* Testing::                     
-* Editing::                     
-* Distribution::                
-* Historical::                  
-* File formats::                
+* Introduction::
+* Extending Daikon::
+* Debugging Daikon::
+* Daikon internals::
+* Testing::
+* Editing::
+* Distribution::
+* Historical::
+* File formats::
 * Index::
 
 @ifhtml
@@ -92,117 +92,117 @@ It describes Daikon version 4.6.4, released June 23, 2010.
 
 Extending Daikon
 
-* Compiling Daikon::            
-* Version control repository::  
-* Using Eclipse::               
-* New invariants::              
-* New derived variables::       
-* New formatting for invariants::  
-* New front ends::              
-* New suppressors::             
-* System.exit::                 
+* Compiling Daikon::
+* Version control repository::
+* Using Eclipse::
+* New invariants::
+* New derived variables::
+* New formatting for invariants::
+* New front ends::
+* New suppressors::
+* System.exit::
 
 New front ends
 
-* Example instrumented Java program::  
-* Instrumenting C programs::    
+* Example instrumented Java program::
+* Instrumenting C programs::
 
 Debugging Daikon
 
-* Track logging::               
+* Track logging::
 
 Track logging
 
-* Adding track logging::        
-* Track log output::            
+* Adding track logging::
+* Track log output::
 
 Daikon internals
 
-* Avoiding work for redundant invariants::  
-* Dataflow hierarchy::          
-* Equality optimization::       
+* Avoiding work for redundant invariants::
+* Dataflow hierarchy::
+* Equality optimization::
 
 Testing
 
-* Unit testing::                
-* Regression tests::            
+* Unit testing::
+* Regression tests::
 
 Unit testing
 
-* Invariant format testing::    
-* Sample Testing::              
+* Invariant format testing::
+* Sample Testing::
 
 Sample Testing
 
-* Assertions::                  
-* Example file::                
+* Assertions::
+* Example file::
 
 Regression tests
 
-* Kvasir regression tests::     
-* Adding regression tests::     
+* Kvasir regression tests::
+* Adding regression tests::
 
 Editing Daikon source code
 
-* Emacs commands::              
-* Eclipse setup::               
-* Editing daikon.texinfo::      
+* Emacs commands::
+* Eclipse setup::
+* Editing daikon.texinfo::
 
 Eclipse setup
 
-* Start up Eclipse::            
-* Existing projects::           
-* External tools::              
-* Eclipse debugger::            
-* Using Mercurial with Eclipse::  
+* Start up Eclipse::
+* Existing projects::
+* External tools::
+* Eclipse debugger::
+* Using Mercurial with Eclipse::
 
 Work on existing coding projects
 
-* Import existing project::     
-* Import different project::    
+* Import existing project::
+* Import different project::
 
 Analyzing historical versions of Daikon
 
-* Branches::                    
+* Branches::
 
 File formats
 
-* Declarations in a separate file::  
-* Conventions::                 
-* Declarations::                
-* Data trace records::          
-* Example files::               
-* Version 1 Declarations::      
+* Declarations in a separate file::
+* Conventions::
+* Declarations::
+* Data trace records::
+* Example files::
+* Version 1 Declarations::
 
 Declarations
 
-* Declaration-related records::  
-* Program point declarations::  
-* Variable declarations::       
+* Declaration-related records::
+* Program point declarations::
+* Variable declarations::
 
 Declaration-related records
 
-* Declaration version::         
-* Input-language declaration::  
-* Variable comparability::      
-* ListImplementors declaration::  
+* Declaration version::
+* Input-language declaration::
+* Variable comparability::
+* ListImplementors declaration::
 
 Data trace records
 
-* Nonsensical values::          
-* Variables that do not appear in trace records::  
+* Nonsensical values::
+* Variables that do not appear in trace records::
 
 Example files
 
-* Example declaration file::    
-* Example data trace file::     
+* Example declaration file::
+* Example data trace file::
 
 Version 1 Declarations
 
-* V1 Program point declarations::  
-* V1 pptname format::           
-* V1 VarComparability declaration::  
-* V1 ListImplementors declaration::  
+* V1 Program point declarations::
+* V1 pptname format::
+* V1 VarComparability declaration::
+* V1 ListImplementors declaration::
 
 @end detailmenu
 @end ifnothtml
@@ -233,15 +233,15 @@ This chapter describes how to customize or modify Daikon.
 
 
 @menu
-* Compiling Daikon::            
-* Version control repository::  
-* Using Eclipse::               
-* New invariants::              
-* New derived variables::       
-* New formatting for invariants::  
-* New front ends::              
-* New suppressors::             
-* System.exit::                 
+* Compiling Daikon::
+* Version control repository::
+* Using Eclipse::
+* New invariants::
+* New derived variables::
+* New formatting for invariants::
+* New front ends::
+* New suppressors::
+* System.exit::
 @end menu
 
 @node    Compiling Daikon, Version control repository, Extending Daikon, Extending Daikon
@@ -597,8 +597,8 @@ values of the variables of interest.
 
 
 @menu
-* Example instrumented Java program::  
-* Instrumenting C programs::    
+* Example instrumented Java program::
+* Instrumenting C programs::
 @end menu
 
 @node    Example instrumented Java program, Instrumenting C programs, New front ends, New front ends
@@ -961,7 +961,7 @@ as well.)
 @cindex debugging Daikon
 
 @menu
-* Track logging::               
+* Track logging::
 @end menu
 
 This chapter describes some techniques that can be used for debugging
@@ -1051,8 +1051,8 @@ and
 @uref{http://pag.csail.mit.edu/daikon/download/jdoc/@/daikon/inv/Invariant.html,@code{daikon.inv.Invariant}}.
 
 @menu
-* Adding track logging::        
-* Track log output::            
+* Adding track logging::
+* Track log output::
 @end menu
 
 @node Adding track logging, Track log output, Track logging, Track logging
@@ -1219,9 +1219,9 @@ world writable for log2html to work correctly.
 @cindex optimizations
 
 @menu
-* Avoiding work for redundant invariants::  
-* Dataflow hierarchy::          
-* Equality optimization::       
+* Avoiding work for redundant invariants::
+* Dataflow hierarchy::
+* Equality optimization::
 @end menu
 
 This chapter describes some of the techniques used in Daikon to make
@@ -1369,8 +1369,8 @@ appear in Daikon's version control repository (@pxref{Version control
 repository}).
 
 @menu
-* Unit testing::                
-* Regression tests::            
+* Unit testing::
+* Regression tests::
 @end menu
 
 @node    Unit testing, Regression tests, Testing, Testing
@@ -1388,8 +1388,8 @@ also run them explicitly via @samp{make unit}.  When you write new code
 or modify old code, please try to add unit tests.
 
 @menu
-* Invariant format testing::    
-* Sample Testing::              
+* Invariant format testing::
+* Sample Testing::
 @end menu
 
 @node    Invariant format testing, Sample Testing, Unit testing, Unit testing
@@ -1568,8 +1568,8 @@ point before the assertion (for example: @code{!inv("x > y", x, y})).
 @end deffn
 
 @menu
-* Assertions::                  
-* Example file::                
+* Assertions::
+* Example file::
 @end menu
 
 @node       Assertions, Example file, Sample Testing, Sample Testing
@@ -1651,8 +1651,8 @@ because it controls so many types of tests.
 
 
 @menu
-* Kvasir regression tests::     
-* Adding regression tests::     
+* Kvasir regression tests::
+* Adding regression tests::
 @end menu
 
 
@@ -1772,9 +1772,9 @@ The Daikon source code follows these coding conventions: @uref{http://groups.csa
 
 
 @menu
-* Emacs commands::              
-* Eclipse setup::               
-* Editing daikon.texinfo::      
+* Emacs commands::
+* Eclipse setup::
+* Editing daikon.texinfo::
 @end menu
 
 @node    Emacs commands, Eclipse setup, Editing, Editing
@@ -1800,11 +1800,11 @@ PostScript or PDF version either electronically or on paper.
 @section Eclipse setup
 
 @menu
-* Start up Eclipse::            
-* Existing projects::           
-* External tools::              
-* Eclipse debugger::            
-* Using Mercurial with Eclipse::  
+* Start up Eclipse::
+* Existing projects::
+* External tools::
+* Eclipse debugger::
+* Using Mercurial with Eclipse::
 @end menu
 
 @node    Start up Eclipse, Existing projects, Eclipse setup, Eclipse setup
@@ -1836,8 +1836,8 @@ Window >> Preferences >> Java >> Compiler >> Style >> Non-static access >> >> Ig
 @subsection Work on existing coding projects
 
 @menu
-* Import existing project::     
-* Import different project::    
+* Import existing project::
+* Import different project::
 @end menu
 
 @node    Import existing project, Import different project, Existing projects, Existing projects
@@ -2430,7 +2430,7 @@ and later when development on it ceased (@pxref{Branches}).
 
 
 @menu
-* Branches::                    
+* Branches::
 @end menu
 
 @node    Branches,  , Historical, Historical
@@ -2557,12 +2557,12 @@ There exist some other declaration-related records;
 
 
 @menu
-* Declarations in a separate file::  
-* Conventions::                 
-* Declarations::                
-* Data trace records::          
-* Example files::               
-* Version 1 Declarations::      
+* Declarations in a separate file::
+* Conventions::
+* Declarations::
+* Data trace records::
+* Example files::
+* Version 1 Declarations::
 @end menu
 
 
@@ -2626,9 +2626,9 @@ Some additional details about the declaration file format appear in file
 
 
 @menu
-* Declaration-related records::  
-* Program point declarations::  
-* Variable declarations::       
+* Declaration-related records::
+* Program point declarations::
+* Variable declarations::
 @end menu
 
 
@@ -2637,10 +2637,10 @@ Some additional details about the declaration file format appear in file
 
 
 @menu
-* Declaration version::         
-* Input-language declaration::  
-* Variable comparability::      
-* ListImplementors declaration::  
+* Declaration version::
+* Input-language declaration::
+* Variable comparability::
+* ListImplementors declaration::
 @end menu
 
 @node Declaration version, Input-language declaration, Declaration-related records, Declaration-related records
@@ -3113,8 +3113,8 @@ declaration of the program point, without omissions or additions.
 
 
 @menu
-* Nonsensical values::          
-* Variables that do not appear in trace records::  
+* Nonsensical values::
+* Variables that do not appear in trace records::
 @end menu
 
 @node    Nonsensical values, Variables that do not appear in trace records, Data trace records, Data trace records
@@ -3175,8 +3175,8 @@ many more examples by simply running an existing front end on some Java,
 C, or Perl programs and viewing the resulting files.
 
 @menu
-* Example declaration file::    
-* Example data trace file::     
+* Example declaration file::
+* Example data trace file::
 @end menu
 
 
@@ -3519,10 +3519,10 @@ A declarations file can contain program point declarations,
 @code{VarComparability} declarations, and @code{ListImplementors declarations}.
 
 @menu
-* V1 Program point declarations::  
-* V1 pptname format::           
-* V1 VarComparability declaration::  
-* V1 ListImplementors declaration::  
+* V1 Program point declarations::
+* V1 pptname format::
+* V1 VarComparability declaration::
+* V1 ListImplementors declaration::
 @end menu
 
 @node    V1 Program point declarations, V1 pptname format, Version 1 Declarations, Version 1 Declarations
