@@ -382,37 +382,37 @@ syntax: regexp
 ^tests/.*\.out$
 ^tests/.*\/ran-kvasir$
 
-#^tests/daikon-tests/.*/scratch$
-#^tests/daikon-tests/.*/source$
-#^tests/.*-jaif\.inv\.gz$
-#^tests/.*\.decls-DynComp$
-#^tests/.*\.decls-DynComp\.diff$
-#^tests/.*\.inv\.gz$
-#^tests/.*\.spinfo-static$
-#^tests/.*\.spinfo-static\.diff$
-#^tests/.*\.txt-chicory\.diff$
-#^tests/.*\.txt-chicory\.dtrace$
-#^tests/.*\.txt-chicory\.dtrace\.bak$
-#^tests/.*\.txt-cset$
-#^tests/.*\.txt-cset\.diff$
-#^tests/.*\.txt-daikon$
-#^tests/.*\.txt-daikon\.diff$
-#^tests/.*\.txt-esc$
-#^tests/.*\.txt-esc\.diff$
-#^tests/.*\.txt-jaif$
-#^tests/.*\.txt-jaif\.diff$
-#^tests/.*\.txt-jml$
-#^tests/.*\.txt-jml\.diff$
-#^tests/.*\.txt-merge-esc$
-#^tests/.*\.txt-merge-esc\.diff$
-#^tests/.*\.txt-merge-jml$
-#^tests/.*\.txt-merge-jml\.diff$
-#^tests/.*\.txt-simplify$
-#^tests/.*\.txt-simplify\.diff$
-#^tests/.*\.txt-trace$
-#^tests/diff-tests/schedule2/schedule2.*\.map$
-#^tests/diff-tests/schedule2/schedule2.*\.txt$
-#^tests/chicory-tests/option-tests/.*\.txt$
+^tests/daikon-tests/.*/scratch$
+^tests/daikon-tests/.*/source$
+^tests/.*-jaif\.inv\.gz$
+^tests/.*\.decls-DynComp$
+^tests/.*\.decls-DynComp\.diff$
+^tests/.*\.inv\.gz$
+^tests/.*\.spinfo-static$
+^tests/.*\.spinfo-static\.diff$
+^tests/.*\.txt-chicory\.diff$
+^tests/.*\.txt-chicory\.dtrace$
+^tests/.*\.txt-chicory\.dtrace\.bak$
+^tests/.*\.txt-cset$
+^tests/.*\.txt-cset\.diff$
+^tests/.*\.txt-daikon$
+^tests/.*\.txt-daikon\.diff$
+^tests/.*\.txt-esc$
+^tests/.*\.txt-esc\.diff$
+^tests/.*\.txt-jaif$
+^tests/.*\.txt-jaif\.diff$
+^tests/.*\.txt-jml$
+^tests/.*\.txt-jml\.diff$
+^tests/.*\.txt-merge-esc$
+^tests/.*\.txt-merge-esc\.diff$
+^tests/.*\.txt-merge-jml$
+^tests/.*\.txt-merge-jml\.diff$
+^tests/.*\.txt-simplify$
+^tests/.*\.txt-simplify\.diff$
+^tests/.*\.txt-trace$
+^tests/diff-tests/schedule2/schedule2.*\.map$
+^tests/diff-tests/schedule2/schedule2.*\.txt$
+^tests/chicory-tests/option-tests/.*\.txt$
 
 
 ## Old contents of file daikon/tests/daikon-tests/.cvsignore, which may be
@@ -435,4 +435,4 @@ syntax: regexp
 # *.txt-jml.diff
 # *.txt-merge-esc.diff
 # *.txt-merge-jml.diff
-# merged
+merged
