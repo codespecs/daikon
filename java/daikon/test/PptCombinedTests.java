@@ -10,7 +10,7 @@ import junit.framework.TestCase;
 
 public class PptCombinedTests extends TestCase {
 
-  /*@NonNullOnEntry("PptCombined.assemblies")*/
+  /*@RequiresNonNull("PptCombined.assemblies")*/
   public void testFindIntermediateBlocks1() {
 
     PptTopLevel p1 = new PptTopLevel("ppt:::1", new VarInfo[0]);
@@ -30,7 +30,7 @@ public class PptCombinedTests extends TestCase {
 
   }
 
-  /*@NonNullOnEntry("PptCombined.assemblies")*/
+  /*@RequiresNonNull("PptCombined.assemblies")*/
   public void testFindIntermediateBlocks2() {
 
     PptTopLevel p1 = new PptTopLevel("ppt:::1", new VarInfo[0]);
@@ -54,7 +54,7 @@ public class PptCombinedTests extends TestCase {
 
   }
 
-  /*@NonNullOnEntry("PptCombined.assemblies")*/
+  /*@RequiresNonNull("PptCombined.assemblies")*/
   public void testFindIntermediateBlocks3() {
 
    PptTopLevel p1 = new PptTopLevel("ppt:::1", new VarInfo[0]);
@@ -69,7 +69,7 @@ public class PptCombinedTests extends TestCase {
    assertListDoesNotContain(list, p1);
  }
 
-  /*@NonNullOnEntry("PptCombined.assemblies")*/
+  /*@RequiresNonNull("PptCombined.assemblies")*/
   public void testFindIntermediateBlocks4() {
 
    PptTopLevel p1 = new PptTopLevel("ppt:::1", new VarInfo[0]);
@@ -104,7 +104,7 @@ public class PptCombinedTests extends TestCase {
     PptTopLevel main = ppts[0];
     main.predecessors = new ArrayList<PptTopLevel>();
     for (int i = 1 ; i < ppts.length ; i++) {
-      assert main.predecessors != null : "@SuppressWarnings(nullness): add() has no side effects to main.predecessors";
+      assert main.predecessors != null : "@AssumeAssertion(nullness): add() has no side effects to main.predecessors";
       main.predecessors.add(ppts[i]);
     }
   }

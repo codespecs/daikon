@@ -213,7 +213,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return (true);
   }
 
-  public boolean isExact() {
+  /*@Pure*/ public boolean isExact() {
     return true;
   }
 
@@ -442,6 +442,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 #endif
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);
@@ -722,6 +723,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /**
      * Returns a list of non-instantiating suppressions for this invariant.
      */
+    /*@Deterministic*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);
@@ -767,6 +769,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
      * @return non-null value iff this invariant is obvious from
      *          other invariants in the same slice
      **/
+    /*@Pure*/
     public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
       // First call super type's method, and if it returns non-null, then
       // this invariant is already known to be obvious, so just return
@@ -960,6 +963,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
+    /*@Deterministic*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);
@@ -1024,7 +1028,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       return new BitwiseComplement (slice);
     }
 
-    public boolean is_symmetric() {
+    /*@Pure*/ public boolean is_symmetric() {
       return (true);
     }
 
@@ -1123,6 +1127,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     #endif
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
+    /*@Deterministic*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);
@@ -1200,7 +1205,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
         return ("(%var1% & %var2%) == 0");
     }
 
-    public boolean is_symmetric() {
+    /*@Pure*/ public boolean is_symmetric() {
       return (true);
     }
 
@@ -1209,6 +1214,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
+    /*@Deterministic*/
     public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
       return (suppressions);
     }
@@ -1293,6 +1299,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
+    /*@Deterministic*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);
@@ -1385,6 +1392,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /**
      * Returns a list of non-instantiating suppressions for this invariant.
      */
+    /*@Deterministic*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);

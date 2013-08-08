@@ -130,7 +130,7 @@ public final class CLASSNAME
    * active after MINPAIRS values have been seen and a line calculated.
    * Before that, a and b are uninitialized
    */
-  public boolean isActive() {
+  /*@Pure*/ public boolean isActive() {
     return (values_seen >= MINPAIRS);
   }
 
@@ -139,7 +139,7 @@ public final class CLASSNAME
    * line.  These sample can't be flowed from ppt to ppt (since they probably
    * didn't occur at the lower ppt).
    */
-  public boolean isFlowable() {
+  /*@Pure*/ public boolean isFlowable() {
     return (false);
   }
 
@@ -635,7 +635,7 @@ public final class CLASSNAME
     return (result);
   }
 
-  public boolean isSameFormula(CLASSNAME other) {
+  /*@Pure*/ public boolean isSameFormula(CLASSNAME other) {
     boolean thisMeaningless = values_seen < MINPAIRS;
     boolean otherMeaningless = other.values_seen < MINPAIRS;
 
@@ -651,7 +651,7 @@ public final class CLASSNAME
     }
   }
 
-  public boolean isExclusiveFormula(CLASSNAME other) {
+  /*@Pure*/ public boolean isExclusiveFormula(CLASSNAME other) {
     if ((values_seen < MINPAIRS) ||
         (other.values_seen < MINPAIRS)) {
       return false;

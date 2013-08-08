@@ -319,13 +319,13 @@ public class DtraceDiff {
                  || (state1.rtype == FileIO.RecordType.TRUNCATED))
           return;  // either file reached truncation limit, return quietly
         else if (state1.rtype == FileIO.RecordType.EOF) {
-          assert state2.ppt != null : "@SuppressWarnings(nullness): application invariant: status is not EOF or TRUNCATED";
+          assert state2.ppt != null : "@AssumeAssertion(nullness): application invariant: status is not EOF or TRUNCATED";
           throw new DiffError(String.format (
                         "ppt %s (%s at line %d) is missing at end of %s",
                         state2.ppt.name(), dtracefile2, state2.get_linenum(),
                         dtracefile1));
         } else {
-          assert state1.ppt != null : "@SuppressWarnings(nullness): application invariant: status is not EOF or TRUNCATED";
+          assert state1.ppt != null : "@AssumeAssertion(nullness): application invariant: status is not EOF or TRUNCATED";
           throw new DiffError(String.format (
                         "ppt %s (%s at line %d) is missing at end of %s",
                         state1.ppt.name(), dtracefile1, state1.get_linenum(),
@@ -397,8 +397,8 @@ public class DtraceDiff {
     } else {
       // scalar case
       if (type.isPointerFileRep()) {
-        Long v1 = ((Long)val1).longValue();
-        Long v2 = ((Long)val2).longValue();
+        long v1 = ((Long)val1).longValue();
+        long v2 = ((Long)val2).longValue();
         return !(((v1 == 0) || (v2 == 0)) && (v1 != v2));
       }
       else if (type.isScalar())

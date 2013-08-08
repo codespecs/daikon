@@ -109,7 +109,7 @@ public class InvTranslate {
   /**
    * Returns a somewhat verbose description of the translation.
    */
-  public String toString () {
+  /*@SideEffectFree*/ public String toString () {
     StringBuilder out = new StringBuilder();
 
     List<String> mappings = new ArrayList<String>();

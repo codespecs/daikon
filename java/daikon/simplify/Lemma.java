@@ -31,7 +31,7 @@ public class Lemma implements Comparable<Lemma> {
     return null;
   }
 
-  public int compareTo(Lemma other) {
+  /*@Pure*/ public int compareTo(Lemma other) {
     return summarize().compareTo(other.summarize());
   }
 

@@ -13,6 +13,10 @@ import java.util.*;
  * for each two variable invariant.
  **/
 public abstract class BinaryInvariant extends Invariant {
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  static final long serialVersionUID = 20130808L;
 
   protected BinaryInvariant (PptSlice ppt) {
     super(ppt);
@@ -74,7 +78,7 @@ public abstract class BinaryInvariant extends Invariant {
    * Returns true if the binary function is symmetric (x,y ==> y,x).
    * Subclasses that are symmetric should override.
    */
-  public boolean is_symmetric() {
+  /*@Pure*/ public boolean is_symmetric() {
     return (false);
   }
 

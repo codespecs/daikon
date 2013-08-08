@@ -180,11 +180,11 @@ public abstract class RANGE extends SUPERCLASS {
     return CONFIDENCE_JUSTIFIED;
   }
 
-  public boolean isSameFormula (Invariant other) {
+  /*@Pure*/ public boolean isSameFormula (Invariant other) {
     assert other.getClass() == getClass();
     return (true);
   }
-  public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 
@@ -193,6 +193,7 @@ public abstract class RANGE extends SUPERCLASS {
    * All range invariants except Even and PowerOfTwo are obvious since they
    * represented by some version of OneOf or Bound.
    */
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
     return new DiscardInfo (this, DiscardCode.obvious,
@@ -611,7 +612,8 @@ public abstract class RANGE extends SUPERCLASS {
      * Since PowerOfTwo is not covered by Bound or OneOf, it is not obvious
      * (and should thus be printed)
      */
-     public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
+    /*@Pure*/
+    public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
 
        ONEOF oneof = find_oneof (vis);
        if (oneof != null)
@@ -679,7 +681,8 @@ public abstract class RANGE extends SUPERCLASS {
      * Since Even is not covered by Bound or OneOf, it is not obvious
      * (and should thus be printed)
      */
-     public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
+    /*@Pure*/
+    public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
        // If there is a oneof, it implies this
        ONEOF oneof = find_oneof (vis);
        if (oneof != null)

@@ -656,7 +656,7 @@ public class Instrument implements ClassFileTransformer {
 
   // This method exists only to suppress interning warnings
   @SuppressWarnings("interning") // special, unique value
-  private static boolean isVoid(Type t) {
+  /*@Pure*/ private static boolean isVoid(Type t) {
     return t == Type.VOID;
   }
 
@@ -968,7 +968,7 @@ public class Instrument implements ClassFileTransformer {
    * Returns true iff mgen is a constructor
    * @return true iff mgen is a constructor
    */
-  private boolean is_constructor (MethodGen mgen) {
+  /*@Pure*/ private boolean is_constructor (MethodGen mgen) {
 
     if (mgen.getName().equals ("<init>") || mgen.getName().equals ("")) {
       // log ("method '%s' is a constructor%n", mgen.getName());
@@ -1146,7 +1146,7 @@ public class Instrument implements ClassFileTransformer {
       return null;
   }
 
-  public boolean is_local_variable_type_table (Attribute a) {
+  /*@Pure*/ public boolean is_local_variable_type_table (Attribute a) {
     return (get_attribute_name (a).equals ("LocalVariableTypeTable"));
   }
 
@@ -1191,7 +1191,7 @@ public class Instrument implements ClassFileTransformer {
    * itself (and thus should not be instrumented).  Some daikon classes
    * that are used by Chicory are included here as well
    */
-  private static boolean is_chicory (String classname) {
+  /*@Pure*/ private static boolean is_chicory (String classname) {
     if (classname.startsWith ("daikon/chicory")
         && !classname.equals ("daikon/chicory/Test"))
       return true;

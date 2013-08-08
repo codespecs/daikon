@@ -97,7 +97,7 @@ public class InvMap implements Serializable {
     return answer.iterator();
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     String result = "";
     for (PptTopLevel ppt : pptIterable()) {
       result += ppt.name() + Global.lineSep;

@@ -142,11 +142,12 @@ public class CommonStringSequence
     throw new Error("Not yet implemented");
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousImplied() {
     return null;
   }
 
-  public boolean isSameFormula(Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
     assert other instanceof CommonStringSequence;
     return true;
   }

@@ -99,19 +99,19 @@ public class DeclReader {
       return rep_type.replaceFirst (" .*", "");
     }
 
-    public boolean is_double() {
+    /*@Pure*/ public boolean is_double() {
       return (rep_type.equals ("double") || (rep_type.equals ("float")));
     }
 
-    public boolean is_string() {
+    /*@Pure*/ public boolean is_string() {
       return (rep_type.equals ("string"));
     }
 
-    public boolean is_string_array() {
+    /*@Pure*/ public boolean is_string_array() {
       return (rep_type.equals ("string[]"));
     }
 
-    public boolean is_int() {
+    /*@Pure*/ public boolean is_int() {
       return (rep_type.equals ("int"));
     }
 
@@ -128,7 +128,7 @@ public class DeclReader {
       this.comparability = comparability;
     }
 
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
       return String.format ("%s [%s] %s", type, rep_type, name);
     }
 
@@ -252,7 +252,7 @@ public class DeclReader {
       return name.replaceFirst (":::.*", "");
     }
 
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
       return name;
     }
 

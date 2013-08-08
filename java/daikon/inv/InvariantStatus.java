@@ -12,7 +12,7 @@ public final /*@Interned*/ class InvariantStatus {
     this.status = status;
   }
 
-  public String toString() { return status; }
+  /*@SideEffectFree*/ public String toString() { return status; }
 
   /**
    * The InvariantStatus that represents no change being made to the

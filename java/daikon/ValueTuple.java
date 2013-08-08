@@ -63,30 +63,30 @@ public final class ValueTuple implements Cloneable {
   // (An alternate representation would pack the mod values into fewer ints
   // than the vals field.)
 
-  public int getModified(VarInfo vi) { return vi.getModified(this); }
-  public boolean isUnmodified(VarInfo vi) { return vi.isUnmodified(this); }
-  public boolean isModified(VarInfo vi) { return vi.isModified(this); }
-  public boolean isMissingNonsensical(VarInfo vi) { return vi.isMissingNonsensical(this); }
-  public boolean isMissingFlow(VarInfo vi) { return vi.isMissingFlow(this); }
+  /*@Pure*/ public int getModified(VarInfo vi) { return vi.getModified(this); }
+  /*@Pure*/ public boolean isUnmodified(VarInfo vi) { return vi.isUnmodified(this); }
+  /*@Pure*/ public boolean isModified(VarInfo vi) { return vi.isModified(this); }
+  /*@Pure*/ public boolean isMissingNonsensical(VarInfo vi) { return vi.isMissingNonsensical(this); }
+  /*@Pure*/ public boolean isMissingFlow(VarInfo vi) { return vi.isMissingFlow(this); }
   @SuppressWarnings("nullness") // postcondition: array expression
-  /*@AssertNonNullIfFalse("vals[#1.value_index]")*/
-  public boolean isMissing(VarInfo vi) { return vi.isMissing(this); }
+  /*@EnsuresNonNullIf(result=false, expression="vals[#1.value_index]")*/
+  /*@Pure*/ public boolean isMissing(VarInfo vi) { return vi.isMissing(this); }
 
-  int getModified(int value_index) { return mods[value_index]; }
-  boolean isUnmodified(int value_index) { return mods[value_index] == UNMODIFIED; }
-  boolean isModified(int value_index) { return mods[value_index] == MODIFIED; }
-  boolean isMissingNonsensical(int value_index) { return mods[value_index] == MISSING_NONSENSICAL; }
-  boolean isMissingFlow(int value_index) { return mods[value_index] == MISSING_FLOW; }
+  /*@Pure*/ int getModified(int value_index) { return mods[value_index]; }
+  /*@Pure*/ boolean isUnmodified(int value_index) { return mods[value_index] == UNMODIFIED; }
+  /*@Pure*/ boolean isModified(int value_index) { return mods[value_index] == MODIFIED; }
+  /*@Pure*/ boolean isMissingNonsensical(int value_index) { return mods[value_index] == MISSING_NONSENSICAL; }
+  /*@Pure*/ boolean isMissingFlow(int value_index) { return mods[value_index] == MISSING_FLOW; }
   @SuppressWarnings("nullness") // postcondition: array expression
-  /*@AssertNonNullIfFalse("vals[#1]")*/
-  boolean isMissing(int value_index) { return (isMissingNonsensical(value_index)
+  /*@EnsuresNonNullIf(result=false, expression="vals[#1]")*/
+  /*@Pure*/ boolean isMissing(int value_index) { return (isMissingNonsensical(value_index)
                                                || isMissingFlow(value_index)); }
 
   // The arguments ints represent modification information.
-  static boolean modIsUnmodified(int mod_value) { return mod_value == UNMODIFIED; }
-  static boolean modIsModified(int mod_value) { return mod_value == MODIFIED; }
-  static boolean modIsMissingNonsensical(int mod_value) { return mod_value == MISSING_NONSENSICAL; }
-  static boolean modIsMissingFlow(int mod_value) { return mod_value == MISSING_FLOW; }
+  /*@Pure*/ static boolean modIsUnmodified(int mod_value) { return mod_value == UNMODIFIED; }
+  /*@Pure*/ static boolean modIsModified(int mod_value) { return mod_value == MODIFIED; }
+  /*@Pure*/ static boolean modIsMissingNonsensical(int mod_value) { return mod_value == MISSING_NONSENSICAL; }
+  /*@Pure*/ static boolean modIsMissingFlow(int mod_value) { return mod_value == MISSING_FLOW; }
 
   // A tuplemod is summary modification information about the whole tuple
   // rather than about specific elements of the tuple.
@@ -305,7 +305,7 @@ public final class ValueTuple implements Cloneable {
 
   // These definitions are intended to make different ValueTuples with the
   // same contents compare identically.
-  /*@AssertNonNullIfTrue("#1")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
   public boolean equals(/*@Nullable*/ Object obj) {
     if (! (obj instanceof ValueTuple))
       return false;
@@ -331,7 +331,7 @@ public final class ValueTuple implements Cloneable {
   }
 
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return toString(null);
   }
 
@@ -340,7 +340,7 @@ public final class ValueTuple implements Cloneable {
    * If vis is non-null, the values are annotated with the VarInfo name that
    * would be associated with the value.
    **/
-  public String toString(VarInfo /*@Nullable*/ [] vis) {
+  /*@SideEffectFree*/ public String toString(VarInfo /*@Nullable*/ [] vis) {
     StringBuffer sb = new StringBuffer("[");
     assert vals.length == mods.length;
     assert vis == null || vals.length == vis.length;

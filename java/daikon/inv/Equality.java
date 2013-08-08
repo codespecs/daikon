@@ -131,7 +131,8 @@ public final /*(at)Interned*/ class Equality
    * changes.
    * @return the canonical VarInfo of this
    **/
-  public VarInfo leader() {
+  /*@SuppressWarnings("purity")*/ // set cache field
+  /*@Pure*/ public VarInfo leader() {
     if (leaderCache == null) {
       leaderCache = vars.iterator().next();
     }
@@ -348,7 +349,7 @@ public final /*(at)Interned*/ class Equality
     return UtilMDE.join(clauses, " && ");
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return repr();
   }
 
@@ -423,7 +424,7 @@ public final /*(at)Interned*/ class Equality
   }
 
   //  This method isn't going to be called, but it's declared abstract in Invariant.
-  public boolean isSameFormula( Invariant other ) {
+  /*@Pure*/ public boolean isSameFormula( Invariant other ) {
     throw new UnsupportedOperationException( "Equality.isSameFormula(): this method should not be called" );
   }
 

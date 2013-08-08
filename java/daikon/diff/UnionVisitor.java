@@ -9,7 +9,7 @@ import daikon.inv.*;
 public class UnionVisitor extends DepthFirstVisitor {
 
   private InvMap result = new InvMap();
-  private /*@LazyNonNull*/ PptTopLevel currentPpt;
+  private /*@MonotonicNonNull*/ PptTopLevel currentPpt;
 
   public InvMap getResult() {
     return result;
@@ -35,12 +35,12 @@ public class UnionVisitor extends DepthFirstVisitor {
    * (higher) confidence.
    **/
   @SuppressWarnings("nullness:override.pre.method.annotation.invalid") // visitor invariant, because the PptNode has already been visited
-  /*@NonNullOnEntry("currentPpt")*/ // visitor invariant
+  /*@RequiresNonNull("currentPpt")*/ // visitor invariant
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();
     Invariant inv2 = node.getInv2();
     if (inv1 == null) {
-      assert inv2 != null : "@SuppressWarnings(nullness): at least one of inv1 and inv2 is non-null";
+      assert inv2 != null : "@AssumeAssertion(nullness): at least one of inv1 and inv2 is non-null";
       result.add(currentPpt, inv2);
     } else if (inv2 == null) {
       result.add(currentPpt, inv1);

@@ -392,7 +392,7 @@ public abstract class Invariant
    * The result of this method does not depend on whether the invariant is
    * justified, destroyed, etc.
    **/
-  public boolean isExact(/*>>> @Prototype Invariant this*/) {
+  /*@Pure*/ public boolean isExact(/*>>> @Prototype Invariant this*/) {
     return false;
   }
 
@@ -409,7 +409,7 @@ public abstract class Invariant
   }
 
   @SuppressWarnings("unused")
-  private boolean isPrototype() {
+  /*@Pure*/ private boolean isPrototype() {
     return this.ppt == null;
   }
 
@@ -430,7 +430,7 @@ public abstract class Invariant
   }
 
   /** Returns whether or not this invariant has been destroyed. */
-  public boolean is_false(/*>>> @NonPrototype Invariant this*/) {
+  /*@Pure*/ public boolean is_false(/*>>> @NonPrototype Invariant this*/) {
     return (falsified);
   }
 
@@ -712,7 +712,7 @@ public abstract class Invariant
     return result;
   }
 
-  public abstract String format_using(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) ;
+  public abstract /*@Pure*/ String format_using(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) ;
 
   /**
    * @return conjuction of mapping the same function of our
@@ -722,7 +722,7 @@ public abstract class Invariant
    *
    * @see VarInfo#isValidEscExpression
    **/
-  public boolean isValidEscExpression(/*>>> @NonPrototype Invariant this*/) {
+  /*@Pure*/ public boolean isValidEscExpression(/*>>> @NonPrototype Invariant this*/) {
     for (int i=0; i < ppt.var_infos.length; i++) {
       if (! ppt.var_infos[i].isValidEscExpression()) {
         return false;
@@ -737,7 +737,7 @@ public abstract class Invariant
   /**
    * @return true if this Invariant can be properly formatted for Java output.
    **/
-  public boolean isValidExpression(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) {
+  /*@Pure*/ public boolean isValidExpression(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) {
     if ((format == OutputFormat.ESCJAVA) && (! isValidEscExpression())) {
       return false;
     }
@@ -930,7 +930,7 @@ public abstract class Invariant
    * Compare based on arity, then printed representation.
    **/
   public static final class InvariantComparatorForPrinting implements Comparator<Invariant> {
-    public int compare(/*@NonPrototype*/ Invariant inv1, /*@NonPrototype*/ Invariant inv2) {
+    /*@Pure*/ public int compare(/*@NonPrototype*/ Invariant inv1, /*@NonPrototype*/ Invariant inv2) {
       if (inv1 == inv2)
         return 0;
 
@@ -1017,7 +1017,7 @@ public abstract class Invariant
    *
    * @exception RuntimeException if other.getClass() != this.getClass()
    **/
-  public boolean isSameFormula(/*>>> @Prototype Invariant this,*/ Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(/*>>> @Prototype Invariant this,*/ Invariant other) {
     return false;
   }
 
@@ -1039,7 +1039,7 @@ public abstract class Invariant
    * Same, in this case, means a matching type, formula, and variable
    * names.
    **/
-  public boolean isSameInvariant(/*>>> @NonPrototype Invariant this,*/ Invariant inv2) {
+  /*@Pure*/ public boolean isSameInvariant(/*>>> @NonPrototype Invariant this,*/ Invariant inv2) {
     // return isSameInvariant(inv2, defaultIsSameInvariantNameExtractor);
 
     Invariant inv1 = this;
@@ -1079,7 +1079,7 @@ public abstract class Invariant
    * as variable names, confidences, sample counts, value counts, or
    * related quantities.
    **/
-  public boolean isExclusiveFormula(/*>>> @NonPrototype Invariant this,*/ Invariant other){
+  /*@Pure*/ public boolean isExclusiveFormula(/*>>> @NonPrototype Invariant this,*/ Invariant other){
     return false;
   }
 
@@ -1102,6 +1102,7 @@ public abstract class Invariant
    * May return null instead of an empty set.
    * Should be overridden by subclasses with non-instantiating suppressions.
    */
+  /*@Deterministic*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions(/*>>> @Prototype Invariant this*/) {
     return (null);
   }
@@ -1110,8 +1111,8 @@ public abstract class Invariant
    * Returns whether or not this invariant is ni-suppressed.
    */
   @SuppressWarnings("nullness") // tricky control flow, need to mark get_ni_suppressions as @Pure if that's true
-  /*@AssertNonNullIfTrue("get_ni_suppressions()")*/
-  public boolean is_ni_suppressed() {
+  /*@EnsuresNonNullIf(result=true, expression="get_ni_suppressions()")*/
+  /*@Pure*/ public boolean is_ni_suppressed() {
 
     NISuppressionSet ss = get_ni_suppressions();
     if (ss == null)
@@ -1132,7 +1133,7 @@ public abstract class Invariant
 
   // DO NOT OVERRIDE.  Should be declared "final", but the "final" is
   // omitted to allow for easier testing.
-  public boolean isWorthPrinting(/*>>> @NonPrototype Invariant this*/) {
+  /*@Pure*/ public boolean isWorthPrinting(/*>>> @NonPrototype Invariant this*/) {
     return InvariantFilters.defaultFilters().shouldKeep(this) == null;
   }
 
@@ -1149,6 +1150,7 @@ public abstract class Invariant
    * extending isObviousStatically(VarInfo[]) because it is more
    * general.
    **/
+  /*@Pure*/
   public final /*@Nullable*/ DiscardInfo isObviousStatically(/*>>> @NonPrototype Invariant this */) {
     return isObviousStatically(this.ppt.var_infos);
   }
@@ -1165,6 +1167,7 @@ public abstract class Invariant
    * position and data type of the variables is the *same* as that of
    * this.ppt.var_infos.
    **/
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(/*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
     return null;
   }
@@ -1185,7 +1188,7 @@ public abstract class Invariant
   // Of course, it's expensive to examine every possible permutation
   // of VarInfos and their equality set, so a possible conservative
   // approximation is to simply return false.
-  public boolean isObviousStatically_AllInEquality(/*>>> @NonPrototype Invariant this*/) {
+  /*@Pure*/ public boolean isObviousStatically_AllInEquality(/*>>> @NonPrototype Invariant this*/) {
     // If the leaders aren't statically obvious, then clearly not all
     // combinations are.
     if (isObviousStatically() == null) return false;
@@ -1209,11 +1212,12 @@ public abstract class Invariant
    * elementwise in the same equality set as this.ppt.var_infos.  Can
    * be null if no such assignment exists.
    **/
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality(/*>>> @NonPrototype Invariant this */) {
     DiscardInfo result = isObviousStatically();
     if (result != null) return result;
     return isObviousStatically_SomeInEqualityHelper (this.ppt.var_infos,
-                                                     new /*NNC:@LazyNonNull*/ VarInfo[this.ppt.var_infos.length],
+                                                     new /*NNC:@MonotonicNonNull*/ VarInfo[this.ppt.var_infos.length],
                                                      0);
   }
 
@@ -1221,9 +1225,10 @@ public abstract class Invariant
   /**
    * Recurse through vis and generate the cartesian product of ...
    **/
+  /*@Pure*/
   protected /*@Nullable*/ DiscardInfo
-    isObviousStatically_SomeInEqualityHelper(/*>>> @NonPrototype Invariant this,*/ VarInfo[] vis,
-                                             /*NNC:@LazyNonNull*/ VarInfo[] assigned,
+  isObviousStatically_SomeInEqualityHelper(/*>>> @NonPrototype Invariant this,*/ VarInfo[] vis,
+                                             /*NNC:@MonotonicNonNull*/ VarInfo[] assigned,
                                              int position) {
     if (position == vis.length) {
       if (debugIsObvious.isLoggable(Level.FINE)) {
@@ -1316,7 +1321,7 @@ public abstract class Invariant
    * "a[] is a palindrome" corresponding to "a[] is the reverse of
    * a[]", for instance.
    **/
-  public boolean isReflexive(/*>>> @NonPrototype Invariant this*/) {
+  /*@Pure*/ public boolean isReflexive(/*>>> @NonPrototype Invariant this*/) {
     return ! ArraysMDE.noDuplicates(ppt.var_infos);
   }
 
@@ -1347,12 +1352,13 @@ public abstract class Invariant
    * elementwise in the same equality set as this.ppt.var_infos.  Can
    * be null if no such assignment exists.
    **/
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality(/*>>> @NonPrototype Invariant this */) {
     DiscardInfo result = isObviousDynamically();
     if (result != null)
       return result;
     return isObviousDynamically_SomeInEqualityHelper (this.ppt.var_infos,
-                                                     new /*NNC:@LazyNonNull*/ VarInfo[this.ppt.var_infos.length],
+                                                     new /*NNC:@MonotonicNonNull*/ VarInfo[this.ppt.var_infos.length],
                                                      0);
   }
 
@@ -1395,7 +1401,7 @@ public abstract class Invariant
   /**
    * @return true if this invariant is only over prestate variables .
    */
-  public boolean isAllPrestate(/*>>> @NonPrototype Invariant this*/) {
+  /*@Pure*/ public boolean isAllPrestate(/*>>> @NonPrototype Invariant this*/) {
     return ppt.allPrestate();
   }
 
@@ -1404,7 +1410,7 @@ public abstract class Invariant
   // hasUninterestingConstant(), or some other filter.
   // Uninteresting invariants will override this method to return
   // false
-  public boolean isInteresting(/*>>> @NonPrototype Invariant this*/) {
+  /*@Pure*/ public boolean isInteresting(/*>>> @NonPrototype Invariant this*/) {
     return true;
   }
 
@@ -1428,7 +1434,7 @@ public abstract class Invariant
   // invariants are both of class Implication, they are ordered by
   // comparing the predicate, then the consequent.
   public static final class ClassVarnameComparator implements Comparator<Invariant> {
-    public int compare(Invariant inv1, Invariant inv2) {
+    /*@Pure*/ public int compare(Invariant inv1, Invariant inv2) {
 
       if (inv1 instanceof Implication && inv2 instanceof Implication)
         return compareImplications((Implication) inv1, (Implication) inv2);
@@ -1505,7 +1511,7 @@ public abstract class Invariant
 
     Comparator<Invariant> classVarnameComparator = new ClassVarnameComparator();
 
-    public int compare(/*@NonPrototype*/ Invariant inv1,
+    /*@Pure*/ public int compare(/*@NonPrototype*/ Invariant inv1,
                        /*@NonPrototype*/ Invariant inv2) {
       int compareClassVarname = classVarnameComparator.compare(inv1, inv2);
 
@@ -1558,7 +1564,7 @@ public abstract class Invariant
       this.inv = inv;
     }
 
-    /*@AssertNonNullIfTrue("#1")*/
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof Match))
         return (false);
@@ -1886,7 +1892,7 @@ public abstract class Invariant
    * This is used during suppresion.  Any invariant that is not active
    * cannot suppress another invariant
    */
-  public boolean isActive(/*>>> @NonPrototype Invariant this*/) {
+  /*@Pure*/ public boolean isActive(/*>>> @NonPrototype Invariant this*/) {
     return (true);
   }
 
@@ -1951,7 +1957,7 @@ public abstract class Invariant
       return (false);
   }
 
-  public String toString(/*>>> @NonPrototype Invariant this*/) {
+  /*@SideEffectFree*/ public String toString(/*>>> @NonPrototype Invariant this*/) {
     return format();
   }
 

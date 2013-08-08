@@ -406,7 +406,8 @@ program computes, and then reports properties that were true over the
 observed executions.
 @c Daikon's output, which is sometimes called an ``operational abstraction'',
 @c looks like a formal specification, or the contents of assert statements.
-Daikon can detect properties in C, C++, Eiffel, Java, and Perl programs;
+Daikon can detect properties in C, C++, C#, Eiffel, F#, Java, Perl, and
+Visual Basic programs;
 in spreadsheet files; and in other data sources.  (Dynamic invariant
 detection is a machine learning technique that can be applied to
 arbitrary data.)  It is easy to extend Daikon to other applications.
@@ -572,7 +573,7 @@ as Chicory (@pxref{Chicory}) and Kvasir (@pxref{Kvasir}).
 
 If you wish to edit the Daikon source code and re-compile Daikon, see
 @ref{Compiling Daikon,,,./developer,Daikon Developer Manual} in the 
-Daikon developers manual.
+Daikon Developer Manual.
 
 
 @c The explicit examples, segregated by OS type, seem necessary for some users.
@@ -900,7 +901,7 @@ Unix definition is not part of the environment.
 
 
 @node    Example usage, Running Daikon, Installing Daikon, Top
-@chapter Example usage for Java, C/C++, Perl, and Eiffel
+@chapter Example usage for Java, C/C++, C#/F#/Visual Basic, Perl, and Eiffel
 
 Detecting invariants involves two steps:
 @enumerate
@@ -926,7 +927,7 @@ sending trace information directly from the instrumented program to
 Daikon, which is called ``online execution'' of Daikon.
 
 This section briefly describes how to obtain data traces for Java, C,
-Perl, and Eiffel programs, and how to run Daikon.  For detailed
+C#, Perl, and Eiffel programs, and how to run Daikon.  For detailed
 information about these and other front ends that are available for
 Daikon, @ref{Front ends (instrumentation)}.
 
@@ -1507,6 +1508,14 @@ For more techniques for using Daikon with large programs
 and long program runs, see @ref{Large dtrace files}.
 
 
+
+@node    Detecting invariants in C# programs, Detecting invariants in Eiffel programs, Detecting invariants in C/C++ programs, Example usage
+@section Detecting invariants in C#, F#, and Visual Basic programs
+
+The Daikon front end for .NET languages (C#, F#, and Visual Basic) is
+called Celeriac.
+
+Please see its documentation at @url{https://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted}.
 
 
 @node    Detecting invariants in Perl programs, Detecting invariants in Eiffel programs, Detecting invariants in C/C++ programs, Example usage
@@ -7289,6 +7298,24 @@ at all from the Daikon developers.  For more information about building
 a new front end, see @ref{New front ends,,,./developer,Daikon Developer
 Manual}.
 
+@cindex Celeriac front end for .NET
+@cindex front end for C#
+@cindex C# front end
+@cindex instrumentation, of C# programs
+@cindex front end for F#
+@cindex F# front end
+@cindex instrumentation, of F# programs
+@cindex front end for Visual Basic
+@cindex Visual Basic front end
+@cindex instrumentation, of Visual Basic programs
+@cindex front end for Basic
+@cindex Basic front end
+@cindex instrumentation, of Basic programs
+
+A front end for .NET languages (C#, F#, and Visual Basic) is distributed
+separately; see @uref{https://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted}.
+
+@cindex Citadel front end for Eiffel
 @cindex front end for Eiffel
 @cindex Eiffel front end
 @cindex instrumentation, of Eiffel programs

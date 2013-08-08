@@ -73,7 +73,7 @@ public final /*@Interned*/ class ProglangType
   public /*@Interned*/ String base() { return base; }
   private int dimensions;       // number of dimensions
   public int dimensions() { return dimensions; }
-  public boolean isArray() { return dimensions > 0; }
+  /*@Pure*/ public boolean isArray() { return dimensions > 0; }
 
   /**
    * No public constructor:  use parse() instead to get a canonical
@@ -144,7 +144,7 @@ public final /*@Interned*/ class ProglangType
   }
 
   // Is this necessary?  It will be inherited from Object.
-  // /*@AssertNonNullIfTrue("#1")*/
+  // /*@EnsuresNonNullIf(result=true, expression="#1")*/
   // public boolean equals(/*@Nullable*/ Object o) {
   //   return this == o;
   // }
@@ -477,7 +477,7 @@ public final /*@Interned*/ class ProglangType
           if (parser.ttype == '\"') {
             v.add(parser.sval);
           } else if (parser.ttype == StreamTokenizer.TT_WORD) {
-            assert parser.sval != null : "@SuppressWarnings(nullness): dependent: representation invariant of StreamTokenizer";
+            assert parser.sval != null : "@AssumeAssertion(nullness): dependent: representation invariant of StreamTokenizer";
             if (parser.sval.equals ("nonsensical"))
               return null;
             assert parser.sval.equals("null");
@@ -586,7 +586,7 @@ public final /*@Interned*/ class ProglangType
             || (base == BASE_SHORT));
   }
 
-  public boolean isPrimitive() {
+  /*@Pure*/ public boolean isPrimitive() {
     return ((dimensions == 0) && baseIsPrimitive());
   }
 
@@ -602,7 +602,7 @@ public final /*@Interned*/ class ProglangType
             || (base == BASE_INTEGER));
   }
 
-  public boolean isIntegral() {
+  /*@Pure*/ public boolean isIntegral() {
     return ((dimensions == 0) && baseIsIntegral());
   }
 
@@ -620,11 +620,11 @@ public final /*@Interned*/ class ProglangType
   }
 
   // Return true if this variable is sensible as an array index.
-  public boolean isIndex() {
+  /*@Pure*/ public boolean isIndex() {
     return isIntegral();
   }
 
-  public boolean isScalar() {
+  /*@Pure*/ public boolean isScalar() {
     // For reptypes, checking against INT is sufficient, rather than
     // calling isIntegral().
     return (isIntegral()
@@ -646,11 +646,11 @@ public final /*@Interned*/ class ProglangType
     return ((base == BASE_DOUBLE) || (base == BASE_FLOAT));
   }
 
-  public boolean isFloat() {
+  /*@Pure*/ public boolean isFloat() {
     return ((dimensions == 0) && baseIsFloat());
   }
 
-  public boolean isObject() {
+  /*@Pure*/ public boolean isObject() {
     return ((dimensions == 0)
             && (baseIsObject()));
   }
@@ -665,7 +665,7 @@ public final /*@Interned*/ class ProglangType
     return (base == BASE_STRING);
   }
 
-  public boolean isString() {
+  /*@Pure*/ public boolean isString() {
     return ((dimensions == 0) && baseIsString());
   }
 
@@ -673,7 +673,7 @@ public final /*@Interned*/ class ProglangType
     return (base == BASE_HASHCODE);
   }
 
-  public boolean isHashcode() {
+  /*@Pure*/ public boolean isHashcode() {
     return ((dimensions == 0) && baseIsHashcode());
   }
 
@@ -681,7 +681,7 @@ public final /*@Interned*/ class ProglangType
    * Does this type represent a pointer? Should only be applied to
    * file_rep types.
    **/
-  public boolean isPointerFileRep() {
+  /*@Pure*/ public boolean isPointerFileRep() {
     return (base == BASE_HASHCODE);
   }
 
@@ -755,7 +755,7 @@ public final /*@Interned*/ class ProglangType
   }
 
   // For Java programs, a @BinaryName.
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return format();
   }
 
@@ -764,7 +764,7 @@ public final /*@Interned*/ class ProglangType
    * Only valid if the front end marks the function pointer with the
    * name '*func'
    **/
-  public boolean is_function_pointer() {
+  /*@Pure*/ public boolean is_function_pointer() {
     assert base == base.intern();
     return base == "*func";     // interned
   }

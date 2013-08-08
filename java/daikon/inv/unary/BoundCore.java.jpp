@@ -377,11 +377,11 @@ public class LOWERBOUNDCORE
 
   }
 
-  public boolean isSameFormula(LOWERBOUNDCORE other) {
+  /*@Pure*/ public boolean isSameFormula(LOWERBOUNDCORE other) {
     return MIN1 == other.MIN1;
   }
 
-  public boolean isExact() {
+  /*@Pure*/ public boolean isExact() {
     return false;
   }
 

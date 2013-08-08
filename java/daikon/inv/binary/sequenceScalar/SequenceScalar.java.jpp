@@ -91,7 +91,7 @@ public abstract class CLASSNAME extends BinaryInvariant {
    * Since the order is determined from the vars and the sequence is always
    * first, this is essentially symmetric.  Subclasses can override if necessary
    */
-  public boolean is_symmetric() {
+  /*@Pure*/ public boolean is_symmetric() {
     return (true);
   }
 

@@ -215,12 +215,12 @@ public final class CLASSNAME
     return VarInfo.make_function ("predicateSlice", var1(), var2());
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return "[" + CLASSSTRING + " of " + var1().name() + " " +
       var2().name() + " for " + name + "]";
   }
 
-  public boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     // For Toh (tohn) to do.
     if (other instanceof CLASSNAME) {
       CLASSNAME o = (CLASSNAME) other;
@@ -232,7 +232,7 @@ public final class CLASSNAME
   }
 
   /** Returns the ESC name **/
-  public String esc_name (String index) {
+  /*@SideEffectFree*/ public String esc_name(String index) {
     return String.format ("predicate(%s,%s)", var1().esc_name(),
                           var2().esc_name());
   }

@@ -229,7 +229,7 @@ public final class MergeInvariants {
           }
         }
       }
-      assert merge_ppts != null : "@SuppressWarnings(nullness): inv_files is non-empty, so for-loop body executed";
+      assert merge_ppts != null : "@AssumeAssertion(nullness): inv_files is non-empty, so for-loop body executed";
 
       // Remove all of the slices, equality sets, to start
       debugProgress.fine ("Cleaning ppt map in preparation for merge");

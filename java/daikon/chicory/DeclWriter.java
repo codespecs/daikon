@@ -443,7 +443,7 @@ public class DeclWriter extends DaikonWriter {
       this (parent_ppt_name, type, null, null, null);
     }
 
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
       return String.format ("VarRelation %s (%s->%s) %s [%s]", parent_ppt_name,
                             local_prefix, parent_prefix, local_variable, type);
     }
@@ -452,7 +452,7 @@ public class DeclWriter extends DaikonWriter {
      * Returns whether or not this relation is from a static variable in
      * an object ppt to its matching variable at the class level.
      */
-    public boolean is_class_relation() {
+    /*@Pure*/ public boolean is_class_relation() {
       return (parent_ppt_name.endsWith (":::CLASS"));
     }
 
@@ -476,7 +476,7 @@ public class DeclWriter extends DaikonWriter {
      * local variable
      */
     @Override
-    /*@AssertNonNullIfTrue("#1")*/
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals (/*@Nullable*/ Object o) {
       if (!(o instanceof VarRelation) || (o == null))
         return false;

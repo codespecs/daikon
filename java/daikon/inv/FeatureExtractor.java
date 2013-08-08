@@ -732,7 +732,7 @@ public final class FeatureExtractor {
     }
 
     @Override
-      /*@AssertNonNullIfTrue("#1")*/
+      /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals(/*@Nullable*/ Object o) {
       if (o instanceof IntDoublePair) {
         IntDoublePair other = (IntDoublePair) o;
@@ -749,7 +749,7 @@ public final class FeatureExtractor {
 
     // Compares an Object to this
     // Throws ClassCastException if argument is not an IntDoublePair
-    public int compareTo(IntDoublePair p) {
+    /*@Pure*/ public int compareTo(IntDoublePair p) {
       if (this.number < p.number) {
         return -1;
       } else if (this.number > p.number) {

@@ -1,26 +1,21 @@
 package typequals;
 
-import java.util.ArrayList;
-import java.util.List;
 import java.util.Set;
 
+import javacutils.AnnotationUtils;
+import javacutils.InternalUtils;
+import javacutils.TypesUtils;
+
 import javax.lang.model.element.AnnotationMirror;
-import javax.lang.model.element.ExecutableElement;
 
 import checkers.basetype.BaseTypeChecker;
 import checkers.types.AnnotatedTypeMirror;
 import checkers.types.BasicAnnotatedTypeFactory;
 import checkers.types.TreeAnnotator;
-import checkers.util.*;
 
 import com.sun.source.tree.BinaryTree;
 import com.sun.source.tree.CompilationUnitTree;
-import com.sun.source.tree.CompoundAssignmentTree;
-import com.sun.source.tree.ExpressionTree;
-import com.sun.source.tree.LiteralTree;
-import com.sun.source.tree.MethodInvocationTree;
 import com.sun.source.tree.Tree;
-import com.sun.source.tree.Tree.Kind;
 
 /**
  * Adds a type qualifier from the VIndex type system to the type of tree,
@@ -29,10 +24,12 @@ import com.sun.source.tree.Tree.Kind;
  */
 public class VIndexAnnotatedTypeFactory extends BasicAnnotatedTypeFactory<VIndexChecker> {
 
+    private final AnnotationMirror VINDEXTOP;
+
     public VIndexAnnotatedTypeFactory(VIndexChecker checker,
             CompilationUnitTree root) {
         super(checker, root);
-
+        VINDEXTOP = AnnotationUtils.fromClass(elements, VIndexTop.class);
         this.postInit();
     }
 
@@ -43,7 +40,7 @@ public class VIndexAnnotatedTypeFactory extends BasicAnnotatedTypeFactory<VIndex
 
     private class VIndexTreeAnnotator extends TreeAnnotator {
 
-        public VIndexTreeAnnotator(BaseTypeChecker checker) {
+        public VIndexTreeAnnotator(BaseTypeChecker<?> checker) {
             super(checker, VIndexAnnotatedTypeFactory.this);
         }
 
@@ -53,12 +50,12 @@ public class VIndexAnnotatedTypeFactory extends BasicAnnotatedTypeFactory<VIndex
          */
         @Override
         public Void visitBinary(BinaryTree tree, AnnotatedTypeMirror type) {
-            if (!type.isAnnotated()
+            if (!type.isAnnotatedInHierarchy(VINDEXTOP)
                 && tree.getKind() == Tree.Kind.PLUS
                 && TypesUtils.isDeclaredOfName(InternalUtils.typeOf(tree), "int")) {
                 AnnotatedTypeMirror lExpr = getAnnotatedType(tree.getLeftOperand());
                 AnnotatedTypeMirror rExpr = getAnnotatedType(tree.getRightOperand());
-                Set<AnnotationMirror> lubs = qualHierarchy.leastUpperBounds(lExpr.getAnnotations(), rExpr.getAnnotations());
+                Set<? extends AnnotationMirror> lubs = qualHierarchy.leastUpperBounds(lExpr.getAnnotations(), rExpr.getAnnotations());
                 type.replaceAnnotations(lubs);
             }
             return null; // super.visitBinary(tree, type);

@@ -40,7 +40,7 @@ public class GuardingImplication
     return result;
   }
 
-  public boolean isWorthPrinting() {
+  /*@Pure*/ public boolean isWorthPrinting() {
     return right.isWorthPrinting();
     // return !right.isObvious();
   }

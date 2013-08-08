@@ -122,7 +122,7 @@ public final class FileIO {
   public static long dkconfig_dtrace_line_count = 0;
 
   /** True if declaration records are in the new format **/
-  public static /*@LazyNonNull*/ Boolean new_decl_format = null;
+  public static /*@MonotonicNonNull*/ Boolean new_decl_format = null;
 
   /**
    * If true, modified all ppt names to remove duplicate routine
@@ -234,7 +234,7 @@ public final class FileIO {
       this.parent_ppt_name = parent_ppt_name;
       this.id = id;
     }
-    public String toString() { return parent_ppt_name + "[" + id + "] "
+    /*@SideEffectFree*/ public String toString() { return parent_ppt_name + "[" + id + "] "
                                  + rel_type; };
     private void readObject(ObjectInputStream in)
       throws IOException, ClassNotFoundException {
@@ -245,15 +245,15 @@ public final class FileIO {
   }
 
   // Utilities
-  /*@AssertNonNullIfTrue("#1")*/
-  public static final boolean isComment(/*@Nullable*/ String s) {
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
+  /*@Pure*/ public static final boolean isComment(/*@Nullable*/ String s) {
     return s != null && (s.startsWith("//") || s.startsWith("#"));
   }
 
   // Nullness-checking of read_data_trace_record(ParseState) works even
   // without these two lines, since StringBuilderDelimited accepts null values.
   @SuppressWarnings("nullness:assertiftrue.postcondition.not.satisfied") // readLine() assertion is ensured by call to reset()
-  /*@AssertNonNullIfTrue("#1.readLine()")*/
+  /*@EnsuresNonNullIf(result=true, expression="#1.readLine()")*/
   public static final boolean nextLineIsComment(BufferedReader reader) {
     boolean result = false;
     try {
@@ -445,7 +445,7 @@ public final class FileIO {
     if (state.all_ppts.containsName(ppt_name)) {
       PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
-      assert existing_ppt != null : "@SuppressWarnings(nullness): bug: containsName() is annotated as @AssertNonNullIfTrue('get(#0)')";
+      assert existing_ppt != null : "@AssumeAssertion(nullness): bug: containsName() is annotated as @EnsuresNonNullIf(result=true, expression='get(#0)')";
       if (state.ppts_are_new) {
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
@@ -555,7 +555,7 @@ public final class FileIO {
     if (state.all_ppts.containsName(ppt_name)) {
       PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
-      assert existing_ppt != null : "@SuppressWarnings(nullness): bug: containsName() is annotated as @AssertNonNullIfTrue('get(#0)')";
+      assert existing_ppt != null : "@AssumeAssertion(nullness): bug: containsName() is annotated as @EnsuresNonNullIf(result=true, expression='get(#0)')";
       if (state.ppts_are_new) {
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
@@ -779,7 +779,7 @@ public final class FileIO {
       aux);
   }
 
-  /*@NonNullOnEntry("FileIO.new_decl_format")*/
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
   private static int read_var_comparability (ParseState state, String line)
     throws IOException {
 
@@ -819,7 +819,7 @@ public final class FileIO {
     return input_lang;
   }
 
-  /*@AssertNonNullAfter("new_decl_format")*/
+  /*@EnsuresNonNull("FileIO.new_decl_format")*/
   private static void read_decl_version (ParseState state, String line)
     throws IOException {
     Scanner scanner = new Scanner (line);
@@ -945,7 +945,7 @@ public final class FileIO {
     }
 
     // Return true if the invocations print the same
-    /*@AssertNonNullIfTrue("#1")*/
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
     public boolean equals(/*@Nullable*/ Object other) {
       if (other instanceof FileIO.Invocation)
         return this.format().equals(((FileIO.Invocation) other).format());
@@ -953,7 +953,7 @@ public final class FileIO {
         return false;
     }
 
-    public int compareTo(Invocation other) {
+    /*@Pure*/ public int compareTo(Invocation other) {
       return ppt.name().compareTo(other.ppt.name());
     }
 
@@ -1152,7 +1152,7 @@ public final class FileIO {
    */
   public static class Processor {
     /** Process a data sample record. */
-    /*@NonNullOnEntry("FileIO.data_trace_state")*/
+    /*@RequiresNonNull("FileIO.data_trace_state")*/
     public void process_sample(PptMap all_ppts,
                                PptTopLevel ppt,
                                ValueTuple vt,
@@ -1425,17 +1425,17 @@ public final class FileIO {
 
 
   /**
-   * Logically, this is a local variable in method read_data_trace_file.
+   * Logically, this is a local variable in static method read_data_trace_file.
    * It is used for status output, and to give the line number at which
    * a problem was detected.
    */
-  // The @LazyNonNull property is not true globally, but within every
+  // The @MonotonicNonNull property is not true globally, but within every
   // method it's true, so it is a useful annotation.
-  public static /*@LazyNonNull*/ ParseState data_trace_state = null;
+  public static /*@MonotonicNonNull*/ ParseState data_trace_state = null;
   // The variable is only ever cleared at the end of a routine that set it.
   @SuppressWarnings("nullness") // reinitialization
   private static void clear_data_trace_state() {
-    data_trace_state = null;
+    FileIO.data_trace_state = null;
   }
 
 
@@ -1481,8 +1481,8 @@ public final class FileIO {
       read_data_trace_record (data_trace_state);
 
       if (data_trace_state.rtype == RecordType.SAMPLE) {
-        assert data_trace_state.ppt != null : "@SuppressWarnings(nullness): dependent: RecordType.SAMPLE";
-        assert data_trace_state.vt != null : "@SuppressWarnings(nullness): dependent: RecordType.SAMPLE";
+        assert data_trace_state.ppt != null : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
+        assert data_trace_state.vt != null : "@AssumeAssertion(nullness): dependent: RecordType.SAMPLE";
         // Nonce may be null
         samples_processed++;
         // Add orig and derived variables; pass to inference (add_and_flow)
@@ -1514,7 +1514,7 @@ public final class FileIO {
 
     if (Global.debugPrintDtrace) {
       assert Global.dtraceWriter != null
-        : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
+        : "@AssumeAssertion(nullness): dependent: set if debugPrintDtrace is true";
       Global.dtraceWriter.close();
     }
 
@@ -1544,8 +1544,8 @@ public final class FileIO {
    * The record is stored by side effect into the state argument.
    */
   // TODO:  For clarity, this should perhaps return its side-effected argument.
-  /*@NonNullOnEntry("FileIO.data_trace_state")*/
-  // not guaranteed: File might be empty  AssertNonNullAfter("FileIO.new_decl_format")
+  /*@RequiresNonNull("FileIO.data_trace_state")*/
+  // not guaranteed: File might be empty  EnsuresNonNull("FileIO.new_decl_format")
   public static void read_data_trace_record (ParseState state)
     throws IOException {
 
@@ -1588,7 +1588,10 @@ public final class FileIO {
       // Check for the file format
       if (line.startsWith ("decl-version")) {
         read_decl_version (state, line);
+        assert new_decl_format != null : "@AssumeAssertion(nullness): bug in Checker Framework:  read_decl_version is annotated as @EnsuresNonNull(new_decl_format)";
+        assert FileIO.new_decl_format != null : "@AssumeAssertion(nullness): bug in Checker Framework:  read_decl_version is annotated as @EnsuresNonNull(new_decl_format)";
         state.payload = (new_decl_format ? "2.0" : "1.0");
+        state.payload = (FileIO.new_decl_format ? "2.0" : "1.0");
         state.rtype = RecordType.DECL_VERSION;
         return;
       }
@@ -1618,7 +1621,7 @@ public final class FileIO {
         // --ppt-select-pattern or --ppt-omit-pattern.
         if (state.ppt != null) {
           if (!state.all_ppts.containsName (state.ppt.name())) {
-            assert state.ppt != null : "@SuppressWarnings(nullness): bug: not side-effected since check, and only pure methods have been called since";
+            assert state.ppt != null : "@AssumeAssertion(nullness): bug: not side-effected since check, and only pure methods have been called since";
             state.all_ppts.add(state.ppt);
             assert state.ppt != null; // for nullness checker
             try {
@@ -1778,7 +1781,7 @@ public final class FileIO {
    * supply it to the program point for flowing.
    * @param vt trace data only; modified by side effect to add derived vars
    **/
-  /*@NonNullOnEntry("FileIO.data_trace_state")*/
+  /*@RequiresNonNull("FileIO.data_trace_state")*/
   public static void process_sample(
                                     PptMap all_ppts,
                                     PptTopLevel ppt,
@@ -1913,7 +1916,7 @@ public final class FileIO {
             for (String succName : p.ppt_successors) {
               @SuppressWarnings("nullness") // map: any successor is in the map
               /*@NonNull*/ PptTopLevel succPpt = all_ppts.get(succName);
-              assert succPpt.predecessors != null : "@SuppressWarnings(nullness): this is a successor, so the predecessor exists";
+              assert succPpt.predecessors != null : "@AssumeAssertion(nullness): this is a successor, so the predecessor exists";
               succPpt.predecessors.add(p);
             }
           }
@@ -1929,7 +1932,7 @@ public final class FileIO {
           // Every block except the first should have at least one predecessor
           for (int i = 1; i < ppts.size(); i++) {
             PptTopLevel p = ppts.get(i);
-            assert p.predecessors != null : "@SuppressWarnings(nullness): dependent: building combined program points";
+            assert p.predecessors != null : "@AssumeAssertion(nullness): dependent: building combined program points";
             if (p.predecessors.size() == 0)
               System.out.printf ("ERROR: ppt %s has no predecessors\n", p);
           }
@@ -1973,7 +1976,7 @@ public final class FileIO {
       // Add the sample to the ppt.  Ppts that are part of a combined ppt
       // are handled as part of the combined ppt.
       if ((!ppt.combined_subsumed) && (ppt.combined_ppt != null)) {
-        assert ppt.combined_ppt != null : "@SuppressWarnings(nullness): bug in flow with respect to fields";
+        assert ppt.combined_ppt != null : "@AssumeAssertion(nullness): bug in flow with respect to fields";
         ppt.combined_ppt.add_combined();
       }
     } else {
@@ -1986,7 +1989,7 @@ public final class FileIO {
 
     if (Global.debugPrintDtrace) {
       assert Global.dtraceWriter != null
-        : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
+        : "@AssumeAssertion(nullness): dependent: set if debugPrintDtrace is true";
       Global.dtraceWriter.close();
     }
 
@@ -2097,7 +2100,7 @@ public final class FileIO {
   // This procedure reads a single record from a trace file and
   // fills up vals and mods by side effect.  The ppt name and
   // invocation nonce (if any) have already been read.
-  /*@NonNullOnEntry("FileIO.data_trace_state")*/
+  /*@RequiresNonNull("FileIO.data_trace_state")*/
   private static void read_vals_and_mods_from_trace_file
                         (LineNumberReader reader, String filename,
                          PptTopLevel ppt, /*@Nullable*/ Object[] vals, int[] mods)
@@ -2116,7 +2119,7 @@ public final class FileIO {
 
     if (Global.debugPrintDtrace) {
       assert Global.dtraceWriter != null
-        : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
+        : "@AssumeAssertion(nullness): dependent: set if debugPrintDtrace is true";
       Global.dtraceWriter.println(ppt.name());
 
       if (to_write_nonce) {
@@ -2255,7 +2258,7 @@ public final class FileIO {
 
       if (Global.debugPrintDtrace) {
         assert Global.dtraceWriter != null
-          : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
+          : "@AssumeAssertion(nullness): dependent: set if debugPrintDtrace is true";
         Global.dtraceWriter.println(vi.name());
         Global.dtraceWriter.println(value_rep);
         Global.dtraceWriter.println(mod);
@@ -2339,7 +2342,7 @@ public final class FileIO {
 
     if (Global.debugPrintDtrace) {
       assert Global.dtraceWriter != null
-        : "@SuppressWarnings(nullness): dependent: set if debugPrintDtrace is true";
+        : "@AssumeAssertion(nullness): dependent: set if debugPrintDtrace is true";
       Global.dtraceWriter.println();
     }
 
@@ -2367,7 +2370,7 @@ public final class FileIO {
    * a matching enter.  See dkconfig_ignore_missing_enter for more info.
    * If true is returned, this ppt should be ignored by the caller.
    **/
-  /*@NonNullOnEntry("FileIO.data_trace_state")*/
+  /*@RequiresNonNull("FileIO.data_trace_state")*/
   public static boolean compute_orig_variables(PptTopLevel ppt,
                                      // HashMap cumulative_modbits,
                                      /*@Nullable*/ Object[] vals, int[] mods,
@@ -2497,7 +2500,7 @@ public final class FileIO {
       assert ppt.var_infos[i].derived != null
         : "variable not derived: " + ppt.var_infos[i].repr();
       assert ppt.var_infos[i].derived != null
-        : "@SuppressWarnings(nullness): application invariant";
+        : "@AssumeAssertion(nullness): application invariant";
       // Add this derived variable's value
       ValueAndModified vm =
         ppt.var_infos[i].derived.computeValueAndModified(partial_vt);
@@ -2522,7 +2525,7 @@ public final class FileIO {
     // remove fields, you should change this number to the current date.
     static final long serialVersionUID = 20060905L;
 
-    /*@NonNullOnEntry("FileIO.new_decl_format")*/
+    /*@RequiresNonNull("FileIO.new_decl_format")*/
     public SerialFormat(PptMap map, Configuration config) {
       this.map = map;
       this.config = config;
@@ -3083,8 +3086,8 @@ public final class FileIO {
   }
 
   /** Returns whether the line is the start of a ppt declaration **/
-  /*@NonNullOnEntry("FileIO.new_decl_format")*/
-  private static boolean is_declaration_header (String line) {
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
+  /*@Pure*/ private static boolean is_declaration_header (String line) {
     if (new_decl_format)
       return (line.startsWith ("ppt "));
     else

@@ -18,7 +18,7 @@ public class ClassInfo {
 
   // set by initViaReflection()
   /** reflection object for this class **/
-  public /*@LazyNonNull*/ Class<?> clazz;
+  public /*@MonotonicNonNull*/ Class<?> clazz;
 
   // Does not include class initializers, so each element's .member field
   // is non-null.
@@ -30,10 +30,10 @@ public class ClassInfo {
 
   // traversalClass and traversalObject are set by init_traversal().
   /** DaikonVariables for the object (instance and static) **/
-  public /*@LazyNonNull*/ RootInfo traversalObject;
+  public /*@MonotonicNonNull*/ RootInfo traversalObject;
 
   /** DaikonVariables for the class (static vars only) **/
-  public /*@LazyNonNull*/ RootInfo traversalClass;
+  public /*@MonotonicNonNull*/ RootInfo traversalClass;
 
   /** Whether or not any methods in this class were instrumented **/
   public boolean shouldInclude = false;
@@ -62,7 +62,7 @@ public class ClassInfo {
    * Gets the reflection object Class for this class, and the Method objects
    * for each method that is already in method_infos.
    */
-  /*@AssertNonNullAfter("clazz")*/
+  /*@EnsuresNonNull("clazz")*/
   public void initViaReflection() {
 
     // get the reflection class
@@ -88,7 +88,7 @@ public class ClassInfo {
             {
                 boolean foundMatch = false;
                 for (MethodInfo mi: method_infos) {
-                  assert mi.member != null : "@SuppressWarnings(nullness): member of method_infos have .member field"; // fix with dependent type
+                  assert mi.member != null : "@AssumeAssertion(nullness): member of method_infos have .member field"; // fix with dependent type
                   // System.out.printf("compare %s to pure %s%n",
                   //                  mi.member.toString() , pureMeth);
                   if (mi.member.toString().trim().equals(pureMeth)) {
@@ -150,7 +150,7 @@ public class ClassInfo {
 
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return (String.format ("ClassInfo %08X [%s] %s",
                            System.identityHashCode (this), class_name, clazz));
   }

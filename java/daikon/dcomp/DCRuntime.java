@@ -164,7 +164,7 @@ public final class DCRuntime {
       this.value_source = value_source;
       this.compared_to = compared_to;
     }
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
       return String.format ("%s:%s", value_source, compared_to);
     }
   }
@@ -2320,7 +2320,7 @@ public final class DCRuntime {
     implements Comparable<DVSet> {
     static final long serialVersionUID = 20050923L;
 
-    public int compareTo (DVSet s1) {
+    /*@Pure*/ public int compareTo (DVSet s1) {
       if (s1.size() == 0)
         return 1;
       else if (size() == 0)
@@ -2886,7 +2886,7 @@ public final class DCRuntime {
   /**
    * Returns whether or not the specified class is initialized
    */
-  public static boolean is_class_init (Class<?> clazz) {
+  /*@Pure*/ public static boolean is_class_init (Class<?> clazz) {
     return (init_classes.contains (clazz.getName()));
   }
 

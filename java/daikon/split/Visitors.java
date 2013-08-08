@@ -33,49 +33,49 @@ class Visitors implements JavaParserConstants {
     Node root = parser.CompilationUnit();
     ExpressionExtractor expressionExtractor = new ExpressionExtractor();
     root.accept(expressionExtractor);
-    assert expressionExtractor.expressionNode != null : "@SuppressWarnings(nullness): control flow: visitor pattern";
+    assert expressionExtractor.expressionNode != null : "@AssumeAssertion(nullness): control flow: visitor pattern";
     return expressionExtractor.expressionNode;
   }
 
   /**
    * Returns whether n represents the java reserved word "this".
    */
-  public static boolean isThis(NodeToken n) {
+  /*@Pure*/ public static boolean isThis(NodeToken n) {
     return n.kind == THIS;
   }
 
   /**
    * Returns whether n represents a left bracket, "[".
    */
-  public static boolean isLBracket(NodeToken n) {
+  /*@Pure*/ public static boolean isLBracket(NodeToken n) {
     return n.kind == LBRACKET;
   }
 
   /**
    * Returns whether n represents a dot, ".".
    */
-  public static boolean isDot(NodeToken n) {
+  /*@Pure*/ public static boolean isDot(NodeToken n) {
     return n.kind == DOT;
   }
 
   /**
    * Returns whether n represents a java identifier.
    */
-  public static boolean isIdentifier(NodeToken n) {
+  /*@Pure*/ public static boolean isIdentifier(NodeToken n) {
     return n.kind == IDENTIFIER;
   }
 
   /**
    * Returns whether n represents a left parenthesis, "(".
    */
-  public static boolean isLParen(NodeToken n) {
+  /*@Pure*/ public static boolean isLParen(NodeToken n) {
     return n.kind == LPAREN;
   }
 
   /**
    * Returns whether n represents the java reserved word "null".
    */
-  public static boolean isNull(NodeToken n) {
+  /*@Pure*/ public static boolean isNull(NodeToken n) {
     return n.kind == NULL;
   }
 

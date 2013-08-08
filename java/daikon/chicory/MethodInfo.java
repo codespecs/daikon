@@ -19,7 +19,7 @@ public class MethodInfo {
    *    Null if a class initializer, &lt;clinit&gt; (see {@link #is_class_init()}.
    */
   // The code often assumes that member != null.
-  public /*@LazyNonNull*/ Member member = null;
+  public /*@MonotonicNonNull*/ Member member = null;
 
   /**
    * Method name.  For example: "public static void sort(int[] arr)"
@@ -53,14 +53,14 @@ public class MethodInfo {
    *
    * Set by DeclWriter and read by DTraceWriter.
    **/
-  public /*@LazyNonNull*/ RootInfo traversalEnter = null;
+  public /*@MonotonicNonNull*/ RootInfo traversalEnter = null;
 
   /**
    * The root of the variable tree for the method exit program point(s).
    *
    * Set by DeclWriter and read by DTraceWriter.
    **/
-  public /*@LazyNonNull*/ RootInfo traversalExit = null;
+  public /*@MonotonicNonNull*/ RootInfo traversalExit = null;
 
   /** The number of times this method has been called **/
   public int call_cnt = 0;
@@ -170,18 +170,18 @@ public class MethodInfo {
    * Returns true iff this method is a constructor
    * @return true iff this method is a constructor
    */
-  public boolean is_constructor() {
+  /*@Pure*/ public boolean is_constructor() {
     return (method_name.equals ("<init>") || method_name.equals(""));
   }
 
   /** Returns whether or not this method is a class initializer **/
-  public boolean is_class_init() {
+  /*@Pure*/ public boolean is_class_init() {
     return (method_name.equals ("<clinit>"));
   }
 
   /** Returns whether or not this method is static **/
-  /*@NonNullOnEntry("member")*/
-  public boolean is_static() {
+  /*@RequiresNonNull("member")*/
+  /*@Pure*/ public boolean is_static() {
     return Modifier.isStatic(member.getModifiers());
   }
 
@@ -205,7 +205,7 @@ public class MethodInfo {
   }
 
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     String out = "";
     if (class_info != null)
       out = class_info.class_name + ".";

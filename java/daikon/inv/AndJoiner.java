@@ -69,6 +69,7 @@ public class AndJoiner
   }
 
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     // Don't call super.isObviousDynamically(vis);
 
@@ -82,6 +83,7 @@ public class AndJoiner
     return null;
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     DiscardInfo leftObvious = left.isObviousStatically(vis);
     DiscardInfo rightObvious = right.isObviousStatically(vis);
@@ -95,7 +97,7 @@ public class AndJoiner
     }
   }
 
-  public boolean isSameInvariant(Invariant other) {
+  /*@Pure*/ public boolean isSameInvariant(Invariant other) {
     return super.isSameInvariant(other);
   }
 }

@@ -74,7 +74,7 @@ class ReplaceStatement {
     // But also seems to depend on methodName being set already...
     root.accept(visitor);
     assert methodName != null;
-    assert parameters != null : "@SuppressWarnings(nullness) : initialization via helper method (visitor pattern)";
+    assert parameters != null : "@AssumeAssertion(nullness) : initialization via helper method (visitor pattern)";
   }
 
   /**
@@ -101,7 +101,7 @@ class ReplaceStatement {
   /**
    * Returns a string representation of this.
    */
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     StringBuffer params = new StringBuffer();
     for (int i = 0; i < parameters.length; i++) {
       params.append(parameters[i].toString());

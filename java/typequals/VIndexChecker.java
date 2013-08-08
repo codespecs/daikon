@@ -16,4 +16,4 @@ import checkers.quals.*;
  **/
 
 @TypeQualifiers({ VIndexTop.class, ValueIndex.class, VarIndex.class, VIndexUnqualified.class, VIndexBottom.class })
-public final class VIndexChecker extends BaseTypeChecker { }
+public final class VIndexChecker extends BaseTypeChecker<VIndexAnnotatedTypeFactory> { }

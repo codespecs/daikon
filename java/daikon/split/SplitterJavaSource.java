@@ -358,7 +358,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @return true iff the variable represented by varInfo
    *  may appear in the splitting condition.
    */
-  private static boolean isNormalVar(VarInfo varInfo) {
+  /*@Pure*/ private static boolean isNormalVar(VarInfo varInfo) {
     return ((! isTypeOfVar(varInfo)) &&
             (! isSizeVar(varInfo)) &&
             (! isThisVar(varInfo)));
@@ -370,7 +370,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo of the variable being tested.
    * @return true iff varInfo is a ".getClass()" variable.
    */
-  private static boolean isTypeOfVar(VarInfo varInfo) {
+  /*@Pure*/ private static boolean isTypeOfVar(VarInfo varInfo) {
     return varInfo.has_typeof();
   }
 
@@ -380,7 +380,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * @param varInfo the VarInfo of the variable being tested.
    * @return true iff varInfo is a "size" variable.
    */
-  private static boolean isSizeVar(VarInfo varInfo) {
+  /*@Pure*/ private static boolean isSizeVar(VarInfo varInfo) {
     return varInfo.is_size();
   }
 
@@ -388,7 +388,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Determines if the variable represented by varInfo is a
    * "this" variable.
    */
-  private static boolean isThisVar(VarInfo varInfo) {
+  /*@Pure*/ private static boolean isThisVar(VarInfo varInfo) {
     return varInfo.isThis();
   }
 
@@ -722,7 +722,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * Returns true if the variable represented by varInfo
    * is used in this splitting condition.
    */
-  private static boolean isNeeded(String name, List<String> vars) {
+  /*@Pure*/ private static boolean isNeeded(String name, List<String> vars) {
     return vars.contains(name);
   }
 

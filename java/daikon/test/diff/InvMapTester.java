@@ -10,7 +10,7 @@ import java.util.*;
 @SuppressWarnings("interning")  // use of == in test code
 public class InvMapTester extends TestCase {
 
-  private /*@LazyNonNull*/ InvMap map; // initialized by setUp()
+  private /*@MonotonicNonNull*/ InvMap map; // initialized by setUp()
   private PptTopLevel pptA = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
   private PptTopLevel pptB = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
   private PptTopLevel pptC = new PptTopLevel("A:::OBJECT", new VarInfo[0]);
@@ -32,7 +32,7 @@ public class InvMapTester extends TestCase {
     map = new InvMap();
   }
 
-  /*@NonNullOnEntry("map")*/  // implicit flow: setUp was called by JUnit";
+  /*@RequiresNonNull("map")*/  // implicit flow: setUp was called by JUnit";
   public void testABC() {
     map.put(pptA, invsA);
     map.put(pptB, invsB);
@@ -51,7 +51,7 @@ public class InvMapTester extends TestCase {
     assert invsC == map.get(pptC);
   }
 
-  /*@NonNullOnEntry("map")*/  // implicit flow: setUp was called by JUnit";
+  /*@RequiresNonNull("map")*/  // implicit flow: setUp was called by JUnit";
   public void testCAB() {
     map.put(pptC, invsC);
     map.put(pptA, invsA);
