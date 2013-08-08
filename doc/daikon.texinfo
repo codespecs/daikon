@@ -573,7 +573,7 @@ as Chicory (@pxref{Chicory}) and Kvasir (@pxref{Kvasir}).
 
 If you wish to edit the Daikon source code and re-compile Daikon, see
 @ref{Compiling Daikon,,,./developer,Daikon Developer Manual} in the 
-Daikon developers manual.
+Daikon Developer Manual.
 
 
 @c The explicit examples, segregated by OS type, seem necessary for some users.
