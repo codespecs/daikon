@@ -1125,11 +1125,6 @@ doc-dkconfig: ../doc/config-options.texinfo
 # 		--list $@ \
 # 		$(JDOC_FILES)
 
-# Per comments above, an attempt to make it possible
-# to build docs without having to compile all.  (markro)
-daikon/config/ParameterDoclet.class:
-	cd daikon/config \
-	${JAVAC_COMMAND} ParameterDoclet.java 
 
 ###
 ### Switching between version 2 and version 3 (temporary)
