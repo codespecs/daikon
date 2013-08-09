@@ -1,11 +1,11 @@
 This is the distribution of the Daikon invariant detector,
 Daikon version 4.6.4, released June 23, 2010.
 
-For documentation, including installation instructions, see the "doc"
-subdirectory.  You can start with file
+If you are working with a Daikon distribution downloaded from the Daikon
+website, then most everything is setup and ready to go.  See the 'doc'
+subdirectory for additional information, including installation instructions.
+You should start out with the file:
   doc/index.html
-If you are building from source and have not yet built the documentation,
-then the links on that page will not yet work.  In that case, see
-http://groups.csail.mit.edu/pag/daikon/dist/doc/ for instructions on
-building the documentation, then return to reading the local copy, which is
-likely to be more up-to-date than the webpage.
+
+However, if you are working with source cloned from the Google Code
+repository Daikon, the please review the file README.source.

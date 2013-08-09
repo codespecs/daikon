@@ -1,0 +1,32 @@
+This README is intended for developers working with source cloned from
+the Google Code repository Daikon.  In this case, the documentation
+probably has not been built yet and the links on the page noted in
+README.txt will not yet work.  In that case, see:
+  http://groups.csail.mit.edu/pag/daikon/dist/doc/daikon.html#Installing
+
+In particular, see section 2.2.2, bullet item 2 for instructions on
+setting up your build environment.  You will then be ready to build
+the documentation.  However, due to embedding of JAVADOC info you must
+build Daikon first.  Hence:
+  - set your environment variables
+  - make compile
+  - make doc-all
+
+At this point you should have local copies of the documentation, which
+are likely to be more up-to-date than the webpage.
+
+If you plan to use Kvasir, the C/C++ front end for Daikon, then there
+are a few more steps needed to prepare for its use.  You will need a
+clone of the Google Code repository Fjalar, which contains Kvasir. 
+Important: there two implicit assumptions that must be met for the
+Daikon/Kvasir system to build and work properly:
+    - the root of your Fjalar clone must be named 'fjalar' (the Daikon
+      clone name has no restrictions)
+    - the two clones must be side by side (i.e. parallel directories)
+      in the same directory on your system
+
+At this point, you should be able to 'make kvasir' in the root of your
+Daikon tree and it will build the Fjalar/Kvasir shared library, as
+well as install it locally and make a symbolic link to it in your
+Daikon tree.
+
