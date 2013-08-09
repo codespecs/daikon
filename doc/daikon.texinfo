@@ -534,6 +534,8 @@ Optionally, compile Daikon and build other tools by running @code{make}.
 
 @end enumerate
 
+@cindex compiling Daikon
+@cindex building Daikon from source
 
 For more complete information on compiling Daikon, @pxref{Compiling
 Daikon,,,./developer,Daikon Developer Manual} in the Daikon Developer Manual.
