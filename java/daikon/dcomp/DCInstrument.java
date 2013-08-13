@@ -174,14 +174,14 @@ class DCInstrument {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    public boolean equals (/*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof MethodDef))
         return false;
       MethodDef md = (MethodDef)obj;
       return equals (md.name, md.arg_types);
     }
 
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
       int code = name.hashCode();
       for (Type arg : arg_types)
         code += arg.hashCode();
@@ -4038,7 +4038,7 @@ class DCInstrument {
 
   /**
    * Adds the following method to a class:
-   *   public boolean equals(Object obj) {
+   *   public boolean equals (Object obj) {
    *     return super.equals(obj);
    *   }
    * Must only be called if the Object equals method has not been

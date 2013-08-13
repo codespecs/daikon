@@ -229,7 +229,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
    * get_format_str().  Instances of %varN% are replaced by the variable
    * name in the specified format.
    */
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
 
     if (ppt == null)
       return (String.format ("proto ppt [class %s] format %s", getClass(),

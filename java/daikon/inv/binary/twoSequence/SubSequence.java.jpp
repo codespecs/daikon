@@ -145,7 +145,7 @@ public class CLASSNAME
     return new SUBSEQ_SWAP (ppt);
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
     if (format.isJavaFamily()) { return format_unimplemented(format); }

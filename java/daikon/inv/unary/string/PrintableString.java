@@ -52,7 +52,7 @@ public final class PrintableString extends SingleString
 
 
   /** return description of invariant.  Only Daikon format is implemented **/
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON)
       return var().name() + " is printable";
     else

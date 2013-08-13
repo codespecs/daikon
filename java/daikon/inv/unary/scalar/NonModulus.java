@@ -79,7 +79,7 @@ public class NonModulus
     return new NonModulus (slice);
   }
 
-  public NonModulus clone() {
+  /*@SideEffectFree*/ public NonModulus clone() {
     NonModulus result = (NonModulus) super.clone();
     result.elements = new TreeSet<Long>(this.elements);
     return result;
@@ -90,7 +90,7 @@ public class NonModulus
       + "m=" + modulus + ",r=" + remainder;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     updateResults();
     String name = var().name_using(format);
 

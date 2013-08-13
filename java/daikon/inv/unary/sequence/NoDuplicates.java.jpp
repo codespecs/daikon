@@ -104,7 +104,7 @@ public class CLASSNAME
     return CLASSSTRING + varNames() + ": ";
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine (repr());
     }

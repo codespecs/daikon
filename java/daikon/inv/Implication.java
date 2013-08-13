@@ -102,7 +102,7 @@ public class Implication
       + " => " + right.repr() + "]";
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     String pred_fmt = left.format_using(format);
     String consq_fmt = right.format_using(format);
     if (format == OutputFormat.DAIKON || format == OutputFormat.JML) {

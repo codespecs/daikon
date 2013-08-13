@@ -97,7 +97,7 @@ public class Property implements Serializable {
             this.xmlname = xmlname;
         }
 
-        public int hashCode() {
+        /*@Pure*/ public int hashCode() {
             return name.hashCode();
         }
 
@@ -142,7 +142,7 @@ public class Property implements Serializable {
      * The other fields may differ.
      */
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    public boolean equals(/*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
         if (o == null) {
             return false;
         }
@@ -155,7 +155,7 @@ public class Property implements Serializable {
                 && (this.kind().equals(anno.kind())));
     }
 
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
         return daikonRep.hashCode()
             + kind.hashCode()
             + (method == null ? 0 : method.hashCode());

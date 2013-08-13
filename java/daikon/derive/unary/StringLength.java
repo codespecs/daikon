@@ -44,7 +44,7 @@ public final class StringLength extends UnaryDerivation
     return VarInfo.make_scalar_str_func ("length", ProglangType.INT, base);
   }
 
-  /*@Pure*/ public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof StringLength);
   }
 

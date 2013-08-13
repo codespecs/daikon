@@ -241,7 +241,7 @@ public class Annotation {
       this.name = name;
       this.xmlname = xmlname;
     }
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
       return name.hashCode();
     }
     public String toString() {
@@ -267,7 +267,7 @@ public class Annotation {
    * and "kind" are equal.
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  public boolean equals(/*@Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
     if (o == null) {
       return false;
     }
@@ -281,7 +281,7 @@ public class Annotation {
             && (this.kind().equals(anno.kind())));
   }
 
-  public int hashCode() {
+  /*@Pure*/ public int hashCode() {
     return daikonRep.hashCode() + kind.hashCode() + method.hashCode();
   }
 

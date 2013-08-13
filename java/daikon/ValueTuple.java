@@ -271,7 +271,7 @@ public final class ValueTuple implements Cloneable {
 
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
-  public ValueTuple clone() throws CloneNotSupportedException {
+  /*@SideEffectFree*/ public ValueTuple clone() throws CloneNotSupportedException {
     return (ValueTuple) super.clone();
   }
 
@@ -306,13 +306,13 @@ public final class ValueTuple implements Cloneable {
   // These definitions are intended to make different ValueTuples with the
   // same contents compare identically.
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  public boolean equals(/*@Nullable*/ Object obj) {
+  /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
     if (! (obj instanceof ValueTuple))
       return false;
     ValueTuple other = (ValueTuple) obj;
     return (vals == other.vals) && (mods == other.mods);
   }
-  public int hashCode() {
+  /*@Pure*/ public int hashCode() {
     return vals.hashCode() * 31 + mods.hashCode();
   }
 

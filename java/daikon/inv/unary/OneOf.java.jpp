@@ -376,7 +376,7 @@ public final class ONEOFSCALAR
 #endif
 
   @SuppressWarnings("interning") // clone method re-does interning
-  public ONEOFSCALAR clone() {
+  /*@SideEffectFree*/ public ONEOFSCALAR clone() {
     ONEOFSCALAR result = (ONEOFSCALAR) super.clone();
     result.elts = elts.clone();
 #ifdef IS_SEQUENCE
@@ -561,7 +561,7 @@ public final class ONEOFSCALAR
   }
 #endif
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     sort_rep();
 
     if (format.isJavaFamily()) return format_java_family(format);

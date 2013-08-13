@@ -143,7 +143,7 @@ public final class SEQUENCESCALARSUBSEQUENCE
     return new ValueAndModified(subarr, mod);
   }
 
-  /*@Pure*/ public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof SEQUENCESCALARSUBSEQUENCE)
       && (((SEQUENCESCALARSUBSEQUENCE) other).index_shift == this.index_shift)
       && (((SEQUENCESCALARSUBSEQUENCE) other).from_start == this.from_start);

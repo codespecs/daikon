@@ -36,7 +36,7 @@ public class AndJoiner
       right.repr() + "]";
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     List<Invariant> invs = conjuncts();
     List<String> invStrings = new ArrayList<String>(invs.size());
     for (Invariant inv : invs) {

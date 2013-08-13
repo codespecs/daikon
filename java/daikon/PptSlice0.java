@@ -177,7 +177,7 @@ public class PptSlice0
       // return theImp.repr();
     }
 
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
       if (hashCode == 0) {
         hashCode = format().hashCode();
         // hashCode = (theImp.iff ? 1 : 0);
@@ -189,7 +189,7 @@ public class PptSlice0
 
     // Returns the value of "isSameInvariant()".
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    public boolean equals(/*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
       if (o == null)
         return false;
       assert o instanceof ImplicationWrapper;

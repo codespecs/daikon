@@ -17,7 +17,7 @@ public abstract class UnaryDerivation
 
   public UnaryDerivation(VarInfo vi) { base = vi; }
 
-  public UnaryDerivation clone() {
+  /*@SideEffectFree*/ public UnaryDerivation clone() {
     try {
       return (UnaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {

@@ -119,7 +119,7 @@ public final class CLASSNAME
     return VarInfo.make_subscript (base, null, index);
   }
 
-  /*@Pure*/ public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof CLASSNAME)
       && (((CLASSNAME) other).index == this.index);
   }

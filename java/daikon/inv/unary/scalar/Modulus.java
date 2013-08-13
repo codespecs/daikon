@@ -78,7 +78,7 @@ public class Modulus
       + "modulus=" + modulus + ",remainder=" + remainder;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     String name = var().name_using(format);
 
     if (format == OutputFormat.DAIKON) {

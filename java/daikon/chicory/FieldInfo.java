@@ -90,7 +90,7 @@ public class FieldInfo extends DaikonVariableInfo
     /**
      * Returns true iff the corresponding field is static.
      */
-    public boolean isStatic()
+    /*@Pure*/ public boolean isStatic()
     {
         return is_static;
     }

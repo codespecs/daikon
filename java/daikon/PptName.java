@@ -432,16 +432,16 @@ public class PptName
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  public boolean equals(/*@Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
     return (o instanceof PptName) && equals((PptName) o);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  public boolean equals(PptName o) {
+  /*@Pure*/ public boolean equals (PptName o) {
     return (o != null) && (o.fullname == fullname);
   }
 
-  public int hashCode() {
+  /*@Pure*/ public int hashCode() {
     return fullname.hashCode();
   }
 

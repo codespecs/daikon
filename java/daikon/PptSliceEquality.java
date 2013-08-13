@@ -71,7 +71,7 @@ public class PptSliceEquality
   private static class VarInfoAndComparability {
     public VarInfo vi;
 
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
       // This is about as good as we can do it.  Can't do hashcode of
       // the comparability because two comparabilities may be
       // comparable and yet be not the same
@@ -80,7 +80,7 @@ public class PptSliceEquality
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    public boolean equals (/*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
       if (!(o instanceof VarInfoAndComparability)) return false;
       return equals ((VarInfoAndComparability) o);
     }
@@ -91,7 +91,7 @@ public class PptSliceEquality
      * inheritance, we require that the comptability go both ways.
      **/
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    public boolean equals (VarInfoAndComparability o) {
+    /*@Pure*/ public boolean equals (VarInfoAndComparability o) {
 
       return (vi.comparableNWay (o.vi)
               && (vi.comparability.equality_set_ok (o.vi.comparability)));

@@ -889,7 +889,7 @@ public class NIS {
 
     /** Equal iff classes / swap variable / and variables match exactly **/
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    public boolean equals (/*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof SupInv))
         return (false);
 
@@ -913,7 +913,7 @@ public class NIS {
     }
 
     /** Hash on class and variables **/
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
       int code = suppressee.sup_class.hashCode();
       for (int i = 0; i < vis.length; i++)
         code += vis[i].hashCode();

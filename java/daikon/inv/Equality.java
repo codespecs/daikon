@@ -77,7 +77,7 @@ public final /*(at)Interned*/ class Equality
   private TreeSet<VarInfo> vars;
 
   /** Returns the number of variables in the set. **/
-  public int size() {
+  /*@Pure*/ public int size() {
     return vars.size();
   }
 
@@ -173,7 +173,7 @@ public final /*(at)Interned*/ class Equality
       + format_daikon() + " samples: " + numSamples();
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
 
 
     if (format.isJavaFamily()) return format_java_family(format);

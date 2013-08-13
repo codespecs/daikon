@@ -562,12 +562,12 @@ public abstract /*@Interned*/ class VarInfoName
   // The usual Object methods
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  public boolean equals(/*@Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
     return (o instanceof VarInfoName) && equals((VarInfoName) o);
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  public boolean equals(/*>>> @Interned VarInfoName this,*/ VarInfoName other) {
+  /*@Pure*/ public boolean equals (/*>>> @Interned VarInfoName this,*/ VarInfoName other) {
     return ((other == this)     // "interned": equality optimization pattern
             || ((other != null)
                 && (this.repr().equals(other.repr()))));
@@ -576,7 +576,7 @@ public abstract /*@Interned*/ class VarInfoName
   // This should be safe even in the absence of caching, because "repr()"
   // returns a new string each time, but it is equal() to any other
   // returned string, so their hashCode()s should be the same.
-  public int hashCode() {
+  /*@Pure*/ public int hashCode() {
     return repr().hashCode();
   }
 
@@ -1349,7 +1349,7 @@ public abstract /*@Interned*/ class VarInfoName
       return "(typeof " + term.simplify_name(prestate) + ")";
     }
 
-    /*@Pure*/ protected String javaFamilyFormat(String varname, boolean isArray) {
+    /*@SideEffectFree*/ protected String javaFamilyFormat(String varname, boolean isArray) {
       if (isArray) {
         return "daikon.Quant.typeArray(" + varname + ")";
       } else {

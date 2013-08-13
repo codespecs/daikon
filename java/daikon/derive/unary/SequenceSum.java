@@ -54,7 +54,7 @@ public final class SequenceSum
   }
 
 
-  /*@Pure*/ public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceSum);
   }
 

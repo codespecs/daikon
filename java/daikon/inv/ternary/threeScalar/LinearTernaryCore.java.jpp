@@ -125,10 +125,10 @@ public final class CLASSNAME
     public Point (PRIMITIVE x, PRIMITIVE y, PRIMITIVE z) {
       this.x = x; this.y = y; this.z = z;
     }
-    public boolean equals (PRIMITIVE x, PRIMITIVE y, PRIMITIVE z) {
+    /*@Pure*/ public boolean equals (PRIMITIVE x, PRIMITIVE y, PRIMITIVE z) {
       return ((this.x == x) && (this.y == y) && (this.z == z));
     }
-    protected Point clone() throws CloneNotSupportedException {
+    /*@SideEffectFree*/ protected Point clone() throws CloneNotSupportedException {
       return (Point) super.clone();
     }
     /*@SideEffectFree*/ public String toString() {
@@ -157,7 +157,7 @@ public final class CLASSNAME
     this.wrapper = wrapper;
   }
 
-  public CLASSNAME clone() {
+  /*@SideEffectFree*/ public CLASSNAME clone() {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();
       result.def_points = new Point[MINTRIPLES];
@@ -1141,7 +1141,7 @@ public final class CLASSNAME
     return LinearBinaryCore.formatTerm (coeff, varname, first);
   }
 
-  public String format_using(OutputFormat format,
+  /*@SideEffectFree*/ public String format_using(OutputFormat format,
                              String vix, String viy, String viz,
                              double a, double b, double c, double d) {
 
@@ -1234,7 +1234,7 @@ public final class CLASSNAME
     return "(EQ 0 " + str_axPbyPczPd + ")";
   }
 
-  public String format_using(OutputFormat format,
+  /*@SideEffectFree*/ public String format_using(OutputFormat format,
                              String vix, String viy, String viz
                              ) {
     String result = format_using(format, vix, viy, viz, a, b, c, d);

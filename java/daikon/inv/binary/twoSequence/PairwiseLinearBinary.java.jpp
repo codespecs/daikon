@@ -93,7 +93,7 @@ public class CLASSNAME
     return new CLASSNAME (slice);
   }
 
-  public CLASSNAME clone() {
+  /*@SideEffectFree*/ public CLASSNAME clone() {
     CLASSNAME result = (CLASSNAME) super.clone();
     result.core = core.clone();
     result.core.wrapper = result;
@@ -111,7 +111,7 @@ public class CLASSNAME
       + "; " + core.repr();
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (core.a == 0 && core.b == 0 && core.c == 0) {
       return format_too_few_samples(format, null);
     }

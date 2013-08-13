@@ -946,7 +946,7 @@ public final class FileIO {
 
     // Return true if the invocations print the same
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    public boolean equals(/*@Nullable*/ Object other) {
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object other) {
       if (other instanceof FileIO.Invocation)
         return this.format().equals(((FileIO.Invocation) other).format());
       else
@@ -957,7 +957,7 @@ public final class FileIO {
       return ppt.name().compareTo(other.ppt.name());
     }
 
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
       return this.format().hashCode();
     }
   }
@@ -2843,7 +2843,7 @@ public final class FileIO {
       comparability = VarComparabilityNone.it;
     }
 
-    public VarDefinition clone() {
+    /*@SideEffectFree*/ public VarDefinition clone() {
       try {
         return (VarDefinition) super.clone();
       } catch (CloneNotSupportedException e) {

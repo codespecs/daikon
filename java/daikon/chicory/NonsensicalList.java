@@ -23,7 +23,7 @@ public class NonsensicalList extends AbstractList<Object>
         return theList;
     }
 
-    public Object get(int index)
+    /*@Pure*/ public Object get(int index)
     {
         return NonsensicalObject.getInstance();
     }

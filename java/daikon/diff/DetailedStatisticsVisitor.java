@@ -255,7 +255,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   }
 
   /** Returns a human-readable table of its data. **/
-  public String format() {
+  /*@SideEffectFree*/ public String format() {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
 

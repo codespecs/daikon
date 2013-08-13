@@ -735,7 +735,7 @@ public final /*@Interned*/ class ProglangType
   }
 
   // For Java programs, a @BinaryName.
-  public String format() {
+  /*@SideEffectFree*/ public String format() {
     if (dimensions == 0)
       return base;
 

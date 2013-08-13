@@ -164,7 +164,7 @@ public class DummyInvariant
     negated = !negated;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.ESCJAVA) return format_esc();

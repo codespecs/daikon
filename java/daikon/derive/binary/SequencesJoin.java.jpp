@@ -205,7 +205,7 @@ public final class CLASSNAME
       + "]";
   }
 
-  /*@Pure*/ public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof CLASSNAME);
   }
 

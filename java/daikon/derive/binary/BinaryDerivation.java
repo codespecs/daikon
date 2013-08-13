@@ -35,7 +35,7 @@ public abstract class BinaryDerivation
     base2 = vi2;
   }
 
-  public BinaryDerivation clone() {
+  /*@SideEffectFree*/ public BinaryDerivation clone() {
     try {
       return (BinaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {

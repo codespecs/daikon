@@ -388,7 +388,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return format();
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     }

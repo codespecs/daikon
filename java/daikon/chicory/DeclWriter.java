@@ -477,7 +477,7 @@ public class DeclWriter extends DaikonWriter {
      */
     @Override
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    public boolean equals (/*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
       if (!(o instanceof VarRelation) || (o == null))
         return false;
       VarRelation vr = (VarRelation) o;
@@ -488,7 +488,7 @@ public class DeclWriter extends DaikonWriter {
     }
 
     @Override
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
       return (parent_ppt_name.hashCode()
               + ((local_variable == null) ? 0 : local_variable.hashCode()));
     }

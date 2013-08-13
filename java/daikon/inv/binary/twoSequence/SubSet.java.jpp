@@ -150,7 +150,7 @@ public class SUBSET
       + ",falsified=" + falsified;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
@@ -161,7 +161,7 @@ public class SUBSET
     return format_unimplemented(format);
   }
 
-  public String format() {
+  /*@SideEffectFree*/ public String format() {
     String v1 = var1().name();
     String v2 = var2().name();
     #if (defined(SUB) || defined(SUBFLOAT))

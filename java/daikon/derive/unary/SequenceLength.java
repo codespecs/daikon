@@ -98,7 +98,7 @@ public final class SequenceLength
                                          shift);
   }
 
-  /*@Pure*/ public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceLength)
       && (((SequenceLength) other).shift == this.shift);
   }

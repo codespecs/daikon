@@ -80,7 +80,7 @@ public abstract class PptSlice
     invs.trimToSize();
   }
 
-  public final /*@Pure*/ String name() {
+  /*@Pure*/ public final String name() {
     return parent.name + varNames(var_infos);
   }
 

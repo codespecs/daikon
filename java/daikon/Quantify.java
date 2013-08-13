@@ -207,7 +207,7 @@ public class Quantify {
       return name_with_offset (var.jml_name(), offset);
     }
 
-    public String jml_name (boolean in_prestate) {
+    /*@SideEffectFree*/ public String jml_name (boolean in_prestate) {
       if (!in_prestate)
         return jml_name();
 

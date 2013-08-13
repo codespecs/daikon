@@ -232,7 +232,7 @@ public final class VarInfoAux
 
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
-  public VarInfoAux clone() throws CloneNotSupportedException {
+  /*@SideEffectFree*/ public VarInfoAux clone() throws CloneNotSupportedException {
     return (VarInfoAux) super.clone();
   }
 
@@ -240,13 +240,13 @@ public final class VarInfoAux
     return map.toString();
   }
 
-  public int hashCode() {
+  /*@Pure*/ public int hashCode() {
     return map.hashCode();
   }
 
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  public boolean equals(/*@Nullable*/ Object o) {
+  /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
     if (o instanceof VarInfoAux) {
       return equals((VarInfoAux) o);
     } else {
@@ -255,7 +255,7 @@ public final class VarInfoAux
   }
 
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
-  public boolean equals(VarInfoAux o) {
+  /*@Pure*/ public boolean equals (VarInfoAux o) {
     return this.map.equals(o.map);
   }
 

@@ -122,7 +122,7 @@ public final class SEQUENCESCALARSUBSCRIPT
     return VarInfo.make_subscript (seqvar(), sclvar(), index_shift);
   }
 
-  /*@Pure*/ public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof SEQUENCESCALARSUBSCRIPT)
       && (((SEQUENCESCALARSUBSCRIPT) other).index_shift == this.index_shift);
   }

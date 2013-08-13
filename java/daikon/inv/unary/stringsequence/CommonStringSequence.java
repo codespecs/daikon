@@ -80,7 +80,7 @@ public class CommonStringSequence
     return result;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
 
     return format_unimplemented(format);

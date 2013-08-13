@@ -601,7 +601,7 @@ public final class INTEQUAL
     return INTEQUALstring + varNames();
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
 
     String var1name = var1().name_using(format);
     String var2name = var2().name_using(format);

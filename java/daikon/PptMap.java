@@ -216,7 +216,7 @@ public class PptMap
     return result;
   }
 
-  public int size() {
+  /*@Pure*/ public int size() {
     return nameToPpt.size();
   }
 

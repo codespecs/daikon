@@ -108,7 +108,7 @@ public final class SCALARSEQUENCESINTERSECTION
     return VarInfo.make_function ("intersection", base1, base2);
   }
 
-  /*@Pure*/ public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof SCALARSEQUENCESINTERSECTION);
   }
 

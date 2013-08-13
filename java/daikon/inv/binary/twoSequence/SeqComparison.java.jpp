@@ -362,7 +362,7 @@ public class SEQSEQINTEQUAL
       ;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     // System.out.println("Calling " + SEQSEQINTEQUALstring + ".format for: " + repr());
 
     if (format == OutputFormat.SIMPLIFY) {

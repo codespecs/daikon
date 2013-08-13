@@ -118,7 +118,7 @@ public abstract class RANGE extends SUPERCLASS {
    * get_format_str().  Instances of %var1% are replaced by the variable
    * name in the specified format.
    */
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
 
     String fmt_str = get_format_str (format);
 

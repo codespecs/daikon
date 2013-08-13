@@ -2491,7 +2491,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    public boolean equals(/*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof Pair))
         return (false);
 
@@ -2499,7 +2499,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return ((o.v1 == v1) && (o.v2 == v2));
     }
 
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
       return (v1.hashCode() + v2.hashCode());
     }
 

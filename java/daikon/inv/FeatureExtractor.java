@@ -733,7 +733,7 @@ public final class FeatureExtractor {
 
     @Override
       /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    public boolean equals(/*@Nullable*/ Object o) {
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
       if (o instanceof IntDoublePair) {
         IntDoublePair other = (IntDoublePair) o;
         return ((number == other.number) && (value == other.value));
@@ -743,7 +743,7 @@ public final class FeatureExtractor {
 
     //returns a valid hashCode
     @Override
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
       return number;
     }
 

@@ -257,7 +257,7 @@ class Test {
   // Tests the clone() method
   public static class G {
     static class Uncloneable {
-      protected Object clone() throws CloneNotSupportedException {
+      /*@SideEffectFree*/ protected Object clone() throws CloneNotSupportedException {
         //        return super.clone();
         throw new CloneNotSupportedException();
       }
@@ -320,18 +320,18 @@ class Test {
       this.y = y;
     }
 
-    protected Object clone() throws CloneNotSupportedException {
+    /*@SideEffectFree*/ protected Object clone() throws CloneNotSupportedException {
       return super.clone();
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    public boolean equals(/*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
       return (obj instanceof Obj)
         && this.x == ((Obj)obj).x
         && this.y == ((Obj)obj).y;
     }
 
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
       return this.x + this.y;
     }
 
@@ -351,7 +351,7 @@ class Test {
 
     // Overrides Obj.equals
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    public boolean equals(/*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
       return (obj instanceof ObjSub)
         && super.equals(obj)
         && this.z == ((ObjSub)obj).z;

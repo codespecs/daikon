@@ -180,7 +180,7 @@ public final class SEQUENCESCALARARBITRARYSUBSEQUENCE
     return seqvar();
   }
 
-  /*@Pure*/ public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof SEQUENCESCALARARBITRARYSUBSEQUENCE)
       && (((SEQUENCESCALARARBITRARYSUBSEQUENCE)other).left_closed == this.left_closed)
       && (((SEQUENCESCALARARBITRARYSUBSEQUENCE)other).right_closed == this.right_closed);

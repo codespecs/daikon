@@ -248,7 +248,7 @@ public final class SEQINTEQUAL
     return (null);
   }
 
-  public SEQINTEQUAL clone() {
+  /*@SideEffectFree*/ public SEQINTEQUAL clone() {
     SEQINTEQUAL result = (SEQINTEQUAL) super.clone();
     return result;
   }
@@ -258,7 +258,7 @@ public final class SEQINTEQUAL
       + ",falsified=" + falsified;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 

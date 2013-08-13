@@ -438,7 +438,7 @@ public abstract class Invariant
    * Do nothing special, Overridden to remove
    * exception from declaration
    **/
-  public Invariant clone(/*>>> @NonPrototype Invariant this*/) {
+  /*@SideEffectFree*/ public Invariant clone(/*>>> @NonPrototype Invariant this*/) {
     try {
       Invariant result = (Invariant) super.clone();
       return result;
@@ -701,7 +701,7 @@ public abstract class Invariant
    * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
-  public /*@Pure*/ String format(/*>>> @NonPrototype Invariant this*/) {
+  /*@SideEffectFree*/ public String format(/*>>> @NonPrototype Invariant this*/) {
     String result = format_using(OutputFormat.DAIKON);
     if (PrintInvariants.dkconfig_print_inv_class) {
       String classname = getClass().getName();
@@ -712,7 +712,7 @@ public abstract class Invariant
     return result;
   }
 
-  public abstract /*@Pure*/ String format_using(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) ;
+  /*@Pure*/ public abstract String format_using(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) ;
 
   /**
    * @return conjuction of mapping the same function of our
@@ -1565,7 +1565,7 @@ public abstract class Invariant
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#1")*/
-    public boolean equals (/*@Nullable*/ Object obj) {
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
       if (!(obj instanceof Match))
         return (false);
 
@@ -1573,7 +1573,7 @@ public abstract class Invariant
       return (ic.inv.match (inv));
     }
 
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
       return (inv.getClass().hashCode());
     }
   }

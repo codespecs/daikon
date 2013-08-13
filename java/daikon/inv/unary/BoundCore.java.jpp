@@ -155,7 +155,7 @@ public class LOWERBOUNDCORE
     return MIN1;
   }
 
-  public LOWERBOUNDCORE clone() {
+  /*@SideEffectFree*/ public LOWERBOUNDCORE clone() {
     try {
       return (LOWERBOUNDCORE) super.clone();
     } catch (CloneNotSupportedException e) {

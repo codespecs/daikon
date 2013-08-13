@@ -406,7 +406,7 @@ public class PAIRWISEINTEQUAL
     return EQUALSstring;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 

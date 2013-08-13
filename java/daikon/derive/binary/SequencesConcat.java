@@ -94,7 +94,7 @@ public final class SequencesConcat
 
   }
 
-  /*@Pure*/ public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof SequencesConcat);
   }
 

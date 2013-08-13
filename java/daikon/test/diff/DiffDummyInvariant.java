@@ -84,7 +84,7 @@ public class DiffDummyInvariant
     return "DiffDummyInvariant(" + ppt.arity() + "," + formula + "," + confidence + ")";
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     return repr();
   }
 

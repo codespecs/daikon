@@ -281,7 +281,7 @@ public class CLASSNAME extends SUPERCLASS {
     return EQUALSstring;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
     // TODO: Eliminate the unnecessary format_xxx() below if the

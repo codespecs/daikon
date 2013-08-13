@@ -109,7 +109,7 @@ public class InvMap implements Serializable {
     return result;
   }
 
-  public int size() {
+  /*@Pure*/ public int size() {
     int size1 = ppts.size();
     int size2 = pptToInvs.size();
     assert size1 == size2;

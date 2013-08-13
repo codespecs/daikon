@@ -42,7 +42,7 @@ public abstract class TernaryDerivation
     base3 = vi3;
   }
 
-  public TernaryDerivation clone() {
+  /*@SideEffectFree*/ public TernaryDerivation clone() {
     try {
       return (TernaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {

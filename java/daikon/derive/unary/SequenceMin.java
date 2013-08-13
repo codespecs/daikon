@@ -52,7 +52,7 @@ public final class SequenceMin
     return VarInfo.make_scalar_seq_func ("min", null, base, 0);
   }
 
-  /*@Pure*/ public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceMin);
   }
 
