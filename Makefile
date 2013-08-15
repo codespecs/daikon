@@ -158,6 +158,8 @@ help:
 	@echo " compile compile-java     -- compile Java files"
 	@echo " junit                    -- run unit tests"
 	@echo " test                     -- run system tests"
+# must 'make compile' before 'make doc-all'
+	@echo " doc-all                  -- build all documentation"
 	@echo " tags TAGS                -- make TAGS file for Emacs"
 	@echo " pag-install              -- install PAG specific files "
 	@echo " kvasir                   -- make Kvasir, the C front end"
