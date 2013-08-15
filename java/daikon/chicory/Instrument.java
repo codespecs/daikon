@@ -830,7 +830,7 @@ public class Instrument implements ClassFileTransformer {
     // out.format ("    targeter: %s%n", it);
     assert !(it instanceof BranchInstruction) : "target " + it;
     if (it instanceof CodeExceptionGen) {
-
+    }
     }
     }
     */
