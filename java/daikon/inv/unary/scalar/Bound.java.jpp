@@ -284,7 +284,7 @@ public class LOWERBOUND
     return new LOWERBOUND (slice);
   }
 
-  public LOWERBOUND clone() {
+  /*@SideEffectFree*/ public LOWERBOUND clone() {
     LOWERBOUND result = (LOWERBOUND) super.clone();
     result.core = core.clone();
     result.core.wrapper = result;
@@ -301,7 +301,7 @@ public class LOWERBOUND
   }
 
 #if (defined(LOWER) || defined(UPPER) || defined(LOWERFLOAT) || defined(UPPERFLOAT))
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     String name = var().name_using(format);
     PptTopLevel pptt = ppt.parent;
 
@@ -346,7 +346,7 @@ public class LOWERBOUND
   }
 #else
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -535,11 +535,11 @@ public class LOWERBOUND
     return core.computeConfidence();
   }
 
-  public boolean isExact() {
+  /*@Pure*/ public boolean isExact() {
     return core.isExact();
   }
 
-  public boolean isSameFormula(Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((LOWERBOUND) other).core);
   }
 
@@ -547,7 +547,7 @@ public class LOWERBOUND
 #ifndef IS_ELT
   // XXX FIXME This looks like a hack that should be removed.  -MDE 6/13/2002
   // Use hasUninterestingConstant() instead. -SMcC 2/26/2003
-  public boolean isInteresting() {
+  /*@Pure*/ public boolean isInteresting() {
     return (-1 < MIN1 && MIN1 < 2);
   }
 #endif
@@ -568,6 +568,7 @@ public class LOWERBOUND
     return false;
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically (VarInfo[] vis) {
     VarInfo var = vis[0];
     if ((var.derived instanceof SequenceLength)
@@ -578,6 +579,7 @@ public class LOWERBOUND
     return super.isObviousStatically (vis);
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -700,7 +702,7 @@ public class LOWERBOUND
   }
 
 
-  public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
 #ifdef IS_ELT
     /* N.B. "x[] elements >= 200" is not mutually exclusive with "x[]
      * elements <= 100"; they could both be true if x[] were always

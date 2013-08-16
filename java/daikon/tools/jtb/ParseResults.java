@@ -30,7 +30,7 @@ public class ParseResults {
   }
 
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return "package name: " + packageName + ", " + "file name: "
       + fileName;
   }

@@ -52,7 +52,7 @@ public final class PrintableString extends SingleString
 
 
   /** return description of invariant.  Only Daikon format is implemented **/
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON)
       return var().name() + " is printable";
     else
@@ -88,6 +88,7 @@ public final class PrintableString extends SingleString
    * is for static constants which are obviously printable (or not)
    * from their values
    */
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     if (vis[0].isStaticConstant()) {
       return new DiscardInfo(this, DiscardCode.obvious, vis[0].name()
@@ -96,7 +97,7 @@ public final class PrintableString extends SingleString
     return super.isObviousStatically(vis);
   }
 
-  public boolean isSameFormula(Invariant o) {
+  /*@Pure*/ public boolean isSameFormula(Invariant o) {
     assert o instanceof PrintableString;
     return true;
   }

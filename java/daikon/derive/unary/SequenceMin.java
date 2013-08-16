@@ -52,12 +52,12 @@ public final class SequenceMin
     return VarInfo.make_scalar_seq_func ("min", null, base, 0);
   }
 
-  public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof SequenceMin);
   }
 
   /** Returns the ESC name **/
-  public String esc_name (String index) {
+  /*@SideEffectFree*/ public String esc_name(String index) {
     return String.format ("min(%s)", base.esc_name());
   }
 }

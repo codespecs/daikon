@@ -39,7 +39,7 @@ public class PptSlice0
   // sliceTemplate, but marked as prestate (i.e., orig(x) rather than x).
   public static PptSlice makeFakePrestate(PptSlice sliceTemplate) {
     PptSlice0 fake = new PptSlice0(sliceTemplate.parent);
-    fake.var_infos = new /*NNC:@LazyNonNull*/ VarInfo[sliceTemplate.var_infos.length];
+    fake.var_infos = new /*NNC:@MonotonicNonNull*/ VarInfo[sliceTemplate.var_infos.length];
     for (int i=0; i < fake.var_infos.length; i++) {
       fake.var_infos[i] = VarInfo.origVarInfo(sliceTemplate.var_infos[i]);
     }
@@ -177,7 +177,7 @@ public class PptSlice0
       // return theImp.repr();
     }
 
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
       if (hashCode == 0) {
         hashCode = format().hashCode();
         // hashCode = (theImp.iff ? 1 : 0);
@@ -188,8 +188,8 @@ public class PptSlice0
     }
 
     // Returns the value of "isSameInvariant()".
-    /*@AssertNonNullIfTrue("#1")*/
-    public boolean equals(/*@Nullable*/ Object o) {
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
       if (o == null)
         return false;
       assert o instanceof ImplicationWrapper;

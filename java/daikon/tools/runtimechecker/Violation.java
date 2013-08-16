@@ -65,11 +65,11 @@ public class Violation implements Serializable {
             this.xmlname = xmlname;
         }
 
-        public int hashCode() {
+        /*@Pure*/ public int hashCode() {
             return name.hashCode();
         }
 
-        public String toString() {
+        /*@SideEffectFree*/ public String toString() {
             return name;
         }
 
@@ -191,22 +191,22 @@ public class Violation implements Serializable {
     /**
      * String representation.
      */
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
         return time.toString() + " : " + property.toString();
     }
 
     /**
      * String representation.
      */
-    public String toStringWithMethod() {
+    /*@SideEffectFree*/ public String toStringWithMethod() {
         return time.toString() + "of " + property.method() + " : " + property.toString();
     }
 
     /**
      * Two violations are equal if their properties and times are equal.
      */
-    /*@AssertNonNullIfTrue("#1")*/
-    public boolean equals(/*@Nullable*/ Object o) {
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
         if (o == null) {
             return false;
         }
@@ -217,7 +217,7 @@ public class Violation implements Serializable {
         return (this.property.equals(other.property) && this.time.equals(other.time));
     }
 
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
         return property.hashCode() + time.hashCode();
     }
 

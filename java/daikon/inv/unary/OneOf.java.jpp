@@ -360,23 +360,23 @@ public final class ONEOFSCALAR
   }
 
 #if defined(SCALAR)
-  public boolean is_boolean() {
+  /*@Pure*/ public boolean is_boolean() {
      return (var().file_rep_type == ProglangType.BOOLEAN);
   }
-  public boolean is_hashcode() {
+  /*@Pure*/ public boolean is_hashcode() {
     return (var().file_rep_type == ProglangType.HASHCODE);
   }
 #else
-  public boolean is_boolean() {
+  /*@Pure*/ public boolean is_boolean() {
     return (var().file_rep_type.elementType() == ProglangType.BOOLEAN);
   }
-  public boolean is_hashcode() {
+  /*@Pure*/ public boolean is_hashcode() {
     return (var().file_rep_type.elementType() == ProglangType.HASHCODE);
   }
 #endif
 
   @SuppressWarnings("interning") // clone method re-does interning
-  public ONEOFSCALAR clone() {
+  /*@SideEffectFree*/ public ONEOFSCALAR clone() {
     ONEOFSCALAR result = (ONEOFSCALAR) super.clone();
     result.elts = elts.clone();
 #ifdef IS_SEQUENCE
@@ -561,7 +561,7 @@ public final class ONEOFSCALAR
   }
 #endif
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     sort_rep();
 
     if (format.isJavaFamily()) return format_java_family(format);
@@ -700,7 +700,7 @@ public final class ONEOFSCALAR
 
 
 #if defined(STRING) || defined(ELTSTRING)
-  private boolean is_type() {
+  /*@Pure*/ private boolean is_type() {
     return var().has_typeof();
   }
 #endif
@@ -736,7 +736,7 @@ public final class ONEOFSCALAR
 #endif
 
 #if defined(ELTSTRING) || defined(STRINGSEQUENCE)
-  public boolean isValidEscExpression() {
+  /*@Pure*/ public boolean isValidEscExpression() {
     // format_esc will look at the particulars and decide
     return true;
   }
@@ -761,7 +761,7 @@ public final class ONEOFSCALAR
       } else { // base is not an array, presume it is a collection
         VarInfo collection = base.get_enclosing_var();
         assert collection != null : "no enclosing var for " + base.name();
-        assert collection != null : "@SuppressWarnings(nullness)";
+        assert collection != null : "@AssumeAssertion(nullness)";
         result = collection.esc_name() + ".elementType == "
             + format_esc_string2type(elts[0]);
         // Do not use the \forall, return this directly
@@ -1404,6 +1404,7 @@ public final class ONEOFSCALAR
     }
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     // Static constants are necessarily OneOf precisely one value.
     // This removes static constants from the output, which might not be
@@ -1416,6 +1417,7 @@ public final class ONEOFSCALAR
   }
 
 #if defined(IS_NUMERIC)
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -1437,11 +1439,11 @@ public final class ONEOFSCALAR
     if (v.isDerived() && (v.derived instanceof SequenceLength)
       && (num_elts == 1) && (elts[0] == 0)) {
       @SuppressWarnings("nullness") // checker bug: flow
-      /*@NonNull*/ VarInfo[] bv = v.derived.getBases();
-      if (!bv[0].isDerived()) {
+      /*@NonNull*/ VarInfo b = v.derived.getBase(0);
+      if (!b.isDerived()) {
         if (logOn())
           dlog.log ("isObviousDynamically '" + v.name()
-                    + " == 0' ==> '" + bv[0].name() + " == []'");
+                    + " == 0' ==> '" + b.name() + " == []'");
         return new DiscardInfo(this, DiscardCode.obvious, "size(array) == 0 is implied by array == []");
       }
     }
@@ -1483,6 +1485,7 @@ public final class ONEOFSCALAR
     return null;
   }
 #elif defined(IS_ELT_NUMERIC)
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -1520,7 +1523,7 @@ public final class ONEOFSCALAR
     return (true);
   }
 
-  public boolean isSameFormula(Invariant o) {
+  /*@Pure*/ public boolean isSameFormula(Invariant o) {
     ONEOFSCALAR other = (ONEOFSCALAR) o;
     if (num_elts != other.num_elts)
       return false;
@@ -1599,7 +1602,7 @@ public final class ONEOFSCALAR
     return true;
   }
 
-  public boolean isExclusiveFormula(Invariant o) {
+  /*@Pure*/ public boolean isExclusiveFormula(Invariant o) {
     if (o instanceof ONEOFSCALAR) {
       ONEOFSCALAR other = (ONEOFSCALAR) o;
 
@@ -1657,7 +1660,7 @@ public final class ONEOFSCALAR
   // OneOf invariants that indicate a small set of possible values are
   // uninteresting.  OneOf invariants that indicate exactly one value
   // are interesting.
-  public boolean isInteresting() {
+  /*@Pure*/ public boolean isInteresting() {
     if (num_elts() > 1) {
       return false;
     } else {
@@ -1694,7 +1697,7 @@ public final class ONEOFSCALAR
   }
 
 
-  public boolean isExact() {
+  /*@Pure*/ public boolean isExact() {
     return (num_elts == 1);
   }
 

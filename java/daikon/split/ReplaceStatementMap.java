@@ -54,7 +54,7 @@ class ReplaceStatementMap {
   }
 
   /** For debugging only. **/
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return map.toString();
   }
 

@@ -29,9 +29,9 @@ public enum OutputFormat {
 
   OutputFormat(String name) { this.name = name; }
 
-  public String toString() { return "OutputFormat:" + name; }
+  /*@SideEffectFree*/ public String toString() { return "OutputFormat:" + name; }
 
-  public boolean isJavaFamily() {
+  /*@Pure*/ public boolean isJavaFamily() {
     return (this == DBCJAVA || this == JML || this == JAVA);
   }
 

@@ -169,7 +169,7 @@ public class NISuppressor {
    * Returns whether or not this suppressor is enabled.  A suppressor
    * is enabled if the invariant on which it depends is enabled.
    */
-  public boolean is_enabled() {
+  /*@Pure*/ public boolean is_enabled() {
     return (sample_inv.enabled());
   }
 
@@ -254,7 +254,7 @@ public class NISuppressor {
 
       // Check to see if the suppressor is true over all constants.
       if (ppt.is_prev_constant (v1)) {
-        assert ppt.constants != null : "@SuppressWarnings(nullness)";
+        assert ppt.constants != null : "@AssumeAssertion(nullness)";
         boolean valid = false;
         VarInfo[] sup_vis = new VarInfo[] {v1};
         assert sample_inv.valid_types (sup_vis);
@@ -336,7 +336,7 @@ public class NISuppressor {
       // Check to see if the suppressor is true over all constants.  This
       // code only works for stateless invariants!
       if (ppt.is_prev_constant (v1) && ppt.is_prev_constant (v2)) {
-        assert ppt.constants != null : "@SuppressWarnings(nullness)";
+        assert ppt.constants != null : "@AssumeAssertion(nullness)";
         boolean valid = false;
         VarInfo[] sup_vis = new VarInfo[] {v1, v2};
         assert sample_inv.valid_types (sup_vis);
@@ -495,7 +495,7 @@ public class NISuppressor {
    * var indices as numbers, the variables x, y, and z are shown instead
    * with indices 0, 1, and 2 respectively
    */
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
 
     String cname = inv_class.getCanonicalName();
 

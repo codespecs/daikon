@@ -85,7 +85,7 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers-quals.jar
 # Version of javac that supports pluggable type-checking.
 JAVAC_FOR_CHECKERS ?= ${CHECKERS}/binary/javac
 
-jsr308_imports = checkers.interning.quals.*:checkers.nullness.quals.*:checkers.regex.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*:checkers.signature.quals.*
+jsr308_imports = dataflow.quals.*:checkers.initialization.quals.*:checkers.interning.quals.*:checkers.nullness.quals.*:checkers.regex.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*:checkers.signature.quals.*
 
 ### end of user customizations
 
@@ -739,6 +739,8 @@ etags:	tags
 tags: ../plume-lib
 	@echo etags '*.java ...'
 	@etags -l java ${TAG_FILES}
+# A TAGS file that does not contain generated files
+tags-sans-generated: clean-generated-files tags
 
 # When doing certain search/replace tasks, it's better to omit generated files
 tags-nogen: tags-without-generated-files
@@ -792,13 +794,16 @@ audit:
 
 CHECKERS_BOOTCLASSPATH = -Xbootclasspath/p:${CHECKERS}/jdk/jdk.jar
 # CHECKERS_ARGS = -source 7
+# CHECKERS_ARGS ?= -AsuppressWarnings=purity,flowexpr.parameter.not.final
+CHECKERS_ARGS ?= -AsuppressWarnings=flowexpr.parameter.not.final -AprintErrorStack
 
 ## All of the following targets need to depend on "compile".
 
 # JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'
 JAVAC_SIGNATURE_ARGS = -processor checkers.signature.SignatureChecker -implicit:class -Xlint:-processing
-JAVAC_NULLNESS_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing -Alint=advancedchecks
+JAVAC_NULLNESS_RAW_ARGS = -processor checkers.nullness.NullnessRawnessChecker -implicit:class -Xlint:-processing
+JAVAC_NULLNESS_FBC_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing
 ## The "-J-Dcheckers.skipUses='^daikon.Debug'" should really be just for rawness, not for nullness.
 JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src -J-Dcheckers.skipUses='^daikon.Debug'
 JAVAC_PROTOTYPE_ARGS = -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing
@@ -852,7 +857,14 @@ check-interning-all: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
-signature: check-interning-all
+# These targets run the Interning checker on just one file.
+# Typical command: 
+# INTERNING_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-nullness-onefile
+INTERNING_ONEFILE ?= daikon/PptTopLevel.java
+check-interning-onefile: ${ALL_GENERATED_FILES} compile
+	${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${INTERNING_ONEFILE}
+
+signature: check-signature
 check-signature: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_SIGNATURE_ARGS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_SIGNATURE_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
@@ -861,27 +873,45 @@ check-nullness: daikon/util/README check-nullness-all
 
 check-nullness-all: check-nullness-all-withstubs
 
-check-nullness-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
-	$(MAKE) compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+check-nullness-all-nostubs: check-nullness-raw-all-nostubs check-nullness-fbc-all-nostubs
 
-check-nullness-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+check-nullness-raw-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
+	$(MAKE) compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
+check-nullness-fbc-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
+	$(MAKE) compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
+check-nullness-all-withstubs: check-nullness-raw-all-withstubs check-nullness-fbc-all-withstubs
+
+check-nullness-raw-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
+check-nullness-fbc-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
 
 # Version that issues warnings, not errors.
 ## (Actually, it's identical to the above!  TODO: Fix that.)
-check-nullness-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+check-nullness-raw-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
+check-nullness-fbc-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
 
 # These targets run the Nullness checker on just one file.
 # Typical command: 
 # NULLNESS_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-nullness-onefile
 NULLNESS_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
-check-nullness-onefile: ${ALL_GENERATED_FILES} compile-typequals compile
-	${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_ONEFILE}
+check-nullness-fbc-onefile: ${ALL_GENERATED_FILES} compile-typequals compile
+	${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_ONEFILE}
 
 check-prototype: check-prototype-all
 

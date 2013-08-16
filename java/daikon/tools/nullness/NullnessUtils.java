@@ -1,14 +1,18 @@
-// package checkers.nullness;
+// From plume-lib, but replace uses of "checkers.nullness" by
+// "daikon.tools.nullness" and comment out nullness annotations and their
+// import statement.
 package daikon.tools.nullness;
+
+// import checkers.nullness.quals.*;
 
 /**
  * Utilities class for the Nullness Checker.
  * <p>
  *
  * To avoid the need to write the NullnessUtils class name, do:
- * <pre>import static daikon.tools.NullnessUtils.castNonNull;</pre>
+ * <pre>import static daikon.tools.nullness.NullnessUtils.castNonNull;</pre>
  * or
- * <pre>import static daikon.tools.NullnessUtils.*;</pre>
+ * <pre>import static daikon.tools.nullness.NullnessUtils.*;</pre>
  * <p>
  *
  * <b>Runtime Dependency</b>
@@ -59,7 +63,7 @@ public final class NullnessUtils {
      * not null, but the type system is unable to make this deduction.  It
      * is not intended for defensive programming, in which a programmer
      * cannot prove that the value is not null but wishes to have an
-     * earlier indication if it is.  See the Checker Framework manual for
+     * earlier indication if it is.  See the Checker Framework Manual for
      * further discussion.
      * <p>
      *
@@ -72,7 +76,6 @@ public final class NullnessUtils {
      * @param ref a reference of @Nullable type
      * @return the argument, casted to have the type qualifier @NonNull
      */
-    /*@AssertParametersNonNull*/
     public static
     <T extends /*@Nullable*/ Object>
     /*@NonNull*/ T castNonNull(T ref) {
@@ -87,7 +90,6 @@ public final class NullnessUtils {
      * every array level are non-null.
      * @see #castNonNull(Object)
      */
-    /*@AssertParametersNonNull*/
     public static
     <T extends /*@Nullable*/ Object>
     /*@NonNull*/ T /*@NonNull*/ []
@@ -102,7 +104,6 @@ public final class NullnessUtils {
      * every array level are non-null.
      * @see #castNonNull(Object)
      */
-    /*@AssertParametersNonNull*/
     public static
     <T extends /*@Nullable*/ Object>
     /*@NonNull*/ T /*@NonNull*/ [][]
@@ -117,7 +118,6 @@ public final class NullnessUtils {
      * every array level are non-null.
      * @see #castNonNull(Object)
      */
-    /*@AssertParametersNonNull*/
     public static
     <T extends /*@Nullable*/ Object>
     /*@NonNull*/ T /*@NonNull*/ [][][]
@@ -132,7 +132,6 @@ public final class NullnessUtils {
      * every array level are non-null.
      * @see #castNonNull(Object)
      */
-    /*@AssertParametersNonNull*/
     public static
     <T extends /*@Nullable*/ Object>
     /*@NonNull*/ T /*@NonNull*/ [][][][]
@@ -147,7 +146,6 @@ public final class NullnessUtils {
      * every array level are non-null.
      * @see #castNonNull(Object)
      */
-    /*@AssertParametersNonNull*/
     public static
     <T extends /*@Nullable*/ Object>
     /*@NonNull*/ T /*@NonNull*/ [][][][][]
@@ -155,7 +153,6 @@ public final class NullnessUtils {
         return (/*@NonNull*/ T[][][][][]) castNonNullArray(arr);
     }
 
-    /*@AssertParametersNonNull*/
     private static
     <T extends /*@Nullable*/ Object>
     /*@NonNull*/ T /*@NonNull*/ [] castNonNullArray(T /*@Nullable*/ [] arr) {

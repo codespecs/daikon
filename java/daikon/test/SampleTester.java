@@ -359,7 +359,7 @@ public class SampleTester extends TestCase {
     StrTok stok = new StrTok (assert_string);
     stok.commentChar ('#');
     stok.quoteChar ('"');
-    stok.set_error_handler ( new StrTok.Error() {
+    stok.set_error_handler ( new StrTok.ErrorHandler() {
         public void tok_error(String s) {parse_error(s);}});
 
     // Get the assertion name

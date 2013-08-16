@@ -64,7 +64,7 @@ public final class SEQUENCESCALARSUBSCRIPT
   public VarInfo seq_enclosing_var() {
     VarInfo result = seqvar().enclosing_var;
     // When using old dtrace file format, this can fail.
-    assert result != null : "@SuppressWarnings(nullness): foo[] has enclosing_var foo";
+    assert result != null : "@AssumeAssertion(nullness): foo[] has enclosing_var foo";
     return result;
   }
 
@@ -81,7 +81,7 @@ public final class SEQUENCESCALARSUBSCRIPT
       index_shift = 0;
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     String shift = "";
     if (index_shift < 0)
       shift = "" + index_shift;
@@ -122,14 +122,14 @@ public final class SEQUENCESCALARSUBSCRIPT
     return VarInfo.make_subscript (seqvar(), sclvar(), index_shift);
   }
 
-  public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof SEQUENCESCALARSUBSCRIPT)
       && (((SEQUENCESCALARSUBSCRIPT) other).index_shift == this.index_shift);
   }
 
   /** Returns the ESC name for sequence subscript **/
   @SuppressWarnings("nullness")
-  public String esc_name (String index) {
+  /*@SideEffectFree*/ public String esc_name(String index) {
     if (seqvar().isPrestate())
       return String.format ("\\old(%s[%s])",
                             seqvar().enclosing_var.postState.esc_name(),
@@ -160,7 +160,7 @@ public final class SEQUENCESCALARSUBSCRIPT
 
   /** Return the simplify name for sequence subscript **/
   @SuppressWarnings("nullness")
-  public String simplify_name() {
+  /*@SideEffectFree*/ public String simplify_name() {
     String subscript = sclvar().simplify_name();
     if (index_shift < 0)
       subscript = String.format ("(- %s %d)", subscript, -index_shift);

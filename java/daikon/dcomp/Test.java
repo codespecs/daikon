@@ -37,7 +37,7 @@ class Test {
     public void tta () {
       add (y);
     }
-    public String toString() { return ("A " + id); }
+    /*@SideEffectFree*/ public String toString() { return ("A " + id); }
   }
 
   public static class C {
@@ -53,7 +53,7 @@ class Test {
       long1 = l1;
     }
 
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
       return cid;
     }
 
@@ -257,7 +257,7 @@ class Test {
   // Tests the clone() method
   public static class G {
     static class Uncloneable {
-      protected Object clone() throws CloneNotSupportedException {
+      /*@SideEffectFree*/ protected Object clone() throws CloneNotSupportedException {
         //        return super.clone();
         throw new CloneNotSupportedException();
       }
@@ -320,22 +320,22 @@ class Test {
       this.y = y;
     }
 
-    protected Object clone() throws CloneNotSupportedException {
+    /*@SideEffectFree*/ protected Object clone() throws CloneNotSupportedException {
       return super.clone();
     }
 
-    /*@AssertNonNullIfTrue("#1")*/
-    public boolean equals(/*@Nullable*/ Object obj) {
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
       return (obj instanceof Obj)
         && this.x == ((Obj)obj).x
         && this.y == ((Obj)obj).y;
     }
 
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
       return this.x + this.y;
     }
 
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
       return String.valueOf(this.x) + String.valueOf(this.y);
     }
   }
@@ -350,8 +350,8 @@ class Test {
     }
 
     // Overrides Obj.equals
-    /*@AssertNonNullIfTrue("#1")*/
-    public boolean equals(/*@Nullable*/ Object obj) {
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object obj) {
       return (obj instanceof ObjSub)
         && super.equals(obj)
         && this.z == ((ObjSub)obj).z;

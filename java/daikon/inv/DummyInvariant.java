@@ -97,7 +97,7 @@ public class DummyInvariant
     int sliceSize = uniqVarsSet.size();
     if (sliceSize > 3)
       sliceSize = 3;
-    /*NNC:@LazyNonNull*/ VarInfo[] newVars = new VarInfo[sliceSize];
+    /*NNC:@MonotonicNonNull*/ VarInfo[] newVars = new VarInfo[sliceSize];
     {
       Iterator<VarInfo> it = uniqVarsSet.iterator();
       int i = 0;
@@ -164,7 +164,7 @@ public class DummyInvariant
     negated = !negated;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.JAVA) return format_java();
     if (format == OutputFormat.ESCJAVA) return format_esc();

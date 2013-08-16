@@ -136,7 +136,7 @@ public class Session
   /* package access */ void sendLine(String s) {
     if (dkconfig_trace_input) {
       assert trace_file != null
-        : "@SuppressWarnings(nullness): dependent: trace_file is set in constructor if dkconfig_trace_input is true";
+        : "@AssumeAssertion(nullness): dependent: trace_file is set in constructor if dkconfig_trace_input is true";
       trace_file.println(s);
     }
     input.println(s);

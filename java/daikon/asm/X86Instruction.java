@@ -21,7 +21,7 @@ public class X86Instruction implements IInstruction {
 
   // For debugging printing purposes.
   /** The name of the basic block that contains this instruction. */
-  // (Maybe this should be @LazyNonNull?)
+  // (Maybe this should be @MonotonicNonNull?)
   public /*@Nullable*/ String owner = null;
 
   // See method parseInstruction. It sets all fields appropriately.
@@ -105,7 +105,7 @@ public class X86Instruction implements IInstruction {
    *
    * @see daikon.IInstruction#toString()
    */
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     StringBuilder b = new StringBuilder();
     // b.append(owner != null ? owner + ":" : "");
     // b.append(dllName);

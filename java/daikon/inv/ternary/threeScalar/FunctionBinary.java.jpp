@@ -146,7 +146,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   // check_modified relies on func having no side effects.
   abstract PRIMITIVE func (PRIMITIVE arg1, PRIMITIVE arg2);
-  abstract boolean is_symmetric();
+  /*@Pure*/ abstract boolean is_symmetric();
   abstract String[] get_method_name();
   abstract int get_var_order();
   abstract void set_function_id (int function_id);
@@ -388,7 +388,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return format();
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     }
@@ -461,7 +461,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
   }
 
   // If our classes match, we must match
-  public boolean isSameFormula(Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
     return true;
   }
   public double computeConfidence() {
@@ -488,6 +488,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     return null;
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);

@@ -24,7 +24,7 @@ ifdef SKIP_JAVA
 config-options:
 invariants-doc:
 else
-config-options:
+config-options: ../java/daikon/util/SimpleLog.class
 	cd ../java && $(MAKE) ../doc/config-options.texinfo
 
 invariants-doc:
@@ -35,6 +35,9 @@ invariants-doc:
 .PHONY : config-options
 .PHONY : invariants-doc
 endif
+
+../java/daikon/util/SimpleLog.class: ../java/daikon/util/SimpleLog.java
+	make -C ../java
 
 # Don't want to make this a target of other rules because it updates the modification date.
 # Make forces me to double the dollar signs in the Perl code.

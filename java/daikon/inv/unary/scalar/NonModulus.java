@@ -79,7 +79,7 @@ public class NonModulus
     return new NonModulus (slice);
   }
 
-  public NonModulus clone() {
+  /*@SideEffectFree*/ public NonModulus clone() {
     NonModulus result = (NonModulus) super.clone();
     result.elements = new TreeSet<Long>(this.elements);
     return result;
@@ -90,7 +90,7 @@ public class NonModulus
       + "m=" + modulus + ",r=" + remainder;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     updateResults();
     String name = var().name_using(format);
 
@@ -167,7 +167,7 @@ public class NonModulus
     return 1 - Math.pow(probability_one_elt_nonmodulus, ppt.num_samples());
   }
 
-  public boolean isSameFormula(Invariant o) {
+  /*@Pure*/ public boolean isSameFormula(Invariant o) {
     NonModulus other = (NonModulus) o;
 
     updateResults();
@@ -195,7 +195,7 @@ public class NonModulus
   }
 
 
-  public boolean isExclusiveFormula(Invariant o) {
+  /*@Pure*/ public boolean isExclusiveFormula(Invariant o) {
     updateResults();
     if (no_result_yet)
       return false;

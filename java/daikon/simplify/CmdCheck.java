@@ -119,7 +119,7 @@ public class CmdCheck
     }
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return "CmdCheck: " + proposition;
   }
 

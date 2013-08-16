@@ -69,7 +69,7 @@ public final class CompleteOneOfScalar extends SingleScalar
   }
 
   /** return description of invariant.  Only Daikon format is implemented **/
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       String out = var().name() + " has values: ";
       for (Info val : vals) 
@@ -110,6 +110,7 @@ public final class CompleteOneOfScalar extends SingleScalar
    * is for static constants which are obviously printable (or not)
    * from their values
    */
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     return super.isObviousStatically(vis);
   }
@@ -118,7 +119,7 @@ public final class CompleteOneOfScalar extends SingleScalar
    * Same formula if each value is the same and has the same count.
    * Not implemented for now, just presumed to be false.
    */
-  public boolean isSameFormula(Invariant o) {
+  /*@Pure*/ public boolean isSameFormula(Invariant o) {
     return false;
   }
 

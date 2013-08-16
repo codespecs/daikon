@@ -66,7 +66,7 @@ public final class TypeStack
         return type;
     }
 
-    /*@AssertNonNullAfter("stack")*/
+    /*@EnsuresNonNull("stack")*/
     private void createMap(final InstructionList l,
             final CodeExceptionGen[] exceptionTable)
     {
@@ -177,7 +177,7 @@ public final class TypeStack
         return inChainHelper(parentMap.get(h), h);
     }
 
-    /*@AssertNonNullIfTrue("#2")*/
+    /*@EnsuresNonNullIf(result=true, expression="#2")*/
     private boolean inChainHelper(final /*@Nullable*/ InstructionHandle h1,
                                   final /*@Nullable*/ InstructionHandle h2)
     {
@@ -196,7 +196,7 @@ public final class TypeStack
             return inChainHelper(parentMap.get(h1), h2);
     }
 
-    /*@AssertNonNullAfter("stack")*/
+    /*@EnsuresNonNull("stack")*/
     private void initStack(InstructionHandle hand)
     {
         Instruction inst = hand.getInstruction();
@@ -215,7 +215,7 @@ public final class TypeStack
                 initStack(parent);
                 parentStack = stackMap.get(parent);
                 assert parentStack != null : "Could not initialize parent stack!!!";
-                assert parentStack != null : "@SuppressWarnings(nullness): just checked";
+                assert parentStack != null : "@AssumeAssertion(nullness): just checked";
             }
         }
         else
@@ -652,7 +652,7 @@ public final class TypeStack
         }
     }
 
-    /*@NonNullOnEntry("stack")*/  // is this right, or too strict?
+    /*@RequiresNonNull("stack")*/  // is this right, or too strict?
     private void handleBranch(BranchInstruction inst)
     {
         if (inst instanceof GotoInstruction)

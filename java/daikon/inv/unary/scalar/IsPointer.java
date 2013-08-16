@@ -86,7 +86,7 @@ public class IsPointer extends SingleScalar {
         return InvariantStatus.NO_CHANGE;
       }
 
-    private boolean isWithinPointerRange(long value) {
+    /*@Pure*/ private boolean isWithinPointerRange(long value) {
         if (value == 0)
             return true;
         return (value >= largestNonPointerValue) || (value <= smallestNonPointerValue);
@@ -94,7 +94,7 @@ public class IsPointer extends SingleScalar {
 
 
     @Override
-    public String format_using(OutputFormat format) {
+    /*@SideEffectFree*/ public String format_using(OutputFormat format) {
       String varname = var().name_using (format);
       return varname + "  isPointer";
     }
