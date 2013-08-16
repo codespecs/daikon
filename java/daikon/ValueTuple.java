@@ -317,7 +317,7 @@ public final class ValueTuple implements Cloneable {
   }
 
 
-  public int size() {
+  /*@Pure*/ public int size() {
     assert vals.length == mods.length
       : "vals = " + vals + " mods = " + mods;
     return vals.length;

@@ -9,7 +9,7 @@ public interface IInstruction {
 
   public abstract Set<String> getBinaryVarNames();
 
-  public abstract String toString();
+  /*@SideEffectFree*/ public abstract String toString();
 
   public abstract boolean kills(String var);
 

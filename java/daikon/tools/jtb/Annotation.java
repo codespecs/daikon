@@ -244,7 +244,7 @@ public class Annotation {
     /*@Pure*/ public int hashCode() {
       return name.hashCode();
     }
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
       return name;
     }
     public String xmlString() {
@@ -256,7 +256,7 @@ public class Annotation {
   }
 
   /** Easy-on-the-eye format. */
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return kind.toString()
       + " : "
       + daikonRep();

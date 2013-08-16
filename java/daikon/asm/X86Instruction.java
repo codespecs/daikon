@@ -105,7 +105,7 @@ public class X86Instruction implements IInstruction {
    *
    * @see daikon.IInstruction#toString()
    */
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     StringBuilder b = new StringBuilder();
     // b.append(owner != null ? owner + ":" : "");
     // b.append(dllName);

@@ -40,7 +40,7 @@ public abstract class Joiner
     throw new UnsupportedOperationException();
   }
 
-  /*@Pure*/ public abstract String format_using(OutputFormat format);
+  /*@SideEffectFree*/ public abstract String format_using(OutputFormat format);
 
   /*@Pure*/ public boolean isValidEscExpression() {
     return left.isValidEscExpression() &&

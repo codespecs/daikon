@@ -28,7 +28,7 @@ public class NonsensicalList extends AbstractList<Object>
         return NonsensicalObject.getInstance();
     }
 
-    public int size()
+    /*@Pure*/ public int size()
     {
         return -1;
     }

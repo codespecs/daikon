@@ -712,7 +712,7 @@ public abstract class Invariant
     return result;
   }
 
-  /*@Pure*/ public abstract String format_using(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) ;
+  /*@SideEffectFree*/ public abstract String format_using(/*>>> @NonPrototype Invariant this,*/ OutputFormat format) ;
 
   /**
    * @return conjuction of mapping the same function of our

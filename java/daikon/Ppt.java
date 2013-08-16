@@ -57,7 +57,7 @@ public abstract class Ppt
 
   /** Returns a string rep of the specified variable names **/
   @SuppressWarnings("purity")    // Impure side effects do not escape (string creation)
-  /*@Pure*/ public static String varNames(VarInfo[] infos) {
+  /*@SideEffectFree*/ public static String varNames(VarInfo[] infos) {
     StringBuffer sb = new StringBuffer();
     sb.append("(");
     if (infos.length == 0) {

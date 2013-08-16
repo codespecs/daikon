@@ -37,7 +37,7 @@ class Test {
     public void tta () {
       add (y);
     }
-    public String toString() { return ("A " + id); }
+    /*@SideEffectFree*/ public String toString() { return ("A " + id); }
   }
 
   public static class C {
@@ -53,7 +53,7 @@ class Test {
       long1 = l1;
     }
 
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
       return cid;
     }
 
@@ -335,7 +335,7 @@ class Test {
       return this.x + this.y;
     }
 
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
       return String.valueOf(this.x) + String.valueOf(this.y);
     }
   }

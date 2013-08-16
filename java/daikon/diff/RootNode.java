@@ -15,11 +15,11 @@ public class RootNode extends Node<Void,PptNode> {
     throw new Error("Shouldn't ask for userObject for RootNode");
   }
 
-  /*@SideEffectFree*/ public Void getUserLeft() {
+  /*@Pure*/ public Void getUserLeft() {
     throw new Error("Shouldn't ask for userObject for RootNode");
   }
 
-  /*@SideEffectFree*/ public Void getUserRight() {
+  /*@Pure*/ public Void getUserRight() {
     throw new Error("Shouldn't ask for userObject for RootNode");
   }
 
