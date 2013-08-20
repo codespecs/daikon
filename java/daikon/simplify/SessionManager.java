@@ -188,6 +188,7 @@ public class SessionManager
         }
         error = null;
         try {
+          // session could also be null at this point, I presume.
           mgr.pending.apply(session);
         } catch (Throwable e) {
           if (finished)

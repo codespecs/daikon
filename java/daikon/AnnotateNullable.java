@@ -24,7 +24,8 @@ import plume.*;
  */
 public class AnnotateNullable {
 
-  static PptMap ppts;
+  // Why is this variable static?
+  static PptMap ppts = new PptMap(); // dummy value, to satisfy Nullness Checker
 
   static SimpleLog verbose = new SimpleLog (/*enabled=*/ false);
 

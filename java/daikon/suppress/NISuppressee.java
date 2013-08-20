@@ -182,7 +182,7 @@ public class NISuppressee {
    * @return a list describing all of the invariants.
    */
   @SuppressWarnings("field.not.found.nullness.parse.error") // bug: fields in precondition expressions
-  /*@RequiresNonNull("ppt.equality_view")*/
+  /*@RequiresNonNull("#2.equality_view")*/
   public List<NIS.SupInv> find_all (VarInfo[] vis, PptTopLevel ppt,
                                     /*@Nullable*/ Invariant /*@Nullable*/ [] cinvs) {
 

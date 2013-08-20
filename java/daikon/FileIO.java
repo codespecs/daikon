@@ -253,7 +253,7 @@ public final class FileIO {
   // Nullness-checking of read_data_trace_record(ParseState) works even
   // without these two lines, since StringBuilderDelimited accepts null values.
   @SuppressWarnings("nullness:assertiftrue.postcondition.not.satisfied") // readLine() assertion is ensured by call to reset()
-  /*@EnsuresNonNullIf(result=true, expression="#1.readLine()")*/
+  // can't do this since readLine is not deterministic /*@EnsuresNonNullIf(result=true, expression="#1.readLine()")*/
   public static final boolean nextLineIsComment(BufferedReader reader) {
     boolean result = false;
     try {

@@ -103,6 +103,9 @@ public class PptName
     // Then add method name
     if (methodName == null) {
       method = null;
+      if (fn_name == null) {
+        throw new RuntimeException("fn_name should not be null; probably bad arguments");
+      }
     } else {
       method = methodName.intern();
       if (cls != null) {
