@@ -93,7 +93,7 @@ public class ModBitTracker
 
 
   /** Check the representation invariant. **/
-  public void checkRep() {
+  public void checkRep(/*>>>@Raw(ModBitTracker.class) ModBitTracker this*/) {
     assert index.length == num_vars;
     assert modbits_arrays.length == num_vars;
     for (int i=0; i<num_vars; i++) {

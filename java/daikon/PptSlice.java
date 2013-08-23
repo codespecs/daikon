@@ -48,7 +48,7 @@ public abstract class PptSlice
   // with the program point hierarchy.
   /** This is a slice of the 'parent' ppt. */
   public PptTopLevel parent;
-  public abstract int arity();
+  public abstract int arity(/*>>>@Raw(PptSlice.class) PptSlice this*/);
 
   /**
    * The invariants contained in this slice.

@@ -76,6 +76,7 @@ public final class ValueTuple implements Cloneable {
   /*@Pure*/ boolean isUnmodified(int value_index) { return mods[value_index] == UNMODIFIED; }
   /*@Pure*/ boolean isModified(int value_index) { return mods[value_index] == MODIFIED; }
   /*@Pure*/ boolean isMissingNonsensical(int value_index) { return mods[value_index] == MISSING_NONSENSICAL; }
+  /*@EnsuresNonNullIf(result=false, expression="this.vals[#1]")*/
   /*@Pure*/ boolean isMissingFlow(int value_index) { return mods[value_index] == MISSING_FLOW; }
   @SuppressWarnings("nullness") // postcondition: array expression
   /*@EnsuresNonNullIf(result=false, expression="vals[#1]")*/
@@ -242,7 +243,7 @@ public final class ValueTuple implements Cloneable {
     return result;
   }
 
-  public void checkRep() {
+  public void checkRep(/*>>>@Raw(ValueTuple.class) ValueTuple this*/) {
     assert vals.length == mods.length;
     for (int i=0; i<vals.length; i++) {
       assert 0 <= mods[i] && mods[i] < MODBIT_VALUES
