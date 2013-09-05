@@ -25,7 +25,7 @@ public class CmdUndoAssume
 
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return "CmdUndoAssume";
   }
 

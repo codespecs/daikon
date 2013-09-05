@@ -56,7 +56,8 @@ public abstract class Ppt
   protected static final List<Invariant> emptyInvList = new ArrayList<Invariant>();
 
   /** Returns a string rep of the specified variable names **/
-  public static /*@Pure*/ String varNames(VarInfo[] infos) {
+  @SuppressWarnings("purity")    // Impure side effects do not escape (string creation)
+  /*@SideEffectFree*/ public static String varNames(VarInfo[] infos) {
     StringBuffer sb = new StringBuffer();
     sb.append("(");
     if (infos.length == 0) {
@@ -73,7 +74,7 @@ public abstract class Ppt
   }
 
   /** Return a string representation of the variable names. */
-  public String varNames() {
+  /*@SideEffectFree*/ public String varNames() {
     return (varNames (var_infos));
   }
 
@@ -81,7 +82,7 @@ public abstract class Ppt
    * Returns the varinfo_index of the variable whose name is varname.
    * Returns -1 if there is no such variable
    */
-  public int indexOf(String varname) {
+  /*@Pure*/ public int indexOf(String varname) {
     for (int i = 0; i < var_infos.length; i++) {
       if (var_infos[i].name().equals(varname)) {
         return i;
@@ -94,7 +95,7 @@ public abstract class Ppt
    * Returns the VarInfo with the specified name.  Null if the name is
    * not found
    */
-  public /*@Nullable*/ VarInfo find_var_by_name(String varname) {
+  /*@Pure*/ public /*@Nullable*/ VarInfo find_var_by_name(String varname) {
     // System.out.printf ("Ppt.find_var_by_name(%s): %s%n", varname, this);
     int i = indexOf(varname);
     if (i == -1) {
@@ -128,7 +129,7 @@ public abstract class Ppt
   // Orders ppts by the name, except . and : are swapped
   //   so that Foo:::OBJECT and Foo:::CLASS are processed before Foo.method.
   public static final class NameComparator implements Comparator<PptTopLevel> {
-    public int compare(PptTopLevel p1, PptTopLevel p2) {
+    /*@Pure*/ public int compare(PptTopLevel p1, PptTopLevel p2) {
       if (p1 == p2) {
         return 0;
       }

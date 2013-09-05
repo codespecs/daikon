@@ -106,7 +106,7 @@ public class CLASSNAME
     return new CLASSNAME(slice);
   }
 
-  public CLASSNAME clone() {
+  /*@SideEffectFree*/ public CLASSNAME clone() {
     CLASSNAME result = (CLASSNAME) super.clone();
     result.core = core.clone();
     result.core.wrapper = result;
@@ -124,12 +124,12 @@ public class CLASSNAME
       + "; " + core.repr();
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     return core.format_using(format, var1().name_using(format),
                              var2().name_using(format));
   }
 
-  public boolean isActive() {
+  /*@Pure*/ public boolean isActive() {
     return core.isActive();
   }
 
@@ -178,10 +178,11 @@ public class CLASSNAME
     return core.computeConfidence();
   }
 
-  public boolean isExact() {
+  /*@Pure*/ public boolean isExact() {
     return true;
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     // Obvious derived
     VarInfo var1 = vis[0];
@@ -216,6 +217,7 @@ public class CLASSNAME
     return super.isObviousStatically(vis);
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -237,11 +239,11 @@ public class CLASSNAME
     return null;
   }
 
-  public boolean isSameFormula(Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
     return core.isSameFormula(((CLASSNAME) other).core);
   }
 
-  public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
     if (other instanceof CLASSNAME) {
       return core.isExclusiveFormula(((CLASSNAME) other).core);
     }

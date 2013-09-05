@@ -17,7 +17,7 @@ public class TraceSelect {
   private static int num_reps;
 
   private static String filePrefix;
-  private static /*@LazyNonNull*/ String fileName = null;
+  private static /*@MonotonicNonNull*/ String fileName = null;
 
   // Just a quick command line cache
   private static String[] argles;
@@ -318,7 +318,7 @@ public class TraceSelect {
 class InvocationComparator implements Comparator<String> {
     /** Requires:  s1 and s2 are String representations of invocations
      *  from a tracefile. */
-    public int compare (String s1, String s2) {
+    /*@Pure*/ public int compare (String s1, String s2) {
       if (s1 == s2) {
         return 0;
       }

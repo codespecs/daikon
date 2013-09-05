@@ -23,17 +23,17 @@ public class NonsensicalList extends AbstractList<Object>
         return theList;
     }
 
-    public Object get(int index)
+    /*@Pure*/ public Object get(int index)
     {
         return NonsensicalObject.getInstance();
     }
 
-    public int size()
+    /*@Pure*/ public int size()
     {
         return -1;
     }
 
-    public String toString()
+    /*@SideEffectFree*/ public String toString()
     {
         return "NonsensicalList";
     }

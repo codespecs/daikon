@@ -200,17 +200,17 @@ public final class CLASSNAME
     return (vi);
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return "[" + CLASSSTRING + " of " + var1().name() + " " + var2().name()
       + "]";
   }
 
-  public  boolean isSameFormula(Derivation other) {
+  /*@Pure*/ public boolean isSameFormula(Derivation other) {
     return (other instanceof CLASSNAME);
   }
 
   /** Returns the ESC name **/
-  public String esc_name (String index) {
+  /*@SideEffectFree*/ public String esc_name(String index) {
     return String.format ("join[%s,%s]", var1().esc_name(), var2().esc_name());
   }
 }

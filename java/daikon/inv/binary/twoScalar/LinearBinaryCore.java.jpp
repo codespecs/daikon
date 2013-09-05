@@ -71,7 +71,7 @@ public final class CLASSNAME
     this.wrapper = wrapper;
   }
 
-  public CLASSNAME clone() {
+  /*@SideEffectFree*/ public CLASSNAME clone() {
     try {
       CLASSNAME result = (CLASSNAME) super.clone();
       if (x_cache != null)
@@ -130,7 +130,7 @@ public final class CLASSNAME
    * active after MINPAIRS values have been seen and a line calculated.
    * Before that, a and b are uninitialized
    */
-  public boolean isActive() {
+  /*@Pure*/ public boolean isActive() {
     return (values_seen >= MINPAIRS);
   }
 
@@ -139,7 +139,7 @@ public final class CLASSNAME
    * line.  These sample can't be flowed from ppt to ppt (since they probably
    * didn't occur at the lower ppt).
    */
-  public boolean isFlowable() {
+  /*@Pure*/ public boolean isFlowable() {
     return (false);
   }
 
@@ -478,7 +478,7 @@ public final class CLASSNAME
       return sign + coeff_string + " * " + varname;
   }
 
-  public String format_using(OutputFormat format,
+  /*@SideEffectFree*/ public String format_using(OutputFormat format,
                              String vix, String viy,
                              double u, double v, double w) {
 
@@ -557,7 +557,7 @@ public final class CLASSNAME
       return "(EQ 0 " + str_axpc + ")";
   }
 
-  public String format_using(OutputFormat format, String xname, String yname) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format, String xname, String yname) {
     String result = format_using(format, xname, yname, a, b, c);
     if (result != null) {
       return result;
@@ -635,7 +635,7 @@ public final class CLASSNAME
     return (result);
   }
 
-  public boolean isSameFormula(CLASSNAME other) {
+  /*@Pure*/ public boolean isSameFormula(CLASSNAME other) {
     boolean thisMeaningless = values_seen < MINPAIRS;
     boolean otherMeaningless = other.values_seen < MINPAIRS;
 
@@ -651,7 +651,7 @@ public final class CLASSNAME
     }
   }
 
-  public boolean isExclusiveFormula(CLASSNAME other) {
+  /*@Pure*/ public boolean isExclusiveFormula(CLASSNAME other) {
     if ((values_seen < MINPAIRS) ||
         (other.values_seen < MINPAIRS)) {
       return false;

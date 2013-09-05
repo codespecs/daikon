@@ -102,7 +102,7 @@ public class Implication
       + " => " + right.repr() + "]";
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     String pred_fmt = left.format_using(format);
     String consq_fmt = right.format_using(format);
     if (format == OutputFormat.DAIKON || format == OutputFormat.JML) {
@@ -127,6 +127,7 @@ public class Implication
     }
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
     assert vis.length > 0;
     for (int ii = 0; ii < vis.length; ii++ )
@@ -134,6 +135,7 @@ public class Implication
     return orig_right.isObviousStatically(vis);
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
     assert vis.length > 0;
     for (int ii = 0; ii < vis.length; ii++ )
@@ -162,6 +164,7 @@ public class Implication
    * the invariant of interest.  The standard version passes the vis
    * from the slice containing the implication itself (slice 0).
    **/
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     return orig_right.isObviousStatically_SomeInEquality();
 //     DiscardInfo result = isObviousStatically (orig_right.ppt.var_infos);
@@ -186,6 +189,7 @@ public class Implication
    * the invariant of interest.  The standard version passes the vis
    * from the slice containing the implication itself (slice 0).
    **/
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
 
     // If the consequent is ni-suppressed in its original program point,
@@ -207,14 +211,14 @@ public class Implication
 //                                  new VarInfo[right.ppt.var_infos.length], 0);
   }
 
-  public boolean isSameFormula(/*@NonNull*/ Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(/*@NonNull*/ Invariant other) {
     Implication other_implic = (Implication)other;
     return ((iff == other_implic.iff)
             && super.isSameFormula(other_implic));
   }
 
-  /*@AssertNonNullIfTrue("#1")*/
-  public boolean isSameInvariant(Invariant other) {
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
+  /*@Pure*/ public boolean isSameInvariant(Invariant other) {
     if (other == null)
       return false;
     if (! (other instanceof Implication))
@@ -226,7 +230,7 @@ public class Implication
 
   // An implication is only interesting if both the predicate and
   // consequent are interesting
-  public boolean isInteresting() {
+  /*@Pure*/ public boolean isInteresting() {
     return (predicate().isInteresting() && consequent().isInteresting());
   }
 
@@ -236,7 +240,7 @@ public class Implication
     return consequent().hasUninterestingConstant();
   }
 
-  public boolean isAllPrestate() {
+  /*@Pure*/ public boolean isAllPrestate() {
     return predicate().isAllPrestate() && consequent().isAllPrestate();
   }
 

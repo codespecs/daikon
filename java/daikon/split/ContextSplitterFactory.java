@@ -288,7 +288,7 @@ public class ContextSplitterFactory
       this.splitters = splitters;
     }
 
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
       return "PptNameAndSplitters<" + ppt_name + ","
         + Arrays.asList(splitters).toString() + ">";
     }

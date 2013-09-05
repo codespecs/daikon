@@ -73,7 +73,7 @@ public class Property implements Serializable {
     /**
      * Easy-on-the-eye string representation.
      */
-    public String toString() {
+    /*@SideEffectFree*/ public String toString() {
         return kind.toString() + " : " + daikonRep();
     }
 
@@ -97,11 +97,11 @@ public class Property implements Serializable {
             this.xmlname = xmlname;
         }
 
-        public int hashCode() {
+        /*@Pure*/ public int hashCode() {
             return name.hashCode();
         }
 
-        public String toString() {
+        /*@SideEffectFree*/ public String toString() {
             return name;
         }
 
@@ -141,8 +141,8 @@ public class Property implements Serializable {
      * <code>method</code> and <code>kind</code> are equal.
      * The other fields may differ.
      */
-    /*@AssertNonNullIfTrue("#1")*/
-    public boolean equals(/*@Nullable*/ Object o) {
+    /*@EnsuresNonNullIf(result=true, expression="#1")*/
+    /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
         if (o == null) {
             return false;
         }
@@ -155,7 +155,7 @@ public class Property implements Serializable {
                 && (this.kind().equals(anno.kind())));
     }
 
-    public int hashCode() {
+    /*@Pure*/ public int hashCode() {
         return daikonRep.hashCode()
             + kind.hashCode()
             + (method == null ? 0 : method.hashCode());

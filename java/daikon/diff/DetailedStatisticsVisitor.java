@@ -119,7 +119,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     switch (relationship) {
     case REL_SAME_JUST1_UNJUST2:
     case REL_SAME_UNJUST1_JUST2:
-      assert inv1 != null && inv2 != null : "@SuppressWarnings(nullness)"; // application invariant about return value of determineRelationship
+      assert inv1 != null && inv2 != null : "@AssumeAssertion(nullness)"; // application invariant about return value of determineRelationship
       freq[type][relationship] += calculateConfidenceDifference(inv1, inv2);
       break;
     default:
@@ -203,7 +203,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
     int relationship;
 
     if (inv1 == null) {
-      assert inv2 != null : "@SuppressWarnings(nullness): at least one argument is non-null";
+      assert inv2 != null : "@AssumeAssertion(nullness): at least one argument is non-null";
       relationship = inv2.justified() ? REL_MISS_JUST2 : REL_MISS_UNJUST2;
     } else if (inv2 == null) {
       relationship = inv1.justified() ? REL_MISS_JUST1 : REL_MISS_UNJUST1;
@@ -255,7 +255,7 @@ public class DetailedStatisticsVisitor extends DepthFirstVisitor {
   }
 
   /** Returns a human-readable table of its data. **/
-  public String format() {
+  /*@SideEffectFree*/ public String format() {
     StringWriter sw = new StringWriter();
     PrintWriter pw = new PrintWriter(sw);
 

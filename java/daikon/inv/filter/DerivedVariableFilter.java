@@ -31,7 +31,7 @@ public class DerivedVariableFilter extends InvariantFilter {
     isOn = dkconfig_class_re != null;
     if (isOn) {
       assert dkconfig_class_re != null
-        : "@SuppressWarnings(nullness): dependent:  nullness is indicated by boolean variable isOn";
+        : "@AssumeAssertion(nullness): dependent:  nullness is indicated by boolean variable isOn";
       class_re = Pattern.compile (dkconfig_class_re);
     }
   }
@@ -43,7 +43,7 @@ public class DerivedVariableFilter extends InvariantFilter {
   boolean shouldDiscardInvariant( Invariant invariant ) {
 
     assert class_re != null
-      : "@SuppressWarnings(nullness):  only called when filter is active";
+      : "@AssumeAssertion(nullness):  only called when filter is active";
 
     for (VarInfo vi : invariant.ppt.var_infos) {
       if (vi.derived == null)

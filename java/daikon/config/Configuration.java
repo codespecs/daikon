@@ -61,7 +61,7 @@ public final class Configuration
     }
     return instance;
   }
-  private static volatile /*@LazyNonNull*/ Configuration instance = null;
+  private static volatile /*@MonotonicNonNull*/ Configuration instance = null;
 
   /**
    * This used to read a file containing all of the configurable

@@ -88,7 +88,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
 
     // Get the ppt we are working in
     PptTopLevel ppt = inv.ppt.parent;
-    assert ppt.equality_view != null : "@SuppressWarnings(nullness): haven't reasoned through the reason";
+    assert ppt.equality_view != null : "@AssumeAssertion(nullness): haven't reasoned through the reason";
 
     // For now all suppressors are unary/binary and
     // all suppressees are unary, binary or ternary
@@ -360,7 +360,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * suppressions are valid.  A suppression is valid if all of its
    * non-missing suppressors are true.
    */
-  public boolean is_instantiate_ok (PptSlice slice) {
+  /*@Pure*/ public boolean is_instantiate_ok (PptSlice slice) {
 
     return (is_instantiate_ok (slice.parent, slice.var_infos));
   }
@@ -371,7 +371,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * suppression is invalid.  A suppression is valid if all of
    * its non-missing suppressors are true.
    */
-  public boolean is_instantiate_ok (PptTopLevel ppt, VarInfo[] var_infos) {
+  /*@Pure*/ public boolean is_instantiate_ok (PptTopLevel ppt, VarInfo[] var_infos) {
 
     // Check each suppression to see if it is valid
     for (int i = 0; i < suppression_set.length; i++ ) {
@@ -505,7 +505,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     // assert new_suppressions.size() > 0;
 
     // Create a new suppression set with all of the suppressions.
-    /*NNC:@LazyNonNull*/ NISuppression[] new_array
+    /*NNC:@MonotonicNonNull*/ NISuppression[] new_array
       = new NISuppression [suppression_set.length + new_suppressions.size()];
     for (int i = 0; i < suppression_set.length; i++)
       new_array[i] = suppression_set[i];
@@ -525,7 +525,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
     NISuppression[] swap_sups = new NISuppression[suppression_set.length];
     for (int i = 0; i < swap_sups.length; i++) {
       NISuppression std_sup = suppression_set[i];
-      /*NNC:@LazyNonNull*/ NISuppressor[] sors = new NISuppressor[std_sup.suppressors.length];
+      /*NNC:@MonotonicNonNull*/ NISuppressor[] sors = new NISuppressor[std_sup.suppressors.length];
       for (int j = 0; j < sors.length; j++) {
         sors[j] = std_sup.suppressors[j].swap();
       }
@@ -553,7 +553,7 @@ public class NISuppressionSet implements Iterable<NISuppression> {
   /**
    * Returns a string containing each suppression separated by commas.
    */
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return UtilMDE.join(suppression_set, ", ");
   }
 

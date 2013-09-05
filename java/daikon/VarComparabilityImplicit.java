@@ -47,7 +47,7 @@ public final class VarComparabilityImplicit
    */
   int dimensions;
 
-  private /*@LazyNonNull*/ VarComparabilityImplicit cached_element_type;
+  private /*@MonotonicNonNull*/ VarComparabilityImplicit cached_element_type;
 
   public static final VarComparabilityImplicit unknown = new VarComparabilityImplicit(-3, null, 0);
 
@@ -57,7 +57,7 @@ public final class VarComparabilityImplicit
     this.dimensions = dimensions;
   }
 
-  public int hashCode() {
+  /*@Pure*/ public int hashCode() {
     if (base < 0) {
       // This is equals() to everything
       return -1;
@@ -70,14 +70,14 @@ public final class VarComparabilityImplicit
     return base;
   }
 
-  /*@AssertNonNullIfTrue("#1")*/
-  public boolean equals (/*@Nullable*/ Object o) {
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
+  /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
     if (!(o instanceof VarComparabilityImplicit)) return false;
     return equals ((VarComparabilityImplicit) o);
   }
 
-  /*@AssertNonNullIfTrue("#1")*/
-  public boolean equals (VarComparabilityImplicit o) {
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
+  /*@Pure*/ public boolean equals (VarComparabilityImplicit o) {
     return equality_set_ok (o);
   }
 
@@ -85,7 +85,7 @@ public final class VarComparabilityImplicit
     return (base < 0);
   }
 
-  public boolean alwaysComparable() {
+  public /*@Pure*/ boolean alwaysComparable() {
     return (dimensions == 0) && (base < 0);
   }
 
@@ -140,19 +140,20 @@ public final class VarComparabilityImplicit
     return unknown;
   }
 
-  public VarComparability indexType(int dim) {
+  public /*@Pure*/ VarComparability indexType(int dim) {
     // When Ajax is modified to output non-atomic info for arrays, this
     // check will no longer be necessary.
     if (dim < dimensions) {
-      assert indexTypes != null : "@SuppressWarnings(nullness): dependent: not the unknown type";
+      assert indexTypes != null : "@AssumeAssertion(nullness): dependent: not the unknown type";
       return indexTypes[dim];
     } else {
       return unknown;
     }
   }
 
-  static boolean comparable (VarComparabilityImplicit type1,
-                            VarComparabilityImplicit type2) {
+  @SuppressWarnings("purity")    // Override the purity checker
+  static /*@Pure*/ boolean comparable (VarComparabilityImplicit type1,
+                                       VarComparabilityImplicit type2) {
     if (type1.alwaysComparable())
       return true;
     if (type2.alwaysComparable())
@@ -198,7 +199,7 @@ public final class VarComparabilityImplicit
   }
 
   // for debugging
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     String result = "" + base;
     for (int i=0; i<dimensions; i++) {
       result += "[" + indexType(i) + "]";

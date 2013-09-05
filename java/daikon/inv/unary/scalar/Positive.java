@@ -62,7 +62,7 @@ public class Positive
   }
 
   // A printed representation for user output
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     return var().name() + " > 0";
   }
 

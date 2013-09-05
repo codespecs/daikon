@@ -94,7 +94,7 @@ public class SessionManager
     worker = null;
   }
 
-  private static /*@LazyNonNull*/ String prover_background = null;
+  private static /*@MonotonicNonNull*/ String prover_background = null;
 
   private static String proverBackground() {
     if (prover_background == null) {
@@ -183,11 +183,12 @@ public class SessionManager
           mgr.pending = null;
           mgr.notifyAll();
           try { mgr.wait(0); } catch (InterruptedException e) { }
-          assert mgr.pending != null : "@SuppressWarnings(nullness)";
+          assert mgr.pending != null : "@AssumeAssertion(nullness)";
           // session != null && mgr.pending != null;
         }
         error = null;
         try {
+          // session could also be null at this point, I presume.
           mgr.pending.apply(session);
         } catch (Throwable e) {
           if (finished)
@@ -198,7 +199,7 @@ public class SessionManager
       }
     }
 
-    /*@NonNullOnEntry("session")*/
+    /*@RequiresNonNull("session")*/
     private void session_done() {
       finished = true;
       Session tmp = session;

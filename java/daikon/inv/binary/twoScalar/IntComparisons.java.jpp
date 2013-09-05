@@ -541,7 +541,7 @@ public final class INTEQUAL
   }
 
 #ifdef EQUAL_OP
-  public boolean is_equality_inv() {
+  /*@Pure*/ public boolean is_equality_inv() {
     return (true);
   }
 #endif
@@ -560,7 +560,7 @@ public final class INTEQUAL
   }
 
 #if (defined(EQUAL_OP) || defined(NONEQUAL_OP))
-  public boolean is_symmetric() {
+  /*@Pure*/ public boolean is_symmetric() {
     return (true);
   }
 
@@ -601,7 +601,7 @@ public final class INTEQUAL
     return INTEQUALstring + varNames();
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
 
     String var1name = var1().name_using(format);
     String var2name = var2().name_using(format);
@@ -739,7 +739,7 @@ public final class INTEQUAL
       return Invariant.CONFIDENCE_NEVER;
   }
 
-  public boolean isExact() {
+  /*@Pure*/ public boolean isExact() {
     #if defined(EQUAL_OP)
       return true;
     #else
@@ -767,11 +767,11 @@ public final class INTEQUAL
     return super.add(v1, v2, mod_index, count);
   }
 
-  public boolean isSameFormula(Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
 
     // Also ought to check against LinearBinary, etc.
     #if defined(EQUAL_OP)
@@ -821,6 +821,7 @@ public final class INTEQUAL
    *  obviousness rather than the cartesian product on the equality
    *  set.
    **/
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousStatically(this.ppt.var_infos);
@@ -836,6 +837,7 @@ public final class INTEQUAL
    *  obviousness rather than the cartesian product on the equality
    *  set.
    **/
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically_SomeInEquality() {
     if (var1().equalitySet == var2().equalitySet) {
       return isObviousDynamically(this.ppt.var_infos);
@@ -845,6 +847,7 @@ public final class INTEQUAL
   }
 #endif
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     // JHP: We might consider adding a check over bounds.   If
@@ -1053,13 +1056,13 @@ public final class INTEQUAL
     VarInfo v2 = vis[1];
     if (!v2.isDerived() || !(v2.derived instanceof SequenceLength))
       return (null);
-    assert v1.derived != null : "@SuppressWarnings(nullness): checker bug: flow";
-    assert v2.derived != null : "@SuppressWarnings(nullness): checker bug: flow";
+    assert v1.derived != null : "@AssumeAssertion(nullness): checker bug: flow";
+    assert v2.derived != null : "@AssumeAssertion(nullness): checker bug: flow";
     if (!v1.derived.isSameFormula (v2.derived))
       return (null);
 
-    VarInfo seqvar1 = v1.derived.getBases()[0];
-    VarInfo seqvar2 = v2.derived.getBases()[0];
+    VarInfo seqvar1 = v1.derived.getBase(0);
+    VarInfo seqvar2 = v2.derived.getBase(0);
     if (ppt.parent.is_equal (seqvar1, seqvar2))
       return new DiscardInfo (this, DiscardCode.obvious, "Implied by " +
                               seqvar1 + " == " + seqvar2 + " and "
@@ -1118,6 +1121,7 @@ public final class INTEQUAL
 
 #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
   /** Returns the non-instantiating suppressions for this invariant. **/
+  /*@Deterministic*/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
@@ -1158,6 +1162,7 @@ public final class INTEQUAL
   }
 #else
   /** Returns the non-instantiating suppressions for this invariant. **/
+  /*@Deterministic*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return null;
   }

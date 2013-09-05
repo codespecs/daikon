@@ -17,7 +17,7 @@ public abstract class UnaryDerivation
 
   public UnaryDerivation(VarInfo vi) { base = vi; }
 
-  public UnaryDerivation clone() {
+  /*@SideEffectFree*/ public UnaryDerivation clone() {
     try {
       return (UnaryDerivation) super.clone();
     } catch (CloneNotSupportedException e) {
@@ -50,17 +50,24 @@ public abstract class UnaryDerivation
     return base;
   }
 
-  public VarInfo[] getBases() {
+  /*@SideEffectFree*/ public VarInfo[] getBases() {
     return new VarInfo[] { base() };
   }
 
-  protected boolean isParam() {
+  /*@Pure*/ public VarInfo getBase(int i) {
+    switch (i) {
+    case 0: return base;
+    default: throw new Error("bad base: " + i);
+    }
+  }
+
+  /*@Pure*/ protected boolean isParam() {
     return base.isParam();
     // VIN
     // return base.aux.getFlag(VarInfoAux.IS_PARAM);
   }
 
-  public boolean isDerivedFromNonCanonical() {
+  /*@Pure*/ public boolean isDerivedFromNonCanonical() {
     return ! base.isCanonical();
   }
 

@@ -145,7 +145,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     addComment(Ast.nodeTokenAfter(n), comment, true);
   }
 
-  private boolean isOwned(String fieldname) {
+  /*@Pure*/ private boolean isOwned(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.ownedFieldNames.contains(fieldname)) {
         return true;
@@ -154,7 +154,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return false;
   }
 
-  private boolean isFinal(String fieldname) {
+  /*@Pure*/ private boolean isFinal(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.finalFieldNames.contains(fieldname)) {
         return true;
@@ -163,7 +163,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return false;
   }
 
-  private boolean isNotContainsNull(String fieldname) {
+  /*@Pure*/ private boolean isNotContainsNull(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.notContainsNullFieldNames.contains(fieldname)) {
         return true;
@@ -172,7 +172,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     return false;
   }
 
-  private boolean isElementType(String fieldname) {
+  /*@Pure*/ private boolean isElementType(String fieldname) {
     for (ClassFieldInfo cfi : cfis) {
       if (cfi.elementTypeFieldNames.containsKey(fieldname)) {
         return true;
@@ -623,7 +623,7 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   // The "invs" argument may be null, in which case no work is done.
-  /*@AssertNonNullIfTrue("#3")*/
+  /*@EnsuresNonNullIf(result=true, expression="#3")*/
   public boolean insertInvariants(Node n, String prefix, /*@Nullable*/ InvariantsAndModifiedVars invs,
                                   boolean useJavaComment) {
     if (invs == null) {

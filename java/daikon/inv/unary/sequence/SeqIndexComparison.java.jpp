@@ -227,6 +227,7 @@ public class CLASSNAME extends SUPERCLASS {
   private static /*@Nullable*/ NISuppressionSet suppressions = null;
 
   /** returns the ni-suppressions for CLASSNAME **/
+  /*@Deterministic*/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)
@@ -262,6 +263,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 #else
   /** returns the ni-suppressions for CLASSNAME **/
+  /*@Deterministic*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return null;
   }
@@ -279,7 +281,7 @@ public class CLASSNAME extends SUPERCLASS {
     return EQUALSstring;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format.isJavaFamily()) return format_java_family(format);
 
     // TODO: Eliminate the unnecessary format_xxx() below if the
@@ -390,11 +392,11 @@ public class CLASSNAME extends SUPERCLASS {
   }
 
 
-  public boolean isSameFormula(Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 
@@ -420,6 +422,7 @@ public class CLASSNAME extends SUPERCLASS {
    * A[] = {2, 3, 4}, A[] is a subsequence of B[] and B[i] == i,
    * but A[i] = i is not true.
    */
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
 
     DiscardInfo super_result = super.isObviousDynamically(vis);

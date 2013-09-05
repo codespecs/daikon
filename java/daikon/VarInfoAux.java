@@ -121,7 +121,7 @@ public final class VarInfoAux
 
       /*@Interned*/ String token;
       if (tok.ttype == StreamTokenizer.TT_WORD || tok.ttype == '\"') {
-        assert tok.sval != null : "@SuppressWarnings(nullness): representation invariant of StreamTokenizer";
+        assert tok.sval != null : "@AssumeAssertion(nullness): representation invariant of StreamTokenizer";
         token = tok.sval.trim().intern();
       } else {
         token = ((char) tok.ttype + "").intern();
@@ -155,7 +155,7 @@ public final class VarInfoAux
 
     // Interning
     VarInfoAux result = new VarInfoAux(map).intern();
-    assert interningMap != null : "@SuppressWarnings(nullness):  application invariant:  postcondition of intern(), which was just called";
+    assert interningMap != null : "@AssumeAssertion(nullness):  application invariant:  postcondition of intern(), which was just called";
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("New parse " + result);
       debug.fine ("Intern table size: " + new Integer(interningMap.size()));
@@ -181,7 +181,7 @@ public final class VarInfoAux
   /**
    * Map for interning.
    **/
-  private static /*@LazyNonNull*/ Map<VarInfoAux,/*@Interned*/ VarInfoAux> interningMap = null;
+  private static /*@MonotonicNonNull*/ Map<VarInfoAux,/*@Interned*/ VarInfoAux> interningMap = null;
 
 
 
@@ -232,21 +232,21 @@ public final class VarInfoAux
 
   /** Creates and returns a copy of this. **/
   // Default implementation to quiet Findbugs.
-  public VarInfoAux clone() throws CloneNotSupportedException {
+  /*@SideEffectFree*/ public VarInfoAux clone() throws CloneNotSupportedException {
     return (VarInfoAux) super.clone();
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return map.toString();
   }
 
-  public int hashCode() {
+  /*@Pure*/ public int hashCode() {
     return map.hashCode();
   }
 
 
-  /*@AssertNonNullIfTrue("#1")*/
-  public boolean equals(/*@Nullable*/ Object o) {
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
+  /*@Pure*/ public boolean equals (/*@Nullable*/ Object o) {
     if (o instanceof VarInfoAux) {
       return equals((VarInfoAux) o);
     } else {
@@ -254,8 +254,8 @@ public final class VarInfoAux
     }
   }
 
-  /*@AssertNonNullIfTrue("#1")*/
-  public boolean equals(VarInfoAux o) {
+  /*@EnsuresNonNullIf(result=true, expression="#1")*/
+  /*@Pure*/ public boolean equals (VarInfoAux o) {
     return this.map.equals(o.map);
   }
 
@@ -299,7 +299,7 @@ public final class VarInfoAux
   }
 
   /** Returns whether or not this is a parameter **/
-  public boolean isParam() {
+  /*@Pure*/ public boolean isParam() {
     return getFlag (IS_PARAM);
   }
 

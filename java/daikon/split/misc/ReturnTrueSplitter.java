@@ -27,14 +27,14 @@ public final class ReturnTrueSplitter
     return new ReturnTrueSplitter(ppt);
   }
 
-  /*@AssertNonNullIfTrue("return_varinfo")*/
+  /*@EnsuresNonNullIf(result=true, expression="return_varinfo")*/
   public boolean valid() {
     return ((return_varinfo != null)
             && (return_varinfo.type == ProglangType.BOOLEAN));
   }
 
   @SuppressWarnings("nullness:override.pre.method.annotation.invalid") // application invariant about private variable
-  /*@NonNullOnEntry("return_varinfo")*/
+  /*@RequiresNonNull("return_varinfo")*/
   public boolean test(ValueTuple vt) {
     return (return_varinfo.getIntValue(vt) != 0);
   }

@@ -90,13 +90,13 @@ public final class SplitDtrace {
       if (res.get(i).equals("this_invocation_nonce")) return Integer.parseInt(res.get(i+1));
     throw new RuntimeException("no nonce: "+res);
   }
-  static boolean isEnter(ArrayList<String> res) {
+  /*@Pure*/ static boolean isEnter(ArrayList<String> res) {
     return res.get(0).contains(":::ENTER");
   }
-  static boolean isExit(ArrayList<String> res) {
+  /*@Pure*/ static boolean isExit(ArrayList<String> res) {
     return res.get(0).contains(":::EXIT");
   }
-  static boolean isDeclare(ArrayList<String> res) {
+  /*@Pure*/ static boolean isDeclare(ArrayList<String> res) {
     return res.get(0).equals("DECLARE");
   }
   static void writeRec(BufferedWriter writer, ArrayList<String> res) throws IOException {
@@ -106,7 +106,8 @@ public final class SplitDtrace {
     }
     writer.newLine();
   }
-  static boolean isEmpty(String l) {
+  @SuppressWarnings("purity") // non-deterministic call to trim is used only for equals() and does not affect result
+  /*@Pure*/ static boolean isEmpty(String l) {
     return l.trim().equals("") || l.startsWith("#");
   }
   static void readRec(BufferedReader reader, ArrayList<String> res) throws IOException {

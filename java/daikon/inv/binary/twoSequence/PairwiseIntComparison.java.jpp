@@ -289,6 +289,7 @@ public class PAIRWISEINTEQUAL
   #endif
 
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousStatically (VarInfo[] vis) {
     VarInfo var1 = vis[0];
     VarInfo var2 = vis[1];
@@ -316,6 +317,7 @@ public class PAIRWISEINTEQUAL
     return super.isObviousStatically (vis);
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically (VarInfo[] vis) {
     DiscardInfo super_result = super.isObviousDynamically(vis);
     if (super_result != null) {
@@ -381,7 +383,7 @@ public class PAIRWISEINTEQUAL
   }
 
   #if (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING))
-  public boolean is_symmetric() {
+    /*@Pure*/ public boolean is_symmetric() {
     return (true);
   }
 
@@ -404,7 +406,7 @@ public class PAIRWISEINTEQUAL
     return EQUALSstring;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
 
     if (format.isJavaFamily()) return format_java_family(format);
 
@@ -484,11 +486,11 @@ public class PAIRWISEINTEQUAL
     }
   }
 
-  public boolean isSameFormula(Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
     return true;
   }
 
-  public boolean isExclusiveFormula(Invariant other) {
+  /*@Pure*/ public boolean isExclusiveFormula(Invariant other) {
     return false;
   }
 
@@ -505,6 +507,7 @@ public class PAIRWISEINTEQUAL
   /**
    * Returns a list of non-instantiating suppressions for this invariant.
    */
+  /*@Deterministic*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return (suppressions);
   }

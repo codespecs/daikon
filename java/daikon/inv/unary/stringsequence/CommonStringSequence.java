@@ -80,7 +80,7 @@ public class CommonStringSequence
     return result;
   }
 
-  public String format_using(OutputFormat format) {
+  /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) return format_daikon();
 
     return format_unimplemented(format);
@@ -142,11 +142,12 @@ public class CommonStringSequence
     throw new Error("Not yet implemented");
   }
 
+  /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousImplied() {
     return null;
   }
 
-  public boolean isSameFormula(Invariant other) {
+  /*@Pure*/ public boolean isSameFormula(Invariant other) {
     assert other instanceof CommonStringSequence;
     return true;
   }

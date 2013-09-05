@@ -33,6 +33,10 @@ import java.io.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import dataflow.quals.Pure;
+*/
+
 /**
  * All information about a single program point.
  * A Ppt may also represent just part of the data: see PptConditional.
@@ -160,7 +164,7 @@ public class PptTopLevel extends Ppt {
    * List of constant variables.
    * Null unless DynamicConstants.dkconfig_use_dynamic_constant_optimization is set.
    */
-  public /*@LazyNonNull*/ DynamicConstants constants = null;
+  public /*@MonotonicNonNull*/ DynamicConstants constants = null;
 
   // Invariant:  num_declvars == num_tracevars + num_orig_vars
   public int num_declvars; // number of variables in the declaration
@@ -184,7 +188,7 @@ public class PptTopLevel extends Ppt {
   private Map<List<Integer>,PptSlice> views;
 
   /** List of all of the splitters for this ppt. */
-  public /*@LazyNonNull*/ ArrayList<PptSplitter> splitters = null;
+  public /*@MonotonicNonNull*/ ArrayList<PptSplitter> splitters = null;
 
   /**
    * Iterator for all of the conditional ppts.  Returns each PptConditional
@@ -195,7 +199,8 @@ public class PptTopLevel extends Ppt {
     int splitter_index = 0;
     int ppts_index = 0;
 
-    /*@AssertNonNullIfTrue("splitters")*/
+    @SuppressWarnings("flowexpr.parse.error") // Checker Framework bug: splitters is a field in this class
+    /*@EnsuresNonNullIf(result=true, expression="splitters")*/
     public boolean hasNext() {
       if (splitters == null)
         return (false);
@@ -233,7 +238,8 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns whether or not this ppt has any splitters. */
-  /*@AssertNonNullIfTrue("splitters")*/
+  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug: problem with "splitters" again
+  /*@EnsuresNonNullIf(result=true, expression="splitters")*/
   public boolean has_splitters() {
     return (splitters != null) && (splitters.size() > 0);
   }
@@ -282,7 +288,7 @@ public class PptTopLevel extends Ppt {
    * Combined ppt that should be processed when this ppt is encountered.
    * Only non-null for basic block ppts.
    */
-  public /*@LazyNonNull*/ PptCombined combined_ppt = null;
+  public /*@MonotonicNonNull*/ PptCombined combined_ppt = null;
 
   /**
    * True if this ppt is subsumed by combined_ppt.  A different ppt is the
@@ -334,7 +340,7 @@ public class PptTopLevel extends Ppt {
    **/
   // Is set by Daikon.setupEquality.  Remains null if
   // Daikon.using_DaikonSimple==true or Daikon.use_equality_optimization==false
-  public /*@LazyNonNull*/ PptSliceEquality equality_view;
+  public /*@MonotonicNonNull*/ PptSliceEquality equality_view;
 
   // The redundant_invs* variables are filled in by method
   // mark_implied_via_simplify.
@@ -387,8 +393,8 @@ public class PptTopLevel extends Ppt {
     init_vars ();
   }
 
-  /*@NonNullOnEntry("var_infos")*/
-  /*@AssertNonNullAfter({"mbtracker", "views", "value_sets"})*/
+  /*@RequiresNonNull("var_infos")*/
+  /*@EnsuresNonNull({"mbtracker", "views", "value_sets"})*/
   private void init_vars (/*>>> @Raw PptTopLevel this*/) {
 
     debug_varinfo.log_tb ("initializing var_infos %s",
@@ -419,7 +425,7 @@ public class PptTopLevel extends Ppt {
     assert num_static_constant_vars == num_declvars - num_tracevars;
     assert num_tracevars == var_infos.length - num_static_constant_vars;
     mbtracker = new ModBitTracker(num_tracevars);
-    /*NNC:@LazyNonNull*/ ValueSet[] new_value_sets = new ValueSet[num_tracevars];
+    /*NNC:@MonotonicNonNull*/ ValueSet[] new_value_sets = new ValueSet[num_tracevars];
     for (VarInfo vi : var_infos) {
       int value_index = vi.value_index;
       if (value_index == -1) {
@@ -469,7 +475,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns the full name of the ppt **/
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return name();
   }
 
@@ -588,7 +594,7 @@ public class PptTopLevel extends Ppt {
     if (vis.length == 0)
       return;
     int old_length = var_infos.length;
-    /*NNC:@LazyNonNull*/ VarInfo[] new_var_infos = new VarInfo[var_infos.length + vis.length];
+    /*NNC:@MonotonicNonNull*/ VarInfo[] new_var_infos = new VarInfo[var_infos.length + vis.length];
     assert mbtracker.num_samples() == 0;
     mbtracker = new ModBitTracker(mbtracker.num_vars() + vis.length);
     System.arraycopy(var_infos, 0, new_var_infos, 0, old_length);
@@ -602,7 +608,7 @@ public class PptTopLevel extends Ppt {
     }
     var_infos = castNonNullDeep(new_var_infos);
     int old_vs_length = value_sets.length;
-    /*NNC:@LazyNonNull*/ ValueSet[] new_value_sets = new ValueSet[old_vs_length + vis.length];
+    /*NNC:@MonotonicNonNull*/ ValueSet[] new_value_sets = new ValueSet[old_vs_length + vis.length];
     System.arraycopy(value_sets, 0, new_value_sets, 0, old_vs_length);
     for (int i = 0; i < vis.length; i++) {
       new_value_sets[old_vs_length + i] = ValueSet.factory(vis[i]);
@@ -1033,7 +1039,7 @@ public class PptTopLevel extends Ppt {
 
     // Add the samples to all of the equality sets, breaking sets as required
     if (Daikon.use_equality_optimization) {
-      assert equality_view != null : "@SuppressWarnings(nullness): dependent: non-null if use_equality_optimization==true";
+      assert equality_view != null : "@AssumeAssertion(nullness): dependent: non-null if use_equality_optimization==true";
       weakened_invs.addAll(equality_view.add(vt, count));
     }
 
@@ -1268,7 +1274,7 @@ public class PptTopLevel extends Ppt {
     for (int ii = 0; ii < ppt.var_infos.length; ii++) {
       if (ppt.var_infos[ii].missingOutOfBounds()) {
         int mod = vt.getModified(ppt.var_infos[ii]);
-        assert var_infos[ii].derived != null : "@SuppressWarnings(nullness)";
+        assert var_infos[ii].derived != null : "@AssumeAssertion(nullness)";
         if (mod == ValueTuple.MISSING_NONSENSICAL)
           var_infos[ii].derived.missing_array_bounds = true;
       }
@@ -1278,8 +1284,9 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns whether or not the specified variable is dynamically constant.
    */
-  /*@AssertNonNullIfTrue("constants")*/
-  public boolean is_constant(VarInfo v) {
+  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug
+  /*@EnsuresNonNullIf(result=true, expression="constants")*/
+  /*@Pure*/ public boolean is_constant(VarInfo v) {
     return ((constants != null) && constants.is_constant(v));
   }
 
@@ -1288,8 +1295,9 @@ public class PptTopLevel extends Ppt {
    * constant, or was a dynamic constant at the beginning of constant
    * processing.
    */
-  /*@AssertNonNullIfTrue("constants")*/
-  public boolean is_prev_constant(VarInfo v) {
+  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug
+  /*@EnsuresNonNullIf(result=true, expression="constants")*/
+  /*@Pure*/ public boolean is_prev_constant(VarInfo v) {
     return ((constants != null)
             && constants.is_prev_constant(v));
   }
@@ -1298,8 +1306,9 @@ public class PptTopLevel extends Ppt {
    * Returns whether or not the specified variable has been missing
    * for all samples seen so far.
    */
-  /*@AssertNonNullIfTrue("constants")*/
-  public boolean is_missing(VarInfo v) {
+  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug
+  /*@EnsuresNonNullIf(result=true, expression="constants")*/
+  /*@Pure*/ public boolean is_missing(VarInfo v) {
     return ((constants != null) && constants.is_missing(v));
   }
 
@@ -1307,8 +1316,9 @@ public class PptTopLevel extends Ppt {
    * returns whether the specified variable is currently missing OR
    * was missing at the beginning of constants processing.
    **/
-  /*@AssertNonNullIfTrue("constants")*/
-  public boolean is_prev_missing(VarInfo v) {
+  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // Checker Framework bug
+  /*@EnsuresNonNullIf(result=true, expression="constants")*/
+  /*@Pure*/ public boolean is_prev_missing(VarInfo v) {
     return ((constants != null) && constants.is_prev_missing(v));
   }
 
@@ -1746,7 +1756,8 @@ public class PptTopLevel extends Ppt {
    * Looks up the slice for v1.  If the slice does not exist, one is
    * created (but not added into the list of slices for this ppt).
    */
-  public PptSlice get_temp_slice(VarInfo v) {
+  @SuppressWarnings("purity")   // caching
+  /*@Pure*/ public PptSlice get_temp_slice(VarInfo v) {
 
     PptSlice slice = findSlice(v);
     if (slice == null)
@@ -1760,7 +1771,8 @@ public class PptTopLevel extends Ppt {
    * in order.  If the slice does not exist, one  is created (but
    * not added into the list of slices for this ppt).
    */
-  public PptSlice get_temp_slice(VarInfo v1, VarInfo v2) {
+  @SuppressWarnings("purity")   // caching
+  /*@Pure*/ public PptSlice get_temp_slice(VarInfo v1, VarInfo v2) {
 
     PptSlice slice = findSlice_unordered(v1, v2);
     if (slice == null) {
@@ -1926,7 +1938,8 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns whether or not v1 is a subset of v2.
    */
-  public boolean is_subset(VarInfo v1, VarInfo v2) {
+  @SuppressWarnings("purity")   // side effects to local state
+  /*@Pure*/ public boolean is_subset(VarInfo v1, VarInfo v2) {
 
     // Find the slice for v1 and v2.  If no slice exists, create it,
     // but don't add it to the slices for this ppt.  It only exists
@@ -1955,7 +1968,8 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Returns whether or not v1 is always non-zero **/
-  public boolean is_nonzero (VarInfo v) {
+  @SuppressWarnings("purity")   // caching
+  /*@Pure*/ public boolean is_nonzero (VarInfo v) {
 
     // find the slice for v.  If the slice doesn't exist, the non-zero
     // invariant can't exist
@@ -1992,7 +2006,7 @@ public class PptTopLevel extends Ppt {
    * Returns whether or not the specified variables are equal (ie,
    * an equality invariant exists between them)
    */
-  public boolean is_equal(VarInfo v1, VarInfo v2) {
+  /*@Pure*/ public boolean is_equal(VarInfo v1, VarInfo v2) {
 
     // System.out.printf ("checking equality on %s and %s%n", v1, v2);
 
@@ -2048,7 +2062,7 @@ public class PptTopLevel extends Ppt {
    * Returns true if (v1+v1_shift) <= (v2+v2_shift) is known
    * to be true.  Returns false otherwise.  Integers only.
    */
-  public boolean is_less_equal(
+  /*@Pure*/ public boolean is_less_equal(
     VarInfo v1,
     int v1_shift,
     VarInfo v2,
@@ -2099,7 +2113,7 @@ public class PptTopLevel extends Ppt {
    * is true if the subsequence invariant exists or if it it
    * suppressed
    */
-  public boolean is_subsequence(VarInfo v1, VarInfo v2) {
+  /*@Pure*/ public boolean is_subsequence(VarInfo v1, VarInfo v2) {
 
     // Find the slice for v1 and v2.  If no slice exists, create it,
     // but don't add it to the slices for this ppt.  It only exists
@@ -2132,7 +2146,7 @@ public class PptTopLevel extends Ppt {
    * Returns true if varr is empty.  Supports ints, doubles, and
    * strings.
    */
-  public boolean is_empty(VarInfo varr) {
+  /*@Pure*/ public boolean is_empty(VarInfo varr) {
 
     // Find the slice for varr.  If no slice exists, create it, but
     // don't add it to the slices for this ppt.  It only exists as a
@@ -2334,7 +2348,7 @@ public class PptTopLevel extends Ppt {
    * Returns whether the variable should be involved in an unary slice. The
    * variable must be a leader, not a constant, and not always missing.
    */
-  private boolean is_var_ok_unary(VarInfo var) {
+  /*@Pure*/ private boolean is_var_ok_unary(VarInfo var) {
 
     if (DynamicConstants.dkconfig_use_dynamic_constant_optimization && constants == null)
       return (false);
@@ -2362,7 +2376,7 @@ public class PptTopLevel extends Ppt {
    * suitable for binary slices, then we do not need to look at
    * x with any other variable in a binary slice (fail fast).
    */
-  private boolean is_var_ok_binary(VarInfo var) {
+  /*@Pure*/ private boolean is_var_ok_binary(VarInfo var) {
 
     if (DynamicConstants.dkconfig_use_dynamic_constant_optimization && constants == null)
       return (false);
@@ -2390,7 +2404,7 @@ public class PptTopLevel extends Ppt {
    *
    * @see #is_var_ok_binary(VarInfo)
    */
-  private boolean is_var_ok_ternary(VarInfo var) {
+  /*@Pure*/ private boolean is_var_ok_ternary(VarInfo var) {
     if (DynamicConstants.dkconfig_use_dynamic_constant_optimization && constants == null)
       return (false);
 
@@ -2415,7 +2429,7 @@ public class PptTopLevel extends Ppt {
   /**
    * Returns whether or not the specified slice should be created.
    */
-  public boolean is_slice_ok(VarInfo[] vis, int arity) {
+  /*@Pure*/ public boolean is_slice_ok(VarInfo[] vis, int arity) {
     if (arity == 1)
       return (is_slice_ok(vis[0]));
     else if (arity == 2)
@@ -2431,7 +2445,7 @@ public class PptTopLevel extends Ppt {
    *
    * @see #is_var_ok_unary(VarInfo)
    */
-  public boolean is_slice_ok(VarInfo var1) {
+  /*@Pure*/ public boolean is_slice_ok(VarInfo var1) {
 
     return is_var_ok_unary(var1);
   }
@@ -2446,7 +2460,7 @@ public class PptTopLevel extends Ppt {
    *
    * @see #is_var_ok_binary(VarInfo)
    */
-  public boolean is_slice_ok(VarInfo var1, VarInfo var2) {
+  /*@Pure*/ public boolean is_slice_ok(VarInfo var1, VarInfo var2) {
 
     if (!is_var_ok_binary(var1) || !is_var_ok_binary(var2))
       return (false);
@@ -2490,7 +2504,7 @@ public class PptTopLevel extends Ppt {
    *
    * @see #is_var_ok_ternary(VarInfo)
    */
-  public boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
+  /*@Pure*/ public boolean is_slice_ok(VarInfo v1, VarInfo v2, VarInfo v3) {
 
     Debug dlog = null;
     if (Debug.logOn() || debug.isLoggable(Level.FINE))
@@ -2768,7 +2782,7 @@ public class PptTopLevel extends Ppt {
     if (num_samples() == 0)
       return;
     assert equality_view != null : "ppt = " + ppt_name +" children = " + children;
-    assert equality_view != null : "@SuppressWarnings(nullness): application invariant";
+    assert equality_view != null : "@AssumeAssertion(nullness): application invariant";
     Invariants equalityInvs = equality_view.invs;
 
     // Pivot invariants to new equality leaders if needed, if old
@@ -2832,7 +2846,7 @@ public class PptTopLevel extends Ppt {
   // Created upon first use, then saved.  Do not eagerly initialize,
   // because doing so runs Simplify (which crashes if Simplify is not
   // installed).
-  private static /*@LazyNonNull*/ LemmaStack proverStack = null;
+  private static /*@MonotonicNonNull*/ LemmaStack proverStack = null;
 
   /**
    * Interface used by mark_implied_via_simplify to determine what
@@ -2880,7 +2894,7 @@ public class PptTopLevel extends Ppt {
    * logically implied by others.  Uses the provided test interface to
    * determine if an invariant is within the domain of inspection.
    **/
-  /*@NonNullOnEntry("proverStack")*/
+  /*@RequiresNonNull("proverStack")*/
   private void markImpliedViaSimplify_int(
     PptMap all_ppts,
     SimplifyInclusionTester test)
@@ -3006,7 +3020,7 @@ public class PptTopLevel extends Ppt {
 
     int backgroundMark = proverStack.markLevel();
 
-    /*NNC:@LazyNonNull*/ InvariantLemma[] lemmas = new InvariantLemma[invs.length];
+    /*NNC:@MonotonicNonNull*/ InvariantLemma[] lemmas = new InvariantLemma[invs.length];
     for (int i = 0; i < invs.length; i++)
       lemmas[i] = new InvariantLemma(invs[i]);
     lemmas = castNonNullDeep(lemmas); // issue 154
@@ -3126,7 +3140,7 @@ public class PptTopLevel extends Ppt {
 
   /** Go though an array of invariants, marking those that can be
    * proved as consequences of others as redundant. */
-  /*@NonNullOnEntry("proverStack")*/
+  /*@RequiresNonNull("proverStack")*/
   private void flagRedundantRecursive(
     InvariantLemma[] lemmas,
     boolean[] present,
@@ -3192,12 +3206,12 @@ public class PptTopLevel extends Ppt {
   /**
    * Cached VarInfos that are parameter variables.
    **/
-  private /*@LazyNonNull*/ Set<VarInfo> paramVars = null;
+  private /*@MonotonicNonNull*/ Set<VarInfo> paramVars = null;
 
   /**
    * Returns variables in this Ppt that are parameters.
    **/
-  public Set<VarInfo> getParamVars() {
+  /*@Pure*/ public Set<VarInfo> getParamVars() {
     if (paramVars != null) {
       return paramVars;
     }
@@ -3769,7 +3783,7 @@ public class PptTopLevel extends Ppt {
    * by first creating all of the suppressed invariants in each of the
    * children, performing the merge, and then removing them.
    */
-  /*@NonNullOnEntry("equality_view")*/
+  /*@RequiresNonNull("equality_view")*/
   public void merge_invs_multiple_children() {
 
     // Debug print ppt and children
@@ -3954,7 +3968,7 @@ public class PptTopLevel extends Ppt {
    */
   public VarInfo /*@Nullable*/ [] parent_vis(PptRelation rel, PptSlice slice) {
 
-    /*NNC:@LazyNonNull*/ VarInfo[] pvis = new VarInfo[slice.var_infos.length];
+    /*NNC:@MonotonicNonNull*/ VarInfo[] pvis = new VarInfo[slice.var_infos.length];
     for (int j = 0; j < slice.var_infos.length; j++) {
       VarInfo cv = slice.var_infos[j]; // child variable
       VarInfo pv = null;               // parent variable
@@ -4298,7 +4312,7 @@ public class PptTopLevel extends Ppt {
 
     /** program point of the stat **/
     // Initialized by the set() method.
-    public /*@LazyNonNull*/ PptTopLevel ppt;
+    public /*@MonotonicNonNull*/ PptTopLevel ppt;
 
     int const_slice_cnt = 0;
     int const_inv_cnt = 0;
@@ -4313,7 +4327,7 @@ public class PptTopLevel extends Ppt {
      * Sets each of the stats from the current info in ppt and the specified
      * time (msecs) and memory (bytes).
      */
-    /*@AssertNonNullAfter("ppt")*/
+    /*@EnsuresNonNull("ppt")*/
     void set(PptTopLevel ppt, int time, int memory) {
       set_cnt = 0;
       var_cnt = 0;
@@ -4351,7 +4365,7 @@ public class PptTopLevel extends Ppt {
           + " Memory (bytes) : Time (msecs) ");
     }
 
-    /*@NonNullOnEntry("ppt")*/
+    /*@RequiresNonNull("ppt")*/
     void dump(Logger log) {
 
       DecimalFormat dfmt = new DecimalFormat();
@@ -4376,7 +4390,7 @@ public class PptTopLevel extends Ppt {
                         + memory + ": "
                         + time);
       if (cnt_inv_classes) {
-        assert inv_map != null : "@SuppressWarnings(nullness) : dependent: cnt_inv_classes is true";
+        assert inv_map != null : "@AssumeAssertion(nullness) : dependent: cnt_inv_classes is true";
         for (Class<? extends Invariant> inv_class : inv_map.keySet()) {
           Cnt cnt = inv_map.get(inv_class);
           log.fine(" : " + inv_class + ": " + cnt.cnt);
@@ -4536,7 +4550,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Is this is an exit ppt (combined or specific)? **/
-  public boolean is_exit() {
+  /*@Pure*/ public boolean is_exit() {
     if (type != null)
       return ((type == PptType.EXIT) || (type == PptType.SUBEXIT));
     else
@@ -4544,7 +4558,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** is this an enter ppt **/
-  public boolean is_enter() {
+  /*@Pure*/ public boolean is_enter() {
     if (type != null)
       return (type == PptType.ENTER);
     else
@@ -4552,12 +4566,12 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Is this a basic block ppt **/
-  public boolean is_basic_block() {
+  /*@Pure*/ public boolean is_basic_block() {
     return type == PptType.BASIC_BLOCK;
   }
 
   /** Is this a combined exit point? **/
-  public boolean is_combined_exit() {
+  /*@Pure*/ public boolean is_combined_exit() {
     if (type != null)
       return (type == PptType.EXIT);
     else
@@ -4565,7 +4579,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Is this a numbered (specific) exit point? **/
-  public boolean is_subexit() {
+  /*@Pure*/ public boolean is_subexit() {
     if (type != null)
       return (type == PptType.SUBEXIT);
     else
@@ -4573,7 +4587,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Is this a ppt that represents an object? **/
-  public boolean is_object() {
+  /*@Pure*/ public boolean is_object() {
     if (type != null)
       return (type == PptType.OBJECT);
     else
@@ -4581,8 +4595,8 @@ public class PptTopLevel extends Ppt {
   }
 
   /** Is this a ppt that represents a class? **/
-  /*@AssertNonNullIfTrue("type")*/
-  public boolean is_class() {
+  /*@EnsuresNonNullIf(result=true, expression="type")*/
+  /*@Pure*/ public boolean is_class() {
     return (type != null && type == PptType.CLASS);
   }
 

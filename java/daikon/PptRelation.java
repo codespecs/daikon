@@ -117,7 +117,8 @@ public class PptRelation implements Serializable {
    * Adds this relation to its child's parent list and its parent's
    * children list.
    */
-  private void connect() {
+  @SuppressWarnings("rawness") // won't be used until initialization is finished
+  private void connect(/*>>>@UnknownInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this*/) {
     assert !child.parents.contains(this);
     assert !parent.children.contains(this);
     child.parents.add(this);
@@ -127,11 +128,11 @@ public class PptRelation implements Serializable {
   /**
    * Returns the number of parent to child variable relations.
    */
-  public int size() {
+  /*@Pure*/ public int size() {
     return (parent_to_child_map.size());
   }
 
-  public String toString() {
+  /*@SideEffectFree*/ public String toString() {
     return (parent.ppt_name + "->" + child.ppt_name + "(" + relationship + ")");
   }
 
@@ -192,7 +193,7 @@ public class PptRelation implements Serializable {
    * object->method,and exit->exitNN) form a simple tree without duplication
    */
 
-  public boolean is_primary() {
+  /*@Pure*/ public boolean is_primary() {
     return ((relationship != PptRelationType.USER) &&
             (relationship != PptRelationType.ENTER_EXIT));
   }
@@ -539,6 +540,7 @@ public class PptRelation implements Serializable {
       for (VarInfo vc : child.var_infos) {
         if (vc.derived == null)
           continue;
+        assert vp.derived != null : "@AssumeAssertion(nullness): bug in Nullness Checker";
         if (vc.derived.isSameFormula(vp.derived)) {
           assert vc.derived != null;
           VarInfo[] vc_bases = vc.derived.getBases();
@@ -1058,6 +1060,8 @@ public class PptRelation implements Serializable {
           break;
         }
 
+        assert ppt != null : "@AssumeAssertion(nullness): bug in Nullness Checker"; // also, accesses of ppt worked earlier
+        assert ppt.children != null : "@AssumeAssertion(nullness): bug in Nullness Checker"; // The "children" field is declared to be non-null
         // If we didn't find a matching splitter at each child, can't merge
         // this point.  Just remove it from the list of splitters
         if (split_children.size() != ppt.children.size()) {
@@ -1083,7 +1087,7 @@ public class PptRelation implements Serializable {
       if ((ppt.children.size() == 0) && (ppt.equality_view == null)) {
         assert ppt.is_object() || ppt.is_class() || ppt.is_enter() : ppt;
         ppt.equality_view = new PptSliceEquality(ppt);
-        assert ppt.equality_view != null : "@SuppressWarnings(nullness)"; // bug 107: http://code.google.com/p/checker-framework/issues/detail?id=107
+        assert ppt.equality_view != null : "@AssumeAssertion(nullness)"; // bug 107: http://code.google.com/p/checker-framework/issues/detail?id=107
         ppt.equality_view.instantiate_invariants();
       }
     }
