@@ -256,8 +256,9 @@ public final class StackVer {
 		InstructionContextQueue icq = new InstructionContextQueue();
 
     stack_types.set (start.getInstruction().getPosition(), vanillaFrame);
-		start.execute(vanillaFrame, new ArrayList(), icv, ev);	// new ArrayList() <=>	no Instruction was executed before
-																									//									=> Top-Level routine (no jsr call before)
+        // new ArrayList() <=>	no Instruction was executed before
+		start.execute(vanillaFrame, new ArrayList<InstructionContext>(), icv, ev);
+		//	=> Top-Level routine (no jsr call before)
 		icq.add(start, new ArrayList<InstructionContext>());
 
 		// LOOP!
@@ -276,10 +277,12 @@ public final class StackVer {
 				icq.remove(0);
 			}
 
-			ArrayList<?> oldchain = (ArrayList<?>) (ec.clone());
-      // this makes Java 5.0 grumpy
-			// ArrayList<InstructionContext> newchain = (ArrayList) (ec.clone());
-      ArrayList<InstructionContext> newchain = new ArrayList<InstructionContext>(ec);
+            // this makes Java grumpy
+            // ArrayList<InstructionContext> oldchain = (ArrayList<InstructionContext>) (ec.clone());
+            ArrayList<InstructionContext> oldchain = new ArrayList<InstructionContext>(ec);
+            // this makes Java grumpy
+		    // ArrayList<InstructionContext> newchain = (ArrayList) (ec.clone());
+            ArrayList<InstructionContext> newchain = new ArrayList<InstructionContext>(ec);
 			newchain.add(u);
 
 			if ((u.getInstruction().getInstruction()) instanceof RET){
@@ -297,14 +300,14 @@ public final class StackVer {
 						throw new AssertionViolatedException("More RET than JSR in execution chain?!");
 					}
 //System.err.println("+"+oldchain.get(ss));
-					if (((InstructionContext) oldchain.get(ss)).getInstruction().getInstruction() instanceof JsrInstruction){
+					if ((oldchain.get(ss)).getInstruction().getInstruction() instanceof JsrInstruction){
 						if (skip_jsr == 0){
-							lastJSR = (InstructionContext) oldchain.get(ss);
+							lastJSR = oldchain.get(ss);
 							break;
 						}
             skip_jsr--;
 					}
-					if (((InstructionContext) oldchain.get(ss)).getInstruction().getInstruction() instanceof RET){
+					if ((oldchain.get(ss)).getInstruction().getInstruction() instanceof RET){
 						skip_jsr++;
 					}
 				}
@@ -360,7 +363,7 @@ public final class StackVer {
                   (exc_hds[s].getExceptionType()==null
                     ? Type.THROWABLE : exc_hds[s].getExceptionType())) );
                 stack_types.set (v.getInstruction().getPosition(), f);
-				if (v.execute(f, new ArrayList(), icv, ev)){
+				if (v.execute(f, new ArrayList<InstructionContext>(), icv, ev)){
 					icq.add(v, new ArrayList<InstructionContext>());
 				}
 			}
@@ -371,7 +374,9 @@ public final class StackVer {
 		do{
 			if ((ih.getInstruction() instanceof ReturnInstruction) && (!(cfg.isDead(ih)))) {
 				InstructionContext ic = cfg.contextOf(ih);
-				Frame f = ic.getOutFrame(new ArrayList()); // TODO: This is buggy, we check only the top-level return instructions this way. Maybe some maniac returns from a method when in a subroutine?
+				Frame f = ic.getOutFrame(new ArrayList<InstructionContext>());
+                // TODO: This is buggy, we check only the top-level return instructions
+                // this way. Maybe some maniac returns from a method when in a subroutine?
 				LocalVariables lvs = f.getLocals();
 				for (int i=0; i<lvs.maxLocals(); i++){
 					if (lvs.get(i) instanceof UninitializedObjectType){
