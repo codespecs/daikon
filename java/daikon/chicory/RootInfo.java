@@ -36,7 +36,7 @@ public class RootInfo extends DaikonVariableInfo
         // System.out.println ("Entering method " + mi);
         // debug_vars.enabled = mi.toString().contains ("Job.<init>");
 
-        debug_vars.clear ("building enter tree for %s%n", mi);
+        debug_vars.clear ("building enter tree for %s:%s%n", mi.method_name, mi);
 
         // Don't build a tree for class initializers.
         if (mi.is_class_init())

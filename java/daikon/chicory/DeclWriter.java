@@ -26,6 +26,8 @@ public class DeclWriter extends DaikonWriter {
   /** Header string before each new method entry or exit point **/
   public static final String declareHeader = "DECLARE";
 
+  public static boolean debug = false;
+
   /** Stream to write to **/
   private PrintStream outFile;
 
@@ -45,6 +47,7 @@ public class DeclWriter extends DaikonWriter {
     {
         super();
         outFile = writer;
+        debug = Chicory.debug;
     }
 
     /**
@@ -159,6 +162,9 @@ public class DeclWriter extends DaikonWriter {
     {
         outFile.println(declareHeader);
         outFile.println(name);
+
+        if (debug)
+          System.out.println("printMethod " + name);
 
         for (DaikonVariableInfo childOfRoot: root)
         {
@@ -318,6 +324,9 @@ public class DeclWriter extends DaikonWriter {
                                PptType ppt_type, /*@Nullable*/ DeclReader comp_info) {
 
       outFile.println ("ppt " + escape(name));
+      if (debug)
+        System.out.println("print_method " + name);
+
       outFile.println ("ppt-type " + ppt_type.name().toLowerCase());
 
       // Look for and print any hierarchy relations
@@ -335,6 +344,8 @@ public class DeclWriter extends DaikonWriter {
       }
 
       outFile.println();
+      if (debug)
+        System.out.println("end print_method ");
     }
 
     /**
