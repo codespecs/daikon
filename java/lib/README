@@ -5,16 +5,6 @@ For external libraries in this directory, we supply both the original
 distribution (for completeness) and also, if the original distribution is
 not a .jar file, the .jar file (for use by Java).
 
-BCEL 5.1 (bcel.jar)
-  - java class file reader/writer
-  - Our local changes partially support Java 1.5
-  - Built by jhp in ~jhp/research/jakarta-bcel
-    make bcel.jar
-
-Apache Commons IO components (commons-io.jar)
-- "Standard" library of IO utility
-- http://commons.apache.org/
-
 GNU getopt 1.0.8 (java-getopt.jar)
 - Command line option parser
 - Distributed with java files alongside class files in the jar file.
@@ -28,10 +18,6 @@ GNU getopt 1.0.8 (java-getopt.jar)
   6. "jar cf java-getopt.jar gnu/"
 - http://www.urbanophile.com/arenn/coding/download.html
 
-JUnit (junit.jar)
-- Automated unit testing framework
-- http://www.junit.org
-
 plume-lib (plume.jar)
 - A library of useful abstractions for programming.
 - http://code.google.com/p/plume-lib/
@@ -41,3 +27,5 @@ plume-lib (plume.jar)
   plume.jar needs to be compiled with a JSR 308 compiler, so its annotations
   are present in the .jar file.  However, it has to be compiled with "-target
   5" or the like, so that it can be used by a Java 5 JVM.
+- Note that plume-lib includes BCEL, Apache Commons IO, JUnit,
+  and the Checker Framework qualifiers.

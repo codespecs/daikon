@@ -101,7 +101,6 @@ WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
 
 C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
 
-BCEL_DIR := $(DAIKONDIR)/java/lib/bcel.jar
 DIST_DIR := $(WWW_DIR)/dist
 MIT_DIR  := $(WWW_DIR)/mit
 DIST_BIN_DIR := $(DIST_DIR)/binaries
@@ -128,7 +127,7 @@ HG_PULL_U ?= hg pull -u
 # Example Makefile.user line, on cygwin: HG_OPTIONS=--insecure
 HG_OPTIONS ?=
 
-JUNIT_VERSION := junit3.8.1
+# JUNIT_VERSION := junit3.8.1
 
 # for "chgrp, we need to use the number on debian, 14127 is invariants"
 INV_GROUP := 14127
@@ -416,10 +415,7 @@ update-dist-version-file:
 	perl -wpi -e 's/\.(-?[0-9]+)$$/"." . ($$1+1)/e' doc/VERSION
 
 JAR_FILES = \
-$(INV_DIR)/java/lib/bcel.jar \
-$(INV_DIR)/java/lib/commons-io.jar \
 $(INV_DIR)/java/lib/java-getopt.jar \
-$(INV_DIR)/java/lib/junit.jar \
 $(INV_DIR)/java/lib/plume.jar
 
 ## Problem: "make -C java veryclean; make daikon.jar" fails, as does
@@ -436,10 +432,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 		-exec ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar \;
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
-	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/bcel.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/commons-io.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/junit.jar
 	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/plume.jar
 	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
@@ -662,7 +655,7 @@ showvars:
 
 plume-lib:
 	rm -rf java/utilMDE java/lib/utilMDE.jar
-	hg clone ${HG_OPTIONS} https://code.google.com/p/plume-lib.dff-temp/ plume-lib
+	hg clone ${HG_OPTIONS} https://code.google.com/p/plume-lib/ plume-lib
 
 .PHONY: plume-lib-update
 plume-lib-update: plume-lib

@@ -227,8 +227,8 @@ else
 endif
 CP    := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
-CPDAIKON := $(DAIKONDIR)/java:$(DAIKONDIR)/java/lib/bcel.jar:$(DAIKONDIR)/java/lib/java-getopt.jar:$(DAIKONDIR)/java/lib/junit.jar:$(DAIKONDIR)/java/lib/plume.jar:${CP}
-CPJUNIT := $(DAIKONDIR)/java/lib/junit.jar
+CPDAIKON := $(DAIKONDIR)/java:$(DAIKONDIR)/java/lib/java-getopt.jar:$(DAIKONDIR)/java/lib/plume.jar:${CP}
+CPJUNIT := $(DAIKONDIR)/java/lib/plume.jar
 
 export CLASSPATH := .:$(CP):$(SCRATCH_FOR_DAIKON):$(CPDAIKON)
 ifeq (cygwin,$(OSTYPE))

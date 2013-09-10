@@ -81,7 +81,7 @@ ifdef CHECKERS
   CHECKERSJAR ?= ${CHECKERS}/binary/checkers.jar
 endif
 # If actually checking, override to checkers.jar.
-CHECKERSJAR ?= ${DAIKONDIR}/java/lib/checkers-quals.jar
+CHECKERSJAR ?= ${DAIKONDIR}/java/lib/plume.jar
 # Version of javac that supports pluggable type-checking.
 JAVAC_FOR_CHECKERS ?= ${CHECKERS}/binary/javac
 
@@ -103,8 +103,8 @@ JAVAC_COMMAND_FOR_CHECKERS = ${JAVAC_FOR_CHECKERS} -J-Xmx1024m
 # These jar files only exist for the development version, not the
 # distributed version, of Daikon.  The if clause avoids a (harmless but
 # annoying) javac error message that they don't exist.
-ifeq "$(wildcard $(DAIKONDIR)/java/lib/bcel.jar)" "$(DAIKONDIR)/java/lib/bcel.jar"
-    CLASSPATH_JARS = :$(DAIKONDIR)/java/lib/bcel.jar:$(DAIKONDIR)/java/lib/java-getopt.jar:$(DAIKONDIR)/java/lib/commons-io.jar:$(DAIKONDIR)/java/lib/junit.jar:$(DAIKONDIR)/java/lib/plume.jar
+ifeq "$(wildcard $(DAIKONDIR)/java/lib/plume.jar)" "$(DAIKONDIR)/java/lib/plume.jar"
+    CLASSPATH_JARS = :$(DAIKONDIR)/java/lib/java-getopt.jar:$(DAIKONDIR)/java/lib/plume.jar
 endif
 ifeq "$(wildcard ${CHECKERSJAR})" "${CHECKERSJAR}"
     CLASSPATH_JARS2 = ${CHECKERSJAR}
@@ -128,7 +128,7 @@ ifeq "$(wildcard ${CHECKERS}/build)" "${CHECKERS}/build"
   CLASSPATH := $(CLASSPATH):${CHECKERS}/build
 endif
 ifdef CLASSPATH_JARS2
-  ifneq (checkers-quals.jar,$(findstring checkers-quals.jar,$(CLASSPATH)))
+  ifneq (${CHECKERSJAR}, $(findstring ${CHECKERSJAR},$(CLASSPATH)))
     CLASSPATH := $(CLASSPATH):$(CLASSPATH_JARS2)
   endif
 endif
