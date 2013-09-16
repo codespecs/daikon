@@ -43,7 +43,7 @@ public class PptSliceEquality
      super(parent, parent.var_infos);
   }
 
-  public final int arity() {
+  public final int arity(/*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSliceEquality this*/) {
     throw new Error("Don't call arity on PptSliceEquality");
   }
 

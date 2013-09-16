@@ -348,7 +348,7 @@ public class PptCombined extends PptTopLevel {
    * always setup (since this is always a leaf in the hierarchy)
    **/
   @SuppressWarnings("nullness") // checker bug with flow
-  private void init() {
+  private void init(/*>>>@UnknownInitialization(PptCombined.class) @Raw(PptCombined.class) PptCombined this*/) {
     if (!Derivation.dkconfig_disable_derived_variables) {
       create_derived_variables();
     }

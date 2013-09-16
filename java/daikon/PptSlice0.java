@@ -31,7 +31,7 @@ public class PptSlice0
      super(parent, new VarInfo[0]);
   }
 
-  public final int arity() {
+  public final int arity(/*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice0 this*/) {
     return 0;
   }
 

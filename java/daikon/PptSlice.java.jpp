@@ -105,7 +105,7 @@ public final class PPTSLICE1 extends PptSlice {
   }
 #endif
 
-  public final int arity() {
+  public final int arity(/*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PPTSLICE1 this*/) {
     return ARITY;
   }
   /**
