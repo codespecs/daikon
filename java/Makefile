@@ -911,10 +911,12 @@ check-nullness-fbc-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals
 # Typical command: 
 # NULLNESS_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-nullness-onefile
 # NULLNESS_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
-NULLNESS_ONEFILE ?= daikon/FileIO.java
+# NULLNESS_ONEFILE ?= daikon/FileIO.java
+NULLNESS_ONEFILE ?= daikon/inv/Invariant.java
 check-nullness-onefile: check-nullness-fbc-onefile
 check-nullness-fbc-onefile: ${ALL_GENERATED_FILES} compile-typequals compile
 	${MAKE} check-nullness-fbc-onefile-norecompile
+check-nullness-onefile-norecompile: check-nullness-fbc-onefile-norecompile
 check-nullness-fbc-onefile-norecompile:
 	${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_ONEFILE}
 
