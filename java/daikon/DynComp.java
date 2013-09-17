@@ -101,11 +101,11 @@ public class DynComp {
   public static /*@MonotonicNonNull*/ File premain = null;
 
 
-  /** Thread that copies output from target to our output **/
-  public static StreamRedirectThread out_thread;
+  // /** Thread that copies output from target to our output **/
+  // public static StreamRedirectThread out_thread;
 
-  /** Thread that copies stderr from target to our stderr **/
-  public static StreamRedirectThread err_thread;
+  // /** Thread that copies stderr from target to our stderr **/
+  // public static StreamRedirectThread err_thread;
 
   /** starting time (msecs) **/
   public static long start = System.currentTimeMillis();

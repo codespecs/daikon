@@ -99,7 +99,7 @@ public class InvTranslate {
   /**
    * Add the specified variable names to the variable translation.
    */
-  private void add_variable_map (String v1_name, String v2_name) {
+  private void add_variable_map (/*>>>@Raw(daikon.tools.InvTranslate.class) InvTranslate this,*/ String v1_name, String v2_name) {
 
     assert !var_map.containsKey (v1_name);
 

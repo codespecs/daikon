@@ -23,6 +23,7 @@ public final class DiscReasonMap {
     // Use initialize();
   }
 
+  @EnsuresNonNull("the_map")
   public static void initialize() {
     the_map = new HashMap<String,HashMap<String,List<DiscardInfo>>>();
   }

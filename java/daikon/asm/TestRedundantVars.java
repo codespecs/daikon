@@ -45,6 +45,14 @@ public class TestRedundantVars {
     private static PptFile with;
     private static PptFile reds;
 
+    // Suppress warnings
+    private TestRedundantVars() {
+        without = PptFile.getPptFile("dummy file");
+        with =    PptFile.getPptFile("dummy file");
+        reds =    PptFile.getPptFile("dummy file");
+        throw new Error("do not instantiate");
+    }
+
     @SuppressWarnings("nullness.parse.error") // bug: fields in precondition expressions
     public static void main(String[] args) {
 

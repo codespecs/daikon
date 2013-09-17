@@ -28,7 +28,10 @@ public class DtracePartitioner
       // System.out.printf ("trying with file %s%n", fileName);
       br = UtilMDE.bufferedFileReader (fileName);
 
-    } catch (IOException e) {e.printStackTrace(); }
+    } catch (IOException e) {
+      e.printStackTrace();
+      throw new Error(e);
+    }
   }
 
   public boolean hasNext() {

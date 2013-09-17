@@ -168,7 +168,7 @@ public final class PrintInvariants {
   private static final String lineSep = Global.lineSep;
 
   /** Regular expression that ppts must match to be printed **/
-  private static Pattern ppt_regexp;
+  private static /*@Nullable*/ Pattern ppt_regexp;
 
   /**
    * Switch for whether to print discarded Invariants or not, default is false.
