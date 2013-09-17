@@ -161,7 +161,7 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   SORT_DIRECTORY_ORDER = sort
 endif
 JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
-DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | sort)
+DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | ${SORT_DIRECTORY_ORDER})
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
@@ -826,13 +826,13 @@ ALLSYSTEMS_SKIPDEFS=^jtb\.
 INTERNING_JAVA_FILES_SKIP_COUNTS = Intern.java\|VarInfoName.java\|daikon/dcomp
 ## Which files to check.
 INTERNING_JAVA_FILES = ${DAIKON_JAVA_FILES} $(shell find daikon/util/ -name '*.java')
-INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | sort)
+INTERNING_JAVA_FILES_COUNTS = $(shell find . -type f -name '*.java' | egrep -v ${INTERNING_JAVA_FILES_SKIP_COUNTS} | xargs grep -l -i '@Interned' | ${SORT_DIRECTORY_ORDER})
 ## Setting this to a subset of directories only works if every file has been
 ## previously compiled with the Java 7 compiler in annotations-in-comments
 ## mode, so that annotations in the files with @SuppressWarnings are respected.
 NULLNESS_JAVA_FILES = \
   ${DAIKON_JAVA_FILES} \
-  $(shell find daikon/util/ -name '*.java')
+  $(shell find daikon/util/ -name '*.java' | ${SORT_DIRECTORY_ORDER})
 
 #  $(shell find daikon -name '*.java' -a -exec grep -L "^@SuppressWarnings.*nullness" {} \; | sort)
 #   $(shell find typequals/ -name '*.java')
@@ -1095,7 +1095,7 @@ JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
                 -classpath $(subst $(DAIKONDIR)/java,${CLASSPATH_JARS}:${CLASSPATH_JARS2},${CLASSPATH})
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 # JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v '\#'`
-JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | sort)
+JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | ${SORT_DIRECTORY_ORDER})
 #JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v '\#' | sort | uniq | perl -p -e 's:^./::g; s:/:.:g;'`
 
 # Daikon packages except for util (which is just a copy of plume)
