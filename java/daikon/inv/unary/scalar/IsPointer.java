@@ -43,12 +43,10 @@ public class IsPointer extends SingleScalar {
         super();
     }
 
-    private static /*@MonotonicNonNull*/ /*@Prototype*/ IsPointer proto;
+    private static /*@Prototype*/ IsPointer proto = new /*@Prototype*/ IsPointer();
 
     /** Returns the prototype invariant for IsPointer **/
     public static /*@Prototype*/ IsPointer get_proto() {
-      if (proto == null)
-        proto = new /*@Prototype*/ IsPointer();
       return (proto);
     }
 

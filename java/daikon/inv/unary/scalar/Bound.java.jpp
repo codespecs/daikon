@@ -256,12 +256,10 @@ public class LOWERBOUND
     // do we need a core?
   }
 
-  private static /*@MonotonicNonNull*/ /*@Prototype*/ LOWERBOUND proto;
+  private static /*@Prototype*/ LOWERBOUND proto = new /*@Prototype*/ LOWERBOUND ();
 
   /** Returns the prototype invariant for LOWERBOUND **/
   public static /*@Prototype*/ LOWERBOUND get_proto() {
-    if (proto == null)
-      proto = new /*@Prototype*/ LOWERBOUND ();
     return (proto);
   }
 

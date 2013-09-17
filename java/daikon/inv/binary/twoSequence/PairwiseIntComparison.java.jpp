@@ -244,12 +244,10 @@ public class PAIRWISEINTEQUAL
     super();
   }
 
-  private static /*@MonotonicNonNull*/ /*@Prototype*/ PAIRWISEINTEQUAL proto;
+  private static /*@Prototype*/ PAIRWISEINTEQUAL proto = new /*@Prototype*/ PAIRWISEINTEQUAL ();
 
   /** Returns the prototype invariant for PAIRWISEINTEQUAL **/
   public static /*@Prototype*/ PAIRWISEINTEQUAL get_proto() {
-    if (proto == null)
-      proto = new /*@Prototype*/ PAIRWISEINTEQUAL ();
     return (proto);
   }
 

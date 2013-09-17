@@ -48,13 +48,10 @@ public final class CompleteOneOfScalar extends SingleScalar
     super ();
   }
 
-  private static /*@MonotonicNonNull*/ /*@Prototype*/ CompleteOneOfScalar proto;
+  private static /*@Prototype*/ CompleteOneOfScalar proto = new /*@Prototype*/ CompleteOneOfScalar ();
 
   /** Returns the prototype invariant for CompleteOneOFScalar **/
   public static /*@Prototype*/ CompleteOneOfScalar get_proto() {
-    // System.out.printf ("complete one of scalar proto%n");
-    if (proto == null)
-      proto = new /*@Prototype*/ CompleteOneOfScalar ();
     return (proto);
   }
 

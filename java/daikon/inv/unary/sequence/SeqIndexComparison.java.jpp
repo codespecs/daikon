@@ -180,12 +180,10 @@ public class CLASSNAME extends SUPERCLASS {
     assert var().rep_type == ProglangType.ASSERTYPE;
   }
 
-  private static /*@MonotonicNonNull*/ /*@Prototype*/ CLASSNAME proto;
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
 
   /** Returns the prototype invariant for CLASSNAME **/
   public static /*@Prototype*/ CLASSNAME get_proto() {
-    if (proto == null)
-      proto = new /*@Prototype*/ CLASSNAME ();
     return (proto);
   }
 

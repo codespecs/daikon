@@ -260,12 +260,10 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@MonotonicNonNull*/ /*@Prototype*/ EqualZero proto;
+    private static /*@Prototype*/ EqualZero proto = new /*@Prototype*/ EqualZero ();
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ EqualZero get_proto() {
-      if (proto == null)
-        proto = new /*@Prototype*/ EqualZero ();
       return proto;
     }
 
@@ -311,12 +309,10 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@MonotonicNonNull*/ /*@Prototype*/ EqualOne proto;
+    private static /*@Prototype*/ EqualOne proto = new /*@Prototype*/ EqualOne ();
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ EqualOne get_proto() {
-      if (proto == null)
-        proto = new /*@Prototype*/ EqualOne ();
       return proto;
     }
 
@@ -362,12 +358,10 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@MonotonicNonNull*/ /*@Prototype*/ EqualMinusOne proto;
+    private static /*@Prototype*/ EqualMinusOne proto = new /*@Prototype*/ EqualMinusOne ();
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ EqualMinusOne get_proto() {
-      if (proto == null)
-        proto = new /*@Prototype*/ EqualMinusOne ();
       return proto;
     }
 
@@ -413,12 +407,10 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@MonotonicNonNull*/ /*@Prototype*/ GreaterEqualZero proto;
+    private static /*@Prototype*/ GreaterEqualZero proto = new /*@Prototype*/ GreaterEqualZero ();
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ GreaterEqualZero get_proto() {
-      if (proto == null)
-        proto = new /*@Prototype*/ GreaterEqualZero ();
       return proto;
     }
 
@@ -464,12 +456,10 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@MonotonicNonNull*/ /*@Prototype*/ GreaterEqual64 proto;
+    private static /*@Prototype*/ GreaterEqual64 proto = new /*@Prototype*/ GreaterEqual64 ();
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ GreaterEqual64 get_proto() {
-      if (proto == null)
-        proto = new /*@Prototype*/ GreaterEqual64 ();
       return proto;
     }
 
@@ -516,12 +506,10 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@MonotonicNonNull*/ /*@Prototype*/ BooleanVal proto;
+    private static /*@Prototype*/ BooleanVal proto = new /*@Prototype*/ BooleanVal ();
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ BooleanVal get_proto() {
-      if (proto == null)
-        proto = new /*@Prototype*/ BooleanVal ();
       return (proto);
     }
 
@@ -571,12 +559,10 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@MonotonicNonNull*/ /*@Prototype*/ PowerOfTwo proto;
+    private static /*@Prototype*/ PowerOfTwo proto = new /*@Prototype*/ PowerOfTwo ();
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ PowerOfTwo get_proto() {
-      if (proto == null)
-        proto = new /*@Prototype*/ PowerOfTwo ();
       return (proto);
     }
 
@@ -647,12 +633,10 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@MonotonicNonNull*/ /*@Prototype*/ Even proto;
+    private static /*@Prototype*/ Even proto = new /*@Prototype*/ Even ();
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ Even get_proto() {
-      if (proto == null)
-        proto = new /*@Prototype*/ Even ();
       return proto;
     }
 
@@ -712,18 +696,16 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@MonotonicNonNull*/ /*@Prototype*/ Bound0_63 proto;
+    private static /*@Prototype*/ Bound0_63 proto = new /*@Prototype*/ Bound0_63 ();
+
+    /** returns the prototype invariant **/
+    public static /*@Prototype*/ Bound0_63 get_proto() {
+      return (proto);
+    }
 
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() {
       return LOWER_BOUND.dkconfig_enabled && UPPER_BOUND.dkconfig_enabled;
-    }
-
-    /** returns the prototype invariant **/
-    public static /*@Prototype*/ Bound0_63 get_proto() {
-      if (proto == null)
-        proto = new /*@Prototype*/ Bound0_63 ();
-      return (proto);
     }
 
     /** instantiates the invariant on the specified slice **/
