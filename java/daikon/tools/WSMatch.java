@@ -234,7 +234,8 @@ public class WSMatch {
      * If multiple sets have the same number of elements, the set with the
      * higher average match percent is chosen.
      */
-    public List<MatchInfo> find_best_matches (List<DeclVarInfo> vars1,
+    public List<MatchInfo> find_best_matches (/*>>>@Raw(daikon.tools.WSMatch.Substitution.class) Substitution this,*/
+                                              List<DeclVarInfo> vars1,
                                               List<DeclVarInfo> vars2,
                                               double min_percent) {
 

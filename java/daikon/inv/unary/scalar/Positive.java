@@ -42,12 +42,10 @@ public class Positive
     super();
   }
 
-  private static /*@Prototype*/ Positive proto;
+  private static /*@Prototype*/ Positive proto = new /*@Prototype*/ Positive ();
 
   /** Returns the prototype invariant **/
   public static /*@Prototype*/ Positive get_proto() {
-    if (proto == null)
-      proto = new /*@Prototype*/ Positive ();
     return (proto);
   }
 

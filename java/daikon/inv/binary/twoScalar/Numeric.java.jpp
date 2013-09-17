@@ -663,6 +663,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static /*@Prototype*/ Divides proto = new /*@Prototype*/ Divides (false);
     private static /*@Prototype*/ Divides proto_swap = new /*@Prototype*/ Divides (true);
 
+    /** Returns the prototype invariant **/
     public static /*@Prototype*/ CLASSNAME get_proto (boolean swap) {
       if (swap) {
         return (proto_swap);
@@ -856,6 +857,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static /*@Prototype*/ Square proto = new /*@Prototype*/ Square (false);
     private static /*@Prototype*/ Square proto_swap = new /*@Prototype*/ Square (true);
 
+    /** Returns the prototype invariant **/
     public static /*@Prototype*/ Square get_proto (boolean swap) {
       if (swap) return proto_swap;
       else return proto;
@@ -926,6 +928,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static /*@Prototype*/ ZeroTrack proto = new /*@Prototype*/ ZeroTrack (false);
     private static /*@Prototype*/ ZeroTrack proto_swap = new /*@Prototype*/ ZeroTrack (true);
 
+    /** Returns the prototype invariant **/
     public static /*@Prototype*/ ZeroTrack get_proto (boolean swap) {
       if (swap)
         return proto_swap;
@@ -1008,11 +1011,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(false);
     }
 
-    private static /*@Prototype*/ BitwiseComplement proto;
+    private static /*@Prototype*/ BitwiseComplement proto = new /*@Prototype*/ BitwiseComplement ();
 
+    /** Returns the prototype invariant **/
     public static /*@Prototype*/ BitwiseComplement get_proto() {
-      if (proto == null)
-        proto = new /*@Prototype*/ BitwiseComplement ();
       return (proto);
     }
 
@@ -1072,6 +1074,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static /*@Prototype*/ BitwiseSubset proto = new /*@Prototype*/ BitwiseSubset (false);
     private static /*@Prototype*/ BitwiseSubset proto_swap = new /*@Prototype*/ BitwiseSubset (true);
 
+    /** Returns the prototype invariant **/
     public static /*@Prototype*/ BitwiseSubset get_proto (boolean swap) {
       if (swap)
         return proto_swap;
@@ -1172,11 +1175,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(false);
     }
 
-    private static /*@Prototype*/ BitwiseAndZero proto;
+    private static /*@Prototype*/ BitwiseAndZero proto = new /*@Prototype*/ BitwiseAndZero ();
 
+    /** Returns the prototype invariant **/
     public static /*@Prototype*/ BitwiseAndZero get_proto () {
-      if (proto == null)
-        proto = new /*@Prototype*/ BitwiseAndZero ();
       return (proto);
     }
 
@@ -1261,6 +1263,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static /*@Prototype*/ ShiftZero proto = new /*@Prototype*/ ShiftZero (false);
     private static /*@Prototype*/ ShiftZero proto_swap = new /*@Prototype*/ ShiftZero (true);
 
+    /** Returns the prototype invariant **/
     public static /*@Prototype*/ ShiftZero get_proto (boolean swap) {
       if (swap)
         return proto_swap;
@@ -1346,6 +1349,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     private static /*@Prototype*/ SubString proto = new /*@Prototype*/ SubString (false);
     private static /*@Prototype*/ SubString proto_swap = new /*@Prototype*/ SubString (true);
 
+    /** Returns the prototype invariant **/
     public static /*@Prototype*/ SubString get_proto (boolean swap) {
       if (swap) {
         return (proto_swap);

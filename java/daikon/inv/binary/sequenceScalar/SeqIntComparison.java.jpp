@@ -169,12 +169,10 @@ public final class SEQINTEQUAL
     super();
   }
 
-  private static /*@Prototype*/ SEQINTEQUAL proto;
+  private static /*@Prototype*/ SEQINTEQUAL proto = new /*@Prototype*/ SEQINTEQUAL ();
 
   /** Returns the prototype invariant for SEQINTEQUAL **/
   public static /*@Prototype*/ SEQINTEQUAL get_proto () {
-    if (proto == null)
-      proto = new /*@Prototype*/ SEQINTEQUAL ();
     return (proto);
   }
 

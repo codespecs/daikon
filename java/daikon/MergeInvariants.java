@@ -29,7 +29,7 @@ public final class MergeInvariants {
   public static final Logger debugProgress
                         = Logger.getLogger("daikon.MergeInvariants.progress");
 
-  public static File output_inv_file;
+  public static /*@Nullable*/ File output_inv_file;
 
   private static Stopwatch stopwatch = new Stopwatch();
 

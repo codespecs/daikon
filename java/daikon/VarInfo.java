@@ -743,10 +743,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * Returns the static constant value of this variable.  The variable
-   * must be a static constant.
+   * must be a static constant.  The result is non-null.
    */
-  public /*@Nullable*/ Object constantValue() {
+  public Object constantValue() {
     if (isStaticConstant()) {
+      assert static_constant_value != null;
       return static_constant_value;
     } else {
       throw new Error("Variable " + name() + " is not constant");

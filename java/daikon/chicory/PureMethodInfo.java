@@ -138,7 +138,7 @@ public class PureMethodInfo extends DaikonVariableInfo
         return params;
     }
 
-    private static Object executePureMethod(Method meth, Object receiverVal, /*@Nullable*/ Object[] argVals)
+    private static /*@Nullable*/ Object executePureMethod(Method meth, Object receiverVal, /*@Nullable*/ Object[] argVals)
     {
         Object retVal = null;
         try

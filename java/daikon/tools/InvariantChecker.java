@@ -57,12 +57,11 @@ public class InvariantChecker {
       );
 
   public static List<String> dtrace_files = new ArrayList<String>();
-  static File output_file;
   static PrintStream output_stream = System.out;
   static int error_cnt = 0;
   static int sample_cnt = 0;
 
-  static File dir_file; //Yoav added
+  static /*@Nullable*/ File dir_file; //Yoav added
   static boolean doFilter;
   static boolean doConf;
   static boolean quiet = true;
@@ -135,7 +134,7 @@ public class InvariantChecker {
              throw new Daikon.TerminationMessage ("Error reading the directory "+dir_file);
 
         } else if (output_SWITCH.equals (option_name)) {
-          output_file = new File (g.getOptarg());
+          File output_file = new File (g.getOptarg());
           output_stream = new PrintStream (new FileOutputStream (output_file));
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
           String item = g.getOptarg();

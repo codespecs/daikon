@@ -198,6 +198,7 @@ public final class Runtime {
     // = (ClassLoader.getSystemClassLoader().findLoadedClass("daikon.Daikon")
     //    != null);
 
+  @EnsuresNonNull("dtrace")
   public static void setDtrace(String filename, boolean append) {
     // System.out.printf("entered daikon.Runtime.setDtrace(%s, %b)%n", filename, append);
     if (no_dtrace) {
@@ -232,7 +233,8 @@ public final class Runtime {
   }
 
   /**
-   * If the current data trace file is not yet set, then set it.
+   * If the current data trace file is not yet set (and no_dtrace is not
+   * true), then set it.
    * The value of the DTRACEFILE environment variable is used;
    * if that environment variable is not set, then the argument
    * to this method is used instead.

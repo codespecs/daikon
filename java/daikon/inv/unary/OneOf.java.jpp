@@ -340,12 +340,10 @@ public final class ONEOFSCALAR
 #endif
   }
 
-  private static /*@Prototype*/ ONEOFSCALAR proto;
+  private static /*@Prototype*/ ONEOFSCALAR proto = new /*@Prototype*/ ONEOFSCALAR ();
 
   /** Returns the prototype invariant for ONEOFSCALAR **/
   public static /*@Prototype*/ ONEOFSCALAR get_proto() {
-    if (proto == null)
-      proto = new /*@Prototype*/ ONEOFSCALAR ();
     return (proto);
   }
 

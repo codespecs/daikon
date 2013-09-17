@@ -295,12 +295,10 @@ public class SEQSEQINTEQUAL
 
   #endif
 
-  private static /*@Prototype*/ SEQSEQINTEQUAL proto;
+  private static /*@Prototype*/ SEQSEQINTEQUAL proto = new /*@Prototype*/ SEQSEQINTEQUAL (true);
 
   /** Returns the prototype invariant for SEQSEQINTEQUAL **/
   public static /*@Prototype*/ SEQSEQINTEQUAL get_proto() {
-    if (proto == null)
-      proto = new /*@Prototype*/ SEQSEQINTEQUAL (true);
     return (proto);
   }
 

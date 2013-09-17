@@ -74,7 +74,7 @@ public abstract class Ppt
   }
 
   /** Return a string representation of the variable names. */
-  /*@SideEffectFree*/ public String varNames() {
+  /*@SideEffectFree*/ public String varNames(/*>>>@Raw(Ppt.class) Ppt this*/) {
     return (varNames (var_infos));
   }
 

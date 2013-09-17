@@ -92,6 +92,7 @@ public final /*(at)Interned*/ class Equality
    * @param variables Variables which are equivalent, with the canonical
    * one first.  Elements must be of type VarInfo.
    **/
+  @SuppressWarnings("initialization.invalid.field.write.initialized") // weakness of FBC type system
   public Equality(Collection<VarInfo> variables, PptSlice ppt) {
     super(ppt);
     if (debug.isLoggable(Level.FINE)) {
@@ -132,7 +133,7 @@ public final /*(at)Interned*/ class Equality
    * @return the canonical VarInfo of this
    **/
   /*@SuppressWarnings("purity")*/ // set cache field
-  /*@Pure*/ public VarInfo leader() {
+  /*@Pure*/ public VarInfo leader(/*>>>@Raw(Equality.class) Equality this*/) {
     if (leaderCache == null) {
       leaderCache = vars.iterator().next();
     }
