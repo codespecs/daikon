@@ -71,7 +71,7 @@ public class CLASSNAME
     core = new CORECLASS(this);
   }
 
-  private static /*@Prototype*/ CLASSNAME proto;
+  private static /*@MonotonicNonNull*/ /*@Prototype*/ CLASSNAME proto;
 
   /** Returns a prototype CLASSNAME invariant **/
   public static /*@Prototype*/ CLASSNAME get_proto() {

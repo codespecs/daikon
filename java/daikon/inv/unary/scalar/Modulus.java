@@ -45,7 +45,7 @@ public class Modulus
     super();
   }
 
-  private static /*@Prototype*/ Modulus proto;
+  private static /*@MonotonicNonNull*/ /*@Prototype*/ Modulus proto;
 
   /** Returns the prototype invariant for Modulus **/
   public static /*@Prototype*/ Modulus get_proto() {

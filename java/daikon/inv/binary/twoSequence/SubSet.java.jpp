@@ -91,7 +91,7 @@ public class SUBSET
     super();
   }
 
-  private static /*@Prototype*/ SUBSET proto;
+  private static /*@MonotonicNonNull*/ /*@Prototype*/ SUBSET proto;
 
   /** Returns the prototype invariant for SUBSET **/
   public static /*@Prototype*/ SUBSET get_proto() {

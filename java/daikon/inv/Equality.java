@@ -132,7 +132,7 @@ public final /*(at)Interned*/ class Equality
    * @return the canonical VarInfo of this
    **/
   /*@SuppressWarnings("purity")*/ // set cache field
-  /*@Pure*/ public VarInfo leader() {
+  /*@Pure*/ public VarInfo leader(/*>>>@Raw(Equality.class) Equality this*/) {
     if (leaderCache == null) {
       leaderCache = vars.iterator().next();
     }

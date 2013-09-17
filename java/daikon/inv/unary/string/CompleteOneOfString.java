@@ -54,7 +54,7 @@ public final class CompleteOneOfString extends SingleString
     super ();
   }
 
-  private static /*@Prototype*/ CompleteOneOfString proto;
+  private static /*@MonotonicNonNull*/ /*@Prototype*/ CompleteOneOfString proto;
 
   /** Returns the prototype invariant for CompleteOneOFString **/
   public static /*@Prototype*/ CompleteOneOfString get_proto() {

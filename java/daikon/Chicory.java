@@ -83,7 +83,7 @@ public class Chicory {
    * as format ouput by the purity analysis.
    */
   @Option ("File of pure methods to use as additional Daikon variables")
-  public static File purity_file;
+  public static /*@Nullable*/ File purity_file;
 
   @Option ("Directory in which to find configuration files")
   public static /*@Nullable*/ File config_dir = null;
@@ -115,16 +115,16 @@ public class Chicory {
   private static int daikon_port = -1;
 
   /** Thread that copies output from target to our output **/
-  public static StreamRedirectThread out_thread;
+  public static /*@MonotonicNonNull*/ StreamRedirectThread out_thread;
 
   /** Thread that copies stderr from target to our stderr **/
-  public static StreamRedirectThread err_thread;
+  public static /*@MonotonicNonNull*/ StreamRedirectThread err_thread;
 
   /** starting time (msecs) **/
   public static long start = System.currentTimeMillis();
 
   /** daikon process for --daikon switch **/
-  public static Process daikon_proc;
+  public static /*@MonotonicNonNull*/ Process daikon_proc;
 
   private static final String traceLimTermString = "DTRACELIMITTERMINATE";
   private static final String traceLimString = "DTRACELIMIT";
@@ -200,7 +200,7 @@ public class Chicory {
   /**
    * Return true iff a file name was specified to supply pure method names
    */
-  public static File get_purity_file()
+  public static /*@Nullable*/ File get_purity_file()
   {
     return purity_file;
   }

@@ -39,7 +39,7 @@ public class CommonStringSequence
     super();
   }
 
-  private static /*@Prototype*/ CommonStringSequence proto;
+  private static /*@MonotonicNonNull*/ /*@Prototype*/ CommonStringSequence proto;
 
   /** Returns the prototype invariant for CommonStringSequence **/
   public static /*@Prototype*/ CommonStringSequence get_proto() {

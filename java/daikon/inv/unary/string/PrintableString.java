@@ -31,7 +31,7 @@ public final class PrintableString extends SingleString
     super ();
   }
 
-  private static /*@Prototype*/ PrintableString proto;
+  private static /*@MonotonicNonNull*/ /*@Prototype*/ PrintableString proto;
 
   /** Returns the prototype invariant for PrintableString **/
   public static /*@Prototype*/ PrintableString get_proto() {

@@ -374,7 +374,7 @@ public final class INTEQUAL
    super();
   }
 
-  private static /*@Prototype*/ INTEQUAL proto;
+  private static /*@MonotonicNonNull*/ /*@Prototype*/ INTEQUAL proto;
 
   /** Returns the prototype invariant for INTEQUAL **/
   public static /*@Prototype*/ INTEQUAL get_proto() {

@@ -81,8 +81,8 @@ public class Runtime
     /** Terminate the program when the dtrace limit is reached **/
     static boolean dtraceLimitTerminate = false;
 
-    /** Dtrace output stream **/
-    static PrintStream dtrace;
+    /** Dtrace output stream.  Null if no_dtrace is true. **/
+    static /*@MonotonicNonNull*/ PrintStream dtrace;
 
     /** Set to true when the dtrace stream is closed **/
     static boolean dtrace_closed = false;
@@ -496,6 +496,7 @@ public class Runtime
         }
     }
 
+    /*@EnsuresNonNull("dtrace")*/
     public static void setDtraceOnlineMode(int port)
     {
         dtraceLimit = Long.getLong("DTRACELIMIT", Integer.MAX_VALUE).longValue();
@@ -544,6 +545,7 @@ public class Runtime
 
     // Copied from daikon.Runtime
     /** Specify the dtrace file to which to write **/
+    /*@EnsuresNonNull("dtrace")*/
     public static void setDtrace(String filename, boolean append)
     {
         System.out.printf("entered daikon.chicory.Runtime.setDtrace(%s, %b)...%n", filename, append);

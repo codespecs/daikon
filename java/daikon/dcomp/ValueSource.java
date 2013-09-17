@@ -170,13 +170,13 @@ public class ValueSource {
       }
     }
     if (left != null) {
-      out.append (lineSep);
       left.tree_dump (out, indent+2);
+      out.append (lineSep);
     }
 
     if (right != null) {
-      out.append (lineSep);
       right.tree_dump (out, indent+2);
+      out.append (lineSep);
     }
 
     return out;

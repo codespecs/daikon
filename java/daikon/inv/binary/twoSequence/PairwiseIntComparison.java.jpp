@@ -244,7 +244,7 @@ public class PAIRWISEINTEQUAL
     super();
   }
 
-  private static /*@Prototype*/ PAIRWISEINTEQUAL proto;
+  private static /*@MonotonicNonNull*/ /*@Prototype*/ PAIRWISEINTEQUAL proto;
 
   /** Returns the prototype invariant for PAIRWISEINTEQUAL **/
   public static /*@Prototype*/ PAIRWISEINTEQUAL get_proto() {

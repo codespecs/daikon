@@ -48,7 +48,7 @@ public final class CompleteOneOfScalar extends SingleScalar
     super ();
   }
 
-  private static /*@Prototype*/ CompleteOneOfScalar proto;
+  private static /*@MonotonicNonNull*/ /*@Prototype*/ CompleteOneOfScalar proto;
 
   /** Returns the prototype invariant for CompleteOneOFScalar **/
   public static /*@Prototype*/ CompleteOneOfScalar get_proto() {

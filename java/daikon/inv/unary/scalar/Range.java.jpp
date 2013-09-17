@@ -260,7 +260,7 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@Prototype*/ EqualZero proto;
+    private static /*@MonotonicNonNull*/ /*@Prototype*/ EqualZero proto;
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ EqualZero get_proto() {
@@ -311,7 +311,7 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@Prototype*/ EqualOne proto;
+    private static /*@MonotonicNonNull*/ /*@Prototype*/ EqualOne proto;
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ EqualOne get_proto() {
@@ -362,7 +362,7 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@Prototype*/ EqualMinusOne proto;
+    private static /*@MonotonicNonNull*/ /*@Prototype*/ EqualMinusOne proto;
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ EqualMinusOne get_proto() {
@@ -413,7 +413,7 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@Prototype*/ GreaterEqualZero proto;
+    private static /*@MonotonicNonNull*/ /*@Prototype*/ GreaterEqualZero proto;
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ GreaterEqualZero get_proto() {
@@ -464,7 +464,7 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@Prototype*/ GreaterEqual64 proto;
+    private static /*@MonotonicNonNull*/ /*@Prototype*/ GreaterEqual64 proto;
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ GreaterEqual64 get_proto() {
@@ -516,7 +516,7 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@Prototype*/ BooleanVal proto;
+    private static /*@MonotonicNonNull*/ /*@Prototype*/ BooleanVal proto;
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ BooleanVal get_proto() {
@@ -571,7 +571,7 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@Prototype*/ PowerOfTwo proto;
+    private static /*@MonotonicNonNull*/ /*@Prototype*/ PowerOfTwo proto;
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ PowerOfTwo get_proto() {
@@ -647,7 +647,7 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@Prototype*/ Even proto;
+    private static /*@MonotonicNonNull*/ /*@Prototype*/ Even proto;
 
     /** returns the prototype invariant **/
     public static /*@Prototype*/ Even get_proto() {
@@ -712,7 +712,7 @@ public abstract class RANGE extends SUPERCLASS {
       super ();
     }
 
-    private static /*@Prototype*/ Bound0_63 proto;
+    private static /*@MonotonicNonNull*/ /*@Prototype*/ Bound0_63 proto;
 
     /** Returns whether or not this invariant is enabled **/
     public boolean enabled() {

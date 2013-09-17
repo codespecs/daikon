@@ -254,10 +254,10 @@ public final class Daikon {
   public static boolean ignore_comparability = false;
 
   // Controls which program points/variables are used/ignored.
-  public static Pattern ppt_regexp;
-  public static Pattern ppt_omit_regexp;
-  public static Pattern var_regexp;
-  public static Pattern var_omit_regexp;
+  public static /*@Nullable*/ Pattern ppt_regexp;
+  public static /*@Nullable*/ Pattern ppt_omit_regexp;
+  public static /*@Nullable*/ Pattern var_regexp;
+  public static /*@Nullable*/ Pattern var_omit_regexp;
 
   /**
    * If set, only ppts less than ppt_max_name are included.  Used by the
@@ -268,7 +268,7 @@ public final class Daikon {
 
   // The invariants detected will be serialized and written to this
   // file.
-  public static File inv_file;
+  public static /*@Nullable*/ File inv_file;
 
   // Whether we want the memory monitor activated
   private static boolean use_mem_monitor = false;

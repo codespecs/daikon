@@ -1008,7 +1008,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(false);
     }
 
-    private static /*@Prototype*/ BitwiseComplement proto;
+    private static /*@MonotonicNonNull*/ /*@Prototype*/ BitwiseComplement proto;
 
     public static /*@Prototype*/ BitwiseComplement get_proto() {
       if (proto == null)
@@ -1172,7 +1172,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       super(false);
     }
 
-    private static /*@Prototype*/ BitwiseAndZero proto;
+    private static /*@MonotonicNonNull*/ /*@Prototype*/ BitwiseAndZero proto;
 
     public static /*@Prototype*/ BitwiseAndZero get_proto () {
       if (proto == null)

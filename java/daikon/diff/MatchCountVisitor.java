@@ -154,6 +154,7 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
   /** returns true iff any token of inv.format_java() contains
    *  a number other than -1, 0, 1 or is null. */
+  /*@EnsuresNonNullIf(result=true, expression={"#1"})*/
   private static boolean filterOut (/*@Nullable*/ Invariant inv) {
     if (inv == null) return true;
     String str = inv.format_using(OutputFormat.JAVA);

@@ -340,7 +340,7 @@ public final class ONEOFSCALAR
 #endif
   }
 
-  private static /*@Prototype*/ ONEOFSCALAR proto;
+  private static /*@MonotonicNonNull*/ /*@Prototype*/ ONEOFSCALAR proto;
 
   /** Returns the prototype invariant for ONEOFSCALAR **/
   public static /*@Prototype*/ ONEOFSCALAR get_proto() {

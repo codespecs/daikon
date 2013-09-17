@@ -81,7 +81,7 @@ public class CLASSNAME
     super();
   }
 
-  private static /*@Prototype*/ CLASSNAME proto;
+  private static /*@MonotonicNonNull*/ /*@Prototype*/ CLASSNAME proto;
 
   /** Returns the prototype invariant for CLASSNAME **/
   public static /*@Prototype*/ CLASSNAME get_proto() {

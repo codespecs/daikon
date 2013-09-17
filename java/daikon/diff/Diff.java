@@ -870,7 +870,7 @@ public final class Diff {
    * tree.
    **/
   /*@EnsuresNonNull({"invSortComparator1", "invSortComparator2", "invPairComparator"})*/
-  public void setAllInvComparators(Comparator<Invariant> c) {
+  public void setAllInvComparators(/*>>>@Raw(Diff.class) Diff this,*/ Comparator<Invariant> c) {
     setInvSortComparator1(c);
     setInvSortComparator2(c);
     setInvPairComparator(c);
