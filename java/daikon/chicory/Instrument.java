@@ -751,6 +751,32 @@ public class Instrument implements ClassFileTransformer {
   }
 
   /**
+   * We have inserted an additional single byte into the instruction list;
+   * update the StackMaps, if required.
+   */
+  private void
+  update_stack_map_offset (int location, MethodContext c) {
+
+    // Get existing StackMapTable (if present)
+    Attribute smta = get_stack_map_table_attribute(c.mgen);
+    if (smta == null) {
+        return;
+    }
+    StackMapTableEntry[] old_map = ((StackMapTable)smta).getStackMapTable();
+
+    int running_offset = -1; // no +1 on first entry
+    for (int i = 0; i < old_map.length; i++) {
+      running_offset = old_map[i].getByteCodeOffsetDelta() + running_offset + 1;
+      if (running_offset > location) {
+          modify_stack_map_offset(old_map[i], 1);
+          // Only update the first StackMap that occurs after the current
+          // location as offsets are relative to previous.
+          return;
+      }
+    }    
+  }    
+
+  /**
    * Find the StackMap entry who's offset matches the input argument
    */
   private StackMapTableEntry
@@ -818,7 +844,7 @@ public class Instrument implements ClassFileTransformer {
 
 
   // Set by create_local_nonce and used in xform_local_ref and add_method_startup
-  private int insert_index;
+  private int nonce_index;
 
 
   /**
@@ -827,230 +853,93 @@ public class Instrument implements ClassFileTransformer {
    * Runtime.exit() immediately before the return.
    */
   private void
-  xform_local_ref (Instruction inst, MethodContext c, boolean wide_override) {
+  xform_local_ref (InstructionHandle ih, MethodContext c) {
 
-  // UNDONE: need to deal with the WIDE opcode
-  // both input and output?
+      Instruction inst = ih.getInstruction();
 
       int operand;
       short opcode = inst.getOpcode();
 
       switch (opcode) {
+
       case Constants.RET:
           operand = ((IndexedInstruction)inst).getIndex();
-          if (operand >= insert_index) {
+          if (operand >= nonce_index) {
               ((IndexedInstruction)inst).setIndex(operand + 1);
-              // UNDONE: check for index overflow and convert to WIDE
           }    
           break;
 
       case Constants.IINC:
-      case Constants.ILOAD:
-      case Constants.LLOAD:
-      case Constants.FLOAD:
-      case Constants.DLOAD:
-      case Constants.ALOAD:
-      case Constants.ISTORE:
-      case Constants.LSTORE:
-      case Constants.FSTORE:
-      case Constants.DSTORE:
-      case Constants.ASTORE:
           operand = ((LocalVariableInstruction)inst).getIndex();
-          if (operand >= insert_index) {
+          if (operand >= nonce_index) {
               ((LocalVariableInstruction)inst).setIndex(operand + 1);
-              // UNDONE: check for index overflow and convert to WIDE
-              // not very likely?
           }    
           break;
 
+      case Constants.ILOAD:
       case Constants.ILOAD_0:
       case Constants.ILOAD_1:
       case Constants.ILOAD_2:
       case Constants.ILOAD_3:
-          if ((opcode - Constants.ILOAD_0) >= insert_index) {
-              opcode++;
-              if (opcode > Constants.ILOAD_3) {
-                  opcode = Constants.ILOAD;
-                  // UNDONE: need to insert byte operand = 4
-                throw new RuntimeException("UNDONE");
-              } else {
-                  inst.setOpcode(opcode);
-              }    
-          }    
-          break;
-
+      case Constants.LLOAD:
       case Constants.LLOAD_0:
       case Constants.LLOAD_1:
       case Constants.LLOAD_2:
       case Constants.LLOAD_3:
-          if ((opcode - Constants.LLOAD_0) >= insert_index) {
-              opcode++;
-              if (opcode > Constants.LLOAD_3) {
-                  opcode = Constants.LLOAD;
-                  // UNDONE: need to insert byte operand = 4
-                throw new RuntimeException("UNDONE");
-              } else {
-                  inst.setOpcode(opcode);
-              }    
-          }    
-          break;
-
+      case Constants.FLOAD:
       case Constants.FLOAD_0:
       case Constants.FLOAD_1:
       case Constants.FLOAD_2:
       case Constants.FLOAD_3:
-          if ((opcode - Constants.FLOAD_0) >= insert_index) {
-              opcode++;
-              if (opcode > Constants.FLOAD_3) {
-                  opcode = Constants.FLOAD;
-                  // UNDONE: need to insert byte operand = 4
-                throw new RuntimeException("UNDONE");
-              } else {
-                  inst.setOpcode(opcode);
-              }    
-          }    
-          break;
-
+      case Constants.DLOAD:
       case Constants.DLOAD_0:
       case Constants.DLOAD_1:
       case Constants.DLOAD_2:
       case Constants.DLOAD_3:
-          if ((opcode - Constants.DLOAD_0) >= insert_index) {
-              opcode++;
-              if (opcode > Constants.DLOAD_3) {
-                  opcode = Constants.DLOAD;
-                  // UNDONE: need to insert byte operand = 4
-                throw new RuntimeException("UNDONE");
-              } else {
-                  inst.setOpcode(opcode);
-              }    
-          }    
-          break;
-
+      case Constants.ALOAD:
       case Constants.ALOAD_0:
       case Constants.ALOAD_1:
       case Constants.ALOAD_2:
       case Constants.ALOAD_3:
-          if ((opcode - Constants.ALOAD_0) >= insert_index) {
-              opcode++;
-              if (opcode > Constants.ALOAD_3) {
-                  opcode = Constants.ALOAD;
-                  // UNDONE: need to insert byte operand = 4
-                throw new RuntimeException("UNDONE");
-              } else {
-                  inst.setOpcode(opcode);
-              }    
-          }    
-          break;
-
+      case Constants.ISTORE:
       case Constants.ISTORE_0:
       case Constants.ISTORE_1:
       case Constants.ISTORE_2:
       case Constants.ISTORE_3:
-          if ((opcode - Constants.ISTORE_0) >= insert_index) {
-              opcode++;
-              if (opcode > Constants.ISTORE_3) {
-                  opcode = Constants.ISTORE;
-                  // UNDONE: need to insert byte operand = 4
-                throw new RuntimeException("UNDONE");
-              } else {
-                  inst.setOpcode(opcode);
-              }    
-          }    
-          break;
-
+      case Constants.LSTORE:
       case Constants.LSTORE_0:
       case Constants.LSTORE_1:
       case Constants.LSTORE_2:
       case Constants.LSTORE_3:
-          if ((opcode - Constants.LSTORE_0) >= insert_index) {
-              opcode++;
-              if (opcode > Constants.LSTORE_3) {
-                  opcode = Constants.LSTORE;
-                  // UNDONE: need to insert byte operand = 4
-                throw new RuntimeException("UNDONE");
-              } else {
-                  inst.setOpcode(opcode);
-              }    
-          }    
-          break;
-
+      case Constants.FSTORE:
       case Constants.FSTORE_0:
       case Constants.FSTORE_1:
       case Constants.FSTORE_2:
       case Constants.FSTORE_3:
-          if ((opcode - Constants.FSTORE_0) >= insert_index) {
-              opcode++;
-              if (opcode > Constants.FSTORE_3) {
-                  opcode = Constants.FSTORE;
-                  // UNDONE: need to insert byte operand = 4
-                throw new RuntimeException("UNDONE");
-              } else {
-                  inst.setOpcode(opcode);
-              }    
-          }    
-          break;
-
+      case Constants.DSTORE:
       case Constants.DSTORE_0:
       case Constants.DSTORE_1:
       case Constants.DSTORE_2:
       case Constants.DSTORE_3:
-          if ((opcode - Constants.DSTORE_0) >= insert_index) {
-              opcode++;
-              if (opcode > Constants.DSTORE_3) {
-                  opcode = Constants.DSTORE;
-                  // UNDONE: need to insert byte operand = 4
-                throw new RuntimeException("UNDONE");
-              } else {
-                  inst.setOpcode(opcode);
-              }    
-          }    
-          break;
-
+      case Constants.ASTORE:
       case Constants.ASTORE_0:
       case Constants.ASTORE_1:
       case Constants.ASTORE_2:
       case Constants.ASTORE_3:
-          if ((opcode - Constants.ASTORE_0) >= insert_index) {
-              opcode++;
-              if (opcode > Constants.ASTORE_3) {
-                  opcode = Constants.ASTORE;
-                  // UNDONE: need to insert byte operand = 4
-                throw new RuntimeException("UNDONE");
-              } else {
-                  inst.setOpcode(opcode);
-              }    
+          // BCEL handles all the details of which opcode and if index
+          // is implicit or explicit; also, and if needs to be WIDE.
+          operand = ((LocalVariableInstruction)inst).getIndex();
+          if (operand >= nonce_index) {
+              ((LocalVariableInstruction)inst).setIndex(operand + 1);
+          }    
+          // Unfortunately, it doesn't take care of incrementing the
+          // offset within StackMapEntrys.
+          if (operand == 3) {
+              // If operand was 3 (implicit) will now be 4 (explicit)
+              // which means we might need to update a StackMap offset.
+              update_stack_map_offset (ih.getPosition(), c);
           }    
           break;
-
-/* UNDONE: ignore for now until we insert bytes 
-      case Constants.IFEQ:
-      case Constants.IFNE:
-      case Constants.IFLT:
-      case Constants.IFGE:
-      case Constants.IFGT:
-      case Constants.IFLE:
-      case Constants.IF_ICMPEQ:
-      case Constants.IF_ICMPNE:
-      case Constants.IF_ICMPLT:
-      case Constants.IF_ICMPGE:
-      case Constants.IF_ICMPGT:
-      case Constants.IF_ICMPLE:
-      case Constants.IF_ACMPEQ:
-      case Constants.IF_ACMPNE:
-      case Constants.GOTO:
-      case Constants.JSR:
-      case Constants.RET:
-
-      case Constants.TABLESWITCH:
-      case Constants.LOOKUPSWITCH:
-
-      case Constants.MULTIANEWARRAY:
-      case Constants.IFNULL:
-      case Constants.IFNONNULL:
-      case Constants.GOTO_W:
-      case Constants.JSR_W:
- */      
 
       default:
     }
@@ -1073,40 +962,30 @@ public class Instrument implements ClassFileTransformer {
     // implict local #3 to an instruction with an explict reference to local #4
     // as this would require the insertion of an offset into the byte codes. 
     // This means we would need to make an additional pass to update branch
-    // targets and the StackMapTable.
+    // targets (no - BCEL does this for us) and the StackMapTable (yes).
 
     LocalVariableGen lv_nonce;
 
-    insert_index = -1;
+    nonce_index = -1;
     for (LocalVariableGen lv : c.mgen.getLocalVariables()) {
         if (lv.getStart().getPosition() != 0) {
-            if (insert_index == -1) {
-                insert_index = lv.getIndex();
+            if (nonce_index == -1) {
+                nonce_index = lv.getIndex();
             }
             lv.setIndex(lv.getIndex() + 1);
         }
     }
 
-    if (insert_index != -1) {
-        // insert the local variable into existing table at slot 'insert_index'
+    if (nonce_index != -1) {
+        // insert the local variable into existing table at slot 'nonce_index'
         lv_nonce = c.mgen.addLocalVariable("this_invocation_nonce", Type.INT,
-                                           insert_index, null, null);
+                                           nonce_index, null, null);
         c.mgen.setMaxLocals(c.mgen.getMaxLocals() + 1);
-
-        // UNDONE: need to deal with branch offset changes
 
         // Loop through each instruction looking for local variable references
         for (InstructionHandle ih = il.getStart(); ih != null; ) {
-          Instruction inst = ih.getInstruction();
-          boolean wide_override = false;
 
-          if (inst.getOpcode() == Constants.WIDE) {
-              wide_override = true;
-              ih = ih.getNext();
-              inst = ih.getInstruction();
-          }    
-
-          xform_local_ref (inst, c, wide_override);
+          xform_local_ref (ih, c);
 
           // Go on to the next instruction in the list
           ih = ih.getNext();
@@ -1117,6 +996,7 @@ public class Instrument implements ClassFileTransformer {
         // will automatically update max_locals
         lv_nonce = c.mgen.addLocalVariable("this_invocation_nonce",
                                            Type.INT, null, null);
+        nonce_index = lv_nonce.getIndex();
     }    
 
     if (debug) {
@@ -1211,9 +1091,9 @@ public class Instrument implements ClassFileTransformer {
     }
 
     StackMapTableEntry[] new_map = new StackMapTableEntry[old_map.length + ((len_part2 > 0) ? 2 : 1)];
-    StackMapType new_type = new StackMapType(Constants.ITEM_Integer, -1, pgen.getConstantPool());
-    StackMapType[] new_types = {new_type};
-    new_map[0] = new StackMapTableEntry(Constants.APPEND_FRAME, len_part1, 1, new_types,
+    StackMapType nonce_type = new StackMapType(Constants.ITEM_Integer, -1, pgen.getConstantPool());
+    StackMapType[] old_nonce_type = {nonce_type};
+    new_map[0] = new StackMapTableEntry(Constants.APPEND_FRAME, len_part1, 1, old_nonce_type,
                                             0, null, pgen.getConstantPool());
 
     // System.out.println("len_part1: " + len_part1);
@@ -1230,21 +1110,33 @@ public class Instrument implements ClassFileTransformer {
         new_index++;
     }
 
-// BUG BUG BUG: we cannot just copy the remaining stack map entires.  If any of them
+// We cannot just copy the remaining stack map entires.  If any of them
 // are FULL_FAME we need to add our 'nonce' variable to the local table.
 
     for (int i = 0; i < old_map.length; i++) {
         if (old_map[i].getFrameType() == Constants.FULL_FRAME) {
+
             // need to add our 'nonce' variable into the list of locals
             // We must account for the args and this pointer which
-            // means insert 'nonce' at 'insert_index'
-            // handle simple case first of no existing locals
-            if (old_map[i].getNumberOfLocals() == 0) {
-                old_map[i].setNumberOfLocals(1);
-                old_map[i].setTypesOfLocals(new_types);
-            } else {
-            // UNDONE: 
-                throw new RuntimeException("UNDONE");
+            // means insert type of 'nonce' at 'nonce_index'
+
+            int num_locals = old_map[i].getNumberOfLocals();
+            // if num_locals < insert index nothing to do
+            // (can this happen?)
+            if (num_locals >= nonce_index) {
+                StackMapType[] old_local_types = old_map[i].getTypesOfLocals();
+                StackMapType[] new_local_types = new StackMapType[num_locals+1];
+
+                for (int j = num_locals; j > nonce_index; j--) {
+                    new_local_types[j] = old_local_types[j-1];
+                }
+                new_local_types[nonce_index] = nonce_type;
+                for (int j = nonce_index; j != 0; j--) {
+                    new_local_types[j-1] = old_local_types[j-1];
+                }
+
+                old_map[i].setNumberOfLocals(num_locals+1);
+                old_map[i].setTypesOfLocals(new_local_types);
             }    
         }    
         new_map[new_index++] = old_map[i];
@@ -1259,7 +1151,8 @@ public class Instrument implements ClassFileTransformer {
     for (int i = 0; i < new_map.length; i++) {
         map_table_size += new_map[i].getEntryByteSize();
     }
-    StackMapTable map_table = new StackMapTable(pgen.addUtf8("StackMapTable"), map_table_size, new_map, pgen.getConstantPool());
+    StackMapTable map_table = new StackMapTable(pgen.addUtf8("StackMapTable"),
+                                      map_table_size, new_map, pgen.getConstantPool());
     c.mgen.removeCodeAttribute(smta);
     c.mgen.addCodeAttribute (map_table);
   }
@@ -1513,9 +1406,10 @@ public class Instrument implements ClassFileTransformer {
 
     // see if we should filter the entry point
     if (!shouldFilter(class_info.class_name, mgen.getName(),
-                      DaikonWriter.methodEntryName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName())))
-      shouldInclude = true;
-
+             DaikonWriter.methodEntryName(class_info.class_name, getArgTypes(mgen),
+                                          mgen.toString(), mgen.getName()))) {
+        shouldInclude = true;
+    }
     // Get the argument types for this method
     Type[] arg_types = mgen.getArgumentTypes();
     /*@ClassGetName*/ String[] arg_type_strings = new /*@ClassGetName*/ String[arg_types.length];
@@ -1578,7 +1472,8 @@ public class Instrument implements ClassFileTransformer {
             last_line_number = line_number;
 
             if (!shouldFilter(class_info.class_name, mgen.getName(),
-                              DaikonWriter.methodExitName(class_info.class_name, getArgTypes(mgen), mgen.toString(), mgen.getName(), line_number)))
+                     DaikonWriter.methodExitName(class_info.class_name, getArgTypes(mgen),
+                         mgen.toString(), mgen.getName(), line_number)))
               {
                 shouldInclude = true;
                 exit_locs.add(new Integer(line_number));
