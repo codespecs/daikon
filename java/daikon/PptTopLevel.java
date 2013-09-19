@@ -395,7 +395,7 @@ public class PptTopLevel extends Ppt {
 
   /*@RequiresNonNull("var_infos")*/
   /*@EnsuresNonNull({"mbtracker", "views", "value_sets"})*/
-  private void init_vars (/*>>> @Raw PptTopLevel this*/) {
+  private void init_vars (/*>>> @UnknownInitialization(PptSlice.class) @Raw PptTopLevel this*/) {
 
     debug_varinfo.log_tb ("initializing var_infos %s",
                            Arrays.toString(var_infos));

@@ -92,7 +92,7 @@ public class SpinfoFileParser {
    */
   /*@RequiresNonNull("tempDir")*/
   /*@EnsuresNonNull({"statementReplacer", "splitterObjects"})*/
-  public void parseFile(/*>>> @Raw SpinfoFileParser this,*/ LineNumberReader spinfoFile) throws IOException {
+  public void parseFile(/*>>> @UnknownInitialization(PptSlice.class) @Raw SpinfoFileParser this,*/ LineNumberReader spinfoFile) throws IOException {
     List<ReplaceStatement> replaceStatements = new ArrayList<ReplaceStatement>();
     List<List<String>> pptSections = new ArrayList<List<String>>();
     try {
@@ -144,7 +144,7 @@ public class SpinfoFileParser {
    *  are added.
    */
   @SuppressWarnings("nullness") // bug exposed by test case Asserts.assertTwice().
-  private void readReplaceStatements(/*>>> @Raw SpinfoFileParser this,*/ LineNumberReader spinfoFile,
+  private void readReplaceStatements(/*>>> @UnknownInitialization(PptSlice.class) @Raw SpinfoFileParser this,*/ LineNumberReader spinfoFile,
                                      List<ReplaceStatement> replaceStatements)
     throws IOException, ParseException {
     String methodDeclaration = spinfoFile.readLine();
@@ -174,7 +174,7 @@ public class SpinfoFileParser {
    * @param pptName name of the ppt.
    * @throws IOException if an I/O error occurs.
    */
-  private void readPptStatements(/*>>> @Raw SpinfoFileParser this,*/ LineNumberReader spinfoFile,
+  private void readPptStatements(/*>>> @UnknownInitialization(PptSlice.class) @Raw SpinfoFileParser this,*/ LineNumberReader spinfoFile,
                                    List<List<String>> pptSections,
                                  String pptName)
     throws IOException {
@@ -197,7 +197,7 @@ public class SpinfoFileParser {
    *  SplitterObjects for one of lists of ppt statements found in pptSections.
    */
   /*@RequiresNonNull("tempDir")*/
-  private SplitterObject[][] createSplitterObjects(/*>>> @Raw SpinfoFileParser this,*/ List<List<String>> pptSections) {
+  private SplitterObject[][] createSplitterObjects(/*>>> @UnknownInitialization(PptSlice.class) @Raw SpinfoFileParser this,*/ List<List<String>> pptSections) {
     List<SplitterObject[]> splittersForAllPpts = new ArrayList<SplitterObject[]>();
     for (List<String> pptSection : pptSections) {
       List<SplitterObject> splittersForThisPpt = new ArrayList<SplitterObject>();

@@ -1947,7 +1947,7 @@ public abstract class Invariant
   * @return whether or not it logged anything
   */
 
-  public boolean log (/*>>> @Raw Invariant this,*/ String format, /*@Nullable*/ Object...args) {
+  public boolean log (/*>>> @UnknownInitialization(PptSlice.class) @Raw Invariant this,*/ String format, /*@Nullable*/ Object...args) {
     if (ppt != null) {
       String msg = format;
       if (args.length > 0)
