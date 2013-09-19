@@ -12,7 +12,7 @@ public final class SplitterExample
   // remove fields, you should change this number to the current date.
   static final long serialVersionUID = 20030218L;
 
-  static DummyInvariant dummyInvFactory;
+  static /*@Nullable*/ DummyInvariant dummyInvFactory;
   private /*@Nullable*/ DummyInvariant dummyInv;
 
   private /*@Nullable*/ VarInfo x_varinfo;
@@ -46,11 +46,13 @@ public final class SplitterExample
     return "X > 0";
   }
 
+  /*@EnsuresNonNull("dummyInvFactory")*/
   public void makeDummyInvariant(DummyInvariant inv) {
     assert dummyInvFactory == null;
     dummyInvFactory = inv;
   }
 
+  /*@RequiresNonNull("dummyInvFactory")*/
   public void instantiateDummy(PptTopLevel ppt) {
     dummyInv = null;
     VarInfo x_vi = ppt.find_var_by_name ("X");

@@ -104,12 +104,10 @@ public class NONZERO
     super();
   }
 
-  private static /*@Prototype*/ NONZERO proto;
+  private static /*@Prototype*/ NONZERO proto = new /*@Prototype*/ NONZERO ();
 
   /** Returns the prototype invariant for NONZERO **/
   public static /*@Prototype*/ NONZERO get_proto() {
-    if (proto == null)
-      proto = new /*@Prototype*/ NONZERO ();
     return (proto);
   }
 

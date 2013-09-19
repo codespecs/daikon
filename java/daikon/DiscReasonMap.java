@@ -14,10 +14,16 @@ public final class DiscReasonMap {
   //      those variable names in that PptTopLevel.
   private static HashMap<String,HashMap<String,List<DiscardInfo>>> the_map;
 
+  // This seems to be a gross singleton pattern.
+  static {
+    initialize();
+  }
+
   private DiscReasonMap() {
     // Use initialize();
   }
 
+  @EnsuresNonNull("the_map")
   public static void initialize() {
     the_map = new HashMap<String,HashMap<String,List<DiscardInfo>>>();
   }

@@ -45,12 +45,10 @@ public class Modulus
     super();
   }
 
-  private static /*@Prototype*/ Modulus proto;
+  private static /*@Prototype*/ Modulus proto = new /*@Prototype*/ Modulus ();
 
   /** Returns the prototype invariant for Modulus **/
   public static /*@Prototype*/ Modulus get_proto() {
-    if (proto == null)
-      proto = new /*@Prototype*/ Modulus ();
     return (proto);
   }
 

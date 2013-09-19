@@ -16,24 +16,25 @@ public class TraceSelect {
 
   private static int num_reps;
 
-  private static String filePrefix;
   private static /*@MonotonicNonNull*/ String fileName = null;
 
   // Just a quick command line cache
-  private static String[] argles;
+  private static String /*@MonotonicNonNull*/ [] argles;
   // // stores the invocations in Strings
   // private static ArrayList invokeBuffer;
 
   private static int numPerSample;
 
-  private static Random randObj;
+  // always set to non-null by mainHelper
+  private static /*@MonotonicNonNull*/ Random randObj;
 
 
   private static int daikonArgStart = 0;
 
   // This allows us to simply call MultiDiff
-  // with the same files we just created
-  private static String[] sampleNames;
+  // with the same files we just created.
+  // Always set to non-null by mainHelper
+  private static String /*@MonotonicNonNull*/ [] sampleNames;
 
   private static final String usage =
     UtilMDE.joinLines(
@@ -188,7 +189,7 @@ public class TraceSelect {
 
         al = dec.patchValues (al, INCLUDE_UNRETURNED);
 
-        filePrefix = calcOut (fileName);
+        String filePrefix = calcOut (fileName);
 
         // gotta do num_reps - 1 because of "off by one"
         // but now add a '-p' in the front so it's all good

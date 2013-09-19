@@ -123,7 +123,7 @@ public class LemmaStack {
   }
 
   /** Push an assumption onto our and Simplify's stacks. */
-  public boolean pushLemma(Lemma lem) throws SimplifyError {
+  public boolean pushLemma(/*>>>@Raw(LemmaStack.class) LemmaStack this,*/ Lemma lem) throws SimplifyError {
     SimpUtil.assert_well_formed(lem.formula);
     try {
       assume(lem);
@@ -149,7 +149,7 @@ public class LemmaStack {
   }
 
   /** Push a vector of assumptions onto our and Simplify's stacks. */
-  public void pushLemmas(Vector<Lemma> newLemmas) throws SimplifyError {
+  public void pushLemmas(/*>>>@Raw(LemmaStack.class) LemmaStack this,*/ Vector<Lemma> newLemmas) throws SimplifyError {
     for (Lemma lem : newLemmas) {
       pushLemma(lem);
     }

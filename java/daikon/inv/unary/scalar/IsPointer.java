@@ -24,8 +24,6 @@ import daikon.inv.ValueSet;
  */
 public class IsPointer extends SingleScalar {
 
-    private static /*@Prototype*/ IsPointer proto;
-
     private static final long serialVersionUID = 20080221L;
 
     /** Boolean. True iff IsPointer invariants should be considered. **/
@@ -45,11 +43,10 @@ public class IsPointer extends SingleScalar {
         super();
     }
 
+    private static /*@Prototype*/ IsPointer proto = new /*@Prototype*/ IsPointer();
 
     /** Returns the prototype invariant for IsPointer **/
     public static /*@Prototype*/ IsPointer get_proto() {
-      if (proto == null)
-        proto = new /*@Prototype*/ IsPointer();
       return (proto);
     }
 

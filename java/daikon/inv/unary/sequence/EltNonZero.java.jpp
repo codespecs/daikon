@@ -101,12 +101,10 @@ public final class CLASSNAME
     super();
   }
 
-  private static /*@Prototype*/ CLASSNAME proto;
+  private static /*@Prototype*/ CLASSNAME proto = new /*@Prototype*/ CLASSNAME ();
 
   /** Returns the prototype invariant for CLASSNAME **/
   public static /*@Prototype*/ CLASSNAME get_proto() {
-    if (proto == null)
-      proto = new /*@Prototype*/ CLASSNAME ();
     return proto;
   }
 

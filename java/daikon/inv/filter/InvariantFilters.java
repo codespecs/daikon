@@ -80,7 +80,7 @@ public class InvariantFilters {
   }
 
 
-  void addPropertyFilter( InvariantFilter filter ) {
+  void addPropertyFilter(/*>>>@Raw(InvariantFilters.class) InvariantFilters this,*/ InvariantFilter filter ) {
     propertyFilters.add( filter );
   }
 

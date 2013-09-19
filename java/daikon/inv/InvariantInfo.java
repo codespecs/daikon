@@ -12,7 +12,7 @@ public class InvariantInfo {
   private String ppt;
   // vars is maintained as "var1,var2,.." sorted in ascending lexicographical order
   /** If null, treated as a wildcard. */
-  private /*@Nullable*/ String vars;
+  final private /*@Nullable*/ String vars;
   /** If null, treated as a wildcard. */
   private /*@Nullable*/ String className;
 
@@ -20,7 +20,7 @@ public class InvariantInfo {
 //     // Make the default constructor private, this should never be called
 //   }
 
-  // It's ok if vars isn't given in sorted order, we'll sort it here
+  /* // It's ok if vars isn't given in sorted order, we'll sort it here */
   public InvariantInfo(String ppt, /*@Nullable*/ String vars, /*@Nullable*/ String className) {
     this.ppt = ppt;
     this.className = className;

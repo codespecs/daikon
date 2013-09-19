@@ -20,7 +20,8 @@ public final class StackTypes {
 
   boolean track_locals = true;
   OperandStack[] os_arr;
-  LocalVariables[] loc_arr;
+  // non-null if track_locals is true
+  LocalVariables /*@Nullable*/ [] loc_arr;
 
   /**
    * TODO

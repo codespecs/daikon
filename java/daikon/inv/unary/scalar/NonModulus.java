@@ -51,12 +51,10 @@ public class NonModulus
     super();
   }
 
-  private static /*@Prototype*/ NonModulus proto;
+  private static /*@Prototype*/ NonModulus proto = new /*@Prototype*/ NonModulus ();
 
   /** Returns the prototype invariant for NonModulus **/
   public static /*@Prototype*/ NonModulus get_proto() {
-    if (proto == null)
-      proto = new /*@Prototype*/ NonModulus ();
     return (proto);
   }
 
