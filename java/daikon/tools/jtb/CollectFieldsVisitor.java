@@ -30,7 +30,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   private boolean cached = false;
 
   /*@EnsuresNonNull({"allNames" , "ownedNames", "finalNames"})*/
-  private void updateCache(/*>>> @UnknownInitialization(PptSlice.class) @Raw CollectFieldsVisitor this*/) {
+  private void updateCache(/*>>> @UnknownInitialization @Raw CollectFieldsVisitor this*/) {
     if (cached) {
       assert allNames != null : "@AssumeAssertion(nullness): flag indicates initialization";
       assert ownedNames != null : "@AssumeAssertion(nullness): flag indicates initialization";
