@@ -19,6 +19,8 @@ public class TraceSelect {
   private static /*@MonotonicNonNull*/ String fileName = null;
 
   // Just a quick command line cache
+  // ... but I think it would it be better to pass args to invokeDaikon
+  // rather than introducing this variable.
   private static String /*@MonotonicNonNull*/ [] argles;
   // // stores the invocations in Strings
   // private static ArrayList invokeBuffer;
@@ -238,6 +240,7 @@ public class TraceSelect {
     }
   }
 
+  @RequiresNonNull("argles")
   private static void invokeDaikon(String dtraceName) throws IOException {
 
     System.out.println ("Created file: " + dtraceName);
