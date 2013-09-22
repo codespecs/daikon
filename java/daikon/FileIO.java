@@ -1449,7 +1449,7 @@ public final class FileIO {
   }
 
   /**
-   * Read declarations OR samples (not just sample data as the name might
+   * Read declarations AND samples (not just sample data as the name might
    * imply) from .dtrace file.  Calls processor on each record read from
    * the file.
    **/
