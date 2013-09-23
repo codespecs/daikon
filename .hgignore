@@ -291,6 +291,7 @@ java/daikon/test/split/SplitterFactoryTest.java
 
 # Testing
 daikon-direct-output.txt
+java/make-check-all-output.txt*
 # merged
 tests/chicory-tests/option-tests/DataStructures
 tests/chicory-tests/option-tests/StackArTester.dtrace.gz
