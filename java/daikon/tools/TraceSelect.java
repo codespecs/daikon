@@ -1,9 +1,19 @@
 // TraceSelect.java
 package daikon.tools;
 
-import java.util.*;
-import java.io.*;
-import plume.*;
+import checkers.nullness.quals.RequiresNonNull;
+
+import java.io.IOException;
+import java.io.PrintWriter;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Random;
+import java.util.StringTokenizer;
+
+import plume.MultiRandSelector;
+import plume.UtilMDE;
 
 public class TraceSelect {
 
@@ -322,7 +332,9 @@ public class TraceSelect {
 class InvocationComparator implements Comparator<String> {
     /** Requires:  s1 and s2 are String representations of invocations
      *  from a tracefile. */
-    /*@Pure*/ public int compare (String s1, String s2) {
+    /*@Pure*/
+    @Override
+    public int compare (String s1, String s2) {
       if (s1 == s2) {
         return 0;
       }

@@ -1,9 +1,16 @@
 package daikon;
 
+import checkers.nullness.quals.EnsuresNonNull;
+
+import java.io.BufferedOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.OutputStream;
+import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
-import java.io.*;
 
 
 /**
@@ -265,6 +272,7 @@ public final class Runtime {
   // exits
   private static void addShutdownHook() {
     java.lang.Runtime.getRuntime().addShutdownHook(new Thread() {
+        @Override
         public void run() {
           if (! dtrace_closed) {
 

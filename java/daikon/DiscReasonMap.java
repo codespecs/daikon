@@ -1,8 +1,15 @@
 package daikon;
 
-import daikon.inv.*;
+import checkers.nullness.quals.EnsuresNonNull;
 
-import java.util.*;
+import daikon.inv.DiscardCode;
+import daikon.inv.DiscardInfo;
+import daikon.inv.Invariant;
+import daikon.inv.InvariantInfo;
+
+import java.util.ArrayList;
+import java.util.HashMap;
+import java.util.List;
 
 public final class DiscReasonMap {
 
