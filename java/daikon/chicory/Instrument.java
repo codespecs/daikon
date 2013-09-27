@@ -60,12 +60,14 @@ public class Instrument implements ClassFileTransformer {
       log_on = Chicory.debug_transform;
   }
 
+
   private void
   log (String format, /*@Nullable*/ Object... args) {
     if (!log_on)
       return;
     System.out.printf (format, args);
   }
+
 
   // uses Runtime.ppt_omit_pattern and Runtime.ppt_select_pattern
   // to see if the given ppt should be "filtered out"
@@ -124,6 +126,7 @@ public class Instrument implements ClassFileTransformer {
     // System.out.println("filtering 3: " + ret + " on --- " + pptName);
     return ret;
   }
+
 
   /**
    * Given another class, return a transformed version of the class which
@@ -208,7 +211,7 @@ public class Instrument implements ClassFileTransformer {
 
       // Convert reach non-void method to save its result in a local
       // before returning
-      ClassInfo c_info = instrument_method (cg, fullClassName, loader);
+      ClassInfo c_info = instrument_all_methods (cg, fullClassName, loader);
 
       // get constant static fields!
       Field[] fields = cg.getFields();
@@ -275,6 +278,7 @@ public class Instrument implements ClassFileTransformer {
       return (null);
     }
   }
+
 
   // used to add a "hook" into the <clinit> static initializer
   private Method
@@ -364,6 +368,7 @@ public class Instrument implements ClassFileTransformer {
     return mg.getMethod();
   }
 
+
   // called by addInvokeToClinit to add in a hook at return opcodes
   private /*@Nullable*/ InstructionList
   xform_clinit (ClassGen cg, ConstantPoolGen cp, String fullClassName,
@@ -388,6 +393,7 @@ public class Instrument implements ClassFileTransformer {
     il.append(inst);
     return (il);
   }
+
 
   // create a <clinit> method, if none exists; guarantees we have this hook
   private Method
@@ -432,6 +438,7 @@ public class Instrument implements ClassFileTransformer {
     return newMethGen.getMethod();
   }
 
+
   // created the InstructionList to insert for adding the <clinit> hookd
   private InstructionList
   call_initNotify(ClassGen cg, ConstantPoolGen cp, String fullClassName,
@@ -447,15 +454,28 @@ public class Instrument implements ClassFileTransformer {
     return invokeList;
   }
 
-  /**
-   * Adds instrumentation code to the begining and at each return from a method.
+
+  // This really should be part of the abstraction provided by BCEL,
+  // similar to LineNumberTable and LocalVariableTable.  However, for 
+  // now we'll do it all within Instrument.java.
+
+  // Set by instrument_all_methods
+  // Used by instrument_all_methods, find_stack_map, update_stack_map_offset,
+  // add_entry_instrumentation
+  StackMapTableEntry[] stack_map_table;
+  StackMapTableEntry[] empty_stack_map_table = {};
+  
+ 
+ /**
+   * Instrument all the methods in a class.  For each method, add
+   * instrumentation code at the entry and at each return from the method.
    * In additon, changes each return statement to first place the value
    * being returned into a local and then return. This allows us to work
    * around the JDI deficiency of not being able to query return values.
    * @param fullClassName must be packageName.className
    */
   private ClassInfo
-  instrument_method (ClassGen cg, String fullClassName, ClassLoader loader) {
+  instrument_all_methods (ClassGen cg, String fullClassName, ClassLoader loader) {
 
     ClassInfo class_info = new ClassInfo (cg.getClassName(), loader);
     List<MethodInfo> method_infos = new ArrayList<MethodInfo>();
@@ -499,30 +519,45 @@ public class Instrument implements ClassFileTransformer {
           out.format ("Original code: %s%n", mg.getMethod().getCode());
           out.format ("ClassInfo: %s%n", class_info);
           out.format ("MethodGen: %s%n", mg);
+          dump_code_attributes (mg);
         }
+
+        // Get existing StackMapTable (if present)
+        Attribute smta = get_stack_map_table_attribute(mg);
+        if (smta != null) {
+            stack_map_table = ((StackMapTable)smta).getStackMapTable();
+            if (debug) {
+                out.format ("Original StackMap: " + smta + "%n");
+                out.format ("Attribute tag: " + smta.getTag() + " length: "
+                        + smta.getLength() + " nameIndex: " + smta.getNameIndex() + "%n");
+            }
+            mg.removeCodeAttribute(smta);
+        } else {
+            stack_map_table = empty_stack_map_table;
+        }    
 
         // Create a MethodInfo that describes this methods arguments
         // and exit line numbers (information not available via reflection)
         // and add it to the list for this class.
-        MethodInfo mi = (create_method_info (class_info, mg));
+        MethodInfo mi = (create_method_info(class_info, mg));
 
         if (mi == null)  // method filtered out!
           continue;
 
-        if (!shouldInclude && ChicoryPremain.debug)
-          out.format ("Class %s included [%s]%n", cg.getClassName(),
-                      mi);
+        if (!shouldInclude && ChicoryPremain.debug) {
+          out.format ("Class %s included [%s]%n", cg.getClassName(), mi);
+        }    
         shouldInclude = true; // at least one method not filtered out
 
-        method_infos.add (mi);
+        method_infos.add(mi);
 
         cur_method_info_index = Runtime.methods.size();
-        Runtime.methods.add (mi);
+        Runtime.methods.add(mi);
 
         // Add nonce local to matchup enter/exits
         String entry_ppt_name = DaikonWriter.methodEntryName(fullClassName,
                                     getArgTypes(mg), mg.toString(), mg.getName());
-        add_entry_instrumentation (il, context, !shouldFilter(fullClassName,
+        add_entry_instrumentation(il, context, !shouldFilter(fullClassName,
                                       mg.getName(), entry_ppt_name));
 
         Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
@@ -534,7 +569,7 @@ public class Instrument implements ClassFileTransformer {
           Instruction inst = ih.getInstruction();
 
           // If this is a return instruction, insert method exit instrumentation
-          new_il = add_return_instrumentation (fullClassName, inst, context,
+          new_il = add_return_instrumentation(fullClassName, inst, context,
                                                shouldIncIter, exitIter);
 
           // Remember the next instruction to process
@@ -550,9 +585,7 @@ public class Instrument implements ClassFileTransformer {
                   // target and that means it has a StackMap entry. (Java7)
                   // We need to adjust its offset for our inserted code.
 
-                  // Get existing StackMapTable (if present)
-                  Attribute smta = get_stack_map_table_attribute(context.mgen);
-                  if (smta != null) {
+                  if (stack_map_table.length > 0) {
                       int len = (new_il.getByteCode()).length;
                       il.setPositions();
                       int current_offset = next_ih.getPosition();
@@ -562,22 +595,21 @@ public class Instrument implements ClassFileTransformer {
                                       current_offset, len);
                       }    
 
-                      StackMapTableEntry[] old_map = ((StackMapTable)smta).getStackMapTable();
                       // find stack map for current location
-                      StackMapTableEntry stack_map = find_stack_map(old_map, current_offset);
-                      modify_stack_map_offset (stack_map, len);
+                      StackMapTableEntry stack_map = find_stack_map(current_offset);
+                      modify_stack_map_offset(stack_map, len);
                   }    
               }    
 
-              InstructionHandle new_start = il.insert (ih, new_il);
+              InstructionHandle new_start = il.insert(ih, new_il);
               // out.format ("old start = %s, new_start = %s%n", ih, new_start);
-              il.redirectBranches (ih, new_start);
+              il.redirectBranches(ih, new_start);
 
               // Fix up line numbers to point at the new code
               if (ih.hasTargeters()) {
                 for (InstructionTargeter it : ih.getTargeters()) {
                   if (it instanceof LineNumberGen) {
-                    it.updateTarget (ih, new_start);
+                    it.updateTarget(ih, new_start);
                   }
                 }
               }
@@ -585,6 +617,16 @@ public class Instrument implements ClassFileTransformer {
           // Go on to the next instruction in the list
           ih = next_ih;
         }
+
+
+        // Build new StackMapTable attribute
+        int map_table_size = 2;  // space for the number_of_entries
+        for (int j = 0; j < stack_map_table.length; j++) {
+            map_table_size += stack_map_table[j].getEntryByteSize();
+        }
+        StackMapTable map_table = new StackMapTable(pgen.addUtf8("StackMapTable"),
+                                  map_table_size, stack_map_table, pgen.getConstantPool());
+        mg.addCodeAttribute(map_table);
 
         // UNDONE: not sure this is necessary anymore?
         // Remove the Local variable type table attribute (if any).
@@ -594,10 +636,10 @@ public class Instrument implements ClassFileTransformer {
         // a debugger)
         Attribute a = get_local_variable_type_table_attribute(mg);
         if (a != null)
-            mg.removeCodeAttribute (a);
+            mg.removeCodeAttribute(a);
 
         // Update the instruction list
-        mg.setInstructionList (il);
+        mg.setInstructionList(il);
         mg.update();
 
         // Update the max stack and Max Locals
@@ -606,13 +648,15 @@ public class Instrument implements ClassFileTransformer {
         mg.update();
 
         // Update the method in the class
-        cg.replaceMethod (methods[i], mg.getMethod());
-        if (debug)
+        cg.replaceMethod(methods[i], mg.getMethod());
+        if (debug) {
           out.format ("Modified code: %s%n", mg.getMethod().getCode());
+          dump_code_attributes(mg);
+        }  
 
         // verify the new method
         // StackVer stackver = new StackVer();
-        // VerificationResult vr = stackver.do_stack_ver (mg);
+        // VerificationResult vr = stackver.do_stack_ver(mg);
         // log ("vr for method %s = %s%n", mg.getName(), vr);
         // if (vr.getStatus() != VerificationResult.VERIFIED_OK) {
         //  System.out.printf ("Warning BCEL Verify failed for method %s: %s",
@@ -630,15 +674,15 @@ public class Instrument implements ClassFileTransformer {
 
     // Add the class and method information to runtime so it is available
     // as enter/exit ppts are processed.
-    class_info.set_method_infos (method_infos);
+    class_info.set_method_infos(method_infos);
 
     if (shouldInclude) {
       debug_transform.log ("Added trace info to class %s%n", class_info);
-      synchronized (Runtime.new_classes) {
-        Runtime.new_classes.add (class_info);
+      synchronized(Runtime.new_classes) {
+        Runtime.new_classes.add(class_info);
       }
-      synchronized (Runtime.all_classes) {
-        Runtime.all_classes.add (class_info);
+      synchronized(Runtime.all_classes) {
+        Runtime.all_classes.add(class_info);
       }
     } else { // not included
       debug_transform.log ("Trace info not added to class %s%n", class_info);
@@ -648,11 +692,13 @@ public class Instrument implements ClassFileTransformer {
     return class_info;
   }
 
+
   // This method exists only to suppress interning warnings
   @SuppressWarnings("interning") // special, unique value
   /*@Pure*/ private static boolean isVoid(Type t) {
     return t == Type.VOID;
   }
+
 
   /**
    * Transforms return instructions to first assign the result to a local
@@ -688,17 +734,18 @@ public class Instrument implements ClassFileTransformer {
     Type type = c.mgen.getReturnType();
     InstructionList il = new InstructionList();
     if (! isVoid(type)) {
-      LocalVariableGen return_loc = get_return_local (c.mgen, type);
-      il.append (InstructionFactory.createDup (type.getSize()));
-      il.append (InstructionFactory.createStore (type, return_loc.getIndex()));
+      LocalVariableGen return_loc = get_return_local(c.mgen, type);
+      il.append(InstructionFactory.createDup(type.getSize()));
+      il.append(InstructionFactory.createStore(type, return_loc.getIndex()));
     }
 
     if (!exitIter.hasNext())
       throw new RuntimeException("Not enough exit locations in the exitIter");
 
-    il.append (call_enter_exit (c, "exit", exitIter.next()));
-    return (il);
+    il.append(call_enter_exit(c, "exit", exitIter.next()));
+    return(il);
   }
+
 
   /**
    * Returns the local variable used to store the return result.  If it
@@ -734,11 +781,12 @@ public class Instrument implements ClassFileTransformer {
     return (return_local);
   }
 
+
   /**
    * Finds the nonce local variable.  Returns null if not present.
    */
   private /*@Nullable*/ LocalVariableGen
-  get_nonce_local (MethodGen mgen) {
+  get_nonce_local(MethodGen mgen) {
 
     // Find the local used for the nonce value
     for (LocalVariableGen lv : mgen.getLocalVariables()) {
@@ -750,6 +798,7 @@ public class Instrument implements ClassFileTransformer {
     return (null);
   }
 
+
   /**
    * We have inserted an additional single byte into the instruction list;
    * update the StackMaps, if required.
@@ -757,52 +806,46 @@ public class Instrument implements ClassFileTransformer {
   private void
   update_stack_map_offset (int location, MethodContext c) {
 
-    // Get existing StackMapTable (if present)
-    Attribute smta = get_stack_map_table_attribute(c.mgen);
-    if (smta == null) {
-        return;
-    }
-    StackMapTableEntry[] old_map = ((StackMapTable)smta).getStackMapTable();
-
     int running_offset = -1; // no +1 on first entry
-    for (int i = 0; i < old_map.length; i++) {
-      running_offset = old_map[i].getByteCodeOffsetDelta() + running_offset + 1;
-      if (running_offset > location) {
-          modify_stack_map_offset(old_map[i], 1);
-          // Only update the first StackMap that occurs after the current
-          // location as offsets are relative to previous.
-          return;
-      }
+    for (int i = 0; i < stack_map_table.length; i++) {
+        running_offset = stack_map_table[i].getByteCodeOffsetDelta()
+                                            + running_offset + 1;
+        
+        if (running_offset > location) {
+            modify_stack_map_offset(stack_map_table[i], 1);
+            // Only update the first StackMap that occurs after the current
+            // location as map offsets are relative to previous map.
+            return;
+        }
     }    
   }    
+
 
   /**
    * Find the StackMap entry who's offset matches the input argument
    */
   private StackMapTableEntry
-  find_stack_map (StackMapTableEntry[] old_map, int offset) {
-
-    if (debug) {
-        out.format("Input map: " + Arrays.toString(old_map) + "%n");
-    }
+  find_stack_map (int offset) {
 
     int running_offset = -1; // no +1 on first entry
-    for (int i = 0; i < old_map.length; i++) {
-      running_offset = old_map[i].getByteCodeOffsetDelta() + running_offset + 1;
+    for (int i = 0; i < stack_map_table.length; i++) {
+      running_offset = stack_map_table[i].getByteCodeOffsetDelta()
+                                          + running_offset + 1;
 
       if (running_offset > offset) {
           throw new RuntimeException("Invalid StackMap offset");
       }
 
       if (running_offset == offset) {
-          return old_map[i];
+          return stack_map_table[i];
       }
-      // try next map
+      // try next map entry
     }    
 
     // no offset matched
     throw new RuntimeException("Invalid StackMap offset");
   }    
+
 
   private void
   modify_stack_map_offset (StackMapTableEntry stack_map, int delta) {
@@ -843,17 +886,18 @@ public class Instrument implements ClassFileTransformer {
   }
 
 
-  // Set by create_local_nonce and used in xform_local_ref and add_method_startup
+  // Set by create_local_nonce
+  // Used by create_local_nonce, xform_local_ref, add_method_startup
   private int nonce_index;
 
 
   /**
-   * Transforms return instructions to first assign the result to a local
-   * variable (return__$trace2_val) and then do the return.  Also, calls
-   * Runtime.exit() immediately before the return.
+   * Transforms instructions that reference locals that are 'higher'
+   * in the local map that the nonce local.  Need to add one to their
+   * operand offset.  This may require changing the instruction as well.
    */
   private void
-  xform_local_ref (InstructionHandle ih, MethodContext c) {
+  xform_local_ref (InstructionHandle ih, InstructionList il, MethodContext c) {
 
       Instruction inst = ih.getInstruction();
 
@@ -935,9 +979,12 @@ public class Instrument implements ClassFileTransformer {
           // Unfortunately, it doesn't take care of incrementing the
           // offset within StackMapEntrys.
           if (operand == 3) {
-              // If operand was 3 (implicit) will now be 4 (explicit)
-              // which means we might need to update a StackMap offset.
-              update_stack_map_offset (ih.getPosition(), c);
+              // If operand was 3 (implicit), it will now be 4 (explicit)
+              // which makes the instruction one byte longer.  We need to
+              // update the instruction list to account for this.
+              il.setPositions();
+              // Which means we might need to update a StackMap offset.
+              update_stack_map_offset(ih.getPosition(), c);
           }    
           break;
 
@@ -945,13 +992,14 @@ public class Instrument implements ClassFileTransformer {
     }
   }
 
+
   /**
    * Create the nonce local variable.  This may have the side effect of
    * causing us to rewrite the method byte codes to adjust the offsets
    * of existing local variables - see below for details.
    */
   private LocalVariableGen
-  create_local_nonce (InstructionList il, MethodContext c) {
+  create_local_nonce(InstructionList il, MethodContext c) {
 
     // BCEL sorts local vars and presents in index order.  Search locals for
     // first var with start != 0. If none, just add nonce at end of table and
@@ -966,6 +1014,7 @@ public class Instrument implements ClassFileTransformer {
 
     LocalVariableGen lv_nonce;
 
+    int max_index = -1;
     nonce_index = -1;
     for (LocalVariableGen lv : c.mgen.getLocalVariables()) {
         if (lv.getStart().getPosition() != 0) {
@@ -973,6 +1022,16 @@ public class Instrument implements ClassFileTransformer {
                 nonce_index = lv.getIndex();
             }
             lv.setIndex(lv.getIndex() + 1);
+        }
+        // need to add 1 if type is double or long
+        max_index = lv.getIndex() + lv.getType().getSize() - 1;
+    }
+
+    // Special case: sometimes the java compiler allocates an unnamed
+    // local temp for saving the exception in a finally clause.
+    if (nonce_index == -1) {
+        if (c.mgen.getMaxLocals() > max_index + 1) {
+            nonce_index = max_index + 1;
         }
     }
 
@@ -985,7 +1044,7 @@ public class Instrument implements ClassFileTransformer {
         // Loop through each instruction looking for local variable references
         for (InstructionHandle ih = il.getStart(); ih != null; ) {
 
-          xform_local_ref (ih, c);
+          xform_local_ref(ih, il, c);
 
           // Go on to the next instruction in the list
           ih = ih.getNext();
@@ -1000,10 +1059,11 @@ public class Instrument implements ClassFileTransformer {
     }    
 
     if (debug) {
-        out.format(c.mgen.getLocalVariableTable(pgen) + "%n");
+        out.format (c.mgen.getLocalVariableTable(pgen) + "%n");
     }
     return lv_nonce;
   }
+
 
   /**
    * Inserts instrumentation code at the start of the method.  This includes
@@ -1025,24 +1085,24 @@ public class Instrument implements ClassFileTransformer {
     //     this_invocation_nonce = Runtime.nonce++;
 
     // getstatic Runtime.nonce (push its current value on stack)
-    nl.append (c.ifact.createGetStatic (runtime_classname, "nonce",
+    nl.append(c.ifact.createGetStatic(runtime_classname, "nonce",
                                         Type.INT));
 
     // dup (make a second copy of runtime.nonce on the stack)
-    nl.append (InstructionFactory.createDup (Type.INT.getSize()));
+    nl.append(InstructionFactory.createDup(Type.INT.getSize()));
 
     // iconst_1 (push 1 on the stack)
-    nl.append (c.ifact.createConstant (1));
+    nl.append(c.ifact.createConstant(1));
 
     // iadd (add the top two items on the stack together)
-    nl.append (InstructionFactory.createBinaryOperation ("+", Type.INT));
+    nl.append(InstructionFactory.createBinaryOperation("+", Type.INT));
 
     // putstatic Runtime.nonce (pop result of add to Runtime.nonce)
-    nl.append (c.ifact.createPutStatic (runtime_classname, "nonce",
+    nl.append(c.ifact.createPutStatic(runtime_classname, "nonce",
                                         Type.INT));
 
     // istore <lv> (pop original value of nonce into this_invocation_nonce)
-    nl.append (InstructionFactory.createStore (Type.INT, nonce_lv.getIndex()));
+    nl.append(InstructionFactory.createStore(Type.INT, nonce_lv.getIndex()));
 
     // Seems like there should be a easier way to do this.
     // Just need the size of nl in bytes, not instructions.
@@ -1051,7 +1111,7 @@ public class Instrument implements ClassFileTransformer {
 
     if (shouldCallEnter) {
         // call Runtime.enter()
-        nl.append (call_enter_exit (c, "enter", -1));
+        nl.append(call_enter_exit(c, "enter", -1));
     }
 
     instrumentation = nl.getByteCode();
@@ -1061,10 +1121,10 @@ public class Instrument implements ClassFileTransformer {
     // and Local variables to point to them.  Other targeters
     // (branches, exceptions) should still point to the old start
     InstructionHandle old_start = il.getStart();
-    InstructionHandle new_start = il.insert (nl);
+    InstructionHandle new_start = il.insert(nl);
     for (InstructionTargeter it : old_start.getTargeters()) {
       if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
-        it.updateTarget (old_start, new_start);
+        it.updateTarget(old_start, new_start);
     }
 
     // For Java 7 and beyond the StackMapTable is part of the
@@ -1073,58 +1133,43 @@ public class Instrument implements ClassFileTransformer {
     // adjustments for the new 'nonce' local.
 
     // Get existing StackMapTable (if present)
-    StackMapTableEntry[] old_map = {};
-    Attribute smta = get_stack_map_table_attribute(c.mgen);
-    if (smta != null) {
-        old_map = ((StackMapTable)smta).getStackMapTable();
-        if (debug) {
-            out.format("Old StackMap: " + smta + "%n");
-            out.format("Attribute tag: " + smta.getTag() + " length: "
-                        + smta.getLength() + " nameIndex: " + smta.getNameIndex() + "%n");
-        }
-
+    if (stack_map_table.length > 0) {
         // We need to adjust the offset_delta of the first old 
         // StackMapEntry due to the fact that it will no longer be
         // the first entry.  We must subtract 1.
-        StackMapTableEntry first_stack_map = old_map[0];
-        modify_stack_map_offset (first_stack_map, -1);
+        modify_stack_map_offset(stack_map_table[0], -1);
     }
 
-    StackMapTableEntry[] new_map = new StackMapTableEntry[old_map.length + ((len_part2 > 0) ? 2 : 1)];
-    StackMapType nonce_type = new StackMapType(Constants.ITEM_Integer, -1, pgen.getConstantPool());
+    StackMapTableEntry[] new_map = new StackMapTableEntry[stack_map_table.length
+                                                          + ((len_part2 > 0) ? 2 : 1)];
+    StackMapType nonce_type = new StackMapType(Constants.ITEM_Integer, -1,
+                                               pgen.getConstantPool());
     StackMapType[] old_nonce_type = {nonce_type};
-    new_map[0] = new StackMapTableEntry(Constants.APPEND_FRAME, len_part1, 1, old_nonce_type,
-                                            0, null, pgen.getConstantPool());
-
-    // System.out.println("len_part1: " + len_part1);
-    // System.out.println("new_map[0]: " + new_map[0]);
-    // System.out.println("len_part2: " + len_part2);
-    // System.out.println("old_map.length: " + old_map.length);
-    // if (old_map.length > 0)
-    //    System.out.println("old_map: " + Arrays.toString(old_map));
+    new_map[0] = new StackMapTableEntry(Constants.APPEND_FRAME, len_part1, 1,
+                                        old_nonce_type, 0, null, pgen.getConstantPool());
 
     int new_index = 1;
     if (len_part2 > 0) {
-        new_map[1] = new StackMapTableEntry(Constants.SAME_FRAME+len_part2-1, len_part2-1, 0, null,
-                                            0, null, pgen.getConstantPool());
+        new_map[1] = new StackMapTableEntry(Constants.SAME_FRAME+len_part2-1,
+                             len_part2-1, 0, null, 0, null, pgen.getConstantPool());
         new_index++;
     }
 
-// We cannot just copy the remaining stack map entires.  If any of them
+// We cannot just copy over the existing stack map entires.  If any of them
 // are FULL_FAME we need to add our 'nonce' variable to the local table.
 
-    for (int i = 0; i < old_map.length; i++) {
-        if (old_map[i].getFrameType() == Constants.FULL_FRAME) {
+    for (int i = 0; i < stack_map_table.length; i++) {
+        if (stack_map_table[i].getFrameType() == Constants.FULL_FRAME) {
 
             // need to add our 'nonce' variable into the list of locals
             // We must account for the args and this pointer which
             // means insert type of 'nonce' at 'nonce_index'
 
-            int num_locals = old_map[i].getNumberOfLocals();
+            int num_locals = stack_map_table[i].getNumberOfLocals();
             // if num_locals < insert index nothing to do
             // (can this happen?)
             if (num_locals >= nonce_index) {
-                StackMapType[] old_local_types = old_map[i].getTypesOfLocals();
+                StackMapType[] old_local_types = stack_map_table[i].getTypesOfLocals();
                 StackMapType[] new_local_types = new StackMapType[num_locals+1];
 
                 for (int j = num_locals; j > nonce_index; j--) {
@@ -1135,27 +1180,18 @@ public class Instrument implements ClassFileTransformer {
                     new_local_types[j-1] = old_local_types[j-1];
                 }
 
-                old_map[i].setNumberOfLocals(num_locals+1);
-                old_map[i].setTypesOfLocals(new_local_types);
+                stack_map_table[i].setNumberOfLocals(num_locals+1);
+                stack_map_table[i].setTypesOfLocals(new_local_types);
             }    
         }    
-        new_map[new_index++] = old_map[i];
+        new_map[new_index++] = stack_map_table[i];
     }    
-
     if (debug) {
-        out.format("new_map: " + Arrays.toString(new_map) + "%n");
+        out.format ("new_map: " + Arrays.toString(new_map) + "%n");
     }
-
-    // Build new StackMapTable attribute
-    int map_table_size = 2;  // space for the number_of_entries
-    for (int i = 0; i < new_map.length; i++) {
-        map_table_size += new_map[i].getEntryByteSize();
-    }
-    StackMapTable map_table = new StackMapTable(pgen.addUtf8("StackMapTable"),
-                                      map_table_size, new_map, pgen.getConstantPool());
-    c.mgen.removeCodeAttribute(smta);
-    c.mgen.addCodeAttribute (map_table);
+    stack_map_table = new_map;
   }
+
 
   /**
    * Pushes the object, nonce, parameters, and return value
@@ -1175,10 +1211,10 @@ public class Instrument implements ClassFileTransformer {
     // aload
     // Push the object.  Null if this is a static method or a constructor
     if (mgen.isStatic() ||
-        (method_name.equals ("enter") && is_constructor (mgen))) {
-      il.append (new ACONST_NULL());
+        (method_name.equals ("enter") && is_constructor(mgen))) {
+      il.append(new ACONST_NULL());
     } else { // must be an instance method
-      il.append (InstructionFactory.createLoad (Type.OBJECT, 0));
+      il.append(InstructionFactory.createLoad(Type.OBJECT, 0));
     }
 
     // Determine the offset of the first parameter
@@ -1188,32 +1224,32 @@ public class Instrument implements ClassFileTransformer {
 
     // iload
     // Push the nonce
-    LocalVariableGen nonce_lv = get_nonce_local (mgen);
-    il.append (InstructionFactory.createLoad (Type.INT, nonce_lv.getIndex()));
+    LocalVariableGen nonce_lv = get_nonce_local(mgen);
+    il.append(InstructionFactory.createLoad(Type.INT, nonce_lv.getIndex()));
 
     // iconst
     // Push the MethodInfo index
-    il.append (ifact.createConstant (cur_method_info_index));
+    il.append(ifact.createConstant(cur_method_info_index));
 
     // iconst
     // anewarray
     // Create an array of objects with elements for each parameter
-    il.append (ifact.createConstant (arg_types.length));
+    il.append(ifact.createConstant(arg_types.length));
     Type object_arr_typ = new ArrayType ("java.lang.Object", 1);
-    il.append (ifact.createNewArray (Type.OBJECT, (short) 1));
+    il.append(ifact.createNewArray(Type.OBJECT, (short) 1));
 
     // Put each argument into the array
     int param_index = param_offset;
     for (int ii = 0; ii < arg_types.length; ii++) {
-      il.append (InstructionFactory.createDup (object_arr_typ.getSize()));
-      il.append (ifact.createConstant (ii));
+      il.append(InstructionFactory.createDup(object_arr_typ.getSize()));
+      il.append(ifact.createConstant(ii));
       Type at = arg_types[ii];
       if (at instanceof BasicType) {
-        il.append (create_wrapper (c, at, param_index));
+        il.append(create_wrapper(c, at, param_index));
       } else { // must be reference of some sort
-        il.append (InstructionFactory.createLoad (Type.OBJECT, param_index));
+        il.append(InstructionFactory.createLoad(Type.OBJECT, param_index));
       }
-      il.append (InstructionFactory.createArrayStore (Type.OBJECT));
+      il.append(InstructionFactory.createArrayStore(Type.OBJECT));
       param_index += at.getSize();
     }
 
@@ -1224,20 +1260,20 @@ public class Instrument implements ClassFileTransformer {
     if (method_name.equals ("exit")) {
       Type ret_type = mgen.getReturnType();
       if (isVoid(ret_type)) {
-        il.append (new ACONST_NULL());
+        il.append(new ACONST_NULL());
       } else {
-        LocalVariableGen return_local = get_return_local (mgen, ret_type);
+        LocalVariableGen return_local = get_return_local(mgen, ret_type);
         if (ret_type instanceof BasicType) {
-          il.append (create_wrapper (c, ret_type, return_local.getIndex()));
+          il.append(create_wrapper(c, ret_type, return_local.getIndex()));
         } else {
-          il.append (InstructionFactory.createLoad (Type.OBJECT, return_local.getIndex()));
+          il.append(InstructionFactory.createLoad(Type.OBJECT, return_local.getIndex()));
         }
       }
 
 
       // push line number
       // System.out.println(c.mgen.getName() + " --> " + line);
-      il.append (ifact.createConstant (line));
+      il.append(ifact.createConstant(line));
     }
 
     // Call the specified method
@@ -1248,11 +1284,12 @@ public class Instrument implements ClassFileTransformer {
     else
       method_args = new Type[] {Type.OBJECT, Type.INT, Type.INT,
                                 object_arr_typ};
-    il.append (c.ifact.createInvoke (runtime_classname, method_name,
+    il.append(c.ifact.createInvoke(runtime_classname, method_name,
                                      Type.VOID, method_args, Constants.INVOKESTATIC));
 
     return (il);
   }
+
 
   /**
    * Creates code to put the local var/param at the specified var_index
@@ -1281,14 +1318,15 @@ public class Instrument implements ClassFileTransformer {
 
     InstructionList il = new InstructionList();
     String classname = runtime_classname + "$" + wrapper;
-    il.append (c.ifact.createNew (classname));
-    il.append (InstructionFactory.createDup (Type.OBJECT.getSize()));
-    il.append (InstructionFactory.createLoad (prim_type, var_index));
-    il.append (c.ifact.createInvoke (classname, "<init>", Type.VOID,
+    il.append(c.ifact.createNew(classname));
+    il.append(InstructionFactory.createDup(Type.OBJECT.getSize()));
+    il.append(InstructionFactory.createLoad(prim_type, var_index));
+    il.append(c.ifact.createInvoke(classname, "<init>", Type.VOID,
                                      new Type[] {prim_type}, Constants.INVOKESPECIAL));
 
     return (il);
   }
+
 
   /**
    * Returns true iff mgen is a constructor
@@ -1304,6 +1342,7 @@ public class Instrument implements ClassFileTransformer {
     } else
       return (false);
   }
+
 
   /**
    * Return an array of strings, each corresponding to mgen's argument types
@@ -1330,6 +1369,7 @@ public class Instrument implements ClassFileTransformer {
 
     return arg_type_strings;
   }
+
 
   @SuppressWarnings("signature") // conversion routine
   private static /*@ClassGetName*/ String
@@ -1496,37 +1536,55 @@ public class Instrument implements ClassFileTransformer {
       return null;
   }
 
+
+  public void
+  dump_code_attributes (MethodGen mg) {
+      // mg.getMethod().getCode().getAttributes() forces attributes
+      // to be instantiated; mg.getCodeAttributes() does not
+      for (Attribute a : mg.getMethod().getCode().getAttributes()) {
+          int con_index = a.getNameIndex();
+          Constant c = pgen.getConstant(con_index);
+          String att_name = ((ConstantUtf8) c).getBytes();
+          out.format ("Attribute Index: %s Name: %s%n", con_index, att_name);
+      }
+  }
+
+
   public Attribute
   get_stack_map_table_attribute (MethodGen mg) {
       for (Attribute a : mg.getCodeAttributes()) {
-          if (is_stack_map_table (a)) {
+          if (is_stack_map_table(a)) {
             return a;
           }
       }
       return null;
   }
+
 
   public Attribute
   get_local_variable_type_table_attribute (MethodGen mg) {
       for (Attribute a : mg.getCodeAttributes()) {
-          if (is_local_variable_type_table (a)) {
+          if (is_local_variable_type_table(a)) {
             return a;
           }
       }
       return null;
   }
 
+
   /*@Pure*/
   public boolean
   is_local_variable_type_table (Attribute a) {
-    return (get_attribute_name (a).equals ("LocalVariableTypeTable"));
+    return (get_attribute_name(a).equals ("LocalVariableTypeTable"));
   }
+
 
   /*@Pure*/
   public boolean
   is_stack_map_table (Attribute a) {
-    return (get_attribute_name (a).equals ("StackMapTable"));
+    return (get_attribute_name(a).equals ("StackMapTable"));
   }
+
 
   /**
    * Returns the attribute name for the specified attribute
@@ -1535,10 +1593,11 @@ public class Instrument implements ClassFileTransformer {
   get_attribute_name (Attribute a) {
 
     int con_index = a.getNameIndex();
-    Constant c = pgen.getConstant (con_index);
+    Constant c = pgen.getConstant(con_index);
     String att_name = ((ConstantUtf8) c).getBytes();
     return (att_name);
   }
+
 
   /**
    * Any information needed by InstTransform routines about the method
@@ -1565,6 +1624,7 @@ public class Instrument implements ClassFileTransformer {
       this.mgen = mgen;
     }
   }
+
 
   /**
    * Returns whether or not the specified class is part of chicory
