@@ -140,10 +140,11 @@ Running Daikon under Windows
 * Windows command line::
 * Cygwin shell::
 
-Example usage for Java, C/C++, Perl, and Eiffel
+Example usage for Java, C/C++, C#/F#/Visual Basic, Perl, and Eiffel
 
 * Detecting invariants in Java programs::
 * Detecting invariants in C/C++ programs::
+* Detecting invariants in C# programs::
 * Detecting invariants in Perl programs::
 * Detecting invariants in Eiffel programs::
 
@@ -936,6 +937,7 @@ Daikon, @ref{Front ends (instrumentation)}.
 @menu
 * Detecting invariants in Java programs::
 * Detecting invariants in C/C++ programs::
+* Detecting invariants in C# programs::
 * Detecting invariants in Perl programs::
 * Detecting invariants in Eiffel programs::
 @end menu
@@ -1295,7 +1297,7 @@ java daikon.Daikon QueueArTester.dtrace.gz
 
 
 
-@node    Detecting invariants in C/C++ programs, Detecting invariants in Perl programs, Detecting invariants in Java programs, Example usage
+@node    Detecting invariants in C/C++ programs, Detecting invariants in C# programs, Detecting invariants in Java programs, Example usage
 @section Detecting invariants in C/C++ programs
 
 In order to detect invariants over C or C++ programs, you must first install
@@ -1511,7 +1513,7 @@ and long program runs, see @ref{Large dtrace files}.
 
 
 
-@node    Detecting invariants in C# programs, Detecting invariants in Eiffel programs, Detecting invariants in C/C++ programs, Example usage
+@node    Detecting invariants in C# programs, Detecting invariants in Perl programs, Detecting invariants in C/C++ programs, Example usage
 @section Detecting invariants in C#, F#, and Visual Basic programs
 
 The Daikon front end for .NET languages (C#, F#, and Visual Basic) is
@@ -1520,7 +1522,7 @@ called Celeriac.
 Please see its documentation at @url{https://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted}.
 
 
-@node    Detecting invariants in Perl programs, Detecting invariants in Eiffel programs, Detecting invariants in C/C++ programs, Example usage
+@node    Detecting invariants in Perl programs, Detecting invariants in Eiffel programs, Detecting invariants in C# programs, Example usage
 @section Detecting invariants in Perl programs
 
 The Daikon front end for Perl is called dfepl.
