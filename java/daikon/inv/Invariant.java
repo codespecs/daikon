@@ -404,6 +404,7 @@ public abstract class Invariant
     this.ppt = ppt;
   }
 
+  @SuppressWarnings("nullness") // weakness in @Unused checking
   protected /*@Prototype*/ Invariant() {
     this.ppt = null;
   }
