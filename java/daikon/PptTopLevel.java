@@ -396,7 +396,7 @@ public class PptTopLevel extends Ppt {
 
   /*@RequiresNonNull("var_infos")*/
   /*@EnsuresNonNull({"mbtracker", "views", "value_sets"})*/
-  private void init_vars (/*>>> @UnknownInitialization(PptSlice.class) @Raw PptTopLevel this*/) {
+  private void init_vars (/*>>> @UnderInitialization(Ppt.class) @Raw PptTopLevel this*/) {
 
     debug_varinfo.log_tb ("initializing var_infos %s",
                            Arrays.toString(var_infos));
@@ -443,9 +443,9 @@ public class PptTopLevel extends Ppt {
 
     for (VarInfo vi : var_infos) {
       // TODO: This should not be necessary, since initialization is now complete
-      @SuppressWarnings("rawness") // initialization is now complete
-      /*@NonRaw*/ PptTopLevel nonRawThis = this;
-      vi.ppt = nonRawThis;
+      @SuppressWarnings({"rawness", "initialization"}) // initialization is now complete
+      /*@Initialized*/ /*@NonRaw*/ PptTopLevel initializedThis = this;
+      vi.ppt = initializedThis;
     }
 
     // Fix variable pointers so that they refer to the variables
