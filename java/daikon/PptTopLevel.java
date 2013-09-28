@@ -332,6 +332,7 @@ public class PptTopLevel extends Ppt {
   // This was renamed to the joiner_view because it no longer just for
   // implications, but instead for any Invariants that represents a
   // "joining" of two others (such as and, or, etc)
+  @SuppressWarnings({"rawness"}) // field won't be used until object is initialized
   public PptSlice0 joiner_view = new PptSlice0(this);
 
   /**
@@ -1127,6 +1128,7 @@ public class PptTopLevel extends Ppt {
         if (val == null) {      // temporary, for debugging
           System.out.printf("Null value at index %s in ValueTuple %s, ValueSet=%s%n", i, vt, vs);
         }
+        assert val != null : "@AssumeAssertion(nullness) : bug in checker; see test case checkers/tests/nullness/EnsuresNonNullIfTest3.java";
         vs.add(val);
       }
     }
