@@ -16,7 +16,7 @@ public class SimplifyFilter extends InvariantFilter {
    */
   public static boolean dkconfig_enabled = true;
 
-  public SimplifyFilter( InvariantFilters filters ) {
+  public SimplifyFilter( ) {
     isOn = dkconfig_enabled;
   }
 
