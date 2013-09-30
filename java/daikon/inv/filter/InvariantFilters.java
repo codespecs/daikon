@@ -57,7 +57,7 @@ public class InvariantFilters {
     // This set of filters is invoked when preparing invariants for processing
     // by Simplify, but before Simplify actually runs this will just not
     // filter anything, so no need to fear recursiveness here.
-    addPropertyFilter( new SimplifyFilter( this ));
+    addPropertyFilter( new SimplifyFilter( ));
 
     addPropertyFilter( new OnlyConstantVariablesFilter());
     addPropertyFilter( new DerivedParameterFilter());
@@ -80,7 +80,7 @@ public class InvariantFilters {
   }
 
 
-  void addPropertyFilter(/*>>>@Raw(InvariantFilters.class) InvariantFilters this,*/ InvariantFilter filter ) {
+  void addPropertyFilter(/*>>>@UnknownInitialization(InvariantFilters.class) @Raw(InvariantFilters.class) InvariantFilters this,*/ InvariantFilter filter ) {
     propertyFilters.add( filter );
   }
 

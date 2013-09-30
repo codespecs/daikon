@@ -21,11 +21,11 @@ public class SplitterFactory {
   public static final Logger debug =
     Logger.getLogger("daikon.split.SplitterFactory");
 
-  /** The directory in which the java files for the splitter will be made. */
-  // This must not be set in a static block, which happens before the
+  /** The directory in which the Java files for the splitter will be made. */
+  // This must *not* be set in a static block, which happens before the
   // Configuration object has had a chance to possibly set
   // dkconfig_delete_splitters_on_exit.
-  private static String tempdir;
+  private static /*@MonotonicNonNull*/ String tempdir;
 
   /**
    * Boolean. Specifies whether or not the temporary Splitter files
@@ -48,7 +48,7 @@ public class SplitterFactory {
    **/
   public static int dkconfig_compile_timeout = 6;
 
-  private static FileCompiler fileCompiler; // lazily initialized
+  private static /*@MonotonicNonNull*/ FileCompiler fileCompiler; // lazily initialized
 
   /**
    * guid is a counter that increments every time a file is written.  It is
@@ -80,7 +80,7 @@ public class SplitterFactory {
    * @param ppt the Ppt
    * @param splitters a list of SpinfoFileParsers
    */
-
+  /*@RequiresNonNull("tempdir")*/
   public static void load_splitters (PptTopLevel ppt,
                                      List<SpinfoFileParser> splitters)
   {
@@ -142,6 +142,7 @@ public class SplitterFactory {
    * @param statementReplacer a StatementReplacer for the replace statements
    *  to be used in these splitterObjects.
    */
+  /*@RequiresNonNull("tempdir")*/
   private static void loadSplitters(SplitterObject[] splitterObjects,
                                     PptTopLevel ppt,
                                     StatementReplacer statementReplacer)

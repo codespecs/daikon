@@ -31,7 +31,7 @@ public abstract class SingleStringSequence
             && vis[0].file_rep_type.isArray());
   }
 
-  public VarInfo var() {
+  public VarInfo var(/*>>>@UnknownInitialization(SingleStringSequence.class) @Raw(SingleStringSequence.class) SingleStringSequence this*/) {
     return ppt.var_infos[0];
   }
 

@@ -124,6 +124,7 @@ public class Chicory {
   public static long start = System.currentTimeMillis();
 
   /** daikon process for --daikon switch **/
+  // non-null if either daikon==true or daikon_online==true
   public static /*@MonotonicNonNull*/ Process daikon_proc;
 
   private static final String traceLimTermString = "DTRACELIMITTERMINATE";
@@ -200,6 +201,7 @@ public class Chicory {
   /**
    * Return true iff a file name was specified to supply pure method names
    */
+  /*@Pure*/
   public static /*@Nullable*/ File get_purity_file()
   {
     return purity_file;
@@ -404,6 +406,7 @@ public class Chicory {
       int daikonResult = waitForDaikon();
       System.exit(daikonResult);
     } else if (daikon_online) {
+      assert daikon_proc != null : "@AssumeAssertion(nullness): conditional: just tested daikon_online, and ran runDaikon() earlier in this method";
       if (targetResult != 0) {
         System.out.printf ("Warning: Target exited with %d status\n", targetResult);
       }
@@ -448,6 +451,7 @@ public class Chicory {
   /**
    * Runs daikon either online or on the generated trace file.
    */
+  /*@EnsuresNonNull("daikon_proc")*/
   public void runDaikon() {
 
     java.lang.Runtime rt = java.lang.Runtime.getRuntime();
@@ -481,6 +485,7 @@ public class Chicory {
   }
 
   /** Wait for daikon to complete and return its exit status **/
+  /*@RequiresNonNull("daikon_proc")*/
   private int waitForDaikon() {
     int result = redirect_wait (daikon_proc);
     return result;

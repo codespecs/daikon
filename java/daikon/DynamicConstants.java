@@ -836,10 +836,12 @@ public class DynamicConstants implements Serializable {
               continue;
             slice = ppt.get_or_instantiate_slice (con1.vi, con2.vi, con3.vi);
             lt = LinearTernaryFloat.get_proto().instantiate (slice);
-            if (lt != null)
+            if (lt != null) {
+              assert con2.val != null : "@AssumeAssertion(nullness)";
               sts = ((LinearTernaryFloat) lt).setup (oo, con1.vi,
                         ((Double) con1.val).doubleValue(),
                         con2.vi, ((Double) con2.val).doubleValue());
+            }
           }
           if ((lt != null) && (sts == InvariantStatus.NO_CHANGE)) {
             if (Debug.dkconfig_internal_check)
@@ -948,6 +950,7 @@ public class DynamicConstants implements Serializable {
    * on (default is on), only unary and binary invariants that can
    * be suppressors in NIS suppressions are created.
    */
+  /*@RequiresNonNull("suppressor_proto_invs")*/
   public List<PptSlice> create_constant_invs() {
 
     // Turn off track logging so that we don't get voluminous messages

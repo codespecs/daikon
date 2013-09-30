@@ -41,15 +41,12 @@ import java.util.Map;
  */
 public class TestRedundantVars {
 
-    private static PptFile without;
-    private static PptFile with;
-    private static PptFile reds;
+    private static /*@MonotonicNonNull*/ PptFile without;
+    private static /*@MonotonicNonNull*/ PptFile with;
+    private static /*@MonotonicNonNull*/ PptFile reds;
 
-    // Suppress warnings
+    @SuppressWarnings("initialization.fields.uninitialized") // never instantiated
     private TestRedundantVars() {
-        without = PptFile.getPptFile("dummy file");
-        with =    PptFile.getPptFile("dummy file");
-        reds =    PptFile.getPptFile("dummy file");
         throw new Error("do not instantiate");
     }
 
@@ -86,8 +83,7 @@ public class TestRedundantVars {
     }
 
     // Returns true iff all tests pass.
-    @SuppressWarnings("field.not.found.nullness.parse.error") // bug: fields in precondition expressions
-    /*@RequiresNonNull("this.reds.records.get(#1)")*/
+    /*@RequiresNonNull({"this.reds.records.get(#1)", "without", "with", "reds"})*/
     private static boolean process_ppt(String ppt) {
 
         List<String> invsWithout = without.records.get(ppt);

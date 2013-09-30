@@ -193,7 +193,8 @@ public final class Runtime {
   // probably don't bother to generalize this to put output from a single
   // run in different files depending on the class the information is
   // about.
-  public static PrintStream dtrace;
+  // Set by setDtrace().  May be null if no_dtrace==true.
+  public static /*@MonotonicNonNull*/ PrintStream dtrace;
   public static boolean dtrace_closed = false;
   // daikon.Daikon should never load daikon.Runtime; but sometimes it
   // happens, due to reflective loading of the target program that gets the
@@ -319,7 +320,7 @@ public final class Runtime {
   // unexpected results if the Object I was trying to print happened to be
   // a String.  So now I use different names to avoid that problem.
 
-  public static final void print_Object(java.io.PrintStream ps, Object x) {
+  public static final void print_Object(java.io.PrintStream ps, /*@Nullable*/ Object x) {
     if (x == null) {
       ps.print("null");
     } else {
@@ -328,7 +329,7 @@ public final class Runtime {
   }
 
   // augmentation of print_Object above
-  public static final void print_class(java.io.PrintStream ps, Object x) {
+  public static final void print_class(java.io.PrintStream ps, /*@Nullable*/ Object x) {
     if (x == null) {
       ps.print("null");
     } else {
@@ -344,7 +345,7 @@ public final class Runtime {
     ps.println("2");          // "nonsensical"
   }
 
-  public static final void println_class_and_modbit(java.io.PrintStream ps, Object x) {
+  public static final void println_class_and_modbit(java.io.PrintStream ps, /*@Nullable*/ Object x) {
     if (x == null) {
       ps.println("nonsensical");
       println_modbit_missing(ps);
@@ -365,15 +366,15 @@ public final class Runtime {
 
   // Avoid using this; prefer print_quoted_String instead, unless we can
   // guarantee that the string contains no character that need to be quoted.
-  public static final void print_String(java.io.PrintStream ps, String x) {
+  public static final void print_String(java.io.PrintStream ps, /*@Nullable*/ String x) {
     ps.print((x == null) ? "null" : "\"" + x + "\"");
   }
 
-  public static final void print_quoted_String(java.io.PrintStream ps, String x) {
+  public static final void print_quoted_String(java.io.PrintStream ps, /*@Nullable*/ String x) {
     ps.print((x == null) ? "null" : "\"" + quote(x) + "\"");
   }
 
-  public static final void println_quoted_String_and_modbit(java.io.PrintStream ps, String x) {
+  public static final void println_quoted_String_and_modbit(java.io.PrintStream ps, /*@Nullable*/ String x) {
     if (x == null) {
       ps.println("nonsensical");
       println_modbit_missing(ps);
@@ -384,7 +385,7 @@ public final class Runtime {
   }
 
   // Not yet used; but probably should be.
-  public static final void print_quoted_Character(java.io.PrintStream ps, Character ch) {
+  public static final void print_quoted_Character(java.io.PrintStream ps, /*@Nullable*/ Character ch) {
     ps.print((ch == null) ? "null" : quote(ch));
   }
 
@@ -487,7 +488,7 @@ public final class Runtime {
   /// Object
   ///
 
-  public static final void println_array_Object(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_Object(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -503,7 +504,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_Object(java.io.PrintStream ps, List<?> v) {
+  public static final void println_array_Object(java.io.PrintStream ps, /*@Nullable*/ List<?> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -522,7 +523,7 @@ public final class Runtime {
 
   // Print an array of the classes of the elements.
   @Deprecated
-  public static final void println_array_Object_eltclass(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_Object_eltclass(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -539,7 +540,7 @@ public final class Runtime {
   }
 
   // Print an array of the classes of the elements.
-  public static final void println_array_Object_eltclass_and_modbit(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_Object_eltclass_and_modbit(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("nonsensical");
       println_modbit_missing(ps);
@@ -562,7 +563,7 @@ public final class Runtime {
 
   // Print an array of the classes of the elements.
   @Deprecated
-  public static final void println_array_Object_eltclass(java.io.PrintStream ps, List<?> v) {
+  public static final void println_array_Object_eltclass(java.io.PrintStream ps, /*@Nullable*/ List<?> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -580,7 +581,7 @@ public final class Runtime {
   }
 
   // Print an array of the classes of the elements.
-  public static final void println_array_Object_eltclass_and_modbit(java.io.PrintStream ps, List<?> v) {
+  public static final void println_array_Object_eltclass_and_modbit(java.io.PrintStream ps, /*@Nullable*/ List<?> v) {
     if (v == null) {
       ps.println("nonsensical");
       println_modbit_missing(ps);
@@ -610,7 +611,7 @@ public final class Runtime {
   // Print the lengths of the elements of the top-level array.
   // This is for Object[][] or for anything[][][], where "anything" may
   // be either Object or a base class.
-  public static final void println_array_2d_size(java.io.PrintStream ps, Object[][] a) {
+  public static final void println_array_2d_size(java.io.PrintStream ps, Object /*@Nullable*/ [][] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -634,7 +635,7 @@ public final class Runtime {
   // Print the lengths of the elements of a List[]
 
   @SuppressWarnings("rawtypes")
-  public static final void println_array_List_size(java.io.PrintStream ps, List[] a) {
+  public static final void println_array_List_size(java.io.PrintStream ps, List /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -650,7 +651,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_List_size(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_List_size(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -666,7 +667,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_List_size(java.io.PrintStream ps, List<List<?>> v) {
+  public static final void println_array_List_size(java.io.PrintStream ps, /*@Nullable*/ List<List<?>> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -687,7 +688,7 @@ public final class Runtime {
   /// String
   ///
 
-  public static final void println_array_String(java.io.PrintStream ps, String[] a) {
+  public static final void println_array_String(java.io.PrintStream ps, String /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -703,7 +704,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_String(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_String(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -719,7 +720,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_String(java.io.PrintStream ps, List<String> v) {
+  public static final void println_array_String(java.io.PrintStream ps, /*@Nullable*/ List<String> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -747,7 +748,7 @@ public final class Runtime {
 
   /// boolean
 
-  public static final void println_array_boolean(java.io.PrintStream ps, boolean[] a) {
+  public static final void println_array_boolean(java.io.PrintStream ps, boolean /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -763,7 +764,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_boolean(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_boolean(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -779,7 +780,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_boolean(java.io.PrintStream ps, List<Boolean> v) {
+  public static final void println_array_boolean(java.io.PrintStream ps, /*@Nullable*/ List<Boolean> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -797,7 +798,7 @@ public final class Runtime {
   }
 
   // Print the lengths of the elements of the top-level array.
-  public static final void println_array_2d_size(java.io.PrintStream ps, boolean[][] a) {
+  public static final void println_array_2d_size(java.io.PrintStream ps, boolean /*@Nullable*/ [][] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -815,7 +816,7 @@ public final class Runtime {
 
   /// byte
 
-  public static final void println_array_byte(java.io.PrintStream ps, byte[] a) {
+  public static final void println_array_byte(java.io.PrintStream ps, byte /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -831,7 +832,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_byte(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_byte(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -847,7 +848,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_byte(java.io.PrintStream ps, List<Byte> v) {
+  public static final void println_array_byte(java.io.PrintStream ps, /*@Nullable*/ List<Byte> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -865,7 +866,7 @@ public final class Runtime {
   }
 
   // Print the lengths of the elements of the top-level array.
-  public static final void println_array_2d_size(java.io.PrintStream ps, byte[][] a) {
+  public static final void println_array_2d_size(java.io.PrintStream ps, byte /*@Nullable*/ [][] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -895,7 +896,7 @@ public final class Runtime {
     println_array_char_as_chars(ps, v);
   }
 
-  public static final void println_array_char_as_String(java.io.PrintStream ps, char[] a) {
+  public static final void println_array_char_as_String(java.io.PrintStream ps, char /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -905,7 +906,7 @@ public final class Runtime {
 
   // Outputs a sequence of space-separated characters, with (only) return
   // and newline quoted.  (Should backslash also be quoted?)
-  public static final void println_array_char_as_chars(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_char_as_chars(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -927,7 +928,7 @@ public final class Runtime {
 
   // Outputs a sequence of space-separated characters, with (only) return
   // and newline quoted.  (Should backslash also be quoted?)
-  public static final void println_array_char_as_chars(java.io.PrintStream ps, List<Character> v) {
+  public static final void println_array_char_as_chars(java.io.PrintStream ps, /*@Nullable*/ List<Character> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -948,7 +949,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_char_as_ints(java.io.PrintStream ps, char[] a) {
+  public static final void println_array_char_as_ints(java.io.PrintStream ps, char /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -964,7 +965,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_char_as_ints(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_char_as_ints(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -980,7 +981,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_char_as_ints(java.io.PrintStream ps, List<Character> v) {
+  public static final void println_array_char_as_ints(java.io.PrintStream ps, /*@Nullable*/ List<Character> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -999,7 +1000,7 @@ public final class Runtime {
 
   // I'm not sure if this is what I want -- I might prefer to view it as String[].
   // Print the lengths of the elements of the top-level array.
-  public static final void println_array_2d_size(java.io.PrintStream ps, char[][] a) {
+  public static final void println_array_2d_size(java.io.PrintStream ps, char /*@Nullable*/ [][] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1017,7 +1018,7 @@ public final class Runtime {
 
   /// double
 
-  public static final void println_array_double(java.io.PrintStream ps, double[] a) {
+  public static final void println_array_double(java.io.PrintStream ps, double /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1033,7 +1034,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_double(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_double(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1049,7 +1050,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_double(java.io.PrintStream ps, List<Double> v) {
+  public static final void println_array_double(java.io.PrintStream ps, /*@Nullable*/ List<Double> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -1067,7 +1068,7 @@ public final class Runtime {
   }
 
   // Print the lengths of the elements of the top-level array.
-  public static final void println_array_2d_size(java.io.PrintStream ps, double[][] a) {
+  public static final void println_array_2d_size(java.io.PrintStream ps, double /*@Nullable*/ [][] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1085,7 +1086,7 @@ public final class Runtime {
 
   /// float
 
-  public static final void println_array_float(java.io.PrintStream ps, float[] a) {
+  public static final void println_array_float(java.io.PrintStream ps, float /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1101,7 +1102,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_float(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_float(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1117,7 +1118,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_float(java.io.PrintStream ps, List<Float> v) {
+  public static final void println_array_float(java.io.PrintStream ps, /*@Nullable*/ List<Float> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -1135,7 +1136,7 @@ public final class Runtime {
   }
 
   // Print the lengths of the elements of the top-level array.
-  public static final void println_array_2d_size(java.io.PrintStream ps, float[][] a) {
+  public static final void println_array_2d_size(java.io.PrintStream ps, float /*@Nullable*/ [][] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1153,7 +1154,7 @@ public final class Runtime {
 
   /// int
 
-  public static final void println_array_int(java.io.PrintStream ps, int[] a) {
+  public static final void println_array_int(java.io.PrintStream ps, int /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1169,7 +1170,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_int(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_int(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1185,7 +1186,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_int(java.io.PrintStream ps, List<Integer> v) {
+  public static final void println_array_int(java.io.PrintStream ps, /*@Nullable*/ List<Integer> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -1203,7 +1204,7 @@ public final class Runtime {
   }
 
   // Print the lengths of the elements of the top-level array.
-  public static final void println_array_2d_size(java.io.PrintStream ps, int[][] a) {
+  public static final void println_array_2d_size(java.io.PrintStream ps, int /*@Nullable*/ [][] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1221,7 +1222,7 @@ public final class Runtime {
 
   /// long
 
-  public static final void println_array_long(java.io.PrintStream ps, long[] a) {
+  public static final void println_array_long(java.io.PrintStream ps, long /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1237,7 +1238,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_long(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_long(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1253,7 +1254,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_long(java.io.PrintStream ps, List<Long> v) {
+  public static final void println_array_long(java.io.PrintStream ps, /*@Nullable*/ List<Long> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -1271,7 +1272,7 @@ public final class Runtime {
   }
 
   // Print the lengths of the elements of the top-level array.
-  public static final void println_array_2d_size(java.io.PrintStream ps, long[][] a) {
+  public static final void println_array_2d_size(java.io.PrintStream ps, long /*@Nullable*/ [][] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1289,7 +1290,7 @@ public final class Runtime {
 
   /// short
 
-  public static final void println_array_short(java.io.PrintStream ps, short[] a) {
+  public static final void println_array_short(java.io.PrintStream ps, short /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1305,7 +1306,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_short(java.io.PrintStream ps, Object[] a) {
+  public static final void println_array_short(java.io.PrintStream ps, Object /*@Nullable*/ [] a) {
     if (a == null) {
       ps.println("null");
       return;
@@ -1321,7 +1322,7 @@ public final class Runtime {
     ps.println(']');
   }
 
-  public static final void println_array_short(java.io.PrintStream ps, List<Short> v) {
+  public static final void println_array_short(java.io.PrintStream ps, /*@Nullable*/ List<Short> v) {
     if (v == null) {
       ps.println("null");
       return;
@@ -1339,7 +1340,7 @@ public final class Runtime {
   }
 
   // Print the lengths of the elements of the top-level array.
-  public static final void println_array_2d_size(java.io.PrintStream ps, short[][] a) {
+  public static final void println_array_2d_size(java.io.PrintStream ps, short /*@Nullable*/ [][] a) {
     if (a == null) {
       ps.println("null");
       return;

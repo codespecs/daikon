@@ -75,13 +75,13 @@ public final class ValueTuple implements Cloneable {
   /*@Pure*/ int getModified(int value_index) { return mods[value_index]; }
   /*@Pure*/ boolean isUnmodified(int value_index) { return mods[value_index] == UNMODIFIED; }
   /*@Pure*/ boolean isModified(int value_index) { return mods[value_index] == MODIFIED; }
-  /*@Pure*/ boolean isMissingNonsensical(/*>>>@Raw(ValueTuple.class) ValueTuple this, */ int value_index) { return mods[value_index] == MISSING_NONSENSICAL; }
-  @SuppressWarnings("flowexpr.parse.error") // limitation of flow expressions
+  /*@Pure*/ boolean isMissingNonsensical(/*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ int value_index) { return mods[value_index] == MISSING_NONSENSICAL; }
+  @SuppressWarnings("contracts.conditional.postcondition.not.satisfied") // dependent property
   /*@EnsuresNonNullIf(result=false, expression="this.vals[#1]")*/
-  /*@Pure*/ boolean isMissingFlow(/*>>>@Raw(ValueTuple.class) ValueTuple this, */ int value_index) { return mods[value_index] == MISSING_FLOW; }
+  /*@Pure*/ boolean isMissingFlow(/*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ int value_index) { return mods[value_index] == MISSING_FLOW; }
   @SuppressWarnings("nullness") // postcondition: array expression
   /*@EnsuresNonNullIf(result=false, expression="vals[#1]")*/
-  /*@Pure*/ boolean isMissing(/*>>>@Raw(ValueTuple.class) ValueTuple this, */ int value_index) {
+  /*@Pure*/ boolean isMissing(/*>>>@UnknownInitialization(ValueTuple.class) @Raw(ValueTuple.class) ValueTuple this, */ int value_index) {
     return (isMissingNonsensical(value_index) || isMissingFlow(value_index)); }
 
   // The arguments ints represent modification information.

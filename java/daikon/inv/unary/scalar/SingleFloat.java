@@ -29,7 +29,7 @@ public abstract class SingleFloat
     return ((vis.length == 1) && vis[0].file_rep_type.isFloat());
   }
 
-  public VarInfo var() {
+  public VarInfo var(/*>>>@UnknownInitialization(SingleFloat.class) @Raw(SingleFloat.class) SingleFloat this*/) {
     return ppt.var_infos[0];
   }
 

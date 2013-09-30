@@ -404,6 +404,7 @@ public abstract class Invariant
     this.ppt = ppt;
   }
 
+  @SuppressWarnings("nullness") // weakness in @Unused checking
   protected /*@Prototype*/ Invariant() {
     this.ppt = null;
   }
@@ -701,7 +702,8 @@ public abstract class Invariant
    * (repr_prop also prints the confidence), and
    * format gives a high-level representation for user output.
    **/
-  /*@SideEffectFree*/ public String format(/*>>> @NonPrototype Invariant this*/) {
+  // receiver must be fully-initialized because subclasses read their fields
+  /*@SideEffectFree*/ public String format(/*>>>@NonPrototype Invariant this*/) {
     String result = format_using(OutputFormat.DAIKON);
     if (PrintInvariants.dkconfig_print_inv_class) {
       String classname = getClass().getName();
@@ -1930,7 +1932,7 @@ public abstract class Invariant
    * logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
    * VarInfo[], String)}.
    */
-
+  // receiver needs to be initialized because subclass implementations will read their own fields
   public void log (/*>>> @NonPrototype Invariant this,*/ Logger log, String msg) {
 
     if (Debug.logOn()) {
@@ -1946,8 +1948,7 @@ public abstract class Invariant
   *
   * @return whether or not it logged anything
   */
-
-  public boolean log (/*>>> @UnknownInitialization(PptSlice.class) @Raw Invariant this,*/ String format, /*@Nullable*/ Object...args) {
+  public boolean log (/*>>> @UnknownInitialization(Invariant.class) @Raw(Invariant.class) @NonPrototype Invariant this,*/ String format, /*@Nullable*/ Object... args) {
     if (ppt != null) {
       String msg = format;
       if (args.length > 0)
@@ -1957,7 +1958,8 @@ public abstract class Invariant
       return (false);
   }
 
-  /*@SideEffectFree*/ public String toString(/*>>> @NonPrototype Invariant this*/) {
+  // Receiver must be fully initialized
+  /*@SideEffectFree*/ public String toString() {
     return format();
   }
 

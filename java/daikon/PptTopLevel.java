@@ -332,14 +332,15 @@ public class PptTopLevel extends Ppt {
   // This was renamed to the joiner_view because it no longer just for
   // implications, but instead for any Invariants that represents a
   // "joining" of two others (such as and, or, etc)
+  @SuppressWarnings({"rawness"}) // field won't be used until object is initialized
   public PptSlice0 joiner_view = new PptSlice0(this);
 
   /**
    * Holds Equality invariants.  Never null after invariants are
    * instantiated.
    **/
-  // Is set by Daikon.setupEquality.  Remains null if
-  // Daikon.using_DaikonSimple==true or Daikon.use_equality_optimization==false
+  // Is set by Daikon.setupEquality (and a few other methods).  Remains null if
+  // Daikon.using_DaikonSimple==true or Daikon.use_equality_optimization==false.
   public /*@MonotonicNonNull*/ PptSliceEquality equality_view;
 
   // The redundant_invs* variables are filled in by method
@@ -395,7 +396,7 @@ public class PptTopLevel extends Ppt {
 
   /*@RequiresNonNull("var_infos")*/
   /*@EnsuresNonNull({"mbtracker", "views", "value_sets"})*/
-  private void init_vars (/*>>> @UnknownInitialization(PptSlice.class) @Raw PptTopLevel this*/) {
+  private void init_vars (/*>>> @UnderInitialization(Ppt.class) @Raw PptTopLevel this*/) {
 
     debug_varinfo.log_tb ("initializing var_infos %s",
                            Arrays.toString(var_infos));
@@ -442,9 +443,9 @@ public class PptTopLevel extends Ppt {
 
     for (VarInfo vi : var_infos) {
       // TODO: This should not be necessary, since initialization is now complete
-      @SuppressWarnings("rawness") // initialization is now complete
-      /*@NonRaw*/ PptTopLevel nonRawThis = this;
-      vi.ppt = nonRawThis;
+      @SuppressWarnings({"rawness", "initialization"}) // initialization is now complete
+      /*@Initialized*/ /*@NonRaw*/ PptTopLevel initializedThis = this;
+      vi.ppt = initializedThis;
     }
 
     // Fix variable pointers so that they refer to the variables
@@ -971,6 +972,7 @@ public class PptTopLevel extends Ppt {
    *
    * @return the set of all invariants weakened or falsified by this sample
    **/
+  /*@RequiresNonNull({"suppressor_map", "suppressor_map_suppression_count", "all_suppressions"})*/
   public /*@Nullable*/ Set<Invariant> add_bottom_up (ValueTuple vt, int count) {
     // Doable, but commented out for efficiency
     // repCheck();
@@ -1127,6 +1129,7 @@ public class PptTopLevel extends Ppt {
         if (val == null) {      // temporary, for debugging
           System.out.printf("Null value at index %s in ValueTuple %s, ValueSet=%s%n", i, vt, vs);
         }
+        assert val != null : "@AssumeAssertion(nullness) : bug in checker; see test case checkers/tests/nullness/EnsuresNonNullIfTest3.java";
         vs.add(val);
       }
     }
@@ -4392,6 +4395,7 @@ public class PptTopLevel extends Ppt {
       if (cnt_inv_classes) {
         assert inv_map != null : "@AssumeAssertion(nullness) : dependent: cnt_inv_classes is true";
         for (Class<? extends Invariant> inv_class : inv_map.keySet()) {
+          @SuppressWarnings("nullness") // limited side effects don't affect inv_map field
           Cnt cnt = inv_map.get(inv_class);
           log.fine(" : " + inv_class + ": " + cnt.cnt);
         }

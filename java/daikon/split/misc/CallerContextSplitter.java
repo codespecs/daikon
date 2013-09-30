@@ -54,7 +54,7 @@ public final class CallerContextSplitter
     return (caller_varinfo != null);
   }
 
-  @SuppressWarnings("nullness:override.pre.method.annotation.invalid") // application invariant about private variable
+  @SuppressWarnings("nullness:contracts.precondition.override.invalid") // application invariant about private variable
   /*@RequiresNonNull("caller_varinfo")*/
   public boolean test(ValueTuple vt) {
     long caller = caller_varinfo.getIntValue(vt);

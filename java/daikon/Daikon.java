@@ -345,7 +345,8 @@ public final class Daikon {
 
   public static /*@MonotonicNonNull*/ File server_dir = null; //YOAV: the directory from which we read the dtrace files
 
-  // A PptMap (mapping String -> PptTopLevel) that contains all the Program Points
+  // A PptMap (mapping String -> PptTopLevel) that contains all the program points.
+  // Set in mainHelper().
   public static PptMap all_ppts;
 
   /** current invariant (used for debugging) **/
@@ -599,6 +600,7 @@ public final class Daikon {
     // Write serialized output - must be done before guarding invariants
     if (inv_file != null) {
       nullOutMaps();
+      assert inv_file != null : "@AssumeAssertion(nullness): nullOutMaps() didn't affect inv_file field";
       try {
         FileIO.write_serialized_pptmap(all_ppts, inv_file);
       } catch (IOException e) {

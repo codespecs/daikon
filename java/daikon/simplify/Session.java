@@ -73,7 +73,8 @@ public class Session
 
   public static boolean dkconfig_trace_input = false;
 
-  private PrintStream trace_file;
+  // non-null if dkconfig_trace_input==true
+  private /*@MonotonicNonNull*/ PrintStream trace_file;
   private static int trace_count = 0;
 
   /* package */ final Process process;
@@ -133,10 +134,10 @@ public class Session
     }
   }
 
-  /* package access */ void sendLine(String s) {
+  /* package access */ void sendLine(/*>>>@UnknownInitialization(Session.class) @Raw(Session.class) Session this,*/ String s) {
     if (dkconfig_trace_input) {
       assert trace_file != null
-        : "@AssumeAssertion(nullness): dependent: trace_file is set in constructor if dkconfig_trace_input is true";
+        : "@AssumeAssertion(nullness): dependent: trace_file is non-null (set in constructor) if dkconfig_trace_input is true";
       trace_file.println(s);
     }
     input.println(s);
@@ -152,6 +153,7 @@ public class Session
   public void kill() {
     process.destroy();
     if (dkconfig_trace_input) {
+      assert trace_file != null : "@AssumeAssertion(nullness): conditional: trace_file is non-null if dkconfig_trace_input==true";
       trace_file.close();
     }
   }

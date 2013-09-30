@@ -113,7 +113,8 @@ class OrigFixer extends DepthFirstVisitor {
     if (withinArgList && isLastTokenVar(n)) {
       lastToken.tokenImage = "orig_" + lastToken.tokenImage;
     }
-    twoTokensAgo = lastToken;
+    if (lastToken != null) // test is to quiet the Nullness Checker
+      twoTokensAgo = lastToken;
     lastToken = n;
   }
 

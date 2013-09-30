@@ -33,7 +33,7 @@ public final class ReturnTrueSplitter
             && (return_varinfo.type == ProglangType.BOOLEAN));
   }
 
-  @SuppressWarnings("nullness:override.pre.method.annotation.invalid") // application invariant about private variable
+  @SuppressWarnings("nullness:contracts.precondition.override.invalid") // application invariant about private variable
   /*@RequiresNonNull("return_varinfo")*/
   public boolean test(ValueTuple vt) {
     return (return_varinfo.getIntValue(vt) != 0);

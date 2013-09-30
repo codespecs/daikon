@@ -37,7 +37,9 @@ public abstract class SingleScalarSequence
     return valid_types_static(vis);
   }
 
-  public VarInfo var() {
+  // Identical to superclass definition, and therefore gratuitious
+  @Override
+  public VarInfo var(/*>>>@UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleScalarSequence this*/) {
     return ppt.var_infos[0];
   }
 

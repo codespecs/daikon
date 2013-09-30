@@ -47,7 +47,7 @@ public abstract class Splitter
    * the "instantiated" protected field to true, if that field is present
    * in the Splitter class.
    */
-  public abstract Splitter instantiate(Ppt ppt);
+  public abstract Splitter instantiate(/*@UnknownInitialization(Ppt.class) @Raw(.class)*/ Ppt ppt);
 
   protected boolean instantiated = false;
   /**

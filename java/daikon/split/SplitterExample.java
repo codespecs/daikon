@@ -34,7 +34,7 @@ public final class SplitterExample
     return (x_varinfo != null);
   }
 
-  @SuppressWarnings("nullness:override.pre.method.annotation.invalid") // application invariant about private variable
+  @SuppressWarnings("nullness:contracts.precondition.override.invalid") // application invariant about private variable
   /*@RequiresNonNull("x_varinfo")*/
   public boolean test(ValueTuple vt) {
     // Alternately, if x represents an array, use

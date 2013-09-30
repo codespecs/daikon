@@ -217,6 +217,7 @@ public class Premain {
             System.out.printf ("Writing error output to %s%n",
                                DynComp.dataflow_out);
             dataflow_fp.printf ("Error: %s%n", DCRuntime.exit_exception);
+            assert DCRuntime.exit_exception != null : "@AssumeAssertion(nullness): limited side effects don't change this field";
             DCRuntime.exit_exception.printStackTrace (dataflow_fp);
           } else { // no error was encountered, results should be good
 
@@ -256,6 +257,7 @@ public class Premain {
           if (DynComp.verbose)
             System.out.println ("Writing comparability sets to "
                                 + DynComp.compare_sets_file);
+          assert DynComp.compare_sets_file != null : "@AssumeAssertion(nullness): limited side effects don't change this field";
           PrintWriter compare_out = open (DynComp.compare_sets_file);
           Stopwatch watch = new Stopwatch();
           if (DynComp.no_primitives)
@@ -279,6 +281,7 @@ public class Premain {
         if (DynComp.verbose)
           System.out.println ("Writing traced comparability sets to "
                               + DynComp.trace_sets_file);
+        assert DynComp.trace_sets_file != null : "@AssumeAssertion(nullness): limited side effects don't change this field";
         PrintWriter trace_out = open (DynComp.trace_sets_file);
         Stopwatch watch = new Stopwatch();
         DCRuntime.trace_all_comparable (trace_out);

@@ -51,7 +51,7 @@ public class PureMethodInfo extends DaikonVariableInfo
      */
     @Override
     @SuppressWarnings("unchecked")
-    public Object getMyValFromParentVal(Object parentVal)
+    public /*@Nullable*/ Object getMyValFromParentVal(Object parentVal)
     {
         @SuppressWarnings("nullness") // not a class initializer, so meth != null
         /*@NonNull*/ Method meth = (Method) minfo.member;
@@ -74,7 +74,7 @@ public class PureMethodInfo extends DaikonVariableInfo
             }
             else
             {
-                List<Object> retList = new ArrayList<Object>();
+                List</*@Nullable*/ Object> retList = new ArrayList</*@Nullable*/ Object>();
 
                 for (Object val : (List<Object>) parentVal) // unchecked cast
                 {

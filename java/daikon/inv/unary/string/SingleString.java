@@ -30,7 +30,7 @@ public abstract class SingleString
     return ((vis.length == 1) && vis[0].file_rep_type.isString());
   }
 
-  public VarInfo var() {
+  public VarInfo var(/*>>>@UnknownInitialization(SingleString.class) @Raw(SingleString.class) SingleString this*/) {
     return ppt.var_infos[0];
   }
 

@@ -43,8 +43,10 @@ public final class StackTypes {
     OperandStack os = f.getStack();
     // logger.info ("stack[" + offset + "] = " + toString(os));
 
-    if (track_locals)
+    if (track_locals) {
+      assert loc_arr != null : "@AssumeAssertion(nullness): dependent: non-null if track_locals==true";
       loc_arr[offset] = (LocalVariables) f.getLocals().clone();
+    }
 
     os_arr[offset] = (OperandStack) os.clone();
   }
@@ -62,8 +64,10 @@ public final class StackTypes {
       if (os_arr[i] != null) {
         sb.append (String.format ("Instruction %d:\n", i));
         sb.append (String.format ("  stack:  %s\n", toString(os_arr[i])));
-        if (track_locals)
+        if (track_locals) {
+          assert loc_arr != null : "@AssumeAssertion(nullness): dependent: non-null if track_locals==true";
           sb.append (String.format ("  locals: %s\n", toString (loc_arr[i])));
+        }
       }
     }
 
