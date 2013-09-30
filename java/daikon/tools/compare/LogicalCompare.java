@@ -41,10 +41,13 @@ public class LogicalCompare {
   private static boolean opt_show_sets      = false;
   private static boolean opt_minimize_classes = false;
 
-  // key = ppt name
-  private static Map<String,Vector<Lemma>> extra_assumptions;
+  // TODO: both of these fields should be instance fields and the main
+  // method should create an instance.
 
-  private static LemmaStack lemmas;
+  // key = ppt name
+  private static /*@MonotonicNonNull*/ Map<String,Vector<Lemma>> extra_assumptions;
+
+  private static /*@MonotonicNonNull*/ LemmaStack lemmas;
 
   private static String usage =
     UtilMDE.joinLines(
@@ -225,6 +228,7 @@ public class LogicalCompare {
     return name.substring(name.lastIndexOf('.') + 1);
   }
 
+  /*@RequiresNonNull("lemmas")*/
   private static int checkConsequences(Vector<Lemma> assumptions, Vector<Lemma> consequences) {
     Set<String> assumption_formulas = new HashSet<String>();
     for (Lemma lem : assumptions) {
@@ -316,6 +320,7 @@ public class LogicalCompare {
   // Check that each of the invariants in CONSEQUENCES follows from
   // zero or more of the invariants in ASSUMPTIONS. Returns the number
   // of invariants that can't be proven to follow.
+  /*@RequiresNonNull("lemmas")*/
   private static int evaluateImplications(Vector<Lemma> assumptions,
                                           Vector<Lemma> consequences)
   throws SimplifyError {
@@ -341,6 +346,7 @@ public class LogicalCompare {
     return invalidCount;
   }
 
+  /*@RequiresNonNull("lemmas")*/
   private static int evaluateImplicationsCarefully(Vector<Lemma> safeAssumptions,
                                                    Vector<Lemma> unsafeAssumptions,
                                                    Vector<Lemma> consequences)
@@ -389,6 +395,7 @@ public class LogicalCompare {
 
   // Initialize the theorem prover. Whichever mode we're in, we should
   // only do this once per program run.
+  /*@EnsuresNonNull("lemmas")*/
   private static void startProver() {
     lemmas = new LemmaStack();
   }
@@ -396,6 +403,7 @@ public class LogicalCompare {
   // Comparare the invariants for enter and exit points between two
   // methods (usually two sets of invariants for methods of the same
   // name)
+  /*@RequiresNonNull({"extra_assumptions","lemmas"})*/
   private static void comparePpts(PptTopLevel app_enter_ppt,
                                   PptTopLevel test_enter_ppt,
                                   PptTopLevel app_exit_ppt,
@@ -500,6 +508,7 @@ public class LogicalCompare {
       System.out.println("Total time " + time_elapsed + "ms");
   }
 
+  /*@RequiresNonNull("extra_assumptions")*/
   private static void readExtraAssumptions(String filename) {
     File file = new File(filename);
     try {

@@ -36,7 +36,7 @@ public abstract class SingleSequence
     super();
   }
 
-  public VarInfo var() {
+  public VarInfo var(/*>>>@UnknownInitialization(SingleSequence.class) @Raw(SingleSequence.class) SingleSequence this*/) {
     return ppt.var_infos[0];
   }
 

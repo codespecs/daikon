@@ -80,7 +80,7 @@ public abstract class PptSlice
     invs.trimToSize();
   }
 
-  /*@SideEffectFree*/ public final String name(/*>>>@Raw(PptSlice.class) PptSlice this*/) {
+  /*@SideEffectFree*/ public final String name(/*>>>@UnknownInitialization(PptSlice.class) @Raw(PptSlice.class) PptSlice this*/) {
     return parent.name + varNames(var_infos);
   }
 
@@ -175,6 +175,7 @@ public abstract class PptSlice
   /**
    * Removes any falsified invariants from our list.
    */
+  /*@RequiresNonNull("NIS.suppressor_map")*/
   protected void remove_falsified () {
 
     // Remove the dead invariants

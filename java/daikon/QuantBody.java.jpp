@@ -1802,7 +1802,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * Returns null if any array or field access causes an exception.
    */
   @SuppressWarnings("interning") // reflection
-  /*@SideEffectFree*/ public static _TYPE_NAME /*@Nullable*/ [] COLLECT_TYPE (Object object, String fieldStr) {
+  /*@SideEffectFree*/ public static _TYPE_NAME /*@Nullable*/ [] COLLECT_TYPE (/*@Nullable*/ Object object, /*@Nullable*/ String fieldStr) {
 
     if (object == null) { return null; }
     if (fieldStr == null) { return null; }
@@ -1819,7 +1819,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * Operates on the fields specified in fields[fieldsStartIdx..].
    * @see COLLECT_TYPE(Object, String)
    */
-  /*@SideEffectFree*/ private static _TYPE_NAME /*@Nullable*/ [] COLLECT_TYPE (Object object,
+  /*@SideEffectFree*/ private static _TYPE_NAME /*@Nullable*/ [] COLLECT_TYPE (/*@Nullable*/ Object object,
                                                    String[] fields, int fieldsStartIdx) {
 
     // @PolyNull does not work for return type, because null is returned elsewhere.

@@ -175,6 +175,7 @@ public class PptSplitter implements Serializable {
    * Adds implication invariants based on the invariants found on each
    * side of the split
    */
+  /*@RequiresNonNull("parent.equality_view")*/
   public void add_implications() {
 
     // Currently only binary implications are supported
@@ -220,6 +221,7 @@ public class PptSplitter implements Serializable {
    * but in fact that is a false inference.  Note that this situation can
    * occur if the splitting condition uses variables that can ever be missing.
    */
+  /*@RequiresNonNull("parent.equality_view")*/
   private void add_implications_pair () {
 
     for (PptTopLevel pchild : ppts) {
@@ -251,7 +253,6 @@ public class PptSplitter implements Serializable {
 
 /// ??? MDE
     // Loop through each possible parent slice
-    @SuppressWarnings("class.not.found.nullness.parse.error") // bug: fields in precondition expressions
     List<VarInfo[]> slices = possible_slices();
 
     for (VarInfo[] vis : slices) {
@@ -516,7 +517,6 @@ public class PptSplitter implements Serializable {
    * because there may be implications created from invariants in child
    * slices that only exist in one child.
    **/
-  @SuppressWarnings("field.not.found.nullness.parse.error") // bug: fields in precondition expressions
   /*@RequiresNonNull("parent.equality_view")*/
   private List<VarInfo[]> possible_slices() {
 

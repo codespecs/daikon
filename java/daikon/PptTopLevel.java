@@ -339,8 +339,8 @@ public class PptTopLevel extends Ppt {
    * Holds Equality invariants.  Never null after invariants are
    * instantiated.
    **/
-  // Is set by Daikon.setupEquality.  Remains null if
-  // Daikon.using_DaikonSimple==true or Daikon.use_equality_optimization==false
+  // Is set by Daikon.setupEquality (and a few other methods).  Remains null if
+  // Daikon.using_DaikonSimple==true or Daikon.use_equality_optimization==false.
   public /*@MonotonicNonNull*/ PptSliceEquality equality_view;
 
   // The redundant_invs* variables are filled in by method
@@ -972,6 +972,7 @@ public class PptTopLevel extends Ppt {
    *
    * @return the set of all invariants weakened or falsified by this sample
    **/
+  /*@RequiresNonNull({"suppressor_map", "suppressor_map_suppression_count", "all_suppressions"})*/
   public /*@Nullable*/ Set<Invariant> add_bottom_up (ValueTuple vt, int count) {
     // Doable, but commented out for efficiency
     // repCheck();
@@ -4394,6 +4395,7 @@ public class PptTopLevel extends Ppt {
       if (cnt_inv_classes) {
         assert inv_map != null : "@AssumeAssertion(nullness) : dependent: cnt_inv_classes is true";
         for (Class<? extends Invariant> inv_class : inv_map.keySet()) {
+          @SuppressWarnings("nullness") // limited side effects don't affect inv_map field
           Cnt cnt = inv_map.get(inv_class);
           log.fine(" : " + inv_class + ": " + cnt.cnt);
         }

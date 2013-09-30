@@ -10,6 +10,7 @@ import junit.framework.TestCase;
 
 public class PptCombinedTests extends TestCase {
 
+  @SuppressWarnings("flowexpr.parse.error") // flow expression uses private field
   /*@RequiresNonNull("PptCombined.assemblies")*/
   public void testFindIntermediateBlocks1() {
 
@@ -30,6 +31,7 @@ public class PptCombinedTests extends TestCase {
 
   }
 
+  @SuppressWarnings("flowexpr.parse.error") // flow expression uses private field
   /*@RequiresNonNull("PptCombined.assemblies")*/
   public void testFindIntermediateBlocks2() {
 
@@ -54,6 +56,7 @@ public class PptCombinedTests extends TestCase {
 
   }
 
+  @SuppressWarnings("flowexpr.parse.error") // flow expression uses private field
   /*@RequiresNonNull("PptCombined.assemblies")*/
   public void testFindIntermediateBlocks3() {
 
@@ -69,6 +72,7 @@ public class PptCombinedTests extends TestCase {
    assertListDoesNotContain(list, p1);
  }
 
+  @SuppressWarnings("flowexpr.parse.error") // flow expression uses private field
   /*@RequiresNonNull("PptCombined.assemblies")*/
   public void testFindIntermediateBlocks4() {
 

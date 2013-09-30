@@ -63,8 +63,10 @@ class PrefixFixer extends DepthFirstVisitor {
     }
     n.beginColumn = -1;
     n.endColumn = -1;
-    threeTokensAgo = twoTokensAgo;
-    twoTokensAgo = lastToken;
+    if (twoTokensAgo != null) // test is to quiet the Nullness Checker
+      threeTokensAgo = twoTokensAgo;
+    if (lastToken != null) // test is to quiet the Nullness Checker
+      twoTokensAgo = lastToken;
     lastToken = n;
     super.visit(n);
   }

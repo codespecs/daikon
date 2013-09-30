@@ -26,6 +26,11 @@ import java.util.*;
  */
 public class NIS {
 
+  @SuppressWarnings("initialization.fields.uninitialized") // never instantiated
+  public NIS() {
+    throw new Error("Do not instantiate");
+  }
+
   /** Debug tracer. **/
   public static final Logger debug = Logger.getLogger ("daikon.suppress.NIS");
 
@@ -109,19 +114,19 @@ public class NIS {
    * Map from invariant class to a list of all of the suppression sets
    * that contain a suppressor of that class.
    */
-  public static Map<Class<? extends Invariant>,List<NISuppressionSet>> suppressor_map;
+  public static /*@MonotonicNonNull*/ Map<Class<? extends Invariant>,List<NISuppressionSet>> suppressor_map;
 
   /**
    * Map from invariant class to the number of suppressions
    * that contain a suppressor of that class.
    */
-  public static Map<Class<? extends Invariant>,Integer> suppressor_map_suppression_count;
+  public static /*@MonotonicNonNull*/ Map<Class<? extends Invariant>,Integer> suppressor_map_suppression_count;
 
   /** List of all suppressions */
-  static List<NISuppressionSet> all_suppressions;
+  static /*@MonotonicNonNull*/ List<NISuppressionSet> all_suppressions;
 
   /** List of suppressor invariant prototypes **/
-  public static List</*@Prototype*/ Invariant> suppressor_proto_invs;
+  public /*@MonotonicNonNull*/ static List</*@Prototype*/ Invariant> suppressor_proto_invs;
 
   /**
    * List of invariants that are unsuppressed by the current sample.
@@ -172,17 +177,20 @@ public class NIS {
    * up the map from suppressor classes to all of the suppression sets
    * associated with that suppressor invariant
    */
+  /*@EnsuresNonNull({"suppressor_map", "suppressor_map_suppression_count", "all_suppressions", "suppressor_proto_invs"})*/
   public static void init_ni_suppression() {
 
-    if (!dkconfig_enabled)
-      return;
-
-    // Creating these here, rather than where they are declared allows
+    // Creating these here, rather than where they are declared, allows
     // this method to be called multiple times without a problem.
     suppressor_map = new LinkedHashMap<Class<? extends Invariant>,List<NISuppressionSet>>(256);
     suppressor_map_suppression_count = new LinkedHashMap<Class<? extends Invariant>,Integer>(256);
     all_suppressions = new ArrayList<NISuppressionSet>();
     suppressor_proto_invs = new ArrayList</*@Prototype*/ Invariant>();
+
+    // This should be the first statement in the method, but put it after the
+    // field initalizations so that the Initialization Checker doesn't complain.
+    if (!dkconfig_enabled)
+      return;
 
     // Get all defined suppressions.
     for (Invariant inv : Daikon.proto_invs) {
@@ -266,6 +274,7 @@ public class NIS {
    * Note: this method is should NOT be used with the antecedent approach.
    * See NIS.process_falsified_invs()
    */
+  /*@RequiresNonNull("suppressor_map")*/
   public static void falsified (Invariant inv) {
 
     if (!dkconfig_enabled || antecedent_method)
@@ -466,6 +475,7 @@ public class NIS {
    * and any invariants falsified by the sample are marked as such, but before
    * they have been removed.
    */
+  /*@RequiresNonNull({"suppressor_map", "suppressor_map_suppression_count", "all_suppressions"})*/
   public static void process_falsified_invs (PptTopLevel ppt, ValueTuple vt) {
 
     // if using the hybrid method, need to know the number of falsified suppressor
@@ -705,6 +715,7 @@ public class NIS {
    * places them in their associated slices.
    * @return a list of created invariants.
    */
+  /*@RequiresNonNull({"all_suppressions"})*/
   public static List<Invariant> create_suppressed_invs (PptTopLevel ppt) {
 
     // Find all antecedents and organize them by their variables comparability
@@ -745,6 +756,7 @@ public class NIS {
    * Adds each antecedent invariant in the specified slices to the Antecedents
    * object in comp_ants with the corresponding VarComparability.
    */
+  /*@RequiresNonNull("suppressor_map")*/
   static void store_antecedents_by_comparability
                            (Iterator<PptSlice> slice_iterator,
                             Map<VarComparability,Antecedents> comp_ants) {
@@ -792,6 +804,7 @@ public class NIS {
    * map with a list of all of the antecedent invariants for each
    * class. @return the number of false antecedents found.
    */
+  /*@RequiresNonNull("suppressor_map")*/
   static int find_antecedents (Iterator<PptSlice> slice_iterator,
                Map<Class<? extends Invariant>,List<Invariant>> antecedent_map) {
 
@@ -836,6 +849,7 @@ public class NIS {
   /**
    * Returns true if the specified class is an antecedent in any NI suppression
    */
+  /*@RequiresNonNull("suppressor_map")*/
   /*@Pure*/ public static boolean is_suppressor (Class<? extends Invariant> cls) {
     return (suppressor_map.containsKey (cls));
   }
@@ -843,6 +857,7 @@ public class NIS {
   /**
    * Dump out the suppressor map.
    */
+  /*@RequiresNonNull("suppressor_map")*/
   public static void dump (Logger log) {
 
     if (!log.isLoggable(Level.FINE))
@@ -882,7 +897,7 @@ public class NIS {
     }
 
     /** Track Log the specified message **/
-    public void log (String message) {
+    public void log (/*>>>@UnknownInitialization(SupInv.class) @Raw(SupInv.class) SupInv this,*/ String message) {
       if (Debug.logOn())
         Debug.log (suppressee.sup_class, ppt, vis, message);
     }

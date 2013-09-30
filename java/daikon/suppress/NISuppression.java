@@ -258,6 +258,7 @@ public class NISuppression {
     NISuppressor s = suppressors[idx];
     for (Invariant inv : antecedents[idx]) {
       PptTopLevel ppt = inv.ppt.parent;
+      assert ppt.equality_view != null : "@AssumeAssertion(nullness): need to check justification";
 
       // See if this antecedent can be used with the ones we have found so far
       VarInfo[] cvis = consider_inv (inv, s, vis);
@@ -268,7 +269,6 @@ public class NISuppression {
       if ((idx + 1) == suppressors.length) {
 
         // Create descriptions of the suppressed invariants
-        @SuppressWarnings("class.not.found.nullness.parse.error") // bug: fields in precondition expressions
         List<NIS.SupInv> new_invs = suppressee.find_all (cvis, ppt, null);
         unsuppressed_invs.addAll (new_invs);
 
@@ -362,7 +362,6 @@ public class NISuppression {
         }
 
         // Create descriptions of the suppressed invariants
-        @SuppressWarnings("class.not.found.nullness.parse.error") // bug: fields in precondition expressions
         List<NIS.SupInv> new_invs = suppressee.find_all (cvis, ppt, cinvs);
         if (debug)
           System.out.printf ("created %s new invariants", new_invs);

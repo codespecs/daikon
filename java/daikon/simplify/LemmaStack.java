@@ -59,12 +59,12 @@ public class LemmaStack {
 
   /** Tell Simplify to assume a lemma, which should already be on our
    * stack. */
-  private void assume(Lemma lemma) throws TimeoutException {
+  private void assume(/*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Lemma lemma) throws TimeoutException {
     session.request(new CmdAssume(lemma.formula));
   }
 
   /** Assume a list of lemmas. */
-  private void assumeAll(Vector<Lemma> invs) throws TimeoutException {
+  private void assumeAll(/*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Vector<Lemma> invs) throws TimeoutException {
     for (Lemma lem : invs) {
       assume(lem);
     }
@@ -100,7 +100,7 @@ public class LemmaStack {
   }
 
   /** Try to restart Simplify back where we left off, after killing it. */
-  private void restartProver() throws SimplifyError {
+  private void restartProver(/*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this*/) throws SimplifyError {
     startProver();
     try {
       assumeAll(lemmas);
@@ -123,7 +123,7 @@ public class LemmaStack {
   }
 
   /** Push an assumption onto our and Simplify's stacks. */
-  public boolean pushLemma(/*>>>@Raw(LemmaStack.class) LemmaStack this,*/ Lemma lem) throws SimplifyError {
+  public boolean pushLemma(/*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Lemma lem) throws SimplifyError {
     SimpUtil.assert_well_formed(lem.formula);
     try {
       assume(lem);
@@ -149,7 +149,7 @@ public class LemmaStack {
   }
 
   /** Push a vector of assumptions onto our and Simplify's stacks. */
-  public void pushLemmas(/*>>>@Raw(LemmaStack.class) LemmaStack this,*/ Vector<Lemma> newLemmas) throws SimplifyError {
+  public void pushLemmas(/*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ Vector<Lemma> newLemmas) throws SimplifyError {
     for (Lemma lem : newLemmas) {
       pushLemma(lem);
     }
@@ -159,7 +159,7 @@ public class LemmaStack {
    * assumptions. Returns 'T' if Simplify says yes, 'F' if Simplify
    * says no, or '?' if we have to kill Simplify because it won't
    * answer. */
-  private char checkString(String str) throws SimplifyError {
+  private char checkString(/*>>>@UnknownInitialization(LemmaStack.class) @Raw(LemmaStack.class) LemmaStack this,*/ String str) throws SimplifyError {
     SimpUtil.assert_well_formed(str);
     CmdCheck cc = new CmdCheck(str);
     try {

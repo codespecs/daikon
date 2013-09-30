@@ -234,7 +234,7 @@ public class WSMatch {
      * If multiple sets have the same number of elements, the set with the
      * higher average match percent is chosen.
      */
-    public List<MatchInfo> find_best_matches (/*>>>@Raw(daikon.tools.WSMatch.Substitution.class) Substitution this,*/
+    public List<MatchInfo> find_best_matches (/*>>>@UnknownInitialization(daikon.tools.WSMatch.Substitution.class) @Raw(daikon.tools.WSMatch.Substitution.class) Substitution this,*/
                                               List<DeclVarInfo> vars1,
                                               List<DeclVarInfo> vars2,
                                               double min_percent) {
@@ -262,7 +262,8 @@ public class WSMatch {
      * @param best_match The best match found so far.  Updated in place
      *    when a better match is found.
      */
-    private void matches (List<DeclVarInfo> vars1, List<DeclVarInfo> vars2,
+    private void matches (/*>>>@UnknownInitialization(WSMatch.Substitution.class) @Raw(WSMatch.Substitution.class) Substitution this,*/
+                         List<DeclVarInfo> vars1, List<DeclVarInfo> vars2,
                          int index, double min_perc,
                          List<MatchInfo> matches,
                          List<MatchInfo> best_match) {
@@ -313,7 +314,7 @@ public class WSMatch {
      * the same number of matches, the one with the highest average match
      * percentage is better.
      */
-    private boolean better_match (List<MatchInfo> m1, List<MatchInfo> m2) {
+    private static boolean better_match (List<MatchInfo> m1, List<MatchInfo> m2) {
 
       if (m2.size() > m1.size())
         return (true);

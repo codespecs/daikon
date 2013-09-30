@@ -34,7 +34,7 @@ public class UnionVisitor extends DepthFirstVisitor {
    * invariants are non-null, add the invariant with the better
    * (higher) confidence.
    **/
-  @SuppressWarnings("nullness:override.pre.method.annotation.invalid") // visitor invariant, because the PptNode has already been visited
+  @SuppressWarnings("nullness:contracts.precondition.override.invalid") // visitor invariant, because the PptNode has already been visited
   /*@RequiresNonNull("currentPpt")*/ // visitor invariant
   public void visit(InvNode node) {
     Invariant inv1 = node.getInv1();

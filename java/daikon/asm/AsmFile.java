@@ -56,7 +56,7 @@ public class AsmFile {
 
     // Precondition: the reader is positioned at the first
     //               non-empty line of the record.
-    private void readOneBlock(LineNumberReader reader) throws IOException {
+    private void readOneBlock(/*>>>@UnknownInitialization(AsmFile.class) @Raw(AsmFile.class) AsmFile this,*/ LineNumberReader reader) throws IOException {
 
         String name = null;
         List<X86Instruction> instructions = new ArrayList<X86Instruction>();
@@ -103,7 +103,7 @@ public class AsmFile {
         instructionsForBlock.put(name, instructions);
     }
 
-    private String parseError(int lastLineRead, String errorMessage) {
+    private static String parseError(int lastLineRead, String errorMessage) {
         return "Parse error (line " + lastLineRead + ") : " + errorMessage;
     }
 

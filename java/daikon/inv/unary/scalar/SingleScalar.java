@@ -24,7 +24,7 @@ public abstract class SingleScalar
     super();
   }
 
-  public VarInfo var() {
+  public VarInfo var(/*>>>@UnknownInitialization(SingleScalar.class) @Raw(SingleScalar.class) SingleScalar this*/) {
     return ppt.var_infos[0];
   }
 

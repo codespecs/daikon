@@ -247,10 +247,10 @@ public class Implication
   /**
    * Logs a description of the invariant and the specified msg via the
    * logger as described in {@link daikon.Debug#log(Logger, Class, Ppt,
-   * VarInfo[], String)}.  Uses the consequent as the logger
+   * VarInfo[], String)}.  Uses the consequent as the logger.
    */
-
-  public void log (Logger log, String msg) {
+  @Override
+  public void log (/*NOT: @UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,*/ Logger log, String msg) {
 
     right.log (log, msg + "[for implication " + format() + " ("
                + (orig_right == null ? "null" : orig_right.format()) + ")]");
@@ -264,10 +264,12 @@ public class Implication
   *
   * @return whether or not it logged anything
   */
-
-  public boolean log (String msg) {
-
-    return (right.log (msg + "[for implication " + format() + " ("
+  @Override
+  public boolean log (/*NOT: @UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,*/ String format, /*@Nullable*/ Object... args) {
+    String msg = format;
+    if (args.length > 0)
+      msg = String.format (format, args);
+    return (right.log (msg + " [for implication " + format() + " ("
                + (orig_right == null ? "null" : orig_right.format()) + ")]"));
   }
 

@@ -642,6 +642,7 @@ public final class PrintInvariants {
   //
   // All of this can (and should be) improved when V2 is dropped.
 
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariants(PptMap all_ppts) {
 
     PrintWriter pw = new PrintWriter(System.out, true);
@@ -724,6 +725,7 @@ public final class PrintInvariants {
    * Print invariants for a single program point and its conditionals.
    * Does no output if no samples or no views.
    **/
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariants_maybe(PptTopLevel ppt,
                                             PrintWriter out,
                                             PptMap all_ppts) {
@@ -1022,7 +1024,7 @@ public final class PrintInvariants {
    * Print invariants for a single program point, once we know that
    * this ppt is worth printing.
    **/
-  @SuppressWarnings("class.not.found.nullness.parse.error") // bug: fields in precondition expressions
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariants(PptTopLevel ppt, PrintWriter out,
                                       PptMap ppt_map) {
 
@@ -1146,7 +1148,7 @@ public final class PrintInvariants {
   /**
    * Does the actual printing of the invariants.
    **/
-  @SuppressWarnings("class.not.found.nullness.parse.error") // bug: fields in precondition expressions
+  /*@RequiresNonNull("FileIO.new_decl_format")*/
   private static void finally_print_the_invariants(List<Invariant> invariants,
                                                    PrintWriter out,
                                                    PptTopLevel ppt) {

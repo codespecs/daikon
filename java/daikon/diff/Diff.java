@@ -870,7 +870,7 @@ public final class Diff {
    * tree.
    **/
   /*@EnsuresNonNull({"invSortComparator1", "invSortComparator2", "invPairComparator"})*/
-  public void setAllInvComparators(/*>>>@Raw(Diff.class) Diff this,*/ Comparator<Invariant> c) {
+  public void setAllInvComparators(/*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
     setInvSortComparator1(c);
     setInvSortComparator2(c);
     setInvPairComparator(c);
@@ -896,19 +896,19 @@ public final class Diff {
 
   /** Use the comparator for sorting the first set. **/
   /*@EnsuresNonNull("invSortComparator1")*/
-  public void setInvSortComparator1(Comparator<Invariant> c) {
+  public void setInvSortComparator1(/*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
     invSortComparator1 = c;
   }
 
   /** Use the comparator for sorting the second set. **/
   /*@EnsuresNonNull("invSortComparator2")*/
-  public void setInvSortComparator2(Comparator<Invariant> c) {
+  public void setInvSortComparator2(/*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
     invSortComparator2 = c;
   }
 
   /** Use the comparator for creating the pair tree. **/
   /*@EnsuresNonNull("invPairComparator")*/
-  public void setInvPairComparator(Comparator<Invariant> c) {
+  public void setInvPairComparator(/*>>>@UnknownInitialization @Raw Diff this,*/ Comparator<Invariant> c) {
     invPairComparator = c;
   }
 

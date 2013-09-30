@@ -109,6 +109,7 @@ public class ChicoryPremain {
     // Setup the declaration and dtrace writer.  The include/exclude filter are
     // implemented in the transform, so they don't need to be handled
     // here.
+    // (It looks like these can be called even if Runtime.dtrace is null...)
     Runtime.decl_writer = new DeclWriter (Runtime.dtrace);
     Runtime.dtrace_writer = new DTraceWriter (Runtime.dtrace);
 
@@ -393,7 +394,7 @@ public class ChicoryPremain {
      * for org.apache.bcel.  Two locations match if they refer to the
      * same jar file or the same directory in the filesystem.
      */
-    private boolean same_location (URL url1, URL url2) {
+    private static boolean same_location (URL url1, URL url2) {
       if (!url1.getProtocol().equals (url2.getProtocol()))
         return false;
 
@@ -422,7 +423,7 @@ public class ChicoryPremain {
      * Returns the pathname of a jar file specified in the URL.  The
      * protocol must be 'jar'.  Only file jars are supported.
      */
-    private String extract_jar_path (URL url) {
+    private static String extract_jar_path (URL url) {
       assert url.getProtocol().equals ("jar") : url.toString();
 
       // Remove the preceeding 'file:' and trailing '!filename'
@@ -439,7 +440,7 @@ public class ChicoryPremain {
      * org.apache.bcel.Constants).  An empty list is returned if no
      * names match.
      */
-    List<URL> get_resource_list (String classname) throws IOException {
+    static List<URL> get_resource_list (String classname) throws IOException {
 
       String name = classname_to_resource_name (classname);
       Enumeration<URL> enum_urls = ClassLoader.getSystemResources (name);
@@ -454,7 +455,7 @@ public class ChicoryPremain {
      * Changs a class name in the normal format (eg, org.apache.bcel.Constants)
      * to that used to lookup resources (eg. org/apache/bcel/Constants.class)
      */
-    private String classname_to_resource_name (String name) {
+    private static String classname_to_resource_name (String name) {
       return (name.replace (".", "/") + ".class");
     }
 

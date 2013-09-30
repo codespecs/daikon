@@ -124,12 +124,14 @@ public class MatchCountVisitor extends PrintAllVisitor {
   }
 
   /** Returns true if the pair of invariants should be printed **/
-  @SuppressWarnings("assertiftrue.postcondition.not.satisfied") // determineRelationship returns REL_SAME_JUST1_JUST2 only if inv1 and inv2 are nonnull
   /*@EnsuresNonNullIf(result=true, expression={"#1", "#2"})*/
   protected static boolean shouldPrint(/*@Nullable*/ Invariant inv1, /*@Nullable*/ Invariant inv2) {
 
     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
     if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2 ) {
+      // determineRelationship returns REL_SAME_JUST1_JUST2 only if inv1 and inv2 are nonnull
+      assert inv1 != null : "@AssumeAssertion(nullness): dependent: called determineRelationship()";
+      assert inv2 != null : "@AssumeAssertion(nullness): dependent: called determineRelationship()";
 
       // got rid of unjustified
       //   rel == DetailedStatisticsVisitor.REL_SAME_UNJUST1_UNJUST2)
@@ -154,9 +156,8 @@ public class MatchCountVisitor extends PrintAllVisitor {
 
   /** returns true iff any token of inv.format_java() contains
    *  a number other than -1, 0, 1 or is null. */
-  /*@EnsuresNonNullIf(result=true, expression={"#1"})*/
-  private static boolean filterOut (/*@Nullable*/ Invariant inv) {
-    if (inv == null) return true;
+  private static boolean filterOut (Invariant inv) {
+    assert inv != null : "@AssumeAssertion(nullness): precondition";
     String str = inv.format_using(OutputFormat.JAVA);
     StringTokenizer st = new StringTokenizer (str, " ()");
     while (st.hasMoreTokens()) {

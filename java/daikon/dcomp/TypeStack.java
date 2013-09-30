@@ -21,7 +21,7 @@ public final class TypeStack
     private final Map<InstructionHandle, InstructionHandle> parentMap = new HashMap<InstructionHandle, InstructionHandle>();
     private final Type[] argTypes;
     private final Type retType;
-    // Initialized by createMap, which is called be the constructor.  But, if the createMap argument is empty or null, then stack does not get initialized!
+    // Initialized by createMap, which is called by the constructor.  But, if the createMap argument is empty or null, then stack does not get initialized!
     private OperandStack stack;
 
     private static final int MAX = Integer.MAX_VALUE;
@@ -54,7 +54,8 @@ public final class TypeStack
         createMap (mg.getInstructionList(), mg.getExceptionHandlers());
     }
 
-    private OperandStack startMethStack()
+    /*@RequiresNonNull("argTypes")*/
+    private OperandStack startMethStack(/*>>>@UnknownInitialization @Raw TypeStack this*/)
     {
         OperandStack type = new OperandStack(MAX);
 
@@ -66,8 +67,10 @@ public final class TypeStack
         return type;
     }
 
+    // initialization helper, sets "stack" field
+    /*@RequiresNonNull({"retType", "argTypes", "pool"})*/
     /*@EnsuresNonNull("stack")*/
-    private void createMap(final InstructionList l,
+    private void createMap(/*>>>@UnknownInitialization @Raw TypeStack this,*/ final InstructionList l,
             final CodeExceptionGen[] exceptionTable)
     {
         if (l == null) {
@@ -99,7 +102,8 @@ public final class TypeStack
             
     }
 
-    private boolean initParents(final InstructionHandle hand,
+    private boolean initParents(/*>>>@UnknownInitialization @Raw TypeStack this,*/
+            final InstructionHandle hand,
             final InstructionHandle[] allInst,
             final CodeExceptionGen[] exceptionTable)
     {
@@ -172,13 +176,14 @@ public final class TypeStack
         return false;
     }
 
-    private boolean inChain(final InstructionHandle h)
+    private boolean inChain(/*>>>@UnknownInitialization @Raw TypeStack this,*/ final InstructionHandle h)
     {
         return inChainHelper(parentMap.get(h), h);
     }
 
     /*@EnsuresNonNullIf(result=true, expression="#2")*/
-    private boolean inChainHelper(final /*@Nullable*/ InstructionHandle h1,
+    private boolean inChainHelper(/*>>>@UnknownInitialization @Raw TypeStack this,*/
+                                  final /*@Nullable*/ InstructionHandle h1,
                                   final /*@Nullable*/ InstructionHandle h2)
     {
         if (h2 == null)
@@ -196,8 +201,10 @@ public final class TypeStack
             return inChainHelper(parentMap.get(h1), h2);
     }
 
+    // initialization helper, sets "stack" field
+    /*@RequiresNonNull({"argTypes", "retType", "pool"})*/
     /*@EnsuresNonNull("stack")*/
-    private void initStack(InstructionHandle hand)
+    private void initStack(/*>>>@UnknownInitialization @Raw TypeStack this,*/ InstructionHandle hand)
     {
         Instruction inst = hand.getInstruction();
         assert inst != null;
@@ -390,7 +397,9 @@ public final class TypeStack
         }
     }
 
-    private void handleMath(ArithmeticInstruction inst)
+    /*@RequiresNonNull("stack")*/
+    private void handleMath(/*>>>@UnknownInitialization @Raw TypeStack this,*/
+                            ArithmeticInstruction inst)
     {
         if (inst instanceof DADD)
         {
@@ -579,7 +588,9 @@ public final class TypeStack
         }
     }
 
-    private void handleArray(ArrayInstruction inst)
+    /*@RequiresNonNull("stack")*/
+    private void handleArray(/*>>>@UnknownInitialization @Raw TypeStack this,*/
+                             ArrayInstruction inst)
     {
         if (inst instanceof AALOAD)
         {
@@ -653,7 +664,7 @@ public final class TypeStack
     }
 
     /*@RequiresNonNull("stack")*/  // is this right, or too strict?
-    private void handleBranch(BranchInstruction inst)
+    private void handleBranch(/*>>>@UnknownInitialization @Raw TypeStack this,*/ BranchInstruction inst)
     {
         if (inst instanceof GotoInstruction)
         {
@@ -770,7 +781,8 @@ public final class TypeStack
         }
     }
 
-    private void handleConv(ConversionInstruction inst)
+    /*@RequiresNonNull("stack")*/
+    private void handleConv(/*>>>@UnknownInitialization @Raw TypeStack this,*/ ConversionInstruction inst)
     {
         if (inst instanceof D2F)
         {
@@ -839,7 +851,8 @@ public final class TypeStack
         }
     }
 
-    private void handleCP(CPInstruction inst)
+    /*@RequiresNonNull({"stack", "pool"})*/
+    private void handleCP(/*>>>@UnknownInitialization @Raw TypeStack this,*/ CPInstruction inst)
     {
         if (inst instanceof ANEWARRAY)
         {
@@ -937,7 +950,8 @@ public final class TypeStack
         }
     }
 
-    private void handleLocal(LocalVariableInstruction inst)
+    /*@RequiresNonNull("stack")*/
+    private void handleLocal(/*>>>@UnknownInitialization @Raw TypeStack this,*/ LocalVariableInstruction inst)
     {
         if (inst instanceof IINC)
         {
@@ -982,7 +996,8 @@ public final class TypeStack
         }
     }
 
-    private void handleReturn(ReturnInstruction inst)
+    /*@RequiresNonNull("stack")*/
+    private void handleReturn(/*>>>@UnknownInitialization @Raw TypeStack this,*/ ReturnInstruction inst)
     {
         stack.clear();
         if (inst.getType() != Type.VOID)
@@ -991,7 +1006,8 @@ public final class TypeStack
         }
     }
 
-    private void handleStack(StackInstruction inst)
+    /*@RequiresNonNull("stack")*/
+    private void handleStack(/*>>>@UnknownInitialization @Raw TypeStack this,*/ StackInstruction inst)
     {
         if (inst instanceof DUP)
         {
@@ -1148,29 +1164,31 @@ public final class TypeStack
         }
     }
 
-    private Type top(OperandStack theStack, int i)
+    private static Type top(OperandStack theStack, int i)
     {
         //return theStack.get(theStack.size() - i - 1);
         return theStack.peek(i);
     }
 
-    private boolean isCat2(Type t)
+    private static boolean isCat2(Type t)
     {
         return (t == Type.LONG || t == Type.DOUBLE);
     }
 
-    private boolean isCat1(Type t)
+    private static boolean isCat1(Type t)
     {
         return !isCat2(t);
     }
 
-    private void popNumPut(int n, Type type)
+    /*@RequiresNonNull("stack")*/
+    private void popNumPut(/*>>>@UnknownInitialization @Raw TypeStack this,*/ int n, Type type)
     {
         popNum(n);
         stack.push(type);
     }
 
-    private void popNum(int n)
+    /*@RequiresNonNull("stack")*/
+    private void popNum(/*>>>@UnknownInitialization @Raw TypeStack this,*/ int n)
     {
         for (int i = 0; i < n; i++)
         {
@@ -1178,7 +1196,8 @@ public final class TypeStack
         }
     }
 
-    public Type peek()
+    /*@RequiresNonNull("stack")*/
+    public Type peek(/*>>>@UnknownInitialization @Raw TypeStack this*/)
     {
         return stack.peek();
     }
@@ -1298,7 +1317,9 @@ public final class TypeStack
         return copyOfStack(s);
     }
 
-    private void assertStack(Type... types)
+    /*@RequiresNonNull("stack")*/
+    private void assertStack(/*>>>@UnknownInitialization @Raw TypeStack this,*/
+                             Type... types)
     {
         for (int i = 0; i < types.length; i++)
         {
