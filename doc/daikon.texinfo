@@ -476,7 +476,7 @@ Use the simple installation instructions if you only wish to detect
 invariants in Java programs.  Use the complete installation instructions
 (which are easy to follow) if you wish to detect invariants in C or Perl
 programs, if you wish to run certain other programs distributed with
-Daikon in its @file{bin/} directory, or if you wish to edit and
+Daikon in its @file{scripts/} directory, or if you wish to edit and
 recompile the source code of Daikon itself.
 
 Differences from previous versions of Daikon appear
@@ -508,7 +508,7 @@ classpath.
 @xref{Installing Daikon}, for situations where you should
 follow the complete installation instructions of @ref{Complete
 installation}.  (Also, if you do not know how to add a jar file to your
-classpath, then use the complete installation instructions, which walk
+classpath, then use the complete installation instructions, which walks
 you through the process.)
 
 
