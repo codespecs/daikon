@@ -403,7 +403,6 @@ class FormatTestCase {
     try {
       Field f = classToTest.getField("dkconfig_enabled");
       f.setBoolean (null, true);
-      // InvariantFormatTester.config.apply(className + ".enabled", "true");
     }
     catch (Exception e) { // Otherwise do nothing
     }
