@@ -9188,8 +9188,9 @@ most important thing is the original, uninstrumented source files (e.g.,
 It is also helpful to include instrumented source files,
 @file{.decl} files, and @file{.dtrace} files.
 @item
-the operating system and revision you are using (e.g., Debian stable,
-Windows XP service pack 2, etc)
+the JDK or JRE version (e.g., the complete output of @samp{java
+-version}), and operating system and revision you are using (e.g.,
+Debian stable, Windows XP service pack 2, etc)
 @item
 any other information that you consider relevant.
 @end itemize
