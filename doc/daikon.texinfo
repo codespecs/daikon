@@ -8331,6 +8331,17 @@ Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
 @noindent
 then you have not put @file{daikon.jar} on your classpath; @pxref{Simple installation}.
 
+More generally, an error such as
+@example
+Exception in thread "main" java.lang.NoClassDefFoundError: plume/FuzzyFloat
+@end example
+@noindent
+means that Java did not find the class @file{plume/FuzzyFloat} on your
+classpath.  To debug such a problem, you need to determine your
+classpath (it's your @samp{CLASSPATH} environment variable under
+Mac/Linux), and the location of file @file{plume/FuzzyFloat.class} or of
+the jar file that contains it.
+
 
 @node    Too much output, Missing output invariants, Can't run Daikon, Daikon problems
 @subsection Too much output
