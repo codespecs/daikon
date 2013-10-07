@@ -475,7 +475,7 @@ public class NIS {
    * and any invariants falsified by the sample are marked as such, but before
    * they have been removed.
    */
-  /*@RequiresNonNull({"suppressor_map", "suppressor_map_suppression_count", "all_suppressions"})*/
+  /*@RequiresNonNull({"suppressor_map", "suppressor_map_suppression_count", "all_suppressions", "NIS.suppressor_proto_invs"})*/
   public static void process_falsified_invs (PptTopLevel ppt, ValueTuple vt) {
 
     // if using the hybrid method, need to know the number of falsified suppressor
@@ -715,7 +715,7 @@ public class NIS {
    * places them in their associated slices.
    * @return a list of created invariants.
    */
-  /*@RequiresNonNull({"all_suppressions"})*/
+  /*@RequiresNonNull({"all_suppressions", "suppressor_map"})*/
   public static List<Invariant> create_suppressed_invs (PptTopLevel ppt) {
 
     // Find all antecedents and organize them by their variables comparability

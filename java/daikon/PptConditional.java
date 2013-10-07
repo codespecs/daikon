@@ -35,7 +35,9 @@ public final class PptConditional
           ctor_vis_helper(parent, splitter, splitter_inverse));
     // assert splitter.instantiated() == false;
     this.parent = parent;
-    this.splitter = splitter.instantiate(this);
+    @SuppressWarnings({"rawness", "initialization"}) // won't be used until it's fully initialized
+    /*@Initialized*/ /*@NonRaw*/ PptConditional thisNonRaw = this;
+    this.splitter = splitter.instantiate(thisNonRaw);
     this.splitter_inverse = splitter_inverse;
     // assert splitter.instantiated() == false;
     // assert this.splitter.instantiated() == true;

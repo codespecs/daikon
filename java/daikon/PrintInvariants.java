@@ -1371,6 +1371,7 @@ public final class PrintInvariants {
     }
   }
 
+  /*@RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})*/
   public static void print_true_inv_cnt (PptMap ppts) {
 
     // Count printable invariants

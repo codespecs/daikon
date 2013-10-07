@@ -176,6 +176,7 @@ public class SessionManager
 
     private boolean finished = false;
 
+    @SuppressWarnings("nullness") // tricky, but I think it's OK
     public void run() {
       debugln("Worker: run");
       while (session != null) {
@@ -189,6 +190,7 @@ public class SessionManager
         error = null;
         try {
           // session could also be null at this point, I presume.
+          // That's probably what the catch block is for.
           mgr.pending.apply(session);
         } catch (Throwable e) {
           if (finished)

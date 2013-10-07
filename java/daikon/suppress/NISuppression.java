@@ -333,6 +333,7 @@ public class NISuppression {
     NISuppressor s = suppressors[idx];
     for (Invariant inv : antecedents[idx]) {
       PptTopLevel ppt = inv.ppt.parent;
+      assert ppt.equality_view != null : "@AssumeAssertion(nullness): need to check justification";
       cinvs[idx] = inv;
 
       // If this is the last suppressor, no previous antecedents were

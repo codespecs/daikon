@@ -2214,6 +2214,7 @@ public final class Daikon {
   * suppression and equality set optimizations (should yield the same
   * invariants as the simple incremental algorithm
   */
+  /*@RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})*/
   public static void undoOpts(PptMap all_ppts) {
 
     //undo suppressions
