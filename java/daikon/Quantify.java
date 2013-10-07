@@ -341,7 +341,7 @@ public class Quantify {
      * var using index.  The expression is of the form
      * lower_bound <= index && index <= upper_bound
      */
-    private String bld_quant (/*>>> @UnknownInitialization(PptSlice.class) @Raw ESCQuantification this,*/ VarInfo var, Term index) {
+    private static String bld_quant (VarInfo var, Term index) {
       return String.format ("%s <= %s && %s <= %s",
                             var.get_lower_bound().esc_name(),
                             index.esc_name(), index.esc_name(),

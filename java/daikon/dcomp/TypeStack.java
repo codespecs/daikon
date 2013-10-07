@@ -1293,12 +1293,14 @@ public final class TypeStack
                 //if (meth.getReturnType() != Type.VOID)
                     //System.out.printf("\tmethod --- %s, return type %s --- expected --- %s%n", mg, stack.peek(), mg.getReturnType());
 
-                if (meth.getReturnType() != Type.VOID)
+                if (meth.getReturnType() != Type.VOID) {
+                    assert stack.stack != null : "@AssumeAssertion(nullness): Checker Framework bug: does not infer flow facts from annotated types";
                     assert sameType(meth.getReturnType(), stack.peek()) : "Invalid return type "
                             + stack.peek()
                             + "\n"
                             + "Expected "
                             + meth.getReturnType();
+                }
             }
 
             //System.out.printf("done%n");

@@ -433,6 +433,7 @@ public abstract class DaikonVariableInfo
             param_offset++;
             if ((type == Double.TYPE) || (type == Long.TYPE))
                 param_offset++;
+            assert cinfo.clazz != null : "@AssumeAssertion(nullness): need to check justification";
             theChild.addChildNodes(cinfo, type, name, offset, depth);
             debug_vars.exdent();
         }

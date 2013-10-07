@@ -122,6 +122,8 @@ public final class FileIO {
   public static long dkconfig_dtrace_line_count = 0;
 
   /** True if declaration records are in the new format **/
+  // Set by read_decl_version; by read_data_trace_record if the file is non-empty;
+  // by read_serialized_pptmap; and by InvMap.readObject.
   public static /*@MonotonicNonNull*/ Boolean new_decl_format = null;
 
   /**
@@ -2547,6 +2549,7 @@ public final class FileIO {
    * Read either a serialized PptMap or a InvMap and return a
    * PptMap.  If an InvMap is specified, it is converted to a PptMap
    */
+  /*@EnsuresNonNull("FileIO.new_decl_format")*/
   public static PptMap read_serialized_pptmap(
     File file,
     boolean use_saved_config)
@@ -2578,6 +2581,7 @@ public final class FileIO {
             slice.addInvariant(inv);
           }
         }
+        assert FileIO.new_decl_format != null : "@AssumeAssertion(nullness): InvMap.readObject() sets FileIO.new_decl_format";
         return (ppts);
       } else {
         throw new IOException(

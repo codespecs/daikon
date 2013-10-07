@@ -332,7 +332,7 @@ public class PptTopLevel extends Ppt {
   // This was renamed to the joiner_view because it no longer just for
   // implications, but instead for any Invariants that represents a
   // "joining" of two others (such as and, or, etc)
-  @SuppressWarnings({"rawness"}) // field won't be used until object is initialized
+  @SuppressWarnings({"rawness", "initialization"}) // field won't be used until object is initialized
   public PptSlice0 joiner_view = new PptSlice0(this);
 
   /**
@@ -972,7 +972,7 @@ public class PptTopLevel extends Ppt {
    *
    * @return the set of all invariants weakened or falsified by this sample
    **/
-  /*@RequiresNonNull({"suppressor_map", "suppressor_map_suppression_count", "all_suppressions"})*/
+  /*@RequiresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public /*@Nullable*/ Set<Invariant> add_bottom_up (ValueTuple vt, int count) {
     // Doable, but commented out for efficiency
     // repCheck();
@@ -1379,6 +1379,7 @@ public class PptTopLevel extends Ppt {
    * Debug print to the specified logger information about each
    * invariant at this ppt
    */
+  /*@RequiresNonNull("NIS.suppressor_map")*/
   public void debug_invs(Logger log) {
 
     for (Iterator<PptSlice> i = views_iterator(); i.hasNext();) {

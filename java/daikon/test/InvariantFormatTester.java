@@ -45,11 +45,6 @@ public class InvariantFormatTester extends TestCase
   public static final List<String> TEST_FORMAT_LIST = getTestFormatList();
 
   /**
-   * Allows for the configuring of Daikon options.
-   **/
-  static Configuration config;
-
-  /**
    * File that contains the format test commands.  Must be found as a
    * resource
    **/
@@ -97,7 +92,6 @@ public class InvariantFormatTester extends TestCase
    **/
   public InvariantFormatTester(String name) {
     super(name);
-    config = Configuration.getInstance();
   }
 
   /**

@@ -117,8 +117,8 @@ public class PptRelation implements Serializable {
    * Adds this relation to its child's parent list and its parent's
    * children list.
    */
-  @SuppressWarnings("rawness") // won't be used until initialization is finished
-  private void connect(/*>>>@UnknownInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this*/) {
+  @SuppressWarnings({"rawness", "initialization"}) // won't be used until initialization is finished
+  private void connect(/*>>>@UnderInitialization(PptRelation.class) @Raw(PptRelation.class) PptRelation this*/) {
     assert !child.parents.contains(this);
     assert !parent.children.contains(this);
     child.parents.add(this);

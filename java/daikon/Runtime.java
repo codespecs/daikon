@@ -27,6 +27,9 @@ import java.util.zip.GZIPOutputStream;
  * order to create input to Daikon.
  * <p>
  **/
+// I don't see a way to suppress per-field rather than on the whole class.
+// See Checker Framework test case 
+@SuppressWarnings("initialization.fields.uninitialized") // for the dtrace field.
 public final class Runtime {
 
   private static final String lineSep = System.getProperty("line.separator");
@@ -194,7 +197,11 @@ public final class Runtime {
   // run in different files depending on the class the information is
   // about.
   // Set by setDtrace().  May be null if no_dtrace==true.
-  public static /*@MonotonicNonNull*/ PrintStream dtrace;
+  // @MonotonicNonNull would be more accurate, but annotated as @NonNull
+  // because this is a library; control flow occurs at run time in generated
+  // instrumented code that is not checkable by a source code typechecker.
+  @SuppressWarnings("nullness")   // set and used by run-time instrumentation
+  public static PrintStream dtrace;
   public static boolean dtrace_closed = false;
   // daikon.Daikon should never load daikon.Runtime; but sometimes it
   // happens, due to reflective loading of the target program that gets the

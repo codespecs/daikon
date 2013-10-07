@@ -11,6 +11,7 @@ import java.util.*;
  * Runtime support for Chicory, the Daikon front end for Java.
  * This class is a collection of methods; it should never be instantiated.
  */
+@SuppressWarnings("initialization.fields.uninitialized") // library initialized in code added by run-time instrumentation
 public class Runtime
 {
     /** Unique id for method entry/exit (so they can be matched up) **/
@@ -82,7 +83,10 @@ public class Runtime
     static boolean dtraceLimitTerminate = false;
 
     /** Dtrace output stream.  Null if no_dtrace is true. **/
-    static /*@MonotonicNonNull*/ PrintStream dtrace;
+    // Not annotated *@MonotonicNonNull* because initialization and use
+    // happen in generated instrumentation code that cannot be type-checked
+    // by a source code checker.
+    static PrintStream dtrace;
 
     /** Set to true when the dtrace stream is closed **/
     static boolean dtrace_closed = false;

@@ -73,6 +73,7 @@ public class TestRedundantVars {
                 continue;
             }
 
+            assert reds.records.get(e.getKey()) != null : "@AssumeAssertion(nullness): iterating over map";
             if (!process_ppt(e.getKey())) {
                 success = false;
             }
@@ -83,7 +84,7 @@ public class TestRedundantVars {
     }
 
     // Returns true iff all tests pass.
-    /*@RequiresNonNull({"this.reds.records.get(#1)", "without", "with", "reds"})*/
+    /*@RequiresNonNull({"reds.records.get(#1)", "without", "with", "reds"})*/
     private static boolean process_ppt(String ppt) {
 
         List<String> invsWithout = without.records.get(ppt);

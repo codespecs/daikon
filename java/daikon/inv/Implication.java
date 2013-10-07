@@ -265,7 +265,9 @@ public class Implication
   * @return whether or not it logged anything
   */
   @Override
-  public boolean log (/*NOT: @UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,*/ String format, /*@Nullable*/ Object... args) {
+  @SuppressWarnings({"override.receiver.invalid", // sound overriding, not expressible in Checker Framework
+        "method.invocation.invalid"}) // call to format is OK
+  public boolean log (/*>>>@UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,*/ String format, /*@Nullable*/ Object... args) {
     String msg = format;
     if (args.length > 0)
       msg = String.format (format, args);
