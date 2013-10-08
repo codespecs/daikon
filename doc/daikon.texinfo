@@ -61,7 +61,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2010
+Copyright @copyright{} 1998-2013
 @end titlepage
 
 @html
@@ -615,7 +615,7 @@ add these three commands to your @file{~/.bashrc} or @file{~/.bash_profile} file
 export DAIKONDIR=$HOME/daikon
 # The full pathname of the directory that contains the Java JDK
 export JAVA_HOME=/usr/java/current
-source $DAIKONDIR/bin/daikon.bashrc
+source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
 @strong{csh/tcsh:} If you use the csh or tcsh shell or their variants, 
@@ -625,7 +625,7 @@ add these three commands to your @file{~/.cshrc} file:
 setenv DAIKONDIR $HOME/daikon
 # The full pathname of the directory that contains the Java JDK
 setenv JAVA_HOME /usr/java/current
-source $DAIKONDIR/bin/daikon.cshrc
+source $DAIKONDIR/scripts/daikon.cshrc
 @end example
 
 After editing your shell initialization file, either execute the commands
@@ -711,7 +711,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 export DAIKONDIR=$HOME/daikon
 # The full Unix pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.6.0_20
-source $DAIKONDIR/bin/daikon.bashrc
+source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
 Use the Cygwin/Unix path style (e.g., @code{/cygdrive/c/daikon}) rather than the
@@ -3338,7 +3338,7 @@ invariants into a splitter info file for conditional invariant
 detection.
 
 To find splitting conditions using cluster analysis, run the
-@command{runcluster.pl} program (found in the @file{$DAIKONDIR/bin}
+@command{runcluster.pl} program (found in the @file{$DAIKONDIR/scripts}
 directory) in the following way:
 @example
 runcluster.pl [@var{options}] @var{dtrace_file ...} @var{decls_files ...}
@@ -5935,7 +5935,7 @@ it in the directory @file{kvasir/inst}.
 You may see warnings about the 'missing' script.  These can be ignored.
 
 Once Kvasir has been installed, it can be used via the
-@file{kvasir-dtrace} script in the @file{$DAIKONDIR/bin} directory; if
+@file{kvasir-dtrace} script in the @file{$DAIKONDIR/scripts} directory; if
 you have set up the Daikon environment according to the instructions
 above, it should already be in your @env{PATH}.  For instructions on using
 Kvasir, see @ref{Kvasir}.
@@ -7265,7 +7265,7 @@ use such files, first save them in @uref{http://en.wikipedia.org/wiki/Comma-sepa
 as csv or comma-delimited or comma-separated-list, format.
 Then, convert the @file{.csv} file into a @file{.dtrace} file (and a
 @file{.decls} file) to be used by Daikon by running the
-@command{convertcsv.pl} program found in the @file{$DAIKONDIR/bin}
+@command{convertcsv.pl} program found in the @file{$DAIKONDIR/scripts}
 directory.  For example,
 @example
 convertcsv.pl myfile.csv
@@ -9029,7 +9029,7 @@ You can terminate the instrumented program when it has created a
 sufficiently large @file{.dtrace} file.  If you interrupt the program
 while it is in the middle of writing a record to the @file{.dtrace}
 file, the last record may be only partially written.  Use the
-@command{daikon/bin/trace-untruncate} program to remove the last,
+@command{daikon/scripts/trace-untruncate} program to remove the last,
 possibly partial, record from the file:
 @example
 trace-untruncate myfile.dtrace
@@ -9038,7 +9038,7 @@ trace-untruncate myfile.dtrace
 modifies @file{myfile.dtrace} in place to remove the last record.
 
 Alternately, you can use the
-@command{daikon/bin/trace-untruncate-fast} program.  It operates much
+@command{daikon/scripts/trace-untruncate-fast} program.  It operates much
 faster on very large files.  In order to use
 @command{trace-untruncate-fast}, you must have already compiled it
 (@pxref{Installing Daikon}).
