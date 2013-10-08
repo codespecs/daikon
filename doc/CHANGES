@@ -20,10 +20,23 @@ Further documentation can be found in:
 
 ===========================================================================
 
-4.7.0 (???)
+5.0.0 (in progress)
 
 A new front end for .NET languages (C#, F#, and Visual Basic) is available.
 
+===========================================================================
+
+4.7.1 (October 8, 2013)
+
+An interim release to get updated system support into the field:
+  Support for more recent versions of Linux (tested with Fedora 17).
+  Support for more recent versions of gnu tools (tested with gcc 4.7.2
+    and glibc 2.17).
+  Support for Java 7.
+  Updated readelf support to version 2.23.2.
+  Updated underlying Valgrind from revision 11017 to 12996 and VEX from
+    revision 1953 to 2538.  Together, this represents Valgrind 3.8.1.
+  Many improvements and bug fixes to Chicory, the Java front end for Daikon.
 
 ===========================================================================
 

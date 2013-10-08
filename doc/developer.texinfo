@@ -16,6 +16,8 @@
 @c avoid black boxes marking overfull hboxes in TeX output
 @finalout
 
+@c set overall document style
+@c @raggedright
 @paragraphindent none
 
 @titlepage
@@ -24,11 +26,11 @@
 @center @titlefont{Daikon Invariant Detector Developer Manual}
 
 @sp 2
-@center Daikon version 4.6.4
+@center Daikon version 4.7.1
 
 @sp 1
-@c Daikon version 4.6.4 date
-@center June 23, 2010
+@c Daikon version 4.7.1 date
+@center October 8, 2013
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -38,7 +40,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2005
+Copyright @copyright{} 1998-2013
 @c Copyright @copyright{} 1998-2001 Michael Ernst
 @end titlepage
 
@@ -50,7 +52,7 @@ Copyright @copyright{} 1998-2005
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the developer manual for the Daikon invariant detector.
-@c It describes Daikon version 4.6.4, released June 23, 2010.
+@c It describes Daikon version 4.7.1, released October 8, 2013.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -69,7 +71,7 @@ Copyright @copyright{} 1998-2005
 @c 
 @c @end ifinfo
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 4.6.4, released June 23, 2010.
+It describes Daikon version 4.7.1, released October 8, 2013.
 @end ifnottex
 
 @menu
@@ -335,9 +337,12 @@ file is found in @samp{/System/Library/Frameworks} under the appropriate Java
 version.  The following example is for the standard install of
 Java 1.5 on MacOSX:
 
+@exampleindent 0
 @smallexample
 export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
 @end smallexample
+@c restore default:
+@exampleindent 5
 
 
 @node     Version control repository, Using Eclipse, Compiling Daikon, Extending Daikon
@@ -888,6 +893,7 @@ is called.
 The following example defines suppressions for ``x == y'' implies
 ``x >= y'' and ``x > y'' implies ``x >= y''.
 
+@exampleindent 1
 @smallexample
 private static NISuppressionSet suppressions = null;
 
@@ -906,11 +912,14 @@ public NISuppressionSet get_ni_suppressions() @{
   return (suppressions);
 @}
 @end smallexample
+@c restore default:
+@exampleindent 5
 
 For suppressions depending on the state of a particular invariant, each @code{Invariant} has an @code{isObviousDynamically(VarInfo[] vis)} method that is called once the state of other invariants has already been determined.  This method returns a non-null value if this invariant is implied by a fact that can be derived from the given @code{VarInfo}s.  
 
 For example, suppose division was not defined for divisors smaller than 1.  The following example defines an obvious check for ``x <= c'' (where c < 1 is a constant) implies ``y % x == 0'', written in the Divides class.
 
+@exampleindent 1
 @smallexample
 public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
   DiscardInfo di = super.isObviousDynamically(vis);
@@ -938,6 +947,8 @@ public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
   return null;
 @}
 @end smallexample  
+@c restore default:
+@exampleindent 5
 
 @node    System.exit,  , New suppressors, Extending Daikon
 @section System.exit
@@ -1032,9 +1043,12 @@ sequence variables from sequence @code{this.theArray[]} and scalar
 @code{x} at program point @code{DisjSets.find(int):::EXIT}, the tracking
 argument would be:
 
+@exampleindent 1
 @smallexample
 SequenceScalarSubscriptFactory<x,this.theArray[]>@@DisjSets.find(int):::EXIT
 @end smallexample
+@c restore default:
+@exampleindent 5
 
 There are two configuration options that can customize the output.  The
 option @option{daikon.Debug.showTraceback} will output a stack trace on
@@ -1284,7 +1298,7 @@ checks; it can be called at the end without reference to equality sets.
 More detail can be found in the paper ``Efficient incremental algorithms
 for dynamic detection of likely invariants'' by Jeff H. Perkins and
 Michael D. Ernst, published in FSE 2004; the paper is available from
-@uref{http://pag.csail.mit.edu/pubs/invariants-incremental-fse2004-abstract.html}.
+@uref{http://pag.csail.mit.edu/pubs/invariants-incremental-@/fse2004-@/abstract.html}.
 
 @node    Dataflow hierarchy, Equality optimization, Avoiding work for redundant invariants, Daikon internals
 @section Dataflow hierarchy
@@ -1422,10 +1436,13 @@ lists end). This will be remedied in a future version of the tester.
 These are optional additional arguments to the static
 instantiate method of the class.  Each argument consists of the type (boolean
 or int) followed by the value.  For example:
+@exampleindent 1
 @example
 boolean true
 int 37 boolean false
 @end example
+@c restore default:
+@exampleindent 5
 
 @item Type string: 
 A type string must consist of one or more of the following literals:
@@ -1449,6 +1466,7 @@ first type in the type string) corresponds with @samp{a}, the second with
 value of @samp{a} is read first, possibly followed by @samp{b}, and then
 possibly @samp{c}, depending on the arity of the invariant.)
 
+@exampleindent 1
 @example
 Example:
 Type string, Goals
@@ -1462,6 +1480,8 @@ Goal (ioa): a >= -6
 Goal (jml): a >= -6
 Goal (simplify): (>= |a| -6)
 @end example
+@c restore default:
+@exampleindent 5
 
 Note that the spacing on the goal lines is exact, that is, no extra
 spaces are allowed and no spaces are allowed to be missing. So the
@@ -1492,7 +1512,8 @@ enclosed in quotes (@samp{"}). Quotes within a string can be represented by the
 sequence @samp{\"}.
 
 For example:
-@smallexample
+@exampleindent 1
+@example
 [1 2 3 4 5] - an array with the elements 1, 2, 3, 4, 5
 "aString" - a string
 "a string" - also legal as a string
@@ -1505,7 +1526,9 @@ Goal: a < b    <- goal string, no comment/blank lines after this
 2
 2              <-|__ Pair of values (a = 2 , b = 3)
 3              <-|
-@end smallexample
+@end example
+@c restore default:
+@exampleindent 5
 
 Other examples are in the existing test file 
 (@file{InvariantFormatTest.commands}).
@@ -1709,9 +1732,12 @@ The @file{Makefile} must contain at least the following entries.
 @item MAIN_CLASS
 Dot separated fully qualified name of the class that contains the main
 entry point for the test.  For example,
+@exampleindent 0
 @example
 MAIN_CLASS := DataStructures.StackArTester.
 @end example
+@c restore default:
+@exampleindent 5
 
 @item include ../../Makefile.common
 This includes the common portion of the test Makefiles that does most
@@ -1720,10 +1746,13 @@ testing.
 
 @item instrument-files-revise:
 A target that writes the list of files to instrument.  For example,
+@exampleindent 0
 @example
 instrument-files-revise:
     echo "DataStructures/StackAr.java" >| $@{INST_LIST_FILE@}
 @end example
+@c restore default:
+@exampleindent 5
 
 @end table
 
@@ -1770,7 +1799,8 @@ The test can be added into the standard tests (either @samp{everything} or
 @node    Editing, Distribution, Testing, Top
 @chapter Editing Daikon source code
 
-The Daikon source code follows these coding conventions: @uref{http://groups.csail.mit.edu/pag/pag/logistics.html#code-conventions}.
+The Daikon source code follows these coding conventions:
+@uref{http://groups.csail.mit.edu/@/pag/pag/logistics.html#code-conventions}.
 
 
 @menu
@@ -1827,11 +1857,14 @@ confusing workaround.
 
 It is strongly recommended that you make the following customizations to Eclipse:
 
-@example
+@exampleindent 1
+@smallexample
 Window >> Preferences >> Workbench >> Refresh Workspace on Startup
 Window >> Preferences >> Java >> Compiler >> Problems >> Unused imports >> Ignore
 Window >> Preferences >> Java >> Compiler >> Style >> Non-static access >> >> Ignore
-@end example
+@end smallexample
+@c restore default:
+@exampleindent 5
 
 
 @node    Existing projects, External tools, Start up Eclipse, Eclipse setup
@@ -1989,7 +2022,7 @@ HTML, info, or printed (PostScript and PDF) output.
 You can edit the manual using an ordinary text editor.  Emacs has a
 useful Texinfo mode.  You can mimic the formatting commands that
 already appear in the manual, but it's also a good idea to read the
-@url{http://texinfo.org,Texinfo documentation}.
+@uref{http://texinfo.org,Texinfo documentation}.
 
 If you wish to create a new section of the manual, insert two lines like
 the following:
@@ -2059,6 +2092,7 @@ All times are on godwit, as of 8/2011.
 
 @b{To do:}  All references to CVS should be changed to Mercurial.
 
+@exampleindent 0
 
 @enumerate
 
@@ -2351,8 +2385,8 @@ This could be automated.  See "man freshmeat-submit".
 
 @end enumerate
 
-
-
+@c restore default:
+@exampleindent 5
 
 @node    Historical, File formats, Distribution, Top
 @chapter Analyzing historical versions of Daikon
@@ -2366,13 +2400,13 @@ This could be automated.  See "man freshmeat-submit".
 @c removed from this file on 12 Nov 2010.
 
 Daikon's Mercurial repository, available at
-@url{http://code.google.com/p/daikon/}, contains complete development
+@uref{http://code.google.com/p/daikon/}, contains complete development
 history starting from October 1, 2010, and partial development history
 before that time.  The reason for this is that converting the full CVS
 repository to Mercurial would create a repository that would be too
 large for convenient use, and that would also be too large to upload to
 Google Code.  The original CVS repository is available for download from
-@url{http://code.google.com/p/daikon/downloads}, as files
+@uref{http://code.google.com/p/daikon/downloads}, as files
 @file{inv-cvs.zip} and @file{inv-cvs.z01} through @file{inv-cvs.z09}.  Download
 all 10 files, and then run the following commands to re-create the CVS
 repository, which will be named @file{invariants/}:
