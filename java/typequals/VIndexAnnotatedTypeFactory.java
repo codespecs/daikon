@@ -10,7 +10,7 @@ import javax.lang.model.element.AnnotationMirror;
 
 import checkers.basetype.BaseTypeChecker;
 import checkers.types.AnnotatedTypeMirror;
-import checkers.types.BasicAnnotatedTypeFactory;
+import checkers.types.SubtypingAnnotatedTypeFactory;
 import checkers.types.TreeAnnotator;
 
 import com.sun.source.tree.BinaryTree;
@@ -22,7 +22,7 @@ import com.sun.source.tree.Tree;
  * in the following cases:
  * [TODO]
  */
-public class VIndexAnnotatedTypeFactory extends BasicAnnotatedTypeFactory<VIndexChecker> {
+public class VIndexAnnotatedTypeFactory extends SubtypingAnnotatedTypeFactory<VIndexChecker> {
 
     private final AnnotationMirror VINDEXTOP;
 

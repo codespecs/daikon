@@ -806,10 +806,10 @@ JAVAC_NULLNESS_RAW_ARGS = -processor checkers.nullness.NullnessRawnessChecker -i
 JAVAC_NULLNESS_FBC_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 ## The "-J-Dcheckers.skipUses='^daikon.Debug'" should really be just for rawness, not for nullness.
 JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src -J-Dcheckers.skipUses='^daikon.Debug'
-JAVAC_PROTOTYPE_ARGS = -processor checkers.basic.BasicChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing
+JAVAC_PROTOTYPE_ARGS = -processor checkers.subtyping.SubtypingChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing
 # JAVAC_PROTOTYPE_STUBS = -Astubs=typequals/prototype-stubs.astub
 JAVAC_PROTOTYPE_STUBS = -J-Dcheckers.skipUses='^java\.'
-JAVAC_VINDEX_ARGS = -processor checkers.basic.BasicChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing
+JAVAC_VINDEX_ARGS = -processor checkers.subtyping.SubtypingChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing
 # JAVAC_VINDEX_STUBS = -Astubs=typequals/vindex-stubs.astub
 JAVAC_VINDEX_STUBS = -J-Dcheckers.skipUses='^java\.'
 JAVAC_REGEX_ARGS = -processor checkers.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
@@ -843,6 +843,8 @@ show_nullness_java_files:
 	@echo DAIKON_JAVA_FILES:
 	@echo ${DAIKON_JAVA_FILES}
 
+# Reinstate prototype and vindex checkers later
+# check-all: check-interning check-signature check-nullness check-regex check-prototype check-vindex
 check-all: check-interning check-signature check-nullness check-regex
 
 intern: check-interning
