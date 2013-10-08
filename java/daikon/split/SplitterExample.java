@@ -4,6 +4,7 @@ import daikon.*;
 import daikon.inv.*;
 
 // This splitter tests the condition "X>0".
+@SuppressWarnings("nullness")   // uses private fields, client code not analyzed
 public final class SplitterExample
   extends Splitter
 {

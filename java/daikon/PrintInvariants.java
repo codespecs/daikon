@@ -264,6 +264,7 @@ public final class PrintInvariants {
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    **/
+  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   public static void mainHelper(String[] args)
     throws FileNotFoundException, StreamCorruptedException,
            OptionalDataException, IOException, ClassNotFoundException {
@@ -1371,6 +1372,7 @@ public final class PrintInvariants {
     }
   }
 
+  @SuppressWarnings("flowexpr.parse.error") // private field
   /*@RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})*/
   public static void print_true_inv_cnt (PptMap ppts) {
 

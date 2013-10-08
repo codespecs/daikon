@@ -13,7 +13,7 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
   public CollectFieldsVisitor(ClassOrInterfaceDeclaration n, boolean include_nested_classes) {
     this.include_nested_classes = include_nested_classes;
     @SuppressWarnings({"rawness", "initialization"}) // not used until fully initialized
-    /*@NonRaw*/ CollectFieldsVisitor thisNonRaw = this;
+    /*@Initialized*/ /*@NonRaw*/ CollectFieldsVisitor thisNonRaw = this;
     n.accept(thisNonRaw);
     updateCache();
   }

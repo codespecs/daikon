@@ -125,6 +125,7 @@ public class PptSplitter implements Serializable {
   }
 
   /** Adds the sample to each conditional ppt in the split. */
+  @SuppressWarnings("flowexpr.parse.error") // private field
   /*@RequiresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public void add_bottom_up (ValueTuple vt, int count) {
 
@@ -176,6 +177,7 @@ public class PptSplitter implements Serializable {
    * Adds implication invariants based on the invariants found on each
    * side of the split
    */
+  @SuppressWarnings("flowexpr.parse.error") // private field
   /*@RequiresNonNull({"parent.equality_view", "NIS.all_suppressions", "NIS.suppressor_map"})*/
   public void add_implications() {
 

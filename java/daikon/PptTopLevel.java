@@ -972,6 +972,7 @@ public class PptTopLevel extends Ppt {
    *
    * @return the set of all invariants weakened or falsified by this sample
    **/
+  @SuppressWarnings({"flowexpr.parse.error", "contracts.precondition.not.satisfied"}) // private field
   /*@RequiresNonNull({"NIS.suppressor_map", "NIS.suppressor_map_suppression_count", "NIS.all_suppressions"})*/
   public /*@Nullable*/ Set<Invariant> add_bottom_up (ValueTuple vt, int count) {
     // Doable, but commented out for efficiency
@@ -2732,6 +2733,7 @@ public class PptTopLevel extends Ppt {
    * controls whether all or only the first two conditional program points
    * are considered.
    **/
+  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   public void addImplications() {
 
     if (PptSplitter.dkconfig_disable_splitting)
@@ -3711,7 +3713,7 @@ public class PptTopLevel extends Ppt {
         continue;
       Map<VarInfo.Pair,VarInfo.Pair> eq_new = rel.get_child_equalities_as_parent();
       // Cannot use foreach loop, due to desire to remove from emap.
-      for (Iterator</*@KeyFor("emap")*/ VarInfo.Pair> j = emap.keySet().iterator(); j.hasNext();) {
+      for (Iterator<VarInfo. /*@KeyFor("emap")*/ Pair> j = emap.keySet().iterator(); j.hasNext();) {
         VarInfo.Pair curpair = j.next();
         VarInfo.Pair newpair = eq_new.get(curpair);
         if (newpair == null)
@@ -3787,6 +3789,7 @@ public class PptTopLevel extends Ppt {
    * by first creating all of the suppressed invariants in each of the
    * children, performing the merge, and then removing them.
    */
+  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   /*@RequiresNonNull("equality_view")*/
   public void merge_invs_multiple_children() {
 

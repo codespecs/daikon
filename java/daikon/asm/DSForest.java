@@ -37,7 +37,7 @@ public class DSForest {
     public int rank;
     public int id;
 
-    @SuppressWarnings("initialization.invalid.field.write.unknown") // weakness of FBC type system
+    @SuppressWarnings({"initialization.invalid.field.write.unknown", "assignment.type.incompatible"}) // weakness of FBC type system
     public DSForestNode(String element) {
       this.element = element;
       this.parent = this;

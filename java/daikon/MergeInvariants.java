@@ -69,6 +69,7 @@ public final class MergeInvariants {
    * @see #main(String[])
    * @see daikon.Daikon.TerminationMessage
    **/
+  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   public static void mainHelper(String[] args)
     throws FileNotFoundException, StreamCorruptedException,
            OptionalDataException, IOException, ClassNotFoundException {

@@ -63,6 +63,7 @@ import daikon.util.Pair;
  * The "main" method is the main entry point for the Daikon invariant detector.
  * The "mainHelper" method is the entry point, when called programmatically.
  **/
+@SuppressWarnings("initialization.fields.uninitialized") // field all_ppts; deal with it later
 public final class Daikon {
 
   private Daikon() {
@@ -480,6 +481,7 @@ public final class Daikon {
    * @see #main(String[])
    * @see TerminationMessage
    **/
+  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   public static void mainHelper(final String[] args) {
     // Cleanup from any previous runs
     cleanup();
@@ -1797,6 +1799,7 @@ public final class Daikon {
    * been instantiated.  This routine processes data to falsify the
    * candidate invariants.
    **/
+  @SuppressWarnings("contracts.precondition.not.satisfied") // private field
   /*@RequiresNonNull("fileio_progress")*/ // set in mainHelper
   private static void process_data(PptMap all_ppts, Set<String> dtrace_files) {
     MemMonitor monitor = null;
@@ -2214,6 +2217,7 @@ public final class Daikon {
   * suppression and equality set optimizations (should yield the same
   * invariants as the simple incremental algorithm
   */
+  @SuppressWarnings("flowexpr.parse.error") // private field
   /*@RequiresNonNull({"NIS.all_suppressions", "NIS.suppressor_map"})*/
   public static void undoOpts(PptMap all_ppts) {
 
