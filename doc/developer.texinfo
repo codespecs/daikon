@@ -16,17 +16,21 @@
 @c avoid black boxes marking overfull hboxes in TeX output
 @finalout
 
+@c set overall document style
+@c @raggedright
+@paragraphindent none
+
 @titlepage
 @sp 10
 @c Could also use @title, @subtitle, @author here.
 @center @titlefont{Daikon Invariant Detector Developer Manual}
 
 @sp 2
-@center Daikon version 4.6.4
+@center Daikon version 4.7.1
 
 @sp 1
-@c Daikon version 4.6.4 date
-@center June 23, 2010
+@c Daikon version 4.7.1 date
+@center October 8, 2013
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -36,7 +40,7 @@
 @c The following two commands start the copyright page.
 @page
 @vskip 0pt plus 1filll
-Copyright @copyright{} 1998-2005
+Copyright @copyright{} 1998-2013
 @c Copyright @copyright{} 1998-2001 Michael Ernst
 @end titlepage
 
@@ -48,7 +52,7 @@ Copyright @copyright{} 1998-2005
 @c <h1>Daikon Invariant Detector User Manual</h1>
 @c
 @c This is the developer manual for the Daikon invariant detector.
-@c It describes Daikon version 4.6.4, released June 23, 2010.
+@c It describes Daikon version 4.7.1, released October 8, 2013.
 @c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -67,7 +71,7 @@ Copyright @copyright{} 1998-2005
 @c 
 @c @end ifinfo
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 4.6.4, released June 23, 2010.
+It describes Daikon version 4.7.1, released October 8, 2013.
 @end ifnottex
 
 @menu
@@ -264,11 +268,11 @@ Thus, a complete @file{.bashrc} or @file{.bash_profile} shell setup file
 that would enable you to compile Daikon might look like the following.
 
 @example
-  export DAIKONDIR=$HOME/daikon
-  export JAVA_HOME=/usr/java/current
-  export DAIKONCLASS_SOURCES=1
-  source $DAIKONDIR/scripts/daikon.bashrc
-  export CLASSPATH=.:$CLASSPATH
+export DAIKONDIR=$HOME/daikon
+export JAVA_HOME=/usr/java/current
+export DAIKONCLASS_SOURCES=1
+source $DAIKONDIR/scripts/daikon.bashrc
+export CLASSPATH=.:$CLASSPATH
 @end example
 
 @cindex .jpp files
@@ -333,10 +337,13 @@ file is found in @samp{/System/Library/Frameworks} under the appropriate Java
 version.  The following example is for the standard install of
 Java 1.5 on MacOSX:
 
+@exampleindent 0
 @smallexample
-  export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
+export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
 @end smallexample
-  
+@c restore default:
+@exampleindent 5
+
 
 @node     Version control repository, Using Eclipse, Compiling Daikon, Extending Daikon
 @section Version control repository
@@ -416,7 +423,7 @@ subsequence of b[]''.
 Invariants over a scalar and a sequence, such
 as ``x is a member of a[]''.
 @end table
-@noindent
+
 A complete list of invariants appears in @samp{Daikon.setup_proto_invs()}.
 
 Daikon's invariants are first instantiated, then are presented samples
@@ -492,10 +499,11 @@ For example, suppose your new invariant has a 50% chance of being true
 by chance for each sample.  (``x is even'' is an example of such an
 invariant.)  Then a reasonable body for @code{computeConfidence} would
 be
+
 @example
 return 1 - Math.pow(.5, ppt.num_samples());
 @end example
-@noindent
+
 If 5 values had been seen, then this implementation would return 31/32,
 which is the likelihood that all 5 values seen so far were even not purely
 by chance.  An invariant is printed only if its probability of not
@@ -559,7 +567,6 @@ field and also update the @code{get} method.
 In every subclass of @code{Invariant}, edit the
 @code{format_using} method to handle the new @code{OutputFormat}.
 @end itemize
-
 
 @node    New front ends, New suppressors, New formatting for invariants, Extending Daikon
 @section New front ends
@@ -886,6 +893,7 @@ is called.
 The following example defines suppressions for ``x == y'' implies
 ``x >= y'' and ``x > y'' implies ``x >= y''.
 
+@exampleindent 1
 @smallexample
 private static NISuppressionSet suppressions = null;
 
@@ -904,11 +912,14 @@ public NISuppressionSet get_ni_suppressions() @{
   return (suppressions);
 @}
 @end smallexample
+@c restore default:
+@exampleindent 5
 
 For suppressions depending on the state of a particular invariant, each @code{Invariant} has an @code{isObviousDynamically(VarInfo[] vis)} method that is called once the state of other invariants has already been determined.  This method returns a non-null value if this invariant is implied by a fact that can be derived from the given @code{VarInfo}s.  
 
 For example, suppose division was not defined for divisors smaller than 1.  The following example defines an obvious check for ``x <= c'' (where c < 1 is a constant) implies ``y % x == 0'', written in the Divides class.
 
+@exampleindent 1
 @smallexample
 public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
   DiscardInfo di = super.isObviousDynamically(vis);
@@ -936,6 +947,8 @@ public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
   return null;
 @}
 @end smallexample  
+@c restore default:
+@exampleindent 5
 
 @node    System.exit,  , New suppressors, Extending Daikon
 @section System.exit
@@ -1030,9 +1043,12 @@ sequence variables from sequence @code{this.theArray[]} and scalar
 @code{x} at program point @code{DisjSets.find(int):::EXIT}, the tracking
 argument would be:
 
+@exampleindent 1
 @smallexample
 SequenceScalarSubscriptFactory<x,this.theArray[]>@@DisjSets.find(int):::EXIT
 @end smallexample
+@c restore default:
+@exampleindent 5
 
 There are two configuration options that can customize the output.  The
 option @option{daikon.Debug.showTraceback} will output a stack trace on
@@ -1282,7 +1298,7 @@ checks; it can be called at the end without reference to equality sets.
 More detail can be found in the paper ``Efficient incremental algorithms
 for dynamic detection of likely invariants'' by Jeff H. Perkins and
 Michael D. Ernst, published in FSE 2004; the paper is available from
-@uref{http://pag.csail.mit.edu/pubs/invariants-incremental-fse2004-abstract.html}.
+@uref{http://pag.csail.mit.edu/pubs/invariants-incremental-@/fse2004-@/abstract.html}.
 
 @node    Dataflow hierarchy, Equality optimization, Avoiding work for redundant invariants, Daikon internals
 @section Dataflow hierarchy
@@ -1420,10 +1436,13 @@ lists end). This will be remedied in a future version of the tester.
 These are optional additional arguments to the static
 instantiate method of the class.  Each argument consists of the type (boolean
 or int) followed by the value.  For example:
+@exampleindent 1
 @example
-    boolean true
-    int 37 boolean false
+boolean true
+int 37 boolean false
 @end example
+@c restore default:
+@exampleindent 5
 
 @item Type string: 
 A type string must consist of one or more of the following literals:
@@ -1447,6 +1466,7 @@ first type in the type string) corresponds with @samp{a}, the second with
 value of @samp{a} is read first, possibly followed by @samp{b}, and then
 possibly @samp{c}, depending on the arity of the invariant.)
 
+@exampleindent 1
 @example
 Example:
 Type string, Goals
@@ -1460,6 +1480,8 @@ Goal (ioa): a >= -6
 Goal (jml): a >= -6
 Goal (simplify): (>= |a| -6)
 @end example
+@c restore default:
+@exampleindent 5
 
 Note that the spacing on the goal lines is exact, that is, no extra
 spaces are allowed and no spaces are allowed to be missing. So the
@@ -1490,7 +1512,8 @@ enclosed in quotes (@samp{"}). Quotes within a string can be represented by the
 sequence @samp{\"}.
 
 For example:
-@smallexample
+@exampleindent 1
+@example
 [1 2 3 4 5] - an array with the elements 1, 2, 3, 4, 5
 "aString" - a string
 "a string" - also legal as a string
@@ -1503,7 +1526,9 @@ Goal: a < b    <- goal string, no comment/blank lines after this
 2
 2              <-|__ Pair of values (a = 2 , b = 3)
 3              <-|
-@end smallexample
+@end example
+@c restore default:
+@exampleindent 5
 
 Other examples are in the existing test file 
 (@file{InvariantFormatTest.commands}).
@@ -1707,9 +1732,12 @@ The @file{Makefile} must contain at least the following entries.
 @item MAIN_CLASS
 Dot separated fully qualified name of the class that contains the main
 entry point for the test.  For example,
+@exampleindent 0
 @example
 MAIN_CLASS := DataStructures.StackArTester.
 @end example
+@c restore default:
+@exampleindent 5
 
 @item include ../../Makefile.common
 This includes the common portion of the test Makefiles that does most
@@ -1718,10 +1746,13 @@ testing.
 
 @item instrument-files-revise:
 A target that writes the list of files to instrument.  For example,
+@exampleindent 0
 @example
 instrument-files-revise:
     echo "DataStructures/StackAr.java" >| $@{INST_LIST_FILE@}
 @end example
+@c restore default:
+@exampleindent 5
 
 @end table
 
@@ -1768,7 +1799,8 @@ The test can be added into the standard tests (either @samp{everything} or
 @node    Editing, Distribution, Testing, Top
 @chapter Editing Daikon source code
 
-The Daikon source code follows these coding conventions: @uref{http://groups.csail.mit.edu/pag/pag/logistics.html#code-conventions}.
+The Daikon source code follows these coding conventions:
+@uref{http://groups.csail.mit.edu/@/pag/pag/logistics.html#code-conventions}.
 
 
 @menu
@@ -1825,11 +1857,14 @@ confusing workaround.
 
 It is strongly recommended that you make the following customizations to Eclipse:
 
-@example
+@exampleindent 1
+@smallexample
 Window >> Preferences >> Workbench >> Refresh Workspace on Startup
 Window >> Preferences >> Java >> Compiler >> Problems >> Unused imports >> Ignore
 Window >> Preferences >> Java >> Compiler >> Style >> Non-static access >> >> Ignore
-@end example
+@end smallexample
+@c restore default:
+@exampleindent 5
 
 
 @node    Existing projects, External tools, Start up Eclipse, Eclipse setup
@@ -1875,34 +1910,34 @@ of the windows move around to a structure similar to the screenshot
 below.
 
 @item
- Select the menu item File->New->Project
+Select the menu item File->New->Project
 
 @item
- On the popup window, select Java Project and click Next
+On the popup window, select Java Project and click Next
 
 @item
- Call the project 'Daikon' or some other appropriate name and
+Call the project 'Daikon' or some other appropriate name and
 click Next.
 
 @item
- On the next window, create a new folder in
+On the next window, create a new folder in
 the project called 'src', and answer Yes to the next dialog box asking
 you to confirm a change in the build directory. Select Ok and you
 should see the new Project as a small folder icon in the package
 explorer.
 
 @item
- Select the menu item File->Import
+Select the menu item File->Import
 
 @item
- On the next popup window, select "File System" and click
+On the next popup window, select "File System" and click
 Next. Browse to the folder containing your source code.  Using the
 standard PAG setup, the folder should be $DAIKONDIR/java. The import
 destination should be Daikon/src.  Check the boxes for including
 daikon, jtb, and plume.
 
 @item
- Finally, add the required jars for Daikon by right-clicking on
+Finally, add the required jars for Daikon by right-clicking on
 the project and selecting the Properties menu.  Select "Java Build
 Path", then "Libraries", then "Add External Jars" and add tools.jar,
 junit.jar, jakarta-oro.jar, and java-getopt.jar.  (See your CLASSPATH
@@ -1987,7 +2022,7 @@ HTML, info, or printed (PostScript and PDF) output.
 You can edit the manual using an ordinary text editor.  Emacs has a
 useful Texinfo mode.  You can mimic the formatting commands that
 already appear in the manual, but it's also a good idea to read the
-@url{http://texinfo.org,Texinfo documentation}.
+@uref{http://texinfo.org,Texinfo documentation}.
 
 If you wish to create a new section of the manual, insert two lines like
 the following:
@@ -2005,12 +2040,12 @@ even be the same), and you may replace @code{@@chapter} by @code{@@section},
 Follow the Texinfo conventions for marking up text.  In particular:
 @itemize
 @item
-  Don't use regular double quotes (&quot;) in running text.  Instead, use
-  two single backquotes and two regular quotes, ``like this''.  Emacs will
-  do this substitution for you if you are using its Texinfo mode.
+Don't use regular double quotes (&quot;) in running text.  Instead, use
+two single backquotes and two regular quotes, ``like this''.  Emacs will
+do this substitution for you if you are using its Texinfo mode.
 
 @item
-  Often, some other kind of markup is better than quotes:
+Often, some other kind of markup is better than quotes:
 @itemize
 @item @code{@@code} is for names of classes, functions, variables, keywords, and
       other fragments of source code.
@@ -2027,16 +2062,16 @@ Follow the Texinfo conventions for marking up text.  In particular:
 @end itemize
 
 @item
-  Examples shouldn't include extra spaces on the left for
-    indentation since Texinfo already adds some indentation.  Remember
-    that in code examples you need to replace all curly braces with @{ and @}
-    to quote them for Texinfo.
+Examples shouldn't include extra spaces on the left for
+indentation since Texinfo already adds some indentation.  Remember
+that in code examples you need to replace all curly braces with @{ and @}
+to quote them for Texinfo.
 
 @item
-  Don't mix @code{@@example} and @code{@@smallexample} in the same section since it
-    looks funny to have examples in two different sized fonts.  If your example
-    is too wide to fit on the page with @code{@@example}, it's better to insert some
-    line breaks to make it more readable than to shrink the font.
+Don't mix @code{@@example} and @code{@@smallexample} in the same section since it
+looks funny to have examples in two different sized fonts.  If your example
+is too wide to fit on the page with @code{@@example}, it's better to insert some
+line breaks to make it more readable than to shrink the font.
 @end itemize
 
 Once you have edited the manual, run @samp{make} twice (yes, you must run
@@ -2057,300 +2092,301 @@ All times are on godwit, as of 8/2011.
 
 @b{To do:}  All references to CVS should be changed to Mercurial.
 
+@exampleindent 0
 
 @enumerate
 
 @item
- It is suggested that you use the @samp{daikonuser} account
-    to publish a distribution.  This ensures that everything has been
-    committed to Mercurial and that nothing extraneous in your account gets
-    included in the distribution.  Ask a senior group member for the
-    password.  Note that all of the following instructions should work
-    from other accounts as well.
+It is suggested that you use the @samp{daikonuser} account
+to publish a distribution.  This ensures that everything has been
+committed to Mercurial and that nothing extraneous in your account gets
+included in the distribution.  Ask a senior group member for the
+password.  Note that all of the following instructions should work
+from other accounts as well.
 
 @example
-        ssh daikonuser@@mangold.csail.mit.edu
+ssh daikonuser@@mangold.csail.mit.edu
 @end example
-    (Alternately, you can do @samp{su - daikonuser} instead.)
+(Alternately, you can do @samp{su - daikonuser} instead.)
 
 @item
- Update Daikon to the most recent version.  [Time: moments]
+Update Daikon to the most recent version.  [Time: moments]
 
 @example
-        cd $DAIKONDIR && hg fetch && hg outgoing && hg status
+cd $DAIKONDIR && hg fetch && hg outgoing && hg status
 @end example
 
 The last line printed should be @samp{no changes found}.
 
 @item
- Rebuild everything.
-         [Time: ?? (3pm)]
+Rebuild everything.
+[Time: ?? (3pm)]
 
 @example
-        make rebuild-everything
+make rebuild-everything
 @end example
 
 @item
- Run the Kvasir regression tests.
-         [Time: ??18 min]
+Run the Kvasir regression tests.
+[Time: ??18 min]
 @example
-        make -C $DAIKONDIR/tests/kvasir-tests clean clean-all nightly-summary-w-daikon
+make -C $DAIKONDIR/tests/kvasir-tests clean clean-all nightly-summary-w-daikon
 @end example
 
 
 @item
- Run the regression tests.
-         The last line printed should be "All tests succeeded."
-         [Time: ??55 min]
+Run the regression tests.
+The last line printed should be "All tests succeeded."
+[Time: ??55 min]
 
 @example
-        make -C $DAIKONDIR/tests clean diffs
+make -C $DAIKONDIR/tests clean diffs
 @end example
 
 @item
- Edit the @file{doc/CHANGES} file to indicate what has changed
-    in this version.  A good way to determine what has changed is to diff
-    the texinfo source files in the doc directory against the previous
-    versions:
+Edit the @file{doc/CHANGES} file to indicate what has changed
+in this version.  A good way to determine what has changed is to diff
+the texinfo source files in the doc directory against the previous
+versions:
 
 @example
-        cd $DAIKONDIR/doc
-        diff -b -u -s --from-file /afs/csail/group/pag/docroot/www.pag.csail.mit.edu/daikon/dist/doc *.texinfo
+cd $DAIKONDIR/doc
+diff -b -u -s --from-file /afs/csail/group/pag/docroot/www.pag.csail.mit.edu/daikon/dist/doc *.texinfo
 @end example
 
 Another good source of information is the CVS logs over the
-    last month:
+last month:
 
 @example
-        cd $DAIKONDIR/java
-        cvs -q log -d ">1 month ago" -N | cvs-log-summarize.pl
+cd $DAIKONDIR/java
+cvs -q log -d ">1 month ago" -N | cvs-log-summarize.pl
 @end example
 
 @item
-    Optionally, adjust the version number in file $DAIKONDIR/doc/VERSION.
-    Optionally, override the distribution date (default: today) by
-    redefining environment variable TODAY (e.g., 'TODAY=November 1 2004').
-    [Time: moments]
+Optionally, adjust the version number in file $DAIKONDIR/doc/VERSION.
+Optionally, override the distribution date (default: today) by
+redefining environment variable TODAY (e.g., 'TODAY=November 1 2004').
+[Time: moments]
 
 @example
-        cd $DAIKONDIR
-        make update-doc-dist-date-and-version
+cd $DAIKONDIR
+make update-doc-dist-date-and-version
 @end example
 
 @item
- Build everything to be distributed and copy it to the staging
-    area (@uref{http://www.pag.csail.mit.edu/daikon/staging-daikon/}).  The final
-    output will be a list of files that were added/removed since the
-    last release.
-    [Time: ??11 min]
+Build everything to be distributed and copy it to the staging
+area (@uref{http://www.pag.csail.mit.edu/daikon/staging-daikon/}).  The final
+output will be a list of files that were added/removed since the
+last release.
+[Time: ??11 min]
 
 @example
-        make staging
+make staging
 @end example
 
-    (To test just this part, you can do: @samp{make -C $DAIKONDIR/java clean; make -C $DAIKONDIR WWW_PARENT=$HOME/www/tmp staging})
+(To test just this part, you can do: @samp{make -C $DAIKONDIR/java clean; make -C $DAIKONDIR WWW_PARENT=$HOME/www/tmp staging})
 
 
 @item
- Test the distribution in the staging area, on a 32-bit machine
-    such as onion.  The last part of
-    the test runs Chicory/Daikon on the StackAr example in the
-    release.  Success is indicated by invariant output being written
-    to the screen.  @b{Consider moving the staging area to the website
-    so that we can check things out via the webserver before
-    installing.}
-    [Time: ?? min]
+Test the distribution in the staging area, on a 32-bit machine
+such as onion.  The last part of
+the test runs Chicory/Daikon on the StackAr example in the
+release.  Success is indicated by invariant output being written
+to the screen.  @b{Consider moving the staging area to the website
+so that we can check things out via the webserver before
+installing.}
+[Time: ?? min]
 
 @example
-        make test-staged-dist
+make test-staged-dist
 @end example
 
 @item
- Test the distribution in the staging area, on a 64-bit machine
-    such as mangold. Success is indicated by invariant output being written
-    to the screen.
-    [Time: ??24 min]
+Test the distribution in the staging area, on a 64-bit machine
+such as mangold. Success is indicated by invariant output being written
+to the screen.
+[Time: ??24 min]
 
 @example
-        make test-staged-dist
+make test-staged-dist
 @end example
 
 @item
- Test the distribution on a Windows machine.  On a Windows
-    machine with Cygwin installed, as a guest user (or at least one without
-    environment variables such as $DAIKONDIR defined!), download the staged daikon.tar.gz
-    file, extract the files, set the appropriate environment variables
-    and run the top level Makefile.  This is
-    successful if the make command runs to conclusion without an error.
-    The last line should indicate that Kvasir was not built because
-    it is not a linux platform.
-    [Time: ??32 min]
+Test the distribution on a Windows machine.  On a Windows
+machine with Cygwin installed, as a guest user (or at least one without
+environment variables such as $DAIKONDIR defined!), download the staged daikon.tar.gz
+file, extract the files, set the appropriate environment variables
+and run the top level Makefile.  This is
+successful if the make command runs to conclusion without an error.
+The last line should indicate that Kvasir was not built because
+it is not a linux platform.
+[Time: ??32 min]
 
 @itemize
 @item
 Csh version:
-  @example
-          mkdir -p ~/tmp
-          cd ~/tmp
-          rm -rf daikon.tar.gz daikon
-          wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
-          tar xzf daikon.tar.gz
-          setenv JAVA_HOME "/cygdrive/c/Program Files/Java/jdk1.6.0_19"
-          setenv DAIKONDIR `pwd`/daikon
-          setenv DAIKONCLASS_SOURCES 1
-          source daikon/bin/daikon.cshrc
-          cd daikon
-          make
+@example
+mkdir -p ~/tmp
+cd ~/tmp
+rm -rf daikon.tar.gz daikon
+wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+tar xzf daikon.tar.gz
+setenv JAVA_HOME "/cygdrive/c/Program Files/Java/jdk1.6.0_19"
+setenv DAIKONDIR `pwd`/daikon
+setenv DAIKONCLASS_SOURCES 1
+source daikon/bin/daikon.cshrc
+cd daikon
+make
 @end example
 @item
 Bash version:
-  @example
-          mkdir -p ~/tmp
-          cd ~/tmp
-          rm -rf daikon.tar.gz daikon
-          wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
-          tar xzf daikon.tar.gz
-          # Convert OSTYPE from a bash shell variable to a system environment variable.
-          export OSTYPE
-          export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.6.0_19"
-          export DAIKONDIR=`pwd`/daikon
-          export DAIKONCLASS_SOURCES=1
-          source daikon/bin/daikon.bashrc
-          cd daikon
-          make
+@example
+mkdir -p ~/tmp
+cd ~/tmp
+rm -rf daikon.tar.gz daikon
+wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+tar xzf daikon.tar.gz
+# Convert OSTYPE from a bash shell variable to a system environment variable.
+export OSTYPE
+export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.6.0_19"
+export DAIKONDIR=`pwd`/daikon
+export DAIKONCLASS_SOURCES=1
+source daikon/bin/daikon.bashrc
+cd daikon
+make
 @end example
 @end itemize
 
 @item
- Test the distribution on a MacOSX machine.  On a MacOSX machine
-    with the development tools installed, download the staged daikon.tar.gz
-    file, extract the files, set the appropriate environment variables and
-    run the top level makefile.  This is successful if the make command
-    runs to conclusion without an error.  The last line should indicate
-    that Kvasir was not built because it is not a Linux platform.
+Test the distribution on a MacOSX machine.  On a MacOSX machine
+with the development tools installed, download the staged daikon.tar.gz
+file, extract the files, set the appropriate environment variables and
+run the top level makefile.  This is successful if the make command
+runs to conclusion without an error.  The last line should indicate
+that Kvasir was not built because it is not a Linux platform.
 
-    Note that the build will take a fair amount of time because it
-    builds the DynComp instrumented JDK.
+Note that the build will take a fair amount of time because it
+builds the DynComp instrumented JDK.
 @itemize
 @item
 Csh version:
-  @example
-          mkdir -p ~/tmp
-          cd ~/tmp
-          # or: wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
-          curl -O http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
-          tar xzvf daikon.tar.gz
-          setenv ORIG_RT /System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
-          setenv DAIKONDIR `pwd`/daikon
-          setenv DAIKONCLASS_SOURCES 1
-          source daikon/bin/daikon.cshrc
-          cd daikon
-          make
+@example
+mkdir -p ~/tmp
+cd ~/tmp
+# or: wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+curl -O http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+tar xzvf daikon.tar.gz
+setenv ORIG_RT /System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
+setenv DAIKONDIR `pwd`/daikon
+setenv DAIKONCLASS_SOURCES 1
+source daikon/bin/daikon.cshrc
+cd daikon
+make
 @end example
 @item
 Bash version:
-  @example
-          mkdir -p ~/tmp
-          cd ~/tmp
-          # or: wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
-          curl -O http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
-          tar xzvf daikon.tar.gz
-          # Convert OSTYPE from a bash shell variable to a system environment variable.
-          export OSTYPE
-          export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
-          export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Classes/classes.jar
-          export DAIKONDIR=`pwd`/daikon
-          export DAIKONCLASS_SOURCES=1
-          source daikon/bin/daikon.bashrc
-          cd daikon
-          make
+@example
+mkdir -p ~/tmp
+cd ~/tmp
+# or: wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+curl -O http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+tar xzvf daikon.tar.gz
+# Convert OSTYPE from a bash shell variable to a system environment variable.
+export OSTYPE
+export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
+export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Classes/classes.jar
+export DAIKONDIR=`pwd`/daikon
+export DAIKONCLASS_SOURCES=1
+source daikon/bin/daikon.bashrc
+cd daikon
+make
 @end example
 @end itemize
 
 
 @item
- Update the website.
+Update the website.
 
 @example
-        make staging-to-www
-        make pag-install
+make staging-to-www
+make pag-install
 @end example
 
-    Note that @samp{make staging-to-www} will automatically
-    update the version numbers in the source code and documentation
-    from the file @file{doc/VERSION}.  (In the repository, the
-    @file{doc/VERSION} file describes the @emph{next} version of Daikon
-    to be released; in the repository, it is incremented by 1 as compared
-    to the distributed release.)  After doing so, it will
-    correctly update the version number in @file{doc/VERSION}.  This
-    should not require any hand intervention unless there is a problem
-    near the end of building the distribution and the @samp{make
-    update-doc-dist-date-and-version} command has to be run
-    again after the version number has been incremented.  In this
-    case, simply edit @file{doc/VERSION} by hand back to the correct
-    version number before rebuilding.
+Note that @samp{make staging-to-www} will automatically
+update the version numbers in the source code and documentation
+from the file @file{doc/VERSION}.  (In the repository, the
+@file{doc/VERSION} file describes the @emph{next} version of Daikon
+to be released; in the repository, it is incremented by 1 as compared
+to the distributed release.)  After doing so, it will
+correctly update the version number in @file{doc/VERSION}.  This
+should not require any hand intervention unless there is a problem
+near the end of building the distribution and the @samp{make
+update-doc-dist-date-and-version} command has to be run
+again after the version number has been incremented.  In this
+case, simply edit @file{doc/VERSION} by hand back to the correct
+version number before rebuilding.
 
-    @b{We should consider just updating the version number by hand at the
-    beginning of the process.  That way we can run this multiple times without
-    confusion.}
+@b{We should consider just updating the version number by hand at the
+beginning of the process.  That way we can run this multiple times without
+confusion.}
 
 @item
- Update the publications pages.
+Update the publications pages.
 
 @example
-      (cd ~/bib; hg fetch)      
-      make -C $pag/www/daikon/pubs-sources update-from-checkout
-      make -C $pag/www/daikon pubs
+(cd ~/bib; hg fetch)      
+make -C $pag/www/daikon/pubs-sources update-from-checkout
+make -C $pag/www/daikon pubs
 @end example
 
 
 @item
- Check the website to see if it has any broken links.
+Check the website to see if it has any broken links.
 
 @example
-      checklink -q -r `cat $DAIKONDIR/plume-lib/bin/checklink-args.txt` http://groups.csail.mit.edu/pag/daikon
+checklink -q -r `cat $DAIKONDIR/plume-lib/bin/checklink-args.txt` http://groups.csail.mit.edu/pag/daikon
 @end example
 
-    Links to the webpages of people and conferences are read from
-    @file{$pl/bin/html-canonical-urls}.
+Links to the webpages of people and conferences are read from
+@file{$pl/bin/html-canonical-urls}.
 
-    In some cases a "403 Forbidden" error is transient, due to the website
-    being down.  You can check such links by hand.
+In some cases a "403 Forbidden" error is transient, due to the website
+being down.  You can check such links by hand.
 
 @item
- Commit any changes back to CVS
+Commit any changes back to CVS
 
 @example
-        cd $DAIKONDIR
-        cvs -q commit -m "Change version to @emph{X.Y.Z}"
+cd $DAIKONDIR
+cvs -q commit -m "Change version to @emph{X.Y.Z}"
 @end example
 
 @item
- Send mail to the daikon-announce mailing list.  There are sample
-    messages in the @uref{https://lists.csail.mit.edu/pipermail/daikon-announce/,archive} of @uref{https://lists.csail.mit.edu/mailman/listinfo/daikon-announce/,daikon-announce}.
+Send mail to the daikon-announce mailing list.  There are sample
+messages in the @uref{https://lists.csail.mit.edu/pipermail/daikon-announce/,archive} of @uref{https://lists.csail.mit.edu/mailman/listinfo/daikon-announce/,daikon-announce}.
 
-    You may need to visit @uref{https://lists.csail.mit.edu/mailman/admindb/daikon-announce/}
-    to approve the message before it is sent to the list.
+You may need to visit @uref{https://lists.csail.mit.edu/mailman/admindb/daikon-announce/}
+to approve the message before it is sent to the list.
 
 @item
- Submit an update to
-    freshmeat.net, which will inform others that a new release is available.
+Submit an update to
+freshmeat.net, which will inform others that a new release is available.
 
-    (In order to perform this step, you need to be an admin for the @uref{http://freshmeat.net/projects/daikon/,Daikon project at
-    freshmeat.net}.  If you are not, ask one of the current admins
-    to add you to the list.)
+(In order to perform this step, you need to be an admin for the @uref{http://freshmeat.net/projects/daikon/,Daikon project at
+freshmeat.net}.  If you are not, ask one of the current admins
+to add you to the list.)
 
-    Go to the @uref{http://freshmeat.net/projects/daikon/,Daikon project} and
-    choose 'submit a release' which is in the lower right corner.
-    There enter the version number, type of release and the introductory
-    paragraph from CHANGES for this release.
+Go to the @uref{http://freshmeat.net/projects/daikon/,Daikon project} and
+choose 'submit a release' which is in the lower right corner.
+There enter the version number, type of release and the introductory
+paragraph from CHANGES for this release.
 
-    This could be automated.  See "man freshmeat-submit".
+This could be automated.  See "man freshmeat-submit".
 
 @end enumerate
 
-
-
+@c restore default:
+@exampleindent 5
 
 @node    Historical, File formats, Distribution, Top
 @chapter Analyzing historical versions of Daikon
@@ -2364,13 +2400,13 @@ Bash version:
 @c removed from this file on 12 Nov 2010.
 
 Daikon's Mercurial repository, available at
-@url{http://code.google.com/p/daikon/}, contains complete development
+@uref{http://code.google.com/p/daikon/}, contains complete development
 history starting from October 1, 2010, and partial development history
 before that time.  The reason for this is that converting the full CVS
 repository to Mercurial would create a repository that would be too
 large for convenient use, and that would also be too large to upload to
 Google Code.  The original CVS repository is available for download from
-@url{http://code.google.com/p/daikon/downloads}, as files
+@uref{http://code.google.com/p/daikon/downloads}, as files
 @file{inv-cvs.zip} and @file{inv-cvs.z01} through @file{inv-cvs.z09}.  Download
 all 10 files, and then run the following commands to re-create the CVS
 repository, which will be named @file{invariants/}:
@@ -2451,15 +2487,15 @@ The CVS manual
 describes CVS branches:
 
 @quotation
-  CVS allows you to isolate changes onto a separate line of development,
-  known as a ``branch''.  When you change files on a branch, those changes
-  do not appear on the main trunk or other branches.
+CVS allows you to isolate changes onto a separate line of development,
+known as a ``branch''.  When you change files on a branch, those changes
+do not appear on the main trunk or other branches.
 
-  Later you can move changes from one branch to another branch (or the
-  main trunk) by ``merging''.  Merging involves first running 
-  @samp{cvs update -j}, to merge the changes into the working directory.
-  You can then commit that revision, and thus effectively copy the
-  changes onto another branch.
+Later you can move changes from one branch to another branch (or the
+main trunk) by ``merging''.  Merging involves first running 
+@samp{cvs update -j}, to merge the changes into the working directory.
+You can then commit that revision, and thus effectively copy the
+changes onto another branch.
 @end quotation
 
 @c It is important that the following paragraph not contain any substrings
@@ -3135,7 +3171,7 @@ Examples include
 uninitialized or deallocated, or @code{a} is null, uninitialized, or
 deallocated)
 @end itemize
-@noindent
+
 For trace variables, it is the responsibility of the front end to
 perform a check at run time whenever a variable's value is about to be
 output to the trace, and to output the value ``nonsensical''
@@ -3823,7 +3859,7 @@ follows:
 VarComparability
 none
 @end example
-@noindent
+
 As with all records in Daikon input files, a
 blank line is required between this record and the next one.
 

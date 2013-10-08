@@ -7,7 +7,7 @@ daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo \
 			 .fix-menu
 # Large split size fixes an apparent bug in makeinfo 4.11:
 # failing searches say
-#   Search failed: "  Indirect:"
+#   Search failed: "  Indirect:"
 # instead of proper message.
 	makeinfo --split-size=1000000 $<
 
