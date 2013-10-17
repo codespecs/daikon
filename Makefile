@@ -161,7 +161,6 @@ help:
 # must 'make compile' before 'make doc-all'
 	@echo " doc-all                  -- build all documentation"
 	@echo " tags TAGS                -- make TAGS file for Emacs"
-	@echo " pag-install              -- install PAG specific files "
 	@echo " kvasir                   -- make Kvasir, the C front end"
 	@echo "Creating the Daikon distribution:"
 	@echo " daikon.tar daikon.jar    -- just makes the tar files"
