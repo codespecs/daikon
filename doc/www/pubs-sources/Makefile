@@ -1,15 +1,12 @@
-
-
 ###########################################################################
-
-BIBDIR ?= /afs/csail.mit.edu/u/m/mernst/bib
+MERNSTDIR ?= /homes/gws/mernst
+BIBDIR ?= ${MERNSTDIR}/bib
 # This should include every file with "usesDaikon" or "\"Invariant dectection\""
 BIBFILES = ${BIBDIR}/bibstring-unabbrev.bib ${BIBDIR}/ernst.bib ${BIBDIR}/invariants.bib ${BIBDIR}/pag.bib ${BIBDIR}/soft-eng.bib ${BIBDIR}/testing.bib ${BIBDIR}/types.bib
-BPHOME ?= /afs/csail.mit.edu/u/m/mernst/bin/src/perl/bibtex2web/lib
+BPHOME ?= ${MERNSTDIR}/bin/src/perl/bibtex2web/lib
+export BPHOME
 BWBIN = ${BPHOME}/../bin
-MDEWWW ?= /afs/csail.mit.edu/u/m/mernst/www
 PLUMEBIN ?= ${DAIKONDIR}/plume-lib/bin
-PERLLIB := $(DAIKONDIR)/scripts:$(DAIKONDIR)/plume-lib/bin:/afs/csail.mit.edu/u/m/mernst/bin/src/perl/bibtex2web/lib
 ###########################################################################
 
 # Files in $pag/www/daikon/pubs-sources/

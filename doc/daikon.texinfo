@@ -5,16 +5,10 @@
 @c %**end of header
 
 @c To update all the nodes and menus all at once:   C-u C-c C-u m
-@c You shouldn't need to do that, though; the Makefile does it for you
-@c (and fixes up an @ifhtml issue).
+@c You shouldn't need to do that, though; makeinfo does it for you.
 
 @c I can't get this to work, don't know why.  MDE 4/2001.
 @c @alias directory = file
-
-@c texi2html doesn't work if I use this macro
-@c @macro daikonurl{}
-@c http://pag.csail.mit.edu/daikon/
-@c @end macro
 
 @c Note about ``@table @option''.
 @c Unfortunately, @option{} adds quotes in the Info and printed output
@@ -26,23 +20,23 @@
 @c So for now, I have inlined all instances of the macro.  Yuck.
 @c Another solution would be to use "makeinfo -E" (then process the
 @c resulting file with "makeinfo --html").
+
 @macro daikonemail{}
 @email{daikon-developers@@lists.csail.mit.edu}
 @end macro
 
 @c @setchapternewpage odd
 
-@c @ifinfo
-@c @c This text appears only in the Info Version.
-@c
-@c Copyright 1998-2010
-@c @end ifinfo
-
 @c Avoid black boxes marking overfull hboxes in TeX output.
-@finalout
+@c @finalout
+
+@c set overall document style
+@c @raggedright
+@paragraphindent none
 
 @titlepage
 @sp 10
+
 @c Could also use @title, @subtitle, @author here.
 @center @titlefont{Daikon Invariant Detector User Manual}
 
@@ -67,13 +61,6 @@ Copyright @copyright{} 1998-2013
 @html
 <img src="images/daikon-logo.gif" alt="Daikon logo">
 @end html
-@c Why is this here?  It duplicates the stuff further down.
-@c @html
-@c <h1>Daikon Invariant Detector User Manual</h1>
-@c
-@c This is the user manual for the Daikon invariant detector.
-@c It describes Daikon version 4.7.1, released October 8, 2013.
-@c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
 @c but it's acceptable.
@@ -81,10 +68,9 @@ Copyright @copyright{} 1998-2013
 @contents
 @end ifnothtml
 
-@node    Top, Introduction, (dir), (dir)
-@comment node-name, next,          previous, up
-
 @ifnottex
+@node Top
+@top Daikon Invariant Detector User Manual
 @c Unfortunately, the Daikon logo doesn't look good in ASCII.
 @c @ifinfo
 @c @image{images/daikon-logo,4in,}
@@ -92,7 +78,6 @@ Copyright @copyright{} 1998-2013
 @c @end ifinfo
 This is the user manual for the Daikon invariant detector.
 It describes Daikon version 4.7.1, released October 8, 2013.
-@end ifnottex
 
 @menu
 * Introduction::
@@ -107,11 +92,16 @@ It describes Daikon version 4.7.1, released October 8, 2013.
 * Details::
 * Index::
 
+@c Putting end menu here is not how it's supposed to be done,
+@c but it seems to fix the html toc indentation bug.
+@end menu
+@end ifnottex
+
 @ifhtml
 @contents
 @end ifhtml
-@ifnothtml
 
+@ifinfo
 @detailmenu
  --- The Detailed Node Listing ---
 
@@ -379,15 +369,13 @@ Details
 * Citing Daikon::
 
 @end detailmenu
-@end ifnothtml
-@end menu
+@end ifinfo
 
-@node    Introduction, Installing Daikon, Top, Top
+@node    Introduction
 @chapter Introduction
 
 @c If you edit the introduction, then re-generate daikon.html and insert
 @c its ``Introduction'' section into $DAIKONDIR/doc/www/index.html .
-
 
 @uref{http://pag.csail.mit.edu/daikon/, ,Daikon} is an implementation of
 dynamic detection of likely invariants; that is, the Daikon invariant
@@ -422,8 +410,8 @@ researchers and practitioners have used Daikon; those uses, and Daikon
 itself, are described in various
 @uref{http://pag.csail.mit.edu/daikon/pubs/, ,publications}.
 
-More information on Daikon can be found in the Daikon Developer
-Manual (@pxref{Top,,,./developer,Daikon Developer Manual}).
+For more information on Daikon
+@pxref{Top, , Introduction, ./developer, Daikon Developer Manual}.
 For instance, the Daikon Developer Manual indicates how to
 extend Daikon with new invariants, new derived variables, and front
 ends for new languages.  It also contains information about the
@@ -433,7 +421,7 @@ implementation and about debugging flags.
 * Mailing lists::
 @end menu
 
-@node    Mailing lists,  , Introduction, Introduction
+@node    Mailing lists
 @section Mailing lists
 @cindex mailing lists
 @cindex daikon-announce mailing list
@@ -459,7 +447,7 @@ you may send mail to the list asking to be added.
 @end table
 
 
-@node    Installing Daikon, Example usage, Introduction, Top
+@node    Installing Daikon
 @chapter Installing Daikon
 @cindex installing Daikon
 
@@ -490,7 +478,7 @@ subscribe to one of the mailing lists (@pxref{Mailing lists}).
 * Complete installation::
 @end menu
 
-@node    Simple installation, Complete installation, Installing Daikon, Installing Daikon
+@node    Simple installation
 @section Simple installation instructions
 
 Daikon is written in Java.  In order to run Daikon, all you really need
@@ -512,7 +500,7 @@ classpath, then use the complete installation instructions, which walks
 you through the process.)
 
 
-@node    Complete installation,  , Simple installation, Installing Daikon
+@node    Complete installation
 @section Complete installation instructions
 
 This section gives step-by-step instructions for installing Daikon.
@@ -539,7 +527,7 @@ Optionally, compile Daikon and build other tools by running @code{make}.
 @cindex building Daikon from source
 
 For more complete information on compiling Daikon, @pxref{Compiling
-Daikon,,,./developer,Daikon Developer Manual} in the Daikon Developer Manual.
+Daikon,,,./developer,Daikon Developer Manual}.
 
 @menu
 * Requirements::
@@ -549,7 +537,7 @@ Daikon,,,./developer,Daikon Developer Manual} in the Daikon Developer Manual.
 @end menu
 
 
-@node    Requirements, Unix/Linux/MacOS installation, Complete installation, Complete installation
+@node    Requirements
 @subsection Requirements for running Daikon
 
 In order to run Daikon, you must have a Java 5.0 (or later) JVM
@@ -560,7 +548,7 @@ have a Java 5.0 (or later) compiler.
 * Optional requirements::
 @end menu
 
-@node    Optional requirements,  , Requirements, Requirements
+@node    Optional requirements
 @subsubsection Optional requirements for running Daikon
 
 All the remaining requirements listed here are optional (they enable you
@@ -574,15 +562,14 @@ compiler such as GCC@.  Source code and a compiler are not necessary if
 you plan to use one of Daikon's front ends that work on binaries, such
 as Chicory (@pxref{Chicory}) and Kvasir (@pxref{Kvasir}).
 
-If you wish to edit the Daikon source code and re-compile Daikon, see
-@ref{Compiling Daikon,,,./developer,Daikon Developer Manual} in the 
-Daikon Developer Manual.
+If you wish to edit the Daikon source code and re-compile Daikon, 
+@pxref{Compiling Daikon,,,./developer,Daikon Developer Manual}.
 
 
 @c The explicit examples, segregated by OS type, seem necessary for some users.
 
 
-@node  Unix/Linux/MacOS installation, Windows installation, Requirements, Complete installation
+@node  Unix/Linux/MacOS installation
 @subsection Unix/Linux/MacOS installation
 
 
@@ -599,7 +586,6 @@ wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
 tar zxf daikon.tar.gz
 @end example
 
-@noindent
 This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 
 @item
@@ -613,8 +599,8 @@ add these three commands to your @file{~/.bashrc} or @file{~/.bash_profile} file
 @example
 # The full pathname of the directory that contains Daikon
 export DAIKONDIR=$HOME/daikon
-# The full pathname of the directory that contains the Java JDK
-export JAVA_HOME=/usr/java/current
+# The full pathname of the directory that contains the Java JDK; e.g.:
+export JAVA_HOME=/usr/lib/jvm/java
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
@@ -623,8 +609,8 @@ add these three commands to your @file{~/.cshrc} file:
 @example
 # The full pathname of the directory that contains Daikon
 setenv DAIKONDIR $HOME/daikon
-# The full pathname of the directory that contains the Java JDK
-setenv JAVA_HOME /usr/java/current
+# The full pathname of the directory that contains the Java JDK; e.g.:
+setenv JAVA_HOME /usr/lib/jvm/java
 source $DAIKONDIR/scripts/daikon.cshrc
 @end example
 
@@ -649,15 +635,16 @@ with its Java front end (Chicory).  This step is required for using
 Daikon with its C/C++ front end (Kvasir), and for other tools.
 
 @example
-cd $DAIKONDIR
+cd $DAIKONDIR/java
 make
 @end example
+
 This builds the various executables used by Daikon, such as the
 C/C++ front end Kvasir (@pxref{Installing Kvasir}) and the 
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
 For more
-information about compiling Daikon, see @ref{Compiling
-Daikon,,,./developer,Daikon Developer Manual} in the Daikon Developer Manual.
+information about compiling Daikon, see
+@ref{Compiling Daikon,,,./developer,Daikon Developer Manual}.
 
 Note that running this make command may take 20 minutes or more,
 depending on your computer.  
@@ -669,7 +656,7 @@ prover (@uref{http://www.hpl.hp.com/downloads/crl/jtk/}).
 
 @end enumerate
 
-@node  Windows installation, Running Daikon under Windows, Unix/Linux/MacOS installation, Complete installation
+@node  Windows installation
 @subsection Windows installation
 
 To perform a complete install on
@@ -697,7 +684,6 @@ wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
 tar zxf daikon.tar.gz
 @end example
 
-@noindent
 This creates a @file{@var{daikonparent}/daikon/} subdirectory.
 
 @item
@@ -719,11 +705,12 @@ windows path style (@code{C:\daikon}).
 Some users have reported problems when using pathnames
 with spaces.  You can avoid the problem by using the @code{ln} command to add a
 symbolic link without spaces to @code{Program Files}.
+
 @example
-    cd /cygdrive/c
-    ln -s "Program Files" program_files
+cd /cygdrive/c
+ln -s "Program Files" program_files
 @end example
-@noindent
+
 and then the JAVA_HOME line becomes:
 @example
 export JAVA_HOME=/cygdrive/c/program_files/Java/jdk1.6.0_20
@@ -753,7 +740,7 @@ you from having to edit the main Makefile directly).
 The one variable you must customize is 
 to define the @code{OSTYPE} variable to be @code{cygwin}.
 @example
-  OSTYPE = cygwin
+OSTYPE = cygwin
 @end example
 
 @item
@@ -794,7 +781,7 @@ can replace Simplify but is only distributed for Windows).
 @end enumerate
 
 
-@node    Running Daikon under Windows,  , Windows installation, Complete installation
+@node    Running Daikon under Windows
 @subsection Running Daikon under Windows
 @cindex Windows
 @cindex Microsoft Windows
@@ -815,7 +802,7 @@ would not supply the proper arguments to the program.
 @end menu
 
 
-@node    Windows command line, Cygwin shell, Running Daikon under Windows, Running Daikon under Windows
+@node    Windows command line
 @subsubsection Windows command line
 
 The first option is to run Daikon using native Windows utilities.
@@ -848,7 +835,7 @@ specified in Windows format (Windows paths and semicolon separators).
 @c The values for these registry entries are ASCII key codes.  Tab is 9.
 
 
-@node    Cygwin shell,  , Windows command line, Running Daikon under Windows
+@node    Cygwin shell
 @subsubsection Cygwin shell
 
 @cindex Cygwin toolset
@@ -903,7 +890,7 @@ Unix definition is not part of the environment.
 @c @env{CYGWIN_RUNNER_ENV} in their dotfiles or various wrappers.)
 
 
-@node    Example usage, Running Daikon, Installing Daikon, Top
+@node    Example usage
 @chapter Example usage for Java, C/C++, C#/F#/Visual Basic, Perl, and Eiffel
 
 Detecting invariants involves two steps:
@@ -923,7 +910,7 @@ Run the Daikon invariant detector over the data trace files
 information.  You can view the invariants textually, or process them
 with a variety of tools.
 @end enumerate
-@noindent
+
 Often, you can run a single command that performs both steps.  Among
 other benefits, this can avoid the need to create the data trace file by
 sending trace information directly from the instrumented program to
@@ -942,7 +929,7 @@ Daikon, @ref{Front ends (instrumentation)}.
 * Detecting invariants in Eiffel programs::
 @end menu
 
-@node    Detecting invariants in Java programs, Detecting invariants in C/C++ programs, Example usage, Example usage
+@node    Detecting invariants in Java programs
 @section Detecting invariants in Java programs
 
 In order to detect invariants in a Java program, run the
@@ -955,12 +942,12 @@ For example, if you usually run
 @example
 java mypackage.MyClass arg1 arg2 arg3
 @end example
-@noindent
+
 then instead you would run
 @example
 java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
 @end example
-@noindent
+
 and the Daikon output is written to the terminal.
 
 
@@ -975,7 +962,7 @@ and the Daikon output is written to the terminal.
 @c Commented out as of summer 2005, because David Cok doesn't seem likely
 @c to pick this up again, and we don't want to lead users astray or
 @c discourage them with non-functional software.
-@c @node    Eclipse plug-in, StackAr example, Detecting invariants in Java programs, Detecting invariants in Java programs
+@c @node    Eclipse plug-in
 @c @subsection Eclipse plug-in
 @c @cindex Eclipse plug-in
 @c @cindex GUI, Eclipse
@@ -997,7 +984,7 @@ and the Daikon output is written to the terminal.
 @c For brief troubleshooting information, see @ref{Eclipse plug-in problems}.
 
 
-@node    StackAr example, Using DynComp with Java programs, Detecting invariants in Java programs, Detecting invariants in Java programs
+@node    StackAr example
 @subsection StackAr example
 
 The Daikon distribution contains some sample programs that will help
@@ -1118,7 +1105,7 @@ For more information about the Annotate program, see @ref{Annotate}.
 @end enumerate
 
 
-@node    Using DynComp with Java programs, Understanding the invariants, StackAr example, Detecting invariants in Java programs
+@node    Using DynComp with Java programs
 @subsection Using DynComp with Java programs
 
 DynComp can help to filter Daikon's output by omitting invariants
@@ -1414,7 +1401,6 @@ kvasir-dtrace --dtrace-file=daikon-output/wordplay3.dtrace \
 java -Xmx256m daikon.Daikon daikon-output/wordplay*.dtrace
 @end smallexample
 
-@noindent
 or, you can append information from multiple runs in a single trace file:
 
 @smallexample
@@ -1435,7 +1421,7 @@ there are several ways to do this:
 @item Examine the output from running Daikon.
 @item Use the PrintInvariants program to display the invariants.
 @end itemize
-@noindent
+
 For help understanding the invariants, see @ref{Interpreting output}.
 
 @end enumerate
@@ -1519,7 +1505,8 @@ and long program runs, see @ref{Large dtrace files}.
 The Daikon front end for .NET languages (C#, F#, and Visual Basic) is
 called Celeriac.
 
-Please see its documentation at @url{https://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted}.
+Please see its documentation at
+@url{https://code.google.com/p/@/daikon-dot-net-front-end/@/wiki/@/GettingStarted}.
 
 
 @node    Detecting invariants in Perl programs, Detecting invariants in Eiffel programs, Detecting invariants in C# programs, Example usage
@@ -1750,7 +1737,7 @@ enable detection of conditional invariants (@pxref{Conditional
 invariants}); these are optional and may be created automatically or by hand.
 
 @end itemize
-@noindent
+
 The files may appear in any order;
 the file type is determined by whether the file name contains
 @file{.decls}, @file{.dtrace}, or @file{.spinfo}.
@@ -2425,7 +2412,7 @@ entry to a procedure (because the procedure body might modify the value
 of @code{x}).  These variables appear only at @code{:::EXIT} program
 points.  Typically, @code{orig()} variables do not appear in the trace,
 but are automatically created by Daikon when it matches up
-@code{:::ENTER@var{[nn]}} and @code{:::EXIT} program points.
+@code{:::ENTER} and @code{:::EXIT@var{nn}} program points.
 @xref{orig variable example}.
 
 This variable prints as @code{orig} when using Daikon output format
@@ -2535,7 +2522,6 @@ int[] a = new int[] @{ 22, 23 @};
 int[] b = new int[] @{ 46, 47 @};
 @end example
 
-@noindent
 and then you run the following:
 @example
 // pre-state values at this point
@@ -2904,7 +2890,7 @@ if arg < 0
   then return == -arg
   else return == arg
 @end example
-@noindent
+
 The invariant @code{return == -arg} is a conditional invariant because
 it depends on the predicate @code{arg < 0} being true.  An
 @emph{implication} is a compound invariant that includes both the
@@ -3041,7 +3027,7 @@ PPT_NAME @var{pptname}
 @var{condition3}
 ...
 @end example
-@noindent
+
 @var{pptname} can be any string that matches a part of the desired
 program point name as printed in the decls file.  In finding matching
 program points, Daikon uses the first program point that matches
@@ -3083,7 +3069,7 @@ REPLACE
 @var{replacement2}
 ...
 @end example
-@noindent
+
 where @var{replacementi} is a Java expression for the body
 of @var{procedurei}.  In each condition, Daikon replaces procedure
 calls by their replacements.  A replace section may appear anywhere in
@@ -3245,7 +3231,7 @@ splitter info file for each input file; for instance,
 @example
 java daikon.tools.jtb.CreateSpinfo Foo.java Bar.java
 @end example
-@noindent
+
 creates the splitter info files @file{Foo.spinfo} and
 @file{Bar.spinfo}.
 Given an @option{-o @var{filename}} argument, CreateSpinfo puts all the
@@ -3262,7 +3248,7 @@ If you get an error such as
 jtb.ParseException: Encountered ";" at line 253, column 8.
 Was expecting one of: "abstract" ...
 @end example
-@noindent
+
 then you may have encountered a bug in the JTB library on which
 CreateSpinfo is built.  It does not permit empty declarations in a
 class body.  Remove the extra semicolon in your Java file (at the
@@ -3280,7 +3266,6 @@ cpp -P bar.c bar.c-expanded
 java daikon.tools.jtb.CreateSpinfoC \
      foo.c-expanded bar.c-expanded
 @end example
-@noindent
 
 WARNING:  The names produced by @command{CreateSpinfoC} sometimes differ
 from the names produced by Kvasir.  For example, suppose you have a C
@@ -3298,7 +3283,7 @@ If you get an error such as
 ... Lexical error at line 5, column 1.
 Encountered: "#" (35), after : ""
 @end example
-@noindent
+
 then you forgot to run CPP before running CreateSpinfoC@.
 
 If you get an error such as
@@ -3306,7 +3291,7 @@ If you get an error such as
 CreateSpinfoC encountered errors during parse.
 Encountered "__extension__ typedef struct @{  ...
 @end example
-@noindent
+
 then your program uses non-standard C syntax.  The @samp{__extension__}
 keyword is supported only by the gcc compiler, and isn't handled by
 the CreateSpinfoC program.  You could extend the CreateSpinfoC program
@@ -3507,7 +3492,7 @@ For instance, you might change the original code
     @}
   @}
 @end example
-@noindent
+
 into
 @example
   public void calculate(int x) @{
@@ -3576,19 +3561,19 @@ instance, if you usually run
 @example
 java mypackage.MyClass arg1 arg2 arg3
 @end example
-@noindent
+
 then instead you would run
 @example
 java daikon.Chicory mypackage.MyClass arg1 arg2 arg3
 @end example
-@noindent
+
 This runs your program and creates file @file{MyClass.dtrace}
 in the current directory.
 Furthermore, a single command can both create a trace file and run Daikon:
 @example
 java daikon.Chicory --daikon mypackage.MyClass arg1 arg2 arg3
 @end example
-@noindent
+
 See below for more options.
 
 That's all there is to it!  Since Chicory instruments class files
@@ -3614,12 +3599,12 @@ Chicory is invoked as follows:
 @example
 java daikon.Chicory @var{chicory-args} @var{classname} @var{args}
 @end example
-@noindent
+
 where
 @example
 java @var{classname} @var{args}
 @end example
-@noindent
+
 is a valid invocation of Java.
 
 This section lists the optional command-line arguments to Chicory, which
@@ -4104,12 +4089,12 @@ if you usually run
 @example
 java mypackage.MyClass arg1 arg2 arg3
 @end example
-@noindent
+
 then instead you would run
 @example
 java daikon.DynComp mypackage.MyClass arg1 arg2 arg3
 @end example
-@noindent
+
 This runs your program and creates the file @file{MyClass.decls-DynComp}
 in the current directory.  DynComp also creates @file{MyClass.txt-cset},
 which contains the same information and a further level of detail in an
@@ -4165,7 +4150,7 @@ int
 2
 @end example
 
-@noindent The declarations file format is described in @ref{Program point declarations,,,./developer,Daikon Developer Manual}.
+The declarations file format is described in @ref{Program point declarations,,,./developer,Daikon Developer Manual}.
 
 DynComp creates two representations of the comparability information in
 the files @file{foo.txt-cset} and @file{foo.txt-trace}.  In the @file{cset}
@@ -4209,7 +4194,7 @@ daikon.chicory.ParameterInfo:d2
 daikon.chicory.ParameterInfo yr
 @end example
 
-@noindent The file here shows that @code{d1}, @code{d2}, and the return value of
+The file here shows that @code{d1}, @code{d2}, and the return value of
 the @code{compute} method are in the same comparability set; this is
 correct, as they are all of the abstract type `days'.  The variable
 @code{yr} is in its own comparability set; it has abstract type `year',
@@ -4274,7 +4259,6 @@ instrumented copy of the JDK@.  Use the following command in
 make -C java dcomp_rt.jar
 @end example
 
-@noindent
 Make sure the @code{JAVA_HOME} environment variable is set to the directory
 containing your JDK@.  This command instruments the classes in the
 @file{rt.jar} file of the JDK, and creates a new file,
@@ -4288,7 +4272,7 @@ The following example is for the standard install of Java 1.5 on
 MacOS:
 
 @smallexample
-  export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
+export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
 @end smallexample
 
 BuildJDK requires 20-40 minutes to complete and uses 1024 MB of
@@ -4311,12 +4295,12 @@ DynComp is invoked as follows:
 @example
 java daikon.DynComp @var{dyncomp-args} @var{classname} @var{args}
 @end example
-@noindent
+
 where
 @example
 java @var{classname} @var{args}
 @end example
-@noindent
+
 is a valid invocation of Java.
 
 This section lists the optional command-line arguments to DynComp, which
@@ -4492,12 +4476,12 @@ if you normally run your program with the command
 @example
 ./program -option input.file
 @end example
-@noindent
+
 then instead use the command
 @example
 kvasir-dtrace ./program -option input.file
 @end example
-@noindent
+
 to run your program and create a data trace file
 @file{daikon-output/program.dtrace}, which can be fed as input into
 Daikon.  You can perform this step multiple times to create multiple
@@ -4548,12 +4532,12 @@ For instance, if you normally run your program with the command
 @example
 ./myprogram -option input.file
 @end example
-@noindent
+
 just say
 @example
 kvasir-dtrace ./myprogram -option input.file
 @end example
-@noindent
+
 As well as running your program (more slowly than usual), this command
 also creates a directory @file{daikon-output} in the current
 directory containing a @file{program.dtrace} file suitable as input to Daikon.
@@ -4738,8 +4722,8 @@ classes. See @ref{Program points} for more information.
 @item --flatten-arrays
 This option forces the flattening of statically-sized arrays into
 separate variables, one for each element.  For example, an array
-@var{foo} of size 3 would be flattened into 3 variables: @var{foo[0]},
-@var{foo[1]}, @var{foo[2]}.  By default, Kvasir flattens
+@code{foo} of size 3 would be flattened into 3 variables: @code{foo[0]},
+@code{foo[1]}, @code{foo[2]}.  By default, Kvasir flattens
 statically-sized arrays only after it has already exhausted the one
 level of sequences that Daikon allows in the .dtrace output format
 (e.g. an array of structs where each struct contains a statically-sized
@@ -5166,7 +5150,7 @@ as demonstrated here:
 #second_file.cpp.staticFoo(int, int)
 #..secondFileFunction()
 @end example
-@noindent
+
 When running Kvasir with the @option{--ppt-list-file} option using this
 as the @file{ppt-list-file}, Kvasir only stops the execution of the target program at the
 entrance and exit of @code{main()} in order to output values to the
@@ -5190,7 +5174,7 @@ executing
 kvasir-dtrace --dump-var-file=FunctionNamesTest.vars  ./FunctionNamesTest
 @end example
 
-@noindent
+
 will generate the following @file{var-list-file} named
 @code{FunctionNamesTest.vars}:
 
@@ -5319,7 +5303,7 @@ int total;
 ...
 sum(a, &total);        // use of "sum"
 @end example
-@noindent
+
 the first pointer parameter refers to an array while the second refers to
 a single value.  Kvasir (and Daikon) should treat these values
 differently.  For instance, @code{*array} is better printed as @code{array[]},
@@ -5454,8 +5438,8 @@ prints out a message in the following form while it is processing the
 @file{.disambig} file:
 
 @example
-  .disambig: Coerced variable f into type 'foo'
-  .disambig: Coerced variable b into type 'bar'
+.disambig: Coerced variable f into type 'foo'
+.disambig: Coerced variable b into type 'bar'
 @end example
 
 One more caveat about type coercion is that you can currently only
@@ -5835,7 +5819,7 @@ kvasir-dtrace --dtrace-file=- ./bzip2 --help | $DAIKON -
 Of course, you could also replace @option{--help} with @option{-vv1
 file.txt} to compress a text file (but start with a small one first).
 
-@noindent
+
 (This example assumes that you have compiled the bzip2 example (in
 @file{$DAIKONDIR/examples/c-examples/bzip2} of the distribution) by
 saying @command{gcc -gdwarf-2 bzip2.c -o bzip2}, and that
@@ -5887,17 +5871,17 @@ it once and only generate a .decls file with comparability information,
 then run Kvasir again without DynComp and pipe the .dtrace data directly
 into Daikon while using the .decls file generated from the previous run:
 
-@smallexample
+@example
 kvasir-dtrace --with-dyncomp --decls-only ./foo
-@end smallexample
+@end example
 
 This should generate a .decls file with comparability information
 named @file{daikon-output/foo.decls}.
 
-@smallexample
+@example
 kvasir-dtrace --dtrace-no-decs --dtrace-file=- ./foo \
     | java daikon.Daikon daikon-output/foo.decls -
-@end smallexample
+@end example
 
 When you run Kvasir the second time, you don't need to run DynComp
 again since you are only interested in the .dtrace file.  Notice that
@@ -6124,7 +6108,6 @@ and link in one step:
 mangel -o foo foo.c bar.c baz.c
 @end example
 
-@noindent
 Or, you can compile each file individually and then invoke mangel again to
 link:
 
@@ -6191,7 +6174,10 @@ specific to controlling the program annotations added by wurzel
 Mangel is invoked as:
 
 @example
-mangel @var{[options] inputfile1 ...}
+@c makeinfo doesn't like [] in @var so instead of this:
+@c mangel @var{[options] inputfile1 ...}
+@c we do this ugliness:
+mangel @i{[}@var{options}@i{]}@var{ inputfile1 ...}
 @end example
 
 You can specify multiple @var{inputfile}s on the command line.  Mangel will
@@ -6451,8 +6437,8 @@ Specify the recursion depth for examining fields of nested @code{struct},
 @item --flatten-arrays
 This option forces the flattening of statically-sized arrays into
 separate variables, one for each element.  For example, an array
-@var{foo} of size 3 would be flattened into 3 variables: @var{foo[0]},
-@var{foo[1]}, @var{foo[2]}.  By default, Mangel-Wurzel flattens
+@code{foo} of size 3 would be flattened into 3 variables: @code{foo[0]},
+@code{foo[1]}, @code{foo[2]}.  By default, Mangel-Wurzel flattens
 arrays only after is has already exhausted the one level of sequences
 that Daikon allows in the .dtrace output format.
 
@@ -6759,21 +6745,20 @@ Download the archive from
 @uref{http://pag.csail.mit.edu/daikon/download/} and unpack it in the
 parent of the directory where you wish to install Mangel-Wurzel.
 Unpacking creates a directory named @file{mangel-wurzel}.
-@itemize
-@item
+
 On the Linux/x86 platform, execute these two commands (other Unix
 platforms are similar):
 
-@smallexample
-wget http://pag.csail.mit.edu/daikon/download/binaries/mangel-wurzel-linux-x86.tar.gz
+@exampleindent 0
+@example
+wget @uref{http://pag.csail.mit.edu/daikon/@/download/@/binaries/@/mangel-wurzel-linux-x86.tar.gz}
 tar xvzf mangel-wurzel-linux-x86.tar.gz
-@end smallexample
+@end example
+@c restore default:
+@exampleindent 5
 
-@item
 On Windows, download, then unzip,
-@url{http://pag.csail.mit.edu/daikon/@/download/@/binaries/@/mangel-wurzel-linux-x86.tar.gz} .
-
-@end itemize
+@uref{http://pag.csail.mit.edu/daikon/@/download/@/binaries/@/mangel-wurzel-linux-x86.tar.gz} .
 
 @item
 Set these environment variables:
@@ -7270,7 +7255,7 @@ directory.  For example,
 @example
 convertcsv.pl myfile.csv
 @end example
-@noindent
+
 produces files @file{myfile.decls} and @file{myfile.dtrace}.
 
 Important:  run @command{convertcsv.pl} without any arguments in order
@@ -7281,7 +7266,7 @@ In order to ensure all data is processed, use Daikon with the
 @example
 java daikon.Daikon --nohierarchy myfile.decls myfile.dtrace
 @end example
-@noindent
+
 In a future release, the @option{--nohierarchy} option may not be necessary,
 but it should always be safe to use this option.
 
@@ -7690,9 +7675,9 @@ belongs to (@code{null} for object invariants).
 @cindex Daikon knows nothing about field:  warning from Annotate
 If Annotate issues a warning message of the form
 @example
-  Warning: Annotate: Daikon knows nothing about field ...
+Warning: Annotate: Daikon knows nothing about field ...
 @end example
-@noindent
+
 then the Annotate tool found a variable in the source code that is was
 computed by Daikon.  This can happen if Daikon was run omitting the
 variable, for instance due to @option{--std-visibility}.  It can also happen due
@@ -7718,10 +7703,10 @@ annotated includes logical shift operators. @xref{Known bugs}.
 @cindex inference, of Nullable type
 
 AnnotateNullable determines which variables in a Java program were ever
-null during execution.  AnnotateNullable makes it easier to use 
-the @uref{http://types.cs.washington.edu/checker-framework/current/checkers-manual.html#nullness-checker, Nullness Checker}
+null during execution.  AnnotateNullable makes it easier to use the
+@uref{http://types.cs.washington.edu/checker-framework/@/current/@/checkers-manual.html#nullness-checker, Nullness Checker}
 that is part of the
-@uref{http://types.cs.washington.edu/checker-framework/, Checker Framework}.
+@uref{http://types.cs.washington.edu/@/checker-framework/, Checker Framework}.
 
 The Nullness Checker
 warns the programmer about possible null dereference errors.
@@ -7803,7 +7788,6 @@ java daikon.AnnotateNullable @i{[@var{flags}]} @var{inv-file}
 @end smallexample
 
 The flags are:
-
 @table @option
 
 @item -n --nonnull-annotations
@@ -7845,7 +7829,7 @@ invariant file @file{BoundedStack.inv.gz}, do:
 java daikon.tools.runtimechecker.Main instrument BoundedStack.inv.gz \
     ubs/BoundedStack.java
 @end example
-@noindent
+
 The instrumented Java code references classes in the
 @code{daikon.tools.runtimechecker} package, so those classes must be
 present in the classpath when the instrumented classes are compiled and
@@ -8045,7 +8029,7 @@ form:
 
 @example
 java daikon.tools.compare.LogicalCompare [@var{options}] \
-      @var{weak-invs} @var{strong-invs} [@var{enter-ppt} [@var{exit-ppt}]]
+    @var{weak-invs} @var{strong-invs} [@var{enter-ppt} [@var{exit-ppt}]]
 @end example
 
 LogicalCompare accepts the following options:
@@ -8328,14 +8312,14 @@ If you can't run Daikon at all and you get an error such as
 @example
 Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
 @end example
-@noindent
+
 then you have not put @file{daikon.jar} on your classpath; @pxref{Simple installation}.
 
 More generally, an error such as
 @example
 Exception in thread "main" java.lang.NoClassDefFoundError: plume/FuzzyFloat
 @end example
-@noindent
+
 means that Java did not find the class @file{plume/FuzzyFloat} on your
 classpath.  To debug such a problem, you need to determine your
 classpath (it's your @samp{CLASSPATH} environment variable under
@@ -8562,7 +8546,7 @@ An error such as
 Exception in thread "main" java.lang.UnsupportedClassVersionError:
 daikon/Daikon (Unsupported major.minor version 49.0)
 @end example
-@noindent
+
 indicates that you are trying to run Daikon on an older JVM@.  You need to
 install a newer version of Java in order to run Daikon.
 
@@ -8580,9 +8564,9 @@ install a newer version of Java in order to run Daikon.
 If Daikon runs out of memory, generating a message like
 @example
 Exception in thread "main" java.lang.OutOfMemoryError
-        <<no stack trace available>>
+    <<no stack trace available>>
 @end example
-@noindent
+
 then it is likely that it has created more invariants than will fit
 in memory.  The number of invariants created depends on the number of
 program points and the number of variables at each program point.
@@ -8604,7 +8588,8 @@ run Daikon, then you must separately indicate the amount of memory
 available to Chicory and to Daikon (the latter with Chicory's
 @option{--heap-size} command-line argument).  For example:
 @example
-java -Xmx256m daikon.Chicory --daikon --heap-size=1600m mypackage.MyClass arg1 arg2 arg3
+java -Xmx256m daikon.Chicory --daikon --heap-size=1600m \
+    mypackage.MyClass arg1 arg2 arg3
 @end example
 
 When using the Java HotSpot JVM, an additional parameter may need to
@@ -8703,7 +8688,7 @@ needs to be implemented:
 this.theArray[0..this.topOfStack] is a subsequence of
 orig(this.theArray[0..this.topOfStack])
 @end example
-@noindent
+
 This indicates that a particular invariant (shown on the last two lines
 above) cannot be formatted using the current formatting.  In this example,
 the invariant can be formatted using Daikon's default
@@ -8753,7 +8738,7 @@ Informally, invariant detection time can be characterized as
 @example
 O((@var{vars}^3 * @var{falsetime} + @var{trueinvs} * @var{testsuite}) * @var{procedures})
 @end example
-@noindent
+
 where @var{vars} is the number of variables @emph{at a program point},
 @var{falsetime} is the (small constant)
 time to falsify a potential invariant,
@@ -9034,7 +9019,7 @@ possibly partial, record from the file:
 @example
 trace-untruncate myfile.dtrace
 @end example
-@noindent
+
 modifies @file{myfile.dtrace} in place to remove the last record.
 
 Alternately, you can use the
@@ -9078,12 +9063,12 @@ For example, if a command such as
 @example
 java daikon.Chicory DataStructures.StackArTester
 @end example
-@noindent
+
 fails with an error, then first try
 @example
 java DataStructures.StackArTester
 @end example
-@noindent
+
 which is likely to fail with the same error.
 
 If the latter command also fails, the problem is not with Chicory.
@@ -9111,7 +9096,7 @@ Exception in thread "main" java.lang.VerifyError:
   (class: ps1/PublicTest, method: <init> signature: (Ljava/lang/String;)V)
   Illegal constant pool index
 @end smallexample
-@noindent
+
 then the problem is most likely that your classpath contains a version
 of the BCEL library that is not compatible with Java 5.  The
 incompatible version might appear in @file{bcel.jar}, in Java's
@@ -9249,7 +9234,7 @@ Daikon's Java parser.  We expect it will be fixed by the next release.
 @section Further reading
 
 More information on Daikon can be found in the Daikon Developer Manual
-(@pxref{Top,,,./developer,Daikon Developer Manual}).
+(@pxref{Top, , Introduction, ./developer, Daikon Developer Manual}).
 For instance, the Daikon Developer Manual indicates how to extend
 Daikon with new invariants, new derived variables, and front ends for
 new languages.  It also contains information about the implementation
@@ -9272,7 +9257,7 @@ The Daikon invariant detector is named after an Asian radish.
 English words ``die-con''.
 
 More information on Daikon can be found in the Daikon Developer Manual
-(@pxref{Top,,,./developer,Daikon Developer Manual}).
+(@pxref{Top, , Introduction, ./developer, Daikon Developer Manual}).
 For instance, the Daikon Developer Manual indicates how to extend
 Daikon with new invariants, new derived variables, and front ends for
 new languages.  It also contains information about the implementation
@@ -9468,15 +9453,15 @@ to the following restrictions:
 @enumerate
 
 @item The author is not responsible for the consequences of use of this
-   software, no matter how awful, even if they arise from flaws in it.
+software, no matter how awful, even if they arise from flaws in it.
 
 @item The origin of this software must not be misrepresented, either by
-   explicit claim or by omission.  Since few users ever read sources,
-   credits must appear in the documentation.
+explicit claim or by omission.  Since few users ever read sources,
+credits must appear in the documentation.
 
 @item Altered versions must be plainly marked as such, and must not be
-   misrepresented as being the original software.  Since few users
-   ever read sources, credits must appear in the documentation.
+misrepresented as being the original software.  Since few users
+ever read sources, credits must appear in the documentation.
 
 @item This notice may not be removed or altered.
 @end enumerate
@@ -9507,10 +9492,12 @@ The following individuals have contributed to Daikon:
 Yuriy Brun,
 Jake Cockrell,
 David Cok,
+Forrest Coward,
 Adam Czeisler,
 Brian Demsky,
 Alan Donovan,
 Nii Dodoo,
+Kellen Donohue,
 Alan Dunn,
 Michael Ernst,
 Eric Fellheimer,
@@ -9537,6 +9524,7 @@ David Notkin,
 Carlos Pacheco,
 Jeff Perkins,
 Jaime Quinonez,
+Mark Roberts,
 Robert Rudd,
 Alexandru Salcianu,
 Todd Schiller,

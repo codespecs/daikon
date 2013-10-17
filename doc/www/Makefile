@@ -1,13 +1,9 @@
 default:
 	@echo "Specify a target:"
-	@echo "  www-dist"
 	@echo "  pubs"
+	@echo "  validate"
 
 # Not the default to avoid accidentally installing new webpages.
-www-dist:
-	cd .. && $(MAKE) www-dist
-pag-install:
-	cd .. && $(MAKE) pag-install
 
 pubs:
 	mkdir -p pubs

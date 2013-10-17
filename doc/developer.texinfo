@@ -5,7 +5,7 @@
 @c %**end of header
 
 @c To update all the nodes and menus all at once:   C-u C-c C-u m
-@c You shouldn't need to do that, though; the Makefile does it for you.
+@c You shouldn't need to do that, though; makeinfo does it for you.
 
 @macro daikonemail{}
 @email{daikon-developers@@lists.csail.mit.edu}
@@ -13,8 +13,8 @@
 
 @c @setchapternewpage odd
 
-@c avoid black boxes marking overfull hboxes in TeX output
-@finalout
+@c Avoid black boxes marking overfull hboxes in TeX output.
+@c @finalout
 
 @c set overall document style
 @c @raggedright
@@ -22,6 +22,7 @@
 
 @titlepage
 @sp 10
+
 @c Could also use @title, @subtitle, @author here.
 @center @titlefont{Daikon Invariant Detector Developer Manual}
 
@@ -47,13 +48,6 @@ Copyright @copyright{} 1998-2013
 @html
 <img src="images/daikon-logo.gif" alt="Daikon logo">
 @end html
-@c Why is this here? It duplicates the stuff further down.
-@c @html
-@c <h1>Daikon Invariant Detector User Manual</h1>
-@c
-@c This is the developer manual for the Daikon invariant detector.
-@c It describes Daikon version 4.7.1, released October 8, 2013.
-@c @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
 @c but it's acceptable. 
@@ -61,10 +55,9 @@ Copyright @copyright{} 1998-2013
 @contents
 @end ifnothtml
 
-@node    Top, Introduction, (dir), (dir)
-@comment node-name, next,          previous, up
-
 @ifnottex
+@node  Top
+@top Daikon Invariant Detector Developer Manual
 @c Unfortunately, the Daikon logo doesn't look good in ASCII.
 @c @ifinfo
 @c @image{images/daikon-logo,4in,}
@@ -72,7 +65,6 @@ Copyright @copyright{} 1998-2013
 @c @end ifinfo
 This is the developer manual for the Daikon invariant detector.
 It describes Daikon version 4.7.1, released October 8, 2013.
-@end ifnottex
 
 @menu
 * Introduction::
@@ -86,11 +78,16 @@ It describes Daikon version 4.7.1, released October 8, 2013.
 * File formats::
 * Index::
 
+@c Putting end menu here is not how it's supposed to be done,
+@c but it seems to fix the html toc indentation bug.
+@end menu
+@end ifnottex
+
 @ifhtml
 @contents
 @end ifhtml
-@ifnothtml
 
+@ifinfo
 @detailmenu
  --- The Detailed Node Listing ---
 
@@ -209,15 +206,15 @@ Version 1 Declarations
 * V1 ListImplementors declaration::
 
 @end detailmenu
-@end ifnothtml
-@end menu
+@end ifinfo
 
-@node    Introduction, Extending Daikon, Top, Top
+@node    Introduction
 @chapter Introduction
 
 This is the developer manual for the 
 @uref{http://pag.csail.mit.edu/daikon/, ,Daikon invariant detector}.
-For information about using Daikon, see its user manual (@pxref{Top,,Overview,./daikon,Daikon User Manual}).
+For information about using Daikon, see its user manual
+(@pxref{Top, , Introduction, ./daikon, Daikon User Manual}).
 This manual is intended for those who are already familiar with the use
 of Daikon, but wish to customize or extend it.
 
@@ -998,7 +995,10 @@ on specific invariant objects rather than a particular class or portion of Daiko
 This is referred to as @emph{Track} logging because it tracks particular
 values across Daikon.
 
-The @option{--track @var{class|class|...<var,var,var>@@ppt}} option to Daikon 
+@c makeinfo doesn't like ',' in @var so we can't do this:
+@c @var{class|class|...<var,var,var>@@ppt}
+The @option{--track @var{class|class|...<var}@i{,}@var{var}@i{,}@var{var>@@ppt}}
+option to Daikon 
 (@pxref{Daikon debugging options,,,./daikon,Daikon User Manual})
 enables track logging.
 The argument to the @option{--track} option supplies three pieces of information: 
