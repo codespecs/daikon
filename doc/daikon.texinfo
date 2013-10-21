@@ -4150,7 +4150,7 @@ int
 2
 @end example
 
-The declarations file format is described in @ref{Program point declarations,,,./developer,Daikon Developer Manual}.
+The declaration file format is described in @ref{Program point declarations,,,./developer,Daikon Developer Manual}.
 
 DynComp creates two representations of the comparability information in
 the files @file{foo.txt-cset} and @file{foo.txt-trace}.  In the @file{cset}
