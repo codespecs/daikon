@@ -64,12 +64,9 @@ Front ends
 
   - C front end
 
-      - Everything Robert is currently doing.
-        New gcc, new architectures
-
       - Convert Kvasir to using the new decl format.
 
-  - C/C++ front end for Windows 
+  - C/C++ front end for Windows
 
       - Similar conceptually to the existing front end for binaries on
         linux (Kvasir, which is based on the Valgrind dynamic instrumentation
@@ -90,35 +87,6 @@ Front ends
         Its also possible that there might be heuristics short of a full
         memcheck implementation that might produce reasonable results.
 
-  - C# front end for Windows
-
-      Presumably this would work in a similar fashion to our existing
-      Java front end (Chicory).  I spent some time, however, looking for
-      dynamic instrumentation for C# and didn't find anything (but that
-      doesn't mean that it doesn't exist).
-
-      From our projects file:
-
-        As the <a href="http://pag.csail.mit.edu/daikon/">Daikon
-        invariant detector</a> (which automatically determines program
-        properties, much like formal specifications) increases in
-        popularity, we receive frequent requests for a front end that
-        works for .NET or COM under Microsoft Windows.  A front end
-        performs instrumentation, so that the program outputs trace
-        information (similar to, but much more detailed than, a
-        profiler) that can be processed by the invariant detector.
-        Currently, we have front ends for Java and Perl, and a C/C++
-        front end that works under Linux.
-
-        This project will create a front end for either .NET or for COM.
-        For instance, a MSIL (.NET) front end might take advantage of
-        the Profiling API to output slightly more information than a
-        profiler ordinarily does.  A COM front end could act as a
-        wrapper, intercepting and recording calls between components,
-        but not affecting the internal operation of the COM components
-        in any way.  Other approaches are also possible (and may be
-        technically superior to these suggestions).
-
 ===========================================================================
 
 External tools
@@ -132,14 +100,6 @@ External tools
       should be tested on a wider variety of programs.  Any bugs encountered
       should be fixed and the test suites enhanced to cover more cases.
     
-  - Comparability for C/C++ and C# for windows
-
-      The C/C++ version would essentially be a port of the existing
-      binary DynComp from valgrind to DynamoRio or Pin.
-
-      If an instrumentation interface similar to Java exists for C# then
-      the C# version would probably be pretty similar to DynComp/Java
-
   - Mechanism to check invariants found by Daikon in programs (ie, add
     as assertions or some other mechanism).  Optimally it would be easy
     to read and edit.  Also it would be easy to update if new invariants
