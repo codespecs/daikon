@@ -1,7 +1,7 @@
 package typequals;
 
 import checkers.basetype.BaseTypeChecker;
-import checkers.quals.*;
+import checkers.quals.TypeQualifiers;
 
 /**
  * VIndexChecker ensures that the programmer does not accidentally mix indices that are intended for use into VarInfo lists vs. value lists.
@@ -16,4 +16,4 @@ import checkers.quals.*;
  **/
 
 @TypeQualifiers({ VIndexTop.class, ValueIndex.class, VarIndex.class, VIndexUnqualified.class, VIndexBottom.class })
-public final class VIndexChecker extends BaseTypeChecker<VIndexAnnotatedTypeFactory> { }
+public final class VIndexChecker extends BaseTypeChecker { }

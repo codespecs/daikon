@@ -1,20 +1,19 @@
 package typequals;
 
-import java.util.Set;
+import checkers.basetype.BaseAnnotatedTypeFactory;
+import checkers.basetype.BaseTypeChecker;
+import checkers.types.AnnotatedTypeMirror;
+import checkers.types.TreeAnnotator;
 
 import javacutils.AnnotationUtils;
 import javacutils.InternalUtils;
 import javacutils.TypesUtils;
 
+import java.util.Set;
+
 import javax.lang.model.element.AnnotationMirror;
 
-import checkers.basetype.BaseTypeChecker;
-import checkers.types.AnnotatedTypeMirror;
-import checkers.types.SubtypingAnnotatedTypeFactory;
-import checkers.types.TreeAnnotator;
-
 import com.sun.source.tree.BinaryTree;
-import com.sun.source.tree.CompilationUnitTree;
 import com.sun.source.tree.Tree;
 
 /**
@@ -22,26 +21,25 @@ import com.sun.source.tree.Tree;
  * in the following cases:
  * [TODO]
  */
-public class VIndexAnnotatedTypeFactory extends SubtypingAnnotatedTypeFactory<VIndexChecker> {
+public class VIndexAnnotatedTypeFactory extends BaseAnnotatedTypeFactory {
 
     private final AnnotationMirror VINDEXTOP;
 
-    public VIndexAnnotatedTypeFactory(VIndexChecker checker,
-            CompilationUnitTree root) {
-        super(checker, root);
+    public VIndexAnnotatedTypeFactory(BaseTypeChecker checker) {
+        super(checker);
         VINDEXTOP = AnnotationUtils.fromClass(elements, VIndexTop.class);
         this.postInit();
     }
 
     @Override
-    public TreeAnnotator createTreeAnnotator(VIndexChecker checker) {
-        return new VIndexTreeAnnotator(checker);
+    public TreeAnnotator createTreeAnnotator() {
+        return new VIndexTreeAnnotator(this);
     }
 
     private class VIndexTreeAnnotator extends TreeAnnotator {
 
-        public VIndexTreeAnnotator(BaseTypeChecker<?> checker) {
-            super(checker, VIndexAnnotatedTypeFactory.this);
+        public VIndexTreeAnnotator(VIndexAnnotatedTypeFactory atypeFactory) {
+            super(atypeFactory);
         }
 
         /**
