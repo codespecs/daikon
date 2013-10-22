@@ -1,7 +1,4 @@
-all: config-options invariants-doc info html html-chap ps pdf
-
-
-info: daikon.info developer.info
+all: config-options invariants-doc html html-chap ps pdf
 
 daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 
@@ -55,9 +52,6 @@ images/%.pdf: images/%.eps
 
 html: daikon.html developer.html
 
-# The perl moves </ul> from after the table of contents to before it,
-# preventing it from being too deeply indented.  It's needed with makeinfo 4.2.
-
 daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
 	makeinfo --html --no-split $<
 
@@ -81,7 +75,7 @@ daikon_manual_html/daikon.html: daikon.texinfo
 # However, as of texi2html, the cross-references seem to assume the other
 # document was processed without "-split chapter", instead splitting into nodes.
 	texi2html -split chapter -subdir daikon_manual_html $<
-	perl -pi -e '$$/ = "\n\n"; if (m|http://texi2html\.cvshome\.org|) { $$_ = ""; }' daikon_manual_html/daikon.html
+	perl -pi -e '$$/ = "\n\n"; if (m|http://www\.nongnu\.org/texi2html|) { $$_ = ""; }' daikon_manual_html/*.html
 
 developer_manual_html/developer.html: developer.texinfo
 	rm -rf developer_manual_html/*
@@ -90,6 +84,7 @@ developer_manual_html/developer.html: developer.texinfo
 # However, as of texi2html, the cross-references seem to assume the other
 # document was processed without "-split chapter", instead splitting into nodes.
 	texi2html -split chapter -subdir developer_manual_html $<
+	perl -pi -e '$$/ = "\n\n"; if (m|http://www\.nongnu\.org/texi2html|) { $$_ = ""; }' developer_manual_html/*.html
 
 daikon.dvi: daikon.texinfo config-options.texinfo invariants-doc.texinfo
 	texi2dvi $<
@@ -115,6 +110,12 @@ daikon.pdf: daikon.dvi images/dfepl-flow.eps
 
 developer.pdf: developer.dvi
 	dvipdfm $<
+
+pdf-final: daikon.texinfo config-options.texinfo invariants-doc.texinfo developer.texinfo
+	texi2dvi --command='@set final' daikon.texinfo
+	dvipdfm daikon.dvi
+	texi2dvi --command='@set final' developer.texinfo
+	dvipdfm developer.dvi
 
 # Note that the clean target does not remove invariants-doc.texinfo or
 # config-options.texinfo.

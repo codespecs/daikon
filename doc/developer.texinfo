@@ -11,14 +11,22 @@
 @email{daikon-developers@@lists.csail.mit.edu}
 @end macro
 
-@c @setchapternewpage odd
-
-@c Avoid black boxes marking overfull hboxes in TeX output.
-@c @finalout
-
 @c set overall document style
-@c @raggedright
-@paragraphindent none
+@setchapternewpage odd
+@paragraphindent 1
+@firstparagraphindent insert
+
+@ifset final
+@c FINAL version
+@c Avoid black boxes marking overfull hboxes in TeX output.
+@finalout
+@end ifset
+
+@ifclear final
+@c DRAFT version
+@end ifclear
+
+@c Start of Document
 
 @titlepage
 @sp 10
@@ -30,8 +38,17 @@
 @center Daikon version 4.7.1
 
 @sp 1
-@c Daikon version 4.7.1 date
+
+@ifset final
+@c FINAL version
+@c Print out the Daikon version 4.7.1 release date
 @center October 8, 2013
+@end ifset
+
+@ifclear final
+@c DRAFT version
+@center DRAFT Version @today{}
+@end ifclear
 
 @sp 5
 @c reads daikon-logo.{eps,pdf} (not .txt, .png, or .jpg, because info
@@ -42,15 +59,28 @@
 @page
 @vskip 0pt plus 1filll
 Copyright @copyright{} 1998-2013
-@c Copyright @copyright{} 1998-2001 Michael Ernst
 @end titlepage
+
+@c set document heading/footing style
+@c The texinfo support for headings is too broken to use;
+@c perhaps we could fix texinfo.tex some day.
+@c @headings off
+@c @evenheading @thispage @| @thischaptername @| Chapter @thischapternum
+@c @oddheading Section @thissectionnum @| @thissectionname @| @thispage
+@c @oddheading Chapter @thischapternum: @thischaptername @| @| @thispage 
+@c @evenheading @thispage @| @| Section @thissectionnum: @thissectionname
+
+@ifclear final
+@c DRAFT version
+@everyfooting DRAFT @| @| @today{}
+@end ifclear
 
 @html
 <img src="images/daikon-logo.gif" alt="Daikon logo">
 @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
-@c but it's acceptable. 
+@c but it's acceptable.
 @ifnothtml
 @contents
 @end ifnothtml
@@ -58,11 +88,7 @@ Copyright @copyright{} 1998-2013
 @ifnottex
 @node  Top
 @top Daikon Invariant Detector Developer Manual
-@c Unfortunately, the Daikon logo doesn't look good in ASCII.
-@c @ifinfo
-@c @image{images/daikon-logo,4in,}
-@c 
-@c @end ifinfo
+
 This is the developer manual for the Daikon invariant detector.
 It describes Daikon version 4.7.1, released October 8, 2013.
 
@@ -87,126 +113,6 @@ It describes Daikon version 4.7.1, released October 8, 2013.
 @contents
 @end ifhtml
 
-@ifinfo
-@detailmenu
- --- The Detailed Node Listing ---
-
-Extending Daikon
-
-* Compiling Daikon::
-* Version control repository::
-* Using Eclipse::
-* New invariants::
-* New derived variables::
-* New formatting for invariants::
-* New front ends::
-* New suppressors::
-* System.exit::
-
-New front ends
-
-* Example instrumented Java program::
-* Instrumenting C programs::
-
-Debugging Daikon
-
-* Track logging::
-
-Track logging
-
-* Adding track logging::
-* Track log output::
-
-Daikon internals
-
-* Avoiding work for redundant invariants::
-* Dataflow hierarchy::
-* Equality optimization::
-
-Testing
-
-* Unit testing::
-* Regression tests::
-
-Unit testing
-
-* Invariant format testing::
-* Sample Testing::
-
-Sample Testing
-
-* Assertions::
-* Example file::
-
-Regression tests
-
-* Kvasir regression tests::
-* Adding regression tests::
-
-Editing Daikon source code
-
-* Emacs commands::
-* Eclipse setup::
-* Editing daikon.texinfo::
-
-Eclipse setup
-
-* Start up Eclipse::
-* Existing projects::
-* External tools::
-* Eclipse debugger::
-* Using Mercurial with Eclipse::
-
-Work on existing coding projects
-
-* Import existing project::
-* Import different project::
-
-Analyzing historical versions of Daikon
-
-* Branches::
-
-File formats
-
-* Declarations in a separate file::
-* Conventions::
-* Declarations::
-* Data trace records::
-* Example files::
-* Version 1 Declarations::
-
-Declarations
-
-* Declaration-related records::
-* Program point declarations::
-* Variable declarations::
-
-Declaration-related records
-
-* Declaration version::
-* Input-language declaration::
-* Variable comparability::
-* ListImplementors declaration::
-
-Data trace records
-
-* Nonsensical values::
-* Variables that do not appear in trace records::
-
-Example files
-
-* Example declaration file::
-* Example data trace file::
-
-Version 1 Declarations
-
-* V1 Program point declarations::
-* V1 pptname format::
-* V1 VarComparability declaration::
-* V1 ListImplementors declaration::
-
-@end detailmenu
-@end ifinfo
 
 @node    Introduction
 @chapter Introduction
@@ -221,8 +127,7 @@ of Daikon, but wish to customize or extend it.
 Additional information can be found in technical papers available from
 @uref{http://pag.csail.mit.edu/daikon/pubs/}.
 
-
-@node    Extending Daikon, Debugging Daikon, Introduction, Top
+@node    Extending Daikon
 @chapter Extending Daikon
 
 @cindex extending Daikon
@@ -231,7 +136,6 @@ Additional information can be found in technical papers available from
 @cindex modifying Daikon
 
 This chapter describes how to customize or modify Daikon.
-
 
 @menu
 * Compiling Daikon::
@@ -245,8 +149,9 @@ This chapter describes how to customize or modify Daikon.
 * System.exit::
 @end menu
 
-@node    Compiling Daikon, Version control repository, Extending Daikon, Extending Daikon
+@node    Compiling Daikon
 @section Compiling Daikon
+
 @cindex compiling daikon
 
 To compile Daikon, type @samp{make} in @file{daikon/java/} or any of its
@@ -342,8 +247,9 @@ export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classe
 @exampleindent 5
 
 
-@node     Version control repository, Using Eclipse, Compiling Daikon, Extending Daikon
+@node    Version control repository
 @section Version control repository
+
 @cindex CVS repository
 @cindex Hg repository
 @cindex Mercurial repository
@@ -353,8 +259,9 @@ The Daikon Mercurial repository is at Google Code; see
 @uref{http://code.google.com/p/daikon/}.
 
 
-@node    Using Eclipse, New invariants, Version control repository, Extending Daikon
+@node    Using Eclipse
 @section Using Eclipse
+
 @cindex Eclipse
 
 [To be improved.]
@@ -377,7 +284,7 @@ Project > properties > Java build path:
    Default output folder: change from ``Daikon/bin'' to ``Daikon''.
 
 
-@node    New invariants, New derived variables, Using Eclipse, Extending Daikon
+@node    New invariants
 @section New invariants
 
 @cindex new invariants
@@ -421,6 +328,7 @@ Invariants over a scalar and a sequence, such
 as ``x is a member of a[]''.
 @end table
 
+@noindent
 A complete list of invariants appears in @samp{Daikon.setup_proto_invs()}.
 
 Daikon's invariants are first instantiated, then are presented samples
@@ -501,6 +409,7 @@ be
 return 1 - Math.pow(.5, ppt.num_samples());
 @end example
 
+@noindent
 If 5 values had been seen, then this implementation would return 31/32,
 which is the likelihood that all 5 values seen so far were even not purely
 by chance.  An invariant is printed only if its probability of not
@@ -523,7 +432,7 @@ See also @ref{New formatting for invariants}.
 After the invariant is written, add a call to its @code{get_proto}
 method in the @code{Daikon.setup_proto_invs} method.
 
-@node    New derived variables, New formatting for invariants, New invariants, Extending Daikon
+@node    New derived variables
 @section New derived variables
 
 @cindex derived variable
@@ -543,7 +452,7 @@ be written.  For now, see the derived variables that appear in the Java
 files in directory @file{$DAIKONDIR/java/daikon/derive/}.)
 
 
-@node    New formatting for invariants, New front ends, New derived variables, Extending Daikon
+@node    New formatting for invariants
 @section New formatting for invariants
 
 @cindex output format, defining new
@@ -565,7 +474,7 @@ In every subclass of @code{Invariant}, edit the
 @code{format_using} method to handle the new @code{OutputFormat}.
 @end itemize
 
-@node    New front ends, New suppressors, New formatting for invariants, Extending Daikon
+@node    New front ends
 @section New front ends
 
 @cindex front end, writing
@@ -582,7 +491,8 @@ Manual}), among others.  More often, users apply a programming language
 front end (also called an ``instrumenter'') to a program, causing
 executions of the program to write files in Daikon's format.  (For
 information about existing front ends, see @ref{Front
-ends (instrumentation),,,./daikon,Daikon User Manual}.)  When a general front end is not
+ends (instrumentation),,,./daikon,Daikon User Manual}.)  When a general
+front end is not
 available, it is possible to manually instrument a specific program so
 that it writes files in Daikon's format.  The resulting instrumented
 program is very similar to what an instrumenter would have created, so
@@ -605,7 +515,7 @@ values of the variables of interest.
 * Instrumenting C programs::
 @end menu
 
-@node    Example instrumented Java program, Instrumenting C programs, New front ends, New front ends
+@node       Example instrumented Java program
 @subsection Example instrumented Java program
 
 @cindex instrumenting Java programs
@@ -625,6 +535,7 @@ class Example @{
 @}
 @end example
 
+@noindent
 The @file{.decls} file might look like the following.
 @example
 DECLARE
@@ -654,6 +565,7 @@ int
 1
 @end example
 
+@noindent
 The instrumented @file{.java} file might look like the following.
 This example does not compute the ``modified bits'', but simply sets
 them all to 1, which is a safe default.
@@ -699,6 +611,7 @@ class Example @{
 @}
 @end example
 
+@noindent
 (Daikon's Java front end, Chicory, does not actually insert
 instrumentation into the Java source code of your program.  Rather, it
 instruments the bytecode as it is loaded into the JVM.  This is more
@@ -708,7 +621,7 @@ instrumentation because that is  simpler to explain and understand than
 the bytecode instrumentation.)
 
 
-@node    Instrumenting C programs,  , Example instrumented Java program, New front ends
+@node       Instrumenting C programs
 @subsection Instrumenting C programs
 
 @cindex C programs, instrumenting
@@ -716,7 +629,8 @@ the bytecode instrumentation.)
 
 Daikon comes with two front ends for the C language:  Kvasir
 (@pxref{Kvasir,,,./daikon,Daikon User Manual}) and Mangel-Wurzel
-(@pxref{Mangel-Wurzel,,,./daikon,Daikon User Manual}).  Each has its limitations.
+(@pxref{Mangel-Wurzel,,,./daikon,Daikon User Manual}). 
+Each has its limitations.
 Kvasir only works under the Linux operating system, and it works only on
 ``x86'' (Intel 386-compatible) processors.  Mangel-Wurzel 
 lacks some tracing features related to arrays
@@ -856,7 +770,7 @@ memory errors.
 
 
 
-@node New suppressors, System.exit, New front ends, Extending Daikon
+@node    New suppressors
 @section New suppressors
 
 @cindex adding new suppressors
@@ -912,9 +826,16 @@ public NISuppressionSet get_ni_suppressions() @{
 @c restore default:
 @exampleindent 5
 
-For suppressions depending on the state of a particular invariant, each @code{Invariant} has an @code{isObviousDynamically(VarInfo[] vis)} method that is called once the state of other invariants has already been determined.  This method returns a non-null value if this invariant is implied by a fact that can be derived from the given @code{VarInfo}s.  
+For suppressions depending on the state of a particular invariant,
+each @code{Invariant} has an @code{isObviousDynamically(VarInfo[] vis)}
+method that is called once the state of other invariants has already
+been determined.  This method returns a non-null value if this invariant
+is implied by a fact that can be derived from the given @code{VarInfo}s.  
 
-For example, suppose division was not defined for divisors smaller than 1.  The following example defines an obvious check for ``x <= c'' (where c < 1 is a constant) implies ``y % x == 0'', written in the Divides class.
+For example, suppose division was not defined for divisors smaller than 1. 
+The following example defines an obvious check for ``x <= c''
+(where c < 1 is a constant) implies ``y % x == 0'', written in the
+Divides class.
 
 @exampleindent 1
 @smallexample
@@ -947,7 +868,7 @@ public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
 @c restore default:
 @exampleindent 5
 
-@node    System.exit,  , New suppressors, Extending Daikon
+@node    System.exit
 @section System.exit
 
 The Daikon codebase does not call @code{System.exit()}, except in a
@@ -965,7 +886,7 @@ program handle it appropriately.  (This is true of instrumentation code
 as well.)
 
 
-@node    Debugging Daikon, Daikon internals, Extending Daikon, Top
+@node    Debugging Daikon
 @chapter Debugging Daikon
 
 @cindex debugging Daikon
@@ -983,7 +904,7 @@ Daikon's logging routines are based on the @code{java.util.logging} utilities
 (built into Java 1.4 and later).
 
 
-@node Track logging,  , Debugging Daikon, Debugging Daikon
+@node    Track logging
 @section Track logging
 
 @cindex logging
@@ -1025,6 +946,7 @@ For example:
 IntEqual<x,y>@@makeEmpty()
 LessThan|GreaterThan<return,orig(y)>@@EXIT99
 @end example
+
 Multiple @option{--track} switches can be specified. The class, program point,
 and each of the variables must match one of the specifications in order
 for information concerning the invariant to be printed.
@@ -1071,8 +993,10 @@ and
 * Track log output::
 @end menu
 
-@node Adding track logging, Track log output, Track logging, Track logging
+@node       Adding track logging
 @subsection Adding track logging
+
+@cindex adding track logging
 
 When you add a new invariant, derived variable, or other component to
 Daikon, you should ensure that it supports track logging in the same way
@@ -1089,6 +1013,7 @@ log (Class, Ppt, String)
 log (Class, Ppt, Varinfo[], String)
 @end example
 
+@noindent
 The first uses the cached version of the @code{Class}, @code{Ppt}, 
 and @code{VarInfo} that
 was provided in the constructor.  The second uses the specified
@@ -1119,6 +1044,7 @@ if (Debug.logOn || logger.isLoggable (Level.FINE)) @{
 @}
 @end example
 
+@noindent
 The above will print if either the tracking information matches or if the
 specified logger is enabled.
 
@@ -1133,6 +1059,7 @@ log (String)
 log (Logger, String)
 @end example
 
+@noindent
 These correspond to the @code{Debug} methods described above.  They are
 the recommended way to log information concerning invariants.
 
@@ -1143,8 +1070,10 @@ normally interesting or especially voluminous output.  Often statements
 using @code{logDetail()} should be commented out when not in active use.
 
 
-@node Track log output,  , Adding track logging, Track logging
+@node       Track log output
 @subsection Track log output
+
+@cindex track log output
 
 Each call to a track log method will produce output in the same basic
 format. Space for three variables is always maintained for consistency:
@@ -1153,6 +1082,7 @@ format. Space for three variables is always maintained for consistency:
 @ daikon.Debug: <class>: <ppt>: <var1>: <var2>: <var3>: <msg>
 @end example
 
+@noindent
 If @code{showTrackback} is enabled, the traceback will follow each 
 line of debug output.
 
@@ -1175,6 +1105,7 @@ file is to use the @command{tee} command.  For example:
 daikon [daikon args] | tee ~/daikon.out
 @end example
 
+@noindent
 Then specify that file to log2html.  Note that when supplying a filename
 to log2html, you must expand @samp{~} yourself
 since the webserver doesn't know who you are.  The result will contain
@@ -1187,6 +1118,7 @@ called.  For example, the traceback column might contain:
 +PptSlice1.addInvariant
 @end example
 
+@noindent
 If you put your cursor over @code{PptSlice1.addInvariant} it will show
 the exact line number in the source file where the log method was
 called as part of the href.  If you click on the traceback it will
@@ -1227,7 +1159,7 @@ kept in a file named the same as your Daikon output file with
 world writable for log2html to work correctly.
 
 
-@node    Daikon internals, Testing, Debugging Daikon, Top
+@node    Daikon internals
 @chapter Daikon internals
 
 @cindex Daikon internals
@@ -1245,7 +1177,7 @@ it efficient in terms of time and space needed.  These techniques can
 be enabled or disabled at the Daikon command line, as described in
 @ref{Running Daikon,,Running Daikon,./daikon,Daikon User Manual}.
 
-@node    Avoiding work for redundant invariants, Dataflow hierarchy, Daikon internals, Daikon internals
+@node    Avoiding work for redundant invariants
 @section Avoiding work for redundant invariants
 
 @cindex non-instantiation of invariants
@@ -1300,7 +1232,7 @@ for dynamic detection of likely invariants'' by Jeff H. Perkins and
 Michael D. Ernst, published in FSE 2004; the paper is available from
 @uref{http://pag.csail.mit.edu/pubs/invariants-incremental-@/fse2004-@/abstract.html}.
 
-@node    Dataflow hierarchy, Equality optimization, Avoiding work for redundant invariants, Daikon internals
+@node    Dataflow hierarchy
 @section Dataflow hierarchy
 
 @cindex dataflow hierarchy
@@ -1342,7 +1274,7 @@ the only samples that are examined by Daikon are the @code{:::EXIT} program
 points (plus ``orig'' variables) since these contain a complete view of
 the data.
 
-@node    Equality optimization,  , Dataflow hierarchy, Daikon internals
+@node    Equality optimization
 @section Equality optimization
 
 @cindex equality optimization
@@ -1368,7 +1300,7 @@ imply ``odd(b)''.  Equality optimization can be turned off at the
 command line with the @option{--noequality} flag.
 
 
-@node    Testing, Editing, Daikon internals, Top
+@node    Testing
 @chapter Testing
 
 @cindex testing Daikon
@@ -1389,7 +1321,7 @@ repository}).
 * Regression tests::
 @end menu
 
-@node    Unit testing, Regression tests, Testing, Testing
+@node    Unit testing
 @section Unit testing
 
 @cindex unit testing
@@ -1408,7 +1340,7 @@ or modify old code, please try to add unit tests.
 * Sample Testing::
 @end menu
 
-@node    Invariant format testing, Sample Testing, Unit testing, Unit testing
+@node       Invariant format testing
 @subsection Invariant format testing
 
 This tests the formatting of invariants with specified input.  The
@@ -1483,6 +1415,7 @@ Goal (simplify): (>= |a| -6)
 @c restore default:
 @exampleindent 5
 
+@noindent
 Note that the spacing on the goal lines is exact, that is, no extra
 spaces are allowed and no spaces are allowed to be missing. So the
 exact format is again:
@@ -1530,6 +1463,7 @@ Goal: a < b    <- goal string, no comment/blank lines after this
 @c restore default:
 @exampleindent 5
 
+@noindent
 Other examples are in the existing test file 
 (@file{InvariantFormatTest.commands}).
 @end table
@@ -1539,6 +1473,8 @@ The output of a test run can be converted into goals by using the
 @example
 java daikon.test.InvariantFormatTester --generate_goals
 @end example
+
+@noindent
 Note that this test is included in the set of tests performed by the
 master tester, and so it is not necessary to separately run this test
 except to generate goal files.
@@ -1549,7 +1485,7 @@ function. Otherwise the program has no was of knowing how to create
 such an object from a string. All primitives and the String type are
 already recognized.
 
-@node    Sample Testing,  , Invariant format testing, Unit testing
+@node       Sample Testing
 @subsection Sample Testing
 
 Sample testing tests various components of Daikon as samples are being
@@ -1597,7 +1533,7 @@ point before the assertion (for example: @code{!inv("x > y", x, y})).
 * Example file::
 @end menu
 
-@node       Assertions, Example file, Sample Testing, Sample Testing
+@node          Assertions
 @subsubsection Assertions
 
 Assertions are formatted like function calls: <name>(arg1, arg2, ...).
@@ -1620,7 +1556,7 @@ the invariant.  In this case, it is only necessary for the class to match.
 
 More assertions can easily be added to @file{SampleTester.java} as required.
 
-@node       Example file,  , Assertions, Sample Testing
+@node          Example file
 @subsubsection Example file
 
 The following is an simple example of sample testing.
@@ -1636,7 +1572,7 @@ ppt: foo.f():::EXIT35
   assert: !inv("x <= y", x, y)
 @end example
 
-@node    Regression tests,  , Unit testing, Testing
+@node    Regression tests
 @section Regression tests
 
 @cindex regression tests
@@ -1681,7 +1617,7 @@ because it controls so many types of tests.
 @end menu
 
 
-@node Kvasir regression tests, Adding regression tests, Regression tests, Regression tests
+@node       Kvasir regression tests
 @subsection Kvasir regression tests
 
 
@@ -1697,7 +1633,7 @@ correct output, then run @samp{make update-inv-goals} to update the Daikon
 
 
 
-@node Adding regression tests,  , Kvasir regression tests, Regression tests
+@node       Adding regression tests
 @subsection Adding regression tests
 
 @cindex adding new regression tests
@@ -1776,6 +1712,7 @@ StackAr.txt-merge-esc.goal
 StackAr.txt-merge-jml.goal
 @end example
 
+@noindent
 If you omit some @file{.goal} files, then the related tests will not be run.
 (If you can't figure out how to ensure the tests are not run, it may be
 easier to just add the additional @file{.goal} files.)
@@ -1796,7 +1733,7 @@ The test can be added into the standard tests (either @samp{everything} or
 @end enumerate
 
 
-@node    Editing, Distribution, Testing, Top
+@node    Editing
 @chapter Editing Daikon source code
 
 The Daikon source code follows these coding conventions:
@@ -1809,7 +1746,7 @@ The Daikon source code follows these coding conventions:
 * Editing daikon.texinfo::
 @end menu
 
-@node    Emacs commands, Eclipse setup, Editing, Editing
+@node    Emacs commands
 @section Emacs commands
 
 
@@ -1828,7 +1765,7 @@ use a Web browser to read the manual in HTML form, or to read the
 PostScript or PDF version either electronically or on paper.
 
 
-@node    Eclipse setup, Editing daikon.texinfo, Emacs commands, Editing
+@node    Eclipse setup
 @section Eclipse setup
 
 @menu
@@ -1839,7 +1776,7 @@ PostScript or PDF version either electronically or on paper.
 * Using Mercurial with Eclipse::
 @end menu
 
-@node    Start up Eclipse, Existing projects, Eclipse setup, Eclipse setup
+@node       Start up Eclipse
 @subsection Start up Eclipse
 
 Just run the command @samp{eclipse} at the command shell.
@@ -1867,7 +1804,7 @@ Window >> Preferences >> Java >> Compiler >> Style >> Non-static access >> >> Ig
 @exampleindent 5
 
 
-@node    Existing projects, External tools, Start up Eclipse, Eclipse setup
+@node       Existing projects
 @subsection Work on existing coding projects
 
 @menu
@@ -1875,7 +1812,7 @@ Window >> Preferences >> Java >> Compiler >> Style >> Non-static access >> >> Ig
 * Import different project::
 @end menu
 
-@node    Import existing project, Import different project, Existing projects, Existing projects
+@node          Import existing project
 @subsubsection Import an existing project
 
 First, do @samp{cp $DAIKONDIR/java/.classpath-pag $DAIKONDIR/java/.classpath}
@@ -1893,7 +1830,7 @@ them (for instance, copy them from Daikon's), or else follow a different
 procedure to work on your project in Eclipse.)
 
 
-@node    Import different project,  , Import existing project, Existing projects
+@node          Import different project
 @subsubsection Importing a different existing project
 
 Before working on code in Eclipse, you must import the code into
@@ -1954,7 +1891,7 @@ should add to your CLASSPATH in order to use the updates you make from
 Eclipse.
 
 
-@node    External tools, Eclipse debugger, Existing projects, Eclipse setup
+@node       External tools
 @subsection Interaction with external tools
 
 Eclipse compiles your project whenever you save.
@@ -1966,7 +1903,7 @@ If you change files outside Eclipse, you should refresh Eclipse, via
 right-clicking on the project or via menu item File >> Refresh.
 
 
-@node    Eclipse debugger, Using Mercurial with Eclipse, External tools, Eclipse setup
+@node       Eclipse debugger
 @subsection Using the Eclipse debugger
 
 To begin debugging, you can click on the bug icon in the toolbar or
@@ -2004,7 +1941,7 @@ put a semi-colon at the end of your expression!).
 @end itemize
 
 
-@node    Using Mercurial with Eclipse,  , Eclipse debugger, Eclipse setup
+@node       Using Mercurial with Eclipse
 @subsection Using Mercurial with Eclipse
 
 TODO, although you can just do all the editing, compiling, and
@@ -2012,7 +1949,7 @@ running from the Eclipse IDE while doing version control commands from the shell
 or whatever current system you use.
 
 
-@node    Editing daikon.texinfo,  , Eclipse setup, Editing
+@node    Editing daikon.texinfo
 @section Editing daikon.texinfo
 
 The Daikon manual appears in @file{doc/daikon.texinfo}.  The manual is
@@ -2028,12 +1965,12 @@ If you wish to create a new section of the manual, insert two lines like
 the following:
 
 @example
-@@node    @@@emph{Short title}, Foo, Bar, Baz
+@@node           @@@emph{Short title}
 @@@emph{chapter} @@@emph{Long title}
 @end example
 
-where you should insert "Foo, Bar, Baz" literally (they will be fixed up
-for you automatically), you select the short and the long titles (which may
+@noindent
+where you select the short and the long titles (which may
 even be the same), and you may replace @code{@@chapter} by @code{@@section},
 @code{@@subsection}, or @code{@@subsubsection}.
 
@@ -2080,7 +2017,7 @@ it twice) in order to generate formatted versions of the manual
 
 
 
-@node    Distribution, Historical, Editing, Top
+@node    Distribution
 @chapter Making a distribution
 
 To publish a Daikon distribution, do the following.  If you only want to
@@ -2107,6 +2044,8 @@ from other accounts as well.
 @example
 ssh daikonuser@@mangold.csail.mit.edu
 @end example
+
+@noindent
 (Alternately, you can do @samp{su - daikonuser} instead.)
 
 @item
@@ -2116,6 +2055,7 @@ Update Daikon to the most recent version.  [Time: moments]
 cd $DAIKONDIR && hg fetch && hg outgoing && hg status
 @end example
 
+@noindent
 The last line printed should be @samp{no changes found}.
 
 @item
@@ -2184,7 +2124,9 @@ last release.
 make staging
 @end example
 
-(To test just this part, you can do: @samp{make -C $DAIKONDIR/java clean; make -C $DAIKONDIR WWW_PARENT=$HOME/www/tmp staging})
+@noindent
+(To test just this part, you can do: @samp{make -C $DAIKONDIR/java clean;
+make -C $DAIKONDIR WWW_PARENT=$HOME/www/tmp staging})
 
 
 @item
@@ -2238,6 +2180,7 @@ source daikon/scripts/daikon.cshrc
 cd daikon
 make
 @end example
+
 @item
 Bash version:
 @example
@@ -2283,6 +2226,7 @@ source daikon/scripts/daikon.cshrc
 cd daikon
 make
 @end example
+
 @item
 Bash version:
 @example
@@ -2347,6 +2291,7 @@ Check the website to see if it has any broken links.
 checklink -q -r `cat $DAIKONDIR/plume-lib/bin/checklink-args.txt` http://groups.csail.mit.edu/pag/daikon
 @end example
 
+@noindent
 Links to the webpages of people and conferences are read from
 @file{$pl/bin/html-canonical-urls}.
 
@@ -2363,7 +2308,8 @@ cvs -q commit -m "Change version to @emph{X.Y.Z}"
 
 @item
 Send mail to the daikon-announce mailing list.  There are sample
-messages in the @uref{https://lists.csail.mit.edu/pipermail/daikon-announce/,archive} of @uref{https://lists.csail.mit.edu/mailman/listinfo/daikon-announce/,daikon-announce}.
+messages in the @uref{https://lists.csail.mit.edu/pipermail/daikon-announce/,archive} of
+@uref{https://lists.csail.mit.edu/mailman/listinfo/daikon-announce/,daikon-announce}.
 
 You may need to visit @uref{https://lists.csail.mit.edu/mailman/admindb/daikon-announce/}
 to approve the message before it is sent to the list.
@@ -2372,7 +2318,8 @@ to approve the message before it is sent to the list.
 Submit an update to
 freshmeat.net, which will inform others that a new release is available.
 
-(In order to perform this step, you need to be an admin for the @uref{http://freshmeat.net/projects/daikon/,Daikon project at
+(In order to perform this step, you need to be an admin for the
+@uref{http://freshmeat.net/projects/daikon/,Daikon project at
 freshmeat.net}.  If you are not, ask one of the current admins
 to add you to the list.)
 
@@ -2388,7 +2335,7 @@ This could be automated.  See "man freshmeat-submit".
 @c restore default:
 @exampleindent 5
 
-@node    Historical, File formats, Distribution, Top
+@node    Historical
 @chapter Analyzing historical versions of Daikon
 
 @cindex CVS repository
@@ -2469,7 +2416,7 @@ and later when development on it ceased (@pxref{Branches}).
 * Branches::
 @end menu
 
-@node    Branches,  , Historical, Historical
+@node    Branches
 @section Branches
 
 @cindex branches, in CVS repository
@@ -2478,12 +2425,8 @@ The Daikon CVS repository contains two branches:  a main trunk and a
 branch (named @samp{ENGINE_V2_PATCHES}) for version 2 of Daikon.
 
 The CVS manual
-@ifinfo
-(@pxref{Branching and merging,,,cvs,CVS --- Concurrent Versions System})
-@end ifinfo
-@ifnotinfo
-(see section @uref{http://ximbiot.com/cvs/@/manual/cvs-1.11.18/cvs_5.html,``Branching and merging''} of the manual @emph{CVS --- Concurrent Versions System})
-@end ifnotinfo
+(see section @uref{http://ximbiot.com/cvs/@/manual/cvs-1.11.18/cvs_5.html,
+``Branching and merging''} of the manual @emph{CVS --- Concurrent Versions System})
 describes CVS branches:
 
 @quotation
@@ -2548,7 +2491,7 @@ trunk (respectively, the branch).
 
 
 
-@node     File formats, Index, Historical, Top
+@node     File formats
 @appendix File formats
 
 @cindex file formats
@@ -2602,7 +2545,7 @@ There exist some other declaration-related records;
 @end menu
 
 
-@node    Declarations in a separate file, Conventions, File formats, File formats
+@node    Declarations in a separate file
 @section Declarations in a separate file
 
 
@@ -2610,8 +2553,10 @@ Instead of placing both declarations and data trace records in a single
 file, it is permitted to place the declarations in one or more
 @file{.decls} ``declaration files'' while leaving the data trace records
 in the @file{.dtrace} file.  This can be convenient for tools that
-perform a separate instrumentation step, such as dfepl (@pxref{dfepl,,,./daikon,Daikon User Manual})
-and Mangel-Wurzel (@pxref{Mangel-Wurzel,,,./daikon,Daikon User Manual}).  Such a tool takes as
+perform a separate instrumentation step, such as
+dfepl (@pxref{dfepl,,,./daikon,Daikon User Manual})
+and Mangel-Wurzel (@pxref{Mangel-Wurzel,,,./daikon,Daikon User Manual}). 
+Such a tool takes as
 input a target program to be analyzed, and produces two outputs:  a
 @file{.decls} file and an instrumented program.  Executing the
 instrumented program produces a @file{.dtrace} file containing data
@@ -2626,7 +2571,7 @@ information about a program, rather than multiple @file{.decls} files
 that must be associated with the @file{.dtrace} file.
 
 
-@node    Conventions, Declarations, Declarations in a separate file, File formats
+@node    Conventions
 @section File format conventions
 
 
@@ -2639,7 +2584,7 @@ Outside a record, any line starting with a pound sign (#) or double
 slashes (//) is ignored as a comment.  Comments are not permitted
 inside a record.
 
-@node Declarations, Data trace records, Conventions, File formats
+@node    Declarations
 @section Declarations
 
 @cindex declaration format
@@ -2668,7 +2613,7 @@ Some additional details about the declaration file format appear in file
 @end menu
 
 
-@node Declaration-related records, Program point declarations, Declarations, Declarations
+@node       Declaration-related records
 @subsection Declaration-related records
 
 
@@ -2679,7 +2624,7 @@ Some additional details about the declaration file format appear in file
 * ListImplementors declaration::
 @end menu
 
-@node Declaration version, Input-language declaration, Declaration-related records, Declaration-related records
+@node          Declaration version
 @subsubsection Declaration version
 
 The declaration version record must be the first record in the file.
@@ -2688,13 +2633,15 @@ The declaration version record is as follows:
 @example
 decl-version <version>
 @end example
+
+@noindent
 The current version is 2.0.
 
 Previous versions (see @ref{Version 1 Declarations}) did not include a
 version field and are identified by the lack of this field.
 
 
-@node Input-language declaration, Variable comparability, Declaration version, Declaration-related records
+@node          Input-language declaration
 @subsubsection Input-language declaration
 
 You can specify the language in which the program was written with a
@@ -2704,10 +2651,11 @@ record of the form
 input-language <language>
 @end example
 
+@noindent
 The language string is arbitrary and is not currently used.
 
 
-@node Variable comparability, ListImplementors declaration, Input-language declaration, Declaration-related records
+@node          Variable comparability
 @subsubsection Variable comparability
 
 @cindex comparability, for variables
@@ -2721,6 +2669,8 @@ Its format is:
 @example
 var-comparability <comparability-type>
 @end example
+
+@noindent
 The possible values for @var{comparability-type} are @code{implicit} and
 @code{none}.
 
@@ -2731,7 +2681,7 @@ for historical reasons.)
 This record is optional.  The @code{implicit} type is the default.
 
 
-@node ListImplementors declaration,  , Variable comparability, Declaration-related records
+@node          ListImplementors declaration
 @subsubsection ListImplementors declaration
 
 This declaration indicates classes that implement the
@@ -2745,6 +2695,7 @@ ListImplementors
 ...
 @end example
 
+@noindent
 Each classname is in Java format (for example, ``java.util.LinkedList'').
 
 The @option{--list_type} command-line option to Daikon can also be used to
@@ -2753,7 +2704,7 @@ detection,,,./daikon,Daikon User Manual}.
 
 
 
-@node Program point declarations, Variable declarations, Declaration-related records, Declarations
+@node       Program point declarations
 @subsection Program point declarations
 
 The format of a program point declaration is:
@@ -2767,6 +2718,7 @@ ppt <ppt-name>
 ...
 @end example
 
+@noindent
 The program point name can include any character.  In the declaration
 file,
 @c Replacing blanks by \_ isn't important on this line, but is important
@@ -2796,7 +2748,8 @@ Specifies one or more flags for this ppt.  The possible flags are:
 
 Specifies the program point hierarchy (@ref{Dataflow hierarchy}).
 
-In particular, each @code{parent} field names one parent of this program point.  A parent program point
+In particular, each @code{parent} field names one parent of this program
+point.  A parent program point
 is a point whose samples should include all of the samples at this
 program point.  For example, an object program point is a parent of
 each of the method program points in that object.
@@ -2821,7 +2774,7 @@ Multiple parent fields can be specified.
 
 @end itemize
 
-@node Variable declarations,  , Program point declarations, Declarations
+@node       Variable declarations
 @subsection Variable declarations
 @cindex declaration file format
 
@@ -2833,6 +2786,7 @@ variable <name>
   ...
 @end example
 
+@noindent
 The variable name is arbitrary, but for clarity, it should match what is
 used in the programming language.  All characters are legal in a name,
 but blanks must be represented as @code{\_} and backslashes as
@@ -2846,13 +2800,16 @@ this.theArray[..]
 this.stack.getClass()
 @end example
 
-The following information about the variable (@code{variable-info}) can be specified:
+The following information about the variable (@code{variable-info})
+can be specified:
 @itemize
 
 @item @code{var-kind <kind> [<relative-name>]}
 
-Specifies the variable kind.  Possible values are: @code{field}, @code{function},
-@code{array}, @code{variable}, @code{return}.  If @code{field} or @code{function}
+Specifies the variable kind.  Possible values are: @code{field},
+@code{function},
+@code{array}, @code{variable}, @code{return}.  If @code{field} or
+@code{function}
 are specified, the relative name of the field or function must be
 specified.  For example, if the variable is @code{this.theArray}, the
 relative name is @code{theArray}.  Pointers to arrays are of type
@@ -3013,6 +2970,8 @@ int sum(int len, int[] a) @{
   return sum;
 @}
 @end example
+
+@noindent
 variables @code{i} and @code{len} are comparable to one another (and
 to indices of array @code{a}).  Furthermore, the result is comparable
 to the elements of array @code{a}.  The comparability keys for these
@@ -3052,6 +3011,8 @@ blank separated.  For example
 @example
 function-args a.b this.f1
 @end example
+
+@noindent
 specifies that the function takes two arguments which are @code{a.b} and
 @code{this.f1}.  As with enclosing variables, each of the arguments must
 be defined as variables.
@@ -3059,7 +3020,7 @@ be defined as variables.
 @end itemize
 
 
-@node    Data trace records, Example files, Declarations, File formats
+@node    Data trace records
 @section Data trace records
 
 @cindex data trace format
@@ -3080,6 +3041,7 @@ this_invocation_nonce
 ...
 @end example
 
+@noindent
 In other words, the sample record contains:
 @itemize @bullet
 @item name of the program point
@@ -3120,8 +3082,8 @@ but @samp{a} for the identity of the array itself.)
 @cindex missing values for variables, see nonsensical values
 
 @c the Daikon code sometimes calls this "missing" rather than "nonsensical".
-The value representation may also be the string @code{nonsensical}; @xref{Nonsensical
-values}.
+The value representation may also be the string @code{nonsensical};
+@xref{Nonsensical values}.
 A string or array @emph{value} is never @code{null}.  A @emph{reference} to a
 string or array may be @code{null}, in which case the string or array
 value is printed as @code{nonsensical}.
@@ -3153,7 +3115,7 @@ declaration of the program point, without omissions or additions.
 * Variables that do not appear in trace records::
 @end menu
 
-@node    Nonsensical values, Variables that do not appear in trace records, Data trace records, Data trace records
+@node       Nonsensical values
 @subsection Nonsensical values for variables
 
 Some trace variables and derived variables may not have a value because
@@ -3172,6 +3134,7 @@ uninitialized or deallocated, or @code{a} is null, uninitialized, or
 deallocated)
 @end itemize
 
+@noindent
 For trace variables, it is the responsibility of the front end to
 perform a check at run time whenever a variable's value is about to be
 output to the trace, and to output the value ``nonsensical''
@@ -3187,7 +3150,7 @@ the presence of nonsensical values, see the
 configuration options,,,./daikon,Daikon User Manual}).
 
 
-@node    Variables that do not appear in trace records,  , Nonsensical values, Data trace records
+@node       Variables that do not appear in trace records
 @subsection Variables that do not appear in trace records
 
 A trace record should contain exactly the same variables as in the
@@ -3201,7 +3164,7 @@ variables (@pxref{Variable names,,,./daikon,Daikon User Manual}).
 
 
 
-@node    Example files, Version 1 Declarations, Data trace records, File formats
+@node    Example files
 @section Example files
 
 Here are portions of two files @file{StackArTester.decls} and
@@ -3216,11 +3179,12 @@ C, or Perl programs and viewing the resulting files.
 @end menu
 
 
-@node    Example declaration file, Example data trace file, Example files, Example files
+@node       Example declaration file
 @subsection Example declaration file
 
 This is part of the file @file{StackArTester.decls}, a declaration file for
-the @file{StackAr.java} program (@pxref{StackAr example,,,./daikon,Daikon User Manual}).
+the @file{StackAr.java} program
+(@pxref{StackAr example,,,./daikon,Daikon User Manual}).
 
 @smallexample
 ppt DataStructures.StackAr.push(java.lang.Object):::ENTER
@@ -3395,12 +3359,13 @@ ppt-type object
 @end smallexample
 
 
-@node    Example data trace file,  , Example declaration file, Example files
+@node       Example data trace file
 @subsection Example data trace file
 
 This is part of file @file{StackArTester.dtrace}, which you can create by
 running the instrumented @file{StackAr.java} program (@pxref{StackAr
-example,,,./daikon,Daikon User Manual}).  This excerpt contains only the first two calls to
+example,,,./daikon,Daikon User Manual}).  This excerpt contains only the
+first two calls to
 @code{push} and the first return from @code{push}, along with the
 associated object program point records; omitted records are indicated
 by ellipses.
@@ -3543,7 +3508,7 @@ this.topOfStack
 @end smallexample
 
 
-@node    Version 1 Declarations,  , Example files, File formats
+@node    Version 1 Declarations
 @section Version 1 Declarations
 
 @cindex .decls file (version 1)
@@ -3561,7 +3526,7 @@ A declarations file can contain program point declarations,
 * V1 ListImplementors declaration::
 @end menu
 
-@node    V1 Program point declarations, V1 pptname format, Version 1 Declarations, Version 1 Declarations
+@node       V1 Program point declarations
 @subsection V1 Program point declarations
 
 The format of a program point declaration is:
@@ -3579,6 +3544,7 @@ comparable2
 ...
 @end example
 
+@noindent
 Program point information includes:
 @itemize @bullet
 @item
@@ -3593,7 +3559,8 @@ specification of the naming format.
 for each variable:
 @itemize @bullet
 @item
-name: a string containing no tabs or newlines.  @xref{Variable names,,,./daikon,Daikon User Manual}.
+name: a string containing no tabs or newlines. 
+@xref{Variable names,,,./daikon,Daikon User Manual}.
 
 @item
 declared type: this is what the programmer used in the declaration of
@@ -3751,7 +3718,7 @@ int
 @c and/or MD5 hashes)
 @c @end itemize
 
-@node    V1 pptname format, V1 VarComparability declaration, V1 Program point declarations, Version 1 Declarations
+@node       V1 pptname format
 @subsection Program point name format specification
 
 Instrumenting code creates a @file{.decls} file that contains program
@@ -3820,7 +3787,8 @@ By convention, the entry and exit points for a function have names of
 a special form so that they can be associated with one another.
 (Currently, those names end with @code{:::ENTER} and @code{:::EXIT}.)  This
 convention permits Daikon to generate pre-state variables
-(@pxref{Variable names,,,./daikon,Daikon User Manual}) automatically at procedure exit points, so
+(@pxref{Variable names,,,./daikon,Daikon User Manual}) automatically at
+procedure exit points, so
 front ends need not output them explicitly.  When there
 are multiple exit points, then each one should be suffixed by a number
 (such as a line number, for example, @code{foo::EXIT22}).  Daikon produces
@@ -3845,7 +3813,7 @@ not appear in a trace file.
 
 
 
-@node V1 VarComparability declaration, V1 ListImplementors declaration, V1 pptname format, Version 1 Declarations
+@node       V1 VarComparability declaration
 @subsection V1 VarComparability declaration
 
 There is a special @code{VarComparability} declaration that controls how
@@ -3860,10 +3828,11 @@ VarComparability
 none
 @end example
 
+@noindent
 As with all records in Daikon input files, a
 blank line is required between this record and the next one.
 
-@node V1 ListImplementors declaration,  , V1 VarComparability declaration, Version 1 Declarations
+@node       V1 ListImplementors declaration
 @subsection V1 ListImplementors declaration
 
 This declaration indicates classes that implement the
@@ -3877,13 +3846,15 @@ ListImplementors
 ...
 @end example
 
+@noindent
 Each classname is in Java format (for example, ``java.util.LinkedList'').
 
 The @option{--list_type} command-line option to Daikon can also be used to
-specify classes that implement lists; @xref{Options to control invariant detection,,,./daikon,Daikon User Manual}.
+specify classes that implement lists; @xref{Options to control invariant
+detection,,,./daikon,Daikon User Manual}.
 
 
-@node     Index,  , File formats, Top
+@node       Index
 @unnumbered Index
 
 @printindex cp
