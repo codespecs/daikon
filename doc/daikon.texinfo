@@ -9239,13 +9239,6 @@ OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE@.
 
 
-@c As a condition of use, you agree to promptly communicate any changes,
-@c improvements, or enhancements to the authors for inclusion in a
-@c future release, and to promptly report any errors, problems, or
-@c bugs.
-@c Other licensing terms are available;
-@c send mail to @email{mernst@@csail.mit.edu}.
-
 @sp 1
 
 Daikon uses the Java port of the GNU getopt library, which is
