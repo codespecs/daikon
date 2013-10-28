@@ -1,8 +1,0 @@
-PricesTest
-PricesTest.dtrace.diff
-PricesTest.comp
-PricesTest.comp.diff
-PricesTest.invs.diff
-PricesTest.out
-ran-kvasir
-*.counts *.counts.diff

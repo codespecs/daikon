@@ -1,8 +1,0 @@
-StrcpyTest
-StrcpyTest.dtrace.diff
-StrcpyTest.comp
-StrcpyTest.comp.diff
-StrcpyTest.invs.diff
-StrcpyTest.out
-ran-kvasir
-*.counts *.counts.diff

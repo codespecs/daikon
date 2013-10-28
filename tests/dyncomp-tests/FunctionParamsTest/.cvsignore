@@ -1,8 +1,0 @@
-FunctionParamsTest
-FunctionParamsTest.dtrace.diff
-FunctionParamsTest.comp
-FunctionParamsTest.comp.diff
-FunctionParamsTest.invs.diff
-FunctionParamsTest.out
-ran-kvasir
-*.counts *.counts.diff
