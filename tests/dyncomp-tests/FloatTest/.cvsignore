@@ -1,8 +1,0 @@
-FloatTest
-FloatTest.dtrace.diff
-FloatTest.comp
-FloatTest.comp.diff
-FloatTest.invs.diff
-FloatTest.out
-ran-kvasir
-*.counts *.counts.diff

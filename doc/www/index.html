@@ -7,7 +7,7 @@
 <body>
 
 <p>
-<img src="daikon.gif" alt="Daikon logo" />
+<img src="daikon-logo.gif" alt="Daikon logo" />
 </p>
 
 <p>
@@ -30,50 +30,42 @@
  $DAIKONDIR/doc/daikon.texinfo.
 
  When re-inserting this text, prefix ``href="#'' by
- "http://pag.csail.mit.edu/daikon/download/doc/daikon.html#"
+ "http://plse.cs.washington.edu/daikon/download/doc/daikon.html#"
  ================================================================= -->
 
-
-<!-- If you edit the introduction, then re-generate daikon.html and insert -->
-<!-- its ``Introduction'' section into $DAIKONDIR/doc/www/index.html . -->
-<p>
-<a href="http://pag.csail.mit.edu/daikon/">Daikon</a> is an implementation of
+ <p><a href="http://plse.cs.washington.edu/daikon/">Daikon</a> is an implementation of
 dynamic detection of likely invariants; that is, the Daikon invariant
 detector reports likely program invariants.  An invariant is a property
 that holds at a certain point or points in a program; these are often
 seen in assert statements, documentation, and formal specifications. 
 Invariants can be useful in program understanding and a host of other
-applications.  Examples include &ldquo;x.field &gt; abs(y)&rdquo;; &ldquo;y = 2*x+3&rdquo;;
+applications.  Examples include &ldquo;.field &gt; abs(y)&rdquo;; &ldquo;y = 2*x+3&rdquo;;
 &ldquo;array a is sorted&rdquo;; &ldquo;for all list objects lst, lst.next.prev =
 lst&rdquo;; &ldquo;for all treenode objects n, n.left.value &lt; n.right.value&rdquo;; &ldquo;p
-!= null &rArr; p.content in myArray&rdquo;; and many more.  You can <a href="http://pag.csail.mit.edu/daikon/download/doc/daikon.html#Enhancing-Daikon-output">extend</a> Daikon
-to add new properties.
-</p>
+!= null =&gt; p.content in myArray&rdquo;; and many more.  You can extend Daikon
+to add new properties (see <a href="#Enhancing-Daikon-output">Enhancing Daikon output</a>;
+see <a href="developer.html#New-invariants">New invariants</a>).
 
-   <p>Dynamic invariant detection runs a program, observes the values that the
+ <p>Dynamic invariant detection runs a program, observes the values that the
 program computes, and then reports properties that were true over the
 observed executions. 
 <!-- Daikon's output, which is sometimes called an ``operational abstraction'', -->
 <!-- looks like a formal specification, or the contents of assert statements. -->
-Daikon can detect properties in C, C++, Eiffel, IOA, Java,
-and Perl programs;
-<!-- not very helpful: @uref{http://theory.csail.mit.edu/tds/ioa/, ,IOA} -->
+Daikon can detect properties in C, C++, C#, Eiffel, F#, Java, Perl, and
+Visual Basic programs;
 in spreadsheet files; and in other data sources.  (Dynamic invariant
 detection is a machine learning technique that can be applied to
-arbitrary data.)  It is easy to extend Daikon to other applications; as
-one example, an interface exists to the Java PathFinder model checker. 
-<!-- Removed this because it was the biggest link on the page, which is -->
-<!-- not the desired effect:  @uref{http://ase.arc.nasa.gov/visser/jpf/, , } -->
-</p>
+arbitrary data.)  It is easy to extend Daikon to other applications.
 
-   <p>Daikon is freely available for download from
-<a href="http://pag.csail.mit.edu/daikon/download/">http://pag.csail.mit.edu/daikon/download/</a>.  The distribution
+ <p>Daikon is freely available for download from
+<a href="http://plse.cs.washington.edu/daikon/download/">http://plse.cs.washington.edu/daikon/download/</a>.  The distribution
 includes both source code and
-<a href="http://pag.csail.mit.edu/daikon/download/doc/">documentation</a>,
-and Daikon's <a href="http://pag.csail.mit.edu/daikon/download/doc/daikon.html#License">license</a> permits unrestricted use.  Many
+<a href="http://plse.cs.washington.edu/daikon/download/doc/">documentation</a>,
+and Daikon's license permits unrestricted use (see <a href="#License">License</a>).  Many
 researchers and practitioners have used Daikon; those uses, and Daikon
 itself, are described in various
-<a href="http://pag.csail.mit.edu/daikon/pubs/">publications</a>.
+<a href="http://plse.cs.washington.edu/daikon/pubs/">publications</a>.
+
 </p>
 
 <hr />
@@ -90,7 +82,7 @@ itself, are described in various
 
 <hr />
 
-<a href="http://pag.csail.mit.edu/">MIT Program Analysis Group</a>
+<a href="http://plse.cs.washington.edu/">UW Program Languages and Software Engineering Group</a>
 
 </body>
 </html>

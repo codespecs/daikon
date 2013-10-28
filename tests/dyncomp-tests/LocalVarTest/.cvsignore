@@ -1,8 +1,0 @@
-LocalVarTest
-LocalVarTest.dtrace.diff
-LocalVarTest.comp
-LocalVarTest.comp.diff
-LocalVarTest.invs.diff
-LocalVarTest.out
-ran-kvasir
-*.counts *.counts.diff

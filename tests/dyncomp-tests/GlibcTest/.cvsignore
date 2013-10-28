@@ -1,8 +1,0 @@
-GlibcTest
-GlibcTest.dtrace.diff
-GlibcTest.comp
-GlibcTest.comp.diff
-GlibcTest.invs.diff
-GlibcTest.out
-ran-kvasir
-*.counts *.counts.diff

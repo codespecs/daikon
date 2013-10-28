@@ -6,8 +6,8 @@
 # 1. Create a directory for the program (myprog).
 
 # 2. Put the following files in the directory: myprog.decls,
-# myprog-1.dtrace.gz, myprog-2.dtrace.gz.  Copy the Makefile and
-# .cvsignore from an existing test directory into the new directory.
+# myprog-1.dtrace.gz, myprog-2.dtrace.gz.  Copy the Makefile
+# from an existing test directory into the new directory.
 
 # 3. Run 'make update-goals', and examine the goal files to make sure
 # the output is correct.
@@ -16,10 +16,10 @@
 
 # 5. Run 'make clean'.
 
-# 6. Check the directory and remaining files into CVS.
+# 6. Check the directory and remaining files into the hg repository.
 
 # XXX HACK:  must remove "grep -v StackAr"
-SUBDIRS = $(shell find * -type d -maxdepth 0 | grep -v CVS | grep -v StackAr)
+SUBDIRS = $(shell find * -type d -maxdepth 0 | grep -v StackAr)
 
 default:
 

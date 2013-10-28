@@ -1,28 +1,78 @@
 History of Daikon changes
-http://pag.csail.mit.edu/daikon/
+http://plse.cs.washington.edu/daikon/
 
 This file lists significant user-visible changes to Daikon.
 (Many other changes, including most bug fixes, are not noted here.)
 
 Further documentation can be found in:
  * the Daikon Manual.  Its source is file daikon.texinfo; formatted, it
-   appears as daikon.html, daikon.info, daikon.dvi, daikon.ps, or daikon.pdf.
-   It is available on-line at
-   http://pag.csail.mit.edu/daikon/download/doc/daikon.html .
+   appears as daikon.html, daikon.ps, or daikon.pdf.
+   It is available on-line at:
+   http://plse.cs.washington.edu/daikon/download/doc/daikon.html .
  * the Daikon Developer Manual.  Its source is file developer.texinfo;
-   formatted, it appears as developer.html, developer.info, developer.dvi,
-   developer.ps, or developer.pdf.  It is available on-line at
-   http://pag.csail.mit.edu/daikon/download/doc/developer.html .
+   formatted, it appears as developer.html, developer.ps, or developer.pdf.
+   It is available on-line at:
+   http://plse.cs.washington.edu/daikon/download/doc/developer.html .
  * The Javadoc API documentation for the source code.  This is not
    distributed with Daikon, but you can build it by executing the command
      make -C $DAIKONDIR/java doc
-   It is also available at http://pag.csail.mit.edu/daikon/download/jdoc/ .
+   It is also available at http://plse.cs.washington.edu/daikon/download/jdoc/ .
 
 ===========================================================================
 
 5.0.0 (in progress)
 
 A new front end for .NET languages (C#, F#, and Visual Basic) is available.
+Daikon problems are now tracked in the Google Code database.
+We have moved to new mailing list addresses.
+
+General
+
+  ???
+
+  Daikon and Fjalar problems are now tracked in the appropriate Google
+  Code database.  You may search or add new issues at:
+  http://code.google.com/p/daikon/issues (or)
+  http://code.google.com/p/fjalar/issues 
+  Please note that there are separate databases for Daikon and Kvasir.
+  Problems with Chicory and other front ends should be submitted against
+  the Daikon product.  Problems with Kvasir shoule be subitted against
+  the Fjalar product.
+
+  We have deprecated our MIT based mailing lists in favor of new ones
+  hosted by Google Groups.  Three new mailing lists have been set up:
+    daikon-announce@googlegroups.com
+    daikon-discuss@googlegroups.com
+    daikon-developers@googlegroups.com
+  To subscribe, go to the appropriate site below and "Apply to join group":
+      https://groups.google.com/forum/#!forum/daikon-announce
+      https://groups.google.com/forum/#!forum/daikon-discuss
+
+Daikon
+
+  ???
+
+  User visible changes
+
+  ???
+
+  Bug fixes
+
+  ???
+
+Kvasir
+
+  ???
+
+  User visible changes
+
+    Kvasir's version of Valgrind has been updated to support newer versions
+    of glibc. Kvasir should now support all versions of glibc supported by
+    Valgrind 3.3.1(glibc 2.2-28)
+
+  Bug fixes
+
+  ???
 
 ===========================================================================
 
@@ -2302,7 +2352,7 @@ Daikon
     The Daikon publications webpage has been reorganized to bring all of
     the publications relating to Daikon together on a single webpage.
     Links have been added to other tools that perform dynamic invariant
-    detection.  See http://www.pag.csail.mit.edu/daikon/pubs/.
+    detection.  See http://plse.cs.washington.edu/daikon/pubs/.
 
     The list of configuration options in the user manual was reorganized
     to group the options by category.

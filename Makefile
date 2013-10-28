@@ -14,26 +14,27 @@ DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
 #   make NONETWORK=true compile
 
 # note that for right now, we are only copying the html and texinfo
-# versions of the developer manual (though all other versions are built)
+# versions of the developer manual (though the ps version is also built)
 IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps dfepl-flow.jpg
-# old image files
-# gui-ControlPanel.jpg gui-ControlPanel.eps gui-InvariantsDisplay-small.jpg gui-InvariantsDisplay-small.eps context-gui.jpg context-gui.eps
 IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
-DOC_FILES_NO_IMAGES := Makefile index.html daikon.texinfo config-options.texinfo invariants-doc.texinfo daikon.ps daikon.pdf daikon.html developer.texinfo developer.html CHANGES
+DOC_FILES_NO_IMAGES := Makefile index.html daikon.texinfo \
+                       config-options.texinfo invariants-doc.texinfo \
+                       daikon.ps daikon.pdf daikon.html developer.texinfo \
+                       developer.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
+
 # The texinfo files are included so we can diff to see what has changed from
 # release to release.  They are in the dist/doc directory, but not
 # visible to the user
 DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html CHANGES \
-				  daikon.texinfo developer.texinfo config-options.texinfo \
-				  invariants-doc.texinfo developer.pdf developer.ps
-# EMACS_PATHS := emacs/daikon-context-gui.el
+                  daikon.texinfo developer.texinfo config-options.texinfo \
+                  invariants-doc.texinfo developer.pdf developer.ps
 README_PATHS := README.txt README.html doc/README kvasir/../README
 # Files that contain the (automatically updated) version number and date.
-DIST_VERSION_FILES := ${README_PATHS} \
-	doc/daikon.texinfo doc/developer.texinfo \
-	doc/index.html doc/www/download/index.html
+DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
+                      doc/index.html doc/www/download/index.html
+
 # Scripts, such as Perl programs.  Why not just include all of them?
 # (Maybe to avoid problems with accidentally including things in the user's
 # checkout that are not needed by most users, but why not include
@@ -55,9 +56,11 @@ PLUME_SCRIPT_FILES := java-cpp lines-from
 # 	checkargs.pm
 # 	sort-directory-order
 
-SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES)) $(addprefix plume-lib/bin/,$(PLUME_SCRIPT_FILES))
+SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES)) \
+                $(addprefix plume-lib/bin/,$(PLUME_SCRIPT_FILES))
+
 # This is so troublesome that it isn't used except as a list of dependences for make commands
-DAIKON_JAVA_FILES := $(shell find java \( -name '*daikon-java*' -o -name CVS  \) -prune -o -name '*.java' -print) $(shell find java/daikon -follow \( -name '*daikon-java*' -o -name CVS \) -prune -o -name '*.java' -print)
+DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print) $(shell find java/daikon -follow -name '*daikon-java*' -prune -o -name '*.java' -print)
 DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/simplify/daikon-background.txt \
 	daikon/test/InvariantFormatTest.commands \
@@ -82,15 +85,13 @@ DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/test/dtracediff/Hanoi.dtrace.gz \
 	daikon/test/dtracediff/Hanoi-truncated.dtrace.gz
 
-# Find might be cleaner, but this works.
-# I don't know why, but a "-o name ." clause makes find err, so use grep instead
-# WWW_FILES := $(shell cd doc/www; find . \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw -o name . -o name .. \) -prune -o -print)
-# WWW_FILES := $(shell cd doc/www; find . \( \( -name '*~' -o -name '.*~' -o -name CVS -o -name .cvsignore -o -name '.\#*' -o -name '*.bak' -o -name uw \) -prune -a -type f \) -o -print | grep -v '^.$$')
-WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|CVS|.cvsignore|/.\#|.bak$$|uw/|pubs/')
-#WWW_DIR := /home/httpd/html/daikon/
-WWW_PARENT ?= /afs/csail.mit.edu/group/pag/docroot/www.pag.csail.mit.edu
+# the following is only used in show-vars 
+WWW_FILES := $(shell cd doc/www; find . -type f -print | egrep -v '~$$|/.\#|.bak$$|uw/|pubs/')
+
+WWW_PARENT ?= /cse/web/research/plse
 WWW_DIR := $(WWW_PARENT)/daikon
 INV_DIR := $(shell pwd)
+
 # Staging area for the distribution
 STAGING_DIR := $(WWW_DIR)/staging-daikon
 
@@ -98,19 +99,12 @@ STAGING_DIR := $(WWW_DIR)/staging-daikon
 WWW_DAIKON_FILES := faq.html index.html mailing-lists.html StackAr.html \
                     download/index.html download/doc/index.html
 
+DIST_DIR := $(WWW_DIR)/download
 
-C_RUNTIME_PATHS := front-end/c/daikon_runtime.h front-end/c/daikon_runtime.cc
-
-DIST_DIR := $(WWW_DIR)/dist
-MIT_DIR  := $(WWW_DIR)/mit
-DIST_BIN_DIR := $(DIST_DIR)/binaries
-DIST_PAG_BIN_DIR := /afs/csail/group/pag/projects/invariants/binaries
-# Files that appear in the top level of the distribution directory
-DIST_DIR_FILES := daikon.tar.gz daikon-logo.gif daikon.jar
+# the following is only used in show-vars 
 DIST_DIR_PATHS := daikon.tar.gz daikon.zip doc/images/daikon-logo.gif daikon.jar
 
-# Perhaps replace with `cat CVS/Root`, for remote CVS users?
-CVS_REPOSITORY := /afs/csail.mit.edu/group/pag/projects/invariants/.CVS
+REPOSITORY := https://code.google.com/p/daikon
 
 # It seems like these should come from their standard locations (jhp)
 RTJAR := $(JAVA_HOME)/jre/lib/rt.jar
@@ -129,10 +123,7 @@ HG_OPTIONS ?=
 
 # JUNIT_VERSION := junit3.8.1
 
-# for "chgrp, we need to use the number on debian, 14127 is invariants"
-INV_GROUP := 14127
-
-RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name CVS -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '.cvsignore' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
+RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
 
 TMPDIR ?= $(if $(shell if [ -d /scratch ] ; then echo true; fi), \
 				/scratch/${USER}, \
@@ -280,16 +271,22 @@ test-staged-dist: $(STAGING_DIR)
 	  java -cp .:$(DISTTESTDIR)/daikon/daikon.jar -ea daikon.Chicory \
 		--daikon DataStructures/StackArTester
 
-# I would rather define this inside the cvs-test rule.  (In that case I
+# I would rather define this inside the repository-test rule.  (In that case I
 # must use "$$FOO", not $(FOO), to refer to it.)
-TESTCVS=${TMPDIR}/daikon.cvs
-TESTCVSJAVA=$(TESTCVS)/invariants/java
+MYTESTDIR=${TMPDIR}/test
+TESTPATH=${MYTESTDIR}/daikon/java
 
-cvs-test:
-	-rm -rf $(TESTCVS)
-	mkdir -p $(TESTCVS)
-	cd $(TESTCVS) && cvs -Q -P -d $(CVS_REPOSITORY) co invariants
-	cd $(TESTCVSJAVA)/daikon && make CLASSPATH=$(TESTCVSJAVA):$(TESTCVSJAVA)/lib/java-getopt.jar:$(TESTCVSJAVA)/lib/junit.jar:(TESTCVSJAVA)/lib/checkers.jar:.:$(RTJAR):$(TOOLSJAR)
+#This is broken and under repair! (markro)
+repository-test:
+	-rm -rf $(MYTESTDIR)
+	mkdir -p $(MYTESTDIR)
+	cd $(MYTESTDIR)
+	hg clone -q $(REPOSITORY) daikon
+# vars for Daikon
+	export DAIKONDIR=${MYTESTDIR}/daikon
+	export JAVA_HOME=/usr/lib/jvm/java
+	source $(DAIKONDIR)/scripts/daikon.bashrc
+	cd daikon && make 
 
 
 ###########################################################################
@@ -347,10 +344,16 @@ staging: doc/CHANGES
 # all of the files in staging, but will not delete any files in the website
 # that are not in staging.
 staging-to-www: $(STAGING_DIR)
+#copy the files
 	(cd $(STAGING_DIR) && tar cf - .) | (cd $(WWW_DIR) && tar xfBp -)
 	@echo "**Update the dates and sizes in the various index files**"
+# need to allow write so html-update can update	
+	chmod +w $(DIST_DIR)
+	chmod +w $(DIST_DIR)/index.html
 	html-update-link-dates $(DIST_DIR)/index.html
-	$(MAKE) update-dist-version-file
+	chmod -w $(DIST_DIR)
+	chmod -w $(DIST_DIR)/index.html
+#	$(MAKE) update-dist-version-file
 	@echo "*****"
 	@echo "Don't forget to send mail to daikon-announce and commit changes."
 	@echo "(See sample messages in ~mernst/research/invariants/mail/daikon-lists.mail.)"
@@ -453,18 +456,14 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	mkdir ${TMPDIR}/daikon
 
 	mkdir ${TMPDIR}/daikon/doc
-	cp -p README-dist.txt ${TMPDIR}/daikon/README.txt
-	cp -p README-dist.html ${TMPDIR}/daikon/README.html
-	cp -p doc/README.txt ${TMPDIR}/daikon/doc/README.txt
+	cp -p README.txt ${TMPDIR}/daikon/README.txt
+	cp -p README.html ${TMPDIR}/daikon/README.html
+	cp -p README.source ${TMPDIR}/daikon/README.source
+	cp -p doc/README ${TMPDIR}/daikon/doc/README
 	cd doc && cp -p $(DOC_FILES_NO_IMAGES) ${TMPDIR}/daikon/doc
 	mkdir ${TMPDIR}/daikon/doc/images
 	cd doc && cp -p $(IMAGE_PARTIAL_PATHS) ${TMPDIR}/daikon/doc/images
 	cp -pR doc/daikon_manual_html ${TMPDIR}/daikon/doc
-
-	## EMACS_PATHS is currently empty.
-	# # Emacs
-	# mkdir ${TMPDIR}/daikon/emacs
-	# cp -p $(EMACS_PATHS) ${TMPDIR}/daikon/emacs
 
 	# Plume-lib library
 	(cd plume-lib; hg archive ${TMPDIR}/daikon/plume-lib)
@@ -477,7 +476,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	mkdir ${TMPDIR}/daikon/examples
 	cp -pR examples/java-examples ${TMPDIR}/daikon/examples
 	# Keep .java files, delete everything else
-	cd ${TMPDIR}/daikon && find examples/java-examples -name '*.java' -prune -o \( -type f -o -name CVS -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
+	cd ${TMPDIR}/daikon && find examples/java-examples -name '*.java' -prune -o \( -type f -o -name daikon-output -o -name daikon-java -o -name daikon-instrumented \) -print | xargs rm -rf
 
 	# Perl example files
 	mkdir ${TMPDIR}/daikon/examples/perl-examples
@@ -490,13 +489,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	mkdir ${TMPDIR}/daikon/examples/c-examples/wordplay
 	cp -p examples/c-examples/wordplay/wordplay.c ${TMPDIR}/daikon/examples/c-examples/wordplay
 	cp -p examples/c-examples/wordplay/words.txt ${TMPDIR}/daikon/examples/c-examples/wordplay
-
-	# chgrp -R $(INV_GROUP) ${TMPDIR}/daikon
-
 	cp -p daikon.jar ${TMPDIR}/daikon
-	# # Now we are ready to make the daikon-compiled distribution
-	# (cd ${TMPDIR}; tar cf daikon-compiled.tar daikon)
-	# cp -pf ${TMPDIR}/daikon-compiled.tar .
 
 	## Now make the daikon distribution
 	# First add some more files to the distribution
@@ -508,57 +501,15 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	(mkdir ${TMPDIR}/daikon/java; cd ${TMPDIR}/daikon/java; tar xf ${TMPDIR}/daikon-java.tar; rm ${TMPDIR}/daikon-java.tar)
 	cp -p java/README.txt ${TMPDIR}/daikon/java/README.txt
 	cp -p java/Makefile ${TMPDIR}/daikon/java/Makefile
-	cp -p java/Makefile-dist.user ${TMPDIR}/daikon/java/Makefile.user
 	# Maybe I should do  $(MAKE) doc
 	# Don't do  $(MAKE) clean  which deletes .class files
 	(cd ${TMPDIR}/daikon/java; $(RM_TEMP_FILES))
-
-	## I don't think I need the source.  The compiled versions appear in .jar files.
-	## # Java support files
-	## ## plume
-	## (cd plume-lib; hg archive ${TMPDIR}/daikon/java)
-	## ## getopt
-	## (cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/java-getopt.jar)
-	## ## intern checker
-	## # (cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/checkers.jar)
-	## ## Apache packages
-	## mkdir ${TMPDIR}/daikon/java/org
-	## mkdir ${TMPDIR}/daikon/java/org/apache
-	## ## JTB
-	## cp -pR java/jtb ${TMPDIR}/daikon/java/
-	## ## BCEL
-	## (cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/bcel.jar)
-	## ## Apache commons
-	## (cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/commons-io.jar)
-
-	## JUnit
-	# This is wrong:
-	#   unzip java/lib/$(JUNIT_VERSION).zip -d ${TMPDIR}/daikon/java
-	#   (cd ${TMPDIR}/daikon/java; ln -s $(JUNIT_VERSION)/junit .)
-	# Need to extract a jar file in the zip file, then unjar that.
-	# (src.jar only contains .java files, not .class files.)
-
-	# JHP 9/4/2007: The lines commented out below were removed when the
-    # junit .zip file was removed from the CVS repository.  This happened
-    # when we updated to junit4.4.  It looks like we were compiling JUnit,
-    # though its surprising that was necessary.  Now we just extract from the
-    # jar file like we do for other jars that we include.
-	##mkdir ${TMPDIR}/daikon/tmp-junit
-	##unzip java/lib/$(JUNIT_VERSION).zip $(JUNIT_VERSION)/cpl-v10.html $(JUNIT_VERSION)/src.jar -d ${TMPDIR}/daikon/tmp-junit
-	##(cd ${TMPDIR}/daikon/tmp-junit; unzip $(JUNIT_VERSION)/src.jar; rm -f $(JUNIT_VERSION)/src.jar; mv $(JUNIT_VERSION)/cpl-v10.html junit; rmdir $(JUNIT_VERSION); chmod -R +x *; find . -type f -print | xargs chmod -x; rm -rf META-INF TMP; mv junit ${TMPDIR}/daikon/java/)
-	##rm -rf ${TMPDIR}/daikon/tmp-junit
-	##(cd ${TMPDIR}/daikon/java/junit; ${JAVAC} -g `find . -name '*.java'`)
-	## cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/java/lib/junit.jar
 
 	# Plume library
 	## cd ${TMPDIR}/daikon/java; jar xf $(INV_DIR)/plume-lib/java/plume.jar
 
 	## Front ends
 	mkdir ${TMPDIR}/daikon/front-end
-
-	# # C/C++ instrumenter -- now distributed separately
-	# mkdir ${TMPDIR}/daikon/front-end/c
-	# cp -p $(C_RUNTIME_PATHS) ${TMPDIR}/daikon/front-end/c
 
 	# Perl front end
 	# mkdir ${TMPDIR}/daikon/front-end/perl
@@ -588,7 +539,6 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	(cd ${TMPDIR}/daikon/tools; $(RM_TEMP_FILES); rm -f kmeans/kmeans; (cd hierarchical; rm -f clgroup cluster den difftbl) )
 
 	## Make the source distribution proper
-	rm -rf `find ${TMPDIR}/daikon -name CVS`
 	(cd ${TMPDIR} && chmod -R a+rX daikon)
 	(cd ${TMPDIR}; tar cf daikon.tar daikon)
 	cp -pf ${TMPDIR}/daikon.tar .
@@ -616,43 +566,6 @@ showvars:
 	@echo "WWW_FILES = " $(WWW_FILES)
 	@echo "DIST_DIR_PATHS = " $(DIST_DIR_PATHS)
 
-
-
-# ## v2 is now obsolete, so there is no longer any need to perform these steps.
-# # Only run the "setup" targets once.
-# setup-v2-and-v3: setup-v2-and-v3-tests setup-v2-and-v3-daikon
-# 
-# setup-v2-and-v3-daikon:
-# 	mv java/daikon daikon.ver3
-# 	cvs update -d -P -r ENGINE_V2_PATCHES java/daikon
-# 	mv java/daikon daikon.ver2
-# 	ln -s daikon.ver3 java/daikon
-# 
-# setup-v2-and-v3-tests:
-# 	mv tests tests.ver3
-# 	cvs update -d -P -r ENGINE_V2_PATCHES tests
-# 	mv tests tests.ver2
-# 	ln -s tests.ver3 java/daikon
-# 
-# 
-# # To set up the version-2 and version-3 directories:
-# # Use the above setup-v2-and-v3 target after updating your invariants
-# # directory so that it only contains V3 stuff.
-# 
-# use-%: daikon-is-symlink
-# 	[ -e daikon.$* ]
-# 	[ -e tests.$* ]
-# 	rm -f java/daikon
-# 	ln -s ../daikon.$* java/daikon
-# 	$(MAKE) tags >& /dev/null &
-# 	rm -f tests
-# 	ln -s tests.$* tests
-# 
-# daikon-is-symlink:
-# 	[ ! -e java/daikon ] || [ -L java/daikon ] # daikon must be symlink if it exists
-# 	[ ! -e tests ] || [ -L tests ] # tests must be symlink if it exists
-
-
 plume-lib:
 	rm -rf java/utilMDE java/lib/utilMDE.jar
 	hg clone ${HG_OPTIONS} https://code.google.com/p/plume-lib/ plume-lib
@@ -663,8 +576,3 @@ ifndef NONETWORK
 	(cd plume-lib; ${HG_PULL_U} ${HG_OPTIONS})
 endif
 
-# plume.jar is now checked in.
-# # The file is real, but the commands should always be re-run even if it exists.
-# .PHONY: plume-lib/java/plume.jar
-# plume-lib/java/plume.jar: plume-lib-update
-# 	$(MAKE) -C java ../plume-lib/java/plume.jar

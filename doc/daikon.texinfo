@@ -22,7 +22,7 @@
 @c resulting file with "makeinfo --html").
 
 @macro daikonemail{}
-@email{daikon-developers@@lists.csail.mit.edu}
+@email{daikon-developers@@googlegroups}
 @end macro
 
 @c set overall document style
@@ -135,7 +135,7 @@ It describes Daikon version 4.7.1, released October 8, 2013.
 @c If you edit the introduction, then re-generate daikon.html and insert
 @c its ``Introduction'' section into $DAIKONDIR/doc/www/index.html .
 
-@uref{http://pag.csail.mit.edu/daikon/, ,Daikon} is an implementation of
+@uref{http://plse.cs.washington.edu/daikon/, ,Daikon} is an implementation of
 dynamic detection of likely invariants; that is, the Daikon invariant
 detector reports likely program invariants.  An invariant is a property
 that holds at a certain point or points in a program; these are often
@@ -160,13 +160,13 @@ detection is a machine learning technique that can be applied to
 arbitrary data.)  It is easy to extend Daikon to other applications.
 
 Daikon is freely available for download from
-@uref{http://pag.csail.mit.edu/daikon/download/}.  The distribution
+@uref{http://plse.cs.washington.edu/daikon/download/}.  The distribution
 includes both source code and
-@uref{http://pag.csail.mit.edu/daikon/download/doc/, ,documentation},
+@uref{http://plse.cs.washington.edu/daikon/download/doc/, ,documentation},
 and Daikon's license permits unrestricted use (@pxref{License}).  Many
 researchers and practitioners have used Daikon; those uses, and Daikon
 itself, are described in various
-@uref{http://pag.csail.mit.edu/daikon/pubs/, ,publications}.
+@uref{http://plse.cs.washington.edu/daikon/pubs/, ,publications}.
 
 For more information on Daikon
 @pxref{Top, , Introduction, ./developer, Daikon Developer Manual}.
@@ -188,17 +188,17 @@ implementation and about debugging flags.
 
 The following mailing lists (and their archives) are available:
 @table @samp
-@item daikon-announce@@lists.csail.mit.edu
+@item daikon-announce@@googlegroups.com
 A low-volume, announcement-only list.  For example,
 announcements of new releases are sent to this list.
 To subscribe, visit
 @uref{https://lists.csail.mit.edu/mailman/listinfo/daikon-announce}.
-@item daikon-discuss@@lists.csail.mit.edu
+@item daikon-discuss@@googlegroups.com
 A moderated list for the community of Daikon users.  Use it to share
 tips and successes, and to get help with questions or problems (after
 checking the documentation).  To subscribe, visit
 @uref{https://lists.csail.mit.edu/mailman/listinfo/daikon-discuss}.
-@item daikon-developers@@lists.csail.mit.edu
+@item daikon-developers@@googlegroups.com
 This list goes to the Daikon maintainers.  Use it for bug reports,
 suggestions, and the like.  If you are an active contributor to Daikon,
 you may send mail to the list asking to be added.
@@ -242,7 +242,7 @@ subscribe to one of the mailing lists (@pxref{Mailing lists}).
 Daikon is written in Java.  In order to run Daikon, all you really need
 is the @file{daikon.jar} file, which is included in the distribution or
 can be downloaded separately from
-@uref{http://pag.csail.mit.edu/daikon/download/daikon.jar}.  Place
+@uref{http://plse.cs.washington.edu/daikon/download/daikon.jar}.  Place
 @file{daikon.jar} on your classpath so that Java can find it.  You are
 now ready to use Daikon!
 
@@ -340,7 +340,7 @@ unpack Daikon.
 
 @example
 cd @var{daikonparent}
-wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon.tar.gz
 tar zxf daikon.tar.gz
 @end example
 
@@ -440,7 +440,7 @@ unpack Daikon.
 
 @example
 cd @var{daikonparent}
-wget http://pag.csail.mit.edu/daikon/download/daikon.tar.gz
+wget http://plse.cs.washington.edu/daikon/download/daikon.tar.gz
 tar zxf daikon.tar.gz
 @end example
 
@@ -1895,7 +1895,7 @@ If you wish to write your own tools for processing invariants, you have
 two general options.  You can parse Daikon's textual output, or you can
 write Java code that processes the @file{.inv} file.  The @file{.inv}
 file is simply a serialized
-@uref{http://groups.csail.mit.edu/pag/daikon/download/jdoc/daikon/PptMap.html,@code{PptMap}}
+@uref{http://plse.cs.washington.edu/daikon/download/jdoc/daikon/PptMap.html,@code{PptMap}}
 object.  In addition to reading the Javadoc, you can examine how the
 other tools use this data structure.
 
@@ -2306,7 +2306,7 @@ field could use that to infer the type of any Daikon expression.)
 @end menu
 
 @node       orig variable example
-@subsection orig variable example
+@subsection orig() variable example
 
 @cindex @code{orig()} variable (pre-state value)
 
@@ -2707,7 +2707,7 @@ context-sensitive invariants:  set a variable that depends on the call
 site, then compute an implication whose predicate tests that variable.
 For an example, see the paper ``Selecting, refining, and evaluating
 predicates for program analysis''
-(@uref{http://groups.csail.mit.edu/pag/daikon/pubs/predicates-tr914-abstract.html}).
+(@uref{http://plse.cs.washington.edu/daikon/pubs/predicates-tr914-abstract.html}).
 
 Daikon must be supplied with the predicate for an implication.  Daikon has
 certain built-in predicates that it uses for finding conditional invariants;
@@ -3974,7 +3974,7 @@ int
 @end example
 
 @noindent
-The declaration file format is described in @ref{Program point declarations,,,./developer,Daikon Developer Manual}.
+The declarations file format is described in @ref{Program point declarations,,,./developer,Daikon Developer Manual}.
 
 DynComp creates two representations of the comparability information in
 the files @file{foo.txt-cset} and @file{foo.txt-trace}.  In the @file{cset}
@@ -5626,7 +5626,7 @@ of classes which are defined in external libraries rather than in the
 user's program (e.g., it can properly output a C-string represented as
 @code{char*} but not the contents of the C++ @code{string} class).  If
 further support for specific C++ features are important to you, please
-send email to @email{daikon-developers@@lists.csail.mit.edu}, so that we
+send email to @email{daikon-developers@@googlegroups.com}, so that we
 can increase its priority on our to-do list.
 
 @node       Online execution
@@ -6578,7 +6578,7 @@ Since Mangel-Wurzel is based on the proprietary EDG C/C++ front end, we
 distribute it, at @uref{http://pag.csail.mit.edu/daikon/download/}, in
 binary rather than source format.  (If the web page does not currently
 contain a binary for your architecture, send mail to
-@email{daikon-developers@@lists.csail.mit.edu} and we may be able to
+@email{daikon-developers@@googlegroups.com} and we may be able to
 produce one for you.)  The distribution does not include Purify, which
 you must install separately (either purchase it or download an
 evaluation copy).
@@ -7096,8 +7096,9 @@ including external commands invoked.
 @cindex spreadsheet files
 
 Daikon can process data from spreadsheets such as Excel.  In order to
-use such files, first save them in @uref{http://en.wikipedia.org/wiki/Comma-separated_values, ,comma-separated-value}, also known
-as csv or comma-delimited or comma-separated-list, format.
+use such files, first save them in
+@uref{http://en.wikipedia.org/wiki/Comma-separated_values, ,comma-separated-value format},
+also known as csv or comma-delimited or comma-separated-list, format.
 Then, convert the @file{.csv} file into a @file{.dtrace} file (and a
 @file{.decls} file) to be used by Daikon by running the
 @command{convertcsv.pl} program found in the @file{$DAIKONDIR/scripts}
@@ -7457,7 +7458,7 @@ source code as annotations in  DBC, ESC, Java or JML format.
 These annotations are comments that can be automatically verified or
 otherwise manipulated by other tools.
 The Daikon website has an example of code after invariant
-insertion:  @url{http://pag.csail.mit.edu/daikon/StackAr.html}.
+insertion:  @url{http://plse.cs.washington.edu/daikon/StackAr.html}.
 
 Invoke Annotate like this:
 @example
@@ -9006,7 +9007,7 @@ BCEL on your classpath.)
 If you have any questions, can suggest ways to improve the
 documentation, find bugs in the system, or have suggestions for its
 improvement, please send email to
-@email{daikon-developers@@lists.csail.mit.edu}.  (If you can't figure
+@email{daikon-developers@@googlegroups.com}.  (If you can't figure
 out how to do something or do not understand why Daikon works the way it
 does, that is a bug, too --- in the Daikon documentation.  Please report
 those as well.)
@@ -9029,7 +9030,7 @@ and is also printed when you run Daikon.
 @c ; also, whether you are running
 @c from the @file{.class} files or from the @file{.jar} file.
 If you are not using the most recent version, download a newer version
-from @uref{http://pag.csail.mit.edu/daikon/} to see whether your problem
+from @uref{http://plse.cs.washington.edu/daikon/} to see whether your problem
 has already been corrected.
 If you are using a modified version of Daikon, you should verify that
 the problem exists in Daikon as distributed.
@@ -9119,7 +9120,7 @@ we strive to incorporate that information in this manual so that you
 don't have to search the archives as well.
 
 For further reading, see the list of publications at the
-Daikon homepage, @uref{http://pag.csail.mit.edu/daikon/pubs/}.
+Daikon homepage, @uref{http://plse.cs.washington.edu/daikon/pubs/}.
 
 
 @node    Details
@@ -9212,7 +9213,7 @@ conditions that place no restrictions on use.
 
 Copyright @copyright{} 1998-2008 Massachusetts Institute of Technology
 
-Copyright @copyright{} 2008-2009 University of Washington
+Copyright @copyright{} 2008-2013 University of Washington
 
 Permission is hereby granted, free of charge, to any person obtaining a
 copy of this software and associated documentation files (the
@@ -9343,7 +9344,7 @@ daikon-announce list will inform you of new versions, enhancements,
 and bug fixes.  On the daikon-discuss mailing list, you can obtain
 help from, and offer help to, other users.  We would also appreciate a
 brief description of how you are using Daikon, sent to
-@email{daikon-developers@@lists.csail.mit.edu}.  We are curious about how
+@email{daikon-developers@@googlegroups.com}.  We are curious about how
 users exploit Daikon, and we are eager for anecdotes about its
 successes and failures, so that we can make Daikon more effective for
 its users.
@@ -9447,9 +9448,9 @@ Toshiba.
 
 If you wish to cite Daikon in a publication, we recommend that you
 reference one of the scholarly papers listed at
-@uref{http://pag.csail.mit.edu/daikon/pubs/#invariant-detection} in lieu
+@uref{http://plse.cs.washington.edu/daikon/pubs/#invariant-detection} in lieu
 of, or in addition to, referencing this manual and the Daikon website
-(@uref{http://pag.csail.mit.edu/daikon/}).
+(@uref{http://plse.cs.washington.edu/daikon/}).
 
 
 
