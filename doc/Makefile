@@ -128,15 +128,15 @@ clean: texi-clean
 	rm -rf daikon_manual_html
 	rm -f developer.tmp \
 		developer.info developer.info-[0-9] \
-		developer.log developer.dvi developer.ps developer.pdf developer.html .fix-dev-menu
+		developer.log developer.dvi developer.ps developer.pdf developer.html 
 	rm -rf developer_manual_html
 	rm -f images/dfepl-flow.{eps,pdf,jpg}
 
 texi-clean:
-	rm -rf daikon.aux daikon.cp daikon.cps daikon.fn daikon.ky daikon.pg \
-		   daikon.toc daikon.tp daikon.vr
-	rm -rf developer.aux developer.cp developer.cps developer.fn developer.ky developer.pg \
-		   developer.toc developer.tp developer.vr
+	rm -rf daikon.aux daikon.cp daikon.cps daikon.fn daikon.fns \
+		   daikon.ky  daikon.pg daikon.toc daikon.tp daikon.vr
+	rm -rf developer.aux developer.cp developer.cps developer.fn developer.fns \
+		   developer.ky  developer.pg developer.toc developer.tp developer.vr
 
 # Remakes entire distribution; use with caution.
 dist:
