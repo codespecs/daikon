@@ -8,7 +8,7 @@
 @c You shouldn't need to do that, though; makeinfo does it for you.
 
 @macro daikonemail{}
-@email{daikon-developers@@lists.csail.mit.edu}
+@email{daikon-developers@@googlegroups.com}
 @end macro
 
 @c set overall document style
@@ -118,14 +118,14 @@ It describes Daikon version 4.7.1, released October 8, 2013.
 @chapter Introduction
 
 This is the developer manual for the 
-@uref{http://pag.csail.mit.edu/daikon/, ,Daikon invariant detector}.
+@uref{http://plse.cs.washington.edu/daikon/, ,Daikon invariant detector}.
 For information about using Daikon, see its user manual
 (@pxref{Top, , Introduction, ./daikon, Daikon User Manual}).
 This manual is intended for those who are already familiar with the use
 of Daikon, but wish to customize or extend it.
 
 Additional information can be found in technical papers available from
-@uref{http://pag.csail.mit.edu/daikon/pubs/}.
+@uref{http://plse.cs.washington.edu/daikon/pubs/}.
 
 @node    Extending Daikon
 @chapter Extending Daikon
@@ -180,8 +180,8 @@ export CLASSPATH=.:$CLASSPATH
 @cindex .jpp files
 @cindex jpp files
 
-Daikon is written in Java 1.5 (also known as Java 5).  In order to
-compile Daikon, you need a Java 1.5 compiler such as javac on your path.
+Daikon is written in Java.  In order to
+compile Daikon, you need a Java compiler such as javac on your path.
 @cindex Jikes compiler
 @cindex javac compiler, overriding
 @cindex Java compiler, specifying
@@ -250,7 +250,7 @@ export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classe
 @node    Version control repository
 @section Version control repository
 
-@cindex CVS repository
+@cindex repository
 @cindex Hg repository
 @cindex Mercurial repository
 @cindex version control repository
@@ -632,7 +632,8 @@ Daikon comes with two front ends for the C language:  Kvasir
 (@pxref{Mangel-Wurzel,,,./daikon,Daikon User Manual}). 
 Each has its limitations.
 Kvasir only works under the Linux operating system, and it works only on
-``x86'' (Intel 386-compatible) processors.  Mangel-Wurzel 
+``x86'' (Intel 386, 486, 586, 686 compatible) and ``x86-64'' (AMD64, EM64T
+compatible) processors.  Mangel-Wurzel 
 lacks some tracing features related to arrays
 and nested structs, and requires the user to purchase Purify.
 
@@ -778,7 +779,7 @@ memory errors.
 @cindex suppressors, adding new
 
 As mentioned in @ref{Daikon internals}, one way to make Daikon more
-efficient, and to reduce clutter in output to the user, is to reduce the
+efficient, and to reduce clutter in the output to the user, is to reduce the
 number of redundant invariants of various kinds.  This section describes
 how to add a new suppressor relation, such that if invariant A implies
 B, B is not instantiated or checked as long as A holds, saving time and
@@ -976,7 +977,7 @@ There are two configuration options that can customize the output.  The
 option @option{daikon.Debug.showTraceback} will output a stack trace on
 each log statement.  The option @option{daikon.Debug.logDetail} will cause
 more detailed (and often voluminous) output to be printed.  For more
-information, @ref{Configuration options,,,./daikon,Daikon User Manual}.
+information, @pxref{Configuration options,,,./daikon,Daikon User Manual}.
 
 Note that all interesting information is not necessarily currently logged.
 It will often be necessary to add new logging statements for the specific
@@ -984,9 +985,9 @@ information of interest (@pxref{Adding track logging}).
 This is covered in the next section.
 
 More detailed information can be found in the Javadoc for
-@uref{http://pag.csail.mit.edu/daikon/download/jdoc/daikon/Debug.html,@code{daikon.Debug}}
+@uref{http://plse.cs.washington.edu/daikon/download/jdoc/daikon/Debug.html,@code{daikon.Debug}}
 and
-@uref{http://pag.csail.mit.edu/daikon/download/jdoc/@/daikon/inv/Invariant.html,@code{daikon.inv.Invariant}}.
+@uref{http://plse.cs.washington.edu/daikon/download/jdoc/daikon/inv/Invariant.html,@code{daikon.inv.Invariant}}.
 
 @menu
 * Adding track logging::
@@ -1002,7 +1003,7 @@ When you add a new invariant, derived variable, or other component to
 Daikon, you should ensure that it supports track logging in the same way
 that existing components do.  This section describes how to do so.
 
-@emph{Track} logging is based
+Track logging is based
 around the class name, program point name, and variables of interest.
 Track logging methods accept these parameters and a string to be printed.
 @file{Debug.java} implements the following basic log methods:
@@ -1230,7 +1231,7 @@ checks; it can be called at the end without reference to equality sets.
 More detail can be found in the paper ``Efficient incremental algorithms
 for dynamic detection of likely invariants'' by Jeff H. Perkins and
 Michael D. Ernst, published in FSE 2004; the paper is available from
-@uref{http://pag.csail.mit.edu/pubs/invariants-incremental-@/fse2004-@/abstract.html}.
+@uref{http://plse.cs.washington.edu/daikon/pubs/invariants-incremental-@/fse2004-@/abstract.html}.
 
 @node    Dataflow hierarchy
 @section Dataflow hierarchy
@@ -1737,7 +1738,7 @@ The test can be added into the standard tests (either @samp{everything} or
 @chapter Editing Daikon source code
 
 The Daikon source code follows these coding conventions:
-@uref{http://groups.csail.mit.edu/@/pag/pag/logistics.html#code-conventions}.
+@uref{http://homes.cs.washington.edu/@~mernst/advice/coding-style.html}.
 
 
 @menu
@@ -1959,7 +1960,7 @@ HTML, info, or printed (PostScript and PDF) output.
 You can edit the manual using an ordinary text editor.  Emacs has a
 useful Texinfo mode.  You can mimic the formatting commands that
 already appear in the manual, but it's also a good idea to read the
-@uref{http://texinfo.org,Texinfo documentation}.
+@uref{http://www.gnu.org/software/texinfo,Texinfo documentation}.
 
 If you wish to create a new section of the manual, insert two lines like
 the following:
@@ -1971,7 +1972,7 @@ the following:
 
 @noindent
 where you select the short and the long titles (which may
-even be the same), and you may replace @code{@@chapter} by @code{@@section},
+be the same), and you may replace @code{@@chapter} by @code{@@section},
 @code{@@subsection}, or @code{@@subsubsection}.
 
 Follow the Texinfo conventions for marking up text.  In particular:
@@ -2094,7 +2095,7 @@ cd $DAIKONDIR/doc
 diff -b -u -s --from-file /afs/csail/group/pag/docroot/www.pag.csail.mit.edu/daikon/dist/doc *.texinfo
 @end example
 
-Another good source of information is the CVS logs over the
+Another good source of information are the repository logs over the
 last month:
 
 @example
@@ -2115,7 +2116,7 @@ make update-doc-dist-date-and-version
 
 @item
 Build everything to be distributed and copy it to the staging
-area (@uref{http://www.pag.csail.mit.edu/daikon/staging-daikon/}).  The final
+area (@uref{http://plse.cs.washington.edu/daikon/staging-daikon/}).  The final
 output will be a list of files that were added/removed since the
 last release.
 [Time: ??11 min]
@@ -2171,7 +2172,7 @@ Csh version:
 mkdir -p ~/tmp
 cd ~/tmp
 rm -rf daikon.tar.gz daikon
-wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 tar xzf daikon.tar.gz
 setenv JAVA_HOME "/cygdrive/c/Program Files/Java/jdk1.6.0_19"
 setenv DAIKONDIR `pwd`/daikon
@@ -2187,7 +2188,7 @@ Bash version:
 mkdir -p ~/tmp
 cd ~/tmp
 rm -rf daikon.tar.gz daikon
-wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 tar xzf daikon.tar.gz
 # Convert OSTYPE from a bash shell variable to a system environment variable.
 export OSTYPE
@@ -2216,8 +2217,8 @@ Csh version:
 @example
 mkdir -p ~/tmp
 cd ~/tmp
-# or: wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
-curl -O http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
+curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 tar xzvf daikon.tar.gz
 setenv ORIG_RT /System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
 setenv DAIKONDIR `pwd`/daikon
@@ -2232,8 +2233,8 @@ Bash version:
 @example
 mkdir -p ~/tmp
 cd ~/tmp
-# or: wget http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
-curl -O http://groups.csail.mit.edu/pag/daikon/staging-daikon/download/daikon.tar.gz
+# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
+curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 tar xzvf daikon.tar.gz
 # Convert OSTYPE from a bash shell variable to a system environment variable.
 export OSTYPE
@@ -2288,7 +2289,7 @@ make -C $pag/www/daikon pubs
 Check the website to see if it has any broken links.
 
 @example
-checklink -q -r `cat $DAIKONDIR/plume-lib/bin/checklink-args.txt` http://groups.csail.mit.edu/pag/daikon
+checklink -q -r `cat $DAIKONDIR/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/daikon
 @end example
 
 @noindent
@@ -2299,11 +2300,11 @@ In some cases a "403 Forbidden" error is transient, due to the website
 being down.  You can check such links by hand.
 
 @item
-Commit any changes back to CVS
+Commit any changes back to the repository:
 
 @example
 cd $DAIKONDIR
-cvs -q commit -m "Change version to @emph{X.Y.Z}"
+hg -q commit -m "Change version to @emph{X.Y.Z}"
 @end example
 
 @item
@@ -2338,7 +2339,7 @@ This could be automated.  See "man freshmeat-submit".
 @node    Historical
 @chapter Analyzing historical versions of Daikon
 
-@cindex CVS repository
+@cindex repository
 @cindex Mercurial repository
 @cindex Hg repository
 @cindex Version control repository
@@ -2374,7 +2375,7 @@ a set of tests that is more extensive than those in the Daikon
 distribution.  If you are a researcher who uses the Daikon version
 control history, please let us know of any publications so that we can
 publicize them at
-@uref{http://pag.csail.mit.edu/daikon/pubs/#daikon-testsubject}.
+@uref{http://plse.cs.washington.edu/daikon/pubs/#daikon-testsubject}.
 
 The layout of the Daikon CVS repository differs slightly from that of
 the distribution.  For example, the top-level directory is named
