@@ -11,7 +11,7 @@ clean:
 TAGS: tags
 
 tags:
-	etags `find . | grep -v '~\|/CVS\|^\.$$\|^\./[kx]means$$'`
+	etags `find . | grep -v '~\|^\.$$\|^\./[kx]means$$'`
 
 difftbl: $(HIERDIR)/difftbl
 	cp -p $^ $@
