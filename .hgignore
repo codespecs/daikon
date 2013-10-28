@@ -149,6 +149,8 @@ java/daikon/inv/binary/sequenceScalar/SequenceFloat.java
 java/daikon/inv/binary/sequenceScalar/SequenceScalar.java
 java/daikon/inv/binary/sequenceString/MemberString.java
 java/daikon/inv/binary/sequenceString/SequenceString.java
+java/daikon/inv/binary/twoScalar/IntComparisonCore.java
+java/daikon/inv/binary/twoScalar/FloatComparisonCore.java
 java/daikon/inv/binary/twoScalar/FloatEqual.java
 java/daikon/inv/binary/twoScalar/FloatGreaterEqual.java
 java/daikon/inv/binary/twoScalar/FloatGreaterThan.java
@@ -165,10 +167,14 @@ java/daikon/inv/binary/twoScalar/LinearBinary.java
 java/daikon/inv/binary/twoScalar/LinearBinaryCore.java
 java/daikon/inv/binary/twoScalar/LinearBinaryCoreFloat.java
 java/daikon/inv/binary/twoScalar/LinearBinaryFloat.java
+java/daikon/inv/binary/twoScalar/NonEqualCore.java
+java/daikon/inv/binary/twoScalar/NonEqualCoreFloat.java
 java/daikon/inv/binary/twoScalar/NumericFloat.java
 java/daikon/inv/binary/twoScalar/NumericInt.java
 java/daikon/inv/binary/twoScalar/TwoFloat.java
 java/daikon/inv/binary/twoScalar/TwoScalar.java
+java/daikon/inv/binary/twoScalar/TwoFloatFactory.java
+java/daikon/inv/binary/twoScalar/TwoScalarFactory.java
 java/daikon/inv/binary/twoSequence/PairwiseFloatEqual.java
 java/daikon/inv/binary/twoSequence/PairwiseFloatGreaterEqual.java
 java/daikon/inv/binary/twoSequence/PairwiseFloatGreaterThan.java
@@ -217,6 +223,8 @@ java/daikon/inv/binary/twoSequence/SuperSetFloat.java
 java/daikon/inv/binary/twoSequence/TwoSequence.java
 java/daikon/inv/binary/twoSequence/TwoSequenceFloat.java
 java/daikon/inv/binary/twoSequence/TwoSequenceString.java
+java/daikon/inv/binary/twoSequence/TwoSequenceFactory.java
+java/daikon/inv/binary/twoSequence/TwoSequenceFactoryFloat.java
 java/daikon/inv/binary/twoString/StdString.java
 java/daikon/inv/binary/twoString/StringEqual.java
 java/daikon/inv/binary/twoString/StringGreaterEqual.java
@@ -227,6 +235,8 @@ java/daikon/inv/binary/twoString/StringNonEqual.java
 java/daikon/inv/binary/twoString/TwoString.java
 java/daikon/inv/ternary/threeScalar/FunctionBinary.java
 java/daikon/inv/ternary/threeScalar/FunctionBinaryFloat.java
+java/daikon/inv/ternary/threeScalar/FunctionBinaryCore.java
+java/daikon/inv/ternary/threeScalar/FunctionBinaryCoreFloat.java
 java/daikon/inv/ternary/threeScalar/LinearTernary.java
 java/daikon/inv/ternary/threeScalar/LinearTernaryCore.java
 java/daikon/inv/ternary/threeScalar/LinearTernaryCoreFloat.java
@@ -396,9 +406,11 @@ syntax: regexp
 ^tests/.*\.dtrace$
 ^tests/.*\.inv\.gz$
 ^tests/.*\.invs\.txt$
+^tests/.*\.map$
 ^tests/.*\.o$
 ^tests/.*\.out$
 ^tests/.*\/ran-kvasir$
+^tests/.*\.txt$
 
 ^tests/daikon-tests/.*/scratch$
 ^tests/daikon-tests/.*/source$
