@@ -12,7 +12,7 @@
 @end macro
 
 @c set overall document style
-@setchapternewpage odd
+@c @setchapternewpage odd
 @paragraphindent 1
 @firstparagraphindent insert
 
@@ -118,14 +118,21 @@ It describes Daikon version 4.7.1, released October 8, 2013.
 @chapter Introduction
 
 This is the developer manual for the 
+@ifhtml
 @uref{http://plse.cs.washington.edu/daikon/, ,Daikon invariant detector}.
-For information about using Daikon, see its user manual
-(@pxref{Top, , Introduction, ./daikon, Daikon User Manual}).
+@end ifhtml
+@ifnothtml
+Daikon invariant detector.  See: @*
+@ @ @ @ @ @ @uref{http://plse.cs.washington.edu/daikon/}.
+@end ifnothtml
+
+For information about using Daikon, see the
+@uref{http://plse.cs.washington.edu/daikon/download/doc/daikon.html#Introduction,Daikon User Manual}.
 This manual is intended for those who are already familiar with the use
 of Daikon, but wish to customize or extend it.
 
 Additional information can be found in technical papers available from
-@uref{http://plse.cs.washington.edu/daikon/pubs/}.
+@w{@uref{http://plse.cs.washington.edu/daikon/pubs/}.}
 
 @node    Extending Daikon
 @chapter Extending Daikon
@@ -256,7 +263,7 @@ export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classe
 @cindex version control repository
 
 The Daikon Mercurial repository is at Google Code; see
-@uref{http://code.google.com/p/daikon/}.
+@w{@uref{http://code.google.com/p/daikon/}.}
 
 
 @node    Using Eclipse
@@ -673,8 +680,7 @@ Examples of invalid values are variables that have not yet been
 initialized and pointers whose content has been deallocated.  (A pointer
 dereference, such as @samp{*p} or @samp{p->field}, can itself
 be to uninitialized and/or deallocated memory.)  Invalid values should
-be printed as ``nonsensical'' (@pxref{Data trace
-records}).
+be printed as ``nonsensical'' (@pxref{Data trace records}).
 
 It is desirable to print ``nonsensical'' rather than an invalid value,
 for two reasons.  First, outputting nonsense values can degrade
@@ -784,9 +790,9 @@ number of redundant invariants of various kinds.  This section describes
 how to add a new suppressor relation, such that if invariant A implies
 B, B is not instantiated or checked as long as A holds, saving time and
 space.  Suppression implications use some terminology.  A
-@emph{suppressor} (defined in the class @code{NISuppressor}) is one of a
+@dfn{suppressor} (defined in the class @code{NISuppressor}) is one of a
 set of invariants (@code{NISuppression}) that imply and suppress a
-@emph{suppressee} invariant (@code{NISuppressee}).  The set of all of
+@dfn{suppressee} invariant (@code{NISuppressee}).  The set of all of
 the suppressions that suppress a particular suppressee is stored in the
 class @code{NISuppressionSet}.
 
@@ -914,7 +920,7 @@ Daikon's logging routines are based on the @code{java.util.logging} utilities
 Often it is desirable to print information only about one or more specific 
 invariants.  This is distinct from general logging because it concentrates
 on specific invariant objects rather than a particular class or portion of Daikon.
-This is referred to as @emph{Track} logging because it tracks particular
+This is referred to as @dfn{Track} logging because it tracks particular
 values across Daikon.
 
 @c makeinfo doesn't like ',' in @var so we can't do this:
@@ -985,7 +991,12 @@ information of interest (@pxref{Adding track logging}).
 This is covered in the next section.
 
 More detailed information can be found in the Javadoc for
-@uref{http://plse.cs.washington.edu/daikon/download/jdoc/daikon/Debug.html,@code{daikon.Debug}}
+@ifhtml
+@code{@uref{http://plse.cs.washington.edu/daikon/download/jdoc/daikon/Debug.html,,daikon.Debug}}
+@end ifhtml
+@ifnothtml
+@code{@uref{http://plse.cs.washington.edu/daikon/download/jdoc/daikon/Debug.html, daikon.Debug}}
+@end ifnothtml
 and
 @uref{http://plse.cs.washington.edu/daikon/download/jdoc/daikon/inv/Invariant.html,@code{daikon.inv.Invariant}}.
 
@@ -1087,78 +1098,6 @@ format. Space for three variables is always maintained for consistency:
 If @code{showTrackback} is enabled, the traceback will follow each 
 line of debug output.
 
-Unfortunately, in ASCII text, the above can be a little difficult to read
-because it normally doesn't line up very well.  A simple translator to
-HTML exists that can be used to provide HTML formatted output.  This tool
-is not completely tested, but seems to work reasonably well in most
-situations.  The following instructions only apply to MIT, but the tool
-is shipped in the scripts directory and can easily be setup elsewhere
-as well.
-
-@cindex log2html
-
-Use the URL @uref{http://pag.csail.mit.edu/daikon/mit/log2html.php} to
-access log2html.
-It will ask you for a file of daikon output.  One good way to create this
-file is to use the @command{tee} command.  For example:
-
-@example
-daikon [daikon args] | tee ~/daikon.out
-@end example
-
-@noindent
-Then specify that file to log2html.  Note that when supplying a filename
-to log2html, you must expand @samp{~} yourself
-since the webserver doesn't know who you are.  The result will contain
-tables with the log output in them (all other output is unchanged).  Table
-columns are based on the @samp{: } separator in the ASCII output.  If traceback
-is enabled, another column is added showing where the log method was
-called.  For example, the traceback column might contain:
-
-@example
-+PptSlice1.addInvariant
-@end example
-
-@noindent
-If you put your cursor over @code{PptSlice1.addInvariant} it will show
-the exact line number in the source file where the log method was
-called as part of the href.  If you click on the traceback it will
-create an output file of type @samp{application/emacs} that contains an
-@command{emacsclient} command to edit the related source file.  Most browsers
-can be setup to execute a command to process these files (in Mozilla
-this is done in the ``Navigator/Helper Applications'' section of
-preferences).  The script @command{$DAIKONDIR/scripts/browser_emacs} will
-correctly handle files of this type and bring up the appropriate file
-in Emacs.  This could easily be changed to support other editors.
-Note that as currently implemented this creates a possible security
-hole (malicious non-editor commands could be executed) as no checking
-is done on the validity of the command.
-
-Clicking on the leading plus of the traceback information will show
-the entire traceback.  For example:
-
-@example
--PptSlice1.addInvariant
- PptSlice.flow_and_remove_falsified
- PptSlice1.add
- PptTopLevel.add
- PptTopLevel.add_and_flow
- FileIO.process_sample
- FileIO.read_data_trace_file
- FileIO.read_data_trace_files
- Daikon.process_data
- Daikon.main
-@end example
-
-The same capabilities (showing the line number, bringing up the buffer
-in emacs) exist on each of the frames in the traceback.  The detailed
-traceback can be hidden by clicking on the leading @samp{-} on the first
-frame.  Note that the current state of what tracebacks are expanded is
-kept in a file named the same as your Daikon output file with
-@file{.state} appended.  For example, the state file for
-@file{~/daikon.out} is @file{~/daikon.out.state}.  This file must be
-world writable for log2html to work correctly.
-
 
 @node    Daikon internals
 @chapter Daikon internals
@@ -1191,7 +1130,7 @@ There are three basic types of optimization that can be performed for
 uninteresting invariants:  non-instantiation, suppression, and
 non-printing.
 
-@emph{Non-instantiation} prevents the creation of an invariant because
+@dfn{Non-instantiation} prevents the creation of an invariant because
 the invariant's truth value is statically obvious (from the semantics
 of the programming language), no matter what values may be seen at run
 time.  Two examples are ``A[i] is an element of A[]'' and ``size(A[])
@@ -1218,7 +1157,7 @@ invariant that is being suppressed.  In this example, only invariants
 using the variables ``x[i]'' and ``y[i]'' can be used as a suppressors.
 See @ref{New suppressors} for more information.
 
-@emph{Non-printing} is a post-pass that throws out any invariants that
+@dfn{Non-printing} is a post-pass that throws out any invariants that
 are implied by other true invariants.  It is similar to suppression, but
 has none of the limitations of suppression.  But since it is only run as
 a post pass, it cannot optimize runtime and memory use as suppression can.
@@ -1231,7 +1170,7 @@ checks; it can be called at the end without reference to equality sets.
 More detail can be found in the paper ``Efficient incremental algorithms
 for dynamic detection of likely invariants'' by Jeff H. Perkins and
 Michael D. Ernst, published in FSE 2004; the paper is available from
-@uref{http://plse.cs.washington.edu/daikon/pubs/invariants-incremental-@/fse2004-@/abstract.html}.
+@uref{http://plse.cs.washington.edu/daikon/pubs/invariants-incremental-fse2004-abstract.html}.
 
 @node    Dataflow hierarchy
 @section Dataflow hierarchy
@@ -1290,10 +1229,10 @@ reporting N times the invariants is wasteful.  Daikon thus treats
 equality specially.
 
 Each group of variables that are equal from the start of inferencing
-are placed in @emph{equality sets}.  An equality set can hold an
+are placed in @dfn{equality sets}.  An equality set can hold an
 arbitrary number of variables, and replaces the O(N^2) pairwise
 equality invariants.  Every equality set has a leader or
-@emph{canonical} representation by a variable in the set.
+@dfn{canonical} representation by a variable in the set.
 Non-equality invariants are only instantiated and checked on the
 leader.  When printing invariants, Daikon reports only invariants on
 the leader.  The user can easily determine that ``odd(a)'' and ``a == b''
@@ -1738,7 +1677,10 @@ The test can be added into the standard tests (either @samp{everything} or
 @chapter Editing Daikon source code
 
 The Daikon source code follows these coding conventions:
-@uref{http://homes.cs.washington.edu/@~mernst/advice/coding-style.html}.
+@ifnothtml
+@* @ @ @ @ @ @ 
+@end ifnothtml
+@uref{http://homes.cs.washington.edu/~mernst/advice/coding-style.html}.
 
 
 @menu
@@ -1966,7 +1908,7 @@ If you wish to create a new section of the manual, insert two lines like
 the following:
 
 @example
-@@node           @@@emph{Short title}
+@@node    @@@emph{Short title}
 @@@emph{chapter} @@@emph{Long title}
 @end example
 
@@ -2309,7 +2251,7 @@ hg -q commit -m "Change version to @emph{X.Y.Z}"
 
 @item
 Send mail to the daikon-announce mailing list.  There are sample
-messages in the @uref{https://lists.csail.mit.edu/pipermail/daikon-announce/,archive} of
+messages in the @uref{http://lists.csail.mit.edu/pipermail/daikon-announce/,archive} of
 @uref{https://lists.csail.mit.edu/mailman/listinfo/daikon-announce/,daikon-announce}.
 
 You may need to visit @uref{https://lists.csail.mit.edu/mailman/admindb/daikon-announce/}
@@ -2379,11 +2321,7 @@ publicize them at
 
 The layout of the Daikon CVS repository differs slightly from that of
 the distribution.  For example, the top-level directory is named
-@file{invariants/} instead of @file{daikon/}, and the subdirectory with
-helper programs is named @file{scripts/} instead of @file{bin/}.
-More information about obtaining Daikon via CVS, was available in
-directory @code{invariants/doc/www/mit}.
-
+@file{invariants/} instead of @file{daikon/}.
 
 The remainder of this section points out some pitfalls for such
 researchers.  Although
@@ -2406,7 +2344,7 @@ contains an external library.  Therefore, any measurement of Daikon's code
 coverage should not include such libraries, whether distributed in
 source or as @file{.jar} files.
 
-Historically, the file @file{doc/www/mit/index.html} in the repository
+Historically, the file @file{doc/www/mit/index.html} in the CVS repository
 contains information about how Daikon's developers use Daikon.
 This file changes from
 time to time --- for instance, it changed when a CVS branch was created
@@ -3654,8 +3592,14 @@ Variable comparability information helps Daikon to avoid computing
 information over unrelated variables.  This saves time and (more
 importantly) improves the quality of Daikon's output.  For more details,
 see the paper
+@ifhtml
 @uref{http://homes.cs.washington.edu/~mernst/pubs/invariants-relevance-icse2000-abstract.html,
 , ``Quickly detecting relevant program invariants''}.
+@end ifhtml
+@ifnothtml
+@uref{http://homes.cs.washington.edu/~mernst/pubs/invariants-relevance-icse2000-abstract.html,
+  ``Quickly detecting relevant program invariants''}.
+@end ifnothtml
 
 Variable comparability information may be obtained dynamically
 (@pxref{Dynamic abstract type inference (DynComp),,,./daikon,Daikon User Manual}), via

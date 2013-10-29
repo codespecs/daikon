@@ -345,7 +345,9 @@ staging: doc/CHANGES
 # that are not in staging.
 staging-to-www: $(STAGING_DIR)
 #copy the files
+	chmod -R u+w,g+w $(WWW_DIR)
 	(cd $(STAGING_DIR) && tar cf - .) | (cd $(WWW_DIR) && tar xfBp -)
+	chmod -R u-w,g-w $(WWW_DIR)
 	@echo "**Update the dates and sizes in the various index files**"
 # need to allow write so html-update can update	
 	chmod +w $(DIST_DIR)

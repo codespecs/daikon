@@ -26,9 +26,14 @@
 @end macro
 
 @c set overall document style
-@setchapternewpage odd
+@c @setchapternewpage odd
 @paragraphindent 1
 @firstparagraphindent insert
+@c default value for example indentation
+@set exin 4
+@c default value for example indentation within an @enumerate
+@set exinenum 1
+@exampleindent 4
 
 @ifset final
 @c FINAL version
@@ -192,12 +197,12 @@ The following mailing lists (and their archives) are available:
 A low-volume, announcement-only list.  For example,
 announcements of new releases are sent to this list.
 To subscribe, visit
-@uref{https://lists.csail.mit.edu/mailman/listinfo/daikon-announce}.
+@uref{https://groups.google.com/forum/#!forum/daikon-announce}.
 @item daikon-discuss@@googlegroups.com
 A moderated list for the community of Daikon users.  Use it to share
 tips and successes, and to get help with questions or problems (after
 checking the documentation).  To subscribe, visit
-@uref{https://lists.csail.mit.edu/mailman/listinfo/daikon-discuss}.
+@uref{https://groups.google.com/forum/#!forum/daikon-discuss}.
 @item daikon-developers@@googlegroups.com
 This list goes to the Daikon maintainers.  Use it for bug reports,
 suggestions, and the like.  If you are an active contributor to Daikon,
@@ -331,7 +336,9 @@ If you wish to edit the Daikon source code and re-compile Daikon,
 @subsection Unix/Linux/MacOS installation
 
 
+/item
 
+@exampleindent 1
 @enumerate
 @item
 Choose the directory where you want to install Daikon; we'll call this
@@ -415,6 +422,7 @@ the Simplify theorem
 prover (@uref{http://www.hpl.hp.com/downloads/crl/jtk/}).
 
 @end enumerate
+@exampleindent 4
 
 @node       Windows installation
 @subsection Windows installation
@@ -432,6 +440,7 @@ by simply running the program found at
 installation of Cygwin is sufficient for installing Daikon.
 
 
+@exampleindent 1
 @enumerate
 @item
 Choose the directory where you want to install Daikon; we'll call this
@@ -544,6 +553,7 @@ can replace Simplify but is only distributed for Windows).
 @c end Mangel-Wurzel (@pxref{Installing Mangel-Wurzel}).
 
 @end enumerate
+@exampleindent 4
 
 
 @node       Running Daikon under Windows
@@ -760,6 +770,7 @@ you get practice in running Daikon.
 To detect invariants in the StackAr sample program, perform the
 following steps after installing Daikon (@pxref{Installing Daikon}).
 
+@exampleindent 1
 @enumerate
 @item
 Compile the program with the @option{-g} switch to enable debugging
@@ -877,6 +888,7 @@ For more information about the Annotate program, see @ref{Annotate}.
 
 @end itemize
 @end enumerate
+@exampleindent 4
 
 
 @node       Using DynComp with Java programs
@@ -887,6 +899,7 @@ involving unrelated variables (see @ref{DynComp for Java}).  To do so, run
 DynComp on the target program first, then pass the resulting
 @file{.decls} file to Chicory.  The process would be as follows:
 
+@exampleindent 1
 @enumerate
 @item
 Compile the program with the @option{-g} switch to enable debugging
@@ -921,6 +934,7 @@ java daikon.Chicory --daikon \
 @end example
 
 @end enumerate
+@exampleindent 4
 
 You could split the third step into multiple steps, as described in
 @ref{StackAr example}, to gain more control over the invariant detection
@@ -1110,6 +1124,7 @@ Daikon over the data trace file to produce invariants (steps 3--4).
 The following instructions are for the wordplay example, which is a
 program for finding anagrams.
 
+@exampleindent 1
 @enumerate
 @item
 Change to the directory containing the program.
@@ -1211,6 +1226,7 @@ Use the PrintInvariants program to display the invariants.
 For help understanding the invariants, see @ref{Interpreting output}.
 
 @end enumerate
+@exampleindent 4
 
 @node       Using DynComp with C programs
 @subsection Using DynComp with C programs
@@ -1232,10 +1248,10 @@ supplied to Daikon.
 For instance, to repeat the wordplay example with DynComp, first rerun
 @command{kvasir-dtrace} giving it the option @option{--with-dyncomp}:
 
-@example
+@smallexample
 kvasir-dtrace --with-dyncomp \
    ./wordplay -f words.txt 'daikon dynamic invariant detector'
-@end example
+@end smallexample
 
 @noindent
 Then, supply the @file{.decls} file when invoking Daikon:
@@ -1294,6 +1310,9 @@ The Daikon front end for .NET languages (C#, F#, and Visual Basic) is
 called Celeriac.
 
 Please see its documentation at
+@ifnothtml
+: @* @ @ @ @ @ @ 
+@end ifnothtml
 @url{https://code.google.com/p/@/daikon-dot-net-front-end/@/wiki/@/GettingStarted}.
 
 
@@ -1362,6 +1381,7 @@ with Daikon in the @file{examples/perl-examples} directory.
 Here are step-by-step instructions for examining a simple module,
 @file{Birthday.pm}, as used by a test script @file{test-bday.pl}.
 
+@exampleindent 1
 @enumerate
 @item Change to the directory containing the @file{Birthday.pm}
 module.
@@ -1453,6 +1473,7 @@ java daikon.PrintInvariants Birthday.inv.gz
 Invariants produced from Perl programs can be examined using the same
 tools as other Daikon invariants.
 @end enumerate
+@exampleindent 4
 
 In the example above, the script @file{test_bday.pl} was not itself
 instrumented; it was only used to test the instrumented code.  The
@@ -1697,6 +1718,7 @@ samples, and @var{a}<@var{b} on all of them, then the confidence would be 7/8 =
 confidence would be 0.  If there were 9 samples, and @var{a}<@var{b} on all of
 them, then the confidence would be 1-1/2^9 = .998.
 
+@exampleindent 1
 There are two ways to print the confidence of each invariant.  You can
 use Diff (@pxref{Invariant Diff}):
 @example
@@ -1707,8 +1729,10 @@ java daikon.diff.Diff MyFile.inv.gz
 or you can use PrintInvariants
 (@pxref{Printing invariants}):
 @example
-java daikon.PrintInvariants --dbg daikon.PrintInvariants.repr MyFile.inv.gz 
+java daikon.PrintInvariants --dbg daikon.PrintInvariants.repr \
+     MyFile.inv.gz 
 @end example
+@exampleindent 4
 
 To print the confidence of each invariant that is discarded, run Daikon
 with the @option{--disc_reason all} command-line option (@pxref{Daikon
@@ -3503,6 +3527,7 @@ them are.
 Here are examples of how to avoid detecting invariants over various
 parts of your program.
 
+@exampleindent 1
 @itemize
 @item omit a whole package:
 @smallexample
@@ -3528,6 +3553,7 @@ java daikon.Chicory '--ppt-omit-pattern=StackAr.<init>(int):::EXIT33' ...
 @end smallexample
 
 @end itemize
+@exampleindent 4
 
 @item --sample-start=@var{sample-cnt}
 @cindex sampling of program point executions
@@ -4097,9 +4123,11 @@ jar file (@code{classes.jar} in MacOS).  Normally the file is found in
 The following example is for the standard install of Java 1.5 on
 MacOS:
 
+@exampleindent 0
 @smallexample
 export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
 @end smallexample
+@exampleindent 4
 
 BuildJDK requires 20-40 minutes to complete and uses 1024 MB of
 memory.  Regular progress indicators are printed to standard output.
@@ -4967,7 +4995,8 @@ presented in the above example was generated from a C++ test program named
 @code{FunctionNamesTest} by using the following command:
 
 @example
-kvasir-dtrace --dump-ppt-file=FunctionNamesTest.ppts  ./FunctionNamesTest
+kvasir-dtrace --dump-ppt-file=FunctionNamesTest.ppts \
+              ./FunctionNamesTest
 @end example
 
 @noindent
@@ -5006,7 +5035,8 @@ commenting out lines (again using the @code{'#'} comment character).  For exampl
 executing
 
 @example
-kvasir-dtrace --dump-var-file=FunctionNamesTest.vars  ./FunctionNamesTest
+kvasir-dtrace --dump-var-file=FunctionNamesTest.vars \
+              ./FunctionNamesTest
 @end example
 
 @noindent
@@ -6605,7 +6635,7 @@ wget @uref{http://pag.csail.mit.edu/daikon/@/download/@/binaries/@/mangel-wurzel
 tar xvzf mangel-wurzel-linux-x86.tar.gz
 @end example
 @c restore default:
-@exampleindent 5
+@exampleindent 4
 
 On Windows, download, then unzip,
 @uref{http://pag.csail.mit.edu/daikon/@/download/@/binaries/@/mangel-wurzel-linux-x86.tar.gz} .
@@ -8172,6 +8202,7 @@ understand Daikon's operation; @xref{Daikon debugging options}.
 @node       Can't run Daikon
 @subsection Can't run Daikon: NoClassDefFoundError
 
+@exampleindent 1
 If you can't run Daikon at all and you get an error such as 
 @example
 Exception in thread "main" java.lang.NoClassDefFoundError: daikon/Chicory
@@ -8184,6 +8215,7 @@ More generally, an error such as
 @example
 Exception in thread "main" java.lang.NoClassDefFoundError: plume/FuzzyFloat
 @end example
+@exampleindent 4
 
 @noindent
 means that Java did not find the class @file{plume/FuzzyFloat} on your
@@ -9025,7 +9057,7 @@ able to assist you.
 Your bug report should include:
 @itemize @bullet
 @item
-the version of Daikon, which appears in the file @file{daikon/README}
+the version of Daikon, which appears in the file @file{daikon/README.txt}
 and is also printed when you run Daikon.
 @c ; also, whether you are running
 @c from the @file{.class} files or from the @file{.jar} file.
@@ -9238,7 +9270,6 @@ NONINFRINGEMENT@.  IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE
 LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION
 OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION
 WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE@.
-
 
 @sp 1
 
