@@ -160,12 +160,12 @@ ifneq "$(wildcard ${SORT_DIRECTORY_ORDER})" "${SORT_DIRECTORY_ORDER}"
   # Until "make ../plume-lib" has been run, sort-directory-order is not available.
   SORT_DIRECTORY_ORDER = sort
 endif
-JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name CVS -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
+JAVA_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name '*daikon-instrumented*' -o -name typequals -o -name 'ReturnBytecodes.java' -o -name 'SplitterFactoryTest.java' -o -name '\.\#*' \) -prune -o -name '*.java' -print | grep -v '/jakarta-oro.*/src/java/examples/' | ${SORT_DIRECTORY_ORDER})
 DAIKON_JAVA_FILES = $(shell find daikon/ -name '*.java' -not -name '*\#*' | ${SORT_DIRECTORY_ORDER})
 
 #                    $(shell find binary_variables/ -name '*.java' -print)
 
-TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${SORT_DIRECTORY_ORDER})
+TAG_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -wholename ./daikon/util \) -prune -o \( -name '*.java' -o -name '*.java.jpp' \) -print | grep -v '/\.\#' | ${SORT_DIRECTORY_ORDER})
 
 # When removing files from this list, add them to OLD_AUTO_GENERATED_FILES.
 AUTO_GENERATED_FILES = \
@@ -1096,12 +1096,10 @@ JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
                 -docletpath ${CLASSPATH} \
                 -classpath $(subst $(DAIKONDIR)/java,${CLASSPATH_JARS}:${CLASSPATH_JARS2},${CLASSPATH})
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
-# JDOC_FILES = `find -follow -name '*.java' | grep -v CVS | grep -v '\#'`
-JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -name CVS -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | ${SORT_DIRECTORY_ORDER})
-#JAVADOC_PACKAGES = `find -follow -name '*.java' -exec dirname {} \; | grep -v CVS | grep -v '\#' | sort | uniq | perl -p -e 's:^./::g; s:/:.:g;'`
+JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | ${SORT_DIRECTORY_ORDER})
 
 # Daikon packages except for util (which is just a copy of plume)
-DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'CVS|util' \
+DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' \
 				   | sed s./.. | sed s/^/daikon./ | tr '\n' ':')
 
 javadoc: doc

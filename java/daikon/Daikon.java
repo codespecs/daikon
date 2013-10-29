@@ -191,7 +191,6 @@ public final class Daikon {
    * If "missing", then invariants are guarded only for variables that
    * were missing ("can be missing") in the dtrace (the observed executions).
    * <p>
-   *
    * Guarding means adding predicates that ensure that variables can be
    * dereferenced.  For instance, if <code>a</code> can be null --- that is,
    * if <code>a.b</code> can be nonsensical --- then the guarded version of
@@ -199,7 +198,6 @@ public final class Daikon {
    * is
    * <samp>(a != null) ==> (a.b == 5)</samp>.
    * <p>
-   *
    * (To do:  Some configuration option (maybe this one) should add guards for
    * other reasons that lead to nonsensical values (@pxref{Variable
    * names}).)

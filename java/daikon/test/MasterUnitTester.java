@@ -10,7 +10,7 @@ import daikon.FileIO;
 /**
  * This class runs all the Daikon unit tests.  These tests are small, fast
  * to run, and certainly not comprehensive.  Daikon also has a much more
- * substantial set of regression tests; in the CVS repository, they can be
+ * substantial set of regression tests; in the repository, they can be
  * found at daikon/tests/.
  **/
 public class MasterUnitTester extends TestCase {

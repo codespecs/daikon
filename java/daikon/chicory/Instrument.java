@@ -439,7 +439,7 @@ public class Instrument implements ClassFileTransformer {
   }
 
 
-  // created the InstructionList to insert for adding the <clinit> hookd
+  // created the InstructionList to insert for adding the <clinit> hook
   private InstructionList
   call_initNotify(ClassGen cg, ConstantPoolGen cp, String fullClassName,
                   InstructionFactory factory) {
@@ -642,8 +642,7 @@ public class Instrument implements ClassFileTransformer {
         mg.setInstructionList(il);
         mg.update();
 
-        // Update the max stack and Max Locals
-        // mg.setMaxLocals();
+        // Update the max stack
         mg.setMaxStack();
         mg.update();
 
