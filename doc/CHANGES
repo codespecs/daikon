@@ -25,6 +25,7 @@ Further documentation can be found in:
 A new front end for .NET languages (C#, F#, and Visual Basic) is available.
 Daikon problems are now tracked in the Google Code database.
 We have moved to new mailing list addresses.
+We removed the Mangel-Wurzel documentation.
 
 General
 
@@ -73,6 +74,14 @@ Kvasir
   Bug fixes
 
   ???
+
+Documentation
+
+  We no longer provide 'info' versions of the documentation.  However, the
+  targets remain in the makefile if you wish to make your own.
+
+  We have removed all references to the Mangel-Wurzel front end from the
+  documentation as it is no longer supported.
 
 ===========================================================================
 

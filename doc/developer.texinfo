@@ -634,15 +634,11 @@ the bytecode instrumentation.)
 @cindex C programs, instrumenting
 @cindex instrumenting C programs
 
-Daikon comes with two front ends for the C language:  Kvasir
-(@pxref{Kvasir,,,./daikon,Daikon User Manual}) and Mangel-Wurzel
-(@pxref{Mangel-Wurzel,,,./daikon,Daikon User Manual}). 
-Each has its limitations.
+Daikon comes with a front end for the C language:  Kvasir
+(@pxref{Kvasir,,,./daikon,Daikon User Manual}).
 Kvasir only works under the Linux operating system, and it works only on
 ``x86'' (Intel 386, 486, 586, 686 compatible) and ``x86-64'' (AMD64, EM64T
-compatible) processors.  Mangel-Wurzel 
-lacks some tracing features related to arrays
-and nested structs, and requires the user to purchase Purify.
+compatible) processors.
 
 You may wish to infer invariants over C programs running on other
 platforms; for instance, you want a robust C front end that works under
@@ -2493,8 +2489,7 @@ file, it is permitted to place the declarations in one or more
 @file{.decls} ``declaration files'' while leaving the data trace records
 in the @file{.dtrace} file.  This can be convenient for tools that
 perform a separate instrumentation step, such as
-dfepl (@pxref{dfepl,,,./daikon,Daikon User Manual})
-and Mangel-Wurzel (@pxref{Mangel-Wurzel,,,./daikon,Daikon User Manual}). 
+dfepl (@pxref{dfepl,,,./daikon,Daikon User Manual}).
 Such a tool takes as
 input a target program to be analyzed, and produces two outputs:  a
 @file{.decls} file and an instrumented program.  Executing the
