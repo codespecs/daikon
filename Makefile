@@ -301,6 +301,7 @@ repository-test:
 # See the dist target for moving these files to the website.
 staging: doc/CHANGES
 	chmod -R +w $(STAGING_DIR)
+	chmod +w $(STAGING_DIR)/..
 	/bin/rm -rf $(STAGING_DIR)
 	install -d $(STAGING_DIR)/download
 	# Build the main tarfile for daikon
@@ -381,6 +382,7 @@ doc-all:
 	# "make" in doc directory may fail the first time, but do show output.
 	-cd doc && $(MAKE) all
 	cd doc && $(MAKE) all
+	cd doc && $(MAKE) pdf-final
 
 # Perl command compresses multiple spaces to one, for first 9 days of month.
 TODAY := $(shell date "+%B %e, %Y" | perl -p -e 's/  / /')
