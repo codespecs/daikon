@@ -399,6 +399,9 @@ tools/kmeans/*.o
 
 syntax: regexp
 
+^examples/.*\.class$
+^examples/.*\.dtrace\.gz$$
+
 ^tests/.*\.comp$
 ^tests/.*\.counts$
 ^tests/.*\.decls$
@@ -443,26 +446,5 @@ syntax: regexp
 ^tests/diff-tests/schedule2/schedule2.*\.map$
 ^tests/diff-tests/schedule2/schedule2.*\.txt$
 ^tests/chicory-tests/option-tests/.*\.txt$
+^tests/.*\/merged\/
 
-
-## Old contents of file daikon/tests/daikon-tests/.cvsignore, which may be
-## useful for cannibalizing:
-# .esc-ok
-# Makefile.user
-# *.inv
-# *.inv.gz
-# *.spinfo
-# *.txt-daikon
-# *.txt-daikon.diff
-# *.txt-esc
-# *.txt-esc.diff
-# *.txt-simplify
-# *.txt-simplify.diff
-# *.txt-trace
-# *.esc
-# *.stats
-# *.txt-jml
-# *.txt-jml.diff
-# *.txt-merge-esc.diff
-# *.txt-merge-jml.diff
-merged
