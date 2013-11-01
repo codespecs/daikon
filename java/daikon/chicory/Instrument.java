@@ -1131,16 +1131,38 @@ public class Instrument implements ClassFileTransformer {
     // account for instrumentation code we have inserted as well as
     // adjustments for the new 'nonce' local.
 
+    boolean skipFirst = false;
+
     // Get existing StackMapTable (if present)
     if (stack_map_table.length > 0) {
-        // We need to adjust the offset_delta of the first old 
-        // StackMapEntry due to the fact that it will no longer be
-        // the first entry.  We must subtract 1.
-        modify_stack_map_offset(stack_map_table[0], -1);
+        // Each stack map frame specifies (explicity or implicitly) an
+        // offset_delta that is used to calculate the actual bytecode
+        // offset at which the frame applies.  This is caluclated by
+        // by adding offset_delta + 1 to the bytecode offset of the 
+        // previous frame, unless the previous frame is the initial
+        // frame of the method, in which case the bytecode offset is
+        // offset_delta. (From the Java Virual Machine Specification,
+        // Java SE 7 Edition, section 4.7.4)
+
+        // Since we are inserting (1 or 2) new stack map frames at the
+        // beginning of the stack map table, we need to adjust the
+        // offset_delta of the original first stack map frame due to
+        // the fact that it will no longer be the first entry.  We must 
+        // subtract 1. BUT, if the original first entry has an offset
+        // of 0 (because bytecode address 0 is a branch target) then
+        // we must delete it as it will be replaced by the new frames
+        // we are adding.  (did you get all of that? - markro)
+
+        if (stack_map_table[0].getByteCodeOffsetDelta() == 0) {
+            skipFirst = true;
+        } else {
+            modify_stack_map_offset(stack_map_table[0], -1);
+        }
     }
 
-    StackMapTableEntry[] new_map = new StackMapTableEntry[stack_map_table.length
-                                                          + ((len_part2 > 0) ? 2 : 1)];
+    int new_table_length = stack_map_table.length + ((len_part2 > 0) ? 2 : 1)
+                                                  - (skipFirst ? 1 : 0);
+    StackMapTableEntry[] new_map = new StackMapTableEntry[new_table_length];
     StackMapType nonce_type = new StackMapType(Constants.ITEM_Integer, -1,
                                                pgen.getConstantPool());
     StackMapType[] old_nonce_type = {nonce_type};
@@ -1157,7 +1179,7 @@ public class Instrument implements ClassFileTransformer {
 // We cannot just copy over the existing stack map entires.  If any of them
 // are FULL_FAME we need to add our 'nonce' variable to the local table.
 
-    for (int i = 0; i < stack_map_table.length; i++) {
+    for (int i = (skipFirst ? 1 : 0); i < stack_map_table.length; i++) {
         if (stack_map_table[i].getFrameType() == Constants.FULL_FRAME) {
 
             // need to add our 'nonce' variable into the list of locals
