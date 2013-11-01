@@ -3,7 +3,7 @@ annotation @Nullable:
 annotation @NonNull:
 
 package DataStructures:
-class QueueAr : // 15267/- obj/class samples
+class QueueAr : // 14931/- obj/class samples
   field theArray :  // java.lang.Object[]
   field currentSize :  // int
   field front :  // int
@@ -13,14 +13,16 @@ class QueueAr : // 15267/- obj/class samples
     parameter #0 :  // capacity
   method dequeue()Ljava/lang/Object; : // 536 samples
     return: 
+  method dequeueAll()V : // 4 samples
+    return: 
   method enqueue(Ljava/lang/Object;)V : // 673 samples
     return: 
     parameter #0 :  // x
-  method getFront()Ljava/lang/Object; : // 1274 samples
+  method getFront()Ljava/lang/Object; : // 1231 samples
     return: @Nullable 
-  method isEmpty()Z : // 3156 samples
+  method isEmpty()Z : // 3070 samples
     return: 
-  method isFull()Z : // 1947 samples
+  method isFull()Z : // 1904 samples
     return: 
   method makeEmpty()V : // 29 samples
     return: 

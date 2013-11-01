@@ -56,6 +56,34 @@ orig(this.currentSize) <= size(this.theArray[])
 orig(this.front) <= size(this.theArray[])-1
 this.theArray[this.currentSize+1..] is a subset of orig(this.theArray[post(this.currentSize)..])
 ===========================================================================
+DataStructures.QueueAr.dequeueAll():::ENTER
+this.currentSize == size(this.theArray[])
+this.back == size(this.theArray[])-1
+this.theArray[this.currentSize-1] == this.theArray[this.back]
+this.front == 0
+this.theArray[this.currentSize..] == []
+this.theArray[0..this.front] elements == this.theArray[this.front]
+this.theArray[this.back..] elements == this.theArray[this.back]
+===========================================================================
+DataStructures.QueueAr.dequeueAll():::EXIT
+this.theArray == orig(this.theArray)
+this.currentSize == this.front
+this.currentSize == orig(this.front)
+this.back == orig(this.back)
+this.back == size(this.theArray[])-1
+this.back == orig(size(this.theArray[]))-1
+orig(this.currentSize) == size(this.theArray[])
+this.theArray[this.currentSize] == this.theArray[this.back]
+this.theArray[this.currentSize] == this.theArray[orig(this.currentSize)-1]
+this.theArray[this.currentSize] == this.theArray[orig(this.back)]
+this.theArray[] elements == null
+this.theArray[].getClass() elements == null
+this.currentSize == 0
+this.theArray[0..this.currentSize] == [null]
+this.theArray[0..this.currentSize-1] == []
+this.theArray.getClass() == orig(this.theArray.getClass())
+this.theArray[] elements == this.theArray[this.currentSize]
+===========================================================================
 DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER
 x != null
 x.getClass() is printable

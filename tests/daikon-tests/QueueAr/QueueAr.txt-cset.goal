@@ -98,6 +98,20 @@ Variable sets for DataStructures.QueueAr.enqueue(java.lang.Object x) exit
   [1] [Class of Field theArray[..]]
   [1] [Class of x]
 
+Variable sets for DataStructures.QueueAr.dequeueAll() enter
+  [1] [this]
+  [4] [Field back, Field currentSize, Field front, Field theArray]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+Variable sets for DataStructures.QueueAr.dequeueAll() exit
+  [1] [this]
+  [3] [Field back, Field currentSize, Field theArray]
+  [1] [Field front]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+
 Variable sets for DataStructures.QueueAr.equals(java.lang.Object obj) enter
   not called
 Variable sets for DataStructures.QueueAr.equals(java.lang.Object obj) exit

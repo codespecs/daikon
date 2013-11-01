@@ -10,6 +10,10 @@ isEmpty()
 orig(++front == theArray.length)
 orig(isEmpty())
 
+PPT_NAME DataStructures.QueueAr.dequeueAll
+!isEmpty()
+orig(!isEmpty())
+
 PPT_NAME DataStructures.QueueAr.enqueue
 ++back == theArray.length
 isFull()

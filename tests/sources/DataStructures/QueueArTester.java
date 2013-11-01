@@ -39,7 +39,8 @@ public class QueueArTester {
   public static void fillAndEmpty(int n) {
     doNew(n);
     for (int i=0; i < n; i++) enqueue();
-    while(!q.isEmpty()) dequeue();
+    q.dequeueAll();
+//    while(!q.isEmpty()) dequeue();
   }
 
   public static void walkAround(int n) {

@@ -56,6 +56,34 @@ warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputForma
 (<= (select |front| |__orig__this|) (- (arrayLength (select |theArray| |this|)) 1))
 (FORALL (|i|) (IMPLIES (AND (<= (+ (select |currentSize| |this|) 1) |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1)))(EXISTS (|j|)(AND (<= (select |currentSize| |this|) |j|) (<= |j| (- (arrayLength (select |theArray| |__orig__this|)) 1))(EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |__orig__this|)) |j|))))))
 ===========================================================================
+DataStructures.QueueAr.dequeueAll():::ENTER
+(EQ (select |currentSize| |this|) (arrayLength (select |theArray| |this|)))
+(EQ (select |back| |this|) (- (arrayLength (select |theArray| |this|)) 1))
+(EQ (hash (select (select elems (select |theArray| |this|)) (- (select |currentSize| |this|) 1))) (hash (select (select elems (select |theArray| |this|)) (select |back| |this|))))
+(EQ (select |front| |this|) 0)
+(AND (EQ (+ 1 (- (- (arrayLength (select |theArray| |this|)) 1) (select |currentSize| |this|))) 0) (FORALL (|i|) (IMPLIES (AND (<= (select |currentSize| |this|) |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |front| |this|))) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |this|)) (select |front| |this|)))))
+(FORALL (|i|) (IMPLIES (AND (<= (select |back| |this|) |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |this|)) (select |back| |this|)))))
+===========================================================================
+DataStructures.QueueAr.dequeueAll():::EXIT
+(EQ (hash (select |theArray| |this|)) (hash (select |theArray| |__orig__this|)))
+(EQ (select |currentSize| |this|) (select |front| |this|))
+(EQ (select |currentSize| |this|) (select |front| |__orig__this|))
+(EQ (select |back| |this|) (select |back| |__orig__this|))
+(EQ (select |back| |this|) (- (arrayLength (select |theArray| |this|)) 1))
+(EQ (select |back| |this|) (- (arrayLength (select |theArray| |__orig__this|)) 1))
+(EQ (select |currentSize| |__orig__this|) (arrayLength (select |theArray| |this|)))
+(EQ (hash (select (select elems (select |theArray| |this|)) (select |currentSize| |this|))) (hash (select (select elems (select |theArray| |this|)) (select |back| |this|))))
+(EQ (hash (select (select elems (select |theArray| |this|)) (select |currentSize| |this|))) (hash (select (select elems (select |theArray| |this|)) (- (select |currentSize| |__orig__this|) 1))))
+(EQ (hash (select (select elems (select |theArray| |this|)) (select |currentSize| |this|))) (hash (select (select elems (select |theArray| |this|)) (select |back| |__orig__this|))))
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) null)))
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (typeof (select (select elems (select |theArray| |this|)) |i|)) |T_null|)))
+(EQ (select |currentSize| |this|) 0)
+(AND (EQ (+ 1 (- (select |currentSize| |this|) 0)) 1) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (select |currentSize| |this|))) (EQ (select (select elems (select |theArray| |this|)) |i|)  null))))
+(AND (EQ (+ 1 (- (- (select |currentSize| |this|) 1) 0)) 0) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (select |currentSize| |this|) 1))) (NEQ (select (select elems (select |theArray| |this|)) |i|)  null))))
+(EQ (typeof (select |theArray| |this|)) (typeof (select |theArray| |__orig__this|)))
+(FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength (select |theArray| |this|)) 1))) (EQ (select (select elems (select |theArray| |this|)) |i|) (select (select elems (select |theArray| |this|)) (select |currentSize| |this|)))))
+===========================================================================
 DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER
 (NEQ (hash |x|) null)
 warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:Simplify) needs to be implemented: x.getClass() is printable

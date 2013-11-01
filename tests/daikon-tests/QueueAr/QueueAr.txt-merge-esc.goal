@@ -272,6 +272,36 @@ public class QueueAr
     currentSize++;
   }
 
+  /*@ requires this.currentSize == this.theArray.length; */
+  /*@ requires this.back == this.theArray.length-1; */
+  /*@ requires this.theArray[this.currentSize-1] == this.theArray[this.back]; */
+  /*@ requires this.front == 0; */
+  /*@ requires (\forall int i; (this.currentSize <= i && i <= this.theArray.length-1) ==> (this.theArray[i] != null)); */
+  /*@ requires (\forall int i; (0 <= i && i <= this.front) ==> (this.theArray[i] == this.theArray[this.front])); */
+  /*@ requires (\forall int i; (this.back <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[this.back])); */
+  /*@ modifies this.theArray[*], this.currentSize, this.theArray[this.currentSize], this.theArray[this.currentSize-1], this.theArray[this.currentSize+1..], this.theArray[0..this.currentSize], this.theArray[0..this.currentSize-1], this.theArray[this.front], this.theArray[this.front-1], this.theArray[this.front..], this.theArray[this.front+1..], this.theArray[0..this.front], this.theArray[this.back], this.theArray[this.back-1], this.theArray[this.back..], this.theArray[0..this.back], this.theArray[0..this.back-1]; */
+  /*@ ensures this.currentSize == this.front; */
+  /*@ ensures this.currentSize == \old(this.front); */
+  /*@ ensures this.back == this.theArray.length-1; */
+  /*@ ensures this.back == \old(this.theArray.length)-1; */
+  /*@ ensures \old(this.currentSize) == this.theArray.length; */
+  /*@ ensures this.theArray[this.currentSize] == this.theArray[this.back]; */
+  /*@ ensures this.theArray[this.currentSize] == this.theArray[\old(this.currentSize)-1]; */
+  /*@ ensures this.theArray[this.currentSize] == this.theArray[\old(this.back)]; */
+  /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == null)); */
+  /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (\typeof(this.theArray[i]) == \typeof(null))); */
+  /*@ ensures this.currentSize == 0; */
+  /*@ ensures (\forall int i; (0 <= i && i <= this.currentSize) ==> (this.theArray[i] == null)); */
+  /*@ ensures (\forall int i; (0 <= i && i <= this.currentSize-1) ==> (this.theArray[i] != null)); */
+  /*@ ensures \typeof(this.theArray) == \old(\typeof(this.theArray)); */
+  /*@ ensures (\forall int i; (0 <= i && i <= this.theArray.length-1) ==> (this.theArray[i] == this.theArray[this.currentSize])); */
+  public void dequeueAll()
+  {
+    while( !isEmpty() ) {
+      dequeue();
+    }
+  }
+
   /*@ spec_public */ private Object [ ] theArray;
   /*@ spec_public */ private int        currentSize;
   /*@ spec_public */ private int        front;

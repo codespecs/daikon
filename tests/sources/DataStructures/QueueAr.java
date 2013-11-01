@@ -108,6 +108,13 @@ public class QueueAr
     currentSize++;
   }
 
+  public void dequeueAll()
+  {
+    while( !isEmpty() ) {
+      dequeue();
+    }
+  }
+
   private Object [ ] theArray;
   private int        currentSize;
   private int        front;

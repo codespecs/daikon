@@ -641,6 +641,77 @@ java.lang.String
 
 
 DECLARE
+DataStructures.QueueAr.dequeueAll():::ENTER
+this
+DataStructures.QueueAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+5[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.currentSize
+int # declaringClassPackageName=DataStructures, 
+int
+3
+this.front
+int # declaringClassPackageName=DataStructures, 
+int
+3
+this.back
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+DECLARE
+DataStructures.QueueAr.dequeueAll():::EXIT116
+this
+DataStructures.QueueAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+5[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.currentSize
+int # declaringClassPackageName=DataStructures, 
+int
+3
+this.front
+int # declaringClassPackageName=DataStructures, 
+int
+3
+this.back
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+
+DECLARE
 DataStructures.QueueAr.equals(java.lang.Object):::ENTER
 this
 DataStructures.QueueAr # isParam=true
