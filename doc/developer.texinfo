@@ -35,14 +35,14 @@
 @center @titlefont{Daikon Invariant Detector Developer Manual}
 
 @sp 2
-@center Daikon version 4.7.1
+@center Daikon version 4.7.3
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 4.7.1 release date
-@center October 8, 2013
+@c Print out the Daikon version 4.7.3 release date
+@center November 1, 2013
 @end ifset
 
 @ifclear final
@@ -90,7 +90,7 @@ Copyright @copyright{} 1998-2013
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 4.7.1, released October 8, 2013.
+It describes Daikon version 4.7.3, released November 1, 2013.
 
 @menu
 * Introduction::

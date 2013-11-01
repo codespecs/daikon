@@ -85,6 +85,13 @@ Documentation
 
 ===========================================================================
 
+4.7.3 (November 1, 2013)
+
+An interim release to get an updated version into the field:
+  Fix for stack map problem in Chicory.
+
+===========================================================================
+
 4.7.1 (October 8, 2013)
 
 An interim release to get updated system support into the field:
