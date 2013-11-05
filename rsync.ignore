@@ -1,0 +1,4 @@
+# Need to ignore merucial directory and associated files
+- .hgignore
+- .hgtags
+- .hg/
