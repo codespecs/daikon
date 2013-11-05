@@ -1160,7 +1160,7 @@ public final class INTEQUAL
   }
 #else
   /** Returns the non-instantiating suppressions for this invariant. **/
-  /*@Deterministic*/
+  /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return null;
   }

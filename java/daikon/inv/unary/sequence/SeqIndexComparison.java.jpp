@@ -261,7 +261,7 @@ public class CLASSNAME extends SUPERCLASS {
   }
 #else
   /** returns the ni-suppressions for CLASSNAME **/
-  /*@Deterministic*/
+  /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return null;
   }

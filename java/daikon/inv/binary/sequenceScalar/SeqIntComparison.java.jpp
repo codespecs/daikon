@@ -449,7 +449,7 @@ public final class SEQINTEQUAL
   /**
    * Returns a list of non-instantiating suppressions for this invariant.
    */
-  /*@Deterministic*/
+  /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
     return (suppressions);
   }

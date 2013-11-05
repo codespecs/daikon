@@ -1104,7 +1104,7 @@ public abstract class Invariant
    * May return null instead of an empty set.
    * Should be overridden by subclasses with non-instantiating suppressions.
    */
-  /*@Deterministic*/
+  /*@Pure*/
   public /*@Nullable*/ NISuppressionSet get_ni_suppressions(/*>>> @Prototype Invariant this*/) {
     return (null);
   }
