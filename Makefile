@@ -521,8 +521,10 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	(cd ${TMPDIR}/daikon/front-end/perl; $(RM_TEMP_FILES) )
 
 	# Kvasir C front end
-	@# "rsync -C" means "copy, ignoring the same files CVS would"
-	rsync -rCp ../fjalar/ ${TMPDIR}/daikon/kvasir
+# We use the --filter option twice with rsync to exclude unneeded files.
+# The first attempts to ignore all files indicated by the contents
+# of the .hgignore file.  The second ignores the .hg files.
+	rsync -rp --filter=':- .hgignore' --filter='. rsync.ignore' ../fjalar/ ${TMPDIR}/daikon/kvasir
 	@# Generate configure file
 	(cd ${TMPDIR}/daikon/kvasir/valgrind; ./autogen.sh )
 	@# CVS-only build script
