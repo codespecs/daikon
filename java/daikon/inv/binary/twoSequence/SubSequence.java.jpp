@@ -806,7 +806,7 @@ public class CLASSNAME
   }
 
   /** returns the ni-suppressions for SubSequence **/
-  /*@Deterministic*/
+  /*@Pure*/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     return (suppressions);
   }

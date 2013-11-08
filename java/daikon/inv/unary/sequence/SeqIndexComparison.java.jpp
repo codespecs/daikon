@@ -225,7 +225,7 @@ public class CLASSNAME extends SUPERCLASS {
   private static /*@Nullable*/ NISuppressionSet suppressions = null;
 
   /** returns the ni-suppressions for CLASSNAME **/
-  /*@Deterministic*/
+  /*@Pure*/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       #if defined(LESSEQUAL) || defined(LESSEQUALFLOAT) || defined(GREATEREQUAL) || defined(GREATEREQUALFLOAT)

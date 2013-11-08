@@ -724,7 +724,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /**
      * Returns a list of non-instantiating suppressions for this invariant.
      */
-    /*@Deterministic*/
+    /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);
@@ -966,7 +966,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    /*@Deterministic*/
+    /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);
@@ -1130,7 +1130,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     #endif
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    /*@Deterministic*/
+    /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);
@@ -1216,7 +1216,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    /*@Deterministic*/
+    /*@Pure*/
     public /*@Nullable*/ NISuppressionSet get_ni_suppressions() {
       return (suppressions);
     }
@@ -1302,7 +1302,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     /** Returns a list of non-instantiating suppressions for this invariant. */
-    /*@Deterministic*/
+    /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);
@@ -1396,7 +1396,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     /**
      * Returns a list of non-instantiating suppressions for this invariant.
      */
-    /*@Deterministic*/
+    /*@Pure*/
     public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
       if (swap) return (suppressions_swap);
       else return (suppressions);

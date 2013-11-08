@@ -347,7 +347,7 @@ public class SUBSET
   private static /*@Nullable*/ NISuppressionSet suppressions = null;
 
   /** returns the ni-suppressions for SUBSET **/
-  /*@Deterministic*/
+  /*@Pure*/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       NISuppressee suppressee = new NISuppressee (SUBSET.class, 2);

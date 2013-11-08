@@ -1119,7 +1119,7 @@ public final class INTEQUAL
 
 #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
   /** Returns the non-instantiating suppressions for this invariant. **/
-  /*@Deterministic*/
+  /*@Pure*/
   public /*@NonNull*/ NISuppressionSet get_ni_suppressions() {
     if (suppressions == null) {
       #if defined(GREATEREQUAL_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
