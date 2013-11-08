@@ -591,6 +591,8 @@ public class Instrument implements ClassFileTransformer {
                       int current_offset = next_ih.getPosition();
     
                       if (debug) {
+          out.format ("Modified code: %s%n", mg.getMethod().getCode());
+          dump_code_attributes(mg);
                           out.format ("Current offset: %d Inserted length: %d%n",
                                       current_offset, len);
                       }    

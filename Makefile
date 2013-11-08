@@ -473,8 +473,8 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	(cd plume-lib; hg archive ${TMPDIR}/daikon/plume-lib)
 
 	# Auxiliary programs
-	mkdir ${TMPDIR}/daikon/bin
-	cp -p $(SCRIPT_PATHS) ${TMPDIR}/daikon/bin
+	mkdir ${TMPDIR}/daikon/scripts
+	cp -p $(SCRIPT_PATHS) ${TMPDIR}/daikon/scripts
 
 	# Java example files
 	mkdir ${TMPDIR}/daikon/examples
