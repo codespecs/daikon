@@ -435,9 +435,11 @@ the regular Windows shell (@pxref{Running Daikon under Windows}).
 The Cygwin toolset (available at
 @uref{http://sources.redhat.com/cygwin/}) contains everything you need
 to compile and run Unix programs under Windows.  You can install Cygwin
-by simply running the program found at
-@uref{http://sources.redhat.com/cygwin/setup.exe}.  The default
-installation of Cygwin is sufficient for installing Daikon.
+by running the appropriate setup program; either
+@uref{http://sources.redhat.com/cygwin/setup-x86.exe} or
+@uref{http://sources.redhat.com/cygwin/setup-x86_64.exe},
+as determined by your machine type. 
+The default installation of Cygwin is sufficient for installing Daikon.
 
 
 @exampleindent 1
@@ -1274,11 +1276,10 @@ invariants about the value of each variable.
 @node       Dealing with large examples
 @subsection Dealing with large examples
 
-Since the default memory size used by Java virtual machines varies, we
+Since the default memory size used by a Java virtual machine varies, we
 suggest that Daikon be run with at least 256 megabytes of
 memory (and perhaps much more), specified for many JVMs by the option @option{-Xmx256m}.
-For more
-information about specifying the memory usage for Daikon, see
+For more information about specifying the memory usage for Daikon, see
 @ref{Out of memory}.
 
 Disk usage can be reduced by specifying that the front end should
@@ -1991,8 +1992,8 @@ right before method exit, for method exit invariants;, or anywhere in
 the code, for object invariants.
 
 There are two exceptions.  Method exit invariants that refer to
-prestate, such as @samp{x == old(x) + 1}, are output with the tag
-@samp{\old} surrounding the prestate expression (e.g. @samp{x ==
+pre-state, such as @samp{x == old(x) + 1}, are output with the tag
+@samp{\old} surrounding the pre-state expression (e.g. @samp{x ==
 \old(x) + 1}.  Method exit invariants that refer to the return value of
 the method, such as @samp{return == x + y}, are output with the tag
 @samp{\result} in place of the return value (e.g. @samp{\result == x + y}).
@@ -2293,7 +2294,7 @@ procedure.  If you wish to compute invariants over local variables, you
 can extend one of Daikon's front ends (or request us to do so).
 An alternative that permits computing invariants at arbitrary locations
 is to call a dummy procedure, passing all the variables of interest.
-The dummy procedure's pre- and post-conditions will be identical and will
+The dummy procedure's pre- and postconditions will be identical and will
 represent the invariants at the point of call.
 
 
@@ -2515,7 +2516,7 @@ for details.
 @item DerivedParameterFilter:  suppress parameter-derived postcondition invariants
 
 This filter suppresses invariants at procedure exit points that are
-uninteresting because they refer to prestate variables derived from
+uninteresting because they refer to pre-state variables derived from
 pass-by-value parameters.  For example, suppose that @code{param} is a
 parameter to a
 Java method.  If @code{param} itself is modified, that change won't be
@@ -3258,7 +3259,7 @@ algorithm, one for Java programs and one for binaries compiled from C
 and C++ source code.
 When confusion would otherwise arise, we distinguish them as DynCompJ
 (or DynComp for Java)
-and DynCompB (or Dyncomp for C/C++) respectively.)
+and DynCompB (or DynComp for C/C++) respectively.)
 
 Because abstract type inference must be performed before Daikon runs, it
 is integrated with the front-ends rather than directly as part of
@@ -3363,6 +3364,7 @@ ends,,,./developer,Daikon Developer Manual}.
 * Chicory::
 * DynComp for Java::
 * Kvasir::
+* Celeriac::
 * dfepl::
 * convertcsv.pl::
 * Other front ends::
@@ -3600,7 +3602,7 @@ Link myList;
 
 @itemize @bullet
 @item
-If depth=0, only the identities (hashcodes) of @code{myA} and
+If depth=0, only the identities (hash codes) of @code{myA} and
 @code{myList} would be examined; those variables could be determined to
 be equal or not equal to other variables.
 @item
@@ -4794,16 +4796,16 @@ for Kvasir's developers.
 @itemx --no-var-leader
 @itemx --no-val-leader
 
-These disable optimizations to Dyncomp's abstract type inference 
+These disable optimizations to DynComp's abstract type inference 
 implementation. These are disabled by default. These options are
-intended mainly for Dyncomp developers.
+intended mainly for DynComp developers.
 
 @item --dyncomp-trace
 @itemx --dyncomp-trace-merge
 @itemx -- dyncomp-print-inc
 
 Enables trace messages to be output to stderr. These are disabled by
-default. These options are intended mainly for Dyncomp developers.
+default. These options are intended mainly for DynComp developers.
 
 @item --gcc3
 
@@ -4936,7 +4938,7 @@ interacts with any other variables, so DynComp places it into its own
 comparability set.  With this comparability information, Daikon will
 never attempt to find invariants between @code{yr} and
 @code{d1}/@code{d2}, which both saves time and memory and eliminates
-meaningless invariants (the savings are miniscule in this trivial
+meaningless invariants (the savings are minuscule in this trivial
 example, but they can be rather dramatic in larger examples).
 
 @node       Tracing only part of a program
@@ -5873,7 +5875,7 @@ Kvasir with Dyncomp will produce different results for x86 and
 x86-64 hosts. This is due to a Dyncomp limitation with regards to
 how handling the AMD64 ABI. The AMD64 ABI allows structs that are
 less than 8-bytes to be passed to a function via register. 
-Dyncomp categorizes this as an interaction between all
+DynComp categorizes this as an interaction between all
 fields of the struct and will mark all fields of the struct as
 comparable to each other.
 
@@ -5893,6 +5895,57 @@ This limitation can be worked around by manually coercing a pointer to a
 particular type (@pxref{Pointer type coercion}).
 
 @end itemize
+
+
+@node    Celeriac
+@section .NET (C#) front end Celeriac
+
+@cindex Celeriac (front end for .NET)
+@cindex front end for .NET
+@cindex .NET front end
+@cindex instrumentation, of .NET programs
+@cindex front end for C#
+@cindex C# front end
+@cindex instrumentation, of C# programs
+@cindex front end for F#
+@cindex F# front end
+@cindex instrumentation, of F# programs
+@cindex front end for Visual Basic
+@cindex Visual Basic front end
+@cindex instrumentation, of Visual Basic programs
+@cindex front end for Basic
+@cindex Basic front end
+@cindex instrumentation, of Basic programs
+
+The Daikon front end for .NET languages, named Celeriac, is distributed
+separately; it currently supports the C#, F# and Visual Basic .NET languages.
+Celeriac runs the .NET program, creates data trace (@file{.dtrace}) files,
+and optionally runs Daikon on them.
+Celeriac is named after the celeriac plant, whose root may be
+used as an ingredient in soups or stews.
+
+
+To use Celeriac, run your program as you normally would, but with the
+Celeriac Launcher. 
+For instance, if you usually run
+@example
+MyProgram.exe arg1 arg2 arg3
+@end example
+
+@noindent
+then instead you would run
+@example
+CeleriacLauncher.exe celeriacArg1 celeriacArg2 MyProgram.exe arg1 arg2 arg3
+@end example
+
+@noindent
+This runs your program and creates the @file{MyProgram.dtrace}
+in the current directory. 
+Since Celeriac instruments class files directly as they are loaded into .NET,
+you do not need to perform separate instrumentation and recompilation steps.
+
+For more details about how to download and use Celeriac, please
+see @uref{https://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted}.
 
 
 @node    dfepl
@@ -6329,23 +6382,6 @@ or run-time system.  For example, people have done this without any help
 at all from the Daikon developers.  For more information about building
 a new front end, see @ref{New front ends,,,./developer,Daikon Developer
 Manual}.
-
-@cindex Celeriac front end for .NET
-@cindex front end for C#
-@cindex C# front end
-@cindex instrumentation, of C# programs
-@cindex front end for F#
-@cindex F# front end
-@cindex instrumentation, of F# programs
-@cindex front end for Visual Basic
-@cindex Visual Basic front end
-@cindex instrumentation, of Visual Basic programs
-@cindex front end for Basic
-@cindex Basic front end
-@cindex instrumentation, of Basic programs
-
-A front end for .NET languages (C#, F#, and Visual Basic) is distributed
-separately; see @uref{https://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted}.
 
 @cindex Citadel front end for Eiffel
 @cindex front end for Eiffel
@@ -8638,7 +8674,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  dtype standalone decl asis noversion num conf nohierarchy ppt
 @c  LocalWords:  dbg mem stat postprocessed itemx mux pre val classname regexp
 @c  LocalWords:  ListImplementors dataflow getLogger JML jml hashcode DBC Jtest
-@c  LocalWords:  Parasoft's Quant ESC prestate int seq elt Javadoc JVML param
+@c  LocalWords:  Parasoft's Quant ESC pre-state int seq elt Javadoc JVML param
 @c  LocalWords:  DerivedParameterFilter ObviousFilter args ParentFilter isEmpty
 @c  LocalWords:  OnlyConstantVariablesFilter SimplifyFilter UnjustifiedFilter
 @c  LocalWords:  UnmodifiedVariableEqualityFilter diff OneOf InvMap repr gui td

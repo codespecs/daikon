@@ -1,5 +1,5 @@
 ==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
-==PID== Copyright (C) 2004-2006, Philip Guo, MIT CSAIL Program Analysis Group
+==PID== Copyright (C) 2004-2013, Philip Guo, MIT CSAIL Program Analysis Group
 ==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
 ==PID== Command: ./DisambigTest
 ==PID== 

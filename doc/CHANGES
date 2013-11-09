@@ -31,6 +31,9 @@ General
 
   ???
 
+  The bin directory is now called scripts to be consistent with the google
+  code repository and the documentation.
+
   Daikon and Fjalar problems are now tracked in the appropriate Google
   Code database.  You may search or add new issues at:
   http://code.google.com/p/daikon/issues (or)
@@ -69,7 +72,7 @@ Kvasir
 
     Kvasir's version of Valgrind has been updated to support newer versions
     of glibc. Kvasir should now support all versions of glibc supported by
-    Valgrind 3.3.1(glibc 2.2-28)
+    Valgrind 3.8.1(glibc 2.2-28)
 
   Bug fixes
 
@@ -82,6 +85,15 @@ Documentation
 
   We have removed all references to the Mangel-Wurzel front end from the
   documentation as it is no longer supported.
+
+===========================================================================
+
+4.7.5 (November 7, 2013)
+
+An interim release to get an updated version into the field:
+  Fix for stack map problem in Chicory.
+  The bin directory is now called scripts to be consistent with the google
+  code repository and the documentation.
 
 ===========================================================================
 

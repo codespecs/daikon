@@ -399,6 +399,7 @@ tests/kvasir-tests/virtual-method/virtual-method
 tests/kvasir-tests/wordplay/wordplay
 tests/merge-invariants-tests/drawlet/drawlet.txt
 tests/merge-invariants-tests/drawlet/merge.txt
+tests/sources/sources
 
 # Tools
 tools/hierarchical/clgroup
@@ -413,6 +414,7 @@ syntax: regexp
 ^examples/.*\.class$
 ^examples/.*\.dtrace\.gz$$
 
+^tests/.*\.class$
 ^tests/.*\.comp$
 ^tests/.*\.counts$
 ^tests/.*\.decls$
