@@ -226,6 +226,18 @@ rebuild-everything:
 	-${MAKE} -C $(DAIKONDIR)/kvasir distclean
 	${MAKE} kvasir
 
+rebuild-everything-but-kvasir:
+	${MAKE} -C $(DAIKONDIR)/java very-clean
+	${MAKE} -C $(DAIKONDIR)/java tags compile
+	${MAKE} -C $(DAIKONDIR) daikon.jar
+	${MAKE} -C $(DAIKONDIR)/java dcomp_rt.jar
+	${MAKE} -C $(DAIKONDIR)/java javadoc
+	${MAKE} -C $(DAIKONDIR)/doc clean
+	-${MAKE} -C $(DAIKONDIR)/doc
+	${MAKE} -C $(DAIKONDIR)/doc
+	${MAKE} -C $(DAIKONDIR)/doc pdf-final
+	${MAKE} -C $(DAIKONDIR)/doc/www pubs
+
 ### Testing the code
 
 test:
