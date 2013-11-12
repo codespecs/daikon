@@ -738,7 +738,7 @@ TAGS:	tags
 etags:	tags
 tags: ../plume-lib
 	@echo etags '*.java ...'
-	@etags -l java ${TAG_FILES}
+	@etags --language=java ${TAG_FILES}
 # A TAGS file that does not contain generated files
 tags-sans-generated: clean-generated-files tags
 
@@ -746,7 +746,7 @@ tags-sans-generated: clean-generated-files tags
 tags-nogen: tags-without-generated-files
 tags-without-generated-files: clean-generated-files
 	@echo etags '*.java ...'
-	@etags -l java ${TAG_FILES}
+	@etags --language=java ${TAG_FILES}
 	$(MAKE) compile
 
 ###
