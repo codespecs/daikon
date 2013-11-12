@@ -2,7 +2,7 @@ This README is intended for developers working with source cloned from
 the Google Code repository Daikon.  In this case, the documentation
 probably has not been built yet and the links on the page noted in
 README.txt will not yet work.  In that case, see:
-  http://groups.csail.mit.edu/pag/daikon/dist/doc/daikon.html#Installing
+  http://plse.cs.washington.edu/daikon/download/doc/daikon.html#Installing
 
 In particular, see section 2.2.2, bullet item 2 for instructions on
 setting up your build environment.  You will then be ready to build
