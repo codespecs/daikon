@@ -7912,9 +7912,6 @@ This section describes ways to work around this problem.
 * Run Daikon online::
 * Multiple smaller files::
 * Less information per file::
-* Reducing program points::
-* Reducing variables::
-* Reducing executions::
 @end menu
 
 
@@ -7984,7 +7981,7 @@ rather than have Daikon ignore some of the information.
 
 
 @node       Reducing program points
-@subsection Reducing program points (functions)
+@subsubsection Reducing program points (functions)
 
 Here are ways to compute invariants over a subset of the program
 points (functions) in your program.
@@ -8044,7 +8041,7 @@ allows a percentage of the program points to be processed.
 @end enumerate
 
 @node       Reducing variables
-@subsection Reducing variables
+@subsubsection Reducing variables
 
 Here are ways to compute invariants over a subset of the variables in
 your program.  This changes the resulting invariants, because
@@ -8096,7 +8093,7 @@ the trace file}, and @ref{Chicory options}).
 @end enumerate
 
 @node       Reducing executions
-@subsection Reducing executions
+@subsubsection Reducing executions
 
 Here are ways to run Daikon over fewer executions of each program
 point.  (You cannot combine the resulting invariants in order to
