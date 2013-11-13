@@ -19,7 +19,7 @@
 # 6. Check the directory and remaining files into the hg repository.
 
 # XXX HACK:  must remove "grep -v StackAr"
-SUBDIRS = $(shell find * -type d -maxdepth 0 | grep -v StackAr)
+SUBDIRS = $(shell find * -maxdepth 0 -type d | grep -v StackAr)
 
 default:
 
