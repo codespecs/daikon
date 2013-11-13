@@ -92,6 +92,13 @@ WWW_PARENT ?= /cse/web/research/plse
 WWW_DIR := $(WWW_PARENT)/daikon
 INV_DIR := $(shell pwd)
 
+ifeq (cygwin,$(OSTYPE))
+#JAVA tools need Windows path on Windows
+JAR_DIR := $(shell cygpath -m $(INV_DIR))
+else
+JAR_DIR := INV_DIR
+endif
+
 # Staging area for the distribution
 STAGING_DIR := $(WWW_DIR)/staging-daikon
 
@@ -451,11 +458,12 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 		-exec ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar \;
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
-	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/java-getopt.jar
-	cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/plume.jar
+
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/java-getopt.jar
+	cd ${TMPDIR}/daikon-jar; jar xf $(JAR_DIR)/java/lib/plume.jar
 	(cd java; ${RSYNC_AR} $(DAIKON_RESOURCE_FILES) ${TMPDIR}/daikon-jar)
 	cd ${TMPDIR}/daikon-jar && \
-	  jar cfm $@ $(INV_DIR)/java/daikon/chicory/manifest.txt *
+	  jar cfm $@ $(JAR_DIR)/java/daikon/chicory/manifest.txt *
 	mv ${TMPDIR}/daikon-jar/$@ $@
 	#rm -rf ${TMPDIR}/daikon-jar
 

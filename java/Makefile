@@ -56,7 +56,7 @@ ifeq (cygwin, $(OSTYPE))
   ## Make the classpath explicit on the command line so it can be processed by *-cygwin
   JAVA ?= ${PLUMEBIN}/java-cygwin -ea -classpath "${CLASSPATH}"
   JAVAC ?= ${PLUMEBIN}/javac-cygwin -classpath "${CLASSPATH}"
-  JAVADOC ?= ${PLUMEBIN}/javadoc-cygwin -classpath "${CLASSPATH}"
+  JAVADOC ?= ${PLUMEBIN}/javadoc-cygwin 
   JAR ?= ${JAVA_HOME}/bin/jar
 else
   JAVA ?= java -ea
@@ -1094,7 +1094,7 @@ JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
                 -linkoffline http://java.sun.com/j2se/1.5.0/docs/api/ http://java.sun.com/j2se/1.5.0/docs/api/ \
                 -docletpath ${CLASSPATH} \
-                -classpath $(subst $(DAIKONDIR)/java,${CLASSPATH_JARS}:${CLASSPATH_JARS2},${CLASSPATH})
+                -classpath $(subst $(DAIKONDIR)/java:,${CLASSPATH_JARS}:${CLASSPATH_JARS2}:,${CLASSPATH})
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
 JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -wholename ./daikon/util \) -prune -o \( -name '*.java' \) -print | grep -v '/\.\#' | grep -v typequals | ${SORT_DIRECTORY_ORDER})
 
