@@ -227,7 +227,7 @@ else
 endif
 CP    := $(JAVA_HOME)/jre/lib/rt.jar:$(JAVA_HOME)/lib/tools.jar
 
-CPDAIKON := $(DAIKONDIR)/java:$(DAIKONDIR)/java/lib/java-getopt.jar:$(DAIKONDIR)/java/lib/plume.jar:${CP}
+CPDAIKON := $(DAIKONDIR)/java:$(DAIKONDIR)/java/lib/java-getopt.jar:$(DAIKONDIR)/java/lib/plume.jar
 CPJUNIT := $(DAIKONDIR)/java/lib/plume.jar
 
 export CLASSPATH := .:$(CP):$(SCRATCH_FOR_DAIKON):$(CPDAIKON)
@@ -536,8 +536,7 @@ $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset : $(DCOMP_PREMAIN) \
 	rm -f $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
 	#$(JAVA_DCOMP) "-javaagent:$(DCOMP_PREMAIN_W)=$(DCOMP_ARGS)"
-# I don't understand why "-cp ${CLASSPATH}" is necessary, as CLASSPATH is exported.  -MDE
-	$(RUN_JAVA) -cp ${CLASSPATH} \
+	$(RUN_JAVA)  \
 	  daikon.DynComp $(DCOMP_ARGS) \
 	  $(MAIN_CLASS) $(MAIN_ARGS)
 

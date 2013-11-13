@@ -25,7 +25,7 @@ endif
 # semicolons (;) in the classpath.
 ifeq (cygwin,$(OSTYPE))
   ifneq (;,$(findstring ;,$(CLASSPATH)))
-    CLASSPATH := $(shell cygpath -pw "$(CLASSPATH)")
+    CLASSPATH := $(shell cygpath -pws "$(CLASSPATH)")
   endif
 endif
 
