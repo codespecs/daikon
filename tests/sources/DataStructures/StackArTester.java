@@ -13,9 +13,28 @@ public class StackArTester
     topOrPop();
   }
 
+  public static Object createItem(int phase)
+  {
+    switch (phase) {
+    case 0:
+      return new MyInteger(0);
+    case 1:
+      return new Object();
+    case 2:
+      return new MyInteger(0);
+    case 3:
+      return new Object();
+    case 4:
+      return new Object();
+    default:  
+    // should never get here
+      return new MyInteger(0);
+    }
+  }  
+
   public static void push() {
     try {
-      s.push(rnd.nextBoolean() ? new Object() : new MyInteger(0));
+      s.push(createItem(rnd.nextInt(4)));
     } catch (Overflow e) { }
     observe();
   }

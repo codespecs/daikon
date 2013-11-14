@@ -460,10 +460,13 @@ public class Instrument implements ClassFileTransformer {
   // now we'll do it all within Instrument.java.
 
   // Set by instrument_all_methods
-  // Used by instrument_all_methods, find_stack_map, update_stack_map_offset,
-  // add_entry_instrumentation
-  StackMapTableEntry[] stack_map_table;
-  StackMapTableEntry[] empty_stack_map_table = {};
+  // Used by instrument_all_methods, find_stack_map_equal, find_stack_map_after,
+  // update_stack_map_offset, add_entry_instrumentation
+  private StackMapTableEntry[] stack_map_table;
+  private StackMapTableEntry[] empty_stack_map_table = {};
+  // kind of a hack since no pointers in Java and not 
+  // worth making a container object.
+  private int running_offset;
   
  
  /**
@@ -560,10 +563,15 @@ public class Instrument implements ClassFileTransformer {
         add_entry_instrumentation(il, context, !shouldFilter(fullClassName,
                                       mg.getName(), entry_ppt_name));
 
+        // Need to see if there are any switches after this location.
+        // If so, we may need to update the corresponding stackmap if
+        // the amount of the switch padding changed.
+        modify_stack_maps_for_switches(il.getStart(), il, context);
+
         Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
         Iterator<Integer> exitIter = mi.exit_locations.iterator();
 
-        // Loop through each instruction looking for the return
+        // Loop through each instruction looking for the return(s)
         for (InstructionHandle ih = il.getStart(); ih != null; ) {
           InstructionList new_il = null;
           Instruction inst = ih.getInstruction();
@@ -585,20 +593,20 @@ public class Instrument implements ClassFileTransformer {
                   // target and that means it has a StackMap entry. (Java7)
                   // We need to adjust its offset for our inserted code.
 
-                  if (stack_map_table.length > 0) {
-                      int len = (new_il.getByteCode()).length;
-                      il.setPositions();
-                      int current_offset = next_ih.getPosition();
+                  int len = (new_il.getByteCode()).length;
+                  il.setPositions();
+                  int current_offset = next_ih.getPosition();
     
-                      if (debug) {
-                          out.format ("Current offset: %d Inserted length: %d%n",
-                                      current_offset, len);
-                      }    
-
-                      // find stack map for current location
-                      StackMapTableEntry stack_map = find_stack_map(current_offset);
-                      modify_stack_map_offset(stack_map, len);
+                  if (debug) {
+                      out.format ("Current offset: %d Inserted length: %d%n",
+                                  current_offset, len);
+                      //out.format ("Modified code: %s%n", mg.getMethod().getCode());
+                      //dump_code_attributes(mg);
                   }    
+
+                  // find stack map for current location
+                  StackMapTableEntry stack_map = find_stack_map_equal(current_offset);
+                  modify_stack_map_offset(stack_map, len);
               }    
 
               InstructionHandle new_start = il.insert(ih, new_il);
@@ -613,6 +621,11 @@ public class Instrument implements ClassFileTransformer {
                   }
                 }
               }
+
+              // Need to see if there are any switches after this location.
+              // If so, we may need to update the corresponding stackmap if
+              // the amount of the switch padding changed.
+              modify_stack_maps_for_switches(next_ih, il, context);
           }
           // Go on to the next instruction in the list
           ih = next_ih;
@@ -803,17 +816,17 @@ public class Instrument implements ClassFileTransformer {
    * update the StackMaps, if required.
    */
   private void
-  update_stack_map_offset (int location, MethodContext c) {
+  update_stack_map_offset (int offset, MethodContext c) {
 
-    int running_offset = -1; // no +1 on first entry
+    running_offset = -1; // no +1 on first entry
     for (int i = 0; i < stack_map_table.length; i++) {
         running_offset = stack_map_table[i].getByteCodeOffsetDelta()
                                             + running_offset + 1;
         
-        if (running_offset > location) {
+        if (running_offset > offset) {
             modify_stack_map_offset(stack_map_table[i], 1);
-            // Only update the first StackMap that occurs after the current
-            // location as map offsets are relative to previous map.
+            // Only update the first StackMap that occurs after the given
+            // offset as map offsets are relative to previous map entry.
             return;
         }
     }    
@@ -824,9 +837,9 @@ public class Instrument implements ClassFileTransformer {
    * Find the StackMap entry who's offset matches the input argument
    */
   private StackMapTableEntry
-  find_stack_map (int offset) {
+  find_stack_map_equal (int offset) {
 
-    int running_offset = -1; // no +1 on first entry
+    running_offset = -1; // no +1 on first entry
     for (int i = 0; i < stack_map_table.length; i++) {
       running_offset = stack_map_table[i].getByteCodeOffsetDelta()
                                           + running_offset + 1;
@@ -842,7 +855,31 @@ public class Instrument implements ClassFileTransformer {
     }    
 
     // no offset matched
-    throw new RuntimeException("Invalid StackMap offset");
+    throw new RuntimeException("Invalid StackMap offset 1");
+  }    
+
+
+  /**
+   * Find the StackMap entry who's offset is the first one after
+   * the input argument.  Only called when there must be one.
+   */
+  private StackMapTableEntry
+  find_stack_map_after (int offset) {
+
+    running_offset = -1; // no +1 on first entry
+    for (int i = 0; i < stack_map_table.length; i++) {
+      running_offset = stack_map_table[i].getByteCodeOffsetDelta()
+                                          + running_offset + 1;
+
+      if (running_offset > offset) {
+          // also note that running_offset has been set
+          return stack_map_table[i];
+      }
+      // try next map entry
+    }    
+
+    // no such entry found
+    throw new RuntimeException("Invalid StackMap offset 2");
   }    
 
 
@@ -882,6 +919,40 @@ public class Instrument implements ClassFileTransformer {
       }
 
       stack_map.setByteCodeOffsetDelta(new_delta);
+  }
+
+
+  /**
+   * Check to see if there have been any changes in a switch statement's
+   * padding bytes.  If so, we need to update the corresponding StackMap.
+   */
+  private void
+  modify_stack_maps_for_switches (InstructionHandle ih, InstructionList il, MethodContext c) {
+      Instruction inst;
+      short opcode;
+
+      // Make sure all instruction offsets are uptodate.
+      il.setPositions();
+
+      // Loop through each instruction looking for a switch
+      while ( ih != null ) {
+          inst = ih.getInstruction();
+          opcode = inst.getOpcode();
+
+          if( opcode == Constants.TABLESWITCH || opcode == Constants.LOOKUPSWITCH ) {
+              int current_offset = ih.getPosition();
+              StackMapTableEntry stack_map = find_stack_map_after(current_offset);
+              int delta = (current_offset + inst.getLength()) - running_offset;
+              if (delta != 0) {
+                  modify_stack_map_offset(stack_map, delta);
+              }
+              // Since StackMap offsets are relative to the previous one
+              // we only have to do the first one after a switch.
+          }
+
+          // Go on to the next instruction in the list
+          ih = ih.getNext();
+      }
   }
 
 
