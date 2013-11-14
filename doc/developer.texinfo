@@ -221,10 +221,11 @@ For more information about compiling Daikon, see the comments in the Makefiles.
 
 @cindex Windows, compiling
 To compile Daikon on Windows, the best approach is to install the Cygwin
-toolset (available at @uref{http://sources.redhat.com/cygwin/}), which
+toolset (available at @uref{http://cygwin.com/}), which
 contains everything you need to compile and run Unix programs under
-Windows.  You can install Cygwin by simply running the program found
-at @uref{http://sources.redhat.com/cygwin/setup.exe}.
+Windows.  You can install Cygwin by simply running one of the setup
+programs (based on your machine type) found 
+at @uref{http://cygwin.com/}.
 
 When setting up environment pathname variables under Windows/Cygwin
 (such as @command{JAVA_HOME} or @command{CLASSPATH}) make sure that the

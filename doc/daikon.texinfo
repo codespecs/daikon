@@ -433,11 +433,11 @@ After you have installed Daikon, you can run it using either Cygwin or
 the regular Windows shell (@pxref{Running Daikon under Windows}).
 
 The Cygwin toolset (available at
-@uref{http://sources.redhat.com/cygwin/}) contains everything you need
+@uref{http://cygwin.com/}) contains everything you need
 to compile and run Unix programs under Windows.  You can install Cygwin
 by running the appropriate setup program; either
-@uref{http://sources.redhat.com/cygwin/setup-x86.exe} or
-@uref{http://sources.redhat.com/cygwin/setup-x86_64.exe},
+@uref{http://cygwin.com/setup-x86.exe} or
+@uref{http://cygwin.com/setup-x86_64.exe},
 as determined by your machine type. 
 The default installation of Cygwin is sufficient for installing Daikon.
 
@@ -615,11 +615,12 @@ specified in Windows format (Windows paths and semicolon separators).
 
 @cindex Cygwin toolset
 
-The second option for Windows is to run Daikon using the Cygwin
-toolset (available at @uref{http://sources.redhat.com/cygwin/}), which
+The second option for Windows is to run Daikon using the Cygwin toolset
+(available at @uref{http://cygwin.com/}), which
 contains everything you need to compile and run Unix programs under
-Windows.  You can install Cygwin by simply running the program found
-at @uref{http://sources.redhat.com/cygwin/setup.exe}.
+Windows.  You can install Cygwin by simply running one of the setup
+programs (based on your machine type) found 
+at @uref{http://cygwin.com/}.
 
 There is an incompatibility between Cygwin and programs compiled for
 Windows (such as Java).  (The incompatibility does not exist if the
@@ -789,6 +790,14 @@ a binary representation of the invariants to @file{StackArTester.inv.gz}.
 @example
 java daikon.Chicory --daikon DataStructures.StackArTester
 @end example
+
+@noindent
+If you have not set the CLASSPATH as yet, you may add it to the command
+line for now - but don't forget to set it later.
+
+@smallexample
+java -cp "../../../daikon.jar:." daikon.Chicory --daikon DataStructures.StackArTester
+@end smallexample
 
 @noindent
 Alternately, replacing the @option{--daikon} argument by
