@@ -862,7 +862,7 @@ check-interning-all: ${ALL_GENERATED_FILES} compile
 
 # These targets run the Interning checker on just one file.
 # Typical command: 
-# INTERNING_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-nullness-onefile
+# INTERNING_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-interning-onefile
 INTERNING_ONEFILE ?= daikon/PptTopLevel.java
 check-interning-onefile: ${ALL_GENERATED_FILES} compile
 	${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_INTERNING_ARGS} ${CHECKERS_ARGS} ${INTERNING_ONEFILE}
