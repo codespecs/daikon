@@ -597,6 +597,6 @@ A challenge is that this transformation must be done in bytecode, and
 with as little code duplication as possible..
 
 Also, note that the existing DynComp tool may already do something like
-thes catchingand rethrowing of exceptions.  See the various comments about
+this catching and rethrowing of exceptions.  See the various comments about
 cleaning up the tag stack on an exception exit from a method, such as in
 dcomp/DCRuntime.java .
