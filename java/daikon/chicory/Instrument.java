@@ -563,10 +563,15 @@ public class Instrument implements ClassFileTransformer {
         add_entry_instrumentation(il, context, !shouldFilter(fullClassName,
                                       mg.getName(), entry_ppt_name));
 
-        // Need to see if there are any switches after this location.
-        // If so, we may need to update the corresponding stackmap if
-        // the amount of the switch padding changed.
-        modify_stack_maps_for_switches(il.getStart(), il, context);
+        // If there was no orgiinal StackMapTable (smta == null)
+        // then there are no switches and/or class was compiled for
+        // Java 5.  In either case, no need to process switches.
+        if (smta != null ) {
+           // Need to see if there are any switches after this location.
+           // If so, we may need to update the corresponding stackmap if
+           // the amount of the switch padding changed.
+           modify_stack_maps_for_switches(il.getStart(), il, context);
+        }
 
         Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
         Iterator<Integer> exitIter = mi.exit_locations.iterator();
@@ -593,20 +598,24 @@ public class Instrument implements ClassFileTransformer {
                   // target and that means it has a StackMap entry. (Java7)
                   // We need to adjust its offset for our inserted code.
 
-                  int len = (new_il.getByteCode()).length;
-                  il.setPositions();
-                  int current_offset = next_ih.getPosition();
+                  // If there was no orgiinal StackMapTable (smta == null)
+                  // then class was compiled for Java 5.
+                  if (smta != null ) {
+                      int len = (new_il.getByteCode()).length;
+                      il.setPositions();
+                      int current_offset = next_ih.getPosition();
     
-                  if (debug) {
-                      out.format ("Current offset: %d Inserted length: %d%n",
-                                  current_offset, len);
-                      //out.format ("Modified code: %s%n", mg.getMethod().getCode());
-                      //dump_code_attributes(mg);
-                  }    
+                      if (debug) {
+                          out.format ("Current offset: %d Inserted length: %d%n",
+                                      current_offset, len);
+                          //out.format ("Modified code: %s%n", mg.getMethod().getCode());
+                          //dump_code_attributes(mg);
+                      }    
 
-                  // find stack map for current location
-                  StackMapTableEntry stack_map = find_stack_map_equal(current_offset);
-                  modify_stack_map_offset(stack_map, len);
+                      // find stack map for current location
+                      StackMapTableEntry stack_map = find_stack_map_equal(current_offset);
+                      modify_stack_map_offset(stack_map, len);
+                  }    
               }    
 
               InstructionHandle new_start = il.insert(ih, new_il);
@@ -622,10 +631,15 @@ public class Instrument implements ClassFileTransformer {
                 }
               }
 
-              // Need to see if there are any switches after this location.
-              // If so, we may need to update the corresponding stackmap if
-              // the amount of the switch padding changed.
-              modify_stack_maps_for_switches(next_ih, il, context);
+              // If there was no orgiinal StackMapTable (smta == null)
+              // then there are no switches and/or class was compiled for
+              // Java 5.  In either case, no need to process switches.
+              if (smta != null ) {
+                 // Need to see if there are any switches after this location.
+                 // If so, we may need to update the corresponding stackmap if
+                 // the amount of the switch padding changed.
+                 modify_stack_maps_for_switches(next_ih, il, context);
+              }
           }
           // Go on to the next instruction in the list
           ih = next_ih;
