@@ -878,10 +878,24 @@ check-nullness-all: check-nullness-all-withstubs
 
 check-nullness-all-nostubs: check-nullness-raw-all-nostubs check-nullness-fbc-all-nostubs
 
+check-nullness-raw: check-nullness-raw-all-withstubs
+
 check-nullness-raw-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
 	$(MAKE) compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}
+
+# These targets run the Nullness checker on just one file.
+# Typical command: 
+# NULLNESS_RAW_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-nullness-raw-onefile
+# NULLNESS_RAW_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
+# NULLNESS_RAW_ONEFILE ?= daikon/FileIO.java
+NULLNESS_RAW_ONEFILE ?= daikon/inv/Invariant.java
+check-nullness-raw-onefile: ${ALL_GENERATED_FILES} compile-typequals compile
+	${MAKE} check-nullness-raw-onefile-norecompile
+check-nullness-raw-onefile-norecompile:
+	${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_RAW_ONEFILE}
+
 
 check-nullness-fbc-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
 	$(MAKE) compile
