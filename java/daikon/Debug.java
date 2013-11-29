@@ -659,8 +659,7 @@ public class Debug {
         PptSlice slice = j.next();
         for (int k = 0; k < slice.invs.size(); k++ ) {
           Invariant inv = slice.invs.get(k);
-          if (inv.log (msg + ": found #" + k + "= " + inv.format() +
-                       " in slice " + slice))
+          if (inv.log ("%s: found #%s=%s in slice %s", msg, k, inv.format(), slice))
             found = true;
         }
       }

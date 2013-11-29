@@ -199,6 +199,7 @@ public final class FileIO {
       super (msg, cause);
     }
 
+    @SuppressWarnings("formatter") // acts as format method wrapper
     public static DeclError detail (ParseState state, String format,
                                     /*@Nullable*/ Object... args) {
        String msg = String.format (format, args)
@@ -215,6 +216,7 @@ public final class FileIO {
       return new DeclError (msg, cause);
     }
 
+    @SuppressWarnings("formatter")  // acts as format method wrapper
     public static DeclError detail (ParseState state, Throwable cause, String format,
                                     /*@Nullable*/ Object... args) {
       String msg = String.format (format, args)

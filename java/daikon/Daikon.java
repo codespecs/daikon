@@ -2000,8 +2000,8 @@ public final class Daikon {
         continue;
       ppt_w_sample_cnt++;
       System.out.printf ("%s%n", ppt.name());
-      System.out.printf ("  samples    = %n" + ppt.num_samples());
-      System.out.printf ("  invariants = %n" + ppt.invariant_cnt());
+      System.out.printf ("  samples    = %n%d", ppt.num_samples());
+      System.out.printf ("  invariants = %n%d", ppt.invariant_cnt());
       Map<ProglangType,Count> type_map = new LinkedHashMap<ProglangType,Count>();
       int leader_cnt = 0;
       for (VarInfo v : ppt.var_infos) {

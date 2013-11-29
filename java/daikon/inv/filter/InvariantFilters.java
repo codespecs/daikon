@@ -104,8 +104,8 @@ public class InvariantFilters {
         for (VariableFilter filter : variableFilters) {
           if (filter.shouldDiscard( invariant )) {
             if (Invariant.logOn())
-              invariant.log ("Failed ALL_VARIABLES filter"
-                             + filter.getClass().getName());
+              invariant.log ("Failed ALL_VARIABLES filter %s", 
+                             filter.getClass().getName());
               return filter;
           }
         }
@@ -151,7 +151,7 @@ public class InvariantFilters {
     }
 
     //  Property filters.
-    invariant.log ("Processing " + propertyFilters.size() + " Prop filters");
+    invariant.log ("Processing %s Prop filters", propertyFilters.size());
     return (shouldKeepPropFilters(invariant));
 
   }

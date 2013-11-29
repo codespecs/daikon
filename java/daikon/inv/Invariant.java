@@ -323,8 +323,7 @@ public abstract class Invariant
     boolean just = (!falsified
                     && (getConfidence() >= dkconfig_confidence_limit));
     if (logOn())
-      log ("justified = " + just + ", confidence = " + getConfidence()
-           + ", samples = " + ppt.num_samples());
+      log ("justified = %s, confidence = %s, samples = %s", just, getConfidence(), ppt.num_samples());
     return (just);
   }
 
@@ -422,7 +421,7 @@ public abstract class Invariant
   public void falsify(/*>>> @NonPrototype Invariant this*/) {
     falsified = true;
     if (logOn())
-      log ("Destroyed " + format());
+      log ("Destroyed %s", format());
   }
 
   /** Clear the falsified flag. */
@@ -480,13 +479,10 @@ public abstract class Invariant
     result = result.resurrect_done(permutation);
 
     if (logOn()) {
-      result.log ("Created " + result.getClass().getName() + ":"
-                  + result.format() + " via transfer from "
-                  + getClass().getName() + ":" + format()
-                  + " using permutation "
-                  + ArraysMDE.toString (permutation)
-                  + " old_ppt = " + ppt
-                  + " new_ppt = " + new_ppt);
+      result.log ("Created %s:%s via transfer from %s:%s using permutation %s old_ppt = %s new_ppt = %s", 
+                  result.getClass().getName(), result.format(),
+                  getClass().getName(), format(), ArraysMDE.toString (permutation),
+                  ppt, new_ppt);
       // result.log (UtilMDE.backTrace());
     }
     //if (debug.isLoggable(Level.FINE))
@@ -507,10 +503,9 @@ public abstract class Invariant
     result = result.resurrect_done (permutation);
 
     if (logOn())
-      result.log ("Created " + result.format() + " via clone_and_permute from "
-                  + format() + " using permutation "
-                  + ArraysMDE.toString (permutation)
-                  + " old_ppt = " + VarInfo.arrayToString (ppt.var_infos)
+      result.log ("Created %s via clone_and_permute from %s using permutation %s old_ppt = %s",
+                  result.format(), format(), ArraysMDE.toString (permutation), 
+                  VarInfo.arrayToString (ppt.var_infos)
                   // + " new_ppt = " + VarInfo.arrayToString (new_ppt.var_infos)
                   );
 
@@ -550,11 +545,10 @@ public abstract class Invariant
     result = result.resurrect_done(permutation);
 
     if (logOn())
-      result.log ("Created " + result.format() + " via resurrect from "
-                  + format() + " using permutation "
-                  + ArraysMDE.toString (permutation)
-                  + " old_ppt = " + VarInfo.arrayToString (ppt.var_infos)
-                  + " new_ppt = " + VarInfo.arrayToString (new_ppt.var_infos));
+      result.log ("Created %s via resurrect from %s using permutation %s old_ppt = %s new_ppt = %s", 
+                  result.format(), format(), ArraysMDE.toString (permutation),
+                  VarInfo.arrayToString (ppt.var_infos), 
+                  VarInfo.arrayToString (new_ppt.var_infos));
 
     return result;
   }
@@ -608,8 +602,8 @@ public abstract class Invariant
     Invariant first = invs.get(0);
     Invariant result = first.clone();
     result.ppt = parent_ppt;
-    result.log ("Merged '" + result.format() + "' from " + invs.size()
-                + " child invariants " /* + first.ppt.name() */);
+    result.log ("Merged '%s' from %s child invariants", 
+                result.format(), invs.size()/*, first.ppt.name() */);
 
     // Make sure that each invariant was really of the same type
     boolean assert_enabled = false;
@@ -1121,9 +1115,9 @@ public abstract class Invariant
       return (false);
     boolean suppressed = ss.suppressed (ppt);
     if (suppressed && Debug.logOn() && (Daikon.current_inv != null))
-      Daikon.current_inv.log ("inv " + format() + " suppressed: " + ss);
+      Daikon.current_inv.log ("inv %s suppressed: %s", format(), ss);
     if (Debug.logDetail())
-      log ("suppressed = " + suppressed + " suppression set = " + ss);
+      log ("suppressed = %s suppression set = %s", suppressed, ss);
 
     return (suppressed);
   }
@@ -1303,7 +1297,7 @@ public abstract class Invariant
     assert !Daikon.isInferencing;
     assert vis.length <= 3 : "Unexpected more-than-ternary invariant";
     if (! ArraysMDE.noDuplicates(vis)) {
-      log ("Two or more variables are equal " + format());
+      log ("Two or more variables are equal %s", format());
       return new DiscardInfo(this, DiscardCode.obvious,
                              "Two or more variables are equal");
     }
@@ -1948,6 +1942,8 @@ public abstract class Invariant
   *
   * @return whether or not it logged anything
   */
+  /*@FormatMethod*/
+  @SuppressWarnings("formatter") // call to format method is correct because of @FormatMethod annotation
   public boolean log (/*>>> @UnknownInitialization(Invariant.class) @Raw(Invariant.class) @NonPrototype Invariant this,*/ String format, /*@Nullable*/ Object... args) {
     if (ppt != null) {
       String msg = format;

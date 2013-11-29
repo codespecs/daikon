@@ -381,16 +381,16 @@ public class PptSplitter implements Serializable {
       debug.fine ("Found " + exclusive_invs_vec.size()
                   + " exclusive conditions ");
       for (Invariant[] invs : exclusive_invs_vec) {
-        invs[0].log ("exclusive condition with " + invs[1].format());
-        invs[1].log ("exclusive condition with " + invs[0].format());
+        invs[0].log ("exclusive condition with %s", invs[1].format());
+        invs[1].log ("exclusive condition with %s", invs[0].format());
         debug.fine ("-- " + invs[0] + " -- " + invs[1]);
       }
       debug.fine ("Found " + different_invs_vec.size() + " different invariants ");
       for (Invariant[] invs : different_invs_vec) {
         if (invs[0] != null)
-          invs[0].log (invs[0] + " differs from "  + invs[1]);
+          invs[0].log ("%s differs from %s", invs[0], invs[1]);
         if (invs[1] != null)
-          invs[1].log (invs[0] + " differs from "  + invs[1]);
+          invs[1].log ("%s differs from %s", invs[0], invs[1]);
         debug.fine ("-- " + invs[0] + " -- " + invs[1]);
       }
     }

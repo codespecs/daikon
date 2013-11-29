@@ -222,14 +222,14 @@ public final class CLASSNAME
         Point p = def_points[i];
         if (p == null)
           continue;
-        wrapper.log ("orig def_points["+i+"] = " + p);
+        wrapper.log ("orig def_points[%s] = %s", i, p);
         temp[permutation[0]] = p.x;
         temp[permutation[1]] = p.y;
         temp[permutation[2]] = p.z;
         p.x = temp[0];
         p.y = temp[1];
         p.z = temp[2];
-        wrapper.log ("permuted def_points["+i+"] = " + p);
+        wrapper.log ("permuted def_points[%s] = %s", i, p);
       }
     }
     // Assert that caches sync with a,b,c?
@@ -271,8 +271,8 @@ public final class CLASSNAME
                                 PRIMITIVE con_val) {
 
     if (Debug.logOn())
-      wrapper.log ("setup from lb " + lb + " con var " + con_var +
-                   " con_val " + con_val);
+      wrapper.log ("setup from lb %s con var %s con_val %s", 
+                   lb, con_var, con_val);
 
     int con_index = con_var.varinfo_index;
     int lb_v1_index = lb.ppt.var_infos[0].varinfo_index;
@@ -356,8 +356,8 @@ public final class CLASSNAME
     }
 
     if (Debug.logOn())
-      wrapper.log ("setup from OneOf " +  oo + " v1=" + con1 +
-                   " v2=" + con2 + " status = " + sts);
+      wrapper.log ("setup from OneOf %s v1=%s v2=%s status = %s", 
+                   oo, con1, con2, sts);
 
     return (sts);
   }
@@ -386,7 +386,7 @@ public final class CLASSNAME
   public InvariantStatus add_modified(PRIMITIVE x, PRIMITIVE y, PRIMITIVE z, int count) {
 
     if (Debug.logDetail())
-      wrapper.log ("Adding point, x=" + x + " y=" + y + " z=" + z + " to invariant");
+      wrapper.log ("Adding point, x=%s y=%s z=%s to invariant", x, y, z);
 
     if (values_seen < MINTRIPLES) {
       // We delay computation of a and b until we have seen several triples
@@ -400,9 +400,9 @@ public final class CLASSNAME
           return InvariantStatus.NO_CHANGE;
 
       def_points[values_seen] = new Point (x, y, z);
-      wrapper.log("Add: (" + x + ", " + y + ", " + z + ")");
+      wrapper.log("Add: (%s, %s, %s)", x, y, z);
       values_seen++;
-      wrapper.log("Values seen: " + values_seen);
+      wrapper.log("Values seen: %s", values_seen);
 
       // check to see if we've seen enough values to create the equation
       if (values_seen == MINTRIPLES) {
@@ -522,8 +522,8 @@ public final class CLASSNAME
     c = coef[2];
     d = coef[3];
 
-    wrapper.log("Calculated tri linear coeff: ("+ a +
-                "), b (" + b + "), c (" + c + "), and d (" + d + ")");
+    wrapper.log("Calculated tri linear coeff: (%s), b (%s), c(%s), and d(%s)", 
+                 a, b, c, d);
     // If one of these coefficients is zero (except for d), this
     // should be a LinearBinary, not a LinearTernary, term.  (It
     // might not show up as LinearBinary because there might not
@@ -549,12 +549,11 @@ public final class CLASSNAME
         //  wrapper.log( "to: " + (a*def_point[i].x +
         //  b*def_point[i].y + d));
 
-        wrapper.log ("Trying at index " + i + ": "
-                     + "0 != "
-                     + a + "*" + def_point[i].x
-                     + "+" + b + "*" + def_point[i].y + "+" + c
-                     + "*" + def_point[i].z
-                     + "+" + d);
+        wrapper.log ("Trying at index %s: 0 != %s*%s+%s*%s+%s*%s+%s",
+                     i, a, def_point[i].x, 
+                        b, def_point[i].y, 
+                        c, def_point[i].z,
+                        d);
 
         if (!EQUAL (-d,
                     a*def_point[i].x + b*def_point[i].y + c * def_point[i].z)) {
@@ -571,8 +570,7 @@ public final class CLASSNAME
         }
       }
       if (Debug.logOn())
-        wrapper.log ("equation = " + a + "*x " + b + "*y" + c + "*z = "
-                     + (-d));
+        wrapper.log ("equation = %s*x %s*y %s*z = %s", a, b, c, -d);
 
       // Discard the points not used to define the coefficients.
       for (int ii = 3; ii < MINTRIPLES; ii++)
@@ -700,7 +698,7 @@ public final class CLASSNAME
     // }
 
     if (Debug.logDetail())
-      wrapper.log ("maxsep_doubles = " + p1 + " " + p2);
+      wrapper.log ("maxsep_doubles = %s %s", p1, p2);
     if (p1 == null) {
       return null;
     }
@@ -839,9 +837,8 @@ public final class CLASSNAME
         // Requires that the first 3 elements of def_points must be non-null.
         coef = calc_tri_linear (def_points);
         if (Debug.logDetail())
-          wrapper.log ("Calc new plane with points " + def_points[0] + " " +
-                       def_points[1] + " " + def_points[2] + " " +
-                       def_points[3]);
+          wrapper.log ("Calc new plane with points %s %s %s %s",
+                       def_points[0], def_points[1], def_points[2], def_points[3]);
       } catch (Exception e) {
         return (false);
       }
@@ -864,8 +861,8 @@ public final class CLASSNAME
       if (Invariant.logOn() || debug.isLoggable(Level.FINE))
         wrapper.log (debug, wrapper.ppt.name() + ": Trying new a (" + a +
                      "), b (" + b + "), c (" + c + "), and d (" + d + ")");
-      wrapper.log ("min max: Trying new a (" + a +
-                   "), b (" + b + "), c (" + c + "), and d (" + d + ")");
+      wrapper.log ("min max: Trying new a (%s), b (%s), c (%s), and d (%s)",
+                   a, b, c, d);
       // if the new coefficients are 'equal' to their min and max and
       // this point fits, then this new equation is good enough both
       // for existing points and the new point.
@@ -978,7 +975,7 @@ public final class CLASSNAME
    pa[2] = p3;
 
    if (Debug.logDetail())
-     wrapper.log ("maxsep_triples = " + pa[0] + " " + pa[1] + " " + pa[2]);
+     wrapper.log ("maxsep_triples = %s %s %s", pa[0], pa[1], pa[2]);
    return (max_separation);
 
  }
@@ -1073,9 +1070,9 @@ public final class CLASSNAME
     double standard_Stand_const = Stand_const/myGCD;
 
     if (wrapper != null) {
-      wrapper.log("Preliminary: " + i_var + " " + j_var + " GCD: " + MathMDE.gcd(i_var, j_var));
-      wrapper.log("Preliminary: " + k_var + " " + Stand_const + " GCD: " + MathMDE.gcd(k_var, Stand_const));
-      wrapper.log("GCD: " + myGCD);
+      wrapper.log("Preliminary: %s %s GCD: %s", i_var, j_var, MathMDE.gcd(i_var, j_var));
+      wrapper.log("Preliminary: %s %s GCD: %s", k_var, Stand_const, MathMDE.gcd(k_var, Stand_const));
+      wrapper.log("GCD: %s", myGCD);
     }
 
     // Ensure postive x coefficient by negating if "x" term is negative.
@@ -1348,7 +1345,7 @@ public final class CLASSNAME
         if (cp == null)
           continue;
         if (Debug.logDetail())
-          wrapper.log ("Adding point " + cp + " from " + c.wrapper.ppt);
+          wrapper.log ("Adding point %s from %s", cp, c.wrapper.ppt);
         InvariantStatus stat = first.add_modified (cp.x, cp.y, cp.z, 1);
         if (stat == InvariantStatus.FALSIFIED)
           return (null);

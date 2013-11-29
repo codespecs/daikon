@@ -237,7 +237,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
             if ((ss == null) || !ss.suppressed (slice)) {
               Invariant inv = fb.instantiate_dyn (slice);
               if (Debug.logOn() && (inv != null))
-                inv.log ("instantiated non-suppressed invariant "+inv.format());
+                inv.log ("instantiated non-suppressed invariant %s", inv.format());
               result.add (inv);
             }
           } else /* NIS not enabled */ {
@@ -469,11 +469,11 @@ public abstract class CLASSNAME extends SUPERCLASS {
       VarInfo v1 = ppt.var_infos[0];
       VarInfo v2 = ppt.var_infos[1];
       VarInfo v3 = ppt.var_infos[2];
-      log("computeConfidence(" + format()
-         + ": num_values = " + ppt.num_values()
-         + ", num_values(" + v1.name() + ")=" + ppt.parent.num_values(v1)
-         + ", num_values(" + v2.name() + ")=" + ppt.parent.num_values(v2)
-         + ", num_values(" + v3.name() + ")=" + ppt.parent.num_values(v3));
+      log("computeConfidence(%s: num_values = %s, num_values(%s)=%s, num_values(%s)=%s, num_values(%s)=%s", 
+          format(), ppt.num_values(), 
+          v1.name(), ppt.parent.num_values(v1),
+          v2.name(), ppt.parent.num_values(v2),
+          v3.name(), ppt.parent.num_values(v3));
     }
     return Invariant.conf_is_ge(ppt.num_values(), 5);
   }

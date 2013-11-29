@@ -423,8 +423,8 @@ public final class CLASSNAME
     a = AandBandC[0];
     b = AandBandC[1];
     c = AandBandC[2];
-    wrapper.log (String.format ("x0=%s, x1=%s, y0=%s, y1=%s", x0, x1, y0, y1));
-    wrapper.log (String.format ("a=%s, b=%s, c=%s", a, b, c));
+    wrapper.log ("x0=%s, x1=%s, y0=%s, y1=%s", x0, x1, y0, y1);
+    wrapper.log ("a=%s, b=%s, c=%s", a, b, c);
     return InvariantStatus.NO_CHANGE;
   }
 

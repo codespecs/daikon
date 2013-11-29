@@ -206,7 +206,7 @@ public class CLASSNAME
         VarInfo v2 = inv.ppt.var_infos[0];
         if (SUBSEQUENCE.isObviousSubSequenceDynamically(this, v1, v2)) {
           // System.out.println("obvious: " + format() + "   because of " + inv.format());
-          log ("Obvious- Obvious sub sequence with " + inv.format());
+          log ("Obvious- Obvious sub sequence with %s", inv.format());
           return new DiscardInfo(this, DiscardCode.obvious, "Invariant holds over a supersequence");
         }
       }

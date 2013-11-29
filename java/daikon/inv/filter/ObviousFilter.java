@@ -21,7 +21,7 @@ public class ObviousFilter extends InvariantFilter {
     // if ((invariant.ppt.arity() == 1) || IsEqualityComparison.it.accept(invariant)) {
     DiscardInfo discard = invariant.isObvious();
     if (discard != null)
-      invariant.log ("discard because " + discard.discardString());
+      invariant.log ("discard because %s", discard.discardString());
     return (discard != null);
       /* }
     else {

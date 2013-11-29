@@ -312,7 +312,7 @@ public class NONZERO
             dlog.log ("isObvDyn- true, arg is member of nonzero sequence");
           String discardString = var.name() + " is a member of the non-zero sequence " + v2.name();
           if (logOn())
-            log (format() + " obviously implied from " + inv.format());
+            log ("%s obviously implied from %s", format(), inv.format());
           return new DiscardInfo(this, DiscardCode.obvious, discardString);
         }
       }

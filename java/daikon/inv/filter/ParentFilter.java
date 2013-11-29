@@ -81,14 +81,14 @@ public class ParentFilter extends InvariantFilter {
       // Sort the parent variables in index order
       Arrays.sort (pvis, VarInfo.IndexComparator.getInstance());
       if (Debug.logDetail())
-        inv.log ("Found parent vars: " + VarInfo.arrayToString (pvis));
+        inv.log ("Found parent vars: %s", VarInfo.arrayToString (pvis));
 
       // Lookup the slice, skip if not found
       PptSlice pslice = rel.parent.findSlice (pvis);
       if (pslice == null)
         continue;
       if (Debug.logDetail())
-        inv.log ("Found parent slice: " + pslice.name());
+        inv.log ("Found parent slice: %s", pslice.name());
 
       // System.out.printf ("  found parent slice (%d invs): %s%n", pslice.invs.size(), pslice.name());
 
@@ -104,7 +104,7 @@ public class ParentFilter extends InvariantFilter {
           continue;
         if ((pinv.getClass() == daikon.inv.unary.scalar.NonZero.class)
             && pinv.ppt.var_infos[0].isThis()) {
-          inv.log ("Not filtered by " + pinv.format() + " 'this != null'");
+          inv.log ("Not filtered by %s 'this != null'", pinv.format());
           continue;
         }
         if (! pinv.isSameFormula (inv))

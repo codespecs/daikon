@@ -331,11 +331,11 @@ public class CLASSNAME extends SUPERCLASS {
   public InvariantStatus add_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
 
     if (logDetail())
-      log ("Entered add_modified: ppt.num_values()==" +
-           ppt.num_values() + ", sample== " + ArraysMDE.toString(a));
+      log ("Entered add_modified: ppt.num_values()==%s, sample==%s",
+           ppt.num_values(), ArraysMDE.toString(a));
     InvariantStatus stat = check_modified (a, count);
     if (logDetail())
-      log ("Exiting add_modified status = " + stat);
+      log ("Exiting add_modified status = %s", stat);
 
     return stat;
   }

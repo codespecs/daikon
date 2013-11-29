@@ -1309,8 +1309,8 @@ public final class ONEOFSCALAR
         for (int i = 0; i < num_elts; i++) {
           eltString.append(TOSTRING (elts[i]) + " ");
         }
-        log ("destroyed on sample " + TOSTRING (v) + " previous vals = { "
-             + eltString + "} num_elts = " + num_elts);
+        log ("destroyed on sample %s previous vals = {%s} num_elts = %s", 
+             TOSTRING (v), eltString, num_elts);
       }
       return InvariantStatus.FALSIFIED;
     }
@@ -1764,14 +1764,13 @@ public final class ONEOFSCALAR
         #endif
         InvariantStatus status = result.add_mod_elem(val, 1);
         if (status == InvariantStatus.FALSIFIED) {
-          result.log ("child value '" + val + "' destroyed oneof");
+          result.log ("%s", "child value '" + val + "' destroyed oneof");
           return (null);
         }
       }
     }
 
-    result.log ("Merged '" + result.format() + "' from " + invs.size()
-                + " child invariants");
+    result.log ("Merged '%s' from %s child invariants", result.format(), invs.size());
     return (result);
   }
 

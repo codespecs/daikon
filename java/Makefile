@@ -85,7 +85,7 @@ CHECKERSJAR ?= ${DAIKONDIR}/java/lib/plume.jar
 # Version of javac that supports pluggable type-checking.
 JAVAC_FOR_CHECKERS ?= ${CHECKERS}/binary/javac
 
-jsr308_imports = dataflow.quals.*:checkers.initialization.quals.*:checkers.interning.quals.*:checkers.nullness.quals.*:checkers.regex.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*:checkers.signature.quals.*
+jsr308_imports = dataflow.quals.*:checkers.initialization.quals.*:checkers.interning.quals.*:checkers.nullness.quals.*:checkers.regex.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*:checkers.signature.quals.*:checkers.formatter.quals.*
 
 ### end of user customizations
 
@@ -815,6 +815,7 @@ JAVAC_VINDEX_ARGS = -processor checkers.subtyping.SubtypingChecker -Aquals=typeq
 # JAVAC_VINDEX_STUBS = -Astubs=typequals/vindex-stubs.astub
 JAVAC_VINDEX_STUBS = -J-Dcheckers.skipUses='^java\.'
 JAVAC_REGEX_ARGS = -processor checkers.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_FORMATTER_ARGS = -processor checkers.formatter.FormatterChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_JAVARI_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 JAVAC_IGJ_ARGS = -processor checkers.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
@@ -847,7 +848,7 @@ show_nullness_java_files:
 
 # Reinstate prototype and vindex checkers later
 # check-all: check-interning check-signature check-nullness check-regex check-prototype check-vindex
-check-all: check-interning check-signature check-nullness check-regex
+check-all: check-interning check-signature check-nullness check-regex check-formatter
 
 intern: check-interning
 interning: check-interning
@@ -957,6 +958,10 @@ check-vindex-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
 check-regex: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_REGEX_ARGS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_REGEX_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
+
+check-formatter: ${ALL_GENERATED_FILES} compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_FORMATTER_ARGS} ${CHECKERS_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_FORMATTER_ARGS} ${CHECKERS_ARGS} ${JAVA_FILES}
 
 check-igj-all-nostubs: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_IGJ_ARGS} ${CHECKERS_ARGS} ...

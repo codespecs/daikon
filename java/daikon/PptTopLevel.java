@@ -3949,7 +3949,7 @@ public class PptTopLevel extends Ppt {
         parent_inv.ppt = pslice;
         pslice.invs.add(parent_inv);
         if (Debug.logOn())
-          parent_inv.log("Added " + parent_inv.format() + " to " + pslice);
+          parent_inv.log("Added %s to %s", parent_inv.format(), pslice);
       }
     }
 

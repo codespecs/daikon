@@ -61,6 +61,7 @@ public class SummaryInfo {
    */
   public static class BadSummaryAnnotation extends RuntimeException {
     static final long serialVersionUID = 20080703L;
+    @SuppressWarnings("formatter") // acts as format method wrapper
     public BadSummaryAnnotation (String format, /*@Nullable*/ Object... args) {
       super (String.format (format, args));
     }

@@ -276,8 +276,9 @@ public class CLASSNAME
                                       int count) {
     InvariantStatus is = check_modified (a1, a2, count);
     if ((is == InvariantStatus.FALSIFIED) && Debug.logOn())
-      log (format() + " destroyed by " + Debug.toString(a1) + " "
-           + Debug.toString(a2));
+      log ("%s destroyed by %s %s", 
+           format(), Debug.toString(a1), 
+           Debug.toString(a2));
     return (is);
   }
 
@@ -593,7 +594,7 @@ public class CLASSNAME
 
     DiscardInfo di = isObviousSubSequence (inv, subvar, supervar);
     if (di != null) {
-      inv.log ("ObvSubSeq- true from isObviousSubSequence: " + di.discardString());
+      inv.log ("ObvSubSeq- true from isObviousSubSequence: %s", di.discardString());
       return true;
     }
     debug.fine ("  not isObviousSubSequence(statically)");
@@ -614,7 +615,7 @@ public class CLASSNAME
           if (superinv instanceof ELTONEOF) {
             ELTONEOF eltinv = (ELTONEOF) superinv;
             if (eltinv.num_elts() > 0) {
-              inv.log (" obvious because of " + eltinv.format());
+              inv.log (" obvious because of %s", eltinv.format());
               return true;
             }
           }
@@ -790,8 +791,8 @@ public class CLASSNAME
           // Check to see if there is a subsequence over the supervar
           if (ppt_parent.is_subsequence (subvar, supervar_part)) {
             if (Debug.logOn())
-              inv.log ("ObvSubSeq- true from A subseq B[0..n] "
-                       + subvar.name() + "/"+ supervar_part.name());
+              inv.log ("ObvSubSeq- true from A subseq B[0..n] %s/%s",
+                       subvar.name(), supervar_part.name());
             return (true);
           }
         }

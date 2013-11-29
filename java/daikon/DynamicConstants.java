@@ -627,7 +627,7 @@ public class DynamicConstants implements Serializable {
       int[] true_inv_cnt = {0, 0, 0, 0};
       for (PptSlice slice : new_views) {
         for (Invariant inv : slice.invs) {
-          inv.log ("created, falsified = " + inv.is_false());
+          inv.log ("created, falsified = %b", inv.is_false());
           if (!inv.is_false())
             true_inv_cnt[slice.arity()]++;
           else {
@@ -636,8 +636,8 @@ public class DynamicConstants implements Serializable {
               vals += vi.name() + "="
                 + Debug.toString (constant_value(vi)) + " ";
             }
-            inv.log ("Invariant " + inv.format()
-                     + " destroyed by constant values" + vals);
+            inv.log ("Invariant %s destroyed by constant values %s",
+                      inv.format(), vals);
           }
         }
         if (slice.invs.size() > 0)

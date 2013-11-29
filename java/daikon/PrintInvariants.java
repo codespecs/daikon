@@ -509,8 +509,7 @@ public final class PrintInvariants {
             di = nextInv.isObvious();
             assert di != null : "@AssumeAssertion(nullness)";
             if (Invariant.logOn())
-              nextInv.log ("DiscardInfo's stuff: " + di.className() + lineSep
-                           + di.format());
+              nextInv.log ("DiscardInfo's stuff: %s%s%s", di.className(), lineSep, di.format());
           } else if (propFilter instanceof UnjustifiedFilter) {
             di = new DiscardInfo(nextInv, DiscardCode.bad_confidence,
                                  "Had confidence: " + nextInv.getConfidence());
@@ -1106,7 +1105,7 @@ public final class PrintInvariants {
                                 + " for inv " + inv);
 
       if (Invariant.logOn())
-        inv.log ("Filtering, accepted = " + fi_accepted);
+        inv.log ("Filtering, accepted = %s", fi_accepted);
 
       // Never print the guarding predicates themselves, they should only
       // print as part of GuardingImplications

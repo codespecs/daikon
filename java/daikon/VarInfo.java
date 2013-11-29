@@ -2021,7 +2021,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     if (! (type.isArray() || type.isObject())) {
       String message = String.format
         ("Unexpected guarding based on %s with type %s%n", name(), type);
-      System.err.printf(message);
+      System.err.print(message);
       throw new Error(message);
     }
 
@@ -2596,6 +2596,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   private static Set<String> out_strings = new LinkedHashSet<String>();
 
   /** If the message is new print it, otherwise discard it **/
+  /*@FormatMethod*/
+  @SuppressWarnings("formatter") // call to format method is correct because of @FormatMethod annotation
   static void debug_print_once (String format, /*@Nullable*/ Object... args) {
     String msg = String.format (format, args);
     if (!out_strings.contains (msg)) {
@@ -3649,8 +3651,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       else {
         String begin_pname = (begin == null) ? "0" : begin.parent_var_name();
         String end_pname = (end == null) ? "" : end.parent_var_name();
-        vi.parent_variable = apply_subscript (seq.parent_var_name(),
+
+        @SuppressWarnings("formatter") // format string is constructed above using make_subsequence's arguments
+        String res = apply_subscript (seq.parent_var_name(),
                       String.format (parent_format, begin_pname, end_pname));
+        vi.parent_variable = res;
         // System.out.printf ("-- set parent var from '%s' '%s' '%s' '%s'%n",
         //       seq.parent_var_name(), parent_format, begin_pname, end_pname);
       }

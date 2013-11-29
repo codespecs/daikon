@@ -398,8 +398,8 @@ public class BuildJDK {
     inst_jc.dump (classpath);
     _numFilesProcessed++;
     if ((_numFilesProcessed % 100) == 0)
-      System.out.printf("Processed %d/%d classes at " + new Date() + "\n",
-          _numFilesProcessed, classmap.size());
+      System.out.printf("Processed %d/%d classes at %tc%n",
+          _numFilesProcessed, classmap.size(), new Date());
   }
 
   /** Copy our various helper classes to java/lang **/

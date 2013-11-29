@@ -50,7 +50,7 @@ public final class DiscardInfo {
     this.discardFormat = inv.format();
     // this.className = inv.getClass().getName();
     this.inv = inv;
-    inv.log (discardString);
+    inv.log ("%s", discardString);
   }
 
   public String discardFormat() {

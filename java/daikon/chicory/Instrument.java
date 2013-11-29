@@ -61,6 +61,8 @@ public class Instrument implements ClassFileTransformer {
   }
 
 
+  /*@FormatMethod*/
+  @SuppressWarnings("formatter") // call to format method is correct because of @FormatMethod annotation
   private void
   log (String format, /*@Nullable*/ Object... args) {
     if (!log_on)
@@ -530,9 +532,9 @@ public class Instrument implements ClassFileTransformer {
         if (smta != null) {
             stack_map_table = ((StackMapTable)smta).getStackMapTable();
             if (debug) {
-                out.format ("Original StackMap: " + smta + "%n");
-                out.format ("Attribute tag: " + smta.getTag() + " length: "
-                        + smta.getLength() + " nameIndex: " + smta.getNameIndex() + "%n");
+                out.format ("Original StackMap: %s%n", smta);
+                out.format ("Attribute tag: %s length: %d nameIndex: %d%n", 
+                       smta.getTag(), smta.getLength(), smta.getNameIndex());
             }
             mg.removeCodeAttribute(smta);
         } else {
@@ -694,7 +696,7 @@ public class Instrument implements ClassFileTransformer {
 
       cg.update();
     } catch (Exception e) {
-      out.format ("Unexpected exception encountered: " + e);
+      out.format ("Unexpected exception encountered: %s",  e);
       e.printStackTrace();
     }
 
@@ -1143,7 +1145,7 @@ public class Instrument implements ClassFileTransformer {
     }    
 
     if (debug) {
-        out.format (c.mgen.getLocalVariableTable(pgen) + "%n");
+        out.format ("%s%n", c.mgen.getLocalVariableTable(pgen));
     }
     return lv_nonce;
   }
@@ -1293,7 +1295,7 @@ public class Instrument implements ClassFileTransformer {
         new_map[new_index++] = stack_map_table[i];
     }    
     if (debug) {
-        out.format ("new_map: " + Arrays.toString(new_map) + "%n");
+        out.format ("new_map: %s%n", Arrays.toString(new_map));
     }
     stack_map_table = new_map;
   }

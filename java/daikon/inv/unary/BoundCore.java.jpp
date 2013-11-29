@@ -401,12 +401,11 @@ public class LOWERBOUNDCORE
     if (lbc.NUM_MIN1 > 0)
       add_modified (lbc.MAX, 1);
     if (Debug.logDetail())
-      wrapper.log ("Added vals " + lbc.NUM_MIN1 + " of " + lbc.MIN1 + ","
-                  + lbc.NUM_MIN2 + " of " + lbc.MIN2 + ","
-                  + lbc.NUM_MIN3 + " of " + lbc.MIN3 + ", "
-                  + ((lbc.NUM_MIN1 > 0) ?
-                     "1 of " + lbc.MAX : "")
-                  + " from ppt " + lbc.wrapper.ppt.parent.ppt_name);
+      wrapper.log ("Added vals %s of %s, %s of %s, %s of %s, %s from ppt %s",
+                   lbc.NUM_MIN1, lbc.MIN1, lbc.NUM_MIN2, lbc.MIN2,
+                   lbc.NUM_MIN3, lbc.MIN3, 
+                   ((lbc.NUM_MIN1 > 0) ?  "1 of " + lbc.MAX : ""), 
+                   lbc.wrapper.ppt.parent.ppt_name);
   }
 
 

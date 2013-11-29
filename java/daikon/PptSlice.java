@@ -132,7 +132,7 @@ public abstract class PptSlice
     if (Debug.logDetail())
       log ("Removing invariant '" + inv.format() + "'");
     if (Debug.logOn())
-      inv.log ("Removed from slice: " + inv.format());
+      inv.log ("Removed from slice: %s", inv.format());
     boolean removed = invs.remove(inv);
     assert removed : "inv " + inv + " not in ppt " + name();
     Global.falsified_invariants++;
@@ -414,7 +414,7 @@ public abstract class PptSlice
 
     if (contains_inv_exact (inv)) {
       if (Debug.logOn() && (Daikon.current_inv != null))
-        Daikon.current_inv.log ("inv " + inv.format() + " exists");
+        Daikon.current_inv.log ("inv %s exists", inv.format());
       return (true);
     }
 
@@ -424,13 +424,13 @@ public abstract class PptSlice
     DiscardInfo di = inv.isObviousStatically (var_infos);
     if (di != null) {
       if (Debug.logOn() && (Daikon.current_inv != null))
-        Daikon.current_inv.log ("inv " + inv.format() + " is obv statically");
+        Daikon.current_inv.log ("inv %s is obv statically", inv.format());
       return (true);
     }
 
     boolean suppressed = inv.is_ni_suppressed();
     if (suppressed && Debug.logOn() && (Daikon.current_inv != null))
-      Daikon.current_inv.log ("inv " + inv.format() + " is ni suppressed");
+      Daikon.current_inv.log ("inv %s is ni suppressed", inv.format());
     return (suppressed);
   }
 

@@ -187,7 +187,7 @@ public final class PPTSLICE1 extends PptSlice {
       /*@NonNull*/ Invariant inv = proto.instantiate (this);
       addInvariant(inv);
       if (Debug.logOn())
-        inv.log ("Created invariant " + inv.format() + " ss = " + ss);
+        inv.log ("Created invariant %s ss = %s", inv.format(), ss);
     }
   }
 
@@ -263,8 +263,8 @@ public final class PPTSLICE1 extends PptSlice {
           inv.falsify();
           result.add (inv);
           if (Invariant.logOn())
-            inv.log ("destroyed because " + var_infos[i].name()
-                     + " array index out of bounds");
+            inv.log ("destroyed because %s array index out of bounds", 
+                     var_infos[i].name());
         }
         if (VarInfo.debugMissing.isLoggable (Level.FINE))
           VarInfo.debugMissing.fine ("Removing slice " + this +
@@ -494,7 +494,7 @@ public final class PPTSLICE1 extends PptSlice {
     invs.add(invariant);
     Global.instantiated_invariants++;
     if (Invariant.logOn())
-      invariant.log ("Instantiated " + invariant.format());
+      invariant.log ("Instantiated %s", invariant.format());
 
   }
 
@@ -691,11 +691,10 @@ public final class PPTSLICE1 extends PptSlice {
           }
           child_vars = castNonNullDeep(child_vars); // issue 154
           orig_inv.log ("org inv");
-          inv.log ("Created " + inv + " from " + orig_inv + " using permute "
-                   + ArraysMDE.toString(permute) + " cvis_sorted = "
-                   + VarInfo.arrayToString (cvis_sorted) + " cvis = "
-                   + VarInfo.arrayToString (child_vars)
-                   + " for ppt " + parent.name());
+          inv.log ("Created %s from %s using permute %s cvis_sorted = %s cvis = %s for ppt %s",
+                   inv, orig_inv, ArraysMDE.toString(permute),
+                   VarInfo.arrayToString (cvis_sorted),
+                   VarInfo.arrayToString (child_vars), parent.name());
         }
       }
     }
@@ -714,8 +713,7 @@ public final class PPTSLICE1 extends PptSlice {
       Invariant.Match imatch = new Invariant.Match (inv);
       List<Invariant> invs = inv_map.get (imatch);
       if (Invariant.logOn()) {
-        inv.log ("Adding " + inv.format() + " to " + name()
-                 + " invs list " + invs);
+        inv.log ("Adding %s to %s invs list %s", inv.format(), name(), invs);
       }
       if (invs == null) {
         invs = new ArrayList<Invariant>();
@@ -742,21 +740,20 @@ public final class PPTSLICE1 extends PptSlice {
       if (child_invs.size() == valid_child_count) {
         Invariant first = child_invs.get(0);
         if (Debug.logOn())
-          first.log ("Attempting merge of " + child_invs.size()
-                     + " invariants into ppt " + name());
+          first.log ("Attempting merge of %s invariants into ppt %s", 
+                     child_invs.size(), name());
         Invariant parent_inv = first.merge (child_invs, this);
         if (parent_inv != null) {
           invs.add (parent_inv);
           if (Debug.logOn())
-            parent_inv.log ("Merge successful of " + parent_inv.format()
-                            + " into " + name());
+            parent_inv.log ("Merge successful of %s into %s",
+                            parent_inv.format(), name());
         }
       } else {
         if (Debug.logOn()) {
           Invariant inv = child_invs.get(0);
-          inv.log ("Not merging invariant into " + name()
-                   + ", Found " + child_invs.size() + "child invariants in "
-                    + valid_child_count + " children");
+          inv.log ("Not merging invariant into %s, Found %s child invariants in %s children", 
+                   name(), child_invs.size(), valid_child_count);
         }
       }
     }

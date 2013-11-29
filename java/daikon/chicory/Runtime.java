@@ -138,6 +138,8 @@ public class Runtime
     }
 
     /** Printf to dtrace file. **/
+    /*@FormatMethod*/
+    @SuppressWarnings("formatter") // call to format method is correct because of @FormatMethod annotation
     final private static void printf(String format, /*@Nullable*/ Object... args)
     {
         if (!dtrace_closed)

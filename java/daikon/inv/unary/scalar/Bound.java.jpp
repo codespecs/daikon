@@ -622,7 +622,7 @@ public class LOWERBOUND
       if (MIN1 LTE oo.MINELT()) {
         String varName = vis[0].name();
         String discardString = varName+LTESTR+MIN1+" is implied by "+varName+LTESTR+oo.MINELT();
-        log (discardString);
+        log ("%s", discardString);
         return new DiscardInfo(this, DiscardCode.obvious, discardString);
       }
     }
@@ -647,7 +647,7 @@ public class LOWERBOUND
           String varName = v.name();
           String otherName = other.var().name();
           String discardString = varName + " is a subsequence of " + otherName + " for which the invariant holds.";
-          log (discardString);
+          log ("%s", discardString);
           return new DiscardInfo(this, DiscardCode.obvious, discardString);
         }
       }
@@ -689,7 +689,7 @@ public class LOWERBOUND
             String otherName = other_slice.var_infos[0].name();
             String varName = v.name();
             String discardString = varName+" is a subsequence of "+otherName+" for which the invariant holds.";
-            log (discardString);
+            log ("%s", discardString);
             return new DiscardInfo(this, DiscardCode.obvious, discardString);
           }
         }
@@ -761,8 +761,7 @@ public class LOWERBOUND
       result.core.add(lb.core);
     }
 
-    result.log ("Merged '" + result.format() + "' from " + invs.size()
-                + " child invariants");
+    result.log ("Merged '%s' from %s child invariants", result.format(),invs.size());
     return (result);
   }
 }

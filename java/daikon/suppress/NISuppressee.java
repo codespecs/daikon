@@ -72,7 +72,7 @@ public class NISuppressee {
     Invariant inv = sample_inv.instantiate (slice);
     if (Debug.logOn()) {
       if (inv != null)
-        inv.log ("Created " + inv.format());
+        inv.log ("Created %s", inv.format());
       else
         Debug.log (sup_class, slice,
                    "Didn't create, instantiate returned null");

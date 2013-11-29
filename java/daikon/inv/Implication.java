@@ -92,8 +92,8 @@ public class Implication
       return CONFIDENCE_NEVER;
     }
     double result = confidence_and(pred_conf, cons_conf);
-    log ("Confidence " + result + " " + pred_conf + "/"
-                              + cons_conf + " for " + format());
+    log ("Confidence %s %s/%s for %s", 
+         result, pred_conf, cons_conf, format());
     return result;
   }
 
@@ -142,7 +142,7 @@ public class Implication
       assert vis[ii] != null;
     DiscardInfo di = orig_right.isObviousDynamically (vis);
     if (di != null) {
-      log ("failed isObviousDynamically with vis = " + VarInfo.arrayToString (vis));
+      log ("failed isObviousDynamically with vis = %s", VarInfo.arrayToString (vis));
       return (di);
     }
 
@@ -265,8 +265,10 @@ public class Implication
   * @return whether or not it logged anything
   */
   @Override
+  /*@FormatMethod*/
   @SuppressWarnings({"override.receiver.invalid", // sound overriding, not expressible in Checker Framework
-        "method.invocation.invalid"}) // call to format is OK
+        "method.invocation.invalid", // call to format is OK
+        "formatter"}) // call to format method is correct because of @FormatMethod annotation
   public boolean log (/*>>>@UnknownInitialization(Implication.class) @Raw(Implication.class) Implication this,*/ String format, /*@Nullable*/ Object... args) {
     String msg = format;
     if (args.length > 0)

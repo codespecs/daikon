@@ -308,27 +308,27 @@ public abstract class CLASSNAME extends SUPERCLASS {
                                         int count) {
     if (x.length != y.length) {
       if (Debug.logOn())
-        log ("Falsified - x length = " + x.length + "y length = " + y.length);
+        log ("Falsified - x length = %s y length = %s", x.length, y.length);
       return (InvariantStatus.FALSIFIED);
     }
 
     if (Debug.logDetail()) {
-      log ("testing values " + ArraysMDE.toString (x) + ", "
-           + ArraysMDE.toString(y));
+      log ("testing values %s, %s", ArraysMDE.toString (x), 
+           ArraysMDE.toString(y));
     }
 
     try {
       for (int i = 0; i < x.length; i++) {
         if (!eq_check (x[i], y[i])) {
           if (Debug.logOn())
-            log ("Falsified - x[" + i + "]=" + x[i] + " y[" + i + "]=" + y[i]);
+            log ("Falsified - x[%s]=%s y[%s]=%s", i, x[i], i, y[i]);
           return (InvariantStatus.FALSIFIED);
         }
       }
       return (InvariantStatus.NO_CHANGE);
     } catch (Exception e) {
       if (Debug.logOn())
-        log ("Falsified - exception " + e);
+        log ("Falsified - exception %s", e);
       return (InvariantStatus.FALSIFIED);
     }
   }

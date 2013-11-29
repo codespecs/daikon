@@ -380,7 +380,7 @@ public class NIS {
                             == inv.ppt;
       inv.ppt.addInvariant (inv);
       if (Debug.logOn())
-        inv.log (inv.format() + " added to slice");
+        inv.log ("%s added to slice", inv.format());
 
       if (NIS.antecedent_method)
         created_invs_cnt++;
@@ -839,7 +839,7 @@ public class NIS {
       for (Iterator<Invariant> j = slice.invs.iterator(); j.hasNext(); ) {
         Invariant inv = j.next();
         if (inv.is_ni_suppressed()) {
-          inv.log ("Removed because suppressed " + inv.format());
+          inv.log ("Removed because suppressed %s", inv.format());
           j.remove();
         }
       }
