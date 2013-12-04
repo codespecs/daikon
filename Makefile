@@ -96,7 +96,7 @@ ifeq (cygwin,$(OSTYPE))
 #JAVA tools need Windows path on Windows
 JAR_DIR := $(shell cygpath -m $(INV_DIR))
 else
-JAR_DIR := INV_DIR
+JAR_DIR := $(INV_DIR)
 endif
 
 # Staging area for the distribution
