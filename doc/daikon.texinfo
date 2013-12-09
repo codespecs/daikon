@@ -4174,7 +4174,7 @@ appear before the @var{classname} on the DynComp command line.
 Print information about the classes being processed.
 
 @item --debug
-Dump the instrumented classes to @file{/tmp/$USER/bin}.
+Dump the instrumented classes to @file{debug/bin}.
 
 @item --debug-dir
 The directory in which to dump instrumented class files (only if
