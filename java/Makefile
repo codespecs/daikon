@@ -464,7 +464,8 @@ all_directly: ../plume-lib ${AUTO_GENERATED_FILES} plume-copy-and-check java_fil
 	rm -f `find daikon -name "*.class" -print`
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
-	@chmod -w ${AUTO_GENERATED_FILES}
+# on some systems chmod with symbolic arguments pays attention to umask.  so use 444 instead of -w	
+	@chmod 444 ${AUTO_GENERATED_FILES}
 # This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
 	$(MAKE) all_pass2
 # These can't be prerequisites because they depend on .class files from Daikon itself.
@@ -482,7 +483,7 @@ daikon: compile_daikon junit
 compile_daikon : ../plume-lib $(AUTO_GENERATED_FILES)
 	@echo $(JAVAC_COMMAND) 'daikon/*.java ...'
 	@$(JAVAC_COMMAND) $(DAIKON_JAVA_FILES)
-	@chmod -w ${AUTO_GENERATED_FILES}
+	@chmod 444 ${AUTO_GENERATED_FILES}
 	# $(MAKE) all_pass2
 
 #
