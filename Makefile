@@ -199,10 +199,10 @@ kvasir/fjalar/Makefile.in: ../fjalar/auto-everything.sh
 	ln -nsf ../fjalar/valgrind kvasir
 	touch $@
 
-kvasir/configure: ../fjalar/auto-everything.sh
+kvasir/config.sub: ../fjalar/auto-everything.sh
 	cd ../fjalar && ./auto-everything.sh
 
-kvasir/config.status: kvasir/fjalar/Makefile.in ../fjalar/valgrind/VEX/pub/libvex.h kvasir/configure
+kvasir/config.status: kvasir/fjalar/Makefile.in ../fjalar/valgrind/VEX/pub/libvex.h kvasir/config.sub
 	cd kvasir && ./configure --prefix=`pwd`/inst
 
 kvasir/coregrind/valgrind: kvasir/configure kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
