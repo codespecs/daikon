@@ -225,7 +225,7 @@ toolset (available at @uref{http://cygwin.com/}), which
 contains everything you need to compile and run Unix programs under
 Windows.  You can install Cygwin by simply running one of the setup
 programs (based on your machine type) found 
-at @uref{http://cygwin.com/}.
+at @uref{http://cygwin.com/install.html}.
 
 When setting up environment pathname variables under Windows/Cygwin
 (such as @command{JAVA_HOME} or @command{CLASSPATH}) make sure that the
