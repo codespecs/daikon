@@ -245,6 +245,12 @@ rebuild-everything-but-kvasir:
 	${MAKE} -C $(DAIKONDIR)/doc pdf-final
 	${MAKE} -C $(DAIKONDIR)/doc/www pubs
 
+rebuild-everything-no-clean:
+	${MAKE} -C $(DAIKONDIR)/java tags compile
+	${MAKE} -C $(DAIKONDIR) daikon.jar
+	${MAKE} -C $(DAIKONDIR)/doc
+	${MAKE} kvasir
+
 ### Testing the code
 
 test:
@@ -375,6 +381,7 @@ staging-to-www: $(STAGING_DIR)
 	html-update-link-dates $(DIST_DIR)/index.html
 	chmod -w $(DIST_DIR)
 	chmod -w $(DIST_DIR)/index.html
+# with new version number system, this is now done manually
 #	$(MAKE) update-dist-version-file
 	@echo "*****"
 	@echo "Don't forget to send mail to daikon-announce and commit changes."
