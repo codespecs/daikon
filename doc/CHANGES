@@ -57,6 +57,16 @@ General
       https://groups.google.com/forum/#!forum/daikon-announce
       https://groups.google.com/forum/#!forum/daikon-discuss
 
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+WARNING: There is a known issue with DynComp not working with Java 7.
+The instrumentation code that DynComp inserts does not verify correctly
+with Java 7 due to a StackMap issue.  The work around is to compile with:
+  javac -target 5 -source 5 .......
+If this is a problem for your project, please add a comment to the issues
+database to let us know:
+  https://code.google.com/p/daikon/issues/detail?id=24
+!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+
 Daikon
 
   ???
