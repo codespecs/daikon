@@ -24,12 +24,11 @@ Further documentation can be found in:
 
 A new front end for .NET languages (C#, F#, and Visual Basic) is available.
 Daikon problems are now tracked in the Google Code database.
+We have moved to a new distribution site.
 We have moved to new mailing list addresses.
 We removed the Mangel-Wurzel documentation.
 
 General
-
-  ???
 
   The bin directory is now called scripts to be consistent with the google
   code repository and the documentation.
@@ -42,6 +41,12 @@ General
   Problems with Chicory and other front ends should be submitted against
   the Daikon product.  Problems with Kvasir shoule be subitted against
   the Fjalar product.
+
+  We have moved our distribution host site from MIT to the University of
+  Washington.  All previous references to addresses of the form:
+    //pag.csail.mit.edu/daikon
+  are now:
+    //plse.cs.washington.edu/daikon
 
   We have deprecated our MIT based mailing lists in favor of new ones
   hosted by Google Groups.  Three new mailing lists have been set up:
@@ -86,9 +91,16 @@ Documentation
   We have removed all references to the Mangel-Wurzel front end from the
   documentation as it is no longer supported.
 
+  We have enhanced the documention on using Daikon with Eclipse.
+
+  We have added a section on Celeriac, the new front end for .net languages.
+
+  We have added a section to the developer documentation on how to make
+  a distribution.
+
 ===========================================================================
 
-4.7.5 (November 7, 2013)
+4.7.5 (December 12, 2013)
 
 An interim release to get an updated version into the field:
   Fix for stack map problem in Chicory.

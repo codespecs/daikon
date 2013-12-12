@@ -31,7 +31,7 @@ all diffs: txt-diff diff-tests chicory-tests merge-invariants-tests results
 quick: quick-txt-diff diff-tests results
 
 # targets that descend to child direcories
-clean quick-txt-diff txt-diff update-goals merge spinfo-static txt-suppress \
+quick-txt-diff txt-diff update-goals merge spinfo-static txt-suppress \
 txt-daikon txt-chicory cross-checker cross-checker-good chicory chicory-diff \
 esc jml inv txt-daikon-diff txt-esc-diff txt-jml-diff txt-merge-diff \
 txt-chicory-diff everything-txt-diff stats dyncomp-diff txt-jaif-diff txt-jaif:
@@ -54,6 +54,11 @@ merge-invariants-tests:
 	$(MAKE) -C merge-invariants-tests
 .PHONY: merge-invariants-tests
 
+clean:
+	$(MAKE) -C daikon-tests clean
+	$(MAKE) -C diff-tests clean
+	$(MAKE) -C dyncomp-tests clean
+	$(MAKE) -C kvasir-tests clean
 
 # output display; can be called from children (they will set BASE)
 BASE?=.
