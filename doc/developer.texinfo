@@ -35,14 +35,14 @@
 @center @titlefont{Daikon Invariant Detector Developer Manual}
 
 @sp 2
-@center Daikon version 4.7.3
+@center Daikon version 4.7.5
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 4.7.3 release date
-@center November 1, 2013
+@c Print out the Daikon version 4.7.5 release date
+@center December 12, 2013
 @end ifset
 
 @ifclear final
@@ -90,7 +90,7 @@ Copyright @copyright{} 1998-2013
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 4.7.3, released November 1, 2013.
+It describes Daikon version 4.7.5, released December 12, 2013.
 
 @menu
 * Introduction::
@@ -1960,68 +1960,110 @@ it twice) in order to generate formatted versions of the manual
 @node    Distribution
 @chapter Making a distribution
 
-To publish a Daikon distribution, do the following.  If you only want to
+This section provides the instructions for publishing a Daikon distribution;
+aka making a release. 
+If you only want to
 create the @file{daikon.tar} or @file{daikon.tar.gz} file in your own
 directory, then simply run @samp{make} with the desired file as the
 target.
 
-All times are on godwit, as of 8/2011.
+We have a general policy of using even version numbers (e.g., 4.6.4) for offical
+releases and odd version numbers (e.g., 4.7.3) for intermediate work.  This means
+as you prepare for a release the current version number is probably odd.  It will
+be reset as one of the first steps in the release process.  After making the
+distribution, one of the final steps is to increment the version number again to
+prepare for subsequent development.  Note, this system has the useful side effect
+of allowing the build and release process to be repeated (if, for example, a problem
+is detected) without having to worry about updating or reseting the version number.
 
-@b{To do:}  All references to CVS should be changed to Mercurial.
+The Daikon distribution site is located at @uref{//plse.cs.washington.edu/daikon};
+internally, this can be accessed as part of our file system at
+@file{/cse/web/research/plse/daikon}.
+In order to be able to write to the distribution site, your linux user id must be 
+a member of the 'plse_www' group.  Finally, for each of the major steps below, an
+approximate elapased time is listed.  Currently, this is for a quad x86-64 based
+machine at 3.4GHz with 16GB of memory. Barring any difficulities, the entire process
+will take at least two hours - and could be much more depending on the number of
+different platforms on which you test the release.
+
 
 @exampleindent 0
 
 @enumerate
 
 @item
-It is suggested that you use the @samp{daikonuser} account
-to publish a distribution.  This ensures that everything has been
-committed to Mercurial and that nothing extraneous in your account gets
-included in the distribution.  Ask a senior group member for the
-password.  Note that all of the following instructions should work
-from other accounts as well.
-
-@example
-ssh daikonuser@@mangold.csail.mit.edu
-@end example
-
-@noindent
-(Alternately, you can do @samp{su - daikonuser} instead.)
-
-@item
-Update Daikon to the most recent version.  [Time: moments]
+Update the Daikon source files to their most recent version. 
 
 @example
 cd $DAIKONDIR && hg fetch && hg outgoing && hg status
 @end example
 
-@noindent
 The last line printed should be @samp{no changes found}.
 
+[Time: moments]
+
+
 @item
-Rebuild everything.
-[Time: ?? (3pm)]
+Adjust the version number in file @file{$DAIKONDIR/doc/VERSION}. 
+(It should be set to an even number as noted above.) You may do this
+manually, or if the value just needs to be incremented by 1 (to go
+from odd to even) you may use:
+
+@example
+cd $DAIKONDIR
+make update-dist-version-file
+@end example
+
+Optionally, override the distribution date (default: today) by
+redefining the environment variable @command{TODAY}:
+
+@example
+export TODAY='November 1, 2013'
+@end example
+
+Now, update the appropriate files with the date and version number
+of the release.
+
+@example
+cd $DAIKONDIR
+make update-doc-dist-date-and-version
+@end example
+
+[Time: moments]
+
+
+@item
+Do a clean rebuild of everything.
 
 @example
 make rebuild-everything
 @end example
 
+[Time: 10 min]
+
+
 @item
+@emph{THIS STEP IS CURRENTLY BROKEN.}
+
 Run the Kvasir regression tests.
-[Time: ??18 min]
+
 @example
 make -C $DAIKONDIR/tests/kvasir-tests clean clean-all nightly-summary-w-daikon
 @end example
 
+[Time: ??18 min]
+
 
 @item
-Run the regression tests.
+Run the Daikon regression tests.
 The last line printed should be "All tests succeeded."
-[Time: ??55 min]
 
 @example
 make -C $DAIKONDIR/tests clean diffs
 @end example
+
+[Time: 20 min]
+
 
 @item
 Edit the @file{doc/CHANGES} file to indicate what has changed
@@ -2031,69 +2073,65 @@ versions:
 
 @example
 cd $DAIKONDIR/doc
-diff -b -u -s --from-file /afs/csail/group/pag/docroot/www.pag.csail.mit.edu/daikon/dist/doc *.texinfo
+diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
 @end example
 
 Another good source of information are the repository logs over the
 last month:
+
+@emph{NEEDS TESTING AND REVIEW. hg not cvs}
 
 @example
 cd $DAIKONDIR/java
 cvs -q log -d ">1 month ago" -N | cvs-log-summarize.pl
 @end example
 
-@item
-Optionally, adjust the version number in file $DAIKONDIR/doc/VERSION.
-Optionally, override the distribution date (default: today) by
-redefining environment variable TODAY (e.g., 'TODAY=November 1 2004').
-[Time: moments]
-
-@example
-cd $DAIKONDIR
-make update-doc-dist-date-and-version
-@end example
 
 @item
 Build everything to be distributed and copy it to the staging
 area (@uref{http://plse.cs.washington.edu/daikon/staging-daikon/}).  The final
 output will be a list of files that were added/removed since the
 last release.
-[Time: ??11 min]
 
 @example
 make staging
 @end example
 
-@noindent
-(To test just this part, you can do: @samp{make -C $DAIKONDIR/java clean;
-make -C $DAIKONDIR WWW_PARENT=$HOME/www/tmp staging})
+[Time: ??11 min]
 
 
 @item
-Test the distribution in the staging area, on a 32-bit machine
-such as onion.  The last part of
-the test runs Chicory/Daikon on the StackAr example in the
-release.  Success is indicated by invariant output being written
-to the screen.  @b{Consider moving the staging area to the website
-so that we can check things out via the webserver before
-installing.}
-[Time: ?? min]
+Test the distribution, currently in the staging area, on a 64-bit machine.
+Since the machine you are currently running to build the release is probably
+such a machine, you may simply run the command below. The last step in this
+test runs Chicory/Daikon on the StackAr example.  Success is indicated
+by invariant output being written to the screen.
 
 @example
 make test-staged-dist
 @end example
 
-@item
-Test the distribution in the staging area, on a 64-bit machine
-such as mangold. Success is indicated by invariant output being written
-to the screen.
 [Time: ??24 min]
 
-@example
-make test-staged-dist
-@end example
 
 @item
+Test the distribution, currently in the staging area, on a 32-bit machine. 
+This is probably best done on a virtual machine running a current version
+of Fedora.  The instructions below assume you are running on such a machine.
+They will download the staged daikon.tar.gz file, extract the files, set
+the appropriate environment variables and run the top level Makefile.
+Success is indicated by invariant output being written to the screen.
+
+@example
+@emph{UNDONE - similar to MAC case below.}
+@end example
+
+[Time: ?? min]
+
+
+@item
+@emph{NEEDS TESTING AND REVIEW.}
+
 Test the distribution on a Windows machine.  On a Windows
 machine with Cygwin installed, as a guest user (or at least one without
 environment variables such as $DAIKONDIR defined!), download the staged daikon.tar.gz
@@ -2140,7 +2178,10 @@ make
 @end example
 @end itemize
 
+
 @item
+@emph{NEEDS TESTING AND REVIEW.}
+
 Test the distribution on a MacOSX machine.  On a MacOSX machine
 with the development tools installed, download the staged daikon.tar.gz
 file, extract the files, set the appropriate environment variables and
@@ -2189,30 +2230,24 @@ make
 
 
 @item
+Save the previous release in the history archives.
+
+@example
+make save-current-release
+@end example
+
+[Time: ?? min]
+
+
+@item
 Update the website.
 
 @example
 make staging-to-www
-make pag-install
 @end example
 
-Note that @samp{make staging-to-www} will automatically
-update the version numbers in the source code and documentation
-from the file @file{doc/VERSION}.  (In the repository, the
-@file{doc/VERSION} file describes the @emph{next} version of Daikon
-to be released; in the repository, it is incremented by 1 as compared
-to the distributed release.)  After doing so, it will
-correctly update the version number in @file{doc/VERSION}.  This
-should not require any hand intervention unless there is a problem
-near the end of building the distribution and the @samp{make
-update-doc-dist-date-and-version} command has to be run
-again after the version number has been incremented.  In this
-case, simply edit @file{doc/VERSION} by hand back to the correct
-version number before rebuilding.
+[Time: ?? min]
 
-@b{We should consider just updating the version number by hand at the
-beginning of the process.  That way we can run this multiple times without
-confusion.}
 
 @item
 Update the publications pages.
@@ -2223,6 +2258,8 @@ make -C $pag/www/daikon/pubs-sources update-from-checkout
 make -C $pag/www/daikon pubs
 @end example
 
+[Time: ?? min]
+
 
 @item
 Check the website to see if it has any broken links.
@@ -2231,12 +2268,12 @@ Check the website to see if it has any broken links.
 checklink -q -r `cat $DAIKONDIR/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/daikon
 @end example
 
-@noindent
 Links to the webpages of people and conferences are read from
 @file{$pl/bin/html-canonical-urls}.
 
 In some cases a "403 Forbidden" error is transient, due to the website
 being down.  You can check such links by hand.
+
 
 @item
 Commit any changes back to the repository:
@@ -2244,9 +2281,83 @@ Commit any changes back to the repository:
 @example
 cd $DAIKONDIR
 hg -q commit -m "Change version to @emph{X.Y.Z}"
+hg push
+cd kvasir
+hg -q commit -m "Change version to @emph{X.Y.Z}"
+hg push
 @end example
 
+[Time: moments]
+
+
 @item
+Add a version label to the repository:
+
+@example
+cd $DAIKONDIR
+hg tag @emph{X.Y.Z}
+cd kvasir
+hg tag @emph{X.Y.Z}
+@end example
+
+[Time: moments]
+
+
+@item
+At this point the distribution has been completed; however, we now need
+adjust the version number in file @file{$DAIKONDIR/doc/VERSION} - it should
+be bumped up to an odd value for continuing development.
+
+@example
+cd $DAIKONDIR
+make update-dist-version-file
+@end example
+
+If you previously set the environment variable TODAY, you need to reset it:
+
+@example
+export -n TODAY
+@end example
+
+Now, update the appropriate files with the date and version number
+of the release.
+
+@example
+cd $DAIKONDIR
+make update-doc-dist-date-and-version
+@end example
+
+[Time: moments]
+
+
+@item
+Verfiy these changes by doing partial product builds:
+
+@example
+make rebuild-everything-no-clean
+@end example
+
+[Time: 3 min]
+ 
+
+@item
+Commit any changes back to the repository:
+
+@example
+cd $DAIKONDIR
+hg -q commit -m "Change version to @emph{X.Y.Z}"
+hg push
+cd kvasir
+hg -q commit -m "Change version to @emph{X.Y.Z}"
+hg push
+@end example
+
+[Time: moments]
+
+
+@item
+@emph{NEEDS TESTING AND REVIEW.}
+
 Send mail to the daikon-announce mailing list.  There are sample
 messages in the @uref{http://lists.csail.mit.edu/pipermail/daikon-announce/,archive} of
 @uref{https://lists.csail.mit.edu/mailman/listinfo/daikon-announce/,daikon-announce}.
@@ -2254,7 +2365,10 @@ messages in the @uref{http://lists.csail.mit.edu/pipermail/daikon-announce/,arch
 You may need to visit @uref{https://lists.csail.mit.edu/mailman/admindb/daikon-announce/}
 to approve the message before it is sent to the list.
 
+
 @item
+@emph{NEEDS TESTING AND REVIEW.}
+
 Submit an update to
 freshmeat.net, which will inform others that a new release is available.
 
