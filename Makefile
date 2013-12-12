@@ -119,8 +119,6 @@ TOOLSJAR := $(JAVA_HOME)/lib/tools.jar
 
 RSYNC_AR := rsync -aR
 
-JAVAC ?= javac -target 5
-
 # A good alternative for Makefile.user is: hg fetch
 # When disconnected from network, change this to a no-op, or (better) just
 # set NONETWORK to true.
@@ -132,9 +130,7 @@ HG_OPTIONS ?=
 
 RM_TEMP_FILES := rm -rf `find . \( -name UNUSED -o -name SCCS -o -name RCS -o -name '*.o' -o -name '*~' -o -name '.*~' -o -name '*.orig' -o -name 'config.log' -o -name '*.java-*' -o -name '*to-do' -o -name 'TAGS' -o -name '.\#*' -o -name '.deps' -o -name jikes -o -name daikon-java -o -name daikon-output -o -name core -o -name '*.bak' -o -name '*.rej' -o -name '*.old' -o -name '.nfs*' -o -name '\#*\#' \) -print`
 
-TMPDIR ?= $(if $(shell if [ -d /scratch ] ; then echo true; fi), \
-				/scratch/${USER}, \
-				/tmp/${USER})
+TMPDIR ?= $(if $(shell if [ -d /scratch ] ; then echo true; fi),/scratch/$(USER),/tmp/$(USER))
 
 ## Examples of better ways to get the lists:
 # PERL_MODULES := $(wildcard *.pm)
@@ -282,8 +278,8 @@ test-staged-dist: $(STAGING_DIR)
 	## First, test daikon.jar.
 	(cd $(DISTTESTDIR)/daikon/java && \
 	  $(MAKE) CLASSPATH=$(DISTTESTDIR)/daikon/daikon.jar junit)
-	## Make sure that all of the class files are 1.5 (version 49) or earlier
-	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs -n 1 classfile_check_version 49)
+	## Make sure that all of the class files are 1.7 (version 51) or earlier
+	(cd $(DISTTESTDIRJAVA) && find . \( -name '*.class' \) -print | xargs -n 1 classfile_check_version 51)
 	## Second, test the .java files.
 	# No need to add to classpath: ":$(DISTTESTDIRJAVA)/lib/java-getopt.jar:$(DISTTESTDIRJAVA)/lib/junit.jar"
 	(cd $(DISTTESTDIRJAVA)/daikon; rm `find . -name '*.class'`; make CLASSPATH=$(DISTTESTDIRJAVA):$(DISTTESTDIR)/daikon/daikon.jar:$(RTJAR):$(TOOLSJAR) all_javac)
@@ -292,7 +288,7 @@ test-staged-dist: $(STAGING_DIR)
 	cd $(DISTTESTDIR)/daikon && make
 	# test basic operation (Chicory/Daikon)
 	cd $(DISTTESTDIR)/daikon/examples/java-examples/StackAr && \
-	  ${JAVAC} -g `find . -name '*.java'` && \
+	  javac -g `find . -name '*.java'` && \
 	  java -cp .:$(DISTTESTDIR)/daikon/daikon.jar -ea daikon.Chicory \
 		--daikon DataStructures/StackArTester
 
@@ -358,8 +354,7 @@ staging: doc/CHANGES
 	# compare new list of files in tarfile to previous list
 	@echo "]2;New or removed files"
 	@echo "***** New or removed files:"
-	# Using $(WWW_DIR)/download/daikon.tar.gz is faster than fetching with wget but only works on the local filesystem.
-	(cd ${TMPDIR} && wget http://groups.csail.mit.edu/pag/daikon/download/daikon.tar.gz && tar tzf daikon.tar.gz | sort > old_tar.txt && rm -f daikon.tar.gz)
+	tar tzf $(WWW_DIR)/download/daikon.tar.gz | sort > ${TMPDIR}/old_tar.txt
 	tar tzf $(STAGING_DIR)/download/daikon.tar.gz | sort > ${TMPDIR}/new_tar.txt
 	-diff -u ${TMPDIR}/old_tar.txt ${TMPDIR}/new_tar.txt
 	# Delete the tmp files
@@ -410,8 +405,21 @@ doc-all:
 	cd doc && $(MAKE) all
 	cd doc && $(MAKE) pdf-final
 
+# Get the current release version
+CUR_VER := $(shell unzip -p /cse/web/research/plse/daikon/download/daikon.zip daikon/README.txt |head -2|tail -1|perl -p -e 's/ version /\./' |perl -p -e 's/,.*//')
+HISTORY_DIR := /cse/web/research/plse/daikon/history
+
+save-current-release:
+	@echo Saving $(CUR_VER) to history directory.
+	chmod +w $(HISTORY_DIR)
+	mkdir $(HISTORY_DIR)/$(CUR_VER)
+	chmod -w $(HISTORY_DIR)
+	cd $(HISTORY_DIR)/$(CUR_VER) && cp /cse/web/research/plse/daikon/download/daikon.zip . && unzip -p daikon.zip daikon/doc/CHANGES >CHANGES && chmod -w CHANGES .
+
 # Perl command compresses multiple spaces to one, for first 9 days of month.
+ifeq ($(origin TODAY), undefined)
 TODAY := $(shell date "+%B %e, %Y" | perl -p -e 's/  / /')
+endif
 
 update-doc-dist-date-and-version:
 	$(MAKE) update-doc-dist-date
@@ -445,7 +453,8 @@ update-doc-dist-version:
 # (Note that the last element of VERSION may be negative, such as "-1".
 # This is useful in order to make the next version end with ".0".)
 update-dist-version-file:
-	perl -wpi -e 's/\.(-?[0-9]+)$$/"." . ($$1+1)/e' doc/VERSION
+	@perl -wpi -e 's/\.(-?[0-9]+)$$/"." . ($$1+1)/e' doc/VERSION
+	@cat doc/VERSION
 
 JAR_FILES = \
 $(INV_DIR)/java/lib/java-getopt.jar \
