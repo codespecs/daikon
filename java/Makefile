@@ -763,6 +763,7 @@ findbugs: .findbugs-output
 
 # WARNING: This does not use the class files, but the .jar file.
 # So make sure it's up to date before using this
+# WARNING: I don't think this will work unless you're logged on as Michael Ernst.
 findbugs-nocompile:
 	rm -f .findbugs-output
 	~mernst/bin/share/findbugs -emacs -textui -property "findbugs.maskedfields.locals=true" -property "findbugs.de.comment=true" -exclude .findbugs-exclude.xml -maxHeap 750 ../daikon.jar | tee .findbugs-output
