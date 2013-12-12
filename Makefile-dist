@@ -1,7 +1,7 @@
 # Main Makefile for Daikon
 
 all:
-	$(MAKE) -C bin
+	$(MAKE) -C scripts
 ifdef DAIKONCLASS_SOURCES
 	$(MAKE) -C java
 endif
@@ -30,7 +30,7 @@ endif
 endif
 
 clean:
-	$(MAKE) -C bin clean
+	$(MAKE) -C scripts clean
 ifdef DAIKONCLASS_SOURCES
 	$(MAKE) -C java clean
 endif
