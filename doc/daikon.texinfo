@@ -3428,8 +3428,9 @@ enabled (the @option{-g} command-line switch to @command{javac});
 otherwise, Chicory uses the names @code{arg0}, @code{arg1}, @dots{} as
 the names of method arguments.
 
-Chicory must be run in a version 5.0 JVM, but it is backward-compatible
-with older versions of Java code.
+Chicory must be run in a version 5.0 (or later) JVM, but it is
+backward-compatible with older versions of Java code.  Chicory can process
+class files from any version of Java.
 
 @menu
 * Chicory options::
