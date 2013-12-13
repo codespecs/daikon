@@ -15,6 +15,7 @@
 @c @setchapternewpage odd
 @paragraphindent 1
 @firstparagraphindent insert
+@codequotebacktick on
 
 @ifset final
 @c FINAL version
@@ -236,7 +237,13 @@ and the Makefile will convert them to Windows pathnames when necessary
 @command{CLASSPATH} environment variable should use colons (:) rather
 than semicolons (;) as a separator.  Using windows pathnames or
 separators is a common source of errors that will result in odd error
-messages and build failures.
+messages and build failures. 
+Please note that @command{java} is a Windows program so if you pass it
+a @command{-CLASSPATH} argument it expects it to have Window's pathnames.
+An easy way to deal with this is to use the @command{cygpath} utility:
+@example
+java -cp `cygpath -wp unix/path/a:unix/path/b` <remaider of arguments>
+@end example
 
 @cindex MacOSX, compiling
 Compiling Daikon on MacOSX is relatively straightforward.  In addition
@@ -1973,13 +1980,13 @@ as you prepare for a release the current version number is probably odd.  It wil
 be reset as one of the first steps in the release process.  After making the
 distribution, one of the final steps is to increment the version number again to
 prepare for subsequent development.  Note, this system has the useful side effect
-of allowing the build and release process to be repeated (if, for example, a problem
-is detected) without having to worry about updating or reseting the version number.
+of allowing the build and test process to be repeated to fix a problem (steps 3-11 below) 
+without having to worry about updating or reseting the version number.
 
 The Daikon distribution site is located at @uref{//plse.cs.washington.edu/daikon};
 internally, this can be accessed as part of our file system at
 @file{/cse/web/research/plse/daikon}.
-In order to be able to write to the distribution site, your linux user id must be 
+In order to be able to write to the distribution site, your CSE user id must be 
 a member of the 'plse_www' group.  Finally, for each of the major steps below, an
 approximate elapased time is listed.  Currently, this is for a quad x86-64 based
 machine at 3.4GHz with 16GB of memory. Barring any difficulities, the entire process
@@ -2005,9 +2012,9 @@ The last line printed should be @samp{no changes found}.
 
 @item
 Adjust the version number in file @file{$DAIKONDIR/doc/VERSION}. 
-(It should be set to an even number as noted above.) You may do this
-manually, or if the value just needs to be incremented by 1 (to go
-from odd to even) you may use:
+Set it to an even number (as noted above) in preparation for the release.
+You may do this manually, or if the value just needs to be incremented
+by 1 (to go from odd to even) you may use:
 
 @example
 cd $DAIKONDIR
@@ -2039,7 +2046,7 @@ Do a clean rebuild of everything.
 make rebuild-everything
 @end example
 
-[Time: 10 min]
+[Time: 12 min]
 
 
 @item
@@ -2097,8 +2104,10 @@ last release.
 make staging
 @end example
 
-[Time: ??11 min]
+[Time: 4 min]
 
+
+@emph{CHECK LINKS AT THIS POINT?}
 
 @item
 Test the distribution, currently in the staging area, on a 64-bit machine.
@@ -2111,7 +2120,7 @@ by invariant output being written to the screen.
 make test-staged-dist
 @end example
 
-[Time: ??24 min]
+[Time: 6 min]
 
 
 @item
@@ -2130,17 +2139,17 @@ Success is indicated by invariant output being written to the screen.
 
 
 @item
-@emph{NEEDS TESTING AND REVIEW.}
-
 Test the distribution on a Windows machine.  On a Windows
 machine with Cygwin installed, as a guest user (or at least one without
-environment variables such as $DAIKONDIR defined!), download the staged daikon.tar.gz
+environment variables such as $DAIKONDIR defined!), download the staged
+daikon.tar.gz
 file, extract the files, set the appropriate environment variables
-and run the top level Makefile.  This is
-successful if the make command runs to conclusion without an error.
-The last line should indicate that Kvasir was not built because
-it is not a linux platform.
-[Time: ??32 min]
+and run the top level Makefile.
+The last line of output from the make should indicate that Kvasir was
+not built because this is not a linux platform. After running the 
+@command{java} command, success is indicated by invariant output being
+written to the screen.
+[Time: 10 min]
 
 @itemize
 @item
@@ -2151,12 +2160,16 @@ cd ~/tmp
 rm -rf daikon.tar.gz daikon
 wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 tar xzf daikon.tar.gz
-setenv JAVA_HOME "/cygdrive/c/Program Files/Java/jdk1.6.0_19"
+setenv JAVA_HOME "/cygdrive/c/Program Files/Java/jdk1.7.0_45"
 setenv DAIKONDIR `pwd`/daikon
 setenv DAIKONCLASS_SOURCES 1
 source daikon/scripts/daikon.cshrc
 cd daikon
 make
+cd examples/java-examples/StackAr
+javac -g DataStructures/*.java
+java -cp `cygpath -wp .:../../../daikon.jar` -ea caikon.Chicory \
+     --daikon DataStructures/StackArTester
 @end example
 
 @item
@@ -2169,12 +2182,16 @@ wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 tar xzf daikon.tar.gz
 # Convert OSTYPE from a bash shell variable to a system environment variable.
 export OSTYPE
-export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.6.0_19"
+export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_45"
 export DAIKONDIR=`pwd`/daikon
 export DAIKONCLASS_SOURCES=1
 source daikon/scripts/daikon.bashrc
 cd daikon
 make
+cd examples/java-examples/StackAr
+javac -g DataStructures/*.java
+java -cp `cygpath -wp .:../../../daikon.jar` -ea caikon.Chicory \
+     --daikon DataStructures/StackArTester
 @end example
 @end itemize
 
@@ -2246,7 +2263,7 @@ Update the website.
 make staging-to-www
 @end example
 
-[Time: ?? min]
+[Time: 1 min]
 
 
 @item
@@ -2276,7 +2293,7 @@ being down.  You can check such links by hand.
 
 
 @item
-Commit any changes back to the repository:
+Commit changes back to the repository:
 
 @example
 cd $DAIKONDIR
@@ -2304,7 +2321,7 @@ hg tag @emph{X.Y.Z}
 
 
 @item
-At this point the distribution has been completed; however, we now need
+At this point the distribution has been completed; however, we now need to
 adjust the version number in file @file{$DAIKONDIR/doc/VERSION} - it should
 be bumped up to an odd value for continuing development.
 
@@ -2341,7 +2358,7 @@ make rebuild-everything-no-clean
  
 
 @item
-Commit any changes back to the repository:
+Commit changes back to the repository:
 
 @example
 cd $DAIKONDIR

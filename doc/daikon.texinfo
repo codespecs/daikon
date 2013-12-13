@@ -29,6 +29,7 @@
 @c @setchapternewpage odd
 @paragraphindent 1
 @firstparagraphindent insert
+@codequotebacktick on
 @c default value for example indentation
 @set exin 4
 @c default value for example indentation within an @enumerate
