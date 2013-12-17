@@ -29,6 +29,11 @@ endif
 endif
 endif
 
+installation-test:
+	(cd examples/java-examples/StackAr; \
+	javac -g DataStructures/*.java; \
+	java -cp '../../../daikon.jar:.' daikon.Chicory --daikon DataStructures.StackArTester)
+
 clean:
 	$(MAKE) -C scripts clean
 ifdef DAIKONCLASS_SOURCES
