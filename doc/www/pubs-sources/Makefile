@@ -1,6 +1,5 @@
 ###########################################################################
-MERNSTDIR ?= /homes/gws/mernst
-BIBDIR ?= ${MERNSTDIR}/bib
+BIBDIR ?= ~/bib
 # This should include every file with "usesDaikon" or "\"Invariant dectection\""
 BIBFILES = ${BIBDIR}/bibstring-unabbrev.bib ${BIBDIR}/ernst.bib ${BIBDIR}/invariants.bib ${BIBDIR}/pag.bib ${BIBDIR}/soft-eng.bib ${BIBDIR}/testing.bib ${BIBDIR}/types.bib
 BPHOME ?= ${MERNSTDIR}/bin/src/perl/bibtex2web/lib

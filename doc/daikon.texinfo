@@ -469,7 +469,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 # The full pathname of the directory that contains Daikon
 export DAIKONDIR=$HOME/daikon
 # The full Unix pathname of the directory that contains the Java JDK
-export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.6.0_20
+export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.7.0_45
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
@@ -488,7 +488,7 @@ ln -s "Program Files" program_files
 @noindent
 and then the JAVA_HOME line becomes:
 @example
-export JAVA_HOME=/cygdrive/c/program_files/Java/jdk1.6.0_20
+export JAVA_HOME=/cygdrive/c/program_files/Java/jdk1.7.0_45
 @end example
 
 @c You can also
@@ -641,6 +641,12 @@ the @code{CLASSPATH} should be specified in Windows format.  That is
 why the build instructions suggest specifying the @code{CLASSPATH} in
 the @code{$DAIKONDIR/java/Makefile.user} file --- so that the required
 Unix definition is not part of the environment.
+Because @command{java} is a Windows program, if you give it
+a @command{-CLASSPATH} argument it expects it to have Windows style pathnames.
+An easy way to deal with this is to use the @command{cygpath} utility:
+@example
+java -cp `cygpath -wp unix/path/a:unix/path/b` <remaider of arguments>
+@end example
 
 @c JHP Jan 2 2008: I removed this as I don't think this a problem for
 @c a user that isn't trying to write scripts on two platforms.  They

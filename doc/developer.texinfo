@@ -1980,7 +1980,7 @@ as you prepare for a release the current version number is probably odd.  It wil
 be reset as one of the first steps in the release process.  After making the
 distribution, one of the final steps is to increment the version number again to
 prepare for subsequent development.  Note, this system has the useful side effect
-of allowing the build and test process to be repeated to fix a problem (steps 3-11 below) 
+of allowing the build and test process to be repeated to fix a problem (steps 5-14 below) 
 without having to worry about updating or reseting the version number.
 
 The Daikon distribution site is located at @uref{//plse.cs.washington.edu/daikon};
@@ -1993,6 +1993,10 @@ machine at 3.4GHz with 16GB of memory. Barring any difficulities, the entire pro
 will take at least two hours - and could be much more depending on the number of
 different platforms on which you test the release.
 
+@noindent
+NOTE: @*
+Each of the steps below assumes that the current working directory is $DAIKONDIR.
+
 
 @exampleindent 0
 
@@ -2002,10 +2006,25 @@ different platforms on which you test the release.
 Update the Daikon source files to their most recent version. 
 
 @example
-cd $DAIKONDIR && hg fetch && hg outgoing && hg status
+hg fetch && hg outgoing && hg status
 @end example
 
 The last line printed should be @samp{no changes found}.
+
+[Time: moments]
+
+
+@item
+Make sure we have the latest version of @file{plume.jar}. First,
+update plume-lib to the most recent version.
+
+@example
+(cd plume-lib; hg fetch)
+@end example
+
+Next, verify that @file{plume-lib/java/plume.jar} is identical to 
+@file{java/lib/plume.jar}.  If not, copy the plume-lib version to
+java/lib.
 
 [Time: moments]
 
@@ -2017,7 +2036,6 @@ You may do this manually, or if the value just needs to be incremented
 by 1 (to go from odd to even) you may use:
 
 @example
-cd $DAIKONDIR
 make update-dist-version-file
 @end example
 
@@ -2032,9 +2050,29 @@ Now, update the appropriate files with the date and version number
 of the release.
 
 @example
-cd $DAIKONDIR
 make update-doc-dist-date-and-version
 @end example
+
+[Time: moments]
+
+
+@item
+Update the pulications pages in a local copy of plume-bib. 
+If you have not done so previously, you may create this repository
+now:
+
+@example
+(cd; https://code.google.com/p/plume-bib/ bib)
+@end example
+
+Now uppate the contents:
+
+@example
+(cd ~/bib; hg fetch)
+@end example
+
+Alternatively, you may set the enviroment variable BIBDIR to the location
+of the bibliography you wish to use.
 
 [Time: moments]
 
@@ -2107,7 +2145,24 @@ make staging
 [Time: 4 min]
 
 
-@emph{CHECK LINKS AT THIS POINT?}
+@item
+Check the website to see if it has any broken links.
+
+@example
+checklink -q -r `cat $DAIKONDIR/plume-lib/bin/checklink-args.txt` \
+          http://plse.cs.washington.edu/daikon/staging-daikon > log 2>&1
+@end example
+
+Review the log and make corrections as appropriate.
+
+Errors 301 and 501 are normally fixed by adding an additional line
+to $DAIKONDIR/plume-lib/bin/checklink-args.txt.
+
+In some cases a "403 Forbidden" error is transient, due to the website
+being down.  You can check such links by hand.
+
+Error 404 usually indicates an error in our links that needs to be fixed.
+
 
 @item
 Test the distribution, currently in the staging area, on a 64-bit machine.
@@ -2129,10 +2184,22 @@ This is probably best done on a virtual machine running a current version
 of Fedora.  The instructions below assume you are running on such a machine.
 They will download the staged daikon.tar.gz file, extract the files, set
 the appropriate environment variables and run the top level Makefile.
-Success is indicated by invariant output being written to the screen.
+Finally, a short verification test is run;
+success is indicated by invariant output being written to the screen.
 
 @example
-@emph{UNDONE - similar to MAC case below.}
+mkdir -p ~/tmp
+cd ~/tmp
+rm -rf daikon.tar.gz daikon
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
+tar xzf daikon.tar.gz
+export JAVA_HOME /usr/lib/jvm/java
+export DAIKONDIR `pwd`/daikon
+export DAIKONCLASS_SOURCES 1
+source daikon/scripts/daikon.cshrc
+cd daikon
+make
+make installation-test
 @end example
 
 [Time: ?? min]
@@ -2145,9 +2212,9 @@ environment variables such as $DAIKONDIR defined!), download the staged
 daikon.tar.gz
 file, extract the files, set the appropriate environment variables
 and run the top level Makefile.
-The last line of output from the make should indicate that Kvasir was
-not built because this is not a linux platform. After running the 
-@command{java} command, success is indicated by invariant output being
+The last line of output from the first make should indicate that Kvasir was
+not built because this is not a linux platform. After running the second
+make command, success is indicated by invariant output being
 written to the screen.
 [Time: 10 min]
 
@@ -2166,10 +2233,7 @@ setenv DAIKONCLASS_SOURCES 1
 source daikon/scripts/daikon.cshrc
 cd daikon
 make
-cd examples/java-examples/StackAr
-javac -g DataStructures/*.java
-java -cp `cygpath -wp .:../../../daikon.jar` -ea caikon.Chicory \
-     --daikon DataStructures/StackArTester
+make installation-test
 @end example
 
 @item
@@ -2188,10 +2252,7 @@ export DAIKONCLASS_SOURCES=1
 source daikon/scripts/daikon.bashrc
 cd daikon
 make
-cd examples/java-examples/StackAr
-javac -g DataStructures/*.java
-java -cp `cygpath -wp .:../../../daikon.jar` -ea caikon.Chicory \
-     --daikon DataStructures/StackArTester
+make installation-test
 @end example
 @end itemize
 
@@ -2206,8 +2267,6 @@ run the top level makefile.  This is successful if the make command
 runs to conclusion without an error.  The last line should indicate
 that Kvasir was not built because it is not a Linux platform.
 
-Note that the build will take a fair amount of time because it
-builds the DynComp instrumented JDK.
 @itemize
 @item
 Csh version:
@@ -2267,36 +2326,11 @@ make staging-to-www
 
 
 @item
-Update the publications pages.
-
-@example
-(cd ~/bib; hg fetch)      
-make -C $pag/www/daikon/pubs-sources update-from-checkout
-make -C $pag/www/daikon pubs
-@end example
-
-[Time: ?? min]
-
-
-@item
-Check the website to see if it has any broken links.
-
-@example
-checklink -q -r `cat $DAIKONDIR/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/daikon
-@end example
-
-Links to the webpages of people and conferences are read from
-@file{$pl/bin/html-canonical-urls}.
-
-In some cases a "403 Forbidden" error is transient, due to the website
-being down.  You can check such links by hand.
-
-
-@item
 Commit changes back to the repository:
 
+@emph{NEEDS TESTING AND REVIEW. could this be done with `cat $DAIKONDIR/doc/VERSION`?}
+
 @example
-cd $DAIKONDIR
 hg -q commit -m "Change version to @emph{X.Y.Z}"
 hg push
 cd kvasir
@@ -2326,7 +2360,6 @@ adjust the version number in file @file{$DAIKONDIR/doc/VERSION} - it should
 be bumped up to an odd value for continuing development.
 
 @example
-cd $DAIKONDIR
 make update-dist-version-file
 @end example
 
@@ -2337,10 +2370,9 @@ export -n TODAY
 @end example
 
 Now, update the appropriate files with the date and version number
-of the release.
+for ongoing development.
 
 @example
-cd $DAIKONDIR
 make update-doc-dist-date-and-version
 @end example
 
@@ -2361,7 +2393,6 @@ make rebuild-everything-no-clean
 Commit changes back to the repository:
 
 @example
-cd $DAIKONDIR
 hg -q commit -m "Change version to @emph{X.Y.Z}"
 hg push
 cd kvasir
@@ -2399,7 +2430,7 @@ choose 'submit a release' which is in the lower right corner.
 There enter the version number, type of release and the introductory
 paragraph from CHANGES for this release.
 
-This could be automated.  See "man freshmeat-submit".
+(This could be automated.  See "man freshmeat-submit".)
 
 @end enumerate
 
