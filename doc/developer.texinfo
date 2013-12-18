@@ -2084,7 +2084,7 @@ Do a clean rebuild of everything.
 make rebuild-everything
 @end example
 
-[Time: 12 min]
+[Time: 11 min]
 
 
 @item
@@ -2163,6 +2163,8 @@ being down.  You can check such links by hand.
 
 Error 404 usually indicates an error in our links that needs to be fixed.
 
+[Time: 2 min]
+
 
 @item
 Test the distribution, currently in the staging area, on a 64-bit machine.
@@ -2193,16 +2195,16 @@ cd ~/tmp
 rm -rf daikon.tar.gz daikon
 wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 tar xzf daikon.tar.gz
-export JAVA_HOME /usr/lib/jvm/java
-export DAIKONDIR `pwd`/daikon
-export DAIKONCLASS_SOURCES 1
-source daikon/scripts/daikon.cshrc
+export JAVA_HOME=/usr/lib/jvm/java
+export DAIKONDIR=`pwd`/daikon
+export DAIKONCLASS_SOURCES=1
+source daikon/scripts/daikon.bashrc
 cd daikon
 make
 make installation-test
 @end example
 
-[Time: ?? min]
+[Time: 14 min]
 
 
 @item
@@ -2216,6 +2218,7 @@ The last line of output from the first make should indicate that Kvasir was
 not built because this is not a linux platform. After running the second
 make command, success is indicated by invariant output being
 written to the screen.
+@*
 [Time: 10 min]
 
 @itemize
@@ -2266,6 +2269,8 @@ file, extract the files, set the appropriate environment variables and
 run the top level makefile.  This is successful if the make command
 runs to conclusion without an error.  The last line should indicate
 that Kvasir was not built because it is not a Linux platform.
+@*
+[Time: ?? min]
 
 @itemize
 @item
@@ -2312,7 +2317,7 @@ Save the previous release in the history archives.
 make save-current-release
 @end example
 
-[Time: ?? min]
+[Time: moments]
 
 
 @item
