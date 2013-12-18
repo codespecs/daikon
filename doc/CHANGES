@@ -22,7 +22,13 @@ Further documentation can be found in:
 
 5.0.0 (in progress)
 
-A new front end for .NET languages (C#, F#, and Visual Basic) is available.
+Highlights:
+
+A new front end for .NET languages (C#, F#, and Visual Basic), named Chicory, is available.
+
+Kvasir supports all 
+
+
 Daikon problems are now tracked in the Google Code database.
 We have moved to a new distribution site.
 We have moved to new mailing list addresses.
@@ -30,42 +36,28 @@ We removed the Mangel-Wurzel documentation.
 
 General
 
-  The bin directory is now called scripts to be consistent with the google
-  code repository and the documentation.
+  The Daikon distribution is now hosted at University of Washington:
+    http://plse.cs.washington.edu/daikon
 
-  Daikon and Fjalar problems are now tracked in the appropriate Google
-  Code database.  You may search or add new issues at:
-  http://code.google.com/p/daikon/issues (or)
-  http://code.google.com/p/fjalar/issues 
-  Please note that there are separate databases for Daikon and Kvasir.
+  Bug reporting is done using Google Code issue trackers:
+    http://code.google.com/p/daikon/issues
+    http://code.google.com/p/fjalar/issues 
   Problems with Chicory and other front ends should be submitted against
-  the Daikon product.  Problems with Kvasir shoule be subitted against
+  the Daikon product.  Problems with Kvasir should be subitted against
   the Fjalar product.
 
-  We have moved our distribution host site from MIT to the University of
-  Washington.  All previous references to addresses of the form:
-    //pag.csail.mit.edu/daikon
-  are now:
-    //plse.cs.washington.edu/daikon
-
-  We have deprecated our MIT based mailing lists in favor of new ones
-  hosted by Google Groups.  Three new mailing lists have been set up:
+  Mailing lists have migrated to Google Groups:
     daikon-announce@googlegroups.com
     daikon-discuss@googlegroups.com
     daikon-developers@googlegroups.com
   To subscribe, go to the appropriate site below and "Apply to join group":
       https://groups.google.com/forum/#!forum/daikon-announce
       https://groups.google.com/forum/#!forum/daikon-discuss
+      https://groups.google.com/forum/#!forum/daikon-developers
+  (For the latter, approval is given to people doing Daikon development.)
 
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
-WARNING: There is a known issue with DynComp not working with Java 7.
-The instrumentation code that DynComp inserts does not verify correctly
-with Java 7 due to a StackMap issue.  The work around is to compile with:
-  javac -target 5 -source 5 .......
-If this is a problem for your project, please add a comment to the issues
-database to let us know:
-  https://code.google.com/p/daikon/issues/detail?id=24
-!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!
+  Renamed the bin/ directory to scripts/.
+
 
 Daikon
 
@@ -79,31 +71,52 @@ Daikon
 
   ???
 
-Kvasir
+Chicory front end for Java
+
+  Updated for Java 7.
+
+  WARNING:  Although Chicory proper works with Java 7, DynComp does not yet
+  work with Java 7.  As a workaround, you can compile your code with:
+     javac -target 5 -source 5 ...
+  If this is a problem for your project, please add a comment to the issue
+  tracker to let us know:
+  https://code.google.com/p/daikon/issues/detail?id=24
+
+Kvasir front end for C/C++
 
   ???
 
   User visible changes
 
-    Kvasir's version of Valgrind has been updated to support newer versions
-    of glibc. Kvasir should now support all versions of glibc supported by
-    Valgrind 3.8.1(glibc 2.2-28)
+    Kvasir supports all versions of glibc up to glibc 2.2-28.
+    This is the same versions of glibc as supported by Valgrind 3.8.1.
+
+    [Mark:  http://www.gnu.org/software/libc/ says "The current stable
+    version of glibc is 2.18."  The version installed on F19 is 2.17, which
+    I determined by running either of the following commands:
+        /lib/libc.so.6
+	ldd --version
+    I'm not sure what the version 2.2-28 given above is, but it looks like
+    a mistake.
 
   Bug fixes
 
   ???
 
+Mangel-Wurzel front end for C/C++
+
+  It has not been supported for almost a decade, so we have removed all
+  references to the Mangel-Wurzel front end from the documentation.
+
+
+
 Documentation
-
-  We no longer provide 'info' versions of the documentation.  However, the
-  targets remain in the makefile if you wish to make your own.
-
-  We have removed all references to the Mangel-Wurzel front end from the
-  documentation as it is no longer supported.
 
   We have enhanced the documention on using Daikon with Eclipse.
 
-  We have added a section on Celeriac, the new front end for .net languages.
+  We no longer distribute Texinfo-formatted 'info' versions of the
+  documentation.  However, the targets remain in the makefile if you wish
+  to make your own.
 
   We have added a section to the developer documentation on how to make
   a distribution.
