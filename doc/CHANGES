@@ -20,19 +20,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.0.0 (in progress)
+5.0.0 (December 18, 2013)
 
 Highlights:
 
-A new front end for .NET languages (C#, F#, and Visual Basic), named Chicory, is available.
-
-Kvasir supports all 
-
-
-Daikon problems are now tracked in the Google Code database.
-We have moved to a new distribution site.
-We have moved to new mailing list addresses.
-We removed the Mangel-Wurzel documentation.
+  A new front end for .NET languages (C#, F#, and Visual Basic), named Chicory, is available.
+  Kvasir tested with Fedora 19, gcc 4.8.2 and glibc 2.17.
+  Daikon problems are now tracked in the Google Code database.
+  We have moved to a new distribution site.
+  We have moved to new mailing list addresses.
+  We removed the Mangel-Wurzel documentation.
 
 General
 
@@ -59,18 +56,6 @@ General
   Renamed the bin/ directory to scripts/.
 
 
-Daikon
-
-  ???
-
-  User visible changes
-
-  ???
-
-  Bug fixes
-
-  ???
-
 Chicory front end for Java
 
   Updated for Java 7.
@@ -82,32 +67,20 @@ Chicory front end for Java
   tracker to let us know:
   https://code.google.com/p/daikon/issues/detail?id=24
 
-Kvasir front end for C/C++
 
-  ???
+Kvasir front end for C/C++
 
   User visible changes
 
-    Kvasir supports all versions of glibc up to glibc 2.2-28.
-    This is the same versions of glibc as supported by Valgrind 3.8.1.
+    Support for more recent versions of Linux (tested with Fedora 19).
+    Support for more recent versions of gnu tools (tested with gcc 4.8.2
+    and glibc 2.17).
 
-    [Mark:  http://www.gnu.org/software/libc/ says "The current stable
-    version of glibc is 2.18."  The version installed on F19 is 2.17, which
-    I determined by running either of the following commands:
-        /lib/libc.so.6
-	ldd --version
-    I'm not sure what the version 2.2-28 given above is, but it looks like
-    a mistake.
-
-  Bug fixes
-
-  ???
 
 Mangel-Wurzel front end for C/C++
 
   It has not been supported for almost a decade, so we have removed all
   references to the Mangel-Wurzel front end from the documentation.
-
 
 
 Documentation
