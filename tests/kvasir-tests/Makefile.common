@@ -79,6 +79,9 @@ daikon-output/$(NAME).dyncomp.decls: ran-kvasir
 daikon-output/$(NAME)$(DTRACE_EXT): ran-kvasir
 	@
 
+daikon-output/$(NAME)$(DTRACE_EXT).orig: ran-kvasir
+	@
+
 daikon-output/$(NAME)$(DTRACE_EXT).clean: ran-kvasir
 	@
 
@@ -89,7 +92,7 @@ $(NAME).comp: ran-kvasir
 	@
 
 daikon-output/$(NAME).inv.gz: daikon-output/$(NAME).dyncomp.decls \
-                              daikon-output/$(NAME)$(DTRACE_EXT)
+                              daikon-output/$(NAME)$(DTRACE_EXT).orig
 	$(DAIKON) $^ -o daikon-output/$(NAME).inv.gz
 
 daikon-output/$(NAME).invs.txt: daikon-output/$(NAME).inv.gz
@@ -128,12 +131,15 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
+	/usr/bin/cp -f daikon-output/$(NAME).dtrace daikon-output/$(NAME).dtrace.orig
 	perl -i $(CLEAN_OUTPUT) daikon-output/$(NAME).dtrace
 	perl -i $(CLEAN_DECLS) daikon-output/$(NAME).decls
 	perl -i $(CLEAN_DECLS) daikon-output/$(NAME).dyncomp.decls
 	$(DECLS_2_COMP) daikon-output/$(NAME).dyncomp.decls > $(NAME).comp
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).decls
+	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dtrace.orig
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dtrace
+	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dyncomp.decls
 	touch $@
 else
 ifeq ($(COUNTS_ONLY),)
@@ -145,12 +151,15 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
+	/usr/bin/cp -f daikon-output/$(NAME).dtrace daikon-output/$(NAME).dtrace.orig
 	perl -i $(CLEAN_OUTPUT) daikon-output/$(NAME).dtrace
 	perl -i $(CLEAN_DECLS) daikon-output/$(NAME).decls
 	perl -i $(CLEAN_DECLS) daikon-output/$(NAME).dyncomp.decls
 	$(DECLS_2_COMP) daikon-output/$(NAME).dyncomp.decls > $(NAME).comp
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).decls
+	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dtrace.orig
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dtrace
+	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dyncomp.decls
 	touch $@
 else
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
