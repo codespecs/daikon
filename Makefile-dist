@@ -29,10 +29,16 @@ endif
 endif
 endif
 
+ifeq (cygwin,$(OSTYPE))
+CP:=`cygpath -wp ../../../daikon.jar:.`
+else
+CP:=../../../daikon.jar:.
+endif
+
 installation-test:
-	(cd examples/java-examples/StackAr; \
+	cd examples/java-examples/StackAr; \
 	javac -g DataStructures/*.java; \
-	java -cp '../../../daikon.jar:.' daikon.Chicory --daikon DataStructures.StackArTester)
+	java -cp $(CP) daikon.Chicory --daikon DataStructures.StackArTester
 
 clean:
 	$(MAKE) -C scripts clean
