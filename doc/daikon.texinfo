@@ -1639,7 +1639,7 @@ produced the output that it did.)
 
 The ``Samples breakdown'' output indicates how many samples in the
 @file{.dtrace} file had a modified value (``m''), had an unmodified
-value (``u''), and had a missing value (``x'').  The summary uses a
+value (``u''), and had a nonsensical value (``x'').  The summary uses a
 capital letter if the sample had any of the corresponding type of
 variable, and a lower-case letter if it had none.  These types affect
 statistical tests that determine whether a particular invariant (that
