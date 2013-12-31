@@ -2422,10 +2422,14 @@ found no invariants.  You can get a little bit more information by using
 the @option{--output_num_samples} flag to Daikon
 (@pxref{Options to control Daikon output}).
 
+@cindex nonsensical values, ignored when computing invaraints
+
 Daikon's output is predicated on the assumption that all expressions
 that get evaluated are sensible.  For instance, if Daikon prints
-@samp{a.b == 0}, then that means that if @samp{a.b} is sensible (that
-is, @samp{a} is non-null), then its value is zero.  If you would like
+@samp{a.b == 0}, then that means that @emph{if} @samp{a.b} is sensible (that
+is, @samp{a} is non-null), then its value is zero.  When @samp{a} is
+@samp{null}, then @samp{a.b} is called ``nonsensical''.  Daikon's output
+ignores all nonsensical values.  If you would like
 the assumptions to be printed explicitly, then set the
 @option{daikon.Daikon.guardNulls} configuration option (@pxref{General
 configuration options}).
