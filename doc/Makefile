@@ -36,6 +36,9 @@ endif
 ../java/daikon/util/SimpleLog.class: ../java/daikon/util/SimpleLog.java
 	make -C ../java
 
+../java/daikon/util/SimpleLog.java:
+	make -C ../java plume-copy
+
 images/%.eps: images/%.dot
 	dot -Tps $< >$@
 
