@@ -67,6 +67,8 @@ public class InstrumentHandler extends CommandHandler {
     // Whether should print debugging information as it is executing.
     private static String debug_SWITCH = "debug";
 
+    @SuppressWarnings("enhancedfor.type.incompatible") // Checker Framework bug exposed on line "for (TypeDeclaration decl : oneFile.roots) {"
+
     public boolean handle(String[] args) {
 
         Daikon.output_format = daikon.inv.OutputFormat.JAVA;
