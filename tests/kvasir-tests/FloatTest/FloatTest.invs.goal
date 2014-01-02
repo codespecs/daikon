@@ -62,7 +62,7 @@ b == 34.4560013
 ::globalDouble[] == orig(::globalDouble[])
 ::globalDouble has only one value
 ::globalDouble[] == [1.23E-4, 1230.0, 1.23E12, 1.23E102, Infinity]
-return == 134.8010025024414
+return == 134.800995
 ===========================================================================
 ..floatDivide():::ENTER
 ::globalDouble has only one value
@@ -75,7 +75,7 @@ b == 254.0
 ::globalDouble[] == orig(::globalDouble[])
 ::globalDouble has only one value
 ::globalDouble[] == [1.23E-4, 1230.0, 1.23E12, 1.23E102, Infinity]
-return == 0.003937007874015748
+return == 0.00393700786
 ===========================================================================
 ..floatMultiply():::ENTER
 ::globalDouble has only one value
@@ -88,7 +88,7 @@ b == 1.19999997E24
 ::globalDouble[] == orig(::globalDouble[])
 ::globalDouble has only one value
 ::globalDouble[] == [1.23E-4, 1230.0, 1.23E12, 1.23E102, Infinity]
-return == 1.1999999527397175E37
+return == 1.19999989E37
 ===========================================================================
 ..floatSub():::ENTER
 ::globalDouble has only one value
@@ -101,7 +101,7 @@ b == -3415.23413
 ::globalDouble[] == orig(::globalDouble[])
 ::globalDouble has only one value
 ::globalDouble[] == [1.23E-4, 1230.0, 1.23E12, 1.23E102, Infinity]
-return == 3449.234130859375
+return == 3449.23413
 ===========================================================================
 ..main():::ENTER
 ::globalDouble has only one value

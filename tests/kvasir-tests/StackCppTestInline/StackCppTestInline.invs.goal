@@ -1,9 +1,27 @@
 ===========================================================================
 ..main():::ENTER
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated == 0
 Stack::publicNumLinksCreated == 0
 ===========================================================================
 ..main():::EXIT
+::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
+::__numeric_traits_integer<long>::__min == orig(::__numeric_traits_integer<long>::__min)
+::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
+::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
+::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated == 2
 Stack::publicNumLinksCreated == 9
 return == 0
@@ -12,6 +30,12 @@ Link:::OBJECT
 this->next[].next->next->data elements one of { "First line", "Second line", "Uno" }
 ===========================================================================
 Link.initialize(char*, Stack::Link*):::ENTER
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 nxt[].next->next->data elements one of { "First line", "Second line", "Uno" }
 nxt[].next->next->next->data == [First line]
@@ -22,6 +46,12 @@ nxt[].next->next->next[0] contains no nulls and has only one value, of length 1
 nxt[].next->next->next[0] elements has only one value
 ===========================================================================
 Link.initialize(char*, Stack::Link*):::EXIT
+::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
+::__numeric_traits_integer<long>::__min == orig(::__numeric_traits_integer<long>::__min)
+::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
+::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
+::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 Stack::publicNumLinksCreated == orig(Stack::publicNumLinksCreated)
 nxt[] == orig(nxt[])
@@ -36,6 +66,12 @@ nxt[].next->next->next[0] == orig(nxt[].next->next->next[0])
 nxt[].next->next[0] == orig(nxt[].next->next[0])
 nxt[].next[0] == orig(nxt[].next[0])
 this->next == orig(nxt)
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 nxt[].next->next->data elements one of { "First line", "Second line", "Uno" }
 nxt[].next->next->next->data == [First line]
@@ -52,12 +88,30 @@ Stack:::OBJECT
 this->myName one of { "My first stack", "My second stack" }
 ===========================================================================
 Stack.Stack(char*):::ENTER
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 0, 1 }
 Stack::publicNumLinksCreated one of { 0, 5 }
 name one of { "My first stack", "My second stack" }
 ===========================================================================
 Stack.Stack(char*):::EXIT
+::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
+::__numeric_traits_integer<long>::__min == orig(::__numeric_traits_integer<long>::__min)
+::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
+::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
+::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::publicNumLinksCreated == orig(Stack::publicNumLinksCreated)
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 Stack::publicNumLinksCreated one of { 0, 5 }
 this->head == null
@@ -65,6 +119,12 @@ this->numElements == 0
 this->myName == orig(name)
 ===========================================================================
 Stack.getName():::ENTER
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 Stack::publicNumLinksCreated one of { 5, 9 }
 this->head[].data elements one of { "Cuatro", "Fifth line" }
@@ -76,6 +136,12 @@ this->head[].next->next->data one of { [Dos], [Third line] }
 this->numElements one of { 4, 5 }
 ===========================================================================
 Stack.getName():::EXIT
+::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
+::__numeric_traits_integer<long>::__min == orig(::__numeric_traits_integer<long>::__min)
+::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
+::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
+::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 Stack::publicNumLinksCreated == orig(Stack::publicNumLinksCreated)
 this->head == orig(this->head)
@@ -88,6 +154,12 @@ this->head[].next->next[0] == orig(this->head[].next->next[0])
 this->head[].next[0] == orig(this->head[].next[0])
 this->numElements == orig(this->numElements)
 this[0] == orig(this[0])
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 Stack::publicNumLinksCreated one of { 5, 9 }
 return one of { "My first stack", "My second stack" }
@@ -102,17 +174,41 @@ return == this->myName
 return == orig(this->myName)
 ===========================================================================
 Stack.getNumStacksCreated():::ENTER
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 Stack::publicNumLinksCreated one of { 5, 9 }
 ===========================================================================
 Stack.getNumStacksCreated():::EXIT
+::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
+::__numeric_traits_integer<long>::__min == orig(::__numeric_traits_integer<long>::__min)
+::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
+::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
+::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::numStacksCreated == return
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 Stack::publicNumLinksCreated == orig(Stack::publicNumLinksCreated)
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 Stack::publicNumLinksCreated one of { 5, 9 }
 ===========================================================================
 Stack.peek():::ENTER
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated == 1
 Stack::publicNumLinksCreated == 5
 this has only one value
@@ -132,6 +228,12 @@ this->numElements == 5
 this[0] has only one value
 ===========================================================================
 Stack.peek():::EXIT
+::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
+::__numeric_traits_integer<long>::__min == orig(::__numeric_traits_integer<long>::__min)
+::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
+::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
+::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 Stack::publicNumLinksCreated == orig(Stack::publicNumLinksCreated)
 this->head == orig(this->head)
@@ -144,6 +246,12 @@ this->head[].next->next[0] == orig(this->head[].next->next[0])
 this->head[].next[0] == orig(this->head[].next[0])
 this->numElements == orig(this->numElements)
 this[0] == orig(this[0])
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated == 1
 Stack::publicNumLinksCreated == 5
 return == "Fifth line"
@@ -164,15 +272,33 @@ this[0] has only one value
 this->myName == orig(this->myName)
 ===========================================================================
 Stack.pop():::ENTER
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 Stack::publicNumLinksCreated one of { 5, 9 }
 ===========================================================================
 Stack.pop():::EXIT
+::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
+::__numeric_traits_integer<long>::__min == orig(::__numeric_traits_integer<long>::__min)
+::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
+::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
+::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 Stack::publicNumLinksCreated == orig(Stack::publicNumLinksCreated)
 this->head[].next == orig(this->head[].next->next)
 this->head[].next->next == orig(this->head[].next->next->next)
 this[0] == orig(this[0])
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 Stack::publicNumLinksCreated one of { 5, 9 }
 this->head[].next->next->data elements one of { "First line", "Second line", "Uno" }
@@ -182,13 +308,19 @@ this->numElements >= 0
 return in orig(this->head[].data)
 orig(this->head[].next) elements == this->head
 this->head in orig(this->head[].next)
-this->head[] - orig(this->head[]) + 56 == 0
-this->head[].next[0] - orig(this->head[].next[0]) + 56 == 0
+this->head[] - orig(this->head[]) + 80 == 0
+this->head[].next[0] - orig(this->head[].next[0]) + 80 == 0
 this->myName == orig(this->myName)
 (orig(this->numElements) == 0) ==> (this->numElements == 0)
 this->numElements <= orig(this->numElements)
 ===========================================================================
 Stack.privateStuff():::ENTER
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 Stack::publicNumLinksCreated one of { 5, 9 }
 this->head[].data elements one of { "Cuatro", "Fifth line" }
@@ -200,6 +332,12 @@ this->head[].next->next->data one of { [Dos], [Third line] }
 this->numElements one of { 4, 5 }
 ===========================================================================
 Stack.privateStuff():::EXIT
+::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
+::__numeric_traits_integer<long>::__min == orig(::__numeric_traits_integer<long>::__min)
+::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
+::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
+::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 Stack::publicNumLinksCreated == orig(Stack::publicNumLinksCreated)
 this->head == orig(this->head)
@@ -212,6 +350,12 @@ this->head[].next->next[0] == orig(this->head[].next->next[0])
 this->head[].next[0] == orig(this->head[].next[0])
 this->numElements == orig(this->numElements)
 this[0] == orig(this[0])
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 Stack::publicNumLinksCreated one of { 5, 9 }
 return == 42
@@ -225,38 +369,74 @@ this->numElements one of { 4, 5 }
 this->myName == orig(this->myName)
 ===========================================================================
 Stack.push(char*):::ENTER
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 this->head[].next->next->data elements one of { "First line", "Second line", "Uno" }
 this->head[].next->next->next[0] contains no nulls and has only one value, of length 1
 this->head[].next->next->next[0] elements has only one value
 ===========================================================================
 Stack.push(char*):::EXIT
+::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
+::__numeric_traits_integer<long>::__min == orig(::__numeric_traits_integer<long>::__min)
+::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
+::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
+::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 this->head[].next->next == orig(this->head[].next)
 this->head[].next->next->next == orig(this->head[].next->next)
 this[0] == orig(this[0])
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated one of { 1, 2 }
 Stack::publicNumLinksCreated - orig(Stack::publicNumLinksCreated) - 1 == 0
-this->head[] - orig(this->head[]) - 56 == 0
+this->head[] - orig(this->head[]) - 80 == 0
 orig(dat) in this->head[].data
 orig(this->head) in this->head[].next
 this->head[].next elements == orig(this->head)
-this->head[].next[0] - orig(this->head[].next[0]) - 56 == 0
+this->head[].next[0] - orig(this->head[].next[0]) - 80 == 0
 this->myName == orig(this->myName)
 this->numElements - orig(this->numElements) - 1 == 0
 ===========================================================================
 Stack.~Stack():::ENTER
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated == 2
 Stack::publicNumLinksCreated == 9
 this->head == null
 this->numElements == 0
 ===========================================================================
 Stack.~Stack():::EXIT
+::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
+::__numeric_traits_integer<long>::__min == orig(::__numeric_traits_integer<long>::__min)
+::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
+::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
+::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 Stack::publicNumLinksCreated == orig(Stack::publicNumLinksCreated)
 this->head == orig(this->head)
 this->numElements == orig(this->numElements)
 this[0] == orig(this[0])
+::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__min == -2147483648
+::__numeric_traits_integer<long>::__min == -9223372036854775808L
+::__numeric_traits_integer<short>::__max == 32767
+::__numeric_traits_integer<short>::__min == -32768
+::__numeric_traits_integer<unsigned long>::__digits == 64
 Stack::numStacksCreated == 2
 Stack::publicNumLinksCreated == 9
 this->head == null

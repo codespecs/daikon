@@ -2192,7 +2192,7 @@ public final class FileIO {
             + ppt.name());
       }
 
-      if (!line.trim().equals (vi.str_name())) {
+      if (!unescape_decl(line.trim()).equals (vi.str_name())) {
         throw new Daikon.TerminationMessage(
           "Mismatch between .dtrace file and .decls file.  Expected variable "
             + vi.name()
