@@ -24,24 +24,21 @@ Further documentation can be found in:
 
 Highlights:
 
-  A new front end for .NET languages (C#, F#, and Visual Basic), named Chicory, is available.
-  Kvasir tested with Fedora 19, gcc 4.8.2 and glibc 2.17.
-  Daikon problems are now tracked in the Google Code database.
-  We have moved to a new distribution site.
-  We have moved to new mailing list addresses.
-  We removed the Mangel-Wurzel documentation.
+  Chicory is a new front end for .NET languages (C#, F#, and Visual Basic).
+  The Kvasir front end for C works with current Linux distributions.
+  Daikon releases can be found at http://plse.cs.washington.edu/daikon/.
+  The bug tracker has moved to Google Code, and mailing lists to Google Groups.
 
 General
 
-  The Daikon distribution is now hosted at University of Washington:
-    http://plse.cs.washington.edu/daikon
+  The Daikon distribution is now hosted at the University of Washington:
+    http://plse.cs.washington.edu/daikon/
 
   Bug reporting is done using Google Code issue trackers:
     http://code.google.com/p/daikon/issues
     http://code.google.com/p/fjalar/issues 
-  Problems with Chicory and other front ends should be submitted against
-  the Daikon product.  Problems with Kvasir should be subitted against
-  the Fjalar product.
+  Problems with Kvasir should be submitted against the Fjalar product.
+  All other problems should be submitted against the Daikon product.  
 
   Mailing lists have migrated to Google Groups:
     daikon-announce@googlegroups.com
@@ -51,7 +48,7 @@ General
       https://groups.google.com/forum/#!forum/daikon-announce
       https://groups.google.com/forum/#!forum/daikon-discuss
       https://groups.google.com/forum/#!forum/daikon-developers
-  (For the latter, approval is given to people doing Daikon development.)
+  (daikon-developers is for people doing Daikon development.)
 
   Renamed the bin/ directory to scripts/.
 
@@ -73,7 +70,7 @@ Kvasir front end for C/C++
   User visible changes
 
     Support for more recent versions of Linux (tested with Fedora 19).
-    Support for more recent versions of gnu tools (tested with gcc 4.8.2
+    Support for more recent versions of GNU tools (tested with gcc 4.8.2
     and glibc 2.17).
 
 
@@ -85,7 +82,7 @@ Mangel-Wurzel front end for C/C++
 
 Documentation
 
-  We have enhanced the documention on using Daikon with Eclipse.
+  We have enhanced the documentation on using Daikon with Eclipse.
 
   We no longer distribute Texinfo-formatted 'info' versions of the
   documentation.  However, the targets remain in the makefile if you wish
@@ -100,8 +97,8 @@ Documentation
 
 An interim release to get an updated version into the field:
   Fix for stack map problem in Chicory.
-  The bin directory is now called scripts to be consistent with the google
-  code repository and the documentation.
+  The bin directory is now called scripts to be consistent with the Google
+  Code repository and the documentation.
 
 ===========================================================================
 
