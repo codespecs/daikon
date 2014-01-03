@@ -36,14 +36,14 @@
 @center @titlefont{Daikon Invariant Detector Developer Manual}
 
 @sp 2
-@center Daikon version 4.7.5
+@center Daikon version 4.7.7
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 4.7.5 release date
-@center December 12, 2013
+@c Print out the Daikon version 4.7.7 release date
+@center January 2, 2014
 @end ifset
 
 @ifclear final
@@ -91,7 +91,7 @@ Copyright @copyright{} 1998-2013
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 4.7.5, released December 12, 2013.
+It describes Daikon version 4.7.7, released January 2, 2014.
 
 @menu
 * Introduction::
@@ -2088,15 +2088,14 @@ make rebuild-everything
 
 
 @item
-@emph{THIS STEP IS CURRENTLY BROKEN.}
-
 Run the Kvasir regression tests.
+There should be no diff files marked FAILED.
 
 @example
-make -C $DAIKONDIR/tests/kvasir-tests clean clean-all nightly-summary-w-daikon
+make -C $DAIKONDIR/tests/kvasir-tests clean-all nightly-summary-w-daikon
 @end example
 
-[Time: ??18 min]
+[Time: 12 min]
 
 
 @item
@@ -2121,14 +2120,12 @@ cd $DAIKONDIR/doc
 diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
 @end example
 
-Another good source of information are the repository logs over the
-last month:
-
-@emph{NEEDS TESTING AND REVIEW. hg not cvs}
+Another good source of information are the repository logs since the
+last release:
 
 @example
 cd $DAIKONDIR/java
-cvs -q log -d ">1 month ago" -N | cvs-log-summarize.pl
+hg log -v -d ">2013-11-1" .
 @end example
 
 
@@ -2163,6 +2160,8 @@ being down.  You can check such links by hand.
 
 Error 404 usually indicates an error in our links that needs to be fixed.
 
+[Time: 2 min]
+
 
 @item
 Test the distribution, currently in the staging area, on a 64-bit machine.
@@ -2193,16 +2192,15 @@ cd ~/tmp
 rm -rf daikon.tar.gz daikon
 wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 tar xzf daikon.tar.gz
-export JAVA_HOME /usr/lib/jvm/java
-export DAIKONDIR `pwd`/daikon
-export DAIKONCLASS_SOURCES 1
-source daikon/scripts/daikon.cshrc
+export JAVA_HOME=/usr/lib/jvm/java
+export DAIKONDIR=`pwd`/daikon
+source daikon/scripts/daikon.bashrc
 cd daikon
 make
 make installation-test
 @end example
 
-[Time: ?? min]
+[Time: 14 min]
 
 
 @item
@@ -2216,6 +2214,7 @@ The last line of output from the first make should indicate that Kvasir was
 not built because this is not a linux platform. After running the second
 make command, success is indicated by invariant output being
 written to the screen.
+@*
 [Time: 10 min]
 
 @itemize
@@ -2229,7 +2228,6 @@ wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 tar xzf daikon.tar.gz
 setenv JAVA_HOME "/cygdrive/c/Program Files/Java/jdk1.7.0_45"
 setenv DAIKONDIR `pwd`/daikon
-setenv DAIKONCLASS_SOURCES 1
 source daikon/scripts/daikon.cshrc
 cd daikon
 make
@@ -2248,7 +2246,6 @@ tar xzf daikon.tar.gz
 export OSTYPE
 export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_45"
 export DAIKONDIR=`pwd`/daikon
-export DAIKONCLASS_SOURCES=1
 source daikon/scripts/daikon.bashrc
 cd daikon
 make
@@ -2258,14 +2255,16 @@ make installation-test
 
 
 @item
-@emph{NEEDS TESTING AND REVIEW.}
-
 Test the distribution on a MacOSX machine.  On a MacOSX machine
 with the development tools installed, download the staged daikon.tar.gz
 file, extract the files, set the appropriate environment variables and
-run the top level makefile.  This is successful if the make command
-runs to conclusion without an error.  The last line should indicate
-that Kvasir was not built because it is not a Linux platform.
+run the top level makefile.
+The last line of output from the first make should indicate that Kvasir was
+not built because this is not a linux platform. After running the second
+make command, success is indicated by invariant output being
+written to the screen.
+@*
+[Time: ?? min]
 
 @itemize
 @item
@@ -2276,12 +2275,12 @@ cd ~/tmp
 # or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 tar xzvf daikon.tar.gz
-setenv ORIG_RT /System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
+setenv JAVA_HOME /Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Home
 setenv DAIKONDIR `pwd`/daikon
-setenv DAIKONCLASS_SOURCES 1
 source daikon/scripts/daikon.cshrc
 cd daikon
 make
+make installation-test
 @end example
 
 @item
@@ -2294,13 +2293,12 @@ curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.
 tar xzvf daikon.tar.gz
 # Convert OSTYPE from a bash shell variable to a system environment variable.
 export OSTYPE
-export JAVA_HOME=/System/Library/Frameworks/JavaVM.framework/Home
-export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.6/Classes/classes.jar
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Home
 export DAIKONDIR=`pwd`/daikon
-export DAIKONCLASS_SOURCES=1
 source daikon/scripts/daikon.bashrc
 cd daikon
 make
+make installation-test
 @end example
 @end itemize
 
@@ -2312,7 +2310,7 @@ Save the previous release in the history archives.
 make save-current-release
 @end example
 
-[Time: ?? min]
+[Time: moments]
 
 
 @item
@@ -2404,14 +2402,12 @@ hg push
 
 
 @item
-@emph{NEEDS TESTING AND REVIEW.}
-
-Send mail to the daikon-announce mailing list.  There are sample
-messages in the @uref{http://lists.csail.mit.edu/pipermail/daikon-announce/,archive} of
-@uref{https://lists.csail.mit.edu/mailman/listinfo/daikon-announce/,daikon-announce}.
-
-You may need to visit @uref{https://lists.csail.mit.edu/mailman/admindb/daikon-announce/}
-to approve the message before it is sent to the list.
+Send mail to the daikon-announce mailing list.
+This list is located at daikon-announce@@googlegroups.com.
+(We have just moved the location of our mailing lists.  For now, you can
+find old sample messages in the
+@uref{http://lists.csail.mit.edu/pipermail/daikon-announce/,archive}
+of our previous mail list.)
 
 
 @item

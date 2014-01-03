@@ -18,9 +18,9 @@ char**** returnIntSum(int* u, float* a, char* str, char*** dummy, double** b, in
   if (u)
     returnIntSum(0, a, str + 3, dummy, b, uninit);
   else
-    return 0xDEADDEAD;
+    return (char****)0xDEADDEAD;
 
-  return 0xABBABEEF;
+  return (char****)0xABBABEEF;
 }
 
 int main()

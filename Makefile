@@ -561,10 +561,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 # The first attempts to ignore all files indicated by the contents
 # of the .hgignore file.  The second ignores the .hg files.
 	rsync -rp --filter=':- .hgignore' --filter='. rsync.ignore' ../fjalar/ ${TMPDIR}/daikon/kvasir
-	@# Generate configure file
-	(cd ${TMPDIR}/daikon/kvasir/valgrind; ./autogen.sh )
-	@# CVS-only build script
-	rm -f ${TMPDIR}/daikon/kvasir/auto-everything.sh
+
 	@# Internal developer documentation
 	rm -rf ${TMPDIR}/daikon/kvasir/valgrind/fjalar/notes
 	rm -rf ${TMPDIR}/daikon/kvasir/valgrind/fjalar/trivial-tool

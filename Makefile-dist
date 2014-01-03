@@ -29,10 +29,16 @@ endif
 endif
 endif
 
+ifeq (cygwin,$(OSTYPE))
+CP:=`cygpath -wp ../../../daikon.jar:.`
+else
+CP:=../../../daikon.jar:.
+endif
+
 installation-test:
-	(cd examples/java-examples/StackAr; \
+	cd examples/java-examples/StackAr; \
 	javac -g DataStructures/*.java; \
-	java -cp '../../../daikon.jar:.' daikon.Chicory --daikon DataStructures.StackArTester)
+	java -cp $(CP) daikon.Chicory --daikon DataStructures.StackArTester
 
 clean:
 	$(MAKE) -C scripts clean
@@ -45,9 +51,7 @@ java/dcomp_rt.jar:
 	$(MAKE) -C java dcomp_rt.jar
 
 kvasir:
-	cd kvasir/valgrind && ./configure --prefix=`pwd`/../inst
-	cd kvasir/valgrind && make
-	cd kvasir/valgrind && make install
+	cd kvasir && ./auto-everything.sh
 
 .PHONY: kvasir
 
