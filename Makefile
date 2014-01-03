@@ -409,6 +409,9 @@ doc-all:
 CUR_VER := $(shell unzip -p /cse/web/research/plse/daikon/download/daikon.zip daikon/README.txt |head -2|tail -1|perl -p -e 's/ version /\./' |perl -p -e 's/,.*//')
 HISTORY_DIR := /cse/web/research/plse/daikon/history
 
+check-for-broken-doc-links:
+	checklink -q -r `cat $(DAIKONDIR)/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/daikon/staging-daikon >check.log 2>&1
+
 save-current-release:
 	@echo Saving $(CUR_VER) to history directory.
 	chmod +w $(HISTORY_DIR)
