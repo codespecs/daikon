@@ -796,7 +796,7 @@ audit:
 
 # CHECKERS_ARGS = -source 7
 # CHECKERS_ARGS ?= -AsuppressWarnings=purity,flowexpr.parameter.not.final
-CHECKERS_ARGS ?= -AsuppressWarnings=flowexpr.parameter.not.final -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file
+CHECKERS_ARGS ?= -AsuppressWarnings=flowexpr.parameter.not.final -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation
 
 ## All of the following targets need to depend on "compile".
 
