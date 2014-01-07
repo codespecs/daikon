@@ -55,10 +55,10 @@ merge-invariants-tests:
 .PHONY: merge-invariants-tests
 
 clean:
+	$(MAKE) -C chicory-tests clean
 	$(MAKE) -C daikon-tests clean
 	$(MAKE) -C diff-tests clean
-	$(MAKE) -C dyncomp-tests clean
-	$(MAKE) -C kvasir-tests clean
+	$(MAKE) -C merge-invariants-tests clean
 
 # output display; can be called from children (they will set BASE)
 BASE?=.
