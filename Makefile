@@ -201,7 +201,7 @@ kvasir/config.sub: ../fjalar/auto-everything.sh
 kvasir/config.status: kvasir/fjalar/Makefile.in ../fjalar/valgrind/VEX/pub/libvex.h kvasir/config.sub
 	cd kvasir && ./configure --prefix=`pwd`/inst
 
-kvasir/coregrind/valgrind: kvasir/configure kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
+kvasir/coregrind/valgrind: kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
 	cd kvasir && $(MAKE) --no-print-directory
 
 kvasir/fjalar/fjalar-$(VALGRIND_ARCH)-linux: kvasir/coregrind/valgrind $(wildcard kvasir/fjalar/*.[ch]) $(wildcard kvasir/fjalar/kvasir/*.[ch])
