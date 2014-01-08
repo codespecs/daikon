@@ -86,7 +86,7 @@ public final class Daikon {
       + release_version
       + ", released "
       + release_date
-      + "; http://pag.csail.mit.edu/daikon.";
+      + "; http://plse.cs.washington.edu/daikon.";
 
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
@@ -380,8 +380,8 @@ public final class Daikon {
   static String usage =
     UtilMDE.joinLines(
       release_string,
-      "Daikon invariant detector, copyright 1998-2007",
-      // " by Michael Ernst <mernst@csail.mit.edu>",
+      "Daikon invariant detector, copyright 1998-2014",
+      // " by Michael Ernst <mernst@cs.washington.edu>",
       "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
       // "For licensing information, see the License section of the manual.",
       "Usage:",
@@ -389,9 +389,10 @@ public final class Daikon {
       "  Each file is a declaration file or a data trace file; the file type",
       "  is determined by the file name (containing \".decls\" or \".dtrace\").",
       "  For a list of flags, see the Daikon manual, which appears in the ",
-      "  Daikon distribution and also at http://pag.csail.mit.edu/daikon/.",
+      "  Daikon distribution and also at http://plse.cs.washington.edu/daikon/.",
       "  --"+server_SWITCH+" dir",
-      "  Server mode for Daikon in which it reads files from <dir> as they appear (sorted lexicographically) until it finds a file ending in '.end'"
+      "  Server mode for Daikon in which it reads files from <dir> as they appear",
+      "  (sorted lexicographically) until it finds a file ending in '.end'"
       );
 
   /**
