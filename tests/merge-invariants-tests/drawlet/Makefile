@@ -110,7 +110,7 @@ test_d2:
 update-goals:
 
 clean:
-	/bin/rm -rf *.inv.txt *.inv.gz *.diff *.dtrace.gz *.txt \
+	/bin/rm -rf *.inv.gz *.diff *.txt 
 
 show-vars:
 	@echo PPT_OPTION = $(PPT_OPTION)
