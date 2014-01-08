@@ -25,8 +25,12 @@ help-recurse-list:
 	@echo " which are ones that have been selected as useful tests.)"
 	@echo ""
 
-# V3 doesn't need "merge" target here, I think.
+ifeq (x86_64,$(shell uname -m))
 all diffs: txt-diff diff-tests chicory-tests merge-invariants-tests results
+else
+# the merge-invariants-tests take too long on 32 bits
+all diffs: txt-diff diff-tests chicory-tests results
+endif
 
 quick: quick-txt-diff diff-tests results
 
