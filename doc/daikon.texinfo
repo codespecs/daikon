@@ -4134,20 +4134,19 @@ containing your JDK@.  This command instruments the classes in the
 @file{rt.jar} file of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.
 
-On MacOS, there is not normally a JDK directory.  Instead, the
-@code{ORIG_RT} variable must be set to specify the location of the input JDK
-jar file (@code{classes.jar} in MacOS).  Normally the file is found in
-@code{/System/Library/Frameworks} under the appropriate Java version.
-The following example is for the standard install of Java 1.5 on
-MacOS:
+On MacOS, versions of the JDK prior to 7 were not organized in a manner
+similar to the Linux versions.  Current versions of Daikon require JDK 7
+(or newer); hence, this is no longer an issue on MacOS.
+The following example is typical for an install of Java 1.7 on MacOS:
 
 @exampleindent 0
-@smallexample
-export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
-@end smallexample
+@example
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Home
+@end example
 @exampleindent 4
 
-BuildJDK requires 20-40 minutes to complete and uses 1024 MB of
+@noindent
+Building @file{dcomp_rt} requires 10-30 minutes to complete and uses 1024 MB of
 memory.  Regular progress indicators are printed to standard output.
 
 You can ignore warnings issued during the instrumentation process, so
@@ -4159,6 +4158,10 @@ printed at the end of instrumentation.  This is not a problem unless
 your application calls these methods (directly or indirectly).  
 If one of those methods is called, a NoSuchMethodException will
 be generated when the call is attempted.
+
+One final note: if you update your JDK in any way (such as a OS upgrade),
+you will need to rebuild @file{dcomp_rt.jar}.
+
 
 @node       DynComp for Java options
 @subsection DynComp options
