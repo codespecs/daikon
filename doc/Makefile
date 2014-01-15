@@ -67,52 +67,37 @@ developer.html: developer.texinfo
 
 html-chap: daikon_manual_html/daikon.html developer_manual_html/developer.html
 
-# The "subdir" flag does not copy over images aren't copied, so the
-# pathnames become incorrect.  I need to copy them over myself.
-# Images are in the order of appearance in the manual (search for "@image",
-# except daikon-logo.jpg; this list is updated by hand (unfortunately).
-daikon_manual_html/daikon.html: daikon.texinfo
+# The "subdir" flag does not copy over images, so the
+# pathnames become incorrect.  We need to copy them over ourselves.
+daikon_manual_html/daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
 	rm -rf daikon_manual_html/*
-# Alternatively, run "makeinfo -html", but it doesn't support "-split chapter",
-# only split into nodes or --no-split
-# However, as of texi2html, the cross-references seem to assume the other
-# document was processed without "-split chapter", instead splitting into nodes.
-	texi2html -split chapter -subdir daikon_manual_html $<
-	perl -pi -e '$$/ = "\n\n"; if (m|http://www\.nongnu\.org/texi2html|) { $$_ = ""; }' daikon_manual_html/*.html
+	makeinfo --html --split=chapter -o daikon_manual_html $<
+	mkdir daikon_manual_html/images
+	cp images/*.png daikon_manual_html/images
+	cp images/*.jpg daikon_manual_html/images
 
 developer_manual_html/developer.html: developer.texinfo
 	rm -rf developer_manual_html/*
-# Alternatively, run "makeinfo -html", but it doesn't support "-split chapter",
-# only split into nodes or --no-split
-# However, as of texi2html, the cross-references seem to assume the other
-# document was processed without "-split chapter", instead splitting into nodes.
-	texi2html -split chapter -subdir developer_manual_html $<
-	perl -pi -e '$$/ = "\n\n"; if (m|http://www\.nongnu\.org/texi2html|) { $$_ = ""; }' developer_manual_html/*.html
-
-daikon.dvi: daikon.texinfo config-options.texinfo invariants-doc.texinfo
-	texi2dvi $<
-
-developer.dvi: developer.texinfo
-	texi2dvi $<
+	makeinfo --html --split=chapter -o developer_manual_html $<
+	mkdir developer_manual_html/images
+	cp images/*.png developer_manual_html/images
+	cp images/*.jpg developer_manual_html/images
 
 ps: daikon.ps images/dfepl-flow.eps developer.ps
 
-daikon.ps: daikon.dvi
-	dvips -t letter -o $@ $<
+daikon.ps: daikon.texinfo config-options.texinfo invariants-doc.texinfo
+	makeinfo --ps $<
 
-developer.ps: developer.dvi
-	dvips -t letter -o $@ $<
+developer.ps: developer.texinfo
+	makeinfo --ps $<
 
-pdf: daikon.pdf developer.pdf
+pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
 
-pdf-direct: daikon.texinfo daikon.dvi images/daikon-logo.pdf images/dfepl-flow.pdf
-	pdftex $<
+daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
+	makeinfo --pdf $<
 
-daikon.pdf: daikon.dvi images/dfepl-flow.eps
-	dvipdfm $<
-
-developer.pdf: developer.dvi
-	dvipdfm $<
+developer.pdf: developer.texinfo
+	makeinfo --pdf $<
 
 pdf-final: daikon.texinfo config-options.texinfo invariants-doc.texinfo developer.texinfo
 	texi2dvi --command='@set final' daikon.texinfo
