@@ -147,7 +147,7 @@ detector reports likely program invariants.  An invariant is a property
 that holds at a certain point or points in a program; these are often
 seen in assert statements, documentation, and formal specifications.
 Invariants can be useful in program understanding and a host of other
-applications.  Examples include ``.field > abs(y)''; ``y = 2*x+3'';
+applications.  Examples include ``x.field > abs(y)''; ``y = 2*x+3'';
 ``array a is sorted''; ``for all list objects lst, lst.next.prev =
 lst''; ``for all treenode objects n, n.left.value < n.right.value''; ``p
 != null => p.content in myArray''; and many more.  You can extend Daikon
