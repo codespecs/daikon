@@ -96,7 +96,7 @@ Copyright @copyright{} 1998-2014
 @end ifclear
 
 @html
-<img src="images/daikon-logo.gif" alt="Daikon logo">
+@image{images/daikon-logo}
 @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -123,7 +123,7 @@ It describes Daikon version 5.0.1, released January 3, 2014.
 * Tools::
 * Troubleshooting::
 * Details::
-* Index::
+* General Index::
 
 @c Putting end menu here is not how it's supposed to be done,
 @c but it seems to fix the html toc indentation bug.
@@ -151,8 +151,8 @@ applications.  Examples include ``x.field > abs(y)''; ``y = 2*x+3'';
 ``array a is sorted''; ``for all list objects lst, lst.next.prev =
 lst''; ``for all treenode objects n, n.left.value < n.right.value''; ``p
 != null => p.content in myArray''; and many more.  You can extend Daikon
-to add new properties (@pxref{Enhancing Daikon output};
-@pxref{New invariants,,,./developer,Daikon Developer Manual}).
+to add new properties (@pxref{Enhancing Daikon output}, or
+@pxref{New invariants,,,developer,Daikon Developer Manual}).
 
 Dynamic invariant detection runs a program, observes the values that the
 program computes, and then reports properties that were true over the
@@ -166,7 +166,7 @@ detection is a machine learning technique that can be applied to
 arbitrary data.)  It is easy to extend Daikon to other applications.
 
 Daikon is freely available for download from
-@uref{http://plse.cs.washington.edu/daikon/download/}.  The distribution
+@uref{http://plse.cs.washington.edu/daikon/download/, ,download-site}.  The distribution
 includes both source code and
 @uref{http://plse.cs.washington.edu/daikon/download/doc/, ,documentation},
 and Daikon's license permits unrestricted use (@pxref{License}).  Many
@@ -174,9 +174,9 @@ researchers and practitioners have used Daikon; those uses, and Daikon
 itself, are described in various
 @uref{http://plse.cs.washington.edu/daikon/pubs/, ,publications}.
 
-For more information on Daikon
-@pxref{Top, , Introduction, ./developer, Daikon Developer Manual}.
-For instance, the Daikon Developer Manual indicates how to
+For more information on Daikon,
+@pxref{Top, , Introduction, developer, Daikon Developer Manual}.
+For instance, the @cite{Daikon Developer Manual} indicates how to
 extend Daikon with new invariants, new derived variables, and front
 ends for new languages.  It also contains information about the
 implementation and about debugging flags.
@@ -215,8 +215,8 @@ you may send mail to the list asking to be added.
 @chapter Installing Daikon
 @cindex installing Daikon
 
-Shortcut for the impatient:  skip directly to installation instructions
-(@pxref{Unix/Linux/MacOS installation}) (@pxref{Windows installation}).
+Shortcut for the impatient:  skip directly to the installation instructions
+for @xref{Unix/Linux/MacOS installation}, or @xref{Windows installation}.
 
 There are two main ways to install Daikon.  @xref{Simple installation},
 for a simple 2-step installation process that is adequate for the needs
@@ -258,8 +258,8 @@ JVM (@uref{http://www.oracle.com/technetwork/java/,, Java Virtual Machine}).  Th
 classpath.
 
 @xref{Installing Daikon}, for situations where you should
-follow the complete installation instructions of @ref{Complete
-installation}.  (Also, if you do not know how to add a jar file to your
+follow the complete installation instructions of
+@ref{Complete installation}.  (Also, if you do not know how to add a jar file to your
 classpath, then use the complete installation instructions, which walks
 you through the process.)
 
@@ -290,8 +290,8 @@ Optionally, compile Daikon and build other tools by running @code{make}.
 @cindex compiling Daikon
 @cindex building Daikon from source
 
-For more complete information on compiling Daikon, @pxref{Compiling
-Daikon,,,./developer,Daikon Developer Manual}.
+For more complete information on compiling Daikon,
+@pxref{Compiling Daikon,,,developer,Daikon Developer Manual}.
 
 @menu
 * Requirements::
@@ -327,7 +327,7 @@ you plan to use one of Daikon's front ends that work on binaries, such
 as Chicory (@pxref{Chicory}) or Kvasir (@pxref{Kvasir}).
 
 If you wish to edit the Daikon source code and re-compile Daikon, 
-@pxref{Compiling Daikon,,,./developer,Daikon Developer Manual}.
+@pxref{Compiling Daikon,,,developer,Daikon Developer Manual}.
 
 
 @c The explicit examples, segregated by OS type, seem necessary for some users.
@@ -361,8 +361,8 @@ set two environment variables
 and source a Daikon startup file.
 
 
-@strong{sh/bash:}  If you use the sh or bash shell or their variants,
-add these three commands to your @file{~/.bashrc} or @file{~/.bash_profile} file:
+We will assume that your are using ithe bash shell or its variants.
+Add these three commands to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The full pathname of the directory that contains Daikon
 export DAIKONDIR=$HOME/daikon
@@ -371,24 +371,13 @@ export JAVA_HOME=/usr/lib/jvm/java
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
-@strong{csh/tcsh:} If you use the csh or tcsh shell or their variants, 
-add these three commands to your @file{~/.cshrc} file:
-@example
-# The full pathname of the directory that contains Daikon
-setenv DAIKONDIR $HOME/daikon
-# The full pathname of the directory that contains the Java JDK; e.g.:
-setenv JAVA_HOME /usr/lib/jvm/java
-source $DAIKONDIR/scripts/daikon.cshrc
-@end example
-
 After editing your shell initialization file, either execute the commands
 you placed in it, or else log out and log back in to achieve the same
 effect.
 
 @item
 Optionally, customize other variables.  The customizable variables are
-listed in the Daikon startup file: @file{daikon.bashrc} or
-@file{daikon.cshrc}.
+listed in the Daikon startup file: @file{daikon.bashrc}.
 
 You may customize them by setting environment variables, or by adding a
 @code{Makefile.user} file to directory @code{$DAIKONDIR/java} (it is
@@ -412,7 +401,7 @@ C/C++ front end Kvasir (@pxref{Installing Kvasir}) and the
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
 For more
 information about compiling Daikon, see
-@ref{Compiling Daikon,,,./developer,Daikon Developer Manual}.
+@ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
 
 Note that running this make command may take 20 minutes or more,
 depending on your computer.  
@@ -504,8 +493,7 @@ effect.
 
 @item
 Optionally, customize other variables.  The customizable variables are
-listed in the Daikon startup file: @file{daikon.bashrc} or
-@file{daikon.cshrc}.
+listed in the Daikon startup file: @file{daikon.bashrc}.
 
 You may customize them by setting environment variables, or by adding a
 @code{Makefile.user} file to directory @code{$DAIKONDIR/java} (it is
@@ -534,8 +522,8 @@ This builds the various executables used by Daikon, such as the
 C/C++ front end Kvasir (@pxref{Installing Kvasir}) and the 
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
 For more
-information about compiling Daikon, see @ref{Compiling
-Daikon,,,./developer,Daikon Developer Manual} in the Daikon Developer Manual.
+information about compiling Daikon,
+see @ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
 
 Note that running this make command may take 20 minutes or more,
 depending on your computer.  
@@ -644,9 +632,11 @@ Unix definition is not part of the environment.
 Because @command{java} is a Windows program, if you give it
 a @command{-CLASSPATH} argument it expects it to have Windows style pathnames.
 An easy way to deal with this is to use the @command{cygpath} utility:
+@exampleindent 1
 @example
 java -cp `cygpath -wp unix/path/a:unix/path/b` <remaider of arguments>
 @end example
+@exampleindent 4
 
 @c JHP Jan 2 2008: I removed this as I don't think this a problem for
 @c a user that isn't trying to write scripts on two platforms.  They
@@ -702,7 +692,7 @@ Daikon, which is called ``online execution'' of Daikon.
 This section briefly describes how to obtain data traces for Java, C,
 C#, Perl, and Eiffel programs, and how to run Daikon.  For detailed
 information about these and other front ends that are available for
-Daikon, @ref{Front ends (instrumentation)}.
+Daikon, @pxref{Front ends (instrumentation)}.
 
 @menu
 * Detecting invariants in Java programs::
@@ -971,6 +961,8 @@ The StackAr example is an array-based stack implementation.  Take a
 look at @file{DataStructures/StackAr.java} to get a sense of the
 implementation.  Now, look at the first section of Daikon output.
 
+@exampleindent 1
+
 @example
 ======================================================================
 StackAr:::OBJECT
@@ -1056,6 +1048,7 @@ this.s.topOfStack < orig(i)
 ======================================================================
 @end example
 
+@exampleindent 4
 
 @node       Second Java example
 @subsection A second Java example
@@ -1582,7 +1575,7 @@ information from standard input.
 @cindex flags for Daikon
 The optional flags are described in the sections that follow.  For
 further ways to control Daikon's behavior via configuration options, see
-@ref{Configuration options}, and see the list of options to the front
+@ref{Configuration options}; also see the list of options to the front
 end such as Chicory (@pxref{Chicory options}) or Kvasir (@pxref{Kvasir
 options}).
 
@@ -1759,7 +1752,7 @@ debugging options}).
 Indicate that the given class implements the @code{java.util.List}
 interface.  The preferred mechanism for indicating such information is
 the @code{ListImplementors} section of the @file{.decls} file.
-See @ref{ListImplementors declaration,,,./developer,Daikon Developer Manual}.
+See @ref{ListImplementors declaration,,,developer,Daikon Developer Manual}.
 
 @item --nohierarchy
 @cindex hierarchy, disabling
@@ -1896,7 +1889,7 @@ can be specified.  Each item (class, variables, and program point) is optional.
 Multiple classes can be specified separated by vertical bars (|).  Matching
 is a simple substring (not a regular expression) comparison.  Each item
 must match in order for a printout to occur.  For more information, see
-@ref{Track logging,,,./developer,Daikon Developer Manual}.
+@ref{Track logging,,,developer,Daikon Developer Manual}.
 
 @item --disc_reason @var{inv_class}<@var{var1},@var{var2},...>@@@var{ppt}
 Prints all discarded invariants of class @var{inv_class} at the program point
@@ -1961,7 +1954,7 @@ When passed on the command line, the format names are case-insensitive:
 @option{--format JML} and @option{--format jml} have the same effect.
 
 You can enhance Daikon to produce output in other formats.  See
-@ref{New formatting for invariants,,,./developer,Daikon Developer Manual}.
+@ref{New formatting for invariants,,,developer,Daikon Developer Manual}.
 
 @cindex invariant output format
 @cindex output format, for invariants
@@ -2089,7 +2082,7 @@ that are true at every numbered exit point.  This is an example of a
 program point that represents a collection of locations in the program
 source rather than a single location.  This concept is represented in
 Daikon by the dataflow hierarchy, see
-@ref{Dataflow hierarchy,,,./developer,Daikon Developer Manual}.
+@ref{Dataflow hierarchy,,,developer,Daikon Developer Manual}.
 
 @cindex :::OBJECT program point
 @cindex OBJECT program point
@@ -2171,7 +2164,7 @@ use of them, see @ref{Options to enable/disable derived variables}.
 
 Some trace variables and derived variables may represent meaningless
 expressions; in such a circumstance, the value is said to be nonsensical
-(@pxref{Nonsensical values,,,./developer,Daikon Developer Manual}).
+(@pxref{Nonsensical values,,,developer,Daikon Developer Manual}).
 
 The remainder of this section describes conventions for naming
 expressions.  Those that cannot be named by simple C/Java expressions
@@ -2449,7 +2442,7 @@ that are implied by other invariants in the output --- because such
 results would merely clutter the output without adding any valuable
 information.  For instance, if Daikon reports @samp{x==y}, then it never
 also reports @samp{x-1==y-1}.  You can control this behavior to some extent by
-disabling invariant filters; @xref{Invariant filters}.
+disabling invariant filters; @pxref{Invariant filters}.
 (You can also print all invariants, even
 redundant ones, by saving the invariants to a @file{.inv} file and
 then using the PrintInvariants (@pxref{Printing invariants}) or Diff
@@ -2470,7 +2463,8 @@ Suppose that @code{a = b = c}.  Then Daikon will print @code{a = b} and
 @code{a = c}, but not @code{b = c}.  Furthermore, Daikon might print
 @code{a > d}, but would not print @code{b > d} or @code{c > d}.
 
-You can control which variables are in an equality set; @ref{Variable comparability,,,./developer,Daikon Developer Manual}.
+You can control which variables are in an equality set;
+@pxref{Variable comparability,,,developer,Daikon Developer Manual}.
 
 
 @node       Has only one value variables
@@ -2484,8 +2478,9 @@ that every time that variable @var{var} was encountered, it had the same
 value.  Daikon ordinarily reports the actual value, as in
 @samp{@var{var} == 22}.  Typically this means that the variable is a
 hashcode or address --- that is, its declared type is @samp{hashcode}
-(@pxref{Variable declarations,,,./developer,Daikon Developer Manual}).  For example, @samp{@var{var} ==
-0x38E8A} is not very illuminating, but it is still interesting that
+(@pxref{Variable declarations,,,developer,Daikon Developer Manual}). 
+For example, @samp{@var{var} == 0x38E8A} is not very illuminating,
+but it is still interesting that
 @var{var} was never rebound to a different object.
 
 Note that @samp{@var{var} has only one value} is different from
@@ -2628,7 +2623,7 @@ happening by chance.  If that probability is less than the limit, then
 the invariant is deemed to be an actual invariant, not just a chance
 occurrence.  Currently the limit is .01.  So by default, only invariants
 with probabilities of less than 1% are shown.  See the @option{--conf_limit}
-option (@pxref{Options to control invariant detection}).
+option (@ref{Options to control invariant detection}).
 
 
 @cindex UnmodifiedVariableEqualityFilter
@@ -3381,7 +3376,7 @@ of Daikon.  It
 is relatively easy to build your own front end, if these do not serve
 your purpose; we are aware of a number of users who have done so.  For
 more information about building a new front end, see @ref{New front
-ends,,,./developer,Daikon Developer Manual}.
+ends,,,developer,Daikon Developer Manual}.
 
 
 @menu
@@ -3712,9 +3707,11 @@ parameter types.  If the method throws checked exceptions, the parameter
 list is followed by a space, followed by the word throws followed by a
 comma-separated list of the thrown exception types.  For example:
 
+@exampleindent 1
 @example
 public boolean java.lang.Object.equals(java.lang.Object)
 @end example
+@exampleindent 4
 
 @noindent
 The access modifiers are placed in canonical order as specified by "The
@@ -3791,7 +3788,8 @@ convenient; in other cases, a collection of smaller data trace files may
 give you more control over which subsets of runs to invoke Daikon on.
 
 @item --comparability-file=@var{filename}
-This option specifies a declaration file (see @ref{Declarations,,,./developer,Daikon Developer Manual})
+This option specifies a declaration file
+(see @ref{Declarations,,,developer,Daikon Developer Manual})
 that contains comparability information.  This information will be
 incorporated in the output of Chicory.  Any variables not included in
 the comparability file will have their comparability set so that they
@@ -3900,9 +3898,9 @@ all times.
 @cindex dynamic comparability, for Java
 
 The DynComp dynamic comparability analysis tool performs dynamic type
-inference to group variables at each program point into comparability
-sets (see @ref{Program point declarations,,,./developer,Daikon Developer Manual} for the numeric
-representation format of these sets).  All variables in each
+inference to group variables at each program point into comparability sets
+(see @ref{Program point declarations,,,developer,Daikon Developer Manual}
+for the numeric representation format of these sets).  All variables in each
 comparability set belong to the same ``abstract type'' of data that the
 programmer likely intended to represent, which is a richer set of types
 than the few basic declared types (e.g., int, float) provided by the
@@ -4018,7 +4016,8 @@ int
 @end example
 
 @noindent
-The declaration file format is described in @ref{Program point declarations,,,./developer,Daikon Developer Manual}.
+The declaration file format is described in
+@ref{Program point declarations,,,developer,Daikon Developer Manual}.
 
 DynComp creates two representations of the comparability information in
 the files @file{foo.txt-cset} and @file{foo.txt-trace}.  In the @file{cset}
@@ -4120,8 +4119,8 @@ turned on with @option{--abridged-vars}.
 @cindex instrumented JDK, for DynComp
 @cindex JDK, instrumented for DynComp
 
-If you did not already do so when installing Daikon (in
-@ref{Complete installation}), follow the instructions here to build an
+If you did not already do so when installing Daikon
+(@pxref{Complete installation}), follow the instructions here to build an
 instrumented copy of the JDK@.  Use the following command in
 @file{$DAIKONDIR}:
 
@@ -4373,7 +4372,7 @@ Kvasir only works under Linux running on an x86 or x86-64 processor; for full
 details, see @ref{Kvasir limitations}.
 For information about how to create an instrumenter for C that works on
 non-Linux or non-x86 platforms, see @ref{Instrumenting C
-programs,,,./developer,Daikon Developer Manual}.
+programs,,,developer,Daikon Developer Manual}.
 
 @menu
 * Using Kvasir::
@@ -4479,8 +4478,9 @@ intermixing it with the trace output.  If the given filename ends in
 @item --dtrace-no-decs
 
 By default, the @file{.dtrace} file contains both a list of variable
-declarations followed by a trace of variable values (@pxref{File
-formats,,,./developer,Daikon Developer Manual}).  If this option is used, then variable declarations are not
+declarations followed by a trace of variable values
+(@pxref{File formats,,,developer,Daikon Developer Manual}). 
+If this option is used, then variable declarations are not
 outputted in the .dtrace file.  This option is equivalent to
 @option{--decls-file=/dev/null}, except that it runs faster.  This is
 useful when you want to generate one copy of the declarations in the
@@ -4546,7 +4546,7 @@ given file.  Other program points (respectively variables) will be
 omitted from the @file{.decls} and @file{.dtrace} files.  A convenient
 way to produce such files is by editing the output produced by the
 @option{--dump-ppt-file} (respectively, @option{--dump-var-file}) option
-described below.  (@pxref{Tracing only part of a program} section
+described below.  (@xref{Tracing only part of a program} section
 for detailed instructions on using these options.)
 
 @item --dump-ppt-file=@var{filename}
@@ -4556,7 +4556,7 @@ Print a list of all the program points (respectively all the variables)
 in the program to the specified file.  An edited version of this file can
 then be used with the @option{--ppt-list-file} (respectively
 @option{--var-list-file}) option.
-(@pxref{Tracing only part of a program} section
+(@xref{Tracing only part of a program} section
 for detailed instructions on using these options.)
 Note: Do not use these options with the
 @option{--with-dyncomp} option because the behavior is undefined.
@@ -4713,8 +4713,9 @@ improve the performance of Daikon and allow it to generate a more
 focused and relevant set of invariants.
 Because it is not available until the end of execution, comparability
 information is always written to a separate @file{.decls} file (in the
-format specified in the @ref{Program point declarations,,,./developer,Daikon Developer Manual} section), as if
-the @option{--decls-file} option had been specified
+format specified in the
+@ref{Program point declarations,,,developer,Daikon Developer Manual}),
+as if the @option{--decls-file} option had been specified
 (@option{--decls-file} can still be used to control the name of the
 file).
 This file must be provided to Daikon along with the @file{.dtrace}
@@ -4856,7 +4857,9 @@ more information.
 
 Kvasir comes with the DynComp dynamic comparability analysis tool, which
 performs dynamic type inference to group variables at each program point
-into comparability sets (see @ref{Program point declarations,,,./developer,Daikon Developer Manual} for the
+into comparability sets.
+(@xref{Program point declarations,,,developer,Daikon Developer Manual}
+for the
 numeric representation format of these sets).  All variables in each
 comparability set belong to the same ``abstract type'' of data that the
 programmer likely intended to represent, which is a richer set of types
@@ -4990,8 +4993,8 @@ consists of a newline-separated list of names of functions that the
 user wants Kvasir to trace.  Every name corresponds to both the entrance
 (@code{:::ENTER}) and exit (@code{:::EXIT}) program points for that function
 and is printed out in the exact same format that Kvasir
-uses for that function in the trace file (@pxref{Using Kvasir}
-section for the program point naming scheme).  Here is an
+uses for that function in the trace file. (@xref{Using Kvasir}
+for the program point naming scheme.)  Here is an
 example of a @file{ppt-list-file}:
 
 @example
@@ -5118,8 +5121,8 @@ If an entire section is missing, then no variables for that program point
 (or no global variables, if it is the special globals section) are traced.
 
 The variables listed in this file are written exactly as they appear in
-the .decls and .dtrace file (@pxref{Using Kvasir} section
-for the variable naming scheme).  In the program that generated the
+the .decls and .dtrace file. (@xref{Using Kvasir} section
+for the variable naming scheme.)  In the program that generated the
 output for the above example, @code{int*
 globalIntArray} is a global integer pointer variable.  For that
 variable, Kvasir generates two Daikon variables: @code{/globalIntArray}
@@ -5203,7 +5206,7 @@ and would indicate that the length of array @code{result[]} is always 1.
 In order to improve the formatting of Daikon's output (and to speed it
 up), you can indicate to Kvasir that certain pointers refer to single
 elements rather than to arrays.
-For an example, see @ref{Pointer type disambiguation example}).
+For an example, see @ref{Pointer type disambiguation example}.
 
 Information about whether each pointer refers to an array or a single
 element can be specified in a ``disambig file'' that resides in the
@@ -5956,6 +5959,7 @@ used as an ingredient in soups or stews.
 To use Celeriac, run your program as you normally would, but with the
 Celeriac Launcher. 
 For instance, if you usually run
+@exampleindent 1
 @example
 MyProgram.exe arg1 arg2 arg3
 @end example
@@ -5965,6 +5969,7 @@ then instead you would run
 @example
 CeleriacLauncher.exe celeriacArg1 celeriacArg2 MyProgram.exe arg1 arg2 arg3
 @end example
+@exampleindent 4
 
 @noindent
 This runs your program and creates the @file{MyProgram.dtrace}
@@ -6408,8 +6413,8 @@ You also need the
 It is relatively easy to create a Daikon front end for another language
 or run-time system.  For example, people have done this without any help
 at all from the Daikon developers.  For more information about building
-a new front end, see @ref{New front ends,,,./developer,Daikon Developer
-Manual}.
+a new front end,
+see @ref{New front ends,,,developer,Daikon Developer Manual}.
 
 @cindex Citadel front end for Eiffel
 @cindex front end for Eiffel
@@ -6522,8 +6527,8 @@ Enable debug loggers.
 
 @item --track @var{class}<@var{var1},@var{var2},@var{var3}>@@@var{ppt}
 Track information on specified invariant class, variables and program point.
-For more information, also see @ref{Track logging,,,./developer,Daikon
-Developer Manual}.
+For more information,
+see @ref{Track logging,,,developer,Daikon Developer Manual}.
 
 @item --wrap-xml
 Print extra info about invariants, and wrap in XML tags.
@@ -6575,8 +6580,8 @@ Enable debug loggers.
 
 @item --track @var{class}<@var{var1},@var{var2},@var{var3}>@@@var{ppt}
 Track information on specified invariant class, variables and program point.
-For more information, also see @ref{Track logging,,,./developer,Daikon
-Developer Manual}.
+For more information,
+see @ref{Track logging,,,developer,Daikon Developer Manual}.
 @end table
 
 
@@ -6714,9 +6719,11 @@ The Daikon website has an example of code after invariant
 insertion:  @url{http://plse.cs.washington.edu/daikon/StackAr.html}.
 
 Invoke Annotate like this:
+@exampleindent 1
 @example
 java daikon.tools.jtb.Annotate Myprog.inv Myprog.java Myprog2.java ...
 @end example
+@exampleindent 4
 
 @noindent
 The first argument is a Daikon @file{.inv} or @file{.inv.gz} file
@@ -6751,6 +6758,7 @@ information about the invariant.
 For example, if this switch is set, the output format is ESC,
 and an invariant for method @code{foo(int x)} normally prints as
 
+@exampleindent 1
 @example
 /*@ requires x != 0; */
 @end example
@@ -6768,6 +6776,7 @@ in one line; we break it up here for clarity):
 <METHOD> foo() </METHOD>
 </INVINFO> ; */
 @end example
+@exampleindent 4
 
 @noindent
 Note that the comment will no longer be a legal ESC/JML/DBC
@@ -6939,10 +6948,13 @@ Here is an example of use of the runtime-check instrumenter.
 To create a version of file
 @file{ubs/BoundedStack.java} that checks the invariants in
 invariant file @file{BoundedStack.inv.gz}, do:
+
+@exampleindent 1
 @example
 java daikon.tools.runtimechecker.Main instrument BoundedStack.inv.gz \
     ubs/BoundedStack.java
 @end example
+@exampleindent 4
 
 @noindent
 The instrumented Java code references classes in the
@@ -7012,6 +7024,7 @@ presumably calls one of the methods in the instrumented class.
 The code detects if any violations occurred, and if so, prints
 a message.
 
+@exampleindent 1
 @example
 daikon.tools.runtimechecker.Runtime.resetViolations();
 daikon.tools.runtimechecker.Runtime.resetErrors();
@@ -7023,6 +7036,7 @@ List<Violation> vs = daikon.tools.runtimechecker.Runtime.getViolations();
 if (!vs.isEmpty())
   System.out.println("Violations occurred.");
 @end example
+@exampleindent 4
 
 @noindent
 In addition, the instrumenter adds the following two methods to the
@@ -7056,9 +7070,12 @@ is noted, via a message printed to standard output or to a specified
 output file.
 
 InvariantChecker is invoked as follows:
+
+@exampleindent 1
 @example
 java daikon.tools.InvariantChecker [@var{options}] @var{invariant-file} @var{dtrace-files}
 @end example
+@exampleindent 4
 
 @noindent
 The @var{invariant-files} are invariant files (@file{.inv}) created by
@@ -7401,7 +7418,7 @@ mailing lists (@pxref{Mailing lists}).
 
 You may find the debugging flags @option{--debug} and @option{--dbg
 @var{category}} useful if you wish to track down bugs or better
-understand Daikon's operation; @xref{Daikon debugging options}.
+understand Daikon's operation; @pxref{Daikon debugging options}.
 @xref{Configuration options}, for another way to adjust Daikon's output.
 
 
@@ -7591,7 +7608,7 @@ Using the normal dataflow hierarchy, Daikon only explicitly processes
 corresponding @code{:::EXIT} points are encountered.  
 (You can disable this behavior with the
 @option{--nohierarchy} switch to Daikon;
-see @xref{Options to control invariant detection}.)
+see @ref{Options to control invariant detection}.)
 If no @code{:::EXIT} program points are present (perhaps every
 execution threw an exception, you filtered out all the
 @code{:::EXIT} program points, or the data trace is obtained from
@@ -8019,7 +8036,7 @@ You can instrument fewer procedures.
 @itemize
 @item With Chicory, use the @option{--ppt-omit-pattern} or
 @option{--ppt-select-pattern} options (see @ref{Processing only part of
-the trace file}, @ref{Chicory options}) to
+the trace file}, or @ref{Chicory options}) to
 restrict which program points are traced.  Running the
 instrumented program will result in a smaller @file{.dtrace} file that
 contains fewer records.
@@ -8094,7 +8111,7 @@ With Kvasir, you can either ignore all global and/or static variables with the
 @option{--ignore-globals} and @option{--ignore-static-vars} options or manually
 specify a subset of variables to trace using the
 @option{--var-list-file} option (@pxref{Tracing only part of a program}
-section for details)
+for details)
 
 @item
 You can pare down an existing @file{.dtrace} file using the
@@ -8110,8 +8127,8 @@ You can make Daikon ignore certain variables rather than modifying
 the @file{.dtrace} file directly.  Analogously with the
 @option{--ppt-select-pattern} and @option{--ppt-omit-pattern} flags, the
 @option{--var-select-pattern} and @option{--var-omit-pattern} flags
-restrict which variables Daikon processes
-(see @ref{Processing only part of
+restrict which variables Daikon processes.
+(@xref{Processing only part of
 the trace file}, and @ref{Chicory options}).
 
 @end enumerate
@@ -8357,9 +8374,9 @@ Daikon's Java parser.  We expect it will be fixed by the next release.
 @node    Further reading
 @section Further reading
 
-More information on Daikon can be found in the Daikon Developer Manual
-(@pxref{Top, , Introduction, ./developer, Daikon Developer Manual}).
-For instance, the Daikon Developer Manual indicates how to extend
+More information on Daikon can be found in the @cite{Daikon Developer Manual}
+(@pxref{Top, , Introduction, developer, Daikon Developer Manual}).
+For instance, the @cite{Daikon Developer Manual} indicates how to extend
 Daikon with new invariants, new derived variables, and front ends for
 new languages.  It also contains information about the implementation
 and about how to debug.
@@ -8380,9 +8397,9 @@ The Daikon invariant detector is named after an Asian radish.
 ``Daikon'' is pronounced like the combination of the two one-syllable
 English words ``die-con''.
 
-More information on Daikon can be found in the Daikon Developer Manual
-(@pxref{Top, , Introduction, ./developer, Daikon Developer Manual}).
-For instance, the Daikon Developer Manual indicates how to extend
+More information on Daikon can be found in the @cite{Daikon Developer Manual}
+(@pxref{Top, , Introduction, developer, Daikon Developer Manual}).
+For instance, the @cite{Daikon Developer Manual} indicates how to extend
 Daikon with new invariants, new derived variables, and front ends for
 new languages.  It also contains information about the implementation
 and about debugging flags.
@@ -8675,8 +8692,8 @@ of, or in addition to, referencing this manual and the Daikon website
 
 
 
-@node       Index
-@unnumbered Index
+@node        General Index
+@unnumbered  General Index
 
 @printindex cp
 

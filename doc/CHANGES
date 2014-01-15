@@ -20,6 +20,16 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.0.2 (January 31, 2014)
+
+General
+
+  Improved documentation and installation script for Cygwin.
+  Fixed broken links between the two daikon documents.
+  Removed documentation on Csh in favor of Bash.
+
+===========================================================================
+
 5.0.0 (January 3, 2014)
 
 Highlights:

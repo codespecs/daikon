@@ -338,6 +338,8 @@ staging: doc/CHANGES
 	# Copy the documentation
 	@echo "]2;Copying documentation"
 	install -d $(STAGING_DIR)/download/doc
+	# make 'finalout' version of documents
+	cd doc && make pdf-final
 	cd doc && cp -pf $(DOC_FILES_USER) $(STAGING_DIR)/download/doc
 	cp -pR doc/images $(STAGING_DIR)/download/doc
 	cp -pR doc/daikon_manual_html $(STAGING_DIR)/download/doc

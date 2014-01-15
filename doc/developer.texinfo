@@ -77,7 +77,7 @@ Copyright @copyright{} 1998-2014
 @end ifclear
 
 @html
-<img src="images/daikon-logo.gif" alt="Daikon logo">
+@image{images/daikon-logo}
 @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -103,7 +103,7 @@ It describes Daikon version 5.0.1, released January 3, 2014.
 * Distribution::
 * Historical::
 * File formats::
-* Index::
+* General Index::
 
 @c Putting end menu here is not how it's supposed to be done,
 @c but it seems to fix the html toc indentation bug.
@@ -168,19 +168,15 @@ so you do not need to compile them yourself unless you make changes.
 
 When you compile Daikon, environment variables @env{DAIKONDIR}
 and @env{JAVA_HOME} should be set.
-This is already done if you source the @file{daikon.bashrc} or
-@file{daikon.cshrc} file, as recommended in the installation
-instructions (@pxref{Complete installation,,,./daikon,Daikon User Manual}).
-When you compile Daikon, environment variable @env{DAIKONCLASS_SOURCES}
-should be set (to any value) before your startup file sources file
-@file{daikon.bashrc} or @file{daikon.cshrc}.
+This is already done if you source the @file{daikon.bashrc},
+as recommended in the installation instructions
+(@pxref{Complete installation,,,daikon,Daikon User Manual}).
 Thus, a complete @file{.bashrc} or @file{.bash_profile} shell setup file
-that would enable you to compile Daikon might look like the following.
+that would enable you to compile Daikon might look like the following:
 
 @example
 export DAIKONDIR=$HOME/daikon
 export JAVA_HOME=/usr/java/current
-export DAIKONCLASS_SOURCES=1
 source $DAIKONDIR/scripts/daikon.bashrc
 export CLASSPATH=.:$CLASSPATH
 @end example
@@ -270,7 +266,7 @@ export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classe
 @cindex Mercurial repository
 @cindex version control repository
 
-The Daikon Mercurial repository is at Google Code; see
+The Daikon Mercurial repository is located at Google Code; see
 @w{@uref{http://code.google.com/p/daikon/}.}
 
 
@@ -475,7 +471,7 @@ files in directory @file{$DAIKONDIR/java/daikon/derive/}.)
 @cindex adding new output formats
 
 Daikon can print invariants in multiple formats
-(@pxref{Invariant syntax,,,./daikon,Daikon User Manual}).
+(@pxref{Invariant syntax,,,daikon,Daikon User Manual}).
 
 To support a new output format, you need to do two things:
 @itemize @bullet
@@ -496,18 +492,17 @@ In every subclass of @code{Invariant}, edit the
 
 A front end for Daikon converts data into a form Daikon can process,
 producing files in Daikon's input format --- data trace declarations and
-records.  For more information about these files, see @ref{File
-formats}.
+records.  For more information about these files, see @ref{File formats}.
 
 The data traces can be obtained from any source.  For instance, front
 ends have been built for stock data, weather forecasts, truck weight
-data, and spreadsheet data (@pxref{convertcsv.pl,,,./daikon,Daikon User
+data, and spreadsheet data (@pxref{convertcsv.pl,,,daikon,Daikon User
 Manual}), among others.  More often, users apply a programming language
 front end (also called an ``instrumenter'') to a program, causing
 executions of the program to write files in Daikon's format.  (For
-information about existing front ends, see @ref{Front
-ends (instrumentation),,,./daikon,Daikon User Manual}.)  When a general
-front end is not
+information about existing front ends, see
+@ref{Front ends (instrumentation),,,daikon,Daikon User Manual}.) 
+When a general front end is not
 available, it is possible to manually instrument a specific program so
 that it writes files in Daikon's format.  The resulting instrumented
 program is very similar to what an instrumenter would have created, so
@@ -643,7 +638,7 @@ the bytecode instrumentation.)
 @cindex instrumenting C programs
 
 Daikon comes with a front end for the C language:  Kvasir
-(@pxref{Kvasir,,,./daikon,Daikon User Manual}).
+(@pxref{Kvasir,,,daikon,Daikon User Manual}).
 Kvasir only works under the Linux operating system, and it works only on
 ``x86'' (Intel 386, 486, 586, 686 compatible) and ``x86-64'' (AMD64, EM64T
 compatible) processors.
@@ -931,7 +926,7 @@ values across Daikon.
 @c @var{class|class|...<var,var,var>@@ppt}
 The @option{--track @var{class|class|...<var}@i{,}@var{var}@i{,}@var{var>@@ppt}}
 option to Daikon 
-(@pxref{Daikon debugging options,,,./daikon,Daikon User Manual})
+(@pxref{Daikon debugging options,,,daikon,Daikon User Manual})
 enables track logging.
 The argument to the @option{--track} option supplies three pieces of information: 
 
@@ -987,7 +982,7 @@ There are two configuration options that can customize the output.  The
 option @option{daikon.Debug.showTraceback} will output a stack trace on
 each log statement.  The option @option{daikon.Debug.logDetail} will cause
 more detailed (and often voluminous) output to be printed.  For more
-information, @pxref{Configuration options,,,./daikon,Daikon User Manual}.
+information, @pxref{Configuration options,,,daikon,Daikon User Manual}.
 
 Note that all interesting information is not necessarily currently logged.
 It will often be necessary to add new logging statements for the specific
@@ -1119,7 +1114,7 @@ line of debug output.
 This chapter describes some of the techniques used in Daikon to make
 it efficient in terms of time and space needed.  These techniques can
 be enabled or disabled at the Daikon command line, as described in
-@ref{Running Daikon,,Running Daikon,./daikon,Daikon User Manual}.
+@ref{Running Daikon,,Running Daikon,daikon,Daikon User Manual}.
 
 @node    Avoiding work for redundant invariants
 @section Avoiding work for redundant invariants
@@ -1382,7 +1377,7 @@ the first number of each sample better be less than the second)
 @c samples of a binary integer comparison
 
 Arrays and strings must be formatted according to the Daikon dtrace file
-convention (for a full description, @pxref{File formats}.  This
+convention (for a full description, @pxref{File formats}).  This
 states that arrays must be surrounded in brackets (start with @samp{[}, end
 with @samp{]}), and entries must be separated by a space.  Strings must be
 enclosed in quotes (@samp{"}). Quotes within a string can be represented by the
@@ -1545,7 +1540,7 @@ goal output files, so that the diffs are again zero).
 
 There are several subdirectories under @file{$DAIKONDIR/tests/}, testing
 different components of the Daikon distribution (such as Kvasir,
-@pxref{Kvasir,,,./daikon,Daikon User Manual}).  Tests of the
+@pxref{Kvasir,,,daikon,Daikon User Manual}).  Tests of the
 invariant detection engine itself appear in
 @file{$DAIKONDIR/tests/daikon-tests/}.
 
@@ -1732,8 +1727,7 @@ There is one big catch:  take note of where you launch Eclipse and
 @b{always} launch Eclipse from the same location. For example, you might
 want to alias run-eclipse with '@samp{cd $HOME; eclipse}'.
 For convenience, this is already done for you if you source the
-daikon-dev.bashrc or daikon-dev.cshrc
-startup scripts.
+daikon-dev.bashrc startup script.
 There are ways around the launch location inconvenience, such as
 the -data switch, but the alias trick should be the simplest and least
 confusing workaround.
@@ -1995,7 +1989,8 @@ different platforms on which you test the release.
 
 @noindent
 NOTE: @*
-Each of the steps below assumes that the current working directory is $DAIKONDIR.
+Each of the steps below assumes that the current working directory is $DAIKONDIR 
+and that you are using the Bash shell.
 
 
 @exampleindent 0
@@ -2019,7 +2014,7 @@ Make sure we have the latest version of @file{plume.jar}. First,
 update plume-lib to the most recent version.
 
 @example
-(cd plume-lib; hg fetch)
+(cd plume-lib; hg fetch; make jar)
 @end example
 
 Next, verify that @file{plume-lib/java/plume.jar} is identical to 
@@ -2146,11 +2141,10 @@ make staging
 Check the website to see if it has any broken links.
 
 @example
-checklink -q -r `cat $DAIKONDIR/plume-lib/bin/checklink-args.txt` \
-          http://plse.cs.washington.edu/daikon/staging-daikon > log 2>&1
+make check-for-broken-doc-links
 @end example
 
-Review the log and make corrections as appropriate.
+Review @file{check.log} and make corrections as appropriate.
 
 Errors 301 and 501 are normally fixed by adding an additional line
 to $DAIKONDIR/plume-lib/bin/checklink-args.txt.
@@ -2217,25 +2211,6 @@ written to the screen.
 @*
 [Time: 10 min]
 
-@itemize
-@item
-Csh version:
-@example
-mkdir -p ~/tmp
-cd ~/tmp
-rm -rf daikon.tar.gz daikon
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
-tar xzf daikon.tar.gz
-setenv JAVA_HOME "/cygdrive/c/Program Files/Java/jdk1.7.0_45"
-setenv DAIKONDIR `pwd`/daikon
-source daikon/scripts/daikon.cshrc
-cd daikon
-make
-make installation-test
-@end example
-
-@item
-Bash version:
 @example
 mkdir -p ~/tmp
 cd ~/tmp
@@ -2251,7 +2226,6 @@ cd daikon
 make
 make installation-test
 @end example
-@end itemize
 
 
 @item
@@ -2264,27 +2238,8 @@ not built because this is not a linux platform. After running the second
 make command, success is indicated by invariant output being
 written to the screen.
 @*
-[Time: ?? min]
+[Time: 3 min]
 
-@itemize
-@item
-Csh version:
-@example
-mkdir -p ~/tmp
-cd ~/tmp
-# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
-curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
-tar xzvf daikon.tar.gz
-setenv JAVA_HOME /Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Home
-setenv DAIKONDIR `pwd`/daikon
-source daikon/scripts/daikon.cshrc
-cd daikon
-make
-make installation-test
-@end example
-
-@item
-Bash version:
 @example
 mkdir -p ~/tmp
 cd ~/tmp
@@ -2300,7 +2255,6 @@ cd daikon
 make
 make installation-test
 @end example
-@end itemize
 
 
 @item
@@ -2343,10 +2297,11 @@ hg push
 Add a version label to the repository:
 
 @example
-cd $DAIKONDIR
 hg tag @emph{X.Y.Z}
+hg push
 cd kvasir
 hg tag @emph{X.Y.Z}
+hg push
 @end example
 
 [Time: moments]
@@ -2391,10 +2346,10 @@ make rebuild-everything-no-clean
 Commit changes back to the repository:
 
 @example
-hg -q commit -m "Change version to @emph{X.Y.Z}"
+hg -q commit -m "Bump version number for ongoing development."
 hg push
 cd kvasir
-hg -q commit -m "Change version to @emph{X.Y.Z}"
+hg -q commit -m "Bump version number for ongoing development."
 hg push
 @end example
 
@@ -2408,25 +2363,6 @@ This list is located at daikon-announce@@googlegroups.com.
 find old sample messages in the
 @uref{http://lists.csail.mit.edu/pipermail/daikon-announce/,archive}
 of our previous mail list.)
-
-
-@item
-@emph{NEEDS TESTING AND REVIEW.}
-
-Submit an update to
-freshmeat.net, which will inform others that a new release is available.
-
-(In order to perform this step, you need to be an admin for the
-@uref{http://freshmeat.net/projects/daikon/,Daikon project at
-freshmeat.net}.  If you are not, ask one of the current admins
-to add you to the list.)
-
-Go to the @uref{http://freshmeat.net/projects/daikon/,Daikon project} and
-choose 'submit a release' which is in the lower right corner.
-There enter the version number, type of release and the introductory
-paragraph from CHANGES for this release.
-
-(This could be automated.  See "man freshmeat-submit".)
 
 @end enumerate
 
@@ -2592,14 +2528,14 @@ trunk (respectively, the branch).
 
 This chapter contains information about the file format of Daikon's
 input files.  It is of most information to those who wish to write a
-front end, also known as an instrumenter (@pxref{Front ends
-(instrumentation),,,./daikon,Daikon User Manual}).
+front end, also known as an instrumenter
+(@pxref{Front ends (instrumentation),,,daikon,Daikon User Manual}).
 A new front end enables Daikon to detect
 invariants in another programming language.
 
 Daikon's input is conventionally one or more @file{.dtrace} data trace
 files.  (Another, optional type of input file for Daikon is a splitter
-info file; @pxref{Splitter info file,,,./daikon,Daikon User Manual}.)
+info file; @pxref{Splitter info file,,,daikon,Daikon User Manual}.)
 A trace file is a text file that consists of newline-separated
 records.  There are two basic types of records that can appear in Daikon's
 input:  program point declarations, and trace records.
@@ -2626,7 +2562,7 @@ point.  It is not required that all the program point declarations
 appear before any of the data trace records.  
 
 There exist some other declaration-related records;
-@xref{Declaration-related records}.
+@pxref{Declaration-related records}.
 
 
 @menu
@@ -2648,7 +2584,7 @@ file, it is permitted to place the declarations in one or more
 @file{.decls} ``declaration files'' while leaving the data trace records
 in the @file{.dtrace} file.  This can be convenient for tools that
 perform a separate instrumentation step, such as
-dfepl (@pxref{dfepl,,,./daikon,Daikon User Manual}).
+dfepl (@pxref{dfepl,,,daikon,Daikon User Manual}).
 Such a tool takes as
 input a target program to be analyzed, and produces two outputs:  a
 @file{.decls} file and an instrumented program.  Executing the
@@ -2792,8 +2728,8 @@ ListImplementors
 Each classname is in Java format (for example, ``java.util.LinkedList'').
 
 The @option{--list_type} command-line option to Daikon can also be used to
-specify classes that implement lists; @xref{Options to control invariant
-detection,,,./daikon,Daikon User Manual}.
+specify classes that implement lists;
+@pxref{Options to control invariant detection,,,daikon,Daikon User Manual}.
 
 
 
@@ -3176,7 +3112,7 @@ but @samp{a} for the identity of the array itself.)
 
 @c the Daikon code sometimes calls this "missing" rather than "nonsensical".
 The value representation may also be the string @code{nonsensical};
-@xref{Nonsensical values}.
+@pxref{Nonsensical values}.
 A string or array @emph{value} is never @code{null}.  A @emph{reference} to a
 string or array may be @code{null}, in which case the string or array
 value is printed as @code{nonsensical}.
@@ -3239,8 +3175,8 @@ tracking memory allocation and initialization.)  For derived variables
 created by Daikon, Daikon does the same thing, setting values to
 ``nonsensical'' when appropriate.  For controlling Daikon's output in
 the presence of nonsensical values, see the
-@option{daikon.Daikon.guardNulls} configuration option (@pxref{General
-configuration options,,,./daikon,Daikon User Manual}).
+@option{daikon.Daikon.guardNulls} configuration option
+(@pxref{General configuration options,,,daikon,Daikon User Manual}).
 
 
 @node       Variables that do not appear in trace records
@@ -3252,8 +3188,8 @@ compile-time constants (e.g., static final variables in Java) are
 omitted from the trace record, since they would have the same value
 every time.
 
-Furthermore, neither the declarations nor the trace records contains derived
-variables (@pxref{Variable names,,,./daikon,Daikon User Manual}).
+Furthermore, neither the declarations nor the trace records contain derived
+variables (@pxref{Variable names,,,daikon,Daikon User Manual}).
 
 
 
@@ -3277,7 +3213,7 @@ C, or Perl programs and viewing the resulting files.
 
 This is part of the file @file{StackArTester.decls}, a declaration file for
 the @file{StackAr.java} program
-(@pxref{StackAr example,,,./daikon,Daikon User Manual}).
+(@pxref{StackAr example,,,daikon,Daikon User Manual}).
 
 @smallexample
 ppt DataStructures.StackAr.push(java.lang.Object):::ENTER
@@ -3456,8 +3392,9 @@ ppt-type object
 @subsection Example data trace file
 
 This is part of file @file{StackArTester.dtrace}, which you can create by
-running the instrumented @file{StackAr.java} program (@pxref{StackAr
-example,,,./daikon,Daikon User Manual}).  This excerpt contains only the
+running the instrumented @file{StackAr.java} program
+(@pxref{StackAr example,,,daikon,Daikon User Manual}). 
+This excerpt contains only the
 first two calls to
 @code{push} and the first return from @code{push}, along with the
 associated object program point records; omitted records are indicated
@@ -3653,7 +3590,7 @@ for each variable:
 @itemize @bullet
 @item
 name: a string containing no tabs or newlines. 
-@xref{Variable names,,,./daikon,Daikon User Manual}.
+@xref{Variable names,,,daikon,Daikon User Manual}.
 
 @item
 declared type: this is what the programmer used in the declaration of
@@ -3756,7 +3693,7 @@ see the paper
 @end ifnothtml
 
 Variable comparability information may be obtained dynamically
-(@pxref{Dynamic abstract type inference (DynComp),,,./daikon,Daikon User Manual}), via
+(@pxref{Dynamic abstract type inference (DynComp),,,daikon,Daikon User Manual}), via
 type-inference based analysis, or in some other manner.  In any event,
 Daikon reads it from the variable declarations.
 
@@ -3886,7 +3823,7 @@ By convention, the entry and exit points for a function have names of
 a special form so that they can be associated with one another.
 (Currently, those names end with @code{:::ENTER} and @code{:::EXIT}.)  This
 convention permits Daikon to generate pre-state variables
-(@pxref{Variable names,,,./daikon,Daikon User Manual}) automatically at
+(@pxref{Variable names,,,daikon,Daikon User Manual}) automatically at
 procedure exit points, so
 front ends need not output them explicitly.  When there
 are multiple exit points, then each one should be suffixed by a number
@@ -3949,12 +3886,12 @@ ListImplementors
 Each classname is in Java format (for example, ``java.util.LinkedList'').
 
 The @option{--list_type} command-line option to Daikon can also be used to
-specify classes that implement lists; @xref{Options to control invariant
+specify classes that implement lists; @pxref{Options to control invariant
 detection,,,./daikon,Daikon User Manual}.
 
 
-@node       Index
-@unnumbered Index
+@node       General Index
+@unnumbered General Index
 
 @printindex cp
 

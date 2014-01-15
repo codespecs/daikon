@@ -48,32 +48,33 @@ if [ -z "$PLUMEBIN" ]; then
 fi
 
 # export DAIKONCLASS_SOURCES=1
-
 if [ $DAIKONCLASS_SOURCES ]; then
   CPADD=${DAIKONDIR}/java
 else
   CPADD=${DAIKONDIR}/daikon.jar
 fi
+
 if [ ! -z "$CLASSPATH" ]; then
-  export CLASSPATH=${CPADD}:${CLASSPATH}
+  # For Cygwin we need to convert CLASSPATH to Window's format
+  # BUT - we assume existing CLASSPATH is already in Window's format
+  if [ "$OSTYPE" == "cygwin" ]; then
+    CPADD1="`cygpath -wp ${CPADD}`"
+    CPADD2="`cygpath -wp ${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar`"
+    export CLASSPATH="${CPADD1};${CLASSPATH};${CPADD2}"
+  else
+    export CLASSPATH=${CPADD}:${CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
+  fi
 else
   if [ -n "$PS1" ]; then echo "Warning: daikon.bashrc is setting CLASSPATH, which was previously unset"; fi
-  export CLASSPATH=${CPADD}
-fi
-
-if [ "$JDKPATH" != "none" ]; then
-  ## tools.jar must be on your classpath.
-  if [ "$OSTYPE" != "darwin" ]; then
-    export CLASSPATH=${CLASSPATH}:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
-  else
-    ## For Macintosh MacOSX users.  (This list
-    ## is the system property "sun.boot.class.path".)
-    export CLASSPATH=${CLASSPATH}:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/classes.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/ui.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/i18n.jar:/System/Library/Frameworks/JavaVM.framework/Versions/1.3.1/Classes/sunrsasign.jar
+  export CLASSPATH=${CPADD}:${JAVA_HOME}/jre/lib/rt.jar:${JAVA_HOME}/lib/tools.jar
+  # For Cygwin we need to convert CLASSPATH to windows format
+  if [ "$OSTYPE" == "cygwin" ]; then
+    export CLASSPATH="`cygpath -wp $CLASSPATH`"
   fi
-
-  ## Make sure the specified JDK is first on your path
-  export PATH=$JAVA_HOME/bin:$PATH
 fi
+
+## Make sure the specified JDK is first on your path
+export PATH=$JAVA_HOME/bin:$PATH
 
 ## Add the Daikon binaries to your path
 export PATH=${DAIKONBIN}:${PLUMEBIN}:${PATH}
