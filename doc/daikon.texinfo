@@ -96,7 +96,7 @@ Copyright @copyright{} 1998-2014
 @end ifclear
 
 @html
-<img src="images/daikon-logo.gif" alt="Daikon logo">
+@image{images/daikon-logo}
 @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -123,7 +123,7 @@ It describes Daikon version 5.0.1, released January 3, 2014.
 * Tools::
 * Troubleshooting::
 * Details::
-* Index::
+* General Index::
 
 @c Putting end menu here is not how it's supposed to be done,
 @c but it seems to fix the html toc indentation bug.
@@ -147,12 +147,12 @@ detector reports likely program invariants.  An invariant is a property
 that holds at a certain point or points in a program; these are often
 seen in assert statements, documentation, and formal specifications.
 Invariants can be useful in program understanding and a host of other
-applications.  Examples include ``.field > abs(y)''; ``y = 2*x+3'';
+applications.  Examples include ``x.field > abs(y)''; ``y = 2*x+3'';
 ``array a is sorted''; ``for all list objects lst, lst.next.prev =
 lst''; ``for all treenode objects n, n.left.value < n.right.value''; ``p
 != null => p.content in myArray''; and many more.  You can extend Daikon
 to add new properties (@pxref{Enhancing Daikon output}, or
-@xref{New invariants,,,developer,Daikon Developer Manual}).
+@pxref{New invariants,,,developer,Daikon Developer Manual}).
 
 Dynamic invariant detection runs a program, observes the values that the
 program computes, and then reports properties that were true over the
@@ -166,7 +166,7 @@ detection is a machine learning technique that can be applied to
 arbitrary data.)  It is easy to extend Daikon to other applications.
 
 Daikon is freely available for download from
-@uref{http://plse.cs.washington.edu/daikon/download/}.  The distribution
+@uref{http://plse.cs.washington.edu/daikon/download/, ,download-site}.  The distribution
 includes both source code and
 @uref{http://plse.cs.washington.edu/daikon/download/doc/, ,documentation},
 and Daikon's license permits unrestricted use (@pxref{License}).  Many
@@ -632,9 +632,11 @@ Unix definition is not part of the environment.
 Because @command{java} is a Windows program, if you give it
 a @command{-CLASSPATH} argument it expects it to have Windows style pathnames.
 An easy way to deal with this is to use the @command{cygpath} utility:
+@exampleindent 1
 @example
 java -cp `cygpath -wp unix/path/a:unix/path/b` <remaider of arguments>
 @end example
+@exampleindent 4
 
 @c JHP Jan 2 2008: I removed this as I don't think this a problem for
 @c a user that isn't trying to write scripts on two platforms.  They
@@ -959,6 +961,8 @@ The StackAr example is an array-based stack implementation.  Take a
 look at @file{DataStructures/StackAr.java} to get a sense of the
 implementation.  Now, look at the first section of Daikon output.
 
+@exampleindent 1
+
 @example
 ======================================================================
 StackAr:::OBJECT
@@ -1044,6 +1048,7 @@ this.s.topOfStack < orig(i)
 ======================================================================
 @end example
 
+@exampleindent 4
 
 @node       Second Java example
 @subsection A second Java example
@@ -3702,9 +3707,11 @@ parameter types.  If the method throws checked exceptions, the parameter
 list is followed by a space, followed by the word throws followed by a
 comma-separated list of the thrown exception types.  For example:
 
+@exampleindent 1
 @example
 public boolean java.lang.Object.equals(java.lang.Object)
 @end example
+@exampleindent 4
 
 @noindent
 The access modifiers are placed in canonical order as specified by "The
@@ -5952,6 +5959,7 @@ used as an ingredient in soups or stews.
 To use Celeriac, run your program as you normally would, but with the
 Celeriac Launcher. 
 For instance, if you usually run
+@exampleindent 1
 @example
 MyProgram.exe arg1 arg2 arg3
 @end example
@@ -5961,6 +5969,7 @@ then instead you would run
 @example
 CeleriacLauncher.exe celeriacArg1 celeriacArg2 MyProgram.exe arg1 arg2 arg3
 @end example
+@exampleindent 4
 
 @noindent
 This runs your program and creates the @file{MyProgram.dtrace}
@@ -6710,9 +6719,11 @@ The Daikon website has an example of code after invariant
 insertion:  @url{http://plse.cs.washington.edu/daikon/StackAr.html}.
 
 Invoke Annotate like this:
+@exampleindent 1
 @example
 java daikon.tools.jtb.Annotate Myprog.inv Myprog.java Myprog2.java ...
 @end example
+@exampleindent 4
 
 @noindent
 The first argument is a Daikon @file{.inv} or @file{.inv.gz} file
@@ -6747,6 +6758,7 @@ information about the invariant.
 For example, if this switch is set, the output format is ESC,
 and an invariant for method @code{foo(int x)} normally prints as
 
+@exampleindent 1
 @example
 /*@ requires x != 0; */
 @end example
@@ -6764,6 +6776,7 @@ in one line; we break it up here for clarity):
 <METHOD> foo() </METHOD>
 </INVINFO> ; */
 @end example
+@exampleindent 4
 
 @noindent
 Note that the comment will no longer be a legal ESC/JML/DBC
@@ -6935,10 +6948,13 @@ Here is an example of use of the runtime-check instrumenter.
 To create a version of file
 @file{ubs/BoundedStack.java} that checks the invariants in
 invariant file @file{BoundedStack.inv.gz}, do:
+
+@exampleindent 1
 @example
 java daikon.tools.runtimechecker.Main instrument BoundedStack.inv.gz \
     ubs/BoundedStack.java
 @end example
+@exampleindent 4
 
 @noindent
 The instrumented Java code references classes in the
@@ -7008,6 +7024,7 @@ presumably calls one of the methods in the instrumented class.
 The code detects if any violations occurred, and if so, prints
 a message.
 
+@exampleindent 1
 @example
 daikon.tools.runtimechecker.Runtime.resetViolations();
 daikon.tools.runtimechecker.Runtime.resetErrors();
@@ -7019,6 +7036,7 @@ List<Violation> vs = daikon.tools.runtimechecker.Runtime.getViolations();
 if (!vs.isEmpty())
   System.out.println("Violations occurred.");
 @end example
+@exampleindent 4
 
 @noindent
 In addition, the instrumenter adds the following two methods to the
@@ -7052,9 +7070,12 @@ is noted, via a message printed to standard output or to a specified
 output file.
 
 InvariantChecker is invoked as follows:
+
+@exampleindent 1
 @example
 java daikon.tools.InvariantChecker [@var{options}] @var{invariant-file} @var{dtrace-files}
 @end example
+@exampleindent 4
 
 @noindent
 The @var{invariant-files} are invariant files (@file{.inv}) created by
@@ -8671,8 +8692,8 @@ of, or in addition to, referencing this manual and the Daikon website
 
 
 
-@node       Index
-@unnumbered Index
+@node        General Index
+@unnumbered  General Index
 
 @printindex cp
 

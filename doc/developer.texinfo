@@ -77,7 +77,7 @@ Copyright @copyright{} 1998-2014
 @end ifclear
 
 @html
-<img src="images/daikon-logo.gif" alt="Daikon logo">
+@image{images/daikon-logo}
 @end html
 
 @c Putting this lower in the HTML version looks a little bit strange,
@@ -103,7 +103,7 @@ It describes Daikon version 5.0.1, released January 3, 2014.
 * Distribution::
 * Historical::
 * File formats::
-* Index::
+* General Index::
 
 @c Putting end menu here is not how it's supposed to be done,
 @c but it seems to fix the html toc indentation bug.
@@ -3890,8 +3890,8 @@ specify classes that implement lists; @pxref{Options to control invariant
 detection,,,./daikon,Daikon User Manual}.
 
 
-@node       Index
-@unnumbered Index
+@node       General Index
+@unnumbered General Index
 
 @printindex cp
 
