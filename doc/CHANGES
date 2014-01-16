@@ -25,8 +25,14 @@ Further documentation can be found in:
 General
 
   Improved documentation and installation script for Cygwin.
+  Added corrected version of inv-cvs to new drop site.
+  Several documentation improvements.
+
+Documentation
   Fixed broken links between the two daikon documents.
   Removed documentation on Csh in favor of Bash.
+  Improved pdf output now includes bookmarks and hyper-links.
+  Added split html document versions to drop.
 
 ===========================================================================
 
