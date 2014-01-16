@@ -252,8 +252,8 @@ can be downloaded separately from
 @file{daikon.jar} on your classpath so that Java can find it.  You are
 now ready to use Daikon!
 
-There are two additional requirements.  You must have a Java 5.0 (or later)
-JVM (@uref{http://www.oracle.com/technetwork/java/,, Java Virtual Machine}).  The
+There are two additional requirements.  You must have a Java 7 (or later)
+JVM (@uref{http://www.oracle.com/technetwork/java/javase/overview/,, Java Virtual Machine}).  The
 @file{tools.jar} file that comes with your JVM must also be on your
 classpath.
 
@@ -304,9 +304,9 @@ For more complete information on compiling Daikon,
 @node       Requirements
 @subsection Requirements for running Daikon
 
-In order to run Daikon, you must have a Java 5.0 (or later) JVM
+In order to run Daikon, you must have a Java 7 (or later) JVM
 (@uref{http://www.oracle.com/technetwork/java/,, Java Virtual Machine}).  You must also
-have a Java 5.0 (or later) compiler.
+have a Java 7 (or later) compiler.
 
 @menu
 * Optional requirements::
@@ -335,9 +335,6 @@ If you wish to edit the Daikon source code and re-compile Daikon,
 
 @node       Unix/Linux/MacOS installation
 @subsection Unix/Linux/MacOS installation
-
-
-/item
 
 @exampleindent 1
 @enumerate
@@ -424,7 +421,7 @@ the regular Windows shell (@pxref{Running Daikon under Windows}).
 
 The Cygwin toolset (available at
 @uref{http://cygwin.com/}) contains everything you need
-to compile and run Unix programs under Windows.  You can install Cygwin
+to compile and run Linux programs under Windows.  You can install Cygwin
 by running the appropriate setup program; either
 @uref{http://cygwin.com/setup-x86.exe} or
 @uref{http://cygwin.com/setup-x86_64.exe},
@@ -457,16 +454,16 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 @example
 # The full pathname of the directory that contains Daikon
 export DAIKONDIR=$HOME/daikon
-# The full Unix pathname of the directory that contains the Java JDK
+# The full Linux pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.7.0_45
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
 
 @noindent
-Use the Cygwin/Unix path style (e.g., @code{/cygdrive/c/daikon}) rather than the
+Use the Cygwin/Linux path style (e.g., @code{/cygdrive/c/daikon}) rather than the
 windows path style (@code{C:\daikon}).
 Some users have reported problems when using pathnames
-with spaces.  You can avoid the problem by using the @code{ln} command to add a
+with spaces.  You can avoid the problem by using the @command{ln} command to add a
 symbolic link without spaces to @code{Program Files}.
 
 @example
@@ -496,18 +493,18 @@ Optionally, customize other variables.  The customizable variables are
 listed in the Daikon startup file: @file{daikon.bashrc}.
 
 You may customize them by setting environment variables, or by adding a
-@code{Makefile.user} file to directory @code{$DAIKONDIR/java} (it is
+@file{Makefile.user} file to directory @file{$DAIKONDIR/java} (it is
 automatically read at the beginning of the main Makefile, and prevents
 you from having to edit the main Makefile directly).
 
 The one variable you must customize is 
-to define the @code{OSTYPE} variable to be @code{cygwin}.
+to define the @env{OSTYPE} variable to be @samp{cygwin}.
 @example
 OSTYPE = cygwin
 @end example
 
 @item
-Optionally, compile Daikon and build other tools by running @code{make}.
+Optionally, compile Daikon and build other tools by running @command{make}.
 Note that this step is @emph{not} required if you only want to use Daikon
 with its Java front end (Chicory).  This step is required for using
 Daikon with its C/C++ front end (Kvasir), and for other tools.
@@ -527,7 +524,7 @@ see @ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
 
 Note that running this make command may take 20 minutes or more,
 depending on your computer.  
-On Windows, running @code{make} requires
+On Windows, running @command{make} requires
 that @uref{http://www.cygwin.com/,Cygwin} be installed.
 
 Optionally, download other executables, such as
@@ -560,6 +557,22 @@ programs, such as Chicory).  You should invoke them from a command shell
 than by double-clicking their icons.  In any event, double-clicking
 would not supply the proper arguments to the program.
 
+First, a little background/review.   Java on Linux separates its
+@env{CLASSPATH} entries using the colon (@samp{:}) while Java on Windows
+separates the entries with a semi-colon (@samp{;}). There is a good reason
+for this; on Windows the colon would have been impractical as it is
+used in file paths (@file{c:\}); on Linux the semi-colon is impractical,
+as it is used to end a command line.  The tricky bit is that Cygwin
+provides a Linux like environment on top of Windows.  So Cygwin mainly
+wants colon separators but java is a Windows application, so it wants
+semi-colons.  Another point is that when a Cygwin shell starts up, 
+it copies the Windows environment into its Linux like environment with
+no changes - except for the @env{PATH} variable.  This it converts
+to Linux format (with colons) and adds "/usr/local/bin:/usr/bin:" to
+the front.  Hence, it is all set to run both Cygwin and existing
+Windows applications. 
+
+
 @menu
 * Windows command line::
 * Cygwin shell::
@@ -570,33 +583,26 @@ would not supply the proper arguments to the program.
 @subsubsection Windows command line
 
 The first option is to run Daikon using native Windows utilities.
-The is done in the normal fashion.  The @code{CLASSPATH} must include
-either @code{$DAIKONDIR/daikon.jar} or @code{$DAIKONDIR/java} (if you
-have recompiled the Daikon source).  The @code{CLASSPATH} should be
+The is done in the normal fashion.  However, getting the correct
+value for @env{CLASSPATH} can be confusing.  As noted above, it
+must be 
 specified in Windows format (Windows paths and semicolon separators).
+It must include either @file{$DAIKONDIR/daikon.jar} or
+@file{$DAIKONDIR/java} (if you
+have recompiled the Daikon source).  A typical example for
+@env{CLASSPATH} might be:
 
+@exampleindent 1
+@example
+C:\cygwin64\home\user\invariants\daikon\daikon.jar;.;C:\Program Files
+(x86)\QuickTime\QTSystem\QTJava.zip;C:\Program Files\Java\jdk1.7.0_45\
+jre\lib\rt.jar;C:\Program Files\Java\jdk1.7.0_45\lib\tools.jar
+@end example
+@exampleindent 4
 
-@c JHP Jan 2 2009: I comment out the below.  I don't think the environment
-@c is necessary to run Daikon, only to build it.
-@c
-@c Before running Daikon, you must invoke the @file{daikonenv.bat} batch
-@c file (once) in the Windows command shell to set up the environment
-@c properly.  To automatically run something (such as a batch file) every
-@c time the Windows command shell is started, set the value of this
-@c registry key to the program you want to run:
-@c @example
-@c HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\AutoRun
-@c @end example
-@c @noindent
-
-@c @c This feels quite irrelevant; omit?
-@c You may also wish to set two registry entries to enable automatic completion:
-@c @example
-@c HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\CompletionChar
-@c HKEY_LOCAL_MACHINE\SOFTWARE\Microsoft\Command Processor\PathCompletionChar
-@c @end example
-@c @noindent
-@c The values for these registry entries are ASCII key codes.  Tab is 9.
+@noindent
+With this done, one my enter: @command{java daikon.Daikon} in any
+directory and Daikon should start up correctly.
 
 
 @node          Cygwin shell
@@ -604,63 +610,86 @@ specified in Windows format (Windows paths and semicolon separators).
 
 @cindex Cygwin toolset
 
-The second option for Windows is to run Daikon using the Cygwin toolset
+The second option for Windows (and the one we recomend) is to run
+Daikon using the Cygwin toolset
 (available at @uref{http://cygwin.com/}), which
-contains everything you need to compile and run Unix programs under
+contains everything you need to compile and run Linux programs under
 Windows.  You can install Cygwin by simply running one of the setup
 programs (based on your machine type) found 
 at @uref{http://cygwin.com/}.
 
-There is an incompatibility between Cygwin and programs compiled for
-Windows (such as Java).  (The incompatibility does not exist if the
-program was compiled for Cygwin.)  The incompatibility is that Windows
-programs use the semicolon (@samp{;}) as their path separator (for
-instance, for @env{CLASSPATH}), but Unix and Cygwin programs use the
-colon (@samp{:}) as their path separator.
+As noted above, when running any Java program (such as Daikon or Chicory),
+the @env{CLASSPATH} must be specified in Windows format.  Your initial
+install of the Java JDK will have set the basics for the @env{CLASSPATH}.
+When you installed Daikon, you were instructed to place into your
+shell initialization file commands to set @env{DAIKONDIR} and @env{JAVA_HOME}
+and then @command{source $DAIKONDIR/scripts/daikon.bashrc}.  This will
+set @env{CLASSPATH} properly each time you start a Bash shell.  The
+result should be a value for @env{CLASSPATH} that looks something like:
 
-The @code{Makefiles} used to build Daikon will change the Unix style
-@code{CLASSPATH} (e.g., .;/cygdrive/c/daikon/java) into a Windows
-style @code{CLASSPATH} (.;C:\daikon\java) when necessary.  The
-@code{CLASSPATH} must be in Unix format for the build to work
-correctly.
-
-However, when running any Java program (such as Daikon or Chicory),
-the @code{CLASSPATH} should be specified in Windows format.  That is
-why the build instructions suggest specifying the @code{CLASSPATH} in
-the @code{$DAIKONDIR/java/Makefile.user} file --- so that the required
-Unix definition is not part of the environment.
-Because @command{java} is a Windows program, if you give it
-a @command{-CLASSPATH} argument it expects it to have Windows style pathnames.
-An easy way to deal with this is to use the @command{cygpath} utility:
 @exampleindent 1
 @example
-java -cp `cygpath -wp unix/path/a:unix/path/b` <remaider of arguments>
+C:\cygwin64\home\user\invariants\daikon\daikon.jar;.;C:\Program Files
+(x86)\QuickTime\QTSystem\QTJava.zip;C:\Program Files\Java\jdk1.7.0_45\
+jre\lib\rt.jar;C:\Program Files\Java\jdk1.7.0_45\lib\tools.jar
 @end example
 @exampleindent 4
 
-@c JHP Jan 2 2008: I removed this as I don't think this a problem for
-@c a user that isn't trying to write scripts on two platforms.  They
-@c can just specify the classpath as Java expects it.
-@c 
-@c The @file{cygwin-runner.pl} script in the @file{bin/} directory may
-@c help you run windows-native Java tools from within the Cygwin
-@c environment.  It translates Unix @samp{:}-separated pathlists to
-@c Windows @samp{;}-separated pathlists, changes filenames to their 8.3
-@c ``old style'' name (e.g., @file{My Documents} to @file{MYDOCU~1}),
-@c changes forward slashes to backslashes, and translates paths with
-@c Cygwin mount points to simple @file{C:\}-like paths.
+If you wish to override @env{CLASSPATH} by using the @option{-classpath}
+(or @option{-cp}) option, you need to remember that the result must be
+in Windows format.  This can get confusing because the Cygwin 
+bash interpreter is going to process the command line prior to handing it 
+off to java.  Hence: 
+@exampleindent 1
+@example
+java -cp c:\cygwin64\home\user\invariants\daikon\daikon.jar daikon.Daikon 
+@end example
+@exampleindent 4
 
-@c For now, @file{cygwin-runner.pl} doesn't touch environment variables,
-@c but you can still use it for classpath by getting your classpath onto
-@c the command line explicitly:
-@c @example
-@c dfej -classpath $CLASSPATH DataStructures/StackAr.java
-@c @end example
-@c (It would be nice to patch cygwin-runner to translate environment
-@c variables, too.  For example, always translate @env{CLASSPATH}, or
-@c always translate anything listed in @env{CYGWIN_RUNNER_ENV} (e.g.,
-@c @samp{CYGWIN_RUNNER_ENV="PATH:CLASSPATH:PWD"}) so users can set
-@c @env{CYGWIN_RUNNER_ENV} in their dotfiles or various wrappers.)
+@noindent
+will fail as the backslash @samp{\} is processed by bash and removed.  Any of 
+the following will work: 
+@exampleindent 1
+@example
+java -cp c:\\cygwin64\\home\\user\\invariants\\daikon\\daikon.jar daikon.Daikon 
+java -cp "c:\cygwin64\home\user\invariants\daikon\daikon.jar" daikon.Daikon 
+java -cp c:/cygwin64/home/user/invariants/daikon/daikon.jar daikon.Daikon 
+@end example
+@exampleindent 4
+
+The last is interesting as this is almost the same as on 'real' Linux.  Windows 
+accepts either forward (@samp{/}) or backward (@samp{\}) slashes as directory separators 
+in paths.  There are similar command parsing issues with parenthesis and blanks.
+These are legal in Windows paths, but will cause bash to get confused. 
+In general, enclosing a valid Windows path within double quotes (@samp{"})
+is the preferred way to avoid these problems. 
+If you find it more convenient to use Linux paths, or want to use an 
+existing environment variable that contains a Linux path, the 'cygpath' tool 
+will do the job.  Thus, instead of: 
+@exampleindent 1
+@example
+java -cp $HOME/invariants/daikon/daikon.jar daikon.Daikon 
+@end example
+@exampleindent 4
+
+@noindent
+(which will fail), use 
+@exampleindent 1
+@example
+java -cp `cygpath -wp $HOME/invariants/daikon/daikon.jar` daikon.Daikon 
+@end example
+@exampleindent 4
+
+@noindent
+(note the back quotes @samp{`}) and everything should work as expected. Or even better: 
+@exampleindent 1
+@example
+java -cp "`cygpath -wp $HOME/invariants/daikon/daikon.jar`" daikon.Daikon 
+@end example
+@exampleindent 4
+
+@noindent
+since there may be some Windows path characters contained in the environment variables.
 
 
 @node    Example usage
@@ -1815,9 +1844,9 @@ This takes priority over the @option{--var-select-pattern} argument.
 All of the regular expressions used by Daikon use Java's
 regular expression syntax, which is similar to Perl's but not
 exactly the same.  Details are available at
-@uref{http://download.oracle.com/javase/1.5.0/docs/api/java/util/regex/Pattern.html#sum}.
-Multiple items can be matched by using the logical or operator (|), 
-for example @var{var1|var2|var3}.
+@uref{http://docs.oracle.com/javase/7/docs/api/java/util/regex/Pattern.html#sum}.
+Multiple items can be matched by using the logical or operator (@samp{|}), 
+for example @code{var1|var2|var3}.
 
 The @var{...-omit-pattern} arguments take precedence:  if a name matches
 an omit pattern, it is excluded.  If a name does not match an omit
@@ -1874,7 +1903,7 @@ output.  The @option{--debug} option turns on all debugging flags.
 package names in the Daikon implementation, such as @code{daikon.split}
 or @code{daikon.derive.binary.SequencesJoin}.  Only classes that check
 the appropriate categories are affected by the debug flags; you can
-determine this by looking for a call to @samp{Logger.getLogger} in
+determine this by looking for a call to @code{Logger.getLogger} in
 the specific class.
 
 @item --track @var{class}<@var{var1},@var{var2},@var{var3}>@@@var{ppt}
@@ -1886,7 +1915,8 @@ Turns on debugging information on the specified class, variables, and
 program point.  In contrast to the @option{--dbg} option, track logging follows
 a particular invariant through Daikon.  Multiple @option{--track} options
 can be specified.  Each item (class, variables, and program point) is optional.
-Multiple classes can be specified separated by vertical bars (|).  Matching
+Multiple classes can be specified separated by vertical bars (@samp{|}).
+Matching
 is a simple substring (not a regular expression) comparison.  Each item
 must match in order for a printout to occur.  For more information, see
 @ref{Track logging,,,developer,Daikon Developer Manual}.
@@ -2884,8 +2914,8 @@ is intended to operate.)  The automatically generated Splitter source
 code fails to compile (but Daikon proceeds without it) if a variable
 name in a condition is not found at the matching program point.
 
-Indented lines beginning with @option{DAIKON_FORMAT},
-@option{JAVA_FORMAT}, @option{ESC_FORMAT}, or @option{SIMPLIFY_FORMAT}
+Indented lines beginning with @samp{DAIKON_FORMAT},
+@samp{JAVA_FORMAT}, @samp{ESC_FORMAT}, or @samp{SIMPLIFY_FORMAT}
 may be used to specify how to represent the
 condition specified by the splitter in each of Daikon's output
 formats, to allow the splitting condition to be used as a dummy
@@ -3434,7 +3464,7 @@ enabled (the @option{-g} command-line switch to @command{javac});
 otherwise, Chicory uses the names @code{arg0}, @code{arg1}, @dots{} as
 the names of method arguments.
 
-Chicory must be run in a version 5.0 (or later) JVM, but it is
+Chicory must be run in a version 7 (or later) JVM, but it is
 backward-compatible with older versions of Java code.  Chicory can process
 class files from any version of Java.
 
@@ -3499,7 +3529,7 @@ traces only @code{bar}, you could match the method name (in any class)
 with regular expression
 @samp{bar$}, or you could match the program point name with @samp{C\.bar\(}.
 
-Using Unix shell syntax, you would execute
+Using Linux shell syntax, you would execute
 @example
 java daikon.Chicory --ppt-select-pattern='bar$' ...
 java daikon.Chicory --ppt-select-pattern='C\.bar\(' ...
@@ -3824,7 +3854,7 @@ Just like with the @option{--daikon} option, Daikon is only given a
 single trace from one execution of your program.
 
 The Kvasir front end also supports online execution, via use of (normal or
-named) Unix pipes (@pxref{Online execution}).
+named) Linux pipes (@pxref{Online execution}).
 
 @item --daikon-args=@var{arguments}
 Specifies arguments to be passed to Daikon if the @option{--daikon} or
@@ -4128,7 +4158,7 @@ instrumented copy of the JDK@.  Use the following command in
 make -C java dcomp_rt.jar
 @end example
 
-Make sure the @code{JAVA_HOME} environment variable is set to the directory
+Make sure the @env{JAVA_HOME} environment variable is set to the directory
 containing your JDK@.  This command instruments the classes in the
 @file{rt.jar} file of the JDK, and creates a new file,
 @file{dcomp_rt.jar}, in the @file{java} directory.
@@ -4623,7 +4653,7 @@ struct variables.  By default, Kvasir ignores struct variables because
 there is really no value that can be meaningfully associated with these
 variables.  However, some tools require struct variables to be
 outputted, so we have included this option.  Struct variables are
-denoted by a @code{# isStruct=true} annotation in their declarations.
+denoted by a @samp{# isStruct=true} annotation in their declarations.
 
 @item --nesting-depth=@var{N}
 
@@ -4809,9 +4839,9 @@ report.
 @item --with-gdb
 
 This pauses the program's execution in an infinite loop during
-initialization.  You can attach a debugger such as @code{gdb} to the
+initialization.  You can attach a debugger such as @command{gdb} to the
 running process by running gdb on @file{inst/lib/valgrind/x86-linux/fjalar} under
-the Kvasir directory and using the @code{attach} command.
+the Kvasir directory and using the @command{attach} command.
 
 @item --kvasir-debug
 @itemx --fjalar-debug
@@ -5010,7 +5040,7 @@ because Kvasir performs string comparisons to determine which program
 points to trace.  Thus, it is often easier to have Kvasir generate a
 @file{ppt-list-file} file that contains a list of all program points in a
 target program by using the @option{--dump-ppt-file} option, and then
-either comment out (by using the @code{'#'} comment character at the
+either comment out (by using the @samp{#} comment character at the
 beginning of the line) or delete lines in that file for program points
 not to be traced or create a new @file{ppt-list-file} using the names in
 the Kvasir-generated file.  This prevents typos and the tedium of
@@ -5027,7 +5057,7 @@ kvasir-dtrace --dump-ppt-file=FunctionNamesTest.ppts \
 That file represents all the program points that Kvasir would
 normally trace.  If the user wanted to only trace the @code{main()}
 function, he could comment out all other lines by placing a single
-@code{'#'} character at the beginning of each line to be commented out,
+@samp{#} character at the beginning of each line to be commented out,
 as demonstrated here:
 
 @example
@@ -5055,7 +5085,7 @@ each function (formal parameters and return values).  Again, the best way to
 create a @file{var-list-file} is to have Kvasir generate a file with all
 variables using the @option{--dump-var-file} option and then modifying
 that file for one's particular needs by either deleting or
-commenting out lines (again using the @code{'#'} comment character).  For example,
+commenting out lines (again using the @samp{#} comment character).  For example,
 executing
 
 @example
@@ -5106,16 +5136,16 @@ y
 @end example
 
 The file format is straightforward.  Each section is marked by a
-special string ``@code{----SECTION----}'' on a line by itself followed
+special string @samp{----SECTION----} on a line by itself followed
 immediately by a line that either denotes the program point name
 (formatted like how it appears in the .decls and .dtrace files) or the
-special string ``@code{globals}''.  This is followed by a
+special string @samp{globals}.  This is followed by a
 newline-delimited list of all variables to be outputted for that
 particular program point.  Global variables listed in the
 @code{globals} section are outputted for all program points. Additional global
 variables to be outputted for a particular program point can be specified
 in the corresponding section entry. For clarity, one or more blank lines 
-should separate neighboring sections, although the ``@code{----SECTION----}'' 
+should separate neighboring sections, although the @samp{----SECTION----} 
 string literal on a line by itself is the only required delimiter.  
 If an entire section is missing, then no variables for that program point 
 (or no global variables, if it is the special globals section) are traced.
@@ -5705,7 +5735,7 @@ The Chicory front end for Java also supports online execution, via its
 
 To use regular pipes in lieu of a disk file, simply use @file{-} as the
 name of the @file{.dtrace} file, and run the target program and Daikon
-in a Unix pipeline.
+in a Linux pipeline.
 When the @option{--dtrace-file=-} option is used to redirect
 the .dtrace output to stdout, the target program's stdout is redirected
 to the terminal (@file{/dev/tty}) so that it does not intermix with the
@@ -5723,7 +5753,7 @@ file.txt} to compress a text file (but start with a small one first).
 (This example assumes that you have compiled the bzip2 example (in
 @file{$DAIKONDIR/examples/c-examples/bzip2} of the distribution) by
 saying @command{gcc -gdwarf-2 bzip2.c -o bzip2}, and that
-@command{$DAIKON} stands for the command that invokes Daikon, for
+@env{$DAIKON} stands for the command that invokes Daikon, for
 instance @command{java -Xmx512m daikon.Daikon --config_option
 daikon.derive.Derivation.disable_derived_variables=true}.)
 
@@ -5731,17 +5761,17 @@ daikon.derive.Derivation.disable_derived_variables=true}.)
 @cindex FIFO, as data trace file
 
 Instead of a regular pipe, you can use a named pipe, also known as a
-FIFO, which is a special kind of file supported by most Unix-compatible
+FIFO, which is a special kind of file supported by most Linux-compatible
 systems.  When one process tries to open a FIFO
 for reading, it blocks, waiting for another process to open it for
 writing (or vice-versa).  When both a reader and a writer are ready, the
-FIFO connects the reader to the writer like a regular Unix pipe.
+FIFO connects the reader to the writer like a regular Linux pipe.
 
 The @option{--output-fifo} option causes Kvasir to create its output
 @file{.dtrace} file as a named pipe.  When Kvasir is
 run with this option, Daikon needs to be run at the same time to read
 from the FIFO, such as from another terminal or using the shell's
-@code{&} operator.
+@samp{&} operator.
 
 For instance, the following two commands have the same effect as the
 pipeline above that used ordinary pipes.  The FIFO is named
@@ -7460,7 +7490,7 @@ Exception in thread "main" java.lang.NoClassDefFoundError: plume/FuzzyFloat
 @noindent
 means that Java did not find the class @file{plume/FuzzyFloat} on your
 classpath.  To debug such a problem, you need to determine your
-classpath (it's your @samp{CLASSPATH} environment variable under
+classpath (it's your @env{CLASSPATH} environment variable under
 Mac/Linux), and the location of file @file{plume/FuzzyFloat.class} or of
 the jar file that contains it.
 
@@ -7678,15 +7708,15 @@ user.
 @cindex java.lang.UnsupportedClassVersionError
 @cindex major.minor version error
 
-Daikon requires a Java 5 JVM (@pxref{Requirements}).
+Daikon requires a Java 7 (or newer) JVM (@pxref{Requirements}).
 An error such as
 @example
 Exception in thread "main" java.lang.UnsupportedClassVersionError:
-daikon/Daikon (Unsupported major.minor version 49.0)
+daikon/Daikon (Unsupported major.minor version 51.0)
 @end example
 
 @noindent
-indicates that you are trying to run Daikon on an older JVM@.  You need to
+indicates that you are trying to run Daikon on an older JVM.  You need to
 install a newer version of Java in order to run Daikon.
 
 
@@ -7961,7 +7991,7 @@ This section describes ways to work around this problem.
 
 You can reduce file size by specifying a trace file name that includes
 @file{.gz} at the end.  See the @option{--dtrace-file=FILENAME} argument
-to Chicory or Kvasir, or the @samp{DTRACEFILE} environment variable.
+to Chicory or Kvasir, or the @env{DTRACEFILE} environment variable.
 (Compression is the default if you don't specify a filename.)
 
 
@@ -7970,7 +8000,7 @@ to Chicory or Kvasir, or the @samp{DTRACEFILE} environment variable.
 
 Sometimes, the problem is just filling up your user account with large
 files.  You can instead create dtrace files in a temporary directory.
-Under Unix, this is often called @file{/scratch}.  Typically you should
+Under Linux, this is often called @file{/scratch}.  Typically you should
 create a subdirectory called @file{/scratch/$USER/}.
 
 
@@ -7986,7 +8016,7 @@ disk with files.
 The Chicory front end supports online execution via use of the
 @option{--daikon-online} option (@pxref{Chicory miscellaneous options}).
 The Kvasir front end supports online execution via use of (normal or
-named) Unix pipes (@pxref{Online execution}).
+named) Linux pipes (@pxref{Online execution}).
 
 In the future, Daikon may be able to output partial results as the
 target program is executing.
@@ -8239,7 +8269,7 @@ Exception in thread "main" java.lang.VerifyError:
 
 @noindent
 then the problem is most likely that your classpath contains a version
-of the BCEL library that is not compatible with Java 5.  The
+of the BCEL library that is not compatible with Java 7.  The
 incompatible version might appear in @file{bcel.jar}, in Java's
 @file{rt.jar}, or elsewhere.  You should either remove that version of
 BCEL from your classpath, or you should ensure that it appears after

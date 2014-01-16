@@ -162,7 +162,7 @@ This chapter describes how to customize or modify Daikon.
 
 @cindex compiling daikon
 
-To compile Daikon, type @samp{make} in @file{daikon/java/} or any of its
+To compile Daikon, type @command{make} in @file{daikon/java/} or any of its
 subdirectories.  The distribution includes compiled @file{.class} files,
 so you do not need to compile them yourself unless you make changes.
 
@@ -201,61 +201,51 @@ In order to compile Daikon, you need the C preprocessor
 distribution into multiple @file{.java} files, which are then compiled.
 If you have a C compiler, you almost certainly have @command{cpp}.
 If you do not have @command{cpp} (or @command{gcc}, which can emulate
-@command{cpp} via @samp{gcc -E}), you may run @samp{make avoid-jpp}, in
+@command{cpp} via @command{gcc -E}), you may run @command{make avoid-jpp}, in
 which case changes to @code{.jpp} files will not be reflected in the
 @file{.java} files or the compiled @file{.class} files.  (The purpose
 of the @file{.jpp} files is to avoid code duplication by placing
 common code in a single file, then generating other files that need to
 include that common code.)
 
-To make the documentation (via @samp{make -C $DAIKONDIR/doc}), you will need a
-recent version of makeinfo.
-@c Info as of November 2005
-Makeinfo version 4.7 is known to work, but makeinfo version 4.1 is known
-to fail.
+To make the documentation (via @command{make -C $DAIKONDIR/doc}), you will need a
+recent version of @command{makeinfo}; version 4.7 or newer.
 
 For more information about compiling Daikon, see the comments in the Makefiles.
 
 @cindex Windows, compiling
 To compile Daikon on Windows, the best approach is to install the Cygwin
 toolset (available at @uref{http://cygwin.com/}), which
-contains everything you need to compile and run Unix programs under
-Windows.  You can install Cygwin by simply running one of the setup
+contains everything you need to compile and run Linux programs under
+Windows.  You can install Cygwin by running one of the setup
 programs (based on your machine type) found 
 at @uref{http://cygwin.com/install.html}.
 
 When setting up environment pathname variables under Windows/Cygwin
-(such as @command{JAVA_HOME} or @command{CLASSPATH}) make sure that the
-pathname is specified in Unix format (e.g., @samp{/cygdrive/c/daikon}
-rather than @samp{C:\daikon}).  Cygwin expects Unix style pathnames
-and the Makefile will convert them to Windows pathnames when necessary
-(such as when using Windows programs such as Java).  The
-@command{CLASSPATH} environment variable should use colons (:) rather
-than semicolons (;) as a separator.  Using windows pathnames or
-separators is a common source of errors that will result in odd error
+(such as @command{JAVA_HOME}) make sure that the
+pathname is specified in Linux format (e.g., @file{/cygdrive/c/daikon}
+rather than @file{C:\daikon}).  However, the
+@command{CLASSPATH} environment variable is a special case;
+as @command{java} is a Windows
+program, it expects @command{CLASSPATH} to be in Windows format.
+This is the only exception to Cgywin looking like Linux.
+Thus @command{CLASSPATH} must
+always be in Windows format; i.e., it should use semicolons (;) rather
+than colons (:) as a path separator.
+Using the wrong filename format or the wrong pathname separator
+is a common source of errors that will result in odd error
 messages and build failures. 
-Please note that @command{java} is a Windows program so if you pass it
-a @command{-CLASSPATH} argument it expects it to have Window's pathnames.
-An easy way to deal with this is to use the @command{cygpath} utility:
+
+Please note this applies to a @command{-CLASSPATH} argument to
+@command{java} as well: it must have Windows pathnames.
+One easy way to deal with this is to use the @command{cygpath} utility:
 @example
-java -cp `cygpath -wp unix/path/a:unix/path/b` <remaider of arguments>
+java -cp "`cygpath -wp linux/path/a:linux/path/b`" <remaider of arguments>
 @end example
-
-@cindex MacOSX, compiling
-Compiling Daikon on MacOSX is relatively straightforward.  In addition
-to the standard settings, add an environment variable that specifies
-the location of the Java @samp{classes.jar} file (@samp{classes.jar} performs a
-similar function to the more standard @samp{rt.jar}.  Normally the
-file is found in @samp{/System/Library/Frameworks} under the appropriate Java
-version.  The following example is for the standard install of
-Java 1.5 on MacOSX:
-
-@exampleindent 0
-@smallexample
-export ORIG_RT=/System/Library/Frameworks/JavaVM.framework/Versions/1.5.0/Classes/classes.jar
-@end smallexample
-@c restore default:
-@exampleindent 5
+@noindent
+Note both the back quotes (@samp{`}) to force @command{cygpath} to be evaluated
+before calling @command{java} and the double quotes (@samp{"}) to protect against
+special characters and spaces in Windows paths.
 
 
 @node    Version control repository
@@ -340,7 +330,7 @@ as ``x is a member of a[]''.
 @end table
 
 @noindent
-A complete list of invariants appears in @samp{Daikon.setup_proto_invs()}.
+A complete list of invariants appears in @code{Daikon.setup_proto_invs()}.
 
 Daikon's invariants are first instantiated, then are presented samples
 (tuples of values for all the variables of interest to the invariant;
@@ -432,7 +422,7 @@ see Daikon's @option{--conf_limit} command-line option.
 @itemx public String format_using (OutputFormat format)
 Returns a high-level printed representation of the
 invariant, for user output.  @code{format} produces ``normal'' output, while
-the @samp{repr} formatting routine produces low-level, detailed output for 
+the @code{repr} formatting routine produces low-level, detailed output for 
 debugging.  When first writing
 an invariant, you can make @code{repr} and @code{format_using}
 simply call @code{format}, then fix up the
@@ -625,8 +615,8 @@ class Example @{
 (Daikon's Java front end, Chicory, does not actually insert
 instrumentation into the Java source code of your program.  Rather, it
 instruments the bytecode as it is loaded into the JVM.  This is more
-efficient, and it avoids making any changes to your @code{.java} or
-@code{.class} files.  We have shown an example of  Java source code
+efficient, and it avoids making any changes to your @file{.java} or
+@file{.class} files.  We have shown an example of  Java source code
 instrumentation because that is  simpler to explain and understand than
 the bytecode instrumentation.)
 
@@ -1270,8 +1260,8 @@ repository}).
 The unit tests are found in @file{daikon/java/daikon/test/}; they use
 the JUnit unit testing framework.  They take a few seconds to run.  They
 are automatically run each time you compile Daikon (by running
-@samp{make} in @file{$DAIKONDIR/java} or any of its subdirectories).  You can
-also run them explicitly via @samp{make unit}.  When you write new code
+@command{make} in @file{$DAIKONDIR/java} or any of its subdirectories).  You can
+also run them explicitly via @command{make unit}.  When you write new code
 or modify old code, please try to add unit tests.
 
 @menu
@@ -1520,10 +1510,10 @@ The regression tests run Daikon on many different inputs and compare
 Daikon's output to expected output.  They take about an hour to run.
 
 The regression tests appear in the @file{$DAIKONDIR/tests/} directory.  Type
-@samp{make} in that directory to see a list of Makefile targets.  The
-most common target is @samp{make diffs}; if any resulting file has
+@command{make} in that directory to see a list of Makefile targets.  The
+most common target is @command{make diffs}; if any resulting file has
 non-zero size, the tests fail.  You do not generally need to do
-@samp{make clean}, which forces re-instrumentation (a possibly slow
+@command{make clean}, which forces re-instrumentation (a possibly slow
 process) the next time you run the tests.
 
 As when you install or compile Daikon, when you run the tests
@@ -1564,10 +1554,10 @@ Note on Kvasir tests: The Kvasir (Daikon C front-end) tests appear in the
 @file{$DAIKONDIR/tests/kvasir-tests} directory. These tests run Daikon to ensure 
 that the Kvasir output is valid Daikon input. To run them, go to 
 @file{$DAIKONDIR/tests/kvasir-tests} or any test sub-directory within here and run 
-@samp{make summary-w-daikon}. If any tests return @samp{FAILED}, then
+@command{make summary-w-daikon}. If any tests return @samp{FAILED}, then
 you should look at the appropriate @file{.diff} file. If you feel that the 
 failure was actually a result of your Daikon changes and should be in fact 
-correct output, then run @samp{make update-inv-goals} to update the Daikon
+correct output, then run @command{make update-inv-goals} to update the Daikon
 @file{invs.goal} file.
 
 
@@ -1631,7 +1621,7 @@ instrument-files-revise:
 
 @end table
 
-If you run @samp{make} (without a target), you will see a description of
+If you run @command{make} (without a target), you will see a description of
 all of the Makefile's functionality.  Most of that is inherited from
 @file{$DAIKONDIR/tests/Makefile.common}.
 
@@ -1657,10 +1647,10 @@ If you omit some @file{.goal} files, then the related tests will not be run.
 easier to just add the additional @file{.goal} files.)
 
 You can start out with the @file{.goal} files empty.
-Execute @samp{make diffs}, to produce output; the tests will fail
+Execute @command{make diffs}, to produce output; the tests will fail
 because the output is not identical to the empty @file{.goal} files.
 When the test output is satisfactory, execute 
-@samp{make update-goals} to copy the actual results to the @file{.goal} files.  
+@command{make update-goals} to copy the actual results to the @file{.goal} files.  
 Then, commit the goal files, Makefile, and source files
 to the repository.
 
@@ -1721,11 +1711,11 @@ PostScript or PDF version either electronically or on paper.
 @node       Start up Eclipse
 @subsection Start up Eclipse
 
-Just run the command @samp{eclipse} at the command shell.
+Just run the command @command{eclipse} at the command shell.
 
 There is one big catch:  take note of where you launch Eclipse and
 @b{always} launch Eclipse from the same location. For example, you might
-want to alias run-eclipse with '@samp{cd $HOME; eclipse}'.
+want to alias run-eclipse with '@command{cd $HOME; eclipse}'.
 For convenience, this is already done for you if you source the
 daikon-dev.bashrc startup script.
 There are ways around the launch location inconvenience, such as
@@ -1756,7 +1746,7 @@ Window >> Preferences >> Java >> Compiler >> Style >> Non-static access >> >> Ig
 @node          Import existing project
 @subsubsection Import an existing project
 
-First, do @samp{cp $DAIKONDIR/java/.classpath-pag $DAIKONDIR/java/.classpath}
+First, do @command{cp $DAIKONDIR/java/.classpath-pag $DAIKONDIR/java/.classpath}
 
 Second, import Daikon into Eclipse.  To import:  start Eclipse, then choose
 menu item File->Import->ExistingProjectIntoWorkspace, then enter (the full
@@ -1933,10 +1923,7 @@ Often, some other kind of markup is better than quotes:
 @item @code{@@option} is for command-line options.
 @item @code{@@samp} is for sample input or output.  (Alternatively, you can use
       @code{@@example} to set off longer input/output strings.)
-@item @code{@@command} should be avoided.  If you are referring to the program
-      itself, just use the name of the program without special markup, e.g. GCC.
-      If you are referring to how to invoke the program from the shell,
-      @code{@@samp} is better, e.g. @samp{gcc -E}.
+@item @code{@@command} is for command lines.
 @end itemize
 
 @item
@@ -1952,7 +1939,7 @@ is too wide to fit on the page with @code{@@example}, it's better to insert some
 line breaks to make it more readable than to shrink the font.
 @end itemize
 
-Once you have edited the manual, run @samp{make} twice (yes, you must run
+Once you have edited the manual, run @command{make} twice (yes, you must run
 it twice) in order to generate formatted versions of the manual
 (@file{daikon.}@{@file{html},@file{info},@file{ps},@file{pdf}@}).
 
@@ -1965,7 +1952,7 @@ This section provides the instructions for publishing a Daikon distribution;
 aka making a release. 
 If you only want to
 create the @file{daikon.tar} or @file{daikon.tar.gz} file in your own
-directory, then simply run @samp{make} with the desired file as the
+directory, then simply run @command{make} with the desired file as the
 target.
 
 We have a general policy of using even version numbers (e.g., 4.6.4) for offical
@@ -2425,7 +2412,7 @@ explain that the regression tests are the main tests.)
 The regression tests use Makefiles to avoid re-doing unnecessary work,
 so any description of the time taken to run Daikon's tests should be a
 measurement of re-running the tests after they have been run once, not
-running them from a clean checkout or after a @samp{make clean} command.
+running them from a clean checkout or after a @command{make clean} command.
 
 Daikon intentionally does not contain tests for third-party libraries
 that are included (sometimes in source form) in the Daikon distribution.
@@ -2465,7 +2452,7 @@ do not appear on the main trunk or other branches.
 
 Later you can move changes from one branch to another branch (or the
 main trunk) by ``merging''.  Merging involves first running 
-@samp{cvs update -j}, to merge the changes into the working directory.
+@command{cvs update -j}, to merge the changes into the working directory.
 You can then commit that revision, and thus effectively copy the
 changes onto another branch.
 @end quotation
@@ -2490,7 +2477,7 @@ common, some changes were merged from the trunk to the branch, and
 version 2 was finally retired (and no more changes were made to the
 branch) in December 2003.
 
-A regular @samp{cvs checkout} gets the trunk.  The @option{-r} flag specifies a
+A regular @command{cvs checkout} gets the trunk.  The @option{-r} flag specifies a
 branch.  For example, to get the branch as of June 9, 2002, one could do
 @example
 cvs -d $pag/projects/invariants/.CVS co -r ENGINE_V2_PATCHES \
