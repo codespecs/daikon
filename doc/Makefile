@@ -100,10 +100,8 @@ developer.pdf: developer.texinfo
 	makeinfo --pdf $<
 
 pdf-final: daikon.texinfo config-options.texinfo invariants-doc.texinfo developer.texinfo
-	texi2dvi --command='@set final' daikon.texinfo
-	dvipdfm daikon.dvi
-	texi2dvi --command='@set final' developer.texinfo
-	dvipdfm developer.dvi
+	makeinfo --pdf --Xopt=--command='@set final' daikon.texinfo
+	makeinfo --pdf --Xopt=--command='@set final' developer.texinfo
 
 # Note that the clean target does not remove invariants-doc.texinfo or
 # config-options.texinfo.
