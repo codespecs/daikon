@@ -2387,14 +2387,13 @@ before that time.  The reason for this is that converting the full CVS
 repository to Mercurial would create a repository that would be too
 large for convenient use, and that would also be too large to upload to
 Google Code.  The original CVS repository is available for download from
-@uref{http://code.google.com/p/daikon/downloads}, as files
-@file{inv-cvs.zip} and @file{inv-cvs.z01} through @file{inv-cvs.z09}.  Download
-all 10 files, and then run the following commands to re-create the CVS
+@uref{http://plse.cs.washington.edu/daikon/download/inv-cvs}, as files
+@file{inv-cvsaa} through @file{inv-cvsai}.  Download
+all 9 files, and then run the following commands to re-create the CVS
 repository, which will be named @file{invariants/}:
 
 @example
-cat inv-cvs.z* > inv-cvs-full.zip
-zip -F inv-cvs-full.zip 
+cat inv-cvsa? > inv-cvs-full.zip
 unzip inv-cvs-full.zip 
 @end example
 
