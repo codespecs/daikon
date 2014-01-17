@@ -362,7 +362,7 @@ We will assume that your are using ithe bash shell or its variants.
 Add these three commands to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=$HOME/daikon
+export DAIKONDIR=@var{daikonparent}/daikon
 # The full pathname of the directory that contains the Java JDK; e.g.:
 export JAVA_HOME=/usr/lib/jvm/java
 source $DAIKONDIR/scripts/daikon.bashrc
@@ -453,7 +453,7 @@ Do not use a Windows shell; use the Cygwin bash shell instead.
 
 @example
 # The full pathname of the directory that contains Daikon
-export DAIKONDIR=$HOME/daikon
+export DAIKONDIR=@var{daikonparent}/daikon
 # The full Linux pathname of the directory that contains the Java JDK
 export JAVA_HOME=/cygdrive/c/Program Files/Java/jdk1.7.0_45
 source $DAIKONDIR/scripts/daikon.bashrc
