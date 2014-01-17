@@ -343,7 +343,6 @@ staging: doc/CHANGES
 	cd doc && cp -pf $(DOC_FILES_USER) $(STAGING_DIR)/download/doc
 	cp -pR doc/images $(STAGING_DIR)/download/doc
 	cp -pR doc/daikon_manual_html $(STAGING_DIR)/download/doc
-	cp -pR doc/images $(STAGING_DIR)/download/doc/daikon_manual_html
 	cp -pR doc/developer_manual_html $(STAGING_DIR)/download/doc
 	cd doc/www && ${RSYNC_AR} $(WWW_DAIKON_FILES) $(STAGING_DIR)
 	# Build pubs and copy the results
