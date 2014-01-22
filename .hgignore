@@ -76,7 +76,7 @@ doc/daikon.ps
 doc/daikon.toc
 doc/daikon.tp
 doc/daikon.vr
-doc/daikon_manual_html
+doc/daikon/
 doc/developer.aux
 doc/developer.cp
 doc/developer.cps
@@ -93,7 +93,7 @@ doc/developer.ps
 doc/developer.toc
 doc/developer.tp
 doc/developer.vr
-doc/developer_manual_html
+doc/developer/
 doc/images/daikon-logo.pdf
 doc/images/dfepl-flow.eps
 doc/images/dfepl-flow.jpg
