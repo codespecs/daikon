@@ -236,10 +236,7 @@ rebuild-everything-but-kvasir:
 	${MAKE} -C $(DAIKONDIR)/java dcomp_rt.jar
 	${MAKE} -C $(DAIKONDIR)/java javadoc
 	${MAKE} -C $(DAIKONDIR)/doc clean
-	-${MAKE} -C $(DAIKONDIR)/doc
-	${MAKE} -C $(DAIKONDIR)/doc
-	${MAKE} -C $(DAIKONDIR)/doc pdf-final
-	${MAKE} -C $(DAIKONDIR)/doc/www pubs
+	${MAKE} -C $(DAIKONDIR) doc-all
 
 rebuild-everything-no-clean:
 	${MAKE} -C $(DAIKONDIR)/java tags compile
@@ -327,6 +324,7 @@ staging: doc/CHANGES
 	install -d $(STAGING_DIR)/download
 	# Build the main tarfile for daikon
 	@echo "]2;Building daikon.tar"
+	# make daikon.tar has side effect of making 'finalout' version of documents
 	$(MAKE) daikon.tar
 	gzip -c ${TMPDIR}/daikon.tar > $(STAGING_DIR)/download/daikon.tar.gz
 	cp -pf ${TMPDIR}/daikon.zip $(STAGING_DIR)/download/daikon.zip
@@ -338,18 +336,17 @@ staging: doc/CHANGES
 	# Copy the documentation
 	@echo "]2;Copying documentation"
 	install -d $(STAGING_DIR)/download/doc
-	# make 'finalout' version of documents
-	cd doc && make pdf-final
 	cd doc && cp -pf $(DOC_FILES_USER) $(STAGING_DIR)/download/doc
 	cp -pR doc/images $(STAGING_DIR)/download/doc
-	cp -pR doc/daikon_manual_html $(STAGING_DIR)/download/doc
-	cp -pR doc/developer_manual_html $(STAGING_DIR)/download/doc
+	cp -pR doc/daikon $(STAGING_DIR)/download/doc
+	cp -pR doc/developer $(STAGING_DIR)/download/doc
 	cd doc/www && ${RSYNC_AR} $(WWW_DAIKON_FILES) $(STAGING_DIR)
 	# Build pubs and copy the results
 	@echo "]2;Building Pubs"
 	cd doc/www && make pubs
 	install -d $(STAGING_DIR)/pubs
 	cp -pR doc/www/pubs/* $(STAGING_DIR)/pubs
+	cp -p doc/images/daikon-logo.gif $(STAGING_DIR)
 	# all distributed files should be readonly
 	chmod -R -w $(STAGING_DIR)
 	# compare new list of files in tarfile to previous list
@@ -507,7 +504,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	cd doc && cp -p $(DOC_FILES_NO_IMAGES) ${TMPDIR}/daikon/doc
 	mkdir ${TMPDIR}/daikon/doc/images
 	cd doc && cp -p $(IMAGE_PARTIAL_PATHS) ${TMPDIR}/daikon/doc/images
-	cp -pR doc/daikon_manual_html ${TMPDIR}/daikon/doc
+	cp -pR doc/daikon ${TMPDIR}/daikon/doc
 
 	# Plume-lib library
 	(cd plume-lib; hg archive ${TMPDIR}/daikon/plume-lib)
