@@ -43,7 +43,7 @@
 @ifset final
 @c FINAL version
 @c Print out the Daikon version 5.0.1 release date
-@center January 3, 2014
+@center January 17, 2014
 @end ifset
 
 @ifclear final
@@ -91,7 +91,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.0.1, released January 3, 2014.
+It describes Daikon version 5.0.1, released January 17, 2014.
 
 @menu
 * Introduction::
@@ -1890,7 +1890,7 @@ HTML, info, or printed (PostScript and PDF) output.
 You can edit the manual using an ordinary text editor.  Emacs has a
 useful Texinfo mode.  You can mimic the formatting commands that
 already appear in the manual, but it's also a good idea to read the
-@uref{http://www.gnu.org/software/texinfo,Texinfo documentation}.
+@uref{http://www.gnu.org/software/texinfo/,Texinfo documentation}.
 
 If you wish to create a new section of the manual, insert two lines like
 the following:
@@ -1964,7 +1964,7 @@ prepare for subsequent development.  Note, this system has the useful side effec
 of allowing the build and test process to be repeated to fix a problem (steps 5-14 below) 
 without having to worry about updating or reseting the version number.
 
-The Daikon distribution site is located at @uref{//plse.cs.washington.edu/daikon};
+The Daikon distribution site is located at @uref{//plse.cs.washington.edu/daikon/};
 internally, this can be accessed as part of our file system at
 @file{/cse/web/research/plse/daikon}.
 In order to be able to write to the distribution site, your CSE user id must be 
@@ -2044,7 +2044,7 @@ If you have not done so previously, you may create this repository
 now:
 
 @example
-(cd; https://code.google.com/p/plume-bib/ bib)
+(cd; hg clone https://code.google.com/p/plume-bib/ bib)
 @end example
 
 Now uppate the contents:
@@ -2374,7 +2374,7 @@ before that time.  The reason for this is that converting the full CVS
 repository to Mercurial would create a repository that would be too
 large for convenient use, and that would also be too large to upload to
 Google Code.  The original CVS repository is available for download from
-@uref{http://plse.cs.washington.edu/daikon/download/inv-cvs}, as files
+@uref{http://plse.cs.washington.edu/daikon/download/inv-cvs/}, as files
 @file{inv-cvsaa} through @file{inv-cvsai}.  Download
 all 9 files, and then run the following commands to re-create the CVS
 repository, which will be named @file{invariants/}:
@@ -2521,7 +2521,7 @@ invariants in another programming language.
 
 Daikon's input is conventionally one or more @file{.dtrace} data trace
 files.  (Another, optional type of input file for Daikon is a splitter
-info file; @pxref{Splitter info file,,,daikon,Daikon User Manual}.)
+info file; @pxref{Splitter info file format,,,daikon,Daikon User Manual}.)
 A trace file is a text file that consists of newline-separated
 records.  There are two basic types of records that can appear in Daikon's
 input:  program point declarations, and trace records.
@@ -3873,7 +3873,7 @@ Each classname is in Java format (for example, ``java.util.LinkedList'').
 
 The @option{--list_type} command-line option to Daikon can also be used to
 specify classes that implement lists; @pxref{Options to control invariant
-detection,,,./daikon,Daikon User Manual}.
+detection,,,daikon,Daikon User Manual}.
 
 
 @node       General Index

@@ -65,23 +65,23 @@ daikon-fast: daikon.texinfo
 developer.html: developer.texinfo 
 	makeinfo --html --no-split $<
 
-html-chap: daikon_manual_html/daikon.html developer_manual_html/developer.html
+html-chap: daikon/index.html developer/index.html
 
 # The "subdir" flag does not copy over images, so the
 # pathnames become incorrect.  We need to copy them over ourselves.
-daikon_manual_html/daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
-	rm -rf daikon_manual_html/*
-	makeinfo --html --split=chapter -o daikon_manual_html $<
-	mkdir daikon_manual_html/images
-	cp images/*.png daikon_manual_html/images
-	cp images/*.jpg daikon_manual_html/images
+daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
+	rm -rf daikon/*
+	makeinfo --html --split=chapter -o daikon $<
+	mkdir daikon/images
+	cp images/*.png daikon/images
+	cp images/*.jpg daikon/images
 
-developer_manual_html/developer.html: developer.texinfo
-	rm -rf developer_manual_html/*
-	makeinfo --html --split=chapter -o developer_manual_html $<
-	mkdir developer_manual_html/images
-	cp images/*.png developer_manual_html/images
-	cp images/*.jpg developer_manual_html/images
+developer/index.html: developer.texinfo
+	rm -rf developer/*
+	makeinfo --html --split=chapter -o developer $<
+	mkdir developer/images
+	cp images/*.png developer/images
+	cp images/*.jpg developer/images
 
 ps: daikon.ps images/dfepl-flow.eps developer.ps
 
@@ -111,11 +111,11 @@ clean: texi-clean
 		daikon.info daikon.info-[0-9] \
 		daikon.log daikon.dvi daikon.ps daikon.pdf daikon.html 
 	rm -f *.bak
-	rm -rf daikon_manual_html
+	rm -rf daikon/*
 	rm -f developer.tmp \
 		developer.info developer.info-[0-9] \
 		developer.log developer.dvi developer.ps developer.pdf developer.html 
-	rm -rf developer_manual_html
+	rm -rf developer/*
 	rm -f images/dfepl-flow.{eps,pdf,jpg}
 
 texi-clean:
