@@ -187,33 +187,27 @@ else
 VALGRIND_ARCH := x86
 endif
 
-../fjalar/auto-everything.sh:
+kvasir/autogen.sh:
 	cd .. && hg clone ${HG_OPTIONS} https://code.google.com/p/fjalar/ fjalar
 	touch $@
 
-kvasir/fjalar/Makefile.in: ../fjalar/auto-everything.sh
+kvasir/fjalar/Makefile.am: kvasir/autogen.sh
 	ln -nsf ../fjalar/valgrind kvasir
 	touch $@
 
-kvasir/config.sub: ../fjalar/auto-everything.sh
-	cd ../fjalar && ./auto-everything.sh
+kvasir/config.sub: kvasir/fjalar/Makefile.am
+	cd kvasir && ./autogen.sh
 
-kvasir/config.status: kvasir/fjalar/Makefile.in ../fjalar/valgrind/VEX/pub/libvex.h kvasir/config.sub
+kvasir/config.status: kvasir/config.sub
 	cd kvasir && ./configure --prefix=`pwd`/inst
 
-kvasir/coregrind/valgrind: kvasir/config.status $(wildcard kvasir/coregrind/*.[ch])
-	cd kvasir && $(MAKE) --no-print-directory
-
-kvasir/fjalar/fjalar-$(VALGRIND_ARCH)-linux: kvasir/coregrind/valgrind $(wildcard kvasir/fjalar/*.[ch]) $(wildcard kvasir/fjalar/kvasir/*.[ch])
-	cd kvasir/fjalar && $(MAKE) --no-print-directory
+kvasir/coregrind/valgrind: kvasir/config.status
+	cd kvasir && $(MAKE) 
 
 kvasir/inst/bin/valgrind: kvasir/coregrind/valgrind
 	cd kvasir && $(MAKE) install >/dev/null
 
-kvasir/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux: kvasir/fjalar/fjalar-$(VALGRIND_ARCH)-linux
-	cd kvasir/fjalar && $(MAKE) install >/dev/null
-
-kvasir: kvasir/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux kvasir/inst/bin/valgrind
+kvasir: kvasir/inst/bin/valgrind
 
 build-kvasir: kvasir
 
@@ -226,7 +220,7 @@ rebuild-everything:
 	${MAKE} -C $(DAIKONDIR)/java dcomp_rt.jar
 	${MAKE} -C $(DAIKONDIR)/doc clean
 	${MAKE} -C $(DAIKONDIR)/doc
-	-${MAKE} -C $(DAIKONDIR)/kvasir distclean
+	-${MAKE} -C $(DAIKONDIR)/kvasir distclean uninstall
 	${MAKE} kvasir
 
 rebuild-everything-but-kvasir:
