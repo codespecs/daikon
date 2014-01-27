@@ -66,7 +66,7 @@ public class Chicory {
   @Option ("Create the new declaration record format")
   public static boolean new_decl_format = true;
 
-  @Option ("Use first BCEL on classpath rather than PAG's version")
+  @Option ("Use first BCEL on classpath rather than PLSE's version")
   public static boolean default_bcel = false;
 
   /**

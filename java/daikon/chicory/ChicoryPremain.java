@@ -305,19 +305,19 @@ public class ChicoryPremain {
 
   /**
    * Classloader for the BCEL code.  Using this classloader guarantees
-   * that we get the PAG version of the BCEL code and not a possible
+   * that we get the PLSE version of the BCEL code and not a possible
    * incompatible version from elsewhere on the users classpath.  We
    * also load daikon.chicory.Instrument via this (since that class is
    * the user of all of the BCEL classes).  All references to BCEL
    * must be within that class (so that all references to BCEL will
    * get resolved by this classloader).
    *
-   * The PAG version of BCEL is identified by the presence of the
-   * PAG marker class (org.apache.bcel.PAGMarker).  Other versions of
+   * The PLSE version of BCEL is identified by the presence of the
+   * PLSE marker class (org.apache.bcel.PLSEMarker).  Other versions of
    * BCEL will not contain this class.  If other versions of BCEL are
-   * present, they must appear before the PAG versions in the classpath
+   * present, they must appear before the PLSE versions in the classpath
    * (so that the users application will see them first).  If only the
-   * PAG version is in the classpath, then the normal loader is used
+   * PLSE version is in the classpath, then the normal loader is used
    * for all of the classes.
    */
   public static class ChicoryLoader extends ClassLoader {
@@ -330,47 +330,47 @@ public class ChicoryPremain {
     public ChicoryLoader() throws IOException {
 
       String bcel_classname = "org.apache.bcel.Constants";
-      String pag_marker_classname = "org.apache.bcel.PAGMarker";
+      String plse_marker_classname = "org.apache.bcel.PLSEMarker";
 
       List<URL> bcel_urls = get_resource_list (bcel_classname);
-      List<URL> pag_urls = get_resource_list (pag_marker_classname);
+      List<URL> plse_urls = get_resource_list (plse_marker_classname);
 
-      if (pag_urls.size() == 0) {
+      if (plse_urls.size() == 0) {
         System.err.printf("%nBCEL must be in the classpath.  "
                            + "Normally it is found in daikon.jar .%n");
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       }
-      if (bcel_urls.size() < pag_urls.size()) {
-        System.err.printf("%nCorrupted BCEL library, bcel %s, pag %s%n", bcel_urls,
-                           pag_urls);
+      if (bcel_urls.size() < plse_urls.size()) {
+        System.err.printf("%nCorrupted BCEL library, bcel %s, plse %s%n", bcel_urls,
+                           plse_urls);
         Runtime.chicoryLoaderInstantiationError = true;
         System.exit(1);
       }
 
       // No need to do anything if only our versions of bcel are present
-      if (bcel_urls.size() == pag_urls.size())
+      if (bcel_urls.size() == plse_urls.size())
         return;
 
       int bcel_index = 0;
-      int pag_index = 0;
+      int plse_index = 0;
       while (bcel_index < bcel_urls.size()) {
         URL bcel = bcel_urls.get(bcel_index);
-        URL pag = pag_urls.get(pag_index);
-        if (!pag.getProtocol().equals ("jar")) {
+        URL plse = plse_urls.get(plse_index);
+        if (!plse.getProtocol().equals ("jar")) {
           System.err.printf("%nDaikon BCEL must be in jar file. "
-                            + " Found at %s%n", pag);
+                            + " Found at %s%n", plse);
           Runtime.chicoryLoaderInstantiationError = true;
           System.exit(1);
         }
-        if (same_location (bcel, pag)) {
-          if (bcel_index == pag_index) {
+        if (same_location (bcel, plse)) {
+          if (bcel_index == plse_index) {
             URL first_bcel = bcel;
-            while ((pag != null) && same_location (bcel, pag)) {
+            while ((plse != null) && same_location (bcel, plse)) {
               bcel = bcel_urls.get(++bcel_index);
-              pag_index++;
-              pag = (pag_index < pag_urls.size())
-                ? pag_urls.get(pag_index) : null;
+              plse_index++;
+              plse = (plse_index < plse_urls.size())
+                ? plse_urls.get(plse_index) : null;
             }
             System.err.printf ("%nDaikon BCEL (%s) appears before target BCEL "
               + "(%s).%nPlease reorder classpath to put daikon.jar at the end.%n",
@@ -378,12 +378,12 @@ public class ChicoryPremain {
             Runtime.chicoryLoaderInstantiationError = true;
             System.exit(1);
           } else {
-            bcel_jar = new JarFile (extract_jar_path (pag));
+            bcel_jar = new JarFile (extract_jar_path (plse));
             debug.log ("Daikon BCEL found in jar %s%n", bcel_jar.getName());
             break;
           }
-        } else { // non pag bcel found
-          debug.log ("Found non-pag BCEL at %s%n", bcel);
+        } else { // non plse bcel found
+          debug.log ("Found non-PLSE BCEL at %s%n", bcel);
           bcel_index++;
         }
       }
