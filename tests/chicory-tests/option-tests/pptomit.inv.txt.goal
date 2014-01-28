@@ -210,6 +210,53 @@ DataStructures.StackArTester.s.theArray[DataStructures.StackArTester.s.topOfStac
 DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfStack] elements != null
 DataStructures.StackArTester.s.topOfStack <= size(DataStructures.StackArTester.s.theArray[])-1
 ===========================================================================
+DataStructures.StackArTester.createItem(int):::ENTER
+phase >= 0
+DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfStack] contains no duplicates
+DataStructures.StackArTester.s.topOfStack < size(DataStructures.StackArTester.s.theArray[])-1
+phase <= size(DataStructures.StackArTester.s.theArray[])
+phase != size(DataStructures.StackArTester.s.theArray[])-1
+===========================================================================
+DataStructures.StackArTester.createItem(int):::EXIT20
+return.getClass() == DataStructures.MyInteger.class
+orig(phase) == 0
+size(DataStructures.StackArTester.s.theArray[]) one of { 2, 10, 20 }
+DataStructures.StackArTester.s.theArray[0..orig(phase)-1] == []
+orig(phase) < size(DataStructures.StackArTester.s.theArray[])-1
+DataStructures.StackArTester.s.theArray[0..orig(phase)] elements == DataStructures.StackArTester.s.theArray[orig(phase)]
+orig(phase) == (DataStructures.StackArTester.s.topOfStack / size(DataStructures.StackArTester.s.theArray[]))
+orig(phase) == (DataStructures.StackArTester.s.topOfStack / size(DataStructures.StackArTester.s.theArray[])-1)
+===========================================================================
+DataStructures.StackArTester.createItem(int):::EXIT22
+return.getClass() == java.lang.Object.class
+orig(phase) == 1
+DataStructures.StackArTester.s.theArray[0..orig(phase)-1] elements == DataStructures.StackArTester.s.theArray[orig(phase)-1]
+===========================================================================
+DataStructures.StackArTester.createItem(int):::EXIT24
+return.getClass() == DataStructures.MyInteger.class
+orig(phase) == 2
+size(DataStructures.StackArTester.s.theArray[]) one of { 2, 10, 20 }
+===========================================================================
+DataStructures.StackArTester.createItem(int):::EXIT26
+return.getClass() == java.lang.Object.class
+orig(phase) == 3
+size(DataStructures.StackArTester.s.theArray[]) one of { 3, 10, 20 }
+(size(DataStructures.StackArTester.s.theArray[]) >> size(DataStructures.StackArTester.s.theArray[])-1 == 0)
+===========================================================================
+DataStructures.StackArTester.createItem(int):::EXIT
+DataStructures.StackArTester.s == orig(DataStructures.StackArTester.s)
+DataStructures.StackArTester.s.theArray == orig(DataStructures.StackArTester.s.theArray)
+DataStructures.StackArTester.s.theArray[] == orig(DataStructures.StackArTester.s.theArray[])
+DataStructures.StackArTester.s.topOfStack == orig(DataStructures.StackArTester.s.topOfStack)
+DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
+return != null
+DataStructures.StackArTester.s.theArray[0..DataStructures.StackArTester.s.topOfStack] contains no duplicates
+DataStructures.StackArTester.s.theArray.getClass() != return.getClass()
+DataStructures.StackArTester.s.theArray.getClass() == orig(DataStructures.StackArTester.s.theArray.getClass())
+DataStructures.StackArTester.s.topOfStack < size(DataStructures.StackArTester.s.theArray[])-1
+orig(phase) <= size(DataStructures.StackArTester.s.theArray[])
+orig(phase) != size(DataStructures.StackArTester.s.theArray[])-1
+===========================================================================
 DataStructures.StackArTester.doNew(int):::ENTER
 DataStructures.StackArTester.s.theArray[] elements == null
 DataStructures.StackArTester.s.theArray[].getClass() elements == null

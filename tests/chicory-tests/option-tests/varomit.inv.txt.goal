@@ -109,6 +109,31 @@ DataStructures.StackArTester.s.topOfStack >= -1
 DataStructures.StackArTester.rnd has only one value
 DataStructures.StackArTester.rnd != null
 ===========================================================================
+DataStructures.StackArTester.createItem(int):::ENTER
+phase >= 0
+===========================================================================
+DataStructures.StackArTester.createItem(int):::EXIT20
+return.getClass() == DataStructures.MyInteger.class
+orig(phase) == 0
+===========================================================================
+DataStructures.StackArTester.createItem(int):::EXIT22
+return.getClass() == java.lang.Object.class
+orig(phase) == 1
+===========================================================================
+DataStructures.StackArTester.createItem(int):::EXIT24
+return.getClass() == DataStructures.MyInteger.class
+orig(phase) == 2
+===========================================================================
+DataStructures.StackArTester.createItem(int):::EXIT26
+return.getClass() == java.lang.Object.class
+orig(phase) == 3
+===========================================================================
+DataStructures.StackArTester.createItem(int):::EXIT
+DataStructures.StackArTester.s == orig(DataStructures.StackArTester.s)
+DataStructures.StackArTester.s.topOfStack == orig(DataStructures.StackArTester.s.topOfStack)
+DataStructures.StackArTester.rnd == orig(DataStructures.StackArTester.rnd)
+return != null
+===========================================================================
 DataStructures.StackArTester.doNew(int):::ENTER
 DataStructures.StackArTester.s.topOfStack == -1
 size >= 0
