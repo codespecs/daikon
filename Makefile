@@ -220,7 +220,7 @@ rebuild-everything:
 	${MAKE} -C $(DAIKONDIR)/java dcomp_rt.jar
 	${MAKE} -C $(DAIKONDIR)/doc clean
 	${MAKE} -C $(DAIKONDIR)/doc
-	-${MAKE} -C $(DAIKONDIR)/kvasir distclean uninstall
+	-${MAKE} -C $(DAIKONDIR)/kvasir uninstall distclean 
 	${MAKE} kvasir
 
 rebuild-everything-but-kvasir:
