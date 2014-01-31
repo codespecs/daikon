@@ -58,6 +58,7 @@ cp[]->basic1 == orig(cp[]->basic1)
 cp[]->day_of_week == return[][0]->day_of_week
 cp[]->footer == return[][0]->footer
 cp[]->myString == return[][0]->myString
+cp[]->myString[0] == return[][0]->myString[0]
 cp[]->next == cp[]->prev
 cp[]->next == return[][0]->next
 cp[]->next == return[][0]->prev
@@ -94,7 +95,6 @@ return has only one value
 return[] contains no nulls and has only one value, of length 1
 return[][0]->basic1 contains no nulls and has only one value, of length 1
 return[][0]->basic2[0] contains no nulls and has only one value, of length 1
-return[][0]->myString[0] contains no nulls and has only one value, of length 1
 return[][0][0] contains no nulls and has only one value, of length 1
 ::globalStr == orig(::globalStr)
 ===========================================================================
