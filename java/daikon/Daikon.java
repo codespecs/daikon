@@ -79,8 +79,8 @@ public final class Daikon {
 
   // Don't change the order of the modifiers on these strings as they
   // are automatically updated as part of the release process
-  public final static String release_version = "5.0.1";
-  public final static String release_date = "January 17, 2014";
+  public final static String release_version = "5.0.2";
+  public final static String release_date = "January 31, 2014";
   public final static String release_string =
     "Daikon version "
       + release_version
@@ -199,8 +199,7 @@ public final class Daikon {
    * <samp>(a != null) ==> (a.b == 5)</samp>.
    * <p>
    * (To do:  Some configuration option (maybe this one) should add guards for
-   * other reasons that lead to nonsensical values (@pxref{Variable
-   * names}).)
+   * other reasons that lead to nonsensical values (@pxref{Variable names}).)
    * &#64;cindex nonsensical values for variables, guarding
    **/
   // Perhaps a better default would be "missing".
