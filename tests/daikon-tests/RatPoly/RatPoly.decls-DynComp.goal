@@ -3312,15 +3312,15 @@ PolyCalc.RatPoly.findTermIndex(PolyCalc.RatTermVec, int):::EXIT521
 ts
 PolyCalc.RatTermVec # isParam=true
 hashcode
-4
+3
 ts.wrapped
 java.util.ArrayList # declaringClassPackageName=PolyCalc, 
 hashcode
-5
+4
 ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
-6
+5
 ts.wrapped[..].getClass()
 java.lang.Class[]
 java.lang.String[]
@@ -3332,22 +3332,22 @@ int
 return
 int
 int
-3
+2
 
 DECLARE
 PolyCalc.RatPoly.findTermIndex(PolyCalc.RatTermVec, int):::EXIT523
 ts
 PolyCalc.RatTermVec # isParam=true
 hashcode
-4
+3
 ts.wrapped
 java.util.ArrayList # declaringClassPackageName=PolyCalc, 
 hashcode
-5
+4
 ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
-6
+5
 ts.wrapped[..].getClass()
 java.lang.Class[]
 java.lang.String[]
@@ -3359,22 +3359,22 @@ int
 return
 int
 int
-3
+2
 
 DECLARE
 PolyCalc.RatPoly.findTermIndex(PolyCalc.RatTermVec, int):::EXIT526
 ts
 PolyCalc.RatTermVec # isParam=true
 hashcode
-4
+3
 ts.wrapped
 java.util.ArrayList # declaringClassPackageName=PolyCalc, 
 hashcode
-5
+4
 ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
-6
+5
 ts.wrapped[..].getClass()
 java.lang.Class[]
 java.lang.String[]
@@ -3386,7 +3386,7 @@ int
 return
 int
 int
-3
+2
 
 
 DECLARE
@@ -3394,15 +3394,15 @@ PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec, int, int):::ENTER
 ts
 PolyCalc.RatTermVec # isParam=true
 hashcode
-4
+3
 ts.wrapped
 java.util.ArrayList # declaringClassPackageName=PolyCalc, 
 hashcode
-5
+4
 ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
-6
+5
 ts.wrapped[..].getClass()
 java.lang.Class[]
 java.lang.String[]
@@ -3410,7 +3410,7 @@ java.lang.String[]
 i
 int # isParam=true
 int
-3
+2
 expt
 int # isParam=true
 int
@@ -3421,15 +3421,15 @@ PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec, int, int):::EXIT534
 ts
 PolyCalc.RatTermVec # isParam=true
 hashcode
-6
+5
 ts.wrapped
 java.util.ArrayList # declaringClassPackageName=PolyCalc, 
 hashcode
-7
+6
 ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
-4
+3
 ts.wrapped[..].getClass()
 java.lang.Class[]
 java.lang.String[]
@@ -3437,7 +3437,7 @@ java.lang.String[]
 i
 int # isParam=true
 int
-3
+2
 expt
 int # isParam=true
 int
@@ -3445,11 +3445,11 @@ int
 return
 PolyCalc.RatTerm
 hashcode
-4
+3
 return.coeff
 PolyCalc.RatNum # declaringClassPackageName=PolyCalc, 
 hashcode
-5
+4
 return.coeff.numer
 int # declaringClassPackageName=PolyCalc, 
 int
@@ -3468,15 +3468,15 @@ PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec, int, int):::EXIT537
 ts
 PolyCalc.RatTermVec # isParam=true
 hashcode
-6
+5
 ts.wrapped
 java.util.ArrayList # declaringClassPackageName=PolyCalc, 
 hashcode
-7
+6
 ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
-4
+3
 ts.wrapped[..].getClass()
 java.lang.Class[]
 java.lang.String[]
@@ -3484,7 +3484,7 @@ java.lang.String[]
 i
 int # isParam=true
 int
-3
+2
 expt
 int # isParam=true
 int
@@ -3492,11 +3492,11 @@ int
 return
 PolyCalc.RatTerm
 hashcode
-4
+3
 return.coeff
 PolyCalc.RatNum # declaringClassPackageName=PolyCalc, 
 hashcode
-5
+4
 return.coeff.numer
 int # declaringClassPackageName=PolyCalc, 
 int
@@ -3524,23 +3524,23 @@ hashcode
 term.coeff.numer
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 term.coeff.denom
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 term.expt
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 ts
 PolyCalc.RatTermVec # isParam=true
 hashcode
-6
+5
 ts.wrapped
 java.util.ArrayList # declaringClassPackageName=PolyCalc, 
 hashcode
-7
+6
 ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
@@ -3567,23 +3567,23 @@ hashcode
 term.coeff.numer
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 term.coeff.denom
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 term.expt
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 ts
 PolyCalc.RatTermVec # isParam=true
 hashcode
-6
+5
 ts.wrapped
 java.util.ArrayList # declaringClassPackageName=PolyCalc, 
 hashcode
-7
+6
 ts.wrapped[..]
 java.util.ArrayList
 hashcode[]
@@ -4064,11 +4064,11 @@ PolyCalc.RatTermVec.get(int):::EXIT39
 this
 PolyCalc.RatTermVec # isParam=true
 hashcode
-6
+5
 this.wrapped
 java.util.ArrayList # declaringClassPackageName=PolyCalc, 
 hashcode
-7
+6
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
@@ -4092,15 +4092,15 @@ hashcode
 return.coeff.numer
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 return.coeff.denom
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 return.expt
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 
 
 DECLARE
@@ -4187,11 +4187,11 @@ PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::ENTER
 this
 PolyCalc.RatTermVec # isParam=true
 hashcode
-6
+5
 this.wrapped
 java.util.ArrayList # declaringClassPackageName=PolyCalc, 
 hashcode
-7
+6
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
@@ -4211,15 +4211,15 @@ hashcode
 t.coeff.numer
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 t.coeff.denom
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 t.expt
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 index
 int # isParam=true
 int
@@ -4230,11 +4230,11 @@ PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::EXIT64
 this
 PolyCalc.RatTermVec # isParam=true
 hashcode
-6
+5
 this.wrapped
 java.util.ArrayList # declaringClassPackageName=PolyCalc, 
 hashcode
-7
+6
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
@@ -4254,15 +4254,15 @@ hashcode
 t.coeff.numer
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 t.coeff.denom
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 t.expt
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 index
 int # isParam=true
 int
@@ -4321,11 +4321,11 @@ PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::ENTER
 this
 PolyCalc.RatTermVec # isParam=true
 hashcode
-6
+5
 this.wrapped
 java.util.ArrayList # declaringClassPackageName=PolyCalc, 
 hashcode
-7
+6
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
@@ -4345,15 +4345,15 @@ hashcode
 t.coeff.numer
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 t.coeff.denom
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 t.expt
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 index
 int # isParam=true
 int
@@ -4364,11 +4364,11 @@ PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::EXIT89
 this
 PolyCalc.RatTermVec # isParam=true
 hashcode
-6
+5
 this.wrapped
 java.util.ArrayList # declaringClassPackageName=PolyCalc, 
 hashcode
-7
+6
 this.wrapped[..]
 java.util.ArrayList
 hashcode[]
@@ -4388,15 +4388,15 @@ hashcode
 t.coeff.numer
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 t.coeff.denom
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 t.expt
 int # declaringClassPackageName=PolyCalc, 
 int
-5
+2
 index
 int # isParam=true
 int
