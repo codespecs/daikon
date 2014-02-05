@@ -30,9 +30,10 @@ General
 
 Documentation
   Fixed broken links between the two daikon documents.
+  Updated some URLS to change MIT => UW.
   Clarrified that you must use Java version 7.
   Removed documentation on Csh in favor of Bash.
-  Improved pdf output now includes bookmarks and hyper-links.
+  Improved pdf output - now includes bookmarks and hyper-links.
   Added split html document versions to drop.
   Improved General Index(s).
 
