@@ -1,5 +1,6 @@
 #include <stdio.h>
 #include <stdlib.h>
+#include <string.h>
 
 typedef long long int rhubarbInt64;
 typedef unsigned long long int UrhubarbInt64;

@@ -1,6 +1,7 @@
 // Tests the use of typedefs to access unnamed struct variables
 
 #include <stdio.h>
+#include <stdlib.h>
 
 // On x86-64 (AMD64) small struct arguments are pass by value in registers.
 // However, Dyncomp (by design) only allocates a single tag per register.

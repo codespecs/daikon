@@ -2,6 +2,9 @@
 // types different than their declared types.  Useful for handling
 // C faux-polymorphism
 
+#include <stdlib.h>
+#include <string.h>
+
 typedef struct {
   int foo_int;
   char* foo_str;

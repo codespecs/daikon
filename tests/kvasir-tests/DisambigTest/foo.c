@@ -1,4 +1,5 @@
 #include "DisambigTest.h"
+#include <stdlib.h>
 
 // Same as fooMultiple except for one tb only
 void fooSingle(TestBuffer* tb) {

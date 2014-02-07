@@ -1,3 +1,5 @@
+#include <stdlib.h>
+
 struct foo {
   int a;
   int b;

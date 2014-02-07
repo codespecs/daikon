@@ -1,6 +1,7 @@
 // This file tests the pointer-type disambiguation feature of Kvasir
 
 #include "DisambigTest.h"
+#include <stdlib.h>
 
 int* intPtr_P;
 int* intPtr_A;

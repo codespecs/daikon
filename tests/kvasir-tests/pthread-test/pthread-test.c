@@ -1,5 +1,6 @@
 #include <pthread.h>
 #include <stdio.h>
+#include <stdlib.h>
 
 // Very simple test of how Kvasir handles threading
 // The goal of this test is to record an entry for 1,

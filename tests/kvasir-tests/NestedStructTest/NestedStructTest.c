@@ -5,6 +5,7 @@
 // change all the 'long's below back to 'int'. (markro)
 
 #include <stdio.h>
+#include <stdlib.h>
 
 struct foo {
   long age;

@@ -3,6 +3,11 @@
 // file and function-specific static vars in
 // that function alone
 
+struct desc {
+  int *dyn_array;
+  int answer;
+};
+
 static int second_int = 182;
 static int second_int_array[5] = {1, 1, 2, 3, 5};
 

@@ -2,6 +2,9 @@
 // Dyncomp single tag per register issue.  If (when) we fix this,
 // restore the three items below to their original values. (markro)
 
+#include <stdio.h>
+#include <string.h>
+
 struct bar {
   //char blah;
   char blah[8];

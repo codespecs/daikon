@@ -1,3 +1,5 @@
+#include <stdio.h>
+
 static char trueGlobalStaticBuffer[200];
 
 int f(char *arg, char **strings) 

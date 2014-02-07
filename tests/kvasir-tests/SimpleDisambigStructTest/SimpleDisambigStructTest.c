@@ -7,6 +7,7 @@
 // Dyncomp single tag per register issue.  If (when) we fix this,
 // change the size of 'staticString' back to 10. (markro)
 
+#include <stdlib.h>
 #include <string.h>
 
 typedef struct {
