@@ -739,7 +739,11 @@ TAGS:	tags
 etags:	tags
 tags: ../plume-lib
 	@echo etags '*.java ...'
+ifneq (,$(findstring Exuberant, $(shell etags --version)))
+	@etags --language-force=java ${TAG_FILES}
+else
 	@etags --language=java ${TAG_FILES}
+endif
 # A TAGS file that does not contain generated files
 tags-sans-generated: clean-generated-files tags
 
