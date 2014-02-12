@@ -156,6 +156,7 @@ help:
 	@echo " doc-all                  -- build all documentation"
 	@echo " tags TAGS                -- make TAGS file for Emacs"
 	@echo " kvasir                   -- make Kvasir, the C front end"
+	@echo " very-clean               -- remove (most) all generated files"
 	@echo "Creating the Daikon distribution:"
 	@echo " daikon.tar daikon.jar    -- just makes the tar files"
 	@echo " staging                  -- moves all release file to staging-dist/"
@@ -172,6 +173,15 @@ compile: compile-java
 
 compile-java:
 	cd java && $(MAKE) all
+
+very-clean:
+	cd doc && $(MAKE) very-clean
+	cd java && $(MAKE) very-clean
+	cd tests && $(MAKE) very-clean
+	cd scripts && $(MAKE) clean
+	-rm -rf examples/java-examples/QueueAr/DataStructures/*.class
+	-rm -rf examples/java-examples/StackAr/DataStructures/*.class
+	-rm -rf tests/sources/DataStructures/*.class
 
 clean-java:
 	cd java && $(MAKE) clean

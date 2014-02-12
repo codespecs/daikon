@@ -726,7 +726,10 @@ very-clean: very_clean
 
 # Could/should remove plume-lib here, too.
 very_clean: dist_clean clean-generated-files
-	-rm -f dcomp_premain.jar dcomp_rt.jar
+	-rm -rf dcomp_premain.jar dcomp_rt.jar $(DCOMP_RT)
+	-rm -rf doc
+	-rm -rf daikon/dcomp/std_dcomp_out.diff daikon/dcomp/std_dcomp_out.txt
+
 
 clean-generated-files:
 	-rm -f ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}

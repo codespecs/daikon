@@ -64,6 +64,9 @@ clean:
 	$(MAKE) -C diff-tests clean
 	$(MAKE) -C merge-invariants-tests clean
 
+very-clean: clean
+	$(MAKE) -C kvasir-tests clean-all
+
 # output display; can be called from children (they will set BASE)
 BASE?=.
 # removes fields before the size (ie, permissions, owner, group).

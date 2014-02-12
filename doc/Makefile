@@ -124,6 +124,9 @@ texi-clean:
 	rm -rf developer.aux developer.cp developer.cps developer.fn developer.fns \
 		   developer.ky  developer.pg developer.toc developer.tp developer.vr
 
+very-clean: clean
+	rm -rf config-options.texinfo invariants-doc.texinfo
+
 # Remakes entire distribution; use with caution.
 dist:
 	cd .. && $(MAKE) dist
