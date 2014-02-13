@@ -177,11 +177,13 @@ compile-java:
 very-clean:
 	cd doc && $(MAKE) very-clean
 	cd java && $(MAKE) very-clean
-	cd tests && $(MAKE) very-clean
+	cd plume-lib/java && $(MAKE) very_clean
 	cd scripts && $(MAKE) clean
+	cd tests && $(MAKE) very-clean
 	-rm -rf examples/java-examples/QueueAr/DataStructures/*.class
 	-rm -rf examples/java-examples/StackAr/DataStructures/*.class
 	-rm -rf tests/sources/DataStructures/*.class
+	-rm -rf daikon.jar daikon.tar daikon.zip
 
 clean-java:
 	cd java && $(MAKE) clean
