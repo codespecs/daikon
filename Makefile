@@ -177,7 +177,7 @@ compile-java:
 very-clean:
 	cd doc && $(MAKE) very-clean
 	cd java && $(MAKE) very-clean
-	cd plume-lib/java && $(MAKE) very_clean
+	cd plume-lib/java && $(MAKE) very-clean
 	cd scripts && $(MAKE) clean
 	cd tests && $(MAKE) very-clean
 	-rm -rf examples/java-examples/QueueAr/DataStructures/*.class
