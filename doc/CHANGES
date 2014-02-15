@@ -6,11 +6,11 @@ This file lists significant user-visible changes to Daikon.
 
 Further documentation can be found in:
  * the Daikon Manual.  Its source is file daikon.texinfo; formatted, it
-   appears as daikon.html, daikon.ps, or daikon.pdf.
+   appears as daikon.html or daikon.pdf.
    It is available on-line at:
    http://plse.cs.washington.edu/daikon/download/doc/daikon.html .
  * the Daikon Developer Manual.  Its source is file developer.texinfo;
-   formatted, it appears as developer.html, developer.ps, or developer.pdf.
+   formatted, it appears as developer.html or developer.pdf.
    It is available on-line at:
    http://plse.cs.washington.edu/daikon/download/doc/developer.html .
  * The Javadoc API documentation for the source code.  This is not

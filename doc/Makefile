@@ -1,4 +1,4 @@
-all: config-options invariants-doc html html-chap ps pdf
+all: config-options invariants-doc html html-chap pdf
 
 daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 
@@ -83,14 +83,6 @@ developer/index.html: developer.texinfo
 	cp images/*.png developer/images
 	cp images/*.jpg developer/images
 
-ps: daikon.ps images/dfepl-flow.eps developer.ps
-
-daikon.ps: daikon.texinfo config-options.texinfo invariants-doc.texinfo
-	makeinfo --ps $<
-
-developer.ps: developer.texinfo
-	makeinfo --ps $<
-
 pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
 
 daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
@@ -109,14 +101,16 @@ pdf-final: daikon.texinfo config-options.texinfo invariants-doc.texinfo develope
 clean: texi-clean
 	rm -f daikon.tmp \
 		daikon.info daikon.info-[0-9] \
-		daikon.log daikon.dvi daikon.ps daikon.pdf daikon.html 
+		daikon.log daikon.dvi daikon.pdf daikon.html 
 	rm -f *.bak
 	rm -rf daikon/*
 	rm -f developer.tmp \
 		developer.info developer.info-[0-9] \
-		developer.log developer.dvi developer.ps developer.pdf developer.html 
+		developer.log developer.dvi developer.pdf developer.html 
 	rm -rf developer/*
 	rm -f images/dfepl-flow.{eps,pdf,jpg}
+# Obsolete files
+	rm -f daikon.ps developer.ps
 
 texi-clean:
 	rm -rf daikon.aux daikon.cp daikon.cps daikon.fn daikon.fns \

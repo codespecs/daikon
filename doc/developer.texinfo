@@ -1694,7 +1694,7 @@ viewer within Emacs.  These commands also update all other versions of the
 manuals (HTML, PDF, etc.).
 You may also choose to use the stand-alone Info viewer, to
 use a Web browser to read the manual in HTML form, or to read the
-PostScript or PDF version either electronically or on paper.
+PDF version either electronically or on paper.
 
 
 @node    Eclipse setup
@@ -1885,7 +1885,7 @@ or whatever current system you use.
 
 The Daikon manual appears in @file{doc/daikon.texinfo}.  The manual is
 written using the Texinfo formatting system, which makes it easy to produce
-HTML, info, or printed (PostScript and PDF) output.
+HTML, info, or printed (PDF) output.
 
 You can edit the manual using an ordinary text editor.  Emacs has a
 useful Texinfo mode.  You can mimic the formatting commands that
@@ -1941,7 +1941,7 @@ line breaks to make it more readable than to shrink the font.
 
 Once you have edited the manual, run @command{make} twice (yes, you must run
 it twice) in order to generate formatted versions of the manual
-(@file{daikon.}@{@file{html},@file{info},@file{ps},@file{pdf}@}).
+(@file{daikon.}@{@file{html},@file{pdf}@}).
 
 
 

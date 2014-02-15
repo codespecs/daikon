@@ -14,12 +14,12 @@ DAIKONDIR ?= ${DAIKONDIR_DEFAULT}
 #   make NONETWORK=true compile
 
 # note that for right now, we are only copying the html and texinfo
-# versions of the developer manual (though the ps version is also built)
+# versions of the developer manual (though the PDF version is also built)
 IMAGE_FILES := daikon-logo.gif daikon-logo.png daikon-logo.eps dfepl-flow.jpg
 IMAGE_PARTIAL_PATHS := $(addprefix images/,$(IMAGE_FILES))
 DOC_FILES_NO_IMAGES := Makefile index.html daikon.texinfo \
                        config-options.texinfo invariants-doc.texinfo \
-                       daikon.ps daikon.pdf daikon.html developer.texinfo \
+                       daikon.pdf daikon.html developer.texinfo \
                        developer.html CHANGES
 DOC_FILES := ${DOC_FILES_NO_IMAGES} $(IMAGE_PARTIAL_PATHS)
 DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
@@ -27,9 +27,9 @@ DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 # The texinfo files are included so we can diff to see what has changed from
 # release to release.  They are in the dist/doc directory, but not
 # visible to the user
-DOC_FILES_USER := daikon.ps daikon.pdf daikon.html developer.html CHANGES \
+DOC_FILES_USER := daikon.pdf daikon.html developer.html CHANGES \
                   daikon.texinfo developer.texinfo config-options.texinfo \
-                  invariants-doc.texinfo developer.pdf developer.ps
+                  invariants-doc.texinfo developer.pdf
 README_PATHS := README.txt README.html doc/README kvasir/../README
 # Files that contain the (automatically updated) version number and date.
 DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
