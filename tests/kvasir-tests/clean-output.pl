@@ -11,8 +11,8 @@ while (<>) {
 
     if ($machine_type eq "x86_64") {
         # Valgrind AMD64/Linux locations
-        s/0x7f([0-9a-f]{7,10})/<STACK_ADDR>/ig;  # stack
-        s/0x4[01]([0-9a-f]{7})/<STATIC_ADDR>/ig; # r/w data
+        s/0xff([0-9a-f]{7,10})/<STACK_ADDR>/ig;  # stack
+        s/0x8[01]([0-9a-f]{7})/<STATIC_ADDR>/ig; # r/w data
         s/0x4[cd]([0-9a-f]{5})/<HEAP_ADDR>/ig;   # heap  ArrayTest because so much allocated?
         s/0x5[1a]([0-9a-f]{5})/<HEAP_ADDR>/ig;   # heap
         s/0x4[01]([0-9a-f]{4})/<STATIC_ADDR>/ig; # r/o data
@@ -46,7 +46,7 @@ while (<>) {
     s/Peak memory.*/<Allocation statistics>/g;
 
     s/kvasir-[\d.]+,/kvasir-VERSION/;
-    s[Using Valgrind-3.9.0.SVN and LibVEX; rerun with \-h for copyright info]
+    s[Using Valgrind-.* and LibVEX; rerun with \-h for copyright info]
       [Using Valgrind and LibVEX; rerun with \-h for copyright info];
     s/\(vg_replace_malloc.c:(\d+)\)/(vg_replace_malloc.c:XXX)/;
     print;
