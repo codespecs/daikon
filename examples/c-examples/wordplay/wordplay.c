@@ -534,7 +534,7 @@ int main (int argc, char *argv[])
 
 /*  Go through the loaded words and index the beginning of each word */
 
-  words2[0] = words2mem;
+  if (ncount) words2[0] = words2mem;
   j = 1;
   for (i = 0; i < w2size; i++)
     if (j < ncount)
