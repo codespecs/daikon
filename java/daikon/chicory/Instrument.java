@@ -520,7 +520,19 @@ public class Instrument implements ClassFileTransformer {
           continue;
 
         if (debug) {
+          Type[] arg_types = mg.getArgumentTypes();
+          String[] arg_names = mg.getArgumentNames();
+          String types = "", names = "";
+
+          for (int j = 0; j < arg_types.length; j++) {
+              types = types + arg_types[j] + " ";
+          }
+          for (int j = 0; j < arg_names.length; j++) {
+              names = names + arg_names[j] + " ";
+          }
           out.format ("%nMethod = %s%n", mg);
+          out.format ("arg_types(%d): %s%n", arg_types.length, types);
+          out.format ("arg_names(%d): %s%n", arg_names.length, names);
           out.format ("Original code: %s%n", mg.getMethod().getCode());
           out.format ("ClassInfo: %s%n", class_info);
           out.format ("MethodGen: %s%n", mg);
