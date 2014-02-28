@@ -20,6 +20,26 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.0.4 (February 28, 2014)
+
+Daikon:
+  This release contains a fix for Daikon issue #27.  See:
+  http://code.google.com/p/daikon/issues/detail?id=27
+
+Fjalar:
+  We updated the underlying Valgrind infrastructure to version 3.9.0
+  (build 13710).  In addition, we cleaned up our sources so that there
+  are no compiler warnings when building Valgrind/Fjalar/Kvasir. 
+  As Fjalar is based on the Valgrind tool 'memcheck', we have seen one
+  new memory usage error when running our tests.  Other than this slim
+  possibility, users of Kvasir to analyze C/C++ codes should not see
+  any differences in behavior from the previous version.
+
+Documentation:
+  We no longer distribute PostScript formatted versions of the documentation.
+
+===========================================================================
+
 5.0.2 (January 31, 2014)
 
 General
