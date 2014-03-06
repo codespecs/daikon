@@ -1248,7 +1248,7 @@ f[..][0]
 return
 
 ..PerlIOBase_noop_ok():::ENTER
-f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size
+f f[..] f[..]->flags f[..]->next f[..]->tab
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -1275,10 +1275,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -1286,7 +1287,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -1303,11 +1304,13 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 
 ..PerlIOBase_noop_ok():::EXIT0
-f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size
+f f[..] f[..]->flags f[..]->next f[..]->tab
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -1334,10 +1337,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -1345,7 +1349,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -1362,6 +1366,8 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 return
@@ -1391,10 +1397,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -1402,7 +1409,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -1418,6 +1425,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 
@@ -1446,10 +1454,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -1457,7 +1466,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -1473,6 +1482,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 return
@@ -1480,8 +1490,9 @@ return
 ..PerlIOBase_pushed():::ENTER
 arg
 arg[..]
-arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt f f[..] f[..]->flags f[..]->next f[..]->next->flags f[..]->next->next f[..]->next->tab f[..]->tab f[..]->tab->fsize f[..]->tab->name f[..]->tab->size tab tab[..].fsize tab[..].name tab[..].size
+arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt f
 arg[..].sv_any[0]
+f[..] f[..]->flags f[..]->next f[..]->next->flags f[..]->next->next f[..]->next->tab f[..]->tab f[..]->tab->fsize f[..]->tab->name f[..]->tab->size tab tab[..].fsize tab[..].name tab[..].size
 f[..]->next->next[0]
 f[..]->next->tab[0]
 f[..]->next[0]
@@ -1505,10 +1516,11 @@ f[..]->tab->Flush tab[..].Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base tab[..].Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr tab[..].Get_bufsiz tab[..].Get_ptr
+f[..]->tab->Get_bufsiz tab[..].Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt tab[..].Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr tab[..].Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg tab[..].Getarg
 f[..]->tab->Getarg[0]
@@ -1516,7 +1528,7 @@ f[..]->tab->Open tab[..].Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped tab[..].Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind tab[..].Pushed tab[..].kind
+f[..]->tab->Pushed tab[..].Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read tab[..].Read
 f[..]->tab->Read[0]
@@ -1532,6 +1544,7 @@ f[..]->tab->Unread tab[..].Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write tab[..].Write
 f[..]->tab->Write[0]
+f[..]->tab->kind tab[..].kind
 f[..]->tab[0]
 f[..][0]
 mode
@@ -1564,8 +1577,9 @@ tab[..].Write[0]
 ..PerlIOBase_pushed():::EXIT0
 arg
 arg[..]
-arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt f f[..] f[..]->flags f[..]->next f[..]->next->flags f[..]->next->next f[..]->next->tab f[..]->tab f[..]->tab->fsize f[..]->tab->name f[..]->tab->size tab tab[..].fsize tab[..].name tab[..].size
+arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt f
 arg[..].sv_any[0]
+f[..] f[..]->flags f[..]->next f[..]->next->flags f[..]->next->next f[..]->next->tab f[..]->tab f[..]->tab->fsize f[..]->tab->name f[..]->tab->size tab tab[..].fsize tab[..].name tab[..].size
 f[..]->next->next[0]
 f[..]->next->tab[0]
 f[..]->next[0]
@@ -1589,10 +1603,11 @@ f[..]->tab->Flush tab[..].Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base tab[..].Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr tab[..].Get_bufsiz tab[..].Get_ptr
+f[..]->tab->Get_bufsiz tab[..].Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt tab[..].Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr tab[..].Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg tab[..].Getarg
 f[..]->tab->Getarg[0]
@@ -1600,7 +1615,7 @@ f[..]->tab->Open tab[..].Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped tab[..].Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind tab[..].Pushed tab[..].kind
+f[..]->tab->Pushed tab[..].Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read tab[..].Read
 f[..]->tab->Read[0]
@@ -1616,6 +1631,7 @@ f[..]->tab->Unread tab[..].Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write tab[..].Write
 f[..]->tab->Write[0]
+f[..]->tab->kind tab[..].kind
 f[..]->tab[0]
 f[..][0]
 mode
@@ -11797,7 +11813,7 @@ vbuf
 vbuf[..]
 
 ..PerlIOUnix_close():::ENTER
-f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size
+f f[..] f[..]->flags f[..]->next f[..]->tab
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -11824,10 +11840,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -11835,7 +11852,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -11852,11 +11869,13 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 
 ..PerlIOUnix_close():::EXIT0
-f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size
+f f[..] f[..]->flags f[..]->next f[..]->tab
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -11883,10 +11902,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -11894,7 +11914,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -11911,6 +11931,8 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 return
@@ -12271,7 +12293,7 @@ return[..]->tab[0]
 return[..][0]
 
 ..PerlIOUnix_fileno():::ENTER
-f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size
+f f[..] f[..]->flags f[..]->next f[..]->tab
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -12298,10 +12320,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -12309,7 +12332,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -12326,11 +12349,13 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 
 ..PerlIOUnix_fileno():::EXIT0
-f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size
+f f[..] f[..]->flags f[..]->next f[..]->tab
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -12357,10 +12382,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -12368,7 +12394,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -12385,6 +12411,8 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 return
@@ -12398,7 +12426,7 @@ return
 
 ..PerlIOUnix_open():::ENTER
 args
-args[..] args[..]->sv_any args[..]->sv_flags args[..]->sv_refcnt layers[..].array->funcs self self[..].size
+args[..] args[..]->sv_any args[..]->sv_flags args[..]->sv_refcnt layers[..].array->funcs self
 args[..]->sv_any[0]
 args[..][0]
 f
@@ -12500,10 +12528,11 @@ self[..].Flush
 self[..].Flush[0]
 self[..].Get_base
 self[..].Get_base[0]
-self[..].Get_bufsiz self[..].Get_ptr
+self[..].Get_bufsiz
 self[..].Get_bufsiz[0]
 self[..].Get_cnt
 self[..].Get_cnt[0]
+self[..].Get_ptr
 self[..].Get_ptr[0]
 self[..].Getarg
 self[..].Getarg[0]
@@ -12511,7 +12540,7 @@ self[..].Open
 self[..].Open[0]
 self[..].Popped
 self[..].Popped[0]
-self[..].Pushed self[..].kind
+self[..].Pushed
 self[..].Pushed[0]
 self[..].Read
 self[..].Read[0]
@@ -12528,10 +12557,12 @@ self[..].Unread[0]
 self[..].Write
 self[..].Write[0]
 self[..].fsize self[..].name
+self[..].kind
+self[..].size
 
 ..PerlIOUnix_open():::EXIT0
 args
-args[..] args[..]->sv_any args[..]->sv_flags args[..]->sv_refcnt layers[..].array->funcs return return[..] return[..]->flags return[..]->next return[..]->tab return[..]->tab->size self self[..].size
+args[..] args[..]->sv_any args[..]->sv_flags args[..]->sv_refcnt layers[..].array->funcs return return[..] return[..]->flags return[..]->next return[..]->tab self
 args[..]->sv_any[0]
 args[..][0]
 f
@@ -12638,10 +12669,11 @@ return[..]->tab->Flush self[..].Flush
 return[..]->tab->Flush[0]
 return[..]->tab->Get_base self[..].Get_base
 return[..]->tab->Get_base[0]
-return[..]->tab->Get_bufsiz return[..]->tab->Get_ptr self[..].Get_bufsiz self[..].Get_ptr
+return[..]->tab->Get_bufsiz self[..].Get_bufsiz
 return[..]->tab->Get_bufsiz[0]
 return[..]->tab->Get_cnt self[..].Get_cnt
 return[..]->tab->Get_cnt[0]
+return[..]->tab->Get_ptr self[..].Get_ptr
 return[..]->tab->Get_ptr[0]
 return[..]->tab->Getarg self[..].Getarg
 return[..]->tab->Getarg[0]
@@ -12649,7 +12681,7 @@ return[..]->tab->Open self[..].Open
 return[..]->tab->Open[0]
 return[..]->tab->Popped self[..].Popped
 return[..]->tab->Popped[0]
-return[..]->tab->Pushed return[..]->tab->kind self[..].Pushed self[..].kind
+return[..]->tab->Pushed self[..].Pushed
 return[..]->tab->Pushed[0]
 return[..]->tab->Read self[..].Read
 return[..]->tab->Read[0]
@@ -12666,6 +12698,8 @@ return[..]->tab->Unread[0]
 return[..]->tab->Write self[..].Write
 return[..]->tab->Write[0]
 return[..]->tab->fsize return[..]->tab->name self[..].fsize self[..].name
+return[..]->tab->kind self[..].kind
+return[..]->tab->size self[..].size
 return[..]->tab[0]
 return[..][0]
 self[..]
@@ -12697,7 +12731,7 @@ self[..].Write[0]
 ..PerlIOUnix_pushed():::ENTER
 arg
 arg[..]
-arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size tab tab[..].size
+arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt f f[..] f[..]->flags f[..]->next f[..]->tab tab
 arg[..].sv_any[0]
 f[..]->next->flags
 f[..]->next->next
@@ -12725,10 +12759,11 @@ f[..]->tab->Flush tab[..].Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base tab[..].Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr tab[..].Get_bufsiz tab[..].Get_ptr
+f[..]->tab->Get_bufsiz tab[..].Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt tab[..].Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr tab[..].Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg tab[..].Getarg
 f[..]->tab->Getarg[0]
@@ -12736,7 +12771,7 @@ f[..]->tab->Open tab[..].Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped tab[..].Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind tab[..].Pushed tab[..].kind
+f[..]->tab->Pushed tab[..].Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read tab[..].Read
 f[..]->tab->Read[0]
@@ -12753,6 +12788,8 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write tab[..].Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name tab[..].fsize tab[..].name
+f[..]->tab->kind tab[..].kind
+f[..]->tab->size tab[..].size
 f[..]->tab[0]
 f[..][0]
 mode
@@ -12785,7 +12822,7 @@ tab[..].Write[0]
 ..PerlIOUnix_pushed():::EXIT0
 arg
 arg[..]
-arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size tab tab[..].size
+arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt f f[..] f[..]->flags f[..]->next f[..]->tab tab
 arg[..].sv_any[0]
 f[..]->next->flags
 f[..]->next->next
@@ -12813,10 +12850,11 @@ f[..]->tab->Flush tab[..].Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base tab[..].Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr tab[..].Get_bufsiz tab[..].Get_ptr
+f[..]->tab->Get_bufsiz tab[..].Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt tab[..].Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr tab[..].Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg tab[..].Getarg
 f[..]->tab->Getarg[0]
@@ -12824,7 +12862,7 @@ f[..]->tab->Open tab[..].Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped tab[..].Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind tab[..].Pushed tab[..].kind
+f[..]->tab->Pushed tab[..].Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read tab[..].Read
 f[..]->tab->Read[0]
@@ -12841,6 +12879,8 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write tab[..].Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name tab[..].fsize tab[..].name
+f[..]->tab->kind tab[..].kind
+f[..]->tab->size tab[..].size
 f[..]->tab[0]
 f[..][0]
 mode
@@ -12872,7 +12912,7 @@ tab[..].Unread[0]
 tab[..].Write[0]
 
 ..PerlIOUnix_read():::ENTER
-count f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size vbuf
+count f f[..] f[..]->flags f[..]->next f[..]->tab vbuf
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -12899,10 +12939,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -12910,7 +12951,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -12927,12 +12968,14 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 vbuf[..]
 
 ..PerlIOUnix_read():::EXIT0
-count f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size return vbuf
+count f f[..] f[..]->flags f[..]->next f[..]->tab return vbuf
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -12959,10 +13002,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -12970,7 +13014,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -12987,6 +13031,8 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 vbuf[..]
@@ -13144,7 +13190,7 @@ return
 whence
 
 ..PerlIOUnix_tell():::ENTER
-f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size
+f f[..] f[..]->flags f[..]->next f[..]->tab
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -13171,10 +13217,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -13182,7 +13229,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -13199,11 +13246,13 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 
 ..PerlIOUnix_tell():::EXIT0
-f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size
+f f[..] f[..]->flags f[..]->next f[..]->tab
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -13230,10 +13279,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -13241,7 +13291,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -13258,12 +13308,14 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 return
 
 ..PerlIOUnix_write():::ENTER
-count f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size vbuf
+count f f[..] f[..]->flags f[..]->next f[..]->tab vbuf
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -13290,10 +13342,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -13301,7 +13354,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -13318,12 +13371,14 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 vbuf[..]
 
 ..PerlIOUnix_write():::EXIT0
-count f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size return vbuf
+count f f[..] f[..]->flags f[..]->next f[..]->tab return vbuf
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -13350,10 +13405,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -13361,7 +13417,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -13378,6 +13434,8 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 vbuf[..]
@@ -14427,7 +14485,7 @@ f[..][0]
 return
 
 ..PerlIO_cleantable():::ENTER
-tablep tablep[..] tablep[..][0] tablep[..][0]->flags tablep[..][0]->next tablep[..][0]->tab tablep[..][0]->tab->size
+tablep tablep[..] tablep[..][0] tablep[..][0]->flags tablep[..][0]->next tablep[..][0]->tab
 tablep[..][0]->next->flags
 tablep[..][0]->next->next
 tablep[..][0]->next->next[0]
@@ -14454,10 +14512,11 @@ tablep[..][0]->tab->Flush
 tablep[..][0]->tab->Flush[0]
 tablep[..][0]->tab->Get_base
 tablep[..][0]->tab->Get_base[0]
-tablep[..][0]->tab->Get_bufsiz tablep[..][0]->tab->Get_ptr
+tablep[..][0]->tab->Get_bufsiz
 tablep[..][0]->tab->Get_bufsiz[0]
 tablep[..][0]->tab->Get_cnt
 tablep[..][0]->tab->Get_cnt[0]
+tablep[..][0]->tab->Get_ptr
 tablep[..][0]->tab->Get_ptr[0]
 tablep[..][0]->tab->Getarg
 tablep[..][0]->tab->Getarg[0]
@@ -14465,7 +14524,7 @@ tablep[..][0]->tab->Open
 tablep[..][0]->tab->Open[0]
 tablep[..][0]->tab->Popped
 tablep[..][0]->tab->Popped[0]
-tablep[..][0]->tab->Pushed tablep[..][0]->tab->kind
+tablep[..][0]->tab->Pushed
 tablep[..][0]->tab->Pushed[0]
 tablep[..][0]->tab->Read
 tablep[..][0]->tab->Read[0]
@@ -14482,11 +14541,13 @@ tablep[..][0]->tab->Unread[0]
 tablep[..][0]->tab->Write
 tablep[..][0]->tab->Write[0]
 tablep[..][0]->tab->fsize tablep[..][0]->tab->name
+tablep[..][0]->tab->kind
+tablep[..][0]->tab->size
 tablep[..][0]->tab[0]
 tablep[..][0][0]
 
 ..PerlIO_cleantable():::EXIT0
-tablep tablep[..] tablep[..][0] tablep[..][0]->flags tablep[..][0]->next tablep[..][0]->tab tablep[..][0]->tab->size
+tablep tablep[..] tablep[..][0] tablep[..][0]->flags tablep[..][0]->next tablep[..][0]->tab
 tablep[..][0]->next->flags
 tablep[..][0]->next->next
 tablep[..][0]->next->next[0]
@@ -14513,10 +14574,11 @@ tablep[..][0]->tab->Flush
 tablep[..][0]->tab->Flush[0]
 tablep[..][0]->tab->Get_base
 tablep[..][0]->tab->Get_base[0]
-tablep[..][0]->tab->Get_bufsiz tablep[..][0]->tab->Get_ptr
+tablep[..][0]->tab->Get_bufsiz
 tablep[..][0]->tab->Get_bufsiz[0]
 tablep[..][0]->tab->Get_cnt
 tablep[..][0]->tab->Get_cnt[0]
+tablep[..][0]->tab->Get_ptr
 tablep[..][0]->tab->Get_ptr[0]
 tablep[..][0]->tab->Getarg
 tablep[..][0]->tab->Getarg[0]
@@ -14524,7 +14586,7 @@ tablep[..][0]->tab->Open
 tablep[..][0]->tab->Open[0]
 tablep[..][0]->tab->Popped
 tablep[..][0]->tab->Popped[0]
-tablep[..][0]->tab->Pushed tablep[..][0]->tab->kind
+tablep[..][0]->tab->Pushed
 tablep[..][0]->tab->Pushed[0]
 tablep[..][0]->tab->Read
 tablep[..][0]->tab->Read[0]
@@ -14541,6 +14603,8 @@ tablep[..][0]->tab->Unread[0]
 tablep[..][0]->tab->Write
 tablep[..][0]->tab->Write[0]
 tablep[..][0]->tab->fsize tablep[..][0]->tab->name
+tablep[..][0]->tab->kind
+tablep[..][0]->tab->size
 tablep[..][0]->tab[0]
 tablep[..][0][0]
 
@@ -14676,7 +14740,7 @@ n
 
 ..PerlIO_default_layer():::EXIT0
 n
-return return[..].size
+return
 return[..]
 return[..].Binmode
 return[..].Binmode[0]
@@ -14698,10 +14762,11 @@ return[..].Flush
 return[..].Flush[0]
 return[..].Get_base
 return[..].Get_base[0]
-return[..].Get_bufsiz return[..].Get_ptr
+return[..].Get_bufsiz
 return[..].Get_bufsiz[0]
 return[..].Get_cnt
 return[..].Get_cnt[0]
+return[..].Get_ptr
 return[..].Get_ptr[0]
 return[..].Getarg
 return[..].Getarg[0]
@@ -14709,7 +14774,7 @@ return[..].Open
 return[..].Open[0]
 return[..].Popped
 return[..].Popped[0]
-return[..].Pushed return[..].kind
+return[..].Pushed
 return[..].Pushed[0]
 return[..].Read
 return[..].Read[0]
@@ -14726,6 +14791,8 @@ return[..].Unread[0]
 return[..].Write
 return[..].Write[0]
 return[..].fsize return[..].name
+return[..].kind
+return[..].size
 
 ..PerlIO_default_layers():::ENTER
 
@@ -14741,7 +14808,7 @@ return[..].array[0]
 return[..].refcnt
 
 ..PerlIO_define_layer():::ENTER
-tab tab[..].size
+tab
 tab[..]
 tab[..].Binmode
 tab[..].Binmode[0]
@@ -14763,10 +14830,11 @@ tab[..].Flush
 tab[..].Flush[0]
 tab[..].Get_base
 tab[..].Get_base[0]
-tab[..].Get_bufsiz tab[..].Get_ptr
+tab[..].Get_bufsiz
 tab[..].Get_bufsiz[0]
 tab[..].Get_cnt
 tab[..].Get_cnt[0]
+tab[..].Get_ptr
 tab[..].Get_ptr[0]
 tab[..].Getarg
 tab[..].Getarg[0]
@@ -14774,7 +14842,7 @@ tab[..].Open
 tab[..].Open[0]
 tab[..].Popped
 tab[..].Popped[0]
-tab[..].Pushed tab[..].kind
+tab[..].Pushed
 tab[..].Pushed[0]
 tab[..].Read
 tab[..].Read[0]
@@ -14791,9 +14859,11 @@ tab[..].Unread[0]
 tab[..].Write
 tab[..].Write[0]
 tab[..].fsize tab[..].name
+tab[..].kind
+tab[..].size
 
 ..PerlIO_define_layer():::EXIT0
-tab tab[..].size
+tab
 tab[..]
 tab[..].Binmode
 tab[..].Binmode[0]
@@ -14815,10 +14885,11 @@ tab[..].Flush
 tab[..].Flush[0]
 tab[..].Get_base
 tab[..].Get_base[0]
-tab[..].Get_bufsiz tab[..].Get_ptr
+tab[..].Get_bufsiz
 tab[..].Get_bufsiz[0]
 tab[..].Get_cnt
 tab[..].Get_cnt[0]
+tab[..].Get_ptr
 tab[..].Get_ptr[0]
 tab[..].Getarg
 tab[..].Getarg[0]
@@ -14826,7 +14897,7 @@ tab[..].Open
 tab[..].Open[0]
 tab[..].Popped
 tab[..].Popped[0]
-tab[..].Pushed tab[..].kind
+tab[..].Pushed
 tab[..].Pushed[0]
 tab[..].Read
 tab[..].Read[0]
@@ -14843,6 +14914,8 @@ tab[..].Unread[0]
 tab[..].Write
 tab[..].Write[0]
 tab[..].fsize tab[..].name
+tab[..].kind
+tab[..].size
 
 ..PerlIO_destruct():::ENTER
 
@@ -15011,10 +15084,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -15022,7 +15096,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -15038,6 +15112,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 
@@ -15066,10 +15141,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -15077,7 +15153,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -15093,6 +15169,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 return
@@ -15531,7 +15608,7 @@ name
 len
 load
 name return[..].fsize return[..].name
-return return[..].size
+return
 return[..]
 return[..].Binmode
 return[..].Binmode[0]
@@ -15553,10 +15630,11 @@ return[..].Flush
 return[..].Flush[0]
 return[..].Get_base
 return[..].Get_base[0]
-return[..].Get_bufsiz return[..].Get_ptr
+return[..].Get_bufsiz
 return[..].Get_bufsiz[0]
 return[..].Get_cnt
 return[..].Get_cnt[0]
+return[..].Get_ptr
 return[..].Get_ptr[0]
 return[..].Getarg
 return[..].Getarg[0]
@@ -15564,7 +15642,7 @@ return[..].Open
 return[..].Open[0]
 return[..].Popped
 return[..].Popped[0]
-return[..].Pushed return[..].kind
+return[..].Pushed
 return[..].Pushed[0]
 return[..].Read
 return[..].Read[0]
@@ -15580,6 +15658,8 @@ return[..].Unread
 return[..].Unread[0]
 return[..].Write
 return[..].Write[0]
+return[..].kind
+return[..].size
 
 ..PerlIO_get_layers():::ENTER
 f
@@ -16621,7 +16701,7 @@ av[..]
 av[..].array av[..].cur av[..].len n
 av[..].array->arg
 av[..].array->arg[0]
-av[..].array->funcs def def[..].fsize def[..].name def[..].size
+av[..].array->funcs def def[..].fsize def[..].name
 av[..].array->funcs[0]
 av[..].array[0]
 av[..].refcnt
@@ -16646,10 +16726,11 @@ def[..].Flush
 def[..].Flush[0]
 def[..].Get_base
 def[..].Get_base[0]
-def[..].Get_bufsiz def[..].Get_ptr
+def[..].Get_bufsiz
 def[..].Get_bufsiz[0]
 def[..].Get_cnt
 def[..].Get_cnt[0]
+def[..].Get_ptr
 def[..].Get_ptr[0]
 def[..].Getarg
 def[..].Getarg[0]
@@ -16657,7 +16738,7 @@ def[..].Open
 def[..].Open[0]
 def[..].Popped
 def[..].Popped[0]
-def[..].Pushed def[..].kind
+def[..].Pushed
 def[..].Pushed[0]
 def[..].Read
 def[..].Read[0]
@@ -16673,6 +16754,8 @@ def[..].Unread
 def[..].Unread[0]
 def[..].Write
 def[..].Write[0]
+def[..].kind
+def[..].size
 
 ..PerlIO_layer_fetch():::EXIT0
 av
@@ -16680,7 +16763,7 @@ av[..]
 av[..].array av[..].cur av[..].len n
 av[..].array->arg
 av[..].array->arg[0]
-av[..].array->funcs def def[..].fsize def[..].name def[..].size return return[..].fsize return[..].name return[..].size
+av[..].array->funcs def def[..].fsize def[..].name return return[..].fsize return[..].name
 av[..].array->funcs[0]
 av[..].array[0]
 av[..].refcnt
@@ -16705,10 +16788,11 @@ def[..].Flush return[..].Flush
 def[..].Flush[0]
 def[..].Get_base return[..].Get_base
 def[..].Get_base[0]
-def[..].Get_bufsiz def[..].Get_ptr return[..].Get_bufsiz return[..].Get_ptr
+def[..].Get_bufsiz return[..].Get_bufsiz
 def[..].Get_bufsiz[0]
 def[..].Get_cnt return[..].Get_cnt
 def[..].Get_cnt[0]
+def[..].Get_ptr return[..].Get_ptr
 def[..].Get_ptr[0]
 def[..].Getarg return[..].Getarg
 def[..].Getarg[0]
@@ -16716,7 +16800,7 @@ def[..].Open return[..].Open
 def[..].Open[0]
 def[..].Popped return[..].Popped
 def[..].Popped[0]
-def[..].Pushed def[..].kind return[..].Pushed return[..].kind
+def[..].Pushed return[..].Pushed
 def[..].Pushed[0]
 def[..].Read return[..].Read
 def[..].Read[0]
@@ -16732,6 +16816,8 @@ def[..].Unread return[..].Unread
 def[..].Unread[0]
 def[..].Write return[..].Write
 def[..].Write[0]
+def[..].kind return[..].kind
+def[..].size return[..].size
 return[..]
 return[..].Binmode[0]
 return[..].Clearerr[0]
@@ -16799,7 +16885,7 @@ Perl_list[..]
 Perl_list[..].array Perl_list[..].cur Perl_list[..].len
 Perl_list[..].array->arg arg
 Perl_list[..].array->arg[0]
-Perl_list[..].array->funcs arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt funcs funcs[..].size
+Perl_list[..].array->funcs arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt funcs
 Perl_list[..].array->funcs[0]
 Perl_list[..].array[0]
 Perl_list[..].refcnt
@@ -16826,10 +16912,11 @@ funcs[..].Flush
 funcs[..].Flush[0]
 funcs[..].Get_base
 funcs[..].Get_base[0]
-funcs[..].Get_bufsiz funcs[..].Get_ptr
+funcs[..].Get_bufsiz
 funcs[..].Get_bufsiz[0]
 funcs[..].Get_cnt
 funcs[..].Get_cnt[0]
+funcs[..].Get_ptr
 funcs[..].Get_ptr[0]
 funcs[..].Getarg
 funcs[..].Getarg[0]
@@ -16837,7 +16924,7 @@ funcs[..].Open
 funcs[..].Open[0]
 funcs[..].Popped
 funcs[..].Popped[0]
-funcs[..].Pushed funcs[..].kind
+funcs[..].Pushed
 funcs[..].Pushed[0]
 funcs[..].Read
 funcs[..].Read[0]
@@ -16854,6 +16941,8 @@ funcs[..].Unread[0]
 funcs[..].Write
 funcs[..].Write[0]
 funcs[..].fsize funcs[..].name
+funcs[..].kind
+funcs[..].size
 
 ..PerlIO_list_push():::EXIT0
 Perl_list
@@ -16861,7 +16950,7 @@ Perl_list[..]
 Perl_list[..].array Perl_list[..].cur Perl_list[..].len
 Perl_list[..].array->arg arg
 Perl_list[..].array->arg[0]
-Perl_list[..].array->funcs arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt funcs funcs[..].size
+Perl_list[..].array->funcs arg[..].sv_any arg[..].sv_flags arg[..].sv_refcnt funcs
 Perl_list[..].array->funcs[0]
 Perl_list[..].array[0]
 Perl_list[..].refcnt
@@ -16888,10 +16977,11 @@ funcs[..].Flush
 funcs[..].Flush[0]
 funcs[..].Get_base
 funcs[..].Get_base[0]
-funcs[..].Get_bufsiz funcs[..].Get_ptr
+funcs[..].Get_bufsiz
 funcs[..].Get_bufsiz[0]
 funcs[..].Get_cnt
 funcs[..].Get_cnt[0]
+funcs[..].Get_ptr
 funcs[..].Get_ptr[0]
 funcs[..].Getarg
 funcs[..].Getarg[0]
@@ -16899,7 +16989,7 @@ funcs[..].Open
 funcs[..].Open[0]
 funcs[..].Popped
 funcs[..].Popped[0]
-funcs[..].Pushed funcs[..].kind
+funcs[..].Pushed
 funcs[..].Pushed[0]
 funcs[..].Read
 funcs[..].Read[0]
@@ -16916,6 +17006,8 @@ funcs[..].Unread[0]
 funcs[..].Write
 funcs[..].Write[0]
 funcs[..].fsize funcs[..].name
+funcs[..].kind
+funcs[..].size
 
 ..PerlIO_modestr():::ENTER
 buf
@@ -17380,10 +17472,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -17391,7 +17484,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -17407,6 +17500,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 
@@ -17435,10 +17529,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -17446,7 +17541,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -17462,6 +17557,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 
@@ -17630,10 +17726,11 @@ f[..]->tab->Flush tab[..].Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base tab[..].Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr tab[..].Get_bufsiz tab[..].Get_ptr
+f[..]->tab->Get_bufsiz tab[..].Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt tab[..].Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr tab[..].Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg tab[..].Getarg
 f[..]->tab->Getarg[0]
@@ -17641,7 +17738,7 @@ f[..]->tab->Open tab[..].Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped tab[..].Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind tab[..].Pushed tab[..].kind
+f[..]->tab->Pushed tab[..].Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read tab[..].Read
 f[..]->tab->Read[0]
@@ -17657,6 +17754,7 @@ f[..]->tab->Unread tab[..].Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write tab[..].Write
 f[..]->tab->Write[0]
+f[..]->tab->kind tab[..].kind
 f[..]->tab[0]
 f[..][0]
 mode
@@ -17714,10 +17812,11 @@ f[..]->tab->Flush return[..]->tab->Flush tab[..].Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base return[..]->tab->Get_base tab[..].Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr return[..]->tab->Get_bufsiz return[..]->tab->Get_ptr tab[..].Get_bufsiz tab[..].Get_ptr
+f[..]->tab->Get_bufsiz return[..]->tab->Get_bufsiz tab[..].Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt return[..]->tab->Get_cnt tab[..].Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr return[..]->tab->Get_ptr tab[..].Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg return[..]->tab->Getarg tab[..].Getarg
 f[..]->tab->Getarg[0]
@@ -17725,7 +17824,7 @@ f[..]->tab->Open return[..]->tab->Open tab[..].Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped return[..]->tab->Popped tab[..].Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind return[..]->tab->Pushed return[..]->tab->kind tab[..].Pushed tab[..].kind
+f[..]->tab->Pushed return[..]->tab->Pushed tab[..].Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read return[..]->tab->Read tab[..].Read
 f[..]->tab->Read[0]
@@ -17741,6 +17840,7 @@ f[..]->tab->Unread return[..]->tab->Unread tab[..].Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write return[..]->tab->Write tab[..].Write
 f[..]->tab->Write[0]
+f[..]->tab->kind return[..]->tab->kind tab[..].kind
 f[..]->tab[0]
 f[..][0]
 mode
@@ -19115,6 +19215,13 @@ return
 
 ..PerlIO_vprintf():::ENTER
 ap
+ap[..]
+ap[..].fp_offset
+ap[..].gp_offset
+ap[..].overflow_arg_area
+ap[..].overflow_arg_area[0]
+ap[..].reg_save_area
+ap[..].reg_save_area[0]
 f
 f[..]
 f[..]->flags
@@ -19184,6 +19291,13 @@ fmt
 
 ..PerlIO_vprintf():::EXIT0
 ap
+ap[..]
+ap[..].fp_offset
+ap[..].gp_offset
+ap[..].overflow_arg_area
+ap[..].overflow_arg_area[0]
+ap[..].reg_save_area
+ap[..].reg_save_area[0]
 f
 f[..]
 f[..]->flags
@@ -19254,12 +19368,26 @@ return
 
 ..PerlIO_vsprintf():::ENTER
 ap
+ap[..]
+ap[..].fp_offset
+ap[..].gp_offset
+ap[..].overflow_arg_area
+ap[..].overflow_arg_area[0]
+ap[..].reg_save_area
+ap[..].reg_save_area[0]
 fmt
 n
 s
 
 ..PerlIO_vsprintf():::EXIT0
 ap
+ap[..]
+ap[..].fp_offset
+ap[..].gp_offset
+ap[..].overflow_arg_area
+ap[..].overflow_arg_area[0]
+ap[..].reg_save_area
+ap[..].reg_save_area[0]
 fmt
 n
 return
@@ -19840,10 +19968,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -19851,7 +19980,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -19867,6 +19996,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 
@@ -19895,10 +20025,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -19906,7 +20037,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -19922,6 +20053,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 return
@@ -20068,10 +20200,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -20079,7 +20212,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -20095,6 +20228,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 
@@ -20123,10 +20257,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -20134,7 +20269,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -20150,6 +20285,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 return
@@ -20662,10 +20798,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -20673,7 +20810,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -20689,6 +20826,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 vbuf[..]
@@ -20718,10 +20856,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -20729,7 +20868,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -20745,6 +20884,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 vbuf[..]
@@ -21479,10 +21619,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -21490,7 +21631,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -21506,6 +21647,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 
@@ -21534,10 +21676,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -21545,7 +21688,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -21561,6 +21704,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 
@@ -21730,10 +21874,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -21741,7 +21886,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -21757,6 +21902,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 vbuf[..]
@@ -21786,10 +21932,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -21797,7 +21944,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -21813,6 +21960,7 @@ f[..]->tab->Unread
 f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
+f[..]->tab->kind
 f[..]->tab[0]
 f[..][0]
 vbuf[..]
@@ -23490,9 +23638,13 @@ effective
 mode
 statbufp
 statbufp[..]
-statbufp[..].__pad1
-statbufp[..].__pad2
-statbufp[..].__st_ino
+statbufp[..].__pad0
+statbufp[..].__unused[0]
+statbufp[..].__unused[0][0]
+statbufp[..].__unused[1]
+statbufp[..].__unused[1][0]
+statbufp[..].__unused[2]
+statbufp[..].__unused[2][0]
 statbufp[..].st_atim
 statbufp[..].st_atim.tv_nsec
 statbufp[..].st_atim.tv_sec
@@ -23519,9 +23671,13 @@ mode
 return
 statbufp
 statbufp[..]
-statbufp[..].__pad1
-statbufp[..].__pad2
-statbufp[..].__st_ino
+statbufp[..].__pad0
+statbufp[..].__unused[0]
+statbufp[..].__unused[0][0]
+statbufp[..].__unused[1]
+statbufp[..].__unused[1][0]
+statbufp[..].__unused[2]
+statbufp[..].__unused[2][0]
 statbufp[..].st_atim
 statbufp[..].st_atim.tv_nsec
 statbufp[..].st_atim.tv_sec
@@ -27132,10 +27288,11 @@ return[..].op_targ
 return[..].op_type
 
 ..Perl_ck_svconst():::ENTER
-o o[..].op_next o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_ppaddr
+o o[..].op_next o[..].op_next->op_next
 o[..]
 o[..].op_flags o[..].op_next->op_flags
 o[..].op_next->op_next[0]
+o[..].op_next->op_ppaddr o[..].op_ppaddr
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ
 o[..].op_next->op_sibling[0]
@@ -27156,10 +27313,11 @@ o[..].op_sibling->op_type
 o[..].op_sibling[0]
 
 ..Perl_ck_svconst():::EXIT0
-o o[..].op_next o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_ppaddr return return[..].op_next return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_ppaddr
+o o[..].op_next o[..].op_next->op_next return return[..].op_next return[..].op_next->op_next
 o[..]
 o[..].op_flags o[..].op_next->op_flags return[..].op_flags return[..].op_next->op_flags
 o[..].op_next->op_next[0]
+o[..].op_next->op_ppaddr o[..].op_ppaddr return[..].op_next->op_ppaddr return[..].op_ppaddr
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ
 o[..].op_next->op_sibling[0]
@@ -27307,12 +27465,11 @@ return[..].op_targ
 return[..].op_type
 
 ..Perl_convert():::ENTER
-flags o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ
+flags o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -27329,12 +27486,11 @@ o[..].op_sibling->op_type
 o[..].op_sibling[0]
 
 ..Perl_convert():::EXIT0
-flags o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ
+flags o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type return[..].op_next->op_type return[..].op_type type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -31864,6 +32020,13 @@ gv[..].sv_refcnt
 ..Perl_dump_vindent():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 file
 file[..]
 file[..]->flags
@@ -31935,6 +32098,13 @@ pat
 ..Perl_dump_vindent():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 file
 file[..]
 file[..]->flags
@@ -34440,9 +34610,8 @@ keysv[..].sv_refcnt
 return
 
 ..Perl_hv_fetch():::ENTER
-hv hv[..].sv_any hv[..].sv_any->xhv_eiter hv[..].sv_any->xhv_fill hv[..].sv_any->xhv_keys hv[..].sv_any->xhv_max hv[..].sv_any->xhv_name hv[..].sv_any->xhv_pmroot hv[..].sv_any->xhv_riter hv[..].sv_any->xmg_magic hv[..].sv_any->xmg_stash hv[..].sv_any->xnv_nv hv[..].sv_flags hv[..].sv_refcnt key klen_i32
+hv hv[..].sv_any hv[..].sv_any->xhv_array hv[..].sv_any->xhv_eiter hv[..].sv_any->xhv_fill hv[..].sv_any->xhv_keys hv[..].sv_any->xhv_max hv[..].sv_any->xhv_name hv[..].sv_any->xhv_pmroot hv[..].sv_any->xhv_riter hv[..].sv_any->xmg_magic hv[..].sv_any->xmg_stash hv[..].sv_any->xnv_nv hv[..].sv_flags hv[..].sv_refcnt key klen_i32
 hv[..]
-hv[..].sv_any->xhv_array
 hv[..].sv_any->xhv_eiter[0]
 hv[..].sv_any->xhv_pmroot[0]
 hv[..].sv_any->xmg_magic[0]
@@ -34451,9 +34620,8 @@ hv[..].sv_any[0]
 lval
 
 ..Perl_hv_fetch():::EXIT0
-hv hv[..].sv_any hv[..].sv_any->xhv_eiter hv[..].sv_any->xhv_fill hv[..].sv_any->xhv_keys hv[..].sv_any->xhv_max hv[..].sv_any->xhv_name hv[..].sv_any->xhv_pmroot hv[..].sv_any->xhv_riter hv[..].sv_any->xmg_magic hv[..].sv_any->xmg_stash hv[..].sv_any->xnv_nv hv[..].sv_flags hv[..].sv_refcnt key klen_i32 return[..] return[..]->sv_any return[..]->sv_flags return[..]->sv_refcnt
+hv hv[..].sv_any hv[..].sv_any->xhv_array hv[..].sv_any->xhv_eiter hv[..].sv_any->xhv_fill hv[..].sv_any->xhv_keys hv[..].sv_any->xhv_max hv[..].sv_any->xhv_name hv[..].sv_any->xhv_pmroot hv[..].sv_any->xhv_riter hv[..].sv_any->xmg_magic hv[..].sv_any->xmg_stash hv[..].sv_any->xnv_nv hv[..].sv_flags hv[..].sv_refcnt key klen_i32 return return[..] return[..]->sv_any return[..]->sv_flags return[..]->sv_refcnt
 hv[..]
-hv[..].sv_any->xhv_array return
 hv[..].sv_any->xhv_eiter[0]
 hv[..].sv_any->xhv_pmroot[0]
 hv[..].sv_any->xmg_magic[0]
@@ -34547,10 +34715,10 @@ return[..].hent_val->sv_refcnt
 return[..].hent_val[0]
 
 ..Perl_hv_free_ent():::ENTER
-entry entry[..].hent_hek entry[..].hent_hek->hek_hash entry[..].hent_hek->hek_key entry[..].hent_hek->hek_len entry[..].hent_next->hent_hek entry[..].hent_next->hent_val entry[..].hent_val entry[..].hent_val->sv_any entry[..].hent_val->sv_flags entry[..].hent_val->sv_refcnt hv hv[..].sv_any hv[..].sv_any->xhv_eiter hv[..].sv_any->xhv_fill hv[..].sv_any->xhv_keys hv[..].sv_any->xhv_max hv[..].sv_any->xhv_name hv[..].sv_any->xhv_pmroot hv[..].sv_any->xhv_riter hv[..].sv_any->xmg_magic hv[..].sv_any->xmg_stash hv[..].sv_any->xnv_nv hv[..].sv_flags hv[..].sv_refcnt
+entry entry[..].hent_hek entry[..].hent_hek->hek_hash entry[..].hent_hek->hek_key entry[..].hent_hek->hek_len entry[..].hent_next->hent_hek entry[..].hent_next->hent_next entry[..].hent_next->hent_val entry[..].hent_val entry[..].hent_val->sv_any entry[..].hent_val->sv_flags entry[..].hent_val->sv_refcnt hv hv[..].sv_any hv[..].sv_any->xhv_eiter hv[..].sv_any->xhv_fill hv[..].sv_any->xhv_keys hv[..].sv_any->xhv_max hv[..].sv_any->xhv_name hv[..].sv_any->xhv_pmroot hv[..].sv_any->xhv_riter hv[..].sv_any->xmg_magic hv[..].sv_any->xmg_stash hv[..].sv_any->xnv_nv hv[..].sv_flags hv[..].sv_refcnt
 entry[..]
 entry[..].hent_hek[0]
-entry[..].hent_next entry[..].hent_next->hent_next
+entry[..].hent_next
 entry[..].hent_next->hent_hek[0]
 entry[..].hent_next->hent_next[0]
 entry[..].hent_next->hent_val[0]
@@ -34566,10 +34734,10 @@ hv[..].sv_any->xmg_stash[0]
 hv[..].sv_any[0]
 
 ..Perl_hv_free_ent():::EXIT0
-entry entry[..].hent_hek entry[..].hent_hek->hek_hash entry[..].hent_hek->hek_key entry[..].hent_hek->hek_len entry[..].hent_next->hent_hek entry[..].hent_next->hent_val entry[..].hent_val entry[..].hent_val->sv_any entry[..].hent_val->sv_flags entry[..].hent_val->sv_refcnt hv hv[..].sv_any hv[..].sv_any->xhv_eiter hv[..].sv_any->xhv_fill hv[..].sv_any->xhv_keys hv[..].sv_any->xhv_max hv[..].sv_any->xhv_name hv[..].sv_any->xhv_pmroot hv[..].sv_any->xhv_riter hv[..].sv_any->xmg_magic hv[..].sv_any->xmg_stash hv[..].sv_any->xnv_nv hv[..].sv_flags hv[..].sv_refcnt
+entry entry[..].hent_hek entry[..].hent_hek->hek_hash entry[..].hent_hek->hek_key entry[..].hent_hek->hek_len entry[..].hent_next->hent_hek entry[..].hent_next->hent_next entry[..].hent_next->hent_val entry[..].hent_val entry[..].hent_val->sv_any entry[..].hent_val->sv_flags entry[..].hent_val->sv_refcnt hv hv[..].sv_any hv[..].sv_any->xhv_eiter hv[..].sv_any->xhv_fill hv[..].sv_any->xhv_keys hv[..].sv_any->xhv_max hv[..].sv_any->xhv_name hv[..].sv_any->xhv_pmroot hv[..].sv_any->xhv_riter hv[..].sv_any->xmg_magic hv[..].sv_any->xmg_stash hv[..].sv_any->xnv_nv hv[..].sv_flags hv[..].sv_refcnt
 entry[..]
 entry[..].hent_hek[0]
-entry[..].hent_next entry[..].hent_next->hent_next
+entry[..].hent_next
 entry[..].hent_next->hent_hek[0]
 entry[..].hent_next->hent_next[0]
 entry[..].hent_next->hent_val[0]
@@ -35453,10 +35621,12 @@ return
 testgid
 
 ..Perl_init_argv_symbols():::ENTER
-argc argv argv[..]
+argc argv
+argv[..]
 
 ..Perl_init_argv_symbols():::EXIT0
-argc argv argv[..]
+argc argv
+argv[..]
 
 ..Perl_init_debugger():::ENTER
 
@@ -46424,9 +46594,10 @@ type
 
 ..Perl_newSVOP():::EXIT0
 flags return[..].op_flags return[..].op_next->op_flags
-return return[..].op_next return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+return return[..].op_next return[..].op_next->op_next
 return[..]
 return[..].op_next->op_next[0]
+return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 return[..].op_next->op_ppaddr[0]
 return[..].op_next->op_sibling[0]
 return[..].op_next->op_type return[..].op_type type
@@ -46678,7 +46849,7 @@ return[..].op_sibling->op_type
 return[..].op_sibling[0]
 
 ..Perl_newWHILEOP():::ENTER
-block block[..].op_flags block[..].op_next block[..].op_next->op_flags block[..].op_next->op_next block[..].op_next->op_ppaddr block[..].op_next->op_private block[..].op_next->op_seq block[..].op_next->op_sibling block[..].op_next->op_targ block[..].op_next->op_type block[..].op_ppaddr block[..].op_private block[..].op_seq block[..].op_sibling block[..].op_sibling->op_flags block[..].op_sibling->op_next block[..].op_sibling->op_ppaddr block[..].op_sibling->op_private block[..].op_sibling->op_seq block[..].op_sibling->op_sibling block[..].op_sibling->op_targ block[..].op_sibling->op_type block[..].op_targ block[..].op_type cont cont[..].op_next->op_next cont[..].op_next->op_ppaddr cont[..].op_sibling->op_next cont[..].op_sibling->op_ppaddr cont[..].op_targ cont[..].op_type expr[..].op_next->op_ppaddr expr[..].op_ppaddr flags whileline
+block block[..].op_flags block[..].op_next block[..].op_next->op_flags block[..].op_next->op_next block[..].op_next->op_ppaddr block[..].op_next->op_private block[..].op_next->op_seq block[..].op_next->op_sibling block[..].op_next->op_targ block[..].op_next->op_type block[..].op_ppaddr block[..].op_private block[..].op_seq block[..].op_sibling block[..].op_sibling->op_flags block[..].op_sibling->op_next block[..].op_sibling->op_ppaddr block[..].op_sibling->op_private block[..].op_sibling->op_seq block[..].op_sibling->op_sibling block[..].op_sibling->op_targ block[..].op_sibling->op_type block[..].op_targ block[..].op_type cont cont[..].op_next->op_next cont[..].op_next->op_ppaddr cont[..].op_sibling->op_next cont[..].op_sibling->op_ppaddr cont[..].op_targ cont[..].op_type flags
 block[..]
 block[..].op_next->op_next[0]
 block[..].op_next->op_ppaddr[0]
@@ -46710,6 +46881,7 @@ expr expr[..].op_next expr[..].op_next->op_next
 expr[..]
 expr[..].op_flags expr[..].op_next->op_flags
 expr[..].op_next->op_next[0]
+expr[..].op_next->op_ppaddr expr[..].op_ppaddr whileline
 expr[..].op_next->op_ppaddr[0]
 expr[..].op_next->op_private expr[..].op_next->op_seq expr[..].op_next->op_sibling expr[..].op_next->op_targ expr[..].op_private expr[..].op_seq expr[..].op_sibling expr[..].op_targ
 expr[..].op_next->op_sibling[0]
@@ -46775,7 +46947,7 @@ loop[..].op_targ
 loop[..].op_type
 
 ..Perl_newWHILEOP():::EXIT0
-block block[..].op_flags block[..].op_next block[..].op_next->op_flags block[..].op_next->op_next block[..].op_next->op_ppaddr block[..].op_next->op_private block[..].op_next->op_seq block[..].op_next->op_sibling block[..].op_next->op_targ block[..].op_next->op_type block[..].op_ppaddr block[..].op_private block[..].op_seq block[..].op_sibling block[..].op_sibling->op_flags block[..].op_sibling->op_next block[..].op_sibling->op_ppaddr block[..].op_sibling->op_private block[..].op_sibling->op_seq block[..].op_sibling->op_sibling block[..].op_sibling->op_targ block[..].op_sibling->op_type block[..].op_targ block[..].op_type cont cont[..].op_next->op_next cont[..].op_next->op_ppaddr cont[..].op_sibling->op_next cont[..].op_sibling->op_ppaddr cont[..].op_targ cont[..].op_type expr[..].op_next->op_ppaddr expr[..].op_ppaddr flags return return[..].op_flags return[..].op_next return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type whileline
+block block[..].op_flags block[..].op_next block[..].op_next->op_flags block[..].op_next->op_next block[..].op_next->op_ppaddr block[..].op_next->op_private block[..].op_next->op_seq block[..].op_next->op_sibling block[..].op_next->op_targ block[..].op_next->op_type block[..].op_ppaddr block[..].op_private block[..].op_seq block[..].op_sibling block[..].op_sibling->op_flags block[..].op_sibling->op_next block[..].op_sibling->op_ppaddr block[..].op_sibling->op_private block[..].op_sibling->op_seq block[..].op_sibling->op_sibling block[..].op_sibling->op_targ block[..].op_sibling->op_type block[..].op_targ block[..].op_type cont cont[..].op_next->op_next cont[..].op_next->op_ppaddr cont[..].op_sibling->op_next cont[..].op_sibling->op_ppaddr cont[..].op_targ cont[..].op_type flags return return[..].op_flags return[..].op_next return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
 block[..]
 block[..].op_next->op_next[0]
 block[..].op_next->op_ppaddr[0]
@@ -46807,6 +46979,7 @@ expr expr[..].op_next expr[..].op_next->op_next
 expr[..]
 expr[..].op_flags expr[..].op_next->op_flags
 expr[..].op_next->op_next[0]
+expr[..].op_next->op_ppaddr expr[..].op_ppaddr whileline
 expr[..].op_next->op_ppaddr[0]
 expr[..].op_next->op_private expr[..].op_next->op_seq expr[..].op_next->op_sibling expr[..].op_next->op_targ expr[..].op_private expr[..].op_seq expr[..].op_sibling expr[..].op_targ
 expr[..].op_next->op_sibling[0]
@@ -48658,7 +48831,7 @@ expr expr[..].op_next expr[..].op_next->op_next
 expr[..]
 expr[..].op_flags expr[..].op_next->op_flags
 expr[..].op_next->op_next[0]
-expr[..].op_next->op_ppaddr expr[..].op_ppaddr o o[..].op_flags o[..].op_next o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type
+expr[..].op_next->op_ppaddr expr[..].op_ppaddr o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type
 expr[..].op_next->op_ppaddr[0]
 expr[..].op_next->op_private expr[..].op_next->op_seq expr[..].op_next->op_sibling expr[..].op_next->op_targ expr[..].op_private expr[..].op_seq expr[..].op_sibling expr[..].op_targ
 expr[..].op_next->op_sibling[0]
@@ -48678,17 +48851,9 @@ expr[..].op_sibling->op_targ
 expr[..].op_sibling->op_type
 expr[..].op_sibling[0]
 o[..]
-o[..].op_next->op_flags
-o[..].op_next->op_next
 o[..].op_next->op_next[0]
-o[..].op_next->op_ppaddr
 o[..].op_next->op_ppaddr[0]
-o[..].op_next->op_private
-o[..].op_next->op_seq
-o[..].op_next->op_sibling
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_targ
-o[..].op_next->op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -48744,7 +48909,7 @@ expr expr[..].op_next expr[..].op_next->op_next
 expr[..]
 expr[..].op_flags expr[..].op_next->op_flags
 expr[..].op_next->op_next[0]
-expr[..].op_next->op_ppaddr expr[..].op_ppaddr o o[..].op_flags o[..].op_next o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
+expr[..].op_next->op_ppaddr expr[..].op_ppaddr o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
 expr[..].op_next->op_ppaddr[0]
 expr[..].op_next->op_private expr[..].op_next->op_seq expr[..].op_next->op_sibling expr[..].op_next->op_targ expr[..].op_private expr[..].op_seq expr[..].op_sibling expr[..].op_targ
 expr[..].op_next->op_sibling[0]
@@ -48764,17 +48929,9 @@ expr[..].op_sibling->op_targ
 expr[..].op_sibling->op_type
 expr[..].op_sibling[0]
 o[..]
-o[..].op_next->op_flags
-o[..].op_next->op_next
 o[..].op_next->op_next[0]
-o[..].op_next->op_ppaddr
 o[..].op_next->op_ppaddr[0]
-o[..].op_next->op_private
-o[..].op_next->op_seq
-o[..].op_next->op_sibling
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_targ
-o[..].op_next->op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -48825,17 +48982,9 @@ repl[..].op_sibling[0]
 repl[..].op_targ
 repl[..].op_type
 return[..]
-return[..].op_next->op_flags
-return[..].op_next->op_next
 return[..].op_next->op_next[0]
-return[..].op_next->op_ppaddr
 return[..].op_next->op_ppaddr[0]
-return[..].op_next->op_private
-return[..].op_next->op_seq
-return[..].op_next->op_sibling
 return[..].op_next->op_sibling[0]
-return[..].op_next->op_targ
-return[..].op_next->op_type
 return[..].op_next[0]
 return[..].op_ppaddr[0]
 return[..].op_sibling->op_flags
@@ -54965,13 +55114,12 @@ return[..].op_type
 ..Perl_pp_join():::ENTER
 
 ..Perl_pp_join():::EXIT0
-return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_next return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_sibling->op_type return[..].op_targ
+return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_next return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_sibling->op_type return[..].op_targ
 return[..]
 return[..].op_next->op_next[0]
 return[..].op_next->op_ppaddr[0]
 return[..].op_next->op_sibling[0]
 return[..].op_next[0]
-return[..].op_ppaddr
 return[..].op_ppaddr[0]
 return[..].op_sibling->op_next[0]
 return[..].op_sibling->op_ppaddr[0]
@@ -55276,13 +55424,11 @@ return[..].op_sibling[0]
 ..Perl_pp_leaveloop():::ENTER
 
 ..Perl_pp_leaveloop():::EXIT0
-return return[..].op_flags return[..].op_next return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_next return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_sibling->op_type return[..].op_targ return[..].op_type
+return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_next return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_sibling->op_type return[..].op_targ return[..].op_type
 return[..]
-return[..].op_next->op_flags return[..].op_next->op_private return[..].op_next->op_targ
 return[..].op_next->op_next[0]
 return[..].op_next->op_ppaddr[0]
 return[..].op_next->op_sibling[0]
-return[..].op_next->op_type
 return[..].op_next[0]
 return[..].op_ppaddr[0]
 return[..].op_sibling->op_next[0]
@@ -59196,12 +59342,10 @@ return[..].op_type
 return
 return[..]
 return[..].op_flags return[..].op_private
-return[..].op_next return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_seq
-return[..].op_next->op_flags
+return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_seq
 return[..].op_next->op_next[0]
 return[..].op_next->op_ppaddr[0]
 return[..].op_next->op_sibling[0]
-return[..].op_next->op_type
 return[..].op_next[0]
 return[..].op_ppaddr[0]
 return[..].op_sibling return[..].op_targ
@@ -60266,8 +60410,9 @@ return[..].op_type
 ..Perl_pp_stringify():::ENTER
 
 ..Perl_pp_stringify():::EXIT0
-return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_next return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_sibling->op_type return[..].op_targ return[..].op_type
+return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_sibling->op_type return[..].op_targ return[..].op_type
 return[..]
+return[..].op_next->op_next return[..].op_sibling->op_next
 return[..].op_next->op_next[0]
 return[..].op_next->op_ppaddr[0]
 return[..].op_next->op_sibling[0]
@@ -61836,7 +61981,7 @@ pm[..].op_sibling[0]
 xend
 
 ..Perl_pregcomp():::EXIT0
-exp pm pm[..].op_first pm[..].op_flags pm[..].op_last pm[..].op_next pm[..].op_pmdynflags pm[..].op_pmflags pm[..].op_pmnext pm[..].op_pmnext->op_first pm[..].op_pmnext->op_flags pm[..].op_pmnext->op_last pm[..].op_pmnext->op_next pm[..].op_pmnext->op_pmdynflags pm[..].op_pmnext->op_pmflags pm[..].op_pmnext->op_pmnext pm[..].op_pmnext->op_pmpermflags pm[..].op_pmnext->op_pmregexp pm[..].op_pmnext->op_pmreplroot pm[..].op_pmnext->op_pmreplstart pm[..].op_pmnext->op_pmstash pm[..].op_pmnext->op_ppaddr pm[..].op_pmnext->op_private pm[..].op_pmnext->op_seq pm[..].op_pmnext->op_sibling pm[..].op_pmnext->op_targ pm[..].op_pmnext->op_type pm[..].op_pmpermflags pm[..].op_pmregexp pm[..].op_pmreplroot pm[..].op_pmreplstart pm[..].op_pmstash pm[..].op_pmstash->sv_any pm[..].op_pmstash->sv_flags pm[..].op_pmstash->sv_refcnt pm[..].op_ppaddr pm[..].op_private pm[..].op_seq pm[..].op_sibling pm[..].op_targ pm[..].op_type return return[..].lastcloseparen return[..].lastparen return[..].minlen return[..].offsets return[..].offsets[0] return[..].precomp return[..].prelen return[..].program[0]->flags return[..].program[0]->next_off return[..].program[0]->type return[..].reganch return[..].sublen
+exp pm pm[..].op_first pm[..].op_flags pm[..].op_last pm[..].op_next pm[..].op_pmdynflags pm[..].op_pmflags pm[..].op_pmnext pm[..].op_pmnext->op_first pm[..].op_pmnext->op_flags pm[..].op_pmnext->op_last pm[..].op_pmnext->op_next pm[..].op_pmnext->op_pmdynflags pm[..].op_pmnext->op_pmflags pm[..].op_pmnext->op_pmnext pm[..].op_pmnext->op_pmpermflags pm[..].op_pmnext->op_pmregexp pm[..].op_pmnext->op_pmreplroot pm[..].op_pmnext->op_pmreplstart pm[..].op_pmnext->op_pmstash pm[..].op_pmnext->op_ppaddr pm[..].op_pmnext->op_private pm[..].op_pmnext->op_seq pm[..].op_pmnext->op_sibling pm[..].op_pmnext->op_targ pm[..].op_pmnext->op_type pm[..].op_pmpermflags pm[..].op_pmregexp pm[..].op_pmreplroot pm[..].op_pmreplstart pm[..].op_pmstash pm[..].op_pmstash->sv_any pm[..].op_pmstash->sv_flags pm[..].op_pmstash->sv_refcnt pm[..].op_ppaddr pm[..].op_private pm[..].op_seq pm[..].op_sibling pm[..].op_targ pm[..].op_type return return[..].endp return[..].lastcloseparen return[..].lastparen return[..].minlen return[..].offsets return[..].offsets[0] return[..].precomp return[..].prelen return[..].program[0]->flags return[..].program[0]->next_off return[..].program[0]->type return[..].reganch return[..].regstclass return[..].startp return[..].sublen return[..].substrs
 pm[..]
 pm[..].op_first[0]
 pm[..].op_last[0]
@@ -61913,20 +62058,17 @@ return[..].data->data[0][0]
 return[..].data->what
 return[..].data->what[0]
 return[..].data[0]
-return[..].endp return[..].startp
 return[..].endp[0]
 return[..].nparens
 return[..].program[0]
 return[..].program[0][0]
 return[..].refcnt
-return[..].regstclass
 return[..].regstclass->flags
 return[..].regstclass->next_off
 return[..].regstclass->type
 return[..].regstclass[0]
 return[..].startp[0]
 return[..].subbeg
-return[..].substrs
 return[..].substrs[0]
 return[..].substrs[0].data[0]
 return[..].substrs[0].data[0][0]
@@ -62050,7 +62192,7 @@ strend
 stringarg
 
 ..Perl_pregfree():::ENTER
-r r[..].endp[0] r[..].minlen r[..].offsets r[..].offsets[0] r[..].precomp r[..].prelen r[..].program[0]->flags r[..].program[0]->next_off r[..].program[0]->type r[..].reganch r[..].startp[0] r[..].sublen
+r r[..].endp r[..].endp[0] r[..].minlen r[..].offsets r[..].offsets[0] r[..].precomp r[..].prelen r[..].program[0]->flags r[..].program[0]->next_off r[..].program[0]->type r[..].reganch r[..].regstclass r[..].startp r[..].startp[0] r[..].sublen r[..].substrs
 r[..]
 r[..].data
 r[..].data->count
@@ -62059,18 +62201,15 @@ r[..].data->data[0][0]
 r[..].data->what
 r[..].data->what[0]
 r[..].data[0]
-r[..].endp r[..].startp
 r[..].lastcloseparen r[..].lastparen r[..].nparens
 r[..].program[0]
 r[..].program[0][0]
 r[..].refcnt
-r[..].regstclass
 r[..].regstclass->flags
 r[..].regstclass->next_off
 r[..].regstclass->type
 r[..].regstclass[0]
 r[..].subbeg
-r[..].substrs
 r[..].substrs[0]
 r[..].substrs[0].data[0]
 r[..].substrs[0].data[0][0]
@@ -62080,7 +62219,7 @@ r[..].substrs[0].data[2]
 r[..].substrs[0].data[2][0]
 
 ..Perl_pregfree():::EXIT0
-r r[..].endp[0] r[..].minlen r[..].offsets r[..].offsets[0] r[..].precomp r[..].prelen r[..].program[0]->flags r[..].program[0]->next_off r[..].program[0]->type r[..].reganch r[..].startp[0] r[..].sublen
+r r[..].endp r[..].endp[0] r[..].minlen r[..].offsets r[..].offsets[0] r[..].precomp r[..].prelen r[..].program[0]->flags r[..].program[0]->next_off r[..].program[0]->type r[..].reganch r[..].regstclass r[..].startp r[..].startp[0] r[..].sublen r[..].substrs
 r[..]
 r[..].data
 r[..].data->count
@@ -62089,18 +62228,15 @@ r[..].data->data[0][0]
 r[..].data->what
 r[..].data->what[0]
 r[..].data[0]
-r[..].endp r[..].startp
 r[..].lastcloseparen r[..].lastparen r[..].nparens
 r[..].program[0]
 r[..].program[0][0]
 r[..].refcnt
-r[..].regstclass
 r[..].regstclass->flags
 r[..].regstclass->next_off
 r[..].regstclass->type
 r[..].regstclass[0]
 r[..].subbeg
-r[..].substrs
 r[..].substrs[0]
 r[..].substrs[0].data[0]
 r[..].substrs[0].data[0][0]
@@ -62286,7 +62422,7 @@ data[..].scream_olds[0]
 data[..].scream_pos
 data[..].scream_pos[0]
 flags
-prog prog[..].lastcloseparen prog[..].lastparen prog[..].minlen prog[..].offsets prog[..].offsets[0] prog[..].precomp prog[..].prelen prog[..].program[0]->flags prog[..].program[0]->next_off prog[..].program[0]->type prog[..].reganch prog[..].sublen strend strpos sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+prog prog[..].endp prog[..].lastcloseparen prog[..].lastparen prog[..].minlen prog[..].offsets prog[..].offsets[0] prog[..].precomp prog[..].prelen prog[..].program[0]->flags prog[..].program[0]->next_off prog[..].program[0]->type prog[..].reganch prog[..].regstclass prog[..].startp prog[..].sublen prog[..].substrs strend strpos sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 prog[..]
 prog[..].data
 prog[..].data->count
@@ -62295,20 +62431,17 @@ prog[..].data->data[0][0]
 prog[..].data->what
 prog[..].data->what[0]
 prog[..].data[0]
-prog[..].endp prog[..].startp
 prog[..].endp[0]
 prog[..].nparens
 prog[..].program[0]
 prog[..].program[0][0]
 prog[..].refcnt
-prog[..].regstclass
 prog[..].regstclass->flags
 prog[..].regstclass->next_off
 prog[..].regstclass->type
 prog[..].regstclass[0]
 prog[..].startp[0]
 prog[..].subbeg
-prog[..].substrs
 prog[..].substrs[0]
 prog[..].substrs[0].data[0]
 prog[..].substrs[0].data[0][0]
@@ -62327,7 +62460,7 @@ data[..].scream_olds[0]
 data[..].scream_pos
 data[..].scream_pos[0]
 flags
-prog prog[..].lastcloseparen prog[..].lastparen prog[..].minlen prog[..].offsets prog[..].offsets[0] prog[..].precomp prog[..].prelen prog[..].program[0]->flags prog[..].program[0]->next_off prog[..].program[0]->type prog[..].reganch prog[..].sublen return strend strpos sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+prog prog[..].endp prog[..].lastcloseparen prog[..].lastparen prog[..].minlen prog[..].offsets prog[..].offsets[0] prog[..].precomp prog[..].prelen prog[..].program[0]->flags prog[..].program[0]->next_off prog[..].program[0]->type prog[..].reganch prog[..].regstclass prog[..].startp prog[..].sublen prog[..].substrs return strend strpos sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 prog[..]
 prog[..].data
 prog[..].data->count
@@ -62336,20 +62469,17 @@ prog[..].data->data[0][0]
 prog[..].data->what
 prog[..].data->what[0]
 prog[..].data[0]
-prog[..].endp prog[..].startp
 prog[..].endp[0]
 prog[..].nparens
 prog[..].program[0]
 prog[..].program[0][0]
 prog[..].refcnt
-prog[..].regstclass
 prog[..].regstclass->flags
 prog[..].regstclass->next_off
 prog[..].regstclass->type
 prog[..].regstclass[0]
 prog[..].startp[0]
 prog[..].subbeg
-prog[..].substrs
 prog[..].substrs[0]
 prog[..].substrs[0].data[0]
 prog[..].substrs[0].data[0][0]
@@ -64246,12 +64376,11 @@ need
 need
 
 ..Perl_sawparens():::ENTER
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -64268,12 +64397,11 @@ o[..].op_sibling->op_type
 o[..].op_sibling[0]
 
 ..Perl_sawparens():::EXIT0
-o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_next->op_type o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_targ o[..].op_type return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_next->op_type return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_targ return[..].op_type
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
 o[..].op_next->op_sibling[0]
-o[..].op_next->op_type o[..].op_type return[..].op_next->op_type return[..].op_type
 o[..].op_next[0]
 o[..].op_ppaddr[0]
 o[..].op_sibling->op_flags
@@ -64504,8 +64632,9 @@ start
 ..Perl_scan_num():::ENTER
 lvalp
 lvalp[..]
-lvalp[..].gvval lvalp[..].gvval->sv_any lvalp[..].gvval->sv_flags lvalp[..].gvval->sv_refcnt lvalp[..].ival lvalp[..].opval lvalp[..].opval->op_flags lvalp[..].opval->op_next lvalp[..].opval->op_ppaddr lvalp[..].opval->op_private lvalp[..].opval->op_seq lvalp[..].opval->op_sibling lvalp[..].opval->op_targ lvalp[..].pval start
+lvalp[..].gvval lvalp[..].gvval->sv_any lvalp[..].ival lvalp[..].opval lvalp[..].opval->op_next lvalp[..].pval
 lvalp[..].gvval->sv_any[0]
+lvalp[..].gvval->sv_flags lvalp[..].gvval->sv_refcnt lvalp[..].opval->op_flags lvalp[..].opval->op_ppaddr lvalp[..].opval->op_private lvalp[..].opval->op_seq lvalp[..].opval->op_sibling lvalp[..].opval->op_targ start
 lvalp[..].gvval[0]
 lvalp[..].opval->op_next[0]
 lvalp[..].opval->op_ppaddr[0]
@@ -64516,8 +64645,9 @@ lvalp[..].opval[0]
 ..Perl_scan_num():::EXIT0
 lvalp
 lvalp[..]
-lvalp[..].gvval lvalp[..].gvval->sv_any lvalp[..].gvval->sv_flags lvalp[..].gvval->sv_refcnt lvalp[..].ival lvalp[..].opval lvalp[..].opval->op_flags lvalp[..].opval->op_next lvalp[..].opval->op_ppaddr lvalp[..].opval->op_private lvalp[..].opval->op_seq lvalp[..].opval->op_sibling lvalp[..].opval->op_targ lvalp[..].pval return start
+lvalp[..].gvval lvalp[..].gvval->sv_any lvalp[..].ival lvalp[..].opval lvalp[..].opval->op_next lvalp[..].pval
 lvalp[..].gvval->sv_any[0]
+lvalp[..].gvval->sv_flags lvalp[..].gvval->sv_refcnt lvalp[..].opval->op_flags lvalp[..].opval->op_ppaddr lvalp[..].opval->op_private lvalp[..].opval->op_seq lvalp[..].opval->op_sibling lvalp[..].opval->op_targ return start
 lvalp[..].gvval[0]
 lvalp[..].opval->op_next[0]
 lvalp[..].opval->op_ppaddr[0]
@@ -65493,12 +65623,14 @@ sv[..].sv_flags
 sv[..].sv_refcnt
 
 ..Perl_sv_catpvf():::ENTER
-pat sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+pat
+sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
 
 ..Perl_sv_catpvf():::EXIT0
-pat sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+pat
+sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
 
@@ -67593,19 +67725,42 @@ sv[..].sv_refcnt
 
 ..Perl_sv_vcatpvf():::ENTER
 args
-args[..] pat sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
+pat sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
 
 ..Perl_sv_vcatpvf():::EXIT0
 args
-args[..] pat sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
+pat sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
 
 ..Perl_sv_vcatpvf_mg():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 sv
 sv[..]
@@ -67617,6 +67772,13 @@ sv[..].sv_refcnt
 ..Perl_sv_vcatpvf_mg():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 sv
 sv[..]
@@ -67627,10 +67789,19 @@ sv[..].sv_refcnt
 
 ..Perl_sv_vcatpvfn():::ENTER
 args
-args[..] pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt svargs
+args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 maybe_tainted
+pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
+svargs
 svargs[..]
 svargs[..]->sv_any
 svargs[..]->sv_any[0]
@@ -67641,10 +67812,19 @@ svmax
 
 ..Perl_sv_vcatpvfn():::EXIT0
 args
-args[..] pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt svargs
+args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 maybe_tainted
+pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
+svargs
 svargs[..]
 svargs[..]->sv_any
 svargs[..]->sv_any[0]
@@ -67656,6 +67836,13 @@ svmax
 ..Perl_sv_vsetpvf():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 sv
 sv[..]
@@ -67667,6 +67854,13 @@ sv[..].sv_refcnt
 ..Perl_sv_vsetpvf():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 sv
 sv[..]
@@ -67678,6 +67872,13 @@ sv[..].sv_refcnt
 ..Perl_sv_vsetpvf_mg():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 sv
 sv[..]
@@ -67689,6 +67890,13 @@ sv[..].sv_refcnt
 ..Perl_sv_vsetpvf_mg():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 sv
 sv[..]
@@ -67699,8 +67907,16 @@ sv[..].sv_refcnt
 
 ..Perl_sv_vsetpvfn():::ENTER
 args
-args[..] pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 maybe_tainted
+pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
 svargs
@@ -67714,8 +67930,16 @@ svmax
 
 ..Perl_sv_vsetpvfn():::EXIT0
 args
-args[..] pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
+args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 maybe_tainted
+pat patlen sv sv[..].sv_any sv[..].sv_flags sv[..].sv_refcnt
 sv[..]
 sv[..].sv_any[0]
 svargs
@@ -68456,30 +68680,74 @@ return[..]
 
 ..Perl_vcroak():::ENTER
 args
-args[..] pat
+args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
+pat
 
 ..Perl_vcroak():::EXIT0
 args
-args[..] pat
+args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
+pat
 
 ..Perl_vdeb():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vdeb():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vdie():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vdie():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 return
 return[..]
@@ -68520,11 +68788,25 @@ return[..].op_type
 ..Perl_vform():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vform():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 return
 
@@ -68565,6 +68847,13 @@ to_what
 ..Perl_vload_module():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 flags
 name
 name[..]
@@ -68582,6 +68871,13 @@ ver[..].sv_refcnt
 ..Perl_vload_module():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 flags
 name
 name[..]
@@ -68598,22 +68894,52 @@ ver[..].sv_refcnt
 
 ..Perl_vmess():::ENTER
 args
-args[..] pat
+args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
+pat
 
 ..Perl_vmess():::EXIT0
 args
-args[..] pat return return[..].sv_any return[..].sv_flags return[..].sv_refcnt
+args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
+pat return return[..].sv_any return[..].sv_flags return[..].sv_refcnt
 return[..]
 return[..].sv_any[0]
 
 ..Perl_vnewSVpvf():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vnewSVpvf():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 return
 return[..]
@@ -68625,22 +68951,50 @@ return[..].sv_refcnt
 ..Perl_vwarn():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vwarn():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 pat
 
 ..Perl_vwarner():::ENTER
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 err
 pat
 
 ..Perl_vwarner():::EXIT0
 args
 args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 err
 pat
 
@@ -68744,14 +69098,30 @@ utf8
 
 ..S_vdie_croak_common():::ENTER
 args
-args[..] msglen[..] pat utf8[..]
+args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 msglen
+msglen[..] pat utf8[..]
 utf8
 
 ..S_vdie_croak_common():::EXIT0
 args
-args[..] msglen[..] pat return utf8[..]
+args[..]
+args[..]->fp_offset
+args[..]->gp_offset
+args[..]->overflow_arg_area
+args[..]->overflow_arg_area[0]
+args[..]->reg_save_area
+args[..]->reg_save_area[0]
+args[..][0]
 msglen
+msglen[..] pat return utf8[..]
 utf8
 
 ..XS_Internals_HvREHASH():::ENTER
@@ -71320,9 +71690,8 @@ hv.c.S_hv_fetch_common():::ENTER
 action
 flags
 hash
-hv hv[..].sv_any hv[..].sv_any->xhv_eiter hv[..].sv_any->xhv_fill hv[..].sv_any->xhv_keys hv[..].sv_any->xhv_max hv[..].sv_any->xhv_name hv[..].sv_any->xhv_pmroot hv[..].sv_any->xhv_riter hv[..].sv_any->xmg_magic hv[..].sv_any->xmg_stash hv[..].sv_any->xnv_nv hv[..].sv_flags hv[..].sv_refcnt key klen
+hv hv[..].sv_any hv[..].sv_any->xhv_array hv[..].sv_any->xhv_eiter hv[..].sv_any->xhv_fill hv[..].sv_any->xhv_keys hv[..].sv_any->xhv_max hv[..].sv_any->xhv_name hv[..].sv_any->xhv_pmroot hv[..].sv_any->xhv_riter hv[..].sv_any->xmg_magic hv[..].sv_any->xmg_stash hv[..].sv_any->xnv_nv hv[..].sv_flags hv[..].sv_refcnt key klen
 hv[..]
-hv[..].sv_any->xhv_array
 hv[..].sv_any->xhv_eiter[0]
 hv[..].sv_any->xhv_pmroot[0]
 hv[..].sv_any->xmg_magic[0]
@@ -71345,9 +71714,8 @@ hv.c.S_hv_fetch_common():::EXIT0
 action
 flags
 hash
-hv hv[..].sv_any hv[..].sv_any->xhv_eiter hv[..].sv_any->xhv_fill hv[..].sv_any->xhv_keys hv[..].sv_any->xhv_max hv[..].sv_any->xhv_name hv[..].sv_any->xhv_pmroot hv[..].sv_any->xhv_riter hv[..].sv_any->xmg_magic hv[..].sv_any->xmg_stash hv[..].sv_any->xnv_nv hv[..].sv_flags hv[..].sv_refcnt key klen return[..].hent_hek return[..].hent_hek->hek_hash return[..].hent_hek->hek_key return[..].hent_hek->hek_len return[..].hent_next->hent_hek return[..].hent_next->hent_val return[..].hent_val return[..].hent_val->sv_any return[..].hent_val->sv_flags return[..].hent_val->sv_refcnt
+hv hv[..].sv_any hv[..].sv_any->xhv_array hv[..].sv_any->xhv_eiter hv[..].sv_any->xhv_fill hv[..].sv_any->xhv_keys hv[..].sv_any->xhv_max hv[..].sv_any->xhv_name hv[..].sv_any->xhv_pmroot hv[..].sv_any->xhv_riter hv[..].sv_any->xmg_magic hv[..].sv_any->xmg_stash hv[..].sv_any->xnv_nv hv[..].sv_flags hv[..].sv_refcnt key klen return return[..].hent_hek return[..].hent_hek->hek_hash return[..].hent_hek->hek_key return[..].hent_hek->hek_len return[..].hent_next return[..].hent_next->hent_hek return[..].hent_next->hent_next return[..].hent_next->hent_val return[..].hent_val return[..].hent_val->sv_any return[..].hent_val->sv_flags return[..].hent_val->sv_refcnt
 hv[..]
-hv[..].sv_any->xhv_array return return[..].hent_next return[..].hent_next->hent_next
 hv[..].sv_any->xhv_eiter[0]
 hv[..].sv_any->xhv_pmroot[0]
 hv[..].sv_any->xmg_magic[0]
@@ -72721,14 +73089,16 @@ imopsp[..]->op_next
 imopsp[..]->op_next->op_flags
 imopsp[..]->op_next->op_next
 imopsp[..]->op_next->op_next[0]
-imopsp[..]->op_next->op_ppaddr imopsp[..]->op_next->op_targ imopsp[..]->op_ppaddr o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_sibling->op_flags o[..].op_sibling->op_next o[..].op_sibling->op_ppaddr o[..].op_sibling->op_private o[..].op_sibling->op_seq o[..].op_sibling->op_sibling o[..].op_sibling->op_targ o[..].op_targ
+imopsp[..]->op_next->op_ppaddr
 imopsp[..]->op_next->op_ppaddr[0]
 imopsp[..]->op_next->op_private
 imopsp[..]->op_next->op_seq
 imopsp[..]->op_next->op_sibling
 imopsp[..]->op_next->op_sibling[0]
+imopsp[..]->op_next->op_targ
 imopsp[..]->op_next->op_type
 imopsp[..]->op_next[0]
+imopsp[..]->op_ppaddr
 imopsp[..]->op_ppaddr[0]
 imopsp[..]->op_private
 imopsp[..]->op_seq
@@ -72748,6 +73118,7 @@ imopsp[..]->op_sibling[0]
 imopsp[..]->op_targ
 imopsp[..]->op_type
 imopsp[..][0]
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_sibling->op_flags o[..].op_sibling->op_next o[..].op_sibling->op_ppaddr o[..].op_sibling->op_private o[..].op_sibling->op_seq o[..].op_sibling->op_sibling o[..].op_sibling->op_targ o[..].op_targ
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
@@ -72803,14 +73174,16 @@ imopsp[..]->op_next
 imopsp[..]->op_next->op_flags
 imopsp[..]->op_next->op_next
 imopsp[..]->op_next->op_next[0]
-imopsp[..]->op_next->op_ppaddr imopsp[..]->op_next->op_targ imopsp[..]->op_ppaddr o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_sibling->op_flags o[..].op_sibling->op_next o[..].op_sibling->op_ppaddr o[..].op_sibling->op_private o[..].op_sibling->op_seq o[..].op_sibling->op_sibling o[..].op_sibling->op_targ o[..].op_targ return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_next return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_targ
+imopsp[..]->op_next->op_ppaddr
 imopsp[..]->op_next->op_ppaddr[0]
 imopsp[..]->op_next->op_private
 imopsp[..]->op_next->op_seq
 imopsp[..]->op_next->op_sibling
 imopsp[..]->op_next->op_sibling[0]
+imopsp[..]->op_next->op_targ
 imopsp[..]->op_next->op_type
 imopsp[..]->op_next[0]
+imopsp[..]->op_ppaddr
 imopsp[..]->op_ppaddr[0]
 imopsp[..]->op_private
 imopsp[..]->op_seq
@@ -72830,6 +73203,7 @@ imopsp[..]->op_sibling[0]
 imopsp[..]->op_targ
 imopsp[..]->op_type
 imopsp[..][0]
+o o[..].op_flags o[..].op_next o[..].op_next->op_flags o[..].op_next->op_next o[..].op_next->op_ppaddr o[..].op_next->op_private o[..].op_next->op_seq o[..].op_next->op_sibling o[..].op_next->op_targ o[..].op_ppaddr o[..].op_private o[..].op_seq o[..].op_sibling o[..].op_sibling->op_flags o[..].op_sibling->op_next o[..].op_sibling->op_ppaddr o[..].op_sibling->op_private o[..].op_sibling->op_seq o[..].op_sibling->op_sibling o[..].op_sibling->op_targ o[..].op_targ return return[..].op_flags return[..].op_next return[..].op_next->op_flags return[..].op_next->op_next return[..].op_next->op_ppaddr return[..].op_next->op_private return[..].op_next->op_seq return[..].op_next->op_sibling return[..].op_next->op_targ return[..].op_ppaddr return[..].op_private return[..].op_seq return[..].op_sibling return[..].op_sibling->op_flags return[..].op_sibling->op_next return[..].op_sibling->op_ppaddr return[..].op_sibling->op_private return[..].op_sibling->op_seq return[..].op_sibling->op_sibling return[..].op_sibling->op_targ return[..].op_targ
 o[..]
 o[..].op_next->op_next[0]
 o[..].op_next->op_ppaddr[0]
@@ -74033,12 +74407,14 @@ perl.c.S_init_perllib():::ENTER
 perl.c.S_init_perllib():::EXIT0
 
 perl.c.S_init_postdump_symbols():::ENTER
-argc argv argv[..]
+argc argv
+argv[..]
 env
 env[..]
 
 perl.c.S_init_postdump_symbols():::EXIT0
-argc argv argv[..]
+argc argv
+argv[..]
 env
 env[..]
 
@@ -74145,7 +74521,7 @@ f[..]
 return
 
 perlio.c.PerlIOUnix_setfd():::ENTER
-f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size
+f f[..] f[..]->flags f[..]->next f[..]->tab
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -74172,10 +74548,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -74183,7 +74560,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -74200,13 +74577,15 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 fd
 imode
 
 perlio.c.PerlIOUnix_setfd():::EXIT0
-f f[..] f[..]->flags f[..]->next f[..]->tab f[..]->tab->size
+f f[..] f[..]->flags f[..]->next f[..]->tab
 f[..]->next->flags
 f[..]->next->next
 f[..]->next->next[0]
@@ -74233,10 +74612,11 @@ f[..]->tab->Flush
 f[..]->tab->Flush[0]
 f[..]->tab->Get_base
 f[..]->tab->Get_base[0]
-f[..]->tab->Get_bufsiz f[..]->tab->Get_ptr
+f[..]->tab->Get_bufsiz
 f[..]->tab->Get_bufsiz[0]
 f[..]->tab->Get_cnt
 f[..]->tab->Get_cnt[0]
+f[..]->tab->Get_ptr
 f[..]->tab->Get_ptr[0]
 f[..]->tab->Getarg
 f[..]->tab->Getarg[0]
@@ -74244,7 +74624,7 @@ f[..]->tab->Open
 f[..]->tab->Open[0]
 f[..]->tab->Popped
 f[..]->tab->Popped[0]
-f[..]->tab->Pushed f[..]->tab->kind
+f[..]->tab->Pushed
 f[..]->tab->Pushed[0]
 f[..]->tab->Read
 f[..]->tab->Read[0]
@@ -74261,6 +74641,8 @@ f[..]->tab->Unread[0]
 f[..]->tab->Write
 f[..]->tab->Write[0]
 f[..]->tab->fsize f[..]->tab->name
+f[..]->tab->kind
+f[..]->tab->size
 f[..]->tab[0]
 f[..][0]
 fd
@@ -76001,22 +76383,40 @@ return
 pp_sort.c.dynprep():::ENTER
 cmp
 cmp[..]
-list1 list1[..] list1[..]->sv_any list1[..]->sv_flags list1[..]->sv_refcnt list2 list2[..] list2[..]->sv_any list2[..]->sv_flags nmemb
+list1
+list1[..]
+list1[..]->sv_any
 list1[..]->sv_any[0]
+list1[..]->sv_flags
+list1[..]->sv_refcnt
 list1[..][0]
+list2
+list2[..]
+list2[..]->sv_any
 list2[..]->sv_any[0]
+list2[..]->sv_flags
 list2[..]->sv_refcnt
 list2[..][0]
+nmemb
 
 pp_sort.c.dynprep():::EXIT0
 cmp
 cmp[..]
-list1 list1[..] list1[..]->sv_any list1[..]->sv_flags list1[..]->sv_refcnt list2 list2[..] list2[..]->sv_any list2[..]->sv_flags nmemb
+list1
+list1[..]
+list1[..]->sv_any
 list1[..]->sv_any[0]
+list1[..]->sv_flags
+list1[..]->sv_refcnt
 list1[..][0]
+list2
+list2[..]
+list2[..]->sv_any
 list2[..]->sv_any[0]
+list2[..]->sv_flags
 list2[..]->sv_refcnt
 list2[..][0]
+nmemb
 return
 
 pp_sort.c.sortcv():::ENTER
@@ -76604,10 +77004,7 @@ cl[..].arg1 cl[..].bitmap cl[..].classflags cl[..].flags cl[..].next_off
 cl[..].type
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
-pRExC_state[..].emit->flags
-pRExC_state[..].emit->next_off
-pRExC_state[..].emit->type
+pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].rx->substrs pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].end pRExC_state[..].parse
@@ -76622,12 +77019,10 @@ pRExC_state[..].rx->nparens
 pRExC_state[..].rx->program[0]
 pRExC_state[..].rx->program[0][0]
 pRExC_state[..].rx->refcnt
-pRExC_state[..].rx->regstclass
 pRExC_state[..].rx->regstclass[0]
 pRExC_state[..].rx->startp
 pRExC_state[..].rx->startp[0]
 pRExC_state[..].rx->subbeg
-pRExC_state[..].rx->substrs
 pRExC_state[..].rx->substrs[0]
 pRExC_state[..].rx[0]
 pRExC_state[..].sawback
@@ -76642,10 +77037,7 @@ cl[..].arg1 cl[..].bitmap cl[..].classflags cl[..].flags cl[..].next_off
 cl[..].type
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
-pRExC_state[..].emit->flags
-pRExC_state[..].emit->next_off
-pRExC_state[..].emit->type
+pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].rx->substrs pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].end pRExC_state[..].parse
@@ -76660,12 +77052,10 @@ pRExC_state[..].rx->nparens
 pRExC_state[..].rx->program[0]
 pRExC_state[..].rx->program[0][0]
 pRExC_state[..].rx->refcnt
-pRExC_state[..].rx->regstclass
 pRExC_state[..].rx->regstclass[0]
 pRExC_state[..].rx->startp
 pRExC_state[..].rx->startp[0]
 pRExC_state[..].rx->subbeg
-pRExC_state[..].rx->substrs
 pRExC_state[..].rx->substrs[0]
 pRExC_state[..].rx[0]
 pRExC_state[..].sawback
@@ -76683,10 +77073,7 @@ cl[..].flags
 cl[..].type
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
-pRExC_state[..].emit->flags
-pRExC_state[..].emit->next_off
-pRExC_state[..].emit->type
+pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].rx->substrs pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].end pRExC_state[..].parse
@@ -76701,12 +77088,10 @@ pRExC_state[..].rx->nparens
 pRExC_state[..].rx->program[0]
 pRExC_state[..].rx->program[0][0]
 pRExC_state[..].rx->refcnt
-pRExC_state[..].rx->regstclass
 pRExC_state[..].rx->regstclass[0]
 pRExC_state[..].rx->startp
 pRExC_state[..].rx->startp[0]
 pRExC_state[..].rx->subbeg
-pRExC_state[..].rx->substrs
 pRExC_state[..].rx->substrs[0]
 pRExC_state[..].rx[0]
 pRExC_state[..].sawback
@@ -76724,10 +77109,7 @@ cl[..].flags
 cl[..].type
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
-pRExC_state[..].emit->flags
-pRExC_state[..].emit->next_off
-pRExC_state[..].emit->type
+pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].rx->substrs pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].end pRExC_state[..].parse
@@ -76742,12 +77124,10 @@ pRExC_state[..].rx->nparens
 pRExC_state[..].rx->program[0]
 pRExC_state[..].rx->program[0][0]
 pRExC_state[..].rx->refcnt
-pRExC_state[..].rx->regstclass
 pRExC_state[..].rx->regstclass[0]
 pRExC_state[..].rx->startp
 pRExC_state[..].rx->startp[0]
 pRExC_state[..].rx->subbeg
-pRExC_state[..].rx->substrs
 pRExC_state[..].rx->substrs[0]
 pRExC_state[..].rx[0]
 pRExC_state[..].sawback
@@ -77100,8 +77480,8 @@ sv[..].sv_refcnt
 regcomp.c.S_nextchar():::ENTER
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].rx pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].size
-pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].end pRExC_state[..].flags pRExC_state[..].parse pRExC_state[..].precomp pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].start pRExC_state[..].utf8
+pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].rx pRExC_state[..].rx->offsets
+pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].end pRExC_state[..].flags pRExC_state[..].parse pRExC_state[..].precomp pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].extralen
@@ -77129,8 +77509,8 @@ pRExC_state[..].whilem_seen
 regcomp.c.S_nextchar():::EXIT0
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].rx pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].size
-pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].end pRExC_state[..].flags pRExC_state[..].parse pRExC_state[..].precomp pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].start pRExC_state[..].utf8 return
+pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].rx pRExC_state[..].rx->offsets
+pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].end pRExC_state[..].flags pRExC_state[..].parse pRExC_state[..].precomp pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8 return
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].extralen
@@ -77425,8 +77805,7 @@ flagp
 flagp[..]
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].rx pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].size
-pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].end pRExC_state[..].flags pRExC_state[..].parse pRExC_state[..].precomp pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].start pRExC_state[..].utf8
+pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].end pRExC_state[..].flags pRExC_state[..].parse pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].extralen
@@ -77456,8 +77835,7 @@ flagp
 flagp[..]
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].rx pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].size return
-pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].end pRExC_state[..].flags pRExC_state[..].parse pRExC_state[..].precomp pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].start pRExC_state[..].utf8 return[..].flags return[..].next_off return[..].type
+pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].end pRExC_state[..].flags pRExC_state[..].parse pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8 return return[..].flags return[..].next_off return[..].type
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].extralen
@@ -78289,7 +78667,7 @@ data[..]
 data[..].flags
 data[..].last_closep
 data[..].last_closep[0]
-data[..].last_end data[..].last_found data[..].last_found->sv_any data[..].last_found->sv_flags data[..].last_found->sv_refcnt data[..].longest[0] data[..].longest[0]->sv_any data[..].longest[0]->sv_flags data[..].longest[0]->sv_refcnt data[..].longest_fixed data[..].longest_fixed->sv_any data[..].longest_fixed->sv_flags data[..].longest_fixed->sv_refcnt data[..].longest_float data[..].longest_float->sv_any data[..].longest_float->sv_flags data[..].longest_float->sv_refcnt data[..].pos_min data[..].start_class pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
+data[..].last_end data[..].last_found data[..].last_found->sv_any data[..].last_found->sv_flags data[..].last_found->sv_refcnt data[..].longest[0] data[..].longest[0]->sv_any data[..].longest[0]->sv_flags data[..].longest[0]->sv_refcnt data[..].longest_fixed data[..].longest_fixed->sv_any data[..].longest_fixed->sv_flags data[..].longest_fixed->sv_refcnt data[..].longest_float data[..].longest_float->sv_any data[..].longest_float->sv_flags data[..].longest_float->sv_refcnt data[..].pos_min data[..].start_class pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].rx->substrs pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
 data[..].last_found->sv_any[0]
 data[..].last_found[0]
 data[..].last_start_max
@@ -78315,9 +78693,6 @@ data[..].start_class[0]
 data[..].whilem_c
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit->flags
-pRExC_state[..].emit->next_off
-pRExC_state[..].emit->type
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].end pRExC_state[..].parse
@@ -78332,12 +78707,10 @@ pRExC_state[..].rx->nparens
 pRExC_state[..].rx->program[0]
 pRExC_state[..].rx->program[0][0]
 pRExC_state[..].rx->refcnt
-pRExC_state[..].rx->regstclass
 pRExC_state[..].rx->regstclass[0]
 pRExC_state[..].rx->startp
 pRExC_state[..].rx->startp[0]
 pRExC_state[..].rx->subbeg
-pRExC_state[..].rx->substrs
 pRExC_state[..].rx->substrs[0]
 pRExC_state[..].rx[0]
 pRExC_state[..].sawback
@@ -78351,7 +78724,7 @@ data[..]
 data[..].flags
 data[..].last_closep
 data[..].last_closep[0]
-data[..].last_end data[..].last_found data[..].last_found->sv_any data[..].last_found->sv_flags data[..].last_found->sv_refcnt data[..].longest[0] data[..].longest[0]->sv_any data[..].longest[0]->sv_flags data[..].longest[0]->sv_refcnt data[..].longest_fixed data[..].longest_fixed->sv_any data[..].longest_fixed->sv_flags data[..].longest_fixed->sv_refcnt data[..].longest_float data[..].longest_float->sv_any data[..].longest_float->sv_flags data[..].longest_float->sv_refcnt data[..].pos_min data[..].start_class pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
+data[..].last_end data[..].last_found data[..].last_found->sv_any data[..].last_found->sv_flags data[..].last_found->sv_refcnt data[..].longest[0] data[..].longest[0]->sv_any data[..].longest[0]->sv_flags data[..].longest[0]->sv_refcnt data[..].longest_fixed data[..].longest_fixed->sv_any data[..].longest_fixed->sv_flags data[..].longest_fixed->sv_refcnt data[..].longest_float data[..].longest_float->sv_any data[..].longest_float->sv_flags data[..].longest_float->sv_refcnt data[..].pos_min data[..].start_class pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].rx->substrs pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8
 data[..].last_found->sv_any[0]
 data[..].last_found[0]
 data[..].last_start_max
@@ -78377,9 +78750,6 @@ data[..].start_class[0]
 data[..].whilem_c
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit->flags
-pRExC_state[..].emit->next_off
-pRExC_state[..].emit->type
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].end pRExC_state[..].parse
@@ -78394,12 +78764,10 @@ pRExC_state[..].rx->nparens
 pRExC_state[..].rx->program[0]
 pRExC_state[..].rx->program[0][0]
 pRExC_state[..].rx->refcnt
-pRExC_state[..].rx->regstclass
 pRExC_state[..].rx->regstclass[0]
 pRExC_state[..].rx->startp
 pRExC_state[..].rx->startp[0]
 pRExC_state[..].rx->subbeg
-pRExC_state[..].rx->substrs
 pRExC_state[..].rx->substrs[0]
 pRExC_state[..].rx[0]
 pRExC_state[..].sawback
@@ -78413,7 +78781,7 @@ data[..]
 data[..].flags
 data[..].last_closep
 data[..].last_closep[0]
-data[..].last_end data[..].last_found data[..].last_found->sv_any data[..].last_found->sv_flags data[..].last_found->sv_refcnt data[..].last_start_min data[..].longest[0] data[..].longest[0]->sv_any data[..].longest[0]->sv_flags data[..].longest[0]->sv_refcnt data[..].longest_fixed data[..].longest_fixed->sv_any data[..].longest_fixed->sv_flags data[..].longest_fixed->sv_refcnt data[..].longest_float data[..].longest_float->sv_any data[..].longest_float->sv_flags data[..].longest_float->sv_refcnt data[..].pos_min data[..].start_class last pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8 scanp[..] scanp[..]->flags scanp[..]->next_off scanp[..]->type
+data[..].last_end data[..].last_found data[..].last_found->sv_any data[..].last_found->sv_flags data[..].last_found->sv_refcnt data[..].last_start_min data[..].longest[0] data[..].longest[0]->sv_any data[..].longest[0]->sv_flags data[..].longest[0]->sv_refcnt data[..].longest_fixed data[..].longest_fixed->sv_any data[..].longest_fixed->sv_flags data[..].longest_fixed->sv_refcnt data[..].longest_float data[..].longest_float->sv_any data[..].longest_float->sv_flags data[..].longest_float->sv_refcnt data[..].pos_min data[..].start_class last last[..].flags last[..].next_off last[..].type pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].rx->substrs pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8 scanp[..] scanp[..]->flags scanp[..]->next_off scanp[..]->type
 data[..].last_found->sv_any[0]
 data[..].last_found[0]
 data[..].last_start_max
@@ -78441,14 +78809,8 @@ deltap
 deltap[..]
 flags
 last[..]
-last[..].flags
-last[..].next_off
-last[..].type
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit->flags
-pRExC_state[..].emit->next_off
-pRExC_state[..].emit->type
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].end pRExC_state[..].parse
@@ -78463,12 +78825,10 @@ pRExC_state[..].rx->nparens
 pRExC_state[..].rx->program[0]
 pRExC_state[..].rx->program[0][0]
 pRExC_state[..].rx->refcnt
-pRExC_state[..].rx->regstclass
 pRExC_state[..].rx->regstclass[0]
 pRExC_state[..].rx->startp
 pRExC_state[..].rx->startp[0]
 pRExC_state[..].rx->subbeg
-pRExC_state[..].rx->substrs
 pRExC_state[..].rx->substrs[0]
 pRExC_state[..].rx[0]
 pRExC_state[..].sawback
@@ -78484,7 +78844,7 @@ data[..]
 data[..].flags
 data[..].last_closep
 data[..].last_closep[0]
-data[..].last_end data[..].last_found data[..].last_found->sv_any data[..].last_found->sv_flags data[..].last_found->sv_refcnt data[..].last_start_min data[..].longest[0] data[..].longest[0]->sv_any data[..].longest[0]->sv_flags data[..].longest[0]->sv_refcnt data[..].longest_fixed data[..].longest_fixed->sv_any data[..].longest_fixed->sv_flags data[..].longest_fixed->sv_refcnt data[..].longest_float data[..].longest_float->sv_any data[..].longest_float->sv_flags data[..].longest_float->sv_refcnt data[..].pos_min data[..].start_class last pRExC_state[..].emit pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->sublen pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8 return scanp[..] scanp[..]->flags scanp[..]->next_off scanp[..]->type
+data[..].last_end data[..].last_found data[..].last_found->sv_any data[..].last_found->sv_flags data[..].last_found->sv_refcnt data[..].last_start_min data[..].longest[0] data[..].longest[0]->sv_any data[..].longest[0]->sv_flags data[..].longest[0]->sv_refcnt data[..].longest_fixed data[..].longest_fixed->sv_any data[..].longest_fixed->sv_flags data[..].longest_fixed->sv_refcnt data[..].longest_float data[..].longest_float->sv_any data[..].longest_float->sv_flags data[..].longest_float->sv_refcnt data[..].pos_min data[..].start_class last last[..].flags last[..].next_off last[..].type pRExC_state[..].emit pRExC_state[..].emit->flags pRExC_state[..].emit->next_off pRExC_state[..].emit->type pRExC_state[..].emit_start pRExC_state[..].emit_start->flags pRExC_state[..].emit_start->next_off pRExC_state[..].emit_start->type pRExC_state[..].flags pRExC_state[..].precomp pRExC_state[..].rx pRExC_state[..].rx->lastcloseparen pRExC_state[..].rx->lastparen pRExC_state[..].rx->minlen pRExC_state[..].rx->offsets pRExC_state[..].rx->offsets[0] pRExC_state[..].rx->precomp pRExC_state[..].rx->prelen pRExC_state[..].rx->reganch pRExC_state[..].rx->regstclass pRExC_state[..].rx->sublen pRExC_state[..].rx->substrs pRExC_state[..].seen_evals pRExC_state[..].size pRExC_state[..].start pRExC_state[..].utf8 return scanp[..] scanp[..]->flags scanp[..]->next_off scanp[..]->type
 data[..].last_found->sv_any[0]
 data[..].last_found[0]
 data[..].last_start_max
@@ -78512,14 +78872,8 @@ deltap
 deltap[..]
 flags
 last[..]
-last[..].flags
-last[..].next_off
-last[..].type
 pRExC_state
 pRExC_state[..]
-pRExC_state[..].emit->flags
-pRExC_state[..].emit->next_off
-pRExC_state[..].emit->type
 pRExC_state[..].emit[0]
 pRExC_state[..].emit_start[0]
 pRExC_state[..].end pRExC_state[..].parse
@@ -78534,12 +78888,10 @@ pRExC_state[..].rx->nparens
 pRExC_state[..].rx->program[0]
 pRExC_state[..].rx->program[0][0]
 pRExC_state[..].rx->refcnt
-pRExC_state[..].rx->regstclass
 pRExC_state[..].rx->regstclass[0]
 pRExC_state[..].rx->startp
 pRExC_state[..].rx->startp[0]
 pRExC_state[..].rx->subbeg
-pRExC_state[..].rx->substrs
 pRExC_state[..].rx->substrs[0]
 pRExC_state[..].rx[0]
 pRExC_state[..].sawback

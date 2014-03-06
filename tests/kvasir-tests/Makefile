@@ -44,7 +44,7 @@ nightly-summary: nightly-tests__diffs-if-working
 	$(MAKE) nightly-summary-only
 
 nightly-summary-w-daikon: nightly-tests__diffs-w-daikon-if-working
-	$(MAKE) summary-only-w-daikon
+	$(MAKE) nightly-summary-only-w-daikon
 
 nightly-summary-only: nightly-tests__summary-if-working__quietly
 
@@ -127,8 +127,8 @@ medium-real-tests__%: do-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  do-
                       do-tcas__%
 	@
 
-# Omits perl and povray and tcas
-medium-real-easy-tests__%: do-gzip__% do-flex-pristine__% do-bzip2__%
+# Omits povray
+medium-real-easy-tests__%: do-gzip__% do-flex-pristine__% do-bzip2__% do-perl__% do-tcas__%
 	@
 
 small-crypto-tests__%: do-md5__%

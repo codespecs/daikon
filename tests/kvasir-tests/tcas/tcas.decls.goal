@@ -1,113 +1,1202 @@
-VarComparability
-none
+input-language C/C++
+decl-version 2.0
+var-comparability none
 
-DECLARE
-global.ALIM():::ENTER
+ppt ..ALIM():::ENTER
+  ppt-type enter
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.ALIM():::EXIT0
-return
-int
-int
-22
+ppt ..ALIM():::EXIT0
+  ppt-type subexit
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.Inhibit_Biased_Climb():::ENTER
+ppt ..Inhibit_Biased_Climb():::ENTER
+  ppt-type enter
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.Inhibit_Biased_Climb():::EXIT0
-return
-int
-int
-22
+ppt ..Inhibit_Biased_Climb():::EXIT0
+  ppt-type subexit
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.Non_Crossing_Biased_Climb():::ENTER
+ppt ..Non_Crossing_Biased_Climb():::ENTER
+  ppt-type enter
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.Non_Crossing_Biased_Climb():::EXIT0
-return
-int
-int
-22
+ppt ..Non_Crossing_Biased_Climb():::EXIT0
+  ppt-type subexit
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.Non_Crossing_Biased_Descend():::ENTER
+ppt ..Non_Crossing_Biased_Descend():::ENTER
+  ppt-type enter
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.Non_Crossing_Biased_Descend():::EXIT0
-return
-int
-int
-22
+ppt ..Non_Crossing_Biased_Descend():::EXIT0
+  ppt-type subexit
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.Own_Above_Threat():::ENTER
+ppt ..Own_Above_Threat():::ENTER
+  ppt-type enter
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.Own_Above_Threat():::EXIT0
-return
-int
-int
-22
+ppt ..Own_Above_Threat():::EXIT0
+  ppt-type subexit
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.Own_Below_Threat():::ENTER
+ppt ..Own_Below_Threat():::ENTER
+  ppt-type enter
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.Own_Below_Threat():::EXIT0
-return
-int
-int
-22
+ppt ..Own_Below_Threat():::EXIT0
+  ppt-type subexit
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.alt_sep_test():::ENTER
+ppt ..alt_sep_test():::ENTER
+  ppt-type enter
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.alt_sep_test():::EXIT0
-return
-int
-int
-22
+ppt ..alt_sep_test():::EXIT0
+  ppt-type subexit
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.initialize():::ENTER
+ppt ..initialize():::ENTER
+  ppt-type enter
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.initialize():::EXIT0
+ppt ..initialize():::EXIT0
+  ppt-type subexit
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
 
-DECLARE
-global.main():::ENTER
-argc
-int # isParam=true
-int
-22
-argv
-char[][] # isParam=true
-hashcode
-22
-argv[]
-char[]
-String
-22
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable argc
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable argv
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable argv[..]
+    var-kind array
+    enclosing-var argv
+    array 1
+    rep-type string[]
+    dec-type char*[]
 
-DECLARE
-global.main():::EXIT0
-argc
-int # isParam=true
-int
-22
-argv
-char[][] # isParam=true
-hashcode
-22
-argv[]
-char[]
-String
-22
-return
-int
-int
-22
+ppt ..main():::EXIT0
+  ppt-type subexit
+  variable ::Alt_Layer_Value
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Climb_Inhibit
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Cur_Vertical_Sep
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Down_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::High_Confidence
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Capability
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_RAC
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Other_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Own_Tracked_Alt_Rate
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Positive_RA_Alt_Thresh
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags non_null 
+  variable ::Positive_RA_Alt_Thresh[..]
+    var-kind array
+    enclosing-var ::Positive_RA_Alt_Thresh
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable ::Two_of_Three_Reports_Valid
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::Up_Separation
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable argc
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable argv
+    var-kind variable
+    rep-type hashcode
+    dec-type char**
+    flags is_param 
+  variable argv[..]
+    var-kind array
+    enclosing-var argv
+    array 1
+    rep-type string[]
+    dec-type char*[]
+  variable return
+    var-kind variable
+    rep-type int
+    dec-type int
 

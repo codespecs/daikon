@@ -114,9 +114,15 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(TESTS_SCRIPT) 
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
+	/usr/bin/cp -f daikon-output/$(NAME).dtrace daikon-output/$(NAME).dtrace.orig
+	perl -i $(CLEAN_OUTPUT) daikon-output/$(NAME).dtrace
 	perl -i $(CLEAN_DECLS) daikon-output/$(NAME).decls
+	perl -i $(CLEAN_DECLS) daikon-output/$(NAME).dyncomp.decls
+	$(DECLS_2_COMP) daikon-output/$(NAME).dyncomp.decls > $(NAME).comp
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).decls
+	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dtrace.orig
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dtrace
+	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dyncomp.decls
 	touch $@
 else
 ifdef DTRACE_APPEND

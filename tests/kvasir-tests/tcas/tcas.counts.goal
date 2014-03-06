@@ -1,0 +1,9 @@
+..ALIM() ENTER/45: 138 EXIT0/48: 138
+..Inhibit_Biased_Climb() ENTER/45: 256 EXIT0/48: 256
+..Non_Crossing_Biased_Climb() ENTER/45: 128 EXIT0/48: 128
+..Non_Crossing_Biased_Descend() ENTER/45: 128 EXIT0/48: 128
+..Own_Above_Threat() ENTER/45: 182 EXIT0/48: 182
+..Own_Below_Threat() ENTER/45: 260 EXIT0/48: 260
+..alt_sep_test() ENTER/45: 500 EXIT0/48: 500
+..initialize() ENTER/45: 500 EXIT0/45: 500
+..main() ENTER/54: 500
