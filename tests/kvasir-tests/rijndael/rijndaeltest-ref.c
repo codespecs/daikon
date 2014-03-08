@@ -346,7 +346,7 @@ static void makeKATs (const char *vkFile, const char *vtFile, const char *tblFil
 
 	fprintf (fp,
 		"\n"
-		"==========");
+		"==========\n");
 	fclose (fp);
 
 	/* prepare Variable Text Known Answer Tests: */
@@ -371,7 +371,7 @@ static void makeKATs (const char *vkFile, const char *vtFile, const char *tblFil
 
 	fprintf (fp,
 		"\n"
-		"==========");
+		"==========\n");
 	fclose (fp);
 
 	/* prepare Tables Known Answer Tests: */
@@ -426,7 +426,7 @@ static void makeKATs (const char *vkFile, const char *vtFile, const char *tblFil
 
 	fprintf (fp,
 		"\n"
-		"==========");
+		"==========\n");
 	fclose (fp);
 
 	/* prepare Intermediate Values Known Answer Tests: */
@@ -451,7 +451,7 @@ static void makeKATs (const char *vkFile, const char *vtFile, const char *tblFil
 
 	fprintf (fp,
 		"\n"
-		"==========");
+		"==========\n");
 	fclose (fp);
 
 }
@@ -692,7 +692,7 @@ static void makeMCTs (const char *ecbEncryptionFile, const char *ecbDecryptionFi
 
 	fprintf (fp,
 		"\n"
-		"===========");
+		"===========\n");
 	fclose (fp);
 
 	/* prepare ECB Decryption Monte Carlo Tests: */
@@ -725,7 +725,7 @@ static void makeMCTs (const char *ecbEncryptionFile, const char *ecbDecryptionFi
 
 	fprintf (fp,
 		"\n"
-		"===========");
+		"===========\n");
 	fclose (fp);
 
 	/* prepare CBC Encryption Monte Carlo Tests: */
@@ -761,7 +761,7 @@ static void makeMCTs (const char *ecbEncryptionFile, const char *ecbDecryptionFi
 
 	fprintf (fp,
 		"\n"
-		"===========");
+		"===========\n");
 	fclose (fp);
 
 	/* prepare CBC Decryption Monte Carlo Tests: */
@@ -797,7 +797,7 @@ static void makeMCTs (const char *ecbEncryptionFile, const char *ecbDecryptionFi
 
 	fprintf (fp,
 		"\n"
-		"===========");
+		"===========\n");
 	fclose (fp);
 
 } /* makeMCTs */

@@ -9,6 +9,8 @@ void print_bits(int len, unsigned char *bits) {
     int i;
     char c;
     unsigned char *p = bits;
+
+    fflush(NULL);
     for (i = len; i > 0; i -= 8) {
         int j;
 	unsigned char b = *p++;
@@ -22,6 +24,7 @@ void print_bits(int len, unsigned char *bits) {
     }
     c = '\n';
     write(1, &c, 1);
+    fflush(NULL);
 }
 
 void test_bits(unsigned char *p) {

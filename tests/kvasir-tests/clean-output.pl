@@ -15,7 +15,8 @@ while (<>) {
         s/0x8[01]([0-9a-f]{7})/<STATIC_ADDR>/ig; # r/w data
         s/0x4[cd]([0-9a-f]{5})/<HEAP_ADDR>/ig;   # heap  ArrayTest because so much allocated?
         s/0x5[1a]([0-9a-f]{5})/<HEAP_ADDR>/ig;   # heap
-        s/0x[45]([0-9a-f]{5})/<STATIC_ADDR>/ig;  # r/o data
+#       s/0x[45]([0-9a-f]{5})/<STATIC_ADDR>/ig;  # r/o data
+        s/0x[45]([0-9a-f]{5})(?![0-9a-f])/<STATIC_ADDR>/ig;  # r/o data
         s/0x6[01]([0-9a-f]{4})/<STATIC_ADDR>/ig; # r/w data
     } else {
         # we just assume ...
@@ -45,6 +46,7 @@ while (<>) {
     s/Total Alloc.*/<Allocation statistics>/g;
     s/Peak memory.*/<Allocation statistics>/g;
 
+    s/Copyright \(C\) .*$/COPYRIGHT/;
     s/kvasir-[\d.]+,/kvasir-VERSION/;
     s[Using Valgrind-.* and LibVEX; rerun with \-h for copyright info]
       [Using Valgrind and LibVEX; rerun with \-h for copyright info];

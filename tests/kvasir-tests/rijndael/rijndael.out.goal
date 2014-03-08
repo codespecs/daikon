@@ -1,5 +1,5 @@
 ==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
-==PID== Copyright (C) 2004-2013, Philip Guo, MIT CSAIL Program Analysis Group
+==PID== COPYRIGHT
 ==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
 ==PID== Command: ./rijndael
 ==PID== 
@@ -65,6 +65,7 @@ CT=5B6A067324C19D611EFEFC539028B9FC
 PT=6C8C48E2425535122D1EAB440400F975
 
 ===========
+
 =========================
 
 FILENAME:  "cbc_e_m.txt"
@@ -124,6 +125,7 @@ PT=DC95C078A2408989AD48A21492842087
 CT=4261D8C23F1D413AAD53F214B1E23E65
 
 ===========
+
 =========================
 
 FILENAME:  "ecb_d_m.txt"
@@ -177,6 +179,7 @@ CT=5B6A067324C19D611EFEFC539028B9FC
 PT=C6CB5823DB4338BF22C1137FA070EFF4
 
 ===========
+
 =========================
 
 FILENAME:  "ecb_e_m.txt"
@@ -230,6 +233,7 @@ PT=08C374848C228233C2B34F332BD2E9D3
 CT=6F027D6505F510D873E6FAEDC919EFD3
 
 ===========
+
 =========================
 
 FILENAME:  "ecb_iv.txt"
@@ -351,7 +355,8 @@ PT12=4E5D32BB8B67FD1BD4CFEC9FFB20AC4F
 PT13=73727170777675747B7A79787F7E7D7C
 PT=000102030405060708090A0B0C0D0E0F
 
-==========/* Description of what tables are tested:
+==========
+/* Description of what tables are tested:
    The provided implementations each use a different set of tables
     - Java implementation: uses no tables
     - reference C implementation: uses Logtable, Alogtable, S, Si, rcon
@@ -446,6 +451,7 @@ PT=8F5087C58F698E00C03F86A624E0C2A9
 CT=4264B2696498DE4DF79788A9F83E9390
 
 ==========
+
 =========================
 
 FILENAME:  "ecb_vk.txt"
@@ -619,6 +625,7 @@ KEY=0001000000000000000000000000000000000000000000000000000000000000
 CT=414FEB4376F2C64A5D2FBB2ED531BA7D
 
 ==========
+
 =========================
 
 FILENAME:  "ecb_vt.txt"
