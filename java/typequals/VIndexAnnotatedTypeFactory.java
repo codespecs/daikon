@@ -1,17 +1,16 @@
 package typequals;
 
-import checkers.basetype.BaseAnnotatedTypeFactory;
-import checkers.basetype.BaseTypeChecker;
-import checkers.types.AnnotatedTypeMirror;
-import checkers.types.TreeAnnotator;
-
-import javacutils.AnnotationUtils;
-import javacutils.InternalUtils;
-import javacutils.TypesUtils;
-
 import java.util.Set;
 
 import javax.lang.model.element.AnnotationMirror;
+
+import org.checkerframework.common.basetype.BaseAnnotatedTypeFactory;
+import org.checkerframework.common.basetype.BaseTypeChecker;
+import org.checkerframework.framework.type.AnnotatedTypeMirror;
+import org.checkerframework.framework.type.TreeAnnotator;
+import org.checkerframework.javacutil.AnnotationUtils;
+import org.checkerframework.javacutil.InternalUtils;
+import org.checkerframework.javacutil.TypesUtils;
 
 import com.sun.source.tree.BinaryTree;
 import com.sun.source.tree.Tree;

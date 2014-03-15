@@ -72,20 +72,20 @@ JAVAC_ARGS ?= -g -XDignore.symbol.file ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
-# When type-checking, must use checkers.jar.
+# When type-checking, must use checker.jar.
 # No harm using it, if available, during ordinary compilation.
 ifdef JSR308
-  CHECKERS ?= ${JSR308}/checker-framework/checkers
+  CHECKERS ?= ${JSR308}/checker-framework/checker
 endif
 ifdef CHECKERS
-  CHECKERSJAR ?= ${CHECKERS}/binary/checkers.jar
+  CHECKERSJAR ?= ${CHECKERS}/dist/checker.jar
 endif
-# If actually checking, override to checkers.jar.
-CHECKERSJAR ?= ${DAIKONDIR}/java/lib/plume.jar
+# If actually checking, override to checker.jar.
+# CHECKERSJAR ?= ${DAIKONDIR}/java/lib/plume.jar
 # Version of javac that supports pluggable type-checking.
 JAVAC_FOR_CHECKERS ?= ${CHECKERS}/binary/javac
 
-jsr308_imports = dataflow.quals.*:checkers.initialization.quals.*:checkers.interning.quals.*:checkers.nullness.quals.*:checkers.regex.quals.*:checkers.quals.Dependent:checkers.quals.Unused:typequals.*:checkers.signature.quals.*:checkers.formatter.quals.*
+jsr308_imports = org.checkerframework.dataflow.qual.*:org.checkerframework.checker.initialization.qual.*:org.checkerframework.checker.interning.qual.*:org.checkerframework.checker.nullness.qual.*:org.checkerframework.checker.regex.qual.*:org.checkerframework.framework.qual.Dependent:org.checkerframework.framework.qual.Unused:typequals.*:org.checkerframework.checker.signature.qual.*:org.checkerframework.checker.formatter.qual.*
 
 ### end of user customizations
 
@@ -807,24 +807,24 @@ CHECKERS_ARGS ?= -AsuppressWarnings=flowexpr.parameter.not.final -AprintErrorSta
 
 ## All of the following targets need to depend on "compile".
 
-# JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -implicit:class -Xlint:-processing
-JAVAC_INTERNING_ARGS = -processor checkers.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'
-JAVAC_SIGNATURE_ARGS = -processor checkers.signature.SignatureChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_NULLNESS_RAW_ARGS = -processor checkers.nullness.NullnessRawnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_NULLNESS_FBC_ARGS = -processor checkers.nullness.NullnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+# JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -implicit:class -Xlint:-processing
+JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'
+JAVAC_SIGNATURE_ARGS = -processor org.checkerframework.checker.signature.SignatureChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_NULLNESS_RAW_ARGS = -processor org.checkerframework.checker.nullness.NullnessRawnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_NULLNESS_FBC_ARGS = -processor org.checkerframework.checker.nullness.NullnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 ## The "-J-Dcheckers.skipUses='^daikon.Debug'" should really be just for rawness, not for nullness.
 JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src -J-Dcheckers.skipUses='^daikon.Debug'
-JAVAC_PROTOTYPE_ARGS = -processor checkers.subtyping.SubtypingChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing
+JAVAC_PROTOTYPE_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing
 # JAVAC_PROTOTYPE_STUBS = -Astubs=typequals/prototype-stubs.astub
 JAVAC_PROTOTYPE_STUBS = -J-Dcheckers.skipUses='^java\.'
-JAVAC_VINDEX_ARGS = -processor checkers.subtyping.SubtypingChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing
+JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing
 # JAVAC_VINDEX_STUBS = -Astubs=typequals/vindex-stubs.astub
 JAVAC_VINDEX_STUBS = -J-Dcheckers.skipUses='^java\.'
-JAVAC_REGEX_ARGS = -processor checkers.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_FORMATTER_ARGS = -processor checkers.formatter.FormatterChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_JAVARI_ARGS = -processor checkers.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_REGEX_ARGS = -processor org.checkerframework.checker.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_FORMATTER_ARGS = -processor org.checkerframework.checker.formatter.FormatterChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_JAVARI_ARGS = -processor org.checkerframework.checker.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_JAVARI_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
-JAVAC_IGJ_ARGS = -processor checkers.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_IGJ_ARGS = -processor org.checkerframework.checker.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_IGJ_STUBS = -sourcepath ${CHECKERS}/jdk/nullness/src
 ## Code in dcomp directory is not called directly; annotations would be useless.
 INTERNING_SKIPDEFS = ^daikon\.dcomp\|^jtb\.
@@ -1041,7 +1041,7 @@ nullness-counts:
 	@grep -n '@SuppressWarnings.*nullness\|castNonNull' ${NULLNESS_JAVA_FILES}
 
 
-JAVAC_COUNT_ARGS = -processor checkers.util.count.Locations -implicit:class -Xlint:-processing
+JAVAC_COUNT_ARGS = -processor org.checkerframework.common.util.count.Locations -implicit:class -Xlint:-processing
 possible-annos: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_COUNT_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKERS} ${JAVAC_COUNT_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKERS_ARGS} ${NULLNESS_JAVA_FILES}

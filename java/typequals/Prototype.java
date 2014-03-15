@@ -1,7 +1,10 @@
 package typequals;
 
-import java.lang.annotation.*;
-import checkers.quals.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+
+import org.checkerframework.framework.qual.SubtypeOf;
+import org.checkerframework.framework.qual.TypeQualifier;
 
 /**
  * The Prototype and NonPrototype qualifiers apply only to Invariant (and

@@ -1,7 +1,11 @@
 package typequals;
 
-import java.lang.annotation.*;
-import checkers.quals.*;
+import java.lang.annotation.ElementType;
+import java.lang.annotation.Target;
+
+import org.checkerframework.framework.qual.ImplicitFor;
+import org.checkerframework.framework.qual.SubtypeOf;
+import org.checkerframework.framework.qual.TypeQualifier;
 
 import com.sun.source.tree.Tree;
 

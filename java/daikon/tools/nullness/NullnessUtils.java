@@ -1,9 +1,9 @@
-// From plume-lib, but replace uses of "checkers.nullness" by
+// From plume-lib, but replace uses of "org.checkerframework.checker.nullness" by
 // "daikon.tools.nullness" and comment out nullness annotations and their
 // import statement.
 package daikon.tools.nullness;
 
-// import checkers.nullness.quals.*;
+// import org.checkerframework.checker.nullness.qual.*;
 
 /**
  * Utilities class for the Nullness Checker.

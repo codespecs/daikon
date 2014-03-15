@@ -1,7 +1,7 @@
 package typequals;
 
-import checkers.basetype.BaseTypeChecker;
-import checkers.quals.TypeQualifiers;
+import org.checkerframework.common.basetype.BaseTypeChecker;
+import org.checkerframework.framework.qual.TypeQualifiers;
 
 /**
  * VIndexChecker ensures that the programmer does not accidentally mix indices that are intended for use into VarInfo lists vs. value lists.

@@ -6,8 +6,8 @@ import java.util.*;
 import java.lang.reflect.*;
 
 /*>>>
-import dataflow.quals.Pure;
-import checkers.quals.PolyAll;
+import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.framework.qual.PolyAll;
 */
 
 /**

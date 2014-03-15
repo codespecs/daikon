@@ -1,8 +1,6 @@
 // TraceSelect.java
 package daikon.tools;
 
-import checkers.nullness.quals.RequiresNonNull;
-
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
@@ -11,6 +9,8 @@ import java.util.Iterator;
 import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
+
+import org.checkerframework.checker.nullness.qual.RequiresNonNull;
 
 import plume.MultiRandSelector;
 import plume.UtilMDE;

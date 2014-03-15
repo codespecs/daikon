@@ -1,7 +1,7 @@
 package typequals;
 
-import checkers.basetype.BaseTypeChecker;
-import checkers.quals.TypeQualifiers;
+import org.checkerframework.common.basetype.BaseTypeChecker;
+import org.checkerframework.framework.qual.TypeQualifiers;
 
 /**
  * The prototype checker is relevant only to Invariant and its subclasses.

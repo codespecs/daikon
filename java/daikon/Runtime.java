@@ -1,7 +1,5 @@
 package daikon;
 
-import checkers.nullness.quals.EnsuresNonNull;
-
 import java.io.BufferedOutputStream;
 import java.io.File;
 import java.io.FileOutputStream;
@@ -11,6 +9,8 @@ import java.io.PrintStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
+
+import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
 
 
 /**
@@ -28,7 +28,7 @@ import java.util.zip.GZIPOutputStream;
  * <p>
  **/
 // I don't see a way to suppress per-field rather than on the whole class.
-// See Checker Framework test case 
+// See Checker Framework test case
 @SuppressWarnings("initialization.fields.uninitialized") // for the dtrace field.
 public final class Runtime {
 

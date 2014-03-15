@@ -1,10 +1,18 @@
 package daikon;
 
-import java.io.*;
-import java.util.*;
-import java.util.regex.*;
-import static daikon.PptTopLevel.PptType;
-import plume.*;
+import daikon.PptTopLevel.PptType;
+
+import java.io.File;
+import java.io.IOException;
+import java.util.ArrayList;
+import java.util.LinkedHashMap;
+import java.util.List;
+import java.util.Map;
+
+import plume.Option;
+import plume.Options;
+import plume.SimpleLog;
+import plume.UtilMDE;
 
 /**
  * AnnotateNullable reads a Daikon invariant file and determines which
@@ -74,11 +82,11 @@ public class AnnotateNullable {
 
     // Write out the definitions of our annotations
     if (stub_format) {
-      System.out.println ("import checkers.nullness.quals.Nullable;");
-      System.out.println ("import checkers.nullness.quals.NonNull;");
+      System.out.println ("import org.checkerframework.checker.nullness.qual.Nullable;");
+      System.out.println ("import org.checkerframework.checker.nullness.qual.NonNull;");
       System.out.println();
     } else {
-      System.out.println ("package checkers.nullness.quals:");
+      System.out.println ("package org.checkerframework.checker.nullness.qual:");
       System.out.println ("annotation @Nullable:");
       System.out.println ("annotation @NonNull:");
       System.out.println();
@@ -284,7 +292,7 @@ public class AnnotateNullable {
       annotation = "Nullable";
     if (annotation != "") {     // interned
       // if (! stub_format) {
-      //   annotation = "checkers.nullness.quals." + annotation;
+      //   annotation = "org.checkerframework.checker.nullness.qual." + annotation;
       // }
       annotation = "@" + annotation + " ";
     }
