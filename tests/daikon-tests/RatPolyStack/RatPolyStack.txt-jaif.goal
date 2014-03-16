@@ -1,4 +1,4 @@
-package org.checkerframework.checker.nullness.quals:
+package org.checkerframework.checker.nullness.qual:
 annotation @Nullable:
 annotation @NonNull:
 

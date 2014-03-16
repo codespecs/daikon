@@ -10,8 +10,6 @@ import java.util.List;
 import java.util.Random;
 import java.util.StringTokenizer;
 
-import org.checkerframework.checker.nullness.qual.RequiresNonNull;
-
 import plume.MultiRandSelector;
 import plume.UtilMDE;
 
@@ -250,7 +248,7 @@ public class TraceSelect {
     }
   }
 
-  @RequiresNonNull("argles")
+  /*@RequiresNonNull("argles")*/
   private static void invokeDaikon(String dtraceName) throws IOException {
 
     System.out.println ("Created file: " + dtraceName);

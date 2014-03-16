@@ -9,7 +9,9 @@ import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
+/*>>>
 import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
+*/
 
 public final class DiscReasonMap {
 
@@ -30,7 +32,7 @@ public final class DiscReasonMap {
     // Use initialize();
   }
 
-  @EnsuresNonNull("the_map")
+  /*@EnsuresNonNull("the_map")*/
   public static void initialize() {
     the_map = new HashMap<String,HashMap<String,List<DiscardInfo>>>();
   }

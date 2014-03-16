@@ -83,7 +83,7 @@ endif
 # If actually checking, override to checker.jar.
 # CHECKERSJAR ?= ${DAIKONDIR}/java/lib/plume.jar
 # Version of javac that supports pluggable type-checking.
-JAVAC_FOR_CHECKERS ?= ${CHECKERS}/binary/javac
+JAVAC_FOR_CHECKERS ?= ${CHECKERS}/bin/javac
 
 jsr308_imports = org.checkerframework.dataflow.qual.*:org.checkerframework.checker.initialization.qual.*:org.checkerframework.checker.interning.qual.*:org.checkerframework.checker.nullness.qual.*:org.checkerframework.checker.regex.qual.*:org.checkerframework.framework.qual.Dependent:org.checkerframework.framework.qual.Unused:typequals.*:org.checkerframework.checker.signature.qual.*:org.checkerframework.checker.formatter.qual.*
 

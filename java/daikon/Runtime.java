@@ -10,9 +10,6 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
-import org.checkerframework.checker.nullness.qual.EnsuresNonNull;
-
-
 /**
  * The Runtime class provides methods for printing values to a Daikon data
  * trace file.  Daikon can process the data trace information, either while
@@ -213,7 +210,7 @@ public final class Runtime {
     // = (ClassLoader.getSystemClassLoader().findLoadedClass("daikon.Daikon")
     //    != null);
 
-  @EnsuresNonNull("dtrace")
+  /*@EnsuresNonNull("dtrace")*/
   public static void setDtrace(String filename, boolean append) {
     // System.out.printf("entered daikon.Runtime.setDtrace(%s, %b)%n", filename, append);
     if (no_dtrace) {
