@@ -16,6 +16,7 @@ use constant PRINTING_TO_BRACE  => 2;
 
 # current parser state - this needs to be a stack!
 my $cur_state = NORMAL;
+my @state_stack;
 
 # @ line operator actions
 use constant SKIP_LINE       => 0;
@@ -28,6 +29,7 @@ my %line_operators = (
     "\@c"                 => SKIP_LINE,
     "\@chapter"           => SKIP_LINE,
     "\@cindex"            => SKIP_LINE,
+    "\@clear"             => SKIP_LINE,
     "\@codequotebacktick" => SKIP_LINE,
     "\@contents"          => SKIP_LINE,
     "\@deffn"             => SKIP_LINE,
@@ -38,12 +40,14 @@ my %line_operators = (
     "\@exampleindent"     => SKIP_LINE,
     "\@finalout"          => SKIP_LINE,
     "\@firstparagraphindent" => SKIP_LINE,
+    "\@float"             => SKIP_LINE,
     "\@html"              => SKIP_LINE,
     "\@ifclear"           => SKIP_LINE,
     "\@ifhtml"            => SKIP_LINE,
     "\@ifnothtml"         => SKIP_LINE,
     "\@ifnottex"          => SKIP_LINE,
     "\@ifset"             => SKIP_LINE,
+    "\@include"           => SKIP_LINE,
     "\@item"              => SKIP_LINE,
     "\@itemize"           => SKIP_LINE,
     "\@itemx"             => SKIP_LINE,
@@ -56,6 +60,7 @@ my %line_operators = (
     "\@printindex"        => SKIP_LINE,
     "\@quotation"         => SKIP_LINE,
     "\@section"           => SKIP_LINE,
+    "\@set"               => SKIP_LINE,
     "\@setfilename"       => SKIP_LINE,
     "\@smallexample"      => SKIP_TO_MATCHING_END,
     "\@sp"                => SKIP_LINE,
@@ -79,12 +84,14 @@ use constant SKIP_REST    => 4;
 my %token_operators = (
     "\@b"                => OUTPUT_ARG,
     "\@c"                => SKIP_REST,
+    "\@caption"          => OUTPUT_ARG,
     "\@center"           => SKIP_TOKEN,
     "\@cite"             => OUTPUT_ARG,
     "\@code"             => SKIP_ARG,
     "\@command"          => SKIP_ARG,
     "\@copyright"        => SKIP_ARG,
     "\@dfn"              => SKIP_ARG,
+    "\@dots"             => SKIP_ARG,
     "\@email"            => SKIP_ARG,
     "\@emph"             => OUTPUT_ARG,
     "\@env"              => SKIP_ARG,
@@ -99,22 +106,25 @@ my %token_operators = (
     "\@ref"              => SKIP_ARG,
     "\@samp"             => SKIP_ARG,
     "\@settitle"         => SKIP_TOKEN,
+    "\@strong"           => OUTPUT_ARG,
     "\@t"                => OUTPUT_ARG,
     "\@titlefont"        => OUTPUT_ARG,
     "\@today"            => SKIP_ARG,
     "\@uref"             => SKIP_ARG,
+    "\@url"              => SKIP_ARG,
+    "\@value"            => SKIP_ARG,
     "\@var"              => SKIP_ARG,
     "\@verb"             => SKIP_ARG,
     "\@w"                => OUTPUT_ARG,
     "\@xref"             => SKIP_ARG,
-    "\@\:"               => SKIP_TOKEN,
-    "\@\/"               => SKIP_TOKEN,
+    "\@:"                => SKIP_TOKEN,
+    "\@/"                => SKIP_TOKEN,
     "\@\*"               => SKIP_TOKEN,
     "\@\."               => OUTPUT_TOKEN,
-    "\@\-"               => OUTPUT_TOKEN,
+    "\@-"                => OUTPUT_TOKEN,
     "\@\@"               => OUTPUT_TOKEN,
     "\@\{"               => OUTPUT_TOKEN,
-    "\@\}"               => OUTPUT_TOKEN,
+    "\@}"                => OUTPUT_TOKEN,
     );
 
 # make sure we're looking at a .texinfo file
@@ -139,13 +149,13 @@ while (<>) {
     # quotewords doesn't like appostrope's
     $_ =~ s/'/''/g;         
     # make } a separate token
-    $_ =~ s/}/ } /g;
+    $_ =~ s/}/  } /g;
     # make { a separate token
-    $_ =~ s/{/ { /g;
+    $_ =~ s/{/  { /g;
     # make sure @ starts it's own token
-    $_ =~ s/(.)@/$1 @/g;
-    # make double @ it's own token
-    $_ =~ s/@@/@@ /g;
+    $_ =~ s/(.)@/$1  @/g;
+    # make @ followed by a special character it's own token
+    $_ =~ s/(@[:|\/|\.|-|@|\*|\{|}])/$1 /g;
 
     @tokens = quotewords('\s+', 1, $_);
 
@@ -184,7 +194,9 @@ while (<>) {
     }
 
     for ( ; $index < $#tokens; $index++) {
-        # print "$index:<$tokens[$index]>";
+
+        # debugging output
+        # print "$index:<$tokens[$index]> $cur_state\n";
 
         if ($skip_to_match ne "") {
             # we're in the middle of skip until matching @end
@@ -198,22 +210,22 @@ while (<>) {
                     print "} "; 
                 }
                 when (SKIPPING_TO_BRACE) {
-                    $cur_state = NORMAL;  # need to pop state
+                    if ($#state_stack < 0) { die "Missmatched \'{}\', stopped"; }
+                    $cur_state = pop @state_stack;
                 }
                 when (PRINTING_TO_BRACE) {
-                    $cur_state = NORMAL;  # need to pop state
+                    if ($#state_stack < 0) { die "Missmatched \'{}\', stopped"; }
+                    $cur_state = pop @state_stack;
                 }
             }
-        } elsif ($cur_state == SKIPPING_TO_BRACE) {
-            # skip this token
         } elsif ($tokens[$index] =~ /^@/) {
             given ($token_operators{$tokens[$index]}) {
                 when (SKIP_ARG) {
-                    # push $cur_state
+                    push @state_stack, $cur_state;
                     $cur_state = SKIPPING_TO_BRACE;
                 }
                 when (OUTPUT_ARG) {
-                    # push $cur_state
+                    push @state_stack, $cur_state;
                     $cur_state = PRINTING_TO_BRACE;
                     # we assume next token is "{" - skip it
                     $index++;
