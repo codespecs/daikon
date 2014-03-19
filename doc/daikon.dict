@@ -36,6 +36,7 @@ disambiguated
 disambiguates
 DynComp
 DynComp's
+EM64T
 executables
 filename
 Fjalar
@@ -44,6 +45,7 @@ getters
 globals
 hashcode
 hashcodes
+IDE
 inferencing
 instantiation
 instrumenter
@@ -126,3 +128,4 @@ wildcard
 workflow
 workspace
 xmeans
+x86
