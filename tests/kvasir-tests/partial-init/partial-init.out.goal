@@ -25,6 +25,6 @@ Stack:
 ==PID==    by <STATIC_ADDR>: main (partial-init.c:48)
 ==PID==  Address <STACK_ADDR> is on thread 1's stack
 ==PID== 
-0110 01110110 10101110 00011110 
+0100 11001110 11110110 00000000 
 ==PID== 
 ==PID== ERROR SUMMARY: 56 errors from 2 contexts (suppressed: 0 from 0)

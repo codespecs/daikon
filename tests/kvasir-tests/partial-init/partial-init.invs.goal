@@ -1,50 +1,49 @@
 ===========================================================================
 ..main():::ENTER
-/global has only one value
-/global[] == [0, 0, 0, 0, 0, 0, 0, 0]
+::global has only one value
+::global[] == [0, 0, 0, 0, 0, 0, 0, 0]
 argc == 1
 argv has only one value
-argv[] == [./partial]
+argv[] == [./partial-init]
 ===========================================================================
 ..main():::EXIT
-/global == orig(/global)
-/global has only one value
-/global[] == [10, 0, 0, 0, 10, 0, 0, 0]
-argv[] == [./partial]
+::global == orig(::global)
+::global has only one value
+::global[] == [10, 0, 0, 0, 10, 0, 0, 0]
+argv[] == [./partial-init]
 return == 0
 ===========================================================================
 ..print_bits():::ENTER
-/global has only one value
-/global[] == [10, 0, 0, 0, 10, 0, 0, 0]
-len one of { 36, 64 }
+::global has only one value
+::global[] == [10, 0, 0, 0, 10, 0, 0, 0]
+bits[] == [10, 0, 0, 0, 10, 0, 0, 0]
 bits[] elements one of { 0, 10 }
-bits[] one of { [10, 0, 0, 0, 10], [10, 0, 0, 0, 10, 0, 0, 0] }
-bits[i] != i
-bits[] is a subsequence of /global[]
+len one of { 36, 64 }
+::global[] == bits[] (elementwise)
 ===========================================================================
 ..print_bits():::EXIT
-/global == orig(/global)
-/global[] == orig(/global[])
+::global == orig(::global)
+::global[] == orig(::global[])
 bits[] == orig(bits[])
-/global has only one value
-/global[] == [10, 0, 0, 0, 10, 0, 0, 0]
+::global has only one value
+::global[] == [10, 0, 0, 0, 10, 0, 0, 0]
+bits[] == [10, 0, 0, 0, 10, 0, 0, 0]
 bits[] elements one of { 0, 10 }
-bits[] one of { [10, 0, 0, 0, 10], [10, 0, 0, 0, 10, 0, 0, 0] }
-bits[i] != i
-bits[] is a subsequence of /global[]
+::global[] == bits[] (elementwise)
 ===========================================================================
 ..test_bits():::ENTER
-/global has only one value
-/global[] elements one of { 0, 10 }
-/global[] one of { [0, 0, 0, 0, 0, 0, 0, 0], [10, 0, 0, 0, 10, 0, 0, 0] }
+::global has only one value
+::global[] elements one of { 0, 10 }
+::global[] one of { [0, 0, 0, 0, 0, 0, 0, 0], [10, 0, 0, 0, 10, 0, 0, 0] }
+p[] == [0, 0, 0, 0, 0, 0, 0, 0]
 p[] elements == 0
-p[] one of { [], [0, 0, 0, 0, 0, 0, 0, 0] }
-p[] is a subsequence of /global[]
+::global[] == p[] (elementwise)
+::global[] is the reverse of p[]
 ===========================================================================
 ..test_bits():::EXIT
-/global == orig(/global)
-/global has only one value
-/global[] == [10, 0, 0, 0, 10, 0, 0, 0]
+::global == orig(::global)
+::global has only one value
+::global[] == [10, 0, 0, 0, 10, 0, 0, 0]
+p[] == [10, 0, 0, 0, 10, 0, 0, 0]
 p[] elements one of { 0, 10 }
-p[] one of { [10, 0, 0, 0, 10], [10, 0, 0, 0, 10, 0, 0, 0] }
-p[] is a subsequence of /global[]
+::global[] == p[] (elementwise)
