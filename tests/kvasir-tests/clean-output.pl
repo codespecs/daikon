@@ -11,13 +11,12 @@ while (<>) {
 
     if ($machine_type eq "x86_64") {
         # Valgrind AMD64/Linux locations
-        s/0xff([0-9a-f]{7,10})/<STACK_ADDR>/ig;  # stack
-        s/0x8[01]([0-9a-f]{7})/<STATIC_ADDR>/ig; # r/w data
-        s/0x4[cd]([0-9a-f]{5})/<HEAP_ADDR>/ig;   # heap  ArrayTest because so much allocated?
-        s/0x5[1a]([0-9a-f]{5})/<HEAP_ADDR>/ig;   # heap
-#       s/0x[45]([0-9a-f]{5})/<STATIC_ADDR>/ig;  # r/o data
+        s/0xff([0-9a-f]{7,10})(?![0-9a-f])/<STACK_ADDR>/ig;  # stack
+        s/0x8[01]([0-9a-f]{7})(?![0-9a-f])/<STATIC_ADDR>/ig; # r/w data
+        s/0x4[cd]([0-9a-f]{5})(?![0-9a-f])/<HEAP_ADDR>/ig;   # heap  ArrayTest because so much allocated?
+        s/0x5[1a]([0-9a-f]{5})(?![0-9a-f])/<HEAP_ADDR>/ig;   # heap
         s/0x[45]([0-9a-f]{5})(?![0-9a-f])/<STATIC_ADDR>/ig;  # r/o data
-        s/0x6[01]([0-9a-f]{4})/<STATIC_ADDR>/ig; # r/w data
+        s/0x6[01]([0-9a-f]{4})(?![0-9a-f])/<STATIC_ADDR>/ig; # r/w data
     } else {
         # we just assume ...
         # Valgrind X86/Linux locations
