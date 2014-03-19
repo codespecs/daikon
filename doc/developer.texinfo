@@ -11,6 +11,10 @@
 @email{daikon-developers@@googlegroups.com}
 @end macro
 
+@macro nospellcheck{text}
+\text\
+@end macro
+
 @c set overall document style
 @c @setchapternewpage odd
 @paragraphindent 1
@@ -160,7 +164,7 @@ This chapter describes how to customize or modify Daikon.
 @node    Compiling Daikon
 @section Compiling Daikon
 
-@cindex compiling daikon
+@cindex compiling Daikon
 
 To compile Daikon, type @command{make} in @file{daikon/java/} or any of its
 subdirectories.  The distribution includes compiled @file{.class} files,
@@ -185,11 +189,11 @@ export CLASSPATH=.:$CLASSPATH
 @cindex jpp files
 
 Daikon is written in Java.  In order to
-compile Daikon, you need a Java compiler such as javac on your path.
+compile Daikon, you need a Java compiler such as @samp{javac} on your path.
 @cindex Jikes compiler
-@cindex javac compiler, overriding
+@cindex @samp{javac} compiler, overriding
 @cindex Java compiler, specifying
-To override the default Java compiler (javac), create a
+To override the default Java compiler (@samp{javac}), create a
 @file{Makefile.user} file in the @file{daikon/} directory and add a line
 like the following.
 @example
@@ -225,11 +229,11 @@ When setting up environment pathname variables under Windows/Cygwin
 (such as @command{JAVA_HOME}) make sure that the
 pathname is specified in Linux format (e.g., @file{/cygdrive/c/daikon}
 rather than @file{C:\daikon}).  However, the
-@command{CLASSPATH} environment variable is a special case;
+@env{CLASSPATH} environment variable is a special case;
 as @command{java} is a Windows
-program, it expects @command{CLASSPATH} to be in Windows format.
-This is the only exception to Cgywin looking like Linux.
-Thus @command{CLASSPATH} must
+program, it expects @env{CLASSPATH} to be in Windows format.
+This is the only exception to Cygwin looking like Linux.
+Thus @env{CLASSPATH} must
 always be in Windows format; i.e., it should use semicolons (;) rather
 than colons (:) as a path separator.
 Using the wrong filename format or the wrong pathname separator
@@ -273,16 +277,17 @@ First, make sure that Daikon builds cleanly from the command line.
 
 File > Import > General > Existing Projects into Workspace
 
-Choose the ``java'' directory of your Daikon checkout
+Choose the @file{java} directory of your Daikon checkout
 
 Project > properties > Java build path:
- libraries : ``add external jars'' everything in the lib/ directory,
-   plus also the tools.jar file in the lib/ directory of your JDK.
-   (I'm not sure why, but ``add jars'' doesn't show all .jar files in the directory.)
+ libraries : @command{add external jars} everything in the lib/ directory,
+   plus also the @file{tools.jar} file in the @file{lib/} directory of your JDK.
+   (I'm not sure why, but @command{add jars} doesn't show all @file{.jar}
+   files in the directory.)
   
  Source: 
-   add ``Daikon'', remove ``Daikon/src''.
-   Default output folder: change from ``Daikon/bin'' to ``Daikon''.
+   add @file{Daikon}, remove @file{Daikon/src}.
+   Default output folder: change from @file{Daikon/bin} to @file{Daikon}.
 
 
 @node    New invariants
@@ -301,7 +306,7 @@ The file @file{java/daikon/inv/unary/scalar/Positive.java} in the
 Daikon distribution contains a sample invariant.  This invariant is
 true if the variable is always positive (greater than zero).  This
 invariant is subsumed by other invariants in the system; it is provided
-only as a pedagogical example.  To enable the invariant, uncomment the
+only as a pedagogical example.  To enable the invariant, comment out the
 appropriate line in @code{Daikon.setup_proto_invs()}, then recompile
 Daikon.
 
@@ -311,22 +316,22 @@ the following abstract classes:
 @table @code
 @item SingleScalar
 Invariants over a single numeric (scalar) variable,
-such as ``x != 0''.
+such as @samp{x != 0}.
 @item TwoScalar
-Invariants over two numeric variables, such as ``y
-= abs(x)''.
+Invariants over two numeric variables, such as @samp{y
+= abs(x)}.
 @item ThreeScalar
 Invariants over three numeric variables, such as
-``z = ax + by + c''.
+@samp{z = ax + by + c}.
 @item SingleSequence
 Invariants over one sequence (array)
-variable, such as ``a[] contains no duplicates''.
+variable, such as @samp{a[] contains no duplicates}.
 @item TwoSequence
-Invariants over two sequences, such as ``a[] is a
-subsequence of b[]''.
+Invariants over two sequences, such as @samp{a[] is a
+subsequence of b[]}.
 @item SequenceScalar
 Invariants over a scalar and a sequence, such
-as ``x is a member of a[]''.
+as @samp{x is a member of a[]}.
 @end table
 
 @noindent
@@ -402,7 +407,7 @@ documentation): @code{CONFIDENCE_JUSTIFIED},
 @code{CONFIDENCE_UNJUSTIFIED}, @code{CONFIDENCE_NEVER}.
 
 For example, suppose your new invariant has a 50% chance of being true
-by chance for each sample.  (``x is even'' is an example of such an
+by chance for each sample.  (@samp{x is even} is an example of such an
 invariant.)  Then a reasonable body for @code{computeConfidence} would
 be
 
@@ -421,7 +426,7 @@ see Daikon's @option{--conf_limit} command-line option.
 @itemx public String repr ()
 @itemx public String format_using (OutputFormat format)
 Returns a high-level printed representation of the
-invariant, for user output.  @code{format} produces ``normal'' output, while
+invariant, for user output.  @code{format} produces @dfn{normal} output, while
 the @code{repr} formatting routine produces low-level, detailed output for 
 debugging.  When first writing
 an invariant, you can make @code{repr} and @code{format_using}
@@ -469,7 +474,7 @@ To support a new output format, you need to do two things:
 In @code{daikon.inv.Invariant.OutputFormat}, add a new static final
 field and also update the @code{get} method.
 @c (if it returns null, then you
-@c will get an ``Unknown output format'' error message when you run Daikon.)
+@c will get an @samp{Unknown output format} error message when you run Daikon.)
 @item
 In every subclass of @code{Invariant}, edit the
 @code{format_using} method to handle the new @code{OutputFormat}.
@@ -488,7 +493,7 @@ The data traces can be obtained from any source.  For instance, front
 ends have been built for stock data, weather forecasts, truck weight
 data, and spreadsheet data (@pxref{convertcsv.pl,,,daikon,Daikon User
 Manual}), among others.  More often, users apply a programming language
-front end (also called an ``instrumenter'') to a program, causing
+front end (also called an @dfn{instrumenter}) to a program, causing
 executions of the program to write files in Daikon's format.  (For
 information about existing front ends, see
 @ref{Front ends (instrumentation),,,daikon,Daikon User Manual}.) 
@@ -669,9 +674,9 @@ Examples of invalid values are variables that have not yet been
 initialized and pointers whose content has been deallocated.  (A pointer
 dereference, such as @samp{*p} or @samp{p->field}, can itself
 be to uninitialized and/or deallocated memory.)  Invalid values should
-be printed as ``nonsensical'' (@pxref{Data trace records}).
+be printed as @samp{nonsensical} (@pxref{Data trace records}).
 
-It is desirable to print ``nonsensical'' rather than an invalid value,
+It is desirable to print @samp{nonsensical} rather than an invalid value,
 for two reasons.  First, outputting nonsense values can degrade
 invariant detection; patterns in the valid data may be masked by noise
 from invalid values.  Second, an attempt to access an invalid value can
@@ -744,7 +749,7 @@ For instance, many programs use specialized memory allocation routines
 prevent or detect memory errors.  The information that such libraries
 collect is often sufficient to determine which variable values should be
 printed, and which should be suppressed in favor of printing
-``nonsensical'' instead.
+@samp{nonsensical} instead.
 
 
 The presence of memory errors --- even in a program that @emph{appears}
@@ -782,11 +787,11 @@ space.  Suppression implications use some terminology.  A
 @dfn{suppressor} (defined in the class @code{NISuppressor}) is one of a
 set of invariants (@code{NISuppression}) that imply and suppress a
 @dfn{suppressee} invariant (@code{NISuppressee}).  The set of all of
-the suppressions that suppress a particular suppressee is stored in the
+the suppressions that suppress a particular @var{suppressee} is stored in the
 class @code{NISuppressionSet}.
 
 Adding a new suppression is straightforward when the invariants involved 
-do not have any state.  Define the suppressee and
+do not have any state.  Define the @var{suppressee} and
 each of the suppressions that suppress it using the corresponding
 constructors.  Add the method @code{get_ni_suppressions} to the class
 of the invariant being suppressed and return the appropriate
@@ -797,8 +802,8 @@ done by defining a static variable to hold the suppression sets
 and initializing this variable the first time that @code{get_ni_suppressions}
 is called.
 
-The following example defines suppressions for ``x == y'' implies
-``x >= y'' and ``x > y'' implies ``x >= y''.
+The following example defines suppressions for @samp{x == y} implies
+@samp{x >= y} and @samp{x > y} implies @samp{x >= y}.
 
 @exampleindent 1
 @smallexample
@@ -829,8 +834,8 @@ been determined.  This method returns a non-null value if this invariant
 is implied by a fact that can be derived from the given @code{VarInfo}s.  
 
 For example, suppose division was not defined for divisors smaller than 1. 
-The following example defines an obvious check for ``x <= c''
-(where c < 1 is a constant) implies ``y % x == 0'', written in the
+The following example defines an obvious check for @samp{x <= c}
+(where c < 1 is a constant) implies @samp{y % x == 0}, written in the
 Divides class.
 
 @exampleindent 1
@@ -853,7 +858,7 @@ public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
     if(inv instanceof UpperBound) @{
       if(((UpperBound) inv).max() < 1) @{
         return new DiscardInfo(this, DiscardCode.obvious,
-                               ``Divides is obvious when divisor less than one'');
+                               @samp{Divides is obvious when divisor less than one});
       @}
     @}
   @}
@@ -872,7 +877,7 @@ dummy main method that catches @code{TerminationMessage}, which is the
 standard way that a component of Daikon requests the JVM to shut down.
 
 The reason for this is that calling @code{System.exit()} is usually a
-bad idea.  It makes the class un-usable as a subroutine, because it
+bad idea.  It makes the class unusable as a subroutine, because it
 might kill the calling program.  It can cause deadlock.  And it can
 leave data in an inconsistent state (for example, if the program was in
 the middle of writing a file, still held non-Java locks, etc.), because
@@ -1036,7 +1041,7 @@ if (Debug.logOn()) @{
 Track logging also can work with other loggers.  Each of the logging
 methods has an alternative version that also accepts a logger as the
 first argument.  In this case, normal track logging is performed if
-the class, ppt, and vars match.  If they don't match, the same
+the class, @code{ppt}, and vars match.  If they don't match, the same
 information is logged via the specified logger.  For example:
 
 @example
@@ -1050,7 +1055,7 @@ The above will print if either the tracking information matches or if the
 specified logger is enabled.
 
 Convenience methods are available for track logging invariants.  In this
-case the class name, ppt, and variable information are all taken from the
+case the class name, @code{ppt}, and variable information are all taken from the
 invariant.  The available methods are:
 
 @example
@@ -1084,7 +1089,7 @@ format. Space for three variables is always maintained for consistency:
 @end example
 
 @noindent
-If @code{showTrackback} is enabled, the traceback will follow each 
+If @code{showTrackback} is enabled, the @samp{traceback} will follow each 
 line of debug output.
 
 
@@ -1122,8 +1127,8 @@ non-printing.
 @dfn{Non-instantiation} prevents the creation of an invariant because
 the invariant's truth value is statically obvious (from the semantics
 of the programming language), no matter what values may be seen at run
-time.  Two examples are ``A[i] is an element of A[]'' and ``size(A[])
->= 0''.  Non-instantiation is implemented by the by the
+time.  Two examples are @samp{A[i] is an element of A[]} and @samp{size(A[])
+>= 0}.  Non-instantiation is implemented by the by the
 @code{isObviousStatically} method.
 With the equality sets optimization (@pxref{Equality optimization}),
 non-instantiation can only happen if all equality permutations are
@@ -1133,17 +1138,17 @@ presumes that any statically obvious invariants are true and can
 be safely presumed when determining if other invariants are redundant.
 
 An invariant can be @emph{suppressed} if it is logically implied by some
-set of other invariants (referred to as ``suppressors'').  A suppressed
+set of other invariants (referred to as @dfn{suppressors}).  A suppressed
 invariant is not instantiated or checked as long as its suppressors
-hold.  For example ``x > y'' implies ``x >= y''.  Suppression has some
+hold.  For example @samp{x > y} implies @samp{x >= y}.  Suppression has some
 limitations.  It cannot use as suppressors or suppress sample dependent
 invariants (invariants that adapt themselves to the samples they see and
-whose equation thus involves a constant such as ``x > 42'').
+whose equation thus involves a constant such as @samp{x > 42}).
 Suppression also cannot use relationships between variables.  For
-example, it cannot suppress ``x[i] = y[j]'' by ``(x[] = y[]) ^ (i =
-j)''.  Suppressor invariants can only use variables that are also in the
+example, it cannot suppress @samp{x[i] = y[j]} by @samp{(x[] = y[]) ^ (i =
+j)}.  Suppressor invariants can only use variables that are also in the
 invariant that is being suppressed.  In this example, only invariants
-using the variables ``x[i]'' and ``y[i]'' can be used as a suppressors.
+using the variables @samp{x[i]} and @samp{y[i]} can be used as a suppressors.
 See @ref{New suppressors} for more information.
 
 @dfn{Non-printing} is a post-pass that throws out any invariants that
@@ -1158,7 +1163,8 @@ checks; it can be called at the end without reference to equality sets.
 
 More detail can be found in the paper ``Efficient incremental algorithms
 for dynamic detection of likely invariants'' by Jeff H. Perkins and
-Michael D. Ernst, published in FSE 2004; the paper is available from
+Michael D. Ernst, published in Foundations of Software Engineering in 2004;
+the paper is available from
 @uref{http://plse.cs.washington.edu/daikon/pubs/invariants-incremental-fse2004-abstract.html}.
 
 @node    Dataflow hierarchy
@@ -1169,8 +1175,8 @@ Michael D. Ernst, published in FSE 2004; the paper is available from
 
 Dataflow hierarchy is a means to relate variables in different program
 points in a partial ordering.  Variables in program point X are
-related to variables in another program point Y by a ``flow'' relation
-if every sample seen of X's variables is also meant to be seen at Y.
+related to variables in another program point Y by a @dfn{flow} relation
+if every sample seen of @nospellcheck{X's} variables is also meant to be seen at Y.
 Y is called a parent program point of X.  For example, all the field
 variables in the @code{:::ENTER} program point of a method in class C relate to
 the field variables in the @code{:::CLASS} program point of C.  This is because
@@ -1192,7 +1198,7 @@ Daikon, the former program point's variables relate to the latter
 program point's @code{:::CLASS} method.  For example, if X.y is of type Y, and
 Y contains fields a and b, X.y, X.y.a and X.y.b relate to
 Y.this, Y.b and Y.a.  Fourth, variables at @code{:::ENTER} program
-points are related to the ``orig'' versions at @code{:::EXIT} program points.
+points are related to the @samp{orig} versions at @code{:::EXIT} program points.
 
 When using Daikon, the above four ways of relations in the dataflow
 hierarchy will result in some true invariants that are not reported at
@@ -1200,7 +1206,7 @@ some program points.  However, the invariant will be present in some
 parent program point.  Dataflow hierarchy is enabled by default, but
 can be disabled by the @option{--nohierarchy} flag.  When dataflow is enabled,
 the only samples that are examined by Daikon are the @code{:::EXIT} program
-points (plus ``orig'' variables) since these contain a complete view of
+points (plus @samp{orig} variables) since these contain a complete view of
 the data.
 
 @node    Equality optimization
@@ -1211,8 +1217,8 @@ the data.
 When N variables are equal within a program point there will be
 N(N-1)/2 pairwise invariants to represent the equality within the
 equal variables, and N copies of every other invariant.  For example,
-if a, b, and c are equal, then ``a == b'', ``a == c'', ``b == c'' will be
-reported as pairwise invariants, and ``odd(a)'', ``odd(b)'' and ``odd(c)''
+if a, b, and c are equal, then @samp{a == b}, @samp{a == c}, @samp{b == c} will be
+reported as pairwise invariants, and @samp{odd(a)}, @samp{odd(b)} and @samp{odd(c)}
 will be reported.  If the variables will always be equal, then
 reporting N times the invariants is wasteful.  Daikon thus treats
 equality specially.
@@ -1224,8 +1230,8 @@ equality invariants.  Every equality set has a leader or
 @dfn{canonical} representation by a variable in the set.
 Non-equality invariants are only instantiated and checked on the
 leader.  When printing invariants, Daikon reports only invariants on
-the leader.  The user can easily determine that ``odd(a)'' and ``a == b''
-imply ``odd(b)''.  Equality optimization can be turned off at the 
+the leader.  The user can easily determine that @samp{odd(a)} and @samp{a == b}
+imply @samp{odd(b)}.  Equality optimization can be turned off at the 
 command line with the @option{--noequality} flag.
 
 
@@ -1258,7 +1264,7 @@ repository}).
 @cindex adding new unit tests
 
 The unit tests are found in @file{daikon/java/daikon/test/}; they use
-the JUnit unit testing framework.  They take a few seconds to run.  They
+the @samp{JUnit} unit testing framework.  They take a few seconds to run.  They
 are automatically run each time you compile Daikon (by running
 @command{make} in @file{$DAIKONDIR/java} or any of its subdirectories).  You can
 also run them explicitly via @command{make unit}.  When you write new code
@@ -1355,7 +1361,7 @@ Goal<1 space>(<format name>):<1 space><goal text>
 @item Samples: 
 Values formatted according to the type string, one value per
 line Make sure that the samples provided are actually instances of that
-particular invariant (That is, if the desired invariant is ``a < b'', then
+particular invariant (That is, if the desired invariant is @samp{a < b}, then
 the first number of each sample better be less than the second) 
 
 @c The below is not necessary since we don't check this before formatting
@@ -1366,7 +1372,7 @@ the first number of each sample better be less than the second)
 @c 1-3 for array-based comparisons) Example: Formatting for
 @c samples of a binary integer comparison
 
-Arrays and strings must be formatted according to the Daikon dtrace file
+Arrays and strings must be formatted according to the Daikon @file{.dtrace} file
 convention (for a full description, @pxref{File formats}).  This
 states that arrays must be surrounded in brackets (start with @samp{[}, end
 with @samp{]}), and entries must be separated by a space.  Strings must be
@@ -1419,7 +1425,8 @@ already recognized.
 
 Sample testing tests various components of Daikon as samples are being
 processed.  A file (normally @file{daikon/test/SampleTester.commands}) 
-specifies a decls file to use, the samples for each ppt/var, and assertions
+specifies a @file{.decls} file to use, the samples for each @samp{ppt/var},
+and assertions
 about Daikon's state (such as whether or not a particular invariant exists).
 
 Each line of the file specifies exactly one command.  Blank lines and
@@ -1430,18 +1437,18 @@ are:
 
 @deffn {SampleTester Command} decl: decl-file
 This command specifies the declaration file to use.  This is a normal
-decls file that should follow the format defined in the user manual.
+@file{.decls} file that should follow the format defined in the user manual.
 @end deffn
 
 @deffn {SampleTester Command} ppt: ppt
 This command specifies the program point that will be used with following
 vars, data, and assert commands.  The program point should be specified 
-exactly as it appears in the decls file.
+exactly as it appears in the @file{.decls} file.
 @end deffn
 
 @deffn {SampleTester Command} vars: var1 var2...
 Specifies the variables that will be used on following data lines.
-Each variable must match exactly a variable in the ppt.  Other
+Each variable must match exactly a variable in the @code{ppt}.  Other
 variables will be treated as missing.  
 @end deffn
 
@@ -1465,18 +1472,19 @@ point before the assertion (for example: @code{!inv("x > y", x, y})).
 @node          Assertions
 @subsubsection Assertions
 
-Assertions are formatted like function calls: <name>(arg1, arg2, ...).
+Assertions are formatted like function calls: @code{<name>(arg1, arg2, ...)}.
 The valid assertions for the assert: command are:
 
 @deffn Assertion inv format var1 ...
 
-The inv assertion asserts that the specified invariant exists in the
-current ppt.  The @var{format} argument is the result of calling 
+The @code{inv} assertion asserts that the specified invariant exists in the
+current @code{ppt}.  The @var{format} argument is the result of calling 
 @code{format()} on
 the invariant.  This is how the invariant is recognized.  The remaining
 arguments are the variables that make up the invariants slice.  These
-must match exactly variables in the ppt.  The inv assertion returns true
-iff the slice exists and an invariant is found within that slice that
+must match exactly variables in the @code{ppt}.  The @code{inv} assertion
+returns true if and only if the slice exists and an invariant is found
+within that slice that
 matches @var{format}.
 
 Optionally, @var{format} can be replaced by the fully qualified class name of
@@ -1715,9 +1723,9 @@ Just run the command @command{eclipse} at the command shell.
 
 There is one big catch:  take note of where you launch Eclipse and
 @b{always} launch Eclipse from the same location. For example, you might
-want to alias run-eclipse with '@command{cd $HOME; eclipse}'.
+want to alias run-eclipse with @command{cd $HOME; eclipse}.
 For convenience, this is already done for you if you source the
-daikon-dev.bashrc startup script.
+@file{daikon-dev.bashrc} startup script.
 There are ways around the launch location inconvenience, such as
 the -data switch, but the alias trick should be the simplest and least
 confusing workaround.
@@ -1749,7 +1757,7 @@ Window >> Preferences >> Java >> Compiler >> Style >> Non-static access >> >> Ig
 First, do @command{cp $DAIKONDIR/java/.classpath-pag $DAIKONDIR/java/.classpath}
 
 Second, import Daikon into Eclipse.  To import:  start Eclipse, then choose
-menu item File->Import->ExistingProjectIntoWorkspace, then enter (the full
+menu item @samp{File->Import->ExistingProjectIntoWorkspace}, then enter (the full
 name of) directory @file{$DAIKONDIR/java} for Project Contents.
 
 Those two steps are all there is to it!
@@ -1768,7 +1776,7 @@ Before working on code in Eclipse, you must import the code into
 the Eclipse workspace.  You also need to set up various compilation
 settings and specify jars and classes that should be in the
 compilation classpath.  (By default, Eclipse does not use your
-environment Classpath.)
+environment @env{Classpath}.)
 
 @enumerate
 @item
@@ -1784,13 +1792,13 @@ Select the menu item File->New->Project
 On the popup window, select Java Project and click Next
 
 @item
-Call the project 'Daikon' or some other appropriate name and
+Call the project @samp{Daikon} or some other appropriate name and
 click Next.
 
 @item
 On the next window, create a new folder in
-the project called 'src', and answer Yes to the next dialog box asking
-you to confirm a change in the build directory. Select Ok and you
+the project called @file{src}, and answer Yes to the next dialog box asking
+you to confirm a change in the build directory. Select @samp{Ok} and you
 should see the new Project as a small folder icon in the package
 explorer.
 
@@ -1798,17 +1806,18 @@ explorer.
 Select the menu item File->Import
 
 @item
-On the next popup window, select "File System" and click
+On the next popup window, select @samp{File System} and click
 Next. Browse to the folder containing your source code.  Using the
-standard PAG setup, the folder should be $DAIKONDIR/java. The import
-destination should be Daikon/src.  Check the boxes for including
-daikon, jtb, and plume.
+standard @samp{PAG} setup, the folder should be @file{$DAIKONDIR/java}. The import
+destination should be @file{Daikon/src}.  Check the boxes for including
+Daikon, @samp{jtb}, and plume.
 
 @item
 Finally, add the required jars for Daikon by right-clicking on
 the project and selecting the Properties menu.  Select "Java Build
-Path", then "Libraries", then "Add External Jars" and add tools.jar,
-junit.jar, jakarta-oro.jar, and java-getopt.jar.  (See your CLASSPATH
+Path", then "Libraries", then "Add External Jars" and add @file{tools.jar},
+@file{junit.jar}, @file{jakarta-oro.jar}, and @file{java-getopt.jar}. 
+(See your @env{CLASSPATH}
 environment variable for full pathnames to these files.)
 @end enumerate
 
@@ -1818,7 +1827,7 @@ which you imported in the previous step}.
 Instead, the compiled classes appear in the Eclipse workspace
 directory. If you followed the setup instructions above, then the
 compiled code will be in "$HOME/.eclipse/Daikon/bin", which you
-should add to your CLASSPATH in order to use the updates you make from
+should add to your @env{CLASSPATH} in order to use the updates you make from
 Eclipse.
 
 
@@ -1875,7 +1884,8 @@ put a semi-colon at the end of your expression!).
 @node       Using Mercurial with Eclipse
 @subsection Using Mercurial with Eclipse
 
-TODO, although you can just do all the editing, compiling, and
+This section has yet to be completed, although you can just do all the editing,
+compiling, and
 running from the Eclipse IDE while doing version control commands from the shell
 or whatever current system you use.
 
@@ -1909,7 +1919,7 @@ Follow the Texinfo conventions for marking up text.  In particular:
 @itemize
 @item
 Don't use regular double quotes (&quot;) in running text.  Instead, use
-two single backquotes and two regular quotes, ``like this''.  Emacs will
+two single back quotes and two regular quotes, ``like this''.  Emacs will
 do this substitution for you if you are using its Texinfo mode.
 
 @item
@@ -1955,28 +1965,29 @@ create the @file{daikon.tar} or @file{daikon.tar.gz} file in your own
 directory, then simply run @command{make} with the desired file as the
 target.
 
-We have a general policy of using even version numbers (e.g., 4.6.4) for offical
+We have a general policy of using even version numbers (e.g., 4.6.4) for official
 releases and odd version numbers (e.g., 4.7.3) for intermediate work.  This means
 as you prepare for a release the current version number is probably odd.  It will
 be reset as one of the first steps in the release process.  After making the
 distribution, one of the final steps is to increment the version number again to
 prepare for subsequent development.  Note, this system has the useful side effect
 of allowing the build and test process to be repeated to fix a problem (steps 5-14 below) 
-without having to worry about updating or reseting the version number.
+without having to worry about updating or resetting the version number.
 
 The Daikon distribution site is located at @uref{//plse.cs.washington.edu/daikon/};
 internally, this can be accessed as part of our file system at
 @file{/cse/web/research/plse/daikon}.
-In order to be able to write to the distribution site, your CSE user id must be 
-a member of the 'plse_www' group.  Finally, for each of the major steps below, an
-approximate elapased time is listed.  Currently, this is for a quad x86-64 based
-machine at 3.4GHz with 16GB of memory. Barring any difficulities, the entire process
+In order to be able to write to the distribution site, your @samp{CSE} user id must be 
+a member of the @samp{plse_www} group.  Finally, for each of the major steps below, an
+approximate elapsed time is listed.  Currently, this is for a quad x86-64 based
+machine at @nospellcheck{3.4GHz} with @nospellcheck{16GB} of memory. Barring any difficulties,
+the entire process
 will take at least two hours - and could be much more depending on the number of
 different platforms on which you test the release.
 
 @noindent
 NOTE: @*
-Each of the steps below assumes that the current working directory is $DAIKONDIR 
+Each of the steps below assumes that the current working directory is @file{$DAIKONDIR} 
 and that you are using the Bash shell.
 
 
@@ -2030,7 +2041,7 @@ make update-doc-dist-date-and-version
 
 
 @item
-Update the pulications pages in a local copy of plume-bib. 
+Update the publications pages in a local copy of plume-bib. 
 If you have not done so previously, you may create this repository
 now:
 
@@ -2038,13 +2049,13 @@ now:
 (cd; hg clone https://code.google.com/p/plume-bib/ bib)
 @end example
 
-Now uppate the contents:
+Now update the contents:
 
 @example
 (cd ~/bib; hg fetch)
 @end example
 
-Alternatively, you may set the enviroment variable BIBDIR to the location
+Alternatively, you may set the environment variable @env{BIBDIR} to the location
 of the bibliography you wish to use.
 
 [Time: moments]
@@ -2085,7 +2096,7 @@ make -C $DAIKONDIR/tests clean diffs
 @item
 Edit the @file{doc/CHANGES} file to indicate what has changed
 in this version.  A good way to determine what has changed is to diff
-the texinfo source files in the doc directory against the previous
+the Texinfo source files in the doc directory against the previous
 versions:
 
 @example
@@ -2133,7 +2144,7 @@ make check-for-broken-doc-links
 Review @file{check.log} and make corrections as appropriate.
 
 Errors 301 and 501 are normally fixed by adding an additional line
-to $DAIKONDIR/plume-lib/bin/checklink-args.txt.
+to @file{$DAIKONDIR/plume-lib/bin/checklink-args.txt}.
 
 In some cases a "403 Forbidden" error is transient, due to the website
 being down.  You can check such links by hand.
@@ -2147,7 +2158,7 @@ Error 404 usually indicates an error in our links that needs to be fixed.
 Test the distribution, currently in the staging area, on a 64-bit machine.
 Since the machine you are currently running to build the release is probably
 such a machine, you may simply run the command below. The last step in this
-test runs Chicory/Daikon on the StackAr example.  Success is indicated
+test runs Chicory/Daikon on the @file{StackAr} example.  Success is indicated
 by invariant output being written to the screen.
 
 @example
@@ -2161,7 +2172,7 @@ make test-staged-dist
 Test the distribution, currently in the staging area, on a 32-bit machine. 
 This is probably best done on a virtual machine running a current version
 of Fedora.  The instructions below assume you are running on such a machine.
-They will download the staged daikon.tar.gz file, extract the files, set
+They will download the staged @file{daikon.tar.gz} file, extract the files, set
 the appropriate environment variables and run the top level Makefile.
 Finally, a short verification test is run;
 success is indicated by invariant output being written to the screen.
@@ -2186,12 +2197,12 @@ make installation-test
 @item
 Test the distribution on a Windows machine.  On a Windows
 machine with Cygwin installed, as a guest user (or at least one without
-environment variables such as $DAIKONDIR defined!), download the staged
-daikon.tar.gz
+environment variables such as @env{$DAIKONDIR} defined!), download the staged
+@file{daikon.tar.gz}
 file, extract the files, set the appropriate environment variables
 and run the top level Makefile.
 The last line of output from the first make should indicate that Kvasir was
-not built because this is not a linux platform. After running the second
+not built because this is not a Linux platform. After running the second
 make command, success is indicated by invariant output being
 written to the screen.
 @*
@@ -2216,11 +2227,11 @@ make installation-test
 
 @item
 Test the distribution on a MacOSX machine.  On a MacOSX machine
-with the development tools installed, download the staged daikon.tar.gz
+with the development tools installed, download the staged @file{daikon.tar.gz}
 file, extract the files, set the appropriate environment variables and
-run the top level makefile.
+run the top level Makefile.
 The last line of output from the first make should indicate that Kvasir was
-not built because this is not a linux platform. After running the second
+not built because this is not a Linux platform. After running the second
 make command, success is indicated by invariant output being
 written to the screen.
 @*
@@ -2267,7 +2278,7 @@ make staging-to-www
 @item
 Commit changes back to the repository:
 
-@emph{Could this be done with `cat $DAIKONDIR/doc/VERSION`?}
+@emph{Could this be done with @command{cat $DAIKONDIR/doc/VERSION}?}
 
 @example
 hg -q commit -m "Change version to @emph{X.Y.Z}"
@@ -2320,7 +2331,7 @@ make update-doc-dist-date-and-version
 
 
 @item
-Verfiy these changes by doing partial product builds:
+Verify these changes by doing partial product builds:
 
 @example
 make rebuild-everything-no-clean
@@ -2344,8 +2355,8 @@ hg push
 
 
 @item
-Send mail to the daikon-announce mailing list.
-This list is located at daikon-announce@@googlegroups.com.
+Send mail to the @samp{daikon-announce} mailing list.
+This list is located at @samp{daikon-announce@@googlegroups.com}.
 (We have just moved the location of our mailing lists.  For now, you can
 find old sample messages in the
 @uref{http://lists.csail.mit.edu/pipermail/daikon-announce/,archive}
@@ -2447,11 +2458,11 @@ describes CVS branches:
 
 @quotation
 CVS allows you to isolate changes onto a separate line of development,
-known as a ``branch''.  When you change files on a branch, those changes
+known as a @dfn{branch}.  When you change files on a branch, those changes
 do not appear on the main trunk or other branches.
 
 Later you can move changes from one branch to another branch (or the
-main trunk) by ``merging''.  Merging involves first running 
+main trunk) by @dfn{merging}.  Merging involves first running 
 @command{cvs update -j}, to merge the changes into the working directory.
 You can then commit that revision, and thus effectively copy the
 changes onto another branch.
@@ -2467,9 +2478,9 @@ In early January 2002 (or perhaps in late 2001), we created the
 the Daikon CVS repository.  Primary development continued along the CVS
 branch @samp{ENGINE_V2_PATCHES}, which we called
 ``Daikon version @c trick version updater
-2''.  We
+2''  We
 called the CVS trunk ``Daikon version @c trick version updater
-3''; it was experimental, and very
+3'' it was experimental, and very
 few people ran its code or performed development on it.  Periodically,
 all changes made to the branch would be merged into the trunk, as one
 large checkin on the trunk.  Later, development on version 3 became more
@@ -2520,7 +2531,7 @@ A new front end enables Daikon to detect
 invariants in another programming language.
 
 Daikon's input is conventionally one or more @file{.dtrace} data trace
-files.  (Another, optional type of input file for Daikon is a splitter
+files.  (Another, optional type of input file for Daikon is a @dfn{splitter}
 info file; @pxref{Splitter info file format,,,daikon,Daikon User Manual}.)
 A trace file is a text file that consists of newline-separated
 records.  There are two basic types of records that can appear in Daikon's
@@ -2538,7 +2549,7 @@ A program point declaration
 may be repeated, so long as the declarations match exactly (any
 declarations after the first one have no effect).
 
-A data trace record (also known as a ``sample'')
+A data trace record (also known as a @dfn{sample})
 represents one execution of a program point.  The
 record specifies the program point and gives the runtime values of each
 variable.  The list of variables in the data trace record must be
@@ -2567,10 +2578,10 @@ There exist some other declaration-related records;
 
 Instead of placing both declarations and data trace records in a single
 file, it is permitted to place the declarations in one or more
-@file{.decls} ``declaration files'' while leaving the data trace records
+@file{.decls} @dfn{declaration files} while leaving the data trace records
 in the @file{.dtrace} file.  This can be convenient for tools that
 perform a separate instrumentation step, such as
-dfepl (@pxref{dfepl,,,daikon,Daikon User Manual}).
+@command{dfepl} (@pxref{dfepl,,,daikon,Daikon User Manual}).
 Such a tool takes as
 input a target program to be analyzed, and produces two outputs:  a
 @file{.decls} file and an instrumented program.  Executing the
@@ -2603,7 +2614,7 @@ inside a record.
 @section Declarations
 
 @cindex declaration format
-@cindex .decls file
+@cindex @file{.decls} file
 
 The trace file (or declaration file) first states the declaration file format
 version number (@pxref{Declaration version}).
@@ -2689,7 +2700,7 @@ var-comparability <comparability-type>
 The possible values for @var{comparability-type} are @code{implicit} and
 @code{none}.
 
-``@code{implicit}'' means ordinary comparability as described in
+@code{implicit} means ordinary comparability as described in
 @ref{Program point declarations}.  (The name @code{implicit} is retained
 for historical reasons.)
 
@@ -2711,7 +2722,7 @@ ListImplementors
 @end example
 
 @noindent
-Each classname is in Java format (for example, ``java.util.LinkedList'').
+Each @code{classname} is in Java format (for example, @file{java.util.LinkedList}).
 
 The @option{--list_type} command-line option to Daikon can also be used to
 specify classes that implement lists;
@@ -2756,7 +2767,7 @@ from a programming language or when is no dataflow hierarchy.
 
 @item @code{flags <flags>}
 
-Specifies one or more flags for this ppt.  The possible flags are:
+Specifies one or more flags for this @code{ppt}.  The possible flags are:
 @code{static}, @code{enter}, @code{exit}, @code{private}, @code{return}.
 
 @item @code{parent <relation-type> <parent-ppt-name> <relation-id>}
@@ -2777,7 +2788,8 @@ are explicitly related, such as an enter and an exit point.  All of the
 variables at one of the points exists at the other.  A @code{user}
 relation is one where a class is used at another point, such as at an
 enter point.  For example, if a reference to class A were passed to
-routine r1, the values found at enter and exit of r1 could be applied to
+routine @samp{r1}, the values found at enter and exit of @samp{r1} could
+be applied to
 the class/object program point for A.  By default @code{user} relations
 are not used because they can be recursive.
 
@@ -2807,7 +2819,7 @@ used in the programming language.  All characters are legal in a name,
 but blanks must be represented as @code{\_} and backslashes as
 @code{\\}.
 
-If the variable is an array, '@code{..}' marks the location of
+If the variable is an array, @code{..} marks the location of
 array indices within the variable name.  Some examples of names are:
 @example
 this.theArray
@@ -2864,7 +2876,7 @@ versions of Daikon may support more levels of arrays.
 This is what the programmer used in the declaration of the variable.
 Names for standard types should use Java's names (e.g., @code{int},
 @code{boolean}, etc.), but names for user-defined or language-specific
-types can be arbitrary strings.  A dec-type entry is required in each
+types can be arbitrary strings.  A @code{dec-type} entry is required in each
 variable block.
 
 @item @code{rep-type <daikon-type>}
@@ -2877,7 +2889,7 @@ type might be @code{Object} but the representation type might be
 file.  A rep-type entry is required in each
 variable block.
 
-@cindex pointer variables, see ``hashcode'' type
+@cindex pointer variables, see @dfn{hashcode} type
 @cindex hashcode type, for variables
 
 The representation type should be one of @code{boolean}, @code{int},
@@ -2889,8 +2901,7 @@ addresses (pointers) or the return value of Java's
 @code{Object.hashCode} method.  @code{hashcode} is treated like
 @code{int}, except that the hashcode values are considered uninteresting
 for the purposes of output.  For example, Daikon will print
-@samp{@var{var} has only one value} instead of @samp{@var{var} ==
-0x38E8A}.
+@samp{@var{var} has only one value} instead of @samp{@var{var} == 0x38E8A}.
 
 
 @item @code{flags <flags>}
@@ -2940,7 +2951,7 @@ manifest in the input program.
 
 @item @code{classname} 
 
-Indicates that the variable indicates the classname of its 
+Indicates that the variable indicates the @code{classname} of its 
 enclosing variable.
 
 @item @code{to_string} 
@@ -2951,7 +2962,7 @@ enclosing variable.
 @item @code{non_null}
 
 Indicates that the variable can't take on a null value.  In this
-case, Daikon will not check for the NonZero invariant.
+case, Daikon will not check for the @samp{NonZero} invariant.
 
 @end itemize
 
@@ -3041,7 +3052,7 @@ be defined as variables.
 @cindex data trace format
 @cindex .dtrace file
 
-A data trace record (also known as a ``sample'') contains run-time value
+A data trace record (also known as a @dfn{sample}) contains run-time value
 information.  Its format is:
 @example
 <program-point-name>
@@ -3152,14 +3163,14 @@ deallocated)
 @noindent
 For trace variables, it is the responsibility of the front end to
 perform a check at run time whenever a variable's value is about to be
-output to the trace, and to output the value ``nonsensical''
+output to the trace, and to output the value @samp{nonsensical}
 (@pxref{Nonsensical values}) rather than crashing the program or
 outputting an uninitialized or meaningless value.  (Determining when an
 expression's value is meaningless is the most challenging part of
 writing an instrumenter for a language like C, since it requires
 tracking memory allocation and initialization.)  For derived variables
 created by Daikon, Daikon does the same thing, setting values to
-``nonsensical'' when appropriate.  For controlling Daikon's output in
+@samp{nonsensical} when appropriate.  For controlling Daikon's output in
 the presence of nonsensical values, see the
 @option{daikon.Daikon.guardNulls} configuration option
 (@pxref{General configuration options,,,daikon,Daikon User Manual}).
@@ -3527,7 +3538,7 @@ this.topOfStack
 @node    Version 1 Declarations
 @section Version 1 Declarations
 
-@cindex .decls file (version 1)
+@cindex @file{.decls} file (version 1)
 
 This section describes the original version (1.0) of declaration
 records.  These are now obsolete and should not be used.
@@ -3564,7 +3575,7 @@ comparable2
 Program point information includes:
 @itemize @bullet
 @item
-name (``tag'') of this program point, an arbitrary string containing no
+name (@dfn{tag}) of this program point, an arbitrary string containing no
 tab or newline characters.  This name contains information such as the
 class name or method name; what information is contained depends on
 which instrumenter is being used.  @xref{V1 pptname format}, for a full
@@ -3653,8 +3664,8 @@ compile-time constant value and should be omitted from the data
 trace file.
 @end itemize
 @item
-@cindex comparability, for variables (decls format version 1)
-@cindex variable comparability (decls format version 1)
+@cindex comparability, for variables (@file{.decls} format version 1)
+@cindex variable comparability (@file{.decls} format version 1)
 comparable variables.  This information indicates
 which other variables are comparable to this one.
 
@@ -3800,15 +3811,13 @@ with the name(s) of their classes or namespaces, with the C++ @samp{::}
 syntax mapped onto the Java @samp{.} syntax used by Daikon.
 @end itemize
 
-For IOA, @var{topLevel} consists of an Automaton name and
+For an Input Output Automaton, @var{topLevel} consists of an Automaton name and
 @var{bottomLevel} consists of information for a transition state.
-
-
 
 By convention, the entry and exit points for a function have names of
 a special form so that they can be associated with one another.
 (Currently, those names end with @code{:::ENTER} and @code{:::EXIT}.)  This
-convention permits Daikon to generate pre-state variables
+convention permits Daikon to generate @nospellcheck{pre-state} variables
 (@pxref{Variable names,,,daikon,Daikon User Manual}) automatically at
 procedure exit points, so
 front ends need not output them explicitly.  When there
@@ -3869,7 +3878,7 @@ ListImplementors
 @end example
 
 @noindent
-Each classname is in Java format (for example, ``java.util.LinkedList'').
+Each @code{classname} is in Java format (for example, @file{java.util.LinkedList}).
 
 The @option{--list_type} command-line option to Daikon can also be used to
 specify classes that implement lists; @pxref{Options to control invariant
