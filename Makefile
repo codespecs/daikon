@@ -122,7 +122,8 @@ RSYNC_AR := rsync -aR
 # A good alternative for Makefile.user is: hg fetch
 # When disconnected from network, change this to a no-op, or (better) just
 # set NONETWORK to true.
-HG_PULL_U ?= hg pull -u
+# HG_PULL_U ?= hg pull -u
+HG_PULL_U ?= hg pull; hg update --tool internal:merge
 # Example Makefile.user line, on cygwin: HG_OPTIONS=--insecure
 HG_OPTIONS ?=
 
