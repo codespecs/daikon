@@ -123,7 +123,7 @@ RSYNC_AR := rsync -aR
 # When disconnected from network, change this to a no-op, or (better) just
 # set NONETWORK to true.
 # HG_PULL_U ?= hg pull -u
-HG_PULL_U ?= hg pull; hg update --tool internal:merge
+HG_PULL_U ?= hg pull; hg merge --tool internal:merge; hg update
 # Example Makefile.user line, on cygwin: HG_OPTIONS=--insecure
 HG_OPTIONS ?=
 
