@@ -20,6 +20,27 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.0.6 (March 28, 2014)
+
+Daikon:
+  This release contains a fix for Daikon issue #28.  See:
+  http://code.google.com/p/daikon/issues/detail?id=28
+
+Fjalar:
+  We updated our object code reader to match version 2.24 of the GNU binutils. 
+  Updated the source copyrights.
+  Added two more regressions tests.
+  Fixed Daikon issue #28.
+
+  Users of Kvasir to analyze C/C++ codes should not see
+  any differences in behavior from the previous version.
+
+Documentation:
+  Lots of changes to correct spelling and .texinfo tag usage.
+  No significant content changes were made.
+
+===========================================================================
+
 5.0.4 (February 28, 2014)
 
 Daikon:
