@@ -1,5 +1,5 @@
 This is the distribution of the Daikon invariant detector,
-Daikon version 5.0.6, released March 28, 2014.
+Daikon version 5.0.7, released March 28, 2014.
 
 If you are working with a Daikon distribution downloaded from the Daikon
 website, then most everything is setup and ready to go.  See the 'doc'
