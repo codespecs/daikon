@@ -1,4 +1,4 @@
-# Need to ignore merucial directory and associated files
+# Need to ignore Mercurial directory and associated files
 - .hgignore
 - .hgtags
 - .hg/
