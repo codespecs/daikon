@@ -31,7 +31,7 @@ Variable sets for misc.Param.main() exit
   [1] [Field gs2.a]
   [1] [Field gs2.b]
 
-Variable sets for misc.Param.work(I pi1, I pi2, misc.ParamType ps1, misc.ParamType ps2) enter
+Variable sets for misc.Param.work(int pi1, int pi2, misc.ParamType ps1, misc.ParamType ps2) enter
   [2] [Parameter pi1, Field gi1]
   [2] [Parameter pi2, Field gi2]
   [2] [Parameter ps1, Field gs1]
@@ -41,7 +41,7 @@ Variable sets for misc.Param.work(I pi1, I pi2, misc.ParamType ps1, misc.ParamTy
   [2] [Field ps2.a, Field gs2.a]
   [2] [Field ps2.b, Field gs2.b]
   [1] [this]
-Variable sets for misc.Param.work(I pi1, I pi2, misc.ParamType ps1, misc.ParamType ps2) exit
+Variable sets for misc.Param.work(int pi1, int pi2, misc.ParamType ps1, misc.ParamType ps2) exit
   [2] [Parameter pi1, Field gi1]
   [2] [Parameter pi2, Field gi2]
   [2] [Parameter ps1, Field gs1]

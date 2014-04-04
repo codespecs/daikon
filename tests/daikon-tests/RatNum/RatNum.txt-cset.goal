@@ -1,15 +1,15 @@
 
-Variable sets for PolyCalc.RatNum.<init>(I n) enter
+Variable sets for PolyCalc.RatNum.<init>(int n) enter
   [1] [Parameter n]
-Variable sets for PolyCalc.RatNum.<init>(I n) exit
+Variable sets for PolyCalc.RatNum.<init>(int n) exit
   [2] [Parameter n, Field numer]
   [1] [this]
   [1] [Field denom]
 
-Variable sets for PolyCalc.RatNum.<init>(I n, I d) enter
+Variable sets for PolyCalc.RatNum.<init>(int n, int d) enter
   [1] [Parameter d]
   [1] [Parameter n]
-Variable sets for PolyCalc.RatNum.<init>(I n, I d) exit
+Variable sets for PolyCalc.RatNum.<init>(int n, int d) exit
   [4] [Parameter d, Parameter n, Field denom, Field numer]
   [1] [this]
 
@@ -99,9 +99,9 @@ Variable sets for PolyCalc.RatNum.div(PolyCalc.RatNum arg) exit
   [3] [Parameter arg, return, this]
   [6] [Field arg.denom, Field arg.numer, Field return.denom, Field return.numer, Field denom, Field numer]
 
-Variable sets for PolyCalc.RatNum.gcd(I _a, I _b) enter
+Variable sets for PolyCalc.RatNum.gcd(int _a, int _b) enter
   [2] [Parameter _a, Parameter _b]
-Variable sets for PolyCalc.RatNum.gcd(I _a, I _b) exit
+Variable sets for PolyCalc.RatNum.gcd(int _a, int _b) exit
   [3] [Parameter _a, Parameter _b, return]
 
 Variable sets for PolyCalc.RatNum.hashCode() enter

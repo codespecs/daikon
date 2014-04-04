@@ -1,8 +1,8 @@
 
-Variable sets for misc.Purity.<init>(I value, I shift) enter
+Variable sets for misc.Purity.<init>(int value, int shift) enter
   [1] [Parameter shift]
   [1] [Parameter value]
-Variable sets for misc.Purity.<init>(I value, I shift) exit
+Variable sets for misc.Purity.<init>(int value, int shift) exit
   [2] [Parameter shift, Field shift]
   [1] [this]
   [1] [Field heavy]
@@ -143,7 +143,7 @@ Variable sets for misc.Purity.getJWrap() exit
   [1] [Field shift]
   [1] [Field value]
 
-Variable sets for misc.Purity.scale(I scale) enter
+Variable sets for misc.Purity.scale(int scale) enter
   [2] [Parameter scale, Field value]
   [1] [this]
   [1] [Field heavy]
@@ -155,7 +155,7 @@ Variable sets for misc.Purity.scale(I scale) enter
   [1] [List Field list2[..]]
   [1] [Class of Field list2[..]]
   [1] [Field shift]
-Variable sets for misc.Purity.scale(I scale) exit
+Variable sets for misc.Purity.scale(int scale) exit
   [4] [return, Parameter scale, Field shift, Field value]
   [1] [this]
   [1] [Field heavy]

@@ -1,15 +1,15 @@
 
-Variable sets for PolyCalc.RatNum.<init>(I n) enter
+Variable sets for PolyCalc.RatNum.<init>(int n) enter
   [1] [Parameter n]
-Variable sets for PolyCalc.RatNum.<init>(I n) exit
+Variable sets for PolyCalc.RatNum.<init>(int n) exit
   [2] [Parameter n, Field numer]
   [1] [this]
   [1] [Field denom]
 
-Variable sets for PolyCalc.RatNum.<init>(I n, I d) enter
+Variable sets for PolyCalc.RatNum.<init>(int n, int d) enter
   [1] [Parameter d]
   [1] [Parameter n]
-Variable sets for PolyCalc.RatNum.<init>(I n, I d) exit
+Variable sets for PolyCalc.RatNum.<init>(int n, int d) exit
   [4] [Parameter d, Parameter n, Field denom, Field numer]
   [1] [this]
 
@@ -99,9 +99,9 @@ Variable sets for PolyCalc.RatNum.div(PolyCalc.RatNum arg) exit
   [3] [Parameter arg, return, this]
   [6] [Field arg.denom, Field arg.numer, Field return.denom, Field return.numer, Field denom, Field numer]
 
-Variable sets for PolyCalc.RatNum.gcd(I _a, I _b) enter
+Variable sets for PolyCalc.RatNum.gcd(int _a, int _b) enter
   [2] [Parameter _a, Parameter _b]
-Variable sets for PolyCalc.RatNum.gcd(I _a, I _b) exit
+Variable sets for PolyCalc.RatNum.gcd(int _a, int _b) exit
   [3] [Parameter _a, Parameter _b, return]
 
 Variable sets for PolyCalc.RatNum.hashCode() enter
@@ -141,10 +141,10 @@ Variable sets for PolyCalc.RatPoly.<init>() exit
   [1] [List Field terms.wrapped[..]]
   [1] [Class of Field terms.wrapped[..]]
 
-Variable sets for PolyCalc.RatPoly.<init>(I c, I e) enter
+Variable sets for PolyCalc.RatPoly.<init>(int c, int e) enter
   [1] [Parameter c]
   [1] [Parameter e]
-Variable sets for PolyCalc.RatPoly.<init>(I c, I e) exit
+Variable sets for PolyCalc.RatPoly.<init>(int c, int e) exit
   [1] [Parameter c]
   [1] [Parameter e]
   [1] [this]
@@ -194,14 +194,14 @@ Variable sets for PolyCalc.RatPoly.degree() exit
   [1] [List Field terms.wrapped[..]]
   [1] [Class of Field terms.wrapped[..]]
 
-Variable sets for PolyCalc.RatPoly.coeff(I deg) enter
+Variable sets for PolyCalc.RatPoly.coeff(int deg) enter
   [1] [Parameter deg]
   [1] [this]
   [1] [Field terms]
   [1] [Field terms.wrapped]
   [1] [List Field terms.wrapped[..]]
   [1] [Class of Field terms.wrapped[..]]
-Variable sets for PolyCalc.RatPoly.coeff(I deg) exit
+Variable sets for PolyCalc.RatPoly.coeff(int deg) exit
   [3] [Parameter deg, Field return.denom, Field return.numer]
   [1] [return]
   [1] [this]
@@ -272,13 +272,13 @@ Variable sets for PolyCalc.RatPoly.scaleCoeff(PolyCalc.RatTermVec vec, PolyCalc.
   [1] [List vec.wrapped[..]]
   [1] [Class of vec.wrapped[..]]
 
-Variable sets for PolyCalc.RatPoly.incremExpt(PolyCalc.RatTermVec vec, I degree) enter
+Variable sets for PolyCalc.RatPoly.incremExpt(PolyCalc.RatTermVec vec, int degree) enter
   [1] [Parameter degree]
   [1] [Parameter vec]
   [1] [Field vec.wrapped]
   [1] [List vec.wrapped[..]]
   [1] [Class of vec.wrapped[..]]
-Variable sets for PolyCalc.RatPoly.incremExpt(PolyCalc.RatTermVec vec, I degree) exit
+Variable sets for PolyCalc.RatPoly.incremExpt(PolyCalc.RatTermVec vec, int degree) exit
   [1] [Parameter degree]
   [1] [Parameter vec]
   [1] [Field vec.wrapped]
@@ -415,26 +415,26 @@ Variable sets for PolyCalc.RatPoly.containsNaN(PolyCalc.RatTermVec vec) enter
 Variable sets for PolyCalc.RatPoly.containsNaN(PolyCalc.RatTermVec vec) exit
   not called
 
-Variable sets for PolyCalc.RatPoly.findTermIndex(PolyCalc.RatTermVec ts, I expt) enter
+Variable sets for PolyCalc.RatPoly.findTermIndex(PolyCalc.RatTermVec ts, int expt) enter
   [1] [Parameter expt]
   [1] [Parameter ts]
   [1] [Field ts.wrapped]
   [1] [List ts.wrapped[..]]
   [1] [Class of ts.wrapped[..]]
-Variable sets for PolyCalc.RatPoly.findTermIndex(PolyCalc.RatTermVec ts, I expt) exit
+Variable sets for PolyCalc.RatPoly.findTermIndex(PolyCalc.RatTermVec ts, int expt) exit
   [2] [Parameter expt, return]
   [1] [Parameter ts]
   [1] [Field ts.wrapped]
   [1] [List ts.wrapped[..]]
   [1] [Class of ts.wrapped[..]]
 
-Variable sets for PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec ts, I i, I expt) enter
+Variable sets for PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec ts, int i, int expt) enter
   [2] [Parameter expt, Parameter i]
   [1] [Parameter ts]
   [1] [Field ts.wrapped]
   [1] [List ts.wrapped[..]]
   [1] [Class of ts.wrapped[..]]
-Variable sets for PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec ts, I i, I expt) exit
+Variable sets for PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec ts, int i, int expt) exit
   [5] [Parameter expt, Parameter i, Field return.coeff.denom, Field return.coeff.numer, Field return.expt]
   [2] [return, List ts.wrapped[..]]
   [1] [Field return.coeff]
@@ -442,7 +442,7 @@ Variable sets for PolyCalc.RatPoly.hintedGet(PolyCalc.RatTermVec ts, I i, I expt
   [1] [Field ts.wrapped]
   [1] [Class of ts.wrapped[..]]
 
-Variable sets for PolyCalc.RatPoly.replaceExpt(PolyCalc.RatTerm term, PolyCalc.RatTermVec ts, I index) enter
+Variable sets for PolyCalc.RatPoly.replaceExpt(PolyCalc.RatTerm term, PolyCalc.RatTermVec ts, int index) enter
   [4] [Parameter index, Field term.coeff.denom, Field term.coeff.numer, Field term.expt]
   [1] [Parameter term]
   [1] [Field term.coeff]
@@ -450,7 +450,7 @@ Variable sets for PolyCalc.RatPoly.replaceExpt(PolyCalc.RatTerm term, PolyCalc.R
   [1] [Field ts.wrapped]
   [1] [List ts.wrapped[..]]
   [1] [Class of ts.wrapped[..]]
-Variable sets for PolyCalc.RatPoly.replaceExpt(PolyCalc.RatTerm term, PolyCalc.RatTermVec ts, I index) exit
+Variable sets for PolyCalc.RatPoly.replaceExpt(PolyCalc.RatTerm term, PolyCalc.RatTermVec ts, int index) exit
   [4] [Parameter index, Field term.coeff.denom, Field term.coeff.numer, Field term.expt]
   [2] [Parameter term, List ts.wrapped[..]]
   [1] [Field term.coeff]
@@ -475,14 +475,14 @@ Variable sets for PolyCalc.RatPoly.negate() exit
   [1] [List Field terms.wrapped[..]]
   [1] [Class of Field terms.wrapped[..]]
 
-Variable sets for PolyCalc.RatPoly.eval(D d) enter
+Variable sets for PolyCalc.RatPoly.eval(double d) enter
   [1] [Parameter d]
   [1] [this]
   [1] [Field terms]
   [1] [Field terms.wrapped]
   [1] [List Field terms.wrapped[..]]
   [1] [Class of Field terms.wrapped[..]]
-Variable sets for PolyCalc.RatPoly.eval(D d) exit
+Variable sets for PolyCalc.RatPoly.eval(double d) exit
   [1] [Parameter d]
   [1] [return]
   [1] [this]
@@ -540,13 +540,13 @@ Variable sets for PolyCalc.RatTermVec.size() exit
   [1] [List Field wrapped[..]]
   [1] [Class of Field wrapped[..]]
 
-Variable sets for PolyCalc.RatTermVec.get(I index) enter
+Variable sets for PolyCalc.RatTermVec.get(int index) enter
   [1] [Parameter index]
   [1] [this]
   [1] [Field wrapped]
   [1] [List Field wrapped[..]]
   [1] [Class of Field wrapped[..]]
-Variable sets for PolyCalc.RatTermVec.get(I index) exit
+Variable sets for PolyCalc.RatTermVec.get(int index) exit
   [4] [Parameter index, Field return.coeff.denom, Field return.coeff.numer, Field return.expt]
   [2] [return, List Field wrapped[..]]
   [1] [Field return.coeff]
@@ -570,14 +570,14 @@ Variable sets for PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm t) exit
   [1] [Field wrapped]
   [1] [Class of Field wrapped[..]]
 
-Variable sets for PolyCalc.RatTermVec.insert(PolyCalc.RatTerm t, I index) enter
+Variable sets for PolyCalc.RatTermVec.insert(PolyCalc.RatTerm t, int index) enter
   [4] [Parameter index, Field t.coeff.denom, Field t.coeff.numer, Field t.expt]
   [2] [Parameter t, List Field wrapped[..]]
   [1] [Field t.coeff]
   [1] [this]
   [1] [Field wrapped]
   [1] [Class of Field wrapped[..]]
-Variable sets for PolyCalc.RatTermVec.insert(PolyCalc.RatTerm t, I index) exit
+Variable sets for PolyCalc.RatTermVec.insert(PolyCalc.RatTerm t, int index) exit
   [4] [Parameter index, Field t.coeff.denom, Field t.coeff.numer, Field t.expt]
   [2] [Parameter t, List Field wrapped[..]]
   [1] [Field t.coeff]
@@ -585,20 +585,20 @@ Variable sets for PolyCalc.RatTermVec.insert(PolyCalc.RatTerm t, I index) exit
   [1] [Field wrapped]
   [1] [Class of Field wrapped[..]]
 
-Variable sets for PolyCalc.RatTermVec.remove(I index) enter
+Variable sets for PolyCalc.RatTermVec.remove(int index) enter
   [1] [Parameter index]
   [1] [this]
   [1] [Field wrapped]
   [1] [List Field wrapped[..]]
   [1] [Class of Field wrapped[..]]
-Variable sets for PolyCalc.RatTermVec.remove(I index) exit
+Variable sets for PolyCalc.RatTermVec.remove(int index) exit
   [1] [Parameter index]
   [1] [this]
   [1] [Field wrapped]
   [1] [List Field wrapped[..]]
   [1] [Class of Field wrapped[..]]
 
-Variable sets for PolyCalc.RatTermVec.set(PolyCalc.RatTerm t, I index) enter
+Variable sets for PolyCalc.RatTermVec.set(PolyCalc.RatTerm t, int index) enter
   [4] [Parameter index, Field t.coeff.denom, Field t.coeff.numer, Field t.expt]
   [1] [Parameter t]
   [1] [Field t.coeff]
@@ -606,7 +606,7 @@ Variable sets for PolyCalc.RatTermVec.set(PolyCalc.RatTerm t, I index) enter
   [1] [Field wrapped]
   [1] [List Field wrapped[..]]
   [1] [Class of Field wrapped[..]]
-Variable sets for PolyCalc.RatTermVec.set(PolyCalc.RatTerm t, I index) exit
+Variable sets for PolyCalc.RatTermVec.set(PolyCalc.RatTerm t, int index) exit
   [4] [Parameter index, Field t.coeff.denom, Field t.coeff.numer, Field t.expt]
   [2] [Parameter t, List Field wrapped[..]]
   [1] [Field t.coeff]
@@ -637,11 +637,11 @@ Variable sets for PolyCalc.RatTermVec.equals(java.lang.Object obj) enter
 Variable sets for PolyCalc.RatTermVec.equals(java.lang.Object obj) exit
   not called
 
-Variable sets for PolyCalc.RatTerm.<init>(PolyCalc.RatNum c, I e) enter
+Variable sets for PolyCalc.RatTerm.<init>(PolyCalc.RatNum c, int e) enter
   [1] [Parameter c]
   [2] [Field c.denom, Field c.numer]
   [1] [Parameter e]
-Variable sets for PolyCalc.RatTerm.<init>(PolyCalc.RatNum c, I e) exit
+Variable sets for PolyCalc.RatTerm.<init>(PolyCalc.RatNum c, int e) exit
   [2] [Parameter c, Field coeff]
   [6] [Field c.denom, Field c.numer, Parameter e, Field coeff.denom, Field coeff.numer, Field expt]
   [1] [this]

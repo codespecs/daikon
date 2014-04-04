@@ -93,17 +93,19 @@ public class MethodInfo {
     this.is_included = is_included;
   }
 
+  // Use reserved keyword for basic type rather than signature to
+  // avoid conflicts with user defined types. Daikon issue #10.
   private static HashMap<String,Class<?>> primitive_classes
     = new HashMap<String,Class<?>>(8);
   static {
-    primitive_classes.put("Z", Boolean.TYPE);
-    primitive_classes.put("B", Byte.TYPE);
-    primitive_classes.put("C", Character.TYPE);
-    primitive_classes.put("D", Double.TYPE);
-    primitive_classes.put("F", Float.TYPE);
-    primitive_classes.put("I", Integer.TYPE);
-    primitive_classes.put("J", Long.TYPE);
-    primitive_classes.put("S", Short.TYPE);
+    primitive_classes.put("boolean", Boolean.TYPE);
+    primitive_classes.put("byte", Byte.TYPE);
+    primitive_classes.put("char", Character.TYPE);
+    primitive_classes.put("double", Double.TYPE);
+    primitive_classes.put("float", Float.TYPE);
+    primitive_classes.put("int", Integer.TYPE);
+    primitive_classes.put("long", Long.TYPE);
+    primitive_classes.put("short", Short.TYPE);
   }
 
   /** Populates this class with data from reflection **/

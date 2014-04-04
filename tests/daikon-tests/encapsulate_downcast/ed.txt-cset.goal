@@ -41,12 +41,12 @@ Variable sets for misc.EncapsulateDowncast.equals(java.lang.Object obj) enter
 Variable sets for misc.EncapsulateDowncast.equals(java.lang.Object obj) exit
   not called
 
-Variable sets for misc.Person.<init>(java.lang.String name, I height, I weight) enter
+Variable sets for misc.Person.<init>(java.lang.String name, int height, int weight) enter
   [1] [Parameter height]
   [1] [Parameter name]
   [1] [String name.toString]
   [1] [Parameter weight]
-Variable sets for misc.Person.<init>(java.lang.String name, I height, I weight) exit
+Variable sets for misc.Person.<init>(java.lang.String name, int height, int weight) exit
   [4] [Parameter height, Field _height, Field _weight, Parameter weight]
   [2] [Parameter name, Field _name]
   [1] [String name.toString]

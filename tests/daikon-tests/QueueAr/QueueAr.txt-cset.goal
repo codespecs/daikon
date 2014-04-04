@@ -1,7 +1,7 @@
 
-Variable sets for DataStructures.QueueAr.<init>(I capacity) enter
+Variable sets for DataStructures.QueueAr.<init>(int capacity) enter
   [1] [Parameter capacity]
-Variable sets for DataStructures.QueueAr.<init>(I capacity) exit
+Variable sets for DataStructures.QueueAr.<init>(int capacity) exit
   [3] [Parameter capacity, Field back, Field theArray]
   [1] [this]
   [1] [Field currentSize]

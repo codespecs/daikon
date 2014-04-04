@@ -10,11 +10,11 @@ Variable sets for misc.Suppress02.main([Ljava.lang.String; args) exit
   [1] [Array args[..]]
   [1] [String args[..].toString]
 
-Variable sets for misc.Suppress02.f(I n) enter
+Variable sets for misc.Suppress02.f(int n) enter
   [3] [Parameter n, Field i, Field j]
   [1] [this]
   [2] [Field theArray, Array Field theArray[..]]
-Variable sets for misc.Suppress02.f(I n) exit
+Variable sets for misc.Suppress02.f(int n) exit
   [3] [Parameter n, Field i, Field j]
   [1] [this]
   [2] [Field theArray, Array Field theArray[..]]

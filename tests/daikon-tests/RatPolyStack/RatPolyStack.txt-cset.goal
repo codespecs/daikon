@@ -87,14 +87,14 @@ Variable sets for PolyCalc.RatPolyStack.clear() exit
   [1] [Field polys.tail.tail]
   [1] [Field size]
 
-Variable sets for PolyCalc.RatPolyStack.get(I index) enter
+Variable sets for PolyCalc.RatPolyStack.get(int index) enter
   [2] [Parameter index, Field size]
   [1] [this]
   [1] [Field polys]
   [2] [Field polys.head, Field polys.tail.head]
   [1] [Field polys.tail]
   [1] [Field polys.tail.tail]
-Variable sets for PolyCalc.RatPolyStack.get(I index) exit
+Variable sets for PolyCalc.RatPolyStack.get(int index) exit
   [2] [Parameter index, Field size]
   [3] [return, Field polys.head, Field polys.tail.head]
   [1] [this]
@@ -183,14 +183,14 @@ Variable sets for PolyCalc.RatPolyStack.size() exit
   [1] [Field polys.tail]
   [1] [Field polys.tail.tail]
 
-Variable sets for PolyCalc.RatPolyStack.getCons(I index) enter
+Variable sets for PolyCalc.RatPolyStack.getCons(int index) enter
   [2] [Parameter index, Field size]
   [1] [this]
   [1] [Field polys]
   [2] [Field polys.head, Field polys.tail.head]
   [1] [Field polys.tail]
   [1] [Field polys.tail.tail]
-Variable sets for PolyCalc.RatPolyStack.getCons(I index) exit
+Variable sets for PolyCalc.RatPolyStack.getCons(int index) exit
   [2] [Parameter index, Field size]
   [6] [return, Field return.tail, Field return.tail.tail, Field polys, Field polys.tail, Field polys.tail.tail]
   [4] [Field return.head, Field return.tail.head, Field polys.head, Field polys.tail.head]

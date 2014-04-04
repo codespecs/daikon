@@ -1,47 +1,47 @@
 
-Variable sets for six170.Hanoi.<init>(I height) enter
+Variable sets for six170.Hanoi.<init>(int height) enter
   [1] [Parameter height]
-Variable sets for six170.Hanoi.<init>(I height) exit
+Variable sets for six170.Hanoi.<init>(int height) exit
   [3] [Parameter height, Field diskLocation, Field height]
   [1] [this]
   [1] [Array Field diskLocation[..]]
   [1] [Field noOutput]
 
-Variable sets for six170.Hanoi.<init>(I height, Z noOutput) enter
+Variable sets for six170.Hanoi.<init>(int height, boolean noOutput) enter
   [1] [Parameter height]
   [1] [Parameter noOutput]
-Variable sets for six170.Hanoi.<init>(I height, Z noOutput) exit
+Variable sets for six170.Hanoi.<init>(int height, boolean noOutput) exit
   [3] [Parameter height, Field diskLocation, Field height]
   [2] [Parameter noOutput, Field noOutput]
   [1] [this]
   [1] [Array Field diskLocation[..]]
 
-Variable sets for six170.Hanoi.moveDisk(I fromPeg, I toPeg) enter
+Variable sets for six170.Hanoi.moveDisk(int fromPeg, int toPeg) enter
   [3] [Parameter fromPeg, Array Field diskLocation[..], Parameter toPeg]
   [1] [this]
   [2] [Field diskLocation, Field height]
   [1] [Field noOutput]
-Variable sets for six170.Hanoi.moveDisk(I fromPeg, I toPeg) exit
+Variable sets for six170.Hanoi.moveDisk(int fromPeg, int toPeg) exit
   [3] [Parameter fromPeg, Array Field diskLocation[..], Parameter toPeg]
   [1] [this]
   [2] [Field diskLocation, Field height]
   [1] [Field noOutput]
 
-Variable sets for six170.Hanoi.otherPeg(I pegA, I pegB) enter
+Variable sets for six170.Hanoi.otherPeg(int pegA, int pegB) enter
   [1] [Parameter pegA]
   [1] [Parameter pegB]
-Variable sets for six170.Hanoi.otherPeg(I pegA, I pegB) exit
+Variable sets for six170.Hanoi.otherPeg(int pegA, int pegB) exit
   [1] [Parameter pegA]
   [1] [Parameter pegB]
   [1] [return]
 
-Variable sets for six170.Hanoi.moveTower(I fromPeg, I toPeg, I towerHeight) enter
+Variable sets for six170.Hanoi.moveTower(int fromPeg, int toPeg, int towerHeight) enter
   [1] [Parameter fromPeg]
   [1] [this]
   [3] [Field diskLocation, Field height, Parameter towerHeight]
   [2] [Array Field diskLocation[..], Parameter toPeg]
   [1] [Field noOutput]
-Variable sets for six170.Hanoi.moveTower(I fromPeg, I toPeg, I towerHeight) exit
+Variable sets for six170.Hanoi.moveTower(int fromPeg, int toPeg, int towerHeight) exit
   [3] [Parameter fromPeg, Array Field diskLocation[..], Parameter toPeg]
   [1] [this]
   [3] [Field diskLocation, Field height, Parameter towerHeight]

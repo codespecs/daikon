@@ -1,8 +1,8 @@
 
-Variable sets for javautil.Vector.<init>(I initialCapacity, I capacityIncrement) enter
+Variable sets for javautil.Vector.<init>(int initialCapacity, int capacityIncrement) enter
   [1] [Parameter capacityIncrement]
   [1] [Parameter initialCapacity]
-Variable sets for javautil.Vector.<init>(I initialCapacity, I capacityIncrement) exit
+Variable sets for javautil.Vector.<init>(int initialCapacity, int capacityIncrement) exit
   [4] [Parameter capacityIncrement, Parameter initialCapacity, Field capacityIncrement, Field elementData]
   [1] [Field javautil.Vector.serialVersionUID]
   [1] [this]
@@ -11,9 +11,9 @@ Variable sets for javautil.Vector.<init>(I initialCapacity, I capacityIncrement)
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
 
-Variable sets for javautil.Vector.<init>(I initialCapacity) enter
+Variable sets for javautil.Vector.<init>(int initialCapacity) enter
   [1] [Parameter initialCapacity]
-Variable sets for javautil.Vector.<init>(I initialCapacity) exit
+Variable sets for javautil.Vector.<init>(int initialCapacity) exit
   [2] [Parameter initialCapacity, Field elementData]
   [1] [Field javautil.Vector.serialVersionUID]
   [1] [this]
@@ -65,29 +65,14 @@ Variable sets for javautil.Vector.trimToSize() exit
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
 
-Variable sets for javautil.Vector.ensureCapacity(I minCapacity) enter
+Variable sets for javautil.Vector.ensureCapacity(int minCapacity) enter
   [1] [Field javautil.Vector.serialVersionUID]
   [4] [Parameter minCapacity, Field capacityIncrement, Field elementCount, Field elementData]
   [1] [this]
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
-Variable sets for javautil.Vector.ensureCapacity(I minCapacity) exit
-  [1] [Field javautil.Vector.serialVersionUID]
-  [4] [Parameter minCapacity, Field capacityIncrement, Field elementCount, Field elementData]
-  [1] [this]
-  [1] [Class of Field elementData]
-  [1] [Array Field elementData[..]]
-  [1] [Class of Field elementData[..]]
-
-Variable sets for javautil.Vector.ensureCapacityHelper(I minCapacity) enter
-  [1] [Field javautil.Vector.serialVersionUID]
-  [4] [Parameter minCapacity, Field capacityIncrement, Field elementCount, Field elementData]
-  [1] [this]
-  [1] [Class of Field elementData]
-  [1] [Array Field elementData[..]]
-  [1] [Class of Field elementData[..]]
-Variable sets for javautil.Vector.ensureCapacityHelper(I minCapacity) exit
+Variable sets for javautil.Vector.ensureCapacity(int minCapacity) exit
   [1] [Field javautil.Vector.serialVersionUID]
   [4] [Parameter minCapacity, Field capacityIncrement, Field elementCount, Field elementData]
   [1] [this]
@@ -95,14 +80,29 @@ Variable sets for javautil.Vector.ensureCapacityHelper(I minCapacity) exit
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
 
-Variable sets for javautil.Vector.setSize(I newSize) enter
+Variable sets for javautil.Vector.ensureCapacityHelper(int minCapacity) enter
+  [1] [Field javautil.Vector.serialVersionUID]
+  [4] [Parameter minCapacity, Field capacityIncrement, Field elementCount, Field elementData]
+  [1] [this]
+  [1] [Class of Field elementData]
+  [1] [Array Field elementData[..]]
+  [1] [Class of Field elementData[..]]
+Variable sets for javautil.Vector.ensureCapacityHelper(int minCapacity) exit
+  [1] [Field javautil.Vector.serialVersionUID]
+  [4] [Parameter minCapacity, Field capacityIncrement, Field elementCount, Field elementData]
+  [1] [this]
+  [1] [Class of Field elementData]
+  [1] [Array Field elementData[..]]
+  [1] [Class of Field elementData[..]]
+
+Variable sets for javautil.Vector.setSize(int newSize) enter
   [1] [Field javautil.Vector.serialVersionUID]
   [4] [Parameter newSize, Field capacityIncrement, Field elementCount, Field elementData]
   [1] [this]
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
-Variable sets for javautil.Vector.setSize(I newSize) exit
+Variable sets for javautil.Vector.setSize(int newSize) exit
   [1] [Field javautil.Vector.serialVersionUID]
   [4] [Parameter newSize, Field capacityIncrement, Field elementCount, Field elementData]
   [1] [this]
@@ -198,7 +198,7 @@ Variable sets for javautil.Vector.indexOf(java.lang.Object elem) exit
   [1] [Class of Field elementData]
   [1] [Class of Field elementData[..]]
 
-Variable sets for javautil.Vector.indexOf(java.lang.Object elem, I index) enter
+Variable sets for javautil.Vector.indexOf(java.lang.Object elem, int index) enter
   [2] [Parameter elem, Array Field elementData[..]]
   [1] [Class of elem]
   [4] [Parameter index, Field capacityIncrement, Field elementCount, Field elementData]
@@ -206,7 +206,7 @@ Variable sets for javautil.Vector.indexOf(java.lang.Object elem, I index) enter
   [1] [this]
   [1] [Class of Field elementData]
   [1] [Class of Field elementData[..]]
-Variable sets for javautil.Vector.indexOf(java.lang.Object elem, I index) exit
+Variable sets for javautil.Vector.indexOf(java.lang.Object elem, int index) exit
   [2] [Parameter elem, Array Field elementData[..]]
   [1] [Class of elem]
   [5] [Parameter index, return, Field capacityIncrement, Field elementCount, Field elementData]
@@ -232,7 +232,7 @@ Variable sets for javautil.Vector.lastIndexOf(java.lang.Object elem) exit
   [1] [Class of Field elementData]
   [1] [Class of Field elementData[..]]
 
-Variable sets for javautil.Vector.lastIndexOf(java.lang.Object elem, I index) enter
+Variable sets for javautil.Vector.lastIndexOf(java.lang.Object elem, int index) enter
   [2] [Parameter elem, Array Field elementData[..]]
   [1] [Class of elem]
   [4] [Parameter index, Field capacityIncrement, Field elementCount, Field elementData]
@@ -240,7 +240,7 @@ Variable sets for javautil.Vector.lastIndexOf(java.lang.Object elem, I index) en
   [1] [this]
   [1] [Class of Field elementData]
   [1] [Class of Field elementData[..]]
-Variable sets for javautil.Vector.lastIndexOf(java.lang.Object elem, I index) exit
+Variable sets for javautil.Vector.lastIndexOf(java.lang.Object elem, int index) exit
   [2] [Parameter elem, Array Field elementData[..]]
   [1] [Class of elem]
   [5] [Parameter index, return, Field capacityIncrement, Field elementCount, Field elementData]
@@ -249,14 +249,14 @@ Variable sets for javautil.Vector.lastIndexOf(java.lang.Object elem, I index) ex
   [1] [Class of Field elementData]
   [1] [Class of Field elementData[..]]
 
-Variable sets for javautil.Vector.elementAt(I index) enter
+Variable sets for javautil.Vector.elementAt(int index) enter
   [4] [Parameter index, Field capacityIncrement, Field elementCount, Field elementData]
   [1] [Field javautil.Vector.serialVersionUID]
   [1] [this]
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
-Variable sets for javautil.Vector.elementAt(I index) exit
+Variable sets for javautil.Vector.elementAt(int index) exit
   [4] [Parameter index, Field capacityIncrement, Field elementCount, Field elementData]
   [1] [Field javautil.Vector.serialVersionUID]
   [2] [return, Array Field elementData[..]]
@@ -297,7 +297,7 @@ Variable sets for javautil.Vector.lastElement() exit
   [1] [Class of Field elementData]
   [1] [Class of Field elementData[..]]
 
-Variable sets for javautil.Vector.setElementAt(java.lang.Object obj, I index) enter
+Variable sets for javautil.Vector.setElementAt(java.lang.Object obj, int index) enter
   [4] [Parameter index, Field capacityIncrement, Field elementCount, Field elementData]
   [1] [Field javautil.Vector.serialVersionUID]
   [2] [Parameter obj, Array Field elementData[..]]
@@ -305,7 +305,7 @@ Variable sets for javautil.Vector.setElementAt(java.lang.Object obj, I index) en
   [1] [this]
   [1] [Class of Field elementData]
   [1] [Class of Field elementData[..]]
-Variable sets for javautil.Vector.setElementAt(java.lang.Object obj, I index) exit
+Variable sets for javautil.Vector.setElementAt(java.lang.Object obj, int index) exit
   [4] [Parameter index, Field capacityIncrement, Field elementCount, Field elementData]
   [1] [Field javautil.Vector.serialVersionUID]
   [2] [Parameter obj, Array Field elementData[..]]
@@ -314,14 +314,14 @@ Variable sets for javautil.Vector.setElementAt(java.lang.Object obj, I index) ex
   [1] [Class of Field elementData]
   [1] [Class of Field elementData[..]]
 
-Variable sets for javautil.Vector.removeElementAt(I index) enter
+Variable sets for javautil.Vector.removeElementAt(int index) enter
   [4] [Parameter index, Field capacityIncrement, Field elementCount, Field elementData]
   [1] [Field javautil.Vector.serialVersionUID]
   [1] [this]
   [1] [Class of Field elementData]
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
-Variable sets for javautil.Vector.removeElementAt(I index) exit
+Variable sets for javautil.Vector.removeElementAt(int index) exit
   [4] [Parameter index, Field capacityIncrement, Field elementCount, Field elementData]
   [1] [Field javautil.Vector.serialVersionUID]
   [1] [this]
@@ -329,7 +329,7 @@ Variable sets for javautil.Vector.removeElementAt(I index) exit
   [1] [Array Field elementData[..]]
   [1] [Class of Field elementData[..]]
 
-Variable sets for javautil.Vector.insertElementAt(java.lang.Object obj, I index) enter
+Variable sets for javautil.Vector.insertElementAt(java.lang.Object obj, int index) enter
   [4] [Parameter index, Field capacityIncrement, Field elementCount, Field elementData]
   [1] [Field javautil.Vector.serialVersionUID]
   [2] [Parameter obj, Array Field elementData[..]]
@@ -337,7 +337,7 @@ Variable sets for javautil.Vector.insertElementAt(java.lang.Object obj, I index)
   [1] [this]
   [1] [Class of Field elementData]
   [1] [Class of Field elementData[..]]
-Variable sets for javautil.Vector.insertElementAt(java.lang.Object obj, I index) exit
+Variable sets for javautil.Vector.insertElementAt(java.lang.Object obj, int index) exit
   [4] [Parameter index, Field capacityIncrement, Field elementCount, Field elementData]
   [1] [Field javautil.Vector.serialVersionUID]
   [2] [Parameter obj, Array Field elementData[..]]

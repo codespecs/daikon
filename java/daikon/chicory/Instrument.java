@@ -551,6 +551,9 @@ public class Instrument implements ClassFileTransformer {
             mg.removeCodeAttribute(smta);
         } else {
             stack_map_table = empty_stack_map_table;
+            if (debug) {
+                out.format ("Original StackMap: (none)%n");
+            }
         }    
 
         // Create a MethodInfo that describes this methods arguments
@@ -1270,8 +1273,12 @@ public class Instrument implements ClassFileTransformer {
 
     int new_index = 1;
     if (len_part2 > 0) {
-        new_map[1] = new StackMapTableEntry(Constants.SAME_FRAME+len_part2-1,
-                             len_part2-1, 0, null, 0, null, pgen.getConstantPool());
+        // We need to check for len_part2 being too large,
+        // Daikon issue #30.
+        new_map[1] = new StackMapTableEntry(
+            ((len_part2-1) > Constants.SAME_FRAME_MAX ?
+            Constants.SAME_FRAME_EXTENDED : Constants.SAME_FRAME+len_part2-1),
+            len_part2-1, 0, null, 0, null, pgen.getConstantPool());
         new_index++;
     }
 
@@ -1497,7 +1504,11 @@ public class Instrument implements ClassFileTransformer {
 
     if (t instanceof ObjectType) {
       return ((ObjectType) t).getClassName();
-    } else {
+    } else if (t instanceof BasicType) {
+      // Use reserved keyword for basic type rather than signature to
+      // avoid conflicts with user defined types. Daikon issue #10.
+      return t.toString();
+    } else {  
       // Array type: just convert '/' to '.'
       return t.getSignature().replace('/', '.');
     }

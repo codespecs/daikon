@@ -18,13 +18,13 @@ Variable sets for PolyCalc.RatTermVec.size() exit
   [1] [List Field wrapped[..]]
   [1] [Class of Field wrapped[..]]
 
-Variable sets for PolyCalc.RatTermVec.get(I index) enter
+Variable sets for PolyCalc.RatTermVec.get(int index) enter
   [1] [Parameter index]
   [1] [this]
   [1] [Field wrapped]
   [1] [List Field wrapped[..]]
   [1] [Class of Field wrapped[..]]
-Variable sets for PolyCalc.RatTermVec.get(I index) exit
+Variable sets for PolyCalc.RatTermVec.get(int index) exit
   [1] [Parameter index]
   [2] [return, List Field wrapped[..]]
   [1] [this]
@@ -43,40 +43,40 @@ Variable sets for PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm t) exit
   [1] [Field wrapped]
   [1] [Class of Field wrapped[..]]
 
-Variable sets for PolyCalc.RatTermVec.insert(PolyCalc.RatTerm t, I index) enter
+Variable sets for PolyCalc.RatTermVec.insert(PolyCalc.RatTerm t, int index) enter
   [1] [Parameter index]
   [2] [Parameter t, List Field wrapped[..]]
   [1] [this]
   [1] [Field wrapped]
   [1] [Class of Field wrapped[..]]
-Variable sets for PolyCalc.RatTermVec.insert(PolyCalc.RatTerm t, I index) exit
+Variable sets for PolyCalc.RatTermVec.insert(PolyCalc.RatTerm t, int index) exit
   [1] [Parameter index]
   [2] [Parameter t, List Field wrapped[..]]
   [1] [this]
   [1] [Field wrapped]
   [1] [Class of Field wrapped[..]]
 
-Variable sets for PolyCalc.RatTermVec.remove(I index) enter
+Variable sets for PolyCalc.RatTermVec.remove(int index) enter
   [1] [Parameter index]
   [1] [this]
   [1] [Field wrapped]
   [1] [List Field wrapped[..]]
   [1] [Class of Field wrapped[..]]
-Variable sets for PolyCalc.RatTermVec.remove(I index) exit
+Variable sets for PolyCalc.RatTermVec.remove(int index) exit
   [1] [Parameter index]
   [1] [this]
   [1] [Field wrapped]
   [1] [List Field wrapped[..]]
   [1] [Class of Field wrapped[..]]
 
-Variable sets for PolyCalc.RatTermVec.set(PolyCalc.RatTerm t, I index) enter
+Variable sets for PolyCalc.RatTermVec.set(PolyCalc.RatTerm t, int index) enter
   [1] [Parameter index]
   [1] [Parameter t]
   [1] [this]
   [1] [Field wrapped]
   [1] [List Field wrapped[..]]
   [1] [Class of Field wrapped[..]]
-Variable sets for PolyCalc.RatTermVec.set(PolyCalc.RatTerm t, I index) exit
+Variable sets for PolyCalc.RatTermVec.set(PolyCalc.RatTerm t, int index) exit
   [1] [Parameter index]
   [2] [Parameter t, List Field wrapped[..]]
   [1] [this]

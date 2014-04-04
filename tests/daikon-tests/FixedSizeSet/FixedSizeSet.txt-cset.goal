@@ -5,29 +5,29 @@ Variable sets for six170.FixedSizeSet.<init>() exit
   [1] [Field bits]
   [1] [Array Field bits[..]]
 
-Variable sets for six170.FixedSizeSet.add(I n) enter
+Variable sets for six170.FixedSizeSet.add(int n) enter
   [2] [Parameter n, Field bits]
   [1] [this]
   [1] [Array Field bits[..]]
-Variable sets for six170.FixedSizeSet.add(I n) exit
-  [2] [Parameter n, Field bits]
-  [1] [this]
-  [1] [Array Field bits[..]]
-
-Variable sets for six170.FixedSizeSet.remove(I n) enter
-  [2] [Parameter n, Field bits]
-  [1] [this]
-  [1] [Array Field bits[..]]
-Variable sets for six170.FixedSizeSet.remove(I n) exit
+Variable sets for six170.FixedSizeSet.add(int n) exit
   [2] [Parameter n, Field bits]
   [1] [this]
   [1] [Array Field bits[..]]
 
-Variable sets for six170.FixedSizeSet.contains(I n) enter
+Variable sets for six170.FixedSizeSet.remove(int n) enter
   [2] [Parameter n, Field bits]
   [1] [this]
   [1] [Array Field bits[..]]
-Variable sets for six170.FixedSizeSet.contains(I n) exit
+Variable sets for six170.FixedSizeSet.remove(int n) exit
+  [2] [Parameter n, Field bits]
+  [1] [this]
+  [1] [Array Field bits[..]]
+
+Variable sets for six170.FixedSizeSet.contains(int n) enter
+  [2] [Parameter n, Field bits]
+  [1] [this]
+  [1] [Array Field bits[..]]
+Variable sets for six170.FixedSizeSet.contains(int n) exit
   [2] [Parameter n, Field bits]
   [2] [return, Array Field bits[..]]
   [1] [this]

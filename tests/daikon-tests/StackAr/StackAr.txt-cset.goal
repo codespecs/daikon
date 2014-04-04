@@ -1,7 +1,7 @@
 
-Variable sets for DataStructures.StackAr.<init>(I capacity) enter
+Variable sets for DataStructures.StackAr.<init>(int capacity) enter
   [1] [Parameter capacity]
-Variable sets for DataStructures.StackAr.<init>(I capacity) exit
+Variable sets for DataStructures.StackAr.<init>(int capacity) exit
   [2] [Parameter capacity, Field theArray]
   [1] [this]
   [1] [Class of Field theArray]

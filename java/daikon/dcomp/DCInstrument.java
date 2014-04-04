@@ -2602,6 +2602,10 @@ class DCInstrument {
   private static /*@ClassGetName*/ String typeToClassGetName(Type t) {
     if (t instanceof ObjectType) {
       return ((ObjectType) t).getClassName();
+    } else if (t instanceof BasicType) {
+      // Use reserved keyword for basic type rather than signature to
+      // avoid conflicts with user defined types. Daikon issue #10.
+      return t.toString();
     } else {
       // Array type: just convert '/' to '.'
       return t.getSignature().replace('/', '.');
@@ -2642,6 +2646,7 @@ class DCInstrument {
     /*@ClassGetName*/ String[] arg_type_strings = new /*@ClassGetName*/ String[arg_types.length];
     for (int ii = 0; ii < arg_types.length; ii++) {
       arg_type_strings[ii] = typeToClassGetName(arg_types[ii]);
+      // System.out.printf("DCI arg types: %s %s%n", arg_types[ii], arg_type_strings[ii]);
     }
 
     // Loop through each instruction and find the line number for each

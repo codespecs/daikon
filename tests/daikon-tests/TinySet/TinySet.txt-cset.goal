@@ -4,24 +4,24 @@ Variable sets for six170.TinySet.<init>() exit
   [1] [this]
   [1] [Field bits]
 
-Variable sets for six170.TinySet.add(I n) enter
+Variable sets for six170.TinySet.add(int n) enter
   [2] [Parameter n, Field bits]
   [1] [this]
-Variable sets for six170.TinySet.add(I n) exit
-  [2] [Parameter n, Field bits]
-  [1] [this]
-
-Variable sets for six170.TinySet.remove(I n) enter
-  [2] [Parameter n, Field bits]
-  [1] [this]
-Variable sets for six170.TinySet.remove(I n) exit
+Variable sets for six170.TinySet.add(int n) exit
   [2] [Parameter n, Field bits]
   [1] [this]
 
-Variable sets for six170.TinySet.contains(I n) enter
+Variable sets for six170.TinySet.remove(int n) enter
   [2] [Parameter n, Field bits]
   [1] [this]
-Variable sets for six170.TinySet.contains(I n) exit
+Variable sets for six170.TinySet.remove(int n) exit
+  [2] [Parameter n, Field bits]
+  [1] [this]
+
+Variable sets for six170.TinySet.contains(int n) enter
+  [2] [Parameter n, Field bits]
+  [1] [this]
+Variable sets for six170.TinySet.contains(int n) exit
   [2] [Parameter n, Field bits]
   [1] [return]
   [1] [this]

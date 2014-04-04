@@ -15,11 +15,11 @@ Variable sets for misc.Precedence.main([Ljava.lang.String; args) exit
   [1] [Array args[..]]
   [1] [String args[..].toString]
 
-Variable sets for misc.Precedence.lets_calculate(I j) enter
+Variable sets for misc.Precedence.lets_calculate(int j) enter
   [1] [Parameter j]
   [1] [this]
   [1] [Field i]
-Variable sets for misc.Precedence.lets_calculate(I j) exit
+Variable sets for misc.Precedence.lets_calculate(int j) exit
   [3] [Parameter j, return, Field i]
   [1] [this]
 

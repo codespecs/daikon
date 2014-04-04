@@ -1,8 +1,8 @@
 
-Variable sets for MapQuick1.GeoPoint.<init>(I latitude, I longitude) enter
+Variable sets for MapQuick1.GeoPoint.<init>(int latitude, int longitude) enter
   [1] [Parameter latitude]
   [1] [Parameter longitude]
-Variable sets for MapQuick1.GeoPoint.<init>(I latitude, I longitude) exit
+Variable sets for MapQuick1.GeoPoint.<init>(int latitude, int longitude) exit
   [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
   [4] [Parameter latitude, Parameter longitude, Field latitude, Field longitude]
   [1] [this]
