@@ -92,6 +92,7 @@ public class BuildJDK {
   private static List<String> skipped_methods = new ArrayList<String>();
 
   public static String[] known_skipped_methods = new String[] {
+      /*
       "sun.rmi.transport.proxy.RMIMasterSocketFactory.createSocket",
       "sun.awt.X11.XWindowPeer.handleButtonPressRelease",
       "com.sun.jmx.snmp.daemon.CommunicatorServer.run",
@@ -114,6 +115,7 @@ public class BuildJDK {
       "com.sun.tools.javac.zip.ZipFileIndex$DirectoryEntry.initEntries",
       "com.sun.tools.javac.zip.ZipFileIndex.readIndex",
       "com.sun.tools.javac.zip.ZipFileIndex.writeIndex",
+      */
   };
 
   /**
@@ -203,6 +205,8 @@ public class BuildJDK {
       for (String classname : all_classes) {
         pw.println (classname);
       }
+      pw.flush();
+      pw.close();
 
       // Print out any methods that could not be instrumetned
       print_skipped_methods();
@@ -438,8 +442,10 @@ public class BuildJDK {
    */
   private static void print_skipped_methods() {
 
-    if (skipped_methods.isEmpty())
+    if (skipped_methods.isEmpty()) {
+      System.out.printf ("No methods were skipped.%n");
       return;
+    }
 
     // Determine if all of them were known to be bad
     List<String> known_bad_list = Arrays.asList(known_skipped_methods);
