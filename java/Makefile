@@ -133,7 +133,12 @@ ifdef CLASSPATH_JARS2
   endif
 endif
 ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
-  CLASSPATH := $(CLASSPATH):${JAVA_HOME}/lib/tools.jar:${JAVA_HOME}/jre/lib/rt.jar
+  ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
+    CLASSPATH := $(CLASSPATH):${JDK_HOME}/lib/tools.jar
+  endif
+  ifneq "$(wildcard ${JAVA_HOME}/lib/rt.jar)" ""
+    CLASSPATH := $(CLASSPATH):${JAVA_HOME}/lib/tools.jar
+  endif
 endif
 
 ## Not necessary due to use of *-cygwin versions of Java programs.
