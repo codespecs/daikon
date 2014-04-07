@@ -8,4 +8,5 @@ You should start out with the file:
   doc/index.html
 
 However, if you are working with source cloned from the Google Code
-repository Daikon, the please review the file README.source.
+repository https://code.google.com/p/daikon/, then please review the file
+README.source.
