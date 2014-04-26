@@ -80,6 +80,12 @@ INSTRUMENT?=infer
 SOURCE_LANGUAGE?=java
 DECL_FORMAT?=new
 
+ifeq ($(OS),Windows_NT)
+    UNAME_S := Windows_NT
+else
+    UNAME_S := $(shell uname -s)
+endif
+
 # -noleaf is needed if the filesystem could possibly be AFS (as it is
 # at MIT).  Non GNU versions of find don't support this option, so it
 # must be removed on those version.  Darwin is the only o/s we've
@@ -248,6 +254,14 @@ PRINT_INVARIANTS_CLASS?=$(DAIKONDIR)/java/daikon/PrintInvariants.class
 PRINT_INVARIANTS?=$(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.PrintInvariants
 DAIKON_OPTIONS?=
 PRINT_INVARIANTS_OPTIONS?=
+
+ifeq ($(UNAME_S),Darwin)
+  # On MacOS, dos2unix is not installed by default (but available from homebrew)
+  DOS2UNIX ?= perl -pi -e 's/\r\n|\n|\r/\n/g'
+else
+  DOS2UNIX ?= dos2unix
+endif
+
 
 $(PRINT_INVARIANTS_CLASS):
 	make -C $(DAIKONDIR)/java
@@ -723,8 +737,8 @@ ${PROJECT_FILE}.txt-chicory.dtrace : $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrac
 # zcat into head that truncates causes a non-zero status, so ignore failures
 	-${GZCAT} ${DTRACE_FILES} | head -n 100000 \
 	  > ${PROJECT_FILE}.txt-chicory.dtrace
-    #trace-untruncate fails on dos style files 
-	dos2unix ${PROJECT_FILE}.txt-chicory.dtrace
+# trace-untruncate fails on files with DOS line endings
+	${DOS2UNIX} ${PROJECT_FILE}.txt-chicory.dtrace
 	${TRACE_UNTRUNCATE} ${PROJECT_FILE}.txt-chicory.dtrace
 
 txt-chicory-diff: ${PROJECT_FILE}.txt-chicory.diff
