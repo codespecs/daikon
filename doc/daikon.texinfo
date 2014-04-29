@@ -5850,8 +5850,7 @@ To compile and install Kvasir, give the command @command{make kvasir}
 from the top-level Daikon directory:
 
 @example
-cd $DAIKONDIR
-make kvasir
+make -C $DAIKONDIR kvasir
 @end example
 
 @noindent
