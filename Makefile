@@ -30,7 +30,7 @@ DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 DOC_FILES_USER := daikon.pdf daikon.html developer.html CHANGES \
                   daikon.texinfo developer.texinfo config-options.texinfo \
                   invariants-doc.texinfo developer.pdf
-README_PATHS := README.txt README.html doc/README kvasir/../README
+README_PATHS := README.txt README.html doc/README kvasir/README
 # Files that contain the (automatically updated) version number and date.
 DIST_VERSION_FILES := ${README_PATHS} doc/daikon.texinfo doc/developer.texinfo \
                       doc/index.html doc/www/download/index.html
@@ -200,27 +200,27 @@ else
 VALGRIND_ARCH := x86
 endif
 
-kvasir/autogen.sh:
+../fjalar/auto-everything.sh:
 	cd .. && hg clone ${HG_OPTIONS} https://code.google.com/p/fjalar/ fjalar
 	touch $@
 
-kvasir/fjalar/Makefile.am: kvasir/autogen.sh
-	ln -nsf ../fjalar/valgrind kvasir
+kvasir/valgrind/fjalar/Makefile.am: ../fjalar/auto-everything.sh
+	ln -nsf ../fjalar kvasir
 	touch $@
 
-kvasir/config.sub: kvasir/fjalar/Makefile.am
-	cd kvasir && ./autogen.sh
+kvasir/valgrind/config.sub: kvasir/auto-everything.sh
+	cd kvasir && ./auto-everything.sh
 
-kvasir/config.status: kvasir/config.sub
-	cd kvasir && ./configure --prefix=`pwd`/inst
+kvasir/valgrind/config.status: kvasir/valgrind/fjalar/Makefile.am kvasir/valgrind/config.sub
+	cd kvasir/valgrind && ./configure --prefix=`pwd`/inst
 
-kvasir/coregrind/valgrind: kvasir/config.status
-	cd kvasir && $(MAKE) 
+kvasir/valgrind/coregrind/valgrind: kvasir/valgrind/config.status
+	cd kvasir/valgrind && $(MAKE) 
 
-kvasir/inst/bin/valgrind: kvasir/coregrind/valgrind
-	cd kvasir && $(MAKE) install >/dev/null
+kvasir/valgrind/inst/bin/valgrind: kvasir/valgrind/coregrind/valgrind
+	cd kvasir/valgrind && $(MAKE) install >/dev/null
 
-kvasir: kvasir/inst/bin/valgrind
+kvasir: kvasir/valgrind/inst/bin/valgrind
 
 build-kvasir: kvasir
 
@@ -234,7 +234,7 @@ rebuild-everything:
 	${MAKE} -C $(DAIKONDIR)/java javadoc
 	${MAKE} -C $(DAIKONDIR)/doc clean
 	${MAKE} -C $(DAIKONDIR) doc-all
-	-${MAKE} -C $(DAIKONDIR)/kvasir uninstall distclean 
+	-${MAKE} -C $(DAIKONDIR)/kvasir/valgrind uninstall distclean 
 	${MAKE} kvasir
 
 rebuild-everything-but-kvasir:
@@ -450,8 +450,8 @@ update-doc-dist-date:
 update-doc-dist-version:
 	perl -wpi -e 'BEGIN { $$/="\n\n"; } s/((Daikon|Fjalar) version )[0-9]+(\.[0-9]+)*/$$1 . "$(shell cat doc/VERSION)"/e;' ${DIST_VERSION_FILES}
 	perl -wpi -e 's/(public final static String release_version = ")[0-9]+(\.[0-9]+)*(";)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e;' java/daikon/Daikon.java
-	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' kvasir/fjalar/mc_main.c
-#	cvs ci -m "Update version number for new Daikon distribution" kvasir/fjalar/mc_main.c
+	perl -wpi -e 's/(VG_\(details_version\)\s*\(")[0-9]+(\.[0-9]+)*("\);)$$/$$1 . "$(shell cat doc/VERSION)" . $$3/e' kvasir/valgrind/fjalar/mc_main.c
+#	cvs ci -m "Update version number for new Daikon distribution" kvasir/valgrind/fjalar/mc_main.c
 	touch doc/CHANGES
 
 # Update the version number.
@@ -569,11 +569,11 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 # We use the --filter option twice with rsync to exclude unneeded files.
 # The first attempts to ignore all files indicated by the contents
 # of the .hgignore file.  The second ignores the .hg files.
-	rsync -rp --filter=':- .hgignore' --filter='. rsync.ignore' ../fjalar/ ${TMPDIR}/daikon/kvasir
+	rsync -rp --filter=':- .hgignore' --filter='. rsync.ignore' kvasir ${TMPDIR}/daikon/kvasir
 
 	@# Internal developer documentation
 	rm -rf ${TMPDIR}/daikon/kvasir/valgrind/fjalar/notes
-	rm -rf ${TMPDIR}/daikon/kvasir/valgrind/fjalar/trivial-tool
+	rm -rf ${TMPDIR}/daikon/kvasir/valgrind/fjalar/basic-tool
 	(cd ${TMPDIR}/daikon/kvasir; $(RM_TEMP_FILES) )
 
 	# Jar file needed for Chicory front end
