@@ -569,7 +569,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 # We use the --filter option twice with rsync to exclude unneeded files.
 # The first attempts to ignore all files indicated by the contents
 # of the .hgignore file.  The second ignores the .hg files.
-	rsync -rp --filter=':- .hgignore' --filter='. rsync.ignore' kvasir ${TMPDIR}/daikon/kvasir
+	rsync -rp -L --filter=':- .hgignore' --filter='. rsync.ignore' kvasir ${TMPDIR}/daikon
 
 	@# Internal developer documentation
 	rm -rf ${TMPDIR}/daikon/kvasir/valgrind/fjalar/notes
