@@ -8,9 +8,9 @@ then
     echo "Kvasir is not installed; to install it, run:    make -C \$DAIKONDIR kvasir"
     exit 1
 fi
-if [ ! -f "$DAIKONDIR/kvasir/inst/bin/valgrind" ]
+if [ ! -f "$DAIKONDIR/kvasir/valgrind/inst/bin/valgrind" ]
 then
     echo "Kvasir is not built; to build it, run:    make -C \$DAIKONDIR kvasir"
     exit 1
 fi
-$DAIKONDIR/kvasir/inst/bin/valgrind --tool=fjalar "$@"
+$DAIKONDIR/kvasir/valgrind/inst/bin/valgrind --tool=fjalar "$@"

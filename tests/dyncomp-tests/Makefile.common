@@ -7,8 +7,8 @@
 CC := gcc
 CXX := g++
 CFLAGS := -gdwarf-2
-VALGRIND = $(DAIKONDIR)/kvasir/inst/bin/valgrind
-KVASIR_SKIN = $(DAIKONDIR)/kvasir/inst/lib/valgrind/x86-linux/fjalar
+VALGRIND = $(DAIKONDIR)/kvasir/valgrind/inst/bin/valgrind
+KVASIR_SKIN = $(DAIKONDIR)/kvasir/valgrind/inst/lib/valgrind/x86-linux/fjalar
 KVASIR_SCRIPT = $(DAIKONDIR)/scripts/kvasir-dtrace
 KVASIR_OPTIONS := $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls
 KVASIR_DYNCOMP_OPTIONS := $(KVASIR_OPTIONS) --with-dyncomp

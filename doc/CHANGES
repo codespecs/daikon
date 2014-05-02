@@ -20,6 +20,37 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.0.8 (May 2, 2014)
+
+General:
+  We have modified the directory layout relationship between Daikon
+  and Fjalar/Kvasir.  If you acquire Daikon and Fjalar via their Mercurial
+  repositories, you need to perform the following steps to adjust a symbolic
+  link.  (If you download daikon.zip or daikon.tar.gz from the Daikon
+  distribution site, you are not affected.)  For repository users, perform
+  the following steps:
+    cd $DAIKONDIR
+    make -C kvasir uninstall distclean
+    rm kvasir
+    <hg fetch of the latest daikon and fjalar files>
+    cd $DAIKONDIR
+    ln -nsf ../fjalar kvasir  // replace 'fjalar' with your repository name, if different
+    make kvasir
+
+Daikon:
+  This release contains fixes for Daikon issues #10, 29 and 30.  See:
+  http://code.google.com/p/daikon/issues/detail?id=10
+  http://code.google.com/p/daikon/issues/detail?id=29
+  http://code.google.com/p/daikon/issues/detail?id=30
+
+Fjalar:
+  No significant content changes were made.
+
+Documentation:
+  No significant content changes were made.
+
+===========================================================================
+
 5.0.6 (March 28, 2014)
 
 Daikon:
