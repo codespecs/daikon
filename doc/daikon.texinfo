@@ -362,7 +362,7 @@ set two environment variables
 and source a Daikon startup file.
 
 
-We will assume that your are using the bash shell or its variants.
+We will assume that you are using the bash shell or its variants.
 Add these three commands to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The full pathname of the directory that contains Daikon
