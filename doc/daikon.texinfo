@@ -6975,16 +6975,13 @@ The @code{instrument} command to runtimechecker creates a new directory
 @file{instrumented-classes} containing a new version of the
 user-specified Java files, instrumented to check invariants at runtime
 and to record a list of invariant violations in a Java data structure.
-
-Note that the instrumented program does not do anything with the list of
-violations; it merely creates the list.  You will need to write your own
-code to process that list; see @ref{Accessing violations}.
+You can compile and run the instrumented version of your program.
 
 
-Here is an example of use of the runtime-check instrumenter.
-To create a version of file
+Here is an example of using the runtime-check instrumenter to 
+create a version of file
 @file{ubs/BoundedStack.java} that checks the invariants in
-invariant file @file{BoundedStack.inv.gz}, do:
+invariant file @file{BoundedStack.inv.gz}:
 
 @exampleindent 1
 @example
@@ -7025,13 +7022,17 @@ The throwable is not rethrown.
 
 @end itemize
 
+Note that the instrumented program does not do anything with the list of
+violations; it merely creates the list.  You will need to write your own
+code to process that list; see @ref{How to access violations}.
+
 
 @menu
-* Accessing violations::
+* How to access violations::
 @end menu
 
-@node          Accessing violations
-@subsubsection Accessing violations
+@node          How to access violations
+@subsubsection How to access violations
 
 The instrumented class handles violations silently:
 it simply adds them to a list in the class
@@ -7093,6 +7094,26 @@ Daikon's Java parser (adopted from @command{javacc} and @command{JTB}) accepts J
 An error in the new parser
 may produce illegal Java in the instrumented file, if the source file to
 be instrumented includes logical shift operators. @xref{Known bugs}.
+
+
+@node          Problems compiling instrumented code
+@subsubsection Problems compiling instrumented code
+
+When compiling the instrumented code, the Java compiler might emit an error
+such as
+
+@example
+  error: code too large for try statement
+@end example
+
+You get the above error if the combined size of the original source code,
+plus the instrumentation code, is larger than the JVM's limit of 65536
+bytes of bytecode per method.
+
+You can correct the problem by using a smaller number of invariants when
+instrumenting.  @xref{Too much output}.
+
+(Eventually, it might be nice for the instrumenter to place its code in one or more separate methods so that no one of them is too large.)
 
 
 @node       InvariantChecker
@@ -7551,7 +7572,8 @@ how the target
 program behaved.  However, some of these facts would be true for any
 execution of the target program, and others are accidents of the
 particular executions that Daikon observed.  Both types of facts may be
-useful:  the former tell you about your program, and the latter tell you
+useful, but for different reasons:  the former tell you about your program,
+and the latter tell you
 about your test suite (and how to improve it!).
 
 
