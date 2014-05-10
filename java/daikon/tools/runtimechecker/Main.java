@@ -57,9 +57,13 @@ public class Main extends CommandHandler {
             success = false;
         } finally {
             if (!success) {
-                assert h != null : "@AssumeAssertion(nullness): dependent: success==false";
                 System.err.println("The instrumenter failed.");
-                h.usageMessage();
+                if (h == null) {
+                    System.err.println("Unknown command: " +  command);
+                    System.err.println("For more help, invoke the instrumenter with \"help\" as its sole argument.");
+                } else {
+                    h.usageMessage();
+                }
                 System.exit(1);
             } else {
             }
