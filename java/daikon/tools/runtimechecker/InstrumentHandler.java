@@ -55,17 +55,19 @@ public class InstrumentHandler extends CommandHandler {
     // to the maximum number of invariants out annotate per program point.
     protected static int maxInvariantsPP = -1;
 
+    // User documentation for these fields appears in file InstrumentHandler.doc
     private static final String make_all_fields_public_SWITCH = "make_all_fields_public";
     private static final String output_only_high_conf_invariants_SWITCH = "output_only_high_conf_invariants";
     private static final String create_checker_classes_SWITCH = "create_checker_classes";
     private static final String directory_SWITCH = "directory";
     private static final String checkers_directory_SWITCH = "checker_classes_directory";
+    // Whether should print debugging information as it is executing.
+    private static String debug_SWITCH = "debug";
 
+    // Default values; can be overridden by the command-line switches above.
     private String instrumented_directory = "instrumented-classes";
     private String checkersOutputDirName = "checker-classes";
 
-    // Whether should print debugging information as it is executing.
-    private static String debug_SWITCH = "debug";
 
     @SuppressWarnings("enhancedfor.type.incompatible") // Checker Framework bug exposed on line "for (TypeDeclaration decl : oneFile.roots) {"
 
