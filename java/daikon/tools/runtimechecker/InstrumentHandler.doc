@@ -1,11 +1,16 @@
 instrument [OPTIONS] INV_FILE JAVA_FILES
   Summary:  Creates new copies of the given Java files that contain code to
     check invariants at runtime.
+  Example use:
+    java daikon.tools.runtimecheker.Main instrument BoundedStack.inv.gz ubs/BoundedStack.java
   Arguments:
     INV_FILE is an invariant file (suffix .inv or .inv.gz) created by Daikon.
     JAVA_FILES is one or more Java files that will be instrumented.
     OPTIONS:
       --make_all_fields_public  Make all declared fields public.
       --directory=DIRNAME       Output directory; default: instrumented-classes
-  Example use:
-    java daikon.tools.runtimecheker.Main instrument BoundedStack.inv.gz ubs/BoundedStack.java
+      --output_only_high_conf_invariants
+          Do run-time checking only of invariants with confidence >= 0.5
+      --create_checker_classes
+          Also create runtime-checking code for classes not passed on the command line as JAVA_CLASSES
+      --debug                   Print debugging information
