@@ -7029,6 +7029,7 @@ code to process that list; see @ref{How to access violations}.
 
 @menu
 * How to access violations::
+* Problems compiling instrumented code::
 @end menu
 
 @node          How to access violations
