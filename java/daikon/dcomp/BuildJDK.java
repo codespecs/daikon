@@ -380,10 +380,6 @@ public class BuildJDK {
     JavaClass jc = classmap.get(classname);
     assert jc != null : "@AssumeAssertion(nullness): seems to be non-null";
     DCInstrument dci = new DCInstrument (jc, true, null);
-    if (false) {
-      System.out.printf ("Comparing type stacks for class %s%n", classname);
-      dci.compare_type_stacks();
-    }
     JavaClass inst_jc;
     if (no_primitives)
       inst_jc = dci.instrument_jdk_refs_only();
