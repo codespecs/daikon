@@ -68,16 +68,10 @@ class DFInstrument extends DCInstrument {
     }
 
     // Get Stack information
-    StackTypes stack_types = null;
-    TypeStack type_stack = null;
-    if (use_StackVer) {
-      stack_types = bcel_calc_stack_types (mg);
-      if (stack_types == null) {
-        skip_method (mg);
-        return;
-      }
-    } else { // Use Eric's version
-      type_stack = new TypeStack (mg);
+    StackTypes stack_types = bcel_calc_stack_types (mg);
+    if (stack_types == null) {
+      skip_method (mg);
+      return;
     }
 
     // Loop through each instruction, making substitutions
@@ -94,16 +88,12 @@ class DFInstrument extends DCInstrument {
       InstructionHandle next_ih = ih.getNext();
 
       // Get the stack information
-      if (use_StackVer)
-        stack = stack_types.get (ih.getPosition());
+      stack = stack_types.get (ih.getPosition());
 
       // Get the translation for this instruction (if any)
       new_il = xform_inst (mg, ih, stack, branch_cr);
       if (debug_instrument_inst.enabled())
         debug_instrument_inst.log ("  new inst: %s%n", new_il);
-
-      if (!use_StackVer)
-        stack = type_stack.getAfterInst (ih);
 
       // If this instruction was modified, replace it with the new
       // instruction list. If this instruction was the target of any
