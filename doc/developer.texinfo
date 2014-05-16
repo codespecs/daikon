@@ -2122,8 +2122,10 @@ hg log -v -r "last(tagged())::"
 
 
 @item
-Build everything to be distributed and copy it to the staging
-area (@uref{http://plse.cs.washington.edu/daikon/staging-daikon/}).  The final
+Build everything to be distributed and copy it to the staging area
+@c not @uref{...} because we don't want robots to notice and crawl the link
+(http://plse.cs.washington.edu/daikon/staging-daikon/).
+The final
 output will be a list of files that were added/removed since the
 last release.
 
