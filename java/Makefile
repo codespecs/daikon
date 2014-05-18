@@ -815,22 +815,15 @@ CHECKER_ARGS ?= -AsuppressWarnings=flowexpr.parameter.not.final -AprintErrorStac
 # JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -implicit:class -Xlint:-processing
 JAVAC_INTERNING_ARGS = -processor org.checkerframework.checker.interning.InterningChecker -Alint=-dotequals -implicit:class -Xlint:-processing -AskipDefs='${INTERNING_SKIPDEFS}'
 JAVAC_SIGNATURE_ARGS = -processor org.checkerframework.checker.signature.SignatureChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_NULLNESS_RAW_ARGS = -processor org.checkerframework.checker.nullness.NullnessRawnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_NULLNESS_FBC_ARGS = -processor org.checkerframework.checker.nullness.NullnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 ## The "-J-Dcheckers.skipUses='^daikon.Debug'" should really be just for rawness, not for nullness.
-JAVAC_NULLNESS_STUBS = -sourcepath ${CHECKERFRAMEWORK}/checker/jdk/nullness/src -J-Dcheckers.skipUses='^daikon.Debug'
-JAVAC_PROTOTYPE_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing
-# JAVAC_PROTOTYPE_STUBS = -Astubs=typequals/prototype-stubs.astub
-JAVAC_PROTOTYPE_STUBS = -J-Dcheckers.skipUses='^java\.'
-JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing
-# JAVAC_VINDEX_STUBS = -Astubs=typequals/vindex-stubs.astub
-JAVAC_VINDEX_STUBS = -J-Dcheckers.skipUses='^java\.'
+JAVAC_NULLNESS_RAW_ARGS = -processor org.checkerframework.checker.nullness.NullnessRawnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}' -J-Dcheckers.skipUses='^daikon.Debug'
+JAVAC_NULLNESS_FBC_ARGS = -processor org.checkerframework.checker.nullness.NullnessChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}' -J-Dcheckers.skipUses='^daikon.Debug'
+JAVAC_PROTOTYPE_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
+JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
 JAVAC_REGEX_ARGS = -processor org.checkerframework.checker.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_FORMATTER_ARGS = -processor org.checkerframework.checker.formatter.FormatterChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_JAVARI_ARGS = -processor org.checkerframework.checker.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_JAVARI_STUBS = -sourcepath ${CHECKERFRAMEWORK}/checker/jdk/nullness/src
 JAVAC_IGJ_ARGS = -processor org.checkerframework.checker.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
-JAVAC_IGJ_STUBS = -sourcepath ${CHECKERFRAMEWORK}/checker/jdk/nullness/src
 ## Code in dcomp directory is not called directly; annotations would be useless.
 INTERNING_SKIPDEFS = ^daikon\.dcomp\|^jtb\.
 ALLSYSTEMS_SKIPDEFS=^jtb\.
@@ -908,7 +901,7 @@ NULLNESS_RAW_ONEFILE ?= daikon/inv/Invariant.java
 check-nullness-raw-onefile: ${ALL_GENERATED_FILES} compile-typequals compile
 	${MAKE} check-nullness-raw-onefile-norecompile
 check-nullness-raw-onefile-norecompile:
-	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKER_ARGS} ${NULLNESS_RAW_ONEFILE}
+	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_RAW_ONEFILE}
 
 
 check-nullness-fbc-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
@@ -919,23 +912,23 @@ check-nullness-fbc-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
 check-nullness-all-withstubs: check-nullness-raw-all-withstubs check-nullness-fbc-all-withstubs
 
 check-nullness-raw-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-nullness-fbc-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 
 # Version that issues warnings, not errors.
 ## (Actually, it's identical to the above!  TODO: Fix that.)
 check-nullness-raw-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-nullness-fbc-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 # These targets run the Nullness checker on just one file.
 # Typical command: 
@@ -948,23 +941,23 @@ check-nullness-fbc-onefile: ${ALL_GENERATED_FILES} compile-typequals compile
 	${MAKE} check-nullness-fbc-onefile-norecompile
 check-nullness-onefile-norecompile: check-nullness-fbc-onefile-norecompile
 check-nullness-fbc-onefile-norecompile:
-	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKER_ARGS} ${NULLNESS_ONEFILE}
+	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_ONEFILE}
 
 check-prototype: check-prototype-all
 
 check-prototype-all: check-prototype-all-withstubs
 
 check-prototype-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_PROTOTYPE_ARGS} ${JAVAC_PROTOTYPE_STUBS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-vindex: check-vindex-all
 
 check-vindex-all: check-vindex-all-withstubs
 
 check-vindex-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_VINDEX_ARGS} ${JAVAC_VINDEX_STUBS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${JAVAC_VINDEX_STUBS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKER} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-regex: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ...
@@ -979,16 +972,16 @@ check-igj-all-nostubs: ${ALL_GENERATED_FILES} compile
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_IGJ_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 check-igj-all-withstubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_IGJ_ARGS} ${JAVAC_IGJ_STUBS} ${CHECKER_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_IGJ_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_IGJ_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 check-javari-all-nostubs: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_JAVARI_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_JAVARI_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 check-javari-all-withstubs: ${ALL_GENERATED_FILES} compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_JAVARI_ARGS} ${JAVAC_JAVARI_STUBS} ${CHECKER_ARGS} ${JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_JAVARI_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_JAVARI_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 TYPEQUALS_JAVA_FILES = $(wildcard typequals/*.java)
 TYPEQUALS_CLASSES = $(subst .java,.class,${TYPEQUALS_JAVA_FILES})
@@ -1048,8 +1041,8 @@ nullness-counts:
 
 JAVAC_COUNT_ARGS = -processor org.checkerframework.common.util.count.Locations -implicit:class -Xlint:-processing
 possible-annos: ${ALL_GENERATED_FILES} compile-typequals compile
-	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_COUNT_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKER_ARGS} ...
-	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_COUNT_ARGS} ${JAVAC_NULLNESS_STUBS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
+	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_COUNT_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 
 

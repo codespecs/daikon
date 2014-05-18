@@ -78,7 +78,7 @@ public final class MergeInvariants {
 
 
     LongOpt[] longopts = new LongOpt[] {
-      new LongOpt (Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(Daikon.help_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
       new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT,
                   null, 0),
       new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
