@@ -202,21 +202,22 @@ public class InstrumentHandler extends CommandHandler {
     private Arguments readArguments(String[] args) {
 
         LongOpt[] longopts = new LongOpt[] {
-                new LongOpt(Daikon.debugAll_SWITCH, LongOpt.NO_ARGUMENT, null,
-                        0),
-                new LongOpt(Daikon.debug_SWITCH, LongOpt.REQUIRED_ARGUMENT,
-                        null, 0),
+                new LongOpt(Daikon.debugAll_SWITCH,
+                            LongOpt.NO_ARGUMENT, null, 0),
+                new LongOpt(Daikon.debug_SWITCH,
+                            LongOpt.REQUIRED_ARGUMENT, null, 0),
                 new LongOpt(output_only_high_conf_invariants_SWITCH,
-                        LongOpt.NO_ARGUMENT, null, 0),
+                            LongOpt.NO_ARGUMENT, null, 0),
                 new LongOpt(make_all_fields_public_SWITCH,
-                        LongOpt.NO_ARGUMENT, null, 0),
+                            LongOpt.NO_ARGUMENT, null, 0),
                 new LongOpt(create_checker_classes_SWITCH,
-                        LongOpt.NO_ARGUMENT, null, 0),
+                            LongOpt.NO_ARGUMENT, null, 0),
                 new LongOpt(directory_SWITCH,
-                        LongOpt.REQUIRED_ARGUMENT, null, 0),
+                            LongOpt.REQUIRED_ARGUMENT, null, 0),
                 new LongOpt(checkers_directory_SWITCH,
-                        LongOpt.REQUIRED_ARGUMENT, null, 0),
-                new LongOpt(debug_SWITCH, LongOpt.NO_ARGUMENT, null, 0) };
+                            LongOpt.REQUIRED_ARGUMENT, null, 0),
+                new LongOpt(debug_SWITCH,
+                            LongOpt.NO_ARGUMENT, null, 0) };
         Getopt g = new Getopt("daikon.tools.runtimechecker.InstrumentHandler", args, "hs", longopts);
         int c;
         while ((c = g.getopt()) != -1) {

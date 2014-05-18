@@ -100,8 +100,7 @@ public class InvariantChecker {
     daikon.LogHelper.setupLogs(daikon.LogHelper.INFO);
 
     LongOpt[] longopts = new LongOpt[] {
-      new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT,
-                  null, 0),
+      new LongOpt(Daikon.config_option_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(output_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(dir_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(conf_SWITCH, LongOpt.NO_ARGUMENT, null, 0),

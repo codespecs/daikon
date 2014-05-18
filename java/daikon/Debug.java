@@ -24,7 +24,7 @@ import plume.*;
  * in order for a print to occur.
  **/
 
-public class Debug {
+public final class Debug {
 
   /** Debug Logger. */
   public static final Logger debugTrack = Logger.getLogger ("daikon.Debug");
@@ -145,27 +145,40 @@ public class Debug {
       // {"return"},
     };
 
-  // cached standard parts of the debug print so that multiple calls from
-  // the same context don't have to repeat these each time
+  // Ordinarily, a client would have to supply a Class, Ppt, and
+  // List<Varinfo> with each call to a log method.  But the client can
+  // instead provide those values once (they are cached in these variables)
+  // and omit them in subsequent calls.  The subsequent calls can use forms
+  // of log() that take fewer arguments.
 
-  /** True if the cached variables are printable. **/
+  /**
+   * True if the cached values should be printed --- that is, they match
+   * what is currently being debugged.
+   **/
   public boolean cache_match = true;
 
   // Note that throughout this file, inv_class is not necessarily a
   // subclass of Invariant -- for instance, it might be a subclass of
   // BinaryDerivationFactory.
-  /** cached class */
+  /** cached class: class to use by default when calling variants of log()
+   * with few arguments */
   public /*@Nullable*/ Class<?> cache_class;
 
-  /** cached ppt */
+  /** cached ppt: ppt to use by default when calling variants of log()
+   * with few arguments */
   public /*@Nullable*/ Ppt cache_ppt;
 
-  /** cached variables */
+  /** cached variables: variables to use by default when calling variants of
+   * log() with few arguments */
   public VarInfo /*@Nullable*/ [] cache_vis;
 
   /**
-   * Sets the cache for class, ppt, and vis so that future calls to log
-   * don't have to set them.
+   * Ordinarily, a client would have to supply a Class, Ppt, and
+   * List&lt;Varinfo&gt; with each call to a log method.
+   * This constructor sets as defaults c, ppt, and whatever variable (if any) from
+   * vis that is on the debugTrackVar list.  Essentially this creates
+   * a debug object that will print if any of the variables in vis are
+   * being tracked (and c and ppt match)
    **/
 
   public Debug (Class<?> c, Ppt ppt, VarInfo[] vis) {
@@ -187,7 +200,9 @@ public class Debug {
 
 
   /**
-   * Sets up the cache for c, ppt, and whatever variable (if any) from
+   * Ordinarily, a client would have to supply a Class, Ppt, and
+   * List&lt;Varinfo&gt; with each call to a log method.
+   * This constructor sets as defaults c, ppt, and whatever variable (if any) from
    * vis that is on the debugTrackVar list.  Essentially this creates
    * a debug object that will print if any of the variables in vis are
    * being tracked (and c and ppt match)
@@ -209,7 +224,7 @@ public class Debug {
    * any match, returns that variable.  Null is returned if there are no
    * matches.
    */
-  public /*@Nullable*/ VarInfo visTracked (List<VarInfo> vis) {
+  public /*@Nullable*/ VarInfo visTracked (/*>>>@UnknownInitialization Debug this,*/ List<VarInfo> vis) {
 
     for (VarInfo v : vis) {
       Set<VarInfo> evars = null;
@@ -254,10 +269,11 @@ public class Debug {
 
   /**
    * Sets the cache for class, ppt, and vis so that future calls to log
-   * don't have to set them.
+   * don't have to set them -- in other words, future calls can use the
+   * versions of log with fewer arguments.
    **/
 
-  void set (/*@Nullable*/ Class<?> c, /*@Nullable*/ Ppt ppt, /*@Nullable*/ VarInfo[] vis) {
+  void set (/*>>>@UnknownInitialization Debug this,*/ /*@Nullable*/ Class<?> c, /*@Nullable*/ Ppt ppt, VarInfo /*@Nullable*/ [] vis) {
     cache_class = c;
     cache_ppt = ppt;
     cache_vis = vis;
@@ -371,7 +387,8 @@ public class Debug {
    * directly rather than relying on the check here. <p>
    *
    * Other versions of this method (noted below) work without the Logger
-   * parameter and take class, ppt, and vis from the cached values
+   * parameter and take class, ppt, and vis from the cached values, which
+   * were set by the constructor or by the set() method.
    *
    * @param debug       A second Logger to query if debug tracking is turned
    *                    off or does not match.  If this logger is
@@ -405,8 +422,11 @@ public class Debug {
       return;
 
     // Get the non-qualified class name
-    String class_str = "null";
-    if (inv_class != null) {
+    String class_str;
+    if (inv_class == null) {
+       // when is inv_class null?
+      class_str = "null";
+    } else {
       @SuppressWarnings("nullness") // getPackage(): invariant class always has a package
       /*@NonNull*/ String packageName = inv_class.getPackage().getName() + ".";
       class_str = UtilMDE.replaceString (inv_class.getName(), packageName, "");
@@ -461,7 +481,8 @@ public class Debug {
    *
    * @return whether or not it logged anything
    */
-  public static boolean log (Class<?> inv_class, Ppt ppt, String msg) {
+  // 3-argument form
+  public static boolean log (Class<?> inv_class, /*@UnknownInitialization(PptTopLevel.class)*/ Ppt ppt, String msg) {
 
     return (log (inv_class, ppt, ppt.var_infos, msg));
   }
@@ -474,7 +495,8 @@ public class Debug {
    *
    * @return whether or not it logged anything
    */
-  public static boolean log (Class<?> inv_class, /*@Nullable*/ Ppt ppt, VarInfo /*@Nullable*/ [] vis,
+  // 4-argument form
+  public static boolean log (/*@Nullable*/ Class<?> inv_class, /*@Nullable*/ /*@UnknownInitialization(PptTopLevel.class)*/ Ppt ppt, VarInfo /*@Nullable*/ [] vis,
                              String msg) {
 
     if (!debugTrack.isLoggable(Level.FINE))
@@ -540,7 +562,7 @@ public class Debug {
    * Returns whether or not the specified class matches the classes being
    * tracked
    */
-  public static boolean class_match (Class<?> inv_class) {
+  public static boolean class_match (/*@Nullable*/ Class<?> inv_class) {
 
     if ((debugTrackClass.length > 0) && (inv_class != null)) {
       return (strContainsElem (inv_class.getName(), debugTrackClass));
@@ -549,9 +571,9 @@ public class Debug {
   }
 
   /**
-   * Returns whether onot the specified ppt matches the ppts being tracked
+   * Returns whether or not the specified ppt matches the ppts being tracked
    */
-  public static boolean ppt_match (Ppt ppt) {
+  public static boolean ppt_match (/*@Nullable*/ Ppt ppt) {
 
     if (debugTrackPpt.length > 0) {
       return ((ppt != null) && strContainsElem (ppt.name(), debugTrackPpt));

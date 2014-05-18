@@ -44,7 +44,9 @@ public abstract class Ppt
 
   // The "name" and "ppt_name" fields were moved to PptTopLevel:  they take
   // up too much space in PptSlice objects.
-  public abstract String name();
+  // This is safe if the receiver is @UnknownInitialization(PptTopLevel.class) OR
+  // @UnknownInitialization(PptSlice.class), but annotations cannot express that.
+  public abstract String name(/*>>>@UnknownInitialization(PptTopLevel.class) Ppt this*/);
 
   /** Trim the collections used in this Ppt. */
   public void trimToSize() {
