@@ -12,6 +12,7 @@ import org.apache.bcel.classfile.JavaClass;
 import org.apache.bcel.generic.*;
 import org.apache.bcel.*;
 
+import daikon.DynComp;
 import daikon.util.Option;
 import daikon.util.Options;
 
@@ -22,9 +23,6 @@ import daikon.util.Options;
  * instrumentation code is unchanged and calls the original methods.
  */
 public class BuildJDK {
-
-  @Option("Don't track comparibility of primitive values")
-  public static boolean no_primitives = false;
 
   @Option("Instrument the given classfiles from the specified source directory (by default, src must be a jar file)")
   public static boolean classfiles = false;
@@ -133,12 +131,13 @@ public class BuildJDK {
 
     System.out.println("Starting at " + new Date());
 
-    Options options = new Options (synopsis, BuildJDK.class);
+    Options options = new Options (synopsis, BuildJDK.class, DynComp.class);
     // options.ignore_options_after_arg (true);
     String[] cl_args = options.parse_or_usage (args);
     boolean ok = check_args(options, cl_args);
     if (!ok)
       System.exit(1);
+    verbose = DynComp.verbose;  
 
     if (classfiles) {
 
@@ -381,7 +380,7 @@ public class BuildJDK {
     assert jc != null : "@AssumeAssertion(nullness): seems to be non-null";
     DCInstrument dci = new DCInstrument (jc, true, null);
     JavaClass inst_jc;
-    if (no_primitives)
+    if (DynComp.no_primitives)
       inst_jc = dci.instrument_jdk_refs_only();
     else
       inst_jc = dci.instrument_jdk();
