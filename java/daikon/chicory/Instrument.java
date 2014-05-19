@@ -580,14 +580,14 @@ public class Instrument implements ClassFileTransformer {
         add_entry_instrumentation(il, context, !shouldFilter(fullClassName,
                                       mg.getName(), entry_ppt_name));
 
-        // If there was no orgiinal StackMapTable (smta == null)
+        // If there was no orginal StackMapTable (smta == null)
         // then there are no switches and/or class was compiled for
         // Java 5.  In either case, no need to process switches.
         if (smta != null ) {
            // Need to see if there are any switches after this location.
            // If so, we may need to update the corresponding stackmap if
            // the amount of the switch padding changed.
-           modify_stack_maps_for_switches(il.getStart(), il, context);
+           modify_stack_maps_for_switches(il.getStart(), il);
         }
 
         Iterator<Boolean> shouldIncIter = mi.is_included.iterator();
@@ -648,14 +648,14 @@ public class Instrument implements ClassFileTransformer {
                 }
               }
 
-              // If there was no orgiinal StackMapTable (smta == null)
+              // If there was no orginal StackMapTable (smta == null)
               // then there are no switches and/or class was compiled for
               // Java 5.  In either case, no need to process switches.
               if (smta != null ) {
                  // Need to see if there are any switches after this location.
                  // If so, we may need to update the corresponding stackmap if
                  // the amount of the switch padding changed.
-                 modify_stack_maps_for_switches(next_ih, il, context);
+                 modify_stack_maps_for_switches(next_ih, il);
               }
           }
           // Go on to the next instruction in the list
@@ -847,7 +847,7 @@ public class Instrument implements ClassFileTransformer {
    * update the StackMaps, if required.
    */
   private void
-  update_stack_map_offset (int offset, MethodContext c) {
+  update_stack_map_offset (int offset) {
 
     running_offset = -1; // no +1 on first entry
     for (int i = 0; i < stack_map_table.length; i++) {
@@ -958,7 +958,7 @@ public class Instrument implements ClassFileTransformer {
    * padding bytes.  If so, we need to update the corresponding StackMap.
    */
   private void
-  modify_stack_maps_for_switches (InstructionHandle ih, InstructionList il, MethodContext c) {
+  modify_stack_maps_for_switches (InstructionHandle ih, InstructionList il) {
       Instruction inst;
       short opcode;
 
@@ -998,7 +998,7 @@ public class Instrument implements ClassFileTransformer {
    * operand offset.  This may require changing the instruction as well.
    */
   private void
-  xform_local_ref (InstructionHandle ih, InstructionList il, MethodContext c) {
+  xform_local_ref (InstructionHandle ih, InstructionList il) {
 
       Instruction inst = ih.getInstruction();
 
@@ -1085,7 +1085,7 @@ public class Instrument implements ClassFileTransformer {
               // update the instruction list to account for this.
               il.setPositions();
               // Which means we might need to update a StackMap offset.
-              update_stack_map_offset(ih.getPosition(), c);
+              update_stack_map_offset(ih.getPosition());
           }    
           break;
 
@@ -1145,7 +1145,7 @@ public class Instrument implements ClassFileTransformer {
         // Loop through each instruction looking for local variable references
         for (InstructionHandle ih = il.getStart(); ih != null; ) {
 
-          xform_local_ref(ih, il, c);
+          xform_local_ref(ih, il);
 
           // Go on to the next instruction in the list
           ih = ih.getNext();
