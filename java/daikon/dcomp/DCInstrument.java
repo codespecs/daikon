@@ -154,6 +154,33 @@ class DCInstrument {
   protected static InstructionList global_catch_il;
   protected static CodeExceptionGen global_exception_handler;
 
+  /**
+   * NOMENCLATURE
+   *
+   * I (markro) realized that this code was not consistent with 
+   * respect to variable naming.  It was using different terms
+   * for the same item as well as the same term for different
+   * items.  I have tried to modify the code to be consistent,
+   * but I am sure I have missed some poorly named variables.
+   *
+   * The main issue is with the terms 'index' and 'offset'.
+   * My intent is the following:
+   *
+   * 'index' is an item's subscript into a data structure.
+   *
+   * 'offset' is an item's runtime address as an offset (for example)
+   * from the start of a method's byte codes or from the start
+   * of a method's stack frame. The Java Virtual Machine Specification
+   * uses 'index into the local variable array of the current frame'
+   * or 'slot number' to describe this later case.
+   *
+   * Unfortunately, BCEL uses the method names getIndex and setIndex
+   * to refer to 'offset's into the local stack frame.
+   * It uses getPosition and setPosition to refer to 'offset's into
+   * the byte codes.
+   *
+   */
+
 //
 // The following code is common with chicory/Instrument.java
 // We should move to new module or perhaps util/BCELUtil.java
@@ -163,10 +190,6 @@ class DCInstrument {
    * This really should be part of the abstraction provided by BCEL,
    * similar to LineNumberTable and LocalVariableTable.  However, for 
    * now we'll do it ourselves.
-   *
-   * Set by instrument_all_methods
-   * Used by instrument_all_methods, find_stack_map_equal, find_stack_map_after,
-   * update_stack_map_offset, add_entry_instrumentation
    */
   private StackMapTableEntry[] stack_map_table;
   private StackMapTableEntry[] empty_stack_map_table = {};
@@ -253,7 +276,7 @@ class DCInstrument {
     if (stack_map_table.length == 0) {
       return -1;
     } else {
-      return stack_map_table.length;
+      return stack_map_table.length - 1;
     }  
   }    
 
@@ -415,8 +438,13 @@ class DCInstrument {
               return new StackMapType(Constants.ITEM_Object,
                                       pool.addClass(typeToClassGetName(type)),
                                       pool.getConstantPool());
+          // UNKNOWN seems to be used for Uninitialized objects.
+          // The second argument to the constructor should be the code offset
+          // of the corresponding 'new' instruction.  Just using 0 for now.
+          case Constants.T_UNKNOWN:
+              return new StackMapType(Constants.ITEM_NewObject, 0, pool.getConstantPool());
           default:
-              throw new RuntimeException("Invalid type: " + type);
+              throw new RuntimeException("Invalid type: " + type + type.getType());
           }
   }
 
@@ -461,26 +489,41 @@ class DCInstrument {
 
   /**
    * Update any FULL_FRAME StackMap entries to include a new local var.
+   * The locals array is a copy of the local variables PRIOR to the addition
+   * of the new local in question.
    */
   private void
-  update_full_frame_stack_map_entries (int index, Type type_new_var) {
+  update_full_frame_stack_map_entries (int offset, Type type_new_var,
+                                       LocalVariableGen[] locals) {
+      int index;  // locals index
 
       for (int i = 0; i < stack_map_table.length; i++) {
         if (stack_map_table[i].getFrameType() == Constants.FULL_FRAME) {
 
             int num_locals = stack_map_table[i].getNumberOfLocals();
-            StackMapType[] new_local_types = new StackMapType[num_locals+1];
+            StackMapType[] new_local_types = new StackMapType[num_locals + 1];
             StackMapType[] old_local_types = stack_map_table[i].getTypesOfLocals();
 
-            for (int j = num_locals; j > index; j--) {
-                 new_local_types[j] = old_local_types[j-1];
+       // System.out.printf ("update_full_frame %s %s %s %n", offset, num_locals, locals.length);
+
+            for (index = 0; index < num_locals; index++) {
+                if (index >= locals.length) {
+                    // there are hidden compiler temps in map
+                    break;
+                }    
+                if (locals[index].getIndex() >= offset) {
+                    // we've reached the point of insertion
+                    break;
+                }    
+                new_local_types[index] = old_local_types[index];
             }
-            new_local_types[index] = generate_StackMapType_from_Type (type_new_var);
-            for (int j = index; j != 0; j--) {
-                 new_local_types[j-1] = old_local_types[j-1];
+            new_local_types[index++] = generate_StackMapType_from_Type (type_new_var);
+            while (index <= num_locals) {
+                 new_local_types[index] = old_local_types[index - 1];
+                 index++;
             }
 
-            stack_map_table[i].setNumberOfLocals(num_locals+1);
+            stack_map_table[i].setNumberOfLocals(num_locals + 1);
             stack_map_table[i].setTypesOfLocals(new_local_types);
         }    
       }    
@@ -496,12 +539,12 @@ class DCInstrument {
   private LocalVariableGen
   create_method_scope_local(MethodGen mg, String name, Type type) {
 
-    // BCEL sorts local vars and presents them in index order.  Search
+    // BCEL sorts local vars and presents them in offset order.  Search
     // locals for first var with start != 0. If none, just add the new
     // var at the end of the table and exit. Otherwise, insert the new
     // var just prior to the local we just found.
     // Now we need to make a pass over the byte codes to update the local
-    // index values of all the locals we just shifted up.  This may have
+    // offset values of all the locals we just shifted up.  This may have
     // a 'knock on' effect if we are forced to change an instruction that
     // references implict local #3 to an instruction with an explict
     // reference to local #4 as this would require the insertion of an
@@ -510,41 +553,49 @@ class DCInstrument {
     // us) and the StackMapTable (yes - BCEL should do this, but it doesn't).
 
     LocalVariableGen lv_new;
-    int max_index = -1;
-    int new_index = -1;
+    int max_offset = -1;
+    int new_offset = -1;
+    // get a copy of the local before modification
+    LocalVariableGen[] locals = mg.getLocalVariables();
+
     for (LocalVariableGen lv : mg.getLocalVariables()) {
         if (lv.getStart().getPosition() != 0) {
-            if (new_index == -1) {
-                new_index = lv.getIndex();
+            if (new_offset == -1) {
+                new_offset = lv.getIndex();
             }
             lv.setIndex(lv.getIndex() + type.getSize());
         }
         // need to add 1 if type is double or long
-        max_index = lv.getIndex() + lv.getType().getSize() - 1;
+        max_offset = lv.getIndex() + lv.getType().getSize() - 1;
     }
+
+    // System.out.printf ("new_offset %s%n", new_offset);
 
     // Special case: sometimes the java compiler allocates an unnamed
     // local temp for saving the exception in a finally clause.
-    if (new_index == -1) {
-        if (mg.getMaxLocals() > max_index + 1) {
-            new_index = max_index + 1;
+    if (new_offset == -1) {
+        if (mg.getMaxLocals() > max_offset + 1) {
+            new_offset = max_offset + 1;
         }
     }
 
-    if (new_index != -1) {
-        // insert the local variable into existing table at slot 'new_index'
-        lv_new = mg.addLocalVariable(name, type, new_index, null, null);
+    // System.out.printf ("new_offset %s%n", new_offset);
+
+    if (new_offset != -1) {
+        // insert the local variable into existing table at slot 'new_offset'
+        lv_new = mg.addLocalVariable(name, type, new_offset, null, null);
         mg.setMaxLocals(mg.getMaxLocals() + type.getSize());
 
-        // Process the instruction list, adding one to the index of each
-        // LocalVariableInstruction that references a local that is
-        // 'higher' in the local map than the dcomp arg.
-        adjust_code_for_locals_change (mg, new_index, type.getSize());
+        // Process the instruction list, adding one to the offset
+        // within each LocalVariableInstruction that references a
+        // local that is 'higher' in the local map than new local
+        // we just inserted.
+        adjust_code_for_locals_change (mg, new_offset, type.getSize());
 
         // We also need to update any FULL_FRAME StackMap entries to
-        // add in the variable type.
-        update_full_frame_stack_map_entries (new_index, type);
-
+        // add in the new local variable type.
+ print_stack_map_table ("create_method_scope_local");
+        update_full_frame_stack_map_entries (new_offset, type, locals);
     } else {
         // create the local variable at end of locals
         // will automatically update max_locals
@@ -784,7 +835,7 @@ class DCInstrument {
       return gen.getJavaClass().copy();
     }
 
-    debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
+    debug_instrument.log ("%nInstrumenting class %s%n", gen.getClassName());
     debug_instrument.indent();
 
     // Create the ClassInfo for this class and its list of methods
@@ -843,20 +894,13 @@ class DCInstrument {
 
         InstructionList il = mg.getInstructionList();
         boolean has_code = (il != null);
-        fetch_current_stack_map_table (mg);
+        if (has_code) {
+            fetch_current_stack_map_table (mg);
+        }
 
         // Add a parameter of java.lang.DCompMarker to match up with the
         // instrumented versions in the JDK.
         add_dcomp_arg (mg);
-
-    InstructionHandle ih = il.getStart();
-    while (ih != null) {
-      debug_instrument_inst.log ("inst: %s %n", ih);
-      for (InstructionTargeter it : ih.getTargeters()) {
-        //debug_instrument_inst.log ("targeter: %s %n", it);
-      }
-      ih = ih.getNext();
-    }
 
         // Adding the DCompMarker may have caused the code bytes to
         // be modified.  We need to see if this changed any of the
@@ -882,22 +926,17 @@ class DCInstrument {
           DCRuntime.methods.add (mi);
         }
 
-        // Create the local to store the tag frame for this method
-        tag_frame_local = create_tag_frame_local (mg);
-
         if (has_code) {
+          // Create the local to store the tag frame for this method
+          tag_frame_local = create_tag_frame_local (mg);
           build_exception_handler (mg);
           instrument_method (m, mg);
           if (track) {
             add_enter (mg, mi, DCRuntime.methods.size()-1);
             add_exit (mg, mi, DCRuntime.methods.size()-1);
           }
-          add_create_tag_frame (mg);
           install_exception_handler (mg);
-        }
-
-        create_new_stack_map_attribute (mg);
-        if (has_code) {
+          create_new_stack_map_attribute (mg);
           mg.setMaxLocals();
           mg.setMaxStack();
         } else {
@@ -979,7 +1018,7 @@ class DCInstrument {
       return gen.getJavaClass().copy();
     }
 
-    debug_instrument.log ("(refs_only)Instrumenting class %s%n", gen.getClassName());
+    debug_instrument.log ("%nInstrumenting class(refs_only) %s%n", gen.getClassName());
     debug_instrument.indent();
 
     // Create the ClassInfo for this class and its list of methods
@@ -1028,7 +1067,7 @@ class DCInstrument {
         MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
         mgen = mg;  // copy to global
         boolean has_code = (mg.getInstructionList() != null) ;
-        debug_instrument.log ("  Processing method %s, track=%b\n", m, track);
+        debug_instrument.log ("%n  Processing method %s, track=%b\n", m, track);
         debug_instrument.indent();
 
         // Skip methods defined in Object
@@ -1039,7 +1078,9 @@ class DCInstrument {
           }
         }
 
-        fetch_current_stack_map_table (mg);
+        if (has_code) {
+            fetch_current_stack_map_table (mg);
+        }
 
         // Add a parameter of java.lang.DCompMarker to match up with the
         // instrumented versions in the JDK.
@@ -1055,9 +1096,6 @@ class DCInstrument {
           DCRuntime.methods.add (mi);
         }
 
-        // Create the local to store the tag frame for this method
-        //        tag_frame_local = create_tag_frame_local (mg);
-
         if (has_code) {
           build_exception_handler_refs_only (mg);
           instrument_method_refs_only (mg);
@@ -1065,12 +1103,8 @@ class DCInstrument {
             add_enter_refs_only (mg, mi, DCRuntime.methods.size()-1);
             add_exit_refs_only (mg, mi, DCRuntime.methods.size()-1);
           }
-          // add_create_tag_frame_refs_only (mg);
           install_exception_handler (mg);
-        }
-
-        create_new_stack_map_attribute (mg);
-        if (has_code) {
+          create_new_stack_map_attribute (mg);
           mg.setMaxLocals();
           mg.setMaxStack();
         } else {
@@ -1132,7 +1166,7 @@ class DCInstrument {
       return gen.getJavaClass().copy();
     }
 
-    debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
+    debug_instrument.log ("%nInstrumenting class(JDK) %s%n", gen.getClassName());
 
     // properly account for object methods
     handle_object (gen);
@@ -1164,12 +1198,15 @@ class DCInstrument {
         if (BCELUtil.is_clinit (m))
           continue;
 
-        debug_instrument.log ("  Processing method %s%n", m);
+        debug_instrument.log ("%n  Processing method %s%n", m);
 
         MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
         mgen = mg;  // copy to global
         boolean has_code = (mg.getInstructionList() != null) ;
-        fetch_current_stack_map_table (mg);
+
+        if (has_code) {
+            fetch_current_stack_map_table (mg);
+        }
 
         // If the method is native
         if (mg.isNative()) {
@@ -1178,6 +1215,7 @@ class DCInstrument {
           // real native method
           fix_native (gen, mg);
           has_code = true;
+          fetch_current_stack_map_table (mg);
 
           // Add an argument of java.lang.DCompMarker to distinguish our version
           add_dcomp_arg (mg);
@@ -1187,20 +1225,18 @@ class DCInstrument {
           // Add an argument of java.lang.DCompMarker to distinguish our version
           add_dcomp_arg (mg);
 
-          // Create the local to store the tag frame for this method
-          tag_frame_local = create_tag_frame_local (mg);
-
           // Instrument the method
           if (has_code) {
+            // Create the local to store the tag frame for this method
+            tag_frame_local = create_tag_frame_local (mg);
             build_exception_handler (mg);
             instrument_method (m, mg);
-            add_create_tag_frame (mg);
             install_exception_handler (mg);
           }
         }
 
-        create_new_stack_map_attribute (mg);
         if (has_code) {
+          create_new_stack_map_attribute (mg);
           mg.setMaxLocals();
           mg.setMaxStack();
         } else {
@@ -1244,7 +1280,7 @@ class DCInstrument {
       return gen.getJavaClass().copy();
     }
 
-    debug_instrument.log ("Instrumenting class %s%n", gen.getClassName());
+    debug_instrument.log ("%nInstrumenting class(JDK refs_only) %s%n", gen.getClassName());
 
     // properly account for object methods
     handle_object (gen);
@@ -1276,12 +1312,15 @@ class DCInstrument {
         if (BCELUtil.is_clinit (m))
           continue;
 
-        debug_instrument.log ("  (refs_only)Processing method %s%n", m);
+        debug_instrument.log ("%n  Processing method %s%n", m);
 
         MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
         mgen = mg;  // copy to global
         boolean has_code = (mg.getInstructionList() != null) ;
-        fetch_current_stack_map_table (mg);
+
+        if (has_code) {
+            fetch_current_stack_map_table (mg);
+        }
 
         // If the method is native
         if (mg.isNative()) {
@@ -1290,6 +1329,7 @@ class DCInstrument {
           // real native method
           fix_native_refs_only (gen, mg);
           has_code = true;
+          fetch_current_stack_map_table (mg);
 
           // Add an argument of java.lang.DCompMarker to distinguish our version
           add_dcomp_arg (mg);
@@ -1299,20 +1339,16 @@ class DCInstrument {
           // Add an argument of java.lang.DCompMarker to distinguish our version
           add_dcomp_arg (mg);
 
-          // Create the local to store the tag frame for this method
-          //        tag_frame_local = create_tag_frame_local (mg);
-
           // Instrument the method
           if (has_code) {
             build_exception_handler_refs_only (mg);
             instrument_method_refs_only (mg);
-            //          add_create_tag_frame (mg);
             install_exception_handler (mg);
           }
         }
 
-        create_new_stack_map_attribute (mg);
         if (has_code) {
+          create_new_stack_map_attribute (mg);
           mg.setMaxLocals();
           mg.setMaxStack();
         } else {
@@ -1342,7 +1378,15 @@ class DCInstrument {
    */
   public void instrument_method (Method m, MethodGen mg) {
 
-    // Get Stack information
+    // We need to insert the code to initialize the tag_frame_local
+    // now so that the stack anaylsis is correct for potential
+    // code replacements we might make later.
+    InstructionHandle orig_start = (mg.getInstructionList()).getStart();
+    add_create_tag_frame(mg);
+    
+    // Calculate the operand stack value(s) for revised code.
+    mgen.setMaxStack();
+    // Calculate stack types information
     StackTypes stack_types = bcel_calc_stack_types (mg);
     if (stack_types == null) {
       skip_method (mg);
@@ -1364,7 +1408,7 @@ class DCInstrument {
     // case we will need to use a hash map.
 
     int[] handle_offsets = new int[il.getLength()];
-    InstructionHandle ih = il.getStart();
+    InstructionHandle ih = orig_start;
     int index = 0;
     // Loop through each instruction, building up offset map.
     while (ih != null) {
@@ -1380,7 +1424,7 @@ class DCInstrument {
 
     index = 0;
     // Loop through each instruction, making substitutions
-    for (ih = il.getStart(); ih != null; ) {
+    for (ih = orig_start; ih != null; ) {
       debug_instrument_inst.log ("instrumenting instruction %s%n", ih);
       InstructionList new_il = null;
 
@@ -1632,12 +1676,14 @@ class DCInstrument {
         // Since we are inserting a new stack map frame at the
         // beginning of the stack map table, we need to adjust the
         // offset_delta of the original first stack map frame due to
-        // the fact that it will no longer be the first entry.  We must 
-        // subtract (len_code + 1). BUT, if this new delat is -1
-        // we must delete it as it will be replaced by the new frame
-        // we are adding.  (did you get all of that? - markro)
+        // the fact that it will no longer be the first entry.  We
+        // must subtract (len_code + 1). BUT, if the original first
+        // entry has an offset of 0 (because the bytecode at address
+        // 0 is a branch target) then we must delete it as it will
+        // be replaced by the new frame we are adding. 
+        // (did you get all of that? - markro)
 
-        if (stack_map_table[0].getByteCodeOffsetDelta() == len_code) {
+        if (stack_map_table[0].getByteCodeOffsetDelta() == 0) {
             skipFirst = true;
         } else {
             modify_stack_map_offset(stack_map_table[0], -(len_code+1));
@@ -1658,6 +1704,7 @@ class DCInstrument {
         new_stack_map_table[new_index++] = stack_map_table[i];
     }    
     stack_map_table = new_stack_map_table;
+    // print_stack_map_table ("add_create_tag_frame");
   }
 
   /**
@@ -1750,8 +1797,12 @@ class DCInstrument {
       offset = 0;
 
     // Encode the primitive parameter information in a string
-    mg.setMaxLocals();
+    // It seems incorrect to reset the MaxLocals based on the code
+    // at this point.  We have added special locals that won't
+    // be included.  Commented out 5/14/2014 - markro.
+    //mg.setMaxLocals();
     int frame_size = mg.getMaxLocals();
+
     assert frame_size < 100
       : frame_size + " " + mg.getClassName() + "." + mg.getName();
     String params = "" + (char)(frame_size + '0');
@@ -3752,7 +3803,8 @@ class DCInstrument {
       else // neither of the top two values are primitive
         op = null;
     }
-    debug_dup.log ("DUP2_X1 -> %s [... %s]%n", op,
+    if (debug_dup.enabled)
+        debug_dup.log ("DUP2_X1 -> %s [... %s]%n", op,
                      stack_contents (stack, 3));
 
     if (op != null)
@@ -3776,7 +3828,8 @@ class DCInstrument {
       op = "dup";
     else // both of the top two items are not primitive, nothing to dup
       op = null;
-    debug_dup.log ("DUP2 -> %s [... %s]%n", op,
+    if (debug_dup.enabled)
+        debug_dup.log ("DUP2 -> %s [... %s]%n", op,
                      stack_contents (stack, 2));
     if (op != null)
       return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
@@ -3800,7 +3853,8 @@ class DCInstrument {
       else
         op = "dup";
     }
-    debug_dup.log ("DUP_X2 -> %s [... %s]%n", op,
+    if (debug_dup.enabled)
+        debug_dup.log ("DUP_X2 -> %s [... %s]%n", op,
                      stack_contents (stack, 3));
     if (op != null)
       return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
@@ -3865,7 +3919,8 @@ class DCInstrument {
         op = null; // nothing to dup
       }
     }
-    debug_dup.log ("DUP_X2 -> %s [... %s]%n", op,
+    if (debug_dup.enabled)
+        debug_dup.log ("DUP_X2 -> %s [... %s]%n", op,
                      stack_contents (stack, 3));
     if (op != null)
       return build_il (dcr_call (op, Type.VOID, Type.NO_ARGS), inst);
@@ -4135,7 +4190,7 @@ class DCInstrument {
                 for (InstructionTargeter it : nih.getTargeters()) {
                     if (it instanceof BranchInstruction) {
                         target_offsets[target_count++] = nih.getPosition();
-        //  System.out.printf ("New branch target: %s at %s%n", nih, nih.getPosition());
+                        debug_instrument_inst.log ("New branch target: %s %n", nih);
                     }
                 }
             }
@@ -4153,8 +4208,12 @@ class DCInstrument {
             StackTypes stack_types = bcel_calc_stack_types(mgen);
             OperandStack stack;
 
+            // targ_offsets are new address, but stack map still has
+            // old adresses - need to adjust for search.
+            int new_index = find_stack_map_index_before (
+                                target_offsets[0] - new_length + old_length) + 1;
+
             // Copy any existing stack maps prior to inserted code.
-            int new_index = find_stack_map_index_before (target_offsets[0]) + 1;
             System.arraycopy (stack_map_table, 0, new_stack_map_table, 0, new_index);
 
             for (int i = 0; i < target_count; i++) {
@@ -4993,78 +5052,116 @@ class DCInstrument {
     //if (!mg.getName().equals("double_check"))
     //  return;
 
-    boolean has_code = (mg.getInstructionList() != null) ;
+    InstructionList il = mg.getInstructionList();
+    boolean has_code = (il != null);
 
     // If the method has code, add the local representing the new parameter
     // as a local, move all of the other locals down one slot, and modify
     // all of the code that references those locals
     if (has_code) {
 
-      // Get the current local variables (includes parameters)
+      // print_stack_map_table ("add_decomp_arg 2");
+
+      // Get the current local variables (includes 'this' and parameters)
       LocalVariableGen[] locals = get_fix_locals (mg);
 
       // Remove the existing locals
       mg.removeLocalVariables();
-      mg.setMaxLocals (0);
+      // Reset MaxLocals to 0 and let code below rebuild it.
+      mg.setMaxLocals(0);
 
-      // Determine the first actual local in the local variables.  The object
-      // and the parameters form the first n entries in the list.
-      int first_local = mg.getArgumentTypes().length;
-      if (!mg.isStatic())
-        first_local++;
+      // Determine the first 'true' local index into the local variables.
+      // The object 'this' pointer and the parameters form the first n
+      // entries in the list.
+      int first_local_index = mg.getArgumentTypes().length;
+      if (!mg.isStatic()) {
+          // add 1 for 'this' pointer
+          first_local_index++;
+      }
 
       // Double check all is ok.
-      if (first_local > locals.length) {
+      if (first_local_index > locals.length) {
         Type[] arg_types = mg.getArgumentTypes();
         String[] arg_names = mg.getArgumentNames();
         for (int ii = 0; ii < arg_types.length; ii++)
           System.out.printf ("param %s %s%n", arg_types[ii], arg_names[ii]);
         for (LocalVariableGen lvg : locals)
           System.out.printf ("local[%d] = %s%n", lvg.getIndex(), lvg);
-        throw new Error("first_local > locals.length: "
+        throw new Error("first_local_index > locals.length: "
                         + mg.getClassName() + "." + mg + " "
-                        + first_local + " " + locals.length);
+                        + first_local_index + " " + locals.length);
       }
 
       // Add back the object and the parameters
-      for (int ii = 0; ii < first_local; ii++) {
+      for (int ii = 0; ii < first_local_index; ii++) {
         LocalVariableGen l = locals[ii];
         LocalVariableGen new_lvg
           = mg.addLocalVariable (l.getName(), l.getType(), l.getIndex(),
                                  l.getStart(), l.getEnd());
-        debug_add_dcomp.log ("Added parameter %s%n", new_lvg);
+        debug_add_dcomp.log ("Added parameter %s%n", new_lvg.getIndex() + ": " + new_lvg.getName() + ", " + new_lvg.getType());
       }
 
-      // Add the new parameter
+      // Add the new dcomp marker parameter
       LocalVariableGen dcomp_arg = mg.addLocalVariable ("marker", dcomp_marker,
                                                         null, null);
-      debug_add_dcomp.log ("Added dcomp arg %s%n", dcomp_arg);
+      debug_add_dcomp.log ("Added dcomp arg %s%n", dcomp_arg.getIndex() + ": " + dcomp_arg.getName() + ", " + dcomp_arg.getType());
 
-      // Add back the other locals
-      for (int ii = first_local; ii < locals.length; ii++) {
+      // Add back the true locals
+      //
+      // NOTE that the Java compiler uses unnamed local temps for:
+      // saving the exception in a finally clause 
+      // the lock for a synchronized block
+      // (others?)
+      // We will create a 'fake' local for these cases.
+
+      // next local location (old location before adding dcomp arg)
+      int offset = dcomp_arg.getIndex();
+      for (int ii = first_local_index; ii < locals.length; ii++) {
         LocalVariableGen l = locals[ii];
-        LocalVariableGen new_lvg
-          = mg.addLocalVariable (l.getName(), l.getType(), l.getIndex()+1,
+        LocalVariableGen new_lvg;
+        if (l.getIndex() > offset) {
+            // there is hidden compiler temp before the next local
+            new_lvg = mg.addLocalVariable ("DaIkOnTeMp" + offset, Type.INT, offset+1,
+                                 il.getStart(), il.getEnd());
+            ii--; // need to revisit same local
+        } else {
+            new_lvg = mg.addLocalVariable (l.getName(), l.getType(), l.getIndex()+1,
                                  l.getStart(), l.getEnd());
-        debug_add_dcomp.log ("Added local %d-%s%n", new_lvg.getIndex(),
-                             new_lvg);
+        }
+        offset = offset + (new_lvg.getType()).getSize();
+        debug_add_dcomp.log ("Added a local   %s%n", new_lvg.getIndex() + ": " + new_lvg.getName() + ", " + new_lvg.getType());
       }
 
-      // Get the index of the first local.  This may not be equal to first
-      // local because of category 2 (long, double) parameters. 
-      // ISSUE: don't think the above is true(?) (markro)
-      // Note that this is the OLD value of the index, not the new value
-      int first_local_index = dcomp_arg.getIndex();
-      debug_add_dcomp.log ("First local index = %d%n", first_local_index);
+      // Recalculate the highest local used based on looking at code offsets.
+      mg.setMaxLocals();
+      int max_offset = mg.getMaxLocals();
 
-      // Process the instruction list, adding one to the index of each
+      // System.out.printf ("add_dcomp_arg %s %s %n", offset, max_offset);
+
+      // hidden compiler temps after the last local
+      for (int ii = offset; ii < max_offset; ii++) {
+        LocalVariableGen new_lvg;
+        new_lvg = mg.addLocalVariable ("DaIkOnTeMp" + offset, Type.INT, offset+1,
+                                 il.getStart(), il.getEnd());
+        offset = offset + (new_lvg.getType()).getSize();
+        debug_add_dcomp.log ("Added a local   %s%n", new_lvg.getIndex() + ": " + new_lvg.getName() + ", " + new_lvg.getType());
+      }
+
+      // Get the offset of the first local after the dcomp arg.
+      // Note that this is the OLD value of the offset, not the new value
+      int first_local_offset = dcomp_arg.getIndex();
+      debug_add_dcomp.log ("First old local offset = %d%n", first_local_offset);
+
+      // Process the instruction list, adding one to the offset of each
       // LocalVariableInstruction that references a local that is
       // 'higher' in the local map than the dcomp arg.
-      adjust_code_for_locals_change (mg, first_local_index, 1);
+      adjust_code_for_locals_change (mg, first_local_offset, 1);
+
+      // print_stack_map_table ("add_decomp_arg 2");
 
       // We also need to update any FULL_FRAME StackMap entries to
       // add in the dcomp arg type.
-      update_full_frame_stack_map_entries (first_local_index, dcomp_marker);
+      update_full_frame_stack_map_entries (first_local_offset, dcomp_marker, locals);
     }
 
     // Add an argument of type java.lang.DCompMarker to distinguish the
@@ -5126,6 +5223,8 @@ class DCInstrument {
     int loc_index = 0;
     if (!mg.isStatic())
       loc_index = 1;
+
+// (markro) Is this code correct?  What if missing local is size=2?
 
     // Loop through each argument
     for (int ii = 0; ii < arg_types.length; ii++) {
