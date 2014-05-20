@@ -198,6 +198,7 @@ class DCInstrument {
   private Attribute smta;
   private int running_offset;
   private boolean needStackMap = false;
+  private InstructionHandle orig_start;
 
 
   /**
@@ -1381,7 +1382,7 @@ class DCInstrument {
     // We need to insert the code to initialize the tag_frame_local
     // now so that the stack anaylsis is correct for potential
     // code replacements we might make later.
-    InstructionHandle orig_start = (mg.getInstructionList()).getStart();
+    orig_start = (mg.getInstructionList()).getStart();
     add_create_tag_frame(mg);
     
     // Calculate the operand stack value(s) for revised code.
@@ -1716,6 +1717,21 @@ class DCInstrument {
     InstructionList il = mg.getInstructionList();
     if (il == null)
       return;
+    insert_before_handle(mg, il.getStart(), new_il);
+  }  
+
+  /**
+   * Inserts a new instruction list into an existing instruction list
+   * just prior to the indicated instruction handle. (Which must be a
+   * member of the existing instruction list.)
+   */
+  public void insert_before_handle (MethodGen mg, InstructionHandle old_start,
+                                    InstructionList new_il) {
+
+    // Ignore methods with no instructions
+    InstructionList il = mg.getInstructionList();
+    if (il == null)
+      return;
 
     new_il.setPositions();
     debug_instrument_inst.log ("  insert_inst: %d%n%s%n", new_il.getLength(), new_il);
@@ -1725,12 +1741,11 @@ class DCInstrument {
     byte[] bytecode = new_il.getByteCode();
     int length = bytecode.length;
 
-    // Add the new code to the beginning of the method. 
+    // Add the new code in front of the instruction handle.
     // Move any line number or local variable targeters to point to
     // the new instructions.  Other targeters (branches, exceptions)
     // are left unchanged.
-    InstructionHandle old_start = il.getStart();
-    InstructionHandle new_start = il.insert (new_il);
+    InstructionHandle new_start = il.insert (old_start, new_il);
     if (old_start.hasTargeters()) {
       for (InstructionTargeter it : old_start.getTargeters()) {
         if ((it instanceof LineNumberGen) || (it instanceof LocalVariableGen))
@@ -1740,7 +1755,7 @@ class DCInstrument {
 
     // Need to update stack map for change in length of instruction bytes.
     il.setPositions();
-    update_stack_map_offset(0, length);
+    update_stack_map_offset(new_start.getPosition(), length);
 
     // We need to see if inserting the additional instructions caused 
     // a change in the amount of switch instruction padding bytes.
@@ -1760,8 +1775,8 @@ class DCInstrument {
    * Adds the call to DCRuntime.enter to the beginning of the method.
    */
   public void add_enter (MethodGen mg, MethodInfo mi, int method_info_index) {
-    insert_at_method_start(mg, call_enter_exit(mg, method_info_index,
-                                               "enter", -1));
+    insert_before_handle(mg, orig_start, call_enter_exit(mg, method_info_index,
+                                                         "enter", -1));
   }
 
   /**
@@ -4208,10 +4223,9 @@ class DCInstrument {
             StackTypes stack_types = bcel_calc_stack_types(mgen);
             OperandStack stack;
 
-            // targ_offsets are new address, but stack map still has
-            // old adresses - need to adjust for search.
-            int new_index = find_stack_map_index_before (
-                                target_offsets[0] - new_length + old_length) + 1;
+            // need to find last stack map entry prior to first new branch target
+            // returns -1 if there isn't one
+            int new_index = find_stack_map_index_before (target_offsets[0]) + 1;
 
             // Copy any existing stack maps prior to inserted code.
             System.arraycopy (stack_map_table, 0, new_stack_map_table, 0, new_index);
