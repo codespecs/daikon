@@ -120,6 +120,7 @@ texi-clean:
 
 very-clean: clean
 	rm -rf config-options.texinfo invariants-doc.texinfo
+	rm -rf www/pubs
 
 # Remakes entire distribution; use with caution.
 dist:
