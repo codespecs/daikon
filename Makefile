@@ -113,7 +113,11 @@ DIST_DIR_PATHS := daikon.tar.gz daikon.zip doc/images/daikon-logo.gif daikon.jar
 
 REPOSITORY := https://code.google.com/p/daikon
 
-# It seems like these should come from their standard locations (jhp)
+## These seem to be used only by the test-staged-dist target.
+# It would be nicer to automatically set JAVA_HOME, or to not need it to be set.
+ifndef JAVA_HOME
+$(error JAVA_HOME is not set)
+endif
 RTJAR := $(JAVA_HOME)/jre/lib/rt.jar
 TOOLSJAR := $(JAVA_HOME)/lib/tools.jar
 
