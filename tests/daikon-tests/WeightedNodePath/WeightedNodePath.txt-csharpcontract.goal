@@ -1,0 +1,125 @@
+===========================================================================
+MapQuick.WeightedNodePath:::OBJECT
+this.node != null
+this.path.node != null
+this.path.path.node != null
+this.path.path.cost >= 1
+this.path.cost >= 1
+this.cost >= 1
+this.path.path.cost < this.path.cost
+this.path.path.cost < this.cost
+this.path.cost < this.cost
+===========================================================================
+MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::ENTER
+node != null
+===========================================================================
+MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode):::EXIT
+this.node == Contract.OldValue(node)
+this.path == null
+===========================================================================
+MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::ENTER
+node != null
+path.node != null
+path.path.node != null
+path.path.cost >= 1
+path.cost >= 1
+path.path.cost < path.cost
+===========================================================================
+MapQuick.WeightedNodePath.WeightedNodePath(MapQuick.WeightedNode, MapQuick.WeightedNodePath):::EXIT
+this.node == Contract.OldValue(node)
+this.path == Contract.OldValue(path)
+this.path.node == path.node
+this.path.path == path.path
+this.path.path.node == path.path.node
+this.path.path.path == path.path.path
+this.path.path.cost == path.path.cost
+this.path.cost == path.cost
+path.node == Contract.OldValue(path.node)
+path.path == Contract.OldValue(path.path)
+path.path.node == Contract.OldValue(path.path.node)
+path.path.path == Contract.OldValue(path.path.path)
+path.path.cost == Contract.OldValue(path.path.cost)
+path.cost == Contract.OldValue(path.cost)
+path.node != null
+path.path.node != null
+path.path.cost >= 1
+path.cost >= 1
+this.cost > path.path.cost
+this.cost > path.cost
+path.path.cost < path.cost
+===========================================================================
+MapQuick.WeightedNodePath.cost():::ENTER
+===========================================================================
+MapQuick.WeightedNodePath.cost():::EXIT
+this.node == Contract.OldValue(this.node)
+this.path == Contract.OldValue(this.path)
+this.path.node == Contract.OldValue(this.path.node)
+this.path.path == Contract.OldValue(this.path.path)
+this.path.path.node == Contract.OldValue(this.path.path.node)
+this.path.path.path == Contract.OldValue(this.path.path.path)
+this.path.path.cost == Contract.OldValue(this.path.path.cost)
+this.path.cost == Contract.OldValue(this.path.cost)
+this.cost == Contract.OldValue(this.cost)
+Contract.Result<double>() >= 1.0
+===========================================================================
+MapQuick.WeightedNodePath.elements():::ENTER
+(this.cost >> this.path.cost == 0)
+===========================================================================
+MapQuick.WeightedNodePath.elements():::EXIT
+this.node == Contract.OldValue(this.node)
+this.path == Contract.OldValue(this.path)
+this.path.node == Contract.OldValue(this.path.node)
+this.path.path == Contract.OldValue(this.path.path)
+this.path.path.node == Contract.OldValue(this.path.path.node)
+this.path.path.path == Contract.OldValue(this.path.path.path)
+this.path.path.cost == Contract.OldValue(this.path.path.cost)
+this.path.cost == Contract.OldValue(this.path.cost)
+this.cost == Contract.OldValue(this.cost)
+Contract.Result<java.util.Iterator>() != null
+Contract.Result<java.util.Iterator>().GetType() == typeof(java.util.Collections$UnmodifiableCollection$1)
+(this.cost >> this.path.cost == 0)
+===========================================================================
+MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::ENTER
+node != null
+===========================================================================
+MapQuick.WeightedNodePath.extend(MapQuick.WeightedNode):::EXIT
+this.node == Contract.OldValue(this.node)
+this.path == Contract.OldValue(this.path)
+this.path.node == Contract.OldValue(this.path.node)
+this.path.path == Contract.OldValue(this.path.path)
+this.path.path.node == Contract.OldValue(this.path.path.node)
+this.path.path.path == Contract.OldValue(this.path.path.path)
+this.path.path.cost == Contract.OldValue(this.path.path.cost)
+this.path.cost == Contract.OldValue(this.path.cost)
+this.cost == Contract.OldValue(this.cost)
+Contract.Result<MapQuick.Path>() != null
+Contract.Result<MapQuick.Path>().GetType() == typeof(MapQuick.WeightedNodePath)
+===========================================================================
+MapQuick.WeightedNodePath.extend(java.lang.Object):::ENTER
+o != null
+o.GetType() == typeof(MapQuick.WeightedNode)
+===========================================================================
+MapQuick.WeightedNodePath.extend(java.lang.Object):::EXIT
+this.node == Contract.OldValue(this.node)
+this.path == Contract.OldValue(this.path)
+this.path.node == Contract.OldValue(this.path.node)
+this.path.path == Contract.OldValue(this.path.path)
+this.path.path.node == Contract.OldValue(this.path.path.node)
+this.path.path.path == Contract.OldValue(this.path.path.path)
+this.path.path.cost == Contract.OldValue(this.path.path.cost)
+this.path.cost == Contract.OldValue(this.path.cost)
+this.cost == Contract.OldValue(this.cost)
+Contract.Result<MapQuick.Path>() != null
+Contract.Result<MapQuick.Path>().GetType() == typeof(MapQuick.WeightedNodePath)
+Contract.Result<MapQuick.Path>().GetType().Contains(Contract.OldValue(o.GetType()))
+Contract.Result<MapQuick.Path>().GetType() != Contract.OldValue(o.GetType())
+===========================================================================
+MapQuick.WeightedNodePath.hashCode():::ENTER
+this.path == null
+===========================================================================
+MapQuick.WeightedNodePath.hashCode():::EXIT
+this.node == Contract.OldValue(this.node)
+this.path == Contract.OldValue(this.path)
+this.cost == Contract.OldValue(this.cost)
+this.path == null
+this.cost < Contract.Result<int>()

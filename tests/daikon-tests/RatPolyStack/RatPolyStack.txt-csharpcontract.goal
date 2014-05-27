@@ -1,0 +1,168 @@
+===========================================================================
+PolyCalc.Cons:::OBJECT
+this.head != null
+this.tail.head != null
+this.tail.tail.head != null
+===========================================================================
+PolyCalc.Cons.Cons(PolyCalc.RatPoly, PolyCalc.Cons):::ENTER
+h != null
+t.head != null
+t.tail.head != null
+===========================================================================
+PolyCalc.Cons.Cons(PolyCalc.RatPoly, PolyCalc.Cons):::EXIT
+this.head == Contract.OldValue(h)
+this.tail == Contract.OldValue(t)
+this.tail.head == t.head
+this.tail.tail == t.tail
+this.tail.tail.head == t.tail.head
+this.tail.tail.tail == t.tail.tail
+t.head == Contract.OldValue(t.head)
+t.tail == Contract.OldValue(t.tail)
+t.tail.head == Contract.OldValue(t.tail.head)
+t.tail.tail == Contract.OldValue(t.tail.tail)
+t.head != null
+t.tail.head != null
+===========================================================================
+PolyCalc.RatPolyStack:::OBJECT
+this.polys.head != null
+this.polys.tail.head != null
+this.size >= 0
+===========================================================================
+PolyCalc.RatPolyStack.RatPolyStack():::EXIT
+this.polys == null
+this.size == 0
+===========================================================================
+PolyCalc.RatPolyStack.add():::ENTER
+this.size.OneOf(2, 3)
+===========================================================================
+PolyCalc.RatPolyStack.add():::EXIT
+this.polys.tail == Contract.OldValue(this.polys.tail.tail)
+this.polys.tail.tail == null
+this.size.OneOf(1, 2)
+===========================================================================
+PolyCalc.RatPolyStack.clear():::ENTER
+this.polys.head != null
+this.size == 3
+===========================================================================
+PolyCalc.RatPolyStack.clear():::EXIT
+this.polys == null
+this.size == 0
+===========================================================================
+PolyCalc.RatPolyStack.div():::ENTER
+this != null
+this.size.OneOf(2, 3, 4)
+===========================================================================
+PolyCalc.RatPolyStack.div():::EXIT
+this.polys.tail == Contract.OldValue(this.polys.tail.tail)
+this.size.OneOf(1, 2, 3)
+===========================================================================
+PolyCalc.RatPolyStack.dup():::ENTER
+this.size.OneOf(1, 2, 3)
+===========================================================================
+PolyCalc.RatPolyStack.dup():::EXIT
+this.polys.head == this.polys.tail.head
+this.polys.head == Contract.OldValue(this.polys.head)
+this.polys.tail == Contract.OldValue(this.polys)
+this.polys.tail.tail == Contract.OldValue(this.polys.tail)
+this.size.OneOf(2, 3, 4)
+===========================================================================
+PolyCalc.RatPolyStack.get(int):::ENTER
+this.polys != null
+this.size >= 1
+index >= 0
+this.size > index
+===========================================================================
+PolyCalc.RatPolyStack.get(int):::EXIT
+this.polys == Contract.OldValue(this.polys)
+this.polys.head == Contract.OldValue(this.polys.head)
+this.polys.tail == Contract.OldValue(this.polys.tail)
+this.polys.tail.head == Contract.OldValue(this.polys.tail.head)
+this.polys.tail.tail == Contract.OldValue(this.polys.tail.tail)
+this.size == Contract.OldValue(this.size)
+this.polys != null
+this.size >= 1
+Contract.Result<PolyCalc.RatPoly>() != null
+this.size > Contract.OldValue(index)
+===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::ENTER
+this.polys != null
+this.size >= 1
+index >= 0
+this.size > index
+===========================================================================
+PolyCalc.RatPolyStack.getCons(int):::EXIT
+this.polys == Contract.OldValue(this.polys)
+this.polys.head == Contract.OldValue(this.polys.head)
+this.polys.tail == Contract.OldValue(this.polys.tail)
+this.polys.tail.head == Contract.OldValue(this.polys.tail.head)
+this.polys.tail.tail == Contract.OldValue(this.polys.tail.tail)
+this.size == Contract.OldValue(this.size)
+this.polys != null
+this.size >= 1
+Contract.Result<PolyCalc.Cons>() != null
+Contract.Result<PolyCalc.Cons>().head != null
+Contract.Result<PolyCalc.Cons>().tail.head != null
+this.size > Contract.OldValue(index)
+===========================================================================
+PolyCalc.RatPolyStack.mul():::ENTER
+this.size.OneOf(2, 3)
+===========================================================================
+PolyCalc.RatPolyStack.mul():::EXIT
+this.polys.tail == Contract.OldValue(this.polys.tail.tail)
+this.polys.tail.tail == null
+this.size.OneOf(1, 2)
+===========================================================================
+PolyCalc.RatPolyStack.pop():::ENTER
+this.polys != null
+this.size >= 1
+===========================================================================
+PolyCalc.RatPolyStack.pop():::EXIT
+this.polys == Contract.OldValue(this.polys.tail)
+this.polys.head == Contract.OldValue(this.polys.tail.head)
+this.polys.tail == Contract.OldValue(this.polys.tail.tail)
+Contract.Result<PolyCalc.RatPoly>() == Contract.OldValue(this.polys.head)
+Contract.Result<PolyCalc.RatPoly>() != null
+this.size - Contract.OldValue(this.size) + 1 == 0
+===========================================================================
+PolyCalc.RatPolyStack.push(PolyCalc.RatPoly):::ENTER
+p != null
+===========================================================================
+PolyCalc.RatPolyStack.push(PolyCalc.RatPoly):::EXIT
+this.polys.head == Contract.OldValue(p)
+this.polys.tail == Contract.OldValue(this.polys)
+this.polys.tail.head == Contract.OldValue(this.polys.head)
+this.polys.tail.tail == Contract.OldValue(this.polys.tail)
+this.polys != null
+this.size >= 1
+this.size - Contract.OldValue(this.size) - 1 == 0
+===========================================================================
+PolyCalc.RatPolyStack.size():::ENTER
+===========================================================================
+PolyCalc.RatPolyStack.size():::EXIT
+this.polys == Contract.OldValue(this.polys)
+this.polys.head == Contract.OldValue(this.polys.head)
+this.polys.tail == Contract.OldValue(this.polys.tail)
+this.polys.tail.head == Contract.OldValue(this.polys.tail.head)
+this.polys.tail.tail == Contract.OldValue(this.polys.tail.tail)
+this.size == Contract.Result<int>()
+Contract.Result<int>() == Contract.OldValue(this.size)
+Contract.Result<int>() >= 0
+===========================================================================
+PolyCalc.RatPolyStack.sub():::ENTER
+this.size.OneOf(2, 3, 4)
+===========================================================================
+PolyCalc.RatPolyStack.sub():::EXIT
+this.polys.tail == Contract.OldValue(this.polys.tail.tail)
+this.size.OneOf(1, 2, 3)
+===========================================================================
+PolyCalc.RatPolyStack.swap():::ENTER
+this.size.OneOf(2, 3)
+===========================================================================
+PolyCalc.RatPolyStack.swap():::EXIT
+this.polys == Contract.OldValue(this.polys.tail)
+this.polys.head == Contract.OldValue(this.polys.tail.head)
+this.polys.tail == Contract.OldValue(this.polys)
+this.polys.tail.head == Contract.OldValue(this.polys.head)
+this.polys.tail.tail == Contract.OldValue(this.polys.tail.tail)
+this.size == Contract.OldValue(this.size)
+this.size.OneOf(2, 3)

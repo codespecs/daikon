@@ -1,0 +1,148 @@
+===========================================================================
+PolyCalc.RatTermVec:::OBJECT
+this.wrapped != null
+Contract.ForAll(this.wrapped, x => x != null)
+Contract.ForAll(this.wrapped, x => x.getClass().Equals(typeof(PolyCalc.RatTerm)))
+===========================================================================
+PolyCalc.RatTermVec.RatTermVec():::EXIT
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+===========================================================================
+PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::ENTER
+this.wrapped.Distinct().Count() == this.wrapped.Count()
+t != null
+===========================================================================
+PolyCalc.RatTermVec.addElement(PolyCalc.RatTerm):::EXIT
+this.wrapped == Contract.OldValue(this.wrapped)
+this.wrapped.Count()-1 == Contract.OldValue(this.wrapped).Count()
+this.wrapped.Distinct().Count() == this.wrapped.Count()
+this.wrapped.Count() >= 1
+Contract.OldValue(this.wrapped).IsSubsequence(this.wrapped)
+Contract.ForAll(Contract.OldValue(this.wrapped), i => this.wrapped.Contains(i))
+Contract.Exists(this.wrapped, x => x.Equals(Contract.OldValue(t)))
+===========================================================================
+PolyCalc.RatTermVec.copy():::ENTER
+this.wrapped.Distinct().Count() == this.wrapped.Count()
+===========================================================================
+PolyCalc.RatTermVec.copy():::EXIT
+this.wrapped == Contract.OldValue(this.wrapped)
+Contract.ForAll(0, this.wrapped.Count(), i => this.wrapped[i].Equals(Contract.Result<PolyCalc.RatTermVec>().wrapped[i]))
+Contract.ForAll(0, this.wrapped.Count(), i => this.wrapped[i].Equals(Contract.OldValue(this.wrapped)[i]))
+this.wrapped.Distinct().Count() == this.wrapped.Count()
+Contract.Result<PolyCalc.RatTermVec>() != null
+Contract.Result<PolyCalc.RatTermVec>().wrapped != null
+===========================================================================
+PolyCalc.RatTermVec.get(int):::ENTER
+index >= 0
+this.wrapped.Count() >= 1
+this.wrapped.Slice(index+1, this.wrapped.Count()-1).Distinct().Count() == this.wrapped.Slice(index+1, this.wrapped.Count()-1).Count()
+this.wrapped.Slice(0, index).Distinct().Count() == this.wrapped.Slice(0, index).Count()
+(!(this.wrapped.Count()-1 == 0)) || (index == 0)
+index <= this.wrapped.Count()-1
+===========================================================================
+PolyCalc.RatTermVec.get(int):::EXIT
+this.wrapped == Contract.OldValue(this.wrapped)
+Contract.ForAll(0, this.wrapped.Count(), i => this.wrapped[i].Equals(Contract.OldValue(this.wrapped)[i]))
+Contract.Result<PolyCalc.RatTerm>() == this.wrapped[Contract.OldValue(index)]
+Contract.Result<PolyCalc.RatTerm>() != null
+this.wrapped.Count() >= 1
+this.wrapped.Slice(orig(index)+1, this.wrapped.Count()-1).Distinct().Count() == this.wrapped.Slice(orig(index)+1, this.wrapped.Count()-1).Count()
+this.wrapped.Slice(0, orig(index)).Distinct().Count() == this.wrapped.Slice(0, orig(index)).Count()
+Contract.Exists(this.wrapped, x => x.Equals(Contract.Result<PolyCalc.RatTerm>()))
+Contract.Exists(this.wrapped.Slice(orig(index), this.wrapped.Count()-1), x => x.Equals(Contract.Result<PolyCalc.RatTerm>()))
+Contract.Exists(this.wrapped.Slice(0, orig(index)), x => x.Equals(Contract.Result<PolyCalc.RatTerm>()))
+(!(this.wrapped.Count()-1 == 0)) || (Contract.OldValue(index) == 0)
+Contract.OldValue(index) <= this.wrapped.Count()-1
+===========================================================================
+PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::ENTER
+t != null
+index >= 0
+this.wrapped.Slice(0, index-1).Distinct().Count() == this.wrapped.Slice(0, index-1).Count()
+(!(this.wrapped.Count() == 0)) || (index == 0)
+index <= this.wrapped.Count()
+===========================================================================
+PolyCalc.RatTermVec.insert(PolyCalc.RatTerm, int):::EXIT
+this.wrapped == Contract.OldValue(this.wrapped)
+Contract.OldValue(t) == this.wrapped[Contract.OldValue(index)]
+this.wrapped.Count()-1 == Contract.OldValue(this.wrapped).Count()
+Contract.ForAll(0, this.wrapped.Slice(orig(index)+1, this.wrapped.Count()-1).Count(), i => this.wrapped.Slice(orig(index)+1, this.wrapped.Count()-1)[i].Equals(Contract.OldValue(this.wrapped).Slice(orig(index), Contract.OldValue(this.wrapped).Count()-1)[i]))
+Contract.ForAll(0, this.wrapped.Slice(0, orig(index)-1).Count(), i => this.wrapped.Slice(0, orig(index)-1)[i].Equals(Contract.OldValue(this.wrapped).Slice(0, index-1)[i]))
+Contract.ForAll(0, this.wrapped.Slice(0, orig(index)-1).Count(), i => this.wrapped.Slice(0, orig(index)-1)[i].Equals(Contract.OldValue(this.wrapped).Slice(0, orig(index)-1)[i]))
+this.wrapped.Count() >= 1
+this.wrapped.Slice(0, orig(index)-1).Distinct().Count() == this.wrapped.Slice(0, orig(index)-1).Count()
+Contract.ForAll(Contract.OldValue(this.wrapped), i => this.wrapped.Contains(i))
+Contract.Exists(this.wrapped, x => x.Equals(Contract.OldValue(t)))
+Contract.Exists(this.wrapped.Slice(orig(index), this.wrapped.Count()-1), x => x.Equals(Contract.OldValue(t)))
+Contract.Exists(this.wrapped.Slice(0, orig(index)), x => x.Equals(Contract.OldValue(t)))
+(!(this.wrapped.Count()-1 == 0)) || (Contract.OldValue(index) == 0)
+Contract.OldValue(index) <= this.wrapped.Count()-1
+===========================================================================
+PolyCalc.RatTermVec.printDebug():::ENTER
+===========================================================================
+PolyCalc.RatTermVec.printDebug():::EXIT
+this.wrapped == Contract.OldValue(this.wrapped)
+Contract.ForAll(0, this.wrapped.Count(), i => this.wrapped[i].Equals(Contract.OldValue(this.wrapped)[i]))
+Contract.Result<java.lang.String>() != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.toString is printable
+===========================================================================
+PolyCalc.RatTermVec.remove(int):::ENTER
+this.wrapped.Distinct().Count() == this.wrapped.Count()
+index >= 0
+this.wrapped.Count() >= 1
+(!(this.wrapped.Count()-1 == 0)) || (index == 0)
+index <= this.wrapped.Count()-1
+===========================================================================
+PolyCalc.RatTermVec.remove(int):::EXIT
+this.wrapped == Contract.OldValue(this.wrapped)
+this.wrapped.Count() == Contract.OldValue(this.wrapped).Count()-1
+Contract.ForAll(0, this.wrapped.Slice(orig(index), this.wrapped.Count()-1).Count(), i => this.wrapped.Slice(orig(index), this.wrapped.Count()-1)[i].Equals(Contract.OldValue(this.wrapped).Slice(index+1, Contract.OldValue(this.wrapped).Count()-1)[i]))
+Contract.ForAll(0, this.wrapped.Slice(orig(index), this.wrapped.Count()-1).Count(), i => this.wrapped.Slice(orig(index), this.wrapped.Count()-1)[i].Equals(Contract.OldValue(this.wrapped).Slice(orig(index)+1, Contract.OldValue(this.wrapped).Count()-1)[i]))
+Contract.ForAll(0, this.wrapped.Slice(0, orig(index)-1).Count(), i => this.wrapped.Slice(0, orig(index)-1)[i].Equals(Contract.OldValue(this.wrapped).Slice(0, index-1)[i]))
+Contract.ForAll(0, this.wrapped.Slice(0, orig(index)-1).Count(), i => this.wrapped.Slice(0, orig(index)-1)[i].Equals(Contract.OldValue(this.wrapped).Slice(0, orig(index)-1)[i]))
+this.wrapped.Distinct().Count() == this.wrapped.Count()
+Contract.ForAll(this.wrapped, i => Contract.OldValue(this.wrapped).Contains(i))
+(!(this.wrapped.Count() == 0)) || (Contract.OldValue(index) == 0)
+Contract.OldValue(index) <= this.wrapped.Count()
+===========================================================================
+PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::ENTER
+this.wrapped.Distinct().Count() == this.wrapped.Count()
+t != null
+index >= 0
+this.wrapped.Count() >= 1
+(!(this.wrapped.Count()-1 == 0)) || (index == 0)
+index <= this.wrapped.Count()-1
+===========================================================================
+PolyCalc.RatTermVec.set(PolyCalc.RatTerm, int):::EXIT
+this.wrapped == Contract.OldValue(this.wrapped)
+Contract.OldValue(t) == this.wrapped[Contract.OldValue(index)]
+this.wrapped.Count() == Contract.OldValue(this.wrapped).Count()
+Contract.ForAll(0, this.wrapped.Slice(orig(index)+1, this.wrapped.Count()-1).Count(), i => this.wrapped.Slice(orig(index)+1, this.wrapped.Count()-1)[i].Equals(Contract.OldValue(this.wrapped).Slice(index+1, Contract.OldValue(this.wrapped).Count()-1)[i]))
+Contract.ForAll(0, this.wrapped.Slice(orig(index)+1, this.wrapped.Count()-1).Count(), i => this.wrapped.Slice(orig(index)+1, this.wrapped.Count()-1)[i].Equals(Contract.OldValue(this.wrapped).Slice(orig(index)+1, Contract.OldValue(this.wrapped).Count()-1)[i]))
+Contract.ForAll(0, this.wrapped.Slice(0, orig(index)-1).Count(), i => this.wrapped.Slice(0, orig(index)-1)[i].Equals(Contract.OldValue(this.wrapped).Slice(0, index-1)[i]))
+Contract.ForAll(0, this.wrapped.Slice(0, orig(index)-1).Count(), i => this.wrapped.Slice(0, orig(index)-1)[i].Equals(Contract.OldValue(this.wrapped).Slice(0, orig(index)-1)[i]))
+this.wrapped.Distinct().Count() == this.wrapped.Count()
+this.wrapped.Count() >= 1
+Contract.Exists(this.wrapped, x => x.Equals(Contract.OldValue(t)))
+Contract.Exists(this.wrapped.Slice(orig(index), this.wrapped.Count()-1), x => x.Equals(Contract.OldValue(t)))
+Contract.Exists(this.wrapped.Slice(0, orig(index)), x => x.Equals(Contract.OldValue(t)))
+(!(this.wrapped.Count()-1 == 0)) || (Contract.OldValue(index) == 0)
+Contract.OldValue(index) <= this.wrapped.Count()-1
+===========================================================================
+PolyCalc.RatTermVec.size():::ENTER
+this.wrapped.Distinct().Count() == this.wrapped.Count()
+===========================================================================
+PolyCalc.RatTermVec.size():::EXIT
+this.wrapped == Contract.OldValue(this.wrapped)
+Contract.ForAll(0, this.wrapped.Count(), i => this.wrapped[i].Equals(Contract.OldValue(this.wrapped)[i]))
+Contract.Result<int>() == this.wrapped.Count()
+Contract.Result<int>() == Contract.OldValue(this.wrapped).Count()
+this.wrapped.Distinct().Count() == this.wrapped.Count()
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+===========================================================================
+PolyCalc.RatTermVec.toString():::ENTER
+===========================================================================
+PolyCalc.RatTermVec.toString():::EXIT
+this.wrapped == Contract.OldValue(this.wrapped)
+Contract.ForAll(0, this.wrapped.Count(), i => this.wrapped[i].Equals(Contract.OldValue(this.wrapped)[i]))
+Contract.Result<java.lang.String>() != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.toString is printable

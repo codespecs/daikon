@@ -1,0 +1,354 @@
+===========================================================================
+std.addstr(char;char *;int *;int;)int:::ENTER
+outset != null
+j != null
+*j >= 0
+maxset == 100
+*j <= maxset
+===========================================================================
+std.addstr(char;char *;int *;int;)int:::EXIT
+c == Contract.OldValue(c)
+outset == Contract.OldValue(outset)
+j == Contract.OldValue(j)
+maxset == Contract.OldValue(maxset)
+outset != null
+j != null
+*j >= 1
+maxset == 100
+return.OneOf(0, 1)
+*j <= maxset
+*j >= Contract.OldValue(*j)
+maxset >= Contract.OldValue(*j)
+===========================================================================
+std.amatch(char *;int;char *;int;)int:::ENTER
+lin != null
+offset >= 0
+pat != null
+j >= 0
+===========================================================================
+std.amatch(char *;int;char *;int;)int:::EXIT
+lin == Contract.OldValue(lin)
+offset == return
+pat == Contract.OldValue(pat)
+lin != null
+offset >= -1
+pat != null
+j >= 0
+lin[].CompareTo(Contract.OldValue(lin[])) >= 0
+lin[].Contains(Contract.OldValue(lin[]))
+(!(offset == 0)) || (Contract.OldValue(offset) == 0)
+pat[].Equals(Contract.OldValue(pat[]))
+(!(j == 0)) || (Contract.OldValue(j) == 0)
+j >= Contract.OldValue(j)
+===========================================================================
+std.change(char *;char *;)void:::ENTER
+pat != null
+sub != null
+===========================================================================
+std.change(char *;char *;)void:::EXIT
+pat == Contract.OldValue(pat)
+sub == Contract.OldValue(sub)
+pat != null
+sub != null
+pat[].Equals(Contract.OldValue(pat[]))
+sub[].Equals(Contract.OldValue(sub[]))
+===========================================================================
+std.dodash(char;char *;int *;char *;int *;int;)void:::ENTER
+delim == 93
+src != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: src[] is printable
+i != null
+*i >= 2
+dest != null
+j != null
+maxset == 100
+delim != *j
+*j <= maxset
+===========================================================================
+std.dodash(char;char *;int *;char *;int *;int;)void:::EXIT
+delim == Contract.OldValue(delim)
+src == Contract.OldValue(src)
+i == Contract.OldValue(i)
+dest == Contract.OldValue(dest)
+j == Contract.OldValue(j)
+maxset == Contract.OldValue(maxset)
+delim == 93
+src != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: src[] is printable
+i != null
+dest != null
+j != null
+maxset == 100
+delim != *j
+delim != Contract.OldValue(*j)
+src[].Equals(Contract.OldValue(src[]))
+*i >= Contract.OldValue(*i)
+dest[].Equals(Contract.OldValue(dest[]))
+*j <= maxset
+*j >= Contract.OldValue(*j)
+maxset >= Contract.OldValue(*j)
+===========================================================================
+std.esc(char *;int *;)char:::ENTER
+s != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: s[] is printable
+i != null
+*i >= 0
+===========================================================================
+std.esc(char *;int *;)char:::EXIT
+s == Contract.OldValue(s)
+i == Contract.OldValue(i)
+s != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: s[] is printable
+i != null
+*i >= 0
+s[].Equals(Contract.OldValue(s[]))
+(!(*i == 0)) || (Contract.OldValue(*i) == 0)
+*i >= Contract.OldValue(*i)
+===========================================================================
+std.getccl(char *;int *;char *;int *;)boolean:::ENTER
+arg != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: arg[] is printable
+i != null
+pat != null
+j != null
+===========================================================================
+std.getccl(char *;int *;char *;int *;)boolean:::EXIT
+arg == Contract.OldValue(arg)
+i == Contract.OldValue(i)
+pat == Contract.OldValue(pat)
+j == Contract.OldValue(j)
+(return == 0).Implies(() => Contract.OldValue(*i) >= 1)
+(return == 0).Implies(() => pat[].CompareTo(Contract.OldValue(pat[])) > 0)
+(return == 0).Implies(() => return  isPointer)
+arg != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: arg[] is printable
+i != null
+pat != null
+j != null
+return.OneOf(0, 1)
+arg[].Equals(Contract.OldValue(arg[]))
+*i > Contract.OldValue(*i)
+pat[].Contains(Contract.OldValue(pat[]))
+pat[].CompareTo(Contract.OldValue(pat[])) >= 0
+*j > Contract.OldValue(*j)
+===========================================================================
+std.getline(char *;int;)boolean:::ENTER
+s != null
+maxsize == 100
+===========================================================================
+std.getline(char *;int;)boolean:::EXIT
+s == Contract.OldValue(s)
+maxsize == Contract.OldValue(maxsize)
+(return == 0).Implies(() => return  isPointer)
+(return == 0).Implies(() => s[].Equals(Contract.OldValue(s[])))
+s != null
+maxsize == 100
+return.OneOf(0, 1)
+===========================================================================
+std.getpat(char *;char *;)int:::ENTER
+arg != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: arg[] is printable
+pat != null
+===========================================================================
+std.getpat(char *;char *;)int:::EXIT
+arg == Contract.OldValue(arg)
+pat == Contract.OldValue(pat)
+arg != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: arg[] is printable
+pat != null
+return.OneOf(0, 1)
+arg[].Equals(Contract.OldValue(arg[]))
+===========================================================================
+std.getsub(char *;char *;)boolean:::ENTER
+arg != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: arg[] is printable
+sub != null
+===========================================================================
+std.getsub(char *;char *;)boolean:::EXIT
+arg == Contract.OldValue(arg)
+sub == Contract.OldValue(sub)
+(return == 0).Implies(() => return  isPointer)
+arg != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: arg[] is printable
+sub != null
+return.OneOf(0, 1)
+arg[].Equals(Contract.OldValue(arg[]))
+===========================================================================
+std.in_pat_set(char;)boolean:::ENTER
+===========================================================================
+std.in_pat_set(char;)boolean:::EXIT
+c == Contract.OldValue(c)
+return == 1
+===========================================================================
+std.in_set_2(char;)boolean:::ENTER
+===========================================================================
+std.in_set_2(char;)boolean:::EXIT
+c == Contract.OldValue(c)
+(return == 0).Implies(() => c % 2 == 1)
+(return == 0).Implies(() => return  isPointer)
+(return == 1).Implies(() => c % 5 == 2)
+(return == 1).Implies(() => c.OneOf(37, 42))
+return.OneOf(0, 1)
+===========================================================================
+std.locate(character;char *;int;)boolean:::ENTER
+pat != null
+offset >= 1
+===========================================================================
+std.locate(character;char *;int;)boolean:::EXIT
+c == Contract.OldValue(c)
+pat == Contract.OldValue(pat)
+offset == Contract.OldValue(offset)
+(return == 0).Implies(() => return  isPointer)
+pat != null
+offset >= 1
+return.OneOf(0, 1)
+pat[].Equals(Contract.OldValue(pat[]))
+===========================================================================
+std.main(int;char **;)int:::ENTER
+argc.OneOf(2, 3)
+argv != null
+===========================================================================
+std.main(int;char **;)int:::EXIT
+argc == Contract.OldValue(argc)
+argv == Contract.OldValue(argv)
+argc.OneOf(2, 3)
+argv != null
+return == 0
+===========================================================================
+std.makepat(char *;int;char;char *;)int:::ENTER
+arg != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: arg[] is printable
+start == 0
+delim == 0
+pat != null
+===========================================================================
+std.makepat(char *;int;char;char *;)int:::EXIT
+arg == Contract.OldValue(arg)
+start == Contract.OldValue(start)
+delim == Contract.OldValue(delim)
+pat == Contract.OldValue(pat)
+arg != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: arg[] is printable
+start == 0
+delim == 0
+pat != null
+return >= 0
+arg[].Equals(Contract.OldValue(arg[]))
+start <= return
+===========================================================================
+std.makesub(char *;int;character;char *;)int:::ENTER
+arg != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: arg[] is printable
+from == 0
+delim == 0
+sub != null
+===========================================================================
+std.makesub(char *;int;character;char *;)int:::EXIT
+arg == Contract.OldValue(arg)
+from == Contract.OldValue(from)
+delim == Contract.OldValue(delim)
+sub == Contract.OldValue(sub)
+arg != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: arg[] is printable
+from == 0
+delim == 0
+sub != null
+return >= 0
+arg[].Equals(Contract.OldValue(arg[]))
+from <= return
+===========================================================================
+std.omatch(char *;int *;char *;int;)boolean:::ENTER
+lin != null
+i != null
+*i >= 0
+pat != null
+j >= 0
+===========================================================================
+std.omatch(char *;int *;char *;int;)boolean:::EXIT
+lin == Contract.OldValue(lin)
+i == Contract.OldValue(i)
+pat == Contract.OldValue(pat)
+j == Contract.OldValue(j)
+(return == 0).Implies(() => *i == Contract.OldValue(*i))
+(return == 0).Implies(() => return  isPointer)
+lin != null
+i != null
+*i >= 0
+pat != null
+j >= 0
+return.OneOf(0, 1)
+lin[].CompareTo(Contract.OldValue(lin[])) >= 0
+lin[].Contains(Contract.OldValue(lin[]))
+(!(*i == 0)) || (Contract.OldValue(*i) == 0)
+*i >= Contract.OldValue(*i)
+pat[].Equals(Contract.OldValue(pat[]))
+===========================================================================
+std.patsize(char *;int;)int:::ENTER
+pat != null
+n >= 0
+===========================================================================
+std.patsize(char *;int;)int:::EXIT
+pat == Contract.OldValue(pat)
+n == Contract.OldValue(n)
+pat != null
+n >= 0
+return >= 1
+pat[].Equals(Contract.OldValue(pat[]))
+===========================================================================
+std.putsub(char *;int;int;char *;)void:::ENTER
+lin != null
+s1 >= 0
+s2 >= 0
+sub != null
+(!(s2 == 0)) || (s1 == 0)
+s1 <= s2
+===========================================================================
+std.putsub(char *;int;int;char *;)void:::EXIT
+lin == Contract.OldValue(lin)
+s1 == Contract.OldValue(s1)
+s2 == Contract.OldValue(s2)
+sub == Contract.OldValue(sub)
+lin != null
+s1 >= 0
+s2 >= 0
+sub != null
+lin[].Equals(Contract.OldValue(lin[]))
+(!(s2 == 0)) || (s1 == 0)
+s1 <= s2
+sub[].Equals(Contract.OldValue(sub[]))
+===========================================================================
+std.stclose(char *;int *;int;)void:::ENTER
+pat != null
+j != null
+*j >= 2
+lastj >= 0
+*j > lastj
+===========================================================================
+std.stclose(char *;int *;int;)void:::EXIT
+pat == Contract.OldValue(pat)
+j == Contract.OldValue(j)
+lastj == Contract.OldValue(lastj)
+pat != null
+j != null
+lastj >= 0
+!pat[].Equals(Contract.OldValue(pat[]))
+*j > lastj
+*j - Contract.OldValue(*j) - 1 == 0
+lastj < Contract.OldValue(*j)
+===========================================================================
+std.subline(char *;char *;char *;)void:::ENTER
+lin != null
+pat != null
+sub != null
+===========================================================================
+std.subline(char *;char *;char *;)void:::EXIT
+lin == Contract.OldValue(lin)
+pat == Contract.OldValue(pat)
+sub == Contract.OldValue(sub)
+lin != null
+pat != null
+sub != null
+lin[].CompareTo(Contract.OldValue(lin[])) >= 0
+lin[].Contains(Contract.OldValue(lin[]))
+pat[].Equals(Contract.OldValue(pat[]))
+sub[].Equals(Contract.OldValue(sub[]))

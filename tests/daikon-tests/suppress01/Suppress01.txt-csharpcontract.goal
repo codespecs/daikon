@@ -1,0 +1,85 @@
+===========================================================================
+misc.Suppress01:::OBJECT
+this.b == this.theArray[this.b]
+this.b == this.theArray2[this.b]
+this != null
+this.theArray != null
+Contract.ForAll(this.theArray, x => x >= 0)
+Contract.ForAll(0, this.theArray.Count(), i => this.theArray[i] <= i)
+this.theArray2 != null
+Contract.ForAll(this.theArray2, x => x >= 0)
+Contract.ForAll(0, this.theArray2.Count(), i => this.theArray2[i] <= i)
+this.b == 0
+Contract.ForAll(this.theArray, i => this.theArray2.Contains(i))
+Contract.ForAll(this.theArray, x => x >= this.b)
+Contract.ForAll(this.theArray, x => x <= this.theArray.Count()-1)
+Contract.ForAll(this.theArray, x => x < this.theArray2.Count()-1)
+Contract.ForAll(this.theArray2, x => x >= this.b)
+Contract.ForAll(this.theArray2, x => x <= this.theArray.Count())
+Contract.Exists(this.theArray2, x => x.Equals(this.theArray.Count()-1))
+Contract.ForAll(this.theArray2, x => x <= this.theArray2.Count()-1)
+this.b <= this.theArray.Count()-1
+this.b < this.theArray2.Count()-1
+(this.theArray2.Count()-1 >> this.theArray.Count() == 0)
+this.theArray.Count() <= this.theArray2.Count()-1
+===========================================================================
+misc.Suppress01.Suppress01():::EXIT
+this.b == this.theArray.Count()-1
+this.theArray.Count() == this.theArray2.Count()-1
+this.theArray != null
+Contract.ForAll(this.theArray, x => x == 0)
+Contract.ForAll(0, this.theArray.Count(), i => this.theArray[i] == i)
+this.theArray2 != null
+Contract.ForAll(0, this.theArray2.Count(), i => this.theArray2[i] == i)
+this.theArray2.Count() == 2
+Contract.ForAll(this.theArray, x => x == this.b)
+Contract.Exists(this.theArray2, x => x.Equals(this.theArray.Count()))
+===========================================================================
+misc.Suppress01.f():::ENTER
+===========================================================================
+misc.Suppress01.f():::EXIT
+this.b == Contract.OldValue(this.b)
+this.b == this.theArray[Contract.OldValue(this.b)]
+this.b == this.theArray2[Contract.OldValue(this.b)]
+this.b == Contract.OldValue(this.theArray[this.b])
+this.b == Contract.OldValue(this.theArray2[this.b])
+this.b == Contract.OldValue(this.theArray[this.b])
+this.b == Contract.OldValue(this.theArray2[this.b])
+this.theArray.Count()-1 == Contract.OldValue(this.theArray).Count()
+Contract.ForAll(Contract.OldValue(this.theArray), i => this.theArray.Contains(i))
+Contract.ForAll(this.theArray, i => Contract.OldValue(this.theArray2).Contains(i))
+Contract.Exists(this.theArray, x => x.Equals(Contract.OldValue(this.theArray).Count()-1))
+Contract.ForAll(this.theArray, x => x <= Contract.OldValue(this.theArray).Count()-1)
+Contract.ForAll(this.theArray, x => x < Contract.OldValue(this.theArray2).Count()-1)
+Contract.ForAll(Contract.OldValue(this.theArray), i => this.theArray2.Contains(i))
+Contract.ForAll(Contract.OldValue(this.theArray2), i => this.theArray2.Contains(i))
+Contract.ForAll(this.theArray2, x => x <= this.theArray.Count()-1)
+Contract.ForAll(this.theArray2, x => x < this.theArray2.Count()-1)
+Contract.Exists(this.theArray2, x => x.Equals(Contract.OldValue(this.theArray).Count()-1))
+Contract.ForAll(this.theArray2, x => x <= Contract.OldValue(this.theArray2).Count()-1)
+Contract.ForAll(Contract.OldValue(this.theArray), x => x >= this.b)
+Contract.ForAll(Contract.OldValue(this.theArray2), x => x >= this.b)
+this.b <= Contract.OldValue(this.theArray).Count()-1
+this.b < Contract.OldValue(this.theArray2).Count()-1
+Contract.ForAll(Contract.OldValue(this.theArray), x => x < this.theArray2.Count()-1)
+Contract.ForAll(Contract.OldValue(this.theArray2), x => x <= this.theArray.Count()-1)
+Contract.ForAll(Contract.OldValue(this.theArray2), x => x < this.theArray2.Count()-1)
+this.theArray.Count() - this.theArray2.Count() + 2 == 0
+(Contract.OldValue(this.theArray2).Count() >> this.theArray.Count() == 0)
+this.theArray.Count() <= Contract.OldValue(this.theArray2).Count()
+this.theArray.Count() % Contract.OldValue(this.theArray2).Count()-1 == 0
+this.theArray.Count() >= Contract.OldValue(this.theArray2).Count()-1
+(Contract.OldValue(this.theArray2).Count()-1 >> this.theArray.Count()-1 == 0)
+this.theArray.Count()-1 <= Contract.OldValue(this.theArray2).Count()-1
+(this.theArray2.Count() >> this.theArray2.Count()-1 == 0)
+(this.theArray2.Count()-1 >> Contract.OldValue(this.theArray2).Count() == 0)
+this.theArray2.Count()-1 == (Contract.OldValue(this.theArray2).Count() | this.theArray2.Count()-1)
+this.theArray2.Count()-1 >= Contract.OldValue(this.theArray2).Count()
+===========================================================================
+misc.Suppress01.main(java.lang.String[]):::ENTER
+args != null
+args.GetType() == typeof(java.lang.String[])
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+===========================================================================
+misc.Suppress01.main(java.lang.String[]):::EXIT
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)

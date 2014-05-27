@@ -1,0 +1,297 @@
+===========================================================================
+PolyCalc.RatNum:::OBJECT
+this.denom >= 0
+===========================================================================
+PolyCalc.RatNum.RatNum(int):::ENTER
+===========================================================================
+PolyCalc.RatNum.RatNum(int):::EXIT
+this.numer == Contract.OldValue(n)
+this.denom == 1
+===========================================================================
+PolyCalc.RatNum.RatNum(int, int):::ENTER
+===========================================================================
+PolyCalc.RatNum.RatNum(int, int):::EXIT55
+this.numer == Contract.OldValue(n)
+this.denom == Contract.OldValue(d)
+this.denom == 0
+===========================================================================
+PolyCalc.RatNum.RatNum(int, int):::EXIT67
+this.denom >= 1
+Contract.OldValue(d) != 0
+Contract.OldValue(d) % this.denom == 0
+===========================================================================
+PolyCalc.RatNum.RatNum(int, int):::EXIT
+(this.denom == 0).Implies(() => Contract.OldValue(d) == 0)
+(this.denom == 0).Implies(() => Contract.OldValue(d)  isPointer)
+(this.denom == 0).Implies(() => this.denom  isPointer)
+(this.denom == 0).Implies(() => this.denom == Contract.OldValue(d))
+(this.denom == 0).Implies(() => this.numer == Contract.OldValue(n))
+(!(Contract.OldValue(n) == 0)) || (this.numer == 0)
+(!(this.numer == 0)) || (Contract.OldValue(n) == 0)
+(!(Contract.OldValue(d) == 0)) || (this.denom == 0)
+(!(this.denom == 0)) || (Contract.OldValue(d) == 0)
+===========================================================================
+PolyCalc.RatNum.add(PolyCalc.RatNum):::ENTER
+arg != null
+arg.denom >= 0
+===========================================================================
+PolyCalc.RatNum.add(PolyCalc.RatNum):::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.OldValue(this.denom)
+arg.numer == Contract.OldValue(arg.numer)
+arg.denom == Contract.OldValue(arg.denom)
+arg.denom >= 0
+Contract.Result<PolyCalc.RatNum>() != null
+Contract.Result<PolyCalc.RatNum>().denom >= 0
+(!(this.denom == 0)) || (Contract.Result<PolyCalc.RatNum>().denom == 0)
+(!(arg.denom == 0)) || (Contract.Result<PolyCalc.RatNum>().denom == 0)
+===========================================================================
+PolyCalc.RatNum.approx():::ENTER
+===========================================================================
+PolyCalc.RatNum.approx():::EXIT117
+this.denom == 0
+Contract.Result<double>() == NaN
+this.numer != this.denom
+===========================================================================
+PolyCalc.RatNum.approx():::EXIT120
+this.denom >= 1
+===========================================================================
+PolyCalc.RatNum.approx():::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.OldValue(this.denom)
+(this.denom == 0).Implies(() => Contract.Result<double>() == NaN)
+(this.denom == 0).Implies(() => this.denom  isPointer)
+(this.denom == 0).Implies(() => this.numer != this.denom)
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::ENTER
+rn != null
+rn.denom >= 0
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT101
+this.denom >= 1
+rn.denom >= 1
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT94
+this.denom == Contract.Result<int>()
+rn.denom == Contract.Result<int>()
+Contract.Result<int>() == Contract.OldValue(this.denom)
+Contract.Result<int>() == Contract.OldValue(rn.denom)
+Contract.Result<int>() == 0
+this.numer != Contract.Result<int>()
+rn.numer != Contract.Result<int>()
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96
+this.denom == 0
+rn.numer >= -1
+rn.denom >= 1
+Contract.Result<int>() == 1
+this.numer != this.denom
+this.denom < rn.denom
+rn.denom >= Contract.Result<int>()
+Contract.Result<int>() == CSharpDaikonLib.Extensions.GCD(rn.numer, rn.denom)
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT98
+this.denom >= 1
+rn.numer != 0
+rn.denom == 0
+Contract.Result<int>() == -1
+this.denom > rn.denom
+this.denom > Contract.Result<int>()
+rn.numer != rn.denom
+===========================================================================
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.OldValue(this.denom)
+rn.numer == Contract.OldValue(rn.numer)
+rn.denom == Contract.OldValue(rn.denom)
+rn.denom >= 0
+===========================================================================
+PolyCalc.RatNum.debugPrint():::ENTER
+===========================================================================
+PolyCalc.RatNum.debugPrint():::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.OldValue(this.denom)
+Contract.Result<java.lang.String>() != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.toString is printable
+===========================================================================
+PolyCalc.RatNum.div(PolyCalc.RatNum):::ENTER
+arg != null
+arg.denom >= 0
+===========================================================================
+PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT187
+arg.numer == Contract.Result<PolyCalc.RatNum>().numer
+arg.denom == Contract.Result<PolyCalc.RatNum>().denom
+Contract.Result<PolyCalc.RatNum>() == Contract.OldValue(arg)
+arg.denom == 0
+(!(arg.numer == 0)) || (this.numer == 0)
+this.denom >= arg.denom
+===========================================================================
+PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT189
+arg.denom >= 1
+(!(this.numer == 0)) || (Contract.Result<PolyCalc.RatNum>().numer == 0)
+===========================================================================
+PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.OldValue(this.denom)
+arg.numer == Contract.OldValue(arg.numer)
+arg.denom == Contract.OldValue(arg.denom)
+(arg.denom == 0).Implies(() => (!(arg.numer == 0)) || (this.numer == 0))
+(arg.denom == 0).Implies(() => arg.denom  isPointer)
+(arg.denom == 0).Implies(() => arg.denom == Contract.Result<PolyCalc.RatNum>().denom)
+(arg.denom == 0).Implies(() => arg.numer == Contract.Result<PolyCalc.RatNum>().numer)
+(arg.denom == 0).Implies(() => Contract.Result<PolyCalc.RatNum>() == Contract.OldValue(arg))
+(arg.denom == 0).Implies(() => Contract.Result<PolyCalc.RatNum>().denom  isPointer)
+(arg.denom == 0).Implies(() => Contract.Result<PolyCalc.RatNum>().denom == 0)
+(arg.denom == 0).Implies(() => this.denom >= arg.denom)
+(arg.denom == 0).Implies(() => this.denom >= Contract.Result<PolyCalc.RatNum>().denom)
+arg.denom >= 0
+Contract.Result<PolyCalc.RatNum>() != null
+Contract.Result<PolyCalc.RatNum>().denom >= 0
+(!(Contract.Result<PolyCalc.RatNum>().numer == 0)) || (this.numer == 0)
+(!(this.denom == 0)) || (Contract.Result<PolyCalc.RatNum>().denom == 0)
+(!(arg.numer == 0)) || (Contract.Result<PolyCalc.RatNum>().denom == 0)
+(!(arg.denom == 0)) || (Contract.Result<PolyCalc.RatNum>().denom == 0)
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::ENTER
+obj != null
+obj.GetType() == typeof(PolyCalc.RatNum)
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT230
+this.denom == 0
+Contract.Result<boolean>() == true
+this.numer != this.denom
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT232
+(Contract.Result<boolean>() == true).Implies(() => this.denom >= 1)
+===========================================================================
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.OldValue(this.denom)
+===========================================================================
+PolyCalc.RatNum.gcd(int, int):::ENTER
+_b != 0
+===========================================================================
+PolyCalc.RatNum.gcd(int, int):::EXIT209
+===========================================================================
+PolyCalc.RatNum.gcd(int, int):::EXIT
+Contract.Result<int>() != 0
+Contract.OldValue(_a) % Contract.Result<int>() == 0
+Contract.OldValue(_b) % Contract.Result<int>() == 0
+===========================================================================
+PolyCalc.RatNum.isNaN():::ENTER
+===========================================================================
+PolyCalc.RatNum.isNaN():::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.OldValue(this.denom)
+(this.denom == 0).Implies(() => Contract.Result<boolean>() == true)
+(this.denom == 0).Implies(() => this.denom  isPointer)
+===========================================================================
+PolyCalc.RatNum.isNegative():::ENTER
+===========================================================================
+PolyCalc.RatNum.isNegative():::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.OldValue(this.denom)
+(Contract.Result<boolean>() == true).Implies(() => this.denom >= 1)
+(Contract.Result<boolean>() == true).Implies(() => this.numer < this.denom)
+(Contract.Result<boolean>() == true).Implies(() => this.numer <= -1)
+===========================================================================
+PolyCalc.RatNum.isPositive():::ENTER
+===========================================================================
+PolyCalc.RatNum.isPositive():::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.OldValue(this.denom)
+(Contract.Result<boolean>() == false).Implies(() => this.numer < this.denom)
+(Contract.Result<boolean>() == true).Implies(() => this.numer != 0)
+===========================================================================
+PolyCalc.RatNum.mul(PolyCalc.RatNum):::ENTER
+arg != null
+arg.denom >= 0
+===========================================================================
+PolyCalc.RatNum.mul(PolyCalc.RatNum):::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.OldValue(this.denom)
+arg.numer == Contract.OldValue(arg.numer)
+arg.denom == Contract.OldValue(arg.denom)
+arg.denom >= 0
+Contract.Result<PolyCalc.RatNum>() != null
+Contract.Result<PolyCalc.RatNum>().denom >= 0
+(!(this.numer == 0)) || (Contract.Result<PolyCalc.RatNum>().numer == 0)
+(!(this.denom == 0)) || (Contract.Result<PolyCalc.RatNum>().denom == 0)
+(!(arg.numer == 0)) || (Contract.Result<PolyCalc.RatNum>().numer == 0)
+(!(arg.denom == 0)) || (Contract.Result<PolyCalc.RatNum>().denom == 0)
+===========================================================================
+PolyCalc.RatNum.negate():::ENTER
+===========================================================================
+PolyCalc.RatNum.negate():::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.Result<PolyCalc.RatNum>().denom
+this.denom == Contract.OldValue(this.denom)
+Contract.Result<PolyCalc.RatNum>() != null
+(!(Contract.Result<PolyCalc.RatNum>().numer == 0)) || (this.numer == 0)
+(!(this.numer == 0)) || (Contract.Result<PolyCalc.RatNum>().numer == 0)
+this.numer + Contract.Result<PolyCalc.RatNum>().numer == 0
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::ENTER
+ratStr != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: ratStr.toString is printable
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::EXIT264
+ratStr.Equals("NaN")
+Contract.Result<PolyCalc.RatNum>().numer == 1
+Contract.Result<PolyCalc.RatNum>().denom == 0
+Contract.OldValue(ratStr) != null
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::EXIT267
+Contract.Result<PolyCalc.RatNum>().denom == 1
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::EXIT273
+===========================================================================
+PolyCalc.RatNum.parse(java.lang.String):::EXIT
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: ratStr.toString is printable
+Contract.Result<PolyCalc.RatNum>() != null
+Contract.Result<PolyCalc.RatNum>().denom >= 0
+ratStr.Equals(Contract.OldValue(ratStr))
+===========================================================================
+PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
+arg != null
+arg.denom >= 0
+===========================================================================
+PolyCalc.RatNum.sub(PolyCalc.RatNum):::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.OldValue(this.denom)
+arg.numer == Contract.OldValue(arg.numer)
+arg.denom == Contract.OldValue(arg.denom)
+arg.denom >= 0
+Contract.Result<PolyCalc.RatNum>() != null
+Contract.Result<PolyCalc.RatNum>().denom >= 0
+(!(this.denom == 0)) || (Contract.Result<PolyCalc.RatNum>().denom == 0)
+(!(arg.denom == 0)) || (Contract.Result<PolyCalc.RatNum>().denom == 0)
+===========================================================================
+PolyCalc.RatNum.toString():::ENTER
+===========================================================================
+PolyCalc.RatNum.toString():::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.OldValue(this.denom)
+Contract.Result<java.lang.String>() != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.toString is printable
+===========================================================================
+PolyCalc.RatNum.unparse():::ENTER
+===========================================================================
+PolyCalc.RatNum.unparse():::EXIT133
+this.denom == 0
+Contract.Result<java.lang.String>() != null
+Contract.Result<java.lang.String>().Equals("NaN")
+===========================================================================
+PolyCalc.RatNum.unparse():::EXIT135
+this.numer != 0
+this.denom >= 2
+this.numer != this.denom
+===========================================================================
+PolyCalc.RatNum.unparse():::EXIT137
+this.denom == 1
+===========================================================================
+PolyCalc.RatNum.unparse():::EXIT
+this.numer == Contract.OldValue(this.numer)
+this.denom == Contract.OldValue(this.denom)
+Contract.Result<java.lang.String>() != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.toString is printable

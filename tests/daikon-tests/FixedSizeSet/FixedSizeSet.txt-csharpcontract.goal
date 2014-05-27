@@ -1,0 +1,105 @@
+===========================================================================
+six170.FixedSizeSet:::OBJECT
+this.bits != null
+this.bits.Count() == 8
+===========================================================================
+six170.FixedSizeSet.FixedSizeSet():::EXIT
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(this.bits, x => x == false)
+===========================================================================
+six170.FixedSizeSet.add(int):::ENTER
+n >= 0
+(n & this.bits.Count()) == 0
+n <= this.bits.Count()-1
+this.bits.Count()-1 == (n | this.bits.Count()-1)
+===========================================================================
+six170.FixedSizeSet.add(int):::EXIT
+this.bits == Contract.OldValue(this.bits)
+this.bits.Count() == Contract.OldValue(this.bits).Count()
+Contract.ForAll(0, this.bits.Slice(orig(n)+1, this.bits.Count()-1).Count(), i => this.bits.Slice(orig(n)+1, this.bits.Count()-1)[i].Equals(Contract.OldValue(this.bits).Slice(n+1, Contract.OldValue(this.bits).Count()-1)[i]))
+Contract.ForAll(0, this.bits.Slice(orig(n)+1, this.bits.Count()-1).Count(), i => this.bits.Slice(orig(n)+1, this.bits.Count()-1)[i].Equals(Contract.OldValue(this.bits).Slice(orig(n)+1, Contract.OldValue(this.bits).Count()-1)[i]))
+Contract.ForAll(0, this.bits.Slice(0, orig(n)-1).Count(), i => this.bits.Slice(0, orig(n)-1)[i].Equals(Contract.OldValue(this.bits).Slice(0, n-1)[i]))
+Contract.ForAll(0, this.bits.Slice(0, orig(n)-1).Count(), i => this.bits.Slice(0, orig(n)-1)[i].Equals(Contract.OldValue(this.bits).Slice(0, orig(n)-1)[i]))
+this.bits[Contract.OldValue(n)] == true
+(Contract.OldValue(n) & this.bits.Count()) == 0
+Contract.OldValue(n) <= this.bits.Count()-1
+this.bits.Count()-1 == (Contract.OldValue(n) | this.bits.Count()-1)
+===========================================================================
+six170.FixedSizeSet.contains(int):::ENTER
+n >= 0
+(n & this.bits.Count()) == 0
+n <= this.bits.Count()-1
+this.bits.Count()-1 == (n | this.bits.Count()-1)
+===========================================================================
+six170.FixedSizeSet.contains(int):::EXIT
+this.bits == Contract.OldValue(this.bits)
+Contract.ForAll(0, this.bits.Count(), i => this.bits[i].Equals(Contract.OldValue(this.bits)[i]))
+Contract.Result<boolean>() == this.bits[Contract.OldValue(n)]
+Contract.Result<boolean>() == Contract.OldValue(this.bits[n])
+Contract.Result<boolean>() == Contract.OldValue(this.bits[n])
+(Contract.Result<boolean>() == true).Implies(() => Contract.OldValue(this) != null)
+(Contract.Result<boolean>() == true).Implies(() => this.bits != null)
+(Contract.OldValue(n) & this.bits.Count()) == 0
+Contract.OldValue(n) <= this.bits.Count()-1
+this.bits.Count()-1 == (Contract.OldValue(n) | this.bits.Count()-1)
+===========================================================================
+six170.FixedSizeSet.intersect(six170.FixedSizeSet):::ENTER
+this.bits.Count() == other.bits.Count()
+other != null
+other.bits != null
+Contract.ForAll(this.bits, i => other.bits.Contains(i))
+Contract.ForAll(other.bits, i => this.bits.Contains(i))
+===========================================================================
+six170.FixedSizeSet.intersect(six170.FixedSizeSet):::EXIT
+this.bits == Contract.OldValue(this.bits)
+other.bits == Contract.OldValue(other.bits)
+Contract.ForAll(0, other.bits.Count(), i => other.bits[i].Equals(Contract.OldValue(other.bits)[i]))
+this.bits.Count() == other.bits.Count()
+this.bits.Count() == Contract.OldValue(this.bits).Count()
+this.bits.Count() == Contract.OldValue(other.bits).Count()
+other.bits != null
+Contract.ForAll(this.bits, i => other.bits.Contains(i))
+Contract.ForAll(this.bits, i => Contract.OldValue(this.bits).Contains(i))
+Contract.ForAll(other.bits, i => Contract.OldValue(this.bits).Contains(i))
+Contract.ForAll(Contract.OldValue(this.bits), i => other.bits.Contains(i))
+===========================================================================
+six170.FixedSizeSet.remove(int):::ENTER
+this != null
+this.bits != null
+n >= 0
+(n & this.bits.Count()) == 0
+n <= this.bits.Count()-1
+this.bits.Count()-1 == (n | this.bits.Count()-1)
+===========================================================================
+six170.FixedSizeSet.remove(int):::EXIT
+this.bits == Contract.OldValue(this.bits)
+this.bits.Count() == Contract.OldValue(this.bits).Count()
+Contract.ForAll(0, this.bits.Slice(orig(n)+1, this.bits.Count()-1).Count(), i => this.bits.Slice(orig(n)+1, this.bits.Count()-1)[i].Equals(Contract.OldValue(this.bits).Slice(n+1, Contract.OldValue(this.bits).Count()-1)[i]))
+Contract.ForAll(0, this.bits.Slice(orig(n)+1, this.bits.Count()-1).Count(), i => this.bits.Slice(orig(n)+1, this.bits.Count()-1)[i].Equals(Contract.OldValue(this.bits).Slice(orig(n)+1, Contract.OldValue(this.bits).Count()-1)[i]))
+Contract.ForAll(0, this.bits.Slice(0, orig(n)-1).Count(), i => this.bits.Slice(0, orig(n)-1)[i].Equals(Contract.OldValue(this.bits).Slice(0, n-1)[i]))
+Contract.ForAll(0, this.bits.Slice(0, orig(n)-1).Count(), i => this.bits.Slice(0, orig(n)-1)[i].Equals(Contract.OldValue(this.bits).Slice(0, orig(n)-1)[i]))
+this.bits != null
+this.bits[Contract.OldValue(n)] == false
+(Contract.OldValue(n) & this.bits.Count()) == 0
+Contract.OldValue(n) <= this.bits.Count()-1
+this.bits.Count()-1 == (Contract.OldValue(n) | this.bits.Count()-1)
+===========================================================================
+six170.FixedSizeSet.union(six170.FixedSizeSet):::ENTER
+this.bits.Count() == other.bits.Count()
+other != null
+other.bits != null
+Contract.ForAll(this.bits, i => other.bits.Contains(i))
+Contract.ForAll(other.bits, i => this.bits.Contains(i))
+===========================================================================
+six170.FixedSizeSet.union(six170.FixedSizeSet):::EXIT
+this.bits == Contract.OldValue(this.bits)
+other.bits == Contract.OldValue(other.bits)
+Contract.ForAll(0, other.bits.Count(), i => other.bits[i].Equals(Contract.OldValue(other.bits)[i]))
+this.bits.Count() == other.bits.Count()
+this.bits.Count() == Contract.OldValue(this.bits).Count()
+this.bits.Count() == Contract.OldValue(other.bits).Count()
+other.bits != null
+Contract.ForAll(this.bits, i => other.bits.Contains(i))
+Contract.ForAll(this.bits, i => Contract.OldValue(this.bits).Contains(i))
+Contract.ForAll(other.bits, i => Contract.OldValue(this.bits).Contains(i))
+Contract.ForAll(Contract.OldValue(this.bits), i => other.bits.Contains(i))

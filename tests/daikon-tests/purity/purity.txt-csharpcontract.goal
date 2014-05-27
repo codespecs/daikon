@@ -1,0 +1,308 @@
+===========================================================================
+misc.Purity:::OBJECT
+this.value == this.getValue()
+this.shift == this.getShift()
+this.shift == this.retrieve()
+this.shift == this.retrieve()
+this.heavy == this.isHeavy()
+this.sum() == this.sum()
+this.list1.Count() == this.list2.Count()
+this.shift.OneOf(0, 5, 10)
+this.list1 != null
+this.list1.Distinct().Count() == this.list1.Count()
+Contract.ForAll(this.list1, x => x != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(this.list1, x => x.getClass().Equals(typeof(java.lang.Integer)))
+this.list2 != null
+this.list2.Distinct().Count() == this.list2.Count()
+Contract.ForAll(this.list2, x => x != null)
+this.list2.GetType() == typeof(java.util.ArrayList)
+this.getNum() != null
+this.getNum().GetType() == typeof(java.lang.Integer)
+this.getJWrap() != null
+this.sum() % 2 == 0
+this.list1.Count() == 11
+(!(this.scale() == 0)) || (this.value == 0)
+(!(this.value == 0)) || (this.scale() == 0)
+this.value <= this.scale()
+(!(this.sum() == 0)) || (this.value == 0)
+(!(this.value == 0)) || (this.sum() == 0)
+2 * this.value - this.sum() == 0
+this.shift <= this.list1.Count()-1
+Contract.Exists(this.list1, x => x.getClass().Equals(this.getNum().GetType()))
+this.list2.GetType() != this.getNum().GetType()
+(!(this.scale() == 0)) || (this.sum() == 0)
+(!(this.sum() == 0)) || (this.scale() == 0)
+this.sum() != this.list1.Count()
+===========================================================================
+misc.Purity.Purity(int, int):::ENTER
+shift.OneOf(0, 5, 10)
+shift % 5 == 0
+===========================================================================
+misc.Purity.Purity(int, int):::EXIT
+this.value == Contract.OldValue(value)
+this.shift == Contract.OldValue(shift)
+this.shift % 5 == 0
+===========================================================================
+misc.Purity.getJWrap():::ENTER
+this.shift % 5 == 0
+===========================================================================
+misc.Purity.getJWrap():::EXIT
+this.value == Contract.OldValue(this.value)
+this.value == Contract.OldValue(this.getValue())
+this.shift == Contract.OldValue(this.shift)
+this.shift == Contract.OldValue(this.getShift())
+this.shift == Contract.OldValue(this.retrieve())
+this.shift == Contract.OldValue(this.retrieve())
+this.heavy == Contract.OldValue(this.heavy)
+this.heavy == Contract.OldValue(this.isHeavy())
+this.list1 == Contract.OldValue(this.list1)
+Contract.ForAll(0, this.list1.Count(), i => this.list1[i].Equals(Contract.OldValue(this.list1)[i]))
+this.list2 == Contract.OldValue(this.list2)
+Contract.ForAll(0, this.list2.Count(), i => this.list2[i].Equals(Contract.OldValue(this.list2)[i]))
+this.sum() == Contract.OldValue(this.sum())
+this.list1.Count() == Contract.OldValue(this.list2).Count()
+this.shift % 5 == 0
+Contract.Result<java.lang.Integer>() != null
+this.list2.GetType() == Contract.OldValue(this.list2.GetType())
+this.getNum().GetType() == Contract.OldValue(this.getNum().GetType())
+===========================================================================
+misc.Purity.getNum():::ENTER
+this.shift % 5 == 0
+===========================================================================
+misc.Purity.getNum():::EXIT
+this.value == Contract.OldValue(this.value)
+this.value == Contract.OldValue(this.getValue())
+this.shift == Contract.OldValue(this.shift)
+this.shift == Contract.OldValue(this.getShift())
+this.shift == Contract.OldValue(this.retrieve())
+this.shift == Contract.OldValue(this.retrieve())
+this.heavy == Contract.OldValue(this.heavy)
+this.heavy == Contract.OldValue(this.isHeavy())
+this.list1 == Contract.OldValue(this.list1)
+Contract.ForAll(0, this.list1.Count(), i => this.list1[i].Equals(Contract.OldValue(this.list1)[i]))
+this.list2 == Contract.OldValue(this.list2)
+Contract.ForAll(0, this.list2.Count(), i => this.list2[i].Equals(Contract.OldValue(this.list2)[i]))
+this.sum() == Contract.OldValue(this.sum())
+this.list1.Count() == Contract.OldValue(this.list2).Count()
+this.shift % 5 == 0
+Contract.Result<java.lang.Number>() != null
+Contract.Result<java.lang.Number>().GetType() == typeof(java.lang.Integer)
+Contract.Exists(this.list1, x => x.getClass().Equals(Contract.Result<java.lang.Number>().GetType()))
+this.list2.GetType() != Contract.Result<java.lang.Number>().GetType()
+this.list2.GetType() == Contract.OldValue(this.list2.GetType())
+this.getNum().GetType() == Contract.Result<java.lang.Number>().GetType()
+Contract.Result<java.lang.Number>().GetType() == Contract.OldValue(this.getNum().GetType())
+===========================================================================
+misc.Purity.getShift():::ENTER
+this.shift % 5 == 0
+===========================================================================
+misc.Purity.getShift():::EXIT
+this.value == Contract.OldValue(this.value)
+this.value == Contract.OldValue(this.getValue())
+this.shift == Contract.Result<int>()
+this.heavy == Contract.OldValue(this.heavy)
+this.heavy == Contract.OldValue(this.isHeavy())
+this.list1 == Contract.OldValue(this.list1)
+Contract.ForAll(0, this.list1.Count(), i => this.list1[i].Equals(Contract.OldValue(this.list1)[i]))
+this.list2 == Contract.OldValue(this.list2)
+Contract.ForAll(0, this.list2.Count(), i => this.list2[i].Equals(Contract.OldValue(this.list2)[i]))
+this.getShift() == Contract.Result<int>()
+this.sum() == Contract.OldValue(this.sum())
+this.retrieve() == Contract.Result<int>()
+this.retrieve() == Contract.Result<int>()
+Contract.Result<int>() == Contract.OldValue(this.shift)
+Contract.Result<int>() == Contract.OldValue(this.getShift())
+Contract.Result<int>() == Contract.OldValue(this.retrieve())
+Contract.Result<int>() == Contract.OldValue(this.retrieve())
+this.list1.Count() == Contract.OldValue(this.list2).Count()
+Contract.Result<int>().OneOf(0, 5, 10)
+Contract.Result<int>() % 5 == 0
+this.list2.GetType() == Contract.OldValue(this.list2.GetType())
+this.getNum().GetType() == Contract.OldValue(this.getNum().GetType())
+Contract.Result<int>() <= this.list1.Count()-1
+===========================================================================
+misc.Purity.getValue():::ENTER
+this.shift % 5 == 0
+===========================================================================
+misc.Purity.getValue():::EXIT
+this.value == Contract.Result<int>()
+this.shift == Contract.OldValue(this.shift)
+this.shift == Contract.OldValue(this.getShift())
+this.shift == Contract.OldValue(this.retrieve())
+this.shift == Contract.OldValue(this.retrieve())
+this.heavy == Contract.OldValue(this.heavy)
+this.heavy == Contract.OldValue(this.isHeavy())
+this.list1 == Contract.OldValue(this.list1)
+Contract.ForAll(0, this.list1.Count(), i => this.list1[i].Equals(Contract.OldValue(this.list1)[i]))
+this.list2 == Contract.OldValue(this.list2)
+Contract.ForAll(0, this.list2.Count(), i => this.list2[i].Equals(Contract.OldValue(this.list2)[i]))
+this.getValue() == Contract.Result<int>()
+this.sum() == Contract.OldValue(this.sum())
+Contract.Result<int>() == Contract.OldValue(this.value)
+Contract.Result<int>() == Contract.OldValue(this.getValue())
+this.list1.Count() == Contract.OldValue(this.list2).Count()
+this.shift % 5 == 0
+this.list2.GetType() == Contract.OldValue(this.list2.GetType())
+this.getNum().GetType() == Contract.OldValue(this.getNum().GetType())
+(!(Contract.Result<int>() == 0)) || (this.scale() == 0)
+(!(this.scale() == 0)) || (Contract.Result<int>() == 0)
+this.scale() >= Contract.Result<int>()
+(!(Contract.Result<int>() == 0)) || (this.sum() == 0)
+(!(this.sum() == 0)) || (Contract.Result<int>() == 0)
+===========================================================================
+misc.Purity.isHeavy():::ENTER
+===========================================================================
+misc.Purity.isHeavy():::EXIT
+this.value == Contract.OldValue(this.value)
+this.value == Contract.OldValue(this.getValue())
+this.shift == Contract.OldValue(this.shift)
+this.shift == Contract.OldValue(this.getShift())
+this.shift == Contract.OldValue(this.retrieve())
+this.shift == Contract.OldValue(this.retrieve())
+this.heavy == Contract.Result<boolean>()
+this.list1 == Contract.OldValue(this.list1)
+Contract.ForAll(0, this.list1.Count(), i => this.list1[i].Equals(Contract.OldValue(this.list1)[i]))
+this.list2 == Contract.OldValue(this.list2)
+Contract.ForAll(0, this.list2.Count(), i => this.list2[i].Equals(Contract.OldValue(this.list2)[i]))
+this.isHeavy() == Contract.Result<boolean>()
+this.sum() == Contract.OldValue(this.sum())
+Contract.Result<boolean>() == Contract.OldValue(this.heavy)
+Contract.Result<boolean>() == Contract.OldValue(this.isHeavy())
+this.list1.Count() == Contract.OldValue(this.list2).Count()
+(this.shift == 0).Implies(() => Contract.Result<boolean>() == false)
+(this.shift == 0).Implies(() => this.value == this.scale())
+(this.shift == 0).Implies(() => (!(this.scale() == 0)) || (this.sum() == 0))
+(this.shift == 0).Implies(() => (!(this.sum() == 0)) || (this.scale() == 0))
+(this.shift == 0).Implies(() => 2 * this.scale() - this.sum() == 0)
+(this.shift == 0).Implies(() => 2 * this.scale() - this.sum() == 0)
+(this.shift == 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.shift == 0).Implies(() => Contract.ForAll(this.list1.Slice(0, this.shift), x => x == this.list1[this.shift]))
+(this.shift == 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.shift == 0).Implies(() => Contract.ForAll(this.list2.Slice(0, this.shift), x => x == this.list2[this.shift]))
+(this.shift == 0).Implies(() => this.shift  isPointer)
+(this.shift == 0).Implies(() => this.shift < this.list1.Count()-1)
+(this.shift == 0).Implies(() => this.value == this.scale())
+(this.shift.OneOf(5, 10)).Implies(() => Contract.Result<boolean>() == true)
+(this.shift.OneOf(5, 10)).Implies(() => this.value < this.scale())
+(this.shift.OneOf(5, 10)).Implies(() => 30 * this.shift - 2 * this.scale() + this.sum() - 100 == 0)
+(this.shift.OneOf(5, 10)).Implies(() => this.scale() != this.list1.Count()-1)
+(this.shift.OneOf(5, 10)).Implies(() => this.shift != this.scale())
+(this.shift.OneOf(5, 10)).Implies(() => this.shift % 5 == 0)
+(this.shift.OneOf(5, 10)).Implies(() => this.value + 15 * this.shift - this.scale() - 50 == 0)
+this.list2.GetType() == Contract.OldValue(this.list2.GetType())
+this.getNum().GetType() == Contract.OldValue(this.getNum().GetType())
+===========================================================================
+misc.Purity.retrieve(java.util.List):::ENTER
+this.shift % 5 == 0
+l != null
+l.Distinct().Count() == l.Count()
+Contract.ForAll(l, x => x != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(l, x => x.getClass().Equals(typeof(java.lang.Integer)))
+l.Count() == 20
+this.shift < l.Count()-1
+this.list2.GetType() == l.GetType()
+Contract.Exists(l, x => x.getClass().Equals(this.getNum().GetType()))
+this.sum() != l.Count()-1
+===========================================================================
+misc.Purity.retrieve(java.util.List):::EXIT
+this.value == Contract.OldValue(this.value)
+this.value == Contract.OldValue(this.getValue())
+this.shift == Contract.Result<int>()
+this.heavy == Contract.OldValue(this.heavy)
+this.heavy == Contract.OldValue(this.isHeavy())
+this.list1 == Contract.OldValue(this.list1)
+Contract.ForAll(0, this.list1.Count(), i => this.list1[i].Equals(Contract.OldValue(this.list1)[i]))
+this.list2 == Contract.OldValue(this.list2)
+Contract.ForAll(0, this.list2.Count(), i => this.list2[i].Equals(Contract.OldValue(this.list2)[i]))
+this.getShift() == Contract.Result<int>()
+this.sum() == Contract.OldValue(this.sum())
+this.retrieve() == Contract.Result<int>()
+this.retrieve() == Contract.Result<int>()
+Contract.ForAll(0, l.Count(), i => l[i].Equals(Contract.OldValue(l)[i]))
+Contract.Result<int>() == Contract.OldValue(this.shift)
+Contract.Result<int>() == Contract.OldValue(this.getShift())
+Contract.Result<int>() == Contract.OldValue(this.retrieve())
+Contract.Result<int>() == Contract.OldValue(this.retrieve())
+this.list1.Count() == Contract.OldValue(this.list2).Count()
+l.Distinct().Count() == l.Count()
+Contract.ForAll(l, x => x != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(l, x => x.getClass().Equals(typeof(java.lang.Integer)))
+Contract.Result<int>().OneOf(0, 5, 10)
+Contract.Result<int>() % 5 == 0
+this.list2.GetType() == Contract.OldValue(this.list2.GetType())
+this.list2.GetType() == Contract.OldValue(l.GetType())
+Contract.Exists(l, x => x.getClass().Equals(this.getNum().GetType()))
+this.getNum().GetType() == Contract.OldValue(this.getNum().GetType())
+this.sum() != l.Count()-1
+Contract.Result<int>() <= this.list1.Count()-1
+Contract.Result<int>() < l.Count()-1
+===========================================================================
+misc.Purity.scale(int):::ENTER
+this.value == scale
+this.shift % 5 == 0
+===========================================================================
+misc.Purity.scale(int):::EXIT
+this.value == Contract.OldValue(this.value)
+this.value == Contract.OldValue(this.getValue())
+this.value == Contract.OldValue(scale)
+this.shift == Contract.OldValue(this.shift)
+this.shift == Contract.OldValue(this.getShift())
+this.shift == Contract.OldValue(this.retrieve())
+this.shift == Contract.OldValue(this.retrieve())
+this.heavy == Contract.OldValue(this.heavy)
+this.heavy == Contract.OldValue(this.isHeavy())
+this.list1 == Contract.OldValue(this.list1)
+Contract.ForAll(0, this.list1.Count(), i => this.list1[i].Equals(Contract.OldValue(this.list1)[i]))
+this.list2 == Contract.OldValue(this.list2)
+Contract.ForAll(0, this.list2.Count(), i => this.list2[i].Equals(Contract.OldValue(this.list2)[i]))
+this.scale() == Contract.Result<int>()
+this.scale() == Contract.Result<int>()
+this.sum() == Contract.OldValue(this.sum())
+Contract.Result<int>() == Contract.OldValue(this.scale())
+Contract.Result<int>() == Contract.OldValue(this.scale())
+this.list1.Count() == Contract.OldValue(this.list2).Count()
+this.shift % 5 == 0
+(!(Contract.Result<int>() == 0)) || (this.value == 0)
+(!(this.value == 0)) || (Contract.Result<int>() == 0)
+this.list2.GetType() == Contract.OldValue(this.list2.GetType())
+this.getNum().GetType() == Contract.OldValue(this.getNum().GetType())
+(!(Contract.Result<int>() == 0)) || (this.sum() == 0)
+(!(this.sum() == 0)) || (Contract.Result<int>() == 0)
+===========================================================================
+misc.Purity.sum(java.lang.Number):::ENTER
+this.shift % 5 == 0
+n != null
+this.getNum().GetType() == n.GetType()
+===========================================================================
+misc.Purity.sum(java.lang.Number):::EXIT
+this.value == Contract.OldValue(this.value)
+this.value == Contract.OldValue(this.getValue())
+this.shift == Contract.OldValue(this.shift)
+this.shift == Contract.OldValue(this.getShift())
+this.shift == Contract.OldValue(this.retrieve())
+this.shift == Contract.OldValue(this.retrieve())
+this.heavy == Contract.OldValue(this.heavy)
+this.heavy == Contract.OldValue(this.isHeavy())
+this.list1 == Contract.OldValue(this.list1)
+Contract.ForAll(0, this.list1.Count(), i => this.list1[i].Equals(Contract.OldValue(this.list1)[i]))
+this.list2 == Contract.OldValue(this.list2)
+Contract.ForAll(0, this.list2.Count(), i => this.list2[i].Equals(Contract.OldValue(this.list2)[i]))
+this.sum() == Contract.Result<int>()
+this.sum() == Contract.Result<int>()
+Contract.Result<int>() == Contract.OldValue(this.sum())
+Contract.Result<int>() == Contract.OldValue(this.sum())
+this.list1.Count() == Contract.OldValue(this.list2).Count()
+this.shift % 5 == 0
+Contract.Result<int>() % 2 == 0
+(!(Contract.Result<int>() == 0)) || (this.value == 0)
+(!(this.value == 0)) || (Contract.Result<int>() == 0)
+2 * this.value - Contract.Result<int>() == 0
+this.list2.GetType() == Contract.OldValue(this.list2.GetType())
+this.getNum().GetType() == Contract.OldValue(this.getNum().GetType())
+this.getNum().GetType() == Contract.OldValue(n.GetType())
+(!(Contract.Result<int>() == 0)) || (this.scale() == 0)
+(!(this.scale() == 0)) || (Contract.Result<int>() == 0)
+Contract.Result<int>() != this.list1.Count()

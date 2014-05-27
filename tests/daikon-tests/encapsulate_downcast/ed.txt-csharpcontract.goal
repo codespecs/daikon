@@ -1,0 +1,54 @@
+===========================================================================
+misc.EncapsulateDowncast:::CLASS
+misc.EncapsulateDowncast.random != null
+misc.EncapsulateDowncast.random != null
+===========================================================================
+misc.EncapsulateDowncast.main(java.lang.String[]):::ENTER
+argv != null
+argv.GetType() == typeof(java.lang.String[])
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+===========================================================================
+misc.EncapsulateDowncast.main(java.lang.String[]):::EXIT
+misc.EncapsulateDowncast.random == Contract.OldValue(misc.EncapsulateDowncast.random)
+Contract.ForAll(0, argv.Count(), i => argv[i].Equals(Contract.OldValue(argv)[i]))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+===========================================================================
+misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::ENTER
+list != null
+list.Distinct().Count() == list.Count()
+Contract.ForAll(list, x => x != null)
+Contract.ForAll(list, x => x.getClass().Equals(typeof(misc.Person)))
+(misc.EncapsulateDowncast.CASES & list.Count()) == 0
+misc.EncapsulateDowncast.CASES > list.Count()
+(misc.EncapsulateDowncast.CASES & list.Count()-1) == 0
+misc.EncapsulateDowncast.SEED > list.Count()
+===========================================================================
+misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::EXIT
+misc.EncapsulateDowncast.random == Contract.OldValue(misc.EncapsulateDowncast.random)
+Contract.ForAll(0, list.Count(), i => list[i].Equals(Contract.OldValue(list)[i]))
+list.Distinct().Count() == list.Count()
+Contract.ForAll(list, x => x != null)
+Contract.ForAll(list, x => x.getClass().Equals(typeof(misc.Person)))
+(misc.EncapsulateDowncast.CASES & list.Count()-1) == 0
+===========================================================================
+misc.Person:::OBJECT
+this._name != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: this._name.toString is printable
+this._height >= 0
+this._height < this._weight
+===========================================================================
+misc.Person.Person(java.lang.String, int, int):::ENTER
+name != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: name.toString is printable
+height >= 0
+height < weight
+===========================================================================
+misc.Person.Person(java.lang.String, int, int):::EXIT
+this._name == Contract.OldValue(name)
+this._height == Contract.OldValue(height)
+this._weight == Contract.OldValue(weight)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: name.toString is printable
+this._name.Equals(name)
+name.Equals(Contract.OldValue(name))

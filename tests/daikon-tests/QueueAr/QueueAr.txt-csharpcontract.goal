@@ -1,0 +1,270 @@
+===========================================================================
+DataStructures.QueueAr:::OBJECT
+this.theArray != null
+this.theArray.GetType() == typeof(java.lang.Object[])
+this.currentSize >= 0
+this.front >= 0
+this.back >= 0
+this.currentSize <= this.theArray.Count()
+(!(this.theArray.Count()-1 == 0)) || (this.front == 0)
+this.front <= this.theArray.Count()-1
+(!(this.theArray.Count()-1 == 0)) || (this.back == 0)
+this.back <= this.theArray.Count()-1
+===========================================================================
+DataStructures.QueueAr.QueueAr(int):::ENTER
+===========================================================================
+DataStructures.QueueAr.QueueAr(int):::EXIT
+this.currentSize == this.front
+this.back == this.theArray.Count()-1
+Contract.OldValue(capacity) == this.theArray.Count()
+this.theArray[this.currentSize] == this.theArray[this.back]
+this.theArray[this.currentSize] == this.theArray[Contract.OldValue(capacity)-1]
+Contract.ForAll(this.theArray, x => x== null)
+Contract.ForAll(this.theArray, x => x.getClass().Equals(typeof(null)))
+this.currentSize == 0
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(this.theArray, x => x == this.theArray[this.currentSize])
+this.currentSize <= this.back
+===========================================================================
+DataStructures.QueueAr.dequeue():::ENTER
+this.theArray[this.front] != null
+this.theArray[this.back] != null
+===========================================================================
+DataStructures.QueueAr.dequeue():::EXIT93
+===========================================================================
+DataStructures.QueueAr.dequeue():::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+this.back == Contract.OldValue(this.back)
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.front])
+this.theArray.Count() == Contract.OldValue(this.theArray).Count()
+this.theArray[this.currentSize] == this.theArray[Contract.OldValue(this.currentSize)-1]
+Contract.ForAll(0, this.theArray.Slice(orig(this.front)+1, this.theArray.Count()-1).Count(), i => this.theArray.Slice(orig(this.front)+1, this.theArray.Count()-1)[i].Equals(Contract.OldValue(this.theArray).Slice(orig(this.front)+1, Contract.OldValue(this.theArray).Count()-1)[i]))
+Contract.ForAll(0, this.theArray.Slice(0, orig(this.front)-1).Count(), i => this.theArray.Slice(0, orig(this.front)-1)[i].Equals(Contract.OldValue(this.theArray).Slice(0, orig(this.front)-1)[i]))
+Contract.OldValue(this.theArray[this.currentSize]) == Contract.OldValue(this.theArray[this.currentSize-1])
+Contract.Result<java.lang.Object>() != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.getClass() is printable
+this.theArray[Contract.OldValue(this.front)] == null
+this.theArray.GetType() != Contract.Result<java.lang.Object>().GetType()
+this.theArray.GetType() == Contract.OldValue(this.theArray.GetType())
+this.currentSize - Contract.OldValue(this.currentSize) + 1 == 0
+(!(this.theArray.Count()-1 == 0)) || (this.currentSize == 0)
+this.currentSize <= this.theArray.Count()-1
+Contract.Exists(Contract.OldValue(this.theArray), x => x.getClass().Equals(Contract.Result<java.lang.Object>().GetType()))
+Contract.OldValue(this.currentSize) <= this.theArray.Count()
+(!(this.theArray.Count()-1 == 0)) || (Contract.OldValue(this.front) == 0)
+Contract.OldValue(this.front) <= this.theArray.Count()-1
+Contract.ForAll(this.theArray.Slice(this.currentSize+1, this.theArray.Count()-1), i => Contract.OldValue(this.theArray).Slice(this.currentSize, Contract.OldValue(this.theArray).Count()-1).Contains(i))
+===========================================================================
+DataStructures.QueueAr.enqueue(java.lang.Object):::ENTER
+x != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: x.getClass() is printable
+this.theArray.GetType() != x.GetType()
+(!(this.currentSize == 0)) || (this.front == 0)
+(!(this.theArray.Count()-1 == 0)) || (this.currentSize == 0)
+this.currentSize <= this.theArray.Count()-1
+===========================================================================
+DataStructures.QueueAr.enqueue(java.lang.Object):::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+this.front == Contract.OldValue(this.front)
+Contract.OldValue(x) == this.theArray[this.back]
+this.theArray.Count() == Contract.OldValue(this.theArray).Count()
+this.theArray[this.currentSize-1] == this.theArray[Contract.OldValue(this.currentSize)]
+Contract.ForAll(0, this.theArray.Slice(this.back+1, this.theArray.Count()-1).Count(), i => this.theArray.Slice(this.back+1, this.theArray.Count()-1)[i].Equals(Contract.OldValue(this.theArray).Slice(this.back+1, Contract.OldValue(this.theArray).Count()-1)[i]))
+Contract.ForAll(0, this.theArray.Slice(0, this.back-1).Count(), i => this.theArray.Slice(0, this.back-1)[i].Equals(Contract.OldValue(this.theArray).Slice(0, this.back-1)[i]))
+Contract.OldValue(this.theArray[this.currentSize-1]) == Contract.OldValue(this.theArray[this.currentSize])
+this.currentSize >= 1
+this.theArray[this.front] != null
+Contract.OldValue(this.theArray[this.back]) == null
+this.theArray.GetType() == Contract.OldValue(this.theArray.GetType())
+this.theArray.GetType() != Contract.OldValue(x.GetType())
+Contract.Exists(this.theArray, x => x.getClass().Equals(Contract.OldValue(x.GetType())))
+(this.front >> this.currentSize == 0)
+(this.back >> this.currentSize == 0)
+this.currentSize - Contract.OldValue(this.currentSize) - 1 == 0
+(!(Contract.OldValue(this.currentSize) == 0)) || (this.front == 0)
+(!(Contract.OldValue(this.currentSize) == 0)) || (this.back == 0)
+(!(this.theArray.Count()-1 == 0)) || (Contract.OldValue(this.currentSize) == 0)
+Contract.OldValue(this.currentSize) <= this.theArray.Count()-1
+(!(this.theArray.Count()-1 == 0)) || (Contract.OldValue(this.back) == 0)
+Contract.OldValue(this.back) <= this.theArray.Count()-1
+===========================================================================
+DataStructures.QueueAr.getFront():::ENTER
+===========================================================================
+DataStructures.QueueAr.getFront():::EXIT75
+Contract.Result<java.lang.Object>() == this.theArray[this.currentSize]
+Contract.Result<java.lang.Object>() == this.theArray[this.back]
+Contract.Result<java.lang.Object>() == this.theArray[Contract.OldValue(this.currentSize)]
+Contract.Result<java.lang.Object>() == this.theArray[Contract.OldValue(this.back)]
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.currentSize])
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.back])
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.currentSize])
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.back])
+Contract.ForAll(this.theArray, x => x== null)
+Contract.ForAll(this.theArray, x => x.getClass().Equals(typeof(null)))
+this.currentSize == 0
+Contract.Result<java.lang.Object>() == null
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(this.theArray, x => x == Contract.Result<java.lang.Object>())
+this.currentSize <= this.front
+this.currentSize <= this.back
+this.currentSize <= this.theArray.Count()-1
+(!(this.back == 0)) || (this.front == 0)
+(!(this.back == 0)) || (this.theArray.Count()-1 == 0)
+===========================================================================
+DataStructures.QueueAr.getFront():::EXIT76
+this.currentSize >= 1
+Contract.Result<java.lang.Object>() != null
+this.theArray[this.back] != null
+===========================================================================
+DataStructures.QueueAr.getFront():::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+Contract.ForAll(0, this.theArray.Count(), i => this.theArray[i].Equals(Contract.OldValue(this.theArray)[i]))
+this.currentSize == Contract.OldValue(this.currentSize)
+this.front == Contract.OldValue(this.front)
+this.back == Contract.OldValue(this.back)
+Contract.Result<java.lang.Object>() == this.theArray[this.front]
+Contract.Result<java.lang.Object>() == this.theArray[Contract.OldValue(this.front)]
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.front])
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.front])
+(this.currentSize == 0).Implies(() => Contract.Result<java.lang.Object>() == null)
+(this.currentSize == 0).Implies(() => this.theArray[this.back] == null)
+(this.currentSize == 0).Implies(() => (!(this.back == 0)) || (this.theArray.Count()-1 == 0))
+(this.currentSize == 0).Implies(() => (!(this.back == 0)) || (this.front == 0))
+(this.currentSize == 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.currentSize == 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.currentSize == 0).Implies(() => Contract.OldValue(this.theArray[this.currentSize]) == null)
+(this.currentSize == 0).Implies(() => Contract.OldValue(this.theArray[this.currentSize]) == null)
+(this.currentSize == 0).Implies(() => Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.currentSize]))
+(this.currentSize == 0).Implies(() => Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.currentSize]))
+(this.currentSize == 0).Implies(() => Contract.Result<java.lang.Object>() == this.theArray[Contract.OldValue(this.currentSize)])
+(this.currentSize == 0).Implies(() => Contract.Result<java.lang.Object>() == this.theArray[this.back])
+(this.currentSize == 0).Implies(() => Contract.Result<java.lang.Object>() == this.theArray[this.currentSize])
+(this.currentSize == 0).Implies(() => this.currentSize  isPointer)
+(this.currentSize == 0).Implies(() => this.currentSize <= this.theArray.Count()-1)
+(this.currentSize == 0).Implies(() => this.currentSize <= this.back)
+(this.currentSize == 0).Implies(() => this.currentSize <= this.front)
+(this.currentSize == 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.currentSize == 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.currentSize == 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x== null))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x == Contract.OldValue(this.theArray[this.currentSize])))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x == Contract.OldValue(this.theArray[this.currentSize])))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x == Contract.Result<java.lang.Object>()))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x == this.theArray[Contract.OldValue(this.currentSize)]))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x == this.theArray[this.back]))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x == this.theArray[this.currentSize]))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x.getClass().Equals(typeof(null))))
+(this.currentSize == 0).Implies(() => this.theArray[Contract.OldValue(this.currentSize)] == null)
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x== null))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x == Contract.OldValue(this.theArray[this.currentSize])))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x == Contract.OldValue(this.theArray[this.currentSize])))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x == Contract.Result<java.lang.Object>()))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x == this.theArray[Contract.OldValue(this.currentSize)]))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x == this.theArray[this.back]))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x == this.theArray[this.currentSize]))
+(this.currentSize == 0).Implies(() => this.theArray[this.currentSize] == null)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.getClass() is printable
+this.theArray.GetType() != Contract.Result<java.lang.Object>().GetType()
+this.theArray.GetType() == Contract.OldValue(this.theArray.GetType())
+Contract.Exists(this.theArray, x => x.getClass().Equals(Contract.Result<java.lang.Object>().GetType()))
+===========================================================================
+DataStructures.QueueAr.isEmpty():::ENTER
+===========================================================================
+DataStructures.QueueAr.isEmpty():::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+Contract.ForAll(0, this.theArray.Count(), i => this.theArray[i].Equals(Contract.OldValue(this.theArray)[i]))
+this.currentSize == Contract.OldValue(this.currentSize)
+this.front == Contract.OldValue(this.front)
+this.back == Contract.OldValue(this.back)
+(this.currentSize == 0).Implies(() => Contract.Result<boolean>() == true)
+(this.currentSize == 0).Implies(() => (!(this.back == 0)) || (this.theArray.Count()-1 == 0))
+(this.currentSize == 0).Implies(() => (!(this.back == 0)) || (this.front == 0))
+(this.currentSize == 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.currentSize == 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.currentSize == 0).Implies(() => this.currentSize  isPointer)
+(this.currentSize == 0).Implies(() => this.currentSize <= this.theArray.Count()-1)
+(this.currentSize == 0).Implies(() => this.currentSize <= this.back)
+(this.currentSize == 0).Implies(() => this.currentSize <= this.front)
+(this.currentSize == 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.currentSize == 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.currentSize == 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x== null))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x == Contract.OldValue(this.theArray[this.currentSize])))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x == Contract.OldValue(this.theArray[this.currentSize])))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x == this.theArray[Contract.OldValue(this.currentSize)]))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x == this.theArray[this.back]))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x == this.theArray[this.currentSize]))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x == this.theArray[this.front]))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray, x => x.getClass().Equals(typeof(null))))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x== null))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x == Contract.OldValue(this.theArray[this.currentSize])))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x == Contract.OldValue(this.theArray[this.currentSize])))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x == this.theArray[Contract.OldValue(this.currentSize)]))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x == this.theArray[this.back]))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x == this.theArray[this.currentSize]))
+(this.currentSize == 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.currentSize, this.theArray.Count()-1), x => x == this.theArray[this.front]))
+(this.currentSize == 0).Implies(() => this.theArray[this.currentSize] == this.theArray[this.back])
+(this.currentSize == 0).Implies(() => this.theArray[this.currentSize] == this.theArray[this.front])
+this.theArray.GetType() == Contract.OldValue(this.theArray.GetType())
+===========================================================================
+DataStructures.QueueAr.isFull():::ENTER
+===========================================================================
+DataStructures.QueueAr.isFull():::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+Contract.ForAll(0, this.theArray.Count(), i => this.theArray[i].Equals(Contract.OldValue(this.theArray)[i]))
+this.currentSize == Contract.OldValue(this.currentSize)
+this.front == Contract.OldValue(this.front)
+this.back == Contract.OldValue(this.back)
+(Contract.Result<boolean>() == false).Implies(() => this.currentSize <= this.theArray.Count()-1)
+(Contract.Result<boolean>() == false).Implies(() => (!(this.theArray.Count()-1 == 0)) || (this.currentSize == 0))
+(Contract.Result<boolean>() == true).Implies(() => this.currentSize == this.theArray.Count())
+(Contract.Result<boolean>() == true).Implies(() => this.theArray.Slice(0, this.currentSize-1).Distinct().Count() == this.theArray.Slice(0, this.currentSize-1).Count())
+(Contract.Result<boolean>() == true).Implies(() => Contract.ForAll(this.theArray.Slice(0, this.currentSize-1), x => x != null))
+(Contract.Result<boolean>() == true).Implies(() => this.theArray.Distinct().Count() == this.theArray.Count())
+(Contract.Result<boolean>() == true).Implies(() => Contract.ForAll(this.theArray, x => x != null))
+(Contract.Result<boolean>() == true).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+this.theArray.GetType() == Contract.OldValue(this.theArray.GetType())
+===========================================================================
+DataStructures.QueueAr.makeEmpty():::ENTER
+(!(this.currentSize == 0)) || (this.front == 0)
+(!(this.back == 0)) || (this.front == 0)
+(!(this.back == 0)) || (this.theArray.Count()-1 == 0)
+===========================================================================
+DataStructures.QueueAr.makeEmpty():::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+this.currentSize == this.front
+this.back == this.theArray.Count()-1
+this.back == Contract.OldValue(this.theArray).Count()-1
+this.theArray.Count() == Contract.OldValue(this.theArray).Count()
+this.theArray[this.currentSize] == this.theArray[this.back]
+this.theArray[this.currentSize] == this.theArray[Contract.OldValue(this.front)]
+this.theArray[this.currentSize] == this.theArray[Contract.OldValue(this.back)]
+Contract.ForAll(this.theArray, x => x== null)
+Contract.ForAll(this.theArray, x => x.getClass().Equals(typeof(null)))
+this.currentSize == 0
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.theArray.GetType() == Contract.OldValue(this.theArray.GetType())
+Contract.ForAll(this.theArray, x => x == this.theArray[this.currentSize])
+this.currentSize <= this.back
+this.currentSize <= Contract.OldValue(this.currentSize)
+this.currentSize <= Contract.OldValue(this.front)
+this.currentSize <= Contract.OldValue(this.back)
+(!(this.back == 0)) || (Contract.OldValue(this.front) == 0)
+this.back >= Contract.OldValue(this.front)
+(!(Contract.OldValue(this.back) == 0)) || (this.back == 0)
+(!(this.back == 0)) || (Contract.OldValue(this.back) == 0)
+this.back >= Contract.OldValue(this.back)
+Contract.OldValue(this.currentSize) <= this.theArray.Count()
+Contract.ForAll(this.theArray.Slice(0, orig(this.front)-1), i => Contract.OldValue(this.theArray).Slice(0, this.back-1).Contains(i))
+Contract.ForAll(this.theArray.Slice(0, orig(this.front)-1), i => Contract.OldValue(this.theArray).Slice(0, orig(this.currentSize)-1).Contains(i))
+Contract.ForAll(this.theArray.Slice(0, orig(this.front)-1), i => Contract.OldValue(this.theArray).Slice(0, orig(this.front)).Contains(i))
+Contract.ForAll(this.theArray.Slice(0, orig(this.front)-1), i => Contract.OldValue(this.theArray).Slice(0, orig(this.front)-1).Contains(i))
+Contract.ForAll(this.theArray.Slice(orig(this.back)+1, this.theArray.Count()-1), i => Contract.OldValue(this.theArray).Slice(this.currentSize+1, Contract.OldValue(this.theArray).Count()-1).Contains(i))
+Contract.ForAll(this.theArray.Slice(orig(this.back)+1, this.theArray.Count()-1), i => Contract.OldValue(this.theArray).Slice(0, this.back-1).Contains(i))
+Contract.ForAll(this.theArray.Slice(orig(this.back)+1, this.theArray.Count()-1), i => Contract.OldValue(this.theArray).Slice(orig(this.back), Contract.OldValue(this.theArray).Count()-1).Contains(i))
+Contract.ForAll(this.theArray.Slice(orig(this.back)+1, this.theArray.Count()-1), i => Contract.OldValue(this.theArray).Slice(orig(this.back)+1, Contract.OldValue(this.theArray).Count()-1).Contains(i))
+Contract.ForAll(Contract.OldValue(this.theArray).Slice(0, this.currentSize), x => x == Contract.OldValue(this.theArray[this.currentSize]))
+Contract.ForAll(Contract.OldValue(this.theArray).Slice(this.back, Contract.OldValue(this.theArray).Count()-1), x => x == Contract.OldValue(this.theArray[this.back]))

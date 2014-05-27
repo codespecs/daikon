@@ -1,0 +1,122 @@
+===========================================================================
+six170.Hanoi:::OBJECT
+this.height == this.diskLocation.Count()
+this.diskLocation != null
+Contract.ForAll(this.diskLocation, x => x.OneOf(0, 1, 2))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+===========================================================================
+six170.Hanoi.Hanoi(int):::ENTER
+===========================================================================
+six170.Hanoi.Hanoi(int):::EXIT
+this.height == Contract.OldValue(height)
+Contract.ForAll(this.diskLocation, x => x == 0)
+this.noOutput == false
+Contract.ForAll(this.diskLocation, x => x == this.diskLocation[this.height-1])
+===========================================================================
+six170.Hanoi.Hanoi(int, boolean):::ENTER
+noOutput == true
+===========================================================================
+six170.Hanoi.Hanoi(int, boolean):::EXIT
+this.height == Contract.OldValue(height)
+this.noOutput == Contract.OldValue(noOutput)
+Contract.ForAll(this.diskLocation, x => x == 0)
+this.noOutput == true
+Contract.ForAll(this.diskLocation, x => x == this.diskLocation[this.height-1])
+===========================================================================
+six170.Hanoi.moveDisk(int, int):::ENTER
+this.noOutput == true
+fromPeg.OneOf(0, 1, 2)
+toPeg.OneOf(0, 1, 2)
+Contract.Exists(this.diskLocation, x => x.Equals(fromPeg))
+(fromPeg & toPeg) == 0
+fromPeg != toPeg
+===========================================================================
+six170.Hanoi.moveDisk(int, int):::EXIT
+this.diskLocation == Contract.OldValue(this.diskLocation)
+this.height == Contract.OldValue(this.height)
+this.height == Contract.OldValue(this.diskLocation).Count()
+this.noOutput == Contract.OldValue(this.noOutput)
+this.noOutput == true
+Contract.Exists(this.diskLocation, x => x.Equals(Contract.OldValue(toPeg)))
+===========================================================================
+six170.Hanoi.moveTower(int, int, int):::ENTER
+fromPeg == this.diskLocation[towerHeight-1]
+this.noOutput == true
+fromPeg.OneOf(0, 1, 2)
+toPeg.OneOf(0, 1, 2)
+Contract.ForAll(0, this.diskLocation.Slice(0, towerHeight-1).Count()-1, i => this.diskLocation.Slice(0, towerHeight-1)[i] == this.diskLocation.Slice(0, towerHeight-1)[i+1])
+this.height >= towerHeight
+Contract.ForAll(this.diskLocation.Slice(towerHeight, this.diskLocation.Count()-1), x => x <= this.height)
+(fromPeg & toPeg) == 0
+fromPeg != toPeg
+Contract.ForAll(this.diskLocation.Slice(0, towerHeight-1), x => x == fromPeg)
+===========================================================================
+six170.Hanoi.moveTower(int, int, int):::EXIT
+this.diskLocation == Contract.OldValue(this.diskLocation)
+this.height == Contract.OldValue(this.height)
+this.height == Contract.OldValue(this.diskLocation).Count()
+this.noOutput == Contract.OldValue(this.noOutput)
+Contract.OldValue(fromPeg) == Contract.OldValue(this.diskLocation[towerHeight-1])
+Contract.OldValue(toPeg) == this.diskLocation[Contract.OldValue(towerHeight)-1]
+Contract.ForAll(0, this.diskLocation.Slice(orig(towerHeight), this.diskLocation.Count()-1).Count(), i => this.diskLocation.Slice(orig(towerHeight), this.diskLocation.Count()-1)[i].Equals(Contract.OldValue(this.diskLocation).Slice(towerHeight, Contract.OldValue(this.diskLocation).Count()-1)[i]))
+Contract.ForAll(0, this.diskLocation.Slice(orig(towerHeight), this.diskLocation.Count()-1).Count(), i => this.diskLocation.Slice(orig(towerHeight), this.diskLocation.Count()-1)[i].Equals(Contract.OldValue(this.diskLocation).Slice(orig(towerHeight), Contract.OldValue(this.diskLocation).Count()-1)[i]))
+this.noOutput == true
+Contract.ForAll(0, this.diskLocation.Slice(0, orig(towerHeight)-1).Count()-1, i => this.diskLocation.Slice(0, orig(towerHeight)-1)[i] == this.diskLocation.Slice(0, orig(towerHeight)-1)[i+1])
+this.height >= Contract.OldValue(towerHeight)
+Contract.ForAll(this.diskLocation.Slice(orig(towerHeight), this.diskLocation.Count()-1), x => x <= this.height)
+Contract.ForAll(this.diskLocation.Slice(0, orig(towerHeight)-1), x => x == Contract.OldValue(toPeg))
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::ENTER
+pegA.OneOf(0, 1, 2)
+pegB.OneOf(0, 1, 2)
+(pegA & pegB) == 0
+pegA != pegB
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT65
+Contract.Result<int>() == 2
+Contract.OldValue(pegA) == 0
+Contract.OldValue(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT66
+Contract.Result<int>() == 2
+Contract.OldValue(pegA) == 1
+Contract.OldValue(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT67
+Contract.Result<int>() == 1
+Contract.OldValue(pegA) == 0
+Contract.OldValue(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT68
+Contract.Result<int>() == 1
+Contract.OldValue(pegA) == 2
+Contract.OldValue(pegB) == 0
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT69
+Contract.Result<int>() == 0
+Contract.OldValue(pegA) == 1
+Contract.OldValue(pegB) == 2
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT70
+Contract.Result<int>() == 0
+Contract.OldValue(pegA) == 2
+Contract.OldValue(pegB) == 1
+===========================================================================
+six170.Hanoi.otherPeg(int, int):::EXIT
+Contract.Result<int>().OneOf(0, 1, 2)
+(Contract.Result<int>() & Contract.OldValue(pegA)) == 0
+Contract.Result<int>() != Contract.OldValue(pegA)
+(Contract.Result<int>() & Contract.OldValue(pegB)) == 0
+Contract.Result<int>() != Contract.OldValue(pegB)
+Contract.Result<int>() + Contract.OldValue(pegA) + Contract.OldValue(pegB) - 3 == 0
+===========================================================================
+six170.Hanoi.showTowers():::ENTER
+this.noOutput == true
+===========================================================================
+six170.Hanoi.showTowers():::EXIT
+this.diskLocation == Contract.OldValue(this.diskLocation)
+Contract.ForAll(0, this.diskLocation.Count(), i => this.diskLocation[i].Equals(Contract.OldValue(this.diskLocation)[i]))
+this.height == Contract.OldValue(this.height)
+this.height == Contract.OldValue(this.diskLocation).Count()
+this.noOutput == Contract.OldValue(this.noOutput)
+this.noOutput == true

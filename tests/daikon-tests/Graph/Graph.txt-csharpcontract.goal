@@ -1,0 +1,53 @@
+===========================================================================
+MapQuick1.Graph:::OBJECT
+this.adjMap != null
+===========================================================================
+MapQuick1.Graph.Graph():::EXIT
+===========================================================================
+MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::ENTER
+from != null
+from.GetType() == typeof(MapQuick1.GeoSegment)
+to != null
+from.GetType() == to.GetType()
+===========================================================================
+MapQuick1.Graph.addEdge(java.lang.Object, java.lang.Object):::EXIT
+this.adjMap == Contract.OldValue(this.adjMap)
+===========================================================================
+MapQuick1.Graph.addNode(java.lang.Object):::ENTER
+node != null
+node.GetType() == typeof(MapQuick1.GeoSegment)
+===========================================================================
+MapQuick1.Graph.addNode(java.lang.Object):::EXIT
+this.adjMap == Contract.OldValue(this.adjMap)
+===========================================================================
+MapQuick1.Graph.adjTo(java.lang.Object):::ENTER
+node != null
+node.GetType() == typeof(MapQuick1.GeoSegment)
+===========================================================================
+MapQuick1.Graph.adjTo(java.lang.Object):::EXIT
+this.adjMap == Contract.OldValue(this.adjMap)
+Contract.Result<java.util.Set>() != null
+Contract.Result<java.util.Set>().GetType() == typeof(java.util.LinkedHashSet)
+Contract.Result<java.util.Set>().GetType() != Contract.OldValue(node.GetType())
+===========================================================================
+MapQuick1.Graph.checkRep():::ENTER
+===========================================================================
+MapQuick1.Graph.checkRep():::EXIT
+this.adjMap == Contract.OldValue(this.adjMap)
+===========================================================================
+MapQuick1.Graph.childrenOf(java.lang.Object):::ENTER
+node != null
+node.GetType() == typeof(MapQuick1.GeoSegment)
+===========================================================================
+MapQuick1.Graph.childrenOf(java.lang.Object):::EXIT
+this.adjMap == Contract.OldValue(this.adjMap)
+Contract.Result<java.util.Collection>() != null
+Contract.Result<java.util.Collection>().GetType() == typeof(java.util.LinkedHashSet)
+Contract.Result<java.util.Collection>().GetType() != Contract.OldValue(node.GetType())
+===========================================================================
+MapQuick1.Graph.containsNode(java.lang.Object):::ENTER
+node != null
+node.GetType() == typeof(MapQuick1.GeoSegment)
+===========================================================================
+MapQuick1.Graph.containsNode(java.lang.Object):::EXIT
+this.adjMap == Contract.OldValue(this.adjMap)

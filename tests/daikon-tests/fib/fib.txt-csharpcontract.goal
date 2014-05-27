@@ -1,0 +1,49 @@
+===========================================================================
+misc.Fib:::CLASS
+misc.Fib.a >= 0
+(misc.Fib.a >> misc.Fib.STEPS == 0)
+misc.Fib.STEPS != misc.Fib.a
+(misc.Fib.b >> misc.Fib.STEPS == 0)
+misc.Fib.STEPS != misc.Fib.b
+(misc.Fib.c >> misc.Fib.STEPS == 0)
+misc.Fib.STEPS != misc.Fib.c
+(!(misc.Fib.b == 0)) || (misc.Fib.a == 0)
+misc.Fib.a <= misc.Fib.b
+(!(misc.Fib.c == 0)) || (misc.Fib.a == 0)
+misc.Fib.a <= misc.Fib.c
+(!(misc.Fib.b == 0)) || (misc.Fib.c == 0)
+(!(misc.Fib.c == 0)) || (misc.Fib.b == 0)
+misc.Fib.b <= misc.Fib.c
+misc.Fib.a + misc.Fib.b - misc.Fib.c == 0
+===========================================================================
+misc.Fib.increment():::ENTER
+misc.Fib.a < misc.Fib.c
+===========================================================================
+misc.Fib.increment():::EXIT
+misc.Fib.a == Contract.OldValue(misc.Fib.b)
+misc.Fib.b == Contract.OldValue(misc.Fib.c)
+misc.Fib.a < misc.Fib.c
+misc.Fib.a >= Contract.OldValue(misc.Fib.a)
+misc.Fib.b < misc.Fib.c
+misc.Fib.b > Contract.OldValue(misc.Fib.a)
+misc.Fib.c > Contract.OldValue(misc.Fib.a)
+misc.Fib.a - misc.Fib.b + Contract.OldValue(misc.Fib.a) == 0
+2 * misc.Fib.a - misc.Fib.c + Contract.OldValue(misc.Fib.a) == 0
+2 * misc.Fib.b - misc.Fib.c - Contract.OldValue(misc.Fib.a) == 0
+===========================================================================
+misc.Fib.main(java.lang.String[]):::ENTER
+misc.Fib.a == misc.Fib.b
+misc.Fib.a == misc.Fib.c
+misc.Fib.a == args.Count()
+args != null
+args.GetType() == typeof(java.lang.String[])
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+===========================================================================
+misc.Fib.main(java.lang.String[]):::EXIT
+Contract.ForAll(0, args.Count(), i => args[i].Equals(Contract.OldValue(args)[i]))
+misc.Fib.a == 6765
+misc.Fib.b == 10946
+misc.Fib.c == 17711
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
