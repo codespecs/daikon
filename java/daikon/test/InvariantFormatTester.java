@@ -108,6 +108,7 @@ public class InvariantFormatTester extends TestCase
     result.add("jml");
     result.add("dbc");
     result.add("simplify");
+    result.add("csharpcontract");
 
     return result;
   }

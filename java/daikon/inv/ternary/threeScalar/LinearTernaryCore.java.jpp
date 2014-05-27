@@ -1174,7 +1174,8 @@ public final class CLASSNAME
 
 
     if ((format == OutputFormat.DAIKON)
-        || (format == OutputFormat.ESCJAVA))
+        || (format == OutputFormat.ESCJAVA)
+        || (format == OutputFormat.CSHARPCONTRACT))
       {
         String eq = " == ";
         return formatTerm(a, vix, true)

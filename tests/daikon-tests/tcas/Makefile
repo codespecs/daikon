@@ -1,6 +1,7 @@
 TRACE_SOURCE:=stored
 LANGUAGE:=c
 NO_MERGE=1
+NO_CSHARP=1
 
 include ../../Makefile.common
 

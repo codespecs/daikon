@@ -5,6 +5,7 @@
 TRACE_SOURCE:=stored
 OUTPUT_TYPE = daikon
 NO_MERGE=1
+NO_CSHARP=1
 
 include ../../Makefile.common
 

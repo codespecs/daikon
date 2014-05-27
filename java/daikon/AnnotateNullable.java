@@ -370,7 +370,7 @@ public class AnnotateNullable {
       // Skip anyone with a parent in the hierarchy.  We are only
       // interested in them at the top (e.g., we don't want to see
       // object fields in each method).
-      if (vi.parent_ppt != null)
+      if (!vi.parents.isEmpty())
         continue;
 
       // Skip 'this' variables (we know they are non-null).

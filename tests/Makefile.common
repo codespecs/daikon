@@ -355,7 +355,7 @@ clean-output:
 	@echo
 	@echo "### clean-output (${PROJECT_FILE})"
 	@echo
-	rm -f *.bak *.diff ${PROJECT_FILE}.{inv{,.gz},decls-DynComp,txt{,-merge}-{chicory,daikon,simplify,esc,jml,repair,cset,daikon-suppress,daikon-suppress-diffed,jaif,trace}{,-failed},esc,context,stats,linecov,spinfo-static}
+	rm -f *.bak *.diff ${PROJECT_FILE}.{inv{,.gz},decls-DynComp,txt{,-merge}-{chicory,daikon,simplify,csharpcontract,esc,jml,repair,cset,daikon-suppress,daikon-suppress-diffed,jaif,trace}{,-failed},esc,context,stats,linecov,spinfo-static}
 	rm -rf merged *txt-chicory.dtrace
 	rm -f *.bak *.diff ${PROJECT_FILE}-suppress.inv.gz ${PROJECT_FILE}-jaif.inv.gz
 ifeq (csv,${STORED_TRACE_FORMAT})
@@ -868,6 +868,20 @@ txt-simplify: ${PROJECT_FILE}.txt-simplify
 	  --config_option daikon.inv.unary.scalar.OneOfScalar.omit_hashcode_values_Simplify=true \
 	  ${PRINT_INVARIANTS_OPTIONS} $< > $@ 2>&1) || (mv $@ $@-failed && false)
 
+ifndef NO_CSHARP
+PROJECT_HELP:=${PROJECT_HELP} ;\
+  echo "  make txt-csharpcontract   : creates csharp-style output from the inv file"
+txt-csharpcontract: ${PROJECT_FILE}.txt-csharpcontract
+%.txt-csharpcontract: ${INV_FILE} ${PRINT_INVARIANTS_CLASS}
+	@echo
+	@echo "### txt-csharpcontract (${PROJECT_FILE})"
+	@echo
+	-touch ${PROJECT_FILE}.txt-csharpcontract.goal
+	-rm -f $@-failed
+	(${PRINT_INVARIANTS} --format csharpcontract \
+	  ${PRINT_INVARIANTS_OPTIONS} $< > $@ 2>&1) || (mv $@ $@-failed && false)
+endif
+      
 ifndef NO_JML
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-jml        : creates jml-style output from the inv file"
@@ -895,15 +909,15 @@ endif
 
 ifdef ESC_ON
 PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make txt-all        : creates daikon, esc, jml, simplify, merge-esc, merge-jml outputs from the inv-file"
+  echo "  make txt-all        : creates daikon, esc, jml, simplify, csharpcontract, merge-esc, merge-jml outputs from the inv-file"
 # Use this line when all merge goals are in place.
 # txt-all: ${PROJECT_FILE}.txt-daikon ${PROJECT_FILE}.txt-esc ${PROJECT_FILE}.txt-merge ${PROJECT_FILE}.txt-simplify
-txt-all: ${PROJECT_FILE}.txt-daikon ${PROJECT_FILE}.txt-esc ${PROJECT_FILE}.txt-jml ${PROJECT_FILE}.txt-simplify;
+txt-all: ${PROJECT_FILE}.txt-daikon ${PROJECT_FILE}.txt-esc ${PROJECT_FILE}.txt-jml ${PROJECT_FILE}.txt-simplify ${PROJECT_FILE}.txt-csharpcontract;
 else
 ifndef NO_JML
 PROJECT_HELP:=${PROJECT_HELP} ;\
-  echo "  make txt-all        : creates daikon, jml, simplify, merge-jml  outputs from the inv-file"
-txt-all: ${PROJECT_FILE}.txt-daikon ${PROJECT_FILE}.txt-jml ${PROJECT_FILE}.txt-simplify merge;
+  echo "  make txt-all        : creates daikon, jml, simplify, csharpcontract, merge-jml  outputs from the inv-file"
+txt-all: ${PROJECT_FILE}.txt-daikon ${PROJECT_FILE}.txt-jml ${PROJECT_FILE}.txt-simplify ${PROJECT_FILE}.txt-csharpcontract merge;
 else
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-all        : creates daikon, simplify  outputs from the inv-file"
@@ -919,9 +933,15 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-diff       : makes .diff files (from diff -u $$.goal)"
 ifdef ESC_ON
 ifndef NO_MERGE
+ifndef NO_CSHARP
+txt-diff: txt-daikon-diff txt-chicory-diff txt-esc-diff \
+		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-chicory-diff \
+		  dyncomp-diff txt-simplify-diff txt-csharpcontract-diff txt-jaif-diff
+else
 txt-diff: txt-daikon-diff txt-chicory-diff txt-esc-diff \
 		  txt-jml-diff txt-merge-diff spinfo-static-diff txt-chicory-diff \
 		  dyncomp-diff txt-simplify-diff txt-jaif-diff
+endif
 
 # txt-daikon-suppress-diff;
 # txt-diff: txt-daikon-diff txt-esc-diff
@@ -931,7 +951,11 @@ txt-merge-diff: merge ${PROJECT_FILE}.txt-merge-esc.diff ${PROJECT_FILE}.txt-mer
 else
 txt-merge-diff:
 	@echo 'Nothing to do for merge'
+ifndef NO_CSHARP
+txt-diff: txt-daikon-diff txt-jml-diff spinfo-static-diff txt-esc-diff txt-csharpcontract-diff txt-chicory-diff dyncomp-diff
+else
 txt-diff: txt-daikon-diff txt-jml-diff spinfo-static-diff txt-esc-diff txt-chicory-diff dyncomp-diff
+endif
 # txt-daikon-suppress-diff;
 endif # ifndef NO_MERGE
 else
@@ -941,7 +965,11 @@ txt-merge-diff:
 txt-diff: txt-daikon-diff;
 else
 ifndef NO_MERGE
+ifndef NO_CSHARP
+txt-diff: txt-daikon-diff txt-jml-diff txt-merge-diff txt-chicory-diff txt-csharpcontract-diff dyncomp-diff
+else
 txt-diff: txt-daikon-diff txt-jml-diff txt-merge-diff txt-chicory-diff dyncomp-diff
+endif
 # txt-daikon-suppress-diff;
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-merge-diff : makes .diff files for merge JML target (from diff -u $$.goal)"
@@ -949,7 +977,11 @@ txt-merge-diff: merge ${PROJECT_FILE}.txt-merge-jml.diff;
 else
 txt-merge-diff:
 	@echo 'Nothing to do for merge'
+ifndef NO_CSHARP
+txt-diff: txt-daikon-diff txt-jml-diff txt-csharpcontract-diff
+else
 txt-diff: txt-daikon-diff txt-jml-diff
+endif
 # txt-daikon-suppress-diff;
 endif # ifndef NO_MERGE
 endif # ifdef NO_JML
@@ -971,6 +1003,9 @@ txt-jml-diff: ${PROJECT_FILE}.txt-jml.diff;
 endif
 spinfo-static-diff: ${PROJECT_FILE}.spinfo-static.diff
 txt-simplify-diff: ${PROJECT_FILE}.txt-simplify.diff;
+ifndef NO_CSHARP
+txt-csharpcontract-diff: ${PROJECT_FILE}.txt-csharpcontract.diff;
+endif
 
 txt-jaif-diff: $(PROJECT_FILE).txt-jaif.diff
 
@@ -1031,12 +1066,16 @@ ifndef NO_JML
 	rm -f ${PROJECT_FILE}.txt-jml.diff
 endif
 ifdef ESC_ON
-	cp -pf ${PROJECT_FILE}.spinfo-static ${PROJECT_FILE}.spinfo-static.goal
+	if test -e ${PROJECT_FILE}.spinfo-static ; then \
+		cp -pf ${PROJECT_FILE}.spinfo-static ${PROJECT_FILE}.spinfo-static.goal; fi
 	rm -f ${PROJECT_FILE}.spinfo-static.diff
 endif
 	if test -e ${PROJECT_FILE}.txt-simplify ; then \
 	  cp -pf ${PROJECT_FILE}.txt-simplify ${PROJECT_FILE}.txt-simplify.goal; fi
 	rm -f ${PROJECT_FILE}.txt-simplify.diff;
+	if test -e ${PROJECT_FILE}.txt-csharpcontract ; then \
+	  cp -pf ${PROJECT_FILE}.txt-csharpcontract ${PROJECT_FILE}.txt-csharpcontract.goal; fi
+	rm -f ${PROJECT_FILE}.txt-csharpcontract.diff;
 
 update-merge-goal update-merge-goals:
 ifndef NO_MERGE

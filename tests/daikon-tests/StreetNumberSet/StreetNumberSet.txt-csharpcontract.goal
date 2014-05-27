@@ -1,0 +1,259 @@
+===========================================================================
+MapQuick1.StreetNumberSet:::OBJECT
+this.begins.Count() == this.ends.Count()
+this.begins != null
+this.begins.Distinct().Count() == this.begins.Count()
+Contract.ForAll(this.begins, x => x >= 0)
+this.ends != null
+this.ends.Distinct().Count() == this.ends.Count()
+Contract.ForAll(this.ends, x => x >= 0)
+this.begins.Count() >= 1
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i] <= this.ends[i])
+===========================================================================
+MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::ENTER
+numbers != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: numbers.toString is printable
+===========================================================================
+MapQuick1.StreetNumberSet.StreetNumberSet(java.lang.String):::EXIT
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: numbers.toString is printable
+numbers.Equals(Contract.OldValue(numbers))
+===========================================================================
+MapQuick1.StreetNumberSet.checkRep():::ENTER
+===========================================================================
+MapQuick1.StreetNumberSet.checkRep():::EXIT
+this.begins == Contract.OldValue(this.begins)
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i].Equals(Contract.OldValue(this.begins)[i]))
+this.ends == Contract.OldValue(this.ends)
+Contract.ForAll(0, this.ends.Count(), i => this.ends[i].Equals(Contract.OldValue(this.ends)[i]))
+this.begins.Count() == Contract.OldValue(this.ends).Count()
+===========================================================================
+MapQuick1.StreetNumberSet.contains(int):::ENTER
+n >= 0
+===========================================================================
+MapQuick1.StreetNumberSet.contains(int):::EXIT126
+Contract.Result<boolean>() == true
+===========================================================================
+MapQuick1.StreetNumberSet.contains(int):::EXIT127
+Contract.Result<boolean>() == false
+===========================================================================
+MapQuick1.StreetNumberSet.contains(int):::EXIT
+this.begins == Contract.OldValue(this.begins)
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i].Equals(Contract.OldValue(this.begins)[i]))
+this.ends == Contract.OldValue(this.ends)
+Contract.ForAll(0, this.ends.Count(), i => this.ends[i].Equals(Contract.OldValue(this.ends)[i]))
+this.begins.Count() == Contract.OldValue(this.ends).Count()
+===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::ENTER
+other.begins.Count() == other.ends.Count()
+other.begins != null
+other.begins.Distinct().Count() == other.begins.Count()
+Contract.ForAll(other.begins, x => x >= 0)
+other.ends != null
+other.ends.Distinct().Count() == other.ends.Count()
+Contract.ForAll(other.ends, x => x >= 0)
+other.begins.Count() >= 1
+Contract.ForAll(0, other.begins.Count(), i => other.begins[i] <= other.ends[i])
+===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT271
+Contract.Result<boolean>() == false
+Contract.OldValue(other) == null
+===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT272
+this.begins == other.begins
+this.begins == Contract.OldValue(other.begins)
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i].Equals(other.begins[i]))
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i].Equals(Contract.OldValue(other.begins)[i]))
+this.ends == other.ends
+this.ends == Contract.OldValue(other.ends)
+Contract.ForAll(0, this.ends.Count(), i => this.ends[i].Equals(other.ends[i]))
+Contract.ForAll(0, this.ends.Count(), i => this.ends[i].Equals(Contract.OldValue(other.ends)[i]))
+Contract.OldValue(this) == Contract.OldValue(other)
+this.begins.Count() == other.ends.Count()
+this.begins.Count() == Contract.OldValue(other.ends).Count()
+Contract.Result<boolean>() == true
+===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT281
+Contract.Result<boolean>() == false
+Contract.OldValue(other) != null
+===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT282
+Contract.Result<boolean>() == false
+Contract.OldValue(other) != null
+===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT286
+Contract.Result<boolean>() == false
+Contract.OldValue(other) != null
+this.begins.Count() != other.begins.Count()
+this.begins.Count() != other.begins.Count()-1
+this.begins.Count()-1 != other.begins.Count()
+this.begins.Count()-1 != other.begins.Count()-1
+===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT290
+Contract.Result<boolean>() == true
+===========================================================================
+MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet):::EXIT
+this.begins == Contract.OldValue(this.begins)
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i].Equals(Contract.OldValue(this.begins)[i]))
+this.ends == Contract.OldValue(this.ends)
+Contract.ForAll(0, this.ends.Count(), i => this.ends[i].Equals(Contract.OldValue(this.ends)[i]))
+other.begins == Contract.OldValue(other.begins)
+Contract.ForAll(0, other.begins.Count(), i => other.begins[i].Equals(Contract.OldValue(other.begins)[i]))
+other.ends == Contract.OldValue(other.ends)
+Contract.ForAll(0, other.ends.Count(), i => other.ends[i].Equals(Contract.OldValue(other.ends)[i]))
+this.begins.Count() == Contract.OldValue(this.ends).Count()
+other.begins.Count() == other.ends.Count()
+other.begins.Count() == Contract.OldValue(other.ends).Count()
+(Contract.Result<boolean>() == true).Implies(() => Contract.OldValue(other) != null)
+other.begins != null
+other.begins.Distinct().Count() == other.begins.Count()
+Contract.ForAll(other.begins, x => x >= 0)
+other.ends != null
+other.ends.Distinct().Count() == other.ends.Count()
+Contract.ForAll(other.ends, x => x >= 0)
+other.begins.Count() >= 1
+Contract.ForAll(0, other.begins.Count(), i => other.begins[i] <= other.ends[i])
+===========================================================================
+MapQuick1.StreetNumberSet.equals(java.lang.Object):::ENTER
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: o.getClass() is printable
+===========================================================================
+MapQuick1.StreetNumberSet.equals(java.lang.Object):::EXIT
+this.begins == Contract.OldValue(this.begins)
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i].Equals(Contract.OldValue(this.begins)[i]))
+this.ends == Contract.OldValue(this.ends)
+Contract.ForAll(0, this.ends.Count(), i => this.ends[i].Equals(Contract.OldValue(this.ends)[i]))
+this.begins.Count() == Contract.OldValue(this.ends).Count()
+(Contract.Result<boolean>() == true).Implies(() => Contract.OldValue(o) != null)
+(Contract.Result<boolean>() == true).Implies(() => Contract.OldValue(o.GetType()) == typeof(MapQuick1.StreetNumberSet))
+===========================================================================
+MapQuick1.StreetNumberSet.hashCode():::ENTER
+Contract.ForAll(this.begins, x => x.OneOf(1, 3, 7))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(this.ends, x => x.OneOf(1, 5, 7))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.begins.Count().OneOf(1, 3)
+Contract.Exists(this.begins, x => x.Equals(this.begins.Count()))
+===========================================================================
+MapQuick1.StreetNumberSet.hashCode():::EXIT
+this.begins == Contract.OldValue(this.begins)
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i].Equals(Contract.OldValue(this.begins)[i]))
+this.ends == Contract.OldValue(this.ends)
+Contract.ForAll(0, this.ends.Count(), i => this.ends[i].Equals(Contract.OldValue(this.ends)[i]))
+this.begins.Count() == Contract.OldValue(this.ends).Count()
+Contract.ForAll(this.begins, x => x.OneOf(1, 3, 7))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(this.ends, x => x.OneOf(1, 5, 7))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.Result<int>() == 122
+this.begins.Count().OneOf(1, 3)
+Contract.Exists(this.begins, x => x.Equals(this.begins.Count()))
+===========================================================================
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::ENTER
+other.begins.Count() == other.ends.Count()
+other != null
+other.begins != null
+other.begins.Distinct().Count() == other.begins.Count()
+Contract.ForAll(other.begins, x => x >= 0)
+other.ends != null
+other.ends.Distinct().Count() == other.ends.Count()
+Contract.ForAll(other.ends, x => x >= 0)
+other.begins.Count() >= 1
+Contract.ForAll(0, other.begins.Count(), i => other.begins[i] <= other.ends[i])
+===========================================================================
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT260
+Contract.Result<boolean>() == true
+===========================================================================
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT261
+Contract.Result<boolean>() == false
+===========================================================================
+MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet):::EXIT
+this.begins == Contract.OldValue(this.begins)
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i].Equals(Contract.OldValue(this.begins)[i]))
+this.ends == Contract.OldValue(this.ends)
+Contract.ForAll(0, this.ends.Count(), i => this.ends[i].Equals(Contract.OldValue(this.ends)[i]))
+other.begins == Contract.OldValue(other.begins)
+Contract.ForAll(0, other.begins.Count(), i => other.begins[i].Equals(Contract.OldValue(other.begins)[i]))
+other.ends == Contract.OldValue(other.ends)
+Contract.ForAll(0, other.ends.Count(), i => other.ends[i].Equals(Contract.OldValue(other.ends)[i]))
+this.begins.Count() == Contract.OldValue(this.ends).Count()
+other.begins.Count() == other.ends.Count()
+other.begins.Count() == Contract.OldValue(other.ends).Count()
+other.begins != null
+other.begins.Distinct().Count() == other.begins.Count()
+Contract.ForAll(other.begins, x => x >= 0)
+other.ends != null
+other.ends.Distinct().Count() == other.ends.Count()
+Contract.ForAll(other.ends, x => x >= 0)
+other.begins.Count() >= 1
+Contract.ForAll(0, other.begins.Count(), i => other.begins[i] <= other.ends[i])
+===========================================================================
+MapQuick1.StreetNumberSet.isEmpty():::ENTER
+===========================================================================
+MapQuick1.StreetNumberSet.isEmpty():::EXIT
+this.begins == Contract.OldValue(this.begins)
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i].Equals(Contract.OldValue(this.begins)[i]))
+this.ends == Contract.OldValue(this.ends)
+Contract.ForAll(0, this.ends.Count(), i => this.ends[i].Equals(Contract.OldValue(this.ends)[i]))
+this.begins.Count() == Contract.OldValue(this.ends).Count()
+Contract.Result<boolean>() == false
+===========================================================================
+MapQuick1.StreetNumberSet.max():::ENTER
+===========================================================================
+MapQuick1.StreetNumberSet.max():::EXIT
+this.begins == Contract.OldValue(this.begins)
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i].Equals(Contract.OldValue(this.begins)[i]))
+this.ends == Contract.OldValue(this.ends)
+Contract.ForAll(0, this.ends.Count(), i => this.ends[i].Equals(Contract.OldValue(this.ends)[i]))
+this.begins.Count() == Contract.OldValue(this.ends).Count()
+Contract.Result<int>() >= 0
+Contract.ForAll(this.begins, x => x <= Contract.Result<int>())
+Contract.Exists(this.ends, x => x.Equals(Contract.Result<int>()))
+Contract.ForAll(this.ends, x => x <= Contract.Result<int>())
+(!(Contract.Result<int>() == 0)) || (this.begins.Count()-1 == 0)
+Contract.Result<int>() >= this.begins.Count()-1
+===========================================================================
+MapQuick1.StreetNumberSet.min():::ENTER
+===========================================================================
+MapQuick1.StreetNumberSet.min():::EXIT
+this.begins == Contract.OldValue(this.begins)
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i].Equals(Contract.OldValue(this.begins)[i]))
+this.ends == Contract.OldValue(this.ends)
+Contract.ForAll(0, this.ends.Count(), i => this.ends[i].Equals(Contract.OldValue(this.ends)[i]))
+this.begins.Count() == Contract.OldValue(this.ends).Count()
+Contract.Result<int>() >= 0
+Contract.Exists(this.begins, x => x.Equals(Contract.Result<int>()))
+Contract.ForAll(this.begins, x => x >= Contract.Result<int>())
+Contract.ForAll(this.ends, x => x >= Contract.Result<int>())
+===========================================================================
+MapQuick1.StreetNumberSet.orderStatistic(int):::ENTER
+n >= 0
+n != this.begins.Count()
+===========================================================================
+MapQuick1.StreetNumberSet.orderStatistic(int):::EXIT
+this.begins == Contract.OldValue(this.begins)
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i].Equals(Contract.OldValue(this.begins)[i]))
+this.ends == Contract.OldValue(this.ends)
+Contract.ForAll(0, this.ends.Count(), i => this.ends[i].Equals(Contract.OldValue(this.ends)[i]))
+this.begins.Count() == Contract.OldValue(this.ends).Count()
+Contract.Result<int>() >= 0
+(!(Contract.OldValue(n) == 0)) || (Contract.Result<int>() == 0)
+Contract.Result<int>() <= Contract.OldValue(n)
+Contract.OldValue(n) != this.begins.Count()
+===========================================================================
+MapQuick1.StreetNumberSet.parityOf(int):::ENTER
+i >= 0
+===========================================================================
+MapQuick1.StreetNumberSet.parityOf(int):::EXIT
+Contract.Result<int>().OneOf(0, 1)
+(!(Contract.OldValue(i) == 0)) || (Contract.Result<int>() == 0)
+Contract.Result<int>() <= Contract.OldValue(i)
+Contract.OldValue(i) == (Contract.Result<int>() | Contract.OldValue(i))
+===========================================================================
+MapQuick1.StreetNumberSet.size():::ENTER
+===========================================================================
+MapQuick1.StreetNumberSet.size():::EXIT
+this.begins == Contract.OldValue(this.begins)
+Contract.ForAll(0, this.begins.Count(), i => this.begins[i].Equals(Contract.OldValue(this.begins)[i]))
+this.ends == Contract.OldValue(this.ends)
+Contract.ForAll(0, this.ends.Count(), i => this.ends[i].Equals(Contract.OldValue(this.ends)[i]))
+this.begins.Count() == Contract.OldValue(this.ends).Count()
+Contract.Result<int>() >= this.begins.Count()

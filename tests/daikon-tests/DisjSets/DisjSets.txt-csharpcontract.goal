@@ -1,0 +1,135 @@
+===========================================================================
+DataStructures.DisjSets:::OBJECT
+this.s != null
+Contract.ForAll(this.s, x => x >= -1)
+Contract.ForAll(0, this.s.Count(), i => this.s[i] != i)
+Contract.ForAll(this.s, x => x <= this.s.Count()-1)
+===========================================================================
+DataStructures.DisjSets.DisjSets(int):::ENTER
+numElements >= 1
+===========================================================================
+DataStructures.DisjSets.DisjSets(int):::EXIT
+Contract.OldValue(numElements) == this.s.Count()
+Contract.ForAll(this.s, x => x == -1)
+Contract.ForAll(0, this.s.Count(), i => this.s[i] < i)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(this.s, x => x == this.s[Contract.OldValue(numElements)-1])
+this.s.Count()-1 > this.s[Contract.OldValue(numElements)-1]
+===========================================================================
+DataStructures.DisjSets.find(int):::ENTER
+x >= 0
+(!(this.s.Count()-1 == 0)) || (x == 0)
+x <= this.s.Count()-1
+x != this.s[x]
+this.s.Count()-1 >= this.s[x]
+===========================================================================
+DataStructures.DisjSets.find(int):::EXIT68
+Contract.Result<int>() == Contract.OldValue(x)
+===========================================================================
+DataStructures.DisjSets.find(int):::EXIT70
+this.s[Contract.OldValue(x)] >= 0
+Contract.Exists(this.s, x => x.Equals(Contract.Result<int>()))
+Contract.Result<int>() != Contract.OldValue(x)
+this.s[Contract.Result<int>()] < this.s[Contract.OldValue(x)]
+===========================================================================
+DataStructures.DisjSets.find(int):::EXIT
+this.s == Contract.OldValue(this.s)
+Contract.ForAll(0, this.s.Count(), i => this.s[i].Equals(Contract.OldValue(this.s)[i]))
+(this.s[Contract.OldValue(x)] == -1).Implies(() => Contract.Result<int>() == Contract.OldValue(x))
+(this.s[Contract.OldValue(x)] == -1).Implies(() => Contract.OldValue(x) > this.s[Contract.OldValue(x)])
+(this.s[Contract.OldValue(x)] == -1).Implies(() => Contract.Result<int>() > this.s[Contract.OldValue(x)])
+(this.s[Contract.OldValue(x)] == -1).Implies(() => this.s.Count()-1 > this.s[Contract.OldValue(x)])
+(this.s[Contract.OldValue(x)] == -1).Implies(() => Contract.ForAll(this.s, x => x >= this.s[Contract.OldValue(x)]))
+(this.s[Contract.OldValue(x)] == -1).Implies(() => this.s.Slice(0, orig(x)).Contains(-1))
+(this.s[Contract.OldValue(x)] == -1).Implies(() => this.s.Slice(orig(x), this.s.Count()-1).Contains(-1))
+(this.s[Contract.OldValue(x)] >= 0).Implies(() => Contract.Result<int>() != Contract.OldValue(x))
+(this.s[Contract.OldValue(x)] >= 0).Implies(() => this.s[Contract.Result<int>()] < this.s[Contract.OldValue(x)])
+(this.s[Contract.OldValue(x)] >= 0).Implies(() => Contract.Exists(this.s, x => x.Equals(Contract.Result<int>())))
+Contract.Result<int>() >= 0
+this.s[Contract.Result<int>()] == -1
+this.s.Slice(return, this.s.Count()-1).Contains(-1)
+this.s.Slice(0, return).Contains(-1)
+Contract.ForAll(this.s, x => x >= this.s[Contract.Result<int>()])
+(!(this.s.Count()-1 == 0)) || (Contract.Result<int>() == 0)
+Contract.Result<int>() <= this.s.Count()-1
+Contract.Result<int>() > this.s[Contract.Result<int>()]
+(!(this.s.Count()-1 == 0)) || (Contract.OldValue(x) == 0)
+Contract.OldValue(x) <= this.s.Count()-1
+Contract.OldValue(x) > this.s[Contract.Result<int>()]
+Contract.OldValue(x) != this.s[Contract.OldValue(x)]
+this.s.Count()-1 > this.s[Contract.Result<int>()]
+this.s.Count()-1 >= this.s[Contract.OldValue(x)]
+this.s[Contract.Result<int>()] <= this.s[Contract.OldValue(x)]
+===========================================================================
+DataStructures.DisjSets.unionCareful(int, int):::ENTER
+set1 >= 0
+set2 >= 0
+(!(this.s.Count()-1 == 0)) || (set1 == 0)
+set1 <= this.s.Count()-1
+set1 != this.s[set1]
+(!(this.s.Count()-1 == 0)) || (set2 == 0)
+set2 <= this.s.Count()-1
+set2 != this.s[set2]
+this.s.Count()-1 >= this.s[set1]
+this.s.Count()-1 >= this.s[set2]
+===========================================================================
+DataStructures.DisjSets.unionCareful(int, int):::EXIT
+this.s == Contract.OldValue(this.s)
+this.s.Count() == Contract.OldValue(this.s).Count()
+this.s[Contract.OldValue(set1)] == Contract.OldValue(this.s[set1])
+this.s[Contract.OldValue(set1)] == Contract.OldValue(this.s[set1])
+Contract.ForAll(0, this.s.Count(), i => this.s[i] >= Contract.OldValue(this.s)[i])
+Contract.ForAll(0, Contract.OldValue(this.s).Count(), i => Contract.OldValue(this.s) [i] == Contract.OldValue(this.s)[i] | this.s[i])
+Contract.ForAll(Contract.OldValue(this.s), i => this.s.Contains(i))
+Contract.ForAll(Contract.OldValue(this.s), x => x <= this.s.Count()-1)
+(!(this.s.Count()-1 == 0)) || (Contract.OldValue(set1) == 0)
+Contract.OldValue(set1) <= this.s.Count()-1
+Contract.OldValue(set1) != this.s[Contract.OldValue(set1)]
+(!(this.s.Count()-1 == 0)) || (Contract.OldValue(set2) == 0)
+Contract.OldValue(set2) <= this.s.Count()-1
+Contract.OldValue(set2) != this.s[Contract.OldValue(set2)]
+this.s.Count()-1 >= this.s[Contract.OldValue(set1)]
+this.s.Count()-1 >= this.s[Contract.OldValue(set2)]
+this.s.Count()-1 >= Contract.OldValue(this.s[set2])
+(!(Contract.OldValue(this.s[set2]) == 0)) || (this.s[Contract.OldValue(set2)] == 0)
+===========================================================================
+DataStructures.DisjSets.unionDisjoint(int, int):::ENTER
+this.s[root1] == this.s[root2]
+root1 >= 0
+root2 >= 0
+this.s[root1] == -1
+this.s.Slice(root1, this.s.Count()-1).Contains(-1)
+this.s.Slice(0, root1).Contains(-1)
+this.s.Slice(root2, this.s.Count()-1).Contains(-1)
+this.s.Slice(0, root2).Contains(-1)
+Contract.ForAll(this.s, x => x >= this.s[root1])
+root1 != root2
+root1 <= this.s.Count()-1
+root1 > this.s[root1]
+root2 <= this.s.Count()-1
+root2 > this.s[root1]
+this.s.Count()-1 > this.s[root1]
+===========================================================================
+DataStructures.DisjSets.unionDisjoint(int, int):::EXIT
+this.s == Contract.OldValue(this.s)
+this.s.LexGT(Contract.OldValue(this.s))
+Contract.OldValue(root1) == this.s[Contract.OldValue(root2)]
+this.s.Count() == Contract.OldValue(this.s).Count()
+this.s[Contract.OldValue(root1)] == Contract.OldValue(this.s[root1])
+this.s[Contract.OldValue(root1)] == Contract.OldValue(this.s[root2])
+this.s[Contract.OldValue(root1)] == Contract.OldValue(this.s[root1])
+this.s[Contract.OldValue(root1)] == Contract.OldValue(this.s[root2])
+this.s[Contract.OldValue(root1)] == -1
+this.s.Slice(orig(root1), this.s.Count()-1).Contains(-1)
+this.s.Slice(0, orig(root1)).Contains(-1)
+Contract.ForAll(0, this.s.Count(), i => this.s[i] >= Contract.OldValue(this.s)[i])
+Contract.ForAll(0, Contract.OldValue(this.s).Count(), i => Contract.OldValue(this.s) [i] == Contract.OldValue(this.s)[i] | this.s[i])
+Contract.ForAll(Contract.OldValue(this.s), i => this.s.Contains(i))
+Contract.ForAll(this.s, x => x >= this.s[Contract.OldValue(root1)])
+Contract.ForAll(Contract.OldValue(this.s), x => x <= this.s.Count()-1)
+Contract.ForAll(Contract.OldValue(this.s), x => x >= this.s[Contract.OldValue(root1)])
+Contract.OldValue(root1) <= this.s.Count()-1
+Contract.OldValue(root1) > this.s[Contract.OldValue(root1)]
+Contract.OldValue(root2) <= this.s.Count()-1
+Contract.OldValue(root2) > this.s[Contract.OldValue(root1)]
+this.s.Count()-1 > this.s[Contract.OldValue(root1)]

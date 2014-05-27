@@ -1,0 +1,211 @@
+===========================================================================
+misc.StaticInteresting:::CLASS
+misc.StaticInteresting.rand != null
+misc.StaticInteresting.rand != null
+===========================================================================
+misc.StaticInteresting:::OBJECT
+this.x == this.inner.Count()-1
+this != null
+this.outer != null
+this.outer != null
+this.outer.Distinct().Count() == this.outer.Count()
+this.inner != null
+this.inner != null
+this.y == 25
+this.outer.Count() == 100
+this.inner.Count() == 1
+this.outer[this.y] != 0
+this.outer[this.y-1] != 0
+this.outer[this.x] != 0
+this.inner[this.x] != 0
+this.inner.IsSubsequence(this.outer)
+Contract.Exists(this.outer, x => x.Equals(this.inner[this.x]))
+Contract.ForAll(this.inner, x => x == this.inner[this.x])
+this.y != this.outer[this.y]
+this.y != this.outer[this.y-1]
+this.y != this.outer[this.x]
+this.y != this.inner[this.x]
+this.x != this.outer[this.y]
+this.x != this.outer[this.y-1]
+this.x != this.outer[this.x]
+this.x != this.inner[this.x]
+this.outer.Count() != this.outer[this.y]
+this.outer.Count() != this.outer[this.y-1]
+this.outer.Count() != this.outer[this.x]
+this.outer.Count() != this.inner[this.x]
+this.outer.Count()-1 != this.outer[this.y]
+this.outer.Count()-1 != this.outer[this.y-1]
+this.outer.Count()-1 != this.outer[this.x]
+this.outer.Count()-1 != this.inner[this.x]
+this.inner.Count() != this.outer[this.y]
+this.inner.Count() != this.outer[this.y-1]
+this.inner.Count() != this.outer[this.x]
+this.inner.Count() != this.inner[this.x]
+this.outer[this.y] != this.outer[this.y-1]
+this.outer[this.y] != this.outer[this.x]
+this.outer[this.y-1] != this.outer[this.x]
+this.outer[this.x] != this.inner[this.x]
+===========================================================================
+misc.StaticInteresting2:::CLASS
+misc.StaticInteresting2.rand != null
+misc.StaticInteresting2.rand != null
+===========================================================================
+misc.StaticInteresting2:::OBJECT
+this.x == this.inner.Count()-1
+this.outer[this.y] == this.inner[this.x]
+this != null
+this.outer != null
+this.outer != null
+this.outer.Distinct().Count() == this.outer.Count()
+this.inner != null
+this.inner != null
+this.y == 25
+this.outer.Count() == 100
+this.inner.Count() == 1
+this.inner.IsSubsequence(this.outer)
+Contract.ForAll(this.inner, x => x == this.outer[this.y])
+this.y != this.outer[this.y]
+this.y != this.outer[this.y-1]
+this.y != this.outer[this.x]
+this.x != this.outer[this.y]
+this.x != this.outer[this.y-1]
+this.x != this.outer[this.x]
+this.outer.Count() != this.outer[this.y]
+this.outer.Count() != this.outer[this.y-1]
+this.outer.Count() != this.outer[this.x]
+this.outer.Count()-1 != this.outer[this.y]
+this.outer.Count()-1 != this.outer[this.y-1]
+this.outer.Count()-1 != this.outer[this.x]
+this.inner.Count() != this.outer[this.y]
+this.inner.Count() != this.outer[this.y-1]
+this.inner.Count() != this.outer[this.x]
+this.outer[this.y] != this.outer[this.y-1]
+this.outer[this.y] != this.outer[this.x]
+this.outer[this.y-1] != this.outer[this.x]
+===========================================================================
+misc.StaticInteresting2.StaticInteresting2():::EXIT
+Contract.ForAll(this.inner, x => x == -1339421172)
+this.outer[this.y] == -1339421172
+this.outer[this.y-1] == 134578847
+this.outer[this.x] == -1157793070
+===========================================================================
+misc.StaticInteresting2.main(java.lang.String[]):::ENTER
+args == null
+===========================================================================
+misc.StaticInteresting2.main(java.lang.String[]):::EXIT
+misc.StaticInteresting2.rand == Contract.OldValue(misc.StaticInteresting2.rand)
+===========================================================================
+misc.StaticInteresting2.work():::ENTER
+===========================================================================
+misc.StaticInteresting2.work():::EXIT
+this.outer == Contract.OldValue(this.outer)
+this.inner == Contract.OldValue(this.inner)
+this.y == Contract.OldValue(this.y)
+this.x == Contract.OldValue(this.x)
+this.x == Contract.OldValue(this.inner).Count()-1
+misc.StaticInteresting2.rand == Contract.OldValue(misc.StaticInteresting2.rand)
+this.outer.Count() == Contract.OldValue(this.outer).Count()
+this.inner.Count() == Contract.OldValue(this.inner).Count()
+this.outer[this.y] == this.outer[Contract.OldValue(this.y)]
+this.outer[this.y] == this.inner[Contract.OldValue(this.x)]
+this.outer[this.y-1] == this.outer[Contract.OldValue(this.y)-1]
+this.outer[this.x] == this.outer[Contract.OldValue(this.x)]
+Contract.OldValue(this.outer[this.y]) == Contract.OldValue(this.outer[this.y])
+Contract.OldValue(this.outer[this.y-1]) == Contract.OldValue(this.outer[this.y-1])
+Contract.OldValue(this.outer[this.x]) == Contract.OldValue(this.outer[this.x])
+Contract.OldValue(this.inner[this.x]) == Contract.OldValue(this.outer[this.y])
+this.y != Contract.OldValue(this.outer[this.y])
+this.y != Contract.OldValue(this.outer[this.y-1])
+this.y != Contract.OldValue(this.outer[this.x])
+this.x != Contract.OldValue(this.outer[this.y])
+this.x != Contract.OldValue(this.outer[this.y-1])
+this.x != Contract.OldValue(this.outer[this.x])
+this.outer.Count() != Contract.OldValue(this.outer[this.y])
+this.outer.Count() != Contract.OldValue(this.outer[this.y-1])
+this.outer.Count() != Contract.OldValue(this.outer[this.x])
+this.outer.Count()-1 != Contract.OldValue(this.outer[this.y])
+this.outer.Count()-1 != Contract.OldValue(this.outer[this.y-1])
+this.outer.Count()-1 != Contract.OldValue(this.outer[this.x])
+this.inner.Count() != Contract.OldValue(this.outer[this.y])
+this.inner.Count() != Contract.OldValue(this.outer[this.y-1])
+this.inner.Count() != Contract.OldValue(this.outer[this.x])
+this.outer[this.y] != Contract.OldValue(this.outer[this.y])
+this.outer[this.y] != Contract.OldValue(this.outer[this.y-1])
+this.outer[this.y] != Contract.OldValue(this.outer[this.x])
+this.outer[this.y-1] != Contract.OldValue(this.outer[this.y])
+this.outer[this.y-1] != Contract.OldValue(this.outer[this.y-1])
+this.outer[this.y-1] != Contract.OldValue(this.outer[this.x])
+this.outer[this.x] != Contract.OldValue(this.outer[this.y])
+this.outer[this.x] != Contract.OldValue(this.outer[this.y-1])
+this.outer[this.x] != Contract.OldValue(this.outer[this.x])
+===========================================================================
+misc.StaticInteresting.StaticInteresting():::EXIT
+this.outer[this.y] == this.inner[this.x]
+Contract.ForAll(this.inner, x => x == -1339421172)
+this.outer[this.y] == -1339421172
+this.outer[this.y-1] == 134578847
+this.outer[this.x] == -1157793070
+Contract.ForAll(this.inner, x => x == this.outer[this.y])
+===========================================================================
+misc.StaticInteresting.main(java.lang.String[]):::ENTER
+args != null
+args.GetType() == typeof(java.lang.String[])
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+===========================================================================
+misc.StaticInteresting.main(java.lang.String[]):::EXIT
+misc.StaticInteresting.rand == Contract.OldValue(misc.StaticInteresting.rand)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+===========================================================================
+misc.StaticInteresting.work():::ENTER
+===========================================================================
+misc.StaticInteresting.work():::EXIT
+this.outer == Contract.OldValue(this.outer)
+this.inner == Contract.OldValue(this.inner)
+this.y == Contract.OldValue(this.y)
+this.x == Contract.OldValue(this.x)
+this.x == Contract.OldValue(this.inner).Count()-1
+misc.StaticInteresting.rand == Contract.OldValue(misc.StaticInteresting.rand)
+this.outer.Count() == Contract.OldValue(this.outer).Count()
+this.inner.Count() == Contract.OldValue(this.inner).Count()
+this.outer[this.y] == this.outer[Contract.OldValue(this.y)]
+this.outer[this.y] == this.inner[this.x]
+this.outer[this.y] == this.inner[Contract.OldValue(this.x)]
+this.outer[this.y-1] == this.outer[Contract.OldValue(this.y)-1]
+this.outer[this.x] == this.outer[Contract.OldValue(this.x)]
+Contract.OldValue(this.outer[this.y]) == Contract.OldValue(this.outer[this.y])
+Contract.OldValue(this.outer[this.y-1]) == Contract.OldValue(this.outer[this.y-1])
+Contract.OldValue(this.outer[this.x]) == Contract.OldValue(this.outer[this.x])
+Contract.OldValue(this.inner[this.x]) == Contract.OldValue(this.inner[this.x])
+Contract.ForAll(this.inner, x => x == this.outer[this.y])
+this.y != Contract.OldValue(this.outer[this.y])
+this.y != Contract.OldValue(this.outer[this.y-1])
+this.y != Contract.OldValue(this.outer[this.x])
+this.y != Contract.OldValue(this.inner[this.x])
+this.x != Contract.OldValue(this.outer[this.y])
+this.x != Contract.OldValue(this.outer[this.y-1])
+this.x != Contract.OldValue(this.outer[this.x])
+this.x != Contract.OldValue(this.inner[this.x])
+this.outer.Count() != Contract.OldValue(this.outer[this.y])
+this.outer.Count() != Contract.OldValue(this.outer[this.y-1])
+this.outer.Count() != Contract.OldValue(this.outer[this.x])
+this.outer.Count() != Contract.OldValue(this.inner[this.x])
+this.outer.Count()-1 != Contract.OldValue(this.outer[this.y])
+this.outer.Count()-1 != Contract.OldValue(this.outer[this.y-1])
+this.outer.Count()-1 != Contract.OldValue(this.outer[this.x])
+this.outer.Count()-1 != Contract.OldValue(this.inner[this.x])
+this.inner.Count() != Contract.OldValue(this.outer[this.y])
+this.inner.Count() != Contract.OldValue(this.outer[this.y-1])
+this.inner.Count() != Contract.OldValue(this.outer[this.x])
+this.inner.Count() != Contract.OldValue(this.inner[this.x])
+this.outer[this.y] != Contract.OldValue(this.outer[this.y])
+this.outer[this.y] != Contract.OldValue(this.outer[this.y-1])
+this.outer[this.y] != Contract.OldValue(this.outer[this.x])
+this.outer[this.y] != Contract.OldValue(this.inner[this.x])
+this.outer[this.y-1] != Contract.OldValue(this.outer[this.y])
+this.outer[this.y-1] != Contract.OldValue(this.outer[this.y-1])
+this.outer[this.y-1] != Contract.OldValue(this.outer[this.x])
+this.outer[this.y-1] != Contract.OldValue(this.inner[this.x])
+this.outer[this.x] != Contract.OldValue(this.outer[this.y])
+this.outer[this.x] != Contract.OldValue(this.outer[this.y-1])
+this.outer[this.x] != Contract.OldValue(this.outer[this.x])
+this.outer[this.x] != Contract.OldValue(this.inner[this.x])

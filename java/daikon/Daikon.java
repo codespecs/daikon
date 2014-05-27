@@ -495,7 +495,8 @@ public final class Daikon {
       throw new Daikon.TerminationMessage("No .decls or .dtrace files specified");
     }
 
-    if (Daikon.dkconfig_undo_opts) {
+    // Never disable splitting for csharp format.
+    if (Daikon.dkconfig_undo_opts && Daikon.output_format != OutputFormat.CSHARPCONTRACT) {
       PptSplitter.dkconfig_disable_splitting = true;
     }
 
@@ -1564,6 +1565,21 @@ public final class Daikon {
         }
         origvar.postState = postvar;
         origvar.comparability = postvar.comparability.makeAlias();
+
+        // add parents for override relations
+        // exit_ppt.parents has not been loaded at this point
+        for (VarParent pi : postvar.parents){
+        	PptTopLevel parentppt = ppts.get(pi.parent_ppt);
+        	if (parentppt != null){
+        		if (!parentppt.is_object() && !parentppt.is_class()){
+        			VarInfo pvi = parentppt.find_var_by_name(pi.parent_variable == null ? postvar.name() : pi.parent_variable);
+        			if(pvi != null)
+        			{
+        				origvar.parents.add(new VarParent(pi.parent_ppt, pi.parent_relation_id, pvi.prestate_name()));
+        			}
+        		}
+        	}
+        }
 
         // Add to new_vis
         new_vis[new_vis_index] = origvar;

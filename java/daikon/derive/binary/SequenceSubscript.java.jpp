@@ -158,6 +158,20 @@ public final class SEQUENCESCALARSUBSCRIPT
                             sclvar().jml_name(), shift_str (index_shift));
   }
 
+  /** Returns the CSHARPCONTRACT name for sequence subscript **/
+  @SuppressWarnings("nullness")
+  public String csharp_name (String index) {
+    String[] split = seqvar().csharp_array_split();
+    if (seqvar().isPrestate())
+    {
+      return String.format ("Contract.OldValue(%s[%s]%s)", seqvar().enclosing_var.postState.csharp_name(), inside_csharp_name (sclvar(), true, index_shift), split[1]);
+    }
+    else
+    {
+      return String.format ("%s[%s%s]%s", split[0], sclvar().csharp_name(), shift_str (index_shift), split[1]);
+    }
+  }
+  
   /** Return the simplify name for sequence subscript **/
   @SuppressWarnings("nullness")
   /*@SideEffectFree*/ public String simplify_name() {

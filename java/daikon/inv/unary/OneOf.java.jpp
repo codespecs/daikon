@@ -571,6 +571,8 @@ public final class ONEOFSCALAR
     } else if (format == OutputFormat.ESCJAVA) {
       String result = format_esc();
       return result;
+    } else if (format == OutputFormat.CSHARPCONTRACT) {
+      return format_csharp_contract();
     } else {
       return format_unimplemented(format);
     }
@@ -894,6 +896,146 @@ public final class ONEOFSCALAR
 #if defined(IS_ELT)
     result = form[0] + "(" + result + ")" + form[2];
 #endif
+    return result;
+  }
+
+public String format_csharp_contract() {
+
+    String result;
+
+#if defined(IS_ELT)
+
+    #if defined(ELT)
+    String equalsString = " == ";
+    String endString = "";
+    #elif defined(ELTFLOAT)
+    String equalsString = " == ";
+    String endString = "";
+    #elif defined(ELTSTRING)
+    String equalsString = ".Equals(";
+    String endString = ")";
+    #endif
+
+	String[] split = var().csharp_array_split();
+    List<String> args_list = new ArrayList<String>();
+    // Construct the array that unary value will be compared against.
+    for (int i = 0; i < num_elts; i++) {
+    #if defined(ELTSTRING)
+      String arg = is_type() ? "typeof(" + elts[i] + ")" : TOSTRING(elts[i]);
+      args_list.add(arg);
+    #else
+      args_list.add(TOSTRING(elts[i]));
+    #endif
+    }
+    String args = UtilMDE.join(args_list, ", ");
+
+    if (num_elts == 0) { // If there are no elements, length must be 0.
+    	String varname = var().csharp_name();
+    	return varname + ".Count() == 0";
+    } else if (num_elts == 1) {
+    #if defined(BASE_INT)
+      if (is_boolean()) {
+        String bool_str = (elts[0] == 0) ? "false" : "true";
+        result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " == " + bool_str + ")";
+      } else if (is_hashcode()) {
+        String null_str = elts[0] == 0 ? " == null" : " != null";
+        result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + null_str + ")";
+      } else
+    #endif
+      {
+        result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + equalsString + args + endString + ")";  
+      } 
+    } else {
+      assert num_elts > 1;
+      result = "Contract.ForAll(" + split[0] + ", x => " + "x" + split[1] + ".OneOf(" + args + "))";  
+    }
+
+#elif defined(IS_SCALAR)
+
+  String[] split = var().csharp_array_split();
+  String varname = var().csharp_name();
+  #if defined(IS_NUMERIC)
+
+    #if defined(BASE_INT)
+
+    if (is_boolean()) {
+      assert num_elts == 1;
+      assert (elts[0] == 0) || (elts[0] == 1);
+      result = varname + " == " + ((elts[0] == 0) ? "false" : "true");
+    } else if (is_hashcode()) {
+      if (num_elts == 1) {
+        if (elts[0] == 0) {
+        	result = varname + " == " + "null";
+        } else
+        	result = varname + " != null";
+        }
+      else { // num_elts == 2
+        // I have never observed this case happening.
+        // Daikon: does not handle this case
+        // ESC: returns unimplemented
+        // Java: returns "true"
+        // Probably safe to safe we do not need to worry about this. 
+        assert elts[0] == 0;
+        assert elts[1] != 0;
+        return format_unimplemented(OutputFormat.CSHARPCONTRACT); 
+      } 
+    } else
+
+    #endif
+
+	if(num_elts == 1) {
+		result = varname + " == " + elts[0];
+	} else {
+      List<String> e = new ArrayList<String>();
+      for (int i=0; i<num_elts; i++) {
+        e.add(TOSTRING(elts[i]));
+      }
+      String exp = UtilMDE.join(e, ", ");
+      
+      if(var().is_array() && !var().isDerived())
+      {
+          result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + ".OneOf(" + exp + "))";
+      }
+      else
+      {
+    	  result = varname + ".OneOf(" + exp + ")";
+      }
+    }
+
+  #elif defined(STRING)
+
+    if(is_type()) {
+        List<String> names = new ArrayList<String>();
+        for (int i=0; i<num_elts; i++) {
+             String str = elts[i];
+             if ((str == null) || "null".equals(str)) {
+                 names.add(varname + " == null");
+             } else {
+                 names.add(varname + " == typeof(" + str + ")");
+             } 
+        }
+        result = UtilMDE.join(names, " || ");
+    } else if (num_elts == 1){
+        String str = elts[0];
+        result = (str == null || "null".equals(str)) 
+               ? (varname + " == null")
+               : (varname + ".Equals(" + TOSTRING(str) + ")");
+    } else {
+        List<String> names = new ArrayList<String>();
+        for (int i=0; i<num_elts; i++) {
+            String str = elts[i];
+            names.add((str == null) ? "null" : TOSTRING(str));
+        }
+        result = varname + ".OneOf(" + UtilMDE.join(names, ", ") + ")";
+    }
+
+  #endif
+
+#elif defined(IS_SEQUENCE)
+	result = "(\"oneOf.java.jpp: SEQUENCE unimplemented\" != null)"; // "interned"
+
+#endif
+
     return result;
   }
 

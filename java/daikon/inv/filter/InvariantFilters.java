@@ -68,6 +68,10 @@ public class InvariantFilters {
     // Filter out invariants that contain certain types of derived variables
     // By default, all derived variales are accepted.
     addPropertyFilter (new DerivedVariableFilter());
+
+    addPropertyFilter (new ReadonlyPrestateFilter());
+    
+    addPropertyFilter (new StringFilter());
   }
 
 

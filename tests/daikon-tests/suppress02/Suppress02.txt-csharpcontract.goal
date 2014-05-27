@@ -1,0 +1,194 @@
+===========================================================================
+misc.Suppress02:::OBJECT
+this != null
+this.theArray != null
+this.theArray != null
+Contract.ForAll(this.theArray, x => x >= 0)
+this.i <= 49
+this.i >= 0
+this.theArray.Count() == 1000
+Contract.ForAll(0, this.theArray.Slice(this.j+1, this.theArray.Count()-1).Count(), i => this.theArray.Slice(this.j+1, this.theArray.Count()-1)[i] != i)
+this.theArray.Slice(0, this.j).Distinct().Count() == this.theArray.Slice(0, this.j).Count()
+Contract.Exists(this.theArray, x => x.Equals(this.i))
+Contract.Exists(this.theArray, x => x.Equals(this.j))
+Contract.ForAll(this.theArray, x => x < this.theArray.Count()-1)
+(!(this.j == 0)) || (this.i == 0)
+this.i <= this.j
+this.i < this.theArray.Count()-1
+(!(this.i == 0)) || (this.theArray[this.i] == 0)
+(!(this.theArray[this.i] == 0)) || (this.i == 0)
+Contract.Exists(this.theArray.Slice(this.i, this.theArray.Count()-1), x => x.Equals(this.i))
+Contract.Exists(this.theArray.Slice(this.i+1, this.theArray.Count()-1), x => x.Equals(this.i))
+(!(this.theArray[this.j] == 0)) || (this.i == 0)
+Contract.Exists(this.theArray.Slice(this.j, this.theArray.Count()-1), x => x.Equals(this.i))
+Contract.Exists(this.theArray.Slice(this.j+1, this.theArray.Count()-1), x => x.Equals(this.i))
+this.j < this.theArray.Count()-1
+(!(this.j == 0)) || (this.theArray[this.i] == 0)
+Contract.Exists(this.theArray.Slice(this.i, this.theArray.Count()-1), x => x.Equals(this.j))
+Contract.Exists(this.theArray.Slice(this.i+1, this.theArray.Count()-1), x => x.Equals(this.j))
+(!(this.j == 0)) || (this.theArray[this.j] == 0)
+(!(this.theArray[this.j] == 0)) || (this.j == 0)
+Contract.Exists(this.theArray.Slice(this.j, this.theArray.Count()-1), x => x.Equals(this.j))
+Contract.Exists(this.theArray.Slice(this.j+1, this.theArray.Count()-1), x => x.Equals(this.j))
+this.theArray.Count()-1 > this.theArray[this.i]
+Contract.ForAll(this.theArray.Slice(this.i, this.theArray.Count()-1), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(this.i+1, this.theArray.Count()-1), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(0, this.i), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(0, this.i-1), x => x < this.theArray.Count()-1)
+this.theArray.Count()-1 > this.theArray[this.j]
+Contract.ForAll(this.theArray.Slice(this.j, this.theArray.Count()-1), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(this.j+1, this.theArray.Count()-1), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(0, this.j), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(0, this.j-1), x => x < this.theArray.Count()-1)
+(!(this.theArray[this.j] == 0)) || (this.theArray[this.i] == 0)
+===========================================================================
+misc.Suppress02.Suppress02():::EXIT
+this.i == this.theArray[this.i]
+this.i == 0
+this.j == 5
+Contract.ForAll(this.theArray.Slice(0, this.i), x => x == 0)
+Contract.ForAll(0, this.theArray.Slice(0, this.i).Count(), i => this.theArray.Slice(0, this.i)[i] == i)
+this.theArray[this.j] == 153
+this.theArray[this.j-1] == 44
+Contract.ForAll(this.theArray.Slice(0, this.i), x => x == this.i)
+===========================================================================
+misc.Suppress02.f(int):::ENTER
+this.theArray.Slice(0, n).Distinct().Count() == this.theArray.Slice(0, n).Count()
+Contract.Exists(this.theArray, x => x.Equals(n))
+(!(n == 0)) || (this.i == 0)
+this.i <= n
+(!(this.theArray[n] == 0)) || (this.i == 0)
+Contract.Exists(this.theArray.Slice(n, this.theArray.Count()-1), x => x.Equals(this.i))
+Contract.Exists(this.theArray.Slice(n+1, this.theArray.Count()-1), x => x.Equals(this.i))
+Contract.Exists(this.theArray.Slice(n, this.theArray.Count()-1), x => x.Equals(this.j))
+Contract.Exists(this.theArray.Slice(n+1, this.theArray.Count()-1), x => x.Equals(this.j))
+n < this.theArray.Count()-1
+(!(n == 0)) || (this.theArray[this.i] == 0)
+Contract.Exists(this.theArray.Slice(this.i, this.theArray.Count()-1), x => x.Equals(n))
+Contract.Exists(this.theArray.Slice(this.i+1, this.theArray.Count()-1), x => x.Equals(n))
+n != this.theArray[this.j]
+Contract.Exists(this.theArray.Slice(this.j, this.theArray.Count()-1), x => x.Equals(n))
+Contract.Exists(this.theArray.Slice(this.j+1, this.theArray.Count()-1), x => x.Equals(n))
+(!(n == 0)) || (this.theArray[n] == 0)
+(!(this.theArray[n] == 0)) || (n == 0)
+Contract.Exists(this.theArray.Slice(n, this.theArray.Count()-1), x => x.Equals(n))
+Contract.Exists(this.theArray.Slice(n+1, this.theArray.Count()-1), x => x.Equals(n))
+this.theArray.Count()-1 > this.theArray[n]
+Contract.ForAll(this.theArray.Slice(n, this.theArray.Count()-1), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(n+1, this.theArray.Count()-1), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(0, n), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(0, n-1), x => x < this.theArray.Count()-1)
+(!(this.theArray[n] == 0)) || (this.theArray[this.i] == 0)
+===========================================================================
+misc.Suppress02.f(int):::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+Contract.ForAll(0, this.theArray.Count(), i => this.theArray[i].Equals(Contract.OldValue(this.theArray)[i]))
+Contract.ForAll(0, this.theArray.Slice(orig(this.j)+1, this.theArray.Count()-1).Count(), i => this.theArray.Slice(orig(this.j)+1, this.theArray.Count()-1)[i] != i)
+this.theArray.Slice(0, orig(this.j)).Distinct().Count() == this.theArray.Slice(0, orig(this.j)).Count()
+this.theArray.Slice(0, orig(n)).Distinct().Count() == this.theArray.Slice(0, orig(n)).Count()
+Contract.Exists(this.theArray, x => x.Equals(Contract.OldValue(this.i)))
+Contract.Exists(this.theArray, x => x.Equals(Contract.OldValue(this.j)))
+Contract.Exists(this.theArray, x => x.Equals(Contract.OldValue(n)))
+(!(Contract.OldValue(n) == 0)) || (this.i == 0)
+this.i <= Contract.OldValue(n)
+Contract.Exists(this.theArray.Slice(orig(this.i), this.theArray.Count()-1), x => x.Equals(this.i))
+Contract.Exists(this.theArray.Slice(orig(this.i)+1, this.theArray.Count()-1), x => x.Equals(this.i))
+this.i != this.theArray[Contract.OldValue(this.j)]
+Contract.Exists(this.theArray.Slice(orig(this.j), this.theArray.Count()-1), x => x.Equals(this.i))
+Contract.Exists(this.theArray.Slice(orig(this.j)+1, this.theArray.Count()-1), x => x.Equals(this.i))
+(!(this.theArray[Contract.OldValue(n)] == 0)) || (this.i == 0)
+Contract.Exists(this.theArray.Slice(orig(n), this.theArray.Count()-1), x => x.Equals(this.i))
+Contract.Exists(this.theArray.Slice(orig(n)+1, this.theArray.Count()-1), x => x.Equals(this.i))
+(!(this.j == 0)) || (Contract.OldValue(this.i) == 0)
+this.j != Contract.OldValue(this.j)
+(!(Contract.OldValue(n) == 0)) || (this.j == 0)
+(!(this.j == 0)) || (Contract.OldValue(n) == 0)
+(!(this.j == 0)) || (this.theArray[Contract.OldValue(this.i)] == 0)
+Contract.Exists(this.theArray.Slice(orig(this.i), this.theArray.Count()-1), x => x.Equals(this.j))
+Contract.Exists(this.theArray.Slice(orig(this.i)+1, this.theArray.Count()-1), x => x.Equals(this.j))
+Contract.Exists(this.theArray.Slice(orig(this.j), this.theArray.Count()-1), x => x.Equals(this.j))
+Contract.Exists(this.theArray.Slice(orig(this.j)+1, this.theArray.Count()-1), x => x.Equals(this.j))
+(!(this.j == 0)) || (this.theArray[Contract.OldValue(n)] == 0)
+(!(this.theArray[Contract.OldValue(n)] == 0)) || (this.j == 0)
+Contract.Exists(this.theArray.Slice(orig(n), this.theArray.Count()-1), x => x.Equals(this.j))
+Contract.Exists(this.theArray.Slice(orig(n)+1, this.theArray.Count()-1), x => x.Equals(this.j))
+Contract.OldValue(this.i) < this.theArray.Count()-1
+Contract.Exists(this.theArray.Slice(this.i, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.i)))
+Contract.Exists(this.theArray.Slice(this.i+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.i)))
+(!(this.theArray[this.j] == 0)) || (Contract.OldValue(this.i) == 0)
+Contract.Exists(this.theArray.Slice(this.j, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.i)))
+Contract.Exists(this.theArray.Slice(this.j+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.i)))
+(!(Contract.OldValue(this.i) == 0)) || (this.theArray[Contract.OldValue(this.i)] == 0)
+(!(this.theArray[Contract.OldValue(this.i)] == 0)) || (Contract.OldValue(this.i) == 0)
+Contract.Exists(this.theArray.Slice(orig(this.i), this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.i)))
+Contract.Exists(this.theArray.Slice(orig(this.i)+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.i)))
+(!(this.theArray[Contract.OldValue(this.j)] == 0)) || (Contract.OldValue(this.i) == 0)
+Contract.Exists(this.theArray.Slice(orig(this.j), this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.i)))
+Contract.Exists(this.theArray.Slice(orig(this.j)+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.i)))
+(!(this.theArray[Contract.OldValue(n)] == 0)) || (Contract.OldValue(this.i) == 0)
+Contract.Exists(this.theArray.Slice(orig(n), this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.i)))
+Contract.Exists(this.theArray.Slice(orig(n)+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.i)))
+Contract.OldValue(this.j) < this.theArray.Count()-1
+Contract.Exists(this.theArray.Slice(this.i, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.j)))
+Contract.Exists(this.theArray.Slice(this.i+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.j)))
+Contract.OldValue(this.j) != this.theArray[this.j]
+Contract.Exists(this.theArray.Slice(this.j, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.j)))
+Contract.Exists(this.theArray.Slice(this.j+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.j)))
+(!(Contract.OldValue(this.j) == 0)) || (this.theArray[Contract.OldValue(this.i)] == 0)
+Contract.Exists(this.theArray.Slice(orig(this.i), this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.j)))
+Contract.Exists(this.theArray.Slice(orig(this.i)+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.j)))
+(!(Contract.OldValue(this.j) == 0)) || (this.theArray[Contract.OldValue(this.j)] == 0)
+(!(this.theArray[Contract.OldValue(this.j)] == 0)) || (Contract.OldValue(this.j) == 0)
+Contract.Exists(this.theArray.Slice(orig(this.j), this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.j)))
+Contract.Exists(this.theArray.Slice(orig(this.j)+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.j)))
+Contract.Exists(this.theArray.Slice(orig(n), this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.j)))
+Contract.Exists(this.theArray.Slice(orig(n)+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(this.j)))
+Contract.OldValue(n) < this.theArray.Count()-1
+(!(Contract.OldValue(n) == 0)) || (this.theArray[this.i] == 0)
+Contract.Exists(this.theArray.Slice(this.i, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(n)))
+Contract.Exists(this.theArray.Slice(this.i+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(n)))
+(!(Contract.OldValue(n) == 0)) || (this.theArray[this.j] == 0)
+(!(this.theArray[this.j] == 0)) || (Contract.OldValue(n) == 0)
+Contract.Exists(this.theArray.Slice(this.j, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(n)))
+Contract.Exists(this.theArray.Slice(this.j+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(n)))
+(!(Contract.OldValue(n) == 0)) || (this.theArray[Contract.OldValue(this.i)] == 0)
+Contract.Exists(this.theArray.Slice(orig(this.i), this.theArray.Count()-1), x => x.Equals(Contract.OldValue(n)))
+Contract.Exists(this.theArray.Slice(orig(this.i)+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(n)))
+Contract.OldValue(n) != this.theArray[Contract.OldValue(this.j)]
+Contract.Exists(this.theArray.Slice(orig(this.j), this.theArray.Count()-1), x => x.Equals(Contract.OldValue(n)))
+Contract.Exists(this.theArray.Slice(orig(this.j)+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(n)))
+(!(Contract.OldValue(n) == 0)) || (this.theArray[Contract.OldValue(n)] == 0)
+(!(this.theArray[Contract.OldValue(n)] == 0)) || (Contract.OldValue(n) == 0)
+Contract.Exists(this.theArray.Slice(orig(n), this.theArray.Count()-1), x => x.Equals(Contract.OldValue(n)))
+Contract.Exists(this.theArray.Slice(orig(n)+1, this.theArray.Count()-1), x => x.Equals(Contract.OldValue(n)))
+this.theArray.Count()-1 > this.theArray[Contract.OldValue(this.i)]
+Contract.ForAll(this.theArray.Slice(orig(this.i), this.theArray.Count()-1), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(orig(this.i)+1, this.theArray.Count()-1), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(0, orig(this.i)), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(0, orig(this.i)-1), x => x < this.theArray.Count()-1)
+this.theArray.Count()-1 > this.theArray[Contract.OldValue(this.j)]
+Contract.ForAll(this.theArray.Slice(orig(this.j), this.theArray.Count()-1), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(orig(this.j)+1, this.theArray.Count()-1), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(0, orig(this.j)), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(0, orig(this.j)-1), x => x < this.theArray.Count()-1)
+this.theArray.Count()-1 > this.theArray[Contract.OldValue(n)]
+Contract.ForAll(this.theArray.Slice(orig(n), this.theArray.Count()-1), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(orig(n)+1, this.theArray.Count()-1), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(0, orig(n)), x => x < this.theArray.Count()-1)
+Contract.ForAll(this.theArray.Slice(0, orig(n)-1), x => x < this.theArray.Count()-1)
+(!(this.theArray[Contract.OldValue(n)] == 0)) || (this.theArray[this.i] == 0)
+(!(this.theArray[this.j] == 0)) || (this.theArray[Contract.OldValue(this.i)] == 0)
+this.theArray[this.j] != this.theArray[Contract.OldValue(this.j)]
+(!(this.theArray[Contract.OldValue(n)] == 0)) || (this.theArray[this.j] == 0)
+(!(this.theArray[this.j] == 0)) || (this.theArray[Contract.OldValue(n)] == 0)
+(!(this.theArray[Contract.OldValue(this.j)] == 0)) || (this.theArray[Contract.OldValue(this.i)] == 0)
+(!(this.theArray[Contract.OldValue(n)] == 0)) || (this.theArray[Contract.OldValue(this.i)] == 0)
+===========================================================================
+misc.Suppress02.main(java.lang.String[]):::ENTER
+args != null
+args.GetType() == typeof(java.lang.String[])
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+===========================================================================
+misc.Suppress02.main(java.lang.String[]):::EXIT
+Contract.ForAll(0, args.Count(), i => args[i].Equals(Contract.OldValue(args)[i]))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)

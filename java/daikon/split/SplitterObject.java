@@ -30,6 +30,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
   public /*@Nullable*/ String simplifyFormat = null;
   public /*@Nullable*/ String jmlFormat      = null;
   public /*@Nullable*/ String dbcFormat      = null;
+  public /*@Nullable*/ String csharpFormat   = null;
 
   /**
    * @param condition The splitting condition of this splitter
@@ -41,6 +42,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
     this.directory = directory;
     this.javaFormat = condition;
     this.daikonFormat = condition;
+    this.csharpFormat = condition;
   }
 
   /**
@@ -64,7 +66,7 @@ public class SplitterObject implements Comparable<SplitterObject> {
       }
       DummyInvariant dummy = new /*@Prototype*/ DummyInvariant(
          daikonFormat, javaFormat, escFormat, simplifyFormat,
-                       jmlFormat, dbcFormat, dummyDesired);
+                       jmlFormat, dbcFormat, csharpFormat, dummyDesired);
       splitter.makeDummyInvariant(dummy);
       errorMessage = "Splitter exists " + this.toString();
       exists = true;

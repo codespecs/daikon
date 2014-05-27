@@ -1,0 +1,135 @@
+===========================================================================
+DataStructures.BinarySearchTree:::OBJECT
+===========================================================================
+DataStructures.BinarySearchTree.BinarySearchTree():::EXIT
+this.root == null
+===========================================================================
+DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::ENTER
+===========================================================================
+DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode):::EXIT
+this.root == Contract.OldValue(this.root)
+Contract.Result<DataStructures.Comparable>().GetType() == typeof(DataStructures.MyInteger)
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable):::ENTER
+x != null
+x.GetType() == typeof(DataStructures.MyInteger)
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable):::EXIT
+this.root == Contract.OldValue(this.root)
+Contract.Result<DataStructures.Comparable>().GetType() == typeof(DataStructures.MyInteger)
+Contract.Result<DataStructures.Comparable>().GetType() == Contract.OldValue(x.GetType())
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+x != null
+x.GetType() == typeof(DataStructures.MyInteger)
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT196
+Contract.Result<DataStructures.BinaryNode>() == Contract.OldValue(t)
+Contract.Result<DataStructures.BinaryNode>() == null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT198
+this.root != null
+Contract.OldValue(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT200
+this.root != null
+Contract.OldValue(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT202
+Contract.Result<DataStructures.BinaryNode>() == Contract.OldValue(t)
+this.root != null
+Contract.Result<DataStructures.BinaryNode>() != null
+===========================================================================
+DataStructures.BinarySearchTree.find(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
+this.root == Contract.OldValue(this.root)
+===========================================================================
+DataStructures.BinarySearchTree.findMax():::ENTER
+===========================================================================
+DataStructures.BinarySearchTree.findMax():::EXIT
+this.root == Contract.OldValue(this.root)
+Contract.Result<DataStructures.Comparable>().GetType() == typeof(DataStructures.MyInteger)
+===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::ENTER
+this.root == t
+===========================================================================
+DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode):::EXIT
+this.root == Contract.OldValue(this.root)
+this.root == Contract.OldValue(t)
+===========================================================================
+DataStructures.BinarySearchTree.findMin():::ENTER
+===========================================================================
+DataStructures.BinarySearchTree.findMin():::EXIT
+this.root == Contract.OldValue(this.root)
+Contract.Result<DataStructures.Comparable>().GetType() == typeof(DataStructures.MyInteger)
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::ENTER
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT167
+this.root == Contract.Result<DataStructures.BinaryNode>()
+Contract.Result<DataStructures.BinaryNode>() == Contract.OldValue(this.root)
+Contract.Result<DataStructures.BinaryNode>() == Contract.OldValue(t)
+Contract.Result<DataStructures.BinaryNode>() == null
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT169
+Contract.Result<DataStructures.BinaryNode>() == Contract.OldValue(t)
+this.root != null
+Contract.Result<DataStructures.BinaryNode>() != null
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT170
+this.root != null
+Contract.Result<DataStructures.BinaryNode>() != null
+Contract.OldValue(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode):::EXIT
+this.root == Contract.OldValue(this.root)
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::ENTER
+x != null
+x.GetType() == typeof(DataStructures.MyInteger)
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable):::EXIT
+this.root != null
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+x != null
+x.GetType() == typeof(DataStructures.MyInteger)
+===========================================================================
+DataStructures.BinarySearchTree.insert(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
+this.root == Contract.OldValue(this.root)
+Contract.Result<DataStructures.BinaryNode>() != null
+===========================================================================
+DataStructures.BinarySearchTree.isEmpty():::ENTER
+===========================================================================
+DataStructures.BinarySearchTree.isEmpty():::EXIT
+this.root == Contract.OldValue(this.root)
+(this.root != null).Implies(() => Contract.Result<boolean>() == false)
+(this.root == null).Implies(() => Contract.Result<boolean>() == true)
+===========================================================================
+DataStructures.BinarySearchTree.makeEmpty():::ENTER
+===========================================================================
+DataStructures.BinarySearchTree.makeEmpty():::EXIT
+this.root == null
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::ENTER
+x != null
+x.GetType() == typeof(DataStructures.MyInteger)
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable):::EXIT
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::ENTER
+x != null
+x.GetType() == typeof(DataStructures.MyInteger)
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT144
+Contract.Result<DataStructures.BinaryNode>() == Contract.OldValue(t)
+Contract.Result<DataStructures.BinaryNode>() == null
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT156
+this.root != null
+Contract.OldValue(t) != null
+===========================================================================
+DataStructures.BinarySearchTree.remove(DataStructures.Comparable, DataStructures.BinaryNode):::EXIT
+this.root == Contract.OldValue(this.root)
+(Contract.OldValue(t) != null).Implies(() => this.root != null)
+(Contract.OldValue(t) == null).Implies(() => Contract.Result<DataStructures.BinaryNode>() == null)
+(Contract.OldValue(t) == null).Implies(() => Contract.Result<DataStructures.BinaryNode>() == Contract.OldValue(t))

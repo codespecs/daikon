@@ -191,6 +191,15 @@ public abstract class Derivation
     return esc_name (index);
   }
 
+  /**
+   * Returns the name of this variable in CSHARPCONTRACT format.  If an index
+   * is specified, it is used as an array index.  It is an error to
+   * specify an index on a non-array variable
+   */ 
+  public String csharp_name (String index) {
+	throw new RuntimeException ("csharp_name not implemented for " + this);
+  }
+
   /** Returns the name of this variable in simplify format **/
   /*@SideEffectFree*/ public String simplify_name() {
     throw new RuntimeException ("simplify_name not implemented for "
@@ -241,7 +250,7 @@ public abstract class Derivation
 
   /**
    * Returns the esc name of a variable which is included inside
-   * an an expression (such as orig(a[vi])).  If the expression
+   * an expression (such as orig(a[vi])).  If the expression
    * is orig, the orig is implied for this variable.
    */
   protected String inside_esc_name (VarInfo vi, boolean in_orig, int shift) {
@@ -261,7 +270,7 @@ public abstract class Derivation
 
   /**
    * Returns the jml name of a variable which is included inside
-   * an an expression (such as orig(a[vi])).  If the expression
+   * an expression (such as orig(a[vi])).  If the expression
    * is orig, the orig is implied for this variable.
    */
   protected String inside_jml_name (VarInfo vi, boolean in_orig, int shift) {
@@ -278,5 +287,28 @@ public abstract class Derivation
     } else
       return vi.jml_name() + shift_str(shift);
   }
+  
+  /**
+   * Returns the csharp name of a variable which is included inside
+   * an expression (such as orig(a[vi])).  If the expression
+   * is orig, the orig is implied for this variable.
+   */
+  protected String inside_csharp_name (VarInfo vi, boolean in_orig, int shift) {
+    if (vi == null)
+      return "";
+
+    if (in_orig) {
+      if (vi.isPrestate()) {
+        assert vi.postState != null; // because isPrestate() = true
+        return vi.postState.csharp_name() + shift_str(shift);
+      } else {
+        // return String.format ("\\new(%s)%s", vi.csharp_name(), shift_str(shift));
+    	return String.format ("%s%s", vi.csharp_name(), shift_str(shift));
+      }
+    } else
+      return vi.csharp_name() + shift_str(shift);
+  }
+  
+  
 
 }

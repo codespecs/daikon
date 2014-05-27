@@ -444,6 +444,8 @@ syntax: regexp
 ^tests/.*\.txt-chicory\.dtrace\.bak$
 ^tests/.*\.txt-cset$
 ^tests/.*\.txt-cset\.diff$
+^tests/.*\.txt-csharpcontract$
+^tests/.*\.txt-csharpcontract\.diff$
 ^tests/.*\.txt-daikon$
 ^tests/.*\.txt-daikon\.diff$
 ^tests/.*\.txt-esc$

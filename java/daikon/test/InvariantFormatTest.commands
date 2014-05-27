@@ -9,6 +9,7 @@ Goal (esc): a >= -6
 Goal (jml): a >= -6
 Goal (dbc): a >= -6
 Goal (simplify): (>= |a| -6)
+Goal (csharpcontract): a >= -6
 5
 7
 -6
@@ -25,6 +26,7 @@ Goal (esc): warning: method daikon.inv.unary.scalar.Modulus.format(OutputFormat:
 Goal (jml): a % 3 == 1
 Goal (dbc): a % 3 == 1
 Goal (simplify): (EQ (MOD |a| 3) 1)
+Goal (csharpcontract): a % 3 == 1
 1
 4
 7
@@ -39,6 +41,7 @@ Goal (esc): warning: method daikon.inv.unary.scalar.NonModulus.format(OutputForm
 Goal (jml): a % 5 != 2
 Goal (dbc): a % 5 != 2
 Goal (simplify): (NEQ (MOD |a| 5) 2)
+Goal (csharpcontract): a % 5 != 2
 0
 1
 3
@@ -61,6 +64,7 @@ Goal (esc): a != 0
 Goal (jml): a != 0
 Goal (dbc): a != 0
 Goal (simplify): (NEQ |a| 0)
+Goal (csharpcontract): a != 0
 
 ; All the time it is 1, 5, or 9
 daikon.inv.unary.scalar.OneOfScalar
@@ -71,6 +75,7 @@ Goal (esc): a == 1 || a == 5 || a == 9
 Goal (jml): a == 1 || a == 5 || a == 9
 Goal (dbc): a == 1 || a == 5 || a == 9
 Goal (simplify): (OR (EQ |a| 1) (EQ |a| 5) (EQ |a| 9))
+Goal (csharpcontract): a.OneOf(1, 5, 9)
 1
 5
 9
@@ -94,6 +99,7 @@ Goal (esc): a > 0
 Goal (jml): a > 0
 Goal (dbc): a > 0
 Goal (simplify): a > 0
+Goal (csharpcontract): a > 0
 
 ; All less than or equal to 10
 daikon.inv.unary.scalar.UpperBound
@@ -104,6 +110,7 @@ Goal (esc): a <= 10
 Goal (jml): a <= 10
 Goal (dbc): a <= 10
 Goal (simplify): (<= |a| 10)
+Goal (csharpcontract): a <= 10
 1
 2
 5
@@ -122,6 +129,7 @@ Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] >= -57))
 Goal (jml): daikon.Quant.eltsGTE(a, -57)
 Goal (dbc): daikon.Quant.eltsGTE(a, -57)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (>= (select (select elems |a|) |i|) -57)))
+Goal (csharpcontract): Contract.ForAll(a, x => x >= -57)
 [102 5 92 33 -54 -2 -57 -3 -24 29 93]
 
 ; EltNonZero needs no samples
@@ -133,6 +141,7 @@ Goal (esc): \nonnullelements(a)
 Goal (jml): daikon.Quant.eltsNotEqual(a, 0)
 Goal (dbc): daikon.Quant.eltsNotEqual(a, 0)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (NEQ (select (select elems |a|) |i|) 0)))
+Goal (csharpcontract): Contract.ForAll(a, x => x != 0)
 
 ; All are 4, 5, or 6
 daikon.inv.unary.sequence.EltOneOf
@@ -143,6 +152,7 @@ Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] == 4 || a[i] =
 Goal (jml): daikon.Quant.subsetOf(a, new long[] { 4, 5, 6 })
 Goal (dbc): daikon.Quant.subsetOf(a, new long[] { 4, 5, 6 })
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (OR (EQ (select (select elems |a|) |i|) 4) (EQ (select (select elems |a|) |i|) 5) (EQ (select (select elems |a|) |i|) 6))))
+Goal (csharpcontract): Contract.ForAll(a, x => x.OneOf(4, 5, 6))
 [4 5 6 5 4 5 6 5 4 4 4 5 5 5 6 6 6]
 
 ; All less than 895
@@ -154,6 +164,7 @@ Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] <= 895))
 Goal (jml): daikon.Quant.eltsLTE(a, 895)
 Goal (dbc): daikon.Quant.eltsLTE(a, 895)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (<= (select (select elems |a|) |i|) 895)))
+Goal (csharpcontract): Contract.ForAll(a, x => x <= 895)
 [1 -99 2 456 895 673 2 -23 -123 -9824 23]
 
 ; Sorted ascending
@@ -166,6 +177,7 @@ Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= a.le
 Goal (jml): daikon.Quant.eltwiseLT(a)
 Goal (dbc): daikon.Quant.eltwiseLT(a)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |a|) 1)) (EQ (+ |i| 1) |j|)) (< (select (select elems |a|) |i|) (select (select elems |a|) |j|))))
+Goal (csharpcontract): Contract.ForAll(0, a.Count()-1, i => a[i] < a[i+1])
 [1 2 3 5 7 8 9 100]
 
 ; No duplicates in array
@@ -177,6 +189,7 @@ Goal (esc): warning: method daikon.inv.unary.sequence.NoDuplicates.format(Output
 Goal (jml): daikon.Quant.noDups(a)
 Goal (dbc): daikon.Quant.noDups(a)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |a|) 1)) (NEQ |i| |j|)) (NEQ (select (select elems |a|) |i|) (select (select elems |a|) |j|))))
+Goal (csharpcontract): a.Distinct().Count() == a.Count()
 [1 55 2 -123 873 24 99 239]
 
 ; OneOfSequence not currently implemented
@@ -191,6 +204,7 @@ Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] > i))
 Goal (jml): daikon.Quant.eltsGtIndex(a)
 Goal (dbc): daikon.Quant.eltsGtIndex(a)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (> (select (select elems |a|) |i|) (- |i| 0))))
+Goal (csharpcontract): Contract.ForAll(0, a.Count(), i => a[i] > i)
 [5 10 15 20 25 30 35 40]
 
 ; array[index] != index
@@ -202,6 +216,7 @@ Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] != i))
 Goal (jml): daikon.Quant.eltsNotEqualIndex(a)
 Goal (dbc): daikon.Quant.eltsNotEqualIndex(a)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (NEQ (select (select elems |a|) |i|) (- |i| 0))))
+Goal (csharpcontract): Contract.ForAll(0, a.Count(), i => a[i] != i)
 [5 10 15 20 25 30 35 40]
 
 ; Testing unary string invariants
@@ -214,6 +229,7 @@ Goal (esc): warning: method daikon.inv.unary.string.OneOfString.format(OutputFor
 Goal (jml): a.equals("testString")
 Goal (dbc): a.equals("testString")
 Goal (simplify): (EQ |a| |_string_testString|)
+Goal (csharpcontract): a.Equals("testString")
 "testString"
 
 ; Testing unary stringsequence invariants
@@ -230,6 +246,7 @@ Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (warning: method dai
 Goal (jml): daikon.Quant.subsetOf(a, new String[] { "gnirtStset", "testString" })
 Goal (dbc): daikon.Quant.subsetOf(a, new String[] { "gnirtStset", "testString" })
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (OR (EQ (select (select elems |a|) |i|) |_string_gnirtStset|) (EQ (select (select elems |a|) |i|) |_string_testString|))))
+Goal (csharpcontract): Contract.ForAll(a, x => x.OneOf("gnirtStset", "testString"))
 ["testString" "testString" "gnirtStset" "gnirtStset" "testString" "gnirtStset"]
 
 ; OneOfStringSequence not yet implemented in JML
@@ -246,6 +263,7 @@ Goal (java): a == b
 Goal (esc): a == b
 Goal (jml): a == b
 Goal (dbc): a == b
+Goal (csharpcontract): a == b
 Goal (simplify): (EQ |a| |b|)
 
 ; IntGreaterEqual does not need any samples
@@ -256,6 +274,7 @@ Goal (java): a >= b
 Goal (esc): a >= b
 Goal (jml): a >= b
 Goal (dbc): a >= b
+Goal (csharpcontract): a >= b
 Goal (simplify): (>= |a| |b|)
 
 ; IntGreaterThan does not need any samples
@@ -266,6 +285,7 @@ Goal (java): a > b
 Goal (esc): a > b
 Goal (jml): a > b
 Goal (dbc): a > b
+Goal (csharpcontract): a > b
 Goal (simplify): (> |a| |b|)
 
 ; IntLessEqual does not need any samples
@@ -276,6 +296,7 @@ Goal (java): a <= b
 Goal (esc): a <= b
 Goal (jml): a <= b
 Goal (dbc): a <= b
+Goal (csharpcontract): a <= b
 Goal (simplify): (<= |a| |b|)
 
 ; IntNonEqual does not need any samples
@@ -286,6 +307,7 @@ Goal (java): a != b
 Goal (esc): a != b
 Goal (jml): a != b
 Goal (dbc): a != b
+Goal (csharpcontract): a != b
 Goal (simplify): (NEQ |a| |b|)
 
 ; b = -3*a + 1
@@ -296,6 +318,7 @@ Goal (java): 3 * a + b - 1 == 0
 Goal (esc): 3 * a + b - 1 == 0
 Goal (jml): 3 * a + b - 1 == 0
 Goal (dbc): 3 * a + b - 1 == 0
+Goal (csharpcontract): 3 * a + b - 1 == 0
 Goal (simplify): (EQ 0 (+ (+ (* 3 |a|) |b|) -1))
 1
 -2
@@ -313,6 +336,7 @@ Goal (java): a % b == 0
 Goal (esc): a % b == 0
 Goal (jml): a % b == 0
 Goal (dbc): a % b == 0
+Goal (csharpcontract): a % b == 0
 Goal (simplify): (EQ 0 (MOD |a| |b|))
 
 daikon.inv.binary.twoScalar.NumericInt$Divides boolean true
@@ -322,6 +346,7 @@ Goal (java): b % a == 0
 Goal (esc): b % a == 0
 Goal (jml): b % a == 0
 Goal (dbc): b % a == 0
+Goal (csharpcontract): b % a == 0
 Goal (simplify): (EQ 0 (MOD |b| |a|))
 
 ; Testing binary twoSequence invariants
@@ -337,6 +362,7 @@ Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.le
 Goal (jml): daikon.Quant.pairwiseEqual(a, b)
 Goal (dbc): daikon.Quant.pairwiseEqual(a, b)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ |i| |j|)) (EQ (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
+Goal (csharpcontract): Contract.ForAll(0, a.Count(), i => a[i] == b[i])
 [5 5 5 5 5 5 5 5]
 [5 5 5 5 5 5 5 5]
 
@@ -349,6 +375,7 @@ Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.le
 Goal (jml): daikon.Quant.pairwiseLT(a, b)
 Goal (dbc): daikon.Quant.pairwiseLT(a, b)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ |i| |j|)) (< (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
+Goal (csharpcontract): Contract.ForAll(0, a.Count(), i => a[i] < b[i])
 [-5 0 5 10 15 20 25 30]
 [5 10 15 20 25 30 35 40]
 
@@ -361,6 +388,7 @@ Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.le
 Goal (jml): daikon.Quant.pairwiseGT(a, b)
 Goal (dbc): daikon.Quant.pairwiseGT(a, b)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ |i| |j|)) (> (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
+Goal (csharpcontract): Contract.ForAll(0, a.Count(), i => a[i] > b[i])
 [5 10 15 20 25 30 35 40]
 [-5 0 5 10 15 20 25 30]
 
@@ -373,6 +401,7 @@ Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.le
 Goal (jml): daikon.Quant.pairwiseLTE(a, b)
 Goal (dbc): daikon.Quant.pairwiseLTE(a, b)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ |i| |j|)) (<= (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
+Goal (csharpcontract): Contract.ForAll(0, a.Count(), i => a[i] <= b[i])
 [-5 0 5 10 15 20 25 30]
 [5 0 15 20 25 30 35 40]
 
@@ -385,6 +414,7 @@ Goal (esc): (\forall int i, j; (0 <= i && i <= a.length-1 && 0 <= j && j <= b.le
 Goal (jml): daikon.Quant.pairwiseGTE(a, b)
 Goal (dbc): daikon.Quant.pairwiseGTE(a, b)
 Goal (simplify): (FORALL (|i| |j|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1)) (<= 0 |j|) (<= |j| (- (arrayLength |b|) 1)) (EQ |i| |j|)) (>= (select (select elems |a|) |i|) (select (select elems |b|) |j|))))
+Goal (csharpcontract): Contract.ForAll(0, a.Count(), i => a[i] >= b[i])
 [5 0 15 20 25 30 35 40]
 [-5 0 5 10 15 20 25 30]
 
@@ -397,6 +427,7 @@ Goal (esc): warning: method daikon.inv.binary.twoSequence.Reverse.format(OutputF
 Goal (jml): daikon.Quant.isReverse(a, b)
 Goal (dbc): daikon.Quant.isReverse(a, b)
 Goal (simplify): (AND (EQ (- (- (arrayLength |a|) 1) 0) (- (- (arrayLength |b|) 1) 0)) (<= 0 0) (< (- (arrayLength |a|) 1) (arrayLength |a|)) (<= 0 0) (< (- (arrayLength |b|) 1) (arrayLength |b|)) (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (< |i| (- (- (arrayLength |a|) 1) 0))) (EQ (select (select elems |a|) (+ 0 |i|)) (select (select elems |b|) (- (- (arrayLength |b|) 1) |i|))))))
+Goal (csharpcontract): Contract.ForAll(0, a.Count(), i => a[i].Equals(b[a.Count()-1-i]))
 
 ; a is subsequence of b
 daikon.inv.binary.twoSequence.SubSequence
@@ -407,6 +438,7 @@ Goal (esc): warning: method daikon.inv.binary.twoSequence.SubSequence.format(Out
 Goal (jml): warning: method daikon.inv.binary.twoSequence.SubSequence.format(OutputFormat:JML) needs to be implemented: a[] is a subsequence of b[]
 Goal (dbc): warning: method daikon.inv.binary.twoSequence.SubSequence.format(OutputFormat:DBC) needs to be implemented: a[] is a subsequence of b[]
 Goal (simplify): format_simplify disabled
+Goal (csharpcontract): a.IsSubsequence(b)
 ; Goal (simplify): (IMPLIES (AND (>= (+ (- (- (arrayLength |a|) 1) 0) 1) 0) (>= (+ (- (- (arrayLength |b|) 1) 0) 1) 0)) (AND (AND (NEQ (+ (- (- (arrayLength |a|) 1) 0) 1) 0) (>= (+ (- (- (arrayLength |b|) 1) 0) 1) (+ (- (- (arrayLength |a|) 1) 0) 1))) (EXISTS (|__shift|) (AND (<= 0 |__shift|) (<= (+ |__shift| (+ (- (- (arrayLength |a|) 1) 0) 1)) (+ (- (- (arrayLength |b|) 1) 0) 1)) (FORALL (|__index|) (IMPLIES (AND (<= 0 |__index|) (< |__index| (+ (- (- (arrayLength |a|) 1) 0) 1))) (EQ (select (select elems |a|) (+ 0 |__index|)) (select (select elems |b|) (+ (+ 0 |__index|) |__shift|)))))))))
 [1 2 3 4 5 6]
 [7 8 1 2 3 4 5 6 7 8]
@@ -422,6 +454,7 @@ Goal (esc): a == b
 Goal (jml): a.equals(b)
 Goal (dbc): a.equals(b)
 Goal (simplify): (EQ |a| |b|)
+Goal (csharpcontract): a.Equals(b)
 "aString"
 "aString"
 
@@ -436,6 +469,7 @@ Goal (esc): !(\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] != b))
 Goal (jml): daikon.Quant.memberOf(b , a )
 Goal (dbc): daikon.Quant.memberOf(b , a )
 Goal (simplify): (NOT (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (NEQ (select (select elems |a|) |i|) |b|))))
+Goal (csharpcontract): Contract.Exists(a, x => x.Equals(b))
 [5 -6 7 -8 9 1 -2 3 -4 5]
 7
 
@@ -448,6 +482,7 @@ Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] > b))
 Goal (jml): daikon.Quant.eltsGT(a, b)
 Goal (dbc): daikon.Quant.eltsGT(a, b)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (> (select (select elems |a|) |i|) |b|)))
+Goal (csharpcontract): Contract.ForAll(a, x => x > b)
 [-9 8 -7 6 -5 4 -3 2 -1 0]
 -20
 
@@ -460,6 +495,7 @@ Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] >= b))
 Goal (jml): daikon.Quant.eltsGTE(a, b)
 Goal (dbc): daikon.Quant.eltsGTE(a, b)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (>= (select (select elems |a|) |i|) |b|)))
+Goal (csharpcontract): Contract.ForAll(a, x => x >= b)
 [-9 8 -7 6 -5 4 -3 -20 -1 0]
 -20
 
@@ -472,6 +508,7 @@ Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] == b))
 Goal (jml): daikon.Quant.eltsEqual(a, b)
 Goal (dbc): daikon.Quant.eltsEqual(a, b)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (EQ (select (select elems |a|) |i|) |b|)))
+Goal (csharpcontract): Contract.ForAll(a, x => x == b)
 [2 2 2 2 2 2 2 2 2 2]
 2
 
@@ -484,6 +521,7 @@ Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] < b))
 Goal (jml): daikon.Quant.eltsLT(a, b)
 Goal (dbc): daikon.Quant.eltsLT(a, b)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (< (select (select elems |a|) |i|) |b|)))
+Goal (csharpcontract): Contract.ForAll(a, x => x < b)
 [-9 8 -7 6 -5 4 -3 2 -1 0]
 20
 
@@ -496,6 +534,7 @@ Goal (esc): (\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] <= b))
 Goal (jml): daikon.Quant.eltsLTE(a, b)
 Goal (dbc): daikon.Quant.eltsLTE(a, b)
 Goal (simplify): (FORALL (|i|) (IMPLIES (AND (<= 0 |i|) (<= |i| (- (arrayLength |a|) 1))) (<= (select (select elems |a|) |i|) |b|)))
+Goal (csharpcontract): Contract.ForAll(a, x => x <= b)
 [20 8 -7 6 -5 4 -3 2 -1 0]
 20
 
@@ -510,6 +549,7 @@ Goal (esc): !(\forall int i; (0 <= i && i <= a.length-1) ==> (a[i] != b))
 Goal (jml): daikon.Quant.memberOf(b , a )
 Goal (dbc): daikon.Quant.memberOf(b , a )
 Goal (simplify): warning: method daikon.inv.binary.sequenceString.MemberString.format(OutputFormat:Simplify) needs to be implemented: b in a[]
+Goal (csharpcontract): Contract.Exists(a, x => x.Equals(b))
 ["A" "b" "C" "longerString" "under_score" "findMe" "various" "other strings" "involved" "in" "the array"]
 "findMe"
 
@@ -526,6 +566,7 @@ Goal (esc): 2 * a + 3 * b - c - 6 == 0
 Goal (jml): 2 * a + 3 * b - c - 6 == 0
 Goal (dbc): 2 * a + 3 * b - c - 6 == 0
 Goal (simplify): (EQ 0 (+ (+ (* 2 |a|) (* 3 |b|) (* -1 |c|)) -6))
+Goal (csharpcontract): 2 * a + 3 * b - c - 6 == 0
 1
 1
 -1
@@ -554,6 +595,7 @@ Goal (esc): a - b - c == 0
 Goal (jml): a - b - c == 0
 Goal (dbc): a - b - c == 0
 Goal (simplify): (EQ 0 (+ |a| (* -1 |b|) (* -1 |c|)))
+Goal (csharpcontract): a - b - c == 0
 0
 0
 0

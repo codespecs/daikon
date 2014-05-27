@@ -162,7 +162,8 @@ public class NONZERO
     }
 
     if ((format == OutputFormat.DAIKON)
-        || (format == OutputFormat.ESCJAVA))
+        || (format == OutputFormat.ESCJAVA)
+        || (format == OutputFormat.CSHARPCONTRACT))
     {
       return name + " != " + zero(format);
     }

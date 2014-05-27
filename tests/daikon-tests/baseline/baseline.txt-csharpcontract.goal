@@ -1,0 +1,61 @@
+===========================================================================
+DataAvg:::OBJECT
+this.sum >= 0
+this.count <= 1000
+this.count >= 0
+this.sum >= this.count
+===========================================================================
+DataAvg.DataAvg():::EXIT
+this.sum == this.count
+this.sum == 0
+===========================================================================
+DataAvg.average():::ENTER
+this.count >= 5
+this.sum > this.count
+===========================================================================
+DataAvg.average():::EXIT
+this.sum == Contract.OldValue(this.sum)
+this.count == Contract.OldValue(this.count)
+this.count >= 5
+this.sum > this.count
+this.sum > Contract.Result<int>()
+this.count != Contract.Result<int>()
+===========================================================================
+DataAvg.insert(int):::ENTER
+element != 0
+element <= 1275
+element >= -1023
+this.count != element
+===========================================================================
+DataAvg.insert(int):::EXIT
+this.count >= 1
+this.sum > this.count
+this.sum != Contract.OldValue(this.sum)
+this.sum > Contract.OldValue(this.count)
+this.sum >= Contract.OldValue(element)
+this.count != Contract.OldValue(this.sum)
+this.count - Contract.OldValue(this.count) - 1 == 0
+this.count != Contract.OldValue(element)
+this.sum - Contract.OldValue(this.sum) - Contract.OldValue(element) == 0
+===========================================================================
+Main.main(java.lang.String[]):::ENTER
+args != null
+args.GetType() == typeof(java.lang.String[])
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+===========================================================================
+Main.main(java.lang.String[]):::EXIT
+Contract.ForAll(0, args.Count(), i => args[i].Equals(Contract.OldValue(args)[i]))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+===========================================================================
+TestScores.classAve(int[]):::ENTER
+scores != null
+scores.Count() >= 5
+Contract.ForAll(scores, x => x >= scores.Count()-1)
+===========================================================================
+TestScores.classAve(int[]):::EXIT
+Contract.ForAll(0, scores.Count(), i => scores[i].Equals(Contract.OldValue(scores)[i]))
+Contract.Result<int>() <= 100
+Contract.ForAll(scores, x => x >= scores.Count()-1)
+Contract.Result<int>() > Contract.OldValue(scores).Count()

@@ -134,9 +134,9 @@ public class ParentFilter extends InvariantFilter {
                  || pGuardedVars.contains(pv))) {
             if (debug) System.out.printf("Not in guarding list %s for %s: parent var %s at %s for %s at %s%n",
                               guardedVars, pinv, pv, rel.parent, v.name(), rel.child);
-            VarInfo pgv = pGuardedVars.get(0);
+            VarInfo pgv = pGuardedVars.size() > 0 ? pGuardedVars.get(0) : null;
             assert (pgv != pv);
-            if (debug) System.out.printf("%s is index %d at %s, %s is index %d at %s%n",
+            if (debug && pgv != null) System.out.printf("%s is index %d at %s, %s is index %d at %s%n",
                               pgv, pgv.varinfo_index, pgv.ppt.name, pv, pv.varinfo_index, pv.ppt.name);
             var_mismatch = true;
             break;

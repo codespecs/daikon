@@ -10,6 +10,9 @@ import java.util.regex.*;
 import plume.*;
 import daikon.derive.*;
 import daikon.derive.binary.*;
+import daikon.FileIO.ParentRelation;
+import daikon.PptRelation.PptRelationType;
+import daikon.VarInfo.VarFlags;
 import daikon.inv.*;
 import daikon.inv.OutputFormat;
 import daikon.inv.filter.*;
@@ -139,6 +142,14 @@ public final class PrintInvariants {
   public static boolean dkconfig_static_const_infer = false;
 
   /**
+   * If false, don't print entry method program points for methods that		
+   * override or implement another method (i.e., entry program points that		
+   * have a parent that is a method). Microsoft Code Contracts does not		
+   * allow contracts on such methods.		
+   */		
+  public static boolean dkconfig_print_implementer_entry_ppts = true;
+
+  /**
    * Main debug tracer for PrintInvariants (for things unrelated to printing).
    **/
   public static final Logger debug = Logger.getLogger("daikon.PrintInvariants");
@@ -203,6 +214,21 @@ public final class PrintInvariants {
    */
   public static boolean wrap_xml = false;
 
+  /**
+   * --output flag to redirect output to a specified file. 
+   */
+  private static String output_SWITCH = "output";
+  
+  /**
+   * --extra_csharp_contract_data to print extra data for contracts when the format is CSHARP_CONTRACT
+   */
+  private static String print_csharp_metadata_SWITCH = "print_csharp_metadata";
+  
+  // Stores the output file stream if --output is specified. 
+  private static OutputStream out_stream = null;
+  private static boolean print_csharp_metadata = false;
+  
+
   // Fields that will be used if the --disc_reason switch is used (in other
   // words, if print_discarded_invariants == true).  But they can be null
   // even in that case, which means to output a discard-reason for every
@@ -222,6 +248,8 @@ public final class PrintInvariants {
       "      Display this usage message",
       "  --" + Daikon.format_SWITCH + " format_name",
       "      Write output in the given format.",
+      "  --" + PrintInvariants.output_SWITCH + " output_file",
+      "      Write output to the given file.",
       "  --" + Daikon.suppress_redundant_SWITCH,
       "      Suppress display of logically redundant invariants.",
       "  --" + Daikon.output_num_samples_SWITCH,
@@ -282,6 +310,8 @@ public final class PrintInvariants {
       new LongOpt(Daikon.ppt_regexp_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.track_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt(Daikon.wrap_xml_SWITCH, LongOpt.NO_ARGUMENT, null, 0),
+      new LongOpt(PrintInvariants.output_SWITCH, LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt(PrintInvariants.print_csharp_metadata_SWITCH, LongOpt.OPTIONAL_ARGUMENT, null, 0),
     };
     Getopt g = new Getopt("daikon.PrintInvariants", args, "h", longopts);
     int c;
@@ -301,6 +331,7 @@ public final class PrintInvariants {
           if (!RegexUtil.isRegex(regexp_string)) {
             throw new Daikon.TerminationMessage("Bad regexp " + regexp_string + " for " + Daikon.ppt_regexp_SWITCH + ": " + RegexUtil.regexError(regexp_string));
           }
+          regexp_string = RegexUtil.asRegex(regexp_string);   // @SuppressWarnings("regex") // flow-sensitivity
           ppt_regexp = Pattern.compile(regexp_string);
         } else if (Daikon.disc_reason_SWITCH.equals(option_name)) {
           try { PrintInvariants.discReasonSetup(g.getOptarg()); }
@@ -317,6 +348,8 @@ public final class PrintInvariants {
             throw new Daikon.TerminationMessage(
               "Unknown output format:  --format " + format_name);
           }
+        } else if (PrintInvariants.print_csharp_metadata_SWITCH.equals(option_name)) {
+        	PrintInvariants.print_csharp_metadata = true;
         } else if (Daikon.output_num_samples_SWITCH.equals(option_name)) {
           Daikon.output_num_samples = true;
         } else if (Daikon.config_SWITCH.equals(option_name)) {
@@ -329,6 +362,16 @@ public final class PrintInvariants {
                                         + config_file);
           }
           break;
+        } else if (PrintInvariants.output_SWITCH.equals(option_name)){
+            String output_file = g.getOptarg();
+            try {
+              out_stream = new FileOutputStream(output_file);
+            } catch (IOException e) {
+              out_stream = null;
+              throw new RuntimeException("Could not create output file "
+                                          + output_file);
+            }
+            break;         
         } else if (Daikon.config_option_SWITCH.equals(option_name)) {
           String item = g.getOptarg();
           daikon.config.Configuration.getInstance().apply(item);
@@ -405,6 +448,12 @@ public final class PrintInvariants {
     }
 
     print_invariants(ppts);
+    
+    // Close the output stream if --output was specified. 
+    if(out_stream != null) {
+    	out_stream.flush();
+    	out_stream.close();
+    }
   }
 
   // To avoid the leading "UtilMDE." on all calls.
@@ -545,8 +594,10 @@ public final class PrintInvariants {
     }
 
     // In case the user is interested in conditional ppt's
-    if (Daikon.dkconfig_output_conditionals
-          && Daikon.output_format == OutputFormat.DAIKON) {
+    if (Daikon.dkconfig_output_conditionals && 
+    		(Daikon.output_format == OutputFormat.DAIKON ||
+    		 Daikon.output_format == OutputFormat.CSHARPCONTRACT)) 
+    {
       for (Iterator<PptConditional> i = ppt.cond_iterator(); i.hasNext() ; ) {
         PptConditional pcond = i.next();
         sb.append(print_reasons_from_ppt(pcond,ppts));
@@ -645,7 +696,12 @@ public final class PrintInvariants {
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariants(PptMap all_ppts) {
 
-    PrintWriter pw = new PrintWriter(System.out, true);
+	PrintWriter pw;
+	if(out_stream == null) {
+		pw = new PrintWriter(System.out, true);
+	} else {
+		pw = new PrintWriter(out_stream, true);
+	}
     PptTopLevel combined_exit = null;
     boolean enable_exit_swap = true; // !Daikon.dkconfig_df_bottom_up;
 
@@ -736,6 +792,22 @@ public final class PrintInvariants {
     // Skip this ppt if it doesn't match ppt regular expression
     if ((ppt_regexp != null) && !ppt_regexp.matcher(ppt.name()).find())
       return;
+    
+		// Skip this ppt if it is an ENTER ppt with a non-object parent
+		if (!dkconfig_print_implementer_entry_ppts && ppt.is_enter()) {
+			if(ppt.parent_relations != null)
+			{
+				for (ParentRelation parent : ppt.parent_relations) {
+					if(parent != null)
+					{
+						if (parent.rel_type == PptRelationType.PARENT
+								&& all_ppts.get(parent.parent_ppt_name).is_enter()) {
+							return;
+						}
+					}
+				}
+			}
+		}
 
     // Be silent if we never saw any samples.
     // (Maybe this test isn't even necessary, but will be subsumed by others,
@@ -775,8 +847,10 @@ public final class PrintInvariants {
 
     print_invariants(ppt, out, all_ppts);
 
-    if (Daikon.dkconfig_output_conditionals
-        && Daikon.output_format == OutputFormat.DAIKON) {
+    if (Daikon.dkconfig_output_conditionals &&
+    		(Daikon.output_format == OutputFormat.DAIKON ||
+    		 Daikon.output_format == OutputFormat.CSHARPCONTRACT))
+    {
       for (Iterator<PptConditional> j = ppt.cond_iterator(); j.hasNext() ; ) {
         PptConditional pcond = j.next();
         print_invariants_maybe(pcond, out, all_ppts);
@@ -948,6 +1022,7 @@ public final class PrintInvariants {
   /*@RequiresNonNull("FileIO.new_decl_format")*/
   public static void print_invariant(Invariant inv, PrintWriter out,
                                      int invCounter, PptTopLevel ppt) {
+	  
     int inv_num_samps = inv.ppt.num_samples();
     String num_values_samples = "\t\t(" +
       nplural(inv_num_samps, "sample") + ")";
@@ -962,6 +1037,7 @@ public final class PrintInvariants {
                            "'equality'" : inv.getClass().getName());
       inv_rep = "warning: method " + class_name + ".format(OutputFormat:ESC/Java) needs to be implemented: " + inv.format();
     }
+    
     // TODO: Remove once we revise OutputFormat
     if (Daikon.output_format == OutputFormat.JAVA) {
       // if there is a $pre string in the format, then it contains
@@ -971,6 +1047,49 @@ public final class PrintInvariants {
       }
     }
 
+	/*
+	 * Special print for c sharp contracts that provides additional
+	 * information about each invariant.
+	 */
+	if (Daikon.output_format == OutputFormat.CSHARPCONTRACT) {
+
+		String csharp = inv.format_using(OutputFormat.CSHARPCONTRACT);
+		String daikon = inv.format_using(OutputFormat.DAIKON);
+		String invType = get_csharp_inv_type(inv);
+
+		boolean postAndOrig = daikon.contains("post")
+				&& daikon.contains("orig");
+		// boolean hasOnlyOneValue = daikon.contains("has only one value");
+
+		if (!postAndOrig) {
+			Set<String> sortedVariables = new HashSet<String>();
+			String sortedVars = "";
+			Set<String> variables = new HashSet<String>();
+			String vars = "";
+
+			get_csharp_invariant_variables(inv, sortedVariables, true);
+			get_csharp_invariant_variables(inv, variables, false);
+
+			for (String s : sortedVariables)
+				sortedVars += s + " ";
+			for (String s : variables)
+				vars += s + " ";
+
+			out.println(csharp);
+			
+			// Only print additional meta data information for Scout use if the flag is supplied.
+			if(PrintInvariants.print_csharp_metadata)
+			{
+				out.println(daikon);
+				out.println(invType);
+				out.println(sortedVars);
+				out.println(vars);
+				out.println("*");
+			}
+		}
+		return;
+	} 
+    
     if (Daikon.output_num_samples) {
       inv_rep += num_values_samples;
     }
@@ -1001,7 +1120,114 @@ public final class PrintInvariants {
     if (debug.isLoggable(Level.FINE)) {
       debug.fine (inv.repr());
     }
+  }
 
+  /**
+   * Parses the variables from varInfo.
+   * @param varInfo - the daikon variable representation to parse.
+   * @param sort - true to parse as a grouping variable, false to parse as a filtering variable
+   * @return - the parsed variable string
+   */
+	public static String parse_csharp_invariant_variable(VarInfo varInfo, boolean sort) {
+		// Do not ever want to sort by old value.
+		if (varInfo.postState != null)
+			return parse_csharp_invariant_variable(varInfo.postState, sort);
+
+		// Do not ever want to sort by function.
+		if (varInfo.var_kind == VarInfo.VarKind.FUNCTION
+				&& !varInfo.var_flags.contains(VarFlags.IS_PROPERTY)) {
+			assert (varInfo.enclosing_var != null);
+			return parse_csharp_invariant_variable(varInfo.enclosing_var, sort);
+		}
+
+		if (!sort) {
+			String r = varInfo.name_using(OutputFormat.CSHARPCONTRACT);
+			int a = r.indexOf("[");
+			int b = r.indexOf("]");
+			if (a != 1 && b != 1 && a < b) {
+				String middle = r.substring(a + 1, b);
+				if (middle.equals(".."))
+					r = r.substring(0, a + 1) + ".."
+							+ r.substring(b, r.length());
+				else
+					r = r.substring(0, a + 1) + "i"
+							+ r.substring(b, r.length());
+			}
+
+			return r;
+		}
+
+		if ((varInfo.var_kind == VarInfo.VarKind.FIELD || varInfo.var_kind == VarInfo.VarKind.FUNCTION)
+				&& varInfo.enclosing_var != null
+				&& !varInfo.enclosing_var.csharp_name().equals("this")) {
+
+			return parse_csharp_invariant_variable(varInfo.enclosing_var, sort);
+		} else {
+			return varInfo.csharp_name();
+		}
+	}
+
+	/**
+	 * Parses the variables from vars.
+	 * @param vars - an array of Daikon variable representations
+	 * @param variables - the set to store the parsed variables
+	 * @param sort - true to parse as group variables, false to parse as filtering variables
+	 */
+	public static void get_csharp_invariant_variables(VarInfo[] vars, Set<String> variables, boolean sort) {
+		for (VarInfo v : vars) {
+			String add = parse_csharp_invariant_variable(v, sort);
+			variables.add(add);
+		}
+	}
+
+	/**
+	 *  Parses the invariant variables of invariant and stores them in variables
+	 *  If group is true the invariant's grouping variables are parsed (the variables which the invariant is grouped by in the contract list view). 
+	 *  If group is false the invariant's filtering variables are parsed (the variables for which this invariant can be filtered by).
+	 *  In the case of implications, only variables on the right side of the implication are parsed. 
+	 * @param invariant - the invariant to parse
+	 * @param variables - the set to store the parsed variables
+	 * @param group - true to parse group variables, false to parse filtering variables
+	 */
+	public static void get_csharp_invariant_variables(Invariant invariant, Set<String> variables, boolean group) {
+
+		if (invariant instanceof GuardingImplication) {
+			GuardingImplication gi = (GuardingImplication) invariant;
+			get_csharp_invariant_variables(gi.right, variables, group);
+		}
+		if (invariant instanceof Implication) {
+			Implication implication = ((Implication) invariant);
+			get_csharp_invariant_variables(implication.right, variables, group);
+		} else if (invariant instanceof Joiner) {
+			Joiner joiner = ((Joiner) invariant);
+			// Get the variables on each side of the joiner.
+			get_csharp_invariant_variables(joiner.left, variables, group);
+			get_csharp_invariant_variables(joiner.right, variables, group);
+		} else {
+			get_csharp_invariant_variables(invariant.ppt.var_infos, variables, group);
+		}
+	}
+
+	/**
+	 * Gets the invariant type string (i.e. daikon.inv.binary.inv) of a Daikon invariant.
+	 * @param invariant - the Daikon invariant
+	 * @return - the invariant type string of the invariant
+	 */
+	public static String get_csharp_inv_type(Invariant invariant) {
+		if (invariant instanceof GuardingImplication) {
+			GuardingImplication gi = ((GuardingImplication) invariant);
+			return get_csharp_inv_type(gi.right);
+		} else if (invariant instanceof Implication) {
+			Implication implication = ((Implication) invariant);
+			return get_csharp_inv_type(implication.right);
+		} else if (invariant instanceof Joiner) {
+			Joiner joiner = ((Joiner) invariant);
+			return get_csharp_inv_type(joiner.right);
+		} else {
+			String invType = invariant.getClass().toString();
+			invType = invType.split(" ")[1];
+			return invType;
+		}
   }
 
   /**

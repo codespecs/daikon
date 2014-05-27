@@ -1,0 +1,73 @@
+===========================================================================
+six170.TinySet:::OBJECT
+this.bits >= 0
+===========================================================================
+six170.TinySet.TinySet():::EXIT
+this.bits == 0
+===========================================================================
+six170.TinySet.add(int):::ENTER
+n >= 0
+===========================================================================
+six170.TinySet.add(int):::EXIT
+this.bits >= 1
+this.bits == (Contract.OldValue(this.bits) | this.bits)
+this.bits >= Contract.OldValue(this.bits)
+this.bits > Contract.OldValue(n)
+===========================================================================
+six170.TinySet.contains(int):::ENTER
+n >= 0
+===========================================================================
+six170.TinySet.contains(int):::EXIT
+this.bits == Contract.OldValue(this.bits)
+(Contract.Result<boolean>() == true).Implies(() => Contract.OldValue(this) != null)
+(Contract.Result<boolean>() == true).Implies(() => this.bits > Contract.OldValue(n))
+===========================================================================
+six170.TinySet.intersect(six170.TinySet):::ENTER
+other != null
+other.bits >= 0
+(!(other.bits == 0)) || (this.bits == 0)
+(!(this.bits == 0)) || (other.bits == 0)
+===========================================================================
+six170.TinySet.intersect(six170.TinySet):::EXIT
+other.bits == Contract.OldValue(other.bits)
+other.bits >= 0
+(!(other.bits == 0)) || (this.bits == 0)
+this.bits <= other.bits
+other.bits == (this.bits | other.bits)
+(!(Contract.OldValue(this.bits) == 0)) || (this.bits == 0)
+this.bits <= Contract.OldValue(this.bits)
+Contract.OldValue(this.bits) == (this.bits | Contract.OldValue(this.bits))
+(!(Contract.OldValue(this.bits) == 0)) || (other.bits == 0)
+(!(other.bits == 0)) || (Contract.OldValue(this.bits) == 0)
+this.bits == (other.bits & Contract.OldValue(this.bits))
+===========================================================================
+six170.TinySet.remove(int):::ENTER
+this != null
+this.bits >= 1
+n >= 0
+this.bits > n
+===========================================================================
+six170.TinySet.remove(int):::EXIT
+this.bits <= Contract.OldValue(this.bits)
+Contract.OldValue(this.bits) == (this.bits | Contract.OldValue(this.bits))
+===========================================================================
+six170.TinySet.union(six170.TinySet):::ENTER
+other != null
+other.bits >= 0
+(!(other.bits == 0)) || (this.bits == 0)
+(!(this.bits == 0)) || (other.bits == 0)
+===========================================================================
+six170.TinySet.union(six170.TinySet):::EXIT
+other.bits == Contract.OldValue(other.bits)
+other.bits >= 0
+(!(other.bits == 0)) || (this.bits == 0)
+(!(this.bits == 0)) || (other.bits == 0)
+this.bits == (other.bits | this.bits)
+this.bits >= other.bits
+(!(Contract.OldValue(this.bits) == 0)) || (this.bits == 0)
+(!(this.bits == 0)) || (Contract.OldValue(this.bits) == 0)
+this.bits == (Contract.OldValue(this.bits) | this.bits)
+this.bits >= Contract.OldValue(this.bits)
+(!(Contract.OldValue(this.bits) == 0)) || (other.bits == 0)
+(!(other.bits == 0)) || (Contract.OldValue(this.bits) == 0)
+this.bits == (other.bits | Contract.OldValue(this.bits))

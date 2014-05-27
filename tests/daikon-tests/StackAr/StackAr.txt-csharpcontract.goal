@@ -1,0 +1,316 @@
+===========================================================================
+DataStructures.StackAr:::OBJECT
+this.theArray != null
+this.theArray.GetType() == typeof(java.lang.Object[])
+this.topOfStack >= -1
+this.theArray.Length == 18
+Contract.ForAll(this.theArray.Slice(this.topOfStack+1, this.theArray.Count()-1), x => x== null)
+Contract.ForAll(this.theArray.Slice(0, this.topOfStack), x => x != null)
+this.topOfStack <= this.theArray.Count()-1
+(this.theArray.Count() >> this.theArray.Length == 0)
+this.theArray.Length != this.theArray.Count()
+this.theArray.Length != this.theArray.Count()-1
+===========================================================================
+DataStructures.StackAr.StackAr(int):::ENTER
+capacity >= 0
+===========================================================================
+DataStructures.StackAr.StackAr(int):::EXIT
+Contract.OldValue(capacity) == this.theArray.Count()
+Contract.ForAll(this.theArray, x => x== null)
+Contract.ForAll(this.theArray, x => x.getClass().Equals(typeof(null)))
+this.topOfStack == -1
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+(Contract.OldValue(capacity) >> this.theArray.Length == 0)
+Contract.OldValue(capacity) != this.theArray.Length
+===========================================================================
+DataStructures.StackAr.isEmpty():::ENTER
+===========================================================================
+DataStructures.StackAr.isEmpty():::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+Contract.ForAll(0, this.theArray.Count(), i => this.theArray[i].Equals(Contract.OldValue(this.theArray)[i]))
+this.topOfStack == Contract.OldValue(this.topOfStack)
+this.theArray.Length == Contract.OldValue(this.theArray).Length
+(this.topOfStack == -1).Implies(() => Contract.Result<boolean>() == true)
+(this.topOfStack == -1).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.topOfStack == -1).Implies(() => Contract.ForAll(this.theArray, x => x== null))
+(this.topOfStack == -1).Implies(() => Contract.ForAll(this.theArray, x => x.getClass().Equals(typeof(null))))
+(this.topOfStack == -1).Implies(() => this.topOfStack < this.theArray.Length)
+(this.topOfStack >= 0).Implies(() => Contract.Result<boolean>() == false)
+(this.topOfStack >= 0).Implies(() => (!(this.theArray.Count()-1 == 0)) || (this.topOfStack == 0))
+(this.topOfStack >= 0).Implies(() => (this.theArray.Count()-1 >> this.theArray.Length == 0))
+(this.topOfStack >= 0).Implies(() => (this.topOfStack >> this.theArray.Length == 0))
+(this.topOfStack >= 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.topOfStack >= 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.theArray.GetType() == Contract.OldValue(this.theArray.GetType())
+===========================================================================
+DataStructures.StackAr.isFull():::ENTER
+===========================================================================
+DataStructures.StackAr.isFull():::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+Contract.ForAll(0, this.theArray.Count(), i => this.theArray[i].Equals(Contract.OldValue(this.theArray)[i]))
+this.topOfStack == Contract.OldValue(this.topOfStack)
+this.theArray.Length == Contract.OldValue(this.theArray).Length
+(Contract.Result<boolean>() == false).Implies(() => Contract.ForAll(this.theArray.Slice(this.topOfStack+1, this.theArray.Count()-1), x => x== null))
+(Contract.Result<boolean>() == false).Implies(() => this.topOfStack < this.theArray.Count()-1)
+(Contract.Result<boolean>() == false).Implies(() => (this.theArray.Count()-1 >> this.theArray.Length == 0))
+(Contract.Result<boolean>() == false).Implies(() => this.topOfStack <= this.theArray.Length)
+(Contract.Result<boolean>() == true).Implies(() => this.topOfStack == this.theArray.Count()-1)
+(Contract.Result<boolean>() == true).Implies(() => Contract.ForAll(this.theArray, x => x != null))
+(Contract.Result<boolean>() == true).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(Contract.Result<boolean>() == true).Implies(() => this.topOfStack != this.theArray.Length)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.theArray.GetType() == Contract.OldValue(this.theArray.GetType())
+===========================================================================
+DataStructures.StackAr.makeEmpty():::ENTER
+this.topOfStack < this.theArray.Length
+(!(this.topOfStack == 0)) || (this.theArray.Count()-1 == 0)
+===========================================================================
+DataStructures.StackAr.makeEmpty():::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+this.theArray.Length == Contract.OldValue(this.theArray).Length
+this.theArray.Count() == Contract.OldValue(this.theArray).Count()
+Contract.ForAll(0, this.theArray.Slice(orig(this.topOfStack)+1, this.theArray.Count()-1).Count(), i => this.theArray.Slice(orig(this.topOfStack)+1, this.theArray.Count()-1)[i].Equals(Contract.OldValue(this.theArray).Slice(orig(this.topOfStack)+1, Contract.OldValue(this.theArray).Count()-1)[i]))
+Contract.ForAll(this.theArray, x => x== null)
+Contract.ForAll(this.theArray, x => x.getClass().Equals(typeof(null)))
+this.topOfStack == -1
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.theArray.GetType() == Contract.OldValue(this.theArray.GetType())
+this.topOfStack <= Contract.OldValue(this.topOfStack)
+Contract.OldValue(this.topOfStack) < this.theArray.Length
+(!(Contract.OldValue(this.topOfStack) == 0)) || (this.theArray.Count()-1 == 0)
+Contract.OldValue(this.topOfStack) <= this.theArray.Count()-1
+===========================================================================
+DataStructures.StackAr.pop():::ENTER
+this.topOfStack >= 0
+this.theArray.Slice(0, this.topOfStack).Distinct().Count() == this.theArray.Slice(0, this.topOfStack).Count()
+(this.topOfStack >> this.theArray.Length == 0)
+===========================================================================
+DataStructures.StackAr.pop():::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+this.theArray.Length == Contract.OldValue(this.theArray).Length
+this.theArray.Count() == Contract.OldValue(this.theArray).Count()
+Contract.ForAll(0, this.theArray.Slice(0, this.topOfStack).Count(), i => this.theArray.Slice(0, this.topOfStack)[i].Equals(Contract.OldValue(this.theArray).Slice(0, this.topOfStack)[i]))
+Contract.ForAll(0, this.theArray.Slice(0, this.topOfStack).Count(), i => this.theArray.Slice(0, this.topOfStack)[i].Equals(Contract.OldValue(this.theArray).Slice(0, orig(this.topOfStack)-1)[i]))
+Contract.ForAll(0, this.theArray.Slice(orig(this.topOfStack)+1, this.theArray.Count()-1).Count(), i => this.theArray.Slice(orig(this.topOfStack)+1, this.theArray.Count()-1)[i].Equals(Contract.OldValue(this.theArray).Slice(orig(this.topOfStack)+1, Contract.OldValue(this.theArray).Count()-1)[i]))
+this.theArray[Contract.OldValue(this.topOfStack)] == null
+this.theArray.Slice(0, orig(this.topOfStack)).Distinct().Count() == this.theArray.Slice(0, orig(this.topOfStack)).Count()
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.theArray.GetType() == Contract.OldValue(this.theArray.GetType())
+this.topOfStack - Contract.OldValue(this.topOfStack) + 1 == 0
+this.topOfStack <= this.theArray.Length
+this.topOfStack < this.theArray.Count()-1
+(Contract.OldValue(this.topOfStack) >> this.theArray.Length == 0)
+Contract.OldValue(this.topOfStack) <= this.theArray.Count()-1
+Contract.ForAll(this.theArray.Slice(this.topOfStack+1, this.theArray.Count()-1), x => x == this.theArray[Contract.OldValue(this.topOfStack)])
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::ENTER
+x != null
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: x.getClass() is printable
+x.Length.OneOf(16, 22, 24)
+x.Length % 2 == 0
+this.theArray.GetType() != x.GetType()
+this.topOfStack <= this.theArray.Length
+this.topOfStack < this.theArray.Count()-1
+(this.theArray.Count()-1 >> this.theArray.Length == 0)
+this.theArray.Length != x.Length
+(this.theArray.Count() >> x.Length == 0)
+this.theArray.Count() != x.Length
+(this.theArray.Count()-1 >> x.Length == 0)
+this.theArray.Count()-1 != x.Length
+===========================================================================
+DataStructures.StackAr.push(java.lang.Object):::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+Contract.OldValue(x) == this.theArray[this.topOfStack]
+this.theArray.Length == Contract.OldValue(this.theArray).Length
+this.theArray.Count() == Contract.OldValue(this.theArray).Count()
+x.Length == Contract.OldValue(x).Length
+Contract.ForAll(0, this.theArray.Slice(this.topOfStack+1, this.theArray.Count()-1).Count(), i => this.theArray.Slice(this.topOfStack+1, this.theArray.Count()-1)[i].Equals(Contract.OldValue(this.theArray).Slice(this.topOfStack+1, Contract.OldValue(this.theArray).Count()-1)[i]))
+Contract.ForAll(0, this.theArray.Slice(0, this.topOfStack-1).Count(), i => this.theArray.Slice(0, this.topOfStack-1)[i].Equals(Contract.OldValue(this.theArray).Slice(0, this.topOfStack-1)[i]))
+Contract.ForAll(0, this.theArray.Slice(0, this.topOfStack-1).Count(), i => this.theArray.Slice(0, this.topOfStack-1)[i].Equals(Contract.OldValue(this.theArray).Slice(0, orig(this.topOfStack))[i]))
+this.topOfStack >= 0
+x.Length.OneOf(16, 22, 24)
+x.Length % 2 == 0
+Contract.ForAll(Contract.OldValue(this.theArray).Slice(this.topOfStack, Contract.OldValue(this.theArray).Count()-1), x => x== null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.theArray.GetType() == Contract.OldValue(this.theArray.GetType())
+this.theArray.GetType() != Contract.OldValue(x.GetType())
+Contract.Exists(this.theArray, x => x.getClass().Equals(Contract.OldValue(x.GetType())))
+this.topOfStack - Contract.OldValue(this.topOfStack) - 1 == 0
+(this.topOfStack >> this.theArray.Length == 0)
+(!(this.theArray.Count()-1 == 0)) || (this.topOfStack == 0)
+(this.topOfStack >> x.Length == 0)
+Contract.OldValue(this.topOfStack) <= this.theArray.Length
+Contract.OldValue(this.topOfStack) < this.theArray.Count()-1
+Contract.ForAll(this.theArray.Slice(orig(this.topOfStack)+1, this.topOfStack), x => x == Contract.OldValue(x))
+(this.theArray.Count()-1 >> this.theArray.Length == 0)
+this.theArray.Length != x.Length
+(this.theArray.Count() >> x.Length == 0)
+this.theArray.Count() != x.Length
+(this.theArray.Count()-1 >> x.Length == 0)
+this.theArray.Count()-1 != x.Length
+Contract.ForAll(Contract.OldValue(this.theArray).Slice(this.topOfStack, Contract.OldValue(this.theArray).Count()-1), x => x == Contract.OldValue(this.theArray[this.topOfStack]))
+===========================================================================
+DataStructures.StackAr.top():::ENTER
+===========================================================================
+DataStructures.StackAr.top():::EXIT74
+Contract.ForAll(this.theArray, x => x== null)
+Contract.ForAll(this.theArray, x => x.getClass().Equals(typeof(null)))
+this.topOfStack == -1
+Contract.Result<java.lang.Object>() == null
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(this.theArray, x => x == Contract.Result<java.lang.Object>())
+===========================================================================
+DataStructures.StackAr.top():::EXIT75
+Contract.Result<java.lang.Object>() == this.theArray[this.topOfStack]
+Contract.Result<java.lang.Object>() == this.theArray[Contract.OldValue(this.topOfStack)]
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.topOfStack])
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.topOfStack])
+this.topOfStack >= 0
+(this.topOfStack >> this.theArray.Length == 0)
+(!(this.theArray.Count()-1 == 0)) || (this.topOfStack == 0)
+(this.theArray.Count()-1 >> this.theArray.Length == 0)
+===========================================================================
+DataStructures.StackAr.top():::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+Contract.ForAll(0, this.theArray.Count(), i => this.theArray[i].Equals(Contract.OldValue(this.theArray)[i]))
+this.topOfStack == Contract.OldValue(this.topOfStack)
+this.theArray.Length == Contract.OldValue(this.theArray).Length
+(this.topOfStack == -1).Implies(() => Contract.Result<java.lang.Object>() == null)
+(this.topOfStack == -1).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.topOfStack == -1).Implies(() => Contract.ForAll(this.theArray, x => x== null))
+(this.topOfStack == -1).Implies(() => Contract.ForAll(this.theArray, x => x == Contract.Result<java.lang.Object>()))
+(this.topOfStack == -1).Implies(() => Contract.ForAll(this.theArray, x => x.getClass().Equals(typeof(null))))
+(this.topOfStack == -1).Implies(() => Contract.ForAll(this.theArray.Slice(this.topOfStack+1, this.theArray.Count()-1), x => x == Contract.Result<java.lang.Object>()))
+(this.topOfStack == -1).Implies(() => this.topOfStack < this.theArray.Length)
+(this.topOfStack >= 0).Implies(() => (this.theArray.Count() >> Contract.Result<java.lang.Object>().Length == 0))
+(this.topOfStack >= 0).Implies(() => (!(this.theArray.Count()-1 == 0)) || (this.topOfStack == 0))
+(this.topOfStack >= 0).Implies(() => (this.theArray.Count()-1 >> Contract.Result<java.lang.Object>().Length == 0))
+(this.topOfStack >= 0).Implies(() => (this.theArray.Count()-1 >> this.theArray.Length == 0))
+(this.topOfStack >= 0).Implies(() => (this.topOfStack >> Contract.Result<java.lang.Object>().Length == 0))
+(this.topOfStack >= 0).Implies(() => (this.topOfStack >> this.theArray.Length == 0))
+(this.topOfStack >= 0).Implies(() => Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.topOfStack]))
+(this.topOfStack >= 0).Implies(() => Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.topOfStack]))
+(this.topOfStack >= 0).Implies(() => Contract.Result<java.lang.Object>() == this.theArray[Contract.OldValue(this.topOfStack)])
+(this.topOfStack >= 0).Implies(() => Contract.Result<java.lang.Object>() == this.theArray[this.topOfStack])
+(this.topOfStack >= 0).Implies(() => Contract.Exists(this.theArray, x => x.getClass().Equals(Contract.Result<java.lang.Object>().GetType())))
+(this.topOfStack >= 0).Implies(() => warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.getClass() is printable)
+(this.topOfStack >= 0).Implies(() => Contract.Result<java.lang.Object>().Length % 2 == 0)
+(this.topOfStack >= 0).Implies(() => Contract.Result<java.lang.Object>().Length.OneOf(16, 22, 24))
+(this.topOfStack >= 0).Implies(() => this.theArray.Count() != Contract.Result<java.lang.Object>().Length)
+(this.topOfStack >= 0).Implies(() => this.theArray.Count()-1 != Contract.Result<java.lang.Object>().Length)
+(this.topOfStack >= 0).Implies(() => this.theArray.GetType() != Contract.Result<java.lang.Object>().GetType())
+(this.topOfStack >= 0).Implies(() => this.theArray.Length != Contract.Result<java.lang.Object>().Length)
+(this.topOfStack >= 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(this.topOfStack >= 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.getClass() is printable
+Contract.Result<java.lang.Object>().Length.OneOf(16, 22, 24)
+Contract.Result<java.lang.Object>().Length % 2 == 0
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.theArray.GetType() != Contract.Result<java.lang.Object>().GetType()
+this.theArray.GetType() == Contract.OldValue(this.theArray.GetType())
+Contract.Exists(this.theArray, x => x.getClass().Equals(Contract.Result<java.lang.Object>().GetType()))
+(this.topOfStack >> Contract.Result<java.lang.Object>().Length == 0)
+this.theArray.Length != Contract.Result<java.lang.Object>().Length
+(!(this.theArray.Count() == 0)) || (Contract.Result<java.lang.Object>().Length == 0)
+(this.theArray.Count() >> Contract.Result<java.lang.Object>().Length == 0)
+this.theArray.Count() != Contract.Result<java.lang.Object>().Length
+(this.theArray.Count()-1 >> Contract.Result<java.lang.Object>().Length == 0)
+this.theArray.Count()-1 != Contract.Result<java.lang.Object>().Length
+===========================================================================
+DataStructures.StackAr.topAndPop():::ENTER
+this.theArray.Slice(0, this.topOfStack).Distinct().Count() == this.theArray.Slice(0, this.topOfStack).Count()
+===========================================================================
+DataStructures.StackAr.topAndPop():::EXIT108
+Contract.ForAll(0, this.theArray.Count(), i => this.theArray[i].Equals(Contract.OldValue(this.theArray)[i]))
+this.topOfStack == Contract.OldValue(this.topOfStack)
+Contract.ForAll(this.theArray, x => x== null)
+Contract.ForAll(this.theArray, x => x.getClass().Equals(typeof(null)))
+this.topOfStack == -1
+Contract.Result<java.lang.Object>() == null
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+Contract.ForAll(this.theArray, x => x == Contract.Result<java.lang.Object>())
+===========================================================================
+DataStructures.StackAr.topAndPop():::EXIT111
+Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.topOfStack])
+Contract.ForAll(0, this.theArray.Slice(0, this.topOfStack).Count(), i => this.theArray.Slice(0, this.topOfStack)[i].Equals(Contract.OldValue(this.theArray).Slice(0, orig(this.topOfStack)-1)[i]))
+Contract.OldValue(this.topOfStack) >= 0
+this.theArray[Contract.OldValue(this.topOfStack)] == null
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+this.topOfStack - Contract.OldValue(this.topOfStack) + 1 == 0
+this.topOfStack < this.theArray.Count()-1
+(Contract.OldValue(this.topOfStack) >> this.theArray.Length == 0)
+(!(this.theArray.Count()-1 == 0)) || (Contract.OldValue(this.topOfStack) == 0)
+Contract.ForAll(this.theArray.Slice(this.topOfStack+1, this.theArray.Count()-1), x => x == this.theArray[Contract.OldValue(this.topOfStack)])
+===========================================================================
+DataStructures.StackAr.topAndPop():::EXIT
+this.theArray == Contract.OldValue(this.theArray)
+this.theArray.Length == Contract.OldValue(this.theArray).Length
+this.theArray.Count() == Contract.OldValue(this.theArray).Count()
+Contract.ForAll(0, this.theArray.Slice(0, this.topOfStack).Count(), i => this.theArray.Slice(0, this.topOfStack)[i].Equals(Contract.OldValue(this.theArray).Slice(0, this.topOfStack)[i]))
+Contract.ForAll(0, this.theArray.Slice(orig(this.topOfStack)+1, this.theArray.Count()-1).Count(), i => this.theArray.Slice(orig(this.topOfStack)+1, this.theArray.Count()-1)[i].Equals(Contract.OldValue(this.theArray).Slice(orig(this.topOfStack)+1, Contract.OldValue(this.theArray).Count()-1)[i]))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => (Contract.OldValue(this.topOfStack) >> Contract.Result<java.lang.Object>().Length == 0))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => (Contract.OldValue(this.topOfStack) >> this.theArray.Length == 0))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => (this.theArray.Count() >> Contract.Result<java.lang.Object>().Length == 0))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => (!(this.theArray.Count()-1 == 0)) || (Contract.OldValue(this.topOfStack) == 0))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => (this.theArray.Count()-1 >> Contract.Result<java.lang.Object>().Length == 0))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => Contract.OldValue(this.topOfStack) != Contract.Result<java.lang.Object>().Length)
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => Contract.Result<java.lang.Object>() == Contract.OldValue(this.theArray[this.topOfStack]))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => Contract.Exists(Contract.OldValue(this.theArray), x => x.getClass().Equals(Contract.Result<java.lang.Object>().GetType())))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.getClass() is printable)
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => Contract.Result<java.lang.Object>().Length % 8 == 0)
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => Contract.Result<java.lang.Object>().Length.OneOf(16, 24))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => this.theArray.Count() != Contract.Result<java.lang.Object>().Length)
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => this.theArray.Count()-1 != Contract.Result<java.lang.Object>().Length)
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => this.theArray.GetType() != Contract.Result<java.lang.Object>().GetType())
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => this.theArray.Length != Contract.Result<java.lang.Object>().Length)
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => Contract.ForAll(0, this.theArray.Slice(0, this.topOfStack).Count(), i => this.theArray.Slice(0, this.topOfStack)[i].Equals(Contract.OldValue(this.theArray).Slice(0, orig(this.topOfStack)-1)[i])))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => Contract.ForAll(this.theArray.Slice(orig(this.topOfStack), this.theArray.Count()-1), x => x== null))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => Contract.ForAll(this.theArray.Slice(orig(this.topOfStack), this.theArray.Count()-1), x => x == this.theArray[Contract.OldValue(this.topOfStack)]))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => this.theArray[Contract.OldValue(this.topOfStack)] == null)
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => Contract.ForAll(this.theArray.Slice(this.topOfStack+1, this.theArray.Count()-1), x => x == this.theArray[Contract.OldValue(this.topOfStack)]))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => this.topOfStack - Contract.OldValue(this.topOfStack) + 1 == 0)
+(Contract.OldValue(this.topOfStack) >= 0).Implies(() => this.topOfStack < this.theArray.Count()-1)
+(Contract.Result<java.lang.Object>() == null).Implies(() => Contract.OldValue(this.topOfStack) == -1)
+(Contract.Result<java.lang.Object>() == null).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(Contract.Result<java.lang.Object>() == null).Implies(() => this.topOfStack == Contract.OldValue(this.topOfStack))
+(Contract.Result<java.lang.Object>() == null).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(Contract.Result<java.lang.Object>() == null).Implies(() => Contract.ForAll(Contract.OldValue(this.theArray), x => x== null))
+(Contract.Result<java.lang.Object>() == null).Implies(() => Contract.ForAll(Contract.OldValue(this.theArray), x => x == Contract.Result<java.lang.Object>()))
+(Contract.Result<java.lang.Object>() == null).Implies(() => Contract.ForAll(Contract.OldValue(this.theArray), x => x.getClass().Equals(typeof(null))))
+(Contract.Result<java.lang.Object>() == null).Implies(() => Contract.ForAll(Contract.OldValue(this.theArray).Slice(this.topOfStack+1, Contract.OldValue(this.theArray).Count()-1), x => x== null))
+(Contract.Result<java.lang.Object>() == null).Implies(() => Contract.ForAll(Contract.OldValue(this.theArray).Slice(this.topOfStack+1, Contract.OldValue(this.theArray).Count()-1), x => x == Contract.Result<java.lang.Object>()))
+(Contract.Result<java.lang.Object>() == null).Implies(() => Contract.OldValue(this.topOfStack) < this.theArray.Length)
+(Contract.Result<java.lang.Object>() == null).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(Contract.Result<java.lang.Object>() == null).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(Contract.Result<java.lang.Object>() == null).Implies(() => Contract.ForAll(0, this.theArray.Count(), i => this.theArray[i].Equals(Contract.OldValue(this.theArray)[i])))
+(Contract.Result<java.lang.Object>() == null).Implies(() => Contract.ForAll(this.theArray, x => x== null))
+(Contract.Result<java.lang.Object>() == null).Implies(() => Contract.ForAll(this.theArray, x => x == Contract.Result<java.lang.Object>()))
+(Contract.Result<java.lang.Object>() == null).Implies(() => Contract.ForAll(this.theArray, x => x.getClass().Equals(typeof(null))))
+(Contract.Result<java.lang.Object>() == null).Implies(() => Contract.ForAll(this.theArray.Slice(orig(this.topOfStack)+1, this.theArray.Count()-1), x => x == Contract.Result<java.lang.Object>()))
+(Contract.Result<java.lang.Object>() == null).Implies(() => ("oneOf.java.jpp: SEQUENCE unimplemented" != null))
+(Contract.Result<java.lang.Object>() == null).Implies(() => Contract.ForAll(this.theArray.Slice(this.topOfStack+1, this.theArray.Count()-1), x => x == Contract.Result<java.lang.Object>()))
+(Contract.Result<java.lang.Object>() == null).Implies(() => this.topOfStack < this.theArray.Length)
+(Contract.Result<java.lang.Object>() == null).Implies(() => this.topOfStack == -1)
+warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:CSharpContract) needs to be implemented: return.getClass() is printable
+Contract.Result<java.lang.Object>().Length.OneOf(16, 24)
+Contract.Result<java.lang.Object>().Length % 8 == 0
+this.theArray.Slice(0, orig(this.topOfStack)).Distinct().Count() == this.theArray.Slice(0, orig(this.topOfStack)).Count()
+this.theArray.GetType() != Contract.Result<java.lang.Object>().GetType()
+this.theArray.GetType() == Contract.OldValue(this.theArray.GetType())
+this.topOfStack <= Contract.OldValue(this.topOfStack)
+this.topOfStack <= this.theArray.Length
+Contract.Exists(Contract.OldValue(this.theArray), x => x.getClass().Equals(Contract.Result<java.lang.Object>().GetType()))
+Contract.OldValue(this.topOfStack) <= this.theArray.Count()-1
+(Contract.OldValue(this.topOfStack) >> Contract.Result<java.lang.Object>().Length == 0)
+Contract.OldValue(this.topOfStack) != Contract.Result<java.lang.Object>().Length
+this.theArray.Length != Contract.Result<java.lang.Object>().Length
+(!(this.theArray.Count() == 0)) || (Contract.Result<java.lang.Object>().Length == 0)
+(this.theArray.Count() >> Contract.Result<java.lang.Object>().Length == 0)
+this.theArray.Count() != Contract.Result<java.lang.Object>().Length
+(this.theArray.Count()-1 >> Contract.Result<java.lang.Object>().Length == 0)
+this.theArray.Count()-1 != Contract.Result<java.lang.Object>().Length
