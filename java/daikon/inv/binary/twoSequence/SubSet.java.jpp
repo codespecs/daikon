@@ -152,6 +152,7 @@ public class SUBSET
     if (format == OutputFormat.DAIKON) return format();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.CSHARPCONTRACT) return format_csharp_contract();
     if (format.isJavaFamily()) {
       return format_java_family(format);
     }
@@ -166,6 +167,17 @@ public class SUBSET
     return v1 + " is a subset of " + v2;
     #else
     return v1 + " is a superset of " + v2;
+    #endif
+  }
+  
+  public String format_csharp_contract() {
+    String v1 = var1().csharp_collection_string();
+    String v2 = var2().csharp_collection_string();
+    
+    #if (defined(SUB) || defined(SUBFLOAT))
+    return "Contract.ForAll(" + v1 + ", i => " + v2 + ".Contains(i))";
+    #else
+    return "Contract.ForAll(" + v2 + ", i => " + v1 + ".Contains(i))";
     #endif
   }
 

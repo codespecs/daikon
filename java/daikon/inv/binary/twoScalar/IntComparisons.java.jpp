@@ -610,6 +610,36 @@ public final class INTEQUAL
       return var1name + " " + comparator + " " + var2name;
     }
 
+    if (format == OutputFormat.CSHARPCONTRACT) {
+      #if defined(EQUALSTRING)
+        assert var1().has_typeof() == var2().has_typeof();
+        if (var1().has_typeof()) {
+          return var1name + " == " + var2name;
+        } else {
+          return var1name + ".Equals(" + var2name + ")";
+        }
+      #elif defined(NONEQUALSTRING)
+        assert var1().has_typeof() == var2().has_typeof();
+        if (var1().has_typeof()) {
+          return var1name + " != " + var2name;
+        } else {
+          return "!" + var1name + ".Equals(" + var2name + ")";
+        }
+      #elif defined (LESSTHANSTRING)
+        return var1name + ".CompareTo(" + var2name +") < 0";
+      #elif defined (LESSEQUALSTRING)
+        return var1name + ".CompareTo(" + var2name +") <= 0";
+      #elif defined (GREATERTHANSTRING)
+        return var1name + ".CompareTo(" + var2name +") > 0";
+      #elif defined (GREATEREQUALSTRING)
+        return var1name + ".CompareTo(" + var2name +") >= 0";  
+      // Integer and float cases:
+      #else
+        String comparator = EQUALSstring;
+        return var1name + " " + comparator + " " + var2name;
+      #endif
+    }
+
     if (format.isJavaFamily()) {
       #if defined(EQUALFLOAT)
         return Invariant.formatFuzzy("eq", var1(), var2(), format);
@@ -655,7 +685,6 @@ public final class INTEQUAL
         }
         return var1name + " " + EQUALSstring + " " + var2name;
       #endif
-
     }
 
     if (format == OutputFormat.SIMPLIFY) {

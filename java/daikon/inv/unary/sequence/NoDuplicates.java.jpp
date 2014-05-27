@@ -119,6 +119,10 @@ public class CLASSNAME
       return format_java_family(format);
     }
 
+    if (format == OutputFormat.CSHARPCONTRACT) {
+      return format_csharp_contract();
+    }
+
     return format_unimplemented(format);
   }
 
@@ -131,6 +135,11 @@ public class CLASSNAME
 
   public String format_java_family(OutputFormat format) {
     return "daikon.Quant.noDups(" + var().name_using(format) + ")";
+  }
+  
+  public String format_csharp_contract() {
+  	String collection = var().csharp_collection_string();
+  	return collection + ".Distinct().Count() == " + collection + ".Count()";
   }
 
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {

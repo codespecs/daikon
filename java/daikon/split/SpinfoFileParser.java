@@ -250,6 +250,9 @@ public class SpinfoFileParser {
     } else if (command.startsWith("SIMPLIFY_FORMAT")) {
       obj.simplifyFormat = command.substring("SIMPLIFY_FORMAT".length()).trim();
       obj.dummyDesired = true;
+    } else if (command.startsWith("CSHARPCONTRACT_FORMAT")) {
+      obj.csharpFormat = command.substring("CSHARPCONTRACT_FORMAT".length()).trim();
+      obj.dummyDesired = true;   	
     } else {
       System.err.println("Unrecognized format spec in .spinfo: "
                                  + command);

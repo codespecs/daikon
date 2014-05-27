@@ -58,6 +58,7 @@ public class Quantify {
     /*@SideEffectFree*/ public String jml_name() { return esc_name(); }
     /*@SideEffectFree*/ public String jml_name(boolean in_prestate) { return jml_name(); }
     /*@SideEffectFree*/ public String simplify_name() { return name(); }
+    /*@SideEffectFree*/ public String csharp_name() { return name(); }
     /*@SideEffectFree*/ protected static String name_with_offset (String name, int offset) {
       if (offset == 0)
         return name;
@@ -155,6 +156,10 @@ public class Quantify {
       else
         return length;
     }
+    public String csharp_name() {
+    	VarInfo arr_var = get_check_array_var("CHARPCONTRACT");
+        return name_with_offset (arr_var.csharp_name() + ".Count()", offset);
+    }
 
     public void set_offset (int offset) {
       this.offset = offset;
@@ -248,6 +253,11 @@ public class Quantify {
   public static QuantifyReturn[] quantify(VarInfo[] vars) {
     assert vars != null;
 
+    // create empty result
+    QuantifyReturn[] result = new QuantifyReturn[vars.length];
+    for (int ii = 0; ii < vars.length; ii++)
+      result[ii] = new QuantifyReturn (vars[ii]);
+
     // Determine all of the simple identifiers used by these variables
     Set<String> simples = new HashSet<String>();
     for (VarInfo vi : vars) {
@@ -256,14 +266,10 @@ public class Quantify {
     }
     // System.out.printf ("simple names = %s\n", simples);
 
-    // create empty result
-    List<QuantifyReturn> result = new ArrayList<QuantifyReturn>(vars.length);
-
     // Loop through each of the variables, choosing an index for each
     char tmp = 'i';
-    for (VarInfo vi : vars) {
-      QuantifyReturn qr = new QuantifyReturn(vi);
-      result.add(qr);
+    for (int ii = 0; ii < vars.length; ii++) {
+      VarInfo vi = vars[ii];
 
       // If this variable is not an array, there is not much to do
       if (!vi.file_rep_type.isArray())
@@ -275,9 +281,9 @@ public class Quantify {
         idx_name = String.valueOf(tmp++);
       } while (simples.contains(idx_name));
       assert tmp <= 'z' : "Ran out of letters in quantification";
-      qr.index = new FreeVar(idx_name);
+      result[ii].index = new FreeVar(idx_name);
     }
-    return (result.toArray(new QuantifyReturn[result.size()]));
+    return (result);
   }
 
 

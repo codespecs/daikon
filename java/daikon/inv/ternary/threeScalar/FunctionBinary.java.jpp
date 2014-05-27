@@ -392,6 +392,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
     if (format == OutputFormat.SIMPLIFY) {
       return format_simplify();
     }
+    if (format == OutputFormat.CSHARPCONTRACT) {
+      return format_csharp_contract();
+    }
 
     int var_order = get_var_order();
     String[] methodname = get_method_name();
@@ -455,9 +458,74 @@ public abstract class CLASSNAME extends SUPERCLASS {
       func = "|java-" + methodname[1].trim() + "|";
     }
     if (func == null)
-      return "format_simplify() doesn't know function " + methodname[0] + "-" +
+      return "format_simplify_contract() doesn't know function " + methodname[0] + "-" +
         methodname[1] + "-" + methodname[2];
     return "(EQ " + result + " (" + func + " " + arg1 + " " + arg2 + "))";
+  }
+  
+  public String format_csharp_contract() {
+    int var_order = get_var_order();
+    String[] methodname = get_method_name();
+
+    VarInfo argresultvi = ppt.var_infos[var_indices[var_order][0]];
+    VarInfo arg1vi = ppt.var_infos[var_indices[var_order][1]];
+    VarInfo arg2vi = ppt.var_infos[var_indices[var_order][2]];
+    String result = argresultvi.csharp_name();
+    String arg1 = arg1vi.csharp_name();
+    String arg2 = arg2vi.csharp_name();
+    String func = null;
+    String operator = null;
+    
+    if (methodname[1].equals(" * ")) {
+    	operator = "*";
+    } else if (methodname[1].equals(" | ")) {
+    	operator = "|";
+    } else if (methodname[1].equals(" & ")) {
+    	operator = "&";
+    } else if (methodname[1].equals(" / ")) {
+    	operator = "/";
+    } else if (methodname[1].equals(" ^ ")) {
+    	operator = "^";
+    } else if (methodname[1].equals(" % ")) {
+        operator = "%";
+    } else if (methodname[1].equals(" && ")) {
+        operator = "&&";
+    } else if (methodname[1].equals(" || ")) {
+        operator = "||";
+    } else if (methodname[1].equals(" >> ")) {
+        operator = ">>";
+    } else if (methodname[1].equals(" >>> ")) {
+        return result + " == " + arg1 + ".UnsignedRightShift(" + arg2 + ")";
+        //return result + " == CSharpDaikonLib.Extensions.UnsignedRightShift(" + arg1 + ", " + arg2 + ")"; 
+    } else if (methodname[1].equals(" << ")) {
+        operator = "<<";
+    } 
+    
+    if (operator != null) {
+    	return result + " == (" + arg1 + " " + operator + " " + arg2 + ")";
+    }
+    
+    	 
+    if (methodname[1].equals(", ")) {
+      if (methodname[0].equals("java.lang.Math.min("))
+        func = "Math.Min";
+      else if (methodname[0].equals("java.lang.Math.max("))
+        func = "Math.Max";
+      else if (methodname[0].equals("plume.MathMDE.gcd("))
+        return result + " == CSharpDaikonLib.Extensions.GCD(" + arg1 + ", " + arg2 + ")";
+      else if (methodname[0].equals("java.lang.Math.pow("))
+        return result + " == " + arg1 + ".Pow(" + arg2 + ")";
+      else if (methodname[0].equals("plume.MathMDE.logicalXor("))
+        return result + " == (" + arg1 + " ^ " + arg2 + ")";
+    } else {
+      assert methodname[0].equals("");
+      assert methodname[2].equals("");
+      func = "|" + methodname[1].trim() + "|";
+    }
+    
+    if (func == null)
+      return "format_csharp_contract() doesn't know function " + methodname[0] + "-" + methodname[1] + "-" + methodname[2];
+    return result + " == " + func + "(" + arg1 + ", " + arg2 + ")";   
   }
 
   // If our classes match, we must match

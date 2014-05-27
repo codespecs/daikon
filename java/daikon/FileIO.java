@@ -2795,12 +2795,8 @@ public final class FileIO {
     public EnumSet<LangFlags> lang_flags = EnumSet.noneOf (LangFlags.class);
     /** Comparability of this variable (required **/
     public VarComparability comparability = null;
-    /** Parent program point in ppt hierarchy (optional) **/
-    public /*@Interned*/ String parent_ppt = null;
-    /** One of the relationship IDs for this ppt (optional) **/
-    public int parent_relation_id = 0;
-    /** The parent var name in the parent ppt (defaults to this name) **/
-    public /*@Nullable*/ String parent_variable = null;
+    /** Parent program points in ppt hierarchy (optional) **/
+    public List<VarParent> parents;
     /** Set if this 'variable' always has the same value (optional) **/
     public /*@Nullable*/ /*@Interned*/ Object static_constant_value = null;
 
@@ -2832,6 +2828,7 @@ public final class FileIO {
      */
     public VarDefinition (ParseState state, Scanner scanner) throws DeclError {
       this.state = state;
+      this.parents = new LinkedList<VarParent>();
       name = need (scanner, "name");
       need_eol (scanner);
       if (state.varcomp_format == VarComparability.IMPLICIT)
@@ -2842,6 +2839,7 @@ public final class FileIO {
 
     public VarDefinition (String name, VarKind kind, ProglangType type) {
       this.state = null;
+      this.parents = new LinkedList<VarParent>();
       this.name = name;
       this.kind = kind;
       this.rep_type = type;
@@ -2877,15 +2875,16 @@ public final class FileIO {
         enclosing_var = enclosing_var.intern();
       if (relative_name != null)
         relative_name = relative_name.intern();
-      if (parent_variable != null)
-        parent_variable = parent_variable.intern();
+      for (VarParent parent : parents){
+    	  parent.parent_ppt.intern();
+    	  if (parent.parent_variable != null)
+    		  parent.parent_variable = parent.parent_variable.intern();
+      }
     }
 
-    /** Clears the parent relation if one existed **/
+    /** Clears the parent relations, if any existed **/
     public void clear_parent_relation() {
-      parent_ppt = null;
-      parent_relation_id = 0;
-      parent_variable = null;
+    	parents.clear();
     }
 
     /**
@@ -2980,8 +2979,10 @@ public final class FileIO {
     public void parse_parent (Scanner scanner,
                        List<ParentRelation> ppt_parents) throws DeclError {
 
-     parent_ppt = need (scanner, "parent ppt");
-     parent_relation_id = Integer.parseInt (need (scanner, "parent id"));
+     String parent_ppt = need (scanner, "parent ppt");
+     int parent_relation_id = Integer.parseInt (need (scanner, "parent id"));
+     String parent_variable = null;
+     
      boolean found = false;
      for (ParentRelation pr : ppt_parents) {
        if ((pr.parent_ppt_name == parent_ppt) && (pr.id == parent_relation_id)) {
@@ -2996,6 +2997,9 @@ public final class FileIO {
      }
      if (scanner.hasNext())
        parent_variable = need (scanner, "parent variable");
+     
+     parents.add(new VarParent(parent_ppt, parent_relation_id, parent_variable));
+     
      need_eol (scanner);
     }
 

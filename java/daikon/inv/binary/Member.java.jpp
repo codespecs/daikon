@@ -274,6 +274,8 @@ public final class CLASSNAME
 #endif
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();
+    } else if (format == OutputFormat.CSHARPCONTRACT) {
+      return format_csharp_contract();
     } else {
       return format_unimplemented(format);
     }
@@ -302,6 +304,12 @@ public final class CLASSNAME
     // "exists x in a..b : P(x)" gets written as "!(forall x in a..b : !P(x))"
     String[] form = VarInfo.esc_quantify (seqvar(), sclvar());
     return "!" + form[0] + "(" + form[1] + " != " + form[2] + ")" + form[3];
+  }
+  
+  public String format_csharp_contract() {
+    String sclname = sclvar().csharp_name();
+    String[] split = seqvar().csharp_array_split();
+    return "Contract.Exists(" + split[0] + ", x => x" + split[1] + ".Equals(" + sclname + "))";
   }
 
 #ifdef IS_SCALAR

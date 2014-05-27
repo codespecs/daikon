@@ -122,7 +122,14 @@ public class Implication
         return "((" + pred_fmt + ") == (" + consq_fmt + "))";
       else
         return "(" + pred_fmt + " $implies " + consq_fmt + ")";
-    } else {
+    } else if (format == OutputFormat.CSHARPCONTRACT) {
+      if ( iff )
+        return "(" + pred_fmt + ") == (" + consq_fmt + ")";
+      else
+    	return "(" + pred_fmt + ").Implies(" + consq_fmt + ")";
+    }
+   
+    else {
       return format_unimplemented(format);
     }
   }

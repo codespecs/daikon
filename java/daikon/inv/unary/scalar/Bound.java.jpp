@@ -305,7 +305,8 @@ public class LOWERBOUND
 
     if ((format == OutputFormat.DAIKON)
         || (format == OutputFormat.ESCJAVA)
-        || (format.isJavaFamily()))
+        || (format.isJavaFamily())
+        || (format == OutputFormat.CSHARPCONTRACT))
     {
 
       if (PrintInvariants.dkconfig_static_const_infer) {
@@ -354,6 +355,8 @@ public class LOWERBOUND
       return format_simplify();
     } else if (format == OutputFormat.ESCJAVA) {
       return format_esc();
+    } else if (format == OutputFormat.CSHARPCONTRACT) {
+      return format_csharp_contract();
     }
 
     return format_unimplemented(format);
@@ -426,6 +429,52 @@ public class LOWERBOUND
     return form[0] + "(" + form[1] + " " + GTESTR + " " + MIN1 + ")" + form[2];
 #else
     String varname = var().esc_name();
+    return varname + " " + GTESTR + " " + MIN1;
+#endif
+  }
+  
+  public String format_csharp_contract() {
+    PptTopLevel pptt = ppt.parent;
+    String name = var().csharp_name();
+
+    if (PrintInvariants.dkconfig_static_const_infer) {
+      for (VarInfo vi : pptt.var_infos) {
+        if (vi.isStaticConstant() && VarComparability.comparable(vi, var())) {
+          // If variable is a double, then use fuzzy comparison
+          if (vi.rep_type == ProglangType.DOUBLE) {
+            Double constantVal = (Double)vi.constantValue();
+            if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1))) {
+             #if defined(IS_ELT)
+              String[] split = var().csharp_array_split();
+			  return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + GTESTR + " " + vi.name() + ")";
+             #else
+              String varname = var().chsarp_name();
+              return varname + " " + GTESTR + " " + vi.name();
+             #endif
+            }
+          }
+          // Otherwise just use the equals method
+          else {
+            Object constantVal = vi.constantValue();
+            if (constantVal.equals(MIN1)) {
+             #if defined(IS_ELT)
+              String[] split = var().csharp_array_split();
+			  return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + GTESTR + " " + vi.name() + ")";
+             #else
+              String varname = var().chsarp_name();
+              return varname + " " + GTESTR + " " + vi.name();
+             #endif
+            }
+          }
+        }
+      }
+    }
+
+   #if defined(IS_ELT)
+    String[] split = var().csharp_array_split();
+	return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + GTESTR + " " + MIN1+ ")";
+   #else
+    String varname = var().chsarp_name();
     return varname + " " + GTESTR + " " + MIN1;
 #endif
   }

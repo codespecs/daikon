@@ -37,6 +37,7 @@ public class DummyInvariant
   private /*@Nullable*/ String simplifyFormat;
   private /*@Nullable*/ String jmlFormat;
   private /*@Nullable*/ String dbcFormat;
+  private /*@Nullable*/ String csharpFormat;
 
   private boolean negated = false;
 
@@ -52,7 +53,7 @@ public class DummyInvariant
   public DummyInvariant(PptSlice ppt,
                         /*@Nullable*/ String daikonStr, /*@Nullable*/ String java, /*@Nullable*/ String esc,
                          /*@Nullable*/ String simplify, /*@Nullable*/ String jml,
-                         /*@Nullable*/ String dbc, boolean desired) {
+                         /*@Nullable*/ String dbc, /*@Nullable*/ String csharp, boolean desired) {
     super(ppt);
     daikonFormat = daikonStr;
     javaFormat = java;
@@ -60,12 +61,13 @@ public class DummyInvariant
     simplifyFormat = simplify;
     jmlFormat = jml;
     dbcFormat = dbc;
+    csharpFormat = csharp;
     valid = desired;
   }
 
   public /*@Prototype*/ DummyInvariant(/*@Nullable*/ String daikonStr, /*@Nullable*/ String java, /*@Nullable*/ String esc,
                          /*@Nullable*/ String simplify, /*@Nullable*/ String jml,
-                         /*@Nullable*/ String dbc, boolean desired) {
+                         /*@Nullable*/ String dbc, /*@Nullable*/ String csharp, boolean desired) {
     super();
     daikonFormat = daikonStr;
     javaFormat = java;
@@ -73,6 +75,7 @@ public class DummyInvariant
     simplifyFormat = simplify;
     jmlFormat = jml;
     dbcFormat = dbc;
+    csharpFormat = csharp;
     valid = desired;
   }
 
@@ -86,6 +89,7 @@ public class DummyInvariant
                                             simplifyFormat,
                                             jmlFormat,
                                             dbcFormat,
+                                            csharpFormat,
                                             // Not valid until we find a slice for it
                                             /*valid=*/ false);
 
@@ -171,6 +175,7 @@ public class DummyInvariant
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
     if (format == OutputFormat.JML) return format_jml();
     if (format == OutputFormat.DBCJAVA) return format_dbc();
+    if (format == OutputFormat.CSHARPCONTRACT) return format_csharp();
 
     return format_unimplemented(format);
   }
@@ -230,6 +235,15 @@ public class DummyInvariant
       return "!(" + dbcFormat + ")";
     else
       return dbcFormat;
+  }
+  
+  public String format_csharp() {
+    if (dbcFormat == null)
+        return "format_csharp not implemented for dummy invariant";
+      if (negated)
+        return "!(" + csharpFormat + ")";
+      else
+        return csharpFormat;  
   }
 
   protected Invariant resurrect_done(int[] permutation) {

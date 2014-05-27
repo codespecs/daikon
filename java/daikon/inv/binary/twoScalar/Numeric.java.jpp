@@ -261,6 +261,32 @@ public abstract class CLASSNAME extends SUPERCLASS {
           #endif
         }
 
+        if(format == OutputFormat.CSHARPCONTRACT) {
+          #if defined(STRING)
+            fmt_str = UtilMDE.replaceString(fmt_str, "%var1%", var1().csharp_name());
+            fmt_str = UtilMDE.replaceString(fmt_str, "%var2%", var2().csharp_name());
+            return fmt_str;
+          #else
+            v1 = var1().csharp_name();
+            v2 = var2().csharp_name();
+            String[] split1 = var1().csharp_array_split();
+            String[] split2 = var2().csharp_array_split();
+            if (this instanceof Divides) {
+              return "Contract.ForAll(0, " + split1[0] + ".Count(), i => " + split1[0] + " [i]" + split1[1] + " % " + split2[0] + "[i]" + split2[1] + " == 0)";
+            } else if (this instanceof Square) {
+              return "Contract.ForAll(0, " + split1[0] + ".Count(), i => " + split1[0] + " [i]" + split1[1] + " == " + split2[0] + "[i]" + split2[1] + "*" + split2[0] + "[i]" + split2[1] + ")";
+          #if defined(TYPELONG) || defined(TYPELONGSEQ)
+            } else if (this instanceof BitwiseComplement) {
+              return "Contract.ForAll(0, " + split1[0] + ".Count(), i => " + split1[0] + " [i]" + split1[1] + " == ~" + split2[0] + "[i]" + split2[1] + ")";
+            } else if (this instanceof BitwiseSubset) {
+              return "Contract.ForAll(0, " + split1[0] + ".Count(), i => " + split1[0] + " [i]" + split1[1] + " == " + split1[0] + "[i]" + split1[1] + " | " + split2[0] + "[i]" + split2[1] + ")";
+          #endif
+            } else {
+              return format_unimplemented(format);
+            }
+          #endif        	
+        }
+
       if (format == OutputFormat.ESCJAVA) {
         String[] form = VarInfo.esc_quantify (var1(), var2());
         fmt_str = form[0] + "(" + fmt_str + ")" + form[3];
@@ -687,6 +713,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ 0 (MOD %var1% %var2%))");
+      else if (format == OutputFormat.CSHARPCONTRACT)
+        return ("%var1% % %var2% == 0");
       else
 
         #if defined(TYPEDOUBLE)
@@ -877,6 +905,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ %var1% (* %var2% %var2))");
+      else if (format == OutputFormat.CSHARPCONTRACT)
+      	return "%var1% == %var2%*%var2%";
       else if (format.isJavaFamily()) {
         #if defined(TYPEDOUBLE)
         return ("daikon.Quant.fuzzy.eq(%var1%, %var2%*%var2%)");
@@ -951,7 +981,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY) {
         return ("(IMPLIES (EQ %var1% 0) (EQ %var2% 0))");
-      } else if (format.isJavaFamily()) {
+      } else if (format.isJavaFamily() || format == OutputFormat.CSHARPCONTRACT) {
         return ("(!(%var1% == 0)) || (%var2% == 0)");
       } else {
         return ("(%var1% == 0) ==> (%var2% == 0)");
@@ -1037,6 +1067,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ %var1% (~ %var2%))");
+      else if (format == OutputFormat.CSHARPCONTRACT)
+         return "%var1% == ~%var2%";     	
       else
         #if defined(TYPEDOUBLE)
         if (format.isJavaFamily()) {
@@ -1099,6 +1131,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
         return ("(EQ %var1% (|java-bitwise-or| %var2% %var1%))");
       else if (format == OutputFormat.DAIKON)
         return ("%var2% is a bitwise subset of %var1%");
+      else if (format == OutputFormat.CSHARPCONTRACT) 
+        return "%var1% == (%var2% | %var1%)";    	
       else
         #if defined(TYPEDOUBLE)
         if (format.isJavaFamily()) {
@@ -1197,6 +1231,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ (|java-&| %var1% %var2%) 0)");
+      else if (format == OutputFormat.CSHARPCONTRACT) 
+        return ("(%var1% & %var2%) == 0");     	
       else
         #if defined(TYPEDOUBLE)
         if (format.isJavaFamily()) {
@@ -1286,6 +1322,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ (|java->>| %var1% %var2%) 0)");
+      else if (format == OutputFormat.CSHARPCONTRACT)
+        return ("(%var1% >> %var2% == 0)");     
       else
         #if defined(TYPEDOUBLE)
         if (format.isJavaFamily()) {
@@ -1375,6 +1413,12 @@ public abstract class CLASSNAME extends SUPERCLASS {
         return "%var1% is a substring of %var2%";
       } else if (format.isJavaFamily()) {
         return "%var2%.contains(%var1%)";
+      } else if (format == OutputFormat.CSHARPCONTRACT) {
+        #if defined(TYPESTRINGSEQ)
+           return "Contract.ForAll(0, %var2%.Count(), i => %var2%[i].Contains(%var1%[i]))";
+      	#elif defined(TYPESTRING)
+          return "%var2%.Contains(%var1%)";
+      	#endif
       } else {
         return format_unimplemented(format);
       }

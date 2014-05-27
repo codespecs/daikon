@@ -579,6 +579,8 @@ public abstract class RANGE extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EXISTS (p) (EQ %var1% (pow 2 p)))");
+      if (format == OutputFormat.CSHARPCONTRACT)
+        return "%var1%.IsPowerOfTwo()";
       else
         return ("%var1% is a power of 2");
     }
@@ -653,6 +655,8 @@ public abstract class RANGE extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ (MOD %var1% 2) 0)");
+      if (format == OutputFormat.CSHARPCONTRACT) 
+        return "%var1% % 2 == 0";
       else
         return ("%var1% is even");
     }

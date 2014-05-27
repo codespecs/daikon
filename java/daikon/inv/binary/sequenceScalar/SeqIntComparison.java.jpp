@@ -263,6 +263,7 @@ public final class SEQINTEQUAL
     if (format == OutputFormat.DAIKON) return format_daikon();
     if (format == OutputFormat.ESCJAVA) return format_esc();
     if (format == OutputFormat.SIMPLIFY) return format_simplify();
+    if (format == OutputFormat.CSHARPCONTRACT) return format_csharp_contract();
 
     return format_unimplemented(format);
   }
@@ -286,6 +287,11 @@ public final class SEQINTEQUAL
   public String format_java_family(OutputFormat format) {
     return "daikon.Quant." + EQUALSstringDBC + "("
       + seqvar().name_using(format) + ", " + sclvar().name_using(format) + ")";
+  }
+  
+  public String format_csharp_contract() {
+    String[] split = seqvar().csharp_array_split();
+  	return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + EQUALSstring + " " + sclvar().csharp_name() + ")";
   }
 
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, PRIMITIVE x, int count) {
