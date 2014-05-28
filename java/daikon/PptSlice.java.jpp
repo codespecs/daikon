@@ -263,7 +263,7 @@ public final class PPTSLICE1 extends PptSlice {
           inv.falsify();
           result.add (inv);
           if (Invariant.logOn())
-            inv.log ("destroyed because %s array index out of bounds", 
+            inv.log ("destroyed because %s array index out of bounds",
                      var_infos[i].name());
         }
         if (VarInfo.debugMissing.isLoggable (Level.FINE))
@@ -740,7 +740,7 @@ public final class PPTSLICE1 extends PptSlice {
       if (child_invs.size() == valid_child_count) {
         Invariant first = child_invs.get(0);
         if (Debug.logOn())
-          first.log ("Attempting merge of %s invariants into ppt %s", 
+          first.log ("Attempting merge of %s invariants into ppt %s",
                      child_invs.size(), name());
         Invariant parent_inv = first.merge (child_invs, this);
         if (parent_inv != null) {
@@ -752,7 +752,7 @@ public final class PPTSLICE1 extends PptSlice {
       } else {
         if (Debug.logOn()) {
           Invariant inv = child_invs.get(0);
-          inv.log ("Not merging invariant into %s, Found %s child invariants in %s children", 
+          inv.log ("Not merging invariant into %s, Found %s child invariants in %s children",
                    name(), child_invs.size(), valid_child_count);
         }
       }

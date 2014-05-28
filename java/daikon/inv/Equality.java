@@ -455,18 +455,18 @@ public final /*(at)Interned*/ class Equality
       if (debugPostProcess.isLoggable(Level.FINE)) {
         debugPostProcess.fine ("  var2: " + varArray[i].name());
       }
-      
+
       // Guard to prevent creating unnecessary Equality invariants related to
       // purity method black boxing
       if (leader.function_args != null && varArray[i].function_args != null &&
-    		  leader.function_args.size() > 1 &&
-              leader.function_args.size() == varArray[i].function_args.size()) {
+          leader.function_args.size() > 1 &&
+          leader.function_args.size() == varArray[i].function_args.size()) {
         boolean allEqual = true;
         for (int j = 0; j < leader.function_args.size(); j++) {
           if (!leader.function_args.get(j).isEqualTo(varArray[i].function_args.get(j))) {
             allEqual = false;
             break;
-          }    
+          }
         }
         if (allEqual) continue;
       }

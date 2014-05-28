@@ -157,8 +157,8 @@ public class Quantify {
         return length;
     }
     /*@SideEffectFree*/ public String csharp_name() {
-    	VarInfo arr_var = get_check_array_var("CHARPCONTRACT");
-        return name_with_offset (arr_var.csharp_name() + ".Count()", offset);
+      VarInfo arr_var = get_check_array_var("CHARPCONTRACT");
+      return name_with_offset (arr_var.csharp_name() + ".Count()", offset);
     }
 
     public void set_offset (int offset) {
@@ -383,7 +383,7 @@ public class Quantify {
     String[] arr_vars_indexed;
     /*@Nullable*/ String[] indices;
 
-    public SimplifyQuantification (EnumSet<QuantFlags> flags, VarInfo... vars){
+    public SimplifyQuantification (EnumSet<QuantFlags> flags, VarInfo... vars) {
       this.flags = flags.clone();
 
       assert vars != null;

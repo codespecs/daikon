@@ -916,7 +916,7 @@ public String format_csharp_contract() {
     String endString = ")";
     #endif
 
-	String[] split = var().csharp_array_split();
+    String[] split = var().csharp_array_split();
     List<String> args_list = new ArrayList<String>();
     // Construct the array that unary value will be compared against.
     for (int i = 0; i < num_elts; i++) {
@@ -930,24 +930,24 @@ public String format_csharp_contract() {
     String args = UtilMDE.join(args_list, ", ");
 
     if (num_elts == 0) { // If there are no elements, length must be 0.
-    	String varname = var().csharp_name();
-    	return varname + ".Count() == 0";
+      String varname = var().csharp_name();
+      return varname + ".Count() == 0";
     } else if (num_elts == 1) {
     #if defined(BASE_INT)
       if (is_boolean()) {
         String bool_str = (elts[0] == 0) ? "false" : "true";
         result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " == " + bool_str + ")";
       } else if (is_hashcode()) {
-        String null_str = elts[0] == 0 ? " == null" : " != null";
+        String null_str = elts[0] == 0 ? " == null" : " != null"; // interned
         result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + null_str + ")";
       } else
     #endif
       {
-        result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + equalsString + args + endString + ")";  
-      } 
+        result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + equalsString + args + endString + ")";
+      }
     } else {
       assert num_elts > 1;
-      result = "Contract.ForAll(" + split[0] + ", x => " + "x" + split[1] + ".OneOf(" + args + "))";  
+      result = "Contract.ForAll(" + split[0] + ", x => " + "x" + split[1] + ".OneOf(" + args + "))";
     }
 
 #elif defined(IS_SCALAR)
@@ -965,46 +965,43 @@ public String format_csharp_contract() {
     } else if (is_hashcode()) {
       if (num_elts == 1) {
         if (elts[0] == 0) {
-        	result = varname + " == " + "null";
+          result = varname + " == " + "null";
         } else
-        	result = varname + " != null";
+          result = varname + " != null";
         }
       else { // num_elts == 2
         // I have never observed this case happening.
         // Daikon: does not handle this case
         // ESC: returns unimplemented
         // Java: returns "true"
-        // Probably safe to safe we do not need to worry about this. 
+        // Probably safe to safe we do not need to worry about this.
         assert elts[0] == 0;
         assert elts[1] != 0;
-        return format_unimplemented(OutputFormat.CSHARPCONTRACT); 
-      } 
+        return format_unimplemented(OutputFormat.CSHARPCONTRACT);
+      }
     } else
 
     #endif
 
-	if(num_elts == 1) {
-		result = varname + " == " + elts[0];
-	} else {
-      List<String> e = new ArrayList<String>();
-      for (int i=0; i<num_elts; i++) {
-        e.add(TOSTRING(elts[i]));
+      if (num_elts == 1) {
+        result = varname + " == " + elts[0];
+      } else {
+        List<String> e = new ArrayList<String>();
+        for (int i=0; i<num_elts; i++) {
+          e.add(TOSTRING(elts[i]));
+        }
+        String exp = UtilMDE.join(e, ", ");
+
+        if (var().is_array() && !var().isDerived()) {
+            result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + ".OneOf(" + exp + "))";
+        } else {
+          result = varname + ".OneOf(" + exp + ")";
+        }
       }
-      String exp = UtilMDE.join(e, ", ");
-      
-      if(var().is_array() && !var().isDerived())
-      {
-          result = "Contract.ForAll(" + split[0] + ", x => x" + split[1] + ".OneOf(" + exp + "))";
-      }
-      else
-      {
-    	  result = varname + ".OneOf(" + exp + ")";
-      }
-    }
 
   #elif defined(STRING)
 
-    if(is_type()) {
+    if (is_type()) {
         List<String> names = new ArrayList<String>();
         for (int i=0; i<num_elts; i++) {
              String str = elts[i];
@@ -1012,12 +1009,12 @@ public String format_csharp_contract() {
                  names.add(varname + " == null");
              } else {
                  names.add(varname + " == typeof(" + str + ")");
-             } 
+             }
         }
         result = UtilMDE.join(names, " || ");
-    } else if (num_elts == 1){
+    } else if (num_elts == 1) {
         String str = elts[0];
-        result = (str == null || "null".equals(str)) 
+        result = (str == null || "null".equals(str))
                ? (varname + " == null")
                : (varname + ".Equals(" + TOSTRING(str) + ")");
     } else {
@@ -1032,8 +1029,7 @@ public String format_csharp_contract() {
   #endif
 
 #elif defined(IS_SEQUENCE)
-	result = "(\"oneOf.java.jpp: SEQUENCE unimplemented\" != null)"; // "interned"
-
+  result = "(\"oneOf.java.jpp: SEQUENCE unimplemented\" != null)"; // "interned"
 #endif
 
     return result;
@@ -1451,7 +1447,7 @@ public String format_csharp_contract() {
         for (int i = 0; i < num_elts; i++) {
           eltString.append(TOSTRING (elts[i]) + " ");
         }
-        log ("destroyed on sample %s previous vals = {%s} num_elts = %s", 
+        log ("destroyed on sample %s previous vals = {%s} num_elts = %s",
              TOSTRING (v), eltString, num_elts);
       }
       return InvariantStatus.FALSIFIED;

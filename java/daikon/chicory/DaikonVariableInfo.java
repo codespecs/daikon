@@ -66,7 +66,7 @@ public abstract class DaikonVariableInfo
      * @see #getTypeName()
      * @see #getTypeNameOnly()
      */
-    protected String typeName; 
+    protected String typeName;
     /**
      * The printed representation type that will appear in the .decls
      * declaration.
@@ -80,10 +80,10 @@ public abstract class DaikonVariableInfo
 
     /** Value of static constants.  Access via {@link #get_const_val} method. **/
     /*@Nullable*/ String const_val = null;
-    
+
     /** Arguments used to create a function. Access via {@link #get_func_args()} method. **/
     /*@Nullable*/ String function_args = null;
-    
+
     /** True iff the DeclWriter should print this variable **/
     protected boolean declShouldPrint = true;
 
@@ -574,12 +574,12 @@ public abstract class DaikonVariableInfo
                 // Could not find the class... no further purity analysis
                 typeInfo = null;
             }
-            
+
             if (typeInfo != null)
             {
                 //Pure methods with no parameters
                 for (MethodInfo meth : typeInfo.method_infos)
-                {    
+                {
                     if (meth.isPure() && meth.arg_names.length == 0)
                     {
                         StringBuffer buf = new StringBuffer();
@@ -598,10 +598,10 @@ public abstract class DaikonVariableInfo
 
                     }
                 }
-                
+
                 // List containing all class variables, excluding pure methods with parameters
                 List<DaikonVariableInfo> siblings = new ArrayList<DaikonVariableInfo>(thisInfo.children);
-                
+
                 // Pure methods with one parameter
                 for (MethodInfo meth : typeInfo.method_infos)
                 {
@@ -617,8 +617,8 @@ public abstract class DaikonVariableInfo
                             {
                                 sibClass = UtilMDE.classForName(UtilMDE.binaryNameToClassGetName(sibType));
                             } catch (ClassNotFoundException e)
-                            {    
-                            	throw new Error(e);
+                            {
+                                throw new Error(e);
                             }
 
                             // Add node if the class variable can be used as the pure method's parameter
@@ -639,7 +639,7 @@ public abstract class DaikonVariableInfo
                                                        depth);
                                 debug_vars.exdent();
                             }
-                        }                    
+                        }
                     }
                 }
             }
@@ -669,8 +669,8 @@ public abstract class DaikonVariableInfo
 
         return newChild;
     }
-    
-    
+
+
     /**
      * Adds the decl info for a pure method.
      */
@@ -684,7 +684,7 @@ public abstract class DaikonVariableInfo
         {
             arr_str = "[]";
         }
-        
+
         @SuppressWarnings("nullness") // method precondition
         /*@NonNull*/ Method meth = (Method) minfo.member;
 
@@ -702,10 +702,10 @@ public abstract class DaikonVariableInfo
         assert type != null;
 
         String theName = meth.getName() + "(";
-        if(args.length > 0) {
+        if (args.length > 0) {
             theName += args[0].getName();
         }
-        if (args.length > 1) 
+        if (args.length > 1)
         {
             for (int i = 1; i < args.length - 1; i++) {
                 theName += ", " + args[i].getName();
@@ -1279,7 +1279,7 @@ public abstract class DaikonVariableInfo
 
        return typeName;
    }
-   
+
    /**
     * Return the type name without aux information.
     * @see #getTypeName()
@@ -1312,13 +1312,13 @@ public abstract class DaikonVariableInfo
     public /*@Nullable*/ String get_const_val() {
         return const_val;
     }
-    
+
     /**
      * Returns the function args of the variable. If the variable is not a
      * function, or does not have any arguments, returns null.
      */
     public /*@Nullable*/ String get_function_args() {
-    	return function_args;
+        return function_args;
     }
 
    /**

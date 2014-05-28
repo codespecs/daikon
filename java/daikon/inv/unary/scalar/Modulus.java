@@ -91,9 +91,9 @@ public class Modulus
         return name + " % " + modulus + " == " + remainder;
       }
     }
-    
+
     if (format == OutputFormat.CSHARPCONTRACT) {
-    	return var().csharp_name() + " % " + modulus + " == " + remainder;
+      return var().csharp_name() + " % " + modulus + " == " + remainder;
     }
 
     //   if (format == OutputFormat.JAVA

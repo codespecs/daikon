@@ -157,7 +157,7 @@ public class DeclReader {
           throw new Error ("Unexpected value '" + value
                            + "' for integer variable " + this.name);
         }
-      } else if (is_double()){
+      } else if (is_double()) {
         try {
           return (Intern.intern(new Double (value))); // interning bugfix
         } catch (NumberFormatException t) {

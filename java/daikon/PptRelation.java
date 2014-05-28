@@ -407,31 +407,34 @@ public class PptRelation implements Serializable {
 
     PptRelation rel = new PptRelation (parent, child, pr.rel_type);
     for (VarInfo vc : child.var_infos) {
-      for (VarParent pi : vc.parents){
-      // System.out.printf ("--child variable %s, ppt %s[%d], parent_var %s%n",
-    	//                    vc.name(), pi.parent_ppt, pi.parent_relation_id,
-    	//                    pi.parent_variable);
-    	if (pi.parent_relation_id != pr.id)
-        continue;
+      for (VarParent pi : vc.parents) {
+        // System.out.printf ("--child variable %s, ppt %s[%d], parent_var %s%n",
+        //                    vc.name(), pi.parent_ppt, pi.parent_relation_id,
+        //                    pi.parent_variable);
+        if (pi.parent_relation_id != pr.id) {
+          continue;
+        }
 
-      // Get the name of the parent variable.  Its the same as this one if
-      // not specified.  For now, remove the array placeholder (..) since
-      // VarInfoName doesn't support it.
+        // Get the name of the parent variable.  Its the same as this one if
+        // not specified.  For now, remove the array placeholder (..) since
+        // VarInfoName doesn't support it.
         String parent_name = pi.parent_variable;
-      if (parent_name == null)
-        parent_name = vc.name();
-      // parent_name = parent_name.replace ("[..]", "[]");
+        if (parent_name == null) {
+          parent_name = vc.name();
+        }
+        // parent_name = parent_name.replace ("[..]", "[]");
 
-      // System.out.printf ("---parent name %s%n", parent_name);
-      VarInfo vp = parent.find_var_by_name (parent_name);
-      if (vp == null)
-        throw new RuntimeException
-          ( String.format ("Can't find parent variable '%s' in ppt '%s', "
-                         + "with vars %s specified by var '%s' in ppt '%s'",
-                           parent_name, pi.parent_ppt, parent.var_names(),
-                         vc.name(), child.name()));
-      rel.child_to_parent_map.put(vc, vp);
-      rel.parent_to_child_map.put(vp, vc);
+        // System.out.printf ("---parent name %s%n", parent_name);
+        VarInfo vp = parent.find_var_by_name (parent_name);
+        if (vp == null) {
+          throw new RuntimeException
+            ( String.format ("Can't find parent variable '%s' in ppt '%s', "
+                             + "with vars %s specified by var '%s' in ppt '%s'",
+                             parent_name, pi.parent_ppt, parent.var_names(),
+                             vc.name(), child.name()));
+        }
+        rel.child_to_parent_map.put(vc, vp);
+        rel.parent_to_child_map.put(vp, vc);
       }
     }
     return (rel);

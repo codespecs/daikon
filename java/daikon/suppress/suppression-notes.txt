@@ -33,7 +33,7 @@ true, it is more efficient not to check the invariants on the right-hand
 side.  Furthermore, it is better for users not to report the implied
 invariants.  The suppression mechanism provides a set of rules for
 expressing implications such as those above, and for avoiding checking or
-reporting the implied (suppressed) invariants.  
+reporting the implied (suppressed) invariants.
 
 
 Terminology:

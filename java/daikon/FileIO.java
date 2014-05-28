@@ -2875,16 +2875,17 @@ public final class FileIO {
         enclosing_var = enclosing_var.intern();
       if (relative_name != null)
         relative_name = relative_name.intern();
-      for (VarParent parent : parents){
-    	  parent.parent_ppt.intern();
-    	  if (parent.parent_variable != null)
-    		  parent.parent_variable = parent.parent_variable.intern();
+      for (VarParent parent : parents) {
+        parent.parent_ppt.intern();
+        if (parent.parent_variable != null) {
+          parent.parent_variable = parent.parent_variable.intern();
+        }
       }
     }
 
     /** Clears the parent relations, if any existed **/
     public void clear_parent_relation() {
-    	parents.clear();
+      parents.clear();
     }
 
     /**
@@ -2982,7 +2983,7 @@ public final class FileIO {
      String parent_ppt = need (scanner, "parent ppt");
      int parent_relation_id = Integer.parseInt (need (scanner, "parent id"));
      String parent_variable = null;
-     
+
      boolean found = false;
      for (ParentRelation pr : ppt_parents) {
        if ((pr.parent_ppt_name == parent_ppt) && (pr.id == parent_relation_id)) {
@@ -2997,9 +2998,9 @@ public final class FileIO {
      }
      if (scanner.hasNext())
        parent_variable = need (scanner, "parent variable");
-     
+
      parents.add(new VarParent(parent_ppt, parent_relation_id, parent_variable));
-     
+
      need_eol (scanner);
     }
 

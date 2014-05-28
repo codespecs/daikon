@@ -271,7 +271,7 @@ public class InvariantChecker {
         PptSlice slice = i.next();
         for (Invariant inv : slice.invs) {
           if (doConf &&
-              inv.getConfidence()<Invariant.dkconfig_confidence_limit){
+              inv.getConfidence()<Invariant.dkconfig_confidence_limit) {
             // System.out.printf ("inv ignored (conf): %s:%s\n", inv.ppt.name(),
             //                   inv.format());
             continue;

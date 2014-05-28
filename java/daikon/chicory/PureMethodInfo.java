@@ -35,7 +35,7 @@ public class PureMethodInfo extends DaikonVariableInfo
         minfo = methInfo;
 
         this.args = args;
-        
+
         // Update function_args
         function_args = receiverName;
         if (this.args.length != 0) {
@@ -227,7 +227,7 @@ public class PureMethodInfo extends DaikonVariableInfo
         }
 
     }
-    
+
     public VarKind get_var_kind() {
         return VarKind.FUNCTION;
     }

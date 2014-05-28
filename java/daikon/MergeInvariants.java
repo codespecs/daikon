@@ -344,7 +344,7 @@ public final class MergeInvariants {
 
     // Equality post processing
     debugProgress.fine ("Equality Post Processing");
-    for (Iterator<PptTopLevel> i = merge_ppts.ppt_all_iterator(); i.hasNext();){
+    for (Iterator<PptTopLevel> i = merge_ppts.ppt_all_iterator(); i.hasNext(); ) {
       PptTopLevel ppt = i.next();
       ppt.postProcessEquality();
     }

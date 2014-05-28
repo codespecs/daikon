@@ -252,7 +252,7 @@ public class SpinfoFileParser {
       obj.dummyDesired = true;
     } else if (command.startsWith("CSHARPCONTRACT_FORMAT")) {
       obj.csharpFormat = command.substring("CSHARPCONTRACT_FORMAT".length()).trim();
-      obj.dummyDesired = true;   	
+      obj.dummyDesired = true;
     } else {
       System.err.println("Unrecognized format spec in .spinfo: "
                                  + command);

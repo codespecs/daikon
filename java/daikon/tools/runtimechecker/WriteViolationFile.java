@@ -101,7 +101,7 @@ class WriteViolationFile {
 
         if (vios.size() == 0) {
           writer.write("none." + daikon.Global.lineSep);
-        } else{
+        } else {
           writer.write(daikon.Global.lineSep);
           for (Violation v : vios) {
             writer.write(v.toStringWithMethod());

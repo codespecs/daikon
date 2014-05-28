@@ -385,7 +385,7 @@ public class DTraceWriter extends DaikonWriter
 
         if (!arrayVal.getClass().isArray()) {
             throw new RuntimeException(String.format(
-              "The object \"%s\" of type %s is not an array", 
+              "The object \"%s\" of type %s is not an array",
               arrayVal, arrayVal.getClass()));
         }
 

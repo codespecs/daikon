@@ -19,7 +19,7 @@ public class KillerInstruction implements IInstruction {
   public Collection<X86Instruction> getInstructions() {
     return instructions;
   }
-  
+
   public KillerInstruction(Collection<X86Instruction> instructions) {
     if (instructions == null) throw new IllegalArgumentException("instructions cannot be null.");
     this.instructions = instructions;

@@ -655,7 +655,7 @@ public abstract class RANGE extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ (MOD %var1% 2) 0)");
-      if (format == OutputFormat.CSHARPCONTRACT) 
+      if (format == OutputFormat.CSHARPCONTRACT)
         return "%var1% % 2 == 0";
       else
         return ("%var1% is even");

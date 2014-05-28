@@ -26,7 +26,7 @@ import daikon.DynComp;
 /**
  * Instruments a class file to perform Dynamic Comparability.
  */
-@SuppressWarnings("nullness")   // 
+@SuppressWarnings("nullness")   //
 class DCInstrument {
 
   protected JavaClass orig_class;
@@ -157,7 +157,7 @@ class DCInstrument {
   /**
    * NOMENCLATURE
    *
-   * I (markro) realized that this code was not consistent with 
+   * I (markro) realized that this code was not consistent with
    * respect to variable naming.  It was using different terms
    * for the same item as well as the same term for different
    * items.  I have tried to modify the code to be consistent,
@@ -188,7 +188,7 @@ class DCInstrument {
 
   /**
    * This really should be part of the abstraction provided by BCEL,
-   * similar to LineNumberTable and LocalVariableTable.  However, for 
+   * similar to LineNumberTable and LocalVariableTable.  However, for
    * now we'll do it ourselves.
    */
   private StackMapTableEntry[] stack_map_table;
@@ -212,15 +212,15 @@ class DCInstrument {
     for (int i = 0; i < stack_map_table.length; i++) {
         running_offset = stack_map_table[i].getByteCodeOffsetDelta()
                                             + running_offset + 1;
-        
+
         if (running_offset > position) {
             modify_stack_map_offset(stack_map_table[i], delta);
             // Only update the first StackMap that occurs after the given
             // offset as map offsets are relative to previous map entry.
             return;
         }
-    }    
-  }    
+    }
+  }
 
   /**
    * Find the StackMap entry who's offset matches the input argument
@@ -241,11 +241,11 @@ class DCInstrument {
           return stack_map_table[i];
       }
       // try next map entry
-    }    
+    }
 
     // no offset matched
     throw new RuntimeException("Invalid StackMap offset 2");
-  }    
+  }
 
   /**
    * Find the index of the StackMap entry who's offset is the last
@@ -272,14 +272,14 @@ class DCInstrument {
           }
       }
       // try next map entry
-    }    
+    }
 
     if (stack_map_table.length == 0) {
       return -1;
     } else {
       return stack_map_table.length - 1;
-    }  
-  }    
+    }
+  }
 
   /**
    * Find the index of the StackMap entry who's offset is the first
@@ -297,11 +297,11 @@ class DCInstrument {
           return i;
       }
       // try next map entry
-    }    
+    }
 
     // no such entry found
     return -1;
-  }    
+  }
 
   /**
    * Find the StackMap entry who's offset is the first one after
@@ -317,7 +317,7 @@ class DCInstrument {
     } else {
         return stack_map_table[i];
     }
-  }    
+  }
 
   private void
   modify_stack_map_offset (StackMapTableEntry stack_map, int delta) {
@@ -335,23 +335,23 @@ class DCInstrument {
           frame_type <= Constants.SAME_FRAME_MAX) {
           if (new_delta > Constants.SAME_FRAME_MAX) {
               stack_map.setFrameType(Constants.SAME_FRAME_EXTENDED);
-          } else {    
+          } else {
               stack_map.setFrameType(new_delta);
-          }    
+          }
       } else if (frame_type >= Constants.SAME_LOCALS_1_STACK_ITEM_FRAME &&
                  frame_type <= Constants.SAME_LOCALS_1_STACK_ITEM_FRAME_MAX) {
           if (new_delta > Constants.SAME_FRAME_MAX) {
               stack_map.setFrameType(Constants.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED);
-          } else {    
+          } else {
               stack_map.setFrameType(Constants.SAME_LOCALS_1_STACK_ITEM_FRAME + new_delta);
-          }    
+          }
       } else if (frame_type == Constants.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED) {
-      } else if (frame_type >= Constants.CHOP_FRAME && 
+      } else if (frame_type >= Constants.CHOP_FRAME &&
                  frame_type <= Constants.CHOP_FRAME_MAX) {
       } else if (frame_type == Constants.SAME_FRAME_EXTENDED) {
       } else if (frame_type >= Constants.APPEND_FRAME &&
                  frame_type <= Constants.APPEND_FRAME_MAX) {
-      } else if (frame_type == Constants.FULL_FRAME) {        
+      } else if (frame_type == Constants.FULL_FRAME) {
       } else {
           throw new RuntimeException("Invalid StackMap frame_type");
       }
@@ -376,7 +376,7 @@ class DCInstrument {
           inst = ih.getInstruction();
           opcode = inst.getOpcode();
 
-          if( opcode == Constants.TABLESWITCH || opcode == Constants.LOOKUPSWITCH ) {
+          if ( opcode == Constants.TABLESWITCH || opcode == Constants.LOOKUPSWITCH ) {
               int current_offset = ih.getPosition();
               StackMapTableEntry stack_map = find_stack_map_after(current_offset);
               int delta = (current_offset + inst.getLength()) - running_offset;
@@ -482,8 +482,8 @@ class DCInstrument {
                     il.setPositions();
                     // Which means we might need to update a StackMap offset.
                     update_stack_map_offset(ih.getPosition(), size);
-                }    
-            }    
+                }
+            }
         }
       }
   }
@@ -511,11 +511,11 @@ class DCInstrument {
                 if (index >= locals.length) {
                     // there are hidden compiler temps in map
                     break;
-                }    
+                }
                 if (locals[index].getIndex() >= offset) {
                     // we've reached the point of insertion
                     break;
-                }    
+                }
                 new_local_types[index] = old_local_types[index];
             }
             new_local_types[index++] = generate_StackMapType_from_Type (type_new_var);
@@ -526,12 +526,12 @@ class DCInstrument {
 
             stack_map_table[i].setNumberOfLocals(num_locals + 1);
             stack_map_table[i].setTypesOfLocals(new_local_types);
-        }    
-      }    
+        }
+      }
   }
 
   /**
-   * Create a new local with a scope of the full method. 
+   * Create a new local with a scope of the full method.
    * This means we need to search the existing locals to find
    * the proper index for our new local. This might have the side effect of
    * causing us to rewrite the method byte codes to adjust the offsets
@@ -601,7 +601,7 @@ class DCInstrument {
         // create the local variable at end of locals
         // will automatically update max_locals
         lv_new = mg.addLocalVariable(name, type, null, null);
-    }    
+    }
 
     debug_instrument.log ("New LocalVariableTable: %s%n",
                           mg.getLocalVariableTable(pool));
@@ -640,8 +640,8 @@ class DCInstrument {
               needStackMap = true;
           }
           debug_instrument.log ("Original StackMap: (none)%n");
-      }    
-  }    
+      }
+  }
 
   /**
    */
@@ -656,14 +656,14 @@ class DCInstrument {
                                             + running_offset + 1;
         debug_instrument.log ("@%03d %s %n", running_offset, stack_map_table[i]);
       }
-  }    
+  }
 
   /**
    */
   private void
   create_new_stack_map_attribute (MethodGen mg) throws IOException{
 
-      if (stack_map_table.length == 0) 
+      if (stack_map_table.length == 0)
           return;
       debug_instrument.log ("New StackMap %s items:%n", stack_map_table.length);
 
@@ -679,7 +679,7 @@ class DCInstrument {
       StackMapTable map_table = new StackMapTable(pool.addUtf8("StackMapTable"),
                                 map_table_size, stack_map_table, pool.getConstantPool());
       mg.addCodeAttribute(map_table);
-  }    
+  }
 
   private Attribute
   get_stack_map_table_attribute (MethodGen mg) {
@@ -1384,7 +1384,7 @@ class DCInstrument {
     // code replacements we might make later.
     orig_start = (mg.getInstructionList()).getStart();
     add_create_tag_frame(mg);
-    
+
     // Calculate the operand stack value(s) for revised code.
     mgen.setMaxStack();
     // Calculate stack types information
@@ -1405,7 +1405,7 @@ class DCInstrument {
     // we need a mapping from InstructionHandle to orignal offset.
     // I beleive we always visit the InstructionHandle nodes of
     // the method's InstructionList in order - hence, we will use
-    // a simple array for now.  If this turns out to not be the 
+    // a simple array for now.  If this turns out to not be the
     // case we will need to use a hash map.
 
     int[] handle_offsets = new int[il.getLength()];
@@ -1413,8 +1413,8 @@ class DCInstrument {
     int index = 0;
     // Loop through each instruction, building up offset map.
     while (ih != null) {
-      handle_offsets[index++]= ih.getPosition();  
-  
+      handle_offsets[index++]= ih.getPosition();
+
       debug_instrument_inst.log ("inst: %s %n", ih);
       for (InstructionTargeter it : ih.getTargeters()) {
         //debug_instrument_inst.log ("targeter: %s %n", it);
@@ -1515,7 +1515,7 @@ class DCInstrument {
       global_catch_il = null;
       global_exception_handler = null;
       return;
-    }  
+    }
 
     InstructionList il = new InstructionList();
     il.append (ifact.createInvoke (DCRuntime.class.getName(),
@@ -1568,7 +1568,7 @@ class DCInstrument {
    */
   public void install_exception_handler (MethodGen mg) {
 
-    if (global_catch_il == null) 
+    if (global_catch_il == null)
         return;
 
     InstructionList cur_il = mg.getInstructionList();
@@ -1588,8 +1588,8 @@ class DCInstrument {
 
     debug_instrument.log ("New ExceptionHandler: %x %x %x %n", start.getPosition(),
                            end.getPosition(), exc_offset);
-    
-    // This is a trick to get running_offset set to 
+
+    // This is a trick to get running_offset set to
     // value of last stack map entry.
     update_stack_map_offset(exc_offset, 0);
     int map_offset = exc_offset - running_offset - 1;
@@ -1603,7 +1603,7 @@ class DCInstrument {
         arg_map_types[0] = new StackMapType(Constants.ITEM_Object,
                                             pool.addClass(mg.getClassName()),
                                             pool.getConstantPool());
-    }  
+    }
     for (int ii = 0; ii < arg_types.length; ii++) {
       arg_map_types[arg_index++] = generate_StackMapType_from_Type (arg_types[ii]);
     }
@@ -1657,7 +1657,7 @@ class DCInstrument {
         return;
 
     // For Java 7 and beyond the StackMapTable is part of the
-    // verification process.  We need to create and or update it to 
+    // verification process.  We need to create and or update it to
     // account for instrumentation code we have inserted as well as
     // adjustments for the new 'tag_frame' local.
 
@@ -1668,7 +1668,7 @@ class DCInstrument {
         // Each stack map frame specifies (explicity or implicitly) an
         // offset_delta that is used to calculate the actual bytecode
         // offset at which the frame applies.  This is caluclated by
-        // by adding offset_delta + 1 to the bytecode offset of the 
+        // by adding offset_delta + 1 to the bytecode offset of the
         // previous frame, unless the previous frame is the initial
         // frame of the method, in which case the bytecode offset is
         // offset_delta. (From the Java Virual Machine Specification,
@@ -1681,7 +1681,7 @@ class DCInstrument {
         // must subtract (len_code + 1). BUT, if the original first
         // entry has an offset of 0 (because the bytecode at address
         // 0 is a branch target) then we must delete it as it will
-        // be replaced by the new frame we are adding. 
+        // be replaced by the new frame we are adding.
         // (did you get all of that? - markro)
 
         if (stack_map_table[0].getByteCodeOffsetDelta() == 0) {
@@ -1703,7 +1703,7 @@ class DCInstrument {
     int new_index = 1;
     for (int i = (skipFirst ? 1 : 0); i < stack_map_table.length; i++) {
         new_stack_map_table[new_index++] = stack_map_table[i];
-    }    
+    }
     stack_map_table = new_stack_map_table;
     // print_stack_map_table ("add_create_tag_frame");
   }
@@ -1718,7 +1718,7 @@ class DCInstrument {
     if (il == null)
       return;
     insert_before_handle(mg, il.getStart(), new_il);
-  }  
+  }
 
   /**
    * Inserts a new instruction list into an existing instruction list
@@ -1757,7 +1757,7 @@ class DCInstrument {
     il.setPositions();
     update_stack_map_offset(new_start.getPosition(), length);
 
-    // We need to see if inserting the additional instructions caused 
+    // We need to see if inserting the additional instructions caused
     // a change in the amount of switch instruction padding bytes.
     //
     // If there was no orgiinal StackMapTable (smta == null)
@@ -4124,7 +4124,7 @@ class DCInstrument {
     // code bytes, not instructions.
     byte[] bytecode = new_il.getByteCode();
     int new_length = bytecode.length;
-    
+
     debug_instrument_inst.log ("  replace_inst: %s %d%n%s%n", ih, new_il.getLength(), new_il);
 
 
@@ -4132,7 +4132,7 @@ class DCInstrument {
     if (new_il.getLength() == 1) {
       ih.setInstruction (new_il.getEnd().getInstruction());
       if (old_length == new_length) {
-        // no possible changes downstream, so we can exit now  
+        // no possible changes downstream, so we can exit now
         return;
       }
       print_stack_map_table ("replace_with_single_inst B");
@@ -4147,10 +4147,10 @@ class DCInstrument {
       new_end = new_il.getEnd();
       new_start = il.insert (ih, new_il);
       il.setPositions();
-  
+
       // Move all of the branches from the old instruction to the new start
       il.redirectBranches (ih, new_start);
-  
+
       // Move other targets to the new instuctions.
       if (ih.hasTargeters()) {
         for (InstructionTargeter it : ih.getTargeters()) {
@@ -4173,7 +4173,7 @@ class DCInstrument {
           }
         }
       }
-  
+
       // Remove the old handle.  There should be no targeters left to it.
       try {
         il.delete (ih);
@@ -4188,7 +4188,7 @@ class DCInstrument {
         // Look for branches within the new il; i.e., both the source
         // and target must be within the new il.  If we find any, the
         // target will need a stack map entry.
-        InstructionHandle nih = new_start; 
+        InstructionHandle nih = new_start;
         int target_count = 0;
         int target_offsets[] = new int[2];  // see note below for why '2'
 
@@ -4252,14 +4252,14 @@ class DCInstrument {
                         local_map_types[0] = new StackMapType(Constants.ITEM_Object,
                                                             pool.addClass(mgen.getClassName()),
                                                             pool.getConstantPool());
-                    }  
+                    }
                     for (int ii = 0; ii < arg_types.length; ii++) {
                         local_map_types[arg_index++] = generate_StackMapType_from_Type (arg_types[ii]);
                     }
                     if (frame_flag == 1) {
                         local_map_types[arg_index++] = generate_StackMapType_from_Type (object_arr);
                     }
-                
+
                     int ss = stack.size();
                     StackMapType[] stack_map_types = new StackMapType[ss];
                     for (int ii = 0; ii < ss; ii++) {
@@ -4274,7 +4274,7 @@ class DCInstrument {
                 modify_stack_map_offset (new_stack_map_table[new_index+i], target_offsets[i]-(running_offset+1));
                 running_offset = target_offsets[i];
             }
-            
+
             // now copy remaining 'old' stack maps
             int remainder = orig_size - new_index;
             if (remainder > 0) {
@@ -4554,7 +4554,7 @@ class DCInstrument {
     for (int ii = 0; ii < arg_types.length; ii++) {
       mg.addLocalVariable (arg_names[ii], arg_types[ii], null, null);
     }
-    
+
     /*
     // Discard the tags for any primitive arguments passed to system
     // methods
@@ -5123,7 +5123,7 @@ class DCInstrument {
       // Add back the true locals
       //
       // NOTE that the Java compiler uses unnamed local temps for:
-      // saving the exception in a finally clause 
+      // saving the exception in a finally clause
       // the lock for a synchronized block
       // (others?)
       // We will create a 'fake' local for these cases.

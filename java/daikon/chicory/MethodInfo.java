@@ -153,7 +153,7 @@ public class MethodInfo {
     {
         int mod = member.getModifiers();
 
-        
+
         // Only consider purity on non-abstract, non-static, and non-constructor
         // methods which return a value!
         if (!Modifier.isAbstract(mod) && !Modifier.isStatic(mod) &&

@@ -458,7 +458,7 @@ public class Instrument implements ClassFileTransformer {
 
 
   // This really should be part of the abstraction provided by BCEL,
-  // similar to LineNumberTable and LocalVariableTable.  However, for 
+  // similar to LineNumberTable and LocalVariableTable.  However, for
   // now we'll do it all within Instrument.java.
 
   // Set by instrument_all_methods
@@ -466,11 +466,11 @@ public class Instrument implements ClassFileTransformer {
   // update_stack_map_offset, add_entry_instrumentation
   private StackMapTableEntry[] stack_map_table;
   private StackMapTableEntry[] empty_stack_map_table = {};
-  // kind of a hack since no pointers in Java and not 
+  // kind of a hack since no pointers in Java and not
   // worth making a container object.
   private int running_offset;
-  
- 
+
+
  /**
    * Instrument all the methods in a class.  For each method, add
    * instrumentation code at the entry and at each return from the method.
@@ -545,7 +545,7 @@ public class Instrument implements ClassFileTransformer {
             stack_map_table = ((StackMapTable)smta).getStackMapTable();
             if (debug) {
                 out.format ("Original StackMap: %s%n", smta);
-                out.format ("Attribute tag: %s length: %d nameIndex: %d%n", 
+                out.format ("Attribute tag: %s length: %d nameIndex: %d%n",
                        smta.getTag(), smta.getLength(), smta.getNameIndex());
             }
             mg.removeCodeAttribute(smta);
@@ -554,7 +554,7 @@ public class Instrument implements ClassFileTransformer {
             if (debug) {
                 out.format ("Original StackMap: (none)%n");
             }
-        }    
+        }
 
         // Create a MethodInfo that describes this methods arguments
         // and exit line numbers (information not available via reflection)
@@ -566,7 +566,7 @@ public class Instrument implements ClassFileTransformer {
 
         if (!shouldInclude && ChicoryPremain.debug) {
           out.format ("Class %s included [%s]%n", cg.getClassName(), mi);
-        }    
+        }
         shouldInclude = true; // at least one method not filtered out
 
         method_infos.add(mi);
@@ -621,19 +621,19 @@ public class Instrument implements ClassFileTransformer {
                       int len = (new_il.getByteCode()).length;
                       il.setPositions();
                       int current_offset = next_ih.getPosition();
-    
+
                       if (debug) {
                           out.format ("Current offset: %d Inserted length: %d%n",
                                       current_offset, len);
                           //out.format ("Modified code: %s%n", mg.getMethod().getCode());
                           //dump_code_attributes(mg);
-                      }    
+                      }
 
                       // find stack map for current location
                       StackMapTableEntry stack_map = find_stack_map_equal(current_offset);
                       modify_stack_map_offset(stack_map, len);
-                  }    
-              }    
+                  }
+              }
 
               InstructionHandle new_start = il.insert(ih, new_il);
               // out.format ("old start = %s, new_start = %s%n", ih, new_start);
@@ -695,7 +695,7 @@ public class Instrument implements ClassFileTransformer {
         if (debug) {
           out.format ("Modified code: %s%n", mg.getMethod().getCode());
           dump_code_attributes(mg);
-        }  
+        }
 
         // verify the new method
         // StackVer stackver = new StackVer();
@@ -853,15 +853,15 @@ public class Instrument implements ClassFileTransformer {
     for (int i = 0; i < stack_map_table.length; i++) {
         running_offset = stack_map_table[i].getByteCodeOffsetDelta()
                                             + running_offset + 1;
-        
+
         if (running_offset > offset) {
             modify_stack_map_offset(stack_map_table[i], 1);
             // Only update the first StackMap that occurs after the given
             // offset as map offsets are relative to previous map entry.
             return;
         }
-    }    
-  }    
+    }
+  }
 
 
   /**
@@ -883,11 +883,11 @@ public class Instrument implements ClassFileTransformer {
           return stack_map_table[i];
       }
       // try next map entry
-    }    
+    }
 
     // no offset matched
     throw new RuntimeException("Invalid StackMap offset 1");
-  }    
+  }
 
 
   /**
@@ -907,11 +907,11 @@ public class Instrument implements ClassFileTransformer {
           return stack_map_table[i];
       }
       // try next map entry
-    }    
+    }
 
     // no such entry found
     throw new RuntimeException("Invalid StackMap offset 2");
-  }    
+  }
 
 
   private void
@@ -928,23 +928,23 @@ public class Instrument implements ClassFileTransformer {
           frame_type <= Constants.SAME_FRAME_MAX) {
           if (new_delta > Constants.SAME_FRAME_MAX) {
               stack_map.setFrameType(Constants.SAME_FRAME_EXTENDED);
-          } else {    
+          } else {
               stack_map.setFrameType(new_delta);
-          }    
+          }
       } else if (frame_type >= Constants.SAME_LOCALS_1_STACK_ITEM_FRAME &&
                  frame_type <= Constants.SAME_LOCALS_1_STACK_ITEM_FRAME_MAX) {
           if (new_delta > Constants.SAME_FRAME_MAX) {
               stack_map.setFrameType(Constants.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED);
-          } else {    
+          } else {
               stack_map.setFrameType(Constants.SAME_LOCALS_1_STACK_ITEM_FRAME + new_delta);
-          }    
+          }
       } else if (frame_type == Constants.SAME_LOCALS_1_STACK_ITEM_FRAME_EXTENDED) {
-      } else if (frame_type >= Constants.CHOP_FRAME && 
+      } else if (frame_type >= Constants.CHOP_FRAME &&
                  frame_type <= Constants.CHOP_FRAME_MAX) {
       } else if (frame_type == Constants.SAME_FRAME_EXTENDED) {
       } else if (frame_type >= Constants.APPEND_FRAME &&
                  frame_type <= Constants.APPEND_FRAME_MAX) {
-      } else if (frame_type == Constants.FULL_FRAME) {        
+      } else if (frame_type == Constants.FULL_FRAME) {
       } else {
           throw new RuntimeException("Invalid StackMap frame_type");
       }
@@ -970,7 +970,7 @@ public class Instrument implements ClassFileTransformer {
           inst = ih.getInstruction();
           opcode = inst.getOpcode();
 
-          if( opcode == Constants.TABLESWITCH || opcode == Constants.LOOKUPSWITCH ) {
+          if ( opcode == Constants.TABLESWITCH || opcode == Constants.LOOKUPSWITCH ) {
               int current_offset = ih.getPosition();
               StackMapTableEntry stack_map = find_stack_map_after(current_offset);
               int delta = (current_offset + inst.getLength()) - running_offset;
@@ -1011,14 +1011,14 @@ public class Instrument implements ClassFileTransformer {
           operand = ((IndexedInstruction)inst).getIndex();
           if (operand >= nonce_index) {
               ((IndexedInstruction)inst).setIndex(operand + 1);
-          }    
+          }
           break;
 
       case Constants.IINC:
           operand = ((LocalVariableInstruction)inst).getIndex();
           if (operand >= nonce_index) {
               ((LocalVariableInstruction)inst).setIndex(operand + 1);
-          }    
+          }
           break;
 
       case Constants.ILOAD:
@@ -1076,7 +1076,7 @@ public class Instrument implements ClassFileTransformer {
           operand = ((LocalVariableInstruction)inst).getIndex();
           if (operand >= nonce_index) {
               ((LocalVariableInstruction)inst).setIndex(operand + 1);
-          }    
+          }
           // Unfortunately, it doesn't take care of incrementing the
           // offset within StackMapEntrys.
           if (operand == 3) {
@@ -1086,7 +1086,7 @@ public class Instrument implements ClassFileTransformer {
               il.setPositions();
               // Which means we might need to update a StackMap offset.
               update_stack_map_offset(ih.getPosition());
-          }    
+          }
           break;
 
       default:
@@ -1109,7 +1109,7 @@ public class Instrument implements ClassFileTransformer {
     // all the locals we just shifted up one slot.  This may have a 'knock on'
     // effect if we are forced to change an instruction that references
     // implict local #3 to an instruction with an explict reference to local #4
-    // as this would require the insertion of an offset into the byte codes. 
+    // as this would require the insertion of an offset into the byte codes.
     // This means we would need to make an additional pass to update branch
     // targets (no - BCEL does this for us) and the StackMapTable (yes).
 
@@ -1157,7 +1157,7 @@ public class Instrument implements ClassFileTransformer {
         lv_nonce = c.mgen.addLocalVariable("this_invocation_nonce",
                                            Type.INT, null, null);
         nonce_index = lv_nonce.getIndex();
-    }    
+    }
 
     if (debug) {
         out.format ("%s%n", c.mgen.getLocalVariableTable(pgen));
@@ -1229,7 +1229,7 @@ public class Instrument implements ClassFileTransformer {
     }
 
     // For Java 7 and beyond the StackMapTable is part of the
-    // verification process.  We need to create and or update it to 
+    // verification process.  We need to create and or update it to
     // account for instrumentation code we have inserted as well as
     // adjustments for the new 'nonce' local.
 
@@ -1240,7 +1240,7 @@ public class Instrument implements ClassFileTransformer {
         // Each stack map frame specifies (explicity or implicitly) an
         // offset_delta that is used to calculate the actual bytecode
         // offset at which the frame applies.  This is caluclated by
-        // by adding offset_delta + 1 to the bytecode offset of the 
+        // by adding offset_delta + 1 to the bytecode offset of the
         // previous frame, unless the previous frame is the initial
         // frame of the method, in which case the bytecode offset is
         // offset_delta. (From the Java Virual Machine Specification,
@@ -1249,7 +1249,7 @@ public class Instrument implements ClassFileTransformer {
         // Since we are inserting (1 or 2) new stack map frames at the
         // beginning of the stack map table, we need to adjust the
         // offset_delta of the original first stack map frame due to
-        // the fact that it will no longer be the first entry.  We must 
+        // the fact that it will no longer be the first entry.  We must
         // subtract 1. BUT, if the original first entry has an offset
         // of 0 (because bytecode address 0 is a branch target) then
         // we must delete it as it will be replaced by the new frames
@@ -1309,10 +1309,10 @@ public class Instrument implements ClassFileTransformer {
 
                 stack_map_table[i].setNumberOfLocals(num_locals+1);
                 stack_map_table[i].setTypesOfLocals(new_local_types);
-            }    
-        }    
+            }
+        }
         new_map[new_index++] = stack_map_table[i];
-    }    
+    }
     if (debug) {
         out.format ("new_map: %s%n", Arrays.toString(new_map));
     }
@@ -1508,7 +1508,7 @@ public class Instrument implements ClassFileTransformer {
       // Use reserved keyword for basic type rather than signature to
       // avoid conflicts with user defined types. Daikon issue #10.
       return t.toString();
-    } else {  
+    } else {
       // Array type: just convert '/' to '.'
       return t.getSignature().replace('/', '.');
     }
@@ -1546,13 +1546,13 @@ public class Instrument implements ClassFileTransformer {
         // As a further check, for javac-generated classfiles, the
         // constant pool index #1 is "this$0", and the first 5 bytes of
         // the bytecode are:
-        //   0: aload_0       
-        //   1: aload_1       
+        //   0: aload_0
+        //   1: aload_1
         //   2: putfield      #1
 
         lv_start++;
         param_offset--;
-        
+
         arg_names[0] = mgen.getArgumentType(0).toString() + ".this";
       }
     }

@@ -99,7 +99,7 @@ public final class TypeStack
         if (stack == null) {
             throw new IllegalArgumentException("Empty InstructionList in createMap");
         }
-            
+
     }
 
     private boolean initParents(/*>>>@UnknownInitialization @Raw TypeStack this,*/

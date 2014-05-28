@@ -944,7 +944,7 @@ public class Ast {
     NodeListOptional options = modifiers.f0;
     for (Enumeration e = options.elements(); e.hasMoreElements(); ) { // non-generic due to JTB
       NodeChoice c = (NodeChoice) e.nextElement();
-      
+
       if (c.choice instanceof NodeToken) {
 	      NodeToken t = (NodeToken) c.choice;
 	      String token = t.tokenImage;
@@ -970,17 +970,17 @@ public class Ast {
     NodeSequence sequence = (NodeSequence)nc.choice;
     Modifiers modifiers = (Modifiers)sequence.elementAt(0);
     NodeListOptional options = modifiers.f0;
-    
+
     NodeListOptional filteredOptions = new NodeListOptional();
-    
+
     for (Enumeration e = options.elements(); e.hasMoreElements(); ) { // non-generic due to JTB
       NodeChoice c = (NodeChoice) e.nextElement();
-      
+
       if (!(c.choice instanceof jtb.syntaxtree.Annotation)) {
   	    filteredOptions.addNode(c);
       }
     }
-    
+
     modifiers.f0 = filteredOptions;
   }
 
@@ -1315,7 +1315,7 @@ public class Ast {
     NodeListOptional list = modifiers.f0;
     for (int i = 0 ; i < list.size() ; i++) {
       NodeChoice nodeChoice = (NodeChoice)list.elementAt(i);
-      
+
       if (nodeChoice.choice instanceof NodeToken) {
 	      NodeToken keyword = (NodeToken)nodeChoice.choice;
 	      if (keyword.toString().equals(modifierString)) {
@@ -1336,16 +1336,16 @@ public class Ast {
 
   public static boolean isInAnonymousClass(Node node) {
 	  ClassOrInterfaceBody clsbody = (ClassOrInterfaceBody)Ast.getParent(ClassOrInterfaceBody.class, node);
-	  return (!(clsbody.getParent() instanceof ClassOrInterfaceDeclaration));    
+	  return (!(clsbody.getParent() instanceof ClassOrInterfaceDeclaration));
   }
-  
+
   public static boolean isInterface(ClassOrInterfaceBody n) {
 	// n.getParent won't be an ClassOrInterfaceDeclaration for anonymous
 	// class bodies such as in  new List() { ... }  -- anonymous classes can
 	// never be interfaces, however, so that's simple enough to handle. :)
 	if (!(n.getParent() instanceof ClassOrInterfaceDeclaration))
 		return false;
-		
+
     return isInterface((ClassOrInterfaceDeclaration)n.getParent());
   }
 

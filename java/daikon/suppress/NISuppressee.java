@@ -131,9 +131,9 @@ public class NISuppressee {
 //    * invariants.
 //    */
 //   public List<Invariant> instantiate_all (VarInfo[] vis, PptTopLevel ppt) {
-// 
+//
 //     List<Invariant> created_list = new ArrayList<Invariant>();
-// 
+//
 //     // Check for empty slots in vis, fail if there is more than one
 //     int missing_index = -1;
 //     for (int i = 0; i < vis.length; i++)
@@ -141,7 +141,7 @@ public class NISuppressee {
 //         assert missing_index == -1 : "Multiple empty vars";
 //         missing_index = i;
 //       }
-// 
+//
 //     // If all of the slots were full, create the invariant
 //     if (missing_index == -1) {
 //       if (ppt.is_slice_ok (vis, vis.length)) {
@@ -151,7 +151,7 @@ public class NISuppressee {
 //       }
 //       return (created_list);
 //     }
-// 
+//
 //     // Fill in the missing slot with each possible matching leader and
 //     // create an invariant for it.
 //     VarInfo leaders[] = ppt.equality_view.get_leaders_sorted();
@@ -166,7 +166,7 @@ public class NISuppressee {
 //       if (inv != null)
 //         created_list.add (inv);
 //     }
-// 
+//
 //     return (created_list);
 //   }
 

@@ -235,11 +235,11 @@ public class CLASSNAME
   public String format_java_family(OutputFormat format) {
     return "daikon.Quant." + COMPARATORSTRINGQUANT + "(" + var().name_using(format) + ")";
   }
-  
+
   public String format_csharp_contract() {
     String[] split = var().csharp_array_split();
-  	String name = var().csharp_name();
-  	return "Contract.ForAll(0, " + split[0] + ".Count()-1, i => " + split[0] + "[i]" + split[1] + " " + COMPARATORSTRING + " " + split[0] + "[i+1]" + split[1] + ")";
+    String name = var().csharp_name();
+    return "Contract.ForAll(0, " + split[0] + ".Count()-1, i => " + split[0] + "[i]" + split[1] + " " + COMPARATORSTRING + " " + split[0] + "[i+1]" + split[1] + ")";
   }
 
   public String format_simplify() {

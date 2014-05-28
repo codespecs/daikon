@@ -567,7 +567,7 @@ public class PptTopLevel extends Ppt {
    * few samples due to one of the variables being missing.
    **/
   public int num_values(VarInfo vi1, VarInfo vi2, VarInfo vi3) {
-    return Math.min (num_samples (vi1, vi2, vi3), 
+    return Math.min (num_samples (vi1, vi2, vi3),
                      num_values(vi1) * num_values(vi2) * num_values(vi3));
   }
 

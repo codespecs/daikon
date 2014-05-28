@@ -174,34 +174,34 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         }
 
         // add method to check object and class invariants.
-        
+
         // just skip anonymous classes for now, hard to get a name for them without a decl node...
         if ((clazz.getParent() instanceof ClassOrInterfaceDeclaration)) {
-        	ClassOrInterfaceDeclaration ucd = (ClassOrInterfaceDeclaration) clazz
+            ClassOrInterfaceDeclaration ucd = (ClassOrInterfaceDeclaration) clazz
                 .getParent();
-	        String classname = Ast.getClassName(ucd);
-	        ClassOrInterfaceBodyDeclaration objInvDecl = checkObjectInvariants_instrumentDeclaration(classname);
-	        Ast.addDeclaration(clazz, objInvDecl);
-	
-	        checkerClasses.addDeclaration(clazz, checkObjectInvariants_instrumentDeclaration_checker(classname,
-	                                                                                                 false /* check minor properties */));
-	        checkerClasses.addDeclaration(clazz, checkObjectInvariants_instrumentDeclaration_checker(classname,
-	                                                                                                 true /* check major properties */));
+            String classname = Ast.getClassName(ucd);
+            ClassOrInterfaceBodyDeclaration objInvDecl = checkObjectInvariants_instrumentDeclaration(classname);
+            Ast.addDeclaration(clazz, objInvDecl);
 
-	        boolean isNested = false;
-	        boolean isStatic = false;
-	        if (!Ast.isInner(ucd) || Ast.isStatic(ucd)) {
-	            ClassOrInterfaceBodyDeclaration classInvDecl = checkClassInvariantsInstrumentDeclaration(classname);
-	            checkerClasses.addDeclaration(clazz, checkClassInvariantsInstrumentDeclaration_checker(classname,
-	                                                                                                   false /* check minor properties */));
-	            checkerClasses.addDeclaration(clazz, checkClassInvariantsInstrumentDeclaration_checker(classname,
-	                                                                                                   true /* check minor properties */));
-	            Ast.addDeclaration(clazz, classInvDecl);
-	            Ast.addDeclaration(clazz, getInvariantsDecl());
-	            Ast.addDeclaration(clazz, isInstrumentedDecl());
-	            Ast.addDeclaration(clazz, staticPropertyDecl());
-	            Ast.addDeclaration(clazz, staticPropertyInit());
-	        }
+            checkerClasses.addDeclaration(clazz, checkObjectInvariants_instrumentDeclaration_checker(classname,
+                                                                                                     false /* check minor properties */));
+            checkerClasses.addDeclaration(clazz, checkObjectInvariants_instrumentDeclaration_checker(classname,
+                                                                                                     true /* check major properties */));
+
+            boolean isNested = false;
+            boolean isStatic = false;
+            if (!Ast.isInner(ucd) || Ast.isStatic(ucd)) {
+                ClassOrInterfaceBodyDeclaration classInvDecl = checkClassInvariantsInstrumentDeclaration(classname);
+                checkerClasses.addDeclaration(clazz, checkClassInvariantsInstrumentDeclaration_checker(classname,
+                                                                                                       false /* check minor properties */));
+                checkerClasses.addDeclaration(clazz, checkClassInvariantsInstrumentDeclaration_checker(classname,
+                                                                                                       true /* check minor properties */));
+                Ast.addDeclaration(clazz, classInvDecl);
+                Ast.addDeclaration(clazz, getInvariantsDecl());
+                Ast.addDeclaration(clazz, isInstrumentedDecl());
+                Ast.addDeclaration(clazz, staticPropertyDecl());
+                Ast.addDeclaration(clazz, staticPropertyInit());
+            }
         }
     }
 
@@ -311,20 +311,20 @@ public class InstrumentVisitor extends DepthFirstVisitor {
 
         super.visit(method);
 
-    @SuppressWarnings("nullness") // application invariant: method node is always in a class or interface
-        /*@NonNull*/ ClassOrInterfaceDeclaration clsdecl =
+        @SuppressWarnings("nullness") // application invariant: method node is always in a class or interface
+            /*@NonNull*/ ClassOrInterfaceDeclaration clsdecl =
             (ClassOrInterfaceDeclaration)Ast.getParent(ClassOrInterfaceDeclaration.class, method);
-    
-    	 // skip anonymous nested classes for now, hard to refer to the right this object there...
+
+        // skip anonymous nested classes for now, hard to refer to the right this object there...
         if (Ast.isInterface(clsdecl) || Ast.isInAnonymousClass(method)) {
             return;
         }
 
         method.accept(new TreeFormatter());
 
-//         System.out.println("@@@0");
-//         method.accept(new TreeDumper());
-//         System.out.println("@@@1");
+        //         System.out.println("@@@0");
+        //         method.accept(new TreeDumper());
+        //         System.out.println("@@@1");
 
         if (generated_methods.contains(method)) {
             return;
@@ -394,8 +394,8 @@ public class InstrumentVisitor extends DepthFirstVisitor {
             } else if (returnType.equals("char")) {
                 code.append("'a'");
             } else if (returnType.equals("byte") || returnType.equals("double")
-                    || returnType.equals("float") || returnType.equals("int")
-                    || returnType.equals("long") || returnType.equals("short")) {
+                       || returnType.equals("float") || returnType.equals("int")
+                       || returnType.equals("long") || returnType.equals("short")) {
                 code.append("0");
             } else {
                 code.append("null");
@@ -411,7 +411,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         }
 
         code.append("internal$" + name + "(" + UtilMDE.join(parameters, ", ")
-                + ");");
+                    + ");");
 
         exitChecks(code, matching_ppts, pptmap, declaredThrowables, isStatic);
 
@@ -426,7 +426,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         String new_method = code.toString();
 
         MethodDeclaration wrapper = (MethodDeclaration) Ast.copy(
-                "MethodDeclaration", method);
+                                                                 "MethodDeclaration", method);
 
         Block block = (Block) Ast.create("Block", new_method);
 
@@ -438,7 +438,7 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         modifiers.accept(new TreeFormatter());
 
         @SuppressWarnings("nullness") // application invariant: method node is always in a class or interface
-        /*@NonNull*/ ClassOrInterfaceBody c =
+            /*@NonNull*/ ClassOrInterfaceBody c =
             (ClassOrInterfaceBody) Ast.getParent(ClassOrInterfaceBody.class, method);
 
         StringBuffer modifiers_declaration_stringbuffer  = new StringBuffer();
@@ -447,10 +447,10 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         modifiers_declaration_stringbuffer.append(Ast.format(wrapper));
 
         ClassOrInterfaceBodyDeclaration d = (ClassOrInterfaceBodyDeclaration) Ast.create(
-                "ClassOrInterfaceBodyDeclaration",
-                new Class[] { Boolean.TYPE },
-                new Object[] { Boolean.FALSE },  // isInterface == false
-                modifiers_declaration_stringbuffer.toString());
+                                                                                         "ClassOrInterfaceBodyDeclaration",
+                                                                                         new Class[] { Boolean.TYPE },
+                                                                                         new Object[] { Boolean.FALSE },  // isInterface == false
+                                                                                         modifiers_declaration_stringbuffer.toString());
         Ast.addDeclaration(c, d);
         NodeSequence ns = (NodeSequence) d.f0.choice;
         NodeChoice nc = (NodeChoice) ns.elementAt(1);

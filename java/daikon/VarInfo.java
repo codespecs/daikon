@@ -422,98 +422,98 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     // The parent ppt is the same as the base if each varinfo in the
     // derivation has the same parent
-    for (VarParent bp : base.parents){
+    for (VarParent bp : base.parents) {
       int parent_relation_id = bp.parent_relation_id;
       String parent_ppt = bp.parent_ppt;
-          
-      if (allHaveRelation(parent_relation_id)){
-    	parents.add(new VarParent(parent_ppt, parent_relation_id, null));
-      }
-    }
 
-    // If there is a parent_ppt, determine the parent_variable name.
-    // If all of the argument names are the default, then the parent_variable
-    // is the default as well.  Otherwise, build up the name from the
-    // function name and the name of each arguments parent variable name.
-    // TWS: the code doesn't appear to handle the case where some are default and some aren't.
-    for (VarParent p : parents){
-      boolean parent_vars_specified = false;
-      for (VarInfo vi : bases) {
-    	for (VarParent vp : vi.parents){
-    	  if (vp.parent_variable != null && vp.parent_relation_id == p.parent_relation_id)
-          parent_vars_specified = true;
-    	}
-      }
-      if (!parent_vars_specified)
-    	p.parent_variable = null;
-      else{
-        StringBuilderDelimited args = new StringBuilderDelimited(",");
-        for (VarInfo vi : bases) {
-          boolean found = false;
-          for (VarParent vp : vi.parents){
-            if (vp.parent_relation_id == p.parent_relation_id){
-              args.append(vp.parent_variable);
-              found = true;
-        }
-          }
-          if (!found){
-            args.append(vi.name());
-          }
-        }
-        p.parent_variable = String.format ("%s(%s)", name, args.toString());
-      }
-    }
-  }
+      if (allHaveRelation(parent_relation_id)) {
+         parents.add(new VarParent(parent_ppt, parent_relation_id, null));
+       }
+     }
 
-  /**
-   * Setup information normally specified in the declaration record
-   * for derived variables where one of the variables is the base of
-   * the derivation.  In general this information is inferred
-   * from the base variable of the derived variables.  Note that
-   * parent_ppt is set if each VarInfo in the derivation has the same
-   * parent, but parent_variable is not set.  This has to be set based
-   * on the particular derivation.
-   */
-  public void setup_derived_base (VarInfo base, /*@Nullable*/ VarInfo... others) {
+     // If there is a parent_ppt, determine the parent_variable name.
+     // If all of the argument names are the default, then the parent_variable
+     // is the default as well.  Otherwise, build up the name from the
+     // function name and the name of each arguments parent variable name.
+     // TWS: the code doesn't appear to handle the case where some are default and some aren't.
+     for (VarParent p : parents) {
+       boolean parent_vars_specified = false;
+       for (VarInfo vi : bases) {
+         for (VarParent vp : vi.parents) {
+           if (vp.parent_variable != null && vp.parent_relation_id == p.parent_relation_id)
+             parent_vars_specified = true;
+         }
+       }
+       if (!parent_vars_specified) {
+         p.parent_variable = null;
+       } else {
+         StringBuilderDelimited args = new StringBuilderDelimited(",");
+         for (VarInfo vi : bases) {
+           boolean found = false;
+           for (VarParent vp : vi.parents) {
+             if (vp.parent_relation_id == p.parent_relation_id) {
+               args.append(vp.parent_variable);
+               found = true;
+         }
+           }
+           if (!found) {
+             args.append(vi.name());
+           }
+         }
+         p.parent_variable = String.format ("%s(%s)", name, args.toString());
+       }
+     }
+   }
 
-    // Copy variable info from the base
-    ref_type = base.ref_type;
-    var_kind = base.var_kind;
-    var_flags = base.var_flags.clone();
-    lang_flags = base.lang_flags.clone();
-    enclosing_var = base.enclosing_var;
-    arr_dims = base.arr_dims;
-    function_args = base.function_args;
+   /**
+    * Setup information normally specified in the declaration record
+    * for derived variables where one of the variables is the base of
+    * the derivation.  In general this information is inferred
+    * from the base variable of the derived variables.  Note that
+    * parent_ppt is set if each VarInfo in the derivation has the same
+    * parent, but parent_variable is not set.  This has to be set based
+    * on the particular derivation.
+    */
+   public void setup_derived_base (VarInfo base, /*@Nullable*/ VarInfo... others) {
 
-    // The parent ppt is the same as the base if each varinfo in the
-    // derivation has the same parent
-    for (VarParent bp : base.parents){
+     // Copy variable info from the base
+     ref_type = base.ref_type;
+     var_kind = base.var_kind;
+     var_flags = base.var_flags.clone();
+     lang_flags = base.lang_flags.clone();
+     enclosing_var = base.enclosing_var;
+     arr_dims = base.arr_dims;
+     function_args = base.function_args;
+
+     // The parent ppt is the same as the base if each varinfo in the
+     // derivation has the same parent
+     for (VarParent bp : base.parents) {
        int parent_relation_id = bp.parent_relation_id;
        String parent_ppt = bp.parent_ppt;
-    	     
-      if (allHaveRelation(parent_relation_id, others)){
-    	parents.add(new VarParent(parent_ppt, parent_relation_id, null));
-      }
-    }
-  }
-  
-  /** Returns true if all variables have a parent relation with the specified id **/
-  private static boolean allHaveRelation(int parent_relation_id, VarInfo... vs){
-    for (VarInfo vi : vs) {
-      if (vi == null)
-          continue;
-  	  boolean hasRelId = false;
-      for (VarParent vp : vi.parents){
-        if (parent_relation_id == vp.parent_relation_id){
-          hasRelId = true;
-          break;
-        }
-      }
-      if (!hasRelId)
-        return false;
-    }
-    return true;
-  }
+
+       if (allHaveRelation(parent_relation_id, others)) {
+         parents.add(new VarParent(parent_ppt, parent_relation_id, null));
+       }
+     }
+   }
+
+   /** Returns true if all variables have a parent relation with the specified id **/
+   private static boolean allHaveRelation(int parent_relation_id, VarInfo... vs) {
+     for (VarInfo vi : vs) {
+       if (vi == null)
+         continue;
+       boolean hasRelId = false;
+       for (VarParent vp : vi.parents) {
+         if (parent_relation_id == vp.parent_relation_id) {
+           hasRelId = true;
+           break;
+         }
+       }
+       if (!hasRelId)
+         return false;
+     }
+     return true;
+   }
 
   /** Create the specified VarInfo **/
   private VarInfo (VarInfoName name, ProglangType type,
@@ -607,7 +607,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     arr_dims = vi.arr_dims;
     function_args = vi.function_args;
     parents = new LinkedList<VarParent>();
-    for (VarParent parent : vi.parents){
+    for (VarParent parent : vi.parents) {
       parents.add(new VarParent(parent.parent_ppt, parent.parent_relation_id, parent.parent_variable));
     }
     relative_name = vi.relative_name;
@@ -1180,40 +1180,41 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       return vt.getValueOrNull(value_index);
   }
 
-  /** 
+  /**
    * Returns the parent relation with the specified parent_relation_id;
    * returns null if the relation is not specified
    */
-  private /*@Nullable*/ VarParent get_parent(int parent_relation_id){
-	for (VarParent vp : parents){
-	  if (vp.parent_relation_id == parent_relation_id)
-	    return vp;
-	  }
-	return null;
+  private /*@Nullable*/ VarParent get_parent(int parent_relation_id) {
+    for (VarParent vp : parents) {
+      if (vp.parent_relation_id == parent_relation_id) {
+        return vp;
+      }
+    }
+    return null;
   }
 
   /**
    * Returns the parent variable name for the specified parent_relation_id.
    */
-  private String parent_var_name(int parent_relation_id){
-	VarParent parent = get_parent(parent_relation_id);
-	if (parent == null){
-	  throw new IllegalArgumentException("invalid parent_relation_id " + parent_relation_id + " for variable " + name());
-	}
-	return parent.parent_variable != null ? parent.parent_variable : name();
+  private String parent_var_name(int parent_relation_id) {
+    VarParent parent = get_parent(parent_relation_id);
+    if (parent == null) {
+      throw new IllegalArgumentException("invalid parent_relation_id " + parent_relation_id + " for variable " + name());
+    }
+    return parent.parent_variable != null ? parent.parent_variable : name();
   }
 
   /** Returns true iff the variable has a parent with the given parent_relation_id */
-  private boolean has_parent(int parent_relation_id){
-	return get_parent(parent_relation_id) != null;
+  private boolean has_parent(int parent_relation_id) {
+    return get_parent(parent_relation_id) != null;
   }
 
-  private /*@Nullable*/ String parent_var(int parent_relation_id){
-	VarParent parent = get_parent(parent_relation_id);
-	if (parent == null){
-	  throw new IllegalArgumentException("invalid parent_relation_id " + parent_relation_id + " for variable " + name());
-	}
-	return parent.parent_variable;
+  private /*@Nullable*/ String parent_var(int parent_relation_id) {
+    VarParent parent = get_parent(parent_relation_id);
+    if (parent == null) {
+      throw new IllegalArgumentException("invalid parent_relation_id " + parent_relation_id + " for variable " + name());
+    }
+    return parent.parent_variable;
   }
 
   /** Return the value of this long variable (as an integer) **/
@@ -2034,13 +2035,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     in.defaultReadObject();
     var_info_name = var_info_name.intern(); // vin ok
     str_name = str_name.intern();
-    
-    for (VarParent parent : parents){
+
+    for (VarParent parent : parents) {
       parent.parent_ppt.intern();
       if (parent.parent_variable != null)
         parent.parent_variable = parent.parent_variable.intern();
     }
-    
+
     if (relative_name != null)
       relative_name = relative_name.intern();
   }
@@ -2823,80 +2824,81 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     return (var_info_name); // vin ok
   }
 
-  private static boolean isStatic(String variable, String enclosing){
-	 return !variable.startsWith(enclosing) || variable.charAt(enclosing.length()) != '.';
+  private static boolean isStatic(String variable, String enclosing) {
+    return !variable.startsWith(enclosing) || variable.charAt(enclosing.length()) != '.';
   }
-  
+
   // Map java objects to C# objects.
   private static final Map<String, String> csharp_types = new HashMap<String, String>();
   static {
-	  csharp_types.put("java.lang.String", "string"); 
-	  csharp_types.put("java.lang.String[]", "string[]"); 
-	  csharp_types.put("java.lang.Object", "object");
-	  csharp_types.put("java.lang.Object[]", "object[]");
-	  csharp_types.put("boolean", "bool"); 
+    csharp_types.put("java.lang.String", "string");
+    csharp_types.put("java.lang.String[]", "string[]");
+    csharp_types.put("java.lang.Object", "object");
+    csharp_types.put("java.lang.Object[]", "object[]");
+    csharp_types.put("boolean", "bool");
   }
-  
+
   /**
-   * Transforms a Daikon type representation into a valid C# type. 
+   * Transforms a Daikon type representation into a valid C# type.
    */
   public static String fix_csharp_type_name(String type) {
-	    if(csharp_types.containsKey(type)) 
-	    	return csharp_types.get(type);
-		return type;
+    if (csharp_types.containsKey(type)) {
+      return csharp_types.get(type);
+    } else {
+      return type;
+    }
   }
-  
+
   /**
-   * If the variable is an array, returns a valid C# 'Select' statement representing the array. 
+   * If the variable is an array, returns a valid C# 'Select' statement representing the array.
    * For example, this.Array[].field would become this.Array.Select(x => x.field)
-   * 
-   * If the variable is not an array, csharp_name() is returned. 
+   *
+   * If the variable is not an array, csharp_name() is returned.
    */
   public String csharp_collection_string() {
-	  String[] split = csharp_array_split();
-	  if(split[1].equals(""))
-		  return split[0];
-	  else
-		  return split[0] + ".Select(x => x" + split[1] + ")";
+    String[] split = csharp_array_split();
+    if (split[1].equals(""))
+      return split[0];
+    else
+      return split[0] + ".Select(x => x" + split[1] + ")";
   }
-  
+
   /**
    * Splits an array variable into the array and field portions.
-   * For example, if the variable this.Array[].field then 
-   * result[0] = this.Array[] 
+   * For example, if the variable this.Array[].field then
+   * result[0] = this.Array[]
    * result[1] = field
-   * 
+   *
    * If the variable is not an array then
    * result[0] = csharp_name()
    * result[1] = ""
    * (there is no splitting)
    */
-  public String[] csharp_array_split()
-  {
-	  String[] results = new String[2];
-	  
-	  if(!is_array()) {
-		  results[0] = csharp_name();
-		  results[1] = "";
-		  return results;
-	  }
-	    
-	  String fields = "";
-	  VarInfo v = this;
-	  // Go backwards from v until we reach the array portion. 
-	  while(v.var_kind != VarInfo.VarKind.ARRAY && v.enclosing_var != null) {
-		  if(v.relative_name != null) {
-			  if(v.relative_name.equals("GetType()"))
-				  fields = "." + v.relative_name;
-			  else
-				  fields = "." + v.relative_name + fields;  
-		  }
-		  v = v.enclosing_var;
-	  }
-	  
-	  results[0] = v.csharp_name();
-	  results[1] = fields;  
-	  return results;
+  public String[] csharp_array_split() {
+    String[] results = new String[2];
+
+    if (!is_array()) {
+      results[0] = csharp_name();
+      results[1] = "";
+      return results;
+    }
+
+    String fields = "";
+    VarInfo v = this;
+    // Go backwards from v until we reach the array portion.
+    while (v.var_kind != VarInfo.VarKind.ARRAY && v.enclosing_var != null) {
+      if (v.relative_name != null) {
+        if (v.relative_name.equals("GetType()"))
+          fields = "." + v.relative_name;
+        else
+          fields = "." + v.relative_name + fields;
+      }
+      v = v.enclosing_var;
+    }
+
+    results[0] = v.csharp_name();
+    results[1] = fields;
+    return results;
   }
 
   /**
@@ -2918,77 +2920,77 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Returns the name of this variable as a valid C# Code Contract.
    **/
   /*@SideEffectFree*/ public String csharp_name() {
-	  return csharp_name(null);
+    return csharp_name(null);
   }
-  
+
   /**
    * Returns the name of this variable as a valid C# Code Contract.
    */
-  /*@SideEffectFree*/ public String csharp_name(/*@Nullable*/ String index) {	  	
-  	if (index != null)
-  		assert file_rep_type.isArray();
+  /*@SideEffectFree*/ public String csharp_name(/*@Nullable*/ String index) {
+    if (index != null)
+      assert file_rep_type.isArray();
 
-  	if (postState != null)
-  		return "Contract.OldValue(" + postState.csharp_name(index) + ")";
+    if (postState != null)
+      return "Contract.OldValue(" + postState.csharp_name(index) + ")";
 
-  	if (derived != null)
-  		return derived.csharp_name(index);
+    if (derived != null)
+      return derived.csharp_name(index);
 
-  	switch(var_kind) {
+    switch(var_kind) {
 
-  	case FIELD:
-  		assert relative_name != null : this;
+    case FIELD:
+      assert relative_name != null : this;
 
-  		if(isStatic(str_name, enclosing_var.name()))
-  			return str_name;
+      if (isStatic(str_name, enclosing_var.name()))
+        return str_name;
 
-  		if (enclosing_var != null) 
-  			return enclosing_var.csharp_name(index) + "." + relative_name;
+      if (enclosing_var != null)
+        return enclosing_var.csharp_name(index) + "." + relative_name;
 
-  		return str_name;
+      return str_name;
 
-  	case FUNCTION:
+    case FUNCTION:
 
-  		if (var_flags.contains(VarFlags.TO_STRING))
-  			return enclosing_var.csharp_name(index);   
+      if (var_flags.contains(VarFlags.TO_STRING))
+        return enclosing_var.csharp_name(index);
 
-  		if (var_flags.contains (VarFlags.CLASSNAME)) {
-  			if (arr_dims > 0)
-  				return csharp_collection_string();	        	  
-  			else
-  				return enclosing_var.csharp_name(index) + ".GetType()";
-  		}
+      if (var_flags.contains (VarFlags.CLASSNAME)) {
+        if (arr_dims > 0)
+          return csharp_collection_string();
+        else
+          return enclosing_var.csharp_name(index) + ".GetType()";
+      }
 
-  		if(enclosing_var != null) {
+      if (enclosing_var != null) {
 
-  			if (isStatic(str_name, enclosing_var.name())){    	
-  				String qualifiedName = str_name.substring(0, str_name.indexOf("("));
-  				return qualifiedName + "(" + enclosing_var.csharp_name(index) + ")";
-  			} else if (var_flags.contains(VarFlags.IS_PROPERTY)){
-  				return enclosing_var.csharp_name(index) + "." + relative_name;
-  			} else {
-  				return enclosing_var.csharp_name(index) + "." + relative_name + "()";
-  			}
-  		}
-  		else  {
-  			return str_name; 	
-  		}
+        if (isStatic(str_name, enclosing_var.name())) {
+          String qualifiedName = str_name.substring(0, str_name.indexOf("("));
+          return qualifiedName + "(" + enclosing_var.csharp_name(index) + ")";
+        } else if (var_flags.contains(VarFlags.IS_PROPERTY)) {
+          return enclosing_var.csharp_name(index) + "." + relative_name;
+        } else {
+          return enclosing_var.csharp_name(index) + "." + relative_name + "()";
+        }
+      }
+      else  {
+        return str_name;
+      }
 
-  	case ARRAY:
-  		if (index == null) 
-  			return enclosing_var.csharp_name(null);
-  		return enclosing_var.csharp_name(null) + "[" + index + "]";   
+    case ARRAY:
+      if (index == null)
+        return enclosing_var.csharp_name(null);
+      return enclosing_var.csharp_name(null) + "[" + index + "]";
 
-  	case VARIABLE:
-  		assert enclosing_var == null;
-  		return str_name;
+    case VARIABLE:
+      assert enclosing_var == null;
+      return str_name;
 
-  	case RETURN:
-        return "Contract.Result<" + fix_csharp_type_name(type.toString()) + ">()";
+    case RETURN:
+      return "Contract.Result<" + fix_csharp_type_name(type.toString()) + ">()";
 
-  	default:
-  		throw new Error("can't drop through switch statement.");
-  	}
+    default:
+      throw new Error("can't drop through switch statement.");
+    }
   }
 
   /** Returns the name in java format.  This is the same as JML **/
@@ -3096,8 +3098,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     // If this is a derived variable, the derivations builds the name
     if (derived != null) {
-      if(derived.getClass().toString().contains("ternary")) {
-    	  String x = "10";
+      if (derived.getClass().toString().contains("ternary")) {
+        String x = "10";
       }
       return derived.jml_name (index);
     }
@@ -3843,27 +3845,27 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // parent variable accordingly.  If all of the original variables, used
     // the default name, this can as well.  Otherwise, build the parent
     // name.
-    for (VarParent parent : vi.parents){
-   	    int rid = parent.parent_relation_id;
+    for (VarParent parent : vi.parents) {
+      int rid = parent.parent_relation_id;
 
-    	if ((seq.get_parent(rid) == null)
-    		&& ((begin == null) || !begin.has_parent(rid) || (begin.parent_var(rid) == null))
-    		&& ((end == null) || !end.has_parent(rid) || (end.parent_var(rid) == null))){
-    		
-    	  parent.parent_variable = null;
-    	}else{
-    	  String begin_pname = (begin == null || !begin.has_parent(rid)) ? "0" : begin.parent_var_name(rid);
-    	  String end_pname = (end == null || !end.has_parent(rid)) ? "" : end.parent_var_name(rid);
+      if ((seq.get_parent(rid) == null)
+          && ((begin == null) || !begin.has_parent(rid) || (begin.parent_var(rid) == null))
+          && ((end == null) || !end.has_parent(rid) || (end.parent_var(rid) == null))) {
+
+        parent.parent_variable = null;
+      } else {
+        String begin_pname = (begin == null || !begin.has_parent(rid)) ? "0" : begin.parent_var_name(rid);
+        String end_pname = (end == null || !end.has_parent(rid)) ? "" : end.parent_var_name(rid);
         @SuppressWarnings("formatter") // format string is constructed above using make_subsequence's arguments
-    	  String res = apply_subscript (seq.parent_var_name(rid),
-                      String.format (parent_format, begin_pname, end_pname));
-		  parent.parent_variable = res;
+        String res = apply_subscript (seq.parent_var_name(rid),
+                                        String.format (parent_format, begin_pname, end_pname));
+        parent.parent_variable = res;
         // System.out.printf ("-- set parent var from '%s' '%s' '%s' '%s'%n",
         //       seq.parent_var_name(), parent_format, begin_pname, end_pname);
-        }
-    // System.out.printf ("Parent for %s:%s is %s:%s%n",
-    //                ((seq.ppt != null)? seq.ppt.name() : "none"), vi.name(),
-    //                  vi.parent_ppt, vi.parent_variable);
+      }
+      // System.out.printf ("Parent for %s:%s is %s:%s%n",
+      //                ((seq.ppt != null)? seq.ppt.name() : "none"), vi.name(),
+      //                  vi.parent_ppt, vi.parent_variable);
     }
 
     return (vi);
@@ -3919,30 +3921,30 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     vi.setup_derived_base (seq, index);
     vi.var_kind = VarInfo.VarKind.FIELD;
     vi.str_name = seq.apply_subscript (index_str).intern(); // interning bugfix
-    for (VarParent parent : vi.parents){
+    for (VarParent parent : vi.parents) {
      int rid = parent.parent_relation_id;
 
      if ((seq.parent_var(rid) == null) &&
-         ((index == null) || !index.has_parent(rid) || (index.parent_var(rid) == null))){
+         ((index == null) || !index.has_parent(rid) || (index.parent_var(rid) == null))) {
        parent.parent_variable = null;
-     }else{ // one of the two bases has a different parent variable name
+     } else { // one of the two bases has a different parent variable name
         String subscript_parent = String.valueOf (index_shift);
        if (index != null && index.has_parent(rid)) {
          subscript_parent = index.parent_var_name(rid);
-         
-         if (seq.isPrestate() && !index.isPrestate()){
-           // Wrap the index in POST if the sequence is original 
-           subscript_parent = VarInfoName.parse(subscript_parent).applyPoststate().name_impl();	 
-         }else if (seq.isPrestate() && index.isPrestate()){
+
+         if (seq.isPrestate() && !index.isPrestate()) {
+           // Wrap the index in POST if the sequence is original
+           subscript_parent = VarInfoName.parse(subscript_parent).applyPoststate().name_impl();
+         } else if (seq.isPrestate() && index.isPrestate()) {
            // Remove redundant ORIG
-           subscript_parent = ((Prestate)VarInfoName.parse(subscript_parent)).term.name_impl();	 
+           subscript_parent = ((Prestate)VarInfoName.parse(subscript_parent)).term.name_impl();
          }
 
           if (index_shift == -1)
             subscript_parent = subscript_parent + "-1";
         }
-    	 parent.parent_variable = apply_subscript (seq.parent_var_name(rid),
-                                              subscript_parent);
+       parent.parent_variable = apply_subscript (seq.parent_var_name(rid),
+                                                 subscript_parent);
       }
     }
     return (vi);
@@ -4031,26 +4033,26 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                                    shift_str).intern(); // interning bugfix
     }
 
-    for (VarParent parent : vi.parents){
+    for (VarParent parent : vi.parents) {
       int rid = parent.parent_relation_id;
-      if (!seq.has_parent(rid) || seq.parent_var(rid) == null)
-    	parent.parent_variable = null;
-      else {
-        if (func_name.equals("size") ){
-        	// Special handling for the case where the parent var name is orig(array[...]).
-        	// With swapping, the parent should be orig(size(array[..])), however it's stored 
-        	// as a string so the swap can't be done textually.
-        	VarInfoName parentName = VarInfoName.parse (seq.parent_var_name(rid));
-            
-        	// Can't use the more general applyFunction method here because it doesn't take into
-        	// account prestate values as the applySize method explicitly does
-        	parentName = parentName.applySize();
-        	
-            parent.parent_variable = String.format ("%s%s", parentName.name(), shift_str);
-        }else{
-        assert !swap_orig : "swap orig with parent " + vi;
-        	parent.parent_variable = String.format ("%s(%s)%s", func_name,
-        	   	                                    seq.parent_var_name(rid), shift_str);
+      if (!seq.has_parent(rid) || seq.parent_var(rid) == null) {
+        parent.parent_variable = null;
+      } else {
+        if (func_name.equals("size") ) {
+          // Special handling for the case where the parent var name is orig(array[...]).
+          // With swapping, the parent should be orig(size(array[..])), however it's stored
+          // as a string so the swap can't be done textually.
+          VarInfoName parentName = VarInfoName.parse (seq.parent_var_name(rid));
+
+          // Can't use the more general applyFunction method here because it doesn't take into
+          // account prestate values as the applySize method explicitly does
+          parentName = parentName.applySize();
+
+          parent.parent_variable = String.format ("%s%s", parentName.name(), shift_str);
+        } else {
+          assert !swap_orig : "swap orig with parent " + vi;
+          parent.parent_variable = String.format ("%s(%s)%s", func_name,
+                                                  seq.parent_var_name(rid), shift_str);
         }
       }
     }
@@ -4083,7 +4085,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
     vi.str_name = String.format ("%s.%s()", str.name(), func_name).intern(); // interning bugfix
 
-    for (VarParent parent : vi.parents){
+    for (VarParent parent : vi.parents) {
       int rid = parent.parent_relation_id;
       if (str.get_parent(rid).parent_variable == null)
         parent.parent_variable = null;

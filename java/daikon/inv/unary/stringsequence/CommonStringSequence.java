@@ -88,22 +88,22 @@ public class CommonStringSequence
   public String format_daikon() {
     return (printIntersect() + " subset of " + var().name());
   }
-  
+
   public String format_csharp_contract() {
-	  	if(intersect.length == 1) {
-	  		return var().csharp_name() + ".Contains(" + intersect[0] + ")";
-	  	}
-	  	
-	  	String exp = "{";
-	   	for (int i=0; i < intersect.length; i++) {
-	  			exp += " " + intersect[i] + " ";
-	  	    if(i != intersect.length - 1) {
-	  			exp += ",";
-	  		}
-	  	} 	
-	  	exp += "}";
-	  	String[] split = var().csharp_array_split();
-	  	return "Contract.ForAll(new[] " + exp + " , x => " + var().csharp_name() + ".Contains(x))";
+    if (intersect.length == 1) {
+      return var().csharp_name() + ".Contains(" + intersect[0] + ")";
+    }
+
+    String exp = "{";
+    for (int i=0; i < intersect.length; i++) {
+      exp += " " + intersect[i] + " ";
+      if (i != intersect.length - 1) {
+        exp += ",";
+      }
+    }
+    exp += "}";
+    String[] split = var().csharp_array_split();
+    return "Contract.ForAll(new[] " + exp + " , x => " + var().csharp_name() + ".Contains(x))";
   }
 
   public InvariantStatus check_modified(/*@Interned*/ String /*@Interned*/ [] a, int count) {

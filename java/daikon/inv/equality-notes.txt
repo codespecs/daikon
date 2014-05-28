@@ -61,7 +61,7 @@ Notice that the keeping of what is suppressed is implicit in the
 invariant copying mechanism: when $b$ no longer equals $a$, we simply
 copy $f$ from $a$.  Depending on how many invariants are equal in the
 end, this optimization can result in substantial space and time
-savings, plus a reduction in clutter for the user.  
+savings, plus a reduction in clutter for the user.
 
 There are four details to handle in order to have a correct
 implementation.
@@ -132,4 +132,3 @@ The copied invariants from step 2 are all true up to their point of
 copy, because the assumption is that $b == a$, and $f(a)$ up to this
 point (and step 3 checks $f(b)$ now).  The invariants purely on $X$
 may or may not be true, but these are handled normally.
-

@@ -24,7 +24,7 @@ public final class SplitDtrace {
     int declNum = 1;
     int recNum = 0;
     ArrayList<String> rec = new ArrayList<String>();
-    while(true) {
+    while (true) {
       readRec(reader, rec);
       if (isDeclare(rec)) break;
     }
@@ -56,7 +56,7 @@ public final class SplitDtrace {
     int currRecCount = 0;
     HashSet<Integer> nonceSet = new HashSet<Integer>();
     ArrayList<String> rec = new ArrayList<String>();
-    while(true) {
+    while (true) {
       readRec(reader, rec);
       if (isDeclare(rec)) writer.newLine();
       writeRec(writer,rec);
@@ -113,8 +113,8 @@ public final class SplitDtrace {
   static void readRec(BufferedReader reader, ArrayList<String> res) throws IOException {
     res.clear();
     String line;
-    while((line=reader.readLine())!=null) { if (!isEmpty(line)) break; } //eat white space
-    while(line!=null) {
+    while ((line=reader.readLine())!=null) { if (!isEmpty(line)) break; } //eat white space
+    while (line!=null) {
       line = line.trim();
       if (isEmpty(line)) break;
       res.add(line.trim());

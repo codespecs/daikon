@@ -195,9 +195,9 @@ public abstract class Derivation
    * Returns the name of this variable in CSHARPCONTRACT format.  If an index
    * is specified, it is used as an array index.  It is an error to
    * specify an index on a non-array variable
-   */ 
+   */
   /*@SideEffectFree*/ public String csharp_name (String index) {
-	throw new RuntimeException ("csharp_name not implemented for " + this);
+    throw new RuntimeException ("csharp_name not implemented for " + this);
   }
 
   /** Returns the name of this variable in simplify format **/
@@ -287,7 +287,7 @@ public abstract class Derivation
     } else
       return vi.jml_name() + shift_str(shift);
   }
-  
+
   /**
    * Returns the csharp name of a variable which is included inside
    * an expression (such as orig(a[vi])).  If the expression
@@ -303,12 +303,12 @@ public abstract class Derivation
         return vi.postState.csharp_name() + shift_str(shift);
       } else {
         // return String.format ("\\new(%s)%s", vi.csharp_name(), shift_str(shift));
-    	return String.format ("%s%s", vi.csharp_name(), shift_str(shift));
+        return String.format ("%s%s", vi.csharp_name(), shift_str(shift));
       }
     } else
       return vi.csharp_name() + shift_str(shift);
   }
-  
-  
+
+
 
 }

@@ -632,7 +632,7 @@ public final class INTEQUAL
       #elif defined (GREATERTHANSTRING)
         return var1name + ".CompareTo(" + var2name +") > 0";
       #elif defined (GREATEREQUALSTRING)
-        return var1name + ".CompareTo(" + var2name +") >= 0";  
+        return var1name + ".CompareTo(" + var2name +") >= 0";
       // Integer and float cases:
       #else
         String comparator = EQUALSstring;

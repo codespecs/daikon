@@ -9,8 +9,7 @@ import java.util.*;
 import java.io.Serializable;
 
 /**
- * Tracks every unique value and how many times it occurs.  
- * 
+ * Tracks every unique value and how many times it occurs.
  */
 public final class CompleteOneOfScalar extends SingleScalar
 {
@@ -69,7 +68,7 @@ public final class CompleteOneOfScalar extends SingleScalar
   /*@SideEffectFree*/ public String format_using(OutputFormat format) {
     if (format == OutputFormat.DAIKON) {
       String out = var().name() + " has values: ";
-      for (Info val : vals) 
+      for (Info val : vals)
         out += String.format (" %s[%d]", val.val, val.cnt);
       return out;
     } else

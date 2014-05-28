@@ -9,8 +9,7 @@ import java.util.*;
 import java.io.*;
 
 /**
- * Tracks every unique value and how many times it occurs.  
- * 
+ * Tracks every unique value and how many times it occurs.
  */
 public final class CompleteOneOfString extends SingleString
 {
@@ -76,10 +75,10 @@ public final class CompleteOneOfString extends SingleString
     if (format == OutputFormat.DAIKON) {
       if (vals.size() == 0)
         return var().name() + "has no values";
-      StringBuilder out 
+      StringBuilder out
         = new StringBuilder (vals.get(0).val.length() * vals.size());
       out.append (var().name() + " has values: ");
-      for (Info val : vals) 
+      for (Info val : vals)
         out.append (String.format (" %s[%d]", val.val, val.cnt));
       return out.toString();
     } else

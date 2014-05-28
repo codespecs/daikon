@@ -141,25 +141,25 @@ public class CLASSNAME
   public String format_daikon() {
     return (printIntersect() + " subset of " + var().name());
   }
-  
+
   public String format_csharp_contract() {
-  
-  	if(intersect.length == 1) {
-  	    String collection = var().csharp_collection_string();
-  		return collection + ".Contains(" + intersect[0] + ")";
-  	}
-  	
-  	String exp = "(";
-   	for (int i=0; i < intersect.length; i++) {
-  			exp += " " + intersect[i] + " ";
-  	    if(i != intersect.length - 1) {
-  			exp += ",";
-  		}
-  	} 	
-  	exp += ")";
-  	
-  	String[] split = var().csharp_array_split();
-  	return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + ".OneOf" + exp + ")";  
+
+    if (intersect.length == 1) {
+      String collection = var().csharp_collection_string();
+      return collection + ".Contains(" + intersect[0] + ")";
+    }
+
+    String exp = "(";
+    for (int i=0; i < intersect.length; i++) {
+      exp += " " + intersect[i] + " ";
+      if (i != intersect.length - 1) {
+        exp += ",";
+      }
+    }
+    exp += ")";
+
+    String[] split = var().csharp_array_split();
+    return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + ".OneOf" + exp + ")";
   }
 
   private String format_simplify() {

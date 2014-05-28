@@ -305,7 +305,7 @@ public final class CLASSNAME
     String[] form = VarInfo.esc_quantify (seqvar(), sclvar());
     return "!" + form[0] + "(" + form[1] + " != " + form[2] + ")" + form[3];
   }
-  
+
   public String format_csharp_contract() {
     String sclname = sclvar().csharp_name();
     String[] split = seqvar().csharp_array_split();

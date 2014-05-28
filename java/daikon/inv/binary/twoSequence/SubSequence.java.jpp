@@ -157,9 +157,9 @@ public class CLASSNAME
     String v2 = SUPER_VAR().name();
     return v1 + " is a subsequence of " + v2;
   }
-  
+
   public String format_csharp_contract() {
-  	String v1 = SUB_VAR().csharp_collection_string();
+    String v1 = SUB_VAR().csharp_collection_string();
     String v2 = SUPER_VAR().csharp_collection_string();
     return v1 + ".IsSubsequence(" + v2 + ")";
   }
@@ -283,8 +283,8 @@ public class CLASSNAME
                                       int count) {
     InvariantStatus is = check_modified (a1, a2, count);
     if ((is == InvariantStatus.FALSIFIED) && Debug.logOn())
-      log ("%s destroyed by %s %s", 
-           format(), Debug.toString(a1), 
+      log ("%s destroyed by %s %s",
+           format(), Debug.toString(a1),
            Debug.toString(a2));
     return (is);
   }

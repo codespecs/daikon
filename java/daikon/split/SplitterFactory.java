@@ -198,7 +198,7 @@ public class SplitterFactory {
       debugPrintln(ioe.toString());
     }
     // Forrest - added a checked below for the non-empty string. Splitter files were
-    // compiling correctly for me despite errorOutput being an empty string. 
+    // compiling correctly for me despite errorOutput being an empty string.
     if (errorOutput != null && !errorOutput.equals("")) {
       System.out.println("Errors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);

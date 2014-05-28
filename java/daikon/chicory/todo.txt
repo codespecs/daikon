@@ -4,7 +4,7 @@ Add your name/initials to an item when you are actively working on it.
 When the task is complete, remove it and update the manual and/or changelog.
 
 Longer-term issues
-      
+
   - Add switch (--enable-globals or --enable-static-variables) to allow
     instrumentation of static fields (Java's name for global variables).
     Possibly have it take an argument indicating which fields to
@@ -26,7 +26,7 @@ Longer-term issues
     I think this is there to help debuggers handle local variable that are
     generic (it only appears on methods with generics).  Unfortunately, this
     attribute is not supported by BCEL.  For now we are just removing it
-    (because something we are doing makes it inconsistent).  A better 
+    (because something we are doing makes it inconsistent).  A better
     solution would be to update it correctly.
 
   - Implement --linked-lists option.

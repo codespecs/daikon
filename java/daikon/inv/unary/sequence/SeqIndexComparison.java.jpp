@@ -308,10 +308,10 @@ public class CLASSNAME extends SUPERCLASS {
     String[] form = VarInfo.esc_quantify (var());
     return form[0] + "(" + form[1] + " " + EQUALSstring + " i)" + form[2];
   }
-  
+
   public String format_csharp_contract() {
-  	String[] split = var().csharp_array_split();
-  	return "Contract.ForAll(0, " + split[0] + ".Count(), i => " + split[0] + "[i]" + split[1] + " " + EQUALSstring + " i)";
+    String[] split = var().csharp_array_split();
+    return "Contract.ForAll(0, " + split[0] + ".Count(), i => " + split[0] + "[i]" + split[1] + " " + EQUALSstring + " i)";
   }
 
   public String format_java_family(OutputFormat format) {

@@ -163,25 +163,25 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
 
     //     int rel = DetailedStatisticsVisitor.determineRelationship(inv1, inv2);
     //     if (rel == DetailedStatisticsVisitor.REL_SAME_JUST1_JUST2 ) {
-    // 
+    //
     //       // got rid of unjustified
     //       //   rel == DetailedStatisticsVisitor.REL_SAME_UNJUST1_UNJUST2)
-    // 
+    //
     //       // Added to get rid of constants other than -1, 0, 1 in the
     //       // invariant's format_java() string... this change was made to
     //       // filter out targets that could never really be achived
     //       // example:   num >= 10378
-    // 
+    //
     //       if (filterOut (inv1) || filterOut (inv2)) {
     //         return false;
     //       }
-    // 
+    //
     //       // now you have a match
-    // 
+    //
     //       return true;
     //     }
-    // 
-    // 
+    //
+    //
     //     return false;
   }
 
@@ -192,8 +192,8 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     return false;
 
     //     if (5 == 5) return false;
-    // 
-    // 
+    //
+    //
     //     if (inv == null) return true;
     //     String str = inv.format_using(OutputFormat.JAVA);
     //     StringTokenizer st = new StringTokenizer (str, " ()],[");
@@ -208,7 +208,7 @@ public class MatchCountVisitor2 extends PrintAllVisitor {
     //           }
     //           else return true;
     //         }
-    // 
+    //
     //       }
     //       catch (NumberFormatException e) {
     //         System.out.println ("Should never get here... " +

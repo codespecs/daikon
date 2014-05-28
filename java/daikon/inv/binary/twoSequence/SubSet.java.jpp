@@ -169,11 +169,11 @@ public class SUBSET
     return v1 + " is a superset of " + v2;
     #endif
   }
-  
+
   public String format_csharp_contract() {
     String v1 = var1().csharp_collection_string();
     String v2 = var2().csharp_collection_string();
-    
+
     #if (defined(SUB) || defined(SUBFLOAT))
     return "Contract.ForAll(" + v1 + ", i => " + v2 + ".Contains(i))";
     #else

@@ -26,23 +26,23 @@ import java.io.*;
  * variable name is also specified.
  **/
 public class VarParent implements Serializable {
-	// We are Serializable, so we specify a version to allow changes to
-	// method signatures without breaking serialization.  If you add or
-	// remove fields, you should change this number to the current date.
-	private static final long serialVersionUID = 20130425L;
+  // We are Serializable, so we specify a version to allow changes to
+  // method signatures without breaking serialization.  If you add or
+  // remove fields, you should change this number to the current date.
+  private static final long serialVersionUID = 20130425L;
 
-	/** Parent ppt for this variable **/
-	public String parent_ppt = null;
+  /** Parent ppt for this variable **/
+  public String parent_ppt = null;
 
-	/** Parent variable (within parent_ppt) (if any) **/
-	public /*@Nullable*/ String parent_variable = null;
+  /** Parent variable (within parent_ppt) (if any) **/
+  public /*@Nullable*/ String parent_variable = null;
 
-	/** Parent ppt relation id **/
-	public int parent_relation_id = 0;
-	
-	public VarParent (String parent_ppt, int parent_relation_id, /*@Nullable*/ String parent_variable){
-		this.parent_ppt = parent_ppt;
-		this.parent_relation_id = parent_relation_id;
-		this.parent_variable = parent_variable;
-	}
+  /** Parent ppt relation id **/
+  public int parent_relation_id = 0;
+
+  public VarParent (String parent_ppt, int parent_relation_id, /*@Nullable*/ String parent_variable) {
+    this.parent_ppt = parent_ppt;
+    this.parent_relation_id = parent_relation_id;
+    this.parent_variable = parent_variable;
+  }
 }

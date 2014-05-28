@@ -23,8 +23,8 @@ public class DaikonClassInfo extends DaikonVariableInfo
     public DaikonClassInfo(String theName, String typeName, String repTypeName, String receiverName, boolean isArr)
     {
         super(theName, typeName, repTypeName, isArr);
-        
-        function_args = receiverName; 
+
+        function_args = receiverName;
     }
 
     //.class variables are derived, so just keep the parent value

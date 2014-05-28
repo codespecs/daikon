@@ -479,7 +479,7 @@ public abstract class Invariant
     result = result.resurrect_done(permutation);
 
     if (logOn()) {
-      result.log ("Created %s:%s via transfer from %s:%s using permutation %s old_ppt = %s new_ppt = %s", 
+      result.log ("Created %s:%s via transfer from %s:%s using permutation %s old_ppt = %s new_ppt = %s",
                   result.getClass().getName(), result.format(),
                   getClass().getName(), format(), ArraysMDE.toString (permutation),
                   ppt, new_ppt);
@@ -497,14 +497,14 @@ public abstract class Invariant
    * used to make child invariant match the variable order of the parent
    * when merging invariants bottom up.
    */
-  public Invariant clone_and_permute (/*>>> @NonPrototype Invariant this,*/ int[] permutation){
+  public Invariant clone_and_permute (/*>>> @NonPrototype Invariant this,*/ int[] permutation) {
 
     Invariant result = this.clone();
     result = result.resurrect_done (permutation);
 
     if (logOn())
       result.log ("Created %s via clone_and_permute from %s using permutation %s old_ppt = %s",
-                  result.format(), format(), ArraysMDE.toString (permutation), 
+                  result.format(), format(), ArraysMDE.toString (permutation),
                   VarInfo.arrayToString (ppt.var_infos)
                   // + " new_ppt = " + VarInfo.arrayToString (new_ppt.var_infos)
                   );
@@ -545,9 +545,9 @@ public abstract class Invariant
     result = result.resurrect_done(permutation);
 
     if (logOn())
-      result.log ("Created %s via resurrect from %s using permutation %s old_ppt = %s new_ppt = %s", 
+      result.log ("Created %s via resurrect from %s using permutation %s old_ppt = %s new_ppt = %s",
                   result.format(), format(), ArraysMDE.toString (permutation),
-                  VarInfo.arrayToString (ppt.var_infos), 
+                  VarInfo.arrayToString (ppt.var_infos),
                   VarInfo.arrayToString (new_ppt.var_infos));
 
     return result;
@@ -564,7 +564,7 @@ public abstract class Invariant
    * comparable.  Otherwise the comparability information from one
    * of the non always-comparable variables is returned.
    */
-  public VarComparability get_comparability(/*>>> @NonPrototype Invariant this*/){
+  public VarComparability get_comparability(/*>>> @NonPrototype Invariant this*/) {
 
     // assert ppt != null : "class " + getClass();
 
@@ -602,7 +602,7 @@ public abstract class Invariant
     Invariant first = invs.get(0);
     Invariant result = first.clone();
     result.ppt = parent_ppt;
-    result.log ("Merged '%s' from %s child invariants", 
+    result.log ("Merged '%s' from %s child invariants",
                 result.format(), invs.size()/*, first.ppt.name() */);
 
     // Make sure that each invariant was really of the same type
@@ -1075,7 +1075,7 @@ public abstract class Invariant
    * as variable names, confidences, sample counts, value counts, or
    * related quantities.
    **/
-  /*@Pure*/ public boolean isExclusiveFormula(/*>>> @NonPrototype Invariant this,*/ Invariant other){
+  /*@Pure*/ public boolean isExclusiveFormula(/*>>> @NonPrototype Invariant this,*/ Invariant other) {
     return false;
   }
 
@@ -1780,7 +1780,7 @@ public abstract class Invariant
    *
    * @see #valid_types(VarInfo[])
    */
-  public boolean instantiate_ok (/*>>> @Prototype Invariant this,*/ VarInfo[] vis){
+  public boolean instantiate_ok (/*>>> @Prototype Invariant this,*/ VarInfo[] vis) {
     return (true);
   }
 

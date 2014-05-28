@@ -132,11 +132,11 @@ public final class SequenceLength
     Quantify.Length ql = new Quantify.Length (base, shift);
     return ql.simplify_name();
   }
-  
+
   /** Returns the CSharpContract name **/
   /*@SideEffectFree*/ public String csharp_name(String index) {
-	Quantify.Length ql = new Quantify.Length (base, shift);
-	return ql.csharp_name();
+    Quantify.Length ql = new Quantify.Length (base, shift);
+    return ql.csharp_name();
   }
 
   /** Adds one to the default complexity if shift is not 0 **/

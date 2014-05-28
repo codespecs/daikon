@@ -137,7 +137,7 @@ public class BuildJDK {
     boolean ok = check_args(options, cl_args);
     if (!ok)
       System.exit(1);
-    verbose = DynComp.verbose;  
+    verbose = DynComp.verbose;
 
     if (classfiles) {
 

@@ -53,7 +53,7 @@ public class DaikonSimple {
   // // inv file for storing the invariants in serialized form
   // public static File inv_file = null;
 
-  private static String usage = 
+  private static String usage =
       UtilMDE.join(
           new String[] {
               "",

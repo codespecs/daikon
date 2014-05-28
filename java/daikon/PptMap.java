@@ -131,7 +131,7 @@ public class PptMap
    * It is a wrapper around {@link #pptIterator()} that can be used in a
    * Java new-style for loop ("foreach loop").
    * @see #pptIterator()
-   */ 
+   */
   public Iterable<PptTopLevel> pptIterable() {
     return new IterableIterator<PptTopLevel>(pptIterator());
   }
@@ -184,7 +184,7 @@ public class PptMap
    * It is a wrapper around {@link #ppt_all_iterator()} that can be used in a
    * Java new-style for loop ("foreach loop").
    * @see #ppt_all_iterator()
-   */ 
+   */
   public Iterable<PptTopLevel> ppt_all_iterable() {
     return new IterableIterator<PptTopLevel>(pptIterator());
   }

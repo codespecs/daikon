@@ -92,7 +92,7 @@ public class Implication
       return CONFIDENCE_NEVER;
     }
     double result = confidence_and(pred_conf, cons_conf);
-    log ("Confidence %s %s/%s for %s", 
+    log ("Confidence %s %s/%s for %s",
          result, pred_conf, cons_conf, format());
     return result;
   }
@@ -126,9 +126,9 @@ public class Implication
       if ( iff )
         return "(" + pred_fmt + ") == (" + consq_fmt + ")";
       else
-    	return "(" + pred_fmt + ").Implies(" + consq_fmt + ")";
+        return "(" + pred_fmt + ").Implies(" + consq_fmt + ")";
     }
-   
+
     else {
       return format_unimplemented(format);
     }

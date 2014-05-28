@@ -45,7 +45,7 @@ public class AndJoiner
     if (format == OutputFormat.DAIKON) {
       return UtilMDE.join(invStrings, " and ");
     } else if (format == OutputFormat.ESCJAVA || format.isJavaFamily() || format == OutputFormat.CSHARPCONTRACT) {
-    	// Forrest
+      // Forrest
       return "(" + UtilMDE.join(invStrings, ") && (") + ")";
     } else if (format == OutputFormat.SIMPLIFY) {
       return "(AND" + UtilMDE.join(invStrings, " ") + ")";

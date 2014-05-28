@@ -194,10 +194,10 @@ public final class CLASSNAME
 
     return retval;
   }
-  
+
   public String format_csharp_contract() {
     String[] split = var().csharp_array_split();
-  	return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " != " + (is_pointer() ? "null" : "0") + ")";
+    return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " != " + (is_pointer() ? "null" : "0") + ")";
   }
 
   public String format_simplify() {

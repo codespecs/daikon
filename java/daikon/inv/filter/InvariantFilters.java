@@ -70,7 +70,7 @@ public class InvariantFilters {
     addPropertyFilter (new DerivedVariableFilter());
 
     addPropertyFilter (new ReadonlyPrestateFilter());
-    
+
     addPropertyFilter (new StringFilter());
   }
 
@@ -108,7 +108,7 @@ public class InvariantFilters {
         for (VariableFilter filter : variableFilters) {
           if (filter.shouldDiscard( invariant )) {
             if (Invariant.logOn())
-              invariant.log ("Failed ALL_VARIABLES filter %s", 
+              invariant.log ("Failed ALL_VARIABLES filter %s",
                              filter.getClass().getName());
               return filter;
           }

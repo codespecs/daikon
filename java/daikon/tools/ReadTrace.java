@@ -45,7 +45,7 @@ public class ReadTrace {
    * be retained in memory!
    */
   public static class CollectDataProcessor extends FileIO.Processor {
-    
+
     public Map<PptTopLevel,List<ValueTuple>> samples = new LinkedHashMap<PptTopLevel,List<ValueTuple>>();
 
     /** Process the sample, by adding it to the <tt>samples</tt> map. */

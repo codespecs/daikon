@@ -21,10 +21,10 @@
 # The approach is tested on the following three cases:
 # 1. two constant values and one variable
 #
-#	the problem with two constant values and one var is that it does consist of
-# 	a linearBinary and a constant, but the linearBinary does not contain nonzero
-# 	coefficients for both x and y and consequently, the plane has some zero
-# 	coefficients so they're considered falsified
+#  the problem with two constant values and one var is that it does consist of
+#   a linearBinary and a constant, but the linearBinary does not contain nonzero
+#   coefficients for both x and y and consequently, the plane has some zero
+#   coefficients so they're considered falsified
 #
 # 2. one constant value and two variables
 # 3. three variables

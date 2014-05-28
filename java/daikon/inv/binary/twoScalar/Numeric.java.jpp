@@ -261,7 +261,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
           #endif
         }
 
-        if(format == OutputFormat.CSHARPCONTRACT) {
+        if (format == OutputFormat.CSHARPCONTRACT) {
           #if defined(STRING)
             fmt_str = UtilMDE.replaceString(fmt_str, "%var1%", var1().csharp_name());
             fmt_str = UtilMDE.replaceString(fmt_str, "%var2%", var2().csharp_name());
@@ -284,7 +284,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
             } else {
               return format_unimplemented(format);
             }
-          #endif        	
+          #endif
         }
 
       if (format == OutputFormat.ESCJAVA) {
@@ -339,7 +339,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     if (Debug.logDetail()) {
-      log ("testing values %s, %s", ArraysMDE.toString (x), 
+      log ("testing values %s, %s", ArraysMDE.toString (x),
            ArraysMDE.toString(y));
     }
 
@@ -804,7 +804,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       // this invariant is already known to be obvious, so just return
       // whatever reason the super type returned.
       DiscardInfo di = super.isObviousDynamically(vis);
-      if(di != null) {
+      if (di != null) {
         return di;
       }
 
@@ -812,7 +812,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       VarInfo var2 = vis[1];
 
       // ensure that var1.varinfo_index <= var2.varinfo_index
-      if(var1.varinfo_index > var2.varinfo_index) {
+      if (var1.varinfo_index > var2.varinfo_index) {
         var1 = vis[1];
         var2 = vis[0];
       }
@@ -823,7 +823,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       PptSlice2 ppt2 = ppt.parent.findSlice(var1,var2);
 
       // If no slice is found , no invariants exist to make this one obvious.
-      if(ppt2 == null) {
+      if (ppt2 == null) {
         return null;
       }
 
@@ -832,10 +832,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
       // you know this invariant of the form "x % y == 0" is obvious.
       for(Invariant inv : ppt2.invs) {
         #if defined(TYPEDOUBLE)
-        if(inv instanceof LinearBinaryFloat) {
+        if (inv instanceof LinearBinaryFloat) {
           LinearBinaryFloat linv = (LinearBinaryFloat) inv;
         #else
-        if(inv instanceof LinearBinary) {
+        if (inv instanceof LinearBinary) {
           LinearBinary linv = (LinearBinary) inv;
         #endif
 
@@ -848,7 +848,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
           //     While this means that both x % y == 0 and y % x == 0,
           //     only one of these invariants will still be true at this
           //     time, and only that one will be falsified by this test.
-          if((!linv.is_false()) &&
+          if ((!linv.is_false()) &&
              Global.fuzzy.eq(linv.core.c, 0) &&
              linv.core.b*linv.core.a < 0 &&
              (Global.fuzzy.eq(linv.core.a*linv.core.a, 1) ||
@@ -906,7 +906,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ %var1% (* %var2% %var2))");
       else if (format == OutputFormat.CSHARPCONTRACT)
-      	return "%var1% == %var2%*%var2%";
+        return "%var1% == %var2%*%var2%";
       else if (format.isJavaFamily()) {
         #if defined(TYPEDOUBLE)
         return ("daikon.Quant.fuzzy.eq(%var1%, %var2%*%var2%)");
@@ -1068,7 +1068,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ %var1% (~ %var2%))");
       else if (format == OutputFormat.CSHARPCONTRACT)
-         return "%var1% == ~%var2%";     	
+        return "%var1% == ~%var2%";
       else
         #if defined(TYPEDOUBLE)
         if (format.isJavaFamily()) {
@@ -1131,8 +1131,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
         return ("(EQ %var1% (|java-bitwise-or| %var2% %var1%))");
       else if (format == OutputFormat.DAIKON)
         return ("%var2% is a bitwise subset of %var1%");
-      else if (format == OutputFormat.CSHARPCONTRACT) 
-        return "%var1% == (%var2% | %var1%)";    	
+      else if (format == OutputFormat.CSHARPCONTRACT)
+        return "%var1% == (%var2% | %var1%)";
       else
         #if defined(TYPEDOUBLE)
         if (format.isJavaFamily()) {
@@ -1231,8 +1231,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ (|java-&| %var1% %var2%) 0)");
-      else if (format == OutputFormat.CSHARPCONTRACT) 
-        return ("(%var1% & %var2%) == 0");     	
+      else if (format == OutputFormat.CSHARPCONTRACT)
+        return ("(%var1% & %var2%) == 0");
       else
         #if defined(TYPEDOUBLE)
         if (format.isJavaFamily()) {
@@ -1323,7 +1323,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
       if (format == OutputFormat.SIMPLIFY)
         return ("(EQ (|java->>| %var1% %var2%) 0)");
       else if (format == OutputFormat.CSHARPCONTRACT)
-        return ("(%var1% >> %var2% == 0)");     
+        return ("(%var1% >> %var2% == 0)");
       else
         #if defined(TYPEDOUBLE)
         if (format.isJavaFamily()) {
@@ -1416,9 +1416,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
       } else if (format == OutputFormat.CSHARPCONTRACT) {
         #if defined(TYPESTRINGSEQ)
            return "Contract.ForAll(0, %var2%.Count(), i => %var2%[i].Contains(%var1%[i]))";
-      	#elif defined(TYPESTRING)
+        #elif defined(TYPESTRING)
           return "%var2%.Contains(%var1%)";
-      	#endif
+        #endif
       } else {
         return format_unimplemented(format);
       }

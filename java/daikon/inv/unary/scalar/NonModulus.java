@@ -111,9 +111,9 @@ public class NonModulus
         return name + " % " + modulus + " != " + remainder;
       }
     }
-    
+
     if (format == OutputFormat.CSHARPCONTRACT) {
-        return name + " % " + modulus + " != " + remainder;    	
+      return name + " % " + modulus + " != " + remainder;
     }
 
     if (format == OutputFormat.SIMPLIFY) {

@@ -134,16 +134,16 @@ public class CLASSNAME
                                                core.a, core.b, core.c)
       + form[3];
   }
-  
+
   public String format_csharp() {
-  
+
     String[] split1 = var1().csharp_array_split();
     String[] split2 = var2().csharp_array_split();
-    
-  	return "Contract.ForAll(0, " + split1[0] + 
-  		   ".Count(), i => " + 
-  		   core.format_using(OutputFormat.CSHARPCONTRACT, split1[0] + "[i]" + split1[1], split2[0] + "[i]" + split2[1]) +
-  		   ")";
+
+    return "Contract.ForAll(0, " + split1[0] +
+      ".Count(), i => " +
+      core.format_using(OutputFormat.CSHARPCONTRACT, split1[0] + "[i]" + split1[1], split2[0] + "[i]" + split2[1]) +
+      ")";
   }
 
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] x_arr, PRIMITIVE /*@Interned*/ [] y_arr, int count) {

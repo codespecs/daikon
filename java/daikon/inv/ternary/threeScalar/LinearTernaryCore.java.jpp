@@ -271,7 +271,7 @@ public final class CLASSNAME
                                 PRIMITIVE con_val) {
 
     if (Debug.logOn())
-      wrapper.log ("setup from lb %s con var %s con_val %s", 
+      wrapper.log ("setup from lb %s con var %s con_val %s",
                    lb, con_var, con_val);
 
     int con_index = con_var.varinfo_index;
@@ -356,7 +356,7 @@ public final class CLASSNAME
     }
 
     if (Debug.logOn())
-      wrapper.log ("setup from OneOf %s v1=%s v2=%s status = %s", 
+      wrapper.log ("setup from OneOf %s v1=%s v2=%s status = %s",
                    oo, con1, con2, sts);
 
     return (sts);
@@ -522,7 +522,7 @@ public final class CLASSNAME
     c = coef[2];
     d = coef[3];
 
-    wrapper.log("Calculated tri linear coeff: (%s), b (%s), c(%s), and d(%s)", 
+    wrapper.log("Calculated tri linear coeff: (%s), b (%s), c(%s), and d(%s)",
                  a, b, c, d);
     // If one of these coefficients is zero (except for d), this
     // should be a LinearBinary, not a LinearTernary, term.  (It
@@ -550,8 +550,8 @@ public final class CLASSNAME
         //  b*def_point[i].y + d));
 
         wrapper.log ("Trying at index %s: 0 != %s*%s+%s*%s+%s*%s+%s",
-                     i, a, def_point[i].x, 
-                        b, def_point[i].y, 
+                     i, a, def_point[i].x,
+                        b, def_point[i].y,
                         c, def_point[i].z,
                         d);
 

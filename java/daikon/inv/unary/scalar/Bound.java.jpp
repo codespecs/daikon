@@ -432,7 +432,7 @@ public class LOWERBOUND
     return varname + " " + GTESTR + " " + MIN1;
 #endif
   }
-  
+
   public String format_csharp_contract() {
     PptTopLevel pptt = ppt.parent;
     String name = var().csharp_name();
@@ -446,7 +446,7 @@ public class LOWERBOUND
             if (Global.fuzzy.eq(constantVal, MIN1) || (Double.isNaN(constantVal) && Double.isNaN(MIN1))) {
              #if defined(IS_ELT)
               String[] split = var().csharp_array_split();
-			  return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + GTESTR + " " + vi.name() + ")";
+              return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + GTESTR + " " + vi.name() + ")";
              #else
               String varname = var().chsarp_name();
               return varname + " " + GTESTR + " " + vi.name();
@@ -459,7 +459,7 @@ public class LOWERBOUND
             if (constantVal.equals(MIN1)) {
              #if defined(IS_ELT)
               String[] split = var().csharp_array_split();
-			  return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + GTESTR + " " + vi.name() + ")";
+              return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + GTESTR + " " + vi.name() + ")";
              #else
               String varname = var().chsarp_name();
               return varname + " " + GTESTR + " " + vi.name();
@@ -472,7 +472,7 @@ public class LOWERBOUND
 
    #if defined(IS_ELT)
     String[] split = var().csharp_array_split();
-	return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + GTESTR + " " + MIN1+ ")";
+    return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + GTESTR + " " + MIN1+ ")";
    #else
     String varname = var().chsarp_name();
     return varname + " " + GTESTR + " " + MIN1;

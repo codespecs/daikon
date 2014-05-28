@@ -82,7 +82,7 @@ public class DummyInvariant
   public DummyInvariant instantiate(PptTopLevel parent, VarInfo[] vars) {
     assert !this.negated
         : "Only instantiated invariants should be negated";
-    DummyInvariant inv = new DummyInvariant(ppt, 
+    DummyInvariant inv = new DummyInvariant(ppt,
                                             daikonFormat,
                                             javaFormat,
                                             escFormat,
@@ -236,14 +236,14 @@ public class DummyInvariant
     else
       return dbcFormat;
   }
-  
+
   public String format_csharp() {
     if (dbcFormat == null)
         return "format_csharp not implemented for dummy invariant";
       if (negated)
         return "!(" + csharpFormat + ")";
       else
-        return csharpFormat;  
+        return csharpFormat;
   }
 
   protected Invariant resurrect_done(int[] permutation) {

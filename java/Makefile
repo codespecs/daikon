@@ -56,7 +56,7 @@ ifeq (cygwin, $(OSTYPE))
   ## Make the classpath explicit on the command line so it can be processed by *-cygwin
   JAVA ?= ${PLUMEBIN}/java-cygwin -ea -classpath "${CLASSPATH}"
   JAVAC ?= ${PLUMEBIN}/javac-cygwin -classpath "${CLASSPATH}"
-  JAVADOC ?= ${PLUMEBIN}/javadoc-cygwin 
+  JAVADOC ?= ${PLUMEBIN}/javadoc-cygwin
   JAR ?= ${JAVA_HOME}/bin/jar
 else
   JAVA ?= java -ea
@@ -469,7 +469,7 @@ all_directly: ../plume-lib ${AUTO_GENERATED_FILES} plume-copy-and-check java_fil
 	rm -f `find daikon -name "*.class" -print`
 	${JAVAC_COMMAND} @java_files.txt
 	rm -f java_files.txt
-# on some systems chmod with symbolic arguments pays attention to umask.  so use 444 instead of -w	
+# on some systems chmod with symbolic arguments pays attention to umask.  so use 444 instead of -w
 	@chmod 444 ${AUTO_GENERATED_FILES}
 # This creates ${AUTO_GENERATED_FILES_2}, so that shouldn't be a prerequisite.
 	$(MAKE) all_pass2
@@ -612,7 +612,7 @@ plume-lib-compile:
 # lib/plume.jar: ../plume-lib/java/plume.jar
 # 	install -d lib
 # 	cp -p $< $@
-# 
+#
 # # The file is real, but the commands should always be re-run even if it exists.
 # .PHONY: ../plume-lib/java/plume.jar
 # ../plume-lib/java/plume.jar: ../plume-lib
@@ -868,7 +868,7 @@ check-interning-all: ${ALL_GENERATED_FILES} compile
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_INTERNING_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 # These targets run the Interning checker on just one file.
-# Typical command: 
+# Typical command:
 # INTERNING_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-interning-onefile
 INTERNING_ONEFILE ?= daikon/PptTopLevel.java
 check-interning-onefile: ${ALL_GENERATED_FILES} compile
@@ -893,7 +893,7 @@ check-nullness-raw-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 # These targets run the Nullness checker on just one file.
-# Typical command: 
+# Typical command:
 # NULLNESS_RAW_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-nullness-raw-onefile
 # NULLNESS_RAW_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
 # NULLNESS_RAW_ONEFILE ?= daikon/FileIO.java
@@ -931,7 +931,7 @@ check-nullness-fbc-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 # These targets run the Nullness checker on just one file.
-# Typical command: 
+# Typical command:
 # NULLNESS_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-nullness-onefile
 # NULLNESS_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
 # NULLNESS_ONEFILE ?= daikon/FileIO.java

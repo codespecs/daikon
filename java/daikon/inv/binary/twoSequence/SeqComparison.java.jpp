@@ -380,28 +380,28 @@ public class SEQSEQINTEQUAL
       return name1 + " " + EQUALSstring + " " + name2;
       #endif
     }
-    
-    if (format == OutputFormat.CSHARPCONTRACT)  
+
+    if (format == OutputFormat.CSHARPCONTRACT)
     {
       String name1 = var1().csharp_collection_string();
       String name2 = var2().csharp_collection_string();
-      
+
       #if (! (defined(EQUAL) || defined(EQUALFLOAT) || defined(EQUALSTRING)))
-      if(var1().aux.getFlag(VarInfoAux.HAS_ORDER))
+      if (var1().aux.getFlag(VarInfoAux.HAS_ORDER))
       {
         String dbc = "L" + (EQUALSstringDBC).substring(1);
         return name1 + "." + dbc + "(" + name2 + ")";
       } else {
-        return "\"SeqComparison.java.jpp: sequence comparison does not apply to unordered collections unimplemented\" != null)";
+        return "\"SeqComparison.java.jpp: sequence comparison does not apply to unordered collections unimplemented\" != null)"; // interned
       }
       #else
-      
+
       String[] split1 = var1().csharp_array_split();
-      String[] split2 = var2().csharp_array_split(); 
-      // Pairwise equal. 
-	  return "Contract.ForAll(0, " + split1[0] + ".Count(), i => " + split1[0] + "[i]" + split1[1] + ".Equals(" + split2[0] + "[i]" + split2[1] + "))";
-      #endif    
-      
+      String[] split2 = var2().csharp_array_split();
+      // Pairwise equal.
+      return "Contract.ForAll(0, " + split1[0] + ".Count(), i => " + split1[0] + "[i]" + split1[1] + ".Equals(" + split2[0] + "[i]" + split2[1] + "))";
+      #endif
+
     }
 
 

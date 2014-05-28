@@ -462,7 +462,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
         methodname[1] + "-" + methodname[2];
     return "(EQ " + result + " (" + func + " " + arg1 + " " + arg2 + "))";
   }
-  
+
   public String format_csharp_contract() {
     int var_order = get_var_order();
     String[] methodname = get_method_name();
@@ -475,37 +475,36 @@ public abstract class CLASSNAME extends SUPERCLASS {
     String arg2 = arg2vi.csharp_name();
     String func = null;
     String operator = null;
-    
+
     if (methodname[1].equals(" * ")) {
-    	operator = "*";
+      operator = "*";
     } else if (methodname[1].equals(" | ")) {
-    	operator = "|";
+      operator = "|";
     } else if (methodname[1].equals(" & ")) {
-    	operator = "&";
+      operator = "&";
     } else if (methodname[1].equals(" / ")) {
-    	operator = "/";
+      operator = "/";
     } else if (methodname[1].equals(" ^ ")) {
-    	operator = "^";
+      operator = "^";
     } else if (methodname[1].equals(" % ")) {
-        operator = "%";
+      operator = "%";
     } else if (methodname[1].equals(" && ")) {
-        operator = "&&";
+      operator = "&&";
     } else if (methodname[1].equals(" || ")) {
-        operator = "||";
+      operator = "||";
     } else if (methodname[1].equals(" >> ")) {
-        operator = ">>";
+      operator = ">>";
     } else if (methodname[1].equals(" >>> ")) {
-        return result + " == " + arg1 + ".UnsignedRightShift(" + arg2 + ")";
-        //return result + " == CSharpDaikonLib.Extensions.UnsignedRightShift(" + arg1 + ", " + arg2 + ")"; 
+      return result + " == " + arg1 + ".UnsignedRightShift(" + arg2 + ")";
+      //return result + " == CSharpDaikonLib.Extensions.UnsignedRightShift(" + arg1 + ", " + arg2 + ")";
     } else if (methodname[1].equals(" << ")) {
-        operator = "<<";
-    } 
-    
-    if (operator != null) {
-    	return result + " == (" + arg1 + " " + operator + " " + arg2 + ")";
+      operator = "<<";
     }
-    
-    	 
+
+    if (operator != null) {
+      return result + " == (" + arg1 + " " + operator + " " + arg2 + ")";
+    }
+
     if (methodname[1].equals(", ")) {
       if (methodname[0].equals("java.lang.Math.min("))
         func = "Math.Min";
@@ -522,10 +521,10 @@ public abstract class CLASSNAME extends SUPERCLASS {
       assert methodname[2].equals("");
       func = "|" + methodname[1].trim() + "|";
     }
-    
+
     if (func == null)
       return "format_csharp_contract() doesn't know function " + methodname[0] + "-" + methodname[1] + "-" + methodname[2];
-    return result + " == " + func + "(" + arg1 + ", " + arg2 + ")";   
+    return result + " == " + func + "(" + arg1 + ", " + arg2 + ")";
   }
 
   // If our classes match, we must match
@@ -537,8 +536,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
       VarInfo v1 = ppt.var_infos[0];
       VarInfo v2 = ppt.var_infos[1];
       VarInfo v3 = ppt.var_infos[2];
-      log("computeConfidence(%s: num_values = %s, num_values(%s)=%s, num_values(%s)=%s, num_values(%s)=%s", 
-          format(), ppt.num_values(), 
+      log("computeConfidence(%s: num_values = %s, num_values(%s)=%s, num_values(%s)=%s, num_values(%s)=%s",
+          format(), ppt.num_values(),
           v1.name(), ppt.parent.num_values(v1),
           v2.name(), ppt.parent.num_values(v2),
           v3.name(), ppt.parent.num_values(v3));

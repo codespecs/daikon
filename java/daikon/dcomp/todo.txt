@@ -19,7 +19,7 @@ Dyncomp Todo
     method that adds together otherwise uncomparable fields.
 
   - Support reflection.  Because of the additional argument, reflection
-    finds the original code and not our code.  This means we don't 
+    finds the original code and not our code.  This means we don't
     accurately instrument.  This is the downside of adding the dcomp_marker
     argument to user code (which is necessary only so that we don't have to
     tell when calling between user code and the jdk)
@@ -41,7 +41,7 @@ Dyncomp Todo
     is call compatible with the instrumented methods in the JDK.
 
     A possible solution to this problem is to create two versions of each
-    user method (with and without the dcomp_marker argument).  BOTH 
+    user method (with and without the dcomp_marker argument).  BOTH
     versions would be instrumented.  Normally the version with the
     dcomp_marker argument would be used.  But the version without the
     dcomp_marker argument would be available for reflection.  Since the

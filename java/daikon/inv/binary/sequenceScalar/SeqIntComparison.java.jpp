@@ -288,10 +288,10 @@ public final class SEQINTEQUAL
     return "daikon.Quant." + EQUALSstringDBC + "("
       + seqvar().name_using(format) + ", " + sclvar().name_using(format) + ")";
   }
-  
+
   public String format_csharp_contract() {
     String[] split = seqvar().csharp_array_split();
-  	return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + EQUALSstring + " " + sclvar().csharp_name() + ")";
+    return "Contract.ForAll(" + split[0] + ", x => x" + split[1] + " " + EQUALSstring + " " + sclvar().csharp_name() + ")";
   }
 
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, PRIMITIVE x, int count) {
