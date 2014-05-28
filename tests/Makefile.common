@@ -80,6 +80,8 @@ INSTRUMENT?=infer
 SOURCE_LANGUAGE?=java
 DECL_FORMAT?=new
 
+NO_CSHARP=1
+
 ifeq ($(OS),Windows_NT)
     UNAME_S := Windows_NT
 else
