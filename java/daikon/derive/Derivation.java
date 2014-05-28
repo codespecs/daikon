@@ -196,7 +196,7 @@ public abstract class Derivation
    * is specified, it is used as an array index.  It is an error to
    * specify an index on a non-array variable
    */ 
-  public String csharp_name (String index) {
+  /*@SideEffectFree*/ public String csharp_name (String index) {
 	throw new RuntimeException ("csharp_name not implemented for " + this);
   }
 

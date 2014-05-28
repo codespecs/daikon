@@ -50,7 +50,7 @@ public final class StringLength extends UnaryDerivation
 
   /** Returns the ESC name **/
   @SuppressWarnings("nullness")
-  public String csharp_name (String index) {
+  /*@SideEffectFree*/ public String csharp_name (String index) {
     return String.format ("%s.Length", base.enclosing_var.csharp_name());
   }
 

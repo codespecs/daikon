@@ -156,7 +156,7 @@ public class Quantify {
       else
         return length;
     }
-    public String csharp_name() {
+    /*@SideEffectFree*/ public String csharp_name() {
     	VarInfo arr_var = get_check_array_var("CHARPCONTRACT");
         return name_with_offset (arr_var.csharp_name() + ".Count()", offset);
     }

@@ -85,12 +85,12 @@ public abstract class SequenceSubsequence
     return seqvar();
   }
 
-  public String csharp_name(String index) {
-	// String lower = get_lower_bound().csharp_name();
-	// String upper = get_upper_bound().csharp_name();
-	// We do not need to check if seqvar().isPrestate() because it is redundant. 
+  /*@SideEffectFree*/ public String csharp_name(String index) {
+    // String lower = get_lower_bound().csharp_name();
+    // String upper = get_upper_bound().csharp_name();
+    // We do not need to check if seqvar().isPrestate() because it is redundant. 
     // return seqvar().csharp_name() + ".Slice(" + lower + ", " + upper + ")";
-	return "\"SequenceSubsequence.java.jpp unimplemented\" != null";
+    return "\"SequenceSubsequence.java.jpp unimplemented\" != null";
   }
 
   /** Returns the ESC name **/

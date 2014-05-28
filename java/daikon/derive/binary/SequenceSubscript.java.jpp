@@ -160,7 +160,7 @@ public final class SEQUENCESCALARSUBSCRIPT
 
   /** Returns the CSHARPCONTRACT name for sequence subscript **/
   @SuppressWarnings("nullness")
-  public String csharp_name (String index) {
+  /*@SideEffectFree*/ public String csharp_name (String index) {
     String[] split = seqvar().csharp_array_split();
     if (seqvar().isPrestate())
     {

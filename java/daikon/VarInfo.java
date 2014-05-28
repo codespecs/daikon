@@ -2917,14 +2917,14 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Returns the name of this variable as a valid C# Code Contract.
    **/
-  public String csharp_name() {
+  /*@SideEffectFree*/ public String csharp_name() {
 	  return csharp_name(null);
   }
   
   /**
    * Returns the name of this variable as a valid C# Code Contract.
    */
-  public String csharp_name(/*@Nullable*/ String index) {	  	
+  /*@SideEffectFree*/ public String csharp_name(/*@Nullable*/ String index) {	  	
   	if (index != null)
   		assert file_rep_type.isArray();
 

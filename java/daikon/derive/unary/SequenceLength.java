@@ -134,7 +134,7 @@ public final class SequenceLength
   }
   
   /** Returns the CSharpContract name **/
-  public String csharp_name(String index) {
+  /*@SideEffectFree*/ public String csharp_name(String index) {
 	Quantify.Length ql = new Quantify.Length (base, shift);
 	return ql.csharp_name();
   }
