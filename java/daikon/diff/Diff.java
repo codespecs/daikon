@@ -615,8 +615,7 @@ public final class Diff {
       map.put(ppt, invs);
       if (examineAllPpts) {
         // Add conditional ppts
-        for (Iterator<PptConditional> i2 = ppt.cond_iterator(); i2.hasNext(); ) {
-          PptConditional pptCond = i2.next();
+        for (PptConditional pptCond : ppt.cond_iterable()) {
           List<Invariant> invsCond = UtilMDE.sortList (pptCond.getInvariants(),
                                           PptTopLevel.icfp);
           // List<Invariant> invsCond = pptCond.getInvariants();

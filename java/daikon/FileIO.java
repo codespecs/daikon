@@ -1058,20 +1058,17 @@ public final class FileIO {
     boolean some_program_points = false;
     boolean all_program_points = true;
 
-    // go through each top level ppt, and make all_program_points
+    // Go through each top level ppt, and make all_program_points
     // false if at least one of them is not a program point normally
-    // found in traces from programming languages
-    for (Iterator<PptTopLevel> all_ppts_iter = all_ppts.ppt_all_iterator();
-        all_ppts_iter.hasNext(); ) {
-      PptTopLevel ppt_top_level = all_ppts_iter.next();
-
+    // found in traces from programming languages.
+    for (PptTopLevel ppt_top_level : all_ppts.ppt_all_iterable()) {
       boolean is_program_point =
         (ppt_top_level.ppt_name.isExitPoint() ||
-        ppt_top_level.ppt_name.isEnterPoint() ||
-        ppt_top_level.ppt_name.isThrowsPoint() ||
-        ppt_top_level.ppt_name.isObjectInstanceSynthetic() ||
-        ppt_top_level.ppt_name.isClassStaticSynthetic() ||
-        ppt_top_level.ppt_name.isGlobalPoint());
+         ppt_top_level.ppt_name.isEnterPoint() ||
+         ppt_top_level.ppt_name.isThrowsPoint() ||
+         ppt_top_level.ppt_name.isObjectInstanceSynthetic() ||
+         ppt_top_level.ppt_name.isClassStaticSynthetic() ||
+         ppt_top_level.ppt_name.isGlobalPoint());
 
       all_program_points = all_program_points && is_program_point;
       some_program_points = some_program_points || is_program_point;
