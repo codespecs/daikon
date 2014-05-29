@@ -238,7 +238,7 @@ public class DummyInvariant
   }
 
   public String format_csharp() {
-    if (dbcFormat == null)
+    if (csharpFormat == null)
         return "format_csharp not implemented for dummy invariant";
       if (negated)
         return "!(" + csharpFormat + ")";

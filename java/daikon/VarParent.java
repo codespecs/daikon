@@ -32,7 +32,7 @@ public class VarParent implements Serializable {
   private static final long serialVersionUID = 20130425L;
 
   /** Parent ppt for this variable **/
-  public String parent_ppt = null;
+  public /*@MonotonicNonNull*/ String parent_ppt = null;
 
   /** Parent variable (within parent_ppt) (if any) **/
   public /*@Nullable*/ String parent_variable = null;

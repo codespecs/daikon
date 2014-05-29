@@ -143,6 +143,8 @@ public class CLASSNAME
   }
 
   public String format_csharp_contract() {
+    if (intersect==null)
+      return "()";
 
     if (intersect.length == 1) {
       String collection = var().csharp_collection_string();
