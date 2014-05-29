@@ -901,6 +901,7 @@ public final class ONEOFSCALAR
 
 public String format_csharp_contract() {
 
+    /*@NonNull @NonRaw @Initialized*/ // UNDONE: don't understand why needed (markro)
     String result;
 
 #if defined(IS_ELT)
@@ -921,6 +922,7 @@ public String format_csharp_contract() {
     // Construct the array that unary value will be compared against.
     for (int i = 0; i < num_elts; i++) {
     #if defined(ELTSTRING)
+      /*@NonNull @NonRaw @Initialized*/ // UNDONE: don't understand why needed (markro)
       String arg = is_type() ? "typeof(" + elts[i] + ")" : TOSTRING(elts[i]);
       args_list.add(arg);
     #else

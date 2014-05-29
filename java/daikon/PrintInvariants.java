@@ -225,7 +225,7 @@ public final class PrintInvariants {
   private static String print_csharp_metadata_SWITCH = "print_csharp_metadata";
 
   // Stores the output file stream if --output is specified.
-  private static OutputStream out_stream = null;
+  private static /*@Nullable*/ OutputStream out_stream = null;
   private static boolean print_csharp_metadata = false;
 
 
@@ -798,8 +798,11 @@ public final class PrintInvariants {
       if (ppt.parent_relations != null) {
         for (ParentRelation parent : ppt.parent_relations) {
           if (parent != null) {
-            if (parent.rel_type == PptRelationType.PARENT
-                && all_ppts.get(parent.parent_ppt_name).is_enter()) {
+            // ISSUE: Perhaps the checker framework could be made to
+            // special case all get methods?  (markro)
+            /*@Nullable*/ PptTopLevel ptl = all_ppts.get(parent.parent_ppt_name);
+            if (parent.rel_type == PptRelationType.PARENT && (ptl != null)
+                && ptl.is_enter()) {
               return;
             }
           }
@@ -1132,7 +1135,8 @@ public final class PrintInvariants {
     // Do not ever want to sort by function.
     if (varInfo.var_kind == VarInfo.VarKind.FUNCTION
         && !varInfo.var_flags.contains(VarFlags.IS_PROPERTY)) {
-      assert (varInfo.enclosing_var != null);
+      // We don't support static methods
+      assert varInfo.enclosing_var != null : "@AssumeAssertion(nullness)";
       return parse_csharp_invariant_variable(varInfo.enclosing_var, sort);
     }
 

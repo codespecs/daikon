@@ -1569,6 +1569,7 @@ public final class Daikon {
         // add parents for override relations
         // exit_ppt.parents has not been loaded at this point
         for (VarParent pi : postvar.parents) {
+          assert pi.parent_ppt != null : "@AssumeAssertion(nullness)";
           PptTopLevel parentppt = ppts.get(pi.parent_ppt);
           if (parentppt != null) {
             if (!parentppt.is_object() && !parentppt.is_class()) {
