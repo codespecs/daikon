@@ -597,8 +597,7 @@ public final class PrintInvariants {
     if (Daikon.dkconfig_output_conditionals &&
         (Daikon.output_format == OutputFormat.DAIKON ||
          Daikon.output_format == OutputFormat.CSHARPCONTRACT)) {
-      for (Iterator<PptConditional> i = ppt.cond_iterator(); i.hasNext() ; ) {
-        PptConditional pcond = i.next();
+      for (PptConditional pcond : ppt.cond_iterable()) {
         sb.append(print_reasons_from_ppt(pcond,ppts));
       }
     }
@@ -748,8 +747,7 @@ public final class PrintInvariants {
           if (((i + 1) >= ppts.length) || !ppts[i+1].ppt_name.isExitPoint()) {
 //             if (Daikon.dkconfig_output_conditionals
 //                 && Daikon.output_format == OutputFormat.DAIKON) {
-//               for (Iterator<PptConditional> j = ppt.cond_iterator(); j.hasNext() ; ) {
-//                 PptConditional pcond = j.next();
+//               for (PptConditional pcond : ppt.cond_iterable()) {
 //                 print_invariants_maybe(pcond, pw, all_ppts);
 //               }
 //             }
@@ -848,8 +846,7 @@ public final class PrintInvariants {
     if (Daikon.dkconfig_output_conditionals &&
         (Daikon.output_format == OutputFormat.DAIKON ||
          Daikon.output_format == OutputFormat.CSHARPCONTRACT)) {
-      for (Iterator<PptConditional> j = ppt.cond_iterator(); j.hasNext() ; ) {
-        PptConditional pcond = j.next();
+      for (PptConditional pcond : ppt.cond_iterable()) {
         print_invariants_maybe(pcond, out, all_ppts);
       }
     }
@@ -1417,8 +1414,7 @@ public final class PrintInvariants {
       int inv_cnt = 0;
       int total_slice_cnt = 0;
       int total_inv_cnt = 0;
-      for (Iterator<PptSlice> si = ppt.views_iterator(); si.hasNext(); ) {
-        PptSlice slice = si.next();
+      for (PptSlice slice : ppt.views_iterable()) {
         total_slice_cnt++;
         total_inv_cnt += slice.invs.size();
         if (slice.arity() != 3)
@@ -1440,8 +1436,7 @@ public final class PrintInvariants {
                           ", total_inv_cnt = " + total_inv_cnt);
 
       // Loop through each ternary slice
-      for (Iterator<PptSlice> si = ppt.views_iterator(); si.hasNext(); ) {
-        PptSlice slice = si.next();
+      for (PptSlice slice : ppt.views_iterable()) {
         if (slice.arity() != 3)
           continue;
         VarInfo[] vis = slice.var_infos;

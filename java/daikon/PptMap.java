@@ -186,7 +186,7 @@ public class PptMap
    * @see #ppt_all_iterator()
    */
   public Iterable<PptTopLevel> ppt_all_iterable() {
-    return new IterableIterator<PptTopLevel>(pptIterator());
+    return new IterableIterator<PptTopLevel>(ppt_all_iterator());
   }
 
   /** Iterate over the PptTopLevels and trim them. */

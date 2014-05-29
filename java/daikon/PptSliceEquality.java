@@ -442,7 +442,8 @@ public class PptSliceEquality
     // Copy all possible combinations from the current ppt (with repetition)
     // of replacing leader with different members of newVis.
 
-    // Loop through each slice
+    // Loop through each slice.
+    // Uses old-style for loop and Iterator because it will be side-effected.
     for (Iterator<PptSlice> i = parent.views_iterator(); i.hasNext(); ) {
       PptSlice slice = i.next();
 

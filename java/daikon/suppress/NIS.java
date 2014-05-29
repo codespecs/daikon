@@ -834,8 +834,8 @@ public class NIS {
    */
   public static void remove_suppressed_invs (PptTopLevel ppt) {
 
-    for (Iterator<PptSlice> i = ppt.views_iterator(); i.hasNext(); ) {
-      PptSlice slice = i.next();
+    for (PptSlice slice : ppt.views_iterable()) {
+      // Old-style for loop with Iterator because it will be side-effected
       for (Iterator<Invariant> j = slice.invs.iterator(); j.hasNext(); ) {
         Invariant inv = j.next();
         if (inv.is_ni_suppressed()) {

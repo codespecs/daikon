@@ -234,9 +234,7 @@ public final class MergeInvariants {
 
       // Remove all of the slices, equality sets, to start
       debugProgress.fine ("Cleaning ppt map in preparation for merge");
-      for (Iterator<PptTopLevel> i = merge_ppts.ppt_all_iterator();
-           i.hasNext(); ) {
-        PptTopLevel ppt = i.next();
+      for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
         ppt.clean_for_merge();
       }
 
@@ -344,8 +342,7 @@ public final class MergeInvariants {
 
     // Equality post processing
     debugProgress.fine ("Equality Post Processing");
-    for (Iterator<PptTopLevel> i = merge_ppts.ppt_all_iterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : merge_ppts.ppt_all_iterable()) {
       ppt.postProcessEquality();
     }
 
@@ -368,8 +365,7 @@ public final class MergeInvariants {
       if (ppt.ppt_name.isCombinedExitPoint())
         continue;
       ppt.children.clear();
-      for (Iterator<PptConditional> conds = ppt.cond_iterator(); conds.hasNext(); ) {
-        PptConditional cond = conds.next();
+      for (PptConditional cond : ppt.cond_iterable()) {
         cond.children.clear();
       }
     }

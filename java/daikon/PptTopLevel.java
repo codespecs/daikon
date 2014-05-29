@@ -232,9 +232,20 @@ public class PptTopLevel extends Ppt {
     }
   }
 
-  /** returns an iterator over all of the PptConditionals at this ppt **/
+  /**
+   * returns an iterator over all of the PptConditionals at this ppt
+   * @see #cond_iterable()
+   */
   public CondIterator cond_iterator() {
     return new CondIterator();
+  }
+
+  /**
+   * returns an iterable over all of the PptConditionals at this ppt
+   * @see #cond_iterator()
+   */
+  public Iterable<PptConditional> cond_iterable() {
+    return new IterableIterator<PptConditional>(new CondIterator());
   }
 
   /** Returns whether or not this ppt has any splitters. */
@@ -1060,8 +1071,7 @@ public class PptTopLevel extends Ppt {
       int slice1_cnt = 0;
       int slice2_cnt = 0;
       int slice3_cnt = 0;
-      for (Iterator<PptSlice> j = views_iterator(); j.hasNext();) {
-        PptSlice slice = j.next();
+      for (PptSlice slice : views_iterable()) {
         if (slice instanceof PptSlice1)
           slice1_cnt++;
         else if (slice instanceof PptSlice2)
@@ -1071,8 +1081,7 @@ public class PptTopLevel extends Ppt {
       }
       System.out.println("ppt " + name());
       debugInstantiate.fine("slice1 (" + slice1_cnt + ") slices");
-      for (Iterator<PptSlice> j = views_iterator(); j.hasNext();) {
-        PptSlice slice = j.next();
+      for (PptSlice slice : views_iterable()) {
         if (slice instanceof PptSlice1)
           debugInstantiate.fine(
             " : "
@@ -1090,8 +1099,7 @@ public class PptTopLevel extends Ppt {
         }
       }
       debugInstantiate.fine("slice2 (" + slice2_cnt + ") slices");
-      for (Iterator<PptSlice> j = views_iterator(); j.hasNext();) {
-        PptSlice slice = j.next();
+      for (PptSlice slice : views_iterable()) {
         if (slice instanceof PptSlice2)
           debugInstantiate.fine(
             " : "
@@ -1100,8 +1108,7 @@ public class PptTopLevel extends Ppt {
               + slice.var_infos[1].name());
       }
       debugInstantiate.fine("slice3 (" + slice3_cnt + ") slices");
-      for (Iterator<PptSlice> j = views_iterator(); j.hasNext();) {
-        PptSlice slice = j.next();
+      for (PptSlice slice : views_iterable()) {
         if (slice instanceof PptSlice3)
           debugInstantiate.fine(
             " : "
@@ -1136,8 +1143,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // Add the sample to each slice
-    for (Iterator<PptSlice> i = views_iterator(); i.hasNext();) {
-      PptSlice slice = i.next();
+    for (PptSlice slice : views_iterable()) {
       if (slice.invs.size() == 0)
         continue;
       weakened_invs.addAll(slice.add(vt, count));
@@ -1177,7 +1183,8 @@ public class PptTopLevel extends Ppt {
 
     first_pass_with_sample = true;
 
-    // Remove slices from the list if all of their invariants have died
+    // Remove slices from the list if all of their invariants have died.
+    // (Removal requires use of old-style for loop and Iterator.)
     for (Iterator<PptSlice> itor = views_iterator(); itor.hasNext();) {
       PptSlice view = itor.next();
       if (view.invs.size() == 0) {
@@ -1193,8 +1200,7 @@ public class PptTopLevel extends Ppt {
 
     // At this point, no invariant should exist that is suppressed
     if (Debug.dkconfig_internal_check) {
-      for (Iterator<PptSlice> itor = views_iterator(); itor.hasNext();) {
-        PptSlice slice = itor.next();
+      for (PptSlice slice : views_iterable()) {
         for (Invariant inv : slice.invs) {
           if (inv.is_ni_suppressed()) {
             NISuppressionSet ss = inv.get_ni_suppressions();
@@ -3258,11 +3264,22 @@ public class PptTopLevel extends Ppt {
 
   /**
    * For some clients, this method may be more efficient than getInvariants.
+   * @see #views_iterable()
    **/
   public Iterator<PptSlice> views_iterator() {
     // assertion only true when guarding invariants
     // assert views.contains(joiner_view);
     return viewsAsCollection().iterator();
+  }
+
+  /**
+   * For some clients, this method may be more efficient than getInvariants.
+   * @see #views_iterator()
+   **/
+  public Iterable<PptSlice> views_iterable() {
+    // assertion only true when guarding invariants
+    // assert views.contains(joiner_view);
+    return viewsAsCollection();
   }
 
   /**
@@ -3376,8 +3393,7 @@ public class PptTopLevel extends Ppt {
     for (PptSlice currentView : viewArray) {
       currentView.processOmissions(omitTypes);
     }
-    for (Iterator<PptConditional> i = cond_iterator(); i.hasNext();) {
-      PptConditional currentCondView = i.next();
+    for (PptConditional currentCondView : cond_iterable()) {
       currentCondView.processOmissions(omitTypes);
     }
   }
@@ -4041,8 +4057,7 @@ public class PptTopLevel extends Ppt {
     }
 
     // Merge the conditional points
-    for (Iterator<PptConditional> ii = cond_iterator(); ii.hasNext();) {
-      PptConditional ppt_cond = ii.next();
+    for (PptConditional ppt_cond : cond_iterable()) {
       if (debugConditional.isLoggable(Level.FINE)) {
         debugConditional.fine(
           "Merge invariants for conditional " + ppt_cond.name());
