@@ -340,7 +340,7 @@ staging: doc/CHANGES
 	$(MAKE) daikon.tar
 	gzip -c ${TMPDIR}/daikon.tar > $(STAGING_DIR)/download/daikon.tar.gz
 	cp -pf ${TMPDIR}/daikon.zip $(STAGING_DIR)/download/daikon.zip
-	mv daikon.jar $(STAGING_DIR)/download
+	cp -pf daikon.jar $(STAGING_DIR)/download
 	# Build javadoc
 	@echo "]2;Building Java doc"
 	install -d $(STAGING_DIR)/download/jdoc
