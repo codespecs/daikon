@@ -796,11 +796,13 @@ public final class PrintInvariants {
       if (ppt.parent_relations != null) {
         for (ParentRelation parent : ppt.parent_relations) {
           if (parent != null) {
-            // ISSUE: Perhaps the checker framework could be made to
-            // special case all get methods?  (markro)
-            /*@Nullable*/ PptTopLevel ptl = all_ppts.get(parent.parent_ppt_name);
-            if (parent.rel_type == PptRelationType.PARENT && (ptl != null)
-                && ptl.is_enter()) {
+            // TODO:  This assertion is necessary because the KeyFor
+            // Checker does not track @KeyFor except for Java Maps; it
+            // should support KeyFor for PptMap which is not a subtype of
+            // Map.  Alternately, PptMap could be made a subtype of Map.
+            assert all_ppts.get(parent.parent_ppt_name) != null : "@AssumeAssertion(nullness)"; // parent.parent_ppt_name is a key in all_ppts
+            if (parent.rel_type == PptRelationType.PARENT
+                && all_ppts.get(parent.parent_ppt_name).is_enter()) {
               return;
             }
           }
