@@ -40,6 +40,7 @@ public class PptMap
    * program points are not stored in the map by name.  They are only
    * available through their parent.
    */
+  /*@Pure*/
   public /*@Nullable*/ PptTopLevel get(String name) {
     return nameToPpt.get(name);
   }
@@ -49,6 +50,7 @@ public class PptMap
    * program points are not stored in the map by name.  They are only
    * available through their parent.
    */
+  /*@Pure*/
   public /*@Nullable*/ PptTopLevel get(PptName name) {
     return get(name.toString());
   }
@@ -208,6 +210,7 @@ public class PptMap
   /**
    * Return the number of active PptSlices.
    **/
+  /*@Pure*/
   public int countSlices() {
     int result = 0;
     for (PptTopLevel ppt : this.pptIterable()) {
@@ -216,11 +219,13 @@ public class PptMap
     return result;
   }
 
-  /*@Pure*/ public int size() {
+  /*@Pure*/
+  public int size() {
     return nameToPpt.size();
   }
 
-  /*@SideEffectFree*/ public String toString() {
+  /*@SideEffectFree*/
+  public String toString() {
     return "PptMap: " + nameToPpt.toString();
   }
 
