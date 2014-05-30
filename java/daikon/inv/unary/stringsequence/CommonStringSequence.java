@@ -29,7 +29,7 @@ public class CommonStringSequence
    * Null means no samples have been seen yet.
    * Empty array means intersection is empty.
    */
-  private String /*@Nullable*/ [] intersect = null;
+  private String /*@MonotonicNonNull*/ [] intersect = null;
 
   protected CommonStringSequence(PptSlice ppt) {
     super(ppt);
@@ -90,6 +90,9 @@ public class CommonStringSequence
   }
 
   public String format_csharp_contract() {
+    if (intersect==null)
+      return "()";
+
     if (intersect.length == 1) {
       return var().csharp_name() + ".Contains(" + intersect[0] + ")";
     }

@@ -225,7 +225,7 @@ public final class PrintInvariants {
   private static String print_csharp_metadata_SWITCH = "print_csharp_metadata";
 
   // Stores the output file stream if --output is specified.
-  private static OutputStream out_stream = null;
+  private static /*@Nullable*/ OutputStream out_stream = null;
   private static boolean print_csharp_metadata = false;
 
 
@@ -1117,7 +1117,7 @@ public final class PrintInvariants {
 
   /**
    * Parses the variables from varInfo.
-   * @param varInfo - the daikon variable representation to parse.
+   * @param varInfo - the Daikon variable representation to parse
    * @param sort - true to parse as a grouping variable, false to parse as a filtering variable
    * @return - the parsed variable string
    */
@@ -1129,7 +1129,15 @@ public final class PrintInvariants {
     // Do not ever want to sort by function.
     if (varInfo.var_kind == VarInfo.VarKind.FUNCTION
         && !varInfo.var_flags.contains(VarFlags.IS_PROPERTY)) {
-      assert (varInfo.enclosing_var != null);
+      // The assertion says that currently, Celeriac only visits a static
+      // method is when the method has single parameter with the same type
+      // as the declaring class. For example: string.NullOrEmpty(string
+      // arg). In these cases, Celeriac will output arg as being the
+      // enclosing var. The DECLs would look something like:
+      // var fieldA
+      // var string.NullOrEmpty(fieldA)
+      //   parent fieldA
+      assert (varInfo.enclosing_var != null) : "@AssumeAssertion(nullness)"; // application invariant; see comment above
       return parse_csharp_invariant_variable(varInfo.enclosing_var, sort);
     }
 
