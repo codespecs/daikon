@@ -40,14 +40,14 @@
 @center @titlefont{Daikon Invariant Detector Developer Manual}
 
 @sp 2
-@center Daikon version 5.0.9
+@center Daikon version 5.1.0
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.0.9 release date
-@center May 2, 2014
+@c Print out the Daikon version 5.1.0 release date
+@center May 30,2014
 @end ifset
 
 @ifclear final
@@ -95,7 +95,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.0.9, released May 2, 2014.
+It describes Daikon version 5.1.0, released May 30,2014.
 
 @menu
 * Introduction::
@@ -2039,7 +2039,7 @@ make update-doc-dist-date-and-version
 
 [Time: moments]
 
-
+@page
 @item
 Update the publications pages in a local copy of plume-bib. 
 If you have not done so previously, you may create this repository
@@ -2108,7 +2108,6 @@ Another good source of information are the repository logs since the
 last release:
 
 @example
-cd $DAIKONDIR/java
 hg log -v -r "tag(5.0.2)::"  (substitute last release number for 5.0.2)
 @end example
 
@@ -2116,7 +2115,6 @@ As we normally only tag the repository when we make a release, this can
 usually be simplified to:
 
 @example
-cd $DAIKONDIR/java
 hg log -v -r "last(tagged())::"
 @end example
 
@@ -2243,8 +2241,8 @@ written to the screen.
 mkdir -p ~/tmp
 cd ~/tmp
 rm -rf daikon.tar.gz daikon
-# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
+# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 tar xzf daikon.tar.gz
 # Convert OSTYPE from a bash shell variable to a system environment variable.
 export OSTYPE
