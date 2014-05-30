@@ -20,6 +20,20 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.1.0 (May 30, 2014)
+
+  Daikon can now infer code contracts for .NET programs, such as C# programs. 
+  You will require the Celeriac front end:
+    http://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted
+  In the past, when using Celeriac, you were required to use a special version
+  of Daikon; now you should just use the regular version of Daikon.
+
+  DynComp for Java now works with Java 7.  Chicory already worked with Java 7,
+  but the DynComp component did not work with Java 7 until this release.
+  (This is the fix for Daikon issue #24.)
+   
+===========================================================================
+
 5.0.8 (May 2, 2014)
 
 General:
