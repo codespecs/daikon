@@ -2039,7 +2039,7 @@ make update-doc-dist-date-and-version
 
 [Time: moments]
 
-
+@page
 @item
 Update the publications pages in a local copy of plume-bib. 
 If you have not done so previously, you may create this repository
@@ -2108,7 +2108,6 @@ Another good source of information are the repository logs since the
 last release:
 
 @example
-cd $DAIKONDIR/java
 hg log -v -r "tag(5.0.2)::"  (substitute last release number for 5.0.2)
 @end example
 
@@ -2116,7 +2115,6 @@ As we normally only tag the repository when we make a release, this can
 usually be simplified to:
 
 @example
-cd $DAIKONDIR/java
 hg log -v -r "last(tagged())::"
 @end example
 
@@ -2243,8 +2241,8 @@ written to the screen.
 mkdir -p ~/tmp
 cd ~/tmp
 rm -rf daikon.tar.gz daikon
-# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
+# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 tar xzf daikon.tar.gz
 # Convert OSTYPE from a bash shell variable to a system environment variable.
 export OSTYPE
