@@ -597,8 +597,7 @@ public final class PrintInvariants {
     if (Daikon.dkconfig_output_conditionals &&
         (Daikon.output_format == OutputFormat.DAIKON ||
          Daikon.output_format == OutputFormat.CSHARPCONTRACT)) {
-      for (Iterator<PptConditional> i = ppt.cond_iterator(); i.hasNext() ; ) {
-        PptConditional pcond = i.next();
+      for (PptConditional pcond : ppt.cond_iterable()) {
         sb.append(print_reasons_from_ppt(pcond,ppts));
       }
     }
@@ -748,8 +747,7 @@ public final class PrintInvariants {
           if (((i + 1) >= ppts.length) || !ppts[i+1].ppt_name.isExitPoint()) {
 //             if (Daikon.dkconfig_output_conditionals
 //                 && Daikon.output_format == OutputFormat.DAIKON) {
-//               for (Iterator<PptConditional> j = ppt.cond_iterator(); j.hasNext() ; ) {
-//                 PptConditional pcond = j.next();
+//               for (PptConditional pcond : ppt.cond_iterable()) {
 //                 print_invariants_maybe(pcond, pw, all_ppts);
 //               }
 //             }
@@ -851,8 +849,7 @@ public final class PrintInvariants {
     if (Daikon.dkconfig_output_conditionals &&
         (Daikon.output_format == OutputFormat.DAIKON ||
          Daikon.output_format == OutputFormat.CSHARPCONTRACT)) {
-      for (Iterator<PptConditional> j = ppt.cond_iterator(); j.hasNext() ; ) {
-        PptConditional pcond = j.next();
+      for (PptConditional pcond : ppt.cond_iterable()) {
         print_invariants_maybe(pcond, out, all_ppts);
       }
     }
@@ -1123,7 +1120,7 @@ public final class PrintInvariants {
 
   /**
    * Parses the variables from varInfo.
-   * @param varInfo - the daikon variable representation to parse.
+   * @param varInfo - the Daikon variable representation to parse
    * @param sort - true to parse as a grouping variable, false to parse as a filtering variable
    * @return - the parsed variable string
    */
@@ -1135,8 +1132,15 @@ public final class PrintInvariants {
     // Do not ever want to sort by function.
     if (varInfo.var_kind == VarInfo.VarKind.FUNCTION
         && !varInfo.var_flags.contains(VarFlags.IS_PROPERTY)) {
-      // We don't support static methods
-      assert varInfo.enclosing_var != null : "@AssumeAssertion(nullness)";
+      // The assertion says that currently, Celeriac only visits a static
+      // method is when the method has single parameter with the same type
+      // as the declaring class. For example: string.NullOrEmpty(string
+      // arg). In these cases, Celeriac will output arg as being the
+      // enclosing var. The DECLs would look something like:
+      // var fieldA
+      // var string.NullOrEmpty(fieldA)
+      //   parent fieldA
+      assert (varInfo.enclosing_var != null) : "@AssumeAssertion(nullness)"; // application invariant; see comment above
       return parse_csharp_invariant_variable(varInfo.enclosing_var, sort);
     }
 
@@ -1421,8 +1425,7 @@ public final class PrintInvariants {
       int inv_cnt = 0;
       int total_slice_cnt = 0;
       int total_inv_cnt = 0;
-      for (Iterator<PptSlice> si = ppt.views_iterator(); si.hasNext(); ) {
-        PptSlice slice = si.next();
+      for (PptSlice slice : ppt.views_iterable()) {
         total_slice_cnt++;
         total_inv_cnt += slice.invs.size();
         if (slice.arity() != 3)
@@ -1444,8 +1447,7 @@ public final class PrintInvariants {
                           ", total_inv_cnt = " + total_inv_cnt);
 
       // Loop through each ternary slice
-      for (Iterator<PptSlice> si = ppt.views_iterator(); si.hasNext(); ) {
-        PptSlice slice = si.next();
+      for (PptSlice slice : ppt.views_iterable()) {
         if (slice.arity() != 3)
           continue;
         VarInfo[] vis = slice.var_infos;

@@ -673,12 +673,10 @@ public final class Debug {
 
     boolean found = false;
 
-    for (Iterator<PptTopLevel> i = all_ppts.ppt_all_iterator(); i.hasNext(); ) {
-      PptTopLevel ppt = i.next();
+    for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       if (ppt_match (ppt))
         debugTrack.fine ("Matched ppt '" + ppt.name() + "' at " + msg);
-      for (Iterator<PptSlice> j = ppt.views_iterator(); j.hasNext(); ) {
-        PptSlice slice = j.next();
+      for (PptSlice slice : ppt.views_iterable()) {
         for (int k = 0; k < slice.invs.size(); k++ ) {
           Invariant inv = slice.invs.get(k);
           if (inv.log ("%s: found #%s=%s in slice %s", msg, k, inv.format(), slice))

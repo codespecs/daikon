@@ -32,13 +32,13 @@ public class VarParent implements Serializable {
   private static final long serialVersionUID = 20130425L;
 
   /** Parent ppt for this variable **/
-  public /*@MonotonicNonNull*/ String parent_ppt = null;
+  public String parent_ppt;
 
   /** Parent variable (within parent_ppt) (if any) **/
-  public /*@Nullable*/ String parent_variable = null;
+  public /*@Nullable*/ String parent_variable;
 
   /** Parent ppt relation id **/
-  public int parent_relation_id = 0;
+  public int parent_relation_id;
 
   public VarParent (String parent_ppt, int parent_relation_id, /*@Nullable*/ String parent_variable) {
     this.parent_ppt = parent_ppt;

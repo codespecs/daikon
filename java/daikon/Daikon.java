@@ -548,10 +548,7 @@ public final class Daikon {
       int total_invs = 0;
       // Can't use new for syntax because the default iterator for all_ppts
       // is not the one I want here.
-      for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator();
-           itor.hasNext();
-           ) {
-        PptTopLevel ppt = itor.next();
+      for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
         System.out.printf("Processing %s with %d variables",
                           ppt.name(), ppt.var_infos.length);
         int inv_cnt = 0;
@@ -689,10 +686,7 @@ public final class Daikon {
 
     // print statistics concerning what invariants are printed
     if (debugStats.isLoggable(Level.FINE)) {
-      for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator();
-           itor.hasNext();
-           ) {
-        PptTopLevel ppt = itor.next();
+      for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
         PrintInvariants.print_filter_stats(debugStats, ppt, all_ppts);
       }
     }
@@ -1415,8 +1409,7 @@ public final class Daikon {
 
       // Recursively initialize ppts created by splitters
       if (ppt.has_splitters()) {
-        for (Iterator<PptConditional> ii = ppt.cond_iterator(); ii.hasNext(); ) {
-          PptConditional ppt_cond = ii.next();
+        for (PptConditional ppt_cond : ppt.cond_iterable()) {
           init_ppt (ppt_cond, all_ppts);
         }
       }
@@ -1921,10 +1914,7 @@ public final class Daikon {
     // Post process dynamic constants
     if (DynamicConstants.dkconfig_use_dynamic_constant_optimization) {
       debugProgress.fine("Constant Post Processing ... ");
-      for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator();
-        itor.hasNext();
-        ) {
-        PptTopLevel ppt = itor.next();
+      for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
         if (ppt.constants != null)
           ppt.constants.post_process();
       }
@@ -1950,10 +1940,7 @@ public final class Daikon {
     // Equality data for each PptTopLevel.
     if (Daikon.use_equality_optimization && !Daikon.dkconfig_undo_opts) {
       debugProgress.fine("Equality Post Process ... ");
-      // Can't use a new-style for-each loop with an Iterator :-(
-      for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator();
-           itor.hasNext(); ) {
-        PptTopLevel ppt = itor.next();
+      for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
         // ppt.equality_view can be null here
         ppt.postProcessEquality();
       }
@@ -1968,10 +1955,7 @@ public final class Daikon {
 
     // Debug print information about equality sets
     if (debugEquality.isLoggable(Level.FINE)) {
-      for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator();
-        itor.hasNext();
-        ) {
-        PptTopLevel ppt = itor.next();
+      for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
         debugEquality.fine(ppt.name() + ": " + ppt.equality_sets_txt());
       }
     }
@@ -2048,8 +2032,7 @@ public final class Daikon {
     System.out.print("Invoking Simplify to identify redundant invariants");
     System.out.flush();
     stopwatch.reset();
-    for (Iterator<PptTopLevel> itor = all_ppts.ppt_all_iterator(); itor.hasNext();) {
-      PptTopLevel ppt = itor.next();
+    for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       ppt.mark_implied_via_simplify(all_ppts);
       System.out.print(".");
       System.out.flush();
@@ -2236,18 +2219,12 @@ public final class Daikon {
   public static void undoOpts(PptMap all_ppts) {
 
     //undo suppressions
-    Iterator<PptTopLevel> suppress_it = all_ppts.ppt_all_iterator();
-
-    while (suppress_it.hasNext()) {
-      PptTopLevel p = suppress_it.next();
-      NIS.create_suppressed_invs(p);
+    for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
+      NIS.create_suppressed_invs(ppt);
     }
 
     //undo equality sets
-    Iterator<PptTopLevel> equality_it = all_ppts.ppt_all_iterator();
-    while (equality_it.hasNext()) {
-
-      PptTopLevel ppt = equality_it.next();
+    for (PptTopLevel ppt : all_ppts.ppt_all_iterable()) {
       PptSliceEquality sliceEquality = ppt.equality_view;
 
       // some program points have no equality sets?

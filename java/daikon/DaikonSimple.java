@@ -441,15 +441,11 @@ public class DaikonSimple {
       // Build the vt for the receiver ppt by looking through the current
       // vt and filling in the gaps.
       int k = 0;
-      for (Iterator<VarInfo> i = receiver.var_info_iterator(); i.hasNext();) {
-
-        VarInfo var = i.next();
+      for (VarInfo var : receiver.var_infos) {
         if (var.is_static_constant)
           continue;
         boolean found = false;
-        for (Iterator<VarInfo> j = original.var_info_iterator(); j.hasNext();) {
-          VarInfo var2 = j.next();
-
+        for (VarInfo var2 : original.var_infos) {
           if (var.name().equals(var2.name())) {
             values[k] = vt.getValueOrNull(var2);
             mods[k] = vt.getModified(var2);
@@ -639,8 +635,7 @@ public class DaikonSimple {
       ppt.incSampleNumber();
 
       // Loop through each slice
-      for (Iterator<PptSlice> i = ppt.views_iterator(); i.hasNext();) {
-        PptSlice slice = i.next();
+      for (PptSlice slice :  ppt.views_iterable()) {
         Iterator<Invariant> k = slice.invs.iterator();
         boolean missing = false;
 

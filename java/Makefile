@@ -915,6 +915,8 @@ check-nullness-raw-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compi
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
+check-nullness-fbc: check-nullness-fbc-all-withstubs
+
 check-nullness-fbc-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}

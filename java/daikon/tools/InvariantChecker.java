@@ -267,8 +267,7 @@ public class InvariantChecker {
     //Set<String> allInvariantsStr = new HashSet<String>();
     Set<Invariant> allInvariants = new HashSet<Invariant>();
     for (PptTopLevel ppt : ppts.all_ppts())
-      for (Iterator<PptSlice> i = ppt.views_iterator(); i.hasNext(); ) {
-        PptSlice slice = i.next();
+      for (PptSlice slice : ppt.views_iterable()) {
         for (Invariant inv : slice.invs) {
           if (doConf &&
               inv.getConfidence()<Invariant.dkconfig_confidence_limit) {
@@ -422,8 +421,7 @@ public class InvariantChecker {
 
       // Loop through each slice
       slice_loop:
-      for (Iterator<PptSlice> i = ppt.views_iterator(); i.hasNext(); ) {
-        PptSlice slice = i.next();
+      for (PptSlice slice : ppt.views_iterable()) {
         if (debug_detail.isLoggable (Level.FINE))
           debug_detail.fine (": processing slice " + slice + "vars: "
                            + Debug.toString (slice.var_infos, vt));
