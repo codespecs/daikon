@@ -459,6 +459,7 @@ syntax: regexp
 ^tests/.*\.txt-cset$
 ^tests/.*\.txt-cset\.diff$
 ^tests/.*\.txt-csharpcontract$
+^tests/.*\.txt-csharpcontract-failed$
 ^tests/.*\.txt-csharpcontract\.diff$
 ^tests/.*\.txt-daikon$
 ^tests/.*\.txt-daikon\.diff$
