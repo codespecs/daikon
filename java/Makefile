@@ -888,7 +888,7 @@ check-nullness-all-nostubs: check-nullness-raw-all-nostubs check-nullness-fbc-al
 check-nullness-raw: check-nullness-raw-all-withstubs
 
 check-nullness-raw-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
-	$(MAKE) compile
+	$(MAKE) JAVAC=${JAVAC_FOR_CHECKER} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
@@ -898,37 +898,42 @@ check-nullness-raw-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
 # NULLNESS_RAW_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
 # NULLNESS_RAW_ONEFILE ?= daikon/FileIO.java
 NULLNESS_RAW_ONEFILE ?= daikon/inv/Invariant.java
-check-nullness-raw-onefile: ${ALL_GENERATED_FILES} compile-typequals compile
+check-nullness-raw-onefile: ${ALL_GENERATED_FILES} compile-typequals
+	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
 	${MAKE} check-nullness-raw-onefile-norecompile
 check-nullness-raw-onefile-norecompile:
 	${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_RAW_ONEFILE}
 
 
 check-nullness-fbc-all-nostubs: ${ALL_GENERATED_FILES} compile-typequals
-	$(MAKE) compile
+	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-nullness-all-withstubs: check-nullness-raw-all-withstubs check-nullness-fbc-all-withstubs
 
-check-nullness-raw-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
+check-nullness-raw-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals
+	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 check-nullness-fbc: check-nullness-fbc-all-withstubs
 
-check-nullness-fbc-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
+check-nullness-fbc-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals
+	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
 
 # Version that issues warnings, not errors.
 ## (Actually, it's identical to the above!  TODO: Fix that.)
-check-nullness-raw-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
+check-nullness-raw-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals
+	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_RAW_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
-check-nullness-fbc-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals compile
+check-nullness-fbc-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals
+	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_NULLNESS_FBC_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
@@ -937,9 +942,10 @@ check-nullness-fbc-all-withstubs-warns: ${ALL_GENERATED_FILES} compile-typequals
 # NULLNESS_ONEFILE="daikon/derive/binary/SequenceStringIntersection.java daikon/derive/binary/SequenceStringUnion.java daikon/inv/unary/stringsequence/CommonStringSequence.java daikon/Quant.java" make check-nullness-onefile
 # NULLNESS_ONEFILE ?= daikon/derive/binary/SequenceStringUnion.java
 # NULLNESS_ONEFILE ?= daikon/FileIO.java
-NULLNESS_ONEFILE ?= daikon/inv/Invariant.java
+NULLNESS_ONEFILE ?= daikon/Daikon.java
 check-nullness-onefile: check-nullness-fbc-onefile
-check-nullness-fbc-onefile: ${ALL_GENERATED_FILES} compile-typequals compile
+check-nullness-fbc-onefile: ${ALL_GENERATED_FILES} compile-typequals
+	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
 	${MAKE} check-nullness-fbc-onefile-norecompile
 check-nullness-onefile-norecompile: check-nullness-fbc-onefile-norecompile
 check-nullness-fbc-onefile-norecompile:
@@ -949,7 +955,8 @@ check-prototype: check-prototype-all
 
 check-prototype-all: check-prototype-all-withstubs
 
-check-prototype-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
+check-prototype-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals
+	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_PROTOTYPE_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
@@ -957,7 +964,8 @@ check-vindex: check-vindex-all
 
 check-vindex-all: check-vindex-all-withstubs
 
-check-vindex-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals compile
+check-vindex-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals
+	${MAKE} JAVAC=${JAVAC_FOR_CHECKER} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} -Xbootclasspath/p:${DAIKONDIR}/java ${JAVAC_VINDEX_ARGS} ${CHECKER_ARGS} ${NULLNESS_JAVA_FILES}
 
