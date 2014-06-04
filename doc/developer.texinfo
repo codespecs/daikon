@@ -37,7 +37,9 @@
 @sp 10
 
 @c Could also use @title, @subtitle, @author here.
-@center @titlefont{Daikon Invariant Detector Developer Manual}
+@center @titlefont{Daikon Invariant Detector}
+@sp 1
+@center @titlefont{Developer Manual}
 
 @sp 2
 @center Daikon version 5.0.9
@@ -136,7 +138,7 @@ For information about using Daikon, see the
 This manual is intended for those who are already familiar with the use
 of Daikon, but wish to customize or extend it.
 
-Additional information can be found in technical papers available from
+Additional information can be found in the technical papers available from
 @w{@uref{http://plse.cs.washington.edu/daikon/pubs/}.}
 
 @node    Extending Daikon
@@ -244,7 +246,7 @@ Please note this applies to a @command{-CLASSPATH} argument to
 @command{java} as well: it must have Windows pathnames.
 One easy way to deal with this is to use the @command{cygpath} utility:
 @example
-java -cp "`cygpath -wp linux/path/a:linux/path/b`" <remaider of arguments>
+java -cp "`cygpath -wp linux/path/a:linux/path/b`" <other arguments>
 @end example
 @noindent
 Note both the back quotes (@samp{`}) to force @command{cygpath} to be evaluated
@@ -260,8 +262,8 @@ special characters and spaces in Windows paths.
 @cindex Mercurial repository
 @cindex version control repository
 
-The Daikon Mercurial repository is located at Google Code; see
-@w{@uref{http://code.google.com/p/daikon/}.}
+The Daikon Mercurial repository is located on the Google Code site;
+see @w{@uref{http://code.google.com/p/daikon/}.}
 
 
 @node    Using Eclipse
@@ -806,7 +808,7 @@ The following example defines suppressions for @samp{x == y} implies
 @samp{x >= y} and @samp{x > y} implies @samp{x >= y}.
 
 @exampleindent 1
-@smallexample
+@example
 private static NISuppressionSet suppressions = null;
 
 public NISuppressionSet get_ni_suppressions() @{
@@ -823,7 +825,7 @@ public NISuppressionSet get_ni_suppressions() @{
   @}
   return (suppressions);
 @}
-@end smallexample
+@end example
 @c restore default:
 @exampleindent 5
 
@@ -839,7 +841,7 @@ The following example defines an obvious check for @samp{x <= c}
 Divides class.
 
 @exampleindent 1
-@smallexample
+@example
 public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
   DiscardInfo di = super.isObviousDynamically(vis);
   if(di != null) @{
@@ -858,14 +860,14 @@ public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
     if(inv instanceof UpperBound) @{
       if(((UpperBound) inv).max() < 1) @{
         return new DiscardInfo(this, DiscardCode.obvious,
-                               @samp{Divides is obvious when divisor less than one});
+                    @samp{Divides is obvious when divisor less than one});
       @}
     @}
   @}
 
   return null;
 @}
-@end smallexample  
+@end example  
 @c restore default:
 @exampleindent 5
 
@@ -936,8 +938,8 @@ Multiple class arguments can be specified separated by pipe symbols
 (@samp{<>}).
 
 @item The program point of interest (e.g., 
-@code{DataStructures.StackAr.makeEmpty()V:::ENTER}).  The program point
-is preceded by an at sign (@samp{@@}).
+@code{DataStructures.StackAr.findMin()V:::ENTER}). 
+The program point is preceded by an at sign (@samp{@@}).
 
 @end enumerate
 
@@ -1542,7 +1544,7 @@ different components of the Daikon distribution (such as Kvasir,
 invariant detection engine itself appear in
 @file{$DAIKONDIR/tests/daikon-tests/}.
 
-Each Makefile under @file{$DAIKONDIR/tests/} includes
+Each Makefile under @file{$DAIKONDIR/tests} includes
 @file{$DAIKONDIR/tests/Makefile.common}, which contains the logic for all of
 the tests.  @file{Makefile.common} is somewhat complicated, if only
 because it controls so many types of tests.
@@ -1576,7 +1578,7 @@ correct output, then run @command{make update-inv-goals} to update the Daikon
 @cindex adding new regression tests
 @cindex new regression tests
 
-Most Daikon regression tests appear in subdirectories of
+Most Daikon regression tests are in subdirectories of
 @file{$DAIKONDIR/tests/daikon-tests/}.
 (There is also a @file{$DAIKONDIR/tests/chicory-tests/} directory,
 but it is usually better to put tests in
@@ -2099,10 +2101,20 @@ in this version.  A good way to determine what has changed is to diff
 the Texinfo source files in the doc directory against the previous
 versions:
 
+@iftex
+@example
+cd $DAIKONDIR/doc
+diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc \
+     *.texinfo
+@end example
+@end iftex
+
+@ifnottex
 @example
 cd $DAIKONDIR/doc
 diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
 @end example
+@end ifnottex
 
 Another good source of information are the repository logs since the
 last release:
@@ -2122,7 +2134,7 @@ hg log -v -r "last(tagged())::"
 
 
 @item
-Build everything to be distributed and copy it to the staging area
+Build everything to be distributed and copy it to the temporary staging area
 @c not @uref{...} because we don't want robots to notice and crawl the link
 (http://plse.cs.washington.edu/daikon/staging-daikon/).
 The final
@@ -2179,6 +2191,24 @@ the appropriate environment variables and run the top level Makefile.
 Finally, a short verification test is run;
 success is indicated by invariant output being written to the screen.
 
+@iftex
+@example
+mkdir -p ~/tmp
+cd ~/tmp
+rm -rf daikon.tar.gz daikon
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/ \
+                                                         daikon.tar.gz
+tar xzf daikon.tar.gz
+export JAVA_HOME=/usr/lib/jvm/java
+export DAIKONDIR=`pwd`/daikon
+source daikon/scripts/daikon.bashrc
+cd daikon
+make
+make installation-test
+@end example
+@end iftex
+
+@ifnottex
 @example
 mkdir -p ~/tmp
 cd ~/tmp
@@ -2192,6 +2222,7 @@ cd daikon
 make
 make installation-test
 @end example
+@end ifnottex
 
 [Time: 10 min]
 
@@ -2210,13 +2241,15 @@ written to the screen.
 @*
 [Time: 10 min]
 
+@iftex
 @example
 mkdir -p ~/tmp
 cd ~/tmp
 rm -rf daikon.tar.gz daikon
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/ \
+                                                         daikon.tar.gz
 tar xzf daikon.tar.gz
-# Convert OSTYPE from a bash shell variable to a system environment variable.
+# Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE
 export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_45"
 export DAIKONDIR=`pwd`/daikon
@@ -2225,7 +2258,25 @@ cd daikon
 make
 make installation-test
 @end example
+@end iftex
 
+@ifnottex
+@example
+mkdir -p ~/tmp
+cd ~/tmp
+rm -rf daikon.tar.gz daikon
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
+tar xzf daikon.tar.gz
+# Convert OSTYPE from a shell variable to a system environment variable.
+export OSTYPE
+export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_45"
+export DAIKONDIR=`pwd`/daikon
+source daikon/scripts/daikon.bashrc
+cd daikon
+make
+make installation-test
+@end example
+@end ifnottex
 
 @item
 Test the distribution on a MacOSX machine.  On a MacOSX machine
@@ -2239,14 +2290,17 @@ written to the screen.
 @*
 [Time: 4 min]
 
+@iftex
 @example
 mkdir -p ~/tmp
 cd ~/tmp
 rm -rf daikon.tar.gz daikon
-# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
-curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
+curl -O http://plse.cs.washington.edu/daikon/staging-daikon/ \
+                                                download/daikon.tar.gz
+# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/ \
+#                                               download/daikon.tar.gz
 tar xzf daikon.tar.gz
-# Convert OSTYPE from a bash shell variable to a system environment variable.
+# Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE
 export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Home
 export DAIKONDIR=`pwd`/daikon
@@ -2255,6 +2309,26 @@ cd daikon
 make
 make installation-test
 @end example
+@end iftex
+
+@ifnottex
+@example
+mkdir -p ~/tmp
+cd ~/tmp
+rm -rf daikon.tar.gz daikon
+curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
+# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
+tar xzf daikon.tar.gz
+# Convert OSTYPE from a shell variable to a system environment variable.
+export OSTYPE
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Home
+export DAIKONDIR=`pwd`/daikon
+source daikon/scripts/daikon.bashrc
+cd daikon
+make
+make installation-test
+@end example
+@end ifnottex
 
 
 @item
@@ -2492,10 +2566,19 @@ branch) in December 2003.
 
 A regular @command{cvs checkout} gets the trunk.  The @option{-r} flag specifies a
 branch.  For example, to get the branch as of June 9, 2002, one could do
+
+@iftex
 @example
 cvs -d $pag/projects/invariants/.CVS co -r ENGINE_V2_PATCHES \
     -D 2003/06/09 invariants/java/daikon
 @end example
+@end iftex
+
+@ifnottex
+@example
+cvs -d $pag/projects/invariants/.CVS co -r ENGINE_V2_PATCHES -D 2003/06/09 invariants/java/daikon
+@end example
+@end ifnottex
 
 Some warnings about analyzing historical versions of Daikon:
 @enumerate
