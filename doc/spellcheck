@@ -1,0 +1,4 @@
+#! /bin/sh
+
+perl parse-texinfo.pl < $1.texinfo | hunspell -l -p daikon.dict $2 $3 $4
+
