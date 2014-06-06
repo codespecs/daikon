@@ -1251,7 +1251,7 @@ behavior and possibly update the goals.
 The Daikon distribution contains unit tests, but not regression tests
 (which would make the distribution much larger).  The regression tests
 appear in Daikon's version control repository (@pxref{Version control
-repository}).
+repository}), within the @file{tests} subdirectory.
 
 @menu
 * Unit testing::
@@ -1975,6 +1975,23 @@ distribution, one of the final steps is to increment the version number again to
 prepare for subsequent development.  Note, this system has the useful side effect
 of allowing the build and test process to be repeated to fix a problem (steps 5-14 below) 
 without having to worry about updating or resetting the version number.
+
+The instructions below assume you have two local Mercurial (@command{hg})
+repositories: one for Daikon cloned from
+@uref{http://code.google.com/p/daikon/} and one for Fjalar cloned from
+@uref{http://code.google.com/p/fjalar/}.  Further, they must be sibling
+directories and the environment variable @env{DAIKONDIR} must be set to
+the root of the Daikon tree.  If your local Fjalar directory is named
+@file{fjalar}, then you may choose to let the command @command{make kvasir}
+(previously done in the Daikon directory) set a symbolic link
+@file{kvasir} from Daikon to Fjalar as part of the build process. 
+Otherwise, you must make this link yourself.
+For example, if your Fjalar directory is named @file{myfjalar}:
+
+@example
+cd @@DAIKONDIR
+ln -nsf ../myfjalar kvasir
+@end example
 
 The Daikon distribution site is located at @uref{//plse.cs.washington.edu/daikon/};
 internally, this can be accessed as part of our file system at
