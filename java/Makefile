@@ -1110,8 +1110,6 @@ clover: all_directly
 ### Documentation
 ###
 
-.PHONY: doc
-
 JAVADOC_DEST  = doc
 # $(DAIKONDIR)/java should not be in classpath, to avoid Javadoc error
 # "Multiple sources of package comments found for package"
@@ -1133,7 +1131,7 @@ javadoc: doc
 # daikon (except daikon.util) and plume.  Unfortunately, there is
 # no switch to javadoc that ignores a subpackage.  Don't include the
 # typequals package -- it crashes javadoc.
-doc: ../plume-lib $(AUTO_GENERATED_FILES) doc-dkconfig
+doc: ../plume-lib $(JAVA_FILES) 
 	mkdir -p doc
 	@rm -f java-files.txt
 	find . -name "*.java" -print | grep -v typequals > java-files.txt
@@ -1157,12 +1155,10 @@ doc-private: ../plume-lib $(AUTO_GENERATED_FILES)
 # 	find doc -name '*.html' | xargs -n 100 ${PLUMEBIN}/jdk-add-munged-anchor-names
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
-../doc/invariants-doc.texinfo: ../plume-lib ${JAVA_FILES} $(AUTO_GENERATED_FILES)
+../doc/invariants-doc.texinfo: ../plume-lib ${JDOC_FILES}
 	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${CLASSPATH}" -classpath "${CLASSPATH}" -doclet daikon.config.InvariantDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
-
-doc-invariant: ../doc/invariants-doc.texinfo
 
 # This fails if both . and pwd are on CLASSPATH:  classes are found twice
 # resulting in a duplicate class warning.
@@ -1172,14 +1168,13 @@ doc-invariant: ../doc/invariants-doc.texinfo
 # # with not depending on "all" showed that ParameterDoclet.class was needed.)
 # # It depends on "all", which forces compilation, to avoid errors like
 # #   "java.lang.ClassFormatError: Truncated class file".
-../doc/config-options.texinfo: ../plume-lib ${JAVA_FILES} $(AUTO_GENERATED_FILES) daikon/config/ParameterDoclet.class
+
+../doc/config-options.texinfo: ../plume-lib ${JDOC_FILES} daikon/config/ParameterDoclet.class
 	${JAVADOC} -J-Xmx1000m -J-ea -docletpath "${CLASSPATH}" -classpath "${CLASSPATH}" -doclet daikon.config.ParameterDoclet \
 		--texinfo $@ \
 		$(JDOC_FILES)
 	perl -pi -e 's/&#64;cindex/\@cindex/g' $@
 
-
-doc-dkconfig: ../doc/config-options.texinfo
 
 # This file is no longer used; there's no point in keeping it around.
 # daikon/config/configurable.txt: $(AUTO_GENERATED_FILES)
