@@ -860,7 +860,7 @@ public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
     if(inv instanceof UpperBound) @{
       if(((UpperBound) inv).max() < 1) @{
         return new DiscardInfo(this, DiscardCode.obvious,
-                               @samp{Divides is obvious when divisor less than one});
+                       @samp{Divides is obvious when divisor less than one});
       @}
     @}
   @}
