@@ -47,6 +47,7 @@ my %line_operators = (
     "\@ifnothtml"         => SKIP_LINE,
     "\@ifnottex"          => SKIP_LINE,
     "\@ifset"             => SKIP_LINE,
+    "\@iftex"             => SKIP_LINE,
     "\@include"           => SKIP_LINE,
     "\@item"              => SKIP_LINE,
     "\@itemize"           => SKIP_LINE,

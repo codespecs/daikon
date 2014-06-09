@@ -208,23 +208,29 @@ endif
 	cd .. && hg clone ${HG_OPTIONS} https://code.google.com/p/fjalar/ fjalar
 	touch $@
 
-kvasir/valgrind/fjalar/Makefile.am: ../fjalar/auto-everything.sh
+kvasir/valgrind/Makefile.am: ../fjalar/auto-everything.sh
 	ln -nsf ../fjalar kvasir
 	touch $@
 
-kvasir/valgrind/config.sub: kvasir/auto-everything.sh
-	cd kvasir && ./auto-everything.sh
+kvasir/valgrind/Makefile.in: kvasir/valgrind/Makefile.am
+	cd kvasir/valgrind && ./autogen.sh
 
-kvasir/valgrind/config.status: kvasir/valgrind/fjalar/Makefile.am kvasir/valgrind/config.sub
+kvasir/valgrind/Makefile: kvasir/valgrind/Makefile.in 
 	cd kvasir/valgrind && ./configure --prefix=`pwd`/inst
 
-kvasir/valgrind/coregrind/valgrind: kvasir/valgrind/config.status
-	cd kvasir/valgrind && $(MAKE) 
+kvasir/valgrind/coregrind/valgrind: kvasir/valgrind/Makefile
+	cd kvasir/valgrind && $(MAKE) --no-print-directory
+
+kvasir/valgrind/fjalar/fjalar-$(VALGRIND_ARCH)-linux: kvasir/valgrind/coregrind/valgrind
+	cd kvasir/valgrind/fjalar && $(MAKE) --no-print-directory
 
 kvasir/valgrind/inst/bin/valgrind: kvasir/valgrind/coregrind/valgrind
 	cd kvasir/valgrind && $(MAKE) install >/dev/null
 
-kvasir: kvasir/valgrind/inst/bin/valgrind
+kvasir/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux: kvasir/valgrind/fjalar/fjalar-$(VALGRIND_ARCH)-linux
+	cd kvasir/valgrind/fjalar && $(MAKE) install >/dev/null
+
+kvasir: kvasir/valgrind/inst/lib/valgrind/fjalar-$(VALGRIND_ARCH)-linux kvasir/valgrind/inst/bin/valgrind
 
 build-kvasir: kvasir
 
@@ -410,8 +416,6 @@ doc/CHANGES: doc/daikon.texinfo
 
 
 doc-all:
-	# "make" in doc directory may fail the first time, but do show output.
-	-cd doc && $(MAKE) all
 	cd doc && $(MAKE) all
 	cd doc && $(MAKE) pdf-final
 
