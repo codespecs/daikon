@@ -1147,9 +1147,9 @@ documentation on its command-line options, see @ref{Kvasir}.
 @node       C examples
 @subsection C examples
 
-The Daikon distribution comes with several example C programs in the
-@file{examples/c-examples} directory to enable users to become
-familiar with running Daikon on C programs.
+The Daikon distribution comes with several example C programs 
+to enable users to become familiar with running Daikon on C programs.
+These examples are located in the @file{examples/c-examples} directory.
 
 @c There are two sets of examples, corresponding to the two supplied C
 @c front ends.  Examples intended for use with the binary-based front end
@@ -1191,9 +1191,11 @@ containing code you wish to see invariants about.
 @item
 Run the program just as you normally would, but prepend
 @command{kvasir-dtrace} to the command line.
+@exampleindent 0
 @example
 kvasir-dtrace ./wordplay -f words.txt 'daikon dynamic invariant detector'
 @end example
+@exampleindent 1
 
 @noindent
 Any options to the program can be specified as usual; here, for
@@ -1812,11 +1814,12 @@ true, then Daikon outputs only @samp{x > 0}.  Use of the
 eliminate even more redundant output, and should be used if it is
 important that absolutely no redundancies appear in the output.
 
-Simplify must be separately obtained (from
-@uref{http://www.hpl.hp.com/downloads/crl/jtk/}) and installed in
-order to take advantage of this option.  Beware that Simplify can run slowly;
+The Simplify program must be obtained separately in order to take
+advantage of this option.  It can be installed from
+@uref{http://www.hpl.hp.com/downloads/crl/jtk/}.
+Beware that Simplify can run slowly;
 the amount of effort Simplify exerts for each invariant can be controlled
-using the @option{daikon.simplify.Session.simplify_max_iterations} and
+using both the @option{daikon.simplify.Session.simplify_max_iterations} and
 @option{daikon.simplify.Session.simplify_timeout} configuration
 options.
 
@@ -2030,7 +2033,6 @@ original @command{ESC/Java} tool.  Use Daikon's @option{JML} format for use with
 @uref{http://kindsoftware.com/products/opensource/ESCJava2/, ,ESC/Java2}
 tool.
 
-
 @cindex Java output format
 @cindex output format, Java
 @item Java format
@@ -2080,6 +2082,15 @@ Produces output in the format expected by the Simplify automated theorem
 prover; for details, see the 
 @c was: @uref{http://research.compaq.com/SRC/esc/simplify/InputSyntax.html}
 @uref{http://www.hpl.hp.com/downloads/crl/jtk/,,Simplify distribution}.
+
+@cindex CSharpContract output format
+@cindex output format, CSharpContract
+@item CSharpContract format
+Produces C# output for use with Microsoft's Code Contracts  
+@uref{https://research.microsoft.com/en-us/projects/contracts,,}.
+The format employs some extension/utility methods to improve contract
+readability; the library containing these methods can be found at
+@uref{https://code.google.com/p/daikon-code-contract-extensions,,}.
 
 @end table
 
@@ -2546,7 +2557,9 @@ their behavior.  These are indicated below as well.
 @xref{Options to enable/disable specific invariants}.
 
 @table @asis
+@exampleindent 0
 @include invariants-doc.texinfo
+@exampleindent 4
 @end table
 
 @node    Invariant filters
@@ -2596,7 +2609,7 @@ cluttered with redundant facts.  Some examples are:
 @item If @samp{size(args[])==0} is shown, then @samp{size(args[])-1==-1} is
 obvious and will not be displayed by default.
 @item If @samp{this.topOfStack < size(this.theArray[])-1} is shown, then
-@samp{this.topOfStack < size(this.theArray[])} is obvious and will not be
+@samp{this.@/topOfStack < size(this.theArray[])} is obvious and will not be
 displayed by default.
 
 @end itemize
@@ -2922,6 +2935,7 @@ name in a condition is not found at the matching program point.
 
 Indented lines beginning with @samp{DAIKON_FORMAT},
 @samp{JAVA_FORMAT}, @samp{ESC_FORMAT}, or @samp{SIMPLIFY_FORMAT}
+@c UNDONE is there a @samp{CSHARPCONTRACT_FORMAT}?
 may be used to specify how to represent the
 condition specified by the splitter in each of Daikon's output
 formats, to allow the splitting condition to be used as a dummy
@@ -3734,6 +3748,8 @@ purity of methods listed in the purity file.
 
 The purity file lists a set of methods, one per line.  The format of
 each method is given by the Sun JDK API:
+
+@exampleindent 1
 @quotation
 The string is formatted as the method access modifiers, if any, followed
 by the method return type, followed by a space, followed by the class
@@ -3743,11 +3759,9 @@ parameter types.  If the method throws checked exceptions, the parameter
 list is followed by a space, followed by the word throws followed by a
 comma-separated list of the thrown exception types.  For example:
 
-@exampleindent 1
 @example
 public boolean java.lang.Object.equals(java.lang.Object)
 @end example
-@exampleindent 4
 
 @noindent
 The access modifiers are placed in canonical order as specified by "The
@@ -3755,6 +3769,7 @@ Java Language Specification".  This is public, protected or private
 first, and then other modifiers in the following order: abstract,
 static, final, synchronized native.
 @end quotation
+@exampleindent 4
 
 By convention, @var{pure-methods-file} has the suffix @file{.pure}.  If
 @var{pure-methods-file} is specified as a relative (not absolute) file
@@ -4261,11 +4276,12 @@ is not specified, or is null.
 
 @item --abridged-vars
 When this switch is on, DynComp abridges the variables printed in the files
-specified by @option{--compare-sets-file} and @option{--trace-sets-file}.
-For example, DynComp with output
-@samp{Field foo} instead of @samp{dyncomp.chicory.FieldInfo:MyClass.foo}.  In particular,
-it replaces @samp{dyncomp.chicory.ReturnInfo:return} with @samp{return} and
-@samp{dyncomp.chicory.ThisObjInfo:this} with @samp{this}.
+specified by @option{--compare-@/sets-@/file} and @option{--trace-@/sets-@/file}.
+For example, DynComp will output
+@samp{Field foo} instead of @samp{dyncomp.@/chicory.@/FieldInfo:@/MyClass.foo}. 
+In particular,
+it replaces @samp{dyncomp.@/chicory.@/ReturnInfo:return} with @samp{return} and
+@samp{dyncomp.@/chicory.@/This@/Obj@/Info:@/this} with @samp{this}.
 
 @item --ppt-select-pattern=@var{regex}
 Only emit program points that match @var{regex}.  Specifically, a
@@ -5761,11 +5777,11 @@ file.txt} to compress a text file (but start with a small one first).
 
 @noindent
 (This example assumes that you have compiled the @file{bzip2} example (in
-@file{$DAIKONDIR/examples/c-examples/bzip2} of the distribution) by
+@file{$DAIKONDIR/@/examples/@/c-examples/@/bzip2} of the distribution) by
 saying @command{gcc -gdwarf-2 bzip2.c -o bzip2}, and that
 @env{$DAIKON} stands for the command that invokes Daikon, for
 instance @command{java -Xmx512m daikon.Daikon --config_option
-daikon.derive.Derivation.disable_derived_variables=true}.)
+daikon.@/derive.@/Derivation.@/disable_derived_variables=true}.)
 
 @cindex named pipe, as data trace file
 @cindex FIFO, as data trace file
@@ -5818,7 +5834,7 @@ kvasir-dtrace --with-dyncomp --decls-only ./foo
 
 @noindent
 This should generate a @file{.decls} file with comparability information
-named @file{daikon-output/foo.decls}.
+named @file{daikon-@/output/@/foo.decls}.
 
 @example
 kvasir-dtrace --dtrace-no-decs --dtrace-file=- ./foo \
@@ -5858,7 +5874,19 @@ This will check that you have the appropriate prerequisites (such as
 @command{GCC}), configure Kvasir for your machine, compile it, and install
 it in the directory @file{kvasir/inst}.
 
-You may see warnings about the ``missing'' script.  These can be ignored.
+You may see warnings during this process.  These can be ignored.  If you
+receive an error of the form:
+
+@example
+readelf.c:53:17: fatal error: bfd.h: No such file or directory
+#include "bfd.h"
+          ^
+compilation terminated.
+@end example
+
+@noindent
+It is most likely caused by the package @file{binutils-dev} not being
+installed.
 
 Once Kvasir has been installed, it can be used via the
 @file{kvasir-dtrace} script in the @file{$DAIKONDIR/scripts} directory; if
@@ -6543,6 +6571,9 @@ Print usage message.
 @item --format @var{name}
 Produce output in the given format.  See @ref{Invariant syntax}.
 
+@item --output @var{filename}
+Send output to the specified file rather than @command{stdout}.
+
 @item --output_num_samples
 Output numbers of values and samples for invariants and program points;
 for debugging.
@@ -6836,7 +6867,7 @@ Warning: Annotate: Daikon knows nothing about field ...
 @end example
 
 @noindent
-then the Annotate tool found a variable in the source code that is was
+then the Annotate tool found a variable in the source code that was
 computed by Daikon.  This can happen if Daikon was run omitting the
 variable, for instance due to @option{--std-visibility}.  It can also happen due
 to a bug in Annotate or Daikon; if that is the case, please report it to
@@ -6972,7 +7003,7 @@ java daikon.tools.runtimechecker.Main help
 
 @noindent
 The @code{instrument} command to runtimechecker creates a new directory
-@file{instrumented-classes} containing a new version of the
+@file{instrumented-@/classes} containing a new version of the
 user-specified Java files, instrumented to check invariants at runtime
 and to record a list of invariant violations in a Java data structure.
 You can compile and run the instrumented version of your program.
@@ -7008,10 +7039,10 @@ Program execution continues normally.
 @item
 It evaluates to false, which means that the invariant doesn't
 hold.  In this case the corresponding
-@code{daikon.tools.runtimechecker.Property} is added to a list in the
-class @code{daikon.tools.runtimechecker.Runtime}.  A programmer can
+@code{daikon.@/tools.@/runtimechecker.@/Property} is added to a list in the
+class @code{daikon.@/tools.@/runtimechecker.@/Runtime}.  A programmer can
 obtain the growing list of violated invariants through the method
-@code{daikon.tools.runtimechecker.Runtime.getViolations()}. (See
+@code{daikon.@/tools.@/runtimechecker.@/Runtime.@/getViolations()}. (See
 that class for other useful methods.)
 
 @item
@@ -7048,9 +7079,9 @@ the following ways:
 @cindex WriteViolationFile tool
 @item To write a file of all the violations for a program execution.
 A prototype of such a tool is provided in the Daikon distribution, as
-program @code{daikon.tools.runtimechecker.WriteViolationFile}.  If you
+program @code{daikon.@/tools.@/runtimechecker.@/WriteViolationFile}.  If you
 would ordinarily run your program as @samp{java MyProg arg1 arg2},
-then running @samp{java daikon.tools.runtimechecker.WriteViolationFile
+then running @samp{java daikon.@/tools.@/runtimechecker.@/WriteViolationFile
 MyProg arg1 arg2} creates a file called @file{violations.txt} in the
 current directory.  If the program under test calls
 @code{System.exit}, then no @file{violations.txt} file is created.
@@ -8638,6 +8669,34 @@ Public License along with Kvasir, in the file @file{kvasir/COPYING};
 if not, write to the 
 @nospellcheck{Free Software Foundation, Inc., 51 Franklin St., Fifth Floor, Boston, MA
 02110-1301, USA}.
+
+The Daikon .NET front end Celeriac is Copyright (c) 2012 by
+@nospellcheck{Kellen Donohue}.
+Portions of Celeriac are covered by the Microsoft Public License,
+this is at the top of every such file. Otherwise the following license
+is in effect:
+
+@exampleindent 1
+@quotation
+Permission is hereby granted, free of charge, to any person obtaining a
+copy of this software and associated documentation files (the "Software"),
+to deal in the Software without restriction, including without limitation
+the rights to use, copy, modify, merge, publish, distribute, sublicense,
+and/or sell copies of the Software, and to permit persons to whom the
+Software is furnished to do so, subject to the following conditions:
+
+The above copyright notice and this permission notice shall be included
+in all copies or substantial portions of the Software.
+
+THE SOFTWARE IS PROVIDED "AS IS", WITHOUT WARRANTY OF ANY KIND, EXPRESS
+OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY,
+FITNESS FOR A PARTICULAR PURPOSE AND NON-INFRINGEMENT. IN NO EVENT SHALL
+THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR
+OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE,
+ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR
+OTHER DEALINGS IN THE SOFTWARE.
+@end quotation
+@exampleindent 4
 
 
 @node    Mailing lists reminder
