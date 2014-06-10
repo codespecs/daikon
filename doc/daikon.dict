@@ -45,6 +45,7 @@ getters
 globals
 hashcode
 hashcodes
+html
 IDE
 inferencing
 instantiation
@@ -78,6 +79,7 @@ outliers
 overfitting
 pathname
 pathnames
+pdf
 PDF
 polymorphism
 popup
@@ -111,6 +113,7 @@ superclasses
 superclasses'
 supersets
 suppressions
+texinfo
 Texinfo
 throwable
 toolset
