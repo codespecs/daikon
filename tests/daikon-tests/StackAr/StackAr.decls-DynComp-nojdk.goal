@@ -1,0 +1,718 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+DataStructures.StackAr:::CLASS
+
+DECLARE
+DataStructures.StackAr:::OBJECT
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+2[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+
+DECLARE
+DataStructures.StackAr.StackAr(int):::ENTER
+capacity
+int # isParam=true
+int
+2
+
+DECLARE
+DataStructures.StackAr.StackAr(int):::EXIT33
+this
+DataStructures.StackAr # isParam=true
+hashcode
+4
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+3
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+4[2]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+2
+capacity
+int # isParam=true
+int
+2
+
+
+DECLARE
+DataStructures.StackAr.isEmpty():::ENTER
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+2[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+DECLARE
+DataStructures.StackAr.isEmpty():::EXIT42
+this
+DataStructures.StackAr # isParam=true
+hashcode
+3
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+5
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+3[4]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+4
+return
+boolean
+boolean
+2
+
+
+DECLARE
+DataStructures.StackAr.isFull():::ENTER
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+2[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+DECLARE
+DataStructures.StackAr.isFull():::EXIT52
+this
+DataStructures.StackAr # isParam=true
+hashcode
+3
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+5
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+3[4]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+4
+return
+boolean
+boolean
+2
+
+
+DECLARE
+DataStructures.StackAr.makeEmpty():::ENTER
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+2[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+DECLARE
+DataStructures.StackAr.makeEmpty():::EXIT63
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+2[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+
+DECLARE
+DataStructures.StackAr.top():::ENTER
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+2[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+DECLARE
+DataStructures.StackAr.top():::EXIT74
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+2[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+3
+return
+java.lang.Object
+hashcode
+2
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.StackAr.top():::EXIT75
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+2[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+3
+return
+java.lang.Object
+hashcode
+2
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+DataStructures.StackAr.pop():::ENTER
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+2[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+DECLARE
+DataStructures.StackAr.pop():::EXIT87
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+2[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+
+DECLARE
+DataStructures.StackAr.push(java.lang.Object):::ENTER
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+2[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+3
+x
+java.lang.Object # isParam=true
+hashcode
+2
+x.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.StackAr.push(java.lang.Object):::EXIT99
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+2[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+3
+x
+java.lang.Object # isParam=true
+hashcode
+2
+x.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+DataStructures.StackAr.topAndPop():::ENTER
+this
+DataStructures.StackAr # isParam=true
+hashcode
+2
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+2[3]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+DECLARE
+DataStructures.StackAr.topAndPop():::EXIT108
+this
+DataStructures.StackAr # isParam=true
+hashcode
+3
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+5
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+3[4]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+4
+return
+java.lang.Object
+hashcode
+2
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.StackAr.topAndPop():::EXIT111
+this
+DataStructures.StackAr # isParam=true
+hashcode
+3
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+5
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+3[4]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+4
+return
+java.lang.Object
+hashcode
+2
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+DataStructures.StackAr.equals(java.lang.Object):::ENTER
+this
+DataStructures.StackAr # isParam=true
+hashcode
+3
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+5
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+3[4]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.StackAr.equals(java.lang.Object):::EXIT1
+this
+DataStructures.StackAr # isParam=true
+hashcode
+4
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+6
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+4[5]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+5
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+DataStructures.StackAr.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+DataStructures.StackAr # isParam=true
+hashcode
+3
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+5
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+3[4]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.StackAr.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+DataStructures.StackAr # isParam=true
+hashcode
+4
+this.theArray
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode
+6
+this.theArray.getClass()
+java.lang.Class
+java.lang.String
+1
+this.theArray[..]
+java.lang.Object[]
+hashcode[]
+4[5]
+this.theArray[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.topOfStack
+int # declaringClassPackageName=DataStructures, 
+int
+5
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+

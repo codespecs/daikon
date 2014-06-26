@@ -1,0 +1,540 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+six170.Hanoi:::CLASS
+
+DECLARE
+six170.Hanoi:::OBJECT
+this
+six170.Hanoi # isParam=true
+hashcode
+2
+this.diskLocation
+int[] # declaringClassPackageName=six170, 
+hashcode
+4
+this.diskLocation[..]
+int[]
+int[]
+5[3]
+this.height
+int # declaringClassPackageName=six170, 
+int
+3
+this.noOutput
+boolean # declaringClassPackageName=six170, 
+boolean
+6
+
+
+DECLARE
+six170.Hanoi.Hanoi(int):::ENTER
+height
+int # isParam=true
+int
+2
+
+DECLARE
+six170.Hanoi.Hanoi(int):::EXIT38
+this
+six170.Hanoi # isParam=true
+hashcode
+4
+this.diskLocation
+int[] # declaringClassPackageName=six170, 
+hashcode
+3
+this.diskLocation[..]
+int[]
+int[]
+5[2]
+this.height
+int # declaringClassPackageName=six170, 
+int
+2
+this.noOutput
+boolean # declaringClassPackageName=six170, 
+boolean
+6
+height
+int # isParam=true
+int
+2
+
+
+DECLARE
+six170.Hanoi.Hanoi(int, boolean):::ENTER
+height
+int # isParam=true
+int
+2
+noOutput
+boolean # isParam=true
+boolean
+3
+
+DECLARE
+six170.Hanoi.Hanoi(int, boolean):::EXIT43
+this
+six170.Hanoi # isParam=true
+hashcode
+5
+this.diskLocation
+int[] # declaringClassPackageName=six170, 
+hashcode
+3
+this.diskLocation[..]
+int[]
+int[]
+6[2]
+this.height
+int # declaringClassPackageName=six170, 
+int
+2
+this.noOutput
+boolean # declaringClassPackageName=six170, 
+boolean
+4
+height
+int # isParam=true
+int
+2
+noOutput
+boolean # isParam=true
+boolean
+4
+
+
+DECLARE
+six170.Hanoi.moveDisk(int, int):::ENTER
+this
+six170.Hanoi # isParam=true
+hashcode
+3
+this.diskLocation
+int[] # declaringClassPackageName=six170, 
+hashcode
+5
+this.diskLocation[..]
+int[]
+int[]
+2[4]
+this.height
+int # declaringClassPackageName=six170, 
+int
+4
+this.noOutput
+boolean # declaringClassPackageName=six170, 
+boolean
+6
+fromPeg
+int # isParam=true
+int
+2
+toPeg
+int # isParam=true
+int
+2
+
+DECLARE
+six170.Hanoi.moveDisk(int, int):::EXIT57
+this
+six170.Hanoi # isParam=true
+hashcode
+3
+this.diskLocation
+int[] # declaringClassPackageName=six170, 
+hashcode
+5
+this.diskLocation[..]
+int[]
+int[]
+2[4]
+this.height
+int # declaringClassPackageName=six170, 
+int
+4
+this.noOutput
+boolean # declaringClassPackageName=six170, 
+boolean
+6
+fromPeg
+int # isParam=true
+int
+2
+toPeg
+int # isParam=true
+int
+2
+
+
+DECLARE
+six170.Hanoi.otherPeg(int, int):::ENTER
+pegA
+int # isParam=true
+int
+2
+pegB
+int # isParam=true
+int
+3
+
+DECLARE
+six170.Hanoi.otherPeg(int, int):::EXIT65
+pegA
+int # isParam=true
+int
+2
+pegB
+int # isParam=true
+int
+3
+return
+int
+int
+4
+
+DECLARE
+six170.Hanoi.otherPeg(int, int):::EXIT66
+pegA
+int # isParam=true
+int
+2
+pegB
+int # isParam=true
+int
+3
+return
+int
+int
+4
+
+DECLARE
+six170.Hanoi.otherPeg(int, int):::EXIT67
+pegA
+int # isParam=true
+int
+2
+pegB
+int # isParam=true
+int
+3
+return
+int
+int
+4
+
+DECLARE
+six170.Hanoi.otherPeg(int, int):::EXIT68
+pegA
+int # isParam=true
+int
+2
+pegB
+int # isParam=true
+int
+3
+return
+int
+int
+4
+
+DECLARE
+six170.Hanoi.otherPeg(int, int):::EXIT69
+pegA
+int # isParam=true
+int
+2
+pegB
+int # isParam=true
+int
+3
+return
+int
+int
+4
+
+DECLARE
+six170.Hanoi.otherPeg(int, int):::EXIT70
+pegA
+int # isParam=true
+int
+2
+pegB
+int # isParam=true
+int
+3
+return
+int
+int
+4
+
+DECLARE
+six170.Hanoi.otherPeg(int, int):::EXIT71
+pegA
+int # isParam=true
+int
+2
+pegB
+int # isParam=true
+int
+3
+return
+int
+int
+4
+
+
+DECLARE
+six170.Hanoi.moveTower(int, int, int):::ENTER
+this
+six170.Hanoi # isParam=true
+hashcode
+3
+this.diskLocation
+int[] # declaringClassPackageName=six170, 
+hashcode
+5
+this.diskLocation[..]
+int[]
+int[]
+2[4]
+this.height
+int # declaringClassPackageName=six170, 
+int
+4
+this.noOutput
+boolean # declaringClassPackageName=six170, 
+boolean
+6
+fromPeg
+int # isParam=true
+int
+2
+toPeg
+int # isParam=true
+int
+2
+towerHeight
+int # isParam=true
+int
+4
+
+DECLARE
+six170.Hanoi.moveTower(int, int, int):::EXIT98
+this
+six170.Hanoi # isParam=true
+hashcode
+3
+this.diskLocation
+int[] # declaringClassPackageName=six170, 
+hashcode
+5
+this.diskLocation[..]
+int[]
+int[]
+2[4]
+this.height
+int # declaringClassPackageName=six170, 
+int
+4
+this.noOutput
+boolean # declaringClassPackageName=six170, 
+boolean
+6
+fromPeg
+int # isParam=true
+int
+2
+toPeg
+int # isParam=true
+int
+2
+towerHeight
+int # isParam=true
+int
+4
+
+
+DECLARE
+six170.Hanoi.showTowers():::ENTER
+this
+six170.Hanoi # isParam=true
+hashcode
+2
+this.diskLocation
+int[] # declaringClassPackageName=six170, 
+hashcode
+4
+this.diskLocation[..]
+int[]
+int[]
+5[3]
+this.height
+int # declaringClassPackageName=six170, 
+int
+3
+this.noOutput
+boolean # declaringClassPackageName=six170, 
+boolean
+6
+
+DECLARE
+six170.Hanoi.showTowers():::EXIT136
+this
+six170.Hanoi # isParam=true
+hashcode
+2
+this.diskLocation
+int[] # declaringClassPackageName=six170, 
+hashcode
+4
+this.diskLocation[..]
+int[]
+int[]
+5[3]
+this.height
+int # declaringClassPackageName=six170, 
+int
+3
+this.noOutput
+boolean # declaringClassPackageName=six170, 
+boolean
+6
+
+
+DECLARE
+six170.Hanoi.equals(java.lang.Object):::ENTER
+this
+six170.Hanoi # isParam=true
+hashcode
+3
+this.diskLocation
+int[] # declaringClassPackageName=six170, 
+hashcode
+5
+this.diskLocation[..]
+int[]
+int[]
+6[4]
+this.height
+int # declaringClassPackageName=six170, 
+int
+4
+this.noOutput
+boolean # declaringClassPackageName=six170, 
+boolean
+7
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+six170.Hanoi.equals(java.lang.Object):::EXIT1
+this
+six170.Hanoi # isParam=true
+hashcode
+4
+this.diskLocation
+int[] # declaringClassPackageName=six170, 
+hashcode
+6
+this.diskLocation[..]
+int[]
+int[]
+7[5]
+this.height
+int # declaringClassPackageName=six170, 
+int
+5
+this.noOutput
+boolean # declaringClassPackageName=six170, 
+boolean
+8
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+six170.Hanoi.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+six170.Hanoi # isParam=true
+hashcode
+3
+this.diskLocation
+int[] # declaringClassPackageName=six170, 
+hashcode
+5
+this.diskLocation[..]
+int[]
+int[]
+6[4]
+this.height
+int # declaringClassPackageName=six170, 
+int
+4
+this.noOutput
+boolean # declaringClassPackageName=six170, 
+boolean
+7
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+six170.Hanoi.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+six170.Hanoi # isParam=true
+hashcode
+4
+this.diskLocation
+int[] # declaringClassPackageName=six170, 
+hashcode
+6
+this.diskLocation[..]
+int[]
+int[]
+7[5]
+this.height
+int # declaringClassPackageName=six170, 
+int
+5
+this.noOutput
+boolean # declaringClassPackageName=six170, 
+boolean
+8
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+

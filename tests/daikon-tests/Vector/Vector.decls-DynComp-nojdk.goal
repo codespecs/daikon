@@ -1,0 +1,2538 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+javautil.Vector:::CLASS
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+DECLARE
+javautil.Vector:::OBJECT
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+
+DECLARE
+javautil.Vector.Vector(int, int):::ENTER
+initialCapacity
+int # isParam=true
+int
+2
+capacityIncrement
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.Vector.Vector(int, int):::EXIT85
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+initialCapacity
+int # isParam=true
+int
+2
+capacityIncrement
+int # isParam=true
+int
+2
+
+
+DECLARE
+javautil.Vector.Vector(int):::ENTER
+initialCapacity
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.Vector.Vector(int):::EXIT95
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+initialCapacity
+int # isParam=true
+int
+2
+
+
+DECLARE
+javautil.Vector.Vector():::ENTER
+
+DECLARE
+javautil.Vector.Vector():::EXIT104
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+
+DECLARE
+javautil.Vector.copyInto(java.lang.Object[]):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+anArray
+java.lang.Object[] # isParam=true
+hashcode
+3
+anArray.getClass()
+java.lang.Class
+java.lang.String
+1
+anArray[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+
+DECLARE
+javautil.Vector.copyInto(java.lang.Object[]):::EXIT118
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+anArray
+java.lang.Object[] # isParam=true
+hashcode
+3
+anArray.getClass()
+java.lang.Class
+java.lang.String
+1
+anArray[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+
+
+DECLARE
+javautil.Vector.trimToSize():::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+DECLARE
+javautil.Vector.trimToSize():::EXIT134
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+
+DECLARE
+javautil.Vector.ensureCapacity(int):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+minCapacity
+int # isParam=true
+int
+3
+
+DECLARE
+javautil.Vector.ensureCapacity(int):::EXIT148
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+minCapacity
+int # isParam=true
+int
+3
+
+
+DECLARE
+javautil.Vector.ensureCapacityHelper(int):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+minCapacity
+int # isParam=true
+int
+3
+
+DECLARE
+javautil.Vector.ensureCapacityHelper(int):::EXIT168
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+minCapacity
+int # isParam=true
+int
+3
+
+
+DECLARE
+javautil.Vector.setSize(int):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+newSize
+int # isParam=true
+int
+3
+
+DECLARE
+javautil.Vector.setSize(int):::EXIT188
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+newSize
+int # isParam=true
+int
+3
+
+
+DECLARE
+javautil.Vector.capacity():::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+DECLARE
+javautil.Vector.capacity():::EXIT197
+this
+javautil.Vector # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+6
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5[5]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+5
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+5
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+return
+int
+int
+3
+
+
+DECLARE
+javautil.Vector.size():::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+DECLARE
+javautil.Vector.size():::EXIT207
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+return
+int
+int
+3
+
+
+DECLARE
+javautil.Vector.isEmpty():::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+DECLARE
+javautil.Vector.isEmpty():::EXIT218
+this
+javautil.Vector # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+6
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5[5]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+5
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+5
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+return
+boolean
+boolean
+3
+
+
+DECLARE
+javautil.Vector.elements():::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+DECLARE
+javautil.Vector.elements():::EXIT229
+this
+javautil.Vector # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+6
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5[5]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+5
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+5
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+return
+java.util.Enumeration
+hashcode
+3
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.Vector.contains(java.lang.Object):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+elem
+java.lang.Object # isParam=true
+hashcode
+3
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.Vector.contains(java.lang.Object):::EXIT241
+this
+javautil.Vector # isParam=true
+hashcode
+6
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+elem
+java.lang.Object # isParam=true
+hashcode
+3
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+5
+
+
+DECLARE
+javautil.Vector.indexOf(java.lang.Object):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+elem
+java.lang.Object # isParam=true
+hashcode
+3
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.Vector.indexOf(java.lang.Object):::EXIT255
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+elem
+java.lang.Object # isParam=true
+hashcode
+3
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+2
+
+
+DECLARE
+javautil.Vector.indexOf(java.lang.Object, int):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+elem
+java.lang.Object # isParam=true
+hashcode
+3
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+index
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.Vector.indexOf(java.lang.Object, int):::EXIT274
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+elem
+java.lang.Object # isParam=true
+hashcode
+3
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+index
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+DECLARE
+javautil.Vector.indexOf(java.lang.Object, int):::EXIT277
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+elem
+java.lang.Object # isParam=true
+hashcode
+3
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+index
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+
+DECLARE
+javautil.Vector.lastIndexOf(java.lang.Object):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+elem
+java.lang.Object # isParam=true
+hashcode
+3
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.Vector.lastIndexOf(java.lang.Object):::EXIT290
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+elem
+java.lang.Object # isParam=true
+hashcode
+3
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+2
+
+
+DECLARE
+javautil.Vector.lastIndexOf(java.lang.Object, int):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+elem
+java.lang.Object # isParam=true
+hashcode
+3
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+index
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.Vector.lastIndexOf(java.lang.Object, int):::EXIT307
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+elem
+java.lang.Object # isParam=true
+hashcode
+3
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+index
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+DECLARE
+javautil.Vector.lastIndexOf(java.lang.Object, int):::EXIT310
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+elem
+java.lang.Object # isParam=true
+hashcode
+3
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+index
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+
+DECLARE
+javautil.Vector.elementAt(int):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+index
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.Vector.elementAt(int):::EXIT332
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+index
+int # isParam=true
+int
+2
+return
+java.lang.Object
+hashcode
+3
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.Vector.firstElement():::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+DECLARE
+javautil.Vector.firstElement():::EXIT349
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+return
+java.lang.Object
+hashcode
+4
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.Vector.lastElement():::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+DECLARE
+javautil.Vector.lastElement():::EXIT364
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+return
+java.lang.Object
+hashcode
+4
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.Vector.setElementAt(java.lang.Object, int):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+index
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.Vector.setElementAt(java.lang.Object, int):::EXIT387
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+index
+int # isParam=true
+int
+2
+
+
+DECLARE
+javautil.Vector.removeElementAt(int):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+index
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.Vector.removeElementAt(int):::EXIT417
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+index
+int # isParam=true
+int
+2
+
+
+DECLARE
+javautil.Vector.insertElementAt(java.lang.Object, int):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+index
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.Vector.insertElementAt(java.lang.Object, int):::EXIT447
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+2[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+2
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+2
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+index
+int # isParam=true
+int
+2
+
+
+DECLARE
+javautil.Vector.addElement(java.lang.Object):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+4
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.Vector.addElement(java.lang.Object):::EXIT463
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+4
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.Vector.removeElement(java.lang.Object):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+4
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.Vector.removeElement(java.lang.Object):::EXIT480
+this
+javautil.Vector # isParam=true
+hashcode
+6
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+4
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+5
+
+DECLARE
+javautil.Vector.removeElement(java.lang.Object):::EXIT482
+this
+javautil.Vector # isParam=true
+hashcode
+6
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+3[3]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+3
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+3
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+4
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+5
+
+
+DECLARE
+javautil.Vector.removeAllElements():::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+DECLARE
+javautil.Vector.removeAllElements():::EXIT495
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+
+DECLARE
+javautil.Vector.clone():::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+
+DECLARE
+javautil.Vector.clone():::EXIT508
+this
+javautil.Vector # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4[4]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+4
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+4
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+return
+java.lang.Object
+hashcode
+3
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.Vector.equals(java.lang.Object):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+6
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5[5]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+5
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+5
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.Vector.equals(java.lang.Object):::EXIT1
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+7
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6[6]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+6
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+6
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+4
+
+
+DECLARE
+javautil.Vector.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+javautil.Vector # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+6
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5[5]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+5
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+5
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.Vector.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+javautil.Vector # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+7
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6[6]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.elementCount
+int # declaringClassPackageName=javautil, 
+int
+6
+this.capacityIncrement
+int # declaringClassPackageName=javautil, 
+int
+6
+javautil.Vector.serialVersionUID
+long # declaringClassPackageName=javautil, 
+int
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+3
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+4
+

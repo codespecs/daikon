@@ -1,0 +1,1206 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+PolyCalc.RatNum:::CLASS
+
+DECLARE
+PolyCalc.RatNum:::OBJECT
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+
+DECLARE
+PolyCalc.RatNum.RatNum(int):::ENTER
+n
+int # isParam=true
+int
+2
+
+DECLARE
+PolyCalc.RatNum.RatNum(int):::EXIT45
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+n
+int # isParam=true
+int
+2
+
+
+DECLARE
+PolyCalc.RatNum.RatNum(int, int):::ENTER
+n
+int # isParam=true
+int
+2
+d
+int # isParam=true
+int
+2
+
+DECLARE
+PolyCalc.RatNum.RatNum(int, int):::EXIT55
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+n
+int # isParam=true
+int
+2
+d
+int # isParam=true
+int
+2
+
+DECLARE
+PolyCalc.RatNum.RatNum(int, int):::EXIT67
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+n
+int # isParam=true
+int
+2
+d
+int # isParam=true
+int
+2
+
+
+DECLARE
+PolyCalc.RatNum.isNaN():::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.isNaN():::EXIT71
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+return
+boolean
+boolean
+2
+
+
+DECLARE
+PolyCalc.RatNum.isNegative():::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.isNegative():::EXIT77
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+return
+boolean
+boolean
+2
+
+
+DECLARE
+PolyCalc.RatNum.isPositive():::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.isPositive():::EXIT83
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+return
+boolean
+boolean
+2
+
+
+DECLARE
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+rn
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+rn.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+rn.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT94
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+rn
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+rn.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+rn.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+return
+int
+int
+2
+
+DECLARE
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT96
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+rn
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+rn.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+rn.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+return
+int
+int
+2
+
+DECLARE
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT98
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+rn
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+rn.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+rn.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+return
+int
+int
+2
+
+DECLARE
+PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::EXIT101
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+rn
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+rn.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+rn.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+return
+int
+int
+2
+
+
+DECLARE
+PolyCalc.RatNum.approx():::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.approx():::EXIT117
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+return
+double
+double
+2
+
+DECLARE
+PolyCalc.RatNum.approx():::EXIT120
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+2
+return
+double
+double
+2
+
+
+DECLARE
+PolyCalc.RatNum.unparse():::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.unparse():::EXIT133
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+4
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+return
+java.lang.String
+hashcode
+2
+return.toString
+java.lang.String
+java.lang.String
+3
+
+DECLARE
+PolyCalc.RatNum.unparse():::EXIT135
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+4
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+return
+java.lang.String
+hashcode
+2
+return.toString
+java.lang.String
+java.lang.String
+3
+
+DECLARE
+PolyCalc.RatNum.unparse():::EXIT137
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+4
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+return
+java.lang.String
+hashcode
+2
+return.toString
+java.lang.String
+java.lang.String
+3
+
+
+DECLARE
+PolyCalc.RatNum.negate():::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.negate():::EXIT147
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+4
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+return
+PolyCalc.RatNum
+hashcode
+2
+return.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+return.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+
+DECLARE
+PolyCalc.RatNum.add(PolyCalc.RatNum):::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+arg.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.add(PolyCalc.RatNum):::EXIT156
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+arg.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+return
+PolyCalc.RatNum
+hashcode
+4
+return.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+return.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+
+DECLARE
+PolyCalc.RatNum.sub(PolyCalc.RatNum):::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+arg.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.sub(PolyCalc.RatNum):::EXIT166
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+arg.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+return
+PolyCalc.RatNum
+hashcode
+4
+return.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+return.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+
+DECLARE
+PolyCalc.RatNum.mul(PolyCalc.RatNum):::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+arg.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.mul(PolyCalc.RatNum):::EXIT175
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+arg.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+return
+PolyCalc.RatNum
+hashcode
+4
+return.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+return.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+
+DECLARE
+PolyCalc.RatNum.div(PolyCalc.RatNum):::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+arg.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT187
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+arg.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+return
+PolyCalc.RatNum
+hashcode
+2
+return.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+return.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT189
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+arg.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+arg.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+return
+PolyCalc.RatNum
+hashcode
+2
+return.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+return.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+
+DECLARE
+PolyCalc.RatNum.gcd(int, int):::ENTER
+_a
+int # isParam=true
+int
+2
+_b
+int # isParam=true
+int
+2
+
+DECLARE
+PolyCalc.RatNum.gcd(int, int):::EXIT203
+_a
+int # isParam=true
+int
+2
+_b
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+DECLARE
+PolyCalc.RatNum.gcd(int, int):::EXIT209
+_a
+int # isParam=true
+int
+2
+_b
+int # isParam=true
+int
+2
+return
+int
+int
+2
+
+
+DECLARE
+PolyCalc.RatNum.hashCode():::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.hashCode():::EXIT217
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+return
+int
+int
+2
+
+
+DECLARE
+PolyCalc.RatNum.equals(java.lang.Object):::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT230
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+DECLARE
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT232
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+DECLARE
+PolyCalc.RatNum.equals(java.lang.Object):::EXIT235
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+PolyCalc.RatNum.debugPrint():::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+2
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+3
+
+DECLARE
+PolyCalc.RatNum.debugPrint():::EXIT241
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+4
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+return
+java.lang.String
+hashcode
+2
+return.toString
+java.lang.String
+java.lang.String
+3
+
+
+DECLARE
+PolyCalc.RatNum.parse(java.lang.String):::ENTER
+ratStr
+java.lang.String # isParam=true
+hashcode
+2
+ratStr.toString
+java.lang.String
+java.lang.String
+3
+
+DECLARE
+PolyCalc.RatNum.parse(java.lang.String):::EXIT264
+ratStr
+java.lang.String # isParam=true
+hashcode
+2
+ratStr.toString
+java.lang.String
+java.lang.String
+3
+return
+PolyCalc.RatNum
+hashcode
+4
+return.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+return.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+
+DECLARE
+PolyCalc.RatNum.parse(java.lang.String):::EXIT267
+ratStr
+java.lang.String # isParam=true
+hashcode
+2
+ratStr.toString
+java.lang.String
+java.lang.String
+3
+return
+PolyCalc.RatNum
+hashcode
+4
+return.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+return.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+
+DECLARE
+PolyCalc.RatNum.parse(java.lang.String):::EXIT273
+ratStr
+java.lang.String # isParam=true
+hashcode
+2
+ratStr.toString
+java.lang.String
+java.lang.String
+3
+return
+PolyCalc.RatNum
+hashcode
+4
+return.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+return.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+
+
+DECLARE
+PolyCalc.RatNum.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+3
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+PolyCalc.RatNum.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+PolyCalc.RatNum # isParam=true
+hashcode
+4
+this.numer
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+this.denom
+int # declaringClassPackageName=PolyCalc, 
+int
+5
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+

@@ -1,0 +1,294 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+six170.TinySet:::CLASS
+
+DECLARE
+six170.TinySet:::OBJECT
+this
+six170.TinySet # isParam=true
+hashcode
+2
+this.bits
+int # declaringClassPackageName=six170, 
+int
+3
+
+
+DECLARE
+six170.TinySet.TinySet():::ENTER
+
+DECLARE
+six170.TinySet.TinySet():::EXIT25
+this
+six170.TinySet # isParam=true
+hashcode
+2
+this.bits
+int # declaringClassPackageName=six170, 
+int
+3
+
+
+DECLARE
+six170.TinySet.add(int):::ENTER
+this
+six170.TinySet # isParam=true
+hashcode
+3
+this.bits
+int # declaringClassPackageName=six170, 
+int
+2
+n
+int # isParam=true
+int
+2
+
+DECLARE
+six170.TinySet.add(int):::EXIT33
+this
+six170.TinySet # isParam=true
+hashcode
+3
+this.bits
+int # declaringClassPackageName=six170, 
+int
+2
+n
+int # isParam=true
+int
+2
+
+
+DECLARE
+six170.TinySet.remove(int):::ENTER
+this
+six170.TinySet # isParam=true
+hashcode
+3
+this.bits
+int # declaringClassPackageName=six170, 
+int
+2
+n
+int # isParam=true
+int
+2
+
+DECLARE
+six170.TinySet.remove(int):::EXIT41
+this
+six170.TinySet # isParam=true
+hashcode
+3
+this.bits
+int # declaringClassPackageName=six170, 
+int
+2
+n
+int # isParam=true
+int
+2
+
+
+DECLARE
+six170.TinySet.contains(int):::ENTER
+this
+six170.TinySet # isParam=true
+hashcode
+3
+this.bits
+int # declaringClassPackageName=six170, 
+int
+2
+n
+int # isParam=true
+int
+2
+
+DECLARE
+six170.TinySet.contains(int):::EXIT48
+this
+six170.TinySet # isParam=true
+hashcode
+4
+this.bits
+int # declaringClassPackageName=six170, 
+int
+2
+n
+int # isParam=true
+int
+2
+return
+boolean
+boolean
+3
+
+
+DECLARE
+six170.TinySet.intersect(six170.TinySet):::ENTER
+this
+six170.TinySet # isParam=true
+hashcode
+4
+this.bits
+int # declaringClassPackageName=six170, 
+int
+3
+other
+six170.TinySet # isParam=true
+hashcode
+2
+other.bits
+int # declaringClassPackageName=six170, 
+int
+3
+
+DECLARE
+six170.TinySet.intersect(six170.TinySet):::EXIT58
+this
+six170.TinySet # isParam=true
+hashcode
+4
+this.bits
+int # declaringClassPackageName=six170, 
+int
+3
+other
+six170.TinySet # isParam=true
+hashcode
+2
+other.bits
+int # declaringClassPackageName=six170, 
+int
+3
+
+
+DECLARE
+six170.TinySet.union(six170.TinySet):::ENTER
+this
+six170.TinySet # isParam=true
+hashcode
+4
+this.bits
+int # declaringClassPackageName=six170, 
+int
+3
+other
+six170.TinySet # isParam=true
+hashcode
+2
+other.bits
+int # declaringClassPackageName=six170, 
+int
+3
+
+DECLARE
+six170.TinySet.union(six170.TinySet):::EXIT67
+this
+six170.TinySet # isParam=true
+hashcode
+4
+this.bits
+int # declaringClassPackageName=six170, 
+int
+3
+other
+six170.TinySet # isParam=true
+hashcode
+2
+other.bits
+int # declaringClassPackageName=six170, 
+int
+3
+
+
+DECLARE
+six170.TinySet.equals(java.lang.Object):::ENTER
+this
+six170.TinySet # isParam=true
+hashcode
+3
+this.bits
+int # declaringClassPackageName=six170, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+six170.TinySet.equals(java.lang.Object):::EXIT1
+this
+six170.TinySet # isParam=true
+hashcode
+4
+this.bits
+int # declaringClassPackageName=six170, 
+int
+5
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+six170.TinySet.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+six170.TinySet # isParam=true
+hashcode
+3
+this.bits
+int # declaringClassPackageName=six170, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+six170.TinySet.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+six170.TinySet # isParam=true
+hashcode
+4
+this.bits
+int # declaringClassPackageName=six170, 
+int
+5
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
