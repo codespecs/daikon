@@ -194,11 +194,15 @@ class DCInstrument {
   private StackMapTableEntry[] stack_map_table;
   private StackMapTableEntry[] empty_stack_map_table = {};
   private StackMapTableEntry[] new_stack_map_table;
+  private Map<InstructionHandle,Integer> uninitialized_NEW_map =
+               new HashMap<InstructionHandle,Integer>();
+
   // original stack map table attribute
   private Attribute smta;
   private int running_offset;
   private boolean needStackMap = false;
-  private InstructionHandle orig_start;
+  private int compiler_temp_count;
+  private InstructionHandle insertion_placeholder;
 
 
   /**
@@ -319,6 +323,11 @@ class DCInstrument {
     }
   }
 
+  /**
+   * Update the distance (as an offset delta) from one StackMap
+   * entry to the next.  Note that this might cause the the
+   * frame type to change.
+   */
   private void
   modify_stack_map_offset (StackMapTableEntry stack_map, int delta) {
 
@@ -385,10 +394,109 @@ class DCInstrument {
               }
               // Since StackMap offsets are relative to the previous one
               // we only have to do the first one after a switch.
+              // But we do need to look at all the switch instructions.
           }
 
           // Go on to the next instruction in the list
           ih = ih.getNext();
+      }
+  }
+
+  /**
+   * We need to locate and remember any NEW instructions that create 
+   * uninitialized objects.  Their offset may be contained in a StackMap
+   * entry and will probably need to be updated as we add instrumentation
+   * code.  Note that these instructions are fairly rare.
+   */
+  private void
+  build_unitialized_NEW_map (InstructionList il) {
+
+      uninitialized_NEW_map.clear();
+      il.setPositions();
+
+      for (StackMapTableEntry smte : stack_map_table) {
+          int frame_type = smte.getFrameType();
+
+          if ((frame_type >= Constants.APPEND_FRAME &&
+               frame_type <= Constants.APPEND_FRAME_MAX) ||
+              (frame_type == Constants.FULL_FRAME)) {
+
+              if (smte.getNumberOfLocals() > 0) { 
+                  for (StackMapType smt : smte.getTypesOfLocals()) { 
+                      if (smt.getType() == Constants.ITEM_NewObject) {
+                          int i = smt.getIndex();
+                          uninitialized_NEW_map.put(il.findHandle(i), new Integer(i));
+                      }
+                  }
+              }
+              if (smte.getNumberOfStackItems() > 0) { 
+                  for (StackMapType smt : smte.getTypesOfStackItems()) { 
+                      if (smt.getType() == Constants.ITEM_NewObject) {
+                          int i = smt.getIndex();
+                          uninitialized_NEW_map.put(il.findHandle(i), new Integer(i));
+                      }
+                  }
+              }
+
+          }    
+      }
+  }
+
+  /**
+   * One of these special NEW instructions has moved.  Update it's
+   * offset in StackMap entries.  Note that more than one entry
+   * could refer to the same instruction.
+   */
+  private void
+  update_NEW_object_stack_map_entries (int old_offset, int new_offset) {
+
+      for (StackMapTableEntry smte : stack_map_table) {
+          int frame_type = smte.getFrameType();
+
+          if ((frame_type >= Constants.APPEND_FRAME &&
+               frame_type <= Constants.APPEND_FRAME_MAX) ||
+              (frame_type == Constants.FULL_FRAME)) {
+
+              if (smte.getNumberOfLocals() > 0) { 
+                  for (StackMapType smt : smte.getTypesOfLocals()) { 
+                      if (smt.getType() == Constants.ITEM_NewObject) {
+                          if (old_offset == smt.getIndex()) {
+                              smt.setIndex(new_offset);
+                          }
+                      }
+                  }
+              }
+              if (smte.getNumberOfStackItems() > 0) { 
+                  for (StackMapType smt : smte.getTypesOfStackItems()) { 
+                      if (smt.getType() == Constants.ITEM_NewObject) {
+                          if (old_offset == smt.getIndex()) {
+                              smt.setIndex(new_offset);
+                          }
+                      }
+                  }
+              }
+
+          }    
+      }
+  }
+
+  /**
+   * Check to see if any of these special NEW instructions has moved.
+   * Again, these are rare, so linear pass is fine.
+   */
+  private void
+  update_uninitialized_NEW_offsets (InstructionList il) {
+
+      il.setPositions();
+
+      for (Map.Entry<InstructionHandle,Integer> e : uninitialized_NEW_map.entrySet()) {
+          InstructionHandle ih = e.getKey();
+          int old_offset = e.getValue().intValue();
+          int new_offset = ih.getPosition();
+          if (old_offset != new_offset) {
+              update_NEW_object_stack_map_entries (old_offset, new_offset);
+              e.setValue(new Integer(new_offset));
+          }
       }
   }
 
@@ -460,32 +568,50 @@ class DCInstrument {
 
       InstructionList il = mg.getInstructionList();
       for (InstructionHandle ih = il.getStart(); ih != null; ih = ih.getNext()) {
-        Instruction inst = ih.getInstruction();
-        int operand;
+          Instruction inst = ih.getInstruction();
+          int operand;
 
-        if ((inst instanceof RET) || (inst instanceof IINC)) {
-            IndexedInstruction index_inst = (IndexedInstruction) inst;
-            if (index_inst.getIndex() >= index_first_moved_local)
-                index_inst.setIndex (index_inst.getIndex() + size);
-        } else if (inst instanceof LocalVariableInstruction) {
-            // BCEL handles all the details of which opcode and if index
-            // is implicit or explicit; also, and if needs to be WIDE.
-            operand = ((LocalVariableInstruction)inst).getIndex();
-            if (operand >= index_first_moved_local) {
-                ((LocalVariableInstruction)inst).setIndex(operand + size);
-                // Unfortunately, it doesn't take care of incrementing the
-                // offset within StackMapEntrys.
-                if ((operand < 4) && ((operand+size) > 3)) {
-                    // If operand was <= 3 (max implicit) and it is now
-                    // > 3 (explicit) the instruction will be one byte longer.
-                    // We need to update the instruction list to account for this.
-                    il.setPositions();
-                    // Which means we might need to update a StackMap offset.
-                    update_stack_map_offset(ih.getPosition(), size);
-                }
-            }
-        }
+          if ((inst instanceof RET) || (inst instanceof IINC)) {
+              IndexedInstruction index_inst = (IndexedInstruction) inst;
+              if (index_inst.getIndex() >= index_first_moved_local)
+                  index_inst.setIndex (index_inst.getIndex() + size);
+          } else if (inst instanceof LocalVariableInstruction) {
+              // BCEL handles all the details of which opcode and if index
+              // is implicit or explicit; also, and if needs to be WIDE.
+              operand = ((LocalVariableInstruction)inst).getIndex();
+              if (operand >= index_first_moved_local) {
+                  ((LocalVariableInstruction)inst).setIndex(operand + size);
+                  // Unfortunately, it doesn't take care of incrementing the
+                  // offset within StackMapEntrys.
+                  if ((operand < 4) && ((operand+size) > 3)) {
+                      // If operand was <= 3 (max implicit) and it is now
+                      // > 3 (explicit) the instruction will be one byte longer.
+                      // We need to update the instruction list to account for this.
+                      il.setPositions();
+                      // Which means we might need to update a StackMap offset.
+                      update_stack_map_offset(ih.getPosition(), size);
+                  }
+              }
+          }
       }
+
+      // Adjusting the local's offsets may have caused the code bytes to
+      // be modified.  We need to see if this changed any of the
+      // switch instruction padding bytes.
+      //
+      // If there was no orgiinal StackMapTable (smta == null)
+      // then there are no switches and/or class was compiled for
+      // Java 5.  In either case, no need to process switches.
+      if (smta != null ) {
+         // Need to see if there are any switches after this location.
+         // If so, we may need to update the corresponding stackmap if
+         // the amount of the switch padding changed.
+         modify_stack_maps_for_switches(il.getStart(), il);
+      }
+
+      // Finally, we need to update any StackMaps that point to the NEW
+      // instruction for an uninitialized variable.
+      update_uninitialized_NEW_offsets(il);
   }
 
   /**
@@ -558,25 +684,33 @@ class DCInstrument {
     int new_offset = -1;
     // get a copy of the local before modification
     LocalVariableGen[] locals = mg.getLocalVariables();
+    int local_temp_count = 0;
 
     for (LocalVariableGen lv : mg.getLocalVariables()) {
         if (lv.getStart().getPosition() != 0) {
             if (new_offset == -1) {
                 new_offset = lv.getIndex();
+                compiler_temp_count = local_temp_count;
             }
             lv.setIndex(lv.getIndex() + type.getSize());
         }
         // need to add 1 if type is double or long
         max_offset = lv.getIndex() + lv.getType().getSize() - 1;
+        if (lv.getName().startsWith("DaIkOnTeMp")) {
+            local_temp_count++;
+        } else {
+            local_temp_count = 0;
+        }
     }
 
     // System.out.printf ("new_offset %s%n", new_offset);
 
-    // Special case: sometimes the java compiler allocates an unnamed
-    // local temp for saving the exception in a finally clause.
+    // Special case: sometimes the java compiler allocates unnamed
+    // temps at the end of the locals - we want to insert before them.
     if (new_offset == -1) {
         if (mg.getMaxLocals() > max_offset + 1) {
             new_offset = max_offset + 1;
+            compiler_temp_count = 0;
         }
     }
 
@@ -593,15 +727,19 @@ class DCInstrument {
         // we just inserted.
         adjust_code_for_locals_change (mg, new_offset, type.getSize());
 
-        // We also need to update any FULL_FRAME StackMap entries to
-        // add in the new local variable type.
- print_stack_map_table ("create_method_scope_local");
-        update_full_frame_stack_map_entries (new_offset, type, locals);
     } else {
         // create the local variable at end of locals
         // will automatically update max_locals
         lv_new = mg.addLocalVariable(name, type, null, null);
+        new_offset = lv_new.getIndex();
+        compiler_temp_count = 0;
     }
+
+    // System.out.printf ("create_method_scope_local-1 %s%n", compiler_temp_count);
+
+    // We also need to update any FULL_FRAME StackMap entries to
+    // add in the new local variable type.
+    update_full_frame_stack_map_entries (new_offset, type, locals);
 
     debug_instrument.log ("New LocalVariableTable: %s%n",
                           mg.getLocalVariableTable(pool));
@@ -619,15 +757,20 @@ class DCInstrument {
           stack_map_table = ((StackMapTable)smta).getStackMapTable();
           needStackMap = true;
 
-          // We need to copy the Stack Map items so we can modify
-          // them without affecting the unmodified version of this
-          // method (if there is one).
-          int len = stack_map_table.length;
-          new_stack_map_table = new StackMapTableEntry[len];
-          for (int j = 0; j < len; j++) {
-              new_stack_map_table[j] = stack_map_table[j].copy();
-          }
-          stack_map_table = new_stack_map_table;
+          try {
+              // We need to make a deep copy of the Stack Map items so
+              // we can modify them without affecting the unmodified
+              // version of this method (if there is one).
+              int len = stack_map_table.length;
+              new_stack_map_table = new StackMapTableEntry[len];
+              for (int j = 0; j < len; j++) {
+                  new_stack_map_table[j] = stack_map_table[j].copy();
+              }
+              stack_map_table = new_stack_map_table;
+          } catch (CloneNotSupportedException e) {
+              throw new Error ("Unexpected error copying StackMaps in " +
+                                mg.getClassName() + "." + mg.getName());
+          }    
 
           debug_instrument.log ("Original StackMap: %s%n", smta);
           debug_instrument.log ("Attribute tag: %s length: %d nameIndex: %d%n",
@@ -897,25 +1040,12 @@ class DCInstrument {
         boolean has_code = (il != null);
         if (has_code) {
             fetch_current_stack_map_table (mg);
+            build_unitialized_NEW_map (il);
         }
 
         // Add a parameter of java.lang.DCompMarker to match up with the
         // instrumented versions in the JDK.
         add_dcomp_arg (mg);
-
-        // Adding the DCompMarker may have caused the code bytes to
-        // be modified.  We need to see if this changed any of the
-        // switch instruction padding bytes.
-        //
-        // If there was no orgiinal StackMapTable (smta == null)
-        // then there are no switches and/or class was compiled for
-        // Java 5.  In either case, no need to process switches.
-        if (smta != null ) {
-           // Need to see if there are any switches after this location.
-           // If so, we may need to update the corresponding stackmap if
-           // the amount of the switch padding changed.
-           modify_stack_maps_for_switches(il.getStart(), il);
-        }
 
         // Create a MethodInfo that describes this method's arguments
         // and exit line numbers (information not available via reflection)
@@ -1067,7 +1197,6 @@ class DCInstrument {
 
         MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
         mgen = mg;  // copy to global
-        boolean has_code = (mg.getInstructionList() != null) ;
         debug_instrument.log ("%n  Processing method %s, track=%b\n", m, track);
         debug_instrument.indent();
 
@@ -1079,8 +1208,11 @@ class DCInstrument {
           }
         }
 
+        InstructionList il = mg.getInstructionList();
+        boolean has_code = (il != null);
         if (has_code) {
             fetch_current_stack_map_table (mg);
+            build_unitialized_NEW_map (il);
         }
 
         // Add a parameter of java.lang.DCompMarker to match up with the
@@ -1203,10 +1335,12 @@ class DCInstrument {
 
         MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
         mgen = mg;  // copy to global
-        boolean has_code = (mg.getInstructionList() != null) ;
 
+        InstructionList il = mg.getInstructionList();
+        boolean has_code = (il != null);
         if (has_code) {
             fetch_current_stack_map_table (mg);
+            build_unitialized_NEW_map (il);
         }
 
         // If the method is native
@@ -1317,10 +1451,12 @@ class DCInstrument {
 
         MethodGen mg = new MethodGen (m, gen.getClassName(), pool);
         mgen = mg;  // copy to global
-        boolean has_code = (mg.getInstructionList() != null) ;
 
+        InstructionList il = mg.getInstructionList();
+        boolean has_code = (il != null);
         if (has_code) {
             fetch_current_stack_map_table (mg);
+            build_unitialized_NEW_map (il);
         }
 
         // If the method is native
@@ -1379,10 +1515,12 @@ class DCInstrument {
    */
   public void instrument_method (Method m, MethodGen mg) {
 
-    // We need to insert the code to initialize the tag_frame_local
-    // now so that the stack anaylsis is correct for potential
+    // Because the tag_frame_local is active for the entire method
+    // and its creation will change the state of the locals layout,
+    // we need to insert the code to initialize it now so that the
+    // stack anaylsis we are about to do is correct for potential
     // code replacements we might make later.
-    orig_start = (mg.getInstructionList()).getStart();
+    InstructionHandle orig_start = (mg.getInstructionList()).getStart();
     add_create_tag_frame(mg);
 
     // Calculate the operand stack value(s) for revised code.
@@ -1648,8 +1786,17 @@ class DCInstrument {
   public void add_create_tag_frame (MethodGen mg) {
 
     InstructionList nl = create_tag_frame(mg, tag_frame_local);
+
+    // We add a temporary NOP at the end of the create_tag_frame
+    // code that we will replace with runtime initization code
+    // later.  We do this so that any existing stack map at
+    // instruction offset 0 is not replaced by the one we are
+    // about to add for initializing the tag_frame variable.
+    insertion_placeholder = nl.append(new NOP());
+
     byte[] code = nl.getByteCode();
-    int len_code = code.length;
+    // -1 because of the NOP we inserted.
+    int len_code = code.length - 1;
 
     insert_at_method_start(mg, nl);
 
@@ -1660,8 +1807,6 @@ class DCInstrument {
     // verification process.  We need to create and or update it to
     // account for instrumentation code we have inserted as well as
     // adjustments for the new 'tag_frame' local.
-
-    boolean skipFirst = false;
 
     // Get existing StackMapTable (if present)
     if (stack_map_table.length > 0) {
@@ -1678,30 +1823,62 @@ class DCInstrument {
         // beginning of the stack map table, we need to adjust the
         // offset_delta of the original first stack map frame due to
         // the fact that it will no longer be the first entry.  We
-        // must subtract (len_code + 1). BUT, if the original first
-        // entry has an offset of 0 (because the bytecode at address
-        // 0 is a branch target) then we must delete it as it will
-        // be replaced by the new frame we are adding.
-        // (did you get all of that? - markro)
+        // must subtract (len_code + 1).
+        // (We don't have to worry about the special case of the
+        // original first entry having an offset of 0 because of the
+        // NOP we inserted above.
 
-        if (stack_map_table[0].getByteCodeOffsetDelta() == 0) {
-            skipFirst = true;
-        } else {
-            modify_stack_map_offset(stack_map_table[0], -(len_code+1));
-        }
+        modify_stack_map_offset(stack_map_table[0], -(len_code+1));
     }
 
-    int new_table_length = stack_map_table.length + (skipFirst ? 0 : 1);
+    int new_table_length = stack_map_table.length + 1;
     new_stack_map_table = new StackMapTableEntry[new_table_length];
     StackMapType tag_frame_type = generate_StackMapType_from_Type(object_arr);
-    StackMapType[] tag_frame_type_arr = {tag_frame_type};
-    new_stack_map_table[0] = new StackMapTableEntry(Constants.APPEND_FRAME, len_code, 1,
-                                        tag_frame_type_arr, 0, null, pool.getConstantPool());
+
+    // Check number of compiler temps immediately prior to the tag
+    // variable.  If > 0, we need to add a 'top' to the stack map
+    // for each of them.
+    // FYI: Sometimes the java compiler seems to leave unused local
+    // slots lying around for no apparent reason.  Cases 2 and 3 below
+    // are here just for this case.
+    switch (compiler_temp_count) {
+      case 0: {
+        StackMapType[] stack_map_type_arr = {tag_frame_type};
+        new_stack_map_table[0] = new StackMapTableEntry(Constants.APPEND_FRAME, len_code, 1,
+                                     stack_map_type_arr, 0, null, pool.getConstantPool());
+        break;
+      }
+      case 1: {
+        StackMapType top_frame_type = new StackMapType(Constants.ITEM_Bogus, -1, pool.getConstantPool());
+        StackMapType[] stack_map_type_arr = {top_frame_type, tag_frame_type};
+        new_stack_map_table[0] = new StackMapTableEntry(Constants.APPEND_FRAME + 1, len_code, 2,
+                                     stack_map_type_arr, 0, null, pool.getConstantPool());
+        break;
+      }
+      case 2: {
+        StackMapType top_frame_type = new StackMapType(Constants.ITEM_Bogus, -1, pool.getConstantPool());
+        StackMapType[] stack_map_type_arr = {top_frame_type, top_frame_type, tag_frame_type};
+        new_stack_map_table[0] = new StackMapTableEntry(Constants.APPEND_FRAME + 2, len_code, 3,
+                                     stack_map_type_arr, 0, null, pool.getConstantPool());
+        break;
+      }
+      case 3: {
+        StackMapType top_frame_type = new StackMapType(Constants.ITEM_Bogus, -1, pool.getConstantPool());
+        StackMapType[] stack_map_type_arr = {top_frame_type, top_frame_type, top_frame_type, tag_frame_type};
+        new_stack_map_table[0] = new StackMapTableEntry(Constants.APPEND_FRAME + 3, len_code, 4,
+                                     stack_map_type_arr, 0, null, pool.getConstantPool());
+        break;
+      }
+      default:
+        throw new RuntimeException("Too many hidden compiler temps: " + compiler_temp_count);
+    }
+
+    // System.out.printf ("add_create_tag_frame-1 %s%n", new_stack_map_table[0]);
 
     // We can just copy the items over as the FULL_FRAME ones were
     // already updated when the tag_frame variable was allocated.
     int new_index = 1;
-    for (int i = (skipFirst ? 1 : 0); i < stack_map_table.length; i++) {
+    for (int i = 0; i < stack_map_table.length; i++) {
         new_stack_map_table[new_index++] = stack_map_table[i];
     }
     stack_map_table = new_stack_map_table;
@@ -1755,7 +1932,9 @@ class DCInstrument {
 
     // Need to update stack map for change in length of instruction bytes.
     il.setPositions();
-    update_stack_map_offset(new_start.getPosition(), length);
+    // We use position-1 as we want any stack map associated with the
+    // old_start to stay associated and not move to new_start.
+    update_stack_map_offset(new_start.getPosition()-1, length);
 
     // We need to see if inserting the additional instructions caused
     // a change in the amount of switch instruction padding bytes.
@@ -1769,13 +1948,18 @@ class DCInstrument {
        // the amount of the switch padding changed.
        modify_stack_maps_for_switches(new_start, il);
     }
+
+    // Finally, we need to update any StackMaps that point to the NEW
+    // instruction for an uninitialized variable.
+    update_uninitialized_NEW_offsets(il);
   }
 
   /**
    * Adds the call to DCRuntime.enter to the beginning of the method.
    */
   public void add_enter (MethodGen mg, MethodInfo mi, int method_info_index) {
-    insert_before_handle(mg, orig_start, call_enter_exit(mg, method_info_index,
+    InstructionList il = mg.getInstructionList();
+    replace_instructions(il, insertion_placeholder, call_enter_exit(mg, method_info_index,
                                                          "enter", -1));
   }
 
@@ -4135,18 +4319,22 @@ class DCInstrument {
         // no possible changes downstream, so we can exit now
         return;
       }
-      print_stack_map_table ("replace_with_single_inst B");
+      print_stack_map_table ("replace_inst_with_single_inst B");
       il.setPositions();
       new_end = ih;
       // Update stack map for change in length of instruction bytes.
       update_stack_map_offset(ih.getPosition(), (new_length - old_length));
     } else {
-      print_stack_map_table ("replace_with_inst_list B");
+      print_stack_map_table ("replace_inst_with_inst_list B");
       // We are inserting more than one instruction.
       // Get the start and end handles of the new instruction list.
       new_end = new_il.getEnd();
       new_start = il.insert (ih, new_il);
       il.setPositions();
+
+      // Just in case there is a switch instruction in new_il we need
+      // to recalculate new_length as the padding may have changed.
+      new_length = new_end.getNext().getPosition() - new_start.getPosition();
 
       // Move all of the branches from the old instruction to the new start
       il.redirectBranches (ih, new_start);
@@ -4215,6 +4403,7 @@ class DCInstrument {
         if (target_count != 0) {
             // Currently, target_count is always 2; but code is
             // written to allow more.
+            int cur_loc = new_start.getPosition();
             int orig_size = stack_map_table.length;
             new_stack_map_table = new StackMapTableEntry[orig_size + target_count];
 
@@ -4225,6 +4414,7 @@ class DCInstrument {
 
             // need to find last stack map entry prior to first new branch target
             // returns -1 if there isn't one
+            // sets running_offset
             int new_index = find_stack_map_index_before (target_offsets[0]) + 1;
 
             // Copy any existing stack maps prior to inserted code.
@@ -4242,22 +4432,13 @@ class DCInstrument {
                         null, 1, stack_map_types0, pool.getConstantPool());
                 } else {
                     // need stack map FULL - MAKE SHARED METHOD
-                    // Get the argument types for this method
-                    Type[] arg_types = mgen.getArgumentTypes();
-                    int arg_index = (mgen.isStatic()? 0 : 1);
-                    int frame_flag = ((tag_frame_local == null) ? 0 : 1);
+                    int local_map_index = 0;
+                    StackMapType[] local_map_types = new StackMapType[mgen.getMaxLocals()];
 
-                    StackMapType[] local_map_types = new StackMapType[arg_types.length+arg_index+frame_flag];
-                    if (!mgen.isStatic()) {
-                        local_map_types[0] = new StackMapType(Constants.ITEM_Object,
-                                                            pool.addClass(mgen.getClassName()),
-                                                            pool.getConstantPool());
-                    }
-                    for (int ii = 0; ii < arg_types.length; ii++) {
-                        local_map_types[arg_index++] = generate_StackMapType_from_Type (arg_types[ii]);
-                    }
-                    if (frame_flag == 1) {
-                        local_map_types[arg_index++] = generate_StackMapType_from_Type (object_arr);
+                    for (LocalVariableGen lv : mgen.getLocalVariables()) {
+                        if ((cur_loc >= lv.getStart().getPosition()) && (cur_loc <= lv.getEnd().getPosition())) {
+                            local_map_types[local_map_index++] = generate_StackMapType_from_Type (lv.getType());
+                        }
                     }
 
                     int ss = stack.size();
@@ -4268,7 +4449,7 @@ class DCInstrument {
 
                     new_stack_map_table[new_index+i] = new StackMapTableEntry(
                         Constants.FULL_FRAME, 0,
-                        local_map_types.length, local_map_types,
+                        local_map_index, local_map_types,
                         ss, stack_map_types, pool.getConstantPool());
                 }
                 modify_stack_map_offset (new_stack_map_table[new_index+i], target_offsets[i]-(running_offset+1));
@@ -4313,8 +4494,6 @@ class DCInstrument {
       }
     }
 
-    print_stack_map_table ("replace_inst A");
-
     // We need to see if the change in the size of instruction bytes caused
     // a change in the amount of switch instruction padding bytes.
     //
@@ -4326,6 +4505,19 @@ class DCInstrument {
        // If so, we may need to update the corresponding stackmap if
        // the amount of the switch padding changed.
        modify_stack_maps_for_switches(new_end, il);
+    }
+
+    // Finally, we need to update any StackMaps that point to the NEW
+    // instruction for an uninitialized variable.
+    update_uninitialized_NEW_offsets(il);
+
+    debug_instrument_inst.log ("%n");
+    print_stack_map_table ("replace_inst After");
+    if (debug_instrument_inst.enabled) {
+        while (new_end != null) {
+            debug_instrument_inst.log ("inst: %s %n", new_end);
+            new_end = new_end.getNext();
+        }
     }
   }
 
@@ -5074,7 +5266,7 @@ class DCInstrument {
     // all of the code that references those locals
     if (has_code) {
 
-      // print_stack_map_table ("add_decomp_arg 2");
+      // print_stack_map_table ("add_dcomp_arg 2");
 
       // Get the current local variables (includes 'this' and parameters)
       LocalVariableGen[] locals = get_fix_locals (mg);
@@ -5152,14 +5344,10 @@ class DCInstrument {
 
       // System.out.printf ("add_dcomp_arg %s %s %n", offset, max_offset);
 
-      // hidden compiler temps after the last local
-      for (int ii = offset; ii < max_offset; ii++) {
-        LocalVariableGen new_lvg;
-        new_lvg = mg.addLocalVariable ("DaIkOnTeMp" + offset, Type.INT, offset+1,
-                                 il.getStart(), il.getEnd());
-        offset = offset + (new_lvg.getType()).getSize();
-        debug_add_dcomp.log ("Added a local   %s%n", new_lvg.getIndex() + ": " + new_lvg.getName() + ", " + new_lvg.getType());
-      }
+      // There may be hidden compiler temps after the last local; we
+      // want to ignore them at this point so if we add any locals of
+      // our own later, they will be inserted prior to these compiler
+      // temps.
 
       // Get the offset of the first local after the dcomp arg.
       // Note that this is the OLD value of the offset, not the new value
@@ -5171,7 +5359,7 @@ class DCInstrument {
       // 'higher' in the local map than the dcomp arg.
       adjust_code_for_locals_change (mg, first_local_offset, 1);
 
-      // print_stack_map_table ("add_decomp_arg 2");
+      // print_stack_map_table ("add_dcomp_arg 2");
 
       // We also need to update any FULL_FRAME StackMap entries to
       // add in the dcomp arg type.
