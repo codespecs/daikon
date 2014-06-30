@@ -20,6 +20,17 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.1.2 (June 30, 2014)
+
+  Documentation updates and cleanup.
+  - Added material on CSharpContracts; usage and copyright.
+  - Miscellaneous changes to improve layout and readability.
+  Improved StackMap support.
+  - Both Daikon and DynComp can now process a wider variety of Java 7
+    generated StackMaps.
+   
+===========================================================================
+
 5.1.0 (May 30, 2014)
 
   Daikon can now infer code contracts for .NET programs, such as C# programs. 
