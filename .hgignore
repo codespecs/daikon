@@ -47,6 +47,8 @@ java/dcomp-rt/java/lang/jdk_classes.txt
 java/dcomp_rt.jar
 dcomp-rt.jar
 # DynComp testing
+java/daikon/dcomp/jdk_dcomp_out.diff
+java/daikon/dcomp/jdk_dcomp_out.txt
 java/daikon/dcomp/std_dcomp_out.diff
 java/daikon/dcomp/std_dcomp_out.txt
 java/debug
@@ -450,6 +452,8 @@ syntax: regexp
 ^tests/.*-jaif\.inv\.gz$
 ^tests/.*\.decls-DynComp$
 ^tests/.*\.decls-DynComp\.diff$
+^tests/.*\.decls-DynComp-nojdk$
+^tests/.*\.decls-DynComp-nojdk\.diff$
 ^tests/.*\.inv\.gz$
 ^tests/.*\.spinfo-static$
 ^tests/.*\.spinfo-static\.diff$
