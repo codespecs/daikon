@@ -2170,15 +2170,15 @@ Check the website to see if it has any broken links.
 make check-for-broken-doc-links
 @end example
 
-Review @file{check.log} and make corrections as appropriate.
+Review @file{check.log} and make corrections as appropriate,
+re-running the tool until the output is empty.
 
-Errors 301 and 501 are normally fixed by adding an additional line
-to @file{$DAIKONDIR/plume-lib/bin/checklink-args.txt}.
+In most cases (and for most 404 errors), you should fix the document with the incorrect link.
+
+If the URL is correct but cannot be checked (for example, because the website prohibits spiders or because the URL  redirects to another URL but you prefer to keep the first URL in your document), then you may need to add lines to file @file{$DAIKONDIR/plume-lib/bin/checklink-args.txt}.
 
 In some cases a "403 Forbidden" error is transient, due to the website
 being down.  You can check such links by hand.
-
-Error 404 usually indicates an error in our links that needs to be fixed.
 
 [Time: 2 min]
 
