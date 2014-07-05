@@ -424,7 +424,7 @@ CUR_VER := $(shell unzip -p /cse/web/research/plse/daikon/download/daikon.zip da
 HISTORY_DIR := /cse/web/research/plse/daikon/history
 
 check-for-broken-doc-links:
-	checklink -q -r `cat $(DAIKONDIR)/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/daikon/staging-daikon >check.log 2>&1
+	checklink -q -r `grep -v '^#' $(DAIKONDIR)/plume-lib/bin/checklink-args.txt` http://plse.cs.washington.edu/daikon/staging-daikon >check.log 2>&1
 
 save-current-release:
 	@echo Saving $(CUR_VER) to history directory.
