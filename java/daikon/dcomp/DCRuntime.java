@@ -781,11 +781,25 @@ public final class DCRuntime {
   }
 
   /**
+   * The JVM uses bastore for both boolean and byte data types.  
+   * With the addition of StackMap verification in Java7 we can
+   * no longer use the same runtime routine for both data types.
+   * Hence, the addition of zastore below for boolean.
+   *
    * Execute an bastore instruction and manipulate the tags accordingly.
    * The tag at the top of stack is stored into the tag storage for the
    * array.
    */
   public static void bastore (byte[] arr, int index, byte val) {
+
+    // Store the tag for val in the tag storage for array and mark
+    // the array and the index as comparable.
+    primitive_array_store (arr, arr.length, index);
+
+    // Execute the array store
+    arr[index] = val;
+  }
+  public static void zastore (boolean[] arr, int index, boolean val) {
 
     // Store the tag for val in the tag storage for array and mark
     // the array and the index as comparable.
