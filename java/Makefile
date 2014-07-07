@@ -134,7 +134,7 @@ ifdef CLASSPATH_JARS2
 endif
 ifneq (tools.jar, $(findstring tools.jar,$(CLASSPATH)))
   ifneq "$(wildcard ${JAVA_HOME}/lib/tools.jar)" ""
-    CLASSPATH := $(CLASSPATH):${JDK_HOME}/lib/tools.jar
+    CLASSPATH := $(CLASSPATH):${JAVA_HOME}/lib/tools.jar
   endif
   ifneq "$(wildcard ${JAVA_HOME}/lib/rt.jar)" ""
     CLASSPATH := $(CLASSPATH):${JAVA_HOME}/lib/rt.jar
