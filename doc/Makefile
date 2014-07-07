@@ -57,13 +57,19 @@ html: daikon.html developer.html
 
 daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
 	makeinfo --html --no-split $<
+	# Fixup 'bad' href inserted by makeinfo.
+	perl -pi -e 's|dir.html#Top|index.html|;' daikon.html
 
 # just builds from texinfo.  Much faster than rebuilding the files from javadoc
 daikon-fast: daikon.texinfo 
 	makeinfo --html --no-split $<
+	# Fixup 'bad' href inserted by makeinfo.
+	perl -pi -e 's|dir.html#Top|index.html|;' daikon.html
 
 developer.html: developer.texinfo 
 	makeinfo --html --no-split $<
+	# Fixup 'bad' href inserted by makeinfo.
+	perl -pi -e 's|dir.html#Top|index.html|;' developer.html
 
 html-chap: daikon/index.html developer/index.html
 
@@ -72,6 +78,8 @@ html-chap: daikon/index.html developer/index.html
 daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
 	rm -rf daikon/*
 	makeinfo --html --split=chapter -o daikon $<
+	# Fixup 'bad' href inserted by makeinfo.
+	perl -pi -e 's|../dir/index.html|../index.html|;' daikon/index.html
 	mkdir daikon/images
 	cp images/*.png daikon/images
 	cp images/*.jpg daikon/images
@@ -79,6 +87,8 @@ daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 developer/index.html: developer.texinfo
 	rm -rf developer/*
 	makeinfo --html --split=chapter -o developer $<
+	# Fixup 'bad' href inserted by makeinfo.
+	perl -pi -e 's|../dir/index.html|../index.html|;' developer/index.html
 	mkdir developer/images
 	cp images/*.png developer/images
 	cp images/*.jpg developer/images

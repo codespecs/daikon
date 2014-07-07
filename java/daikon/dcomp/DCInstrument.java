@@ -1669,30 +1669,21 @@ class DCInstrument {
    */
   public void add_exception_handler (MethodGen mg, InstructionList catch_il) {
 
-    InstructionList cur_il = mg.getInstructionList();
-    InstructionHandle start = cur_il.getStart();
-
+    // <init> methods (constructors) turn out to be problematic
+    // for adding a whole method exception handler.  The start of
+    // the exception handler should be after the primary object is
+    // initialized - but this is hard to determine without a full
+    // analysis of the code.  Hence, we just skip these methods.
     if (!mg.isStatic()) {
         if (BCELUtil.is_constructor(mg)) {
-            // We assume all <init> methods start with:
-            //   aload 0
-            //   [possible load other args]
-            //   invokespecial
-            // and object is now initialized.
-            // Search for the invokespecial.
-            while (true) {
-                start = start.getNext();
-                if (start == null) {
-                    throw new Error("Can't find invokespecial in <init> method");
-                }
-                Instruction inst = start.getInstruction();
-                if (inst.getOpcode() == Constants.INVOKESPECIAL) {
-                    break;
-                }
-            }
-            start = start.getNext();
+            global_catch_il = null;
+            global_exception_handler = null;
+            return;
         }
     }
+
+    InstructionList cur_il = mg.getInstructionList();
+    InstructionHandle start = cur_il.getStart();
     InstructionHandle end = cur_il.getEnd();
 
     // This is just a temporary handler to get the start and end
@@ -2508,7 +2499,14 @@ class DCInstrument {
     case Constants.AASTORE:
       return array_store (inst, "aastore", Type.OBJECT);
     case Constants.BASTORE:
-      return array_store (inst, "bastore", Type.BYTE);
+      // The JVM uses bastore for both byte and boolean.
+      // We need to differentiate.
+      Type arr_type = stack.peek(2);
+      if (arr_type.getSignature().equals("[Z")) {
+          return array_store (inst, "zastore", Type.BOOLEAN);
+      } else {
+          return array_store (inst, "bastore", Type.BYTE);
+      }
     case Constants.CASTORE:
       return array_store (inst, "castore", Type.CHAR);
     case Constants.DASTORE:
