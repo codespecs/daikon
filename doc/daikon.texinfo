@@ -519,12 +519,13 @@ make
 @end example
 
 @noindent
-This builds the various executables used by Daikon, such as the
-C/C++ front end Kvasir (@pxref{Installing Kvasir}) and the 
+This builds the various executables used by Daikon, such as the 
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
 For more
 information about compiling Daikon,
 see @ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
+Note that the
+C/C++ front end Kvasir (@pxref{Installing Kvasir}) does not work under Cygwin.
 
 Note that running this make command may take 20 minutes or more,
 depending on your computer.  
