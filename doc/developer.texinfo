@@ -2852,6 +2852,10 @@ file,
 blanks must be replaced by @code{\_}, and backslashes must be escaped as @code{\\}.
 Program point names must be distinct.
 
+@c Note:
+@c The Version 1 declaration file format specification is described in
+@c "V1 pptname format", but it is not relevant for version 2.
+
 The following information about the program point (@code{ppt-info}) can be specified:
 @itemize 
 @item @code{ppt-type <type>}
