@@ -2,6 +2,8 @@
 misc.EncapsulateDowncast:::CLASS
 misc.EncapsulateDowncast.random has only one value
 misc.EncapsulateDowncast.random != null
+misc.EncapsulateDowncast.random2 has only one value
+misc.EncapsulateDowncast.random2 != null
 ===========================================================================
 misc.EncapsulateDowncast.main(java.lang.String[]):::ENTER
 argv has only one value
@@ -11,6 +13,7 @@ argv[].toString == []
 ===========================================================================
 misc.EncapsulateDowncast.main(java.lang.String[]):::EXIT
 misc.EncapsulateDowncast.random == orig(misc.EncapsulateDowncast.random)
+misc.EncapsulateDowncast.random2 == orig(misc.EncapsulateDowncast.random2)
 argv[] == orig(argv[])
 argv[] == []
 argv[].toString == []
@@ -27,6 +30,7 @@ misc.EncapsulateDowncast.SEED > size(list[])
 ===========================================================================
 misc.EncapsulateDowncast.showLastPerson(java.util.Vector):::EXIT
 misc.EncapsulateDowncast.random == orig(misc.EncapsulateDowncast.random)
+misc.EncapsulateDowncast.random2 == orig(misc.EncapsulateDowncast.random2)
 list[] == orig(list[])
 list[] contains no duplicates
 list[] elements != null

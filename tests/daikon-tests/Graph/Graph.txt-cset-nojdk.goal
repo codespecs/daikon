@@ -1,0 +1,86 @@
+
+Variable sets for MapQuick1.Graph.<init>() enter
+Variable sets for MapQuick1.Graph.<init>() exit
+  [1] [this]
+  [1] [Field adjMap]
+
+Variable sets for MapQuick1.Graph.checkRep() enter
+  [1] [this]
+  [1] [Field adjMap]
+Variable sets for MapQuick1.Graph.checkRep() exit
+  [1] [this]
+  [1] [Field adjMap]
+
+Variable sets for MapQuick1.Graph.addNode(java.lang.Object node) enter
+  [1] [Parameter node]
+  [1] [Class of node]
+  [1] [this]
+  [1] [Field adjMap]
+Variable sets for MapQuick1.Graph.addNode(java.lang.Object node) exit
+  [1] [Parameter node]
+  [1] [Class of node]
+  [1] [this]
+  [1] [Field adjMap]
+
+Variable sets for MapQuick1.Graph.containsNode(java.lang.Object node) enter
+  [1] [Parameter node]
+  [1] [Class of node]
+  [1] [this]
+  [1] [Field adjMap]
+Variable sets for MapQuick1.Graph.containsNode(java.lang.Object node) exit
+  [1] [Parameter node]
+  [1] [Class of node]
+  [1] [return]
+  [1] [this]
+  [1] [Field adjMap]
+
+Variable sets for MapQuick1.Graph.nodeSet() enter
+  not called
+Variable sets for MapQuick1.Graph.nodeSet() exit
+  not called
+
+Variable sets for MapQuick1.Graph.adjTo(java.lang.Object node) enter
+  [1] [Parameter node]
+  [1] [Class of node]
+  [1] [this]
+  [1] [Field adjMap]
+Variable sets for MapQuick1.Graph.adjTo(java.lang.Object node) exit
+  [1] [Parameter node]
+  [1] [Class of node]
+  [1] [return]
+  [1] [Class of return]
+  [1] [this]
+  [1] [Field adjMap]
+
+Variable sets for MapQuick1.Graph.addEdge(java.lang.Object from, java.lang.Object to) enter
+  [1] [Parameter from]
+  [1] [Class of from]
+  [1] [this]
+  [1] [Field adjMap]
+  [1] [Parameter to]
+  [1] [Class of to]
+Variable sets for MapQuick1.Graph.addEdge(java.lang.Object from, java.lang.Object to) exit
+  [1] [Parameter from]
+  [1] [Class of from]
+  [1] [this]
+  [1] [Field adjMap]
+  [1] [Parameter to]
+  [1] [Class of to]
+
+Variable sets for MapQuick1.Graph.childrenOf(java.lang.Object node) enter
+  [1] [Parameter node]
+  [1] [Class of node]
+  [1] [this]
+  [1] [Field adjMap]
+Variable sets for MapQuick1.Graph.childrenOf(java.lang.Object node) exit
+  [1] [Parameter node]
+  [1] [Class of node]
+  [1] [return]
+  [1] [Class of return]
+  [1] [this]
+  [1] [Field adjMap]
+
+Variable sets for MapQuick1.Graph.equals(java.lang.Object obj) enter
+  not called
+Variable sets for MapQuick1.Graph.equals(java.lang.Object obj) exit
+  not called

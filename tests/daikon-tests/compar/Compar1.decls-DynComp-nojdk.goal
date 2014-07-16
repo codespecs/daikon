@@ -76,11 +76,11 @@ int
 k
 int # isParam=true
 int
-2
+3
 l
 int # isParam=true
 int
-2
+3
 
 DECLARE
 misc.Compar1.bar(int, int, int, int):::EXIT29
@@ -95,11 +95,11 @@ int
 k
 int # isParam=true
 int
-2
+3
 l
 int # isParam=true
 int
-2
+3
 
 
 DECLARE

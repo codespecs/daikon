@@ -78,6 +78,8 @@ RESULTS_PATTERN :=    -name '*.txt-*.diff' \
                    -o -name '*.txt-*-failed' \
                    -o -name '*.txt.diff' \
                    -o -name '*.decls-DynComp.diff' \
+                   -o -name '*.decls-DynComp-nojdk.diff' \
+                   -o -name '*.txt-cset-nojdk.diff' \
                    -o -name '*xcheck.diff' \
                    -o -name '*daikon.diff'
 results_header:

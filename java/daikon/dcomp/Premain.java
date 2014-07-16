@@ -20,6 +20,14 @@ import daikon.DynComp;
 public class Premain {
 
   /**
+   * Any command line options declared here are 'hidden' as they cannot
+   * be accessed from DynComp.  These are internal debugging options that
+   * may be used when Premain is invoked directly from the command line.
+   **/
+  @Option("Turn on most DCRuntime debugging options")
+  public static boolean debug_dcruntime = false;
+
+  /**
    * Set of pre_instrumented jdk classes.  Needed so that we will instrument
    * classes generated on the fly in the jdk.
    **/

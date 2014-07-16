@@ -35,6 +35,7 @@ public class EncapsulateDowncast {
     /*@ spec_public */ static final int SEED = 327;
 
     /*@ spec_public */ static Random random = new Random(SEED);
+    /*@ spec_public */ static Random random2 = new Random(SEED);
 
     /*@ requires list != null; */
     /*@ requires list.containsNull == false; */
@@ -61,7 +62,7 @@ public class EncapsulateDowncast {
 		 j++) {
 		String name = "name" + j;
 		int height = random.nextInt(12);
-		int weight = random.nextInt(100) + 100;
+		int weight = random2.nextInt(100) + 100;
 		Person person = new Person(name, height, weight);
 		list.addElement(person);
 	    }

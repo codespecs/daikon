@@ -265,6 +265,8 @@ else
 endif
 
 
+default: help
+
 $(PRINT_INVARIANTS_CLASS):
 	make -C $(DAIKONDIR)/java
 
@@ -318,8 +320,6 @@ endif
 # More convenient than using $PIPESTATUS shell variable.
 export SHELL = /bin/bash -o pipefail
 
-default: help
-
 help:
 	@${PROJECT_HELP}
 
@@ -357,7 +357,7 @@ clean-output:
 	@echo
 	@echo "### clean-output (${PROJECT_FILE})"
 	@echo
-	rm -f *.bak *.diff ${PROJECT_FILE}.{inv{,.gz},decls-DynComp,txt{,-merge}-{chicory,daikon,simplify,csharpcontract,esc,jml,repair,cset,daikon-suppress,daikon-suppress-diffed,jaif,trace}{,-failed},esc,context,stats,linecov,spinfo-static}
+	rm -f *.bak *.diff ${PROJECT_FILE}.{inv{,.gz},decls-DynComp{,-nojdk},txt{,-merge}-{chicory,daikon,simplify,csharpcontract,esc,jml,repair,cset{,-nojdk},daikon-suppress,daikon-suppress-diffed,jaif,trace{,-nojdk}}{,-failed},esc,context,stats,linecov,spinfo-static}
 	rm -rf merged *txt-chicory.dtrace
 	rm -f *.bak *.diff ${PROJECT_FILE}-suppress.inv.gz ${PROJECT_FILE}-jaif.inv.gz
 ifeq (csv,${STORED_TRACE_FORMAT})
@@ -535,26 +535,32 @@ endif
 JAVA_DCOMP := $(RUN_JAVA) -esa -ea \
 			  "-Xbootclasspath:$(DCOMP_RT):$(CLASSPATH):$(SCRATCH_FOR_DAIKON)"
 
-dyncomp: $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset
+dyncomp: $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
+		 $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).txt-cset-nojdk
 dyncomp-diff: $(PROJECT_FILE).decls-DynComp.diff \
 			  $(PROJECT_FILE).txt-cset.diff \
+			  $(PROJECT_FILE).decls-DynComp-nojdk.diff \
+			  $(PROJECT_FILE).txt-cset-nojdk.diff \
 			  $(SCRATCH_FOR_DAIKON)/.copy-timestamp
 
 # If the command fails, then it would be convenient to see its output.  But
 # if it fails, then the whole command fails, and if it does not fail (that
 # is, has normal exit status), then we don't care about the standard output
 # and standard error.
-$(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset : $(DCOMP_PREMAIN) \
+$(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset \
+  $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).txt-cset-nojdk: $(DCOMP_PREMAIN) \
 				$(SCRATCH_FOR_DAIKON)/.copy-timestamp $(INST_LIST_FILE)
 	@echo
 	@echo "### Run DynComp (${PROJECT_FILE})"
 	@echo
 	rm -f $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).txt-cset
 	cd $(SCRATCH_FOR_DAIKON) && ${JAVAC} -g `cat $(ALL_LIST_FILE)`
-	#$(JAVA_DCOMP) "-javaagent:$(DCOMP_PREMAIN_W)=$(DCOMP_ARGS)"
-	$(RUN_JAVA)  \
-	  daikon.DynComp $(DCOMP_ARGS) \
-	  $(MAIN_CLASS) $(MAIN_ARGS)
+	$(RUN_JAVA) daikon.DynComp $(DCOMP_ARGS) $(MAIN_CLASS) $(MAIN_ARGS)
+	$(RUN_JAVA) daikon.DynComp '--ppt-select-pattern=$(INST_FILES)' \
+		--compare-sets-file=$(PROJECT_FILE).txt-cset-nojdk \
+		--decl_file $(PROJECT_FILE).decls-DynComp-nojdk \
+		--trace-sets-file=$(PROJECT_FILE).txt-trace-nojdk \
+		--shiny-print=$(SHINY_PRINT) --no-jdk $(MAIN_CLASS) $(MAIN_ARGS)
 
 else
 dyncomp:
@@ -1055,6 +1061,12 @@ ifeq (generated,$(TRACE_SOURCE))
 	if test -e ${PROJECT_FILE}.txt-cset ; then cp -pf \
 	  $(PROJECT_FILE).txt-cset $(PROJECT_FILE).txt-cset.goal; fi
 	rm -f $(PROJECT_FILE).txt-cset.diff
+	if test -e ${PROJECT_FILE}.decls-DynComp-nojdk ; then cp -pf \
+	  $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).decls-DynComp-nojdk.goal; fi
+	rm -f $(PROJECT_FILE).decls-DynComp-nojdk.diff
+	if test -e ${PROJECT_FILE}.txt-cset-nojdk ; then cp -pf \
+	  $(PROJECT_FILE).txt-cset-nojdk $(PROJECT_FILE).txt-cset-nojdk.goal; fi
+	rm -f $(PROJECT_FILE).txt-cset-nojdk.diff
 	if test -e $(PROJECT_FILE).txt-jaif ; then cp -pf \
 	  $(PROJECT_FILE).txt-jaif $(PROJECT_FILE).txt-jaif.goal; fi
 	rm -f $(PROJECT_FILE).txt-jaif.diff
@@ -1098,6 +1110,12 @@ update-dyncomp-goals:
 	if test -e ${PROJECT_FILE}.txt-cset ; then cp -pf \
 	  $(PROJECT_FILE).txt-cset $(PROJECT_FILE).txt-cset.goal; fi
 	rm -f $(PROJECT_FILE).txt-cset.diff
+	if test -e ${PROJECT_FILE}.decls-DynComp-nojdk ; then cp -pf \
+	  $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).decls-DynComp-nojdk.goal; fi
+	rm -f $(PROJECT_FILE).decls-DynComp-nojdk.diff
+	if test -e ${PROJECT_FILE}.txt-cset-nojdk ; then cp -pf \
+	  $(PROJECT_FILE).txt-cset-nojdk $(PROJECT_FILE).txt-cset-nojdk.goal; fi
+	rm -f $(PROJECT_FILE).txt-cset-nojdk.diff
 
 # dump all invariants in the inv file
 dump: ${INV_FILE}

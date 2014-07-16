@@ -1,0 +1,117 @@
+
+Variable sets for MapQuick1.StreetNumberSet.<init>(java.lang.String numbers) enter
+  [1] [Parameter numbers]
+  [1] [String numbers.toString]
+Variable sets for MapQuick1.StreetNumberSet.<init>(java.lang.String numbers) exit
+  [1] [Parameter numbers]
+  [1] [String numbers.toString]
+  [1] [this]
+  [2] [Field begins, Field ends]
+  [2] [Array Field begins[..], Array Field ends[..]]
+
+Variable sets for MapQuick1.StreetNumberSet.parityOf(int i) enter
+  [1] [Parameter i]
+Variable sets for MapQuick1.StreetNumberSet.parityOf(int i) exit
+  [2] [Parameter i, return]
+
+Variable sets for MapQuick1.StreetNumberSet.checkRep() enter
+  [1] [this]
+  [2] [Field begins, Field ends]
+  [2] [Array Field begins[..], Array Field ends[..]]
+Variable sets for MapQuick1.StreetNumberSet.checkRep() exit
+  [1] [this]
+  [2] [Field begins, Field ends]
+  [2] [Array Field begins[..], Array Field ends[..]]
+
+Variable sets for MapQuick1.StreetNumberSet.contains(int n) enter
+  [3] [Parameter n, Array Field begins[..], Array Field ends[..]]
+  [1] [this]
+  [2] [Field begins, Field ends]
+Variable sets for MapQuick1.StreetNumberSet.contains(int n) exit
+  [3] [Parameter n, Array Field begins[..], Array Field ends[..]]
+  [1] [return]
+  [1] [this]
+  [2] [Field begins, Field ends]
+
+Variable sets for MapQuick1.StreetNumberSet.orderStatistic(int n) enter
+  [3] [Parameter n, Array Field begins[..], Array Field ends[..]]
+  [1] [this]
+  [2] [Field begins, Field ends]
+Variable sets for MapQuick1.StreetNumberSet.orderStatistic(int n) exit
+  [4] [Parameter n, return, Array Field begins[..], Array Field ends[..]]
+  [1] [this]
+  [2] [Field begins, Field ends]
+
+Variable sets for MapQuick1.StreetNumberSet.size() enter
+  [1] [this]
+  [2] [Field begins, Field ends]
+  [2] [Array Field begins[..], Array Field ends[..]]
+Variable sets for MapQuick1.StreetNumberSet.size() exit
+  [3] [return, Array Field begins[..], Array Field ends[..]]
+  [1] [this]
+  [2] [Field begins, Field ends]
+
+Variable sets for MapQuick1.StreetNumberSet.isEmpty() enter
+  [1] [this]
+  [2] [Field begins, Field ends]
+  [2] [Array Field begins[..], Array Field ends[..]]
+Variable sets for MapQuick1.StreetNumberSet.isEmpty() exit
+  [1] [return]
+  [1] [this]
+  [2] [Field begins, Field ends]
+  [2] [Array Field begins[..], Array Field ends[..]]
+
+Variable sets for MapQuick1.StreetNumberSet.min() enter
+  [1] [this]
+  [2] [Field begins, Field ends]
+  [2] [Array Field begins[..], Array Field ends[..]]
+Variable sets for MapQuick1.StreetNumberSet.min() exit
+  [3] [return, Array Field begins[..], Array Field ends[..]]
+  [1] [this]
+  [2] [Field begins, Field ends]
+
+Variable sets for MapQuick1.StreetNumberSet.max() enter
+  [1] [this]
+  [2] [Field begins, Field ends]
+  [2] [Array Field begins[..], Array Field ends[..]]
+Variable sets for MapQuick1.StreetNumberSet.max() exit
+  [3] [return, Array Field begins[..], Array Field ends[..]]
+  [1] [this]
+  [2] [Field begins, Field ends]
+
+Variable sets for MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet other) enter
+  [2] [Parameter other, this]
+  [4] [Field other.begins, Field other.ends, Field begins, Field ends]
+  [4] [Array other.begins[..], Array other.ends[..], Array Field begins[..], Array Field ends[..]]
+Variable sets for MapQuick1.StreetNumberSet.intersects(MapQuick1.StreetNumberSet other) exit
+  [2] [Parameter other, this]
+  [4] [Field other.begins, Field other.ends, Field begins, Field ends]
+  [4] [Array other.begins[..], Array other.ends[..], Array Field begins[..], Array Field ends[..]]
+  [1] [return]
+
+Variable sets for MapQuick1.StreetNumberSet.equals(java.lang.Object o) enter
+  [2] [Parameter o, this]
+  [1] [Class of o]
+  [2] [Field begins, Field ends]
+  [2] [Array Field begins[..], Array Field ends[..]]
+Variable sets for MapQuick1.StreetNumberSet.equals(java.lang.Object o) exit
+  [2] [Parameter o, this]
+  [1] [Class of o]
+  [1] [return]
+  [2] [Field begins, Field ends]
+  [2] [Array Field begins[..], Array Field ends[..]]
+
+Variable sets for MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet other) enter
+  [2] [Parameter other, this]
+  [4] [Field other.begins, Field other.ends, Field begins, Field ends]
+  [4] [Array other.begins[..], Array other.ends[..], Array Field begins[..], Array Field ends[..]]
+Variable sets for MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet other) exit
+  [2] [Parameter other, this]
+  [4] [Field other.begins, Field other.ends, Field begins, Field ends]
+  [4] [Array other.begins[..], Array other.ends[..], Array Field begins[..], Array Field ends[..]]
+  [1] [return]
+
+Variable sets for MapQuick1.StreetNumberSet.hashCode() enter
+  not called
+Variable sets for MapQuick1.StreetNumberSet.hashCode() exit
+  not called

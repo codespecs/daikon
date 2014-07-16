@@ -1,0 +1,118 @@
+
+Variable sets for DataStructures.QueueAr.<init>(int capacity) enter
+  [1] [Parameter capacity]
+Variable sets for DataStructures.QueueAr.<init>(int capacity) exit
+  [3] [Parameter capacity, Field back, Field theArray]
+  [1] [this]
+  [1] [Field currentSize]
+  [1] [Field front]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+
+Variable sets for DataStructures.QueueAr.isEmpty() enter
+  [1] [this]
+  [4] [Field back, Field currentSize, Field front, Field theArray]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+Variable sets for DataStructures.QueueAr.isEmpty() exit
+  [1] [return]
+  [1] [this]
+  [4] [Field back, Field currentSize, Field front, Field theArray]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+
+Variable sets for DataStructures.QueueAr.isFull() enter
+  [1] [this]
+  [4] [Field back, Field currentSize, Field front, Field theArray]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+Variable sets for DataStructures.QueueAr.isFull() exit
+  [1] [return]
+  [1] [this]
+  [4] [Field back, Field currentSize, Field front, Field theArray]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+
+Variable sets for DataStructures.QueueAr.makeEmpty() enter
+  [1] [this]
+  [4] [Field back, Field currentSize, Field front, Field theArray]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+Variable sets for DataStructures.QueueAr.makeEmpty() exit
+  [1] [this]
+  [2] [Field back, Field theArray]
+  [1] [Field currentSize]
+  [1] [Field front]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+
+Variable sets for DataStructures.QueueAr.getFront() enter
+  [1] [this]
+  [4] [Field back, Field currentSize, Field front, Field theArray]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+Variable sets for DataStructures.QueueAr.getFront() exit
+  [2] [return, Array Field theArray[..]]
+  [1] [Class of return]
+  [1] [this]
+  [4] [Field back, Field currentSize, Field front, Field theArray]
+  [1] [Class of Field theArray]
+  [1] [Class of Field theArray[..]]
+
+Variable sets for DataStructures.QueueAr.dequeue() enter
+  [1] [this]
+  [4] [Field back, Field currentSize, Field front, Field theArray]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+Variable sets for DataStructures.QueueAr.dequeue() exit
+  [1] [return]
+  [1] [Class of return]
+  [1] [this]
+  [4] [Field back, Field currentSize, Field front, Field theArray]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+
+Variable sets for DataStructures.QueueAr.enqueue(java.lang.Object x) enter
+  [1] [this]
+  [4] [Field back, Field currentSize, Field front, Field theArray]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+  [1] [Parameter x]
+  [1] [Class of x]
+Variable sets for DataStructures.QueueAr.enqueue(java.lang.Object x) exit
+  [1] [this]
+  [4] [Field back, Field currentSize, Field front, Field theArray]
+  [1] [Class of Field theArray]
+  [2] [Array Field theArray[..], Parameter x]
+  [1] [Class of Field theArray[..]]
+  [1] [Class of x]
+
+Variable sets for DataStructures.QueueAr.dequeueAll() enter
+  [1] [this]
+  [4] [Field back, Field currentSize, Field front, Field theArray]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+Variable sets for DataStructures.QueueAr.dequeueAll() exit
+  [1] [this]
+  [3] [Field back, Field currentSize, Field theArray]
+  [1] [Field front]
+  [1] [Class of Field theArray]
+  [1] [Array Field theArray[..]]
+  [1] [Class of Field theArray[..]]
+
+Variable sets for DataStructures.QueueAr.equals(java.lang.Object obj) enter
+  not called
+Variable sets for DataStructures.QueueAr.equals(java.lang.Object obj) exit
+  not called

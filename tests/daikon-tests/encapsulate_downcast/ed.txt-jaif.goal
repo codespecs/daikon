@@ -7,6 +7,7 @@ class EncapsulateDowncast : // 0/130 obj/class samples
   field CASES :  // int
   field SEED :  // int
   field random :  // java.util.Random
+  field random2 :  // java.util.Random
   method main([Ljava/lang/String;)V : // 1 samples
     return: 
     parameter #0 :  // argv
@@ -18,11 +19,11 @@ class EncapsulateDowncast : // 0/130 obj/class samples
 
 
 package misc:
-class Person : // 662/- obj/class samples
+class Person : // 609/- obj/class samples
   field _name :  // java.lang.String
   field _height :  // int
   field _weight :  // int
-  method <init>(Ljava/lang/String;II)V : // 662 samples
+  method <init>(Ljava/lang/String;II)V : // 609 samples
     return: 
     parameter #0 :  // name
     parameter #1 :  // height

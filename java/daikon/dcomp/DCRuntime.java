@@ -60,16 +60,16 @@ public final class DCRuntime {
   public static Object method_marker = new Object();
 
   // Control debug printing
-  public static final boolean debug = false;
-  public static final boolean debug_tag_frame = false;
-  public static final boolean debug_objects = false;
-  public static final SimpleLog merge_dv = new SimpleLog (false);
-  public static final SimpleLog debug_arr_index = new SimpleLog(false);
-  public static final SimpleLog debug_primitive = new SimpleLog (false);
-  public static final SimpleLog debug_merge_comp = new SimpleLog (false);
-  public static final SimpleLog debug_timing = new SimpleLog (false);
-  public static final SimpleLog debug_decl_print = new SimpleLog (false);
-  public static final SimpleLog time_decl = new SimpleLog (false);
+  public static boolean debug = false;
+  public static boolean debug_tag_frame = false;
+  public static boolean debug_objects = false;
+  public static SimpleLog merge_dv = new SimpleLog (false);
+  public static SimpleLog debug_arr_index = new SimpleLog(false);
+  public static SimpleLog debug_primitive = new SimpleLog (false);
+  public static SimpleLog debug_merge_comp = new SimpleLog (false);
+  public static SimpleLog debug_timing = new SimpleLog (false);
+  public static SimpleLog debug_decl_print = new SimpleLog (false);
+  public static SimpleLog time_decl = new SimpleLog (false);
   public static final SimpleLog debug_df = new SimpleLog (false);
   public static final SimpleLog debug_df_branch = new SimpleLog (false, true);
 
@@ -178,6 +178,19 @@ public final class DCRuntime {
 
   /** Perform any initialization required before instrumentation begins **/
   public static void init() {
+  
+    if (Premain.debug_dcruntime) {
+        debug = true;
+        debug_tag_frame = true;
+        debug_objects = true;
+        merge_dv = new SimpleLog (true);
+        debug_arr_index = new SimpleLog(true);
+        debug_primitive = new SimpleLog (true);
+        debug_merge_comp = new SimpleLog (true);
+        debug_timing = new SimpleLog (true);
+        debug_decl_print = new SimpleLog (true);
+        time_decl = new SimpleLog (true);
+    }
 
     // Initialize the array of static tags
     ((ArrayList</*@Nullable*/ Object>)static_tags).ensureCapacity(max_jdk_static);
@@ -186,6 +199,18 @@ public final class DCRuntime {
 
   }
 
+  public static void debug_print_call_stack() {
+    if (!debug) return;  
+
+    StackTraceElement[] stack_trace;
+    stack_trace = Thread.currentThread().getStackTrace();
+    // [0] is getStackTrace
+    // [1] is debug_print_call_stack
+    for (int i = 2; i < stack_trace.length; i++) {
+        System.out.printf("call stack: %s%n", stack_trace[i]);
+    }
+    System.out.println();
+  }
 
   /**
    * Handles calls to instrumented equals() methods.
@@ -573,6 +598,8 @@ public final class DCRuntime {
    * @return the allocated and initialized tag frame
    */
   public static Object[] create_tag_frame (String params) {
+    if (debug)
+      System.out.printf ("%nEnter: %s%n", caller_name());
 
     int frame_size = ((int)params.charAt(0)) - '0';
       //Character.digit (params.charAt(0), Character.MAX_RADIX);
@@ -594,6 +621,8 @@ public final class DCRuntime {
     // the parameters
     tag_stack.push (method_marker);
 
+    //debug_print_call_stack();
+
     return (tag_frame);
   }
 
@@ -605,7 +634,7 @@ public final class DCRuntime {
     Object top = tag_stack.pop();
     assert top == method_marker;
     if (debug)
-      System.out.printf ("Normal exit ok%n");
+      System.out.printf ("Normal exit from %s%n%n", caller_name());
   }
 
   /**
@@ -620,7 +649,7 @@ public final class DCRuntime {
     Object top = tag_stack.pop();
     assert top == method_marker;
     if (debug)
-      System.out.printf ("Normal exit primitive ok%n");
+      System.out.printf ("Normal exit primitive from %s%n%n", caller_name());
     tag_stack.push (ret_tag);
   }
 
@@ -781,11 +810,25 @@ public final class DCRuntime {
   }
 
   /**
+   * The JVM uses bastore for both boolean and byte data types.  
+   * With the addition of StackMap verification in Java7 we can
+   * no longer use the same runtime routine for both data types.
+   * Hence, the addition of zastore below for boolean.
+   *
    * Execute an bastore instruction and manipulate the tags accordingly.
    * The tag at the top of stack is stored into the tag storage for the
    * array.
    */
   public static void bastore (byte[] arr, int index, byte val) {
+
+    // Store the tag for val in the tag storage for array and mark
+    // the array and the index as comparable.
+    primitive_array_store (arr, arr.length, index);
+
+    // Execute the array store
+    arr[index] = val;
+  }
+  public static void zastore (boolean[] arr, int index, boolean val) {
 
     // Store the tag for val in the tag storage for array and mark
     // the array and the index as comparable.
@@ -2647,7 +2690,7 @@ public final class DCRuntime {
     assert tag != null : "Object " +obj.getClass() + " '"+ obj
       + "' field_num " + field_num;
     obj_tags[field_num] = tag;
-    debug_primitive.log ("pop_field_tag (%s [%s] %d = %s%n", obj,
+    debug_primitive.log ("pop_field_tag (%s [%s] %d = %s%n", obj.getClass(),
                    obj.getClass().getName(), field_num, obj_tags[field_num]);
 
   }
@@ -2873,6 +2916,8 @@ public final class DCRuntime {
     Object tag = new Constant();
     debug_primitive.log ("pushing literal constant %s%n", tag);
     tag_stack.push (tag);
+
+    //debug_print_call_stack();
   }
 
   /**

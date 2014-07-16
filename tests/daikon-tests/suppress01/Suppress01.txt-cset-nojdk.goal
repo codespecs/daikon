@@ -1,0 +1,34 @@
+
+Variable sets for misc.Suppress01.main([Ljava.lang.String; args) enter
+  [1] [Parameter args]
+  [1] [Class of args]
+  [1] [Array args[..]]
+  [1] [String args[..].toString]
+Variable sets for misc.Suppress01.main([Ljava.lang.String; args) exit
+  [1] [Parameter args]
+  [1] [Class of args]
+  [1] [Array args[..]]
+  [1] [String args[..].toString]
+
+Variable sets for misc.Suppress01.f() enter
+  [1] [this]
+  [1] [Field b]
+  [4] [Field theArray, Field theArray2, Array Field theArray2[..], Array Field theArray[..]]
+Variable sets for misc.Suppress01.f() exit
+  [1] [this]
+  [1] [Field b]
+  [4] [Field theArray, Field theArray2, Array Field theArray2[..], Array Field theArray[..]]
+
+Variable sets for misc.Suppress01.<init>() enter
+Variable sets for misc.Suppress01.<init>() exit
+  [1] [this]
+  [1] [Field b]
+  [1] [Field theArray]
+  [1] [Field theArray2]
+  [1] [Array Field theArray2[..]]
+  [1] [Array Field theArray[..]]
+
+Variable sets for misc.Suppress01.equals(java.lang.Object obj) enter
+  not called
+Variable sets for misc.Suppress01.equals(java.lang.Object obj) exit
+  not called
