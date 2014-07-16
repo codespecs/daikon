@@ -339,6 +339,8 @@ staging: doc/CHANGES
 	chmod -R +w $(STAGING_DIR)
 	chmod +w $(STAGING_DIR)/..
 	/bin/rm -rf $(STAGING_DIR)
+    # dummy history directory to remove checklink warnings
+	install -d $(STAGING_DIR)/history
 	install -d $(STAGING_DIR)/download
 	# Build the main tarfile for daikon
 	@echo "]2;Building daikon.tar"
@@ -383,7 +385,8 @@ staging: doc/CHANGES
 staging-to-www: $(STAGING_DIR)
 #copy the files
 	chmod -R u+w,g+w $(WWW_DIR)
-	(cd $(STAGING_DIR) && tar cf - .) | (cd $(WWW_DIR) && tar xfBp -)
+# don't trash existing history directory
+	(cd $(STAGING_DIR) && tar cf - --exclude=history .) | (cd $(WWW_DIR) && tar xfBp -)
 	chmod -R u-w,g-w $(WWW_DIR)
 	@echo "**Update the dates and sizes in the various index files**"
 # need to allow write so html-update can update	
