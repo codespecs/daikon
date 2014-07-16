@@ -25,6 +25,7 @@ public class EncapsulateDowncast {
     static final int SEED = 327;
 
     static Random random = new Random(SEED);
+    static Random random2 = new Random(SEED);
 
     static void showLastPerson(Vector list) {
 	    Person last = (Person)list.lastElement();
@@ -42,7 +43,7 @@ public class EncapsulateDowncast {
 		 j++) {
 		String name = "name" + j;
 		int height = random.nextInt(12);
-		int weight = random.nextInt(100) + 100;
+		int weight = random2.nextInt(100) + 100;
 		Person person = new Person(name, height, weight);
 		list.addElement(person);
 	    }

@@ -1,0 +1,143 @@
+
+Variable sets for DataStructures.BinarySearchTree.<init>() enter
+Variable sets for DataStructures.BinarySearchTree.<init>() exit
+  [1] [this]
+  [1] [Field root]
+
+Variable sets for DataStructures.BinarySearchTree.insert(DataStructures.Comparable x) enter
+  [1] [this]
+  [1] [Field root]
+  [1] [Parameter x]
+  [1] [Class of x]
+Variable sets for DataStructures.BinarySearchTree.insert(DataStructures.Comparable x) exit
+  [1] [this]
+  [1] [Field root]
+  [1] [Parameter x]
+  [1] [Class of x]
+
+Variable sets for DataStructures.BinarySearchTree.remove(DataStructures.Comparable x) enter
+  [1] [this]
+  [1] [Field root]
+  [1] [Parameter x]
+  [1] [Class of x]
+Variable sets for DataStructures.BinarySearchTree.remove(DataStructures.Comparable x) exit
+  [1] [this]
+  [1] [Field root]
+  [1] [Parameter x]
+  [1] [Class of x]
+
+Variable sets for DataStructures.BinarySearchTree.findMin() enter
+  [1] [this]
+  [1] [Field root]
+Variable sets for DataStructures.BinarySearchTree.findMin() exit
+  [1] [return]
+  [1] [Class of return]
+  [1] [this]
+  [1] [Field root]
+
+Variable sets for DataStructures.BinarySearchTree.findMax() enter
+  [1] [this]
+  [1] [Field root]
+Variable sets for DataStructures.BinarySearchTree.findMax() exit
+  [1] [return]
+  [1] [Class of return]
+  [1] [this]
+  [1] [Field root]
+
+Variable sets for DataStructures.BinarySearchTree.find(DataStructures.Comparable x) enter
+  [1] [this]
+  [1] [Field root]
+  [1] [Parameter x]
+  [1] [Class of x]
+Variable sets for DataStructures.BinarySearchTree.find(DataStructures.Comparable x) exit
+  [2] [return, Parameter x]
+  [1] [Class of return]
+  [1] [this]
+  [1] [Field root]
+  [1] [Class of x]
+
+Variable sets for DataStructures.BinarySearchTree.makeEmpty() enter
+  [1] [this]
+  [1] [Field root]
+Variable sets for DataStructures.BinarySearchTree.makeEmpty() exit
+  [1] [this]
+  [1] [Field root]
+
+Variable sets for DataStructures.BinarySearchTree.isEmpty() enter
+  [1] [this]
+  [1] [Field root]
+Variable sets for DataStructures.BinarySearchTree.isEmpty() exit
+  [1] [return]
+  [1] [this]
+  [1] [Field root]
+
+Variable sets for DataStructures.BinarySearchTree.printTree() enter
+  not called
+Variable sets for DataStructures.BinarySearchTree.printTree() exit
+  not called
+
+Variable sets for DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode t) enter
+  [2] [Parameter t, Field root]
+  [1] [this]
+Variable sets for DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode t) exit
+  [1] [return]
+  [1] [Class of return]
+  [2] [Parameter t, Field root]
+  [1] [this]
+
+Variable sets for DataStructures.BinarySearchTree.insert(DataStructures.Comparable x, DataStructures.BinaryNode t) enter
+  [2] [Parameter t, Field root]
+  [1] [this]
+  [1] [Parameter x]
+  [1] [Class of x]
+Variable sets for DataStructures.BinarySearchTree.insert(DataStructures.Comparable x, DataStructures.BinaryNode t) exit
+  [3] [return, Parameter t, Field root]
+  [1] [this]
+  [1] [Parameter x]
+  [1] [Class of x]
+
+Variable sets for DataStructures.BinarySearchTree.remove(DataStructures.Comparable x, DataStructures.BinaryNode t) enter
+  [2] [Parameter t, Field root]
+  [1] [this]
+  [1] [Parameter x]
+  [1] [Class of x]
+Variable sets for DataStructures.BinarySearchTree.remove(DataStructures.Comparable x, DataStructures.BinaryNode t) exit
+  [3] [return, Parameter t, Field root]
+  [1] [this]
+  [1] [Parameter x]
+  [1] [Class of x]
+
+Variable sets for DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode t) enter
+  [2] [Parameter t, Field root]
+  [1] [this]
+Variable sets for DataStructures.BinarySearchTree.findMin(DataStructures.BinaryNode t) exit
+  [3] [return, Parameter t, Field root]
+  [1] [this]
+
+Variable sets for DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode t) enter
+  [2] [Parameter t, Field root]
+  [1] [this]
+Variable sets for DataStructures.BinarySearchTree.findMax(DataStructures.BinaryNode t) exit
+  [3] [return, Parameter t, Field root]
+  [1] [this]
+
+Variable sets for DataStructures.BinarySearchTree.find(DataStructures.Comparable x, DataStructures.BinaryNode t) enter
+  [2] [Parameter t, Field root]
+  [1] [this]
+  [1] [Parameter x]
+  [1] [Class of x]
+Variable sets for DataStructures.BinarySearchTree.find(DataStructures.Comparable x, DataStructures.BinaryNode t) exit
+  [3] [return, Parameter t, Field root]
+  [1] [this]
+  [1] [Parameter x]
+  [1] [Class of x]
+
+Variable sets for DataStructures.BinarySearchTree.printTree(DataStructures.BinaryNode t) enter
+  not called
+Variable sets for DataStructures.BinarySearchTree.printTree(DataStructures.BinaryNode t) exit
+  not called
+
+Variable sets for DataStructures.BinarySearchTree.equals(java.lang.Object obj) enter
+  not called
+Variable sets for DataStructures.BinarySearchTree.equals(java.lang.Object obj) exit
+  not called
