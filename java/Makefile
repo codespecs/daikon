@@ -513,7 +513,7 @@ chicory-test : ChicoryPremain.jar
 #
 # Dynamic Comparability (DynComp/Java)
 #
-DCOMP_JAVA_FILES := daikon/dcomp/*java daikon/chicory/*.java daikon/util/*.java
+DCOMP_JAVA_FILES := daikon/DynComp.java daikon/dcomp/*.java daikon/chicory/*.java daikon/util/*.java
 DCOMP_ARGS := --ppt-select-pattern=daikon.dcomp.Test
 ORIG_RT ?= $(JAVA_HOME)/jre/lib/rt.jar
 DCOMP_DIR := daikon/dcomp
