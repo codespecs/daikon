@@ -462,6 +462,8 @@ syntax: regexp
 ^tests/.*\.txt-chicory\.dtrace\.bak$
 ^tests/.*\.txt-cset$
 ^tests/.*\.txt-cset\.diff$
+^tests/.*\.txt-cset-nojdk$
+^tests/.*\.txt-cset-nojdk\.diff$
 ^tests/.*\.txt-csharpcontract$
 ^tests/.*\.txt-csharpcontract-failed$
 ^tests/.*\.txt-csharpcontract\.diff$
@@ -480,6 +482,7 @@ syntax: regexp
 ^tests/.*\.txt-simplify$
 ^tests/.*\.txt-simplify\.diff$
 ^tests/.*\.txt-trace$
+^tests/.*\.txt-trace-nojdk$
 ^tests/diff-tests/schedule2/schedule2.*\.map$
 ^tests/diff-tests/schedule2/schedule2.*\.txt$
 ^tests/chicory-tests/option-tests/.*\.txt$
