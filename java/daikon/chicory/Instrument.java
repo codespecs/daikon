@@ -255,8 +255,10 @@ public class Instrument implements ClassFileTransformer {
 
 
       JavaClass njc = cg.getJavaClass();
-      if (debug)
+      if (debug) {
+        System.out.printf ("Dumping %s to %s%n", njc.getClassName(), "/tmp/ret/");    
         njc.dump ("/tmp/ret/" + njc.getClassName() + ".class");
+      }  
 
       if (c_info.shouldInclude) {
         // System.out.println ("Instrumented class " + className);

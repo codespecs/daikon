@@ -94,6 +94,8 @@ public class Runtime
     /** True if no dtrace is being generated.  **/
     static boolean no_dtrace = false;
 
+    static String method_indent = "";
+
     /** Decl writer setup for writing to the trace file **/
     // Set in ChicoryPremain.premain().
     static DeclWriter decl_writer;
@@ -225,6 +227,12 @@ public class Runtime
     public static synchronized void enter(/*@Nullable*/ Object obj, int nonce, int mi_index,
                                           Object[] args) {
 
+      if (debug) {
+          MethodInfo mi = methods.get(mi_index);
+          System.out.printf("%smethod_entry %s.%s%n", method_indent, mi.class_info.class_name, mi.method_name);
+          method_indent = method_indent.concat("  ");
+      }
+
       if (dontProcessPpts())
         return;
 
@@ -299,6 +307,13 @@ public class Runtime
      */
     public static synchronized void exit(/*@Nullable*/ Object obj, int nonce, int mi_index,
                             Object[] args, Object ret_val, int exitLineNum) {
+      
+      if (debug) {
+          MethodInfo mi = methods.get(mi_index);
+          method_indent = method_indent.substring(2);
+          System.out.printf("%smethod_exit  %s.%s%n", method_indent, mi.class_info.class_name, mi.method_name);
+      }
+
       if (dontProcessPpts())
         return;
 
