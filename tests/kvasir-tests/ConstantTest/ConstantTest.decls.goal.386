@@ -4,16 +4,32 @@ var-comparability none
 
 ppt ..main():::ENTER
   ppt-type enter
+  variable ::__numeric_traits_integer<char>::__max
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::__numeric_traits_integer<int>::__min
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::__numeric_traits_integer<short>::__max
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<short>::__min
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<unsigned\_long>::__digits
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::global_const
     var-kind variable
     rep-type int
     dec-type int
   variable ::static_const
     var-kind variable
-    rep-type int
-    dec-type int
-  variable A::static_const_member
-    var-kind field A::static_const_member
     rep-type int
     dec-type int
   variable argc
@@ -35,16 +51,32 @@ ppt ..main():::ENTER
 
 ppt ..main():::EXIT0
   ppt-type subexit
+  variable ::__numeric_traits_integer<char>::__max
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::__numeric_traits_integer<int>::__min
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::__numeric_traits_integer<short>::__max
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<short>::__min
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<unsigned\_long>::__digits
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::global_const
     var-kind variable
     rep-type int
     dec-type int
   variable ::static_const
     var-kind variable
-    rep-type int
-    dec-type int
-  variable A::static_const_member
-    var-kind field A::static_const_member
     rep-type int
     dec-type int
   variable argc
@@ -70,16 +102,32 @@ ppt ..main():::EXIT0
 
 ppt A.A():::ENTER
   ppt-type enter
+  variable ::__numeric_traits_integer<char>::__max
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::__numeric_traits_integer<int>::__min
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::__numeric_traits_integer<short>::__max
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<short>::__min
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<unsigned\_long>::__digits
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::global_const
     var-kind variable
     rep-type int
     dec-type int
   variable ::static_const
     var-kind variable
-    rep-type int
-    dec-type int
-  variable A::static_const_member
-    var-kind field A::static_const_member
     rep-type int
     dec-type int
   variable this
@@ -95,16 +143,32 @@ ppt A.A():::ENTER
 
 ppt A.A():::EXIT0
   ppt-type subexit
+  variable ::__numeric_traits_integer<char>::__max
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::__numeric_traits_integer<int>::__min
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::__numeric_traits_integer<short>::__max
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<short>::__min
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<unsigned\_long>::__digits
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::global_const
     var-kind variable
     rep-type int
     dec-type int
   variable ::static_const
     var-kind variable
-    rep-type int
-    dec-type int
-  variable A::static_const_member
-    var-kind field A::static_const_member
     rep-type int
     dec-type int
   variable this
@@ -120,16 +184,32 @@ ppt A.A():::EXIT0
 
 ppt A.getInt():::ENTER
   ppt-type enter
+  variable ::__numeric_traits_integer<char>::__max
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::__numeric_traits_integer<int>::__min
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::__numeric_traits_integer<short>::__max
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<short>::__min
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<unsigned\_long>::__digits
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::global_const
     var-kind variable
     rep-type int
     dec-type int
   variable ::static_const
     var-kind variable
-    rep-type int
-    dec-type int
-  variable A::static_const_member
-    var-kind field A::static_const_member
     rep-type int
     dec-type int
   variable this
@@ -145,16 +225,32 @@ ppt A.getInt():::ENTER
 
 ppt A.getInt():::EXIT0
   ppt-type subexit
+  variable ::__numeric_traits_integer<char>::__max
+    var-kind variable
+    rep-type int
+    dec-type char
+  variable ::__numeric_traits_integer<int>::__min
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::__numeric_traits_integer<short>::__max
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<short>::__min
+    var-kind variable
+    rep-type int
+    dec-type short
+  variable ::__numeric_traits_integer<unsigned\_long>::__digits
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::global_const
     var-kind variable
     rep-type int
     dec-type int
   variable ::static_const
     var-kind variable
-    rep-type int
-    dec-type int
-  variable A::static_const_member
-    var-kind field A::static_const_member
     rep-type int
     dec-type int
   variable return
