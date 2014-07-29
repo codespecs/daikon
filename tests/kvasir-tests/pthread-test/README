@@ -1,0 +1,4 @@
+This test creates and runs two threads.  There may or may not be 
+diffs in the .dtrace and .out files depending on the order the
+threads are run.  If there are diffs, you should verify that
+it is just ther order of Thread 1 and Thread 2.

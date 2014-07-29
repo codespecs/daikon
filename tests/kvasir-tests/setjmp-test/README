@@ -1,0 +1,4 @@
+This test uses the 'C' runtime routines setjump and longjmp.  Their
+implementation includes a buffer to save and restore program state.
+The contents of this buffer vary from run to run.  We use COUNTS_ONLY 
+in the Makefile to suppress the .dtrace and .invs results.

@@ -54,15 +54,18 @@
 ::populationPtr[..]
 ::populationPtr[..].SS
 ::populationPtr[..].age
-::populationPtr[..].firstName ::population[..].firstName
-::populationPtr[..].lastName ::population[..].lastName
+::populationPtr[..].firstName
+::populationPtr[..].lastName
 ::populationPtr[..].mallocMePlease
-::populationPtr[..].middleName ::population[..].middleName
+::populationPtr[..].middleName
 ::populationPtr[..].weight ::population[..].weight
 ::population[..]
 ::population[..].SS
 ::population[..].age
+::population[..].firstName
+::population[..].lastName
 ::population[..].mallocMePlease
+::population[..].middleName
 
 ..main():::EXIT0
 ::abracadabra ::abracadabra.social_security[..]
@@ -120,15 +123,18 @@
 ::populationPtr[..]
 ::populationPtr[..].SS
 ::populationPtr[..].age
-::populationPtr[..].firstName ::population[..].firstName
-::populationPtr[..].lastName ::population[..].lastName
+::populationPtr[..].firstName
+::populationPtr[..].lastName
 ::populationPtr[..].mallocMePlease
-::populationPtr[..].middleName ::population[..].middleName
+::populationPtr[..].middleName
 ::populationPtr[..].weight ::population[..].weight
 ::population[..]
 ::population[..].SS
 ::population[..].age
+::population[..].firstName
+::population[..].lastName
 ::population[..].mallocMePlease
+::population[..].middleName
 return
 
 ..structTester():::ENTER
@@ -446,15 +452,18 @@ ArrayTest.c.returnIntSum():::ENTER
 ::populationPtr[..]
 ::populationPtr[..].SS
 ::populationPtr[..].age
-::populationPtr[..].firstName ::population[..].firstName
-::populationPtr[..].lastName ::population[..].lastName
+::populationPtr[..].firstName
+::populationPtr[..].lastName
 ::populationPtr[..].mallocMePlease
-::populationPtr[..].middleName ::population[..].middleName
+::populationPtr[..].middleName
 ::populationPtr[..].weight ::population[..].weight
 ::population[..]
 ::population[..].SS
 ::population[..].age
+::population[..].firstName
+::population[..].lastName
 ::population[..].mallocMePlease
+::population[..].middleName
 ::static_local_array
 ::static_local_array[..]
 a b[..]
@@ -516,15 +525,18 @@ ArrayTest.c.returnIntSum():::EXIT0
 ::populationPtr[..]
 ::populationPtr[..].SS
 ::populationPtr[..].age
-::populationPtr[..].firstName ::population[..].firstName
-::populationPtr[..].lastName ::population[..].lastName
+::populationPtr[..].firstName
+::populationPtr[..].lastName
 ::populationPtr[..].mallocMePlease
-::populationPtr[..].middleName ::population[..].middleName
+::populationPtr[..].middleName
 ::populationPtr[..].weight ::population[..].weight
 ::population[..]
 ::population[..].SS
 ::population[..].age
+::population[..].firstName
+::population[..].lastName
 ::population[..].mallocMePlease
+::population[..].middleName
 ::static_local_array
 ::static_local_array[..]
 a b[..] return

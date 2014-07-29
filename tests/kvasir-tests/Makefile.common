@@ -176,28 +176,24 @@ ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) 
 else
 ran-kvasir: $(NAME) $(KVASIR_SCRIPT) $(VALGRIND) $(KVASIR_SKIN) $(CLEAN_OUTPUT) $(CLEAN_DECLS)
 	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --program-stdout='&2' --program-stderr='&2' --dtrace-file=- ./$(NAME) $(PROGRAM_ARGS) 2>$(NAME).out | $(DAIKONDIR)/scripts/dtrace-count.pl >$(NAME).counts
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --decls-file=daikon-output/$(NAME).decls ./$(NAME) $(PROGRAM_ARGS) >$(NAME).out 2>&1
+	$(BEFORE_RUN)
+	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --with-dyncomp --decls-only --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
 	$(AFTER_RUN)
 	cat /dev/null $(EXTRA_OUTPUTS) >>$(NAME).out
 	perl -i $(CLEAN_OUTPUT) $(NAME).out
-	perl -i $(CLEAN_DECLS) $(NAME).counts
-	$(BEFORE_RUN)
-	$(KVASIR_SCRIPT) $(KVASIR_OPTIONS) --with-dyncomp --decls-only --decls-file=daikon-output/$(NAME).dyncomp.decls ./$(NAME) $(PROGRAM_ARGS) >/dev/null 2>&1
+	perl -i $(CLEAN_DECLS) daikon-output/$(NAME).decls
 	perl -i $(CLEAN_DECLS) daikon-output/$(NAME).dyncomp.decls
 	$(DECLS_2_COMP) daikon-output/$(NAME).dyncomp.decls > $(NAME).comp
+	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).decls
 	$(SORT_DTRACE_INPLACE) daikon-output/$(NAME).dyncomp.decls
 	touch $@
 endif
 endif
 endif
 
-ifeq ($(COUNTS_ONLY),)
 $(NAME).counts: daikon-output/$(NAME)$(DTRACE_EXT)
 	$(ZCAT) $< | $(DAIKONDIR)/scripts/dtrace-count.pl >$@
-else
-$(NAME).counts: ran-kvasir
-	@
-endif
 
 counts: $(NAME).counts
 
@@ -223,7 +219,7 @@ ifeq ($(COUNTS_ONLY),)
 DIFF_FILES := $(DIFF_NAME).comp.diff $(DIFF_NAME).decls.diff $(DIFF_NAME).dtrace.diff $(DIFF_NAME).counts.diff $(DIFF_NAME).out.diff
 INV_DIFFS := $(DIFF_NAME).invs.diff
 else
-DIFF_FILES := $(DIFF_NAME).comp.diff $(DIFF_NAME).counts.diff $(DIFF_NAME).out.diff
+DIFF_FILES := $(DIFF_NAME).comp.diff $(DIFF_NAME).decls.diff $(DIFF_NAME).counts.diff $(DIFF_NAME).out.diff
 INV_DIFFS :=
 endif
 
@@ -299,7 +295,7 @@ update-comp-goals: $(NAME).comp
 ifeq ($(COUNTS_ONLY),)
 update-goals: update-out-goals update-counts-goals update-decls-goals update-dtrace-goals update-comp-goals update-inv-goals
 else
-update-goals: update-out-goals update-counts-goals update-comp-goals
+update-goals: update-out-goals update-counts-goals update-decls-goals update-comp-goals
 endif
 
 kvasir-DC:
