@@ -1,0 +1,16 @@
+ArrayTest.comp fails (64 bits only) due to the 'multiple struct members
+in a single register' problem.
+This will require a significant amount of work in Kvasir to repair.
+
+The fault is that C.baz_head and bar_head are incorrectly placed
+in the same invariant set.
+
+-::eightA[..].B[1]->C.baz_head
++::eightA[..].B[1]->C.baz_head ::eightA[..].B[1]->bar_head
+-::eightA[..].B[1]->bar_head
+
+Similarly, age and middleName are incorrectly associated.
+
+-::population[..].age
++::population[..].age ::population[..].middleName
+-::population[..].middleName

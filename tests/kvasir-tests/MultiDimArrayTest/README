@@ -1,0 +1,11 @@
+MultiDimArrayTest.comp and MultiDimArrayTest.invs fail (64 bits only)
+due to the 'multiple struct members in a single register' problem.
+This will require a significant amount of work in Kvasir to repair.
+
+The fault is that globalBoo.a and globalBoo.b are incorrectly placed
+in the same invariant set.
+
+-::globalBoo ::globalBoo.a
+-::globalBoo.b
++::globalBoo ::globalBoo.a ::globalBoo.b
+
