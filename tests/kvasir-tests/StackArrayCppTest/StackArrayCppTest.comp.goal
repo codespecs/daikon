@@ -1,35 +1,53 @@
 ..main():::ENTER
-Stack::numStacksCreated
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 
 ..main():::EXIT0
-Stack::numStacksCreated
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 return
 
 Stack.Stack(char*,\_int):::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
-maxSize
-name
+maxSize this->maxElts this->numElts this->stackRep this[0]
+name this->myName
 this
-this->maxElts
-this->myName
-this->numElts
-this->stackRep
 this->stackRep[..]
-this[0]
 
 Stack.Stack(char*,\_int):::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
-maxSize
-name
+maxSize this->maxElts this->numElts this->stackRep this[0]
+name this->myName
 this
-this->maxElts
-this->myName
-this->numElts
-this->stackRep
 this->stackRep[..]
-this[0]
 
 Stack.getMaxElts():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 this
 this->maxElts this->numElts this->stackRep this[0]
@@ -37,6 +55,12 @@ this->myName
 this->stackRep[..]
 
 Stack.getMaxElts():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 return this->maxElts this->numElts this->stackRep this[0]
 this
@@ -44,6 +68,12 @@ this->myName
 this->stackRep[..]
 
 Stack.getName():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 this
 this->maxElts this->numElts this->stackRep this[0]
@@ -51,6 +81,12 @@ this->myName
 this->stackRep[..]
 
 Stack.getName():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 return this->myName
 this
@@ -58,6 +94,12 @@ this->maxElts this->numElts this->stackRep this[0]
 this->stackRep[..]
 
 Stack.getNumElts():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 this
 this->maxElts
@@ -68,6 +110,12 @@ this->stackRep[..]
 this[0]
 
 Stack.getNumElts():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 return
 this
@@ -79,12 +127,30 @@ this->stackRep[..]
 this[0]
 
 Stack.getNumStacksCreated():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 
 Stack.getNumStacksCreated():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated return
 
 Stack.peek():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 this
 this->maxElts
@@ -95,6 +161,12 @@ this->stackRep[..]
 this[0]
 
 Stack.peek():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 return
 this
@@ -106,6 +178,12 @@ this->stackRep[..]
 this[0]
 
 Stack.pop():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 this
 this->maxElts this->numElts this->stackRep this[0]
@@ -113,6 +191,12 @@ this->myName
 this->stackRep[..]
 
 Stack.pop():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 return this->stackRep[..]
 this
@@ -120,6 +204,12 @@ this->maxElts this->numElts this->stackRep this[0]
 this->myName
 
 Stack.privateStuff():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 this
 this->maxElts this->numElts this->stackRep this[0]
@@ -127,6 +217,12 @@ this->myName
 this->stackRep[..]
 
 Stack.privateStuff():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 return
 this
@@ -135,6 +231,12 @@ this->myName
 this->stackRep[..]
 
 Stack.push(int):::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 dat this->stackRep[..]
 this
@@ -142,6 +244,12 @@ this->maxElts this->numElts this->stackRep this[0]
 this->myName
 
 Stack.push(int):::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 dat this->stackRep[..]
 this
@@ -149,24 +257,30 @@ this->maxElts this->numElts this->stackRep this[0]
 this->myName
 
 Stack.~Stack():::ENTER
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 this
-this->maxElts
+this->maxElts this->numElts this->stackRep this[0]
 this->myName
-this->numElts
-this->stackRep
 this->stackRep[..]
-this[0]
 
 Stack.~Stack():::EXIT0
+::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__min
+::__numeric_traits_integer<short>::__max
+::__numeric_traits_integer<short>::__min
+::__numeric_traits_integer<unsigned\_long>::__digits
 Stack::numStacksCreated
 this
-this->maxElts
+this->maxElts this->numElts this->stackRep this[0]
 this->myName
-this->numElts
-this->stackRep
 this->stackRep[..]
-this[0]
 
 Stack:::OBJECT
 
