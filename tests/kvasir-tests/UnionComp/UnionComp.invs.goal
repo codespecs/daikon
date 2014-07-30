@@ -22,11 +22,11 @@
 ::comp_test_ptr[].comp.next[0] elements != null
 ::comp_test_ptr[].not_comp == [825373492]
 ::comp_test_ptr[].zero == [0]
-::comp_test_ptr[] - orig(::comp_test_ptr[]) - 64 == 0
-::comp_test_ptr[].comp - orig(::comp_test_ptr[].comp) - 64 == 0
-::comp_test_ptr[].comp.next - orig(::comp_test_ptr[].comp.next) - 64 == 0
-::comp_test_ptr[].comp.next->next[0] - orig(::comp_test_ptr[].comp.next->next[0]) - 64 == 0
-::comp_test_ptr[].comp.next[0] - orig(::comp_test_ptr[].comp.next[0]) - 64 == 0
+::comp_test_ptr[] - orig(::comp_test_ptr[]) - 80 == 0
+::comp_test_ptr[].comp - orig(::comp_test_ptr[].comp) - 80 == 0
+::comp_test_ptr[].comp.next - orig(::comp_test_ptr[].comp.next) - 80 == 0
+::comp_test_ptr[].comp.next->next[0] - orig(::comp_test_ptr[].comp.next->next[0]) - 80 == 0
+::comp_test_ptr[].comp.next[0] - orig(::comp_test_ptr[].comp.next[0]) - 80 == 0
 ::comp_test_ptr[].not_comp == orig(::comp_test_ptr[].not_comp) (elementwise)
 ::comp_test_ptr[].not_comp is the reverse of orig(::comp_test_ptr[].not_comp)
 ::comp_test_ptr[].zero == orig(::comp_test_ptr[].zero) (elementwise)
@@ -40,7 +40,7 @@
 ::comp_test_ptr has only one value
 ::comp_test_ptr[] contains no nulls and has only one value, of length 1
 ::comp_test_ptr[].comp contains no nulls and has only one value, of length 1
-::comp_test_ptr[].comp.name == [�4321]
+::comp_test_ptr[].comp.name == [ð¯Ã]
 ::comp_test_ptr[].comp.next contains no nulls and has only one value, of length 1
 ::comp_test_ptr[].comp.next->next[0] contains no nulls and has only one value, of length 1
 ::comp_test_ptr[].comp.next[0] contains no nulls and has only one value, of length 1

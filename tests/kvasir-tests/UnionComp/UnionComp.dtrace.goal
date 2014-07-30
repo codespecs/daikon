@@ -89,13 +89,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@ √" ]
+[ "@`√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@ √" ]
+[ "@`√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -126,13 +126,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@ √" ]
+[ "@`√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@ √" ]
+[ "@`√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -163,13 +163,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê √" ]
+[ "ê`√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê √" ]
+[ "ê`√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -200,13 +200,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê √" ]
+[ "ê`√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê √" ]
+[ "ê`√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -237,13 +237,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡ √" ]
+[ "‡`√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡ √" ]
+[ "‡`√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -274,13 +274,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡ √" ]
+[ "‡`√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡ √" ]
+[ "‡`√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -311,13 +311,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0!√" ]
+[ "0a√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0!√" ]
+[ "0a√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -348,13 +348,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0!√" ]
+[ "0a√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0!√" ]
+[ "0a√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -385,13 +385,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä!√" ]
+[ "Äa√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä!√" ]
+[ "Äa√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -422,13 +422,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä!√" ]
+[ "Äa√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä!√" ]
+[ "Äa√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -459,13 +459,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–!√" ]
+[ "–a√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–!√" ]
+[ "–a√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -496,13 +496,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–!√" ]
+[ "–a√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–!√" ]
+[ "–a√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -533,13 +533,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " \"√" ]
+[ " b√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " \"√" ]
+[ " b√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -570,13 +570,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " \"√" ]
+[ " b√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " \"√" ]
+[ " b√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -607,13 +607,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p\"√" ]
+[ "pb√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p\"√" ]
+[ "pb√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -644,13 +644,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p\"√" ]
+[ "pb√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p\"√" ]
+[ "pb√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -681,13 +681,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿\"√" ]
+[ "¿b√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿\"√" ]
+[ "¿b√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -718,13 +718,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿\"√" ]
+[ "¿b√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿\"√" ]
+[ "¿b√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -755,13 +755,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "#√" ]
+[ "c√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "#√" ]
+[ "c√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -792,13 +792,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "#√" ]
+[ "c√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "#√" ]
+[ "c√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -829,13 +829,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`#√" ]
+[ "`c√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`#√" ]
+[ "`c√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -866,13 +866,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`#√" ]
+[ "`c√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`#√" ]
+[ "`c√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -903,13 +903,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞#√" ]
+[ "∞c√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞#√" ]
+[ "∞c√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -940,13 +940,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞#√" ]
+[ "∞c√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞#√" ]
+[ "∞c√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1051,13 +1051,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P$√" ]
+[ "Pd√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P$√" ]
+[ "Pd√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1088,13 +1088,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P$√" ]
+[ "Pd√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P$√" ]
+[ "Pd√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1125,13 +1125,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†$√" ]
+[ "†d√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†$√" ]
+[ "†d√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1162,13 +1162,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†$√" ]
+[ "†d√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†$√" ]
+[ "†d√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1199,13 +1199,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "$√" ]
+[ "d√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "$√" ]
+[ "d√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1236,13 +1236,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "$√" ]
+[ "d√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "$√" ]
+[ "d√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1273,13 +1273,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@%√" ]
+[ "@e√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@%√" ]
+[ "@e√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1310,13 +1310,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@%√" ]
+[ "@e√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@%√" ]
+[ "@e√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1347,13 +1347,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê%√" ]
+[ "êe√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê%√" ]
+[ "êe√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1384,13 +1384,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê%√" ]
+[ "êe√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê%√" ]
+[ "êe√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1421,13 +1421,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡%√" ]
+[ "‡e√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡%√" ]
+[ "‡e√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1458,13 +1458,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡%√" ]
+[ "‡e√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡%√" ]
+[ "‡e√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1495,13 +1495,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0&√" ]
+[ "0f√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0&√" ]
+[ "0f√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1532,13 +1532,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0&√" ]
+[ "0f√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0&√" ]
+[ "0f√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1569,13 +1569,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä&√" ]
+[ "Äf√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä&√" ]
+[ "Äf√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1606,13 +1606,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä&√" ]
+[ "Äf√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä&√" ]
+[ "Äf√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1643,13 +1643,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–&√" ]
+[ "–f√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–&√" ]
+[ "–f√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1680,13 +1680,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–&√" ]
+[ "–f√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–&√" ]
+[ "–f√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1717,13 +1717,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " '√" ]
+[ " g√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " '√" ]
+[ " g√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1754,13 +1754,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " '√" ]
+[ " g√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " '√" ]
+[ " g√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1791,13 +1791,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p'√" ]
+[ "pg√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p'√" ]
+[ "pg√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1828,13 +1828,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p'√" ]
+[ "pg√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p'√" ]
+[ "pg√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1865,13 +1865,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿'√" ]
+[ "¿g√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿'√" ]
+[ "¿g√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1902,13 +1902,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿'√" ]
+[ "¿g√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿'√" ]
+[ "¿g√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1939,13 +1939,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "(√" ]
+[ "h√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "(√" ]
+[ "h√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -1976,13 +1976,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "(√" ]
+[ "h√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "(√" ]
+[ "h√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2013,13 +2013,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`(√" ]
+[ "`h√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`(√" ]
+[ "`h√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2050,13 +2050,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`(√" ]
+[ "`h√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`(√" ]
+[ "`h√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2087,13 +2087,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞(√" ]
+[ "∞h√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞(√" ]
+[ "∞h√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2124,13 +2124,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞(√" ]
+[ "∞h√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞(√" ]
+[ "∞h√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2235,13 +2235,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P)√" ]
+[ "Pi√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P)√" ]
+[ "Pi√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2272,13 +2272,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P)√" ]
+[ "Pi√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P)√" ]
+[ "Pi√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2309,13 +2309,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†)√" ]
+[ "†i√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†)√" ]
+[ "†i√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2346,13 +2346,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†)√" ]
+[ "†i√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†)√" ]
+[ "†i√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2383,13 +2383,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ ")√" ]
+[ "i√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ ")√" ]
+[ "i√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2420,13 +2420,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ ")√" ]
+[ "i√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ ")√" ]
+[ "i√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2457,13 +2457,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@*√" ]
+[ "@j√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@*√" ]
+[ "@j√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2494,13 +2494,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@*√" ]
+[ "@j√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@*√" ]
+[ "@j√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2531,13 +2531,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê*√" ]
+[ "êj√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê*√" ]
+[ "êj√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2568,13 +2568,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê*√" ]
+[ "êj√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê*√" ]
+[ "êj√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2605,13 +2605,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡*√" ]
+[ "‡j√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡*√" ]
+[ "‡j√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2642,13 +2642,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡*√" ]
+[ "‡j√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡*√" ]
+[ "‡j√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2679,13 +2679,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0+√" ]
+[ "0k√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0+√" ]
+[ "0k√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2716,13 +2716,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0+√" ]
+[ "0k√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0+√" ]
+[ "0k√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2753,13 +2753,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä+√" ]
+[ "Äk√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä+√" ]
+[ "Äk√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2790,13 +2790,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä+√" ]
+[ "Äk√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä+√" ]
+[ "Äk√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2827,13 +2827,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–+√" ]
+[ "–k√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–+√" ]
+[ "–k√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2864,13 +2864,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–+√" ]
+[ "–k√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–+√" ]
+[ "–k√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2901,13 +2901,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " ,√" ]
+[ " l√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " ,√" ]
+[ " l√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2938,13 +2938,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " ,√" ]
+[ " l√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " ,√" ]
+[ " l√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -2975,13 +2975,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p,√" ]
+[ "pl√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p,√" ]
+[ "pl√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3012,13 +3012,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p,√" ]
+[ "pl√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p,√" ]
+[ "pl√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3049,13 +3049,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿,√" ]
+[ "¿l√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿,√" ]
+[ "¿l√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3086,13 +3086,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿,√" ]
+[ "¿l√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿,√" ]
+[ "¿l√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3123,13 +3123,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "-√" ]
+[ "m√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "-√" ]
+[ "m√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3160,13 +3160,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "-√" ]
+[ "m√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "-√" ]
+[ "m√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3197,13 +3197,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`-√" ]
+[ "`m√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`-√" ]
+[ "`m√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3234,13 +3234,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`-√" ]
+[ "`m√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`-√" ]
+[ "`m√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3271,13 +3271,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞-√" ]
+[ "∞m√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞-√" ]
+[ "∞m√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3308,13 +3308,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞-√" ]
+[ "∞m√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞-√" ]
+[ "∞m√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3419,13 +3419,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P.√" ]
+[ "Pn√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P.√" ]
+[ "Pn√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3456,13 +3456,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P.√" ]
+[ "Pn√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P.√" ]
+[ "Pn√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3493,13 +3493,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†.√" ]
+[ "†n√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†.√" ]
+[ "†n√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3530,13 +3530,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†.√" ]
+[ "†n√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†.√" ]
+[ "†n√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3567,13 +3567,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ ".√" ]
+[ "n√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ ".√" ]
+[ "n√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3604,13 +3604,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ ".√" ]
+[ "n√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ ".√" ]
+[ "n√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3641,13 +3641,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@/√" ]
+[ "@o√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@/√" ]
+[ "@o√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3678,13 +3678,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@/√" ]
+[ "@o√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@/√" ]
+[ "@o√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3715,13 +3715,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê/√" ]
+[ "êo√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê/√" ]
+[ "êo√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3752,13 +3752,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê/√" ]
+[ "êo√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê/√" ]
+[ "êo√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3789,13 +3789,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡/√" ]
+[ "‡o√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡/√" ]
+[ "‡o√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3826,13 +3826,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡/√" ]
+[ "‡o√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡/√" ]
+[ "‡o√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3863,13 +3863,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "00√" ]
+[ "0p√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "00√" ]
+[ "0p√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3900,13 +3900,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "00√" ]
+[ "0p√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "00√" ]
+[ "0p√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3937,13 +3937,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä0√" ]
+[ "Äp√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä0√" ]
+[ "Äp√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -3974,13 +3974,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä0√" ]
+[ "Äp√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä0√" ]
+[ "Äp√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4011,13 +4011,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–0√" ]
+[ "–p√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–0√" ]
+[ "–p√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4048,13 +4048,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–0√" ]
+[ "–p√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–0√" ]
+[ "–p√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4085,13 +4085,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " 1√" ]
+[ " q√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " 1√" ]
+[ " q√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4122,13 +4122,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " 1√" ]
+[ " q√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " 1√" ]
+[ " q√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4159,13 +4159,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p1√" ]
+[ "pq√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p1√" ]
+[ "pq√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4196,13 +4196,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p1√" ]
+[ "pq√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p1√" ]
+[ "pq√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4233,13 +4233,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿1√" ]
+[ "¿q√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿1√" ]
+[ "¿q√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4270,13 +4270,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿1√" ]
+[ "¿q√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿1√" ]
+[ "¿q√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4307,13 +4307,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "2√" ]
+[ "r√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "2√" ]
+[ "r√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4344,13 +4344,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "2√" ]
+[ "r√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "2√" ]
+[ "r√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4381,13 +4381,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`2√" ]
+[ "`r√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`2√" ]
+[ "`r√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4418,13 +4418,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`2√" ]
+[ "`r√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`2√" ]
+[ "`r√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4455,13 +4455,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞2√" ]
+[ "∞r√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞2√" ]
+[ "∞r√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4492,13 +4492,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞2√" ]
+[ "∞r√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞2√" ]
+[ "∞r√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4603,13 +4603,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P3√" ]
+[ "Ps√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P3√" ]
+[ "Ps√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4640,13 +4640,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P3√" ]
+[ "Ps√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P3√" ]
+[ "Ps√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4677,13 +4677,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†3√" ]
+[ "†s√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†3√" ]
+[ "†s√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4714,13 +4714,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†3√" ]
+[ "†s√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†3√" ]
+[ "†s√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4751,13 +4751,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "3√" ]
+[ "s√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "3√" ]
+[ "s√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4788,13 +4788,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "3√" ]
+[ "s√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "3√" ]
+[ "s√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4825,13 +4825,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@4√" ]
+[ "@t√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@4√" ]
+[ "@t√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4862,13 +4862,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@4√" ]
+[ "@t√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@4√" ]
+[ "@t√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4899,13 +4899,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê4√" ]
+[ "êt√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê4√" ]
+[ "êt√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4936,13 +4936,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê4√" ]
+[ "êt√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê4√" ]
+[ "êt√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -4973,13 +4973,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡4√" ]
+[ "‡t√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡4√" ]
+[ "‡t√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5010,13 +5010,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡4√" ]
+[ "‡t√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡4√" ]
+[ "‡t√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5047,13 +5047,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "05√" ]
+[ "0u√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "05√" ]
+[ "0u√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5084,13 +5084,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "05√" ]
+[ "0u√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "05√" ]
+[ "0u√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5121,13 +5121,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä5√" ]
+[ "Äu√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä5√" ]
+[ "Äu√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5158,13 +5158,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä5√" ]
+[ "Äu√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä5√" ]
+[ "Äu√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5195,13 +5195,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–5√" ]
+[ "–u√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–5√" ]
+[ "–u√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5232,13 +5232,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–5√" ]
+[ "–u√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–5√" ]
+[ "–u√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5269,13 +5269,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " 6√" ]
+[ " v√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " 6√" ]
+[ " v√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5306,13 +5306,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " 6√" ]
+[ " v√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " 6√" ]
+[ " v√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5343,13 +5343,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p6√" ]
+[ "pv√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p6√" ]
+[ "pv√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5380,13 +5380,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p6√" ]
+[ "pv√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p6√" ]
+[ "pv√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5417,13 +5417,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿6√" ]
+[ "¿v√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿6√" ]
+[ "¿v√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5454,13 +5454,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿6√" ]
+[ "¿v√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿6√" ]
+[ "¿v√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5491,13 +5491,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "7√" ]
+[ "w√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "7√" ]
+[ "w√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5528,13 +5528,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "7√" ]
+[ "w√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "7√" ]
+[ "w√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5565,13 +5565,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`7√" ]
+[ "`w√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`7√" ]
+[ "`w√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5602,13 +5602,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`7√" ]
+[ "`w√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`7√" ]
+[ "`w√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5639,13 +5639,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞7√" ]
+[ "∞w√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞7√" ]
+[ "∞w√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5676,13 +5676,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞7√" ]
+[ "∞w√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞7√" ]
+[ "∞w√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5787,13 +5787,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P8√" ]
+[ "Px√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P8√" ]
+[ "Px√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5824,13 +5824,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P8√" ]
+[ "Px√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P8√" ]
+[ "Px√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5861,13 +5861,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†8√" ]
+[ "†x√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†8√" ]
+[ "†x√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5898,13 +5898,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†8√" ]
+[ "†x√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†8√" ]
+[ "†x√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5935,13 +5935,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "8√" ]
+[ "x√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "8√" ]
+[ "x√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -5972,13 +5972,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "8√" ]
+[ "x√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "8√" ]
+[ "x√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6009,13 +6009,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@9√" ]
+[ "@y√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@9√" ]
+[ "@y√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6046,13 +6046,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@9√" ]
+[ "@y√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@9√" ]
+[ "@y√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6083,13 +6083,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê9√" ]
+[ "êy√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê9√" ]
+[ "êy√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6120,13 +6120,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê9√" ]
+[ "êy√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê9√" ]
+[ "êy√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6157,13 +6157,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡9√" ]
+[ "‡y√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡9√" ]
+[ "‡y√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6194,13 +6194,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡9√" ]
+[ "‡y√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡9√" ]
+[ "‡y√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6231,13 +6231,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0:√" ]
+[ "0z√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0:√" ]
+[ "0z√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6268,13 +6268,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0:√" ]
+[ "0z√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0:√" ]
+[ "0z√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6305,13 +6305,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä:√" ]
+[ "Äz√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä:√" ]
+[ "Äz√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6342,13 +6342,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä:√" ]
+[ "Äz√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä:√" ]
+[ "Äz√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6379,13 +6379,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–:√" ]
+[ "–z√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–:√" ]
+[ "–z√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6416,13 +6416,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–:√" ]
+[ "–z√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–:√" ]
+[ "–z√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6453,13 +6453,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " ;√" ]
+[ " {√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " ;√" ]
+[ " {√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6490,13 +6490,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " ;√" ]
+[ " {√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " ;√" ]
+[ " {√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6527,13 +6527,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p;√" ]
+[ "p{√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p;√" ]
+[ "p{√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6564,13 +6564,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p;√" ]
+[ "p{√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p;√" ]
+[ "p{√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6601,13 +6601,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿;√" ]
+[ "¿{√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿;√" ]
+[ "¿{√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6638,13 +6638,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿;√" ]
+[ "¿{√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿;√" ]
+[ "¿{√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6675,13 +6675,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "<√" ]
+[ "|√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "<√" ]
+[ "|√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6712,13 +6712,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "<√" ]
+[ "|√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "<√" ]
+[ "|√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6749,13 +6749,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`<√" ]
+[ "`|√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`<√" ]
+[ "`|√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6786,13 +6786,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`<√" ]
+[ "`|√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`<√" ]
+[ "`|√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6823,13 +6823,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞<√" ]
+[ "∞|√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞<√" ]
+[ "∞|√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6860,13 +6860,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞<√" ]
+[ "∞|√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞<√" ]
+[ "∞|√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -6971,13 +6971,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P=√" ]
+[ "P}√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P=√" ]
+[ "P}√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7008,13 +7008,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P=√" ]
+[ "P}√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P=√" ]
+[ "P}√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7045,13 +7045,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†=√" ]
+[ "†}√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†=√" ]
+[ "†}√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7082,13 +7082,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†=√" ]
+[ "†}√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†=√" ]
+[ "†}√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7119,13 +7119,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "=√" ]
+[ "}√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "=√" ]
+[ "}√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7156,13 +7156,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "=√" ]
+[ "}√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "=√" ]
+[ "}√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7193,13 +7193,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@>√" ]
+[ "@~√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@>√" ]
+[ "@~√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7230,13 +7230,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@>√" ]
+[ "@~√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@>√" ]
+[ "@~√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7267,13 +7267,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê>√" ]
+[ "ê~√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê>√" ]
+[ "ê~√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7304,13 +7304,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê>√" ]
+[ "ê~√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê>√" ]
+[ "ê~√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7341,13 +7341,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡>√" ]
+[ "‡~√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡>√" ]
+[ "‡~√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7378,13 +7378,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡>√" ]
+[ "‡~√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡>√" ]
+[ "‡~√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7415,13 +7415,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0?√" ]
+[ "0√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0?√" ]
+[ "0√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7452,13 +7452,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0?√" ]
+[ "0√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0?√" ]
+[ "0√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7489,13 +7489,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä?√" ]
+[ "Ä√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä?√" ]
+[ "Ä√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7526,13 +7526,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä?√" ]
+[ "Ä√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä?√" ]
+[ "Ä√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7563,13 +7563,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–?√" ]
+[ "–√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–?√" ]
+[ "–√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7600,13 +7600,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–?√" ]
+[ "–√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–?√" ]
+[ "–√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7637,13 +7637,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " @√" ]
+[ " Ä√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " @√" ]
+[ " Ä√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7674,13 +7674,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " @√" ]
+[ " Ä√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " @√" ]
+[ " Ä√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7711,13 +7711,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p@√" ]
+[ "pÄ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p@√" ]
+[ "pÄ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7748,13 +7748,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p@√" ]
+[ "pÄ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p@√" ]
+[ "pÄ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7785,13 +7785,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿@√" ]
+[ "¿Ä√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿@√" ]
+[ "¿Ä√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7822,13 +7822,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿@√" ]
+[ "¿Ä√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿@√" ]
+[ "¿Ä√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7859,13 +7859,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "A√" ]
+[ "Å√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "A√" ]
+[ "Å√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7896,13 +7896,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "A√" ]
+[ "Å√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "A√" ]
+[ "Å√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7933,13 +7933,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`A√" ]
+[ "`Å√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`A√" ]
+[ "`Å√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -7970,13 +7970,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`A√" ]
+[ "`Å√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`A√" ]
+[ "`Å√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8007,13 +8007,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞A√" ]
+[ "∞Å√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞A√" ]
+[ "∞Å√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8044,13 +8044,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞A√" ]
+[ "∞Å√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞A√" ]
+[ "∞Å√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8155,13 +8155,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "PB√" ]
+[ "PÇ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "PB√" ]
+[ "PÇ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8192,13 +8192,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "PB√" ]
+[ "PÇ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "PB√" ]
+[ "PÇ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8229,13 +8229,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†B√" ]
+[ "†Ç√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†B√" ]
+[ "†Ç√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8266,13 +8266,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†B√" ]
+[ "†Ç√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†B√" ]
+[ "†Ç√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8303,13 +8303,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "B√" ]
+[ "Ç√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "B√" ]
+[ "Ç√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8340,13 +8340,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "B√" ]
+[ "Ç√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "B√" ]
+[ "Ç√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8377,13 +8377,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@C√" ]
+[ "@É√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@C√" ]
+[ "@É√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8414,13 +8414,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@C√" ]
+[ "@É√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@C√" ]
+[ "@É√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8451,13 +8451,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êC√" ]
+[ "êÉ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êC√" ]
+[ "êÉ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8488,13 +8488,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êC√" ]
+[ "êÉ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êC√" ]
+[ "êÉ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8525,13 +8525,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡C√" ]
+[ "‡É√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡C√" ]
+[ "‡É√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8562,13 +8562,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡C√" ]
+[ "‡É√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡C√" ]
+[ "‡É√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8599,13 +8599,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0D√" ]
+[ "0Ñ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0D√" ]
+[ "0Ñ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8636,13 +8636,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0D√" ]
+[ "0Ñ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0D√" ]
+[ "0Ñ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8673,13 +8673,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ÄD√" ]
+[ "ÄÑ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ÄD√" ]
+[ "ÄÑ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8710,13 +8710,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ÄD√" ]
+[ "ÄÑ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ÄD√" ]
+[ "ÄÑ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8747,13 +8747,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–D√" ]
+[ "–Ñ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–D√" ]
+[ "–Ñ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8784,13 +8784,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–D√" ]
+[ "–Ñ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–D√" ]
+[ "–Ñ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8821,13 +8821,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " E√" ]
+[ " Ö√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " E√" ]
+[ " Ö√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8858,13 +8858,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " E√" ]
+[ " Ö√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " E√" ]
+[ " Ö√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8895,13 +8895,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pE√" ]
+[ "pÖ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pE√" ]
+[ "pÖ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8932,13 +8932,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pE√" ]
+[ "pÖ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pE√" ]
+[ "pÖ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -8969,13 +8969,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿E√" ]
+[ "¿Ö√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿E√" ]
+[ "¿Ö√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9006,13 +9006,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿E√" ]
+[ "¿Ö√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿E√" ]
+[ "¿Ö√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9043,13 +9043,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "F√" ]
+[ "Ü√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "F√" ]
+[ "Ü√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9080,13 +9080,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "F√" ]
+[ "Ü√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "F√" ]
+[ "Ü√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9117,13 +9117,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`F√" ]
+[ "`Ü√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`F√" ]
+[ "`Ü√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9154,13 +9154,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`F√" ]
+[ "`Ü√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`F√" ]
+[ "`Ü√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9191,13 +9191,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞F√" ]
+[ "∞Ü√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞F√" ]
+[ "∞Ü√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9228,13 +9228,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞F√" ]
+[ "∞Ü√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞F√" ]
+[ "∞Ü√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9339,13 +9339,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "PG√" ]
+[ "Pá√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "PG√" ]
+[ "Pá√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9376,13 +9376,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "PG√" ]
+[ "Pá√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "PG√" ]
+[ "Pá√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9413,13 +9413,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†G√" ]
+[ "†á√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†G√" ]
+[ "†á√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9450,13 +9450,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†G√" ]
+[ "†á√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†G√" ]
+[ "†á√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9487,13 +9487,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "G√" ]
+[ "á√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "G√" ]
+[ "á√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9524,13 +9524,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "G√" ]
+[ "á√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "G√" ]
+[ "á√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9561,13 +9561,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@H√" ]
+[ "@à√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@H√" ]
+[ "@à√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9598,13 +9598,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@H√" ]
+[ "@à√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@H√" ]
+[ "@à√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9635,13 +9635,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êH√" ]
+[ "êà√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êH√" ]
+[ "êà√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9672,13 +9672,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êH√" ]
+[ "êà√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êH√" ]
+[ "êà√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9709,13 +9709,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡H√" ]
+[ "‡à√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡H√" ]
+[ "‡à√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9746,13 +9746,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡H√" ]
+[ "‡à√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡H√" ]
+[ "‡à√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9783,13 +9783,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0I√" ]
+[ "0â√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0I√" ]
+[ "0â√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9820,13 +9820,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0I√" ]
+[ "0â√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0I√" ]
+[ "0â√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9857,13 +9857,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ÄI√" ]
+[ "Äâ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ÄI√" ]
+[ "Äâ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9894,13 +9894,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ÄI√" ]
+[ "Äâ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ÄI√" ]
+[ "Äâ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9931,13 +9931,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–I√" ]
+[ "–â√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–I√" ]
+[ "–â√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -9968,13 +9968,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–I√" ]
+[ "–â√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–I√" ]
+[ "–â√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10005,13 +10005,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " J√" ]
+[ " ä√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " J√" ]
+[ " ä√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10042,13 +10042,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " J√" ]
+[ " ä√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " J√" ]
+[ " ä√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10079,13 +10079,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pJ√" ]
+[ "pä√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pJ√" ]
+[ "pä√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10116,13 +10116,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pJ√" ]
+[ "pä√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pJ√" ]
+[ "pä√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10153,13 +10153,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿J√" ]
+[ "¿ä√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿J√" ]
+[ "¿ä√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10190,13 +10190,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿J√" ]
+[ "¿ä√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿J√" ]
+[ "¿ä√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10227,13 +10227,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "K√" ]
+[ "ã√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "K√" ]
+[ "ã√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10264,13 +10264,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "K√" ]
+[ "ã√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "K√" ]
+[ "ã√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10301,13 +10301,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`K√" ]
+[ "`ã√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`K√" ]
+[ "`ã√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10338,13 +10338,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`K√" ]
+[ "`ã√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`K√" ]
+[ "`ã√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10375,13 +10375,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞K√" ]
+[ "∞ã√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞K√" ]
+[ "∞ã√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10412,13 +10412,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞K√" ]
+[ "∞ã√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞K√" ]
+[ "∞ã√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10523,13 +10523,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "PL√" ]
+[ "På√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "PL√" ]
+[ "På√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10560,13 +10560,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "PL√" ]
+[ "På√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "PL√" ]
+[ "På√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10597,13 +10597,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†L√" ]
+[ "†å√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†L√" ]
+[ "†å√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10634,13 +10634,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†L√" ]
+[ "†å√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†L√" ]
+[ "†å√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10671,13 +10671,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "L√" ]
+[ "å√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "L√" ]
+[ "å√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10708,13 +10708,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "L√" ]
+[ "å√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "L√" ]
+[ "å√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10745,13 +10745,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@M√" ]
+[ "@ç√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@M√" ]
+[ "@ç√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10782,13 +10782,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@M√" ]
+[ "@ç√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@M√" ]
+[ "@ç√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10819,13 +10819,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êM√" ]
+[ "êç√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êM√" ]
+[ "êç√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10856,13 +10856,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êM√" ]
+[ "êç√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êM√" ]
+[ "êç√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10893,13 +10893,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡M√" ]
+[ "‡ç√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡M√" ]
+[ "‡ç√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10930,13 +10930,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡M√" ]
+[ "‡ç√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡M√" ]
+[ "‡ç√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -10967,13 +10967,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0N√" ]
+[ "0é√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0N√" ]
+[ "0é√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11004,13 +11004,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0N√" ]
+[ "0é√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0N√" ]
+[ "0é√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11041,13 +11041,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ÄN√" ]
+[ "Äé√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ÄN√" ]
+[ "Äé√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11078,13 +11078,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ÄN√" ]
+[ "Äé√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ÄN√" ]
+[ "Äé√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11115,13 +11115,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–N√" ]
+[ "–é√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–N√" ]
+[ "–é√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11152,13 +11152,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–N√" ]
+[ "–é√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–N√" ]
+[ "–é√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11189,13 +11189,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " O√" ]
+[ " è√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " O√" ]
+[ " è√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11226,13 +11226,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " O√" ]
+[ " è√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " O√" ]
+[ " è√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11263,13 +11263,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pO√" ]
+[ "pè√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pO√" ]
+[ "pè√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11300,13 +11300,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pO√" ]
+[ "pè√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pO√" ]
+[ "pè√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11337,13 +11337,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿O√" ]
+[ "¿è√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿O√" ]
+[ "¿è√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11374,13 +11374,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿O√" ]
+[ "¿è√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿O√" ]
+[ "¿è√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11411,13 +11411,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P√" ]
+[ "ê√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P√" ]
+[ "ê√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11448,13 +11448,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P√" ]
+[ "ê√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P√" ]
+[ "ê√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11485,13 +11485,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`P√" ]
+[ "`ê√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`P√" ]
+[ "`ê√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11522,13 +11522,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`P√" ]
+[ "`ê√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`P√" ]
+[ "`ê√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11559,13 +11559,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞P√" ]
+[ "∞ê√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞P√" ]
+[ "∞ê√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11596,13 +11596,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞P√" ]
+[ "∞ê√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞P√" ]
+[ "∞ê√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11707,13 +11707,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "PQ√" ]
+[ "Pë√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "PQ√" ]
+[ "Pë√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11744,13 +11744,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "PQ√" ]
+[ "Pë√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "PQ√" ]
+[ "Pë√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11781,13 +11781,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†Q√" ]
+[ "†ë√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†Q√" ]
+[ "†ë√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11818,13 +11818,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†Q√" ]
+[ "†ë√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†Q√" ]
+[ "†ë√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11855,13 +11855,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Q√" ]
+[ "ë√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Q√" ]
+[ "ë√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11892,13 +11892,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Q√" ]
+[ "ë√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Q√" ]
+[ "ë√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11929,13 +11929,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@R√" ]
+[ "@í√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@R√" ]
+[ "@í√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -11966,13 +11966,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@R√" ]
+[ "@í√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@R√" ]
+[ "@í√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12003,13 +12003,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êR√" ]
+[ "êí√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êR√" ]
+[ "êí√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12040,13 +12040,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êR√" ]
+[ "êí√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êR√" ]
+[ "êí√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12077,13 +12077,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡R√" ]
+[ "‡í√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡R√" ]
+[ "‡í√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12114,13 +12114,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡R√" ]
+[ "‡í√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡R√" ]
+[ "‡í√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12151,13 +12151,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0S√" ]
+[ "0ì√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0S√" ]
+[ "0ì√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12188,13 +12188,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0S√" ]
+[ "0ì√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0S√" ]
+[ "0ì√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12225,13 +12225,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ÄS√" ]
+[ "Äì√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ÄS√" ]
+[ "Äì√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12262,13 +12262,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ÄS√" ]
+[ "Äì√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ÄS√" ]
+[ "Äì√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12299,13 +12299,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–S√" ]
+[ "–ì√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–S√" ]
+[ "–ì√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12336,13 +12336,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–S√" ]
+[ "–ì√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–S√" ]
+[ "–ì√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12373,13 +12373,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " T√" ]
+[ " î√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " T√" ]
+[ " î√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12410,13 +12410,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " T√" ]
+[ " î√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " T√" ]
+[ " î√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12447,13 +12447,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pT√" ]
+[ "pî√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pT√" ]
+[ "pî√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12484,13 +12484,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pT√" ]
+[ "pî√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pT√" ]
+[ "pî√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12521,13 +12521,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿T√" ]
+[ "¿î√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿T√" ]
+[ "¿î√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12558,13 +12558,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿T√" ]
+[ "¿î√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿T√" ]
+[ "¿î√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12595,13 +12595,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "U√" ]
+[ "ï√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "U√" ]
+[ "ï√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12632,13 +12632,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "U√" ]
+[ "ï√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "U√" ]
+[ "ï√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12669,13 +12669,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`U√" ]
+[ "`ï√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`U√" ]
+[ "`ï√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12706,13 +12706,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`U√" ]
+[ "`ï√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`U√" ]
+[ "`ï√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12743,13 +12743,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞U√" ]
+[ "∞ï√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞U√" ]
+[ "∞ï√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12780,13 +12780,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞U√" ]
+[ "∞ï√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞U√" ]
+[ "∞ï√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12891,13 +12891,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "PV√" ]
+[ "Pñ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "PV√" ]
+[ "Pñ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12928,13 +12928,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "PV√" ]
+[ "Pñ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "PV√" ]
+[ "Pñ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -12965,13 +12965,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†V√" ]
+[ "†ñ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†V√" ]
+[ "†ñ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13002,13 +13002,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†V√" ]
+[ "†ñ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†V√" ]
+[ "†ñ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13039,13 +13039,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "V√" ]
+[ "ñ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "V√" ]
+[ "ñ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13076,13 +13076,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "V√" ]
+[ "ñ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "V√" ]
+[ "ñ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13113,13 +13113,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@W√" ]
+[ "@ó√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@W√" ]
+[ "@ó√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13150,13 +13150,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@W√" ]
+[ "@ó√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@W√" ]
+[ "@ó√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13187,13 +13187,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êW√" ]
+[ "êó√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êW√" ]
+[ "êó√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13224,13 +13224,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êW√" ]
+[ "êó√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êW√" ]
+[ "êó√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13261,13 +13261,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡W√" ]
+[ "‡ó√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡W√" ]
+[ "‡ó√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13298,13 +13298,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡W√" ]
+[ "‡ó√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡W√" ]
+[ "‡ó√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13335,13 +13335,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0X√" ]
+[ "0ò√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0X√" ]
+[ "0ò√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13372,13 +13372,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0X√" ]
+[ "0ò√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0X√" ]
+[ "0ò√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13409,13 +13409,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ÄX√" ]
+[ "Äò√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ÄX√" ]
+[ "Äò√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13446,13 +13446,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ÄX√" ]
+[ "Äò√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ÄX√" ]
+[ "Äò√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13483,13 +13483,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–X√" ]
+[ "–ò√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–X√" ]
+[ "–ò√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13520,13 +13520,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–X√" ]
+[ "–ò√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–X√" ]
+[ "–ò√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13557,13 +13557,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " Y√" ]
+[ " ô√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " Y√" ]
+[ " ô√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13594,13 +13594,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " Y√" ]
+[ " ô√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " Y√" ]
+[ " ô√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13631,13 +13631,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pY√" ]
+[ "pô√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pY√" ]
+[ "pô√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13668,13 +13668,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pY√" ]
+[ "pô√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pY√" ]
+[ "pô√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13705,13 +13705,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿Y√" ]
+[ "¿ô√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿Y√" ]
+[ "¿ô√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13742,13 +13742,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿Y√" ]
+[ "¿ô√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿Y√" ]
+[ "¿ô√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13779,13 +13779,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Z√" ]
+[ "ö√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Z√" ]
+[ "ö√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13816,13 +13816,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Z√" ]
+[ "ö√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Z√" ]
+[ "ö√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13853,13 +13853,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`Z√" ]
+[ "`ö√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`Z√" ]
+[ "`ö√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13890,13 +13890,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`Z√" ]
+[ "`ö√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`Z√" ]
+[ "`ö√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13927,13 +13927,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞Z√" ]
+[ "∞ö√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞Z√" ]
+[ "∞ö√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -13964,13 +13964,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞Z√" ]
+[ "∞ö√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞Z√" ]
+[ "∞ö√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14075,13 +14075,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P[√" ]
+[ "Põ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P[√" ]
+[ "Põ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14112,13 +14112,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P[√" ]
+[ "Põ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P[√" ]
+[ "Põ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14149,13 +14149,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†[√" ]
+[ "†õ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†[√" ]
+[ "†õ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14186,13 +14186,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†[√" ]
+[ "†õ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†[√" ]
+[ "†õ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14223,13 +14223,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "[√" ]
+[ "õ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "[√" ]
+[ "õ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14260,13 +14260,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "[√" ]
+[ "õ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "[√" ]
+[ "õ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14297,13 +14297,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@\\√" ]
+[ "@ú√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@\\√" ]
+[ "@ú√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14334,13 +14334,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@\\√" ]
+[ "@ú√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@\\√" ]
+[ "@ú√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14371,13 +14371,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê\\√" ]
+[ "êú√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê\\√" ]
+[ "êú√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14408,13 +14408,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ê\\√" ]
+[ "êú√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ê\\√" ]
+[ "êú√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14445,13 +14445,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡\\√" ]
+[ "‡ú√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡\\√" ]
+[ "‡ú√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14482,13 +14482,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡\\√" ]
+[ "‡ú√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡\\√" ]
+[ "‡ú√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14519,13 +14519,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0]√" ]
+[ "0ù√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0]√" ]
+[ "0ù√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14556,13 +14556,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0]√" ]
+[ "0ù√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0]√" ]
+[ "0ù√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14593,13 +14593,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä]√" ]
+[ "Äù√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä]√" ]
+[ "Äù√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14630,13 +14630,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Ä]√" ]
+[ "Äù√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Ä]√" ]
+[ "Äù√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14667,13 +14667,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–]√" ]
+[ "–ù√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–]√" ]
+[ "–ù√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14704,13 +14704,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–]√" ]
+[ "–ù√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–]√" ]
+[ "–ù√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14741,13 +14741,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " ^√" ]
+[ " û√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " ^√" ]
+[ " û√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14778,13 +14778,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " ^√" ]
+[ " û√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " ^√" ]
+[ " û√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14815,13 +14815,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p^√" ]
+[ "pû√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p^√" ]
+[ "pû√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14852,13 +14852,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "p^√" ]
+[ "pû√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "p^√" ]
+[ "pû√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14889,13 +14889,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿^√" ]
+[ "¿û√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿^√" ]
+[ "¿û√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14926,13 +14926,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿^√" ]
+[ "¿û√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿^√" ]
+[ "¿û√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -14963,13 +14963,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "_√" ]
+[ "ü√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "_√" ]
+[ "ü√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15000,13 +15000,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "_√" ]
+[ "ü√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "_√" ]
+[ "ü√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15037,13 +15037,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`_√" ]
+[ "`ü√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`_√" ]
+[ "`ü√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15074,13 +15074,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`_√" ]
+[ "`ü√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`_√" ]
+[ "`ü√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15111,13 +15111,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞_√" ]
+[ "∞ü√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞_√" ]
+[ "∞ü√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15148,13 +15148,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞_√" ]
+[ "∞ü√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞_√" ]
+[ "∞ü√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15259,13 +15259,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P`√" ]
+[ "P†√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P`√" ]
+[ "P†√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15296,13 +15296,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "P`√" ]
+[ "P†√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "P`√" ]
+[ "P†√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15333,13 +15333,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†`√" ]
+[ "††√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†`√" ]
+[ "††√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15370,13 +15370,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†`√" ]
+[ "††√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†`√" ]
+[ "††√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15407,13 +15407,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`√" ]
+[ "†√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`√" ]
+[ "†√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15444,13 +15444,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`√" ]
+[ "†√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`√" ]
+[ "†√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15481,13 +15481,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@a√" ]
+[ "@°√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@a√" ]
+[ "@°√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15518,13 +15518,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@a√" ]
+[ "@°√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@a√" ]
+[ "@°√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15555,13 +15555,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êa√" ]
+[ "ê°√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êa√" ]
+[ "ê°√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15592,13 +15592,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êa√" ]
+[ "ê°√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êa√" ]
+[ "ê°√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15629,13 +15629,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡a√" ]
+[ "‡°√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡a√" ]
+[ "‡°√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15666,13 +15666,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡a√" ]
+[ "‡°√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡a√" ]
+[ "‡°√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15703,13 +15703,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0b√" ]
+[ "0¢√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0b√" ]
+[ "0¢√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15740,13 +15740,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0b√" ]
+[ "0¢√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0b√" ]
+[ "0¢√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15777,13 +15777,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Äb√" ]
+[ "Ä¢√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Äb√" ]
+[ "Ä¢√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15814,13 +15814,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Äb√" ]
+[ "Ä¢√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Äb√" ]
+[ "Ä¢√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15851,13 +15851,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–b√" ]
+[ "–¢√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–b√" ]
+[ "–¢√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15888,13 +15888,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–b√" ]
+[ "–¢√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–b√" ]
+[ "–¢√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15925,13 +15925,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " c√" ]
+[ " £√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " c√" ]
+[ " £√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15962,13 +15962,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " c√" ]
+[ " £√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " c√" ]
+[ " £√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -15999,13 +15999,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pc√" ]
+[ "p£√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pc√" ]
+[ "p£√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16036,13 +16036,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pc√" ]
+[ "p£√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pc√" ]
+[ "p£√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16073,13 +16073,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿c√" ]
+[ "¿£√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿c√" ]
+[ "¿£√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16110,13 +16110,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿c√" ]
+[ "¿£√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿c√" ]
+[ "¿£√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16147,13 +16147,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "d√" ]
+[ "§√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "d√" ]
+[ "§√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16184,13 +16184,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "d√" ]
+[ "§√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "d√" ]
+[ "§√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16221,13 +16221,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`d√" ]
+[ "`§√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`d√" ]
+[ "`§√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16258,13 +16258,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`d√" ]
+[ "`§√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`d√" ]
+[ "`§√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16295,13 +16295,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞d√" ]
+[ "∞§√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞d√" ]
+[ "∞§√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16332,13 +16332,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞d√" ]
+[ "∞§√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞d√" ]
+[ "∞§√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16443,13 +16443,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Pe√" ]
+[ "P•√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Pe√" ]
+[ "P•√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16480,13 +16480,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Pe√" ]
+[ "P•√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Pe√" ]
+[ "P•√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16517,13 +16517,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†e√" ]
+[ "†•√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†e√" ]
+[ "†•√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16554,13 +16554,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†e√" ]
+[ "†•√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†e√" ]
+[ "†•√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16591,13 +16591,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "e√" ]
+[ "•√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "e√" ]
+[ "•√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16628,13 +16628,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "e√" ]
+[ "•√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "e√" ]
+[ "•√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16665,13 +16665,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@f√" ]
+[ "@¶√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@f√" ]
+[ "@¶√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16702,13 +16702,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@f√" ]
+[ "@¶√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@f√" ]
+[ "@¶√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16739,13 +16739,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êf√" ]
+[ "ê¶√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êf√" ]
+[ "ê¶√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16776,13 +16776,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êf√" ]
+[ "ê¶√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êf√" ]
+[ "ê¶√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16813,13 +16813,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡f√" ]
+[ "‡¶√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡f√" ]
+[ "‡¶√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16850,13 +16850,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡f√" ]
+[ "‡¶√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡f√" ]
+[ "‡¶√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16887,13 +16887,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0g√" ]
+[ "0ß√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0g√" ]
+[ "0ß√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16924,13 +16924,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0g√" ]
+[ "0ß√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0g√" ]
+[ "0ß√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16961,13 +16961,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Äg√" ]
+[ "Äß√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Äg√" ]
+[ "Äß√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -16998,13 +16998,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Äg√" ]
+[ "Äß√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Äg√" ]
+[ "Äß√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17035,13 +17035,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–g√" ]
+[ "–ß√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–g√" ]
+[ "–ß√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17072,13 +17072,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–g√" ]
+[ "–ß√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–g√" ]
+[ "–ß√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17109,13 +17109,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " h√" ]
+[ " ®√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " h√" ]
+[ " ®√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17146,13 +17146,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " h√" ]
+[ " ®√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " h√" ]
+[ " ®√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17183,13 +17183,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ph√" ]
+[ "p®√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ph√" ]
+[ "p®√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17220,13 +17220,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "ph√" ]
+[ "p®√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "ph√" ]
+[ "p®√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17257,13 +17257,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿h√" ]
+[ "¿®√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿h√" ]
+[ "¿®√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17294,13 +17294,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿h√" ]
+[ "¿®√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿h√" ]
+[ "¿®√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17331,13 +17331,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "i√" ]
+[ "©√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "i√" ]
+[ "©√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17368,13 +17368,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "i√" ]
+[ "©√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "i√" ]
+[ "©√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17405,13 +17405,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`i√" ]
+[ "`©√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`i√" ]
+[ "`©√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17442,13 +17442,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`i√" ]
+[ "`©√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`i√" ]
+[ "`©√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17479,13 +17479,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞i√" ]
+[ "∞©√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞i√" ]
+[ "∞©√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17516,13 +17516,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞i√" ]
+[ "∞©√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞i√" ]
+[ "∞©√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17627,13 +17627,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Pj√" ]
+[ "P™√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Pj√" ]
+[ "P™√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17664,13 +17664,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Pj√" ]
+[ "P™√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Pj√" ]
+[ "P™√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17701,13 +17701,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†j√" ]
+[ "†™√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†j√" ]
+[ "†™√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17738,13 +17738,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†j√" ]
+[ "†™√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†j√" ]
+[ "†™√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17775,13 +17775,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "j√" ]
+[ "™√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "j√" ]
+[ "™√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17812,13 +17812,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "j√" ]
+[ "™√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "j√" ]
+[ "™√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17849,13 +17849,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@k√" ]
+[ "@´√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@k√" ]
+[ "@´√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17886,13 +17886,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "@k√" ]
+[ "@´√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "@k√" ]
+[ "@´√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17923,13 +17923,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êk√" ]
+[ "ê´√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êk√" ]
+[ "ê´√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17960,13 +17960,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "êk√" ]
+[ "ê´√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "êk√" ]
+[ "ê´√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -17997,13 +17997,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡k√" ]
+[ "‡´√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡k√" ]
+[ "‡´√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18034,13 +18034,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "‡k√" ]
+[ "‡´√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "‡k√" ]
+[ "‡´√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18071,13 +18071,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0l√" ]
+[ "0¨√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0l√" ]
+[ "0¨√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18108,13 +18108,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "0l√" ]
+[ "0¨√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "0l√" ]
+[ "0¨√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18145,13 +18145,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Äl√" ]
+[ "Ä¨√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Äl√" ]
+[ "Ä¨√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18182,13 +18182,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Äl√" ]
+[ "Ä¨√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Äl√" ]
+[ "Ä¨√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18219,13 +18219,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–l√" ]
+[ "–¨√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–l√" ]
+[ "–¨√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18256,13 +18256,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "–l√" ]
+[ "–¨√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "–l√" ]
+[ "–¨√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18293,13 +18293,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " m√" ]
+[ " ≠√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " m√" ]
+[ " ≠√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18330,13 +18330,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ " m√" ]
+[ " ≠√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ " m√" ]
+[ " ≠√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18367,13 +18367,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pm√" ]
+[ "p≠√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pm√" ]
+[ "p≠√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18404,13 +18404,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "pm√" ]
+[ "p≠√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "pm√" ]
+[ "p≠√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18441,13 +18441,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿m√" ]
+[ "¿≠√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿m√" ]
+[ "¿≠√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18478,13 +18478,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "¿m√" ]
+[ "¿≠√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "¿m√" ]
+[ "¿≠√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18515,13 +18515,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "n√" ]
+[ "Æ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "n√" ]
+[ "Æ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18552,13 +18552,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "n√" ]
+[ "Æ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "n√" ]
+[ "Æ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18589,13 +18589,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`n√" ]
+[ "`Æ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`n√" ]
+[ "`Æ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18626,13 +18626,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "`n√" ]
+[ "`Æ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "`n√" ]
+[ "`Æ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18663,13 +18663,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞n√" ]
+[ "∞Æ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞n√" ]
+[ "∞Æ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18700,13 +18700,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "∞n√" ]
+[ "∞Æ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "∞n√" ]
+[ "∞Æ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18811,13 +18811,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Po√" ]
+[ "PØ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Po√" ]
+[ "PØ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18848,13 +18848,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "Po√" ]
+[ "PØ√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "Po√" ]
+[ "PØ√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18885,13 +18885,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†o√" ]
+[ "†Ø√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†o√" ]
+[ "†Ø√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18922,13 +18922,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "†o√" ]
+[ "†Ø√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "†o√" ]
+[ "†Ø√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18959,13 +18959,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "o√" ]
+[ "Ø√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "o√" ]
+[ "Ø√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
@@ -18996,13 +18996,13 @@ this_invocation_nonce
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.name
-[ "o√" ]
+[ "Ø√" ]
 1
 ::comp_test_ptr[..].comp.next
 [ <HEAP_ADDR> ]
 1
 ::comp_test_ptr[..].comp.next->name
-[ "o√" ]
+[ "Ø√" ]
 1
 ::comp_test_ptr[..].comp.next->next
 [ <HEAP_ADDR> ]
