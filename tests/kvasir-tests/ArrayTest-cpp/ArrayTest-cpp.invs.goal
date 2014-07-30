@@ -1,51 +1,48 @@
 ===========================================================================
 ..main():::ENTER
-::abracadabra.B[].B[0]->foo_tail == ::abracadabra.B[].foo_tail
-::abracadabra.B[].B[1]->foo_head == ::abracadabra.B[].foo_tail
-::abracadabra.B[].B[1]->foo_tail == ::abracadabra.B[].foo_tail
-::eightA[].B[0]->B->foo_tail == ::eightA[].B[1]->foo_head
 ::abracadabra has only one value
-::abracadabra.B has only one value
-::abracadabra.B[] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0]->B contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0]->B[0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0]->foo_head == [2, 0, 0]
-::abracadabra.B[].B[0][0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1]->B contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1]->B[0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1][0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[2] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[2][0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].foo_head == [1, 0, 0]
-::abracadabra.B[].foo_tail == [0, 0, 0]
-::abracadabra.foo_head == 1
-::abracadabra.foo_tail == 0
+::abracadabra.MIT_id has only one value
+::abracadabra.MIT_id[] == [5, 4, 6, 3, 7, 2, 8, 1, 9]
+::abracadabra.birthday has only one value
+::abracadabra.birthday[] == [1983, 10, 30]
+::abracadabra.social_security has only one value
+::abracadabra.social_security[] == [1, 1, 2, 3, 5, 8, 13, 21, 35]
 ::basicIntArray has only one value
 ::basicIntArray[] == [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 ::eightA has only one value
 ::eightA[] contains no nulls and has only one value, of length 8
 ::eightA[].B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B->B contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B->foo_head == [300, 33, 333, 3333, 33333, 333333, 3333333, 33333333]
-::eightA[].B[0]->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[0]->foo_head == [20, 22, 222, 2222, 22222, 222222, 2222222, 22222222]
-::eightA[].B[0]->foo_tail == [11, 111, 1111, 11111, 111111, 1111111, 11111111, 1]
+::eightA[].B[0]->C contains no nulls and has only one value, of length 8
+::eightA[].B[0]->C.baz_head == [300, 33, 333, 3333, 33333, 333333, 3333333, 33333333]
+::eightA[].B[0]->C.baz_tail == [50000, 55, 555, 5555, 55555, 555555, 5555555, 55555555]
+::eightA[].B[0]->C.y == [4000, 44, 444, 4444, 44444, 444444, 4444444, 44444444]
+::eightA[].B[0]->D contains no nulls and has only one value, of length 8
+::eightA[].B[0]->D->neverSeeMe == [1, 0, 0, 0, 0, 0, 0, 0]
+::eightA[].B[0]->D[0] contains no nulls and has only one value, of length 8
+::eightA[].B[0]->bar_head == [20, 22, 222, 2222, 22222, 222222, 2222222, 22222222]
+::eightA[].B[0]->bar_tail == [600000, 66, 666, 6666, 66666, 666666, 6666666, 66666666]
 ::eightA[].B[0][0] contains no nulls and has only one value, of length 8
 ::eightA[].B[1] contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B->B contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B->foo_head == [33, 333, 3333, 33333, 333333, 3333333, 33333333, 2]
-::eightA[].B[1]->B->foo_tail == [222, 2222, 22222, 222222, 2222222, 22222222, 1, 0]
-::eightA[].B[1]->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[1]->foo_head == [22, 222, 2222, 22222, 222222, 2222222, 22222222, 1]
-::eightA[].B[1]->foo_tail == [111, 1111, 11111, 111111, 1111111, 11111111, 1, 0]
+::eightA[].B[1]->C contains no nulls and has only one value, of length 8
+::eightA[].B[1]->C.baz_head == [-6, 66, 66, 66, 66, 66, 66, 66]
+::eightA[].B[1]->C.baz_tail == [-10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000]
+::eightA[].B[1]->C.y == [-8, 88, 888, 8888, 88888, 888888, 8888888, 88888888]
+::eightA[].B[1]->D contains no nulls and has only one value, of length 8
+::eightA[].B[1]->D->neverSeeMe == [1, 0, 0, 0, 0, 0, 0, 0]
+::eightA[].B[1]->D[0] contains no nulls and has only one value, of length 8
+::eightA[].B[1]->bar_head == [-4, 44, 44, 44, 44, 44, 44, 44]
+::eightA[].B[1]->bar_tail == [-12, 1200, 12000, 120000, 1200000, 1200000, 12000000, 120000000]
 ::eightA[].B[1][0] contains no nulls and has only one value, of length 8
 ::eightA[].B[2] contains no nulls and has only one value, of length 8
+::eightA[].B[2]->C contains no nulls and has only one value, of length 8
+::eightA[].B[2]->C.baz_head == [9, 99, 999, 9999, 99999, 999999, 9999999, 99999999]
+::eightA[].B[2]->C.baz_tail == [15, 1500, 15000, 150000, 1500000, 1500000, 15000000, 150000000]
+::eightA[].B[2]->C.y == [12, 1200, 12000, 120000, 1200000, 1200000, 12000000, 120000000]
+::eightA[].B[2]->D contains no nulls and has only one value, of length 8
+::eightA[].B[2]->D->neverSeeMe == [1, 0, 0, 0, 0, 0, 0, 0]
+::eightA[].B[2]->D[0] contains no nulls and has only one value, of length 8
+::eightA[].B[2]->bar_head == [6, 66, 666, 6666, 66666, 666666, 6666666, 66666666]
+::eightA[].B[2]->bar_tail == [18, 1800, 18000, 180000, 1800000, 1800000, 18000000, 180000000]
 ::eightA[].B[2][0] contains no nulls and has only one value, of length 8
 ::eightA[].foo_head == [1, 11, 111, 1111, 11111, 111111, 1111111, 11111111]
 ::eightA[].foo_tail == [7, 77, 777, 7777, 77777, 777777, 7777777, 77777777]
@@ -65,55 +62,48 @@
 ===========================================================================
 ..main():::EXIT
 ::abracadabra == orig(::abracadabra)
-::abracadabra.B == orig(::abracadabra.B)
-::abracadabra.B[] == orig(::abracadabra.B[])
-::abracadabra.B[].B[0] == orig(::abracadabra.B[].B[0])
-::abracadabra.B[].B[0]->B == orig(::abracadabra.B[].B[0]->B)
-::abracadabra.B[].B[0]->B[0] == orig(::abracadabra.B[].B[0]->B[0])
-::abracadabra.B[].B[0]->foo_head == orig(::abracadabra.B[].B[0]->foo_head)
-::abracadabra.B[].B[0]->foo_tail == ::abracadabra.B[].foo_tail
-::abracadabra.B[].B[0][0] == orig(::abracadabra.B[].B[0][0])
-::abracadabra.B[].B[1] == orig(::abracadabra.B[].B[1])
-::abracadabra.B[].B[1]->B == orig(::abracadabra.B[].B[1]->B)
-::abracadabra.B[].B[1]->B[0] == orig(::abracadabra.B[].B[1]->B[0])
-::abracadabra.B[].B[1]->foo_head == ::abracadabra.B[].foo_tail
-::abracadabra.B[].B[1]->foo_tail == ::abracadabra.B[].foo_tail
-::abracadabra.B[].B[1][0] == orig(::abracadabra.B[].B[1][0])
-::abracadabra.B[].B[2] == orig(::abracadabra.B[].B[2])
-::abracadabra.B[].B[2][0] == orig(::abracadabra.B[].B[2][0])
-::abracadabra.B[].foo_head == orig(::abracadabra.B[].foo_head)
-::abracadabra.B[].foo_tail == orig(::abracadabra.B[].B[0]->foo_tail)
-::abracadabra.B[].foo_tail == orig(::abracadabra.B[].B[1]->foo_head)
-::abracadabra.B[].foo_tail == orig(::abracadabra.B[].B[1]->foo_tail)
-::abracadabra.B[].foo_tail == orig(::abracadabra.B[].foo_tail)
-::abracadabra.foo_head == orig(::abracadabra.foo_head)
-::abracadabra.foo_tail == orig(::abracadabra.foo_tail)
+::abracadabra.MIT_id == orig(::abracadabra.MIT_id)
+::abracadabra.MIT_id[] == orig(::abracadabra.MIT_id[])
+::abracadabra.birthday == orig(::abracadabra.birthday)
+::abracadabra.birthday[] == orig(::abracadabra.birthday[])
+::abracadabra.social_security == orig(::abracadabra.social_security)
+::abracadabra.social_security[] == orig(::abracadabra.social_security[])
 ::basicIntArray == orig(::basicIntArray)
 ::basicIntArray[] == orig(::basicIntArray[])
 ::eightA == orig(::eightA)
 ::eightA[] == orig(::eightA[])
 ::eightA[].B[0] == orig(::eightA[].B[0])
-::eightA[].B[0]->B == orig(::eightA[].B[0]->B)
-::eightA[].B[0]->B->B == orig(::eightA[].B[0]->B->B)
-::eightA[].B[0]->B->B[0] == orig(::eightA[].B[0]->B->B[0])
-::eightA[].B[0]->B->foo_head == orig(::eightA[].B[0]->B->foo_head)
-::eightA[].B[0]->B->foo_tail == ::eightA[].B[1]->foo_head
-::eightA[].B[0]->B[0] == orig(::eightA[].B[0]->B[0])
-::eightA[].B[0]->foo_head == orig(::eightA[].B[0]->foo_head)
-::eightA[].B[0]->foo_tail == orig(::eightA[].B[0]->foo_tail)
+::eightA[].B[0]->C == orig(::eightA[].B[0]->C)
+::eightA[].B[0]->C.baz_head == orig(::eightA[].B[0]->C.baz_head)
+::eightA[].B[0]->C.baz_tail == orig(::eightA[].B[0]->C.baz_tail)
+::eightA[].B[0]->C.y == orig(::eightA[].B[0]->C.y)
+::eightA[].B[0]->D == orig(::eightA[].B[0]->D)
+::eightA[].B[0]->D->neverSeeMe == orig(::eightA[].B[0]->D->neverSeeMe)
+::eightA[].B[0]->D[0] == orig(::eightA[].B[0]->D[0])
+::eightA[].B[0]->bar_head == orig(::eightA[].B[0]->bar_head)
+::eightA[].B[0]->bar_tail == orig(::eightA[].B[0]->bar_tail)
 ::eightA[].B[0][0] == orig(::eightA[].B[0][0])
 ::eightA[].B[1] == orig(::eightA[].B[1])
-::eightA[].B[1]->B == orig(::eightA[].B[1]->B)
-::eightA[].B[1]->B->B == orig(::eightA[].B[1]->B->B)
-::eightA[].B[1]->B->B[0] == orig(::eightA[].B[1]->B->B[0])
-::eightA[].B[1]->B->foo_head == orig(::eightA[].B[1]->B->foo_head)
-::eightA[].B[1]->B->foo_tail == orig(::eightA[].B[1]->B->foo_tail)
-::eightA[].B[1]->B[0] == orig(::eightA[].B[1]->B[0])
-::eightA[].B[1]->foo_head == orig(::eightA[].B[0]->B->foo_tail)
-::eightA[].B[1]->foo_head == orig(::eightA[].B[1]->foo_head)
-::eightA[].B[1]->foo_tail == orig(::eightA[].B[1]->foo_tail)
+::eightA[].B[1]->C == orig(::eightA[].B[1]->C)
+::eightA[].B[1]->C.baz_head == orig(::eightA[].B[1]->C.baz_head)
+::eightA[].B[1]->C.baz_tail == orig(::eightA[].B[1]->C.baz_tail)
+::eightA[].B[1]->C.y == orig(::eightA[].B[1]->C.y)
+::eightA[].B[1]->D == orig(::eightA[].B[1]->D)
+::eightA[].B[1]->D->neverSeeMe == orig(::eightA[].B[1]->D->neverSeeMe)
+::eightA[].B[1]->D[0] == orig(::eightA[].B[1]->D[0])
+::eightA[].B[1]->bar_head == orig(::eightA[].B[1]->bar_head)
+::eightA[].B[1]->bar_tail == orig(::eightA[].B[1]->bar_tail)
 ::eightA[].B[1][0] == orig(::eightA[].B[1][0])
 ::eightA[].B[2] == orig(::eightA[].B[2])
+::eightA[].B[2]->C == orig(::eightA[].B[2]->C)
+::eightA[].B[2]->C.baz_head == orig(::eightA[].B[2]->C.baz_head)
+::eightA[].B[2]->C.baz_tail == orig(::eightA[].B[2]->C.baz_tail)
+::eightA[].B[2]->C.y == orig(::eightA[].B[2]->C.y)
+::eightA[].B[2]->D == orig(::eightA[].B[2]->D)
+::eightA[].B[2]->D->neverSeeMe == orig(::eightA[].B[2]->D->neverSeeMe)
+::eightA[].B[2]->D[0] == orig(::eightA[].B[2]->D[0])
+::eightA[].B[2]->bar_head == orig(::eightA[].B[2]->bar_head)
+::eightA[].B[2]->bar_tail == orig(::eightA[].B[2]->bar_tail)
 ::eightA[].B[2][0] == orig(::eightA[].B[2][0])
 ::eightA[].foo_head == orig(::eightA[].foo_head)
 ::eightA[].foo_tail == orig(::eightA[].foo_tail)
@@ -122,47 +112,48 @@
 ::population == orig(::population)
 ::population[] == orig(::population[])
 ::abracadabra has only one value
-::abracadabra.B has only one value
-::abracadabra.B[] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0]->B contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0]->B[0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0]->foo_head == [2, 0, 0]
-::abracadabra.B[].B[0][0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1]->B contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1]->B[0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1][0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[2] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[2][0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].foo_head == [1, 0, 0]
-::abracadabra.B[].foo_tail == [0, 0, 0]
-::abracadabra.foo_head == 1
-::abracadabra.foo_tail == 0
+::abracadabra.MIT_id has only one value
+::abracadabra.MIT_id[] == [5, 4, 6, 3, 7, 2, 8, 1, 9]
+::abracadabra.birthday has only one value
+::abracadabra.birthday[] == [1983, 10, 30]
+::abracadabra.social_security has only one value
+::abracadabra.social_security[] == [1, 1, 2, 3, 5, 8, 13, 21, 35]
 ::basicIntArray has only one value
 ::basicIntArray[] == [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 ::eightA has only one value
 ::eightA[] contains no nulls and has only one value, of length 8
 ::eightA[].B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B->B contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B->foo_head == [300, 33, 333, 3333, 33333, 333333, 3333333, 33333333]
-::eightA[].B[0]->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[0]->foo_head == [20, 22, 222, 2222, 22222, 222222, 2222222, 22222222]
-::eightA[].B[0]->foo_tail == [11, 111, 1111, 11111, 111111, 1111111, 11111111, 1]
+::eightA[].B[0]->C contains no nulls and has only one value, of length 8
+::eightA[].B[0]->C.baz_head == [300, 33, 333, 3333, 33333, 333333, 3333333, 33333333]
+::eightA[].B[0]->C.baz_tail == [50000, 55, 555, 5555, 55555, 555555, 5555555, 55555555]
+::eightA[].B[0]->C.y == [4000, 44, 444, 4444, 44444, 444444, 4444444, 44444444]
+::eightA[].B[0]->D contains no nulls and has only one value, of length 8
+::eightA[].B[0]->D->neverSeeMe == [1, 0, 0, 0, 0, 0, 0, 0]
+::eightA[].B[0]->D[0] contains no nulls and has only one value, of length 8
+::eightA[].B[0]->bar_head == [20, 22, 222, 2222, 22222, 222222, 2222222, 22222222]
+::eightA[].B[0]->bar_tail == [600000, 66, 666, 6666, 66666, 666666, 6666666, 66666666]
 ::eightA[].B[0][0] contains no nulls and has only one value, of length 8
 ::eightA[].B[1] contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B->B contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B->foo_head == [33, 333, 3333, 33333, 333333, 3333333, 33333333, 2]
-::eightA[].B[1]->B->foo_tail == [222, 2222, 22222, 222222, 2222222, 22222222, 1, 0]
-::eightA[].B[1]->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[1]->foo_head == [22, 222, 2222, 22222, 222222, 2222222, 22222222, 1]
-::eightA[].B[1]->foo_tail == [111, 1111, 11111, 111111, 1111111, 11111111, 1, 0]
+::eightA[].B[1]->C contains no nulls and has only one value, of length 8
+::eightA[].B[1]->C.baz_head == [-6, 66, 66, 66, 66, 66, 66, 66]
+::eightA[].B[1]->C.baz_tail == [-10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000]
+::eightA[].B[1]->C.y == [-8, 88, 888, 8888, 88888, 888888, 8888888, 88888888]
+::eightA[].B[1]->D contains no nulls and has only one value, of length 8
+::eightA[].B[1]->D->neverSeeMe == [1, 0, 0, 0, 0, 0, 0, 0]
+::eightA[].B[1]->D[0] contains no nulls and has only one value, of length 8
+::eightA[].B[1]->bar_head == [-4, 44, 44, 44, 44, 44, 44, 44]
+::eightA[].B[1]->bar_tail == [-12, 1200, 12000, 120000, 1200000, 1200000, 12000000, 120000000]
 ::eightA[].B[1][0] contains no nulls and has only one value, of length 8
 ::eightA[].B[2] contains no nulls and has only one value, of length 8
+::eightA[].B[2]->C contains no nulls and has only one value, of length 8
+::eightA[].B[2]->C.baz_head == [9, 99, 999, 9999, 99999, 999999, 9999999, 99999999]
+::eightA[].B[2]->C.baz_tail == [15, 1500, 15000, 150000, 1500000, 1500000, 15000000, 150000000]
+::eightA[].B[2]->C.y == [12, 1200, 12000, 120000, 1200000, 1200000, 12000000, 120000000]
+::eightA[].B[2]->D contains no nulls and has only one value, of length 8
+::eightA[].B[2]->D->neverSeeMe == [1, 0, 0, 0, 0, 0, 0, 0]
+::eightA[].B[2]->D[0] contains no nulls and has only one value, of length 8
+::eightA[].B[2]->bar_head == [6, 66, 666, 6666, 66666, 666666, 6666666, 66666666]
+::eightA[].B[2]->bar_tail == [18, 1800, 18000, 180000, 1800000, 1800000, 18000000, 180000000]
 ::eightA[].B[2][0] contains no nulls and has only one value, of length 8
 ::eightA[].foo_head == [1, 11, 111, 1111, 11111, 111111, 1111111, 11111111]
 ::eightA[].foo_tail == [7, 77, 777, 7777, 77777, 777777, 7777777, 77777777]
@@ -190,52 +181,49 @@
 return == 0
 ===========================================================================
 ArrayTest_cpp.cpp.returnIntSum(int, int*):::ENTER
-::abracadabra.B[].B[0]->foo_tail == ::abracadabra.B[].foo_tail
-::abracadabra.B[].B[1]->foo_head == ::abracadabra.B[].foo_tail
-::abracadabra.B[].B[1]->foo_tail == ::abracadabra.B[].foo_tail
-::eightA[].B[0]->B->foo_tail == ::eightA[].B[1]->foo_head
 ::abracadabra has only one value
-::abracadabra.B has only one value
-::abracadabra.B[] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0]->B contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0]->B[0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0]->foo_head == [2, 0, 0]
-::abracadabra.B[].B[0][0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1]->B contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1]->B[0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1][0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[2] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[2][0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].foo_head == [1, 0, 0]
-::abracadabra.B[].foo_tail == [0, 0, 0]
-::abracadabra.foo_head == 1
-::abracadabra.foo_tail == 0
+::abracadabra.MIT_id has only one value
+::abracadabra.MIT_id[] == [5, 4, 6, 3, 7, 2, 8, 1, 9]
+::abracadabra.birthday has only one value
+::abracadabra.birthday[] == [1983, 10, 30]
+::abracadabra.social_security has only one value
+::abracadabra.social_security[] == [1, 1, 2, 3, 5, 8, 13, 21, 35]
 ::basicIntArray has only one value
 ::basicIntArray[] == [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 ::eightA has only one value
 ::eightA[] contains no nulls and has only one value, of length 8
 ::eightA[].B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B->B contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B->foo_head == [300, 33, 333, 3333, 33333, 333333, 3333333, 33333333]
-::eightA[].B[0]->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[0]->foo_head == [20, 22, 222, 2222, 22222, 222222, 2222222, 22222222]
-::eightA[].B[0]->foo_tail == [11, 111, 1111, 11111, 111111, 1111111, 11111111, 1]
+::eightA[].B[0]->C contains no nulls and has only one value, of length 8
+::eightA[].B[0]->C.baz_head == [300, 33, 333, 3333, 33333, 333333, 3333333, 33333333]
+::eightA[].B[0]->C.baz_tail == [50000, 55, 555, 5555, 55555, 555555, 5555555, 55555555]
+::eightA[].B[0]->C.y == [4000, 44, 444, 4444, 44444, 444444, 4444444, 44444444]
+::eightA[].B[0]->D contains no nulls and has only one value, of length 8
+::eightA[].B[0]->D->neverSeeMe == [1, 0, 0, 0, 0, 0, 0, 0]
+::eightA[].B[0]->D[0] contains no nulls and has only one value, of length 8
+::eightA[].B[0]->bar_head == [20, 22, 222, 2222, 22222, 222222, 2222222, 22222222]
+::eightA[].B[0]->bar_tail == [600000, 66, 666, 6666, 66666, 666666, 6666666, 66666666]
 ::eightA[].B[0][0] contains no nulls and has only one value, of length 8
 ::eightA[].B[1] contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B->B contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B->foo_head == [33, 333, 3333, 33333, 333333, 3333333, 33333333, 2]
-::eightA[].B[1]->B->foo_tail == [222, 2222, 22222, 222222, 2222222, 22222222, 1, 0]
-::eightA[].B[1]->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[1]->foo_head == [22, 222, 2222, 22222, 222222, 2222222, 22222222, 1]
-::eightA[].B[1]->foo_tail == [111, 1111, 11111, 111111, 1111111, 11111111, 1, 0]
+::eightA[].B[1]->C contains no nulls and has only one value, of length 8
+::eightA[].B[1]->C.baz_head == [-6, 66, 66, 66, 66, 66, 66, 66]
+::eightA[].B[1]->C.baz_tail == [-10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000]
+::eightA[].B[1]->C.y == [-8, 88, 888, 8888, 88888, 888888, 8888888, 88888888]
+::eightA[].B[1]->D contains no nulls and has only one value, of length 8
+::eightA[].B[1]->D->neverSeeMe == [1, 0, 0, 0, 0, 0, 0, 0]
+::eightA[].B[1]->D[0] contains no nulls and has only one value, of length 8
+::eightA[].B[1]->bar_head == [-4, 44, 44, 44, 44, 44, 44, 44]
+::eightA[].B[1]->bar_tail == [-12, 1200, 12000, 120000, 1200000, 1200000, 12000000, 120000000]
 ::eightA[].B[1][0] contains no nulls and has only one value, of length 8
 ::eightA[].B[2] contains no nulls and has only one value, of length 8
+::eightA[].B[2]->C contains no nulls and has only one value, of length 8
+::eightA[].B[2]->C.baz_head == [9, 99, 999, 9999, 99999, 999999, 9999999, 99999999]
+::eightA[].B[2]->C.baz_tail == [15, 1500, 15000, 150000, 1500000, 1500000, 15000000, 150000000]
+::eightA[].B[2]->C.y == [12, 1200, 12000, 120000, 1200000, 1200000, 12000000, 120000000]
+::eightA[].B[2]->D contains no nulls and has only one value, of length 8
+::eightA[].B[2]->D->neverSeeMe == [1, 0, 0, 0, 0, 0, 0, 0]
+::eightA[].B[2]->D[0] contains no nulls and has only one value, of length 8
+::eightA[].B[2]->bar_head == [6, 66, 666, 6666, 66666, 666666, 6666666, 66666666]
+::eightA[].B[2]->bar_tail == [18, 1800, 18000, 180000, 1800000, 1800000, 18000000, 180000000]
 ::eightA[].B[2][0] contains no nulls and has only one value, of length 8
 ::eightA[].foo_head == [1, 11, 111, 1111, 11111, 111111, 1111111, 11111111]
 ::eightA[].foo_tail == [7, 77, 777, 7777, 77777, 777777, 7777777, 77777777]
@@ -260,61 +248,56 @@ ArrayTest_cpp.cpp.returnIntSum(int, int*):::ENTER
 ::population[].lastName == [supercalifragilisticexpialadocious, baby2, baby3, baby4, baby5]
 ::population[].middleName == [Ricky, world2, world3, world4, world5]
 ::population[].weight == [155.0, 6.2, 6.3, 6.4, 6.5]
+::static_local_array has only one value
+::static_local_array[] == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 a == 250
 b has only one value
 b[] == [100]
 ===========================================================================
 ArrayTest_cpp.cpp.returnIntSum(int, int*):::EXIT
 ::abracadabra == orig(::abracadabra)
-::abracadabra.B == orig(::abracadabra.B)
-::abracadabra.B[] == orig(::abracadabra.B[])
-::abracadabra.B[].B[0] == orig(::abracadabra.B[].B[0])
-::abracadabra.B[].B[0]->B == orig(::abracadabra.B[].B[0]->B)
-::abracadabra.B[].B[0]->B[0] == orig(::abracadabra.B[].B[0]->B[0])
-::abracadabra.B[].B[0]->foo_head == orig(::abracadabra.B[].B[0]->foo_head)
-::abracadabra.B[].B[0]->foo_tail == ::abracadabra.B[].foo_tail
-::abracadabra.B[].B[0][0] == orig(::abracadabra.B[].B[0][0])
-::abracadabra.B[].B[1] == orig(::abracadabra.B[].B[1])
-::abracadabra.B[].B[1]->B == orig(::abracadabra.B[].B[1]->B)
-::abracadabra.B[].B[1]->B[0] == orig(::abracadabra.B[].B[1]->B[0])
-::abracadabra.B[].B[1]->foo_head == ::abracadabra.B[].foo_tail
-::abracadabra.B[].B[1]->foo_tail == ::abracadabra.B[].foo_tail
-::abracadabra.B[].B[1][0] == orig(::abracadabra.B[].B[1][0])
-::abracadabra.B[].B[2] == orig(::abracadabra.B[].B[2])
-::abracadabra.B[].B[2][0] == orig(::abracadabra.B[].B[2][0])
-::abracadabra.B[].foo_head == orig(::abracadabra.B[].foo_head)
-::abracadabra.B[].foo_tail == orig(::abracadabra.B[].B[0]->foo_tail)
-::abracadabra.B[].foo_tail == orig(::abracadabra.B[].B[1]->foo_head)
-::abracadabra.B[].foo_tail == orig(::abracadabra.B[].B[1]->foo_tail)
-::abracadabra.B[].foo_tail == orig(::abracadabra.B[].foo_tail)
-::abracadabra.foo_head == orig(::abracadabra.foo_head)
-::abracadabra.foo_tail == orig(::abracadabra.foo_tail)
+::abracadabra.MIT_id == orig(::abracadabra.MIT_id)
+::abracadabra.MIT_id[] == orig(::abracadabra.MIT_id[])
+::abracadabra.birthday == orig(::abracadabra.birthday)
+::abracadabra.birthday[] == orig(::abracadabra.birthday[])
+::abracadabra.social_security == orig(::abracadabra.social_security)
+::abracadabra.social_security[] == orig(::abracadabra.social_security[])
 ::basicIntArray == orig(::basicIntArray)
 ::basicIntArray[] == orig(::basicIntArray[])
 ::eightA == orig(::eightA)
 ::eightA[] == orig(::eightA[])
 ::eightA[].B[0] == orig(::eightA[].B[0])
-::eightA[].B[0]->B == orig(::eightA[].B[0]->B)
-::eightA[].B[0]->B->B == orig(::eightA[].B[0]->B->B)
-::eightA[].B[0]->B->B[0] == orig(::eightA[].B[0]->B->B[0])
-::eightA[].B[0]->B->foo_head == orig(::eightA[].B[0]->B->foo_head)
-::eightA[].B[0]->B->foo_tail == ::eightA[].B[1]->foo_head
-::eightA[].B[0]->B[0] == orig(::eightA[].B[0]->B[0])
-::eightA[].B[0]->foo_head == orig(::eightA[].B[0]->foo_head)
-::eightA[].B[0]->foo_tail == orig(::eightA[].B[0]->foo_tail)
+::eightA[].B[0]->C == orig(::eightA[].B[0]->C)
+::eightA[].B[0]->C.baz_head == orig(::eightA[].B[0]->C.baz_head)
+::eightA[].B[0]->C.baz_tail == orig(::eightA[].B[0]->C.baz_tail)
+::eightA[].B[0]->C.y == orig(::eightA[].B[0]->C.y)
+::eightA[].B[0]->D == orig(::eightA[].B[0]->D)
+::eightA[].B[0]->D->neverSeeMe == orig(::eightA[].B[0]->D->neverSeeMe)
+::eightA[].B[0]->D[0] == orig(::eightA[].B[0]->D[0])
+::eightA[].B[0]->bar_head == orig(::eightA[].B[0]->bar_head)
+::eightA[].B[0]->bar_tail == orig(::eightA[].B[0]->bar_tail)
 ::eightA[].B[0][0] == orig(::eightA[].B[0][0])
 ::eightA[].B[1] == orig(::eightA[].B[1])
-::eightA[].B[1]->B == orig(::eightA[].B[1]->B)
-::eightA[].B[1]->B->B == orig(::eightA[].B[1]->B->B)
-::eightA[].B[1]->B->B[0] == orig(::eightA[].B[1]->B->B[0])
-::eightA[].B[1]->B->foo_head == orig(::eightA[].B[1]->B->foo_head)
-::eightA[].B[1]->B->foo_tail == orig(::eightA[].B[1]->B->foo_tail)
-::eightA[].B[1]->B[0] == orig(::eightA[].B[1]->B[0])
-::eightA[].B[1]->foo_head == orig(::eightA[].B[0]->B->foo_tail)
-::eightA[].B[1]->foo_head == orig(::eightA[].B[1]->foo_head)
-::eightA[].B[1]->foo_tail == orig(::eightA[].B[1]->foo_tail)
+::eightA[].B[1]->C == orig(::eightA[].B[1]->C)
+::eightA[].B[1]->C.baz_head == orig(::eightA[].B[1]->C.baz_head)
+::eightA[].B[1]->C.baz_tail == orig(::eightA[].B[1]->C.baz_tail)
+::eightA[].B[1]->C.y == orig(::eightA[].B[1]->C.y)
+::eightA[].B[1]->D == orig(::eightA[].B[1]->D)
+::eightA[].B[1]->D->neverSeeMe == orig(::eightA[].B[1]->D->neverSeeMe)
+::eightA[].B[1]->D[0] == orig(::eightA[].B[1]->D[0])
+::eightA[].B[1]->bar_head == orig(::eightA[].B[1]->bar_head)
+::eightA[].B[1]->bar_tail == orig(::eightA[].B[1]->bar_tail)
 ::eightA[].B[1][0] == orig(::eightA[].B[1][0])
 ::eightA[].B[2] == orig(::eightA[].B[2])
+::eightA[].B[2]->C == orig(::eightA[].B[2]->C)
+::eightA[].B[2]->C.baz_head == orig(::eightA[].B[2]->C.baz_head)
+::eightA[].B[2]->C.baz_tail == orig(::eightA[].B[2]->C.baz_tail)
+::eightA[].B[2]->C.y == orig(::eightA[].B[2]->C.y)
+::eightA[].B[2]->D == orig(::eightA[].B[2]->D)
+::eightA[].B[2]->D->neverSeeMe == orig(::eightA[].B[2]->D->neverSeeMe)
+::eightA[].B[2]->D[0] == orig(::eightA[].B[2]->D[0])
+::eightA[].B[2]->bar_head == orig(::eightA[].B[2]->bar_head)
+::eightA[].B[2]->bar_tail == orig(::eightA[].B[2]->bar_tail)
 ::eightA[].B[2][0] == orig(::eightA[].B[2][0])
 ::eightA[].foo_head == orig(::eightA[].foo_head)
 ::eightA[].foo_tail == orig(::eightA[].foo_tail)
@@ -333,49 +316,52 @@ ArrayTest_cpp.cpp.returnIntSum(int, int*):::EXIT
 ::population[].SS == orig(::population[].SS)
 ::population[].age == orig(::population[].age)
 ::population[].weight == orig(::population[].weight)
+::static_local_array == orig(::static_local_array)
+::static_local_array[] == orig(::static_local_array[])
 b[] == orig(b[])
 ::abracadabra has only one value
-::abracadabra.B has only one value
-::abracadabra.B[] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0]->B contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0]->B[0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[0]->foo_head == [2, 0, 0]
-::abracadabra.B[].B[0][0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1]->B contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1]->B[0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[1][0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[2] contains no nulls and has only one value, of length 3
-::abracadabra.B[].B[2][0] contains no nulls and has only one value, of length 3
-::abracadabra.B[].foo_head == [1, 0, 0]
-::abracadabra.B[].foo_tail == [0, 0, 0]
-::abracadabra.foo_head == 1
-::abracadabra.foo_tail == 0
+::abracadabra.MIT_id has only one value
+::abracadabra.MIT_id[] == [5, 4, 6, 3, 7, 2, 8, 1, 9]
+::abracadabra.birthday has only one value
+::abracadabra.birthday[] == [1983, 10, 30]
+::abracadabra.social_security has only one value
+::abracadabra.social_security[] == [1, 1, 2, 3, 5, 8, 13, 21, 35]
 ::basicIntArray has only one value
 ::basicIntArray[] == [10, 9, 8, 7, 6, 5, 4, 3, 2, 1]
 ::eightA has only one value
 ::eightA[] contains no nulls and has only one value, of length 8
 ::eightA[].B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B->B contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[0]->B->foo_head == [300, 33, 333, 3333, 33333, 333333, 3333333, 33333333]
-::eightA[].B[0]->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[0]->foo_head == [20, 22, 222, 2222, 22222, 222222, 2222222, 22222222]
-::eightA[].B[0]->foo_tail == [11, 111, 1111, 11111, 111111, 1111111, 11111111, 1]
+::eightA[].B[0]->C contains no nulls and has only one value, of length 8
+::eightA[].B[0]->C.baz_head == [300, 33, 333, 3333, 33333, 333333, 3333333, 33333333]
+::eightA[].B[0]->C.baz_tail == [50000, 55, 555, 5555, 55555, 555555, 5555555, 55555555]
+::eightA[].B[0]->C.y == [4000, 44, 444, 4444, 44444, 444444, 4444444, 44444444]
+::eightA[].B[0]->D contains no nulls and has only one value, of length 8
+::eightA[].B[0]->D->neverSeeMe == [1, 0, 0, 0, 0, 0, 0, 0]
+::eightA[].B[0]->D[0] contains no nulls and has only one value, of length 8
+::eightA[].B[0]->bar_head == [20, 22, 222, 2222, 22222, 222222, 2222222, 22222222]
+::eightA[].B[0]->bar_tail == [600000, 66, 666, 6666, 66666, 666666, 6666666, 66666666]
 ::eightA[].B[0][0] contains no nulls and has only one value, of length 8
 ::eightA[].B[1] contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B->B contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[1]->B->foo_head == [33, 333, 3333, 33333, 333333, 3333333, 33333333, 2]
-::eightA[].B[1]->B->foo_tail == [222, 2222, 22222, 222222, 2222222, 22222222, 1, 0]
-::eightA[].B[1]->B[0] contains no nulls and has only one value, of length 8
-::eightA[].B[1]->foo_head == [22, 222, 2222, 22222, 222222, 2222222, 22222222, 1]
-::eightA[].B[1]->foo_tail == [111, 1111, 11111, 111111, 1111111, 11111111, 1, 0]
+::eightA[].B[1]->C contains no nulls and has only one value, of length 8
+::eightA[].B[1]->C.baz_head == [-6, 66, 66, 66, 66, 66, 66, 66]
+::eightA[].B[1]->C.baz_tail == [-10, 100, 1000, 10000, 100000, 1000000, 10000000, 100000000]
+::eightA[].B[1]->C.y == [-8, 88, 888, 8888, 88888, 888888, 8888888, 88888888]
+::eightA[].B[1]->D contains no nulls and has only one value, of length 8
+::eightA[].B[1]->D->neverSeeMe == [1, 0, 0, 0, 0, 0, 0, 0]
+::eightA[].B[1]->D[0] contains no nulls and has only one value, of length 8
+::eightA[].B[1]->bar_head == [-4, 44, 44, 44, 44, 44, 44, 44]
+::eightA[].B[1]->bar_tail == [-12, 1200, 12000, 120000, 1200000, 1200000, 12000000, 120000000]
 ::eightA[].B[1][0] contains no nulls and has only one value, of length 8
 ::eightA[].B[2] contains no nulls and has only one value, of length 8
+::eightA[].B[2]->C contains no nulls and has only one value, of length 8
+::eightA[].B[2]->C.baz_head == [9, 99, 999, 9999, 99999, 999999, 9999999, 99999999]
+::eightA[].B[2]->C.baz_tail == [15, 1500, 15000, 150000, 1500000, 1500000, 15000000, 150000000]
+::eightA[].B[2]->C.y == [12, 1200, 12000, 120000, 1200000, 1200000, 12000000, 120000000]
+::eightA[].B[2]->D contains no nulls and has only one value, of length 8
+::eightA[].B[2]->D->neverSeeMe == [1, 0, 0, 0, 0, 0, 0, 0]
+::eightA[].B[2]->D[0] contains no nulls and has only one value, of length 8
+::eightA[].B[2]->bar_head == [6, 66, 666, 6666, 66666, 666666, 6666666, 66666666]
+::eightA[].B[2]->bar_tail == [18, 1800, 18000, 180000, 1800000, 1800000, 18000000, 180000000]
 ::eightA[].B[2][0] contains no nulls and has only one value, of length 8
 ::eightA[].foo_head == [1, 11, 111, 1111, 11111, 111111, 1111111, 11111111]
 ::eightA[].foo_tail == [7, 77, 777, 7777, 77777, 777777, 7777777, 77777777]
@@ -400,5 +386,7 @@ b[] == orig(b[])
 ::population[].lastName == [supercalifragilisticexpialadocious, baby2, baby3, baby4, baby5]
 ::population[].middleName == [Ricky, world2, world3, world4, world5]
 ::population[].weight == [155.0, 6.2, 6.3, 6.4, 6.5]
+::static_local_array has only one value
+::static_local_array[] == [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
 b[] == [100]
 return == 350
