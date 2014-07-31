@@ -20,6 +20,15 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.1.4 (July 31, 2014)
+
+  Improved StackMap support.
+  - for <init> methods
+  - for BASTORE instruction
+  Improved Kvasir (C/C++ Daikon front end) support for 32bit hosts.
+   
+===========================================================================
+
 5.1.2 (June 30, 2014)
 
   Improved StackMap support.
