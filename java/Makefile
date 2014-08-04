@@ -68,7 +68,8 @@ else
 endif
 
 # Add flags like "-source 5" or "-target 5" to JAVAC_TARGET_FLAGS.
-JAVAC_ARGS ?= -g -XDignore.symbol.file ${JAVAC_TARGET_FLAGS}
+# That variable appears last and overrides the values we provide here.
+JAVAC_ARGS ?= -g -XDignore.symbol.file -source 7 -target 7 ${JAVAC_TARGET_FLAGS}
 
 INSTALL ?= /usr/bin/install
 
