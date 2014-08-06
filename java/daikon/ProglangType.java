@@ -408,7 +408,11 @@ public final /*@Interned*/ class ProglangType
       else
         throw new IllegalArgumentException("Bad character: " + value);
       return Intern.internedLong(Character.getNumericValue(c));
-    } else if (base == BASE_INT) {
+    } 
+    // When parse_value is called from FileIO.read_ppt_decl, we have
+    // not set file_rep_type. Hence, rep_type is still file_rep_type
+    // and BASE_BOOLEAN is legal.  (Daikon issue #33 - markro)
+      else if ((base == BASE_INT) || (base == BASE_BOOLEAN)) {
       // File rep type might be int, boolean, or hashcode.
       // If we had the declared type, we could do error-checking here.
       // (Example:  no hashcode should be negative, nor any boolean > 1.)
@@ -432,8 +436,7 @@ public final /*@Interned*/ class ProglangType
       if (value.equalsIgnoreCase("-Infinity") || value.equals("-inf"))
         return DoubleNegativeInfinity;
       return Intern.internedDouble(value);
-    } else if ((base == BASE_BOOLEAN)
-               || (base == BASE_HASHCODE)
+    } else if ((base == BASE_HASHCODE)
                || (base == BASE_LONG)
                || (base == BASE_LONG_LONG)
                || (base == BASE_SHORT)) {

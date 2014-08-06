@@ -783,8 +783,9 @@ public class DynamicConstants implements Serializable {
               assert slice.find_inv_by_class (lt.getClass()) == null
                 : "inv = " + lt.format() + " slice = " + slice;
             slice.addInvariant (lt);
-            debug.fine ("Adding invariant " + lt.format() + " to slice "
-                        + slice);
+            if (debug.isLoggable (Level.FINE))
+              debug.fine ("Adding invariant " + lt.format() + " to slice "
+                          + slice);
           }
         }
       }
