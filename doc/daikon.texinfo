@@ -4204,12 +4204,13 @@ memory.  Regular progress indicators are printed to standard output.
 You can ignore warnings issued during the instrumentation process, so
 long as the make target itself completes normally.
 
-There are a small number of methods in the JDK that DynComp is
-currently unable to instrument.  The names of these methods will be
-printed at the end of instrumentation.  This is not a problem unless
-your application calls these methods (directly or indirectly).  
-If one of those methods is called, a @samp{NoSuchMethodException} will
-be generated when the call is attempted.
+If there are any methods in the JDK that DynComp is
+unable to instrument, their names will be
+printed at the end of the instrumentation process.  This is not a problem unless
+your application calls one of these methods (directly or indirectly).  
+If one of these methods is called, a @samp{NoSuchMethodException} will
+be generated when the call is attempted. As of Java 7 runtime version 1.7.0_65
+all Java runtime methods are able to be instrumented.
 
 One final note: if you update your JDK in any way (such as a OS upgrade),
 you will need to rebuild @file{dcomp_rt.jar}.
@@ -8313,6 +8314,7 @@ Chicory; please report it if it is not already explained in this manual.
 
 @menu
 * VerifyError constant pool index error::
+* Attempted duplicate class definition error::
 @end menu
 
 @node       VerifyError constant pool index error
@@ -8340,6 +8342,32 @@ BCEL from your classpath, or you should ensure that it appears after
 are running Daikon from sources rather than from @file{daikon.jar}, then
 ensure that @file{$DAIKONDIR/java/lib/bcel.jar} is the first version of
 BCEL on your classpath.)
+
+@node       Attempted duplicate class definition error
+@subsection Attempted duplicate class definition error
+
+@cindex LinkageError, when running Chicory
+@cindex java.lang.LinkageError, when running Chicory
+@cindex attempted duplicate class definition error, when running Chicory
+
+If Chicory throws an error such as the following:
+@smallexample
+Exception in thread "main" java.lang.LinkageError:
+java.lang.LinkageError: loader (instance of  sun/misc/Launcher$AppClassLoader):
+attempted duplicate class definition for name: "SquarePanel"
+@end smallexample
+
+@noindent
+then the problem is most likely that some method in your program uses 
+Java runtime services to set up an additional thread that can get 
+invoked asynchronously. One example is using the @code{java.lang.SecurityManager}
+class to set up a @code{SecurityManager} via @code{System.setSecurityManager}.  The easiest
+way to work around this is to use the @option{--ppt-omit-pattern} option to Chicory.
+After you have located the problem method, rerun Chicory with the additional
+option:
+@smallexample
+--ppt-omitpattern=MyPackage.MyProblemMethod
+@end smallexample
 
 
 @c @node    Eclipse plug-in problems
