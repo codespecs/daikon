@@ -2003,12 +2003,12 @@ machine at @nospellcheck{3.4GHz} with @nospellcheck{16GB} of memory. Barring any
 the entire process
 will take at least two hours - and could be much more depending on the number of
 different platforms on which you test the release.
-
+@sp 1
 @noindent
-NOTE: @*
+PLEASE NOTE: @*
 Each of the steps below assumes that the current working directory is @file{$DAIKONDIR} 
 and that you are using the Bash shell.
-
+@sp 1
 
 @exampleindent 0
 
@@ -2024,7 +2024,25 @@ hg fetch && hg outgoing && hg status
 The last line printed should be @samp{no changes found}.
 
 [Time: moments]
+@page
 
+IMPORTANT NOTE: @*
+The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
+from, two open source projects.  It is important to periodically
+check to see if newer versions of these projects are available.
+The home page for the Valgrind instrumentation framework is
+@uref{http://www.valgring.org}.  We are currently using version 3.9.0,
+released in October, 2013.  The home page for the GNU Binutils
+(a collection of binary tools, of which we only use readelf) is
+@uref{http://www.gnu.org/software/binutils/}.
+We are currently using version 2.24, released in December, 2013.
+
+If you find that there are newer versions of either of these projects
+available, you should update the Fjalar source tree as soon as practical,
+possibly the next release after the one you are currently in the process
+of making.  See the separate document @cite{Merging newer versions of Valgrind
+into Fjalar} for details.
+@sp 1
 
 @item
 Make sure we have the latest version of @file{bcel.jar}. Generally,
@@ -2058,7 +2076,6 @@ make update-doc-dist-date-and-version
 
 [Time: moments]
 
-@page
 @item
 Update the publications pages in a local copy of plume-bib. 
 If you have not done so previously, you may create this repository
@@ -2100,6 +2117,7 @@ make -C $DAIKONDIR/tests/kvasir-tests clean-all nightly-summary-w-daikon
 
 [Time: 15 min]
 
+@page
 
 @item
 Run the Daikon regression tests.
@@ -2182,6 +2200,7 @@ being down.  You can check such links by hand.
 
 [Time: 2 min]
 
+@page
 
 @item
 Test the distribution, currently in the staging area, on a 64-bit machine.
@@ -2317,7 +2336,7 @@ curl -O http://plse.cs.washington.edu/daikon/staging-daikon/ \
 tar xzf daikon.tar.gz
 # Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home
 export DAIKONDIR=`pwd`/daikon
 source daikon/scripts/daikon.bashrc
 cd daikon
@@ -2336,7 +2355,7 @@ curl -O http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.
 tar xzf daikon.tar.gz
 # Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home
 export DAIKONDIR=`pwd`/daikon
 source daikon/scripts/daikon.bashrc
 cd daikon
@@ -2381,6 +2400,7 @@ hg push
 
 [Time: moments]
 
+@page
 
 @item
 Add a version label to the repository:
