@@ -29,6 +29,10 @@
 \text\
 @end macro
 
+@tex
+\global\tableindent=.4in
+@end tex
+
 @c set overall document style
 @c @setchapternewpage odd
 @paragraphindent 1
@@ -654,6 +658,10 @@ java -cp c:\cygwin64\home\user\invariants\daikon\daikon.jar daikon.Daikon
 @noindent
 will fail as the backslash @samp{\} is processed by bash and removed.  Any of 
 the following will work: 
+
+@tex
+\global\hfuzz=35pt
+@end tex
 @exampleindent 1
 @example
 java -cp c:\\cygwin64\\home\\user\\invariants\\daikon\\daikon.jar daikon.Daikon 
@@ -661,6 +669,9 @@ java -cp "c:\cygwin64\home\user\invariants\daikon\daikon.jar" daikon.Daikon
 java -cp c:/cygwin64/home/user/invariants/daikon/daikon.jar daikon.Daikon 
 @end example
 @exampleindent 4
+@tex
+\global\hfuzz=1pt
+@end tex
 
 The last is interesting as this is almost the same as on ``real'' Linux.  Windows 
 accepts either forward (@samp{/}) or backward (@samp{\}) slashes as directory separators 
@@ -1939,8 +1950,10 @@ and discard code explaining why they were not worthy of print.  Any of
 the three parts of the argument may be made a wildcard by excluding it.
 For example, @samp{@var{inv_class}} and
 @samp{<@var{var1},@var{var2},...>@@@var{ppt}} are valid arguments.
-Concrete examples are @samp{Implication<x,y>@@foo():::EXIT},
-@samp{Implication<x,y>}, and @samp{<x,y>@@foo():::EXIT}.
+Some concrete examples are
+@samp{Implication<x,y>@@foo():::EXIT},
+@samp{<x,y>@@foo():::EXIT},
+and @samp{Implication<x,y>}.
 To print all discarded invariants, use the argument @samp{all}.
 
 @item --mem_stat
@@ -2558,11 +2571,17 @@ Some invariants also have additional configuration switches that control
 their behavior.  These are indicated below as well.
 @xref{Options to enable/disable specific invariants}.
 
+@tex
+\global\hfuzz=35pt
+@end tex
 @table @asis
 @exampleindent 0
 @include invariants-doc.texinfo
 @exampleindent 4
 @end table
+@tex
+\global\hfuzz=1pt
+@end tex
 
 @node    Invariant filters
 @section Invariant filters
@@ -3681,7 +3700,7 @@ be equal or not equal to other variables.
 If depth=1, then also @code{MyA.b}, @code{myList.next}, and the integers
 @code{myA.x} and @code{myList.val} would be examined.
 @item
-If depth=2, then also @code{MyA.b.y}, @code{MyA.b.z},
+If depth=2, then, in addition to the above, also @code{MyA.b.y}, @code{MyA.b.z},
 @code{myList.next.next}, and @code{myList.next.val} would be examined.
 @end itemize
 
@@ -7696,8 +7715,8 @@ section tells you how to debug your problem if the
 answer is 0, but you believe that there are samples in the file you are
 feeding to Daikon.
 
-Using the normal dataflow hierarchy, Daikon only explicitly processes 
-@code{:::EXIT} program points.  Other program points, such as
+Using the normal dataflow hierarchy, Daikon explicitly processes 
+@code{:::EXIT} program points only.  Other program points, such as
 @code{:::ENTER} program points, are processed indirectly when their
 corresponding @code{:::EXIT} points are encountered.  
 (You can disable this behavior with the
