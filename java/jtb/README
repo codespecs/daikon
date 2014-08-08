@@ -30,4 +30,13 @@ file). The file Java1.5.jj is from the same above repository (version
 java-1.5 com.rc.retroweaver.Weaver -source jtb
 for x in `find jtb -name "*.java"` ; do mv $x $x.renamed ; done
 
-The 
+===========================================================================
+
+Daikon uses JTB for parsing and unparsing expressions.  
+JTB is used by the daikon.runtimechecker and daikon.split packages.
+
+JTB 1.3.2 was released in 2005.  It is the last version of JTB -- JTB is no
+longer maintained.  JTB 1.3.2 is rather old and does not support recent
+versions of Java, but there would be no benefit to updating JTB because
+Java's expression syntax has not changed appreciably since the last release
+of JTB.
