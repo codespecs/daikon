@@ -10,6 +10,7 @@ Athlon
 basename
 BCEL
 biconditional
+Binutils
 bitwise
 boolean
 breakpoint
@@ -93,6 +94,7 @@ preprocess
 preprocessing
 preprocessor
 prover
+readelf
 rethrown
 runtime
 runtimechecker
@@ -131,5 +133,5 @@ whitespace
 wildcard
 workflow
 workspace
-xmeans
 x86
+xmeans
