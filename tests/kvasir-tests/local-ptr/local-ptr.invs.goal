@@ -85,6 +85,8 @@
 ::intPtrPtr[0][0] == orig(::intPtrPtr[0][0])
 ::intPtr[] == orig(::intPtr[])
 ::leaf_global1 == ::leaf_global2
+::leaf_global1[0] == ::leaf_global2[0]
+::leaf_global1[0] == ::leaf_global4[0]
 ::nonleaf_global1 == orig(::nonleaf_global1)
 ::nonleaf_global2 == orig(::nonleaf_global2)
 ::nonleaf_global3 == orig(::nonleaf_global3)
@@ -99,11 +101,9 @@
 ::intPtr[] == [3, 1, 4, 1, 5, 9, 2, 6]
 ::leaf_global1 has only one value
 ::leaf_global1[0] == 1
-::leaf_global2[0] == 1
 ::leaf_global3 has only one value
 ::leaf_global3[0] == 2
 ::leaf_global4 has only one value
-::leaf_global4[0] == 1
 ::nonleaf_global1 == null
 ::nonleaf_global2 == null
 ::nonleaf_global3 == null
@@ -126,6 +126,12 @@
 ..main():::EXIT
 ::intPtr == ::intPtrPtr[0]
 ::leaf_global1 == ::leaf_global2
+::leaf_global1[0] == ::leaf_global2[0]
+::leaf_global1[0] == ::leaf_global4[0]
+::leaf_global1[0] == ::nonleaf_global1[0]
+::leaf_global1[0] == ::nonleaf_global2[0]
+::leaf_global1[0] == ::nonleaf_global4[0]
+::leaf_global3[0] == ::nonleaf_global3[0]
 ::nonleaf_global1 == ::nonleaf_global2
 ::floatPtr1 has only one value
 ::floatPtr1[0] == 3.1415
@@ -137,23 +143,19 @@
 ::intPtr[] == [3, 1, 4, 1, 5, 9, 2, 6]
 ::leaf_global1 has only one value
 ::leaf_global1[0] == 1
-::leaf_global2[0] == 1
 ::leaf_global3 has only one value
 ::leaf_global3[0] == 2
 ::leaf_global4 has only one value
-::leaf_global4[0] == 1
 ::nonleaf_global1 has only one value
-::nonleaf_global1[0] == 1
-::nonleaf_global2[0] == 1
 ::nonleaf_global3 has only one value
-::nonleaf_global3[0] == 2
 ::nonleaf_global4 has only one value
-::nonleaf_global4[0] == 1
 return == 0
 ===========================================================================
 ..nonleaf():::ENTER
 ::intPtr == ::intPtrPtr[0]
 ::leaf_global1 == ::leaf_global2
+::leaf_global1[0] == ::leaf_global2[0]
+::leaf_global1[0] == ::leaf_global4[0]
 ::nonleaf_global1 == ::nonleaf_global2
 ::floatPtr1 has only one value
 ::floatPtr1[0] == 3.1415
@@ -165,11 +167,9 @@ return == 0
 ::intPtr[] == [3, 1, 4, 1, 5, 9, 2, 6]
 ::leaf_global1 has only one value
 ::leaf_global1[0] == 1
-::leaf_global2[0] == 1
 ::leaf_global3 has only one value
 ::leaf_global3[0] == 2
 ::leaf_global4 has only one value
-::leaf_global4[0] == 1
 ::nonleaf_global1 == null
 ::nonleaf_global3 == null
 ::nonleaf_global4 == null
@@ -188,12 +188,18 @@ return == 0
 ::leaf_global1 == ::leaf_global2
 ::leaf_global1 == orig(::leaf_global1)
 ::leaf_global1 == orig(::leaf_global2)
+::leaf_global1[0] == ::leaf_global2[0]
+::leaf_global1[0] == ::leaf_global4[0]
+::leaf_global1[0] == ::nonleaf_global1[0]
+::leaf_global1[0] == ::nonleaf_global2[0]
+::leaf_global1[0] == ::nonleaf_global4[0]
 ::leaf_global1[0] == orig(::leaf_global1[0])
-::leaf_global2[0] == orig(::leaf_global2[0])
+::leaf_global1[0] == orig(::leaf_global2[0])
+::leaf_global1[0] == orig(::leaf_global4[0])
 ::leaf_global3 == orig(::leaf_global3)
+::leaf_global3[0] == ::nonleaf_global3[0]
 ::leaf_global3[0] == orig(::leaf_global3[0])
 ::leaf_global4 == orig(::leaf_global4)
-::leaf_global4[0] == orig(::leaf_global4[0])
 ::nonleaf_global1 == ::nonleaf_global2
 ::floatPtr1 has only one value
 ::floatPtr1[0] == 3.1415
@@ -205,15 +211,9 @@ return == 0
 ::intPtr[] == [3, 1, 4, 1, 5, 9, 2, 6]
 ::leaf_global1 has only one value
 ::leaf_global1[0] == 1
-::leaf_global2[0] == 1
 ::leaf_global3 has only one value
 ::leaf_global3[0] == 2
 ::leaf_global4 has only one value
-::leaf_global4[0] == 1
 ::nonleaf_global1 has only one value
-::nonleaf_global1[0] == 1
-::nonleaf_global2[0] == 1
 ::nonleaf_global3 has only one value
-::nonleaf_global3[0] == 2
 ::nonleaf_global4 has only one value
-::nonleaf_global4[0] == 1

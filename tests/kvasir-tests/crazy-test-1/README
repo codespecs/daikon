@@ -1,0 +1,13 @@
+crazy-test-1.comp fails (64 bits only) due to the 'multiple struct members
+in a single register' problem.
+This will require a significant amount of work in Kvasir to repair.
+
+The fault is that the first five elements of basicTypesStruct are
+placed in the same invariant set.
+
+-a a.char_val a.short_val a.uchar_val return return.char_val return.short_val return.uchar_val
+-a.int_val return.int_val
+-a.ushort_val return.ushort_val
++a a.char_val a.int_val a.short_val a.uchar_val a.ushort_val return return.char_val return.int_val return.short_val retu
+rn.uchar_val return.ushort_val
+
