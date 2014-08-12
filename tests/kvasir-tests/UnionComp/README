@@ -1,4 +1,4 @@
-This test is intentional a little strange to demonstrate a potential
+This test is intentionally a little strange to demonstrate a potential
 problem with unions in Kvasir.  The program contains a union of a
 char* and ptr*.  The ptr (next) is assigned an address giving the 
 char* (name) random garbage.  Hence, the .dtrace file will almost
