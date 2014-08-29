@@ -17,8 +17,11 @@ package B::DeparseDaikon;
 
 use B::Deparse;
 
-use B qw(main_root main_start main_cv SVf_POK CVf_METHOD CVf_LOCKED
-         CVf_LVALUE OPpCONST_ARYBASE class);
+# OPpCONST_ARYBASE and CVf_LOCKED removed from Perl > 5.10 (markro)
+# use B qw(main_root main_start main_cv SVf_POK CVf_METHOD CVf_LOCKED
+#          CVf_LVALUE OPpCONST_ARYBASE class);
+
+use B qw(main_root main_start main_cv SVf_POK CVf_METHOD CVf_LVALUE class);
 
 use Daikon::PerlType qw(parse_type unparse_type type_lub
                         unparse_to_code read_types_into);
@@ -324,7 +327,12 @@ sub make_trace_return {
     # correct output. This number is easier to find on successive runs
     # than a line number, but it may change between different versions
     # of perl looking at the same code.
-    my $seq = $op->seq - $self->{'op_seq_base'};
+
+    # UNDONE:
+    # $op->seq has been removed in Perl > 5.10.  I have not been able
+    # to locate a suitable replacement as yet.  (markro)
+#   my $seq = $op->seq - $self->{'op_seq_base'};
+    my $seq = 0;
     # Evaluate only the appropriate version, depending on the runtime
     # context.
     my $ret_val = "(wantarray() ? $list : $scalar)";
@@ -385,10 +393,13 @@ sub deparse_sub {
     if ($cv->FLAGS & SVf_POK) {
         $proto = "(". $cv->PV . ") ";
     }
-    if ($cv->CvFLAGS & (CVf_METHOD|CVf_LOCKED|CVf_LVALUE)) {
+
+# CVf_LOCKED removed from Perl > 5.10 (markro)
+#   if ($cv->CvFLAGS & (CVf_METHOD|CVf_LOCKED|CVf_LVALUE)) {
+    if ($cv->CvFLAGS & (CVf_METHOD|CVf_LVALUE)) {
         $proto .= ": ";
         $proto .= "lvalue " if $cv->CvFLAGS & CVf_LVALUE;
-        $proto .= "locked " if $cv->CvFLAGS & CVf_LOCKED;
+#       $proto .= "locked " if $cv->CvFLAGS & CVf_LOCKED;
         $proto .= "method " if $cv->CvFLAGS & CVf_METHOD;
     }
 
@@ -398,7 +409,12 @@ sub deparse_sub {
 
     # The lowest OP sequence number in this sub, to which all others
     # will be compared
-    local($self->{'op_seq_base'}) = $cv->START->seq;
+
+    # UNDONE:
+    # $op->seq has been removed in Perl > 5.10.  I have not been able
+    # to locate a suitable replacement as yet.  (markro)
+#   local($self->{'op_seq_base'}) = $cv->START->seq;
+    local($self->{'op_seq_base'}) = 0;
 
     local($self->{'curcv'}) = $cv;
     local($self->{'curcvlex'});
@@ -708,7 +724,9 @@ sub dq {
     my $op = shift;
     my $type = $op->name;
     if ($type eq "const") {
-        return '$[' if $op->private & OPpCONST_ARYBASE;
+
+# OPpCONST_ARYBASE removed from Perl > 5.10 (markro)
+#       return '$[' if $op->private & OPpCONST_ARYBASE;
         return B::Deparse::uninterp(B::Deparse::escape_str(B::Deparse::unback($self->const_sv($op)->as_string)));
     } elsif ($type eq "concat") {
         my $first = $self->dq($op->first);
@@ -766,9 +784,12 @@ sub const {
 sub pp_const {
     my $self = shift;
     my($op, $cx) = @_;
-    if ($op->private & OPpCONST_ARYBASE) {
-        return '$[';
-    }
+ 
+# OPpCONST_ARYBASE removed from Perl > 5.10 (markro)
+#
+#   if ($op->private & OPpCONST_ARYBASE) {
+#       return '$[';
+#   }
 #    if ($op->private & OPpCONST_BARE) { # trouble with `=>' autoquoting 
 #       return $self->const_sv($op)->PV;
 #    }
