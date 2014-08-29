@@ -20,6 +20,17 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.1.6 (August 29, 2014)
+
+  A section has been added to the Daikon User Manual describing how to
+  deal with a "duplicate class definition error" when running Chicory.
+
+  We have fixed a problem (Daikon issue #33) that would cause Chicory to
+  crash on input of the form:
+    private static final Boolean name = false;
+
+===========================================================================
+
 5.1.4 (July 31, 2014)
 
   Improved StackMap support.

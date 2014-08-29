@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.1.5
+@center Daikon version 5.1.6
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.1.5 release date
-@center July 31, 2014
+@c Print out the Daikon version 5.1.6 release date
+@center August 29, 2014
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.1.5, released July 31, 2014.
+It describes Daikon version 5.1.6, released August 29, 2014.
 
 @menu
 * Introduction::
@@ -2031,7 +2031,7 @@ The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
 from, two open source projects.  It is important to periodically
 check to see if newer versions of these projects are available.
 The home page for the Valgrind instrumentation framework is
-@uref{http://www.valgring.org}.  We are currently using version 3.9.0,
+@uref{http://www.valgrind.org}.  We are currently using version 3.9.0,
 released in October, 2013.  The home page for the GNU Binutils
 (a collection of binary tools, of which we only use readelf) is
 @uref{http://www.gnu.org/software/binutils/}.

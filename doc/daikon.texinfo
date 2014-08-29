@@ -63,14 +63,14 @@
 @center @titlefont{Daikon Invariant Detector User Manual}
 
 @sp 2
-@center Daikon version 5.1.5
+@center Daikon version 5.1.6
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.1.5 release date
-@center July 31, 2014
+@c Print out the Daikon version 5.1.6 release date
+@center August 29, 2014
 @end ifset
 
 @ifclear final
@@ -118,7 +118,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector User Manual
 
 This is the user manual for the Daikon invariant detector.
-It describes Daikon version 5.1.5, released July 31, 2014.
+It describes Daikon version 5.1.6, released August 29, 2014.
 
 @menu
 * Introduction::
@@ -8557,7 +8557,7 @@ and about debugging flags.
 @section History
 @cindex history of Daikon
 
-This manual describes Daikon version 5.1.5, released July 31, 2014.
+This manual describes Daikon version 5.1.6, released August 29, 2014.
 A more detailed list of revisions since mid-2001 can be found in file
 @file{daikon/doc/CHANGES} in the distribution; this section gives a
 high-level view of the package's history.
@@ -8571,7 +8571,7 @@ judged based on the version of Daikon current at the time of use.
 @c @cindex loop heads, instrumenting
 @c @cindex instrumenting loop heads
 @cindex Python implementation of Daikon
-@cindex Daikon version 5.1.5
+@cindex Daikon version 5.1.6
 
 Daikon 1 was written in the Python programming language in 1998.  It included
 front ends for C, Java, and Lisp.  The C front end was extremely limited
