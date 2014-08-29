@@ -1,0 +1,748 @@
+\input texinfo   @c -*-texinfo-*-
+@c %**start of header
+@setfilename valgrind_merge.info
+@settitle Merging newer versions of Valgrind into Fjalar
+@c %**end of header
+
+@paragraphindent 0
+@codequotebacktick on
+@exampleindent 1
+
+@titlepage
+@sp 10
+@center @titlefont{Merging newer versions of Valgrind into Fjalar}
+@sp 4
+@center @today{}
+@end titlepage
+
+@everyfooting @| @| @today{}
+
+@ifnottex
+@node Top
+@top Merging newer versions of Valgrind into Fjalar
+
+This document describes how to update Fjalar, Kvasir, and Dyncomp
+with newer versions of Valgrind and VEX.
+
+@menu
+* Introduction::
+* Getting Started::
+* Creating the diffs::
+* Merging the changes::
+* Compiling and Testing::
+* Committing::
+* Valgrind modifications::
+* Memcheck modifications::
+* Supporting new VEX IR Instruction::
+@end menu
+@end ifnottex
+
+
+@node Introduction
+@chapter Introduction
+
+Fjalar is built as a tool on top of Valgrind, and it it also contains
+a sizable amount of code from Memcheck, another Valgrind tool. When new
+versions of Valgrind and Memcheck are released, Fjalar (and Kvasir)
+should be updated
+to incorporate the Valgrind/Memcheck changes. This document tells you
+how to do so.
+
+Conceptually, this is two separate updates: (1) Updating our underlying
+copy of Valgrind to the newer version of Valgrind, and (2) Updating the
+memcheck code contained in Fjalar to the newer version of Memcheck. Due
+to very tight dependence of the memcheck code on Valgrind, the changes
+should be done simultaneously. 
+
+The update of the underlying copy of Valgrind can usually be done almost
+automatically. Updating the memcheck code often involves manual work,
+due to substantial modifications to the memcheck code that are incorporated
+in Fjalar. The more frequent the merges are, the easier they will be to
+do. Monthly, at the very least, is recommended. 
+
+
+@node Getting Started
+@chapter Getting Started
+
+The instructions in this document assume you use bash or sh as your shell.
+If you use a different shell, you will need to adjust the instructions
+accordingly.  Also, we assume $INV points to a parent directory that
+contains both the Daikon and Fjalar source trees.
+
+After you update and verify your Daikon and Fjalar trees, you will need
+to obtain two copies of Valgrind: the latest upstream version (or perhaps
+the latest upstream release version), and the one
+that the current version of Fjalar is based on. (The version that was the 
+target of the last upgrade.)
+
+@menu
+* Obtain a copy of Daikon and Fjalar::
+* Ensure your source is up to date::
+* Verify current sources pass the regression tests::
+* Obtain a copy of the target Valgrind and VEX source trees::
+* Obtain a copy of the base Valgrind and VEX source trees::
+@end menu
+
+
+@node Obtain a copy of Daikon and Fjalar
+@section Obtain a copy of Daikon and Fjalar
+
+(You may skip this step if you already have local clones of these repositories.)
+
+Clone a copy of Daikon and Fjalar from our Google Code Mercurial
+repositories:
+
+@example
+export $INV=`pwd`
+hg clone https://code.google.com/p/daikon/
+hg clone https://code.google.com/p/fjalar/
+@end example
+
+
+@node Ensure your source is up to date 
+@section Ensure your source is up to date 
+
+(If you just made fresh clones of the repositories, you may skip this step.)
+
+Update your enlistment to the latest versions:
+
+@example
+cd $INV/daikon
+hg fetch
+cd $INV/fjalar
+hg fetch
+@end example
+
+Ensure there are no local changes:
+
+@example
+cd $INV/daikon
+hg -q diff 
+cd $INV/fjalar
+hg -q diff 
+@end example
+
+The diff commands should produce no output. If there are any differences,
+commit and push them, then start over from the beginning. 
+
+Ensure there are no outgoing changes:
+
+@example
+cd $INV/daikon
+hg outgoing
+cd $INV/fjalar
+hg outgoing
+@end example
+
+The outgoing commands should say "no changes found". If there are outgoing changes,
+push them, then start over from the beginning. 
+
+
+@node Verify current sources pass the regression tests
+@section Verify current sources pass the regression tests
+
+Re-compile Fjalar, then run the tests. (The tests take about 20 minutes.) 
+
+@example
+cd $INV/fjalar
+make build
+cd $INV/daikon/tests/kvasir-tests 
+make nightly-summary-w-daikon
+@end example
+
+The tests should pass. If any tests fail, fix them, then start over from
+the beginning.
+
+At this point, the source trees are ready for the merge.
+However, the PLSE repositories contain 
+automake/autoconf generated files to simplify things for the end user;
+also, there are many other build and test generated files that
+need to be omitted to
+simplfy the output of the diff commands below. 
+
+@example
+cd $INV/fjalar
+make very-clean
+cd $INV/daikon
+make very-clean
+@end example
+
+In addition, we don't want to continue to propagate deleted files.
+You should run the following command to get a list of
+all unknown (not tracked) files.  Review the list and in most cases
+you will want to delete the file(s).
+
+@example
+cd $INV/fjalar
+hg status -u
+@end example
+
+The Mercurial command to remove (delete) a tracked file is:
+
+@example
+hg remove @var{file-name}
+@end example
+
+
+@node Obtain a copy of the target Valgrind and VEX source trees
+@section Obtain a copy of the target Valgrind and VEX source trees
+
+First, we will get a copy of the target source tree and call it
+"valgrind-new".  As mentioned above, you need to decide whether to
+get the current
+upstream version or the most recent release version.
+Additional information about working with the Valgrind repository can be
+found at: @uref{http://www.valgrind.org/downloads/repository.html,
+Valgrind: Code Repository}
+
+To get the current upstream sources:
+
+@example
+cd $INV
+svn co svn://svn.valgrind.org/valgrind/trunk valgrind-new
+@end example
+
+To get the more recent release sources you first need to find the
+associated revision numbers.  This can be done by looking at the
+most recent source tags: 
+
+@example
+svn log -l1 svn://svn.valgrind.org/valgrind/tags 
+svn log -l1 svn://svn.valgrind.org/vex/tags 
+@end example
+
+The revision number will be displayed as a number precedded by the
+letter "r" - such as r2796.  Remember these two revision numbers
+for the following commands to fetch the source code:
+
+@example
+cd $INV
+svn co -r @var{valgrind-revision-number} \
+    svn://svn.valgrind.org/valgrind/trunk valgrind-new
+cd valgrind-new
+svn update -r @var{vex-revision-number} VEX
+@end example
+
+The VEX update command is necessary because the VEX instrumentation library
+Valgrind is built on is stored in a separate SVN repository. A Valgrind
+checkout will always check out the most recent version of the VEX source.
+This is fine for when we checked out the current Valgrind source, however,
+here we want the release revison we captured with the log command.
+
+
+@node Obtain a copy of the base Valgrind and VEX source trees
+@section Obtain a copy of the base Valgrind and VEX source trees
+
+This step uses the values captured in the @file{REVISION} file the 
+previous time Valgrind was merged into Fjalar.  We will call this
+tree "valgrind-old".
+
+@example
+cd $INV
+source fjalar/valgrind/REVISION
+svn co -r $VALGRIND_REVISION \
+    svn://svn.valgrind.org/valgrind/trunk valgrind-old
+cd valgrind-old
+svn update -r $VEX_REVISION VEX
+@end example
+
+Here again, the VEX update is necessary because 
+we want the corresponding version used in the Fjalar repository for
+the copy that will be diffed.
+
+Now that we have the old and new Valgrind trees, we can check for any
+files that have been removed by the Valgrind developers since our last
+merge.  Use the following
+command to get the list, if any, and then remove the indicated files.
+
+@example
+cd $INV
+diff -qrb -x.svn valgrind-old valgrind-new |grep "Only in valgrind-old"
+@end example
+
+This step could be done later, but we do it now to reduce the size
+of the patch and diff files.
+
+
+@node Creating the diffs
+@chapter Creating the diffs
+
+Create patches and diffs showing what the Valgrind maintainers have
+changed since
+the last time Valgrind code was merged into Fjalar. Two sets of diffs
+will be created: one for Memcheck and one for everything else (which
+we'll call "Coregrind", and which includes VEX). The commands below
+may be found in @file{fjalar/generate-patch-file.sh}.
+
+@menu
+* Coregrind and Memcheck patch files::
+* PLSE Coregrind and Memcheck diff files::
+@end menu
+
+
+@node Coregrind and Memcheck patch files
+@section Coregrind and Memcheck patch files 
+
+Create diff files to be used as input to the patch program.
+
+@example
+cd $INV
+rm -f coregrind.patch memcheck.patch
+diff -urb --unidirectional-new-file -x.svn valgrind-old valgrind-new \
+     > coregrind.patch
+diff -urb --unidirectional-new-file -x.svn -xdocs -xtests \
+     valgrind-old/memcheck valgrind-new/memcheck > memcheck.patch
+@end example
+
+
+@node PLSE Coregrind and Memcheck diff files
+@section PLSE Coregrind and Memcheck diff files
+
+Generate diff files containing PLSE changes to coregrind and memcheck.
+These will not be used for any automated patching, but for visiual
+verification later.
+
+@example
+cd $INV
+rm -f coregrind-PLSE.diff memcheck-PLSE.diff
+diff -urb -x.hg -xinst -x.svn -xfjalar -xMakefile.in -xfjalar/html \
+     valgrind-old fjalar/valgrind > coregrind-PLSE.diff
+diff -urb -x.hg -xinst -x.svn -xMakefile.in -xhtml -xdocs -xtests \
+     valgrind-old/memcheck fjalar/valgrind/fjalar > memcheck-PLSE.diff
+@end example
+
+
+@node Merging the changes
+@chapter Merging the changes
+
+@menu
+* Coregrind Merge::
+* Coregrind Conflicts::
+* Memcheck Merge::
+* Memcheck Conflicts::
+* Updating Fjalar/Kvasir::
+@end menu
+
+
+@node Coregrind Merge
+@section Coregrind Merge
+
+Now we can merge the changes from the created diffs. The coregrind patch
+should apply with very little conflicts.
+
+It can be difficult to undo a patch operation, so you should first attempt
+a dry run. 
+
+@example
+cd $INV/fjalar/valgrind
+patch -p1 -lu < $INV/coregrind.patch --dry-run
+@end example
+
+If the patch fails, it might be indicative of problems in the above diffing.
+
+When you are ready to apply the patch run:
+
+@example
+cd $INV/fjalar/valgrind
+patch -p1 -lu < $INV/coregrind.patch
+@end example
+
+
+@node Coregrind Conflicts
+@section Coregrind Conflicts
+
+Handle any conflicts. They are listed in the patch output, or run this
+command:
+
+@example
+find -name '*.rej'
+@end example
+
+For every change in the file you will need to examine both the changed
+code as well as our original code and determine if it needs to be hand
+merged or if the change is not relevant. It is useful to refer to
+@code{coregrind-PLSE.diff} during this process. Remove the @code{.rej}
+and @code{.orig} files as you go, so that finally the @code{find}
+command produces no output.
+
+
+@node Memcheck Merge
+@section Memcheck Merge
+
+We use the memcheck.patch file to update Fjalar as it's code is
+derived from Valgrind/memcheck.
+
+@example
+cd $INV/fjalar/valgrind/fjalar
+patch -p2 -lu < $INV/memcheck.patch --dry-run
+@end example
+
+If the patch output looks sane, continue with the actual merge:
+
+@example
+cd $INV/fjalar/valgrind/fjalar
+patch -p2 -lu < $INV/memcheck.patch
+@end example
+
+
+@node Memcheck Conflicts
+@section Memcheck Conflicts
+
+Handle any conflicts. They are listed in the patch output, or run this
+command:
+
+@example
+find -name '*.rej'
+@end example
+
+For every change in the file you will need to examine both the changed
+code as well as our original code and determine if it needs to be hand
+merged or if the change is not relevant.
+
+Our changes to Memcheck are much more substantial than our changes to
+Coregrind.
+
+The largest modification to memcheck is in mc_translate.c and special
+care should be made to ensure it is present and up to date.
+The function MC_(instrument) handles the instrumentation of calls for
+Dyncomp.
+It is primarily contained in a switch statement; each case handles one
+VEX instruction type, and the body contains both the original code for
+memcheck and also the code for Dyncomp. After the update, you should
+double-check that each clause contains corresponding code: any changes
+to the memcheck versions are reflected in the Dyncomp versions, and
+any new clause has a Dyncomp version.
+
+
+@node Updating Fjalar/Kvasir
+@section Updating Fjalar/Kvasir
+
+Like @file{fjalar/mc_translate.c},
+@file{fjalar/kvasir/dyncomp_translate.c}
+is derived from
+@file{valgrind/memcheck/mc_translate.c}.  However, due to extensive 
+modifications and appending '_DC' to most function names to avoid
+conflicts, using the patch program with @file{memcheck.patch} file
+is of little use.
+Instead, you will need to use @file{memcheck.patch} as a template for 
+editing @file{fjalar/kvasir/dyncomp_translate.c} by hand.
+
+Additionally Fjalar/Kvasir need to be updated to properly handle any
+changes in Valgrind API/functionality. For the most part Valgrind
+maintains a relatively stable interface to its tools. Any tool-visible
+changes should be noted in the change logs.
+
+A somewhat more problematic area are changes in the VEX IR. Dyncomp
+makes heavy use of the VEX IR, so any changes in it need to be
+reflected. Most of the changes to the public VEX IR can be discovered
+by running the following command:
+
+@example
+cd $inv/valgrind-new
+svn log -r $@{VEX_REVISION@}:HEAD VEX/pub/libvex_ir.h
+@end example
+
+The files with all the VEX IR code for Dyncomp is located in
+dyncomp_translate.[ch]. dyncomp_translate.c is structured primarily
+into functions of the form @code{expr2tags_[EXPRESSION_TYPE]()}.
+These functions will contain a switch for all VEX IR instructions
+corresponding to the expression type and some call to a Dyncomp tag
+function. Most often VEX IR changes will be syntactical in nature and
+will only involve changing the names of the instructions. If the log
+indicates that new VEX IR instructions have been added, they will need
+to be explicitly supported by Dyncomp. Please see Appendix C for
+guidelines on supporting new VEX instructions.
+
+@emph{need section on readdwarf and Binutils.}
+diff -ub binutils-2.23.2/include/elf binutils-2.24/include/elf > ~/include.patch
+diff -ub binutils-2.23.2/include binutils-2.24/include >> ~/include.patch
+diff -ub binutils-2.23.2/libiberty/dwarfnames.c binutils-2.24/libiberty/dwarfnames.c >> ~/include.patch
+diff -ub binutils-2.23.2/binutils binutils-2.24/binutils > ~/binutils.patch
+cd $INV/fjalar/valgrind/fjalar
+patch -p1 -lu -f <~/include.patch --dry-run
+patch -p2 -lu -f -F3 <~/binutils.patch --dry-run
+
+
+@emph{need section on special changes to Valgrind source. I can't remember what this refers to}
+
+
+@node Compiling and Testing
+@chapter Compiling and Testing
+
+We must now ensure that the merged code compiles correctly and passes
+the regression test suite.
+
+@menu
+* Compiling Fjalar::
+* Testing Valgrind::
+* Testing Fjalar::
+* Documenting Changes::
+@end menu
+
+
+@node Compiling Fjalar
+@section Compiling Fjalar
+
+The first step is to build Fjalar/Kvasir.
+
+@example
+cd $INV/fjalar
+make build
+@end example
+
+The build target should autogen the config and Makefiles
+and compile Fjalar. Fix any compilation errors.
+
+
+@node Testing Valgrind
+@section Testing Valgrind
+
+Before we test Fjalar, it is a good idea to verify we haven't
+broken the underlying Valgrind:
+
+@example
+cd $INV/fjalar
+make test
+@end example
+
+The test suite should pass without modification.
+
+
+@node Testing Fjalar
+@section Testing Fjalar
+
+The regression suite is located in the tests/kvasir-tests directory
+of the Daikon tree.
+It can be run using the following commands (takes about 20 minutes):
+
+@example
+cd $INV/daikon/tests/kvasir-tests 
+make nightly-summary-w-daikon
+@end example
+
+The test suite should pass without modification.
+
+
+@node Documenting Changes
+@section Documenting Changes
+
+Any user-visible changes should be documented in
+@file{$INV/daikon/docs/CHANGES}.
+Additionally, @file{fjalar/valgrind/REVISION} should be updated
+with the Valgrind and VEX revisions that were used for this merge.
+
+The revision for Valgrind can be obtained by:
+
+@example
+export VALGRIND_REVISION_NEW=`(cd $INV/valgrind-new; svn info | \
+    grep "Last Changed Rev: " | cut -d " " --fields=4)`
+echo $VALGRIND_REVISION_NEW
+@end example
+
+The revision for VEX can be obtained by:
+
+@example
+export VEX_REVISION_NEW=`(cd $INV/valgrind-new/VEX; svn info | \
+    grep "Last Changed Rev: " | cut -d " " --fields=4)`
+echo $VEX_REVISION_NEW
+@end example
+
+
+@node Committing
+@chapter Committing
+
+Once the test suite passes without errors and all changes are documented,
+the changes should be committed to the Mercurial repository.
+
+@menu
+* Tell Mercurial about files that were added or removed::
+* Commit commands::
+@end menu
+
+
+@node Tell Mercurial about files that were added or removed
+@section Tell Mercurial about files that were added or removed
+
+The hg-update target below searches through the two patch files 
+looking for files that were added or deleted.  It then does a
+@code{hg add} or @code{hg remove} as appropriate.
+
+@example
+cd $INV/fjalar
+make hg-update
+@end example
+
+
+@node Commit commands 
+@section Commit commands 
+
+Next, we do a final visual verification of the changes and commit them
+to the repository.
+
+@example
+cd $INV/fjalar
+# Double-check the diffs - standard practice before committing
+hg diff -b | more
+# If looks OK, proceed with commit.
+hg commit -m "Valgrind merge from revision $@{VALGRIND_REVISION@}\
+   to $@{VALGRIND_REVISION_NEW@}.  VEX IR merge from $@{VEX_REVISION@} \
+   to $@{VEX_REVISION_NEW@}."
+@end example
+
+@emph{keep .patch and .diff as documentation?}
+rm -f coregrind.patch memcheck.patch coregrind-PLSE.diff memcheck-PLSE.diff
+
+
+@node Valgrind modifications
+@appendix Valgrind modifications
+
+In an effort to aid in determining the appropriate measures to take
+when merging conflicted files, this section will provide a list of
+Valgrind files we have modified and a brief explanation of the changes. 
+
+The most important set of changes is the addition of extra shadow
+state in Coregrind and VEX. The shadow area is an area of memory that
+Valgrind provides for tools to use. Unfortunately, it is of a fixed
+size, and memcheck uses all of it. We've had to increase the size of
+the shadow area. 
+
+@table @asis
+@item $INV/fjalar/valgrind/coregrind/pub_core_threadstate.h
+The declaration of the extra shadow space
+@item $INV/fjalar/valgrind/coregrind/m_scheduler/scheduler.c
+An assertion that triggers based on shadow size
+@item $INV/fjalar/valgrind/VEX/priv/host-generic/reg_alloc2.c
+memory calculation using the shadow size
+@end table
+
+Additionally, we had to modify some of the VEX architecture files to
+return information specific to the x86 platform. 
+
+@table @asis
+@item $INV/fjalar/valgrind/VEX/priv/guest-x86/ghelpers.c
+@item $INV/fjalar/valgrind/VEX/pub/libvex.h
+Addition of primary/secondary integer return registers to the guest state
+@item $INV/fjalar/valgrind/coregrind/m_machine.c
+@item $INV/fjalar/valgrind/include/pub_tool_machine.h
+Tool-visible functions to access the primary/secondary integer return registers
+@end table
+
+Finally, we had to extend Valgrind's implementation of the C library
+with a few extra functions. 
+
+@table @asis
+@item $INV/fjalar/valgrind/coregrind/m_libcfile.c
+@item $INV/fjalar/valgrind/include/pub_tool_libcfile.h
+Addition of extra libc functions
+@end table
+
+
+@node Memcheck modifications
+@appendix Memcheck modifications
+
+The modifications made to memcheck are more organizational in nature.
+A few functions from mc_main.c and mc_translate.c have been made
+non-static. An extra header has also been created and filled with their
+signatures for use by Fjalar.
+
+Other modifications include:
+
+@table @asis
+@item $INV/fjalar/valgrind/fjalar/mc_malloc_wrappers.c
+Calls to Dyncomp functions for memory operations.
+@item $INV/fjalar/valgrind/fjalar/mc_main.c
+Run-time arguments and versioning information for Kvasir to replace
+the default memcheck ones
+@item $INV/fjalar/valgrind/fjalar/mc_translate.c
+In memcheck's instrumentation block, duplicate each case for Dyncomp.
+@end table
+
+
+@node Supporting new VEX IR Instruction
+@appendix Supporting new VEX IR Instruction
+
+It is recommended that you acquaint yourself with the VEX IR by reading
+through: 
+
+@table @asis
+@item $INV/fjalar/valgrind/VEX/pub/libvex.h
+@item $INV/fjalar/valgrind/VEX/pub/libvex_ir.h
+@end table
+
+In addition to being the primary headers for the VEX library, the above
+files represent the majority of the public documentation on VEX.
+Valgrind's translation pipeline consists of the following: 
+
+@smallexample
+Native assembly -> Pre-instrumented VEX IR -> Post-Instrumented VEX IR -> Final assembly
+@end smallexample
+
+Valgrind begins by translating the entirety of an assembly basic block
+into VEX IR. Valgrind then allows tools to examine the
+translated basic block and insert their own instrumentation. Valgrind
+finishes by translating the instrumented IR back into the machine's native
+assembly. 
+
+In order to keep track of comparabilities, Dyncomp instruments almost
+every VEX IR instruction type. Any added instructions will likely need
+to be supported by Dyncomp. In general Dyncomp's functionality parallels
+Memcheck's, so the best starting point for implementing support for a
+new instruction would be to mirror Memcheck's implementation. Dyncomp's
+layout is very similar to Memcheck's, so mirroring functionality should
+be fairly straightforward. It is, however, very unlikely that a new
+instruction type will be added as the VEX IR is a relatively mature
+instruction set and has been in use for almost 9 years at the time of
+this writing. 
+
+Another type of addition that will need to be supported are added
+"IR Expressions." Most VEX IR instructions are implemented as a set
+of IR Expressions - Take the following IR instructions for example: 
+
+@example
+t5 = Add32(t12,0x8:I32)
+t10 = CmpLE32S(t2,0x21:I32)
+@end example
+
+The above IR Instructions are of the type PUT and they store the
+result of an IR Expression into a temporary. These instructions consist
+of the destination temporary, an IR Expression, which conceptually is
+the operation to be formed, and the arguments to that expression. Most
+IR Instructions will have a similar format. Dyncomp is particularly
+interested in analyzing all possible IR Expressions. 
+
+@example
+$INV/fjalar/valgrind/fjalar/kvasir/dyncomp_translate.c
+@end example
+
+contains the following set of functions for processing IRExpressions. 
+
+@table @code
+@item @strong{IRExpr* expr2tags_DC ( DCEnv* dce, IRExpr* e )}
+The main expression handling function. Contains a switch which is
+responsible for delegating expression handling to one of the other functions
+@item @strong{IRExpr* expr2tags_Qop_DC(...)}
+Responsible for the handling of expressions which take 4 arguments. 
+@item @strong{IRExpr* expr2tags_Triop_DC(...)}
+Responsible for the handling of expressions which take 3 arguments. 
+@item @strong{IRExpr* expr2tags_Binop_DC(...)}
+Responsible for the handling of expressions which take 2 arguments. 
+@item @strong{IRExpr* expr2tags_Unop_DC(...)}
+Responsible for the handling of expressions which take 1 argument. 
+@item @strong{IRExpr* expr2tags_Ldle_DC(...)}
+Responsible for the handling of load expressions
+@item @strong{IRExpr* expr2tags_CCall_DC(...)}
+Responsible for the handling of calls to pure functions.
+@item @strong{IRExpr* expr2tags_Mux0X_DC(...)}
+Responsible for the handling of multiplexing expressions
+@end table
+
+If a new IR Expression is added, it will need to be handled by one of
+the above functions. The easiest way to implement it will be to base it
+on the implementation of an existing instruction. Alternatively, it
+should be straightforward to mimic Memcheck's handling of the expression.
+
+@iftex
+@contents
+@end iftex
+
+@bye
