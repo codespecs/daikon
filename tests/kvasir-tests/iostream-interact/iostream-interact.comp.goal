@@ -1,6 +1,8 @@
 ..examine(int,\_int,\_int):::ENTER
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__max
 ::__numeric_traits_integer<long>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -11,7 +13,9 @@ y
 
 ..examine(int,\_int,\_int):::EXIT0
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__max
 ::__numeric_traits_integer<long>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -22,7 +26,9 @@ y
 
 ..main():::ENTER
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__max
 ::__numeric_traits_integer<long>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -30,7 +36,9 @@ y
 
 ..main():::EXIT0
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
+::__numeric_traits_integer<long>::__max
 ::__numeric_traits_integer<long>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min

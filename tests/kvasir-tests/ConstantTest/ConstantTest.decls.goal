@@ -8,10 +8,18 @@ ppt ..main():::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -59,10 +67,18 @@ ppt ..main():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -114,10 +130,18 @@ ppt A.A():::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -159,10 +183,18 @@ ppt A.A():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -204,10 +236,18 @@ ppt A.getInt():::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -249,10 +289,18 @@ ppt A.getInt():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int

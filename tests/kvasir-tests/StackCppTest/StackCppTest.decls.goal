@@ -8,10 +8,18 @@ ppt ..main():::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -35,10 +43,18 @@ ppt ..main():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -68,10 +84,18 @@ ppt Link.initialize(char*,\_Stack::Link*):::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -282,10 +306,18 @@ ppt Link.initialize(char*,\_Stack::Link*):::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -568,10 +600,18 @@ ppt Stack.Stack(char*):::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -706,10 +746,18 @@ ppt Stack.Stack(char*):::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -844,10 +892,18 @@ ppt Stack.getName():::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -977,10 +1033,18 @@ ppt Stack.getName():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -1113,10 +1177,18 @@ ppt Stack.getNumStacksCreated():::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -1150,10 +1222,18 @@ ppt Stack.getNumStacksCreated():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -1192,10 +1272,18 @@ ppt Stack.peek():::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -1325,10 +1413,18 @@ ppt Stack.peek():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -1462,10 +1558,18 @@ ppt Stack.pop():::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -1595,10 +1699,18 @@ ppt Stack.pop():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -1732,10 +1844,18 @@ ppt Stack.privateStuff():::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -1865,10 +1985,18 @@ ppt Stack.privateStuff():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -2002,10 +2130,18 @@ ppt Stack.push(char*):::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -2140,10 +2276,18 @@ ppt Stack.push(char*):::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -2278,10 +2422,18 @@ ppt Stack.~Stack():::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
@@ -2411,10 +2563,18 @@ ppt Stack.~Stack():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
     dec-type int
+  variable ::__numeric_traits_integer<long>::__max
+    var-kind variable
+    rep-type int
+    dec-type long
   variable ::__numeric_traits_integer<long>::__min
     var-kind variable
     rep-type int
