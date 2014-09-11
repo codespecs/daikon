@@ -3,7 +3,7 @@
 using namespace std;
 
 int main() {
-  Stack first("My first stack", 10);
+  Stack first((char*)"My first stack", 10);
 
   first.push(101);
   first.push(102);
@@ -20,7 +20,7 @@ int main() {
     cout << s << endl;
   }
 
-  Stack second("My second stack", 5);
+  Stack second((char*)"My second stack", 5);
 
   second.push(1001);
   second.push(1002);
