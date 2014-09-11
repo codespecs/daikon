@@ -77,7 +77,7 @@ class Stack {
   }
 
   Stack(char* name, int x) {
-      x / 0; // This should never be called; it's a private constructor
+      throw "should never get here";
   }
 
   struct Link {

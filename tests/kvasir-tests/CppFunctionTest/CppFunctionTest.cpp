@@ -48,7 +48,7 @@ void default_args_func(int a, int b = 5, int c = 10) {
 int main() {
   int i_x = 1, i_y = 2;
   double d_x = 1.56, d_y = 2.15;
-  char *str_x = "hello", *str_y = "world";
+  char *str_x = (char*)"hello", *str_y = (char*)"world";
 
   overloaded_foo(i_x, i_y);
   overloaded_foo(d_x, d_y);

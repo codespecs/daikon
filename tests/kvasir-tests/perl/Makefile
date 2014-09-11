@@ -14,6 +14,7 @@ INCLUDES := EXTERN.h INTERN.h XSUB.h av.h config.h cop.h cv.h embed.h \
             util.h warnings.h
 DEFINES = -I. -DPERL_CORE -DPURIFY -DDEBUGGING -fno-strict-aliasing -D_LARGEFILE_SOURCE -D_FILE_OFFSET_BITS=64
 LIBS := -lm -lcrypt
+CFLAGS := -DNEED_VA_COPY
 # PROGRAM_ARGS := -e 'print "Hello, world!\n"'
 PROGRAM_ARGS := sort-half.t
 KVASIR_OPTIONS := --ignore-globals --nesting-depth=1

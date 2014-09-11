@@ -131,7 +131,7 @@ complexStruct*** initBasicTypesStruct(double a,
   (*cp)->day_of_week = THURSDAY;
   //  (*cp)->intArray = 69;
   (*cp)->basic1 = (**bp);
-  (*cp)->myString =  "myString";
+  (*cp)->myString = (char***)"myString";
   (*cp)->basic2 = (*bp);
   (*cp)->footer = -123456;
 

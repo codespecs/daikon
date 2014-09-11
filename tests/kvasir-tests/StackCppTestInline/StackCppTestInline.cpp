@@ -20,13 +20,13 @@ int Stack::numStacksCreated;
 int Stack::publicNumLinksCreated;
 
 int main() {
-  Stack first("My first stack");
+  Stack first((char *)"My first stack");
 
-  first.push("First line");
-  first.push("Second line");
-  first.push("Third line");
-  first.push("Fourth line");
-  first.push("Fifth line");
+  first.push((char *)"First line");
+  first.push((char *)"Second line");
+  first.push((char *)"Third line");
+  first.push((char *)"Fourth line");
+  first.push((char *)"Fifth line");
 
   // THIS IS SUPER WEIRD! IF YOU COMMENT OUT THIS NEXT LINE AND DON'T
   // USE peek() AT ALL IN YOUR PROGRAM, AN ENTRY FOR IT WILL NOT
@@ -48,12 +48,12 @@ int main() {
   cout << "numStacksCreated: " << Stack::getNumStacksCreated() << endl;
   cout << "publicNumLinksCreated: " << Stack::publicNumLinksCreated << endl;
 
-  Stack second("My second stack");
+  Stack second((char *)"My second stack");
 
-  second.push("Uno");
-  second.push("Dos");
-  second.push("Tres");
-  second.push("Cuatro");
+  second.push((char *)"Uno");
+  second.push((char *)"Dos");
+  second.push((char *)"Tres");
+  second.push((char *)"Cuatro");
 
   cout << endl << second.getName() << ":" << endl;
 

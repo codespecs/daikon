@@ -20,7 +20,7 @@ void ffixedint(int param[987][654][321]) {};
 
 void __attribute__(()) fcrashint(int param[10000][321], struct boo booParam) {
   printf("fcrashint: &param=%p &booParam=%p, diff=%d\n",
-         &param, &booParam, (int)(&booParam) - (int)(&param));
+         &param, &booParam, (void*)&booParam - (void*)&param);
 };
 
 void fchar(char p[DIM1][DIM2]) {

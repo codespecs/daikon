@@ -722,7 +722,7 @@ char *
 Dstr::aschar () const {
   if (theBuffer)
     return theBuffer;
-  return "";
+  return (char *)"";
 }
 
 char *
@@ -733,9 +733,9 @@ Dstr::asdupchar() const {
 char *
 Dstr::ascharfrom(unsigned from_index) const {
   if (!theBuffer)
-    return "";
+    return (char *)"";
   if (from_index >= used)
-    return "";
+    return (char *)"";
   return theBuffer + from_index;
 }
 
