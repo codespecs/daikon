@@ -1,3 +1,3 @@
-..main() ENTER/33: 1 EXIT0/36: 1
-A.A() ENTER/30: 1 EXIT0/30: 1
-A.getInt() ENTER/30: 1 EXIT0/33: 1
+..main() ENTER/36: 1 EXIT0/39: 1
+A.A() ENTER/33: 1 EXIT0/33: 1
+A.getInt() ENTER/33: 1 EXIT0/36: 1

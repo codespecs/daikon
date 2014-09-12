@@ -8,6 +8,9 @@ this_invocation_nonce
 ::__numeric_traits_integer<char>::__max
 127
 1
+::__numeric_traits_integer<int>::__max
+2147483647
+1
 ::__numeric_traits_integer<int>::__min
 -2147483648
 1
@@ -26,6 +29,9 @@ this_invocation_nonce
 1
 ::__numeric_traits_integer<char>::__max
 127
+1
+::__numeric_traits_integer<int>::__max
+2147483647
 1
 ::__numeric_traits_integer<int>::__min
 -2147483648
@@ -55,6 +61,9 @@ this_invocation_nonce
 ::__numeric_traits_integer<char>::__max
 127
 1
+::__numeric_traits_integer<int>::__max
+2147483647
+1
 ::__numeric_traits_integer<int>::__min
 -2147483648
 1
@@ -83,6 +92,9 @@ this_invocation_nonce
 ::__numeric_traits_integer<char>::__max
 127
 1
+::__numeric_traits_integer<int>::__max
+2147483647
+1
 ::__numeric_traits_integer<int>::__min
 -2147483648
 1
@@ -110,6 +122,9 @@ this_invocation_nonce
 2
 ::__numeric_traits_integer<char>::__max
 127
+1
+::__numeric_traits_integer<int>::__max
+2147483647
 1
 ::__numeric_traits_integer<int>::__min
 -2147483648
@@ -138,6 +153,9 @@ this_invocation_nonce
 0
 ::__numeric_traits_integer<char>::__max
 127
+1
+::__numeric_traits_integer<int>::__max
+2147483647
 1
 ::__numeric_traits_integer<int>::__min
 -2147483648

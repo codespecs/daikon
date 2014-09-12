@@ -8,6 +8,10 @@ ppt ..examine(int,\_int,\_int):::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
@@ -46,6 +50,10 @@ ppt ..examine(int,\_int,\_int):::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
@@ -84,6 +92,10 @@ ppt ..main():::ENTER
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int
@@ -107,6 +119,10 @@ ppt ..main():::EXIT0
     var-kind variable
     rep-type int
     dec-type char
+  variable ::__numeric_traits_integer<int>::__max
+    var-kind variable
+    rep-type int
+    dec-type int
   variable ::__numeric_traits_integer<int>::__min
     var-kind variable
     rep-type int

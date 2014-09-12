@@ -1,6 +1,7 @@
 ===========================================================================
 ..main():::ENTER
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -8,11 +9,13 @@
 ===========================================================================
 ..main():::EXIT
 ::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__max == orig(::__numeric_traits_integer<int>::__max)
 ::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
 ::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
 ::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
 ::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -24,6 +27,7 @@ this->next[].next->next->data elements one of { "First line", "Second line", "Un
 ===========================================================================
 Link.initialize(char*, Stack::Link*):::ENTER
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -39,6 +43,7 @@ nxt[].next->next->next[0] elements has only one value
 ===========================================================================
 Link.initialize(char*, Stack::Link*):::EXIT
 ::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__max == orig(::__numeric_traits_integer<int>::__max)
 ::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
 ::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
 ::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
@@ -58,6 +63,7 @@ nxt[].next->next[0] == orig(nxt[].next->next[0])
 nxt[].next[0] == orig(nxt[].next[0])
 this->next == orig(nxt)
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -80,6 +86,7 @@ this->myName one of { "My first stack", "My second stack" }
 ===========================================================================
 Stack.Stack(char*):::ENTER
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -90,12 +97,14 @@ name one of { "My first stack", "My second stack" }
 ===========================================================================
 Stack.Stack(char*):::EXIT
 ::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__max == orig(::__numeric_traits_integer<int>::__max)
 ::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
 ::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
 ::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
 ::__numeric_traits_integer<unsigned long>::__digits == orig(::__numeric_traits_integer<unsigned long>::__digits)
 Stack::publicNumLinksCreated == orig(Stack::publicNumLinksCreated)
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -108,6 +117,7 @@ this->myName == orig(name)
 ===========================================================================
 Stack.getName():::ENTER
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -124,6 +134,7 @@ this->numElements one of { 4, 5 }
 ===========================================================================
 Stack.getName():::EXIT
 ::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__max == orig(::__numeric_traits_integer<int>::__max)
 ::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
 ::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
 ::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
@@ -141,6 +152,7 @@ this->head[].next[0] == orig(this->head[].next[0])
 this->numElements == orig(this->numElements)
 this[0] == orig(this[0])
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -160,6 +172,7 @@ return == orig(this->myName)
 ===========================================================================
 Stack.getNumStacksCreated():::ENTER
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -169,6 +182,7 @@ Stack::publicNumLinksCreated one of { 5, 9 }
 ===========================================================================
 Stack.getNumStacksCreated():::EXIT
 ::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__max == orig(::__numeric_traits_integer<int>::__max)
 ::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
 ::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
 ::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
@@ -177,6 +191,7 @@ Stack::numStacksCreated == return
 Stack::numStacksCreated == orig(Stack::numStacksCreated)
 Stack::publicNumLinksCreated == orig(Stack::publicNumLinksCreated)
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -186,6 +201,7 @@ Stack::publicNumLinksCreated one of { 5, 9 }
 ===========================================================================
 Stack.pop():::ENTER
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -195,6 +211,7 @@ Stack::publicNumLinksCreated one of { 5, 9 }
 ===========================================================================
 Stack.pop():::EXIT
 ::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__max == orig(::__numeric_traits_integer<int>::__max)
 ::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
 ::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
 ::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
@@ -205,6 +222,7 @@ this->head[].next == orig(this->head[].next->next)
 this->head[].next->next == orig(this->head[].next->next->next)
 this[0] == orig(this[0])
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -226,6 +244,7 @@ this->numElements <= orig(this->numElements)
 ===========================================================================
 Stack.privateStuff():::ENTER
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -242,6 +261,7 @@ this->numElements one of { 4, 5 }
 ===========================================================================
 Stack.privateStuff():::EXIT
 ::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__max == orig(::__numeric_traits_integer<int>::__max)
 ::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
 ::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
 ::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
@@ -259,6 +279,7 @@ this->head[].next[0] == orig(this->head[].next[0])
 this->numElements == orig(this->numElements)
 this[0] == orig(this[0])
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -277,6 +298,7 @@ this->myName == orig(this->myName)
 ===========================================================================
 Stack.push(char*):::ENTER
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -288,6 +310,7 @@ this->head[].next->next->next[0] elements has only one value
 ===========================================================================
 Stack.push(char*):::EXIT
 ::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__max == orig(::__numeric_traits_integer<int>::__max)
 ::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
 ::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
 ::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
@@ -297,6 +320,7 @@ this->head[].next->next == orig(this->head[].next)
 this->head[].next->next->next == orig(this->head[].next->next)
 this[0] == orig(this[0])
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -313,6 +337,7 @@ this->numElements - orig(this->numElements) - 1 == 0
 ===========================================================================
 Stack.~Stack():::ENTER
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768
@@ -324,6 +349,7 @@ this->numElements == 0
 ===========================================================================
 Stack.~Stack():::EXIT
 ::__numeric_traits_integer<char>::__max == orig(::__numeric_traits_integer<char>::__max)
+::__numeric_traits_integer<int>::__max == orig(::__numeric_traits_integer<int>::__max)
 ::__numeric_traits_integer<int>::__min == orig(::__numeric_traits_integer<int>::__min)
 ::__numeric_traits_integer<short>::__max == orig(::__numeric_traits_integer<short>::__max)
 ::__numeric_traits_integer<short>::__min == orig(::__numeric_traits_integer<short>::__min)
@@ -334,6 +360,7 @@ this->head == orig(this->head)
 this->numElements == orig(this->numElements)
 this[0] == orig(this[0])
 ::__numeric_traits_integer<char>::__max == 127
+::__numeric_traits_integer<int>::__max == 2147483647
 ::__numeric_traits_integer<int>::__min == -2147483648
 ::__numeric_traits_integer<short>::__max == 32767
 ::__numeric_traits_integer<short>::__min == -32768

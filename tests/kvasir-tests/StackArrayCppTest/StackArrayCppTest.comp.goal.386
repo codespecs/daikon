@@ -1,5 +1,6 @@
 ..main():::ENTER
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -7,6 +8,7 @@
 
 ..main():::EXIT0
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -15,6 +17,7 @@ return
 
 Stack.Stack(char*,\_int):::ENTER
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -27,6 +30,7 @@ this->stackRep[..]
 
 Stack.Stack(char*,\_int):::EXIT0
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -39,6 +43,7 @@ this->stackRep[..]
 
 Stack.getMaxElts():::ENTER
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -51,6 +56,7 @@ this->stackRep[..]
 
 Stack.getMaxElts():::EXIT0
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -63,6 +69,7 @@ this->stackRep[..]
 
 Stack.getName():::ENTER
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -75,6 +82,7 @@ this->stackRep[..]
 
 Stack.getName():::EXIT0
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -87,6 +95,7 @@ this->stackRep[..]
 
 Stack.getNumElts():::ENTER
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -102,6 +111,7 @@ this[0]
 
 Stack.getNumElts():::EXIT0
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -118,6 +128,7 @@ this[0]
 
 Stack.getNumStacksCreated():::ENTER
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -126,6 +137,7 @@ Stack::numStacksCreated
 
 Stack.getNumStacksCreated():::EXIT0
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -134,6 +146,7 @@ Stack::numStacksCreated return
 
 Stack.peek():::ENTER
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -149,6 +162,7 @@ this[0]
 
 Stack.peek():::EXIT0
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -165,6 +179,7 @@ this[0]
 
 Stack.pop():::ENTER
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -177,6 +192,7 @@ this->stackRep[..]
 
 Stack.pop():::EXIT0
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -189,6 +205,7 @@ this->myName
 
 Stack.privateStuff():::ENTER
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -201,6 +218,7 @@ this->stackRep[..]
 
 Stack.privateStuff():::EXIT0
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -214,6 +232,7 @@ this->stackRep[..]
 
 Stack.push(int):::ENTER
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -226,6 +245,7 @@ this->myName
 
 Stack.push(int):::EXIT0
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -238,6 +258,7 @@ this->myName
 
 Stack.~Stack():::ENTER
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
@@ -250,6 +271,7 @@ this->stackRep[..]
 
 Stack.~Stack():::EXIT0
 ::__numeric_traits_integer<char>::__max
+::__numeric_traits_integer<int>::__max
 ::__numeric_traits_integer<int>::__min
 ::__numeric_traits_integer<short>::__max
 ::__numeric_traits_integer<short>::__min
