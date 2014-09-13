@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> RelationalExpression()
- * f1 -> [ ( "==" | "!=" ) EqualityExpression() ]
- */
+// Grammar production:
+// f0 -> RelationalExpression()
+// f1 -> [ ( "==" | "!=" ) EqualityExpression() ]
 public class EqualityExpression implements Node {
   static final long serialVersionUID = 20050923L;
 

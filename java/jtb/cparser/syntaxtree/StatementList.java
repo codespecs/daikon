@@ -4,10 +4,8 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ( Statement() )+
- */
+// Grammar production:
+// f0 -> ( Statement() )+
 public class StatementList implements Node {
   static final long serialVersionUID = 20050923L;
 

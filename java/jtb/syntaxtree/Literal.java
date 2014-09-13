@@ -4,15 +4,13 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> <INTEGER_LITERAL>
- *       | <FLOATING_POINT_LITERAL>
- *       | <CHARACTER_LITERAL>
- *       | <STRING_LITERAL>
- *       | BooleanLiteral()
- *       | NullLiteral()
- */
+// Grammar production:
+// f0 -> <INTEGER_LITERAL>
+//       | <FLOATING_POINT_LITERAL>
+//       | <CHARACTER_LITERAL>
+//       | <STRING_LITERAL>
+//       | BooleanLiteral()
+//       | NullLiteral()
 public class Literal implements Node {
    static final long serialVersionUID = 20050923L;
 

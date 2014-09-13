@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> LocalVariableDeclaration() ";"
- *       | Statement()
- *       | ClassOrInterfaceDeclaration(0)
- */
+// Grammar production:
+// f0 -> LocalVariableDeclaration() ";"
+//       | Statement()
+//       | ClassOrInterfaceDeclaration(0)
 public class BlockStatement implements Node {
    static final long serialVersionUID = 20050923L;
 

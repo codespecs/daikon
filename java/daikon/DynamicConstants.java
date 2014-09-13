@@ -73,7 +73,7 @@ public class DynamicConstants implements Serializable {
 
   /**
    * List of dynamic constants.
-   * Each element, c, has c.constant = true, c.count > 0, elt.val != null.
+   * Each element, c, has c.constant = true, c.count &gt; 0, elt.val != null.
    **/
   List<Constant> con_list = new ArrayList<Constant>();
 

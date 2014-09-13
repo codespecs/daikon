@@ -15,8 +15,9 @@ import java.util.logging.Level;
  * point (perhaps in a different program) to a similar invariant at a
  * second program point.  In general, on order for a translation to be
  * possible, the invariants must be of the same class.  For example,
- * consider the invariants (x>y) at ppt1 and (p>q) at ppt2.  Since the
- * invariants are the same, the translation is (x -> p) and (y -> q)
+ * consider the invariants (x&gt;y) at ppt1 and (p&gt;q) at ppt2.  Since the
+ * invariants are the same, the translation is (x &rarr; p) and (y &rarr; q).
+ * <p>
  *
  * The quality of the translation is also determined (approximately on
  * a scale of 0 to 100).  If the invariants are not of the same class,
@@ -24,7 +25,8 @@ import java.util.logging.Level;
  * and the formula are the same, the match is excellent (80).  If the
  * class is the same and the formula is different, the match is mediocre (40).
  * The quality is increased for variables with exactly the same derivation
- * and decreased for  those with different derivations.
+ * and decreased for those with different derivations.
+ * <p>
  *
  * Other checks could be added to further specify the quality.  For example,
  * if one invariant is a precondition and the other is a postcondition,

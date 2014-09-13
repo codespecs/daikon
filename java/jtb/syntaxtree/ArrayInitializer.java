@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "{"
- * f1 -> [ VariableInitializer() ( "," VariableInitializer() )* ]
- * f2 -> [ "," ]
- * f3 -> "}"
- */
+// Grammar production:
+// f0 -> "{"
+// f1 -> [ VariableInitializer() ( "," VariableInitializer() )* ]
+// f2 -> [ "," ]
+// f3 -> "}"
 public class ArrayInitializer implements Node {
    static final long serialVersionUID = 20050923L;
 

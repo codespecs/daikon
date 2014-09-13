@@ -7,7 +7,7 @@ import java.io.Serializable;
 /**
  * A Splitter represents a test that can be used to separate all samples
  * into two parts.  For instance, a Splitter might represent the condition
- * "x > 0".  The Splitter is used to divide a collection of variable values
+ * "x &gt; 0".  The Splitter is used to divide a collection of variable values
  * into sub-sets.  Invariant detection can then occur for the two subsets
  * independently.
  *

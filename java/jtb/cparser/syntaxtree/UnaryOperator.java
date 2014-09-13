@@ -4,10 +4,8 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ( "&" | "*" | "+" | "-" | "~" | "!" )
- */
+// Grammar production:
+// f0 -> ( "&" | "*" | "+" | "-" | "~" | "!" )
 public class UnaryOperator implements Node {
   static final long serialVersionUID = 20050923L;
 

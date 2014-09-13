@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> Type()
- * f1 -> VariableDeclarator()
- * f2 -> ( "," VariableDeclarator() )*
- * f3 -> ";"
- */
+// Grammar production:
+// f0 -> Type()
+// f1 -> VariableDeclarator()
+// f2 -> ( "," VariableDeclarator() )*
+// f3 -> ";"
 public class FieldDeclaration implements Node {
    static final long serialVersionUID = 20050923L;
 

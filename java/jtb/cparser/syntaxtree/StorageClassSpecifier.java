@@ -4,10 +4,8 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ( &lt; AUTO &gt; | <REGISTER> | <STATIC> | <EXTERN> | <TYPEDEF> )
- */
+// Grammar production:
+// f0 -> ( &lt; AUTO &gt; | <REGISTER> | <STATIC> | <EXTERN> | <TYPEDEF> )
 public class StorageClassSpecifier implements Node {
   static final long serialVersionUID = 20050923L;
 

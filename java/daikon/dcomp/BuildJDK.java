@@ -117,12 +117,13 @@ public class BuildJDK {
   };
 
   /**
-   * BuildJDK <jarfile> <dest> <prefix>
+   * Invoke as:
+   * BuildJDK jarfile dest prefix
    *
-   *    <jarfile>   - jarfile to process
-   *    <dest>      - destination directory in which to place instrumented
+   *    jarfile     - jarfile to process
+   *    dest        - destination directory in which to place instrumented
    *                  classes
-   *    <prefix>    - optional prefix of classes to be translated
+   *    prefix      - optional prefix of classes to be translated
    *
    * Instruments each class file in jarfile that begins with prefix
    * and puts the results in dest.

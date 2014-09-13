@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "{"
- * f1 -> ( BlockStatement() )*
- * f2 -> "}"
- */
+// Grammar production:
+// f0 -> "{"
+// f1 -> ( BlockStatement() )*
+// f2 -> "}"
 public class Block implements Node {
    static final long serialVersionUID = 20050923L;
 

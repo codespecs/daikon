@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> LocalVariableDeclaration()
- *       | StatementExpressionList()
- */
+// Grammar production:
+// f0 -> LocalVariableDeclaration()
+//       | StatementExpressionList()
 public class ForInit implements Node {
    static final long serialVersionUID = 20050923L;
 

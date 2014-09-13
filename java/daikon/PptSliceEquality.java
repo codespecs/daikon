@@ -284,6 +284,9 @@ public class PptSliceEquality
    * of bounds are forced into a separate equality set (since they
    * no longer make sense and certainly shouldn't be equal to anything
    * else)
+   * <p>
+   * pre: vis.size() &gt; 0
+   * post: result.size() &gt; 0
    * @param vis The VarInfos that were different from leader
    * @param vt The ValueTuple associated with the VarInfos now
    * @param leader The original leader of VarInfos
@@ -292,8 +295,6 @@ public class PptSliceEquality
    * @return a List of Equality invariants bundling together same
    * values from vis, and if needed, another representing all the
    * missing values.
-   * pre vis.size() > 0
-   * post result.size() > 0
    **/
   private List<Equality> createEqualityInvs (List<VarInfo> vis, ValueTuple vt,
                                                  Equality leader, int count
@@ -360,12 +361,13 @@ public class PptSliceEquality
       * Create a List of Equality invariants based on the VarInfos in vis.
       * Assumes that the VarInfos in vis are not missing.  The method is used
       * exclusively for reversing optimizations in Daikon.
+      * <p>
+      * pre: vis.size() &gt; 0
+      * post: result.size() &gt; 0
       * @param vis The VarInfos that were different from leader
       * @param leader The original leader of VarInfos
       * @return a List of Equality invariants bundling together same
       * values from vis.
-      * pre vis.size() > 0
-      * post result.size() > 0
       */
      public List<Equality> createEqualityInvs(List<VarInfo> vis, Equality leader) {
        assert vis.size() > 0;
@@ -395,13 +397,14 @@ public class PptSliceEquality
    * Map maps keys to non-empty lists of elements.
    * This method adds var to the list mapped by key,
    * creating a new list for key if one doesn't already exist.
+   * <p>
+   * pre: Each value in map is a list of size 1 or greater
+   * post: Each value in map is a list of size 1 or greater
    * @param map The map to add the bindings to
    * @param key If there is already a List associated with key, then
    * add value to key.  Otherwise create a new List associated with
    * key and insert value.
    * @param value The value to insert into the List mapped to key.
-   * pre: Each value in map is a list of size 1 or greater
-   * post: Each value in map is a list of size 1 or greater
    **/
   private <T> void addToBindingList (Map<T,List<VarInfo>> map, T key, VarInfo value) {
     assert key != null;
@@ -420,12 +423,13 @@ public class PptSliceEquality
    * where we create new PptSliceNs.  This is called when newVis have
    * just split off from leader, and we want the leaders of newVis to
    * have the same invariants as leader.
+   * <p>
+   * post: Adds the newly instantiated invariants and slices to
+   * this.parent.
    * @param leader the old leader
    * @param newVis a List of new VarInfos that used to be equal to
    * leader.  Actually, it's the list of canonical that were equal to
    * leader, representing their own newly-created equality sets.
-   * post: Adds the newly instantiated invariants and slices to
-   * this.parent.
    **/
   public List<Invariant> copyInvsFromLeader (VarInfo leader, List<VarInfo> newVis) {
 

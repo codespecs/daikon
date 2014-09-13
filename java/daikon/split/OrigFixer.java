@@ -7,8 +7,8 @@ import jtb.ParseException;
 
 /**
  * OrigFixer is a visitor for a jtb syntax tree that replaces instances of
- * of "orig()" with "orig_".  For example, "orig(x) < y" would yield
- * "orig_x < y".
+ * of "orig()" with "orig_".  For example, "orig(x) &lt; y" would yield
+ * "orig_x &lt; y".
  */
 class OrigFixer extends DepthFirstVisitor {
 
@@ -32,8 +32,8 @@ class OrigFixer extends DepthFirstVisitor {
    * Replaces all instance of "orig(variableName) with "orig_variableName"
    * in expression. In the case of multiple variable names appearing within
    * the argument of "orig()" all variable names are prefixed with "orig_".
-   * For example, "orig(x + y > z - 3)" would yield,
-   * "orig_x + orig_y > orig_z - 3".
+   * For example, "orig(x + y &gt; z - 3)" would yield,
+   * "orig_x + orig_y &gt; orig_z - 3".
    * @param expression a valid segment of java code in which "orig()" is
    *  being replaced.
    * @return condition with all instances of "orig()" replaced.

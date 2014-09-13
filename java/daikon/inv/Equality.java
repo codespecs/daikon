@@ -36,10 +36,10 @@ import java.util.*;
 /**
  * Keeps track of sets of variables that are equal.  Other invariants are
  * instantiated for only one member of the Equality set, the leader.  If
- * variables <samp>x</samp>, <samp>y</samp>, and <samp>z</samp> are members
- * of the Equality set and <samp>x</samp> is chosen as the leader, then
+ * variables <code>x</code>, <code>y</code>, and <code>z</code> are members
+ * of the Equality set and <code>x</code> is chosen as the leader, then
  * the Equality will internally convert into binary comparison invariants
- * that print as <samp>x == y</samp> and <samp>x == z</samp>.
+ * that print as <code>x == y</code> and <code>x == z</code>.
  *
  **/
 public final /*(at)Interned*/ class Equality

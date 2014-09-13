@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "@"
- * f1 -> Name()
- */
+// Grammar production:
+// f0 -> "@"
+// f1 -> Name()
 public class MarkerAnnotation implements Node {
    static final long serialVersionUID = 20050923L;
 

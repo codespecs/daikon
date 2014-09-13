@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "void"
- *       | Type()
- */
+// Grammar production:
+// f0 -> "void"
+//       | Type()
 public class ResultType implements Node {
    static final long serialVersionUID = 20050923L;
 

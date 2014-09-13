@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ( "[" Expression() "]" )+ ( "[" "]" )*
- *       | ( "[" "]" )+ ArrayInitializer()
- */
+// Grammar production:
+// f0 -> ( "[" Expression() "]" )+ ( "[" "]" )*
+//       | ( "[" "]" )+ ArrayInitializer()
 public class ArrayDimsAndInits implements Node {
    static final long serialVersionUID = 20050923L;
 

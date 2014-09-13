@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ANDExpression()
- * f1 -> [ "^" ExclusiveORExpression() ]
- */
+// Grammar production:
+// f0 -> ANDExpression()
+// f1 -> [ "^" ExclusiveORExpression() ]
 public class ExclusiveORExpression implements Node {
   static final long serialVersionUID = 20050923L;
 

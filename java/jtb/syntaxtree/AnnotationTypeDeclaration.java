@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "@"
- * f1 -> "interface"
- * f2 -> <IDENTIFIER>
- * f3 -> AnnotationTypeBody()
- */
+// Grammar production:
+// f0 -> "@"
+// f1 -> "interface"
+// f2 -> <IDENTIFIER>
+// f3 -> AnnotationTypeBody()
 public class AnnotationTypeDeclaration implements Node {
    static final long serialVersionUID = 20050923L;
 

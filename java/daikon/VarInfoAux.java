@@ -89,9 +89,9 @@ public final class VarInfoAux
   /**
    * Return an interned VarInfoAux that represents a given string.
    * Elements are separated by commas, in the form:
-   *
-   * <li> x = a, "a key" = "a value"
-   * <br>
+   * <p>
+   * x = a, "a key" = "a value"
+   * <p>
    * Parse allow for quoted elements.  White space to the left and
    * right of keys and values do not matter, but inbetween does.
    **/

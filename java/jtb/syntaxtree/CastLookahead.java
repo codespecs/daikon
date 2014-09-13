@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "(" PrimitiveType()
- *       | "(" Type() "[" "]"
- *       | "(" Type() ")" ( "~" | "!" | "(" | <IDENTIFIER> | "this" | "super" | "new" | Literal() )
- */
+// Grammar production:
+// f0 -> "(" PrimitiveType()
+//       | "(" Type() "[" "]"
+//       | "(" Type() ")" ( "~" | "!" | "(" | <IDENTIFIER> | "this" | "super" | "new" | Literal() )
 public class CastLookahead implements Node {
    static final long serialVersionUID = 20050923L;
 

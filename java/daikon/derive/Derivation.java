@@ -34,7 +34,7 @@ public abstract class Derivation
    * sequences. However, derived variables increase Daikon's time and
    * memory usage, sometimes dramatically. If false, individual kinds of
    * derived variables can be enabled or disabled individually using
-   * configuration options under <samp>daikon.derive</samp>.
+   * configuration options under <code>daikon.derive</code>.
    **/
   public static boolean dkconfig_disable_derived_variables = false;
 

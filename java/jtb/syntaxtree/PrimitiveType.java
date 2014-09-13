@@ -4,17 +4,15 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "boolean"
- *       | "char"
- *       | "byte"
- *       | "short"
- *       | "int"
- *       | "long"
- *       | "float"
- *       | "double"
- */
+// Grammar production:
+// f0 -> "boolean"
+//       | "char"
+//       | "byte"
+//       | "short"
+//       | "int"
+//       | "long"
+//       | "float"
+//       | "double"
 public class PrimitiveType implements Node {
    static final long serialVersionUID = 20050923L;
 

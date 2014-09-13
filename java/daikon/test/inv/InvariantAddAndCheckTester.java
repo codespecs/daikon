@@ -805,7 +805,7 @@ public class InvariantAddAndCheckTester extends TestCase {
     /**
      * This function returns a VarInfo of the given type. The name is
      * the ith letter of the alphabet. (Produces variables such that i=0
-     * -> name=a, i=1 -> name=b, ...)
+     * -> name=a, i=1 &rarr; name=b, ...)
      *
      * @param type the desired type that the VarInfo will represent
      * @param i a unique identifier that determines the name to be used

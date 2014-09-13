@@ -799,10 +799,10 @@ public final class Debug {
    * Parses the specified argument to --track and sets up the track arrays
    * accordingly.  The syntax of the argument is
    *
-   *    class|class|...<var,var,var>@ppt
+   *    class|class|...&lt;var,var,var&gt;@ppt
    *
    * As shown, multiple class arguments can be specified separated by pipe
-   * symbols (|).  The variables are specified in angle brackets (<>) and
+   * symbols (|).  The variables are specified in angle brackets (&lt;&gt;) and
    * the program point is preceeded by an at sign (@).  Each is optional
    * and can be left out.  The add_track routine can be called multiple times.
    * An invariant that matches any of the specifications will be tracked.

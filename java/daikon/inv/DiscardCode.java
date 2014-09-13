@@ -17,7 +17,7 @@ import daikon.inv.filter.*;
  *
  *  bad_confidence // has an unjustified confidence
  *
- *  <unused> // was few_modified_samples
+ *  (unused) // was few_modified_samples
  *
  *  not_enough_samples // not enough samples seen for the Invariant
  *

@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> InitDeclarator()
- * f1 -> ( "," InitDeclarator() )*
- */
+// Grammar production:
+// f0 -> InitDeclarator()
+// f1 -> ( "," InitDeclarator() )*
 public class InitDeclaratorList implements Node {
   static final long serialVersionUID = 20050923L;
 

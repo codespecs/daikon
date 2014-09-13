@@ -129,7 +129,7 @@ public class X86Instruction implements IInstruction {
   }
 
   /**
-   * <dll name>:<address> <op name> <arg> ... <arg> -> <result var>
+   * dllname:address opname arg ... arg &rarr; resultvar
    */
   public static X86Instruction parseInstruction(String s) {
     if (s == null)

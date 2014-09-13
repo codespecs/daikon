@@ -7,9 +7,9 @@ import plume.*;
 import java.util.Iterator;
 
 /**
- * Represents the invariant <samp>x == r (mod m)</samp> where <samp>x</samp>
- * is a long scalar variable, <samp>r</samp> is the (constant) remainder,
- * and <samp>m</samp> is the (constant) modulus.
+ * Represents the invariant <code>x == r (mod m)</code> where <code>x</code>
+ * is a long scalar variable, <code>r</code> is the (constant) remainder,
+ * and <code>m</code> is the (constant) modulus.
  **/
 
 public class Modulus
@@ -261,7 +261,7 @@ public class Modulus
    * Checks to see if this is obvious over the specified variables.
    * Implements the following checks: <pre>
    *
-   *    size(x[]) = r (mod m) ==> size(x[])-1 = (r-1) (mod m)
+   *    size(x[]) = r (mod m) &rArr; size(x[])-1 = (r-1) (mod m)
    * </pre>
    **/
   /*@Pure*/

@@ -108,14 +108,12 @@ public class InstrumentVisitor extends DepthFirstVisitor {
         fd.accept(new TreeFormatter());
 
         super.visit(fd);
-        /**
-         * Grammar production for ClassOrInterfaceBodyDeclaration:
-         * f0 -> Initializer()
-         *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers)
-         *                       | ConstructorDeclaration() | FieldDeclaration(modifiers)
-         *                       | MethodDeclaration(modifiers) )
-         *       | ";"
-         */
+        // Grammar production for ClassOrInterfaceBodyDeclaration:
+        // f0 -> Initializer()
+        //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers)
+        //                       | ConstructorDeclaration() | FieldDeclaration(modifiers)
+        //                       | MethodDeclaration(modifiers) )
+        //       | ";"
 
         if (makeAllFieldsPublic) {
             NodeSequence seq = (NodeSequence)fd.getParent().getParent();

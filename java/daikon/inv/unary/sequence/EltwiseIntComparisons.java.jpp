@@ -42,6 +42,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME EQUALCLASS
   #define CLASSSTRING "EltwiseIntEqual"
   #define COMPARATOR(a,b) ((a) == (b))
+  #define COMPARATORhtml ==
   #define COMPARATORSTRING "=="
   #define COMPARATORSTRINGQUANT "eltwiseEqual"
   #define INVERSECOMPARATORSTRING "!="
@@ -49,6 +50,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME LESSTHANCLASS
   #define CLASSSTRING "EltwiseIntLessThan"
   #define COMPARATOR(a,b) ((a) < (b))
+  #define COMPARATORhtml &lt;
   #define COMPARATORSTRING "<"
   #define COMPARATORSTRINGQUANT "eltwiseLT"
   #define INVERSECOMPARATORSTRING ">="
@@ -56,6 +58,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME LESSEQUALCLASS
   #define CLASSSTRING "EltwiseIntLessEqual"
   #define COMPARATOR(a,b) ((a) <= (b))
+  #define COMPARATORhtml &le;
   #define COMPARATORSTRING "<="
   #define COMPARATORSTRINGQUANT "eltwiseLTE"
   #define INVERSECOMPARATORSTRING ">"
@@ -63,6 +66,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME GREATERTHANCLASS
   #define CLASSSTRING "EltwiseIntGreaterThan"
   #define COMPARATOR(a,b) ((a) > (b))
+  #define COMPARATORhtml &gt;
   #define COMPARATORSTRING ">"
   #define COMPARATORSTRINGQUANT "eltwiseGT"
   #define INVERSECOMPARATORSTRING "<="
@@ -70,6 +74,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME GREATEREQUALCLASS
   #define CLASSSTRING "EltwiseIntGreaterEqual"
   #define COMPARATOR(a,b) ((a) >= (b))
+  #define COMPARATORhtml &ge;
   #define COMPARATORSTRING ">="
   #define COMPARATORSTRINGQUANT "eltwiseGTE"
   #define INVERSECOMPARATORSTRING "<"
@@ -77,6 +82,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME EQUALFLOATCLASS
   #define CLASSSTRING "EltwiseFloatEqual"
   #define COMPARATOR(a,b) (Global.fuzzy.eq (a,b))
+  #define COMPARATORhtml ==
   #define COMPARATORSTRING "=="
   #define COMPARATORSTRINGQUANT "eltwiseEqual"
   #define INVERSECOMPARATORSTRING "!="
@@ -84,6 +90,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME LESSTHANFLOATCLASS
   #define CLASSSTRING "EltwiseFloatLessThan"
   #define COMPARATOR(a,b) (Global.fuzzy.lt (a,b))
+  #define COMPARATORhtml &lt;
   #define COMPARATORSTRING "<"
   #define COMPARATORSTRINGQUANT "eltwiseLT"
   #define INVERSECOMPARATORSTRING ">="
@@ -91,6 +98,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME LESSEQUALFLOATCLASS
   #define CLASSSTRING "EltwiseFloatLessEqual"
   #define COMPARATOR(a,b) (Global.fuzzy.lte (a,b))
+  #define COMPARATORhtml &le;
   #define COMPARATORSTRING "<="
   #define COMPARATORSTRINGQUANT "eltwiseLTE"
   #define INVERSECOMPARATORSTRING ">"
@@ -98,6 +106,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME GREATERTHANFLOATCLASS
   #define CLASSSTRING "EltwiseFloatGreaterThan"
   #define COMPARATOR(a,b) (Global.fuzzy.gt (a,b))
+  #define COMPARATORhtml &gt;
   #define COMPARATORSTRING ">"
   #define COMPARATORSTRINGQUANT "eltwiseGT"
   #define INVERSECOMPARATORSTRING "<="
@@ -105,6 +114,7 @@ The correct way to build the system is to run 'make'.
   #define CLASSNAME GREATEREQUALFLOATCLASS
   #define CLASSSTRING "EltwiseFloatGreaterEqual"
   #define COMPARATOR(a,b) (Global.fuzzy.gte (a,b))
+  #define COMPARATORhtml &ge;
   #define COMPARATORSTRING ">="
   #define COMPARATORSTRINGQUANT "eltwiseGTE"
   #define INVERSECOMPARATORSTRING "<"
@@ -126,13 +136,13 @@ import java.util.*;
 #if defined(EQUAL) || defined(EQUALFLOAT)
   /**
    * Represents equality between adjacent elements (x[i], x[i+1]) of a
-   * PRIMITIVE sequence.  Prints as <samp>x[] elements are equal</samp>.
+   * PRIMITIVE sequence.  Prints as <code>x[] elements are equal</code>.
    **/
 #else
   /**
-   * Represents the invariant COMPARATORSTRING between adjacent elements
+   * Represents the invariant COMPARATORhtml between adjacent elements
    * (x[i], x[i+1]) of a PRIMITIVE sequence.  Prints as
-   * <samp>x[] sorted by COMPARATORSTRING</samp>.
+   * <code>x[] sorted by COMPARATORhtml</code>.
    **/
 #endif
 public class CLASSNAME

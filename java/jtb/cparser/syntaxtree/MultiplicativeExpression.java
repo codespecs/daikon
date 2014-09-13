@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> CastExpression()
- * f1 -> [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
- */
+// Grammar production:
+// f0 -> CastExpression()
+// f1 -> [ ( "*" | "/" | "%" ) MultiplicativeExpression() ]
 public class MultiplicativeExpression implements Node {
   static final long serialVersionUID = 20050923L;
 

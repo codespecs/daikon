@@ -20,7 +20,7 @@ import java.util.Iterator;
  * to use that split data to form conditional invariants out of its
  * standard built-in invariants.  If you wish the expression in the .spinfo
  * file to be printed as an invariant, then the configuration option
- * <samp>daikon.split.PptSplitter.dummy_invariant_level</samp> must be set,
+ * <code>daikon.split.PptSplitter.dummy_invariant_level</code> must be set,
  * and formatting information must be supplied in the splitter info file.
  **/
 public class DummyInvariant

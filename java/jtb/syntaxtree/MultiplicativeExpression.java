@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> UnaryExpression()
- * f1 -> ( ( "*" | "/" | "%" ) UnaryExpression() )*
- */
+// Grammar production:
+// f0 -> UnaryExpression()
+// f1 -> ( ( "*" | "/" | "%" ) UnaryExpression() )*
 public class MultiplicativeExpression implements Node {
    static final long serialVersionUID = 20050923L;
 

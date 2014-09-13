@@ -7,14 +7,14 @@ import junit.framework.*;
 /**
  * This tests various aspects of VarInfoName's and transforming
  * VarInfoName's.  This calls VarInfoNameDriver after parsing all
- * input files of the name "varInfoNameTest.<foo>".  VarInfoNameDriver
+ * input files of the name "varInfoNameTest.<em>foo</em>".  VarInfoNameDriver
  * does transform tests, and its output is compared to the
- * "varInfoNameTest.<foo>.goal" file by this.
+ * "varInfoNameTest.<em>foo</em>.goal" file by this.
  *
  * <br>
  *
- * To add a new test case, add a line to the <foo> file and a line to
- * the goal file with intended output.  Format of the <foo> file is
+ * To add a new test case, add a line to the <em>foo</em> file and a line to
+ * the goal file with intended output.  Format of the <em>foo</em> file is
  * output method, followed by a variable name.  Output methods are
  * defined in VarInfoNameDriver.  To add a new transformation method
  * (which can then be tested in test cases) add a static Handler

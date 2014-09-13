@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ( t=<IDENTIFIER> | "(" Declarator() ")" )
- * f1 -> ( "[" [ ConstantExpression() ] "]" | "(" ParameterTypeList() ")" | "(" [ IdentifierList() ] ")" )*
- */
+// Grammar production:
+// f0 -> ( t=<IDENTIFIER> | "(" Declarator() ")" )
+// f1 -> ( "[" [ ConstantExpression() ] "]" | "(" ParameterTypeList() ")" | "(" [ IdentifierList() ] ")" )*
 public class DirectDeclarator implements Node {
   static final long serialVersionUID = 20050923L;
 

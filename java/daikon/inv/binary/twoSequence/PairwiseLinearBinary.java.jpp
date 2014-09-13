@@ -37,12 +37,12 @@ import daikon.Quantify.QuantFlags;
 import java.util.*;
 
 /**
- * Represents a linear invariant (i.e., <samp>y = ax + b</samp>) between
+ * Represents a linear invariant (i.e., <code>y = ax + b</code>) between
  * the corresponding elements of two sequences of PRIMITIVE values.
- * Each <samp>(x[i], y[i])</samp> pair is examined.
- * Thus, <samp>x[0]</samp> is compared to <samp>y[0]</samp>,
- * <samp>x[1]</samp> to <samp>y[1]</samp> and so forth.
- * Prints as <samp>y[] = a * x[] + b</samp>.
+ * Each <code>(x[i], y[i])</code> pair is examined.
+ * Thus, <code>x[0]</code> is compared to <code>y[0]</code>,
+ * <code>x[1]</code> to <code>y[1]</code> and so forth.
+ * Prints as <code>y[] = a * x[] + b</code>.
  **/
 public class CLASSNAME
   extends SUPERCLASS

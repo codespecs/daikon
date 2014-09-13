@@ -35,12 +35,10 @@ public class ConditionPrinter extends DepthFirstVisitor {
     }
 
 
-    /**
-     * f0 -> [ DeclarationSpecifiers() ]
-     * f1 -> Declarator()
-     * f2 -> [ DeclarationList() ]
-     * f3 -> CompoundStatement()
-     */
+    // f0 -> [ DeclarationSpecifiers() ]
+    // f1 -> Declarator()
+    // f2 -> [ DeclarationList() ]
+    // f3 -> CompoundStatement()
 
     @Override
     public void visit(FunctionDefinition n) {
@@ -149,9 +147,7 @@ public class ConditionPrinter extends DepthFirstVisitor {
         return actualStrings.contains(s.trim());
     }
 
-    /**
-     * f0 -> ( <IF> "(" Expression() ")" Statement() [ <ELSE> Statement() ] | <SWITCH> "(" Expression() ")" Statement() )
-     */
+    // f0 -> ( <IF> "(" Expression() ")" Statement() [ <ELSE> Statement() ] | <SWITCH> "(" Expression() ")" Statement() )
     @Override
     public void visit(SelectionStatement n) {
         NodeSequence seq = (NodeSequence) n.f0.choice;

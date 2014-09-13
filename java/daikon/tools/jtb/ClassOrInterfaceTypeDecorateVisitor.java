@@ -35,13 +35,11 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     }
   }
 
-   /**
-    * f0 -> [ TypeParameters() ]
-    * f1 -> ResultType()
-    * f2 -> MethodDeclarator()
-    * f3 -> [ "throws" NameList() ]
-    * f4 -> ( Block() | ";" )
-    */
+   // f0 -> [ TypeParameters() ]
+   // f1 -> ResultType()
+   // f2 -> MethodDeclarator()
+   // f3 -> [ "throws" NameList() ]
+   // f4 -> ( Block() | ";" )
    public void visit(MethodDeclaration n) {
 
      // A shallow clone, which is what we want.
@@ -62,16 +60,14 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
       //printShadowingMap();
    }
 
-   /**
-    * f0 -> [ TypeParameters() ]
-    * f1 -> <IDENTIFIER>
-    * f2 -> FormalParameters()
-    * f3 -> [ "throws" NameList() ]
-    * f4 -> "{"
-    * f5 -> [ ExplicitConstructorInvocation() ]
-    * f6 -> ( BlockStatement() )*
-    * f7 -> "}"
-    */
+   // f0 -> [ TypeParameters() ]
+   // f1 -> <IDENTIFIER>
+   // f2 -> FormalParameters()
+   // f3 -> [ "throws" NameList() ]
+   // f4 -> "{"
+   // f5 -> [ ExplicitConstructorInvocation() ]
+   // f6 -> ( BlockStatement() )*
+   // f7 -> "}"
    public void visit(ConstructorDeclaration n) {
 
      // A shallow clone, which is what we want.
@@ -95,14 +91,12 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
       //printShadowingMap();
    }
 
-   /**
-    * f0 -> ( "class" | "interface" )
-    * f1 -> <IDENTIFIER>
-    * f2 -> [ TypeParameters() ]
-    * f3 -> [ ExtendsList(isInterface) ]
-    * f4 -> [ ImplementsList(isInterface) ]
-    * f5 -> ClassOrInterfaceBody(isInterface)
-    */
+   // f0 -> ( "class" | "interface" )
+   // f1 -> <IDENTIFIER>
+   // f2 -> [ TypeParameters() ]
+   // f3 -> [ ExtendsList(isInterface) ]
+   // f4 -> [ ImplementsList(isInterface) ]
+   // f5 -> ClassOrInterfaceBody(isInterface)
    public void visit(ClassOrInterfaceDeclaration n) {
 
      // A shallow clone, which is what we want.
@@ -128,13 +122,11 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
    }
 
   public void augmentShadowingMap(TypeParameters n) {
-    /**
-     * Grammar production:
-     * f0 -> "<"
-     * f1 -> TypeParameter()
-     * f2 -> ( "," TypeParameter() )*
-     * f3 -> ">"
-     */
+    // Grammar production:
+    // f0 -> "<"
+    // f1 -> TypeParameter()
+    // f2 -> ( "," TypeParameter() )*
+    // f3 -> ">"
     final List<TypeParameter> params = new ArrayList<TypeParameter>();
     n.accept(new DepthFirstVisitor() {
         public void visit(TypeParameter n) {
@@ -147,10 +139,8 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
     }
   }
 
-  /**
-   * f0 -> <IDENTIFIER>
-   * f1 -> [ TypeBound() ]
-   */
+  // f0 -> <IDENTIFIER>
+  // f1 -> [ TypeBound() ]
   public void augmentShadowingMap(TypeParameter n) {
     n.f0.accept(this);
     n.f1.accept(this);
@@ -158,11 +148,10 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
     if (n.f1.present()) {
 
-      /* TypeBound:
-       * f0 -> "extends"
-       * f1 -> ClassOrInterfaceType()
-       * f2 -> ( "&" ClassOrInterfaceType() )*
-       */
+      // Grammar production for TypeBound:
+      // f0 -> "extends"
+      // f1 -> ClassOrInterfaceType()
+      // f2 -> ( "&" ClassOrInterfaceType() )*
 
       // TODO figure out how/whether to handle f2 (currently it's just ignored).
 
@@ -196,12 +185,10 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
 
 
-  /**
-   * ClassOrInterfaceType:
-   * f0 -> <IDENTIFIER>
-   * f1 -> [ TypeArguments() ]
-   * f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
-   */
+  // ClassOrInterfaceType:
+  // f0 -> <IDENTIFIER>
+  // f1 -> [ TypeArguments() ]
+  // f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
   public void visit(ClassOrInterfaceType t) {
     t.f0.accept(this);
     t.f1.accept(this); // NO NEED TO DO THIS?
@@ -219,12 +206,10 @@ public class ClassOrInterfaceTypeDecorateVisitor extends DepthFirstVisitor {
 
   }
 
-  /**
-   * ClassOrInterfaceType:
-   * f0 -> <IDENTIFIER>
-   * f1 -> [ TypeArguments() ]
-   * f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
-   */
+  // ClassOrInterfaceType:
+  // f0 -> <IDENTIFIER>
+  // f1 -> [ TypeArguments() ]
+  // f2 -> ( "." <IDENTIFIER> [ TypeArguments() ] )*
   private void ungenerify(ClassOrInterfaceType n) {
 
     // Drop all type arguments.

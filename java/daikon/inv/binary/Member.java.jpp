@@ -76,8 +76,8 @@ import java.util.logging.Level;
 /**
  * Represents SCALAR scalars that are always members of a sequence of SCALAR
  * values.
- * Prints as <samp>x in y[]</samp> where <samp>x</samp> is a SCALAR scalar
- * and <samp>y[]</samp> is a sequence of SCALAR.
+ * Prints as <code>x in y[]</code> where <code>x</code> is a SCALAR scalar
+ * and <code>y[]</code> is a sequence of SCALAR.
  **/
 public final class CLASSNAME
   extends SEQUENCESCALAR
@@ -365,9 +365,9 @@ public final class CLASSNAME
    * Checks to see if this is obvious over the specified variables.
    * Implements the following checks: <pre>
    *
-   *   (0 <= i <= j) ^ (A[] == B[]) ==> A[i] in B[0..j]
-   *   (0 <= i <= j) ^ (A[] == B[]) ==> A[j] in B[i..]
-   *   (A subset B)                 ==> A[i] in B
+   *   (0 &le; i &le; j) ^ (A[] == B[]) &rArr; A[i] in B[0..j]
+   *   (0 &le; i &le; j) ^ (A[] == B[]) &rArr; A[j] in B[i..]
+   *   (A subset B)                       &rArr; A[i] in B
    * </pre>
    */
   /*@Pure*/
@@ -398,7 +398,7 @@ public final class CLASSNAME
    * Checks to see if this is obvious over the specified variables.
    * Implements the following check: <pre>
    *
-   * (A subset B) ==> (A[i] member B)
+   * (A subset B) &rArr; (A[i] member B)
    * </pre>
    */
   private /*@Nullable*/ DiscardInfo subset_in_subsequence (VarInfo[] vis) {
@@ -437,8 +437,8 @@ public final class CLASSNAME
    * Checks to see if this is obvious over the specified variables.
    * Implements the following checks: <pre>
    *
-   *   (0 <= i <= j) ^ (a[] == b[]) ==> a[i] in b[0..j]
-   *   (0 <= i <= j) ^ (a[] == b[]) ==> a[j] in b[i..]
+   *   (0 <= i &le; j) ^ (a[] == b[]) &rArr; a[i] in b[0..j]
+   *   (0 <= i &le; j) ^ (a[] == b[]) &rArr; a[j] in b[i..]
    * </pre>
    */
   private /*@Nullable*/ DiscardInfo subscript_in_subsequence (VarInfo[] vis) {

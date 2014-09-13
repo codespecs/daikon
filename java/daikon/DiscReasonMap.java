@@ -41,7 +41,7 @@ public final class DiscReasonMap {
    * Adds disc_info to DiscReasonMap's internal data structure, unless
    * a reason already exists for inv, in which case the old reason is kept and
    * disc_info is discarded.
-   * Requires: inv != null && disc_info != null && disc_info.shouldDiscard()
+   * Requires: inv != null &and; disc_info != null &and; disc_info.shouldDiscard()
    */
   public static void put(Invariant inv, DiscardInfo disc_info) {
     if (! PrintInvariants.print_discarded_invariants)
@@ -120,8 +120,8 @@ public final class DiscReasonMap {
 
   /**
    * Requires: vars is given in the form "var1,var2,var3" in ascending
-   * alphabetical order with no spaces && invInfo.ppt() != null.
-   * @return a List of all DiscardInfos di such that && the di is for an
+   * alphabetical order with no spaces &and; invInfo.ppt() != null.
+   * @return a List of all DiscardInfos di such that &and; the di is for an
    * Invariant from discPpt whose class and vars match the params passed
    * into the method call. If the user wishes for any of the 3 params to be
    * a wildcard, they can pass that/those param(s) in as null.

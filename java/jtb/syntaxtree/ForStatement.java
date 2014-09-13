@@ -4,14 +4,12 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "for"
- * f1 -> "("
- * f2 -> ( Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
- * f3 -> ")"
- * f4 -> Statement()
- */
+// Grammar production:
+// f0 -> "for"
+// f1 -> "("
+// f2 -> ( Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
+// f3 -> ")"
+// f4 -> Statement()
 public class ForStatement implements Node {
    static final long serialVersionUID = 20050923L;
 

@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> AndExpression()
- * f1 -> ( "^" AndExpression() )*
- */
+// Grammar production:
+// f0 -> AndExpression()
+// f1 -> ( "^" AndExpression() )*
 public class ExclusiveOrExpression implements Node {
    static final long serialVersionUID = 20050923L;
 

@@ -4,14 +4,12 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "@"
- * f1 -> Name()
- * f2 -> "("
- * f3 -> MemberValue()
- * f4 -> ")"
- */
+// Grammar production:
+// f0 -> "@"
+// f1 -> Name()
+// f2 -> "("
+// f3 -> MemberValue()
+// f4 -> ")"
 public class SingleMemberAnnotation implements Node {
    static final long serialVersionUID = 20050923L;
 

@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "extends" ReferenceType()
- *       | "super" ReferenceType()
- */
+// Grammar production:
+// f0 -> "extends" ReferenceType()
+//       | "super" ReferenceType()
 public class WildcardBounds implements Node {
    static final long serialVersionUID = 20050923L;
 

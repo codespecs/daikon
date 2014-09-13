@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> Enumerator()
- * f1 -> ( "," Enumerator() )*
- */
+// Grammar production:
+// f0 -> Enumerator()
+// f1 -> ( "," Enumerator() )*
 public class EnumeratorList implements Node {
   static final long serialVersionUID = 20050923L;
 

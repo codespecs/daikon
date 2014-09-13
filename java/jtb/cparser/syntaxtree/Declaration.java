@@ -4,12 +4,10 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> DeclarationSpecifiers()
- * f1 -> [ InitDeclaratorList() ]
- * f2 -> ";"
- */
+// Grammar production:
+// f0 -> DeclarationSpecifiers()
+// f1 -> [ InitDeclaratorList() ]
+// f2 -> ";"
 public class Declaration implements Node {
   static final long serialVersionUID = 20050923L;
 

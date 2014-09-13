@@ -4,12 +4,10 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "*"
- * f1 -> [ TypeQualifierList() ]
- * f2 -> [ Pointer() ]
- */
+// Grammar production:
+// f0 -> "*"
+// f1 -> [ TypeQualifierList() ]
+// f2 -> [ Pointer() ]
 public class Pointer implements Node {
   static final long serialVersionUID = 20050923L;
 

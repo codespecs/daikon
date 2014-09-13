@@ -345,7 +345,7 @@ public class Quantify {
     /**
      * Returns a string quantification expression for the array variable
      * var using index.  The expression is of the form
-     * lower_bound <= index && index <= upper_bound
+     * lower_bound <= index && index &le; upper_bound
      */
     private static String bld_quant (VarInfo var, Term index) {
       return String.format ("%s <= %s && %s <= %s",
@@ -356,8 +356,9 @@ public class Quantify {
 
     /**
      * Returns the quantification string.  For example, if there is one
-     * array variable (a[]) that is not a slice, it will return
-     * '(\forall int i; (0 <= i <= size(a[]) ==> '
+     * array variable (a[]) that is not a slice, it will return<pre>
+     * '(\forall int i; (0 &lt;= i &lt;= size(a[]) ==&gt; '
+     * </pre>
      **/
     public String get_quantification() {
       return quant + " ==> ";

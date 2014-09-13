@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "this" Arguments() ";"
- *       | [ PrimaryExpression() "." ] "super" Arguments() ";"
- */
+// Grammar production:
+// f0 -> "this" Arguments() ";"
+//       | [ PrimaryExpression() "." ] "super" Arguments() ";"
 public class ExplicitConstructorInvocation implements Node {
    static final long serialVersionUID = 20050923L;
 

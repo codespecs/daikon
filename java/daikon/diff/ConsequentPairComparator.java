@@ -8,7 +8,7 @@ import daikon.inv.*;
  * implication, its consequent is used instead of the whole invariant.
  * In set1, the whole invariant is always used.  Some examples:
  *
- * this.compare(A, B->A) == c.compare(A, A)
+ * this.compare(A, B&rArr;A) == c.compare(A, A)
  * this.compare(C, D) == c.compare(C, D)
  **/
 public class ConsequentPairComparator implements Comparator<Invariant> {

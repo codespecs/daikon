@@ -4,10 +4,8 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ( <CONST> | <VOLATILE> )
- */
+// Grammar production:
+// f0 -> ( <CONST> | <VOLATILE> )
 public class TypeQualifier implements Node {
   static final long serialVersionUID = 20050923L;
 

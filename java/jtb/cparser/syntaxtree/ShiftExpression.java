@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> AdditiveExpression()
- * f1 -> [ ( "<<" | ">>" ) ShiftExpression() ]
- */
+// Grammar production:
+// f0 -> AdditiveExpression()
+// f1 -> [ ( "<<" | ">>" ) ShiftExpression() ]
 public class ShiftExpression implements Node {
   static final long serialVersionUID = 20050923L;
 

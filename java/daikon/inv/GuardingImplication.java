@@ -5,8 +5,8 @@ import daikon.*;
 /**
  *  This is a special implication invariant that guards any invariants that
  *  are over variables that are sometimes missing.  For example, if the
- *  invariant <samp>a.x = 0</samp> is true, the guarded implication is
- *  <samp>a != null => a.x = 0</samp>.
+ *  invariant <code>a.x = 0</code> is true, the guarded implication is
+ *  <code>a != null \rArr; a.x = 0</code>.
  **/
 public class GuardingImplication
   extends Implication

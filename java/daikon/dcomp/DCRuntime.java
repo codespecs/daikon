@@ -2298,8 +2298,8 @@ public final class DCRuntime {
 
     /* This method, for some reason, triggers a segfault due to the way
      * DVSets are handled conceptually. A trace-tree of one element creates
-     * a key-value pair DVI foo --> DVSet {foo}, whereas a trace-tree of
-     * two elements creates a key-value pair DVI foo --> DVSet {bar}.
+     * a key-value pair DVI foo &rarr; DVSet {foo}, whereas a trace-tree of
+     * two elements creates a key-value pair DVI foo &rarr; DVSet {bar}.
      */
 
     if (depth == 0) {

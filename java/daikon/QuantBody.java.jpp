@@ -975,7 +975,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
    *
    * Meaning (in pseudo-FOL):
    *
-   * forall i in { 0..arr.length-1 } : arr[i] > elt
+   * forall i in { 0..arr.length-1 } : arr[i] &gt; elt
    *
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -1002,7 +1002,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
    *
    * Meaning (in pseudo-FOL):
    *
-   * forall i in { 0..arr.length-1 } : arr[i] >= elt
+   * forall i in { 0..arr.length-1 } : arr[i] &ge; elt
    *
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -1029,7 +1029,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
    *
    * Meaning (in pseudo-FOL):
    *
-   * forall i in { 0..arr.length-1 } : arr[i] < elt
+   * forall i in { 0..arr.length-1 } : arr[i] &lt; elt
    *
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -1056,7 +1056,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
    *
    * Meaning (in pseudo-FOL):
    *
-   * forall i in { 0..arr.length-1 } : arr[i] <= elt
+   * forall i in { 0..arr.length-1 } : arr[i] &le; elt
    *
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -1188,12 +1188,12 @@ The "defined(INT)" test ensures that it only appears once in the output.
 
 #ifdef NUMERIC
 
-  /** True iff seq1 and seq2 have the same length, and every seq1[i] < seq2[i].
+  /** True iff seq1 and seq2 have the same length, and every seq1[i] &lt; seq2[i].
    *
    * Meaning (in pseudo-FOL):
    *
    * /\ seq1.length == se2.length
-   * /\ forall i in { 0..seq1.length-1 } : seq1[i] < seq2[i]
+   * /\ forall i in { 0..seq1.length-1 } : seq1[i] &lt; seq2[i]
    *
    */
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
@@ -1222,11 +1222,11 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 #endif
 
-  /** True iff seq1 and seq2 have the same length, and every seq1[i] <= seq2[i].
+  /** True iff seq1 and seq2 have the same length, and every seq1[i] &le; seq2[i].
    * Meaning (in pseudo-FOL):
    *
    * /\ seq1.length == se2.length
-   * /\ forall i in { 0..seq1.length-1 } : seq1[i] <= seq2[i]
+   * /\ forall i in { 0..seq1.length-1 } : seq1[i] &le; seq2[i]
    *
    */
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
@@ -1255,11 +1255,11 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 #endif
 
-  /** True iff seq1 and seq2 have the same length, and every seq1[i] > seq2[i].
+  /** True iff seq1 and seq2 have the same length, and every seq1[i] &gt; seq2[i].
    * Meaning (in pseudo-FOL):
    *
    * /\ seq1.length == se2.length
-   * /\ forall i in { 0..seq1.length-1 } : seq1[i] > seq2[i]
+   * /\ forall i in { 0..seq1.length-1 } : seq1[i] &gt; seq2[i]
    *
    */
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
@@ -1288,11 +1288,11 @@ The "defined(INT)" test ensures that it only appears once in the output.
   }
 #endif
 
-  /** True iff seq1 and seq2 have the same length, and every seq1[i] >= seq2[i].
+  /** True iff seq1 and seq2 have the same length, and every seq1[i] &ge; seq2[i].
    * Meaning (in pseudo-FOL):
    *
    * /\ seq1.length == se2.length
-   * /\ forall i in { 0..seq1.length-1 } : seq1[i] >= seq2[i]
+   * /\ forall i in { 0..seq1.length-1 } : seq1[i] &ge; seq2[i]
    *
    */
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
@@ -1365,7 +1365,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #ifdef NUMERIC
 
   /**
-   * Returns true iff seq1 is lexically <  seq2.
+   * Returns true iff seq1 is lexically &lt;  seq2.
    */
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
   /*@Pure*/ public static boolean lexLT(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
@@ -1407,7 +1407,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
   /**
-   * Returns true iff seq1 is lexically <= to seq2.
+   * Returns true iff seq1 is lexically &le; to seq2.
    */
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
   /*@Pure*/ public static boolean lexLTE(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
@@ -1449,7 +1449,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
   /**
-   * Returns true iff seq1 is lexically > to seq2.
+   * Returns true iff seq1 is lexically &gt; to seq2.
    */
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
   /*@Pure*/ public static boolean lexGT(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
@@ -1491,7 +1491,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
 #endif
 
   /**
-   * Returns true iff seq1 is lexically >= to seq2.
+   * Returns true iff seq1 is lexically &ge; to seq2.
    */
   /*@EnsuresNonNullIf(result=true, expression={"#1","#2"})*/
   /*@Pure*/ public static boolean lexGTE(_TYPE /*@Nullable*/ [] seq1, _TYPE /*@Nullable*/ [] seq2) {
@@ -1575,11 +1575,11 @@ The "defined(INT)" test ensures that it only appears once in the output.
 
 #ifdef NUMERIC
 
-  /** True iff for all applicable i, every seq[i] < seq[i+1].
+  /** True iff for all applicable i, every seq[i] &lt; seq[i+1].
    *
    * Meaning (in pseudo-FOL):
    *
-   * forall i in { 0..seq.length-2 } : seq[i] < seq[i+1]
+   * forall i in { 0..seq.length-2 } : seq[i] &lt; seq[i+1]
    *
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -1595,11 +1595,11 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return true;
   }
 
-  /** True iff for all applicable i, every seq[i] <= seq[i+1].
+  /** True iff for all applicable i, every seq[i] &le; seq[i+1].
    *
    * Meaning (in pseudo-FOL):
    *
-   * forall i in { 0..seq.length-2 } : seq[i] <= seq[i+1]
+   * forall i in { 0..seq.length-2 } : seq[i] &le; seq[i+1]
    *
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -1615,11 +1615,11 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return true;
   }
 
-  /** True iff for all applicable i, every seq[i] > seq[i+1].
+  /** True iff for all applicable i, every seq[i] &gt; seq[i+1].
    *
    * Meaning (in pseudo-FOL):
    *
-   * forall i in { 0..seq.length-2 } : seq[i] > seq[i+1]
+   * forall i in { 0..seq.length-2 } : seq[i] &gt; seq[i+1]
    *
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -1635,11 +1635,11 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return true;
   }
 
-  /** True iff for all applicable i, every seq[i] >= seq[i+1].
+  /** True iff for all applicable i, every seq[i] &ge; seq[i+1].
    *
    * Meaning (in pseudo-FOL):
    *
-   * forall i in { 0..seq.length-2 } : seq[i] >= seq[i+1]
+   * forall i in { 0..seq.length-2 } : seq[i] &ge; seq[i+1]
    *
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -1694,11 +1694,11 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return true;
   }
 
-  /** True iff for all applicable i, every seq[i] < i.
+  /** True iff for all applicable i, every seq[i] &lt; i.
    *
    * Meaning (in pseudo-FOL):
    *
-   * forall i in { 0..seq.length-1 } : seq[i] < i
+   * forall i in { 0..seq.length-1 } : seq[i] &lt; i
    *
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -1712,11 +1712,11 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return true;
   }
 
-  /** True iff for all applicable i, every seq[i] <= i.
+  /** True iff for all applicable i, every seq[i] &le; i.
    *
    * Meaning (in pseudo-FOL):
    *
-   * forall i in { 0..seq.length-1 } : seq[i] <= i
+   * forall i in { 0..seq.length-1 } : seq[i] &le; i
    *
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -1730,11 +1730,11 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return true;
   }
 
-  /** True iff for all applicable i, every seq[i] > i.
+  /** True iff for all applicable i, every seq[i] &gt; i.
    *
    * Meaning (in pseudo-FOL):
    *
-   * forall i in { 0..seq.length-1 } : seq[i] > i
+   * forall i in { 0..seq.length-1 } : seq[i] &gt; i
    *
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -1748,11 +1748,11 @@ The "defined(INT)" test ensures that it only appears once in the output.
     return true;
   }
 
-  /** True iff for all applicable i, every seq[i] >= i.
+  /** True iff for all applicable i, every seq[i] &ge; i.
    *
    * Meaning (in pseudo-FOL):
    *
-   * forall i in { 0..seq.length-1 } : seq[i] >= i
+   * forall i in { 0..seq.length-1 } : seq[i] &ge; i
    *
    */
   /*@EnsuresNonNullIf(result=true, expression="#1")*/
@@ -1789,7 +1789,7 @@ The "defined(INT)" test ensures that it only appears once in the output.
    * above example), the collect method collects the elements the result
    * from following the fields, one of which is assumed to be an array.
    *
-   * requires: fieldStr.length() > 0 and object != null
+   * requires: fieldStr.length() &gt; 0 and object != null
    * requires: fieldStr contains only field names, no "[]" strings.
    *
    * requires: the method only works for field sequences with exactly

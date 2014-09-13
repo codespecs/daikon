@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "package"
- * f1 -> Name()
- * f2 -> ";"
- */
+// Grammar production:
+// f0 -> "package"
+// f1 -> Name()
+// f2 -> ";"
 public class PackageDeclaration implements Node {
    static final long serialVersionUID = 20050923L;
 

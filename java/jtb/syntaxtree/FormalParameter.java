@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> [ "final" ]
- * f1 -> Type()
- * f2 -> [ "..." ]
- * f3 -> VariableDeclaratorId()
- */
+// Grammar production:
+// f0 -> [ "final" ]
+// f1 -> Type()
+// f2 -> [ "..." ]
+// f3 -> VariableDeclaratorId()
 public class FormalParameter implements Node {
    static final long serialVersionUID = 20050923L;
 

@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ShiftExpression()
- * f1 -> [ ( "<" | ">" | "<=" | ">=" ) RelationalExpression() ]
- */
+// Grammar production:
+// f0 -> ShiftExpression()
+// f1 -> [ ( "<" | ">" | "<=" | ">=" ) RelationalExpression() ]
 public class RelationalExpression implements Node {
   static final long serialVersionUID = 20050923L;
 

@@ -8,8 +8,8 @@ import jtb.ParseException;
 /**
  * TokenExtractor is a visitor for a jtb syntax tree that returns all the
  * tokens from a expression in the order they appear in the expression.
- * For example on "x > someMethod(i[3])" would yield an array of the
- * following elements: x, >, someMethod,(, i, [, 3, ], ).
+ * For example on "x &gt; someMethod(i[3])" would yield an array of the
+ * following elements: x, &gt;, someMethod,(, i, [, 3, ], ).
  **/
 class TokenExtractor extends DepthFirstVisitor {
 

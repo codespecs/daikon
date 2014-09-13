@@ -4,13 +4,11 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> [ DeclarationSpecifiers() ]
- * f1 -> Declarator()
- * f2 -> [ DeclarationList() ]
- * f3 -> CompoundStatement()
- */
+// Grammar production:
+// f0 -> [ DeclarationSpecifiers() ]
+// f1 -> Declarator()
+// f2 -> [ DeclarationList() ]
+// f3 -> CompoundStatement()
 public class FunctionDefinition implements Node {
   static final long serialVersionUID = 20050923L;
 

@@ -4,10 +4,8 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ( <IDENTIFIER> | Constant() | "(" Expression() ")" )
- */
+// Grammar production:
+// f0 -> ( <IDENTIFIER> | Constant() | "(" Expression() ")" )
 public class PrimaryExpression implements Node {
   static final long serialVersionUID = 20050923L;
 

@@ -37,32 +37,32 @@
 #if defined(EQUAL)
   #define CLASSNAME SeqIndexIntEqual
   #define EQUALS(a,b) (a == b)
-  #define COMPARE ==
   #define SYMMETRIC_OP
+  #define EQUALShtml ==
   #define EQUALSstring "=="
   #define EQUALSSIMPLIFYstring "EQ"
   #define EQUALSQUANTstring "Equal"
 #elif defined(EQUALFLOAT)
   #define CLASSNAME SeqIndexFloatEqual
   #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
-  #define COMPARE ==
   #define SYMMETRIC_OP
+  #define EQUALShtml ==
   #define EQUALSstring "=="
   #define EQUALSSIMPLIFYstring "EQ"
   #define EQUALSQUANTstring "Equal"
 #elif defined(NONEQUAL)
   #define CLASSNAME SeqIndexIntNonEqual
   #define EQUALS(a,b) (a != b)
-  #define COMPARE !=
   #define SYMMETRIC_OP
+  #define EQUALShtml !=
   #define EQUALSstring "!="
   #define EQUALSSIMPLIFYstring "NEQ"
   #define EQUALSQUANTstring "NotEqual"
 #elif defined(NONEQUALFLOAT)
   #define CLASSNAME SeqIndexFloatNonEqual
   #define EQUALS(a,b) (Global.fuzzy.ne (a, b))
-  #define COMPARE !=
   #define SYMMETRIC_OP
+  #define EQUALShtml !=
   #define EQUALSstring "!="
   #define EQUALSSIMPLIFYstring "NEQ"
   #define EQUALSQUANTstring "NotEqual"
@@ -70,7 +70,7 @@
   #define CLASSNAME SeqIndexIntLessThan
   #define CLASS_SWAP SeqIndexIntGreaterThan
   #define EQUALS(a,b) (a < b)
-  #define COMPARE <
+  #define EQUALShtml &lt;
   #define EQUALSstring "<"
   #define EQUALSSIMPLIFYstring "<"
   #define EQUALSQUANTstring "Lt"
@@ -78,7 +78,7 @@
   #define CLASSNAME SeqIndexFloatLessThan
   #define CLASS_SWAP SeqIndexFloatGreaterThan
   #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
-  #define COMPARE <
+  #define EQUALShtml &lt;
   #define EQUALSstring "<"
   #define EQUALSSIMPLIFYstring "<"
   #define EQUALSQUANTstring "Lt"
@@ -86,7 +86,7 @@
   #define CLASSNAME SeqIndexIntLessEqual
   #define CLASS_SWAP SeqIndexIntGreaterEqual
   #define EQUALS(a,b) (a <= b)
-  #define COMPARE <=
+  #define EQUALShtml &le;
   #define EQUALSstring "<="
   #define EQUALSSIMPLIFYstring "<="
   #define EQUALSQUANTstring "Lte"
@@ -94,7 +94,7 @@
   #define CLASSNAME SeqIndexFloatLessEqual
   #define CLASS_SWAP SeqIndexFloatGreaterEqual
   #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
-  #define COMPARE <=
+  #define EQUALShtml &le;
   #define EQUALSstring "<="
   #define EQUALSSIMPLIFYstring "<="
   #define EQUALSQUANTstring "Lte"
@@ -102,7 +102,7 @@
   #define CLASSNAME SeqIndexIntGreaterThan
   #define CLASS_SWAP SeqIndexIntLessThan
   #define EQUALS(a,b) (a > b)
-  #define COMPARE >
+  #define EQUALShtml &gt;
   #define EQUALSstring ">"
   #define EQUALSSIMPLIFYstring ">"
   #define EQUALSQUANTstring "Gt"
@@ -110,7 +110,7 @@
   #define CLASSNAME SeqIndexFloatGreaterThan
   #define CLASS_SWAP SeqIndexFloatLessThan
   #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
-  #define COMPARE >
+  #define EQUALShtml &gt;
   #define EQUALSstring ">"
   #define EQUALSSIMPLIFYstring ">"
   #define EQUALSQUANTstring "Gt"
@@ -118,7 +118,7 @@
   #define CLASSNAME SeqIndexIntGreaterEqual
   #define CLASS_SWAP SeqIndexIntLessEqual
   #define EQUALS(a,b) (a >= b)
-  #define COMPARE >=
+  #define EQUALShtml &ge;
   #define EQUALSstring ">="
   #define EQUALSSIMPLIFYstring ">="
   #define EQUALSQUANTstring "Gte"
@@ -126,7 +126,7 @@
   #define CLASSNAME SeqIndexFloatGreaterEqual
   #define CLASS_SWAP SeqIndexFloatLessEqual
   #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
-  #define COMPARE >=
+  #define EQUALShtml &ge;
   #define EQUALSstring ">="
   #define EQUALSSIMPLIFYstring ">="
   #define EQUALSQUANTstring "Gte"
@@ -151,7 +151,7 @@ import java.util.logging.Logger;
 /**
  * Represents an invariant over sequences of PRIMITIVE values between the
  * index of an element of the sequence and the element itself.
- * Prints as <samp>x[i] COMPARE i</samp>.
+ * Prints as <code>x[i] EQUALShtml i</code>.
  **/
 public class CLASSNAME extends SUPERCLASS {
   // We are Serializable, so we specify a version to allow changes to
@@ -418,7 +418,7 @@ public class CLASSNAME extends SUPERCLASS {
    * Checks to see if this is obvious over the specified variables
    * Implements the following checks: <pre>
    *
-   *    (A[] subsequence B[]) ^ (B[i] op i) ==> A[i] op i
+   *    (A[] subsequence B[]) ^ (B[i] op i) &rArr; A[i] op i
    * </pre>
    *
    * JHP: Its not obvious (to me) that this is true except when the

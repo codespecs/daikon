@@ -332,7 +332,7 @@ public abstract /*@Interned*/ class VarInfoName
    *        something like "\old(x)".
    *
    *        If var is not null and `this' is an "orig(x)" expressions, it
-   *        will be formatted in Jtest's DBC style, as "$pre(<type>, x)".
+   *        will be formatted in Jtest's DBC style, as "$pre(<em>type</em>, x)".
    *
    * @return the string representation (interned) of this name, in the
    * dbc style output format.

@@ -4,10 +4,8 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ConditionalExpression()
- */
+// Grammar production:
+// f0 -> ConditionalExpression()
 public class ConstantExpression implements Node {
   static final long serialVersionUID = 20050923L;
 

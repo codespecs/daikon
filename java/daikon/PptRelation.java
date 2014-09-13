@@ -17,7 +17,7 @@ import java.util.logging.Level;
  *
  * The basic function of the class is to translate from a variable in
  * the parent to the equivalent variable in the child and vice-versa.
- * For example, in the ENTER -> EXIT relationship, the parent is the
+ * For example, in the ENTER &rarr; EXIT relationship, the parent is the
  * ENTER ppt and the child is the EXIT ppt.  Each variable in the ENTER
  * ppt is connected to the corresponding orig variable in the EXIT ppt.
  */
@@ -137,7 +137,7 @@ public class PptRelation implements Serializable {
   }
 
   /**
-   * Return a string containing all of the parent->child var relations.
+   * Return a string containing all of the parent&rarr;child var relations.
    */
   public String parent_to_child_var_string() {
 
@@ -188,9 +188,9 @@ public class PptRelation implements Serializable {
    * used to simplify debug prints of the PPt tree (so that extra relations
    * don't result in duplicative information).
    *
-   * Somewhat arbitrarily, Object->User and Enter->Exit are not considered
-   * primary while all others are.  The remaining relations (class->object,
-   * object->method,and exit->exitNN) form a simple tree without duplication
+   * Somewhat arbitrarily, Object&rarr;User and Enter&rarr;Exit are not considered
+   * primary while all others are.  The remaining relations (class&rarr;object,
+   * object&rarr;method,and exit&rarr;exitNN) form a simple tree without duplication
    */
 
   /*@Pure*/ public boolean is_primary() {

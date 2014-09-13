@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> <ENUM>
- * f1 -> ( [ <IDENTIFIER> ] "{" EnumeratorList() "}" | <IDENTIFIER> )
- */
+// Grammar production:
+// f0 -> <ENUM>
+// f1 -> ( [ <IDENTIFIER> ] "{" EnumeratorList() "}" | <IDENTIFIER> )
 public class EnumSpecifier implements Node {
   static final long serialVersionUID = 20050923L;
 

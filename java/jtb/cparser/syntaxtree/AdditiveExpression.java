@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> MultiplicativeExpression()
- * f1 -> [ ( "+" | "-" ) AdditiveExpression() ]
- */
+// Grammar production:
+// f0 -> MultiplicativeExpression()
+// f1 -> [ ( "+" | "-" ) AdditiveExpression() ]
 public class AdditiveExpression implements Node {
   static final long serialVersionUID = 20050923L;
 

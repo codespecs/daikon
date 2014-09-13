@@ -4,13 +4,11 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> <INTEGER_LITERAL>
- *       | <FLOATING_POINT_LITERAL>
- *       | <CHARACTER_LITERAL>
- *       | <STRING_LITERAL>
- */
+// Grammar production:
+// f0 -> <INTEGER_LITERAL>
+//       | <FLOATING_POINT_LITERAL>
+//       | <CHARACTER_LITERAL>
+//       | <STRING_LITERAL>
 public class Constant implements Node {
   static final long serialVersionUID = 20050923L;
 

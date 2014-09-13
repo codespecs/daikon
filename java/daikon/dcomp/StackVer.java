@@ -101,7 +101,7 @@ import org.apache.bcel.verifier.structurals.UninitializedObjectType;
  * documentation.
  *
  * @version $Id$
- * @author <A HREF="http://www.inf.fu-berlin.de/~ehaase"/>Enver Haase</A>
+ * @author <A HREF="http://www.inf.fu-berlin.de/~ehaase">Enver Haase</A>
  * @see #get_stack_types()
  */
 @SuppressWarnings({"rawtypes", "nullness"}) // third-party code

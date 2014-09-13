@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> Annotation()
- *       | MemberValueArrayInitializer()
- *       | ConditionalExpression()
- */
+// Grammar production:
+// f0 -> Annotation()
+//       | MemberValueArrayInitializer()
+//       | ConditionalExpression()
 public class MemberValue implements Node {
    static final long serialVersionUID = 20050923L;
 

@@ -4,14 +4,12 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "while"
- * f1 -> "("
- * f2 -> Expression()
- * f3 -> ")"
- * f4 -> Statement()
- */
+// Grammar production:
+// f0 -> "while"
+// f1 -> "("
+// f2 -> Expression()
+// f3 -> ")"
+// f4 -> Statement()
 public class WhileStatement implements Node {
    static final long serialVersionUID = 20050923L;
 
