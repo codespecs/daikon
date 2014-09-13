@@ -278,10 +278,9 @@ public class DynComp {
       if (rt_file == null) {
         System.err.printf ("Can't find dcomp_rt.jar on the classpath "
                            + "or in $DAIKONDIR/java\n");
-        System.err.printf ("Use the --rt-file switch to specify its location, "
-                           + "or change your classpath to include it\n");
-        System.err.printf ("See Daikon manual, section \"Instrumenting the "
-                           + "JDK with DynComp\" for help\n");
+        System.err.printf ("Probably you forgot to build it.\n");
+        System.err.printf ("See the Daikon manual, section \"Instrumenting the "
+                           + "JDK with DynComp\" for help.\n");
         System.exit (1);
       }
     }

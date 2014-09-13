@@ -4231,6 +4231,10 @@ If one of these methods is called, a @samp{NoSuchMethodException} will
 be generated when the call is attempted. As of Java 7 runtime version 1.7.0_65
 all Java runtime methods are able to be instrumented.
 
+If the instrumented JDK is in a non-standord location, use the
+@option{--rt-file} switch to specify its location, or change your classpath
+to include it.
+
 One final note: if you update your JDK in any way (such as a OS upgrade),
 you will need to rebuild @file{dcomp_rt.jar}.
 
