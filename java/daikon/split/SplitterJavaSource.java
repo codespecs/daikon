@@ -429,7 +429,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /**
    * Return str with the char at index removed.
-   * This method requires: 0 <= index < str.length
+   * This method requires: 0 &le; index &lt; str.length
    * @param str the String from which the char at index should be removed.
    * @param index the index of the char that should be removed from str.
    * @return str with the char at index removed.
@@ -440,7 +440,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
 
   /**
    * Returns str with chr inserted at index.
-   * This method requires: 0 <= index <= str.length
+   * This method requires: 0 <= index &le; str.length
    * @param str the String in which chr should be inserted.
    * @param chr the char that should be inserted into str.
    * @param index the index of the position where chr should be

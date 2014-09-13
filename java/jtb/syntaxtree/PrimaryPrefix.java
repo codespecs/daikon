@@ -4,16 +4,14 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> Literal()
- *       | "this"
- *       | "super" "." <IDENTIFIER>
- *       | "(" Expression() ")"
- *       | AllocationExpression()
- *       | ResultType() "." "class"
- *       | Name()
- */
+// Grammar production:
+// f0 -> Literal()
+//       | "this"
+//       | "super" "." <IDENTIFIER>
+//       | "(" Expression() ")"
+//       | AllocationExpression()
+//       | ResultType() "." "class"
+//       | Name()
 public class PrimaryPrefix implements Node {
    static final long serialVersionUID = 20050923L;
 

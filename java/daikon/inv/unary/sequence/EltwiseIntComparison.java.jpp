@@ -25,7 +25,7 @@ import daikon.*;
 /**
  * Abstract base class defined so that the different types of
  * EltwiseIntComparison (and separately EltwiseFloatComparison), at
- * the current moment those are ==, !=, <, <=, >, >= can have a common
+ * the current moment those are ==, !=, &lt;, &le;, &gt;, &ge; can have a common
  * superclass which is needed for actions like the isExclusiveFormula
  * method. It is also used to force the definition of the
  * hasSeenNonTrivialSample function for each type of

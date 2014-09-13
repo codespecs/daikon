@@ -80,6 +80,7 @@
   #define INTEQUAL IntEqual
   #define INTEQUALstring "IntEqual"
   #define EQUALS(a,b) (a == b)
+  #define EQUALShtml ==
   #define EQUALSstring "=="
   #define INVEQUALSstring "=="
   #define PAIRWISE_COMPARE PairwiseIntEqual
@@ -89,6 +90,7 @@
   #define INTEQUAL FloatEqual
   #define INTEQUALstring "FloatEqual"
   #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
+  #define EQUALShtml ==
   #define EQUALSstring "=="
   #define INVEQUALSstring "=="
   #define PAIRWISE_COMPARE PairwiseFloatEqual
@@ -98,6 +100,7 @@
   #define INTEQUAL StringEqual
   #define INTEQUALstring "StringEqual"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a == b))
+  #define EQUALShtml ==
   #define EQUALSstring "=="
   #define INVEQUALSstring "=="
 #if 0
@@ -110,6 +113,7 @@
   #define INTEQUAL IntNonEqual
   #define INTEQUALstring "IntNonEqual"
   #define EQUALS(a,b) (a != b)
+  #define EQUALShtml !=
   #define EQUALSstring "!="
   #define INVEQUALSstring "!="
   #define DEBUGINTEQUAL debugIntNonEqual
@@ -118,6 +122,7 @@
   #define INTEQUAL FloatNonEqual
   #define INTEQUALstring "FloatNonEqual"
   #define EQUALS(a,b) (Global.fuzzy.ne (a, b))
+  #define EQUALShtml !=
   #define EQUALSstring "!="
   #define INVEQUALSstring "!="
   #define DEBUGINTEQUAL debugIntNonEqual
@@ -126,6 +131,7 @@
   #define INTEQUAL StringNonEqual
   #define INTEQUALstring "StringNonEqual"
   #define EQUALS(a,b) (a != b)
+  #define EQUALShtml !=
   #define EQUALSstring "!="
   #define INVEQUALSstring "!="
   #define DEBUGINTEQUAL debugStringNonEqual
@@ -136,6 +142,7 @@
   #define INTEQUAL_SWAP IntGreaterThan
   #define INTEQUALstring "IntLessThan"
   #define EQUALS(a,b) (a < b)
+  #define EQUALShtml &lt;
   #define EQUALSstring "<"
   #define INVEQUALSstring ">"
   #define PAIRWISE_COMPARE PairwiseIntLessThan
@@ -146,6 +153,7 @@
   #define INTEQUAL_SWAP FloatGreaterThan
   #define INTEQUALstring "FloatLessThan"
   #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
+  #define EQUALShtml &lt;
   #define EQUALSstring "<"
   #define INVEQUALSstring ">"
   #define PAIRWISE_COMPARE PairwiseFloatLessThan
@@ -156,6 +164,7 @@
   #define INTEQUAL_SWAP StringGreaterThan
   #define INTEQUALstring "StringLessThan"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo (b) < 0))
+  #define EQUALShtml &lt;
   #define EQUALSstring "<"
   #define INVEQUALSstring ">"
 #if 0
@@ -169,6 +178,7 @@
   #define INTEQUAL_SWAP IntGreaterEqual
   #define INTEQUALstring "IntLessEqual"
   #define EQUALS(a,b) (a <= b)
+  #define EQUALShtml &le;
   #define EQUALSstring "<="
   #define INVEQUALSstring ">="
   #define PAIRWISE_COMPARE PairwiseIntLessEqual
@@ -179,6 +189,7 @@
   #define INTEQUAL_SWAP FloatGreaterEqual
   #define INTEQUALstring "FloatLessEqual"
   #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
+  #define EQUALShtml &le;
   #define EQUALSstring "<="
   #define INVEQUALSstring ">="
   #define PAIRWISE_COMPARE PairwiseFloatLessEqual
@@ -189,6 +200,7 @@
   #define INTEQUAL_SWAP StringGreaterEqual
   #define INTEQUALstring "StringLessEqual"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo (b) <= 0))
+  #define EQUALShtml &le;
   #define EQUALSstring "<="
   #define INVEQUALSstring ">="
 #if 0
@@ -202,6 +214,7 @@
   #define INTEQUAL_SWAP IntLessThan
   #define INTEQUALstring "IntGreaterThan"
   #define EQUALS(a,b) (a > b)
+  #define EQUALShtml &gt;
   #define EQUALSstring ">"
   #define INVEQUALSstring "<"
   #define PAIRWISE_COMPARE PairwiseIntGreaterThan
@@ -212,6 +225,7 @@
   #define INTEQUAL_SWAP FloatLessThan
   #define INTEQUALstring "FloatGreaterThan"
   #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
+  #define EQUALShtml &gt;
   #define EQUALSstring ">"
   #define INVEQUALSstring "<"
   #define PAIRWISE_COMPARE PairwiseFloatGreaterThan
@@ -222,6 +236,7 @@
   #define INTEQUAL_SWAP StringLessThan
   #define INTEQUALstring "StringGreaterThan"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo(b) > 0))
+  #define EQUALShtml &gt;
   #define EQUALSstring ">"
   #define INVEQUALSstring "<"
 #if 0
@@ -235,6 +250,7 @@
   #define INTEQUAL_SWAP IntLessEqual
   #define INTEQUALstring "IntGreaterEqual"
   #define EQUALS(a,b) (a >= b)
+  #define EQUALShtml &ge;
   #define EQUALSstring ">="
   #define INVEQUALSstring "<="
   #define PAIRWISE_COMPARE PairwiseIntGreaterEqual
@@ -245,6 +261,7 @@
   #define INTEQUAL_SWAP FloatLessEqual
   #define INTEQUALstring "FloatGreaterEqual"
   #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
+  #define EQUALShtml &ge;
   #define EQUALSstring ">="
   #define NONEQUALSstring "<="
   #define INVEQUALSstring "<="
@@ -256,6 +273,7 @@
   #define INTEQUAL_SWAP StringLessEqual
   #define INTEQUALstring "StringGreaterEqual"
   #define EQUALS(a,b) ((a != null) && (b != null) && (a.compareTo (b) >= 0))
+  #define EQUALShtml &ge;
   #define EQUALSstring ">="
   #define NONEQUALSstring "<="
   #define INVEQUALSstring "<="
@@ -339,7 +357,7 @@ import java.util.logging.Level;
 import java.util.*;
 
 /**
- * Represents an invariant of EQUALSstring between two PRIMITIVENONCOMMENT scalars.
+ * Represents an invariant of EQUALShtml between two PRIMITIVENONCOMMENT scalars.
  **/
 public final class INTEQUAL
   extends SUPERCLASS IMPLEMENTSCOMPARISON {
@@ -995,11 +1013,11 @@ public final class INTEQUAL
 #if defined(IS_NUMERIC) && (defined(LESSTHAN_OP) || defined(GREATERTHAN_OP))
   /**
    * Checks to see if there is a linear binary relationship between the
-   * variables that implies > or <
+   * variables that implies &gt; or <
    *  a * x + b * y + c == 0
    *
-   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b > 0) ==> y > x
-   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b < 0) ==> y < x
+   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b > 0) &rArr; y &gt; x
+   *  (y = (-a/b)*x + (-c/b) ^ (-a/b == 1) ^ (-c/b < 0) &rArr; y &lt; x
    *
    *
    * Returns null if this is not true.  Appropriate DiscardInfo otherwise.
@@ -1034,7 +1052,7 @@ public final class INTEQUAL
    * If both variables are subscripts and the underlying arrays have the
    * same invariant, then this invariant is implied:
    *
-   *     (x[] op y[]) ^ (i == j) ==> (x[i] op y[j])
+   *     (x[] op y[]) ^ (i == j) &rArr; (x[i] op y[j])
    */
   private /*@Nullable*/ DiscardInfo pairwise_implies (VarInfo[] vis) {
 
@@ -1072,7 +1090,7 @@ public final class INTEQUAL
    * If the equality is between two array size variables, check to see if
    * the underlying arrays are equal:
    *
-   *   (x[] = y[]) ==> size(x[]) = size(y[])
+   *   (x[] = y[]) &rArr; size(x[]) = size(y[])
    */
   private /*@Nullable*/ DiscardInfo array_eq_implies (VarInfo[] vis) {
 
@@ -1105,7 +1123,7 @@ public final class INTEQUAL
    * Suppress NonEqual invariants where both variables are subscripts
    * from the same array and the array has no duplicates:
    *
-   *    (A[] has no dups) ^ (i != j) ==> a[i] != a[j]
+   *    (A[] has no dups) ^ (i != j) &rArr; a[i] != a[j]
    */
   private /*@Nullable*/ DiscardInfo no_dups_implies (VarInfo[] vis) {
 

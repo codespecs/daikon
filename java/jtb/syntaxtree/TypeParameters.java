@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "<"
- * f1 -> TypeParameter()
- * f2 -> ( "," TypeParameter() )*
- * f3 -> ">"
- */
+// Grammar production:
+// f0 -> "<"
+// f1 -> TypeParameter()
+// f2 -> ( "," TypeParameter() )*
+// f3 -> ">"
 public class TypeParameters implements Node {
    static final long serialVersionUID = 20050923L;
 

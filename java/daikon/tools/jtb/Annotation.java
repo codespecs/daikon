@@ -9,30 +9,31 @@ import java.util.regex.*;
  *
  * An example of the String representation of an annotation, as output
  * with the --wrap_xml flag, is:
- *
- *  <INVINFO>
- *  <INV> this.topOfStack <= this.theArray.length-1 </INV>
- *  <ENTER>
- *  <DAIKON>  this.topOfStack <= size(this.theArray[])-1  </DAIKON>
- *  <DAIKONCLASS>class daikon.inv.binary.twoScalar.IntLessEqual</DAIKONCLASS>
- *  <METHOD>  isEmpty()  </METHOD>
- *  </INVINFO>
- *
+ * <pre>
+ *  &lt;INVINFO&gt;
+ *  &lt;INV&gt; this.topOfStack &le; this.theArray.length-1 &lt;/INV&gt;
+ *  &lt;ENTER&gt;
+ *  &lt;DAIKON&gt;  this.topOfStack &le; size(this.theArray[])-1  &lt;/DAIKON&gt;
+ *  &lt;DAIKONCLASS&gt;class daikon.inv.binary.twoScalar.IntLessEqual&lt;/DAIKONCLASS&gt;
+ *  &lt;METHOD&gt;  isEmpty()  &lt;/METHOD&gt;
+ *  &lt;/INVINFO&gt;
+ * </pre>
  * The above string should actually span only one line.
  *
- * To be well-formed, an annotation should be enclosed in <INVINFO>
+ * To be well-formed, an annotation should be enclosed in &lt;INVINFO&gt;
  * tags, contain
- *
- *   <DAIKON> and
- *   <METHOD> tags,
- *
+ * <pre>
+ *   &lt;DAIKON&gt; and
+ *   &lt;METHOD&gt; tags,
+ * </pre>
  * and exactly one of
- *
- *   <ENTER>,
- *   <EXIT>,
- *   <OBJECT>, or
- *   <CLASS>.
- *
+ * <pre>
+ *   &lt;ENTER&gt;,
+ *   &lt;EXIT&gt;,
+ *   &lt;OBJECT&gt;, or
+ *   &lt;CLASS&gt;.
+ * </pre>
+
  * Obviously, the tool Annotate outputs well-formed annotations, so
  * the user shouldn't have to worry too much about well-formedness.
  *

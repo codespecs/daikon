@@ -2820,7 +2820,7 @@ public final class FileIO {
     }
 
     /**
-     * Initialize from the 'variable <name>' record.  Scanner should be
+     * Initialize from the 'variable <em>name</em>' record.  Scanner should be
      * pointing at name.
      */
     public VarDefinition (ParseState state, Scanner scanner) throws DeclError {

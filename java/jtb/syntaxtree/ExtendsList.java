@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "extends"
- * f1 -> ClassOrInterfaceType()
- * f2 -> ( "," ClassOrInterfaceType() )*
- */
+// Grammar production:
+// f0 -> "extends"
+// f1 -> ClassOrInterfaceType()
+// f2 -> ( "," ClassOrInterfaceType() )*
 public class ExtendsList implements Node {
    static final long serialVersionUID = 20050923L;
 

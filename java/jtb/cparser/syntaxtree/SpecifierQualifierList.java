@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> TypeSpecifier() [ SpecifierQualifierList() ]
- *       | TypeQualifier() [ SpecifierQualifierList() ]
- */
+// Grammar production:
+// f0 -> TypeSpecifier() [ SpecifierQualifierList() ]
+//       | TypeQualifier() [ SpecifierQualifierList() ]
 public class SpecifierQualifierList implements Node {
   static final long serialVersionUID = 20050923L;
 

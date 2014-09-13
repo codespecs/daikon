@@ -476,21 +476,21 @@ public class NISuppressionSet implements Iterable<NISuppression> {
    * by each of its suppressions.  This allows recursive suppressions.
    *
    * For example, consider the suppressions:
-   *
-   *    (r == arg1) && (arg2 <= arg1) ==> r = max(arg1,arg2)
-   *    (arg2 == arg1) ==> arg2 <= arg1
-   *
-   * The suppressor (arg2 <= arg1) in the first suppression matches the
+   * <pre>
+   *    (r == arg1) &and; (arg2 &le; arg1) &rArr; r = max(arg1,arg2)
+   *    (arg2 == arg1) &rArr; arg2 &le; arg1
+   * </pre>
+   * The suppressor (arg2 &le; arg1) in the first suppression matches the
    * suppressee in the second suppression.  In order for the first
-   * suppression to work even when (arg2 <= arg1) is suppressed, the
+   * suppression to work even when (arg2 &le; arg1) is suppressed, the
    * second suppression is added to the first:
-   *
-   *    (r == arg1) && (arg2 <= arg1) ==> r = max(arg1,arg2)
-   *    (r == arg1) && (arg2 == arg1) ==> r = max(arg1,arg2)
-   *
-   * When (arg2 <= arg1) is suppressed, the second suppression for max
+   * <pre>
+   *    (r == arg1) &and; (arg2 &le; arg1) &rArr; r = max(arg1,arg2)
+   *    (r == arg1) &and; (arg2 == arg1) &rArr; r = max(arg1,arg2)
+   * </pre>
+   * When (arg2 &le; arg1) is suppressed, the second suppression for max
    * will still suppress max.  If (arg2 == arg1) is falsified, the
-   * (arg2 <= arg1) invariant will be created and can continue to suppress
+   * (arg2 &le; arg1) invariant will be created and can continue to suppress
    * max (as long as it is not falsified itself).
    */
   public void recurse_definitions (NISuppressionSet ss) {

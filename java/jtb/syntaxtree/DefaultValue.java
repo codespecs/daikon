@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "default"
- * f1 -> MemberValue()
- */
+// Grammar production:
+// f0 -> "default"
+// f1 -> MemberValue()
 public class DefaultValue implements Node {
    static final long serialVersionUID = 20050923L;
 

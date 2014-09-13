@@ -187,9 +187,9 @@ public class Property implements Serializable {
      *
      * <p>
      * To be well-formed, a property should be enclosed in
-     * <code><INVINFO></code> tags, contain <code><DAIKON></code> and
-     * <code><METHOD></code> tags, and exactly one of <code><ENTER></code>,
-     * <code><EXIT></code>,<code><OBJECT></code>, or <code><CLASS></code>.
+     * <code>&lt;INVINFO&gt;</code> tags, contain <code>&lt;DAIKON&gt;</code> and
+     * <code>&lt;METHOD&gt;</code> tags, and exactly one of <code>&lt;ENTER&gt;</code>,
+     * <code>&lt;EXIT&gt;</code>,<code>&lt;OBJECT&gt;</code>, or <code>&lt;CLASS&gt;</code>.
      */
     // [[ Using an XML parser seems like too strong a hammer here.
     //    But should do some profiling to see if all the string
@@ -253,7 +253,7 @@ public class Property implements Serializable {
 
     /**
      * Similar to <code>xmlString()</code>, but without a
-     * <code><INV>...</INV></code> tag (the JML representation).
+     * <code>&lt;INV&gt;...&lt;/INV&gt;</code> tag (the JML representation).
      *
      * Invariant:
      * <p>
@@ -361,7 +361,7 @@ public class Property implements Serializable {
      * <li>Whether the property relates old and new state.
      * <li>The total number of properties in the method containing this
      * property.
-     * <ul>
+     * </ul>
      */
     // [[ A work in progress ]]
     public double calculateConfidence() {

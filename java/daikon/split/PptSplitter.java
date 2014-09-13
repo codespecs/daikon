@@ -220,7 +220,7 @@ public class PptSplitter implements Serializable {
    * <pre>
    *   {A,B}  {!A,!B}  {A,!B}
    * </pre>
-   * Examining just the first two would suggest that "A <=> B" is valid,
+   * Examining just the first two would suggest that "A &hArr; B" is valid,
    * but in fact that is a false inference.  Note that this situation can
    * occur if the splitting condition uses variables that can ever be missing.
    */

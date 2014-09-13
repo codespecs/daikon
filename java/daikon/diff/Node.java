@@ -6,7 +6,7 @@ import plume.Pair;
 /**
  * All nodes must subclass this class.
  * The type parameter CONTENT is (half of) the type of the objects stored in this
- * node:  they are Pair<CONTENT,CONTENT>.
+ * node:  they are Pair&lt;CONTENT,CONTENT&gt;.
  * The type parameter CHILD is the type of the children (and is ignored if
  * there are no children).
  **/

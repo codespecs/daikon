@@ -10,8 +10,8 @@ import java.util.*;
  * where all other numbers in the same range (i.e., all the values that
  * <code>x</code> doesn't take from <code>min(x)</code> to
  * <code>max(x)</code>) are equal to <code>r (mod m)</code>.
- * Prints as <samp>x != r (mod m)</samp>, where <samp>r</samp>
- * is the remainder and <samp>m</samp> is the modulus.
+ * Prints as <code>x != r (mod m)</code>, where <code>r</code>
+ * is the remainder and <code>m</code> is the modulus.
  **/
 
 public class NonModulus

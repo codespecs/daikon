@@ -11,10 +11,10 @@ import daikon.inv.*;
  * compared.  The predicates and consequents themselves are compared
  * using the Comparator c passed to the constructor.  Some examples:
  *
- * this.compare(A->B, A->C) == c.compare(B, C)
- * this.compare(B, A->C) == c.compare(B, C)
+ * this.compare(A&rArr;B, A&rArr;C) == c.compare(B, C)
+ * this.compare(B, A&rArr;C) == c.compare(B, C)
  * this.compare(B, C) == c.compare(B, C)
- * this.compare(A->C, B->C) == c.compare(A, B)
+ * this.compare(A&rArr;C, B&rArr;C) == c.compare(A, B)
  **/
 public class ConsequentSortComparator implements Comparator<Invariant> {
 

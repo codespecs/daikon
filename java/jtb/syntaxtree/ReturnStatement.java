@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "return"
- * f1 -> [ Expression() ]
- * f2 -> ";"
- */
+// Grammar production:
+// f0 -> "return"
+// f1 -> [ Expression() ]
+// f2 -> ";"
 public class ReturnStatement implements Node {
    static final long serialVersionUID = 20050923L;
 

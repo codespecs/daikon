@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> PrimaryPrefix()
- * f1 -> ( PrimarySuffix() )*
- */
+// Grammar production:
+// f0 -> PrimaryPrefix()
+// f1 -> ( PrimarySuffix() )*
 public class PrimaryExpression implements Node {
    static final long serialVersionUID = 20050923L;
 

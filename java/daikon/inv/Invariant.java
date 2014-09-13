@@ -26,8 +26,8 @@ import java.io.Serializable;
  * Base implementation for Invariant objects.
  * Intended to be subclassed but not to be directly instantiated.
  * Rules/assumptions for invariants:
- *
- * <li> For each program point's set of VarInfos, there exists exactly
+ * <p>
+ * For each program point's set of VarInfos, there exists exactly
  * no more than one invariant of its type.  For example, between
  * variables a and b at PptTopLevel T, there will not be two instances
  * of invariant I(a, b).
@@ -81,20 +81,20 @@ public abstract class Invariant
    * Floating-point number between 0 and 1.  Invariants are displayed only if
    * the confidence that the invariant did not occur by chance is
    * greater than this.  (May also be set
-   * via <samp>--conf_limit</samp> switch to Daikon; refer to manual.)
+   * via the <tt>--conf_limit</tt> switch to Daikon; refer to manual.)
    **/
   public static double dkconfig_confidence_limit = .99;
 
   /**
    * A boolean value.  If true, Daikon's Simplify output (printed when
-   * the <samp>--format simplify</samp> flag is enabled, and used internally by
-   * <samp>--suppress_redundant</samp>)
+   * the <tt>--format simplify</tt> flag is enabled, and used internally by
+   * <tt>--suppress_redundant</tt>)
    * will include new predicates representing
    * some complex relationships in invariants, such as lexical
    * ordering among sequences.  If false, some complex relationships
    * will appear in the output as complex quantified formulas, while
    * others will not appear at all.  When enabled, Simplify may be able
-   * to make more inferences, allowing <samp>--suppress_redundant</samp> to
+   * to make more inferences, allowing <tt>--suppress_redundant</tt> to
    * suppress more redundant invariants, but Simplify may also run
    * more slowly.
    **/
@@ -1418,7 +1418,7 @@ public abstract class Invariant
    * interesting.
    *
    * Intuitively, the justification for this test is that an invariant
-   * that includes an uninteresting constant (say, "size(x[]) < 237")
+   * that includes an uninteresting constant (say, "size(x[]) &lt; 237")
    * is likely to be an artifact of the way the program was tested,
    * rather than a statement that would in fact hold over all possible
    * executions. */
@@ -1654,11 +1654,11 @@ public abstract class Invariant
   /**
    * Return a list of all the variables that must be non-null in order for
    * this invariant to be evaluated.  For instance, it this invariant is
-   * "a.b.c > d.e" (where c and e are of integer type), then it doesn't
+   * "a.b.c &gt; d.e" (where c and e are of integer type), then it doesn't
    * make sense to evaluate the invariant unless "a" is non-null, "a.b" is
    * non-null, and "d" is non-null.  So, another way to write the invariant
    * (in "guarded" form) would be
-   * "a != null && a.b != null && d != null && a.b.c > d.e".
+   * "a != null &amp;&amp; a.b != null &amp;&amp; d != null &amp;&amp; a.b.c &gt; d.e".
    */
   public List<VarInfo> getGuardingList(/*>>> @NonPrototype Invariant this*/) {
     return getGuardingList(ppt.var_infos);

@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> NormalAnnotation()
- *       | SingleMemberAnnotation()
- *       | MarkerAnnotation()
- */
+// Grammar production:
+// f0 -> NormalAnnotation()
+//       | SingleMemberAnnotation()
+//       | MarkerAnnotation()
 public class Annotation implements Node {
    static final long serialVersionUID = 20050923L;
 

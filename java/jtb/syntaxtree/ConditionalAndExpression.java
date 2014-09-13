@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> InclusiveOrExpression()
- * f1 -> ( "&&" InclusiveOrExpression() )*
- */
+// Grammar production:
+// f0 -> InclusiveOrExpression()
+// f1 -> ( "&&" InclusiveOrExpression() )*
 public class ConditionalAndExpression implements Node {
    static final long serialVersionUID = 20050923L;
 

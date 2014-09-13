@@ -48,7 +48,7 @@ public abstract class ValueSet extends LimitedSizeIntSet
   // it is, then change LimitedSizeIntSet to optionally not pre-allocate
   // the entire array.
   /**
-   * The number 44 comes from the fact that .9^44 < .01.  So, if the
+   * The number 44 comes from the fact that .9^44 &lt; .01.  So, if the
    * confidence limit is .01 and the probability of a given event is set at
    * .1, then 44 values is enough to demonstrate that never seeing the
    * event is statistically justified (not a coincidence).

@@ -4,16 +4,14 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "." "this"
- *       | "." "super"
- *       | "." AllocationExpression()
- *       | MemberSelector()
- *       | "[" Expression() "]"
- *       | "." <IDENTIFIER>
- *       | Arguments()
- */
+// Grammar production:
+// f0 -> "." "this"
+//       | "." "super"
+//       | "." AllocationExpression()
+//       | MemberSelector()
+//       | "[" Expression() "]"
+//       | "." <IDENTIFIER>
+//       | Arguments()
 public class PrimarySuffix implements Node {
    static final long serialVersionUID = 20050923L;
 

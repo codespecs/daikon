@@ -47,12 +47,12 @@ public class Session
    * <code>--suppress_redundant</code>
    * check.  If the value is 1 or higher, a hyphen will be printed when
    * each invariant is passed to Simplify, and then replaced by a
-   * <samp>T</samp>
+   * <code>T</code>
    * if the invariant was redundant,
-   * <samp>F</samp> if it was not found to be,
-   * and <samp>?</samp> if Simplify gave up because of a time limit.
+   * <code>F</code> if it was not found to be,
+   * and <code>?</code> if Simplify gave up because of a time limit.
    * If the value
-   * is 2 or higher, a <samp><</samp> or <samp>></samp>
+   * is 2 or higher, a <code>&lt;</code> or <code>&gt;</code>
    * will also be printed for each
    * invariant that is pushed onto or popped from from Simplify's
    * assumption stack. This option is mainly intended for debugging
@@ -66,7 +66,7 @@ public class Session
    * also be directed to a file named simplifyN.in (where N is a
    * number starting from 0) in the current directory. Simplify's
    * operation can then be reproduced with a command like
-   * <samp>Simplify -nosc &lt;simplify0.in</samp>.
+   * <code>Simplify -nosc &lt;simplify0.in</code>.
    * This is intended primarily for debugging
    * when Simplify fails.
    **/

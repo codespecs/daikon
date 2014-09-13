@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> Expression()
- * f1 -> ( "," Expression() )*
- */
+// Grammar production:
+// f0 -> Expression()
+// f1 -> ( "," Expression() )*
 public class ArgumentList implements Node {
    static final long serialVersionUID = 20050923L;
 

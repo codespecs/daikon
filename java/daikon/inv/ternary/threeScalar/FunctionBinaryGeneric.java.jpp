@@ -61,7 +61,7 @@
 
 
 /**
- * Represents the invariant <samp>resultvar = FUNCTION (arg1, arg2)</samp>
+ * Represents the invariant <code>resultvar = FUNCTION (arg1, arg2)</code>
  * over three PRIMITIVE scalars.
  * EXTRA_INV_DOC
  */

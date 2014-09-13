@@ -4,10 +4,8 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ( "(" TypeName() ")" CastExpression() | UnaryExpression() )
- */
+// Grammar production:
+// f0 -> ( "(" TypeName() ")" CastExpression() | UnaryExpression() )
 public class CastExpression implements Node {
   static final long serialVersionUID = 20050923L;
 

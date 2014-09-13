@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "(" Type() ")" UnaryExpression()
- *       | "(" Type() ")" UnaryExpressionNotPlusMinus()
- */
+// Grammar production:
+// f0 -> "(" Type() ")" UnaryExpression()
+//       | "(" Type() ")" UnaryExpressionNotPlusMinus()
 public class CastExpression implements Node {
    static final long serialVersionUID = 20050923L;
 

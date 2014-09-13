@@ -4,13 +4,11 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "{"
- * f1 -> [ DeclarationList() ]
- * f2 -> [ StatementList() ]
- * f3 -> "}"
- */
+// Grammar production:
+// f0 -> "{"
+// f1 -> [ DeclarationList() ]
+// f2 -> [ StatementList() ]
+// f3 -> "}"
 public class CompoundStatement implements Node {
   static final long serialVersionUID = 20050923L;
 

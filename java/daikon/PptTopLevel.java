@@ -713,7 +713,7 @@ public class PptTopLevel extends Ppt {
    * This routine creates derivations for one "pass"; that is, it adds
    * some set of derived variables, according to the functions that
    * are passed in.  All the results involve at least one VarInfo
-   * object at an index i such that vi_index_min <= i < vi_index_limit
+   * object at an index i such that vi_index_min &le; i &lt; vi_index_limit
    * (and possibly other VarInfos outside that range).
    **/
   private Derivation[] derive(int vi_index_min, int vi_index_limit) {
@@ -2070,7 +2070,7 @@ public class PptTopLevel extends Ppt {
   }
 
   /**
-   * Returns true if (v1+v1_shift) <= (v2+v2_shift) is known
+   * Returns true if (v1+v1_shift) &le; (v2+v2_shift) is known
    * to be true.  Returns false otherwise.  Integers only.
    */
   /*@Pure*/ public boolean is_less_equal(

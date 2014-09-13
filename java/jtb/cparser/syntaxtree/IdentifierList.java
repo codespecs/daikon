@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> <IDENTIFIER>
- * f1 -> ( "," <IDENTIFIER> )*
- */
+// Grammar production:
+// f0 -> <IDENTIFIER>
+// f1 -> ( "," <IDENTIFIER> )*
 public class IdentifierList implements Node {
   static final long serialVersionUID = 20050923L;
 

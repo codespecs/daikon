@@ -35,11 +35,11 @@ import java.util.logging.Level;
 
 /**
  * Represents a Linear invariant between two PRIMITIVE
- * scalars <samp>x</samp> and <samp>y</samp>, of the form
- * <samp>ax + by + c = 0</samp>.
- * The constants <samp>a</samp>, <samp>b</samp> and <samp>c</samp> are
+ * scalars <code>x</code> and <code>y</code>, of the form
+ * <code>ax + by + c = 0</code>.
+ * The constants <code>a</code>, <code>b</code> and <code>c</code> are
  * mutually relatively prime,
- * and the constant <samp>a</samp> is always positive.
+ * and the constant <code>a</code> is always positive.
  **/
 public class CLASSNAME
   extends SUPERCLASS

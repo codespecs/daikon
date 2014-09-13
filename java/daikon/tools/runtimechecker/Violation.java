@@ -102,12 +102,12 @@ public class Violation implements Serializable {
      * Precondition: the string is of the form:
      *
      * <p>
-     * <code><INVINFO> property time</INVINFO></code>
+     * <code>&lt;INVINFO&gt; property time&lt;/INVINFO&gt;</code>
      *
      * <p>
      * Where <code>property</code> is valid XML representation of a
-     * <code>Property</code>, and time is <code><ON_ENTRY></code> or
-     * <code><ON_EXIT></code>.
+     * <code>Property</code>, and time is <code>&lt;ON_ENTRY&gt;</code> or
+     * <code>&lt;ON_EXIT&gt;</code>.
      */
     public static Violation get(String vioString) {
 

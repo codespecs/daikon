@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ParameterList()
- * f1 -> [ "," "..." ]
- */
+// Grammar production:
+// f0 -> ParameterList()
+// f1 -> [ "," "..." ]
 public class ParameterTypeList implements Node {
   static final long serialVersionUID = 20050923L;
 

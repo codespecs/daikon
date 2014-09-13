@@ -54,7 +54,7 @@ public final class PrintInvariants {
    * See dkconfig_replace_prestate.
    *
    * Return the variable name corresponding to expr.  Create a new
-   * varname and an expr -> varname mapping if there is not already
+   * varname and an expr &rarr; varname mapping if there is not already
    * one.
    */
   public static String addPrestateExpression(String expr) {
@@ -136,8 +136,8 @@ public final class PrintInvariants {
    * examined during print time.  If a unary invariant contains a value
    * which matches the value of a static constant varible, the value
    * will be replaced by the name of the variable, "if it makes sense".
-   * For example, if there is a static constant variable a = 1.  And there
-   * exists an invariant x <= 1, x <= a would be the result printed.
+   * For example, if there is a static constant variable a = 1.  And if there
+   * exists an invariant x &le; 1, x &le; a would be the result printed.
    */
   public static boolean dkconfig_static_const_infer = false;
 
@@ -193,15 +193,16 @@ public final class PrintInvariants {
    * information about the invariant.  For example, if this switch is
    * true and if the output format is JAVA, and the invariant prints
    * as "x == null", the results of print_invariant would look
-   * something like:
+   * something like:<pre>
    *
-   * <INVINFO>
-   * <INV> x == null </INV>
-   * <SAMPLES> 100 </SAMPLES>
-   * <DAIKON> x == null </DAIKON>
-   * <DAIKONCLASS> daikon.inv.unary.scalar.NonZero </DAIKONCLASS>
-   * <METHOD> foo() </METHOD>
-   * </INVINFO>
+   * &lt;INVINFO&gt;
+   * &lt;INV&gt; x == null &lt;/INV&gt;
+   * &lt;SAMPLES&gt; 100 &lt;/SAMPLES&gt;
+   * &lt;DAIKON&gt; x == null &lt;/DAIKON&gt;
+   * &lt;DAIKONCLASS&gt; daikon.inv.unary.scalar.NonZero &lt;/DAIKONCLASS&gt;
+   * &lt;METHOD&gt; foo() &lt;/METHOD&gt;
+   * &lt;/INVINFO&gt;
+   * </pre>
    *
    * The above output is actually all in one line, although in this
    * comment it's broken up into multiple lines for clarity.
@@ -608,8 +609,8 @@ public final class PrintInvariants {
    * Method used to setup fields if the --disc_reason switch is used
    * if (arg==null) then show all discarded Invariants, otherwise just
    * show the ones specified in arg, where arg =
-   * <class-name><<var1>,<var2>,...>@<ppt.name> e.g.:
-   * OneOf<x>@foo():::ENTER would only show OneOf Invariants that
+   * <em>class-name</em>&lt;<em>var1</em>,<em>var2</em>,...&gt;@<em>ppt.name</em> e.g.:
+   * OneOf&lt;x&gt;@foo():::ENTER would only show OneOf Invariants that
    * involve x at the program point foo:::ENTER (any of the 3 params
    * can be ommitted, e.g. OneOf@foo:::ENTER)
    * @throws IllegalArgumentException if arg is not of the proper syntax

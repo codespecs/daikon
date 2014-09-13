@@ -4,14 +4,12 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "{"
- * f1 -> [ EnumConstant() ( "," EnumConstant() )* ]
- * f2 -> [ "," ]
- * f3 -> [ ";" ( ClassOrInterfaceBodyDeclaration(false) )* ]
- * f4 -> "}"
- */
+// Grammar production:
+// f0 -> "{"
+// f1 -> [ EnumConstant() ( "," EnumConstant() )* ]
+// f2 -> [ "," ]
+// f3 -> [ ";" ( ClassOrInterfaceBodyDeclaration(false) )* ]
+// f4 -> "}"
 public class EnumBody implements Node {
    static final long serialVersionUID = 20050923L;
 

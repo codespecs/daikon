@@ -243,11 +243,9 @@ public class Ast {
   // ClassOrInterfaceDeclaration. Otherwise returns null.
   public static /*@Nullable*/ /*@BinaryNameForNonArray*/ String getClassNameForType(TypeDeclaration d) {
 
-    /**
-     * Grammar production for TypeDeclaration:
-     * f0 -> ";"
-     *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
-     */
+    // Grammar production for TypeDeclaration:
+    // f0 -> ";"
+    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | AnnotationTypeDeclaration(modifiers) )
 
     NodeChoice c = d.f0;
     if (c.which == 0) {
@@ -391,13 +389,11 @@ public class Ast {
       PrimarySuffix ps = (PrimarySuffix) pslist.elementAt(pslist.size()-1);
       NodeChoice psnc = ps.f0;
       // PrimarySuffix:
-      /**
-       * f0 -> "." "this"
-       *       | "." AllocationExpression()
-       *       | "[" Expression() "]"
-       *       | "." <IDENTIFIER>
-       *       | Arguments()
-       */
+      // f0 -> "." "this"
+      //       | "." AllocationExpression()
+      //       | "[" Expression() "]"
+      //       | "." <IDENTIFIER>
+      //       | Arguments()
       switch (psnc.which) {
       case 4:
         NodeSequence sn = (NodeSequence) psnc.choice;
@@ -410,15 +406,13 @@ public class Ast {
     // try the PrimaryPrefix.
 
     // PrimaryPrefix:
-    /**
-     * f0 -> Literal()
-     *       | "this"
-     *       | "super" "." <IDENTIFIER>
-     *       | "(" Expression() ")"
-     *       | AllocationExpression()
-     *       | ResultType() "." "class"
-     *       | Name()
-     */
+    // f0 -> Literal()
+    //       | "this"
+    //       | "super" "." <IDENTIFIER>
+    //       | "(" Expression() ")"
+    //       | AllocationExpression()
+    //       | ResultType() "." "class"
+    //       | Name()
     PrimaryPrefix pp = pe.f0;
     NodeChoice ppnc = pp.f0;
     switch (ppnc.which) {
@@ -1289,12 +1283,10 @@ public class Ast {
 
 
   private static boolean isStaticInternal(Node n) {
-    /**
-     * Grammar production for ClassOrInterfaceBodyDeclaration
-     * f0 -> Initializer()
-     *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
-     *       | ";"
-     */
+    // Grammar production for ClassOrInterfaceBodyDeclaration
+    // f0 -> Initializer()
+    //       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
+    //       | ";"
     assert (n instanceof MethodDeclaration)
                       || (n instanceof ClassOrInterfaceDeclaration);
 
@@ -1307,10 +1299,8 @@ public class Ast {
   }
 
   public static boolean modifierPresent(Modifiers modifiers, String modifierString) {
-    /**
-     * Grammar production:
-     * f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" | "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
-     */
+    // Grammar production:
+    // f0 -> ( ( "public" | "static" | "protected" | "private" | "final" | "abstract" | "synchronized" | "native" | "transient" | "volatile" | "strictfp" | Annotation() ) )*
 
     NodeListOptional list = modifiers.f0;
     for (int i = 0 ; i < list.size() ; i++) {
@@ -1350,15 +1340,13 @@ public class Ast {
   }
 
   public static boolean isInterface(ClassOrInterfaceDeclaration n) {
-    /**
-     * Grammar production for ClassOrInterfaceDeclaration:
-     * f0 -> ( "class" | "interface" )
-     * f1 -> <IDENTIFIER>
-     * f2 -> [ TypeParameters() ]
-     * f3 -> [ ExtendsList(isInterface) ]
-     * f4 -> [ ImplementsList(isInterface) ]
-     * f5 -> ClassOrInterfaceBody(isInterface)
-     */
+    // Grammar production for ClassOrInterfaceDeclaration:
+    // f0 -> ( "class" | "interface" )
+    // f1 -> <IDENTIFIER>
+    // f2 -> [ TypeParameters() ]
+    // f3 -> [ ExtendsList(isInterface) ]
+    // f4 -> [ ImplementsList(isInterface) ]
+    // f5 -> ClassOrInterfaceBody(isInterface)
     NodeToken t = (NodeToken) n.f0.choice;
     String token = t.tokenImage;
     if (token.equals("interface")) {
@@ -1370,30 +1358,24 @@ public class Ast {
   }
 
   public static boolean isPrimitive(jtb.syntaxtree.Type n) {
-    /**
-     * Grammar production:
-     * f0 -> ReferenceType()
-     *       | PrimitiveType()
-     */
+    // Grammar production:
+    // f0 -> ReferenceType()
+    //       | PrimitiveType()
     return (n.f0.choice instanceof PrimitiveType);
   }
 
   public static boolean isReference(jtb.syntaxtree.Type n) {
-    /**
-     * Grammar production:
-     * f0 -> ReferenceType()
-     *       | PrimitiveType()
-     */
+    // Grammar production:
+    // f0 -> ReferenceType()
+    //       | PrimitiveType()
     return (n.f0.choice instanceof ReferenceType);
   }
 
 
   public static boolean isArray(jtb.syntaxtree.Type n) {
-    /**
-     * Grammar production:
-     * f0 -> PrimitiveType() ( "[" "]" )+
-     *       | ( ClassOrInterfaceType() ) ( "[" "]" )*
-     */
+    // Grammar production:
+    // f0 -> PrimitiveType() ( "[" "]" )+
+    //       | ( ClassOrInterfaceType() ) ( "[" "]" )*
     if (isPrimitive(n)) {
       return false;
     }

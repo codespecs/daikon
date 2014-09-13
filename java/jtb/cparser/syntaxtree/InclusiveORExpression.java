@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ExclusiveORExpression()
- * f1 -> [ "|" InclusiveORExpression() ]
- */
+// Grammar production:
+// f0 -> ExclusiveORExpression()
+// f1 -> [ "|" InclusiveORExpression() ]
 public class InclusiveORExpression implements Node {
   static final long serialVersionUID = 20050923L;
 

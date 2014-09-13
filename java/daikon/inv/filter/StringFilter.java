@@ -19,7 +19,7 @@ import daikon.inv.unary.string.OneOfString;
  * <ul>
  *  <li><tt>x != null</tt>, if <tt>!string.IsNullOrEmpty(...)</tt> or <tt>!string.IsNullOrWhitespace(...)</tt> is inferred.</li>
  *  <li>Frame conditions for string properties, if the frame condition exists for the string (reference or value)</li>
- *  <li>String properties, if {@link StringOneOf}</tt> is inferred.</li>
+ *  <li>String properties, if {@link OneOfString} is inferred.</li>
  *  <li><tt>!string.IsNullOrEmpty(...)</tt> if <tt>!string.IsNullOrWhitespace(...)</tt> is inferred.</li>
  *  <li><tt>string.IsNullOrWhitespace(...)</tt> if <tt>string.IsNullOrEmpty(...)</tt> is inferred.</li>
  * </ul>

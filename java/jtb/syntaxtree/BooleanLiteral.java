@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "true"
- *       | "false"
- */
+// Grammar production:
+// f0 -> "true"
+//       | "false"
 public class BooleanLiteral implements Node {
    static final long serialVersionUID = 20050923L;
 

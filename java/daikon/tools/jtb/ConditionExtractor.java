@@ -44,23 +44,19 @@ class ConditionExtractor extends DepthFirstVisitor {
   //// DepthFirstVisitor Methods overridden by ConditionExtractor //////////////
   /////
 
-  /**
-   * f0 -> "package"
-   * f1 -> Name()
-   * f2 -> ";"
-   */
+  // f0 -> "package"
+  // f1 -> Name()
+  // f2 -> ";"
   public void visit(PackageDeclaration n) {
     packageName = Ast.format(n.f1);
     super.visit(n);
   }
 
-  /**
-   * f0 -> "class"
-   * f1 -> <IDENTIFIER>
-   * f2 -> [ "extends" Name() ]
-   * f3 -> [ "implements" NameList() ]
-   * f4 -> ClassBody()
-   */
+  // f0 -> "class"
+  // f1 -> <IDENTIFIER>
+  // f2 -> [ "extends" Name() ]
+  // f3 -> [ "implements" NameList() ]
+  // f4 -> ClassBody()
   public void visit(ClassOrInterfaceDeclaration n) {
 
     if (!Ast.isInterface(n)) { // Not sure if this is needed; added during JTB udpate.
@@ -73,13 +69,11 @@ class ConditionExtractor extends DepthFirstVisitor {
    * Stores the field name, if it is a boolean.
    */
   public void visit(FieldDeclaration n) {
-    /**
-     * Grammar production:
-     * f0 -> Type()
-     * f1 -> VariableDeclarator()
-     * f2 -> ( "," VariableDeclarator() )*
-     * f3 -> ";"
-     */
+    // Grammar production:
+    // f0 -> Type()
+    // f1 -> VariableDeclarator()
+    // f2 -> ( "," VariableDeclarator() )*
+    // f3 -> ";"
 
     String resultType = Ast.format(n.f0);
     if (resultType.equals("boolean")) {
@@ -88,13 +82,11 @@ class ConditionExtractor extends DepthFirstVisitor {
     super.visit(n);
   }
 
-  /**
-   * f0 -> ( "public" | "protected" | "private" | "static" | "abstract" | "final" | "native" | "synchronized" )*
-   * f1 -> ResultType()
-   * f2 -> MethodDeclarator()
-   * f3 -> [ "throws" NameList() ]
-   * f4 -> ( Block() | ";" )
-   */
+  // f0 -> ( "public" | "protected" | "private" | "static" | "abstract" | "final" | "native" | "synchronized" )*
+  // f1 -> ResultType()
+  // f2 -> MethodDeclarator()
+  // f3 -> [ "throws" NameList() ]
+  // f4 -> ( Block() | ";" )
 
   /**
    * It is sometimes helpful to store the method bodies of one-liner
@@ -111,11 +103,9 @@ class ConditionExtractor extends DepthFirstVisitor {
     resultTypes.pop();
   }
 
-  /**
-   * f0 -> <IDENTIFIER>
-   * f1 -> FormalParameters()
-   * f2 -> ( "[" "]" )*
-   */
+  // f0 -> <IDENTIFIER>
+  // f1 -> FormalParameters()
+  // f2 -> ( "[" "]" )*
   public void visit(MethodDeclarator n) {
     // This goes on the PPT_NAME line of the spinfo file.
     // eg. QueueAr.isEmpty
@@ -126,16 +116,14 @@ class ConditionExtractor extends DepthFirstVisitor {
     // should reset curMethodName to null here??
   }
 
-  /**
-   * f0 -> [ "public" | "protected" | "private" ]
-   * f1 -> <IDENTIFIER>
-   * f2 -> FormalParameters()
-   * f3 -> [ "throws" NameList() ]
-   * f4 -> "{"
-   * f5 -> [ ExplicitConstructorInvocation() ]
-   * f6 -> ( BlockStatement() )*
-   * f7 -> "}"
-   */
+  // f0 -> [ "public" | "protected" | "private" ]
+  // f1 -> <IDENTIFIER>
+  // f2 -> FormalParameters()
+  // f3 -> [ "throws" NameList() ]
+  // f4 -> "{"
+  // f5 -> [ ExplicitConstructorInvocation() ]
+  // f6 -> ( BlockStatement() )*
+  // f7 -> "}"
   public void visit(ConstructorDeclaration n) {
     // This goes on the PPT_NAME line of the spinfo file.
     // eg. QueueAr.isEmpty
@@ -147,15 +135,13 @@ class ConditionExtractor extends DepthFirstVisitor {
     resultTypes.pop();
   }
 
-  /**
-   * f0 -> "switch"
-   * f1 -> "("
-   * f2 -> Expression()
-   * f3 -> ")"
-   * f4 -> "{"
-   * f5 -> ( SwitchLabel() ( BlockStatement() )* )*
-   * f6 -> "}"
-   */
+  // f0 -> "switch"
+  // f1 -> "("
+  // f2 -> Expression()
+  // f3 -> ")"
+  // f4 -> "{"
+  // f5 -> ( SwitchLabel() ( BlockStatement() )* )*
+  // f6 -> "}"
 
   /**
    * extracts the values for the different cases and creates splitting
@@ -198,55 +184,47 @@ class ConditionExtractor extends DepthFirstVisitor {
     return values;
   }
 
-  /**
-   * f0 -> "if"
-   * f1 -> "("
-   * f2 -> Expression()
-   * f3 -> ")"
-   * f4 -> Statement()
-   * f5 -> [ "else" Statement() ]
-   */
+  // f0 -> "if"
+  // f1 -> "("
+  // f2 -> Expression()
+  // f3 -> ")"
+  // f4 -> Statement()
+  // f5 -> [ "else" Statement() ]
   /* Extract the condition in an 'if' statement */
   public void visit(IfStatement n) {
     addCondition(Ast.format(n.f2));
     super.visit(n);
 }
 
-  /**
-   * f0 -> "while"
-   * f1 -> "("
-   * f2 -> Expression()
-   * f3 -> ")"
-   * f4 -> Statement()
-   */
+  // f0 -> "while"
+  // f1 -> "("
+  // f2 -> Expression()
+  // f3 -> ")"
+  // f4 -> Statement()
   /* Extract the condition in an 'while' statement */
   public void visit(WhileStatement n) {
     super.visit(n);
     addCondition(Ast.format(n.f2));
   }
 
-  /**
-   * f0 -> "do"
-   * f1 -> Statement()
-   * f2 -> "while"
-   * f3 -> "("
-   * f4 -> Expression()
-   * f5 -> ")"
-   * f6 -> ";"
-   */
+  // f0 -> "do"
+  // f1 -> Statement()
+  // f2 -> "while"
+  // f3 -> "("
+  // f4 -> Expression()
+  // f5 -> ")"
+  // f6 -> ";"
   /* Extract the condition in an 'DoStatement' statement */
   public void visit(DoStatement n) {
     super.visit(n);
     addCondition(Ast.format(n.f4));
   }
 
-   /**
-    * f0 -> "for"
-    * f1 -> "("
-    * f2 -> ( Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
-    * f3 -> ")"
-    * f4 -> Statement()
-    */
+   // f0 -> "for"
+   // f1 -> "("
+   // f2 -> ( Type() <IDENTIFIER> ":" Expression() | [ ForInit() ] ";" [ Expression() ] ";" [ ForUpdate() ] )
+   // f3 -> ")"
+   // f4 -> Statement()
   /* Extract the condition in an 'for' statement */
   public void visit(ForStatement n) {
     super.visit(n);
@@ -257,23 +235,21 @@ class ConditionExtractor extends DepthFirstVisitor {
   }
 
 
-  /**
-   * f0 -> LabeledStatement()
-   *       | Block()
-   *       | EmptyStatement()
-   *       | StatementExpression() ";"
-   *       | SwitchStatement()
-   *       | IfStatement()
-   *       | WhileStatement()
-   *       | DoStatement()
-   *       | ForStatement()
-   *       | BreakStatement()
-   *       | ContinueStatement()
-   *       | ReturnStatement()
-   *       | ThrowStatement()
-   *       | SynchronizedStatement()
-   *       | TryStatement()
-   */
+  // f0 -> LabeledStatement()
+  //       | Block()
+  //       | EmptyStatement()
+  //       | StatementExpression() ";"
+  //       | SwitchStatement()
+  //       | IfStatement()
+  //       | WhileStatement()
+  //       | DoStatement()
+  //       | ForStatement()
+  //       | BreakStatement()
+  //       | ContinueStatement()
+  //       | ReturnStatement()
+  //       | ThrowStatement()
+  //       | SynchronizedStatement()
+  //       | TryStatement()
 
   /*
    * If this statement is a one-liner (the sole statement in a

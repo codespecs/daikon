@@ -4,10 +4,8 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> StatementExpressionList()
- */
+// Grammar production:
+// f0 -> StatementExpressionList()
 public class ForUpdate implements Node {
    static final long serialVersionUID = 20050923L;
 

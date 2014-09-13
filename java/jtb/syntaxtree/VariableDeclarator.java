@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> VariableDeclaratorId()
- * f1 -> [ "=" VariableInitializer() ]
- */
+// Grammar production:
+// f0 -> VariableDeclaratorId()
+// f1 -> [ "=" VariableInitializer() ]
 public class VariableDeclarator implements Node {
    static final long serialVersionUID = 20050923L;
 

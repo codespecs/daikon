@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> StatementExpression()
- * f1 -> ( "," StatementExpression() )*
- */
+// Grammar production:
+// f0 -> StatementExpression()
+// f1 -> ( "," StatementExpression() )*
 public class StatementExpressionList implements Node {
    static final long serialVersionUID = 20050923L;
 

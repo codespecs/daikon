@@ -995,6 +995,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * one in such a way that changes to it wouldn't be visible to the
    * method's caller. There are 3 such cases:
    *
+   * <ul>
    * <li> The variable is a pass-by-value parameter "p".
    * <li> The variable is of the form "p.prop" where "prop" is an
    * immutable property of an object, like its type, or (for a Java
@@ -1002,6 +1003,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * <li> The variable is of the form "p.prop", and "p" has been
    * modified to point to a different object. We assume "p" has been
    * modified if we don't have an invariant "orig(p) == p".
+   * </ul>
    *
    * In any case, the variable must have a postState VarInfoName, and
    * equality invariants need to have already been computed.
@@ -1576,10 +1578,10 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    *  Given two variables I and J, indicate whether it is necessarily the
-   *  case that i<=j or i>=j.  The variables also each have a shift, so the
-   *  test can really be something like (i+1)<=(j-1).
-   *  The test is either:  i + i_shift <= j + j_shift (if test_lessequal)
-   *                       i + i_shift >= j + j_shift (if !test_lessequal)
+   *  case that i&le;j or i&ge;j.  The variables also each have a shift, so the
+   *  test can really be something like (i+1)&le;(j-1).
+   *  The test is either:  i + i_shift &le; j + j_shift (if test_lessequal)
+   *                       i + i_shift &ge; j + j_shift (if !test_lessequal)
    *  This is a dynamic check, and so must not be called while Daikon is
    *  inferencing.
    **/
@@ -2851,7 +2853,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   /**
    * If the variable is an array, returns a valid C# 'Select' statement representing the array.
-   * For example, this.Array[].field would become this.Array.Select(x => x.field)
+   * For example, this.Array[].field would become this.Array.Select(x =&gt; x.field)
    *
    * If the variable is not an array, csharp_name() is returned.
    */
@@ -3573,7 +3575,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   }
 
-  /** see simplify_quantify (EnumSet<QuantFlags>, VarInfo ...) **/
+  /** @see #simplify_quantify(EnumSet, VarInfo ...) */
   public static String[] simplify_quantify (VarInfo ...vars) {
     return simplify_quantify (EnumSet.noneOf (QuantFlags.class), vars);
   }

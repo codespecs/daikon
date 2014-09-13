@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> EqualityExpression()
- * f1 -> [ "&" ANDExpression() ]
- */
+// Grammar production:
+// f0 -> EqualityExpression()
+// f1 -> [ "&" ANDExpression() ]
 public class ANDExpression implements Node {
   static final long serialVersionUID = 20050923L;
 

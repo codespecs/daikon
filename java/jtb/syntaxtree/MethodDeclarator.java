@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> <IDENTIFIER>
- * f1 -> FormalParameters()
- * f2 -> ( "[" "]" )*
- */
+// Grammar production:
+// f0 -> <IDENTIFIER>
+// f1 -> FormalParameters()
+// f2 -> ( "[" "]" )*
 public class MethodDeclarator implements Node {
    static final long serialVersionUID = 20050923L;
 

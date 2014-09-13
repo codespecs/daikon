@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "{"
- * f1 -> ( AnnotationTypeMemberDeclaration() )*
- * f2 -> "}"
- */
+// Grammar production:
+// f0 -> "{"
+// f1 -> ( AnnotationTypeMemberDeclaration() )*
+// f2 -> "}"
 public class AnnotationTypeBody implements Node {
    static final long serialVersionUID = 20050923L;
 

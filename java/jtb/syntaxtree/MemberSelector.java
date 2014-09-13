@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "."
- * f1 -> TypeArguments()
- * f2 -> <IDENTIFIER>
- */
+// Grammar production:
+// f0 -> "."
+// f1 -> TypeArguments()
+// f2 -> <IDENTIFIER>
 public class MemberSelector implements Node {
    static final long serialVersionUID = 20050923L;
 

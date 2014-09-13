@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> PrimitiveType() ( "[" "]" )+
- *       | ( ClassOrInterfaceType() ) ( "[" "]" )*
- */
+// Grammar production:
+// f0 -> PrimitiveType() ( "[" "]" )+
+//       | ( ClassOrInterfaceType() ) ( "[" "]" )*
 public class ReferenceType implements Node {
    static final long serialVersionUID = 20050923L;
 

@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "try"
- * f1 -> Block()
- * f2 -> ( "catch" "(" FormalParameter() ")" Block() )*
- * f3 -> [ "finally" Block() ]
- */
+// Grammar production:
+// f0 -> "try"
+// f1 -> Block()
+// f2 -> ( "catch" "(" FormalParameter() ")" Block() )*
+// f3 -> [ "finally" Block() ]
 public class TryStatement implements Node {
    static final long serialVersionUID = 20050923L;
 

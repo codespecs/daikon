@@ -516,27 +516,27 @@ public abstract class CLASSNAME extends SUPERCLASS {
   /**
    * Returns an invariant that is true when the size(v1) == size(v2).
    * There are a number of possible cases for an array:
-   *
+   * <pre>
    *    x[]         - entire array, size usually available as size(x[])
    *    x[..(n-1)]  - size is n
    *    x[..n]      - size is n+1
    *    x[n..]      - size is size(x[]) - n
    *    x[(n+1)..]  - size is size(x[]) - (n+1)
-   *
+   * </pre>
    * Each combination of the above must be considered in creating the
    * equality invariant.  Not all possibilities can be handled.  Null is
    * returned in that case.  In the following table, s stands for the size
-   *
+   * <pre>
    *                    x[]     x[..(n-1)]  x[..n]  x[n..]    x[(n+1)..]
    *                  --------- ----------  ------  ------    ----------
    *    y[]           s(y)=s(x)   s(y)=n
    *    y[..(m-1)]        x         m=n
    *    y[..m]            x         x         m=n
-   *    y[m..]            x         x          x     m=n &&
+   *    y[m..]            x         x          x     m=n &and;
    *                                                s(y)=s(x)
-   *    y[(m+1)..]        x         x          x        x       m=n &&
+   *    y[(m+1)..]        x         x          x        x       m=n &and;
    *                                                           s(y)=s(x)
-   *
+   * </pre>
    * NOTE: this is not currently used.  Many (if not all) of the missing
    * table cells above could be filled in with linear binary invariants
    * (eg, m = n + 1)
@@ -670,7 +670,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #if !defined(STRING)
   /**
    * Represents the divides without remainder invariant between
-   * COMMENT_TXT.  Prints as <samp>VAR1 % VAR2 == 0</samp>.
+   * COMMENT_TXT.  Prints as <code>VAR1 % VAR2 == 0</code>.
    */
   public static class Divides extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -866,7 +866,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the square invariant between
-   * COMMENT_TXT.  Prints as <samp>VAR1 = VAR2**2</samp>.
+   * COMMENT_TXT.  Prints as <code>VAR1 = VAR2**2</code>.
    **/
   public static class Square extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -937,9 +937,9 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the zero tracks invariant between
-   * COMMENT_TXT; that is, when <samp>VAR1</samp> is zero,
-   * <samp>VAR2</samp> is also zero.
-   * Prints as <samp>VAR1 = 0 ==> VAR2 = 0</samp>.
+   * COMMENT_TXT; that is, when <code>VAR1</code> is zero,
+   * <code>VAR2</code> is also zero.
+   * Prints as <code>VAR1 = 0 &rArr; VAR2 = 0</code>.
    **/
   public static class ZeroTrack extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -1025,7 +1025,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the bitwise complement invariant between
-   * COMMENT_TXT.  Prints as <samp>VAR1 = ~VAR2</samp>.
+   * COMMENT_TXT.  Prints as <code>VAR1 = ~VAR2</code>.
    **/
   public static class BitwiseComplement extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -1086,8 +1086,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the bitwise subset invariant between
-   * COMMENT_TXT; that is, the bits of <samp>VAR2</samp> are a subset of the
-   * bits of <samp>VAR1</samp>.  Prints as <samp>VAR1 = VAR2 | VAR1</samp>.
+   * COMMENT_TXT; that is, the bits of <code>VAR2</code> are a subset of the
+   * bits of <code>VAR1</code>.  Prints as <code>VAR1 = VAR2 | VAR1</code>.
    **/
   public static class BitwiseSubset extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -1192,8 +1192,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
   /**
    * Represents the BitwiseAnd == 0 invariant between
-   * COMMENT_TXT; that is, <samp>VAR1</samp> and <samp>VAR2</samp> have no
-   * bits in common.  Prints as <samp>VAR1 & VAR2 == 0</samp>.
+   * COMMENT_TXT; that is, <code>VAR1</code> and <code>VAR2</code> have no
+   * bits in common.  Prints as <code>VAR1 &amp; VAR2 == 0</code>.
    **/
   public static class BitwiseAndZero extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -1279,8 +1279,8 @@ public abstract class CLASSNAME extends SUPERCLASS {
   /**
    * Represents the ShiftZero invariant between
    * COMMENT_TXT;
-   * that is, <samp>VAR1</samp> right-shifted by <samp>VAR2</samp>
-   * is always zero.  Prints as <samp>VAR1 >> VAR2 = 0</samp>.
+   * that is, <code>VAR1</code> right-shifted by <code>VAR2</code>
+   * is always zero.  Prints as <code>VAR1 &gt;&gt; VAR2 = 0</code>.
    **/
   public static class ShiftZero  extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to
@@ -1368,7 +1368,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #if defined(STRING)
   /**
    * Represents the substring invariant between
-   * COMMENT_TXT.  Prints as <samp>VAR1 is a substring of VAR2</samp>.
+   * COMMENT_TXT.  Prints as <code>VAR1 is a substring of VAR2</code>.
    */
   public static class SubString extends CLASSNAME {
     // We are Serializable, so we specify a version to allow changes to

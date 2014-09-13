@@ -38,7 +38,7 @@ import plume.*;
 
 /**
  * Represents sequences of PRIMITIVE values that contain a common subset.
- * Prints as <samp>{e1, e2, e3, ...} subset of x[]</samp>.
+ * Prints as <code>{e1, e2, e3, ...} subset of x[]</code>.
  **/
 
 public class CLASSNAME

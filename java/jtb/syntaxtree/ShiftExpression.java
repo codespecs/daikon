@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> AdditiveExpression()
- * f1 -> ( ( "<<" | RSIGNEDSHIFT() | RUNSIGNEDSHIFT() ) AdditiveExpression() )*
- */
+// Grammar production:
+// f0 -> AdditiveExpression()
+// f1 -> ( ( "<<" | RSIGNEDSHIFT() | RUNSIGNEDSHIFT() ) AdditiveExpression() )*
 public class ShiftExpression implements Node {
    static final long serialVersionUID = 20050923L;
 

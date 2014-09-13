@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> [ "final" ]
- * f1 -> Type()
- * f2 -> VariableDeclarator()
- * f3 -> ( "," VariableDeclarator() )*
- */
+// Grammar production:
+// f0 -> [ "final" ]
+// f1 -> Type()
+// f2 -> VariableDeclarator()
+// f3 -> ( "," VariableDeclarator() )*
 public class LocalVariableDeclaration implements Node {
    static final long serialVersionUID = 20050923L;
 

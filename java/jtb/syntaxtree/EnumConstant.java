@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> <IDENTIFIER>
- * f1 -> [ Arguments() ]
- * f2 -> [ ClassOrInterfaceBody(false) ]
- */
+// Grammar production:
+// f0 -> <IDENTIFIER>
+// f1 -> [ Arguments() ]
+// f2 -> [ ClassOrInterfaceBody(false) ]
 public class EnumConstant implements Node {
    static final long serialVersionUID = 20050923L;
 

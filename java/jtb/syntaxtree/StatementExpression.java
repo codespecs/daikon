@@ -4,12 +4,10 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> PreIncrementExpression()
- *       | PreDecrementExpression()
- *       | PrimaryExpression() [ "++" | "--" | AssignmentOperator() Expression() ]
- */
+// Grammar production:
+// f0 -> PreIncrementExpression()
+//       | PreDecrementExpression()
+//       | PrimaryExpression() [ "++" | "--" | AssignmentOperator() Expression() ]
 public class StatementExpression implements Node {
    static final long serialVersionUID = 20050923L;
 

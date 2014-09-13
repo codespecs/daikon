@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> EqualityExpression()
- * f1 -> ( "&" EqualityExpression() )*
- */
+// Grammar production:
+// f0 -> EqualityExpression()
+// f1 -> ( "&" EqualityExpression() )*
 public class AndExpression implements Node {
    static final long serialVersionUID = 20050923L;
 

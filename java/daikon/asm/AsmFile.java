@@ -13,12 +13,13 @@ import java.util.Map;
  * Stores the instructions associated with an asm file.
  *
  * An asm file consists of a list of records. Each record contains assembly
- * instructions corresponding to a basic block. Each record has the form
- *
- * ppt <name>
- *  <instruction>
+ * instructions corresponding to a basic block. Each record has the form<pre>
+ * 
+ * ppt <em>name</em>
+ *  <em>instruction</em>
  *  ...
- *  <instruction>
+ *  <em>instruction</em>
+ * </pre>
  *
  * Two recods are separated by one or more empty lines.
  * Each record represents a basic block, and contains its name followed by the

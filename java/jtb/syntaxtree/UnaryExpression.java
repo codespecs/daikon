@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ( "+" | "-" ) UnaryExpression()
- *       | PreIncrementExpression()
- *       | PreDecrementExpression()
- *       | UnaryExpressionNotPlusMinus()
- */
+// Grammar production:
+// f0 -> ( "+" | "-" ) UnaryExpression()
+//       | PreIncrementExpression()
+//       | PreDecrementExpression()
+//       | UnaryExpressionNotPlusMinus()
 public class UnaryExpression implements Node {
    static final long serialVersionUID = 20050923L;
 

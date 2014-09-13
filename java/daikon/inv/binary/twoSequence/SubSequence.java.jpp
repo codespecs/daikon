@@ -93,7 +93,7 @@ import java.util.*;
 /**
  * Represents two sequences of PRIMITIVE values where one sequence is a
  * subsequence of the other.  Prints as
- * <samp>x[] is a subsequence of y[]</samp>.
+ * <code>x[] is a subsequence of y[]</code>.
  **/
 
 public class CLASSNAME

@@ -4,10 +4,8 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ( <STRUCT> | <UNION> )
- */
+// Grammar production:
+// f0 -> ( <STRUCT> | <UNION> )
 public class StructOrUnion implements Node {
   static final long serialVersionUID = 20050923L;
 

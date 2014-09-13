@@ -4,13 +4,11 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> [ PackageDeclaration() ]
- * f1 -> ( ImportDeclaration() )*
- * f2 -> ( TypeDeclaration() )*
- * f3 -> <EOF>
- */
+// Grammar production:
+// f0 -> [ PackageDeclaration() ]
+// f1 -> ( ImportDeclaration() )*
+// f2 -> ( TypeDeclaration() )*
+// f3 -> <EOF>
 public class CompilationUnit implements Node {
    static final long serialVersionUID = 20050923L;
 

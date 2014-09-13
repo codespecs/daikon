@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> InclusiveORExpression()
- * f1 -> [ "&&" LogicalANDExpression() ]
- */
+// Grammar production:
+// f0 -> InclusiveORExpression()
+// f1 -> [ "&&" LogicalANDExpression() ]
 public class LogicalANDExpression implements Node {
   static final long serialVersionUID = 20050923L;
 

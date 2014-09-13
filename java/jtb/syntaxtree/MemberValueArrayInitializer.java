@@ -4,14 +4,12 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> "{"
- * f1 -> MemberValue()
- * f2 -> ( "," MemberValue() )*
- * f3 -> [ "," ]
- * f4 -> "}"
- */
+// Grammar production:
+// f0 -> "{"
+// f1 -> MemberValue()
+// f2 -> ( "," MemberValue() )*
+// f3 -> [ "," ]
+// f4 -> "}"
 public class MemberValueArrayInitializer implements Node {
    static final long serialVersionUID = 20050923L;
 

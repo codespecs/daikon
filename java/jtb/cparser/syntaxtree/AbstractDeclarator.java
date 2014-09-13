@@ -4,10 +4,8 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ( Pointer() | [ Pointer() ] DirectAbstractDeclarator() )
- */
+// Grammar production:
+// f0 -> ( Pointer() | [ Pointer() ] DirectAbstractDeclarator() )
 public class AbstractDeclarator implements Node {
   static final long serialVersionUID = 20050923L;
 

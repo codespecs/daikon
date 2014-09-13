@@ -12,7 +12,7 @@ import daikon.inv.*;
 /**
  * Extract the consequents of all Implication invariants that are predicated
  * by membership in a cluster, from a .inv file.  An example of such an
- * implication would be "(cluster == <NUM>) ==> consequent". The consequent
+ * implication would be "(cluster == <em>NUM</em>) ==&gt; consequent". The consequent
  * is only true in certain clusters, but is not generally true for all
  * executions of the program point to which the Implication belongs.  These
  * resulting implications are written to standard output in the format of a
@@ -415,7 +415,7 @@ public class ExtractConsequent {
   /**
    * Prevents the occurence of "equivalent" inequalities, or inequalities
    * which produce the same pair of splits at a program point, for example
-   * "x <= y" and "x > y". Replaces ">=" with "<", "<=" with ">", and "!="
+   * "x <= y" and "x &gt; y". Replaces "&ge;" with "<", "&le;" with ">", and "!="
    * with "==" so that the occurence of equivalent inequalities can be
    * detected. However it tries not to be smart ... If there is more than
    * one inequality in the expression, it doesn't perform a substitution.

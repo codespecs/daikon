@@ -18,7 +18,7 @@ import org.checkerframework.framework.qual.PolyAll;
  * formats. This allows invariants to be output as snippets of
  * executable (Java) code. For example, an invariant like
  * <pre>
- *  a[] elements >= 1
+ *  a[] elements &ge; 1
  * </pre>
  * is output (in the Java, JML, and DBC formats) as something like
  * <pre>

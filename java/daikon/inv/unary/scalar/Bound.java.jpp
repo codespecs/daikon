@@ -36,6 +36,7 @@ The correct way to build the system is to run 'make'.
   #define GREATER greater
   #define GT >
   #define GTE >=
+  #define GTEHTML &gt;=
   #define MIN min
   #define MIN1 core.min1
   #define NUM_MIN1 core.num_min1
@@ -90,6 +91,7 @@ The correct way to build the system is to run 'make'.
   #define GREATER less
   #define GT <
   #define GTE <=
+  #define GTEHTML &lt;=
   #define MIN max
   #define MIN1 core.max1
   #define NUM_MIN1 core.num_max1
@@ -191,14 +193,14 @@ import java.util.*;
 
 #if defined (IS_SCALAR)
   /**
-   * Represents the invariant <samp>x GTE c</samp>, where <samp>c</samp>
-   * is a constant and <samp>x</samp> is a LONG scalar.
+   * Represents the invariant <pre>x GTEHTML c</pre>, where <code>c</code>
+   * is a constant and <code>x</code> is a LONG scalar.
    **/
 #else
   /**
    * Represents the invariant that each element of a sequence of PRIMITIVE
    * values is GREATER than or equal to a constant. Prints as
-   * <samp>x[] elements GTE c</samp>.
+   * <code>x[] elements GTEHTML c</code>.
    */
 #endif
 // One reason not to combine LowerBound and UpperBound into a single range

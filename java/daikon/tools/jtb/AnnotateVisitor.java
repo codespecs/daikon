@@ -194,18 +194,14 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   // ClassDeclaration is a top-level (non-nested) construct.  Collect all
   // the fields in this and any nested class, so that we can recognize
   // assignments to them later on.
-  /**
-   * f0 -> ( "abstract" | "final" | "public" )*
-   * f1 -> UnmodifiedClassDeclaration()
-   */
+  // f0 -> ( "abstract" | "final" | "public" )*
+  // f1 -> UnmodifiedClassDeclaration()
 //   public void visit(ClassOrInterfaceDeclaration n) {
 //     super.visit(n);             // call "accept(this)" on each field
 //   }
 
-  /**
-   * f0 -> ( "static" | "abstract" | "final" | "public" | "protected" | "private" )*
-   * f1 -> UnmodifiedClassDeclaration()
-   */
+  // f0 -> ( "static" | "abstract" | "final" | "public" | "protected" | "private" )*
+  // f1 -> UnmodifiedClassDeclaration()
 //   public void visit(NestedClassDeclaration n) {
 //     super.visit(n);             // call "accept(this)" on each field
 //   }
@@ -232,15 +228,13 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   // Insert object invariants for this class.
   // Insert owner assertions for fields.
-/**
- * Grammar production:
- * f0 -> ( "class" | "interface" )
- * f1 -> <IDENTIFIER>
- * f2 -> [ TypeParameters() ]
- * f3 -> [ ExtendsList(isInterface) ]
- * f4 -> [ ImplementsList(isInterface) ]
- * f5 -> ClassOrInterfaceBody(isInterface)
- */
+// Grammar production:
+// f0 -> ( "class" | "interface" )
+// f1 -> <IDENTIFIER>
+// f2 -> [ TypeParameters() ]
+// f3 -> [ ExtendsList(isInterface) ]
+// f4 -> [ ImplementsList(isInterface) ]
+// f5 -> ClassOrInterfaceBody(isInterface)
   public void visit(ClassOrInterfaceDeclaration n) {
     String classname = Ast.getClassName(n);
     String pptname = classname + ":::OBJECT";
@@ -426,12 +420,10 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   public void visit(MethodDeclaration n) {
 
-/**
- * Grammar production for ClassOrInterfaceBodyDeclaration:
- * f0 -> Initializer()
- *       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
- *       | ";"
- */
+// Grammar production for ClassOrInterfaceBodyDeclaration:
+// f0 -> Initializer()
+//       | Modifiers() ( ClassOrInterfaceDeclaration(modifiers) | EnumDeclaration(modifiers) | ConstructorDeclaration() | FieldDeclaration(modifiers) | MethodDeclaration(modifiers) )
+//       | ";"
 
 
     super.visit(n);             // call "accept(this)" on each field
@@ -491,17 +483,15 @@ public class AnnotateVisitor extends DepthFirstVisitor {
     }
   }
 
-/**
- * Grammar production:
- * f0 -> [ TypeParameters() ]
- * f1 -> <IDENTIFIER>
- * f2 -> FormalParameters()
- * f3 -> [ "throws" NameList() ]
- * f4 -> "{"
- * f5 -> [ ExplicitConstructorInvocation() ]
- * f6 -> ( BlockStatement() )*
- * f7 -> "}"
- */
+// Grammar production:
+// f0 -> [ TypeParameters() ]
+// f1 -> <IDENTIFIER>
+// f2 -> FormalParameters()
+// f3 -> [ "throws" NameList() ]
+// f4 -> "{"
+// f5 -> [ ExplicitConstructorInvocation() ]
+// f6 -> ( BlockStatement() )*
+// f7 -> "}"
   public void visit(ConstructorDeclaration n) {
     // System.out.println("ConstructorDeclaration: " + n.f1);
 
@@ -665,11 +655,9 @@ public class AnnotateVisitor extends DepthFirstVisitor {
 
   // Set .owner and/or .containsnull for ++, --, etc expressions within a
   // statement.
-  /**
-   * f0 -> PreIncrementExpression()
-   *       | PreDecrementExpression()
-   *       | PrimaryExpression() [ "++" | "--" | AssignmentOperator() Expression() ]
-   */
+  // f0 -> PreIncrementExpression()
+  //       | PreDecrementExpression()
+  //       | PrimaryExpression() [ "++" | "--" | AssignmentOperator() Expression() ]
   public void visit(StatementExpression n) {
     super.visit(n);             // call "accept(this)" on each field
 
@@ -741,10 +729,8 @@ public class AnnotateVisitor extends DepthFirstVisitor {
   }
 
   // This is an assignment exactly if field f1 is present.
-  /**
-   * f0 -> ConditionalExpression()
-   * f1 -> [ AssignmentOperator() Expression() ]
-   */
+  // f0 -> ConditionalExpression()
+  // f1 -> [ AssignmentOperator() Expression() ]
   public void visit(Expression n) {
     super.visit(n);             // call "accept(this)" on each field
 

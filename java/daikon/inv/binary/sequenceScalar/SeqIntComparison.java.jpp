@@ -38,7 +38,7 @@
   #define SEQINTEQUAL SeqIntEqual
   #define SEQINTEQUALstring "SeqIntEqual"
   #define EQUALS(a,b) (a == b)
-  #define COMPARE ==
+  #define EQUALShtml ==
   #define EQUALSstring "=="
   #define EQUALSstringDBC "eltsEqual"
   #define EQUALSSIMPLIFYstring "EQ"
@@ -46,7 +46,7 @@
   #define SEQINTEQUAL SeqFloatEqual
   #define SEQINTEQUALstring "SeqFloatEqual"
   #define EQUALS(a,b) (Global.fuzzy.eq (a, b))
-  #define COMPARE ==
+  #define EQUALShtml
   #define EQUALSstring "=="
   #define EQUALSstringDBC "eltsEqual"
   #define EQUALSSIMPLIFYstring "EQ"
@@ -54,7 +54,7 @@
   #define SEQINTEQUAL SeqIntLessThan
   #define SEQINTEQUALstring "SeqIntLessThan"
   #define EQUALS(a,b) (a < b)
-  #define COMPARE <
+  #define EQUALShtml &lt;
   #define EQUALSstring "<"
   #define EQUALSstringDBC "eltsLT"
   #define EQUALSSIMPLIFYstring "<"
@@ -62,7 +62,7 @@
   #define SEQINTEQUAL SeqFloatLessThan
   #define SEQINTEQUALstring "SeqFloatLessThan"
   #define EQUALS(a,b) (Global.fuzzy.lt (a, b))
-  #define COMPARE <
+  #define EQUALShtml &lt;
   #define EQUALSstring "<"
   #define EQUALSstringDBC "eltsLT"
   #define EQUALSSIMPLIFYstring "<"
@@ -70,7 +70,7 @@
   #define SEQINTEQUAL SeqIntLessEqual
   #define SEQINTEQUALstring "SeqIntLessEqual"
   #define EQUALS(a,b) (a <= b)
-  #define COMPARE <=
+  #define EQUALShtml &le;
   #define EQUALSstring "<="
   #define EQUALSstringDBC "eltsLTE"
   #define EQUALSSIMPLIFYstring "<="
@@ -78,7 +78,7 @@
   #define SEQINTEQUAL SeqFloatLessEqual
   #define SEQINTEQUALstring "SeqFloatLessEqual"
   #define EQUALS(a,b) (Global.fuzzy.lte (a, b))
-  #define COMPARE <=
+  #define EQUALShtml &le;
   #define EQUALSstring "<="
   #define EQUALSstringDBC "eltsLTE"
   #define EQUALSSIMPLIFYstring "<="
@@ -86,7 +86,7 @@
   #define SEQINTEQUAL SeqIntGreaterThan
   #define SEQINTEQUALstring "SeqIntGreaterThan"
   #define EQUALS(a,b) (a > b)
-  #define COMPARE >
+  #define EQUALShtml &gt;
   #define EQUALSstring ">"
   #define EQUALSstringDBC "eltsGT"
   #define EQUALSSIMPLIFYstring ">"
@@ -94,7 +94,7 @@
   #define SEQINTEQUAL SeqFloatGreaterThan
   #define SEQINTEQUALstring "SeqFloatGreaterThan"
   #define EQUALS(a,b) (Global.fuzzy.gt (a, b))
-  #define COMPARE >
+  #define EQUALShtml &gt;
   #define EQUALSstring ">"
   #define EQUALSstringDBC "eltsGT"
   #define EQUALSSIMPLIFYstring ">"
@@ -102,7 +102,7 @@
   #define SEQINTEQUAL SeqIntGreaterEqual
   #define SEQINTEQUALstring "SeqIntGreaterEqual"
   #define EQUALS(a,b) (a >= b)
-  #define COMPARE >=
+  #define EQUALShtml &ge;
   #define EQUALSstring ">="
   #define EQUALSstringDBC "eltsGTE"
   #define EQUALSSIMPLIFYstring ">="
@@ -110,7 +110,7 @@
   #define SEQINTEQUAL SeqFloatGreaterEqual
   #define SEQINTEQUALstring "SeqFloatGreaterEqual"
   #define EQUALS(a,b) (Global.fuzzy.gte (a, b))
-  #define COMPARE >=
+  #define EQUALShtml &ge;
   #define EQUALSstring ">="
   #define EQUALSstringDBC "eltsGTE"
   #define EQUALSSIMPLIFYstring ">="
@@ -138,8 +138,8 @@ import java.util.logging.Logger;
 /**
  * Represents an invariant between a PRIMITIVE scalar and a
  * a sequence of PRIMITIVE values.
- * Prints as <samp>x[] elements COMPARE y</samp> where <samp>x</samp> is a
- * PRIMITIVE sequence and <samp>y</samp> is a PRIMITIVE scalar.
+ * Prints as <code>x[] elements EQUALShtml y</code> where <code>x</code> is a
+ * PRIMITIVE sequence and <code>y</code> is a PRIMITIVE scalar.
  **/
 public final class SEQINTEQUAL
   extends SUPERCLASS
@@ -365,9 +365,9 @@ public final class SEQINTEQUAL
    * Checks to see if this is obvious over the specified variables.
    * Implements the following checks: <pre>
    *
-   *  (x op B[]) ^ (B[] subsequence A[]) ==> (x op A[])
-   *  (A[] == [])                        ==> (x op A[])
-   *
+   *  (x op B[]) ^ (B[] subsequence A[]) &rArr; (x op A[])
+   *  (A[] == [])                        &rArr; (x op A[])
+   * </pre>
    */
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {

@@ -4,11 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> LogicalORExpression()
- * f1 -> [ "?" Expression() ":" ConditionalExpression() ]
- */
+// Grammar production:
+// f0 -> LogicalORExpression()
+// f1 -> [ "?" Expression() ":" ConditionalExpression() ]
 public class ConditionalExpression implements Node {
   static final long serialVersionUID = 20050923L;
 

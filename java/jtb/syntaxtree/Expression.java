@@ -4,11 +4,9 @@
 
 package jtb.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ConditionalExpression()
- * f1 -> [ AssignmentOperator() Expression() ]
- */
+// Grammar production:
+// f0 -> ConditionalExpression()
+// f1 -> [ AssignmentOperator() Expression() ]
 public class Expression implements Node {
    static final long serialVersionUID = 20050923L;
 

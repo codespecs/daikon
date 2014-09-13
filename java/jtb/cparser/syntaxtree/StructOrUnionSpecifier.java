@@ -4,12 +4,9 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
-
- * f0 -> StructOrUnion()
- * f1 -> ( [ <IDENTIFIER> ] "{" StructDeclarationList() "}" | <IDENTIFIER> )
- */
+// Grammar production:
+// f0 -> StructOrUnion()
+// f1 -> ( [ <IDENTIFIER> ] "{" StructDeclarationList() "}" | <IDENTIFIER> )
 public class StructOrUnionSpecifier implements Node {
   static final long serialVersionUID = 20050923L;
 

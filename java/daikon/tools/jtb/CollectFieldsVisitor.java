@@ -126,13 +126,11 @@ class CollectFieldsVisitor extends DepthFirstVisitor {
     }
   }
 
-  /**
-   * f0 -> ( "public" | "protected" | "private" | "static" | "final" | "transient" | "volatile" )*
-   * f1 -> Type()
-   * f2 -> VariableDeclarator()
-   * f3 -> ( "," VariableDeclarator() )*
-   * f4 -> ";"
-   */
+  // f0 -> ( "public" | "protected" | "private" | "static" | "final" | "transient" | "volatile" )*
+  // f1 -> Type()
+  // f2 -> VariableDeclarator()
+  // f3 -> ( "," VariableDeclarator() )*
+  // f4 -> ";"
   public void visit(FieldDeclaration n) {
     assert ! cached;
     fieldDecls.add(n);

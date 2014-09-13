@@ -194,9 +194,9 @@ public final class Daikon {
    * Guarding means adding predicates that ensure that variables can be
    * dereferenced.  For instance, if <code>a</code> can be null --- that is,
    * if <code>a.b</code> can be nonsensical --- then the guarded version of
-   * <samp>a.b == 5</samp>
+   * <pre>a.b == 5</pre>
    * is
-   * <samp>(a != null) ==> (a.b == 5)</samp>.
+   * <pre>(a != null) &rArr; (a.b == 5)</pre>.
    * <p>
    * (To do:  Some configuration option (maybe this one) should add guards for
    * other reasons that lead to nonsensical values (@pxref{Variable names}).)
@@ -1692,7 +1692,7 @@ public final class Daikon {
   /**
    * The number of columns of progress information to display. In many
    * Unix shells, this can be set to an appropriate value by
-   * <samp>--config_option daikon.Daikon.progress_display_width=$COLUMNS</samp>.
+   * <tt>--config_option daikon.Daikon.progress_display_width=$COLUMNS</tt>.
    */
   public static int dkconfig_progress_display_width = 80;
 
@@ -2136,7 +2136,7 @@ public final class Daikon {
 
   /**
    * Returns the ppt name, max_ppt, that corresponds to the specified
-   * percentage of ppts (presuming that only those ppts <= max_ppt will be
+   * percentage of ppts (presuming that only those ppts &le; max_ppt will be
    * processed).
    */
   private static /*@Nullable*/ String setup_ppt_perc(Collection<File> decl_files, int ppt_perc) {

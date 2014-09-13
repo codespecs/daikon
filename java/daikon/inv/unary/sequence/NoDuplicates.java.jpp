@@ -52,7 +52,7 @@ import java.util.logging.*;
 
 /**
  * Represents sequences of PRIMITIVE that contain no duplicate elements.
- * Prints as <samp>x[] contains no duplicates</samp>.
+ * Prints as <code>x[] contains no duplicates</code>.
  **/
 
 public class CLASSNAME
@@ -182,8 +182,8 @@ public class CLASSNAME
    * Checks to see if this is obvious over the specified variables
    * Implements the following checks: <pre>
    *
-   *    (A[] subsequence B[]) ^ (B[] has nodups) ==> A[] has nodups
-   *    (A[] sorted by >) v (A[] sorted by <)    ==> A[] has nodups
+   *    (A[] subsequence B[]) ^ (B[] has nodups) &rArr; A[] has nodups
+   *    (A[] sorted by &gt;) v (A[] sorted by &lt;)    &rArr; A[] has nodups
    * </pre>
    * JHP: The first check is not valid because we can't rely on transitive
    *      checks because of missing (if B[] is missing, A[] could have dups

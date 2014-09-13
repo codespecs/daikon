@@ -4,7 +4,7 @@ import daikon.*;
 import daikon.derive.*;
 
 /**
- * Derivations of the form A[0..i] or A[i..<end>], derived from A and
+ * Derivations of the form A[0..i] or A[i..<em>end</em>], derived from A and
  * i.
  **/
 public abstract class SequenceSubsequence

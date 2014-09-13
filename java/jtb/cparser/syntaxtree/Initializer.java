@@ -4,10 +4,8 @@
 
 package jtb.cparser.syntaxtree;
 
-/**
- * Grammar production:
- * f0 -> ( AssignmentExpression() | "{" InitializerList() [ "," ] "}" )
- */
+// Grammar production:
+// f0 -> ( AssignmentExpression() | "{" InitializerList() [ "," ] "}" )
 public class Initializer implements Node {
   static final long serialVersionUID = 20050923L;
 
