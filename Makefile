@@ -490,7 +490,7 @@ daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $
 	# Compile Daikon and copy the resulting class files
 	# to the ${TMPDIR}/daikon-jar directory
 	$(MAKE) -C java all_directly
-	cd java && find . \( -name dcomp-rt \) -prune -o -name '*.class' -print \
+	cd java && find . \( -name "dcomp-rt*" \) -prune -o -name '*.class' -print \
 		-exec ${RSYNC_AR} '{}' ${TMPDIR}/daikon-jar \;
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/checkers.jar)
 	# (cd ${TMPDIR}/daikon-jar; jar xf $(INV_DIR)/java/lib/jtb-1.1.jar)
