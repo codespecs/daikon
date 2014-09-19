@@ -148,7 +148,7 @@ public class BinarySearchTree<E extends Comparable>
       t.right = remove( x, t.right );
     else if( t.left != null && t.right != null ) // Two children
       {
-	t.element = findMin( t.right ).element;
+	t.element = (E)findMin( t.right ).element;
 	t.right = remove( t.element, t.right );
       }
     else
