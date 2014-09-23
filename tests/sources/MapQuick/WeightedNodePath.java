@@ -110,9 +110,9 @@ public class WeightedNodePath implements Path {
    * @return true iff wnp.elements is the same sequence as this.elements
    **/
   public boolean equals(WeightedNodePath wnp) {
-    return (wnp != null) &&
-      this.node.equals(wnp.node) && 
-      (this.path == null ? wnp.path==null : this.path.equals(wnp.path));
+    return (wnp != null) && this.node.equals(wnp.node) && (this.path == null ? wnp.path==null : this.path.equals(wnp.path));
+    // Java 7 and Java 8 assign different line numbers
+    // to multi-line return statements.
   }
 
   // Specified by the Object superclass
