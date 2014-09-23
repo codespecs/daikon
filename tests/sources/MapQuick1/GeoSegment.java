@@ -132,19 +132,19 @@ public class GeoSegment  {
       return false;
 
     GeoSegment other = (GeoSegment) o;
-    return
-      this.p1.equals(other.p1) &&
-      this.p2.equals(other.p2) &&
-      this.name.equals(other.name);
+    return this.p1.equals(other.p1) && this.p2.equals(other.p2) && this.name.equals(other.name);
+    //
+    // Java 7 and Java 8 assign different line numbers
+    // to multi-line return statements.
   }
 
   // specified by superclass (Object)
   public int hashCode()
   {
-    return
-      name.hashCode() +
-      p1.hashCode() * 7 +
-      p2.hashCode() * 17;
+    return name.hashCode() + p1.hashCode() * 7 + p2.hashCode() * 17;
+    //
+    // Java 7 and Java 8 assign different line numbers
+    // to multi-line return statements.
   }
 
 } // GeoSegment
