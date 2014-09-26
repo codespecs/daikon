@@ -194,6 +194,17 @@ SOURCES?=$(COMMON_HERE)/sources
 CWD:=$(shell pwd)
 PROJECT?=$(shell echo ${CWD} | perl -pe 's|.*/(jdk[67]-)?daikon/(workspace/)?tests(\.ver[23])?/||;')
 
+# Function to compute goal filename extension.  If we are using Java8 then
+# if filename.test.goal.j8 exists, use it; otherwise, use filename.test.goal
+# otherwise (not Java8) use filename.test.goal. 
+# The argument ($(1)) is '<filename>.<test>'
+goal_name = $(if $(findstring 1.8, "$(shell java -version 2>&1)"), \
+			  $(if $(shell if [ -f $(1).goal.j8 ] ; then echo true; fi), \
+				$(1).goal.j8, \
+				$(1).goal), \
+			  $(1).goal \
+			)
+
 # This is the name for the output files ($.inv.gz $.txt-daikon ...)
 # Default is the last name on the path to the project; most projects
 # will not need to override the default.
@@ -751,7 +762,7 @@ ${PROJECT_FILE}.txt-chicory.dtrace : $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrac
 
 txt-chicory-diff: ${PROJECT_FILE}.txt-chicory.diff
 
-${PROJECT_FILE}.txt-chicory.diff: ${PROJECT_FILE}.txt-chicory.goal \
+${PROJECT_FILE}.txt-chicory.diff: $(call goal_name,${PROJECT_FILE}.txt-chicory) \
 								  ${PROJECT_FILE}.txt-chicory.dtrace
 #ifeq (new,${DECL_FORMAT})
 #	@echo "Not diffing chicory, goal is setup for old format"
@@ -762,7 +773,7 @@ ${PROJECT_FILE}.txt-chicory.diff: ${PROJECT_FILE}.txt-chicory.goal \
 	@echo
 	-rm -f $@
 	-java -cp "${CLASSPATH}" -ea daikon.tools.DtraceDiff \
-	    ${PROJECT_FILE}.txt-chicory.goal \
+		$(call goal_name,${PROJECT_FILE}.txt-chicory) \
 	    ${PROJECT_FILE}.txt-chicory.dtrace > $@ 2>&1
 	cat $@
 #endif
@@ -1017,6 +1028,16 @@ endif
 
 txt-jaif-diff: $(PROJECT_FILE).txt-jaif.diff
 
+# Special case for jaif as it may differ for Java8
+${PROJECT_FILE}.txt-jaif.diff: $(call goal_name,${PROJECT_FILE}.txt-jaif) \
+								  ${PROJECT_FILE}.txt-jaif
+	@echo
+	@echo "### textual diff (${PROJECT_FILE})"
+	@echo
+	-rm -f $@
+	-diff -bu $^ > $@ 2>&1
+	cat $@
+
 # Special case for merge: we want to keep track of whitespace
 %-merge-jml.diff: %-merge-jml.goal %-merge-jml
 	@echo
@@ -1053,7 +1074,7 @@ update-goal-impl:
 ifeq (generated,$(TRACE_SOURCE))
 	if test -e ${PROJECT_FILE}.txt-chicory.dtrace ; then \
 	  cp -pf ${PROJECT_FILE}.txt-chicory.dtrace \
-			 ${PROJECT_FILE}.txt-chicory.goal; fi
+	  $(call goal_name,${PROJECT_FILE}.txt-chicory); fi
 	rm -f ${PROJECT_FILE}.txt-chicory.diff
 	if test -e ${PROJECT_FILE}.decls-DynComp ; then cp -pf \
 	  $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).decls-DynComp.goal; fi
@@ -1068,7 +1089,7 @@ ifeq (generated,$(TRACE_SOURCE))
 	  $(PROJECT_FILE).txt-cset-nojdk $(PROJECT_FILE).txt-cset-nojdk.goal; fi
 	rm -f $(PROJECT_FILE).txt-cset-nojdk.diff
 	if test -e $(PROJECT_FILE).txt-jaif ; then cp -pf \
-	  $(PROJECT_FILE).txt-jaif $(PROJECT_FILE).txt-jaif.goal; fi
+	  $(PROJECT_FILE).txt-jaif $(call goal_name,${PROJECT_FILE}.txt-jaif); fi
 	rm -f $(PROJECT_FILE).txt-jaif.diff
 endif
 ifdef ESC_ON
