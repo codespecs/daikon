@@ -40,11 +40,13 @@ public class PS3TestDriver {
       System.out.printf ("processing file %s\n", input);
       PS3TestDriver drv =
 	new PS3TestDriver(new InputStreamReader(new FileInputStream(input)),
+	//		  new OutputStreamWriter(System.out)
 			  new OutputStreamWriter(new OutputStream() {
 			      public void write(int b) { }
 			      public void write(byte[] b) { }
 			      public void write(byte[] b, int off, int len) { }
-			    }));
+			    })
+              );
       drv.runTests();
     }
   }
