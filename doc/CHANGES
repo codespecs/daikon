@@ -20,6 +20,20 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.1.8 (September 30, 2014)
+
+  A large number of small corrections were made to the Javadoc annotations
+  in the Daikon source tree.  This will most often manifest in the HTML
+  documentation as supplying information that was previously missing.
+
+  We have fixed a problem in Kvasir with C++ static members.  This should
+  provide more accurate invariants in these cases.
+
+  We have fixed a problem in DynComp with lambda expressions in Java 8
+  programs.  Previously, this syntax would cause a program fault.
+
+===========================================================================
+
 5.1.6 (August 29, 2014)
 
   A section has been added to the Daikon User Manual describing how to
@@ -78,7 +92,7 @@ General:
     rm kvasir
     <hg fetch of the latest daikon and fjalar files>
     cd $DAIKONDIR
-    ln -nsf ../fjalar kvasir  // replace 'fjalar' with your repository name, if different
+    ln -nsf ../fjalar kvasir  // replace "fjalar" with your repository name, if different
     make kvasir
 
 Daikon:
@@ -126,7 +140,7 @@ Fjalar:
   We updated the underlying Valgrind infrastructure to version 3.9.0
   (build 13710).  In addition, we cleaned up our sources so that there
   are no compiler warnings when building Valgrind/Fjalar/Kvasir. 
-  As Fjalar is based on the Valgrind tool 'memcheck', we have seen one
+  As Fjalar is based on the Valgrind tool "memcheck", we have seen one
   new memory usage error when running our tests.  Other than this slim
   possibility, users of Kvasir to analyze C/C++ codes should not see
   any differences in behavior from the previous version.
@@ -219,7 +233,7 @@ Documentation
 
   We have enhanced the documentation on using Daikon with Eclipse.
 
-  We no longer distribute Texinfo-formatted 'info' versions of the
+  We no longer distribute Texinfo-formatted "info" versions of the
   documentation.  However, the targets remain in the makefile if you wish
   to make your own.
 
@@ -340,15 +354,15 @@ Kvasir
   User-visible changes
 
      The output of variables declared as constant can now be
-     supressed via the '--ignore-constants' flag.
+     suppressed via the "--ignore-constants" flag.
 
   Bug fixes
 
      Fixed an issue where Fjalar would not print variables
-     delcared constant for binaries created with some versions
+     declared constant for binaries created with some versions
      of g++.
 
-     Fixed comparability errors which occured when Kvasir was run
+     Fixed comparability errors which occurred when Kvasir was run
      with dyncomp on an x86-64 host.
 
 -------------------------------------------
@@ -393,7 +407,7 @@ Daikon
   User Documentation
 
     Added an explanation of how additional data changes invariant
-    ouput.
+    output.
 
 -------------------------------------------
 
@@ -472,7 +486,7 @@ Kvasir
 	Kvasir is now able to correctly output dtrace files for binaries
 	produced with GCC 4.0+.
 
-	Variables declared with the 'register' attribute should now be
+	Variables declared with the "register" attribute should now be
 	handled correctly.
 
    Bug fixes
@@ -500,7 +514,7 @@ Daikon
         A section was added describing approaches for writing automated
         tools that process Daikon output
 
-        A new section (5.4.3) was added explaining the 'Has only one value'
+        A new section (5.4.3) was added explaining the "Has only one value"
         invariant.
 
         Detail was added to the section (6.5) on Loop invariants
@@ -635,14 +649,14 @@ Kvasir
   Kvasir has been updated to produce trace files using the new
   format for declaration records. This format should allow
   for future improvements with regards to readability. the old
-  format can be produced using the flag '--old-decls-format'
+  format can be produced using the flag "--old-decls-format"
 
   User visible changes
 
     The new declarations format has allowed for some improved handling
     for determining object invariants in C/C++. Kvasir can now produce
     object declarations for C/C++ structs. This option is, by default,
-    off and can be turned on with '--parent-records'
+    off and can be turned on with "--parent-records"
 
     Kvasir's version of Valgrind has been updated to support newer versions
     of glibc. Kvasir should now support all versions of glibc supported by
@@ -704,8 +718,8 @@ Daikon
     - Fixed a bug where Boolean constants were not parsed correctly in
       the new declaration format
 
-    - Any suppressions that included 'result == arg1' and 'arg1 == arg2'
-      were augmented to include 'result == arg2'.  Invariants are not
+    - Any suppressions that included "result == arg1" and "arg1 == arg2"
+      were augmented to include "result == arg2".  Invariants are not
       necessarily transitive due to missing variables.  Under certain
       conditions this problem could lead to an assertion failure in Daikon.
 
@@ -1032,7 +1046,7 @@ Kvasir
     tree to allow Kvasir to compile on systems where gcc uses
     -fstack-protector by default, such as some recent Ubuntu
     systems. (The symptom of the problem is a linking failure
-    mentioning '__stack_chk_fail'.)
+    mentioning "__stack_chk_fail".)
 
 DynComp Java
 
@@ -1151,7 +1165,7 @@ Daikon
 
     Added a server mode for daikon (specified by the --server switch).
     In this mode, Daikon processes files that are placed in the specified
-    server directory until a filename that ends in '.end' is encountered.
+    server directory until a filename that ends in ".end" is encountered.
 
 ---------------------------------------
 
@@ -1209,7 +1223,7 @@ Daikon
     Added a derived variable (StringLength) that represents the length
     of a string.  StringLength is not enabled by default.
 
-    Post variables in JML output are marked as '\new' rather than generating
+    Post variables in JML output are marked as "\new" rather than generating
     a warning.
 
   Bug Fixes
@@ -1274,7 +1288,7 @@ Chicory
 
 Daikon
 
-  The configuration option 'omit_hashcode_values_Simplify' now uses
+  The configuration option "omit_hashcode_values_Simplify" now uses
   artificial values for hashcodes that should remain consistent from run
   to run rather than omitting the invariant altogether.
 
@@ -1718,8 +1732,8 @@ Purity Analysis Kit
 
 4.1.7 (November 1 2005)
 
-Enhancements were made to the Kvasir, Mangel/Wurzel and Chicory front
-ends.  Kvasir and Mangel/Wurzel both handle arrays of structures and
+Enhancements were made to the Kvasir, Mangel-Wurzel and Chicory front
+ends.  Kvasir and Mangel-Wurzel both handle arrays of structures and
 pointers better than previously.  The command line options for Chicory
 were standardized.  The documentation of each was reorganized and updated.
 Daikon has some new and enhanced configuration options.
