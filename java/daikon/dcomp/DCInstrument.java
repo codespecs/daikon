@@ -1380,8 +1380,8 @@ class DCInstrument {
         }
         gen.addMethod (mg.getMethod());
       } catch (Throwable t) {
-          System.out.printf ("Unexpected error processing " + gen.getClassName()
-                             + "." + m.getName(), t);
+          System.out.printf ("Unexpected error processing %s.%s: %s%n", gen.getClassName(),
+                              m.getName(), t);
           System.out.printf ("Method is NOT instrumented%n");
           skipped_methods.add(gen.getClassName() + "." + m.getName());
       }
@@ -1496,8 +1496,8 @@ class DCInstrument {
         }
         gen.addMethod (mg.getMethod());
       } catch (Throwable t) {
-          System.out.printf ("Unexpected error processing " + gen.getClassName()
-                             + "." + m.getName(), t);
+          System.out.printf ("Unexpected error processing %s.%s: %s%n", gen.getClassName(),
+                              m.getName(), t);
           System.out.printf ("Method is NOT instrumented%n");
           skip_method (mgen);
       }
