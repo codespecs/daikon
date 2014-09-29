@@ -68,6 +68,7 @@ my %line_operators = (
     "\@subsection"        => SKIP_LINE,
     "\@subsubsection"     => SKIP_LINE,
     "\@table"             => SKIP_LINE,
+    "\@tex"               => SKIP_TO_MATCHING_END,
     "\@titlepage"         => SKIP_LINE,
     "\@top"               => SKIP_LINE,
     "\@unnumbered"        => SKIP_LINE,
