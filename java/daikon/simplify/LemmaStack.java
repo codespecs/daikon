@@ -499,4 +499,11 @@ public class LemmaStack {
       last_long = l;
     }
   }
+
+  public void closeSession() {
+      session.session_done();
+      synchronized (session) {
+	  session.notifyAll();
+      }
+  }
 }

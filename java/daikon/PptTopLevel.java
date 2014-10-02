@@ -2733,6 +2733,10 @@ public class PptTopLevel extends Ppt {
 
   }
 
+  public synchronized static LemmaStack getProverStack() {
+      return proverStack;
+  }
+
   /**
    * Given conditional program points (and invariants detected over them),
    * create implications.  Configuration variable "pairwise_implications"

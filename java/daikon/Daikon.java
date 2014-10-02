@@ -2038,6 +2038,11 @@ public final class Daikon {
       System.out.flush();
     }
     System.out.println(stopwatch.format());
+
+    // Make sure the Simplify process and helper threads are finished
+    if (PptTopLevel.getProverStack() != null) {
+	PptTopLevel.getProverStack().closeSession();
+    }
   }
 
   /**
