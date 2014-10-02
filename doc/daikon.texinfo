@@ -6507,19 +6507,30 @@ at all from the Daikon developers.  For more information about building
 a new front end,
 see @ref{New front ends,,,developer,Daikon Developer Manual}.
 
-@cindex Citadel front end for Eiffel
+@cindex Takuan front end for WS-BPEL
+@cindex front end for WS-BPEL
+@cindex WS-BPEL front end
+@cindex instrumentation, of WS-BPEL process definitions
+
+A front end for WS-BPEL process definitions, named Takuan, is distributed
+separately; see @uref{https://neptuno.uca.es/redmine/projects/takuan-website}.
+
+@cindex CITADEL front end for Eiffel
 @cindex front end for Eiffel
 @cindex Eiffel front end
 @cindex instrumentation, of Eiffel programs
 
-A front end for the Eiffel programming language is distributed
+A front end for the Eiffel programming language, named CITADEL, is distributed
 separately; see @uref{http://se.inf.ethz.ch/people/polikarpova/citadel/}.
 
 @cindex front end for IOA
+@cindex front end for Input/Output Automata
 @cindex IOA front end
+@cindex Input/Output Automata front end
 @cindex instrumentation, of IOA programs
+@cindex instrumentation, of Input/Output Automata programs
 
-A front end for the Input Output Automaton programming language is distributed separately;
+A front end for the IOA (Input/Output Automata) programming language is distributed separately;
 see @uref{http://groups.csail.mit.edu/tds/ioa.html}.
 
 @cindex front end for Lisp
