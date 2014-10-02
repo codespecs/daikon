@@ -1705,7 +1705,7 @@ public final class FileIO {
       {
         String nonce_header_peekahead;
         // arbitrary number, hopefully big enough; catch exceptions
-        reader.mark(100);
+        reader.mark(1000);
         try {
           nonce_header_peekahead = reader.readLine();
         } catch (Exception e) {
