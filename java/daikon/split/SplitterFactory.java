@@ -37,9 +37,12 @@ public class SplitterFactory {
    * String.  Specifies which Java compiler is used to compile
    * Splitters.  This can be the full path name or whatever is used on
    * the commandline.
+   *
+   * By default, $DAIKONDIR/java is part of the classpath. This is useful
+   * when working from the sources directly.
    **/
   public static String dkconfig_compiler
-    = "javac -classpath " + new File(System.getenv("DAIKONDIR"), "daikon.jar");
+    = "javac -classpath " + new File(System.getenv("DAIKONDIR"), "daikon.jar") + File.pathSeparatorChar + new File(System.getenv("DAIKONDIR"), "java");
 
   /**
    * Positive integer.  Specifies the Splitter compilation timeout, in
