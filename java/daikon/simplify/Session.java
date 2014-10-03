@@ -99,8 +99,14 @@ public class Session
       String[] envArray = newEnv.toArray(new String[] {});
       SessionManager.debugln("Session: exec");
       // -nosc: don't compute or print invalid context
+      String simplifyPath;
+      if (System.getProperty("simplify.path") == null) {
+        simplifyPath = "Simplify";
+      } else {
+        simplifyPath = System.getProperty("simplify.path");
+      }
       process =
-        java.lang.Runtime.getRuntime().exec("Simplify -nosc", envArray);
+        java.lang.Runtime.getRuntime().exec(simplifyPath + " -nosc", envArray);
       SessionManager.debugln("Session: exec ok");
 
       if (dkconfig_trace_input) {

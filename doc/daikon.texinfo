@@ -2681,6 +2681,10 @@ Simplify must be separately obtained (from
 @uref{http://www.hpl.hp.com/downloads/crl/jtk/}) and installed in
 order to take advantage of this filter.
 
+If the @command{Simplify} executable is not on your path, then
+you should set the @code{simplify.path} property to its absolute
+pathname so that Daikon can run it.
+
 If you don't also specify the @option{--suppress_redundant} command-line
 option (@pxref{Options to control invariant detection}) to enable
 Simplify processing, this filter doesn't do anything.
