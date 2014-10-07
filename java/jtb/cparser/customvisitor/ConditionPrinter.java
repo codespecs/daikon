@@ -136,10 +136,10 @@ public class ConditionPrinter extends DepthFirstVisitor {
     }
 
     public void printExpression(Expression n) {
-	printer.setFilter(localVariables);
-       	n.accept(converter);
-	n.accept(printer);
-	printer.commit();
+        printer.setFilter(localVariables);
+        n.accept(converter);
+        n.accept(printer);
+        printer.commit();
     }
 
 
@@ -163,18 +163,18 @@ public class ConditionPrinter extends DepthFirstVisitor {
 
     @Override
     public void visit(LogicalANDExpression n) {
-	if (n.f0 !=null) {
-	    n.f0.accept(this);
-	}
-	n.f1.accept(this);
+        if (n.f0 !=null) {
+            n.f0.accept(this);
+        }
+        n.f1.accept(this);
     }
 
     @Override
     public void visit(LogicalORExpression n) {
-	if (n.f0 !=null) {
-	    n.f0.accept(this);
-	}
-	n.f1.accept(this);
+        if (n.f0 !=null) {
+            n.f0.accept(this);
+        }
+        n.f1.accept(this);
     }
 
     @Override

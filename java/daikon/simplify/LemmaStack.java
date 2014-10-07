@@ -503,7 +503,7 @@ public class LemmaStack {
   public void closeSession() {
       session.session_done();
       synchronized (session) {
-	  session.notifyAll();
+        session.notifyAll();
       }
   }
 }

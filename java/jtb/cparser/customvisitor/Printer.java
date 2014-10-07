@@ -62,8 +62,8 @@ public class Printer extends DepthFirstVisitor {
       String curr = filter.get(i);
       int index = buffer.toString().indexOf(curr);
       if (shouldPrint(curr, index)) {
-	okToPrint = false;
-	break;
+        okToPrint = false;
+        break;
       }
     }
     if (okToPrint) {

@@ -74,7 +74,7 @@ public class Converter extends DepthFirstVisitor {
       convertMatrixExpression(n, seq1.nodes, seq2.nodes);
       if (nestedIndents == 1) {
         seq1.nodes.addAll(0, toBringToFront);
-	toBringToFront.clear();
+        toBringToFront.clear();
       }
     }
     else if (reorder) {
@@ -171,7 +171,7 @@ public class Converter extends DepthFirstVisitor {
         convertArrayExpression(n, seq.nodes, 0);
         if (nestedIndents == 1) {
           seq.nodes.addAll(0, toBringToFront);
-	  toBringToFront.clear();
+          toBringToFront.clear();
         }
       }
       else if (reorder) {

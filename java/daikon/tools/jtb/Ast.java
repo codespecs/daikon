@@ -940,13 +940,13 @@ public class Ast {
       NodeChoice c = (NodeChoice) e.nextElement();
 
       if (c.choice instanceof NodeToken) {
-	      NodeToken t = (NodeToken) c.choice;
-	      String token = t.tokenImage;
-	      if (token.equals("public") || token.equals("protected") ||
-	          token.equals("private")) {
-	        t.tokenImage = access;
-	        return;
-	      }
+        NodeToken t = (NodeToken) c.choice;
+        String token = t.tokenImage;
+        if (token.equals("public") || token.equals("protected") ||
+            token.equals("private")) {
+          t.tokenImage = access;
+          return;
+        }
       }
     }
     // The method did not have any modifier
@@ -971,7 +971,7 @@ public class Ast {
       NodeChoice c = (NodeChoice) e.nextElement();
 
       if (!(c.choice instanceof jtb.syntaxtree.Annotation)) {
-  	    filteredOptions.addNode(c);
+        filteredOptions.addNode(c);
       }
     }
 
@@ -1307,10 +1307,10 @@ public class Ast {
       NodeChoice nodeChoice = (NodeChoice)list.elementAt(i);
 
       if (nodeChoice.choice instanceof NodeToken) {
-	      NodeToken keyword = (NodeToken)nodeChoice.choice;
-	      if (keyword.toString().equals(modifierString)) {
-	        return true;
-	      }
+        NodeToken keyword = (NodeToken)nodeChoice.choice;
+        if (keyword.toString().equals(modifierString)) {
+          return true;
+        }
       }
     }
     return false;
@@ -1325,16 +1325,16 @@ public class Ast {
   }
 
   public static boolean isInAnonymousClass(Node node) {
-	  ClassOrInterfaceBody clsbody = (ClassOrInterfaceBody)Ast.getParent(ClassOrInterfaceBody.class, node);
-	  return (!(clsbody.getParent() instanceof ClassOrInterfaceDeclaration));
+    ClassOrInterfaceBody clsbody = (ClassOrInterfaceBody)Ast.getParent(ClassOrInterfaceBody.class, node);
+    return (!(clsbody.getParent() instanceof ClassOrInterfaceDeclaration));
   }
 
   public static boolean isInterface(ClassOrInterfaceBody n) {
-	// n.getParent won't be an ClassOrInterfaceDeclaration for anonymous
-	// class bodies such as in  new List() { ... }  -- anonymous classes can
-	// never be interfaces, however, so that's simple enough to handle. :)
-	if (!(n.getParent() instanceof ClassOrInterfaceDeclaration))
-		return false;
+    // n.getParent won't be an ClassOrInterfaceDeclaration for anonymous
+    // class bodies such as in  new List() { ... }  -- anonymous classes can
+    // never be interfaces, however, so that's simple enough to handle. :)
+    if (!(n.getParent() instanceof ClassOrInterfaceDeclaration))
+      return false;
 
     return isInterface((ClassOrInterfaceDeclaration)n.getParent());
   }
