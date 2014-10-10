@@ -494,7 +494,7 @@ PROJECT_HELP:=${PROJECT_HELP} ;\
 
 ifndef INST_FILES
   INST_FILES = $(shell echo `cat $(INST_LIST_FILE)` \
-			   | sed -e 's/.java/$$/g;s/  */|/g;s|/|.|g')
+			   | sed -e 's/\.java/$$/g;s/  */|/g;s|/|.|g')
 endif
 
 chicory: $(SCRATCH_FOR_DAIKON)/$(PROJECT_FILE).dtrace.gz
