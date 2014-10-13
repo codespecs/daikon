@@ -8,7 +8,7 @@ EXTRA_CLASSPATH_END:=:$(shell pwd)/test.jar
 
 include ../../Makefile.common
 
-DAIKON_OPTIONS:=--noternary
+#DAIKON_OPTIONS:=--noternary
 
 instrument-files-revise:
 	echo "alloy/testera/TreeMap.java" >| ${INST_LIST_FILE}

@@ -1,0 +1,2703 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+javautil.ArrayList:::CLASS
+
+DECLARE
+javautil.ArrayList:::OBJECT
+this
+javautil.ArrayList # isParam=true
+hashcode
+2
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+5
+
+
+DECLARE
+javautil.ArrayList.ArrayList(int):::ENTER
+initialCapacity
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.ArrayList.ArrayList(int):::EXIT101
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5[2]
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+initialCapacity
+int # isParam=true
+int
+2
+
+
+DECLARE
+javautil.ArrayList.ArrayList():::ENTER
+
+DECLARE
+javautil.ArrayList.ArrayList():::EXIT108
+this
+javautil.ArrayList # isParam=true
+hashcode
+2
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+5
+
+
+DECLARE
+javautil.ArrayList.ArrayList(javautil.Collection):::ENTER
+c
+javautil.Collection # isParam=true
+hashcode
+2
+c.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.ArrayList.ArrayList(javautil.Collection):::EXIT122
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+c
+javautil.Collection # isParam=true
+hashcode
+2
+c.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.ArrayList.trimToSize():::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+2
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+5
+
+DECLARE
+javautil.ArrayList.trimToSize():::EXIT137
+this
+javautil.ArrayList # isParam=true
+hashcode
+2
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+5
+
+
+DECLARE
+javautil.ArrayList.ensureCapacity(int):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+minCapacity
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.ArrayList.ensureCapacity(int):::EXIT157
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+minCapacity
+int # isParam=true
+int
+2
+
+
+DECLARE
+javautil.ArrayList.size():::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+2
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+5
+
+DECLARE
+javautil.ArrayList.size():::EXIT165
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+return
+int
+int
+2
+
+
+DECLARE
+javautil.ArrayList.isEmpty():::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+2
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+5
+
+DECLARE
+javautil.ArrayList.isEmpty():::EXIT175
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+return
+boolean
+boolean
+2
+
+
+DECLARE
+javautil.ArrayList.contains(java.lang.Object):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+elem
+java.lang.Object # isParam=true
+hashcode
+2
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.ArrayList.contains(java.lang.Object):::EXIT184
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+elem
+java.lang.Object # isParam=true
+hashcode
+2
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+javautil.ArrayList.indexOf(java.lang.Object):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+elem
+java.lang.Object # isParam=true
+hashcode
+2
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.ArrayList.indexOf(java.lang.Object):::EXIT200
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+elem
+java.lang.Object # isParam=true
+hashcode
+2
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+DECLARE
+javautil.ArrayList.indexOf(java.lang.Object):::EXIT204
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+elem
+java.lang.Object # isParam=true
+hashcode
+2
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+DECLARE
+javautil.ArrayList.indexOf(java.lang.Object):::EXIT206
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+elem
+java.lang.Object # isParam=true
+hashcode
+2
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+
+DECLARE
+javautil.ArrayList.lastIndexOf(java.lang.Object):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+elem
+java.lang.Object # isParam=true
+hashcode
+2
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.ArrayList.lastIndexOf(java.lang.Object):::EXIT221
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+elem
+java.lang.Object # isParam=true
+hashcode
+2
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+DECLARE
+javautil.ArrayList.lastIndexOf(java.lang.Object):::EXIT225
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+elem
+java.lang.Object # isParam=true
+hashcode
+2
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+DECLARE
+javautil.ArrayList.lastIndexOf(java.lang.Object):::EXIT227
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+elem
+java.lang.Object # isParam=true
+hashcode
+2
+elem.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+
+DECLARE
+javautil.ArrayList.clone():::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+2
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+5
+
+DECLARE
+javautil.ArrayList.clone():::EXIT242
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+return
+java.lang.Object
+hashcode
+2
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.ArrayList.toArray():::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+2
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+5
+
+DECLARE
+javautil.ArrayList.toArray():::EXIT259
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+return
+java.lang.Object[]
+hashcode
+2
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+return[..]
+java.lang.Object[]
+hashcode[]
+3
+
+
+DECLARE
+javautil.ArrayList.toArray(java.lang.Object[]):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+a
+java.lang.Object[] # isParam=true
+hashcode
+2
+a.getClass()
+java.lang.Class
+java.lang.String
+1
+a[..]
+java.lang.Object[]
+hashcode[]
+3
+
+DECLARE
+javautil.ArrayList.toArray(java.lang.Object[]):::EXIT293
+this
+javautil.ArrayList # isParam=true
+hashcode
+6
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+7
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+8
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+9
+a
+java.lang.Object[] # isParam=true
+hashcode
+2
+a.getClass()
+java.lang.Class
+java.lang.String
+1
+a[..]
+java.lang.Object[]
+hashcode[]
+3
+return
+java.lang.Object[]
+hashcode
+4
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+return[..]
+java.lang.Object[]
+hashcode[]
+5
+
+
+DECLARE
+javautil.ArrayList.get(int):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+index
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.ArrayList.get(int):::EXIT309
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+index
+int # isParam=true
+int
+2
+return
+java.lang.Object
+hashcode
+3
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.ArrayList.set(int, java.lang.Object):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+index
+int # isParam=true
+int
+3
+element
+java.lang.Object # isParam=true
+hashcode
+2
+element.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.ArrayList.set(int, java.lang.Object):::EXIT327
+this
+javautil.ArrayList # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+6
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+7
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+8
+index
+int # isParam=true
+int
+3
+element
+java.lang.Object # isParam=true
+hashcode
+2
+element.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+java.lang.Object
+hashcode
+4
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.ArrayList.add(java.lang.Object):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.ArrayList.add(java.lang.Object):::EXIT339
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+javautil.ArrayList.add(int, java.lang.Object):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+index
+int # isParam=true
+int
+3
+element
+java.lang.Object # isParam=true
+hashcode
+2
+element.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.ArrayList.add(int, java.lang.Object):::EXIT362
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+index
+int # isParam=true
+int
+3
+element
+java.lang.Object # isParam=true
+hashcode
+2
+element.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.ArrayList.remove(int):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+index
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.ArrayList.remove(int):::EXIT386
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+index
+int # isParam=true
+int
+2
+return
+java.lang.Object
+hashcode
+3
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.ArrayList.clear():::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+2
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+5
+
+DECLARE
+javautil.ArrayList.clear():::EXIT401
+this
+javautil.ArrayList # isParam=true
+hashcode
+2
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+3
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+4
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+5
+
+
+DECLARE
+javautil.ArrayList.addAll(javautil.Collection):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+c
+javautil.Collection # isParam=true
+hashcode
+2
+c.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.ArrayList.addAll(javautil.Collection):::EXIT425
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+c
+javautil.Collection # isParam=true
+hashcode
+2
+c.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+javautil.ArrayList.addAll(int, javautil.Collection):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+4
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+5
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+6
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+7
+index
+int # isParam=true
+int
+3
+c
+javautil.Collection # isParam=true
+hashcode
+2
+c.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.ArrayList.addAll(int, javautil.Collection):::EXIT460
+this
+javautil.ArrayList # isParam=true
+hashcode
+5
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+6
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+7
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+8
+index
+int # isParam=true
+int
+3
+c
+javautil.Collection # isParam=true
+hashcode
+2
+c.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+4
+
+
+DECLARE
+javautil.ArrayList.removeRange(int, int):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+fromIndex
+int # isParam=true
+int
+2
+toIndex
+int # isParam=true
+int
+7
+
+DECLARE
+javautil.ArrayList.removeRange(int, int):::EXIT483
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+fromIndex
+int # isParam=true
+int
+2
+toIndex
+int # isParam=true
+int
+7
+
+
+DECLARE
+javautil.ArrayList.RangeCheck(int):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+index
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.ArrayList.RangeCheck(int):::EXIT493
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+index
+int # isParam=true
+int
+2
+
+
+DECLARE
+javautil.ArrayList.writeObject(java.io.ObjectOutputStream):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+s
+java.io.ObjectOutputStream # isParam=true
+hashcode
+2
+
+DECLARE
+javautil.ArrayList.writeObject(java.io.ObjectOutputStream):::EXIT514
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+s
+java.io.ObjectOutputStream # isParam=true
+hashcode
+2
+
+
+DECLARE
+javautil.ArrayList.readObject(java.io.ObjectInputStream):::ENTER
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+s
+java.io.ObjectInputStream # isParam=true
+hashcode
+2
+
+DECLARE
+javautil.ArrayList.readObject(java.io.ObjectInputStream):::EXIT532
+this
+javautil.ArrayList # isParam=true
+hashcode
+3
+this.elementData
+java.lang.Object[] # declaringClassPackageName=javautil, 
+hashcode
+4
+this.elementData.getClass()
+java.lang.Class
+java.lang.String
+1
+this.elementData[..]
+java.lang.Object[]
+hashcode[]
+5
+this.elementData[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+this.size
+int # declaringClassPackageName=javautil, 
+int
+6
+s
+java.io.ObjectInputStream # isParam=true
+hashcode
+2
+
+DECLARE
+javautil.AbstractList:::CLASS
+
+DECLARE
+javautil.AbstractList:::OBJECT
+this
+javautil.AbstractList # isParam=true
+hashcode
+2
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+3
+
+
+DECLARE
+javautil.AbstractList.AbstractList():::ENTER
+
+DECLARE
+javautil.AbstractList.AbstractList():::EXIT63
+this
+javautil.AbstractList # isParam=true
+hashcode
+2
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+3
+
+
+DECLARE
+javautil.AbstractList.add(java.lang.Object):::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+3
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+4
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.AbstractList.add(java.lang.Object):::EXIT91
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+javautil.AbstractList.set(int, java.lang.Object):::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+index
+int # isParam=true
+int
+3
+element
+java.lang.Object # isParam=true
+hashcode
+2
+element.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.AbstractList.add(int, java.lang.Object):::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+index
+int # isParam=true
+int
+3
+element
+java.lang.Object # isParam=true
+hashcode
+2
+element.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.AbstractList.remove(int):::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+3
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+4
+index
+int # isParam=true
+int
+2
+
+
+DECLARE
+javautil.AbstractList.indexOf(java.lang.Object):::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+3
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+4
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.AbstractList.indexOf(java.lang.Object):::EXIT200
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+DECLARE
+javautil.AbstractList.indexOf(java.lang.Object):::EXIT204
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+DECLARE
+javautil.AbstractList.indexOf(java.lang.Object):::EXIT206
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+
+DECLARE
+javautil.AbstractList.lastIndexOf(java.lang.Object):::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+3
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+4
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.AbstractList.lastIndexOf(java.lang.Object):::EXIT231
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+DECLARE
+javautil.AbstractList.lastIndexOf(java.lang.Object):::EXIT235
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+DECLARE
+javautil.AbstractList.lastIndexOf(java.lang.Object):::EXIT237
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+int
+int
+3
+
+
+DECLARE
+javautil.AbstractList.clear():::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+2
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+3
+
+DECLARE
+javautil.AbstractList.clear():::EXIT260
+this
+javautil.AbstractList # isParam=true
+hashcode
+2
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+3
+
+
+DECLARE
+javautil.AbstractList.addAll(int, javautil.Collection):::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+index
+int # isParam=true
+int
+3
+c
+javautil.Collection # isParam=true
+hashcode
+2
+c.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.AbstractList.addAll(int, javautil.Collection):::EXIT308
+this
+javautil.AbstractList # isParam=true
+hashcode
+5
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+6
+index
+int # isParam=true
+int
+3
+c
+javautil.Collection # isParam=true
+hashcode
+2
+c.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+4
+
+
+DECLARE
+javautil.AbstractList.iterator():::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+2
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+3
+
+DECLARE
+javautil.AbstractList.iterator():::EXIT336
+this
+javautil.AbstractList # isParam=true
+hashcode
+3
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+4
+return
+javautil.Iterator
+hashcode
+2
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.AbstractList.listIterator():::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+2
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+3
+
+DECLARE
+javautil.AbstractList.listIterator():::EXIT348
+this
+javautil.AbstractList # isParam=true
+hashcode
+3
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+4
+return
+javautil.ListIterator
+hashcode
+2
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.AbstractList.listIterator(int):::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+3
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+4
+index
+int # isParam=true
+int
+2
+
+DECLARE
+javautil.AbstractList.listIterator(int):::EXIT391
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+index
+int # isParam=true
+int
+2
+return
+javautil.ListIterator
+hashcode
+3
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.AbstractList.subList(int, int):::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+3
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+4
+fromIndex
+int # isParam=true
+int
+2
+toIndex
+int # isParam=true
+int
+5
+
+DECLARE
+javautil.AbstractList.subList(int, int):::EXIT565
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+fromIndex
+int # isParam=true
+int
+2
+toIndex
+int # isParam=true
+int
+6
+return
+javautil.List
+hashcode
+3
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+javautil.AbstractList.equals(java.lang.Object):::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+3
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+4
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+javautil.AbstractList.equals(java.lang.Object):::EXIT594
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+DECLARE
+javautil.AbstractList.equals(java.lang.Object):::EXIT596
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+DECLARE
+javautil.AbstractList.equals(java.lang.Object):::EXIT604
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+DECLARE
+javautil.AbstractList.equals(java.lang.Object):::EXIT606
+this
+javautil.AbstractList # isParam=true
+hashcode
+4
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+5
+o
+java.lang.Object # isParam=true
+hashcode
+2
+o.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+javautil.AbstractList.hashCode():::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+2
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+3
+
+DECLARE
+javautil.AbstractList.hashCode():::EXIT625
+this
+javautil.AbstractList # isParam=true
+hashcode
+3
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+4
+return
+int
+int
+2
+
+
+DECLARE
+javautil.AbstractList.removeRange(int, int):::ENTER
+this
+javautil.AbstractList # isParam=true
+hashcode
+3
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+4
+fromIndex
+int # isParam=true
+int
+2
+toIndex
+int # isParam=true
+int
+5
+
+DECLARE
+javautil.AbstractList.removeRange(int, int):::EXIT657
+this
+javautil.AbstractList # isParam=true
+hashcode
+3
+this.getClass()
+java.lang.Class
+java.lang.String
+1
+this.modCount
+int # declaringClassPackageName=javautil, 
+int
+4
+fromIndex
+int # isParam=true
+int
+2
+toIndex
+int # isParam=true
+int
+5
+

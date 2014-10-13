@@ -4,7 +4,7 @@
 
 MAIN_CLASS:=DataStructures.LinkedListTest
 
-ESC_ON:=1
+#ESC_ON:=1
 
 # USER_DAIKON_OPTIONS:=--ppt-select-pattern="^DataStructures\.LinkedList[:\.]"
 

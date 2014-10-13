@@ -1,0 +1,215 @@
+
+Variable sets for javautil.ArrayList.<init>(int initialCapacity) enter
+  [1] [Parameter initialCapacity]
+Variable sets for javautil.ArrayList.<init>(int initialCapacity) exit
+  [2] [Parameter initialCapacity, Field elementData]
+  [1] [this]
+  [1] [Class of Field elementData]
+  [1] [Array Field elementData[..]]
+  [1] [Class of Field elementData[..]]
+  [1] [Field size]
+
+Variable sets for javautil.ArrayList.<init>() enter
+Variable sets for javautil.ArrayList.<init>() exit
+  [1] [this]
+  [1] [Field elementData]
+  [1] [Class of Field elementData]
+  [1] [Array Field elementData[..]]
+  [1] [Class of Field elementData[..]]
+  [1] [Field size]
+
+Variable sets for javautil.ArrayList.<init>(javautil.Collection c) enter
+  not called
+Variable sets for javautil.ArrayList.<init>(javautil.Collection c) exit
+  not called
+
+Variable sets for javautil.ArrayList.trimToSize() enter
+  not called
+Variable sets for javautil.ArrayList.trimToSize() exit
+  not called
+
+Variable sets for javautil.ArrayList.ensureCapacity(int minCapacity) enter
+  not called
+Variable sets for javautil.ArrayList.ensureCapacity(int minCapacity) exit
+  not called
+
+Variable sets for javautil.ArrayList.size() enter
+  not called
+Variable sets for javautil.ArrayList.size() exit
+  not called
+
+Variable sets for javautil.ArrayList.isEmpty() enter
+  not called
+Variable sets for javautil.ArrayList.isEmpty() exit
+  not called
+
+Variable sets for javautil.ArrayList.contains(java.lang.Object elem) enter
+  not called
+Variable sets for javautil.ArrayList.contains(java.lang.Object elem) exit
+  not called
+
+Variable sets for javautil.ArrayList.indexOf(java.lang.Object elem) enter
+  not called
+Variable sets for javautil.ArrayList.indexOf(java.lang.Object elem) exit
+  not called
+
+Variable sets for javautil.ArrayList.lastIndexOf(java.lang.Object elem) enter
+  not called
+Variable sets for javautil.ArrayList.lastIndexOf(java.lang.Object elem) exit
+  not called
+
+Variable sets for javautil.ArrayList.clone() enter
+  not called
+Variable sets for javautil.ArrayList.clone() exit
+  not called
+
+Variable sets for javautil.ArrayList.toArray() enter
+  not called
+Variable sets for javautil.ArrayList.toArray() exit
+  not called
+
+Variable sets for javautil.ArrayList.toArray([Ljava.lang.Object; a) enter
+  not called
+Variable sets for javautil.ArrayList.toArray([Ljava.lang.Object; a) exit
+  not called
+
+Variable sets for javautil.ArrayList.get(int index) enter
+  not called
+Variable sets for javautil.ArrayList.get(int index) exit
+  not called
+
+Variable sets for javautil.ArrayList.set(int index, java.lang.Object element) enter
+  not called
+Variable sets for javautil.ArrayList.set(int index, java.lang.Object element) exit
+  not called
+
+Variable sets for javautil.ArrayList.add(java.lang.Object o) enter
+  not called
+Variable sets for javautil.ArrayList.add(java.lang.Object o) exit
+  not called
+
+Variable sets for javautil.ArrayList.add(int index, java.lang.Object element) enter
+  not called
+Variable sets for javautil.ArrayList.add(int index, java.lang.Object element) exit
+  not called
+
+Variable sets for javautil.ArrayList.remove(int index) enter
+  not called
+Variable sets for javautil.ArrayList.remove(int index) exit
+  not called
+
+Variable sets for javautil.ArrayList.clear() enter
+  not called
+Variable sets for javautil.ArrayList.clear() exit
+  not called
+
+Variable sets for javautil.ArrayList.addAll(javautil.Collection c) enter
+  not called
+Variable sets for javautil.ArrayList.addAll(javautil.Collection c) exit
+  not called
+
+Variable sets for javautil.ArrayList.addAll(int index, javautil.Collection c) enter
+  not called
+Variable sets for javautil.ArrayList.addAll(int index, javautil.Collection c) exit
+  not called
+
+Variable sets for javautil.ArrayList.removeRange(int fromIndex, int toIndex) enter
+  not called
+Variable sets for javautil.ArrayList.removeRange(int fromIndex, int toIndex) exit
+  not called
+
+Variable sets for javautil.ArrayList.RangeCheck(int index) enter
+  not called
+Variable sets for javautil.ArrayList.RangeCheck(int index) exit
+  not called
+
+Variable sets for javautil.ArrayList.writeObject(java.io.ObjectOutputStream s) enter
+  not called
+Variable sets for javautil.ArrayList.writeObject(java.io.ObjectOutputStream s) exit
+  not called
+
+Variable sets for javautil.ArrayList.readObject(java.io.ObjectInputStream s) enter
+  not called
+Variable sets for javautil.ArrayList.readObject(java.io.ObjectInputStream s) exit
+  not called
+
+Variable sets for javautil.AbstractList.<init>() enter
+Variable sets for javautil.AbstractList.<init>() exit
+  [1] [this]
+  [1] [Class of this]
+  [1] [Field modCount]
+
+Variable sets for javautil.AbstractList.add(java.lang.Object o) enter
+  not called
+Variable sets for javautil.AbstractList.add(java.lang.Object o) exit
+  not called
+
+Variable sets for javautil.AbstractList.set(int index, java.lang.Object element) enter
+  not called
+Variable sets for javautil.AbstractList.set(int index, java.lang.Object element) exit
+  not called
+
+Variable sets for javautil.AbstractList.add(int index, java.lang.Object element) enter
+  not called
+Variable sets for javautil.AbstractList.add(int index, java.lang.Object element) exit
+  not called
+
+Variable sets for javautil.AbstractList.remove(int index) enter
+  not called
+Variable sets for javautil.AbstractList.remove(int index) exit
+  not called
+
+Variable sets for javautil.AbstractList.indexOf(java.lang.Object o) enter
+  not called
+Variable sets for javautil.AbstractList.indexOf(java.lang.Object o) exit
+  not called
+
+Variable sets for javautil.AbstractList.lastIndexOf(java.lang.Object o) enter
+  not called
+Variable sets for javautil.AbstractList.lastIndexOf(java.lang.Object o) exit
+  not called
+
+Variable sets for javautil.AbstractList.clear() enter
+  not called
+Variable sets for javautil.AbstractList.clear() exit
+  not called
+
+Variable sets for javautil.AbstractList.addAll(int index, javautil.Collection c) enter
+  not called
+Variable sets for javautil.AbstractList.addAll(int index, javautil.Collection c) exit
+  not called
+
+Variable sets for javautil.AbstractList.iterator() enter
+  not called
+Variable sets for javautil.AbstractList.iterator() exit
+  not called
+
+Variable sets for javautil.AbstractList.listIterator() enter
+  not called
+Variable sets for javautil.AbstractList.listIterator() exit
+  not called
+
+Variable sets for javautil.AbstractList.listIterator(int index) enter
+  not called
+Variable sets for javautil.AbstractList.listIterator(int index) exit
+  not called
+
+Variable sets for javautil.AbstractList.subList(int fromIndex, int toIndex) enter
+  not called
+Variable sets for javautil.AbstractList.subList(int fromIndex, int toIndex) exit
+  not called
+
+Variable sets for javautil.AbstractList.equals(java.lang.Object o) enter
+  not called
+Variable sets for javautil.AbstractList.equals(java.lang.Object o) exit
+  not called
+
+Variable sets for javautil.AbstractList.hashCode() enter
+  not called
+Variable sets for javautil.AbstractList.hashCode() exit
+  not called
+
+Variable sets for javautil.AbstractList.removeRange(int fromIndex, int toIndex) enter
+  not called
+Variable sets for javautil.AbstractList.removeRange(int fromIndex, int toIndex) exit
+  not called

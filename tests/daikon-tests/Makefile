@@ -27,29 +27,29 @@ cross-checker-good:
 
 # (We must use actions for these rules for 'make' to work correctly.)
 
-everything-%: dsaa-% mapquick-% javautil-% 6170-% large-% polycalc-% quick-% # do-redblack-%
+everything-%: dsaa-% mapquick-% javautil-% 6170-% large-% polycalc-% quick-% 
 	@echo ${HR}
 quick-%: SQD-% do-BinaryTree-% do-WeightedNodePath-% do-StreetNumberSet-% polycalc-% special-cases-% siemens-%
 	@echo ${HR}
 
 # Canonical groupings
 
-dsaa-%: do-StackAr-% do-QueueAr-% do-DisjSets-% do-BinaryTree-% # do-CursorList-% do-LinkedList-%
+dsaa-%: do-StackAr-% do-QueueAr-% do-DisjSets-% do-BinaryTree-% do-CursorList-% do-LinkedList-% do-redblack-% do-BinaryHeap-%
 	@echo ${HR}
 mapquick-%: do-WeightedNodePath-% do-StreetNumberSet-% do-GeoSegment-% do-Graph-% # do-MapQuick-%
 	@echo ${HR}
 polycalc-%: do-RatNum-% do-RatPoly-% do-RatPolyStack-% do-RatTermVec-%
 	@echo ${HR}
-javautil-%: do-Vector-% # arraylist
+javautil-%: do-Vector-% do-ArrayList-%
 	@echo ${HR}
-6170-%: do-FixedSizeSet-% do-TinySet-% # huffman
+6170-%: do-FixedSizeSet-% do-TinySet-% do-Huffman-%
 	@echo ${HR}
 large-%: # do-Flex-% do-JML-%
 	@echo ${HR}
 # Doesn't work in V3 as of 7/26/2003
 taoxie-%: do-IntStackRetObjectArray-% do-Library-% do-UBStack-%
 	@echo ${HR}
-special-cases-%: do-encapsulate_downcast-% do-compar-% do-precedence-% do-fib-% do-hanoi-% do-param-% do-suppress01-% do-suppress02-% do-StaticInteresting-% do-pine_mdiep-% do-purity-%
+special-cases-%: do-encapsulate_downcast-% do-compar-% do-precedence-% do-fib-% do-hanoi-% do-param-% do-suppress01-% do-suppress02-% do-StaticInteresting-% do-pine_mdiep-% do-purity-% do-Smithnosky-%
 	@echo ${HR}
 siemens-%: do-print_tokens-% do-print_tokens2-% do-replace-% do-schedule-% do-schedule2-% do-tcas-% do-tot_info-% do-space-%
 	@echo ${HR}

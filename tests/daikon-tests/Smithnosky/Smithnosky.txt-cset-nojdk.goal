@@ -1,0 +1,93 @@
+
+Variable sets for misc.Smithnosky.<init>(int a, int b, int c) enter
+  [1] [Parameter a]
+  [1] [Parameter b]
+  [1] [Parameter c]
+Variable sets for misc.Smithnosky.<init>(int a, int b, int c) exit
+  [5] [Parameter a, Parameter b, Parameter c, Field aXb, Field aXc]
+  [1] [this]
+  [1] [Field a]
+  [1] [Field b]
+  [1] [Field c]
+  [1] [Field s]
+  [1] [List Field s[..]]
+  [1] [Class of Field s[..]]
+  [1] [Field size]
+
+Variable sets for misc.Smithnosky.incA() enter
+  [1] [this]
+  [5] [Field a, Field aXb, Field aXc, Field b, Field c]
+  [1] [Field s]
+  [1] [List Field s[..]]
+  [1] [Class of Field s[..]]
+  [1] [Field size]
+Variable sets for misc.Smithnosky.incA() exit
+  [1] [this]
+  [5] [Field a, Field aXb, Field aXc, Field b, Field c]
+  [1] [Field s]
+  [1] [List Field s[..]]
+  [1] [Class of Field s[..]]
+  [1] [Field size]
+
+Variable sets for misc.Smithnosky.incB() enter
+  [1] [this]
+  [5] [Field a, Field aXb, Field aXc, Field b, Field c]
+  [1] [Field s]
+  [1] [List Field s[..]]
+  [1] [Class of Field s[..]]
+  [1] [Field size]
+Variable sets for misc.Smithnosky.incB() exit
+  [1] [this]
+  [5] [Field a, Field aXb, Field aXc, Field b, Field c]
+  [1] [Field s]
+  [1] [List Field s[..]]
+  [1] [Class of Field s[..]]
+  [1] [Field size]
+
+Variable sets for misc.Smithnosky.incC() enter
+  [1] [this]
+  [5] [Field a, Field aXb, Field aXc, Field b, Field c]
+  [1] [Field s]
+  [1] [List Field s[..]]
+  [1] [Class of Field s[..]]
+  [1] [Field size]
+Variable sets for misc.Smithnosky.incC() exit
+  [1] [this]
+  [5] [Field a, Field aXb, Field aXc, Field b, Field c]
+  [1] [Field s]
+  [1] [List Field s[..]]
+  [1] [Class of Field s[..]]
+  [1] [Field size]
+
+Variable sets for misc.Smithnosky.add(java.lang.Object o) enter
+  [2] [Parameter o, List Field s[..]]
+  [1] [Class of o]
+  [1] [this]
+  [5] [Field a, Field aXb, Field aXc, Field b, Field c]
+  [1] [Field s]
+  [1] [Class of Field s[..]]
+  [1] [Field size]
+Variable sets for misc.Smithnosky.add(java.lang.Object o) exit
+  [2] [Parameter o, List Field s[..]]
+  [1] [Class of o]
+  [1] [this]
+  [5] [Field a, Field aXb, Field aXc, Field b, Field c]
+  [1] [Field s]
+  [1] [Class of Field s[..]]
+  [1] [Field size]
+
+Variable sets for misc.Smithnosky.main([Ljava.lang.String; args) enter
+  [1] [Parameter args]
+  [1] [Class of args]
+  [1] [Array args[..]]
+  [1] [String args[..].toString]
+Variable sets for misc.Smithnosky.main([Ljava.lang.String; args) exit
+  [1] [Parameter args]
+  [1] [Class of args]
+  [1] [Array args[..]]
+  [1] [String args[..].toString]
+
+Variable sets for misc.Smithnosky.equals(java.lang.Object obj) enter
+  not called
+Variable sets for misc.Smithnosky.equals(java.lang.Object obj) exit
+  not called

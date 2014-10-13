@@ -1,0 +1,315 @@
+
+Variable sets for DataStructures.LinkedList.<init>() enter
+Variable sets for DataStructures.LinkedList.<init>() exit
+  [1] [this]
+  [1] [Field header]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Field header.next]
+  [1] [Field header.next.element]
+  [1] [Class of Field header.next.element]
+  [1] [Field header.next.next]
+
+Variable sets for DataStructures.LinkedList.isEmpty() enter
+  [1] [this]
+  [1] [Field header]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Field header.next]
+  [1] [Field header.next.element]
+  [1] [Class of Field header.next.element]
+  [1] [Field header.next.next]
+Variable sets for DataStructures.LinkedList.isEmpty() exit
+  [1] [return]
+  [1] [this]
+  [1] [Field header]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Field header.next]
+  [1] [Field header.next.element]
+  [1] [Class of Field header.next.element]
+  [1] [Field header.next.next]
+
+Variable sets for DataStructures.LinkedList.makeEmpty() enter
+  [1] [this]
+  [1] [Field header]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Field header.next]
+  [1] [Field header.next.element]
+  [1] [Class of Field header.next.element]
+  [1] [Field header.next.next]
+Variable sets for DataStructures.LinkedList.makeEmpty() exit
+  [1] [this]
+  [1] [Field header]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Field header.next]
+  [1] [Field header.next.element]
+  [1] [Class of Field header.next.element]
+  [1] [Field header.next.next]
+
+Variable sets for DataStructures.LinkedList.zeroth() enter
+  [1] [this]
+  [1] [Field header]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Field header.next]
+  [1] [Field header.next.element]
+  [1] [Class of Field header.next.element]
+  [1] [Field header.next.next]
+Variable sets for DataStructures.LinkedList.zeroth() exit
+  [1] [return]
+  [2] [Field return.current, Field header]
+  [1] [Field return.current.element]
+  [1] [Class of return.current.element]
+  [2] [Field return.current.next, Field header.next]
+  [1] [this]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Field header.next.element]
+  [1] [Class of Field header.next.element]
+  [1] [Field header.next.next]
+
+Variable sets for DataStructures.LinkedList.first() enter
+  [1] [this]
+  [1] [Field header]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Field header.next]
+  [1] [Field header.next.element]
+  [1] [Class of Field header.next.element]
+  [1] [Field header.next.next]
+Variable sets for DataStructures.LinkedList.first() exit
+  [1] [return]
+  [2] [Field return.current, Field header.next]
+  [2] [Field return.current.element, Field header.next.element]
+  [1] [Class of return.current.element]
+  [2] [Field return.current.next, Field header.next.next]
+  [1] [this]
+  [1] [Field header]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Class of Field header.next.element]
+
+Variable sets for DataStructures.LinkedList.insert(java.lang.Object x, DataStructures.LinkedListItr p) enter
+  [1] [Parameter p]
+  [5] [Field p.current, Field p.current.next, Field header, Field header.next, Field header.next.next]
+  [3] [Field p.current.element, Field header.next.element, Parameter x]
+  [1] [Class of p.current.element]
+  [1] [this]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Class of Field header.next.element]
+  [1] [Class of x]
+Variable sets for DataStructures.LinkedList.insert(java.lang.Object x, DataStructures.LinkedListItr p) exit
+  [1] [Parameter p]
+  [5] [Field p.current, Field p.current.next, Field header, Field header.next, Field header.next.next]
+  [3] [Field p.current.element, Field header.next.element, Parameter x]
+  [1] [Class of p.current.element]
+  [1] [this]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Class of Field header.next.element]
+  [1] [Class of x]
+
+Variable sets for DataStructures.LinkedList.find(java.lang.Object x) enter
+  [1] [this]
+  [1] [Field header]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Field header.next]
+  [2] [Field header.next.element, Parameter x]
+  [1] [Class of Field header.next.element]
+  [1] [Field header.next.next]
+  [1] [Class of x]
+Variable sets for DataStructures.LinkedList.find(java.lang.Object x) exit
+  [1] [return]
+  [4] [Field return.current, Field return.current.next, Field header.next, Field header.next.next]
+  [3] [Field return.current.element, Field header.next.element, Parameter x]
+  [1] [Class of return.current.element]
+  [1] [this]
+  [1] [Field header]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Class of Field header.next.element]
+  [1] [Class of x]
+
+Variable sets for DataStructures.LinkedList.findPrevious(java.lang.Object x) enter
+  [1] [this]
+  [1] [Field header]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Field header.next]
+  [2] [Field header.next.element, Parameter x]
+  [1] [Class of Field header.next.element]
+  [1] [Field header.next.next]
+  [1] [Class of x]
+Variable sets for DataStructures.LinkedList.findPrevious(java.lang.Object x) exit
+  [1] [return]
+  [5] [Field return.current, Field return.current.next, Field header, Field header.next, Field header.next.next]
+  [3] [Field return.current.element, Field header.next.element, Parameter x]
+  [1] [Class of return.current.element]
+  [1] [this]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Class of Field header.next.element]
+  [1] [Class of x]
+
+Variable sets for DataStructures.LinkedList.remove(java.lang.Object x) enter
+  [1] [this]
+  [1] [Field header]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Field header.next]
+  [2] [Field header.next.element, Parameter x]
+  [1] [Class of Field header.next.element]
+  [1] [Field header.next.next]
+  [1] [Class of x]
+Variable sets for DataStructures.LinkedList.remove(java.lang.Object x) exit
+  [1] [this]
+  [1] [Field header]
+  [1] [Field header.element]
+  [1] [Class of Field header.element]
+  [1] [Field header.next]
+  [2] [Field header.next.element, Parameter x]
+  [1] [Class of Field header.next.element]
+  [1] [Field header.next.next]
+  [1] [Class of x]
+
+Variable sets for DataStructures.LinkedList.printList(DataStructures.LinkedList theList) enter
+  [1] [Parameter theList]
+  [1] [Field theList.header]
+  [1] [Field theList.header.element]
+  [1] [Class of theList.header.element]
+  [1] [Field theList.header.next]
+Variable sets for DataStructures.LinkedList.printList(DataStructures.LinkedList theList) exit
+  [1] [Parameter theList]
+  [1] [Field theList.header]
+  [1] [Field theList.header.element]
+  [1] [Class of theList.header.element]
+  [1] [Field theList.header.next]
+
+Variable sets for DataStructures.LinkedList.equals(java.lang.Object obj) enter
+  not called
+Variable sets for DataStructures.LinkedList.equals(java.lang.Object obj) exit
+  not called
+
+Variable sets for DataStructures.ListNode.<init>(java.lang.Object theElement) enter
+  [1] [Parameter theElement]
+  [1] [Class of theElement]
+Variable sets for DataStructures.ListNode.<init>(java.lang.Object theElement) exit
+  [1] [Parameter theElement]
+  [1] [Class of theElement]
+  [1] [this]
+  [1] [Field element]
+  [1] [Class of Field element]
+  [1] [Field next]
+  [1] [Field next.element]
+  [1] [Class of Field next.element]
+  [1] [Field next.next]
+  [1] [Field next.next.element]
+  [1] [Class of Field next.next.element]
+  [1] [Field next.next.next]
+
+Variable sets for DataStructures.ListNode.<init>(java.lang.Object theElement, DataStructures.ListNode n) enter
+  [1] [Parameter n]
+  [3] [Field n.element, Field n.next.element, Parameter theElement]
+  [1] [Class of n.element]
+  [1] [Field n.next]
+  [1] [Class of n.next.element]
+  [1] [Field n.next.next]
+  [1] [Class of theElement]
+Variable sets for DataStructures.ListNode.<init>(java.lang.Object theElement, DataStructures.ListNode n) exit
+  [2] [Parameter n, Field next]
+  [6] [Field n.element, Field n.next.element, Parameter theElement, Field element, Field next.element, Field next.next.element]
+  [1] [Class of n.element]
+  [2] [Field n.next, Field next.next]
+  [1] [Class of n.next.element]
+  [2] [Field n.next.next, Field next.next.next]
+  [1] [Class of theElement]
+  [1] [this]
+  [1] [Class of Field element]
+  [1] [Class of Field next.element]
+  [1] [Class of Field next.next.element]
+
+Variable sets for DataStructures.ListNode.equals(java.lang.Object obj) enter
+  not called
+Variable sets for DataStructures.ListNode.equals(java.lang.Object obj) exit
+  not called
+
+Variable sets for DataStructures.LinkedListItr.<init>(DataStructures.ListNode theNode) enter
+  [1] [Parameter theNode]
+  [2] [Field theNode.element, Field theNode.next.element]
+  [1] [Class of theNode.element]
+  [1] [Field theNode.next]
+  [1] [Class of theNode.next.element]
+  [1] [Field theNode.next.next]
+Variable sets for DataStructures.LinkedListItr.<init>(DataStructures.ListNode theNode) exit
+  [2] [Parameter theNode, Field current]
+  [4] [Field theNode.element, Field theNode.next.element, Field current.element, Field current.next.element]
+  [1] [Class of theNode.element]
+  [2] [Field theNode.next, Field current.next]
+  [1] [Class of theNode.next.element]
+  [2] [Field theNode.next.next, Field current.next.next]
+  [1] [this]
+  [1] [Class of Field current.element]
+  [1] [Class of Field current.next.element]
+
+Variable sets for DataStructures.LinkedListItr.isPastEnd() enter
+  [1] [this]
+  [1] [Field current]
+  [2] [Field current.element, Field current.next.element]
+  [1] [Class of Field current.element]
+  [1] [Field current.next]
+  [1] [Class of Field current.next.element]
+  [1] [Field current.next.next]
+Variable sets for DataStructures.LinkedListItr.isPastEnd() exit
+  [1] [return]
+  [1] [this]
+  [1] [Field current]
+  [2] [Field current.element, Field current.next.element]
+  [1] [Class of Field current.element]
+  [1] [Field current.next]
+  [1] [Class of Field current.next.element]
+  [1] [Field current.next.next]
+
+Variable sets for DataStructures.LinkedListItr.retrieve() enter
+  [1] [this]
+  [1] [Field current]
+  [2] [Field current.element, Field current.next.element]
+  [1] [Class of Field current.element]
+  [1] [Field current.next]
+  [1] [Class of Field current.next.element]
+  [1] [Field current.next.next]
+Variable sets for DataStructures.LinkedListItr.retrieve() exit
+  [3] [return, Field current.element, Field current.next.element]
+  [1] [Class of return]
+  [1] [this]
+  [1] [Field current]
+  [1] [Class of Field current.element]
+  [1] [Field current.next]
+  [1] [Class of Field current.next.element]
+  [1] [Field current.next.next]
+
+Variable sets for DataStructures.LinkedListItr.advance() enter
+  [1] [this]
+  [1] [Field current]
+  [2] [Field current.element, Field current.next.element]
+  [1] [Class of Field current.element]
+  [1] [Field current.next]
+  [1] [Class of Field current.next.element]
+  [1] [Field current.next.next]
+Variable sets for DataStructures.LinkedListItr.advance() exit
+  [1] [this]
+  [1] [Field current]
+  [2] [Field current.element, Field current.next.element]
+  [1] [Class of Field current.element]
+  [1] [Field current.next]
+  [1] [Class of Field current.next.element]
+  [1] [Field current.next.next]
+
+Variable sets for DataStructures.LinkedListItr.equals(java.lang.Object obj) enter
+  not called
+Variable sets for DataStructures.LinkedListItr.equals(java.lang.Object obj) exit
+  not called

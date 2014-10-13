@@ -6,7 +6,7 @@
 
 MAIN_CLASS:=DataStructures.BinaryHeap
 
-ESC_ON:=1
+#ESC_ON:=1
 
 ## INSTRUMENT:=infer
 ## #INSTRUMENT:=explicit

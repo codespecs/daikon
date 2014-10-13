@@ -1,0 +1,268 @@
+===========================================================================
+DataStructures.LinkedList:::OBJECT
+this.header != null
+this.header.element == null
+this.header.next.element != null
+this.header.next.element.getClass() is printable
+===========================================================================
+DataStructures.LinkedList.LinkedList():::EXIT
+this.header.element == this.header.next
+this.header.next == null
+===========================================================================
+DataStructures.LinkedList.find(java.lang.Object):::ENTER
+this.header.next != null
+x != null
+x.getClass() is printable
+===========================================================================
+DataStructures.LinkedList.find(java.lang.Object):::EXIT
+this.header == orig(this.header)
+this.header.element == orig(this.header.element)
+this.header.next == orig(this.header.next)
+this.header.next.element == orig(this.header.next.element)
+this.header.next.next == orig(this.header.next.next)
+this.header.next != null
+return != null
+return.current.element != null
+return.current.element.getClass() is printable
+this.header.next.element.getClass() == orig(this.header.next.element.getClass())
+return.current.element.getClass() == orig(x.getClass())
+===========================================================================
+DataStructures.LinkedList.findPrevious(java.lang.Object):::ENTER
+x != null
+x.getClass() is printable
+===========================================================================
+DataStructures.LinkedList.findPrevious(java.lang.Object):::EXIT
+this.header == orig(this.header)
+this.header.element == orig(this.header.element)
+this.header.next == orig(this.header.next)
+this.header.next.element == orig(this.header.next.element)
+this.header.next.next == orig(this.header.next.next)
+return != null
+return.current != null
+return.current.element.getClass() is printable
+this.header.next.element.getClass() == orig(this.header.next.element.getClass())
+===========================================================================
+DataStructures.LinkedList.first():::ENTER
+===========================================================================
+DataStructures.LinkedList.first():::EXIT
+this.header == orig(this.header)
+this.header.element == orig(this.header.element)
+this.header.next == return.current
+this.header.next.element == return.current.element
+this.header.next.next == return.current.next
+return.current == orig(this.header.next)
+return.current.element == orig(this.header.next.element)
+return.current.next == orig(this.header.next.next)
+return != null
+return.current.element != null
+return.current.element.getClass() is printable
+this.header.next.element.getClass() == return.current.element.getClass()
+return.current.element.getClass() == orig(this.header.next.element.getClass())
+===========================================================================
+DataStructures.LinkedList.insert(java.lang.Object, DataStructures.LinkedListItr):::ENTER
+x != null
+x.getClass() is printable
+p != null
+p.current != null
+p.current.element.getClass() is printable
+===========================================================================
+DataStructures.LinkedList.insert(java.lang.Object, DataStructures.LinkedListItr):::EXIT
+this.header == orig(this.header)
+this.header.element == orig(this.header.element)
+p.current == orig(p.current)
+p.current.element == orig(p.current.element)
+this.header.next != null
+p.current != null
+p.current.element.getClass() is printable
+p.current.next != null
+p.current.element.getClass() == orig(p.current.element.getClass())
+===========================================================================
+DataStructures.LinkedList.isEmpty():::ENTER
+===========================================================================
+DataStructures.LinkedList.isEmpty():::EXIT
+this.header == orig(this.header)
+this.header.element == orig(this.header.element)
+this.header.next == orig(this.header.next)
+this.header.next.element == orig(this.header.next.element)
+this.header.next.next == orig(this.header.next.next)
+(this.header.next != null)  <==>  (return == false)
+(this.header.next != null)  ==>  (this.header.next.element != null)
+(this.header.next != null)  ==>  (this.header.next.element.getClass() is printable)
+(this.header.next == null)  <==>  (return == true)
+(this.header.next == null)  ==>  (this.header.element == this.header.next)
+this.header.next.element.getClass() == orig(this.header.next.element.getClass())
+===========================================================================
+DataStructures.LinkedList.isEmpty():::EXIT;condition="return == true"
+this.header.element == this.header.next
+this.header.next == null
+return == true
+===========================================================================
+DataStructures.LinkedList.isEmpty():::EXIT;condition="not(return == true)"
+this.header.next != null
+return == false
+===========================================================================
+DataStructures.LinkedList.makeEmpty():::ENTER
+===========================================================================
+DataStructures.LinkedList.makeEmpty():::EXIT
+this.header == orig(this.header)
+this.header.element == this.header.next
+this.header.element == orig(this.header.element)
+this.header.next == null
+===========================================================================
+DataStructures.LinkedList.printList(DataStructures.LinkedList):::ENTER
+theList != null
+theList.header != null
+theList.header.element == null
+===========================================================================
+DataStructures.LinkedList.printList(DataStructures.LinkedList):::EXIT
+theList.header == orig(theList.header)
+theList.header.element == orig(theList.header.element)
+theList.header.next == orig(theList.header.next)
+theList.header != null
+theList.header.element == null
+===========================================================================
+DataStructures.LinkedList.remove(java.lang.Object):::ENTER
+this.header.next != null
+this.header.next.next != null
+x != null
+this.header.next.element.getClass() == x.getClass()
+===========================================================================
+DataStructures.LinkedList.remove(java.lang.Object):::EXIT
+this.header == orig(this.header)
+this.header.element == orig(this.header.element)
+this.header.next != null
+orig(x.getClass()) is printable
+===========================================================================
+DataStructures.LinkedList.zeroth():::ENTER
+===========================================================================
+DataStructures.LinkedList.zeroth():::EXIT
+this.header == return.current
+this.header == orig(this.header)
+this.header.element == return.current.element
+this.header.element == orig(this.header.element)
+this.header.next == return.current.next
+this.header.next == orig(this.header.next)
+this.header.next.element == orig(this.header.next.element)
+this.header.next.next == orig(this.header.next.next)
+return != null
+this.header.next.element.getClass() == orig(this.header.next.element.getClass())
+===========================================================================
+DataStructures.LinkedListItr:::OBJECT
+this.current.element.getClass() is printable
+this.current.next.element != null
+this.current.next.element.getClass() is printable
+===========================================================================
+DataStructures.LinkedListItr.LinkedListItr(DataStructures.ListNode):::ENTER
+theNode.element.getClass() is printable
+theNode.next.element != null
+theNode.next.element.getClass() is printable
+===========================================================================
+DataStructures.LinkedListItr.LinkedListItr(DataStructures.ListNode):::EXIT
+this.current == orig(theNode)
+this.current.element == theNode.element
+this.current.next == theNode.next
+this.current.next.element == theNode.next.element
+this.current.next.next == theNode.next.next
+theNode.element == orig(theNode.element)
+theNode.next == orig(theNode.next)
+theNode.next.element == orig(theNode.next.element)
+theNode.next.next == orig(theNode.next.next)
+theNode.element.getClass() is printable
+theNode.next.element != null
+theNode.next.element.getClass() is printable
+this.current.element.getClass() == theNode.element.getClass()
+this.current.next.element.getClass() == theNode.next.element.getClass()
+theNode.element.getClass() == orig(theNode.element.getClass())
+theNode.next.element.getClass() == orig(theNode.next.element.getClass())
+===========================================================================
+DataStructures.LinkedListItr.advance():::ENTER
+this.current != null
+===========================================================================
+DataStructures.LinkedListItr.advance():::EXIT
+this.current == orig(this.current.next)
+this.current.element == orig(this.current.next.element)
+this.current.next == orig(this.current.next.next)
+this.current.element != null
+this.current.element.getClass() == orig(this.current.next.element.getClass())
+===========================================================================
+DataStructures.LinkedListItr.isPastEnd():::ENTER
+===========================================================================
+DataStructures.LinkedListItr.isPastEnd():::EXIT
+this.current == orig(this.current)
+this.current.element == orig(this.current.element)
+this.current.next == orig(this.current.next)
+this.current.next.element == orig(this.current.next.element)
+this.current.next.next == orig(this.current.next.next)
+(this.current != null)  <==>  (return == false)
+(this.current != null)  ==>  (this.current.element.getClass() is printable)
+(this.current != null)  ==>  (this.current.next.element != null)
+(this.current != null)  ==>  (this.current.next.element.getClass() is printable)
+(this.current == null)  <==>  (return == true)
+this.current.element.getClass() == orig(this.current.element.getClass())
+this.current.next.element.getClass() == orig(this.current.next.element.getClass())
+===========================================================================
+DataStructures.LinkedListItr.isPastEnd():::EXIT;condition="return == true"
+this.current == null
+return == true
+===========================================================================
+DataStructures.LinkedListItr.isPastEnd():::EXIT;condition="not(return == true)"
+this.current != null
+return == false
+===========================================================================
+DataStructures.LinkedListItr.retrieve():::ENTER
+===========================================================================
+DataStructures.LinkedListItr.retrieve():::EXIT
+this.current == orig(this.current)
+this.current.element == return
+this.current.element == orig(this.current.element)
+this.current.next == orig(this.current.next)
+this.current.next.element == orig(this.current.next.element)
+this.current.next.next == orig(this.current.next.next)
+return.getClass() is printable
+this.current.element.getClass() == return.getClass()
+this.current.next.element.getClass() == orig(this.current.next.element.getClass())
+return.getClass() == orig(this.current.element.getClass())
+===========================================================================
+DataStructures.ListNode:::OBJECT
+this.element.getClass() is printable
+this.next.element != null
+this.next.element.getClass() is printable
+this.next.next.element != null
+this.next.next.element.getClass() is printable
+===========================================================================
+DataStructures.ListNode.ListNode(java.lang.Object):::ENTER
+theElement == null
+===========================================================================
+DataStructures.ListNode.ListNode(java.lang.Object):::EXIT
+this.element == this.next
+this.element == orig(theElement)
+this.element == null
+this.next == null
+===========================================================================
+DataStructures.ListNode.ListNode(java.lang.Object, DataStructures.ListNode):::ENTER
+theElement.getClass() is printable
+n.element != null
+n.element.getClass() is printable
+n.next.element != null
+n.next.element.getClass() is printable
+===========================================================================
+DataStructures.ListNode.ListNode(java.lang.Object, DataStructures.ListNode):::EXIT
+this.element == orig(theElement)
+this.next == orig(n)
+this.next.element == n.element
+this.next.next == n.next
+this.next.next.element == n.next.element
+this.next.next.next == n.next.next
+n.element == orig(n.element)
+n.next == orig(n.next)
+n.next.element == orig(n.next.element)
+n.next.next == orig(n.next.next)
+n.element != null
+n.element.getClass() is printable
+n.next.element != null
+n.next.element.getClass() is printable
+this.element.getClass() == orig(theElement.getClass())
+this.next.element.getClass() == n.element.getClass()
+this.next.next.element.getClass() == n.next.element.getClass()
+n.element.getClass() == orig(n.element.getClass())
+n.next.element.getClass() == orig(n.next.element.getClass())

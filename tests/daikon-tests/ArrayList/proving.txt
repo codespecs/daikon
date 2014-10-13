@@ -1,3 +1,0 @@
-
-Waiting on mharder to write a test suite.
-

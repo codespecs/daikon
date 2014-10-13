@@ -1,0 +1,1826 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+DataStructures.CursorList:::CLASS
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+
+DECLARE
+DataStructures.CursorList:::OBJECT
+this
+DataStructures.CursorList # isParam=true
+hashcode
+7
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+
+
+DECLARE
+DataStructures.CursorList.alloc():::ENTER
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+
+DECLARE
+DataStructures.CursorList.alloc():::EXIT37
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+return
+int
+int
+3
+
+
+DECLARE
+DataStructures.CursorList.free(int):::ENTER
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+p
+int # isParam=true
+int
+3
+
+DECLARE
+DataStructures.CursorList.free(int):::EXIT45
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+p
+int # isParam=true
+int
+3
+
+
+DECLARE
+DataStructures.CursorList.CursorList():::ENTER
+
+DECLARE
+DataStructures.CursorList.CursorList():::EXIT54
+this
+DataStructures.CursorList # isParam=true
+hashcode
+7
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+
+
+DECLARE
+DataStructures.CursorList.isEmpty():::ENTER
+this
+DataStructures.CursorList # isParam=true
+hashcode
+7
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+
+DECLARE
+DataStructures.CursorList.isEmpty():::EXIT62
+this
+DataStructures.CursorList # isParam=true
+hashcode
+8
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+return
+boolean
+boolean
+7
+
+
+DECLARE
+DataStructures.CursorList.makeEmpty():::ENTER
+this
+DataStructures.CursorList # isParam=true
+hashcode
+7
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+
+DECLARE
+DataStructures.CursorList.makeEmpty():::EXIT72
+this
+DataStructures.CursorList # isParam=true
+hashcode
+7
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+
+
+DECLARE
+DataStructures.CursorList.zeroth():::ENTER
+this
+DataStructures.CursorList # isParam=true
+hashcode
+7
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+
+DECLARE
+DataStructures.CursorList.zeroth():::EXIT80
+this
+DataStructures.CursorList # isParam=true
+hashcode
+8
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+return
+DataStructures.CursorListItr
+hashcode
+7
+return.current
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+
+DECLARE
+DataStructures.CursorList.first():::ENTER
+this
+DataStructures.CursorList # isParam=true
+hashcode
+7
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+
+DECLARE
+DataStructures.CursorList.first():::EXIT89
+this
+DataStructures.CursorList # isParam=true
+hashcode
+8
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+return
+DataStructures.CursorListItr
+hashcode
+7
+return.current
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+
+DECLARE
+DataStructures.CursorList.insert(java.lang.Object, DataStructures.CursorListItr):::ENTER
+this
+DataStructures.CursorList # isParam=true
+hashcode
+8
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+x
+java.lang.Object # isParam=true
+hashcode
+6
+x.getClass()
+java.lang.Class
+java.lang.String
+1
+p
+DataStructures.CursorListItr # isParam=true
+hashcode
+7
+p.current
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+DECLARE
+DataStructures.CursorList.insert(java.lang.Object, DataStructures.CursorListItr):::EXIT108
+this
+DataStructures.CursorList # isParam=true
+hashcode
+8
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+x
+java.lang.Object # isParam=true
+hashcode
+6
+x.getClass()
+java.lang.Class
+java.lang.String
+1
+p
+DataStructures.CursorListItr # isParam=true
+hashcode
+7
+p.current
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+
+DECLARE
+DataStructures.CursorList.find(java.lang.Object):::ENTER
+this
+DataStructures.CursorList # isParam=true
+hashcode
+7
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+x
+java.lang.Object # isParam=true
+hashcode
+6
+x.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.CursorList.find(java.lang.Object):::EXIT122
+this
+DataStructures.CursorList # isParam=true
+hashcode
+8
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+x
+java.lang.Object # isParam=true
+hashcode
+6
+x.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+DataStructures.CursorListItr
+hashcode
+7
+return.current
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+
+DECLARE
+DataStructures.CursorList.findPrevious(java.lang.Object):::ENTER
+this
+DataStructures.CursorList # isParam=true
+hashcode
+7
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+x
+java.lang.Object # isParam=true
+hashcode
+6
+x.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.CursorList.findPrevious(java.lang.Object):::EXIT139
+this
+DataStructures.CursorList # isParam=true
+hashcode
+8
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+x
+java.lang.Object # isParam=true
+hashcode
+6
+x.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+DataStructures.CursorListItr
+hashcode
+7
+return.current
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+
+DECLARE
+DataStructures.CursorList.remove(java.lang.Object):::ENTER
+this
+DataStructures.CursorList # isParam=true
+hashcode
+7
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+x
+java.lang.Object # isParam=true
+hashcode
+6
+x.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.CursorList.remove(java.lang.Object):::EXIT157
+this
+DataStructures.CursorList # isParam=true
+hashcode
+7
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+x
+java.lang.Object # isParam=true
+hashcode
+6
+x.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+DataStructures.CursorList.printList(DataStructures.CursorList):::ENTER
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+theList
+DataStructures.CursorList # isParam=true
+hashcode
+7
+theList.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+DECLARE
+DataStructures.CursorList.printList(DataStructures.CursorList):::EXIT172
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+theList
+DataStructures.CursorList # isParam=true
+hashcode
+7
+theList.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+
+DECLARE
+DataStructures.CursorList.equals(java.lang.Object):::ENTER
+this
+DataStructures.CursorList # isParam=true
+hashcode
+8
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+7
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.CursorList.equals(java.lang.Object):::EXIT1
+this
+DataStructures.CursorList # isParam=true
+hashcode
+9
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+7
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+8
+
+
+DECLARE
+DataStructures.CursorList.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+DataStructures.CursorList # isParam=true
+hashcode
+8
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+7
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.CursorList.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+DataStructures.CursorList # isParam=true
+hashcode
+9
+this.header
+int # declaringClassPackageName=DataStructures, 
+int
+3
+DataStructures.CursorList.cursorSpace
+DataStructures.CursorNode[] # declaringClassPackageName=DataStructures, 
+hashcode
+4
+DataStructures.CursorList.cursorSpace.getClass()
+java.lang.Class
+java.lang.String
+1
+DataStructures.CursorList.cursorSpace[..]
+DataStructures.CursorNode[]
+hashcode[]
+5[3]
+DataStructures.CursorList.cursorSpace[..].getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].element
+java.lang.Object[] # declaringClassPackageName=DataStructures, 
+hashcode[]
+6
+DataStructures.CursorList.cursorSpace[..].element.getClass()
+java.lang.Class[]
+java.lang.String[]
+1
+DataStructures.CursorList.cursorSpace[..].next
+int[] # declaringClassPackageName=DataStructures, 
+int[]
+3
+DataStructures.CursorList.SPACE_SIZE
+int # declaringClassPackageName=DataStructures, 
+int
+2
+obj
+java.lang.Object # isParam=true
+hashcode
+7
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+8
+
+DECLARE
+DataStructures.CursorNode:::CLASS
+
+DECLARE
+DataStructures.CursorNode:::OBJECT
+this
+DataStructures.CursorNode # isParam=true
+hashcode
+2
+this.element
+java.lang.Object # declaringClassPackageName=DataStructures, 
+hashcode
+3
+this.element.getClass()
+java.lang.Class
+java.lang.String
+1
+this.next
+int # declaringClassPackageName=DataStructures, 
+int
+4
+
+
+DECLARE
+DataStructures.CursorNode.CursorNode(java.lang.Object):::ENTER
+theElement
+java.lang.Object # isParam=true
+hashcode
+2
+theElement.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.CursorNode.CursorNode(java.lang.Object):::EXIT13
+this
+DataStructures.CursorNode # isParam=true
+hashcode
+3
+this.element
+java.lang.Object # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.element.getClass()
+java.lang.Class
+java.lang.String
+1
+this.next
+int # declaringClassPackageName=DataStructures, 
+int
+5
+theElement
+java.lang.Object # isParam=true
+hashcode
+2
+theElement.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+DataStructures.CursorNode.CursorNode(java.lang.Object, int):::ENTER
+theElement
+java.lang.Object # isParam=true
+hashcode
+3
+theElement.getClass()
+java.lang.Class
+java.lang.String
+1
+n
+int # isParam=true
+int
+2
+
+DECLARE
+DataStructures.CursorNode.CursorNode(java.lang.Object, int):::EXIT19
+this
+DataStructures.CursorNode # isParam=true
+hashcode
+4
+this.element
+java.lang.Object # declaringClassPackageName=DataStructures, 
+hashcode
+5
+this.element.getClass()
+java.lang.Class
+java.lang.String
+1
+this.next
+int # declaringClassPackageName=DataStructures, 
+int
+2
+theElement
+java.lang.Object # isParam=true
+hashcode
+3
+theElement.getClass()
+java.lang.Class
+java.lang.String
+1
+n
+int # isParam=true
+int
+2
+
+
+DECLARE
+DataStructures.CursorNode.equals(java.lang.Object):::ENTER
+this
+DataStructures.CursorNode # isParam=true
+hashcode
+3
+this.element
+java.lang.Object # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.element.getClass()
+java.lang.Class
+java.lang.String
+1
+this.next
+int # declaringClassPackageName=DataStructures, 
+int
+5
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.CursorNode.equals(java.lang.Object):::EXIT1
+this
+DataStructures.CursorNode # isParam=true
+hashcode
+4
+this.element
+java.lang.Object # declaringClassPackageName=DataStructures, 
+hashcode
+5
+this.element.getClass()
+java.lang.Class
+java.lang.String
+1
+this.next
+int # declaringClassPackageName=DataStructures, 
+int
+6
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+DataStructures.CursorNode.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+DataStructures.CursorNode # isParam=true
+hashcode
+3
+this.element
+java.lang.Object # declaringClassPackageName=DataStructures, 
+hashcode
+4
+this.element.getClass()
+java.lang.Class
+java.lang.String
+1
+this.next
+int # declaringClassPackageName=DataStructures, 
+int
+5
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.CursorNode.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+DataStructures.CursorNode # isParam=true
+hashcode
+4
+this.element
+java.lang.Object # declaringClassPackageName=DataStructures, 
+hashcode
+5
+this.element.getClass()
+java.lang.Class
+java.lang.String
+1
+this.next
+int # declaringClassPackageName=DataStructures, 
+int
+6
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+DECLARE
+DataStructures.CursorListItr:::CLASS
+
+DECLARE
+DataStructures.CursorListItr:::OBJECT
+this
+DataStructures.CursorListItr # isParam=true
+hashcode
+2
+this.current
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+
+DECLARE
+DataStructures.CursorListItr.CursorListItr(int):::ENTER
+theNode
+int # isParam=true
+int
+2
+
+DECLARE
+DataStructures.CursorListItr.CursorListItr(int):::EXIT27
+this
+DataStructures.CursorListItr # isParam=true
+hashcode
+3
+this.current
+int # declaringClassPackageName=DataStructures, 
+int
+2
+theNode
+int # isParam=true
+int
+2
+
+
+DECLARE
+DataStructures.CursorListItr.isPastEnd():::ENTER
+this
+DataStructures.CursorListItr # isParam=true
+hashcode
+2
+this.current
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+DECLARE
+DataStructures.CursorListItr.isPastEnd():::EXIT35
+this
+DataStructures.CursorListItr # isParam=true
+hashcode
+3
+this.current
+int # declaringClassPackageName=DataStructures, 
+int
+4
+return
+boolean
+boolean
+2
+
+
+DECLARE
+DataStructures.CursorListItr.retrieve():::ENTER
+this
+DataStructures.CursorListItr # isParam=true
+hashcode
+2
+this.current
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+DECLARE
+DataStructures.CursorListItr.retrieve():::EXIT45
+this
+DataStructures.CursorListItr # isParam=true
+hashcode
+3
+this.current
+int # declaringClassPackageName=DataStructures, 
+int
+4
+return
+java.lang.Object
+hashcode
+2
+return.getClass()
+java.lang.Class
+java.lang.String
+1
+
+
+DECLARE
+DataStructures.CursorListItr.advance():::ENTER
+this
+DataStructures.CursorListItr # isParam=true
+hashcode
+2
+this.current
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+DECLARE
+DataStructures.CursorListItr.advance():::EXIT56
+this
+DataStructures.CursorListItr # isParam=true
+hashcode
+2
+this.current
+int # declaringClassPackageName=DataStructures, 
+int
+3
+
+
+DECLARE
+DataStructures.CursorListItr.equals(java.lang.Object):::ENTER
+this
+DataStructures.CursorListItr # isParam=true
+hashcode
+3
+this.current
+int # declaringClassPackageName=DataStructures, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.CursorListItr.equals(java.lang.Object):::EXIT1
+this
+DataStructures.CursorListItr # isParam=true
+hashcode
+4
+this.current
+int # declaringClassPackageName=DataStructures, 
+int
+5
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+DataStructures.CursorListItr.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+DataStructures.CursorListItr # isParam=true
+hashcode
+3
+this.current
+int # declaringClassPackageName=DataStructures, 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataStructures.CursorListItr.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+DataStructures.CursorListItr # isParam=true
+hashcode
+4
+this.current
+int # declaringClassPackageName=DataStructures, 
+int
+5
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+

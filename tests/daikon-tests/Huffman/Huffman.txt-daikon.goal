@@ -1,0 +1,572 @@
+===========================================================================
+six170.HuffmanCodec:::OBJECT
+this.decodingTree.symbol == this.decodingTree.left.symbol
+this.decodingTree.symbol == this.decodingTree.right.symbol
+this.encodingMap != null
+this.encodingMap.getClass() == java.util.LinkedHashMap.class
+this.decodingTree != null
+this.decodingTree.symbol == null
+this.decodingTree.left != null
+this.decodingTree.left.left != null
+this.decodingTree.left.right != null
+this.decodingTree.right != null
+this.decodingTree.right.left != null
+this.decodingTree.right.right != null
+===========================================================================
+six170.HuffmanCodec.HuffmanCodec(java.util.List):::ENTER
+huffmanSymbols[].getClass() elements == six170.HuffmanSymbol.class
+huffmanSymbols.getClass() == java.util.ArrayList.class
+(size(huffmanSymbols[]) >> size(huffmanSymbols[])-1 == 0)
+===========================================================================
+six170.HuffmanCodec.HuffmanCodec(java.util.List):::EXIT
+huffmanSymbols[] == orig(huffmanSymbols[])
+huffmanSymbols[].getClass() elements == six170.HuffmanSymbol.class
+(orig(size(huffmanSymbols[])) >> size(huffmanSymbols[])-1 == 0)
+===========================================================================
+six170.HuffmanCodec.addToMap(java.util.Map, six170.HuffmanTree, java.util.List):::ENTER
+encodingMap != null
+encodingMap.getClass() == java.util.LinkedHashMap.class
+subTree != null
+subTree.symbol.symbol != null
+subTree.symbol.symbol.getClass() == java.lang.Character.class
+subTree.symbol.frequency >= 1
+bitStack != null
+bitStack[] contains no duplicates
+bitStack[] elements != null
+bitStack[].getClass() elements == java.lang.Boolean.class
+bitStack.getClass() == java.util.ArrayList.class
+encodingMap.getClass() != subTree.symbol.symbol.getClass()
+encodingMap.getClass() != bitStack.getClass()
+subTree.symbol.symbol.getClass() != bitStack.getClass()
+(size(bitStack[]) == 0) ==> (subTree.symbol.frequency == 0)
+(size(bitStack[])-1 == 0) ==> (subTree.symbol.frequency == 0)
+===========================================================================
+six170.HuffmanCodec.addToMap(java.util.Map, six170.HuffmanTree, java.util.List):::EXIT
+subTree.symbol == orig(subTree.symbol)
+subTree.symbol.symbol == orig(subTree.symbol.symbol)
+subTree.symbol.frequency == orig(subTree.symbol.frequency)
+subTree.left == orig(subTree.left)
+subTree.left.symbol == orig(subTree.left.symbol)
+subTree.left.left == orig(subTree.left.left)
+subTree.left.right == orig(subTree.left.right)
+subTree.right == orig(subTree.right)
+subTree.right.symbol == orig(subTree.right.symbol)
+subTree.right.left == orig(subTree.right.left)
+subTree.right.right == orig(subTree.right.right)
+bitStack[] == orig(bitStack[])
+subTree.symbol.symbol != null
+subTree.symbol.symbol.getClass() == java.lang.Character.class
+subTree.symbol.frequency >= 1
+bitStack[] contains no duplicates
+bitStack[] elements != null
+bitStack[].getClass() elements == java.lang.Boolean.class
+subTree.symbol.symbol.getClass() != orig(encodingMap.getClass())
+subTree.symbol.symbol.getClass() == orig(subTree.symbol.symbol.getClass())
+subTree.symbol.symbol.getClass() != orig(bitStack.getClass())
+(size(bitStack[])-1 == 0) ==> (subTree.symbol.frequency == 0)
+(orig(size(bitStack[])) == 0) ==> (subTree.symbol.frequency == 0)
+===========================================================================
+six170.HuffmanCodec.buildDecodingTree(java.util.List):::ENTER
+huffmanSymbols[].getClass() elements == six170.HuffmanSymbol.class
+huffmanSymbols.getClass() == java.util.ArrayList.class
+(size(huffmanSymbols[]) >> size(huffmanSymbols[])-1 == 0)
+===========================================================================
+six170.HuffmanCodec.buildDecodingTree(java.util.List):::EXIT
+huffmanSymbols[] == orig(huffmanSymbols[])
+return.symbol == return.left.symbol
+return.symbol == return.right.symbol
+huffmanSymbols[].getClass() elements == six170.HuffmanSymbol.class
+return.symbol == null
+(orig(size(huffmanSymbols[])) >> size(huffmanSymbols[])-1 == 0)
+===========================================================================
+six170.HuffmanCodec.buildEncodingMap(six170.HuffmanTree):::ENTER
+decodingTree.symbol == decodingTree.left.symbol
+decodingTree.symbol == decodingTree.right.symbol
+decodingTree.symbol == null
+===========================================================================
+six170.HuffmanCodec.buildEncodingMap(six170.HuffmanTree):::EXIT
+decodingTree.symbol == decodingTree.left.symbol
+decodingTree.symbol == decodingTree.right.symbol
+decodingTree.symbol == orig(decodingTree.symbol)
+decodingTree.symbol == orig(decodingTree.left.symbol)
+decodingTree.symbol == orig(decodingTree.right.symbol)
+decodingTree.left == orig(decodingTree.left)
+decodingTree.left.left == orig(decodingTree.left.left)
+decodingTree.left.right == orig(decodingTree.left.right)
+decodingTree.right == orig(decodingTree.right)
+decodingTree.right.left == orig(decodingTree.right.left)
+decodingTree.right.right == orig(decodingTree.right.right)
+decodingTree.symbol == null
+return.getClass() == java.util.LinkedHashMap.class
+===========================================================================
+six170.HuffmanCodec.decode(java.util.List):::ENTER
+inputBitStream[].getClass() elements == java.lang.Boolean.class
+inputBitStream.getClass() == java.util.ArrayList.class
+size(inputBitStream[])-1 is a bitwise subset of size(inputBitStream[])
+===========================================================================
+six170.HuffmanCodec.decode(java.util.List):::EXIT
+this.encodingMap == orig(this.encodingMap)
+this.decodingTree == orig(this.decodingTree)
+this.decodingTree.symbol == orig(this.decodingTree.symbol)
+this.decodingTree.symbol == orig(this.decodingTree.left.symbol)
+this.decodingTree.symbol == orig(this.decodingTree.right.symbol)
+this.decodingTree.left == orig(this.decodingTree.left)
+this.decodingTree.left.left == orig(this.decodingTree.left.left)
+this.decodingTree.left.right == orig(this.decodingTree.left.right)
+this.decodingTree.right == orig(this.decodingTree.right)
+this.decodingTree.right.left == orig(this.decodingTree.right.left)
+this.decodingTree.right.right == orig(this.decodingTree.right.right)
+inputBitStream[] == orig(inputBitStream[])
+inputBitStream[].getClass() elements == java.lang.Boolean.class
+return[].getClass() elements == java.lang.Character.class
+return.getClass() == java.util.ArrayList.class
+this.encodingMap.getClass() == orig(this.encodingMap.getClass())
+return.getClass() == orig(inputBitStream.getClass())
+size(inputBitStream[])-1 is a bitwise subset of orig(size(inputBitStream[]))
+===========================================================================
+six170.HuffmanCodec.encode(java.util.List):::ENTER
+inputStream[].getClass() elements == java.lang.Character.class
+inputStream.getClass() == java.util.ArrayList.class
+===========================================================================
+six170.HuffmanCodec.encode(java.util.List):::EXIT
+this.encodingMap == orig(this.encodingMap)
+this.decodingTree == orig(this.decodingTree)
+this.decodingTree.symbol == orig(this.decodingTree.symbol)
+this.decodingTree.symbol == orig(this.decodingTree.left.symbol)
+this.decodingTree.symbol == orig(this.decodingTree.right.symbol)
+this.decodingTree.left == orig(this.decodingTree.left)
+this.decodingTree.left.left == orig(this.decodingTree.left.left)
+this.decodingTree.left.right == orig(this.decodingTree.left.right)
+this.decodingTree.right == orig(this.decodingTree.right)
+this.decodingTree.right.left == orig(this.decodingTree.right.left)
+this.decodingTree.right.right == orig(this.decodingTree.right.right)
+inputStream[] == orig(inputStream[])
+inputStream[].getClass() elements == java.lang.Character.class
+return[].getClass() elements == java.lang.Boolean.class
+return.getClass() == java.util.ArrayList.class
+this.encodingMap.getClass() == orig(this.encodingMap.getClass())
+return.getClass() == orig(inputStream.getClass())
+size(return[])-1 is a bitwise subset of size(return[])
+===========================================================================
+six170.HuffmanCodec.extractSmallest(java.util.List):::ENTER
+nodeList != null
+nodeList[] contains no duplicates
+nodeList[] elements != null
+nodeList[].getClass() elements == six170.HuffmanTree.class
+nodeList.getClass() == java.util.ArrayList.class
+size(nodeList[]) >= 1
+===========================================================================
+six170.HuffmanCodec.extractSmallest(java.util.List):::EXIT
+nodeList[] contains no duplicates
+nodeList[] elements != null
+nodeList[].getClass() elements == six170.HuffmanTree.class
+return != null
+return.symbol.symbol != null
+return.symbol.symbol.getClass() == java.lang.Character.class
+return.symbol.frequency >= 1
+nodeList[] is a subset of orig(nodeList[])
+return in orig(nodeList[])
+return.symbol.symbol.getClass() != orig(nodeList.getClass())
+(size(nodeList[])-1 == 0) ==> (return.symbol.frequency == 0)
+(orig(size(nodeList[]))-1 == 0) ==> (return.symbol.frequency == 0)
+===========================================================================
+six170.HuffmanSymbol:::OBJECT
+this.symbol != null
+this.symbol.getClass() == java.lang.Character.class
+this.frequency >= 1
+===========================================================================
+six170.HuffmanSymbol.HuffmanSymbol(java.lang.Object, int):::ENTER
+symbol != null
+symbol.getClass() == java.lang.Character.class
+frequency >= 1
+===========================================================================
+six170.HuffmanSymbol.HuffmanSymbol(java.lang.Object, int):::EXIT
+this.symbol == orig(symbol)
+this.frequency == orig(frequency)
+this.symbol.getClass() == orig(symbol.getClass())
+===========================================================================
+six170.HuffmanSymbol.frequency():::ENTER
+===========================================================================
+six170.HuffmanSymbol.frequency():::EXIT
+this.symbol == orig(this.symbol)
+this.frequency == return
+return == orig(this.frequency)
+return >= 1
+this.symbol.getClass() == orig(this.symbol.getClass())
+===========================================================================
+six170.HuffmanSymbol.symbol():::ENTER
+===========================================================================
+six170.HuffmanSymbol.symbol():::EXIT
+this.symbol == return
+this.frequency == orig(this.frequency)
+return == orig(this.symbol)
+return != null
+return.getClass() == java.lang.Character.class
+this.symbol.getClass() == return.getClass()
+return.getClass() == orig(this.symbol.getClass())
+===========================================================================
+six170.HuffmanTree:::OBJECT
+this.symbol.symbol != null
+this.symbol.symbol.getClass() == java.lang.Character.class
+this.symbol.frequency >= 1
+this.left.symbol.symbol != null
+this.left.symbol.symbol.getClass() == java.lang.Character.class
+this.left.symbol.frequency >= 1
+this.right.symbol.symbol != null
+this.right.symbol.symbol.getClass() == java.lang.Character.class
+this.right.symbol.frequency >= 1
+this.left.symbol.symbol.getClass() == this.right.symbol.symbol.getClass()
+(this.left.symbol.frequency >> this.right.symbol.frequency == 0)
+this.left.symbol.frequency <= this.right.symbol.frequency
+===========================================================================
+six170.HuffmanTree.HuffmanTree(six170.HuffmanSymbol):::ENTER
+symbol != null
+symbol.symbol != null
+symbol.symbol.getClass() == java.lang.Character.class
+symbol.frequency >= 1
+===========================================================================
+six170.HuffmanTree.HuffmanTree(six170.HuffmanSymbol):::EXIT
+this.symbol == orig(symbol)
+this.symbol.symbol == symbol.symbol
+this.symbol.frequency == symbol.frequency
+this.left == this.right
+symbol.symbol == orig(symbol.symbol)
+symbol.frequency == orig(symbol.frequency)
+this.symbol != null
+this.left == null
+symbol.symbol != null
+symbol.symbol.getClass() == java.lang.Character.class
+symbol.frequency >= 1
+this.symbol.symbol.getClass() == symbol.symbol.getClass()
+symbol.symbol.getClass() == orig(symbol.symbol.getClass())
+===========================================================================
+six170.HuffmanTree.HuffmanTree(six170.HuffmanTree, six170.HuffmanTree):::ENTER
+left != null
+left.symbol.symbol != null
+left.symbol.symbol.getClass() == java.lang.Character.class
+left.symbol.frequency >= 1
+right != null
+right.symbol.symbol != null
+right.symbol.symbol.getClass() == java.lang.Character.class
+right.symbol.frequency >= 1
+left.symbol.symbol.getClass() == right.symbol.symbol.getClass()
+(left.symbol.frequency >> right.symbol.frequency == 0)
+left.symbol.frequency <= right.symbol.frequency
+===========================================================================
+six170.HuffmanTree.HuffmanTree(six170.HuffmanTree, six170.HuffmanTree):::EXIT
+this.left == orig(left)
+this.left.symbol == left.symbol
+this.left.symbol.symbol == left.symbol.symbol
+this.left.symbol.frequency == left.symbol.frequency
+this.left.left == left.left
+this.left.left.symbol == left.left.symbol
+this.left.left.left == left.left.left
+this.left.left.right == left.left.right
+this.left.right == left.right
+this.left.right.symbol == left.right.symbol
+this.left.right.left == left.right.left
+this.left.right.right == left.right.right
+this.right == orig(right)
+this.right.symbol == right.symbol
+this.right.symbol.symbol == right.symbol.symbol
+this.right.symbol.frequency == right.symbol.frequency
+this.right.left == right.left
+this.right.left.symbol == right.left.symbol
+this.right.left.left == right.left.left
+this.right.left.right == right.left.right
+this.right.right == right.right
+this.right.right.symbol == right.right.symbol
+this.right.right.left == right.right.left
+this.right.right.right == right.right.right
+left.symbol == orig(left.symbol)
+left.symbol.symbol == orig(left.symbol.symbol)
+left.symbol.frequency == orig(left.symbol.frequency)
+left.left == orig(left.left)
+left.left.symbol == orig(left.left.symbol)
+left.left.left == orig(left.left.left)
+left.left.right == orig(left.left.right)
+left.right == orig(left.right)
+left.right.symbol == orig(left.right.symbol)
+left.right.left == orig(left.right.left)
+left.right.right == orig(left.right.right)
+right.symbol == orig(right.symbol)
+right.symbol.symbol == orig(right.symbol.symbol)
+right.symbol.frequency == orig(right.symbol.frequency)
+right.left == orig(right.left)
+right.left.symbol == orig(right.left.symbol)
+right.left.left == orig(right.left.left)
+right.left.right == orig(right.left.right)
+right.right == orig(right.right)
+right.right.symbol == orig(right.right.symbol)
+right.right.left == orig(right.right.left)
+right.right.right == orig(right.right.right)
+this.symbol == null
+this.left != null
+this.right != null
+left.symbol.symbol != null
+left.symbol.symbol.getClass() == java.lang.Character.class
+left.symbol.frequency >= 1
+right.symbol.symbol != null
+right.symbol.symbol.getClass() == java.lang.Character.class
+right.symbol.frequency >= 1
+this.left.symbol.symbol.getClass() == left.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass() == right.symbol.symbol.getClass()
+left.symbol.symbol.getClass() == right.symbol.symbol.getClass()
+left.symbol.symbol.getClass() == orig(left.symbol.symbol.getClass())
+(left.symbol.frequency >> right.symbol.frequency == 0)
+left.symbol.frequency <= right.symbol.frequency
+right.symbol.symbol.getClass() == orig(right.symbol.symbol.getClass())
+===========================================================================
+six170.HuffmanTree.frequency():::ENTER
+===========================================================================
+six170.HuffmanTree.frequency():::EXIT51
+this.left == this.right
+this.left == orig(this.right)
+return == orig(this.symbol.frequency)
+this.symbol != null
+this.left == null
+===========================================================================
+six170.HuffmanTree.frequency():::EXIT53
+this.symbol == null
+this.left != null
+this.right != null
+return >= 2
+===========================================================================
+six170.HuffmanTree.frequency():::EXIT
+this.symbol == orig(this.symbol)
+this.symbol.symbol == orig(this.symbol.symbol)
+this.symbol.frequency == return
+this.symbol.frequency == orig(this.symbol.frequency)
+this.left == orig(this.left)
+this.left.symbol == orig(this.left.symbol)
+this.left.symbol.symbol == orig(this.left.symbol.symbol)
+this.left.symbol.frequency == orig(this.left.symbol.frequency)
+this.left.left == orig(this.left.left)
+this.left.left.symbol == orig(this.left.left.symbol)
+this.left.left.left == orig(this.left.left.left)
+this.left.left.right == orig(this.left.left.right)
+this.left.right == orig(this.left.right)
+this.left.right.symbol == orig(this.left.right.symbol)
+this.left.right.left == orig(this.left.right.left)
+this.left.right.right == orig(this.left.right.right)
+this.right == orig(this.right)
+this.right.symbol == orig(this.right.symbol)
+this.right.symbol.symbol == orig(this.right.symbol.symbol)
+this.right.symbol.frequency == orig(this.right.symbol.frequency)
+this.right.left == orig(this.right.left)
+this.right.left.symbol == orig(this.right.left.symbol)
+this.right.left.left == orig(this.right.left.left)
+this.right.left.right == orig(this.right.left.right)
+this.right.right == orig(this.right.right)
+this.right.right.symbol == orig(this.right.right.symbol)
+this.right.right.left == orig(this.right.right.left)
+this.right.right.right == orig(this.right.right.right)
+(this.symbol != null)  <==>  (this.left == null)
+(this.symbol != null)  <==>  (this.right == null)
+(this.symbol != null)  ==>  (return >= 1)
+(this.symbol != null)  ==>  (this.left == this.right)
+(this.symbol != null)  ==>  (this.symbol.frequency == return)
+(this.symbol != null)  ==>  (this.symbol.frequency >= 1)
+(this.symbol != null)  ==>  (this.symbol.symbol != null)
+(this.symbol != null)  ==>  (this.symbol.symbol.getClass() == java.lang.Character.class)
+(this.symbol == null)  <==>  (this.left != null)
+(this.symbol == null)  <==>  (this.right != null)
+(this.symbol == null)  ==>  ((this.left.symbol.frequency >> this.right.symbol.frequency == 0))
+(this.symbol == null)  ==>  (return >= 2)
+(this.symbol == null)  ==>  (this.left.symbol.frequency + this.right.symbol.frequency - return == 0)
+(this.symbol == null)  ==>  (this.left.symbol.frequency < return)
+(this.symbol == null)  ==>  (this.left.symbol.frequency <= this.right.symbol.frequency)
+(this.symbol == null)  ==>  (this.left.symbol.frequency >= 1)
+(this.symbol == null)  ==>  (this.left.symbol.symbol != null)
+(this.symbol == null)  ==>  (this.left.symbol.symbol.getClass() == java.lang.Character.class)
+(this.symbol == null)  ==>  (this.left.symbol.symbol.getClass() == this.right.symbol.symbol.getClass())
+(this.symbol == null)  ==>  (this.right.symbol.frequency < return)
+(this.symbol == null)  ==>  (this.right.symbol.frequency >= 1)
+(this.symbol == null)  ==>  (this.right.symbol.symbol != null)
+(this.symbol == null)  ==>  (this.right.symbol.symbol.getClass() == java.lang.Character.class)
+return >= 1
+this.symbol.symbol.getClass() == orig(this.symbol.symbol.getClass())
+this.left.symbol.symbol.getClass() == orig(this.left.symbol.symbol.getClass())
+this.left.symbol.frequency < return
+this.right.symbol.symbol.getClass() == orig(this.right.symbol.symbol.getClass())
+this.right.symbol.frequency < return
+this.left.symbol.frequency + this.right.symbol.frequency - return == 0
+===========================================================================
+six170.HuffmanTree.left():::ENTER
+===========================================================================
+six170.HuffmanTree.left():::EXIT
+this.symbol == orig(this.symbol)
+this.symbol.symbol == orig(this.symbol.symbol)
+this.symbol.frequency == orig(this.symbol.frequency)
+this.left == return
+this.left.symbol == return.symbol
+this.left.symbol.symbol == return.symbol.symbol
+this.left.symbol.frequency == return.symbol.frequency
+this.left.left == return.left
+this.left.left.symbol == return.left.symbol
+this.left.left.left == return.left.left
+this.left.left.right == return.left.right
+this.left.right == return.right
+this.left.right.symbol == return.right.symbol
+this.left.right.left == return.right.left
+this.left.right.right == return.right.right
+this.right == orig(this.right)
+this.right.symbol == orig(this.right.symbol)
+this.right.symbol.symbol == orig(this.right.symbol.symbol)
+this.right.symbol.frequency == orig(this.right.symbol.frequency)
+this.right.left == orig(this.right.left)
+this.right.left.symbol == orig(this.right.left.symbol)
+this.right.left.left == orig(this.right.left.left)
+this.right.left.right == orig(this.right.left.right)
+this.right.right == orig(this.right.right)
+this.right.right.symbol == orig(this.right.right.symbol)
+this.right.right.left == orig(this.right.right.left)
+this.right.right.right == orig(this.right.right.right)
+return == orig(this.left)
+return.symbol == orig(this.left.symbol)
+return.symbol.symbol == orig(this.left.symbol.symbol)
+return.symbol.frequency == orig(this.left.symbol.frequency)
+return.left == orig(this.left.left)
+return.left.symbol == orig(this.left.left.symbol)
+return.left.left == orig(this.left.left.left)
+return.left.right == orig(this.left.left.right)
+return.right == orig(this.left.right)
+return.right.symbol == orig(this.left.right.symbol)
+return.right.left == orig(this.left.right.left)
+return.right.right == orig(this.left.right.right)
+return.symbol.symbol != null
+return.symbol.symbol.getClass() == java.lang.Character.class
+return.symbol.frequency >= 1
+this.symbol.symbol.getClass() == orig(this.symbol.symbol.getClass())
+this.left.symbol.symbol.getClass() == return.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass() == return.symbol.symbol.getClass()
+this.right.symbol.symbol.getClass() == orig(this.right.symbol.symbol.getClass())
+(return.symbol.frequency >> this.right.symbol.frequency == 0)
+this.right.symbol.frequency >= return.symbol.frequency
+return.symbol.symbol.getClass() == orig(this.left.symbol.symbol.getClass())
+===========================================================================
+six170.HuffmanTree.right():::ENTER
+===========================================================================
+six170.HuffmanTree.right():::EXIT
+this.symbol == orig(this.symbol)
+this.symbol.symbol == orig(this.symbol.symbol)
+this.symbol.frequency == orig(this.symbol.frequency)
+this.left == orig(this.left)
+this.left.symbol == orig(this.left.symbol)
+this.left.symbol.symbol == orig(this.left.symbol.symbol)
+this.left.symbol.frequency == orig(this.left.symbol.frequency)
+this.left.left == orig(this.left.left)
+this.left.left.symbol == orig(this.left.left.symbol)
+this.left.left.left == orig(this.left.left.left)
+this.left.left.right == orig(this.left.left.right)
+this.left.right == orig(this.left.right)
+this.left.right.symbol == orig(this.left.right.symbol)
+this.left.right.left == orig(this.left.right.left)
+this.left.right.right == orig(this.left.right.right)
+this.right == return
+this.right.symbol == return.symbol
+this.right.symbol.symbol == return.symbol.symbol
+this.right.symbol.frequency == return.symbol.frequency
+this.right.left == return.left
+this.right.left.symbol == return.left.symbol
+this.right.left.left == return.left.left
+this.right.left.right == return.left.right
+this.right.right == return.right
+this.right.right.symbol == return.right.symbol
+this.right.right.left == return.right.left
+this.right.right.right == return.right.right
+return == orig(this.right)
+return.symbol == orig(this.right.symbol)
+return.symbol.symbol == orig(this.right.symbol.symbol)
+return.symbol.frequency == orig(this.right.symbol.frequency)
+return.left == orig(this.right.left)
+return.left.symbol == orig(this.right.left.symbol)
+return.left.left == orig(this.right.left.left)
+return.left.right == orig(this.right.left.right)
+return.right == orig(this.right.right)
+return.right.symbol == orig(this.right.right.symbol)
+return.right.left == orig(this.right.right.left)
+return.right.right == orig(this.right.right.right)
+return.symbol.symbol != null
+return.symbol.symbol.getClass() == java.lang.Character.class
+return.symbol.frequency >= 1
+this.symbol.symbol.getClass() == orig(this.symbol.symbol.getClass())
+this.left.symbol.symbol.getClass() == return.symbol.symbol.getClass()
+this.left.symbol.symbol.getClass() == orig(this.left.symbol.symbol.getClass())
+(this.left.symbol.frequency >> return.symbol.frequency == 0)
+this.left.symbol.frequency <= return.symbol.frequency
+this.right.symbol.symbol.getClass() == return.symbol.symbol.getClass()
+return.symbol.symbol.getClass() == orig(this.right.symbol.symbol.getClass())
+===========================================================================
+six170.HuffmanTree.symbol():::ENTER
+===========================================================================
+six170.HuffmanTree.symbol():::EXIT63
+this.symbol == return
+this.symbol == null
+this.left != null
+this.right != null
+return == null
+===========================================================================
+six170.HuffmanTree.symbol():::EXIT65
+this.left == this.right
+this.left == orig(this.right)
+return == orig(this.symbol.symbol)
+this.symbol != null
+this.left == null
+return != null
+===========================================================================
+six170.HuffmanTree.symbol():::EXIT
+this.symbol == orig(this.symbol)
+this.symbol.symbol == return
+this.symbol.symbol == orig(this.symbol.symbol)
+this.symbol.frequency == orig(this.symbol.frequency)
+this.left == orig(this.left)
+this.left.symbol == orig(this.left.symbol)
+this.left.symbol.symbol == orig(this.left.symbol.symbol)
+this.left.symbol.frequency == orig(this.left.symbol.frequency)
+this.left.left == orig(this.left.left)
+this.left.left.symbol == orig(this.left.left.symbol)
+this.left.left.left == orig(this.left.left.left)
+this.left.left.right == orig(this.left.left.right)
+this.left.right == orig(this.left.right)
+this.left.right.symbol == orig(this.left.right.symbol)
+this.left.right.left == orig(this.left.right.left)
+this.left.right.right == orig(this.left.right.right)
+this.right == orig(this.right)
+this.right.symbol == orig(this.right.symbol)
+this.right.symbol.symbol == orig(this.right.symbol.symbol)
+this.right.symbol.frequency == orig(this.right.symbol.frequency)
+this.right.left == orig(this.right.left)
+this.right.left.symbol == orig(this.right.left.symbol)
+this.right.left.left == orig(this.right.left.left)
+this.right.left.right == orig(this.right.left.right)
+this.right.right == orig(this.right.right)
+this.right.right.symbol == orig(this.right.right.symbol)
+this.right.right.left == orig(this.right.right.left)
+this.right.right.right == orig(this.right.right.right)
+(this.symbol != null)  <==>  (return != null)
+(this.symbol != null)  <==>  (this.left == null)
+(this.symbol != null)  <==>  (this.right == null)
+(this.symbol != null)  ==>  (return.getClass() == java.lang.Character.class)
+(this.symbol != null)  ==>  (this.left == this.right)
+(this.symbol != null)  ==>  (this.symbol.frequency >= 1)
+(this.symbol != null)  ==>  (this.symbol.symbol != null)
+(this.symbol != null)  ==>  (this.symbol.symbol == return)
+(this.symbol == null)  <==>  (return == null)
+(this.symbol == null)  <==>  (this.left != null)
+(this.symbol == null)  <==>  (this.right != null)
+(this.symbol == null)  ==>  ((this.left.symbol.frequency >> this.right.symbol.frequency == 0))
+(this.symbol == null)  ==>  (this.left.symbol.frequency <= this.right.symbol.frequency)
+(this.symbol == null)  ==>  (this.left.symbol.frequency >= 1)
+(this.symbol == null)  ==>  (this.left.symbol.symbol != null)
+(this.symbol == null)  ==>  (this.left.symbol.symbol.getClass() == java.lang.Character.class)
+(this.symbol == null)  ==>  (this.left.symbol.symbol.getClass() == this.right.symbol.symbol.getClass())
+(this.symbol == null)  ==>  (this.right.symbol.frequency >= 1)
+(this.symbol == null)  ==>  (this.right.symbol.symbol != null)
+(this.symbol == null)  ==>  (this.right.symbol.symbol.getClass() == java.lang.Character.class)
+(this.symbol == null)  ==>  (this.symbol == return)
+return.getClass() == java.lang.Character.class
+this.symbol.symbol.getClass() == return.getClass()
+this.left.symbol.symbol.getClass() == orig(this.left.symbol.symbol.getClass())
+this.right.symbol.symbol.getClass() == orig(this.right.symbol.symbol.getClass())
+return.getClass() == orig(this.symbol.symbol.getClass())

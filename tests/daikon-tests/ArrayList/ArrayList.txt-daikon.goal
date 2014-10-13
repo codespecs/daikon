@@ -1,0 +1,32 @@
+===========================================================================
+javautil.AbstractList:::OBJECT
+this has only one value
+this.getClass() == javautil.ArrayList.class
+this.modCount == 0
+===========================================================================
+javautil.AbstractList.AbstractList():::EXIT
+===========================================================================
+javautil.ArrayList:::OBJECT
+this has only one value
+this.elementData has only one value
+this.elementData.getClass() == java.lang.Object[].class
+this.elementData[] contains only nulls and has only one value, of length 10
+this.elementData[] elements == null
+this.elementData[].getClass() == [null, null, null, null, null, null, null, null, null, null]
+this.elementData[].getClass() elements == null
+this.size == 0
+size(this.elementData[]) == 10
+this.elementData[this.size+1..] contains only nulls and has only one value, of length 9
+this.elementData[0..this.size] == [null]
+this.elementData[0..this.size-1] == []
+this.elementData[] elements == this.elementData[this.size]
+===========================================================================
+javautil.ArrayList.ArrayList():::EXIT
+===========================================================================
+javautil.ArrayList.ArrayList(int):::ENTER
+initialCapacity == 10
+===========================================================================
+javautil.ArrayList.ArrayList(int):::EXIT
+orig(initialCapacity) == size(this.elementData[])
+this.elementData[this.size] == this.elementData[orig(initialCapacity)-1]
+this.elementData[orig(initialCapacity)..] == []

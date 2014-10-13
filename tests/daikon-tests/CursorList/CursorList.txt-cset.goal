@@ -1,0 +1,293 @@
+
+Variable sets for DataStructures.CursorList.alloc() enter
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [2] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+Variable sets for DataStructures.CursorList.alloc() exit
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, return]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+
+Variable sets for DataStructures.CursorList.free(int p) enter
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Parameter p]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+Variable sets for DataStructures.CursorList.free(int p) exit
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Parameter p]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+
+Variable sets for DataStructures.CursorList.<init>() enter
+Variable sets for DataStructures.CursorList.<init>() exit
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [this]
+
+Variable sets for DataStructures.CursorList.isEmpty() enter
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [this]
+Variable sets for DataStructures.CursorList.isEmpty() exit
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [return]
+  [1] [this]
+
+Variable sets for DataStructures.CursorList.makeEmpty() enter
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [this]
+Variable sets for DataStructures.CursorList.makeEmpty() exit
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [this]
+
+Variable sets for DataStructures.CursorList.zeroth() enter
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [this]
+Variable sets for DataStructures.CursorList.zeroth() exit
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [4] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field return.current, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [return]
+  [1] [this]
+
+Variable sets for DataStructures.CursorList.first() enter
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [this]
+Variable sets for DataStructures.CursorList.first() exit
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [4] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field return.current, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [return]
+  [1] [this]
+
+Variable sets for DataStructures.CursorList.insert(java.lang.Object x, DataStructures.CursorListItr p) enter
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [4] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field p.current, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [2] [Field DataStructures.CursorList.cursorSpace[..].element, Parameter x]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [Parameter p]
+  [1] [this]
+  [1] [Class of x]
+Variable sets for DataStructures.CursorList.insert(java.lang.Object x, DataStructures.CursorListItr p) exit
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [4] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field p.current, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [2] [Field DataStructures.CursorList.cursorSpace[..].element, Parameter x]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [Parameter p]
+  [1] [this]
+  [1] [Class of x]
+
+Variable sets for DataStructures.CursorList.find(java.lang.Object x) enter
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [2] [Field DataStructures.CursorList.cursorSpace[..].element, Parameter x]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [this]
+  [1] [Class of x]
+Variable sets for DataStructures.CursorList.find(java.lang.Object x) exit
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [4] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field return.current, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [2] [Field DataStructures.CursorList.cursorSpace[..].element, Parameter x]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [return]
+  [1] [this]
+  [1] [Class of x]
+
+Variable sets for DataStructures.CursorList.findPrevious(java.lang.Object x) enter
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [2] [Field DataStructures.CursorList.cursorSpace[..].element, Parameter x]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [this]
+  [1] [Class of x]
+Variable sets for DataStructures.CursorList.findPrevious(java.lang.Object x) exit
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [4] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field return.current, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [2] [Field DataStructures.CursorList.cursorSpace[..].element, Parameter x]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [return]
+  [1] [this]
+  [1] [Class of x]
+
+Variable sets for DataStructures.CursorList.remove(java.lang.Object x) enter
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [2] [Field DataStructures.CursorList.cursorSpace[..].element, Parameter x]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [this]
+  [1] [Class of x]
+Variable sets for DataStructures.CursorList.remove(java.lang.Object x) exit
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [2] [Field DataStructures.CursorList.cursorSpace[..].element, Parameter x]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [this]
+  [1] [Class of x]
+
+Variable sets for DataStructures.CursorList.printList(DataStructures.CursorList theList) enter
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field theList.header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [Parameter theList]
+Variable sets for DataStructures.CursorList.printList(DataStructures.CursorList theList) exit
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field theList.header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [Parameter theList]
+
+Variable sets for DataStructures.CursorList.equals(java.lang.Object obj) enter
+  not called
+Variable sets for DataStructures.CursorList.equals(java.lang.Object obj) exit
+  not called
+
+Variable sets for DataStructures.CursorNode.<init>(java.lang.Object theElement) enter
+  not called
+Variable sets for DataStructures.CursorNode.<init>(java.lang.Object theElement) exit
+  not called
+
+Variable sets for DataStructures.CursorNode.<init>(java.lang.Object theElement, int n) enter
+  [1] [Parameter n]
+  [1] [Parameter theElement]
+  [1] [Class of theElement]
+Variable sets for DataStructures.CursorNode.<init>(java.lang.Object theElement, int n) exit
+  [2] [Parameter n, Field next]
+  [1] [Parameter theElement]
+  [1] [Class of theElement]
+  [1] [this]
+  [1] [Field element]
+  [1] [Class of Field element]
+
+Variable sets for DataStructures.CursorNode.equals(java.lang.Object obj) enter
+  not called
+Variable sets for DataStructures.CursorNode.equals(java.lang.Object obj) exit
+  not called
+
+Variable sets for DataStructures.CursorListItr.<init>(int theNode) enter
+  [1] [Parameter theNode]
+Variable sets for DataStructures.CursorListItr.<init>(int theNode) exit
+  [2] [Parameter theNode, Field current]
+  [1] [this]
+
+Variable sets for DataStructures.CursorListItr.isPastEnd() enter
+  [1] [this]
+  [1] [Field current]
+Variable sets for DataStructures.CursorListItr.isPastEnd() exit
+  [1] [return]
+  [1] [this]
+  [1] [Field current]
+
+Variable sets for DataStructures.CursorListItr.retrieve() enter
+  [1] [this]
+  [1] [Field current]
+Variable sets for DataStructures.CursorListItr.retrieve() exit
+  [1] [return]
+  [1] [Class of return]
+  [1] [this]
+  [1] [Field current]
+
+Variable sets for DataStructures.CursorListItr.advance() enter
+  [1] [this]
+  [1] [Field current]
+Variable sets for DataStructures.CursorListItr.advance() exit
+  [1] [this]
+  [1] [Field current]
+
+Variable sets for DataStructures.CursorListItr.equals(java.lang.Object obj) enter
+  not called
+Variable sets for DataStructures.CursorListItr.equals(java.lang.Object obj) exit
+  not called
