@@ -1028,16 +1028,6 @@ endif
 
 txt-jaif-diff: $(PROJECT_FILE).txt-jaif.diff
 
-# Special case for jaif as it may differ for Java8
-${PROJECT_FILE}.txt-jaif.diff: $(call goal_name,${PROJECT_FILE}.txt-jaif) \
-								  ${PROJECT_FILE}.txt-jaif
-	@echo
-	@echo "### textual diff (${PROJECT_FILE})"
-	@echo
-	-rm -f $@
-	-diff -bu $^ > $@ 2>&1
-	cat $@
-
 # Special case for merge: we want to keep track of whitespace
 %-merge-jml.diff: %-merge-jml.goal %-merge-jml
 	@echo
@@ -1047,7 +1037,7 @@ ${PROJECT_FILE}.txt-jaif.diff: $(call goal_name,${PROJECT_FILE}.txt-jaif) \
 	-diff -u --strip-trailing-cr $^ > $@ 2>&1
 	cat $@
 
-%.diff: %.goal %
+%.diff: $(call goal_name, %) %
 	@echo
 	@echo "### textual diff (${PROJECT_FILE})"
 	@echo
@@ -1068,7 +1058,7 @@ update-goal-impl:
 	@echo
 	@echo "### update-goal (${PROJECT_FILE})"
 	@echo
-	cp -pf ${PROJECT_FILE}.txt-daikon ${PROJECT_FILE}.txt-daikon.goal
+	cp -pf ${PROJECT_FILE}.txt-daikon $(call goal_name,${PROJECT_FILE}.txt-daikon)
 	rm -f ${PROJECT_FILE}.txt-daikon.diff
 
 ifeq (generated,$(TRACE_SOURCE))
@@ -1077,13 +1067,13 @@ ifeq (generated,$(TRACE_SOURCE))
 	  $(call goal_name,${PROJECT_FILE}.txt-chicory); fi
 	rm -f ${PROJECT_FILE}.txt-chicory.diff
 	if test -e ${PROJECT_FILE}.decls-DynComp ; then cp -pf \
-	  $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).decls-DynComp.goal; fi
+	  $(PROJECT_FILE).decls-DynComp $(call goal_name,$(PROJECT_FILE).decls-DynComp); fi
 	rm -f $(PROJECT_FILE).decls-DynComp.diff
 	if test -e ${PROJECT_FILE}.txt-cset ; then cp -pf \
 	  $(PROJECT_FILE).txt-cset $(PROJECT_FILE).txt-cset.goal; fi
 	rm -f $(PROJECT_FILE).txt-cset.diff
 	if test -e ${PROJECT_FILE}.decls-DynComp-nojdk ; then cp -pf \
-	  $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).decls-DynComp-nojdk.goal; fi
+	  $(PROJECT_FILE).decls-DynComp-nojdk $(call goal_name,$(PROJECT_FILE).decls-DynComp-nojdk); fi
 	rm -f $(PROJECT_FILE).decls-DynComp-nojdk.diff
 	if test -e ${PROJECT_FILE}.txt-cset-nojdk ; then cp -pf \
 	  $(PROJECT_FILE).txt-cset-nojdk $(PROJECT_FILE).txt-cset-nojdk.goal; fi
@@ -1097,7 +1087,7 @@ ifdef ESC_ON
 	rm -f ${PROJECT_FILE}.txt-esc.diff
 endif
 ifndef NO_JML
-	cp -pf ${PROJECT_FILE}.txt-jml ${PROJECT_FILE}.txt-jml.goal
+	cp -pf ${PROJECT_FILE}.txt-jml $(call goal_name,${PROJECT_FILE}.txt-jml)
 	rm -f ${PROJECT_FILE}.txt-jml.diff
 endif
 ifdef ESC_ON
@@ -1126,13 +1116,13 @@ endif
 
 update-dyncomp-goals:
 	if test -e ${PROJECT_FILE}.decls-DynComp ; then cp -pf \
-	  $(PROJECT_FILE).decls-DynComp $(PROJECT_FILE).decls-DynComp.goal; fi
+	  $(PROJECT_FILE).decls-DynComp $(call goal_name,$(PROJECT_FILE).decls-DynComp); fi
 	rm -f $(PROJECT_FILE).decls-DynComp.diff
 	if test -e ${PROJECT_FILE}.txt-cset ; then cp -pf \
 	  $(PROJECT_FILE).txt-cset $(PROJECT_FILE).txt-cset.goal; fi
 	rm -f $(PROJECT_FILE).txt-cset.diff
 	if test -e ${PROJECT_FILE}.decls-DynComp-nojdk ; then cp -pf \
-	  $(PROJECT_FILE).decls-DynComp-nojdk $(PROJECT_FILE).decls-DynComp-nojdk.goal; fi
+	  $(PROJECT_FILE).decls-DynComp-nojdk $(call goal_name,$(PROJECT_FILE).decls-DynComp-nojdk); fi
 	rm -f $(PROJECT_FILE).decls-DynComp-nojdk.diff
 	if test -e ${PROJECT_FILE}.txt-cset-nojdk ; then cp -pf \
 	  $(PROJECT_FILE).txt-cset-nojdk $(PROJECT_FILE).txt-cset-nojdk.goal; fi
