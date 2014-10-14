@@ -1037,12 +1037,12 @@ txt-jaif-diff: $(PROJECT_FILE).txt-jaif.diff
 	-diff -u --strip-trailing-cr $^ > $@ 2>&1
 	cat $@
 
-%.diff: $(call goal_name, %) %
+%.diff: $(call goal_name,%) %
 	@echo
 	@echo "### textual diff (${PROJECT_FILE})"
 	@echo
 	-rm -f $@
-	-diff -bu $^ > $@ 2>&1
+	-diff -bu $(call goal_name, $*) $* > $@ 2>&1
 	cat $@
 
 #  echo "  make update-goals   : copies the output to the .goal file"
