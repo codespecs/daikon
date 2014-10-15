@@ -16,14 +16,20 @@ Variable sets for misc.Precedence.main([Ljava.lang.String; args) exit
   [1] [String args[..].toString]
 
 Variable sets for misc.Precedence.lets_calculate(int j) enter
-  [1] [Parameter j]
+  [2] [Parameter j, Field i]
   [1] [this]
-  [1] [Field i]
 Variable sets for misc.Precedence.lets_calculate(int j) exit
   [3] [Parameter j, return, Field i]
   [1] [this]
 
 Variable sets for misc.Precedence.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [1] [Field i]
 Variable sets for misc.Precedence.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [1] [Field i]

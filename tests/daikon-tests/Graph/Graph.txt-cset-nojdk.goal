@@ -35,9 +35,13 @@ Variable sets for MapQuick1.Graph.containsNode(java.lang.Object node) exit
   [1] [Field adjMap]
 
 Variable sets for MapQuick1.Graph.nodeSet() enter
-  not called
+  [1] [this]
+  [1] [Field adjMap]
 Variable sets for MapQuick1.Graph.nodeSet() exit
-  not called
+  [1] [return]
+  [1] [Class of return]
+  [1] [this]
+  [1] [Field adjMap]
 
 Variable sets for MapQuick1.Graph.adjTo(java.lang.Object node) enter
   [1] [Parameter node]
@@ -81,6 +85,13 @@ Variable sets for MapQuick1.Graph.childrenOf(java.lang.Object node) exit
   [1] [Field adjMap]
 
 Variable sets for MapQuick1.Graph.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [1] [Field adjMap]
 Variable sets for MapQuick1.Graph.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [1] [Field adjMap]

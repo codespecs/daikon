@@ -21,8 +21,7 @@ Variable sets for misc.StaticInteresting.work() exit
   [1] [Field misc.StaticInteresting.rand]
   [1] [this]
   [2] [Field inner, Field x]
-  [2] [Array Field inner[..], Array Field outer[..]]
-  [2] [Field outer, Field y]
+  [4] [Array Field inner[..], Field outer, Array Field outer[..], Field y]
 
 Variable sets for misc.StaticInteresting.<init>() enter
 Variable sets for misc.StaticInteresting.<init>() exit
@@ -32,9 +31,20 @@ Variable sets for misc.StaticInteresting.<init>() exit
   [4] [Array Field inner[..], Field outer, Array Field outer[..], Field y]
 
 Variable sets for misc.StaticInteresting.equals(java.lang.Object obj) enter
-  not called
+  [1] [Field misc.StaticInteresting.rand]
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [2] [Field inner, Field x]
+  [4] [Array Field inner[..], Field outer, Array Field outer[..], Field y]
 Variable sets for misc.StaticInteresting.equals(java.lang.Object obj) exit
-  not called
+  [1] [Field misc.StaticInteresting.rand]
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [2] [Field inner, Field x]
+  [4] [Array Field inner[..], Field outer, Array Field outer[..], Field y]
 
 Variable sets for misc.StaticInteresting2.main([Ljava.lang.String; args) enter
   [1] [Parameter args]
@@ -58,8 +68,7 @@ Variable sets for misc.StaticInteresting2.work() exit
   [1] [Field misc.StaticInteresting2.rand]
   [1] [this]
   [2] [Field inner, Field x]
-  [2] [Array Field inner[..], Array Field outer[..]]
-  [2] [Field outer, Field y]
+  [4] [Array Field inner[..], Field outer, Array Field outer[..], Field y]
 
 Variable sets for misc.StaticInteresting2.<init>() enter
 Variable sets for misc.StaticInteresting2.<init>() exit
@@ -69,6 +78,17 @@ Variable sets for misc.StaticInteresting2.<init>() exit
   [4] [Array Field inner[..], Field outer, Array Field outer[..], Field y]
 
 Variable sets for misc.StaticInteresting2.equals(java.lang.Object obj) enter
-  not called
+  [1] [Field misc.StaticInteresting2.rand]
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [2] [Field inner, Field x]
+  [4] [Array Field inner[..], Field outer, Array Field outer[..], Field y]
 Variable sets for misc.StaticInteresting2.equals(java.lang.Object obj) exit
-  not called
+  [1] [Field misc.StaticInteresting2.rand]
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [2] [Field inner, Field x]
+  [4] [Array Field inner[..], Field outer, Array Field outer[..], Field y]

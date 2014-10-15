@@ -45,6 +45,13 @@ Variable sets for six170.TinySet.union(six170.TinySet other) exit
   [1] [this]
 
 Variable sets for six170.TinySet.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [1] [Field bits]
 Variable sets for six170.TinySet.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [1] [Field bits]

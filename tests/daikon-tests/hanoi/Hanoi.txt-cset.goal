@@ -36,10 +36,9 @@ Variable sets for six170.Hanoi.otherPeg(int pegA, int pegB) exit
   [1] [return]
 
 Variable sets for six170.Hanoi.moveTower(int fromPeg, int toPeg, int towerHeight) enter
-  [1] [Parameter fromPeg]
+  [3] [Parameter fromPeg, Array Field diskLocation[..], Parameter toPeg]
   [1] [this]
   [3] [Field diskLocation, Field height, Parameter towerHeight]
-  [2] [Array Field diskLocation[..], Parameter toPeg]
   [1] [Field noOutput]
 Variable sets for six170.Hanoi.moveTower(int fromPeg, int toPeg, int towerHeight) exit
   [3] [Parameter fromPeg, Array Field diskLocation[..], Parameter toPeg]
@@ -59,6 +58,17 @@ Variable sets for six170.Hanoi.showTowers() exit
   [1] [Field noOutput]
 
 Variable sets for six170.Hanoi.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [2] [Field diskLocation, Field height]
+  [1] [Array Field diskLocation[..]]
+  [1] [Field noOutput]
 Variable sets for six170.Hanoi.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [2] [Field diskLocation, Field height]
+  [1] [Array Field diskLocation[..]]
+  [1] [Field noOutput]

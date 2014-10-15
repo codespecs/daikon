@@ -4102,8 +4102,7 @@ output corresponds to the following in @file{cset}:
 
 @example
 Daikon Variable sets for Year.compute(I yr, I d1, I d2) enter
-  [1] [daikon.chicory.ParameterInfo:d1]
-  [1] [daikon.chicory.ParameterInfo:d2]
+  [2] [daikon.chicory.ParameterInfo:d1] [daikon.chicory.ParameterInfo:d2]
   [1] [daikon.chicory.ParameterInfo:yr]
 Daikon Variable sets for Year.compute(I yr, I d1, I d2) exit
   [3] [daikon.chicory.ParameterInfo:d1, daikon.chicory.ParameterInfo:
@@ -4123,17 +4122,16 @@ The above @file{.decls} output corresponds to the following in
 Daikon Traced Tree for Year.compute(I yr, I d1, I d2) enter
 
 daikon.chicory.ParameterInfo:d1
-
-daikon.chicory.ParameterInfo:d2
+--daikon.chicory.ParameterInfo:d2 ()
 
 daikon.chicory.ParameterInfo:yr
 
 
 Daikon Traced Tree for Year.compute(I yr, I d1, I d2) exit
 
-daikon.chicory.ParameterInfo:d2
---daikon.chicory.ParameterInfo:d1 ([Year:compute()-11])
---daikon.chicory.ReturnInfo:return ([Year:compute()-11])
+daikon.chicory.ParameterInfo:d1
+--daikon.chicory.ParameterInfo:d2 (Year:compute()-11)
+--daikon.chicory.ReturnInfo:return (Year:compute()-11)
 
 daikon.chicory.ParameterInfo yr
 @end example

@@ -112,6 +112,11 @@ Variable sets for MapQuick1.StreetNumberSet.equals(MapQuick1.StreetNumberSet oth
   [1] [return]
 
 Variable sets for MapQuick1.StreetNumberSet.hashCode() enter
-  not called
+  [1] [this]
+  [2] [Field begins, Field ends]
+  [2] [Array Field begins[..], Array Field ends[..]]
 Variable sets for MapQuick1.StreetNumberSet.hashCode() exit
-  not called
+  [1] [return]
+  [1] [this]
+  [2] [Field begins, Field ends]
+  [2] [Array Field begins[..], Array Field ends[..]]

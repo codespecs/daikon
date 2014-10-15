@@ -2,13 +2,11 @@
 Variable sets for PolyCalc.RatNum.<init>(int n) enter
   [1] [Parameter n]
 Variable sets for PolyCalc.RatNum.<init>(int n) exit
-  [2] [Parameter n, Field numer]
+  [3] [Parameter n, Field denom, Field numer]
   [1] [this]
-  [1] [Field denom]
 
 Variable sets for PolyCalc.RatNum.<init>(int n, int d) enter
-  [1] [Parameter d]
-  [1] [Parameter n]
+  [2] [Parameter d, Parameter n]
 Variable sets for PolyCalc.RatNum.<init>(int n, int d) exit
   [4] [Parameter d, Parameter n, Field denom, Field numer]
   [1] [this]
@@ -105,9 +103,12 @@ Variable sets for PolyCalc.RatNum.gcd(int _a, int _b) exit
   [3] [Parameter _a, Parameter _b, return]
 
 Variable sets for PolyCalc.RatNum.hashCode() enter
-  not called
+  [1] [this]
+  [2] [Field denom, Field numer]
 Variable sets for PolyCalc.RatNum.hashCode() exit
-  not called
+  [1] [return]
+  [1] [this]
+  [2] [Field denom, Field numer]
 
 Variable sets for PolyCalc.RatNum.equals(java.lang.Object obj) enter
   [2] [Parameter obj, this]
@@ -120,9 +121,13 @@ Variable sets for PolyCalc.RatNum.equals(java.lang.Object obj) exit
   [2] [Field denom, Field numer]
 
 Variable sets for PolyCalc.RatNum.debugPrint() enter
-  not called
+  [1] [this]
+  [2] [Field denom, Field numer]
 Variable sets for PolyCalc.RatNum.debugPrint() exit
-  not called
+  [1] [return]
+  [1] [String return.toString]
+  [1] [this]
+  [2] [Field denom, Field numer]
 
 Variable sets for PolyCalc.RatNum.parse(java.lang.String ratStr) enter
   [1] [Parameter ratStr]

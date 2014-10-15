@@ -231,14 +231,39 @@ Variable sets for DataStructures.CursorList.printList(DataStructures.CursorList 
   [1] [Parameter theList]
 
 Variable sets for DataStructures.CursorList.equals(java.lang.Object obj) enter
-  not called
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
 Variable sets for DataStructures.CursorList.equals(java.lang.Object obj) exit
-  not called
+  [1] [Field DataStructures.CursorList.SPACE_SIZE]
+  [3] [Field DataStructures.CursorList.cursorSpace, Field DataStructures.CursorList.cursorSpace[..].next, Field header]
+  [1] [Class of DataStructures.CursorList.cursorSpace]
+  [1] [Array DataStructures.CursorList.cursorSpace[..]]
+  [1] [Field DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..].element]
+  [1] [Class of DataStructures.CursorList.cursorSpace[..]]
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
 
 Variable sets for DataStructures.CursorNode.<init>(java.lang.Object theElement) enter
-  not called
+  [1] [Parameter theElement]
+  [1] [Class of theElement]
 Variable sets for DataStructures.CursorNode.<init>(java.lang.Object theElement) exit
-  not called
+  [1] [Parameter theElement]
+  [1] [Class of theElement]
+  [1] [this]
+  [1] [Field element]
+  [1] [Class of Field element]
+  [1] [Field next]
 
 Variable sets for DataStructures.CursorNode.<init>(java.lang.Object theElement, int n) enter
   [1] [Parameter n]
@@ -253,9 +278,20 @@ Variable sets for DataStructures.CursorNode.<init>(java.lang.Object theElement, 
   [1] [Class of Field element]
 
 Variable sets for DataStructures.CursorNode.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [1] [Field element]
+  [1] [Class of Field element]
+  [1] [Field next]
 Variable sets for DataStructures.CursorNode.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [1] [Field element]
+  [1] [Class of Field element]
+  [1] [Field next]
 
 Variable sets for DataStructures.CursorListItr.<init>(int theNode) enter
   [1] [Parameter theNode]
@@ -288,6 +324,13 @@ Variable sets for DataStructures.CursorListItr.advance() exit
   [1] [Field current]
 
 Variable sets for DataStructures.CursorListItr.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [1] [Field current]
 Variable sets for DataStructures.CursorListItr.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [1] [Field current]

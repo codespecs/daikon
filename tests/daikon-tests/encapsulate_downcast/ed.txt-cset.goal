@@ -1,8 +1,11 @@
 
 Variable sets for misc.EncapsulateDowncast.<init>() enter
-  not called
 Variable sets for misc.EncapsulateDowncast.<init>() exit
-  not called
+  [1] [Field misc.EncapsulateDowncast.CASES]
+  [1] [Field misc.EncapsulateDowncast.SEED]
+  [1] [Field misc.EncapsulateDowncast.random]
+  [1] [Field misc.EncapsulateDowncast.random2]
+  [1] [this]
 
 Variable sets for misc.EncapsulateDowncast.showLastPerson(java.util.Vector list) enter
   [1] [Parameter list]
@@ -41,9 +44,22 @@ Variable sets for misc.EncapsulateDowncast.main([Ljava.lang.String; argv) exit
   [1] [Field misc.EncapsulateDowncast.random2]
 
 Variable sets for misc.EncapsulateDowncast.equals(java.lang.Object obj) enter
-  not called
+  [1] [Field misc.EncapsulateDowncast.CASES]
+  [1] [Field misc.EncapsulateDowncast.SEED]
+  [1] [Field misc.EncapsulateDowncast.random]
+  [1] [Field misc.EncapsulateDowncast.random2]
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
 Variable sets for misc.EncapsulateDowncast.equals(java.lang.Object obj) exit
-  not called
+  [1] [Field misc.EncapsulateDowncast.CASES]
+  [1] [Field misc.EncapsulateDowncast.SEED]
+  [1] [Field misc.EncapsulateDowncast.random]
+  [1] [Field misc.EncapsulateDowncast.random2]
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
 
 Variable sets for misc.Person.<init>(java.lang.String name, int height, int weight) enter
   [1] [Parameter height]
@@ -59,11 +75,34 @@ Variable sets for misc.Person.<init>(java.lang.String name, int height, int weig
   [2] [Field _weight, Parameter weight]
 
 Variable sets for misc.Person.getName() enter
-  not called
+  [1] [this]
+  [1] [Field _height]
+  [1] [Field _name]
+  [1] [String Field _name.toString]
+  [1] [Field _weight]
 Variable sets for misc.Person.getName() exit
-  not called
+  [1] [return]
+  [1] [String return.toString]
+  [1] [this]
+  [1] [Field _height]
+  [1] [Field _name]
+  [1] [String Field _name.toString]
+  [1] [Field _weight]
 
 Variable sets for misc.Person.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [1] [Field _height]
+  [1] [Field _name]
+  [1] [String Field _name.toString]
+  [1] [Field _weight]
 Variable sets for misc.Person.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [1] [Field _height]
+  [1] [Field _name]
+  [1] [String Field _name.toString]
+  [1] [Field _weight]

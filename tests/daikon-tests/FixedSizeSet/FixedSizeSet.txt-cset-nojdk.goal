@@ -34,10 +34,9 @@ Variable sets for six170.FixedSizeSet.contains(int n) exit
 
 Variable sets for six170.FixedSizeSet.intersect(six170.FixedSizeSet other) enter
   [1] [Parameter other]
-  [1] [Field other.bits]
+  [2] [Field other.bits, Field bits]
   [1] [Array other.bits[..]]
   [1] [this]
-  [1] [Field bits]
   [1] [Array Field bits[..]]
 Variable sets for six170.FixedSizeSet.intersect(six170.FixedSizeSet other) exit
   [1] [Parameter other]
@@ -48,10 +47,9 @@ Variable sets for six170.FixedSizeSet.intersect(six170.FixedSizeSet other) exit
 
 Variable sets for six170.FixedSizeSet.union(six170.FixedSizeSet other) enter
   [1] [Parameter other]
-  [1] [Field other.bits]
+  [2] [Field other.bits, Field bits]
   [1] [Array other.bits[..]]
   [1] [this]
-  [1] [Field bits]
   [1] [Array Field bits[..]]
 Variable sets for six170.FixedSizeSet.union(six170.FixedSizeSet other) exit
   [1] [Parameter other]
@@ -61,6 +59,15 @@ Variable sets for six170.FixedSizeSet.union(six170.FixedSizeSet other) exit
   [1] [Array Field bits[..]]
 
 Variable sets for six170.FixedSizeSet.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [1] [Field bits]
+  [1] [Array Field bits[..]]
 Variable sets for six170.FixedSizeSet.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [1] [Field bits]
+  [1] [Array Field bits[..]]

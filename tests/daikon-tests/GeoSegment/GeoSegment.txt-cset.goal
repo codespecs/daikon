@@ -1,7 +1,6 @@
 
 Variable sets for MapQuick1.GeoPoint.<init>(int latitude, int longitude) enter
-  [1] [Parameter latitude]
-  [1] [Parameter longitude]
+  [2] [Parameter latitude, Parameter longitude]
 Variable sets for MapQuick1.GeoPoint.<init>(int latitude, int longitude) exit
   [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
   [4] [Parameter latitude, Parameter longitude, Field latitude, Field longitude]
@@ -20,9 +19,14 @@ Variable sets for MapQuick1.GeoPoint.equals(java.lang.Object o) exit
   [2] [Field latitude, Field longitude]
 
 Variable sets for MapQuick1.GeoPoint.hashCode() enter
-  not called
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [this]
+  [2] [Field latitude, Field longitude]
 Variable sets for MapQuick1.GeoPoint.hashCode() exit
-  not called
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [return]
+  [1] [this]
+  [2] [Field latitude, Field longitude]
 
 Variable sets for MapQuick1.GeoPoint.distanceTo(MapQuick1.GeoPoint gp) enter
   [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
@@ -48,9 +52,8 @@ Variable sets for MapQuick1.GeoSegment.<init>(java.lang.String name, MapQuick1.G
   [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
   [1] [Parameter name]
   [1] [String name.toString]
-  [1] [Parameter p1]
+  [2] [Parameter p1, Parameter p2]
   [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
-  [1] [Parameter p2]
 Variable sets for MapQuick1.GeoSegment.<init>(java.lang.String name, MapQuick1.GeoPoint p1, MapQuick1.GeoPoint p2) exit
   [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
   [2] [Parameter name, Field name]
@@ -61,9 +64,28 @@ Variable sets for MapQuick1.GeoSegment.<init>(java.lang.String name, MapQuick1.G
   [1] [String Field name.toString]
 
 Variable sets for MapQuick1.GeoSegment.reverse() enter
-  not called
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
 Variable sets for MapQuick1.GeoSegment.reverse() exit
-  not called
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [return]
+  [1] [Field return.name]
+  [1] [String return.name.toString]
+  [1] [Field return.p1]
+  [1] [Field return.p1.latitude]
+  [1] [Field return.p1.longitude]
+  [1] [Field return.p2]
+  [1] [Field return.p2.latitude]
+  [1] [Field return.p2.longitude]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
 
 Variable sets for MapQuick1.GeoSegment.name() enter
   [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
@@ -162,6 +184,17 @@ Variable sets for MapQuick1.GeoSegment.equals(java.lang.Object o) exit
   [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
 
 Variable sets for MapQuick1.GeoSegment.hashCode() enter
-  not called
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]
 Variable sets for MapQuick1.GeoSegment.hashCode() exit
-  not called
+  [1] [Field MapQuick1.GeoPoint.REP_SCALE_FACTOR]
+  [1] [return]
+  [1] [this]
+  [1] [Field name]
+  [1] [String Field name.toString]
+  [2] [Field p1, Field p2]
+  [4] [Field p1.latitude, Field p1.longitude, Field p2.latitude, Field p2.longitude]

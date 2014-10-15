@@ -2,9 +2,8 @@
 Variable sets for DataStructures.DisjSets.<init>(int numElements) enter
   [1] [Parameter numElements]
 Variable sets for DataStructures.DisjSets.<init>(int numElements) exit
-  [2] [Parameter numElements, Field s]
+  [3] [Parameter numElements, Field s, Array Field s[..]]
   [1] [this]
-  [1] [Array Field s[..]]
 
 Variable sets for DataStructures.DisjSets.unionDisjoint(int root1, int root2) enter
   [4] [Parameter root1, Parameter root2, Field s, Array Field s[..]]
@@ -28,6 +27,13 @@ Variable sets for DataStructures.DisjSets.find(int x) exit
   [1] [this]
 
 Variable sets for DataStructures.DisjSets.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [2] [Field s, Array Field s[..]]
 Variable sets for DataStructures.DisjSets.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [2] [Field s, Array Field s[..]]

@@ -68,9 +68,30 @@ Variable sets for misc.Param.<init>() exit
   [1] [Field gs2.b]
 
 Variable sets for misc.Param.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [1] [Field gi1]
+  [1] [Field gi2]
+  [1] [Field gs1]
+  [1] [Field gs1.a]
+  [1] [Field gs1.b]
+  [1] [Field gs2]
+  [1] [Field gs2.a]
+  [1] [Field gs2.b]
 Variable sets for misc.Param.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [1] [Field gi1]
+  [1] [Field gi2]
+  [1] [Field gs1]
+  [1] [Field gs1.a]
+  [1] [Field gs1.b]
+  [1] [Field gs2]
+  [1] [Field gs2.a]
+  [1] [Field gs2.b]
 
 Variable sets for misc.ParamType.<init>() enter
 Variable sets for misc.ParamType.<init>() exit
@@ -79,6 +100,15 @@ Variable sets for misc.ParamType.<init>() exit
   [1] [Field b]
 
 Variable sets for misc.ParamType.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [1] [Field a]
+  [1] [Field b]
 Variable sets for misc.ParamType.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [1] [Field a]
+  [1] [Field b]

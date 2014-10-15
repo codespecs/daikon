@@ -59,6 +59,15 @@ Variable sets for six170.FixedSizeSet.union(six170.FixedSizeSet other) exit
   [1] [Array Field bits[..]]
 
 Variable sets for six170.FixedSizeSet.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [1] [Field bits]
+  [1] [Array Field bits[..]]
 Variable sets for six170.FixedSizeSet.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [1] [Field bits]
+  [1] [Array Field bits[..]]

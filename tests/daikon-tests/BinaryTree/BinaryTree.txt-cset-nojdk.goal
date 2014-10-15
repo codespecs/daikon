@@ -72,9 +72,11 @@ Variable sets for DataStructures.BinarySearchTree.isEmpty() exit
   [1] [Field root]
 
 Variable sets for DataStructures.BinarySearchTree.printTree() enter
-  not called
+  [1] [this]
+  [1] [Field root]
 Variable sets for DataStructures.BinarySearchTree.printTree() exit
-  not called
+  [1] [this]
+  [1] [Field root]
 
 Variable sets for DataStructures.BinarySearchTree.elementAt(DataStructures.BinaryNode t) enter
   [2] [Parameter t, Field root]
@@ -133,11 +135,22 @@ Variable sets for DataStructures.BinarySearchTree.find(DataStructures.Comparable
   [1] [Class of x]
 
 Variable sets for DataStructures.BinarySearchTree.printTree(DataStructures.BinaryNode t) enter
-  not called
+  [1] [Parameter t]
+  [1] [this]
+  [1] [Field root]
 Variable sets for DataStructures.BinarySearchTree.printTree(DataStructures.BinaryNode t) exit
-  not called
+  [1] [Parameter t]
+  [1] [this]
+  [1] [Field root]
 
 Variable sets for DataStructures.BinarySearchTree.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [1] [Field root]
 Variable sets for DataStructures.BinarySearchTree.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [1] [Field root]

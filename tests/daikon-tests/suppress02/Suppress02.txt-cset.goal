@@ -22,11 +22,19 @@ Variable sets for misc.Suppress02.f(int n) exit
 Variable sets for misc.Suppress02.<init>() enter
 Variable sets for misc.Suppress02.<init>() exit
   [1] [this]
-  [1] [Field i]
-  [1] [Field j]
+  [2] [Field i, Field j]
   [2] [Field theArray, Array Field theArray[..]]
 
 Variable sets for misc.Suppress02.equals(java.lang.Object obj) enter
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [2] [Field i, Field j]
+  [2] [Field theArray, Array Field theArray[..]]
 Variable sets for misc.Suppress02.equals(java.lang.Object obj) exit
-  not called
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [2] [Field i, Field j]
+  [2] [Field theArray, Array Field theArray[..]]

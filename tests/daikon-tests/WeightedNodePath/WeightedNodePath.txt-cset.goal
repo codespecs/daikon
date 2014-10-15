@@ -2,15 +2,11 @@
 Variable sets for MapQuick.WeightedNodePath.<init>(MapQuick.WeightedNode node) enter
   [1] [Parameter node]
 Variable sets for MapQuick.WeightedNodePath.<init>(MapQuick.WeightedNode node) exit
-  [2] [Parameter node, Field node]
+  [4] [Parameter node, Field node, Field path.node, Field path.path.node]
   [1] [this]
-  [1] [Field cost]
+  [3] [Field cost, Field path.cost, Field path.path.cost]
   [1] [Field path]
-  [1] [Field path.cost]
-  [1] [Field path.node]
   [1] [Field path.path]
-  [1] [Field path.path.cost]
-  [1] [Field path.path.node]
   [1] [Field path.path.path]
 
 Variable sets for MapQuick.WeightedNodePath.<init>(MapQuick.WeightedNode node, MapQuick.WeightedNodePath path) enter
@@ -96,16 +92,67 @@ Variable sets for MapQuick.WeightedNodePath.elements() exit
   [1] [Field path.path.path]
 
 Variable sets for MapQuick.WeightedNodePath.equals(java.lang.Object o) enter
-  not called
+  [1] [Parameter o]
+  [1] [Class of o]
+  [1] [this]
+  [3] [Field cost, Field path.cost, Field path.path.cost]
+  [3] [Field node, Field path.node, Field path.path.node]
+  [1] [Field path]
+  [1] [Field path.path]
+  [1] [Field path.path.path]
 Variable sets for MapQuick.WeightedNodePath.equals(java.lang.Object o) exit
-  not called
+  [1] [Parameter o]
+  [1] [Class of o]
+  [1] [return]
+  [1] [this]
+  [3] [Field cost, Field path.cost, Field path.path.cost]
+  [3] [Field node, Field path.node, Field path.path.node]
+  [1] [Field path]
+  [1] [Field path.path]
+  [1] [Field path.path.path]
 
 Variable sets for MapQuick.WeightedNodePath.equals(MapQuick.WeightedNodePath wnp) enter
-  not called
+  [1] [this]
+  [3] [Field cost, Field path.cost, Field path.path.cost]
+  [3] [Field node, Field path.node, Field path.path.node]
+  [1] [Field path]
+  [1] [Field path.path]
+  [1] [Field path.path.path]
+  [1] [Parameter wnp]
+  [1] [Field wnp.cost]
+  [1] [Field wnp.node]
+  [1] [Field wnp.path]
+  [1] [Field wnp.path.cost]
+  [1] [Field wnp.path.node]
+  [1] [Field wnp.path.path]
 Variable sets for MapQuick.WeightedNodePath.equals(MapQuick.WeightedNodePath wnp) exit
-  not called
+  [1] [return]
+  [1] [this]
+  [3] [Field cost, Field path.cost, Field path.path.cost]
+  [3] [Field node, Field path.node, Field path.path.node]
+  [1] [Field path]
+  [1] [Field path.path]
+  [1] [Field path.path.path]
+  [1] [Parameter wnp]
+  [1] [Field wnp.cost]
+  [1] [Field wnp.node]
+  [1] [Field wnp.path]
+  [1] [Field wnp.path.cost]
+  [1] [Field wnp.path.node]
+  [1] [Field wnp.path.path]
 
 Variable sets for MapQuick.WeightedNodePath.hashCode() enter
-  not called
+  [1] [this]
+  [3] [Field cost, Field path.cost, Field path.path.cost]
+  [3] [Field node, Field path.node, Field path.path.node]
+  [1] [Field path]
+  [1] [Field path.path]
+  [1] [Field path.path.path]
 Variable sets for MapQuick.WeightedNodePath.hashCode() exit
-  not called
+  [1] [return]
+  [1] [this]
+  [3] [Field cost, Field path.cost, Field path.path.cost]
+  [3] [Field node, Field path.node, Field path.path.node]
+  [1] [Field path]
+  [1] [Field path.path]
+  [1] [Field path.path.path]

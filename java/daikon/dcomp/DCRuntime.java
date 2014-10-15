@@ -1784,6 +1784,7 @@ public final class DCRuntime {
   public static void print_all_comparable(PrintWriter ps) {
 
     for (ClassInfo ci : all_classes) {
+      merge_class_comparability (ci);
       for (MethodInfo mi : ci.method_infos) {
         if (mi.is_class_init())
           continue;
@@ -1804,6 +1805,7 @@ public final class DCRuntime {
   public static void print_all_comparable_refs_only(PrintWriter ps) {
 
     for (ClassInfo ci : all_classes) {
+      merge_class_comparability (ci);
       for (MethodInfo mi : ci.method_infos) {
         if (mi.is_class_init())
           continue;
@@ -1819,6 +1821,7 @@ public final class DCRuntime {
   public static void trace_all_comparable(PrintWriter ps) {
 
     for (ClassInfo ci : all_classes) {
+      merge_class_comparability (ci);
       for (MethodInfo mi : ci.method_infos) {
         if (mi.is_class_init()) continue;
         if (mi.method_name.equals("equals_dcomp_instrumented")) continue;

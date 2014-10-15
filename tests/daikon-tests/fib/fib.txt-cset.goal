@@ -1,8 +1,9 @@
 
 Variable sets for misc.Fib.<init>() enter
-  not called
 Variable sets for misc.Fib.<init>() exit
-  not called
+  [1] [Field misc.Fib.STEPS]
+  [3] [Field misc.Fib.a, Field misc.Fib.b, Field misc.Fib.c]
+  [1] [this]
 
 Variable sets for misc.Fib.main([Ljava.lang.String; args) enter
   [1] [Parameter args]
@@ -10,9 +11,7 @@ Variable sets for misc.Fib.main([Ljava.lang.String; args) enter
   [1] [Array args[..]]
   [1] [String args[..].toString]
   [1] [Field misc.Fib.STEPS]
-  [1] [Field misc.Fib.a]
-  [1] [Field misc.Fib.b]
-  [1] [Field misc.Fib.c]
+  [3] [Field misc.Fib.a, Field misc.Fib.b, Field misc.Fib.c]
 Variable sets for misc.Fib.main([Ljava.lang.String; args) exit
   [1] [Parameter args]
   [1] [Class of args]
@@ -29,6 +28,15 @@ Variable sets for misc.Fib.increment() exit
   [3] [Field misc.Fib.a, Field misc.Fib.b, Field misc.Fib.c]
 
 Variable sets for misc.Fib.equals(java.lang.Object obj) enter
-  not called
+  [1] [Field misc.Fib.STEPS]
+  [3] [Field misc.Fib.a, Field misc.Fib.b, Field misc.Fib.c]
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
 Variable sets for misc.Fib.equals(java.lang.Object obj) exit
-  not called
+  [1] [Field misc.Fib.STEPS]
+  [3] [Field misc.Fib.a, Field misc.Fib.b, Field misc.Fib.c]
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]

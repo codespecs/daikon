@@ -1,28 +1,30 @@
 
 Variable sets for DataStructures.BinaryHeap.<init>() enter
-  not called
 Variable sets for DataStructures.BinaryHeap.<init>() exit
-  not called
-
-Variable sets for DataStructures.BinaryHeap.<init>(int capacity) enter
-  [1] [Parameter capacity]
-Variable sets for DataStructures.BinaryHeap.<init>(int capacity) exit
-  [1] [Field DataStructures.BinaryHeap.DEFAULT_CAPACITY]
-  [2] [Parameter capacity, Field array]
-  [1] [this]
-  [1] [Class of Field array]
-  [1] [Array Field array[..]]
-  [1] [Class of Field array[..]]
-  [1] [Field currentSize]
-
-Variable sets for DataStructures.BinaryHeap.insert(DataStructures.Comparable x) enter
   [1] [Field DataStructures.BinaryHeap.DEFAULT_CAPACITY]
   [1] [this]
   [2] [Field array, Field currentSize]
   [1] [Class of Field array]
   [1] [Array Field array[..]]
   [1] [Class of Field array[..]]
-  [1] [Parameter x]
+
+Variable sets for DataStructures.BinaryHeap.<init>(int capacity) enter
+  [1] [Parameter capacity]
+Variable sets for DataStructures.BinaryHeap.<init>(int capacity) exit
+  [1] [Field DataStructures.BinaryHeap.DEFAULT_CAPACITY]
+  [3] [Parameter capacity, Field array, Field currentSize]
+  [1] [this]
+  [1] [Class of Field array]
+  [1] [Array Field array[..]]
+  [1] [Class of Field array[..]]
+
+Variable sets for DataStructures.BinaryHeap.insert(DataStructures.Comparable x) enter
+  [1] [Field DataStructures.BinaryHeap.DEFAULT_CAPACITY]
+  [1] [this]
+  [2] [Field array, Field currentSize]
+  [1] [Class of Field array]
+  [2] [Array Field array[..], Parameter x]
+  [1] [Class of Field array[..]]
   [1] [Class of x]
 Variable sets for DataStructures.BinaryHeap.insert(DataStructures.Comparable x) exit
   [1] [Field DataStructures.BinaryHeap.DEFAULT_CAPACITY]
@@ -66,9 +68,19 @@ Variable sets for DataStructures.BinaryHeap.deleteMin() exit
   [1] [Class of Field array[..]]
 
 Variable sets for DataStructures.BinaryHeap.buildHeap() enter
-  not called
+  [1] [Field DataStructures.BinaryHeap.DEFAULT_CAPACITY]
+  [1] [this]
+  [2] [Field array, Field currentSize]
+  [1] [Class of Field array]
+  [1] [Array Field array[..]]
+  [1] [Class of Field array[..]]
 Variable sets for DataStructures.BinaryHeap.buildHeap() exit
-  not called
+  [1] [Field DataStructures.BinaryHeap.DEFAULT_CAPACITY]
+  [1] [this]
+  [2] [Field array, Field currentSize]
+  [1] [Class of Field array]
+  [1] [Array Field array[..]]
+  [1] [Class of Field array[..]]
 
 Variable sets for DataStructures.BinaryHeap.isEmpty() enter
   [1] [Field DataStructures.BinaryHeap.DEFAULT_CAPACITY]
@@ -103,15 +115,24 @@ Variable sets for DataStructures.BinaryHeap.isFull() exit
   [1] [Class of Field array[..]]
 
 Variable sets for DataStructures.BinaryHeap.makeEmpty() enter
-  not called
+  [1] [Field DataStructures.BinaryHeap.DEFAULT_CAPACITY]
+  [1] [this]
+  [2] [Field array, Field currentSize]
+  [1] [Class of Field array]
+  [1] [Array Field array[..]]
+  [1] [Class of Field array[..]]
 Variable sets for DataStructures.BinaryHeap.makeEmpty() exit
-  not called
+  [1] [Field DataStructures.BinaryHeap.DEFAULT_CAPACITY]
+  [1] [this]
+  [2] [Field array, Field currentSize]
+  [1] [Class of Field array]
+  [1] [Array Field array[..]]
+  [1] [Class of Field array[..]]
 
 Variable sets for DataStructures.BinaryHeap.percolateDown(int hole) enter
   [1] [Field DataStructures.BinaryHeap.DEFAULT_CAPACITY]
-  [1] [Parameter hole]
+  [3] [Parameter hole, Field array, Field currentSize]
   [1] [this]
-  [2] [Field array, Field currentSize]
   [1] [Class of Field array]
   [1] [Array Field array[..]]
   [1] [Class of Field array[..]]
@@ -137,6 +158,21 @@ Variable sets for DataStructures.BinaryHeap.main([Ljava.lang.String; args) exit
   [1] [String args[..].toString]
 
 Variable sets for DataStructures.BinaryHeap.equals(java.lang.Object obj) enter
-  not called
+  [1] [Field DataStructures.BinaryHeap.DEFAULT_CAPACITY]
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [2] [Field array, Field currentSize]
+  [1] [Class of Field array]
+  [1] [Array Field array[..]]
+  [1] [Class of Field array[..]]
 Variable sets for DataStructures.BinaryHeap.equals(java.lang.Object obj) exit
-  not called
+  [1] [Field DataStructures.BinaryHeap.DEFAULT_CAPACITY]
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [2] [Field array, Field currentSize]
+  [1] [Class of Field array]
+  [1] [Array Field array[..]]
+  [1] [Class of Field array[..]]
