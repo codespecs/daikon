@@ -2003,9 +2003,31 @@ machine at @nospellcheck{3.4GHz} with @nospellcheck{16GB} of memory. Barring any
 the entire process
 will take at least two hours - and could be much more depending on the number of
 different platforms on which you test the release.
-@sp 1
+
 @noindent
-PLEASE NOTE: @*
+IMPORTANT NOTE:
+
+The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
+from, two open source projects.  It is important to periodically
+check to see if newer versions of these projects are available.
+The home page for the Valgrind instrumentation framework is
+@uref{http://www.valgrind.org}.  We are currently using version 3.9.0,
+released in October, 2013.  The home page for the GNU Binutils
+(a collection of binary tools, of which we only use readelf) is
+@uref{http://www.gnu.org/software/binutils/}.
+We are currently using version 2.24, released in December, 2013.
+
+If you find that there are newer versions of either of these projects
+available, you should update the Fjalar source tree as soon as practical,
+possibly the next release after the one you are currently in the process
+of making.  See the separate document @cite{Merging newer versions of Valgrind
+into Fjalar} for details.
+
+@page
+@noindent
+GENERAL INSTRUCTION NOTE:
+
+@noindent
 Each of the steps below assumes that the current working directory is @file{$DAIKONDIR} 
 and that you are using the Bash shell.
 @sp 1
@@ -2024,30 +2046,33 @@ hg fetch && hg outgoing && hg status
 The last line printed should be @samp{no changes found}.
 
 [Time: moments]
-@page
 
-IMPORTANT NOTE: @*
-The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
-from, two open source projects.  It is important to periodically
-check to see if newer versions of these projects are available.
-The home page for the Valgrind instrumentation framework is
-@uref{http://www.valgrind.org}.  We are currently using version 3.9.0,
-released in October, 2013.  The home page for the GNU Binutils
-(a collection of binary tools, of which we only use readelf) is
-@uref{http://www.gnu.org/software/binutils/}.
-We are currently using version 2.24, released in December, 2013.
-
-If you find that there are newer versions of either of these projects
-available, you should update the Fjalar source tree as soon as practical,
-possibly the next release after the one you are currently in the process
-of making.  See the separate document @cite{Merging newer versions of Valgrind
-into Fjalar} for details.
-@sp 1
 
 @item
-Make sure we have the latest version of @file{bcel.jar}. Generally,
-you can ensure this by checking that the latest version of
-@file{plume.jar} is checked into @file{daikon/java/lib/plume.jar}.
+Make sure that the latest version of @file{bcel.jar} has been checked
+into the plume-lib repository.  If it has not, then do so now and you
+will need to rebuild @file{plume.jar} as noted in the following step.
+
+
+@item
+Make sure you have the latest version of the Checker Framework Java compiler. 
+See the @cite{Download} section of @uref{types.cs.washington.edu/jsr308}. 
+Make sure you have the @env{CHECKERFRAMEWORK} environment 
+variable set to the location of the Checker Framework package.
+
+If the Checker Framework has been updated since the last distribution, or
+if @file{bcel.jar} has been updated, 
+then you need to perform the following steps to update @file{plume.jar}.
+
+@example
+cd $DAIKONDIR/plume-lib/java
+hg fetch
+make clean
+make
+cp plume.jar ../../java/lib
+@end example
+
+[Time: 1 min]
 
 
 @item
@@ -2075,6 +2100,7 @@ make update-doc-dist-date-and-version
 @end example
 
 [Time: moments]
+
 
 @item
 Update the publications pages in a local copy of plume-bib. 
@@ -2104,7 +2130,31 @@ Do a clean rebuild of everything.
 make rebuild-everything
 @end example
 
-[Time: 13 min]
+[Time: 15 min]
+
+
+@item
+Run the nullness checker.  This is to verify that the Checker Framework 
+Java compiler was correctly used to build Daikon.  There should be no
+errors output.
+
+@example
+cd $DAIKONDIR/java
+make check-nullness
+@end example
+
+[Time: 20 min (due to a bug, it currently takes about an hour)]
+
+
+@item
+Run the Daikon regression tests.
+The last line printed should be "All tests succeeded."
+
+@example
+make -C $DAIKONDIR/tests clean diffs
+@end example
+
+[Time: 20 min]
 
 
 @item
@@ -2117,17 +2167,39 @@ make -C $DAIKONDIR/tests/kvasir-tests clean-all nightly-summary-w-daikon
 
 [Time: 15 min]
 
-@page
 
 @item
-Run the Daikon regression tests.
-The last line printed should be "All tests succeeded."
+Check the release documents for spelling errors.
 
 @example
-make -C $DAIKONDIR/tests clean diffs
+cd $DAIKONDIR/doc
+./spellcheck daikon
+./spellcheck developer
 @end example
 
-[Time: 20 min]
+Any words that may be spelled incorrectly are output to standard out.  There are three
+basic ways to remove items from the misspelled list:
+
+@itemize
+
+@item
+If the word is in fact misspelled, correct it.
+
+@item
+If the word is spelled correctly, and if it not a proper noun or part
+of a computer command or filename or similar construct, it should be
+added to our local dictionary.  Edit the file @file{daikon.dict} and
+add the new word - keeping the list in alphabetical order.
+
+@item
+If the word is a proper noun or some sort of technical information
+then it should be marked as such with the correct texinfo command.
+@code{@@nospellcheck} is appropriate for proper nouns.  For the 
+proper input of technical information, see "Chapter 9: Marking Text,
+Words and Phrases" of the
+@uref{http://www.gnu.org/software/texinfo/manual/texinfo/texinfo.pdf,, GNU Texinfo Manual}.
+
+@end itemize
 
 
 @item
@@ -2182,7 +2254,9 @@ make staging
 
 
 @item
-Check the website to see if it has any broken links.
+Check the website to see if it has any broken links. Do not run this step on
+@samp{buffalo}.  For some reason the system software is not up to date.  Both
+@samp{bicycle} and @samp{tricycle} have been verified to work properly.
 
 @example
 make check-for-broken-doc-links
@@ -2193,14 +2267,16 @@ re-running the tool until the output is empty.
 
 In most cases (and for most 404 errors), you should fix the document with the incorrect link.
 
-If the URL is correct but cannot be checked (for example, because the website prohibits spiders or because the URL  redirects to another URL but you prefer to keep the first URL in your document), then you may need to add lines to file @file{$DAIKONDIR/plume-lib/bin/checklink-args.txt}.
+If the URL is correct but cannot be checked (for example, because the website
+prohibits spiders or because the URL  redirects to another URL but you prefer
+to keep the first URL in your document), then you may need to add lines to
+file @file{$DAIKONDIR/plume-lib/bin/checklink-args.txt}.
 
 In some cases a "403 Forbidden" error is transient, due to the website
 being down.  You can check such links by hand.
 
 [Time: 2 min]
 
-@page
 
 @item
 Test the distribution, currently in the staging area, on a 64-bit machine.
@@ -2312,6 +2388,7 @@ make installation-test
 @end example
 @end ifnottex
 
+
 @item
 Test the distribution on a MacOSX machine.  On a MacOSX machine
 with the development tools installed, download the staged @file{daikon.tar.gz}
@@ -2400,7 +2477,6 @@ hg push
 
 [Time: moments]
 
-@page
 
 @item
 Add a version label to the repository:
@@ -2440,7 +2516,6 @@ make update-doc-dist-date-and-version
 
 [Time: moments]
 
-
 @item
 Verify these changes by doing partial product builds:
 
@@ -2451,6 +2526,7 @@ make rebuild-everything-no-clean
 [Time: 3 min]
  
 
+@page
 @item
 Commit changes back to the repository:
 

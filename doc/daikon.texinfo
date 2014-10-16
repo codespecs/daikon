@@ -6514,7 +6514,8 @@ see @ref{New front ends,,,developer,Daikon Developer Manual}.
 @cindex WS-BPEL front end
 @cindex instrumentation, of WS-BPEL process definitions
 
-A front end for WS-BPEL process definitions, named Takuan, is distributed
+A front end for @nospellcheck{WS-BPEL} process definitions, named Takuan,
+is distributed
 separately; see @uref{https://neptuno.uca.es/redmine/projects/takuan-website}.
 
 @cindex CITADEL front end for Eiffel
