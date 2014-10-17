@@ -1521,21 +1521,21 @@ Daikon's output to expected output.  They take about an hour to run.
 
 The regression tests appear in the @file{$DAIKONDIR/tests/} directory.  Type
 @command{make} in that directory to see a list of Makefile targets.  The
-most common target is @command{make diffs}; if any resulting file has
+most common target is @command{make diffs}; if any output file has
 non-zero size, the tests fail.  You do not generally need to do
 @command{make clean}, which forces re-instrumentation (a possibly slow
 process) the next time you run the tests.
 
 As when you install or compile Daikon, when you run the tests
-environment variable @env{DAIKONDIR} (or @env{INV}, whose effect is
-the same) should be set.  Additionally, environment variable
+environment variable @env{DAIKONDIR}
+should be set.  Additionally, environment variable
 @env{JAVA_HOME} should be the directory containing the Java JDK@.
 
 You should generally run the regression tests before checking it a
 change (especially any non-trivial change).  If any of the regression
 test diffs has a non-zero size, then your edits have changed Daikon's
 output and you should not check in without carefully determining that
-the changes are intentional and desirable (and you should update the
+the changes are intentional and desirable (in which case you should update the
 goal output files, so that the diffs are again zero).
 
 There are several subdirectories under @file{$DAIKONDIR/tests/}, testing
@@ -1560,10 +1560,10 @@ because it controls so many types of tests.
 @subsection Kvasir regression tests
 
 
-Note on Kvasir tests: The Kvasir (Daikon C front-end) tests appear in the 
+The Kvasir (Daikon C front-end) tests appear in the 
 @file{$DAIKONDIR/tests/kvasir-tests} directory. These tests run Daikon to ensure 
 that the Kvasir output is valid Daikon input. To run them, go to 
-@file{$DAIKONDIR/tests/kvasir-tests} or any test sub-directory within here and run 
+@file{$DAIKONDIR/tests/kvasir-tests} or of its sub-directories and run 
 @command{make summary-w-daikon}. If any tests return @samp{FAILED}, then
 you should look at the appropriate @file{.diff} file. If you feel that the 
 failure was actually a result of your Daikon changes and should be in fact 
@@ -1594,7 +1594,7 @@ Create a new subdirectory of
 
 @item
 Put the source files for the test under @file{$DAIKONDIR/tests/sources/},
-not in the test directory itself.  You may be able to re-use existing
+not in the test directory itself.  Your test may be able to re-use existing
 Java source code that appears in that directory.
 
 @item
@@ -1665,12 +1665,14 @@ Then, commit the goal files, Makefile, and source files
 to the repository.
 
 @item
-The test can be added into the standard tests (either @samp{everything} or
-@samp{quick}) by adding the test the appropriate list in 
+Make the new test be run by adding to the appropriate list (usually
+@samp{everything} or @samp{quick}) in 
 @file{$DAIKONDIR/tests/daikon-tests/Makefile}.
 
 @end enumerate
 
+For more information, see the comments in file
+@file{$DAIKONDIR/tests/Makefile.common}.
 
 @node    Editing
 @chapter Editing Daikon source code
