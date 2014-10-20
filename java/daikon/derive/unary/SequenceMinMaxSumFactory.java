@@ -6,6 +6,10 @@ import daikon.VarInfo;
 import daikon.ProglangType;
 import daikon.inv.OutputFormat;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public final class SequenceMinMaxSumFactory extends UnaryDerivationFactory {
 
   public UnaryDerivation /*@Nullable*/ [] instantiate(VarInfo vi) {

@@ -13,6 +13,10 @@ import java.util.StringTokenizer;
 import plume.MultiRandSelector;
 import plume.UtilMDE;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 public class TraceSelect {
 
   private static final int DEFAULT_NUM = 10;

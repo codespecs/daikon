@@ -4,6 +4,10 @@ import daikon.*;
 import daikon.inv.*;
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+*/
+
 /**
  * Abstract base class used to evaluate single double sequences.
  **/

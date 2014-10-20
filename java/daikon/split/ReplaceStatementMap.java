@@ -2,6 +2,11 @@ package daikon.split;
 
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * ReplaceStatementMap is a immutable ADT for holding ReplaceStatements
  * that need to be looked-up by their method names.

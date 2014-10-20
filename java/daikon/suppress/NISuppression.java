@@ -12,6 +12,11 @@ import java.lang.reflect.*;
 import java.util.logging.Logger;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Class that defines a single non-instantiating suppression.  A suppression
  * consists of one or more suppressors and a suppressee.  If each of the

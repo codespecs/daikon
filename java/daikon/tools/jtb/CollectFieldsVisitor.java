@@ -4,6 +4,10 @@ import java.util.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Method "fieldDeclarations" returns a list of all FieldDeclarations
  * declared in this class (or, optionally, in nested classes).

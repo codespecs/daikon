@@ -13,6 +13,12 @@ import java.lang.reflect.*;
 import java.util.logging.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 // Outstanding NIS todo list
 //
 //  - Merging is slow when there are multiple children.

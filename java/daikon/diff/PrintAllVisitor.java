@@ -5,6 +5,10 @@ import java.text.*;
 import daikon.*;
 import daikon.inv.Invariant;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Prints all the invariant pairs, including pairs containing
  * identical invariants.

@@ -8,6 +8,11 @@ import plume.*;
 import java.util.*;
 import java.io.Serializable;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Tracks every unique value and how many times it occurs.
  */

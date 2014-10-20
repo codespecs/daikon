@@ -3,6 +3,10 @@ import daikon.*;
 import plume.Pair;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Enumeration type for output style.
  * (Should this be somewhere else?)

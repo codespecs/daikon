@@ -11,6 +11,10 @@ import java.util.Iterator;
 import plume.*;
 import daikon.inv.Invariant;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * A stack of Lemmas that shadows the stack of assumptions that
  * Simplify keeps. Keeping this stack is necessary if we're to be able

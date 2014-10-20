@@ -6,6 +6,10 @@ import daikon.split.misc.*;
 import plume.*;
 import java.util.logging.Logger;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * This factory creates Splitters from map files.  The splitters
  * partition the data based upon the the caller (i.e., which static

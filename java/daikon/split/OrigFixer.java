@@ -5,6 +5,10 @@ import jtb.visitor.*;
 import daikon.tools.jtb.*;
 import jtb.ParseException;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * OrigFixer is a visitor for a jtb syntax tree that replaces instances of
  * of "orig()" with "orig_".  For example, "orig(x) &lt; y" would yield

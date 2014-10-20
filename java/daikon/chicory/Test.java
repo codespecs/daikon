@@ -3,6 +3,10 @@ package daikon.chicory;
 import java.io.*;
 import static java.lang.System.out;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 class Test {
 
   int t1 = 55;

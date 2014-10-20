@@ -3,6 +3,11 @@ package daikon.diff;
 import daikon.PptTopLevel;
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Contains a pair of Ppts.  Resides in the second level of the tree.
  * All its children are InvNodes.

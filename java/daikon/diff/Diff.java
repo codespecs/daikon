@@ -10,6 +10,12 @@ import gnu.getopt.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Diff is the main class for the invariant diff program.  The
  * invariant diff program outputs the differences between two sets of

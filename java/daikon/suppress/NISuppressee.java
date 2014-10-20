@@ -12,6 +12,11 @@ import java.lang.reflect.*;
 import java.util.logging.Logger;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Defines a suppressee for non-instantiating suppression.  A suppressee
  * consists only of the class at this point since ternary invariants

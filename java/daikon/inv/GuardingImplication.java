@@ -2,6 +2,10 @@ package daikon.inv;
 
 import daikon.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  *  This is a special implication invariant that guards any invariants that
  *  are over variables that are sometimes missing.  For example, if the

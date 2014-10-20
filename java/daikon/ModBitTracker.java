@@ -5,6 +5,10 @@ import java.util.*;
 
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 
 // "ModBitTracker" is a poor name for this class, since it tracks
 // whether a value is missing, not whether it is modified.

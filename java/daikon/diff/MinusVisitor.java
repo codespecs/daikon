@@ -3,6 +3,10 @@ package daikon.diff;
 import daikon.*;
 import daikon.inv.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Computes A - B, where A and B are the two sets of invariants.
  **/

@@ -2,6 +2,11 @@ package daikon;
 
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Helper classes for quantification for various output formats
  */

@@ -8,6 +8,11 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 
 // Note that this Invariant is used in a *very* different way from
 // the same-named one in V2.  In V2, this is just for printing.  In V3,

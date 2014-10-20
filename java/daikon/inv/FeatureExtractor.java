@@ -11,6 +11,11 @@ import java.io.*;
 import java.util.*;
 import java.text.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * An invariant feature extractor.
  * This class creates a labeling of invariants.

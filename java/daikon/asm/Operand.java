@@ -7,6 +7,10 @@ import java.util.Set;
 import java.util.regex.Matcher;
 import java.util.regex.Pattern;
 
+/*>>>
+import org.checkerframework.checker.regex.qual.*;
+*/
+
 /**
  * Utility methods for operands of instructions.
  *

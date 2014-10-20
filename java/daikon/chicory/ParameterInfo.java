@@ -3,6 +3,10 @@ package daikon.chicory;
 import java.lang.reflect.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 
 /**
  * The ParameterInfo class is a subtype of DaikonVariableInfo used for

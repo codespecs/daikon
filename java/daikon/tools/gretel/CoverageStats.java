@@ -4,6 +4,10 @@ import java.lang.reflect.Method;
 import java.text.DecimalFormat;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 // see /g4/projects/invariants/tools/Gretel/current/lib/residue
 
 /**

@@ -12,6 +12,11 @@ import gnu.getopt.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Functions that look for relationships between the invariants at
  * different program points.  Relationships between individual invariants

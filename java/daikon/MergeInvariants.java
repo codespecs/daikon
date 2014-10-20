@@ -10,6 +10,10 @@ import plume.*;
 import daikon.suppress.NIS;
 import daikon.split.PptSplitter;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Merges invariants from multiple invariant files into a single invariant
  * file.  It does this by forming a hierarchy over the ppts from each

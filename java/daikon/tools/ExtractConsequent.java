@@ -9,6 +9,10 @@ import plume.UtilMDE;
 import daikon.*;
 import daikon.inv.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Extract the consequents of all Implication invariants that are predicated
  * by membership in a cluster, from a .inv file.  An example of such an

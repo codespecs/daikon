@@ -12,6 +12,10 @@ import gnu.getopt.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * InvariantChecker reads an invariant file and trace file.  It prints errors
  * for any invariants that are violated by the trace file.

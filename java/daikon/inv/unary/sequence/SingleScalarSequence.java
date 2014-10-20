@@ -4,6 +4,11 @@ import daikon.*;
 import daikon.inv.*;
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Abstract base class used to evaluate single long sequences.
  **/

@@ -5,6 +5,10 @@ import daikon.inv.*;
 import daikon.inv.unary.OneOf;
 import daikon.inv.unary.scalar.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 public class OnlyConstantVariablesFilter extends InvariantFilter {
   public String getDescription() {
     return "Suppress invariants containing only constants";

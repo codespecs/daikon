@@ -5,6 +5,11 @@ import daikon.inv.DummyInvariant;
 import daikon.split.*;
 import plume.ArraysMDE;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * This splitter tests the condition "$caller one of { some set of integers }".
  **/

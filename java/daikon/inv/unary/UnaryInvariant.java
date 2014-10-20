@@ -4,6 +4,10 @@ import daikon.inv.*;
 import daikon.PptSlice;
 import daikon.inv.InvariantStatus;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+*/
+
 /**
  * Exists simply to provide the do-nothing resusurrect_done method and
  * abstract add method.

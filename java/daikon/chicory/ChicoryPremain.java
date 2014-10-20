@@ -15,6 +15,11 @@ import daikon.util.*;
 
 import static daikon.tools.nullness.NullnessUtils.castNonNull;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+*/
+
 public class ChicoryPremain {
 
   // Premain specific options.  Most options are the same as Chicory.

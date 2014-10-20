@@ -6,6 +6,10 @@ import java.util.*;
 
 import daikon.Chicory;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  *  DTraceWriter writes .dtrace program points to an output stream.
  *  It uses the trees created by the {@link DeclWriter}.

@@ -7,6 +7,11 @@ import plume.*;
 
 import java.util.logging.Logger;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Represents the concatenation of two base variables.  This derived
  * variable works for both sequences of numbers and strings.

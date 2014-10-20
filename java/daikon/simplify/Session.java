@@ -3,6 +3,10 @@ package daikon.simplify;
 import java.io.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 
 /**
  * A session is a channel to the Simplify theorem-proving tool.  Once

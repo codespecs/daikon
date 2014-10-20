@@ -5,6 +5,10 @@ import java.util.logging.Level;
 import daikon.inv.Invariant;
 import java.io.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 
 /**
  * Prints the differing invariant pairs.

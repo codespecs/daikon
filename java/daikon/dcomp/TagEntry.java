@@ -6,6 +6,10 @@ import daikon.chicory.DaikonVariableInfo;
 import java.lang.ref.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Union/Find datastructure for Objects without the ranking optimization.
  * All references to the Objects are weak so that they will be removed from

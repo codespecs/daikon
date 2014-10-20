@@ -134,6 +134,12 @@ import plume.*;
 import java.util.*;
 import java.util.logging.Logger;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 
 /**
  * Represents an invariant between a PRIMITIVE scalar and a

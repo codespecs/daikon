@@ -9,6 +9,11 @@ import daikon.PptTopLevel.PptType;
 import daikon.Chicory;
 import daikon.util.SimpleLog;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  *
  * DeclWriter writes the .decls file to a stream.  It

@@ -54,6 +54,11 @@ import daikon.suppress.NIS;
 import java.util.*;
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Represents a Linear invariant over three PRIMITIVE scalars <code>x</code>,
  * <code>y</code>, and <code>z</code>, of the form

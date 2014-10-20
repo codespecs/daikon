@@ -3,6 +3,11 @@ package daikon.diff;
 import daikon.inv.Invariant;
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Contains a pair of Invariants.  Resides in the third level of the tree.
  * Has no children.

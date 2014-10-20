@@ -6,6 +6,10 @@ import daikon.*;
 import daikon.inv.*;
 import plume.IterableIterator;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Maps ppts to lists of invariants.  Has an iterator to return the
  * ppts in the order they were inserted.

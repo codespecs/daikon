@@ -173,6 +173,12 @@ import static daikon.inv.Invariant.asInvClass;
 import plume.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Baseclass for binary numeric invariants.
  *

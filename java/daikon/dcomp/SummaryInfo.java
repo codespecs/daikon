@@ -22,6 +22,12 @@ import daikon.util.BCELUtil;
 
 import org.apache.commons.io.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 
 /**
  * Information about DF summary routines.  These routines are called in

@@ -5,6 +5,13 @@ import java.io.*;
 
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Represents the type of a variable, for its declared, dtrace file
  * representation, and internal representations.  ProgLangTypes are

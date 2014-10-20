@@ -8,6 +8,11 @@ import java.util.regex.PatternSyntaxException;
 import daikon.chicory.*;
 import daikon.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * This is the main class for Chicory which transforms the class files
  * of a program to instrument it for Daikon.  The instrumentation uses

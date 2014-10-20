@@ -58,6 +58,11 @@ import daikon.suppress.NIS;
 import daikon.suppress.NIS.SuppressionProcessor;
 import daikon.util.Pair;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 
 /**
  * The "main" method is the main entry point for the Daikon invariant detector.

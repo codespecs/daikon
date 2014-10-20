@@ -4,6 +4,11 @@ import daikon.*;
 
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * This is a temporary structure for grouping elements to be returned
  * from computeValueAndModified, not for permanent storage.

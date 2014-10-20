@@ -7,6 +7,10 @@ import jtb.visitor.*;
 import jtb.ParseException;
 import daikon.tools.jtb.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 
 /**
  * StatementReplacer is a jtb syntax tree visitor that replaces method calls

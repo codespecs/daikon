@@ -22,6 +22,12 @@ import java.util.regex.*;
 import java.util.*;
 import java.io.Serializable;
 
+/*>>>
+import org.checkerframework.checker.formatter.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Base implementation for Invariant objects.
  * Intended to be subclassed but not to be directly instantiated.

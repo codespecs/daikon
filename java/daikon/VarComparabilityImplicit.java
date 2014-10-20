@@ -3,6 +3,11 @@ package daikon;
 import java.util.Vector;
 import java.io.Serializable;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * A VarComparabilityImplicit is an arbitrary integer, and comparisons
  * succeed exactly if the two integers are equal, except that negative

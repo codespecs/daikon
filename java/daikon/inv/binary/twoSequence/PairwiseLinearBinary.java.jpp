@@ -36,6 +36,12 @@ import daikon.inv.binary.twoScalar.*;
 import daikon.Quantify.QuantFlags;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Represents a linear invariant (i.e., <code>y = ax + b</code>) between
  * the corresponding elements of two sequences of PRIMITIVE values.

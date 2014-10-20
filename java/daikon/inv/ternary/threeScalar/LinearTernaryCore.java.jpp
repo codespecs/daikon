@@ -47,6 +47,11 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * The LinearTernaryCore class is acts as the backend for the
  * invariant (ax + by + cz + d = 0) by processing samples and

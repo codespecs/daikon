@@ -9,6 +9,11 @@ import java.util.HashSet;
 import java.util.List;
 import java.util.Set;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 
 /**
  * Represents a violation of a <code>Property</code>.

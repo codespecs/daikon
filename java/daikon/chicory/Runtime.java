@@ -7,6 +7,13 @@ import java.net.*;
 import java.net.Socket;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.formatter.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Runtime support for Chicory, the Daikon front end for Java.
  * This class is a collection of methods; it should never be instantiated.

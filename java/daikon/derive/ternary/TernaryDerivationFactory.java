@@ -3,6 +3,10 @@ package daikon.derive.ternary;
 import daikon.*;
 import daikon.derive.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Factory to produce TernaryDerivations.
  **/

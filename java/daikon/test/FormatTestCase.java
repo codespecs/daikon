@@ -21,6 +21,11 @@ import java.util.Vector;
 
 import plume.Intern;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+*/
+
 /**
  * This class is used by InvariantFormatTester to store data
  * representing test cases and for formatting results related to that

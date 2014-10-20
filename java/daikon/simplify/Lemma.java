@@ -4,6 +4,11 @@ import daikon.inv.Invariant;
 
 import java.util.Vector;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /** A lemma is an object that wraps a Simplify formula representing
  * some logical statement. The only other thing it adds is a short
  * human-readable description, suitable for debugging.

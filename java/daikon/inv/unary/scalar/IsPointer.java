@@ -8,6 +8,10 @@ import daikon.inv.InvariantStatus;
 import daikon.inv.OutputFormat;
 import daikon.inv.ValueSet;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * IsPointer is an invariant that heuristically determines whether
  * an integer represents a pointer (a 32-bit memory address).

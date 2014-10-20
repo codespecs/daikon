@@ -2,6 +2,10 @@ package daikon.inv.unary;
 
 import daikon.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 // An interface satisfied by OneOfScalar, OneOfString, OneOfSequence, and
 // OneOfStringSequence.
 // The variable takes on exactly one value.

@@ -3,6 +3,11 @@ package daikon.tools.jtb;
 import java.util.*;
 import java.util.regex.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Utility class to parse annotations generated with the Annotate program
  * using --wrap_xml flag.

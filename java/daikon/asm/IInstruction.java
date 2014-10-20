@@ -2,6 +2,10 @@ package daikon.asm;
 
 import java.util.Set;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /*
  * Represents an assembly instruction.
  */

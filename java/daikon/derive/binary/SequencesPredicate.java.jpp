@@ -31,6 +31,11 @@ import plume.*;
 
 import java.util.logging.Logger;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Derived variable representing the selecting of elements of one
  * sequence based on the values of another sequence.  We only

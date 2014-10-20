@@ -4,6 +4,11 @@ import java.util.regex.Pattern;
 import daikon.inv.*;
 import daikon.VarInfo;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.regex.qual.*;
+*/
+
 /**
  * A filter that filters out invariants that contain derived variables
  * of a specified derivation.  If the derivation class name contains

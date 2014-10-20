@@ -41,6 +41,11 @@ import daikon.inv.binary.BinaryInvariant;
 
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Abstract base class for comparing PRIMITIVE sequences to PRIMITIVE
  * variables.  Note that the sequence must always be passed in first.

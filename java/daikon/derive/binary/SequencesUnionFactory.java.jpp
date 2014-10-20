@@ -36,6 +36,10 @@ package daikon.derive.binary;
 
 import daikon.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 // This controls derivations which use the scalar as an index into the
 // sequence, such as getting the element at that index or a subsequence up
 // to that index.

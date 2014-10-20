@@ -29,6 +29,13 @@ import daikon.util.SimpleLog;
 
 import daikon.Chicory;
 
+/*>>>
+import org.checkerframework.checker.formatter.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * The Instrument class is responsible for modifying another class'
  * bytecode.  Specifically, its main task is to add "hooks" into the

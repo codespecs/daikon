@@ -5,6 +5,10 @@ import java.io.IOException;
 
 import java.util.logging.Logger;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * A Check command takes a given proposition and asks the Session to
  * prove it.  The apply method returns when a result is available; the

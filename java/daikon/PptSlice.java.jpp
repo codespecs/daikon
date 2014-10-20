@@ -60,6 +60,11 @@ import static daikon.tools.nullness.NullnessUtils.castNonNullDeep;
 
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Contains all of the invariants over a particular set of ARITY variables
  */

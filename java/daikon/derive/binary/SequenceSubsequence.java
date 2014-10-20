@@ -3,6 +3,10 @@ package daikon.derive.binary;
 import daikon.*;
 import daikon.derive.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Derivations of the form A[0..i] or A[i..<em>end</em>], derived from A and
  * i.
@@ -90,7 +94,7 @@ public abstract class SequenceSubsequence
     // String upper = get_upper_bound().csharp_name();
     // We do not need to check if seqvar().isPrestate() because it is redundant.
     // return seqvar().csharp_name() + ".Slice(" + lower + ", " + upper + ")";
-    return "\"SequenceSubsequence.java.jpp unimplemented\" != null";
+    return "\"SequenceSubsequence.java.jpp unimplemented\" != null"; // "interned"
   }
 
   /** Returns the ESC name **/

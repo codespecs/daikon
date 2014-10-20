@@ -12,6 +12,10 @@ import java.lang.reflect.*;
 import java.util.logging.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Class that defines a set of non-instantiating suppressions for a single
  * invariant (suppressee).

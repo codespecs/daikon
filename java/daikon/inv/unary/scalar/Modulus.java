@@ -6,6 +6,11 @@ import daikon.derive.unary.SequenceLength;
 import plume.*;
 import java.util.Iterator;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Represents the invariant <code>x == r (mod m)</code> where <code>x</code>
  * is a long scalar variable, <code>r</code> is the (constant) remainder,

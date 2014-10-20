@@ -9,6 +9,11 @@ import plume.*;
 import java.lang.reflect.*;
 import java.util.logging.Logger;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Class that defines an invariant so that it can be searched for as
  * part of suppression.

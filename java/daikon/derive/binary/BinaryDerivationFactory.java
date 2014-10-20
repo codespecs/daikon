@@ -3,6 +3,10 @@ package daikon.derive.binary;
 import daikon.*;
 import daikon.derive.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Factory to produce BinaryDerivation.
  **/

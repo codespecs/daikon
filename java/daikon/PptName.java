@@ -5,6 +5,12 @@ import java.io.Serializable;
 import java.io.IOException;
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * PptName is an immutable ADT that represents naming data associated with a
  * given program point, such as the class or method.

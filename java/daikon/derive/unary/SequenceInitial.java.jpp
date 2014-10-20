@@ -34,6 +34,11 @@ import daikon.derive.*;
 import daikon.derive.binary.*;
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 
 
 // originally from pass1.

@@ -4,6 +4,10 @@ import daikon.inv.Invariant;
 import java.io.*;
 import daikon.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /** <B>XorInvariantsVisitor</B> is a visitor that performs a
  * standard Diff on two PptMaps, that is, finds the set of
  * Invariants in the XOR set of two PptMaps.  However, while

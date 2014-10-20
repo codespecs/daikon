@@ -8,6 +8,8 @@ import java.lang.reflect.*;
 /*>>>
 import org.checkerframework.dataflow.qual.Pure;
 import org.checkerframework.framework.qual.PolyAll;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
 */
 
 /**

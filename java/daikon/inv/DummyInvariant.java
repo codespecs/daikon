@@ -4,6 +4,11 @@ import daikon.*;
 import java.util.HashSet;
 import java.util.Iterator;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * This is a special invariant used internally by Daikon to represent
  * invariants whose meaning Daikon doesn't understand. The only

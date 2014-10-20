@@ -2,6 +2,11 @@ package daikon.inv;
 
 import daikon.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 
 public abstract class Joiner
   extends Invariant {

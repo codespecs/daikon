@@ -11,6 +11,11 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Holds Equality invariants.
  **/

@@ -5,6 +5,10 @@ import jtb.visitor.*;
 import daikon.tools.jtb.*;
 import jtb.ParseException;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * PrefixFixer is a visitor for a jtb syntax tree that converts
  * prefixes of variable name to part of the variable name.

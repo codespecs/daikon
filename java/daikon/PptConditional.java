@@ -4,6 +4,10 @@ import daikon.split.*;
 import daikon.inv.DummyInvariant;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 // Information about a disjunctive program point that represents just part
 // of the data.
 // This doesn't do any direct computation, instead deferring that to its

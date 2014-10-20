@@ -5,6 +5,10 @@ import daikon.*;
 import plume.*;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 // SplitterList maps from a program point name to an array of Splitter
 // objects that should be used when splitting that program point.
 // Invariant:  each of those splitters should be non-instantiated (each is

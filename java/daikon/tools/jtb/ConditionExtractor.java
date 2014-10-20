@@ -4,6 +4,10 @@ import java.util.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 // CreateSpinfo extracts the following expressions from the Java source:
 // For each method:
 //  * extracts all expressions in conditional statements,

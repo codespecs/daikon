@@ -4,6 +4,11 @@ import daikon.*;
 import java.util.*;
 import plume.UtilMDE;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * This is a special invariant used internally by Daikon to represent
  * an antecedent invariant in an implication where that antecedent

@@ -3,6 +3,10 @@ package daikon.tools;
 import java.util.*;
 import daikon.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * A class that gives an example of how to use a FileIO.Processor object to
  * read a trace.  Invoke it like:

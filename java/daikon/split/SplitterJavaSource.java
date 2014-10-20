@@ -7,6 +7,12 @@ import jtb.ParseException;
 import java.util.*;
 import java.util.regex.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.regex.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 
 /**
  * SplitterJavaSource writes the splitter Java file's contents to a string

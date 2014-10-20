@@ -2,6 +2,10 @@ package daikon.chicory;
 
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 
 /**
  * The StaticObjInfo class is a subtype of DaikonVariableInfo used as

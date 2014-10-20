@@ -148,6 +148,12 @@ import plume.*;
 import java.util.Iterator;
 import java.util.logging.Logger;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Represents an invariant over sequences of PRIMITIVE values between the
  * index of an element of the sequence and the element itself.

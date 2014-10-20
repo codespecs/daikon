@@ -7,6 +7,10 @@ import org.apache.bcel.generic.FieldOrMethod;
 import org.apache.bcel.util.*;
 import org.apache.bcel.verifier.structurals.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 
 
 //map from handle -> Stack

@@ -220,6 +220,11 @@ import java.util.logging.Level;
 #endif
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 // This subsumes an "exact" invariant that says the value is always exactly
 // a specific value.  Do I want to make that a separate invariant
 // nonetheless?  Probably not, as this will simplify implication and such.

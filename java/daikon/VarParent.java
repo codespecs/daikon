@@ -19,6 +19,10 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.io.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Represents a parent of a variable. Includes the name of the parent
  * program point, as well as the relationship id. If the name of the

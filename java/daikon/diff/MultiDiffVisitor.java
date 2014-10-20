@@ -8,6 +8,10 @@ import java.io.*;
 import java.util.*;
 import plume.UtilMDE;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * <B>MultiDiffVisitor</B> is a state-storing NodeVisitor that works
  * across multiple files regardless of the current two-file infrastructure.

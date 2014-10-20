@@ -10,6 +10,10 @@ import java.util.*;
 
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 
 /**
  * Matches program point names with their corresponding MethodDeclaration's

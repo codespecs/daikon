@@ -2,6 +2,10 @@ package daikon;
 
 import java.io.Serializable;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Used when no VarComparability information is available (in the .dtrace file).
  * Every variable is considered comparable to every other variable.

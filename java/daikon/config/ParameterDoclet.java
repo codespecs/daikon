@@ -8,6 +8,11 @@ import com.sun.javadoc.*;
 
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+*/
+
 /**
  * ParameterDoclet is a JavaDoc doclet that collects information about
  * the runtime configuration options for the Daikon tools.  Refer to

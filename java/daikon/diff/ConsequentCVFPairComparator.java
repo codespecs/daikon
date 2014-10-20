@@ -3,6 +3,10 @@ package daikon.diff;
 import java.util.*;
 import daikon.inv.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Comparator for sorting invariants.  Uses the
  * ConsequentPairComparator, initialized with the

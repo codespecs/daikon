@@ -18,6 +18,11 @@ import daikon.inv.unary.stringsequence.EltOneOfString;
 import daikon.inv.unary.stringsequence.OneOfStringSequence;
 import daikon.chicory.DaikonVariableInfo;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 
 // For each class:  (UnmodifiedClassDeclaration)
 //  * insert object invariants

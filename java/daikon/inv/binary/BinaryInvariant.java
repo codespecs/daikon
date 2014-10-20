@@ -8,6 +8,12 @@ import static daikon.inv.Invariant.asInvClass;
 import java.lang.reflect.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Provides a class that defines the functions that must exist
  * for each two variable invariant.

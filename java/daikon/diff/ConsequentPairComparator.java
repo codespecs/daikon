@@ -3,6 +3,10 @@ package daikon.diff;
 import java.util.*;
 import daikon.inv.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Comparator for pairing invariants.  In an invariant in set2 is an
  * implication, its consequent is used instead of the whole invariant.

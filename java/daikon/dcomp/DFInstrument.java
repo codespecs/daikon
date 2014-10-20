@@ -22,6 +22,10 @@ import daikon.chicory.DaikonWriter;
 
 import daikon.DynComp;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Instruments a class file to perform Data Flow.
  */

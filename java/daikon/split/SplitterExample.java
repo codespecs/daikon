@@ -3,6 +3,10 @@ package daikon.split;
 import daikon.*;
 import daikon.inv.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 // This splitter tests the condition "X>0".
 @SuppressWarnings("nullness")   // uses private fields, client code not analyzed
 public final class SplitterExample

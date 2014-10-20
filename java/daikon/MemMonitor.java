@@ -2,6 +2,10 @@ package daikon;
 
 import java.io.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public class MemMonitor implements Runnable {
 
   PrintWriter fout;

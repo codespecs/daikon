@@ -7,6 +7,11 @@ import java.io.*;
 import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * This class consists solely of static methods that are useful when
  * working with jtb syntax tree visitors.

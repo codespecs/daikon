@@ -4,6 +4,10 @@ import daikon.*;
 import java.io.Serializable;
 import java.util.logging.Logger;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Structure that represents a derivation; can generate values and
  * derived variables from base variables.  A Derivation has a set of

@@ -20,6 +20,12 @@ import java.util.List;
 import java.util.StringTokenizer;
 import java.util.Vector;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * This is a tester for the results of adding or checking an sample
  * to an invariant.  It can test practically

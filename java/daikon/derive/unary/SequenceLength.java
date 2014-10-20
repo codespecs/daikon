@@ -5,6 +5,10 @@ import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
 import plume.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 // originally from pass1.
 public final class SequenceLength
   extends UnaryDerivation

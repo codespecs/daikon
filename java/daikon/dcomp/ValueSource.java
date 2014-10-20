@@ -11,6 +11,11 @@ import daikon.util.SimpleLog;
 import daikon.util.ArraysMDE;
 import daikon.util.Stopwatch;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Class used in dataflow that creates a tree the defines the way that
  * each value is created.

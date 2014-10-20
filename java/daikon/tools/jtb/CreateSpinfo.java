@@ -10,6 +10,10 @@ import jtb.ParseException;
 import plume.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Create a splitter info file from Java source.
  * <p>

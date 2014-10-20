@@ -6,6 +6,11 @@ import java.io.*;
 import daikon.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 // This seems to only count the left side of the pair -- it calls getPpt1
 // but not getPpt2.
 /**

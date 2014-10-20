@@ -20,6 +20,10 @@ import daikon.suppress.*;
 import daikon.split.PptSplitter;
 import daikon.config.Configuration;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * PrintInvariants prints a set of invariants from a .inv file.
  * For documentation, see section "Printing Invariants" in the Daikon

@@ -4,6 +4,10 @@ import daikon.inv.*;
 import daikon.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Filter for not printing invariants that have a matching invariant
  * at their parent PPT.

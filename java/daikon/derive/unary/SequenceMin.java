@@ -3,6 +3,10 @@ import daikon.*;
 import daikon.derive.*;
 import plume.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 // like SequenceMax; if one changes, change the other, too
 public final class SequenceMin
   extends UnaryDerivation

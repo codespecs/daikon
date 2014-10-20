@@ -8,6 +8,10 @@ import java.util.Iterator;
 import plume.EntryReader;
 import plume.UtilMDE;
 
+/*>>>
+import org.checkerframework.checker.signature.qual.*;
+*/
+
 /**
  * This class applies settings from a configuration file that lists
  * variable names and values (see "example-settings.txt" in this directory

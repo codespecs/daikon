@@ -35,6 +35,9 @@ import java.util.logging.Level;
 
 /*>>>
 import org.checkerframework.dataflow.qual.Pure;
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
 */
 
 /**

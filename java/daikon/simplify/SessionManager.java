@@ -4,6 +4,10 @@ import java.io.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * A SessionManager is a component which handles the threading
  * interaction with the Session.

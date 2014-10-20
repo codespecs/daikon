@@ -9,6 +9,10 @@ import daikon.chicory.StreamRedirectThread;
 import daikon.dcomp.*;
 import daikon.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * This is the main class for DynComp. It uses the javaagent switch to
  * java (which allows classes to be instrumented as they are loaded).

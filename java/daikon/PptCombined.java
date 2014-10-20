@@ -21,6 +21,12 @@ import daikon.asm.InstructionUtils;
 import daikon.asm.KillerInstruction;
 import daikon.asm.X86Instruction;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * A program point which consists of a number of program points.  Invariants
  * are looked for over all combinations of variables from all of the program

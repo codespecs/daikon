@@ -5,6 +5,12 @@ import daikon.util.*;
 import java.util.*;
 import java.io.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Reads declaration files and provides methods to access the information
  * within them.  A declaration file consists of a number of program points

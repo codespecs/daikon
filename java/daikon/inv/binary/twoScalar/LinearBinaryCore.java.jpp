@@ -34,6 +34,11 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.io.Serializable;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 public final class CLASSNAME
   implements Serializable, Cloneable
 {

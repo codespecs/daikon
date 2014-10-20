@@ -5,6 +5,10 @@ import daikon.inv.Implication;
 import daikon.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /** <B>ConsequentExtractorVisitor</B> is a visitor that
  *  takes in RootNode tree used by the other visitors in Diff
  *  and only modifies the first inv tree out of the pair of two

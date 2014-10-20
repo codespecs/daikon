@@ -33,6 +33,11 @@ import daikon.inv.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Represents two sequences of PRIMITIVE where one is in the reverse order
  * of the other.  Prints as <code>x[] is the reverse of y[]</code>.

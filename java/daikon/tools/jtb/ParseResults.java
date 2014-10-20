@@ -9,6 +9,10 @@ import java.io.*;
 
 import plume.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * The wrapped result of parsing a .java source file. The packageName and
  * className arguments can be obtained from root, but they are returned here

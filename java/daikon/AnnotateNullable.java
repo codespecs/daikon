@@ -14,6 +14,12 @@ import plume.Options;
 import plume.SimpleLog;
 import plume.UtilMDE;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * AnnotateNullable reads a Daikon invariant file and determines which
  * reference variables have seen any null values.  It writes to standard

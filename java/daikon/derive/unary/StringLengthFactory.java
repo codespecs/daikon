@@ -7,6 +7,10 @@ import java.util.Iterator;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public final class StringLengthFactory extends UnaryDerivationFactory {
 
   /** Debug output **/

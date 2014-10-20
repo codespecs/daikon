@@ -11,6 +11,11 @@ import org.apache.bcel.verifier.structurals.LocalVariables;
 import org.apache.bcel.verifier.structurals.Frame;
 import org.apache.bcel.verifier.structurals.UninitializedObjectType;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 
 /**
  * Stores the types on the stack at each instruction (identified by

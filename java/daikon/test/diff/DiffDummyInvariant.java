@@ -5,6 +5,10 @@ package daikon.test.diff;
 import daikon.*;
 import daikon.inv.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * A dummy invariant used for testing purposes.
  **/

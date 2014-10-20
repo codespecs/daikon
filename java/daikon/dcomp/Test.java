@@ -4,6 +4,11 @@ import java.io.*;
 import java.util.*;
 import static java.lang.System.out;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 @SuppressWarnings("nullness") // uninitialized fields default to null
 class Test {
 

@@ -3,6 +3,11 @@ package daikon.chicory;
 import java.util.*;
 import java.lang.reflect.*;
 
+/*>>>
+import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Keeps information about a method that is useful for writing out
  * decl and/or dtrace information.  Original information is filled

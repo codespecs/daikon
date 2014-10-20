@@ -14,6 +14,11 @@ import java.util.logging.Level;
 
 import junit.framework.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+*/
+
 
 /**
  * This tests Daikon's state as samples are processed.  A standard

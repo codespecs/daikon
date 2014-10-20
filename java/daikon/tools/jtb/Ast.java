@@ -21,6 +21,11 @@ import daikon.*;
 
 import java.lang.reflect.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+*/
+
 @SuppressWarnings({"rawtypes","nullness"}) // not generics-correct
 public class Ast {
 

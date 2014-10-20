@@ -5,6 +5,10 @@ import daikon.derive.*;
 
 import plume.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Abstract class to represent a derived variable that came from
  * three base variables.

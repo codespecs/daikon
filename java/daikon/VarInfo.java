@@ -22,6 +22,13 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.io.*;
 
+/*>>>
+import org.checkerframework.checker.formatter.qual.*;
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Represents information about a particular variable for a program
  * point.  This object doesn't hold the value of the variable at a

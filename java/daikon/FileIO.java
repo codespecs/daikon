@@ -24,6 +24,12 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import java.util.zip.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 public final class FileIO {
 
   /** Nobody should ever instantiate a FileIO. **/

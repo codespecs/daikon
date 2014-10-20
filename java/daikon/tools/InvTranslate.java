@@ -10,6 +10,11 @@ import gnu.getopt.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Provides a variable translation over an invariant at one program
  * point (perhaps in a different program) to a similar invariant at a

@@ -8,6 +8,10 @@ import daikon.derive.binary.SequenceSubsequence;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Invariants on a single sequence.
  **/

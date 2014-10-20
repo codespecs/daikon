@@ -2,6 +2,11 @@ package daikon.inv;
 
 import daikon.*;
 
+/*>>>
+import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * A class used for holding a DiscardCode and a string
  * that contains more detailed information about why an Invariant

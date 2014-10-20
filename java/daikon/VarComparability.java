@@ -4,6 +4,10 @@ import plume.*;
 
 import java.util.logging.Logger;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 // Internally, we use the names "array[]", "array[]-element", and
 // "array[]-indexn".  These may be different depending on the programming
 // language; for instance, C uses "*array" in place of "array[]-element".

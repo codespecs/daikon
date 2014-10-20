@@ -5,6 +5,10 @@ import java.lang.reflect.Method;
 import java.util.ArrayList;
 import java.util.List;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 
 /**
  * The PureMethodInfo class is a subtype of DaikonVariableInfo used

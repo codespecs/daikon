@@ -71,6 +71,12 @@ import java.util.logging.Logger;
 import java.util.logging.Level;
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Baseclass for unary range based invariants.  Each invariant is a
  * special stateless version of bound or oneof.  For example

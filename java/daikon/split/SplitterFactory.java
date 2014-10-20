@@ -10,6 +10,11 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.regex.*;
 
+/*>>>
+import org.checkerframework.checker.regex.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+*/
+
 /**
  * This class contains static methods parse_spinfofile(spinfofile) and
  * load_splitters() which respectively creates Splitters from a .spinfo file

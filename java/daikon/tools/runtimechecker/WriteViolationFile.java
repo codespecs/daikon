@@ -4,6 +4,10 @@ import java.lang.reflect.*;
 import java.io.*;
 import java.util.List;
 
+/*>>>
+import org.checkerframework.checker.signature.qual.*;
+*/
+
 /**
  * This program runs a given program (which is assumed to contain some
  * classes that have been instrumented with the runtimechecker

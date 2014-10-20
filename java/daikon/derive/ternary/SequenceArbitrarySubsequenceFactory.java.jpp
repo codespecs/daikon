@@ -53,6 +53,10 @@ import daikon.inv.binary.twoScalar.*; // for IntComparison
 import plume.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public final class SEQUENCESCALARSUBSCRIPTFACTORY
   extends TernaryDerivationFactory {
 

@@ -85,6 +85,11 @@ import java.lang.reflect.*;
 import java.util.*;
 import java.util.logging.Logger;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Base class for each of the CLASSNAME functions and permutatons.
  * Most of the work is done here.  The subclasses basically define the

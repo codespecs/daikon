@@ -133,6 +133,12 @@ import daikon.Quantify.QuantFlags;
 import plume.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 #if defined(EQUAL) || defined(EQUALFLOAT)
   /**
    * Represents equality between adjacent elements (x[i], x[i+1]) of a

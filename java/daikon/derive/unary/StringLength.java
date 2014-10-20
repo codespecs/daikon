@@ -5,6 +5,10 @@ import daikon.derive.binary.*;
 import daikon.derive.ternary.*;
 import plume.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /** Length of String variables **/
 public final class StringLength extends UnaryDerivation
 {

@@ -7,6 +7,10 @@ import plume.SimpleLog;
 import java.util.*;
 import java.io.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public class StackOffsets {
 
   public static class OffsetInfo {

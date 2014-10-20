@@ -9,6 +9,10 @@ import java.util.logging.Level;
 
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Debug class used with the logger to create standardized output.
  * It can be setup to track combinations of classes, program points,

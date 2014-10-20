@@ -205,6 +205,12 @@ import java.util.Iterator;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Represents an invariant between corresponding elements of two
  * sequences of PRIMITIVE values.  The length of the sequences must match for

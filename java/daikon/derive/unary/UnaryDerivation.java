@@ -5,6 +5,10 @@ import daikon.derive.*;
 
 import plume.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 public abstract class UnaryDerivation
   extends Derivation
 {

@@ -1,6 +1,10 @@
 package daikon.diff;
 import plume.Pair;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * The root of the tree.  All its children are PptNodes.
  **/

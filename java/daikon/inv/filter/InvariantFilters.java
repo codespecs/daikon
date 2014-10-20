@@ -9,6 +9,10 @@ import daikon.VarInfo;
 import daikon.PrintInvariants;
 import daikon.Daikon;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 //  This class contains a collection of invariant filters, and allows other
 //  code to perform invariant filtering.  To filter invariants, do the
 //  following:

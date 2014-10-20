@@ -32,6 +32,10 @@ import plume.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Derived variable representing the "join" of two sequences.  That
  * is, if the two sequences came from the same original data structure

@@ -6,6 +6,11 @@ import java.lang.reflect.*;
 import java.lang.reflect.Field;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 
 /**
  * The OjbectInfo class is a subtype of DaikonVariableInfo used for

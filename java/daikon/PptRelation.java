@@ -9,6 +9,11 @@ import java.util.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Class that builds and describes relations in the ppt hierachy.
  * Building the relationship is specific to each type of parent/child

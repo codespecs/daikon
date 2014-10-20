@@ -22,6 +22,12 @@ import daikon.suppress.NIS;
 
 import static daikon.Global.lineSep;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * DaikonSimple reads a declaration file and trace file and outputs a list of
  * likely invariants using the simple incremental algorithm. Its methods

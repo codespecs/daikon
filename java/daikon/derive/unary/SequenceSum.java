@@ -3,6 +3,10 @@ import daikon.*;
 import daikon.derive.*;
 import plume.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 public final class SequenceSum
   extends UnaryDerivation
 {

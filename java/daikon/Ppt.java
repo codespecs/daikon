@@ -7,6 +7,11 @@ import java.io.Serializable;
 import plume.*;
 import daikon.inv.Invariant;    // for emptyInvList
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 // Types of Ppt (program point) objects:
 //  Ppt:  abstract base class
 //  PptTopLevel:  pointed to by top-level PptMap object.  Contains all variables

@@ -14,6 +14,11 @@ import java.util.Vector;
 
 import junit.framework.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * This is a tester for the formatting of invariants in different
  * modes that is configurable by file input. It can test practically

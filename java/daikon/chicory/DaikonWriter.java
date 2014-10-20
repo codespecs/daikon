@@ -4,6 +4,10 @@ import java.lang.reflect.*;
 import daikon.Chicory;
 import daikon.util.UtilMDE;
 
+/*>>>
+import org.checkerframework.checker.signature.qual.*;
+*/
+
 /**
  * DaikonWriter is the parent class of DeclWriter and DTraceWriter.
  */

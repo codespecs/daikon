@@ -3,6 +3,12 @@ package daikon.split;
 import daikon.inv.*;
 import java.io.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * A SplitterObject is the starting point for all the information we
  * have about a splitting condition. It is created immediately when

@@ -3,6 +3,11 @@ package daikon.diff;
 import java.util.*;
 import plume.Pair;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * All nodes must subclass this class.
  * The type parameter CONTENT is (half of) the type of the objects stored in this

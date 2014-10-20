@@ -3,6 +3,11 @@ package daikon.inv;
 import daikon.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 // The downside of this extending Vector is that the operations
 // return Objects rather than Invariants.
 

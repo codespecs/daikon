@@ -10,6 +10,10 @@ import java.util.regex.*;
 import gnu.getopt.*;
 import static daikon.tools.nullness.NullnessUtils.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /** This tool is used to find the differences between two dtrace files
  *  based on analysis of the files' content, rather than a straight textual
  *  comparison.

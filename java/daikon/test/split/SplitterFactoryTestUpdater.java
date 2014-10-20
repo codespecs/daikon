@@ -6,6 +6,10 @@ import java.io.*;
 import plume.*;
 import daikon.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * This class's main method can be used to update both the
  * target files of SplitterFactoryTest and the code of the

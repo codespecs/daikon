@@ -23,6 +23,12 @@ import daikon.chicory.DaikonWriter;
 
 import daikon.DynComp;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Instruments a class file to perform Dynamic Comparability.
  */

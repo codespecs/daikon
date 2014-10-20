@@ -7,6 +7,12 @@ import plume.*;
 
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Represents a string that contains only printable ascii characters
  * (values 32 through 126 plus 9 (tab)

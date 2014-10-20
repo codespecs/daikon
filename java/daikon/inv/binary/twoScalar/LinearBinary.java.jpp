@@ -33,6 +33,11 @@ import plume.*;
 import java.util.*;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Represents a Linear invariant between two PRIMITIVE
  * scalars <code>x</code> and <code>y</code>, of the form

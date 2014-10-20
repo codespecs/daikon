@@ -3,6 +3,11 @@ package daikon.split;
 import java.io.*;
 import daikon.Daikon;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+*/
+
 /**
  * Reads in and loads compiled Java source and returns a Java Object.
  **/

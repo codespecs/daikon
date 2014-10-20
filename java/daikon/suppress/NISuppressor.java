@@ -12,6 +12,11 @@ import java.lang.reflect.*;
 import java.util.logging.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Class that defines a suppressor invariant for use in non-instantiating
  * suppressions.  In non-instantiating suppressions, suppressor invariants

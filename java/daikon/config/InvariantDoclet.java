@@ -6,6 +6,11 @@ import java.lang.reflect.*;
 import com.sun.javadoc.*;
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.regex.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+*/
+
 /**
  * InvariantDoclet is a JavaDoc doclet that collects information about
  * the invariants defined within Daikon.  Class documentation is collected

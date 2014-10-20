@@ -6,6 +6,11 @@ import plume.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Computes statistics about the differences between the sets of
  * invariants.  The statistics can be printed as a human-readable

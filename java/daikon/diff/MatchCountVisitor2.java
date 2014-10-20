@@ -6,6 +6,10 @@ import daikon.inv.OutputFormat;
 import java.io.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 // MatchCountVisitor2 differs from MatchCountVisitor in that it reverses
 // some key predicates, and adds some functionality.  The differences are
 // not documented.

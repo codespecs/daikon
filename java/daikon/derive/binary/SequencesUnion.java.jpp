@@ -37,6 +37,10 @@ import daikon.derive.*;
 
 import plume.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Represents the setwise union of two base variables, each of which is a
  * collection.

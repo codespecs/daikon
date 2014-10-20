@@ -2,6 +2,11 @@ package daikon.inv;
 
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Container class for holding all info needed to describe an Invariant.
  * If any field is null, that field is a wildcard, so one instance of

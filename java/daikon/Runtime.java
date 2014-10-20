@@ -10,6 +10,11 @@ import java.util.HashMap;
 import java.util.List;
 import java.util.zip.GZIPOutputStream;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.signature.qual.*;
+*/
+
 /**
  * The Runtime class provides methods for printing values to a Daikon data
  * trace file.  Daikon can process the data trace information, either while

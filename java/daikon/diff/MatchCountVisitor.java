@@ -6,6 +6,10 @@ import daikon.inv.OutputFormat;
 import java.io.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * MatchCountVisitor is a visitor that almost does the opposite of
  * PrintDifferingInvariantsVisitor.  MatchCount prints invariant pairs

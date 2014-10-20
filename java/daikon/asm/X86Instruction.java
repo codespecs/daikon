@@ -2,6 +2,11 @@ package daikon.asm;
 
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * Represents an x86 instruction.
  */

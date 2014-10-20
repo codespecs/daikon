@@ -3,6 +3,10 @@ package daikon.inv;
 import java.io.*;
 import daikon.inv.filter.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /** DiscardCode is an enumeration type.
  *  It represents reasons why an invariant is falsified or disregarded.
  *  Methods that decide whether an Invariant should be printed later

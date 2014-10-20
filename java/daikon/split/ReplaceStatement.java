@@ -7,6 +7,10 @@ import daikon.tools.jtb.*;
 import java.io.*;
 import java.util.*;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 
 /**
  * ReplaceStatement is an immutable data structure for holding

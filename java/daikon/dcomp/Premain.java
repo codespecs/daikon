@@ -17,6 +17,10 @@ import daikon.dcomp.ValueSource;
 
 import daikon.DynComp;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public class Premain {
 
   /**

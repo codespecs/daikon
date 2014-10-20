@@ -5,6 +5,10 @@ import daikon.inv.*;
 import java.util.logging.Logger;
 import java.util.logging.Level;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Computes A xor B, where A and B are the two sets of invariants.
  **/

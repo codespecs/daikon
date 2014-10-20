@@ -7,6 +7,10 @@ import daikon.diff.*;
 import daikon.test.*;
 import java.lang.reflect.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public class DetailedStatisticsVisitorTester extends TestCase {
 
   RootNode root = new RootNode();
