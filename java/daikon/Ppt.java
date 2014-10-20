@@ -8,6 +8,7 @@ import plume.*;
 import daikon.inv.Invariant;    // for emptyInvList
 
 /*>>>
+import org.checkerframework.checker.intering.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
