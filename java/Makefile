@@ -86,8 +86,6 @@ endif
 # Version of javac that supports pluggable type-checking.
 JAVAC_FOR_CHECKER ?= ${CHECKERFRAMEWORK}/checker/bin/javac
 
-jsr308_imports = org.checkerframework.dataflow.qual.*:org.checkerframework.checker.initialization.qual.*:org.checkerframework.checker.interning.qual.*:org.checkerframework.checker.nullness.qual.*:org.checkerframework.checker.regex.qual.*:org.checkerframework.framework.qual.Dependent:org.checkerframework.framework.qual.Unused:typequals.*:org.checkerframework.checker.signature.qual.*:org.checkerframework.checker.formatter.qual.*
-
 ### end of user customizations
 
 JAVAC_COMMAND = ${JAVAC} -Xlint -J-Xmx1024m ${JAVAC_ARGS}
@@ -432,7 +430,6 @@ ALL_GENERATED_FILES = ${AUTO_GENERATED_FILES} ${AUTO_GENERATED_FILES_2}
 ### Variables passed down to subshells
 ###
 
-export jsr308_imports
 export CLASSPATH
 export CHECKERJAR
 export DAIKONDIR
@@ -1226,7 +1223,6 @@ showvars:
 	@echo JAVAC_COMMAND = ${JAVAC_COMMAND}
 	@echo JAVA_FILES = $(JAVA_FILES)
 	@echo TAG_FILES = $(TAG_FILES)
-	@echo jsr308_imports = $(jsr308_imports)
 	@echo INTERNING_JAVA_FILES = $(INTERNING_JAVA_FILES)
 	@echo INTERNING_JAVA_FILES_COUNTS = $(INTERNING_JAVA_FILES_COUNTS)
 	@echo JAVA_HOME = $(JAVA_HOME)
