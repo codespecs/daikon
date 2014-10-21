@@ -10,6 +10,7 @@ import daikon.test.Common;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
+@SuppressWarnings("nullness")   // testing code
 public class OneOfSequenceTester extends TestCase {
 
   private VarInfo[] vars = { Common.makeHashcodeArrayVarInfo("x"),

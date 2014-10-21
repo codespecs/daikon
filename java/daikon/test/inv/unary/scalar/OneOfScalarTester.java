@@ -9,6 +9,7 @@ import daikon.test.Common;
 import org.checkerframework.checker.nullness.qual.*;
 */
 
+@SuppressWarnings("nullness")   // testing code
 public class OneOfScalarTester extends TestCase {
 
   private VarInfo[] vars = { Common.makeHashcodeVarInfo("x"), Common.makeIntVarInfo("y") };
