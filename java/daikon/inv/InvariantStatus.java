@@ -1,5 +1,10 @@
 package daikon.inv;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+import org.checkerframework.dataflow.qual.*;
+*/
+
 /**
  * This class is an enumerated type representing the possible results of
  * adding an sample to an invariant.

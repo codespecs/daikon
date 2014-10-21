@@ -15,6 +15,10 @@ import gnu.getopt.*;
 
 import static daikon.tools.nullness.NullnessUtils.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * This is a standalone program that compares the invariants from two
  * versions of (and/or runs of) a program, and determines using

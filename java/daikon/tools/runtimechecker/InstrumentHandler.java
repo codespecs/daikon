@@ -28,6 +28,11 @@ import daikon.tools.runtimechecker.InstrumentVisitor;
 import gnu.getopt.Getopt;
 import gnu.getopt.LongOpt;
 
+ 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+*/
+
 /**
  * Instruments a file to check invariant violations at
  * runtime. Violated invariants are stored in a list in

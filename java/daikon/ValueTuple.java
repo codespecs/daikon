@@ -9,6 +9,7 @@ import java.util.*;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;

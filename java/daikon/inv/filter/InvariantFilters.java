@@ -10,6 +10,7 @@ import daikon.PrintInvariants;
 import daikon.Daikon;
 
 /*>>>
+import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 

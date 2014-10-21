@@ -84,6 +84,9 @@ import org.apache.bcel.verifier.structurals.LocalVariables;
 import org.apache.bcel.verifier.structurals.OperandStack;
 import org.apache.bcel.verifier.structurals.UninitializedObjectType;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
 
 /**
  * This is a slightly modified version of Pass3bVerifier from BCEL.

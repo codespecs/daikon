@@ -6,6 +6,10 @@ import jtb.ParseException;
 import jtb.visitor.*;
 import daikon.tools.jtb.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * TokenReplacer is a jtb syntax tree visitor that replaces a given set of
  * tokens that are names of a variable with another set of tokens.  Note that

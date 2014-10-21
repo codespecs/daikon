@@ -9,6 +9,7 @@ import org.apache.bcel.verifier.structurals.*;
 
 /*>>>
 import org.checkerframework.checker.nullness.qual.*;
+import org.checkerframework.checker.initialization.qual.*;
 */
 
 

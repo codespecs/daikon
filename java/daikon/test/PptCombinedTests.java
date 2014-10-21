@@ -8,6 +8,10 @@ import daikon.PptTopLevel;
 import daikon.VarInfo;
 import junit.framework.TestCase;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public class PptCombinedTests extends TestCase {
 
   @SuppressWarnings("flowexpr.parse.error") // flow expression uses private field

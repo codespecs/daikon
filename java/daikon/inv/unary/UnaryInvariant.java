@@ -6,6 +6,7 @@ import daikon.inv.InvariantStatus;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import typequals.*;
 */
 
 /**

@@ -6,7 +6,10 @@ import daikon.inv.unary.sequence.*;
 import plume.*;
 import daikon.test.Common;
 
-@SuppressWarnings("nullness")   // testing code
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public class OneOfSequenceTester extends TestCase {
 
   private VarInfo[] vars = { Common.makeHashcodeArrayVarInfo("x"),

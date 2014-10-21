@@ -10,6 +10,7 @@ import daikon.inv.ValueSet;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;
+import typequals.*;
 */
 
 /**

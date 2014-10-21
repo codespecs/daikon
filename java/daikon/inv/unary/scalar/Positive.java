@@ -7,6 +7,7 @@ import daikon.inv.InvariantStatus;
 
 /*>>>
 import org.checkerframework.dataflow.qual.*;
+import typequals.*;
 */
 
 // This invariant is true if the variable is always positive (greater than 0).

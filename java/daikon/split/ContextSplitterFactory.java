@@ -7,6 +7,7 @@ import plume.*;
 import java.util.logging.Logger;
 
 /*>>>
+import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 

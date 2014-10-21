@@ -1,5 +1,9 @@
 package daikon.simplify;
 
+/*>>>
+import org.checkerframework.dataflow.qual.*;
+*/
+
 public interface Cmd
 {
   /**

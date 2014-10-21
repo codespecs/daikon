@@ -5,6 +5,7 @@ import daikon.inv.DummyInvariant;
 import java.util.*;
 
 /*>>>
+import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 

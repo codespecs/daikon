@@ -3,6 +3,7 @@ package daikon;
 import java.io.*;
 
 /*>>>
+import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 

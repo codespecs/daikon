@@ -7,6 +7,10 @@ import daikon.inv.Invariant;
 
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 @SuppressWarnings("interning")  // use of == in test code
 public class InvMapTester extends TestCase {
 

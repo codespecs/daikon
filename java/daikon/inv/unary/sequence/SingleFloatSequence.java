@@ -6,6 +6,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
+import typequals.*;
 */
 
 /**

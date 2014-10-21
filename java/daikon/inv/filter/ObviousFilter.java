@@ -2,6 +2,10 @@ package daikon.inv.filter;
 
 import daikon.inv.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public class ObviousFilter extends InvariantFilter {
   public String getDescription() { return "Suppress obvious invariants"; }
 

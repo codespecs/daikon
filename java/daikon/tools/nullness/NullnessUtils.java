@@ -3,7 +3,9 @@
 // import statement.
 package daikon.tools.nullness;
 
-// import org.checkerframework.checker.nullness.qual.*;
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
 
 /**
  * Utilities class for the Nullness Checker.

@@ -6,6 +6,10 @@ import daikon.*;
 import daikon.tools.jtb.*;
 import jtb.ParseException;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * ArrayFixer is a visitor for a jtb syntax tree that adds the
  * "_identity" and "_array" suffixes to an expression as needed.

@@ -8,6 +8,9 @@ import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
 
 /**
  * Input: 3 text files associated with the same dtrace file:

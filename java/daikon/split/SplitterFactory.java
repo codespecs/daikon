@@ -11,6 +11,7 @@ import java.util.logging.Logger;
 import java.util.regex.*;
 
 /*>>>
+import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.regex.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 */

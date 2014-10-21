@@ -24,6 +24,10 @@ import daikon.tools.jtb.*;
 
 import java.lang.reflect.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Visitor that instruments a Java source file (i.e. adds code at
  * certain places) to check invariant violations at runtime.

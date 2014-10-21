@@ -60,6 +60,9 @@ import org.apache.bcel.verifier.structurals.InstConstraintVisitor;
 import org.apache.bcel.verifier.structurals.LocalVariables;
 import org.apache.bcel.verifier.structurals.OperandStack;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
 
 /**
  * A Visitor class testing for valid preconditions of JVM instructions.

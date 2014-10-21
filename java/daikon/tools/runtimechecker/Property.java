@@ -12,6 +12,7 @@ import java.util.Set;
 import java.util.regex.Pattern;
 
 /*>>>
+import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */

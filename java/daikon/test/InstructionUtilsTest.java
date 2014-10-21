@@ -13,6 +13,10 @@ import daikon.asm.InstructionUtils;
 import daikon.asm.KillerInstruction;
 import daikon.asm.X86Instruction;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public class InstructionUtilsTest extends TestCase {
 
   public static void testComputeRedundantVars1() {

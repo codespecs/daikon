@@ -10,6 +10,7 @@ import plume.*;
 
 /*>>>
 import org.checkerframework.checker.formatter.qual.*;
+import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */

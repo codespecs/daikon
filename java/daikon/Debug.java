@@ -10,6 +10,7 @@ import java.util.logging.Level;
 import plume.*;
 
 /*>>>
+import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 

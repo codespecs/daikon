@@ -22,6 +22,10 @@ import daikon.inv.OutputFormat;
 import daikon.inv.ternary.threeScalar.FunctionBinary;
 import daikon.tools.jtb.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Represents a set of classes created by the instrumenter to check
  * invariants.

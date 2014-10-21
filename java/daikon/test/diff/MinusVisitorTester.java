@@ -7,6 +7,10 @@ import daikon.diff.*;
 import daikon.inv.*;
 import daikon.test.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public class MinusVisitorTester extends TestCase {
 
   private Diff diff = new Diff(true, new Invariant.ClassVarnameFormulaComparator());

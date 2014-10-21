@@ -5,7 +5,10 @@ import daikon.*;
 import daikon.inv.unary.scalar.*;
 import daikon.test.Common;
 
-@SuppressWarnings("nullness")   // testing code
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public class OneOfScalarTester extends TestCase {
 
   private VarInfo[] vars = { Common.makeHashcodeVarInfo("x"), Common.makeIntVarInfo("y") };

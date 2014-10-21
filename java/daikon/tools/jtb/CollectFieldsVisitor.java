@@ -5,6 +5,7 @@ import jtb.syntaxtree.*;
 import jtb.visitor.*;
 
 /*>>>
+import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 

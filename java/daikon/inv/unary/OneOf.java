@@ -3,6 +3,7 @@ package daikon.inv.unary;
 import daikon.*;
 
 /*>>>
+import org.checkerframework.checker.initialization.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 

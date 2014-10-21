@@ -61,6 +61,7 @@ import daikon.util.Pair;
 /*>>>
 import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
+import typequals.*;
 */
 
 

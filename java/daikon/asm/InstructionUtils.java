@@ -3,6 +3,10 @@ package daikon.asm;
 import java.util.*;
 import daikon.util.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Utility methods that operate on collections of instructions.
  *

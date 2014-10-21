@@ -9,6 +9,7 @@ import plume.EntryReader;
 import plume.UtilMDE;
 
 /*>>>
+import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.checker.signature.qual.*;
 */
 

@@ -5,6 +5,7 @@ import daikon.inv.DummyInvariant;
 import java.io.Serializable;
 
 /*>>>
+import org.checkerframework.checker.interning.qual.*;
 import org.checkerframework.checker.nullness.qual.*;
 */
 

@@ -8,6 +8,10 @@ import jtb.visitor.*;
 import plume.*;
 import daikon.Global;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * Given a class with certain methods annotated as observers, adds one
  * field for each method, and adds code to update those fields with

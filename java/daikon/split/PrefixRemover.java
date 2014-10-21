@@ -5,6 +5,10 @@ import jtb.visitor.*;
 import daikon.tools.jtb.*;
 import jtb.ParseException;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 /**
  * PrefixRemover is a visitor for a JTB syntax tree that removes all instances
  * of some prefix. For example if "prefix" is the prefix then "prefix.x" would

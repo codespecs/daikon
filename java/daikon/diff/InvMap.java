@@ -7,6 +7,7 @@ import daikon.inv.*;
 import plume.IterableIterator;
 
 /*>>>
+import org.checkerframework.checker.nullness.qual.*;
 import org.checkerframework.dataflow.qual.*;
 */
 

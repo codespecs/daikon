@@ -2,6 +2,10 @@ package daikon.asm;
 
 import java.util.*;
 
+/*>>>
+import org.checkerframework.checker.interning.qual.*;
+*/
+
 /**
  * Implements a partition of distinct elements into disjoint
  * sets. Each set in the partition is represented as a tree.

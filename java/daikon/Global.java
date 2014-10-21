@@ -8,6 +8,10 @@ import java.util.regex.*;
 import java.util.logging.Logger;
 import plume.*;
 
+/*>>>
+import org.checkerframework.checker.nullness.qual.*;
+*/
+
 public final class Global {
 
   // There are some other variables in the Daikon class.  Probably move
