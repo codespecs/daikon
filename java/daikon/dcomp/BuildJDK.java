@@ -465,10 +465,9 @@ public class BuildJDK {
     } else { // some methods have not been previously seen
       System.out.printf
         ("Warning: the following JDK methods could not be instrumetned.%n"
-         + "Some of these are known problems, others are unexpected.%n"
-         + "Please report the new ones so we can look into them.%n"
+         + "Please report any line that starts with [unexpected] so we can look into them.%n"
          + "Dyncomp will still work as long as these methods are not called%n"
-         + "by your applications.  "
+         + "by your applications.%n"
          + "If one is called, A NoSuchMethodException will be generated.%n");
       for (String method : skipped_methods) {
         if (known_bad_list.contains (method))
