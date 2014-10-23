@@ -152,7 +152,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         throw new ArithmeticException ("arg2 (" + arg2 + ") is not boolean ");
     #endif
 
-    return (FUNC (arg1, arg2));
+    return (FUNC(arg1, arg2));
   }
 
   public InvariantStatus check_modified(PRIMITIVE x, PRIMITIVE y,
@@ -317,7 +317,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
     = new NISuppressor (arg2_index, BOUND0_63.class);
 #endif
 
-  #if #FTYPE (Division)
+  #if FTYPE == FTYPE_Division
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
@@ -334,7 +334,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         new NISuppression (result_eq_arg1, arg2_eq_1, suppressee),
       });
 
-  #elif #FTYPE (Mod)
+  #elif FTYPE == FTYPE_Mod
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
@@ -354,7 +354,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         // new NISuppression (result_eq_0, arg1_eq_arg2, suppressee),
       });
 
-  #elif #FTYPE (Multiply)
+  #elif FTYPE == FTYPE_Multiply
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
@@ -384,7 +384,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
       #endif
       });
 
-  #elif #FTYPE (Power)
+  #elif FTYPE == FTYPE_Power
 
     // Note that any suppression that doesn't limit arg2 to valid exponents
     // (>= 0), must check for valid exponents as well (so that the invariant
@@ -433,7 +433,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
       #endif
       });
 
-  #elif #FTYPE (Minimum)
+  #elif FTYPE == FTYPE_Minimum
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
@@ -457,7 +457,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
       #endif
       });
 
-  #elif #FTYPE (Maximum)
+  #elif FTYPE == FTYPE_Maximum
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
@@ -470,7 +470,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
       });
 
-  #elif #FTYPE (RshiftUnsigned)
+  #elif FTYPE == FTYPE_RshiftUnsigned
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
@@ -492,7 +492,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         //                   arg2_valid_shift, suppressee),
       });
 
-  #elif #FTYPE (RshiftSigned)
+  #elif FTYPE == FTYPE_RshiftSigned
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
@@ -514,7 +514,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
         //                   arg2_valid_shift, suppressee),
       });
 
-  #elif #FTYPE (Lshift)
+  #elif FTYPE == FTYPE_Lshift
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
@@ -528,7 +528,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
       });
 
-  #elif #FTYPE (BitwiseXor)
+  #elif FTYPE == FTYPE_BitwiseXor
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
@@ -544,7 +544,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
       });
 
-  #elif #FTYPE (BitwiseAnd)
+  #elif FTYPE == FTYPE_BitwiseAnd
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
@@ -593,7 +593,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
       });
 
-  #elif #FTYPE (BitwiseOr)
+  #elif FTYPE == FTYPE_BitwiseOr
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
@@ -622,7 +622,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
       });
 
-  #elif #FTYPE (Gcd)
+  #elif FTYPE == FTYPE_Gcd
 
     // gcd (0, y) == y
     // gcd (0, 0) == 0
@@ -668,7 +668,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
       });
 
-  #elif #FTYPE (LogicalAnd)
+  #elif FTYPE == FTYPE_LogicalAnd
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
@@ -700,7 +700,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
       });
 
-  #elif #FTYPE (LogicalOr)
+  #elif FTYPE == FTYPE_LogicalOr
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {
@@ -738,7 +738,7 @@ public static class CNAME(FUNCTION,PERM_NAME) extends CLASSNAME {
 
       });
 
-  #elif #FTYPE (LogicalXor)
+  #elif FTYPE == FTYPE_LogicalXor
 
     private static NISuppressionSet suppressions
       = new NISuppressionSet (new NISuppression[] {

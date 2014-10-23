@@ -1456,10 +1456,10 @@ public String format_csharp_contract() {
       if (logOn() && mutate) {
         StringBuffer eltString = new StringBuffer();
         for (int i = 0; i < num_elts; i++) {
-          eltString.append(TOSTRING (elts[i]) + " ");
+          eltString.append(TOSTRING(elts[i]) + " ");
         }
         log ("destroyed on sample %s previous vals = {%s} num_elts = %s",
-             TOSTRING (v), eltString, num_elts);
+             TOSTRING(v), eltString, num_elts);
       }
       return InvariantStatus.FALSIFIED;
     }
@@ -1495,7 +1495,7 @@ public String format_csharp_contract() {
     for (int i=0; i<num_elts; i++) {
       //if (logDetail())
       //  log ("add_modified (" + v + ")");
-      if (EQUALS (elts[i], v)) {
+      if (EQUALS(elts[i], v)) {
         return (InvariantStatus.NO_CHANGE);
       }
     }

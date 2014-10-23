@@ -1046,7 +1046,7 @@ public final class INTEQUAL
       return (null);
 
     // The b coefficient determines less than or greater than
-    if (EQUALS (-lb.core.c/lb.core.b, 0))
+    if (EQUALS(-lb.core.c/lb.core.b, 0))
       return (null);
 
     return new DiscardInfo (this, DiscardCode.obvious, "implied by "

@@ -440,7 +440,7 @@ public final class CLASSNAME
       // if line already broken, fit to plane equation
       if (line_flag == Flag.NO_LINE) {
         // If the new value doesn't fit the equation
-        if (!EQUAL (-d, a*x+b*y+c*z)) {
+        if (!EQUAL(-d, a*x+b*y+c*z)) {
 
           // Try to find small changes that will fit better.
           if (!try_new_equation (x, y, z)) {
@@ -561,7 +561,7 @@ public final class CLASSNAME
                         c, def_point[i].z,
                         d);
 
-        if (!EQUAL (-d,
+        if (!EQUAL(-d,
                     a*def_point[i].x + b*def_point[i].y + c * def_point[i].z)) {
           if (Debug.logOn() || debug.isLoggable(Level.FINE)) {
             wrapper.log (debug, "Destroying at index " + i + ": "
@@ -876,7 +876,7 @@ public final class CLASSNAME
           Global.fuzzy.eq(b, min_b) && Global.fuzzy.eq(b, max_b) &&
           Global.fuzzy.eq(c, min_c) && Global.fuzzy.eq(c, max_c) &&
           Global.fuzzy.eq(d, min_d) && Global.fuzzy.eq(d, max_d) &&
-          EQUAL (-d, a*x+b*y+c*z)) {
+          EQUAL(-d, a*x+b*y+c*z)) {
         if (debug.isLoggable(Level.FINE))
           debug.fine (wrapper.ppt.name() + ": New a (" + a + ") and b ("
                       + b + ") and c (" + c + ")");

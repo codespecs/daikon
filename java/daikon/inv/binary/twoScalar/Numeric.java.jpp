@@ -733,7 +733,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
-      return (EQUALS (0, (x % y)));
+      return (EQUALS(0, (x % y)));
     }
 
 
@@ -927,7 +927,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Check to see if x == y squared. **/
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
-      return (EQUALS (x, y*y));
+      return (EQUALS(x, y*y));
     }
 
     // Note there are no NI Suppressions for Square.  Two obvious
@@ -1087,7 +1087,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 
     /** Check to see if x == ~y . **/
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
-      return (EQUALS (x, ~y));
+      return (EQUALS(x, ~y));
     }
   }
 
@@ -1150,7 +1150,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
     }
 
     public boolean eq_check (PRIMITIVE x, PRIMITIVE y) {
-      return (EQUALS (x, (y | x)));
+      return (EQUALS(x, (y | x)));
     }
 
     #if defined(SEQ)

@@ -154,7 +154,7 @@ public class CLASSNAME
     //   log ("sample " + ArraysMDE.toString (a));
     for (int i=1; i<a.length; i++) {
       for (int j = 0; j < i; j++) {
-        if (EQUAL (a[i], a[j])) {
+        if (EQUAL(a[i], a[j])) {
           return InvariantStatus.FALSIFIED;
         }
       }

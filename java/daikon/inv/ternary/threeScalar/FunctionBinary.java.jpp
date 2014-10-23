@@ -63,6 +63,23 @@
 #define PERM_YZX 5
 #define PERM_ZYX 6
 
+#define FTYPE_BitwiseAnd 1
+#define FTYPE_BitwiseOr 2
+#define FTYPE_BitwiseXor 3
+#define FTYPE_Division 4
+#define FTYPE_Gcd 5
+#define FTYPE_LogicalAnd 6
+#define FTYPE_LogicalOr 7
+#define FTYPE_LogicalXor 8
+#define FTYPE_Lshift 9
+#define FTYPE_Maximum 10
+#define FTYPE_Minimum 11
+#define FTYPE_Mod 12
+#define FTYPE_Multiply 13
+#define FTYPE_Power 14
+#define FTYPE_RshiftSigned 15
+#define FTYPE_RshiftUnsigned 16
+
 #if 0
   // CNAME macro builds the class name from the function, Primitive type,
   // and permutation.
@@ -304,7 +321,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
                                       PRIMITIVE arg2, int count) {
     // This implementation relies on func having no side effects.
     try {
-      if (!EQUAL (result, func (arg1, arg2)))
+      if (! EQUAL(result, func (arg1, arg2)))
         return InvariantStatus.FALSIFIED;
     } catch (Exception e) {
         return InvariantStatus.FALSIFIED;
@@ -624,7 +641,7 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #endif
 
 #define FUNCTION Multiply
-#assert FTYPE (Multiply)
+#define FTYPE FTYPE_Multiply
 #define FUNC(arg1,arg2) arg1 * arg2
 #define METHOD_NAME {"", " * ", ""}
 #define EXACT
@@ -632,28 +649,28 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
 #define FUNCTION Minimum
-#assert FTYPE (Minimum)
+#define FTYPE FTYPE_Minimum
   // #define EQUALITY_MIN_MAX_SUPPRESS
 #define FUNC(arg1, arg2) Math.min (arg1, arg2)
 #define METHOD_NAME {"java.lang.Math.min(", ", ", ")"}
 #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
 #define FUNCTION Maximum
-#assert FTYPE (Maximum)
+#define FTYPE FTYPE_Maximum
   // #define EQUALITY_MIN_MAX_SUPPRESS
 #define FUNC(arg1, arg2) Math.max (arg1, arg2)
 #define METHOD_NAME {"java.lang.Math.max(", ", ", ")"}
 #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
 #define FUNCTION Division
-#assert FTYPE (Division)
+#define FTYPE FTYPE_Division
 #define FUNC(arg1, arg2) (arg1 / arg2)
 #define METHOD_NAME {"", " / ", ""}
 #define EXACT
 #include "daikon/inv/ternary/threeScalar/FunctionBinaryNonSymmetric.java.jpp"
 
 #define FUNCTION Power
-#assert FTYPE (Power)
+#define FTYPE FTYPE_Power
 #define FUNC(arg1, arg2) POW (arg1, arg2)
 #define METHOD_NAME {"java.lang.Math.pow(", ", ", ")"}
 #define EXACT
@@ -662,82 +679,88 @@ public abstract class CLASSNAME extends SUPERCLASS {
 #if defined(TYPELONG)
 
   #define FUNCTION BitwiseAnd
-  #assert FTYPE (BitwiseAnd)
+  #define FTYPE FTYPE_BitwiseAnd
   // #define EQUALITY_SUPPRESS 1
   #define FUNC(arg1,arg2) (arg1 & arg2)
   #define METHOD_NAME {"", " & ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION LogicalAnd
-  #assert FTYPE (LogicalAnd)
+  #define FTYPE FTYPE_LogicalAnd
   #define BOOLEAN_ARGS 1
   #define FUNC(arg1,arg2) (((arg1 != 0) && (arg2 != 0)) ? 1 : 0)
   #define METHOD_NAME {"", " && ", ""}
+  #undef EXTRA_INV_DOC
   #define EXTRA_INV_DOC For logical operations, Daikon treats 0 as false and all other values as true.
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
+  #undef EXTRA_INV_DOC
   #define EXTRA_INV_DOC
 
   #define FUNCTION BitwiseXor
-  #assert FTYPE (BitwiseXor)
+  #define FTYPE FTYPE_BitwiseXor
   #define FUNC(arg1,arg2) (arg1 ^ arg2)
   #define METHOD_NAME {"", " ^ ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION LogicalXor
-  #assert FTYPE (LogicalXor)
+  #define FTYPE FTYPE_LogicalXor
   #define BOOLEAN_ARGS 1
   #define FUNC(arg1,arg2) (((arg1 != 0) ^ (arg2 != 0)) ? 1 : 0)
   // #define METHOD_NAME {"", " ^ ", ""}
   #define METHOD_NAME {"plume.MathMDE.logicalXor(", ", ", ")"}
+  #undef EXTRA_INV_DOC
   #define EXTRA_INV_DOC For logical operations, Daikon treats 0 as false and all other values as true.
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
+  #undef EXTRA_INV_DOC
   #define EXTRA_INV_DOC
 
   #define FUNCTION BitwiseOr
-  #assert FTYPE (BitwiseOr)
+  #define FTYPE FTYPE_BitwiseOr
   // #define EQUALITY_SUPPRESS 1
   #define FUNC(arg1,arg2) (arg1 | arg2)
   #define METHOD_NAME {"", " | ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION LogicalOr
-  #assert FTYPE (LogicalOr)
+  #define FTYPE FTYPE_LogicalOr
   #define BOOLEAN_ARGS 1
   #define FUNC(arg1,arg2) (((arg1 != 0) || (arg2 != 0)) ? 1 : 0)
   #define METHOD_NAME {"", " || ", ""}
+  #undef EXTRA_INV_DOC
   #define EXTRA_INV_DOC For logical operations, Daikon treats 0 as false and all other values as true.
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
+  #undef EXTRA_INV_DOC
   #define EXTRA_INV_DOC
 
   #define FUNCTION Gcd
-  #assert FTYPE (Gcd)
+  #define FTYPE FTYPE_Gcd
   // #define EQUALITY_SUPPRESS 1
   #define FUNC(arg1,arg2) MathMDE.gcd (arg1, arg2)
   #define METHOD_NAME {"plume.MathMDE.gcd(", ", ", ")"}
   #include "daikon/inv/ternary/threeScalar/FunctionBinarySymmetric.java.jpp"
 
   #define FUNCTION Mod
-  #assert FTYPE (Mod)
+  #define FTYPE FTYPE_Mod
   #define FUNC(arg1,arg2) (arg1 % arg2)
   #define METHOD_NAME {"", " % ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinaryNonSymmetric.java.jpp"
 
   #define FUNCTION Lshift
-  #assert FTYPE (Lshift)
+  #define FTYPE FTYPE_Lshift
   #define ARG2_BOUND {0, 63}
   #define FUNC(arg1,arg2) (arg1 << arg2)
   #define METHOD_NAME {"", " << ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinaryNonSymmetric.java.jpp"
 
   #define FUNCTION RshiftSigned
-  #assert FTYPE (RshiftSigned)
+  #define FTYPE FTYPE_RshiftSigned
   #define ARG2_BOUND {0, 63}
   #define FUNC(arg1,arg2) (arg1 >> arg2)
   #define METHOD_NAME {"", " >> ", ""}
   #include "daikon/inv/ternary/threeScalar/FunctionBinaryNonSymmetric.java.jpp"
 
   #define FUNCTION RshiftUnsigned
-  #assert FTYPE   (RshiftUnsigned)
+  #define FTYPE FTYPE_RshiftUnsigned
   #define ARG2_BOUND {0, 63}
   #define FUNC(arg1,arg2) (arg1 >>> arg2)
   #define METHOD_NAME {"", " >>> ", ""}

@@ -274,9 +274,9 @@ public class CLASSNAME
       return InvariantStatus.FALSIFIED;
 
     #if defined(SUB)
-      int result = INDEX_OF (a2, a1);
+      int result = INDEX_OF(a2, a1);
     #else
-      int result = INDEX_OF (a1, a2);
+      int result = INDEX_OF(a1, a2);
     #endif
 
     if (result == -1)

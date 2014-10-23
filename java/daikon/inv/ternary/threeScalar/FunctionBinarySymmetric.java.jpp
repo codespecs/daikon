@@ -38,4 +38,4 @@
 #undef EQUALITY_SUPPRESS
 #undef EQUALITY_MIN_MAX_SUPPRESS
 #undef EXACT
-#unassert FTYPE
+#undef FTYPE

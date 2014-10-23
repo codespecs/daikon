@@ -233,8 +233,8 @@ public abstract class CLASSNAME extends BinaryInvariant {
     // making this call, so as to reduce overall work.
     assert ! falsified;
     assert (mod_index >= 0) && (mod_index < 4);
-    PRIMITIVE v1 = GET_VAL (val1);
-    PRIMITIVE v2 = GET_VAL (val2);
+    PRIMITIVE v1 = GET_VAL(val1);
+    PRIMITIVE v2 = GET_VAL(val2);
     if (mod_index == 0) {
       if (swap)
         return add_unmodified(v2, v1, count);

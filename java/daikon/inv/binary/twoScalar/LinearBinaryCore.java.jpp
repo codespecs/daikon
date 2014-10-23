@@ -226,8 +226,8 @@ public final class CLASSNAME
           // actual distance from the line, but it would be unclear what to
           // compare this to (average or X and Y?).  This seems like a
           // reasonable compromise
-          if ((!EQUAL (-b*y_cache[i],  a*x_cache[i]+c))
-              && (!EQUAL (x_cache[i], ((-b*y_cache[i] - c) / a)))) {
+          if ((!EQUAL(-b*y_cache[i],  a*x_cache[i]+c))
+              && (!EQUAL(x_cache[i], ((-b*y_cache[i] - c) / a)))) {
             if (debug.isLoggable(Level.FINE)) {
               debug.fine ("Suppressing " + CLASSSTRING + " (" + wrapper.format() + ") at index " + i + ": "
                           + y_cache[i] + " != " + a + "*" + x_cache[i] + "+" + b);
@@ -242,7 +242,7 @@ public final class CLASSNAME
     } else {
       // Check the new value against a and b. (see prev explanation for double
       // EQUAL check)
-      if ((! EQUAL (y, (-c-a*x)/b))  && (!EQUAL (x, (-c-b*y)/ a))) {
+      if ((! EQUAL(y, (-c-a*x)/b))  && (!EQUAL(x, (-c-b*y)/ a))) {
         // see if this new point is off one end or the other
         if (x < min_x) {
           min_x = x;
@@ -294,7 +294,7 @@ public final class CLASSNAME
         if (Global.fuzzy.eq(new_a, min_a) && Global.fuzzy.eq(new_a, max_a) &&
             Global.fuzzy.eq(new_b, min_b) && Global.fuzzy.eq(new_b, max_b) &&
             Global.fuzzy.eq(new_c, min_c) && Global.fuzzy.eq(new_c, max_c) &&
-            EQUAL (-new_b * y, new_a*x + new_c)) {
+            EQUAL(-new_b * y, new_a*x + new_c)) {
           a = new_a;
           b = new_b;
           c = new_c;

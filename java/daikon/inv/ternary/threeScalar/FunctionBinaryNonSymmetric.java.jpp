@@ -45,4 +45,4 @@
 #undef FUNCTION
 #undef EQUALITY_SUPPRESS
 #undef EQUALITY_MIN_MAX_SUPPRESS
-#unassert FTYPE
+#undef FTYPE

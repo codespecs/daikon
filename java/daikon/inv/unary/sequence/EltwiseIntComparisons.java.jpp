@@ -273,7 +273,7 @@ public class CLASSNAME
 
   public InvariantStatus check_modified(PRIMITIVE /*@Interned*/ [] a, int count) {
     for (int i=1; i<a.length; i++) {
-      if (!COMPARATOR (a[i-1], a[i])) {
+      if (!COMPARATOR(a[i-1], a[i])) {
         return InvariantStatus.FALSIFIED;
       }
     }

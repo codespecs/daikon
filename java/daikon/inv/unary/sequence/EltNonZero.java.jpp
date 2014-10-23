@@ -217,7 +217,7 @@ public final class CLASSNAME
     for (int ai=0; ai<a.length; ai++) {
       PRIMITIVE v = a[ai];
 
-      if (EQUAL (v, 0)) {
+      if (EQUAL(v, 0)) {
         return InvariantStatus.FALSIFIED;
       }
     }

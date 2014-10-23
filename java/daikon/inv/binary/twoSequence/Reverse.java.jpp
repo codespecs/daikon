@@ -202,7 +202,7 @@ public class CLASSNAME
     }
     int len = a1.length;
     for (int i=0, j=len-1; i<len; i++, j--) {
-      if (!EQUAL (a1[i], a2[j])) {
+      if (!EQUAL(a1[i], a2[j])) {
         return InvariantStatus.FALSIFIED;
       }
     }
