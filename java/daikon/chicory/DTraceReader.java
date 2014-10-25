@@ -12,6 +12,12 @@ import org.checkerframework.checker.interning.qual.*;
 /**
  * Reads dtrace files and provides methods to access the information
  * within them.  A dtrace file contains both declarations and data.
+ * <p>
+ *
+ * Do <b>not</b> use this program as an example of how to read a dtrace file.
+ * The better way to do that is to define a {@link daikon.FileIO.Processor}
+ * and pass it to
+ * {@link daikon.FileIO#read_data_trace_files(Collection, PptMap, daikon.FileIO.Processor, boolean)}.
  */
 @SuppressWarnings("nullness")   // to do
 public class DTraceReader extends DeclReader {

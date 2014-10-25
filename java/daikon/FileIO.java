@@ -982,8 +982,10 @@ public final class FileIO {
   static HashMap<Integer,Invocation> call_hashmap = new HashMap<Integer,Invocation>();
 
   /**
-   * Reads data trace files using the default sample processor.
+   * Reads data from .dtrace files.
+   * For each record in the files, calls the appropriate callback in the processor.
    * @see #read_data_trace_files(Collection,PptMap,Processor,boolean)
+   * @see #read_data_trace_file(Collection,PptMap,Processor,boolean,boolean)
    **/
   public static void read_data_trace_files(Collection<String> files,
                                            PptMap all_ppts) throws IOException {
@@ -993,13 +995,16 @@ public final class FileIO {
   }
 
   /**
-   * Read data from .dtrace files.  Calls
+   * Reads data from .dtrace files.
+   * Calls
    * {@link #read_data_trace_file(String,PptMap,Processor,boolean,boolean)}
    * for each element of filenames.
    *
    * @param ppts_are_new - true if declarations of ppts read from the data
    *                       trace file are new (and thus are not in all_ppts)
    *                       false if the ppts may already be there.
+   *
+   * @see #read_data_trace_file(Collection,PptMap,Processor,boolean,boolean)
    **/
   public static void read_data_trace_files(Collection<String> files,
                 PptMap all_ppts, Processor processor, boolean ppts_are_new)
@@ -1153,12 +1158,32 @@ public final class FileIO {
 
 
   /**
-   * Class used to specify the processor to use for sample data.  By
-   * default, the internal process_sample routine will be called, once for
-   * each sample.
+   * A Processor is used to read a dtrace file.  A Processor defines
+   * callbacks for each record type in a dtrace file.  As each record is
+   * read from a dtrace file, the corresponding callback is called.
+   * <p>
+   *
+   * to use a Processor, pass it to 
+   * {@link #read_data_trace_files(Collection, PptMap, FileIO.Processor, boolean)}.
+   * {@code read_data_trace_files} will call
+   * {@link #process_sample(PptMap,PptTopLevel,Valuetuple,integer)}
+   * once for every sample in the dtrace file, and will call other
+   * callbacks for other records in the dtrace file.
+   * <p>
+   *
+   * For an example of how to create and use a Processor, see
+   * {@link daikon.tools.ReadTrace}.
+   *
+   * @see #read_data_trace_files(Collection, PptMap, FileIO.Processor, boolean)
+   * @see daikon.tools.ReadTrace
    */
   public static class Processor {
-    /** Process a data sample record. */
+    /**
+     * Process a data sample record.
+     * This default implementation calls
+     * {@link FileIO#process_sample(PptMap, PptTopLevel, Valuetuple, Integer)}.
+     * @see FileIO#process_sample(PptMap, PptTopLevel, Valuetuple, Integer)
+     */
     /*@RequiresNonNull("FileIO.data_trace_state")*/
     public void process_sample(PptMap all_ppts,
                                PptTopLevel ppt,
@@ -1447,8 +1472,11 @@ public final class FileIO {
 
 
   /**
-   * Read declarations or samples (not just sample data) from .dtrace
-   * file, using standard data processor. **/
+   * Read only samples from .dtrace file.
+   * Uses the standard data processor which calls
+   * {@link FileIO#process_sample(PptMap, PptTopLevel, Valuetuple, Integer)}
+   * on each record, and ignores records other than samples.
+   **/
   public static void read_data_trace_file(String filename, PptMap all_ppts)
     throws IOException {
     Processor processor = new Processor();
@@ -1457,8 +1485,8 @@ public final class FileIO {
 
   /**
    * Read declarations AND samples (not just sample data as the name might
-   * imply) from .dtrace file.  Calls processor on each record read from
-   * the file.
+   * imply) from .dtrace file.  For each record read from the file, passes
+   * the record to a method of the processor.
    **/
   public static void read_data_trace_file(String filename, PptMap all_ppts,
                                    Processor processor,

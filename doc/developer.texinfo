@@ -160,6 +160,7 @@ This chapter describes how to customize or modify Daikon.
 * New formatting for invariants::
 * New front ends::
 * New suppressors::
+* Reading dtrace files::
 * System.exit::
 @end menu
 
@@ -870,6 +871,24 @@ public DiscardInfo isObviousDynamically(VarInfo[] vis) @{
 @end example  
 @c restore default:
 @exampleindent 5
+
+
+@node    Reading dtrace files
+@section Reading dtrace files
+
+If you wish to write a program that manipulates a @file{.dtrace} file, you
+can use Daikon's built-in mechanisms for parsing @file{.dtrace} files.
+(This is easier and less error-prone than write a program that directly
+reads the file.)
+
+You will write a subclass of @code{FileIO.Processor}, then pass an instance
+of that class to @code{FileIO.read_data_trace_files}.  Daikon will parse
+each record in the trace files that you indicate, then will pass the parsed
+version to methods in your processor.
+
+For a simple example of how to use @code{FileIO.Processor}, see file
+@file{daikon/java/daikon/tools/ReadTrace.java}.
+
 
 @node    System.exit
 @section System.exit
