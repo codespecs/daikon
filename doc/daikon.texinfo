@@ -3444,7 +3444,7 @@ Daikon is typically used to find invariants over variable values in
 running programs.  A front end is a tool that converts data from some
 other format into Daikon's input format.  The most common type of front
 end is an instrumenter, which causes your program to output a
-@file{.dtrace} file that Daikon can process.
+@file{.dtrace} file that Daikon can process, or that you can process (@pxref{Reading dtrace files,,,developer,Daikon Developer Manual}).
 
 This chapter describes several front ends (instrumenters) that are part
 of Daikon.  It
@@ -6559,6 +6559,7 @@ distribution.
 @menu
 * Tools for manipulating invariants::
 * DtraceDiff utility::
+* Reading dtrace files::
 @end menu
 
 @node    Tools for manipulating invariants
@@ -7517,6 +7518,14 @@ comparison function only looks for null versus non-null pointer values.
 @item Floating-point values are subject to roundoff error from printing and
 reading, so they are compared with a ``fuzzy'' rather than exact equality test.
 @end itemize
+
+
+@node    Reading dtrace files
+@section Reading dtrace files
+
+If you wish to write a program that manipulates @file{.dtrace} files, then
+see @xref{Reading dtrace files,,,developer,Daikon Developer Manual}.
+
 
 @node    Troubleshooting
 @chapter Troubleshooting
