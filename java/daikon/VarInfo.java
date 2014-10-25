@@ -3582,7 +3582,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   }
 
-  /** @see #simplify_quantify(EnumSet, VarInfo ...) */
+  /** @see #simplify_quantify(EnumSet, VarInfo[]) */
   public static String[] simplify_quantify (VarInfo ...vars) {
     return simplify_quantify (EnumSet.noneOf (QuantFlags.class), vars);
   }

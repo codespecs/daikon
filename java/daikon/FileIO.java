@@ -985,7 +985,7 @@ public final class FileIO {
    * Reads data from .dtrace files.
    * For each record in the files, calls the appropriate callback in the processor.
    * @see #read_data_trace_files(Collection,PptMap,Processor,boolean)
-   * @see #read_data_trace_file(Collection,PptMap,Processor,boolean,boolean)
+   * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
    **/
   public static void read_data_trace_files(Collection<String> files,
                                            PptMap all_ppts) throws IOException {
@@ -1004,7 +1004,7 @@ public final class FileIO {
    *                       trace file are new (and thus are not in all_ppts)
    *                       false if the ppts may already be there.
    *
-   * @see #read_data_trace_file(Collection,PptMap,Processor,boolean,boolean)
+   * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
    **/
   public static void read_data_trace_files(Collection<String> files,
                 PptMap all_ppts, Processor processor, boolean ppts_are_new)
@@ -1166,7 +1166,7 @@ public final class FileIO {
    * to use a Processor, pass it to 
    * {@link #read_data_trace_files(Collection, PptMap, FileIO.Processor, boolean)}.
    * {@code read_data_trace_files} will call
-   * {@link #process_sample(PptMap,PptTopLevel,Valuetuple,integer)}
+   * {@link #process_sample(PptMap,PptTopLevel,ValueTuple,Integer)}
    * once for every sample in the dtrace file, and will call other
    * callbacks for other records in the dtrace file.
    * <p>
@@ -1181,8 +1181,8 @@ public final class FileIO {
     /**
      * Process a data sample record.
      * This default implementation calls
-     * {@link FileIO#process_sample(PptMap, PptTopLevel, Valuetuple, Integer)}.
-     * @see FileIO#process_sample(PptMap, PptTopLevel, Valuetuple, Integer)
+     * {@link FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)}.
+     * @see FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)
      */
     /*@RequiresNonNull("FileIO.data_trace_state")*/
     public void process_sample(PptMap all_ppts,
@@ -1474,7 +1474,7 @@ public final class FileIO {
   /**
    * Read only samples from .dtrace file.
    * Uses the standard data processor which calls
-   * {@link FileIO#process_sample(PptMap, PptTopLevel, Valuetuple, Integer)}
+   * {@link FileIO#process_sample(PptMap, PptTopLevel, ValueTuple, Integer)}
    * on each record, and ignores records other than samples.
    **/
   public static void read_data_trace_file(String filename, PptMap all_ppts)
