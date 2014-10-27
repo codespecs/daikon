@@ -804,9 +804,8 @@ audit:
 ### Pluggable type qualifier checkers
 # (Don't run these until after you have compiled Daikon at least once.)
 
-# CHECKER_ARGS = -source 7
-# CHECKER_ARGS ?= -AsuppressWarnings=purity,flowexpr.parameter.not.final
-CHECKER_ARGS ?= -AsuppressWarnings=flowexpr.parameter.not.final -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation
+# Add proc:only to not generate .class files (so don't change version 7 to version 8).
+CHECKER_ARGS ?= -AsuppressWarnings=flowexpr.parameter.not.final -AprintErrorStack -Xmaxerrs 10000 -Xmaxwarns 10000 -XDignore.symbol.file -Xlint:deprecation -proc:only
 
 ## All of the following targets need to depend on "compile".
 
