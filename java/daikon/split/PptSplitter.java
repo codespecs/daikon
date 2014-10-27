@@ -63,7 +63,7 @@ public class PptSplitter implements Serializable {
   public static boolean dkconfig_suppressSplitterErrors = false;
 
   /** General debug tracer. **/
-  public static final Logger debug = Logger.getLogger ("daikon.PptSplitter");
+  public static final Logger debug = Logger.getLogger ("daikon.split.PptSplitter");
 
   /** PptTopLevel that contains this split. */
   private PptTopLevel parent;
@@ -100,7 +100,7 @@ public class PptSplitter implements Serializable {
       new PptConditional (parent, splitter, false),
       new PptConditional (parent, splitter, true) };
 
-    if (Debug.logDetail()) {
+    if (debug.isLoggable (Level.FINE)) {
       debug.fine ("VarInfos for " + parent.name());
       for (int ii = 0; ii < parent.var_infos.length; ii++)
         debug.fine (parent.var_infos[ii].name() + " "
@@ -149,9 +149,9 @@ public class PptSplitter implements Serializable {
     // Add the point
     ppt_cond.add_bottom_up (vt, count);
 
-    if (Debug.logDetail() && Debug.ppt_match (ppt_cond)) {
-      System.out.println ("Adding sample to " + ppt_cond + " with vars "
-                          + Debug.related_vars (ppt_cond, vt));
+    if (Debug.ppt_match (ppt_cond)) {
+      debug.fine ("Adding sample to " + ppt_cond + " with vars "
+                   + Debug.related_vars (ppt_cond, vt));
     }
 
   }
@@ -367,7 +367,7 @@ public class PptSplitter implements Serializable {
       }
 
 
-      if ((pslice.invs.size() == 0) && Debug.logDetail())
+      if (pslice.invs.size() == 0)
         debug.fine ("PptSplitter: created new slice " +
                             VarInfo.arrayToString (vis) + " @" + parent.name);
 
@@ -383,7 +383,7 @@ public class PptSplitter implements Serializable {
 
     } // slices.iterator() loop
 
-    if (Debug.logOn() || debug.isLoggable (Level.FINE)) {
+    if (debug.isLoggable (Level.FINE)) {
       debug.fine ("Found " + exclusive_invs_vec.size()
                   + " exclusive conditions ");
       for (Invariant[] invs : exclusive_invs_vec) {
@@ -436,9 +436,7 @@ public class PptSplitter implements Serializable {
 
     // If there are no exclusive conditions, we can do nothing here
     if (exclusive_invs_vec.size() == 0) {
-      if (debug.isLoggable(Level.FINE)) {
-        debug.fine ("addImplications: no exclusive conditions");
-      }
+      debug.fine ("addImplications: no exclusive conditions");
       return;
     }
 

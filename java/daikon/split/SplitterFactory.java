@@ -93,6 +93,8 @@ public class SplitterFactory {
   public static void load_splitters (PptTopLevel ppt,
                                      List<SpinfoFileParser> splitters)
   {
+    Global.debugSplit.fine("<<enter>> load_splitters");
+
     for (SpinfoFileParser fileParser : splitters) {
       SplitterObject[][] splitterObjects = fileParser.getSplitterObjects();
       StatementReplacer statementReplacer = fileParser.getReplacer();
@@ -124,8 +126,8 @@ public class SplitterFactory {
         }
       }
     }
+    Global.debugSplit.fine("<<exit>>  load_splitters");
   }
-
 
   // Accessible for the purpose of testing.
   public static String getTempDir() {
@@ -142,7 +144,6 @@ public class SplitterFactory {
     }
   }
 
-
   /**
    * Writes, compiles, and loads the splitter .java files for each
    * splitterObject in splitterObjects.
@@ -156,6 +157,8 @@ public class SplitterFactory {
                                     PptTopLevel ppt,
                                     StatementReplacer statementReplacer)
   {
+    Global.debugSplit.fine("<<enter>> loadSplitters");
+
     // System.out.println("loadSplitters for " + ppt.name);
     if (splitterObjects.length == 0) {
       return;
@@ -192,7 +195,7 @@ public class SplitterFactory {
       } catch (IOException ioe) {
         System.out.println("Error while writing Splitter file: " +
                            fileAddress);
-        debugPrintln(ioe.toString());
+        debug.fine(ioe.toString());
       }
     }
     List<String> fileNames = new ArrayList<String>();
@@ -204,18 +207,20 @@ public class SplitterFactory {
       errorOutput = compileFiles(fileNames);
     } catch (IOException ioe) {
       System.out.println("Error while compiling Splitter files (Daikon will continue):");
-      debugPrintln(ioe.toString());
+      debug.fine(ioe.toString());
     }
     // Forrest - added a checked below for the non-empty string. Splitter files were
     // compiling correctly for me despite errorOutput being an empty string.
     if (errorOutput != null && !errorOutput.equals("")) {
-      System.out.println("Errors while compiling Splitter files (Daikon will use non-erroneous splitters):");
+      System.out.println("\nErrors while compiling Splitter files (Daikon will use non-erroneous splitters):");
       System.out.println(errorOutput);
     }
     SplitterLoader loader = new SplitterLoader();
     for (int i = 0; i < splitterObjects.length; i++) {
       splitterObjects[i].load(loader);
     }
+
+    Global.debugSplit.fine("<<exit>>  loadSplitters");
   }
 
   private static String compileFiles(List<String> fileNames) throws IOException {
@@ -229,7 +234,6 @@ public class SplitterFactory {
     }
     return fileCompiler.compileFiles(fileNames);
   }
-
 
   /**
    * Determine whether a Ppt's name matches the given pattern.
@@ -271,7 +275,6 @@ public class SplitterFactory {
     return matcher.find();
   }
 
-
   /**
    * Returns a file name for a splitter file to be used with a Ppt
    * with the name, ppt_name.  The file name is ppt_name with all
@@ -308,7 +311,6 @@ public class SplitterFactory {
     return new String(cleaned);
   }
 
-
   /**
    * Creates the temporary directory in which splitter files will
    * be stored.
@@ -323,17 +325,9 @@ public class SplitterFactory {
       }
       return tmpDir.getPath() + File.separator;
     } catch (IOException e) {
-      debugPrintln(e.toString());
+      debug.fine(e.toString());
     }
     return ""; // Use current directory
   }
-
-  /**
-   * Print out a message if the debugPptSplit variable is set to "true".
-   **/
-  private static void debugPrintln(String s) {
-    Global.debugSplit.fine(s);
-  }
-
 
 }

@@ -21,8 +21,6 @@ import org.checkerframework.dataflow.qual.*;
  */
 class SplitterJavaSource implements jtb.JavaParserConstants {
 
-  static final boolean debug = false;
-
   /** The text contents of the splitter file, a java class. */
   private StringBuffer fileText = new StringBuffer();
 
@@ -63,11 +61,15 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
                             VarInfo[] varInfos,
                             StatementReplacer statementReplacer)
     throws ParseException {
+
+    Global.debugSplit.fine("<<enter>> SplitterJavaSource");
+
     className = getClassName(pptName);
     this.fileName = fileName;
     this.statementReplacer = statementReplacer;
     varInfos = filterNonVars(varInfos);
     String originalCondition = splitObj.condition();
+    Global.debugSplit.fine("originalCondition = " + originalCondition);
     String condition = replaceReservedWords(originalCondition);
     condition = this.statementReplacer.makeReplacements(condition);
     condition = convertVariableNames(condition, className, varInfos);
@@ -133,6 +135,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     add("  } ");
     skipLine();
     add("} ");
+
+    Global.debugSplit.fine("<<exit>>  SplitterJavaSource");
   }
 
   /**
@@ -209,8 +213,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
         type = "int[]";
         get_expr = "getIntArrayValue(vt)";
       } else {
-        debugPrintln("Can't deal with this type " + type +
-                     " declared in Splitter File");
+        Global.debugSplit.fine("Can't deal with this type " + type +
+                               " declared in Splitter File");
         throw new Error("Can't deal with this type " + type +
                         " declared in Splitter File");
       }
@@ -349,9 +353,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       if (isNormalVar(vi)) {
         filteredList.add(vi);
       } else {
-        if (debug) {
-          System.out.println("filterNonVars removed " + vi.name());
-        }
+        Global.debugSplit.fine("filterNonVars removed " + vi.name());
       }
     }
     return filteredList.toArray(new VarInfo[0]);
@@ -428,13 +430,6 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
   }
 
   /**
-   * Print out a message if the debugPptSplit variable is set to "true".
-   **/
-  private static void debugPrintln(String s) {
-    Global.debugSplit.fine(s);
-  }
-
-  /**
    * Return str with the char at index removed.
    * This method requires: 0 &le; index &lt; str.length
    * @param str the String from which the char at index should be removed.
@@ -506,8 +501,12 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       name = fixPrefixes(name, className);
     }
     name = name.replace('.', '_');
-    name = remove(name, ']');
-    name = remove(name, '[');
+    // originally array names in type infos end in "[..]"
+    // but the replace above will change it to "[__]".   (markro)
+    if (varInfo.type.isArray()) {
+        if (name.endsWith("[__]"))
+            name = name.substring(0, name.length()-4);
+    }
     return name;
   }
 
@@ -531,6 +530,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * would yield no change.
    */
   private static String fixPrefixes(String name, String className) {
+    Global.debugSplit.fine("<<enter>> fixPrefixes name: " + name + ", class: " + className);
     if (name.startsWith("this.")) {
       return name.substring("this.".length());
     }
@@ -542,6 +542,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
       }
       dotIndex = className.indexOf('.', dotIndex + 1);
     }
+    Global.debugSplit.fine("<<exit>>  fixPrefixes name: " + name);
     return name;
   }
 
@@ -707,14 +708,17 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
                                                             String condition,
                                                             String className)
     throws ParseException {
+
+    Global.debugSplit.fine("<<enter>> makeVariableManagerArray");
+
     List<VariableManager> variableManagerList = new ArrayList<VariableManager>();
     List<String> classVars = findPossibleClassVariables(condition);
     for (VarInfo varInfo : varInfos) {
       try {
         String compilableName = compilableName(varInfo, className);
-        if (debug) {
-          System.out.printf("varInfo %s, isNeeded(%s, %s)=%s%n", varInfo.name(), compilableName, classVars, isNeeded(compilableName, classVars));
-        }
+        Global.debugSplit.fine("varInfo " + varInfo.name() + " isNeeded(" +
+                               compilableName + ", " + classVars + ")=" + 
+                               isNeeded(compilableName, classVars));
         if (isNeeded(compilableName, classVars)) {
           variableManagerList.add(new VariableManager(varInfo, condition, className));
         }
@@ -722,6 +726,8 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
         System.out.println("ParseException: " + e.toString());
       }
     }
+    Global.debugSplit.fine("<<exit>>  makeVariableManagerArray");
+
     return variableManagerList.toArray(new VariableManager[0]);
   }
 
@@ -730,6 +736,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    * is used in this splitting condition.
    */
   /*@Pure*/ private static boolean isNeeded(String name, List<String> vars) {
+    Global.debugSplit.fine("isNeeded name: " + name + ", vars: " + vars.toString());
     return vars.contains(name);
   }
 
@@ -743,45 +750,25 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
    */
   private static List<String> findPossibleClassVariables(String condition)
     throws ParseException {
+
+    Global.debugSplit.fine("<<enter>> findPossibleClassVariables");
+
     NodeToken[] tokens = TokenExtractor.extractTokens(condition);
-    if (debug) {
-      System.out.println("TokenExtractor.extractTokens(" + condition + ") ==> " + ArraysMDE.toString(tokens));
-    }
+    Global.debugSplit.fine("TokenExtractor.extractTokens(" + condition + ") ==> " + ArraysMDE.toString(tokens));
     Set<String> variables = new LinkedHashSet<String>();
-    // Identifier as first token
-    if (tokens.length >= 1) {
-      NodeToken token = tokens[0];
-      if (token.kind == IDENTIFIER &&
-          (tokens.length <= 1 || tokens[1].kind != LPAREN)) {
-        variables.add(token.tokenImage);
-      }
+
+    for (int i = 0; i < tokens.length; i++) {
+        NodeToken token = tokens[i];
+        if (token.kind == IDENTIFIER) {
+            if ((i > 0) && (tokens[i-1].kind == DOT))
+                continue;
+            if ((i < tokens.length - 1) && (tokens[i+1].kind == LPAREN))
+                continue;
+            variables.add(token.tokenImage);
+        }
     }
-    if (tokens.length >= 2) {
-      NodeToken token = tokens[1];
-      if (token.kind == IDENTIFIER &&
-          (tokens.length <= 2 || tokens[2].kind != LPAREN)) {
-        variables.add(token.tokenImage);
-      }
-    }
-    for (int i = 2; i < tokens.length - 1; i++) {
-      NodeToken token = tokens[i];
-      if (token.kind == IDENTIFIER &&
-          tokens[i-1].kind != DOT &&
-          tokens[i+1].kind != LPAREN) {
-        variables.add(token.tokenImage);
-      }
-    }
-    if (tokens.length >= 3) {
-      int lastIndex = tokens.length - 1;
-      NodeToken token = tokens[lastIndex];
-      if (token.kind == IDENTIFIER &&
-          tokens[lastIndex-1].kind != DOT) {
-        variables.add(token.tokenImage);
-      }
-    }
-    if (debug) {
-      System.out.println("findPossibleClassVariables(" + condition + ") ==> " + variables.toString());
-    }
+
+    Global.debugSplit.fine("<<exit>>  findPossibleClassVariables(" + condition + ") ==> " + variables.toString());
     return new ArrayList<String>(variables);
   }
 
@@ -806,10 +793,6 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     throws ParseException {
     if ((type.equals("int") || varInfo.type.isArray()) &&
         varInfo.file_rep_type != ProglangType.HASHCODE) {
-      int LPAREN = 74;
-      int RPAREN = 75;
-      int LBRACKET = 78;
-      int RBRACKET = 79;
       Stack<Boolean> inArrayIndex = new Stack<Boolean>();
       inArrayIndex.push(Boolean.FALSE);
       NodeToken[] tokens = TokenExtractor.extractTokens(condition);
@@ -834,7 +817,6 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
           }
         }
       }
-      return type;
     }
     return type;
   }

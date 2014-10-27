@@ -91,12 +91,12 @@ public final class LogHelper {
       // setupLogs (l, "@ %20.20c: %m%n");
 
       String loggerName = record.getLoggerName() + ":";
-      int len = loggerName.length();
-      if (len > 20) {
-        loggerName = loggerName.substring(len - 20, len);
-      } else if (len < 20) {
-        loggerName = loggerName + padding_arrays[20 - len];
-      }
+//      int len = loggerName.length();
+//      if (len > 20) {
+//        loggerName = loggerName.substring(len - 20, len);
+//      } else if (len < 20) {
+//        loggerName = loggerName + padding_arrays[20 - len];
+//      }
 
       // If we aren't generating tracebacks, find the src class/method/line
       // where the log was called from

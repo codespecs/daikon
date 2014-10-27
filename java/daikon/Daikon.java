@@ -1608,7 +1608,7 @@ public final class Daikon {
       }
       fileio_progress.clear();
       if (!Daikon.dkconfig_quiet && decl_files.size() > 0) {
-        System.out.print(" (read ");
+        System.out.print("\r(read ");
         System.out.print(UtilMDE.nplural(decl_files.size(), "decls file"));
         System.out.println(")");
       }
@@ -1631,7 +1631,7 @@ public final class Daikon {
     try {
       System.out.print("Reading splitter info files ");
       create_splitters(spinfo_files);
-      System.out.print(" (read ");
+      System.out.print("\r(read ");
       System.out.print(UtilMDE.nplural(spinfo_files.size(), "spinfo file"));
       System.out.print(" , ");
       System.out.print(UtilMDE.nplural(parsedSplitters.size(), "splitter"));
@@ -1653,7 +1653,7 @@ public final class Daikon {
       ContextSplitterFactory.load_mapfiles_into_splitterlist(
         map_files,
         ContextSplitterFactory.dkconfig_granularity);
-      System.out.print(" (read ");
+      System.out.print("\r(read ");
       System.out.print(
         UtilMDE.nplural(map_files.size(), "map (context) file"));
       System.out.println(")");
@@ -1672,6 +1672,8 @@ public final class Daikon {
       return;
     }
 
+    Global.debugSplit.fine("<<enter>> setup_splitters");
+
     SplitterFactory.load_splitters(ppt, parsedSplitters);
 
     Splitter[] pconds = null;
@@ -1681,15 +1683,12 @@ public final class Daikon {
       pconds = SplitterList.get(ppt.name());
     }
     if (pconds != null) {
-      if (Global.debugSplit.isLoggable(Level.FINE)) {
-        Global.debugSplit.fine(
-                               "Got "
-                               + UtilMDE.nplural(pconds.length, "splitter")
-                               + " for "
-                               + ppt.name());
-      }
+      Global.debugSplit.fine("Got " + UtilMDE.nplural(pconds.length, "splitter")
+                             + " for " + ppt.name());
       ppt.addConditions(pconds);
     }
+
+    Global.debugSplit.fine("<<exit>>  setup_splitters");
   }
 
   ///////////////////////////////////////////////////////////////////////////
