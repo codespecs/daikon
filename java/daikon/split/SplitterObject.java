@@ -192,10 +192,6 @@ public class SplitterObject implements Comparable<SplitterObject> {
     return this.testString;
   }
 
-  public void debugPrint(String s) {
-    System.out.println(s);
-  }
-
   /*@SideEffectFree*/ public String toString() {
     return (className + ": " + "condition: " + condition + ", testString: " + testString
             + ", @ " + pptName);

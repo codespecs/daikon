@@ -335,7 +335,7 @@ public class CLASSNAME
 
     if (debug.isLoggable(Level.FINE)) {
       debug.fine ("isObviousSubSequence " +
-                  subvar.name() + "in " + supervar.name());
+                  subvar.name() + " in " + supervar.name());
     }
 
     // Standard discard reason/string

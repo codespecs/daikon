@@ -17,13 +17,6 @@ import org.checkerframework.checker.nullness.qual.*;
 
 public abstract class SplitterList
 {
-  // This causes problems right now, probably due to classloading
-  // before logs are configured.
-  // /**
-  //  * Debug tracer
-  //  **/
-  // public static final Logger debug = Logger.getLogger("daikon.split.SplitterList");
-
   // Variables starting with dkconfig_ should only be set via the
   // daikon.config.Configuration interface.
   // "@ref{}" produces a cross-reference in the printed manual.  It must
@@ -151,10 +144,8 @@ public abstract class SplitterList
   //       splitterArrays.addElement(result);
   //
   //     if (splitterArrays.size() == 0) {
-  //       if (Global.debugPptSplit) {
-  //         System.out.println("SplitterList.get found no splitters for " + pptName);
+  //         Global.debugSplit.fine("SplitterList.get found no splitters for " + pptName);
   //         return null;
-  //       }
   //     } else {
   //       int counter = 0;
   //       for (int i = 0; i < splitterArrays.size(); i++) {
@@ -164,8 +155,7 @@ public abstract class SplitterList
   //           counter++;
   //         }
   //       }
-  //       if (Global.debugPptSplit)
-  //         System.out.println("SplitterList.get found " + counter + " splitters for " + pptName);
+  //       Global.debugSplit.fine("SplitterList.get found " + counter + " splitters for " + pptName);
   //     }
   //     return (Splitter[])splitters.toArray(new Splitter[0]);
   //   }
@@ -197,10 +187,8 @@ public abstract class SplitterList
     }
 
     if (splitterArrays.size() == 0) {
-      if (Global.debugSplit.isLoggable(Level.FINE)) {
         Global.debugSplit.fine ("SplitterList.get found no splitters for " + pptName);
-      }
-      return null;
+        return null;
     } else {
       Vector<Splitter> splitters = new Vector<Splitter>();
       for (Splitter[] tempsplitters : splitterArrays) {
@@ -208,10 +196,8 @@ public abstract class SplitterList
           splitters.addElement(tempsplitters[j]);
         }
       }
-      if (Global.debugSplit.isLoggable(Level.FINE)) {
         Global.debugSplit.fine ("SplitterList.get found " + splitters.size() + " splitters for " + pptName);
-      }
-      return splitters.toArray(new Splitter[0]);
+        return splitters.toArray(new Splitter[0]);
     }
   }
 
