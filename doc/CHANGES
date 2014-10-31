@@ -20,6 +20,28 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.1.10 (October 31, 2014)
+
+  We have fixed some problems in Kvasir with C++ code.  We now correctly
+  support unnamed parameters and subclasses that add no additional data
+  members.
+
+  We have modified the output of txt-cset and txt-trace so that the 
+  invariants detected match those of the decls-DynComp output.
+
+  We have improved Daikon splitter file processing. In particular, the
+  handling of arrays has been improved.
+
+  Daikon will now build on Macs with a non-gcc C++ preprocessor.
+
+  We have added a section to the documentation on how to write your
+  own tool to manipulate a .dtrace file.
+
+  We have added a link to Takuan; a Daikon front end for WS-BPEL tool
+  process definitions.
+
+===========================================================================
+
 5.1.8 (September 30, 2014)
 
   A large number of small corrections were made to the Javadoc annotations

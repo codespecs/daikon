@@ -29,6 +29,7 @@ cygwin
 daikon
 Daikon
 Daikon's
+DAIKONDIR
 dataflow
 deallocated
 deallocations
@@ -115,9 +116,11 @@ screenshot
 signalling
 splitter
 splitters
+StackMap
 startup
 struct
 structs
+subclasses
 subdirectories
 subdirectory
 sublicense
