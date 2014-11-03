@@ -886,7 +886,8 @@ of that class to @code{FileIO.read_data_trace_files}.  Daikon will parse
 each record in the trace files that you indicate, then will pass the parsed
 version to methods in your processor.
 
-For a simple example of how to use @code{FileIO.Processor}, see file
+For a simple example of how to use @code{FileIO.Processor}, see the file
+@*
 @file{daikon/java/daikon/tools/ReadTrace.java}.
 
 
@@ -2434,7 +2435,8 @@ curl -O http://plse.cs.washington.edu/daikon/staging-daikon/ \
 tar xzf daikon.tar.gz
 # Convert OSTYPE from a shell variable to a system environment variable.
 export OSTYPE
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/Contents/Home
+export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/ \
+                                                Contents/Home
 export DAIKONDIR=`pwd`/daikon
 source daikon/scripts/daikon.bashrc
 cd daikon

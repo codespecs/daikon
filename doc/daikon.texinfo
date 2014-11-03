@@ -4100,6 +4100,7 @@ the files @file{foo.txt-cset} and @file{foo.txt-trace}.  In the @file{cset}
 file, DynComp outputs comparability sets as sets.  The above @file{.decls}
 output corresponds to the following in @file{cset}:
 
+@exampleindent 1
 @example
 Daikon Variable sets for Year.compute(I yr, I d1, I d2) enter
   [2] [daikon.chicory.ParameterInfo:d1] [daikon.chicory.ParameterInfo:d2]
@@ -4109,6 +4110,7 @@ Daikon Variable sets for Year.compute(I yr, I d1, I d2) exit
        d2, daikon.chicory.ReturnInfo:return]
   [1] [daikon.chicory.ParameterInfo:yr]
 @end example
+@exampleindent 4
 
 @noindent
 In the @file{trace} file, DynComp outputs comparability sets as trees,
@@ -4118,6 +4120,7 @@ in a set does not imply anything about whether they interacted.
 The above @file{.decls} output corresponds to the following in
 @file{trace}:
 
+@exampleindent 1
 @example
 Daikon Traced Tree for Year.compute(I yr, I d1, I d2) enter
 
@@ -4135,6 +4138,7 @@ daikon.chicory.ParameterInfo:d1
 
 daikon.chicory.ParameterInfo yr
 @end example
+@exampleindent 4
 
 @noindent
 The file here shows that @code{d1}, @code{d2}, and the return value of
