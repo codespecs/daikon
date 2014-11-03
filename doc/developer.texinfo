@@ -2078,7 +2078,7 @@ will need to rebuild @file{plume.jar} as noted in the following step.
 
 @item
 Make sure you have the latest version of the Checker Framework Java compiler. 
-See the @cite{Download} section of @uref{http://types.cs.washington.edu/jsr308}. 
+See the @cite{Download} section of @uref{http://types.cs.washington.edu/jsr308/}. 
 Make sure you have the @env{CHECKERFRAMEWORK} environment 
 variable set to the location of the Checker Framework package.
 
