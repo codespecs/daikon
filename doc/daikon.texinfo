@@ -4630,8 +4630,7 @@ given file.  Other program points (respectively variables) will be
 omitted from the @file{.decls} and @file{.dtrace} files.  A convenient
 way to produce such files is by editing the output produced by the
 @option{--dump-ppt-file} (respectively, @option{--dump-var-file}) option
-described below.  (@xref{Tracing only part of a program} section
-for detailed instructions on using these options.)
+described below (@pxref{Tracing only part of a program}).
 
 @item --dump-ppt-file=@var{filename}
 @itemx --dump-var-file=@var{filename}
@@ -4639,9 +4638,8 @@ for detailed instructions on using these options.)
 Print a list of all the program points (respectively all the variables)
 in the program to the specified file.  An edited version of this file can
 then be used with the @option{--ppt-list-file} (respectively
-@option{--var-list-file}) option.
-(@xref{Tracing only part of a program} section
-for detailed instructions on using these options.)
+@option{--var-list-file}) option
+(@pxref{Tracing only part of a program}).
 Note: Do not use these options with the
 @option{--with-dyncomp} option because the behavior is undefined.
 Running Kvasir with these
@@ -4942,7 +4940,7 @@ default. These options are intended mainly for DynComp developers.
 Kvasir comes with the DynComp dynamic comparability analysis tool, which
 performs dynamic type inference to group variables at each program point
 into comparability sets.
-(@xref{Program point declarations,,,developer,Daikon Developer Manual}
+(@xref{Program point declarations,,,developer,Daikon Developer Manual},
 for the
 numeric representation format of these sets).  All variables in each
 comparability set belong to the same ``abstract type'' of data that the
@@ -5077,7 +5075,7 @@ consists of a newline-separated list of names of functions that the
 user wants Kvasir to trace.  Every name corresponds to both the entrance
 (@code{:::ENTER}) and exit (@code{:::EXIT}) program points for that function
 and is printed out in the exact same format that Kvasir
-uses for that function in the trace file. (@xref{Using Kvasir}
+uses for that function in the trace file. (@xref{Using Kvasir},
 for the program point naming scheme.)  Here is an
 example of a @file{ppt-list-file}:
 
@@ -5205,7 +5203,7 @@ If an entire section is missing, then no variables for that program point
 (or no global variables, if it is the special globals section) are traced.
 
 The variables listed in this file are written exactly as they appear in
-the @file{.decls} and @file{.dtrace} file. (@xref{Using Kvasir} section
+the @file{.decls} and @file{.dtrace} file. (@xref{Using Kvasir},
 for the variable naming scheme.)  In the program that generated the
 output for the above example, @code{int*
 globalIntArray} is a global integer pointer variable.  For that
