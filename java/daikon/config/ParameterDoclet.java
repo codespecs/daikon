@@ -277,7 +277,9 @@ public class ParameterDoclet
         desc = UtilMDE.replaceString (desc, "<code>", "@code{");
         desc = UtilMDE.replaceString (desc, "</code>", "}");
         out.println(desc);
-        out.println(defstr);
+        if (! desc.contains("The default value is")) {
+          out.println(defstr);
+        }
         out.println();
       }
       out.println("@end table");
@@ -301,7 +303,9 @@ public class ParameterDoclet
         //   [desc]
         out.println("  " + field);
         out.println("    " + desc);
-        out.println("    " + defstr);
+        if (! desc.contains("The default value is")) {
+          out.println("    " + defstr);
+        }
         out.println();
       }
     }
