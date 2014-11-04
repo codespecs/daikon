@@ -46,6 +46,10 @@ public class SplitterFactory {
    *
    * By default, $DAIKONDIR/java is part of the classpath. This is useful
    * when working from the sources directly.
+   *
+   * The default value is
+   * "javac -classpath $DAIKONDIR/daikon.jar:$DAIKONDIR/java"
+   * (with appropriate classpath separator for the operating system).
    **/
   public static String dkconfig_compiler
     = "javac -classpath " + new File(System.getenv("DAIKONDIR"), "daikon.jar") + File.pathSeparatorChar + new File(System.getenv("DAIKONDIR"), "java");
