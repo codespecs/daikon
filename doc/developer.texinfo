@@ -2165,7 +2165,7 @@ cd $DAIKONDIR/java
 make check-nullness
 @end example
 
-[Time: 20 min (due to a bug, it currently takes about an hour)]
+[Time: 20 min]
 
 
 @item
@@ -2176,7 +2176,7 @@ The last line printed should be "All tests succeeded."
 make -C $DAIKONDIR/tests clean diffs
 @end example
 
-[Time: 20 min]
+[Time: 25 min]
 
 
 @item
@@ -2187,7 +2187,7 @@ There should be no diff files marked FAILED.
 make -C $DAIKONDIR/tests/kvasir-tests clean-all nightly-summary-w-daikon
 @end example
 
-[Time: 15 min]
+[Time: 17 min]
 
 
 @item
@@ -2297,7 +2297,7 @@ file @file{$DAIKONDIR/plume-lib/bin/checklink-args.txt}.
 In some cases a "403 Forbidden" error is transient, due to the website
 being down.  You can check such links by hand.
 
-[Time: 2 min]
+[Time: 3 min]
 
 
 @item
@@ -2311,7 +2311,7 @@ by invariant output being written to the screen.
 make test-staged-dist
 @end example
 
-[Time: 7 min]
+[Time: 9 min]
 
 
 @item
@@ -2567,10 +2567,6 @@ hg push
 @item
 Send mail to the @samp{daikon-announce} mailing list.
 This list is located at @samp{daikon-announce@@googlegroups.com}.
-(We have just moved the location of our mailing lists.  For now, you can
-find old sample messages in the
-@uref{http://lists.csail.mit.edu/pipermail/daikon-announce/,archive}
-of our previous mail list.)
 
 @end enumerate
 
