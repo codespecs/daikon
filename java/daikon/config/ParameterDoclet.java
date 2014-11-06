@@ -295,7 +295,7 @@ public class ParameterDoclet
       out.println(categories[c].description);
       out.println();
 
-      for (String field : UtilMDE.sortedKeySet(categories[c].fields)) {
+      for (/*@KeyFor("categories[c].fields")*/ String field : UtilMDE.sortedKeySet(categories[c].fields)) {
         String desc = categories[c].fields.get(field);
         String defstr = getDefaultString(field);
 
