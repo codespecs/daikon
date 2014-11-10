@@ -6075,6 +6075,8 @@ you do not need to perform separate instrumentation and recompilation steps.
 For more details about how to download and use Celeriac, please
 see @uref{http://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted}.
 
+Celeriac works under Mono as well as under the Microsoft .NET implementation; see @uref{https://code.google.com/p/daikon-dot-net-front-end/wiki/Mono}.
+
 
 @node    dfepl
 @section Perl front end dfepl
