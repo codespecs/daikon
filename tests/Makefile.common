@@ -268,11 +268,14 @@ PRINT_INVARIANTS?=$(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.PrintInvariants
 DAIKON_OPTIONS?=
 PRINT_INVARIANTS_OPTIONS?=
 
-ifeq ($(UNAME_S),Darwin)
-  # On MacOS, dos2unix is not installed by default (but available from homebrew)
-  DOS2UNIX ?= perl -pi -e 's/\r\n|\n|\r/\n/g'
-else
-  DOS2UNIX ?= dos2unix
+# This test should use "command -v" instead of "which"
+DOS2UNIX ?= $(shell which dos2unix)
+ifeq ($(DOS2UNIX),)
+  ifeq ($(shell which perl),)
+    $(error Install either dos2unix or perl)
+  else
+    DOS2UNIX ?= perl -pi -e 's/\r\n|\n|\r/\n/g'
+  endif
 endif
 
 
