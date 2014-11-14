@@ -1,0 +1,630 @@
+// Declaration file written by daikon.dcomp
+
+VarComparability
+implicit
+DECLARE
+Main:::CLASS
+
+DECLARE
+Main:::OBJECT
+this
+Main # isParam=true
+hashcode
+2
+
+
+DECLARE
+Main.Main():::ENTER
+
+DECLARE
+Main.Main():::EXIT3
+this
+Main # isParam=true
+hashcode
+2
+
+
+DECLARE
+Main.main(java.lang.String[]):::ENTER
+args
+java.lang.String[] # isParam=true
+hashcode
+2
+args.getClass()
+java.lang.Class
+java.lang.String
+1
+args[..]
+java.lang.String[]
+hashcode[]
+3
+args[..].toString
+java.lang.String[]
+java.lang.String[]
+4
+
+DECLARE
+Main.main(java.lang.String[]):::EXIT10
+args
+java.lang.String[] # isParam=true
+hashcode
+2
+args.getClass()
+java.lang.Class
+java.lang.String
+1
+args[..]
+java.lang.String[]
+hashcode[]
+3
+args[..].toString
+java.lang.String[]
+java.lang.String[]
+4
+
+
+DECLARE
+Main.equals(java.lang.Object):::ENTER
+this
+Main # isParam=true
+hashcode
+3
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+Main.equals(java.lang.Object):::EXIT1
+this
+Main # isParam=true
+hashcode
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+Main.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+Main # isParam=true
+hashcode
+3
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+Main.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+Main # isParam=true
+hashcode
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+DECLARE
+TestScores:::CLASS
+
+DECLARE
+TestScores:::OBJECT
+this
+TestScores # isParam=true
+hashcode
+2
+
+
+DECLARE
+TestScores.TestScores():::ENTER
+
+DECLARE
+TestScores.TestScores():::EXIT3
+this
+TestScores # isParam=true
+hashcode
+2
+
+
+DECLARE
+TestScores.main(java.lang.String[]):::ENTER
+args
+java.lang.String[] # isParam=true
+hashcode
+2
+args.getClass()
+java.lang.Class
+java.lang.String
+1
+args[..]
+java.lang.String[]
+hashcode[]
+3
+args[..].toString
+java.lang.String[]
+java.lang.String[]
+4
+
+DECLARE
+TestScores.main(java.lang.String[]):::EXIT9
+args
+java.lang.String[] # isParam=true
+hashcode
+2
+args.getClass()
+java.lang.Class
+java.lang.String
+1
+args[..]
+java.lang.String[]
+hashcode[]
+3
+args[..].toString
+java.lang.String[]
+java.lang.String[]
+4
+
+
+DECLARE
+TestScores.classAve(int[]):::ENTER
+scores
+int[] # isParam=true
+hashcode
+2
+scores[..]
+int[]
+int[]
+3
+
+DECLARE
+TestScores.classAve(int[]):::EXIT17
+scores
+int[] # isParam=true
+hashcode
+3
+scores[..]
+int[]
+int[]
+2
+return
+int
+int
+2
+
+
+DECLARE
+TestScores.six170():::ENTER
+
+DECLARE
+TestScores.six170():::EXIT32
+
+
+DECLARE
+TestScores.six821():::ENTER
+
+DECLARE
+TestScores.six821():::EXIT46
+
+
+DECLARE
+TestScores.six893():::ENTER
+
+DECLARE
+TestScores.six893():::EXIT70
+
+
+DECLARE
+TestScores.equals(java.lang.Object):::ENTER
+this
+TestScores # isParam=true
+hashcode
+3
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+TestScores.equals(java.lang.Object):::EXIT1
+this
+TestScores # isParam=true
+hashcode
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+TestScores.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+TestScores # isParam=true
+hashcode
+3
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+TestScores.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+TestScores # isParam=true
+hashcode
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+DECLARE
+DataAvg:::CLASS
+
+DECLARE
+DataAvg:::OBJECT
+this
+DataAvg # isParam=true
+hashcode
+2
+this.sum
+int # 
+int
+3
+this.count
+int # 
+int
+3
+
+
+DECLARE
+DataAvg.DataAvg():::ENTER
+
+DECLARE
+DataAvg.DataAvg():::EXIT13
+this
+DataAvg # isParam=true
+hashcode
+2
+this.sum
+int # 
+int
+3
+this.count
+int # 
+int
+3
+
+
+DECLARE
+DataAvg.insert(int):::ENTER
+this
+DataAvg # isParam=true
+hashcode
+3
+this.sum
+int # 
+int
+2
+this.count
+int # 
+int
+2
+element
+int # isParam=true
+int
+2
+
+DECLARE
+DataAvg.insert(int):::EXIT19
+this
+DataAvg # isParam=true
+hashcode
+3
+this.sum
+int # 
+int
+2
+this.count
+int # 
+int
+2
+element
+int # isParam=true
+int
+2
+
+
+DECLARE
+DataAvg.average():::ENTER
+this
+DataAvg # isParam=true
+hashcode
+2
+this.sum
+int # 
+int
+3
+this.count
+int # 
+int
+3
+
+DECLARE
+DataAvg.average():::EXIT24
+this
+DataAvg # isParam=true
+hashcode
+3
+this.sum
+int # 
+int
+2
+this.count
+int # 
+int
+2
+return
+int
+int
+2
+
+
+DECLARE
+DataAvg.equals(java.lang.Object):::ENTER
+this
+DataAvg # isParam=true
+hashcode
+3
+this.sum
+int # 
+int
+4
+this.count
+int # 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataAvg.equals(java.lang.Object):::EXIT1
+this
+DataAvg # isParam=true
+hashcode
+4
+this.sum
+int # 
+int
+5
+this.count
+int # 
+int
+5
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+DataAvg.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+DataAvg # isParam=true
+hashcode
+3
+this.sum
+int # 
+int
+4
+this.count
+int # 
+int
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+DataAvg.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+DataAvg # isParam=true
+hashcode
+4
+this.sum
+int # 
+int
+5
+this.count
+int # 
+int
+5
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+DECLARE
+RandomMean:::CLASS
+
+DECLARE
+RandomMean:::OBJECT
+this
+RandomMean # isParam=true
+hashcode
+2
+
+
+DECLARE
+RandomMean.RandomMean():::ENTER
+
+DECLARE
+RandomMean.RandomMean():::EXIT3
+this
+RandomMean # isParam=true
+hashcode
+2
+
+
+DECLARE
+RandomMean.main():::ENTER
+
+DECLARE
+RandomMean.main():::EXIT7
+
+
+DECLARE
+RandomMean.compute():::ENTER
+
+DECLARE
+RandomMean.compute():::EXIT20
+
+
+DECLARE
+RandomMean.equals(java.lang.Object):::ENTER
+this
+RandomMean # isParam=true
+hashcode
+3
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+RandomMean.equals(java.lang.Object):::EXIT1
+this
+RandomMean # isParam=true
+hashcode
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+
+
+DECLARE
+RandomMean.equals_dcomp_instrumented(java.lang.Object):::ENTER
+this
+RandomMean # isParam=true
+hashcode
+3
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+
+DECLARE
+RandomMean.equals_dcomp_instrumented(java.lang.Object):::EXIT1
+this
+RandomMean # isParam=true
+hashcode
+4
+obj
+java.lang.Object # isParam=true
+hashcode
+2
+obj.getClass()
+java.lang.Class
+java.lang.String
+1
+return
+boolean
+boolean
+3
+

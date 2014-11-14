@@ -1,0 +1,117 @@
+
+Variable sets for Main.<init>() enter
+Variable sets for Main.<init>() exit
+  [1] [this]
+
+Variable sets for Main.main([Ljava.lang.String; args) enter
+  [1] [Parameter args]
+  [1] [Class of args]
+  [1] [Array args[..]]
+  [1] [String args[..].toString]
+Variable sets for Main.main([Ljava.lang.String; args) exit
+  [1] [Parameter args]
+  [1] [Class of args]
+  [1] [Array args[..]]
+  [1] [String args[..].toString]
+
+Variable sets for Main.equals(java.lang.Object obj) enter
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+Variable sets for Main.equals(java.lang.Object obj) exit
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+
+Variable sets for TestScores.<init>() enter
+Variable sets for TestScores.<init>() exit
+  [1] [this]
+
+Variable sets for TestScores.main([Ljava.lang.String; args) enter
+  [1] [Parameter args]
+  [1] [Class of args]
+  [1] [Array args[..]]
+  [1] [String args[..].toString]
+Variable sets for TestScores.main([Ljava.lang.String; args) exit
+  [1] [Parameter args]
+  [1] [Class of args]
+  [1] [Array args[..]]
+  [1] [String args[..].toString]
+
+Variable sets for TestScores.classAve([I scores) enter
+  [1] [Parameter scores]
+  [1] [Array scores[..]]
+Variable sets for TestScores.classAve([I scores) exit
+  [2] [return, Array scores[..]]
+  [1] [Parameter scores]
+
+Variable sets for TestScores.six170() enter
+Variable sets for TestScores.six170() exit
+
+Variable sets for TestScores.six821() enter
+Variable sets for TestScores.six821() exit
+
+Variable sets for TestScores.six893() enter
+Variable sets for TestScores.six893() exit
+
+Variable sets for TestScores.equals(java.lang.Object obj) enter
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+Variable sets for TestScores.equals(java.lang.Object obj) exit
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+
+Variable sets for DataAvg.<init>() enter
+Variable sets for DataAvg.<init>() exit
+  [1] [this]
+  [2] [Field count, Field sum]
+
+Variable sets for DataAvg.insert(int element) enter
+  [3] [Parameter element, Field count, Field sum]
+  [1] [this]
+Variable sets for DataAvg.insert(int element) exit
+  [3] [Parameter element, Field count, Field sum]
+  [1] [this]
+
+Variable sets for DataAvg.average() enter
+  [1] [this]
+  [2] [Field count, Field sum]
+Variable sets for DataAvg.average() exit
+  [3] [return, Field count, Field sum]
+  [1] [this]
+
+Variable sets for DataAvg.equals(java.lang.Object obj) enter
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+  [2] [Field count, Field sum]
+Variable sets for DataAvg.equals(java.lang.Object obj) exit
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]
+  [2] [Field count, Field sum]
+
+Variable sets for RandomMean.<init>() enter
+Variable sets for RandomMean.<init>() exit
+  [1] [this]
+
+Variable sets for RandomMean.main() enter
+Variable sets for RandomMean.main() exit
+
+Variable sets for RandomMean.compute() enter
+Variable sets for RandomMean.compute() exit
+
+Variable sets for RandomMean.equals(java.lang.Object obj) enter
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [this]
+Variable sets for RandomMean.equals(java.lang.Object obj) exit
+  [1] [Parameter obj]
+  [1] [Class of obj]
+  [1] [return]
+  [1] [this]

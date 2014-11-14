@@ -1,0 +1,61 @@
+===========================================================================
+DataAvg:::OBJECT
+this.sum >= 0
+this.count <= 1000
+this.count >= 0
+this.sum >= this.count
+===========================================================================
+DataAvg.DataAvg():::EXIT
+this.sum == this.count
+this.sum == 0
+===========================================================================
+DataAvg.average():::ENTER
+this.count >= 5
+this.sum > this.count
+===========================================================================
+DataAvg.average():::EXIT
+this.sum == orig(this.sum)
+this.count == orig(this.count)
+this.count >= 5
+this.sum > this.count
+this.sum > return
+this.count != return
+===========================================================================
+DataAvg.insert(int):::ENTER
+element != 0
+element <= 1275
+element >= -1023
+this.count != element
+===========================================================================
+DataAvg.insert(int):::EXIT
+this.count >= 1
+this.sum > this.count
+this.sum != orig(this.sum)
+this.sum > orig(this.count)
+this.sum >= orig(element)
+this.count != orig(this.sum)
+this.count - orig(this.count) - 1 == 0
+this.count != orig(element)
+this.sum - orig(this.sum) - orig(element) == 0
+===========================================================================
+Main.main(java.lang.String[]):::ENTER
+args has only one value
+args.getClass() == java.lang.String[].class
+args[] == []
+args[].toString == []
+===========================================================================
+Main.main(java.lang.String[]):::EXIT
+args[] == orig(args[])
+args[] == []
+args[].toString == []
+===========================================================================
+TestScores.classAve(int[]):::ENTER
+scores != null
+size(scores[]) >= 5
+scores[] elements >= size(scores[])-1
+===========================================================================
+TestScores.classAve(int[]):::EXIT
+scores[] == orig(scores[])
+return <= 100
+scores[] elements >= size(scores[])-1
+return > orig(size(scores[]))

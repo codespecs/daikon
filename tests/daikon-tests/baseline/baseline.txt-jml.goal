@@ -1,0 +1,72 @@
+===========================================================================
+DataAvg:::OBJECT
+    Variables: this this.sum this.count
+this.sum >= 0
+this.count <= 1000
+this.count >= 0
+this.sum >= this.count
+===========================================================================
+DataAvg.DataAvg():::EXIT
+    Variables: this this.sum this.count
+this.sum == this.count
+this.sum == 0
+===========================================================================
+DataAvg.average():::ENTER
+    Variables: this this.sum this.count
+this.count >= 5
+this.sum > this.count
+===========================================================================
+DataAvg.average():::EXIT
+    Variables: this this.sum this.count return orig(this) orig(this.sum) orig(this.count)
+this.sum == \old(this.sum)
+this.count == \old(this.count)
+this.count >= 5
+this.sum > this.count
+this.sum > \result
+this.count != \result
+===========================================================================
+DataAvg.insert(int):::ENTER
+    Variables: this this.sum this.count element
+element != 0
+element <= 1275
+element >= -1023
+this.count != element
+===========================================================================
+DataAvg.insert(int):::EXIT
+    Variables: this this.sum this.count element orig(this) orig(this.sum) orig(this.count) orig(element)
+assignable this.sum, this.count
+this.count >= 1
+this.sum > this.count
+this.sum != \old(this.sum)
+this.sum > \old(this.count)
+this.sum >= \old(element)
+this.count != \old(this.sum)
+this.count - \old(this.count) - 1 == 0
+this.count != \old(element)
+this.sum - \old(this.sum) - \old(element) == 0
+===========================================================================
+Main.main(java.lang.String[]):::ENTER
+    Variables: args args.getClass() args[] args[].toString size(args[]) size(args[])-1
+args != null
+args.getClass() == java.lang.String[].class
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(args, "toString()"), new String[] {  })
+===========================================================================
+Main.main(java.lang.String[]):::EXIT
+    Variables: args args.getClass() args[] args[].toString orig(args) orig(args.getClass()) orig(args[]) orig(args[].toString) size(args[]) size(args[])-1 orig(size(args[])) orig(size(args[]))-1
+daikon.Quant.pairwiseEqual(args, \old(args))
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.pairwiseEqual(daikon.Quant.collectObject(args, "toString()"), new String[] {  })
+===========================================================================
+TestScores.classAve(int[]):::ENTER
+    Variables: scores scores[] size(scores[]) size(scores[])-1
+scores != null
+daikon.Quant.size(scores) >= 5
+daikon.Quant.eltsGTE(scores, daikon.Quant.size(scores)-1)
+===========================================================================
+TestScores.classAve(int[]):::EXIT
+    Variables: scores scores[] return orig(scores) orig(scores[]) size(scores[]) size(scores[])-1 orig(size(scores[])) orig(size(scores[]))-1 scores[return] scores[return-1] orig(scores[post(return)]) orig(scores[post(return)-1])
+daikon.Quant.pairwiseEqual(scores, \old(scores))
+\result <= 100
+daikon.Quant.eltsGTE(scores, daikon.Quant.size(scores)-1)
+\result > \old(daikon.Quant.size(scores))
