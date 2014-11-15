@@ -1,0 +1,6 @@
+This test case comes from the Google C++ Testing Framework.
+It is a sample program provided with the release.
+The version used was gtest-1.6.0.
+
+It looks like it will always fail the dtrace compare due
+to program variables containing elapsed time.

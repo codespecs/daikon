@@ -1,0 +1,31 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== COPYRIGHT
+==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
+==PID== Command: ./gtest
+==PID== 
+Running main() from gtest_main.cc
+[==========] Running 6 tests from 2 test cases.
+[----------] Global test environment set-up.
+[----------] 3 tests from FactorialTest
+[ RUN      ] FactorialTest.Negative
+[       OK ] FactorialTest.Negative (294 ms)
+[ RUN      ] FactorialTest.Zero
+[       OK ] FactorialTest.Zero (263 ms)
+[ RUN      ] FactorialTest.Positive
+[       OK ] FactorialTest.Positive (300 ms)
+[----------] 3 tests from FactorialTest (1215 ms total)
+
+[----------] 3 tests from IsPrimeTest
+[ RUN      ] IsPrimeTest.Negative
+[       OK ] IsPrimeTest.Negative (277 ms)
+[ RUN      ] IsPrimeTest.Trivial
+[       OK ] IsPrimeTest.Trivial (285 ms)
+[ RUN      ] IsPrimeTest.Positive
+[       OK ] IsPrimeTest.Positive (285 ms)
+[----------] 3 tests from IsPrimeTest (1192 ms total)
+
+[----------] Global test environment tear-down
+[==========] 6 tests from 2 test cases ran. (3624 ms total)
+[  PASSED  ] 6 tests.
+==PID== 
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
