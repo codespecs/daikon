@@ -27,14 +27,16 @@ cross-checker-good:
 
 # (We must use actions for these rules for 'make' to work correctly.)
 
-everything-%: dsaa-% mapquick-% javautil-% 6170-% large-% polycalc-% quick-% 
+everything-%: dsaa-% mapquick-% javautil-% 6170-% large-% quick-% new-%
 	@echo ${HR}
-quick-%: SQD-% do-BinaryTree-% do-WeightedNodePath-% do-StreetNumberSet-% polycalc-% special-cases-% siemens-%
+quick-%: SQD-% polycalc-% special-cases-% siemens-%
 	@echo ${HR}
 
 # Canonical groupings
 
-dsaa-%: do-StackAr-% do-QueueAr-% do-DisjSets-% do-BinaryTree-% do-CursorList-% do-LinkedList-% do-redblack-% do-BinaryHeap-%
+SQD-%: do-StackAr-% do-QueueAr-% do-DisjSets-% 
+	@echo ${HR}
+dsaa-%: do-BinaryTree-% do-CursorList-% do-LinkedList-% do-redblack-% do-BinaryHeap-%
 	@echo ${HR}
 mapquick-%: do-WeightedNodePath-% do-StreetNumberSet-% do-GeoSegment-% do-Graph-% # do-MapQuick-%
 	@echo ${HR}
@@ -46,26 +48,15 @@ javautil-%: do-Vector-% do-ArrayList-%
 	@echo ${HR}
 large-%: # do-Flex-% do-JML-%
 	@echo ${HR}
-# Doesn't work in V3 as of 7/26/2003
-taoxie-%: do-IntStackRetObjectArray-% do-Library-% do-UBStack-%
-	@echo ${HR}
 special-cases-%: do-encapsulate_downcast-% do-compar-% do-precedence-% do-fib-% do-hanoi-% do-param-% do-suppress01-% do-suppress02-% do-StaticInteresting-% do-pine_mdiep-% do-purity-% do-Smithnosky-%
 	@echo ${HR}
 siemens-%: do-print_tokens-% do-print_tokens2-% do-replace-% do-schedule-% do-schedule2-% do-tcas-% do-tot_info-% do-space-%
 	@echo ${HR}
+new-%: do-KnownValues-% do-KnownValuesNewDecls-% do-baseline-%
+	@echo ${HR}
 
 # Extra groupings
 
-# Java programs
-java-% : dsaa-% mapquick-% polycalc-% javautil-% 6170-% \
-		 do-encapsulate_downcast-% do-compar-% do-precedence-% do-fib-% \
-		 do-hanoi-% do-param-% do-suppress01-% do-suppress02-% \
-		 do-StaticInteresting-%
-	@echo ${HR}
-
-# "SQD" is "StackAr,QueueAr,DisjSets"
-SQD-%: do-StackAr-% do-DisjSets-% # do-QueueAr-%
-	@echo ${HR}
 paper-%: SQD-% do-Vector-% do-StreetNumberSet-% do-GeoSegment-% do-Graph-% do-RatNum-% do-RatPoly-% do-FixedSizeSet-%
 	@echo ${HR}
 
