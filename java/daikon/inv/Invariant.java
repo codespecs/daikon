@@ -1148,8 +1148,8 @@ public abstract class Invariant
 
   /**
    * Return true if this invariant is necessarily true from a fact
-   * that can be determined statically (i.e., the decls files) (e.g.,
-   * by being from a certain derivation).  Intended to be overridden
+   * that can be determined statically from the decls files.  (An example
+   * is being from a certain derivation.)  Intended to be overridden
    * by subclasses.
    *
    * <p> This method is final because children of Invariant should be
@@ -1168,6 +1168,7 @@ public abstract class Invariant
    * this invariant statically obvious if its VarInfos were switched
    * with vis?"  Intended to be overridden by subclasses.  Should only
    * do static checking.
+   * <p>
    * Precondition: vis.length == this.ppt.var_infos.length
    * @param vis The VarInfos this invariant is obvious over.  The
    * position and data type of the variables is the *same* as that of
@@ -1322,6 +1323,7 @@ public abstract class Invariant
    * printing; there should be invariants with the same meaning but
    * lower arity instead. For instance, we don't need "x = x + x"
    * because we have "x = 0" instead.
+   * <p>
    *
    * Actually, this isn't strictly true: we don't have an invariant
    * "a[] is a palindrome" corresponding to "a[] is the reverse of
@@ -1333,9 +1335,16 @@ public abstract class Invariant
 
   /**
    * Return true if this invariant is necessarily true from a fact
-   * that can be determined dynamically (after checking data).  Since
+   * that can be determined dynamically (after checking data, based
+   * on other invariants that were inferred).  Since
    * this method is dynamic, it should only be called after all
    * processing.
+   * <p>
+   *
+   * If a test does not look up other inferred invariants
+   * (that is, it relies only on information in the decls file), then
+   * it should be written as an isObviousStatically test, not an
+   * isObviousDynamically test.
    *
    * <p> This method is final because subclasses should extend
    * isObviousDynamically(VarInfo[]) since that method is more general.
