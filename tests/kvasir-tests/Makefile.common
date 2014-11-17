@@ -207,8 +207,12 @@ $(DIFF_NAME).decls.diff: daikon-output/$(NAME).decls $(call goal_name,$(NAME).de
 $(DIFF_NAME).counts.diff: $(NAME).counts $(call goal_name,$(NAME).counts)
 	-diff -u $(call goal_name,$(NAME).counts) $(NAME).counts >$@ 2>&1
 
+ifeq ($(SKIP_DTRACE_DIFF),)
 $(DIFF_NAME).dtrace.diff: daikon-output/$(NAME)$(DTRACE_EXT) $(call goal_name,$(NAME).dtrace)
 	-diff --text -u $(call goal_name,$(NAME).dtrace) daikon-output/$(NAME)$(DTRACE_EXT) >$@ 2>&1
+else
+$(DIFF_NAME).dtrace.diff: daikon-output/$(NAME)$(DTRACE_EXT)
+endif
 
 $(DIFF_NAME).out.diff: $(NAME).out $(call goal_name,$(NAME).out)
 	-diff --text -u $(call goal_name,$(NAME).out) $(NAME).out  >$@ 2>&1
