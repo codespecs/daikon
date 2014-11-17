@@ -27,7 +27,8 @@ cross-checker-good:
 
 # (We must use actions for these rules for 'make' to work correctly.)
 
-everything-%: dsaa-% mapquick-% javautil-% 6170-% large-% quick-% new-%
+#everything-%: dsaa-% mapquick-% javautil-% 6170-% large-% quick-% new-%
+everything-%: dsaa-% mapquick-% javautil-% 6170-% large-% quick-% 
 	@echo ${HR}
 quick-%: SQD-% polycalc-% special-cases-% siemens-%
 	@echo ${HR}
