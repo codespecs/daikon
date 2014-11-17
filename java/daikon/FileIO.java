@@ -425,6 +425,16 @@ public final class FileIO {
             decl_error (state, "var %s declared twice", vardef.name);
           if (var_included (vardef.name))
             varmap.put (vardef.name, vardef);
+        } else if (record == "min-value") {
+            vardef.parse_min_value (scanner);
+        } else if (record == "max-value") {
+            vardef.parse_max_value (scanner);
+        } else if (record == "min-length") {
+            vardef.parse_min_length (scanner);
+        } else if (record == "max-length") {
+            vardef.parse_max_length (scanner);
+        } else if (record == "valid-values") {
+            vardef.parse_valid_values (scanner);
         } else {
           decl_error (state, "Unexpected variable item '%s' found", record);
         }
@@ -2830,6 +2840,16 @@ public final class FileIO {
     public List<VarParent> parents;
     /** Set if this 'variable' always has the same value (optional) **/
     public /*@Nullable*/ /*@Interned*/ Object static_constant_value = null;
+    /** Set if it is statically known that the value of the variable will be always greater than or equal to this value. */
+    public /*@Nullable*/ String min_value = null;
+    /** Set if it is statically known that the value of the variable will be always less than or equal to this value. */
+    public /*@Nullable*/ String max_value = null;
+    /** Set if it is statically known that the array will have at least this many elements. */
+    public /*@Nullable*/ Integer min_length = null;
+    /** Set if it is statically known that the array will have up to this many elements. */
+    public /*@Nullable*/ Integer max_length = null;
+    /** Set if the set of valid values for the variable is statically known. */
+    public /*@Nullable*/ String valid_values = null;
 
     /** Check representation invariants. */
     public void checkRep() {
@@ -3044,6 +3064,35 @@ public final class FileIO {
       } catch (Error e) {
         decl_error (state, e);
       }
+    }
+
+    /** Parse a minimum value record */
+    public void parse_min_value (Scanner scanner) throws DeclError {
+      this.min_value = need(scanner, "minimum value");
+      need_eol (scanner);
+    }
+
+    /** Parse a maximum value record */
+    public void parse_max_value (Scanner scanner) throws DeclError {
+      this.max_value = need(scanner, "maximum value");
+      need_eol (scanner);
+    }
+
+    /** Parse a minimum length record */
+    public void parse_min_length (Scanner scanner) throws DeclError {
+      this.min_length = Integer.parseInt(need(scanner, "maximum value"));
+      need_eol (scanner);
+    }
+
+    /** Parse a maximum length record */
+    public void parse_max_length (Scanner scanner) throws DeclError {
+      this.max_length = Integer.parseInt(need(scanner, "maximum value"));
+      need_eol (scanner);
+    }
+
+    /** Parse a valid values record */
+    public void parse_valid_values (Scanner scanner) throws DeclError {
+      this.valid_values = scanner.nextLine();
     }
 
     /**

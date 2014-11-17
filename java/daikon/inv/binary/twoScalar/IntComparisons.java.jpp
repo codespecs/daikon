@@ -865,6 +865,79 @@ public final class INTEQUAL
     return false;
   }
 
+  @Override
+  public /*@Nullable*/ DiscardInfo isObviousStatically(VarInfo[] vis) {
+    final VarInfo var1 = vis[0];
+    final VarInfo var2 = vis[1];
+
+    #if defined(EQUAL_OP)
+    // If A.minvalue==A.maxvalue==B.minvalue==B.maxvalue, then
+    // there's nothing to see here
+    if (var1.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
+        && var1.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)
+        && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
+        && var2.aux.hasValue(VarInfoAux.MAXIMUM_VALUE))
+    {
+      int minA = var1.aux.getInt(VarInfoAux.MINIMUM_VALUE),
+          maxA = var1.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
+          minB = var2.aux.getInt(VarInfoAux.MINIMUM_VALUE),
+          maxB = var2.aux.getInt(VarInfoAux.MAXIMUM_VALUE);
+
+      if (minA == maxA && maxA == minB && minB == maxB) {
+        return new DiscardInfo(this,
+          DiscardCode.obvious,
+          var1.name() + " == " + var2.name() + " is already known");
+      }
+    }
+    #endif
+
+    #if defined(LESSTHAN_OP) || defined(LESSEQUAL_OP) || defined(NONEQUAL_OP)
+    if (var1.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)
+        && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE))
+    {
+      int maxA = var1.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
+          minB = var2.aux.getInt(VarInfoAux.MINIMUM_VALUE);
+
+      #if defined(LESSTHAN_OP)
+      #define DISCARD_OP <
+      #elif defined(NONEQUAL_OP)
+      #define DISCARD_OP <
+      #else
+      #define DISCARD_OP <=
+      #endif
+      if (maxA DISCARD_OP minB) {
+        return new DiscardInfo(this,
+          DiscardCode.obvious,
+          var1.name() + " DISCARD_OP " + var2.name() + " is already known");
+      }
+    }
+    #endif
+
+    #if defined(GREATERTHAN_OP) || defined(GREATEREQUAL_OP) || defined(NONEQUAL_OP)
+    if (var1.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
+        && var2.aux.hasValue(VarInfoAux.MAXIMUM_VALUE))
+    {
+      int maxB = var2.aux.getInt(VarInfoAux.MAXIMUM_VALUE),
+          minA = var1.aux.getInt(VarInfoAux.MINIMUM_VALUE);
+
+      #if defined(GREATERTHAN_OP)
+      #define DISCARD_OP >
+      #elif defined(NONEQUAL_OP)
+      #define DISCARD_OP >
+      #else
+      #define DISCARD_OP >=
+      #endif
+      if (minA DISCARD_OP maxB) {
+        return new DiscardInfo(this,
+          DiscardCode.obvious,
+          var1.name() + " DISCARD_OP " + var2.name() + " is already known");
+      }
+    }
+    #endif
+
+    return super.isObviousStatically(vis);
+  }
+
 #if (defined(EQUAL_OP))
   /**
    *  Since this invariant can be a postProcessed equality, we have to

@@ -633,6 +633,25 @@ public class LOWERBOUND
       return new DiscardInfo(this, DiscardCode.obvious, "Bounds are preferrable over"
                              + " sequence lengths with no shift");
     }
+
+    #if defined(LOWER) || defined(LOWERFLOAT)
+    if (var.aux.hasValue(VarInfoAux.MINIMUM_VALUE)) {
+      int minVal = var.aux.getInt(VarInfoAux.MINIMUM_VALUE);
+      if (minVal == MIN1) {
+        return new DiscardInfo(this, DiscardCode.obvious,
+          var.name() + " >= " + MIN1 + " is already known");
+      }
+    }
+    #elif defined(UPPER) || defined(UPPERFLOAT)
+    if (var.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
+      int maxVal = var.aux.getInt(VarInfoAux.MAXIMUM_VALUE);
+      if (maxVal == MIN1) {
+        return new DiscardInfo(this, DiscardCode.obvious,
+          var.name() + " <= " + MIN1 + " is already known");
+      }
+    }
+    #endif
+
     return super.isObviousStatically (vis);
   }
 

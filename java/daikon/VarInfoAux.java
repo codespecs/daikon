@@ -79,6 +79,36 @@ public final class VarInfoAux
    **/
   public static final String HAS_NULL = "hasNull";
 
+  /**
+   * Indicates the minimum size of the vector, if there's any.
+   */
+  public static final String MINIMUM_LENGTH = "minlength";
+
+  /**
+   * Indicates the maximum size of the vector, if there's any.
+   */
+  public static final String MAXIMUM_LENGTH = "maxlength";
+
+  /**
+   * Indicates the minimum value of the scalar variable or the vector elements, if there's any.
+   */
+  public static final String MINIMUM_VALUE = "minvalue";
+
+  /**
+   * Indicates the maximum value of the scalar variable or the vector elements, if there's any.
+   */
+  public static final String MAXIMUM_VALUE = "maxvalue";
+
+  /**
+   * Indicates the valid values (using string representation) for the elements
+   * of the vector. Values are enclosed in square brackets, and each element is
+   * quoted separately, e.g.: ["a" "b"]. Parsing will be done upon
+   * call of the getList() method.
+   *
+   * @see #getList(String)
+   */
+  public static final String VALID_VALUES = "validvalues";
+
   public static final String TRUE = "true";
   public static final String FALSE = "false";
 
@@ -107,6 +137,9 @@ public final class VarInfoAux
     tok.resetSyntax();
     tok.wordChars(0, Integer.MAX_VALUE);
     tok.quoteChar('\"');
+    tok.whitespaceChars(' ',' ');
+    tok.ordinaryChar('[');
+    tok.ordinaryChar(']');
     tok.ordinaryChars(',', ',');
     tok.ordinaryChars('=', '=');
     Map</*@Interned*/ String,/*@Interned*/ String> map = theDefault.map;
@@ -114,6 +147,7 @@ public final class VarInfoAux
     String key = "";
     String value = "";
     boolean seenEqual = false;
+    boolean insideVector = false;
     for (int tokInfo = tok.nextToken(); tokInfo != StreamTokenizer.TT_EOF;
          tokInfo = tok.nextToken()) {
       @SuppressWarnings("interning") // initialization-checking pattern
@@ -135,20 +169,40 @@ public final class VarInfoAux
 
       debug.fine ("Token info: " + tokInfo + " " + token);
 
-      if (token == ",") {       // interned
+      if (token == "[") { // interned
         if (!seenEqual)
-          throw new IOException ("Aux option did not contain an '='");
+          throw new IOException("Aux option did not contain an '='");
+        if (insideVector)
+          throw new IOException("Vectors cannot be nested in an aux option");
+        if (value.length() > 0)
+          throw new IOException("Cannot mix scalar and vector values");
+
+        insideVector = true;
+        value = "";
+      } else if (token == "]") { // interned
+        if (!insideVector)
+          throw new IOException("']' without preceding '['");
+        insideVector = false;
+      } else if (token == ",") { // interned
+        if (!seenEqual)
+          throw new IOException("Aux option did not contain an '='");
+        if (insideVector)
+          throw new IOException("',' cannot be used inside a vector");
         map.put (key.intern(), value.intern());
         key = "";
         value = "";
         seenEqual = false;
       } else if (token == "=") { // interned
         if (seenEqual)
-          throw new IOException ("Aux option contained more than one '='");
+          throw new IOException("Aux option contained more than one '='");
+        if (insideVector)
+          throw new IOException("'=' cannot be used inside a vector");
         seenEqual = true;
       } else {
         if (!seenEqual) {
           key = (key + " " + token).trim();
+        } else if (insideVector) {
+          value = value + " \"" + token.trim() + "\"";
         } else {
           value = (value + " " + token).trim();
         }
@@ -289,13 +343,68 @@ public final class VarInfoAux
     return result;
   }
 
+  /**
+   * Returns the integer value associated with a key, assuming it is
+   * defined. It is recommended to check that it is defined first with
+   * {@link #hasValue(String)}.
+   *
+   * @throws RuntimeException if the key is not defined.
+   * @throws NumberFormatException if the value of the key cannot be parsed as an integer.
+   * @see #hasValue(String)
+   */
+  public int getInt(String key) {
+    if (!hasValue(key)) {
+      throw new RuntimeException(String.format("Key '%s' is not defined", key));
+    }
+    return Integer.parseInt(getValue(key));
+  }
+
+  /**
+   * Returns the string array associated with a key, assuming it is
+   * defined. It is recommended to check that it is defined first with
+   * {@link #hasValue(String)}.
+   *
+   * @throws RuntimeException if the key is not defined.
+   * @see #hasValue(String)
+   */
+  public String[] getList(String key) {
+    try {
+      if (!hasValue(key)) {
+        throw new RuntimeException(String.format("Key '%s' is not defined", key));
+      }
+      final String sValue = getValue(key);
+      StreamTokenizer tok = new StreamTokenizer(new StringReader(sValue));
+      tok.quoteChar('"');
+      tok.whitespaceChars(' ',' ');
+      ArrayList<String> lValues = new ArrayList<String>();
+
+      int tokInfo = tok.nextToken();
+      while (tokInfo != StreamTokenizer.TT_EOF) {
+        if (tok.ttype != '"') continue;
+        assert tok.sval != null : "@AssumeAssertion(nullness)"; // tok.type == '"' guarantees not null
+        lValues.add(tok.sval.trim());
+        tokInfo = tok.nextToken();
+      }
+      return lValues.toArray(new String[]{});
+    }
+    catch (IOException ex) {
+      throw new RuntimeException(String.format("Parsing for key '%s' failed", key), ex);
+    }
+  }
 
   /**
    * Returns the value for the given key.
    **/
   public String getValue(String key) {
-    assert map.containsKey(key);
+    assert map.containsKey(key) : "Map contains key " + key;
     return map.get(key);
+  }
+
+  /**
+   * Return <code>true</code> if the value for the given key is defined, and <code>false</code> otherwise.
+   */
+  public boolean hasValue(String key) {
+    return map.containsKey(key);
   }
 
   public boolean getFlag(String key) {
@@ -317,6 +426,14 @@ public final class VarInfoAux
     HashMap</*@Interned*/ String,/*@Interned*/ String> newMap = new HashMap</*@Interned*/ String,/*@Interned*/ String> (this.map);
     newMap.put (key.intern(), value.intern());
     return new VarInfoAux(newMap).intern();
+  }
+
+  /**
+   * Converts the integer <code>value</code> to a String before
+   * invoking {@link #setValue(String, String)}.
+   */
+  public VarInfoAux setInt(String key, int value) {
+    return setValue(key, Integer.toString(value));
   }
 
 }

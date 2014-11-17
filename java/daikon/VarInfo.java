@@ -323,17 +323,43 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     rep_type = file_rep_type.fileTypeToRepType();
 
     // Create the VarInfoAux information
-    String auxstr = "";
+    final List<String> auxstrs = new ArrayList<String>();
     if (var_flags.contains (VarFlags.IS_PARAM)) {
-      if (auxstr.length() > 0)
-        auxstr += ", ";
-      auxstr += "isParam=true";
+      auxstrs.add("isParam=true");
     }
     if (var_flags.contains (VarFlags.NON_NULL)) {
-      if (auxstr.length() > 0)
-        auxstr += ", ";
-      auxstr += "isStruct=true";
+      auxstrs.add("isStruct=true");
     }
+    if (vardef.min_value != null) {
+      auxstrs.add("minvalue=" + vardef.min_value);
+    }
+    if (vardef.max_value != null) {
+      auxstrs.add("maxvalue=" + vardef.max_value);
+    }
+    if (vardef.min_length != null) {
+      auxstrs.add("minlength=" + vardef.min_length);
+    }
+    if (vardef.max_length != null) {
+      auxstrs.add("maxlength=" + vardef.max_length);
+    }
+    if (vardef.valid_values != null) {
+      auxstrs.add("validvalues=" + vardef.valid_values);
+    }
+
+    // Sadly, String.join is only available from Java 8:
+    // https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#join-java.lang.CharSequence-java.lang.Iterable-
+    final StringBuilder sb = new StringBuilder();
+    boolean first = true;
+    for (String s : auxstrs) {
+        if (first) {
+            first = false;
+        } else {
+            sb.append(", ");
+        }
+        sb.append(s);
+    }
+    final String auxstr = sb.toString();
+
     try {
       aux = VarInfoAux.parse (auxstr);
     } catch (Exception e) {

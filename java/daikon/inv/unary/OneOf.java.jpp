@@ -1578,6 +1578,40 @@ public String format_csharp_contract() {
     if (logOn())
       dlog.log ("enter isObviousDynamically");
 
+      // We can use the minvalue and maxvalue custom attributes here: if
+      // minimum value and maximum value are the same as the reported
+      // value, then we can suppress this invariant
+      if (num_elts == 1
+          && v.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
+          && v.aux.hasValue(VarInfoAux.MAXIMUM_VALUE))
+      {
+        int min = v.aux.getInt(VarInfoAux.MINIMUM_VALUE);
+        int max = v.aux.getInt(VarInfoAux.MAXIMUM_VALUE);
+        if (min == max && min == elts[0]) {
+          return new DiscardInfo(this,
+            DiscardCode.obvious,
+            v.name() + "'s value matches with the expected value");
+        }
+      }
+
+      // We can check if all values in the list match with the ones we know about
+      // (useful for booleans and numeric enumerations)
+      if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
+        String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
+        Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
+        for (String s : vsValidValues) {
+          setValidValues.add(new NUMWRAPPER(s));
+        }
+        Set<NUMWRAPPER> setValuesInvariant = new TreeSet<NUMWRAPPER>();
+        for (INT e : elts) {
+          setValuesInvariant.add(e);
+        }
+        if (setValidValues.equals(setValuesInvariant)) {
+          return new DiscardInfo(this, DiscardCode.obvious,
+            "The value list matches the allowed value list");
+        }
+      }
+
     // Obvious if we are 'size(array) == 0'  The thinking is that this
     // will also always show up as 'array == []' which is a little more
     // illuminating.  At this point we insist that we are a SequenceLength
@@ -1631,6 +1665,54 @@ public String format_csharp_contract() {
 
     return null;
   }
+#elif defined(IS_SEQUENCE)
+  /** {@inheritDoc} */
+  @Override
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
+
+    VarInfo v = vis[0];
+
+    // We can check if all values in the element sequence match
+    // with the ones we know about (useful for booleans and numeric
+    // enumerations)
+    if (v.aux.hasValue(VarInfoAux.VALID_VALUES)
+        && v.aux.hasValue(VarInfoAux.MAXIMUM_LENGTH)
+        && v.aux.hasValue(VarInfoAux.MINIMUM_LENGTH)
+        && v.aux.getInt(VarInfoAux.MAXIMUM_LENGTH) == 1
+        && v.aux.getInt(VarInfoAux.MINIMUM_LENGTH) == 1)
+    {
+      #if defined(SEQUENCE)
+      #define BASETYPE Long
+      #elif defined(FLOATSEQUENCE)
+      #define BASETYPE Double
+      #else
+      #define BASETYPE String
+      #endif
+
+      String[] vsValidValues       = v.aux.getList(VarInfoAux.VALID_VALUES);
+      Set<BASETYPE> setValidValues = new TreeSet<BASETYPE>();
+      for (String s : vsValidValues) {
+        setValidValues.add(new BASETYPE(s));
+      }
+      Set<BASETYPE> setValuesInvariant = new TreeSet<BASETYPE>();
+      for (INT e : elts) {
+        if (e == null) continue;
+        for (BASETYPE b : e) {
+          setValuesInvariant.add(b);
+        }
+      }
+      if (setValidValues.equals(setValuesInvariant)) {
+        return new DiscardInfo(this, DiscardCode.obvious,
+          "The value list matches the allowed value list");
+      }
+    }
+
+    return null;
+  }
 #elif defined(IS_ELT_NUMERIC)
   /*@Pure*/
   public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
@@ -1640,6 +1722,25 @@ public String format_csharp_contract() {
     }
 
     VarInfo v = vis[0];
+
+    // We can check if all values in the list match with the ones we know about
+    // (useful for booleans and numeric enumerations)
+    if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
+      String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
+      Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
+      for (String s : vsValidValues) {
+        setValidValues.add(new NUMWRAPPER(s));
+      }
+      Set<NUMWRAPPER> setValuesInvariant = new TreeSet<NUMWRAPPER>();
+      for (INT e : elts) {
+        setValuesInvariant.add(e);
+      }
+      if (setValidValues.equals(setValuesInvariant)) {
+        return new DiscardInfo(this, DiscardCode.obvious,
+          "The value list matches the allowed value list");
+      }
+    }
+
     // Look for the same property over a supersequence of this one.
     PptTopLevel pptt = ppt.parent;
     for (Iterator<Invariant> inv_itor = pptt.invariants_iterator(); inv_itor.hasNext(); ) {
@@ -1659,7 +1760,39 @@ public String format_csharp_contract() {
 
     return null;
   }
+#elif defined(STRING) || defined(ELTSTRING)
+  /** {@inheritDoc} */
+  @Override
+  public /*@Nullable*/ DiscardInfo isObviousDynamically(VarInfo[] vis) {
+    DiscardInfo super_result = super.isObviousDynamically(vis);
+    if (super_result != null) {
+      return super_result;
+    }
 
+    VarInfo v = vis[0];
+
+    // We can check if all values in the list match with the ones we know about
+    // (useful for booleans and numeric enumerations)
+    if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
+      String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
+      Set<INT> setValidValues = new TreeSet<INT>();
+      for (String s : vsValidValues) {
+        setValidValues.add(new INT(s));
+      }
+      Set<INT> setValuesInvariant = new TreeSet<INT>();
+      for (INT e : elts) {
+        if (e == null) continue;
+        setValuesInvariant.add(e);
+      }
+
+      if (setValidValues.equals(setValuesInvariant)) {
+        return new DiscardInfo(this, DiscardCode.obvious,
+          "The value list consists of all possible values");
+      }
+    }
+
+    return null;
+  }
 #endif
 
   /**

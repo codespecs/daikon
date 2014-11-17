@@ -98,8 +98,19 @@ public final class SequenceLength
   }
 
   protected VarInfo makeVarInfo() {
-    return VarInfo.make_scalar_seq_func ("size", ProglangType.INT, base,
+    VarInfo v = VarInfo.make_scalar_seq_func("size", ProglangType.INT, base,
                                          shift);
+
+    if (base.aux.hasValue(VarInfoAux.MINIMUM_LENGTH)) {
+      v.aux = v.aux.setInt(VarInfoAux.MINIMUM_VALUE,
+                           base.aux.getInt(VarInfoAux.MINIMUM_LENGTH)+shift);
+    }
+    if (base.aux.hasValue(VarInfoAux.MAXIMUM_LENGTH)) {
+      v.aux = v.aux.setInt(VarInfoAux.MAXIMUM_VALUE,
+                           base.aux.getInt(VarInfoAux.MAXIMUM_LENGTH)+shift);
+    }
+
+    return v;
   }
 
   /*@Pure*/ public boolean isSameFormula(Derivation other) {
