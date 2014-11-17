@@ -1,5 +1,7 @@
 NAME := gtest
 CUSTOM_BUILD := 1
+# dtrace file contains timing variables
+SKIP_DTRACE_DIFF := 1
 
 include ../Makefile.common
 

@@ -8,24 +8,24 @@ Running main() from gtest_main.cc
 [----------] Global test environment set-up.
 [----------] 3 tests from FactorialTest
 [ RUN      ] FactorialTest.Negative
-[       OK ] FactorialTest.Negative (294 ms)
+[       OK ] FactorialTest.Negative (<TIMING>)
 [ RUN      ] FactorialTest.Zero
-[       OK ] FactorialTest.Zero (263 ms)
+[       OK ] FactorialTest.Zero (<TIMING>)
 [ RUN      ] FactorialTest.Positive
-[       OK ] FactorialTest.Positive (300 ms)
-[----------] 3 tests from FactorialTest (1215 ms total)
+[       OK ] FactorialTest.Positive (<TIMING>)
+[----------] 3 tests from FactorialTest (<TIMING> total)
 
 [----------] 3 tests from IsPrimeTest
 [ RUN      ] IsPrimeTest.Negative
-[       OK ] IsPrimeTest.Negative (277 ms)
+[       OK ] IsPrimeTest.Negative (<TIMING>)
 [ RUN      ] IsPrimeTest.Trivial
-[       OK ] IsPrimeTest.Trivial (285 ms)
+[       OK ] IsPrimeTest.Trivial (<TIMING>)
 [ RUN      ] IsPrimeTest.Positive
-[       OK ] IsPrimeTest.Positive (285 ms)
-[----------] 3 tests from IsPrimeTest (1192 ms total)
+[       OK ] IsPrimeTest.Positive (<TIMING>)
+[----------] 3 tests from IsPrimeTest (<TIMING> total)
 
 [----------] Global test environment tear-down
-[==========] 6 tests from 2 test cases ran. (3624 ms total)
+[==========] 6 tests from 2 test cases ran. (<TIMING> total)
 [  PASSED  ] 6 tests.
 ==PID== 
 ==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

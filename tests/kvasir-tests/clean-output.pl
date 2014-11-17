@@ -45,6 +45,9 @@ while (<>) {
     s/Total Alloc.*/<Allocation statistics>/g;
     s/Peak memory.*/<Allocation statistics>/g;
 
+    s/([0-9]+ ms)/<TIMING>/;
+    s/([0-9]+ ms total)/<TIMING>/;
+
     s/Copyright \(C\) .*$/COPYRIGHT/;
     s/kvasir-[\d.]+,/kvasir-VERSION/;
     s[Using Valgrind-.* and LibVEX; rerun with \-h for copyright info]
