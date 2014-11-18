@@ -403,6 +403,7 @@ tests/kvasir-tests/flex-rothermel/flex-rothermel
 tests/kvasir-tests/flex-rothermel/lex.yy.c
 tests/kvasir-tests/flex-rothermel/output
 tests/kvasir-tests/function-pointer/function-pointer
+tests/kvasir-tests/gtest/gtest
 tests/kvasir-tests/gzip/file.gz
 tests/kvasir-tests/gzip/gzip
 tests/kvasir-tests/inline-func/inline-func
