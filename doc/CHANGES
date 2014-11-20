@@ -25,6 +25,17 @@ Further documentation can be found in:
 Celeriac, Daikon's front end for .NET programs, now works under Mono.
 See https://code.google.com/p/daikon-dot-net-front-end/wiki/Mono .
 
+The declaration file format now supports five new variable-info fields:
+  min-value
+  max-value
+  min-length
+  max-length
+  valid-values
+These specify what possible values may appear in the trace file, and they
+enable Daikon to suppress inveriants that are obvious due to, for example,
+programming language limitations on the values for a particular type.
+Thanks to Antonio Garcia Dominguez for contributing this feature.
+
 ===========================================================================
 
 5.1.10 (October 31, 2014)
@@ -44,8 +55,8 @@ See https://code.google.com/p/daikon-dot-net-front-end/wiki/Mono .
   We have added a section to the documentation on how to write your
   own tool to manipulate a .dtrace file.
 
-  We have added a link to Takuan; a Daikon front end for WS-BPEL tool
-  process definitions.
+  The manual contains a link to Takuan, a Daikon front end for WS-BPEL
+  tool process definitions.
 
 ===========================================================================
 

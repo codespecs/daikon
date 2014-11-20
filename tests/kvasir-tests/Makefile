@@ -91,7 +91,7 @@ pgbovine-tests__%: do-IntTest__% do-PointerTest__% do-TrivialTest__% \
 		   do-FunctionNamesTest__% do-CoercePointerTest__% \
 		   do-CppFunctionTest__% do-SimpleClassesTest__% \
 		   do-CppInlineTest__% do-ArrayTest-cpp__% do-FloatTest__% \
-		   do-NestedStructVarList__%
+		   do-NestedStructVarList__% do-gtest__%
 	@
 
 missing-tests__%: do-ConstantTest__% do-ConstMergeTest__% do-ExceptionTest__% \

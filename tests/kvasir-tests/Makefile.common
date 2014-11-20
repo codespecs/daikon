@@ -97,6 +97,10 @@ $(NAME).out: ran-kvasir
 $(NAME).comp: ran-kvasir
 	@
 
+# Temporarily turn off running gtest.inv - see daikon issue #37.
+# Remove this ifeq to enable.
+ifeq ($(SKIP_DTRACE_DIFF),)
+
 daikon-output/$(NAME).inv.gz: daikon-output/$(NAME).dyncomp.decls \
                               daikon-output/$(NAME)$(DTRACE_EXT).orig
 	$(DAIKON) $^ -o daikon-output/$(NAME).inv.gz
@@ -104,6 +108,7 @@ daikon-output/$(NAME).inv.gz: daikon-output/$(NAME).dyncomp.decls \
 daikon-output/$(NAME).invs.txt: daikon-output/$(NAME).inv.gz
 	$(PRINT_INV) $< >$@
 
+endif
 
 invs-large: $(NAME)
 	$(BEFORE_RUN)
@@ -207,14 +212,25 @@ $(DIFF_NAME).decls.diff: daikon-output/$(NAME).decls $(call goal_name,$(NAME).de
 $(DIFF_NAME).counts.diff: $(NAME).counts $(call goal_name,$(NAME).counts)
 	-diff -u $(call goal_name,$(NAME).counts) $(NAME).counts >$@ 2>&1
 
+# This is correct usage of SKIP_DTRACE, don't remove as part of daikon issue #37.
+ifeq ($(SKIP_DTRACE_DIFF),)
 $(DIFF_NAME).dtrace.diff: daikon-output/$(NAME)$(DTRACE_EXT) $(call goal_name,$(NAME).dtrace)
 	-diff --text -u $(call goal_name,$(NAME).dtrace) daikon-output/$(NAME)$(DTRACE_EXT) >$@ 2>&1
+else
+$(DIFF_NAME).dtrace.diff: daikon-output/$(NAME)$(DTRACE_EXT)
+endif
 
 $(DIFF_NAME).out.diff: $(NAME).out $(call goal_name,$(NAME).out)
 	-diff --text -u $(call goal_name,$(NAME).out) $(NAME).out  >$@ 2>&1
 
+# Temporarily turn off running gtest.inv - see daikon issue #37.
+# Remove this ifeq to enable. (delete else arm)
+ifeq ($(SKIP_DTRACE_DIFF),)
 $(DIFF_NAME).invs.diff: daikon-output/$(NAME).invs.txt $(call goal_name,$(NAME).invs)
 	-diff --text -F::: -u $(call goal_name,$(NAME).invs) daikon-output/$(NAME).invs.txt >$@ 2>&1
+else
+$(DIFF_NAME).invs.diff:
+endif
 
 $(DIFF_NAME).comp.diff: $(NAME).comp $(call goal_name,$(NAME).comp)
 	-diff --text -F::: -u $(call goal_name,$(NAME).comp) $(NAME).comp >$@ 2>&1
