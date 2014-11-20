@@ -36,6 +36,15 @@ enable Daikon to suppress inveriants that are obvious due to, for example,
 programming language limitations on the values for a particular type.
 Thanks to Antonio Garcia Dominguez for contributing this feature.
 
+We made a small change to allow the Daikon installation test to pass
+when the current locale is not en_US (English for the United States).
+
+We have made additional improvements to Daikon splitter file processing.
+We now do a much better job with variable scoping.  For example, you may
+now have a splitter condition that references a local variable and a 
+global variable with the same name. (The global will, of course, require
+a classname prefix.)
+
 ===========================================================================
 
 5.1.10 (October 31, 2014)
