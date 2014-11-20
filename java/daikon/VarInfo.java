@@ -325,40 +325,29 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     // Create the VarInfoAux information
     final List<String> auxstrs = new ArrayList<String>();
     if (var_flags.contains (VarFlags.IS_PARAM)) {
-      auxstrs.add("isParam=true");
+      auxstrs.add(VarInfoAux.IS_PARAM + "=true");
     }
     if (var_flags.contains (VarFlags.NON_NULL)) {
-      auxstrs.add("isStruct=true");
+      auxstrs.add(VarInfoAux.IS_STRUCT + "=true");
     }
     if (vardef.min_value != null) {
-      auxstrs.add("minvalue=" + vardef.min_value);
+      auxstrs.add(VarInfoAux.MINIMUM_VALUE + "=" + vardef.min_value);
     }
     if (vardef.max_value != null) {
-      auxstrs.add("maxvalue=" + vardef.max_value);
+      auxstrs.add(VarInfoAux.MAXIMUM_VALUE + "=" + vardef.max_value);
     }
     if (vardef.min_length != null) {
-      auxstrs.add("minlength=" + vardef.min_length);
+      auxstrs.add(VarInfoAux.MINIMUM_LENGTH + "=" + vardef.min_length);
     }
     if (vardef.max_length != null) {
-      auxstrs.add("maxlength=" + vardef.max_length);
+      auxstrs.add(VarInfoAux.MAXIMUM_LENGTH + "=" + vardef.max_length);
     }
     if (vardef.valid_values != null) {
-      auxstrs.add("validvalues=" + vardef.valid_values);
+      auxstrs.add(VarInfoAux.VALID_VALUES + "=" + vardef.valid_values);
     }
-
     // Sadly, String.join is only available from Java 8:
     // https://docs.oracle.com/javase/8/docs/api/java/lang/String.html#join-java.lang.CharSequence-java.lang.Iterable-
-    final StringBuilder sb = new StringBuilder();
-    boolean first = true;
-    for (String s : auxstrs) {
-        if (first) {
-            first = false;
-        } else {
-            sb.append(", ");
-        }
-        sb.append(s);
-    }
-    final String auxstr = sb.toString();
+    final String auxstr = UtilMDE.join(auxstrs, ", ");
 
     try {
       aux = VarInfoAux.parse (auxstr);

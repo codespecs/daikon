@@ -1595,7 +1595,7 @@ public String format_csharp_contract() {
       }
 
       // We can check if all values in the list match with the ones we know about
-      // (useful for booleans and numeric enumerations)
+      // (useful for booleans and numeric enumerations).
       if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
         String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
         Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
@@ -1678,7 +1678,7 @@ public String format_csharp_contract() {
 
     // We can check if all values in the element sequence match
     // with the ones we know about (useful for booleans and numeric
-    // enumerations)
+    // enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)
         && v.aux.hasValue(VarInfoAux.MAXIMUM_LENGTH)
         && v.aux.hasValue(VarInfoAux.MINIMUM_LENGTH)
@@ -1724,7 +1724,7 @@ public String format_csharp_contract() {
     VarInfo v = vis[0];
 
     // We can check if all values in the list match with the ones we know about
-    // (useful for booleans and numeric enumerations)
+    // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<NUMWRAPPER> setValidValues = new TreeSet<NUMWRAPPER>();
@@ -1772,7 +1772,7 @@ public String format_csharp_contract() {
     VarInfo v = vis[0];
 
     // We can check if all values in the list match with the ones we know about
-    // (useful for booleans and numeric enumerations)
+    // (useful for booleans and numeric enumerations).
     if (v.aux.hasValue(VarInfoAux.VALID_VALUES)) {
       String[] vsValidValues         = v.aux.getList(VarInfoAux.VALID_VALUES);
       Set<INT> setValidValues = new TreeSet<INT>();

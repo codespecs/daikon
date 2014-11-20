@@ -425,15 +425,15 @@ public final class FileIO {
             decl_error (state, "var %s declared twice", vardef.name);
           if (var_included (vardef.name))
             varmap.put (vardef.name, vardef);
-        } else if (record == "min-value") {
+        } else if (record == "min-value") { // interned
             vardef.parse_min_value (scanner);
-        } else if (record == "max-value") {
+        } else if (record == "max-value") { // interned
             vardef.parse_max_value (scanner);
-        } else if (record == "min-length") {
+        } else if (record == "min-length") { // interned
             vardef.parse_min_length (scanner);
-        } else if (record == "max-length") {
+        } else if (record == "max-length") { // interned
             vardef.parse_max_length (scanner);
-        } else if (record == "valid-values") {
+        } else if (record == "valid-values") { // interned
             vardef.parse_valid_values (scanner);
         } else {
           decl_error (state, "Unexpected variable item '%s' found", record);
@@ -2838,17 +2838,17 @@ public final class FileIO {
     public VarComparability comparability = null;
     /** Parent program points in ppt hierarchy (optional) **/
     public List<VarParent> parents;
-    /** Set if this 'variable' always has the same value (optional) **/
+    /** Non-null if this 'variable' always has the same value (optional) **/
     public /*@Nullable*/ /*@Interned*/ Object static_constant_value = null;
-    /** Set if it is statically known that the value of the variable will be always greater than or equal to this value. */
+    /** Non-null if it is statically known that the value of the variable will be always greater than or equal to this value. */
     public /*@Nullable*/ String min_value = null;
-    /** Set if it is statically known that the value of the variable will be always less than or equal to this value. */
+    /** Non-null if it is statically known that the value of the variable will be always less than or equal to this value. */
     public /*@Nullable*/ String max_value = null;
-    /** Set if it is statically known that the array will have at least this many elements. */
+    /** Non-null if it is statically known that the array will have at least this many elements. */
     public /*@Nullable*/ Integer min_length = null;
-    /** Set if it is statically known that the array will have up to this many elements. */
+    /** Non-null if it is statically known that the array will have up to this many elements. */
     public /*@Nullable*/ Integer max_length = null;
-    /** Set if the set of valid values for the variable is statically known. */
+    /** Non-null if the set of valid values for the variable is statically known. */
     public /*@Nullable*/ String valid_values = null;
 
     /** Check representation invariants. */
@@ -3080,13 +3080,13 @@ public final class FileIO {
 
     /** Parse a minimum length record */
     public void parse_min_length (Scanner scanner) throws DeclError {
-      this.min_length = Integer.parseInt(need(scanner, "maximum value"));
+      this.min_length = Integer.parseInt(need(scanner, "minimum length"));
       need_eol (scanner);
     }
 
     /** Parse a maximum length record */
     public void parse_max_length (Scanner scanner) throws DeclError {
-      this.max_length = Integer.parseInt(need(scanner, "maximum value"));
+      this.max_length = Integer.parseInt(need(scanner, "maximum length"));
       need_eol (scanner);
     }
 

@@ -44,6 +44,7 @@ The correct way to build the system is to run 'make'.
   #define NUM_MIN2 core.num_min2
   #define MIN3 core.min3
   #define NUM_MIN3 core.num_min3
+  #define VARINFOAUX_MINIMUM_VALUE VarInfoAux.MINIMUM_VALUE
   #define MAX max
   #if defined(BASE_INT)
     #define LONGMAX Long.MAX_VALUE
@@ -99,6 +100,7 @@ The correct way to build the system is to run 'make'.
   #define NUM_MIN2 core.num_max2
   #define MIN3 core.max3
   #define NUM_MIN3 core.num_max3
+  #define VARINFOAUX_MINIMUM_VALUE VarInfoAux.MAXIMUM_VALUE
   #define MAX min
   #if defined(UPPER) || defined(ELTUPPER)
     #define LONGMAX Long.MIN_VALUE
@@ -634,20 +636,12 @@ public class LOWERBOUND
                              + " sequence lengths with no shift");
     }
 
-    #if defined(LOWER) || defined(LOWERFLOAT)
-    if (var.aux.hasValue(VarInfoAux.MINIMUM_VALUE)) {
-      int minVal = var.aux.getInt(VarInfoAux.MINIMUM_VALUE);
+    #if defined(LOWER) || defined(LOWERFLOAT) || defined(UPPER) || defined(UPPERFLOAT)
+    if (var.aux.hasValue(VARINFOAUX_MINIMUM_VALUE)) {
+      int minVal = var.aux.getInt(VARINFOAUX_MINIMUM_VALUE);
       if (minVal == MIN1) {
         return new DiscardInfo(this, DiscardCode.obvious,
-          var.name() + " >= " + MIN1 + " is already known");
-      }
-    }
-    #elif defined(UPPER) || defined(UPPERFLOAT)
-    if (var.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)) {
-      int maxVal = var.aux.getInt(VarInfoAux.MAXIMUM_VALUE);
-      if (maxVal == MIN1) {
-        return new DiscardInfo(this, DiscardCode.obvious,
-          var.name() + " <= " + MIN1 + " is already known");
+          var.name() + " GTE " + MIN1 + " is already known");
       }
     }
     #endif

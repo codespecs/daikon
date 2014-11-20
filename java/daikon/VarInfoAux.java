@@ -401,7 +401,8 @@ public final class VarInfoAux
   }
 
   /**
-   * Return <code>true</code> if the value for the given key is defined, and <code>false</code> otherwise.
+   * Return <code>true</code> if the value for the given key is defined,
+   * and <code>false</code> otherwise.
    */
   public boolean hasValue(String key) {
     return map.containsKey(key);

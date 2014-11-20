@@ -872,7 +872,7 @@ public final class INTEQUAL
 
     #if defined(EQUAL_OP)
     // If A.minvalue==A.maxvalue==B.minvalue==B.maxvalue, then
-    // there's nothing to see here
+    // there's nothing to see here.
     if (var1.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
         && var1.aux.hasValue(VarInfoAux.MAXIMUM_VALUE)
         && var2.aux.hasValue(VarInfoAux.MINIMUM_VALUE)
@@ -900,10 +900,10 @@ public final class INTEQUAL
 
       #if defined(LESSTHAN_OP)
       #define DISCARD_OP <
+      #elif defined(LESSEQUAL_OP)
+      #define DISCARD_OP <=
       #elif defined(NONEQUAL_OP)
       #define DISCARD_OP <
-      #else
-      #define DISCARD_OP <=
       #endif
       if (maxA DISCARD_OP minB) {
         return new DiscardInfo(this,
@@ -922,10 +922,10 @@ public final class INTEQUAL
 
       #if defined(GREATERTHAN_OP)
       #define DISCARD_OP >
+      #elif defined(GREATEREQUAL_OP)
+      #define DISCARD_OP >=
       #elif defined(NONEQUAL_OP)
       #define DISCARD_OP >
-      #else
-      #define DISCARD_OP >=
       #endif
       if (minA DISCARD_OP maxB) {
         return new DiscardInfo(this,
