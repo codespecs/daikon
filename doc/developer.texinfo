@@ -1038,7 +1038,7 @@ Track logging methods accept these parameters and a string to be printed.
 @example
 log (String)
 log (Class, Ppt, String)
-log (Class, Ppt, Varinfo[], String)
+log (Class, Ppt, VarInfo[], String)
 @end example
 
 @noindent
