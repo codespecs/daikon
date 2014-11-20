@@ -1767,7 +1767,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
           // a * v1 + b * this + c = 0 or this == (-a/b) * v1 - c/b
           double a = lb.core.a, b = lb.core.b, c = lb.core.c;
-         // if (a == 1) {
+          // if (a == 1) {  // match } for vim
           if (-a/b == 1) {
             // this = v1 - c/b
            // int add = (int) b;
@@ -1781,7 +1781,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
           // v2 = a * this + b <-- not true anymore
           // a * this + b * v2 + c == 0 or v2 == (-a/b) * this - c/b
           double a = lb.core.a, b = lb.core.b, c = lb.core.c;
-          //if (a == 1) {
+          // if (a == 1) {  // match } for vim
             if (-a/b == 1) {
             // this = v2 + c/b
             //int add = - ((int) b);
@@ -2675,7 +2675,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * Returns itself if the equality optimization is turned off
    */
   public VarInfo get_equalitySet_leader() {
-    //  if (equalitySet == null && VarInfo.use_equality_optimization == false) {
+    // if (equalitySet == null && VarInfo.use_equality_optimization == false) {  // match } for vim
     if (equalitySet == null) {
       return this;
     } else

@@ -106,6 +106,7 @@ public class SplitterFactory {
         int numsplitters = splitterObjects[i].length;
         if (numsplitters != 0) {
           String ppt_name = splitterObjects[i][0].getPptName();
+    Global.debugSplit.fine("          load_splitters: " + ppt_name + ", " + ppt);
           if (matchPpt(ppt_name, ppt)) {
             // Writes, compiles, and loads the splitter .java files.
             loadSplitters(splitterObjects[i], ppt, statementReplacer);
