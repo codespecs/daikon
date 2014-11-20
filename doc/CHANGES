@@ -20,7 +20,7 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.1.12 (December 1, 2014)
+5.1.12 (November 27, 2014)
 
 Celeriac, Daikon's front end for .NET programs, now works under Mono.
 See https://code.google.com/p/daikon-dot-net-front-end/wiki/Mono .
