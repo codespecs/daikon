@@ -10,6 +10,7 @@ Athlon
 Automata
 basename
 BCEL
+BIBDIR
 biconditional
 Binutils
 bitwise
@@ -22,6 +23,7 @@ classpath
 codebase
 comparator
 consequents
+CSE
 customizable
 customizations
 CVS
@@ -44,6 +46,7 @@ disambiguated
 disambiguates
 DynComp
 DynComp's
+edu
 EM64T
 executables
 filename
@@ -147,9 +150,11 @@ uninstrumented
 unselected
 unsplit
 untyped
+UW
 Valgrind
 Valgrind's
 versa
+washington
 whitespace
 wildcard
 workflow

@@ -1001,7 +1001,7 @@ each log statement.  The option @option{daikon.Debug.logDetail} will cause
 more detailed (and often voluminous) output to be printed.  For more
 information, @pxref{Configuration options,,,daikon,Daikon User Manual}.
 
-Note that all interesting information is not necessarily currently logged.
+Note that all interesting information is not necessarily logged.
 It will often be necessary to add new logging statements for the specific
 information of interest (@pxref{Adding track logging}).
 This is covered in the next section.
@@ -1209,7 +1209,7 @@ The purpose of dataflow hierarchy is to reduce the presence of
 redundant invariants by only keeping invariants at the highest parent
 at which they apply.  This saves both time and space.
 
-Daikon currently provides four ways that program points can be connected.
+Daikon provides four ways that program points can be connected.
 First, @code{:::CLASS} program points are parents of
 all their method program points.  Second, between two classes that are
 related by inheritance, corresponding program points relate --- for
@@ -1317,7 +1317,7 @@ The file is formatted as follows:
 The file format should be the same regardless of blank or commented
 lines except in the samples area. No blank lines or comments should
 appear after the goal string before the first sample or between parts
-of samples (these lines are used currently to determine where samples
+of samples (these lines are used to determine where sample
 lists end). This will be remedied in a future version of the tester.
 
 @table @code
@@ -1995,7 +1995,8 @@ as you prepare for a release the current version number is probably odd.  It wil
 be updated as one of the first steps in the release process.  After making the
 distribution, one of the final steps is to increment the version number again to
 prepare for subsequent development.  This system has the useful side effect
-of allowing the build and test process to be repeated to fix a problem (steps 5--14 below) 
+of allowing the build and test process to be repeated to fix a problem (steps 2--14
+of @ref{Distribution steps} below) 
 without having to worry about updating or resetting the version number.
 Another advantage is to reinforce, to people who are working form the
 version control repository, that they are not using the released version,
@@ -2009,14 +2010,17 @@ In order to be able to write to the distribution site, your CSE user id must be
 a member of the @samp{plse_www} Unix group.
 
 For each of the major steps below, an
-approximate elapsed time is listed.  Currently, this is for a quad x86-64 based
-machine at @nospellcheck{3.4GHz} with @nospellcheck{16GB} of memory.
-[TODO: which one?]
+approximate elapsed time is listed.  These timings are up to date as of November 2014.
+They were measured on a quad x86-64 based
+machine at @nospellcheck{3.4GHz} with @nospellcheck{16GB} of memory
+(buffalo.cs.washington.edu).
 Barring any difficulties,
 the entire process
 will take at least two hours --- and could be much more depending on the number of
 different platforms on which you test the release.
 
+Each of the steps below assumes that the current working directory is @file{$DAIKONDIR} 
+and that you are using the Bash shell.
 
 
 @menu
@@ -2065,16 +2069,8 @@ of the bibliography you wish to use.
 @end itemize
 
 
-Each of the steps below assumes that the current working directory is @file{$DAIKONDIR} 
-and that you are using the Bash shell.
-
-
-@exampleindent 0
-
 @node    Updating dependencies
 @section  Getting the latest version of dependencies
-
-
 
 @enumerate
 
@@ -2096,16 +2092,11 @@ See the @cite{Download} section of @uref{http://types.cs.washington.edu/jsr308/}
 Make sure you have the @env{CHECKERFRAMEWORK} environment 
 variable set to the location of the Checker Framework directory.
 
+[Time: moments]
+
+
 @item
-Make sure that the latest version of @file{bcel.jar} has been checked
-into the plume-lib repository.
-[TODO: How does one do this?]
-  If it has not, then do so now and you
-will need to rebuild @file{plume.jar} as noted in the following step.
-
-
-If the Checker Framework has been released since the last distribution, or
-if @file{bcel.jar} has been updated, 
+If the Checker Framework has been released since the last distribution,
 then you need to perform the following steps to update @file{plume.jar}.
 
 @example
@@ -2117,6 +2108,7 @@ cp plume.jar ../../java/lib
 @end example
 
 [Time: 1 min]
+
 
 @item
 Update the publications pages in a local copy of plume-bib. 
@@ -2131,18 +2123,17 @@ Update the publications pages in a local copy of plume-bib.
 @end enumerate
 
 
-
 The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
 from, two open source projects.
 The home page for the Valgrind instrumentation framework is
-@uref{http://www.valgrind.org}.  We are currently using version 3.9.0,
+@uref{http://www.valgrind.org}.  As of November 2014 we using version 3.9.0,
 released in October, 2013.
 [TODO: How can a reader confirm that this is correct or determine the
 version on his or her own?]
   The home page for the GNU Binutils
 (a collection of binary tools, of which we only use readelf) is
 @uref{http://www.gnu.org/software/binutils/}.
-We are currently using version 2.24, released in December, 2013.
+As of November 2014 we are using version 2.24, released in December, 2013.
 If newer versions of either of these projects is
 available, you should update the Fjalar source tree as soon as practical.
 For details, see the separate document @ref{Top,,,valgrind-merge,Merging
@@ -2314,11 +2305,13 @@ make check-for-broken-doc-links
 
 Review @file{check.log} and make corrections as appropriate.
 
-In most cases (and for most 404 errors), you should fix the document with the incorrect link.
-
-[TODO: This means fix the source file in the repository, not fix any link
-on the website, right?  The manual should say that explicitly and should
-say what step the reader should go back to.]
+In most cases (and for most 404 errors), you should fix the document with
+the incorrect link.  Note that you must fix it in the original repository, 
+not in the drop directories.
+This means correcting the file, most likely located beneath either
+$DAIKONDIR/doc or $BIBDIR and then committing the changes. You will then
+need to repeat the previous step (@command{make staging}) prior to re-running
+the broken link tool.
 
 If the URL is correct but cannot be checked (for example, because the website
 prohibits spiders or because the URL  redirects to another URL but you prefer
@@ -2334,8 +2327,8 @@ If you made changes, re-run the tool.
 
 
 @item
-Test the distribution, currently in the staging area, on a 64-bit machine.
-Since the machine you are currently running to build the release is probably
+Test the distribution on a 64-bit machine.
+Since the machine you are using to build the release is probably
 such a machine, you may simply run the command below. The last step in this
 test runs Chicory/Daikon on the @file{StackAr} example.  Success is indicated
 by invariant output being written to the screen.
@@ -2348,7 +2341,7 @@ make test-staged-dist
 
 
 @item
-Test the distribution, currently in the staging area, on a 32-bit machine. 
+Test the distribution on a 32-bit machine. 
 This is probably best done on a virtual machine running a current version
 of Fedora.  The instructions below assume you are running on such a machine.
 They will download the staged @file{daikon.tar.gz} file, extract the files, set
@@ -2857,7 +2850,7 @@ input-language <language>
 @end example
 
 @noindent
-The language string is arbitrary and is not currently used.
+The language string is arbitrary and is not used.
 
 
 @node          Variable comparability
@@ -3256,7 +3249,7 @@ case, such as @code{size(var) <= v}.
 
 @item @code{valid-values [<v1> <v2> ... <vN>]}
 
-Optionally specifes all the possible values for this
+Optionally specifies all the possible values for this
 variable (for instance, due to language-specific restrictions on the
 type). This enables Daikon to suppress invariants which would be
 ``obvious'' in that case, such as @code{v is one of @{v1, v2, ..., vN@}}.
@@ -4044,7 +4037,7 @@ are multiple exit points, then each one should be suffixed by a number
 the main (non-numbered) @code{:::EXIT} point automatically.  All the
 numbered exits should contain the same set of variables; in general,
 this means that local variables are not included at exit points.
-Daikon currently requires that declarations for @code{:::ENTER} program
+Daikon requires that declarations for @code{:::ENTER} program
 points appear before any declarations for matching @code{:::EXIT} program
 points.
 
