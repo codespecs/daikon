@@ -1982,79 +1982,99 @@ it twice) in order to generate formatted versions of the manual
 @node    Distribution
 @chapter Making a distribution
 
-This section provides the instructions for publishing a Daikon distribution;
-aka making a release. 
+This section provides the instructions for publishing a Daikon distribution,
+a.k.a.@ making a release. 
 If you only want to
 create the @file{daikon.tar} or @file{daikon.tar.gz} file in your own
-directory, then simply run @command{make} with the desired file as the
-target.
+directory, then simply run @command{make daikon.tar} or @command{make daikon.tar.gz}.
 
-We have a general policy of using even version numbers (e.g., 4.6.4) for official
-releases and odd version numbers (e.g., 4.7.3) for intermediate work.  This means
+
+Official releases have even version numbers (e.g., 4.6.4) and
+intermediate work has odd version numbers (e.g., 4.7.3).  This means
 as you prepare for a release the current version number is probably odd.  It will
-be reset as one of the first steps in the release process.  After making the
+be updated as one of the first steps in the release process.  After making the
 distribution, one of the final steps is to increment the version number again to
-prepare for subsequent development.  Note, this system has the useful side effect
-of allowing the build and test process to be repeated to fix a problem (steps 5-14 below) 
+prepare for subsequent development.  This system has the useful side effect
+of allowing the build and test process to be repeated to fix a problem (steps 5--14 below) 
 without having to worry about updating or resetting the version number.
+Another advantage is to reinforce, to people who are working form the
+version control repository, that they are not using the released version,
+because the version numbers differ.
 
-The instructions below assume you have two local Mercurial (@command{hg})
-repositories: one for Daikon cloned from
-@uref{http://code.google.com/p/daikon/} and one for Fjalar cloned from
-@uref{http://code.google.com/p/fjalar/}.  Further, they must be sibling
-directories and the environment variable @env{DAIKONDIR} must be set to
-the root of the Daikon tree.  If your local Fjalar directory is named
-@file{fjalar}, then you may choose to let the command @command{make kvasir}
-(previously done in the Daikon directory) set a symbolic link
-@file{kvasir} from Daikon to Fjalar as part of the build process. 
-Otherwise, you must make this link yourself.
-For example, if your Fjalar directory is named @file{myfjalar}:
-
-@example
-cd @@DAIKONDIR
-ln -nsf ../myfjalar kvasir
-@end example
-
-The Daikon distribution site is located at @uref{//plse.cs.washington.edu/daikon/};
-internally, this can be accessed as part of our file system at
+The Daikon distribution site is located at
+@uref{http//plse.cs.washington.edu/daikon/} and is served from the UW CSE
+file system at
 @file{/cse/web/research/plse/daikon}.
-In order to be able to write to the distribution site, your @samp{CSE} user id must be 
-a member of the @samp{plse_www} group.  Finally, for each of the major steps below, an
+In order to be able to write to the distribution site, your CSE user id must be 
+a member of the @samp{plse_www} Unix group.
+
+For each of the major steps below, an
 approximate elapsed time is listed.  Currently, this is for a quad x86-64 based
-machine at @nospellcheck{3.4GHz} with @nospellcheck{16GB} of memory. Barring any difficulties,
+machine at @nospellcheck{3.4GHz} with @nospellcheck{16GB} of memory.
+[TODO: which one?]
+Barring any difficulties,
 the entire process
-will take at least two hours - and could be much more depending on the number of
+will take at least two hours --- and could be much more depending on the number of
 different platforms on which you test the release.
 
-@noindent
-IMPORTANT NOTE:
 
-The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
-from, two open source projects.  It is important to periodically
-check to see if newer versions of these projects are available.
-The home page for the Valgrind instrumentation framework is
-@uref{http://www.valgrind.org}.  We are currently using version 3.9.0,
-released in October, 2013.  The home page for the GNU Binutils
-(a collection of binary tools, of which we only use readelf) is
-@uref{http://www.gnu.org/software/binutils/}.
-We are currently using version 2.24, released in December, 2013.
 
-If you find that there are newer versions of either of these projects
-available, you should update the Fjalar source tree as soon as practical,
-possibly the next release after the one you are currently in the process
-of making.  See the separate document @cite{Merging newer versions of Valgrind
-into Fjalar} for details.
+@menu
+* Directory layout::
+* Updating dependencies::
+* Distribution steps::
+@end menu
 
-@page
-@noindent
-GENERAL INSTRUCTION NOTE:
 
-@noindent
+@node    Directory layout
+@section Directory layout
+
+@itemize
+@item
+Environment variable @env{DAIKONDIR} must be set to a clone of 
+@uref{http://code.google.com/p/daikon/}.
+@item
+A clone of 
+@uref{http://code.google.com/p/fjalar/} must be a sibling of
+@file{$DAIKONDIR}..
+@item
+There must be a symbolic link from 
+@file{$DAIKONDIR/fjalar} to @file{$DAIKONDIR/../fjalar}; the build process
+will create this if it does not exist.
+
+@c Why would one ever want to create it manually, if the build process does so?
+@c Otherwise, you must make this link yourself.
+@c For example, if your Fjalar directory is named @file{myfjalar}:
+@c 
+@c @example
+@c cd @@DAIKONDIR
+@c ln -nsf ../myfjalar kvasir
+@c @end example
+
+@item
+@file{$HOME/bib} is a clone of @uref{https://code.google.com/p/plume-bib/}.
+You can create this clone via the command
+
+@example
+(cd; hg clone https://code.google.com/p/plume-bib/ bib)
+@end example
+
+Alternatively, you may set the environment variable @env{BIBDIR} to the location
+of the bibliography you wish to use.
+
+@end itemize
+
+
 Each of the steps below assumes that the current working directory is @file{$DAIKONDIR} 
 and that you are using the Bash shell.
-@sp 1
+
 
 @exampleindent 0
+
+@node    Updating dependencies
+@section  Getting the latest version of dependencies
+
+
 
 @enumerate
 
@@ -2071,18 +2091,20 @@ The last line printed should be @samp{no changes found}.
 
 
 @item
-Make sure that the latest version of @file{bcel.jar} has been checked
-into the plume-lib repository.  If it has not, then do so now and you
-will need to rebuild @file{plume.jar} as noted in the following step.
-
-
-@item
 Make sure you have the latest version of the Checker Framework Java compiler. 
 See the @cite{Download} section of @uref{http://types.cs.washington.edu/jsr308/}. 
 Make sure you have the @env{CHECKERFRAMEWORK} environment 
-variable set to the location of the Checker Framework package.
+variable set to the location of the Checker Framework directory.
 
-If the Checker Framework has been updated since the last distribution, or
+@item
+Make sure that the latest version of @file{bcel.jar} has been checked
+into the plume-lib repository.
+[TODO: How does one do this?]
+  If it has not, then do so now and you
+will need to rebuild @file{plume.jar} as noted in the following step.
+
+
+If the Checker Framework has been released since the last distribution, or
 if @file{bcel.jar} has been updated, 
 then you need to perform the following steps to update @file{plume.jar}.
 
@@ -2096,10 +2118,45 @@ cp plume.jar ../../java/lib
 
 [Time: 1 min]
 
+@item
+Update the publications pages in a local copy of plume-bib. 
+
+@example
+(cd ~/bib; hg fetch)
+@end example
+
+[Time: moments]
+
+
+@end enumerate
+
+
+
+The Fjalar tool set (primarily, Kvasir) is built upon, or uses pieces
+from, two open source projects.
+The home page for the Valgrind instrumentation framework is
+@uref{http://www.valgrind.org}.  We are currently using version 3.9.0,
+released in October, 2013.
+[TODO: How can a reader confirm that this is correct or determine the
+version on his or her own?]
+  The home page for the GNU Binutils
+(a collection of binary tools, of which we only use readelf) is
+@uref{http://www.gnu.org/software/binutils/}.
+We are currently using version 2.24, released in December, 2013.
+If newer versions of either of these projects is
+available, you should update the Fjalar source tree as soon as practical.
+For details, see the separate document @ref{Top,,,valgrind-merge,Merging
+newer versions of Valgrind into Fjalar}.
+
+
+@node    Distribution steps
+@section Steps for making the distribution
+
+@enumerate
 
 @item
-Adjust the version number in file @file{$DAIKONDIR/doc/VERSION}. 
-Set it to an even number (as noted above) in preparation for the release.
+Set the version number in file @file{$DAIKONDIR/doc/VERSION}
+to an even number.
 You may do this manually, or if the value just needs to be incremented
 by 1 (to go from odd to even) you may use:
 
@@ -2125,27 +2182,6 @@ make update-doc-dist-date-and-version
 
 
 @item
-Update the publications pages in a local copy of plume-bib. 
-If you have not done so previously, you may create this repository
-now:
-
-@example
-(cd; hg clone https://code.google.com/p/plume-bib/ bib)
-@end example
-
-Now update the contents:
-
-@example
-(cd ~/bib; hg fetch)
-@end example
-
-Alternatively, you may set the environment variable @env{BIBDIR} to the location
-of the bibliography you wish to use.
-
-[Time: moments]
-
-
-@item
 Do a clean rebuild of everything.
 
 @example
@@ -2156,7 +2192,7 @@ make rebuild-everything
 
 
 @item
-Run the nullness checker.  This is to verify that the Checker Framework 
+Run the Nullness Checker.  This is to verify that the Checker Framework 
 Java compiler was correctly used to build Daikon.  There should be no
 errors output.
 
@@ -2205,17 +2241,19 @@ basic ways to remove items from the misspelled list:
 @itemize
 
 @item
-If the word is in fact misspelled, correct it.
+If the word is misspelled, correct it in the source (@file{.texinfo}) file.
 
 @item
 If the word is spelled correctly, and if it not a proper noun or part
 of a computer command or filename or similar construct, it should be
 added to our local dictionary.  Edit the file @file{daikon.dict} and
-add the new word - keeping the list in alphabetical order.
+add the new word, keeping the list in alphabetical order.
+[TODO: Why shouldn't proper nouns go in daikon.dict?  I would think they
+should go there.  It also reduces clutter in the .texinfo source files.]
 
 @item
 If the word is a proper noun or some sort of technical information
-then it should be marked as such with the correct texinfo command.
+then it should be marked as such with the correct Texinfo command.
 @code{@@nospellcheck} is appropriate for proper nouns.  For the 
 proper input of technical information, see "Chapter 9: Marking Text,
 Words and Phrases" of the
@@ -2230,20 +2268,10 @@ in this version.  A good way to determine what has changed is to diff
 the Texinfo source files in the doc directory against the previous
 versions:
 
-@iftex
-@example
-cd $DAIKONDIR/doc
-diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc \
-     *.texinfo
-@end example
-@end iftex
-
-@ifnottex
-@example
+@smallexample
 cd $DAIKONDIR/doc
 diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
-@end example
-@end ifnottex
+@end smallexample
 
 Another good source of information are the repository logs since the
 last release:
@@ -2284,10 +2312,13 @@ Check the website to see if it has any broken links. Do not run this step on
 make check-for-broken-doc-links
 @end example
 
-Review @file{check.log} and make corrections as appropriate,
-re-running the tool until the output is empty.
+Review @file{check.log} and make corrections as appropriate.
 
 In most cases (and for most 404 errors), you should fix the document with the incorrect link.
+
+[TODO: This means fix the source file in the repository, not fix any link
+on the website, right?  The manual should say that explicitly and should
+say what step the reader should go back to.]
 
 If the URL is correct but cannot be checked (for example, because the website
 prohibits spiders or because the URL  redirects to another URL but you prefer
@@ -2296,6 +2327,8 @@ file @file{$DAIKONDIR/plume-lib/bin/checklink-args.txt}.
 
 In some cases a "403 Forbidden" error is transient, due to the website
 being down.  You can check such links by hand.
+
+If you made changes, re-run the tool.
 
 [Time: 3 min]
 
@@ -2323,25 +2356,7 @@ the appropriate environment variables and run the top level Makefile.
 Finally, a short verification test is run;
 success is indicated by invariant output being written to the screen.
 
-@iftex
-@example
-mkdir -p ~/tmp
-cd ~/tmp
-rm -rf daikon.tar.gz daikon
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/ \
-                                                         daikon.tar.gz
-tar xzf daikon.tar.gz
-export JAVA_HOME=/usr/lib/jvm/java
-export DAIKONDIR=`pwd`/daikon
-source daikon/scripts/daikon.bashrc
-cd daikon
-make
-make installation-test
-@end example
-@end iftex
-
-@ifnottex
-@example
+@smallexample
 mkdir -p ~/tmp
 cd ~/tmp
 rm -rf daikon.tar.gz daikon
@@ -2353,8 +2368,7 @@ source daikon/scripts/daikon.bashrc
 cd daikon
 make
 make installation-test
-@end example
-@end ifnottex
+@end smallexample
 
 [Time: 10 min]
 
@@ -2373,27 +2387,7 @@ written to the screen.
 @*
 [Time: 10 min]
 
-@iftex
-@example
-mkdir -p ~/tmp
-cd ~/tmp
-rm -rf daikon.tar.gz daikon
-wget http://plse.cs.washington.edu/daikon/staging-daikon/download/ \
-                                                         daikon.tar.gz
-tar xzf daikon.tar.gz
-# Convert OSTYPE from a shell variable to a system environment variable.
-export OSTYPE
-export JAVA_HOME="/cygdrive/c/Program Files/Java/jdk1.7.0_45"
-export DAIKONDIR=`pwd`/daikon
-source daikon/scripts/daikon.bashrc
-cd daikon
-make
-make installation-test
-@end example
-@end iftex
-
-@ifnottex
-@example
+@smallexample
 mkdir -p ~/tmp
 cd ~/tmp
 rm -rf daikon.tar.gz daikon
@@ -2407,8 +2401,7 @@ source daikon/scripts/daikon.bashrc
 cd daikon
 make
 make installation-test
-@end example
-@end ifnottex
+@end smallexample
 
 
 @item
@@ -2423,30 +2416,7 @@ written to the screen.
 @*
 [Time: 4 min]
 
-@iftex
-@example
-mkdir -p ~/tmp
-cd ~/tmp
-rm -rf daikon.tar.gz daikon
-curl -O http://plse.cs.washington.edu/daikon/staging-daikon/ \
-                                                download/daikon.tar.gz
-# or: wget http://plse.cs.washington.edu/daikon/staging-daikon/ \
-#                                               download/daikon.tar.gz
-tar xzf daikon.tar.gz
-# Convert OSTYPE from a shell variable to a system environment variable.
-export OSTYPE
-export JAVA_HOME=/Library/Java/JavaVirtualMachines/jdk1.7.0_45.jdk/ \
-                                                Contents/Home
-export DAIKONDIR=`pwd`/daikon
-source daikon/scripts/daikon.bashrc
-cd daikon
-make
-make installation-test
-@end example
-@end iftex
-
-@ifnottex
-@example
+@smallexample
 mkdir -p ~/tmp
 cd ~/tmp
 rm -rf daikon.tar.gz daikon
@@ -2461,8 +2431,7 @@ source daikon/scripts/daikon.bashrc
 cd daikon
 make
 make installation-test
-@end example
-@end ifnottex
+@end smallexample
 
 
 @item
@@ -2488,7 +2457,7 @@ make staging-to-www
 @item
 Commit changes back to the repository:
 
-@emph{Could this be done with @command{cat $DAIKONDIR/doc/VERSION}?}
+@emph{Could this and the following step be done with @command{cat $DAIKONDIR/doc/VERSION}?}
 
 @example
 hg -q commit -m "Change version to @emph{X.Y.Z}"
@@ -2517,8 +2486,8 @@ hg push
 
 @item
 At this point the distribution has been completed; however, we now need to
-adjust the version number in file @file{$DAIKONDIR/doc/VERSION} - it should
-be bumped up to an odd value for continuing development.
+bump up the version number in file @file{$DAIKONDIR/doc/VERSION}
+to an odd value for continuing development.
 
 @example
 make update-dist-version-file
@@ -2700,18 +2669,10 @@ branch) in December 2003.
 A regular @command{cvs checkout} gets the trunk.  The @option{-r} flag specifies a
 branch.  For example, to get the branch as of June 9, 2002, one could do
 
-@iftex
 @example
 cvs -d $pag/projects/invariants/.CVS co -r ENGINE_V2_PATCHES \
     -D 2003/06/09 invariants/java/daikon
 @end example
-@end iftex
-
-@ifnottex
-@example
-cvs -d $pag/projects/invariants/.CVS co -r ENGINE_V2_PATCHES -D 2003/06/09 invariants/java/daikon
-@end example
-@end ifnottex
 
 Some warnings about analyzing historical versions of Daikon:
 @enumerate
