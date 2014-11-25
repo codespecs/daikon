@@ -2016,12 +2016,14 @@ machine at @nospellcheck{3.4GHz} with @nospellcheck{16GB} of memory
 (buffalo.cs.washington.edu).
 Barring any difficulties,
 the entire process
-will take at least two hours --- and could be much more depending on the number of
+will take at least two hours --- but could be much more depending on the number of
 different platforms on which you test the release.
 
 Each of the steps below assumes that the current working directory is @file{$DAIKONDIR} 
 and that you are using the Bash shell.
 
+@c maximize line size for all example command lists
+@exampleindent 0
 
 @menu
 * Directory layout::
@@ -2056,11 +2058,14 @@ will create this if it does not exist.
 @c @end example
 
 @item
-@file{$HOME/bib} is a clone of @uref{https://code.google.com/p/plume-bib/}.
+Environment variable @env{BIBDIR} must be set to a clone of 
+@uref{https://code.google.com/p/plume-bib/}.
 You can create this clone via the command
 
 @example
-(cd; hg clone https://code.google.com/p/plume-bib/ bib)
+cd
+hg clone https://code.google.com/p/plume-bib/ bib
+export BIBDIR=`pwd`
 @end example
 
 Alternatively, you may set the environment variable @env{BIBDIR} to the location
@@ -2114,7 +2119,7 @@ cp plume.jar ../../java/lib
 Update the publications pages in a local copy of plume-bib. 
 
 @example
-(cd ~/bib; hg fetch)
+(cd $BIBDIR; hg fetch)
 @end example
 
 [Time: moments]
@@ -2128,13 +2133,17 @@ from, two open source projects.
 The home page for the Valgrind instrumentation framework is
 @uref{http://www.valgrind.org}.  As of November 2014 we using version 3.9.0,
 released in October, 2013.
-[TODO: How can a reader confirm that this is correct or determine the
-version on his or her own?]
-  The home page for the GNU Binutils
+(You can verify this by inspecting the first
+line of the file @file{$DAIKONDIR/kvasir/valgrind/NEWS}.)
+
+The home page for the GNU Binutils
 (a collection of binary tools, of which we only use readelf) is
 @uref{http://www.gnu.org/software/binutils/}.
 As of November 2014 we are using version 2.24, released in December, 2013.
-If newer versions of either of these projects is
+[TODO: How can a reader confirm that this is correct or determine the
+version on his or her own?]
+
+If a newer version of either of these projects is
 available, you should update the Fjalar source tree as soon as practical.
 For details, see the separate document @ref{Top,,,valgrind-merge,Merging
 newer versions of Valgrind into Fjalar}.
@@ -2235,22 +2244,22 @@ basic ways to remove items from the misspelled list:
 If the word is misspelled, correct it in the source (@file{.texinfo}) file.
 
 @item
-If the word is spelled correctly, and if it not a proper noun or part
+If the word is spelled correctly, and if it is not a person's name or part
 of a computer command or filename or similar construct, it should be
 added to our local dictionary.  Edit the file @file{daikon.dict} and
 add the new word, keeping the list in alphabetical order.
-[TODO: Why shouldn't proper nouns go in daikon.dict?  I would think they
-should go there.  It also reduces clutter in the .texinfo source files.]
 
 @item
-If the word is a proper noun or some sort of technical information
+If the word is some sort of technical information
 then it should be marked as such with the correct Texinfo command.
-@code{@@nospellcheck} is appropriate for proper nouns.  For the 
+@code{@@nospellcheck} is appropriate for a person's or company's name.  For the 
 proper input of technical information, see "Chapter 9: Marking Text,
 Words and Phrases" of the
 @uref{http://www.gnu.org/software/texinfo/manual/texinfo/texinfo.pdf,, GNU Texinfo Manual}.
 
 @end itemize
+
+[Time: moments]
 
 
 @item
@@ -2277,6 +2286,8 @@ usually be simplified to:
 @example
 hg log -v -r "last(tagged())::"
 @end example
+
+[Time: a few minutes]
 
 
 @item
@@ -2511,7 +2522,6 @@ make rebuild-everything-no-clean
 [Time: 3 min]
  
 
-@page
 @item
 Commit changes back to the repository:
 
