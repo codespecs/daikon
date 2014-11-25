@@ -53,12 +53,12 @@ images/dfepl-flow.jpg: images/dfepl-flow.eps
 images/%.pdf: images/%.eps
 	epstopdf $< --outfile=$@
 
-html: daikon.html developer.html
+html: daikon.html developer.html valgrind-merge.html
 
 daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
 	makeinfo --html --no-split $<
 	# Fixup 'bad' href inserted by makeinfo.
-	perl -pi -e 's|dir.html#Top|index.html|;' daikon.html
+	perl -pi -e 's|dir.html#Top|index.html|;' $@
 
 # just builds from texinfo.  Much faster than rebuilding the files from javadoc
 daikon-fast: daikon.texinfo 
@@ -69,7 +69,12 @@ daikon-fast: daikon.texinfo
 developer.html: developer.texinfo 
 	makeinfo --html --no-split $<
 	# Fixup 'bad' href inserted by makeinfo.
-	perl -pi -e 's|dir.html#Top|index.html|;' developer.html
+	perl -pi -e 's|dir.html#Top|index.html|;' $@
+
+valgrind-merge.html: valgrind-merge.texinfo
+	makeinfo --html --no-split $<
+	# Fixup 'bad' href inserted by makeinfo.
+	perl -pi -e 's|dir.html#Top|index.html|;' $@
 
 html-chap: daikon/index.html developer/index.html
 
@@ -93,12 +98,15 @@ developer/index.html: developer.texinfo
 	cp images/*.png developer/images
 	cp images/*.jpg developer/images
 
-pdf: daikon.pdf images/dfepl-flow.eps developer.pdf
+pdf: daikon.pdf images/dfepl-flow.eps developer.pdf valgrind-merge.pdf
 
 daikon.pdf: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 	makeinfo --pdf $<
 
 developer.pdf: developer.texinfo
+	makeinfo --pdf $<
+
+valgrind-merge.pdf: valgrind-merge.texinfo
 	makeinfo --pdf $<
 
 pdf-final: daikon.texinfo config-options.texinfo invariants-doc.texinfo developer.texinfo
