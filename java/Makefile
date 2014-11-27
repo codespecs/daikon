@@ -1074,9 +1074,9 @@ check-serialize:
 # Include CLASSPATH on command line for Cygwin compatibility.
 # Include . in CLASSPATH because you can have two versions of Daikon,
 # and you want to do junit tests on *this* version.
-# Note that we force locale to be US as TestPlume.java requires.
+# TestPlume.java requires the locale to be US.
 junit:
-	@echo "Running unit (not system) tests with en_US.UTF-8 locale."
+	@echo "Running unit (not system) tests..."
 	LC_ALL=en_US.UTF-8 ${JAVA} daikon.test.MasterUnitTester
 
 junit-all: junit
