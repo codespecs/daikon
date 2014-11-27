@@ -2047,9 +2047,9 @@ A clone of
 A clone of 
 @uref{https://code.google.com/p/plume-lib/} must be in
 @file{$DAIKONDIR/plume-lib}.
-(This is automatic if you have previously built Daikon.)
 @item
 Environment variable @env{JAVA_HOME} must be set to your JDK installation.
+@c Example:  export JAVA_HOME=/usr/lib/jvm/java-1.7.0
 @item
 [TODO: make the following three items consistent.  Currently it seems that
 the first one is needed; I think just the second one would be the best choice.]
@@ -2205,7 +2205,8 @@ Do a clean rebuild of everything.
 make rebuild-everything
 @end example
 
-[Time: 15 min]
+@c Time on godwit as of 11/27/2014
+[Time: 20 min]
 
 
 @item
@@ -2217,7 +2218,8 @@ errors output.
 make -C $DAIKONDIR/java check-nullness
 @end example
 
-[Time: 20 min]
+@c Time on godwit as of 11/27/2014
+[Time: 30 min]
 
 
 @item
@@ -2228,6 +2230,7 @@ The last line printed should be "All tests succeeded."
 make -C $DAIKONDIR/tests clean diffs
 @end example
 
+@c Time on godwit as of 11/27/2014
 [Time: 25 min]
 
 
@@ -2239,7 +2242,8 @@ There should be no diff files marked FAILED.
 make -C $DAIKONDIR/tests/kvasir-tests clean-all nightly-summary-w-daikon
 @end example
 
-[Time: 17 min]
+@c Time on godwit as of 11/27/2014
+[Time: 20 min]
 
 
 @item
@@ -2336,7 +2340,7 @@ In most cases (and for most 404 errors), you should fix the document with
 the incorrect link.  Note that you must fix it in the original repository, 
 not in the drop directories.
 This means correcting the file, most likely located beneath either
-$DAIKONDIR/doc or $BIBDIR and then committing the changes. You will then
+@file{$DAIKONDIR/doc} or @file{$BIBDIR} and then committing the changes. You will then
 need to repeat the previous step (@command{make staging}) prior to re-running
 the broken link tool.
 
