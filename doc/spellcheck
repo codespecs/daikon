@@ -1,4 +1,6 @@
 #! /bin/sh
 
-perl parse-texinfo.pl < $1.texinfo | hunspell -l -p daikon.dict $2 $3 $4
+# -u switch is undocumented and subject to change, but gives a line number
+# whereas -l does not.
+perl parse-texinfo.pl < $1.texinfo | hunspell -u -p daikon.dict $2 $3 $4
 
