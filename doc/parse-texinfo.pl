@@ -2,6 +2,9 @@
 
 use v5.14;    #to get given/when
 
+# Turn off warnings (dangerous, but reduces output)
+no if $] >= 5.018, warnings => "experimental::smartmatch";
+
 use strict;
 use Text::ParseWords;
 
