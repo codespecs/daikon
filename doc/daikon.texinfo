@@ -573,7 +573,7 @@ for this; on Windows the colon would have been impractical as it is
 used in file paths (@file{c:\}); on Linux the semi-colon is impractical,
 as it is used to end a command line.  The tricky bit is that Cygwin
 provides a Linux like environment on top of Windows.  So Cygwin mainly
-wants colon separators but java is a Windows application, so it wants
+wants colon separators but @command{java} is a Windows application, so it wants
 semi-colons.  Another point is that when a Cygwin shell starts up, 
 it copies the Windows environment into its Linux like environment with
 no changes - except for the @env{PATH} variable.  This it converts
@@ -648,7 +648,7 @@ If you wish to override @env{CLASSPATH} by using the @option{-classpath}
 (or @option{-cp}) option, you need to remember that the result must be
 in Windows format.  This can get confusing because the Cygwin 
 bash interpreter is going to process the command line prior to handing it 
-off to java.  Hence: 
+off to @command{java}.  Hence: 
 @exampleindent 1
 @example
 java -cp c:\cygwin64\home\user\invariants\daikon\daikon.jar daikon.Daikon 
@@ -3927,7 +3927,7 @@ Specifies the maximum size, in bytes, of the memory allocation pool for
 the target program.  Also applies to Daikon, if the @option{--daikon}
 command-line argument is given.
 The size is specified in the same manner as the
-@option{--Xmx} switch to java; for example: @option{--heap-size=2048m}.
+@option{--Xmx} switch to @command{java}; for example: @option{--heap-size=2048m}.
 
 @end table
 
@@ -8525,9 +8525,9 @@ You may also wish to take advantage of the Daikon mailing lists
 @item
 This problem affects @ref{Annotate} and the @ref{Runtime-check
 instrumenter}, which output Java source code.  If
-the java file to be annotated/instrumented uses logical
+the Java file to be annotated/instrumented uses logical
 shift operators (@code{>>}, @code{<<}, and @code{>>>}), the
-annotated/instrumented java may contain extra brackets in these
+annotated/instrumented Java may contain extra brackets in these
 operators.  For example, the expression @code{x << y} in the input source
 file may erroneously be translated as @code{x <<<<<< y} in the
 annotated/instrumented file.
