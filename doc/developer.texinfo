@@ -1899,7 +1899,7 @@ method (Step return).
 @item
 Variables: On the top right window, there is a tab pane that displays
 the values of objects and fields during a breakpoint halt.  You can also
-type in any legal java expression that could appear at the breakpoint
+type in any legal Java expression that could appear at the breakpoint,
 and the window will display the value of the expression (don't forget to
 put a semi-colon at the end of your expression!).
 @end itemize
@@ -2038,15 +2038,28 @@ and that you are using the Bash shell.
 @itemize
 @item
 Environment variable @env{DAIKONDIR} must be set to a clone of 
-@uref{http://code.google.com/p/daikon/}.
+@uref{https://code.google.com/p/daikon/}.
 @item
 A clone of 
-@uref{http://code.google.com/p/fjalar/} must be a sibling of
-@file{$DAIKONDIR}..
+@uref{https://code.google.com/p/fjalar/} must be a sibling of
+@file{$DAIKONDIR}.
+@item
+A clone of 
+@uref{https://code.google.com/p/plume-lib/} must be in
+@file{$DAIKONDIR/plume-lib}.
+(This is automatic if you have previously built Daikon.)
+@item
+Environment variable @env{JAVA_HOME} must be set to your JDK installation.
+@item
+[TODO: make the following three items consistent.  Currently it seems that
+the first one is needed; I think just the second one would be the best choice.]
+There must be a symbolic link from 
+@file{$DAIKONDIR/kvasir} to @file{$DAIKONDIR/../fjalar}.
 @item
 There must be a symbolic link from 
-@file{$DAIKONDIR/fjalar} to @file{$DAIKONDIR/../fjalar}; the build process
-will create this if it does not exist.
+@file{$DAIKONDIR/fjalar} to @file{$DAIKONDIR/../fjalar}.
+@item
+There must be a symbolic link from @file{$DAIKONDIR/kvasir} to @file{$DAIKONDIR/../fjalar/valgrind}.
 
 @c Why would one ever want to create it manually, if the build process does so?
 @c Otherwise, you must make this link yourself.
@@ -2083,19 +2096,22 @@ of the bibliography you wish to use.
 Update the Daikon source files to their most recent version. 
 
 @example
-hg fetch && hg outgoing && hg status
+(cd $DAIKONDIR && hg fetch && hg outgoing && hg status)
+(cd $DAIKONDIR/../fjalar && hg fetch && hg outgoing && hg status)
 @end example
 
-The last line printed should be @samp{no changes found}.
+@c No need to check output from "hg outgoing" because
+@c "hg outgoing" returns 0 if there are outgoing changes.
+For each command, the last line printed should be @samp{no changes found}.
 
 [Time: moments]
 
 
 @item
-Make sure you have the latest version of the Checker Framework Java compiler. 
-See the @cite{Download} section of @uref{http://types.cs.washington.edu/jsr308/}. 
-Make sure you have the @env{CHECKERFRAMEWORK} environment 
-variable set to the location of the Checker Framework directory.
+Download the latest version of the Checker Framework Java compiler from
+@uref{http://checkerframework.org/}. 
+Set the @env{CHECKERFRAMEWORK} environment 
+variable to the location of the Checker Framework directory.
 
 [Time: moments]
 
@@ -2107,16 +2123,15 @@ then you need to perform the following steps to update @file{plume.jar}.
 @example
 cd $DAIKONDIR/plume-lib/java
 hg fetch
-make clean
-make
+make check-all && make clean && make
 cp plume.jar ../../java/lib
 @end example
 
-[Time: 1 min]
+[Time: 5 min]
 
 
 @item
-Update the publications pages in a local copy of plume-bib. 
+Update the bibliography.
 
 @example
 (cd $BIBDIR; hg fetch)
@@ -2160,7 +2175,9 @@ to an even number.
 You may do this manually, or if the value just needs to be incremented
 by 1 (to go from odd to even) you may use:
 
+@c "cd $DAIKONDIR" because the previous commands changed the working directory
 @example
+cd $DAIKONDIR
 make update-dist-version-file
 @end example
 
@@ -2197,8 +2214,7 @@ Java compiler was correctly used to build Daikon.  There should be no
 errors output.
 
 @example
-cd $DAIKONDIR/java
-make check-nullness
+make -C $DAIKONDIR/java check-nullness
 @end example
 
 [Time: 20 min]
@@ -3048,7 +3064,7 @@ Specifies the kind of reference for variables which are structures or
 classes.  The possible values are @code{pointer} or @code{offset}.  In
 C, @code{pointer} is used if the variable is a pointer, @code{offset}
 is used when the structure is placed inline.  Pointer would be used
-for all references to java objects.  Defaults to pointer.
+for all references to Java objects.  Defaults to pointer.
 
 @item @code{array <dim>}
 
