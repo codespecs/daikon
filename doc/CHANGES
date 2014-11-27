@@ -22,10 +22,10 @@ Further documentation can be found in:
 
 5.1.12 (November 27, 2014)
 
-Celeriac, Daikon's front end for .NET programs, now works under Mono.
+Celeriac, Daikon's front end for .NET programs, works under Mono.
 See https://code.google.com/p/daikon-dot-net-front-end/wiki/Mono .
 
-The declaration file format now supports five new variable-info fields:
+The declaration file format supports five new variable-info fields:
   min-value
   max-value
   min-length
@@ -36,14 +36,12 @@ enable Daikon to suppress inveriants that are obvious due to, for example,
 programming language limitations on the values for a particular type.
 Thanks to Antonio Garcia Dominguez for contributing this feature.
 
-We made a small change to allow the Daikon installation test to pass
-when the current locale is not en_US (English for the United States).
+The Daikon installation tests now pass when the current locale is not en_US.
 
-We have made additional improvements to Daikon splitter file processing.
-We now do a much better job with variable scoping.  For example, you may
-now have a splitter condition that references a local variable and a 
-global variable with the same name. (The global will, of course, require
-a classname prefix.)
+We have fixed bugs on Daikon splitter file processing.  For example, a
+splitter condition can now reference a local variable and a global
+variable with the same name.  (The global variable, of course, requires a
+classname prefix.)
 
 ===========================================================================
 
