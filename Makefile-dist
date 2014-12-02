@@ -45,13 +45,13 @@ clean:
 ifdef DAIKONCLASS_SOURCES
 	$(MAKE) -C java clean
 endif
-	$(MAKE) -C kvasir/valgrind clean
+	$(MAKE) -C fjalar/valgrind clean
 
 java/dcomp_rt.jar:
 	$(MAKE) -C java dcomp_rt.jar
 
 kvasir:
-	cd kvasir && ./auto-everything.sh
+	cd fjalar && ./auto-everything.sh
 
 .PHONY: kvasir
 
