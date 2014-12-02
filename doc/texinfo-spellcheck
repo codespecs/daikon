@@ -1,0 +1,19 @@
+#! /bin/sh
+
+# texinfo-spellcheck
+# argument: a texinfo file
+# Calls prepare-texinfo-for-spellcheck.pl to preprocess
+# the texinfo file and passes the result to hunspell
+# for spell checking.
+
+# grab the input filename
+input=$1.texinfo
+
+# any additional arguments are to be passed to hunspell
+shift
+
+# -u switch to hunspell is undocumented and subject to change,
+# but gives a line number whereas -l does not.
+
+perl prepare-texinfo-for-spellcheck.pl < $input | hunspell -u -p daikon.dict "$@"
+

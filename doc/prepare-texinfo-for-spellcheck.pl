@@ -1,5 +1,12 @@
 #!/usr/bin/env perl
 
+# prepare-texinfo-for-spellcheck.pl
+# argument: .texinfo file
+# Reads the input .texinfo file and outputs a filtered
+# version that elides the texinfo commands.  It also
+# removes other text that is not appropriate as input
+# to spellcheckx such as examples and comments.
+
 use v5.14;    #to get given/when
 
 # Turn off warnings (dangerous, but reduces output)
@@ -57,6 +64,7 @@ my %line_operators = (
     "\@itemx"             => SKIP_LINE,
     "\@macro"             => SKIP_TO_MATCHING_END,
     "\@menu"              => SKIP_TO_MATCHING_END,
+    "\@need"              => SKIP_LINE,
     "\@node"              => SKIP_LINE,
     "\@noindent"          => SKIP_LINE,
     "\@page"              => SKIP_LINE,

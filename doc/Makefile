@@ -94,6 +94,8 @@ developer/index.html: developer.texinfo
 	makeinfo --html --split=chapter -o developer $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|../dir/index.html|../index.html|;' developer/index.html
+	# Fixup 'bad' href inserted by makeinfo.
+	perl -pi -e 's|../valgrind-merge/index.html|../valgrind-merge.html|;' developer/Distribution.html
 	mkdir developer/images
 	cp images/*.png developer/images
 	cp images/*.jpg developer/images
