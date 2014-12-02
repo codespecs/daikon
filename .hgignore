@@ -12,7 +12,7 @@ syntax: glob
 *.sav
 
 # Symlink to another Mercurial repository
-kvasir
+fjalar
 
 # User customizations
 # (Each filename matches in all directories.)
