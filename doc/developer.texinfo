@@ -2207,8 +2207,8 @@ make rebuild-everything
 @end example
 
 @c Time on buffalo as of 12/01/2014
-@c only 13 minutes.  Most other godwit/buffalo times in same ball park.
-@c ???
+@c only 13 minutes.
+@c buffalo has twice the memory of godwit.
 @c Time on godwit as of 11/27/2014
 [Time: 20 min]
 
