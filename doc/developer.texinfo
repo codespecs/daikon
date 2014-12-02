@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.1.11
+@center Daikon version 5.1.12
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.1.11 release date
-@center October 31, 2014
+@c Print out the Daikon version 5.1.12 release date
+@center December 2, 2014
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.1.11, released October 31, 2014.
+It describes Daikon version 5.1.12, released December 2, 2014.
 
 @menu
 * Introduction::
@@ -1998,12 +1998,12 @@ prepare for subsequent development.  This system has the useful side effect
 of allowing the build and test process to be repeated to fix a problem (steps 2--14
 of @ref{Distribution steps} below) 
 without having to worry about updating or resetting the version number.
-Another advantage is to reinforce, to people who are working form the
+Another advantage is to reinforce, to people who are working from the
 version control repository, that they are not using the released version,
 because the version numbers differ.
 
 The Daikon distribution site is located at
-@uref{http//plse.cs.washington.edu/daikon/} and is served from the UW CSE
+@uref{http://plse.cs.washington.edu/daikon/} and is served from the UW CSE
 file system at
 @file{/cse/web/research/plse/daikon}.
 In order to be able to write to the distribution site, your CSE user id must be 
@@ -2036,30 +2036,30 @@ and that you are using the Bash shell.
 @section Directory layout
 
 @itemize
+
 @item
 Environment variable @env{DAIKONDIR} must be set to a clone of 
 @uref{https://code.google.com/p/daikon/}.
+
 @item
 A clone of 
 @uref{https://code.google.com/p/fjalar/} must be a sibling of
 @file{$DAIKONDIR}.
+
 @item
 A clone of 
 @uref{https://code.google.com/p/plume-lib/} must be in
-@file{$DAIKONDIR/plume-lib}.
+@file{$DAIKONDIR/@/plume-lib}.
+
 @item
 Environment variable @env{JAVA_HOME} must be set to your JDK installation.
 @c Example:  export JAVA_HOME=/usr/lib/jvm/java-1.7.0
-@item
-[TODO: make the following three items consistent.  Currently it seems that
-the first one is needed; I think just the second one would be the best choice.]
-There must be a symbolic link from 
-@file{$DAIKONDIR/kvasir} to @file{$DAIKONDIR/../fjalar}.
+
 @item
 There must be a symbolic link from 
 @file{$DAIKONDIR/fjalar} to @file{$DAIKONDIR/../fjalar}.
-@item
-There must be a symbolic link from @file{$DAIKONDIR/kvasir} to @file{$DAIKONDIR/../fjalar/valgrind}.
+If it does not already exist, the @command{rebuild-everything} step below 
+will create it for you.
 
 @c Why would one ever want to create it manually, if the build process does so?
 @c Otherwise, you must make this link yourself.
@@ -2067,18 +2067,18 @@ There must be a symbolic link from @file{$DAIKONDIR/kvasir} to @file{$DAIKONDIR/
 @c 
 @c @example
 @c cd @@DAIKONDIR
-@c ln -nsf ../myfjalar kvasir
+@c ln -nsf ../myfjalar fjalar
 @c @end example
 
 @item
 Environment variable @env{BIBDIR} must be set to a clone of 
 @uref{https://code.google.com/p/plume-bib/}.
-You can create this clone via the command
+You can create this clone with the commands:
 
 @example
 cd
 hg clone https://code.google.com/p/plume-bib/ bib
-export BIBDIR=`pwd`
+export BIBDIR=`pwd`/bib
 @end example
 
 Alternatively, you may set the environment variable @env{BIBDIR} to the location
@@ -2127,6 +2127,7 @@ make check-all && make clean && make
 cp plume.jar ../../java/lib
 @end example
 
+@c Time on buffalo as of 12/01/2014
 [Time: 5 min]
 
 
@@ -2149,7 +2150,7 @@ The home page for the Valgrind instrumentation framework is
 @uref{http://www.valgrind.org}.  As of November 2014 we using version 3.9.0,
 released in October, 2013.
 (You can verify this by inspecting the first
-line of the file @file{$DAIKONDIR/kvasir/valgrind/NEWS}.)
+line of the file @file{$DAIKONDIR/fjalar/valgrind/NEWS}.)
 
 The home page for the GNU Binutils
 (a collection of binary tools, of which we only use readelf) is
@@ -2205,6 +2206,9 @@ Do a clean rebuild of everything.
 make rebuild-everything
 @end example
 
+@c Time on buffalo as of 12/01/2014
+@c only 13 minutes.  Most other godwit/buffalo times in same ball park.
+@c ???
 @c Time on godwit as of 11/27/2014
 [Time: 20 min]
 
@@ -2251,8 +2255,8 @@ Check the release documents for spelling errors.
 
 @example
 cd $DAIKONDIR/doc
-./spellcheck daikon
-./spellcheck developer
+./texinfo-spellcheck daikon
+./texinfo-spellcheck developer
 @end example
 
 Any words that may be spelled incorrectly are output to standard out.  There are three
@@ -2457,7 +2461,7 @@ make
 make installation-test
 @end smallexample
 
-
+@need 800
 @item
 Save the previous release in the history archives.
 
@@ -2486,7 +2490,7 @@ Commit changes back to the repository:
 @example
 hg -q commit -m "Change version to @emph{X.Y.Z}"
 hg push
-cd kvasir
+cd fjalar
 hg -q commit -m "Change version to @emph{X.Y.Z}"
 hg push
 @end example
@@ -2500,7 +2504,7 @@ Add a version label to the repository:
 @example
 hg tag @emph{X.Y.Z}
 hg push
-cd kvasir
+cd fjalar
 hg tag @emph{X.Y.Z}
 hg push
 @end example
@@ -2548,7 +2552,7 @@ Commit changes back to the repository:
 @example
 hg -q commit -m "Bump version number for ongoing development."
 hg push
-cd kvasir
+cd fjalar
 hg -q commit -m "Bump version number for ongoing development."
 hg push
 @end example

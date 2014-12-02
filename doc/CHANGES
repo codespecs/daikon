@@ -20,28 +20,38 @@ Further documentation can be found in:
 
 ===========================================================================
 
-5.1.12 (November 27, 2014)
+5.1.12 (December 2, 2014)
 
-Celeriac, Daikon's front end for .NET programs, works under Mono.
-See https://code.google.com/p/daikon-dot-net-front-end/wiki/Mono .
+  Celeriac, Daikon's front end for .NET programs, works under Mono.
+  See https://code.google.com/p/daikon-dot-net-front-end/wiki/Mono .
 
-The declaration file format supports five new variable-info fields:
-  min-value
-  max-value
-  min-length
-  max-length
-  valid-values
-These specify what possible values may appear in the trace file, and they
-enable Daikon to suppress inveriants that are obvious due to, for example,
-programming language limitations on the values for a particular type.
-Thanks to Antonio Garcia Dominguez for contributing this feature.
+  The declaration file format supports five new variable-info fields:
+    min-value
+    max-value
+    min-length
+    max-length
+    valid-values
+  These specify what possible values may appear in the trace file, and they
+  enable Daikon to suppress inveriants that are obvious due to, for example,
+  programming language limitations on the values for a particular type.
+  Thanks to Antonio Garcia Dominguez for contributing this feature.
 
-The Daikon installation tests now pass when the current locale is not en_US.
+  The Daikon installation tests now pass when the current locale is not en_US.
 
-We have fixed bugs on Daikon splitter file processing.  For example, a
-splitter condition can now reference a local variable and a global
-variable with the same name.  (The global variable, of course, requires a
-classname prefix.)
+  We have fixed bugs on Daikon splitter file processing.  For example, a
+  splitter condition can now reference a local variable and a global
+  variable with the same name.  (The global variable, of course, requires a
+  classname prefix.)
+
+  We have changed the name of the symbolic link that points from the Daikon
+  clone to the Fjalar clone. It used to be 'kvasir', it is now 'fjalar'. 
+  For most clients, the change will be unnoticed.  However, if you are using
+  Fjalar/Kvasir and you are working directly from our repository, you will
+  need to regenerate the fjalar Makefiles as follows:
+    cd $DAIKONDIR/fjalar/valgrind
+    ./autogen.sh
+    ./configure --prefix=`pwd`/inst
+  
 
 ===========================================================================
 
