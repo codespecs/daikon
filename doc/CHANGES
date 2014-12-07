@@ -43,15 +43,16 @@ Further documentation can be found in:
   variable with the same name.  (The global variable, of course, requires a
   classname prefix.)
 
-  We have changed the name of the symbolic link that points from the Daikon
-  clone to the Fjalar clone. It used to be 'kvasir', it is now 'fjalar'. 
-  For most clients, the change will be unnoticed.  However, if you are using
-  Fjalar/Kvasir and you are working directly from our repository, you will
-  need to regenerate the fjalar Makefiles as follows:
+  If you work from a clone of the repository, as opposed to downloading the
+  Daikon release, then there needs to be a symbolic link named 'fjalar'
+  from the Daikon clone to the Fjalar clone.  After this change, you need to
+  regenerate the fjalar Makefiles.
+  To accomplish all of this, run the following commands:
+    cd $DAIKONDIR
+    ln -s ../fjalar fjalar
     cd $DAIKONDIR/fjalar/valgrind
     ./autogen.sh
     ./configure --prefix=`pwd`/inst
-  
 
 ===========================================================================
 
