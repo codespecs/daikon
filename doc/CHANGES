@@ -49,6 +49,7 @@ Further documentation can be found in:
   regenerate the fjalar Makefiles.
   To accomplish all of this, run the following commands:
     cd $DAIKONDIR
+    rm -f kjasir   # remove old link
     ln -s ../fjalar fjalar
     cd $DAIKONDIR/fjalar/valgrind
     ./autogen.sh
