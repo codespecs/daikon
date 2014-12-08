@@ -7903,10 +7903,15 @@ Any output generated before the out-of-memory error is perfectly valid.
 @subsection Simplify errors
 
 @cindex Simplify, could not utilize
+@cindex Simplify, couldn't start
 
-The warning @samp{Could not utilize Simplify} indicates that the Simplify
+The warning @samp{Could not utilize Simplify}
+and/or @samp{Couldn't start Simplify} indicates that the Simplify
 theorem-prover could not be run; this usually indicates that the
 Simplify binary was not found on the user's path.
+If the @command{Simplify} executable is not on your path, then
+you should set the @code{simplify.path} property to its absolute
+pathname so that Daikon can run it.
 Simplify must be separately obtained (from
 @uref{http://www.hpl.hp.com/downloads/crl/jtk/}) and installed.
 
