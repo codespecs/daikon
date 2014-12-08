@@ -46,10 +46,13 @@ public class SplitterLoader extends ClassLoader {
     byte[] classData = read_Class_Data(full_pathname);
     if (classData == null) {
       return null;
-    } else {
-      return_class = defineClass(className, classData, 0, classData.length);
-      resolveClass(return_class);
     }
+    try {
+      return_class = defineClass(className, classData, 0, classData.length);
+    } catch (UnsupportedClassVersionError ucve) { // should be more general?
+        throw new Daikon.TerminationMessage("Wrong Java version while reading file " + full_pathname + ": " + ucve.getMessage() + "\n" + "This indicates a possible problem with configuration option\ndaikon.split.SplitterFactory.compiler whose value is: " + SplitterFactory.dkconfig_compiler);
+    }
+    resolveClass(return_class);
     return return_class;
   }
 
