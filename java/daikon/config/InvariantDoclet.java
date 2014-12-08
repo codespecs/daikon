@@ -231,6 +231,10 @@ public class InvariantDoclet
       comment = UtilMDE.replaceString (comment, "</samp>", "}");
       comment = UtilMDE.replaceString (comment, "<code>", "@code{");
       comment = UtilMDE.replaceString (comment, "</code>", "}");
+      // Catch-all for parameters, filenames, etc. for which there
+      // is no specific HTML formatting.
+      comment = UtilMDE.replaceString (comment, "<tt>", "@code{");
+      comment = UtilMDE.replaceString (comment, "</tt>", "}");
 
 
       if (dc.name().startsWith ("FunctionBinary")) {

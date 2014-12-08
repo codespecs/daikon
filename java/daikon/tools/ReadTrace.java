@@ -44,7 +44,7 @@ public class ReadTrace {
   }
 
   /**
-   * Populates the <tt>samples</tt> map with all the data read from the file.
+   * Populates the <code>samples</code> map with all the data read from the file.
    * This is only reasonable for small trace files, since all the data will
    * be retained in memory!
    */
@@ -52,7 +52,7 @@ public class ReadTrace {
 
     public Map<PptTopLevel,List<ValueTuple>> samples = new LinkedHashMap<PptTopLevel,List<ValueTuple>>();
 
-    /** Process the sample, by adding it to the <tt>samples</tt> map. */
+    /** Process the sample, by adding it to the <code>samples</code> map. */
     /*@RequiresNonNull("FileIO.data_trace_state")*/
     public void process_sample (PptMap all_ppts, PptTopLevel ppt,
                                 ValueTuple vt, /*@Nullable*/ Integer nonce) {

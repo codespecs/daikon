@@ -276,6 +276,10 @@ public class ParameterDoclet
         desc = UtilMDE.replaceString (desc, "</samp>", "}");
         desc = UtilMDE.replaceString (desc, "<code>", "@code{");
         desc = UtilMDE.replaceString (desc, "</code>", "}");
+        // Catch-all for parameters, filenames, etc. for which there
+        // is no specific HTML formatting.
+        desc = UtilMDE.replaceString (desc, "<tt>", "@code{");
+        desc = UtilMDE.replaceString (desc, "</tt>", "}");
         out.println(desc);
         if (! desc.contains("The default value is")) {
           out.println(defstr);
