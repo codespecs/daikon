@@ -2330,9 +2330,12 @@ make staging
 
 
 @item
-Check the website to see if it has any broken links. Do not run this step on
-@samp{buffalo}.  For some reason the system software is not up to date.  Both
-@samp{bicycle} and @samp{tricycle} have been verified to work properly.
+Check the website to see if it has any broken links.
+
+@c missing software has been loaded onto buffalo.  (12/2/2014)
+@c Do not run this step on
+@c @samp{buffalo}.  For some reason the system software is not up to date.  Both
+@c @samp{bicycle} and @samp{tricycle} have been verified to work properly.
 
 @example
 make check-for-broken-doc-links
