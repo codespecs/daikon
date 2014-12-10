@@ -112,7 +112,7 @@ public class SessionManager
         InputStream bg_stream =
           SessionManager.class.getResourceAsStream(fileName);
         if (bg_stream == null) {
-          throw new RuntimeException("Could not find simplify/daikon-background.txt");
+          throw new RuntimeException("Could not find resource daikon/simplify/" + fileName + " on the classpath");
         }
         BufferedReader lines =
           new BufferedReader(new InputStreamReader(bg_stream));
