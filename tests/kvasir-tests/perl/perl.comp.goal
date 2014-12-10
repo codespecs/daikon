@@ -76383,40 +76383,22 @@ return
 pp_sort.c.dynprep():::ENTER
 cmp
 cmp[..]
-list1
-list1[..]
-list1[..]->sv_any
+list1 list1[..] list1[..]->sv_any list1[..]->sv_flags list1[..]->sv_refcnt list2 list2[..] list2[..]->sv_any list2[..]->sv_flags nmemb
 list1[..]->sv_any[0]
-list1[..]->sv_flags
-list1[..]->sv_refcnt
 list1[..][0]
-list2
-list2[..]
-list2[..]->sv_any
 list2[..]->sv_any[0]
-list2[..]->sv_flags
 list2[..]->sv_refcnt
 list2[..][0]
-nmemb
 
 pp_sort.c.dynprep():::EXIT0
 cmp
 cmp[..]
-list1
-list1[..]
-list1[..]->sv_any
+list1 list1[..] list1[..]->sv_any list1[..]->sv_flags list1[..]->sv_refcnt list2 list2[..] list2[..]->sv_any list2[..]->sv_flags nmemb
 list1[..]->sv_any[0]
-list1[..]->sv_flags
-list1[..]->sv_refcnt
 list1[..][0]
-list2
-list2[..]
-list2[..]->sv_any
 list2[..]->sv_any[0]
-list2[..]->sv_flags
 list2[..]->sv_refcnt
 list2[..][0]
-nmemb
 return
 
 pp_sort.c.sortcv():::ENTER
