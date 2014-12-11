@@ -412,9 +412,8 @@ Note that running this make command may take 20 minutes or more,
 depending on your computer.  
 
 Optionally, download other executables, such as
-@c
-the Simplify theorem
-prover (@uref{http://www.hpl.hp.com/downloads/crl/jtk/}).
+the Simplify theorem prover (@pxref{Installing Simplify}).
+
 
 @end enumerate
 @exampleindent 4
@@ -537,15 +536,8 @@ On Windows, running @command{make} requires
 that @uref{http://www.cygwin.com/,Cygwin} be installed.
 
 Optionally, download other executables, such as
-@c
 the Simplify theorem
-prover (@uref{http://www.hpl.hp.com/downloads/crl/jtk/}),
-@c
-or
-the @command{Z3} theorem 
-prover (@uref{http://research.microsoft.com/en-us/um/redmond/projects/z3/}; @command{Z3}
-can replace Simplify but is only distributed for Windows).
-@c
+prover (@pxref{Installing Simplify}).
 
 @end enumerate
 @exampleindent 4
@@ -1826,9 +1818,8 @@ true, then Daikon outputs only @samp{x > 0}.  Use of the
 eliminate even more redundant output, and should be used if it is
 important that absolutely no redundancies appear in the output.
 
-The Simplify program must be obtained separately in order to take
-advantage of this option.  It can be installed from
-@uref{http://www.hpl.hp.com/downloads/crl/jtk/}.
+The Simplify program must be installed in order to take
+advantage of this option (@pxref{Installing Simplify}).
 Beware that Simplify can run slowly;
 the amount of effort Simplify exerts for each invariant can be controlled
 using both the @option{daikon.simplify.Session.simplify_max_iterations} and
@@ -2677,13 +2668,8 @@ implied) invariants from its output; see
 
 Daikon can use the Simplify theorem-prover to eliminate even more
 implied invariants than Daikon's built-in tests are able to eliminate.
-Simplify must be separately obtained (from
-@uref{http://www.hpl.hp.com/downloads/crl/jtk/}) and installed in
-order to take advantage of this filter.
-
-If the @command{Simplify} executable is not on your path, then
-you should set the @code{simplify.path} property to its absolute
-pathname so that Daikon can run it.
+Simplify must be installed in
+order to take advantage of this filter (@pxref{Installing Simplify}).
 
 If you don't also specify the @option{--suppress_redundant} command-line
 option (@pxref{Options to control invariant detection}) to enable
@@ -7269,9 +7255,8 @@ examines two sets of invariants, and checks using the Simplify
 automatic theorem prover whether they satisfy a precise version of
 this relationship.
 
-Simplify must be separately obtained (from
-@uref{http://www.hpl.hp.com/downloads/crl/jtk/}) and installed in
-order to use this program.
+Simplify must be installed in
+order to use this program (@pxref{Installing Simplify}).
 
 The @command{LogicalCompare} program takes two mandatory arguments, which are
 @file{.inv} files containing invariants; the invariants will be
@@ -7909,15 +7894,37 @@ The warning @samp{Could not utilize Simplify}
 and/or @samp{Couldn't start Simplify} indicates that the Simplify
 theorem-prover could not be run; this usually indicates that the
 Simplify binary was not found on the user's path.
-If the @command{Simplify} executable is not on your path, then
-you should set the @code{simplify.path} property to its absolute
-pathname so that Daikon can run it.
-Simplify must be separately obtained (from
-@uref{http://www.hpl.hp.com/downloads/crl/jtk/}) and installed.
 
 If Simplify is not used, certain redundant (logically implied)
 invariants may appear in Daikon's output.  The output is
 correct, but more verbose than it would be if you used Simplify.
+
+@menu
+* Installing Simplify::
+@end menu
+
+
+@node          Installing Simplify
+@subsubsection Installing Simplify
+
+@cindex Simplify, installing
+
+Obtain Simplify from
+@uref{http://kindsoftware.com/products/opensource/archives/Simplify-1.5.5-13-06-07-binary.zip},
+and unzip the zipfile.
+
+Either place the appropriate binary on your path, named @command{Simplify},
+or set set the @code{simplify.path} property to its absolute pathname.
+
+Note:  Older versions of the @command{Z3} theorem 
+prover (@uref{http://z3.codeplex.com/})
+can replace Simplify, but more recent versions do not support the Simplify
+syntax.  In the future, it would be nice to rewrite Daikon's theorem-prover
+interface to use the SMT-LIB2 language, so that a compatible solver like Z3
+or CVC4 could be used.  The main challenge to this is writing the
+boilerplate code to output each different kind of invariant in SMT-LIB2
+format.
+
 
 @node       Contradictory invariants
 @subsection Contradictory invariants
