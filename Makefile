@@ -64,6 +64,7 @@ SCRIPT_PATHS := $(addprefix scripts/,$(SCRIPT_FILES)) \
 DAIKON_JAVA_FILES := $(shell find java -name '*daikon-java*' -prune -o -name '*.java' -print) $(shell find java/daikon -follow -name '*daikon-java*' -prune -o -name '*.java' -print)
 DAIKON_RESOURCE_FILES := daikon/config/example-settings.txt \
 	daikon/simplify/daikon-background.txt \
+	daikon/simplify/daikon-background-defined.txt \
 	daikon/test/InvariantFormatTest.commands \
 	daikon/test/SampleTester.commands \
 	daikon/test/SampleTester.decls \
