@@ -3362,12 +3362,11 @@ information, which must be supplied to Daikon along with the
 tool for C/C++, see @ref{DynComp for C/C++}.
 
 @item
-The Celeriac front-end for .NET programs has a DynComp mode.
-For full details about the DynComp tool for .NET, see the Celeriac
-documentation at
-@uref{https://code.google.com/p/daikon-dot-net-front-end/}, and in
-particular the @option{--comparability=@emph{filename}} and
-@option{--generate-comparability} command-line options.
+The Celeriac front-end for .NET programs can compute variable
+comparability.  It does so statically by examining the program text, rather
+than dynamically by running the program as DynComp does.
+For full details about variable comparability in Celeriac, see
+@uref{https://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted#Ignoring_Comparisons_of_Unrelated_Variables}.
 
 @end itemize
 
