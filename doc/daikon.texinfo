@@ -3361,6 +3361,14 @@ information, which must be supplied to Daikon along with the
 @ref{Using DynComp with C programs}.  For full details about the DynComp
 tool for C/C++, see @ref{DynComp for C/C++}.
 
+@item
+The Celeriac front-end for .NET programs has a DynComp mode.
+For full details about the DynComp tool for .NET, see the Celeriac
+documentation at
+@uref{https://code.google.com/p/daikon-dot-net-front-end/}, and in
+particular the @option{--comparability=@emph{filename}} and
+@option{--generate-comparability} command-line options.
+
 @end itemize
 
 @node    Loop invariants
