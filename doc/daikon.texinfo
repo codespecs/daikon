@@ -224,7 +224,7 @@ you may send mail to the list asking to be added.
 @cindex installing Daikon
 
 Shortcut for the impatient:  skip directly to the installation instructions
-for @xref{Unix/Linux/MacOSX installation}, or @xref{Windows installation}.
+for @ref{Unix/Linux/MacOSX installation}, or @ref{Windows installation}.
 
 There are two main ways to install Daikon.  @xref{Simple installation},
 for a simple 2-step installation process that is adequate for the needs
@@ -234,7 +234,7 @@ functionality in the Daikon distribution.
 
 Use the simple installation instructions if you only wish to detect
 invariants in Java programs.  Use the complete installation instructions
-(which are easy to follow) if you wish to detect invariants in C or Perl
+if you wish to detect invariants in C or Perl
 programs, if you wish to run certain other programs distributed with
 Daikon in its @file{scripts/} directory, or if you wish to edit and
 recompile the source code of Daikon itself.
@@ -366,12 +366,12 @@ set two environment variables
 and source a Daikon startup file.
 
 
-We will assume that you are using the bash shell or its variants.
-Add these three commands to your @file{~/.bashrc} or @file{~/.bash_profile} file:
+We will assume that you are using the bash shell or one of its variants.
+Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The full pathname of the directory that contains Daikon
 export DAIKONDIR=@var{daikonparent}/daikon
-# The full pathname of the directory that contains the Java JDK; e.g.:
+# The full pathname of the directory that contains the Java JDK
 export JAVA_HOME=/usr/lib/jvm/java
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
@@ -396,7 +396,7 @@ with its Java front end (Chicory).  This step is required for using
 Daikon with its C/C++ front end (Kvasir), and for other tools.
 
 @example
-cd $DAIKONDIR/java
+cd $DAIKONDIR
 make
 @end example
 
@@ -5888,21 +5888,41 @@ previous run.
 @cindex Kvasir installation
 
 @c Kvasir is the recommended C/C++ front end for use on Linux/x86.
-The source
-code for Kvasir is included in the main Daikon distribution, and is
-compiled by default on Linux/x86 and Linux/x86-64 systems.
+There are two scenarios for building the Kvasir
+tool:
 
-To compile and install Kvasir, give the command @command{make kvasir}
-from the top-level Daikon directory:
+@itemize @bullet
+@item
+You have downloaded a packaged release of Daikon from our website and
+have followed the installation steps in @ref{Installing Daikon}.  If so,
+Kvasir is already built and available for use.
+@item
+You wish to customize or extend Daikon and are (or will be) working
+with a clone of the Daikon repository. The remainder of this section
+describes this case.
+@end itemize
+
+We assume you are already familiar with the @cite{Daikon Developer Manual},
+in particular @ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
+If that is not the case, you should read that section first.
+
+You will need to make a clone of Fjalar's version control repository, named
+@file{fjalar}, as a sibling of your Daikon clone.
 
 @example
-make -C $DAIKONDIR kvasir
+cd $DAIKONDIR
+cd ..
+hg clone https://code.google.com/p/fjalar/
 @end example
 
-@noindent
-This will check that you have the appropriate prerequisites (such as
-@command{GCC}), configure Kvasir for your machine, compile it, and install
-it in the directory @file{kvasir/inst}.
+You may now build Fjalar (which includes Kvasir).  The following commands build
+Fjalar, install it locally, and make a symbolic
+link to it in your Daikon tree.
+
+@example
+cd $DAIKONDIR
+make kvasir
+@end example
 
 You may see warnings during this process.  These can be ignored.  If you
 receive an error of the form:
@@ -5915,7 +5935,7 @@ compilation terminated.
 @end example
 
 @noindent
-It is most likely caused by the package @file{binutils-dev} not being
+it is most likely caused by the package @file{binutils-dev} not being
 installed.
 
 Once Kvasir has been installed, it can be used via the
@@ -6075,7 +6095,8 @@ you do not need to perform separate instrumentation and recompilation steps.
 For more details about how to download and use Celeriac, please
 see @uref{http://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted}.
 
-Celeriac works under Mono as well as under the Microsoft .NET implementation; see @uref{https://code.google.com/p/daikon-dot-net-front-end/wiki/Mono}.
+Celeriac works under Mono as well as under the Microsoft .NET implementation;
+see @uref{https://code.google.com/p/daikon-dot-net-front-end/wiki/Mono}.
 
 
 @node    dfepl
