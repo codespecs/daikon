@@ -127,8 +127,8 @@ medium-real-tests__%: do-gzip__% do-flex-pristine__% do-bzip2__% do-perl__%  do-
                       do-tcas__%
 	@
 
-# Omits povray
-medium-real-easy-tests__%: do-gzip__% do-flex-pristine__% do-bzip2__% do-perl__% do-tcas__%
+# Omits povray and perl
+medium-real-easy-tests__%: do-gzip__% do-flex-pristine__% do-bzip2__% do-tcas__%
 	@
 
 small-crypto-tests__%: do-md5__%
