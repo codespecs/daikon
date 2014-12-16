@@ -226,18 +226,22 @@ you may send mail to the list asking to be added.
 Shortcut for the impatient:  skip directly to the installation instructions
 for @ref{Unix/Linux/MacOSX installation}, or @ref{Windows installation}.
 
-There are two main ways to install Daikon.  @xref{Simple installation},
-for a simple 2-step installation process that is adequate for the needs
-of many users.  @xref{Complete installation}, for a complete
+There are two main ways to install Daikon.
+@xref{Complete installation}, for a complete
 installation, in 4 easy steps, that permits you to use all of the
 functionality in the Daikon distribution.
+@xref{Simple installation},
+for an even simpler 2-step installation process that is adequate for the needs
+of many users.
 
-Use the simple installation instructions if you only wish to detect
-invariants in Java programs.  Use the complete installation instructions
+Use the complete installation instructions
 if you wish to detect invariants in C or Perl
 programs, if you wish to run certain other programs distributed with
 Daikon in its @file{scripts/} directory, or if you wish to edit and
 recompile the source code of Daikon itself.
+Use the simple installation instructions if you only wish to detect
+invariants in Java programs, and you don't want to set any environment
+variables in your startup file.
 
 Differences from previous versions of Daikon appear
 in the file @file{doc/CHANGES} in the distribution.
