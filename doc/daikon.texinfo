@@ -1980,7 +1980,7 @@ If you wish to write your own tools for processing invariants, you have
 two general options.  You can parse Daikon's textual output, or you can
 write Java code that processes the @file{.inv} file.  The @file{.inv}
 file is simply a serialized
-@uref{http://plse.cs.washington.edu/daikon/download/jdoc/daikon/PptMap.html,@code{PptMap}}
+@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/PptMap.html,@code{PptMap}}
 object.  In addition to reading the Javadoc, you can examine how the
 other tools use this data structure.
 

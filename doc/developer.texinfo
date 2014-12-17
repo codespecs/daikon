@@ -1009,13 +1009,13 @@ This is covered in the next section.
 
 More detailed information can be found in the Javadoc for
 @ifhtml
-@code{@uref{http://plse.cs.washington.edu/daikon/download/jdoc/daikon/Debug.html,,daikon.Debug}}
+@code{@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/Debug.html,,daikon.Debug}}
 @end ifhtml
 @ifnothtml
-@code{@uref{http://plse.cs.washington.edu/daikon/download/jdoc/daikon/Debug.html, daikon.Debug}}
+@code{@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/Debug.html, daikon.Debug}}
 @end ifnothtml
 and
-@uref{http://plse.cs.washington.edu/daikon/download/jdoc/daikon/inv/Invariant.html,@code{daikon.inv.Invariant}}.
+@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/inv/Invariant.html,@code{daikon.inv.Invariant}}.
 
 @menu
 * Adding track logging::
