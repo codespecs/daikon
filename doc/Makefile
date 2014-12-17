@@ -1,7 +1,6 @@
 all: config-options invariants-doc html html-chap pdf
 
 daikon.info: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
-
 # Large split size fixes an apparent bug in makeinfo 4.11:
 # failing searches say
 #   Search failed: "  Indirect:"
@@ -56,25 +55,32 @@ images/%.pdf: images/%.eps
 html: daikon.html developer.html valgrind-merge.html
 
 daikon.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo images/dfepl-flow.jpg
-	makeinfo --html --no-split $<
-	# Fixup 'bad' href inserted by makeinfo.
-	perl -pi -e 's|dir.html#Top|index.html|;' $@
+	$(MAKE) daikon-html
 
-# just builds from texinfo.  Much faster than rebuilding the files from javadoc
-daikon-fast: daikon.texinfo 
-	makeinfo --html --no-split $<
+# Just builds .html from .texinfo.
+# Much faster than rebuilding the .texinfo files from Javadoc.
+daikon-fast: daikon.texinfo
+	$(MAKE) daikon-html
+
+.PHONY: daikon-html
+# Does the actual work
+daikon-html:
+	makeinfo --html --no-split daikon.texinfo
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' daikon.html
+	../plume-lib/bin/add-favicon . daikon-favicon.png
 
 developer.html: developer.texinfo 
 	makeinfo --html --no-split $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' $@
+	../plume-lib/bin/add-favicon . daikon-favicon.png
 
 valgrind-merge.html: valgrind-merge.texinfo
 	makeinfo --html --no-split $<
 	# Fixup 'bad' href inserted by makeinfo.
 	perl -pi -e 's|dir.html#Top|index.html|;' $@
+	../plume-lib/bin/add-favicon . daikon-favicon.png
 
 html-chap: daikon/index.html developer/index.html
 
@@ -88,6 +94,7 @@ daikon/index.html: daikon.texinfo config-options.texinfo invariants-doc.texinfo 
 	mkdir daikon/images
 	cp images/*.png daikon/images
 	cp images/*.jpg daikon/images
+	../plume-lib/bin/add-favicon . daikon-favicon.png
 
 developer/index.html: developer.texinfo
 	rm -rf developer/*
@@ -99,6 +106,7 @@ developer/index.html: developer.texinfo
 	mkdir developer/images
 	cp images/*.png developer/images
 	cp images/*.jpg developer/images
+	../plume-lib/bin/add-favicon . daikon-favicon.png
 
 pdf: daikon.pdf images/dfepl-flow.eps developer.pdf valgrind-merge.pdf
 

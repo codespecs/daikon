@@ -5,7 +5,7 @@ See file
   index.html
 for a list of the documentation available in this directory.
 
-Javadoc for the Daikon implementation appears in directory ../java/doc/.
+Javadoc for the Daikon implementation appears in directory ../java/api/.
 
 File VERSION describes the NEXT version of Daikon to be released.  That is,
 it is typically incremented by 1 as compared to the distributed release

@@ -29,7 +29,7 @@ java/**/*.class
 # Temporary file used during compilation
 java/java_files.txt
 # Javadoc
-java/doc
+java/api
 
 # Eclipse files
 java/bin
@@ -59,7 +59,7 @@ plume-lib
 # Generated from plume-lib
 java/daikon/util
 
-# Documentation
+# Documentation (including WWW pages and the manual)
 doc/.fix-dev-menu
 doc/.fix-menu
 doc/config-options.texinfo

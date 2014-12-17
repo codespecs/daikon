@@ -730,7 +730,7 @@ very-clean: very_clean
 # Could/should remove plume-lib here, too.
 very_clean: dist_clean clean-generated-files
 	-rm -rf dcomp_premain.jar dcomp_rt.jar $(DCOMP_RT)
-	-rm -rf doc
+	-rm -rf api
 	-rm -rf daikon/dcomp/std_dcomp_out.diff daikon/dcomp/std_dcomp_out.txt
 
 
@@ -1118,7 +1118,7 @@ clover: all_directly
 ### Documentation
 ###
 
-JAVADOC_DEST  = doc
+JAVADOC_DEST  = api
 # $(DAIKONDIR)/java should not be in classpath, to avoid Javadoc error
 # "Multiple sources of package comments found for package"
 JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
@@ -1133,34 +1133,37 @@ JDOC_FILES = $(shell find . -follow \( -name '*daikon-java*' -o -wholename ./dai
 DAIKON_PACKAGES := $(shell ls -F daikon | grep / | egrep -v 'util' \
 				   | sed s./.. | sed s/^/daikon./ | tr '\n' ':')
 
-javadoc: doc
+javadoc: api
 
 # Build javadoc using the daikon package and all of subpackages of
 # daikon (except daikon.util) and plume.  Unfortunately, there is
 # no switch to javadoc that ignores a subpackage.  Don't include the
 # typequals package -- it crashes javadoc.
-doc: ../plume-lib $(JAVA_FILES) 
-	mkdir -p doc
+api: ../plume-lib $(JAVA_FILES) 
+	mkdir -p api
 	@rm -f java-files.txt
 	find . -name "*.java" -print | grep -v typequals > java-files.txt
 	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
 		@java-files.txt
 	@rm -f java-files.txt
-	cd doc && ../../plume-lib/bin/preplace '^ *&#64;cindex.*' ''
+	cd api && ../../plume-lib/bin/preplace '^ *&#64;cindex.*' ''
+	cp -pf ../doc/daikon-favicon.png api/
+	cd api && ../../plume-lib/bin/add-favicon . daikon-favicon.png
 
-## Make doc with private fields for people working on source code
-doc-private: ../plume-lib $(AUTO_GENERATED_FILES)
-	mkdir -p doc
+## Make Javadoc with private fields for people working on source code.
+## It is generated in the standard location, directory api/
+api-private: ../plume-lib $(AUTO_GENERATED_FILES)
+	mkdir -p api
 	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) -private \
 	  daikon -subpackages $(DAIKON_PACKAGES):plume
-	cd doc && ../../plume-lib/bin/preplace '^ *&#64;cindex.*' ''
+	cd api && ../../plume-lib/bin/preplace '^ *&#64;cindex.*' ''
 
 ## This doesn't seem necessary any more
 # javadoc-lookup: doc-javadoc-lookup
 #
 # ## Fix up generated .html files for use by the Emacs `javadoc-lookup' function.
-# doc-javadoc-lookup: doc
-# 	find doc -name '*.html' | xargs -n 100 ${PLUMEBIN}/jdk-add-munged-anchor-names
+# doc-javadoc-lookup: api
+# 	find api -name '*.html' | xargs -n 100 ${PLUMEBIN}/jdk-add-munged-anchor-names
 # 	echo "Run javadoc-index-to-alist > ~/.javadoc-index.el"
 
 ../doc/invariants-doc.texinfo: ../plume-lib ${JDOC_FILES}

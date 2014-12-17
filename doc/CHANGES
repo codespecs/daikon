@@ -15,7 +15,7 @@ Further documentation can be found in:
    http://plse.cs.washington.edu/daikon/download/doc/developer.html .
  * The Javadoc API documentation for the source code.  This is not
    distributed with Daikon, but you can build it by executing the command
-     make -C $DAIKONDIR/java doc
+     make -C $DAIKONDIR/java javadoc
    It is also available at http://plse.cs.washington.edu/daikon/download/jdoc/ .
 
 ===========================================================================

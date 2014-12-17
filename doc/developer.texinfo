@@ -215,8 +215,9 @@ of the @file{.jpp} files is to avoid code duplication by placing
 common code in a single file, then generating other files that need to
 include that common code.)
 
-To make the documentation (via @command{make -C $DAIKONDIR/doc}), you will need a
-recent version of @command{makeinfo}; version 4.7 or newer.
+To make the documentation (via @command{make -C $DAIKONDIR/doc}), you need
+@command{makeinfo} version 4.7 or newer.
+@c version 4.7 was released in April 2004
 
 For more information about compiling Daikon, see the comments in the Makefiles.
 
@@ -2289,7 +2290,7 @@ Words and Phrases" of the
 @item
 Edit the @file{doc/CHANGES} file to indicate what has changed
 in this version.  A good way to determine what has changed is to diff
-the Texinfo source files in the doc directory against the previous
+the Texinfo source files in the @file{doc/} directory against the previous
 versions:
 
 @smallexample
