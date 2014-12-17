@@ -409,9 +409,11 @@ make
 This builds the various executables used by Daikon, such as the
 C/C++ front end Kvasir (@pxref{Installing Kvasir}) and the 
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
-For more
+If you need more
 information about compiling Daikon, see
 @ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
+If you have trouble compiling the C/C++ front end Kvasir, see
+@xref{Installing Kvasir}.
 
 Note that running this make command may take 20 minutes or more,
 depending on your computer.  
