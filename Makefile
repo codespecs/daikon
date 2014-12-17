@@ -564,7 +564,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	(mkdir ${TMPDIR}/daikon/java; cd ${TMPDIR}/daikon/java; tar xf ${TMPDIR}/daikon-java.tar; rm ${TMPDIR}/daikon-java.tar)
 	cp -p java/README.txt ${TMPDIR}/daikon/java/README.txt
 	cp -p java/Makefile ${TMPDIR}/daikon/java/Makefile
-	# Maybe I should do  $(MAKE) javdoc
+	# Maybe I should do  $(MAKE) javadoc
 	# Don't do  $(MAKE) clean  which deletes .class files
 	(cd ${TMPDIR}/daikon/java; $(RM_TEMP_FILES))
 
