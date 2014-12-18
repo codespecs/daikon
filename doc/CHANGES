@@ -15,8 +15,16 @@ Further documentation can be found in:
    http://plse.cs.washington.edu/daikon/download/doc/developer.html .
  * The Javadoc API documentation for the source code.  This is not
    distributed with Daikon, but you can build it by executing the command
-     make -C $DAIKONDIR/java doc
-   It is also available at http://plse.cs.washington.edu/daikon/download/jdoc/ .
+     make -C $DAIKONDIR/java javadoc
+   It is also available at http://plse.cs.washington.edu/daikon/download/api/ .
+
+===========================================================================
+
+5.1.14 (TBD)
+
+  Fjalar now builds correctly on Ubuntu 14.10.
+  Improved installation instructions.
+  Improved documentation on Simplify tool.
 
 ===========================================================================
 
@@ -41,7 +49,7 @@ Further documentation can be found in:
   We have fixed bugs in Daikon splitter file processing.  For example, a
   splitter condition can now reference a local variable and a global
   variable with the same name.  (The global variable, of course, requires a
-  classname prefix.)
+  class name prefix.)
 
   If you work from a clone of the repository, as opposed to downloading the
   Daikon release, then there needs to be a symbolic link named 'fjalar'
@@ -49,7 +57,7 @@ Further documentation can be found in:
   regenerate the fjalar Makefiles.
   To accomplish all of this, run the following commands:
     cd $DAIKONDIR
-    rm -f kjasir   # remove old link
+    rm -f kvasir   # remove old link
     ln -s ../fjalar fjalar
     cd $DAIKONDIR/fjalar/valgrind
     ./autogen.sh

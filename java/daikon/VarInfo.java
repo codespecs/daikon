@@ -3183,7 +3183,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   /**
    * Returns the name of this variable in simplify format.  If an index
    * is specified, it is used as an array index.  It is an error to specify
-   * an index on a non-array variable
+   * an index on a non-array variable.
     **/
   public String simplify_name (/*@Nullable*/ String index) {
     if (!FileIO.new_decl_format)

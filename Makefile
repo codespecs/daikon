@@ -352,9 +352,9 @@ staging: doc/CHANGES
 	cp -pf ${TMPDIR}/daikon.zip $(STAGING_DIR)/download/daikon.zip
 	cp -pf daikon.jar $(STAGING_DIR)/download
 	# Build javadoc
-	@echo "]2;Building Java doc"
-	install -d $(STAGING_DIR)/download/jdoc
-	cd java; make 'JAVADOC_DEST=$(STAGING_DIR)/download/jdoc' doc
+	@echo "]2;Building Javadoc"
+	install -d $(STAGING_DIR)/download/api
+	cd java; make 'JAVADOC_DEST=$(STAGING_DIR)/download/api' javadoc
 	# Copy the documentation
 	@echo "]2;Copying documentation"
 	install -d $(STAGING_DIR)/download/doc
@@ -564,7 +564,7 @@ daikon.tar daikon.zip: doc-all $(DOC_PATHS) $(EDG_FILES) $(README_PATHS) $(DAIKO
 	(mkdir ${TMPDIR}/daikon/java; cd ${TMPDIR}/daikon/java; tar xf ${TMPDIR}/daikon-java.tar; rm ${TMPDIR}/daikon-java.tar)
 	cp -p java/README.txt ${TMPDIR}/daikon/java/README.txt
 	cp -p java/Makefile ${TMPDIR}/daikon/java/Makefile
-	# Maybe I should do  $(MAKE) doc
+	# Maybe I should do  $(MAKE) javadoc
 	# Don't do  $(MAKE) clean  which deletes .class files
 	(cd ${TMPDIR}/daikon/java; $(RM_TEMP_FILES))
 

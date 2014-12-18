@@ -200,18 +200,18 @@ public class DynComp {
       cp = ".";
 
     // The the separator for items in the class path
-    String separator = System.getProperty("path.separator");
-    basic.log("separator = %s\n", separator);
-    if (separator == null) {
-      separator = ";"; //should work for windows at least...
-    } else if (!RegexUtil.isRegex(separator)) {
-      throw new Daikon.TerminationMessage("Bad regexp " + separator + " for path.separator: " + RegexUtil.regexError(separator));
+    String path_separator = System.getProperty("path.separator");
+    basic.log("path_separator = %s\n", path_separator);
+    if (path_separator == null) {
+      path_separator = ";"; //should work for windows at least...
+    } else if (!RegexUtil.isRegex(path_separator)) {
+      throw new Daikon.TerminationMessage("Bad regexp " + path_separator + " for path.separator: " + RegexUtil.regexError(path_separator));
     }
 
     // Look for dcomp_premain.jar along the classpath
     if (premain == null)
       {
-        String[] cpath = cp.split(separator);
+        String[] cpath = cp.split(path_separator);
         for (String path : cpath)
           {
             File poss_premain;
@@ -257,12 +257,19 @@ public class DynComp {
       // Look for dcomp_rt.jar along the classpath
       if (rt_file == null)
       {
-        String[] cpath = cp.split(separator);
+        String[] cpath = cp.split(path_separator);
         for (String path : cpath)
         {
-          File poss_rt = new File(path, "dcomp_rt.jar");
-          if (poss_rt.canRead())
+          File poss_rt;
+          if (path.endsWith ("dcomp_rt.jar")) {
+            poss_rt = new File (path);
+          } else {
+            poss_rt = new File(path, "dcomp_rt.jar");
+          }
+          if (poss_rt.canRead()) {
             rt_file = poss_rt;
+            break;
+          }
         }
       }
 
@@ -300,7 +307,7 @@ public class DynComp {
     cmdlist.add ("-esa");
     cmdlist.add ("-Xmx1024m");
     if (!no_jdk)
-      cmdlist.add ("-Xbootclasspath:" + rt_file + separator + cp);
+      cmdlist.add ("-Xbootclasspath:" + rt_file + path_separator + cp);
 
     cmdlist.add (String.format("-javaagent:%s=%s", premain, premain_args));
 

@@ -224,20 +224,24 @@ you may send mail to the list asking to be added.
 @cindex installing Daikon
 
 Shortcut for the impatient:  skip directly to the installation instructions
-for @xref{Unix/Linux/MacOSX installation}, or @xref{Windows installation}.
+for @ref{Unix/Linux/MacOSX installation}, or @ref{Windows installation}.
 
-There are two main ways to install Daikon.  @xref{Simple installation},
-for a simple 2-step installation process that is adequate for the needs
-of many users.  @xref{Complete installation}, for a complete
+There are two main ways to install Daikon.
+@xref{Complete installation}, for a complete
 installation, in 4 easy steps, that permits you to use all of the
 functionality in the Daikon distribution.
+@xref{Simple installation},
+for an even simpler 2-step installation process that is adequate for the needs
+of many users.
 
-Use the simple installation instructions if you only wish to detect
-invariants in Java programs.  Use the complete installation instructions
-(which are easy to follow) if you wish to detect invariants in C or Perl
+Use the complete installation instructions
+if you wish to detect invariants in C or Perl
 programs, if you wish to run certain other programs distributed with
 Daikon in its @file{scripts/} directory, or if you wish to edit and
 recompile the source code of Daikon itself.
+Use the simple installation instructions if you only wish to detect
+invariants in Java programs, and you don't want to set any environment
+variables in your startup file.
 
 Differences from previous versions of Daikon appear
 in the file @file{doc/CHANGES} in the distribution.
@@ -366,12 +370,12 @@ set two environment variables
 and source a Daikon startup file.
 
 
-We will assume that you are using the bash shell or its variants.
-Add these three commands to your @file{~/.bashrc} or @file{~/.bash_profile} file:
+We will assume that you are using the bash shell or one of its variants.
+Add commands like these to your @file{~/.bashrc} or @file{~/.bash_profile} file:
 @example
 # The full pathname of the directory that contains Daikon
 export DAIKONDIR=@var{daikonparent}/daikon
-# The full pathname of the directory that contains the Java JDK; e.g.:
+# The full pathname of the directory that contains the Java JDK
 export JAVA_HOME=/usr/lib/jvm/java
 source $DAIKONDIR/scripts/daikon.bashrc
 @end example
@@ -392,11 +396,12 @@ you from having to edit the main Makefile directly).
 @item
 Optionally, compile Daikon and build other tools by running @code{make}.
 Note that this step is @emph{not} required if you only want to use Daikon
-with its Java front end (Chicory).  This step is required for using
+with its Java front end (Chicory) or its .NET front end (Celeriac).
+This step is required for using
 Daikon with its C/C++ front end (Kvasir), and for other tools.
 
 @example
-cd $DAIKONDIR/java
+cd $DAIKONDIR
 make
 @end example
 
@@ -404,9 +409,11 @@ make
 This builds the various executables used by Daikon, such as the
 C/C++ front end Kvasir (@pxref{Installing Kvasir}) and the 
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
-For more
+If you need more
 information about compiling Daikon, see
 @ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
+If you have trouble compiling the C/C++ front end Kvasir, see
+@xref{Installing Kvasir}.
 
 Note that running this make command may take 20 minutes or more,
 depending on your computer.  
@@ -524,11 +531,12 @@ make
 @noindent
 This builds the various executables used by Daikon, such as the 
 JDK for use with DynComp (@pxref{Instrumenting the JDK with DynComp}).
-For more
+If you need more
 information about compiling Daikon,
 see @ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
-Note that the
-C/C++ front end Kvasir (@pxref{Installing Kvasir}) does not work under Cygwin.
+If you have trouble compiling the C/C++ front end Kvasir, see
+@xref{Installing Kvasir}.  Note that
+Kvasir does not work under Cygwin.
 
 Note that running this make command may take 20 minutes or more,
 depending on your computer.  
@@ -1974,7 +1982,7 @@ If you wish to write your own tools for processing invariants, you have
 two general options.  You can parse Daikon's textual output, or you can
 write Java code that processes the @file{.inv} file.  The @file{.inv}
 file is simply a serialized
-@uref{http://plse.cs.washington.edu/daikon/download/jdoc/daikon/PptMap.html,@code{PptMap}}
+@uref{http://plse.cs.washington.edu/daikon/download/api/daikon/PptMap.html,@code{PptMap}}
 object.  In addition to reading the Javadoc, you can examine how the
 other tools use this data structure.
 
@@ -3360,6 +3368,13 @@ information, which must be supplied to Daikon along with the
 @file{.dtrace} file.  For examples of using DynComp with C programs, see
 @ref{Using DynComp with C programs}.  For full details about the DynComp
 tool for C/C++, see @ref{DynComp for C/C++}.
+
+@item
+The Celeriac front-end for .NET programs can compute variable
+comparability.  It does so statically by examining the program text, rather
+than dynamically by running the program as DynComp does.
+For full details about variable comparability in Celeriac, see
+@uref{https://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted#Ignoring_Comparisons_of_Unrelated_Variables}.
 
 @end itemize
 
@@ -5874,21 +5889,41 @@ previous run.
 @cindex Kvasir installation
 
 @c Kvasir is the recommended C/C++ front end for use on Linux/x86.
-The source
-code for Kvasir is included in the main Daikon distribution, and is
-compiled by default on Linux/x86 and Linux/x86-64 systems.
+There are two scenarios for building the Kvasir
+tool:
 
-To compile and install Kvasir, give the command @command{make kvasir}
-from the top-level Daikon directory:
+@itemize @bullet
+@item
+You have downloaded a packaged release of Daikon from our website and
+have followed the installation steps in @ref{Installing Daikon}.  If so,
+Kvasir is already built and available for use.
+@item
+You wish to customize or extend Daikon and are (or will be) working
+with a clone of the Daikon repository. The remainder of this section
+describes this case.
+@end itemize
+
+We assume you are already familiar with the @cite{Daikon Developer Manual},
+in particular @ref{Compiling Daikon,,,developer,Daikon Developer Manual}.
+If that is not the case, you should read that section first.
+
+You will need to make a clone of Fjalar's version control repository, named
+@file{fjalar}, as a sibling of your Daikon clone.
 
 @example
-make -C $DAIKONDIR kvasir
+cd $DAIKONDIR
+cd ..
+hg clone https://code.google.com/p/fjalar/
 @end example
 
-@noindent
-This will check that you have the appropriate prerequisites (such as
-@command{GCC}), configure Kvasir for your machine, compile it, and install
-it in the directory @file{kvasir/inst}.
+You may now build Fjalar (which includes Kvasir).  The following commands build
+Fjalar, install it locally, and make a symbolic
+link to it in your Daikon tree.
+
+@example
+cd $DAIKONDIR
+make kvasir
+@end example
 
 You may see warnings during this process.  These can be ignored.  If you
 receive an error of the form:
@@ -5901,7 +5936,7 @@ compilation terminated.
 @end example
 
 @noindent
-It is most likely caused by the package @file{binutils-dev} not being
+it is most likely caused by the package @file{binutils-dev} not being
 installed.
 
 Once Kvasir has been installed, it can be used via the
@@ -6061,7 +6096,8 @@ you do not need to perform separate instrumentation and recompilation steps.
 For more details about how to download and use Celeriac, please
 see @uref{http://code.google.com/p/daikon-dot-net-front-end/wiki/GettingStarted}.
 
-Celeriac works under Mono as well as under the Microsoft .NET implementation; see @uref{https://code.google.com/p/daikon-dot-net-front-end/wiki/Mono}.
+Celeriac works under Mono as well as under the Microsoft .NET implementation;
+see @uref{https://code.google.com/p/daikon-dot-net-front-end/wiki/Mono}.
 
 
 @node    dfepl
@@ -7911,7 +7947,7 @@ correct, but more verbose than it would be if you used Simplify.
 
 Obtain Simplify from
 @uref{http://kindsoftware.com/products/opensource/archives/Simplify-1.5.5-13-06-07-binary.zip},
-and unzip the zipfile.
+and unzip the zip file.
 
 Either place the appropriate binary on your path, named @command{Simplify},
 or set set the @code{simplify.path} property to its absolute pathname.
@@ -7920,10 +7956,11 @@ Note:  Older versions of the @command{Z3} theorem
 prover (@uref{http://z3.codeplex.com/})
 can replace Simplify, but more recent versions do not support the Simplify
 syntax.  In the future, it would be nice to rewrite Daikon's theorem-prover
-interface to use the SMT-LIB2 language, so that a compatible solver like Z3
-or CVC4 could be used.  The main challenge to this is writing the
-boilerplate code to output each different kind of invariant in SMT-LIB2
-format.
+interface to use the @nospellcheck{SMT-LIB2} language, so that a compatible
+solver like @command{Z3} or @command{CVC4} could be used.
+The main challenge to this is writing the
+boilerplate code to output each different kind of invariant in
+@nospellcheck{SMT-LIB2} format.
 
 
 @node       Contradictory invariants
