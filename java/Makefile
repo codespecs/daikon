@@ -818,6 +818,7 @@ JAVAC_NULLNESS_FBC_ARGS = -processor org.checkerframework.checker.nullness.Nulln
 JAVAC_PROTOTYPE_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.Prototype,typequals.NonPrototype -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
 JAVAC_VINDEX_ARGS = -processor org.checkerframework.common.subtyping.SubtypingChecker -Aquals=typequals.VIndexTop,typequals.ValueIndex,typequals.VarIndex,typequals.VIndexUnqualified,typequals.VIndexBottom -implicit:class -Xlint:-processing -J-Dcheckers.skipUses='^java\.'
 JAVAC_REGEX_ARGS = -processor org.checkerframework.checker.regex.RegexChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
+JAVAC_REGEX_QUAL_ARGS = -processor org.checkerframework.checker.experimental.regex_qual_poly.RegexCheckerAdapter -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_FORMATTER_ARGS = -processor org.checkerframework.checker.formatter.FormatterChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_JAVARI_ARGS = -processor org.checkerframework.checker.javari.JavariChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
 JAVAC_IGJ_ARGS = -processor org.checkerframework.checker.igj.IGJChecker -implicit:class -Xlint:-processing -AskipDefs='${ALLSYSTEMS_SKIPDEFS}'
@@ -849,7 +850,7 @@ show_nullness_java_files:
 
 # Reinstate prototype and vindex checkers later
 # check-all: check-interning check-signature check-nullness check-regex check-prototype check-vindex
-check-all: check-interning check-signature check-nullness check-regex check-formatter
+check-all: check-interning check-signature check-nullness check-regex check-regex-qual check-formatter
 
 intern: check-interning
 interning: check-interning
@@ -969,6 +970,10 @@ check-vindex-all-withstubs: ${ALL_GENERATED_FILES} compile-typequals
 check-regex: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ...
 	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_REGEX_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
+
+check-regex-qual: ${ALL_GENERATED_FILES} compile
+	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ...
+	@${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_REGEX_QUAL_ARGS} ${CHECKER_ARGS} ${JAVA_FILES}
 
 check-formatter: ${ALL_GENERATED_FILES} compile
 	@echo ${JAVAC_COMMAND_FOR_CHECKER} ${JAVAC_FORMATTER_ARGS} ${CHECKER_ARGS} ...
