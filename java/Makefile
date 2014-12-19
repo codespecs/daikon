@@ -1123,7 +1123,7 @@ JAVADOC_DEST  = api
 # "Multiple sources of package comments found for package"
 JAVADOC_FLAGS = -breakiterator -quiet -linksource -noqualifier all \
 				-d $(JAVADOC_DEST) \
-                -linkoffline http://java.sun.com/j2se/1.5.0/docs/api/ http://java.sun.com/j2se/1.5.0/docs/api/ \
+                -linkoffline http://docs.oracle.com/javase/8/docs/api/ http://docs.oracle.com/javase/8/docs/api/ \
                 -docletpath "${CLASSPATH}" \
                 -classpath "$(subst $(DAIKONDIR)/java:,${CLASSPATH_JARS}:${CLASSPATH_JARS2}:,${CLASSPATH})"
 # javadoc 1.4 doesn't like being given package names; give all filenames explicitly instead
