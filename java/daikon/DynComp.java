@@ -68,6 +68,9 @@ public class DynComp {
   @Option("Shiny element output")
   public static boolean shiny_print = false;
 
+  @Option("Don't continue after instrumentation error")
+  public static boolean quit_if_error = false;
+
   @Option("Trace output file")
   // Null if shouldn't do output
   public static /*@Nullable*/ File trace_sets_file = null;

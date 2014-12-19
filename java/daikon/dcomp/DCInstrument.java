@@ -1386,10 +1386,15 @@ class DCInstrument {
         }
         gen.addMethod (mg.getMethod());
       } catch (Throwable t) {
-          System.out.printf ("Unexpected error processing %s.%s: %s%n", gen.getClassName(),
-                              m.getName(), t);
-          System.out.printf ("Method is NOT instrumented%n");
           skipped_methods.add(gen.getClassName() + "." + m.getName());
+          if (!DynComp.quit_if_error) {
+              System.out.printf ("Unexpected error processing %s.%s: %s%n", gen.getClassName(),
+                                  m.getName(), t);
+              System.out.printf ("Method is NOT instrumented%n");
+          } else {
+              throw new Error ("Unexpected error processing " + gen.getClassName()
+                               + "." + m.getName(), t);
+          }
       }
     }
 
@@ -2549,6 +2554,7 @@ class DCInstrument {
     case Constants.INVOKEVIRTUAL:
     case Constants.INVOKESPECIAL:
     case Constants.INVOKEINTERFACE:
+    case Constants.INVOKEDYNAMIC:
       return handle_invoke ((InvokeInstruction) inst);
 
     // Throws an exception.  This clears the operand stack of the current
@@ -2659,6 +2665,7 @@ class DCInstrument {
     case Constants.INVOKEVIRTUAL:
     case Constants.INVOKESPECIAL:
     case Constants.INVOKEINTERFACE:
+    case Constants.INVOKEDYNAMIC:
       return handle_invoke_refs_only ((InvokeInstruction) inst);
 
     // All other instructions need no instrumentation
@@ -2760,17 +2767,24 @@ class DCInstrument {
    * tag stack is correct for non-instrumented methods
    */
   InstructionList handle_invoke (InvokeInstruction invoke) {
+    boolean callee_instrumented;
+    String classname = null;
 
     // Get information about the call
-    String classname = invoke.getClassName (pool);
     String method_name = invoke.getMethodName(pool);
     Type ret_type = invoke.getReturnType(pool);
     Type[] arg_types = invoke.getArgumentTypes(pool);
 
     InstructionList il = new InstructionList();
 
-    // Determine if the callee is instrumented.
-    boolean callee_instrumented = callee_instrumented (classname);
+    if (invoke instanceof INVOKEDYNAMIC) {
+        // we don't instrument lambda methods
+        callee_instrumented = false;
+    } else {  
+        classname = invoke.getClassName (pool);
+        callee_instrumented = callee_instrumented (classname);
+    }
+
     if (is_object_method (method_name, invoke.getArgumentTypes(pool)))
       callee_instrumented = false;
 
@@ -3125,26 +3139,32 @@ class DCInstrument {
    * Currently, does not treat equals or clone specially.
    */
   /*@Nullable*/ InstructionList handle_invoke_refs_only (InvokeInstruction invoke) {
+    boolean callee_instrumented;
+    String classname = null;
 
-    String classname = invoke.getClassName (pool);
-
-    InstructionList il = new InstructionList();
-
-    boolean callee_instrumented = !BCELUtil.in_jdk (classname)
-      || (jdk_instrumented // && classname.startsWith ("java")
-          && (exclude_object && !classname.equals ("java.lang.Object")));
-
-    // Don't instrument daikon.util (our copy of plume)
-    if (classname.startsWith ("daikon.util"))
-      callee_instrumented = false;
-
-    // We don't instrument any of the Object methods
+    // Get information about the call
     String method_name = invoke.getMethodName(pool);
     Type ret_type = invoke.getReturnType(pool);
     Type[] arg_types = invoke.getArgumentTypes(pool);
+
+    InstructionList il = new InstructionList();
+
+    if (invoke instanceof INVOKEDYNAMIC) {
+        // we don't instrument lambda methods
+        callee_instrumented = false;
+    } else {  
+        classname = invoke.getClassName (pool);
+        callee_instrumented = !BCELUtil.in_jdk (classname)
+          || (jdk_instrumented // && classname.startsWith ("java")
+              && (exclude_object && !classname.equals ("java.lang.Object")));
+        // Don't instrument daikon.util (our copy of plume)
+        if (classname.startsWith ("daikon.util"))
+            callee_instrumented = false;
+    }
+
+    // We don't instrument any of the Object methods
     if (is_object_method (method_name, invoke.getArgumentTypes(pool)))
       callee_instrumented = false;
-
 
     // Replace calls to Object's equals method with calls to our
     // replacement, a static method in DCRuntime
