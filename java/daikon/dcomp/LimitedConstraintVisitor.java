@@ -550,6 +550,7 @@ public class LimitedConstraintVisitor extends InstConstraintVisitor {
 	public void visitIMUL(IMUL o) {}
 	public void visitINEG(INEG o) {}
 	public void visitINSTANCEOF(INSTANCEOF o) {}
+	public void visitINVOKEDYNAMIC(INVOKEDYNAMIC o) {}
 	public void visitINVOKEINTERFACE(INVOKEINTERFACE o) {}
 	public void visitINVOKESPECIAL(INVOKESPECIAL o) {}
 	public void visitINVOKESTATIC(INVOKESTATIC o) {}
