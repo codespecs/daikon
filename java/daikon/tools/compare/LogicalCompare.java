@@ -209,6 +209,7 @@ public class LogicalCompare {
   // orig(...) to each variable so that the invariant will be true
   // about the precondition of a routine when it is examined in the
   // poststate context.
+  // The arguments are invariants at the entry point, where no orig(...) variables exist.
   private static Vector<Lemma> translateAddOrig(Vector<Invariant> invs) {
     Vector<Lemma> lems = new Vector<Lemma>();
     for (Invariant inv : invs) {
@@ -406,7 +407,11 @@ public class LogicalCompare {
 
   // Comparare the invariants for enter and exit points between two
   // methods (usually two sets of invariants for methods of the same
-  // name)
+  // name).
+  // For historical reasons, one set of invariants is called the app
+  // invariants (from running the app in practice) and the other set of
+  // invariants is called the test invariants (from running the app on its
+  // test suite).
   /*@RequiresNonNull({"extra_assumptions","lemmas"})*/
   private static void comparePpts(PptTopLevel app_enter_ppt,
                                   PptTopLevel test_enter_ppt,

@@ -21,9 +21,9 @@ public class Lemma implements Comparable<Lemma> {
   public String summary;
   public String formula;
 
-  public Lemma(String s, String f) {
-    summary = s;
-    formula = f;
+  public Lemma(String summary, String formula) {
+    this.summary = summary;
+    this.formula = formula;
   }
 
   /** Return a human-readable description. */

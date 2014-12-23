@@ -783,6 +783,8 @@ findbugs-nocompile:
 findbugs-cat:
 	cat .findbugs-output
 
+.PHONY: jar
+jar: ../daikon.jar
 ../daikon.jar: ../plume-lib ${AUTO_GENERATED_FILES} compile
 	cd .. && $(MAKE) daikon.jar
 

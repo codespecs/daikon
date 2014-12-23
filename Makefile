@@ -486,6 +486,8 @@ $(INV_DIR)/java/lib/plume.jar
 ## "make -C java clean; make daikon.jar".
 ## It seems that one must do "make compile" before "make daikon.jar".
 # Perhaps daikon.jar shouldn't include JUnit or the test files.
+.PHONY: jar
+jar: daikon.jar
 daikon.jar: $(DAIKON_JAVA_FILES) $(patsubst %,java/%,$(DAIKON_RESOURCE_FILES)) $(JAR_FILES)
 	-rm -rf $@ ${TMPDIR}/daikon-jar
 	install -d ${TMPDIR}/daikon-jar

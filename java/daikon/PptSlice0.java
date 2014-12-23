@@ -42,7 +42,8 @@ public class PptSlice0
   }
 
   // Make a fake slice whose variables are the same as the ones in
-  // sliceTemplate, but marked as prestate (i.e., orig(x) rather than x).
+  // sliceTemplate and at the same PptTopLevel, but marked as prestate
+  // (i.e., orig(x) rather than x) and transplanted to origSlice.
   public static PptSlice makeFakePrestate(PptSlice sliceTemplate) {
     PptSlice0 fake = new PptSlice0(sliceTemplate.parent);
     fake.var_infos = new /*NNC:@MonotonicNonNull*/ VarInfo[sliceTemplate.var_infos.length];

@@ -3089,7 +3089,8 @@ versions of Daikon may support more levels of arrays.
 
 This is what the programmer used in the declaration of the variable.
 Names for standard types should use Java's names (e.g., @code{int},
-@code{boolean}, etc.), but names for user-defined or language-specific
+@code{boolean}, @code{java.lang.String}, etc.),
+but names for user-defined or language-specific
 types can be arbitrary strings.  A @code{dec-type} entry is required in each
 variable block.
 
