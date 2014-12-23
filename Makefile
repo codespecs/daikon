@@ -29,7 +29,7 @@ DOC_PATHS := $(addprefix doc/,$(DOC_FILES))
 # visible to the user
 DOC_FILES_USER := daikon.pdf daikon.html developer.html developer.pdf \
                   daikon.texinfo developer.texinfo config-options.texinfo \
-                  invariants-doc.texinfo CHANGES \
+                  invariants-doc.texinfo CHANGES daikon-favicon.png \
                   valgrind-merge.pdf valgrind-merge.html valgrind-merge.texinfo
 README_PATHS := README.txt README.html doc/README fjalar/README
 # Files that contain the (automatically updated) version number and date.
