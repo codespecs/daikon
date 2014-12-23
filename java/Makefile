@@ -1144,16 +1144,17 @@ javadoc: api
 # daikon (except daikon.util) and plume.  Unfortunately, there is
 # no switch to javadoc that ignores a subpackage.  Don't include the
 # typequals package -- it crashes javadoc.
+.PHONY: api
 api: ../plume-lib $(JAVA_FILES) 
-	mkdir -p api
+	mkdir -p $(JAVADOC_DEST)
 	@rm -f java-files.txt
 	find . -name "*.java" -print | grep -v typequals > java-files.txt
 	${JAVADOC} -J-Xmx1000m -J-ea $(JAVADOC_FLAGS) \
 		@java-files.txt
 	@rm -f java-files.txt
-	cd api && ../../plume-lib/bin/preplace '^ *&#64;cindex.*' ''
-	cp -pf ../doc/daikon-favicon.png api/
-	cd api && ../../plume-lib/bin/add-favicon . daikon-favicon.png
+	cd $(JAVADOC_DEST) && $(PLUMEBIN)/preplace '^ *&#64;cindex.*' ''
+	cp -pf ../doc/daikon-favicon.png $(JAVADOC_DEST)
+	cd $(JAVADOC_DEST) && $(PLUMEBIN)/add-favicon . daikon-favicon.png
 
 ## Make Javadoc with private fields for people working on source code.
 ## It is generated in the standard location, directory api/
