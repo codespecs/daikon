@@ -127,7 +127,7 @@ public final class FileIO {
    */
   public static long dkconfig_dtrace_line_count = 0;
 
-  /** True if declaration records are in the new format **/
+  /** True if declaration records are in the new format -- that is, decl-version 2.0. **/
   // Set by read_decl_version; by read_data_trace_record if the file is non-empty;
   // by read_serialized_pptmap; and by InvMap.readObject.
   public static /*@MonotonicNonNull*/ Boolean new_decl_format = null;
@@ -345,6 +345,7 @@ public final class FileIO {
     // Information that will populate the new program point
     Map<String,VarDefinition> varmap
       = new LinkedHashMap<String,VarDefinition>();
+    // The VarDefinition we are in the middle of reading, or null if we are not.
     VarDefinition vardef = null;
     List<ParentRelation> ppt_parents = new ArrayList<ParentRelation>();
     EnumSet<PptFlags> ppt_flags = EnumSet.noneOf (PptFlags.class);
@@ -478,8 +479,8 @@ public final class FileIO {
                ppt_flags, ppt_successors, function_id, bb_length, vi_array);
 
     // Add this ppt to the list of ppts for this function_id.  If we
-    // are still getting ppts for this function id, they should not have
-    // been yet combined
+    // are still getting ppts for this function id, they should not yet
+    // have been combined.
     if (function_id != null) {
       System.out.printf ("Declaration of ppt %s with %d variables\n",
                          newppt.name(), newppt.var_infos.length);
@@ -2682,9 +2683,9 @@ public final class FileIO {
 
   /**
    * Checks the specified array of variables to see if it matches
-   * exactly thevariables in the existing ppt.  Throws an error if
+   * exactly the variables in the existing ppt.  Throws an error if
    * there are any differences.  Used to ensure that a new ppt with the
-   * same name as an existing ppt is exactly the same
+   * same name as an existing ppt is exactly the same.
    */
   static void check_decl_match (ParseState state, PptTopLevel existing_ppt,
                                 VarInfo[] vi_array) {

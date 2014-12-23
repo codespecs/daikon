@@ -179,7 +179,8 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   public VarDefinition vardef;
   // For documentation, see get_enclosing_var().
-  // Under what circumstances is this null?
+  // Null if no variable encloses this one -- that is, this is not a field
+  // of another variable, nor a "method call" like tostring or class.
   public /*@Nullable*/ VarInfo enclosing_var;
   public int arr_dims = 0;
   /** The arguments that were used to create this function application.
@@ -243,7 +244,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     assert (comparability.alwaysComparable()
             || (((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions()));
     assert 0 <= varinfo_index && varinfo_index < ppt.var_infos.length;
-    assert -1 <= value_index && value_index < varinfo_index;
+    assert -1 <= value_index && value_index <= varinfo_index;
     assert is_static_constant == (value_index == -1);
     assert is_static_constant || (static_constant_value == null);
   }
@@ -280,7 +281,13 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
                 && file_rep_type.baseIsPrimitive()));
   }
 
-  /** Create VarInfo from VarDefinition **/
+  /**
+   * Create VarInfo from VarDefinition.
+   * <p>
+   * This does not create a fully initialized VarInfo.  For example, its
+   * ppt and enclosing_var fields are not yet set.  Callers need to do some
+   * work to complete the construction of the VarInfo.
+   **/
   public VarInfo (VarDefinition vardef) {
     vardef.checkRep();
 
@@ -661,7 +668,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       // ppt.  Remove any specified relations.
       result_vardef.clear_parent_relation();
 
-      // Fix the enclosing variable to point to the prestate version
+      // Fix the enclosing variable, if any, to point to the prestate version
       if (result_vardef.enclosing_var != null) {
         assert vi.enclosing_var != null : "@AssumeAssertion(nullness): dependent: result_vardef was copied from vi and their enclosing_var fields are the same";
         result_vardef.enclosing_var = vi.enclosing_var.prestate_name();

@@ -44,6 +44,7 @@ public class InvariantLemma extends Lemma {
    * referring to the prestate versions of all the variables that inv
    * referred to.
    **/
+  // The argument is an invariant at the entry point, where no orig(...) variables exist.
   public static InvariantLemma makeLemmaAddOrig(Invariant inv) {
     // XXX Side-effecting the invariant to change its ppt (and then
     // to change it back afterward) isn't such a hot thing to do, but

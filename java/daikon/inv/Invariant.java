@@ -37,7 +37,7 @@ import typequals.*;
  * Intended to be subclassed but not to be directly instantiated.
  * Rules/assumptions for invariants:
  * <p>
- * For each program point's set of VarInfos, there exists exactly
+ * For each program point's set of VarInfos, there exists
  * no more than one invariant of its type.  For example, between
  * variables a and b at PptTopLevel T, there will not be two instances
  * of invariant I(a, b).
@@ -2025,6 +2025,16 @@ public abstract class Invariant
   @SuppressWarnings("unchecked") // casting method
   public static Class<? extends Invariant> asInvClass(Object x) {
     return (Class<? extends Invariant>)x;
+  }
+
+  /**
+   * @exception RuntimeException if representation invariant on this is broken
+   */
+  public void checkRep() {
+    // very partial initial implementation
+    for (VarInfo vi : ppt.var_infos) {
+      vi.checkRep();
+    }
   }
 
 }
