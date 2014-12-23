@@ -25,7 +25,7 @@ Further documentation can be found in:
   Fjalar now builds correctly on Ubuntu 14.10.
   Improved installation instructions.
   Improved documentation on Simplify tool.
-  Added support for Java/JDK 8. (tested with 1.8.0-b129)
+  Chicory and DynComp now support Java/JDK 8. (tested with 1.8.0-b129)
 
 ===========================================================================
 
