@@ -2903,9 +2903,9 @@ public class PptTopLevel extends Ppt {
    * Returns true if there was a problem with Simplify formatting (such as
    * the invariant not having a Simplify representation).
    **/
-  private static boolean format_simplify_problem(String s) {
+  public static boolean format_simplify_problem(String s) {
     return (
-      (s.indexOf("Simplify") >= 0)
+      (s.indexOf("Simplify not implemented") >= 0)
         || (s.indexOf("format(OutputFormat:Simplify)") >= 0)
         || (s.indexOf("format_simplify") >= 0));
   }
