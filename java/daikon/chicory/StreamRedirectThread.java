@@ -37,8 +37,8 @@ package daikon.chicory;
 import java.io.*;
 
 /**
- * StreamRedirectThread is a thread which copies it's input to
- * it's output and terminates when it completes.
+ * StreamRedirectThread is a thread that copies its input to
+ * its output and terminates when it completes.
  *
  * @version     (#) StreamRedirectThread.java 1.4 03/01/23 16:33:15
  * @author Robert Field
@@ -50,31 +50,47 @@ public class StreamRedirectThread extends Thread
     private final Writer out;
     private final PrintStream outWriter;
 
-    private static final int BUFFER_SIZE = 2048;
-    //private static final int BUFFER_SIZE = 1;
-
     private boolean line_by_line = false;
+
+    private boolean debug = false;
+
+    private static final int BUFFER_SIZE = 2048;
+    //for debugging: private static final int BUFFER_SIZE = 1;
+
+    public StreamRedirectThread(String name, InputStream in, OutputStream out)
+    {
+        this (name, in, out, false, false);
+    }
+
+    public StreamRedirectThread (String name, InputStream in, OutputStream out,
+                                 boolean line_by_line) {
+        this (name, in, out, line_by_line, false);
+    }
 
     /**
      * Set up for copy.
      * @param name  Name of the thread
      * @param in    Stream to copy from
      * @param out   Stream to copy to
+     * @param line_by_line   Whether to copy one line at a time
+     * @param debug Whether to enable debugging
      */
-    public StreamRedirectThread(String name, InputStream in, OutputStream out)
-    {
+    public StreamRedirectThread (String name, InputStream in, OutputStream out,
+                                 boolean line_by_line, boolean debug) {
         super(name);
+        if (debug) {
+            System.out.println("StreamRedirectThread(" + name + ", " + in + ", " + out + ", " + line_by_line + ", " + debug + ")");
+        }
+        if (in == null || out == null) {
+            System.out.println("bad arguments to StreamRedirectThread: " + in + " " + out);
+        }
         this.in = new InputStreamReader(in);
         this.out = new OutputStreamWriter(out);
         this.outWriter = new PrintStream(out);
+        this.line_by_line = line_by_line;
+        this.debug = debug;
 
         setPriority(Thread.MAX_PRIORITY - 1);
-    }
-
-    public StreamRedirectThread (String name, InputStream in, OutputStream out,
-                                 boolean line_by_line) {
-        this (name, in, out);
-        this.line_by_line = line_by_line;
     }
 
     /**
@@ -97,10 +113,15 @@ public class StreamRedirectThread extends Thread
             } else {
                 int nextChar;
                 while (true) {
+                    // read() is a blocking call, but that's OK because
+                    // this is running in its own thread.
                     nextChar = in.read();
                     if (nextChar == -1)
                         break;
 
+                    if (debug) {
+                        System.out.println("[[[" + nextChar + "]]]");
+                    }
                     out.write(nextChar);
                     out.flush();
                 }
