@@ -309,7 +309,7 @@ public class Chicory {
 
         // Examine up to 100 lines of Daikon output, looking for
         // the "DaikonChicoryOnlinePort=" line.  Note that if file progress
-        // is turned on in Daikon, it may be proceeded by the time
+        // is turned on in Daikon, it may be preceded by a timestamp.
         for (int i = 0; i < 100; i++)
           {
             String line;
@@ -398,6 +398,11 @@ public class Chicory {
                         cmdline);
       System.exit(1);
     }
+
+     StreamRedirectThread stdin_thread
+       = new StreamRedirectThread("stdin", System.in, chicory_proc.getOutputStream(), false);
+     stdin_thread.start();
+
     int targetResult = redirect_wait (chicory_proc);
 
     if (daikon) {
