@@ -467,7 +467,7 @@ public final class FileIO {
       PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
       assert existing_ppt != null : "@AssumeAssertion(nullness): bug: containsName() is annotated as @EnsuresNonNullIf(result=true, expression='get(#0)')";
-      if (state.ppts_are_new) {
+      if (state.ppts_may_be_new) {
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
         return existing_ppt;
@@ -577,7 +577,7 @@ public final class FileIO {
       PptTopLevel existing_ppt = state.all_ppts.get(ppt_name);
       assert existing_ppt != null : "state.all_ppts.containsName(" + ppt_name + ")";
       assert existing_ppt != null : "@AssumeAssertion(nullness): bug: containsName() is annotated as @EnsuresNonNullIf(result=true, expression='get(#0)')";
-      if (state.ppts_are_new) {
+      if (state.ppts_may_be_new) {
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
         return existing_ppt;
@@ -1011,21 +1011,21 @@ public final class FileIO {
    * {@link #read_data_trace_file(String,PptMap,Processor,boolean,boolean)}
    * for each element of filenames.
    *
-   * @param ppts_are_new - true if declarations of ppts read from the data
+   * @param ppts_may_be_new - true if declarations of ppts read from the data
    *                       trace file are new (and thus are not in all_ppts)
    *                       false if the ppts may already be there.
    *
    * @see #read_data_trace_file(String,PptMap,Processor,boolean,boolean)
    **/
   public static void read_data_trace_files(Collection<String> files,
-                PptMap all_ppts, Processor processor, boolean ppts_are_new)
+                PptMap all_ppts, Processor processor, boolean ppts_may_be_new)
                 throws IOException {
 
     for (String filename : files) {
       // System.out.printf ("processing filename %s%n", filename);
       try {
         read_data_trace_file(filename, all_ppts, processor, false,
-                             ppts_are_new);
+                             ppts_may_be_new);
       } catch (Throwable e) {
         String message = e.getMessage();
         if (message != null && message.equals("Corrupt GZIP trailer")) {
@@ -1058,7 +1058,7 @@ public final class FileIO {
           if (files.contains(f)) continue;
           files.add(f);
           System.out.println("Reading "+f);
-          read_data_trace_file(new File(Daikon.server_dir,f).toString(), all_ppts, processor, false, ppts_are_new);
+          read_data_trace_file(new File(Daikon.server_dir,f).toString(), all_ppts, processor, false, ppts_may_be_new);
         }
         if (hasEnd) break;
         try { Thread.sleep(1000); } catch(java.lang.InterruptedException e) {}
@@ -1303,7 +1303,7 @@ public final class FileIO {
      * a previous point exactly.  If false, the previous ppt is used without
      * checking for a match.
      */
-    public boolean ppts_are_new;
+    public boolean ppts_may_be_new;
 
     /** All of the ppts seen so far **/
     public PptMap all_ppts;
@@ -1345,7 +1345,7 @@ public final class FileIO {
 
     /** Start parsing the given file. */
     public ParseState (String raw_filename, boolean decl_file_p,
-                       boolean ppts_are_new, PptMap ppts) throws IOException {
+                       boolean ppts_may_be_new, PptMap ppts) throws IOException {
       // Pretty up raw_filename for use in messages
       if (raw_filename.equals("-")) {
         filename = "standard input";
@@ -1359,7 +1359,7 @@ public final class FileIO {
       }
 
       is_decl_file = decl_file_p;
-      this.ppts_are_new = ppts_are_new;
+      this.ppts_may_be_new = ppts_may_be_new;
       all_ppts = ppts;
 
       boolean is_url = raw_filename.startsWith ("file:")
@@ -1501,7 +1501,7 @@ public final class FileIO {
    **/
   public static void read_data_trace_file(String filename, PptMap all_ppts,
                                    Processor processor,
-                                   boolean is_decl_file, boolean ppts_are_new)
+                                   boolean is_decl_file, boolean ppts_may_be_new)
     throws IOException {
 
     if (debugRead.isLoggable(Level.FINE)) {
@@ -1512,7 +1512,7 @@ public final class FileIO {
                          ? " " + Daikon.ppt_omit_regexp.pattern() : ""));
     }
 
-    ParseState data_trace_state = new ParseState(filename, is_decl_file, ppts_are_new,
+    ParseState data_trace_state = new ParseState(filename, is_decl_file, ppts_may_be_new,
                                       all_ppts);
     FileIO.data_trace_state = data_trace_state;
 
