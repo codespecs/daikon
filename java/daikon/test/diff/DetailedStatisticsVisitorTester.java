@@ -177,20 +177,20 @@ public class DetailedStatisticsVisitorTester extends TestCase {
       ("shouldAddFrequency", new Class<?>[] {Invariant.class, Invariant.class});
     m.setAccessible(true);
 
-    Boolean b = (Boolean) m.invoke
-      (null, new Object[] {null_noprint, null_noprint});
-    assert !b.booleanValue();
+    @SuppressWarnings("nullness") // "shouldAddFrequency" is static so first arg null is ok.
+    /*@NonNull*/ Boolean b1 = (Boolean) m.invoke (null, new Object[] {null_noprint, null_noprint});
+    assert !b1.booleanValue();
 
-    b = (Boolean) m.invoke
-      (null, new Object[] {null_int_1_just, null_int_1_just});
-    assert b.booleanValue();
+    @SuppressWarnings("nullness") // "shouldAddFrequency" is static so first arg null is ok.
+    /*@NonNull*/ Boolean b2 = (Boolean) m.invoke (null, new Object[] {null_int_1_just, null_int_1_just});
+    assert b2.booleanValue();
 
-    b = (Boolean) m.invoke
-      (null, new /*@Nullable*/ Object[] {null, null_noprint});
-    assert !b.booleanValue();
+    @SuppressWarnings("nullness") // "shouldAddFrequency" is static so first arg null is ok.
+    /*@NonNull*/ Boolean b3 = (Boolean) m.invoke (null, new /*@Nullable*/ Object[] {null, null_noprint});
+    assert !b3.booleanValue();
 
-    b = (Boolean) m.invoke
-      (null, new /*@Nullable*/ Object[] {null, null_int_1_just});
-    assert b.booleanValue();
+    @SuppressWarnings("nullness") // "shouldAddFrequency" is static so first arg null is ok.
+    /*@NonNull*/ Boolean b4 = (Boolean) m.invoke (null, new /*@Nullable*/ Object[] {null, null_int_1_just});
+    assert b4.booleanValue();
   }
 }

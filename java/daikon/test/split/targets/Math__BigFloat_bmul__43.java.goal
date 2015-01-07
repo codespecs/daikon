@@ -25,7 +25,7 @@ public final class Math__BigFloat_bmul__43 extends Splitter {
   } 
 
   public boolean valid() { 
-    return (daikonreturn__p_varinfo != null) && (daikonreturn__p_varinfo != null);
+    return (daikonreturn__p_varinfo != null) && (daikonreturn_sign_varinfo != null);
   } 
 
   public boolean test(ValueTuple vt) { 

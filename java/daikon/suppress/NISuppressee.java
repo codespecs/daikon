@@ -59,8 +59,8 @@ public class NISuppressee {
     try {
       Method get_proto = cls.getMethod ("get_proto",
                                         new Class<?>[] {boolean.class});
-      @SuppressWarnings("prototype")
-      /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null,
+      @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
+      /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null,
                                     new Object[] {Boolean.valueOf(swap)});
       sample_inv = sample_inv_local;
       assert sample_inv != null : cls.getName();

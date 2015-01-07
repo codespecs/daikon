@@ -152,7 +152,9 @@ public class PureMethodInfo extends DaikonVariableInfo
             // called)
             Runtime.startPure();
 
-            retVal = meth.invoke(receiverVal, argVals);
+            @SuppressWarnings("nullness") // argVals is declared Nullable
+            /*@NonNull*/ Object tmp_retVal = meth.invoke(receiverVal, argVals);
+            retVal = tmp_retVal;
 
             if (meth.getReturnType().isPrimitive())
                 retVal = convertWrapper(retVal);

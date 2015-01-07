@@ -52,7 +52,8 @@ public class CoverageStats
     // setConfigFile(gretelFile);
     {
       Method m = clazzListHits.getMethod("setConfigFile", new Class<?>[] { String.class });
-      m.invoke(null, new Object[] { gretelFile });
+      @SuppressWarnings("nullness") // "swap_class" is static, so null first argument is OK
+      Object dummy = m.invoke(null, new Object[] { gretelFile });
     }
 
     Map<String,Set<Integer>> hits, misses;
@@ -60,12 +61,12 @@ public class CoverageStats
     {
       Method m;
       m = clazzListHits.getMethod("getHits", (Class<?> /*@Nullable*/ [])null);
-      @SuppressWarnings("unchecked")
-      Map<String,Set<Integer>> hits_result = (Map<String,Set<Integer>>) m.invoke(null, (Object /*@Nullable*/ [])null);
+      @SuppressWarnings({"nullness","unchecked"})
+      /*@NonNull*/ Map<String,Set<Integer>> hits_result = (Map<String,Set<Integer>>) m.invoke(null, (Object /*@Nullable*/ [])null);
       hits = hits_result;
       m = clazzListHits.getMethod("getMisses", (Class<?> /*@Nullable*/ [])null);
-      @SuppressWarnings("unchecked")
-      Map<String,Set<Integer>> misses_result = (Map<String,Set<Integer>>) m.invoke(null, (Object /*@Nullable*/ [])null);
+      @SuppressWarnings({"nullness","unchecked"})
+      /*@NonNull*/ Map<String,Set<Integer>> misses_result = (Map<String,Set<Integer>>) m.invoke(null, (Object /*@Nullable*/ [])null);
       misses = misses_result;
     }
 

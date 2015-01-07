@@ -80,8 +80,8 @@ public class NISuppressor {
     try {
       Method get_proto = inv_class.getMethod ("get_proto",
                                                 new Class<?>[] {});
-      @SuppressWarnings("prototype")
-      /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant) get_proto.invoke (null, new Object[] {});
+      @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
+      /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant) get_proto.invoke (null, new Object[] {});
       sample_inv = sample_inv_local;
       assert sample_inv != null;
     } catch (Exception e) {
@@ -116,8 +116,12 @@ public class NISuppressor {
     swap_class = true;
     try {
       Method swap_method = cls.getMethod ("swap_class", (Class<?>[])null);
-      if (swap)
-        cls = asInvClass(swap_method.invoke (null, (Object /*@Nullable*/ []) null));
+      if (swap) {
+        @SuppressWarnings("nullness") // "swap_class" is static, so null first argument is OK
+        Class<? extends Invariant> tmp_cls = asInvClass(swap_method.invoke (null, (Object /*@Nullable*/ [])null));
+        cls = tmp_cls;
+      }
+
     } catch (Exception e) {
       swap_class = false;
     }
@@ -130,15 +134,15 @@ public class NISuppressor {
       try {
         Method get_proto = inv_class.getMethod ("get_proto",
                                new Class<?>[] {boolean.class});
-        @SuppressWarnings("prototype")
-        /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null,
+        @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
+        /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null,
                                   new Object[] {Boolean.valueOf(swap)});
         sample_inv = sample_inv_local;
       } catch (NoSuchMethodException e) {
         Method get_proto = inv_class.getMethod ("get_proto",
                                new Class<?>[] {});
-        @SuppressWarnings("prototype")
-        /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null, new Object[] {});
+        @SuppressWarnings({"nullness", "prototype"}) // reflective invocation is nullness-correct
+        /*@NonNull*/ /*@Prototype*/ Invariant sample_inv_local = (/*@Prototype*/ Invariant)get_proto.invoke (null, new Object[] {});
         sample_inv = sample_inv_local;
       }
     } catch (Exception e) {

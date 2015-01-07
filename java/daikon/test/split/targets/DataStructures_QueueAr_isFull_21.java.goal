@@ -8,7 +8,6 @@ public final class DataStructures_QueueAr_isFull_21 extends Splitter {
     return "currentSize == theArray.length"; 
   } 
 
-  VarInfo theArray_array_varinfo; // this.theArray[]
   VarInfo currentSize_varinfo; // this.currentSize
 
   static DummyInvariant dummyInvFactory;
@@ -16,7 +15,6 @@ public final class DataStructures_QueueAr_isFull_21 extends Splitter {
 
   public DataStructures_QueueAr_isFull_21() { } 
   public DataStructures_QueueAr_isFull_21(Ppt ppt) { 
-    theArray_array_varinfo = ppt.find_var_by_name("this.theArray[]");
     currentSize_varinfo = ppt.find_var_by_name("this.currentSize");
   }
 
@@ -25,19 +23,17 @@ public final class DataStructures_QueueAr_isFull_21 extends Splitter {
   } 
 
   public boolean valid() { 
-    return (theArray_array_varinfo != null) && (theArray_array_varinfo != null);
+    return (currentSize_varinfo != null);
   } 
 
   public boolean test(ValueTuple vt) { 
-    /* writeTestBody: 2 declarations */
-    long[] theArray_array = theArray_array_varinfo.getIntArrayValue(vt);
+    /* writeTestBody: 1 declarations */
     long currentSize = currentSize_varinfo.getIntValue(vt);
-    return(currentSize==theArray_array.length); 
+    return(currentSize==theArray.length); 
   } 
 
   public String repr() { 
     return "DataStructures_QueueAr_isFull_21: "
-      + "theArray_array_varinfo = " + theArray_array_varinfo.repr() + " "
       + "currentSize_varinfo = " + currentSize_varinfo.repr() + " "
       ;
   } 
@@ -48,10 +44,9 @@ public final class DataStructures_QueueAr_isFull_21 extends Splitter {
 
   public void instantiateDummy(PptTopLevel ppt) { 
     dummyInv = null; 
-    VarInfo theArray_array_vi = ppt.find_var_by_name("this.theArray[]");
     VarInfo currentSize_vi = ppt.find_var_by_name("this.currentSize");
-    if (theArray_array_vi != null && currentSize_vi != null) {
-      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {theArray_array_vi, currentSize_vi});
+    if (currentSize_vi != null) {
+      dummyInv = dummyInvFactory.instantiate(ppt, new VarInfo[] {currentSize_vi});
     }
   } 
 

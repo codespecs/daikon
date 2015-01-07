@@ -342,10 +342,14 @@ public class DynComp {
   public int redirect_wait (Process p) {
 
     // Create the redirect theads and start them
+    @SuppressWarnings("nullness") // ErrorStream is non-null because we didn't redirect above.
     StreamRedirectThread err_thread
       = new StreamRedirectThread("stderr", p.getErrorStream(), System.err, true);
+
+    @SuppressWarnings("nullness") // InputStream is non-null because we didn't redirect above.
     StreamRedirectThread out_thread
       = new StreamRedirectThread("stdout", p.getInputStream(), System.out, true);
+
     err_thread.start();
     out_thread.start();
 

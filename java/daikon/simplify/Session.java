@@ -122,10 +122,13 @@ public class Session
       }
 
       // set up command stream
-      input = new PrintStream(process.getOutputStream());
+      @SuppressWarnings("nullness") // getOutputStream is non-null because we didn't redirect
+      PrintStream tmp_input = new PrintStream(process.getOutputStream());
+      input = tmp_input;
 
       // set up result stream
-      InputStream is = process.getInputStream();
+      @SuppressWarnings("nullness") // getInputStream is non-null because we didn't redirect
+      /*@NonNull*/ InputStream is = process.getInputStream();
       output = new BufferedReader(new InputStreamReader(is));
 
       // turn off prompting

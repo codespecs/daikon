@@ -260,7 +260,9 @@ public final class Configuration
           throw new RuntimeException("Didn't find valueOf in " + type);
         }
         try {
-          value = valueOf.invoke(null, unparsed);
+          @SuppressWarnings("nullness") // "valueOf" is static, so first arg is null
+          Object tmp_value = valueOf.invoke(null, unparsed);
+          value = tmp_value;
         } catch (IllegalArgumentException e) {
           throw new ConfigException("Badly formatted argument " + unparsed + " for configuration option " + field.getName() + ": " + e.getMessage());
         }

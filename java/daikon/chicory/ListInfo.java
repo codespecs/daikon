@@ -66,8 +66,9 @@ public class ListInfo extends DaikonVariableInfo
         else
             arrayVal = NonsensicalObject.getInstance();
 
-
-        return DTraceWriter.getListFromArray(arrayVal);
+        @SuppressWarnings("nullness") // We just verified (or set) arrayVal in code above.
+        Object tmp = DTraceWriter.getListFromArray(arrayVal);
+        return tmp;
     }
 
     /** Lists are arrays from Daikon's point of view **/
