@@ -64,7 +64,7 @@ clean-all:
 	$(MAKE) nightly-tests__clean
 
 
-default-projects__%: pgbovine-tests__% smcc-tests__% small-crypto-tests__% \
+default-projects__%: pgbovine-tests__% gtest-tests__% smcc-tests__% small-crypto-tests__% \
 	             tiny-real-tests__% tws-tests__% 
 	@
 
@@ -91,8 +91,17 @@ pgbovine-tests__%: do-IntTest__% do-PointerTest__% do-TrivialTest__% \
 		   do-FunctionNamesTest__% do-CoercePointerTest__% \
 		   do-CppFunctionTest__% do-SimpleClassesTest__% \
 		   do-CppInlineTest__% do-ArrayTest-cpp__% do-FloatTest__% \
-		   do-NestedStructVarList__% do-gtest__%
+		   do-NestedStructVarList__% 
 	@
+
+ifeq (x86_64,$(shell uname -m))
+gtest-tests__%: do-gtest__%
+	@
+else
+# gtest is too big to run on 32 bits
+gtest-tests__%:
+	@
+endif
 
 missing-tests__%: do-ConstantTest__% do-ConstMergeTest__% do-ExceptionTest__% \
 		   do-partial-init__%  do-pthread-test__% do-rdtsc__% do-setjmp-test__% \

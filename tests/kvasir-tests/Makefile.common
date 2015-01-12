@@ -16,6 +16,7 @@ KVASIR_OPTIONS := $(KVASIR_OPTIONS)
 KVASIR_DECLS_2 := $(KVASIR_DECLS_@)
 CLEAN_OUTPUT := ../clean-output.pl
 CLEAN_DECLS := ../clean-decls.pl
+REMOVE_TIMING := ../remove-timing.pl
 DECLS_2_COMP ?= $(DAIKONDIR)/scripts/decls2comp.py
 RUN_MANY := ../run-many.pl
 DTRACE_DIFF ?= dtrace-diff.pl
@@ -32,8 +33,9 @@ ifeq (i386, $(shell uname -i))
 DAIKON := java -Xmx960m -XX:MaxPermSize=480M -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true
 PRINT_INV := java -Xmx960m -XX:MaxPermSize=480M -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
 else
-DAIKON := java -Xmx960m -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true
-PRINT_INV := java -Xmx960m -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
+# gtest needs a lot of memory and I don't think it matters to give same large amount to all tests.
+DAIKON := java -Xmx2500M -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar daikon.Daikon --no_text_output --config_option daikon.derive.Derivation.disable_derived_variables=true --config ../config.txt --config_option daikon.DynamicConstants.OneOf_only=true
+PRINT_INV := java -Xmx2500M -XX:MaxPermSize=960M -cp ${DAIKONDIR}/daikon.jar daikon.PrintInvariants
 endif
 
 default: summary
@@ -97,17 +99,14 @@ $(NAME).out: ran-kvasir
 $(NAME).comp: ran-kvasir
 	@
 
-# Temporarily turn off running gtest.inv - see daikon issue #37.
-# Remove this ifeq to enable.
-ifeq ($(SKIP_DTRACE_DIFF),)
-
 daikon-output/$(NAME).inv.gz: daikon-output/$(NAME).dyncomp.decls \
                               daikon-output/$(NAME)$(DTRACE_EXT).orig
 	$(DAIKON) $^ -o daikon-output/$(NAME).inv.gz
 
 daikon-output/$(NAME).invs.txt: daikon-output/$(NAME).inv.gz
 	$(PRINT_INV) $< >$@
-
+ifneq ($(REMOVE_TIMING_VALUES),)
+	perl -i $(REMOVE_TIMING) $@
 endif
 
 invs-large: $(NAME)
@@ -212,7 +211,6 @@ $(DIFF_NAME).decls.diff: daikon-output/$(NAME).decls $(call goal_name,$(NAME).de
 $(DIFF_NAME).counts.diff: $(NAME).counts $(call goal_name,$(NAME).counts)
 	-diff -u $(call goal_name,$(NAME).counts) $(NAME).counts >$@ 2>&1
 
-# This is correct usage of SKIP_DTRACE, don't remove as part of daikon issue #37.
 ifeq ($(SKIP_DTRACE_DIFF),)
 $(DIFF_NAME).dtrace.diff: daikon-output/$(NAME)$(DTRACE_EXT) $(call goal_name,$(NAME).dtrace)
 	-diff --text -u $(call goal_name,$(NAME).dtrace) daikon-output/$(NAME)$(DTRACE_EXT) >$@ 2>&1
@@ -223,14 +221,8 @@ endif
 $(DIFF_NAME).out.diff: $(NAME).out $(call goal_name,$(NAME).out)
 	-diff --text -u $(call goal_name,$(NAME).out) $(NAME).out  >$@ 2>&1
 
-# Temporarily turn off running gtest.inv - see daikon issue #37.
-# Remove this ifeq to enable. (delete else arm)
-ifeq ($(SKIP_DTRACE_DIFF),)
 $(DIFF_NAME).invs.diff: daikon-output/$(NAME).invs.txt $(call goal_name,$(NAME).invs)
 	-diff --text -F::: -u $(call goal_name,$(NAME).invs) daikon-output/$(NAME).invs.txt >$@ 2>&1
-else
-$(DIFF_NAME).invs.diff:
-endif
 
 $(DIFF_NAME).comp.diff: $(NAME).comp $(call goal_name,$(NAME).comp)
 	-diff --text -F::: -u $(call goal_name,$(NAME).comp) $(NAME).comp >$@ 2>&1
