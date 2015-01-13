@@ -165,7 +165,7 @@ public class CursorList
       {
 	CursorListItr itr = theList.first( );
 	for( ; !itr.isPastEnd( ); itr.advance( ) )
-	  System.out.print( itr.retrieve( ) + " " );
+      {Object junk = itr.retrieve( ); /*System.out.print( itr.retrieve( ) + " " );*/ }
       }
 
     System.out.println( );

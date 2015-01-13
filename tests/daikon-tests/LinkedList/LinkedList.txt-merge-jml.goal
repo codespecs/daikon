@@ -241,9 +241,9 @@ public class LinkedList
       System.out.print( "Empty list" );
     else
       {
-	LinkedListItr itr = theList.first( );
-	for( ; !itr.isPastEnd( ); itr.advance( ) )
-	  System.out.print( itr.retrieve( ) + " " );
+      LinkedListItr itr = theList.first( );
+      for( ; !itr.isPastEnd( ); itr.advance( ) )
+      {Object junk = itr.retrieve( ); /*System.out.print( itr.retrieve( ) + " " );*/ }
       }
 
     System.out.println( );
