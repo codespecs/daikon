@@ -859,10 +859,11 @@ public final class FileIO {
     }
 
     // Make sure that if a format was specified previously, it is the same
-    if ((new_decl_format != null) && (new_df != new_decl_format))
+    if ((new_decl_format != null) && (new_df != new_decl_format.booleanValue()))
       decl_error (state, "decl format '%s' does not match previous setting",
                   version);
 
+    // System.out.println("setting new_decl_format = " + new_df);
     new_decl_format = Boolean.valueOf (new_df);
   }
 

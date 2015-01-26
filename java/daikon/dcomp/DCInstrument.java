@@ -763,20 +763,15 @@ class DCInstrument {
           stack_map_table = ((StackMapTable)smta).getStackMapTable();
           needStackMap = true;
 
-          try {
-              // We need to make a deep copy of the Stack Map items so
-              // we can modify them without affecting the unmodified
-              // version of this method (if there is one).
-              int len = stack_map_table.length;
-              new_stack_map_table = new StackMapTableEntry[len];
-              for (int j = 0; j < len; j++) {
-                  new_stack_map_table[j] = stack_map_table[j].copy();
-              }
-              stack_map_table = new_stack_map_table;
-          } catch (CloneNotSupportedException e) {
-              throw new Error ("Unexpected error copying StackMaps in " +
-                                mg.getClassName() + "." + mg.getName());
-          }    
+          // We need to make a deep copy of the Stack Map items so
+          // we can modify them without affecting the unmodified
+          // version of this method (if there is one).
+          int len = stack_map_table.length;
+          new_stack_map_table = new StackMapTableEntry[len];
+          for (int j = 0; j < len; j++) {
+              new_stack_map_table[j] = stack_map_table[j].copy();
+          }
+          stack_map_table = new_stack_map_table;
 
           debug_instrument.log ("Original StackMap: %s%n", smta);
           debug_instrument.log ("Attribute tag: %s length: %d nameIndex: %d%n",
@@ -1568,9 +1563,11 @@ class DCInstrument {
     while (ih != null) {
       handle_offsets[index++]= ih.getPosition();
 
-      debug_instrument_inst.log ("inst: %s %n", ih);
-      for (InstructionTargeter it : ih.getTargeters()) {
-        //debug_instrument_inst.log ("targeter: %s %n", it);
+      if (debug_instrument_inst.enabled) {
+        debug_instrument_inst.log ("inst: %s %n", ih);
+        for (InstructionTargeter it : ih.getTargeters()) {
+          debug_instrument_inst.log ("targeter: %s %n", it);
+        }
       }
 
       ih = ih.getNext();
@@ -4258,6 +4255,7 @@ class DCInstrument {
    */
   protected void append_inst (InstructionList il, Instruction inst) {
 
+    //System.out.println ("append_inst: " + inst.getClass().getName());
     if (inst instanceof LOOKUPSWITCH) {
       LOOKUPSWITCH ls = (LOOKUPSWITCH)inst;
       il.append (new LOOKUPSWITCH (ls.getMatchs(), ls.getTargets(),
@@ -4338,7 +4336,6 @@ class DCInstrument {
     int new_length = bytecode.length;
 
     debug_instrument_inst.log ("  replace_inst: %s %d%n%s%n", ih, new_il.getLength(), new_il);
-
 
     // If there is only one new instruction, just replace it in the handle
     if (new_il.getLength() == 1) {
@@ -4542,10 +4539,15 @@ class DCInstrument {
     debug_instrument_inst.log ("%n");
     print_stack_map_table ("replace_inst After");
     if (debug_instrument_inst.enabled) {
-        while (new_end != null) {
-            debug_instrument_inst.log ("inst: %s %n", new_end);
-            new_end = new_end.getNext();
-        }
+      while (new_end != null) {
+        debug_instrument_inst.log ("inst: %s %n", new_end);
+        if (new_end.hasTargeters()) {
+          for (InstructionTargeter it : new_end.getTargeters()) {
+            System.out.println ("Targeter has type " + it.getClass().getName());
+          }
+        }  
+        new_end = new_end.getNext();
+      }
     }
   }
 
