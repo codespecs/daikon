@@ -239,6 +239,7 @@ build-kvasir: kvasir
 ### Rebuild everything; used for monthly releases, for example
 
 rebuild-everything:
+	-rm -rf daikon.jar
 	${MAKE} -C $(DAIKONDIR)/java very-clean
 	${MAKE} -C $(DAIKONDIR)/java tags compile
 	${MAKE} -C $(DAIKONDIR) daikon.jar
