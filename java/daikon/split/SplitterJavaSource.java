@@ -6,6 +6,7 @@ import jtb.syntaxtree.*;
 import jtb.ParseException;
 import java.util.*;
 import java.util.regex.*;
+import java.util.logging.Level;
 
 /*>>>
 import org.checkerframework.checker.initialization.qual.*;
@@ -333,6 +334,7 @@ class SplitterJavaSource implements jtb.JavaParserConstants {
     // because the visitors causes the trees to become invalid.  Therefore,
     // it is needed to re-parse the condition in a new jtb syntax tree each
     // time.  (All the parsing is hidden in the static methods.)
+    condition = NameFixer.fixUnqualifiedMemberNames(condition, className, varInfos);
     condition = ThisRemover.removeThisDot(condition);
     condition = OrigFixer.fixOrig(condition);
     condition = PrefixFixer.fixPrefix(condition);

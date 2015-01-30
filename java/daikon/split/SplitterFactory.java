@@ -162,7 +162,7 @@ public class SplitterFactory {
                                     PptTopLevel ppt,
                                     StatementReplacer statementReplacer)
   {
-    Global.debugSplit.fine("<<enter>> loadSplitters");
+    Global.debugSplit.fine("<<enter>> loadSplitters - count: " + splitterObjects.length);
 
     // System.out.println("loadSplitters for " + ppt.name);
     if (splitterObjects.length == 0) {

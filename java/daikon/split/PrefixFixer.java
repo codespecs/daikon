@@ -32,7 +32,7 @@ class PrefixFixer extends DepthFirstVisitor {
   private /*@MonotonicNonNull*/ NodeToken threeTokensAgo;
 
   /**
-   * Creates a new instance of PrefixRemover to remove prefix.
+   * Creates a new instance of PrefixFixer to fix "." prefixes.
    */
   private PrefixFixer() {
     super();
