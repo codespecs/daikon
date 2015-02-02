@@ -85,8 +85,8 @@ public final class Daikon {
 
   // Don't change the order of the modifiers on these strings as they
   // are automatically updated as part of the release process
-  public final static String release_version = "5.1.15";
-  public final static String release_date = "December 23, 2014";
+  public final static String release_version = "5.1.16";
+  public final static String release_date = "February 2, 2015";
   public final static String release_string =
     "Daikon version "
       + release_version
@@ -385,7 +385,7 @@ public final class Daikon {
   static String usage =
     UtilMDE.joinLines(
       release_string,
-      "Daikon invariant detector, copyright 1998-2014",
+      "Daikon invariant detector, copyright 1998-2015",
       // " by Michael Ernst <mernst@cs.washington.edu>",
       "Uses the Java port of GNU getopt, copyright (c) 1998 Aaron M. Renn",
       // "For licensing information, see the License section of the manual.",

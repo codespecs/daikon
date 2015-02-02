@@ -42,14 +42,14 @@
 @center @titlefont{Developer Manual}
 
 @sp 2
-@center Daikon version 5.1.15
+@center Daikon version 5.1.16
 
 @sp 1
 
 @ifset final
 @c FINAL version
-@c Print out the Daikon version 5.1.15 release date
-@center December 23, 2014
+@c Print out the Daikon version 5.1.16 release date
+@center February 2, 2015
 @end ifset
 
 @ifclear final
@@ -97,7 +97,7 @@ Copyright @copyright{} 1998-2014
 @top Daikon Invariant Detector Developer Manual
 
 This is the developer manual for the Daikon invariant detector.
-It describes Daikon version 5.1.15, released December 23, 2014.
+It describes Daikon version 5.1.16, released February 2, 2015.
 
 @menu
 * Introduction::
@@ -2183,6 +2183,7 @@ cd $DAIKONDIR
 make update-dist-version-file
 @end example
 
+@need 1000
 Optionally, override the distribution date (default: today) by
 redefining the environment variable @command{TODAY}:
 
@@ -2298,6 +2299,7 @@ cd $DAIKONDIR/doc
 diff -b -u -s --from-file /cse/web/research/plse/daikon/download/doc *.texinfo
 @end smallexample
 
+@need 1000
 Another good source of information are the repository logs since the
 last release:
 
@@ -2309,6 +2311,13 @@ As we normally only tag the repository when we make a release, this can
 usually be simplified to:
 
 @example
+hg log -v -r "last(tagged())::"
+@end example
+
+In addition, you should run the same command in your Fjalar clone:
+
+@example
+cd $DAIKONDIR/fjalar
 hg log -v -r "last(tagged())::"
 @end example
 
@@ -2406,6 +2415,33 @@ make installation-test
 
 
 @item
+Test the distribution on a 64-bit, Ubuntu based system.  The 64-bit test
+run above is normally run on one of our local machines; therefore, it was
+probably done on a Fedora (Red Hat) based system. 
+Ubuntu is another distributor of Linux based systems and we have run into
+some differences with Fedora in the past.  This test is
+probably best done on a virtual machine running a current version. It is 
+important to regularly check to see if a new major release of Ubuntu is
+available and upgrade your test bed as necessary.
+
+@smallexample
+mkdir -p ~/tmp
+cd ~/tmp
+rm -rf daikon.tar.gz daikon
+wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
+tar xzf daikon.tar.gz
+export JAVA_HOME=/usr/lib/jvm/java
+export DAIKONDIR=`pwd`/daikon
+source daikon/scripts/daikon.bashrc
+cd daikon
+make
+make installation-test
+@end smallexample
+
+[Time: ?? min]
+
+
+@item
 Test the distribution on a Windows machine.  On a Windows
 machine with Cygwin installed, as a guest user (or at least one without
 environment variables such as @env{$DAIKONDIR} defined!), download the staged
@@ -2416,8 +2452,6 @@ The last line of output from the first make should indicate that Kvasir was
 not built because this is not a Linux platform. After running the second
 make command, success is indicated by invariant output being
 written to the screen.
-@*
-[Time: 10 min]
 
 @smallexample
 mkdir -p ~/tmp
@@ -2435,6 +2469,8 @@ make
 make installation-test
 @end smallexample
 
+[Time: 10 min]
+
 
 @item
 Test the distribution on a MacOSX machine.  On a MacOSX machine
@@ -2445,8 +2481,6 @@ The last line of output from the first make should indicate that Kvasir was
 not built because this is not a Linux platform. After running the second
 make command, success is indicated by invariant output being
 written to the screen.
-@*
-[Time: 4 min]
 
 @smallexample
 mkdir -p ~/tmp
@@ -2465,7 +2499,10 @@ make
 make installation-test
 @end smallexample
 
-@need 800
+[Time: 4 min]
+
+
+@need 1000
 @item
 Save the previous release in the history archives.
 
@@ -2532,13 +2569,16 @@ export -n TODAY
 @end example
 
 Now, update the appropriate files with the date and version number
-for ongoing development.
+for ongoing development. (We revert the change to @file{doc/README} as we
+want it to reflect the most recent actual release.)
 
 @example
 make update-doc-dist-date-and-version
+hg revert doc/README
 @end example
 
 [Time: moments]
+
 
 @item
 Verify these changes by doing partial product builds:

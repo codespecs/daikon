@@ -20,6 +20,19 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.1.16 (February 2, 2015)
+
+  Splitters now properly support unqualified member variables within
+  .spinfo files.
+
+  Fjalar support improved for C++ static const items.  (For more information,
+  see Daikon issue #37: http://code.google.com/p/daikon/issues/detail?id=37.)
+
+  Updated bcel.jar (within plume.jar) for some minor improvements in
+  JDK 8 support.
+
+===========================================================================
+
 5.1.14 (December 22, 2014)
 
   Fjalar now builds correctly on Ubuntu 14.10.
