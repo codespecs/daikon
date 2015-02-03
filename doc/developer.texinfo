@@ -2430,7 +2430,7 @@ cd ~/tmp
 rm -rf daikon.tar.gz daikon
 wget http://plse.cs.washington.edu/daikon/staging-daikon/download/daikon.tar.gz
 tar xzf daikon.tar.gz
-export JAVA_HOME=/usr/lib/jvm/java
+export JAVA_HOME=/usr/lib/jvm/java-7-openjdk-amd64
 export DAIKONDIR=`pwd`/daikon
 source daikon/scripts/daikon.bashrc
 cd daikon
@@ -3054,6 +3054,37 @@ relations for variables.
 Multiple parent fields can be specified.
 
 @end itemize
+
+@c (unpublished notes to Daikon developers)
+@c 
+@c The following features were added to Daikon to support the Galar
+@c front end, which in turn supported the ClearView tool
+@c (https://homes.cs.washington.edu/~mernst/pubs/automatic-patching-sosp2009.pdf).
+@c Unfortunately, the Galar front end was never released.
+@c 
+@c There are five undocumented items: ppt-func, ppt-length,
+@c ppt-successors, ppt-basic_block and ppt-combined_basic_block.
+@c 
+@c If the ppt-type is basic_block then the ppt-name is expected to be of 
+@c the form "<string>:0x<hex offset>:::BB".  I'm not clear what the 
+@c <string> represents or how it is used.  The main item is the <hex 
+@c offset> which is the offset from the start of the function to this basic block.
+@c 
+@c The ppt-func record has a string argument for function_id.  I think 
+@c each basic_block ppt is supposed to have one of these records to 
+@c identify the containing function.
+@c 
+@c The ppt-length record has a numeric argument for bb_length.  I think 
+@c each basic_block ppt is supposed to have one of these records 
+@c indicating the length of the basic block.  I'm assume this is in bytes not
+@c instructions.
+@c 
+@c The ppt-successors record has a list of string arguments that identify 
+@c the successor blocks of the current basic block.  I think these names 
+@c are supposed to be in the same format as the ppt-name.
+@c 
+@c (end developer notes)
+
 
 @node       Variable declarations
 @subsection Variable declarations
