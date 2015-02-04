@@ -3230,6 +3230,11 @@ Indicates that the order of a collection does not have meaning.  In
 this case, Daikon does not check for element-wise comparisons between
 it and other collections.
 
+@item @code{nomod}
+
+Indicates that the variable can never be modified.  For example, a
+variable declared @code{static final} in Java.
+
 @item @code{synthetic}
 
 Indicates that the variable was added by the front end and is not
@@ -3249,6 +3254,22 @@ enclosing variable.
 
 Indicates that the variable can't take on a null value.  In this
 case, Daikon will not check for the @samp{NonZero} invariant.
+
+@item @code{is_property}
+
+Indicates that the variable is a C# property (set by the Celeriac front
+end).  It is used in output
+formatting to remove the parentheses from a method call.
+
+@item @code{is_enum}
+
+Indicates that the variable is an enumerated type (set by the Celeriac
+front end).  Daikon uses this information to suppress obvious invariants.
+
+@item @code{is_readonly}
+
+Indicates that the variable is read only (set by the Celeriac front
+end).  Daikon uses this information to suppress obvious invariants.
 
 @end itemize
 
