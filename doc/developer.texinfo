@@ -2806,6 +2806,11 @@ It is also more convenient to have a single file that contains all
 information about a program, rather than multiple @file{.decls} files
 that must be associated with the @file{.dtrace} file.
 
+It is also permitted for a declaration to appear more than once in Daikon's
+input.  The declaration must be identical in all occurrences.  This is
+useful when running Daikon with multiple @file{.dtrace} files, each of
+which contains its own declarations.
+
 
 @node    Conventions
 @section File format conventions
