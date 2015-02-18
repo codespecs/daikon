@@ -3,7 +3,7 @@ accessor
 accessors
 AFS
 AMD
-AMD64
+amd64
 API
 arity
 Athlon
@@ -21,8 +21,10 @@ checkin
 checkins
 classpath
 codebase
+comparabilities
 comparator
 consequents
+Coregrind
 CSE
 customizable
 customizations
@@ -49,11 +51,13 @@ DynComp's
 edu
 EM64T
 executables
+fcntl
 filename
 fjalar
 Fjalar
 Fjalar's
 getters
+gdb
 globals
 hashcode
 hashcodes
@@ -86,8 +90,10 @@ Makefile
 Makefiles
 Makefile's
 Memcheck
+Memcheck's
 merchantability
 metadata
+mkdir
 namespace
 namespaces
 nullness
@@ -98,6 +104,7 @@ pathname
 pathnames
 pdf
 PDF
+PLSE
 polymorphism
 popup
 postcondition
@@ -122,6 +129,7 @@ splitter
 splitters
 StackMap
 startup
+strnlen
 struct
 structs
 subclasses
@@ -137,6 +145,7 @@ superclasses'
 supersequence
 supersets
 suppressions
+SVN
 Takuan
 texinfo
 Texinfo
@@ -153,9 +162,10 @@ unselected
 unsplit
 untyped
 UW
-Valgrind
-Valgrind's
+valgrind
+valgrind's
 versa
+versioning
 washington
 whitespace
 wildcard
