@@ -8396,7 +8396,7 @@ java daikon.Chicory DataStructures.StackArTester
 @end example
 
 @noindent
-fails with an error such as ``couldn't find or load main class'', then first try
+fails with an error (such as ``couldn't find or load main class''), then first try
 @example
 java DataStructures.StackArTester
 @end example
