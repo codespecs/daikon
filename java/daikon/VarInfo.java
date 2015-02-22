@@ -242,9 +242,11 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
     assert rep_type != null;
     assert comparability != null; // anything else ??
     assert (comparability.alwaysComparable()
-            || (((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions()));
+            || (((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions()))
+      : "Dimensions mismatch for " + this + ": " + ((VarComparabilityImplicit)comparability).dimensions + " " + file_rep_type.dimensions();
     assert 0 <= varinfo_index && varinfo_index < ppt.var_infos.length;
-    assert -1 <= value_index && value_index <= varinfo_index;
+    assert -1 <= value_index && value_index <= varinfo_index
+      : "" + this + " value_index=" + value_index + ", varinfo_index=" + varinfo_index;
     assert is_static_constant == (value_index == -1);
     assert is_static_constant || (static_constant_value == null);
   }
@@ -668,13 +670,16 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       // ppt.  Remove any specified relations.
       result_vardef.clear_parent_relation();
 
-      // Fix the enclosing variable, if any, to point to the prestate version
+      // Fix the VarDefinition enclosing variable, if any, to point to the
+      // prestate version.  This code does not affect the VarInfo yet, but
+      // the side-effected VarDefinition will be passed to "new VarInfo".
       if (result_vardef.enclosing_var != null) {
         assert vi.enclosing_var != null : "@AssumeAssertion(nullness): dependent: result_vardef was copied from vi and their enclosing_var fields are the same";
         result_vardef.enclosing_var = vi.enclosing_var.prestate_name();
+        assert result_vardef.enclosing_var != null : "" + result_vardef;
       }
 
-      // Build a the prestate VarInfo from the VarDefinition.
+      // Build the prestate VarInfo from the VarDefinition.
       result = new VarInfo (result_vardef);
 
       // Copy the missing flag from the original variable.  This is necessary
@@ -2771,6 +2776,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       VarInfo var = this;
       while (var.var_kind != VarKind.ARRAY) {
         if (var.enclosing_var == null) {
+          // error condition; print some debugging output before assertion failure
           for (VarInfo vi = this; vi != null; vi = vi.enclosing_var)
             System.out.printf ("%s %s%n", vi, vi.var_kind);
           assert var.enclosing_var != null : this + " " + var;
@@ -2842,6 +2848,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    **/
   public void new_ppt() {
     if (enclosing_var != null) {
+      // enclosing_var exists but is in the wrong ppt; update it
       enclosing_var = ppt.find_var_by_name (enclosing_var.name());
       assert enclosing_var != null;
     }

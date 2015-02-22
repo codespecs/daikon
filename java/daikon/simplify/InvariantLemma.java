@@ -48,7 +48,7 @@ public class InvariantLemma extends Lemma {
   public static InvariantLemma makeLemmaAddOrig(Invariant inv) {
     // XXX Side-effecting the invariant to change its ppt (and then
     // to change it back afterward) isn't such a hot thing to do, but
-    // it isn't that hard, and seems to work.
+    // it isn't that hard, and seems to work so long as the new ppt is valid.
     InvariantLemma result;
     if (inv instanceof Implication) {
       Implication imp = (Implication)inv;
