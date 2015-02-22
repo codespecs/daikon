@@ -919,13 +919,12 @@ as well.)
 * Track logging::
 @end menu
 
-This chapter describes some techniques that can be used for debugging
-Daikon.  Because Daikon processes large amounts of data, using
-a debugger can be difficult.  The following logging techniques provide
-alternatives to using a debugger.
+@ref{Daikon debugging options,,,daikon,Daikon User Manual} describes
+several command-line options that enable logging, which can be a useful
+alternative to using a debugger when debugging Daikon.  Because Daikon
+processes large amounts of data, using a debugger can be difficult.
 
-Daikon's logging routines are based on the @code{java.util.logging} utilities
-(built into Java 1.4 and later).
+This chapter describes some of the command-line options in more detail.
 
 
 @node    Track logging
