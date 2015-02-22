@@ -1816,6 +1816,16 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   private static final Logger debugSimplifyExpression =
     Logger.getLogger("daikon.VarInfo.simplifyExpression");
 
+  /** Enable assertions that would otherwise reduce run time performance. **/
+  private static final Logger debugEnableAssertions =
+    Logger.getLogger("daikon.VarInfo.enableAssertions");
+
+  // Slightly gross implementation, using a logger (but the command-line
+  // options processing code already exists for it).
+  public boolean assertionsEnabled() {
+    return debugEnableAssertions.isLoggable(Level.FINE);
+  }
+
   /**
    * Change the name of this VarInfo by side effect into a more simplified
    * form, which is easier to read on display.  Don't call this during
