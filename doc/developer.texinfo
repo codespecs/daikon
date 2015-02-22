@@ -2916,7 +2916,7 @@ The possible values for @var{comparability-type} are @code{implicit} and
 @code{none}.
 
 @code{implicit} means ordinary comparability as described in
-@ref{Program point declarations}.  (The name @code{implicit} is retained
+@ref{Variable declarations}.  (The name @code{implicit} is retained
 for historical reasons.)
 
 This record is optional.  The @code{implicit} type is the default.
