@@ -1420,6 +1420,12 @@ public final class Daikon {
         }
       }
     }
+
+    if (VarInfo.assertionsEnabled()) {
+      for (VarInfo vi : ppt.var_infos) {
+        vi.checkRep();
+      }
+    }
   }
 
 
@@ -1524,6 +1530,16 @@ public final class Daikon {
    */
   private static void create_orig_vars(PptTopLevel exit_ppt, PptMap ppts) {
     if (! exit_ppt.ppt_name.isExitPoint()) {
+      if (VarInfo.assertionsEnabled()) {
+        for (VarInfo vi : exit_ppt.var_infos) {
+          try {
+            vi.checkRep();
+          } catch (Throwable e) {
+            System.err.println("\nError with variable " + vi + " at ppt " + exit_ppt);
+            throw e;
+          }
+        }
+      }
       return;
     }
 
@@ -1590,6 +1606,18 @@ public final class Daikon {
       assert new_vis_index == exit_ppt.num_orig_vars;
     }
     exit_ppt.addVarInfos(new_vis);
+
+    if (VarInfo.assertionsEnabled()) {
+      for (VarInfo vi : exit_ppt.var_infos) {
+        try {
+          vi.checkRep();
+        } catch (Throwable e) {
+          System.err.println("\nError with variable " + vi + " at ppt " + exit_ppt);
+          throw e;
+        }
+      }
+    }
+
   }
 
 

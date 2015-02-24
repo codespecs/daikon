@@ -249,6 +249,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
       : "" + this + " value_index=" + value_index + ", varinfo_index=" + varinfo_index;
     assert is_static_constant == (value_index == -1);
     assert is_static_constant || (static_constant_value == null);
+    // TODO: uncomment the assertion once bugs are fixed.
+    // assert (! (var_kind == VarKind.FIELD)) || enclosing_var != null
+    //   : "FIELD with no enclosing_var: " + this + " at " + ppt;
   }
 
   /** Returns whether or not rep_type is a legal type **/
@@ -1822,7 +1825,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
 
   // Slightly gross implementation, using a logger (but the command-line
   // options processing code already exists for it).
-  public boolean assertionsEnabled() {
+  public static boolean assertionsEnabled() {
     return debugEnableAssertions.isLoggable(Level.FINE);
   }
 
