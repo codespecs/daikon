@@ -919,13 +919,12 @@ as well.)
 * Track logging::
 @end menu
 
-This chapter describes some techniques that can be used for debugging
-Daikon.  Because Daikon processes large amounts of data, using
-a debugger can be difficult.  The following logging techniques provide
-alternatives to using a debugger.
+@ref{Daikon debugging options,,,daikon,Daikon User Manual} describes
+several command-line options that enable logging, which can be a useful
+alternative to using a debugger when debugging Daikon.  Because Daikon
+processes large amounts of data, using a debugger can be difficult.
 
-Daikon's logging routines are based on the @code{java.util.logging} utilities
-(built into Java 1.4 and later).
+This chapter describes some of the command-line options in more detail.
 
 
 @node    Track logging
@@ -2846,6 +2845,11 @@ It is also more convenient to have a single file that contains all
 information about a program, rather than multiple @file{.decls} files
 that must be associated with the @file{.dtrace} file.
 
+It is also permitted for a declaration to appear more than once in Daikon's
+input.  The declaration must be identical in all occurrences.  This is
+useful when running Daikon with multiple @file{.dtrace} files, each of
+which contains its own declarations.
+
 
 @node    Conventions
 @section File format conventions
@@ -2951,7 +2955,7 @@ The possible values for @var{comparability-type} are @code{implicit} and
 @code{none}.
 
 @code{implicit} means ordinary comparability as described in
-@ref{Program point declarations}.  (The name @code{implicit} is retained
+@ref{Variable declarations}.  (The name @code{implicit} is retained
 for historical reasons.)
 
 This record is optional.  The @code{implicit} type is the default.

@@ -470,6 +470,11 @@ public final class FileIO {
       if (state.ppts_may_be_new) {
         check_decl_match (state, existing_ppt, vi_array);
       } else { // ppts are already in the map
+        if (VarInfo.assertionsEnabled()) {
+          for (VarInfo vi : vi_array) {
+            vi.checkRep();
+          }
+        }
         return existing_ppt;
       }
     }

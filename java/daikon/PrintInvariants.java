@@ -1140,7 +1140,7 @@ public final class PrintInvariants {
     if (varInfo.var_kind == VarInfo.VarKind.FUNCTION
         && !varInfo.var_flags.contains(VarFlags.IS_PROPERTY)) {
       // The assertion says that currently, Celeriac only visits a static
-      // method is when the method has single parameter with the same type
+      // method when the method has a single parameter with the same type
       // as the declaring class. For example: string.NullOrEmpty(string
       // arg). In these cases, Celeriac will output arg as being the
       // enclosing var. The DECLs would look something like:
