@@ -8404,8 +8404,9 @@ JTB parser generator,
 Daikon's Java parser.
 The bug should be fixed in JTB, or
 the generated Java parser in @file{daikon/java/jtb} could be
-fixed.
-Your assistance with either of these tasks would be greatly appreciated.
+fixed, or
+Daikon could be changed to use a less buggy parser generator.
+Your assistance with any of these tasks would be greatly appreciated.
 Alternately, you can manually fix occurrences of the
 logical shift operator in the output of Daikon's tools that parse Java.
 
