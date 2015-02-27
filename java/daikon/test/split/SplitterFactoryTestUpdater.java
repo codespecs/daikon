@@ -86,6 +86,7 @@ public class SplitterFactoryTestUpdater {
                                         List<String> decls) {
     HashSet<File> declsFileSet = new HashSet<File>();
     HashSet<File> spinfoFiles = new HashSet<File>();
+    PptMap allPpts = new PptMap();
     for (String spinfoFile : spinfos) {
       spinfoFile = targetDir + spinfoFile;
       spinfoFiles.add(new File(spinfoFile));
@@ -99,7 +100,13 @@ public class SplitterFactoryTestUpdater {
     try {
       PptSplitter.dkconfig_suppressSplitterErrors = true;
       Daikon.create_splitters(spinfoFiles);
-      PptMap allPpts = FileIO.read_declaration_files(declsFileSet);
+      // calling read_data_trace_file in a loop instead of calling
+      // read_data_trace_files allows us to mix version 1 and 
+      // version 2 decls file formats.
+      for (String declsFile : decls) {
+        FileIO.new_decl_format = null;  // this is the magic noted above
+        FileIO.read_data_trace_file(targetDir + declsFile, allPpts);
+      }
     } catch(IOException e) {
       throw new RuntimeException(e);
     }
@@ -274,11 +281,8 @@ public class SplitterFactoryTestUpdater {
     ps.println("   * Sets up the test by generating the needed splitter java files.");
     ps.println("   */");
     ps.println("  private static void createSplitterFiles(List<String> spinfos, List<String> decls) {");
-    ps.println("    List<File> declsFiles = new ArrayList<File>();");
-    ps.println("    for (String decl : decls) {");
-    ps.println("      declsFiles.add(new File(decl));");
-    ps.println("    }");
     ps.println("    Set<File> spFiles = new HashSet<File>();");
+    ps.println("    PptMap allPpts = new PptMap();");
     ps.println("    for (String spinfo : spinfos) {");
     ps.println("      spFiles.add(new File(spinfo));");
     ps.println("    }");
@@ -288,12 +292,15 @@ public class SplitterFactoryTestUpdater {
     ps.println("      }");
     ps.println("      PptSplitter.dkconfig_suppressSplitterErrors = true;");
     ps.println("      Daikon.create_splitters(spFiles);");
-    ps.println("      FileIO.read_declaration_files(declsFiles); // invoked for side effect");
+    ps.println("      for (String declsFile : decls) {");
+    ps.println("        FileIO.new_decl_format = null;");
+    ps.println("        FileIO.read_data_trace_file(declsFile, allPpts);"); // invoked for side effects
+    ps.println("      }");
     ps.println("      tempDir = SplitterFactory.getTempDir();");
     ps.println("    } catch(IOException e) {");
     ps.println("        throw new RuntimeException(e);");
     ps.println("    }");
-    ps.println("   }");
+    ps.println("  }");
     ps.println();
 
     appendTests(ps);
@@ -341,7 +348,9 @@ public class SplitterFactoryTestUpdater {
     ps.println("   */");
     ps.println();
     ps.println("  public static void assertEqualFiles(String f1, String f2) {");
-    ps.println("    assert UtilMDE.equalFiles(f1, f2) : \"Files \" + f1 + \" and \" + f2 + \" differ.\";");
+    ps.println("    if (!UtilMDE.equalFiles(f1, f2)) {");
+    ps.println("      fail(\"Files \" + f1 + \" and \" + f2 + \" differ.\");");
+    ps.println("    }");
     ps.println("  }");
     ps.println();
     ps.println("  public static void assertEqualFiles(String f1) {");
