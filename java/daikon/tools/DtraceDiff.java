@@ -211,18 +211,13 @@ public class DtraceDiff {
     dtraceDiff (declsfile1, dtracefile1, declsfile2, dtracefile2);
   }
 
-  @SuppressWarnings("nullness") // reinitialization
-  private static void resetNewDeclFormat() {
-    FileIO.new_decl_format = null;
-  }
-
   public static void dtraceDiff (Set<File> declsfile1,
                                  String dtracefile1,
                                  Set<File> declsfile2,
                                  String dtracefile2) {
 
     // System.out.printf ("dtrace files = %s, %s\n", dtracefile1, dtracefile2);
-    resetNewDeclFormat();
+    FileIO.resetNewDeclFormat();
 
     try {
       Map<PptTopLevel,PptTopLevel> pptmap = new HashMap<PptTopLevel,PptTopLevel>();  // map ppts1 -> ppts2

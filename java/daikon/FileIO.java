@@ -133,6 +133,19 @@ public final class FileIO {
   public static /*@MonotonicNonNull*/ Boolean new_decl_format = null;
 
   /**
+   * Do not use this routine unless you know what you are doing.
+   * This routine breaks the representation invariant that new_decl_format,
+   * once set, is never reset to null.
+   * This routine should be used only if you can guarantee that
+   * new_decl_format will be once again set to a non-null value before any
+   * code runs that depends on the fact that new_decl_format is non-null.
+   */
+  @SuppressWarnings("nullness") // reinitialization
+  public static void resetNewDeclFormat() {
+    FileIO.new_decl_format = null;
+  }
+
+  /**
    * If true, modified all ppt names to remove duplicate routine
    * names within the ppt name.  This is used when a stack trace
    * (of active methods) is used as the ppt name.  The routine names
