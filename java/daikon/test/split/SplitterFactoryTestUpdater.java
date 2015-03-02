@@ -104,7 +104,8 @@ public class SplitterFactoryTestUpdater {
       // read_data_trace_files allows us to mix version 1 and 
       // version 2 decls file formats.
       for (String declsFile : decls) {
-        FileIO.new_decl_format = null;  // this is the magic noted above
+        // This reset allows current format to differ from previous.
+        FileIO.resetNewDeclFormat();
         FileIO.read_data_trace_file(targetDir + declsFile, allPpts);
       }
     } catch(IOException e) {
@@ -293,7 +294,7 @@ public class SplitterFactoryTestUpdater {
     ps.println("      PptSplitter.dkconfig_suppressSplitterErrors = true;");
     ps.println("      Daikon.create_splitters(spFiles);");
     ps.println("      for (String declsFile : decls) {");
-    ps.println("        FileIO.new_decl_format = null;");
+    ps.println("        FileIO.resetNewDeclFormat();");
     ps.println("        FileIO.read_data_trace_file(declsFile, allPpts);"); // invoked for side effects
     ps.println("      }");
     ps.println("      tempDir = SplitterFactory.getTempDir();");
