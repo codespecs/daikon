@@ -27,7 +27,6 @@ import org.checkerframework.checker.signature.qual.*;
  * class.  Neither Chicory nor Daikon calls the methods of the Runtime
  * class; only the target program (as instrumented by Chicory) does, in
  * order to create input to Daikon.
- * <p>
  **/
 // I don't see a way to suppress per-field rather than on the whole class.
 // See Checker Framework test case

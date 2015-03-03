@@ -21,7 +21,6 @@ import jtb.syntaxtree.*;
  * Invariant objects.  All subsequent arguments are Foo.java files that are
  * rewritten into Foo.java-jmlannotated versions; alternately, use the -r
  * flag to process every .java file under the current directory.
- * <p>
  **/
 public class Annotate {
 

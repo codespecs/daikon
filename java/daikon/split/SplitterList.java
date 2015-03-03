@@ -164,7 +164,6 @@ public abstract class SplitterList
   /**
    * Return the splitters associated with this program point name (or null).
    * The resulting splitters are factories, not instantiated splitters.
-   * @param pptName
    * @return an array of splitters
    */
   public static Splitter /*@Nullable*/ [] get(String pptName) {

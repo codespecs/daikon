@@ -16,9 +16,9 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
   /**
    * Create a set of derivations from three base variables.  If the
    * base variables aren't worth deriving from, returns null.
-   * @param vi1
-   * @param vi2
-   * @param vi3 the three base variables.
+   * @param vi1 The first of the three base variables
+   * @param vi2 The second of the three base variables
+   * @param vi3 The third of the three base variables
    * @return a set of derivations based on three base variables.  We
    * allow more than one because the base variables may have multiple
    * derived variables, per type of derivation.  Can also be null if the
@@ -30,8 +30,6 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
   /**
    * Check if vi1 and vi2 can be a part of a VarInfo triple based on
    * their types.
-   * @param vi1
-   * @param vi2
    * @return a boolean which is true if vi1 and vi2 can belong to
    * a valid VarInfo triple. (false otherwise)
    */
@@ -52,8 +50,6 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
   /**
    * Check if vi1 and vi2 can be a part of a VarInfo triple based on
    * their types.
-   * @param vi1
-   * @param vi2
    * @return a ProglangType which is the type of VarInfo needed to make
    * a valid VarInfo triple out of vi1 and vi2 (null otherwise)
    */
@@ -74,8 +70,6 @@ public abstract class TernaryDerivationFactory implements DerivationFactory {
   /**
    * Checks if two base variables are comparable to each other.
    *
-   * @param vi1
-   * @param vi2
    * @return a boolean which is true if vi1 and vi2 are comparable
    * (false otherwise).
    */

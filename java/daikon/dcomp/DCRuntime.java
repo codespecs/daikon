@@ -262,7 +262,7 @@ public final class DCRuntime {
 
 
   /**
-   * Handles <code>super.equals(Object)</code> calls.<p>
+   * Handles <code>super.equals(Object)</code> calls.
    * @see #active_equals_calls
    */
   public static boolean dcomp_super_equals(Object o1, Object o2) {
@@ -414,7 +414,7 @@ public final class DCRuntime {
   }
 
   /**
-   * Handles <code>super.clone()</code> calls.<p>
+   * Handles <code>super.clone()</code> calls.
    * @see #active_clone_calls
    */
   public static Object dcomp_super_clone(Object o) throws Throwable {

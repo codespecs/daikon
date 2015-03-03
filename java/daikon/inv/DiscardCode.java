@@ -184,8 +184,7 @@ public class DiscardCode implements Comparable<DiscardCode>, Serializable {
   }
 
   /** To prevent deserialization causing more DiscardCodes to be instantiated
-   *@return one of the static DiscardCode instances
-   *@throws ObjectStreamException
+   * @return one of the static DiscardCode instances
    **/
   public Object readResolve() throws ObjectStreamException {
     if (enumValue==0)

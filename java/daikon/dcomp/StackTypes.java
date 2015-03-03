@@ -28,10 +28,6 @@ public final class StackTypes {
   // non-null if track_locals is true
   LocalVariables /*@Nullable*/ [] loc_arr;
 
-  /**
-   * TODO
-   * @param mg
-   */
   public StackTypes (MethodGen mg) {
     InstructionList il = mg.getInstructionList();
     int size = 0;

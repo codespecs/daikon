@@ -21,7 +21,7 @@ import org.checkerframework.dataflow.qual.*;
  * A VarComparabilityImplicit is an arbitrary string, and comparisons
  * succeed exactly if the two VarComparabilitys are identical.<p>
  *
- * VarComparabilityNone means no comparability information was provided.<p>
+ * VarComparabilityNone means no comparability information was provided.
  **/
 public abstract class VarComparability {
 
