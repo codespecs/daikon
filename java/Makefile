@@ -52,6 +52,8 @@ endif
 
 # For debugging, add -verbose flag to javac command
 
+# To run doclint, do
+#   JAVADOC="~/research/types/jsr308-langtools/dist/bin/javadoc -Xdoclint:all,-missing" make javadoc
 ifeq (cygwin, $(OSTYPE))
   ## Make the classpath explicit on the command line so it can be processed by *-cygwin
   JAVA ?= ${PLUMEBIN}/java-cygwin -ea -classpath "${CLASSPATH}"
