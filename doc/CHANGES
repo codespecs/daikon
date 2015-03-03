@@ -26,9 +26,7 @@ Further documentation can be found in:
   (build 14784).  Users of Kvasir to analyze C/C++ codes should not see
   any differences in behavior from the previous version.
 
-  We have clarified the issue with Daikon's parsing of logical shift operators.
-
-  We have improved the documentation of Program Point record types.
+  We made various improvements to the documentation.
 
 ===========================================================================
 
