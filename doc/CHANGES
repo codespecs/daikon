@@ -20,6 +20,18 @@ Further documentation can be found in:
 
 ===========================================================================
 
+5.2.0 (March 3, 2015)
+
+  We updated the underlying Valgrind infrastructure to version 3.10.1
+  (build 14784).  Users of Kvasir to analyze C/C++ codes should not see
+  any differences in behavior from the previous version.
+
+  We have clarified the issue with Daikon's parsing of logical shift operators.
+
+  We have improved the documentation of Program Point record types.
+
+===========================================================================
+
 5.1.16 (February 2, 2015)
 
   Splitters now properly support unqualified member variables within
