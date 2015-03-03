@@ -16,8 +16,8 @@ public abstract class BinaryDerivationFactory implements DerivationFactory {
   /**
    * Create a set of derivations from two base variables.  If the base variables
    * aren't worth deriving from, returns null.
-   * @param vi1
-   * @param vi2 the two base variables.
+   * @param vi1 the first of the two base variables
+   * @param vi2 the second of the two base variables
    * @return a set of derivations based on two base variables.  We
    * allow more than one because two base variables may have multiple
    * derived variables, per type of derivation.  Can also be null if the

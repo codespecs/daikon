@@ -18,7 +18,6 @@ import org.checkerframework.dataflow.qual.*;
 
 /**
  * Represents a violation of a <code>Property</code>.
- * <p>
  *
  * @see Property
  */

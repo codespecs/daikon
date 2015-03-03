@@ -38,9 +38,6 @@ public class BuildJDK {
   public static class RtJarFinder {
     private final String arg;
 
-    /**
-     * @param arg
-     */
     public RtJarFinder(String arg) {
       super();
       this.arg = arg;
@@ -66,7 +63,6 @@ public class BuildJDK {
     }
 
     /**
-     * @param libRt
      * @return true iff libRt exists in the filesystem.
      */
     protected boolean exists(String libRt) {

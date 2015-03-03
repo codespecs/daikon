@@ -1141,7 +1141,6 @@ public abstract class DaikonVariableInfo
    /**
     * Returns true iff type implements the List interface.
     *
-    * @param type
     * @return true iff type implements the List interface
     */
    public static boolean implementsList(Class<?> type)
