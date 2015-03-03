@@ -7140,20 +7140,17 @@ No ``invariant violation'' exceptions are thrown, and the violated
 invariants can only be obtained dynamically from class
 @code{daikon.tools.runtimechecker.Runtime}.
 
-A future release of Daikon will provide tools that process the list in
-the following ways:
-@enumerate
 @cindex WriteViolationFile tool
-@item To write a file of all the violations for a program execution.
-A prototype of such a tool is provided in the Daikon distribution, as
-program @code{daikon.@/tools.@/runtimechecker.@/WriteViolationFile}.  If you
+To write a file of all the violations for a program execution, use
+program @code{daikon.@/tools.@/runtimechecker.@/WriteViolationFile}.
+If you
 would ordinarily run your program as @samp{java MyProg arg1 arg2},
 then running @samp{java daikon.@/tools.@/runtimechecker.@/WriteViolationFile
 MyProg arg1 arg2} creates a file called @file{violations.txt} in the
 current directory.  If the program under test calls
 @code{System.exit}, then no @file{violations.txt} file is created.
-@item Throw an exception when any violation occurs.
-@end enumerate
+
+@c TODO: in the future, it would be nice to have a tool that throws an exception when any violation occurs.
 
 
 The following code snippet contains a method @code{callMethod()} which
