@@ -1040,13 +1040,26 @@ txt-jaif-diff: $(PROJECT_FILE).txt-jaif.diff
 	-diff -u --strip-trailing-cr $^ > $@ 2>&1
 	cat $@
 
-%.diff: $(call goal_name,%) %
+# If a prerequisite fails, none of the rules gets run.
+# So update the goal here before the -implementation rule does the real work.
+# (The old .diff file, now named .diff-implementation, doesn't get removed if
+# a prerequisite fails, but I don't see how to fix that.)
+# (Another downside is that starting a new process and re-reading the Makefile
+# may be inefficient, but I don't see a way around that either.)
+%.diff: force
+	@mv -f $@ $@-implementation
+	@echo "Failed to build $*" > $@
+	$(MAKE) $@-implementation
+	@mv -f $@-implementation $@
+	cat $@
+
+.PHONY: %.diff-implementation
+%.diff-implementation: $(call goal_name,%) %
 	@echo
 	@echo "### textual diff (${PROJECT_FILE})"
 	@echo
 	-rm -f $@
 	-diff -bu $(call goal_name, $*) $* > $@ 2>&1
-	cat $@
 
 #  echo "  make update-goals   : copies the output to the .goal file"
 ifndef NO_MERGE
@@ -1595,3 +1608,10 @@ dump_vars dump-vars dumpvars :
 	@echo "RUN_JAVA =	   " "$(RUN_JAVA)"
 	@echo "DCOMP_PREMAIN_W = " "$(DCOMP_PREMAIN_W)"
 	@echo "DAIKON_OPTIONS  = " "$(DAIKON_OPTIONS)"
+
+
+###########################################################################
+# Standard force target
+
+.PHONY: force
+force: ;
