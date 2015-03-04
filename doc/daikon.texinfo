@@ -7137,18 +7137,29 @@ The instrumented class handles violations silently:
 it simply adds them to a list in the class
 @code{daikon.tools.runtimechecker.Runtime.}
 No ``invariant violation'' exceptions are thrown, and the violated
-invariants can only be obtained dynamically from class
-@code{daikon.tools.runtimechecker.Runtime}.
+invariants can only be obtained dynamically (while the program is running)
+by calling @code{daikon.tools.runtimechecker.Runtime.getViolations()}.
 
 @cindex WriteViolationFile tool
-To write a file of all the violations for a program execution, use
+To obtain a file of all the violations for a program execution, you can use
 program @code{daikon.@/tools.@/runtimechecker.@/WriteViolationFile}.
-If you
-would ordinarily run your program as @samp{java MyProg arg1 arg2},
+If you would ordinarily run your program as @samp{java MyProg arg1 arg2},
 then running @samp{java daikon.@/tools.@/runtimechecker.@/WriteViolationFile
 MyProg arg1 arg2} creates a file called @file{violations.txt} in the
-current directory.  If the program under test calls
-@code{System.exit}, then no @file{violations.txt} file is created.
+current directory, immediately before the program exits normally.
+If the program under test calls @code{System.exit}, then no
+@file{violations.txt} file is created.  (JUnit is an example of a program
+that calls @code{System.exit}.)
+
+@c Here are two possible ways to handle System.exit:
+@c 1. Change the instrumentation so that it rewrites calls to
+@c System.exit(1) to do end-of-execution processing.  This might not work
+@c if only part of the program is being instrumented; for example, you
+@c would ordinarily instrument your tests rather than JUnit itself where
+@c the call to System.exit() appears.
+@c 2. Change the instrumentation to produce file output (rather than just
+@c storing data in a list) and to flush the file as each element is added to it.
+
 
 @c TODO: in the future, it would be nice to have a tool that throws an exception when any violation occurs.
 
