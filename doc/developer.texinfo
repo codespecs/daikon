@@ -4018,7 +4018,7 @@ which other variables are comparable to this one.
 The point of comparability is that Daikon should not compare unrelated
 quantities.  For example, each person's height in centimeters may always
 be less than their birth year, but it is not helpful for Daikon to
-output @samp{height < birthyear}, because they are measuring
+output @samp{height < birthyear}, because the two variables are measuring
 incomparable quantities.  (In this case, the variables use different
 units of measurement.)
 
