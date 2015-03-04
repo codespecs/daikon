@@ -97,7 +97,7 @@ hashcode
 a[]
 int[] # validvalues=[0 1]
 int[]
-1
+1[2]
 
 # If a.validavalues == [0, 1] and a.maxlength == a.minlength = 1,
 # 'a[] is one of ([0], [1])' is suppressed.
@@ -113,7 +113,7 @@ hashcode
 a[]
 int[] # validvalues=[0 1], maxlength=1, minlength=1
 int[]
-1
+1[2]
 
 # If a.minvalue == 1, 'a >= 1' is suppressed. Note that the
 # trace repeats 'a = 1' at least five more times than the 
