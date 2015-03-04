@@ -693,7 +693,7 @@ public final class FileIO {
     String proglang_type_string_and_aux = file.readLine();
     String file_rep_type_string = file.readLine();
     String comparability_string = file.readLine();
-    if ( // (varname == null) || // just cheeck varname above
+    if ( // (varname == null) || // just check varname above
         (proglang_type_string_and_aux == null)
         || (file_rep_type_string == null)
         || (comparability_string == null))
@@ -800,9 +800,10 @@ public final class FileIO {
     // COMPARABILITY TEST
     // if (!(comparability.alwaysComparable()
     //       || ((VarComparabilityImplicit)comparability).dimensions == file_rep_type.dimensions())) {
-    //   throw new FileIOException(
-    //     "Rep type " + file_rep_type.format() + " has " + file_rep_type.dimensions() + " dimensions"
-    //       + " but comparability " + comparability + " has " + ((VarComparabilityImplicit)comparability).dimensions + " dimensions"
+    //   System.err.println();
+    //   throw new Daikon.TerminationMessage(
+    //     "Rep type " + file_rep_type.format() + " has " + file_rep_type.dimensions() + " dimensions,"
+    //       + " but comparability " + comparability + " has " + ((VarComparabilityImplicit)comparability).dimensions + " dimensions,"
     //       + " for variable "
     //       + varname,
     //     file,
