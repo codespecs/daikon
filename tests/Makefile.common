@@ -1047,7 +1047,7 @@ txt-jaif-diff: $(PROJECT_FILE).txt-jaif.diff
 # (Another downside is that starting a new process and re-reading the Makefile
 # may be inefficient, but I don't see a way around that either.)
 %.diff: force
-	@mv -f $@ $@-implementation
+	@-[ -f $@ ] && mv -f $@ $@-implementation
 	@echo "Failed to build $*" > $@
 	$(MAKE) $@-implementation
 	@mv -f $@-implementation $@
