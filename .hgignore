@@ -454,6 +454,7 @@ syntax: regexp
 ^tests/.*\.counts$
 ^tests/.*\.decls$
 ^tests/.*\.diff$
+^tests/.*\.diff-implementation$
 ^tests/.*\.dtrace$
 ^tests/.*\.inv\.gz$
 ^tests/.*\.invs\.txt$
