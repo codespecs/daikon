@@ -1,0 +1,67 @@
+..InfoTbl():::ENTER
+::c ::f[..] ::line ::r c f f[..] pdf[..] r
+::f
+pdf
+
+..InfoTbl():::EXIT0
+::c ::f[..] ::line ::r c f f[..] pdf[..] r return
+::f
+pdf
+
+..LGamma():::ENTER
+::c ::cof[..] ::f[..] ::line ::r x
+::cof
+::f
+
+..LGamma():::EXIT0
+::c ::cof[..] ::f[..] ::line ::r return x
+::cof
+::f
+
+..QChiSq():::ENTER
+::c ::f[..] ::line ::r chisq df
+::f
+
+..QChiSq():::EXIT0
+::c ::f[..] ::line ::r chisq df return
+::f
+
+..QGamma():::ENTER
+::c ::f[..] ::line ::r a x
+::f
+
+..QGamma():::EXIT0
+::c ::f[..] ::line ::r a return x
+::f
+
+..main():::ENTER
+::c ::f[..] ::line ::r
+::f
+argc
+argv
+argv[..]
+
+..main():::EXIT0
+::c ::f[..] ::line ::r
+::f
+argc
+argv
+argv[..]
+return
+
+tot_info.c.gcf():::ENTER
+::c ::f[..] ::line ::r a x
+::f
+
+tot_info.c.gcf():::EXIT0
+::c ::f[..] ::line ::r a return x
+::f
+
+tot_info.c.gser():::ENTER
+::c ::f[..] ::line ::r a x
+::f
+
+tot_info.c.gser():::EXIT0
+::c ::f[..] ::line ::r a return x
+::f
+

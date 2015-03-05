@@ -1,0 +1,7 @@
+..InfoTbl() ENTER/36: 30 EXIT0/39: 30
+..LGamma() ENTER/27: 22 EXIT0/30: 22
+..QChiSq() ENTER/24: 26 EXIT0/27: 26
+..QGamma() ENTER/24: 26 EXIT0/27: 26
+..main() ENTER/27: 1 EXIT0/30: 1
+tot_info.c.gcf() ENTER/24: 15 EXIT0/27: 15
+tot_info.c.gser() ENTER/24: 11 EXIT0/27: 11

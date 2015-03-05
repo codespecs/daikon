@@ -1,293 +1,272 @@
 ===========================================================================
-std.InfoTbl(int;int;const long *;int *;)double:::ENTER
-    Variables: r c f *f pdf *pdf ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
-r == ::r
-c == ::c
-f == ::f
-f != null
+..InfoTbl():::ENTER
+    Variables: ::line ::f ::f[] ::r ::c r c f f[] pdf pdf[] size(::f[]) size(::f[])-1 size(f[]) size(f[])-1 size(pdf[]) size(pdf[])-1
+::f == f
+daikon.Quant.pairwiseEqual(::f, f)
+::r == r
+::c == c
+::f != null
+daikon.Quant.eltsGTE(::f, 0)
 pdf != null
-*pdf >= 0
-::line != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::line[] is printable
-daikon.Quant.size(::f) >= 1
-daikon.Quant.memberOf(*f , ::f )
-(!(daikon.Quant.size(::f)-1 == 0)) || (*pdf == 0)
-*pdf <= daikon.Quant.size(::f)-1
-===========================================================================
-std.InfoTbl(int;int;const long *;int *;)double:::EXIT
-    Variables: r c f *f pdf *pdf ::line ::line[] ::f ::f[] ::r ::c return orig(r) orig(c) orig(f) orig(*f) orig(pdf) orig(*pdf) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-assignable *pdf
-r == ::r
-r == \old(r)
-r == \old(::r)
-c == ::c
-c == \old(c)
-c == \old(::c)
-f == ::f
-f == \old(f)
-f == \old(::f)
-*f == \old(*f)
-pdf == \old(pdf)
-::line == \old(::line)
-daikon.Quant.pairwiseEqual(::f, \old(::f))
-f != null
 pdf != null
-*pdf >= 0
-::line != null
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::line[] is printable
-daikon.Quant.size(::f) >= 1
-daikon.Quant.memberOf(*f , ::f )
-(!(*pdf == 0)) || (\old(*pdf) == 0)
-(!(daikon.Quant.size(::f)-1 == 0)) || (*pdf == 0)
-*pdf <= daikon.Quant.size(::f)-1
-::line.equals(\old(::line))
-(!(daikon.Quant.size(::f)-1 == 0)) || (\old(*pdf) == 0)
-\old(*pdf) <= daikon.Quant.size(::f)-1
+(pdf != null)  ==>  (daikon.Quant.eltsGTE(pdf, 2))
+(pdf != null)  ==>  (daikon.Quant.eltsGtIndex(pdf))
+daikon.Quant.size(::f) == 1000
+(pdf != null)  ==>  (daikon.Quant.size(pdf) == 1)
+(pdf != null)  ==>  (daikon.Quant.eltsGTE(::f, daikon.Quant.size(pdf)-1))
+(pdf != null)  ==>  (daikon.Quant.memberOf(daikon.Quant.size(pdf)-1 , ::f ))
+::r < daikon.Quant.size(::f)-1
+(pdf != null)  ==>  (::r >= daikon.Quant.size(pdf)-1)
+::c < daikon.Quant.size(::f)-1
+(pdf != null)  ==>  (::c != daikon.Quant.size(pdf))
+(pdf != null)  ==>  (::c >= daikon.Quant.size(pdf)-1)
+(pdf != null)  ==>  (daikon.Quant.eltsLT(pdf, daikon.Quant.size(::f)-1))
+(pdf != null)  ==>  (daikon.Quant.eltsGT(pdf, daikon.Quant.size(pdf)))
 ===========================================================================
-std.LGamma(double;)double:::ENTER
-    Variables: x ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
-x >= 0.5
-::line != null
-::f != null
-::r >= 2
-::c != 0
-===========================================================================
-std.LGamma(double;)double:::EXIT6
-    Variables: x ::line ::line[] ::f ::f[] ::r ::c return orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-assignable x
-::r == ::c
-::r == \old(::c)
-daikon.Quant.fuzzy.eq(x, -0.5)
-::r == 2 || ::r == 4
-::r % 2 == 0
-daikon.Quant.fuzzy.eq(\result, 0.572365)
-daikon.Quant.fuzzy.eq(\old(x), 0.5)
-===========================================================================
-std.LGamma(double;)double:::EXIT7
-    Variables: x ::line ::line[] ::f ::f[] ::r ::c return orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-assignable x
-\old(x) >= 1.0
-daikon.Quant.fuzzy.eq(0, x - \old(x) - 5)
-===========================================================================
-std.LGamma(double;)double:::EXIT
-    Variables: x ::line ::line[] ::f ::f[] ::r ::c return orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-assignable x
-::line == \old(::line)
+..InfoTbl():::EXIT
+    Variables: ::line ::f ::f[] ::r ::c r c f f[] pdf pdf[] return orig(::line) orig(::f) orig(::f[]) orig(::r) orig(::c) orig(r) orig(c) orig(f) orig(f[]) orig(pdf) orig(pdf[]) size(::f[]) size(::f[])-1 size(f[]) size(f[])-1 size(pdf[]) size(pdf[])-1 orig(size(::f[])) orig(size(::f[]))-1 orig(size(f[])) orig(size(f[]))-1 orig(size(pdf[])) orig(size(pdf[]))-1
+assignable pdf[*]
 ::f == \old(::f)
+::f == \old(f)
+daikon.Quant.pairwiseEqual(::f, f)
 daikon.Quant.pairwiseEqual(::f, \old(::f))
+daikon.Quant.pairwiseEqual(::f, \old(f))
 ::r == \old(::r)
+::r == \old(r)
 ::c == \old(::c)
-(\old(x) >= 1.0)  ==>  (\result >= -0.120782)
-(\old(x) >= 1.0)  ==>  (daikon.Quant.fuzzy.eq(0, x - \old(x) - 5))
-(daikon.Quant.fuzzy.eq(x, -0.5))  <==>  (daikon.Quant.fuzzy.eq(\old(x), 0.5))
-(daikon.Quant.fuzzy.eq(x, -0.5))  <==>  (daikon.Quant.fuzzy.lt(x, \old(x)))
-(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (::c % 2 == 0)
-(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (::c == 2 || ::c == 4)
-(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (::r % 2 == 0)
-(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (::r == ::c)
-(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (::r == 2 || ::r == 4)
-(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (daikon.Quant.fuzzy.eq(\result, 0.572365))
-(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (daikon.Quant.fuzzy.gt(\result, \old(x)))
-(daikon.Quant.fuzzy.eq(x, -0.5))  ==>  (daikon.Quant.fuzzy.lt(x, \result))
-daikon.Quant.fuzzy.ne(x, 0)
-x >= -0.5
-::line != null
+::c == \old(c)
 ::f != null
-::r >= 2
-::c != 0
-daikon.Quant.fuzzy.ne(\result, 0)
-\result >= -0.120782
-daikon.Quant.fuzzy.ne(x, \result)
-daikon.Quant.fuzzy.ne(x, \old(x))
+daikon.Quant.eltsGTE(::f, 0)
+daikon.Quant.eltsGTE(pdf, 2)
+daikon.Quant.eltsGtIndex(pdf)
+daikon.Quant.size(::f) == 1000
 ::line.equals(\old(::line))
-daikon.Quant.fuzzy.ne(\result, \old(x))
+daikon.Quant.eltsGTE(::f, daikon.Quant.size(pdf)-1)
+daikon.Quant.memberOf(daikon.Quant.size(pdf)-1 , ::f )
+(\old(pdf) != null)  ==>  (daikon.Quant.eltsGTE(::f, \old(daikon.Quant.size(pdf))-1))
+(\old(pdf) != null)  ==>  (daikon.Quant.memberOf(\old(daikon.Quant.size(pdf))-1 , ::f ))
+::r < daikon.Quant.size(::f)-1
+::r >= daikon.Quant.size(pdf)-1
+(\old(pdf) != null)  ==>  (::r >= \old(daikon.Quant.size(pdf))-1)
+::c < daikon.Quant.size(::f)-1
+::c >= daikon.Quant.size(pdf)-1
+(\old(pdf) != null)  ==>  (::c != \old(daikon.Quant.size(pdf)))
+(\old(pdf) != null)  ==>  (::c >= \old(daikon.Quant.size(pdf))-1)
+daikon.Quant.eltsLT(pdf, daikon.Quant.size(::f)-1)
+(\old(pdf) != null)  ==>  (daikon.Quant.eltsGT(pdf, \old(daikon.Quant.size(pdf))))
+(\old(pdf) != null)  ==>  (daikon.Quant.eltsLT(\old(pdf), daikon.Quant.size(::f)-1))
 ===========================================================================
-std.QChiSq(double;int;)double:::ENTER
-    Variables: chisq df ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
-chisq >= 0.0
-df >= 1
-::line != null
+..LGamma():::ENTER
+    Variables: ::cof ::cof[] ::line ::f ::f[] ::r ::c x size(::cof[]) size(::cof[])-1 size(::f[]) size(::f[])-1
+::cof != null
+daikon.Quant.pairwiseEqual(::cof, new double[] { 76.18009173, -86.50532032999999, 24.014098219999997, -1.231739516, 0.00120858003, -5.363819999999999E-6 })
 ::f != null
+daikon.Quant.eltsGTE(::f, 0)
 ::r >= 2
-::c != 0
-===========================================================================
-std.QChiSq(double;int;)double:::EXIT
-    Variables: chisq df ::line ::line[] ::f ::f[] ::r ::c return orig(chisq) orig(df) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-daikon.Quant.fuzzy.eq(chisq, \old(chisq))
-df == \old(df)
-::line == \old(::line)
-::f == \old(::f)
-daikon.Quant.pairwiseEqual(::f, \old(::f))
-::r == \old(::r)
-::c == \old(::c)
-chisq >= 0.0
-df >= 1
-::line != null
-::f != null
-::r >= 2
-::c != 0
-daikon.Quant.fuzzy.ne(chisq, \result)
-::line.equals(\old(::line))
-===========================================================================
-std.QGamma(double;double;)double:::ENTER
-    Variables: a x ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
-a >= 0.5
-x >= 0.0
-::line != null
-::f != null
-::r >= 2
-::c != 0
-daikon.Quant.fuzzy.ne(a, x)
-===========================================================================
-std.QGamma(double;double;)double:::EXIT
-    Variables: a x ::line ::line[] ::f ::f[] ::r ::c return orig(a) orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-daikon.Quant.fuzzy.eq(a, \old(a))
-daikon.Quant.fuzzy.eq(x, \old(x))
-::line == \old(::line)
-::f == \old(::f)
-daikon.Quant.pairwiseEqual(::f, \old(::f))
-::r == \old(::r)
-::c == \old(::c)
-a >= 0.5
-x >= 0.0
-::line != null
-::f != null
-::r >= 2
-::c != 0
-daikon.Quant.fuzzy.ne(a, x)
-daikon.Quant.fuzzy.ne(x, \result)
-::line.equals(\old(::line))
-===========================================================================
-std.gcf(double;double;)double:::ENTER
-    Variables: a x ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
-a >= 0.5
-::line != null
-::f != null
-::r >= 2
-::c >= 2
-===========================================================================
-std.gcf(double;double;)double:::EXIT11
-    Variables: a x ::line ::line[] ::f ::f[] ::r ::c return orig(a) orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-===========================================================================
-std.gcf(double;double;)double:::EXIT
-    Variables: a x ::line ::line[] ::f ::f[] ::r ::c return orig(a) orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-daikon.Quant.fuzzy.eq(a, \old(a))
-daikon.Quant.fuzzy.eq(x, \old(x))
-::line == \old(::line)
-::f == \old(::f)
-daikon.Quant.pairwiseEqual(::f, \old(::f))
-::r == \old(::r)
-::c == \old(::c)
-a >= 0.5
-::line != null
-::f != null
-::r >= 2
-::c >= 2
-::line.equals(\old(::line))
-===========================================================================
-std.gser(double;double;)double:::ENTER
-    Variables: a x ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
-a >= 0.5
-::line != null
-::f != null
-::r >= 2
-::c != 0
-===========================================================================
-std.gser(double;double;)double:::EXIT8
-    Variables: a x ::line ::line[] ::f ::f[] ::r ::c return orig(a) orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-daikon.Quant.fuzzy.eq(x, 0.0)
-::r == 2 || ::r == 4 || ::r == 6
-::r % 2 == 0
-::c >= 2
-daikon.Quant.fuzzy.eq(\result, 0.0)
+x >= 1.0
+daikon.Quant.size(::cof) == 6
+daikon.Quant.size(::f) == 1000
 (::r >> ::c == 0)
+(::r >> daikon.Quant.size(::cof) == 0)
+::r != daikon.Quant.size(::cof)
+(::r >> daikon.Quant.size(::cof)-1 == 0)
+::r < daikon.Quant.size(::f)-1
+(::c >> daikon.Quant.size(::cof) == 0)
+(::c >> daikon.Quant.size(::cof)-1 == 0)
+::c < daikon.Quant.size(::f)-1
 ===========================================================================
-std.gser(double;double;)double:::EXIT9
-    Variables: a x ::line ::line[] ::f ::f[] ::r ::c return orig(a) orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-===========================================================================
-std.gser(double;double;)double:::EXIT
-    Variables: a x ::line ::line[] ::f ::f[] ::r ::c return orig(a) orig(x) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-daikon.Quant.fuzzy.eq(a, \old(a))
-daikon.Quant.fuzzy.eq(x, \old(x))
-::line == \old(::line)
+..LGamma():::EXIT
+    Variables: ::cof ::cof[] ::line ::f ::f[] ::r ::c x return orig(::cof) orig(::cof[]) orig(::line) orig(::f) orig(::f[]) orig(::r) orig(::c) orig(x) size(::cof[]) size(::cof[])-1 size(::f[]) size(::f[])-1 orig(size(::cof[])) orig(size(::cof[]))-1 orig(size(::f[])) orig(size(::f[]))-1
+::cof == \old(::cof)
+daikon.Quant.pairwiseEqual(::cof, \old(::cof))
 ::f == \old(::f)
 daikon.Quant.pairwiseEqual(::f, \old(::f))
 ::r == \old(::r)
 ::c == \old(::c)
-a >= 0.5
-::line != null
+::cof != null
+daikon.Quant.pairwiseEqual(::cof, new double[] { 76.18009173, -86.50532032999999, 24.014098219999997, -1.231739516, 0.00120858003, -5.363819999999999E-6 })
 ::f != null
+daikon.Quant.eltsGTE(::f, 0)
 ::r >= 2
-::c != 0
+daikon.Quant.size(::cof) == 6
+daikon.Quant.size(::f) == 1000
 ::line.equals(\old(::line))
+(::r >> ::c == 0)
+(::r >> daikon.Quant.size(::cof) == 0)
+::r != daikon.Quant.size(::cof)
+(::r >> daikon.Quant.size(::cof)-1 == 0)
+::r < daikon.Quant.size(::f)-1
+(::c >> daikon.Quant.size(::cof) == 0)
+(::c >> daikon.Quant.size(::cof)-1 == 0)
+::c < daikon.Quant.size(::f)-1
+daikon.Quant.fuzzy.ne(return, \old(x))
 ===========================================================================
-std.main(int;char **;)int:::ENTER
-    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c size(::f[]) size(::f[])-1
-::r == ::c
-argc == 1
-argv != null
-::line != null
+..QChiSq():::ENTER
+    Variables: ::line ::f ::f[] ::r ::c chisq df size(::f[]) size(::f[])-1
 ::f != null
-::r == 0
-===========================================================================
-std.main(int;char **;)int:::EXIT1
-    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c return orig(argc) orig(argv) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-assignable ::line[*], ::f[*], ::r, ::c
-(::f != null)  ==>  (daikon.Quant.eltsGTE(::f, 0))
-\result == 1
-daikon.Quant.size(::f) % 2 == 0
-(::f != null)  ==>  (daikon.Quant.eltsGTE(::f, \old(::r)))
-::r >= ::c
-::r > \old(::r)
-::c >= \old(::r)
-===========================================================================
-std.main(int;char **;)int:::EXIT2
-    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c return orig(argc) orig(argv) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-assignable ::line[*], ::f[*], ::r, ::c
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::line[] is printable
-\result == 1
-::r > \old(::r)
-::c > \old(::r)
-===========================================================================
-std.main(int;char **;)int:::EXIT3
-    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c return orig(argc) orig(argv) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-assignable ::line[*], ::f[*], ::r, ::c
-warning: method daikon.inv.unary.string.PrintableString.format(OutputFormat:JML) needs to be implemented: ::line[] is printable
-\result == 1
-daikon.Quant.size(::f) >= 1
-::r > \old(::r)
-::c > \old(::r)
-===========================================================================
-std.main(int;char **;)int:::EXIT4
-    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c return orig(argc) orig(argv) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-assignable ::line[*], ::f[*], ::r, ::c
-(::line != null)  ==>  (::line.equals("\n") || ::line.equals(" \n") || ::line.equals("  \n"))
-::c >= 0
-\result == 1
-::c >= \old(::r)
-===========================================================================
-std.main(int;char **;)int:::EXIT5
-    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c return orig(argc) orig(argv) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-assignable ::line[*], ::f[*], ::r, ::c
-::line.equals("\n") || ::line.equals(" \n") || ::line.equals("  \n")
+daikon.Quant.eltsGTE(::f, 0)
 ::r >= 2
-::c != 0
-\result == 0
-::r > \old(::r)
-::c != \old(::r)
+chisq >= 0.0
+df >= 2
+daikon.Quant.size(::f) == 1000
+(::r >> ::c == 0)
+::r < daikon.Quant.size(::f)-1
+::c < daikon.Quant.size(::f)-1
+df < daikon.Quant.size(::f)-1
 ===========================================================================
-std.main(int;char **;)int:::EXIT
-    Variables: argc argv ::line ::line[] ::f ::f[] ::r ::c return orig(argc) orig(argv) orig(::line) orig(::line[]) orig(::f) orig(::f[]) orig(::r) orig(::c) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
-assignable ::line[*], ::f[*], ::r, ::c
-argc == \old(argc)
-argv == \old(argv)
-::line == \old(::line)
+..QChiSq():::EXIT
+    Variables: ::line ::f ::f[] ::r ::c chisq df return orig(::line) orig(::f) orig(::f[]) orig(::r) orig(::c) orig(chisq) orig(df) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
 ::f == \old(::f)
+daikon.Quant.pairwiseEqual(::f, \old(::f))
+::r == \old(::r)
+::c == \old(::c)
+::f != null
+daikon.Quant.eltsGTE(::f, 0)
+::r >= 2
+daikon.Quant.size(::f) == 1000
+::line.equals(\old(::line))
+(::r >> ::c == 0)
+::r < daikon.Quant.size(::f)-1
+::c < daikon.Quant.size(::f)-1
+daikon.Quant.fuzzy.ne(return, \old(chisq))
+\old(df) < daikon.Quant.size(::f)-1
+===========================================================================
+..QGamma():::ENTER
+    Variables: ::line ::f ::f[] ::r ::c a x size(::f[]) size(::f[])-1
+::f != null
+daikon.Quant.eltsGTE(::f, 0)
+::r >= 2
+a >= 1.0
+x >= 0.0
+daikon.Quant.size(::f) == 1000
+(::r >> ::c == 0)
+::r < daikon.Quant.size(::f)-1
+::c < daikon.Quant.size(::f)-1
+daikon.Quant.fuzzy.ne(a, x)
+===========================================================================
+..QGamma():::EXIT
+    Variables: ::line ::f ::f[] ::r ::c a x return orig(::line) orig(::f) orig(::f[]) orig(::r) orig(::c) orig(a) orig(x) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+::f == \old(::f)
+daikon.Quant.pairwiseEqual(::f, \old(::f))
+::r == \old(::r)
+::c == \old(::c)
+::f != null
+daikon.Quant.eltsGTE(::f, 0)
+::r >= 2
+daikon.Quant.size(::f) == 1000
+::line.equals(\old(::line))
+(::r >> ::c == 0)
+::r < daikon.Quant.size(::f)-1
+::c < daikon.Quant.size(::f)-1
+daikon.Quant.fuzzy.lte(return, \old(a))
+daikon.Quant.fuzzy.ne(return, \old(x))
+===========================================================================
+..main():::ENTER
+    Variables: ::line ::f ::f[] ::r ::c argc argv argv[] size(::f[]) size(::f[])-1 size(argv[]) size(argv[])-1
+::r == ::c
+::r == daikon.Quant.size(argv)-1
+argc == daikon.Quant.size(argv)
+::line.equals("")
+::f != null
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.eltsEqual(::f, 0)
 argc == 1
 argv != null
-::line != null
+daikon.Quant.pairwiseEqual(argv, new String[] { "./tot_info" })
+daikon.Quant.eltsEqual(argv, "./tot_info")
+daikon.Quant.size(::f) == 1000
+daikon.Quant.eltsEqual(::f, ::r)
+daikon.Quant.memberOf(::r , ::f )
+===========================================================================
+..main():::EXIT
+    Variables: ::line ::f ::f[] ::r ::c argc argv argv[] return orig(::line) orig(::f) orig(::f[]) orig(::r) orig(::c) orig(argc) orig(argv) orig(argv[]) size(::f[]) size(::f[])-1 size(argv[]) size(argv[])-1 orig(size(::f[])) orig(size(::f[]))-1 orig(size(argv[])) orig(size(argv[]))-1
+assignable ::line, ::f[*], ::r, ::c
+::f == \old(::f)
+::r == ::c
+return == \old(argc)
+return == \old(daikon.Quant.size(argv))
+\old(::r) == daikon.Quant.size(argv)-1
+daikon.Quant.size(::f) == \old(daikon.Quant.size(::f))
+::line.equals("44 44\n")
 ::f != null
-::r >= 0
-\result == 0 || \result == 1
-(::f != null)  ==>  (daikon.Quant.size(::f) >= 1)
-::r >= \old(::r)
+("oneOf.java.jpp: SEQUENCE unimplemented" != null)
+daikon.Quant.eltsGTE(::f, 0)
+::r == 44
+daikon.Quant.pairwiseEqual(argv, new String[] { "./tot_info" })
+daikon.Quant.eltsEqual(argv, "./tot_info")
+return == 1
+daikon.Quant.size(::f) == 1000
+::line.contains(\old(::line))
+daikon.Quant.memberOf(::r , ::f )
+daikon.Quant.memberOf(return , ::f )
+daikon.Quant.subsetOf(\old(::f), ::f)
+daikon.Quant.memberOf(\old(::r) , ::f )
+===========================================================================
+tot_info.c.gcf():::ENTER
+    Variables: ::line ::f ::f[] ::r ::c a x size(::f[]) size(::f[])-1
+::f != null
+daikon.Quant.eltsGTE(::f, 0)
+::r >= 2
+a >= 1.0
+daikon.Quant.size(::f) == 1000
+(::r >> ::c == 0)
+::r < daikon.Quant.size(::f)-1
+::c < daikon.Quant.size(::f)-1
+daikon.Quant.fuzzy.lt(a, x)
+===========================================================================
+tot_info.c.gcf():::EXIT
+    Variables: ::line ::f ::f[] ::r ::c a x return orig(::line) orig(::f) orig(::f[]) orig(::r) orig(::c) orig(a) orig(x) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+::f == \old(::f)
+daikon.Quant.pairwiseEqual(::f, \old(::f))
+::r == \old(::r)
+::c == \old(::c)
+::f != null
+daikon.Quant.eltsGTE(::f, 0)
+::r >= 2
+daikon.Quant.size(::f) == 1000
+::line.equals(\old(::line))
+(::r >> ::c == 0)
+::r < daikon.Quant.size(::f)-1
+::c < daikon.Quant.size(::f)-1
+daikon.Quant.fuzzy.lt(return, \old(a))
+daikon.Quant.fuzzy.lt(return, \old(x))
+===========================================================================
+tot_info.c.gser():::ENTER
+    Variables: ::line ::f ::f[] ::r ::c a x size(::f[]) size(::f[])-1
+::f != null
+daikon.Quant.eltsGTE(::f, 0)
+a >= 1.0
+x >= 0.0
+daikon.Quant.size(::f) == 1000
+daikon.Quant.memberOf(::r , ::f )
+daikon.Quant.memberOf(::c , ::f )
+(::c >> ::r == 0)
+(::r >> ::c == 0)
+(::r & daikon.Quant.size(::f)) == 0
+::r < daikon.Quant.size(::f)-1
+daikon.Quant.size(::f)-1 == (::r | daikon.Quant.size(::f)-1)
+::c < daikon.Quant.size(::f)-1
+daikon.Quant.fuzzy.ne(a, x)
+===========================================================================
+tot_info.c.gser():::EXIT
+    Variables: ::line ::f ::f[] ::r ::c a x return orig(::line) orig(::f) orig(::f[]) orig(::r) orig(::c) orig(a) orig(x) size(::f[]) size(::f[])-1 orig(size(::f[])) orig(size(::f[]))-1
+::f == \old(::f)
+daikon.Quant.pairwiseEqual(::f, \old(::f))
+::r == \old(::r)
+::c == \old(::c)
+::f != null
+daikon.Quant.eltsGTE(::f, 0)
+daikon.Quant.size(::f) == 1000
+::line.equals(\old(::line))
+daikon.Quant.memberOf(::r , ::f )
+daikon.Quant.memberOf(::c , ::f )
+(::c >> ::r == 0)
+(::r >> ::c == 0)
+(::r & daikon.Quant.size(::f)) == 0
+::r < daikon.Quant.size(::f)-1
+daikon.Quant.size(::f)-1 == (::r | daikon.Quant.size(::f)-1)
+::c < daikon.Quant.size(::f)-1
+daikon.Quant.fuzzy.lt(return, \old(a))
+(!(\old(x) == 0)) || (return == 0)
+(!(return == 0)) || (\old(x) == 0)
+daikon.Quant.fuzzy.lte(return, \old(x))

@@ -2,13 +2,12 @@ input-language C/C++
 decl-version 2.0
 var-comparability none
 
-ppt ..main():::ENTER
+ppt ..InfoTbl():::ENTER
   ppt-type enter
-  variable ::line
+  variable ::c
     var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
+    rep-type int
+    dec-type int
   variable ::f
     var-kind variable
     rep-type hashcode
@@ -21,11 +20,390 @@ ppt ..main():::ENTER
     array 1
     rep-type int[]
     dec-type long[]
+  variable ::line
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
   variable ::r
     var-kind variable
     rep-type int
     dec-type int
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable f
+    var-kind variable
+    rep-type hashcode
+    dec-type long*
+    flags is_param 
+  variable f[..]
+    var-kind array
+    enclosing-var f
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable pdf
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags is_param 
+  variable pdf[..]
+    var-kind array
+    enclosing-var pdf
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable r
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..InfoTbl():::EXIT0
+  ppt-type subexit
   variable ::c
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::f
+    var-kind variable
+    rep-type hashcode
+    dec-type long*
+    flags non_null 
+  variable ::f[..]
+    var-kind array
+    enclosing-var ::f
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable ::line
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::r
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable c
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable f
+    var-kind variable
+    rep-type hashcode
+    dec-type long*
+    flags is_param 
+  variable f[..]
+    var-kind array
+    enclosing-var f
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable pdf
+    var-kind variable
+    rep-type hashcode
+    dec-type int*
+    flags is_param 
+  variable pdf[..]
+    var-kind array
+    enclosing-var pdf
+    array 1
+    rep-type int[]
+    dec-type int[]
+  variable r
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type double
+    dec-type double
+
+ppt ..LGamma():::ENTER
+  ppt-type enter
+  variable ::c
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::cof
+    var-kind variable
+    rep-type hashcode
+    dec-type double*
+    flags non_null 
+  variable ::cof[..]
+    var-kind array
+    enclosing-var ::cof
+    reference-type offset
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::f
+    var-kind variable
+    rep-type hashcode
+    dec-type long*
+    flags non_null 
+  variable ::f[..]
+    var-kind array
+    enclosing-var ::f
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable ::line
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::r
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable x
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+
+ppt ..LGamma():::EXIT0
+  ppt-type subexit
+  variable ::c
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::cof
+    var-kind variable
+    rep-type hashcode
+    dec-type double*
+    flags non_null 
+  variable ::cof[..]
+    var-kind array
+    enclosing-var ::cof
+    reference-type offset
+    array 1
+    rep-type double[]
+    dec-type double[]
+  variable ::f
+    var-kind variable
+    rep-type hashcode
+    dec-type long*
+    flags non_null 
+  variable ::f[..]
+    var-kind array
+    enclosing-var ::f
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable ::line
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::r
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable return
+    var-kind variable
+    rep-type double
+    dec-type double
+  variable x
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+
+ppt ..QChiSq():::ENTER
+  ppt-type enter
+  variable ::c
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::f
+    var-kind variable
+    rep-type hashcode
+    dec-type long*
+    flags non_null 
+  variable ::f[..]
+    var-kind array
+    enclosing-var ::f
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable ::line
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::r
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable chisq
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+  variable df
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+
+ppt ..QChiSq():::EXIT0
+  ppt-type subexit
+  variable ::c
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::f
+    var-kind variable
+    rep-type hashcode
+    dec-type long*
+    flags non_null 
+  variable ::f[..]
+    var-kind array
+    enclosing-var ::f
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable ::line
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::r
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable chisq
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+  variable df
+    var-kind variable
+    rep-type int
+    dec-type int
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type double
+    dec-type double
+
+ppt ..QGamma():::ENTER
+  ppt-type enter
+  variable ::c
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::f
+    var-kind variable
+    rep-type hashcode
+    dec-type long*
+    flags non_null 
+  variable ::f[..]
+    var-kind array
+    enclosing-var ::f
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable ::line
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::r
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+  variable x
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+
+ppt ..QGamma():::EXIT0
+  ppt-type subexit
+  variable ::c
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::f
+    var-kind variable
+    rep-type hashcode
+    dec-type long*
+    flags non_null 
+  variable ::f[..]
+    var-kind array
+    enclosing-var ::f
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable ::line
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::r
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable a
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type double
+    dec-type double
+  variable x
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+
+ppt ..main():::ENTER
+  ppt-type enter
+  variable ::c
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::f
+    var-kind variable
+    rep-type hashcode
+    dec-type long*
+    flags non_null 
+  variable ::f[..]
+    var-kind array
+    enclosing-var ::f
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable ::line
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::r
     var-kind variable
     rep-type int
     dec-type int
@@ -48,11 +426,10 @@ ppt ..main():::ENTER
 
 ppt ..main():::EXIT0
   ppt-type subexit
-  variable ::line
+  variable ::c
     var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
+    rep-type int
+    dec-type int
   variable ::f
     var-kind variable
     rep-type hashcode
@@ -65,11 +442,12 @@ ppt ..main():::EXIT0
     array 1
     rep-type int[]
     dec-type long[]
-  variable ::r
+  variable ::line
     var-kind variable
-    rep-type int
-    dec-type int
-  variable ::c
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::r
     var-kind variable
     rep-type int
     dec-type int
@@ -94,187 +472,12 @@ ppt ..main():::EXIT0
     rep-type int
     dec-type int
 
-ppt ..LGamma():::ENTER
-  ppt-type enter
-  variable ::cof
-    var-kind variable
-    rep-type hashcode
-    dec-type double*
-    flags non_null 
-  variable ::cof[..]
-    var-kind array
-    enclosing-var ::cof
-    reference-type offset
-    array 1
-    rep-type double[]
-    dec-type double[]
-  variable ::line
-    var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
-  variable ::f
-    var-kind variable
-    rep-type hashcode
-    dec-type long*
-    flags non_null 
-  variable ::f[..]
-    var-kind array
-    enclosing-var ::f
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type long[]
-  variable ::r
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::c
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable x
-    var-kind variable
-    rep-type double
-    dec-type double
-    flags is_param 
-
-ppt ..LGamma():::EXIT0
-  ppt-type subexit
-  variable ::cof
-    var-kind variable
-    rep-type hashcode
-    dec-type double*
-    flags non_null 
-  variable ::cof[..]
-    var-kind array
-    enclosing-var ::cof
-    reference-type offset
-    array 1
-    rep-type double[]
-    dec-type double[]
-  variable ::line
-    var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
-  variable ::f
-    var-kind variable
-    rep-type hashcode
-    dec-type long*
-    flags non_null 
-  variable ::f[..]
-    var-kind array
-    enclosing-var ::f
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type long[]
-  variable ::r
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::c
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable x
-    var-kind variable
-    rep-type double
-    dec-type double
-    flags is_param 
-  variable return
-    var-kind variable
-    rep-type double
-    dec-type double
-
-ppt tot_info.c.gser():::ENTER
-  ppt-type enter
-  variable ::line
-    var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
-  variable ::f
-    var-kind variable
-    rep-type hashcode
-    dec-type long*
-    flags non_null 
-  variable ::f[..]
-    var-kind array
-    enclosing-var ::f
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type long[]
-  variable ::r
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::c
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable a
-    var-kind variable
-    rep-type double
-    dec-type double
-    flags is_param 
-  variable x
-    var-kind variable
-    rep-type double
-    dec-type double
-    flags is_param 
-
-ppt tot_info.c.gser():::EXIT0
-  ppt-type subexit
-  variable ::line
-    var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
-  variable ::f
-    var-kind variable
-    rep-type hashcode
-    dec-type long*
-    flags non_null 
-  variable ::f[..]
-    var-kind array
-    enclosing-var ::f
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type long[]
-  variable ::r
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::c
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable a
-    var-kind variable
-    rep-type double
-    dec-type double
-    flags is_param 
-  variable x
-    var-kind variable
-    rep-type double
-    dec-type double
-    flags is_param 
-  variable return
-    var-kind variable
-    rep-type double
-    dec-type double
-
 ppt tot_info.c.gcf():::ENTER
   ppt-type enter
-  variable ::line
+  variable ::c
     var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
+    rep-type int
+    dec-type int
   variable ::f
     var-kind variable
     rep-type hashcode
@@ -287,11 +490,12 @@ ppt tot_info.c.gcf():::ENTER
     array 1
     rep-type int[]
     dec-type long[]
-  variable ::r
+  variable ::line
     var-kind variable
-    rep-type int
-    dec-type int
-  variable ::c
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::r
     var-kind variable
     rep-type int
     dec-type int
@@ -308,11 +512,10 @@ ppt tot_info.c.gcf():::ENTER
 
 ppt tot_info.c.gcf():::EXIT0
   ppt-type subexit
-  variable ::line
+  variable ::c
     var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
+    rep-type int
+    dec-type int
   variable ::f
     var-kind variable
     rep-type hashcode
@@ -325,11 +528,54 @@ ppt tot_info.c.gcf():::EXIT0
     array 1
     rep-type int[]
     dec-type long[]
+  variable ::line
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
   variable ::r
     var-kind variable
     rep-type int
     dec-type int
+  variable a
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+  variable return
+    var-kind variable
+    rep-type double
+    dec-type double
+  variable x
+    var-kind variable
+    rep-type double
+    dec-type double
+    flags is_param 
+
+ppt tot_info.c.gser():::ENTER
+  ppt-type enter
   variable ::c
+    var-kind variable
+    rep-type int
+    dec-type int
+  variable ::f
+    var-kind variable
+    rep-type hashcode
+    dec-type long*
+    flags non_null 
+  variable ::f[..]
+    var-kind array
+    enclosing-var ::f
+    reference-type offset
+    array 1
+    rep-type int[]
+    dec-type long[]
+  variable ::line
+    var-kind variable
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::r
     var-kind variable
     rep-type int
     dec-type int
@@ -343,18 +589,13 @@ ppt tot_info.c.gcf():::EXIT0
     rep-type double
     dec-type double
     flags is_param 
-  variable return
-    var-kind variable
-    rep-type double
-    dec-type double
 
-ppt ..QGamma():::ENTER
-  ppt-type enter
-  variable ::line
+ppt tot_info.c.gser():::EXIT0
+  ppt-type subexit
+  variable ::c
     var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
+    rep-type int
+    dec-type int
   variable ::f
     var-kind variable
     rep-type hashcode
@@ -367,11 +608,12 @@ ppt ..QGamma():::ENTER
     array 1
     rep-type int[]
     dec-type long[]
-  variable ::r
+  variable ::line
     var-kind variable
-    rep-type int
-    dec-type int
-  variable ::c
+    reference-type offset
+    rep-type string
+    dec-type char*
+  variable ::r
     var-kind variable
     rep-type int
     dec-type int
@@ -380,255 +622,13 @@ ppt ..QGamma():::ENTER
     rep-type double
     dec-type double
     flags is_param 
+  variable return
+    var-kind variable
+    rep-type double
+    dec-type double
   variable x
     var-kind variable
     rep-type double
     dec-type double
     flags is_param 
-
-ppt ..QGamma():::EXIT0
-  ppt-type subexit
-  variable ::line
-    var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
-  variable ::f
-    var-kind variable
-    rep-type hashcode
-    dec-type long*
-    flags non_null 
-  variable ::f[..]
-    var-kind array
-    enclosing-var ::f
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type long[]
-  variable ::r
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::c
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable a
-    var-kind variable
-    rep-type double
-    dec-type double
-    flags is_param 
-  variable x
-    var-kind variable
-    rep-type double
-    dec-type double
-    flags is_param 
-  variable return
-    var-kind variable
-    rep-type double
-    dec-type double
-
-ppt ..QChiSq():::ENTER
-  ppt-type enter
-  variable ::line
-    var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
-  variable ::f
-    var-kind variable
-    rep-type hashcode
-    dec-type long*
-    flags non_null 
-  variable ::f[..]
-    var-kind array
-    enclosing-var ::f
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type long[]
-  variable ::r
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::c
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable chisq
-    var-kind variable
-    rep-type double
-    dec-type double
-    flags is_param 
-  variable df
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-
-ppt ..QChiSq():::EXIT0
-  ppt-type subexit
-  variable ::line
-    var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
-  variable ::f
-    var-kind variable
-    rep-type hashcode
-    dec-type long*
-    flags non_null 
-  variable ::f[..]
-    var-kind array
-    enclosing-var ::f
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type long[]
-  variable ::r
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::c
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable chisq
-    var-kind variable
-    rep-type double
-    dec-type double
-    flags is_param 
-  variable df
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-  variable return
-    var-kind variable
-    rep-type double
-    dec-type double
-
-ppt ..InfoTbl():::ENTER
-  ppt-type enter
-  variable ::line
-    var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
-  variable ::f
-    var-kind variable
-    rep-type hashcode
-    dec-type long*
-    flags non_null 
-  variable ::f[..]
-    var-kind array
-    enclosing-var ::f
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type long[]
-  variable ::r
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::c
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable r
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-  variable c
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-  variable f
-    var-kind variable
-    rep-type hashcode
-    dec-type long*
-    flags is_param 
-  variable f[..]
-    var-kind array
-    enclosing-var f
-    array 1
-    rep-type int[]
-    dec-type long[]
-  variable pdf
-    var-kind variable
-    rep-type hashcode
-    dec-type int*
-    flags is_param 
-  variable pdf[..]
-    var-kind array
-    enclosing-var pdf
-    array 1
-    rep-type int[]
-    dec-type int[]
-
-ppt ..InfoTbl():::EXIT0
-  ppt-type subexit
-  variable ::line
-    var-kind variable
-    reference-type offset
-    rep-type string
-    dec-type char*
-  variable ::f
-    var-kind variable
-    rep-type hashcode
-    dec-type long*
-    flags non_null 
-  variable ::f[..]
-    var-kind array
-    enclosing-var ::f
-    reference-type offset
-    array 1
-    rep-type int[]
-    dec-type long[]
-  variable ::r
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable ::c
-    var-kind variable
-    rep-type int
-    dec-type int
-  variable r
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-  variable c
-    var-kind variable
-    rep-type int
-    dec-type int
-    flags is_param 
-  variable f
-    var-kind variable
-    rep-type hashcode
-    dec-type long*
-    flags is_param 
-  variable f[..]
-    var-kind array
-    enclosing-var f
-    array 1
-    rep-type int[]
-    dec-type long[]
-  variable pdf
-    var-kind variable
-    rep-type hashcode
-    dec-type int*
-    flags is_param 
-  variable pdf[..]
-    var-kind array
-    enclosing-var pdf
-    array 1
-    rep-type int[]
-    dec-type int[]
-  variable return
-    var-kind variable
-    rep-type double
-    dec-type double
 

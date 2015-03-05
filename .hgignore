@@ -429,6 +429,7 @@ tests/kvasir-tests/small-test/small-test
 tests/kvasir-tests/static-struct/static-struct
 tests/kvasir-tests/string-arrays/string-arrays
 tests/kvasir-tests/tcas/tcas
+tests/kvasir-tests/tot_info/tot_info
 tests/kvasir-tests/two-statics/two-statics
 tests/kvasir-tests/virtual-method/virtual-method
 tests/kvasir-tests/wordplay/wordplay

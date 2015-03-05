@@ -1,0 +1,104 @@
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== COPYRIGHT
+==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
+==PID== Command: ./tot_info
+==PID== 
+2info = 4904.19	df = 65	q =  0.0000
+2info =  0.54	df =  2	q =  0.7649
+2info = 6813.98	df =  8	q =  0.0000
+2info =  1.40	df =  2	q =  0.4977
+2info = 4904.19	df = 65	q =  0.0000
+# v 
+2info = 3750.02	df = 342	q =  0.0000
+2info = 3778.62	df = 231	q =  0.0000
+2info = 3778.62	df = 231	q =  0.0000
+#   
+2info = 313.17	df = 105	q =  0.0000
+# 0 
+table too small
+# k 
+2info = 54.36	df =  4	q =  0.0000
+#  nq @$!i   QTg#l     
+table too small
+#   
+2info =  0.00	df = 15	q =  1.0000
+# c 
+2info =  5.27	df =  3	q =  0.1532
+#  t% saP95kJO_BkYEuo65@1HsZ$  p%Udpmkk*)kKqfM NqCjwdaI@v    
+2info =  8.15	df =  6	q =  0.2273
+#  nq @$!i   QTg#l     
+2info = 45.46	df = 44	q =  0.4110
+#   
+2info =  0.00	df = 15	q =  1.0000
+# c 
+2info =  5.27	df =  3	q =  0.1532
+#  t% saP95kJO_BkYEuo65@1HsZ$  p%Udpmkk*)kKqfM NqCjwdaI@v    
+2info =  8.15	df =  6	q =  0.2273
+#  nq @$!i   QTg#l     
+2info = 45.46	df = 44	q =  0.4110
+2info =  0.00	df =  2	q =  1.0000
+table too small
+2info =  0.00	df =  9	q =  1.0000
+2info =  0.08	df =  2	q =  0.9606
+2info = 39.19	df =  2	q =  0.0000
+2info =  5.06	df =  2	q =  0.0795
+2info =  6.94	df =  2	q =  0.0312
+2info =  0.00	df =  2	q =  1.0000
+table all zeros
+2info =  0.00	df =  2	q =  1.0000
+* table too large *
+==PID== 
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)
+==PID== kvasir-VERSION C/C++ Language Front-End for Daikon with DynComp comparability analysis tool.
+==PID== COPYRIGHT
+==PID== Using Valgrind and LibVEX; rerun with -h for copyright info
+==PID== Command: ./tot_info
+==PID== 
+  Start garbage collecting (next tag = 10000001, total assigned = 10000000)
+   Done garbage collecting (next tag = 9934688, total assigned = 10000000)
+2info = 4904.19	df = 65	q =  0.0000
+2info =  0.54	df =  2	q =  0.7649
+2info = 6813.98	df =  8	q =  0.0000
+2info =  1.40	df =  2	q =  0.4977
+2info = 4904.19	df = 65	q =  0.0000
+# v 
+2info = 3750.02	df = 342	q =  0.0000
+2info = 3778.62	df = 231	q =  0.0000
+2info = 3778.62	df = 231	q =  0.0000
+#   
+2info = 313.17	df = 105	q =  0.0000
+# 0 
+table too small
+# k 
+2info = 54.36	df =  4	q =  0.0000
+#  nq @$!i   QTg#l     
+table too small
+#   
+2info =  0.00	df = 15	q =  1.0000
+# c 
+2info =  5.27	df =  3	q =  0.1532
+#  t% saP95kJO_BkYEuo65@1HsZ$  p%Udpmkk*)kKqfM NqCjwdaI@v    
+2info =  8.15	df =  6	q =  0.2273
+#  nq @$!i   QTg#l     
+2info = 45.46	df = 44	q =  0.4110
+#   
+2info =  0.00	df = 15	q =  1.0000
+# c 
+2info =  5.27	df =  3	q =  0.1532
+#  t% saP95kJO_BkYEuo65@1HsZ$  p%Udpmkk*)kKqfM NqCjwdaI@v    
+2info =  8.15	df =  6	q =  0.2273
+#  nq @$!i   QTg#l     
+2info = 45.46	df = 44	q =  0.4110
+2info =  0.00	df =  2	q =  1.0000
+table too small
+2info =  0.00	df =  9	q =  1.0000
+2info =  0.08	df =  2	q =  0.9606
+2info = 39.19	df =  2	q =  0.0000
+2info =  5.06	df =  2	q =  0.0795
+2info =  6.94	df =  2	q =  0.0312
+2info =  0.00	df =  2	q =  1.0000
+table all zeros
+2info =  0.00	df =  2	q =  1.0000
+* table too large *
+==PID== 
+==PID== ERROR SUMMARY: 0 errors from 0 contexts (suppressed: 0 from 0)

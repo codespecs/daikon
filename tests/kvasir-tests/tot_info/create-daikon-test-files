@@ -1,0 +1,7 @@
+echo "gcc -gdwarf-2  tot_info.c -o tot_info  -lm"
+gcc -gdwarf-2  tot_info.c -o tot_info  -lm
+echo "kvasir-dtrace --decls-file=tot_info.decls --dtrace-file=tot_info.dtrace.gz ./tot_info < tst45 >/dev/null"
+kvasir-dtrace --decls-file=tot_info.decls --dtrace-file=tot_info.dtrace.gz ./tot_info < tst45 >/dev/null
+echo
+echo "If no errors, then copy tot_info.decls and tot_info.dtrace.gz to DAIKONDIR/tests/daikon-tests/tot_info"
+
