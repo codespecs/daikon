@@ -2859,7 +2859,7 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
    * in a new program point (such as is done when combined exits are
    * created)
    **/
-  public void new_ppt() {
+  public void update_after_moving_to_new_ppt() {
     if (enclosing_var != null) {
       // enclosing_var exists but is in the wrong ppt; update it
       enclosing_var = ppt.find_var_by_name (enclosing_var.name());
