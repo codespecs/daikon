@@ -16,9 +16,9 @@
 
 # For invariants ...
 
-daikon.inv.Invariant.probability_limit = .01
+daikon.inv.Invariant.confidence_limit = .99
 daikon.inv.unary.scalar.Modulus.enabled = 1
-daikon.inv.binary.sequenceString.Member.enabled = 0
+daikon.inv.binary.sequenceString.MemberString.enabled = false
 
 # For derived variables ...
 
@@ -28,4 +28,4 @@ daikon.derive.unary.SequenceSum.enabled = 1
 # For splitters ...
 
 daikon.split.SplitterList.all_splitters = true
-daikon.split.FileCompiler.compiler = javac
+daikon.split.SplitterFactory.compiler = javac
