@@ -7290,23 +7290,40 @@ These switches are the same as for Daikon.  They are described in
 @cindex implication checking tool
 @cindex comparison tool, logical
 
-Given two sets of invariants describing the operation of a software
-module, or describing two implementations of a module with the same
-interface, we can define one set of invariants to be ``stronger'' than
-another roughly if in any situation where the ``stronger'' invariants
+Suppose you have two sets of invariants describing the operation of a software
+module or describing two implementations of a module with the same
+interface.  Roughly, one set of invariants is ``stronger'' than
+another if in any situation where the ``stronger'' invariants
 hold, the ``weaker'' invariants also hold.  The @command{LogicalCompare} tool
-examines two sets of invariants, and checks using the Simplify
-automatic theorem prover whether they satisfy a precise version of
-this relationship.
+checks whether two sets of invariants satisfy this relationship.
 
-Simplify must be installed in
-order to use this program (@pxref{Installing Simplify}).
+In order to use @command{LogicalCompare}, Simplify must be installed
+(@pxref{Installing Simplify}).
+
+An invocation of @command{LogicalCompare} has the following form:
+
+@example
+java daikon.tools.compare.LogicalCompare [@var{options}] \
+    @var{weak-invs} @var{strong-invs} [@var{enter-ppt} [@var{exit-ppt}]]
+@end example
 
 The @command{LogicalCompare} program takes two mandatory arguments, which are
-@file{.inv} files containing invariants; the invariants will be
-checked to verify if the invariants in the first file are weaker
-(implied by) the invariants in the second file, and exceptions to this
-implication are printed.  If no other regular arguments are supplied,
+@file{.inv} files containing invariants.  @command{LogicalCompare}
+checks whether the invariants in the first file are weaker
+(implied by) the invariants in the second file.
+@command{LogicalCompare} prints any exceptions to this implication,
+preceded by the text ``Invalid:''.
+
+To be precise, for each
+pair of program points representing a single method or function,
+@command{LogicalCompare} will check that each precondition (@code{:::ENTER} point
+invariant) in the ``stronger'' invariant set is implied by some
+combination of invariants in the ``weaker'' invariant set, and that
+each postcondition (@code{:::EXIT} point invariant) in the ``weaker'' invariant
+set is implied by some combination of postconditions in the
+``stronger'' set and preconditions in the ``weaker'' set.
+
+If no other regular arguments besides the two @file{.inv} files are supplied,
 all the method or function program points that exist in both files
 will be compared, with a exception message reported for each method
 that exists in the ``weaker'' set but not the ``stronger''.
@@ -7314,21 +7331,7 @@ Alternatively, one or two additional arguments may be supplied, which name an
 @code{:::ENTER} program point and an @code{:::EXIT} program point to examine
 (if only an @code{:::ENTER} program point is supplied,
 the corresponding combined @code{:::EXIT} point
-is selected automatically).  To be precise, for each
-pair of program points representing a single method or function,
-@command{LogicalCompare} will check that each precondition (@code{:::ENTER} point
-invariant) in the ``stronger'' invariant set is implied by some
-combination of invariants in the ``weaker'' invariant set, and that
-each postcondition (@code{:::EXIT} point invariant) in the ``weaker'' invariant
-set is implied by some combination of postconditions in the
-``stronger'' set and preconditions in the ``weaker'' set.  In summary,
-the syntax of an invocation of @command{LogicalCompare} will have the following
-form:
-
-@example
-java daikon.tools.compare.LogicalCompare [@var{options}] \
-    @var{weak-invs} @var{strong-invs} [@var{enter-ppt} [@var{exit-ppt}]]
-@end example
+is selected automatically).
 
 @command{LogicalCompare} accepts the following options:
 
