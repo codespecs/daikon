@@ -21,6 +21,7 @@ import typequals.*;
  * several scalar invariants are computed for integer variables. Most of them
  * would not make any sense for pointers. Determining whether a 32-bit variable
  * is a pointer can thus spare the computation of many irrelevant invariants.
+ * <p>
  *
  * The basic approach is to discard the invariant if any values that are
  * not valid pointers are encountered.  By default values between -100,000
@@ -98,7 +99,10 @@ public class IsPointer extends SingleScalar {
     @Override
     /*@SideEffectFree*/ public String format_using(OutputFormat format) {
       String varname = var().name_using (format);
-      return varname + "  isPointer";
+      if (format == OutputFormat.SIMPLIFY)
+          return "(AND)";       // trivially true
+      else
+          return varname + "  isPointer";
     }
 
     protected double computeConfidence() {

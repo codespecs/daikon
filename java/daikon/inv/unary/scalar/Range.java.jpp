@@ -532,7 +532,7 @@ public abstract class RANGE extends SUPERCLASS {
 
     public String get_format_str (OutputFormat format) {
       if (format == OutputFormat.SIMPLIFY)
-        return ("(EQ %var1% (OR 0 1))");
+        return ("(OR (EQ 0 %var1%) (EQ 1 %var1%))");
       else
         return ("%var1% is boolean");
     }
