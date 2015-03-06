@@ -116,13 +116,13 @@ public class Lemma implements Comparable<Lemma> {
               "(FORALL (a i j b ip jp) (IFF (|is-reverse-of| a i j b ip jp) (AND (EQ (- j i) (- jp ip)) (<= 0 i) (< j (arrayLength a)) (<= 0 ip) (< jp (arrayLength b)) (FORALL (x) (IMPLIES (AND (<= 0 x) (< x (- j i))) (EQ (select (select elems a) (+ i x)) (select (select elems b) (- jp x))))))))"),
     new Lemma("definition of subset",
               "(FORALL (a i j b ip jp) (IFF (subset a i j b ip jp) (FORALL (x) (IMPLIES (AND (<= i x) (<= x j)) (EXISTS (y) (AND (<= ip y) (<= y jp) (EQ (select (select elems a) x) (select (select elems b) y))))))))"),
-    new Lemma("when && on integers is 1",
+    new Lemma("definition of && on integers (case when result is 1)",
               "(FORALL (x y) (IFF (EQ (|java-&&| x y) 1) (AND (NEQ x 0) (NEQ y 0))))"),
-    new Lemma("when && on integers is 0",
+    new Lemma("definition of && on integers (case when result is 0)",
               "(FORALL (x y) (IFF (EQ (|java-&&| x y) 0) (NOT (AND (NEQ x 0) (NEQ y 0)))))"),
-    new Lemma("when || on integers is 1",
+    new Lemma("definition of || on integers (case when result is 1)",
               "(FORALL (x y) (IFF (EQ (|java-logical-or| x y) 1) (OR (NEQ x 0) (NEQ y 0))))"),
-    new Lemma("when || on integers is 0",
+    new Lemma("definition of || on integers (case when result is 0)",
               "(FORALL (x y) (IFF (EQ (|java-logical-or| x y) 0) (NOT (OR (NEQ x 0) (NEQ y 0)))))"),
     // Some of the following lemmas about MOD (the ones with PATS)
     // were borrowed from the esc.ax file in the Simplify source
