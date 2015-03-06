@@ -22,8 +22,8 @@ PolyCalc.RatNum.RatNum(int, int):::EXIT67
 ===========================================================================
 PolyCalc.RatNum.RatNum(int, int):::EXIT
 (IFF (EQ (select |denom| |this|) 0) (EQ |__orig__d| 0))
-(IMPLIES (EQ (select |denom| |this|) 0) |__orig__d|  isPointer)
-(IMPLIES (EQ (select |denom| |this|) 0) (select |denom| |this|)  isPointer)
+(IMPLIES (EQ (select |denom| |this|) 0) (AND))
+(IMPLIES (EQ (select |denom| |this|) 0) (AND))
 (IMPLIES (EQ (select |denom| |this|) 0) (EQ (select |denom| |this|) |__orig__d|))
 (IMPLIES (EQ (select |denom| |this|) 0) (EQ (select |numer| |this|) |__orig__n|))
 (IMPLIES (EQ |__orig__n| 0) (EQ (select |numer| |this|) 0))
@@ -60,7 +60,7 @@ PolyCalc.RatNum.approx():::EXIT
 (EQ (select |numer| |this|) (select |numer| |__orig__this|))
 (EQ (select |denom| |this|) (select |denom| |__orig__this|))
 (IMPLIES (EQ (select |denom| |this|) 0) (EQ |return| NaN))
-(IMPLIES (EQ (select |denom| |this|) 0) (select |denom| |this|)  isPointer)
+(IMPLIES (EQ (select |denom| |this|) 0) (AND))
 (IMPLIES (EQ (select |denom| |this|) 0) (NEQ (select |numer| |this|) (select |denom| |this|)))
 ===========================================================================
 PolyCalc.RatNum.compareTo(PolyCalc.RatNum):::ENTER
@@ -136,11 +136,11 @@ PolyCalc.RatNum.div(PolyCalc.RatNum):::EXIT
 (EQ (select |numer| |arg|) (select |numer| |__orig__arg|))
 (EQ (select |denom| |arg|) (select |denom| |__orig__arg|))
 (IMPLIES (EQ (select |denom| |arg|) 0) (IMPLIES (EQ (select |numer| |arg|) 0) (EQ (select |numer| |this|) 0)))
-(IMPLIES (EQ (select |denom| |arg|) 0) (select |denom| |arg|)  isPointer)
+(IMPLIES (EQ (select |denom| |arg|) 0) (AND))
 (IMPLIES (EQ (select |denom| |arg|) 0) (EQ (select |denom| |arg|) (select |denom| |return|)))
 (IMPLIES (EQ (select |denom| |arg|) 0) (EQ (select |numer| |arg|) (select |numer| |return|)))
 (IMPLIES (EQ (select |denom| |arg|) 0) (EQ (hash |return|) (hash |__orig__arg|)))
-(IMPLIES (EQ (select |denom| |arg|) 0) (select |denom| |return|)  isPointer)
+(IMPLIES (EQ (select |denom| |arg|) 0) (AND))
 (IMPLIES (EQ (select |denom| |arg|) 0) (EQ (select |denom| |return|) 0))
 (IMPLIES (EQ (select |denom| |arg|) 0) (>= (select |denom| |this|) (select |denom| |arg|)))
 (IMPLIES (EQ (select |denom| |arg|) 0) (>= (select |denom| |this|) (select |denom| |return|)))
@@ -184,7 +184,7 @@ PolyCalc.RatNum.isNaN():::EXIT
 (EQ (select |numer| |this|) (select |numer| |__orig__this|))
 (EQ (select |denom| |this|) (select |denom| |__orig__this|))
 (IFF (EQ (select |denom| |this|) 0) (EQ |return| |@true|))
-(IMPLIES (EQ (select |denom| |this|) 0) (select |denom| |this|)  isPointer)
+(IMPLIES (EQ (select |denom| |this|) 0) (AND))
 ===========================================================================
 PolyCalc.RatNum.isNegative():::ENTER
 ===========================================================================

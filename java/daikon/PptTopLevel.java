@@ -467,7 +467,7 @@ public class PptTopLevel extends Ppt {
     // in this program point (they may have been cloned from a diff
     // program point)
     for (VarInfo vi : var_infos)
-      vi.new_ppt();
+      vi.update_after_moving_to_new_ppt();
 
     // Relate the variables to one another
     for (VarInfo vi : var_infos)

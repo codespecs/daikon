@@ -43,6 +43,7 @@
 # txt-daikon           | X | X | X | X |   |   |   |   |   |
 # txt-esc              |   | X |   |   |   |   |   |   |   |
 # txt-simplify         |   |   |   |   |   |   |   |   |   |
+# txt-logicalcompare   |   |   |   |   |   |   |   |   |   |
 # txt-all              |   |   |   |   |   |   |   |   |   |
 # context              |   |   |   |   |   |   |   |   |   |
 # gui                  | X | X | X | X |   |   |   |   |   |
@@ -371,7 +372,7 @@ clean-output:
 	@echo
 	@echo "### clean-output (${PROJECT_FILE})"
 	@echo
-	rm -f *.bak *.diff ${PROJECT_FILE}.{inv{,.gz},decls-DynComp{,-nojdk},txt{,-merge}-{chicory,daikon,simplify,csharpcontract,esc,jml,repair,cset{,-nojdk},daikon-suppress,daikon-suppress-diffed,jaif,trace{,-nojdk}}{,-failed},esc,context,stats,linecov,spinfo-static}
+	rm -f *.bak *.diff ${PROJECT_FILE}.{inv{,.gz},decls-DynComp{,-nojdk},txt{,-merge}-{chicory,daikon,simplify,logicalcompare,csharpcontract,esc,jml,repair,cset{,-nojdk},daikon-suppress,daikon-suppress-diffed,jaif,trace{,-nojdk}}{,-failed},esc,context,stats,linecov,spinfo-static}
 	rm -rf merged *txt-chicory.dtrace
 	rm -f *.bak *.diff ${PROJECT_FILE}-suppress.inv.gz ${PROJECT_FILE}-jaif.inv.gz
 ifeq (csv,${STORED_TRACE_FORMAT})
@@ -890,6 +891,16 @@ txt-simplify: ${PROJECT_FILE}.txt-simplify
 	  --config_option daikon.inv.unary.scalar.OneOfScalar.omit_hashcode_values_Simplify=true \
 	  ${PRINT_INVARIANTS_OPTIONS} $< > $@ 2>&1) || (mv $@ $@-failed && false)
 
+PROJECT_HELP:=${PROJECT_HELP} ;\
+  echo "  make txt-logicalcompare   : runs LogicalCompare on the inv file"
+txt-logicalcompare: ${PROJECT_FILE}.txt-logicalcompare
+%.txt-logicalcompare: ${INV_FILE}
+	@echo
+	@echo "### txt-logicalcompare (${PROJECT_FILE})"
+	@echo
+	-rm -f $@-failed
+	($(RUN_JAVA) $(USER_JAVA_FLAGS) daikon.tools.compare.LogicalCompare $< $< > $@ 2>&1) || (mv $@ $@-failed && false)
+
 ifndef NO_CSHARP
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-csharpcontract   : creates csharp-style output from the inv file"
@@ -903,7 +914,7 @@ txt-csharpcontract: ${PROJECT_FILE}.txt-csharpcontract
 	(${PRINT_INVARIANTS} --format csharpcontract \
 	  ${PRINT_INVARIANTS_OPTIONS} $< > $@ 2>&1) || (mv $@ $@-failed && false)
 endif
-      
+
 ifndef NO_JML
 PROJECT_HELP:=${PROJECT_HELP} ;\
   echo "  make txt-jml        : creates jml-style output from the inv file"
@@ -1025,6 +1036,7 @@ txt-jml-diff: ${PROJECT_FILE}.txt-jml.diff;
 endif
 spinfo-static-diff: ${PROJECT_FILE}.spinfo-static.diff
 txt-simplify-diff: ${PROJECT_FILE}.txt-simplify.diff;
+txt-logicalcompare-diff: ${PROJECT_FILE}.txt-logicalcompare.diff;
 ifndef NO_CSHARP
 txt-csharpcontract-diff: ${PROJECT_FILE}.txt-csharpcontract.diff;
 endif
@@ -1047,6 +1059,7 @@ txt-jaif-diff: $(PROJECT_FILE).txt-jaif.diff
 # (Another downside is that starting a new process and re-reading the Makefile
 # may be inefficient, but I don't see a way around that either.)
 %.diff: force
+	@[ -f $*.goal ] || { echo "File $*.goal does not exist!"; exit 1; }
 	@-[ -f $@ ] && mv -f $@ $@-implementation
 	@echo "Failed to build $*" > $@
 	$(MAKE) $@-implementation
@@ -1114,6 +1127,9 @@ endif
 	if test -e ${PROJECT_FILE}.txt-simplify ; then \
 	  cp -pf ${PROJECT_FILE}.txt-simplify ${PROJECT_FILE}.txt-simplify.goal; fi
 	rm -f ${PROJECT_FILE}.txt-simplify.diff;
+	if test -e ${PROJECT_FILE}.txt-logicalcompare ; then \
+	  cp -pf ${PROJECT_FILE}.txt-logicalcompare ${PROJECT_FILE}.txt-logicalcompare.goal; fi
+	rm -f ${PROJECT_FILE}.txt-logicalcompare.diff;
 	if test -e ${PROJECT_FILE}.txt-csharpcontract ; then \
 	  cp -pf ${PROJECT_FILE}.txt-csharpcontract ${PROJECT_FILE}.txt-csharpcontract.goal; fi
 	rm -f ${PROJECT_FILE}.txt-csharpcontract.diff;

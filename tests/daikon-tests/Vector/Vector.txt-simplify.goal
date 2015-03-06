@@ -345,7 +345,7 @@ javautil.Vector.isEmpty():::EXIT
 (EQ (select |elementCount| |this|) (select |elementCount| |__orig__this|))
 (EQ (select |capacityIncrement| |this|) (select |capacityIncrement| |__orig__this|))
 (IFF (EQ (select |elementCount| |this|) 0) (EQ |return| |@true|))
-(IMPLIES (EQ (select |elementCount| |this|) 0) (select |elementCount| |this|)  isPointer)
+(IMPLIES (EQ (select |elementCount| |this|) 0) (AND))
 (IMPLIES (EQ (select |elementCount| |this|) 0) (<= (select |elementCount| |this|) (select |capacityIncrement| |this|)))
 (IMPLIES (EQ (select |elementCount| |this|) 0) (EQ (select |elementCount| |this|) (|java-/| (arrayLength (select |elementData| |this|)) (select |serialVersionUID| (select |Vector| |javautil|)))))
 (IMPLIES (EQ (select |elementCount| |this|) 0) (EQ (select |elementCount| |this|) (|java-/| (- (arrayLength (select |elementData| |this|)) 1) (select |serialVersionUID| (select |Vector| |javautil|)))))

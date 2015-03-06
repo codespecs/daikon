@@ -61,7 +61,7 @@ public class LogicalCompare {
       "      Display this usage message",
       "  --config-file FILE",
       "      Read configuration option file",
-      "  --cfg OPTION=VALUE",
+      "  --config_option OPTION=VALUE",
       "      Set individual configuration option",
       "  --debug-all",
       "      Enable all debugging logs",
@@ -477,6 +477,7 @@ public class LogicalCompare {
     pre_conclusions.addAll(translateStraight(t_pre));
     Collections.sort(pre_conclusions);
 
+    System.out.println("Testing preconditions:");
     int bad_pre = evaluateImplications(pre_assumptions, pre_conclusions);
     int num_checked = pre_conclusions.size();
     if (bad_pre > 0 && !opt_post_after_pre) {
@@ -484,9 +485,7 @@ public class LogicalCompare {
       return;
     }
 
-    System.out.println("================================================="
-                       + "=============================");
-
+    System.out.println("Testing postconditions:");
 
     Vector<Lemma> post_assumptions_safe = new Vector<Lemma>();
     Vector<Lemma> post_assumptions_unsafe = new Vector<Lemma>();
@@ -598,7 +597,7 @@ public class LogicalCompare {
   {
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt("assume",              LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt("cfg",                 LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt("config_option",       LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt("config-file",         LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt("dbg",                 LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt("debug-all",                 LongOpt.NO_ARGUMENT, null, 0),
@@ -643,7 +642,7 @@ public class LogicalCompare {
             throw new RuntimeException("Could not open config file "
                                        + config_file);
           }
-        } else if (option_name.equals("cfg")) {
+        } else if (option_name.equals("config_option")) {
           String item = g.getOptarg();
           Configuration.getInstance().apply(item);
         } else if (option_name.equals("debug")) {
@@ -786,6 +785,7 @@ public class LogicalCompare {
       }
 
       for (String name : common_names) {
+        System.out.println();
         System.out.println("Looking at " + name);
         @SuppressWarnings("nullness") // map: iterating over subset of keySet
         /*@NonNull*/ PptTopLevel app_enter_ppt = app_ppts.get(name);
