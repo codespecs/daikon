@@ -61,7 +61,7 @@ public class LogicalCompare {
       "      Display this usage message",
       "  --config-file FILE",
       "      Read configuration option file",
-      "  --cfg OPTION=VALUE",
+      "  --config_option OPTION=VALUE",
       "      Set individual configuration option",
       "  --debug-all",
       "      Enable all debugging logs",
@@ -598,7 +598,7 @@ public class LogicalCompare {
   {
     LongOpt[] longopts = new LongOpt[] {
       new LongOpt("assume",              LongOpt.REQUIRED_ARGUMENT, null, 0),
-      new LongOpt("cfg",                 LongOpt.REQUIRED_ARGUMENT, null, 0),
+      new LongOpt("config_option",       LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt("config-file",         LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt("dbg",                 LongOpt.REQUIRED_ARGUMENT, null, 0),
       new LongOpt("debug-all",                 LongOpt.NO_ARGUMENT, null, 0),
@@ -643,7 +643,7 @@ public class LogicalCompare {
             throw new RuntimeException("Could not open config file "
                                        + config_file);
           }
-        } else if (option_name.equals("cfg")) {
+        } else if (option_name.equals("config_option")) {
           String item = g.getOptarg();
           Configuration.getInstance().apply(item);
         } else if (option_name.equals("debug")) {

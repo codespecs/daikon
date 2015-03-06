@@ -7344,7 +7344,7 @@ ignored.  The assumption properties will be used as if they were
 invariants true at the strong @code{:::EXIT} point when checking
 weak @code{:::EXIT} point invariants.
 
-@item --cfg @var{option}=@var{value}
+@item --config_option @var{option}=@var{value}
 Specify a single configuration setting.  The available settings are the
 same as can be passed to Daikon's @option{--config_option} option,
 though because the invariants have already been generated, some will
@@ -9018,7 +9018,7 @@ of, or in addition to, referencing this manual and the Daikon website
 @c  LocalWords:  smallexample simpleStack currentSize jtb ParseException kmeans
 @c  LocalWords:  runcluster xm ALG xmeans TraceSelect NOCLEAN DIFFS MergeESC pp
 @c  LocalWords:  escannotated jmlannotated dbcannotated Annnotate xml INVINFO
-@c  LocalWords:  ubs Throwable throwable rethrown WriteViolationFile MyProg cfg
+@c  LocalWords:  ubs Throwable throwable rethrown WriteViolationFile MyProg
 @c  LocalWords:  callMethod isInstrumented getInvariants INVS ijmp
 @c  LocalWords:  bBoOmjpi de iconv undefine DHAVE Xie Ast rt MyPackage
 @c  LocalWords:  superdirectory SOURCEPATH InvalidClassDataError strace lstat
