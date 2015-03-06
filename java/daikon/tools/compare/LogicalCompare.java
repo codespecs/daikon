@@ -477,6 +477,7 @@ public class LogicalCompare {
     pre_conclusions.addAll(translateStraight(t_pre));
     Collections.sort(pre_conclusions);
 
+    System.out.println("Testing preconditions:");
     int bad_pre = evaluateImplications(pre_assumptions, pre_conclusions);
     int num_checked = pre_conclusions.size();
     if (bad_pre > 0 && !opt_post_after_pre) {
@@ -484,9 +485,7 @@ public class LogicalCompare {
       return;
     }
 
-    System.out.println("================================================="
-                       + "=============================");
-
+    System.out.println("Testing postconditions:");
 
     Vector<Lemma> post_assumptions_safe = new Vector<Lemma>();
     Vector<Lemma> post_assumptions_unsafe = new Vector<Lemma>();
@@ -786,6 +785,7 @@ public class LogicalCompare {
       }
 
       for (String name : common_names) {
+        System.out.println();
         System.out.println("Looking at " + name);
         @SuppressWarnings("nullness") // map: iterating over subset of keySet
         /*@NonNull*/ PptTopLevel app_enter_ppt = app_ppts.get(name);
