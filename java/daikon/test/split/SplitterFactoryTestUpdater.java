@@ -209,12 +209,12 @@ public class SplitterFactoryTestUpdater {
     ps.println(" * Therefore, it is a bad idea to directly edit this class's");
     ps.println(" * code for all but temporary reasons.  Any permanent changes");
     ps.println(" * should be made through SplitterFactoryUpdater.");
-    ps.println(" *");
+    ps.println(" * <p>");
     ps.println(" * This class contains regression tests for the SplitterFactory class.");
     ps.println(" * The tests directly test the java files produced by the");
     ps.println(" * load_splitters method by comparing them against goal files.");
     ps.println(" * Note that it is normal for some classes not to compile during this test.");
-    ps.println(" *");
+    ps.println(" * <p>");
     ps.println(" * These tests assume that the goal files are contained in the directory:");
     ps.println(" * \"" + targetDir + "\"");
     ps.println(" * These tests ignore extra white spaces.");
