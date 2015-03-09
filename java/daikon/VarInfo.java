@@ -1823,8 +1823,9 @@ public final /*@Interned*/ class VarInfo implements Cloneable, Serializable {
   private static final Logger debugEnableAssertions =
     Logger.getLogger("daikon.VarInfo.enableAssertions");
 
-  // Slightly gross implementation, using a logger (but the command-line
-  // options processing code already exists for it).
+  // Slightly gross implementation, using a logger; but the command-line
+  // options processing code already exists for it:
+  // --dbg daikon.VarInfo
   public static boolean assertionsEnabled() {
     return debugEnableAssertions.isLoggable(Level.FINE);
   }
